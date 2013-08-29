@@ -1,0 +1,287 @@
+/*---------------------------------------------*/
+/* listview.css                                */
+/*---------------------------------------------*/
+.n-lv {
+	margin: 0;
+	padding: 0;
+}
+
+/* form */
+.n-lv-form {
+	display: none;
+}
+.n-lv-submit {
+}
+
+/* header */
+.n-lv-header {
+}
+.n-lv-header .n-lv-toolbar {
+	margin: 0 0 -1px 0;
+}
+
+/* footer */
+.n-lv-footer {
+}
+.n-lv-footer .n-lv-toolbar {
+	margin: -1px 0 0 0;
+}
+
+/* toolbar */
+.n-lv-toolbar {
+	font-weight: normal !important;
+	padding: 0 8px;
+}
+.n-lv-toolbar .n-lv-toolbar-tb {
+	width: 100%;
+}
+.n-lv-toolbar .n-lv-td-tools {
+	padding: 0 8px;
+	text-align: left;
+	white-space: nowrap;
+}
+.n-lv-toolbar .n-lv-td-pager {
+	text-align: left;
+	white-space: nowrap;
+	width: 1%;
+}
+.n-lv-toolbar .n-lv-td-addon {
+	text-align: left;
+	white-space: nowrap;
+}
+
+/* pager */
+.n-lv-pager {
+	margin: 2px 0;
+}
+
+/* addon */
+.n-lv-addon {
+	margin: 0;
+}
+
+/* action link */
+.n-lv a.n-lv-ia {
+	display: inline-block;
+	padding: 1px;
+	white-space: nowrap;
+}
+.n-lv a.n-lv-ia, .n-lv a.n-lv-ia:hover {
+	border: 0 none;
+	text-decoration: none;
+}
+.n-lv a.n-lv-ia:hover {
+	background-color: #ffef8f;
+}
+.n-lv a.n-lv-ia .n-lv-t {
+	border: solid 1px #999;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 0 0 -17px;
+	padding: 1px 0 1px 18px;
+	vertical-align: middle;
+}
+
+/* normal link */
+.n-lv a.n-lv-a {
+}
+
+/* checkbox all */
+.n-lv-ca {
+}
+/* checkbox row */
+.n-lv-cb {
+}
+
+/* filters */
+.n-lv-filters {
+	margin: 0 0 10px 0;
+}
+.n-lv-filters-t {
+	width: 100%;
+}
+.n-lv-filters-t td.n-td-submit td {
+	white-space: nowrap;
+}
+.n-lv-filters-t td.n-td-label {
+	width: 80px;
+	min-width: 80px;
+}
+.n-lv-filters-t td.n-td-input {
+	min-width: 390px;
+	white-space: nowrap;
+}
+.n-lv-filters-t td.n-td-input .n-checkboxlist,
+.n-lv-filters-t td.n-td-input .n-radiomap {
+	white-space: normal;
+}
+.n-lv-filters-t td.n-td-tooltip {
+	width: auto;
+}
+.n-lv-filters-t .n-lv-f-string-v {
+	width: 280px !important;
+}
+.n-lv-filters-t .n-lv-f-string-c {
+	/*width: 80px !important;*/
+}
+.n-lv-filters-t .n-lv-f-date-v, .n-lv-filters-t .n-lv-f-date-v2,
+.n-lv-filters-t .n-lv-f-time-v, .n-lv-filters-t .n-lv-f-time-v2,
+.n-lv-filters-t .n-lv-f-datetime-v, .n-lv-filters-t .n-lv-f-datetime-v2 {
+	width: 140px !important;
+	padding-right: 20px !important;
+}
+.n-lv-filters-t .n-lv-f-date-c,
+.n-lv-filters-t .n-lv-f-datetime-c,
+.n-lv-filters-t .n-lv-f-time-c {
+/*	width: 40px !important;*/
+}
+.n-lv-filters-t .n-lv-f-number-v, .n-lv-filters-t .n-lv-f-number-v2 {
+	width: 160px !important;
+}
+.n-lv-filters-t .n-lv-f-number-c {
+/*	width: 40px !important;*/
+}
+.n-lv-filters-t .n-lv-f-boolean-true {
+}
+.n-lv-filters-t .n-lv-f-boolean-false {
+}
+.n-lv-filters-t .n-checkboxlist {
+}
+.n-lv-filters-t .n-lv-filters-sep td {
+	padding: 10px 0;
+}
+.n-lv-filters-t .n-lv-filters-sep div {
+	border-top: 1px dashed #ccc;
+	width: 100%;
+}
+.n-lv-filters-t tr.n-tr-submit {
+}
+.n-lv-filters-t tr.n-tr-submit td.n-td-submit {
+	padding: 2px;
+}
+.n-lv-fs-tb-options {
+	margin: 0;
+}
+.n-lv-fs-tb-options td {
+	white-space: nowrap;
+}
+
+/* body */
+.n-lv-body {
+	margin: 0;
+	padding: 0;
+}
+.n-lv-body-head {
+	margin: 0 0 -2px 0;
+}
+.n-lv-cell-last {
+	width: 100px;
+}
+
+/* table */
+.n-lv-table {
+	margin: 0;
+	width: 100%;
+}
+.n-lv-hidden {
+	display: none;
+}
+.n-lv-nowrap {
+	white-space: nowrap;
+}
+.n-lv-column {
+}
+
+
+/* table - thead */
+thead.n-lv-chead tr {
+}
+thead.n-lv-chead th {
+	font-weight: normal;
+	padding: 4px 4px;
+	text-align: left;
+	vertical-align: middle;
+}
+thead.n-lv-chead th.n-lv-rownum,
+thead.n-lv-chead th.n-lv-number,
+thead.n-lv-chead th.n-lv-check,
+thead.n-lv-chead th.n-lv-actions {
+	text-align: center;
+	padding: 2px 4px;
+	width: 22px;
+}
+thead.n-lv-chead th.n-lv-hover {
+	font-weight: normal;
+}
+thead.n-lv-chead th.n-lv-filtered, thead.n-lv-chead th.n-lv-filtered:hover {
+	font-style: italic;
+	font-weight: bold;
+}
+thead.n-lv-chead th.n-lv-sort-asc,
+thead.n-lv-chead th.n-lv-sort-desc,
+thead.n-lv-chead th.n-lv-sortable {
+	cursor: pointer;
+}
+thead.n-lv-chead th .n-lv-sort-asc,
+thead.n-lv-chead th .n-lv-sort-desc,
+thead.n-lv-chead th .n-lv-sort-off {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* table - tbody */
+tbody.n-lv-tbody {
+}
+tbody.n-lv-tbody tr.n-lv-odd {
+}
+tbody.n-lv-tbody tr.n-lv-even {
+}
+tbody.n-lv-tbody tr.n-lv-selected {
+}
+tbody.n-lv-tbody tr.n-lv-hover {
+}
+tbody.n-lv-tbody th {
+	font-weight: normal;
+}
+tbody.n-lv-tbody th, tbody.n-lv-tbody td {
+	padding: 2px 4px;
+	vertical-align: middle;
+}
+tbody.n-lv-tbody th.n-lv-check, tbody.n-lv-tbody td.n-lv-check,
+tbody.n-lv-tbody th.n-lv-number, tbody.n-lv-tbody td.n-lv-number,
+tbody.n-lv-tbody th.n-lv-rownum, tbody.n-lv-tbody td.n-lv-rownum,
+tbody.n-lv-tbody th.n-lv-actions, tbody.n-lv-tbody td.n-lv-actions {
+	text-align: center;
+	padding: 2px 4px;
+	width: 22px;
+}
+
+thead.n-lv-chead th, thead.n-lv-chead th .n-lv-cell,
+thead.n-lv-chead th.n-lv-actions, thead.n-lv-chead th.n-lv-actions .n-lv-cell,
+thead.n-lv-chead th.n-lv-number,  thead.n-lv-chead th.n-lv-number .n-lv-cell,
+thead.n-lv-chead th.n-lv-check,   thead.n-lv-chead th.n-lv-check .n-lv-cell,
+tbody.n-lv-tbody th.n-lv-number,  tbody.n-lv-tbody th.n-lv-number .n-lv-cell, 
+tbody.n-lv-tbody th.n-lv-rownum,  tbody.n-lv-tbody th.n-lv-rownum .n-lv-cell, 
+tbody.n-lv-tbody th.n-lv-check,   tbody.n-lv-tbody th.n-lv-check .n-lv-cell, 
+tbody.n-lv-tbody th.n-lv-actions, tbody.n-lv-tbody th.n-lv-actions .n-lv-cell, 
+tbody.n-lv-tbody td.n-lv-number,  tbody.n-lv-tbody td.n-lv-number .n-lv-cell,
+tbody.n-lv-tbody td.n-lv-rownum,  tbody.n-lv-tbody td.n-lv-rownum .n-lv-cell,
+tbody.n-lv-tbody td.n-lv-check,   tbody.n-lv-tbody td.n-lv-check .n-lv-cell,
+tbody.n-lv-tbody td.n-lv-actions, tbody.n-lv-tbody td.n-lv-actions .n-lv-cell {
+	white-space: nowrap;
+}
+
+/* theme */
+/*
+thead.n-lv-chead th.n-lv-column {
+	border-left-style: dotted;
+	border-right-style: dotted;
+}
+tbody.n-lv-tbody td.n-lv-column,
+tbody.n-lv-tbody tr.n-lv-selected td.n-lv-column,
+tbody.n-lv-tbody tr:hover td.n-lv-column,
+tbody.n-lv-tbody tr.n-lv-hover td.n-lv-column {
+	border-left: dotted 1px #ccc;
+	border-right: dotted 1px #ccc;
+}
+*/

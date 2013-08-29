@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pandaw" default="usage" basedir=".">
+
+	<!-- set global properties for this build -->
+	<property name="sdk.dir" value="${basedir}/../nuts-sdk"/>
+	<import file="${sdk.dir}/ant/build-common.xml"/>
+
+	<property name="prj.name" value="Pandaw"/>
+	<property name="prj.title" value="Panda Web Framework"/>
+	<property name="prj.author" value="${nuts.author}"/>
+	<property name="prj.site" value="${nuts.site}"/>
+	<property name="prj.version" value="${nuts.version}"/>
+
+	<property name="dist.dir" value="${sdk.nuts}"/>
+
+	<target name="usage">
+		<echo message=""/>
+		<echo message="${prj.name} build file"/>
+		<echo message="-----------------------------------"/>
+		<echo message=""/>
+		<echo message="Available targets are:"/>
+		<echo message=""/>
+		<echo message="all          --> dist &amp; test"/>
+		<echo message="build        --> Build the project (minjs, mincss)"/>
+		<echo message="mincss       --> Merge &amp; minify css files"/>
+		<echo message="minjs        --> Merge &amp; minify javascript files"/>
+		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
+		<echo message="jar          --> Make the project as a jar file"/>
+		<echo message="svninfo      --> Get source svn infomation"/>
+		<echo message=""/>
+	</target>
+
+	<target name="minjs" description="Merge &amp; minify javascript files">
+		<taskdef name="jsmin" classname="nuts.tools.minify.JsMinify" classpathref="tools.cp"/>
+
+		<concat destfile="static/panda/js/panda.js" binary="true">
+			<fileset dir="static/panda/js">
+				<include name="core.*.js"/>
+				<include name="ui.*.js"/>
+			</fileset>
+		</concat>
+		<jsmin charset="UTF-8"
+			jsfile="static/panda/js/panda.js"
+			minfile="static/panda/js/panda.min.js"/>
+
+		<concat destfile="static/jquery/js/jquery-plugins.js" binary="true">
+			<fileset dir="static/jquery/js" includes="jquery.*.js"/>
+		</concat>
+		<jsmin charset="UTF-8" 
+			jsfile="static/jquery/js/jquery-plugins.js" 
+			minfile="static/jquery/js/jquery-plugins.min.js"/>
+<!-- 
+		<concat destfile="static/jquery/js/jquery-plugins-ja.js" binary="true">
+			<fileset dir="static/jquery/js/i18n" includes="*-ja.js"/>
+		</concat>
+		<jsmin charset="UTF-8" 
+			jsfile="static/jquery/js/jquery-plugins-ja.js" 
+			minfile="static/jquery/js/jquery-plugins-ja.min.js"/>
+
+		<concat destfile="static/jquery/js/jquery-plugins-zh-CN.js" binary="true">
+			<fileset dir="static/jquery/js/i18n" includes="*-zh-CN.js"/>
+		</concat>
+		<jsmin charset="UTF-8" 
+			jsfile="static/jquery/js/jquery-plugins-zh-CN.js" 
+			minfile="static/jquery/js/jquery-plugins-zh-CN.min.js"/>
+
+		<concat destfile="static/jquery/js/jquery-plugins-zh-TW.js" binary="true">
+			<fileset dir="static/jquery/js/i18n" includes="*-zh-TW.js"/>
+		</concat>
+		<jsmin charset="UTF-8" 
+			jsfile="static/jquery/js/jquery-plugins-zh-TW.js" 
+			minfile="static/jquery/js/jquery-plugins-zh-TW.min.js"/>
+
+		<concat destfile="static/jquery/js/jquery-plugins-zh-HK.js" binary="true">
+			<fileset dir="static/jquery/js/i18n" includes="*-zh-HK.js"/>
+		</concat>
+		<jsmin charset="UTF-8" 
+			jsfile="static/jquery/js/jquery-plugins-zh-HK.js" 
+			minfile="static/jquery/js/jquery-plugins-zh-HK.min.js"/>
+-->
+	</target>
+
+	<target name="mincss" depends="svninfo" description="Merge &amp; minify css files">
+		<taskdef name="cssmin" classname="nuts.tools.minify.CssMinify" classpathref="tools.cp"/>
+
+		<concat destfile="static/panda/css/panda.css" binary="true">
+			<fileset dir="static/panda/css" includes="ui.*.css"/>
+		</concat>
+		<cssmin charset="UTF-8" 
+			cssfile="static/panda/css/panda.css" 
+			minfile="static/panda/css/panda.min.css"/>
+
+		<concat destfile="static/jquery/css/jquery-plugins.css" binary="true">
+			<fileset dir="static/jquery/css" includes="jquery.*.css"/>
+		</concat>
+		<cssmin charset="UTF-8" 
+			cssfile="static/jquery/css/jquery-plugins.css" 
+			minfile="static/jquery/css/jquery-plugins.min.css"/>
+	</target>
+
+	<target name="build" depends="minjs, mincss" description="Build the project"/>
+
+	<target name="jar" depends="svninfo" description="Make project as a jar file">
+		<delete>
+			<fileset dir="${sdk.nuts}">
+				<include name="${prj.name}-*.jar"/>
+			</fileset>
+		</delete>
+		<jar destfile="${sdk.nuts}/${prj.name}-${VERSION}.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.author}"/>
+				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/> 
+				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+			</manifest>
+			<fileset dir="${basedir}">
+				<include name="static/**"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
+
+	<target name="all" depends="dist"/>
+</project>

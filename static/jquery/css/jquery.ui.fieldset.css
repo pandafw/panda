@@ -1,0 +1,13 @@
+fieldset.ui-collapsible legend {
+	cursor: pointer;
+}
+fieldset.ui-collapsible {
+	border-width: 1px;
+}
+fieldset.ui-collapsed {
+	border-width: 1px 0 0 0;
+}
+.ui-fieldset-icon {
+	display: block;
+	float: left;
+}
