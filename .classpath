@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="main/java"/>
+	<classpathentry kind="src" output="test/classes" path="test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/compile/activation.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-cli.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-email.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-net.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-vfs2.jar"/>
+	<classpathentry kind="lib" path="lib/compile/freemarker.jar"/>
+	<classpathentry kind="lib" path="lib/compile/jtidy.jar"/>
+	<classpathentry kind="lib" path="lib/compile/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/compile/mail.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/postgresql.jar"/>
+	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit.jar"/>
+	<classpathentry kind="lib" path="lib/3rd/db2jcc_license_cu.jar"/>
+	<classpathentry kind="lib" path="lib/3rd/db2jcc.jar"/>
+	<classpathentry kind="lib" path="lib/3rd/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="lib/api/el-api.jar"/>
+	<classpathentry kind="lib" path="lib/api/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
+	<classpathentry kind="lib" path="lib/api/servlet-api.jar"/>
+	<classpathentry kind="output" path="main/classes"/>
+</classpath>

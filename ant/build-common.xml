@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build-common" basedir=".">
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
+	</tstamp>
+
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="lib.3rd" value="${lib.dir}/3rd"/>
+	<property name="lib.api" value="${lib.dir}/api"/>
+	<property name="lib.compile" value="${lib.dir}/compile"/>
+	<property name="lib.api" value="${lib.dir}/api"/>
+	<property name="lib.jdbc" value="${lib.dir}/jdbc"/>
+	<property name="lib.run" value="${lib.dir}/run"/>
+	<property name="lib.test" value="${lib.dir}/test"/>
+	<property name="lib.ivy" value="${lib.dir}/ivy"/>
+	
+	<property name="panda.fonts" value="${panda.dir}/fonts"/>
+
+	<property name="db.dir" value="${basedir}/db"/>
+	<property name="db.data" value="${db.dir}/data"/>
+	<property name="db.tpl" value="${db.dir}/templates"/>
+
+	<property name="env.dir" value="${basedir}/env"/>
+	<property name="env.java" value="${env.dir}/java"/>
+	<property name="env.res" value="${env.dir}/resources"/>
+
+	<property name="web.dir" value="${basedir}/web"/>
+	<property name="web.static" value="${web.dir}/_static"/>
+	<property name="web.fonts" value="${web.dir}/WEB-INF/fonts"/>
+
+	<property name="main.dir" value="${basedir}/main"/>
+	<property name="main.ajax" value="${main.dir}/ajax"/>
+	<property name="main.cls" value="${main.dir}/classes"/>
+	<property name="main.doc" value="${main.dir}/javadoc"/>
+	<property name="main.java" value="${main.dir}/java"/>
+	<property name="main.res" value="${main.dir}/resources"/>
+	<property name="main.sta" value="${main.dir}/statics"/>
+	<property name="main.tpl" value="${main.dir}/templates"/>
+
+	<property name="gen.dir" value="${basedir}/gen"/>
+	<property name="gen.conf" value="${gen.dir}/conf"/>
+	<property name="gen.java" value="${gen.dir}/java"/>
+	<property name="gen.res" value="${gen.dir}/resources"/>
+	<property name="gen.tpl" value="${gen.dir}/templates"/>
+	<property name="gen.ajax" value="${gen.dir}/ajax"/>
+	<property name="gen.ddl" value="${gen.dir}/ddl"/>
+	<property name="gen.ddl.aems" value="${gen.ddl}/nuts.aems"/>
+	<property name="gen.lang" value="ja"/>
+	<property name="gen.verbose" value="0"/>
+	
+	<property name="test.dir" value="${basedir}/test"/>
+	<property name="test.cls" value="${test.dir}/classes"/>
+	<property name="test.doc" value="${test.dir}/javadoc"/>
+	<property name="test.java" value="${test.dir}/java"/>
+	<property name="test.res" value="${test.dir}/resources"/>
+	<property name="test.rpt" value="${test.dir}/test-report"/>
+	<property name="emma.cls" value="${test.dir}/emma-classes"/>
+	<property name="emma.rpt" value="${test.dir}/emma-report"/>
+
+	<path id="tools.cp">
+		<pathelement path="../nuts-core/main/classes"/>
+		<pathelement path="../nuts-exts/main/classes"/>
+		<pathelement path="../nuts-gae/main/classes"/>
+		<pathelement path="../nuts-tools/main/classes"/>
+		<fileset dir="${lib.jdbc}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.gae}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.test}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.nuts}">
+			<include name="nuts-core-*.jar"/>
+			<include name="nuts-exts-*.jar"/>
+			<include name="nuts-tools-*.jar"/>
+			<exclude name="nuts-*-sources.jar"/>
+			<exclude name="nuts-*-javadoc.jar"/>
+		</fileset>
+		<fileset dir="${lib.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<scriptdef name="propertyreset" language="javascript"
+		description="Allows to assign @{property} new value">
+		<attribute name="name"/>
+		<attribute name="value"/>
+			project.setProperty(attributes.get("name"), attributes.get("value"));
+	</scriptdef>
+
+	<script language="javascript">
+		var ver = project.getProperty("VERSION");
+		if (ver == null) {
+			function run(cmd) {
+				var is = null;
+				try {
+					var p = java.lang.Runtime.getRuntime().exec(cmd);
+					is = p.getInputStream();
+					var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+					var o = "";
+					var s;
+					while ((s = br.readLine()) != null) {
+						o += s.trim();
+					}
+					return o;
+				}
+				catch (e) {
+					java.lang.System.err.println(e);
+					return "";
+				}
+				finally {
+					if (is != null) {
+						is.close();
+					}
+				}
+			}
+			
+			var rev = "0";
+			if (new java.io.File(".git").exists()) {
+				var s = run("git rev-list --all --count");
+				if (s != "") {
+					rev = s;
+				}
+			}
+			else if (new java.io.File(".svn").exists()) {
+				var si = run("svn info . --xml");
+				if (si != "") {
+					var b = si.indexOf("revision=\"") + 10;
+					var e = si.indexOf("\"", b);
+					rev = si.substring(b, e);
+				}
+			}
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		}
+	</script>
+
+	<target name="svn-info" unless="${snv.info}" description="Get source svn revision information">
+		<exec dir="${basedir}" executable="svn" outputproperty="svn.info">
+			<arg line="info . --xml"/>
+		</exec>
+		<script language="javascript">
+			var si = project.getProperty("svn.info");
+			var b = si.indexOf("revision=\"") + 10;
+			var e = si.indexOf("\"", b);
+			var rev = si.substring(b, e);
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		</script>
+	</target>
+	
+	<target name="git-info" unless="${git.info}" description="Get source git revision information">
+		<exec dir="${basedir}" executable="git" outputproperty="git.info">
+			<arg line="rev-list --all --count"/>
+		</exec>
+		<script language="javascript">
+			var gi = project.getProperty("git.info");
+			var rev = gi.trim();
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		</script>
+	</target>
+	
+	<target name="execsql" description="Execute SQL script">
+		<taskdef name="execsql" classname="nuts.tools.sql.SqlExecutor" classpathref="tools.cp"/>
+		<execsql source="${script}" charset="UTF-8" verbose="${sql.verbose}" 
+			jdbcDriver="${jdbc.driver}" jdbcUrl="${jdbc.url}"
+			jdbcUsername="${jdbc.username}" jdbcPassword="${jdbc.password}"/>
+	</target>
+
+	<target name="dbtype" unless="${db.type}" description="Get db.type infomation">
+		<!-- database type: HSQLDB, MYSQL, MSSQL, SYBASE, DB2, ORACLE, POSTGRESQL -->
+		<condition property="db.type" value="HSQLDB">
+			<contains string="${jdbc.driver}" substring="hsqldb" casesensitive="false"/>
+		</condition>
+		<condition property="db.type" value="MYSQL">
+			<contains string="${jdbc.driver}" substring="mysql" casesensitive="false"/>
+		</condition>
+		<condition property="db.type" value="ORACLE">
+			<contains string="${jdbc.driver}" substring="oracle" casesensitive="false"/>
+		</condition>
+		<condition property="db.type" value="POSTGRE">
+			<contains string="${jdbc.driver}" substring="postgresql" casesensitive="false"/>
+		</condition>
+		<condition property="hsqldb.dir" value="${web.dir}/WEB-INF/hsqldb">
+			<equals arg1="${db.type}" arg2="HSQLDB"/>
+		</condition>
+		<echo message="DB: ${db.type} - ${jdbc.driver}"/>
+	</target>
+
+	<target name="clean" description="Delete everything in the classes directory">
+		<delete dir="${main.cls}"/>
+		<delete dir="${main.doc}"/>
+	</target>
+
+	<target name="cp-res" description="Copy resource files to the classes directory">
+		<mkdir dir="${main.cls}"/>
+		<delete>
+			<fileset dir="${main.cls}">
+				<exclude name="**/*.class"/>
+			</fileset>
+		</delete>
+		<copy todir="${main.cls}" preservelastmodified="true">
+			<fileset dir="${env.java}" erroronmissingdir="false">
+				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="${env.res}" erroronmissingdir="false"/>
+			<fileset dir="${gen.java}" erroronmissingdir="false">
+				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="${gen.res}" erroronmissingdir="false"/>
+			<fileset dir="${gen.tpl}" erroronmissingdir="false"/>
+			<fileset dir="${main.java}">
+				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="${main.res}" erroronmissingdir="false"/>
+			<fileset dir="${main.tpl}" erroronmissingdir="false"/>
+			<fileset dir="${main.sta}" erroronmissingdir="false"/>
+		</copy>
+	</target>
+
+	<target name="dir_check">
+		<available file="${dir}" type="dir" property="dir.exists"/>
+	</target>
+	
+	<target name="n2a_do" depends="dir_check" if="dir.exists">
+		<native2ascii src="${dir}" dest="${main.cls}" encoding="Windows-31J" includes="**/*_ja.properties"/>
+		<native2ascii src="${dir}" dest="${main.cls}" encoding="GB2312" includes="**/*_zh.properties"/>
+	</target>
+
+	<target name="n2a" description="Convert native properties to ascii properties">
+		<delete>
+			<fileset dir="${main.cls}">
+				<include name="**/*_ja.properties"/>
+				<include name="**/*_zh.properties"/>
+			</fileset>
+		</delete>
+		
+		<antcall target="n2a_do">
+			<param name="dir" value="${env.res}"/>
+		</antcall>
+		<antcall target="n2a_do">
+			<param name="dir" value="${gen.res}"/>
+		</antcall>
+		<antcall target="n2a_do">
+			<param name="dir" value="${main.res}"/>
+		</antcall>
+	</target>
+
+	<target name="javadoc" description="Generate java documents">
+		<delete dir="${main.doc}"/>
+		<javadoc destdir="${main.doc}"
+			locale="en_US" docencoding="UTF-8" charset="UTF-8"
+			use="true" splitindex="true"
+			windowTitle="${prj.title} ${prj.version} API"
+			doctitle="${prj.title} ${prj.version} API"
+			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+		>
+			<fileset dir="${env.java}" erroronmissingdir="false"/>
+			<fileset dir="${gen.java}" erroronmissingdir="false"/>
+			<fileset dir="${main.java}"/>
+			<classpath refid="main.cp"/>
+		</javadoc>
+		<delete>
+			<fileset dir="${dist.dir}">
+				<include name="${prj.name}-*-javadoc.jar"/>
+			</fileset>
+		</delete>
+		<jar destfile="${dist.dir}/${prj.name}-${prj.version}-javadoc.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.author}"/>
+				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/> 
+				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+			</manifest>
+			<fileset dir="${main.doc}"/>
+		</jar>
+	</target>
+
+</project>

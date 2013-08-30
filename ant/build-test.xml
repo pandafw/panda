@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build-test" basedir=".">
+	<path id="emma.cp">
+		<pathelement location="${sdk.tool}/emma.jar"/>
+		<pathelement location="${sdk.tool}/emma_ant.jar"/>
+	</path>
+
+	<target name="test-clean" description="Delete everything in the classes directory">
+		<delete dir="${test.cls}"/>
+		<delete dir="${test.doc}"/>
+		<delete dir="${test.rpt}"/>
+		<delete dir="${emma.cls}"/>
+		<delete dir="${emma.rpt}"/>
+	</target>
+
+	<target name="test-rescp" description="Copy resource to the classes directory">
+		<mkdir dir="${test.cls}"/>
+		<delete>
+			<fileset dir="${test.cls}">
+				<exclude name="**/*.class"/>
+			</fileset>
+		</delete>
+		<copy todir="${test.cls}" preservelastmodified="true">
+			<fileset dir="${test.java}">
+				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="${test.res}"/>
+		</copy>
+	</target>
+
+	<target name="test-emma" description="EMMA instruments classes">
+		<taskdef resource="emma_ant.properties" classpathref="emma.cp"/>
+		
+		<!-- EMMA instr class output directory (it is important to create this property only when EMMA is enabled) -->
+		<mkdir dir="${emma.cls}"/>
+
+		<copy todir="${emma.cls}" preservelastmodified="true">
+			<fileset dir="${main.cls}"/>
+		</copy>
+
+		<!-- Instrument the classes, this takes the normal classes, and makes instrumented classes instead -->
+		<!-- Note that EMMA takes regular ANT path elements as instrumentation input, which is exceedingly convenient -->
+		<emma>
+			<instr instrpath="${emma.cls}"
+				 metadatafile="${emma.rpt}/metadata.emma"
+				 merge="true"
+				 mode="overwrite"
+			/>
+		</emma>
+	</target>
+
+	<target name="test-javac" description="Compile test source java files">
+		<mkdir dir="${test.cls}"/>
+		<javac destdir="${test.cls}" encoding="UTF-8" source="1.5" target="1.5" debug="true" includeAntRuntime="false">
+			<src path="${test.java}"/>
+			<classpath refid="test.cp"/>
+		</javac>
+	</target>
+
+	<target name="test-build"
+		depends="test-clean, test-rescp, test-emma, test-javac"
+		description="Build the test suite of project"/>
+
+	<target name="test-run" description="Run all junit test case">
+		<mkdir dir="${test.rpt}"/>
+
+		<junit printsummary="yes" haltonfailure="no" fork="true" forkmode="once">
+			<jvmarg value="-Demma.coverage.out.file=${emma.rpt}/coverage.emma"/>
+			<jvmarg value="-Demma.coverage.out.merge=false"/>
+			<classpath refid="junit.cp"/>
+			<batchtest fork="yes" todir="${test.rpt}">
+				<formatter type="xml"/>
+				<fileset dir="${test.java}">
+					<include name="**/*Test.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="test-report" description="Build the test report">
+		<junitreport todir="${test.rpt}">
+			<fileset dir="${test.rpt}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${test.rpt}"/>
+		</junitreport>
+
+		<emma>
+			<report sourcepath="${main.java}"
+				  sort="+name,+class,+method,+block"
+				  metrics="method:70,block:80,line:80,class:100"
+			>
+				<!-- collect all EMMA data dumps (metadata and runtime)
+					 [this can be done via nested <fileset> fileset elements
+					 or <file> elements pointing to a single file]:
+				-->
+				<fileset dir="${emma.rpt}" >
+					<include name="*.emma"/>
+				</fileset>
+
+				<!-- for every type of report desired, configure a nested
+					 element; various report parameters
+					 can be inherited from the parent <report>
+					 and individually overridden for each report type:
+				-->
+				<txt outfile="${emma.rpt}/coverage.txt"
+					depth="package"
+					columns="class,method,block,line,name"
+				/>
+				<xml outfile="${emma.rpt}/coverage.xml"
+					depth="package"
+				/>
+				<html outfile="${emma.rpt}/coverage.html"
+					depth="method"
+					columns="name,class,method,block,line"
+				/>
+			</report>
+		</emma>
+	</target>
+
+	<target name="test-javadoc" description="Generate test java documents">
+		<delete dir="${test.doc}"/>
+		<javadoc locale="en_US"
+			sourcepath="${test.java}" destdir="${test.doc}"
+			docencoding="UTF-8" charset="UTF-8"
+			use="true" splitindex="true"
+			windowTitle="${prj.title} ${VERSION} Test API"
+			doctitle="${prj.title} ${VERSION} Test API"
+			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+		>
+			<classpath refid="test.cp"/>
+		</javadoc>
+	</target>
+
+	<target name="test"
+		depends="test-build, test-run, test-report"
+		description="Test the project (test-build, test-run, test-report)"/>
+</project>

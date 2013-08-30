@@ -1,0 +1,8 @@
+package panda.lang;
+
+public class DynamicTestChild extends DynamicTest {
+	@Override
+	public String toString() {
+		return "child";
+	}
+}

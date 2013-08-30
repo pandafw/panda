@@ -1,0 +1,25 @@
+package panda.lang;
+
+public class DynamicTest2 {
+	public static class PublicInner {
+		int i;
+	}
+	
+	protected class ProtectedInner {
+		int i;
+	}
+	
+	private class PrivateInner {
+		int i;
+	}
+	
+	int i = 2;
+	
+	PublicInner pui;
+	ProtectedInner pti;
+	PrivateInner pri;
+	
+	public String toString() {
+		return String.valueOf(i);
+	}
+}

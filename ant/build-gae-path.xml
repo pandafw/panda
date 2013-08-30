@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build-gae-path" basedir=".">
+	<propertyreset name="main.cls" value="${web.dir}/WEB-INF/classes"/>
+	
+	<path id="tools.cp">
+		<pathelement path="../nuts-core/main/classes"/>
+		<pathelement path="../nuts-exts/main/classes"/>
+		<pathelement path="../nuts-gae/main/classes"/>
+		<pathelement path="../nuts-tools/main/classes"/>
+		<fileset dir="${sdk.jdbc}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.gae}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.nuts}">
+			<include name="nuts-core-*.jar"/>
+			<include name="nuts-exts-*.jar"/>
+			<include name="nuts-tools-*.jar"/>
+			<exclude name="nuts-*-sources.jar"/>
+			<exclude name="nuts-*-javadoc.jar"/>
+		</fileset>
+		<fileset dir="${sdk.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="main.cp">
+		<pathelement path="${main.cls}"/>
+		<pathelement path="../nuts-core/main/classes"/>
+		<pathelement path="../nuts-exts/main/classes"/>
+		<pathelement path="../nuts-gae/main/classes"/>
+		<pathelement path="../nuts-aems-gae/main/classes"/>
+		<fileset dir="${sdk.api}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.nuts}">
+			<include name="nuts-core-*.jar"/>
+			<include name="nuts-exts-*.jar"/>
+			<include name="nuts-gae-*.jar"/>
+			<include name="nuts-aems-gae-*.jar"/>
+			<exclude name="nuts-*-sources.jar"/>
+			<exclude name="nuts-*-javadoc.jar"/>
+		</fileset>
+		<fileset dir="${sdk.gae}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="test.cp">
+		<pathelement path="${main.cls}"/>
+		<pathelement path="${test.cls}"/>
+		<pathelement path="../nuts-core/main/classes"/>
+		<pathelement path="../nuts-exts/main/classes"/>
+		<pathelement path="../nuts-gae/main/classes"/>
+		<pathelement path="../nuts-aems-gae/main/classes"/>
+		<fileset dir="${sdk.api}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.gae}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.nuts}">
+			<include name="nuts-core-*.jar"/>
+			<include name="nuts-exts-*.jar"/>
+			<include name="nuts-gae-*.jar"/>
+			<include name="nuts-aems-gae-*.jar"/>
+			<exclude name="nuts-*-sources.jar"/>
+			<exclude name="nuts-*-javadoc.jar"/>
+		</fileset>
+		<fileset dir="${sdk.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.tool}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="junit.cp">
+		<pathelement path="${emma.cls}"/>
+		<pathelement path="${test.cls}"/>
+		<pathelement path="../nuts-core/main/classes"/>
+		<pathelement path="../nuts-exts/main/classes"/>
+		<pathelement path="../nuts-gae/main/classes"/>
+		<pathelement path="../nuts-aems-gae/main/classes"/>
+		<fileset dir="${sdk.api}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.gae}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.nuts}">
+			<include name="nuts-core-*.jar"/>
+			<include name="nuts-exts-*.jar"/>
+			<include name="nuts-gae-*.jar"/>
+			<include name="nuts-aems-gae-*.jar"/>
+			<exclude name="nuts-*-sources.jar"/>
+			<exclude name="nuts-*-javadoc.jar"/>
+		</fileset>
+		<fileset dir="${sdk.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${sdk.tool}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+</project>

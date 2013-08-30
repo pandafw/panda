@@ -1,0 +1,21 @@
+package panda.bind;
+
+import java.io.Reader;
+import java.lang.reflect.Type;
+
+/**
+ * 
+ * @author yf.frank.wang@gmail.com
+ *
+ */
+public interface Deserializer {
+	/**
+	 * Creates a object from a string, with a specific target class.<br>
+	 */
+	<T> T deserialize(String source, Type type);
+	
+	/**
+	 * Creates a object from a reader, with a specific target class.<br>
+	 */
+	<T> T deserialize(Reader source, Type type);
+}

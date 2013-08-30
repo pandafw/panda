@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property name="prj.name" value="panda"/>
+	<property name="prj.title" value="Panda Java Framework"/>
+	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
+	<property name="prj.site" value="github.com/pandawind/panda-java"/>
+	<loadfile srcFile="${basedir}/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8">
+		<filterchain>
+			<striplinebreaks/>
+			<linecontains>
+				<contains value="VERSION"/>
+			</linecontains>
+			<tokenfilter>
+				<replaceregex pattern="(.*)&quot;(.*)&quot;.*" replace="\2"/>
+			</tokenfilter>
+		</filterchain>
+	</loadfile>
+	
+	<!-- import -->
+	<property name="ant.dir" value="${basedir}/ant"/>
+	<import file="${ant.dir}/build-common.xml"/>
+	
+	<property name="dist.dir" value="${basedir}/dist"/>
+
+	<path id="main.cp">
+		<pathelement path="${main.cls}"/>
+		<fileset dir="${lib.compile}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.api}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="test.cp">
+		<pathelement path="${main.cls}"/>
+		<pathelement path="${test.cls}"/>
+		<fileset dir="${lib.compile}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.jdbc}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.test}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.api}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="junit.cp">
+		<pathelement path="${emma.cls}"/>
+		<pathelement path="${test.cls}"/>
+		<fileset dir="${lib.compile}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.test}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib.api}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="usage">
+		<echo message=""/>
+		<echo message="${prj.name}-${VERSION} build file"/>
+		<echo message="-----------------------------------"/>
+		<echo message=""/>
+		<echo message="Available targets are:"/>
+		<echo message=""/>
+		<echo message="all          --> dist &amp; test"/>
+		<echo message="build        --> Build the project (clean, cp-res, javac)"/>
+		<echo message="clean        --> Delete everything in the classes directory"/>
+		<echo message="cp-res       --> Copy resource files to the classes directory"/>
+		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
+		<echo message="jar          --> Make the project as a jar file"/>
+		<echo message="javac        --> Compile java source files"/>
+		<echo message="javadoc      --> Generate java documents"/>
+		<echo message="test         --> Test the project (test-build, test-run, test-report)"/>
+		<echo message="test-build   --> Build the test suite of project (test-clean, test-rescp, test-emma, test-javac)"/>
+		<echo message="test-clean   --> Delete everything in the test classes directory"/>
+		<echo message="test-emma    --> EMMA instruments main classes"/>
+		<echo message="test-javac   --> Compile test java source files"/>
+		<echo message="test-javadoc --> Generate test java documents"/>
+		<echo message="test-report  --> Build the test report"/>
+		<echo message="test-rescp   --> Copy test resource to the test classes directory"/>
+		<echo message="test-run     --> Run all junit test case"/>
+		<echo message=""/>
+	</target>
+
+	<!-- ivy -->
+	<target name="ivy-resolve" description="ivy --> retreive dependencies">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${lib.api}"/>
+			<fileset dir="${lib.compile}"/>
+			<fileset dir="${lib.gae}"/>
+			<fileset dir="${lib.jdbc}"/>
+			<fileset dir="${lib.test}"/>
+		</delete>
+		<ivy:retrieve conf="api,compile,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+	</target>
+
+	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
+		<ivy:report todir="lib/ivy" conf="api,compile,gae,jdbc,test"/>
+	</target>
+
+	<target name="ivy-cleancache" description="ivy --> clean the cache">
+		<ivy:cleancache />
+	</target>
+	
+	<!-- build -->
+	<target name="javac" description="Compile java source files">
+		<mkdir dir="${main.cls}"/>
+		<touch>
+			<fileset dir="${main.java}" includes="**/package-info.java"/>
+		</touch>
+		<javac destdir="${main.cls}" encoding="UTF-8" source="1.5" target="1.5" debug="true" includeAntRuntime="false">
+			<src path="${main.java}"/>
+			<classpath refid="main.cp"/>
+		</javac>
+	</target>
+
+	<target name="build" depends="clean, cp-res, javac" description="Build the project"/>
+
+
+	<!-- dist -->
+	<target name="jar" description="Make project as a jar file">
+		<delete dir="${dist.dir}"/>
+		<jar destfile="${dist.dir}/${prj.name}-${VERSION}.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.author}"/>
+				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/> 
+				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+			</manifest>
+			<fileset dir="${main.cls}"/>
+		</jar>
+		<jar destfile="${dist.dir}/${prj.name}-${VERSION}-sources.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.author}"/>
+				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/> 
+				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+			</manifest>
+			<fileset dir="${main.java}"/>
+			<fileset dir="${main.res}" erroronmissingdir="false"/>
+		</jar>
+	</target>
+
+	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
+
+	<!-- test -->
+	<import file="${ant.dir}/build-test.xml"/>
+
+	<target name="all" depends="dist, test"/>
+</project>

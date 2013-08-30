@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build-ivy" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+	<target name="ivy-resolve" description="ivy --> retreive dependencies">
+		<delete>
+			<fileset dir="lib/compile"/>
+			<fileset dir="lib/test"/>
+		</delete>
+		<ivy:retrieve conf="compile" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+	</target>
+
+	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
+		<ivy:report todir="lib/ivy" conf="compile,test"/>
+	</target>
+
+	<target name="ivy-cleancache" description="ivy --> clean the cache">
+		<ivy:cleancache />
+	</target>
+</project>

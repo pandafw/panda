@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build-app-common" basedir=".">
+	<target name="cp-nfonts" description="Copy nuts-sdk font files to the WEB-INF/fonts directory">
+		<delete dir="${web.fonts}"/>
+		<mkdir dir="${web.fonts}"/>
+		<copy todir="${web.fonts}" preservelastmodified="true">
+			<fileset dir="${sdk.fonts}">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="cp-nstatic" description="Copy nuts-sdk static files to the web/_static directory">
+		<delete dir="${web.static}"/>
+		<mkdir dir="${web.static}"/>
+		<unjar dest="${web.static}">
+			<fileset dir="${sdk.nuts}">
+				<include name="nuts-exts-statics-*.jar"/>
+				<include name="nuts-aems-statics-*.jar"/>
+			</fileset>
+			<patternset>
+				<exclude name="META-INF/**"/>
+			</patternset>
+		</unjar>
+		<move todir="${web.static}">
+			<fileset dir="${web.static}/static"/>
+		</move>
+		<delete>
+			<fileset dir="${web.static}">
+				<include name="jquery/plugins/jquery.*.js"/>
+				<include name="jquery/plugins/jquery.*.css"/>
+				<include name="jquery/plugins/i18n/jquery.*.js"/>
+				<include name="jquery/ui/jquery.*.js"/>
+				<include name="jquery/ui/minified/jquery.*.js"/>
+				<include name="nuts/images/icons/*.png"/>
+				<exclude name="nuts/images/icons/bullet_*.png"/>
+				<include name="nuts/js/core.*.js"/>
+				<include name="nuts/js/ui.*.js"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="cp-glib" description="Copy nuts-sdk(gae) lib to WEB-INF/lib">
+		<delete>
+			<fileset dir="${web.dir}/WEB-INF/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</delete>
+		<copy todir="${web.dir}/WEB-INF/lib" preservelastmodified="true">
+			<fileset dir="${sdk.gae}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${sdk.nuts}">
+				<include name="nuts-core-*.jar"/>
+				<include name="nuts-exts-*.jar"/>
+				<include name="nuts-gae-*.jar"/>
+				<include name="nuts-aems-gae-*.jar"/>
+				<exclude name="nuts-*-statics-*.jar"/>
+				<exclude name="nuts-*-sources.jar"/>
+				<exclude name="nuts-*-javadoc.jar"/>
+			</fileset>
+			<fileset dir="${sdk.lib}">
+				<include name="activation.jar"/>
+				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-codec-*.jar"/>
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
+				<include name="commons-email-*.jar"/>
+				<include name="commons-fileupload-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-lang*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="commons-validator-*.jar"/>
+				<include name="commons-vfs*.jar"/>
+				<include name="ezmorph-*.jar"/>
+				<include name="javassist-*.jar"/>
+				<include name="json-lib-*.jar"/>
+				<include name="jtidy-*.jar"/>
+				<include name="log4j-*.jar"/>
+				<include name="lucene-core-*.jar"/>
+				<include name="ognl-*.jar"/>
+				<include name="poi-*.jar"/>
+				<include name="sitemesh-*.jar"/>
+				<include name="struts2-core-*.jar"/>
+				<include name="xwork-core-*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="javac" description="Compile java source files">
+		<mkdir dir="${main.cls}"/>
+		<script language="javascript">
+			importClass(java.io.File)
+			
+			project.setProperty("java.src", project.getProperty("main.java"));
+			dn = project.getProperty("gen.java");
+			if (dn != null) {
+				df = new File(dn);
+				if (df.exists()) {
+					project.setProperty("java.src", project.getProperty("java.src") + ":" + dn)
+				}
+			}
+			dn = project.getProperty("env.java");
+			if (dn != null) {
+				df = new File(dn);
+				if (df.exists()) {
+					project.setProperty("java.src", project.getProperty("java.src") + ":" + dn)
+				}
+			}
+		</script>
+		<javac 
+			srcdir="${java.src}" destdir="${main.cls}" 
+			encoding="UTF-8" debug="true" 
+			source="1.5" target="1.5" 
+			includeAntRuntime="false">
+			<classpath refid="main.cp"/>
+		</javac>
+	</target>
+
+	<target name="war" description="Make project as a war distribute">
+		<mkdir dir="${dist.dir}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}">
+				<include name="war/**"/>
+				<include name="${prj.name}-*.war"/>
+			</fileset>
+		</delete>
+
+		<copy todir="${dist.dir}/war" preservelastmodified="true">
+			<fileset dir="${web.dir}">
+				<include name="**/*"/>
+				<exclude name="WEB-INF/hsqldb/**"/>
+				<exclude name="WEB-INF/upload/**"/>
+			</fileset>
+		</copy>
+
+		<manifest file="${dist.dir}/war/META-INF/MANIFEST.MF">
+			<attribute name="Created-By" value="${prj.author}"/>
+			<attribute name="Built-By" value="${prj.author}"/>
+			<attribute name="Built-Date" value="${TODAY}"/>
+			<attribute name="Implementation-Title" value="${prj.title}"/>
+			<attribute name="Implementation-Version" value="${VERSION}"/>
+			<attribute name="Implementation-Vendor" value="${prj.site}"/>
+		</manifest>
+
+		<copy todir="${dist.dir}/war/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${main.cls}">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.author=.*"
+			replace="prj.author=${prj.author}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.version=.*"
+			replace="prj.version=${prj.version}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.revision=.*"
+			replace="prj.revision=${REVISION}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/log4j.properties" 
+			match="(debug)|(trace)"
+			replace="info"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/freemarker.properties" 
+			match="template_update_delay=.*"
+			replace="template_update_delay=60000"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/decorators/main.ftl" 
+			match="debug=&quot;true&quot;"
+			replace="debug=&quot;false&quot;"
+			byline="true"
+			encoding="ISO-8859-1"/>
+
+		<jar destfile="${dist.dir}/war/WEB-INF/lib/${VERSION}.jar">
+			<fileset dir="${dist.dir}/war/WEB-INF/classes"/>
+		</jar>
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}/war/WEB-INF/classes" includes="**/*"/>
+		</delete>
+
+		<copy todir="${dist.dir}/war/WEB-INF/lib" preservelastmodified="true">
+			<fileset dir="${sdk.api}">
+				<include name="jsr107cache-*.jar"/>
+			</fileset>
+			<fileset dir="${sdk.nuts}">
+				<include name="nuts-core-*.jar"/>
+				<include name="nuts-exts-*.jar"/>
+				<include name="nuts-aems-*.jar"/>
+				<exclude name="nuts-*-gae.jar"/>
+				<exclude name="nuts-*-statics-*.jar"/>
+				<exclude name="nuts-*-sources.jar"/>
+				<exclude name="nuts-*-javadoc.jar"/>
+			</fileset>
+			<fileset dir="${sdk.lib}">
+				<include name="activation.jar"/>
+				<include name="commons-beanutils-*.jar"/>
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-configuration-*.jar"/>
+				<include name="commons-email-*.jar"/>
+				<include name="commons-fileupload-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-lang*.jar"/>
+				<include name="commons-logging-*.jar"/>
+				<include name="commons-net-*.jar"/>
+				<include name="commons-validator-*.jar"/>
+				<include name="commons-vfs*.jar"/>
+				<include name="ehcache-core-*.jar"/>
+				<include name="ehcache-jcache-*.jar"/>
+				<include name="freemarker-*.jar"/>
+				<include name="flyingsaucer-*.jar"/>
+				<include name="iText-*.jar"/>
+				<include name="javamail-*.jar"/>
+				<include name="javassist-*.jar"/>
+				<include name="jtidy-*.jar"/>
+				<include name="log4j-*.jar"/>
+				<include name="lucene-core-*.jar"/>
+				<include name="mybatis-*.jar"/>
+				<include name="ognl-*.jar"/>
+				<include name="poi-*.jar"/>
+				<include name="sitemesh-*.jar"/>
+				<include name="struts2-core-*.jar"/>
+				<include name="xwork-core-*.jar"/>
+			</fileset>
+		</copy>
+
+		<war destfile="${dist.dir}/${prj.name}-${VERSION}.war"
+			manifest="${dist.dir}/war/META-INF/MANIFEST.MF">
+			<fileset dir="${dist.dir}/war"/>
+		</war>
+	</target>
+
+	<target name="war-gae" description="Make project as a gae war distribute">
+		<mkdir dir="${dist.dir}"/>
+		<delete dir="${dist.dir}/war"/>
+
+		<copy todir="${dist.dir}/war" preservelastmodified="true">
+			<fileset dir="${web.dir}">
+				<exclude name="WEB-INF/appengine-generated/**"/>
+				<exclude name="WEB-INF/fonts/**"/>
+			</fileset>
+		</copy>
+
+		<manifest file="${dist.dir}/war/META-INF/MANIFEST.MF">
+			<attribute name="Created-By" value="${prj.author}"/>
+			<attribute name="Built-By" value="${prj.author}"/>
+			<attribute name="Built-Date" value="${TODAY}"/>
+			<attribute name="Implementation-Title" value="${prj.title}"/>
+			<attribute name="Implementation-Version" value="${VERSION}"/>
+			<attribute name="Implementation-Vendor" value="${prj.site}"/>
+		</manifest>
+
+		<replaceregexp file="${dist.dir}/war/WEB-INF/web.xml" 
+			match="&lt;!\-\-\{\{"
+			replace=""
+			byline="true"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/web.xml" 
+			match="}}\-\-&gt;"
+			replace=""
+			byline="true"/>
+
+		<script language="javascript">
+			var v = project.getProperty("VERSION");
+			project.setProperty("GVERSION", v.replaceAll("\\.", "-"));
+		</script>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/appengine-web.xml" 
+			match="&lt;version&gt;&lt;/version&gt;"
+			replace="&lt;version&gt;${GVERSION}&lt;/version&gt;"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/appengine-web.xml" 
+			match="&lt;!\-\-\{\{"
+			replace=""
+			byline="true"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/appengine-web.xml" 
+			match="}}\-\-&gt;"
+			replace=""
+			byline="true"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/appengine-log.properties" 
+			match="FINE"
+			replace="INFO"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.author=.*"
+			replace="prj.author=${prj.author}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.version=.*"
+			replace="prj.version=${prj.version}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/system.properties" 
+			match="prj.revision=.*"
+			replace="prj.revision=${REVISION}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/log4j.properties" 
+			match="(debug)|(trace)"
+			replace="info"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/log4j.properties" 
+			match="log4j.rootLogger=warn, stdout"
+			replace="log4j.rootLogger=warn, java, smtp"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/log4j.properties" 
+			match="\{VERSION\}"
+			replace="${VERSION}"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/freemarker.properties" 
+			match="template_update_delay=.*"
+			replace="template_update_delay=60000"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/decorators/main.ftl" 
+			match="debug=&quot;true&quot;"
+			replace="debug=&quot;false&quot;"
+			byline="true"
+			encoding="ISO-8859-1"/>
+		<replaceregexp file="${dist.dir}/war/WEB-INF/classes/decorators/parts/main-footer.ftl" 
+			match="(poweredby-gph)|(poweredby-sf)"
+			replace="poweredby-gae"
+			byline="true"
+			encoding="UTF-8"/>
+
+		<jar destfile="${dist.dir}/war/WEB-INF/lib/${VERSION}.jar">
+			<fileset dir="${dist.dir}/war/WEB-INF/classes"/>
+		</jar>
+		<delete includeemptydirs="true">
+			<fileset dir="${dist.dir}/war/WEB-INF/classes" includes="**/*"/>
+		</delete>
+	</target>
+
+</project>
