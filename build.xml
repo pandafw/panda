@@ -1,54 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="pandaw" default="usage" basedir=".">
-
+<project name="panda-web" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 	<!-- set global properties for this build -->
-	<property name="sdk.dir" value="${basedir}/../nuts-sdk"/>
-	<import file="${sdk.dir}/ant/build-common.xml"/>
-
-	<property name="prj.name" value="Pandaw"/>
+	<property name="prj.name" value="panda-web"/>
 	<property name="prj.title" value="Panda Web Framework"/>
-	<property name="prj.author" value="${nuts.author}"/>
-	<property name="prj.site" value="${nuts.site}"/>
-	<property name="prj.version" value="${nuts.version}"/>
+	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
+	<property name="prj.site" value="github.com/pandawind/panda-web"/>
+	<loadfile srcFile="${basedir}/../panda-java/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8" failonerror="false">
+		<filterchain>
+			<striplinebreaks/>
+			<linecontains>
+				<contains value="VERSION"/>
+			</linecontains>
+			<tokenfilter>
+				<replaceregex pattern="(.*)&quot;(.*)&quot;.*" replace="\2"/>
+			</tokenfilter>
+		</filterchain>
+	</loadfile>
+	<property name="prj.version" value="0.1.0"/>
 
-	<property name="dist.dir" value="${sdk.nuts}"/>
+	<exec dir="${basedir}" executable="git" outputproperty="git.info" failifexecutionfails="false">
+		<arg line="rev-list --all --count"/>
+	</exec>
+	<script language="javascript">
+		var gi = project.getProperty("git.info");
+		var rev = gi == null ? "0" : gi.trim();
+		project.setProperty("REVISION", rev);
+		project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+	</script>
 
 	<target name="usage">
 		<echo message=""/>
-		<echo message="${prj.name} build file"/>
+		<echo message="${prj.name}-${VERSION} build file"/>
 		<echo message="-----------------------------------"/>
 		<echo message=""/>
 		<echo message="Available targets are:"/>
 		<echo message=""/>
 		<echo message="all          --> dist &amp; test"/>
 		<echo message="build        --> Build the project (minjs, mincss)"/>
-		<echo message="mincss       --> Merge &amp; minify css files"/>
-		<echo message="minjs        --> Merge &amp; minify javascript files"/>
+		<echo message="min-css      --> Merge &amp; minify css files"/>
+		<echo message="min-js       --> Merge &amp; minify javascript files"/>
 		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
 		<echo message="jar          --> Make the project as a jar file"/>
-		<echo message="svninfo      --> Get source svn infomation"/>
 		<echo message=""/>
 	</target>
 
-	<target name="minjs" description="Merge &amp; minify javascript files">
-		<taskdef name="jsmin" classname="nuts.tools.minify.JsMinify" classpathref="tools.cp"/>
+	<!-- ivy -->
+	<target name="ivy-resolve" description="ivy --> retreive dependencies">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="tools"/>
+		</delete>
+		<ivy:retrieve conf="tool" pattern="tools/[artifact](-[classifier]).[ext]"/>
+	</target>
 
+	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
+		<ivy:report todir="tools/ivy" conf="tool"/>
+	</target>
+
+	<target name="ivy-cleancache" description="ivy --> clean the cache">
+		<ivy:cleancache />
+	</target>
+
+	<!-- build -->
+	<target name="min-js" description="Merge &amp; minify javascript files">
 		<concat destfile="static/panda/js/panda.js" binary="true">
 			<fileset dir="static/panda/js">
 				<include name="core.*.js"/>
 				<include name="ui.*.js"/>
 			</fileset>
 		</concat>
-		<jsmin charset="UTF-8"
-			jsfile="static/panda/js/panda.js"
-			minfile="static/panda/js/panda.min.js"/>
+		<java jar="tools/yuicompressor.jar" fork="true">
+			<arg value="static/panda/js/panda.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="static/panda/js/panda.min.js"/>
+		</java>
 
 		<concat destfile="static/jquery/js/jquery-plugins.js" binary="true">
 			<fileset dir="static/jquery/js" includes="jquery.*.js"/>
 		</concat>
-		<jsmin charset="UTF-8" 
-			jsfile="static/jquery/js/jquery-plugins.js" 
-			minfile="static/jquery/js/jquery-plugins.min.js"/>
+		<java jar="tools/yuicompressor.jar" fork="true">
+			<arg value="static/jquery/js/jquery-plugins.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="static/jquery/js/jquery-plugins.min.js"/>
+		</java>
 <!-- 
 		<concat destfile="static/jquery/js/jquery-plugins-ja.js" binary="true">
 			<fileset dir="static/jquery/js/i18n" includes="*-ja.js"/>
@@ -80,33 +121,39 @@
 -->
 	</target>
 
-	<target name="mincss" depends="svninfo" description="Merge &amp; minify css files">
-		<taskdef name="cssmin" classname="nuts.tools.minify.CssMinify" classpathref="tools.cp"/>
-
+	<target name="min-css" description="Merge &amp; minify css files">
 		<concat destfile="static/panda/css/panda.css" binary="true">
 			<fileset dir="static/panda/css" includes="ui.*.css"/>
 		</concat>
-		<cssmin charset="UTF-8" 
-			cssfile="static/panda/css/panda.css" 
-			minfile="static/panda/css/panda.min.css"/>
+		<java jar="tools/yuicompressor.jar" fork="true">
+			<arg value="static/panda/css/panda.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="static/panda/css/panda.min.css"/>
+		</java>
 
 		<concat destfile="static/jquery/css/jquery-plugins.css" binary="true">
 			<fileset dir="static/jquery/css" includes="jquery.*.css"/>
 		</concat>
-		<cssmin charset="UTF-8" 
-			cssfile="static/jquery/css/jquery-plugins.css" 
-			minfile="static/jquery/css/jquery-plugins.min.css"/>
+		<java jar="tools/yuicompressor.jar" fork="true">
+			<arg value="static/jquery/css/jquery-plugins.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="static/jquery/css/jquery-plugins.min.css"/>
+		</java>
 	</target>
 
-	<target name="build" depends="minjs, mincss" description="Build the project"/>
+	<target name="build" depends="ivy-resolve, min-js, min-css" description="Build the project"/>
 
-	<target name="jar" depends="svninfo" description="Make project as a jar file">
-		<delete>
-			<fileset dir="${sdk.nuts}">
-				<include name="${prj.name}-*.jar"/>
-			</fileset>
-		</delete>
-		<jar destfile="${sdk.nuts}/${prj.name}-${VERSION}.jar">
+	<target name="jar" description="Make project as a jar file">
+		<delete dir="dist"/>
+		<jar destfile="dist/${prj.name}-${VERSION}.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.author}"/>
 				<attribute name="Built-By" value="${prj.author}"/>

@@ -1,0 +1,10 @@
+<ivy-module version="2.0">
+	<info organisation="pandawind.com" module="panda-web" revision="${prj.version}"/>
+	<configurations>
+		<conf name="tool" visibility="public" />
+	</configurations>
+	<dependencies>
+		<!-- tool -->
+		<dependency org="com.yahoo.platform.yui" name="yuicompressor" rev="2.4.7" conf="tool->master,sources" />
+	</dependencies>
+</ivy-module>
