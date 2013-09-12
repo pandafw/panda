@@ -9,6 +9,18 @@ import panda.lang.DynamicClassLoader;
  * DynamicClassLoaderTest
  */
 public class DynamicClassLoaderTest extends TestCase {
+	DynamicClassLoader loader;
+
+	@Override
+	public void setUp() {
+		loader = new DynamicClassLoader();
+	}
+
+	@Override
+	public void tearDown() {
+		loader.clear();
+	}
+	
 	private Class loadClass(DynamicClassLoader loader, String className, String sourceName) throws Exception {
 		String source = Streams.toString(this.getClass().getResourceAsStream(sourceName));
 		
@@ -56,7 +68,6 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * @throws Exception if an error occurs
 	 */
 	public void testSimple() throws Exception {
-		DynamicClassLoader loader = new DynamicClassLoader();
 		loadDynamicTest(loader);
 	}
 	
@@ -65,8 +76,6 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * @throws Exception if an error occurs
 	 */
 	public void testRecompile() throws Exception {
-		DynamicClassLoader loader = new DynamicClassLoader();
-
 		loadDynamicTest(loader);
 		
 		Class c = loadClass(loader, "DynamicTest", "DynamicTest.java.2.txt");
@@ -85,8 +94,6 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * @throws Exception if an error occurs
 	 */
 	public void testTwoClass() throws Exception {
-		DynamicClassLoader loader = new DynamicClassLoader();
-
 		loadDynamicTest(loader);
 		loadDynamicTest2(loader);
 	}
@@ -96,8 +103,6 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * @throws Exception if an error occurs
 	 */
 	public void testInherit() throws Exception {
-		DynamicClassLoader loader = new DynamicClassLoader();
-
 		try {
 			loadDynamicTestChild(loader);
 			fail("loadDynamicTestChild should failed!");

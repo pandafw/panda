@@ -415,7 +415,7 @@ public class ClassesTest extends TestCase {
 
 	@Test
 	public void test_isAssignable() throws Exception {
-		assertFalse(Classes.isAssignable((Class<?>)null, null));
+		assertTrue(Classes.isAssignable((Class<?>)null, null));
 		assertFalse(Classes.isAssignable(String.class, null));
 
 		assertTrue(Classes.isAssignable(null, Object.class));
@@ -443,7 +443,7 @@ public class ClassesTest extends TestCase {
 
 	@Test
 	public void test_isAssignable_Autoboxing() throws Exception {
-		assertFalse(Classes.isAssignable((Class<?>)null, null, true));
+		assertTrue(Classes.isAssignable((Class<?>)null, null, true));
 		assertFalse(Classes.isAssignable(String.class, null, true));
 
 		assertTrue(Classes.isAssignable(null, Object.class, true));
@@ -467,7 +467,7 @@ public class ClassesTest extends TestCase {
 
 	@Test
 	public void test_isAssignable_NoAutoboxing() throws Exception {
-		assertFalse(Classes.isAssignable((Class<?>)null, null, false));
+		assertTrue(Classes.isAssignable((Class<?>)null, null, false));
 		assertFalse(Classes.isAssignable(String.class, null, false));
 
 		assertTrue(Classes.isAssignable(null, Object.class, false));

@@ -161,7 +161,6 @@ public class Base64 extends BaseNCodec {
 	 * 
 	 * @param urlSafe if {@code true}, URL-safe encoding is used. In most cases this should be set
 	 *            to {@code false}.
-	 * @since 1.4
 	 */
 	public Base64(final boolean urlSafe) {
 		this(MIME_CHUNK_SIZE, CHUNK_SEPARATOR, urlSafe);
@@ -457,7 +456,6 @@ public class Base64 extends BaseNCodec {
 	 * @param octet The value to test
 	 * @return {@code true} if the value is defined in the the base 64 alphabet, {@code false}
 	 *         otherwise.
-	 * @since 1.4
 	 */
 	public static boolean isBase64(final byte octet) {
 		return octet == PAD_DEFAULT || (octet >= 0 && octet < DECODE_TABLE.length && DECODE_TABLE[octet] != -1);
@@ -519,7 +517,6 @@ public class Base64 extends BaseNCodec {
 	 * 
 	 * @param binaryData binary data to encode
 	 * @return byte[] containing Base64 characters in their UTF-8 representation.
-	 * @since 1.4
 	 */
 	public static byte[] encodeBase64URLSafe(final byte[] binaryData) {
 		return encodeBase64(binaryData, false, true);
@@ -576,7 +573,6 @@ public class Base64 extends BaseNCodec {
 	 * @return Base64-encoded data.
 	 * @throws IllegalArgumentException Thrown when the input array needs an output array bigger
 	 *             than {@link Integer#MAX_VALUE}
-	 * @since 1.4
 	 */
 	public static byte[] encodeBase64(final byte[] binaryData, final boolean isChunked, final boolean urlSafe) {
 		return encodeBase64(binaryData, isChunked, urlSafe, Integer.MAX_VALUE);
@@ -643,7 +639,6 @@ public class Base64 extends BaseNCodec {
 	 * 
 	 * @param pArray a byte array containing base64 character data
 	 * @return A BigInteger
-	 * @since 1.4
 	 */
 	public static BigInteger decodeInteger(final byte[] pArray) {
 		return new BigInteger(1, decodeBase64(pArray));
