@@ -1,19 +1,19 @@
 package panda.dao.sql.criteria;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import panda.lang.Objects;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
-public class SqlSelectClause implements Cloneable, Serializable {
+public class SqlSelectClause {
 
 	private List<SelectColumnExpression> expressions;
 
-    /**
+	/**
 	 * @return expressionList
 	 */
 	public List<SelectColumnExpression> getExpressions() {
@@ -28,43 +28,36 @@ public class SqlSelectClause implements Cloneable, Serializable {
 	}
 
 	/**
-     * constructor
-     */
-    public SqlSelectClause() {
-    	expressions = new ArrayList<SelectColumnExpression>();
-    }
-    
-    /**
-     * clear
-     */
-    public void clear() {
-    	expressions.clear();
-    }
-
-    /**
-     * addSelectColumn
-     * @param column column
-     */
-    public void addSelectColumn(String column) {
-    	expressions.add(new SelectColumnExpression(column));
-    }
-
-    /**
-     * addSelectColumn
-     * @param column column
-     * @param columnAlias columnAlias
-     */
-    public void addSelectColumn(String column, String columnAlias) {
-    	expressions.add(new SelectColumnExpression(column, columnAlias));
-    }
+	 * constructor
+	 */
+	public SqlSelectClause() {
+		expressions = new ArrayList<SelectColumnExpression>();
+	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
+	 * clear
 	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public void clear() {
+		expressions.clear();
+	}
+
+	/**
+	 * addSelectColumn
+	 * 
+	 * @param column column
+	 */
+	public void addSelectColumn(String column) {
+		expressions.add(new SelectColumnExpression(column));
+	}
+
+	/**
+	 * addSelectColumn
+	 * 
+	 * @param column column
+	 * @param columnAlias columnAlias
+	 */
+	public void addSelectColumn(String column, String columnAlias) {
+		expressions.add(new SelectColumnExpression(column, columnAlias));
 	}
 
 	/**
@@ -72,10 +65,7 @@ public class SqlSelectClause implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((expressions == null) ? 0 : expressions.hashCode());
-		return result;
+		return Objects.hashCodeBuilder().append(expressions).toHashCode();
 	}
 
 	/**
@@ -89,28 +79,21 @@ public class SqlSelectClause implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SqlSelectClause other = (SqlSelectClause) obj;
-		if (expressions == null) {
-			if (other.expressions != null)
-				return false;
-		}
-		else if (!expressions.equals(other.expressions))
-			return false;
-		return true;
+
+		SqlSelectClause rhs = (SqlSelectClause) obj;
+		return Objects.equalsBuilder()
+				.append(expressions, rhs.expressions)
+				.isEquals();
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("expressions: [ ").append(expressions).append(" ]");
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("expressions", expressions)
+				.toString();
 	}
 
 }

@@ -1,8 +1,8 @@
---DROP DATABASE IF EXISTS nutstest;
---DROP USER IF EXISTS nutstest;
---CREATE USER nutstest PASSWORD 'nuts';
---CREATE DATABASE nutstest WITH OWNER = nuts ENCODING = 'UTF-8';
---GRANT ALL ON DATABASE nutstest TO nuts;
+--DROP DATABASE IF EXISTS pandatest;
+--DROP USER IF EXISTS panda;
+--CREATE USER panda PASSWORD 'panda';
+--CREATE DATABASE pandastest WITH OWNER = panda ENCODING = 'UTF-8';
+--GRANT ALL ON DATABASE pandatest TO panda;
 
 
 DROP TABLE IF EXISTS TEST;

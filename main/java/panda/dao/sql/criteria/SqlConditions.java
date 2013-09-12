@@ -1,6 +1,5 @@
 package panda.dao.sql.criteria;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,8 +12,7 @@ import panda.lang.Objects;
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
-public class SqlConditions implements Conditions, Cloneable, Serializable {
+public class SqlConditions implements Conditions {
 
 	private String conjunction = AND;
 	
@@ -494,28 +492,14 @@ public class SqlConditions implements Conditions, Cloneable, Serializable {
 	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
 	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("conjunction: ").append(conjunction);
-		sb.append(", ");
-		sb.append("expressions: ").append(expressions);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("conjunction", conjunction)
+				.append("expressions", expressions)
+				.toString();
 	}
 
 }

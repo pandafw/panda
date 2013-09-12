@@ -3,10 +3,11 @@ package panda.dao.sql.criteria;
 import java.lang.reflect.Array;
 import java.util.Collection;
 
+import panda.lang.Objects;
+
 /**
- * CollectionExpression
+ * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class CompareCollectionExpression extends SimpleExpression {
 	
 	protected Object compareValues;
@@ -75,10 +76,10 @@ public class CompareCollectionExpression extends SimpleExpression {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((compareValues == null) ? 0 : compareValues.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(compareValues)
+				.toHashCode();
 	}
 
 	/**
@@ -92,14 +93,12 @@ public class CompareCollectionExpression extends SimpleExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CompareCollectionExpression other = (CompareCollectionExpression) obj;
-		if (compareValues == null) {
-			if (other.compareValues != null)
-				return false;
-		}
-		else if (!compareValues.equals(other.compareValues))
-			return false;
-		return true;
+
+		CompareCollectionExpression rhs = (CompareCollectionExpression) obj;
+		return Objects.equalsBuilder()
+				.appendSuper(super.equals(rhs))
+				.append(compareValues, rhs.compareValues)
+				.isEquals();
 	}
 
 
@@ -116,7 +115,10 @@ public class CompareCollectionExpression extends SimpleExpression {
 		sb.append("compareValues: ").append(compareValues);
 		sb.append(" }");
 
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("compareValues", compareValues)
+				.toString();
 	}
 
 }

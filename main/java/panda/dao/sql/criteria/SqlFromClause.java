@@ -1,14 +1,12 @@
 package panda.dao.sql.criteria;
 
-import java.io.Serializable;
-
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
-public class SqlFromClause implements Cloneable, Serializable {
+public class SqlFromClause {
 
 	private String table;
 
@@ -49,10 +47,7 @@ public class SqlFromClause implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((table == null) ? 0 : table.hashCode());
-		return result;
+		return Objects.hashCodeBuilder().append(table).toHashCode();
 	}
 
 	/**
@@ -66,36 +61,18 @@ public class SqlFromClause implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SqlFromClause other = (SqlFromClause) obj;
-		if (table == null) {
-			if (other.table != null)
-				return false;
-		}
-		else if (!table.equals(other.table))
-			return false;
-		return true;
+
+		SqlFromClause rhs = (SqlFromClause) obj;
+		return Objects.equalsBuilder().append(table, rhs.table).isEquals();
 	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("table: ").append(table);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("table", table)
+				.toString();
 	}
 }

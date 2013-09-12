@@ -1,11 +1,11 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
+
 
 /**
- * CompareRangeExpression
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class CompareRangeExpression extends SimpleExpression {
 
 	protected Object minValue;
@@ -79,11 +79,11 @@ public class CompareRangeExpression extends SimpleExpression {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((minValue == null) ? 0 : minValue.hashCode());
-		result = prime * result + ((maxValue == null) ? 0 : maxValue.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(minValue)
+				.append(maxValue)
+				.toHashCode();
 	}
 
 	/**
@@ -97,39 +97,26 @@ public class CompareRangeExpression extends SimpleExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CompareRangeExpression other = (CompareRangeExpression) obj;
-		if (minValue == null) {
-			if (other.minValue != null)
-				return false;
-		}
-		else if (!minValue.equals(other.minValue))
-			return false;
-		if (maxValue == null) {
-			if (other.maxValue != null)
-				return false;
-		}
-		else if (!maxValue.equals(other.maxValue))
-			return false;
-		return true;
+
+		CompareRangeExpression rhs = (CompareRangeExpression) obj;
+		return Objects.equalsBuilder()
+				.appendSuper(super.equals(rhs))
+				.append(minValue, rhs.minValue)
+				.append(maxValue, rhs.maxValue)
+				.isEquals();
 	}
 
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append(super.toString());
-		sb.append(", ");
-		sb.append("minValue: ").append(minValue);
-		sb.append(", ");
-		sb.append("maxValue: ").append(maxValue);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("minValue", minValue)
+				.append("maxValue", maxValue)
+				.toString();
 	}
 
 }

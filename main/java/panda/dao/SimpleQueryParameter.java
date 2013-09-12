@@ -1,6 +1,5 @@
 package panda.dao;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,9 +8,7 @@ import panda.lang.Objects;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SimpleQueryParameter implements QueryParameter, Cloneable, Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class SimpleQueryParameter implements QueryParameter {
 	protected Map<String, Boolean> excludes;
 	protected Conditions conditions;
 	protected Orders orders;
@@ -182,35 +179,17 @@ public class SimpleQueryParameter implements QueryParameter, Cloneable, Serializ
 	}
 
 	/**
-	 * Clone
-	 * 
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
 	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("excludes: { ").append(excludes).append(" }");
-		sb.append(", ");
-		sb.append("conditions: ").append(conditions);
-		sb.append(", ");
-		sb.append("orders: ").append(orders);
-		sb.append(", ");
-		sb.append("start: ").append(start);
-		sb.append(", ");
-		sb.append("limit: ").append(limit);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("excludes", excludes)
+				.append("conditions", conditions)
+				.append("orders", orders)
+				.append("start", start)
+				.append("limit", limit)
+				.toString();
 	}
 
 }

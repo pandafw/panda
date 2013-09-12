@@ -1,10 +1,11 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
+
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class SqlUpdateParameter extends SqlQueryParameter {
 
 	private Object data;
@@ -75,10 +76,10 @@ public class SqlUpdateParameter extends SqlQueryParameter {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(data)
+				.hashCode();
 	}
 
 	/**
@@ -92,13 +93,12 @@ public class SqlUpdateParameter extends SqlQueryParameter {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SqlUpdateParameter other = (SqlUpdateParameter) obj;
-		if (data == null) {
-			if (other.data != null)
-				return false;
-		} else if (!data.equals(other.data))
-			return false;
-		return true;
+
+		SqlUpdateParameter rhs = (SqlUpdateParameter) obj;
+		return Objects.equalsBuilder()
+				.appendSuper(super.equals(rhs))
+				.append(data, rhs.data)
+				.isEquals();
 	}
 
 	/**
@@ -106,15 +106,10 @@ public class SqlUpdateParameter extends SqlQueryParameter {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append(super.toString());
-		sb.append(", ");
-		sb.append("data: ").append(data);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("data", data)
+				.toString();
 	}
 
 }

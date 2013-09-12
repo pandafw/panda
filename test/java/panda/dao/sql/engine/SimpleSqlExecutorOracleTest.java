@@ -11,13 +11,9 @@ import java.util.Map.Entry;
 import oracle.sql.TIMESTAMP;
 
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
-import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.TestSupport;
-import panda.dao.sql.engine.SimpleSqlManager;
-import panda.mock.sql.MockConnection;
 
 /**
  * PreparedSqlExecutorOracleTest
@@ -25,13 +21,8 @@ import panda.mock.sql.MockConnection;
 public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 
 	@Override
-	protected SqlExecutor createExecutor() throws Exception {
-		Connection c = TestSupport.getOracleConnection();
-		if (c instanceof MockConnection) {
-			log.warn(this.getClass().getName() + " - skip test!");
-			Assume.assumeTrue(false);
-		}
-		return new SimpleSqlManager().getExecutor(c);
+	protected Connection getConnection() throws Exception {
+		return TestSupport.getOracleConnection();
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlLogger;
 import panda.dao.sql.SqlManager;
 import panda.dao.sql.SqlResultSet;
@@ -168,7 +169,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	/**
 	 * log
 	 */
-	private static Log log = Logs.getLog(SimpleSqlExecutor.class);
+	protected static Log log = Logs.getLog(SqlExecutor.class);
 
 	private static final String BLANK_SQL_MESSAGE = "The sql is blank";
 	

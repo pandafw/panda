@@ -1,5 +1,6 @@
 package panda.dao.sql.engine;
 
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,12 +11,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.TestA;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mock.sql.MockConnection;
 
 /**
  * SqlExecutorTestCase
@@ -28,11 +31,20 @@ public abstract class SqlExecutorTestCase {
 
 	protected SqlExecutor executor;
 	
-	protected abstract SqlExecutor createExecutor() throws Exception;
+	protected abstract Connection getConnection() throws Exception;
+
+	protected SqlExecutor createExecutor(Connection c) throws Exception {
+		return new SimpleSqlManager().getExecutor(c);
+	}
 	
 	@Before
 	public void setUp() throws Exception {
-		executor = createExecutor();
+		Connection c = getConnection();
+		if (c instanceof MockConnection) {
+			log.warn(this.getClass().getName() + " - skip test!");
+			Assume.assumeTrue(false);
+		}
+		executor = createExecutor(c);
 	}
 
 	protected Object getExpectedInteger(int num) {

@@ -1,13 +1,12 @@
 package panda.dao.sql.criteria;
 
 import panda.dao.sql.SqlUtils;
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
- * OrderBy Expression
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class OrderExpression extends AbstractExpression {
 
 	protected String column;
@@ -75,24 +74,14 @@ public class OrderExpression extends AbstractExpression {
 	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(column)
+				.append(direction)
+				.toHashCode();
 	}
 
 	/**
@@ -100,41 +89,21 @@ public class OrderExpression extends AbstractExpression {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OrderExpression other = (OrderExpression) obj;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		}
-		else if (!column.equals(other.column))
-			return false;
-		if (direction == null) {
-			if (other.direction != null)
-				return false;
-		}
-		else if (!direction.equals(other.direction))
-			return false;
-		return true;
+		OrderExpression rhs = (OrderExpression) obj;
+		return Objects.equalsBuilder()
+				.append(column, rhs.column)
+				.append(direction, rhs.direction)
+				.isEquals();
 	}
 	
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("column: ").append(column);
-		sb.append(", ");
-		sb.append("direction: ").append(direction);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("column", column)
+				.append("direction", direction)
+				.toString();
 	}
 }

@@ -1,6 +1,7 @@
 package panda.dao.sql.engine;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +19,13 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 			FreemarkerSqlExecutorTest.class, "/test.sql.ftl"); 
 
 	@Override
-	protected SqlExecutor createExecutor() throws Exception {
-		try {
-			return new FreemarkerSqlManager().getExecutor(TestSupport.getHsqldbConnection());
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+	protected Connection getConnection() throws Exception {
+		return TestSupport.getHsqldbConnection();
+	}
+
+	@Override
+	protected SqlExecutor createExecutor(Connection c) throws Exception {
+		return new FreemarkerSqlManager().getExecutor(c);
 	}
 
 	/**

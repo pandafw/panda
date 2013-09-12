@@ -2,10 +2,11 @@ package panda.dao.sql.criteria;
 
 import java.util.List;
 
+import panda.lang.Objects;
+
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class SqlSelectParameter extends SqlQueryParameter {
 
 	private SqlSelectClause selectClause;
@@ -202,17 +203,11 @@ public class SqlSelectParameter extends SqlQueryParameter {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append(super.toString());
-		sb.append(", ");
-		sb.append("fromClause: ").append(fromClause);
-		sb.append(", ");
-		sb.append("selectClause: ").append(selectClause);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("fromClause", fromClause)
+				.append("selectClause", selectClause)
+				.toString();
 	}
 
 }

@@ -1,9 +1,10 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
+
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class CompareValueExpression extends SimpleExpression {
 
 	protected Object compareValue;
@@ -49,10 +50,10 @@ public class CompareValueExpression extends SimpleExpression {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((compareValue == null) ? 0 : compareValue.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(compareValue)
+				.toHashCode();
 	}
 
 	/**
@@ -66,31 +67,24 @@ public class CompareValueExpression extends SimpleExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CompareValueExpression other = (CompareValueExpression) obj;
-		if (compareValue == null) {
-			if (other.compareValue != null)
-				return false;
-		}
-		else if (!compareValue.equals(other.compareValue))
-			return false;
-		return true;
+
+		CompareValueExpression rhs = (CompareValueExpression) obj;
+		return Objects.equalsBuilder()
+				.appendSuper(super.equals(rhs))
+				.append(compareValue, rhs.compareValue)
+				.isEquals();
 	}
 
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append(super.toString());
-		sb.append(", ");
-		sb.append("compareValue: ").append(compareValue);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("compareValue", compareValue)
+				.toString();
 	}
 
 }

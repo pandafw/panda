@@ -25,7 +25,7 @@ public class SimpleDataSourceTest extends TestCase {
 			p.load(SimpleDataSourceTest.class.getResourceAsStream("SimpleDataSourceTest.properties"));
 			simpleDataSource = new SimpleDataSource(p);
 			Connection c = simpleDataSource.getConnection();
-			TestSupport.initHsqldbData(c);
+			TestSupport.initHsqldbTestData(c);
 			c.close();
 		}
 		catch (Exception e) {

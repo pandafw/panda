@@ -1,6 +1,7 @@
 package panda.dao.sql.engine;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +17,13 @@ import panda.dao.sql.engine.ExtendSqlManager;
  */
 public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 	@Override
-	protected SqlExecutor createExecutor() throws Exception {
-		try {
-			return new ExtendSqlManager().getExecutor(TestSupport.getHsqldbConnection());
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+	protected Connection getConnection() throws Exception {
+		return TestSupport.getHsqldbConnection();
+	}
+
+	@Override
+	protected SqlExecutor createExecutor(Connection c) throws Exception {
+		return new ExtendSqlManager().getExecutor(c);
 	}
 
 	/**

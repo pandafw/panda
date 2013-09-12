@@ -1,12 +1,11 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
- * SimpleExpression
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class SimpleExpression extends AbstractExpression {
 
 	protected String column;
@@ -77,11 +76,10 @@ public class SimpleExpression extends AbstractExpression {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(column)
+				.append(operator)
+				.hashCode();
 	}
 
 	/**
@@ -95,36 +93,23 @@ public class SimpleExpression extends AbstractExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SimpleExpression other = (SimpleExpression) obj;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		}
-		else if (!column.equals(other.column))
-			return false;
-		if (operator == null) {
-			if (other.operator != null)
-				return false;
-		}
-		else if (!operator.equals(other.operator))
-			return false;
-		return true;
+		
+		SimpleExpression rhs = (SimpleExpression) obj;
+		return Objects.equalsBuilder()
+				.append(column, rhs.column)
+				.append(operator, rhs.operator)
+				.isEquals();
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("column: ").append(column);
-		sb.append(", ");
-		sb.append("operator: ").append(operator);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("column", column)
+				.append("operator", operator)
+				.toString();
 	}
 
 }

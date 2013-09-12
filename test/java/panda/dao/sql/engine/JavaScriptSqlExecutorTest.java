@@ -1,6 +1,7 @@
 package panda.dao.sql.engine;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +16,13 @@ import panda.io.Streams;
  */
 public class JavaScriptSqlExecutorTest extends SqlExecutorTestCase {
 	@Override
-	protected SqlExecutor createExecutor() throws Exception {
-		try {
-			return new JavaScriptSqlManager().getExecutor(TestSupport.getHsqldbConnection());
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
+	protected Connection getConnection() throws Exception {
+		return TestSupport.getHsqldbConnection();
+	}
+
+	@Override
+	protected SqlExecutor createExecutor(Connection c) throws Exception {
+		return new JavaScriptSqlManager().getExecutor(c);
 	}
 
 	private String loadSql(String id) {

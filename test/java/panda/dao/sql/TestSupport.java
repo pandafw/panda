@@ -23,10 +23,19 @@ public class TestSupport {
 	private static Log log = Logs.getLog(TestSupport.class);
 
 	private static Properties properties;
-	private static Connection hsqlConnection;
-	private static Connection postgreConnection;
 	private static Connection db2Connection;
+	private static Connection hsqldbConnection;
+	private static Connection mysqlConnection;
 	private static Connection oracleConnection;
+	private static Connection postgreConnection;
+
+	/**
+	 * @param connection connection
+	 * @throws Exception if an error occurs
+	 */
+	public static void initMysqlTestData(Connection connection) throws Exception {
+		execSQL(connection, "mysql.sql", "\\;");
+	}
 
 	/**
 	 * initOracleTestData
@@ -51,7 +60,7 @@ public class TestSupport {
 	 * @param connection connection
 	 * @throws Exception if an error occurs
 	 */
-	public static void initHsqldbData(Connection connection) throws Exception {
+	public static void initHsqldbTestData(Connection connection) throws Exception {
 		execSQL(connection, "hsqldb.sql", "\\;");
 	}
 	
@@ -142,11 +151,23 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getHsqldbConnection() throws Exception {
-		if (hsqlConnection == null) {
-			hsqlConnection = getConnection("hsql");
+		if (hsqldbConnection == null) {
+			hsqldbConnection = getConnection("hsqldb");
 		}
-		initHsqldbData(hsqlConnection);
-		return hsqlConnection;
+		initHsqldbTestData(hsqldbConnection);
+		return hsqldbConnection;
+	}
+
+	/**
+	 * @return mysql connection 
+	 * @throws Exception if an error occurs
+	 */
+	public static Connection getMysqlConnection() throws Exception {
+		if (mysqlConnection == null) {
+			mysqlConnection = getConnection("mysql");
+		}
+		initMysqlTestData(mysqlConnection);
+		return mysqlConnection;
 	}
 
 	/**

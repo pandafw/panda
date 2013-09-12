@@ -1,12 +1,11 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
- * SelectColumnExpression
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class SelectColumnExpression extends AbstractExpression {
 	
 	protected String column;
@@ -70,24 +69,14 @@ public class SelectColumnExpression extends AbstractExpression {
 	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(column)
+				.append(alias)
+				.toHashCode();
 	}
 
 	/**
@@ -101,36 +90,23 @@ public class SelectColumnExpression extends AbstractExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SelectColumnExpression other = (SelectColumnExpression) obj;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		}
-		else if (!column.equals(other.column))
-			return false;
-		if (alias == null) {
-			if (other.alias != null)
-				return false;
-		}
-		else if (!alias.equals(other.alias))
-			return false;
-		return true;
+
+		SelectColumnExpression rhs = (SelectColumnExpression) obj;
+		return Objects.equalsBuilder()
+				.append(column, rhs.column)
+				.append(alias, rhs.alias)
+				.isEquals();
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("column: ").append(column);
-		sb.append(", ");
-		sb.append("alias: ").append(alias);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("column", column)
+				.append("alias", alias)
+				.toString();
 	}
 
 }

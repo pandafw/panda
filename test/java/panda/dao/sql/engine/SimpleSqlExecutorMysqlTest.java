@@ -8,11 +8,11 @@ import panda.dao.sql.TestSupport;
 
 /**
  */
-public class SimpleSqlExecutorPostgreTest extends SimpleSqlExecutorTestCase {
+public class SimpleSqlExecutorMysqlTest extends SimpleSqlExecutorTestCase {
 
 	@Override
 	protected Connection getConnection() throws Exception {
-		return TestSupport.getPostgreConnection();
+		return TestSupport.getMysqlConnection();
 	}
 
 	@Test

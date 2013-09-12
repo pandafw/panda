@@ -1,12 +1,11 @@
 package panda.dao.sql.criteria;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
- * ConjunctionExpression
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class ConjunctionExpression extends AbstractExpression {
 
 	protected String operator;
@@ -52,10 +51,9 @@ public class ConjunctionExpression extends AbstractExpression {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(operator)
+				.toHashCode();
 	}
 
 	/**
@@ -69,27 +67,20 @@ public class ConjunctionExpression extends AbstractExpression {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ConjunctionExpression other = (ConjunctionExpression) obj;
-		if (operator == null) {
-			if (other.operator != null)
-				return false;
-		}
-		else if (!operator.equals(other.operator))
-			return false;
-		return true;
+
+		ConjunctionExpression rhs = (ConjunctionExpression) obj;
+		return Objects.equalsBuilder()
+				.append(operator, rhs.operator)
+				.isEquals();
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("operator: ").append(operator);
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("operator", operator)
+				.toString();
 	}
 }

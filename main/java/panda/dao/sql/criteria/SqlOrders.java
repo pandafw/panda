@@ -1,28 +1,27 @@
 package panda.dao.sql.criteria;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.Orders;
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
-public class SqlOrders implements Orders, Cloneable, Serializable {
+public class SqlOrders implements Orders {
 
 	private List<OrderExpression> expressions;
 
-    /**
-     * constructor
-     */
-    public SqlOrders() {
-    	expressions = new ArrayList<OrderExpression>();
-    }
-    
+	/**
+	 * constructor
+	 */
+	public SqlOrders() {
+		expressions = new ArrayList<OrderExpression>();
+	}
+
 	/**
 	 * @return expressionList
 	 */
@@ -101,10 +100,7 @@ public class SqlOrders implements Orders, Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((expressions == null) ? 0 : expressions.hashCode());
-		return result;
+		return Objects.hashCodeBuilder().append(expressions).toHashCode();
 	}
 
 	/**
@@ -118,36 +114,16 @@ public class SqlOrders implements Orders, Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SqlOrders other = (SqlOrders) obj;
-		if (expressions == null) {
-			if (other.expressions != null)
-				return false;
-		}
-		else if (!expressions.equals(other.expressions))
-			return false;
-		return true;
+
+		SqlOrders rhs = (SqlOrders) obj;
+		return Objects.equalsBuilder().append(expressions, rhs.expressions).isEquals();
 	}
 
 	/**
-	 * Clone
-	 * @throws CloneNotSupportedException if clone not supported
-	 * @return Clone Object
-	 */
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("expressions: [").append(expressions).append(" ]");
-		sb.append(" }");
-
-		return sb.toString();
+		return Objects.toStringBuilder(this).append("expressions", expressions).toString();
 	}
 }
