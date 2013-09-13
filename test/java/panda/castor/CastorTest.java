@@ -1,14 +1,16 @@
 package panda.castor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import junit.framework.TestCase;
 import panda.bind.json.Jsons;
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.TypeToken;
-import junit.framework.TestCase;
 
 /**
  */
@@ -17,8 +19,10 @@ public class CastorTest extends TestCase {
 		private boolean bol = false;
 		private String str = "A";
 		private Integer num = 1;
+		private A obj;
 		private A[] ary;
 		private List<A> lst;
+		private Map<String, A> map;
 
 		public boolean isBol() {
 			return bol;
@@ -38,6 +42,12 @@ public class CastorTest extends TestCase {
 		public void setNum(Integer num) {
 			this.num = num;
 		}
+		public A getObj() {
+			return obj;
+		}
+		public void setObj(A obj) {
+			this.obj = obj;
+		}
 		public A[] getAry() {
 			return ary;
 		}
@@ -50,7 +60,13 @@ public class CastorTest extends TestCase {
 		public void setLst(List<A> lst) {
 			this.lst = lst;
 		}
-		
+		public Map<String, A> getMap() {
+			return map;
+		}
+		public void setMap(Map<String, A> map) {
+			this.map = map;
+		}
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
@@ -63,45 +79,16 @@ public class CastorTest extends TestCase {
 				return false;
 			}
 
-			A a = (A)obj;
-			if (bol != a.bol) {
-				return false;
-			}
-
-			if (str == null) {
-				if (a.str != null) {
-					return false;
-				}
-			}
-			else if (!str.equals(a.str)) {
-				return false;
-			}
-			if (num == null) {
-				if (a.num != null) {
-					return false;
-				}
-			}
-			else if (!num.equals(a.num)) {
-				return false;
-			}
-			if (ary == null) {
-				if (a.ary != null) {
-					return false;
-				}
-			}
-			else if (!ary.equals(a.ary)) {
-				return false;
-			}
-			if (lst == null) {
-				if (a.lst != null) {
-					return false;
-				}
-			}
-			else if (!lst.equals(a.lst)) {
-				return false;
-			}
-
-			return true;
+			A rhs = (A)obj;
+			return Objects.equalsBuilder()
+					.append(bol, rhs.bol)
+					.append(str, rhs.str)
+					.append(num, rhs.num)
+					.append(obj, rhs.obj)
+					.append(ary, rhs.ary)
+					.append(lst, rhs.lst)
+					.append(map, rhs.map)
+					.isEquals();
 		}
 	}
 
@@ -109,8 +96,10 @@ public class CastorTest extends TestCase {
 		private boolean bol = true;
 		private StringBuilder str = new StringBuilder("B");
 		private Integer num = 2;
+		private B obj;
 		private B[] ary;
 		private List<B> lst;
+		private Map<String, B> map;
 		
 		public boolean isBol() {
 			return bol;
@@ -130,6 +119,12 @@ public class CastorTest extends TestCase {
 		public void setNum(Integer num) {
 			this.num = num;
 		}
+		public B getObj() {
+			return obj;
+		}
+		public void setObj(B obj) {
+			this.obj = obj;
+		}
 		public B[] getAry() {
 			return ary;
 		}
@@ -141,6 +136,12 @@ public class CastorTest extends TestCase {
 		}
 		public void setLst(List<B> lst) {
 			this.lst = lst;
+		}
+		public Map<String, B> getMap() {
+			return map;
+		}
+		public void setMap(Map<String, B> map) {
+			this.map = map;
 		}
 	}
 
@@ -193,4 +194,33 @@ public class CastorTest extends TestCase {
 		assertEquals(Jsons.toJson(a, true), Jsons.toJson(b, true));
 	}
 
+	
+	public void testMapToA() throws Exception {
+		Map<String, Object> m = new HashMap<String, Object>();;
+		
+		m.put("bol", true);
+		m.put("obj.bol", true);
+		m.put("dummy", true);
+		m.put("obj.dummy", true);
+		
+		A a = Objects.cast(m, A.class);
+		assertNotNull(a);
+		assertTrue(a.bol);
+		assertNotNull(a.obj);
+		assertTrue(a.obj.bol);
+	}
+
+	public void testStringToA() throws Exception {
+		Map<String, Object> m = new HashMap<String, Object>();;
+		
+		m.put("bol", true);
+		m.put("obj", "test");
+		
+		try {
+			Objects.cast(m, A.class);
+			fail();
+		}
+		catch (CastException e) {
+		}
+	}
 }

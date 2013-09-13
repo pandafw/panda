@@ -10,12 +10,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import panda.castor.Castors;
+import panda.lang.Asserts;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -26,25 +28,25 @@ import panda.log.Logs;
  * 
  * ---- REQUIRED PROPERTIES ----
  * <ul>
- * <li>JDBC.Driver</li>
- * <li>JDBC.ConnectionURL</li>
- * <li>JDBC.Username</li>
- * <li>JDBC.Password</li>
+ * <li>jdbc.driver</li>
+ * <li>jdbc.url</li>
+ * <li>jdbc.username</li>
+ * <li>jdbc.password</li>
  * </ul>
  * <p/>
  * 
  * ---- POOLING PROPERTIES ----
  * <ul>
- * <li>JDBC.DefaultAutoCommit - default: false</li>
- * <li>Pool.MaximumActiveConnections - default: 10</li>
- * <li>Pool.MaximumIdleConnections - default: 5</li>
- * <li>Pool.MaximumCheckoutTime - default: 20000</li>
- * <li>Pool.TimeToWait - default: 20000</li>
- * <li>Pool.PingEnabled - default false</li>
- * <li>Pool.PingQuery</li>
- * <li>Pool.PingTimeout - default: 0</li>
- * <li>Pool.PingConnectionsOlderThan - default: 0</li>
- * <li>Pool.PingConnectionsNotUsedFor - default: 0</li>
+ * <li>jdbc.DefaultAutoCommit - default: false</li>
+ * <li>pool.maximumActiveConnections - default: 10</li>
+ * <li>pool.maximumIdleConnections - default: 5</li>
+ * <li>pool.maximumCheckoutTime - default: 20000</li>
+ * <li>pool.timeToWait - default: 20000</li>
+ * <li>pool.pingEnabled - default false</li>
+ * <li>pool.pingQuery</li>
+ * <li>pool.pingTimeout - default: 0</li>
+ * <li>pool.pingConnectionsOlderThan - default: 0</li>
+ * <li>pool.pingConnectionsNotUsedFor - default: 0</li>
  * </ul>
  * <p/>
  * 
@@ -54,122 +56,115 @@ public class SimpleDataSource implements DataSource {
 	private static Log log = Logs.getLog(SimpleDataSource.class);
 
 	//--------------------------------------------------------------------------------------
-	// Required Properties
-	//--------------------------------------------------------------------------------------
-	/**
-	 * PROP_JDBC_DRIVER = "JDBC.Driver";
-	 */
-	public static final String PROP_JDBC_DRIVER = "JDBC.Driver";
-
-	/**
-	 * PROP_JDBC_URL = "JDBC.ConnectionURL";
-	 */
-	public static final String PROP_JDBC_URL = "JDBC.ConnectionURL";
-
-	/**
-	 * PROP_JDBC_USERNAME = "JDBC.Username";
-	 */
-	public static final String PROP_JDBC_USERNAME = "JDBC.Username";
-
-	/**
-	 * PROP_JDBC_PASSWORD = "JDBC.Password";
-	 */
-	public static final String PROP_JDBC_PASSWORD = "JDBC.Password";
-
-	//--------------------------------------------------------------------------------------
-	// Optional Properties
-	//--------------------------------------------------------------------------------------
-	/**
-	 * PROP_JDBC_DEFAULT_AUTOCOMMIT = "JDBC.DefaultAutoCommit"; // default: false
-	 */
-	public static final String PROP_JDBC_DEFAULT_AUTOCOMMIT = "JDBC.DefaultAutoCommit";
-
-	/**
-	 * PROP_POOL_MAX_ACTIVE_CONN = "Pool.MaximumActiveConnections"; // default: 10
-	 */
-	public static final String PROP_POOL_MAX_ACTIVE_CONN = "Pool.MaximumActiveConnections";
-
-	/**
-	 * PROP_POOL_MAX_IDLE_CONN = "Pool.MaximumIdleConnections"; // default: 5
-	 */
-	public static final String PROP_POOL_MAX_IDLE_CONN = "Pool.MaximumIdleConnections";
-
-	/**
-	 * PROP_POOL_MAX_CHECKOUT_TIME = "Pool.MaximumCheckoutTime"; // default: 20000
-	 */
-	public static final String PROP_POOL_MAX_CHECKOUT_TIME = "Pool.MaximumCheckoutTime";
-
-	/**
-	 * PROP_POOL_TIME_TO_WAIT = "Pool.TimeToWait"; // default: 20000
-	 */
-	public static final String PROP_POOL_TIME_TO_WAIT = "Pool.TimeToWait";
-
-	/**
-	 * PROP_POOL_PING_ENABLED = "Pool.PingEnabled"; // default: false
-	 */
-	public static final String PROP_POOL_PING_ENABLED = "Pool.PingEnabled";
-
-	/**
-	 * PROP_POOL_PING_QUERY = "Pool.PingQuery";
-	 */
-	public static final String PROP_POOL_PING_QUERY = "Pool.PingQuery";
-
-	/**
-	 * PROP_POOL_PING_TIMEOUT = "Pool.PingTimeout"; // default: 0
-	 */
-	public static final String PROP_POOL_PING_TIMEOUT = "Pool.PingTimeout";
-
-	/**
-	 * PROP_POOL_PING_CONN_OLDER_THAN = "Pool.PingConnectionsOlderThan"; // default: 0
-	 */
-	public static final String PROP_POOL_PING_CONN_OLDER_THAN = "Pool.PingConnectionsOlderThan";
-
-	/**
-	 * PROP_POOL_PING_CONN_NOT_USED_FOR = "Pool.PingConnectionsNotUsedFor"; // default: 0
-	 */
-	public static final String PROP_POOL_PING_CONN_NOT_USED_FOR = "Pool.PingConnectionsNotUsedFor";
-
-	/**
-	 * Additional Driver Properties prefix
-	 */
-	public static final String ADD_DRIVER_PROPS_PREFIX = "Driver.";
-
-	private static final int ADD_DRIVER_PROPS_PREFIX_LENGTH = ADD_DRIVER_PROPS_PREFIX.length();
-
-	//--------------------------------------------------------------------------------------
 	// PROPERTY FIELDS FOR CONFIGURATION
 	//--------------------------------------------------------------------------------------
-	private String jdbcDriver;
+	public static class JdbcConf {
+		private String driver;
+		private String url;
+		private String username;
+		private String password;
+		private boolean autoCommit = false;
+		public String getDriver() {
+			return driver;
+		}
+		public void setDriver(String driver) {
+			this.driver = driver;
+		}
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		public boolean isAutoCommit() {
+			return autoCommit;
+		}
+		public void setAutoCommit(boolean autoCommit) {
+			this.autoCommit = autoCommit;
+		}
+	}
 
-	private String jdbcUrl;
+	public static class PoolConf {
+		private int maximumActiveConnections = 10;
+		private int maximumIdleConnections = 5;
+		private int maximumCheckoutTime = 20000;
+		private int timeToWait = 20000;
+		private boolean pingEnabled = false;
+		private String pingQuery;
+		private int pingTimeout;
+		private int pingConnectionsOlderThan;
+		private int pingConnectionsNotUsedFor;
+		public int getMaximumActiveConnections() {
+			return maximumActiveConnections;
+		}
+		public void setMaximumActiveConnections(int maximumActiveConnections) {
+			this.maximumActiveConnections = maximumActiveConnections;
+		}
+		public int getMaximumIdleConnections() {
+			return maximumIdleConnections;
+		}
+		public void setMaximumIdleConnections(int maximumIdleConnections) {
+			this.maximumIdleConnections = maximumIdleConnections;
+		}
+		public int getMaximumCheckoutTime() {
+			return maximumCheckoutTime;
+		}
+		public void setMaximumCheckoutTime(int maximumCheckoutTime) {
+			this.maximumCheckoutTime = maximumCheckoutTime;
+		}
+		public int getTimeToWait() {
+			return timeToWait;
+		}
+		public void setTimeToWait(int timeToWait) {
+			this.timeToWait = timeToWait;
+		}
+		public boolean isPingEnabled() {
+			return pingEnabled;
+		}
+		public void setPingEnabled(boolean pingEnabled) {
+			this.pingEnabled = pingEnabled;
+		}
+		public String getPingQuery() {
+			return pingQuery;
+		}
+		public void setPingQuery(String pingQuery) {
+			this.pingQuery = pingQuery;
+		}
+		public int getPingTimeout() {
+			return pingTimeout;
+		}
+		public void setPingTimeout(int pingTimeout) {
+			this.pingTimeout = pingTimeout;
+		}
+		public int getPingConnectionsOlderThan() {
+			return pingConnectionsOlderThan;
+		}
+		public void setPingConnectionsOlderThan(int pingConnectionsOlderThan) {
+			this.pingConnectionsOlderThan = pingConnectionsOlderThan;
+		}
+		public int getPingConnectionsNotUsedFor() {
+			return pingConnectionsNotUsedFor;
+		}
+		public void setPingConnectionsNotUsedFor(int pingConnectionsNotUsedFor) {
+			this.pingConnectionsNotUsedFor = pingConnectionsNotUsedFor;
+		}
+	}
 
-	private String jdbcUsername;
-
-	private String jdbcPassword;
-
-	private boolean jdbcDefaultAutoCommit;
-
-	private Properties driverProps;
-
-	private boolean useDriverProps;
-
-	private int poolMaximumActiveConnections;
-
-	private int poolMaximumIdleConnections;
-
-	private int poolMaximumCheckoutTime;
-
-	private int poolTimeToWait;
-
-	private boolean poolPingEnabled;
-
-	private String poolPingQuery;
-
-	private int poolPingTimeout;
-
-	private int poolPingConnectionsOlderThan;
-
-	private int poolPingConnectionsNotUsedFor;
+	private JdbcConf jdbc = new JdbcConf();
+	private PoolConf pool = new PoolConf();
+	private Properties driver;
 
 	//--------------------------------------------------------------------------------------
 	// FIELDS LOCKED BY POOL_LOCK
@@ -218,87 +213,35 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	private void initialize(Map<String, String> props) {
-		try {
-			String prop_pool_ping_query = null;
-
-			if (props == null) {
-				throw new IllegalArgumentException(
-						"SimpleDataSource: The properties map passed to the initializer was null.");
-			}
-
-			if (!(props.containsKey(PROP_JDBC_DRIVER) && props.containsKey(PROP_JDBC_URL)
-					&& props.containsKey(PROP_JDBC_USERNAME) && props
-					.containsKey(PROP_JDBC_PASSWORD))) {
-				throw new IllegalArgumentException(
-						"SimpleDataSource: JDBC properties were not set.");
-			}
-			else {
-				jdbcDriver = props.get(PROP_JDBC_DRIVER);
-				jdbcUrl = props.get(PROP_JDBC_URL);
-				jdbcUsername = props.get(PROP_JDBC_USERNAME);
-				jdbcPassword = props.get(PROP_JDBC_PASSWORD);
-
-				poolMaximumActiveConnections = props.containsKey(PROP_POOL_MAX_ACTIVE_CONN) ? 
-						Integer.parseInt(props.get(PROP_POOL_MAX_ACTIVE_CONN)) : 10;
-
-				poolMaximumIdleConnections = props.containsKey(PROP_POOL_MAX_IDLE_CONN) ? 
-						Integer.parseInt(props.get(PROP_POOL_MAX_IDLE_CONN)) : 5;
-
-				poolMaximumCheckoutTime = props.containsKey(PROP_POOL_MAX_CHECKOUT_TIME) ? 
-						Integer.parseInt(props.get(PROP_POOL_MAX_CHECKOUT_TIME)) : 20000;
-
-				poolTimeToWait = props.containsKey(PROP_POOL_TIME_TO_WAIT) ? 
-						Integer.parseInt(props.get(PROP_POOL_TIME_TO_WAIT)) : 20000;
-
-				poolPingEnabled = props.containsKey(PROP_POOL_PING_ENABLED)
-						&& Boolean.valueOf(props.get(PROP_POOL_PING_ENABLED)).booleanValue();
-
-				prop_pool_ping_query = props.get(PROP_POOL_PING_QUERY);
-				poolPingQuery = props.containsKey(PROP_POOL_PING_QUERY) ? 
-						prop_pool_ping_query : "NO PING QUERY SET";
-
-				poolPingTimeout = props.containsKey(PROP_POOL_PING_TIMEOUT) ? 
-						Integer.parseInt(props.get(PROP_POOL_PING_TIMEOUT)) : 0;
-
-				poolPingConnectionsOlderThan = props.containsKey(PROP_POOL_PING_CONN_OLDER_THAN) ? 
-						Integer.parseInt(props.get(PROP_POOL_PING_CONN_OLDER_THAN)) : 0;
-
-				poolPingConnectionsNotUsedFor = props.containsKey(PROP_POOL_PING_CONN_NOT_USED_FOR) ? 
-						Integer.parseInt(props.get(PROP_POOL_PING_CONN_NOT_USED_FOR)) : 0;
-
-				jdbcDefaultAutoCommit = props.containsKey(PROP_JDBC_DEFAULT_AUTOCOMMIT)
-						&& Boolean.valueOf(props.get(PROP_JDBC_DEFAULT_AUTOCOMMIT)).booleanValue();
-
-				useDriverProps = false;
-				driverProps = new Properties();
-				driverProps.put("user", jdbcUsername);
-				driverProps.put("password", jdbcPassword);
-				for (Entry<String, String> e : props.entrySet()) {
-					String name = e.getKey();
-					String value = e.getValue();
-					if (name.startsWith(ADD_DRIVER_PROPS_PREFIX)) {
-						driverProps.put(name.substring(ADD_DRIVER_PROPS_PREFIX_LENGTH), value);
-						useDriverProps = true;
-					}
-				}
-
-				expectedConnectionTypeCode = assembleConnectionTypeCode(
-						jdbcUrl, jdbcUsername, jdbcPassword);
-
-				Class.forName(jdbcDriver);
-
-				if (poolPingEnabled
-						&& (!props.containsKey(PROP_POOL_PING_QUERY) 
-								|| prop_pool_ping_query.trim().length() == 0)) {
-					throw new RuntimeException("SimpleDataSource: property '"
-							+ PROP_POOL_PING_ENABLED + "' is true, but property '"
-							+ PROP_POOL_PING_QUERY + "' is not set correctly.");
-				}
-			}
-
+		if (props == null) {
+			throw new IllegalArgumentException(
+					"SimpleDataSource: The properties map passed to the initializer was null.");
 		}
-		catch (Exception e) {
-			throw new RuntimeException("SimpleDataSource: Error while loading properties. ", e);
+
+		Castors.scastTo(props, this);
+
+		Asserts.notEmpty(jdbc.driver, "The jdbc.driver property is empty.");
+		Asserts.notEmpty(jdbc.url, "The jdbc.url property is empty.");
+		Asserts.notNull(jdbc.username, "The jdbc.username property is null.");
+		Asserts.notNull(jdbc.password, "The jdbc.password property is null.");
+
+		try {
+			Class.forName(jdbc.driver);
+		}
+		catch (ClassNotFoundException e) {
+			throw new RuntimeException("Failed to initialize jdbc driver: " + jdbc.driver, e);
+		}
+
+		if (driver != null) {
+			driver.put("user", jdbc.username);
+			driver.put("password", jdbc.password);
+
+			expectedConnectionTypeCode = assembleConnectionTypeCode(
+					jdbc.url, jdbc.username, jdbc.password);
+
+			if (pool.pingEnabled && Strings.isEmpty(pool.pingQuery)) {
+				throw new RuntimeException("SimpleDataSource: property 'pool.pingEnabled' is true, but property 'pool.pingQuery' is not set correctly.");
+			}
 		}
 	}
 
@@ -310,7 +253,7 @@ public class SimpleDataSource implements DataSource {
 	 * @see javax.sql.DataSource#getConnection()
 	 */
 	public Connection getConnection() throws SQLException {
-		return popConnection(jdbcUsername, jdbcPassword);
+		return popConnection(jdbc.username, jdbc.password);
 	}
 
 	/**
@@ -349,119 +292,45 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	/**
-	 * If a connection has not been used in this many milliseconds, ping the database to make sure
-	 * the connection is still good.
-	 * 
-	 * @return the number of milliseconds of inactivity that will trigger a ping
+	 * @return the jdbc
 	 */
-	public int getPoolPingConnectionsNotUsedFor() {
-		return poolPingConnectionsNotUsedFor;
+	public JdbcConf getJdbc() {
+		return jdbc;
 	}
 
 	/**
-	 * Getter for the name of the JDBC driver class used
-	 * 
-	 * @return The name of the class
+	 * @param jdbc the jdbc to set
 	 */
-	public String getJdbcDriver() {
-		return jdbcDriver;
+	public void setJdbc(JdbcConf jdbc) {
+		this.jdbc = jdbc;
 	}
 
 	/**
-	 * Getter of the JDBC URL used
-	 * 
-	 * @return The JDBC URL
+	 * @return the pool
 	 */
-	public String getJdbcUrl() {
-		return jdbcUrl;
+	public PoolConf getPool() {
+		return pool;
 	}
 
 	/**
-	 * Getter for the JDBC user name used
-	 * 
-	 * @return The user name
+	 * @param pool the pool to set
 	 */
-	public String getJdbcUsername() {
-		return jdbcUsername;
+	public void setPool(PoolConf pool) {
+		this.pool = pool;
 	}
 
 	/**
-	 * Getter for the JDBC password used
-	 * 
-	 * @return The password
+	 * @return the driver
 	 */
-	public String getJdbcPassword() {
-		return jdbcPassword;
+	public Properties getDriver() {
+		return driver;
 	}
 
 	/**
-	 * Getter for the maximum number of active connections
-	 * 
-	 * @return The maximum number of active connections
+	 * @param driver the driver to set
 	 */
-	public int getPoolMaximumActiveConnections() {
-		return poolMaximumActiveConnections;
-	}
-
-	/**
-	 * Getter for the maximum number of idle connections
-	 * 
-	 * @return The maximum number of idle connections
-	 */
-	public int getPoolMaximumIdleConnections() {
-		return poolMaximumIdleConnections;
-	}
-
-	/**
-	 * Getter for the maximum time a connection can be used before it *may* be given away again.
-	 * 
-	 * @return The maximum time
-	 */
-	public int getPoolMaximumCheckoutTime() {
-		return poolMaximumCheckoutTime;
-	}
-
-	/**
-	 * Getter for the time to wait before retrying to get a connection
-	 * 
-	 * @return The time to wait
-	 */
-	public int getPoolTimeToWait() {
-		return poolTimeToWait;
-	}
-
-	/**
-	 * Getter for the query to be used to check a connection
-	 * 
-	 * @return The query
-	 */
-	public String getPoolPingQuery() {
-		return poolPingQuery;
-	}
-
-	/**
-	 * Getter to tell if we should use the ping query
-	 * 
-	 * @return True if we need to check a connection before using it
-	 */
-	public boolean isPoolPingEnabled() {
-		return poolPingEnabled;
-	}
-
-	/**
-	 * @return poolPingTimeout
-	 */
-	public int getPoolPingTimeout() {
-		return poolPingTimeout;
-	}
-
-	/**
-	 * Getter for the age of connections that should be pinged before using
-	 * 
-	 * @return The age
-	 */
-	public int getPoolPingConnectionsOlderThan() {
-		return poolPingConnectionsOlderThan;
+	public void setDriver(Properties driver) {
+		this.driver = driver;
 	}
 
 	private int getExpectedConnectionTypeCode() {
@@ -557,19 +426,19 @@ public class SimpleDataSource implements DataSource {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n===============================================================");
-		sb.append("\n jdbcDriver                     ").append(jdbcDriver);
-		sb.append("\n jdbcUrl                        ").append(jdbcUrl);
-		sb.append("\n jdbcUsername                   ").append(jdbcUsername);
-		sb.append("\n jdbcPassword                   ").append(jdbcPassword);
-		sb.append("\n jdbcDefaultAutoCommit          ").append(jdbcDefaultAutoCommit);
-		sb.append("\n poolMaxActiveConnections       ").append(poolMaximumActiveConnections);
-		sb.append("\n poolMaxIdleConnections         ").append(poolMaximumIdleConnections);
-		sb.append("\n poolMaxCheckoutTime            ").append(poolMaximumCheckoutTime);
-		sb.append("\n poolPingEnabled                ").append(poolPingEnabled);
-		sb.append("\n poolPingQuery                  ").append(poolPingQuery);
-		sb.append("\n poolTimeToWait                 ").append(poolTimeToWait);
-		sb.append("\n poolPingConnectionsOlderThan   ").append(poolPingConnectionsOlderThan);
-		sb.append("\n poolPingConnectionsNotUsedFor  ").append(poolPingConnectionsNotUsedFor);
+		sb.append("\n jdbc.driver                     ").append(jdbc.driver);
+		sb.append("\n jdbc.url                        ").append(jdbc.url);
+		sb.append("\n jdbc.username                   ").append(jdbc.username);
+		sb.append("\n jdbc.password                   ").append(jdbc.password);
+		sb.append("\n jdbc.autoCommit                 ").append(jdbc.autoCommit);
+		sb.append("\n pool.maxActiveConnections       ").append(pool.maximumActiveConnections);
+		sb.append("\n pool.maxIdleConnections         ").append(pool.maximumIdleConnections);
+		sb.append("\n pool.maxCheckoutTime            ").append(pool.maximumCheckoutTime);
+		sb.append("\n pool.pingEnabled                ").append(pool.pingEnabled);
+		sb.append("\n pool.pingQuery                  ").append(pool.pingQuery);
+		sb.append("\n pool.timeToWait                 ").append(pool.timeToWait);
+		sb.append("\n pool.pingConnectionsOlderThan   ").append(pool.pingConnectionsOlderThan);
+		sb.append("\n pool.pingConnectionsNotUsedFor  ").append(pool.pingConnectionsNotUsedFor);
 		sb.append("\n --------------------------------------------------------------");
 		sb.append("\n activeConnections              ").append(activeConnections.size());
 		sb.append("\n idleConnections                ").append(idleConnections.size());
@@ -633,7 +502,7 @@ public class SimpleDataSource implements DataSource {
 		synchronized (POOL_LOCK) {
 			activeConnections.remove(conn);
 			if (conn.isValid()) {
-				if (idleConnections.size() < poolMaximumIdleConnections
+				if (idleConnections.size() < pool.maximumIdleConnections
 						&& conn.getConnectionTypeCode() == getExpectedConnectionTypeCode()) {
 					accumulatedCheckoutTime += conn.getCheckoutTime();
 					if (!conn.getRealConnection().getAutoCommit()) {
@@ -691,19 +560,19 @@ public class SimpleDataSource implements DataSource {
 				}
 				else {
 					// Pool does not have available connection
-					if (activeConnections.size() < poolMaximumActiveConnections) {
+					if (activeConnections.size() < pool.maximumActiveConnections) {
 						// Can create new connection
-						if (useDriverProps) {
-							conn = new SimplePooledConnection(DriverManager.getConnection(jdbcUrl,
-								driverProps), this);
+						if (driver != null) {
+							conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url,
+								driver), this);
 						}
 						else {
-							conn = new SimplePooledConnection(DriverManager.getConnection(jdbcUrl,
-								jdbcUsername, jdbcPassword), this);
+							conn = new SimplePooledConnection(DriverManager.getConnection(jdbc.url,
+								jdbc.username, jdbc.password), this);
 						}
 						Connection realConn = conn.getRealConnection();
-						if (realConn.getAutoCommit() != jdbcDefaultAutoCommit) {
-							realConn.setAutoCommit(jdbcDefaultAutoCommit);
+						if (realConn.getAutoCommit() != jdbc.autoCommit) {
+							realConn.setAutoCommit(jdbc.autoCommit);
 						}
 						if (log.isDebugEnabled()) {
 							log.debug("Created connection " + conn.getRealHashCode() + ".");
@@ -714,7 +583,7 @@ public class SimpleDataSource implements DataSource {
 						SimplePooledConnection oldestActiveConnection = 
 							(SimplePooledConnection) activeConnections.get(0);
 						long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
-						if (longestCheckoutTime > poolMaximumCheckoutTime) {
+						if (longestCheckoutTime > pool.maximumCheckoutTime) {
 							// Can claim overdue connection
 							claimedOverdueConnectionCount++;
 							accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
@@ -739,11 +608,11 @@ public class SimpleDataSource implements DataSource {
 									countedWait = true;
 								}
 								if (log.isDebugEnabled()) {
-									log.debug("Waiting as long as " + poolTimeToWait
+									log.debug("Waiting as long as " + pool.timeToWait
 											+ " milliseconds for connection.");
 								}
 								long wt = System.currentTimeMillis();
-								POOL_LOCK.wait(poolTimeToWait);
+								POOL_LOCK.wait(pool.timeToWait);
 								accumulatedWaitTime += System.currentTimeMillis() - wt;
 							}
 							catch (InterruptedException e) {
@@ -757,7 +626,7 @@ public class SimpleDataSource implements DataSource {
 						if (!conn.getRealConnection().getAutoCommit()) {
 							conn.getRealConnection().rollback();
 						}
-						conn.setConnectionTypeCode(assembleConnectionTypeCode(jdbcUrl, username,
+						conn.setConnectionTypeCode(assembleConnectionTypeCode(jdbc.url, username,
 							password));
 						conn.setCheckoutTimestamp(System.currentTimeMillis());
 						conn.setLastUsedTimestamp(System.currentTimeMillis());
@@ -773,7 +642,7 @@ public class SimpleDataSource implements DataSource {
 						badConnectionCount++;
 						localBadConnectionCount++;
 						conn = null;
-						if (localBadConnectionCount > (poolMaximumIdleConnections + 3)) {
+						if (localBadConnectionCount > (pool.maximumIdleConnections + 3)) {
 							if (log.isDebugEnabled()) {
 								log.debug("SimpleDataSource: Could not get a good connection to the database.");
 							}
@@ -814,11 +683,11 @@ public class SimpleDataSource implements DataSource {
 			result = false;
 		}
 
-		if (result && poolPingEnabled) {
-			if ((poolPingConnectionsOlderThan > 0 
-					&& conn.getAge() > poolPingConnectionsOlderThan)
-					|| (poolPingConnectionsNotUsedFor > 0 
-							&& conn.getTimeElapsedSinceLastUse() > poolPingConnectionsNotUsedFor)) {
+		if (result && pool.pingEnabled) {
+			if ((pool.pingConnectionsOlderThan > 0 
+					&& conn.getAge() > pool.pingConnectionsOlderThan)
+					|| (pool.pingConnectionsNotUsedFor > 0 
+							&& conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor)) {
 
 				try {
 					if (log.isDebugEnabled()) {
@@ -826,7 +695,7 @@ public class SimpleDataSource implements DataSource {
 					}
 					Connection realConn = conn.getRealConnection();
 					Statement statement = realConn.createStatement();
-					ResultSet rs = statement.executeQuery(poolPingQuery);
+					ResultSet rs = statement.executeQuery(pool.pingQuery);
 					rs.close();
 					statement.close();
 					if (!realConn.getAutoCommit()) {
@@ -838,7 +707,7 @@ public class SimpleDataSource implements DataSource {
 					}
 				}
 				catch (Exception e) {
-					log.warn("Execution of ping query '" + poolPingQuery + "' failed: "
+					log.warn("Execution of ping query '" + pool.pingQuery + "' failed: "
 							+ e.getMessage());
 					try {
 						conn.getRealConnection().close();
