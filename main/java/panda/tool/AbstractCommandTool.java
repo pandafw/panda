@@ -11,8 +11,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import panda.bean.Beans;
-import panda.bean.IncorrectAccessException;
-import panda.bean.NoSuchPropertyException;
 import panda.lang.Arrays;
 import panda.lang.HandledException;
 import panda.lang.Methods;
@@ -83,15 +81,7 @@ public abstract class AbstractCommandTool {
 	}
 	
 	protected Object getParameter(String name) {
-		try {
-			return Beans.getProperty(target, name);
-		}
-		catch (NoSuchPropertyException e) {
-			return null;
-		}
- 		catch (IncorrectAccessException e) {
-			return null;
-		}
+		return Beans.getProperty(target, name);
 	}
 	
 	protected Option addCommandLineFlag(String opt, String name, String description) {

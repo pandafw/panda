@@ -12,8 +12,6 @@ import panda.lang.Types;
  * @param <T> class type
  */
 public class AtomicBeanHandler<T> extends AbstractSimpleBeanHandler<T> {
-	private final static String[] READ_PROPERTY_NAMES = { "" };
-	
 	private Type type;
 	
 	/**
@@ -42,7 +40,7 @@ public class AtomicBeanHandler<T> extends AbstractSimpleBeanHandler<T> {
 	 * @return property names
 	 */
 	public String[] getReadPropertyNames() {
-		return READ_PROPERTY_NAMES;
+		return Strings.EMPTY_ARRAY;
 	}
 
 	/**
@@ -144,6 +142,7 @@ public class AtomicBeanHandler<T> extends AbstractSimpleBeanHandler<T> {
 	 * @param propertyName property name
 	 * @param value value
 	 */
-	public void setPropertyValue(T beanObject, String propertyName, Object value) {
+	public boolean setPropertyValue(T beanObject, String propertyName, Object value) {
+		return false;
 	}
 }

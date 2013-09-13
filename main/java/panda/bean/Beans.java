@@ -170,12 +170,12 @@ public class Beans {
 	 *                throws an exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static void setBean(Object bean, String name, Object value) {
+	public static boolean setBean(Object bean, String name, Object value) {
 		assertBeanAndName(bean, name);
 		
 		BeanHandler bh = me().getBeanHandler(bean.getClass());
 
-		bh.setBeanValue(bean, name, value);
+		return bh.setBeanValue(bean, name, value);
 	}
 
 	/**
@@ -216,12 +216,12 @@ public class Beans {
 	 *                throws an exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static void setProperty(Object bean, String name, Object value) {
+	public static boolean setProperty(Object bean, String name, Object value) {
 		assertBeanAndName(bean, name);
 		
 		BeanHandler bh = me().getBeanHandler(bean.getClass());
 
-		bh.setPropertyValue(bean, name, value);
+		return bh.setPropertyValue(bean, name, value);
 	}
 
 	// ------------------------------------------------------------------------

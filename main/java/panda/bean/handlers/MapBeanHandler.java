@@ -117,8 +117,9 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 		return map.get(propertyName);
 	}
 	
-	public void setPropertyValue(T map, String propertyName, Object propertyValue) {
+	public boolean setPropertyValue(T map, String propertyName, Object propertyValue) {
 		map.put(propertyName, propertyValue);
+		return true;
 	}
 
 	/**
@@ -142,12 +143,12 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	 * @param value value
 	 */
 	@Override
-	public void setBeanValue(T map, String beanName, Object value) {
+	public boolean setBeanValue(T map, String beanName, Object value) {
 		if (map.containsKey(beanName)) {
 			map.put(beanName, value);
-			return;
+			return true;
 		}
 
-		super.setBeanValue(map, beanName, value);
+		return super.setBeanValue(map, beanName, value);
 	}
 }

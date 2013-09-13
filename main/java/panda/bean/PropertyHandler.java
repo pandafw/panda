@@ -93,6 +93,7 @@ public interface PropertyHandler<T> {
 	 * @param beanObject bean object
 	 * @param propertyName property name
 	 * @param value value
+	 * @return true if set value successfully
 	 */
-	void setPropertyValue(T beanObject, String propertyName, Object value);
+	boolean setPropertyValue(T beanObject, String propertyName, Object value);
 }

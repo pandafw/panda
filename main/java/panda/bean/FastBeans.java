@@ -9,10 +9,11 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
-import panda.bean.handlers.AbstractJavaBeanHandler;
+import panda.bean.handlers.AbstractFastBeanHandler;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.DynamicClassLoader;
+import panda.lang.Exceptions;
 import panda.lang.Types;
 import panda.log.Log;
 import panda.log.Logs;
@@ -78,10 +79,11 @@ public class FastBeans extends Beans {
 		src.append("package ").append(packageName).append(";\n");
 		src.append("import ").append(Type.class.getName()).append(";\n");
 		src.append("import ").append(Types.class.getName()).append(";\n");
+		src.append("import ").append(Exceptions.class.getName()).append(";\n");
 		src.append("public class ")
 			.append(simpleName)
 			.append(" extends ")
-			.append(AbstractJavaBeanHandler.class.getName())
+			.append(AbstractFastBeanHandler.class.getName())
 			.append('<').append(typeName).append('>')
 			.append(" {\n");
 
@@ -94,73 +96,70 @@ public class FastBeans extends Beans {
 		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 
 		boolean first = true;
-		src.append("  private static String[] rpns = new String[] {\n");
+		src.append("  protected void init() {\n");
+		src.append("    rpns = new String[] {\n");
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
 			if (pd.getReadMethod() != null) {
-				src.append("    ").append(first ? "" : ", ")
-					.append("\"").append(propName).append("\"\n");
+				src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
 				first = false;
 			}
 
 			if (Character.isUpperCase(propName.charAt(0))) {
 				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
 				if (pd.getReadMethod() != null) {
-					src.append("    ").append(first ? "" : ", ")
-						.append("\"").append(propName).append("\"\n");
+					src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
 				}
 			}
 		}
-		src.append("  };\n");
+		src.append("    };\n");
 
 		first = true;
-		src.append("  private static String[] wpns = new String[] {\n");
+		src.append("    wpns = new String[] {\n");
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
 			if (pd.getWriteMethod() != null) {
-				src.append("    ").append(first ? "" : ", ")
-					.append("\"").append(propName).append("\"\n");
+				src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
 				first = false;
 			}
 
 			if (Character.isUpperCase(propName.charAt(0))) {
 				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
 				if (pd.getWriteMethod() != null) {
-					src.append("    ").append(first ? "" : ", ")
-						.append("\"").append(propName).append("\"\n");
+					src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
 				}
 			}
 		}
-		src.append("  };\n");
+		src.append("    };\n");
 
 		int i = 0;
-		src.append("  private static java.util.Map<String, Integer> mm = new java.util.HashMap<String, Integer>();\n");
-		src.append("  static {\n");
+		src.append("    PropertyInfo pi;\n");
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
-			src.append("    mm.put(\"").append(propName).append("\", ").append(++i).append(");\n");
+			src.append("    pi = new PropertyInfo();\n");
+			src.append("    pi.index = ").append(++i).append(";\n");;
+			src.append("    pi.readable = ").append(pd.getReadMethod() != null).append(";\n");;
+			src.append("    pi.writable = ").append(pd.getWriteMethod() != null).append(";\n");;
+			src.append("    mm.put(\"").append(propName).append("\", pi);\n");
 
 			if (Character.isUpperCase(propName.charAt(0))) {
 				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("    mm.put(\"").append(propName).append("\", ").append(++i).append(");\n");
+				src.append("    pi = new PropertyInfo();\n");
+				src.append("    pi.index = ").append(++i).append(";\n");;
+				src.append("    pi.readable = ").append(pd.getReadMethod() != null).append(";\n");;
+				src.append("    pi.writable = ").append(pd.getWriteMethod() != null).append(";\n");;
+				src.append("    mm.put(\"").append(propName).append("\", pi);\n");
 			}
 		}
 		src.append("  }\n");
 
-		src.append("  public String[] getReadPropertyNames(").append(typeName).append(" bo) {\n");
-		src.append("    return rpns;\n");
-		src.append("  }\n");
-		
-		src.append("  public String[] getWritePropertyNames(").append(typeName).append(" bo) {\n");
-		src.append("    return wpns;\n");
-		src.append("  }\n");
-		
 		src.append("  public Type getPropertyType(").append(typeName).append(" bo, String pn) {\n");
-		src.append("    Integer i = mm.get(pn);\n");
-		src.append("    if (i == null) {\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("    PropertyInfo pi = mm.get(pn);\n");
+		src.append("    if (pi == null) {\n");
+		src.append("      return null;\n");
+//		src.append("      throw noSuchPropertyException(pn);\n");
 		src.append("    }\n");
-		src.append("    switch (i) {\n");
+		src.append("    switch (pi.index) {\n");
 		i = 0;
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
@@ -178,16 +177,19 @@ public class FastBeans extends Beans {
 			}
 		}
 		src.append("    default:\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("      return null;\n");
+//		src.append("      throw noSuchPropertyException(pn);\n");
 		src.append("    }\n");
 		src.append("  }\n");
 
 		src.append("  public Object getPropertyValue(").append(typeName).append(" bo, String pn) {\n");
-		src.append("    Integer i = mm.get(pn);\n");
-		src.append("    if (i == null) {\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("    PropertyInfo pi = mm.get(pn);\n");
+		src.append("    if (pi == null) {\n");
+		src.append("      return null;\n");
+//		src.append("      throw noSuchPropertyException(pn);\n");
 		src.append("    }\n");
-		src.append("    switch (i) {\n");
+		src.append("    try {\n");
+		src.append("      switch (pi.index) {\n");
 		i = 0;
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
@@ -196,9 +198,10 @@ public class FastBeans extends Beans {
 				getter = pd.getReadMethod().getName();
 			}
 
-			src.append("    case ").append(++i).append(": ");
+			src.append("      case ").append(++i).append(": ");
 			if (getter == null) {
-				src.append("throw noGetterMethodException(pn);\n");
+				src.append("return null;\n");
+//				src.append("throw noGetterMethodException(pn);\n");
 			}
 			else {
 				src.append("return bo.").append(getter).append("();\n");
@@ -206,26 +209,31 @@ public class FastBeans extends Beans {
 
 			if (Character.isUpperCase(propName.charAt(0))) {
 				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("    case ").append(++i).append(": ");
+				src.append("      case ").append(++i).append(": ");
 				if (getter == null) {
-					src.append("throw noGetterMethodException(pn);\n");
+					src.append("return null;\n");
+//					src.append("throw noGetterMethodException(pn);\n");
 				}
 				else {
 					src.append("return bo.").append(getter).append("();\n");
 				}
 			}
 		}
-		src.append("    default:\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
-		src.append("    }\n");
+		src.append("      default:");
+		src.append("return null;\n");
+//		src.append("throw noSuchPropertyException(pn);\n");
+		src.append("      }\n");
+		src.append("    } catch (Throwable e) { throw Exceptions.wrapThrow(e); }\n");
 		src.append("  }\n");
 
-		src.append("  public void setPropertyValue(").append(typeName).append(" bo, String pn, Object value) {\n");
-		src.append("    Integer i = mm.get(pn);\n");
-		src.append("    if (i == null) {\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("  public boolean setPropertyValue(").append(typeName).append(" bo, String pn, Object value) {\n");
+		src.append("    PropertyInfo pi = mm.get(pn);\n");
+		src.append("    if (pi == null) {\n");
+		src.append("      return false;\n");
+//		src.append("      throw noSuchPropertyException(pn);\n");
 		src.append("    }\n");
-		src.append("    switch (i) {\n");
+		src.append("    try {\n");
+		src.append("      switch (pi.index) {\n");
 		i = 0;
 		for (PropertyDescriptor pd : propertyDescriptors) {
 			String propName = pd.getName();
@@ -237,30 +245,34 @@ public class FastBeans extends Beans {
 				setter = pd.getWriteMethod().getName();
 			}
 
-			src.append("    case ").append(++i).append(": ");
+			src.append("      case ").append(++i).append(": ");
 			if (setter == null) {
-				src.append("throw noSetterMethodException(pn);\n");
+				src.append("return false;\n");
+//				src.append("throw noSetterMethodException(pn);\n");
 			}
 			else {
 				src.append("bo.").append(setter).append("((")
-					.append(propType).append(")value); return;\n");
+					.append(propType).append(")value); return true;\n");
 			}
 
 			if (Character.isUpperCase(propName.charAt(0))) {
 				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("    case ").append(++i).append(": ");
+				src.append("      case ").append(++i).append(": ");
 				if (setter == null) {
-					src.append("throw noSetterMethodException(pn);\n");
+					src.append("return false;\n");
+//					src.append("throw noSetterMethodException(pn);\n");
 				}
 				else {
 					src.append("bo.").append(setter).append("((")
-						.append(propType).append(")value); return;\n");
+						.append(propType).append(")value); return true;\n");
 				}
 			}
 		}
-		src.append("    default:\n");
-		src.append("      throw noSuchPropertyException(pn);\n");
-		src.append("    }\n");
+		src.append("      default:");
+		src.append("return false;\n");
+//		src.append("throw noSuchPropertyException(pn);\n");
+		src.append("      }\n");
+		src.append("    } catch (Throwable e) { throw Exceptions.wrapThrow(e); }\n");
 		src.append("  }\n");
 
 		src.append("}\n");

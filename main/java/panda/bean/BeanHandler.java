@@ -74,7 +74,8 @@ public interface BeanHandler<T> extends PropertyHandler<T> {
 	 * @param beanObject bean object
 	 * @param beanName bean name
 	 * @param value value
+	 * @return true if set value successfully
 	 */
-	void setBeanValue(T beanObject, String beanName, Object value);
+	boolean setBeanValue(T beanObject, String beanName, Object value);
 
 }

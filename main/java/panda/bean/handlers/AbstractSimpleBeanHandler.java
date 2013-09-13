@@ -83,8 +83,9 @@ public abstract class AbstractSimpleBeanHandler<T> implements BeanHandler<T> {
 	 * @param beanObject bean object
 	 * @param beanName bean name
 	 * @param value value
+	 * @return true if set value successfully
 	 */
-	public void setBeanValue(T beanObject, String beanName, Object value) {
-		setPropertyValue(beanObject, beanName, value);
+	public boolean setBeanValue(T beanObject, String beanName, Object value) {
+		return setPropertyValue(beanObject, beanName, value);
 	}
 }

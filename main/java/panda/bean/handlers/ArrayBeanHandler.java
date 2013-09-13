@@ -33,11 +33,20 @@ public class ArrayBeanHandler<T> extends AbstractArrayBeanHandler<T> {
 	
 	@Override
 	protected Object getElement(T array, int index) {
+		if (index < 0 || index >= getSize(array)) {
+			return null;
+		}
+		
 		return Array.get(array, index);
 	}
 	
 	@Override
-	protected void setElement(T array, int index, Object value) {
+	protected boolean setElement(T array, int index, Object value) {
+		if (index < 0 || index >= getSize(array)) {
+			return false;
+		}
+		
 		Array.set(array, index, value);
+		return true;
 	}
 }

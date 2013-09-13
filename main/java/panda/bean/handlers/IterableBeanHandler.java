@@ -56,12 +56,14 @@ public class IterableBeanHandler<T extends Iterable> extends ArrayBeanHandler<T>
 		int n = 0;
 		for ( ; it.hasNext() && n < index; it.next(), n++) {}
 		if (n != index || !it.hasNext()) {
-			this.noSuchPropertyException(String.valueOf(index));
+			//this.noSuchPropertyException(String.valueOf(index));
+			return null;
 		}
 		return it.next();
 	}
 	
 	@Override
-	protected void setElement(T list, int index, Object value) {
+	protected boolean setElement(T list, int index, Object value) {
+		return false;
 	}
 }

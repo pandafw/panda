@@ -24,13 +24,11 @@ import panda.lang.Types;
 public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 
 	private static class PropertyAccessor {
-		String name;
 		Type type;
 		Method getter;
 		Method setter;
 		
 		PropertyAccessor(Type beanType, PropertyDescriptor pd) {
-			name = pd.getName();
 			getter = pd.getReadMethod();
 			setter = pd.getWriteMethod();
 			type = Types.getPropertyType(pd);
@@ -138,7 +136,8 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 * @return property type
 	 */
 	public Type getPropertyType(T beanObject, String propertyName) {
-		return getPropertyAccessor(propertyName).type;
+		PropertyAccessor pa = accessors.get(propertyName);
+		return pa == null ? null : pa.type;
 	}
 
 	/**
@@ -148,10 +147,13 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 * @return value
 	 */
 	public Object getPropertyValue(T beanObject, String propertyName) {
-		PropertyAccessor pa = getPropertyAccessor(propertyName);
-		Method getter = getReadMethod(pa);
+		PropertyAccessor pa = accessors.get(propertyName);
+		if (pa == null || pa.getter == null) {
+			return null;
+		}
+		
 		try {
-			return getter.invoke(beanObject);
+			return pa.getter.invoke(beanObject);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -164,54 +166,18 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 * @param propertyName property name
 	 * @param value value
 	 */
-	public void setPropertyValue(T beanObject, String propertyName, Object value) {
-		PropertyAccessor pa = getPropertyAccessor(propertyName);
-		Method setter = getWriteMethod(pa);
+	public boolean setPropertyValue(T beanObject, String propertyName, Object value) {
+		PropertyAccessor pa = accessors.get(propertyName);
+		if (pa == null || pa.setter == null) {
+			return false;
+		}
+
 		try {
-			setter.invoke(beanObject, value);
+			pa.setter.invoke(beanObject, value);
+			return true;
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * getPropertyAccessor
-	 * 
-	 * @param propertyName property name
-	 * @return PropertyAccessor
-	 */
-	private PropertyAccessor getPropertyAccessor(String propertyName) {
-		PropertyAccessor pa = accessors.get(propertyName);
-		if (pa == null) {
-			throw noSuchPropertyException(propertyName);
-		}
-		return pa;
-	}
-	
-	/**
-	 * getReadMethod
-	 * @param propertyAccessor PropertyAccessor
-	 * @return read method
-	 * @throws RuntimeException if read method is null 
-	 */
-	private Method getReadMethod(PropertyAccessor propertyAccessor) {
-		if (propertyAccessor.getter == null) {
-			throw noGetterMethodException(propertyAccessor.name);
-		}
-		return propertyAccessor.getter;
-	}
-	
-	/**
-	 * getWriteMethod
-	 * @param propertyAccessor PropertyAccessor
-	 * @return write method
-	 * @throws RuntimeException if write method is null 
-	 */
-	private Method getWriteMethod(PropertyAccessor propertyAccessor) {
-		if (propertyAccessor.setter == null) {
-			throw noSetterMethodException(propertyAccessor.name);
-		}
-		return propertyAccessor.setter;
 	}
 }

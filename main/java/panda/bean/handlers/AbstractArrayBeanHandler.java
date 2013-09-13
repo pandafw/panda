@@ -3,23 +3,22 @@ package panda.bean.handlers;
 import java.lang.reflect.Type;
 
 import panda.bean.Beans;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Types;
 
 
 /**
- * 
  * @author yf.frank.wang@gmail.com
- *
  */
 public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler beans
 	 * @param type bean type
 	 */
-	public AbstractArrayBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public AbstractArrayBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 	}
 	
 	/**
@@ -76,16 +75,17 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 	}
 	
 	protected int toIndex(String index) {
-		try {
-			int idx = Integer.parseInt(index);
-			if (idx < 0) {
-				throw new IllegalArgumentException("[" + index + "] is not a valid index number.");
-			}
-			return idx;
-		}
-		catch (NumberFormatException nfe) {
-			throw new IllegalArgumentException("[" + index + "] is not a valid index number.");
-		}
+		return Numbers.toInt(index, -1);
+//		try {
+//			int idx = Integer.parseInt(index);
+//			if (idx < 0) {
+//				throw new IllegalArgumentException("[" + index + "] is not a valid index number.");
+//			}
+//			return idx;
+//		}
+//		catch (NumberFormatException nfe) {
+//			throw new IllegalArgumentException("[" + index + "] is not a valid index number.");
+//		}
 	}
 
 	protected Type getElementType() {
@@ -105,14 +105,14 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		return getElement(array, index);
 	}
 	
-	public void setPropertyValue(T array, String propertyName, Object propertyValue) {
+	public boolean setPropertyValue(T array, String propertyName, Object propertyValue) {
 		int index = toIndex(propertyName);
-		setElement(array, index, propertyValue);
+		return setElement(array, index, propertyValue);
 	}
 
 	protected abstract int getSize(T array);
 	
 	protected abstract Object getElement(T array, int index);
 	
-	protected abstract void setElement(T array, int index, Object value);
+	protected abstract boolean setElement(T array, int index, Object value);
 }

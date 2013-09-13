@@ -3,9 +3,6 @@ package panda.bean.handlers;
 import java.lang.reflect.Type;
 
 import panda.bean.Beans;
-import panda.bean.IncorrectAccessException;
-import panda.bean.NoSuchPropertyException;
-import panda.lang.Arrays;
 import panda.lang.Types;
 
 
@@ -16,6 +13,12 @@ import panda.lang.Types;
  * @param <T> class type
  */
 public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> {
+	protected static class PropertyInfo {
+		int index;
+		boolean readable;
+		boolean writable;
+	}
+	
 
 	protected Type type;
 
@@ -42,51 +45,51 @@ public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> 
 		}
 	}
 
-	/**
-	 * is the property readable
-	 * @param beanObject bean object (can be null)
-	 * @param propertyName property name
-	 * @return property type
-	 */
-	public boolean canReadProperty(T beanObject, String propertyName) {
-		return Arrays.contains(getReadPropertyNames(beanObject), propertyName);
-	}
-
-	/**
-	 * is the property writable
-	 * @param beanObject bean object (can be null)
-	 * @param propertyName property name
-	 * @return property writable
-	 */
-	public boolean canWriteProperty(T beanObject, String propertyName) {
-		return Arrays.contains(getWritePropertyNames(beanObject), propertyName);
-	}
+//	/**
+//	 * is the property readable
+//	 * @param beanObject bean object (can be null)
+//	 * @param propertyName property name
+//	 * @return property type
+//	 */
+//	public boolean canReadProperty(T beanObject, String propertyName) {
+//		return Arrays.contains(getReadPropertyNames(beanObject), propertyName);
+//	}
+//
+//	/**
+//	 * is the property writable
+//	 * @param beanObject bean object (can be null)
+//	 * @param propertyName property name
+//	 * @return property writable
+//	 */
+//	public boolean canWriteProperty(T beanObject, String propertyName) {
+//		return Arrays.contains(getWritePropertyNames(beanObject), propertyName);
+//	}
 	
-	/**
-	 * @param propertyName property name
-	 * @return NoSuchPropertyException
-	 */
-	protected RuntimeException noSuchPropertyException(String propertyName) {
-		return new NoSuchPropertyException("Unknown property: " + propertyName + " [" + type + "].");
-	}
-	
-	/**
-	 * @param propertyName property name
-	 * @return No getter method Exception
-	 */
-	protected RuntimeException noGetterMethodException(String propertyName) {
-		return new IncorrectAccessException("No getter method for property: " 
-				+ propertyName + " [" + type + "].");
-	}
-	
-	/**
-	 * @param propertyName property name
-	 * @return No setter method Exception
-	 */
-	protected RuntimeException noSetterMethodException(String propertyName) {
-		return new IncorrectAccessException("No setter method for property: " 
-				+ propertyName + " [" + type + "].");
-	}
+//	/**
+//	 * @param propertyName property name
+//	 * @return NoSuchPropertyException
+//	 */
+//	protected RuntimeException noSuchPropertyException(String propertyName) {
+//		return new NoSuchPropertyException("Unknown property: " + propertyName + " [" + type + "].");
+//	}
+//	
+//	/**
+//	 * @param propertyName property name
+//	 * @return No getter method Exception
+//	 */
+//	protected RuntimeException noGetterMethodException(String propertyName) {
+//		return new IncorrectAccessException("No getter method for property: " 
+//				+ propertyName + " [" + type + "].");
+//	}
+//	
+//	/**
+//	 * @param propertyName property name
+//	 * @return No setter method Exception
+//	 */
+//	protected RuntimeException noSetterMethodException(String propertyName) {
+//		return new IncorrectAccessException("No setter method for property: " 
+//				+ propertyName + " [" + type + "].");
+//	}
 	
 	/**
 	 * @return a string representation of the object.

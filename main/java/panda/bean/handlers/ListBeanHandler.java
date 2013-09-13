@@ -38,12 +38,20 @@ public class ListBeanHandler<T extends List> extends AbstractArrayBeanHandler<T>
 	
 	@Override
 	protected Object getElement(T list, int index) {
+		if (index < 0 || index >= getSize(list)) {
+			return null;
+		}
 		return list.get(index);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void setElement(T list, int index, Object value) {
+	protected boolean setElement(T list, int index, Object value) {
+		if (index < 0 || index >= getSize(list)) {
+			return false;
+		}
+
 		list.set(index, value);
+		return true;
 	}
 }
