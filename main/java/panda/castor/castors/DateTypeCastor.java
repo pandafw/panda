@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
 import panda.castor.CastException;
+import panda.castor.Castor;
 import panda.lang.collection.MultiKey;
 
 /**
@@ -21,7 +21,7 @@ import panda.lang.collection.MultiKey;
  *
  */
 public class DateTypeCastor {
-	public static class DateCastor extends AbstractCastor<Object, Date> {
+	public static class DateCastor extends Castor<Object, Date> {
 		/**
 		 * DateFormat cache
 		 */
@@ -45,7 +45,7 @@ public class DateTypeCastor {
 		}
 		
 		@Override
-		protected Date convertValue(Object value, CastContext context) {
+		protected Date castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				Number num = (Number)value;
 				return new Date(num.longValue());
@@ -62,24 +62,36 @@ public class DateTypeCastor {
 			if (value instanceof java.sql.Timestamp) {
 				return new Date(((java.sql.Timestamp)value).getTime());
 			}
-			
-			String sv = value.toString();
-
-			ParseException ex = null;
-			for (String f : DATE_FORMATS) {
-				try {
-					DateFormat df = getDateFormat(f, Locale.getDefault(), null);
-					if (df != null) {
-						return df.parse(sv);
+			if (value instanceof CharSequence) {
+				String sv = value.toString();
+	
+				ParseException ex = null;
+				for (String f : DATE_FORMATS) {
+					try {
+						DateFormat df = getDateFormat(f, Locale.getDefault(), null);
+						if (df != null) {
+							return df.parse(sv);
+						}
+					}
+					catch (ParseException e) {
+						ex = e;
 					}
 				}
-				catch (ParseException e) {
-					ex = e;
-				}
+				throw new CastException(context.toPath() 
+						+ "Failed to convert date: " 
+						+ value.getClass() + " - " + sv
+						, ex);
 			}
-			throw new CastException("Failed to convert date: " + value.getClass() + " - " + sv, ex);
+			throw castError(value, context);
 		}
 	
+		@Override
+		public Date castValueTo(Object value, Date target, CastContext context) {
+			Date v = castValue(value, context);
+			target.setTime(v.getTime());
+			return target;
+		}
+		
 		/**
 		 * get the cached DateFormat
 		 * @param pattern pattern string
@@ -137,7 +149,7 @@ public class DateTypeCastor {
 		}
 	}
 
-	public static class CalendarCastor extends AbstractCastor<Object, Calendar> {
+	public static class CalendarCastor extends Castor<Object, Calendar> {
 		private DateCastor dateCastor;
 		
 		public CalendarCastor(DateCastor dateCastor) {
@@ -146,15 +158,18 @@ public class DateTypeCastor {
 		}
 		
 		@Override
-		protected Calendar convertValue(Object value, CastContext context) {
-			Date d = dateCastor.cast(value, context);
-			if (d == null) {
-				return null;
-			}
-
+		protected Calendar castValue(Object value, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
 			Calendar c = Calendar.getInstance();
 			c.setTime(d);
 			return c;
+		}
+
+		@Override
+		protected Calendar castValueTo(Object value, Calendar target, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			target.setTime(d);
+			return target;
 		}
 	}
 }

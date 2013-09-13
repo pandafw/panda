@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import panda.bean.BeanHandler;
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
 import panda.castor.Castor;
 import panda.castor.Castors;
@@ -21,7 +20,7 @@ import panda.lang.Types;
  * @param <S> source type
  * @param <T> target type
  */
-public class MapCastor<S, T extends Map<?,?>> extends AbstractCastor<S, T> {
+public class MapCastor<S, T extends Map<?,?>> extends Castor<S, T> {
 	private Castors castors;
 	private Type keyType;
 	private Type valType;
@@ -75,8 +74,14 @@ public class MapCastor<S, T extends Map<?,?>> extends AbstractCastor<S, T> {
 	}
 
 	@Override
+	protected T castValue(S value, CastContext context) {
+		T map = createTarget();
+		return castValueTo(value, map, context);
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
-	protected T convertValue(Object value, CastContext context) {
+	protected T castValueTo(S value, T target, CastContext context) {
 		if (keyCastor == null) {
 			keyCastor = castors.getCastor(keyType);
 		}
@@ -84,7 +89,8 @@ public class MapCastor<S, T extends Map<?,?>> extends AbstractCastor<S, T> {
 			valCastor = castors.getCastor(valType);
 		}
 		
-		Map map = createTarget();
+		Map map = target;
+		map.clear();
 		if (value.getClass().isArray()) {
 			int size = Array.getLength(value);
 

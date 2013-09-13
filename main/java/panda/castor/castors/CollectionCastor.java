@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
 import panda.castor.Castor;
 import panda.castor.Castors;
@@ -17,7 +16,7 @@ import panda.lang.Types;
  *
  * @param <T> target type
  */
-public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Object, T> {
+public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T> {
 	protected Castors castors;
 	protected Type toElementType;
 	
@@ -70,7 +69,7 @@ public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Ob
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected T convertValue(Object value, CastContext context) {
+	protected T castValue(Object value, CastContext context) {
 		Collection coll = createTarget();
 		if (value.getClass().isArray()) {
 			Type fType = value.getClass().getComponentType();

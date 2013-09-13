@@ -4,12 +4,12 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -19,20 +19,17 @@ import panda.castor.castors.DateTypeCastor;
 import panda.castor.castors.JavaBeanCastor;
 import panda.castor.castors.MapCastor;
 import panda.castor.castors.NumberTypeCastor;
-import panda.castor.castors.ObjectCastor;
 import panda.castor.castors.PrimitiveTypeCastor;
 import panda.castor.castors.PrimitiveWrapCastor;
 import panda.castor.castors.StreamCastor;
 import panda.castor.castors.StringTypeCastor;
 import panda.lang.Asserts;
-import panda.lang.Classes;
 import panda.lang.Types;
 import panda.lang.collection.MultiKey;
 
 /**
- * 
+ * !! thread-safe !! 
  * @author yf.frank.wang@gmail.com
- *
  */
 public class Castors {
 	private static Castors me = new Castors();
@@ -58,27 +55,27 @@ public class Castors {
 		Castors.me = instance;
 	}
 
-	public static <T> T scast(Object value, Class<T> toType) {
-		return scast(value, toType, new CastContext());
-	}
-
-	public static <T> T scast(Object value, Class<T> toType, CastContext context) {
-		Castor<Object, T> c = me().getCastor(value == null ? Object.class : value.getClass(), toType);
-		return c.cast(value, context);
-	}
-
 	public static <T> T scast(Object value, Type toType) {
-		return scast(value, toType, new CastContext());
+		Asserts.notNull(toType);
+		Castor<Object, T> c = me().getCastor(value == null ? Object.class : value.getClass(), toType);
+		return c.cast(value, new CastContext());
 	}
 
-	public static <T> T scast(Object value, Type toType, CastContext context) {
-		Castor<Object, T> c = me().getCastor(value == null ? Object.class : value.getClass(), toType);
-		return c.cast(value, context);
+	@SuppressWarnings("unchecked")
+	public static <T> T scastTo(Object value, T target) {
+		if (value == null) {
+			return target;
+		}
+		
+		Asserts.notNull(target);
+		
+		Castor<Object, T> c = (Castor<Object, T>)me().getCastor(value == null ? Object.class : target.getClass());
+		return c.castTo(value, target, new CastContext());
 	}
 
 	// ------------------------------------------------------------------------
 	private Beans beans = Beans.me();
-	private Map<MultiKey, Castor> castors = new HashMap<MultiKey, Castor>();
+	private Map<MultiKey, Castor> castors = new ConcurrentHashMap<MultiKey, Castor>();
 	
 	/**
 	 * Constructor
@@ -130,7 +127,7 @@ public class Castors {
 	 * 
 	 * @param castor - the castor instance
 	 */
-	public synchronized void register(AbstractCastor castor) {
+	public void register(Castor castor) {
 		register(castor.getFromType(), castor.getToType(), castor);
 	}
 
@@ -140,7 +137,7 @@ public class Castors {
 	 * @param toType - the class
 	 * @param castor - the castor instance
 	 */
-	public synchronized void register(Type fromType, Type toType, Castor castor) {
+	public void register(Type fromType, Type toType, Castor castor) {
 		castors.put(new MultiKey(fromType, toType), castor);
 	}
 	
@@ -149,14 +146,14 @@ public class Castors {
 	 * 
 	 * @param toType - the class
 	 */
-	public synchronized void unregister(Type fromType, Type toType) {
+	public void unregister(Type fromType, Type toType) {
 		castors.remove(new MultiKey(fromType, toType));
 	}
 	
 	/**
 	 * clear converters
 	 */
-	public synchronized void clear() {
+	public void clear() {
 		castors.clear();
 	}
 	
@@ -204,13 +201,13 @@ public class Castors {
 		
 		// default castor
 		if (Object.class.equals(toType)) {
-			return new ObjectCastor();
+			return new Castor(fromType, toType);
 		}
 		else if (Types.isArrayType(toType)) {
 			castor = new ArrayCastor(fromType, toType, this);
 		}
 		else if (Types.isAssignable(toType, Number.class)) {
-			castor = (Castor<S, T>)new NumberTypeCastor();
+			castor = (Castor<S, T>)new NumberTypeCastor.NumberCastor();
 		}
 		else if (Types.isAbstractType(toType)) {
 			if (toType instanceof ParameterizedType) {
@@ -226,7 +223,7 @@ public class Castors {
 					rawType = LinkedHashSet.class;
 				}
 				else {
-					return new ObjectCastor();
+					return new Castor(fromType, toType);
 				}
 				
 				toType = Types.paramTypeOfOwner(pt.getOwnerType(), rawType, pt.getActualTypeArguments());
@@ -243,7 +240,7 @@ public class Castors {
 				castor = (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class, this);
 			}
 			else {
-				castor = new ObjectCastor();
+				return new Castor(fromType, toType);
 			}
 		}
 		else if (Types.isAssignable(toType, Map.class)) {
@@ -263,40 +260,27 @@ public class Castors {
 		return beans.getBeanHandler(type);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T cast(Object value, Class<T> toType) {
-		if (value != null && Classes.isAssignable(value.getClass(), toType)) {
-			return (T)value;
-		}
-		return cast(value, toType, new CastContext());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T cast(Object value, Class<T> toType, CastContext context) {
-		if (value != null && Classes.isAssignable(value.getClass(), toType)) {
-			return (T)value;
-		}
-		
-		Castor<Object, T> c = getCastor(value == null ? Object.class : value.getClass(), toType);
-		return c.cast(value, context);
-	}
-
-	@SuppressWarnings("unchecked")
 	public <T> T cast(Object value, Type toType) {
-		if (value != null && Types.isAssignable(value.getClass(), toType)) {
-			return (T)value;
-		}
-
+		Asserts.notNull(toType);
 		return cast(value, toType, new CastContext());
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> T cast(Object value, Type toType, CastContext context) {
-		if (value != null && Types.isAssignable(value.getClass(), toType)) {
-			return (T)value;
-		}
-
+		Asserts.notNull(toType);
 		Castor<Object, T> c = getCastor(value == null ? Object.class : value.getClass(), toType);
 		return c.cast(value, context);
+	}
+
+	public <T> T castTo(Object value, T target, Type toType) {
+		Asserts.notNull(target);
+		return castTo(value, target, toType, new CastContext());
+	}
+
+	public <T> T castTo(Object value, T target, Type toType, CastContext context) {
+		Asserts.notNull(target);
+		Castor<Object, T> c = getCastor(
+			value == null ? Object.class : value.getClass(), 
+			toType == null ? target.getClass() : toType);
+		return c.castTo(value, target, context);
 	}
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
 import panda.castor.Castor;
 import panda.castor.Castors;
@@ -29,7 +28,7 @@ import panda.lang.Types;
  * @param <S> source type
  * @param <T> target type
  */
-public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
+public class ArrayCastor<S, T> extends Castor<S, T> {
 	private Castors castors;
 	private Type toComponentType;
 	
@@ -49,15 +48,30 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 		return cType == null ? Object.class : cType;
 	}
 
+	private Object createArray(T target, int size) {
+		if (target != null
+				&& size == Array.getLength(target) 
+				&& Types.isAssignable(toComponentType, target.getClass().getComponentType())) {
+			return target;
+		}
+		
+		return Arrays.newInstance(toComponentType, size);
+	}
+	
+	@Override
+	protected T castValue(S value, CastContext context) {
+		return castValueTo(value, null, context);
+	}
+	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected T convertValue(Object value, CastContext context) {
+	protected T castValueTo(S value, T target, CastContext context) {
 		if (value.getClass().isArray()) {
 			Type fType = value.getClass().getComponentType();
 			Castor conv = castors.getCastor(fType, toComponentType);
 
 			int size = Array.getLength(value);
-			Object array = Arrays.newInstance(toComponentType, size);
+			Object array = createArray(target, size);
 			for (int i = 0; i < size; i++) {
 				Object v = Array.get(value, i);
 				v = castChild(context, conv, i, v);
@@ -77,7 +91,7 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 				list.add(castChild(context, conv, i++, v));
 			}
 
-			Object array = Arrays.newInstance(toComponentType, list.size());
+			Object array = createArray(target, list.size());
 			int index = 0;
 			for (Object v : list) {
 				Array.set(array, index++, v);
@@ -85,51 +99,56 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 			return (T)array; 
 		}
 		else {
-			if (byte.class.equals(toComponentType)) {
-				try {
-					if (value instanceof InputStream) {
-						return (T)Streams.toByteArray((InputStream)value);
-					}
-					if (value instanceof Reader) {
-						return (T)Streams.toByteArray((Reader)value, Charsets.UTF_8);
-					}
-					if (value instanceof Blob) {
-						return (T)((Blob)value).getBytes(0, (int)((Blob)value).length());
-					}
-					return (T)value.toString().getBytes(Charsets.CS_UTF_8);
-				}
-				catch (SQLException e) {
-					Exceptions.wrapThrow(e);
-				}
-				catch (IOException e) {
-					Exceptions.wrapThrow(e);
-				}
-			}
-			if (char.class.equals(toComponentType)) {
-				try {
-					if (value instanceof InputStream) {
-						return (T)Streams.toCharArray((InputStream)value, Charsets.UTF_8);
-					}
-					if (value instanceof Reader) {
-						return (T)Streams.toCharArray((Reader)value);
-					}
-					if (value instanceof Clob) {
-						return (T)Streams.toCharArray(((Clob)value).getCharacterStream());
-					}
-					return (T)value.toString().toCharArray();
-				}
-				catch (SQLException e) {
-					Exceptions.wrapThrow(e);
-				}
-				catch (IOException e) {
-					Exceptions.wrapThrow(e);
-				}
-			}
-
-			Object array = Arrays.newInstance(toComponentType, 1);
-			Castor conv = castors.getCastor(value.getClass(), toComponentType);
-			Array.set(array, 0, castChild(context, conv, 0, value));
-			return (T)array;
+			return convert(target, value, context);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private T convert(T target, Object value, CastContext context) {
+		if (byte.class.equals(toComponentType)) {
+			try {
+				if (value instanceof InputStream) {
+					return (T)Streams.toByteArray((InputStream)value);
+				}
+				if (value instanceof Reader) {
+					return (T)Streams.toByteArray((Reader)value, Charsets.UTF_8);
+				}
+				if (value instanceof Blob) {
+					return (T)((Blob)value).getBytes(0, (int)((Blob)value).length());
+				}
+				return (T)value.toString().getBytes(Charsets.CS_UTF_8);
+			}
+			catch (SQLException e) {
+				Exceptions.wrapThrow(e);
+			}
+			catch (IOException e) {
+				Exceptions.wrapThrow(e);
+			}
+		}
+		if (char.class.equals(toComponentType)) {
+			try {
+				if (value instanceof InputStream) {
+					return (T)Streams.toCharArray((InputStream)value, Charsets.UTF_8);
+				}
+				if (value instanceof Reader) {
+					return (T)Streams.toCharArray((Reader)value);
+				}
+				if (value instanceof Clob) {
+					return (T)Streams.toCharArray(((Clob)value).getCharacterStream());
+				}
+				return (T)value.toString().toCharArray();
+			}
+			catch (SQLException e) {
+				Exceptions.wrapThrow(e);
+			}
+			catch (IOException e) {
+				Exceptions.wrapThrow(e);
+			}
+		}
+
+		Object array = createArray(target, 1);
+		Castor conv = castors.getCastor(value.getClass(), toComponentType);
+		Array.set(array, 0, castChild(context, conv, 0, value));
+		return (T)array;
 	}
 }

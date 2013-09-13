@@ -142,7 +142,7 @@ public class Streams {
 	 */
 	public static InputStream copy(InputStream sourceStream) throws IOException {
 		if (sourceStream.markSupported())
-			sourceStream.mark(sourceStream.available());
+			sourceStream.mark(Integer.MAX_VALUE);
 		byte[] sourceData = toByteArray(sourceStream);
 		if (sourceStream.markSupported())
 			sourceStream.reset();
@@ -442,7 +442,6 @@ public class Streams {
 	 * @return the requested byte array
 	 * @throws NullPointerException if the input is null
 	 * @throws IOException if an I/O error occurs
-	 * @since 1.1
 	 */
 	public static byte[] toByteArray(Reader input, String encoding) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -1597,7 +1596,7 @@ public class Streams {
 	}
 
 	public static long available(InputStream input) throws IOException {
-		return input.available();
+		return input == null ? 0 : input.available();
 	}
 	
 	public static long available(Reader reader) throws IOException {

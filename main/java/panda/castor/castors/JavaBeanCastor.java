@@ -3,8 +3,8 @@ package panda.castor.castors;
 import java.lang.reflect.Type;
 
 import panda.bean.BeanHandler;
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
+import panda.castor.Castor;
 import panda.castor.Castors;
 import panda.lang.CycleDetectStrategy;
 
@@ -14,7 +14,7 @@ import panda.lang.CycleDetectStrategy;
  *
  * @param <T> target type
  */
-public class JavaBeanCastor<T> extends AbstractCastor<Object, T> {
+public class JavaBeanCastor<T> extends Castor<Object, T> {
 	private Castors castors;
 	private BeanHandler<T> beanHandler;
 	
@@ -31,41 +31,62 @@ public class JavaBeanCastor<T> extends AbstractCastor<Object, T> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public T convertValue(Object value, CastContext context) {
+	protected T castValue(Object value, CastContext context) {
 		T bean = createTarget();
-		
+		return castValueTo(value, bean, context);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	protected T castValueTo(Object value, T bean, CastContext context) {
 		BeanHandler bh = castors.getBeanHandler(value.getClass());
+		String[] pns = bh.getReadPropertyNames(value);
+		if (pns.length == 0) {
+			throw castError(value, context);
+		}
 		
-		for (String pn : beanHandler.getWritePropertyNames()) {
-			if (bh.canReadProperty(pn)) {
-				Object pv = bh.getPropertyValue(value, pn);
-				if (pv != null && context.isCycled(pv)) {
-					switch (context.getCycleDetectStrategy()) {
-					case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
-						continue;
-					case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
-						pv = null;
-						break;
-					default:
-						throw cycleError(context, pn, value);
-					}
-				}
+		for (String pn : pns) {
+			if (!beanHandler.canWriteBean(pn)) {
+				continue;
+			}
 
-				Type pt = beanHandler.getPropertyType(pn);
-				context.push(pn, value);
-				try {
-					pv = castors.cast(pv, pt, context);
-					beanHandler.setPropertyValue(bean, pn, pv);
-				}
-				catch (Throwable e) {
-					throw wrapError(context, e);
-				}
-				finally {
-					context.popup();
+			Object pv = bh.getPropertyValue(value, pn);
+			if (context.isCycled(pv)) {
+				switch (context.getCycleDetectStrategy()) {
+				case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
+					continue;
+				case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
+					pv = null;
+					break;
+				default:
+					throw cycleError(context, pn, value);
 				}
 			}
+
+			context.push(pn, pv);
+			try {
+				Type pt = beanHandler.getBeanType(pn);
+				Object bv = beanHandler.getBeanValue(bean, pn);
+
+				if (bv == null) {
+					bv = castors.cast(pv, pt, context);
+					beanHandler.setBeanValue(bean, pn, bv);
+				}
+				else {
+					Object cv = castors.castTo(pv, bv, pt, context);
+					if (cv != bv) {
+						beanHandler.setBeanValue(bean, pn, cv);
+					}
+				}
+			}
+			catch (Throwable e) {
+				throw wrapError(e, context);
+			}
+			finally {
+				context.popup();
+			}
 		}
+		
 		return bean; 
 	}
 }

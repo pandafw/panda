@@ -7,9 +7,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
-import panda.castor.CastException;
+import panda.castor.Castor;
 import panda.io.ReaderInputStream;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -20,39 +19,40 @@ import panda.lang.Charsets;
  *
  */
 public class StreamCastor {
-	public static class InputStreamCastor extends AbstractCastor<Object, InputStream> {
+	public static class InputStreamCastor extends Castor<Object, InputStream> {
 		public InputStreamCastor() {
 			super(Object.class, InputStream.class);
 		}
 		
 		@Override
-		protected InputStream convertValue(Object value, CastContext context) {
+		protected InputStream castValue(Object value, CastContext context) {
 			if (value instanceof byte[]) {
 				ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
 				return bais;
 			}
-			
 			if (value instanceof Reader) {
 				return new ReaderInputStream((Reader)value, Charsets.CS_UTF_8);
 			}
-			
-			String sv = value.toString();
-			try {
-				return Streams.toInputStream(sv, Charsets.UTF_8);
+			if (value instanceof CharSequence) {
+				String sv = value.toString();
+				try {
+					return Streams.toInputStream(sv, Charsets.UTF_8);
+				}
+				catch (IOException e) {
+					throw wrapError(e, context);
+				}
 			}
-			catch (IOException e) {
-				throw new CastException(e);
-			}
+			throw castError(value, context);
 		}
 	}
 
-	public static class ReaderCastor extends AbstractCastor<Object, Reader> {
+	public static class ReaderCastor extends Castor<Object, Reader> {
 		public ReaderCastor() {
 			super(Object.class, Reader.class);
 		}
 		
 		@Override
-		protected Reader convertValue(Object value, CastContext context) {
+		protected Reader castValue(Object value, CastContext context) {
 			if (value instanceof byte[]) {
 				ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
 				return new InputStreamReader(bais, Charsets.CS_UTF_8);

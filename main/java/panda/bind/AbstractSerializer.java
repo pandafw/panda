@@ -256,22 +256,22 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 
 	private void serializeArrayElement(Object src, Object val, int idx) {
 		this.startArrayElement(val, idx);
-		if (val != null) {
-			if (cycleDetector.isCycled(val)) {
-				switch (cycleDetectStrategy) {
-				// always has array element
-				case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
-				case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
-					val = null;
-					break;
-				default:
-					throw new BindException("Cycle object detected: " + Objects.identityToString(val));
-				}
-			}
-			if (val != null && isExcludeProperty(val.getClass())) {
+
+		if (cycleDetector.isCycled(val)) {
+			switch (cycleDetectStrategy) {
+			// always has array element
+			case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
+			case CycleDetectStrategy.CYCLE_DETECT_LENIENT:
 				val = null;
+				break;
+			default:
+				throw new BindException("Cycle object detected: " + Objects.identityToString(val));
 			}
 		}
+		if (val != null && isExcludeProperty(val.getClass())) {
+			val = null;
+		}
+
 		serializeSource(String.valueOf(idx), val);
 		this.endArrayElement(val, idx);
 	}
@@ -279,7 +279,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	private boolean serializeObjectProperty(Object src, String key, Object val, int idx, PropertyFilter pf) {
 		if (val != null || !isIgnoreNullProperty()) {
 			if (pf == null || pf.accept(src, key, val)) {
-				if (val != null && cycleDetector.isCycled(val)) {
+				if (cycleDetector.isCycled(val)) {
 					switch (cycleDetectStrategy) {
 					case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
 						return false;

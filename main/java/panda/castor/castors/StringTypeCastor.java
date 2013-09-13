@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
 import panda.castor.CastException;
+import panda.castor.Castor;
 import panda.castor.castors.DateTypeCastor.DateCastor;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -24,7 +24,7 @@ import panda.lang.Charsets;
  * @param <S> source type
  * @param <T> target type
  */
-public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
+public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 	protected DateCastor dateCastor;
 	
 	public StringTypeCastor(Type fromType, Type toType, DateCastor dateCastor) {
@@ -32,9 +32,8 @@ public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
 		this.dateCastor = dateCastor;
 	}
 
-	protected <E extends Appendable> E convertValue(Object value, Class<E> type) {
+	protected void write(Object value, Appendable a) {
 		try {
-			E a = type.newInstance();
 			if (value instanceof InputStream) {
 				Streams.copy((InputStream)value, a, Charsets.UTF_8);
 			}
@@ -47,7 +46,6 @@ public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
 			else {
 				a.append(convertToString(value));
 			}
-			return a;
 		}
 		catch (CastException e) {
 			throw e;
@@ -96,7 +94,7 @@ public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 		
 		@Override
-		protected String convertValue(Object value, CastContext context) {
+		protected String castValue(Object value, CastContext context) {
 			return convertToString(value);
 		}
 	}
@@ -107,8 +105,17 @@ public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 		
 		@Override
-		protected StringBuffer convertValue(Object value, CastContext context) {
-			return convertValue(value, StringBuffer.class);
+		protected StringBuffer castValue(Object value, CastContext context) {
+			StringBuffer sb = new StringBuffer();
+			write(value, sb);
+			return sb;
+		}
+		
+		@Override
+		protected StringBuffer castValueTo(Object value, StringBuffer sb, CastContext context) {
+			sb.setLength(0);
+			write(value, sb);
+			return sb;
 		}
 	}
 
@@ -118,8 +125,17 @@ public abstract class StringTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 		
 		@Override
-		protected StringBuilder convertValue(Object value, CastContext context) {
-			return convertValue(value, StringBuilder.class);
+		protected StringBuilder castValue(Object value, CastContext context) {
+			StringBuilder sb = new StringBuilder();
+			write(value, sb);
+			return sb;
+		}
+		
+		@Override
+		protected StringBuilder castValueTo(Object value, StringBuilder sb, CastContext context) {
+			sb.setLength(0);
+			write(value, sb);
+			return sb;
 		}
 	}
 }

@@ -17,9 +17,6 @@ public class CycleDetector {
 
 
 	public void push(String name, Object value) {
-		if (value == null) {
-			throw new NullPointerException(toPath(name) + "is null");
-		}
 		names.add(name);
 		stack.add(value);
 	}
@@ -28,7 +25,7 @@ public class CycleDetector {
 		stack.remove(stack.size() - 1);
 	}
 	public boolean isCycled(Object value) {
-		return stack.contains(value);
+		return value != null && stack.contains(value);
 	}
 	
 	public String toPath() {

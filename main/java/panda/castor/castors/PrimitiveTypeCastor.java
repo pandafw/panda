@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
+import panda.castor.Castor;
 import panda.lang.Numbers;
 
 
@@ -16,7 +16,7 @@ import panda.lang.Numbers;
  * @param <S> source type
  * @param <T> target type
  */
-public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
+public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 	public PrimitiveTypeCastor(Type type) {
 		super(Object.class, type);
 	}
@@ -35,36 +35,38 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Boolean convertValue(Object value, CastContext context) {
+		protected Boolean castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).intValue() != 0;
 			}
-			
-			String s = value.toString();
-			if (s.length() < 1) {
-				return false;
+			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return false;
+				}
+				
+				switch (s.charAt(0)) {
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+				case 'Y':
+				case 'y':
+				case 'T':
+				case 't':
+				case 'O':
+				case 'o':
+					return true;
+				default:
+					return false;
+				}
 			}
-			
-			switch (s.charAt(0)) {
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case 'Y':
-			case 'y':
-			case 'T':
-			case 't':
-			case 'O':
-			case 'o':
-				return true;
-			default:
-				return false;
-			}
+			throw castError(value, context);
 		}
 	}
 
@@ -82,12 +84,14 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Byte convertValue(Object value, CastContext context) {
+		protected Byte castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).byteValue();
 			}
-			
-			return Numbers.toByte(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toByte(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
 
@@ -106,21 +110,20 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Character convertValue(Object value, CastContext context) {
+		protected Character castValue(Object value, CastContext context) {
 			if (value instanceof Character) {
 				return (Character)value;
 			}
-			
 			if (value instanceof Number) {
 				return (char)((Number)value).intValue();
 			}
-
-			String s = value.toString();
-			if (s.length() > 0) {
-				return s.charAt(0);
+			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() > 0) {
+					return s.charAt(0);
+				}
 			}
-			
-			return defaultValue();
+			throw castError(value, context);
 		}
 	}
 
@@ -139,12 +142,14 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Double convertValue(Object value, CastContext context) {
+		protected Double castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).doubleValue();
 			}
-			
-			return Numbers.toDouble(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toDouble(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
 
@@ -163,12 +168,14 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Float convertValue(Object value, CastContext context) {
+		protected Float castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).floatValue();
 			}
-			
-			return Numbers.toFloat(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toFloat(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
 
@@ -187,12 +194,14 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Integer convertValue(Object value, CastContext context) {
+		protected Integer castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).intValue();
 			}
-			
-			return Numbers.toInt(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toInt(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
 
@@ -210,18 +219,29 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Long convertValue(Object value, CastContext context) {
+		protected Long castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).longValue();
 			}
-			else if (value instanceof Date) {
+			if (value instanceof java.sql.Date) {
+				return ((java.sql.Date)value).getTime();
+			}
+			if (value instanceof java.sql.Time) {
+				return ((java.sql.Time)value).getTime();
+			}
+			if (value instanceof java.sql.Timestamp) {
+				return ((java.sql.Timestamp)value).getTime();
+			}
+			if (value instanceof Date) {
 				return ((Date)value).getTime();
 			}
-			else if (value instanceof Calendar) {
+			if (value instanceof Calendar) {
 				return ((Calendar)value).getTimeInMillis();
 			}
-			
-			return Numbers.toLong(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toLong(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
 
@@ -239,14 +259,14 @@ public abstract class PrimitiveTypeCastor<S, T> extends AbstractCastor<S, T> {
 		}
 
 		@Override
-		protected Short convertValue(Object value, CastContext context) {
+		protected Short castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				return ((Number)value).shortValue();
 			}
-			
-			return Numbers.toShort(value.toString(), defaultValue());
+			if (value instanceof CharSequence) {
+				return Numbers.toShort(value.toString(), defaultValue());
+			}
+			throw castError(value, context);
 		}
 	}
-
-
 }

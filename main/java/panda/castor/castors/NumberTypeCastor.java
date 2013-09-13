@@ -5,62 +5,67 @@ import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 
-import panda.castor.AbstractCastor;
 import panda.castor.CastContext;
+import panda.castor.Castor;
 import panda.lang.Numbers;
 
 /**
- * 
  * @author yf.frank.wang@gmail.com
- *
  */
 public class NumberTypeCastor {
-	public static class NumberCastor extends AbstractCastor<Object, Number> {
+	public static class NumberCastor extends Castor<Object, Number> {
 		public NumberCastor() {
 			super(Object.class, Number.class);
 		}
 
 		@Override
-		protected Number convertValue(Object value, CastContext context) {
+		protected Number castValue(Object value, CastContext context) {
 			if (value instanceof Date) {
 				return ((Date)value).getTime();
 			}
-			else if (value instanceof Calendar) {
+			if (value instanceof Calendar) {
 				return ((Calendar)value).getTimeInMillis();
 			}
-			return Numbers.createNumber(value.toString());
+			if (value instanceof CharSequence) {
+				return Numbers.createNumber(value.toString());
+			}
+			throw castError(value, context);
 		}
 	}
 
-	public static class BigDecimalCastor extends AbstractCastor<Object, BigDecimal> {
+	public static class BigDecimalCastor extends Castor<Object, BigDecimal> {
 		public BigDecimalCastor() {
 			super(Object.class, BigDecimal.class);
 		}
 
 		@Override
-		protected BigDecimal convertValue(Object value, CastContext context) {
+		protected BigDecimal castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				Number num = (Number)value;
 				return BigDecimal.valueOf(num.longValue());
 			}
-			
-			return Numbers.toBigDecimal(value.toString());
+			if (value instanceof CharSequence) {
+				return Numbers.toBigDecimal(value.toString());
+			}
+			throw castError(value, context);
 		}
 	}
 
-	public static class BigIntegerCastor extends AbstractCastor<Object, BigInteger> {
+	public static class BigIntegerCastor extends Castor<Object, BigInteger> {
 		public BigIntegerCastor() {
 			super(Object.class, BigInteger.class);
 		}
 		
 		@Override
-		protected BigInteger convertValue(Object value, CastContext context) {
+		protected BigInteger castValue(Object value, CastContext context) {
 			if (value instanceof Number) {
 				Number num = (Number)value;
 				return BigInteger.valueOf(num.longValue());
 			}
-			
-			return Numbers.toBigInteger(value.toString());
+			if (value instanceof CharSequence) {
+				return Numbers.toBigInteger(value.toString());
+			}
+			throw castError(value, context);
 		}
 	}
 }
