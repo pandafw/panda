@@ -75,6 +75,11 @@ public class SqlUtils {
 		return m.matches();
 	}
 
+	public static void safeClose(ResultSet rs, Statement stat) {
+		safeClose(rs);
+		safeClose(stat);
+	}
+
 	/**
 	 * close ResultSet with out throw exception
 	 * @param resultSet result set

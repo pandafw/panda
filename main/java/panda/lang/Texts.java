@@ -1,12 +1,10 @@
 package panda.lang;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
+import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.log.Log;
-import panda.log.Logs;
 
 
 /**
@@ -15,8 +13,6 @@ import panda.log.Logs;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Texts {
-	private static Log log = Logs.getLog(Texts.class);
-
 	// Wrapping
 	// --------------------------------------------------------------------------
 	/**
@@ -534,47 +530,38 @@ public abstract class Texts {
 	 * @param wrapper object wrapper
 	 * @return translated string
 	 */
+	@SuppressWarnings("unchecked")
 	public static String transform(String expression, Object wrapper, char prefix, char open, char close) {
-		if (Strings.isEmpty(expression)) {
+		if (Strings.isEmpty(expression) || wrapper == null) {
 			return expression;
 		}
 		
+		BeanHandler bh = Beans.me().getBeanHandler(wrapper.getClass());
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
 			if (c == prefix && i < expression.length() - 1 && expression.charAt(i + 1) == open) {
-				String n = null;
+				String pn = null;
 				int j = i + 2;
 				for (; j < expression.length(); j++) {
 					if (expression.charAt(j) == close) {
-						n = expression.substring(i + 2, j);
+						pn = expression.substring(i + 2, j);
 						break;
 					}
 				}
-				if (n == null) {
+				if (pn == null) {
 					throw new IllegalArgumentException("Illegal statement (" + i + "): unexpected end of tag reached.");
 				}
-				else if (n.length() < 1) {
+				else if (pn.length() < 1) {
 					throw new IllegalArgumentException("Illegal statement (" + i + "): the paramenter can not be empty.");
 				}
 				
-				Object v = null;
-				if (wrapper instanceof Map) {
-					v = ((Map<?, ?>)wrapper).get(n);
-				}
-				else {
-					try {
-						v = Beans.getBean(wrapper, n);
-					}
-					catch (Exception e) {
-						log.warn("Failed to get property: " + wrapper.getClass() + " - " + n);
-					}
-				}
+				Object v = bh.getBeanValue(wrapper, pn);
 				if (v == null) {
 					sb.append(prefix);
 					sb.append(open);
-					sb.append(n);
+					sb.append(pn);
 					sb.append(close);
 				}
 				else {

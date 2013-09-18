@@ -11,6 +11,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlExecutor;
+import panda.dao.sql.SqlNamings;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.lang.Types;
 

@@ -15,21 +15,28 @@ import junit.framework.TestCase;
 
 
 /**
- * SimpleSqlStatementTest
  */
 public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * log
 	 */
-	private static Log log = Logs.getLog(SimpleSqlParserTest.class);
+	protected static Log log = Logs.getLog(SimpleSqlParserTest.class);
 
-	private String getTestMethodName() {
+	protected String getTestMethodName() {
 		StackTraceElement stack[] = (new Throwable()).getStackTrace();
 		StackTraceElement ste = stack[2];
 		return this.getClass().getSimpleName() + "." + ste.getMethodName() + "()";
 	}
 
-	private void testTranslate(String originalSql, Object paramObject, String translatedSql, List<SqlParameter> parameters) {
+	protected SqlExecutor createExecutor() {
+		return new SimpleSqlManager().getExecutor();
+	}
+	
+	protected SqlParser createParser(String sql) {
+		return new SimpleSqlParser(sql);
+	}
+
+	protected void testTranslate(String originalSql, Object paramObject, String translatedSql, List<SqlParameter> parameters) {
 		log.debug("");
 		log.debug(getTestMethodName());
 		log.debug("original SQL: [" + originalSql + "]");
@@ -37,8 +44,8 @@ public class SimpleSqlParserTest extends TestCase {
 		String actTranslatedSql = null;
 		List<SqlParameter> actParameters = null;
 		try {
-			SqlExecutor executor = new SimpleSqlManager().getExecutor();
-			SimpleSqlParser parser = new SimpleSqlParser(originalSql);
+			SqlExecutor executor = createExecutor();
+			SqlParser parser = createParser(originalSql);
 			
 			actParameters = new ArrayList<SqlParameter>();
 			actTranslatedSql = parser.parse(executor, paramObject, actParameters);
@@ -64,9 +71,9 @@ public class SimpleSqlParserTest extends TestCase {
 	}
 	
 	/**
-	 * test01
+	 * test for alias
 	 */
-	public void test01() {
+	public void testAlias() {
 		String originalSql = "SELECT ID AS a.id, NAME AS a.idName, ITEM_NAME AS a.item.name, B_ITEM_NAME as a.b.itemName FROM SAMPLE";
 		String translatedSql = "SELECT ID AS A_0_ID , NAME AS A_0_ID_NAME , ITEM_NAME AS A_0_ITEM_0_NAME , B_ITEM_NAME as A_0_B_0_ITEM_NAME FROM SAMPLE";
 
@@ -74,9 +81,9 @@ public class SimpleSqlParserTest extends TestCase {
 	}
 	
 	/**
-	 * test02
+	 * test for comment
 	 */
-	public void test02() {
+	public void testComment() {
 		String originalSql = "SELECT /* SELECT */ ID AS a.id, NAME AS a.name, ITEM_NAME AS a.item.name FROM SAMPLE";
 		String translatedSql = "SELECT /* SELECT */ ID AS A_0_ID , NAME AS A_0_NAME , ITEM_NAME AS A_0_ITEM_0_NAME FROM SAMPLE";
 
@@ -84,9 +91,9 @@ public class SimpleSqlParserTest extends TestCase {
 	}
 	
 	/**
-	 * test03
+	 * test variable
 	 */
-	public void test03() {
+	public void testVariable() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE NAME=:a.name";
 
 		Map<String, Map> map = new HashMap<String, Map>();
@@ -101,11 +108,28 @@ public class SimpleSqlParserTest extends TestCase {
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
+	
+	/**
+	 * test parameter
+	 */
+	public void testParameter() {
+		String originalSql = "SELECT * FROM SAMPLE WHERE ID=? and NAME=?";
+
+		String a[] = new String[] { "id", "name" };
+
+		String translatedSql = "SELECT * FROM SAMPLE WHERE ID= ? and NAME= ?";
+		
+		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
+		parameters.add(new SqlParameter("0", "id"));
+		parameters.add(new SqlParameter("1", "name"));
+		
+		testTranslate(originalSql, a, translatedSql, parameters);
+	}
 
 	/**
-	 * test04
+	 * test replace
 	 */
-	public void test04() {
+	public void testReplace() {
 		String originalSql = "SELECT * FROM SAMPLE ORDER BY ::orderCol ::orderDir";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -117,9 +141,9 @@ public class SimpleSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test05
+	 * test collection
 	 */
-	public void test05() {
+	public void testCollection() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE LIST IN (:list)";
 
 		List<String> list = new ArrayList<String>();

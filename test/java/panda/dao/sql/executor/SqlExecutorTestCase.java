@@ -195,7 +195,7 @@ public abstract class SqlExecutorTestCase {
 		Assert.assertEquals(expected, actual);
 	}
 	
-	protected void testQueryForObject(String sql, TestA param, TestA expectedResult) {
+	protected void testQueryForObject(String sql, Object param, TestA expectedResult) {
 		logTestMethodName();
 
 		TestA actualResult = null;

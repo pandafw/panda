@@ -7,6 +7,7 @@ import java.util.List;
 import panda.bean.PropertyAccessor;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlExecutor;
+import panda.dao.sql.SqlNamings;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 

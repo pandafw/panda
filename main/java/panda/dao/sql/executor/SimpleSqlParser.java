@@ -8,6 +8,7 @@ import java.util.List;
 import panda.bean.BeanHandler;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlExecutor;
+import panda.dao.sql.SqlNamings;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Strings;
@@ -61,21 +62,29 @@ public class SimpleSqlParser implements SqlParser {
 	}
 
 	protected static class ParameterSegment implements SqlSegment {
-		private String name;
+		protected String name;
 		
 		/**
 		 * jdbc type or type alias
 		 */
-		private String type;
-		private Integer scale; 
-		private String mode;
+		protected String type;
+		protected Integer scale; 
+		protected String mode;
 		
 		/**
 		 * Constructor
-		 * @param parameter parameter
 		 */
-		public ParameterSegment(String parameter) {
-			parse(parameter);
+		protected ParameterSegment() {
+		}
+		
+		/**
+		 * Constructor
+		 * @param index parameter index
+		 * @param content parameter detail content
+		 */
+		public ParameterSegment(int index, String content) {
+			parse(content);
+			name = String.valueOf(index);
 		}
 		
 		/**
@@ -101,7 +110,7 @@ public class SimpleSqlParser implements SqlParser {
 						scale = Integer.parseInt(type.substring(i + 1));
 					}
 					catch (NumberFormatException e) {
-						throw new IllegalArgumentException("Illegal parameter: scale must be a parsable integer.", e);
+						throw new IllegalArgumentException("Illegal parameter '" + name + "': scale must be a parsable integer.", e);
 					}
 					type = type.substring(0, i);
 				}
@@ -123,12 +132,45 @@ public class SimpleSqlParser implements SqlParser {
 		 */
 		@SuppressWarnings("unchecked")
 		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			String translatedString = null;
+			Object paramValue = null;
+			if (parameter != null) {
+				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
+				paramValue = bh.getBeanValue(parameter, name);
+			}
+
+			TypeAdapters typeAdapters = executor.getTypeAdapters();
+
+			String ts = "?";
+			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
+			strings.add(ts);
+			return ts;
+		}
+	}
+
+	protected static class VariableSegment extends ParameterSegment {
+		/**
+		 * Constructor
+		 * @param parameter parameter
+		 */
+		public VariableSegment(String parameter) {
+			parse(parameter);
+		}
+		
+		/**
+		 * translate 
+		 * @param parameter parameter object
+		 * @param strings strings
+		 * @param sqlParams sql parameters
+		 * @return translated string
+		 */
+		@SuppressWarnings("unchecked")
+		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
+			String ts = null;
 
 			Object paramValue = null;
 			if (parameter != null) {
-				BeanHandler beanHandler = executor.getBeans().getBeanHandler(parameter.getClass());
-				paramValue = beanHandler.getBeanValue(parameter, name);
+				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
+				paramValue = bh.getBeanValue(parameter, name);
 			}
 
 			TypeAdapters typeAdapters = executor.getTypeAdapters();
@@ -150,9 +192,9 @@ public class SimpleSqlParser implements SqlParser {
 								}
 								sb.append('?');
 							}
-							translatedString = sb.toString(); 
-							strings.add(translatedString);
-							return translatedString;
+							ts = sb.toString(); 
+							strings.add(ts);
+							return ts;
 						}
 					}
 					else if (paramValue instanceof Collection) {
@@ -169,18 +211,18 @@ public class SimpleSqlParser implements SqlParser {
 								}
 								sb.append('?');
 							}
-							translatedString = sb.toString(); 
-							strings.add(translatedString);
-							return translatedString;
+							ts = sb.toString(); 
+							strings.add(ts);
+							return ts;
 						}
 					}
 				}
 			}
 
-			translatedString = "?";
+			ts = "?";
 			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
-			strings.add(translatedString);
-			return translatedString;
+			strings.add(ts);
+			return ts;
 		}
 	}
 
@@ -204,20 +246,19 @@ public class SimpleSqlParser implements SqlParser {
 		 */
 		@SuppressWarnings("unchecked")
 		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			String translatedString = null;
-			
-			Object repValue = null;
+			Object rv = null;
 			if (parameter != null) {
-				BeanHandler beanHandler = executor.getBeans().getBeanHandler(parameter.getClass());
-				repValue = beanHandler.getBeanValue(parameter, propertyName);
+				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
+				rv = bh.getBeanValue(parameter, propertyName);
 			}
 
-			if (repValue != null) {
-				translatedString = repValue.toString();
-				strings.add(translatedString);
+			String ts = null;
+			if (rv != null) {
+				ts = rv.toString();
+				strings.add(ts);
 			}
 			
-			return translatedString;
+			return ts;
 		}
 	}
 
@@ -392,6 +433,7 @@ public class SimpleSqlParser implements SqlParser {
 	protected void compile(String sql, List<SqlSegment> segments) {
 		int i;
 		int start = 0;
+		int qmark = 0;
 		for (i = start; i < sql.length(); i++) {
 			char c = sql.charAt(i);
 			if (c == '/') {
@@ -448,12 +490,7 @@ public class SimpleSqlParser implements SqlParser {
 				}
 
 				start = i;
-				for (i++; i < sql.length(); i++) {
-					char c2 = sql.charAt(i);
-					if (!Character.isJavaIdentifierPart(c2)	&& c2 != ':' && c2 != '.') {
-						break;
-					}
-				}
+				i = skipJavaIdentifier(sql, i);
 
 				boolean dual = false;
 				String param = sql.substring(start + 1, i);
@@ -469,8 +506,24 @@ public class SimpleSqlParser implements SqlParser {
 					segments.add(new ReplacerSegment(param));
 				}
 				else {
-					segments.add(new ParameterSegment(param));
+					segments.add(new VariableSegment(param));
 				}
+				start = i--;
+			}
+			else if (c == '?') {
+				if (i > start) {
+					split(sql.substring(start, i), segments);
+				}
+
+				start = i;
+				i = skipJavaIdentifier(sql, i);
+
+				String param = sql.substring(start, i);
+				if (param.length() < 1) {
+					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected character : reached.");
+				}
+
+				segments.add(new ParameterSegment(qmark++, param));
 				start = i--;
 			}
 		}
@@ -480,6 +533,16 @@ public class SimpleSqlParser implements SqlParser {
 		}
 	}
 
+	protected int skipJavaIdentifier(String sql, int i) {
+		for (i++; i < sql.length(); i++) {
+			char c2 = sql.charAt(i);
+			if (!Character.isJavaIdentifierPart(c2)	&& c2 != ':' && c2 != '.') {
+				break;
+			}
+		}
+		return i;
+	}
+	
 	/**
 	 * isLastAsWord
 	 * @param segments segments

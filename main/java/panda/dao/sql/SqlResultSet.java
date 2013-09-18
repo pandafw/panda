@@ -479,4 +479,8 @@ public interface SqlResultSet {
 	 */
 	void close() throws SQLException;
 
+	/**
+	 * safe close the <code>ResultSet</code> and <code>Statement</code>
+	 */
+	void safeClose();
 }

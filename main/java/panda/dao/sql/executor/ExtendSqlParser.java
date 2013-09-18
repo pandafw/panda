@@ -196,14 +196,15 @@ public class ExtendSqlParser extends SimpleSqlParser {
 	 * @param start start position
 	 * @param close close ']' need or not
 	 */
-	private int compile(String sql, List<SqlSegment> statements, int start, boolean close) {
+	private int compile(String sql, List<SqlSegment> segments, int start, boolean close) {
 		int i;
+		int qmark = 0;
 		for (i = start; i < sql.length(); i++) {
 			char c = sql.charAt(i);
 			if (c == '/') {
 				if (i + 1 < sql.length() && sql.charAt(i + 1) == '*') {
 					if (i > start) {
-						split(sql.substring(start, i), statements);
+						split(sql.substring(start, i), segments);
 					}
 					start = i;
 					String comment = null;
@@ -219,12 +220,12 @@ public class ExtendSqlParser extends SimpleSqlParser {
 						throw new IllegalArgumentException("Illegal sql statement (" + i + "): unexpected end of comment reached.");
 					}
 					
-					statements.add(new SqlCommentSegment(comment));
+					segments.add(new SqlCommentSegment(comment));
 				}
 			}
 			else if (c == '\'') {
 				if (i > start) {
-					split(sql.substring(start, i), statements);
+					split(sql.substring(start, i), segments);
 				}
 				start = i++;
 				if (i >= sql.length()) {
@@ -246,11 +247,11 @@ public class ExtendSqlParser extends SimpleSqlParser {
 				if (str == null) {
 					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected end of string reached.");
 				}
-				statements.add(new SqlStringSegment(str));
+				segments.add(new SqlStringSegment(str));
 			}
 			else if (c == '@') {
 				if (i > start) {
-					split(sql.substring(start, i), statements);
+					split(sql.substring(start, i), segments);
 				}
 				start = i++;
 				if (i >= sql.length()) {
@@ -272,7 +273,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 					List<SqlSegment> items = new ArrayList<SqlSegment>();
 					i = compile(sql, items, i + 1, true);
 					LogicalContainerSegment stm = new LogicalContainerSegment(items);
-					statements.add(stm);
+					segments.add(stm);
 					start = i + 1;
 				}
 				else {
@@ -313,22 +314,17 @@ public class ExtendSqlParser extends SimpleSqlParser {
 					LogicalExpressionSegment stm = new LogicalExpressionSegment(expression, items,
 							notStart > 0 ? LogicalExpressionSegment.NOT
 									: LogicalExpressionSegment.AT);
-					statements.add(stm);
+					segments.add(stm);
 					start = i + 1;
 				}
 			}
 			else if (c == ':') {
 				if (i > start) {
-					split(sql.substring(start, i), statements);
+					split(sql.substring(start, i), segments);
 				}
 
 				start = i;
-				for (i++; i < sql.length(); i++) {
-					char c2 = sql.charAt(i);
-					if (!Character.isJavaIdentifierPart(c2)	&& c2 != ':' && c2 != '.') {
-						break;
-					}
-				}
+				i = skipJavaIdentifier(sql, i);
 
 				boolean dual = false;
 				String param = sql.substring(start + 1, i);
@@ -341,20 +337,36 @@ public class ExtendSqlParser extends SimpleSqlParser {
 				}
 
 				if (dual) {
-					statements.add(new ReplacerSegment(param));
+					segments.add(new ReplacerSegment(param));
 				}
 				else {
-					statements.add(new ParameterSegment(param));
+					segments.add(new VariableSegment(param));
 				}
 				start = i--;
 			}
 			else if (c == ']') {
 				if (close) {
 					if (i > start) {
-						split(sql.substring(start, i), statements);
+						split(sql.substring(start, i), segments);
 					}
 					return i;
 				}
+			}
+			else if (c == '?') {
+				if (i > start) {
+					split(sql.substring(start, i), segments);
+				}
+
+				start = i;
+				i = skipJavaIdentifier(sql, i);
+
+				String param = sql.substring(start, i);
+				if (param.length() < 1) {
+					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected character : reached.");
+				}
+
+				segments.add(new ParameterSegment(qmark++, param));
+				start = i--;
 			}
 		}
 
@@ -362,7 +374,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 			throw new IllegalArgumentException("Illegal sql statement (" + i + "): unexpected end of statement reached. Unclosed [...] statement. ']' is required.");
 		}
 		if (i > start) {
-			split(sql.substring(start, i), statements);
+			split(sql.substring(start, i), segments);
 		}
 		return i;
 	}

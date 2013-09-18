@@ -115,6 +115,24 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	/**
 	 */
 	@Test
+	public void testQueryForObjectByParam() {
+		String sql = "SELECT * FROM TEST WHERE ID=?";
+		
+		Object param = new int[] { 1005 };
+		
+		TestA expected = new TestA();
+		expected.setId(1005);
+		expected.setName("NAME 1005");
+		expected.setKind('5');
+		expected.setPrice(new BigDecimal("1005.05"));
+		expected.setUpdateTime(convertToDate("2009-05-05"));
+	
+		testQueryForObject(sql, param, expected);
+	}
+	
+	/**
+	 */
+	@Test
 	public void testQueryForListByInArray() {
 		String sql = "SELECT * FROM TEST WHERE ID IN (:idArray)";
 

@@ -6,67 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.executor.ExtendSqlManager;
-import panda.dao.sql.executor.ExtendSqlParser;
-import panda.dao.sql.executor.SqlParameter;
-import panda.log.Log;
-import panda.log.Logs;
-import junit.framework.TestCase;
 
 
 /**
- * ExtendSqlStatementTest
  */
-public class ExtendSqlParserTest extends TestCase {
-	/**
-	 * log
-	 */
-	private static Log log = Logs.getLog(ExtendSqlParserTest.class);
-
-	private String getTestMethodName() {
-		StackTraceElement stack[] = (new Throwable()).getStackTrace();
-		StackTraceElement ste = stack[2];
-		return this.getClass().getSimpleName() + "." + ste.getMethodName() + "()";
-	}
-
-	private void testTranslate(String originalSql, Object paramObject, String translatedSql, List<SqlParameter> parameters) {
-		log.debug("");
-		log.debug(getTestMethodName());
-		log.debug("original SQL: [" + originalSql + "]");
-
-		String actTranslatedSql = null;
-		List<SqlParameter> actParameters = null;
-		try {
-			SqlExecutor executor = new ExtendSqlManager().getExecutor();
-			ExtendSqlParser parser = new ExtendSqlParser(originalSql);
-			
-			actParameters = new ArrayList<SqlParameter>();
-			actTranslatedSql = parser.parse(executor, paramObject, actParameters);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-
-		log.debug("expect SQL: [" + translatedSql + "]");
-		log.debug("actual SQL: [" + actTranslatedSql + "]");
-
-		assertEquals(translatedSql, actTranslatedSql);
-		
-		if (parameters == null) {
-			assertTrue(actParameters.isEmpty());
-		}
-		else {
-			log.debug("expect parameters: " + parameters);
-			log.debug("actual parameters: " + actParameters);
-			assertEquals(parameters, actParameters);
-		}
+public class ExtendSqlParserTest extends SimpleSqlParserTest {
+	protected SqlExecutor createExecutor() {
+		return new ExtendSqlManager().getExecutor();
 	}
 	
+	protected SqlParser createParser(String sql) {
+		return new ExtendSqlParser(sql);
+	}
+
 	/**
-	 * test01_at
+	 * test for '@'
 	 */
-	public void test01_at() {
+	public void testAtMark() {
 		String originalSql = "SELECT * FROM SAMPLE @orderCol[ORDER BY ::orderCol ::orderDir]";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -78,9 +34,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test02_atList
+	 * test for '@' List
 	 */
-	public void test02_atList() {
+	public void testAtList() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @list[LIST IN (:list)]";
 
 		List<String> list = new ArrayList<String>();
@@ -102,9 +58,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test03_notat
+	 * test for not at
 	 */
-	public void test03_notat() {
+	public void testNotAt() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @kind[KIND=:kind] @!kind[KIND IS NULL]";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -119,9 +75,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test04_notat
+	 * test for not at(null)
 	 */
-	public void test04_notat() {
+	public void testNotAtNull() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @kind[KIND=:kind] @!kind[KIND IS NULL]";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -132,9 +88,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test05
+	 * test for at where
 	 */
-	public void test05() {
+	public void testAtWhere() {
 		String originalSql = "SELECT * FROM SAMPLE @[WHERE @id[AND ID=:id] @name[AND NAME=:name] @!kind[AND KIND IS NULL]]";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -151,9 +107,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test06
+	 * test for at where (null)
 	 */
-	public void test06() {
+	public void testAtWhereNull() {
 		String originalSql = "SELECT * FROM SAMPLE @[WHERE @id[AND ID=:id] @name[AND NAME=:name] @!kind[AND KIND IS NULL]]";
 
 		Map<String, String> map = new HashMap<String, String>();
@@ -165,9 +121,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test07
+	 * test for at where with paren
 	 */
-	public void test07() {
+	public void testAtWhereParen() {
 		String originalSql = "SELECT * FROM SAMPLE"
 			+ " @[ WHERE"
 				+ " @[(@id[AND ID=:id] @name[OR NAME=:name])]"
@@ -193,9 +149,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test08
+	 * testAtSet
 	 */
-	public void test08() {
+	public void testAtSet() {
 		String originalSql = "UPDATE SAMPLE"
 			+ " SET"
 				+ " @name [,NAME=:name]"
@@ -217,9 +173,9 @@ public class ExtendSqlParserTest extends TestCase {
 	}
 
 	/**
-	 * test09
+	 * testAtSet2
 	 */
-	public void test09() {
+	public void testAtSet2() {
 		String originalSql = "UPDATE SAMPLE"
 			+ " SET"
 				+ " @name[,NAME=:name]"

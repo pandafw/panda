@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 
 import panda.bean.Beans;
 import panda.dao.sql.adapter.TypeAdapters;
-import panda.dao.sql.engine.ExtendSqlManager;
+import panda.dao.sql.executor.ExtendSqlManager;
 
 
 /**
