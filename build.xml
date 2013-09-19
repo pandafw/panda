@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-	<property name="prj.name" value="panda"/>
+	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
 	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
 	<property name="prj.site" value="github.com/pandawind/panda-java"/>
+	<!-- get prj.version -->
 	<loadfile srcFile="${basedir}/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8">
 		<filterchain>
 			<striplinebreaks/>
@@ -15,54 +16,105 @@
 			</tokenfilter>
 		</filterchain>
 	</loadfile>
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
+	</tstamp>
 	
-	<!-- import -->
-	<property name="ant.dir" value="${basedir}/ant"/>
-	<import file="${ant.dir}/build-common.xml"/>
-	
-	<property name="dist.dir" value="${basedir}/dist"/>
-
 	<path id="main.cp">
-		<pathelement path="${main.cls}"/>
-		<fileset dir="${lib.compile}">
+		<pathelement path="main/classes"/>
+		<fileset dir="lib/compile">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.api}">
+		<fileset dir="lib/api">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
 
 	<path id="test.cp">
-		<pathelement path="${main.cls}"/>
-		<pathelement path="${test.cls}"/>
-		<fileset dir="${lib.compile}">
+		<pathelement path="main/classes"/>
+		<pathelement path="test/classes"/>
+		<fileset dir="lib/compile">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.jdbc}">
+		<fileset dir="lib/jdbc">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.test}">
+		<fileset dir="lib/test">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.api}">
+		<fileset dir="lib/api">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
 
 	<path id="junit.cp">
-		<pathelement path="${emma.cls}"/>
-		<pathelement path="${test.cls}"/>
-		<fileset dir="${lib.compile}">
+		<pathelement path="test/emma-classes"/>
+		<pathelement path="test/classes"/>
+		<fileset dir="lib/compile">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.test}">
+		<fileset dir="lib/test">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${lib.api}">
+		<fileset dir="lib/api">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
 
+	<path id="emma.cp">
+		<pathelement location="lib/test/emma.jar"/>
+		<pathelement location="lib/test/emma_ant.jar"/>
+	</path>
+
+	<!-- get revision -->
+	<script language="javascript">
+		var ver = project.getProperty("VERSION");
+		if (ver == null) {
+			function run(cmd) {
+				var is = null;
+				try {
+					var p = java.lang.Runtime.getRuntime().exec(cmd);
+					is = p.getInputStream();
+					var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+					var o = "";
+					var s;
+					while ((s = br.readLine()) != null) {
+						o += s.trim();
+					}
+					return o;
+				}
+				catch (e) {
+					java.lang.System.err.println(e);
+					return "";
+				}
+				finally {
+					if (is != null) {
+						is.close();
+					}
+				}
+			}
+			
+			var rev = "0";
+			if (new java.io.File(".git").exists()) {
+				var s = run("git rev-list --all --count");
+				if (s != "") {
+					rev = s;
+				}
+			}
+			else if (new java.io.File(".svn").exists()) {
+				var si = run("svn info . --xml");
+				if (si != "") {
+					var b = si.indexOf("revision=\"") + 10;
+					var e = si.indexOf("\"", b);
+					rev = si.substring(b, e);
+				}
+			}
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		}
+	</script>
+
+	<!-- usage -->
 	<target name="usage">
 		<echo message=""/>
 		<echo message="${prj.name}-${VERSION} build file"/>
@@ -75,6 +127,9 @@
 		<echo message="clean        --> Delete everything in the classes directory"/>
 		<echo message="cp-res       --> Copy resource files to the classes directory"/>
 		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
+		<echo message="ivy-resolve  --> retreive dependencies"/>
+		<echo message="ivy-report   --> generates a report of dependencies"/>
+		<echo message="ivy-clean    --> clean the cache"/>
 		<echo message="jar          --> Make the project as a jar file"/>
 		<echo message="javac        --> Compile java source files"/>
 		<echo message="javadoc      --> Generate java documents"/>
@@ -93,11 +148,11 @@
 	<!-- ivy -->
 	<target name="ivy-resolve" description="ivy --> retreive dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">
-			<fileset dir="${lib.api}"/>
-			<fileset dir="${lib.compile}"/>
-			<fileset dir="${lib.gae}"/>
-			<fileset dir="${lib.jdbc}"/>
-			<fileset dir="${lib.test}"/>
+			<fileset dir="lib/api"/>
+			<fileset dir="lib/compile"/>
+			<fileset dir="lib/gae"/>
+			<fileset dir="lib/jdbc"/>
+			<fileset dir="lib/test"/>
 		</delete>
 		<ivy:retrieve conf="api,compile,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
@@ -106,18 +161,36 @@
 		<ivy:report todir="lib/ivy" conf="api,compile,gae,jdbc,test"/>
 	</target>
 
-	<target name="ivy-cleancache" description="ivy --> clean the cache">
+	<target name="ivy-clean" description="ivy --> clean the cache">
 		<ivy:cleancache />
 	</target>
 	
 	<!-- build -->
+	<target name="clean" description="Delete everything in the classes directory">
+		<delete dir="main/classes"/>
+	</target>
+
+	<target name="cp-res" description="Copy resource files to the classes directory">
+		<mkdir dir="main/classes"/>
+		<delete>
+			<fileset dir="main/classes">
+				<exclude name="**/*.class"/>
+			</fileset>
+		</delete>
+		<copy todir="main/classes" preservelastmodified="true">
+			<fileset dir="main/java">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="javac" description="Compile java source files">
-		<mkdir dir="${main.cls}"/>
+		<mkdir dir="main/classes"/>
 		<touch>
-			<fileset dir="${main.java}" includes="**/package-info.java"/>
+			<fileset dir="main/java" includes="**/package-info.java"/>
 		</touch>
-		<javac destdir="${main.cls}" encoding="UTF-8" source="1.5" target="1.5" debug="true" includeAntRuntime="false">
-			<src path="${main.java}"/>
+		<javac destdir="main/classes" encoding="UTF-8" source="1.5" target="1.5" debug="true" includeAntRuntime="false">
+			<src path="main/java"/>
 			<classpath refid="main.cp"/>
 		</javac>
 	</target>
@@ -126,9 +199,23 @@
 
 
 	<!-- dist -->
+	<target name="javadoc" description="Generate java documents">
+		<delete dir="main/javadoc"/>
+		<javadoc destdir="main/javadoc"
+			locale="en_US" docencoding="UTF-8" charset="UTF-8"
+			use="true" splitindex="true"
+			windowTitle="${prj.title} ${prj.version} API"
+			doctitle="${prj.title} ${prj.version} API"
+			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+		>
+			<fileset dir="main/java"/>
+			<classpath refid="main.cp"/>
+		</javadoc>
+	</target>
+
 	<target name="jar" description="Make project as a jar file">
-		<delete dir="${dist.dir}"/>
-		<jar destfile="${dist.dir}/${prj.name}-${VERSION}.jar">
+		<delete dir="dist"/>
+		<jar destfile="dist/${prj.name}-${VERSION}.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.author}"/>
 				<attribute name="Built-By" value="${prj.author}"/>
@@ -137,9 +224,9 @@
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
 				<attribute name="Implementation-Vendor" value="${prj.site}"/>
 			</manifest>
-			<fileset dir="${main.cls}"/>
+			<fileset dir="main/classes"/>
 		</jar>
-		<jar destfile="${dist.dir}/${prj.name}-${VERSION}-sources.jar">
+		<jar destfile="dist/${prj.name}-${VERSION}-sources.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.author}"/>
 				<attribute name="Built-By" value="${prj.author}"/>
@@ -148,15 +235,154 @@
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
 				<attribute name="Implementation-Vendor" value="${prj.site}"/>
 			</manifest>
-			<fileset dir="${main.java}"/>
-			<fileset dir="${main.res}" erroronmissingdir="false"/>
+			<fileset dir="main/java"/>
+		</jar>
+		<jar destfile="dist/${prj.name}-${VERSION}-javadoc.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.author}"/>
+				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/>
+				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+			</manifest>
+			<fileset dir="main/javadoc"/>
 		</jar>
 	</target>
 
-	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
+	<target name="dist" depends="ivy-report, build, javadoc, jar" description="Distribute project as a jar file"/>
 
 	<!-- test -->
-	<import file="${ant.dir}/build-test.xml"/>
+	<target name="test-clean" description="Delete everything in the classes directory">
+		<delete dir="test/classes"/>
+		<delete dir="test/javadoc"/>
+		<delete dir="test/test-report"/>
+		<delete dir="test/emma-classes"/>
+		<delete dir="test/emma-report"/>
+	</target>
 
+	<target name="test-rescp" description="Copy resource to the classes directory">
+		<mkdir dir="test/classes"/>
+		<delete>
+			<fileset dir="test/classes">
+				<exclude name="**/*.class"/>
+			</fileset>
+		</delete>
+		<copy todir="test/classes" preservelastmodified="true">
+			<fileset dir="test/java">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test-emma" description="EMMA instruments classes">
+		<taskdef resource="emma_ant.properties" classpathref="emma.cp"/>
+		
+		<!-- EMMA instr class output directory (it is important to create this property only when EMMA is enabled) -->
+		<mkdir dir="test/emma-classes"/>
+
+		<copy todir="test/emma-classes" preservelastmodified="true">
+			<fileset dir="main/classes"/>
+		</copy>
+
+		<!-- Instrument the classes, this takes the normal classes, and makes instrumented classes instead -->
+		<!-- Note that EMMA takes regular ANT path elements as instrumentation input, which is exceedingly convenient -->
+		<emma>
+			<instr instrpath="test/emma-classes"
+				 metadatafile="test/emma-report/metadata.emma"
+				 merge="true"
+				 mode="overwrite"
+			/>
+		</emma>
+	</target>
+
+	<target name="test-javac" description="Compile test source java files">
+		<mkdir dir="test/classes"/>
+		<javac destdir="test/classes" encoding="UTF-8" source="1.5" target="1.5" debug="true" includeAntRuntime="false">
+			<src path="test/java"/>
+			<classpath refid="test.cp"/>
+		</javac>
+	</target>
+
+	<target name="test-build"
+		depends="test-clean, test-rescp, test-emma, test-javac"
+		description="Build the test suite of project"/>
+
+	<target name="test-run" description="Run all junit test case">
+		<mkdir dir="test/test-report"/>
+
+		<junit printsummary="yes" haltonfailure="no" fork="true" forkmode="once">
+			<jvmarg value="-Demma.coverage.out.file=test/emma-report/coverage.emma"/>
+			<jvmarg value="-Demma.coverage.out.merge=false"/>
+			<classpath refid="junit.cp"/>
+			<batchtest fork="yes" todir="test/test-report">
+				<formatter type="xml"/>
+				<fileset dir="test/java">
+					<include name="**/*Test.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="test-report" description="Build the test report">
+		<junitreport todir="test/test-report">
+			<fileset dir="test/test-report">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="test/test-report"/>
+		</junitreport>
+
+		<emma>
+			<report sourcepath="main/java"
+				  sort="+name,+class,+method,+block"
+				  metrics="method:70,block:80,line:80,class:100"
+			>
+				<!-- collect all EMMA data dumps (metadata and runtime)
+					 [this can be done via nested <fileset> fileset elements
+					 or <file> elements pointing to a single file]:
+				-->
+				<fileset dir="test/emma-report" >
+					<include name="*.emma"/>
+				</fileset>
+
+				<!-- for every type of report desired, configure a nested
+					 element; various report parameters
+					 can be inherited from the parent <report>
+					 and individually overridden for each report type:
+				-->
+				<txt outfile="test/emma-report/coverage.txt"
+					depth="package"
+					columns="class,method,block,line,name"
+				/>
+				<xml outfile="test/emma-report/coverage.xml"
+					depth="package"
+				/>
+				<html outfile="test/emma-report/coverage.html"
+					depth="method"
+					columns="name,class,method,block,line"
+				/>
+			</report>
+		</emma>
+	</target>
+
+	<target name="test-javadoc" description="Generate test java documents">
+		<delete dir="test/javadoc"/>
+		<javadoc locale="en_US"
+			sourcepath="test/java" destdir="test/javadoc"
+			docencoding="UTF-8" charset="UTF-8"
+			use="true" splitindex="true"
+			windowTitle="${prj.title} ${VERSION} Test API"
+			doctitle="${prj.title} ${VERSION} Test API"
+			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+		>
+			<classpath refid="test.cp"/>
+		</javadoc>
+	</target>
+
+	<target name="test"
+		depends="test-build, test-run, test-report"
+		description="Test the project (test-build, test-run, test-report)"/>
+
+	<!-- all -->
 	<target name="all" depends="dist, test"/>
 </project>
