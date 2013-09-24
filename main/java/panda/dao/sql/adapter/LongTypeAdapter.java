@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Long implementation of TypeAdapter
@@ -25,7 +26,7 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		long l = rs.getLong(columnName);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(l);
@@ -43,7 +44,7 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		long l = rs.getLong(columnIndex);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(l);
@@ -61,7 +62,7 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		long l = cs.getLong(columnIndex);
 		if (cs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(l);
@@ -79,11 +80,12 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Long l = castToJdbc(value);
+		if (l == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateLong(columnName, castToJdbc(value));
+			rs.updateLong(columnName, l);
 		}
 	}
 
@@ -98,11 +100,12 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Long l = castToJdbc(value);
+		if (l == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateLong(columnIndex, castToJdbc(value));
+			rs.updateLong(columnIndex, l);
 		}
 	}
 
@@ -111,12 +114,18 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setLong(i, castToJdbc(parameter));
+		Long l = castToJdbc(value);
+		if (l == null) {
+			ps.setNull(i, Types.BIGINT);
+		}
+		else {
+			ps.setLong(i, l);
+		}
 	}
 }

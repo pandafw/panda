@@ -24,12 +24,7 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 	 */
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		Object object = rs.getObject(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(object);
-		}
+		return castToJava(object);
 	}
 
 	/**
@@ -42,12 +37,7 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		Object object = rs.getObject(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(object);
-		}
+		return castToJava(object);
 	}
 
 	/**
@@ -60,12 +50,7 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 	 */
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		Object object = cs.getObject(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(object);
-		}
+		return castToJava(object);
 	}
 
 	/**
@@ -83,7 +68,7 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateObject(columnName, castToJdbc(value));
+			rs.updateObject(columnName, value);
 		}
 	}
 
@@ -102,7 +87,7 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateObject(columnIndex, castToJdbc(value));
+			rs.updateObject(columnIndex, value);
 		}
 	}
 
@@ -111,12 +96,12 @@ public class ObjectTypeAdapter<T> extends AbstractTypeAdapter<T, Object> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setObject(i, castToJdbc(parameter));
+		ps.setObject(i, value);
 	}
 }

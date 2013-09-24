@@ -12,13 +12,21 @@ import panda.bean.Beans;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlNamings;
+import panda.dao.sql.SqlResultSet;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.lang.Types;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class SimpleSqlResultSet extends AbstractSqlResultSet {
+	/**
+	 * log
+	 */
+	protected static Log log = Logs.getLog(SqlResultSet.class);
+
 	/**
 	 * ResultColumn
 	 */
@@ -134,7 +142,9 @@ public class SimpleSqlResultSet extends AbstractSqlResultSet {
 		List<ResultColumn> rcs = getResultColumnList(resultSet, resultObject, beanHandler);
 		for (ResultColumn rc : rcs) {
 			Object value = rc.typeAdapter.getResult(resultSet, rc.columnIndex);
-			beanHandler.setBeanValue(resultObject, rc.propertyName, value);
+			if (!beanHandler.setBeanValue(resultObject, rc.propertyName, value)) {
+				log.warn("Failed to set " + rc.propertyName + " of " + resultObject.getClass());
+			}
 		}
 
 		return resultObject;

@@ -24,12 +24,7 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 */
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		String s = rs.getString(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(s);
-		}
+		return castToJava(s);
 	}
 
 	/**
@@ -42,12 +37,7 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		String s = rs.getString(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(s);
-		}
+		return castToJava(s);
 	}
 
 	/**
@@ -60,12 +50,7 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 */
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		String s = cs.getString(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(s);
-		}
+		return castToJava(s);
 	}
 
 	/**
@@ -79,11 +64,12 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = castToJdbc(value);
+		if (s == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateString(columnName, castToJdbc(value));
+			rs.updateString(columnName, s);
 		}
 	}
 
@@ -98,11 +84,12 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = castToJdbc(value);
+		if (s == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateString(columnIndex, castToJdbc(value));
+			rs.updateString(columnIndex, s);
 		}
 	}
 
@@ -115,8 +102,9 @@ public class StringTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setString(i, castToJdbc(parameter));
+		String s = castToJdbc(value);
+		ps.setString(i, s);
 	}
 }

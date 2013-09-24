@@ -25,12 +25,7 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 */
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		Object sqlDate = rs.getDate(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(sqlDate);
-		}
+		return castToJava(sqlDate);
 	}
 
 	/**
@@ -43,12 +38,7 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		Object sqlDate = rs.getDate(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(sqlDate);
-		}
+		return castToJava(sqlDate);
 	}
 
 	/**
@@ -61,12 +51,7 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 */
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		Object sqlDate = cs.getDate(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(sqlDate);
-		}
+		return castToJava(sqlDate);
 	}
 
 	/**
@@ -80,11 +65,12 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Date d = castToJdbc(value);
+		if (d == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateDate(columnName, castToJdbc(value));
+			rs.updateDate(columnName, d);
 		}
 	}
 
@@ -99,11 +85,12 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Date d = castToJdbc(value);
+		if (d == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateDate(columnIndex, castToJdbc(value));
+			rs.updateDate(columnIndex, d);
 		}
 	}
 
@@ -112,12 +99,13 @@ public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setDate(i, castToJdbc(parameter));
+		Date d = castToJdbc(value);
+		ps.setDate(i, d);
 	}
 }

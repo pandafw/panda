@@ -114,6 +114,7 @@ public class BlobTypeAdapter<T> extends AbstractTypeAdapter<T, InputStream> {
 		else {
 			InputStream is = castToJdbc(value);
 			try {
+				// NOTE: some InputStream does not return total available size
 				rs.updateBinaryStream(columnIndex, is, is.available());
 			}
 			catch (IOException e) {
@@ -139,6 +140,7 @@ public class BlobTypeAdapter<T> extends AbstractTypeAdapter<T, InputStream> {
 		else {
 			InputStream is = castToJdbc(parameter);
 			try {
+				// NOTE: some InputStream does not return total available size
 				ps.setBinaryStream(i, is, is.available());
 			}
 			catch (IOException e) {

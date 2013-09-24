@@ -2,7 +2,9 @@ package panda.dao.sql.executor;
 
 import java.sql.Connection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlManager;
@@ -13,9 +15,14 @@ import panda.dao.sql.SqlManager;
  */
 public class SimpleSqlManager extends SqlManager {
 	/**
+	 * lock for cache
+	 */
+	private ReadWriteLock lock = new ReentrantReadWriteLock();
+	
+	/**
 	 * sqlParserCache
 	 */
-	private Map<String, SqlParser> sqlParserCache = new ConcurrentHashMap<String, SqlParser>();
+	private Map<String, SqlParser> sqlParserCache = new WeakHashMap<String, SqlParser>();
 	
 	/**
 	 * Constructor
@@ -42,8 +49,34 @@ public class SimpleSqlManager extends SqlManager {
 	/**
 	 * @return the sqlParserCache
 	 */
-	public Map<String, SqlParser> getSqlParserCache() {
-		return sqlParserCache;
+	public SqlParser getSqlParser(String key) {
+		if (sqlParserCache == null) {
+			return null;
+		}
+		
+		try {
+			lock.readLock().lock();
+			return sqlParserCache.get(key);
+		}
+		finally {
+			lock.readLock().unlock();
+		}
 	}
 
+	/**
+	 * @return the sqlParserCache
+	 */
+	public void putSqlParser(String key, SqlParser parser) {
+		if (sqlParserCache == null) {
+			return;
+		}
+
+		try {
+			lock.writeLock().lock();
+			sqlParserCache.put(key, parser);
+		}
+		finally {
+			lock.writeLock().unlock();
+		}
+	}
 }

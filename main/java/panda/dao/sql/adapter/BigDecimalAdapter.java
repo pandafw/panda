@@ -25,12 +25,7 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 */
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		BigDecimal bigdec = rs.getBigDecimal(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(bigdec);
-		}
+		return castToJava(bigdec);
 	}
 
 	/**
@@ -43,12 +38,7 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		BigDecimal bigdec = rs.getBigDecimal(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(bigdec);
-		}
+		return castToJava(bigdec);
 	}
 
 	/**
@@ -61,12 +51,7 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 */
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		BigDecimal bigdec = cs.getBigDecimal(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
-		else {
-			return castToJava(bigdec);
-		}
+		return castToJava(bigdec);
 	}
 
 	/**
@@ -80,11 +65,12 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
+		BigDecimal bd = castToJdbc(value);
 		if (value == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateBigDecimal(columnName, castToJdbc(value));
+			rs.updateBigDecimal(columnName, bd);
 		}
 	}
 
@@ -99,11 +85,12 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
+		BigDecimal bd = castToJdbc(value);
 		if (value == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateBigDecimal(columnIndex, castToJdbc(value));
+			rs.updateBigDecimal(columnIndex, bd);
 		}
 	}
 
@@ -112,12 +99,13 @@ public class BigDecimalAdapter<T> extends AbstractTypeAdapter<T, BigDecimal> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setBigDecimal(i, castToJdbc(parameter));
+		BigDecimal bd = castToJdbc(value);
+		ps.setBigDecimal(i, bd);
 	}
 }

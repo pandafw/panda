@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Boolean implementation of TypeAdapter
@@ -117,6 +118,12 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 */
 	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
 			throws SQLException {
-		ps.setBoolean(i, castToJdbc(parameter));
+		Boolean b = castToJdbc(parameter);
+		if (b == null) {
+			ps.setNull(i, Types.BOOLEAN);
+		}
+		else {
+			ps.setBoolean(i, b);
+		}
 	}
 }

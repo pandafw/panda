@@ -21,7 +21,7 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 
 	protected T convertFromJdbc(String s) throws SQLException {
 		if (Strings.isEmpty(s)) {
-			return null;
+			return castToJava(null);
 		}
 		
 		char c = s.charAt(0);
@@ -70,9 +70,6 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 */
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		String s = rs.getString(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
 		return convertFromJdbc(s);
 	}
 
@@ -86,9 +83,6 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		String s = rs.getString(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
 		return convertFromJdbc(s);
 	}
 
@@ -102,9 +96,6 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 */
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		String s = cs.getString(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
 		return convertFromJdbc(s);
 	}
 
@@ -119,11 +110,12 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = convertFromJava(value);
+		if (s == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateString(columnName, convertFromJava(value));
+			rs.updateString(columnName, s);
 		}
 	}
 
@@ -138,11 +130,12 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = convertFromJava(value);
+		if (s == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateString(columnIndex, convertFromJava(value));
+			rs.updateString(columnIndex, s);
 		}
 	}
 
@@ -151,15 +144,17 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setString(i, convertFromJava(parameter));
+		String s = convertFromJava(value);
+		ps.setString(i, s);
 	}
 	
+	//--------------------------------------------------------------------------------------
 	public static class YesNoBoolCharTypeAdapter<T> extends BoolCharTypeAdapter<T> {
 		public YesNoBoolCharTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 			super(adapters, javaType);
@@ -171,8 +166,8 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	public static class ZeroOneBoolCharTypeAdapter<T> extends BoolCharTypeAdapter<T> {
 		public ZeroOneBoolCharTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 			super(adapters, javaType);
-			chTrue = 'Y';
-			chFalse = 'N';
+			chTrue = '1';
+			chFalse = '0';
 		}
 	}
 }

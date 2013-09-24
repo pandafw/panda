@@ -27,7 +27,10 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	}
 	
 	protected T toCollection(String value) throws SQLException {
-		if (Strings.isEmpty(value)) {
+		if (value == null) {
+			return null;
+		}
+		else if (Strings.isEmpty(value)) {
 			try {
 				return Types.newInstance(type);
 			}
@@ -49,11 +52,15 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	}
 
 	protected String toString(Object v) throws SQLException {
+		if (v == null) {
+			return null;
+		}
+		
 		try {
 			return Jsons.toJson(v);
 		}
 		catch (Exception e) {
-			throw new SQLException(e);
+			throw new SQLException("Failed to serialize to json", e);
 		}
 	}
 
@@ -68,12 +75,7 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	public T getResult(ResultSet rs, String columnName)
 			throws SQLException {
 		String s = rs.getString(columnName);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return toCollection(s);
-		}
+		return toCollection(s);
 	}
 
 	/**
@@ -86,12 +88,7 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	 */
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		String s = rs.getString(columnIndex);
-		if (rs.wasNull()) {
-			return null;
-		}
-		else {
-			return toCollection(s);
-		}
+		return toCollection(s);
 	}
 
 	/**
@@ -105,12 +102,7 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	public T getResult(CallableStatement cs, int columnIndex)
 			throws SQLException {
 		String s = cs.getString(columnIndex);
-		if (cs.wasNull()) {
-			return null;
-		}
-		else {
-			return toCollection(s);
-		}
+		return toCollection(s);
 	}
 
 	/**
@@ -124,11 +116,12 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = toString(value);
+		if (s == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateString(columnName, toString(value));
+			rs.updateString(columnName, s);
 		}
 	}
 
@@ -143,11 +136,12 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		String s = toString(value);
+		if (s == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateString(columnIndex, toString(value));
+			rs.updateString(columnIndex, s);
 		}
 	}
 
@@ -156,16 +150,13 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		String val = null;
-		if (parameter != null) {
-			val = toString(parameter);
-		}
-		ps.setString(i, val);
+		String s = toString(value);
+		ps.setString(i, s);
 	}
 }

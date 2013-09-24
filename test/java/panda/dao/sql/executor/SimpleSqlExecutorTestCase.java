@@ -67,10 +67,23 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	/**
 	 */
 	@Test
-	public void testQueryForObject() {
+	public void testQueryForNullObject() {
 		String sql = "SELECT * FROM TEST WHERE NAME IS NULL";
 		
 		testQueryForObject(sql, (Map)null, (Map)null);
+	}
+	
+	/**
+	 */
+	@Test
+	public void testQueryForNullChar() {
+		String sql = "SELECT ID, NAME, NULL AS kind FROM TEST WHERE ID=1001";
+		
+		TestA expected = new TestA();
+		expected.setId(1001);
+		expected.setName("NAME 1001");
+
+		testQueryForObject(sql, null, expected);
 	}
 	
 	/**

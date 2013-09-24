@@ -1,5 +1,6 @@
 package panda.dao.sql;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,46 @@ public interface SqlExecutor {
 	 */
 	void setTypeAdapters(TypeAdapters typeAdapters);
 	
+	/**
+	 * @return the connection
+	 */
+	Connection getConnection();
+
+	/**
+	 * @param connection the connection to set
+	 */
+	void setConnection(Connection connection);
+
+	/**
+	 * @return the resultSetType
+	 */
+	int getResultSetType();
+
+	/**
+	 * @param resultSetType the resultSetType to set
+	 */
+	void setResultSetType(int resultSetType);
+
+	/**
+	 * @return the resultSetConcurrency
+	 */
+	int getResultSetConcurrency();
+
+	/**
+	 * @param resultSetConcurrency the resultSetConcurrency to set
+	 */
+	void setResultSetConcurrency(int resultSetConcurrency);
+
+	/**
+	 * @return the resultSetHoldability
+	 */
+	int getResultSetHoldability();
+
+	/**
+	 * @param resultSetHoldability the resultSetHoldability to set
+	 */
+	void setResultSetHoldability(int resultSetHoldability);
+
 	/**
 	 * Executes the given SQL statement, which may be an INSERT, UPDATE, 
 	 * or DELETE statement or an SQL statement that returns nothing, 

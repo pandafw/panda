@@ -189,7 +189,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	}
 
 	/**
-	 * retrive output parameters
+	 * retrieve output parameters
 	 * @param cs statement
 	 * @param parameters parameters 
 	 * @throws SQLException if a SQL exception occurs
@@ -292,16 +292,10 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 * @throws Exception if an error occurs
 	 */
 	protected String parseSqlStatement(String sql, Object parameter, List<SqlParameter> sqlParams) {
-		Map<String, SqlParser> sqlParserCache = getSimpleSqlManager().getSqlParserCache();
-		SqlParser parser = sqlParserCache.get(sql);
+		SqlParser parser = getSimpleSqlManager().getSqlParser(sql);
 		if (parser == null) {
-			synchronized (sqlParserCache) {
-				parser = sqlParserCache.get(sql);
-				if (parser == null) {
-					parser = createSqlParser(sql);
-					sqlParserCache.put(sql, parser);
-				}
-			}
+			parser = createSqlParser(sql);
+			getSimpleSqlManager().putSqlParser(sql, parser);
 		}
 		return parser.parse(this, parameter, sqlParams);
 	}

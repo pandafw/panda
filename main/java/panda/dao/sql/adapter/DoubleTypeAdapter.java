@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Double implementation of TypeAdapter
@@ -25,7 +26,7 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		double d = rs.getDouble(columnName);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(d);
@@ -43,7 +44,7 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		double d = rs.getDouble(columnIndex);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(d);
@@ -61,7 +62,7 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		double d = cs.getDouble(columnIndex);
 		if (cs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(d);
@@ -79,11 +80,12 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	 */
 	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Double d = castToJdbc(value);
+		if (d == null) {
 			rs.updateNull(columnName);
 		}
 		else {
-			rs.updateDouble(columnName, castToJdbc(value));
+			rs.updateDouble(columnName, d);
 		}
 	}
 
@@ -98,11 +100,12 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	 */
 	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
 			throws SQLException {
-		if (value == null) {
+		Double d = castToJdbc(value);
+		if (d == null) {
 			rs.updateNull(columnIndex);
 		}
 		else {
-			rs.updateDouble(columnIndex, castToJdbc(value));
+			rs.updateDouble(columnIndex, d);
 		}
 	}
 
@@ -111,12 +114,18 @@ public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
+	 * @param value - the parameter value
 	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
 			throws SQLException {
-		ps.setDouble(i, castToJdbc(parameter));
+		Double d = castToJdbc(value);
+		if (d == null) {
+			ps.setNull(i, Types.DOUBLE);
+		}
+		else {
+			ps.setDouble(i, d);
+		}
 	}
 }
