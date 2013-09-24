@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import panda.castor.CastContext;
+import panda.castor.CastException;
 import panda.castor.Castor;
 import panda.lang.Numbers;
 
@@ -89,7 +90,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Number)value).byteValue();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toByte(value.toString(), defaultValue());
+				try {
+					return Numbers.createByte(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert byte: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}
@@ -147,7 +156,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Number)value).doubleValue();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toDouble(value.toString(), defaultValue());
+				try {
+					return Numbers.createDouble(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert double: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}
@@ -173,7 +190,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Number)value).floatValue();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toFloat(value.toString(), defaultValue());
+				try {
+					return Numbers.createFloat(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert float: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}
@@ -199,7 +224,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Number)value).intValue();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toInt(value.toString(), defaultValue());
+				try {
+					return Numbers.createInteger(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert integer: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}
@@ -239,7 +272,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Calendar)value).getTimeInMillis();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toLong(value.toString(), defaultValue());
+				try {
+					return Numbers.createLong(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert long: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}
@@ -264,7 +305,15 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				return ((Number)value).shortValue();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toShort(value.toString(), defaultValue());
+				try {
+					return Numbers.createShort(value.toString());
+				}
+				catch (NumberFormatException e) {
+					throw new CastException(context.toPath() 
+						+ "Failed to convert short: " 
+						+ value.getClass() + " - " + value
+						, e);
+				}
 			}
 			throw castError(value, context);
 		}

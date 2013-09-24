@@ -147,7 +147,7 @@ public class CastorTest extends TestCase {
 
 	public void testStringArrayToIntArray() throws Exception {
 		String[] ss = {
-			"1", "2", "-3", "a"
+			"1", "2", "-3", "0"
 		};
 		
 		int[] ii = {
@@ -160,7 +160,7 @@ public class CastorTest extends TestCase {
 
 	public void testStringArrayToIntList() throws Exception {
 		String[] ss = {
-			"1", "2", "-3", "a"
+			"1", "2", "-3", null
 		};
 		
 		Integer[] ii = new Integer[] {

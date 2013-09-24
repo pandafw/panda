@@ -171,7 +171,12 @@ public class Castor<S, T> {
 	 * @param context context
 	 * @return casted value
 	 */
+	@SuppressWarnings("unchecked")
 	protected T castValueTo(S value, T target, CastContext context) {
+		if (isAssignable(value)) {
+			return (T)value;
+		}
+		
 		return castValue(value, context);
 	}
 

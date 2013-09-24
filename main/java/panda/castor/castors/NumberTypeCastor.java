@@ -45,7 +45,7 @@ public class NumberTypeCastor {
 				return BigDecimal.valueOf(num.longValue());
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toBigDecimal(value.toString());
+				return Numbers.createBigDecimal(value.toString());
 			}
 			throw castError(value, context);
 		}
@@ -63,7 +63,7 @@ public class NumberTypeCastor {
 				return BigInteger.valueOf(num.longValue());
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.toBigInteger(value.toString());
+				return Numbers.createBigInteger(value.toString());
 			}
 			throw castError(value, context);
 		}
