@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Queue;
@@ -285,7 +286,6 @@ public abstract class Collections {
 	 * @param object the object to add, if null it will not be added
 	 * @return true if the collection changed
 	 * @throws NullPointerException if the collection is null
-	 * @since Commons Collections 3.2
 	 */
 	public static boolean addIgnoreNull(Collection collection, Object object) {
 		return (object == null ? false : collection.add(object));
@@ -418,7 +418,6 @@ public abstract class Collections {
 	 * @param object the object to get the size of
 	 * @return the size of the specified collection
 	 * @throws IllegalArgumentException thrown if object is not recognised or null
-	 * @since Commons Collections 3.1
 	 */
 	public static int size(Object object) {
 		int total = 0;
@@ -477,7 +476,6 @@ public abstract class Collections {
 	 * @param object the object to get the size of, not null
 	 * @return true if empty
 	 * @throws IllegalArgumentException thrown if object is not recognised or null
-	 * @since Commons Collections 3.2
 	 */
 	public static boolean sizeIsEmpty(Object object) {
 		if (object instanceof Collection) {
@@ -517,7 +515,6 @@ public abstract class Collections {
 	 * 
 	 * @param coll the collection to check, may be null
 	 * @return true if empty or null
-	 * @since Commons Collections 3.2
 	 */
 	public static boolean isEmpty(Collection coll) {
 		return (coll == null || coll.isEmpty());
@@ -530,7 +527,6 @@ public abstract class Collections {
 	 * 
 	 * @param coll the collection to check, may be null
 	 * @return true if non-null and non-empty
-	 * @since Commons Collections 3.2
 	 */
 	public static boolean isNotEmpty(Collection coll) {
 		return !Collections.isEmpty(coll);
@@ -579,7 +575,6 @@ public abstract class Collections {
 	 * @return a <code>Collection</code> containing all the elements of <code>collection</code> that
 	 *         occur at least once in <code>retain</code>.
 	 * @throws NullPointerException if either parameter is null
-	 * @since Commons Collections 3.2
 	 */
 	public static Collection retainAll(Collection collection, Collection retain) {
 		List list = new ArrayList(Math.min(collection.size(), retain.size()));
@@ -607,7 +602,6 @@ public abstract class Collections {
 	 * @return a <code>Collection</code> containing all the elements of <code>collection</code>
 	 *         except any elements that also occur in <code>remove</code>.
 	 * @throws NullPointerException if either parameter is null
-	 * @since Commons Collections 3.2
 	 */
 	public static Collection removeAll(Collection collection, Collection remove) {
 		List list = new ArrayList();
@@ -945,61 +939,231 @@ public abstract class Collections {
 	// @see java.util.Collections
 	
 	/**
-     */
+	 * Sorts the specified list into ascending order, according to the <i>natural ordering</i> of
+	 * its elements. All elements in the list must implement the <tt>Comparable</tt> interface.
+	 * Furthermore, all elements in the list must be <i>mutually comparable</i> (that is,
+	 * <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt> for any elements
+	 * <tt>e1</tt> and <tt>e2</tt> in the list).
+	 * <p>
+	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be reordered as a result
+	 * of the sort.
+	 * <p>
+	 * The specified list must be modifiable, but need not be resizable.
+	 * <p>
+	 * The sorting algorithm is a modified mergesort (in which the merge is omitted if the highest
+	 * element in the low sublist is less than the lowest element in the high sublist). This
+	 * algorithm offers guaranteed n log(n) performance. This implementation dumps the specified
+	 * list into an array, sorts the array, and iterates over the list resetting each element from
+	 * the corresponding position in the array. This avoids the n<sup>2</sup> log(n) performance
+	 * that would result from attempting to sort a linked list in place.
+	 * 
+	 * @param list the list to be sorted.
+	 * @throws ClassCastException if the list contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers).
+	 * @throws UnsupportedOperationException if the specified list's list-iterator does not support
+	 *             the <tt>set</tt> operation.
+	 * @see Comparable
+	 */
 	public static <T extends Comparable<? super T>> void sort(List<T> list) {
 		java.util.Collections.sort(list);
 	}
 
 	/**
-     */
+	 * Sorts the specified list according to the order induced by the specified comparator. All
+	 * elements in the list must be <i>mutually comparable</i> using the specified comparator (that
+	 * is, <tt>c.compare(e1, e2)</tt> must not throw a <tt>ClassCastException</tt> for any elements
+	 * <tt>e1</tt> and <tt>e2</tt> in the list).
+	 * <p>
+	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be reordered as a result
+	 * of the sort.
+	 * <p>
+	 * The sorting algorithm is a modified mergesort (in which the merge is omitted if the highest
+	 * element in the low sublist is less than the lowest element in the high sublist). This
+	 * algorithm offers guaranteed n log(n) performance. The specified list must be modifiable, but
+	 * need not be resizable. This implementation dumps the specified list into an array, sorts the
+	 * array, and iterates over the list resetting each element from the corresponding position in
+	 * the array. This avoids the n<sup>2</sup> log(n) performance that would result from attempting
+	 * to sort a linked list in place.
+	 * 
+	 * @param list the list to be sorted.
+	 * @param c the comparator to determine the order of the list. A <tt>null</tt> value indicates
+	 *            that the elements' <i>natural ordering</i> should be used.
+	 * @throws ClassCastException if the list contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator.
+	 * @throws UnsupportedOperationException if the specified list's list-iterator does not support
+	 *             the <tt>set</tt> operation.
+	 * @see Comparator
+	 */
 	public static <T> void sort(List<T> list, Comparator<? super T> c) {
 		java.util.Collections.sort(list, c);
 	}
 
 	/**
-     */
+	 * Searches the specified list for the specified object using the binary search algorithm. The
+	 * list must be sorted into ascending order according to the {@linkplain Comparable natural
+	 * ordering} of its elements (as by the {@link #sort(List)} method) prior to making this call.
+	 * If it is not sorted, the results are undefined. If the list contains multiple elements equal
+	 * to the specified object, there is no guarantee which one will be found.
+	 * <p>
+	 * This method runs in log(n) time for a "random access" list (which provides near-constant-time
+	 * positional access). If the specified list does not implement the {@link RandomAccess}
+	 * interface and is large, this method will do an iterator-based binary search that performs
+	 * O(n) link traversals and O(log n) element comparisons.
+	 * 
+	 * @param list the list to be searched.
+	 * @param key the key to be searched for.
+	 * @return the index of the search key, if it is contained in the list; otherwise,
+	 *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+	 *         the point at which the key would be inserted into the list: the index of the first
+	 *         element greater than the key, or <tt>list.size()</tt> if all elements in the list are
+	 *         less than the specified key. Note that this guarantees that the return value will be
+	 *         &gt;= 0 if and only if the key is found.
+	 * @throws ClassCastException if the list contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers), or the search key is not
+	 *             mutually comparable with the elements of the list.
+	 */
 	public static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key) {
 		return java.util.Collections.binarySearch(list, key);
 	}
 
 	/**
-     */
+	 * Searches the specified list for the specified object using the binary search algorithm. The
+	 * list must be sorted into ascending order according to the specified comparator (as by the
+	 * {@link #sort(List, Comparator) sort(List, Comparator)} method), prior to making this call. If
+	 * it is not sorted, the results are undefined. If the list contains multiple elements equal to
+	 * the specified object, there is no guarantee which one will be found.
+	 * <p>
+	 * This method runs in log(n) time for a "random access" list (which provides near-constant-time
+	 * positional access). If the specified list does not implement the {@link RandomAccess}
+	 * interface and is large, this method will do an iterator-based binary search that performs
+	 * O(n) link traversals and O(log n) element comparisons.
+	 * 
+	 * @param list the list to be searched.
+	 * @param key the key to be searched for.
+	 * @param c the comparator by which the list is ordered. A <tt>null</tt> value indicates that
+	 *            the elements' {@linkplain Comparable natural ordering} should be used.
+	 * @return the index of the search key, if it is contained in the list; otherwise,
+	 *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+	 *         the point at which the key would be inserted into the list: the index of the first
+	 *         element greater than the key, or <tt>list.size()</tt> if all elements in the list are
+	 *         less than the specified key. Note that this guarantees that the return value will be
+	 *         &gt;= 0 if and only if the key is found.
+	 * @throws ClassCastException if the list contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator, or the search key is not mutually
+	 *             comparable with the elements of the list using this comparator.
+	 */
 	public static <T> int binarySearch(List<? extends T> list, T key, Comparator<? super T> c) {
 		return java.util.Collections.binarySearch(list, key, c);
 	}
 
 	/**
-     */
+	 * Reverses the order of the elements in the specified list.
+	 * <p>
+	 * This method runs in linear time.
+	 * 
+	 * @param list the list whose elements are to be reversed.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static void reverse(List<?> list) {
 		java.util.Collections.reverse(list);
 	}
 
 	/**
-     */
+	 * Randomly permutes the specified list using a default source of randomness. All permutations
+	 * occur with approximately equal likelihood.
+	 * <p>
+	 * The hedge "approximately" is used in the foregoing description because default source of
+	 * randomness is only approximately an unbiased source of independently chosen bits. If it were
+	 * a perfect source of randomly chosen bits, then the algorithm would choose permutations with
+	 * perfect uniformity.
+	 * <p>
+	 * This implementation traverses the list backwards, from the last element up to the second,
+	 * repeatedly swapping a randomly selected element into the "current position". Elements are
+	 * randomly selected from the portion of the list that runs from the first element to the
+	 * current position, inclusive.
+	 * <p>
+	 * This method runs in linear time. If the specified list does not implement the
+	 * {@link RandomAccess} interface and is large, this implementation dumps the specified list
+	 * into an array before shuffling it, and dumps the shuffled array back into the list. This
+	 * avoids the quadratic behavior that would result from shuffling a "sequential access" list in
+	 * place.
+	 * 
+	 * @param list the list to be shuffled.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static void shuffle(List<?> list) {
 		java.util.Collections.shuffle(list);
 	}
 
 	/**
-     */
+	 * Randomly permute the specified list using the specified source of randomness. All
+	 * permutations occur with equal likelihood assuming that the source of randomness is fair.
+	 * <p>
+	 * This implementation traverses the list backwards, from the last element up to the second,
+	 * repeatedly swapping a randomly selected element into the "current position". Elements are
+	 * randomly selected from the portion of the list that runs from the first element to the
+	 * current position, inclusive.
+	 * <p>
+	 * This method runs in linear time. If the specified list does not implement the
+	 * {@link RandomAccess} interface and is large, this implementation dumps the specified list
+	 * into an array before shuffling it, and dumps the shuffled array back into the list. This
+	 * avoids the quadratic behavior that would result from shuffling a "sequential access" list in
+	 * place.
+	 * 
+	 * @param list the list to be shuffled.
+	 * @param rnd the source of randomness to use to shuffle the list.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static void shuffle(List<?> list, Random rnd) {
 		java.util.Collections.shuffle(list, rnd);
 	}
 
 	/**
-     */
+	 * Swaps the elements at the specified positions in the specified list. (If the specified
+	 * positions are equal, invoking this method leaves the list unchanged.)
+	 * 
+	 * @param list The list in which to swap elements.
+	 * @param i the index of one element to be swapped.
+	 * @param j the index of the other element to be swapped.
+	 * @throws IndexOutOfBoundsException if either <tt>i</tt> or <tt>j</tt> is out of range (i &lt;
+	 *             0 || i &gt;= list.size() || j &lt; 0 || j &gt;= list.size()).
+	 */
 	public static void swap(List<?> list, int i, int j) {
 		java.util.Collections.swap(list, i, j);
 	}
 
 	/**
-     */
+	 * Replaces all of the elements of the specified list with the specified element.
+	 * <p>
+	 * This method runs in linear time.
+	 * 
+	 * @param list the list to be filled with the specified element.
+	 * @param obj The element with which to fill the specified list.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static <T> void fill(List<? super T> list, T obj) {
 		java.util.Collections.fill(list, obj);
 	}
 
 	/**
-     */
+	 * Copies all of the elements from one list into another. After the operation, the index of each
+	 * copied element in the destination list will be identical to its index in the source list. The
+	 * destination list must be at least as long as the source list. If it is longer, the remaining
+	 * elements in the destination list are unaffected.
+	 * <p>
+	 * This method runs in linear time.
+	 * 
+	 * @param dest The destination list.
+	 * @param src The source list.
+	 * @throws IndexOutOfBoundsException if the destination list is too small to contain the entire
+	 *             source List.
+	 * @throws UnsupportedOperationException if the destination list's list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static <T> void copy(List<? super T> dest, List<? extends T> src) {
 		java.util.Collections.copy(dest, src);
 	}
@@ -1044,49 +1208,198 @@ public abstract class Collections {
 	}
 
 	/**
-     */
+	 * Returns the minimum element of the given collection, according to the <i>natural ordering</i>
+	 * of its elements. All elements in the collection must implement the <tt>Comparable</tt>
+	 * interface. Furthermore, all elements in the collection must be <i>mutually comparable</i>
+	 * (that is, <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt> for any
+	 * elements <tt>e1</tt> and <tt>e2</tt> in the collection).
+	 * <p>
+	 * This method iterates over the entire collection, hence it requires time proportional to the
+	 * size of the collection.
+	 * 
+	 * @param coll the collection whose minimum element is to be determined.
+	 * @return the minimum element of the given collection, according to the <i>natural ordering</i>
+	 *         of its elements.
+	 * @throws ClassCastException if the collection contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers).
+	 * @throws NoSuchElementException if the collection is empty.
+	 * @see Comparable
+	 */
 	public static <T extends Object & Comparable<? super T>> T min(Collection<? extends T> coll) {
 		return java.util.Collections.min(coll);
 	}
 
 	/**
-     */
+	 * Returns the minimum element of the given collection, according to the order induced by the
+	 * specified comparator. All elements in the collection must be <i>mutually comparable</i> by
+	 * the specified comparator (that is, <tt>comp.compare(e1, e2)</tt> must not throw a
+	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and <tt>e2</tt> in the collection).
+	 * <p>
+	 * This method iterates over the entire collection, hence it requires time proportional to the
+	 * size of the collection.
+	 * 
+	 * @param coll the collection whose minimum element is to be determined.
+	 * @param comp the comparator with which to determine the minimum element. A <tt>null</tt> value
+	 *            indicates that the elements' <i>natural ordering</i> should be used.
+	 * @return the minimum element of the given collection, according to the specified comparator.
+	 * @throws ClassCastException if the collection contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator.
+	 * @throws NoSuchElementException if the collection is empty.
+	 * @see Comparable
+	 */
 	public static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp) {
 		return java.util.Collections.min(coll, comp);
 	}
 
 	/**
-     */
+	 * Returns the maximum element of the given collection, according to the <i>natural ordering</i>
+	 * of its elements. All elements in the collection must implement the <tt>Comparable</tt>
+	 * interface. Furthermore, all elements in the collection must be <i>mutually comparable</i>
+	 * (that is, <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt> for any
+	 * elements <tt>e1</tt> and <tt>e2</tt> in the collection).
+	 * <p>
+	 * This method iterates over the entire collection, hence it requires time proportional to the
+	 * size of the collection.
+	 * 
+	 * @param coll the collection whose maximum element is to be determined.
+	 * @return the maximum element of the given collection, according to the <i>natural ordering</i>
+	 *         of its elements.
+	 * @throws ClassCastException if the collection contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers).
+	 * @throws NoSuchElementException if the collection is empty.
+	 * @see Comparable
+	 */
 	public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll) {
 		return java.util.Collections.max(coll);
 	}
 
 	/**
-     */
+	 * Returns the maximum element of the given collection, according to the order induced by the
+	 * specified comparator. All elements in the collection must be <i>mutually comparable</i> by
+	 * the specified comparator (that is, <tt>comp.compare(e1, e2)</tt> must not throw a
+	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and <tt>e2</tt> in the collection).
+	 * <p>
+	 * This method iterates over the entire collection, hence it requires time proportional to the
+	 * size of the collection.
+	 * 
+	 * @param coll the collection whose maximum element is to be determined.
+	 * @param comp the comparator with which to determine the maximum element. A <tt>null</tt> value
+	 *            indicates that the elements' <i>natural ordering</i> should be used.
+	 * @return the maximum element of the given collection, according to the specified comparator.
+	 * @throws ClassCastException if the collection contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator.
+	 * @throws NoSuchElementException if the collection is empty.
+	 * @see Comparable
+	 */
 	public static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp) {
 		return java.util.Collections.max(coll, comp);
 	}
 
 	/**
-     */
+	 * Rotates the elements in the specified list by the specified distance. After calling this
+	 * method, the element at index <tt>i</tt> will be the element previously at index
+	 * <tt>(i - distance)</tt> mod <tt>list.size()</tt>, for all values of <tt>i</tt> between
+	 * <tt>0</tt> and <tt>list.size()-1</tt>, inclusive. (This method has no effect on the size of
+	 * the list.)
+	 * <p>
+	 * For example, suppose <tt>list</tt> comprises<tt> [t, a, n, k, s]</tt>. After invoking
+	 * <tt>Collections.rotate(list, 1)</tt> (or <tt>Collections.rotate(list, -4)</tt>),
+	 * <tt>list</tt> will comprise <tt>[s, t, a, n, k]</tt>.
+	 * <p>
+	 * Note that this method can usefully be applied to sublists to move one or more elements within
+	 * a list while preserving the order of the remaining elements. For example, the following idiom
+	 * moves the element at index <tt>j</tt> forward to position <tt>k</tt> (which must be greater
+	 * than or equal to <tt>j</tt>):
+	 * 
+	 * <pre>
+	 * Collections.rotate(list.subList(j, k + 1), -1);
+	 * </pre>
+	 * 
+	 * To make this concrete, suppose <tt>list</tt> comprises <tt>[a, b, c, d, e]</tt>. To move the
+	 * element at index <tt>1</tt> (<tt>b</tt>) forward two positions, perform the following
+	 * invocation:
+	 * 
+	 * <pre>
+	 * Collections.rotate(l.subList(1, 4), -1);
+	 * </pre>
+	 * 
+	 * The resulting list is <tt>[a, c, d, b, e]</tt>.
+	 * <p>
+	 * To move more than one element forward, increase the absolute value of the rotation distance.
+	 * To move elements backward, use a positive shift distance.
+	 * <p>
+	 * If the specified list is small or implements the {@link RandomAccess} interface, this
+	 * implementation exchanges the first element into the location it should go, and then
+	 * repeatedly exchanges the displaced element into the location it should go until a displaced
+	 * element is swapped into the first element. If necessary, the process is repeated on the
+	 * second and successive elements, until the rotation is complete. If the specified list is
+	 * large and doesn't implement the <tt>RandomAccess</tt> interface, this implementation breaks
+	 * the list into two sublist views around index <tt>-distance mod size</tt>. Then the
+	 * {@link #reverse(List)} method is invoked on each sublist view, and finally it is invoked on
+	 * the entire list. For a more complete description of both algorithms, see Section 2.3 of Jon
+	 * Bentley's <i>Programming Pearls</i> (Addison-Wesley, 1986).
+	 * 
+	 * @param list the list to be rotated.
+	 * @param distance the distance to rotate the list. There are no constraints on this value; it
+	 *            may be zero, negative, or greater than <tt>list.size()</tt>.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static void rotate(List<?> list, int distance) {
 		java.util.Collections.rotate(list, distance);
 	}
 
 	/**
-     */
+	 * Replaces all occurrences of one specified value in a list with another. More formally,
+	 * replaces with <tt>newVal</tt> each element <tt>e</tt> in <tt>list</tt> such that
+	 * <tt>(oldVal==null ? e==null : oldVal.equals(e))</tt>. (This method has no effect on the size
+	 * of the list.)
+	 * 
+	 * @param list the list in which replacement is to occur.
+	 * @param oldVal the old value to be replaced.
+	 * @param newVal the new value with which <tt>oldVal</tt> is to be replaced.
+	 * @return <tt>true</tt> if <tt>list</tt> contained one or more elements <tt>e</tt> such that
+	 *         <tt>(oldVal==null ?  e==null : oldVal.equals(e))</tt>.
+	 * @throws UnsupportedOperationException if the specified list or its list-iterator does not
+	 *             support the <tt>set</tt> operation.
+	 */
 	public static <T> boolean replaceAll(List<T> list, T oldVal, T newVal) {
 		return java.util.Collections.replaceAll(list, oldVal, newVal);
 	}
 
 	/**
-     */
+	 * Returns the starting position of the first occurrence of the specified target list within the
+	 * specified source list, or -1 if there is no such occurrence. More formally, returns the
+	 * lowest index <tt>i</tt> such that <tt>source.subList(i, i+target.size()).equals(target)</tt>,
+	 * or -1 if there is no such index. (Returns -1 if <tt>target.size() > source.size()</tt>.)
+	 * <p>
+	 * This implementation uses the "brute force" technique of scanning over the source list,
+	 * looking for a match with the target at each location in turn.
+	 * 
+	 * @param source the list in which to search for the first occurrence of <tt>target</tt>.
+	 * @param target the list to search for as a subList of <tt>source</tt>.
+	 * @return the starting position of the first occurrence of the specified target list within the
+	 *         specified source list, or -1 if there is no such occurrence.
+	 * @since 1.4
+	 */
 	public static int indexOfSubList(List<?> source, List<?> target) {
 		return java.util.Collections.indexOfSubList(source, target);
 	}
 
 	/**
-     */
+	 * Returns the starting position of the last occurrence of the specified target list within the
+	 * specified source list, or -1 if there is no such occurrence. More formally, returns the
+	 * highest index <tt>i</tt> such that <tt>source.subList(i, i+target.size()).equals(target)</tt>
+	 * , or -1 if there is no such index. (Returns -1 if <tt>target.size() > source.size()</tt>.)
+	 * <p>
+	 * This implementation uses the "brute force" technique of iterating over the source list,
+	 * looking for a match with the target at each location in turn.
+	 * 
+	 * @param source the list in which to search for the last occurrence of <tt>target</tt>.
+	 * @param target the list to search for as a subList of <tt>source</tt>.
+	 * @return the starting position of the last occurrence of the specified target list within the
+	 *         specified source list, or -1 if there is no such occurrence.
+	 */
 	public static int lastIndexOfSubList(List<?> source, List<?> target) {
 		return java.util.Collections.lastIndexOfSubList(source, target);
 	}
@@ -1514,7 +1827,6 @@ public abstract class Collections {
 	 * @param list the list for which a dynamically typesafe view is to be returned
 	 * @param type the type of element that <tt>list</tt> is permitted to hold
 	 * @return a dynamically typesafe view of the specified list
-	 * @since 1.5
 	 */
 	public static <E> List<E> checkedList(List<E> list, Class<E> type) {
 		return java.util.Collections.checkedList(list, type);
