@@ -2,14 +2,19 @@ package panda.util;
 
 import java.io.Serializable;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class Sorter implements Cloneable, Serializable {
+
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * ASC = "ASC";
@@ -95,19 +100,15 @@ public class Sorter implements Cloneable, Serializable {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		return Objects.toStringBuilder(this)
+				.append("column", column)
+				.append("direction", direction)
+				.toString();
 
-		sb.append("{ ");
-		sb.append("column: ").append(column);
-		sb.append(", ");
-		sb.append("direction: ").append(direction);
-		sb.append(" }");
-
-		return sb.toString();
 	}
 
 	/**
@@ -115,11 +116,10 @@ public class Sorter implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(column)
+				.append(direction)
+				.toHashCode();
 	}
 
 	/**
@@ -133,20 +133,12 @@ public class Sorter implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Sorter other = (Sorter) obj;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		}
-		else if (!column.equals(other.column))
-			return false;
-		if (direction == null) {
-			if (other.direction != null)
-				return false;
-		}
-		else if (!direction.equals(other.direction))
-			return false;
-		return true;
+
+		Sorter rhs = (Sorter) obj;
+		return Objects.equalsBuilder()
+				.append(column, rhs.column)
+				.append(direction, rhs.direction)
+				.isEquals();
 	}
 
 	/**

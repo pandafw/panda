@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,7 +28,7 @@ import panda.bind.json.Jsons;
  * 
  * @author yf.frank.wang@gmail.com
  */
-public class Classes {
+public abstract class Classes {
 	public final static Class[] EMPTY_CLASS_ARRAY = new Class[0];
 
 	/**
@@ -139,18 +140,15 @@ public class Classes {
 	}
 
 	/**
-	 * <p>
-	 * ClassUtils instances should NOT be constructed in standard programming. Instead, the class
-	 * should be used as {@code ClassUtils.getShortClassName(cls)}.
-	 * </p>
-	 * <p>
-	 * This constructor is public to permit tools that require a JavaBean instance to operate.
-	 * </p>
+	 * immutable types
 	 */
-	public Classes() {
-		super();
-	}
-
+	private static Class<?>[] IMMUTABLE_TYPES = {
+		CharSequence.class,
+		Date.class,
+		Calendar.class,
+		Number.class
+	};
+	
 	// Short class name
 	// ----------------------------------------------------------------------
 	/**
@@ -2141,5 +2139,29 @@ public class Classes {
 				&& (Calendar.class.isAssignableFrom(clazz) || java.util.Date.class.isAssignableFrom(clazz)
 						|| java.sql.Date.class.isAssignableFrom(clazz) || java.sql.Time.class.isAssignableFrom(clazz)
 						|| java.sql.Timestamp.class.isAssignableFrom(clazz));
+	}
+
+	/**
+	 * The immutable type is:
+	 * enum, primitive type, primitive wrapper, all class inherit from
+	 * CharSequence, Date, Calendar, Number 
+	 *  
+	 * @param clazz class
+	 * @return true if the class is a immutable type
+	 */
+	public static boolean isImmutable(Class<?> clazz) {
+		if (clazz.isEnum()) {
+			return true;
+		}
+		if (Classes.isPrimitiveOrWrapper(clazz)) {
+			return true;
+		}
+		
+		for (Class<?> c : IMMUTABLE_TYPES) {
+			if (c.isAssignableFrom(clazz)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

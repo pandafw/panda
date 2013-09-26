@@ -11,8 +11,8 @@ import java.sql.Time;
  * @author yf.frank.wang@gmail.com
  */
 public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
-	public SqlTimeTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Time.class);
+	public SqlTimeTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Time.class);
 	}
 
 	/**

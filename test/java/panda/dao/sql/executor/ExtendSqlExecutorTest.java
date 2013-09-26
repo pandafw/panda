@@ -113,7 +113,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		list.add(expected);
 
 		testQueryForList(sql, param, TestA.class, list);
@@ -136,7 +136,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		list.add(expected);
 		
 		testQueryForList(sql, param, TestA.class, list);
@@ -159,7 +159,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		list.add(expected);
 
 		expected = new TestA();
@@ -167,7 +167,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 		list.add(expected);
 
 		testQueryForList(sql, param, TestA.class, list);
@@ -189,7 +189,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1002");
 		expected.setKind('2');
 		expected.setPrice(new BigDecimal("1002.02"));
-		expected.setUpdateTime(convertToDate("2009-02-02"));
+		expected.setUpdateTime(convertToCalendar("2009-02-02"));
 		list.add(expected);
 
 		expected = new TestA();
@@ -197,7 +197,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1004");
 		expected.setKind('4');
 		expected.setPrice(new BigDecimal("1004.04"));
-		expected.setUpdateTime(convertToDate("2009-04-04"));
+		expected.setUpdateTime(convertToCalendar("2009-04-04"));
 		list.add(expected);
 
 		testQueryForList(sql, param, 1, 2, TestA.class, list);
@@ -257,7 +257,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 		list.add(expected);
 		
 		expected = new TestA();
@@ -265,7 +265,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		list.add(expected);
 
 		testQueryForList(sql, param, TestA.class, list);

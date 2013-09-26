@@ -21,13 +21,15 @@ import panda.mock.sql.MockConnection;
  */
 public class TestSupport {
 	private static Log log = Logs.getLog(TestSupport.class);
-
 	private static Properties properties;
-	private static Connection db2Connection;
-	private static Connection hsqldbConnection;
-	private static Connection mysqlConnection;
-	private static Connection oracleConnection;
-	private static Connection postgreConnection;
+
+	/**
+	 * @param connection connection
+	 * @throws Exception if an error occurs
+	 */
+	public static void initSqliteTestData(Connection connection) throws Exception {
+		execSQL(connection, "sqlite.sql", "\\;");
+	}
 
 	/**
 	 * @param connection connection
@@ -123,7 +125,6 @@ public class TestSupport {
 	private static Connection getConnection(String name) throws Exception {
 		if (properties == null) {
 			properties = new Properties();
-			
 			properties.load(TestSupport.class.getResourceAsStream("jdbc.properties"));
 		}
 		
@@ -137,7 +138,9 @@ public class TestSupport {
 		try {
 			Class.forName(driver);
 			
-			return DriverManager.getConnection(jdbcurl, username, password);
+			Connection c = DriverManager.getConnection(jdbcurl, username, password);
+			c.setAutoCommit(true);
+			return c;
 		}
 		catch (Exception ex) {
 			log.warn("Failed to load " + name + " driver: " + ex.getMessage());
@@ -147,15 +150,23 @@ public class TestSupport {
 	}
 	
 	/**
+	 * @return sqlite connection 
+	 * @throws Exception if an error occurs
+	 */
+	public static Connection getSqliteConnection() throws Exception {
+		Connection connection = getConnection("sqlite");
+		initSqliteTestData(connection);
+		return connection;
+	}
+	
+	/**
 	 * @return hsqldb connection 
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getHsqldbConnection() throws Exception {
-		if (hsqldbConnection == null) {
-			hsqldbConnection = getConnection("hsqldb");
-		}
-		initHsqldbTestData(hsqldbConnection);
-		return hsqldbConnection;
+		Connection connection = getConnection("hsqldb");
+		initHsqldbTestData(connection);
+		return connection;
 	}
 
 	/**
@@ -163,11 +174,12 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getMysqlConnection() throws Exception {
-		if (mysqlConnection == null) {
-			mysqlConnection = getConnection("mysql");
-		}
-		initMysqlTestData(mysqlConnection);
-		return mysqlConnection;
+		Connection connection = getConnection("mysql");
+		initMysqlTestData(connection);
+
+//		connection.close();
+//		connection = getConnection("mysql");
+		return connection;
 	}
 
 	/**
@@ -175,11 +187,9 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getPostgreConnection() throws Exception {
-		if (postgreConnection == null) {
-			postgreConnection = getConnection("postgre");
-		}
-		initPostgreData(postgreConnection);
-		return postgreConnection;
+		Connection connection = getConnection("postgre");
+		initPostgreData(connection);
+		return connection;
 	}
 
 	/**
@@ -187,11 +197,9 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getDB2Connection() throws Exception {
-		if (db2Connection == null) {
-			db2Connection = getConnection("db2");
-		}
-		initDB2TestData(db2Connection);
-		return db2Connection;
+		Connection connection = getConnection("db2");
+		initDB2TestData(connection);
+		return connection;
 	}
 
 	/**
@@ -199,10 +207,8 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getOracleConnection() throws Exception {
-		if (oracleConnection == null) {
-			oracleConnection = getConnection("oracle");
-		}
-		initOracleTestData(oracleConnection);
-		return oracleConnection;
+		Connection connection = getConnection("oracle");
+		initOracleTestData(connection);
+		return connection;
 	}
 }

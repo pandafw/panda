@@ -6,7 +6,7 @@ import panda.bind.filters.QueryPropertyFilter;
 import panda.bind.filters.SorterPropertyFilter;
 import panda.util.Filter;
 import panda.util.Pager;
-import panda.util.Query;
+import panda.util.CompositeQuery;
 import panda.util.Sorter;
 
 /**
@@ -18,7 +18,7 @@ public abstract class Binds {
 	protected static void setDefaultSerializerOptions(AbstractSerializer as) {
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(false));
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(false));
-		as.registerPropertyFilter(Query.class, new QueryPropertyFilter(false));
+		as.registerPropertyFilter(CompositeQuery.class, new QueryPropertyFilter(false));
 		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(false));
 	}	
 }

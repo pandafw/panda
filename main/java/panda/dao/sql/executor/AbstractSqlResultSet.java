@@ -15,7 +15,7 @@ import panda.dao.sql.SqlUtils;
  * AbstractSqlResultSet
  * @author yf.frank.wang@gmail.com
  */
-public abstract class AbstractSqlResultSet implements SqlResultSet {
+public abstract class AbstractSqlResultSet<T> implements SqlResultSet<T> {
 
 	protected SqlExecutor executor;
 	protected ResultSet resultSet;

@@ -3,7 +3,7 @@ package panda.dao.sql.executor;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,17 +30,17 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		TestA actual;
 		
 		try {
-			SqlResultSet rs = executor.selectResultSet(selectSql);
+			SqlResultSet<TestA> rs = executor.selectResultSet(selectSql, TestA.class);
 			
 			expected = new TestA();
 			expected.setId(1001);
 			expected.setName("NAME 1001");
 			expected.setKind('1');
 			expected.setPrice(new BigDecimal("1001.01"));
-			expected.setUpdateTime(convertToDate("2009-01-01"));
+			expected.setUpdateTime(convertToCalendar("2009-01-01"));
 			
 			Assert.assertTrue(rs.next());
-			actual = rs.getResult(TestA.class);
+			actual = rs.getResult();
 			Assert.assertEquals(expected, actual);
 			
 			expected = new TestA();
@@ -48,10 +48,10 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 			expected.setName("NAME 1002");
 			expected.setKind('2');
 			expected.setPrice(new BigDecimal("1002.02"));
-			expected.setUpdateTime(convertToDate("2009-02-02"));
+			expected.setUpdateTime(convertToCalendar("2009-02-02"));
 			
 			Assert.assertTrue(rs.next());
-			actual = rs.getResult(TestA.class);
+			actual = rs.getResult();
 			Assert.assertEquals(expected, actual);
 			
 			Assert.assertFalse(rs.next());
@@ -63,6 +63,25 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 			Assert.fail(e.getMessage());
 		}
 	}
+
+	/**
+	 */
+	@Test
+	public void testQueryForInt() {
+		String sql = "SELECT COUNT(*) FROM TEST WHERE ID=1001";
+		
+		testQueryForInt(sql, null, 1);
+	}
+	
+	/**
+	 */
+	@Test
+	public void testQueryForInteger() {
+		String sql = "SELECT COUNT(*) FROM TEST WHERE ID=1001 or ID=1002";
+		
+		testQueryForObject(sql, null, new Integer(2));
+	}
+	
 	
 	/**
 	 */
@@ -70,7 +89,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	public void testQueryForNullObject() {
 		String sql = "SELECT * FROM TEST WHERE NAME IS NULL";
 		
-		testQueryForObject(sql, (Map)null, (Map)null);
+		testQueryForObject(sql, null, (Map)null);
 	}
 	
 	/**
@@ -92,14 +111,14 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	public void testQueryForObjectByMap() {
 		String sql = "SELECT * FROM TEST WHERE ID=:id";
 		
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		param.put("id", 1005);
 		
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1005));
 		expected.put("name", "NAME 1005");
 		expected.put("kind", "5");
-		expected.put("price", new BigDecimal("1005.05"));
+		expected.put("price", getExpectedDecimal("1005.05"));
 		expected.put("updateTime", getExpectedTimestamp("2009-05-05"));
 	
 		testQueryForObject(sql, param, expected);
@@ -120,7 +139,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 	
 		testQueryForObject(sql, param, expected);
 	}
@@ -138,7 +157,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 	
 		testQueryForObject(sql, param, expected);
 	}
@@ -159,7 +178,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1002");
 		expected.setKind('2');
 		expected.setPrice(new BigDecimal("1002.02"));
-		expected.setUpdateTime(convertToDate("2009-02-02"));
+		expected.setUpdateTime(convertToCalendar("2009-02-02"));
 		list.add(expected);
 
 		expected = new TestA();
@@ -167,7 +186,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1004");
 		expected.setKind('4');
 		expected.setPrice(new BigDecimal("1004.04"));
-		expected.setUpdateTime(convertToDate("2009-04-04"));
+		expected.setUpdateTime(convertToCalendar("2009-04-04"));
 		list.add(expected);
 
 		testQueryForList(sql, param, 1, 2, TestA.class, list);
@@ -179,7 +198,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	public void testQueryForListByInArrayOrder() {
 		String sql = "SELECT * FROM TEST WHERE ID IN (:id) ORDER BY ::orderCol ::orderDir";
 
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		List<Integer> ids = new ArrayList<Integer>();
 		ids.add(1001);
 		ids.add(1005);
@@ -188,23 +207,23 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		param.put("orderDir", "DESC");
 		
 		List<Map> list = new ArrayList<Map>();
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1005));
 		expected.put("name", "NAME 1005");
 		expected.put("kind", "5");
-		expected.put("price", new BigDecimal("1005.05"));
+		expected.put("price", getExpectedDecimal("1005.05"));
 		expected.put("updateTime", getExpectedTimestamp("2009-05-05"));
 		list.add(expected);
 		
-		expected = new HashMap<String, Object>();
+		expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1001));
 		expected.put("name", "NAME 1001");
 		expected.put("kind", "1");
-		expected.put("price", new BigDecimal("1001.01"));
+		expected.put("price", getExpectedDecimal("1001.01"));
 		expected.put("updateTime", getExpectedTimestamp("2009-01-01"));
 		list.add(expected);
 
-		testQueryForList(sql, param, HashMap.class, list);
+		testQueryForList(sql, param, Map.class, list);
 	}
 
 	/**
@@ -227,7 +246,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 		list.add(expected);
 		
 		expected = new TestA();
@@ -235,7 +254,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		list.add(expected);
 
 		testQueryForList(sql, param, TestA.class, list);
@@ -247,30 +266,30 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	public void testQueryForMap() {
 		String sql = "SELECT * FROM TEST WHERE ID IN (:id)";
 
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		List<Integer> ids = new ArrayList<Integer>();
 		ids.add(1001);
 		ids.add(1005);
 		param.put("id", ids);
 		
-		Map<Object, Map> map = new HashMap<Object, Map>();
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<Object, Map> map = new LinkedHashMap<Object, Map>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1001));
 		expected.put("name", "NAME 1001");
 		expected.put("kind", "1");
-		expected.put("price", new BigDecimal("1001.01"));
+		expected.put("price", getExpectedDecimal("1001.01"));
 		expected.put("updateTime", getExpectedTimestamp("2009-01-01"));
 		map.put(getExpectedInteger(1001), expected);
 		
-		expected = new HashMap<String, Object>();
+		expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1005));
 		expected.put("name", "NAME 1005");
 		expected.put("kind", "5");
-		expected.put("price", new BigDecimal("1005.05"));
+		expected.put("price", getExpectedDecimal("1005.05"));
 		expected.put("updateTime", getExpectedTimestamp("2009-05-05"));
 		map.put(getExpectedInteger(1005), expected);
 
-		testQueryForMap(sql, param, HashMap.class, map);
+		testQueryForMap(sql, param, Map.class, map);
 	}
 	
 	/**
@@ -285,13 +304,13 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		ids.add(1005);
 		param.setIdList(ids);
 		
-		Map<Integer, TestA> map = new HashMap<Integer, TestA>();
+		Map<Integer, TestA> map = new LinkedHashMap<Integer, TestA>();
 		TestA expected = new TestA();
 		expected.setId(1005);
 		expected.setName("NAME 1005");
 		expected.setKind('5');
 		expected.setPrice(new BigDecimal("1005.05"));
-		expected.setUpdateTime(convertToDate("2009-05-05"));
+		expected.setUpdateTime(convertToCalendar("2009-05-05"));
 		map.put(new Integer(1005), expected);
 		
 		expected = new TestA();
@@ -299,7 +318,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 		map.put(new Integer(1001), expected);
 
 		testQueryForMap(sql, param, TestA.class,  map);
@@ -312,15 +331,15 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		String updateSql = "UPDATE TEST SET NAME=:name WHERE ID=:id";
 		String selectSql = "SELECT * FROM TEST WHERE ID=:id";
 
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		param.put("id", 1001);
 		param.put("name", "TEST 1001");
 		
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1001));
 		expected.put("name", "TEST 1001");
 		expected.put("kind", "1");
-		expected.put("price", new BigDecimal("1001.01"));
+		expected.put("price", getExpectedDecimal("1001.01"));
 		expected.put("updateTime", getExpectedTimestamp("2009-01-01"));
 		
 		testExecuteUpdate(updateSql, param, selectSql, expected);
@@ -333,18 +352,42 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		String updateSql = "UPDATE TEST SET PRICE=:price WHERE ID=:id";
 		String selectSql = "SELECT * FROM TEST WHERE ID=:id";
 
-		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		param.put("id", 1001);
-		param.put("price", new BigDecimal("1002.02"));
+		param.put("price", getExpectedDecimal("1002.02"));
 		
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(1001));
 		expected.put("name", "NAME 1001");
 		expected.put("kind", "1");
-		expected.put("price", new BigDecimal("1002.02"));
+		expected.put("price", getExpectedDecimal("1002.02"));
 		expected.put("updateTime", getExpectedTimestamp("2009-01-01"));
 		
 		testExecuteUpdate(updateSql, param, selectSql, expected);
+	}
+
+	/**
+	 */
+	@Test
+	public void testUpdateTimestamp() {
+		String updateSql = "UPDATE TEST SET UPDATE_TIME=:updateTime WHERE ID=:id";
+		String selectSql = "SELECT * FROM TEST WHERE ID=:id";
+
+		Map<String, Object> expem = new LinkedHashMap<String, Object>();
+		expem.put("id", getExpectedInteger(1001));
+		expem.put("name", "NAME 1001");
+		expem.put("kind", "1");
+		expem.put("price", getExpectedDecimal("1001.01"));
+		expem.put("updateTime", getExpectedTimestamp("2009-09-01"));
+		testExecuteUpdate(updateSql, expem, selectSql, expem);
+
+		TestA expea = new TestA();
+		expea.setId(1002);
+		expea.setName("NAME 1002");
+		expea.setKind('2');
+		expea.setPrice(new BigDecimal("1002.02"));
+		expea.setUpdateTime(convertToCalendar("2009-09-02"));
+		testExecuteUpdate(updateSql, expea, selectSql, expea);
 	}
 
 	@Test
@@ -352,11 +395,11 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		String insertSql = "INSERT INTO TEST VALUES(:id, :name, :kind, :price, :updateTime)";
 		String selectSql = "SELECT * FROM TEST WHERE ID=:id";
 
-		Map<String, Object> expected = new HashMap<String, Object>();
+		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("id", getExpectedInteger(2001));
 		expected.put("name", "NAME 2001");
 		expected.put("kind", "2");
-		expected.put("price", new BigDecimal("2001.01"));
+		expected.put("price", getExpectedDecimal("2001.01"));
 		expected.put("updateTime", getExpectedTimestamp("2013-01-01"));
 		testExecuteInsert(insertSql, expected, selectSql, expected);
 	}
@@ -365,20 +408,28 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		String insertSql = "INSERT INTO IDTEST(NAME, KIND, PRICE, UPDATE_TIME) VALUES(:name, :kind, :price, :updateTime)";
 		String selectSql = "SELECT * FROM IDTEST WHERE ID=:id";
 
-		Map<String, Object> expected = new HashMap<String, Object>();
-		expected.put("id", getExpectedInteger(1));
-		expected.put("name", "NAME 1001");
-		expected.put("kind", "1");
-		expected.put("price", new BigDecimal("1001.01"));
-		expected.put("updateTime", getExpectedTimestamp("2001-01-01"));
-		testExecuteInsert(insertSql, expected, selectSql, expected);
+		Map<String, Object> param = new LinkedHashMap<String, Object>();
+		param.put("name", "NAME 2001");
+		param.put("kind", "1");
+		param.put("price", getExpectedDecimal("2001.01"));
+		param.put("updateTime", getExpectedTimestamp("2001-01-01"));
 
-		expected.put("id", getExpectedInteger(2));
-		expected.put("name", "NAME 2002");
-		expected.put("kind", "2");
-		expected.put("price", new BigDecimal("2002.02"));
-		expected.put("updateTime", getExpectedTimestamp("2002-02-02"));
-		testExecuteInsert(insertSql, expected, selectSql, expected);
+		Map<String, Object> expem = new LinkedHashMap<String, Object>();
+		expem.put("id", getExpectedInteger(101));
+		expem.putAll(param);
+		testExecuteInsert(insertSql, param, selectSql, expem);
+
+		//-------------
+		TestA paraa = new TestA(); 
+		paraa.setName("NAME 2002");
+		paraa.setKind('2');
+		paraa.setPrice(new BigDecimal("2002.02"));
+		paraa.setUpdateTime(convertToCalendar("2001-01-01"));
+		
+		TestA expea = paraa.clone(); 
+		expea.setId(102);
+		
+		testExecuteInsert(insertSql, paraa, selectSql, expea);
 	}
 
 }

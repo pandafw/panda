@@ -4,32 +4,36 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import panda.dao.Conditions;
+import panda.dao.criteria.Operator;
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * Query bean object
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
-public class Query implements Cloneable, Serializable {
+public class CompositeQuery implements Cloneable, Serializable {
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * AND = "and";
 	 */
-	public static final String AND = Conditions.AND.toLowerCase();
+	public static final String AND = Operator.AND.toString().toLowerCase();
 
 	/**
 	 * OR = "or";
 	 */
-	public static final String OR = Conditions.OR.toLowerCase();
+	public static final String OR = Operator.OR.toString().toLowerCase();
 
 	/**
 	 * Create a AND query.
 	 * @return query
 	 */
-	public static Query and() {
-		Query query = new Query();
+	public static CompositeQuery and() {
+		CompositeQuery query = new CompositeQuery();
 		query.method = AND;
 		return query;
 	}
@@ -38,8 +42,8 @@ public class Query implements Cloneable, Serializable {
 	 * Create a OR query.
 	 * @return query
 	 */
-	public static Query or() {
-		Query query = new Query();
+	public static CompositeQuery or() {
+		CompositeQuery query = new CompositeQuery();
 		query.method = OR;
 		return query;
 	}
@@ -47,14 +51,14 @@ public class Query implements Cloneable, Serializable {
 	/**
 	 * constructor
 	 */
-	public Query() {
+	public CompositeQuery() {
 	}
 
 	/**
 	 * constructor
 	 * @param method the method to set
 	 */
-	public Query(String method) {
+	public CompositeQuery(String method) {
 		setMethod(method);
 	}
 
@@ -87,10 +91,7 @@ public class Query implements Cloneable, Serializable {
 	 * @param method the method to set
 	 */
 	public void setMethod(String method) {
-		method = Strings.stripToNull(method);
-		if (method != null) {
-			this.method = Strings.lowerCase(method);
-		}
+		method = Strings.lowerCase(Strings.stripToNull(method));
 	}
 
 	/**
@@ -160,21 +161,15 @@ public class Query implements Cloneable, Serializable {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("name: ").append(name);
-		sb.append(", ");
-		sb.append("method: ").append(method);
-		sb.append(", ");
-		sb.append("filters: ").append(filters);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("name", name)
+				.append("method", method)
+				.append("filters", filters)
+				.toString();
 	}
 
 	/**
@@ -182,12 +177,11 @@ public class Query implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((method == null) ? 0 : method.hashCode());
-		result = prime * result + ((filters == null) ? 0 : filters.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(name)
+				.append(method)
+				.append(filters)
+				.toHashCode();
 	}
 
 	/**
@@ -201,26 +195,13 @@ public class Query implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Query other = (Query) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
-			return false;
-		if (method == null) {
-			if (other.method != null)
-				return false;
-		}
-		else if (!method.equals(other.method))
-			return false;
-		if (filters == null) {
-			if (other.filters != null)
-				return false;
-		}
-		else if (!filters.equals(other.filters))
-			return false;
-		return true;
+
+		CompositeQuery rhs = (CompositeQuery) obj;
+		return Objects.equalsBuilder()
+				.append(name, rhs.name)
+				.append(method, rhs.method)
+				.append(filters, rhs.filters)
+				.isEquals();
 	}
 
 	/**
@@ -228,7 +209,7 @@ public class Query implements Cloneable, Serializable {
 	 * @return Clone Object
 	 */
 	public Object clone() {
-		Query clone = new Query();
+		CompositeQuery clone = new CompositeQuery();
 		
 		clone.name = this.name;
 		clone.method = this.method;

@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class ShortTypeAdapter<T> extends AbstractTypeAdapter<T, Short> {
-	public ShortTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Short.class);
+	public ShortTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Short.class);
 	}
 
 	/**

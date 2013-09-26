@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * TestA
  */
-public class TestA {
+public class TestA implements Cloneable {
 	protected int id;
 	protected char kind;
 	protected String kinds;
@@ -302,6 +302,30 @@ public class TestA {
 		} else if (!updateTime.equals(other.updateTime))
 			return false;
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public TestA clone() {
+		TestA a = new TestA();
+		
+		a.id = this.id;
+		a.kind = this.kind;
+		a.kinds = this.kinds;
+		a.name = this.name;
+		a.price = this.price;
+		a.updateTime = this.updateTime;
+
+		a.idArray = this.idArray;
+		a.idList = this.idList;
+		a.nameList = this.nameList;
+		
+		a.orderCol = this.orderCol;
+		a.orderDir = this.orderDir;
+		
+		a.a = this.a;
+		return a;
 	}
 
 	

@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class DoubleTypeAdapter<T> extends AbstractTypeAdapter<T, Double> {
-	public DoubleTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Double.class);
+	public DoubleTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Double.class);
 	}
 
 	/**

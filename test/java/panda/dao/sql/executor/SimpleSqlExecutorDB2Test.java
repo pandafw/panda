@@ -46,7 +46,7 @@ public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 		expected.setName("NAME 1001");
 		expected.setKind('1');
 		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToDate("2009-01-01"));
+		expected.setUpdateTime(convertToCalendar("2009-01-01"));
 
 		Assert.assertEquals(expected, actual);
 	}

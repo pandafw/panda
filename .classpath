@@ -12,17 +12,18 @@
 	<classpathentry kind="lib" path="lib/compile/jtidy.jar"/>
 	<classpathentry kind="lib" path="lib/compile/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/compile/mail.jar"/>
-	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/postgresql.jar"/>
 	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
-	<classpathentry kind="lib" path="lib/test/junit.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit.jar" sourcepath="lib/test/junit-sources.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/db2jcc_license_cu.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/db2jcc.jar"/>
-	<classpathentry kind="lib" path="lib/3rd/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/api/el-api.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/api/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/3rd/ojdbc5.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc.jar"/>
 	<classpathentry kind="output" path="main/classes"/>
 </classpath>

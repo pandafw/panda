@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
-	public ByteTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Byte.class);
+	public ByteTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Byte.class);
 	}
 
 	/**

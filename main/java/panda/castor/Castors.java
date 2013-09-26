@@ -106,6 +106,10 @@ public class Castors {
 		DateTypeCastor.DateCastor dc = new DateTypeCastor.DateCastor();
 		register(dc);
 		register(new DateTypeCastor.CalendarCastor(dc));
+		register(new DateTypeCastor.GregorianCalendarCastor(dc));
+		register(new DateTypeCastor.SqlDateCastor(dc));
+		register(new DateTypeCastor.SqlTimeCastor(dc));
+		register(new DateTypeCastor.SqlTimestampCastor(dc));
 		
 		register(new StringTypeCastor.StringCastor(dc));
 		register(new StringTypeCastor.StringBufferCastor(dc));

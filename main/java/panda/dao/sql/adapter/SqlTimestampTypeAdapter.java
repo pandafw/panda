@@ -11,8 +11,8 @@ import java.sql.Timestamp;
  * @author yf.frank.wang@gmail.com
  */
 public class SqlTimestampTypeAdapter<T> extends AbstractTypeAdapter<T, Timestamp> {
-	public SqlTimestampTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Timestamp.class);
+	public SqlTimestampTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Timestamp.class);
 	}
 
 	/**

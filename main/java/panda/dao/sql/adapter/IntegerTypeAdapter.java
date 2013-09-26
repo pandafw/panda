@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
-	public IntegerTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Integer.class);
+	public IntegerTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Integer.class);
 	}
 
 	/**

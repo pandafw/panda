@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.TimeZone;
 
 /**
  * <p>A suite of utilities surrounding the use of the
@@ -131,8 +130,6 @@ public class DateTimes {
 	 */
 	private static final int MODIFY_CEILING = 2;
 
-	public static TimeZone GMT = TimeZone.getTimeZone("GMT");
-	
 	// -----------------------------------------------------------------------
 	public static Date getDate() {
 		return Calendar.getInstance().getTime();

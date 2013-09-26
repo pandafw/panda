@@ -2,15 +2,13 @@ package panda.bean;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.handlers.ArrayBeanHandler;
-import panda.bean.handlers.AtomicBeanHandler;
+import panda.bean.handlers.ImmutableBeanHandler;
 import panda.bean.handlers.IterableBeanHandler;
 import panda.bean.handlers.JavaBeanHandler;
 import panda.bean.handlers.ListBeanHandler;
@@ -74,31 +72,6 @@ public class Beans {
 	public static boolean isReservedProperty(Type propertyType) {
 		return Arrays.contains(RESERVED_PROPERTY_TYPES, propertyType);
 	}
-
-	private static Class<?>[] ATOMIC_TYPES = {
-		CharSequence.class,
-		Date.class,
-		Calendar.class,
-		Number.class
-	};
-	
-	public static boolean isAtomicType(Class<?> type) {
-		if (type.isEnum()) {
-			return true;
-		}
-		if (Classes.isPrimitiveOrWrapper(type)) {
-			return true;
-		}
-		
-		for (Class<?> c : ATOMIC_TYPES) {
-			if (c.isAssignableFrom(type)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 
 	/**
 	 * get bean name from method.
@@ -288,6 +261,14 @@ public class Beans {
 	}
 
 	/**
+	 * @param handler bean handler
+	 * @return true if the handler is a immutable bean handler
+	 */
+	public boolean isImmutableBeanHandler(BeanHandler<?> handler) {
+		return handler instanceof ImmutableBeanHandler;
+	}
+	
+	/**
 	 * getBeanHandler
 	 * @param type bean type
 	 * @return BeanHandler
@@ -304,7 +285,7 @@ public class Beans {
 	@SuppressWarnings("unchecked")
 	public <T> BeanHandler<T> getBeanHandler(Type type) {
 		if (type == null) {
-			return new AtomicBeanHandler(Object.class); 
+			return new ImmutableBeanHandler(Object.class); 
 		}
 
 		BeanHandler<T> handler = handlers.get(type);
@@ -321,8 +302,8 @@ public class Beans {
 			else if (Types.isAssignable(type, Iterable.class)) {
 				handler = new IterableBeanHandler(this, type);
 			}
-			else if (isAtomicJavaType(type)) {
-				handler = new AtomicBeanHandler(type); 
+			else if (isImmutableJavaType(type)) {
+				handler = new ImmutableBeanHandler(type); 
 			}
 			else {
 				handler = createJavaBeanHandler(type);
@@ -333,15 +314,15 @@ public class Beans {
 	}
 
 	/**
-	 * is primitive java type
+	 * is a immutable java type
 	 * @param type class type
 	 * @return true if the type is a simple java type
 	 */
-	protected boolean isAtomicJavaType(Type type) {
+	protected boolean isImmutableJavaType(Type type) {
 		Class clazz = Types.getRawType(type);
-		return Beans.isAtomicType(clazz);
+		return Classes.isImmutable(clazz);
 	}
-	
+
 	/**
 	 * create java bean handler
 	 * @param type bean type

@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.lang.Collections;
+import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class SimpleQuery implements Cloneable, Serializable {
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * constructor
@@ -120,19 +124,14 @@ public class SimpleQuery implements Cloneable, Serializable {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("key: ").append(key);
-		sb.append(", ");
-		sb.append("targets: ").append(targets);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder(this)
+				.append("key", key)
+				.append("targets", targets)
+				.toString();
 	}
 
 	/**
@@ -140,11 +139,10 @@ public class SimpleQuery implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result + ((targets == null) ? 0 : targets.hashCode());
-		return result;
+		return Objects.hashCodeBuilder()
+				.append(key)
+				.append(targets)
+				.toHashCode();
 	}
 
 	/**
@@ -158,20 +156,12 @@ public class SimpleQuery implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SimpleQuery other = (SimpleQuery) obj;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		}
-		else if (!key.equals(other.key))
-			return false;
-		if (targets == null) {
-			if (other.targets != null)
-				return false;
-		}
-		else if (!targets.equals(other.targets))
-			return false;
-		return true;
+
+		SimpleQuery rhs = (SimpleQuery) obj;
+		return Objects.equalsBuilder()
+				.append(key, rhs.key)
+				.append(targets, rhs.targets)
+				.isEquals();
 	}
 
 	/**

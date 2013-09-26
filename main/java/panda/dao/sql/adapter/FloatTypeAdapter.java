@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class FloatTypeAdapter<T> extends AbstractTypeAdapter<T, Float> {
-	public FloatTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Float.class);
+	public FloatTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Float.class);
 	}
 
 	/**

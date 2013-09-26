@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -149,6 +150,7 @@ public class DateTypeCastor {
 		}
 	}
 
+	//------------------------------------------------------------------------------------
 	public static class CalendarCastor extends Castor<Object, Calendar> {
 		private DateCastor dateCastor;
 		
@@ -169,6 +171,103 @@ public class DateTypeCastor {
 		protected Calendar castValueTo(Object value, Calendar target, CastContext context) {
 			Date d = dateCastor.castValue(value, context);
 			target.setTime(d);
+			return target;
+		}
+	}
+
+	//------------------------------------------------------------------------------------
+	public static class GregorianCalendarCastor extends Castor<Object, GregorianCalendar> {
+		private DateCastor dateCastor;
+		
+		public GregorianCalendarCastor(DateCastor dateCastor) {
+			super(Object.class, GregorianCalendar.class);
+			this.dateCastor = dateCastor;
+		}
+		
+		@Override
+		protected GregorianCalendar castValue(Object value, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			GregorianCalendar c = new GregorianCalendar();
+			c.setTime(d);
+			return c;
+		}
+
+		@Override
+		protected GregorianCalendar castValueTo(Object value, GregorianCalendar target, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			target.setTime(d);
+			return target;
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	public static class SqlDateCastor extends Castor<Object, java.sql.Date> {
+		private DateCastor dateCastor;
+		
+		public SqlDateCastor(DateCastor dateCastor) {
+			super(Object.class, java.sql.Date.class);
+			this.dateCastor = dateCastor;
+		}
+		
+		@Override
+		protected java.sql.Date castValue(Object value, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			java.sql.Date sd = new java.sql.Date(d.getTime());
+			return sd;
+		}
+
+		@Override
+		protected java.sql.Date castValueTo(Object value, java.sql.Date target, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			target.setTime(d.getTime());
+			return target;
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	public static class SqlTimeCastor extends Castor<Object, java.sql.Time> {
+		private DateCastor dateCastor;
+		
+		public SqlTimeCastor(DateCastor dateCastor) {
+			super(Object.class, java.sql.Time.class);
+			this.dateCastor = dateCastor;
+		}
+		
+		@Override
+		protected java.sql.Time castValue(Object value, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			java.sql.Time st = new java.sql.Time(d.getTime());
+			return st;
+		}
+
+		@Override
+		protected java.sql.Time castValueTo(Object value, java.sql.Time target, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			target.setTime(d.getTime());
+			return target;
+		}
+	}
+	
+	//------------------------------------------------------------------------------------
+	public static class SqlTimestampCastor extends Castor<Object, java.sql.Timestamp> {
+		private DateCastor dateCastor;
+		
+		public SqlTimestampCastor(DateCastor dateCastor) {
+			super(Object.class, java.sql.Timestamp.class);
+			this.dateCastor = dateCastor;
+		}
+		
+		@Override
+		protected java.sql.Timestamp castValue(Object value, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			java.sql.Timestamp st = new java.sql.Timestamp(d.getTime());
+			return st;
+		}
+
+		@Override
+		protected java.sql.Timestamp castValueTo(Object value, java.sql.Timestamp target, CastContext context) {
+			Date d = dateCastor.castValue(value, context);
+			target.setTime(d.getTime());
 			return target;
 		}
 	}

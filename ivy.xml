@@ -40,6 +40,7 @@
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
 		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.0" conf="jdbc->master,sources" />
 		<dependency org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4" conf="jdbc->master,sources" />
+		<dependency org="org.xerial" name="sqlite-jdbc" rev="3.7.15-M1" conf="jdbc->master,sources" />
 
 		<!-- TEST -->
 		<dependency org="junit" name="junit" rev="4.11" conf="test->*"/>

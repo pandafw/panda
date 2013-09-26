@@ -11,8 +11,8 @@ import java.sql.Types;
  * @author yf.frank.wang@gmail.com
  */
 public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
-	public LongTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Long.class);
+	public LongTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Long.class);
 	}
 
 	/**

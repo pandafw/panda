@@ -11,8 +11,8 @@ import java.sql.SQLException;
  * @author yf.frank.wang@gmail.com
  */
 public class SqlDateTypeAdapter<T> extends AbstractTypeAdapter<T, Date> {
-	public SqlDateTypeAdapter(TypeAdapters adapters, Class<T> toType) {
-		super(adapters, toType, Date.class);
+	public SqlDateTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Date.class);
 	}
 
 	/**

@@ -13,6 +13,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.Chars;
+import panda.lang.Classes;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Objects;
@@ -225,7 +226,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			else if (src instanceof CharSequence) {
 				this.writeString(src.toString());
 			}
-			else if (isAtomicType(type)) {
+			else if (isImmutableType(type)) {
 				String s = convertValue(src, String.class);
 				this.writeString(s);
 			}
@@ -304,8 +305,8 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		return false;
 	}
 
-	protected boolean isAtomicType(Class type) {
-		return Beans.isAtomicType(type);
+	protected boolean isImmutableType(Class type) {
+		return Classes.isImmutable(type);
 	}
 
 	protected void writeIndent(int indent) throws IOException {

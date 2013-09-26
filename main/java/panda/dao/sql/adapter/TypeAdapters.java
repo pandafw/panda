@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import panda.castor.Castors;
 import panda.dao.sql.JdbcTypes;
@@ -44,9 +45,15 @@ public class TypeAdapters {
 	}
 
 	//------------------------------------------------------------------
+	/**
+	 * casters used for cast value
+	 */
 	private Castors castors = Castors.me();
 	
-	private Map<MultiKey, TypeAdapter<?>> adapters = new ConcurrentHashMap<MultiKey, TypeAdapter<?>>();
+	/**
+	 * all adapters should be registered before use
+	 */
+	private Map<MultiKey, TypeAdapter<?>> adapters = new HashMap<MultiKey, TypeAdapter<?>>();
 
 	/**
 	 * Constructor
@@ -54,65 +61,142 @@ public class TypeAdapters {
 	public TypeAdapters() {
 		TypeAdapter adapter;
 
-		register(null, new UnknownTypeAdapter(this));
+		register(Object.class, new UnknownTypeAdapter(this));
 
+		//----------------------------------------------------
+		// boolean
+		//
 		register(Boolean.TYPE, new BooleanTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.class, new BooleanTypeAdapter<Boolean>(this, Boolean.class));
+		adapter = new BooleanTypeAdapter<Boolean>(this, Boolean.class);
+		register(Boolean.class, adapter);
+		register(JdbcTypes.BOOLEAN, adapter);
+
 		register(Boolean.TYPE, JdbcTypes.CHAR, new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.class, JdbcTypes.CHAR, new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.class));
+		adapter = new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.class);
+		register(Boolean.class, JdbcTypes.CHAR, adapter);
+		register(JdbcTypes.CHAR, adapter);
+
+		//----------------------------------------------------
+		// integer
+		//
 		register(Byte.TYPE, new ByteTypeAdapter<Byte>(this, Byte.TYPE));
 		register(Byte.class, new ByteTypeAdapter<Byte>(this, Byte.class));
-		register(Character.TYPE, new StringTypeAdapter<Character>(this, Character.TYPE));
-		register(Character.class, new StringTypeAdapter<Character>(this, Character.class));
+		
 		register(Short.TYPE, new ShortTypeAdapter<Short>(this, Short.TYPE));
 		register(Short.class, new ShortTypeAdapter<Short>(this, Short.class));
+
 		register(Integer.TYPE, new IntegerTypeAdapter<Integer>(this, Integer.TYPE));
 		register(Integer.class, new IntegerTypeAdapter<Integer>(this, Integer.class));
+
 		register(Long.TYPE, new LongTypeAdapter<Long>(this, Long.TYPE));
-		register(Long.class, new LongTypeAdapter<Long>(this, Long.class));
+		adapter = new LongTypeAdapter<Long>(this, Long.class);
+		register(Long.class, adapter);
+		register(JdbcTypes.TINYINT, adapter);
+		register(JdbcTypes.SMALLINT, adapter);
+		register(JdbcTypes.INTEGER, adapter);
+		register(JdbcTypes.BIGINT, adapter);
+
+		//----------------------------------------------------
+		// float
+		//
 		register(Float.TYPE, new FloatTypeAdapter<Float>(this, Float.TYPE));
 		register(Float.class, new FloatTypeAdapter<Float>(this, Float.class));
+
 		register(Double.TYPE, new DoubleTypeAdapter<Double>(this, Double.TYPE));
-		register(Double.class, new DoubleTypeAdapter<Double>(this, Double.class));
-		register(String.class, new StringTypeAdapter<String>(this, String.class));
+		adapter = new DoubleTypeAdapter<Double>(this, Double.class);
+		register(Double.class, adapter);
+		register(JdbcTypes.FLOAT, adapter);
+		register(JdbcTypes.DOUBLE, adapter);
+		register(JdbcTypes.REAL, adapter);
+
+		adapter = new BigDecimalAdapter<BigDecimal>(this, BigDecimal.class);
+		register(BigDecimal.class, adapter);
+		register(JdbcTypes.DECIMAL, adapter);
+		register(JdbcTypes.NUMERIC, adapter);
+
+		//----------------------------------------------------
+		// string
+		//
+		register(Character.TYPE, new StringTypeAdapter<Character>(this, Character.TYPE));
+		register(Character.class, new StringTypeAdapter<Character>(this, Character.class));
+
+		adapter = new StringTypeAdapter<String>(this, String.class);
+		register(String.class, adapter);
+		register(JdbcTypes.CHAR, adapter);
+		register(JdbcTypes.VARCHAR, adapter);
+
 		register(StringBuilder.class, new StringTypeAdapter<StringBuilder>(this, StringBuilder.class));
 		register(StringBuffer.class, new StringTypeAdapter<StringBuffer>(this, StringBuffer.class));
 
 		adapter = new ClobTypeAdapter<String>(this, String.class);
-		register(String.class, JdbcTypes.CLOB, adapter);
-		register(String.class, JdbcTypes.LONGVARCHAR, adapter);
+		register(JdbcTypes.CLOB, adapter);
+		register(JdbcTypes.LONGVARCHAR, adapter);
 
-		register(BigDecimal.class, new BigDecimalAdapter<BigDecimal>(this, BigDecimal.class));
-
-		register(byte[].class, new ByteArrayTypeAdapter<byte[]>(this, byte[].class));
 		
+		//----------------------------------------------------
+		// binary
+		//
+		register(byte[].class, new ByteArrayTypeAdapter<byte[]>(this, byte[].class));
+
 		adapter = new BlobTypeAdapter<byte[]>(this, byte[].class);
 		register(byte[].class, JdbcTypes.BLOB, adapter);
 		register(byte[].class, JdbcTypes.LONGVARBINARY, adapter);
 
-		adapter = new ObjectTypeAdapter<Object>(this, Object.class);
+		//----------------------------------------------------
+		// date time
+		//
+		adapter = new LongTypeAdapter<Date>(this, Date.class);
+		register(Date.class, JdbcTypes.INTEGER, adapter);
+		register(Date.class, JdbcTypes.BIGINT, adapter);
+		register(Date.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Date>(this, Date.class));
+		register(Date.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Date>(this, Date.class));
+		adapter = new SqlTimestampTypeAdapter<Date>(this, Date.class);
+		register(Date.class, JdbcTypes.TIMESTAMP, adapter);
+		register(Date.class, adapter);
+
+		adapter = new LongTypeAdapter<Calendar>(this, Calendar.class);
+		register(Calendar.class, JdbcTypes.INTEGER, adapter);
+		register(Calendar.class, JdbcTypes.BIGINT, adapter);
+		register(Calendar.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Calendar>(this, Calendar.class));
+		register(Calendar.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Calendar>(this, Calendar.class));
+		adapter = new SqlTimestampTypeAdapter<Calendar>(this, Calendar.class);
+		register(Calendar.class, JdbcTypes.TIMESTAMP, adapter);
+		register(Calendar.class, adapter);
+
+		adapter = new LongTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class);
+		register(GregorianCalendar.class, JdbcTypes.INTEGER, adapter);
+		register(GregorianCalendar.class, JdbcTypes.BIGINT, adapter);
+		register(GregorianCalendar.class, JdbcTypes.DATE, new SqlDateTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
+		register(GregorianCalendar.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
+		adapter = new SqlTimestampTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class);
+		register(GregorianCalendar.class, JdbcTypes.TIMESTAMP, adapter);
+		register(GregorianCalendar.class, adapter);
+
+		adapter = new SqlDateTypeAdapter<java.sql.Date>(this, java.sql.Date.class);
+		register(java.sql.Date.class, adapter);
+		register(JdbcTypes.DATE, adapter);
+
+		adapter = new SqlTimeTypeAdapter<java.sql.Time>(this, java.sql.Time.class);
+		register(java.sql.Time.class, adapter);
+		register(JdbcTypes.TIME, adapter);
+		
+		adapter = new SqlTimestampTypeAdapter<java.sql.Timestamp>(this, java.sql.Timestamp.class);
+		register(java.sql.Timestamp.class, adapter);
+		register(JdbcTypes.TIMESTAMP, adapter);
+
+		//----------------------------------------------------
+		// binary
+		//
+		adapter = new ObjectTypeAdapter<Object, Object>(this, Object.class, Object.class);
 		register(Object.class, adapter);
 		register(Object.class, JdbcTypes.JAVAOBJECT, adapter);
 
-		adapter = new SqlTimestampTypeAdapter<Date>(this, Date.class);
-		register(Date.class, adapter);
-		register(Date.class, JdbcTypes.TIMESTAMP, adapter);
-		register(Date.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Date>(this, Date.class));
-		register(Date.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Date>(this, Date.class));
-
-		adapter = new SqlTimestampTypeAdapter<Calendar>(this, Calendar.class);
-		register(Calendar.class, adapter);
-		register(Calendar.class, JdbcTypes.TIMESTAMP, adapter);
-		register(Calendar.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Calendar>(this, Calendar.class));
-		register(Calendar.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Calendar>(this, Calendar.class));
-
-		register(java.sql.Date.class, new SqlDateTypeAdapter<java.sql.Date>(this, java.sql.Date.class));
-		register(java.sql.Time.class, new SqlTimeTypeAdapter<java.sql.Time>(this, java.sql.Time.class));
-		register(java.sql.Timestamp.class, new SqlTimestampTypeAdapter<java.sql.Timestamp>(this, java.sql.Timestamp.class));
-
-		register(List.class, "LIST", new CollectionTypeAdapter(ArrayList.class));
-		register(Map.class, "MAP", new CollectionTypeAdapter(LinkedHashMap.class));
-		register(Set.class, "SET", new CollectionTypeAdapter(LinkedHashSet.class));
+		//----------------------------------------------------
+		// json collection
+		//
+		register("LIST", new CollectionTypeAdapter(ArrayList.class));
+		register("MAP", new CollectionTypeAdapter(LinkedHashMap.class));
+		register("SET", new CollectionTypeAdapter(LinkedHashSet.class));
 	}
 
 	/**
@@ -150,6 +234,11 @@ public class TypeAdapters {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> TypeAdapter<T> getTypeAdapter(Class<T> javaType, String jdbcType) {
+		if (javaType == null) {
+			// null javaType is only used for setParameter
+			javaType = (Class<T>)Object.class;
+		}
+		
 		TypeAdapter<T> adapter = (TypeAdapter<T>)adapters.get(new MultiKey(javaType, jdbcType));
 		if (adapter != null) {
 			return adapter;
@@ -162,11 +251,6 @@ public class TypeAdapters {
 			}
 		}
 
-		if (javaType == null) {
-			// is a parameter is null, the javaType will be null
-			return adapter;
-		}
-		
 		if (javaType.isEnum()) {
 			adapter = new EnumTypeAdapter(javaType);
 		}
@@ -229,7 +313,7 @@ public class TypeAdapters {
 					adapter = new ByteArrayTypeAdapter(this, javaType);
 					break;
 				case java.sql.Types.JAVA_OBJECT:
-					adapter = new ObjectTypeAdapter(this, javaType);
+					adapter = new ObjectTypeAdapter(this, javaType, Object.class);
 					break;
 				case java.sql.Types.LONGVARBINARY:
 				case java.sql.Types.BLOB:
@@ -246,13 +330,23 @@ public class TypeAdapters {
 	}
 
 	/**
-	 * Register (add) a type adapter for a class and JDBC type
+	 * Register (add) a type adapter for a class
 	 * 
 	 * @param javaType - the java type
 	 * @param adapter - the adapter instance
 	 */
 	public void register(Class<?> javaType, TypeAdapter<?> adapter) {
 		register(javaType, null, adapter);
+	}
+
+	/**
+	 * Register (add) a type adapter for a JDBC type
+	 * 
+	 * @param jdbcType - the jdbc type
+	 * @param adapter - the adapter instance
+	 */
+	public void register(String jdbcType, TypeAdapter<?> adapter) {
+		register(Object.class, jdbcType, adapter);
 	}
 	
 	/**
