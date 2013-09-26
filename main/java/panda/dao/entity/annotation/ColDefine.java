@@ -6,7 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.dao.entity.ColType;
+import panda.dao.sql.JdbcTypes;
+import panda.lang.Strings;
 
 /**
  * Column definition for create table
@@ -18,15 +19,15 @@ import panda.dao.entity.ColType;
 public @interface ColDefine {
 
 	/**
-	 * abstract column type
+	 * jdbc type
 	 * 
-	 * @see panda.dao.entity.ColType
+	 * @see java.sql.Types
 	 */
-	ColType type() default ColType.VARCHAR;
+	String type() default JdbcTypes.VARCHAR;
 
 	int size() default 0;
 
-	int scale() default 2;
+	int scale() default 0;
 
 	boolean notNull() default false;
 
@@ -35,5 +36,5 @@ public @interface ColDefine {
 	/**
 	 * real database column type
 	 */
-	String dbType() default "";
+	String dbType() default Strings.EMPTY;
 }

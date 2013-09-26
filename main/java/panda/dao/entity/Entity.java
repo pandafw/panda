@@ -12,26 +12,43 @@ import panda.bind.json.JsonObject;
  * @author yf.frank.wang@gmail.com
  */
 public class Entity<T> {
-	private Class<T> type;
-	private String tableName;
-	private JsonObject tableMeta;
-	private String viewName;
-	private String comment;
+	protected Class<T> type;
+	protected String tableName;
+	protected JsonObject tableMeta;
+	protected String viewName;
+	protected String comment;
 	
-	private EntityField identity;
+	protected EntityField identity;
 	
-	private Map<String, EntityField> fieldMap;
-	private Map<String, EntityField> columnMap;
+	protected Map<String, EntityField> fieldMap;
+	protected Map<String, EntityField> columnMap;
 	
-	private List<EntityField> primaryKeys;
-	private Map<String, EntityIndex> indexMap;
-	private Map<String, EntityFKey> foreignKeyMap;
+	protected List<EntityField> primaryKeys;
+	protected Map<String, EntityIndex> indexMap;
+	protected Map<String, EntityFKey> foreignKeyMap;
 
 	/**
 	 * constructor
 	 */
 	protected Entity(Class<T> type) {
 		this.type = type;
+	}
+
+	/**
+	 * constructor
+	 */
+	public Entity(Entity<T> entity) {
+		this.type = entity.type;
+		this.tableName = entity.tableName;
+		this.tableMeta = entity.tableMeta;
+		this.viewName = entity.viewName;
+		this.comment = entity.comment;
+		this.identity = entity.identity;
+		this.fieldMap = entity.fieldMap;
+		this.columnMap = entity.columnMap;
+		this.primaryKeys = entity.primaryKeys;
+		this.indexMap = entity.indexMap;
+		this.foreignKeyMap = entity.foreignKeyMap;
 	}
 
 	/**
@@ -131,7 +148,7 @@ public class Entity<T> {
 
 		field.setEntity(this);
 		fieldMap.put(field.getName(), field);
-		columnMap.put(field.getColumnName(), field);
+		columnMap.put(field.getColumn(), field);
 	}
 
 	/**
@@ -144,7 +161,7 @@ public class Entity<T> {
 	/**
 	 * @return the primaryKeys
 	 */
-	public Collection<EntityField> getPrimaryKeys() {
+	public List<EntityField> getPrimaryKeys() {
 		return primaryKeys;
 	}
 
@@ -214,20 +231,20 @@ public class Entity<T> {
 	}
 
 	/**
-	 * 根据实体的 Java 字段名获取一个实体字段对象
+	 * get a entity field by name
 	 * 
-	 * @param name 实体字段的 Java 对象名
-	 * @return 实体字段
+	 * @param name field name
+	 * @return entity field
 	 */
 	public EntityField getField(String name) {
 		return fieldMap.get(name);
 	}
 
 	/**
-	 * 根据实体的数据库字段名获取一个实体字段对象
+	 * get a entity field by column name
 	 * 
-	 * @param name 实体字段数据库字段名
-	 * @return 实体字段
+	 * @param name column name
+	 * @return entity field
 	 */
 	public EntityField getColumn(String name) {
 		return columnMap.get(name);

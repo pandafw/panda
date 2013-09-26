@@ -1,12 +1,12 @@
 package panda.dao.restriction;
 
-import panda.dao.QueryParameter;
+import panda.dao.criteria.Query;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class AbstractRestriction<E extends QueryParameter> {
+public abstract class AbstractRestriction<E extends Query> {
 	
 	protected String property;
 	protected String column;

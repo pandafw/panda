@@ -20,7 +20,12 @@ public abstract class SqlLogger {
 	/**
 	 * log for java.sql.Statement
 	 */
-	private static Log pslog = Logs.getLog(Statement.class);
+	private static Log sslog = Logs.getLog(Statement.class);
+
+	/**
+	 * log for java.sql.PreparedStatement
+	 */
+	private static Log pslog = Logs.getLog(PreparedStatement.class);
 
 	/**
 	 * log for java.sql.ResultSet
@@ -41,6 +46,7 @@ public abstract class SqlLogger {
 				int cnt = meta.getColumnCount();
 				for (int i = 1; i <= cnt; i++) {
 					sb.append(meta.getColumnLabel(i));
+					sb.append('(').append(JdbcTypes.getType(meta.getColumnType(i))).append(')');
 					if (i < cnt) {
 						sb.append(", ");
 					}
@@ -85,9 +91,19 @@ public abstract class SqlLogger {
 	 * logSatement
 	 * @param sql sql statement 
 	 */
-	public static void logSatement(String sql) {
+	public static void logSql(String sql) {
+		if (sslog.isDebugEnabled()) {
+			sslog.debug("SQL: " + sql);
+		}
+	}
+	
+	/**
+	 * logSatement
+	 * @param sql sql statement 
+	 */
+	public static void logStatement(PreparedStatement ps) {
 		if (pslog.isDebugEnabled()) {
-			pslog.debug("Statement: " + sql);
+			pslog.debug("Statement: " + ps.toString());
 		}
 	}
 	
@@ -96,7 +112,7 @@ public abstract class SqlLogger {
 	 * @param ps PreparedStatement
 	 */
 	public static void logParameters(PreparedStatement ps) {
-		if (pslog.isDebugEnabled()) {
+		if (sslog.isDebugEnabled()) {
 			try {
 				ParameterMetaData pmd = ps.getParameterMetaData();
 
@@ -117,11 +133,11 @@ public abstract class SqlLogger {
 					}
 		
 					sb.append("]");
-					pslog.debug(sb.toString());
+					sslog.debug(sb.toString());
 				}
 			}
 			catch (SQLException e) {
-				pslog.warn("SQLException", e);
+				sslog.warn("SQLException", e);
 			}
 		}
 	}

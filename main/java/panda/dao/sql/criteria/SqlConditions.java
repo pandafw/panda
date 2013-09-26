@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import panda.dao.Conditions;
-import panda.dao.sql.SqlConstants;
+import panda.dao.criteria.Expression;
+import panda.dao.criteria.Conditions;
+import panda.dao.criteria.Operator;
+import panda.dao.criteria.SimpleExpression;
 import panda.dao.sql.SqlUtils;
 import panda.lang.Objects;
 
@@ -16,13 +18,13 @@ public class SqlConditions implements Conditions {
 
 	private String conjunction = AND;
 	
-	private List<AbstractExpression> expressions;
+	private List<Expression> expressions;
 
 	/**
 	 * constructor
 	 */
 	public SqlConditions() {
-		expressions = new ArrayList<AbstractExpression>();
+		expressions = new ArrayList<Expression>();
 	}
 
 	/**
@@ -67,14 +69,14 @@ public class SqlConditions implements Conditions {
 	/**
 	 * @return expressions
 	 */
-	public List<AbstractExpression> getExpressions() {
+	public List<Expression> getExpressions() {
 		return expressions;
 	}
 
 	/**
 	 * @param expressions the expressions to set
 	 */
-	public void setExpressions(List<AbstractExpression> expressions) {
+	public void setExpressions(List<Expression> expressions) {
 		this.expressions = expressions;
 	}
 
@@ -101,10 +103,10 @@ public class SqlConditions implements Conditions {
 			}
 		}
 		else {
-			AbstractExpression last = expressions.get(expressions.size() - 1); 
-			if (last instanceof ParenExpression) {
-				ParenExpression ce = (ParenExpression)last;
-				if (SqlConstants.CLOSE_PAREN.equals(ce.getOperator())) {
+			Expression last = expressions.get(expressions.size() - 1); 
+			if (last instanceof SimpleExpression) {
+				SimpleExpression ce = (SimpleExpression)last;
+				if (Operator.CLOSE_PAREN.equals(ce.getOperator())) {
 					return addConjunctionExpression(conjunction);
 				}
 				else {
@@ -128,7 +130,7 @@ public class SqlConditions implements Conditions {
 	}
 
 	private SqlConditions addParenExpression(String operator) {
-		expressions.add(new ParenExpression(operator));
+		expressions.add(new SimpleExpression(operator));
 		return this;
 	}
 
@@ -203,7 +205,7 @@ public class SqlConditions implements Conditions {
 	 */
 	public SqlConditions open() {
 		conjunction();
-		return addParenExpression(SqlConstants.OPEN_PAREN);
+		return addParenExpression(Operator.OPEN_PAREN);
 	}
 	
 	/**
@@ -211,7 +213,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions close() {
-		return addParenExpression(SqlConstants.CLOSE_PAREN);
+		return addParenExpression(Operator.CLOSE_PAREN);
 	}
 	
 	/**
@@ -220,7 +222,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions isNull(String column) {
-		return addSimpleExpression(column, SqlConstants.IS_NULL);
+		return addSimpleExpression(column, Operator.IS_NULL);
 	}
 
 	/**
@@ -229,7 +231,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions isNotNull(String column) {
-		return addSimpleExpression(column, SqlConstants.IS_NOT_NULL);
+		return addSimpleExpression(column, Operator.IS_NOT_NULL);
 	}
 
 	/**
@@ -239,7 +241,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions equalTo(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.EQUAL, value);
+		return addCompareValueExpression(column, Operator.EQUAL, value);
 	}
 
 	/**
@@ -249,7 +251,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notEqualTo(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.NOT_EQUAL, value);
+		return addCompareValueExpression(column, Operator.NOT_EQUAL, value);
 	}
 
 	/**
@@ -259,7 +261,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions greaterThan(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.GREAT_THAN, value);
+		return addCompareValueExpression(column, Operator.GREAT_THAN, value);
 	}
 
 	/**
@@ -269,7 +271,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions greaterThanOrEqualTo(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.GREAT_EQUAL, value);
+		return addCompareValueExpression(column, Operator.GREAT_EQUAL, value);
 	}
 
 	/**
@@ -279,7 +281,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions lessThan(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.LESS_THAN, value);
+		return addCompareValueExpression(column, Operator.LESS_THAN, value);
 	}
 
 	/**
@@ -289,7 +291,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions lessThanOrEqualTo(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.LESS_EQUAL, value);
+		return addCompareValueExpression(column, Operator.LESS_EQUAL, value);
 	}
 
 	/**
@@ -299,7 +301,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions like(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.LIKE, value);
+		return addCompareValueExpression(column, Operator.LIKE, value);
 	}
 
 	/**
@@ -339,7 +341,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notLike(String column, Object value) {
-		return addCompareValueExpression(column, SqlConstants.NOT_LIKE, value);
+		return addCompareValueExpression(column, Operator.NOT_LIKE, value);
 	}
 
 	/**
@@ -349,7 +351,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions equalToColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.EQUAL, compareColumn);
+		return addCompareColumnExpression(column, Operator.EQUAL, compareColumn);
 	}
 
 	/**
@@ -359,7 +361,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notEqualToColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.NOT_EQUAL, compareColumn);
+		return addCompareColumnExpression(column, Operator.NOT_EQUAL, compareColumn);
 	}
 
 	/**
@@ -369,7 +371,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions greaterThanColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.GREAT_THAN, compareColumn);
+		return addCompareColumnExpression(column, Operator.GREAT_THAN, compareColumn);
 	}
 
 	/**
@@ -379,7 +381,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions greaterThanOrEqualToColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.GREAT_EQUAL, compareColumn);
+		return addCompareColumnExpression(column, Operator.GREAT_EQUAL, compareColumn);
 	}
 
 	/**
@@ -389,7 +391,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions lessThanColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.LESS_THAN, compareColumn);
+		return addCompareColumnExpression(column, Operator.LESS_THAN, compareColumn);
 	}
 
 	/**
@@ -399,7 +401,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions lessThanOrEqualToColumn(String column, String compareColumn) {
-		return addCompareColumnExpression(column, SqlConstants.LESS_EQUAL, compareColumn);
+		return addCompareColumnExpression(column, Operator.LESS_EQUAL, compareColumn);
 	}
 
 	/**
@@ -409,7 +411,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions in(String column, Object[] values) {
-		return addCompareCollectionExpression(column, SqlConstants.IN, values);
+		return addCompareCollectionExpression(column, Operator.IN, values);
 	}
 
 	/**
@@ -419,7 +421,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions in(String column, Collection values) {
-		return addCompareCollectionExpression(column, SqlConstants.IN, values);
+		return addCompareCollectionExpression(column, Operator.IN, values);
 	}
 
 	/**
@@ -429,7 +431,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notIn(String column, Object[] values) {
-		return addCompareCollectionExpression(column, SqlConstants.NOT_IN, values);
+		return addCompareCollectionExpression(column, Operator.NOT_IN, values);
 	}
 
 	/**
@@ -439,7 +441,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notIn(String column, Collection values) {
-		return addCompareCollectionExpression(column, SqlConstants.NOT_IN, values);
+		return addCompareCollectionExpression(column, Operator.NOT_IN, values);
 	}
 
 	/**
@@ -450,7 +452,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions between(String column, Object value1, Object value2) {
-		return addCompareRanageExpression(column, SqlConstants.BETWEEN, value1, value2);
+		return addCompareRanageExpression(column, Operator.BETWEEN, value1, value2);
 	}
 
 	/**
@@ -461,7 +463,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions notBetween(String column, Object value1, Object value2) {
-		return addCompareRanageExpression(column, SqlConstants.NOT_BETWEEN, value1, value2);
+		return addCompareRanageExpression(column, Operator.NOT_BETWEEN, value1, value2);
 	}
 
 	/**

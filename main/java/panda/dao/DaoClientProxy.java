@@ -1,71 +1,62 @@
 package panda.dao;
 
-import java.util.Map;
+import panda.dao.entity.Entity;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class DaoClientProxy implements DaoClient {
+public class DaoClientProxy extends DaoClient {
 	
-	private static DaoClient dataAccessClient;
+	public DaoClientProxy() {
+	}
+
+	private static DaoClient daoClient;
 	
 	/**
-	 * @return the dataAccessClient
+	 * @return the daoClient
 	 */
-	public static DaoClient getDataAccessClient() {
-		return dataAccessClient;
+	public static DaoClient getDaoClient() {
+		return daoClient;
 	}
 
 	/**
-	 * @param dataAccessClient the dataAccessClient to set
+	 * @param daoClient the daoClient to set
 	 */
-	public static void setDataAccessClient(DaoClient dataAccessClient) {
-		DaoClientProxy.dataAccessClient = dataAccessClient;
+	public static void setDaoClient(DaoClient daoClient) {
+		DaoClientProxy.daoClient = daoClient;
 	}
 
 	/**
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
-		return dataAccessClient.getName();
+		return daoClient.getName();
+	}
+
+	/**
+	 * @return datebase meta
+	 */
+	@Override
+	public DatabaseMeta getMeta() {
+		return daoClient.getMeta();
+	}
+
+	/**
+	 * @param type record type
+	 * @return the entity
+	 */
+	@Override
+	public <T> Entity<T> getEntity(Class<T> type) {
+		return daoClient.getEntity(type);
 	}
 	
 	/**
-	 * @return model meta data map
-	 */
-	public Map<String, ModelMetaData> getMetaDataMap() {
-		return dataAccessClient.getMetaDataMap();
-	}
-	
-	/**
-	 * @param name model name
-	 * @return model meta data
-	 */
-	public ModelMetaData getMetaData(String name) {
-		return dataAccessClient.getMetaData(name);
-	}
-
-	/**
-	 * @param name model name
-	 * @return modelDao
-	 */
-	public ModelDAO getModelDAO(String name, DaoSession session) {
-		return dataAccessClient.getModelDAO(name, session);
-	}
-
-	/**
 	 * @return An DataAccessSession instance.
 	 */
-	public DaoSession openSession() throws DaoException {
-		return dataAccessClient.openSession();
-	}
-
-	/**
-	 * @param autoCommit auto commit
-	 * @return An DataAccessSession instance.
-	 */
-	public DaoSession openSession(boolean autoCommit) throws DaoException {
-		return dataAccessClient.openSession(autoCommit);
+	@Override
+	public Dao getDao() {
+		return daoClient.getDao();
 	}
 }

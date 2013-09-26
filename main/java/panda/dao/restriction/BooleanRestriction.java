@@ -1,12 +1,12 @@
 package panda.dao.restriction;
 
-import panda.dao.QueryParameter;
+import panda.dao.criteria.Query;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class BooleanRestriction<E extends QueryParameter> extends ComparableRestriction<E, Boolean> {
+public class BooleanRestriction<E extends Query> extends ComparableRestriction<E, Boolean> {
 	/**
 	 * @param example example
 	 * @param name name

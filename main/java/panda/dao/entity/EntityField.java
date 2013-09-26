@@ -13,17 +13,20 @@ public class EntityField {
 	private Entity<?> entity;
 	private String name;
 	private Type type;
-	private String columnName;
-	private String columnComment;
-	private ColType columnType;
+	private String column;
+	private String comment;
+	private String jdbcType;
 	private String dbType;
 	private Integer size;
 	private Integer scale;
 	private boolean identity;
+	private boolean autoIncrement;
+	private int startWith;
 	private boolean primaryKey;
 	private boolean notNull;
 	private boolean unsigned;
 	private String defaultValue;
+	private boolean readonly;
 	
 	/**
 	 * constructor
@@ -75,45 +78,45 @@ public class EntityField {
 	}
 
 	/**
-	 * @return the columnName
+	 * @return the column
 	 */
-	public String getColumnName() {
-		return columnName;
+	public String getColumn() {
+		return column;
 	}
 
 	/**
-	 * @param columnName the columnName to set
+	 * @param column the column to set
 	 */
-	protected void setColumnName(String columnName) {
-		this.columnName = columnName;
+	protected void setColumn(String column) {
+		this.column = column;
 	}
 
 	/**
-	 * @return the columnComment
+	 * @return the comment
 	 */
-	public String getColumnComment() {
-		return columnComment;
+	public String getComment() {
+		return comment;
 	}
 
 	/**
-	 * @param columnComment the columnComment to set
+	 * @param comment the comment to set
 	 */
-	protected void setColumnComment(String columnComment) {
-		this.columnComment = columnComment;
+	protected void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	/**
-	 * @return the columnType
+	 * @return the jdbcType
 	 */
-	public ColType getColumnType() {
-		return columnType;
+	public String getJdbcType() {
+		return jdbcType;
 	}
 
 	/**
-	 * @param columnType the columnType to set
+	 * @param jdbcType the jdbcType to set
 	 */
-	protected void setColumnType(ColType columnType) {
-		this.columnType = columnType;
+	protected void setJdbcType(String jdbcType) {
+		this.jdbcType = jdbcType;
 	}
 
 	/**
@@ -170,6 +173,34 @@ public class EntityField {
 	 */
 	protected void setIdentity(boolean identity) {
 		this.identity = identity;
+	}
+
+	/**
+	 * @return the autoIncrement
+	 */
+	public boolean isAutoIncrement() {
+		return autoIncrement;
+	}
+
+	/**
+	 * @param autoIncrement the autoIncrement to set
+	 */
+	protected void setAutoIncrement(boolean autoIncrement) {
+		this.autoIncrement = autoIncrement;
+	}
+
+	/**
+	 * @return the startWith
+	 */
+	public int getStartWith() {
+		return startWith;
+	}
+
+	/**
+	 * @param startWith the startWith to set
+	 */
+	protected void setStartWith(int startWith) {
+		this.startWith = startWith;
 	}
 
 	/**
@@ -233,17 +264,17 @@ public class EntityField {
 	}
 	
 	/**
-	 * 根据实体的实例对象，获取默认值
-	 * 
-	 * @param obj
-	 *            当前实体的实例对象
-	 * 
-	 * @return 数据库字段的默认值
-	 * 
+	 * @return the readonly
 	 */
-	public String getDefaultValue(Object obj) {
-		//TODO: translate default value
-		return defaultValue;
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	/**
+	 * @param readonly the readonly to set
+	 */
+	protected void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 
 	/**
@@ -254,9 +285,9 @@ public class EntityField {
 		return Objects.toStringBuilder(this)
 				.append("name", name)
 				.append("type", type)
-				.append("columnName", columnName)
-				.append("columnComment", columnComment)
-				.append("columnType", columnType)
+				.append("column", column)
+				.append("comment", comment)
+				.append("jdbcType", jdbcType)
 				.append("dbType", dbType)
 				.append("size", size)
 				.append("scale", scale)
@@ -265,6 +296,7 @@ public class EntityField {
 				.append("notNull", notNull)
 				.append("unsigned", unsigned)
 				.append("defaultValue", defaultValue)
+				.append("readonly", readonly)
 				.toString();
 	}
 }

@@ -1,32 +1,35 @@
-package panda.dao;
+package panda.dao.criteria;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import panda.lang.Asserts;
 import panda.lang.Objects;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SimpleQueryParameter implements QueryParameter {
-	protected Map<String, Boolean> excludes;
+public class Query {
+	protected Set<String> excludes;
 	protected Conditions conditions;
 	protected Orders orders;
-	protected Integer start;
-	protected Integer limit;
+	protected int start;
+	protected int limit;
+	protected Map<String, Object> params;
 
 	/**
 	 * constructor
 	 */
-	protected SimpleQueryParameter() {
+	public Query() {
 	}
 
 	/**
 	 * constructor
 	 * 
-	 * @param qp queryParameter
+	 * @param qp query
 	 */
-	protected SimpleQueryParameter(SimpleQueryParameter qp) {
+	public Query(Query qp) {
 		orders = qp.orders;
 		conditions = qp.conditions;
 		excludes = qp.excludes;
@@ -37,9 +40,9 @@ public class SimpleQueryParameter implements QueryParameter {
 	/**
 	 * @return the excludes
 	 */
-	public Map<String, Boolean> getExcludes() {
+	public Set<String> getExcludes() {
 		if (excludes == null) {
-			excludes = new HashMap<String, Boolean>();
+			excludes = new HashSet<String>();
 		}
 		return excludes;
 	}
@@ -47,7 +50,7 @@ public class SimpleQueryParameter implements QueryParameter {
 	/**
 	 * @param excludes the excludes to set
 	 */
-	public void setExcludes(Map<String, Boolean> excludes) {
+	public void setExcludes(Set<String> excludes) {
 		this.excludes = excludes;
 	}
 
@@ -62,8 +65,8 @@ public class SimpleQueryParameter implements QueryParameter {
 	 * @param column exclude column
 	 * @return this
 	 */
-	public SimpleQueryParameter addExclude(String column) {
-		getExcludes().put(column, true);
+	public Query addExclude(String column) {
+		getExcludes().add(column);
 		return this;
 	}
 
@@ -71,7 +74,7 @@ public class SimpleQueryParameter implements QueryParameter {
 	 * @param column exclude column
 	 * @return this
 	 */
-	public SimpleQueryParameter removeExclude(String column) {
+	public Query removeExclude(String column) {
 		getExcludes().remove(column);
 		return this;
 	}
@@ -81,7 +84,7 @@ public class SimpleQueryParameter implements QueryParameter {
 	 * 
 	 * @return this
 	 */
-	public SimpleQueryParameter clearExcludes() {
+	public Query clearExcludes() {
 		getExcludes().clear();
 		return this;
 	}
@@ -117,29 +120,45 @@ public class SimpleQueryParameter implements QueryParameter {
 	/**
 	 * @return the start
 	 */
-	public Integer getStart() {
+	public int getStart() {
 		return start;
 	}
 
 	/**
 	 * @param start the start to set
 	 */
-	public void setStart(Integer start) {
+	public void setStart(int start) {
+		Asserts.isTrue(start >= 0, "The start must >= 0");
 		this.start = start;
 	}
 
 	/**
 	 * @return the limit
 	 */
-	public Integer getLimit() {
+	public int getLimit() {
 		return limit;
 	}
 
 	/**
 	 * @param limit the limit to set
 	 */
-	public void setLimit(Integer limit) {
+	public void setLimit(int limit) {
+		Asserts.isTrue(limit >= 0, "The limit must >= 0");
 		this.limit = limit;
+	}
+
+	/**
+	 * @return the params
+	 */
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	/**
+	 * @param params the params to set
+	 */
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
 	}
 
 	/**
@@ -153,6 +172,7 @@ public class SimpleQueryParameter implements QueryParameter {
 				.append(orders)
 				.append(start)
 				.append(limit)
+				.append(params)
 				.toHashCode();
 	}
 
@@ -168,13 +188,14 @@ public class SimpleQueryParameter implements QueryParameter {
 		if (getClass() != obj.getClass())
 			return false;
 		
-		SimpleQueryParameter rhs = (SimpleQueryParameter) obj;
+		Query rhs = (Query) obj;
 		return Objects.equalsBuilder()
 				.append(excludes, rhs.excludes)
 				.append(conditions, rhs.conditions)
 				.append(orders, rhs.orders)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
+				.append(params, rhs.params)
 				.isEquals();
 	}
 
@@ -189,7 +210,7 @@ public class SimpleQueryParameter implements QueryParameter {
 				.append("orders", orders)
 				.append("start", start)
 				.append("limit", limit)
+				.append("params", params)
 				.toString();
 	}
-
 }

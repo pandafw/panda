@@ -6,22 +6,22 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 
 /**
- * SqlResultSet
  * @author yf.frank.wang@gmail.com
+ *
+ * @param <T> result type
  */
-public interface SqlResultSet {
+public interface SqlResultSet<T> {
 	// ---------------------------------------------------------------------
 	// Get/Update
 	// ---------------------------------------------------------------------
 	/**
 	 * returns data to populate a single object instance.
 	 * @param <T> The type of result object 
-	 * @param resultClass The class of result object
 	 * @return The single result object populated with the result set data, or null if no result was
 	 *         found
 	 * @throws SQLException If an SQL error occurs.
 	 */
-	<T> T getResult(Class<T> resultClass) throws SQLException;
+	T getResult() throws SQLException;
 
 	/**
 	 * returns data to populate a single object instance.
@@ -32,7 +32,7 @@ public interface SqlResultSet {
 	 *         the result set data, or null if no result was found
 	 * @throws SQLException If an SQL error occurs.
 	 */
-	<T> T getResult(T resultObject) throws SQLException;
+	T getResult(T resultObject) throws SQLException;
 
 	/**
 	 * update data to result set.
@@ -40,7 +40,7 @@ public interface SqlResultSet {
 	 * @param resultObject The result data object.
 	 * @throws SQLException If an SQL error occurs.
 	 */
-	void updateResult(Object resultObject) throws SQLException;
+	void updateResult(T resultObject) throws SQLException;
 
 	// ---------------------------------------------------------------------
 	// Traversal/Positioning

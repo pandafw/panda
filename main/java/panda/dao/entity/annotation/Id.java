@@ -36,8 +36,12 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Id {
 	/**
-	 * true : auto increasement
+	 * true : auto increase
 	 */
 	boolean auto() default true;
 
+	/**
+	 * start number
+	 */
+	int start() default 1;
 }

@@ -2,13 +2,13 @@ package panda.dao.restriction;
 
 import java.util.Collection;
 
-import panda.dao.QueryParameter;
+import panda.dao.criteria.Query;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRestriction<E> {
+public class ComparableRestriction<E extends Query, T> extends ObjectRestriction<E> {
 	/**
 	 * @param example example
 	 * @param name name
@@ -37,11 +37,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E equalToColumn(String aColumn) {
-		example.getConditions().equalToColumn(column, aColumn);
+	public E equalToField(String aField) {
+		example.getConditions().equalToField(column, aField);
 		return example;
 	}
 
@@ -55,11 +55,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E notEqualToColumn(String aColumn) {
-		example.getConditions().notEqualToColumn(column, aColumn);
+	public E notEqualToField(String aField) {
+		example.getConditions().notEqualToField(column, aField);
 		return example;
 	}
 
@@ -73,11 +73,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E greaterThanColumn(String aColumn) {
-		example.getConditions().greaterThanColumn(column, aColumn);
+	public E greaterThanField(String aField) {
+		example.getConditions().greaterThanField(column, aField);
 		return example;
 	}
 
@@ -91,11 +91,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E greaterThanOrEqualToColumn(String aColumn) {
-		example.getConditions().greaterThanOrEqualToColumn(column, aColumn);
+	public E greaterThanOrEqualToField(String aField) {
+		example.getConditions().greaterThanOrEqualToField(column, aField);
 		return example;
 	}
 
@@ -109,11 +109,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E lessThanColumn(String aColumn) {
-		example.getConditions().lessThanColumn(column, aColumn);
+	public E lessThanField(String aField) {
+		example.getConditions().lessThanField(column, aField);
 		return example;
 	}
 
@@ -127,11 +127,11 @@ public class ComparableRestriction<E extends QueryParameter, T> extends ObjectRe
 	}
 
 	/**
-	 * @param aColumn the column to compare
+	 * @param aField the column to compare
 	 * @return example
 	 */
-	public E lessThanOrEqualToColumn(String aColumn) {
-		example.getConditions().lessThanOrEqualToColumn(column, aColumn);
+	public E lessThanOrEqualToField(String aField) {
+		example.getConditions().lessThanOrEqualToField(column, aField);
 		return example;
 	}
 

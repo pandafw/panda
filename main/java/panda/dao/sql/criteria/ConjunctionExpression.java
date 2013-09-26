@@ -1,12 +1,13 @@
 package panda.dao.sql.criteria;
 
+import panda.dao.criteria.Expression;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ConjunctionExpression extends AbstractExpression {
+public class ConjunctionExpression extends Expression {
 
 	protected String operator;
 	

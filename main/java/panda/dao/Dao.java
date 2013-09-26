@@ -3,39 +3,126 @@ package panda.dao;
 import java.util.List;
 import java.util.Map;
 
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
+import panda.dao.criteria.Query;
+import panda.dao.entity.Entity;
+import panda.dao.entity.EntityDao;
+import panda.dao.entity.EntityField;
+import panda.lang.Asserts;
+
 /**
+ * !! thread-unsafe !!
  * @author yf.frank.wang@gmail.com
  */
-public interface Dao {
-	/**
-	 * @return 数据源的元数据
-	 */
-	DatabaseMeta meta();
+public abstract class Dao {
+	protected final DaoClient daoClient;
+	
+	public Dao(DaoClient daoClient) {
+		this.daoClient = daoClient;
+	}
 
 	/**
 	 * @return the DaoClient
 	 */
-	DaoClient getDaoClient();
+	public DaoClient getDaoClient() {
+		return daoClient;
+	}
+	
+	/**
+	 * @return datebase meta
+	 */
+	public DatabaseMeta meta() {
+		return daoClient.getMeta();
+	}
 
 	/**
-	 * @return the DaoSession
+	 * @return beans
 	 */
-	DaoSession getDaoSession();
+	public Beans getBeans() {
+		return daoClient.getBeans();
+	}
+
+	protected void assertTable(String table) {
+		Asserts.notEmpty(table, "The table is empty");
+	}
+	
+	protected void assertTable(Entity<?> entity) {
+		assertEntity(entity);
+		Asserts.notEmpty(entity.getTableName(), "The table of [%s] is undefined", entity.getType().toString());
+	}
+	
+	protected void assertType(Class<?> type) {
+		Asserts.notNull(type, "The type is null");
+	}
+
+	protected void assertEntity(Entity<?> entity) {
+		Asserts.notNull(entity, "The entity is null");
+	}
+	
+	protected void assertEntity(Entity<?> entity, Class<?> type) {
+		Asserts.notNull(entity, "The entity of [%s] is undefined", type.toString());
+	}
+	
+	protected void assertObject(Object object) {
+		Asserts.notNull(object, "The object is null");
+	}
+	
+	protected void assertTransaction(Transaction transaction) {
+		Asserts.notNull(transaction, "The transaction is null");
+	}
+	
+	/**
+	 * @param type record type
+	 * @return the entity
+	 */
+	public <T> Entity<T> getEntity(Class<T> type) {
+		assertType(type);
+		return daoClient.getEntity(type);
+	}
 
 	/**
 	 * @param type record type
-	 * @return 实体描述
+	 * @return the entity
 	 */
-//	<T> Entity<T> getEntity(Class<T> type);
+	public <T> EntityDao<T> getEntityDao(Class<T> type) {
+		assertType(type);
+		return new EntityDao<T>(this, type);
+	}
 
 	/**
-	 * 根据一个实体的配置信息为其创建一张表
-	 * 
-	 * @param type 实体类型
-	 * @param dropIfExists 如果表存在是否强制移除
-	 * @return 实体对象
+	 * @param type record type
+	 * @param param argument used for dynamic table
+	 * @return the entity
 	 */
-//	<T> Entity<T> create(Class<T> type, boolean dropIfExists);
+	public <T> EntityDao<T> getEntityDao(Class<T> type, Object param) {
+		assertType(type);
+		return new EntityDao<T>(this, type, param);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param type record type
+	 * @param dropIfExists drop if table exists
+	 * @return true if table exists or create successfully
+	 */
+	public <T> boolean create(Class<T> type, boolean dropIfExists) {
+		assertType(type);
+
+		Entity<T> en = getEntity(type);
+		assertEntity(en, type);
+		return create(en, dropIfExists);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param entity entity
+	 * @param dropIfExists drop if table exists
+	 * @return true if table exists or create successfully
+	 */
+	public abstract boolean create(Entity<?> entity, boolean dropIfExists);
 
 	/**
 	 * drop a table if exists
@@ -43,7 +130,17 @@ public interface Dao {
 	 * @param type record type
 	 * @return true if drop successfully
 	 */
-	boolean drop(Class<?> type);
+	public boolean drop(Class<?> type) {
+		return drop(getEntity(type));
+	}
+
+	/**
+	 * drop a table if exists
+	 * 
+	 * @param entity entity
+	 * @return true if drop successfully
+	 */
+	public abstract boolean drop(Entity<?> entity);
 
 	/**
 	 * drop a table if exists
@@ -51,7 +148,7 @@ public interface Dao {
 	 * @param table table name
 	 * @return true if drop successfully
 	 */
-	boolean drop(String table);
+	public abstract boolean drop(String table);
 
 	/**
 	 * check a table exists in the data store.
@@ -59,7 +156,7 @@ public interface Dao {
 	 * @param table table name
 	 * @return true if the record or the table exists in the data store
 	 */
-	boolean exists(String table);
+	public abstract boolean exists(String table);
 
 	/**
 	 * check a record exists in the data store.
@@ -69,7 +166,19 @@ public interface Dao {
 	 * @param keys record keys (int, string or java bean with keys)
 	 * @return true if the record or the table exists in the data store
 	 */
-	boolean exists(Class<?> type, Object ... keys);
+	public boolean exists(Class<?> type, Object ... keys) {
+		return exists(getEntity(type), keys);
+	}
+
+	/**
+	 * check a record exists in the data store.
+	 * if the keys is not supplied, then check the table existence.
+	 * 
+	 * @param entity entity
+	 * @param keys record keys (int, string or java bean with keys)
+	 * @return true if the record or the table exists in the data store
+	 */
+	public abstract boolean exists(Entity<?> entity, Object ... keys);
 
 	/**
 	 * get a record by the supplied keys
@@ -77,7 +186,17 @@ public interface Dao {
 	 * @param type record type
 	 * @param keys record keys (int, string or java bean with keys)
 	 */
-	<T> T fetch(Class<T> type, Object ... keys);
+	public <T> T fetch(Class<T> type, Object ... keys) {
+		return fetch(getEntity(type), keys);
+	}
+
+	/**
+	 * get a record by the supplied keys
+	 * 
+	 * @param entity entity
+	 * @param keys record keys (int, string or java bean with keys)
+	 */
+	public abstract <T> T fetch(Entity<T> entity, Object ... keys);
 
 	/**
 	 * get a record by the supplied query
@@ -86,7 +205,18 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
-	<T> T fetch(Class<T> type, QueryParameter qp);
+	public <T> T fetch(Class<T> type, Query query) {
+		return fetch(getEntity(type), query);
+	}
+
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record
+	 */
+	public abstract <T> T fetch(Entity<T> entity, Query query);
 
 	/**
 	 * get a record by the supplied query
@@ -95,7 +225,7 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
-	Map fetch(String table, QueryParameter query);
+	public abstract Map fetch(String table, Query query);
 
 	/**
 	 * delete a object.
@@ -103,7 +233,7 @@ public interface Dao {
 	 * @param obj object to be deleted
 	 * @return deleted count
 	 */
-	int delete(Object obj);
+	public abstract int delete(Object obj);
 
 	/**
 	 * delete records by the supplied keys.
@@ -113,7 +243,19 @@ public interface Dao {
 	 * @param keys a record contains key property or composite keys
 	 * @return deleted count
 	 */
-	<T> int delete(Class<T> type, Object ... keys);
+	public <T> int delete(Class<T> type, Object ... keys) {
+		return delete(getEntity(type), keys);
+	}
+
+	/**
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
+	 * 
+	 * @param entity entity
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
+	 */
+	public abstract <T> int delete(Entity<T> entity, Object ... keys);
 
 	/**
 	 * delete record by the supplied query
@@ -122,7 +264,18 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	int delete(Class<?> type, QueryParameter query);
+	public int delete(Class<?> type, Query query) {
+		return delete(getEntity(type), query);
+	}
+
+	/**
+	 * delete record by the supplied query
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return deleted count
+	 */
+	public abstract int delete(Entity<?> entity, Query query);
 
 	/**
 	 * delete record by the supplied query
@@ -131,24 +284,22 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	int delete(String table, QueryParameter query);
+	public abstract int delete(String table, Query query);
 
 	/**
 	 * insert a record.
 	 * <p>
-	 * 声明了 '@Id'的字段会在插入数据库时被忽略，因为数据库会自动为其设值。如果想手动设置，请设置 '@Id(auto=false)'
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
 	 * <p>
-	 * <b>插入之前</b>，会检查声明了 '@Prep(@SQL("SELECT ..."))' 的字段，预先执行 SQL 为字段设置。
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
 	 * <p>
-	 * <b>插入之后</b>，会检查声明了 '@Post(@SQL("SELECT ..."))' 的字段，通过执行 SQL 将值取回
-	 * <p>
-	 * 如果你的字段仅仅声明了 '@Id(auto=true)'，没有声明 '@Post'，则认为你还是想取回插入后最新的 ID 值，因为 自动为你添加类似
-	 * @Post(@SQL("SELECT MAX(id) FROM table")) 的设置
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
 	 * 
 	 * @param obj the record to be inserted
 	 * @return the inserted record
 	 */
-	<T> T insert(T obj);
+	public abstract <T> T insert(T obj);
 
 	/**
 	 * update a record by the supplied object. 
@@ -156,7 +307,7 @@ public interface Dao {
 	 * @param obj sample object
 	 * @return updated count
 	 */
-	int update(Object obj);
+	public abstract int update(Object obj);
 
 	/**
 	 * update a record by the supplied object. 
@@ -165,7 +316,7 @@ public interface Dao {
 	 * @param obj sample object
 	 * @return updated count
 	 */
-	int updateIgnoreNull(Object obj);
+	public abstract int updateIgnoreNull(Object obj);
 
 	/**
 	 * update records by the supplied object and query
@@ -174,7 +325,7 @@ public interface Dao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	int update(Object obj, QueryParameter query);
+	public abstract int update(Object obj, Query query);
 
 	/**
 	 * update records by the supplied object and query. 
@@ -184,7 +335,7 @@ public interface Dao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	int updateIgnoreNull(Object obj, QueryParameter query);
+	public abstract int updateIgnoreNull(Object obj, Query query);
 
 	/**
 	 * select all records.
@@ -192,7 +343,19 @@ public interface Dao {
 	 * @param type record type
 	 * @return record list
 	 */
-	<T> List<T> select(Class<T> type);
+	public <T> List<T> select(Class<T> type) {
+		return select(getEntity(type));
+	}
+
+	/**
+	 * select all records.
+	 * 
+	 * @param entity entity
+	 * @return record list
+	 */
+	public <T> List<T> select(Entity<T> entity) {
+		return select(entity, (Query)null);
+	}
 
 	/**
 	 * select all records.
@@ -200,7 +363,9 @@ public interface Dao {
 	 * @param table table name
 	 * @return record(a map) list
 	 */
-	List<Map> select(String table);
+	public List<Map> select(String table) {
+		return select(table, (Query)null);
+	}
 
 	/**
 	 * select records by the supplied query.
@@ -210,7 +375,19 @@ public interface Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record list
 	 */
-	<T> List<T> select(Class<T> type, QueryParameter query);
+	public <T> List<T> select(Class<T> type, Query query) {
+		return select(getEntity(type), query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public abstract <T> List<T> select(Entity<T> entity, Query query);
 
 	/**
 	 * select records by the supplied query.
@@ -220,7 +397,7 @@ public interface Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record(a map) list
 	 */
-	List<Map> select(String table, QueryParameter query);
+	public abstract List<Map> select(String table, Query query);
 
 	/**
 	 * select all records.
@@ -229,7 +406,20 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	<T> int select(Class<T> type, DataHandler<T> callback);
+	public <T> int select(Class<T> type, DataHandler<T> callback) {
+		return select(getEntity(type), callback);
+	}
+
+	/**
+	 * select all records.
+	 * 
+	 * @param entity entity
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public <T> int select(Entity<T> entity, DataHandler<T> callback) {
+		return select(entity, null, callback);
+	}
 
 	/**
 	 * select all records.
@@ -238,7 +428,9 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	int select(String table, DataHandler<Map> callback);
+	public int select(String table, DataHandler<Map> callback) {
+		return select(table, null, callback);
+	}
 
 	/**
 	 * select records by the supplied query.
@@ -248,7 +440,19 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	<T> int select(Class<T> type, QueryParameter query, DataHandler<T> callback);
+	public <T> int select(Class<T> type, Query query, DataHandler<T> callback) {
+		return select(getEntity(type), query, callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public abstract <T> int select(Entity<T> entity, Query query, DataHandler<T> callback);
 
 	/**
 	 * select records by the supplied query.
@@ -258,7 +462,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	int select(String table, QueryParameter query, DataHandler<Map> callback);
+	public abstract int select(String table, Query query, DataHandler<Map> callback);
 
 	/**
 	 * count all records.
@@ -266,7 +470,19 @@ public interface Dao {
 	 * @param type record type
 	 * @return record count
 	 */
-	int count(Class<?> type);
+	public int count(Class<?> type) {
+		return count(getEntity(type));
+	}
+
+	/**
+	 * count all records.
+	 * 
+	 * @param entity entity
+	 * @return record count
+	 */
+	public int count(Entity<?> entity) {
+		return count(entity, null);
+	}
 
 	/**
 	 * count all records.
@@ -274,7 +490,9 @@ public interface Dao {
 	 * @param table table name
 	 * @return record count
 	 */
-	int count(String table);
+	public int count(String table) {
+		return count(table, null);
+	}
 
 	/**
 	 * count records by the supplied query.
@@ -283,7 +501,18 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return record count
 	 */
-	int count(Class<?> type, QueryParameter query);
+	public int count(Class<?> type, Query query) {
+		return count(getEntity(type), query);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public abstract int count(Entity<?> entity, Query query);
 
 	/**
 	 * count records by the supplied query.
@@ -292,6 +521,83 @@ public interface Dao {
 	 * @param query WHERE conditions
 	 * @return record count
 	 */
-	int count(String table, QueryParameter query);
+	public abstract int count(String table, Query query);
 
+	/**
+	 * execute a transaction
+	 */
+	public abstract void exec(Transaction transaction);
+	
+	/**
+	 * execute a transaction
+	 * @param level transaction level
+	 */
+	public abstract void exec(Transaction transaction, int level);
+	
+	/**
+	 * commit a transaction
+	 */
+	public abstract void commit();
+
+	/**
+	 * rollback a transaction
+	 */
+	public abstract void rollback();
+
+	//--------------------------------------------------------------------
+	@SuppressWarnings("unchecked")
+	protected void queryPrimaryKey(Entity<?> entity, Query query, Object ... keys) {
+		if (keys == null || keys.length == 0) {
+			return;
+		}
+		
+		if (keys.length == 1 && entity.getType().isInstance(keys[0])) {
+			BeanHandler bh = getBeans().getBeanHandler(entity.getType());
+
+			for (EntityField ef : entity.getFields()) {
+				if (ef.isPrimaryKey()) {
+					Object k = bh.getPropertyValue(keys[0], ef.getName());
+					query.getConditions().equalTo(ef.getName(), k);
+				}
+			}
+		}
+		else {
+			if (keys.length != entity.getPrimaryKeys().size()) {
+				throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "] ");
+			}
+			
+			int i = 0;
+			for (EntityField ef : entity.getFields()) {
+				if (ef.isPrimaryKey()) {
+					query.getConditions().equalTo(ef.getName(), keys[i++]);
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void excludeNullProperties(Entity<?> entity, Query query, Object obj) {
+		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());
+		for (EntityField ef : entity.getFields()) {
+			if (bh.getPropertyValue(obj, ef.getName()) == null) {
+				query.addExclude(ef.getName());
+			}
+		}
+	}
+
+	protected void excludePrimaryKeys(Entity<?> entity, Query query) {
+		for (EntityField ef : entity.getFields()) {
+			if (ef.isPrimaryKey()) {
+				query.addExclude(ef.getName());
+			}
+		}
+	}
+
+	protected void excludeNonPrimaryKey(Entity<?> entity, Query query) {
+		for (EntityField ef : entity.getFields()) {
+			if (!ef.isPrimaryKey()) {
+				query.addExclude(ef.getName());
+			}
+		}
+	}
 }

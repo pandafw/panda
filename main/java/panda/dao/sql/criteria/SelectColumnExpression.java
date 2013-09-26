@@ -1,12 +1,13 @@
 package panda.dao.sql.criteria;
 
+import panda.dao.criteria.Expression;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SelectColumnExpression extends AbstractExpression {
+public class SelectColumnExpression extends Expression {
 	
 	protected String column;
 	protected String alias;

@@ -38,11 +38,15 @@ public enum DB {
 	 */
 	SQLITE,
 	/**
-	 * 
+	 * HSqldb 
 	 */
-	HSQL,
+	HSQLDB,
 	/**
-	 * 
+	 * Derby
 	 */
-	DERBY
+	DERBY,
+	/**
+	 * Google App Engine Data Store
+	 */
+	GAE
 }

@@ -1,5 +1,6 @@
 package panda.dao.sql.criteria;
 
+import panda.dao.criteria.Expression;
 import panda.dao.sql.SqlUtils;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -7,7 +8,7 @@ import panda.lang.Strings;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class OrderExpression extends AbstractExpression {
+public class OrderExpression extends Expression {
 
 	protected String column;
 	protected String direction = "";

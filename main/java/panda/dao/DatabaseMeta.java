@@ -10,17 +10,17 @@ public class DatabaseMeta {
 	}
 
 	/**
-	 * 现在所支持的数据库类型
+	 * db type
 	 */
 	private DB type;
 
 	/**
-	 * 产品版本号
+	 * version
 	 */
 	private String version;
 
 	/**
-	 * 产品名称
+	 * product name
 	 */
 	private String productName;
 
@@ -57,7 +57,7 @@ public class DatabaseMeta {
 			type = DB.SQLITE;
 		}
 		else if (proName.startsWith("hsql")) {
-			type = DB.HSQL;
+			type = DB.HSQLDB;
 		}
 		else if (proName.contains("derby")) {
 			type = DB.DERBY;
@@ -154,10 +154,14 @@ public class DatabaseMeta {
 	}
 
 	public boolean isHsql() {
-		return DB.HSQL == type;
+		return DB.HSQLDB == type;
 	}
 
 	public boolean isDerby() {
 		return DB.DERBY == type;
+	}
+
+	public boolean isGae() {
+		return DB.GAE == type;
 	}
 }

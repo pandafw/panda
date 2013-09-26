@@ -5,8 +5,9 @@ package panda.dao;
  * @author yf.frank.wang@gmail.com
  *
  */
-@SuppressWarnings("serial")
 public class DaoException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
 
 	public DaoException() {
 		super();

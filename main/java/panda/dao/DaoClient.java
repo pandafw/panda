@@ -1,42 +1,120 @@
 package panda.dao;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import panda.bean.Beans;
+import panda.dao.entity.AnnotationEntityMaker;
+import panda.dao.entity.Entity;
+import panda.dao.entity.EntityDao;
+import panda.dao.entity.EntityMaker;
 
 
 /**
+ * !! thread-safe !!
  * @author yf.frank.wang@gmail.com
  */
-public interface DaoClient {
+public abstract class DaoClient {
+	protected String name;
+	protected DatabaseMeta meta;
+	protected Map<Class<?>, Entity> entities = new ConcurrentHashMap<Class<?>, Entity>();
+	protected EntityMaker entityMaker = new AnnotationEntityMaker();
+	protected Beans beans = Beans.me();
+	
+	/**
+	 * @param name client name
+	 */
+	public DaoClient() {
+	}
+	
+	/**
+	 * @param name client name
+	 */
+	public DaoClient(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * @return the name
 	 */
-	String getName();
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return datebase meta
+	 */
+	public DatabaseMeta getMeta() {
+		return meta;
+	}
+
+
+	/**
+	 * @return the entityMaker
+	 */
+	public EntityMaker getEntityMaker() {
+		return entityMaker;
+	}
+
+	/**
+	 * @param entityMaker the entityMaker to set
+	 */
+	public void setEntityMaker(EntityMaker entityMaker) {
+		this.entityMaker = entityMaker;
+	}
 	
 	/**
-	 * @return model meta data map
+	 * @return the beans
 	 */
-	Map<String, ModelMetaData> getMetaDataMap();
-	
-	/**
-	 * @param name model name
-	 * @return model meta data
-	 */
-	ModelMetaData getMetaData(String name);
+	public Beans getBeans() {
+		return beans;
+	}
 
 	/**
-	 * @param name model name
-	 * @return modelDao
+	 * @param beans the beans to set
 	 */
-	ModelDAO getModelDAO(String name, DaoSession session);
+	public void setBeans(Beans beans) {
+		this.beans = beans;
+	}
 
 	/**
-	 * @return An DataAccessSession instance.
+	 * @param type record type
+	 * @return the entity
 	 */
-	DaoSession openSession() throws DaoException;
+	@SuppressWarnings("unchecked")
+	public <T> Entity<T> getEntity(Class<T> type) {
+		Entity<T> entity = entities.get(type);
+		if (entity == null) {
+			synchronized(this) {
+				entity = entities.get(type);
+				if (entity == null) {
+					entity = entityMaker.make(type);
+					entities.put(type, entity);
+				}
+			}
+		}
+		return entity;
+	}
 
 	/**
-	 * @param autoCommit auto commit
-	 * @return An DataAccessSession instance.
+	 * @param type record type
+	 * @return the entity
 	 */
-	DaoSession openSession(boolean autoCommit) throws DaoException;
+	public <T> EntityDao<T> getEntityDao(Class<T> type) {
+		return getDao().getEntityDao(type);
+	}
+
+	/**
+	 * @param type record type
+	 * @param param argument used for dynamic table
+	 * @return the entity
+	 */
+	public <T> EntityDao<T> getEntityDao(Class<T> type, Object param) {
+		return getDao().getEntityDao(type, param);
+	}
+
+	/**
+	 * @return a Dao instance.
+	 */
+	public abstract Dao getDao();
 }
