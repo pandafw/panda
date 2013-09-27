@@ -3,11 +3,11 @@ package panda.bind.xml;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
 
 import panda.bind.AbstractDeserializer;
 import panda.io.Streams;
@@ -26,12 +26,11 @@ public class XmlDeserializer extends AbstractDeserializer {
 	 */
 	public <T> T deserialize(Reader xml, Type type) {
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			InputSource is = new InputSource(xml);
-			Document doc = builder.parse(is);
+			SAXParserFactory parserFactor = SAXParserFactory.newInstance();
+			SAXParser parser = parserFactor.newSAXParser();
+			parser.parse(new InputSource(xml), new SAXHandler());
 			//TODO
-			return convertValue(doc, type);
+			return null;
 		}
 		catch (Exception e) {
 			throw wrapError(e);
@@ -39,6 +38,10 @@ public class XmlDeserializer extends AbstractDeserializer {
 		finally {
 			Streams.safeClose(xml);
 		}
+	}
+
+	private class SAXHandler extends DefaultHandler {
+		
 	}
 	
 	protected XmlException wrapError(Throwable e) {

@@ -8,6 +8,16 @@ import java.math.BigInteger;
  * @author yf.frank.wang@gmail.com
  */
 public class Numbers {
+	/** 1KB */
+	public static final int KB = 1024;
+	/** 1MB */
+	public static final int MB = KB * 1024;
+	/** 1GB */
+	public static final long GB = MB * 1024L;
+	/** 1TB */
+	public static final long TB = GB * 1024;
+	/** 1PB */
+	public static final long PB = TB * 1024;
 
 	/** Reusable Long constant for zero. */
 	public static final Long LONG_ZERO = Long.valueOf(0L);

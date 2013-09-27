@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Strings;
+import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -96,7 +97,7 @@ public class Files {
 			pathToUse = pathToUse.substring(prefixIndex + 1);
 		}
 
-		List<String> pathList = Strings.parseCsv(pathToUse, DIR_SEPARATOR_UNIX);
+		List<String> pathList = Texts.parseCsv(pathToUse, DIR_SEPARATOR_UNIX);
 		List<String> pathElements = new LinkedList<String>();
 		int tops = 0;
 
@@ -329,7 +330,7 @@ public class Files {
 			if (patDir.equals("**")) {
 				break;
 			}
-			if (!Strings.wildcardMatch(strDirs[strIdxStart], patDir, isCaseSensitive)) {
+			if (!Texts.wildcardMatch(strDirs[strIdxStart], patDir, isCaseSensitive)) {
 				return false;
 			}
 			patIdxStart++;
@@ -357,7 +358,7 @@ public class Files {
 			if (patDir.equals("**")) {
 				break;
 			}
-			if (!Strings.wildcardMatch(strDirs[strIdxEnd], patDir, isCaseSensitive)) {
+			if (!Texts.wildcardMatch(strDirs[strIdxEnd], patDir, isCaseSensitive)) {
 				return false;
 			}
 			patIdxEnd--;
@@ -395,7 +396,7 @@ public class Files {
 				for (int j = 0; j < patLength; j++) {
 					String subPat = patDirs[patIdxStart + j + 1];
 					String subStr = strDirs[strIdxStart + i + j];
-					if (!Strings.wildcardMatch(subStr, subPat, isCaseSensitive)) {
+					if (!Texts.wildcardMatch(subStr, subPat, isCaseSensitive)) {
 						continue strLoop;
 					}
 				}

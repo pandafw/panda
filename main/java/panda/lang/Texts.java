@@ -1,10 +1,16 @@
 package panda.lang;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.io.CsvReader;
+import panda.io.CsvWriter;
+import panda.io.Streams;
+import panda.io.StringBuilderWriter;
 
 
 /**
@@ -13,6 +19,8 @@ import panda.bean.Beans;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Texts {
+	public final static String ELLIPSIS = "...";
+
 	// Wrapping
 	// --------------------------------------------------------------------------
 	/**
@@ -247,7 +255,6 @@ public abstract class Texts {
 	 * @param str the String to capitalize, may be null
 	 * @param delimiters set of characters to determine capitalization, null means whitespace
 	 * @return capitalized String, <code>null</code> if null String input
-	 * @since 2.1
 	 */
 	public static String capitalizeFully(String str, char... delimiters) {
 		int delimLen = delimiters == null ? -1 : delimiters.length;
@@ -309,7 +316,6 @@ public abstract class Texts {
 	 * @param delimiters set of characters to determine uncapitalization, null means whitespace
 	 * @return uncapitalized String, <code>null</code> if null String input
 	 * @see #capitalize(String)
-	 * @since 2.1
 	 */
 	public static String uncapitalize(String str, char... delimiters) {
 		int delimLen = delimiters == null ? -1 : delimiters.length;
@@ -414,7 +420,6 @@ public abstract class Texts {
 	 * @param str the String to get initials from, may be null
 	 * @return String of initial letters, <code>null</code> if null String input
 	 * @see #initials(String,char[])
-	 * @since 2.2
 	 */
 	public static String initials(String str) {
 		return initials(str, null);
@@ -447,7 +452,6 @@ public abstract class Texts {
 	 * @param delimiters set of characters to determine words, null means whitespace
 	 * @return String of initial letters, <code>null</code> if null String input
 	 * @see #initials(String)
-	 * @since 2.2
 	 */
 	public static String initials(String str, char... delimiters) {
 		if (Strings.isEmpty(str)) {
@@ -497,6 +501,7 @@ public abstract class Texts {
 		return false;
 	}
 
+	// -----------------------------------------------------------------------
 	/**
 	 * transform "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
@@ -520,6 +525,7 @@ public abstract class Texts {
 	public static String transform(String expression, Object wrapper, char prefix) {
 		return transform(expression, wrapper, prefix, '{', '}');
 	}
+
 	/**
 	 * transform "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
@@ -577,47 +583,507 @@ public abstract class Texts {
 		return sb.toString();
 	}
 
+	// -----------------------------------------------------------------------
 	/**
+	 * convert a string to a camel style word
 	 * 
-	 * @param text text
-	 * @return keyword set
+	 * <pre>
+	 *  camelWord("hello-world", '-') => "helloWorld"
+	 * </pre>
+	 * 
+	 * @param cs the input string
+	 * @param c separator
+	 * @return camel style word
 	 */
-	public static Set<String> parseKeywords(String text) {
-		return parseKeywords(text, 1, 20);
+	public static String camelWord(CharSequence cs, char c) {
+		if (cs == null) {
+			return null;
+		}
+		if (cs.length() < 1) {
+			return Strings.EMPTY;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		int len = cs.length();
+		for (int i = 0; i < len; i++) {
+			char ch = cs.charAt(i);
+			if (ch == c) {
+				do {
+					i++;
+					if (i >= len) {
+						return sb.toString();
+					}
+					ch = cs.charAt(i);
+				}
+				while (ch == c);
+				sb.append(Character.toUpperCase(ch));
+			}
+			else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * convert a camel style word to a string joined by sepecified separator
+	 * 
+	 * <pre>
+	 *  uncamelWord("helloWorld", '-') => "hello-world"
+	 * </pre>
+	 * 
+	 * @param cs the input string
+	 * @param c separator
+	 * @return converted string
+	 */
+	public static String uncamelWord(CharSequence cs, char c) {
+		if (cs == null) {
+			return null;
+		}
+		if (cs.length() < 1) {
+			return Strings.EMPTY;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		int len = cs.length();
+		for (int i = 0; i < len; i++) {
+			char ch = cs.charAt(i);
+			if (Character.isUpperCase(ch)) {
+				if (i > 0) {
+					sb.append(c);
+				}
+				sb.append(Character.toLowerCase(ch));
+			}
+			else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * toCsv
+	 * 
+	 * @param lines lines
+	 * @return csv string
+	 */
+	public static String toCsv(List<String[]> lines) {
+		if (lines == null) {
+			return null;
+		}
+
+		StringBuilderWriter sw = new StringBuilderWriter();
+		CsvWriter cw = new CsvWriter(sw);
+		try {
+			cw.writeAll(lines);
+			return sw.toString();
+		}
+		finally {
+			Streams.safeClose(cw);
+		}
+	}
+
+	/**
+	 * parse csv string
+	 * 
+	 * @param str string
+	 * @return string list
+	 */
+	public static List<String> parseCsv(String str) {
+		return parseCsv(str, CsvReader.COMMA_SEPARATOR);
+	}
+
+	/**
+	 * parse csv string
+	 * 
+	 * @param str string
+	 * @param separator the delimiter to use for separating entries.
+	 * @return string list
+	 */
+	public static List<String> parseCsv(String str, char separator) {
+		return parseCsv(str, CsvReader.COMMA_SEPARATOR, CsvReader.DEFAULT_QUOTE_CHARACTER);
+	}
+
+	/**
+	 * parse csv string
+	 * 
+	 * @param str string
+	 * @param separator the delimiter to use for separating entries.
+	 * @param quotechar the character to use for quoted elements
+	 * @return string list
+	 */
+	public static List<String> parseCsv(String str, char separator, char quotechar) {
+		if (str == null) {
+			return null;
+		}
+
+		CsvReader cr = new CsvReader(new StringReader(str), separator, quotechar);
+		try {
+			return cr.readNext();
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		finally {
+			Streams.safeClose(cr);
+		}
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * match a String with the wild card pattern (case sensitive).
+	 * 
+	 * @param str string
+	 * @param pattern wild card pattern
+	 * @return true if matches
+	 */
+	public static boolean wildcardMatch(String str, String pattern) {
+		return wildcardMatch(str, pattern, true);
+	}
+
+	/**
+	 * match a String with the wild card pattern (ignore case sensitive).
+	 * 
+	 * @param str string
+	 * @param pattern wild card pattern
+	 * @return true if matches
+	 */
+	public static boolean wildcardMatchIgnoreCase(String str, String pattern) {
+		return wildcardMatch(str, pattern, false);
+	}
+
+	/**
+	 * match a String with the wild card pattern.
+	 * 
+	 * @param str string
+	 * @param pattern wild card pattern
+	 * @param isCaseSensitive case sensitive
+	 * @return true if matches
+	 */
+	public static boolean wildcardMatch(String str, String pattern, boolean isCaseSensitive) {
+		if (str == null || pattern == null) {
+			return false;
+		}
+
+		char[] patArr = pattern.toCharArray();
+		char[] strArr = str.toCharArray();
+		int patIdxStart = 0;
+		int patIdxEnd = patArr.length - 1;
+		int strIdxStart = 0;
+		int strIdxEnd = strArr.length - 1;
+		char ch;
+
+		boolean containsStar = false;
+		for (int i = 0; i < patArr.length; i++) {
+			if (patArr[i] == '*') {
+				containsStar = true;
+				break;
+			}
+		}
+
+		if (!containsStar) {
+			// No '*'s, so we make a shortcut
+			if (patIdxEnd != strIdxEnd) {
+				return false; // Pattern and string do not have the same size
+			}
+			for (int i = 0; i <= patIdxEnd; i++) {
+				ch = patArr[i];
+				if (ch != '?') {
+					if (isCaseSensitive && ch != strArr[i]) {
+						return false; // Character mismatch
+					}
+					if (!isCaseSensitive
+							&& Character.toUpperCase(ch) != Character.toUpperCase(strArr[i])) {
+						return false; // Character mismatch
+					}
+				}
+			}
+			return true; // String matches against pattern
+		}
+
+		if (patIdxEnd == 0) {
+			return true; // Pattern contains only '*', which matches anything
+		}
+
+		// Process characters before first star
+		while ((ch = patArr[patIdxStart]) != '*' && strIdxStart <= strIdxEnd) {
+			if (ch != '?') {
+				if (isCaseSensitive && ch != strArr[strIdxStart]) {
+					return false; // Character mismatch
+				}
+				if (!isCaseSensitive
+						&& Character.toUpperCase(ch) != Character.toUpperCase(strArr[strIdxStart])) {
+					return false; // Character mismatch
+				}
+			}
+			patIdxStart++;
+			strIdxStart++;
+		}
+		if (strIdxStart > strIdxEnd) {
+			// All characters in the string are used. Check if only '*'s are
+			// left in the pattern. If so, we succeeded. Otherwise failure.
+			for (int i = patIdxStart; i <= patIdxEnd; i++) {
+				if (patArr[i] != '*') {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// Process characters after last star
+		while ((ch = patArr[patIdxEnd]) != '*' && strIdxStart <= strIdxEnd) {
+			if (ch != '?') {
+				if (isCaseSensitive && ch != strArr[strIdxEnd]) {
+					return false; // Character mismatch
+				}
+				if (!isCaseSensitive
+						&& Character.toUpperCase(ch) != Character.toUpperCase(strArr[strIdxEnd])) {
+					return false; // Character mismatch
+				}
+			}
+			patIdxEnd--;
+			strIdxEnd--;
+		}
+		if (strIdxStart > strIdxEnd) {
+			// All characters in the string are used. Check if only '*'s are
+			// left in the pattern. If so, we succeeded. Otherwise failure.
+			for (int i = patIdxStart; i <= patIdxEnd; i++) {
+				if (patArr[i] != '*') {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// process pattern between stars. padIdxStart and patIdxEnd point
+		// always to a '*'.
+		while (patIdxStart != patIdxEnd && strIdxStart <= strIdxEnd) {
+			int patIdxTmp = -1;
+			for (int i = patIdxStart + 1; i <= patIdxEnd; i++) {
+				if (patArr[i] == '*') {
+					patIdxTmp = i;
+					break;
+				}
+			}
+			if (patIdxTmp == patIdxStart + 1) {
+				// Two stars next to each other, skip the first one.
+				patIdxStart++;
+				continue;
+			}
+			// Find the pattern between padIdxStart & padIdxTmp in str between
+			// strIdxStart & strIdxEnd
+			int patLength = (patIdxTmp - patIdxStart - 1);
+			int strLength = (strIdxEnd - strIdxStart + 1);
+			int foundIdx = -1;
+			strLoop: for (int i = 0; i <= strLength - patLength; i++) {
+				for (int j = 0; j < patLength; j++) {
+					ch = patArr[patIdxStart + j + 1];
+					if (ch != '?') {
+						if (isCaseSensitive && ch != strArr[strIdxStart + i + j]) {
+							continue strLoop;
+						}
+						if (!isCaseSensitive
+								&& Character.toUpperCase(ch) != Character
+									.toUpperCase(strArr[strIdxStart + i + j])) {
+							continue strLoop;
+						}
+					}
+				}
+
+				foundIdx = strIdxStart + i;
+				break;
+			}
+
+			if (foundIdx == -1) {
+				return false;
+			}
+
+			patIdxStart = patIdxTmp;
+			strIdxStart = foundIdx + patLength;
+		}
+
+		// All characters in the string are used. Check if only '*'s are left
+		// in the pattern. If so, we succeeded. Otherwise failure.
+		for (int i = patIdxStart; i <= patIdxEnd; i++) {
+			if (patArr[i] != '*') {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * format file size
+	 * 
+	 * @param fs size
+	 * @return (xxGB, xxMB, xxKB, xxB)
+	 */
+	public static String formatFileSize(Integer fs) {
+		if (fs == null) {
+			return Strings.EMPTY;
+		}
+
+		return formatFileSize(fs.longValue());
+	}
+
+	/**
+	 * format file size
+	 * 
+	 * @param fs size
+	 * @return (xxGB, xxMB, xxKB, xxB)
+	 */
+	public static String formatFileSize(Long fs) {
+		if (fs == null) {
+			return Strings.EMPTY;
+		}
+
+		String sz;
+		if (fs >= Numbers.PB) {
+			sz = Math.round(fs / Numbers.PB) + "PB";
+		}
+		else if (fs >= Numbers.TB) {
+			sz = Math.round(fs / Numbers.TB) + "TB";
+		}
+		else if (fs >= Numbers.GB) {
+			sz = Math.round(fs / Numbers.GB) + "GB";
+		}
+		else if (fs >= Numbers.MB) {
+			sz = Math.round(fs / Numbers.MB) + "MB";
+		}
+		else if (fs >= Numbers.KB) {
+			sz = Math.round(fs / Numbers.KB) + "KB";
+		}
+		else {
+			sz = fs + "B";
+		}
+		return sz;
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * 
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted text
+	 */
+	public static String ellipsis(String str, int len) {
+		return ellipsis(str, len, ELLIPSIS);
+	}
+
+	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * 
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted textELLIPSIS
+	 */
+	public static String ellipsis(String str, int len, String ellipsis) {
+		if (str == null) {
+			return null;
+		}
+
+		if (str.length() > len) {
+			if (len <= ellipsis.length()) {
+				return ellipsis.substring(0, len);
+			}
+			return str.substring(0, len - ellipsis.length()) + ellipsis;
+		}
+		return str;
+	}
+
+	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * the length of charCodeAt(i) > 0xFF will be treated as 2.
+	 * 
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted text
+	 */
+	public static String ellipsiz(String str, int len) {
+		return ellipsiz(str, len, ELLIPSIS);
 	}
 	
 	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * the length of charCodeAt(i) > 0xFF will be treated as 2.
 	 * 
-	 * @param text text
-	 * @param minLength min length of keyword
-	 * @param maxLength max length of keyword 
-	 * @return keyword set
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted text
 	 */
-	public static Set<String> parseKeywords(String text, int minLength, int maxLength) {
-		Set<String> kws = new HashSet<String>();
-
-		if (Strings.isBlank(text)) {
-			return kws;
+	public static String ellipsiz(String str, int len, String ellipsis) {
+		if (str == null) {
+			return null;
 		}
 
-		int start = 0;
-		int i = 0;
-		int len = text.length();
-		for (; i < len; i++) {
-			char ch = text.charAt(i);
-			if (!Character.isLetterOrDigit(ch)) {
-				int cl = i - start;
-				if (cl >= minLength && i <= maxLength) {
-					kws.add(text.substring(start, i));
+		int max = len - ellipsis.length();
+		int sz = 0, j = 0;
+		for (int i = 0; i < str.length(); i++) {
+			sz++;
+			if (str.charAt(i) > 0xFF) {
+				sz++;
+			}
+			if (sz > max && j == 0) {
+				j = i;
+			}
+			if (sz > len) {
+				if (len <= ellipsis.length()) {
+					return ellipsis.substring(0, len);
 				}
-				start = i + 1;
+				return str.substring(0, j) + ellipsis;
 			}
 		}
-		int cl = i - start;
-		if (cl >= minLength && i <= maxLength) {
-			kws.add(text.substring(start, i));
+		return str;
+	}
+	
+	// -----------------------------------------------------------------------
+	private static class XmlPattern {
+		static Pattern p0 = Pattern.compile(".+</\\w[^>]*>$");
+		static Pattern p1 = Pattern.compile("^</\\w*>$");
+		static Pattern p2 = Pattern.compile("^<\\w[^>]*[^/]>.*$");
+		static Pattern p3 = Pattern.compile("(>)(<)(/*)");
+	}
+	
+	/**
+	 * prettify xml
+	 * 
+	 * @param xml xml string
+	 * @return prettified xml
+	 */
+	public static String prettifyXml(String xml) {
+		StringBuilder fmt = new StringBuilder();
+
+		xml = XmlPattern.p3.matcher(xml).replaceAll("$1\n$2$3");
+
+		String[] xs = Strings.split(xml, Strings.CRLF);
+
+		int pad = 0;
+		for (int i = 0; i < xs.length; i++) {
+			String node = xs[i];
+			int indent = 0;
+			if (XmlPattern.p0.matcher(node).matches()) {
+				indent = 0;
+			}
+			else if (XmlPattern.p1.matcher(node).matches()) {
+				if (pad != 0) {
+					pad -= 1;
+				}
+			}
+			else if (XmlPattern.p2.matcher(node).matches()) {
+				indent = 1;
+			}
+			else {
+				indent = 0;
+			}
+
+			fmt.append(Strings.leftPad(Strings.EMPTY, pad * 2, ' ')).append(node).append(Strings.CRLF);
+			pad += indent;
 		}
 
-		return kws;
+		return fmt.toString();
 	}
+
 }

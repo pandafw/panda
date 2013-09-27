@@ -1,6 +1,7 @@
 package panda.dao.sql;
 
 import panda.lang.Strings;
+import panda.lang.Texts;
 
 
 /**
@@ -101,6 +102,6 @@ public class SqlNamings {
 	 * @return table name
 	 */
 	public static String javaName2TableName(String javaName) {
-		return Strings.uncamelWord(javaName, '_');
+		return Texts.uncamelWord(javaName, '_');
 	}
 }
