@@ -1,20 +1,3 @@
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
-
 if (typeof String.prototype.contains != "function") {
 	String.prototype.contains = function(s) {
 		return this.indexOf(s) >= 0;
@@ -192,35 +175,37 @@ if (typeof String.prototype.unescapePhtml != "function") {
 		return this.replace(/<br\/>/g, "\n").unescapeHtml();
 	};
 }
-if (typeof String.prototype.formatXml != "function") {
-	String.prototype.formatXml = function() {
+if (typeof String.prototype.prettifyXml != "function") {
+	String.prototype.prettifyXml = function() {
 		var fmt = '';
 		var reg = /(>)(<)(\/*)/g;
 		var xml = this.replace(reg, '$1\r\n$2$3');
 		var pad = 0;
-		$.each(xml.split('\r\n'), function(index, node) {
+		var ss = xml.split('\r\n');
+		for (var i = 0; i < ss.length; i++) {
+			var s = ss[i];
 			var indent = 0;
-			if (node.match( /.+<\/\w[^>]*>$/ )) {
+			if (s.match( /.+<\/\w[^>]*>$/ )) {
 				indent = 0;
 			}
-			else if (node.match( /^<\/\w/ )) {
+			else if (s.match( /^<\/\w/ )) {
 				if (pad != 0) {
 					pad -= 1;
 				}
 			}
-			else if (node.match( /^<\w[^>]*[^\/]>.*$/ )) {
+			else if (s.match( /^<\w[^>]*[^\/]>.*$/ )) {
 				indent = 1;
 			}
 			else {
 				indent = 0;
 			}
 	
-			fmt += ("").leftPad(' ', pad * 2) + node + '\r\n';
+			fmt += ("").leftPad(' ', pad * 2) + s + '\r\n';
 			pad += indent;
-		});
+		}
 	
 		return fmt;
-	}
+	};
 }
 if (typeof String.prototype.encodeUtf8 != "function") {
 	String.prototype.encodeUtf8 = function() {
@@ -402,9 +387,9 @@ if (typeof String.unescapePhtml != "function") {
 		return s != null ? String(s).unescapePhtml() : "";
 	};
 }
-if (typeof String.formatXml != "function") {
-	String.formatXml = function(s) {
-		return s != null ? String(s).formatXml() : "";
+if (typeof String.prettifyXml != "function") {
+	String.prettifyXml = function(s) {
+		return s != null ? String(s).prettifyXml() : "";
 	};
 }
 if (typeof String.encodeUtf8 != 'function') {
@@ -438,16 +423,28 @@ if (typeof String.queryParams != "function") {
 	};
 }
 if (typeof String.formatSize != "function") {
+	var KB = 1024;
+	var MB = KB * KB;
+	var GB = MB * KB;
+	var TB = GB * KB;
+	var PB = TB * KB;
+	
 	String.formatSize = function(n) {
 		var sz = "";
-		if (n > 1024 * 1024 * 1024) {
-			sz = Math.round(n / 1024 / 1024 / 1024) + 'GB';
+		if (n >= PB) {
+			sz = Math.round(n / PB) + 'PB';
 		}
-		if (n > 1024 * 1024) {
-			sz = Math.round(n / 1024 / 1024) + 'MB';
+		else if (n >= TB) {
+			sz = Math.round(n / TB) + 'TB';
 		}
-		else if (n > 1024) {
-			sz = Math.round(n / 1024) + 'KB';
+		else if (n >= GB) {
+			sz = Math.round(n / GB) + 'GB';
+		}
+		else if (n >= MB) {
+			sz = Math.round(n / MB) + 'MB';
+		}
+		else if (n >= KB) {
+			sz = Math.round(n / KB) + 'KB';
 		}
 		else if (n != '') {
 			sz = n + 'B';
