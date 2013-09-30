@@ -105,8 +105,8 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 	
 	@SuppressWarnings("unchecked")
 	private T convert(T target, Object value, CastContext context) {
-		if (byte.class.equals(toComponentType)) {
-			try {
+		try {
+			if (byte.class.equals(toComponentType)) {
 				if (value instanceof InputStream) {
 					return (T)Streams.toByteArray((InputStream)value);
 				}
@@ -114,19 +114,14 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 					return (T)Streams.toByteArray((Reader)value, Charsets.UTF_8);
 				}
 				if (value instanceof Blob) {
-					return (T)((Blob)value).getBytes(0, (int)((Blob)value).length());
+					return (T)((Blob)value).getBytes(1, (int)((Blob)value).length());
 				}
-				return (T)value.toString().getBytes(Charsets.CS_UTF_8);
+				if (value instanceof CharSequence) {
+					return (T)value.toString().getBytes(Charsets.CS_UTF_8);
+				}
+				throw castError(value, context);
 			}
-			catch (SQLException e) {
-				Exceptions.wrapThrow(e);
-			}
-			catch (IOException e) {
-				Exceptions.wrapThrow(e);
-			}
-		}
-		if (char.class.equals(toComponentType)) {
-			try {
+			if (char.class.equals(toComponentType)) {
 				if (value instanceof InputStream) {
 					return (T)Streams.toCharArray((InputStream)value, Charsets.UTF_8);
 				}
@@ -136,19 +131,22 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 				if (value instanceof Clob) {
 					return (T)Streams.toCharArray(((Clob)value).getCharacterStream());
 				}
-				return (T)value.toString().toCharArray();
+				if (value instanceof CharSequence) {
+					return (T)value.toString().toCharArray();
+				}
+				throw castError(value, context);
 			}
-			catch (SQLException e) {
-				Exceptions.wrapThrow(e);
-			}
-			catch (IOException e) {
-				Exceptions.wrapThrow(e);
-			}
-		}
 
-		Object array = createArray(target, 1);
-		Castor conv = castors.getCastor(value.getClass(), toComponentType);
-		Array.set(array, 0, castChild(context, conv, 0, value));
-		return (T)array;
+			Object array = createArray(target, 1);
+			Castor conv = castors.getCastor(value.getClass(), toComponentType);
+			Array.set(array, 0, castChild(context, conv, 0, value));
+			return (T)array;
+		}
+		catch (SQLException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 }

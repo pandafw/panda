@@ -20,6 +20,11 @@ public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 		return TestSupport.getDB2Connection();
 	}
 
+	@Test
+	public void testInsertIdAuto() throws Exception {
+		super.testInsertIdAuto();
+	}
+
 	/**
 	 * testCall01
 	 */

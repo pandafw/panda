@@ -25,5 +25,6 @@
 	<classpathentry kind="lib" path="lib/api/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/ojdbc5.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc.jar"/>
+	<classpathentry kind="lib" path="lib/3rd/sqljdbc4.jar"/>
 	<classpathentry kind="output" path="main/classes"/>
 </classpath>

@@ -65,7 +65,7 @@ public class SimpleSqlResultSet<T> extends AbstractSqlResultSet<T> {
 	 */
 	protected SimpleSqlResultSet(SqlExecutor executor, ResultSet resultSet, Class<T> resultType, T resultObject)
 			throws SQLException {
-		this(executor, resultSet, resultType, null, null);
+		this(executor, resultSet, resultType, resultObject, null);
 	}
 	
 	/**

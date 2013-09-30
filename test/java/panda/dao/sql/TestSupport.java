@@ -40,6 +40,14 @@ public class TestSupport {
 	}
 
 	/**
+	 * @param connection connection
+	 * @throws Exception if an error occurs
+	 */
+	public static void initMssqlTestData(Connection connection) throws Exception {
+		execSQL(connection, "mssql.sql", "\\;");
+	}
+
+	/**
 	 * initOracleTestData
 	 * @param connection connection
 	 * @throws Exception if an error occurs
@@ -83,6 +91,10 @@ public class TestSupport {
 	 * @throws Exception if an error occurs
 	 */
 	public static void execSQL(Connection connection, String name, String splitter) throws Exception {
+		if (connection instanceof MockConnection) {
+			return;
+		}
+		
 		InputStream is = TestSupport.class.getResourceAsStream(name);
 
 		StringBuilder sqls = new StringBuilder();
@@ -143,7 +155,7 @@ public class TestSupport {
 			return c;
 		}
 		catch (Exception ex) {
-			log.warn("Failed to load " + name + " driver: " + ex.getMessage());
+			log.warn("Failed to connect " + name + ": " + ex.getMessage());
 
 			return new MockConnection();
 		}
@@ -166,6 +178,16 @@ public class TestSupport {
 	public static Connection getHsqldbConnection() throws Exception {
 		Connection connection = getConnection("hsqldb");
 		initHsqldbTestData(connection);
+		return connection;
+	}
+
+	/**
+	 * @return mssql connection 
+	 * @throws Exception if an error occurs
+	 */
+	public static Connection getMssqlConnection() throws Exception {
+		Connection connection = getConnection("mssql");
+		initMssqlTestData(connection);
 		return connection;
 	}
 

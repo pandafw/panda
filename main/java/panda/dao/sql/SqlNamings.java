@@ -8,29 +8,6 @@ import panda.lang.Texts;
  * @author yf.frank.wang@gmail.com
  */
 public class SqlNamings {
-	protected static String columnLabel2FieldName(String columnLabel) {
-		String[] ss = Strings.split(columnLabel, '_');
-		StringBuilder sb = null;
-		for (String s : ss) {
-			if (s.length() > 0) {
-				if (sb == null) {
-					sb = new StringBuilder();
-					sb.append(s.toLowerCase());
-				}
-				else {
-					sb.append(Character.toUpperCase(s.charAt(0)));
-					if (s.length() > 1) {
-						sb.append(s.substring(1).toLowerCase());
-					}
-				}
-			}
-		}
-		if (sb == null || sb.length() < 1) {
-			throw new IllegalArgumentException("Illegal column label: " + columnLabel);
-		}
-		return sb.toString();
-	}
-	
 	/**
 	 * javaName2ColumnLabel
 	 * @param javaName java style name
@@ -66,8 +43,11 @@ public class SqlNamings {
 	 * @return java style name
 	 */
 	public static String columnLabel2JavaName(String columnLabel) {
+		if (Strings.isEmpty(columnLabel)) {
+			return Strings.EMPTY;
+		}
+		
 		StringBuilder sb = new StringBuilder();
-
 		String javaName = Strings.replace(columnLabel, "_0_", ".");
 		
 		boolean toUpper = false;
@@ -87,10 +67,6 @@ public class SqlNamings {
 			else {
 				sb.append(Character.toLowerCase(c));
 			}
-		}
-
-		if (sb.length() < 1) {
-			throw new IllegalArgumentException("Illegal column label: " + columnLabel);
 		}
 		return sb.toString();
 	}

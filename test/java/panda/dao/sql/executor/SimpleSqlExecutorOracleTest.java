@@ -157,7 +157,7 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 			Assert.fail(e.getMessage());
 		}
 
-		Assert.assertEquals(new Integer(1), param.get("count"));
+		Assert.assertEquals(new Long(1), param.get("count"));
 		Assert.assertEquals(new BigDecimal("1001.01"), param.get("price"));
 
 		param.put("price", new BigDecimal("1001.01"));
@@ -169,7 +169,7 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 			Assert.fail(e.getMessage());
 		}
 
-		Assert.assertEquals(new Integer(1), param.get("count"));
+		Assert.assertEquals(new Long(1), param.get("count"));
 		Assert.assertEquals(new BigDecimal("9999"), param.get("price"));
 	}
 
