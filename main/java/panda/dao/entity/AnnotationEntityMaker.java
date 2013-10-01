@@ -91,6 +91,11 @@ public class AnnotationEntityMaker implements EntityMaker {
 			}
 		}
 
+		// fix primary key not null
+		for (EntityField ef : en.getPrimaryKeys()) {
+			ef.setNotNull(true);
+		}
+
 		// evaluate indexes
 		TableIndexes annIndexes = Classes.getAnnotation(type, TableIndexes.class);
 		if (annIndexes != null) {

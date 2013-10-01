@@ -47,4 +47,8 @@ public class HsqldbSqlExpert extends SqlExpert {
 		return sqls;
 	}
 
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE " + escapeTable(tableName) + " IF EXISTS";
+	}
 }

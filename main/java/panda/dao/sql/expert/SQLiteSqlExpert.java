@@ -9,33 +9,26 @@ import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
 import panda.lang.Strings;
 
-public class PostgreSqlExpert extends SqlExpert {
-
+public class SQLiteSqlExpert extends SqlExpert {
 	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
 		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
 		for (EntityField ef : entity.getFields()) {
-			sb.append('\n').append(ef.getColumn());
-			sb.append(' ').append(evalFieldType(ef));
+			sb.append('\n').append(escapeColumn(ef.getColumn()));
+			if (ef.isAutoIncrement()) {
+				sb.append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+				continue;
+			}
 
+			sb.append(' ').append(evalFieldType(ef));
 			if (ef.isUnsigned()) {
 				sb.append(" UNSIGNED");
 			}
-
-			if (ef.isAutoIncrement()) {
-				if (JdbcTypes.BIGINT.equals(ef.getJdbcType())) {
-					sb.append(" BIGSERIAL");
-				}
-				else {
-					sb.append(" SERIAL");
-				}
-			}
-			else if (ef.isNotNull()) {
+			if (ef.isNotNull()) {
 				sb.append(" NOT NULL");
 			}
-
 			if (ef.hasDefaultValue()) {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
@@ -43,30 +36,16 @@ public class PostgreSqlExpert extends SqlExpert {
 		}
 
 		// append primary keys
-		addPrimaryKeysConstraint(sb, entity);
-
+		if (entity.getIdentity() == null) {
+			addPrimaryKeysConstraint(sb, entity);
+		}
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
-		EntityField id = entity.getIdentity();
-		if (id != null && id.isAutoIncrement() && id.getStartWith() > 1) {
-			String sql = "ALTER SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ RESTART WITH " + id.getStartWith();
-			sqls.add(sql);
-		}
-
 		addIndexes(sqls, entity);
-		addComments(sqls, entity);
 		return sqls;
 	}
 
-	@Override
-	public String dropTable(String tableName) {
-		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
-	}
-
-	/**
-	 * @see http://www.postgresql.org/docs/8.4/static/datatype.html
-	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
 		if (Strings.isNotEmpty(ef.getDbType())) {
@@ -75,22 +54,40 @@ public class PostgreSqlExpert extends SqlExpert {
 		
 		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
+		case Types.BIT:
+		case Types.BOOLEAN:
+		case Types.CHAR:
+		case Types.VARCHAR:
+		case Types.CLOB:
+		case Types.LONGVARCHAR:
+			return "TEXT";
+		case Types.REAL:
+		case Types.FLOAT:
+		case Types.DOUBLE:
+		case Types.DECIMAL:
+		case Types.NUMERIC:
+			return JdbcTypes.REAL;
+		case Types.TINYINT:
+		case Types.SMALLINT:
+		case Types.INTEGER:
+		case Types.BIGINT:
+			return JdbcTypes.INTEGER;
+		case Types.DATE:
+		case Types.TIME:
+		case Types.TIMESTAMP:
+			return JdbcTypes.INTEGER;
 		case Types.BLOB:
 		case Types.BINARY:
 		case Types.VARBINARY:
 		case Types.LONGVARBINARY:
-			return "BYTEA";
-		case Types.CLOB:
-		case Types.LONGVARCHAR:
-			return "TEXT";
-		case Types.DOUBLE:
-			return "DOUBLE PRECISION";
-		case Types.FLOAT:
-			return "REAL";
-		case Types.TINYINT:
-			return JdbcTypes.SMALLINT;
+			return JdbcTypes.BLOB;
 		default:
 			return super.evalFieldType(ef);
 		}
+	}
+
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE IF EXISTS " + tableName;
 	}
 }

@@ -37,11 +37,13 @@ public class OracleSqlExpert extends SqlExpert {
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
+		// add multiple pks
 		List<EntityField> pks = entity.getPrimaryKeys();
 		if (pks.size() > 1) {
 			sqls.add(alterPrimaryKeys(entity));
 		}
 
+		// add sequence
 		EntityField id = entity.getIdentity();
 		if (id != null && id.isAutoIncrement()) {
 			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ START WITH " + id.getStartWith();
@@ -51,6 +53,11 @@ public class OracleSqlExpert extends SqlExpert {
 		addIndexes(sqls, entity);
 		addComments(sqls, entity);
 		return sqls;
+	}
+
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE " + tableName;
 	}
 
 	@Override
@@ -73,18 +80,22 @@ public class OracleSqlExpert extends SqlExpert {
 		
 		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
+		case Types.BIT:
 		case Types.BOOLEAN:
 			return "CHAR(1)";
 		case Types.BINARY:
-		case Types.BLOB:
-		case Types.LONGVARBINARY:
 		case Types.VARBINARY:
-			return "BYTEA";
+			return evalFieldType("RAW", ef.getSize(), ef.getScale());
+		case Types.BLOB:
+			return JdbcTypes.BLOB;
+		case Types.LONGVARBINARY:
+			return "LONG RAW";
 		case Types.CLOB:
 		case Types.LONGVARCHAR:
-			return "CLOB";
-		case Types.DOUBLE:
+			return "NCLOB";
+		case Types.REAL:
 		case Types.FLOAT:
+		case Types.DOUBLE:
 			return evalFieldType("NUMBER", ef.getSize(), ef.getScale());
 		case Types.TINYINT:
 			return "NUMBER(3)";

@@ -36,9 +36,7 @@ public abstract class SqlExpert {
 		return sqls;
 	}
 
-	public String dropTable(String tableName) {
-		return "DROP TABLE " + tableName + " IF EXISTS";
-	}
+	public abstract String dropTable(String tableName);
 
 	public abstract List<String> create(Entity<?> entity);
 
@@ -100,54 +98,6 @@ public abstract class SqlExpert {
 		}
 
 		return evalFieldType(type, ef.getSize(), ef.getScale());
-
-//		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
-//		switch (jdbcType) {
-//		case Types.BIGINT:
-//			return ef.getJdbcType();
-//		case Types.BINARY:
-//		case Types.BIT:
-//			return ef.getJdbcType();
-//		case Types.BLOB:
-//			return ef.getJdbcType();
-//		case Types.BOOLEAN:
-//			return ef.getJdbcType();
-//		case Types.CHAR:
-//			return ef.getJdbcType() + "(" + ef.getSize() + ")";
-//		case Types.CLOB:
-//			return ef.getJdbcType();
-//		case Types.DATE:
-//			return ef.getJdbcType();
-//		case Types.DECIMAL:
-//			if (ef.getSize() > 0 && ef.getScale() > 0) {
-//				return "NUMERIC(" + ef.getSize() + "," + ef.getScale() + ")";
-//			}
-//		case Types.DOUBLE:
-//			return ef.getJdbcType();
-//		case Types.FLOAT:
-//			return ef.getJdbcType();
-//		case Types.INTEGER:
-//			return ef.getJdbcType();
-//		case Types.LONGVARBINARY:
-//			return JdbcTypes.BLOB;
-//		case Types.LONGVARCHAR:
-//			return JdbcTypes.CLOB;
-//		case Types.NUMERIC:
-//		case Types.SMALLINT:
-//			return ef.getJdbcType();
-//		case Types.TIME:
-//			return ef.getJdbcType();
-//		case Types.TIMESTAMP:
-//			return ef.getJdbcType();
-//		case Types.TINYINT:
-//			return ef.getJdbcType();
-//		case Types.VARBINARY:
-//			return JdbcTypes.BLOB;
-//		case Types.VARCHAR:
-//			return ef.getJdbcType() + "(" + ef.getSize() + ")";
-//		default:
-//			throw new DaoException("Unsupport jdbcType '" + ef.getJdbcType() + "' of field '" + ef.getName() + "' in '" + ef.getEntity().getClass() + "'");
-//		}
 	}
 
 	/**
@@ -177,7 +127,20 @@ public abstract class SqlExpert {
 			sb.append("\n ");
 		}
 	}
-
+	
+	protected void addPrimaryKeysConstraint(StringBuilder sb, Entity<?> entity) {
+		List<EntityField> pks = entity.getPrimaryKeys();
+		if (!pks.isEmpty()) {
+			sb.append('\n');
+			sb.append("CONSTRAINT ").append(entity.getTableName()).append("_PK PRIMARY KEY (");
+			for (EntityField pk : pks) {
+				sb.append(pk.getColumn()).append(',');
+			}
+			sb.setCharAt(sb.length() - 1, ')');
+			sb.append("\n ");
+		}
+	}
+	
 	protected String alterPrimaryKeys(Entity<?> entity) {
 		StringBuilder sb = new StringBuilder();
 		List<EntityField> pks = entity.getPrimaryKeys();
@@ -228,6 +191,10 @@ public abstract class SqlExpert {
 			sb.setCharAt(sb.length() - 1, ')');
 			sqls.add(sb.toString());
 		}
+	}
+
+	protected String escapeTable(String table) {
+		return table;
 	}
 
 	protected String escapeColumn(String column) {

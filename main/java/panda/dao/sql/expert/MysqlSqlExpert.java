@@ -16,6 +16,10 @@ public class MysqlSqlExpert extends SqlExpert {
 
 	private static final String META_CHARSET = "mysql-charset";
 
+	protected String escapeTable(String table) {
+		return '`' + table + '`'; 
+	}
+	
 	protected String escapeColumn(String column) {
 		return '`' + column + '`'; 
 	}
@@ -101,6 +105,11 @@ public class MysqlSqlExpert extends SqlExpert {
 		return sqls;
 	}
 
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
+
 	/**
 	 * @see http://dev.mysql.com/doc/refman/5.0/en/storage-requirements.html
 	 */
@@ -108,12 +117,16 @@ public class MysqlSqlExpert extends SqlExpert {
 	protected String evalFieldType(EntityField ef) {
 		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
+		case Types.TIMESTAMP:
+			return "DATETIME";
 		case Types.BLOB:
-		case Types.LONGVARBINARY:
 			return "LONGBLOB";
+		case Types.LONGVARBINARY:
+			return "MEDIUMBLOB";
 		case Types.CLOB:
-		case Types.LONGVARCHAR:
 			return "LONGTEXT";
+		case Types.LONGVARCHAR:
+			return "MEDIUMTEXT";
 		default:
 			return super.evalFieldType(ef);
 		}
