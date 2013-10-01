@@ -1,14 +1,11 @@
 package panda.dao.sql.executor;
 
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
 
 import panda.dao.sql.TestSupport;
-import panda.lang.TimeZones;
 
 /**
  */
@@ -20,33 +17,36 @@ public class SimpleSqlExecutorSqliteTest extends SimpleSqlExecutorTestCase {
 	}
 
 	@Override
+	protected Object getExpectedBit(boolean b) {
+		return b ? 1L : 0L;
+	}
+
+	@Override
+	protected Object getExpectedTime(String time) {
+		Date d = convertToGMTTime(time);
+		return d.getTime();
+	}
+
+	@Override
+	protected Object getExpectedDate(String date) {
+		Date d = convertToGMTDate(date);
+		return d.getTime();
+	}
+
+	@Override
 	protected Object getExpectedTimestamp(String time) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			sdf.setTimeZone(TimeZones.GMT);
-			Long t = sdf.parse(time).getTime();
-			return t;
-		}
-		catch (Exception e) {
-			log.error("exception", e);
-			throw new RuntimeException(e);
-		}
+		Date d = convertToGMTDate(time);
+		return d.getTime();
 	}
 	
 	@Override
-	protected Calendar convertToCalendar(String date) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			sdf.setTimeZone(TimeZones.GMT);
-			Date d = sdf.parse(date);
-			Calendar c = Calendar.getInstance();
-			c.setTime(d);
-			return c;
-		}
-		catch (Exception e) {
-			log.error("exception", e);
-			throw new RuntimeException(e);
-		}
+	protected Date convertToTime(String time) {
+		return convertToGMTTime(time);
+	}
+	
+	@Override
+	protected Date convertToDate(String date) {
+		return convertToGMTDate(date);
 	}
 
 	@Test

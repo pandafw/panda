@@ -67,9 +67,18 @@ public class TypeAdapters {
 		// boolean
 		//
 		register(Boolean.TYPE, new BooleanTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, JdbcTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, JdbcTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, JdbcTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, JdbcTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.TYPE));
+
 		adapter = new BooleanTypeAdapter<Boolean>(this, Boolean.class);
 		register(Boolean.class, adapter);
 		register(JdbcTypes.BOOLEAN, adapter);
+		register(Boolean.class, JdbcTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, JdbcTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, JdbcTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, JdbcTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.class));
 
 		register(Boolean.TYPE, JdbcTypes.CHAR, new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.TYPE));
 		adapter = new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.class);

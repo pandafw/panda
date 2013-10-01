@@ -9,39 +9,63 @@ import java.util.Map;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class JdbcTypes {
-	public static final String ARRAY         = "ARRAY";
-	public static final String BIGINT        = "BIGINT";
-	public static final String BINARY        = "BINARY";
+	// ---------------------------------------------------
+	// boolean
 	public static final String BIT           = "BIT";
-	public static final String BLOB          = "BLOB";
 	public static final String BOOLEAN       = "BOOLEAN";
+
+	// ---------------------------------------------------
+	// string
 	public static final String CHAR          = "CHAR";
-	public static final String CLOB          = "CLOB";
-	public static final String DATALINK      = "DATALINK";
-	public static final String DATE          = "DATE";
-	public static final String DECIMAL       = "DECIMAL";
-	public static final String DISTINCT      = "DISTINCT";
-	public static final String DOUBLE        = "DOUBLE";
-	public static final String FLOAT         = "FLOAT";
-	public static final String INTEGER       = "INTEGER";
-	public static final String JAVAOBJECT    = "JAVAOBJECT";
-	public static final String LONGVARBINARY = "LONGVARBINARY";
-	public static final String LONGVARCHAR   = "LONGVARCHAR";
-	public static final String NULL          = "NULL";
-	public static final String NUMERIC       = "NUMERIC";
-	public static final String OTHER         = "OTHER";
-	public static final String REAL          = "REAL";
-	public static final String REF           = "REF";
-	public static final String SMALLINT      = "SMALLINT";
-	public static final String STRUCT        = "STRUCT";
-	public static final String TIME          = "TIME";
-	public static final String TIMESTAMP     = "TIMESTAMP";
-	public static final String TINYINT       = "TINYINT";
-	public static final String VARBINARY     = "VARBINARY";
 	public static final String VARCHAR       = "VARCHAR";
 
-	private static final Map<String, Integer> NAME_MAP = new HashMap<String, Integer>();
+	// ---------------------------------------------------
+	// float
+	public static final String FLOAT         = "FLOAT";
+	public static final String DOUBLE        = "DOUBLE";
+	public static final String DECIMAL       = "DECIMAL";
+	public static final String NUMERIC       = "NUMERIC";
+	public static final String REAL          = "REAL";
 
+	// ---------------------------------------------------
+	// integer
+	public static final String TINYINT       = "TINYINT";
+	public static final String SMALLINT      = "SMALLINT";
+	public static final String INTEGER       = "INTEGER";
+	public static final String BIGINT        = "BIGINT";
+
+	// ---------------------------------------------------
+	// date time
+	public static final String DATE          = "DATE";
+	public static final String TIME          = "TIME";
+	public static final String TIMESTAMP     = "TIMESTAMP";
+
+	// ---------------------------------------------------
+	// clob
+	public static final String CLOB          = "CLOB";
+	public static final String LONGVARCHAR   = "LONGVARCHAR";
+
+	// ---------------------------------------------------
+	// blob
+	public static final String BLOB          = "BLOB";
+	public static final String BINARY        = "BINARY";
+	public static final String VARBINARY     = "VARBINARY";
+	public static final String LONGVARBINARY = "LONGVARBINARY";
+
+	// ---------------------------------------------------
+	// other
+	public static final String ARRAY         = "ARRAY";
+	public static final String DATALINK      = "DATALINK";
+	public static final String DISTINCT      = "DISTINCT";
+	public static final String JAVAOBJECT    = "JAVAOBJECT";
+	public static final String NULL          = "NULL";
+	public static final String OTHER         = "OTHER";
+	public static final String REF           = "REF";
+	public static final String STRUCT        = "STRUCT";
+
+	// ---------------------------------------------------
+	// mapping
+	private static final Map<String, Integer> NAME_MAP = new HashMap<String, Integer>();
 	private static final Map<Integer, String> TYPE_MAP = new HashMap<Integer, String>();
 
 	static {

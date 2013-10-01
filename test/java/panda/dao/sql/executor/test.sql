@@ -1,7 +1,7 @@
 SELECT * FROM TEST 
 WHERE 
 	@validId[ID=:id]
-	@idList[AND ID IN (:idList)]
-	@name[AND NAME=:name]
+	@intList[AND ID IN (:intList)]
+	@fstr[AND FSTR=:fstr]
 ORDER BY 
 	@orderCol[::orderCol] @!orderCol[ID] @orderDir[::orderDir]

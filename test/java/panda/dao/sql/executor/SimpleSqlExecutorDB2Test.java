@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.dao.sql.TestA;
+import panda.dao.sql.TestBean;
 import panda.dao.sql.TestSupport;
 
 /**
@@ -18,6 +18,39 @@ public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 	@Override
 	protected Connection getConnection() throws Exception {
 		return TestSupport.getDB2Connection();
+	}
+
+	@Override
+	protected Object getExpectedBit(boolean b) {
+		return b ? "1" : "0";
+	}
+
+	@Override
+	protected Object getExpectedBool(boolean b) {
+		return b ? "1" : "0";
+	}
+
+	@Override
+	protected Object getExpectedFloat(String num) {
+		return new BigDecimal(num);
+	}
+
+	@Override
+	protected void prepareActualBean(TestBean actual) {
+		// fix for real precision error 
+		Double n = trimDouble(actual.getFreal());
+		actual.setFreal(n);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void prepareActualMap(Map actual) {
+		// fix for postgre real precision bug 
+		Double d = (Double)actual.get("freal");
+		if (d != null) {
+			Double n = trimDouble(d);
+			actual.put("freal", n);
+		}
 	}
 
 	@Test
@@ -37,23 +70,18 @@ public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("id", 1001);
 
-		TestA actual = null;
+		TestBean actual = null;
 		try {
-			actual = executor.fetch(sql, param, TestA.class);
+			actual = executor.fetch(sql, param, TestBean.class);
+			prepareActualBean(actual);
 		}
 		catch (Exception e) {
 			log.error("exception", e);
 			Assert.fail(e.getMessage());
 		}
 
-		TestA expected = new TestA();
-		expected.setId(1001);
-		expected.setName("NAME 1001");
-		expected.setKind('1');
-		expected.setPrice(new BigDecimal("1001.01"));
-		expected.setUpdateTime(convertToCalendar("2009-01-01"));
-
-		Assert.assertEquals(expected, actual);
+		TestBean expect = createBean(1);
+		Assert.assertEquals(expect, actual);
 	}
 
 	/**

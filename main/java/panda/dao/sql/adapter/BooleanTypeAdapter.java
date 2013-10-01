@@ -26,7 +26,7 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	public T getResult(ResultSet rs, String columnName) throws SQLException {
 		boolean b = rs.getBoolean(columnName);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(b);
@@ -44,7 +44,7 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
 		boolean b = rs.getBoolean(columnIndex);
 		if (rs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(b);
@@ -62,7 +62,7 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		boolean b = cs.getBoolean(columnIndex);
 		if (cs.wasNull()) {
-			return null;
+			return castToJava(null);
 		}
 		else {
 			return castToJava(b);

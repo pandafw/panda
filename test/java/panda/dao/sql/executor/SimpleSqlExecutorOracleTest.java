@@ -3,11 +3,13 @@ package panda.dao.sql.executor;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import oracle.sql.DATE;
 import oracle.sql.TIMESTAMP;
 
 import org.junit.Assert;
@@ -27,7 +29,7 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void prepareActualResultMap(Map actual) {
+	protected void prepareActualMap(Map actual) {
 		for (Iterator<Entry> it = actual.entrySet().iterator(); it.hasNext();) {
 			Entry e = it.next();
 			Object val = e.getValue();
@@ -40,7 +42,36 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 					log.error(ex.getMessage());
 				}
 			}
+			else if (val instanceof DATE) {
+				val = ((DATE) val).timestampValue();
+				actual.put(e.getKey(), val);
+			}
 		}
+	}
+
+	@Override
+	protected Object getExpectedBit(boolean b) {
+		return b ? "1" : "0";
+	}
+
+	@Override
+	protected Object getExpectedBool(boolean b) {
+		return b ? "1" : "0";
+	}
+
+	@Override
+	protected Object getExpectedReal(String num) {
+		return new BigDecimal(num);
+	}
+
+	@Override
+	protected Object getExpectedFloat(String num) {
+		return new BigDecimal(num);
+	}
+
+	@Override
+	protected Object getExpectedDouble(String num) {
+		return new BigDecimal(num);
 	}
 
 	@Override
@@ -48,6 +79,18 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 		return new BigDecimal(num);
 	}
 
+	@Override
+	protected Object getExpectedDate(String date) {
+		Date d = convertToDate(date);
+		return new java.sql.Timestamp(d.getTime());
+	}
+	
+	@Override
+	protected Object getExpectedTime(String time) {
+		Date d = convertToTime(time);
+		return new java.sql.Timestamp(d.getTime());
+	}
+	
 	private static int id = 1000;
 
 	private void insertAndSelectBLOB(String data) {
