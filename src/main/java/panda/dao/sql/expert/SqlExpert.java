@@ -36,7 +36,9 @@ public abstract class SqlExpert {
 		return sqls;
 	}
 
-	public abstract String dropTable(String tableName);
+	public String dropTable(String tableName) {
+		return "DROP TABLE " + escapeTable(tableName);
+	}
 
 	public abstract List<String> create(Entity<?> entity);
 

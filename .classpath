@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="main/java"/>
-	<classpathentry kind="src" output="test/classes" path="test/java"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/compile/activation.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-cli.jar"/>
@@ -26,5 +26,5 @@
 	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/ojdbc6.jar"/>
-	<classpathentry kind="output" path="main/classes"/>
+	<classpathentry kind="output" path="out/classes"/>
 </classpath>

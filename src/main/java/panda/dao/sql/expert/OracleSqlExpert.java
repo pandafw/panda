@@ -56,11 +56,6 @@ public class OracleSqlExpert extends SqlExpert {
 	}
 
 	@Override
-	public String dropTable(String tableName) {
-		return "DROP TABLE " + tableName;
-	}
-
-	@Override
 	public List<String> drop(Entity<?> entity) {
 		List<String> sqls = super.drop(entity);
 		
