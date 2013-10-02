@@ -3,6 +3,7 @@ package panda.dao.sql.expert;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 
@@ -50,5 +51,19 @@ public class HsqldbSqlExpert extends SqlExpert {
 	@Override
 	public String dropTable(String tableName) {
 		return "DROP TABLE " + escapeTable(tableName) + " IF EXISTS";
+	}
+
+	/**
+	 * @param sql sql
+	 * @param query query
+	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
+	 */
+	@Override
+	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+		sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
+		
+		if (query.getStart() > 0) {
+			sql.append(" OFFSET ").append(query.getStart());
+		}
 	}
 }

@@ -79,11 +79,16 @@ public class Db2SqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+		sql.insert(0, "SELECT * FROM (SELECT ROW_NUMBER() OVER() AS RN_, T.* FROM (");
+		sql.append(") T WHERE ");
+		if (query.getStart() > 0) {
+			sql.append("RN_ > ").append(query.getStart());
+		}
 		if (query.getLimit() > 0) {
-			int start = query.getStart() > 0 ? query.getStart() : 0;
-
-			sql.insert(0, "SELECT * FROM (SELECT ROW_NUMBER() OVER() AS RN_, T.* FROM (");
-			sql.append(") T WHERE RN_ BETWEEN ").append(start).append(" AND ").append(start + query.getLimit());
+			if (query.getStart() > 0) {
+				sql.append(" AND ");
+			}
+			sql.append("RN_ <= " + query.getStart() + query.getLimit());
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
@@ -59,11 +60,6 @@ public class PostgreSqlExpert extends SqlExpert {
 		return sqls;
 	}
 
-	@Override
-	public String dropTable(String tableName) {
-		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
-	}
-
 	/**
 	 * @see http://www.postgresql.org/docs/8.4/static/datatype.html
 	 */
@@ -91,6 +87,27 @@ public class PostgreSqlExpert extends SqlExpert {
 			return JdbcTypes.SMALLINT;
 		default:
 			return super.evalFieldType(ef);
+		}
+	}
+
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
+
+	/**
+	 * @param sql sql
+	 * @param query query
+	 * @see http://www.postgresql.org/docs/8.0/static/queries-limit.html
+	 */
+	@Override
+	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+		if (query.getLimit() > 0) {
+			sql.append(" LIMIT ").append(query.getLimit());
+		}
+		
+		if (query.getStart() > 0) {
+			sql.append(" OFFSET ").append(query.getStart());
 		}
 	}
 }

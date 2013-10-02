@@ -22,6 +22,10 @@ public abstract class SqlExpert {
 		return true;
 	}
 
+	public boolean isSupportPaginate() {
+		return true;
+	}
+
 	public String meta(String tableName) {
 		return "SELECT * FROM " + tableName + " where 1!=1";
 	}
@@ -102,20 +106,7 @@ public abstract class SqlExpert {
 		return evalFieldType(type, ef.getSize(), ef.getScale());
 	}
 
-	/**
-	 * @param sql sql
-	 * @param query query
-	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
-	 */
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		if (query.getLimit() > 0) {
-			sql.append(" LIMIT ").append(query.getLimit());
-			
-			if (query.getStart() > 0) {
-				sql.append(" OFFSET ").append(query.getStart());
-			}
-		}
-	}
+	protected abstract void setLimitAndOffset(StringBuilder sql, Query query);
 
 	protected void addPrimaryKeys(StringBuilder sb, Entity<?> entity) {
 		List<EntityField> pks = entity.getPrimaryKeys();

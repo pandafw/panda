@@ -139,12 +139,10 @@ public class MysqlSqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		if (query.getLimit() > 0) {
-			sql.append(" LIMIT ");
-			if (query.getStart() > 0) {
-				sql.append(query.getStart()).append(',');
-			}
-			sql.append(query.getLimit());
+		sql.append(" LIMIT ");
+		if (query.getStart() > 0) {
+			sql.append(query.getStart()).append(',');
 		}
+		sql.append(query.getLimit());
 	}
 }

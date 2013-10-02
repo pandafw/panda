@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
@@ -89,5 +90,19 @@ public class SQLiteSqlExpert extends SqlExpert {
 	@Override
 	public String dropTable(String tableName) {
 		return "DROP TABLE IF EXISTS " + tableName;
+	}
+
+	/**
+	 * @param sql sql
+	 * @param query query
+	 * @see http://sqlite.org/lang_select.html
+	 */
+	@Override
+	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+		sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
+		
+		if (query.getStart() > 0) {
+			sql.append(" OFFSET ").append(query.getStart());
+		}
 	}
 }

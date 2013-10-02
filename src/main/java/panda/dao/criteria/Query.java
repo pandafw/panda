@@ -162,6 +162,14 @@ public class Query {
 	}
 
 	/**
+	 * is this query needs paginate
+	 * @return true if start or limit > 0
+	 */
+	public boolean needsPaginate() {
+		return start > 0 || limit > 0;
+	}
+	
+	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

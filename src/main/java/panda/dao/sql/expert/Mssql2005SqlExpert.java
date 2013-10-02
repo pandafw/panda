@@ -10,7 +10,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
 import panda.lang.Strings;
 
-public class MssqlSqlExpert extends SqlExpert {
+public class Mssql2005SqlExpert extends SqlExpert {
 
 	@Override
 	public List<String> create(Entity<?> entity) {
@@ -79,17 +79,23 @@ public class MssqlSqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		if (query.getLimit() > 0) {
-			int start = query.getStart() > 0 ? query.getStart() : 0;
+		// very rough, but works
+		if (query.getStart() > 0) {
+			StringBuilder beg = new StringBuilder(); 
+			beg.append("SELECT * FROM (");
+			beg.append("SELECT ROW_NUMBER() OVER(ORDER BY __tc__) __rn__, * FROM (");
+			beg.append("SELECT");
+			if (query.getLimit() > 0) {
+				beg.append(" TOP ").append(query.getStart() + query.getLimit());
+			}
+			beg.append(" 0 __tc__, * FROM (");
 
-			// very rough, but works
-			String beg = 
-					"SELECT * FROM ("
-					+ "SELECT ROW_NUMBER() OVER(ORDER BY __tc__) __rn__, * FROM ("
-					+ "SELECT TOP " + (start + query.getLimit()) + " 0 __tc__, * FROM (";
-			String end = ") t1 ) t2 ) t3 WHERE __rn__ > " + start;
 			sql.insert(0, beg);
-			sql.append(end);
+			sql.append(") t1 ) t2 ) t3 WHERE __rn__ > ").append(query.getStart());
+		}
+		else {
+			sql.insert(0, "SELECT TOP " + query.getLimit() + " * FROM (");
+			sql.append(") t1");
 		}
 	}
 }
