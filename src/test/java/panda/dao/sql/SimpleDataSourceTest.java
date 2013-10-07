@@ -1,14 +1,11 @@
 package panda.dao.sql;
 
-import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Properties;
 
-import panda.dao.sql.SimpleDataSource;
-import panda.dao.sql.SimplePooledConnection;
+import junit.framework.TestCase;
 import panda.log.Log;
 import panda.log.Logs;
-import junit.framework.TestCase;
 
 
 /**
@@ -24,9 +21,6 @@ public class SimpleDataSourceTest extends TestCase {
 			Properties p = new Properties();
 			p.load(SimpleDataSourceTest.class.getResourceAsStream("SimpleDataSourceTest.properties"));
 			simpleDataSource = new SimpleDataSource(p);
-			Connection c = simpleDataSource.getConnection();
-			TestSupport.initHsqldbTestData(c);
-			c.close();
 		}
 		catch (Exception e) {
 			log.error("exception", e);
@@ -48,7 +42,7 @@ public class SimpleDataSourceTest extends TestCase {
 				SimplePooledConnection c = (SimplePooledConnection)simpleDataSource.getConnection();
 				
 				Statement s = c.createStatement();
-				s.execute("select * from TEST");
+				s.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES");
 				s.close();
 				
 				Thread.sleep(timeout);

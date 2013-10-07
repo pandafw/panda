@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.dao.sql.SqlResultSet;
-import panda.dao.sql.TestBean;
 
 /**
  * SimpleSqlExecutorTestCase

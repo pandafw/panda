@@ -1,7 +1,3 @@
---db2 create database ptest using codeset UTF-8 territory en
---"db2 user is system level user"
---"e.g.: useradd ptest"
-
 DROP TABLE TEST/
 
 CREATE TABLE TEST (

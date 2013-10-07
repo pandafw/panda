@@ -5,11 +5,17 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import panda.dao.sql.TestBean;
-import panda.dao.sql.TestSupport;
 import panda.lang.Strings;
 
 /**
+ * test database create:
+ * <pre> 
+DROP DATABASE IF EXISTS ptest;
+DROP USER IF EXISTS ptest;
+CREATE USER ptest PASSWORD 'ptest';
+CREATE DATABASE ptest WITH OWNER = ptest ENCODING = 'UTF-8';
+GRANT ALL ON DATABASE ptest TO ptest;
+ * </pre>
  */
 public class SimpleSqlExecutorPostgreTest extends SimpleSqlExecutorTestCase {
 

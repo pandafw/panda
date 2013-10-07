@@ -8,7 +8,7 @@ public class Mssql2012SqlExpert extends Mssql2005SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+	protected void limit(StringBuilder sql, Query query) {
 		if (query.getStart() > 0) {
 			sql.append(" OFFSET ").append(query.getStart()).append(" ROWS");
 		}

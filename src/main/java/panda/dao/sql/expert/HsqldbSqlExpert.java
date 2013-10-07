@@ -59,11 +59,13 @@ public class HsqldbSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
-		
-		if (query.getStart() > 0) {
-			sql.append(" OFFSET ").append(query.getStart());
+	protected void limit(StringBuilder sql, Query query) {
+		if (query.getStart() > 0 || query.getLimit() > 0) {
+			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
+			
+			if (query.getStart() > 0) {
+				sql.append(" OFFSET ").append(query.getStart());
+			}
 		}
 	}
 }

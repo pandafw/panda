@@ -20,7 +20,6 @@ import org.junit.Assume;
 import org.junit.Before;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.TestBean;
 import panda.lang.Exceptions;
 import panda.lang.TimeZones;
 import panda.log.Log;

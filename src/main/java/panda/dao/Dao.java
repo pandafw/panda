@@ -557,7 +557,7 @@ public abstract class Dao {
 			for (EntityField ef : entity.getFields()) {
 				if (ef.isPrimaryKey()) {
 					Object k = bh.getPropertyValue(keys[0], ef.getName());
-					query.getConditions().equalTo(ef.getName(), k);
+					query.equalTo(ef.getName(), k);
 				}
 			}
 		}
@@ -569,7 +569,7 @@ public abstract class Dao {
 			int i = 0;
 			for (EntityField ef : entity.getFields()) {
 				if (ef.isPrimaryKey()) {
-					query.getConditions().equalTo(ef.getName(), keys[i++]);
+					query.equalTo(ef.getName(), keys[i++]);
 				}
 			}
 		}
@@ -593,10 +593,18 @@ public abstract class Dao {
 		}
 	}
 
-	protected void excludeNonPrimaryKey(Entity<?> entity, Query query) {
+	protected void excludeNonPrimaryKeys(Entity<?> entity, Query query) {
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
 				query.addExclude(ef.getName());
+			}
+		}
+	}
+
+	protected void includePrimaryKeys(Entity<?> entity, Query query) {
+		for (EntityField ef : entity.getFields()) {
+			if (!ef.isPrimaryKey()) {
+				query.addInclude(ef.getName());
 			}
 		}
 	}

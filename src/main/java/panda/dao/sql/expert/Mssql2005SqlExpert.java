@@ -78,7 +78,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+	protected void limit(StringBuilder sql, Query query) {
 		// very rough, but works
 		if (query.getStart() > 0) {
 			StringBuilder beg = new StringBuilder(); 
@@ -93,7 +93,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 			sql.insert(0, beg);
 			sql.append(") t1 ) t2 ) t3 WHERE __rn__ > ").append(query.getStart());
 		}
-		else {
+		else if (query.getLimit() > 0) {
 			sql.insert(0, "SELECT TOP " + query.getLimit() + " * FROM (");
 			sql.append(") t1");
 		}

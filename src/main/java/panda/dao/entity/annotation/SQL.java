@@ -14,7 +14,7 @@ import panda.dao.DB;
  * 支持两个属性：
  * <p>
  * <b>db</b><br>
- * 表示本条 SQL 可以应用到的数据库。DatabaseType.UNKNOWN 为默认值，表示 适用于任何数据库。
+ * 表示本条 SQL 可以应用到的数据库。DB.GENERAL 为默认值，表示 适用于任何数据库。
  * 
  * <p>
  * <b>value</b><br>

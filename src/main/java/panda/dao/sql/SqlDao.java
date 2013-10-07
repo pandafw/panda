@@ -15,7 +15,6 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Strings;
-import panda.lang.mutable.MutableInt;
 
 /**
  * !! thread-unsafe !!
@@ -225,7 +224,7 @@ public class SqlDao extends Dao {
 		Query query = new Query();
 		query.setLimit(1);
 		queryPrimaryKey(entity, query, keys);
-		excludeNonPrimaryKey(entity, query);
+		includePrimaryKeys(entity, query);
 		
 		Object d = fetch(entity, query);
 		return d != null;
@@ -268,7 +267,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			return executor.fetch(sql, query, entity.getType());
+			return executor.fetch(sql, query.getParams(), entity.getType());
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to fetch entity " + entity.getViewName() + ": " + sql, e);
@@ -298,7 +297,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			return executor.fetch(sql, HashMap.class);
+			return executor.fetch(sql, query.getParams(), HashMap.class);
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to fetch table " + table + ": " + sql, e);
@@ -364,7 +363,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, query);
+			int cnt = executor.update(sql, query == null ? null : query.getParams());
 			autoCommit();
 			return cnt;
 		}
@@ -392,7 +391,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, query);
+			int cnt = executor.update(sql, query == null ? null : query.getParams());
 			autoCommit();
 			return cnt;
 		}
@@ -425,7 +424,7 @@ public class SqlDao extends Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		String sql = getSqlExpert().insert(entity, obj);
+		String sql = getSqlExpert().insert(entity);
 		
 		autoStart();
 		try {
@@ -436,6 +435,7 @@ public class SqlDao extends Dao {
 				return i > 0 ? obj : null;
 			}
 			
+			// TODO: @Prep @Post
 			T d = executor.insert(sql, obj, id.getName());
 			autoCommit();
 			return d;
@@ -511,7 +511,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, obj);
+			int cnt = executor.update(sql, query.getParams());
 			autoCommit();
 			return cnt;
 		}
@@ -563,7 +563,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			return executor.selectList(sql, query.getParams(), entity.getType());
+			return executor.selectList(sql, query == null ? null : query.getParams(), entity.getType());
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql, e);
@@ -589,7 +589,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			return executor.selectList(sql, query.getParams(), Map.class);
+			return executor.selectList(sql, query == null ? null : query.getParams(), Map.class);
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to select table " + table + ": " + sql, e);
@@ -615,7 +615,8 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			SqlResultSet<T> srs = executor.selectResultSet(sql, query.getParams(), entity.getType());
+			SqlResultSet<T> srs = executor.selectResultSet(sql, 
+				query == null ? null : query.getParams(), entity.getType());
 			int count = 0;
 			boolean next = true;
 			while (srs.next() && next) {
@@ -654,7 +655,8 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			SqlResultSet<Map> srs = executor.selectResultSet(sql, query.getParams(), Map.class);
+			SqlResultSet<Map> srs = executor.selectResultSet(sql, 
+				query == null ? null : query.getParams(), Map.class);
 			int count = 0;
 			boolean next = true;
 			while (srs.next() && next) {
@@ -691,7 +693,7 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			int i = executor.fetch(sql, query.getParams(), int.class);
+			int i = executor.fetch(sql, query == null ? null : query.getParams(), int.class);
 			return i;
 		}
 		catch (SQLException e) {
@@ -717,8 +719,8 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			MutableInt mi = executor.fetch(sql, query.getParams(), new MutableInt());
-			return mi.intValue();
+			int i = executor.fetch(sql, query == null ? null : query.getParams(), int.class);
+			return i;
 		}
 		catch (SQLException e) {
 			throw new DaoException("Failed to count table " + table + ": " + sql, e);

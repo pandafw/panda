@@ -101,7 +101,7 @@ public class PostgreSqlExpert extends SqlExpert {
 	 * @see http://www.postgresql.org/docs/8.0/static/queries-limit.html
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
+	protected void limit(StringBuilder sql, Query query) {
 		if (query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit());
 		}

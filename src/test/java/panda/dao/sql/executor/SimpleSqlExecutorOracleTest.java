@@ -15,8 +15,6 @@ import oracle.sql.TIMESTAMP;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.dao.sql.TestSupport;
-
 /**
  * PreparedSqlExecutorOracleTest
  */

@@ -120,13 +120,18 @@ public class OracleSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		if (query.getLimit() > 0) {
-			int start = query.getStart() > 0 ? query.getStart() : 0;
-
+	protected void limit(StringBuilder sql, Query query) {
+		if (query.getStart() > 0) {
 			sql.insert(0, "SELECT * FROM (SELECT T.*, ROWNUM RN_ FROM (");
-			sql.append(") T WHERE ROWNUM <= ").append(start + query.getLimit());
-			sql.append(") WHERE RN_ > ").append(start);
+			sql.append(") T");
+			if (query.getLimit() > 0) {
+				sql.append(" WHERE ROWNUM <= ").append(query.getStart() + query.getLimit());
+			}
+			sql.append(") T2 WHERE RN_ > ").append(query.getStart());
+		}
+		else if (query.getLimit() > 0) {
+			sql.insert(0, "SELECT T.*, ROWNUM RN_ FROM (");
+			sql.append(") T WHERE ROWNUM <= ").append(query.getLimit());
 		}
 	}
 }

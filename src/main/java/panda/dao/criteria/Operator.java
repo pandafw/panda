@@ -18,7 +18,7 @@ public enum Operator {
 	/**
 	 * OPEN_PAREN = "(";
 	 */
-	OPEN_PAREN {
+	BEG_PAREN {
 		public String toString() {
 			return "(";
 		}
@@ -26,7 +26,7 @@ public enum Operator {
 	/**
 	 * CLOSE_PAREN = ")";
 	 */
-	CLOSE_PAREN {
+	END_PAREN {
 		public String toString() {
 			return ")";
 		}

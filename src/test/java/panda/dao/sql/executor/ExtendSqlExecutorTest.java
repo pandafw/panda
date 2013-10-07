@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.TestBean;
-import panda.dao.sql.TestSupport;
 
 /**
  * ExtendSqlExecutorTest

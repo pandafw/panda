@@ -98,11 +98,13 @@ public class SQLiteSqlExpert extends SqlExpert {
 	 * @see http://sqlite.org/lang_select.html
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
-		
-		if (query.getStart() > 0) {
-			sql.append(" OFFSET ").append(query.getStart());
+	protected void limit(StringBuilder sql, Query query) {
+		if (query.getStart() > 0 || query.getLimit() > 0) {
+			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
+			
+			if (query.getStart() > 0) {
+				sql.append(" OFFSET ").append(query.getStart());
+			}
 		}
 	}
 }

@@ -21,8 +21,8 @@ public class Expression {
 	 * @param operator the operator to set
 	 */
 	public void setOperator(Operator operator) {
-		if (operator != Operator.OPEN_PAREN && operator != Operator.CLOSE_PAREN) {
-			throw new IllegalArgumentException("operator '" + operator + "' must be " + Operator.OPEN_PAREN + " | " + Operator.CLOSE_PAREN);
+		if (operator != Operator.BEG_PAREN && operator != Operator.END_PAREN) {
+			throw new IllegalArgumentException("operator '" + operator + "' must be " + Operator.BEG_PAREN + " | " + Operator.END_PAREN);
 		}
 		this.operator = operator;
 	}
@@ -32,9 +32,7 @@ public class Expression {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
-				.append("operator", operator)
-				.toString();
+		return operator.toString();
 	}
 	
 	public static class Paren extends Expression {
@@ -50,8 +48,8 @@ public class Expression {
 		 * @param operator the operator to set
 		 */
 		public void setOperator(Operator operator) {
-			if (operator != Operator.OPEN_PAREN && operator != Operator.CLOSE_PAREN) {
-				throw new IllegalArgumentException("operator '" + operator + "' must be " + Operator.OPEN_PAREN + " | " + Operator.CLOSE_PAREN);
+			if (operator != Operator.BEG_PAREN && operator != Operator.END_PAREN) {
+				throw new IllegalArgumentException("operator '" + operator + "' must be " + Operator.BEG_PAREN + " | " + Operator.END_PAREN);
 			}
 			this.operator = operator;
 		}
@@ -111,10 +109,7 @@ public class Expression {
 		 */
 		@Override
 		public String toString() {
-			return Objects.toStringBuilder(this)
-					.append("field", field)
-					.append("operator", operator)
-					.toString();
+			return field + ' ' + operator;
 		}
 	}
 
@@ -169,11 +164,7 @@ public class Expression {
 		 */
 		@Override
 		public String toString() {
-			return Objects.toStringBuilder(this)
-					.append("field", field)
-					.append("operator", operator)
-					.append("value", value)
-					.toString();
+			return field + ' ' + operator + ' ' + Objects.toString(value);
 		}
 	}
 
@@ -228,11 +219,7 @@ public class Expression {
 		 */
 		@Override
 		public String toString() {
-			return Objects.toStringBuilder(this)
-					.append("field", field)
-					.append("operator", operator)
-					.append("value", value)
-					.toString();
+			return field + ' ' + operator + ' ' + value;
 		}
 	}
 

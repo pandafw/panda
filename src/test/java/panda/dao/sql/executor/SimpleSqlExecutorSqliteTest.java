@@ -5,8 +5,6 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import panda.dao.sql.TestSupport;
-
 /**
  */
 public class SimpleSqlExecutorSqliteTest extends SimpleSqlExecutorTestCase {

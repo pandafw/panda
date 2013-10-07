@@ -4,8 +4,6 @@ import java.sql.Connection;
 
 import org.junit.Test;
 
-import panda.dao.sql.TestSupport;
-
 /**
  */
 public class SimpleSqlExecutorMysqlTest extends SimpleSqlExecutorTestCase {

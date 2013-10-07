@@ -8,11 +8,14 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.dao.sql.TestBean;
-import panda.dao.sql.TestSupport;
-
 /**
  * SimpleSqlExecutorDB2Test
+ * 
+ * create test database:
+ * > db2 create database ptest using codeset UTF-8 territory en
+ * 
+ * db2 user is system level user"
+ * "e.g.: useradd ptest"
  */
 public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 	@Override

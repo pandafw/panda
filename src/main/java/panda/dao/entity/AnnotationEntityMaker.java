@@ -204,6 +204,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		else if (Classes.isAssignable(clazz, BigDecimal.class)) {
 			ef.setJdbcType(JdbcTypes.NUMERIC);
 			ef.setSize(32);
+			ef.setScale(2);
 		}
 		else if (Classes.isAssignable(clazz, Reader.class)) {
 			ef.setJdbcType(JdbcTypes.CLOB);

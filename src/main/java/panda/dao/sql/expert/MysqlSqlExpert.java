@@ -79,15 +79,12 @@ public class MysqlSqlExpert extends SqlExpert {
 			sb.append(" AUTO_INCREMENT=").append(id.getStartWith());
 		}
 
-		String engine = entity.getMeta(META_ENGINE);
+		String engine = getEntityMeta(entity, META_ENGINE);
 		if (Strings.isNotEmpty(engine)) {
 			sb.append(" ENGINE=" + engine);
 		}
 		
-		String charset = entity.getMeta(META_CHARSET);
-		if (Strings.isEmpty(charset)) {
-			charset = "UTF8";
-		}
+		String charset = getEntityMeta(entity, META_CHARSET, "UTF8");
 		sb.append(" CHARSET=" + charset);
 
 		if (Strings.isNotEmpty(entity.getComment())) {
@@ -138,11 +135,13 @@ public class MysqlSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void setLimitAndOffset(StringBuilder sql, Query query) {
-		sql.append(" LIMIT ");
-		if (query.getStart() > 0) {
-			sql.append(query.getStart()).append(',');
+	protected void limit(StringBuilder sql, Query query) {
+		if (query.getStart() > 0 || query.getLimit() > 0) {
+			sql.append(" LIMIT ");
+			if (query.getStart() > 0) {
+				sql.append(query.getStart()).append(',');
+			}
+			sql.append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 		}
-		sql.append(query.getLimit());
 	}
 }

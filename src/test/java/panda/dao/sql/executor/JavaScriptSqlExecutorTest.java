@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.TestBean;
-import panda.dao.sql.TestSupport;
 import panda.io.Streams;
 
 /**

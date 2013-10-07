@@ -6,9 +6,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import panda.dao.sql.TestBean;
-import panda.dao.sql.TestSupport;
-
 /**
  */
 public class SimpleSqlExecutorMssqlTest extends SimpleSqlExecutorTestCase {
