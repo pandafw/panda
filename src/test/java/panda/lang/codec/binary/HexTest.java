@@ -19,7 +19,7 @@ import panda.lang.codec.DecoderException;
 import panda.lang.codec.EncoderException;
 
 /**
- * Tests {@link org.apache.commons.codec.binary.Hex}.
+ * Tests {@link panda.lang.codec.binary.Hex}.
  *
  */
 public class HexTest {

@@ -14,7 +14,7 @@ import panda.lang.builder.ToStringStyle;
 import panda.lang.builder.ToStringStyleTest.Person;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.builder.SimpleToStringStyleTest}.
+ * Unit tests {@link panda.lang.builder.SimpleToStringStyleTest}.
  *
  * @version $Id: SimpleToStringStyleTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */

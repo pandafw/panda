@@ -2267,15 +2267,4 @@ public class StringsTest {
 		assertTrue(Strings.startsWithChars("adga", "abc"));
 	}
 	
-
-	/**
-	 * test method: dup
-	 * @throws Exception if an error occurs
-	 */
-	@Test
-	public void testDup() throws Exception {
-		assertEquals(Strings.dup("adga", 0), "");
-		assertEquals(Strings.dup("adga", 1), "adga");
-		assertEquals(Strings.dup("adga", 0), "");
-	}
 }

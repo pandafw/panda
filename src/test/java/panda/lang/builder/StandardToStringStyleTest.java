@@ -12,7 +12,7 @@ import org.junit.Test;
 import panda.lang.builder.ToStringStyleTest.Person;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.builder.ToStringStyle}.
+ * Unit tests {@link panda.lang.builder.ToStringStyle}.
  *
  * @version $Id: StandardToStringStyleTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */

@@ -636,7 +636,7 @@ public class Files {
 		if (base.endsWith("/"))
 			dir = 0;
 
-		StringBuilder sb = new StringBuilder(Strings.dup("../", bb.length - pos - dir));
+		StringBuilder sb = new StringBuilder(Strings.repeat("../", bb.length - pos - dir));
 		return sb.append(Strings.join(ff, "/", pos, ff.length)).toString();
 	}
 

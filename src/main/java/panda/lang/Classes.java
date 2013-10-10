@@ -1979,7 +1979,7 @@ public abstract class Classes {
 			ann = clazz.getAnnotation(annType);
 			clazz = clazz.getSuperclass();
 		}
-		while (null == ann && clazz != Object.class);
+		while (null == ann && clazz != null && clazz != Object.class);
 		return ann;
 	}
 

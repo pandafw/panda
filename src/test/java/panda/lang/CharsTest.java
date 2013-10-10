@@ -10,8 +10,7 @@ import org.junit.Test;
 import panda.lang.Chars;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.CharUtils}.
- *
+ * Unit tests {@link panda.lang.Chars}.
  */
 public class CharsTest {
 
