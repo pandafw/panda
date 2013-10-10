@@ -93,6 +93,20 @@ public class SqlUtils {
 		catch (SQLException e) {
 		}
 	}
+
+	/**
+	 * close ResultSet with out throw exception
+	 * @param resultSet result set
+	 */
+	public static void safeClose(SqlResultSet resultSet) {
+		try {
+			if (resultSet != null) {
+				resultSet.close();
+			}
+		}
+		catch (SQLException e) {
+		}
+	}
 	
 	/**
 	 * close statement with out throw exception
@@ -143,6 +157,27 @@ public class SqlUtils {
 	 * @throws SQLException if a SQL exception occurs
 	 */
 	public static void skipResultSet(ResultSet resultSet, int skip) throws SQLException {
+		if (skip > 0) {
+			if (resultSet.getType() != ResultSet.TYPE_FORWARD_ONLY) {
+				resultSet.absolute(skip);
+			}
+			else {
+				for (; skip > 0; skip--) {
+					if (!resultSet.next()) {
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * skip result
+	 * @param resultSet result set
+	 * @param skip            The number of results to ignore.
+	 * @throws SQLException if a SQL exception occurs
+	 */
+	public static void skipResultSet(SqlResultSet resultSet, int skip) throws SQLException {
 		if (skip > 0) {
 			if (resultSet.getType() != ResultSet.TYPE_FORWARD_ONLY) {
 				resultSet.absolute(skip);

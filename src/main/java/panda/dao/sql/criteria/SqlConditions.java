@@ -106,7 +106,7 @@ public class SqlConditions implements Conditions {
 			Expression last = expressions.get(expressions.size() - 1); 
 			if (last instanceof SimpleExpression) {
 				SimpleExpression ce = (SimpleExpression)last;
-				if (Operator.CLOSE_PAREN.equals(ce.getOperator())) {
+				if (Operator.END_PAREN.equals(ce.getOperator())) {
 					return addConjunctionExpression(conjunction);
 				}
 				else {
@@ -205,7 +205,7 @@ public class SqlConditions implements Conditions {
 	 */
 	public SqlConditions open() {
 		conjunction();
-		return addParenExpression(Operator.OPEN_PAREN);
+		return addParenExpression(Operator.BEG_PAREN);
 	}
 	
 	/**
@@ -213,7 +213,7 @@ public class SqlConditions implements Conditions {
 	 * @return this
 	 */
 	public SqlConditions close() {
-		return addParenExpression(Operator.CLOSE_PAREN);
+		return addParenExpression(Operator.END_PAREN);
 	}
 	
 	/**

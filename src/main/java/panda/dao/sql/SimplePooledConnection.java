@@ -380,7 +380,7 @@ public class SimplePooledConnection implements Connection {
 	 */
 	public PreparedStatement prepareStatement(String sql, int resultSetType,
 			int resultSetConcurrency) throws SQLException {
-		return getValidConnection().prepareCall(sql, resultSetType, resultSetConcurrency);
+		return getValidConnection().prepareStatement(sql, resultSetType, resultSetConcurrency);
 	}
 
 	/**

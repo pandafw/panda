@@ -25,6 +25,16 @@ public class MysqlSqlExpert extends SqlExpert {
 	}
 	
 	@Override
+	public boolean isSupportDropIfExists() {
+		return true;
+	}
+
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
+
+	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
@@ -100,11 +110,6 @@ public class MysqlSqlExpert extends SqlExpert {
 
 		addIndexes(sqls, entity);
 		return sqls;
-	}
-
-	@Override
-	public String dropTable(String tableName) {
-		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
 	}
 
 	/**

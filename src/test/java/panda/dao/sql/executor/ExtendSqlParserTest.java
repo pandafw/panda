@@ -47,7 +47,7 @@ public class ExtendSqlParserTest extends SimpleSqlParserTest {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put("list", list);
 
-		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN ( ?,?,? )";
+		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN( ?,?,?)";
 		
 		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
 		parameters.add(new SqlParameter("list", "a"));
@@ -139,7 +139,7 @@ public class ExtendSqlParserTest extends SimpleSqlParserTest {
 		map.put("orderCol", "ID");
 
 		String translatedSql = "SELECT * FROM SAMPLE"
-			+ " WHERE ( NAME= ? ) AND KIND= ? ORDER BY ID";
+			+ " WHERE( NAME= ?) AND KIND= ? ORDER BY ID";
 		
 		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
 		parameters.add(new SqlParameter("name", "Name"));

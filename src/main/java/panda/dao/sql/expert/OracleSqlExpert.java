@@ -11,6 +11,19 @@ import panda.dao.sql.JdbcTypes;
 import panda.lang.Strings;
 
 public class OracleSqlExpert extends SqlExpert {
+
+	@Override
+	public List<String> drop(Entity<?> entity) {
+		List<String> sqls = super.drop(entity);
+		
+		EntityField id = entity.getIdentity();
+		if (id != null && id.isAutoIncrement()) {
+			String sql = "DROP SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ";
+			sqls.add(sql);
+		}
+		return sqls;
+	}
+
 	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
@@ -30,7 +43,7 @@ public class OracleSqlExpert extends SqlExpert {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
 			if (ef.isUnsigned()) {
-				sb.append(" Check ( ").append(ef.getColumn()).append(" >= 0)");
+				sb.append(" Check (").append(ef.getColumn()).append(" >= 0)");
 			}
 			sb.append(',');
 		}
@@ -52,18 +65,6 @@ public class OracleSqlExpert extends SqlExpert {
 		
 		addIndexes(sqls, entity);
 		addComments(sqls, entity);
-		return sqls;
-	}
-
-	@Override
-	public List<String> drop(Entity<?> entity) {
-		List<String> sqls = super.drop(entity);
-		
-		EntityField id = entity.getIdentity();
-		if (id != null && id.isAutoIncrement()) {
-			String sql = "DROP SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ";
-			sqls.add(sql);
-		}
 		return sqls;
 	}
 	

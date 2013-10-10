@@ -2,7 +2,6 @@ package panda.dao.sql.criteria;
 
 import panda.dao.SimpleQueryParameter;
 import panda.dao.criteria.Conditions;
-import panda.dao.criteria.Orders;
 
 /**
  * @author yf.frank.wang@gmail.com

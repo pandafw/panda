@@ -26,50 +26,28 @@ public class ExtendSqlParser extends SimpleSqlParser {
 			this.items = items;
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
 			if (items == null || items.isEmpty()) {
-				return null;
+				return false;
 			}
 			
-			int stmSize = strings.size();
-			int pmSize = sqlParams.size();
-			
+			int size = sql.length();
+
 			boolean logic = false;
-			StringBuilder sb = null;
 			for (SqlSegment seg : items) {
-				String sql = seg.translate(executor, parameter, strings, sqlParams);
-				if (sql != null && sql.length() > 0) {
-					if (seg instanceof LogicalExpressionSegment) {
-						logic = true;
+				if (seg.translate(sql, executor, parameter, sqlParams)) {
+					if (!logic) {
+						logic = (seg instanceof LogicalContainerSegment);
 					}
-					if (sb == null) {
-						sb = new StringBuilder();
-					}
-					else {
-						sb.append(' ');
-					}
-					sb.append(sql);
 				}
 			}
+
 			if (logic) {
-				return sb.toString();
+				return true;
 			}
-			else {
-				for (int i = stmSize; i < strings.size(); i++) {
-					strings.remove(i);
-				}
-				for (int i = pmSize; i < sqlParams.size(); i++) {
-					sqlParams.remove(i);
-				}
-				return null;
-			}
+
+			sql.setLength(size);
+			return false;
 		}
 	}
 
@@ -135,37 +113,18 @@ public class ExtendSqlParser extends SimpleSqlParser {
 			}
 		}
 		
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			if (items == null || items.isEmpty()) {
-				return null;
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+			if (items == null || items.isEmpty() || !isExpressionTrue(parameter)) {
+				return false;
 			}
 			
-			if (isExpressionTrue(parameter)) {
-				StringBuilder sb = null;
-				for (SqlSegment seg : items) {
-					String sql = seg.translate(executor, parameter, strings, sqlParams);
-					if (sql != null && sql.length() > 0) {
-						if (sb == null) {
-							sb = new StringBuilder();
-						}
-						else {
-							sb.append(' ');
-						}
-						sb.append(sql);
-					}
-				}
-				if (sb != null) {
-					return sb.toString();
+			boolean r = false;
+			for (SqlSegment seg : items) {
+				if (seg.translate(sql, executor, parameter, sqlParams)) {
+					r = true;
 				}
 			}
-			return null;
+			return r;
 		}
 	}
 
@@ -178,14 +137,22 @@ public class ExtendSqlParser extends SimpleSqlParser {
 	}
 
 	/**
+	 * Constructor
+	 * @param sql sql statement
+	 */
+	public ExtendSqlParser(String sql, boolean keepComments) {
+		super(sql, keepComments);
+	}
+
+	/**
 	 * compile sql to segments
 	 * 
 	 * @param sql sql
 	 * @param segments segments
 	 */
 	@Override
-	protected void compile(String sql, List<SqlSegment> segments) {
-		compile(sql, segments, 0, false);
+	protected void compile(String sql, List<SqlSegment> segments, boolean keepComments) {
+		compile(sql, segments, keepComments, 0, false);
 	}
 
 	/**
@@ -196,58 +163,21 @@ public class ExtendSqlParser extends SimpleSqlParser {
 	 * @param start start position
 	 * @param close close ']' need or not
 	 */
-	private int compile(String sql, List<SqlSegment> segments, int start, boolean close) {
+	private int compile(String sql, List<SqlSegment> segments, boolean keepComments, int start, boolean close) {
 		int i;
 		int qmark = 0;
 		for (i = start; i < sql.length(); i++) {
 			char c = sql.charAt(i);
 			if (c == '/') {
-				if (i + 1 < sql.length() && sql.charAt(i + 1) == '*') {
-					if (i > start) {
-						split(sql.substring(start, i), segments);
-					}
-					start = i;
-					String comment = null;
-					if (i + 2 < sql.length()) {
-						int j = sql.indexOf("*/", i + 2);
-						if (j > 0) {
-							comment = sql.substring(i, j + 2);
-							i = j + 1;
-							start = j + 2;
-						}
-					}
-					if (comment == null) {
-						throw new IllegalArgumentException("Illegal sql statement (" + i + "): unexpected end of comment reached.");
-					}
-					
-					segments.add(new SqlCommentSegment(comment));
+				int j = skipComment(start, i, sql, segments, keepComments);
+				if (j > i) {
+					i = j;
+					start = i + 1;
 				}
 			}
 			else if (c == '\'') {
-				if (i > start) {
-					split(sql.substring(start, i), segments);
-				}
-				start = i++;
-				if (i >= sql.length()) {
-					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected character ' reached.");
-				}
-
-				String str = null;
-				for (; i < sql.length(); i++) {
-					if (sql.charAt(i) == '\'') {
-						if (i + 1 < sql.length() && sql.charAt(i + 1) == '\'') {
-							i++;
-							continue;
-						}
-						str = sql.substring(start, i + 1);
-						start = i + 1;
-						break;
-					}
-				}
-				if (str == null) {
-					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected end of string reached.");
-				}
-				segments.add(new SqlStringSegment(str));
+				i = skipString(start, i, sql, segments);
+				start = i + 1;
 			}
 			else if (c == '@') {
 				if (i > start) {
@@ -271,7 +201,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 					}
 
 					List<SqlSegment> items = new ArrayList<SqlSegment>();
-					i = compile(sql, items, i + 1, true);
+					i = compile(sql, items, keepComments, i + 1, true);
 					LogicalContainerSegment stm = new LogicalContainerSegment(items);
 					segments.add(stm);
 					start = i + 1;
@@ -309,7 +239,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 					}
 
 					List<SqlSegment> items = new ArrayList<SqlSegment>();
-					i = compile(sql, items, j + 1, true);
+					i = compile(sql, items, keepComments, j + 1, true);
 
 					LogicalExpressionSegment stm = new LogicalExpressionSegment(expression, items,
 							notStart > 0 ? LogicalExpressionSegment.NOT

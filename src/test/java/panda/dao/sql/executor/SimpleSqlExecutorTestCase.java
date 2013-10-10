@@ -2,6 +2,7 @@ package panda.dao.sql.executor;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,6 +208,25 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		expect.add(createBean(4));
 
 		testQueryForList(sql, param, 1, 2, TestBean.class, expect);
+	}
+	
+	/**
+	 */
+	@Test
+	public void testQueryForListByBetween() {
+		String sql = "SELECT * FROM TEST WHERE ID BETWEEN :from AND :to";
+
+		Map<String, Integer> param = new HashMap<String, Integer>();
+		param.put("from", 1002);
+		param.put("to", 1004);
+		
+		List<TestBean> expect = new ArrayList<TestBean>();
+		expect.add(createBean(2));
+		expect.add(createBean(3));
+		expect.add(createBean(4));
+
+		testQueryForList(sql, param, TestBean.class, expect);
+
 	}
 
 	/**

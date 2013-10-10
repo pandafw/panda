@@ -4,7 +4,6 @@ package panda.dao.sql.criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.dao.criteria.Orders;
 import panda.lang.Objects;
 import panda.lang.Strings;
 

@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/3rd/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/h2.jar"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

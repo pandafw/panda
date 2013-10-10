@@ -23,12 +23,12 @@ public class SimpleSqlParser implements SqlParser {
 	protected static interface SqlSegment {
 		/**
 		 * translate 
+		 * @param sql sql to append
 		 * @param parameter parameter object
-		 * @param strings strings
 		 * @param sqlParams sql parameters
-		 * @return translated string
+		 * @return true if sql appended
 		 */
-		String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams);
+		boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams);
 	}
 
 	//-------------------------------------------------------------------------
@@ -48,16 +48,9 @@ public class SimpleSqlParser implements SqlParser {
 			this.alias = SqlNamings.javaName2ColumnLabel(alias);
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			strings.add(alias);
-			return alias;
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+			sql.append(' ').append(alias);
+			return true;
 		}
 	}
 
@@ -123,15 +116,8 @@ public class SimpleSqlParser implements SqlParser {
 			}
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
 		@SuppressWarnings("unchecked")
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
@@ -139,11 +125,10 @@ public class SimpleSqlParser implements SqlParser {
 			}
 
 			TypeAdapters typeAdapters = executor.getTypeAdapters();
-
-			String ts = "?";
 			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
-			strings.add(ts);
-			return ts;
+
+			sql.append(" ?");
+			return true;
 		}
 	}
 
@@ -156,17 +141,8 @@ public class SimpleSqlParser implements SqlParser {
 			parse(parameter);
 		}
 		
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
 		@SuppressWarnings("unchecked")
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			String ts = null;
-
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
@@ -180,49 +156,34 @@ public class SimpleSqlParser implements SqlParser {
 					if (paramValue.getClass().isArray()) {
 						int len = Array.getLength(paramValue);
 						if (len > 0) {
-							StringBuilder sb = null;
+							sql.append(' ');
 							for (int i = 0; i < len; i++) {
 								Object v = Array.get(paramValue, i);
 								sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
-								if (sb == null) {
-									sb = new StringBuilder(len * 2);
-								}
-								else {
-									sb.append(',');
-								}
-								sb.append('?');
+								sql.append("?,");
 							}
-							ts = sb.toString(); 
-							strings.add(ts);
-							return ts;
+							sql.setLength(sql.length() - 1);
+							return true;
 						}
 					}
 					else if (paramValue instanceof Collection) {
 						Collection c = (Collection)paramValue;
 						if (!c.isEmpty()) {
-							StringBuilder sb = null;
+							sql.append(' ');
 							for (Object v : c) {
 								sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
-								if (sb == null) {
-									sb = new StringBuilder(c.size() * 2);
-								}
-								else {
-									sb.append(',');
-								}
-								sb.append('?');
+								sql.append("?,");
 							}
-							ts = sb.toString(); 
-							strings.add(ts);
-							return ts;
+							sql.setLength(sql.length() - 1);
+							return true;
 						}
 					}
 				}
 			}
 
-			ts = "?";
 			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
-			strings.add(ts);
-			return ts;
+			sql.append(" ?");
+			return true;
 		}
 	}
 
@@ -237,28 +198,20 @@ public class SimpleSqlParser implements SqlParser {
 			this.propertyName = propertyName;
 		}
 		
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
 		@SuppressWarnings("unchecked")
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
 			Object rv = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
 				rv = bh.getBeanValue(parameter, propertyName);
 			}
 
-			String ts = null;
 			if (rv != null) {
-				ts = rv.toString();
-				strings.add(ts);
+				sql.append(' ').append(rv.toString());
+				return true;
 			}
 			
-			return ts;
+			return false;
 		}
 	}
 
@@ -276,16 +229,9 @@ public class SimpleSqlParser implements SqlParser {
 			this.comment = comment;
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			strings.add(comment);
-			return comment;
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+			sql.append(' ').append(comment);
+			return false;
 		}
 	}
 
@@ -302,16 +248,9 @@ public class SimpleSqlParser implements SqlParser {
 			this.string = string;
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
-			strings.add(string);
-			return string;
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+			sql.append(' ').append(string);
+			return true;
 		}
 	}
 
@@ -324,6 +263,7 @@ public class SimpleSqlParser implements SqlParser {
 		private static final int AS = 2;
 		private static final int AND = 3;
 		private static final int OR = 4;
+		private static final int PAREN = 5;
 		
 		private int kind;
 		private String content;
@@ -346,38 +286,31 @@ public class SimpleSqlParser implements SqlParser {
 			else if ("OR".equalsIgnoreCase(content)) {
 				kind = OR;
 			}
+			else if ("(".equals(content) || ")".equals(content)) {
+				kind = PAREN;
+			}
 			else {
 				kind = NORMAL;
 			}
 		}
 
-		/**
-		 * translate 
-		 * @param parameter parameter object
-		 * @param strings strings
-		 * @param sqlParams sql parameters
-		 * @return translated string
-		 */
-		public String translate(SqlExecutor executor, Object parameter, List<String> strings, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
 			if (kind == AND || kind == OR) {
-				if (!strings.isEmpty()) {
-					String prev = strings.get(strings.size() - 1);
-					if ("WHERE".equalsIgnoreCase(prev) || prev.endsWith("(")) {
-						return null;
-					}
+				if (Strings.endsWith(sql, "(") || Strings.endsWithIgnoreCase(sql, " WHERE")) {
+					return false;
 				}
 			}
 			else if (kind == COMMA) {
-				if (!strings.isEmpty()) {
-					String prev = strings.get(strings.size() - 1);
-					if ("SET".equalsIgnoreCase(prev) || "BY".equalsIgnoreCase(prev)) {
-						return null;
-					}
+				if (Strings.endsWithIgnoreCase(sql, " SET") || Strings.endsWithIgnoreCase(sql, " BY")) {
+					return false;
 				}
 			}
 
-			strings.add(content);
-			return content;
+			if (kind != PAREN) {
+				sql.append(' ');
+			}
+			sql.append(content);
+			return true;
 		}
 	}
 
@@ -391,8 +324,17 @@ public class SimpleSqlParser implements SqlParser {
 	 * @param sql sql statement
 	 */
 	public SimpleSqlParser(String sql) {
+		this(sql, false);
+	}
+
+	/**
+	 * Constructor
+	 * @param sql sql statement
+	 * @param keepComments keep comments
+	 */
+	public SimpleSqlParser(String sql, boolean keepComments) {
 		segments = new ArrayList<SqlSegment>();
-		compile(sql, segments);
+		compile(sql, segments, keepComments);
 	}
 
 	/**
@@ -403,86 +345,87 @@ public class SimpleSqlParser implements SqlParser {
 	 * @return jdbc sql  
 	 */
 	public String parse(SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
-		List<String> strings = new ArrayList<String>();
-		
-		StringBuilder sb = null;
+		StringBuilder sql = new StringBuilder();
 		for (SqlSegment seg : segments) {
-			String sql = seg.translate(executor, parameter, strings, sqlParams);
-			if (Strings.isNotEmpty(sql)) {
-				if (sb == null) {
-					sb = new StringBuilder();
-					sb.append(sql);
-				}
-				else {
-					sb.append(' ');
-					sb.append(sql);
-				}
-			}
+			seg.translate(sql, executor, parameter, sqlParams);
 		}
-
-		String sql = sb == null ? null : sb.toString();
-		return sql;
+		return Strings.strip(sql);
 	}
 
+	protected int skipComment(int start, int i, String sql, List<SqlSegment> segments, boolean keepComments) {
+		if (i + 1 < sql.length() && sql.charAt(i + 1) == '*') {
+			if (i > start) {
+				split(sql.substring(start, i), segments);
+			}
+			String comment = null;
+			if (i + 2 < sql.length()) {
+				int j = sql.indexOf("*/", i + 2);
+				if (j > 0) {
+					comment = sql.substring(i, j + 2);
+					i = j + 1;
+				}
+			}
+			if (comment == null) {
+				throw new IllegalArgumentException("Illegal sql statement (" + i + "): unexpected end of comment reached.");
+			}
+			
+			if (keepComments) {
+				segments.add(new SqlCommentSegment(comment));
+			}
+		}
+		return i;
+	}
+	
+	protected int skipString(int start, int i, String sql, List<SqlSegment> segments) {
+		if (i > start) {
+			split(sql.substring(start, i), segments);
+		}
+
+		start = i++;
+		if (i >= sql.length()) {
+			throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected character ' reached.");
+		}
+
+		String str = null;
+		for (; i < sql.length(); i++) {
+			if (sql.charAt(i) == '\'') {
+				if (i + 1 < sql.length() && sql.charAt(i + 1) == '\'') {
+					i++;
+					continue;
+				}
+				str = sql.substring(start, i + 1);
+				break;
+			}
+		}
+		if (str == null) {
+			throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected end of string reached.");
+		}
+		segments.add(new SqlStringSegment(str));
+		return i;
+	}
+	
 	/**
 	 * compile sql to segments
 	 * 
 	 * @param sql sql
 	 * @param segments segments
 	 */
-	protected void compile(String sql, List<SqlSegment> segments) {
+	protected void compile(String sql, List<SqlSegment> segments, boolean keepComments) {
 		int i;
 		int start = 0;
 		int qmark = 0;
 		for (i = start; i < sql.length(); i++) {
 			char c = sql.charAt(i);
 			if (c == '/') {
-				if (i + 1 < sql.length() && sql.charAt(i + 1) == '*') {
-					if (i > start) {
-						split(sql.substring(start, i), segments);
-					}
-					start = i;
-					String comment = null;
-					if (i + 2 < sql.length()) {
-						int j = sql.indexOf("*/", i + 2);
-						if (j > 0) {
-							comment = sql.substring(i, j + 2);
-							i = j + 1;
-							start = j + 2;
-						}
-					}
-					if (comment == null) {
-						throw new IllegalArgumentException("Illegal sql statement (" + i + "): unexpected end of comment reached.");
-					}
-					
-					segments.add(new SqlCommentSegment(comment));
+				int j = skipComment(start, i, sql, segments, keepComments);
+				if (j > i) {
+					i = j;
+					start = i + 1;
 				}
 			}
 			else if (c == '\'') {
-				if (i > start) {
-					split(sql.substring(start, i), segments);
-				}
-				start = i++;
-				if (i >= sql.length()) {
-					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected character ' reached.");
-				}
-
-				String str = null;
-				for (; i < sql.length(); i++) {
-					if (sql.charAt(i) == '\'') {
-						if (i + 1 < sql.length() && sql.charAt(i + 1) == '\'') {
-							i++;
-							continue;
-						}
-						str = sql.substring(start, i + 1);
-						start = i + 1;
-						break;
-					}
-				}
-				if (str == null) {
-					throw new IllegalArgumentException("Illegal sql statement (" + start + "): unexpected end of string reached.");
-				}
-				segments.add(new SqlStringSegment(str));
+				i = skipString(start, i, sql, segments);
+				start = i + 1;
 			}
 			else if (c == ':') {
 				if (i > start) {
@@ -591,12 +534,12 @@ public class SimpleSqlParser implements SqlParser {
 				}
 				start = i + 1;
 			}
-			else if (c == ',') {
+			else if (Strings.contains(",()[]", c)) {
 				if (i > start) {
 					append(sql.substring(start, i), segments);
 				}
 				start = i + 1;
-				segments.add(new SqlWordSegment(","));
+				segments.add(new SqlWordSegment(String.valueOf((char)c)));
 			}
 		}
 		if (i > start) {

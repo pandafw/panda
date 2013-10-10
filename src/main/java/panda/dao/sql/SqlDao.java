@@ -2,6 +2,7 @@ package panda.dao.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,60 +89,27 @@ public class SqlDao extends Dao {
 	}
 
 	/**
-	 * create table
-	 * 
-	 * @param entity entity
-	 * @param dropIfExists drop if table exists
-	 * @return the entity
-	 */
-	@Override
-	public boolean create(Entity<?> entity, boolean dropIfExists) {
-		assertTable(entity);
-
-		List<String> sqls = getSqlExpert().create(entity);
-
-		autoStart();
-		try {
-			if (dropIfExists) {
-				drop(entity);
-			}
-
-			int i = 0;
-			for (String sql : sqls) {
-				i += executor.update(sql);
-			}
-			autoCommit();
-			return i > 0;
-		}
-		catch (SQLException e) {
-			rollback();
-			throw new DaoException("Failed to create entity " + entity.getType() + ": " + Strings.join(sqls, ";\n"), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
 	 * drop a table if exists
 	 * 
 	 * @param entity entity
-	 * @return true if drop successfully
 	 */
-	public boolean drop(Entity<?> entity) {
+	public void drop(Entity<?> entity) {
 		assertTable(entity);
 
+		if (!getSqlExpert().isSupportDropIfExists()) {
+			if (!exists(entity)) {
+				return;
+			}
+		}
+		
 		List<String> sqls = getSqlExpert().drop(entity);
 
 		autoStart();
 		try {
-			int i = 0;
-			
 			for (String sql : sqls) {
-				i += executor.update(sql);
+				executor.update(sql);
 			}
 			autoCommit();
-			return i > 0;
 		}
 		catch (SQLException e) {
 			rollback();
@@ -159,20 +127,57 @@ public class SqlDao extends Dao {
 	 * @return true if drop successfully
 	 */
 	@Override
-	public boolean drop(String table) {
+	public void drop(String table) {
 		assertTable(table);
 
+		if (!getSqlExpert().isSupportDropIfExists()) {
+			if (!exists(table)) {
+				return;
+			}
+		}
+		
 		String sql = getSqlExpert().dropTable(table);
 
 		autoStart();
 		try {
-			int i = executor.update(sql);
+			executor.update(sql);
 			autoCommit();
-			return i > 0;
 		}
 		catch (SQLException e) {
 			rollback();
 			throw new DaoException("Failed to drop table " + table + ": " + sql, e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param entity entity
+	 * @param dropIfExists drop if table exists
+	 */
+	@Override
+	public void create(Entity<?> entity, boolean dropIfExists) {
+		assertTable(entity);
+
+		List<String> sqls = getSqlExpert().create(entity);
+
+		autoStart();
+		try {
+			if (dropIfExists) {
+				drop(entity);
+			}
+
+			for (String sql : sqls) {
+				executor.update(sql);
+			}
+			autoCommit();
+		}
+		catch (SQLException e) {
+			rollback();
+			throw new DaoException("Failed to create entity " + entity.getType() + ": " + Strings.join(sqls, ";\n"), e);
 		}
 		finally {
 			autoClose();
@@ -218,7 +223,7 @@ public class SqlDao extends Dao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return exists(entity);
+			return exists(entity.getTableName());
 		}
 
 		Query query = new Query();
@@ -428,17 +433,68 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
-			EntityField id = entity.getIdentity();
-			if (id == null) {
-				int i = executor.update(sql, obj);
-				autoCommit();
-				return i > 0 ? obj : null;
-			}
-			
-			// TODO: @Prep @Post
-			T d = executor.insert(sql, obj, id.getName());
+			T d = insert(entity, sql, obj);
 			autoCommit();
 			return d;
+		}
+		catch (SQLException e) {
+			rollback();
+			throw new DaoException("Failed to insert entity " + entity.getType() + ": " + sql, e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	private <T> T insert(Entity<?> entity, String sql, T obj) throws SQLException {
+		EntityField id = entity.getIdentity();
+		if (id == null) {
+			int i = executor.update(sql, obj);
+			autoCommit();
+			return i > 0 ? obj : null;
+		}
+		
+		// TODO: @Prep @Post
+		T d = executor.insert(sql, obj, id.getName());
+		return d;
+	}
+
+	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	public <T> Collection<T> inserts(Collection<T> col) {
+		assertCollection(col);
+
+		Entity<?> entity = null;
+		String sql = null;
+
+		autoStart();
+		try {
+			for (T obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				if (entity == null) {
+					entity = getEntity(obj.getClass());
+					assertTable(entity);
+					sql = getSqlExpert().insert(entity);
+				}
+				
+				insert(entity, sql, obj);
+			}
+
+			autoCommit();
+			return col;
 		}
 		catch (SQLException e) {
 			rollback();
@@ -465,9 +521,55 @@ public class SqlDao extends Dao {
 		Query query = new Query();
 		queryPrimaryKey(entity, query, obj);
 
-		return update(obj, query);
+		return update(entity, obj, query);
 	}
 
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	@Override
+	public <T> int updates(Collection<T> col) {
+		assertCollection(col);
+
+		Entity<?> entity = null;
+		Query query = new Query();
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (T obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				if (entity == null) {
+					entity = getEntity(obj.getClass());
+					assertTable(entity);
+				}
+				
+				query.reset();
+				queryPrimaryKey(entity, query, obj);
+				excludePrimaryKeys(entity, query);
+
+				String sql = getSqlExpert().update(entity, query);
+				cnt += executor.update(sql, query.getParams());
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		catch (SQLException e) {
+			rollback();
+			throw new DaoException("Failed to update entity " + entity.getType() + " collection", e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+	
 	/**
 	 * update a record by the supplied object. 
 	 * the null properties will be ignored.
@@ -485,7 +587,7 @@ public class SqlDao extends Dao {
 		Query query = new Query();
 		excludeNullProperties(entity, query, obj);
 
-		return update(obj, query);
+		return update(entity, obj, query);
 	}
 
 	/**
@@ -502,26 +604,7 @@ public class SqlDao extends Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 
-		if (query == null) {
-			query = new Query();
-		}
-		excludePrimaryKeys(entity, query);
-
-		String sql = getSqlExpert().update(entity, query);
-		
-		autoStart();
-		try {
-			int cnt = executor.update(sql, query.getParams());
-			autoCommit();
-			return cnt;
-		}
-		catch (SQLException e) {
-			rollback();
-			throw new DaoException("Failed to update entity " + entity.getType() + ": " + sql, e);
-		}
-		finally {
-			autoClose();
-		}
+		return update(entity, obj, query);
 	}
 
 	/**
@@ -544,9 +627,43 @@ public class SqlDao extends Dao {
 		}
 		excludeNullProperties(entity, query, obj);
 
-		return update(obj, query);
+		return update(entity, obj, query);
 	}
 
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	private int update(Entity<?> entity, Object obj, Query query) {
+		if (query == null) {
+			query = new Query();
+		}
+		excludePrimaryKeys(entity, query);
+
+		String sql = getSqlExpert().update(entity, query);
+		
+		autoStart();
+		try {
+			int cnt = executor.update(sql, query.getParams());
+			autoCommit();
+			return cnt;
+		}
+		catch (SQLException e) {
+			rollback();
+			throw new DaoException("Failed to update entity " + entity.getType() + ": " + sql, e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	private boolean isClientPaginate(Query query) {
+		return (query != null && query.needsPaginate() && !getSqlExpert().isSupportPaginate());
+	}
+	
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
@@ -563,6 +680,9 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
+			if (isClientPaginate(query)) {
+				return executor.selectList(sql, query == null ? null : query.getParams(), entity.getType(), query.getStart(), query.getLimit());
+			}
 			return executor.selectList(sql, query == null ? null : query.getParams(), entity.getType());
 		}
 		catch (SQLException e) {
@@ -589,6 +709,9 @@ public class SqlDao extends Dao {
 		
 		autoStart();
 		try {
+			if (isClientPaginate(query)) {
+				return executor.selectList(sql, query == null ? null : query.getParams(), Map.class, query.getStart(), query.getLimit());
+			}
 			return executor.selectList(sql, query == null ? null : query.getParams(), Map.class);
 		}
 		catch (SQLException e) {
@@ -611,23 +734,32 @@ public class SqlDao extends Dao {
 	public <T> int select(Entity<T> entity, Query query, DataHandler<T> callback) {
 		assertEntity(entity);
 		
+		SqlResultSet<T> srs = null;
 		String sql = getSqlExpert().select(entity, query);
 		
 		autoStart();
 		try {
-			SqlResultSet<T> srs = executor.selectResultSet(sql, 
-				query == null ? null : query.getParams(), entity.getType());
+			srs = executor.selectResultSet(sql, query == null ? null : query.getParams(), entity.getType());
+			
 			int count = 0;
+			int max = Integer.MAX_VALUE;
+			if (isClientPaginate(query)) {
+				SqlUtils.skipResultSet(srs, query.getStart());
+				if (query.getLimit() > 0) {
+					max = query.getLimit();
+				}
+			}
+			
 			boolean next = true;
-			while (srs.next() && next) {
+			while (srs.next() && next && count < max) {
 				T data = srs.getResult();
 				try {
 					next = callback.handleData(data);
-					count++;
 				}
 				catch (Throwable ex) {
 					throw new DaoException("Data Handle Error [" + count + "]: " + data, ex);
 				}
+				count++;
 			}
 			return count;
 		}
@@ -635,6 +767,7 @@ public class SqlDao extends Dao {
 			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql, e);
 		}
 		finally {
+			SqlUtils.safeClose(srs);
 			autoClose();
 		}
 	}
@@ -651,23 +784,32 @@ public class SqlDao extends Dao {
 	public int select(String table, Query query, DataHandler<Map> callback) {
 		assertTable(table);
 
+		SqlResultSet<Map> srs = null;
 		String sql = getSqlExpert().select(table, query);
-		
+
 		autoStart();
 		try {
-			SqlResultSet<Map> srs = executor.selectResultSet(sql, 
-				query == null ? null : query.getParams(), Map.class);
+			srs = executor.selectResultSet(sql, query == null ? null : query.getParams(), Map.class);
+
 			int count = 0;
+			int max = Integer.MAX_VALUE;
+			if (isClientPaginate(query)) {
+				SqlUtils.skipResultSet(srs, query.getStart());
+				if (query.getLimit() > 0) {
+					max = query.getLimit();
+				}
+			}
+			
 			boolean next = true;
-			while (srs.next() && next) {
+			while (srs.next() && next && count < max) {
 				Map data = srs.getResult();
 				try {
 					next = callback.handleData(data);
-					count++;
 				}
 				catch (Exception ex) {
 					throw new DaoException("Data Handle Error [" + count + "]: " + data, ex);
 				}
+				count++;
 			}
 			return count;
 		}
@@ -675,6 +817,7 @@ public class SqlDao extends Dao {
 			throw new DaoException("Failed to select table " + table + ": " + sql, e);
 		}
 		finally {
+			SqlUtils.safeClose(srs);
 			autoClose();
 		}
 	}

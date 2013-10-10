@@ -14,8 +14,11 @@ public class SqlNamings {
 	 * @return sql column label
 	 */
 	public static String javaName2ColumnLabel(String javaName) {
+		if (Strings.isAllUpperCase(javaName)) {
+			return javaName;
+		}
+		
 		StringBuilder sb = new StringBuilder();
-
 		int len = javaName.length();
 		for (int i = 0; i < len; i++) {
 			char c = javaName.charAt(i);

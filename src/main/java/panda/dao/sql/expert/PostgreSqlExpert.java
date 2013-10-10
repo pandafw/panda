@@ -11,6 +11,15 @@ import panda.dao.sql.JdbcTypes;
 import panda.lang.Strings;
 
 public class PostgreSqlExpert extends SqlExpert {
+	@Override
+	public boolean isSupportDropIfExists() {
+		return true;
+	}
+
+	@Override
+	public String dropTable(String tableName) {
+		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
 
 	@Override
 	public List<String> create(Entity<?> entity) {
@@ -88,11 +97,6 @@ public class PostgreSqlExpert extends SqlExpert {
 		default:
 			return super.evalFieldType(ef);
 		}
-	}
-
-	@Override
-	public String dropTable(String tableName) {
-		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
 	}
 
 	/**

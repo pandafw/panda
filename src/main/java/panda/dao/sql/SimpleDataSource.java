@@ -32,12 +32,12 @@ import panda.log.Logs;
  * <li>jdbc.url</li>
  * <li>jdbc.username</li>
  * <li>jdbc.password</li>
+ * <li>jdbc.autoCommit - default: false</li>
  * </ul>
  * <p/>
  * 
  * ---- POOLING PROPERTIES ----
  * <ul>
- * <li>jdbc.DefaultAutoCommit - default: false</li>
  * <li>pool.maximumActiveConnections - default: 10</li>
  * <li>pool.maximumIdleConnections - default: 5</li>
  * <li>pool.maximumCheckoutTime - default: 20000</li>
@@ -203,6 +203,12 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	/**
+	 * Constructor
+	 */
+	public SimpleDataSource() {
+	}
+
+	/**
 	 * Constructor to allow passing in a map of properties for configuration
 	 * 
 	 * @param props - the configuration parameters
@@ -219,7 +225,11 @@ public class SimpleDataSource implements DataSource {
 		}
 
 		Castors.scastTo(props, this);
-
+		
+		initialize();
+	}
+	
+	public void initialize() {
 		Asserts.notEmpty(jdbc.driver, "The jdbc.driver property is empty.");
 		Asserts.notEmpty(jdbc.url, "The jdbc.url property is empty.");
 		Asserts.notNull(jdbc.username, "The jdbc.username property is null.");

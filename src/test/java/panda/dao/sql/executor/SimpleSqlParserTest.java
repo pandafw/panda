@@ -85,7 +85,7 @@ public class SimpleSqlParserTest extends TestCase {
 	 */
 	public void testComment() {
 		String originalSql = "SELECT /* SELECT */ ID AS a.id, NAME AS a.name, ITEM_NAME AS a.item.name FROM SAMPLE";
-		String translatedSql = "SELECT /* SELECT */ ID AS A_0_ID , NAME AS A_0_NAME , ITEM_NAME AS A_0_ITEM_0_NAME FROM SAMPLE";
+		String translatedSql = "SELECT ID AS A_0_ID , NAME AS A_0_NAME , ITEM_NAME AS A_0_ITEM_0_NAME FROM SAMPLE";
 
 		testTranslate(originalSql, null, translatedSql, null);
 	}
@@ -94,7 +94,7 @@ public class SimpleSqlParserTest extends TestCase {
 	 * test variable
 	 */
 	public void testVariable() {
-		String originalSql = "SELECT * FROM SAMPLE WHERE NAME=:a.name";
+		String originalSql = " SELECT * FROM SAMPLE WHERE NAME=:a.name";
 
 		Map<String, Map> map = new HashMap<String, Map>();
 		Map<String, String> a = new HashMap<String, String>();
@@ -154,7 +154,7 @@ public class SimpleSqlParserTest extends TestCase {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		map.put("list", list);
 
-		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN ( ?,?,? )";
+		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN( ?,?,?)";
 		
 		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
 		parameters.add(new SqlParameter("list", "a"));

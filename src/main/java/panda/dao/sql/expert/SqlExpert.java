@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import panda.dao.criteria.Expression;
+import panda.dao.criteria.Operator;
 import panda.dao.criteria.Order;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
@@ -22,20 +23,20 @@ import panda.lang.Strings;
  * !! thread-safe !!
  */
 public abstract class SqlExpert {
-	protected Map<String, String> meta;
+	protected Map<String, Object> properties;
 	
 	/**
-	 * @return the meta
+	 * @return the properties
 	 */
-	public Map<String, String> getMeta() {
-		return meta;
+	public Map<String, Object> getProperties() {
+		return properties;
 	}
 
 	/**
-	 * @param meta the meta to set
+	 * @param properties the properties to set
 	 */
-	public void setMeta(Map<String, String> meta) {
-		this.meta = meta;
+	public void setProperties(Map<String, Object> properties) {
+		this.properties = properties;
 	}
 
 	protected String getEntityMeta(Entity<?> entity, String name) {
@@ -44,8 +45,11 @@ public abstract class SqlExpert {
 	
 	protected String getEntityMeta(Entity<?> entity, String name, String defval) {
 		String v = entity.getMeta(name);
-		if (v == null && meta != null) {
-			v = meta.get(name);
+		if (v == null && properties != null) {
+			Object o = properties.get(name);
+			if (o != null) {
+				v = o.toString();
+			}
 		}
 		return Strings.isEmpty(v) ? defval : v;
 	}
@@ -58,7 +62,10 @@ public abstract class SqlExpert {
 		return true;
 	}
 
-	
+	public boolean isSupportDropIfExists() {
+		return false;
+	}
+
 	public String meta(String tableName) {
 		return "SELECT * FROM " + tableName + " where 1!=1";
 	}
@@ -108,7 +115,7 @@ public abstract class SqlExpert {
 		sb.append("FROM ").append(entity.getViewName());
 		where(sb, entity, query);
 		order(sb, entity, query);
-		limit(sb, query);
+		_limit(sb, query);
 		return sb.toString();
 	}
 
@@ -127,7 +134,7 @@ public abstract class SqlExpert {
 		sb.append("FROM ").append(table);
 		where(sb, query);
 		order(sb, query);
-		limit(sb, query);
+		_limit(sb, query);
 		return sb.toString();
 	}
 
@@ -182,6 +189,12 @@ public abstract class SqlExpert {
 	}
 	
 	//-----------------------------------------------------------------------
+	private void _limit(StringBuilder sql, Query query) {
+		if (query != null && query.needsPaginate()) {
+			limit(sql, query);
+		}
+	}
+	
 	protected abstract void limit(StringBuilder sql, Query query);
 
 	protected void where(StringBuilder sb, Entity<?> entity, Query query) {
@@ -189,6 +202,7 @@ public abstract class SqlExpert {
 			return;
 		}
 		
+		sb.append(" WHERE");
 		int i = 0;
 		for (Expression exp : query.getExpressions()) {
 			if (exp instanceof Expression.ValueCompare) {
@@ -198,8 +212,21 @@ public abstract class SqlExpert {
 					throw new IllegalArgumentException("invalid where field '" + evc.getField() + "' of entity " + entity.getType());
 				}
 
-				sb.append(' ').append(ef.getColumn()).append(' ').append(evc.getOperator()).append(" :p").append(++i);
-				query.addParam("p" + i, evc.getValue());
+				sb.append(' ').append(ef.getColumn()).append(' ').append(evc.getOperator());
+				if (evc.getOperator() == Operator.BETWEEN || evc.getOperator() == Operator.NOT_BETWEEN) {
+					sb.append(" :p").append(++i);
+					query.addParam("p" + i, evc.getValue(0));
+					sb.append(" AND :p").append(++i);
+					query.addParam("p" + i, evc.getValue(0));
+				}
+				else if (evc.getOperator() == Operator.IN || evc.getOperator() == Operator.NOT_IN) {
+					sb.append(" (:p").append(++i).append(')');
+					query.addParam("p" + i, evc.getValue());
+				}
+				else {
+					sb.append(" :p").append(++i);
+					query.addParam("p" + i, evc.getValue());
+				}
 			}
 			else if (exp instanceof Expression.FieldCompare) {
 				Expression.FieldCompare efc = (Expression.FieldCompare)exp;
@@ -235,12 +262,27 @@ public abstract class SqlExpert {
 			return;
 		}
 		
+		sb.append(" WHERE");
 		int i = 0;
 		for (Expression exp : query.getExpressions()) {
 			if (exp instanceof Expression.ValueCompare) {
 				Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-				sb.append(' ').append(evc.getField()).append(' ').append(evc.getOperator()).append(" :p").append(++i);
-				query.addParam("p" + i, evc.getValue());
+				
+				sb.append(' ').append(evc.getField()).append(' ').append(evc.getOperator());
+				if (evc.getOperator() == Operator.BETWEEN || evc.getOperator() == Operator.NOT_BETWEEN) {
+					sb.append(" :p").append(++i);
+					query.addParam("p" + i, evc.getValue(0));
+					sb.append(" AND :p").append(++i);
+					query.addParam("p" + i, evc.getValue(0));
+				}
+				else if (evc.getOperator() == Operator.IN || evc.getOperator() == Operator.NOT_IN) {
+					sb.append(" (:p").append(++i).append(')');
+					query.addParam("p" + i, evc.getValue());
+				}
+				else {
+					sb.append(" :p").append(++i);
+					query.addParam("p" + i, evc.getValue());
+				}
 			}
 			else {
 				sb.append(' ').append(exp.toString());
@@ -289,7 +331,7 @@ public abstract class SqlExpert {
 	
 	protected String evalFieldType(EntityField ef) {
 		String type = ef.getDbType();
-		if (Strings.isNotEmpty(type)) {
+		if (Strings.isEmpty(type)) {
 			type = ef.getJdbcType();
 		}
 
@@ -341,7 +383,7 @@ public abstract class SqlExpert {
 
 	protected void addComments(List<String> sqls, Entity<?> entity) {
 		if (Strings.isNotEmpty(entity.getComment())) {
-			String sql = "COMMENT ON TABLE" + entity.getTableName() + " IS '" + SqlUtils.escapeSql(entity.getComment())
+			String sql = "COMMENT ON TABLE " + entity.getTableName() + " IS '" + SqlUtils.escapeSql(entity.getComment())
 					+ '\'';
 			sqls.add(sql);
 		}
@@ -358,6 +400,10 @@ public abstract class SqlExpert {
 	protected void addIndexes(List<String> sqls, Entity<?> entity) {
 		StringBuilder sb = new StringBuilder();
 		Collection<EntityIndex> indexs = entity.getIndexes();
+		if (indexs == null || indexs.isEmpty()) {
+			return;
+		}
+		
 		for (EntityIndex index : indexs) {
 			sb.setLength(0);
 			if (index.isUnique())

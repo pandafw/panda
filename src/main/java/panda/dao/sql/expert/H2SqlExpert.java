@@ -10,7 +10,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
 import panda.lang.Strings;
 
-public class SQLiteSqlExpert extends SqlExpert {
+public class H2SqlExpert extends SqlExpert {
 	@Override
 	public boolean isSupportDropIfExists() {
 		return true;
@@ -24,22 +24,24 @@ public class SQLiteSqlExpert extends SqlExpert {
 	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
-
+		
 		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
 		for (EntityField ef : entity.getFields()) {
-			sb.append('\n').append(escapeColumn(ef.getColumn()));
-			if (ef.isAutoIncrement()) {
-				sb.append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-				continue;
-			}
-
+			sb.append('\n').append(ef.getColumn());
 			sb.append(' ').append(evalFieldType(ef));
-			if (ef.isUnsigned()) {
-				sb.append(" UNSIGNED");
+			
+			// unsupported
+//			if (ef.isUnsigned()) {
+//				sb.append(" UNSIGNED");
+//			}
+
+			if (ef.isAutoIncrement()) {
+				sb.append(" AUTO_INCREMENT(").append(ef.getStartWith()).append(")");
 			}
-			if (ef.isNotNull()) {
+			else if (ef.isNotNull()) {
 				sb.append(" NOT NULL");
 			}
+
 			if (ef.hasDefaultValue()) {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
@@ -47,16 +49,21 @@ public class SQLiteSqlExpert extends SqlExpert {
 		}
 
 		// append primary keys
-		if (entity.getIdentity() == null) {
-			addPrimaryKeysConstraint(sb, entity);
-		}
+		addPrimaryKeys(sb, entity);
+
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
 		addIndexes(sqls, entity);
+		addComments(sqls, entity);
+		
 		return sqls;
 	}
 
+
+	/**
+	 * @see http://www.h2database.com/html/datatypes.html
+	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
 		if (Strings.isNotEmpty(ef.getDbType())) {
@@ -66,32 +73,12 @@ public class SQLiteSqlExpert extends SqlExpert {
 		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.BIT:
-		case Types.BOOLEAN:
-		case Types.CHAR:
-		case Types.VARCHAR:
-		case Types.CLOB:
+			return JdbcTypes.BOOLEAN;
 		case Types.LONGVARCHAR:
-			return "TEXT";
-		case Types.REAL:
-		case Types.FLOAT:
-		case Types.DOUBLE:
-		case Types.DECIMAL:
-		case Types.NUMERIC:
-			return JdbcTypes.REAL;
-		case Types.TINYINT:
-		case Types.SMALLINT:
-		case Types.INTEGER:
-		case Types.BIGINT:
-			return JdbcTypes.INTEGER;
-		case Types.DATE:
-		case Types.TIME:
-		case Types.TIMESTAMP:
-			return JdbcTypes.INTEGER;
-		case Types.BLOB:
-		case Types.BINARY:
+			return JdbcTypes.VARCHAR;
 		case Types.VARBINARY:
 		case Types.LONGVARBINARY:
-			return JdbcTypes.BLOB;
+			return JdbcTypes.BINARY;
 		default:
 			return super.evalFieldType(ef);
 		}
@@ -100,7 +87,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://sqlite.org/lang_select.html
+	 * @see http://www.h2database.com/html/grammar.html
 	 */
 	@Override
 	protected void limit(StringBuilder sql, Query query) {
@@ -113,3 +100,4 @@ public class SQLiteSqlExpert extends SqlExpert {
 		}
 	}
 }
+
