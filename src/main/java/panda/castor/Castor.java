@@ -100,14 +100,6 @@ public class Castor<S, T> {
 		}
 	}
 	
-	protected CastException castError(Object value, CastContext context) {
-		return new CastException(context.toPath() 
-				+ ": Failed to cast " 
-				+ (value == null ? "null" : value.getClass())
-				+ " -> "
-				+ Types.getRawType(toType));
-	}
-	
 	/**
 	 * cast value to the provided target object,
 	 * NOTE: if the target is not a mutable object, a new object will be returned.
@@ -189,6 +181,14 @@ public class Castor<S, T> {
 	
 	protected CastException cycleError(CastContext context, String name, Object value) {
 		throw new CastException("Cycle object detected: " + context.toPath(name) + " : " + Objects.identityToString(value));
+	}
+	
+	protected CastException castError(Object value, CastContext context) {
+		return new CastException(context.toPath() 
+				+ ": Failed to cast " 
+				+ (value == null ? "null" : value.getClass())
+				+ " -> "
+				+ Types.getRawType(toType));
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -1,5 +1,7 @@
 package panda.bind.json;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -630,6 +632,22 @@ public class JsonArray extends ArrayList<Object> {
 	
 	public String toString(int indent) {
 		return Jsons.toJson(this, indent);
+	}
+	
+	public static JsonArray fromJson(InputStream json, String encoding) {
+		if (json == null) {
+			return null;
+		}
+		
+		return Jsons.fromJson(json, encoding, JsonArray.class);
+	}
+	
+	public static JsonArray fromJson(Reader json) {
+		if (json == null) {
+			return null;
+		}
+		
+		return Jsons.fromJson(json, JsonArray.class);
 	}
 	
 	public static JsonArray fromJson(String json) {

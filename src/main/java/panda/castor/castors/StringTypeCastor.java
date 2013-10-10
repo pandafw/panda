@@ -57,6 +57,9 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 
 	protected String convertToString(Object value) {
 		try {
+			if (value instanceof Class) {
+				return ((Class)value).getName().toString();
+			}
 			if (value instanceof Date) {
 				return dateCastor.getDefaultDateFormat().format((Date)value);
 			}

@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.castor.castors.ArrayCastor;
+import panda.castor.castors.ClassCastor;
 import panda.castor.castors.CollectionCastor;
 import panda.castor.castors.DateTypeCastor;
 import panda.castor.castors.JavaBeanCastor;
@@ -116,6 +117,8 @@ public class Castors {
 		register(new StringTypeCastor.StringBuilderCastor(dc));
 		
 		register(new StreamCastor.InputStreamCastor());
+
+		register(new ClassCastor());
 	}
 	
 	public Beans getBeans() {
