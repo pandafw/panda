@@ -10,13 +10,13 @@ import panda.dao.sql.SqlExecutor;
 
 /**
  */
-public class ExtendSqlParserTest extends SimpleSqlParserTest {
+public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	protected SqlExecutor createExecutor() {
-		return new ExtendSqlManager().getExecutor();
+		return new DynamicSqlManager().getExecutor();
 	}
 	
 	protected SqlParser createParser(String sql) {
-		return new ExtendSqlParser(sql);
+		return new DynamicSqlParser(sql);
 	}
 
 	/**

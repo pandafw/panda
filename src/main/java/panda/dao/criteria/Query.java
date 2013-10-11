@@ -2,7 +2,6 @@ package panda.dao.criteria;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,8 +23,10 @@ public class Query {
 	protected Operator conjunction = Operator.AND;
 	protected List<Expression> expressions;
 	protected Map<String, Order> orders;
-	protected Map<String, Object> params;
 
+	public static Query create() {
+		return new Query();
+	}
 
 	/**
 	 * constructor
@@ -46,7 +47,6 @@ public class Query {
 		conjunction = qp.conjunction;
 		expressions = qp.expressions;
 		orders = qp.orders;
-		params = qp.params;
 	}
 
 	/**
@@ -66,7 +66,6 @@ public class Query {
 		if (orders != null) {
 			orders.clear();
 		};
-		params = null;
 	}
 
 	//---------------------------------------------------------------
@@ -328,39 +327,27 @@ public class Query {
 	}
 
 	/**
+	 * @param start the start to set
+	 */
+	public Query start(int start) {
+		setStart(start);
+		return this;
+	}
+
+	/**
+	 * @param limit the limit to set
+	 */
+	public Query limit(int limit) {
+		setLimit(limit);
+		return this;
+	}
+
+	/**
 	 * is this query needs paginate
 	 * @return true if start or limit > 0
 	 */
 	public boolean needsPaginate() {
 		return start > 0 || limit > 0;
-	}
-
-	//---------------------------------------------------------------
-	// params
-	//
-	/**
-	 * @return the params
-	 */
-	public Map<String, Object> getParams() {
-		return params;
-	}
-
-	/**
-	 * @param params the params to set
-	 */
-	public void setParams(Map<String, Object> params) {
-		this.params = params;
-	}
-
-	/**
-	 * @param params the params to set
-	 */
-	public Query addParam(String key, Object value) {
-		if (params == null) {
-			params = new HashMap<String, Object>();
-		}
-		params.put(key, value);
-		return this;
 	}
 
 	//---------------------------------------------------------------
@@ -828,7 +815,6 @@ public class Query {
 				.append(orders)
 				.append(start)
 				.append(limit)
-				.append(params)
 				.toHashCode();
 	}
 
@@ -853,7 +839,6 @@ public class Query {
 				.append(orders, rhs.orders)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
-				.append(params, rhs.params)
 				.isEquals();
 	}
 
@@ -870,7 +855,6 @@ public class Query {
 				.append("orders", orders)
 				.append("start", start)
 				.append("limit", limit)
-				.append("params", params)
 				.toString();
 	}
 }

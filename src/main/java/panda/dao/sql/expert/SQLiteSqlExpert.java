@@ -8,6 +8,7 @@ import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class SQLiteSqlExpert extends SqlExpert {
@@ -103,7 +104,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 	 * @see http://sqlite.org/lang_select.html
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 			

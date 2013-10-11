@@ -4,13 +4,20 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class PostgreSqlExpert extends SqlExpert {
+	@Override
+	public DB getType() {
+		return DB.POSTGRE;
+	}
+
 	@Override
 	public boolean isSupportDropIfExists() {
 		return true;
@@ -28,11 +35,6 @@ public class PostgreSqlExpert extends SqlExpert {
 		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
 		for (EntityField ef : entity.getFields()) {
 			sb.append('\n').append(ef.getColumn());
-			sb.append(' ').append(evalFieldType(ef));
-
-			if (ef.isUnsigned()) {
-				sb.append(" UNSIGNED");
-			}
 
 			if (ef.isAutoIncrement()) {
 				if (JdbcTypes.BIGINT.equals(ef.getJdbcType())) {
@@ -42,12 +44,17 @@ public class PostgreSqlExpert extends SqlExpert {
 					sb.append(" SERIAL");
 				}
 			}
-			else if (ef.isNotNull()) {
-				sb.append(" NOT NULL");
-			}
-
-			if (ef.hasDefaultValue()) {
-				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
+			else {
+				sb.append(' ').append(evalFieldType(ef));
+				if (ef.isUnsigned()) {
+					sb.append(" UNSIGNED");
+				}
+				if (ef.isNotNull()) {
+					sb.append(" NOT NULL");
+				}
+				if (ef.hasDefaultValue()) {
+					sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
+				}
 			}
 			sb.append(',');
 		}
@@ -105,7 +112,7 @@ public class PostgreSqlExpert extends SqlExpert {
 	 * @see http://www.postgresql.org/docs/8.0/static/queries-limit.html
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit());
 		}

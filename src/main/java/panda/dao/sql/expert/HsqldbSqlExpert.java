@@ -3,13 +3,20 @@ package panda.dao.sql.expert;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.sql.Sql;
 
 /**
  */
 public class HsqldbSqlExpert extends SqlExpert {
+	@Override
+	public DB getType() {
+		return DB.HSQLDB;
+	}
+
 	@Override
 	public boolean isSupportDropIfExists() {
 		return true;
@@ -65,7 +72,7 @@ public class HsqldbSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 			

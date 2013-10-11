@@ -4,13 +4,19 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class OracleSqlExpert extends SqlExpert {
+	@Override
+	public DB getType() {
+		return DB.ORACLE;
+	}
 
 	@Override
 	public List<String> drop(Entity<?> entity) {
@@ -69,6 +75,12 @@ public class OracleSqlExpert extends SqlExpert {
 	}
 	
 	@Override
+	public String prepIdentity(Entity<?> entity) {
+		EntityField id = entity.getIdentity();
+		return "SELECT " + entity.getTableName() + '_' + id.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
+	}
+	
+	@Override
 	protected String evalFieldType(EntityField ef) {
 		if (Strings.isNotEmpty(ef.getDbType())) {
 			return super.evalFieldType(ef);
@@ -121,7 +133,7 @@ public class OracleSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getStart() > 0) {
 			sql.insert(0, "SELECT * FROM (SELECT T.*, ROWNUM RN_ FROM (");
 			sql.append(") T");

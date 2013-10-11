@@ -28,6 +28,8 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void prepareActualMap(Map actual) {
+		super.prepareActualMap(actual);
+
 		for (Iterator<Entry> it = actual.entrySet().iterator(); it.hasNext();) {
 			Entry e = it.next();
 			Object val = e.getValue();
@@ -89,71 +91,6 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 		return new java.sql.Timestamp(d.getTime());
 	}
 	
-	private static int id = 1000;
-
-	private void insertAndSelectBLOB(String data) {
-		logTestMethodName();
-
-		id++;
-
-		String sql = "INSERT INTO TESTB VALUES(:id, :data)";
-
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("id", id);
-		param.put("data", data == null ? null : data.getBytes());
-
-		int cnt = 0;
-		try {
-			cnt = executor.update(sql, param);
-		}
-		catch (Exception e) {
-			log.error("exception", e);
-			Assert.fail(e.getMessage());
-		}
-		Assert.assertEquals(1, cnt);
-
-		sql = "SELECT * FROM TESTB WHERE id=:id";
-
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("id", id);
-		result.put("data", new byte[0]);
-
-		try {
-			executor.fetch(sql, result, result);
-		}
-		catch (Throwable e) {
-			log.error("exception", e);
-			Assert.fail(e.getMessage());
-		}
-
-		byte[] expected = (byte[]) result.get("data");
-
-		log.debug("expected data: " + (expected == null ? "null" : new String(expected)));
-
-		if (data == null) {
-			Assert.assertNull(expected);
-		}
-		else {
-			Assert.assertEquals(new String(data), new String(expected));
-		}
-	}
-
-	/**
-	 * testBLOB
-	 */
-	@Test
-	public void testBLOB() {
-		insertAndSelectBLOB("test data");
-	}
-
-	/**
-	 * testBLOBNull
-	 */
-	@Test
-	public void testBLOBNull() {
-		insertAndSelectBLOB(null);
-	}
-
 	/**
 	 * testCall01
 	 */

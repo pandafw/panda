@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
 
+import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonObject;
 import panda.dao.entity.annotation.ColDefine;
@@ -18,7 +19,10 @@ import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.PK;
+import panda.dao.entity.annotation.Post;
+import panda.dao.entity.annotation.Prep;
 import panda.dao.entity.annotation.Readonly;
+import panda.dao.entity.annotation.SQL;
 import panda.dao.entity.annotation.Table;
 import panda.dao.entity.annotation.TableIndexes;
 import panda.dao.entity.annotation.TableMeta;
@@ -37,10 +41,12 @@ import panda.log.Logs;
  * @author yf.frank.wang@gmail.com
  */
 public class AnnotationEntityMaker implements EntityMaker {
-
 	private static final Log log = Logs.getLog(AnnotationEntityMaker.class);
 
-	public AnnotationEntityMaker() {
+	private Beans beans;
+	
+	public AnnotationEntityMaker(Beans beans) {
+		this.beans = beans; 
 	}
 
 	public <T> Entity<T> make(Class<T> type) {
@@ -59,18 +65,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		// loop for fields
 		for (Field field : fields) {
-			EntityField ef = createEntityField(field, shouldUseColumn);
-			if (ef != null) {
-				en.addField(ef);
-			}
+			addEntityField(en, field, shouldUseColumn);
 		}
 
 		// loop for methods
 		for (Method method : Classes.getMethods(en.getType())) {
-			EntityField ef = createEntityField(method);
-			if (ef != null) {
-				en.addField(ef);
-			}
+			addEntityField(en, method);
 		}
 
 		// check empty
@@ -109,6 +109,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private <T> Entity<T> createEntity(Class<T> type) {
 		Entity<T> en = new Entity<T>(type);
 
+		BeanHandler<T> bh = beans.getBeanHandler(type);
+		if (bh == null) {
+			throw new RuntimeException("Failed to get BeanHander for " + type);
+		}
+		en.setBeanHandler(bh);
+		
 		// Table meta
 		TableMeta annMeta = Classes.getAnnotation(type, TableMeta.class);
 		if (annMeta != null) {
@@ -202,8 +208,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 			ef.setJdbcType(JdbcTypes.TIMESTAMP);
 		}
 		else if (Classes.isAssignable(clazz, BigDecimal.class)) {
-			ef.setJdbcType(JdbcTypes.NUMERIC);
-			ef.setSize(32);
+			ef.setJdbcType(JdbcTypes.DECIMAL);
+			ef.setSize(20);
 			ef.setScale(2);
 		}
 		else if (Classes.isAssignable(clazz, Reader.class)) {
@@ -232,6 +238,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 		Comment annComment;
 		ColDefine annDefine;
 		Readonly annReadonly;
+		Prep annPrep;
+		Post annPost;
 		
 		public static MappingInfo create(Field field, boolean useColumn) {
 			Id annId = field.getAnnotation(Id.class);
@@ -255,6 +263,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.annComment = field.getAnnotation(Comment.class);
 			mi.annDefine = field.getAnnotation(ColDefine.class);
 			mi.annReadonly = field.getAnnotation(Readonly.class);
+			mi.annPrep = field.getAnnotation(Prep.class);
+			mi.annPost = field.getAnnotation(Post.class);
 			return mi;
 		}
 
@@ -282,11 +292,13 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.annComment = method.getAnnotation(Comment.class);
 			mi.annDefine = method.getAnnotation(ColDefine.class);
 			mi.annReadonly = method.getAnnotation(Readonly.class);
+			mi.annPrep = method.getAnnotation(Prep.class);
+			mi.annPost = method.getAnnotation(Post.class);
 			return mi;
 		}
 	}
 	
-	private EntityField createEntityField(MappingInfo mi) {
+	private void addEntityField(Entity<?> entity, MappingInfo mi) {
 		EntityField ef = new EntityField();
 
 		if (mi.annId != null) {
@@ -304,7 +316,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		ef.setName(mi.name);
 		ef.setType(mi.type);
-		if (mi.annColumn == null || Strings.isBlank(mi.annColumn.value())) {
+		if (mi.annColumn != null && Strings.isNotBlank(mi.annColumn.value())) {
 			ef.setColumn(mi.annColumn.value());
 		}
 		else {
@@ -329,25 +341,37 @@ public class AnnotationEntityMaker implements EntityMaker {
 		else {
 			guessEntityFieldJdbcType(ef);
 		}
-		return ef;
+
+		if (mi.annPrep != null) {
+			for (SQL s : mi.annPrep.value()) {
+				entity.addPrepSql(s.db(), s.value());
+			}
+		}
+		if (mi.annPost != null) {
+			for (SQL s : mi.annPost.value()) {
+				entity.addPostSql(s.db(), s.value());
+			}
+		}
+
+		entity.addField(ef);
 	}
 
-	private EntityField createEntityField(Field field, boolean useColumn) {
+	private void addEntityField(Entity<?> entity, Field field, boolean useColumn) {
 		MappingInfo mi = MappingInfo.create(field, useColumn);
 		if (mi == null) {
-			return null;
+			return;
 		}
 	
-		return createEntityField(mi);
+		addEntityField(entity, mi);
 	}
 
-	private EntityField createEntityField(Method method) {
+	private void addEntityField(Entity<?> entity, Method method) {
 		MappingInfo mi = MappingInfo.create(method);
 		if (mi == null) {
-			return null;
+			return;
 		}
 	
-		return createEntityField(mi);
+		addEntityField(entity, mi);
 	}
 
 	private void evalEntityIndexes(Entity<?> en, TableIndexes indexes) {

@@ -24,6 +24,8 @@ public class SimpleSqlExecutorH2Test extends SimpleSqlExecutorTestCase {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void prepareActualMap(Map actual) {
+		super.prepareActualMap(actual);
+
 		// fix for real precision error 
 		Double d = (Double)actual.get("freal");
 		if (d != null) {

@@ -114,6 +114,7 @@ public class TestSupport extends TestHelper {
 	 */
 	public static Connection getMssqlConnection() throws Exception {
 		Connection connection = getConnection("mssql");
+		connection.setAutoCommit(true);
 		initMssqlTestData(connection);
 		return connection;
 	}

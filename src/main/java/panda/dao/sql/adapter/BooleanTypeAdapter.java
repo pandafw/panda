@@ -10,7 +10,7 @@ import java.sql.Types;
  * Boolean implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
+public class BooleanTypeAdapter<T> extends AbstractCastTypeAdapter<T, Boolean> {
 	public BooleanTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, Boolean.class);
 	}
@@ -19,12 +19,12 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		boolean b = rs.getBoolean(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		boolean b = rs.getBoolean(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -37,12 +37,12 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		boolean b = rs.getBoolean(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		boolean b = rs.getBoolean(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -55,12 +55,12 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		boolean b = cs.getBoolean(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		boolean b = cs.getBoolean(column);
 		if (cs.wasNull()) {
 			return castToJava(null);
 		}
@@ -73,18 +73,16 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		if (value == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateBoolean(columnName, castToJdbc(value));
+			rs.updateBoolean(column, castToJdbc(value));
 		}
 	}
 
@@ -92,18 +90,16 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		if (value == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateBoolean(columnIndex, castToJdbc(value));
+			rs.updateBoolean(column, castToJdbc(value));
 		}
 	}
 
@@ -112,13 +108,12 @@ public class BooleanTypeAdapter<T> extends AbstractTypeAdapter<T, Boolean> {
 	 * 
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
-	 * @param parameter - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object parameter, String jdbcType)
+	public void setParameter(PreparedStatement ps, int i, Object value)
 			throws SQLException {
-		Boolean b = castToJdbc(parameter);
+		Boolean b = castToJdbc(value);
 		if (b == null) {
 			ps.setNull(i, Types.BOOLEAN);
 		}

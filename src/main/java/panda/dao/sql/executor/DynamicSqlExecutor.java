@@ -3,7 +3,7 @@ package panda.dao.sql.executor;
 
 
 /**
- * ExtendSqlExecutor (extends from SimpleSqlExecutor).
+ * SqlExecutor supports dynamic sql.
  * 
  * <pre>
  * Dynamic SQL: 
@@ -41,12 +41,12 @@ package panda.dao.sql.executor;
  * 
  * @author yf.frank.wang@gmail.com
  */
-public class ExtendSqlExecutor extends SimpleSqlExecutor {
+public class DynamicSqlExecutor extends SimpleSqlExecutor {
 	/**
 	 * Constructor
 	 * @param sqlManager sqlManager
 	 */
-	protected ExtendSqlExecutor(ExtendSqlManager sqlManager) {
+	protected DynamicSqlExecutor(DynamicSqlManager sqlManager) {
 		super(sqlManager);
 	}
 
@@ -57,6 +57,6 @@ public class ExtendSqlExecutor extends SimpleSqlExecutor {
 	 */
 	@Override
 	protected SqlParser createSqlParser(String sql) {
-		return new ExtendSqlParser(sql);
+		return new DynamicSqlParser(sql);
 	}
 }

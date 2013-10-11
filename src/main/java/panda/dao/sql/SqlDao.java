@@ -1,12 +1,14 @@
 package panda.dao.sql;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.dao.DB;
 import panda.dao.Dao;
 import panda.dao.DaoException;
 import panda.dao.DataHandler;
@@ -16,6 +18,8 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Strings;
+import panda.lang.Texts;
+import panda.lang.Types;
 
 /**
  * !! thread-unsafe !!
@@ -62,6 +66,7 @@ public class SqlDao extends Dao {
 			executor = getSqlDaoClient().getSqlManager().getExecutor(connection);
 		}
 		else {
+			executor.reset();
 			executor.setConnection(connection);
 		}
 		autoCount++;
@@ -107,7 +112,7 @@ public class SqlDao extends Dao {
 		autoStart();
 		try {
 			for (String sql : sqls) {
-				executor.update(sql);
+				executor.execute(sql);
 			}
 			autoCommit();
 		}
@@ -140,7 +145,7 @@ public class SqlDao extends Dao {
 
 		autoStart();
 		try {
-			executor.update(sql);
+			executor.execute(sql);
 			autoCommit();
 		}
 		catch (SQLException e) {
@@ -171,7 +176,7 @@ public class SqlDao extends Dao {
 			}
 
 			for (String sql : sqls) {
-				executor.update(sql);
+				executor.execute(sql);
 			}
 			autoCommit();
 		}
@@ -202,7 +207,7 @@ public class SqlDao extends Dao {
 			return true;
 		}
 		catch (SQLException e) {
-			// table does exists
+			// table does not exist
 			return false;
 		}
 		finally {
@@ -268,14 +273,14 @@ public class SqlDao extends Dao {
 		}
 
 		query.setLimit(1);
-		String sql = getSqlExpert().select(entity, query);
+		Sql sql = getSqlExpert().select(entity, query);
 		
 		autoStart();
 		try {
-			return executor.fetch(sql, query.getParams(), entity.getType());
+			return executor.fetch(sql.getSql(), sql.getParams(), entity.getType());
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to fetch entity " + entity.getViewName() + ": " + sql, e);
+			throw new DaoException("Failed to fetch entity " + entity.getViewName() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -298,14 +303,14 @@ public class SqlDao extends Dao {
 		}
 
 		query.setLimit(1);
-		String sql = getSqlExpert().select(table, query);
+		Sql sql = getSqlExpert().select(table, query);
 		
 		autoStart();
 		try {
-			return executor.fetch(sql, query.getParams(), HashMap.class);
+			return executor.fetch(sql.getSql(), sql.getParams(), HashMap.class);
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to fetch table " + table + ": " + sql, e);
+			throw new DaoException("Failed to fetch table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -329,6 +334,37 @@ public class SqlDao extends Dao {
 		queryPrimaryKey(entity, query, obj);
 
 		return delete(entity, query);
+	}
+
+	/**
+	 * delete object collection
+	 * 
+	 * @param col object collection to be deleted
+	 * @return deleted count
+	 */
+	public int deletes(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				cnt += delete(obj);
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		catch (DaoException e) {
+			rollback();
+			throw e;
+		}
+		finally {
+			autoClose();
+		}
 	}
 
 	/**
@@ -364,17 +400,17 @@ public class SqlDao extends Dao {
 	public int delete(Entity<?> entity, Query query) {
 		assertTable(entity);
 
-		String sql = getSqlExpert().delete(entity, query);
+		Sql sql = getSqlExpert().delete(entity, query);
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, query == null ? null : query.getParams());
+			int cnt = executor.update(sql.getSql(), sql.getParams());
 			autoCommit();
 			return cnt;
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to delete entity " + entity.getType() + ": " + sql, e);
+			throw new DaoException("Failed to delete entity " + entity.getType() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -392,17 +428,17 @@ public class SqlDao extends Dao {
 	public int delete(String table, Query query) {
 		assertTable(table);
 
-		String sql = getSqlExpert().delete(table, query);
+		Sql sql = getSqlExpert().delete(table, query);
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, query == null ? null : query.getParams());
+			int cnt = executor.update(sql.getSql(), sql.getParams());
 			autoCommit();
 			return cnt;
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to delete table " + table + ": " + sql, e);
+			throw new DaoException("Failed to delete table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -429,34 +465,106 @@ public class SqlDao extends Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		String sql = getSqlExpert().insert(entity);
-		
 		autoStart();
 		try {
-			T d = insert(entity, sql, obj);
+			T d = insert(entity, obj);
 			autoCommit();
 			return d;
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to insert entity " + entity.getType() + ": " + sql, e);
+			throw new DaoException("Failed to insert entity " + entity.getType(), e);
 		}
 		finally {
 			autoClose();
 		}
 	}
 
-	private <T> T insert(Entity<?> entity, String sql, T obj) throws SQLException {
+	private <T> T insert(Entity<?> entity, T obj) throws SQLException {
 		EntityField id = entity.getIdentity();
 		if (id == null) {
-			int i = executor.update(sql, obj);
-			autoCommit();
-			return i > 0 ? obj : null;
+			Sql sql = getSqlExpert().insert(entity, obj, false);
+			int c = executor.update(sql.getSql(), sql.getParams());
+			return c > 0 ? obj : null;
 		}
 		
-		// TODO: @Prep @Post
-		T d = executor.insert(sql, obj, id.getName());
-		return d;
+		Object iid = id.getValue(obj);
+		if (iid != null && !iid.equals(0)) {
+			String s = getSqlExpert().identityInsertOn(entity);
+			if (Strings.isNotEmpty(s)) {
+				executor.execute(s);
+			}
+			
+			Sql sql = getSqlExpert().insert(entity, obj, false);
+			int c = executor.update(sql.getSql(), sql.getParams());
+			
+			s = getSqlExpert().identityInsertOff(entity);
+			if (Strings.isNotEmpty(s)) {
+				executor.execute(s);
+			}
+			
+			return c > 0 ? obj : null;
+		}
+		
+		if (id.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
+			Sql sql = getSqlExpert().insert(entity, obj, true);
+			return executor.insert(sql.getSql(), sql.getParams(), obj, id.getName());
+		}
+
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("view", entity.getViewName());
+		m.put("table", entity.getTableName());
+		m.put("field", id.getName());
+		
+		String prep = entity.getPrepSql(getSqlExpert().getType());
+		if (Strings.isEmpty(prep)) {
+			prep = entity.getPrepSql(DB.GENERAL);
+		}
+		String post = entity.getPostSql(getSqlExpert().getType());
+		if (Strings.isEmpty(post)) {
+			post = entity.getPostSql(DB.GENERAL);
+		}
+		
+		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
+			prep = getSqlExpert().prepIdentity(entity);
+			post = getSqlExpert().postIdentity(entity);
+		}
+		else {
+			prep = Texts.transform(prep, m);
+			post = Texts.transform(post, m);
+		}
+
+		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
+			throw new DaoException("Failed to get (" + getSqlExpert().getType() + ") identity select sql for entity: " + entity.getType());
+		}
+		
+		if (Strings.isNotEmpty(prep)) {
+			iid = executor.fetch(prep, Types.getRawType(id.getType()));
+			if (iid == null || iid.equals(0)) {
+				throw new DaoException("Failed to get identity from prep sql: " + prep);
+			}
+			if (!id.setValue(obj, iid)) {
+				throw new DaoException("Failed to set identity to entity: " + entity.getType());
+			}
+		}
+		
+		Sql sql = getSqlExpert().insert(entity, obj, false);
+		int c = executor.update(sql.getSql(), sql.getParams());
+		if (c == 0) {
+			return null;
+		}
+
+		if (Strings.isNotEmpty(post)) {
+			iid = executor.fetch(post, Types.getRawType(id.getType()));
+			if (iid == null || iid.equals(0)) {
+				throw new DaoException("Failed to get identity from post sql: " + post);
+			}
+			if (!id.setValue(obj, iid)) {
+				throw new DaoException("Failed to set identity to entity: " + entity.getType());
+			}
+		}
+		
+		return obj;
 	}
 
 	/**
@@ -472,25 +580,23 @@ public class SqlDao extends Dao {
 	 * @param col the record collection to be inserted
 	 * @return the inserted record collection
 	 */
-	public <T> Collection<T> inserts(Collection<T> col) {
+	public Collection<?> inserts(Collection<?> col) {
 		assertCollection(col);
 
 		Entity<?> entity = null;
-		String sql = null;
 
 		autoStart();
 		try {
-			for (T obj : col) {
+			for (Object obj : col) {
 				if (obj == null) {
 					continue;
 				}
 				if (entity == null) {
 					entity = getEntity(obj.getClass());
 					assertTable(entity);
-					sql = getSqlExpert().insert(entity);
 				}
 				
-				insert(entity, sql, obj);
+				insert(entity, obj);
 			}
 
 			autoCommit();
@@ -498,7 +604,7 @@ public class SqlDao extends Dao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to insert entity " + entity.getType() + ": " + sql, e);
+			throw new DaoException("Failed to insert entity " + entity.getType(), e);
 		}
 		finally {
 			autoClose();
@@ -524,7 +630,6 @@ public class SqlDao extends Dao {
 		return update(entity, obj, query);
 	}
 
-
 	/**
 	 * update records by the supplied object collection. 
 	 * 
@@ -532,7 +637,7 @@ public class SqlDao extends Dao {
 	 * @return updated count
 	 */
 	@Override
-	public <T> int updates(Collection<T> col) {
+	public int updates(Collection<?> col) {
 		assertCollection(col);
 
 		Entity<?> entity = null;
@@ -541,7 +646,7 @@ public class SqlDao extends Dao {
 		autoStart();
 		try {
 			int cnt = 0;
-			for (T obj : col) {
+			for (Object obj : col) {
 				if (obj == null) {
 					continue;
 				}
@@ -554,8 +659,8 @@ public class SqlDao extends Dao {
 				queryPrimaryKey(entity, query, obj);
 				excludePrimaryKeys(entity, query);
 
-				String sql = getSqlExpert().update(entity, query);
-				cnt += executor.update(sql, query.getParams());
+				Sql sql = getSqlExpert().update(entity, obj, query);
+				cnt += executor.update(sql.getSql(), sql.getParams());
 			}
 
 			autoCommit();
@@ -588,6 +693,37 @@ public class SqlDao extends Dao {
 		excludeNullProperties(entity, query, obj);
 
 		return update(entity, obj, query);
+	}
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public int updatesIgnoreNull(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				cnt += updateIgnoreNull(obj);
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		catch (DaoException e) {
+			rollback();
+			throw e;
+		}
+		finally {
+			autoClose();
+		}
 	}
 
 	/**
@@ -643,11 +779,11 @@ public class SqlDao extends Dao {
 		}
 		excludePrimaryKeys(entity, query);
 
-		String sql = getSqlExpert().update(entity, query);
+		Sql sql = getSqlExpert().update(entity, obj, query);
 		
 		autoStart();
 		try {
-			int cnt = executor.update(sql, query.getParams());
+			int cnt = executor.update(sql.getSql(), sql.getParams());
 			autoCommit();
 			return cnt;
 		}
@@ -676,17 +812,24 @@ public class SqlDao extends Dao {
 	public <T> List<T> select(Entity<T> entity, Query query) {
 		assertEntity(entity);
 
-		String sql = getSqlExpert().select(entity, query);
+		Sql sql = getSqlExpert().select(entity, query);
 		
 		autoStart();
 		try {
 			if (isClientPaginate(query)) {
-				return executor.selectList(sql, query == null ? null : query.getParams(), entity.getType(), query.getStart(), query.getLimit());
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+				}
+				List<T> list = executor.selectList(sql.getSql(), sql.getParams(), entity.getType(), query.getStart(), query.getLimit());
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.FETCH_FORWARD);
+				}
+				return list;
 			}
-			return executor.selectList(sql, query == null ? null : query.getParams(), entity.getType());
+			return executor.selectList(sql.getSql(), sql.getParams(), entity.getType());
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql, e);
+			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -705,17 +848,17 @@ public class SqlDao extends Dao {
 	public List<Map> select(String table, Query query) {
 		assertTable(table);
 
-		String sql = getSqlExpert().select(table, query);
+		Sql sql = getSqlExpert().select(table, query);
 		
 		autoStart();
 		try {
 			if (isClientPaginate(query)) {
-				return executor.selectList(sql, query == null ? null : query.getParams(), Map.class, query.getStart(), query.getLimit());
+				return executor.selectList(sql.getSql(), sql.getParams(), Map.class, query.getStart(), query.getLimit());
 			}
-			return executor.selectList(sql, query == null ? null : query.getParams(), Map.class);
+			return executor.selectList(sql.getSql(), sql.getParams(), Map.class);
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select table " + table + ": " + sql, e);
+			throw new DaoException("Failed to select table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -735,11 +878,11 @@ public class SqlDao extends Dao {
 		assertEntity(entity);
 		
 		SqlResultSet<T> srs = null;
-		String sql = getSqlExpert().select(entity, query);
+		Sql sql = getSqlExpert().select(entity, query);
 		
 		autoStart();
 		try {
-			srs = executor.selectResultSet(sql, query == null ? null : query.getParams(), entity.getType());
+			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), entity.getType());
 			
 			int count = 0;
 			int max = Integer.MAX_VALUE;
@@ -764,7 +907,7 @@ public class SqlDao extends Dao {
 			return count;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql, e);
+			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql.getSql(), e);
 		}
 		finally {
 			SqlUtils.safeClose(srs);
@@ -785,11 +928,11 @@ public class SqlDao extends Dao {
 		assertTable(table);
 
 		SqlResultSet<Map> srs = null;
-		String sql = getSqlExpert().select(table, query);
+		Sql sql = getSqlExpert().select(table, query);
 
 		autoStart();
 		try {
-			srs = executor.selectResultSet(sql, query == null ? null : query.getParams(), Map.class);
+			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), Map.class);
 
 			int count = 0;
 			int max = Integer.MAX_VALUE;
@@ -814,7 +957,7 @@ public class SqlDao extends Dao {
 			return count;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select table " + table + ": " + sql, e);
+			throw new DaoException("Failed to select table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
 			SqlUtils.safeClose(srs);
@@ -832,15 +975,15 @@ public class SqlDao extends Dao {
 	public int count(Entity<?> entity, Query query) {
 		assertEntity(entity);
 
-		String sql = getSqlExpert().count(entity, query);
+		Sql sql = getSqlExpert().count(entity, query);
 		
 		autoStart();
 		try {
-			int i = executor.fetch(sql, query == null ? null : query.getParams(), int.class);
+			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
 			return i;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to count entity " + entity.getViewName() + ": " + sql, e);
+			throw new DaoException("Failed to count entity " + entity.getViewName() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -858,15 +1001,15 @@ public class SqlDao extends Dao {
 	public int count(String table, Query query) {
 		assertTable(table);
 
-		String sql = getSqlExpert().count(table, query);
+		Sql sql = getSqlExpert().count(table, query);
 		
 		autoStart();
 		try {
-			int i = executor.fetch(sql, query == null ? null : query.getParams(), int.class);
+			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
 			return i;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to count table " + table + ": " + sql, e);
+			throw new DaoException("Failed to count table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();

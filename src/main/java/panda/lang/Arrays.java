@@ -208,8 +208,8 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * String[] array = ArrayUtils.toArray(&quot;1&quot;, &quot;2&quot;);
-	 * String[] emptyArray = ArrayUtils.&lt;String&gt; toArray();
+	 * String[] array = Arrays.toArray(&quot;1&quot;, &quot;2&quot;);
+	 * String[] emptyArray = Arrays.&lt;String&gt; toArray();
 	 * </pre>
 	 * <p>
 	 * The method is typically used in scenarios, where the caller itself uses generic types that
@@ -219,7 +219,7 @@ public abstract class Arrays {
 	 * Note, this method makes only sense to provide arguments of the same type so that the compiler
 	 * can deduce the type of the array itself. While it is possible to select the type explicitly
 	 * like in
-	 * <code>Number[] array = ArrayUtils.&lt;Number&gt;toArray(Integer.valueOf(42), Double.valueOf(Math.PI))</code>
+	 * <code>Number[] array = Arrays.&lt;Number&gt;toArray(Integer.valueOf(42), Double.valueOf(Math.PI))</code>
 	 * , there is no real advantage when compared to
 	 * <code>new Number[] {Integer.valueOf(42), Double.valueOf(Math.PI)}</code>.
 	 * </p>
@@ -227,7 +227,6 @@ public abstract class Arrays {
 	 * @param <T> the array's element type
 	 * @param items the varargs array items, null allowed
 	 * @return the array, not null unless a null array is passed in
-	 * @since 3.0
 	 */
 	public static <T> T[] toArray(final T... items) {
 		return items;
@@ -418,7 +417,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Object[] nullToEmpty(Object[] array) {
 		if (array == null || array.length == 0) {
@@ -441,7 +439,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static String[] nullToEmpty(String[] array) {
 		if (array == null || array.length == 0) {
@@ -464,7 +461,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static long[] nullToEmpty(long[] array) {
 		if (array == null || array.length == 0) {
@@ -487,7 +483,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static int[] nullToEmpty(int[] array) {
 		if (array == null || array.length == 0) {
@@ -510,7 +505,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static short[] nullToEmpty(short[] array) {
 		if (array == null || array.length == 0) {
@@ -533,7 +527,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static char[] nullToEmpty(char[] array) {
 		if (array == null || array.length == 0) {
@@ -556,7 +549,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static byte[] nullToEmpty(byte[] array) {
 		if (array == null || array.length == 0) {
@@ -579,7 +571,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static double[] nullToEmpty(double[] array) {
 		if (array == null || array.length == 0) {
@@ -602,7 +593,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static float[] nullToEmpty(float[] array) {
 		if (array == null || array.length == 0) {
@@ -625,7 +615,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static boolean[] nullToEmpty(boolean[] array) {
 		if (array == null || array.length == 0) {
@@ -648,7 +637,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Long[] nullToEmpty(Long[] array) {
 		if (array == null || array.length == 0) {
@@ -671,7 +659,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Integer[] nullToEmpty(Integer[] array) {
 		if (array == null || array.length == 0) {
@@ -694,7 +681,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Short[] nullToEmpty(Short[] array) {
 		if (array == null || array.length == 0) {
@@ -717,7 +703,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Character[] nullToEmpty(Character[] array) {
 		if (array == null || array.length == 0) {
@@ -740,7 +725,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Byte[] nullToEmpty(Byte[] array) {
 		if (array == null || array.length == 0) {
@@ -763,7 +747,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Double[] nullToEmpty(Double[] array) {
 		if (array == null || array.length == 0) {
@@ -786,7 +769,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Float[] nullToEmpty(Float[] array) {
 		if (array == null || array.length == 0) {
@@ -809,7 +791,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to check for {@code null} or empty
 	 * @return the same array, {@code public static} empty array if {@code null} or empty input
-	 * @since 2.5
 	 */
 	public static Boolean[] nullToEmpty(Boolean[] array) {
 		if (array == null || array.length == 0) {
@@ -833,7 +814,7 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Date[] someDates = (Date[])ArrayUtils.subarray(allDates, 2, 5);
+	 * Date[] someDates = (Date[])Arrays.subarray(allDates, 2, 5);
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -844,7 +825,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static <T> T[] subarray(T[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -886,7 +866,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static long[] subarray(long[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -923,7 +902,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static int[] subarray(int[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -960,7 +938,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static short[] subarray(short[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -997,7 +974,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static char[] subarray(char[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -1034,7 +1010,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static byte[] subarray(byte[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -1072,7 +1047,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static double[] subarray(double[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -1109,7 +1083,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static float[] subarray(float[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -1147,7 +1120,6 @@ public abstract class Arrays {
 	 *            Undervalue (&lt; startIndex) produces empty array, overvalue (&gt;array.length) is
 	 *            demoted to array length.
 	 * @return a new array containing the elements between the start and end indices.
-	 * @since 2.1
 	 */
 	public static boolean[] subarray(boolean[] array, int startIndexInclusive, int endIndexExclusive) {
 		if (array == null) {
@@ -1355,18 +1327,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.getLength(null)            = 0
-	 * ArrayUtils.getLength([])              = 0
-	 * ArrayUtils.getLength([null])          = 1
-	 * ArrayUtils.getLength([true, false])   = 2
-	 * ArrayUtils.getLength([1, 2, 3])       = 3
-	 * ArrayUtils.getLength(["a", "b", "c"]) = 3
+	 * Arrays.getLength(null)            = 0
+	 * Arrays.getLength([])              = 0
+	 * Arrays.getLength([null])          = 1
+	 * Arrays.getLength([true, false])   = 2
+	 * Arrays.getLength([1, 2, 3])       = 3
+	 * Arrays.getLength(["a", "b", "c"]) = 3
 	 * </pre>
 	 * 
 	 * @param array the array to retrieve the length from, may be null
 	 * @return The length of the array, or {@code 0} if the array is {@code null}
 	 * @throws IllegalArgumentException if the object arguement is not an array.
-	 * @since 2.1
 	 */
 	public static int getLength(Object array) {
 		if (array == null) {
@@ -2150,7 +2121,6 @@ public abstract class Arrays {
 	 * @param valueToFind the value to find
 	 * @return the index of the value within the array, {@link #INDEX_NOT_FOUND} ({@code -1}) if not
 	 *         found or {@code null} array input
-	 * @since 2.1
 	 */
 	public static int indexOf(char[] array, char valueToFind) {
 		return indexOf(array, valueToFind, 0);
@@ -2173,7 +2143,6 @@ public abstract class Arrays {
 	 * @param startIndex the index to start searching at
 	 * @return the index of the value within the array, {@link #INDEX_NOT_FOUND} ({@code -1}) if not
 	 *         found or {@code null} array input
-	 * @since 2.1
 	 */
 	public static int indexOf(char[] array, char valueToFind, int startIndex) {
 		if (array == null) {
@@ -2202,7 +2171,6 @@ public abstract class Arrays {
 	 * @param valueToFind the object to find
 	 * @return the last index of the value within the array, {@link #INDEX_NOT_FOUND} ({@code -1})
 	 *         if not found or {@code null} array input
-	 * @since 2.1
 	 */
 	public static int lastIndexOf(char[] array, char valueToFind) {
 		return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
@@ -2225,7 +2193,6 @@ public abstract class Arrays {
 	 * @param startIndex the start index to travers backwards from
 	 * @return the last index of the value within the array, {@link #INDEX_NOT_FOUND} ({@code -1})
 	 *         if not found or {@code null} array input
-	 * @since 2.1
 	 */
 	public static int lastIndexOf(char[] array, char valueToFind, int startIndex) {
 		if (array == null) {
@@ -2256,7 +2223,6 @@ public abstract class Arrays {
 	 * @param array the array to search through
 	 * @param valueToFind the value to find
 	 * @return {@code true} if the array contains the object
-	 * @since 2.1
 	 */
 	public static boolean contains(char[] array, char valueToFind) {
 		return indexOf(array, valueToFind) != INDEX_NOT_FOUND;
@@ -3567,7 +3533,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(Object[] array) {
 		return array == null || array.length == 0;
@@ -3580,7 +3545,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(long[] array) {
 		return array == null || array.length == 0;
@@ -3593,7 +3557,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(int[] array) {
 		return array == null || array.length == 0;
@@ -3606,7 +3569,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(short[] array) {
 		return array == null || array.length == 0;
@@ -3619,7 +3581,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(char[] array) {
 		return array == null || array.length == 0;
@@ -3632,7 +3593,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(byte[] array) {
 		return array == null || array.length == 0;
@@ -3645,7 +3605,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(double[] array) {
 		return array == null || array.length == 0;
@@ -3658,7 +3617,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(float[] array) {
 		return array == null || array.length == 0;
@@ -3671,7 +3629,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is empty or {@code null}
-	 * @since 2.1
 	 */
 	public static boolean isEmpty(boolean[] array) {
 		return array == null || array.length == 0;
@@ -3686,7 +3643,6 @@ public abstract class Arrays {
 	 * @param <T> the component type of the array
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static <T> boolean isNotEmpty(T[] array) {
 		return (array != null && array.length != 0);
@@ -3699,7 +3655,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(long[] array) {
 		return (array != null && array.length != 0);
@@ -3712,7 +3667,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(int[] array) {
 		return (array != null && array.length != 0);
@@ -3725,7 +3679,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(short[] array) {
 		return (array != null && array.length != 0);
@@ -3738,7 +3691,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(char[] array) {
 		return (array != null && array.length != 0);
@@ -3751,7 +3703,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(byte[] array) {
 		return (array != null && array.length != 0);
@@ -3764,7 +3715,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(double[] array) {
 		return (array != null && array.length != 0);
@@ -3777,7 +3727,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(float[] array) {
 		return (array != null && array.length != 0);
@@ -3790,7 +3739,6 @@ public abstract class Arrays {
 	 * 
 	 * @param array the array to test
 	 * @return {@code true} if the array is not empty or not {@code null}
-	 * @since 2.5
 	 */
 	public static boolean isNotEmpty(boolean[] array) {
 		return (array != null && array.length != 0);
@@ -3806,12 +3754,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(null, null)     = null
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
-	 * ArrayUtils.addAll([null], [null]) = [null, null]
-	 * ArrayUtils.addAll(["a", "b", "c"], ["1", "2", "3"]) = ["a", "b", "c", "1", "2", "3"]
+	 * Arrays.addAll(null, null)     = null
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
+	 * Arrays.addAll([null], [null]) = [null, null]
+	 * Arrays.addAll(["a", "b", "c"], ["1", "2", "3"]) = ["a", "b", "c", "1", "2", "3"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -3820,7 +3768,6 @@ public abstract class Arrays {
 	 * @return The new array, {@code null} if both arrays are {@code null}. The type of the new
 	 *         array is the type of the first array, unless the first array is null, in which case
 	 *         the type is the same as the second array.
-	 * @since 2.1
 	 * @throws IllegalArgumentException if the array types are incompatible
 	 */
 	public static <T> T[] addAll(T[] array1, T... array2) {
@@ -3864,15 +3811,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new boolean[] array.
-	 * @since 2.1
 	 */
 	public static boolean[] addAll(boolean[] array1, boolean... array2) {
 		if (array1 == null) {
@@ -3897,15 +3843,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new char[] array.
-	 * @since 2.1
 	 */
 	public static char[] addAll(char[] array1, char... array2) {
 		if (array1 == null) {
@@ -3930,15 +3875,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new byte[] array.
-	 * @since 2.1
 	 */
 	public static byte[] addAll(byte[] array1, byte... array2) {
 		if (array1 == null) {
@@ -3963,15 +3907,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new short[] array.
-	 * @since 2.1
 	 */
 	public static short[] addAll(short[] array1, short... array2) {
 		if (array1 == null) {
@@ -3996,15 +3939,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new int[] array.
-	 * @since 2.1
 	 */
 	public static int[] addAll(int[] array1, int... array2) {
 		if (array1 == null) {
@@ -4029,15 +3971,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new long[] array.
-	 * @since 2.1
 	 */
 	public static long[] addAll(long[] array1, long... array2) {
 		if (array1 == null) {
@@ -4062,15 +4003,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new float[] array.
-	 * @since 2.1
 	 */
 	public static float[] addAll(float[] array1, float... array2) {
 		if (array1 == null) {
@@ -4095,15 +4035,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.addAll(array1, null)   = cloned copy of array1
-	 * ArrayUtils.addAll(null, array2)   = cloned copy of array2
-	 * ArrayUtils.addAll([], [])         = []
+	 * Arrays.addAll(array1, null)   = cloned copy of array1
+	 * Arrays.addAll(null, array2)   = cloned copy of array2
+	 * Arrays.addAll([], [])         = []
 	 * </pre>
 	 * 
 	 * @param array1 the first array whose elements are added to the new array.
 	 * @param array2 the second array whose elements are added to the new array.
 	 * @return The new double[] array.
-	 * @since 2.1
 	 */
 	public static double[] addAll(double[] array1, double... array2) {
 		if (array1 == null) {
@@ -4133,11 +4072,11 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, null)      = [null]
-	 * ArrayUtils.add(null, "a")       = ["a"]
-	 * ArrayUtils.add(["a"], null)     = ["a", null]
-	 * ArrayUtils.add(["a"], "b")      = ["a", "b"]
-	 * ArrayUtils.add(["a", "b"], "c") = ["a", "b", "c"]
+	 * Arrays.add(null, null)      = [null]
+	 * Arrays.add(null, "a")       = ["a"]
+	 * Arrays.add(["a"], null)     = ["a", null]
+	 * Arrays.add(["a"], "b")      = ["a", "b"]
+	 * Arrays.add(["a", "b"], "c") = ["a", "b", "c"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -4146,7 +4085,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements plus the new element The returned array
 	 *         type will be that of the input array (unless null), in which case it will have the
 	 *         same type as the element. If both are null, an IllegalArgumentException is thrown
-	 * @since 2.1
 	 * @throws IllegalArgumentException if both arguments are null
 	 */
 	public static <T> T[] add(T[] array, T element) {
@@ -4181,15 +4119,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, true)          = [true]
-	 * ArrayUtils.add([true], false)       = [true, false]
-	 * ArrayUtils.add([true, false], true) = [true, false, true]
+	 * Arrays.add(null, true)          = [true]
+	 * Arrays.add([true], false)       = [true, false]
+	 * Arrays.add([true, false], true) = [true, false, true]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static boolean[] add(boolean[] array, boolean element) {
 		boolean[] newArray = (boolean[])copyArrayGrow1(array, Boolean.TYPE);
@@ -4211,15 +4148,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static byte[] add(byte[] array, byte element) {
 		byte[] newArray = (byte[])copyArrayGrow1(array, Byte.TYPE);
@@ -4241,15 +4177,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, '0')       = ['0']
-	 * ArrayUtils.add(['1'], '0')      = ['1', '0']
-	 * ArrayUtils.add(['1', '0'], '1') = ['1', '0', '1']
+	 * Arrays.add(null, '0')       = ['0']
+	 * Arrays.add(['1'], '0')      = ['1', '0']
+	 * Arrays.add(['1', '0'], '1') = ['1', '0', '1']
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static char[] add(char[] array, char element) {
 		char[] newArray = (char[])copyArrayGrow1(array, Character.TYPE);
@@ -4271,15 +4206,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static double[] add(double[] array, double element) {
 		double[] newArray = (double[])copyArrayGrow1(array, Double.TYPE);
@@ -4301,15 +4235,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static float[] add(float[] array, float element) {
 		float[] newArray = (float[])copyArrayGrow1(array, Float.TYPE);
@@ -4331,15 +4264,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static int[] add(int[] array, int element) {
 		int[] newArray = (int[])copyArrayGrow1(array, Integer.TYPE);
@@ -4361,15 +4293,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static long[] add(long[] array, long element) {
 		long[] newArray = (long[])copyArrayGrow1(array, Long.TYPE);
@@ -4391,15 +4322,14 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0)   = [0]
-	 * ArrayUtils.add([1], 0)    = [1, 0]
-	 * ArrayUtils.add([1, 0], 1) = [1, 0, 1]
+	 * Arrays.add(null, 0)   = [0]
+	 * Arrays.add([1], 0)    = [1, 0]
+	 * Arrays.add([1, 0], 1) = [1, 0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to copy and add the element to, may be {@code null}
 	 * @param element the object to add at the last index of the new array
 	 * @return A new array containing the existing elements plus the new element
-	 * @since 2.1
 	 */
 	public static short[] add(short[] array, short element) {
 		short[] newArray = (short[])copyArrayGrow1(array, Short.TYPE);
@@ -4444,11 +4374,11 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0, null)      = [null]
-	 * ArrayUtils.add(null, 0, "a")       = ["a"]
-	 * ArrayUtils.add(["a"], 1, null)     = ["a", null]
-	 * ArrayUtils.add(["a"], 1, "b")      = ["a", "b"]
-	 * ArrayUtils.add(["a", "b"], 3, "c") = ["a", "b", "c"]
+	 * Arrays.add(null, 0, null)      = [null]
+	 * Arrays.add(null, 0, "a")       = ["a"]
+	 * Arrays.add(["a"], 1, null)     = ["a", null]
+	 * Arrays.add(["a"], 1, "b")      = ["a", "b"]
+	 * Arrays.add(["a", "b"], 3, "c") = ["a", "b", "c"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -4494,10 +4424,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0, true)          = [true]
-	 * ArrayUtils.add([true], 0, false)       = [false, true]
-	 * ArrayUtils.add([false], 1, true)       = [false, true]
-	 * ArrayUtils.add([true, false], 1, true) = [true, true, false]
+	 * Arrays.add(null, 0, true)          = [true]
+	 * Arrays.add([true], 0, false)       = [false, true]
+	 * Arrays.add([false], 1, true)       = [false, true]
+	 * Arrays.add([true, false], 1, true) = [true, true, false]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4528,11 +4458,11 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add(null, 0, 'a')            = ['a']
-	 * ArrayUtils.add(['a'], 0, 'b')           = ['b', 'a']
-	 * ArrayUtils.add(['a', 'b'], 0, 'c')      = ['c', 'a', 'b']
-	 * ArrayUtils.add(['a', 'b'], 1, 'k')      = ['a', 'k', 'b']
-	 * ArrayUtils.add(['a', 'b', 'c'], 1, 't') = ['a', 't', 'b', 'c']
+	 * Arrays.add(null, 0, 'a')            = ['a']
+	 * Arrays.add(['a'], 0, 'b')           = ['b', 'a']
+	 * Arrays.add(['a', 'b'], 0, 'c')      = ['c', 'a', 'b']
+	 * Arrays.add(['a', 'b'], 1, 'k')      = ['a', 'k', 'b']
+	 * Arrays.add(['a', 'b', 'c'], 1, 't') = ['a', 't', 'b', 'c']
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4563,10 +4493,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1], 0, 2)         = [2, 1]
-	 * ArrayUtils.add([2, 6], 2, 3)      = [2, 6, 3]
-	 * ArrayUtils.add([2, 6], 0, 1)      = [1, 2, 6]
-	 * ArrayUtils.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
+	 * Arrays.add([1], 0, 2)         = [2, 1]
+	 * Arrays.add([2, 6], 2, 3)      = [2, 6, 3]
+	 * Arrays.add([2, 6], 0, 1)      = [1, 2, 6]
+	 * Arrays.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4597,10 +4527,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1], 0, 2)         = [2, 1]
-	 * ArrayUtils.add([2, 6], 2, 10)     = [2, 6, 10]
-	 * ArrayUtils.add([2, 6], 0, -4)     = [-4, 2, 6]
-	 * ArrayUtils.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
+	 * Arrays.add([1], 0, 2)         = [2, 1]
+	 * Arrays.add([2, 6], 2, 10)     = [2, 6, 10]
+	 * Arrays.add([2, 6], 0, -4)     = [-4, 2, 6]
+	 * Arrays.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4631,10 +4561,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1], 0, 2)         = [2, 1]
-	 * ArrayUtils.add([2, 6], 2, 10)     = [2, 6, 10]
-	 * ArrayUtils.add([2, 6], 0, -4)     = [-4, 2, 6]
-	 * ArrayUtils.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
+	 * Arrays.add([1], 0, 2)         = [2, 1]
+	 * Arrays.add([2, 6], 2, 10)     = [2, 6, 10]
+	 * Arrays.add([2, 6], 0, -4)     = [-4, 2, 6]
+	 * Arrays.add([2, 6, 3], 2, 1)   = [2, 6, 1, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4665,10 +4595,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1L], 0, 2L)           = [2L, 1L]
-	 * ArrayUtils.add([2L, 6L], 2, 10L)      = [2L, 6L, 10L]
-	 * ArrayUtils.add([2L, 6L], 0, -4L)      = [-4L, 2L, 6L]
-	 * ArrayUtils.add([2L, 6L, 3L], 2, 1L)   = [2L, 6L, 1L, 3L]
+	 * Arrays.add([1L], 0, 2L)           = [2L, 1L]
+	 * Arrays.add([2L, 6L], 2, 10L)      = [2L, 6L, 10L]
+	 * Arrays.add([2L, 6L], 0, -4L)      = [-4L, 2L, 6L]
+	 * Arrays.add([2L, 6L, 3L], 2, 1L)   = [2L, 6L, 1L, 3L]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4699,10 +4629,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1.1f], 0, 2.2f)               = [2.2f, 1.1f]
-	 * ArrayUtils.add([2.3f, 6.4f], 2, 10.5f)        = [2.3f, 6.4f, 10.5f]
-	 * ArrayUtils.add([2.6f, 6.7f], 0, -4.8f)        = [-4.8f, 2.6f, 6.7f]
-	 * ArrayUtils.add([2.9f, 6.0f, 0.3f], 2, 1.0f)   = [2.9f, 6.0f, 1.0f, 0.3f]
+	 * Arrays.add([1.1f], 0, 2.2f)               = [2.2f, 1.1f]
+	 * Arrays.add([2.3f, 6.4f], 2, 10.5f)        = [2.3f, 6.4f, 10.5f]
+	 * Arrays.add([2.6f, 6.7f], 0, -4.8f)        = [-4.8f, 2.6f, 6.7f]
+	 * Arrays.add([2.9f, 6.0f, 0.3f], 2, 1.0f)   = [2.9f, 6.0f, 1.0f, 0.3f]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4733,10 +4663,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.add([1.1], 0, 2.2)              = [2.2, 1.1]
-	 * ArrayUtils.add([2.3, 6.4], 2, 10.5)        = [2.3, 6.4, 10.5]
-	 * ArrayUtils.add([2.6, 6.7], 0, -4.8)        = [-4.8, 2.6, 6.7]
-	 * ArrayUtils.add([2.9, 6.0, 0.3], 2, 1.0)    = [2.9, 6.0, 1.0, 0.3]
+	 * Arrays.add([1.1], 0, 2.2)              = [2.2, 1.1]
+	 * Arrays.add([2.3, 6.4], 2, 10.5)        = [2.3, 6.4, 10.5]
+	 * Arrays.add([2.6, 6.7], 0, -4.8)        = [-4.8, 2.6, 6.7]
+	 * Arrays.add([2.9, 6.0, 0.3], 2, 1.0)    = [2.9, 6.0, 1.0, 0.3]
 	 * </pre>
 	 * 
 	 * @param array the array to add the element to, may be {@code null}
@@ -4798,10 +4728,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove(["a"], 0)           = []
-	 * ArrayUtils.remove(["a", "b"], 0)      = ["b"]
-	 * ArrayUtils.remove(["a", "b"], 1)      = ["a"]
-	 * ArrayUtils.remove(["a", "b", "c"], 1) = ["a", "c"]
+	 * Arrays.remove(["a"], 0)           = []
+	 * Arrays.remove(["a", "b"], 0)      = ["b"]
+	 * Arrays.remove(["a", "b"], 1)      = ["a"]
+	 * Arrays.remove(["a", "b", "c"], 1) = ["a", "c"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -4811,7 +4741,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	@SuppressWarnings("unchecked")
 	// remove() always creates an array of the same type as its input
@@ -4832,11 +4761,11 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, "a")            = null
-	 * ArrayUtils.removeElement([], "a")              = []
-	 * ArrayUtils.removeElement(["a"], "b")           = ["a"]
-	 * ArrayUtils.removeElement(["a", "b"], "a")      = ["b"]
-	 * ArrayUtils.removeElement(["a", "b", "a"], "a") = ["b", "a"]
+	 * Arrays.removeElement(null, "a")            = null
+	 * Arrays.removeElement([], "a")              = []
+	 * Arrays.removeElement(["a"], "b")           = ["a"]
+	 * Arrays.removeElement(["a", "b"], "a")      = ["b"]
+	 * Arrays.removeElement(["a", "b", "a"], "a") = ["b", "a"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -4844,7 +4773,6 @@ public abstract class Arrays {
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static <T> T[] removeElement(T[] array, Object element) {
 		int index = indexOf(array, element);
@@ -4870,10 +4798,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([true], 0)              = []
-	 * ArrayUtils.remove([true, false], 0)       = [false]
-	 * ArrayUtils.remove([true, false], 1)       = [true]
-	 * ArrayUtils.remove([true, true, false], 1) = [true, false]
+	 * Arrays.remove([true], 0)              = []
+	 * Arrays.remove([true, false], 0)       = [false]
+	 * Arrays.remove([true, false], 1)       = [true]
+	 * Arrays.remove([true, true, false], 1) = [true, false]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -4882,7 +4810,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static boolean[] remove(boolean[] array, int index) {
 		return (boolean[])remove((Object)array, index);
@@ -4901,18 +4828,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, true)                = null
-	 * ArrayUtils.removeElement([], true)                  = []
-	 * ArrayUtils.removeElement([true], false)             = [true]
-	 * ArrayUtils.removeElement([true, false], false)      = [true]
-	 * ArrayUtils.removeElement([true, false, true], true) = [false, true]
+	 * Arrays.removeElement(null, true)                = null
+	 * Arrays.removeElement([], true)                  = []
+	 * Arrays.removeElement([true], false)             = [true]
+	 * Arrays.removeElement([true, false], false)      = [true]
+	 * Arrays.removeElement([true, false, true], true) = [false, true]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static boolean[] removeElement(boolean[] array, boolean element) {
 		int index = indexOf(array, element);
@@ -4938,10 +4864,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1], 0)          = []
-	 * ArrayUtils.remove([1, 0], 0)       = [0]
-	 * ArrayUtils.remove([1, 0], 1)       = [1]
-	 * ArrayUtils.remove([1, 0, 1], 1)    = [1, 1]
+	 * Arrays.remove([1], 0)          = []
+	 * Arrays.remove([1, 0], 0)       = [0]
+	 * Arrays.remove([1, 0], 1)       = [1]
+	 * Arrays.remove([1, 0, 1], 1)    = [1, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -4950,7 +4876,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static byte[] remove(byte[] array, int index) {
 		return (byte[])remove((Object)array, index);
@@ -4969,18 +4894,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1)        = null
-	 * ArrayUtils.removeElement([], 1)          = []
-	 * ArrayUtils.removeElement([1], 0)         = [1]
-	 * ArrayUtils.removeElement([1, 0], 0)      = [1]
-	 * ArrayUtils.removeElement([1, 0, 1], 1)   = [0, 1]
+	 * Arrays.removeElement(null, 1)        = null
+	 * Arrays.removeElement([], 1)          = []
+	 * Arrays.removeElement([1], 0)         = [1]
+	 * Arrays.removeElement([1, 0], 0)      = [1]
+	 * Arrays.removeElement([1, 0, 1], 1)   = [0, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static byte[] removeElement(byte[] array, byte element) {
 		int index = indexOf(array, element);
@@ -5006,10 +4930,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove(['a'], 0)           = []
-	 * ArrayUtils.remove(['a', 'b'], 0)      = ['b']
-	 * ArrayUtils.remove(['a', 'b'], 1)      = ['a']
-	 * ArrayUtils.remove(['a', 'b', 'c'], 1) = ['a', 'c']
+	 * Arrays.remove(['a'], 0)           = []
+	 * Arrays.remove(['a', 'b'], 0)      = ['b']
+	 * Arrays.remove(['a', 'b'], 1)      = ['a']
+	 * Arrays.remove(['a', 'b', 'c'], 1) = ['a', 'c']
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5018,7 +4942,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static char[] remove(char[] array, int index) {
 		return (char[])remove((Object)array, index);
@@ -5037,18 +4960,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 'a')            = null
-	 * ArrayUtils.removeElement([], 'a')              = []
-	 * ArrayUtils.removeElement(['a'], 'b')           = ['a']
-	 * ArrayUtils.removeElement(['a', 'b'], 'a')      = ['b']
-	 * ArrayUtils.removeElement(['a', 'b', 'a'], 'a') = ['b', 'a']
+	 * Arrays.removeElement(null, 'a')            = null
+	 * Arrays.removeElement([], 'a')              = []
+	 * Arrays.removeElement(['a'], 'b')           = ['a']
+	 * Arrays.removeElement(['a', 'b'], 'a')      = ['b']
+	 * Arrays.removeElement(['a', 'b', 'a'], 'a') = ['b', 'a']
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static char[] removeElement(char[] array, char element) {
 		int index = indexOf(array, element);
@@ -5074,10 +4996,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1.1], 0)           = []
-	 * ArrayUtils.remove([2.5, 6.0], 0)      = [6.0]
-	 * ArrayUtils.remove([2.5, 6.0], 1)      = [2.5]
-	 * ArrayUtils.remove([2.5, 6.0, 3.8], 1) = [2.5, 3.8]
+	 * Arrays.remove([1.1], 0)           = []
+	 * Arrays.remove([2.5, 6.0], 0)      = [6.0]
+	 * Arrays.remove([2.5, 6.0], 1)      = [2.5]
+	 * Arrays.remove([2.5, 6.0, 3.8], 1) = [2.5, 3.8]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5086,7 +5008,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static double[] remove(double[] array, int index) {
 		return (double[])remove((Object)array, index);
@@ -5105,18 +5026,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1.1)            = null
-	 * ArrayUtils.removeElement([], 1.1)              = []
-	 * ArrayUtils.removeElement([1.1], 1.2)           = [1.1]
-	 * ArrayUtils.removeElement([1.1, 2.3], 1.1)      = [2.3]
-	 * ArrayUtils.removeElement([1.1, 2.3, 1.1], 1.1) = [2.3, 1.1]
+	 * Arrays.removeElement(null, 1.1)            = null
+	 * Arrays.removeElement([], 1.1)              = []
+	 * Arrays.removeElement([1.1], 1.2)           = [1.1]
+	 * Arrays.removeElement([1.1, 2.3], 1.1)      = [2.3]
+	 * Arrays.removeElement([1.1, 2.3, 1.1], 1.1) = [2.3, 1.1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static double[] removeElement(double[] array, double element) {
 		int index = indexOf(array, element);
@@ -5142,10 +5062,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1.1], 0)           = []
-	 * ArrayUtils.remove([2.5, 6.0], 0)      = [6.0]
-	 * ArrayUtils.remove([2.5, 6.0], 1)      = [2.5]
-	 * ArrayUtils.remove([2.5, 6.0, 3.8], 1) = [2.5, 3.8]
+	 * Arrays.remove([1.1], 0)           = []
+	 * Arrays.remove([2.5, 6.0], 0)      = [6.0]
+	 * Arrays.remove([2.5, 6.0], 1)      = [2.5]
+	 * Arrays.remove([2.5, 6.0, 3.8], 1) = [2.5, 3.8]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5154,7 +5074,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static float[] remove(float[] array, int index) {
 		return (float[])remove((Object)array, index);
@@ -5173,18 +5092,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1.1)            = null
-	 * ArrayUtils.removeElement([], 1.1)              = []
-	 * ArrayUtils.removeElement([1.1], 1.2)           = [1.1]
-	 * ArrayUtils.removeElement([1.1, 2.3], 1.1)      = [2.3]
-	 * ArrayUtils.removeElement([1.1, 2.3, 1.1], 1.1) = [2.3, 1.1]
+	 * Arrays.removeElement(null, 1.1)            = null
+	 * Arrays.removeElement([], 1.1)              = []
+	 * Arrays.removeElement([1.1], 1.2)           = [1.1]
+	 * Arrays.removeElement([1.1, 2.3], 1.1)      = [2.3]
+	 * Arrays.removeElement([1.1, 2.3, 1.1], 1.1) = [2.3, 1.1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static float[] removeElement(float[] array, float element) {
 		int index = indexOf(array, element);
@@ -5210,10 +5128,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1], 0)         = []
-	 * ArrayUtils.remove([2, 6], 0)      = [6]
-	 * ArrayUtils.remove([2, 6], 1)      = [2]
-	 * ArrayUtils.remove([2, 6, 3], 1)   = [2, 3]
+	 * Arrays.remove([1], 0)         = []
+	 * Arrays.remove([2, 6], 0)      = [6]
+	 * Arrays.remove([2, 6], 1)      = [2]
+	 * Arrays.remove([2, 6, 3], 1)   = [2, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5222,7 +5140,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static int[] remove(int[] array, int index) {
 		return (int[])remove((Object)array, index);
@@ -5241,18 +5158,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1)      = null
-	 * ArrayUtils.removeElement([], 1)        = []
-	 * ArrayUtils.removeElement([1], 2)       = [1]
-	 * ArrayUtils.removeElement([1, 3], 1)    = [3]
-	 * ArrayUtils.removeElement([1, 3, 1], 1) = [3, 1]
+	 * Arrays.removeElement(null, 1)      = null
+	 * Arrays.removeElement([], 1)        = []
+	 * Arrays.removeElement([1], 2)       = [1]
+	 * Arrays.removeElement([1, 3], 1)    = [3]
+	 * Arrays.removeElement([1, 3, 1], 1) = [3, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static int[] removeElement(int[] array, int element) {
 		int index = indexOf(array, element);
@@ -5278,10 +5194,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1], 0)         = []
-	 * ArrayUtils.remove([2, 6], 0)      = [6]
-	 * ArrayUtils.remove([2, 6], 1)      = [2]
-	 * ArrayUtils.remove([2, 6, 3], 1)   = [2, 3]
+	 * Arrays.remove([1], 0)         = []
+	 * Arrays.remove([2, 6], 0)      = [6]
+	 * Arrays.remove([2, 6], 1)      = [2]
+	 * Arrays.remove([2, 6, 3], 1)   = [2, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5290,7 +5206,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static long[] remove(long[] array, int index) {
 		return (long[])remove((Object)array, index);
@@ -5309,18 +5224,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1)      = null
-	 * ArrayUtils.removeElement([], 1)        = []
-	 * ArrayUtils.removeElement([1], 2)       = [1]
-	 * ArrayUtils.removeElement([1, 3], 1)    = [3]
-	 * ArrayUtils.removeElement([1, 3, 1], 1) = [3, 1]
+	 * Arrays.removeElement(null, 1)      = null
+	 * Arrays.removeElement([], 1)        = []
+	 * Arrays.removeElement([1], 2)       = [1]
+	 * Arrays.removeElement([1, 3], 1)    = [3]
+	 * Arrays.removeElement([1, 3, 1], 1) = [3, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static long[] removeElement(long[] array, long element) {
 		int index = indexOf(array, element);
@@ -5346,10 +5260,10 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.remove([1], 0)         = []
-	 * ArrayUtils.remove([2, 6], 0)      = [6]
-	 * ArrayUtils.remove([2, 6], 1)      = [2]
-	 * ArrayUtils.remove([2, 6, 3], 1)   = [2, 3]
+	 * Arrays.remove([1], 0)         = []
+	 * Arrays.remove([2, 6], 0)      = [6]
+	 * Arrays.remove([2, 6], 1)      = [2]
+	 * Arrays.remove([2, 6, 3], 1)   = [2, 3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5358,7 +5272,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	public static short[] remove(short[] array, int index) {
 		return (short[])remove((Object)array, index);
@@ -5377,18 +5290,17 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElement(null, 1)      = null
-	 * ArrayUtils.removeElement([], 1)        = []
-	 * ArrayUtils.removeElement([1], 2)       = [1]
-	 * ArrayUtils.removeElement([1, 3], 1)    = [3]
-	 * ArrayUtils.removeElement([1, 3, 1], 1) = [3, 1]
+	 * Arrays.removeElement(null, 1)      = null
+	 * Arrays.removeElement([], 1)        = []
+	 * Arrays.removeElement([1], 2)       = [1]
+	 * Arrays.removeElement([1, 3], 1)    = [3]
+	 * Arrays.removeElement([1, 3, 1], 1) = [3, 1]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param element the element to be removed
 	 * @return A new array containing the existing elements except the first occurrence of the
 	 *         specified element.
-	 * @since 2.1
 	 */
 	public static short[] removeElement(short[] array, short element) {
 		int index = indexOf(array, element);
@@ -5419,7 +5331,6 @@ public abstract class Arrays {
 	 *         position.
 	 * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 2.1
 	 */
 	private static Object remove(Object array, int index) {
 		int length = getLength(array);
@@ -5452,8 +5363,8 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll(["a", "b", "c"], 0, 2) = ["b"]
-	 * ArrayUtils.removeAll(["a", "b", "c"], 1, 2) = ["a"]
+	 * Arrays.removeAll(["a", "b", "c"], 0, 2) = ["b"]
+	 * Arrays.removeAll(["a", "b", "c"], 1, 2) = ["a"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -5462,7 +5373,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	@SuppressWarnings("unchecked")
 	// removeAll() always creates an array of the same type as its input
@@ -5484,12 +5394,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, "a", "b")            = null
-	 * ArrayUtils.removeElements([], "a", "b")              = []
-	 * ArrayUtils.removeElements(["a"], "b", "c")           = ["a"]
-	 * ArrayUtils.removeElements(["a", "b"], "a", "c")      = ["b"]
-	 * ArrayUtils.removeElements(["a", "b", "a"], "a")      = ["b", "a"]
-	 * ArrayUtils.removeElements(["a", "b", "a"], "a", "a") = ["b"]
+	 * Arrays.removeElements(null, "a", "b")            = null
+	 * Arrays.removeElements([], "a", "b")              = []
+	 * Arrays.removeElements(["a"], "b", "c")           = ["a"]
+	 * Arrays.removeElements(["a", "b"], "a", "c")      = ["b"]
+	 * Arrays.removeElements(["a", "b", "a"], "a")      = ["b", "a"]
+	 * Arrays.removeElements(["a", "b", "a"], "a", "a") = ["b"]
 	 * </pre>
 	 * 
 	 * @param <T> the component type of the array
@@ -5497,7 +5407,6 @@ public abstract class Arrays {
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static <T> T[] removeElements(T[] array, T... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -5544,12 +5453,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5557,7 +5466,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static byte[] removeAll(byte[] array, int... indices) {
 		return (byte[])removeAll((Object)array, clone(indices));
@@ -5577,19 +5485,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static byte[] removeElements(byte[] array, byte... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -5637,12 +5544,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5650,7 +5557,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static short[] removeAll(short[] array, int... indices) {
 		return (short[])removeAll((Object)array, clone(indices));
@@ -5670,19 +5576,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static short[] removeElements(short[] array, short... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -5730,12 +5635,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5743,7 +5648,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static int[] removeAll(int[] array, int... indices) {
 		return (int[])removeAll((Object)array, clone(indices));
@@ -5763,19 +5667,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static int[] removeElements(int[] array, int... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -5823,12 +5726,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5836,7 +5739,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static char[] removeAll(char[] array, int... indices) {
 		return (char[])removeAll((Object)array, clone(indices));
@@ -5856,19 +5758,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static char[] removeElements(char[] array, char... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -5917,12 +5818,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -5930,7 +5831,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static long[] removeAll(long[] array, int... indices) {
 		return (long[])removeAll((Object)array, clone(indices));
@@ -5950,19 +5850,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static long[] removeElements(long[] array, long... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -6010,12 +5909,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -6023,7 +5922,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static float[] removeAll(float[] array, int... indices) {
 		return (float[])removeAll((Object)array, clone(indices));
@@ -6043,19 +5941,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static float[] removeElements(float[] array, float... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -6103,12 +6000,12 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([1], 0)             = []
-	 * ArrayUtils.removeAll([2, 6], 0)          = [6]
-	 * ArrayUtils.removeAll([2, 6], 0, 1)       = []
-	 * ArrayUtils.removeAll([2, 6, 3], 1, 2)    = [2]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 2)    = [6]
-	 * ArrayUtils.removeAll([2, 6, 3], 0, 1, 2) = []
+	 * Arrays.removeAll([1], 0)             = []
+	 * Arrays.removeAll([2, 6], 0)          = [6]
+	 * Arrays.removeAll([2, 6], 0, 1)       = []
+	 * Arrays.removeAll([2, 6, 3], 1, 2)    = [2]
+	 * Arrays.removeAll([2, 6, 3], 0, 2)    = [6]
+	 * Arrays.removeAll([2, 6, 3], 0, 1, 2) = []
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -6116,7 +6013,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static double[] removeAll(double[] array, int... indices) {
 		return (double[])removeAll((Object)array, clone(indices));
@@ -6136,19 +6032,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, 1, 2)      = null
-	 * ArrayUtils.removeElements([], 1, 2)        = []
-	 * ArrayUtils.removeElements([1], 2, 3)       = [1]
-	 * ArrayUtils.removeElements([1, 3], 1, 2)    = [3]
-	 * ArrayUtils.removeElements([1, 3, 1], 1)    = [3, 1]
-	 * ArrayUtils.removeElements([1, 3, 1], 1, 1) = [3]
+	 * Arrays.removeElements(null, 1, 2)      = null
+	 * Arrays.removeElements([], 1, 2)        = []
+	 * Arrays.removeElements([1], 2, 3)       = [1]
+	 * Arrays.removeElements([1, 3], 1, 2)    = [3]
+	 * Arrays.removeElements([1, 3, 1], 1)    = [3, 1]
+	 * Arrays.removeElements([1, 3, 1], 1, 1) = [3]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static double[] removeElements(double[] array, double... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -6196,8 +6091,8 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeAll([true, false, true], 0, 2) = [false]
-	 * ArrayUtils.removeAll([true, false, true], 1, 2) = [true]
+	 * Arrays.removeAll([true, false, true], 0, 2) = [false]
+	 * Arrays.removeAll([true, false, true], 1, 2) = [true]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may not be {@code null}
@@ -6205,7 +6100,6 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except those at the specified positions.
 	 * @throws IndexOutOfBoundsException if any index is out of range (index < 0 || index >=
 	 *             array.length), or if the array is {@code null}.
-	 * @since 3.0.1
 	 */
 	public static boolean[] removeAll(boolean[] array, int... indices) {
 		return (boolean[])removeAll((Object)array, clone(indices));
@@ -6225,19 +6119,18 @@ public abstract class Arrays {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ArrayUtils.removeElements(null, true, false)               = null
-	 * ArrayUtils.removeElements([], true, false)                 = []
-	 * ArrayUtils.removeElements([true], false, false)            = [true]
-	 * ArrayUtils.removeElements([true, false], true, true)       = [false]
-	 * ArrayUtils.removeElements([true, false, true], true)       = [false, true]
-	 * ArrayUtils.removeElements([true, false, true], true, true) = [false]
+	 * Arrays.removeElements(null, true, false)               = null
+	 * Arrays.removeElements([], true, false)                 = []
+	 * Arrays.removeElements([true], false, false)            = [true]
+	 * Arrays.removeElements([true, false], true, true)       = [false]
+	 * Arrays.removeElements([true, false, true], true)       = [false, true]
+	 * Arrays.removeElements([true, false, true], true, true) = [false]
 	 * </pre>
 	 * 
 	 * @param array the array to remove the element from, may be {@code null}
 	 * @param values the elements to be removed
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
-	 * @since 3.0.1
 	 */
 	public static boolean[] removeElements(boolean[] array, boolean... values) {
 		if (isEmpty(array) || isEmpty(values)) {
@@ -6322,7 +6215,6 @@ public abstract class Arrays {
 	 * 
 	 * @param coll {@code HashSet} of {@code Integer}
 	 * @return int[]
-	 * @since 3.0.1
 	 */
 	private static int[] extractIndices(HashSet<Integer> coll) {
 		int[] result = new int[coll.size()];
@@ -6899,7 +6791,6 @@ public abstract class Arrays {
 	 *         the return value will be &gt;= 0 if and only if the key is found.
 	 * @throws IllegalArgumentException if {@code fromIndex > toIndex}
 	 * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
-	 * @since 1.6
 	 */
 	public static int binarySearch(short[] a, int fromIndex, int toIndex, short key) {
 		return java.util.Arrays.binarySearch(a, fromIndex, toIndex, key);

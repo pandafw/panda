@@ -17,7 +17,7 @@ CREATE TABLE TEST (
 	FREAL            REAL,
 	FFLOAT           FLOAT,
 	FDOUBLE          FLOAT,
-	FDECIMAL         DECIMAL(10,2),
+	FDECIMAL         DECIMAL(20,2),
 	FNUMERIC         NUMERIC(10,2),
 
 	FDATE            DATETIME,

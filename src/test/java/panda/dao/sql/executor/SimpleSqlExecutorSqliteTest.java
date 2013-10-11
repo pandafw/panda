@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import panda.lang.Strings;
+
 /**
  */
 public class SimpleSqlExecutorSqliteTest extends SimpleSqlExecutorTestCase {
@@ -14,6 +16,16 @@ public class SimpleSqlExecutorSqliteTest extends SimpleSqlExecutorTestCase {
 		return TestSupport.getSqliteConnection();
 	}
 
+	@Override
+	protected String getInsertBlobSql() {
+		return Strings.replace(insertBlobSql, ":BLOB", "");
+	}
+	
+	@Override
+	protected String getUpdateBlobSql() {
+		return Strings.replace(updateBlobSql, ":BLOB", "");
+	}
+	
 	@Override
 	protected Object getExpectedBit(boolean b) {
 		return b ? 1L : 0L;

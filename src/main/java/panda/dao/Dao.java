@@ -1,5 +1,6 @@
 package panda.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,10 @@ public abstract class Dao {
 		Asserts.notNull(entity, "The entity of [%s] is undefined", type.toString());
 	}
 	
+	protected void assertCollection(Collection col) {
+		Asserts.notNull(col, "The collection is null");
+	}
+	
 	protected void assertObject(Object object) {
 		Asserts.notNull(object, "The object is null");
 	}
@@ -101,54 +106,67 @@ public abstract class Dao {
 	}
 
 	/**
-	 * create table
-	 * 
-	 * @param type record type
-	 * @param dropIfExists drop if table exists
-	 * @return true if table exists or create successfully
-	 */
-	public <T> boolean create(Class<T> type, boolean dropIfExists) {
-		assertType(type);
-
-		Entity<T> en = getEntity(type);
-		assertEntity(en, type);
-		return create(en, dropIfExists);
-	}
-
-	/**
-	 * create table
-	 * 
-	 * @param entity entity
-	 * @param dropIfExists drop if table exists
-	 * @return true if table exists or create successfully
-	 */
-	public abstract boolean create(Entity<?> entity, boolean dropIfExists);
-
-	/**
 	 * drop a table if exists
 	 * 
 	 * @param type record type
-	 * @return true if drop successfully
 	 */
-	public boolean drop(Class<?> type) {
-		return drop(getEntity(type));
+	public void drop(Class<?> type) {
+		drop(getEntity(type));
 	}
 
 	/**
 	 * drop a table if exists
 	 * 
 	 * @param entity entity
-	 * @return true if drop successfully
 	 */
-	public abstract boolean drop(Entity<?> entity);
+	public abstract void drop(Entity<?> entity);
 
 	/**
 	 * drop a table if exists
 	 * 
 	 * @param table table name
-	 * @return true if drop successfully
 	 */
-	public abstract boolean drop(String table);
+	public abstract void drop(String table);
+
+	/**
+	 * create table
+	 * 
+	 * @param type record type
+	 */
+	public <T> void create(Class<T> type) {
+		create(type, false);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param type record type
+	 * @param dropIfExists drop if table exists
+	 */
+	public <T> void create(Class<T> type, boolean dropIfExists) {
+		assertType(type);
+
+		Entity<T> en = getEntity(type);
+		assertEntity(en, type);
+		create(en, dropIfExists);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param entity entity
+	 */
+	public void create(Entity<?> entity) {
+		create(entity, false);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param entity entity
+	 * @param dropIfExists drop if table exists
+	 */
+	public abstract void create(Entity<?> entity, boolean dropIfExists);
 
 	/**
 	 * check a table exists in the data store.
@@ -236,6 +254,14 @@ public abstract class Dao {
 	public abstract int delete(Object obj);
 
 	/**
+	 * delete object collection
+	 * 
+	 * @param col object collection to be deleted
+	 * @return deleted count
+	 */
+	public abstract int deletes(Collection<?> col);
+
+	/**
 	 * delete records by the supplied keys.
 	 * if the supplied keys is null, all records will be deleted.
 	 * 
@@ -296,10 +322,25 @@ public abstract class Dao {
 	 * <p>
 	 * the '@Post("SELECT ...")' sql will be executed after insert.
 	 * 
-	 * @param obj the record to be inserted
+	 * @param obj the record to be inserted (@Id property will be setted)
 	 * @return the inserted record
 	 */
 	public abstract <T> T insert(T obj);
+
+	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	public abstract Collection<?> inserts(Collection<?> col);
 
 	/**
 	 * update a record by the supplied object. 
@@ -310,6 +351,14 @@ public abstract class Dao {
 	public abstract int update(Object obj);
 
 	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public abstract int updates(Collection<?> col);
+
+	/**
 	 * update a record by the supplied object. 
 	 * the null properties will be ignored.
 	 * 
@@ -317,6 +366,14 @@ public abstract class Dao {
 	 * @return updated count
 	 */
 	public abstract int updateIgnoreNull(Object obj);
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public abstract int updatesIgnoreNull(Collection<?> col);
 
 	/**
 	 * update records by the supplied object and query

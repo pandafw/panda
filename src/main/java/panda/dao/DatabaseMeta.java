@@ -39,7 +39,7 @@ public class DatabaseMeta {
 			type = DB.H2;
 		}
 		else if (proName.startsWith("postgresql")) {
-			type = DB.PGSQL;
+			type = DB.POSTGRE;
 		}
 		else if (proName.startsWith("mysql")) {
 			type = DB.MYSQL;
@@ -90,7 +90,7 @@ public class DatabaseMeta {
 	}
 
 	public void setAsPsql() {
-		this.type = DB.PGSQL;
+		this.type = DB.POSTGRE;
 	}
 
 	public void setAsOracle() {
@@ -130,7 +130,7 @@ public class DatabaseMeta {
 	}
 
 	public boolean isPostgreSql() {
-		return DB.PGSQL == type;
+		return DB.POSTGRE == type;
 	}
 
 	public boolean isSqlServer() {

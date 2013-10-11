@@ -1,17 +1,22 @@
 package panda.dao.sql.executor;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.After;
@@ -21,6 +26,7 @@ import org.junit.Before;
 
 import panda.dao.sql.SqlExecutor;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.TimeZones;
 import panda.log.Log;
 import panda.log.Logs;
@@ -39,9 +45,7 @@ public abstract class SqlExecutorTestCase {
 	
 	protected abstract Connection getConnection() throws Exception;
 
-	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new SimpleSqlManager().getExecutor(c);
-	}
+	protected abstract SqlExecutor createExecutor(Connection c) throws Exception;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -221,6 +225,49 @@ public abstract class SqlExecutorTestCase {
 		return a;
 	}
 
+	protected List<Object> createList(int id, boolean update) {
+		List<Object> a = new ArrayList<Object>();
+
+		if (!update) {
+			a.add(getExpectedInteger(1000 + id));
+		}
+		a.add(getExpectedBit(true));
+		a.add(getExpectedBool(true));
+		a.add(String.valueOf(id));
+		a.add("NAME 100" + id);
+		a.add(getExpectedInteger(10 + id));
+		a.add(getExpectedInteger(100 + id));
+		a.add(getExpectedInteger(1000 + id));
+		a.add(getExpectedInteger(10000 + id));
+		a.add(getExpectedReal(id + ".0" + id));
+		a.add(getExpectedFloat("1" + id + ".0" + id));
+		a.add(getExpectedDouble("10" + id + ".0" + id));
+		a.add(getExpectedDecimal("100" + id + ".0" + id));
+		a.add(getExpectedDecimal("1000" + id + ".0" + id));
+		a.add(getExpectedDate("2009-0" + id + "-0" + id));
+		a.add(getExpectedTime("00:0" + id + ":0" + id));
+		a.add(getExpectedTimestamp("2009-0" + id + "-0" + id));
+		if (update) {
+			a.add(getExpectedInteger(1000 + id));
+		}
+		
+		return a;
+	}
+
+	protected TestBean createBlobBean(int id) {
+		TestBean a = new TestBean();
+		a.setId(1000 + id);
+		a.setFblob(("blob" + id).getBytes());
+		return a;
+	}
+
+	protected Map<String, Object> createBlobMap(int id) {
+		Map<String, Object> a = new LinkedHashMap<String, Object>();
+		a.put("id", getExpectedInteger(1000 + id));
+		a.put("fblob", ("blob" + id).getBytes());
+		return a;
+	}
+
 	protected void logTestMethod() {
 		StackTraceElement stack[] = (new Throwable()).getStackTrace();
 		StackTraceElement ste = stack[1];
@@ -394,10 +441,32 @@ public abstract class SqlExecutorTestCase {
 	protected void prepareActualBean(TestBean actual) {
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void prepareExpectMap(Map actual) {
+		for (Iterator<Entry> it = actual.entrySet().iterator(); it.hasNext();) {
+			Entry e = it.next();
+			Object val = e.getValue();
+			if (val instanceof byte[]) {
+				actual.put(e.getKey(), Strings.newStringUtf8((byte[])val));
+			}
+		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void prepareActualMap(Map actual) {
+		for (Iterator<Entry> it = actual.entrySet().iterator(); it.hasNext();) {
+			Entry e = it.next();
+			Object val = e.getValue();
+			if (val instanceof Blob) {
+				try {
+					byte[] b = ((Blob)val).getBytes(1L, (int)((Blob)val).length());
+					actual.put(e.getKey(), Strings.newStringUtf8(b));
+				}
+				catch (SQLException ex) {
+					log.error(ex.getMessage());
+				}
+			}
+		}
 	}
 	
 	protected void compareListResult(List expect, List actual) {
@@ -502,11 +571,11 @@ public abstract class SqlExecutorTestCase {
 		compareMapResult(expectedResult, actualResult);
 	}
 
-	protected void testExecuteUpdate(String updateSql, Object param, String selectSql, Map expectedResult) {
+	protected void testExecuteUpdate(String updateSql, Object uparam, String selectSql, Object sparam, Map expectedResult) {
 		logTestMethodName();
 
 		try {
-			int cnt = executor.update(updateSql, param);
+			int cnt = executor.update(updateSql, uparam);
 			Assert.assertEquals(cnt, 1);
 		}
 		catch (Exception e) {
@@ -516,7 +585,7 @@ public abstract class SqlExecutorTestCase {
 
 		Map actualResult = null;
 		try {
-			actualResult = executor.fetch(selectSql, param, Map.class);
+			actualResult = executor.fetch(selectSql, sparam, Map.class);
 		}
 		catch (Exception e) {
 			log.error("exception", e);
@@ -532,11 +601,11 @@ public abstract class SqlExecutorTestCase {
 		}
 	}
 
-	protected void testExecuteUpdate(String updateSql, Object param, String selectSql, TestBean expectedResult) {
+	protected void testExecuteUpdate(String updateSql, Object uparam, String selectSql, Object sparam, TestBean expectedResult) {
 		logTestMethodName();
 
 		try {
-			int cnt = executor.update(updateSql, param);
+			int cnt = executor.update(updateSql, uparam);
 			Assert.assertEquals(cnt, 1);
 		}
 		catch (Exception e) {
@@ -546,7 +615,7 @@ public abstract class SqlExecutorTestCase {
 
 		TestBean actualResult = null;
 		try {
-			actualResult = executor.fetch(selectSql, param, TestBean.class);
+			actualResult = executor.fetch(selectSql, sparam, TestBean.class);
 		}
 		catch (Exception e) {
 			log.error("exception", e);
@@ -562,7 +631,7 @@ public abstract class SqlExecutorTestCase {
 		}
 	}
 
-	protected void testExecuteInsert(String insertSql, Map param, String selectSql, Map expect) {
+	protected void testExecuteInsertAuto(String insertSql, Object param, String selectSql, Object expect) {
 		logTestMethodName();
 
 		Map key = null;
@@ -573,16 +642,26 @@ public abstract class SqlExecutorTestCase {
 			log.error("exception", e);
 			throw Exceptions.wrapThrow(e);
 		}
-		Object id = param.get("id");
-		if (id == null) {
-			// id is generated by DB
-			Assert.assertNotNull(key);
-			Assert.assertEquals(expect.get("id").toString(), key.get("id").toString());
+		
+		Object id = null;
+		// id is generated by DB
+		Assert.assertNotNull(key);
+		if (expect instanceof TestBean) {
+			id = ((TestBean)expect).getId();
 		}
+		else {
+			id = ((Map)expect).get("id");
+		}
+		Assert.assertEquals(id.toString(), key.get("id").toString());
 
-		Map actualResult = null;
+		Object actualResult = null;
 		try {
-			actualResult = executor.fetch(selectSql, expect, Map.class);
+			if (executor instanceof SimpleSqlExecutor) {
+				actualResult = executor.fetch(selectSql, expect, expect.getClass());
+			}
+			else {
+				actualResult = executor.fetch(selectSql, Arrays.asList(id), expect.getClass());
+			}
 		}
 		catch (Exception e) {
 			log.error("exception", e);
@@ -590,36 +669,11 @@ public abstract class SqlExecutorTestCase {
 		}
 		
 		Assert.assertNotNull(actualResult);
-		compareResult(expect, actualResult);
-	}
-
-	protected void testExecuteInsert(String insertSql, TestBean param, String selectSql, TestBean expect) {
-		logTestMethodName();
-
-		TestBean key = new TestBean();
-		try {
-			key = executor.insert(insertSql, param, key, "id");
+		if (expect instanceof TestBean) {
+			compareResult((TestBean)expect, (TestBean)actualResult);
 		}
-		catch (Exception e) {
-			log.error("exception", e);
-			throw Exceptions.wrapThrow(e);
+		else {
+			compareResult((Map)expect, (Map)actualResult);
 		}
-		if (param.getId() == null) {
-			// id is generated by DB
-			Assert.assertNotNull(key);
-			Assert.assertEquals(expect.getId(), key.getId());
-		}
-
-		TestBean actualResult = null;
-		try {
-			actualResult = executor.fetch(selectSql, expect, TestBean.class);
-		}
-		catch (Exception e) {
-			log.error("exception", e);
-			throw Exceptions.wrapThrow(e);
-		}
-		
-		Assert.assertNotNull(actualResult);
-		compareResult(expect, actualResult);
 	}
 }

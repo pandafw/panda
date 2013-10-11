@@ -4,22 +4,30 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class MysqlSqlExpert extends SqlExpert {
-
 	private static final String META_ENGINE = "mysql-engine";
 
 	private static final String META_CHARSET = "mysql-charset";
 
+	@Override
+	public DB getType() {
+		return DB.MYSQL;
+	}
+
+	@Override
 	protected String escapeTable(String table) {
 		return '`' + table + '`'; 
 	}
 	
+	@Override
 	protected String escapeColumn(String column) {
 		return '`' + column + '`'; 
 	}
@@ -140,7 +148,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ");
 			if (query.getStart() > 0) {

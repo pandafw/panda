@@ -1,5 +1,6 @@
 package panda.dao.entity;
 
+import java.util.Collection;
 import java.util.List;
 
 import panda.dao.Dao;
@@ -92,22 +93,28 @@ public class EntityDao<T> {
 	}
 
 	/**
-	 * create table
-	 * 
-	 * @param dropIfExists drop if table exists
-	 * @return the entity
-	 */
-	public boolean create(boolean dropIfExists) {
-		return dao.create(entity, dropIfExists);
-	}
-
-	/**
 	 * drop a table if exists
 	 * 
 	 * @return true if drop successfully
 	 */
-	public boolean drop() {
-		return dao.drop(entity);
+	public void drop() {
+		dao.drop(entity);
+	}
+
+	/**
+	 * create table
+	 */
+	public void create() {
+		dao.create(entity);
+	}
+
+	/**
+	 * create table
+	 * 
+	 * @param dropIfExists drop if table exists
+	 */
+	public void create(boolean dropIfExists) {
+		dao.create(entity, dropIfExists);
 	}
 
 	/**
@@ -155,8 +162,18 @@ public class EntityDao<T> {
 	 * @param obj object to be deleted
 	 * @return deleted count
 	 */
-	public int delete(Object obj) {
+	public int delete(T obj) {
 		return dao.delete(obj);
+	}
+
+	/**
+	 * delete object collection
+	 * 
+	 * @param col object collection to be deleted
+	 * @return deleted count
+	 */
+	public int deletes(Collection<T> col) {
+		return dao.deletes(col);
 	}
 
 	/**
@@ -198,6 +215,24 @@ public class EntityDao<T> {
 	}
 
 	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<T> inserts(Collection<T> col) {
+		return (Collection<T>)dao.inserts(col);
+	}
+
+	/**
 	 * update a record by the supplied object. 
 	 * 
 	 * @param obj sample object
@@ -205,6 +240,16 @@ public class EntityDao<T> {
 	 */
 	public int update(T obj) {
 		return dao.update(obj);
+	}
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public int updates(Collection<T> col) {
+		return dao.updates(col);
 	}
 
 	/**
@@ -216,6 +261,16 @@ public class EntityDao<T> {
 	 */
 	public int updateIgnoreNull(T obj) {
 		return dao.updateIgnoreNull(obj);
+	}
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public int updatesIgnoreNull(Collection<T> col) {
+		return dao.updatesIgnoreNull(col);
 	}
 
 	/**

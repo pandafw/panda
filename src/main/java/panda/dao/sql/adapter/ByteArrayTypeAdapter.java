@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * byte[] implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
+public class ByteArrayTypeAdapter<T> extends AbstractCastTypeAdapter<T, byte[]> {
 	public ByteArrayTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, byte[].class);
 	}
@@ -18,12 +18,12 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		byte[] bytes = rs.getBytes(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		byte[] bytes = rs.getBytes(column);
 		return castToJava(bytes);
 	}
 
@@ -31,12 +31,12 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		byte[] bytes = rs.getBytes(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		byte[] bytes = rs.getBytes(column);
 		return castToJava(bytes);
 	}
 
@@ -44,12 +44,12 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		byte[] bytes = cs.getBytes(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		byte[] bytes = cs.getBytes(column);
 		return castToJava(bytes);
 	}
 
@@ -57,19 +57,18 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		byte[] bs = castToJdbc(value);
 		if (bs == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateBytes(columnName, bs);
+			rs.updateBytes(column, bs);
 		}
 	}
 
@@ -77,19 +76,17 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		byte[] bs = castToJdbc(value);
 		if (bs == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateBytes(columnIndex, bs);
+			rs.updateBytes(column, bs);
 		}
 	}
 
@@ -99,11 +96,9 @@ public class ByteArrayTypeAdapter<T> extends AbstractTypeAdapter<T, byte[]> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		byte[] bs = castToJdbc(value);
 		ps.setBytes(i, bs);
 	}

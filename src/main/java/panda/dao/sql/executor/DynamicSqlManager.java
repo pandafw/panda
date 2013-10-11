@@ -7,7 +7,7 @@ import panda.dao.sql.SqlExecutor;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ExtendSqlManager extends SimpleSqlManager {
+public class DynamicSqlManager extends SimpleSqlManager {
 	/**
 	 * Constructor
 	 * 
@@ -22,7 +22,7 @@ public class ExtendSqlManager extends SimpleSqlManager {
 	@Override
 	public SqlExecutor getExecutor(Connection connection, int resultSetType, int resultSetConcurrency,
 			int resultSetHoldability) {
-		ExtendSqlExecutor se = new ExtendSqlExecutor(this);
+		DynamicSqlExecutor se = new DynamicSqlExecutor(this);
 		se.setConnection(connection);
 		se.setResultSetType(resultSetType);
 		se.setResultSetConcurrency(resultSetConcurrency);

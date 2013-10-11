@@ -55,7 +55,7 @@ public abstract class SqlLogger {
 				rslog.debug(sb.toString());
 			}
 			catch (SQLException e) {
-				rslog.warn("SQLException", e);
+				pslog.debug("ResultSet Header LOG ERROR: " + e);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public abstract class SqlLogger {
 				rslog.debug(sb.toString());
 			}
 			catch (SQLException e) {
-				rslog.warn("SQLException", e);
+				pslog.debug("ResultSet Values LOG ERROR: " + e);
 			}
 		}		
 	}
@@ -102,8 +102,8 @@ public abstract class SqlLogger {
 	 * @param sql sql statement 
 	 */
 	public static void logStatement(PreparedStatement ps) {
-		if (pslog.isDebugEnabled()) {
-			pslog.debug("Statement: " + ps.toString());
+		if (sslog.isDebugEnabled()) {
+			sslog.debug("Statement: " + ps.toString());
 		}
 	}
 	
@@ -112,7 +112,7 @@ public abstract class SqlLogger {
 	 * @param ps PreparedStatement
 	 */
 	public static void logParameters(PreparedStatement ps) {
-		if (sslog.isDebugEnabled()) {
+		if (pslog.isDebugEnabled()) {
 			try {
 				ParameterMetaData pmd = ps.getParameterMetaData();
 
@@ -133,11 +133,11 @@ public abstract class SqlLogger {
 					}
 		
 					sb.append("]");
-					sslog.debug(sb.toString());
+					pslog.debug(sb.toString());
 				}
 			}
 			catch (SQLException e) {
-				sslog.warn("SQLException", e);
+				pslog.debug("PreparedStatement LOG ERROR: " + e);
 			}
 		}
 	}

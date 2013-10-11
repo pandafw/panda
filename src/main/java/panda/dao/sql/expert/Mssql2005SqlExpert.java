@@ -4,13 +4,19 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class Mssql2005SqlExpert extends SqlExpert {
+	@Override
+	public DB getType() {
+		return DB.MSSQL;
+	}
 
 	@Override
 	public List<String> create(Entity<?> entity) {
@@ -46,6 +52,10 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	}
 
 	@Override
+	protected void addComments(List<String> slqs, Entity<?> entity) {
+	}
+	
+	@Override
 	protected String evalFieldType(EntityField ef) {
 		if (Strings.isNotEmpty(ef.getDbType())) {
 			return super.evalFieldType(ef);
@@ -73,12 +83,20 @@ public class Mssql2005SqlExpert extends SqlExpert {
 		return super.evalFieldType(ef);
 	}
 
+	public String identityInsertOn(Entity<?> entity) {
+		return "SET IDENTITY_INSERT " + entity.getTableName() + " ON";
+	}
+	
+	public String identityInsertOff(Entity<?> entity) {
+		return "SET IDENTITY_INSERT " + entity.getTableName() + " OFF";
+	}
+	
 	/**
 	 * @param sql sql
 	 * @param query query
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		// very rough, but works
 		if (query.getStart() > 0) {
 			StringBuilder beg = new StringBuilder(); 

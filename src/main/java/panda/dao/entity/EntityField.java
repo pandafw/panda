@@ -17,8 +17,8 @@ public class EntityField {
 	private String comment;
 	private String jdbcType;
 	private String dbType;
-	private Integer size;
-	private Integer scale;
+	private int size;
+	private int scale;
 	private boolean identity;
 	private boolean autoIncrement;
 	private int startWith;
@@ -136,28 +136,28 @@ public class EntityField {
 	/**
 	 * @return the size
 	 */
-	public Integer getSize() {
+	public int getSize() {
 		return size;
 	}
 
 	/**
 	 * @param size the size to set
 	 */
-	protected void setSize(Integer size) {
+	protected void setSize(int size) {
 		this.size = size;
 	}
 
 	/**
 	 * @return the scale
 	 */
-	public Integer getScale() {
+	public int getScale() {
 		return scale;
 	}
 
 	/**
 	 * @param scale the scale to set
 	 */
-	protected void setScale(Integer scale) {
+	protected void setScale(int scale) {
 		this.scale = scale;
 	}
 
@@ -277,6 +277,24 @@ public class EntityField {
 		this.readonly = readonly;
 	}
 
+	/**
+	 * get field value of data
+	 * @param data POJO
+	 * @return field value
+	 */
+	public Object getValue(Object data) {
+		return entity.getFieldValue(data, name);
+	}
+
+	/**
+	 * get field value of data
+	 * @param data POJO
+	 * @return field value
+	 */
+	public boolean setValue(Object data, Object value) {
+		return entity.setFieldValue(data, name, value);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

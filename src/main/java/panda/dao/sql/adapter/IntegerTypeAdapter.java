@@ -10,7 +10,7 @@ import java.sql.Types;
  * Integer Decimal implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
+public class IntegerTypeAdapter<T> extends AbstractCastTypeAdapter<T, Integer> {
 	public IntegerTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, Integer.class);
 	}
@@ -19,12 +19,12 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		int n = rs.getInt(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		int n = rs.getInt(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -37,12 +37,12 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		int n = rs.getInt(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		int n = rs.getInt(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -55,12 +55,12 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		int n = cs.getInt(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		int n = cs.getInt(column);
 		if (cs.wasNull()) {
 			return castToJava(null);
 		}
@@ -73,19 +73,18 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		Integer n = castToJdbc(value);
 		if (n == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateInt(columnName, n);
+			rs.updateInt(column, n);
 		}
 	}
 
@@ -93,19 +92,17 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		Integer n = castToJdbc(value);
 		if (n == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateInt(columnIndex, n);
+			rs.updateInt(column, n);
 		}
 	}
 
@@ -115,11 +112,9 @@ public class IntegerTypeAdapter<T> extends AbstractTypeAdapter<T, Integer> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		Integer n = castToJdbc(value);
 		if (n == null) {
 			ps.setNull(i, Types.INTEGER);

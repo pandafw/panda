@@ -16,7 +16,7 @@ public enum DB {
 	/**
 	 * Postgresql
 	 */
-	PGSQL,
+	POSTGRE,
 	/**
 	 * Oracle
 	 */

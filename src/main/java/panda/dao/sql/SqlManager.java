@@ -5,14 +5,14 @@ import java.sql.ResultSet;
 
 import panda.bean.Beans;
 import panda.dao.sql.adapter.TypeAdapters;
-import panda.dao.sql.executor.ExtendSqlManager;
+import panda.dao.sql.executor.DynamicSqlManager;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public abstract class SqlManager {
-	private static SqlManager me = new ExtendSqlManager();
+	private static SqlManager me = new DynamicSqlManager();
 
 	/**
 	 * @return the me

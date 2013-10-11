@@ -6,7 +6,7 @@ import panda.castor.Castor;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class AbstractTypeAdapter<T, P> implements TypeAdapter<T> {
+public abstract class AbstractCastTypeAdapter<T, P> implements TypeAdapter<T> {
 	private final Castor<Object, T> javaCastor;
 	private final Castor<Object, P> jdbcCastor;
 	
@@ -14,7 +14,7 @@ public abstract class AbstractTypeAdapter<T, P> implements TypeAdapter<T> {
 	 * @param adapters adapters
 	 * @param javaType to type
 	 */
-	public AbstractTypeAdapter(TypeAdapters adapters, Class<T> javaType, Class<P> jdbcType) {
+	public AbstractCastTypeAdapter(TypeAdapters adapters, Class<T> javaType, Class<P> jdbcType) {
 		javaCastor = adapters.getCastors().getCastor(javaType);
 		jdbcCastor = adapters.getCastors().getCastor(jdbcType);
 	}

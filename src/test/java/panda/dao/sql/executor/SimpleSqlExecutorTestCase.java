@@ -1,5 +1,6 @@
 package panda.dao.sql.executor;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlResultSet;
 
 /**
@@ -72,6 +74,22 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 			+ ":ftime,        "
 			+ ":ftimestamp)   ";
 
+	protected static String selectBlobSql = "SELECT ID, FBLOB FROM TEST WHERE ID=:id";
+	protected static String updateBlobSql = "UPDATE TEST SET "
+			+ "FBLOB  = :fblob "
+			+ "WHERE ID=:id:BLOB";
+	protected static String insertBlobSql = "INSERT INTO TEST ("
+			+ "ID,            "
+			+ "FBLOB)         "
+			+ "VALUES (       "
+			+ ":id,           "
+			+ ":fblob:BLOB)   ";
+
+	@Override
+	protected SqlExecutor createExecutor(Connection c) throws Exception {
+		return new SimpleSqlManager().getExecutor(c);
+	}
+	
 	/**
 	 */
 	@Test
@@ -315,6 +333,14 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		return updateSql;
 	}
 	
+	protected String getUpdateBlobSql() {
+		return updateBlobSql;
+	}
+	
+	protected String getSelectBlobSql() {
+		return selectBlobSql;
+	}
+	
 	/**
 	 */
 	@Test
@@ -322,7 +348,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		Map<String, Object> param = createMap(9);
 		param.put("id", getExpectedInteger(1001));
 		
-		testExecuteUpdate(getUpdateSql(), param, selectSql, param);
+		testExecuteUpdate(getUpdateSql(), param, selectSql, param, param);
 	}
 	
 	/**
@@ -332,23 +358,53 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		TestBean param = createBean(8);
 		param.setId(1001);
 		
-		testExecuteUpdate(getUpdateSql(), param, selectSql, param);
+		testExecuteUpdate(getUpdateSql(), param, selectSql, param, param);
 	}
 
 	protected String getInsertSql() {
 		return insertSql;
 	}
 	
+	protected String getInsertBlobSql() {
+		return insertBlobSql;
+	}
+	
 	@Test
 	public void testInsertMap() throws Exception {
 		Map<String, Object> expect = createMap(9);
-		testExecuteUpdate(getInsertSql(), expect, selectSql, expect);
+		testExecuteUpdate(getInsertSql(), expect, selectSql, expect, expect);
 	}
 
 	@Test
 	public void testInsertBean() throws Exception {
 		TestBean expect = createBean(8);
-		testExecuteUpdate(getInsertSql(), expect, selectSql, expect);
+		testExecuteUpdate(getInsertSql(), expect, selectSql, expect, expect);
+	}
+
+	@Test
+	public void testInsertBlobBean() {
+		TestBean expect = createBlobBean(8);
+		testExecuteUpdate(getInsertBlobSql(), expect, getSelectBlobSql(), expect, expect);
+	}
+
+	@Test
+	public void testInsertBlobBeanNull() {
+		TestBean expect = createBlobBean(8);
+		expect.setFblob(null);
+		testExecuteUpdate(getInsertBlobSql(), expect, getSelectBlobSql(), expect, expect);
+	}
+
+	@Test
+	public void testUpdateBlobBean() {
+		TestBean expect = createBlobBean(1);
+		testExecuteUpdate(getUpdateBlobSql(), expect, getSelectBlobSql(), expect, expect);
+	}
+
+	@Test
+	public void testUpdateBlobBeanNull() {
+		TestBean expect = createBlobBean(1);
+		expect.setFblob(null);
+		testExecuteUpdate(getUpdateBlobSql(), expect, getSelectBlobSql(), expect, expect);
 	}
 
 	protected void testInsertIdAuto() throws Exception {
@@ -361,7 +417,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		Map<String, Object> expem = new LinkedHashMap<String, Object>();
 		expem.put("id", getExpectedInteger(101));
 		expem.putAll(param);
-		testExecuteInsert(insertSql, param, selectSql, expem);
+		testExecuteInsertAuto(insertSql, param, selectSql, expem);
 
 		//-------------
 		TestBean paraa = new TestBean(); 
@@ -370,7 +426,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		TestBean expea = paraa.clone(); 
 		expea.setId(102);
 		
-		testExecuteInsert(insertSql, paraa, selectSql, expea);
+		testExecuteInsertAuto(insertSql, paraa, selectSql, expea);
 	}
 
 }

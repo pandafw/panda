@@ -10,7 +10,7 @@ import java.sql.Types;
  * Long implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
+public class LongTypeAdapter<T> extends AbstractCastTypeAdapter<T, Long> {
 	public LongTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, Long.class);
 	}
@@ -19,12 +19,12 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		long l = rs.getLong(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		long l = rs.getLong(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -37,12 +37,12 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		long l = rs.getLong(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		long l = rs.getLong(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -55,12 +55,12 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		long l = cs.getLong(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		long l = cs.getLong(column);
 		if (cs.wasNull()) {
 			return castToJava(null);
 		}
@@ -73,19 +73,18 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateLong(columnName, l);
+			rs.updateLong(column, l);
 		}
 	}
 
@@ -93,19 +92,17 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateLong(columnIndex, l);
+			rs.updateLong(column, l);
 		}
 	}
 
@@ -115,11 +112,9 @@ public class LongTypeAdapter<T> extends AbstractTypeAdapter<T, Long> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
 			ps.setNull(i, Types.BIGINT);

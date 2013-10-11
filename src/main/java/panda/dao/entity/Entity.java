@@ -2,11 +2,14 @@ package panda.dao.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.bean.BeanHandler;
 import panda.bind.json.JsonObject;
+import panda.dao.DB;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -27,6 +30,11 @@ public class Entity<T> {
 	protected Map<String, EntityIndex> indexMap;
 	protected Map<String, EntityFKey> foreignKeyMap;
 
+	protected Map<DB, String> prepSqls;
+	protected Map<DB, String> postSqls;
+	
+	protected BeanHandler<T> beanHandler;
+	
 	/**
 	 * constructor
 	 */
@@ -49,6 +57,7 @@ public class Entity<T> {
 		this.primaryKeys = entity.primaryKeys;
 		this.indexMap = entity.indexMap;
 		this.foreignKeyMap = entity.foreignKeyMap;
+		this.beanHandler = entity.beanHandler;
 	}
 
 	/**
@@ -179,7 +188,7 @@ public class Entity<T> {
 	 * @return the indexes
 	 */
 	public Collection<EntityIndex> getIndexes() {
-		return indexMap.values();
+		return indexMap == null ? null : indexMap.values();
 	}
 
 	/**
@@ -262,5 +271,82 @@ public class Entity<T> {
 	 */
 	public String getMeta(String name) {
 		return tableMeta.optString(name);
+	}
+
+	/**
+	 * @return the prepSqls
+	 */
+	public String getPrepSql(DB db) {
+		if (prepSqls == null) {
+			return null;
+		}
+		return prepSqls.get(db);
+	}
+
+	/**
+	 * @return the prepSqls
+	 */
+	protected void addPrepSql(DB db, String sql) {
+		if (prepSqls == null) {
+			prepSqls = new HashMap<DB, String>();
+		}
+		prepSqls.put(db, sql);
+	}
+
+	/**
+	 * @return the postSql
+	 */
+	public String getPostSql(DB db) {
+		if (postSqls == null) {
+			return null;
+		}
+		return postSqls.get(db);
+	}
+
+	/**
+	 * @return the postSqls
+	 */
+	protected void addPostSql(DB db, String sql) {
+		if (postSqls == null) {
+			postSqls = new HashMap<DB, String>();
+		}
+		postSqls.put(db, sql);
+	}
+
+	/**
+	 * @return the beanHandler
+	 */
+	public BeanHandler<T> getBeanHandler() {
+		return beanHandler;
+	}
+
+	/**
+	 * @param beanHandler the beanHandler to set
+	 */
+	protected void setBeanHandler(BeanHandler<T> beanHandler) {
+		this.beanHandler = beanHandler;
+	}
+
+	/**
+	 * get field value of data
+	 * @param data POJO
+	 * @param name field name
+	 * @return field value
+	 */
+	@SuppressWarnings("unchecked")
+	public Object getFieldValue(Object data, String name) {
+		return beanHandler.getPropertyValue((T)data, name);
+	}
+
+	/**
+	 * set field value to data
+	 * @param data POJO
+	 * @param name field name
+	 * @param value field value
+	 * @return true if set successfully
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean setFieldValue(Object data, String name, Object value) {
+		return beanHandler.setPropertyValue((T)data, name, value);
 	}
 }

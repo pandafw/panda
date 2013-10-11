@@ -164,15 +164,9 @@ import panda.log.Logs;
  * 
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("unchecked")
-public class SimpleSqlExecutor extends AbstractSqlExecutor {
-	/**
-	 * log
-	 */
-	protected static Log log = Logs.getLog(SqlExecutor.class);
+public class SimpleSqlExecutor extends SqlExecutor {
+	private static Log log = Logs.getLog(SimpleSqlExecutor.class);
 
-	private static final String BLANK_SQL_MESSAGE = "The sql is blank";
-	
 	/**
 	 * Constructor
 	 * @param sqlManager sqlManager
@@ -262,6 +256,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 * @param type class type
 	 * @return bean handler
 	 */
+	@SuppressWarnings("unchecked")
 	protected BeanHandler getBeanHandler(Class type) {
 		return Beans.me().getBeanHandler(type);
 	}
@@ -336,17 +331,17 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 */
 	protected PreparedStatement createStatement(String sql, Object parameter,
 			List<SqlParameter> sqlParams, boolean returnGK) throws SQLException {
+
 		String jdbcSql = parseSqlStatement(sql, parameter, sqlParams);
 		
 		SqlLogger.logSql(jdbcSql);
 
-		if (returnGK) {
-			Asserts.isFalse(isCallableSql(jdbcSql), "SQL is a callable sql");
-		}
-
 		if (isCallableSql(jdbcSql)) {
+			if (returnGK) {
+				throw new IllegalArgumentException("Callable sql can not return generated keys");
+			}
+
 			CallableStatement cs;
-			
 			if (resultSetHoldability != 0) {
 				cs = connection.prepareCall(jdbcSql, resultSetType, resultSetConcurrency, resultSetHoldability);
 			}
@@ -357,7 +352,6 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 		}
 		else {
 			PreparedStatement ps;
-
 			if (returnGK) {
 				ps = connection.prepareStatement(jdbcSql, Statement.RETURN_GENERATED_KEYS);
 			}
@@ -387,7 +381,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 				SqlParameter sqlParam = sqlParams.get(i);
 	
 				if (sqlParam.isInputAllowed()) {
-					sqlParam.getTypeAdapter().setParameter(cs, i + 1, sqlParam.getValue(), sqlParam.getJdbcType());
+					sqlParam.getTypeAdapter().setParameter(cs, i + 1, sqlParam.getValue());
 				}
 				if (sqlParam.isOutputAllowed()) {
 					if (sqlParam.getScale() != null) {
@@ -405,7 +399,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 		else {
 			for (int i = 0; i < sqlParams.size(); i++) {
 				SqlParameter sqlParam = sqlParams.get(i);
-				sqlParam.getTypeAdapter().setParameter(ps, i + 1, sqlParam.getValue(), sqlParam.getJdbcType());
+				sqlParam.getTypeAdapter().setParameter(ps, i + 1, sqlParam.getValue());
 			}
 			
 			SqlLogger.logParameters(ps);
@@ -449,6 +443,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 * @param sqlParams sql parameters
 	 * @throws SQLException if a SQL error occurs
 	 */
+	@SuppressWarnings("unchecked")
 	protected void retrieveOutputParameters(PreparedStatement ps, Object parameter, List<SqlParameter> sqlParams) throws SQLException {
 		if (ps instanceof CallableStatement) {
 			CallableStatement cs = (CallableStatement)ps;
@@ -517,7 +512,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 			SqlLogger.logResultHeader(rs);
 			SqlLogger.logResultValues(rs);
 			
-			SimpleSqlResultSet<T> srs = new SimpleSqlResultSet<T>(this, rs, resultClass, resultObject, keyProp); 
+			SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass, resultObject, keyProp); 
 			resultObject = srs.getResult(resultObject);
 
 			return resultObject;
@@ -544,9 +539,9 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 * @throws java.sql.SQLException If more than one result was found, or if any other error occurs.
 	 */
 	@Override
-	protected <T> T queryForObject(String sql, Object parameter, Class<T> resultClass, T resultObject) throws SQLException {
+	protected <T> T fetch(String sql, Object parameter, Class<T> resultClass, T resultObject) throws SQLException {
 		if (log.isDebugEnabled()) {
-			log.debug("queryForObject: " + sql);
+			log.debug("fetch: " + sql);
 		}
 
 		List<SqlParameter> sqlParams = new ArrayList<SqlParameter>();
@@ -565,11 +560,11 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 			SqlLogger.logResultHeader(rs);
 			SqlLogger.logResultValues(rs);
 			
-			SimpleSqlResultSet<T> srs = new SimpleSqlResultSet<T>(this, rs, resultClass, resultObject); 
+			SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass, resultObject); 
 			resultObject = srs.getResult(resultObject);
 
 			if (rs.next()) {
-				throw new SQLException("Error: queryForObject returned too many results.");
+				log.warn("Too many results returned: " + sql);
 			}
 			return resultObject;
 		}
@@ -600,27 +595,27 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
-			log.debug("queryForList: " + sql);
+			log.debug("selectList: " + sql);
 		}
 
 		List<SqlParameter> sqlParams = new ArrayList<SqlParameter>();
 		PreparedStatement ps = prepareStatement(sql, parameter, sqlParams);
+		
 		ResultSet rs = null;
-
 		try {
-			List<T> resultList = new ArrayList<T>();
-
 			ps.execute();
 
 			retrieveOutputParameters(ps, parameter, sqlParams);
-
+			
 			rs = ps.getResultSet();
+
+			List<T> resultList = new ArrayList<T>();
 			if (rs != null) {
 				SqlLogger.logResultHeader(rs);
 	
 				SqlUtils.skipResultSet(rs, skip);
 	
-				SimpleSqlResultSet<T> srs = new SimpleSqlResultSet<T>(this, rs, resultClass);
+				SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass);
 				
 				int cnt = 0;
 				while (rs.next()) {
@@ -663,27 +658,67 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	@Override
-	public <T> Map selectMap(String sql, Object parameter, Class<T> resultClass, String keyPropertyName, String valuePropertyName) throws SQLException {
+	@SuppressWarnings("unchecked")
+	public <T> Map selectMap(String sql, Object parameter, Class<T> resultClass, String keyPropertyName,
+			String valuePropertyName, int skip, int max) throws SQLException {
+
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
-		List<T> list = selectList(sql, parameter, resultClass);
-
-		Map map = new HashMap();
-		BeanHandler beanHandler = getBeanHandler(resultClass);
-
-		for (int i = 0, n = list.size(); i < n; i++) {
-			T bean = list.get(i);
-			Object key = beanHandler.getBeanValue(bean, keyPropertyName);
-			Object value = null;
-			if (valuePropertyName == null) {
-				value = bean;
-			} else {
-				value = beanHandler.getBeanValue(bean, valuePropertyName);
-			}
-			map.put(key, value);
+		if (log.isDebugEnabled()) {
+			log.debug("selectMap: " + sql);
 		}
 
-		return map;
+		List<SqlParameter> sqlParams = new ArrayList<SqlParameter>();
+		PreparedStatement ps = prepareStatement(sql, parameter, sqlParams);
+
+		BeanHandler beanHandler = getBeanHandler(resultClass);
+		
+		ResultSet rs = null;
+		try {
+			ps.execute();
+
+			retrieveOutputParameters(ps, parameter, sqlParams);
+			
+			rs = ps.getResultSet();
+
+			Map map = new HashMap();
+			if (rs != null) {
+				SqlLogger.logResultHeader(rs);
+	
+				SqlUtils.skipResultSet(rs, skip);
+	
+				SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass);
+				
+				int cnt = 0;
+				while (rs.next()) {
+					SqlLogger.logResultValues(rs);
+	
+					T bean = srs.getResult();
+					Object key = beanHandler.getBeanValue(bean, keyPropertyName);
+					Object value = null;
+					if (valuePropertyName == null) {
+						value = bean;
+					}
+					else {
+						value = beanHandler.getBeanValue(bean, valuePropertyName);
+					}
+					map.put(key, value);
+					
+					if (max > 0) {
+						cnt++;
+						if (cnt >= max) {
+							break;
+						}
+					}
+				}
+			}
+
+			return map;
+		}
+		finally {
+			SqlUtils.safeClose(rs);
+			SqlUtils.safeClose(ps);
+		}
 	}
 
 	/**
@@ -701,7 +736,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
-			log.debug("queryForResultSet: " + sql);
+			log.debug("selectResultSet: " + sql);
 		}
 
 		List<SqlParameter> sqlParams = new ArrayList<SqlParameter>();
@@ -711,7 +746,7 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 		
 		retrieveOutputParameters(ps, parameter, sqlParams);
 
-		return new SimpleSqlResultSet<T>(this, rs, resultClass);
+		return new SqlResultSet<T>(this, rs, resultClass);
 	}
 
 	/**
@@ -746,6 +781,33 @@ public class SimpleSqlExecutor extends AbstractSqlExecutor {
 			SqlUtils.safeClose(ps);
 		}
 	}
+
+	/**
+	 * Executes the given SQL statement, which may be an INSERT, UPDATE, 
+	 * or DELETE statement or an SQL statement that returns nothing, 
+	 * such as an SQL DDL statement. 
+	 *
+	 * @param sql The SQL statement to execute.
+	 * @throws java.sql.SQLException If an error occurs.
+	 */
+	@Override
+	public void execute(String sql) throws SQLException {
+		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
+
+		if (log.isDebugEnabled()) {
+			log.debug("execute: " + sql);
+		}
+
+		Statement st = null;
+		try {
+			st = createStatement(); 
+			st.execute(sql);
+		}
+		finally {
+			SqlUtils.safeClose(st);
+		}
+	}
+
 
 	/**
 	 * Executes the given SQL statement, which may be an INSERT, UPDATE, 

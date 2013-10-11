@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * Object implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
+public class ObjectTypeAdapter<T, P> extends AbstractCastTypeAdapter<T, P> {
 	public ObjectTypeAdapter(TypeAdapters adapters, Class<T> javaType, Class<P> jdbcType) {
 		super(adapters, javaType, jdbcType);
 	}
@@ -22,12 +22,12 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		Object object = rs.getObject(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		Object object = rs.getObject(column);
 		return castToJava(object);
 	}
 
@@ -35,12 +35,12 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		Object object = rs.getObject(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		Object object = rs.getObject(column);
 		return castToJava(object);
 	}
 
@@ -48,12 +48,12 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		Object object = cs.getObject(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		Object object = cs.getObject(column);
 		return castToJava(object);
 	}
 
@@ -61,50 +61,49 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
 			if (obj instanceof Byte) {
-				rs.updateByte(columnName, (Byte)obj);
+				rs.updateByte(column, (Byte)obj);
 			}
 			else if (obj instanceof Short) {
-				rs.updateShort(columnName, (Short)obj);
+				rs.updateShort(column, (Short)obj);
 			}
 			else if (obj instanceof Integer) {
-				rs.updateInt(columnName, (Integer)obj);
+				rs.updateInt(column, (Integer)obj);
 			}
 			else if (obj instanceof Long) {
-				rs.updateLong(columnName, (Long)obj);
+				rs.updateLong(column, (Long)obj);
 			}
 			else if (obj instanceof Float) {
-				rs.updateFloat(columnName, (Float)obj);
+				rs.updateFloat(column, (Float)obj);
 			}
 			else if (obj instanceof Double) {
-				rs.updateDouble(columnName, (Double)obj);
+				rs.updateDouble(column, (Double)obj);
 			}
 			else if (obj instanceof BigDecimal) {
-				rs.updateBigDecimal(columnName, (BigDecimal)obj);
+				rs.updateBigDecimal(column, (BigDecimal)obj);
 			}
 			else if (obj instanceof Date) {
-				rs.updateDate(columnName, (Date)obj);
+				rs.updateDate(column, (Date)obj);
 			}
 			else if (obj instanceof Time) {
-				rs.updateTime(columnName, (Time)obj);
+				rs.updateTime(column, (Time)obj);
 			}
 			else if (obj instanceof Timestamp) {
-				rs.updateTimestamp(columnName, (Timestamp)obj);
+				rs.updateTimestamp(column, (Timestamp)obj);
 			}
 			else {
-				rs.updateObject(columnName, obj);
+				rs.updateObject(column, obj);
 			}
 		}
 	}
@@ -113,50 +112,48 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
 			if (obj instanceof Byte) {
-				rs.updateByte(columnIndex, (Byte)obj);
+				rs.updateByte(column, (Byte)obj);
 			}
 			else if (obj instanceof Short) {
-				rs.updateShort(columnIndex, (Short)obj);
+				rs.updateShort(column, (Short)obj);
 			}
 			else if (obj instanceof Integer) {
-				rs.updateInt(columnIndex, (Integer)obj);
+				rs.updateInt(column, (Integer)obj);
 			}
 			else if (obj instanceof Long) {
-				rs.updateLong(columnIndex, (Long)obj);
+				rs.updateLong(column, (Long)obj);
 			}
 			else if (obj instanceof Float) {
-				rs.updateFloat(columnIndex, (Float)obj);
+				rs.updateFloat(column, (Float)obj);
 			}
 			else if (obj instanceof Double) {
-				rs.updateDouble(columnIndex, (Double)obj);
+				rs.updateDouble(column, (Double)obj);
 			}
 			else if (obj instanceof BigDecimal) {
-				rs.updateBigDecimal(columnIndex, (BigDecimal)obj);
+				rs.updateBigDecimal(column, (BigDecimal)obj);
 			}
 			else if (obj instanceof Date) {
-				rs.updateDate(columnIndex, (Date)obj);
+				rs.updateDate(column, (Date)obj);
 			}
 			else if (obj instanceof Time) {
-				rs.updateTime(columnIndex, (Time)obj);
+				rs.updateTime(column, (Time)obj);
 			}
 			else if (obj instanceof Timestamp) {
-				rs.updateTimestamp(columnIndex, (Timestamp)obj);
+				rs.updateTimestamp(column, (Timestamp)obj);
 			}
 			else {
-				rs.updateObject(columnIndex, obj);
+				rs.updateObject(column, obj);
 			}
 		}
 	}
@@ -167,11 +164,9 @@ public class ObjectTypeAdapter<T, P> extends AbstractTypeAdapter<T, P> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
 			ps.setObject(i, obj);

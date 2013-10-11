@@ -11,7 +11,7 @@ import panda.dao.sql.SqlExecutor;
 /**
  * ExtendSqlExecutorTest
  */
-public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
+public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	@Override
 	protected Connection getConnection() throws Exception {
 		return TestSupport.getHsqldbConnection();
@@ -19,7 +19,7 @@ public class ExtendSqlExecutorTest extends SqlExecutorTestCase {
 
 	@Override
 	protected SqlExecutor createExecutor(Connection c) throws Exception {
-		return new ExtendSqlManager().getExecutor(c);
+		return new DynamicSqlManager().getExecutor(c);
 	}
 
 	/**

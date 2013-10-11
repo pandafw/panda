@@ -1,5 +1,7 @@
 package panda.dao.criteria;
 
+import java.lang.reflect.Array;
+
 import panda.lang.Asserts;
 import panda.lang.Objects;
 
@@ -21,9 +23,6 @@ public class Expression {
 	 * @param operator the operator to set
 	 */
 	public void setOperator(Operator operator) {
-		if (operator != Operator.BEG_PAREN && operator != Operator.END_PAREN) {
-			throw new IllegalArgumentException("operator '" + operator + "' must be " + Operator.BEG_PAREN + " | " + Operator.END_PAREN);
-		}
 		this.operator = operator;
 	}
 
@@ -149,6 +148,13 @@ public class Expression {
 		 */
 		public Object getValue() {
 			return value;
+		}
+
+		/**
+		 * @return the value
+		 */
+		public Object getValue(int index) {
+			return Array.get(value, index);
 		}
 
 		/**

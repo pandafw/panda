@@ -61,8 +61,6 @@ public class TypeAdapters {
 	public TypeAdapters() {
 		TypeAdapter adapter;
 
-		register(Object.class, new UnknownTypeAdapter(this));
-
 		//----------------------------------------------------
 		// boolean
 		//

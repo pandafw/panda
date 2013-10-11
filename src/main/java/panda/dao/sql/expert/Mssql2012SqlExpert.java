@@ -1,6 +1,7 @@
 package panda.dao.sql.expert;
 
 import panda.dao.criteria.Query;
+import panda.dao.sql.Sql;
 
 public class Mssql2012SqlExpert extends Mssql2005SqlExpert {
 	/**
@@ -8,7 +9,7 @@ public class Mssql2012SqlExpert extends Mssql2005SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(StringBuilder sql, Query query) {
+	protected void limit(Sql sql, Query query) {
 		if (query.getStart() > 0) {
 			sql.append(" OFFSET ").append(query.getStart()).append(" ROWS");
 		}

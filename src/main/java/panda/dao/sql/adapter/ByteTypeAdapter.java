@@ -10,7 +10,7 @@ import java.sql.Types;
  * Byte implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
+public class ByteTypeAdapter<T> extends AbstractCastTypeAdapter<T, Byte> {
 	public ByteTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, Byte.class);
 	}
@@ -19,12 +19,12 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		byte b = rs.getByte(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		byte b = rs.getByte(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -37,12 +37,12 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		byte b = rs.getByte(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		byte b = rs.getByte(column);
 		if (rs.wasNull()) {
 			return castToJava(null);
 		}
@@ -55,12 +55,12 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		byte b = cs.getByte(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		byte b = cs.getByte(column);
 		if (cs.wasNull()) {
 			return castToJava(null);
 		}
@@ -73,19 +73,18 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		Byte b = castToJdbc(value);
 		if (b == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateByte(columnName, b);
+			rs.updateByte(column, b);
 		}
 	}
 
@@ -93,19 +92,17 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		Byte b = castToJdbc(value);
 		if (b == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateByte(columnIndex, b);
+			rs.updateByte(column, b);
 		}
 	}
 
@@ -115,11 +112,9 @@ public class ByteTypeAdapter<T> extends AbstractTypeAdapter<T, Byte> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		Byte b = castToJdbc(value);
 		if (b == null) {
 			ps.setNull(i, Types.TINYINT);

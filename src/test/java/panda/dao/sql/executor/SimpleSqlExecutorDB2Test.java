@@ -48,6 +48,8 @@ public class SimpleSqlExecutorDB2Test extends SimpleSqlExecutorTestCase {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void prepareActualMap(Map actual) {
+		super.prepareActualMap(actual);
+
 		// fix for postgre real precision bug 
 		Double d = (Double)actual.get("freal");
 		if (d != null) {

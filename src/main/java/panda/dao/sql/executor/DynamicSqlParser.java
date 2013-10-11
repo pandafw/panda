@@ -11,7 +11,7 @@ import panda.dao.sql.SqlExecutor;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ExtendSqlParser extends SimpleSqlParser {
+public class DynamicSqlParser extends SimpleSqlParser {
 	/**
 	 * LogicalContainerSegment
 	 */
@@ -132,7 +132,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 	 * Constructor
 	 * @param sql sql statement
 	 */
-	public ExtendSqlParser(String sql) {
+	public DynamicSqlParser(String sql) {
 		super(sql);
 	}
 
@@ -140,7 +140,7 @@ public class ExtendSqlParser extends SimpleSqlParser {
 	 * Constructor
 	 * @param sql sql statement
 	 */
-	public ExtendSqlParser(String sql, boolean keepComments) {
+	public DynamicSqlParser(String sql, boolean keepComments) {
 		super(sql, keepComments);
 	}
 

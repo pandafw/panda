@@ -10,7 +10,7 @@ import java.sql.Time;
  * SQL time implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
+public class SqlTimeTypeAdapter<T> extends AbstractCastTypeAdapter<T, Time> {
 	public SqlTimeTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, Time.class);
 	}
@@ -19,12 +19,12 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		Object sqlTime = rs.getTime(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		Object sqlTime = rs.getTime(column);
 		return castToJava(sqlTime);
 	}
 
@@ -32,12 +32,12 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		Object sqlTime = rs.getTime(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		Object sqlTime = rs.getTime(column);
 		return castToJava(sqlTime);
 	}
 
@@ -45,12 +45,12 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		Object sqlTime = cs.getTime(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		Object sqlTime = cs.getTime(column);
 		return castToJava(sqlTime);
 	}
 
@@ -58,19 +58,18 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
+	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		Time time = castToJdbc(value);
 		if (time == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateTime(columnName, time);
+			rs.updateTime(column, time);
 		}
 	}
 
@@ -78,19 +77,17 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		Time time = castToJdbc(value);
 		if (time == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateTime(columnIndex, time);
+			rs.updateTime(column, time);
 		}
 	}
 
@@ -100,11 +97,9 @@ public class SqlTimeTypeAdapter<T> extends AbstractTypeAdapter<T, Time> {
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		Time time = castToJdbc(value);
 		ps.setTime(i, time);
 	}

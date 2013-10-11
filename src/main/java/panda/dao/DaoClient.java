@@ -17,21 +17,14 @@ import panda.dao.entity.EntityMaker;
 public abstract class DaoClient {
 	protected String name;
 	protected DatabaseMeta meta;
-	protected Map<Class<?>, Entity> entities = new ConcurrentHashMap<Class<?>, Entity>();
-	protected EntityMaker entityMaker = new AnnotationEntityMaker();
-	protected Beans beans = Beans.me();
-	
-	/**
-	 * @param name client name
-	 */
+	protected Map<Class<?>, Entity> entities;
+	protected Beans beans;
+	protected EntityMaker entityMaker;
+
 	public DaoClient() {
-	}
-	
-	/**
-	 * @param name client name
-	 */
-	public DaoClient(String name) {
-		this.name = name;
+		entities = new ConcurrentHashMap<Class<?>, Entity>();
+		beans = Beans.me();
+		entityMaker = new AnnotationEntityMaker(beans);
 	}
 
 	/**

@@ -11,7 +11,7 @@ import panda.lang.Strings;
  * Boolean implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, String> {
+public abstract class BoolCharTypeAdapter<T> extends AbstractCastTypeAdapter<T, String> {
 	public BoolCharTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
 		super(adapters, javaType, String.class);
 	}
@@ -64,12 +64,12 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, String columnName) throws SQLException {
-		String s = rs.getString(columnName);
+	public T getResult(ResultSet rs, String column) throws SQLException {
+		String s = rs.getString(column);
 		return convertFromJdbc(s);
 	}
 
@@ -77,12 +77,12 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * Gets a column from a result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(ResultSet rs, int columnIndex) throws SQLException {
-		String s = rs.getString(columnIndex);
+	public T getResult(ResultSet rs, int column) throws SQLException {
+		String s = rs.getString(column);
 		return convertFromJdbc(s);
 	}
 
@@ -90,12 +90,12 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * Gets a column from a callable statement
 	 * 
 	 * @param cs - the statement
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @return - the column value
 	 * @throws SQLException if getting the value fails
 	 */
-	public T getResult(CallableStatement cs, int columnIndex) throws SQLException {
-		String s = cs.getString(columnIndex);
+	public T getResult(CallableStatement cs, int column) throws SQLException {
+		String s = cs.getString(column);
 		return convertFromJdbc(s);
 	}
 
@@ -103,19 +103,17 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnName - the column name to get
+	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String columnName, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
 		String s = convertFromJava(value);
 		if (s == null) {
-			rs.updateNull(columnName);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateString(columnName, s);
+			rs.updateString(column, s);
 		}
 	}
 
@@ -123,19 +121,17 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * Update column value to result set
 	 * 
 	 * @param rs - the result set
-	 * @param columnIndex - the column to get (by index)
+	 * @param column - the column to get (by index)
 	 * @param value - the value to update
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int columnIndex, Object value, String jdbcType)
-			throws SQLException {
+	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
 		String s = convertFromJava(value);
 		if (s == null) {
-			rs.updateNull(columnIndex);
+			rs.updateNull(column);
 		}
 		else {
-			rs.updateString(columnIndex, s);
+			rs.updateString(column, s);
 		}
 	}
 
@@ -145,11 +141,9 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractTypeAdapter<T, Stri
 	 * @param ps - the prepared statement
 	 * @param i - the parameter index
 	 * @param value - the parameter value
-	 * @param jdbcType - the JDBC type of the parameter
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value, String jdbcType)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
 		String s = convertFromJava(value);
 		ps.setString(i, s);
 	}
