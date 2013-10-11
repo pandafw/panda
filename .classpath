@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="lib/compile/commons-vfs2.jar"/>
 	<classpathentry kind="lib" path="lib/compile/freemarker.jar"/>
 	<classpathentry kind="lib" path="lib/compile/jtidy.jar"/>
-	<classpathentry kind="lib" path="lib/compile/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/compile/log4j.jar" sourcepath="lib/compile/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="lib/compile/mail.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
