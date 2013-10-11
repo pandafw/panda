@@ -129,7 +129,6 @@ public class SqlDao extends Dao {
 	 * drop a table if exists
 	 * 
 	 * @param table table name
-	 * @return true if drop successfully
 	 */
 	@Override
 	public void drop(String table) {
@@ -868,7 +867,7 @@ public class SqlDao extends Dao {
 	/**
 	 * select records by the supplied query.
 	 * 
-	 * @param type record type
+	 * @param entity entity
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @param callback DataHandler callback
 	 * @return callback processed count

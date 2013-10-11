@@ -66,7 +66,7 @@ public class Sql {
 	}
 	
 	/**
-	 * @param params the params to set
+	 * @param param the parameter to add
 	 */
 	public Sql addParam(Object param) {
 		if (params == null) {

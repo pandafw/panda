@@ -69,7 +69,7 @@ public class H2SqlExpert extends SqlExpert {
 
 
 	/**
-	 * @see http://www.h2database.com/html/datatypes.html
+	 * @see <a href="http://www.h2database.com/html/datatypes.html">http://www.h2database.com/html/datatypes.html</a>
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
@@ -94,7 +94,7 @@ public class H2SqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://www.h2database.com/html/grammar.html
+	 * @see <a href="http://www.h2database.com/html/grammar.html">http://www.h2database.com/html/grammar.html</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

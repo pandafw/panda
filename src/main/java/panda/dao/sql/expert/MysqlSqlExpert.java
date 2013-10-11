@@ -121,7 +121,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	}
 
 	/**
-	 * @see http://dev.mysql.com/doc/refman/5.0/en/storage-requirements.html
+	 * @see <a href="http://dev.mysql.com/doc/refman/5.0/en/storage-requirements.html">http://dev.mysql.com/doc/refman/5.0/en/storage-requirements.html</a>
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
@@ -145,7 +145,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
+	 * @see <a href="http://hsqldb.org/doc/guide/ch09.html#select-section">http://hsqldb.org/doc/guide/ch09.html#select-section</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

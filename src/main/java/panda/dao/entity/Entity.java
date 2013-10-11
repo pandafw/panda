@@ -284,7 +284,8 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @return the prepSqls
+	 * @param db database type
+	 * @param sql sql
 	 */
 	protected void addPrepSql(DB db, String sql) {
 		if (prepSqls == null) {
@@ -304,7 +305,8 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @return the postSqls
+	 * @param db database type
+	 * @param sql sql
 	 */
 	protected void addPostSql(DB db, String sql) {
 		if (postSqls == null) {

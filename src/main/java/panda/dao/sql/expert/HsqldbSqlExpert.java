@@ -69,7 +69,7 @@ public class HsqldbSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
+	 * @see <a href="http://hsqldb.org/doc/guide/ch09.html#select-section">http://hsqldb.org/doc/guide/ch09.html#select-section</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

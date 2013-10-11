@@ -129,8 +129,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests skipping past the end of a stream.
-     *
-     * @throws Throwable
      */
     @Test
     public void testAvailable() throws Throwable {
@@ -369,8 +367,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests markSupported.
-     *
-     * @throws Exception
      */
     @Test
     public void testMarkSupported() throws Exception {
@@ -384,8 +380,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests read returning 0
-     *
-     * @throws Exception
      */
     @Test
     public void testRead0() throws Exception {
@@ -421,8 +415,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests read throwing IndexOutOfBoundsException
-     *
-     * @throws Exception
      */
     @Test
     public void testReadOutOfBounds() throws Exception {
@@ -463,8 +455,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests skipping number of characters larger than the internal buffer.
-     *
-     * @throws Throwable
      */
     @Test
     public void testSkipBig() throws Throwable {
@@ -479,8 +469,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests skipping as a noop
-     *
-     * @throws Throwable
      */
     @Test
     public void testSkipNone() throws Throwable {
@@ -497,8 +485,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests skipping past the end of a stream.
-     *
-     * @throws Throwable
      */
     @Test
     public void testSkipPastEnd() throws Throwable {
@@ -514,8 +500,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests skipping to the end of a stream.
-     *
-     * @throws Throwable
      */
     @Test
     public void testSkipToEnd() throws Throwable {
@@ -531,8 +515,6 @@ public class Base64InputStreamTest {
 
     /**
      * Tests if negative arguments to skip are handled correctly.
-     *
-     * @throws Throwable
      */
     @Test(expected=IllegalArgumentException.class)
     public void testSkipWrongArgument() throws Throwable {

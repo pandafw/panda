@@ -59,7 +59,6 @@ public class ByteArrayTypeAdapter<T> extends AbstractCastTypeAdapter<T, byte[]> 
 	 * @param rs - the result set
 	 * @param column - the column name to get
 	 * @param value - the value to update
-	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
 	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {

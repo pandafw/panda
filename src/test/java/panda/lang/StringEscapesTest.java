@@ -453,8 +453,6 @@ public class StringEscapesTest {
 
 	/**
 	 * Tests // https://issues.apache.org/jira/browse/LANG-480
-	 * 
-	 * @throws java.io.UnsupportedEncodingException
 	 */
 	@Test
 	public void testEscapeHtmlHighUnicode() throws java.io.UnsupportedEncodingException {

@@ -99,7 +99,7 @@ public abstract class SqlLogger {
 	
 	/**
 	 * logSatement
-	 * @param sql sql statement 
+	 * @param ps prepared statement to log 
 	 */
 	public static void logStatement(PreparedStatement ps) {
 		if (sslog.isDebugEnabled()) {

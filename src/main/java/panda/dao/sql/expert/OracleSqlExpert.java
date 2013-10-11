@@ -130,7 +130,6 @@ public class OracleSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://hsqldb.org/doc/guide/ch09.html#select-section
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

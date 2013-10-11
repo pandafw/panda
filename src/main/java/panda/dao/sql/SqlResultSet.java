@@ -47,7 +47,7 @@ public class SqlResultSet<T> {
 	 * @param executor the sql executor
 	 * @param resultSet the sql result set
 	 * @param resultType the result bean type
-	 * @throws SQLException 
+	 * @throws SQLException if a SQL error occurs
 	 */
 	public SqlResultSet(SqlExecutor executor, ResultSet resultSet, Class<T> resultType)
 			throws SQLException {
@@ -60,7 +60,7 @@ public class SqlResultSet<T> {
 	 * @param resultSet the sql result set
 	 * @param resultType the result bean type
 	 * @param resultObject the initial result object
-	 * @throws SQLException 
+	 * @throws SQLException if a SQL error occurs
 	 */
 	public SqlResultSet(SqlExecutor executor, ResultSet resultSet, Class<T> resultType, T resultObject)
 			throws SQLException {
@@ -74,7 +74,7 @@ public class SqlResultSet<T> {
 	 * @param resultType the result bean type
 	 * @param resultObject the initial result object
 	 * @param keyProp the generated key property
-	 * @throws SQLException 
+	 * @throws SQLException if a SQL error occurs
 	 */
 	public SqlResultSet(SqlExecutor executor, ResultSet resultSet, Class<T> resultType, T resultObject, String keyProp)
 			throws SQLException {
@@ -151,11 +151,9 @@ public class SqlResultSet<T> {
 	/**
 	 * returns data to populate a single object instance.
 	 * 
-	 * @param <T> The type of result object 
-	 * @param resultClass The class of result object
 	 * @return The single result object populated with the result set data, or null if no result was
 	 *         found
-	 * @throws SQLException If an SQL error occurs.
+	 * @throws SQLException If anSQL error occurs.
 	 */
 	public T getResult() throws SQLException {
 		return getResult((T)null);
@@ -164,11 +162,10 @@ public class SqlResultSet<T> {
 	/**
 	 * returns data to populate a single object instance.
 	 * 
-	 * @param <T> The type of result object 
 	 * @param resultObject The result object instance that should be populated with result data.
 	 * @return The single result object as supplied by the resultObject parameter, populated with
 	 *         the result set data, or null if no result was found
-	 * @throws SQLException If an SQL error occurs.
+	 * @throws SQLException If a SQL error occurs.
 	 */
 	@SuppressWarnings("unchecked")
 	public T getResult(T resultObject) throws SQLException {
@@ -195,7 +192,7 @@ public class SqlResultSet<T> {
 	 * update data to result set.
 	 * 
 	 * @param resultObject The result data object.
-	 * @throws SQLException If an SQL error occurs.
+	 * @throws SQLException If anSQL error occurs.
 	 */
 	public void updateResult(T resultObject) throws SQLException {
 		for (ResultColumn rc : resultColumns) {

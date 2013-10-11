@@ -274,7 +274,7 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	 * @return A byte array containing binary data decoded from the supplied byte array
 	 *         (representing characters).
 	 * @throws DecoderException Thrown if an odd number of bytes is supplied to this function
-	 * @see #decodeHex(char[])
+	 * @see #decodeHex(byte[])
 	 */
 	public byte[] decode(final byte[] array) throws DecoderException {
 		return decodeHex(array);
@@ -291,7 +291,7 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	 *         (representing characters).
 	 * @throws DecoderException Thrown if an odd number of bytes is supplied to this function
 	 *             or the object is not a String or char[]
-	 * @see #decodeHex(char[])
+	 * @see #decodeHex(byte[])
 	 */
 	public byte[] decode(final String str) throws DecoderException {
 		return decodeHex(Strings.getBytesUtf8(str));
@@ -308,7 +308,7 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	 *         (representing characters).
 	 * @throws DecoderException Thrown if an odd number of bytes is supplied to this function
 	 *             or the object is not a String or char[]
-	 * @see #decodeHex(char[])
+	 * @see #decodeHex(byte[])
 	 */
 	public byte[] decode(final char[] chars) throws DecoderException {
 		return decode(new String(chars));
@@ -339,7 +339,7 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	 * charset named by {@link #getCharset()}.
 	 * </p>
 	 * 
-	 * @param object a String, or byte[] to convert to Hex characters
+	 * @param str a String to convert to Hex characters
 	 * @return A char[] containing hexadecimal characters
 	 * @throws EncoderException Thrown if the given object is not a String or byte[]
 	 * @see #encodeHex(byte[])

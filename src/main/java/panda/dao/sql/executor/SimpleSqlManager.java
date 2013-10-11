@@ -64,7 +64,9 @@ public class SimpleSqlManager extends SqlManager {
 	}
 
 	/**
-	 * @return the sqlParserCache
+	 * put sqlParser to cache
+	 * @param key key
+	 * @param parser parser
 	 */
 	public void putSqlParser(String key, SqlParser parser) {
 		if (sqlParserCache == null) {

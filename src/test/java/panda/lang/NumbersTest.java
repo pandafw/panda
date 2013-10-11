@@ -27,7 +27,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toInt(String, int)}.
+	 * Test for {@link Numbers#toInt(String, Integer)}.
 	 */
 	@Test
 	public void testToIntStringI() {
@@ -51,7 +51,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toLong(String, long)}.
+	 * Test for {@link Numbers#toLong(String, Long)}.
 	 */
 	@Test
 	public void testToLongStringL() {
@@ -74,7 +74,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toFloat(String, float)}.
+	 * Test for {@link Numbers#toFloat(String, Float)}.
 	 */
 	@Test
 	public void testToFloatStringF() {
@@ -111,7 +111,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toDouble(String, double)}.
+	 * Test for {@link Numbers#toDouble(String, Double)}.
 	 */
 	@Test
 	public void testStringToDoubleStringD() {
@@ -131,7 +131,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toByte(String, byte)}.
+	 * Test for {@link Numbers#toByte(String, Byte)}.
 	 */
 	@Test
 	public void testToByteStringI() {
@@ -151,7 +151,7 @@ public class NumbersTest {
 	}
 
 	/**
-	 * Test for {@link Numbers#toShort(String, short)}.
+	 * Test for {@link Numbers#toShort(String, Short)}.
 	 */
 	@Test
 	public void testToShortStringI() {

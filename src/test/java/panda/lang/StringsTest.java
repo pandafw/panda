@@ -2079,7 +2079,6 @@ public class StringsTest {
 	/**
 	 * Tests {@link Strings#toString(byte[], String)}
 	 * 
-	 * @throws UnsupportedEncodingException
 	 * @see Strings#toString(byte[], String)
 	 */
 	@Test
@@ -2111,8 +2110,6 @@ public class StringsTest {
 
 	/**
 	 * Tests LANG-858.
-	 * 
-	 * @throws Exception
 	 */
 	@Test
 	public void testEscapeSurrogatePairsLang858() throws Exception {

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("resource")
 public class WriterOutputStreamTest extends TestCase {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
@@ -86,7 +87,7 @@ public class WriterOutputStreamTest extends TestCase {
     }
 
     
-    public void testFlush() throws IOException {
+	public void testFlush() throws IOException {
         StringWriter writer = new StringWriter();
         WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false);
         out.write("abc".getBytes("us-ascii"));

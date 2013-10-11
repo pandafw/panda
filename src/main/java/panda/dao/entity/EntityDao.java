@@ -94,8 +94,6 @@ public class EntityDao<T> {
 
 	/**
 	 * drop a table if exists
-	 * 
-	 * @return true if drop successfully
 	 */
 	public void drop() {
 		dao.drop(entity);
@@ -329,7 +327,6 @@ public class EntityDao<T> {
 	/**
 	 * select records by the supplied query.
 	 * 
-	 * @param type record type
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @param callback DataHandler callback
 	 * @return callback processed count

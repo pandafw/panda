@@ -77,7 +77,7 @@ public class PostgreSqlExpert extends SqlExpert {
 	}
 
 	/**
-	 * @see http://www.postgresql.org/docs/8.4/static/datatype.html
+	 * @see <a href="http://www.postgresql.org/docs/8.4/static/datatype.html">http://www.postgresql.org/docs/8.4/static/datatype.html</a>
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
@@ -109,7 +109,7 @@ public class PostgreSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://www.postgresql.org/docs/8.0/static/queries-limit.html
+	 * @see <a href="http://www.postgresql.org/docs/8.0/static/queries-limit.html">http://www.postgresql.org/docs/8.0/static/queries-limit.html</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

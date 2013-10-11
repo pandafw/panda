@@ -101,7 +101,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 	/**
 	 * @param sql sql
 	 * @param query query
-	 * @see http://sqlite.org/lang_select.html
+	 * @see <a href="http://sqlite.org/lang_select.html">http://sqlite.org/lang_select.html</a>
 	 */
 	@Override
 	protected void limit(Sql sql, Query query) {

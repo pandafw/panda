@@ -303,7 +303,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#compare(Comparable, Comparable, boolean)}.
+	 * Tests {@link Objects#compare(Comparable, Comparable, boolean)}.
 	 */
 	@Test
 	public void testCompare() {
@@ -393,7 +393,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#clone(Object)} with a cloneable object.
+	 * Tests {@link Objects#clone(Object)} with a cloneable object.
 	 */
 	@Test
 	public void testCloneOfCloneable() {
@@ -403,7 +403,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#clone(Object)} with a not cloneable object.
+	 * Tests {@link Objects#clone(Object)} with a not cloneable object.
 	 */
 	@Test
 	public void testCloneOfNotCloneable() {
@@ -412,7 +412,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#clone(Object)} with an uncloneable object.
+	 * Tests {@link Objects#clone(Object)} with an uncloneable object.
 	 */
 	@Test(expected = NoSuchMethodException.class)
 	public void testCloneOfUncloneable() throws Throwable {
@@ -427,7 +427,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#clone(Object)} with an object array.
+	 * Tests {@link Objects#clone(Object)} with an object array.
 	 */
 	@Test
 	public void testCloneOfStringArray() {
@@ -435,7 +435,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#clone(Object)} with an array of primitives.
+	 * Tests {@link Objects#clone(Object)} with an array of primitives.
 	 */
 	@Test
 	public void testCloneOfPrimitiveArray() {
@@ -443,7 +443,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#cloneIfPossible(Object)} with a cloneable object.
+	 * Tests {@link Objects#cloneIfPossible(Object)} with a cloneable object.
 	 */
 	@Test
 	public void testPossibleCloneOfCloneable() {
@@ -453,7 +453,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#cloneIfPossible(Object)} with a not cloneable object.
+	 * Tests {@link Objects#cloneIfPossible(Object)} with a not cloneable object.
 	 */
 	@Test
 	public void testPossibleCloneOfNotCloneable() {
@@ -462,7 +462,7 @@ public class ObjectsTest {
 	}
 
 	/**
-	 * Tests {@link ObjectUtils#cloneIfPossible(Object)} with an uncloneable object.
+	 * Tests {@link Objects#cloneIfPossible(Object)} with an uncloneable object.
 	 */
 	@Test(expected = NoSuchMethodException.class)
 	public void testPossibleCloneOfUncloneable() throws Throwable {
@@ -509,7 +509,7 @@ public class ObjectsTest {
 		/**
 		 * Create a new NonComparableCharSequence instance.
 		 * 
-		 * @param value
+		 * @param value string
 		 */
 		public NonComparableCharSequence(final String value) {
 			super();

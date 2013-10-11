@@ -255,10 +255,10 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * The String is trimmed using {@link String#trim()}. Trim removes start and end characters
-	 * &lt;= 32. To strip whitespace use {@link #strip(String)}.
+	 * &lt;= 32. To strip whitespace use {@link #strip(CharSequence)}.
 	 * </p>
 	 * <p>
-	 * To trim your choice of characters, use the {@link #strip(String, String)} methods.
+	 * To trim your choice of characters, use the {@link #strip(CharSequence, String)} methods.
 	 * </p>
 	 * 
 	 * <pre>
@@ -282,7 +282,7 @@ public class Strings {
 	 * {@code null} if the String is empty ("") after the trim or if it is {@code null}.
 	 * <p>
 	 * The String is trimmed using {@link String#trim()}. Trim removes start and end characters
-	 * &lt;= 32. To strip whitespace use {@link #stripToNull(String)}.
+	 * &lt;= 32. To strip whitespace use {@link #stripToNull(CharSequence)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -307,7 +307,7 @@ public class Strings {
 	 * String ("") if the String is empty ("") after the trim or if it is {@code null}.
 	 * <p>
 	 * The String is trimmed using {@link String#trim()}. Trim removes start and end characters
-	 * &lt;= 32. To strip whitespace use {@link #stripToEmpty(String)}.
+	 * &lt;= 32. To strip whitespace use {@link #stripToEmpty(CharSequence)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -428,7 +428,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the stripChars String is {@code null}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}. Alternatively use {@link #strip(String)}.
+	 * {@link Character#isWhitespace(char)}. Alternatively use {@link #strip(CharSequence)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -5084,14 +5084,14 @@ public class Strings {
 	 * Note: this method doesn't not support padding with <a
 	 * href="http://www.unicode.org/glossary/#supplementary_character">Unicode Supplementary
 	 * Characters</a> as they require a pair of {@code char}s to be represented. If you are needing
-	 * to support full I18N of your applications consider using {@link #repeat(String, int)}
+	 * to support full I18N of your applications consider using {@link #repeat(CharSequence, int)}
 	 * instead.
 	 * </p>
 	 * 
 	 * @param ch character to repeat
 	 * @param repeat number of times to repeat char, negative treated as zero
 	 * @return String with repeated character
-	 * @see #repeat(String, int)
+	 * @see #repeat(CharSequence, int)
 	 */
 	public static String repeat(final char ch, final int repeat) {
 		final char[] buf = new char[repeat];

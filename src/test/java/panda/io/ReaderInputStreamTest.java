@@ -11,6 +11,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+@SuppressWarnings("resource")
 public class ReaderInputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
@@ -25,7 +26,7 @@ public class ReaderInputStreamTest {
     
     private Random random = new Random();
     
-    private void testWithSingleByteRead(String testString, String charsetName) throws IOException {
+	private void testWithSingleByteRead(String testString, String charsetName) throws IOException {
         byte[] bytes = testString.getBytes(charsetName);
         ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
         for (byte b : bytes) {
@@ -111,8 +112,6 @@ public class ReaderInputStreamTest {
     
     /**
      * Tests https://issues.apache.org/jira/browse/IO-277
-     * 
-     * @throws IOException
      */
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {

@@ -1085,7 +1085,8 @@ public class Base64Test {
      * @throws DecoderException
      *             if Hex.decode() fails - a serious problem since Hex comes from our own commons-codec!
      */
-    @Test
+    @SuppressWarnings("unused")
+	@Test
     public void testUUID() throws DecoderException {
         // The 4 UUID's below contains mixtures of + and / to help us test the
         // URL-SAFE encoding mode.

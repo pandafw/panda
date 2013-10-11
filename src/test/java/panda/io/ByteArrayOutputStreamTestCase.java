@@ -77,7 +77,8 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         checkByteArrays(buf, refbuf);
     }
               
-    public void testStream() throws Exception {
+    @SuppressWarnings("resource")
+	public void testStream() throws Exception {
         int written;
         
         //The ByteArrayOutputStream is initialized with 32 bytes to match
