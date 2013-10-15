@@ -24,7 +24,7 @@ public abstract class DaoClient {
 	public DaoClient() {
 		entities = new ConcurrentHashMap<Class<?>, Entity>();
 		beans = Beans.me();
-		entityMaker = new AnnotationEntityMaker(beans);
+		entityMaker = new AnnotationEntityMaker(this);
 	}
 
 	/**

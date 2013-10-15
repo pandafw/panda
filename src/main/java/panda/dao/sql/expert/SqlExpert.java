@@ -13,6 +13,7 @@ import panda.dao.criteria.Operator;
 import panda.dao.criteria.Order;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
+import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
 import panda.dao.sql.Sql;
@@ -119,7 +120,7 @@ public abstract class SqlExpert {
 
 	public Sql count(Entity<?> entity, Query query) {
 		Sql sql = new Sql();
-		sql.append("SELECT COUNT(*) FROM ").append(entity.getTableName());
+		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(entity.getTableName()));
 		where(sql, entity, query);
 		order(sql, entity, query);
 		return sql;
@@ -171,7 +172,7 @@ public abstract class SqlExpert {
 
 	public Sql delete(Entity<?> entity, Query query) {
 		Sql sql = new Sql();
-		sql.append("DELETE FROM ").append(entity.getTableName());
+		sql.append("DELETE FROM ").append(escapeTable(entity.getTableName()));
 		where(sql, entity, query);
 		return sql;
 	}
@@ -189,7 +190,7 @@ public abstract class SqlExpert {
 		}
 		
 		Sql sql = new Sql();
-		sql.append("INSERT INTO ").append(entity.getTableName());
+		sql.append("INSERT INTO ").append(escapeTable(entity.getTableName()));
 		sql.append('(');
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly() || (ef.isAutoIncrement() && autoId)) {
@@ -213,7 +214,7 @@ public abstract class SqlExpert {
 
 	public Sql update(Entity<?> entity, Object data, Query query) {
 		Sql sql = new Sql();
-		sql.append("UPDATE ").append(entity.getTableName());
+		sql.append("UPDATE ").append(escapeTable(entity.getTableName()));
 		sql.append(" SET");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly() || (query != null && query.shouldExclude(ef.getName()))) {
@@ -383,69 +384,139 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void addPrimaryKeysConstraint(StringBuilder sb, Entity<?> entity) {
+	protected void addPrimaryKeysConstraint(StringBuilder sql, Entity<?> entity) {
 		List<EntityField> pks = entity.getPrimaryKeys();
 		if (!pks.isEmpty()) {
-			sb.append('\n');
-			sb.append("CONSTRAINT ").append(entity.getTableName()).append("_PK PRIMARY KEY (");
+			sql.append('\n');
+			sql.append("CONSTRAINT ").append(entity.getTableName()).append("_PK PRIMARY KEY (");
 			for (EntityField pk : pks) {
-				sb.append(pk.getColumn()).append(',');
+				sql.append(pk.getColumn()).append(',');
 			}
-			sb.setCharAt(sb.length() - 1, ')');
-			sb.append("\n ");
+			sql.setCharAt(sql.length() - 1, ')');
+			sql.append("\n ");
 		}
 	}
 	
 	protected String alterPrimaryKeys(Entity<?> entity) {
-		StringBuilder sb = new StringBuilder();
 		List<EntityField> pks = entity.getPrimaryKeys();
-		if (!pks.isEmpty()) {
-			sb.append("ALTER TABLE ")
-				.append(entity.getTableName())
-				.append(" ADD CONSTRAINT ")
-				.append(entity.getTableName())
-				.append("_PK PRIMARY KEY (");
-			for (EntityField pk : pks) {
-				sb.append(pk.getColumn()).append(',');
-			}
-			sb.setCharAt(sb.length() - 1, ')');
+		if (pks.isEmpty()) {
+			return Strings.EMPTY;
 		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("ALTER TABLE ")
+			.append(escapeTable(entity.getTableName()))
+			.append(" ADD CONSTRAINT ")
+			.append(entity.getTableName())
+			.append("_PK PRIMARY KEY (");
+		for (EntityField pk : pks) {
+			sb.append(pk.getColumn()).append(',');
+		}
+		sb.setCharAt(sb.length() - 1, ')');
 		return sb.toString();
 	}
 
 	protected void addComments(List<String> sqls, Entity<?> entity) {
 		if (Strings.isNotEmpty(entity.getComment())) {
-			String sql = "COMMENT ON TABLE " + entity.getTableName() + " IS '" + SqlUtils.escapeSql(entity.getComment())
+			String sql = "COMMENT ON TABLE " 
+					+ escapeTable(entity.getTableName()) 
+					+ " IS '" 
+					+ SqlUtils.escapeSql(entity.getComment())
 					+ '\'';
 			sqls.add(sql);
 		}
 
 		for (EntityField ef : entity.getFields()) {
 			if (Strings.isNotEmpty(ef.getComment())) {
-				String sql = "COMMENT ON COLUMN " + entity.getTableName() + '.' + ef.getColumn() + " IS '"
-						+ SqlUtils.escapeSql(ef.getComment()) + '\'';
+				String sql = "COMMENT ON COLUMN " 
+						+ entity.getTableName() + '.' + ef.getColumn() 
+						+ " IS '"
+						+ SqlUtils.escapeSql(ef.getComment()) 
+						+ '\'';
 				sqls.add(sql);
 			}
 		}
 	}
 
 	protected void addIndexes(List<String> sqls, Entity<?> entity) {
-		StringBuilder sb = new StringBuilder();
 		Collection<EntityIndex> indexs = entity.getIndexes();
 		if (indexs == null || indexs.isEmpty()) {
 			return;
 		}
 		
+		StringBuilder sb = new StringBuilder();
 		for (EntityIndex index : indexs) {
 			sb.setLength(0);
+			sb.append("Create");
 			if (index.isUnique())
-				sb.append("Create UNIQUE Index ");
-			else
-				sb.append("Create Index ");
-			sb.append(index.getName());
+				sb.append(" UNIQUE");
+			sb.append(" Index ");
+			sb.append(entity.getTableName())
+				.append("_")
+				.append(index.isUnique() ? "UI" : "IX")
+				.append('_')
+				.append(index.getName());
 			sb.append(" ON ").append(entity.getTableName()).append("(");
 			for (EntityField ef : index.getFields()) {
 				sb.append(escapeColumn(ef.getColumn())).append(',');
+			}
+			sb.setCharAt(sb.length() - 1, ')');
+			sqls.add(sb.toString());
+		}
+	}
+
+	protected void addForeignKeysConstraint(StringBuilder sql, Entity<?> entity) {
+		Collection<EntityFKey> fks = entity.getForeignKeys();
+		if (fks == null || fks.isEmpty()) {
+			return;
+		}
+		
+		for (EntityFKey fk: fks) {
+			sql.append('\n');
+			sql.append("CONSTRAINT ")
+				.append(entity.getTableName())
+				.append("_FK_")
+				.append(fk.getName())
+				.append(" FOREIGN KEY (");
+			for (EntityField ef : fk.getFields()) {
+				sql.append(ef.getColumn()).append(',');
+			}
+			sql.setCharAt(sql.length() - 1, ')');
+
+			Entity<?> ref = fk.getReference();
+			sql.append(" REFERENCES ").append(ref.getTableName()).append(" (");
+			for (EntityField ef : ref.getPrimaryKeys()) {
+				sql.append(ef.getColumn()).append(',');
+			}
+			sql.setCharAt(sql.length() - 1, ')');
+			sql.append(',');
+		}
+	}
+	
+	protected void addForeignKeys(List<String> sqls, Entity<?> entity) {
+		Collection<EntityFKey> fks = entity.getForeignKeys();
+		if (fks == null || fks.isEmpty()) {
+			return;
+		}
+		
+		for (EntityFKey fk: fks) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("ALTER TABLE ")
+			.append(entity.getTableName())
+			.append(" ADD CONSTRAINT ")
+			.append(entity.getTableName())
+			.append("_FK_")
+			.append(fk.getName())
+			.append(" FOREIGN KEY (");
+			for (EntityField ef : fk.getFields()) {
+				sb.append(ef.getColumn()).append(',');
+			}
+			sb.setCharAt(sb.length() - 1, ')');
+
+			Entity<?> ref = fk.getReference();
+			sb.append(" REFERENCES ").append(ref.getTableName()).append(" (");
+			for (EntityField ef : ref.getPrimaryKeys()) {
+				sb.append(ef.getColumn()).append(',');
 			}
 			sb.setCharAt(sb.length() - 1, ')');
 			sqls.add(sb.toString());

@@ -116,7 +116,9 @@ public class MysqlSqlExpert extends SqlExpert {
 			sqls.add(sql);
 		}
 
+		// add constraints
 		addIndexes(sqls, entity);
+		addForeignKeys(sqls, entity);
 		return sqls;
 	}
 

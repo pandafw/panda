@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import panda.dao.sql.SqlExecutor;
 
 /**
@@ -25,8 +27,9 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test01
 	 */
+	@Test
 	public void test01() {
-		String sql = "SELECT * FROM TEST @[WHERE @id[ID=:id] @name[AND NAME=:name] @!name[AND NAME IS NULL]]";
+		String sql = "SELECT * FROM TEST @[WHERE @id[ID=:id] @fstr[AND FSTR=:fstr] @!fstr[AND FSTR IS NULL]]";
 		
 		testQueryForObject(sql, (Map)null, (Map)null);
 	}
@@ -34,6 +37,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test03
 	 */
+	@Test
 	public void test03() {
 		String sql = "SELECT * FROM TEST @[WHERE @id[ID=:id] @fstr[AND FSTR=:fstr]]";
 		
@@ -47,6 +51,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test04
 	 */
+	@Test
 	public void test04() {
 		String sql = "SELECT * FROM TEST @[WHERE @id[ID=:id] @fstr[AND FSTR=:fstr] @!fstr[AND FSTR IS NULL]]";
 		
@@ -56,6 +61,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test05
 	 */
+	@Test
 	public void test05() {
 		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList)] @id[OR id=:id]]";
 
@@ -75,6 +81,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test05a
 	 */
+	@Test
 	public void test05a() {
 		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList)] @id[OR id=:id]]";
 
@@ -92,6 +99,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test05a2
 	 */
+	@Test
 	public void test05a2() {
 		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray)] @id[OR id=:id]]";
 
@@ -108,6 +116,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test05a3
 	 */
+	@Test
 	public void test05a3() {
 		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray)] @id[OR id=:id]]";
 
@@ -123,6 +132,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test05a4
 	 */
+	@Test
 	public void test05a4() {
 		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray)] @id[OR id=:id]]";
 
@@ -138,6 +148,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test06
 	 */
+	@Test
 	public void test06() {
 		String sql = "SELECT * FROM TEST WHERE ID IN (:id) @orderCol[ORDER BY ::orderCol ::orderDir]";
 
@@ -159,6 +170,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test06a
 	 */
+	@Test
 	public void test06a() {
 		String sql = "SELECT * FROM TEST WHERE ID IN (:intList) @orderCol[ORDER BY ::orderCol ::orderDir]";
 
@@ -179,6 +191,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test07
 	 */
+	@Test
 	public void test07() {
 		String sql = "SELECT * FROM TEST @[WHERE @id[ID=:id] @fstr[AND FSTR=:fstr] @!fstr[AND FSTR IS NULL]]";
 

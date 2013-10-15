@@ -216,7 +216,7 @@ public class Entity<T> {
 	 * @return the foreign keys
 	 */
 	public Collection<EntityFKey> getForeignKeys() {
-		return foreignKeyMap.values();
+		return foreignKeyMap == null ? null : foreignKeyMap.values();
 	}
 
 	/**
@@ -270,7 +270,30 @@ public class Entity<T> {
 	 * @return meta
 	 */
 	public String getMeta(String name) {
+		if (tableMeta == null) {
+			return null;
+		}
 		return tableMeta.optString(name);
+	}
+
+	/**
+	 * @return meta
+	 */
+	public void addMeta(String name, String value) {
+		if (tableMeta == null) {
+			tableMeta = new JsonObject();
+		}
+		tableMeta.set(name, value);
+	}
+
+	/**
+	 * @return meta
+	 */
+	public void addMetas(Map<? extends String, ? extends Object> m) {
+		if (tableMeta == null) {
+			tableMeta = new JsonObject();
+		}
+		tableMeta.putAll(m);
 	}
 
 	/**

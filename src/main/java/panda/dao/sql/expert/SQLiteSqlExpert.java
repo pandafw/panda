@@ -51,9 +51,14 @@ public class SQLiteSqlExpert extends SqlExpert {
 		if (entity.getIdentity() == null) {
 			addPrimaryKeysConstraint(sb, entity);
 		}
+
+		// append foreign keys
+		this.addForeignKeysConstraint(sb, entity);
+
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
+		// add indexes
 		addIndexes(sqls, entity);
 		return sqls;
 	}

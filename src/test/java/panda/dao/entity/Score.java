@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.entity.annotation.Comment;
+import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.PK;
+import panda.dao.entity.annotation.TableFKeys;
 import panda.lang.Objects;
 
 @Comment("Score of student")
+@TableFKeys({@FK(target=Student.class, fields={"student"})})
 public class Score {
 	@PK
 	int student;

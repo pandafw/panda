@@ -13,9 +13,11 @@ import java.util.Collection;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonObject;
+import panda.dao.DaoClient;
 import panda.dao.entity.annotation.ColDefine;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
+import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.PK;
@@ -24,6 +26,7 @@ import panda.dao.entity.annotation.Prep;
 import panda.dao.entity.annotation.Readonly;
 import panda.dao.entity.annotation.SQL;
 import panda.dao.entity.annotation.Table;
+import panda.dao.entity.annotation.TableFKeys;
 import panda.dao.entity.annotation.TableIndexes;
 import panda.dao.entity.annotation.TableMeta;
 import panda.dao.entity.annotation.View;
@@ -43,10 +46,10 @@ import panda.log.Logs;
 public class AnnotationEntityMaker implements EntityMaker {
 	private static final Log log = Logs.getLog(AnnotationEntityMaker.class);
 
-	private Beans beans;
+	private DaoClient client;
 	
-	public AnnotationEntityMaker(Beans beans) {
-		this.beans = beans; 
+	public AnnotationEntityMaker(DaoClient client) {
+		this.client = client; 
 	}
 
 	public <T> Entity<T> make(Class<T> type) {
@@ -102,6 +105,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 			evalEntityIndexes(en, annIndexes);
 		}
 
+		// evaluate foreign keys
+		TableFKeys annFKeys = Classes.getAnnotation(type, TableFKeys.class);
+		if (annFKeys != null) {
+			evalEntityFKeys(en, annFKeys);
+		}
+
 		// done
 		return en;
 	}
@@ -109,7 +118,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private <T> Entity<T> createEntity(Class<T> type) {
 		Entity<T> en = new Entity<T>(type);
 
-		BeanHandler<T> bh = beans.getBeanHandler(type);
+		BeanHandler<T> bh = client.getBeans().getBeanHandler(type);
 		if (bh == null) {
 			throw new RuntimeException("Failed to get BeanHander for " + type);
 		}
@@ -119,7 +128,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		TableMeta annMeta = Classes.getAnnotation(type, TableMeta.class);
 		if (annMeta != null) {
 			JsonObject jo = JsonObject.fromJson(annMeta.value());
-			en.getMetas().putAll(jo);
+			en.setTableMeta(jo);
 		}
 
 		Table annTable = Classes.getAnnotation(type, Table.class);
@@ -154,9 +163,9 @@ public class AnnotationEntityMaker implements EntityMaker {
 	}
 
 	/**
-	 * 根据字段现有的信息，尽可能猜测一下字段的数据库类型
+	 * guess the entity field jdbc type by java type
 	 * 
-	 * @param ef 映射字段
+	 * @param ef entity field
 	 */
 	public static void guessEntityFieldJdbcType(EntityField ef) {
 		Class<?> clazz = Types.getRawType(ef.getType());
@@ -234,6 +243,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		Id annId;
 		PK annPk;
+		FK annFk;
+		Index annIndex;
 		Column annColumn;
 		Comment annComment;
 		ColDefine annDefine;
@@ -242,24 +253,24 @@ public class AnnotationEntityMaker implements EntityMaker {
 		Post annPost;
 		
 		public static MappingInfo create(Field field, boolean useColumn) {
-			Id annId = field.getAnnotation(Id.class);
-			PK annPk = field.getAnnotation(PK.class);
-			Column annColumn = field.getAnnotation(Column.class);
+			MappingInfo mi = new MappingInfo();
+			mi.annId = field.getAnnotation(Id.class);
+			mi.annPk = field.getAnnotation(PK.class);
+			mi.annFk = field.getAnnotation(FK.class);
+			mi.annIndex = field.getAnnotation(Index.class);
+			mi.annColumn = field.getAnnotation(Column.class);
 
 			if (Modifier.isTransient(field.getModifiers())) {
 				useColumn = true;
 			}
 
-			if (useColumn && annColumn == null && annId == null && annPk == null) {
+			if (useColumn && mi.annColumn == null && mi.annId == null && mi.annPk == null && mi.annFk == null
+					&& mi.annIndex == null) {
 				return null;
 			}
 
-			MappingInfo mi = new MappingInfo();
 			mi.name = field.getName();
 			mi.type = field.getGenericType();
-			mi.annId = annId;
-			mi.annPk = annPk;
-			mi.annColumn = annColumn;
 			mi.annComment = field.getAnnotation(Comment.class);
 			mi.annDefine = field.getAnnotation(ColDefine.class);
 			mi.annReadonly = field.getAnnotation(Readonly.class);
@@ -269,11 +280,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 
 		public static MappingInfo create(Method method) {
-			Id annId = method.getAnnotation(Id.class);
-			PK annPk = method.getAnnotation(PK.class);
-			Column annColumn = method.getAnnotation(Column.class);
+			MappingInfo mi = new MappingInfo();
+			mi.annId = method.getAnnotation(Id.class);
+			mi.annPk = method.getAnnotation(PK.class);
+			mi.annFk = method.getAnnotation(FK.class);
+			mi.annIndex = method.getAnnotation(Index.class);
+			mi.annColumn = method.getAnnotation(Column.class);
 
-			if (annColumn == null && annId == null && annPk == null) {
+			if (mi.annColumn == null && mi.annId == null && mi.annPk == null && mi.annFk == null && mi.annIndex == null) {
 				return null;
 			}
 
@@ -283,12 +297,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 					method.getName(), method.getDeclaringClass().getName());
 			}
 
-			MappingInfo mi = new MappingInfo();
 			mi.name = name;
 			mi.type = method.getGenericReturnType();
-			mi.annId = annId;
-			mi.annPk = annPk;
-			mi.annColumn = annColumn;
 			mi.annComment = method.getAnnotation(Comment.class);
 			mi.annDefine = method.getAnnotation(ColDefine.class);
 			mi.annReadonly = method.getAnnotation(Readonly.class);
@@ -353,6 +363,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 			}
 		}
 
+		if (mi.annFk != null) {
+			evalEntityFKey(entity, mi.annFk.name(), mi.annFk.target(), ef);
+		}
+		
+		if (mi.annIndex != null) {
+			evalEntityIndex(entity, mi.annIndex.name(), ef, mi.annIndex.unique());
+		}
+
 		entity.addField(ef);
 	}
 
@@ -374,20 +392,78 @@ public class AnnotationEntityMaker implements EntityMaker {
 		addEntityField(entity, mi);
 	}
 
+	private void evalEntityIndex(Entity<?> en, String name, EntityField field, boolean unique) {
+		EntityIndex ei = new EntityIndex();
+		ei.setUnique(unique);
+		ei.setName(Strings.isEmpty(name) ? field.getName() : name);
+		ei.addField(field);
+		en.addIndex(ei);
+	}
+
+	private void evalEntityIndex(Entity<?> en, String name, String[] fields, boolean unique) {
+		EntityIndex ei = new EntityIndex();
+		ei.setUnique(unique);
+		ei.setName(Strings.isEmpty(name) ? Strings.join(fields, '_') : name);
+		if (fields == null || fields.length == 0) {
+			throw Exceptions.makeThrow("Empty fields for @Index(%s: %s)", 
+				ei.getName(), Strings.join(fields, '|'));
+		}
+		for (String in : fields) {
+			EntityField ef = en.getField(in);
+			if (null == ef) {
+				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @Index(%s: %s)", 
+					in, en.getType(), ei.getName(), Strings.join(fields, '|'));
+			}
+			ei.addField(ef);
+		}
+		en.addIndex(ei);
+	}
+
 	private void evalEntityIndexes(Entity<?> en, TableIndexes indexes) {
 		for (Index idx : indexes.value()) {
-			EntityIndex index = new EntityIndex();
-			index.setUnique(idx.unique());
-			index.setName(idx.name());
-			for (String indexName : idx.fields()) {
-				EntityField ef = en.getField(indexName);
-				if (null == ef) {
-					throw Exceptions.makeThrow("Fail to find field '%s' in '%s' by @Index(%s:%s)", indexName, en
-						.getType().getName(), index.getName(), Strings.join(idx.fields(), ", "));
-				}
-				index.addField(ef);
+			evalEntityIndex(en, idx.name(), idx.fields(), idx.unique());
+		}
+	}
+
+	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, String[] fields) {
+		EntityFKey efk = new EntityFKey();
+		Entity<?> ref = client.getEntity(target);
+		if (null == ref) {
+			throw new IllegalArgumentException("Failed to find target entity for " + target);
+		}
+		efk.setReference(ref);
+		efk.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+
+		if (fields == null || fields.length == 0) {
+			throw Exceptions.makeThrow("Empty fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
+		}
+		for (String in : fields) {
+			EntityField ef = en.getField(in);
+			if (null == ef) {
+				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @FK(%s: %s)", 
+					in, en.getType(), efk.getName(), Strings.join(fields, '|'));
 			}
-			en.addIndex(index);
+			efk.addField(ef);
+		}
+		en.addForeignKey(efk);
+	}
+
+	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, EntityField field) {
+		EntityFKey efk = new EntityFKey();
+		Entity<?> ref = client.getEntity(target);
+		if (null == ref) {
+			throw new IllegalArgumentException("Failed to find target entity for " + target);
+		}
+		efk.setReference(ref);
+		efk.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+
+		efk.addField(field);
+		en.addForeignKey(efk);
+	}
+
+	private void evalEntityFKeys(Entity<?> en, TableFKeys fks) {
+		for (FK fk: fks.value()) {
+			evalEntityFKey(en, fk.name(), fk.target(), fk.fields());
 		}
 	}
 }

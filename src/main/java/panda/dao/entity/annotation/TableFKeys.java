@@ -6,18 +6,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.lang.Strings;
-
-/**
- * @author yf.frank.wang@gmail.com
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Documented
-public @interface Index {
-	boolean unique() default false;
+public @interface TableFKeys {
 
-	String name() default Strings.EMPTY;
+	FK[] value();
 
-	String[] fields() default {};
 }

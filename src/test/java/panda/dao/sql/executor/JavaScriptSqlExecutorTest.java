@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 import panda.dao.sql.SqlExecutor;
 import panda.io.Streams;
 
@@ -34,6 +36,7 @@ public class JavaScriptSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test01
 	 */
+	@Test
 	public void test01() {
 		String sql = loadSql("test");
 
@@ -47,6 +50,7 @@ public class JavaScriptSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test02
 	 */
+	@Test
 	public void test02() {
 		String sql = loadSql("test");
 
@@ -62,6 +66,7 @@ public class JavaScriptSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test03
 	 */
+	@Test
 	public void test03() {
 		String sql = loadSql("test");
 
@@ -80,6 +85,7 @@ public class JavaScriptSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test04
 	 */
+	@Test
 	public void test04() {
 		String sql = loadSql("test");
 

@@ -7,7 +7,7 @@ import panda.lang.codec.EncoderException;
 
 /**
  */
-public abstract class BinaryEncoderAbstractTest {
+public abstract class BinaryEncoderTestCase {
 
 	protected abstract BinaryEncoder makeEncoder();
 

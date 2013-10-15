@@ -14,10 +14,16 @@ import panda.lang.Strings;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Documented
-public @interface Index {
-	boolean unique() default false;
-
+public @interface FK {
 	String name() default Strings.EMPTY;
 
+	/**
+	 * target class
+	 */
+	Class<?> target();
+	
+	/**
+	 * fields
+	 */
 	String[] fields() default {};
 }

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 import panda.dao.sql.SqlExecutor;
 import panda.lang.Classes;
 
@@ -27,6 +29,7 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test01
 	 */
+	@Test
 	public void test01() {
 		String sql = TEST_SQL;
 
@@ -41,6 +44,7 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test02
 	 */
+	@Test
 	public void test02() {
 		String sql = TEST_SQL;
 
@@ -58,6 +62,7 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test03
 	 */
+	@Test
 	public void test03() {
 		String sql = TEST_SQL;
 
@@ -76,6 +81,7 @@ public class FreemarkerSqlExecutorTest extends SqlExecutorTestCase {
 	/**
 	 * test04
 	 */
+	@Test
 	public void test04() {
 		String sql = TEST_SQL;
 

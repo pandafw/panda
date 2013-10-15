@@ -45,8 +45,10 @@ public class Db2SqlExpert extends SqlExpert {
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
-		addIndexes(sqls, entity);
+		// add comments & constraints
 		addComments(sqls, entity);
+		addIndexes(sqls, entity);
+		addForeignKeys(sqls, entity);
 		return sqls;
 	}
 

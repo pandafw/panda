@@ -8,7 +8,7 @@
 %>
 SELECT * FROM TEST 
 WHERE 
-<% if ((Integer)#id > 0) { %> ID=:id <% } %>
+<% if (#id != null && (Integer)#id > 0) { %> ID=:id <% } %>
 <% if (isNotEmpty((List)#intList)) { %> AND ID IN (:intList) <% } %>
 <% if (#fstr != null) { append(" AND FSTR=:fstr "); } %>
 ORDER BY <%= #orderCol == null ? "ID" : #orderCol %> <%= #orderDir == null ? "" : #orderDir %>

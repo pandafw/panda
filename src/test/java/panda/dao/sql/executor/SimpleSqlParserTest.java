@@ -5,18 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import panda.dao.sql.SqlExecutor;
-import panda.dao.sql.executor.SimpleSqlManager;
-import panda.dao.sql.executor.SimpleSqlParser;
-import panda.dao.sql.executor.SqlParameter;
 import panda.log.Log;
 import panda.log.Logs;
-import junit.framework.TestCase;
 
 
 /**
  */
-public class SimpleSqlParserTest extends TestCase {
+public class SimpleSqlParserTest {
 	/**
 	 * log
 	 */
@@ -52,27 +51,28 @@ public class SimpleSqlParserTest extends TestCase {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 
 		log.debug("expected SQL: [" + translatedSql + "]");
 		log.debug("actual SQL  : [" + actTranslatedSql + "]");
 
-		assertEquals(translatedSql, actTranslatedSql);
+		Assert.assertEquals(translatedSql, actTranslatedSql);
 		
 		if (parameters == null) {
-			assertTrue(actParameters.isEmpty());
+			Assert.assertTrue(actParameters.isEmpty());
 		}
 		else {
 			log.debug("expected parameters: " + parameters);
 			log.debug("actual   parameters: " + actParameters);
-			assertEquals(parameters, actParameters);
+			Assert.assertEquals(parameters, actParameters);
 		}
 	}
 	
 	/**
 	 * test for alias
 	 */
+	@Test
 	public void testAlias() {
 		String originalSql = "SELECT ID AS a.id, NAME AS a.idName, ITEM_NAME AS a.item.name, B_ITEM_NAME as a.b.itemName FROM SAMPLE";
 		String translatedSql = "SELECT ID AS A_0_ID , NAME AS A_0_ID_NAME , ITEM_NAME AS A_0_ITEM_0_NAME , B_ITEM_NAME as A_0_B_0_ITEM_NAME FROM SAMPLE";
@@ -83,6 +83,7 @@ public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * test for comment
 	 */
+	@Test
 	public void testComment() {
 		String originalSql = "SELECT /* SELECT */ ID AS a.id, NAME AS a.name, ITEM_NAME AS a.item.name FROM SAMPLE";
 		String translatedSql = "SELECT ID AS A_0_ID , NAME AS A_0_NAME , ITEM_NAME AS A_0_ITEM_0_NAME FROM SAMPLE";
@@ -93,6 +94,7 @@ public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * test variable
 	 */
+	@Test
 	public void testVariable() {
 		String originalSql = " SELECT * FROM SAMPLE WHERE NAME=:a.name";
 
@@ -112,6 +114,7 @@ public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * test parameter
 	 */
+	@Test
 	public void testParameter() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE ID=? and NAME=?";
 
@@ -129,6 +132,7 @@ public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * test replace
 	 */
+	@Test
 	public void testReplace() {
 		String originalSql = "SELECT * FROM SAMPLE ORDER BY ::orderCol ::orderDir";
 
@@ -143,6 +147,7 @@ public class SimpleSqlParserTest extends TestCase {
 	/**
 	 * test collection
 	 */
+	@Test
 	public void testCollection() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE LIST IN (:list)";
 

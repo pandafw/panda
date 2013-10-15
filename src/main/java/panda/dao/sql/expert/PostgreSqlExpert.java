@@ -61,18 +61,20 @@ public class PostgreSqlExpert extends SqlExpert {
 
 		// append primary keys
 		addPrimaryKeysConstraint(sb, entity);
-
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
+		// alter sequence start value
 		EntityField id = entity.getIdentity();
 		if (id != null && id.isAutoIncrement() && id.getStartWith() > 1) {
 			String sql = "ALTER SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ RESTART WITH " + id.getStartWith();
 			sqls.add(sql);
 		}
 
-		addIndexes(sqls, entity);
+		// add comments & constraints
 		addComments(sqls, entity);
+		addIndexes(sqls, entity);
+		addForeignKeys(sqls, entity);
 		return sqls;
 	}
 

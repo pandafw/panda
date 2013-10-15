@@ -57,13 +57,13 @@ public class H2SqlExpert extends SqlExpert {
 
 		// append primary keys
 		addPrimaryKeys(sb, entity);
-
 		sb.setCharAt(sb.length() - 1, ')');
 		sqls.add(sb.toString());
 
-		addIndexes(sqls, entity);
+		// add comments & constraints
 		addComments(sqls, entity);
-		
+		addIndexes(sqls, entity);
+		addForeignKeys(sqls, entity);
 		return sqls;
 	}
 

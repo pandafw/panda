@@ -4,7 +4,7 @@ package panda.dao.sql;
 
 /**
  */
-public class SqlDaoOracleTest extends SqlDaoTest {
+public class SqlDaoOracleTest extends SqlDaoTestCase {
 	private static SqlDaoClient client = createSqlDaoClient("oracle");
 	
 	protected SqlDaoClient getDaoClient() {

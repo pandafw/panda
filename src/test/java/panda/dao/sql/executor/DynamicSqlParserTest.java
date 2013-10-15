@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import panda.dao.sql.SqlExecutor;
 
 
@@ -22,6 +24,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for '@'
 	 */
+	@Test
 	public void testAtMark() {
 		String originalSql = "SELECT * FROM SAMPLE @orderCol[ORDER BY ::orderCol ::orderDir]";
 
@@ -36,6 +39,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for '@' List
 	 */
+	@Test
 	public void testAtList() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @list[LIST IN (:list)]";
 
@@ -60,6 +64,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for not at
 	 */
+	@Test
 	public void testNotAt() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @kind[KIND=:kind] @!kind[KIND IS NULL]";
 
@@ -77,6 +82,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for not at(null)
 	 */
+	@Test
 	public void testNotAtNull() {
 		String originalSql = "SELECT * FROM SAMPLE WHERE @kind[KIND=:kind] @!kind[KIND IS NULL]";
 
@@ -90,6 +96,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for at where
 	 */
+	@Test
 	public void testAtWhere() {
 		String originalSql = "SELECT * FROM SAMPLE @[WHERE @id[AND ID=:id] @name[AND NAME=:name] @!kind[AND KIND IS NULL]]";
 
@@ -109,6 +116,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for at where (null)
 	 */
+	@Test
 	public void testAtWhereNull() {
 		String originalSql = "SELECT * FROM SAMPLE @[WHERE @id[AND ID=:id] @name[AND NAME=:name] @!kind[AND KIND IS NULL]]";
 
@@ -123,6 +131,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * test for at where with paren
 	 */
+	@Test
 	public void testAtWhereParen() {
 		String originalSql = "SELECT * FROM SAMPLE"
 			+ " @[ WHERE"
@@ -151,6 +160,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * testAtSet
 	 */
+	@Test
 	public void testAtSet() {
 		String originalSql = "UPDATE SAMPLE"
 			+ " SET"
@@ -175,6 +185,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	/**
 	 * testAtSet2
 	 */
+	@Test
 	public void testAtSet2() {
 		String originalSql = "UPDATE SAMPLE"
 			+ " SET"

@@ -68,9 +68,11 @@ public class OracleSqlExpert extends SqlExpert {
 			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ START WITH " + id.getStartWith();
 			sqls.add(sql);
 		}
-		
-		addIndexes(sqls, entity);
+
+		// add comments & constraints
 		addComments(sqls, entity);
+		addIndexes(sqls, entity);
+		addForeignKeys(sqls, entity);
 		return sqls;
 	}
 	

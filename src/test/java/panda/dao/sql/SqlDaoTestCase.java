@@ -23,8 +23,8 @@ import panda.mock.sql.MockDataSource;
 
 /**
  */
-public abstract class SqlDaoTest {
-	private static Log log = Logs.getLog(SqlDaoTest.class);
+public abstract class SqlDaoTestCase {
+	private static Log log = Logs.getLog(SqlDaoTestCase.class);
 
 	protected Dao dao;
 	
@@ -56,7 +56,21 @@ public abstract class SqlDaoTest {
 		}
 	}
 
+	protected void drop(Class clazz) {
+		try {
+			dao.drop(clazz);
+		}
+		catch (Exception e) {
+			log.warn("failed to drop " + clazz + ": " + e);
+		}
+	}
+
 	protected void init() {
+		drop(Score.class);
+		drop(Klass.class);
+		drop(Student.class);
+		drop(Teacher.class);
+
 		dao.create(Teacher.class, true);
 		dao.create(Student.class, true);
 		dao.create(Klass.class, true);
@@ -74,15 +88,14 @@ public abstract class SqlDaoTest {
 		Assert.assertTrue(dao.exists(Student.class));
 		Assert.assertTrue(dao.exists(Klass.class));
 		Assert.assertTrue(dao.exists(Score.class));
-		dao.drop(Teacher.class);
 	}
 	
 	@Test
 	public void testDrop() {
+		dao.drop(Score.class);
+		dao.drop(Klass.class);
 		dao.drop(Teacher.class);
 		dao.drop(Student.class);
-		dao.drop(Klass.class);
-		dao.drop(Score.class);
 	}
 	
 	@Test
@@ -160,20 +173,21 @@ public abstract class SqlDaoTest {
 
 	@Test
 	public void testDelete() {
-		Teacher expect = Teacher.create(2);
+		Score expect = Score.create(2, 2, 2);
 		dao.delete(expect);
 		
-		Teacher actual = dao.fetch(Teacher.class, expect);
+		Score actual = dao.fetch(Score.class, expect);
 		Assert.assertNull(actual);
 	}
 
 	@Test
 	public void testDeletes() {
-		List<Teacher> expect = Teacher.creates(2, 3);
+		List<Score> expect = Score.creates(1, 1);
 		dao.deletes(expect);
 		
-		Assert.assertNull(dao.fetch(Teacher.class, expect.get(0)));
-		Assert.assertNull(dao.fetch(Teacher.class, expect.get(1)));
+		for (Score s : expect) {
+			Assert.assertNull(dao.fetch(Score.class, s));
+		}
 	}
 
 	@Test

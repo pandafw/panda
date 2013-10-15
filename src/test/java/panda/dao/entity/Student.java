@@ -5,8 +5,11 @@ import java.util.List;
 
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
+import panda.dao.entity.annotation.Index;
+import panda.dao.entity.annotation.TableIndexes;
 import panda.lang.Objects;
 
+@TableIndexes({@Index(fields={"name"})})
 public class Student {
 	@Id(start=6)
 	int id;

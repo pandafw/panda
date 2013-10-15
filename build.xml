@@ -22,18 +22,22 @@
 	
 	<path id="main.cp">
 		<pathelement path="out/classes"/>
-		<fileset dir="lib/compile">
+		<fileset dir="lib/api">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="lib/run">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="lib.cp">
+		<fileset dir="lib/3rd">
 			<include name="*.jar"/>
 		</fileset>
 		<fileset dir="lib/api">
 			<include name="*.jar"/>
 		</fileset>
-	</path>
-
-	<path id="test.cp">
-		<pathelement path="out/classes"/>
-		<pathelement path="out/test-classes"/>
-		<fileset dir="lib/compile">
+		<fileset dir="lib/run">
 			<include name="*.jar"/>
 		</fileset>
 		<fileset dir="lib/jdbc">
@@ -42,23 +46,18 @@
 		<fileset dir="lib/test">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="lib/api">
-			<include name="*.jar"/>
-		</fileset>
+	</path>
+	
+	<path id="test.cp">
+		<pathelement path="out/classes"/>
+		<pathelement path="out/test-classes"/>
+		<path refid="lib.cp"/>
 	</path>
 
 	<path id="junit.cp">
 		<pathelement path="out/emma-classes"/>
 		<pathelement path="out/test-classes"/>
-		<fileset dir="lib/compile">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/test">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/api">
-			<include name="*.jar"/>
-		</fileset>
+		<path refid="lib.cp"/>
 	</path>
 
 	<path id="emma.cp">
@@ -149,16 +148,16 @@
 	<target name="ivy-resolve" description="ivy --> retreive dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="lib/api"/>
-			<fileset dir="lib/compile"/>
+			<fileset dir="lib/run"/>
 			<fileset dir="lib/gae"/>
 			<fileset dir="lib/jdbc"/>
 			<fileset dir="lib/test"/>
 		</delete>
-		<ivy:retrieve conf="api,compile,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="api,run,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
-		<ivy:report todir="lib/ivy" conf="api,compile,gae,jdbc,test"/>
+		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,test"/>
 	</target>
 
 	<target name="ivy-clean" description="ivy --> clean the cache">
@@ -201,14 +200,14 @@
 	<!-- dist -->
 	<target name="javadoc" description="Generate java documents">
 		<delete dir="out/javadoc"/>
-		<javadoc destdir="out/javadoc"
-			locale="en_US" docencoding="UTF-8" charset="UTF-8"
+		<javadoc 
+			sourcepath="src/main/java" destdir="out/javadoc"
+			encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" locale="en_US"
 			use="true" splitindex="true"
 			windowTitle="${prj.title} ${prj.version} API"
 			doctitle="${prj.title} ${prj.version} API"
 			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
 		>
-			<fileset dir="src/main/java"/>
 			<classpath refid="main.cp"/>
 		</javadoc>
 	</target>
@@ -369,9 +368,9 @@
 
 	<target name="test-javadoc" description="Generate test java documents">
 		<delete dir="out/test-javadoc"/>
-		<javadoc locale="en_US"
+		<javadoc
 			sourcepath="src/test/java" destdir="out/test-javadoc"
-			docencoding="UTF-8" charset="UTF-8"
+			encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" locale="en_US"
 			use="true" splitindex="true"
 			windowTitle="${prj.title} ${VERSION} Test API"
 			doctitle="${prj.title} ${VERSION} Test API"
