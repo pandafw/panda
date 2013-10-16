@@ -1,15 +1,17 @@
-package panda.bind.filters;
+package panda.mvc.bind.filters;
+
+import panda.bind.filters.IncludePropertyFilter;
 
 /**
  * 
  * @author yf.frank.wang@gmail.com
  *
  */
-public class QueryPropertyFilter extends IncludePropertyFilter {
+public class CompositeQueryPropertyFilter extends IncludePropertyFilter {
 	/**
 	 * Constructor
 	 */
-	public QueryPropertyFilter() {
+	public CompositeQueryPropertyFilter() {
 		this(false);
 	}
 
@@ -17,7 +19,7 @@ public class QueryPropertyFilter extends IncludePropertyFilter {
 	 * Constructor
 	 * @param shortName shortName
 	 */
-	public QueryPropertyFilter(boolean shortName) {
+	public CompositeQueryPropertyFilter(boolean shortName) {
 		if (shortName) {
 			includes.add("n");
 			includes.add("m");

@@ -33,7 +33,7 @@ import panda.log.Logs;
  */
 public class SimpleNamingContext implements Context {
 
-	private final Log logger = Logs.getLog(getClass());
+	private static final Log logger = Logs.getLog(SimpleNamingContext.class);
 
 	private final String root;
 

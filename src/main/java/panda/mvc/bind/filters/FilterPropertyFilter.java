@@ -1,4 +1,6 @@
-package panda.bind.filters;
+package panda.mvc.bind.filters;
+
+import panda.bind.filters.IncludePropertyFilter;
 
 /**
  * 

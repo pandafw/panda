@@ -8,8 +8,8 @@ import panda.lang.Objects;
  * code<->text bean object
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings("serial")
 public class CodeText implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
 
 	private String code;
 	private String text;
@@ -64,7 +64,10 @@ public class CodeText implements Cloneable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this).append("code", code).append("text", text).toString();
+		return Objects.toStringBuilder(this)
+				.append("code", code)
+				.append("text", text)
+				.toString();
 	}
 
 	/**
@@ -72,7 +75,10 @@ public class CodeText implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder().append(code).append(text).toHashCode();
+		return Objects.hashCodeBuilder()
+				.append(code)
+				.append(text)
+				.toHashCode();
 	}
 
 	/**
@@ -88,7 +94,10 @@ public class CodeText implements Cloneable, Serializable {
 			return false;
 
 		CodeText rhs = (CodeText) obj;
-		return Objects.equalsBuilder().append(code, rhs.code).append(text, rhs.text).isEquals();
+		return Objects.equalsBuilder()
+				.append(code, rhs.code)
+				.append(text, rhs.text)
+				.isEquals();
 	}
 
 	/**

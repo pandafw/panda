@@ -1,4 +1,4 @@
-package panda.util;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.vfs2.FileObject;
-
 import panda.lang.Asserts;
 import panda.lang.CharSequences;
 import panda.lang.Strings;
@@ -219,26 +217,6 @@ public class Streams {
 		}
 		finally {
 			safeClose(fis);
-		}
-	}
-
-	/**
-	 * read file content to byte array
-	 * 
-	 * @param file file
-	 * @return byte array
-	 * @throws FileNotFoundException if file not found
-	 * @throws IOException in case of I/O errors
-	 */
-	public static byte[] toByteArray(FileObject file) throws FileNotFoundException, IOException {
-		InputStream is = null;
-		try {
-			is = file.getContent().getInputStream();
-			byte[] b = toByteArray(is);
-			return b;
-		}
-		finally {
-			safeClose(is);
 		}
 	}
 

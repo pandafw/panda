@@ -30,6 +30,25 @@ public class VfsUtils {
 	}
 
 	/**
+	 * read file content to byte array
+	 * 
+	 * @param file file
+	 * @return byte array
+	 * @throws IOException in case of I/O errors
+	 */
+	public static byte[] toByteArray(FileObject file) throws IOException {
+		InputStream is = null;
+		try {
+			is = file.getContent().getInputStream();
+			byte[] b = Streams.toByteArray(is);
+			return b;
+		}
+		finally {
+			Streams.safeClose(is);
+		}
+	}
+
+	/**
 	 * Copy the contents of the given input File to the given output File.
 	 * 
 	 * @param in the file to Streams.copy from

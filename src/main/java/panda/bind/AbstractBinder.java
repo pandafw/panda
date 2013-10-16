@@ -84,16 +84,16 @@ public abstract class AbstractBinder {
 	}
 	@SuppressWarnings("unchecked")
 	public <T> PropertyFilter<T> getPropertyFilter(Type type) {
-		return getPropertyFilters().get(type);
+		return propertyFilters.get(type);
 	}
 	public void registerPropertyFilter(Type type, PropertyFilter propertyFilter) {
-		getPropertyFilters().put(type, propertyFilter);
+		propertyFilters.put(type, propertyFilter);
 	}
 	public void removePropertyFilter(Type type) {
-		getPropertyFilters().remove(type);
+		propertyFilters.remove(type);
 	}
 	public void clearPropertyFilters() {
-		getPropertyFilters().clear();
+		propertyFilters.clear();
 	}
 
 	//----------------------------------------------------------

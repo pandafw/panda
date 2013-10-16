@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.vfs2.FileObject;
-
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
 import panda.lang.Strings;
@@ -41,33 +39,9 @@ public class PropertiesEx extends Properties {
 
 	/**
 	 * @param file file
-	 * @param props properties
-	 * @throws IOException if an IO error occurs
-	 */
-	public static void load(Properties props, FileObject file) throws IOException {
-		InputStream is = null;
-		try {
-			is = file.getContent().getInputStream();
-			props.load(is);
-		}
-		finally {
-			Streams.safeClose(is);
-		}
-	}
-
-	/**
-	 * @param file file
 	 * @throws IOException if an IO error occurs
 	 */
 	public void load(File file) throws IOException {
-		load(this, file);
-	}
-
-	/**
-	 * @param file file
-	 * @throws IOException if an IO error occurs
-	 */
-	public void load(FileObject file) throws IOException {
 		load(this, file);
 	}
 

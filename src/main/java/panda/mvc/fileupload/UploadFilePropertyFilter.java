@@ -1,7 +1,3 @@
-<!DOCTYPE validators PUBLIC
-		"-//Apache Struts//XWork Validator 1.0.3//EN"
-		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
-<!--
 /*
  * This file is part of Nuts Framework.
  * Copyright(C) 2009-2012 Nuts Develop Team.
@@ -9,30 +5,32 @@
  * Nuts Framework is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License any later version.
- *
+ * 
  * Nuts Framework is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with Nuts Framework. If not, see <http://www.gnu.org/licenses/>.
  */
--->
+package panda.mvc.fileupload;
 
-<validators>
-	<field name="m">
-		<field-validator type="constant">
-			<param name="ignoreCase">false</param>
-			<param name="list">{ "and", "or" }</param>
-			<message key="validation-constant"/>
-		</field-validator>
-	</field>
+import panda.bind.filters.IncludePropertyFilter;
 
-	<field name="fs">
-		<field-validator type="visitor">
-			<param name="appendPrefix">true</param>
-			<message key="validation-visitor">%{""}</message>
-		</field-validator>
-	</field>
-</validators>
+/**
+ */
+public class UploadFilePropertyFilter extends IncludePropertyFilter {
+	/**
+	 * Constructor
+	 */
+	public UploadFilePropertyFilter() {
+		super();
+		includes.add("contentType");
+		includes.add("fileName");
+		includes.add("fileSize");
+		includes.add("saveName");
+		includes.add("saveTime");
+	}
+}
+

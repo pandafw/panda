@@ -1,6 +1,6 @@
-package panda.util;
+package panda.mvc.bean;
 
-import panda.util.Pager;
+import panda.mvc.bean.Pager;
 import junit.framework.TestCase;
 
 /**

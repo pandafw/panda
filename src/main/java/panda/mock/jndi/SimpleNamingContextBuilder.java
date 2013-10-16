@@ -55,6 +55,7 @@ import panda.log.Logs;
  *
  */
 public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder {
+	private static final Log log = Logs.getLog(SimpleNamingContextBuilder.class);
 
 	/** An instance of this class bound to JNDI */
 	private static volatile SimpleNamingContextBuilder activated;
@@ -96,9 +97,6 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 		return activated;
 	}
 
-
-	private final Log logger = Logs.getLog(getClass());
-
 	private final Hashtable<String,Object> boundObjects = new Hashtable<String,Object>();
 
 
@@ -111,7 +109,7 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 	 * registered with the JNDI NamingManager
 	 */
 	public void activate() throws IllegalStateException, NamingException {
-		logger.info("Activating simple JNDI environment");
+		log.info("Activating simple JNDI environment");
 		synchronized (initializationLock) {
 			if (!initialized) {
 				if (NamingManager.hasInitialContextFactoryBuilder()) {
@@ -137,7 +135,7 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 	 * @see #activate()
 	 */
 	public void deactivate() {
-		logger.info("Deactivating simple JNDI environment");
+		log.info("Deactivating simple JNDI environment");
 		activated = null;
 	}
 
@@ -155,8 +153,8 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 	 * @param obj the object to bind (e.g. a DataSource implementation)
 	 */
 	public void bind(String name, Object obj) {
-		if (logger.isInfoEnabled()) {
-			logger.info("Static JNDI binding: [" + name + "] = [" + obj + "]");
+		if (log.isInfoEnabled()) {
+			log.info("Static JNDI binding: [" + name + "] = [" + obj + "]");
 		}
 		this.boundObjects.put(name, obj);
 	}
