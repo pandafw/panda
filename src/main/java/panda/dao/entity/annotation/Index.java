@@ -15,9 +15,9 @@ import panda.lang.Strings;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Documented
 public @interface Index {
-	boolean unique() default false;
-
 	String name() default Strings.EMPTY;
 
 	String[] fields() default {};
+
+	boolean unique() default false;
 }

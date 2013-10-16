@@ -194,15 +194,6 @@ public class SimpleDataSource implements DataSource {
 	private int expectedConnectionTypeCode;
 
 	/**
-	 * Constructor to allow passing in a map of properties for configuration
-	 * 
-	 * @param props - the configuration parameters
-	 */
-	public SimpleDataSource(Map<String, String> props) {
-		initialize(props);
-	}
-
-	/**
 	 * Constructor
 	 */
 	public SimpleDataSource() {
@@ -213,9 +204,18 @@ public class SimpleDataSource implements DataSource {
 	 * 
 	 * @param props - the configuration parameters
 	 */
+	public SimpleDataSource(Map<String, String> props) {
+		initialize(props);
+	}
+
+	/**
+	 * Constructor to allow passing in a map of properties for configuration
+	 * 
+	 * @param props - the configuration parameters
+	 */
 	@SuppressWarnings("unchecked")
 	public SimpleDataSource(Properties props) {
-		initialize((Map) props);
+		initialize((Map)props);
 	}
 
 	private void initialize(Map<String, String> props) {

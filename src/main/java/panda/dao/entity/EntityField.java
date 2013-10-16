@@ -3,6 +3,7 @@ package panda.dao.entity;
 import java.lang.reflect.Type;
 
 import panda.lang.Objects;
+import panda.lang.Strings;
 
 /**
  * 
@@ -260,7 +261,7 @@ public class EntityField {
 	}
 
 	public boolean hasDefaultValue() {
-		return defaultValue != null;
+		return Strings.isNotBlank(defaultValue);
 	}
 	
 	/**

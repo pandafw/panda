@@ -29,5 +29,32 @@ import panda.lang.Strings;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Documented
 public @interface Column {
+	/**
+	 * column name
+	 */
 	String value() default Strings.EMPTY;
+
+	/**
+	 * jdbc type
+	 * @see panda.dao.sql.JdbcTypes
+	 */
+	String type() default Strings.EMPTY;
+
+	int size() default 0;
+
+	int scale() default 0;
+
+	boolean notNull() default false;
+
+	boolean unsigned() default false;
+
+	/**
+	 * real database column type
+	 */
+	String dbType() default Strings.EMPTY;
+	
+	/**
+	 * database default value
+	 */
+	String defaults() default Strings.EMPTY;
 }

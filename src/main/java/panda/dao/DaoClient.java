@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.Beans;
+import panda.castor.Castors;
 import panda.dao.entity.AnnotationEntityMaker;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
@@ -16,14 +17,15 @@ import panda.dao.entity.EntityMaker;
  */
 public abstract class DaoClient {
 	protected String name;
-	protected DatabaseMeta meta;
 	protected Map<Class<?>, Entity> entities;
 	protected Beans beans;
+	protected Castors castors;
 	protected EntityMaker entityMaker;
 
 	public DaoClient() {
 		entities = new ConcurrentHashMap<Class<?>, Entity>();
-		beans = Beans.me();
+		castors = Castors.me();
+		beans = castors.getBeans();
 		entityMaker = new AnnotationEntityMaker(this);
 	}
 
@@ -33,14 +35,6 @@ public abstract class DaoClient {
 	public String getName() {
 		return name;
 	}
-
-	/**
-	 * @return datebase meta
-	 */
-	public DatabaseMeta getMeta() {
-		return meta;
-	}
-
 
 	/**
 	 * @return the entityMaker
@@ -68,6 +62,20 @@ public abstract class DaoClient {
 	 */
 	public void setBeans(Beans beans) {
 		this.beans = beans;
+	}
+
+	/**
+	 * @return the castors
+	 */
+	public Castors getCastors() {
+		return castors;
+	}
+
+	/**
+	 * @param castors the castors to set
+	 */
+	public void setCastors(Castors castors) {
+		this.castors = castors;
 	}
 
 	/**
@@ -105,6 +113,11 @@ public abstract class DaoClient {
 	public <T> EntityDao<T> getEntityDao(Class<T> type, Object param) {
 		return getDao().getEntityDao(type, param);
 	}
+
+	/**
+	 * @return datebase meta
+	 */
+	public abstract DatabaseMeta getDatabaseMeta();
 
 	/**
 	 * @return a Dao instance.

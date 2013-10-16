@@ -18,7 +18,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	private static final String META_CHARSET = "mysql-charset";
 
 	@Override
-	public DB getType() {
+	public DB getDatabaseType() {
 		return DB.MYSQL;
 	}
 

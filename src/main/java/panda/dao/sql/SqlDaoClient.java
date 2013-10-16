@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.dao.DatabaseMeta;
 import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
@@ -83,18 +84,13 @@ public class SqlDaoClient extends DaoClient {
 	 * set jndi data source
 	 * @param jndi jndi string such as "java:comp/env/jdbc/xxx"
 	 */
-	public void setJndiDataSource(String jndi) {
-		try {
-			Context ic = new InitialContext();
-			DataSource ds = (DataSource)ic.lookup(jndi);
-			if (dataSource == null) {
-				throw new RuntimeException("Failed to lookup data source: " + jndi);
-			}
-			setDataSource(ds);
+	public void setJndiDataSource(String jndi) throws NamingException {
+		Context ic = new InitialContext();
+		DataSource ds = (DataSource)ic.lookup(jndi);
+		if (dataSource == null) {
+			throw new NamingException("Failed to lookup data source: " + jndi);
 		}
-		catch (NamingException e) {
-			throw new RuntimeException(e);
-		}
+		setDataSource(ds);
 	}
 
 	/**
@@ -103,7 +99,7 @@ public class SqlDaoClient extends DaoClient {
 	 * @param dataSource data source
 	 * @return SqlExpert
 	 */
-	public static SqlExpert getExpert(DataSource dataSource) {
+	public SqlExpert getExpert(DataSource dataSource) {
 		Connection conn = null;
 		try {
 			conn = dataSource.getConnection();
@@ -129,7 +125,7 @@ public class SqlDaoClient extends DaoClient {
 	 * @see java.sql.Connection#getMetaData()
 	 * @see java.sql.DatabaseMetaData#getDatabaseProductName()
 	 */
-	public static SqlExpert getExpert(String productName, String version) {
+	public SqlExpert getExpert(String productName, String version) {
 		String dbName = (productName + " " + version).toLowerCase();
 		log.info("Get SqlExpert for " + dbName);
 
@@ -138,8 +134,18 @@ public class SqlDaoClient extends DaoClient {
 			throw Exceptions.makeThrow("Can not support database '%s %s'", productName, version);
 		}
 		se.setProperties(sqlExpertConfig.getProperties());
+		se.setCastors(getCastors());
+		se.setDatabaseMeta(productName, version);
 		
 		return se;
+	}
+
+	/**
+	 * @return datebase meta
+	 */
+	@Override
+	public DatabaseMeta getDatabaseMeta() {
+		return sqlExpert.getDatabaseMeta();
 	}
 
 	/**

@@ -13,7 +13,7 @@ import panda.dao.sql.Sql;
  */
 public class HsqldbSqlExpert extends SqlExpert {
 	@Override
-	public DB getType() {
+	public DB getDatabaseType() {
 		return DB.HSQLDB;
 	}
 

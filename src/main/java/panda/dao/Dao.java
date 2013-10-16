@@ -31,10 +31,10 @@ public abstract class Dao {
 	}
 	
 	/**
-	 * @return datebase meta
+	 * @return database meta
 	 */
 	public DatabaseMeta meta() {
-		return daoClient.getMeta();
+		return daoClient.getDatabaseMeta();
 	}
 
 	/**

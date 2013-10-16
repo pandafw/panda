@@ -515,11 +515,11 @@ public class SqlDao extends Dao {
 		m.put("table", entity.getTableName());
 		m.put("field", id.getName());
 		
-		String prep = entity.getPrepSql(getSqlExpert().getType());
+		String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());
 		if (Strings.isEmpty(prep)) {
 			prep = entity.getPrepSql(DB.GENERAL);
 		}
-		String post = entity.getPostSql(getSqlExpert().getType());
+		String post = entity.getPostSql(getSqlExpert().getDatabaseType());
 		if (Strings.isEmpty(post)) {
 			post = entity.getPostSql(DB.GENERAL);
 		}
@@ -534,7 +534,7 @@ public class SqlDao extends Dao {
 		}
 
 		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
-			throw new DaoException("Failed to get (" + getSqlExpert().getType() + ") identity select sql for entity: " + entity.getType());
+			throw new DaoException("Failed to get (" + getSqlExpert().getDatabaseType() + ") identity select sql for entity: " + entity.getType());
 		}
 		
 		if (Strings.isNotEmpty(prep)) {

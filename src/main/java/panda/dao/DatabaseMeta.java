@@ -4,15 +4,15 @@ package panda.dao;
  * @author yf.frank.wang@gmail.com
  */
 public class DatabaseMeta {
-
-	public DatabaseMeta() {
-		type = DB.GENERAL;
-	}
-
 	/**
 	 * db type
 	 */
 	private DB type;
+
+	/**
+	 * name
+	 */
+	private String name;
 
 	/**
 	 * version
@@ -20,61 +20,31 @@ public class DatabaseMeta {
 	private String version;
 
 	/**
-	 * product name
+	 * Constructor
+	 * @param type database type
 	 */
-	private String productName;
-
-	public String getProductName() {
-		return productName;
+	public DatabaseMeta(DB type) {
+		this.type = type;
 	}
 
-	public String toString() {
-		return String.format("%s:[%s - %s]", type.name(), productName, version);
+	/**
+	 * Constructor
+	 * @param type database type
+	 * @param name product name
+	 * @param version version
+	 */
+	public DatabaseMeta(DB type, String name, String version) {
+		this.type = type;
+		this.name = name;
+		this.version = version;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
-		String proName = productName.toLowerCase();
-		if ("h2".equals(proName)) {
-			type = DB.H2;
-		}
-		else if (proName.startsWith("postgresql")) {
-			type = DB.POSTGRE;
-		}
-		else if (proName.startsWith("mysql")) {
-			type = DB.MYSQL;
-		}
-		else if (proName.startsWith("oracle")) {
-			type = DB.ORACLE;
-		}
-		else if (proName.startsWith("db2")) {
-			type = DB.DB2;
-		}
-		else if (proName.startsWith("microsoft sql")) {
-			type = DB.MSSQL;
-		}
-		else if (proName.startsWith("sqlite")) {
-			type = DB.SQLITE;
-		}
-		else if (proName.startsWith("hsql")) {
-			type = DB.HSQLDB;
-		}
-		else if (proName.contains("derby")) {
-			type = DB.DERBY;
-		}
-		else {
-			type = DB.GENERAL;
-		}
+	public String getName() {
+		return name;
 	}
 
-	public String getResultSetMetaSql(String tableName) {
-		if (this.isMySql() || this.isPostgreSql()) {
-			return "SELECT * FROM " + tableName + " LIMIT 1";
-		}
-		else if (this.isSqlServer()) {
-			return "SELECT TOP 1 * FROM " + tableName;
-		}
-		return "SELECT * FROM " + tableName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getVersion() {
@@ -83,34 +53,6 @@ public class DatabaseMeta {
 
 	public void setVersion(String version) {
 		this.version = version;
-	}
-
-	public void setAsMysql() {
-		this.type = DB.MYSQL;
-	}
-
-	public void setAsPsql() {
-		this.type = DB.POSTGRE;
-	}
-
-	public void setAsOracle() {
-		this.type = DB.ORACLE;
-	}
-
-	public void setAsMsSql() {
-		this.type = DB.MSSQL;
-	}
-
-	public void setAsDB2() {
-		this.type = DB.DB2;
-	}
-
-	public void setAsSQLite() {
-		this.type = DB.SQLITE;
-	}
-
-	public void setAsGeneral() {
-		this.type = DB.GENERAL;
 	}
 
 	public DB getType() {
@@ -163,5 +105,10 @@ public class DatabaseMeta {
 
 	public boolean isGae() {
 		return DB.GAE == type;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s:[%s - %s]", type.name(), name, version);
 	}
 }

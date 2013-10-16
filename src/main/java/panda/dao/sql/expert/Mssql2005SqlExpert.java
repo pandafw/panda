@@ -14,7 +14,7 @@ import panda.lang.Strings;
 
 public class Mssql2005SqlExpert extends SqlExpert {
 	@Override
-	public DB getType() {
+	public DB getDatabaseType() {
 		return DB.MSSQL;
 	}
 

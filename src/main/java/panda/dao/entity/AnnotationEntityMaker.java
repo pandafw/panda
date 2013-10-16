@@ -14,21 +14,20 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonObject;
 import panda.dao.DaoClient;
-import panda.dao.entity.annotation.ColDefine;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
+import panda.dao.entity.annotation.Meta;
 import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Post;
 import panda.dao.entity.annotation.Prep;
 import panda.dao.entity.annotation.Readonly;
 import panda.dao.entity.annotation.SQL;
 import panda.dao.entity.annotation.Table;
-import panda.dao.entity.annotation.TableFKeys;
-import panda.dao.entity.annotation.TableIndexes;
-import panda.dao.entity.annotation.TableMeta;
+import panda.dao.entity.annotation.ForeignKeys;
+import panda.dao.entity.annotation.Indexes;
 import panda.dao.entity.annotation.View;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlNamings;
@@ -100,13 +99,13 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 
 		// evaluate indexes
-		TableIndexes annIndexes = Classes.getAnnotation(type, TableIndexes.class);
+		Indexes annIndexes = Classes.getAnnotation(type, Indexes.class);
 		if (annIndexes != null) {
 			evalEntityIndexes(en, annIndexes);
 		}
 
 		// evaluate foreign keys
-		TableFKeys annFKeys = Classes.getAnnotation(type, TableFKeys.class);
+		ForeignKeys annFKeys = Classes.getAnnotation(type, ForeignKeys.class);
 		if (annFKeys != null) {
 			evalEntityFKeys(en, annFKeys);
 		}
@@ -124,15 +123,15 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 		en.setBeanHandler(bh);
 		
-		// Table meta
-		TableMeta annMeta = Classes.getAnnotation(type, TableMeta.class);
+		// table meta
+		Meta annMeta = Classes.getAnnotation(type, Meta.class);
 		if (annMeta != null) {
 			JsonObject jo = JsonObject.fromJson(annMeta.value());
 			en.setTableMeta(jo);
 		}
 
-		Table annTable = Classes.getAnnotation(type, Table.class);
 		// table name
+		Table annTable = Classes.getAnnotation(type, Table.class);
 		if (annTable == null) {
 			en.setTableName(SqlNamings.javaName2TableName(type.getSimpleName()));
 		}
@@ -172,7 +171,6 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		if (Classes.isBoolean(clazz)) {
 			ef.setJdbcType(JdbcTypes.BOOLEAN);
-			ef.setSize(1);
 		}
 		else if (Classes.isChar(clazz)) {
 			ef.setJdbcType(JdbcTypes.CHAR);
@@ -247,7 +245,6 @@ public class AnnotationEntityMaker implements EntityMaker {
 		Index annIndex;
 		Column annColumn;
 		Comment annComment;
-		ColDefine annDefine;
 		Readonly annReadonly;
 		Prep annPrep;
 		Post annPost;
@@ -272,7 +269,6 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.name = field.getName();
 			mi.type = field.getGenericType();
 			mi.annComment = field.getAnnotation(Comment.class);
-			mi.annDefine = field.getAnnotation(ColDefine.class);
 			mi.annReadonly = field.getAnnotation(Readonly.class);
 			mi.annPrep = field.getAnnotation(Prep.class);
 			mi.annPost = field.getAnnotation(Post.class);
@@ -300,7 +296,6 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.name = name;
 			mi.type = method.getGenericReturnType();
 			mi.annComment = method.getAnnotation(Comment.class);
-			mi.annDefine = method.getAnnotation(ColDefine.class);
 			mi.annReadonly = method.getAnnotation(Readonly.class);
 			mi.annPrep = method.getAnnotation(Prep.class);
 			mi.annPost = method.getAnnotation(Post.class);
@@ -326,30 +321,26 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 		ef.setName(mi.name);
 		ef.setType(mi.type);
-		if (mi.annColumn != null && Strings.isNotBlank(mi.annColumn.value())) {
+		if (mi.annColumn != null) {
 			ef.setColumn(mi.annColumn.value());
+			ef.setJdbcType(mi.annColumn.type());
+			ef.setSize(mi.annColumn.size());
+			ef.setScale(mi.annColumn.scale());
+			ef.setUnsigned(mi.annColumn.unsigned());
+			ef.setNotNull(mi.annColumn.notNull());
+			ef.setDbType(mi.annColumn.dbType());
+			ef.setDefaultValue(mi.annColumn.defaults());
 		}
-		else {
+
+		if (Strings.isBlank(ef.getColumn())) {
 			ef.setColumn(mi.name);
+		}
+		if (Strings.isBlank(ef.getJdbcType())) {
+			guessEntityFieldJdbcType(ef);
 		}
 
 		if (mi.annComment != null && Strings.isNotBlank(mi.annComment.value())) {
 			ef.setComment(mi.annComment.value());
-		}
-
-		if (mi.annDefine != null) {
-			ef.setJdbcType(mi.annDefine.type());
-			ef.setSize(mi.annDefine.size());
-			ef.setScale(mi.annDefine.scale());
-			ef.setUnsigned(mi.annDefine.unsigned());
-			ef.setNotNull(mi.annDefine.notNull());
-
-			if (Strings.isNotBlank(mi.annDefine.dbType())) {
-				ef.setDbType(mi.annDefine.dbType());
-			}
-		}
-		else {
-			guessEntityFieldJdbcType(ef);
 		}
 
 		if (mi.annPrep != null) {
@@ -419,7 +410,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		en.addIndex(ei);
 	}
 
-	private void evalEntityIndexes(Entity<?> en, TableIndexes indexes) {
+	private void evalEntityIndexes(Entity<?> en, Indexes indexes) {
 		for (Index idx : indexes.value()) {
 			evalEntityIndex(en, idx.name(), idx.fields(), idx.unique());
 		}
@@ -461,7 +452,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		en.addForeignKey(efk);
 	}
 
-	private void evalEntityFKeys(Entity<?> en, TableFKeys fks) {
+	private void evalEntityFKeys(Entity<?> en, ForeignKeys fks) {
 		for (FK fk: fks.value()) {
 			evalEntityFKey(en, fk.name(), fk.target(), fk.fields());
 		}

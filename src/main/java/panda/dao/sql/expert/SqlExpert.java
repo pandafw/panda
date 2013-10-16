@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.castor.Castors;
 import panda.dao.DB;
+import panda.dao.DatabaseMeta;
 import panda.dao.criteria.Expression;
 import panda.dao.criteria.Operator;
 import panda.dao.criteria.Order;
@@ -20,6 +22,7 @@ import panda.dao.sql.Sql;
 import panda.dao.sql.SqlUtils;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.lang.Texts;
 
 
 /**
@@ -28,14 +31,28 @@ import panda.lang.Strings;
  * !! thread-safe !!
  */
 public abstract class SqlExpert {
+	protected DatabaseMeta databaseMeta;
 	protected Map<String, Object> properties;
+	protected Castors castors;
+
+	/**
+	 * @return the databaseMeta
+	 */
+	public DatabaseMeta getDatabaseMeta() {
+		return databaseMeta;
+	}
+
+	/**
+	 * @param databaseMeta the databaseMeta to set
+	 */
+	public void setDatabaseMeta(String name, String version) {
+		databaseMeta = new DatabaseMeta(getDatabaseType(), name, version);
+	}
 
 	/**
 	 * @return the database type
 	 */
-	public DB getType() {
-		return DB.GENERAL;
-	}
+	public abstract DB getDatabaseType();
 
 	/**
 	 * @return the properties
@@ -49,6 +66,20 @@ public abstract class SqlExpert {
 	 */
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
+	}
+
+	/**
+	 * @return the castors
+	 */
+	public Castors getCastors() {
+		return castors;
+	}
+
+	/**
+	 * @param castors the castors to set
+	 */
+	public void setCastors(Castors castors) {
+		this.castors = castors;
 	}
 
 	protected String getEntityMeta(Entity<?> entity, String name) {
@@ -206,7 +237,12 @@ public abstract class SqlExpert {
 				continue;
 			}
 			sql.append("?,");
-			sql.addParam(ef.getValue(data));
+			Object v = ef.getValue(data);
+			if (v == null && Strings.isNotEmpty(ef.getDefaultValue())) {
+				v = Texts.transform(ef.getDefaultValue(), data);
+				v = castors.cast(v, ef.getType());
+			}
+			sql.addParam(v);
 		}
 		sql.setCharAt(sql.length() - 1, ')');
 		return sql;
@@ -453,7 +489,7 @@ public abstract class SqlExpert {
 			sb.append(" Index ");
 			sb.append(entity.getTableName())
 				.append("_")
-				.append(index.isUnique() ? "UI" : "IX")
+				.append(index.isUnique() ? "UX" : "IX")
 				.append('_')
 				.append(index.getName());
 			sb.append(" ON ").append(entity.getTableName()).append("(");

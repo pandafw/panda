@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.DB;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
@@ -12,6 +13,11 @@ import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
 public class SQLiteSqlExpert extends SqlExpert {
+	@Override
+	public DB getDatabaseType() {
+		return DB.SQLITE;
+	}
+
 	@Override
 	public boolean isSupportDropIfExists() {
 		return true;

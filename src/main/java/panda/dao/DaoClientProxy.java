@@ -1,6 +1,7 @@
 package panda.dao;
 
 import panda.dao.entity.Entity;
+import panda.dao.entity.EntityDao;
 
 
 /**
@@ -39,8 +40,8 @@ public class DaoClientProxy extends DaoClient {
 	 * @return datebase meta
 	 */
 	@Override
-	public DatabaseMeta getMeta() {
-		return daoClient.getMeta();
+	public DatabaseMeta getDatabaseMeta() {
+		return daoClient.getDatabaseMeta();
 	}
 
 	/**
@@ -50,6 +51,16 @@ public class DaoClientProxy extends DaoClient {
 	@Override
 	public <T> Entity<T> getEntity(Class<T> type) {
 		return daoClient.getEntity(type);
+	}
+
+	/**
+	 * @param type record type
+	 * @param param argument used for dynamic table
+	 * @return the entity
+	 */
+	@Override
+	public <T> EntityDao<T> getEntityDao(Class<T> type, Object param) {
+		return daoClient.getEntityDao(type, param);
 	}
 	
 	/**

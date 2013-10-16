@@ -21,6 +21,8 @@ public class Klass {
 
 	BigDecimal price;
 	
+	Boolean closed;
+	
 	public String getName() {
 		return name;
 	}
@@ -53,6 +55,13 @@ public class Klass {
 		this.price = price;
 	}
 
+	public Boolean getClosed() {
+		return closed;
+	}
+
+	public void setClosed(Boolean closed) {
+		this.closed = closed;
+	}
 
 	@Override
 	public String toString() {
@@ -61,6 +70,7 @@ public class Klass {
 				.append("alias", alias)
 				.append("teacher", teacher)
 				.append("price", price)
+				.append("closed", closed)
 				.toString();
 	}
 
@@ -71,6 +81,7 @@ public class Klass {
 				.append(alias)
 				.append(teacher)
 				.append(price)
+				.append(closed)
 				.toHashCode();
 	}
 
@@ -89,6 +100,7 @@ public class Klass {
 				.append(alias, rhs.alias)
 				.append(teacher, rhs.teacher)
 				.append(price, rhs.price)
+				.append(closed, rhs.closed)
 				.isEquals();
 	}
 
@@ -100,6 +112,7 @@ public class Klass {
 		this.alias = "A" + i;
 		this.teacher = "T" + i;
 		this.price = new BigDecimal(i * 100101 / 100).setScale(2);
+		this.closed = (i % 2 == 0);
 	}
 
 	public static Klass create(int i) {

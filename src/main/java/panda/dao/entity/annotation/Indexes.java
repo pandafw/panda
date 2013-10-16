@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface TableFKeys {
-
-	FK[] value();
-
+public @interface Indexes {
+	Index[] value();
 }
