@@ -5,7 +5,7 @@
 	<property name="prj.title" value="Panda Web Framework"/>
 	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
 	<property name="prj.site" value="github.com/pandawind/panda-web"/>
-	<loadfile srcFile="${basedir}/../panda-java/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8" failonerror="false">
+	<loadfile srcFile="${basedir}/../panda-java/src/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8" failonerror="false">
 		<filterchain>
 			<striplinebreaks/>
 			<linecontains>
@@ -47,13 +47,9 @@
 	<!-- ivy -->
 	<target name="ivy-resolve" description="ivy --> retreive dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">
-			<fileset dir="tools"/>
+			<fileset dir="lib/tool"/>
 		</delete>
-		<ivy:retrieve conf="tool" pattern="tools/[artifact](-[classifier]).[ext]"/>
-	</target>
-
-	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
-		<ivy:report todir="tools/ivy" conf="tool"/>
+		<ivy:retrieve conf="tool" pattern="lib/tool/[artifact](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="ivy-cleancache" description="ivy --> clean the cache">
@@ -62,98 +58,98 @@
 
 	<!-- build -->
 	<target name="min-js" description="Merge &amp; minify javascript files">
-		<concat destfile="static/panda/js/panda.js" binary="true">
-			<fileset dir="static/panda/js">
+		<concat destfile="src/main/panda/js/panda.js" binary="true">
+			<fileset dir="src/main/panda/js">
 				<include name="core.*.js"/>
 				<include name="ui.*.js"/>
 			</fileset>
 		</concat>
-		<java jar="tools/yuicompressor.jar" fork="true">
-			<arg value="static/panda/js/panda.js"/>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/panda/js/panda.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="static/panda/js/panda.min.js"/>
+			<arg value="src/main/panda/js/panda.min.js"/>
 		</java>
 
-		<concat destfile="static/jquery/js/jquery-plugins.js" binary="true">
-			<fileset dir="static/jquery/js" includes="jquery.*.js"/>
+		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
+			<fileset dir="src/main/jquery/js" includes="jquery.*.js"/>
 		</concat>
-		<java jar="tools/yuicompressor.jar" fork="true">
-			<arg value="static/jquery/js/jquery-plugins.js"/>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/jquery/js/jquery-plugins.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="static/jquery/js/jquery-plugins.min.js"/>
+			<arg value="src/main/jquery/js/jquery-plugins.min.js"/>
 		</java>
 <!-- 
-		<concat destfile="static/jquery/js/jquery-plugins-ja.js" binary="true">
-			<fileset dir="static/jquery/js/i18n" includes="*-ja.js"/>
+		<concat destfile="src/main/jquery/js/jquery-plugins-ja.js" binary="true">
+			<fileset dir="src/main/jquery/js/i18n" includes="*-ja.js"/>
 		</concat>
 		<jsmin charset="UTF-8" 
-			jsfile="static/jquery/js/jquery-plugins-ja.js" 
-			minfile="static/jquery/js/jquery-plugins-ja.min.js"/>
+			jsfile="src/main/jquery/js/jquery-plugins-ja.js" 
+			minfile="src/main/jquery/js/jquery-plugins-ja.min.js"/>
 
-		<concat destfile="static/jquery/js/jquery-plugins-zh-CN.js" binary="true">
-			<fileset dir="static/jquery/js/i18n" includes="*-zh-CN.js"/>
+		<concat destfile="src/main/jquery/js/jquery-plugins-zh-CN.js" binary="true">
+			<fileset dir="src/main/jquery/js/i18n" includes="*-zh-CN.js"/>
 		</concat>
 		<jsmin charset="UTF-8" 
-			jsfile="static/jquery/js/jquery-plugins-zh-CN.js" 
-			minfile="static/jquery/js/jquery-plugins-zh-CN.min.js"/>
+			jsfile="src/main/jquery/js/jquery-plugins-zh-CN.js" 
+			minfile="src/main/jquery/js/jquery-plugins-zh-CN.min.js"/>
 
-		<concat destfile="static/jquery/js/jquery-plugins-zh-TW.js" binary="true">
-			<fileset dir="static/jquery/js/i18n" includes="*-zh-TW.js"/>
+		<concat destfile="src/main/jquery/js/jquery-plugins-zh-TW.js" binary="true">
+			<fileset dir="src/main/jquery/js/i18n" includes="*-zh-TW.js"/>
 		</concat>
 		<jsmin charset="UTF-8" 
-			jsfile="static/jquery/js/jquery-plugins-zh-TW.js" 
-			minfile="static/jquery/js/jquery-plugins-zh-TW.min.js"/>
+			jsfile="src/main/jquery/js/jquery-plugins-zh-TW.js" 
+			minfile="src/main/jquery/js/jquery-plugins-zh-TW.min.js"/>
 
-		<concat destfile="static/jquery/js/jquery-plugins-zh-HK.js" binary="true">
-			<fileset dir="static/jquery/js/i18n" includes="*-zh-HK.js"/>
+		<concat destfile="src/main/jquery/js/jquery-plugins-zh-HK.js" binary="true">
+			<fileset dir="src/main/jquery/js/i18n" includes="*-zh-HK.js"/>
 		</concat>
 		<jsmin charset="UTF-8" 
-			jsfile="static/jquery/js/jquery-plugins-zh-HK.js" 
-			minfile="static/jquery/js/jquery-plugins-zh-HK.min.js"/>
+			jsfile="src/main/jquery/js/jquery-plugins-zh-HK.js" 
+			minfile="src/main/jquery/js/jquery-plugins-zh-HK.min.js"/>
 -->
 	</target>
 
 	<target name="min-css" description="Merge &amp; minify css files">
-		<concat destfile="static/panda/css/panda.css" binary="true">
-			<fileset dir="static/panda/css" includes="ui.*.css"/>
+		<concat destfile="src/main/panda/css/panda.css" binary="true">
+			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
 		</concat>
-		<java jar="tools/yuicompressor.jar" fork="true">
-			<arg value="static/panda/css/panda.css"/>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/panda/css/panda.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="css"/>
 			<arg value="-o"/>
-			<arg value="static/panda/css/panda.min.css"/>
+			<arg value="src/main/panda/css/panda.min.css"/>
 		</java>
 
-		<concat destfile="static/jquery/css/jquery-plugins.css" binary="true">
-			<fileset dir="static/jquery/css" includes="jquery.*.css"/>
+		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
+			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
 		</concat>
-		<java jar="tools/yuicompressor.jar" fork="true">
-			<arg value="static/jquery/css/jquery-plugins.css"/>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/jquery/css/jquery-plugins.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="css"/>
 			<arg value="-o"/>
-			<arg value="static/jquery/css/jquery-plugins.min.css"/>
+			<arg value="src/main/jquery/css/jquery-plugins.min.css"/>
 		</java>
 	</target>
 
 	<target name="build" depends="ivy-resolve, min-js, min-css" description="Build the project"/>
 
 	<target name="jar" description="Make project as a jar file">
-		<delete dir="dist"/>
-		<jar destfile="dist/${prj.name}-${VERSION}.jar">
+		<delete dir="out"/>
+		<jar destfile="out/${prj.name}-${VERSION}.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.author}"/>
 				<attribute name="Built-By" value="${prj.author}"/>
@@ -162,8 +158,8 @@
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
 				<attribute name="Implementation-Vendor" value="${prj.site}"/>
 			</manifest>
-			<fileset dir="${basedir}">
-				<include name="static/**"/>
+			<fileset dir="src/main">
+				<include name="**"/>
 			</fileset>
 		</jar>
 	</target>
