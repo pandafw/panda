@@ -1,9 +1,10 @@
-package panda.io;
+package panda.io.stream;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Random;
 
+import panda.io.WriterOutputStream;
 import junit.framework.TestCase;
 
 @SuppressWarnings("resource")

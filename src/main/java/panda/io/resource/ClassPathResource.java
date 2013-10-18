@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.builder.EqualsBuilder;
@@ -53,7 +53,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, ClassLoader classLoader) {
 		Asserts.notNull(path, "Path must not be null");
-		String pathToUse = Files.cleanPath(path);
+		String pathToUse = FileNames.normalizeUnix(path);
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}
@@ -71,7 +71,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, Class<?> clazz) {
 		Asserts.notNull(path, "Path must not be null");
-		this.path = Files.cleanPath(path);
+		this.path = FileNames.normalizeUnix(path);
 		this.clazz = clazz;
 	}
 
@@ -83,7 +83,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @param clazz the class to load resources with, if any
 	 */
 	protected ClassPathResource(String path, ClassLoader classLoader, Class<?> clazz) {
-		this.path = Files.cleanPath(path);
+		this.path = FileNames.normalizeUnix(path);
 		this.classLoader = classLoader;
 		this.clazz = clazz;
 	}
@@ -168,7 +168,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	@Override
 	public Resource createRelative(String relativePath) {
-		String pathToUse = Files.applyRelativePath(this.path, relativePath);
+		String pathToUse = FileNames.concat(this.path, relativePath);
 		return new ClassPathResource(pathToUse, this.classLoader, this.clazz);
 	}
 
@@ -178,7 +178,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	@Override
 	public String getFilename() {
-		return Files.getFileName(this.path);
+		return FileNames.getName(this.path);
 	}
 
 	/**

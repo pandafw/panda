@@ -1717,7 +1717,6 @@ public abstract class ToStringStyle implements Serializable {
 	 * </p>
 	 * 
 	 * @param useShortClassName the new useShortClassName flag
-	 * @since 2.0
 	 */
 	protected void setUseShortClassName(boolean useShortClassName) {
 		this.useShortClassName = useShortClassName;
@@ -2048,7 +2047,6 @@ public abstract class ToStringStyle implements Serializable {
 	 * </p>
 	 * 
 	 * @param fieldSeparatorAtStart the fieldSeparatorAtStart flag
-	 * @since 2.0
 	 */
 	protected void setFieldSeparatorAtStart(boolean fieldSeparatorAtStart) {
 		this.fieldSeparatorAtStart = fieldSeparatorAtStart;
@@ -2073,7 +2071,6 @@ public abstract class ToStringStyle implements Serializable {
 	 * </p>
 	 * 
 	 * @param fieldSeparatorAtEnd the fieldSeparatorAtEnd flag
-	 * @since 2.0
 	 */
 	protected void setFieldSeparatorAtEnd(boolean fieldSeparatorAtEnd) {
 		this.fieldSeparatorAtEnd = fieldSeparatorAtEnd;

@@ -11,8 +11,6 @@ import panda.lang.codec.binary.Base64;
  * Commons-Codec and OpenSSL. Notice that OpenSSL creates 64 character lines instead of the 76 of Commons-Codec.
  *
  * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
- * @version $Id $
- * @since 1.4
  */
 public class Base64TestData {
 

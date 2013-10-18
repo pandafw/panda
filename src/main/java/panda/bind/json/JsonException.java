@@ -12,7 +12,6 @@ public class JsonException extends RuntimeException {
 	 * Constructs a JsonException.
 	 * 
 	 * @param message description of the exception
-	 * @since upcoming
 	 */
 	public JsonException(final String message) {
 		super(message);
@@ -22,7 +21,6 @@ public class JsonException extends RuntimeException {
 	 * Constructs a JsonException.
 	 * 
 	 * @param cause cause of the exception
-	 * @since upcoming
 	 */
 	public JsonException(final Throwable cause) {
 		super(cause);
@@ -33,7 +31,6 @@ public class JsonException extends RuntimeException {
 	 * 
 	 * @param message description of the exception
 	 * @param cause cause of the exception
-	 * @since upcoming
 	 */
 	public JsonException(final String message, final Throwable cause) {
 		super(message, cause);

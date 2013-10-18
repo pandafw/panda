@@ -3,7 +3,7 @@ package panda.lang.escape;
 import java.io.IOException;
 import java.util.Locale;
 
-import panda.io.StringBuilderWriter;
+import panda.io.stream.StringBuilderWriter;
 
 /**
  * An API for translating text. 

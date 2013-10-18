@@ -9059,6 +9059,21 @@ public class Strings {
 		}
 	}
 
+	/**
+	 * Encodes the given string into a sequence of bytes using the default charset, storing the result
+	 * into a new byte array.
+	 * 
+	 * @param string the String to encode
+	 * @return encoded bytes
+	 * @see String#getBytes()
+	 */
+	public static byte[] getBytes(String string) {
+		if (string == null) {
+			return null;
+		}
+		return string.getBytes();
+	}
+
 	private static IllegalStateException newIllegalStateException(String charsetName, UnsupportedEncodingException e) {
 		return new IllegalStateException(charsetName + ": " + e);
 	}

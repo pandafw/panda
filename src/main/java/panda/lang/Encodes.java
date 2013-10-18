@@ -3,7 +3,7 @@ package panda.lang;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
-import panda.io.ByteArrayOutputStream;
+import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.codec.DecoderException;
 import panda.lang.codec.binary.Base64;
 import panda.lang.codec.binary.Hex;

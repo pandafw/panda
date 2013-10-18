@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import panda.io.Files;
+import panda.io.FileNames;
 
 /**
  * utility class for Locale. 
@@ -378,7 +378,7 @@ public abstract class Locales {
 	 * @return Locale
 	 */
 	public static Locale localeFromFileName(File file, Locale defaultLocale) {
-		String b = Files.getFileNameBase(file);
+		String b = FileNames.getBaseName(file);
 		
 		String[] sa = b.split("\\_");
 		

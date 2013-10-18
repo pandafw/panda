@@ -26,7 +26,7 @@ public class VfsUtils {
 	 *         leading's path removed otherwise.
 	 */
 	public static String removeLeadingPath(FileObject lead, FileObject path) {
-		return Files.removeLeadingPath(lead.getName().getPath(), path.getName().getPath());
+		return FileNames.removeLeadingPath(lead.getName().getPath(), path.getName().getPath());
 	}
 
 	/**

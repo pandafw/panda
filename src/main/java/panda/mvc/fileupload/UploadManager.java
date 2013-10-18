@@ -8,7 +8,7 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Strings;
 
 /**
@@ -88,7 +88,7 @@ public class UploadManager {
 	public static String createUniqueFileName(String baseName) {
 		String uniqueFileName = UUID.randomUUID().toString();
 		if (baseName != null) {
-			uniqueFileName +=  "." + Strings.remove(Files.getFileNameExtension(baseName), ' ');
+			uniqueFileName +=  "." + Strings.remove(FileNames.getExtension(baseName), ' ');
 		}
 		return uniqueFileName;
 	}

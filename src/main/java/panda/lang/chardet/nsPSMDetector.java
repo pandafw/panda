@@ -289,7 +289,7 @@ public abstract class nsPSMDetector {
 
 		if (mRunSampler) {
 			try {
-				Sample(Streams.emptyInputStream(), true);
+				Sample(Streams.closedInputStream(), true);
 			}
 			catch (IOException e) {
 				throw Exceptions.wrapThrow(e);

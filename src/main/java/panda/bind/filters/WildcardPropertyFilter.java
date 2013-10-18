@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.bind.PropertyFilter;
-import panda.lang.Texts;
+import panda.io.FileNames;
 
 /**
  * 
@@ -66,7 +66,7 @@ public class WildcardPropertyFilter implements PropertyFilter {
 		
 		if (filterNames != null) {
 			for (String s : filterNames) {
-				if (Texts.wildcardMatch(name, s)) {
+				if (FileNames.wildcardMatch(name, s)) {
 					return false;
 				}
 			}
@@ -74,7 +74,7 @@ public class WildcardPropertyFilter implements PropertyFilter {
 		
 		if (filterTypes != null) {
 			for (String s : filterTypes) {
-				if (Texts.wildcardMatch(value.getClass().getName(), s)) {
+				if (FileNames.wildcardMatch(value.getClass().getName(), s)) {
 					return false;
 				}
 			}

@@ -522,7 +522,6 @@ public class DateTimes {
 	 * @param amount the amount to set
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
-	 * @since 2.4
 	 */
 	public static Date setDays(Date date, int amount) {
 		return set(date, Calendar.DAY_OF_MONTH, amount);

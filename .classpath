@@ -3,15 +3,14 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/compile/activation.jar"/>
-	<classpathentry kind="lib" path="lib/compile/commons-cli.jar"/>
-	<classpathentry kind="lib" path="lib/compile/commons-email.jar"/>
-	<classpathentry kind="lib" path="lib/compile/commons-net.jar"/>
-	<classpathentry kind="lib" path="lib/compile/commons-vfs2.jar"/>
-	<classpathentry kind="lib" path="lib/compile/freemarker.jar"/>
-	<classpathentry kind="lib" path="lib/compile/jtidy.jar"/>
-	<classpathentry kind="lib" path="lib/compile/log4j.jar" sourcepath="lib/compile/log4j-sources.jar"/>
-	<classpathentry kind="lib" path="lib/compile/mail.jar"/>
+	<classpathentry kind="lib" path="lib/run/activation.jar"/>
+	<classpathentry kind="lib" path="lib/run/commons-cli.jar"/>
+	<classpathentry kind="lib" path="lib/run/commons-email.jar"/>
+	<classpathentry kind="lib" path="lib/run/commons-vfs2.jar"/>
+	<classpathentry kind="lib" path="lib/run/freemarker.jar"/>
+	<classpathentry kind="lib" path="lib/run/jtidy.jar"/>
+	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/mail.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/postgresql.jar"/>

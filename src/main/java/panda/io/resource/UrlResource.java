@@ -9,7 +9,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Asserts;
 
 /**
@@ -81,7 +81,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 */
 	private URL getCleanedUrl(URL originalUrl, String originalPath) {
 		try {
-			return new URL(Files.cleanPath(originalPath));
+			return new URL(FileNames.normalizeUnix(originalPath));
 		}
 		catch (MalformedURLException ex) {
 			// Cleaned URL path cannot be converted to URL

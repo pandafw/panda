@@ -149,7 +149,6 @@ public class BaseNCodecInputStream extends FilterInputStream {
 	 * {@link IOException}.
 	 * 
 	 * @throws IOException if this method is invoked
-	 * @since 1.7
 	 */
 	@Override
 	public synchronized void reset() throws IOException {
@@ -160,7 +159,6 @@ public class BaseNCodecInputStream extends FilterInputStream {
 	 * {@inheritDoc}
 	 * 
 	 * @throws IllegalArgumentException if the provided skip length is negative
-	 * @since 1.7
 	 */
 	@Override
 	public long skip(final long n) throws IOException {

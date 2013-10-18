@@ -3,7 +3,7 @@ package panda.dao.sql.executor;
 import java.util.List;
 
 import panda.io.Streams;
-import panda.io.StringBuilderWriter;
+import panda.io.stream.StringBuilderWriter;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;

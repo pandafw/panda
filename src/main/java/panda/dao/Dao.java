@@ -254,14 +254,6 @@ public abstract class Dao {
 	public abstract int delete(Object obj);
 
 	/**
-	 * delete object collection
-	 * 
-	 * @param col object collection to be deleted
-	 * @return deleted count
-	 */
-	public abstract int deletes(Collection<?> col);
-
-	/**
 	 * delete records by the supplied keys.
 	 * if the supplied keys is null, all records will be deleted.
 	 * 
@@ -284,14 +276,22 @@ public abstract class Dao {
 	public abstract <T> int delete(Entity<T> entity, Object ... keys);
 
 	/**
-	 * delete record by the supplied query
+	 * delete object collection
+	 * 
+	 * @param col object collection to be deleted
+	 * @return deleted count
+	 */
+	public abstract int deletes(Collection<?> col);
+
+	/**
+	 * delete records by the supplied query
 	 * 
 	 * @param type record type
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	public int delete(Class<?> type, Query query) {
-		return delete(getEntity(type), query);
+	public int deletes(Class<?> type, Query query) {
+		return deletes(getEntity(type), query);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	public abstract int delete(Entity<?> entity, Query query);
+	public abstract int deletes(Entity<?> entity, Query query);
 
 	/**
 	 * delete record by the supplied query
@@ -310,7 +310,7 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	public abstract int delete(String table, Query query);
+	public abstract int deletes(String table, Query query);
 
 	/**
 	 * insert a record.
@@ -351,14 +351,6 @@ public abstract class Dao {
 	public abstract int update(Object obj);
 
 	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	public abstract int updates(Collection<?> col);
-
-	/**
 	 * update a record by the supplied object. 
 	 * the null properties will be ignored.
 	 * 
@@ -366,6 +358,14 @@ public abstract class Dao {
 	 * @return updated count
 	 */
 	public abstract int updateIgnoreNull(Object obj);
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	public abstract int updates(Collection<?> col);
 
 	/**
 	 * update records by the supplied object collection. 
@@ -382,7 +382,7 @@ public abstract class Dao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public abstract int update(Object obj, Query query);
+	public abstract int updates(Object obj, Query query);
 
 	/**
 	 * update records by the supplied object and query. 
@@ -392,7 +392,7 @@ public abstract class Dao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public abstract int updateIgnoreNull(Object obj, Query query);
+	public abstract int updatesIgnoreNull(Object obj, Query query);
 
 	/**
 	 * select all records.

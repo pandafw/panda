@@ -91,7 +91,6 @@ public abstract class Objects {
 	 * @param values the values to test, may be {@code null} or empty
 	 * @return the first value from {@code values} which is not {@code null}, or {@code null} if
 	 *         there are no non-null values
-	 * @since 3.0
 	 */
 	public static <T> T firstNonNull(final T... values) {
 		if (values != null) {

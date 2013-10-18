@@ -183,8 +183,6 @@ public class Systems {
 	 * {@link System#setProperties(java.util.Properties)} is called after this class is loaded, the
 	 * value will be out of sync with that System property.
 	 * </p>
-	 * 
-	 * @since 2.1
 	 */
 	public static final String JAVA_AWT_PRINTERJOB = getSystemProperty("java.awt.printerjob");
 
@@ -995,7 +993,6 @@ public class Systems {
 	 * The field will return {@code false} if {@code OS_NAME} is {@code null}.
 	 * </p>
 	 * 
-	 * @since 2.0
 	 */
 	public static final boolean IS_OS_IRIX = getOSMatchesName("Irix");
 
@@ -1352,7 +1349,6 @@ public class Systems {
 	 * @throws SecurityException if a security manager exists and its {@code checkPropertyAccess}
 	 *             method doesn't allow access to the specified system property.
 	 * @see System#getProperty(String)
-	 * @since 2.1
 	 */
 	public static File getUserHome() {
 		return new File(System.getProperty(USER_HOME_KEY));

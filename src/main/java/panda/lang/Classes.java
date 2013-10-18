@@ -246,7 +246,6 @@ public abstract class Classes {
 	 * 
 	 * @param cls the class for which to get the simple name.
 	 * @return the simple class name.
-	 * @since 3.0
 	 * @see Class#getSimpleName()
 	 */
 	public static String getSimpleName(Class<?> cls) {
@@ -264,7 +263,6 @@ public abstract class Classes {
 	 * @param object the object for which to get the simple class name.
 	 * @param valueIfNull the value to return if <code>object</code> is <code>null</code>
 	 * @return the simple class name.
-	 * @since 3.0
 	 * @see Class#getSimpleName()
 	 */
 	public static String getSimpleName(Object object, String valueIfNull) {
@@ -580,7 +578,6 @@ public abstract class Classes {
 	 * @return true if the given {@code type} is a primitive or primitive wrapper ({@link Boolean},
 	 *         {@link Byte}, {@link Character}, {@link Short}, {@link Integer}, {@link Long},
 	 *         {@link Double}, {@link Float}).
-	 * @since 3.1
 	 */
 	public static boolean isPrimitiveOrWrapper(Class<?> type) {
 		if (type == null) {
@@ -752,7 +749,6 @@ public abstract class Classes {
 	 * @param cls the class to convert, may be null
 	 * @return the wrapper class for {@code cls} or {@code cls} if {@code cls} is not a primitive.
 	 *         {@code null} if null input.
-	 * @since 2.1
 	 */
 	public static Class<?> primitiveToWrapper(Class<?> cls) {
 		Class<?> convertedClass = cls;
@@ -772,7 +768,6 @@ public abstract class Classes {
 	 * @return an array which contains for each given class, the wrapper class or the original class
 	 *         if class is not a primitive. {@code null} if null input. Empty array if an empty
 	 *         array passed in.
-	 * @since 2.1
 	 */
 	public static Class<?>[] primitivesToWrappers(Class<?>... classes) {
 		if (classes == null) {
@@ -805,7 +800,6 @@ public abstract class Classes {
 	 * @return the corresponding primitive type if {@code cls} is a wrapper class, <b>null</b>
 	 *         otherwise
 	 * @see #primitiveToWrapper(Class)
-	 * @since 2.4
 	 */
 	public static Class<?> wrapperToPrimitive(Class<?> cls) {
 		return wrapper2PrimitiveTypeMap.get(cls);
@@ -825,7 +819,6 @@ public abstract class Classes {
 	 *         the original class is not a wrapper class. {@code null} if null input. Empty array if
 	 *         an empty array passed in.
 	 * @see #wrapperToPrimitive(Class)
-	 * @since 2.4
 	 */
 	public static Class<?>[] wrappersToPrimitives(Class<?>... classes) {
 		if (classes == null) {

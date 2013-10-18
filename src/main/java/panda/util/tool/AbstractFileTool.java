@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.apache.commons.cli.CommandLine;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.HandledException;
 import panda.lang.Numbers;
 import panda.lang.Strings;
@@ -210,7 +210,7 @@ public abstract class AbstractFileTool {
 		}
 		if (excludes != null) {
 			for (String s : excludes) {
-				if (Files.pathMatch(Files.removeLeadingPath(source, f), s)) {
+				if (FileNames.pathMatch(FileNames.removeLeadingPath(source, f), s)) {
 					return true;
 				}
 			}
@@ -223,7 +223,7 @@ public abstract class AbstractFileTool {
 			return true;
 		}
 		for (String s : includes) {
-			if (Files.pathMatch(Files.removeLeadingPath(source, f), s)) {
+			if (FileNames.pathMatch(FileNames.removeLeadingPath(source, f), s)) {
 				return true;
 			}
 		}
@@ -264,7 +264,7 @@ public abstract class AbstractFileTool {
 		File des;
 		
 		if (target == null) {
-			des = new File(Files.stripFileNameExtension(src) + ext);
+			des = new File(FileNames.removeExtension(src) + ext);
 		}
 		else {
 			if (source.isFile()) {
@@ -272,12 +272,12 @@ public abstract class AbstractFileTool {
 					des = target;
 				}
 				else if (target.isDirectory()) {
-					des = new File(target, Files.getFileNameBase(src) + ext);
+					des = new File(target, FileNames.getBaseName(src) + ext);
 				}
-				else if (Strings.isEmpty(Files.getFileNameExtension(target))) {
+				else if (Strings.isEmpty(FileNames.getExtension(target))) {
 					// assume this is a directory
 					target.mkdirs();
-					des = new File(target, Files.getFileNameBase(src) + ext);
+					des = new File(target, FileNames.getBaseName(src) + ext);
 				}
 				else {
 					File parent = target.getParentFile();
@@ -292,8 +292,8 @@ public abstract class AbstractFileTool {
 					target = target.getParentFile();
 				}
 				
-				String sname = Files.removeLeadingPath(source, src);
-				sname = Files.stripFileNameExtension(sname) + ext;
+				String sname = FileNames.removeLeadingPath(source, src);
+				sname = FileNames.removeExtension(sname) + ext;
 				des = new File(target, sname);
 				File parent = des.getParentFile();
 				if (!parent.exists()) {

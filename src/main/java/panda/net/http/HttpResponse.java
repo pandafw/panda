@@ -541,7 +541,7 @@ public class HttpResponse implements Closeable {
 				}
 			}
 			else {
-				stream = Streams.emptyInputStream();
+				stream = Streams.closedInputStream();
 			}
 		}
 		return stream;

@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Asserts;
 
 /**
@@ -41,7 +41,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	public FileSystemResource(File file) {
 		Asserts.notNull(file, "File must not be null");
 		this.file = file;
-		this.path = Files.cleanPath(file.getPath());
+		this.path = FileNames.normalizeUnix(file.getPath());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	public FileSystemResource(String path) {
 		Asserts.notNull(path, "Path must not be null");
 		this.file = new File(path);
-		this.path = Files.cleanPath(path);
+		this.path = FileNames.normalizeUnix(path);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class FileSystemResource extends AbstractResource implements WritableReso
 	 */
 	@Override
 	public Resource createRelative(String relativePath) {
-		String pathToUse = Files.applyRelativePath(this.path, relativePath);
+		String pathToUse = FileNames.concat(this.path, relativePath);
 		return new FileSystemResource(pathToUse);
 	}
 

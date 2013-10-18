@@ -12,7 +12,6 @@ public class XmlException extends RuntimeException {
 	 * Constructs a JsonException.
 	 * 
 	 * @param message description of the exception
-	 * @since upcoming
 	 */
 	public XmlException(final String message) {
 		super(message);
@@ -22,7 +21,6 @@ public class XmlException extends RuntimeException {
 	 * Constructs a JsonException.
 	 * 
 	 * @param cause cause of the exception
-	 * @since upcoming
 	 */
 	public XmlException(final Throwable cause) {
 		super(cause);
@@ -33,7 +31,6 @@ public class XmlException extends RuntimeException {
 	 * 
 	 * @param message description of the exception
 	 * @param cause cause of the exception
-	 * @since upcoming
 	 */
 	public XmlException(final String message, final Throwable cause) {
 		super(message, cause);

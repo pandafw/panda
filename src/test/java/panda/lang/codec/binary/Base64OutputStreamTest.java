@@ -15,8 +15,6 @@ import panda.lang.codec.binary.Base64OutputStream;
 import panda.lang.codec.binary.BaseNCodec;
 
 /**
- * @version $Id $
- * @since 1.4
  */
 public class Base64OutputStreamTest {
 

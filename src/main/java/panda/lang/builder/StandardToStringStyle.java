@@ -65,7 +65,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @return the current useShortClassName flag
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isUseShortClassName() { // NOPMD as this is implementing the abstract class
@@ -78,7 +77,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @param useShortClassName the new useShortClassName flag
-	 * @since 2.0
 	 */
 	@Override
 	public void setUseShortClassName(final boolean useShortClassName) { // NOPMD as this is
@@ -419,7 +417,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @return the fieldSeparatorAtStart flag
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isFieldSeparatorAtStart() { // NOPMD as this is implementing the abstract class
@@ -432,7 +429,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @param fieldSeparatorAtStart the fieldSeparatorAtStart flag
-	 * @since 2.0
 	 */
 	@Override
 	public void setFieldSeparatorAtStart(final boolean fieldSeparatorAtStart) { // NOPMD as this is
@@ -449,7 +445,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @return fieldSeparatorAtEnd flag
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isFieldSeparatorAtEnd() { // NOPMD as this is implementing the abstract class
@@ -462,7 +457,6 @@ public class StandardToStringStyle extends ToStringStyle {
 	 * </p>
 	 * 
 	 * @param fieldSeparatorAtEnd the fieldSeparatorAtEnd flag
-	 * @since 2.0
 	 */
 	@Override
 	public void setFieldSeparatorAtEnd(final boolean fieldSeparatorAtEnd) { // NOPMD as this is

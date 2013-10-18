@@ -1,4 +1,4 @@
-package panda.io;
+package panda.io.stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +10,8 @@ import java.nio.charset.Charset;
 import java.util.Random;
 
 import org.junit.Test;
+
+import panda.io.ReaderInputStream;
 
 @SuppressWarnings("resource")
 public class ReaderInputStreamTest {

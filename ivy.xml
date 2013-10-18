@@ -19,16 +19,19 @@
 		<dependency org="net.sf.jsr107cache" name="jsr107cache" rev="1.1" conf="api->master,sources" />
 
 		<!-- RUN -->
+		<dependency org="com.amazonaws" name="aws-java-sdk" rev="1.5.5" conf="run->master,sources" />
 		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="run->master,sources" />
+		<dependency org="commons-io" name="commons-io" rev="2.4" conf="run->master,sources" />
 		<dependency org="commons-net" name="commons-net" rev="3.3" conf="run->master,sources" />
+		<dependency org="javax.activation" name="activation" rev="1.1.1" conf="run->master,sources" />
 		<dependency org="javax.mail" name="mail" rev="1.4.7" conf="run->master,sources" />
 		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
 		<dependency org="net.sf.jtidy" name="jtidy" rev="r938" conf="run->master,sources" />
+		<dependency org="org.apache.commons" name="commons-lang3" rev="3.1" conf="run->master,sources" />
 		<dependency org="org.apache.commons" name="commons-email" rev="1.2" conf="run->master,sources" />
 		<dependency org="org.apache.commons" name="commons-vfs2" rev="2.0" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
-		<dependency org="javax.activation" name="activation" rev="1.1.1" conf="run->master,sources" />
-		<dependency org="com.amazonaws" name="aws-java-sdk" rev="1.5.5" conf="run->master,sources" />
+		<dependency org="ognl" name="ognl" rev="3.0.8" conf="run->master,sources" />
 
 		<!-- GAE -->
 		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.8.3" conf="gae->master,sources" />

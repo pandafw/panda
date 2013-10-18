@@ -11,7 +11,7 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
@@ -252,7 +252,7 @@ public class HttpServletSupport {
 
 		if (Strings.isEmpty(contentType)
 				&& Strings.isNotEmpty(fileName)) {
-			contentType = Files.getContentTypeFor(fileName);
+			contentType = FileNames.getContentTypeFor(fileName);
 		}
 
 		if (Strings.isNotEmpty(contentType)) {

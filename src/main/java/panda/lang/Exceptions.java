@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import panda.io.StringBuilderWriter;
+import panda.io.stream.StringBuilderWriter;
 
 
 /**

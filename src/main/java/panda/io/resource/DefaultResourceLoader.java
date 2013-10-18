@@ -3,7 +3,7 @@ package panda.io.resource;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Asserts;
 import panda.lang.Classes;
 
@@ -107,7 +107,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 		@Override
 		public Resource createRelative(String relativePath) {
-			String pathToUse = Files.applyRelativePath(getPath(), relativePath);
+			String pathToUse = FileNames.concat(getPath(), relativePath);
 			return new ClassPathContextResource(pathToUse, getClassLoader());
 		}
 	}

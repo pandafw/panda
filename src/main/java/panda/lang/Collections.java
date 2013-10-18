@@ -1380,7 +1380,6 @@ public abstract class Collections {
 	 * @param target the list to search for as a subList of <tt>source</tt>.
 	 * @return the starting position of the first occurrence of the specified target list within the
 	 *         specified source list, or -1 if there is no such occurrence.
-	 * @since 1.4
 	 */
 	public static int indexOfSubList(List<?> source, List<?> target) {
 		return java.util.Collections.indexOfSubList(source, target);

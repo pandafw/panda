@@ -978,7 +978,6 @@ public class ToStringBuilder implements Builder<String> {
 	 * 
 	 * @param toString the result of <code>toString()</code> on another object
 	 * @return this
-	 * @since 2.0
 	 */
 	public ToStringBuilder appendToString(String toString) {
 		if (toString != null) {
@@ -993,7 +992,6 @@ public class ToStringBuilder implements Builder<String> {
 	 * </p>
 	 * 
 	 * @return The object being output.
-	 * @since 2.0
 	 */
 	public Object getObject() {
 		return object;

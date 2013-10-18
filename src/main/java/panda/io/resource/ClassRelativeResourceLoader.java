@@ -1,6 +1,6 @@
 package panda.io.resource;
 
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.lang.Asserts;
 
 /**
@@ -48,7 +48,7 @@ public class ClassRelativeResourceLoader extends DefaultResourceLoader {
 
 		@Override
 		public Resource createRelative(String relativePath) {
-			String pathToUse = Files.applyRelativePath(getPath(), relativePath);
+			String pathToUse = FileNames.concat(getPath(), relativePath);
 			return new ClassRelativeContextResource(pathToUse, this.clazz);
 		}
 	}

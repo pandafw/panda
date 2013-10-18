@@ -251,21 +251,21 @@ public class Query {
 	}
 
 	/**
-	 * addOrder
-	 * @param column		column
+	 * add ascend order
+	 * @param column column
 	 * @return this
 	 */
-	public Query addOrder(String column) {
-		return addOrder(column, true);
+	public Query orderBy(String column) {
+		return orderBy(column, true);
 	}
 
 	/**
-	 * addOrder
-	 * @param name		name
-	 * @param ascend	direction
+	 * add order
+	 * @param name name
+	 * @param ascend direction
 	 * @return this
 	 */
-	public Query addOrder(String name, boolean ascend) {
+	public Query orderBy(String name, boolean ascend) {
 		if (Strings.isNotEmpty(name)) {
 			if (orders == null) {
 				orders = new LinkedHashMap<String, Order>();
@@ -276,21 +276,21 @@ public class Query {
 	}
 
 	/**
-	 * addOrderAsc
+	 * add ascend order
 	 * @param name		name
 	 * @return this
 	 */
-	public Query addOrderAsc(String name) {
-		return addOrder(name, true);
+	public Query orderByAsc(String name) {
+		return orderBy(name, true);
 	}
 
 	/**
-	 * addOrderDesc
+	 * add descend order
 	 * @param name		name
 	 * @return this
 	 */
-	public Query addOrderDesc(String name) {
-		return addOrder(name, false);
+	public Query orderByDesc(String name) {
+		return orderBy(name, false);
 	}
 
 	//---------------------------------------------------------------

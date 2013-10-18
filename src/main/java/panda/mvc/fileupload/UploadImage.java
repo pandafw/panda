@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import panda.image.ImageWrapper;
 import panda.image.Images;
-import panda.io.Files;
+import panda.io.FileNames;
 import panda.io.VfsUtils;
 import panda.lang.Strings;
 
@@ -32,7 +32,7 @@ public class UploadImage extends UploadFile {
 			byte[] data = getData();
 			if (data != null) {
 				image = Images.me().makeImage(data);
-				String fm = Files.getFileNameExtension(getSaveName());
+				String fm = FileNames.getExtension(getSaveName());
 				if (Strings.isNotEmpty(fm)) {
 					image.setFormat(fm);
 				}

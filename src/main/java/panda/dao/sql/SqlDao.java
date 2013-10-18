@@ -332,7 +332,29 @@ public class SqlDao extends Dao {
 		Query query = new Query();
 		queryPrimaryKey(entity, query, obj);
 
-		return delete(entity, query);
+		return deletes(entity, query);
+	}
+
+	/**
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
+	 * 
+	 * @param entity entity
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
+	 */
+	@Override
+	public <T> int delete(Entity<T> entity, Object ... keys) {
+		assertTable(entity);
+
+		if (keys == null || keys.length == 0) {
+			return delete(entity.getTableName());
+		}
+
+		Query query = new Query();
+		queryPrimaryKey(entity, query, keys);
+		
+		return deletes(entity, query);
 	}
 
 	/**
@@ -367,28 +389,6 @@ public class SqlDao extends Dao {
 	}
 
 	/**
-	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param keys a record contains key property or composite keys
-	 * @return deleted count
-	 */
-	@Override
-	public <T> int delete(Entity<T> entity, Object ... keys) {
-		assertTable(entity);
-
-		if (keys == null || keys.length == 0) {
-			return delete(entity.getTableName());
-		}
-
-		Query query = new Query();
-		queryPrimaryKey(entity, query, keys);
-		
-		return delete(entity, query);
-	}
-
-	/**
 	 * delete record by the supplied query
 	 * 
 	 * @param entity entity
@@ -396,7 +396,7 @@ public class SqlDao extends Dao {
 	 * @return deleted count
 	 */
 	@Override
-	public int delete(Entity<?> entity, Query query) {
+	public int deletes(Entity<?> entity, Query query) {
 		assertTable(entity);
 
 		Sql sql = getSqlExpert().delete(entity, query);
@@ -424,7 +424,7 @@ public class SqlDao extends Dao {
 	 * @return deleted count
 	 */
 	@Override
-	public int delete(String table, Query query) {
+	public int deletes(String table, Query query) {
 		assertTable(table);
 
 		Sql sql = getSqlExpert().delete(table, query);
@@ -628,6 +628,26 @@ public class SqlDao extends Dao {
 
 		return update(entity, obj, query);
 	}
+	
+	/**
+	 * update a record by the supplied object. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @return updated count
+	 */
+	@Override
+	public int updateIgnoreNull(Object obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		Query query = new Query();
+		excludeNullProperties(entity, query, obj);
+
+		return update(entity, obj, query);
+	}
 
 	/**
 	 * update records by the supplied object collection. 
@@ -673,26 +693,6 @@ public class SqlDao extends Dao {
 			autoClose();
 		}
 	}
-	
-	/**
-	 * update a record by the supplied object. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @return updated count
-	 */
-	@Override
-	public int updateIgnoreNull(Object obj) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		Query query = new Query();
-		excludeNullProperties(entity, query, obj);
-
-		return update(entity, obj, query);
-	}
 
 	/**
 	 * update records by the supplied object collection. 
@@ -733,7 +733,7 @@ public class SqlDao extends Dao {
 	 * @return updated count
 	 */
 	@Override
-	public int update(Object obj, Query query) {
+	public int updates(Object obj, Query query) {
 		assertObject(obj);
 
 		Entity<?> entity = getEntity(obj.getClass());
@@ -751,7 +751,7 @@ public class SqlDao extends Dao {
 	 * @return updated count
 	 */
 	@Override
-	public int updateIgnoreNull(Object obj, Query query) {
+	public int updatesIgnoreNull(Object obj, Query query) {
 		assertObject(obj);
 
 		Entity<?> entity = getEntity(obj.getClass());

@@ -85,7 +85,7 @@ public class DynamicClassLoader extends ClassLoader {
 		@Override
 		public OutputStream openOutputStream() throws IOException {
 			File file = new File(toUri().getPath());
-			Files.makedirs(file.getParentFile());
+			Files.makeParents(file);
 			return new FileOutputStream(file);
 		}
 
@@ -193,7 +193,7 @@ public class DynamicClassLoader extends ClassLoader {
 
 	public synchronized void clear() {
 		try {
-			Files.deltree(workdir);
+			Files.deleteDir(workdir);
 		}
 		catch (IOException e) {
 			log.warn("Failed delete: " + workdir, e);
@@ -326,7 +326,7 @@ public class DynamicClassLoader extends ClassLoader {
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
-		Files.deltree(workdir);
+		clear();
 	}
 }
 

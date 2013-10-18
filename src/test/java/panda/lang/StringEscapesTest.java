@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import panda.io.Streams;
-import panda.io.StringBuilderWriter;
+import panda.io.stream.StringBuilderWriter;
 import panda.lang.escape.CharSequenceTranslator;
 import panda.lang.escape.NumericEntityEscaper;
 

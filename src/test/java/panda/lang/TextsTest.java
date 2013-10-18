@@ -1,8 +1,6 @@
 package panda.lang;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -352,23 +350,6 @@ public class TextsTest {
 
 	// -----------------------------------------------------------------------
 	/**
-	 * test method: wildMatch
-	 * @throws Exception if an error occurs
-	 */
-	@Test
-	public void testWildMatch() throws Exception {
-		assertTrue(Texts.wildcardMatch("", ""));
-		assertTrue(Texts.wildcardMatch("ab", "ab"));
-		assertTrue(Texts.wildcardMatch("ab", "ab*"));
-		assertFalse(Texts.wildcardMatch("abc", "ab"));
-		assertTrue(Texts.wildcardMatch("aab", "a?b"));
-		assertFalse(Texts.wildcardMatch("abc", "a?b"));
-		assertTrue(Texts.wildcardMatch("aaaccdsbbb", "a*b"));
-		assertFalse(Texts.wildcardMatch("aaaccdsbbb", "a*z"));
-	}
-
-	// -----------------------------------------------------------------------
-	/**
 	 * test method: camelWord
 	 * @throws Exception if an error occurs
 	 */
@@ -399,26 +380,26 @@ public class TextsTest {
 	}
 	
 	// -----------------------------------------------------------------------
-	/**
-	 * test method: formatFileSize
-	 * @throws Exception if an error occurs
-	 */
-	@Test
-	public void testFormatSize() throws Exception {
-		assertEquals("", Texts.formatFileSize((Integer)null));
-		assertEquals("", Texts.formatFileSize((Long)null));
-		assertEquals("0B", Texts.formatFileSize(0));
-		assertEquals("1023B", Texts.formatFileSize(1023));
-		assertEquals("1KB", Texts.formatFileSize(1024));
-		assertEquals("1023KB", Texts.formatFileSize(1024*1024-1));
-		assertEquals("1MB", Texts.formatFileSize(1024*1024));
-		assertEquals("1023MB", Texts.formatFileSize(1024*1024*1024-1));
-		assertEquals("1GB", Texts.formatFileSize(1024*1024*1024));
-		assertEquals("1023GB", Texts.formatFileSize(1024L*1024*1024*1024-1));
-		assertEquals("1TB", Texts.formatFileSize(1024L*1024*1024*1024));
-		assertEquals("1023TB", Texts.formatFileSize(1024L*1024*1024*1024*1024-1));
-		assertEquals("1PB", Texts.formatFileSize(1024L*1024*1024*1024*1024));
-	}
+//	/**
+//	 * test method: formatFileSize
+//	 * @throws Exception if an error occurs
+//	 */
+//	@Test
+//	public void testFormatSize() throws Exception {
+//		assertEquals("", Texts.formatFileSize((Integer)null));
+//		assertEquals("", Texts.formatFileSize((Long)null));
+//		assertEquals("0B", Texts.formatFileSize(0));
+//		assertEquals("1023B", Texts.formatFileSize(1023));
+//		assertEquals("1KB", Texts.formatFileSize(1024));
+//		assertEquals("1023KB", Texts.formatFileSize(1024*1024-1));
+//		assertEquals("1MB", Texts.formatFileSize(1024*1024));
+//		assertEquals("1023MB", Texts.formatFileSize(1024*1024*1024-1));
+//		assertEquals("1GB", Texts.formatFileSize(1024*1024*1024));
+//		assertEquals("1023GB", Texts.formatFileSize(1024L*1024*1024*1024-1));
+//		assertEquals("1TB", Texts.formatFileSize(1024L*1024*1024*1024));
+//		assertEquals("1023TB", Texts.formatFileSize(1024L*1024*1024*1024*1024-1));
+//		assertEquals("1PB", Texts.formatFileSize(1024L*1024*1024*1024*1024));
+//	}
 	
 	// -----------------------------------------------------------------------
 	/**

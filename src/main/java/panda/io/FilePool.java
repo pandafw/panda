@@ -126,7 +126,7 @@ public class FilePool implements Runnable {
 			File nf = File.createTempFile(prefix, "." + suffix, workdir);
 			nf.delete();
 			if (!file.renameTo(nf)) {
-				Streams.copy(file, nf);
+				Files.copy(file, nf);
 			}
 			if (log.isDebugEnabled()) {
 				log.debug("Add file [" + file.getPath() + "] -> [" + nf.getPath() + "]");
@@ -143,7 +143,7 @@ public class FilePool implements Runnable {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public File addFile(File file) throws IOException {
-		return addFile(file, Files.getFileNameExtension(file));
+		return addFile(file, FileNames.getExtension(file));
 	}
 
 	/**

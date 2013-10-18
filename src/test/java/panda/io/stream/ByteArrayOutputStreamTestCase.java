@@ -1,8 +1,9 @@
-package panda.io;
+package panda.io.stream;
 
 
 import java.io.ByteArrayInputStream;
 
+import panda.io.stream.ByteArrayOutputStream;
 import junit.framework.TestCase;
 
 /**

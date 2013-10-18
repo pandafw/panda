@@ -192,7 +192,7 @@ public class EntityDao<T> {
 	 * @return deleted count
 	 */
 	public int delete(Query query) {
-		return dao.delete(entity, query);
+		return dao.deletes(entity, query);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class EntityDao<T> {
 	 * @return updated count
 	 */
 	public int update(T obj, Query query) {
-		return dao.update(obj, query);
+		return dao.updates(obj, query);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class EntityDao<T> {
 	 * @return updated count
 	 */
 	public int updateIgnoreNull(T obj, Query query) {
-		return dao.updateIgnoreNull(obj, query);
+		return dao.updatesIgnoreNull(obj, query);
 	}
 
 	/**

@@ -11,15 +11,21 @@ public class Numbers {
 	/** 1KB */
 	public static final int KB = 1024;
 	/** 1MB */
-	public static final int MB = KB * 1024;
+	public static final int MB = KB * KB;
 	/** 1GB */
 	public static final long GB = MB * 1024L;
 	/** 1TB */
-	public static final long TB = GB * 1024;
+	public static final long TB = GB * KB;
 	/** 1PB */
-	public static final long PB = TB * 1024;
+	public static final long PB = TB * KB;
+	/** 1EB */
+	public static final long EB = PB * KB;
+	/** 1ZB */
+	public static final BigInteger ZB = BigInteger.valueOf(KB).multiply(BigInteger.valueOf(EB));
+	/** 1YB: yottabyte. */
+	public static final BigInteger YB = ZB.multiply(BigInteger.valueOf(KB));
 
-	/** Reusable Long constant for zero. */
+    /** Reusable Long constant for zero. */
 	public static final Long LONG_ZERO = Long.valueOf(0L);
 	/** Reusable Long constant for one. */
 	public static final Long LONG_ONE = Long.valueOf(1L);
