@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import panda.dao.Dao;
+import panda.dao.Transaction;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Klass;
 import panda.dao.entity.Score;
@@ -81,7 +82,19 @@ public abstract class SqlDaoTestCase {
 		dao.inserts(Klass.creates(1, 5));
 		dao.inserts(Score.creates(1, 5));
 	}
-	
+
+	@Test
+	public void testCount() {
+		Assert.assertEquals(5,  dao.count(Teacher.class));
+	}
+
+	@Test
+	public void testCountQuery() {
+		Query q = new Query();
+		q.equalTo("name", "T1");
+		Assert.assertEquals(1,  dao.count(Teacher.class, q));
+	}
+
 	@Test
 	public void testExists() {
 		Assert.assertTrue(dao.exists(Teacher.class));
@@ -191,6 +204,12 @@ public abstract class SqlDaoTestCase {
 	}
 
 	@Test
+	public void testDeleteAll() {
+		dao.deletes(Score.class);
+		Assert.assertEquals(0, dao.count(Score.class));
+	}
+	
+	@Test
 	public void testUpdate() {
 		Teacher expect = Teacher.create(2);
 		expect.setMemo("update");
@@ -211,5 +230,20 @@ public abstract class SqlDaoTestCase {
 		
 		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
 		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
+	}
+
+	@Test
+	public void testExecDelete() {
+		final Score expect = Score.create(2, 2, 2);
+		dao.exec(new Transaction() {
+			@Override
+			public void run() {
+				dao.delete(expect);
+				dao.commit();
+			}
+		});
+
+		Score actual = dao.fetch(Score.class, expect);
+		Assert.assertNull(actual);
 	}
 }

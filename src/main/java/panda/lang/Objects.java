@@ -280,7 +280,7 @@ public abstract class Objects {
 	 * @return the passed in Object's toString, or {@code ""} if {@code null} input
 	 */
 	public static String toString(final Object obj) {
-		return obj == null ? Strings.EMPTY : toString(obj, Strings.EMPTY);
+		return toString(obj, Strings.EMPTY);
 	}
 
 	/**
@@ -307,8 +307,8 @@ public abstract class Objects {
 		if (obj == null) {
 			return nullStr;
 		}
-		if (obj instanceof String) {
-			return (String)obj;
+		if (obj instanceof CharSequence) {
+			return obj.toString();
 		}
 		if (obj.getClass().isArray()) {
 			return Arrays.toString(obj);

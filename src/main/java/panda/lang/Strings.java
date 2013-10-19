@@ -5676,10 +5676,6 @@ public class Strings {
 	 * Strings.swapCase("")                   = ""
 	 * Strings.swapCase("The dog has a BONE") = "tHE DOG HAS A bone"
 	 * </pre>
-	 * <p>
-	 * NOTE: This method changed in Lang version 2.0. It no longer performs a word based algorithm.
-	 * If you only use ASCII, you will notice no change. That functionality is available in Texts.
-	 * </p>
 	 * 
 	 * @param str the String to swap case, may be null
 	 * @return the changed String, {@code null} if null String input

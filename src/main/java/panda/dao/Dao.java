@@ -11,6 +11,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityField;
 import panda.lang.Asserts;
+import panda.lang.Objects;
 
 /**
  * !! thread-unsafe !!
@@ -254,6 +255,16 @@ public abstract class Dao {
 	public abstract int delete(Object obj);
 
 	/**
+	 * delete all records.
+	 * 
+	 * @param type record type
+	 * @return deleted count
+	 */
+	public <T> int deletes(Class<T> type) {
+		return deletes(getEntity(type));
+	}
+
+	/**
 	 * delete records by the supplied keys.
 	 * if the supplied keys is null, all records will be deleted.
 	 * 
@@ -295,7 +306,19 @@ public abstract class Dao {
 	}
 
 	/**
-	 * delete record by the supplied query
+	 * delete all records.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return deleted count
+	 */
+	public int deletes(Entity<?> entity) {
+		return deletes(entity, null);
+	}
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param query WHERE conditions
@@ -304,7 +327,18 @@ public abstract class Dao {
 	public abstract int deletes(Entity<?> entity, Query query);
 
 	/**
-	 * delete record by the supplied query
+	 * delete all records.
+	 * 
+	 * @param table table name
+	 * @return deleted count
+	 */
+	public int deletes(String table) {
+		return deletes(table, null);
+	}
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param table table name
 	 * @param query WHERE conditions
@@ -341,6 +375,14 @@ public abstract class Dao {
 	 * @return the inserted record collection
 	 */
 	public abstract Collection<?> inserts(Collection<?> col);
+
+	/**
+	 * insert the object if not exists, 
+	 * or update the record by the object.
+	 * 
+	 * @param obj object
+	 */
+	public abstract void save(Object obj);
 
 	/**
 	 * update a record by the supplied object. 
@@ -602,25 +644,23 @@ public abstract class Dao {
 	public abstract void rollback();
 
 	//--------------------------------------------------------------------
-	@SuppressWarnings("unchecked")
 	protected void queryPrimaryKey(Entity<?> entity, Query query, Object ... keys) {
 		if (keys == null || keys.length == 0) {
-			return;
+			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
 		}
 		
 		if (keys.length == 1 && entity.getType().isInstance(keys[0])) {
-			BeanHandler bh = getBeans().getBeanHandler(entity.getType());
-
-			for (EntityField ef : entity.getFields()) {
-				if (ef.isPrimaryKey()) {
-					Object k = bh.getPropertyValue(keys[0], ef.getName());
-					query.equalTo(ef.getName(), k);
+			for (EntityField ef : entity.getPrimaryKeys()) {
+				Object k = ef.getValue(keys[0]);
+				if (k == null) {
+					throw new IllegalArgumentException("Null primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
 				}
+				query.equalTo(ef.getName(), k);
 			}
 		}
 		else {
 			if (keys.length != entity.getPrimaryKeys().size()) {
-				throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "] ");
+				throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
 			}
 			
 			int i = 0;

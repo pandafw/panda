@@ -9,6 +9,7 @@ import panda.dao.entity.AnnotationEntityMaker;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityMaker;
+import panda.lang.Collections;
 
 
 /**
@@ -76,6 +77,13 @@ public abstract class DaoClient {
 	 */
 	public void setCastors(Castors castors) {
 		this.castors = castors;
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public Map<Class<?>, Entity> getEntities() {
+		return Collections.unmodifiableMap(entities);
 	}
 
 	/**

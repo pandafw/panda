@@ -17,6 +17,7 @@ import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.sql.expert.SqlExpert;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.lang.Types;
@@ -348,7 +349,7 @@ public class SqlDao extends Dao {
 		assertTable(entity);
 
 		if (keys == null || keys.length == 0) {
-			return delete(entity.getTableName());
+			return deletes(entity);
 		}
 
 		Query query = new Query();
@@ -441,6 +442,18 @@ public class SqlDao extends Dao {
 		}
 		finally {
 			autoClose();
+		}
+	}
+
+	/**
+	 * insert the object if not exists, 
+	 * or update the record by the object.
+	 * 
+	 * @param obj object
+	 */
+	public void save(Object obj) {
+		if (update(obj) == 0) {
+			insert(obj);
 		}
 	}
 
@@ -1037,6 +1050,7 @@ public class SqlDao extends Dao {
 		}
 		catch (Throwable e) {
 			rollback();
+			throw Exceptions.wrapThrow(e);
 		}
 		finally {
 			autoClose();
