@@ -1,5 +1,7 @@
 package panda.dao.criteria;
 
+import panda.lang.Strings;
+
 
 /**
  * Constants of logic operator.
@@ -154,6 +156,11 @@ public enum Operator {
 		public String toString() {
 			return "=~";
 		}
+	};
+	
+	public static Operator parse(String op) {
+		op = Strings.upperCase(op);
+		return Operator.valueOf(op);
 	}
 }
 

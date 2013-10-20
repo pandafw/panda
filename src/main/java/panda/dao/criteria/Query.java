@@ -262,17 +262,37 @@ public class Query {
 	/**
 	 * add order
 	 * @param name name
-	 * @param ascend direction
+	 * @param order order direction
 	 * @return this
 	 */
-	public Query orderBy(String name, boolean ascend) {
+	public Query orderBy(String name, Order order) {
 		if (Strings.isNotEmpty(name)) {
 			if (orders == null) {
 				orders = new LinkedHashMap<String, Order>();
 			}
-			orders.put(name, ascend ? Order.ASC : Order.DESC);
+			orders.put(name, order);
 		}
 		return this;
+	}
+
+	/**
+	 * add order
+	 * @param name name
+	 * @param order order direction
+	 * @return this
+	 */
+	public Query orderBy(String name, String order) {
+		return orderBy(name, Order.parse(order));
+	}
+
+	/**
+	 * add order
+	 * @param name name
+	 * @param ascend direction
+	 * @return this
+	 */
+	public Query orderBy(String name, boolean ascend) {
+		return orderBy(name, ascend ? Order.ASC : Order.DESC);
 	}
 
 	/**
@@ -358,6 +378,13 @@ public class Query {
 	 */
 	public Operator getConjunction() {
 		return conjunction;
+	}
+
+	/**
+	 * @param conjunction the conjunction to set
+	 */
+	public void setConjunction(String conjunction) {
+		setConjunction(Operator.parse(conjunction));
 	}
 
 	/**
