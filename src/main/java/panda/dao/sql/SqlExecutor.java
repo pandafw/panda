@@ -234,9 +234,10 @@ public abstract class SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sql The SQL statement to execute.
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
-	public abstract void execute(String sql) throws SQLException;
+	public abstract int execute(String sql) throws SQLException;
 	
 	/**
 	 * Executes the given SQL statement, which may be an INSERT, UPDATE, 
@@ -245,9 +246,10 @@ public abstract class SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
-	public abstract void execute(String sql, Object parameter) throws SQLException;
+	public abstract int execute(String sql, Object parameter) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL INSERT statement. Insert is a bit different from

@@ -381,8 +381,9 @@ public abstract class Dao {
 	 * or update the record by the object.
 	 * 
 	 * @param obj object
+	 * @return the saved record
 	 */
-	public abstract void save(Object obj);
+	public abstract <T> T save(T obj);
 
 	/**
 	 * update a record by the supplied object. 
@@ -644,6 +645,10 @@ public abstract class Dao {
 	public abstract void rollback();
 
 	//--------------------------------------------------------------------
+	protected boolean isValidIdentity(Object id) {
+		return id != null && !id.equals(0);
+	}
+	
 	protected void queryPrimaryKey(Entity<?> entity, Query query, Object ... keys) {
 		if (keys == null || keys.length == 0) {
 			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));

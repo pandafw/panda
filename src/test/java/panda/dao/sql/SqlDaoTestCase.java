@@ -115,7 +115,19 @@ public abstract class SqlDaoTestCase {
 	public void testInsertAutoId() {
 		Student expect = Student.create(6);
 		expect.setId(0);
-		dao.insert(expect);
+		Assert.assertNotNull(dao.insert(expect));
+		
+		Assert.assertEquals(6, expect.getId());
+		
+		Student actual = dao.fetch(Student.class, expect);
+		Assert.assertEquals(expect, actual);
+	}
+	
+	@Test
+	public void testSaveAutoId() {
+		Student expect = Student.create(6);
+		expect.setId(0);
+		Assert.assertNotNull(dao.save(expect));
 		
 		Assert.assertEquals(6, expect.getId());
 		
@@ -187,7 +199,7 @@ public abstract class SqlDaoTestCase {
 	@Test
 	public void testDelete() {
 		Score expect = Score.create(2, 2, 2);
-		dao.delete(expect);
+		Assert.assertEquals(1, dao.delete(expect));
 		
 		Score actual = dao.fetch(Score.class, expect);
 		Assert.assertNull(actual);
@@ -196,7 +208,7 @@ public abstract class SqlDaoTestCase {
 	@Test
 	public void testDeletes() {
 		List<Score> expect = Score.creates(1, 1);
-		dao.deletes(expect);
+		Assert.assertEquals(expect.size(), dao.deletes(expect));
 		
 		for (Score s : expect) {
 			Assert.assertNull(dao.fetch(Score.class, s));
@@ -205,8 +217,19 @@ public abstract class SqlDaoTestCase {
 
 	@Test
 	public void testDeleteAll() {
-		dao.deletes(Score.class);
+		Assert.assertTrue(dao.deletes(Score.class) > 0);
 		Assert.assertEquals(0, dao.count(Score.class));
+	}
+	
+	@Test
+	public void testSaveUpdate() {
+		Teacher expect = Teacher.create(2);
+		expect.setMemo("save");
+
+		Assert.assertNotNull(dao.save(expect));
+		
+		Teacher actual = dao.fetch(Teacher.class, expect);
+		Assert.assertEquals(expect, actual);
 	}
 	
 	@Test
@@ -214,7 +237,7 @@ public abstract class SqlDaoTestCase {
 		Teacher expect = Teacher.create(2);
 		expect.setMemo("update");
 
-		dao.update(expect);
+		Assert.assertEquals(1, dao.update(expect));
 		
 		Teacher actual = dao.fetch(Teacher.class, expect);
 		Assert.assertEquals(expect, actual);
@@ -226,7 +249,7 @@ public abstract class SqlDaoTestCase {
 		expect.get(0).setMemo("update1");
 		expect.get(1).setMemo("update2");
 
-		dao.updates(expect);
+		Assert.assertEquals(expect.size(), dao.updates(expect));
 		
 		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
 		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));

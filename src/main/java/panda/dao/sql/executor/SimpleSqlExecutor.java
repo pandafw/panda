@@ -504,6 +504,13 @@ public class SimpleSqlExecutor extends SqlExecutor {
 			
 			retrieveOutputParameters(ps, parameter, sqlParams);
 
+			int cnt = ps.getUpdateCount();
+			log.debug("inserted: " + cnt);
+
+			if (cnt != 1) {
+				return null;
+			}
+			
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs == null || !rs.next()) {
 				return getTypeAdapters().getCastors().cast(resultObject, resultClass);
@@ -774,8 +781,9 @@ public class SimpleSqlExecutor extends SqlExecutor {
 			
 			retrieveOutputParameters(ps, parameter, sqlParams);
 
-			int updateCount = ps.getUpdateCount();
-			return updateCount;
+			int cnt = ps.getUpdateCount();
+			log.debug("updated: " + cnt);
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(ps);
@@ -788,10 +796,11 @@ public class SimpleSqlExecutor extends SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sql The SQL statement to execute.
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	@Override
-	public void execute(String sql) throws SQLException {
+	public int execute(String sql) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
@@ -802,6 +811,10 @@ public class SimpleSqlExecutor extends SqlExecutor {
 		try {
 			st = createStatement(); 
 			st.execute(sql);
+			
+			log.debug("executed: " + sql);
+			int cnt = st.getUpdateCount();
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(st);
@@ -816,10 +829,11 @@ public class SimpleSqlExecutor extends SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	@Override
-	public void execute(String sql, Object parameter) throws SQLException {
+	public int execute(String sql, Object parameter) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
@@ -831,6 +845,10 @@ public class SimpleSqlExecutor extends SqlExecutor {
 		try {
 			ps.execute();
 			retrieveOutputParameters(ps, parameter, sqlParams);
+
+			int cnt = ps.getUpdateCount();
+			log.debug("executed: " + cnt);
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(ps);

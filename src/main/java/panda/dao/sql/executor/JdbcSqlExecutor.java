@@ -288,6 +288,13 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			
 			ps.execute();
 			
+			int cnt = ps.getUpdateCount();
+			log.debug("inserted: " + cnt);
+
+			if (cnt != 1) {
+				return null;
+			}
+			
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs == null || !rs.next()) {
 				return getTypeAdapters().getCastors().cast(resultObject, resultClass);
@@ -550,8 +557,9 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			
 			ps.execute();
 			
-			int updateCount = ps.getUpdateCount();
-			return updateCount;
+			int cnt = ps.getUpdateCount();
+			log.debug("updated: " + cnt);
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(ps);
@@ -564,10 +572,11 @@ public class JdbcSqlExecutor extends SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sql The SQL statement to execute.
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	@Override
-	public void execute(String sql) throws SQLException {
+	public int execute(String sql) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
@@ -578,6 +587,10 @@ public class JdbcSqlExecutor extends SqlExecutor {
 		try {
 			st = createStatement(); 
 			st.execute(sql);
+
+			int cnt = st.getUpdateCount();
+			log.debug("executed: " + cnt);
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(st);
@@ -592,10 +605,11 @@ public class JdbcSqlExecutor extends SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
+	 * @return The number of rows effected.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	@Override
-	public void execute(String sql, Object parameter) throws SQLException {
+	public int execute(String sql, Object parameter) throws SQLException {
 		Asserts.notBlank(sql, BLANK_SQL_MESSAGE);
 
 		if (log.isDebugEnabled()) {
@@ -606,6 +620,9 @@ public class JdbcSqlExecutor extends SqlExecutor {
 		try {
 			setStatementParams(ps, (List)parameter);
 			ps.execute();
+			int cnt = ps.getUpdateCount();
+			log.debug("executed: " + cnt);
+			return cnt;
 		}
 		finally {
 			SqlUtils.safeClose(ps);

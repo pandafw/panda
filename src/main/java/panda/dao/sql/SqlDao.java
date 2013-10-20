@@ -451,10 +451,24 @@ public class SqlDao extends Dao {
 	 * 
 	 * @param obj object
 	 */
-	public void save(Object obj) {
-		if (update(obj) == 0) {
-			insert(obj);
+	public <T> T save(T obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+
+		EntityField eid = entity.getIdentity();
+		if (eid != null) {
+			Object iid = eid.getValue(obj);
+			if (isValidIdentity(iid)) {
+				return insert(obj);
+			}
 		}
+		
+		if (update(obj) == 0) {
+			return insert(obj);
+		}
+		return obj;
 	}
 
 	/**
@@ -493,15 +507,15 @@ public class SqlDao extends Dao {
 	}
 
 	private <T> T insert(Entity<?> entity, T obj) throws SQLException {
-		EntityField id = entity.getIdentity();
-		if (id == null) {
+		EntityField eid = entity.getIdentity();
+		if (eid == null) {
 			Sql sql = getSqlExpert().insert(entity, obj, false);
 			int c = executor.update(sql.getSql(), sql.getParams());
 			return c > 0 ? obj : null;
 		}
 		
-		Object iid = id.getValue(obj);
-		if (iid != null && !iid.equals(0)) {
+		Object iid = eid.getValue(obj);
+		if (isValidIdentity(iid)) {
 			String s = getSqlExpert().identityInsertOn(entity);
 			if (Strings.isNotEmpty(s)) {
 				executor.execute(s);
@@ -518,15 +532,15 @@ public class SqlDao extends Dao {
 			return c > 0 ? obj : null;
 		}
 		
-		if (id.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
+		if (eid.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
 			Sql sql = getSqlExpert().insert(entity, obj, true);
-			return executor.insert(sql.getSql(), sql.getParams(), obj, id.getName());
+			return executor.insert(sql.getSql(), sql.getParams(), obj, eid.getName());
 		}
 
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("view", entity.getViewName());
 		m.put("table", entity.getTableName());
-		m.put("field", id.getName());
+		m.put("field", eid.getName());
 		
 		String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());
 		if (Strings.isEmpty(prep)) {
@@ -551,11 +565,11 @@ public class SqlDao extends Dao {
 		}
 		
 		if (Strings.isNotEmpty(prep)) {
-			iid = executor.fetch(prep, Types.getRawType(id.getType()));
-			if (iid == null || iid.equals(0)) {
+			iid = executor.fetch(prep, Types.getRawType(eid.getType()));
+			if (!isValidIdentity(iid)) {
 				throw new DaoException("Failed to get identity from prep sql: " + prep);
 			}
-			if (!id.setValue(obj, iid)) {
+			if (!eid.setValue(obj, iid)) {
 				throw new DaoException("Failed to set identity to entity: " + entity.getType());
 			}
 		}
@@ -567,11 +581,11 @@ public class SqlDao extends Dao {
 		}
 
 		if (Strings.isNotEmpty(post)) {
-			iid = executor.fetch(post, Types.getRawType(id.getType()));
-			if (iid == null || iid.equals(0)) {
+			iid = executor.fetch(post, Types.getRawType(eid.getType()));
+			if (!isValidIdentity(iid)) {
 				throw new DaoException("Failed to get identity from post sql: " + post);
 			}
-			if (!id.setValue(obj, iid)) {
+			if (!eid.setValue(obj, iid)) {
 				throw new DaoException("Failed to set identity to entity: " + entity.getType());
 			}
 		}

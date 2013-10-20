@@ -22,9 +22,9 @@ public class OracleSqlExpert extends SqlExpert {
 	public List<String> drop(Entity<?> entity) {
 		List<String> sqls = super.drop(entity);
 		
-		EntityField id = entity.getIdentity();
-		if (id != null && id.isAutoIncrement()) {
-			String sql = "DROP SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ";
+		EntityField eid = entity.getIdentity();
+		if (eid != null && eid.isAutoIncrement()) {
+			String sql = "DROP SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ";
 			sqls.add(sql);
 		}
 		return sqls;
@@ -63,9 +63,9 @@ public class OracleSqlExpert extends SqlExpert {
 		}
 
 		// add sequence
-		EntityField id = entity.getIdentity();
-		if (id != null && id.isAutoIncrement()) {
-			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + id.getColumn() + "_SEQ START WITH " + id.getStartWith();
+		EntityField eid = entity.getIdentity();
+		if (eid != null && eid.isAutoIncrement()) {
+			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getStartWith();
 			sqls.add(sql);
 		}
 
@@ -78,8 +78,8 @@ public class OracleSqlExpert extends SqlExpert {
 	
 	@Override
 	public String prepIdentity(Entity<?> entity) {
-		EntityField id = entity.getIdentity();
-		return "SELECT " + entity.getTableName() + '_' + id.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
+		EntityField eid = entity.getIdentity();
+		return "SELECT " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
 	}
 	
 	@Override

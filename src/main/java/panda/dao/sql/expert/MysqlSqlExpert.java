@@ -92,9 +92,9 @@ public class MysqlSqlExpert extends SqlExpert {
 		addPrimaryKeys(sb, entity);
 		sb.setCharAt(sb.length() - 1, ')');
 		
-		EntityField id = entity.getIdentity();
-		if (id != null && id.isAutoIncrement() && id.getStartWith() > 1) {
-			sb.append(" AUTO_INCREMENT=").append(id.getStartWith());
+		EntityField eid = entity.getIdentity();
+		if (eid != null && eid.isAutoIncrement() && eid.getStartWith() > 1) {
+			sb.append(" AUTO_INCREMENT=").append(eid.getStartWith());
 		}
 
 		String engine = getEntityMeta(entity, META_ENGINE);
@@ -111,8 +111,8 @@ public class MysqlSqlExpert extends SqlExpert {
 		sqls.add(sb.toString());
 
 		// sometimes mysql needs alter table sql to change the identity start value
-		if (id != null && id.isAutoIncrement() && id.getStartWith() > 1) {
-			String sql = "ALTER TABLE " + entity.getTableName() + " AUTO_INCREMENT=" + id.getStartWith();
+		if (eid != null && eid.isAutoIncrement() && eid.getStartWith() > 1) {
+			String sql = "ALTER TABLE " + entity.getTableName() + " AUTO_INCREMENT=" + eid.getStartWith();
 			sqls.add(sql);
 		}
 
