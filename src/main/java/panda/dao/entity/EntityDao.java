@@ -186,12 +186,12 @@ public class EntityDao<T> {
 	}
 
 	/**
-	 * delete record by the supplied query
+	 * delete records by the supplied query
 	 * 
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	public int delete(Query query) {
+	public int deletes(Query query) {
 		return dao.deletes(entity, query);
 	}
 
@@ -278,7 +278,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int update(T obj, Query query) {
+	public int updates(T obj, Query query) {
 		return dao.updates(obj, query);
 	}
 
@@ -290,7 +290,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updateIgnoreNull(T obj, Query query) {
+	public int updatesIgnoreNull(T obj, Query query) {
 		return dao.updatesIgnoreNull(obj, query);
 	}
 
@@ -382,4 +382,12 @@ public class EntityDao<T> {
 		dao.rollback();
 	}
 
+	/**
+	 * check the identity value
+	 * @param id identity
+	 * @return true if id != null && id != 0
+	 */
+	public boolean isValidIdentity(Object id) {
+		return dao.isValidIdentity(id);
+	}
 }

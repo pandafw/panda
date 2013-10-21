@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -17,8 +18,10 @@ import panda.dao.DaoClient;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
+import panda.dao.entity.annotation.ForeignKeys;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
+import panda.dao.entity.annotation.Indexes;
 import panda.dao.entity.annotation.Meta;
 import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Post;
@@ -26,8 +29,6 @@ import panda.dao.entity.annotation.Prep;
 import panda.dao.entity.annotation.Readonly;
 import panda.dao.entity.annotation.SQL;
 import panda.dao.entity.annotation.Table;
-import panda.dao.entity.annotation.ForeignKeys;
-import panda.dao.entity.annotation.Indexes;
 import panda.dao.entity.annotation.View;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlNamings;
@@ -419,7 +420,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, String[] fields) {
 		EntityFKey efk = new EntityFKey();
 		Entity<?> ref = client.getEntity(target);
-		if (null == ref) {
+		if (ref == null) {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
 		efk.setReference(ref);
@@ -428,11 +429,27 @@ public class AnnotationEntityMaker implements EntityMaker {
 		if (fields == null || fields.length == 0) {
 			throw Exceptions.makeThrow("Empty fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
 		}
-		for (String in : fields) {
-			EntityField ef = en.getField(in);
-			if (null == ef) {
+		
+		List<EntityField> rpks = ref.getPrimaryKeys();
+		if (fields.length != rpks.size()) {
+			throw Exceptions.makeThrow("Invalid fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
+		}
+		
+		for (int i = 0; i < fields.length; i++) {
+			String fn = fields[i];
+			
+			EntityField ef = en.getField(fn);
+			if (ef == null) {
 				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @FK(%s: %s)", 
-					in, en.getType(), efk.getName(), Strings.join(fields, '|'));
+					fn, en.getType(), efk.getName(), Strings.join(fields, '|'));
+			}
+			
+			EntityField rf = rpks.get(i);
+			
+			if (!Types.equals(ef.getType(), rf.getType())) {
+				throw Exceptions.makeThrow(
+					"The type '%s' of field '%s' is not equals to the field '%s' of reference entity '%s' for '%s'@FK(%s: %s)", 
+					ef.getType(), fn, rf.getName(), ref.getType(), en.getType(), efk.getName(), Strings.join(fields, '|'));
 			}
 			efk.addField(ef);
 		}

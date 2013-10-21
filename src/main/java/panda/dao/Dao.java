@@ -645,10 +645,16 @@ public abstract class Dao {
 	public abstract void rollback();
 
 	//--------------------------------------------------------------------
-	protected boolean isValidIdentity(Object id) {
+	/**
+	 * check the identity value
+	 * @param id identity
+	 * @return true if id != null && id != 0
+	 */
+	public boolean isValidIdentity(Object id) {
 		return id != null && !id.equals(0);
 	}
 	
+	//--------------------------------------------------------------------
 	protected void queryPrimaryKey(Entity<?> entity, Query query, Object ... keys) {
 		if (keys == null || keys.length == 0) {
 			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
