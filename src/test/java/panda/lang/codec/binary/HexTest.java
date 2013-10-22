@@ -116,7 +116,7 @@ public class HexTest {
 
 	/**
 	 * @param name
-	 * @param parent TODO
+	 * @param parent 
 	 * @throws UnsupportedEncodingException
 	 * @throws DecoderException
 	 */
@@ -311,5 +311,33 @@ public class HexTest {
 		testCustomCharset("UTF-16LE", "testRequiredCharset");
 		testCustomCharset("US-ASCII", "testRequiredCharset");
 		testCustomCharset("ISO8859_1", "testRequiredCharset");
+	}
+	
+	@Test
+	public void testEncodeCharsPrefixAscii() {
+		String expect = " 0048 0065 006C 006C 006F 0020 0057 006F 0072 006C 0064";
+		String actual = Hex.encodeHexChars("Hello World", " ", false);
+		assertEquals(expect, actual);
+
+		expect = expect.toLowerCase();
+		actual = Hex.encodeHexChars("Hello World", " ", true);
+		assertEquals(expect, actual);
+
+		actual = Hex.encodeHexChars("Hello World", " ");
+		assertEquals(expect, actual);
+	}
+	
+	@Test
+	public void testEncodeCharsPrefixWide() {
+		String expect = " 3042 3044 3046 3048 304A";
+		String actual = Hex.encodeHexChars("あいうえお", " ", false);
+		assertEquals(expect, actual);
+
+		expect = expect.toLowerCase();
+		actual = Hex.encodeHexChars("あいうえお", " ", true);
+		assertEquals(expect, actual);
+
+		actual = Hex.encodeHexChars("あいうえお", " ");
+		assertEquals(expect, actual);
 	}
 }

@@ -31,20 +31,8 @@ public abstract class AsiaChars {
 	 * @return true if the char is Hankaku
 	 */
 	public static boolean isHankakuChar(char c) {
-		if (c <= '\377') {
-			switch (c) {
-			case '\247':
-			case '\250':
-			case '\260':
-			case '\261':
-			case '\264':
-			case '\266':
-			case '\327':
-			case '\367':
-				return false;
-			default:
-				return true;
-			}
+		if (c <= '\u007F') {
+			return true;
 		}
 
 		return isHankakuKatakanaChar(c);

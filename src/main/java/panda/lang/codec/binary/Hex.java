@@ -218,6 +218,48 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	public static String encodeHexString(final String data, final boolean toLowerCase) {
 		return Strings.newStringUtf8(encodeHex(data, toLowerCase));
 	}
+	/**
+	 * Converts a String into a String representing the hexadecimal values of each char in
+	 * order. The returned String will be double the length of the passed array, as it takes two
+	 * characters to represent any given byte.
+	 * 
+	 * @param data a string to convert to Hex characters
+	 * @param prefix prefix string to every code point
+	 * @param toLowerCase {@code true} converts to lowercase, {@code false} to uppercase
+	 * @return A String containing hexadecimal characters
+	 */
+	public static String encodeHexChars(final String data, final String prefix) {
+		return encodeHexChars(data, prefix, true);
+	}
+	
+	/**
+	 * Converts a String into a String representing the hexadecimal values of each byte in
+	 * order. The returned String will be double the length of the passed array, as it takes two
+	 * characters to represent any given byte.
+	 * 
+	 * @param data a string to convert to Hex characters
+	 * @param prefix prefix string to every code point
+	 * @param toLowerCase {@code true} converts to lowercase, {@code false} to uppercase
+	 * @return A String containing hexadecimal characters
+	 */
+	public static String encodeHexChars(final String data, final String prefix, final boolean toLowerCase) {
+		if (Strings.isEmpty(prefix)) {
+			return encodeHexString(data, toLowerCase);
+		}
+		
+		byte[] toDigits = toLowerCase ? DIGITS_LOWER : DIGITS_UPPER;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < data.length(); i++) {
+			sb.append(prefix);
+			
+			char c = data.charAt(i);
+			sb.append((char)(toDigits[(0xF000 & c) >>> 12]));
+			sb.append((char)(toDigits[(0xF00 & c) >>> 8]));
+			sb.append((char)(toDigits[(0xF0 & c) >>> 4]));
+			sb.append((char)(toDigits[0x0F & c]));
+		}
+		return sb.toString();
+	}
 
 	/**
 	 * Converts a hexadecimal character to an integer.
