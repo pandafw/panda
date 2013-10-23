@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.lang.Asserts;
+import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
@@ -72,37 +73,6 @@ public class Query {
 	// include & exclude
 	//
 	/**
-	 * @param name exclude name
-	 * @return true if the name should include
-	 */
-	public boolean shouldInclude(String name) {
-		if (excludes != null && excludes.contains(name)) {
-			return false;
-		}
-		if (includes != null && !includes.contains(name)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @param name exclude name
-	 * @return true if the name should exclude
-	 */
-	public boolean shouldExclude(String name) {
-		if (excludes != null && excludes.contains(name)) {
-			return true;
-		}
-		if (includes != null && !includes.contains(name)) {
-			return true;
-		}
-		return false;
-	}
-
-	//---------------------------------------------------------------
-	// include
-	//
-	/**
 	 * @return the includes
 	 */
 	public Set<String> getIncludes() {
@@ -110,10 +80,38 @@ public class Query {
 	}
 
 	/**
-	 * @param includes the includes to set
+	 * @return the excludes
 	 */
-	public void setIncludes(Set<String> includes) {
-		this.includes = includes;
+	public Set<String> getExcludes() {
+		return excludes;
+	}
+
+	/**
+	 * @param name field name
+	 * @return true if the name should include
+	 */
+	public boolean shouldInclude(String name) {
+		if (Collections.isNotEmpty(excludes) && excludes.contains(name)) {
+			return false;
+		}
+		if (Collections.isNotEmpty(includes) && !includes.contains(name)) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param name field name
+	 * @return true if the name should exclude
+	 */
+	public boolean shouldExclude(String name) {
+		if (Collections.isNotEmpty(excludes) && excludes.contains(name)) {
+			return true;
+		}
+		if (Collections.isNotEmpty(includes) && !includes.contains(name)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -124,18 +122,55 @@ public class Query {
 	}
 
 	/**
-	 * @param name include name
-	 * @return true if the name is included
+	 * @return true if the excludes is not empty
 	 */
-	public boolean isIncluded(String name) {
-		return includes != null && includes.contains(name);
+	public boolean hasExcludes() {
+		return excludes != null && !excludes.isEmpty();
 	}
 
 	/**
 	 * @param name include name
 	 * @return this
 	 */
-	public Query addInclude(String name) {
+	public Query include(String name) {
+		addInclude(name);
+		removeExclude(name);
+		return this;
+	}
+
+	/**
+	 * @param name the field name to exclude
+	 * @return this
+	 */
+	public Query exclude(String name) {
+		removeInclude(name);
+		addExclude(name);
+		return this;
+	}
+
+	//---------------------------------------------------------------
+	// include
+	//
+	/**
+	 * @param includes the includes to set
+	 */
+	protected void setIncludes(Set<String> includes) {
+		this.includes = includes;
+	}
+
+	/**
+	 * @param name field name
+	 * @return true if the name is included
+	 */
+	protected boolean isIncluded(String name) {
+		return includes != null && includes.contains(name);
+	}
+
+	/**
+	 * @param name the field name to include
+	 * @return this
+	 */
+	protected Query addInclude(String name) {
 		if (includes == null) {
 			includes = new HashSet<String>();
 		}
@@ -144,10 +179,10 @@ public class Query {
 	}
 
 	/**
-	 * @param name include name
+	 * @param name field name
 	 * @return this
 	 */
-	public Query removeInclude(String name) {
+	protected Query removeInclude(String name) {
 		if (includes != null) {
 			includes.remove(name);
 		}
@@ -159,7 +194,7 @@ public class Query {
 	 * 
 	 * @return this
 	 */
-	public Query clearIncludes() {
+	protected Query clearIncludes() {
 		if (includes != null) {
 			includes.clear();
 		}
@@ -170,39 +205,25 @@ public class Query {
 	// exclude
 	//
 	/**
-	 * @return the excludes
-	 */
-	public Set<String> getExcludes() {
-		return excludes;
-	}
-
-	/**
 	 * @param excludes the excludes to set
 	 */
-	public void setExcludes(Set<String> excludes) {
+	protected void setExcludes(Set<String> excludes) {
 		this.excludes = excludes;
 	}
 
 	/**
-	 * @return true if the excludes is not empty
-	 */
-	public boolean hasExcludes() {
-		return excludes != null && !excludes.isEmpty();
-	}
-
-	/**
-	 * @param name exclude name
+	 * @param name field name
 	 * @return true if the name is excluded
 	 */
-	public boolean isExcluded(String name) {
+	protected boolean isExcluded(String name) {
 		return excludes != null && excludes.contains(name);
 	}
 	
 	/**
-	 * @param name exclude name
+	 * @param name the field name to exclude
 	 * @return this
 	 */
-	public Query addExclude(String name) {
+	protected Query addExclude(String name) {
 		if (excludes == null) {
 			excludes = new HashSet<String>();
 		}
@@ -211,10 +232,10 @@ public class Query {
 	}
 
 	/**
-	 * @param name exclude name
+	 * @param name the field name
 	 * @return this
 	 */
-	public Query removeExclude(String name) {
+	protected Query removeExclude(String name) {
 		if (excludes == null) {
 			excludes.remove(name);
 		}
@@ -226,7 +247,7 @@ public class Query {
 	 * 
 	 * @return this
 	 */
-	public Query clearExcludes() {
+	protected Query clearExcludes() {
 		if (excludes == null) {
 			excludes.clear();
 		}
@@ -514,7 +535,7 @@ public class Query {
 		return this;
 	}
 
-	private Query addCompareCollectionExpression(String field, Operator operator, Collection values) {
+	private Query addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
 		conjunction();
 		expressions().add(new Expression.ValueCompare(field, operator, values));
 		return this;
@@ -662,38 +683,8 @@ public class Query {
 	 * @param value value
 	 * @return this
 	 */
-	public Query like(String field, Object value) {
+	public Query like(String field, String value) {
 		return addCompareValueExpression(field, Operator.LIKE, value);
-	}
-
-	/**
-	 * add "field LIKE %value%" expression
-	 * @param field field 
-	 * @param value value
-	 * @return this
-	 */
-	public Query match(String field, Object value) {
-		return addCompareValueExpression(field, Operator.MATCH, value);
-	}
-
-	/**
-	 * add "field LIKE value%" expression
-	 * @param field field 
-	 * @param value value
-	 * @return this
-	 */
-	public Query leftMatch(String field, Object value) {
-		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
-	}
-
-	/**
-	 * add "field LIKE %value" expression
-	 * @param field field 
-	 * @param value value
-	 * @return this
-	 */
-	public Query rightMatch(String field, Object value) {
-		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
 	}
 
 	/**
@@ -702,8 +693,68 @@ public class Query {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notLike(String field, Object value) {
+	public Query notLike(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, value);
+	}
+
+	/**
+	 * add "field LIKE %value%" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query match(String field, String value) {
+		return addCompareValueExpression(field, Operator.MATCH, value);
+	}
+
+	/**
+	 * add "field NOT LIKE %value%" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query notMatch(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_MATCH, value);
+	}
+
+	/**
+	 * add "field LIKE value%" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query leftMatch(String field, String value) {
+		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
+	}
+
+	/**
+	 * add "field NOT LIKE value%" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query notLeftMatch(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_LEFT_MATCH, value);
+	}
+
+	/**
+	 * add "field LIKE %value" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query rightMatch(String field, String value) {
+		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
+	}
+
+	/**
+	 * add "field NOT LIKE %value" expression
+	 * @param field field 
+	 * @param value value
+	 * @return this
+	 */
+	public Query notRightMatch(String field, String value) {
+		return addCompareValueExpression(field, Operator.NOT_RIGHT_MATCH, value);
 	}
 
 	/**
@@ -782,7 +833,7 @@ public class Query {
 	 * @param values values
 	 * @return this
 	 */
-	public Query in(String field, Collection values) {
+	public Query in(String field, Collection<?> values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 

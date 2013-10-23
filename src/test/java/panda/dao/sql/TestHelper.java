@@ -88,7 +88,7 @@ public class TestHelper {
 				}
 			}
 		}
-		SqlUtils.safeClose(stm);
+		Sqls.safeClose(stm);
 	}
 	
 	public static synchronized DataSource getDataSource(String name) {

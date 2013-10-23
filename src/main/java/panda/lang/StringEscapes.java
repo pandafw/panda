@@ -563,62 +563,6 @@ public abstract class StringEscapes {
 	}
 
 	/**
-	 * escapeSqlLike
-	 * 
-	 * @param str string
-	 * @return escaped string
-	 */
-	public static String escapeSqlLike(String str) {
-		final char esc = '~';
-
-		StringBuilder result = new StringBuilder();
-
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (c == esc) {
-				result.append(esc);
-				result.append(esc);
-				continue;
-			}
-			if (c == '%' || c == '_') {
-				result.append(esc);
-				result.append(c);
-			}
-			else {
-				result.append(c);
-			}
-		}
-
-		return result.toString();
-	}
-
-	/**
-	 * <p>
-	 * Escapes the characters in a <code>String</code> to be suitable to pass to an SQL query.
-	 * </p>
-	 * <p>
-	 * For example,
-	 * 
-	 * <pre>
-	 * statement.executeQuery(&quot;SELECT * FROM MOVIES WHERE TITLE='&quot; + StringEscapeUtils.escapeSql(&quot;McHale's Navy&quot;) + &quot;'&quot;);
-	 * </pre>
-	 * 
-	 * </p>
-	 * <p>
-	 * At present, this method only turns single-quotes into doubled single-quotes (
-	 * <code>"McHale's Navy"</code> => <code>"McHale''s Navy"</code>). It does not handle the cases
-	 * of percent (%) or underscore (_) for use in LIKE clauses.
-	 * </p>
-	 * see http://www.jguru.com/faq/view.jsp?EID=8881
-	 * 
-	 * @param str the string to escape, may be null
-	 * @return a new String, escaped for SQL, <code>null</code> if null string input
-	 */
-	public static String escapeSql(String str) {
-		return Strings.replace(str, "'", "''");
-	}
-
-	/**
 	 * escapeJavaScript
 	 * 
 	 * @param str string
@@ -669,5 +613,4 @@ public abstract class StringEscapes {
 	public static void escapePhtml(String str, Appendable writer) throws IOException {
 		ESCAPE_PHTML.translate(str, writer);
 	}
-
 }

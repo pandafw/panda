@@ -17,7 +17,7 @@ import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlLogger;
 import panda.dao.sql.SqlManager;
 import panda.dao.sql.SqlResultSet;
-import panda.dao.sql.SqlUtils;
+import panda.dao.sql.Sqls;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.lang.Asserts;
 import panda.log.Log;
@@ -309,7 +309,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return resultObject;
 		}
 		finally {
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -359,8 +359,8 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return resultObject;
 		}
 		finally {
-			SqlUtils.safeClose(rs);
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(rs);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -401,7 +401,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			if (rs != null) {
 				SqlLogger.logResultHeader(rs);
 	
-				SqlUtils.skipResultSet(rs, skip);
+				Sqls.skipResultSet(rs, skip);
 	
 				SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass);
 				
@@ -424,8 +424,8 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return resultList;
 		}
 		finally {
-			SqlUtils.safeClose(rs);
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(rs);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -471,7 +471,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			if (rs != null) {
 				SqlLogger.logResultHeader(rs);
 	
-				SqlUtils.skipResultSet(rs, skip);
+				Sqls.skipResultSet(rs, skip);
 	
 				SqlResultSet<T> srs = new SqlResultSet<T>(this, rs, resultClass);
 				
@@ -502,8 +502,8 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return map;
 		}
 		finally {
-			SqlUtils.safeClose(rs);
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(rs);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -562,7 +562,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return cnt;
 		}
 		finally {
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -593,7 +593,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return cnt;
 		}
 		finally {
-			SqlUtils.safeClose(st);
+			Sqls.safeClose(st);
 		}
 	}
 
@@ -625,7 +625,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return cnt;
 		}
 		finally {
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(ps);
 		}
 	}
 
@@ -686,7 +686,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return rc;
 		}
 		finally {
-			SqlUtils.safeClose(st);
+			Sqls.safeClose(st);
 		}
 	}
 
@@ -748,7 +748,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			return rc;
 		}
 		finally {
-			SqlUtils.safeClose(ps);
+			Sqls.safeClose(ps);
 		}
 	}
 }

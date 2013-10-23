@@ -19,7 +19,7 @@ import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
 import panda.dao.sql.Sql;
-import panda.dao.sql.SqlUtils;
+import panda.dao.sql.Sqls;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.Texts;
@@ -278,8 +278,7 @@ public abstract class SqlExpert {
 					throw new IllegalArgumentException("invalid where field '" + evc.getField() + "' of entity " + entity.getType());
 				}
 
-				sql.append(' ').append(ef.getColumn()).append(' ').append(evc.getOperator()).append(' ');
-				whereValueCompare(sql, evc);
+				whereValueCompare(sql, ef.getColumn(), evc);
 			}
 			else if (exp instanceof Expression.FieldCompare) {
 				Expression.FieldCompare efc = (Expression.FieldCompare)exp;
@@ -320,8 +319,7 @@ public abstract class SqlExpert {
 			if (exp instanceof Expression.ValueCompare) {
 				Expression.ValueCompare evc = (Expression.ValueCompare)exp;
 				
-				sql.append(' ').append(evc.getField()).append(' ').append(evc.getOperator()).append(' ');
-				whereValueCompare(sql, evc);
+				whereValueCompare(sql, evc.getField(), evc);
 			}
 			else {
 				sql.append(' ').append(exp.toString());
@@ -329,14 +327,17 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void whereValueCompare(Sql sql, Expression.ValueCompare evc) {
-		if (evc.getOperator() == Operator.BETWEEN || evc.getOperator() == Operator.NOT_BETWEEN) {
-			sql.append("? AND ?");
+	protected void whereValueCompare(Sql sql, String column, Expression.ValueCompare evc) {
+		sql.append(' ').append(column).append(' ');
+
+		Operator op = evc.getOperator();
+		if (op == Operator.BETWEEN || op == Operator.NOT_BETWEEN) {
+			sql.append(op).append(" ? AND ?");
 			sql.addParam(evc.getValue(0));
 			sql.addParam(evc.getValue(1));
 		}
-		else if (evc.getOperator() == Operator.IN || evc.getOperator() == Operator.NOT_IN) {
-			sql.append('(');
+		else if (op == Operator.IN || op == Operator.NOT_IN) {
+			sql.append(op).append('(');
 			Iterator it = Objects.toIterator(evc.getValue());
 			while (it.hasNext()) {
 				sql.append('?').append(',');
@@ -344,7 +345,32 @@ public abstract class SqlExpert {
 			}
 			sql.setCharAt(sql.length() - 1, ')');
 		}
+		else if (op == Operator.MATCH) {
+			sql.append("LIKE ?");
+			sql.addParam(Sqls.stringLike((String)evc.getValue()));
+		}
+		else if (op == Operator.NOT_MATCH) {
+			sql.append("NOT LIKE ?");
+			sql.addParam(Sqls.stringLike((String)evc.getValue()));
+		}
+		else if (op == Operator.LEFT_MATCH) {
+			sql.append("LIKE ?");
+			sql.addParam(Sqls.startsLike((String)evc.getValue()));
+		}
+		else if (op == Operator.NOT_LEFT_MATCH) {
+			sql.append("NOT LIKE ?");
+			sql.addParam(Sqls.startsLike((String)evc.getValue()));
+		}
+		else if (op == Operator.RIGHT_MATCH) {
+			sql.append("LIKE ?");
+			sql.addParam(Sqls.endsLike((String)evc.getValue()));
+		}
+		else if (op == Operator.NOT_RIGHT_MATCH) {
+			sql.append("NOT LIKE ?");
+			sql.addParam(Sqls.endsLike((String)evc.getValue()));
+		}
 		else {
+			sql.append(op).append(' ');
 			sql.append('?');
 			sql.addParam(evc.getValue());
 		}
@@ -457,7 +483,7 @@ public abstract class SqlExpert {
 			String sql = "COMMENT ON TABLE " 
 					+ escapeTable(entity.getTableName()) 
 					+ " IS '" 
-					+ SqlUtils.escapeSql(entity.getComment())
+					+ Sqls.escapeString(entity.getComment())
 					+ '\'';
 			sqls.add(sql);
 		}
@@ -467,7 +493,7 @@ public abstract class SqlExpert {
 				String sql = "COMMENT ON COLUMN " 
 						+ entity.getTableName() + '.' + ef.getColumn() 
 						+ " IS '"
-						+ SqlUtils.escapeSql(ef.getComment()) 
+						+ Sqls.escapeString(ef.getComment()) 
 						+ '\'';
 				sqls.add(sql);
 			}

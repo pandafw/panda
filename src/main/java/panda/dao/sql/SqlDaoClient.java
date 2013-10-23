@@ -112,7 +112,7 @@ public class SqlDaoClient extends DaoClient {
 			throw Exceptions.wrapThrow(e);
 		}
 		finally {
-			SqlUtils.safeClose(conn);
+			Sqls.safeClose(conn);
 		}
 	}
 

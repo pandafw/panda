@@ -688,7 +688,7 @@ public abstract class Dao {
 		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());
 		for (EntityField ef : entity.getFields()) {
 			if (bh.getPropertyValue(obj, ef.getName()) == null) {
-				query.addExclude(ef.getName());
+				query.exclude(ef.getName());
 			}
 		}
 	}
@@ -696,7 +696,7 @@ public abstract class Dao {
 	protected void excludePrimaryKeys(Entity<?> entity, Query query) {
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isPrimaryKey()) {
-				query.addExclude(ef.getName());
+				query.exclude(ef.getName());
 			}
 		}
 	}
@@ -704,7 +704,7 @@ public abstract class Dao {
 	protected void excludeNonPrimaryKeys(Entity<?> entity, Query query) {
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
-				query.addExclude(ef.getName());
+				query.exclude(ef.getName());
 			}
 		}
 	}
@@ -712,7 +712,7 @@ public abstract class Dao {
 	protected void includePrimaryKeys(Entity<?> entity, Query query) {
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
-				query.addInclude(ef.getName());
+				query.include(ef.getName());
 			}
 		}
 	}

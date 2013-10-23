@@ -8,33 +8,69 @@ import java.sql.Types;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import panda.lang.StringEscapes;
+import panda.lang.Strings;
 
 /**
  * utility class for sql
  * 
  * @author yf.frank.wang@gmail.coms
  */
-public class SqlUtils {
-
+public class Sqls {
 	/**
-	 * escapeSql
+	 * escape sql Like string
+	 * 
 	 * @param str string
 	 * @return escaped string
 	 */
-	public static String escapeSql(String str) {
-		return StringEscapes.escapeSql(str);
+	public static String escapeLike(String str) {
+		final char esc = '~';
+
+		StringBuilder result = new StringBuilder();
+
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c == esc) {
+				result.append(esc);
+				result.append(esc);
+				continue;
+			}
+			if (c == '%' || c == '_') {
+				result.append(esc);
+				result.append(c);
+			}
+			else {
+				result.append(c);
+			}
+		}
+
+		return result.toString();
 	}
 
 	/**
-	 * escapeSqlLike
-	 * @param str string
-	 * @return escaped string
+	 * <p>
+	 * Escapes the characters in a <code>String</code> to be suitable to pass to an SQL query.
+	 * </p>
+	 * <p>
+	 * For example,
+	 * 
+	 * <pre>
+	 * statement.executeQuery(&quot;SELECT * FROM MOVIES WHERE TITLE='&quot; + StringEscapeUtils.escapeSql(&quot;McHale's Navy&quot;) + &quot;'&quot;);
+	 * </pre>
+	 * 
+	 * </p>
+	 * <p>
+	 * At present, this method only turns single-quotes into doubled single-quotes (
+	 * <code>"McHale's Navy"</code> => <code>"McHale''s Navy"</code>). It does not handle the cases
+	 * of percent (%) or underscore (_) for use in LIKE clauses.
+	 * </p>
+	 * see http://www.jguru.com/faq/view.jsp?EID=8881
+	 * 
+	 * @param str the string to escape, may be null
+	 * @return a new String, escaped for SQL, <code>null</code> if null string input
 	 */
-	public static String escapeSqlLike(String str) {
-		return StringEscapes.escapeSqlLike(str);
+	public static String escapeString(String str) {
+		return Strings.replace(str, "'", "''");
 	}
-
 
 	/**
 	 * like string 
@@ -42,7 +78,7 @@ public class SqlUtils {
 	 * @return %str%
 	 */
 	public static String stringLike(String str) {
-		return '%' + escapeSqlLike(str) + '%';
+		return '%' + escapeLike(str) + '%';
 	}
 	
 	/**
@@ -51,7 +87,7 @@ public class SqlUtils {
 	 * @return str%
 	 */
 	public static String startsLike(String str) {
-		return escapeSqlLike(str) + '%';
+		return escapeLike(str) + '%';
 	}
 	
 	/**
@@ -60,7 +96,7 @@ public class SqlUtils {
 	 * @return %str
 	 */
 	public static String endsLike(String str) {
-		return '%' + escapeSqlLike(str);
+		return '%' + escapeLike(str);
 	}
 	
 	private static Pattern illegalFieldNamePattern = Pattern.compile(".*[^a-zA-Z_0-9\\.].*");

@@ -59,7 +59,7 @@ public class SqlDao extends Dao {
 				}
 			}
 			catch (SQLException e) {
-				SqlUtils.safeClose(connection);
+				Sqls.safeClose(connection);
 				throw new DaoException("Failed to open connection", e);
 			}
 		}
@@ -913,7 +913,7 @@ public class SqlDao extends Dao {
 			int count = 0;
 			int max = Integer.MAX_VALUE;
 			if (isClientPaginate(query)) {
-				SqlUtils.skipResultSet(srs, query.getStart());
+				Sqls.skipResultSet(srs, query.getStart());
 				if (query.getLimit() > 0) {
 					max = query.getLimit();
 				}
@@ -936,7 +936,7 @@ public class SqlDao extends Dao {
 			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql.getSql(), e);
 		}
 		finally {
-			SqlUtils.safeClose(srs);
+			Sqls.safeClose(srs);
 			autoClose();
 		}
 	}
@@ -963,7 +963,7 @@ public class SqlDao extends Dao {
 			int count = 0;
 			int max = Integer.MAX_VALUE;
 			if (isClientPaginate(query)) {
-				SqlUtils.skipResultSet(srs, query.getStart());
+				Sqls.skipResultSet(srs, query.getStart());
 				if (query.getLimit() > 0) {
 					max = query.getLimit();
 				}
@@ -986,7 +986,7 @@ public class SqlDao extends Dao {
 			throw new DaoException("Failed to select table " + table + ": " + sql.getSql(), e);
 		}
 		finally {
-			SqlUtils.safeClose(srs);
+			Sqls.safeClose(srs);
 			autoClose();
 		}
 	}

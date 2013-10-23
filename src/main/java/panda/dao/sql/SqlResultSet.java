@@ -719,7 +719,7 @@ public class SqlResultSet<T> {
 		catch (SQLException e) {
 		}
 		finally {
-			SqlUtils.safeClose(resultSet, st);
+			Sqls.safeClose(resultSet, st);
 		}
 	}
 }

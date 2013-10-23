@@ -98,18 +98,6 @@ public enum Operator {
 		}
 	},
 	/**
-	 * LIKE = "LIKE";
-	 */
-	LIKE,
-	/**
-	 * NOT_LIKE = "NOT LIKE";
-	 */
-	NOT_LIKE {
-		public String toString() {
-			return "NOT LIKE";
-		}
-	},
-	/**
 	 * IN = "IN";
 	 */
 	IN,
@@ -134,6 +122,18 @@ public enum Operator {
 		}
 	},
 	/**
+	 * LIKE = "LIKE";
+	 */
+	LIKE,
+	/**
+	 * NOT_LIKE = "NOT LIKE";
+	 */
+	NOT_LIKE {
+		public String toString() {
+			return "NOT LIKE";
+		}
+	},
+	/**
 	 * MATCH = "~~";
 	 */
 	MATCH {
@@ -142,11 +142,27 @@ public enum Operator {
 		}
 	},
 	/**
-	 * LEFT_MATCH = "~=";
+	 * NOT_MATCH = "!~~";
+	 */
+	NOT_MATCH {
+		public String toString() {
+			return "!~~";
+		}
+	},
+	/**
+	 * LEFT_MATCH = "!~=";
 	 */
 	LEFT_MATCH {
 		public String toString() {
 			return "~=";
+		}
+	},
+	/**
+	 * NOT_LEFT_MATCH = "!~=";
+	 */
+	NOT_LEFT_MATCH {
+		public String toString() {
+			return "!~=";
 		}
 	},
 	/**
@@ -155,6 +171,14 @@ public enum Operator {
 	RIGHT_MATCH {
 		public String toString() {
 			return "=~";
+		}
+	},
+	/**
+	 * NOT_RIGHT_MATCH = "!=~";
+	 */
+	NOT_RIGHT_MATCH {
+		public String toString() {
+			return "!=~";
 		}
 	};
 	

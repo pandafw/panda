@@ -1,5 +1,6 @@
 package panda.dao.sql;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -150,12 +151,102 @@ public abstract class SqlDaoTestCase {
 		
 		Assert.assertEquals(expect, actual);
 	}
+	
+	@Test
+	public void testSelectNotIn() {
+		List<Teacher> expect = Teacher.creates(4, 5);
+		
+		List<Teacher> actual = dao.select(Teacher.class, Query.create().notIn("name", new String[] { "T1", "T2", "T3" }));
+		
+		Assert.assertEquals(expect, actual);
+	}
 
 	@Test
 	public void testSelectBetween() {
 		List<Student> expect = Student.creates(1, 3);
 		
 		List<Student> actual = dao.select(Student.class, Query.create().between("id", 1, 3));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotBetween() {
+		List<Student> expect = Student.creates(4, 5);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().notBetween("id", 1, 3));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectLike() {
+		List<Student> expect = Student.creates(1, 1);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().like("name", "%1"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotLike() {
+		List<Student> expect = Student.creates(2, 5);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().notLike("name", "%1"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectMatch() {
+		List<Student> expect = Student.creates(1, 1);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().match("name", "1"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotMatch() {
+		List<Student> expect = Student.creates(2, 5);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "1"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectLeftMatch() {
+		List<Student> expect = Student.creates(1, 5);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().match("name", "S"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotLeftMatch() {
+		List<Student> expect = new ArrayList<Student>();
+		
+		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "S"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectRightMatch() {
+		List<Student> expect = Student.creates(1, 1);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().match("name", "1"));
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotRightMatch() {
+		List<Student> expect = Student.creates(2, 5);
+		
+		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "1"));
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -262,7 +353,6 @@ public abstract class SqlDaoTestCase {
 			@Override
 			public void run() {
 				dao.delete(expect);
-				dao.commit();
 			}
 		});
 
