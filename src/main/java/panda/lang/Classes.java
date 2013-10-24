@@ -1843,7 +1843,7 @@ public abstract class Classes {
 					continue;
 				if (noFinal && Modifier.isFinal(m))
 					continue;
-				if (noInner && f.getName().startsWith("this$"))
+				if (noInner && f.isSynthetic())
 					continue;
 				if (noMember && !Modifier.isStatic(m))
 					continue;
