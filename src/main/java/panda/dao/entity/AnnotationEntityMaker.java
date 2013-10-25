@@ -33,6 +33,7 @@ import panda.dao.entity.annotation.View;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlNamings;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.Types;
@@ -77,8 +78,8 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 
 		// check empty
-		if (en.getFields().isEmpty()) {
-			throw new IllegalArgumentException(type + " has no Mapping Field!!");
+		if (Collections.isEmpty(en.getFields())) {
+			throw new IllegalArgumentException(type + " has no Mapping Fields !");
 		}
 
 		// find identity field & check primary key
@@ -94,7 +95,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 			}
 		}
 
-		// fix primary key not null
+		// check primary keys
+		if (Collections.isEmpty(en.getPrimaryKeys())) {
+			throw new IllegalArgumentException(type + " has no Primary Key !");
+		}
+
+		// fix not null property of primary key
 		for (EntityField ef : en.getPrimaryKeys()) {
 			ef.setNotNull(true);
 		}

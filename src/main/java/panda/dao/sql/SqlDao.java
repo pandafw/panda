@@ -164,17 +164,13 @@ public class SqlDao extends Dao {
 	 * @param dropIfExists drop if table exists
 	 */
 	@Override
-	public void create(Entity<?> entity, boolean dropIfExists) {
+	public void create(Entity<?> entity) {
 		assertTable(entity);
 
 		List<String> sqls = getSqlExpert().create(entity);
 
 		autoStart();
 		try {
-			if (dropIfExists) {
-				drop(entity);
-			}
-
 			for (String sql : sqls) {
 				executor.execute(sql);
 			}

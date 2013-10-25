@@ -107,15 +107,6 @@ public class EntityDao<T> {
 	}
 
 	/**
-	 * create table
-	 * 
-	 * @param dropIfExists drop if table exists
-	 */
-	public void create(boolean dropIfExists) {
-		dao.create(entity, dropIfExists);
-	}
-
-	/**
 	 * check a table exists in the data store.
 	 * 
 	 * @return true if the record or the table exists in the data store

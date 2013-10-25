@@ -135,21 +135,7 @@ public abstract class Dao {
 	 * @param type record type
 	 */
 	public <T> void create(Class<T> type) {
-		create(type, false);
-	}
-
-	/**
-	 * create table
-	 * 
-	 * @param type record type
-	 * @param dropIfExists drop if table exists
-	 */
-	public <T> void create(Class<T> type, boolean dropIfExists) {
-		assertType(type);
-
-		Entity<T> en = getEntity(type);
-		assertEntity(en, type);
-		create(en, dropIfExists);
+		create(getEntity(type));
 	}
 
 	/**
@@ -157,17 +143,7 @@ public abstract class Dao {
 	 * 
 	 * @param entity entity
 	 */
-	public void create(Entity<?> entity) {
-		create(entity, false);
-	}
-
-	/**
-	 * create table
-	 * 
-	 * @param entity entity
-	 * @param dropIfExists drop if table exists
-	 */
-	public abstract void create(Entity<?> entity, boolean dropIfExists);
+	public abstract void create(Entity<?> entity);
 
 	/**
 	 * check a table exists in the data store.

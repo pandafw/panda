@@ -73,10 +73,10 @@ public abstract class SqlDaoTestCase {
 		drop(Student.class);
 		drop(Teacher.class);
 
-		dao.create(Teacher.class, true);
-		dao.create(Student.class, true);
-		dao.create(Klass.class, true);
-		dao.create(Score.class, true);
+		dao.create(Teacher.class);
+		dao.create(Student.class);
+		dao.create(Klass.class);
+		dao.create(Score.class);
 		
 		dao.inserts(Teacher.creates(1, 5));
 		dao.inserts(Student.creates(1, 5));
