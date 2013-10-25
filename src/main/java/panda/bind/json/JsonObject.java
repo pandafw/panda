@@ -60,7 +60,7 @@ import panda.lang.Strings;
  * or <code>null</code>.</li>
  * </ul>
  *
- * @original JSON.org
+ * @see <a href="http://JSON.org">JSON.org</a>
  * @author yf.frank.wang@gmail.com
  */
 public class JsonObject extends HashMap<String, Object> {

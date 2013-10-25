@@ -10,7 +10,7 @@ import java.io.StringReader;
 /**
  * A JSONTokener takes a source string and extracts characters and tokens from it.
  * 
- * @original JSON.org(2012-02-16)
+ * @see <a href="http://JSON.org">JSON.org</a>
  * @author yf.frank.wang@gmail.com
  */
 public class JsonTokener {

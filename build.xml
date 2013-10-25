@@ -194,8 +194,7 @@
 		</javac>
 	</target>
 
-	<target name="build" depends="clean, cp-res, javac" description="Build the project"/>
-
+	<target name="build" depends="clean, ivy-report, cp-res, javac" description="Build the project"/>
 
 	<!-- dist -->
 	<target name="javadoc" description="Generate java documents">
@@ -251,7 +250,7 @@
 		</jar>
 	</target>
 
-	<target name="dist" depends="ivy-report, build, javadoc, jar" description="Distribute project as a jar file"/>
+	<target name="dist" depends="build, javadoc, jar" description="Distribute project as a jar file"/>
 
 	<!-- test -->
 	<target name="test-clean" description="Delete test output files in the output directory">
