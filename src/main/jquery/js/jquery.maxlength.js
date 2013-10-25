@@ -1,4 +1,4 @@
-/*
+/**
   @author: remy sharp / http://remysharp.com
   @params:
 	feedback - the selector for the element that gives the user feedback. Note that this will be relative to the form the plugin is run against.

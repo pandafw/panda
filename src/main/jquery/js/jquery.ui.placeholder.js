@@ -1,7 +1,7 @@
-/* 
-* Placeholder plugin for jQuery
-* @author Daniel Stocks (http://webcloud.se)
-*/
+/** 
+ * Placeholder plugin for jQuery
+ * @author Daniel Stocks (http://webcloud.se)
+ */
 (function($) {
 	function Placeholder(input) {
 		this.input = input;
