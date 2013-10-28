@@ -65,7 +65,7 @@ public class FilePool implements Runnable {
 			workdir.mkdirs();
 		}
 		if (!workdir.isDirectory()) {
-			throw new IllegalArgumentException("FileCacheTask work directory is not a directory: " + workdir.getPath());
+			throw new IllegalArgumentException("FilePool work directory is not a directory: " + workdir.getPath());
 		}
 		this.workdir = workdir;
 	}
@@ -149,7 +149,7 @@ public class FilePool implements Runnable {
 	/**
 	 * get file
 	 * @param fileName fileName
-	 * @return file name[
+	 * @return file
 	 */
 	public File getFile(String fileName) {
 		File file = new File(workdir, fileName);

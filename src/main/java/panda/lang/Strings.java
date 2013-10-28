@@ -1,6 +1,5 @@
 package panda.lang;
 
-import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -4742,6 +4741,67 @@ public class Strings {
 	 * Strings.replaceChars("abc", null, *)       = "abc"
 	 * Strings.replaceChars("abc", "", *)         = "abc"
 	 * Strings.replaceChars("abc", "b", null)     = "ac"
+	 * Strings.replaceChars("abc", "b", 0)       = "ac"
+	 * Strings.replaceChars("abcba", "bc", 'y')  = "ayyya"
+	 * </pre>
+	 * 
+	 * @param str String to replace characters in, may be null
+	 * @param searchChars a set of characters to search for, may be null
+	 * @param replaceChar a character to replace, may be zero
+	 * @return modified String, {@code null} if null string input
+	 */
+	public static String replaceChars(final String str, final String searchChars, final char replaceChar) {
+		if (isEmpty(str) || isEmpty(searchChars)) {
+			return str;
+		}
+
+		boolean modified = false;
+		final int strLength = str.length();
+		final StringBuilder buf = new StringBuilder(strLength);
+		for (int i = 0; i < strLength; i++) {
+			final char ch = str.charAt(i);
+			final int index = searchChars.indexOf(ch);
+			if (index >= 0) {
+				modified = true;
+				if (replaceChar > 0) {
+					buf.append(replaceChar);
+				}
+			}
+			else {
+				buf.append(ch);
+			}
+		}
+		if (modified) {
+			return buf.toString();
+		}
+		return str;
+	}
+
+	/**
+	 * <p>
+	 * Replaces multiple characters in a String in one go. This method can also be used to delete
+	 * characters.
+	 * </p>
+	 * <p>
+	 * For example:<br />
+	 * <code>replaceChars(&quot;hello&quot;, &quot;ho&quot;, &quot;jy&quot;) = jelly</code>.
+	 * </p>
+	 * <p>
+	 * A {@code null} string input returns {@code null}. An empty ("") string input returns an empty
+	 * string. A null or empty set of search characters returns the input string.
+	 * </p>
+	 * <p>
+	 * The length of the search characters should normally equal the length of the replace
+	 * characters. If the search characters is longer, then the extra search characters are deleted.
+	 * If the search characters is shorter, then the extra replace characters are ignored.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.replaceChars(null, *, *)           = null
+	 * Strings.replaceChars("", *, *)             = ""
+	 * Strings.replaceChars("abc", null, *)       = "abc"
+	 * Strings.replaceChars("abc", "", *)         = "abc"
+	 * Strings.replaceChars("abc", "b", null)     = "ac"
 	 * Strings.replaceChars("abc", "b", "")       = "ac"
 	 * Strings.replaceChars("abcba", "bc", "yz")  = "ayzya"
 	 * Strings.replaceChars("abcba", "bc", "y")   = "ayya"
@@ -9098,36 +9158,6 @@ public class Strings {
 		}
 		try {
 			return new String(bytes, charsetName);
-		}
-		catch (UnsupportedEncodingException e) {
-			throw newIllegalStateException(charsetName, e);
-		}
-	}
-
-	/**
-	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the given
-	 * charset.
-	 * <p>
-	 * This method catches {@link UnsupportedEncodingException} and re-throws it as
-	 * {@link IllegalStateException}, which should never happen for a required charset name. Use
-	 * this method when the encoding is required to be in the JRE.
-	 * </p>
-	 * 
-	 * @param baos The bytes to be decoded into characters
-	 * @param charsetName The name of a required {@link java.nio.charset.Charset}
-	 * @return A new <code>String</code> decoded from the specified array of bytes using the given
-	 *         charset.
-	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught,
-	 *             which should never happen for a required charset name.
-	 * @see Charsets
-	 * @see String#String(byte[], String)
-	 */
-	public static String newString(ByteArrayOutputStream baos, String charsetName) {
-		if (baos == null) {
-			return null;
-		}
-		try {
-			return baos.toString(charsetName);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw newIllegalStateException(charsetName, e);

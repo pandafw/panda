@@ -41,6 +41,7 @@ import panda.io.stream.ClosedInputStream;
 import panda.io.stream.ClosedOutputStream;
 import panda.io.stream.NullOutputStream;
 import panda.io.stream.StringBuilderWriter;
+import panda.lang.Arrays;
 import panda.lang.CharSequences;
 import panda.lang.Charsets;
 import panda.lang.Strings;
@@ -445,7 +446,7 @@ public class Streams {
 		}
 
 		if (size == 0) {
-			return new byte[0];
+			return Arrays.EMPTY_BYTE_ARRAY;
 		}
 
 		final byte[] data = new byte[size];

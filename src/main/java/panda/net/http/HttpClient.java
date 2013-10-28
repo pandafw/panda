@@ -8,11 +8,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import panda.io.Streams;
+import panda.lang.Asserts;
 import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
@@ -21,6 +24,7 @@ import panda.log.Logs;
 /**
  * @author yf.frank.wang@gmail.com
  */
+//TODO: local cache
 public class HttpClient {
 	private static Log log = Logs.getLog(HttpClient.class);
 
@@ -62,17 +66,27 @@ public class HttpClient {
 	protected HttpRequest request;
 	protected HttpResponse response;
 
+	protected Proxy proxy;
+	protected HttpURLConnection conn;
 	protected int timeout;
 
-	protected Proxy proxy;
+	protected boolean autoRedirect;
 	
-	protected HttpURLConnection conn;
-
 	public HttpClient() {
+		this(new HttpRequest());
+	}
+
+	public HttpClient(boolean autoRedirect) {
+		this(new HttpRequest(), autoRedirect);
 	}
 
 	public HttpClient(HttpRequest request) {
-		this.request = request;
+		this(request, true);
+	}
+
+	public HttpClient(HttpRequest request, boolean autoRedirect) {
+		this.autoRedirect = autoRedirect;
+		setRequest(request);
 	}
 
 	/**
@@ -86,6 +100,7 @@ public class HttpClient {
 	 * @param request the request to set
 	 */
 	public void setRequest(HttpRequest request) {
+		Asserts.notNull(request, "the request object is null");
 		this.request = request;
 	}
 
@@ -94,6 +109,20 @@ public class HttpClient {
 	 */
 	public HttpResponse getResponse() {
 		return response;
+	}
+
+	/**
+	 * @return the autoRedirect
+	 */
+	public boolean isAutoRedirect() {
+		return autoRedirect;
+	}
+
+	/**
+	 * @param autoRedirect the autoRedirect to set
+	 */
+	public void setAutoRedirect(boolean autoRedirect) {
+		this.autoRedirect = autoRedirect;
 	}
 
 	/**
@@ -126,39 +155,13 @@ public class HttpClient {
 	}
 
 	public HttpResponse doGet() throws IOException {
-		try {
-			openConnection();
-			setupRequestHeader();
-			return createResponse();
-		}
-		catch (Exception e) {
-			throw new IOException(request.getUrl().toString(), e);
-		}
+		request.setMethod(HttpMethod.GET);
+		return send();
 	}
 
 	public HttpResponse doPost() throws IOException {
-		try {
-			openConnection();
-			setupRequestHeader();
-			setupDoInputOutputFlag();
-			InputStream ins = request.getInputStream();
-			if (null != ins) {
-				OutputStream ops = null;
-				try {
-					ops = conn.getOutputStream();
-					Streams.copy(ins, ops);
-				}
-				finally {
-					Streams.safeClose(ins);
-					Streams.safeFlush(ops);
-					Streams.safeClose(ops);
-				}
-			}
-			return createResponse();
-		}
-		catch (Exception e) {
-			throw new IOException(request.getUrl().toString(), e);
-		}
+		request.setMethod(HttpMethod.POST);
+		return send();
 	}
 
 	public HttpResponse doPostFiles() throws IOException {
@@ -208,6 +211,45 @@ public class HttpClient {
 	}
 
 	public HttpResponse send() throws IOException {
+		if (!autoRedirect) {
+			return doSend();
+		}
+
+		HttpResponse hr = doSend();
+		if (!hr.isMoved()) {
+			return hr;
+		}
+		
+		String location = hr.getHeader().getString(HttpHeader.LOCATION);
+		if (Strings.isEmpty(location)) {
+			return hr;
+		}
+			
+		Set<String> locations = new HashSet<String>();
+		locations.add(location);
+		request.setMethod(HttpMethod.GET);
+
+		while (true) {
+			request.setUrl(location);
+
+			hr = doSend();
+			if (!hr.isMoved()) {
+				return hr;
+			}
+			
+			location = hr.getHeader().getString(HttpHeader.LOCATION);
+			if (Strings.isEmpty(location)) {
+				return hr;
+			}
+			
+			if (locations.contains(location)) {
+				log.info("infinite redirect loop detected: " + location);
+				return hr;
+			}
+		}
+	}
+	
+	protected HttpResponse doSend() throws IOException {
 		final String CLRF = Streams.LINE_SEPARATOR;
 
 		if (log.isDebugEnabled()) {
@@ -221,10 +263,28 @@ public class HttpClient {
 
 		StopWatch sw = new StopWatch(true);
 		if (request.isPost()) {
-			response = doPost();
+			openConnection();
+			setupRequestHeader();
+			setupDoInputOutputFlag();
+			InputStream ins = request.getInputStream();
+			if (null != ins) {
+				OutputStream ops = null;
+				try {
+					ops = conn.getOutputStream();
+					Streams.copy(ins, ops);
+				}
+				finally {
+					Streams.safeClose(ins);
+					Streams.safeFlush(ops);
+					Streams.safeClose(ops);
+				}
+			}
+			response = createResponse();
 		}
 		else {
-			response = doGet();
+			openConnection();
+			setupRequestHeader();
+			response = createResponse();
 		}
 
 		if (log.isInfoEnabled()) {

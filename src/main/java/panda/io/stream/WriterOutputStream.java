@@ -1,4 +1,4 @@
-package panda.io;
+package panda.io.stream;
 
 import java.io.IOException;
 import java.io.OutputStream;

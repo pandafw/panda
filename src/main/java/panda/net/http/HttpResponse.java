@@ -447,7 +447,11 @@ public class HttpResponse implements Closeable {
 	}
 
 	public boolean isOK() {
-		return statusCode == 200;
+		return statusCode == SC_OK;
+	}
+
+	public boolean isMoved() {
+		return statusCode == SC_MOVED_PERMANENTLY || statusCode == SC_MOVED_TEMPORARILY;
 	}
 
 	public boolean isServerError() {

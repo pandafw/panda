@@ -11,8 +11,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import panda.io.ReaderInputStream;
-
 @SuppressWarnings("resource")
 public class ReaderInputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";

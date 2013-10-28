@@ -9,8 +9,8 @@ import java.io.StringReader;
 
 import panda.castor.CastContext;
 import panda.castor.Castor;
-import panda.io.ReaderInputStream;
 import panda.io.Streams;
+import panda.io.stream.ReaderInputStream;
 import panda.lang.Charsets;
 
 /**

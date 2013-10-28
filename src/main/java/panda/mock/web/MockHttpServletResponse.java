@@ -1,6 +1,5 @@
 package panda.mock.web;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -19,6 +18,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Asserts;
 import panda.lang.Chars;
 import panda.lang.Strings;
@@ -172,7 +172,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 			str = content.toString();
 		}
 		else {
-			str = Strings.newString(content, characterEncoding);
+			str = Strings.newString(content.toByteArray(), characterEncoding);
 			if (Strings.isNotEmpty(str) && str.charAt(0) == Chars.BOM) {
 				str = str.substring(1);
 			}
