@@ -1,10 +1,22 @@
-/* field error */
+.p-required {
+	color: #FF0000;
+}
+
 .p-field-errors {
 	color: #b94a48;
 }
 
+.p-checkboxlist label.checkbox-inline {
+	padding-right: 10px;
+}
+
+.p-radiomap label.radio-inline {
+	padding-right: 10px;
+}
+
+
 /** datetimepicker 
-.p-datepicker, .p-timepicker, .p-datetimepicker {
+  .p-datepicker, .p-timepicker, .p-datetimepicker {
 }
 */
 i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
