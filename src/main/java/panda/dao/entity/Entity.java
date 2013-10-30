@@ -10,6 +10,7 @@ import java.util.Map;
 import panda.bean.BeanHandler;
 import panda.bind.json.JsonObject;
 import panda.dao.DB;
+import panda.lang.Collections;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -187,8 +188,9 @@ public class Entity<T> {
 	/**
 	 * @return the indexes
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<EntityIndex> getIndexes() {
-		return indexMap == null ? null : indexMap.values();
+		return indexMap == null ? Collections.EMPTY_LIST : indexMap.values();
 	}
 
 	/**
@@ -215,8 +217,9 @@ public class Entity<T> {
 	/**
 	 * @return the foreign keys
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<EntityFKey> getForeignKeys() {
-		return foreignKeyMap == null ? null : foreignKeyMap.values();
+		return foreignKeyMap == null ? Collections.EMPTY_LIST : foreignKeyMap.values();
 	}
 
 	/**
