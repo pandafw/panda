@@ -58,6 +58,20 @@
 
 	<!-- build -->
 	<target name="min-js" description="Merge &amp; minify javascript files">
+		<concat destfile="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js" binary="true">
+			<fileset dir="src/main/bootstrap2/js/locales">
+				<include name="*.js"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.min.js"/>
+		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true">
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
 			<arg value="--charset"/>
@@ -66,6 +80,21 @@
 			<arg value="js"/>
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
+		</java>
+
+		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
+			<fileset dir="src/main/bootstrap3/js/locales">
+				<include name="*.js"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true">
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>

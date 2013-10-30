@@ -1531,34 +1531,177 @@ if (typeof String.formatSize != "function") {
 	String.formatSize = function(n) {
 		var sz = "";
 		if (n >= PB) {
-			sz = Math.round(n / PB) + 'PB';
+			sz = Math.round(n / PB) + ' PB';
 		}
 		else if (n >= TB) {
-			sz = Math.round(n / TB) + 'TB';
+			sz = Math.round(n / TB) + ' TB';
 		}
 		else if (n >= GB) {
-			sz = Math.round(n / GB) + 'GB';
+			sz = Math.round(n / GB) + ' GB';
 		}
 		else if (n >= MB) {
-			sz = Math.round(n / MB) + 'MB';
+			sz = Math.round(n / MB) + ' MB';
 		}
 		else if (n >= KB) {
-			sz = Math.round(n / KB) + 'KB';
+			sz = Math.round(n / KB) + ' KB';
 		}
 		else if (n != '') {
-			sz = n + 'B';
+			sz = n + ' bytes';
 		}
 		return sz;
 	};
 }
 
-(function($) {
-	$.datepicker._triggerClass = 'n-icon n-icon-date_picker ui-datepicker-trigger';
-	$.datetimepicker.defaults.triggerClass = 'n-icon n-icon-datetime_picker ui-datetimepicker-trigger';
-	$.timepicker.defaults.triggerClass = 'n-icon n-icon-time_picker ui-timepicker-trigger';
+if (typeof(panda) == "undefined") { panda = {}; }
+
+(function() {
+	function setContentType($p, t) {
+		if (t == 'error') {
+			if (!$p.hasClass('error')) {
+				$p.addClass('error').removeClass('warn help info');
+			}
+		}
+		else if (t == 'warn') {
+			if (!$p.hasClass('error') && !$p.hasClass('warn')) {
+				$p.addClass('warn').removeClass('help info');
+			}
+		}
+		else if (t == 'confirm') {
+			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help')) {
+				$p.addClass('help').removeClass('info');
+			}
+		}
+		else {
+			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help') && !$p.hasClass('info')) {
+				$p.addClass('info');
+			}
+		}
+	}
 	
-	$.trim = function(text) { return text == null ? "" : text.strip(); };
-})(jQuery);
+	function addMsg($p, s, m, t) {
+		var ic = s.icons[t];
+		$p.append('<ul class="' +  s.ulCls + '"><li><i class="' + ic + '"></i>' + m + '</li></ul>');
+		setContentType($p, t);
+	}
+
+	function addMsgs($p, s, m, t) {
+		if (m) {
+			var ic = s.icons[t] + ' ' + c;
+			var h = '<ul class="' + s.ulCls + '">';
+			if ($.isArray(m)) {
+				for (var i = 0; i < m.length; i++) {
+					h += '<li><i class="' + ic + '"></i>' + m[i] + '</li>';
+				}
+			}
+			else {
+				for (var n in m) {
+					var v = m[n];
+					for (var i = 0; i < v.length; i++) {
+						h += '<li><i class="' + ic + '"></i>' + v[i] + '</li>';
+					}
+				}
+			}
+			h += '</ul>';
+			$p.append(h);
+			setContentType($p, t);
+		}
+	}
+	
+	panda.alert = function(s) {
+		if (typeof(s) == 'string') {
+			s = { container: s };
+		}
+		s = $.extend({}, panda.alert.defaults, s);
+		return {
+			clear: function() {
+				$(s.container).children('.alert').remove();
+				return this;
+			},
+			error: function(m) {
+				this.add(m, 'error');
+				return this;
+			},
+			warn: function(m) {
+				this.add(m, 'warn');
+				return this;
+			},
+			promt: function(m) {
+				this.add(m, 'help');
+				return this;
+			},
+			info: function(m) {
+				this.add(m, 'info');
+				return this;
+			},
+			add: function(m, t) {
+				t = t || 'info';
+				var $c = $(s.container);
+				var $p = $c.children('.alert');
+				var a = false;
+				if ($p.size() < 1) {
+					$p = $('<div></div>').addClass('alert alert-dismissable').css('display', 'none');
+					$c.prepend($p);
+					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>");
+					a = true;
+				}
+				
+				if (typeof(m) == 'string') {
+					addMsg($p, s, m, t);
+				}
+				else if ($.isArray(m)) {
+					for (var i = 0; i < m.length; i++) {
+						if (typeof(m[i]) == 'string') {
+							addMsg($p, s, m[i], t);
+						}
+						else {
+							addMsg($p, s, m[i].html, m[i].type);
+						}
+					}
+				}
+				else if (m) {
+					addMsgs($p, s, m.actionErrors, "error");
+					addMsgs($p, s, m.fieldErrors, "error");
+					addMsgs($p, s, m.actionWarnings, "warn");
+					addMsgs($p, s, m.actionConfirms, "help");
+					addMsgs($p, s, m.actionMessages, "info");
+				}
+				
+				if (a) { 
+					$p.slideDown();
+				}
+				return this;
+			}
+		}
+	};
+	
+	panda.alert.defaults = {
+		container: 'body',
+		ulCls: 'fa-ul',
+		icons: {
+			'help':'fa-li fa fa-question-circle',
+			'info': 'fa-li fa fa-info-circle',
+			'error': 'fa-li fa fa-times-circle',
+			'warn': 'fa-li fa fa-exclamation-triangle',
+			'down': 'fa-caret-down',
+			'up': 'fa-caret-up'
+		}
+	};
+	
+	panda.alert.toggleFieldErrors = function(el) {
+		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
+		var id = panda.alert.defaults.icons.down;
+		var iu = panda.alert.defaults.icons.up;
+		if ($fes.is(':hidden')) {
+			$fes.slideDown();
+			$(el).children('i').removeClass(id).addClass(iu);
+		}
+		else {
+			$fes.slideUp();
+			$(el).children('i').removeClass(iu).addClass(id);
+		}
+		return false;
+	};
+})();
 if (typeof(pw) == "undefined") { pw = {}; }
 
 function nlv_options(id, options) {
@@ -2017,140 +2160,6 @@ function _nlv_onTBodyMouseOut(evt) {
 if (typeof(pw) == "undefined") { pw = {}; }
 
 (function() {
-	function setContentType($p, t) {
-		if (t == 'error') {
-			if (!$p.hasClass('error')) {
-				$p.addClass('error').removeClass('warn help info');
-			}
-		}
-		else if (t == 'warn') {
-			if (!$p.hasClass('error') && !$p.hasClass('warn')) {
-				$p.addClass('warn').removeClass('help info');
-			}
-		}
-		else if (t == 'confirm') {
-			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help')) {
-				$p.addClass('help').removeClass('info');
-			}
-		}
-		else {
-			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help') && !$p.hasClass('info')) {
-				$p.addClass('info');
-			}
-		}
-	}
-	
-	function addMsg($p, s, m, t) {
-		var c = s.baseCls + '-' + t;
-		var ic = s.icons[t];
-		$p.append('<ul class="' + c + 's"><li class="' + c + '"><i class="' + ic + '"></i>' + m + '</li></ul>');
-		setContentType($p, t);
-	}
-
-	function addMsgs($p, s, m, t) {
-		if (m) {
-			var c = s.baseCls + '-' + t;
-			var ic = s.icons[t] + ' ' + c;
-			var h = '<ul class="' + c + 's">';
-			if ($.isArray(m)) {
-				for (var i = 0; i < m.length; i++) {
-					h += '<li class="' + c + '"><i class="' + ic + '"></i>' + m[i] + '</li>';
-				}
-			}
-			else {
-				for (var n in m) {
-					var v = m[n];
-					for (var i = 0; i < v.length; i++) {
-						h += '<li class="' + c + '"><i class="' + ic + '"></i>' + v[i] + '</li>';
-					}
-				}
-			}
-			h += '</ul>';
-			$p.append(h);
-			setContentType($p, t);
-		}
-	}
-	
-	pw.notice = function(s) {
-		if (typeof(s) == 'string') {
-			s = { container: s };
-		}
-		s = $.extend({}, pw.notice.defaults, s);
-		return {
-			clear: function() {
-				$(s.container).children('.' + s.baseCls + '-notice').remove();
-				return this;
-			},
-			error: function(m) {
-				this.add(m, 'error');
-				return this;
-			},
-			warn: function(m) {
-				this.add(m, 'warn');
-				return this;
-			},
-			promt: function(m) {
-				this.add(m, 'help');
-				return this;
-			},
-			info: function(m) {
-				this.add(m, 'info');
-				return this;
-			},
-			add: function(m, t) {
-				t = t || 'info';
-				var $c = $(s.container);
-				var $p = $c.children('.' + s.baseCls + '-notice');
-				var a = false;
-				if ($p.size() < 1) {
-					$p = $('<div></div>').addClass(s.baseCls + '-notice').css('display', 'none');
-					$c.prepend($p);
-					a = true;
-				}
-				
-				if (typeof(m) == 'string') {
-					addMsg($p, s, m, t);
-				}
-				else if ($.isArray(m)) {
-					for (var i = 0; i < m.length; i++) {
-						if (typeof(m[i]) == 'string') {
-							addMsg($p, s, m[i], t);
-						}
-						else {
-							addMsg($p, s, m[i].html, m[i].type);
-						}
-					}
-				}
-				else if (m) {
-					addMsgs($p, s, m.actionErrors, "error");
-					addMsgs($p, s, m.fieldErrors, "error");
-					addMsgs($p, s, m.actionWarnings, "warn");
-					addMsgs($p, s, m.actionConfirms, "help");
-					addMsgs($p, s, m.actionMessages, "info");
-				}
-				
-				if (a) { 
-					$p.slideDown();
-				}
-				return this;
-			}
-		}
-	};
-	
-	pw.notice.defaults = {
-		baseCls: 'n-action',
-		container: 'body',
-		icons: {
-			'help': 'icon-question-sign',
-			'info': 'icon-info',
-			'error': 'icon-exclamation-sign',
-			'warn': 'icon-warning-sign'
-		}
-	};
-})();
-if (typeof(pw) == "undefined") { pw = {}; }
-
-(function() {
 	function _click(evt) {
 		var $el = $(this);
 		if (!$el.hasClass('n-p-disabled')) {
@@ -2217,9 +2226,9 @@ if (typeof(pw) == "undefined") { pw = {}; }
 		return this;
 	};
 })();
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
-pw.upload = function(id) {
+panda.upload = function(id) {
 	var id = id;
 	var $u = $('#' + id);
 	var pua = $u.attr('uploadAction');
@@ -2349,15 +2358,14 @@ pw.upload = function(id) {
 				}
 				else {
 					_error(r.contentType, r.fileName, r.fileSize, r.saveName);
-					pw.notice({ container: $ue }).add(d);
+					panda.alert({ container: $ue }).add(d);
 					$ue.slideDown();
 				}
 			},
 			error: function(xhr, status, e) {
 				_endUpload();
-				pw.notice({ container: $ue }).add(
-						(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status)),
-						'error'
+				panda.alert({ container: $ue }).error(
+						(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status))
 					);
 				$ue.slideDown();
 			}
@@ -2370,9 +2378,9 @@ pw.upload = function(id) {
 		setTimeout(_upload, 10); 
 	});
 };
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
-pw.viewfield = function(o) {
+panda.viewfield = function(o) {
 	var api = {
 		el: $(o),
 		val: function(v) {

@@ -1077,17 +1077,19 @@
   $.fn.datetimepicker = function ( option, val ) {
     return this.each(function () {
       var $this = $(this),
-      data = $this.data('datetimepicker'),
-      options = typeof option === 'object' && option;
-      if (!data) {
-        $this.data('datetimepicker', (data = new DateTimePicker(
-          this, $.extend({}, $.fn.datetimepicker.defaults,options))));
+        data = $this.data(),
+        dtp = data.datetimepicker,
+        options = typeof option === 'object' && option;
+      if (!dtp) {
+        dtp = new DateTimePicker(this, $.extend({}, $.fn.datetimepicker.defaults, data, options));
+        $this.data('datetimepicker', dtp);
       }
-      if (typeof option === 'string') data[option](val);
+      if (typeof option === 'string') dtp[option](val);
     });
   };
 
   $.fn.datetimepicker.defaults = {
+    language: 'en',
     maskInput: false,
     pickDate: true,
     pickTime: true,
@@ -1298,5 +1300,10 @@
     );
   }
 
+  // DATETIMEPICKER DATA-API
+  // ==================
+  $(window).on('load', function () {
+    $('[data-spy="datetimepicker"]').datetimepicker();
+  });
 
-})(window.jQuery)
+})(window.jQuery);

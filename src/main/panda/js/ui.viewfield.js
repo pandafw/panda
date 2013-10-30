@@ -1,6 +1,6 @@
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
-pw.viewfield = function(o) {
+panda.viewfield = function(o) {
 	var api = {
 		el: $(o),
 		val: function(v) {

@@ -432,22 +432,22 @@ if (typeof String.formatSize != "function") {
 	String.formatSize = function(n) {
 		var sz = "";
 		if (n >= PB) {
-			sz = Math.round(n / PB) + 'PB';
+			sz = Math.round(n / PB) + ' PB';
 		}
 		else if (n >= TB) {
-			sz = Math.round(n / TB) + 'TB';
+			sz = Math.round(n / TB) + ' TB';
 		}
 		else if (n >= GB) {
-			sz = Math.round(n / GB) + 'GB';
+			sz = Math.round(n / GB) + ' GB';
 		}
 		else if (n >= MB) {
-			sz = Math.round(n / MB) + 'MB';
+			sz = Math.round(n / MB) + ' MB';
 		}
 		else if (n >= KB) {
-			sz = Math.round(n / KB) + 'KB';
+			sz = Math.round(n / KB) + ' KB';
 		}
 		else if (n != '') {
-			sz = n + 'B';
+			sz = n + ' bytes';
 		}
 		return sz;
 	};

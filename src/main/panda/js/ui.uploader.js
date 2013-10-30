@@ -1,6 +1,6 @@
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
-pw.upload = function(id) {
+panda.upload = function(id) {
 	var id = id;
 	var $u = $('#' + id);
 	var pua = $u.attr('uploadAction');
@@ -130,15 +130,14 @@ pw.upload = function(id) {
 				}
 				else {
 					_error(r.contentType, r.fileName, r.fileSize, r.saveName);
-					pw.notice({ container: $ue }).add(d);
+					panda.alert({ container: $ue }).add(d);
 					$ue.slideDown();
 				}
 			},
 			error: function(xhr, status, e) {
 				_endUpload();
-				pw.notice({ container: $ue }).add(
-						(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status)),
-						'error'
+				panda.alert({ container: $ue }).error(
+						(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status))
 					);
 				$ue.slideDown();
 			}

@@ -1,50 +1,30 @@
-/*---------------------------------------------*/
-/* images.css                                  */
-/*---------------------------------------------*/
 /* LOADER */
 .n-loader-squares-circle {
-	background: url("images/loader/squares-circle.gif") center center no-repeat;
+	background: url("../img/loader/squares-circle.gif") center center no-repeat;
 	width: 31px;
 	height: 31px;
 }
 .n-loader-snake {
-	background: url("images/loader/snake.gif") center center no-repeat;
+	background: url("../img/loader/snake.gif") center center no-repeat;
 	width: 16px;
 	height: 16px;
 }
 .n-loader-big-snake {
-	background: url("images/loader/big-snake.gif") center center no-repeat;
+	background: url("../img/loader/big-snake.gif") center center no-repeat;
 	width: 24px;
 	height: 24px;
 }
 .n-loader-large-snake {
-	background: url("images/loader/large-snake.gif") center center no-repeat;
+	background: url("../img/loader/large-snake.gif") center center no-repeat;
 	width: 48px;
 	height: 48px;
 }
 
 /* background-image */
 .n-bimg-magnifier24 {
-	background-image: url(images/magnifier-24.png);
+	background-image: url("../img/magnifier-24.png");
 }
 .n-bimg-magnifier32 {
-	background-image: url(images/magnifier-32.png);
-}
-
-/* LOGO */
-.n-logo {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-color: transparent;
-	display: block;
-	overflow: hidden;
-	width: 16px;
-	height: 16px;
-}
-pre .n-logo {
-	float: left;
-}
-.n-logo-nuts {
-	background-image: url(images/logo/nuts-16.gif);
+	background-image: url("../img/magnifier-32.png");
 }
 

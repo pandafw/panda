@@ -1,4 +1,4 @@
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
 (function() {
 	function setContentType($p, t) {
@@ -25,27 +25,25 @@ if (typeof(pw) == "undefined") { pw = {}; }
 	}
 	
 	function addMsg($p, s, m, t) {
-		var c = s.baseCls + '-' + t;
 		var ic = s.icons[t];
-		$p.append('<ul class="' + c + 's"><li class="' + c + '"><i class="' + ic + '"></i>' + m + '</li></ul>');
+		$p.append('<ul class="' +  s.ulCls + '"><li><i class="' + ic + '"></i>' + m + '</li></ul>');
 		setContentType($p, t);
 	}
 
 	function addMsgs($p, s, m, t) {
 		if (m) {
-			var c = s.baseCls + '-' + t;
 			var ic = s.icons[t] + ' ' + c;
-			var h = '<ul class="' + c + 's">';
+			var h = '<ul class="' + s.ulCls + '">';
 			if ($.isArray(m)) {
 				for (var i = 0; i < m.length; i++) {
-					h += '<li class="' + c + '"><i class="' + ic + '"></i>' + m[i] + '</li>';
+					h += '<li><i class="' + ic + '"></i>' + m[i] + '</li>';
 				}
 			}
 			else {
 				for (var n in m) {
 					var v = m[n];
 					for (var i = 0; i < v.length; i++) {
-						h += '<li class="' + c + '"><i class="' + ic + '"></i>' + v[i] + '</li>';
+						h += '<li><i class="' + ic + '"></i>' + v[i] + '</li>';
 					}
 				}
 			}
@@ -55,14 +53,14 @@ if (typeof(pw) == "undefined") { pw = {}; }
 		}
 	}
 	
-	pw.notice = function(s) {
+	panda.alert = function(s) {
 		if (typeof(s) == 'string') {
 			s = { container: s };
 		}
-		s = $.extend({}, pw.notice.defaults, s);
+		s = $.extend({}, panda.alert.defaults, s);
 		return {
 			clear: function() {
-				$(s.container).children('.' + s.baseCls + '-notice').remove();
+				$(s.container).children('.alert').remove();
 				return this;
 			},
 			error: function(m) {
@@ -84,11 +82,12 @@ if (typeof(pw) == "undefined") { pw = {}; }
 			add: function(m, t) {
 				t = t || 'info';
 				var $c = $(s.container);
-				var $p = $c.children('.' + s.baseCls + '-notice');
+				var $p = $c.children('.alert');
 				var a = false;
 				if ($p.size() < 1) {
-					$p = $('<div></div>').addClass(s.baseCls + '-notice').css('display', 'none');
+					$p = $('<div></div>').addClass('alert alert-dismissable').css('display', 'none');
 					$c.prepend($p);
+					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>");
 					a = true;
 				}
 				
@@ -121,14 +120,31 @@ if (typeof(pw) == "undefined") { pw = {}; }
 		}
 	};
 	
-	pw.notice.defaults = {
-		baseCls: 'n-action',
+	panda.alert.defaults = {
 		container: 'body',
+		ulCls: 'fa-ul',
 		icons: {
-			'help': 'icon-question-sign',
-			'info': 'icon-info',
-			'error': 'icon-exclamation-sign',
-			'warn': 'icon-warning-sign'
+			'help':'fa-li fa fa-question-circle',
+			'info': 'fa-li fa fa-info-circle',
+			'error': 'fa-li fa fa-times-circle',
+			'warn': 'fa-li fa fa-exclamation-triangle',
+			'down': 'fa-caret-down',
+			'up': 'fa-caret-up'
 		}
+	};
+	
+	panda.alert.toggleFieldErrors = function(el) {
+		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
+		var id = panda.alert.defaults.icons.down;
+		var iu = panda.alert.defaults.icons.up;
+		if ($fes.is(':hidden')) {
+			$fes.slideDown();
+			$(el).children('i').removeClass(id).addClass(iu);
+		}
+		else {
+			$fes.slideUp();
+			$(el).children('i').removeClass(iu).addClass(id);
+		}
+		return false;
 	};
 })();
