@@ -1,7 +1,7 @@
-/*!
- * Datepicker for Bootstrap
+/**
+ * Datepicker for Bootstrap 3
  *
- * Copyright 2012 Stefan Petre
+ * Copyright 2012 Stefan Petre, Frank Wang
  * Licensed under the Apache License v2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -85,6 +85,7 @@
 .bootstrap-datetimepicker-widget>ul {
 	list-style-type: none;
 	margin: 0;
+	padding: 0;
 }
 
 .bootstrap-datetimepicker-widget .timepicker-hour,.bootstrap-datetimepicker-widget .timepicker-minute,.bootstrap-datetimepicker-widget .timepicker-second
@@ -107,6 +108,7 @@
 
 .bootstrap-datetimepicker-widget .picker-switch {
 	text-align: center;
+	cursor: pointer;
 }
 
 .bootstrap-datetimepicker-widget table {

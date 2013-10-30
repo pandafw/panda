@@ -58,6 +58,25 @@
 
 	<!-- build -->
 	<target name="min-js" description="Merge &amp; minify javascript files">
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
+		</java>
+
 		<concat destfile="src/main/panda/js/panda.js" binary="true">
 			<fileset dir="src/main/panda/js">
 				<include name="core.*.js"/>
@@ -118,6 +137,25 @@
 	</target>
 
 	<target name="min-css" description="Merge &amp; minify css files">
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true">
+			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
+		</java>
+
 		<concat destfile="src/main/panda/css/panda.css" binary="true">
 			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
 		</concat>

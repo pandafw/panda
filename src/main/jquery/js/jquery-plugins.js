@@ -1,19 +1,3 @@
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
 (function($) {
 	function createIFrame(s) {
 		var id = "ajaf_if_" + s.id;
@@ -280,22 +264,6 @@
 	};
 })(jQuery);
 
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
 (function($) {
 	// Use of jQuery.browser is frowned upon.
 	// More details: http://api.jquery.com/jQuery.browser
@@ -461,7 +429,7 @@ jQuery.jcookie = function(name, value, options) {
 	}
 };
 
-/*
+/**
   @author: remy sharp / http://remysharp.com
   @params:
 	feedback - the selector for the element that gives the user feedback. Note that this will be relative to the form the plugin is run against.
@@ -557,22 +525,6 @@ jQuery.jcookie = function(name, value, options) {
 		words : false
 	};
 })(jQuery);
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
 (function($) {
 	function collapse($el) {
 		if (!$el.hasClass('ui-collapsed')) {
@@ -1108,22 +1060,6 @@ jQuery.jcookie = function(name, value, options) {
 		return this.unbind('click').click(_initialize);
 	};
 })(jQuery); // Call and execute the function immediately passing the jQuery object
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
 (function($) {
 	function maskElement($el, conf) {
 		//if this element has delayed mask scheduled then remove it and display the new one
@@ -1930,10 +1866,10 @@ jQuery.jcookie = function(name, value, options) {
 		}
 	});
 })(jQuery);
-/* 
-* Placeholder plugin for jQuery
-* @author Daniel Stocks (http://webcloud.se)
-*/
+/** 
+ * Placeholder plugin for jQuery
+ * @author Daniel Stocks (http://webcloud.se)
+ */
 (function($) {
 	function Placeholder(input) {
 		this.input = input;
@@ -2038,22 +1974,6 @@ jQuery.jcookie = function(name, value, options) {
 		});
 	}
 })(jQuery);
-/*
- * This file is part of Pandaw.
- * Copyright(C) 2013 Pandaw Develop Team.
- *
- * Pandaw is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- * 
- * Pandaw is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Pandaw. If not, see <http://www.gnu.org/licenses/>.
- */
 (function($) {
 	var __inited = false;
 	var __active = null;
