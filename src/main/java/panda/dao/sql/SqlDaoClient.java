@@ -87,7 +87,7 @@ public class SqlDaoClient extends DaoClient {
 	public void setJndiDataSource(String jndi) throws NamingException {
 		Context ic = new InitialContext();
 		DataSource ds = (DataSource)ic.lookup(jndi);
-		if (dataSource == null) {
+		if (ds == null) {
 			throw new NamingException("Failed to lookup data source: " + jndi);
 		}
 		setDataSource(ds);
