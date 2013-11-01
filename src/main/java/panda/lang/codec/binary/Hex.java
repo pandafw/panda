@@ -225,7 +225,6 @@ public class Hex implements BinaryEncoder, BinaryDecoder {
 	 * 
 	 * @param data a string to convert to Hex characters
 	 * @param prefix prefix string to every code point
-	 * @param toLowerCase {@code true} converts to lowercase, {@code false} to uppercase
 	 * @return A String containing hexadecimal characters
 	 */
 	public static String encodeHexChars(final String data, final String prefix) {

@@ -280,7 +280,9 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @return meta
+	 * add meta data
+	 * @param name meta name
+	 * @param value meta value
 	 */
 	public void addMeta(String name, String value) {
 		if (tableMeta == null) {
@@ -290,13 +292,14 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @return meta
+	 * add meta data map
+	 * @param map data map
 	 */
-	public void addMetas(Map<? extends String, ? extends Object> m) {
+	public void addMetas(Map<? extends String, ? extends Object> map) {
 		if (tableMeta == null) {
 			tableMeta = new JsonObject();
 		}
-		tableMeta.putAll(m);
+		tableMeta.putAll(map);
 	}
 
 	/**

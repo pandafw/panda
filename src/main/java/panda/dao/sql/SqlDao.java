@@ -161,7 +161,6 @@ public class SqlDao extends Dao {
 	 * create table
 	 * 
 	 * @param entity entity
-	 * @param dropIfExists drop if table exists
 	 */
 	@Override
 	public void create(Entity<?> entity) {

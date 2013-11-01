@@ -861,8 +861,6 @@ public class FilesTest extends FileBasedTestCase {
 
 	/**
 	 * Tests the {@link Files#sizeOf(File)} method.
-	 * 
-	 * @throws Exception
 	 */
 	public void testSizeOf() throws Exception {
 		final File file = new File(getTestDirectory(), getName());
@@ -900,8 +898,6 @@ public class FilesTest extends FileBasedTestCase {
 
 	/**
 	 * Tests the {@link Files#sizeOf(File)} method.
-	 * 
-	 * @throws Exception
 	 */
 	public void testSizeOfAsBigInteger() throws Exception {
 		final File file = new File(getTestDirectory(), getName());

@@ -1820,7 +1820,7 @@ public abstract class FileNames {
 	 * 
 	 * @param path The path to match, as a String.
 	 * @param pattern The pattern to match against.
-	 * @param isCaseSensitive Whether or not matching should be performed case sensitively.
+	 * @param caseSensitive Whether or not matching should be performed case sensitively.
 	 * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
 	 *         otherwise.
 	 */

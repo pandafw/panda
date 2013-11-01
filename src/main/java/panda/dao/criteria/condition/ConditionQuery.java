@@ -17,7 +17,7 @@ public class ConditionQuery {
 	}
 	
 	/**
-	 * @param query
+	 * @param query the query to set
 	 */
 	public ConditionQuery(Query query) {
 		this.query = query;

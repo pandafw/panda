@@ -43,7 +43,8 @@ public abstract class SqlExpert {
 	}
 
 	/**
-	 * @param databaseMeta the databaseMeta to set
+	 * @param name database name
+	 * @param version database version
 	 */
 	public void setDatabaseMeta(String name, String version) {
 		databaseMeta = new DatabaseMeta(getDatabaseType(), name, version);

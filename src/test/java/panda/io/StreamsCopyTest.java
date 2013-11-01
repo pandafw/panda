@@ -17,8 +17,6 @@ import panda.io.stream.NullWriter;
 
 /**
  * JUnit tests for Streams. copy methods.
- * 
- * @see Streams.
  */
 public class StreamsCopyTest extends FileBasedTestCase {
 

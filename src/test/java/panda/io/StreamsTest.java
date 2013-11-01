@@ -1110,7 +1110,6 @@ public class StreamsTest extends FileBasedTestCase {
 	 * 
 	 * @throws Exception on error
 	 */
-	@SuppressWarnings("javadoc")
 	// deliberately testing deprecated method
 	public void testToInputStream_String() throws Exception {
 		final String str = "Abc123Xyz!";

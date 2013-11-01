@@ -285,7 +285,6 @@ public abstract class Dao {
 	 * delete all records.
 	 * 
 	 * @param entity entity
-	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
 	public int deletes(Entity<?> entity) {

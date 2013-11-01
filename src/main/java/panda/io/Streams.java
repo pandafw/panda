@@ -992,7 +992,7 @@ public class Streams {
 	 * <code>LineIterator</code> holds a reference to the open <code>InputStream</code> specified
 	 * here. When you have finished with the iterator you should close the stream to free internal
 	 * resources. This can be done by closing the stream directly, or by calling
-	 * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+	 * {@link LineIterator#close()} or {@link LineIterator#safeClose(LineIterator)}.
 	 * <p>
 	 * The recommended usage pattern is:
 	 * 
@@ -1658,9 +1658,9 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final InputStream input, final Appendable output, final Charset inputEncoding)
+	public static void copy(final InputStream input, final Appendable output, final Charset encoding)
 			throws IOException {
-		final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(inputEncoding));
+		final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(encoding));
 		copy(in, output);
 	}
 
@@ -1678,13 +1678,13 @@ public class Streams {
 	 * 
 	 * @param input the <code>InputStream</code> to read from
 	 * @param output the <code>Writer</code> to write to
-	 * @param charset the charset to use, null means platform default
+	 * @param encoding the encoding to use, null means platform default
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final InputStream input, final Appendable output, final String inputEncoding)
+	public static void copy(final InputStream input, final Appendable output, final String encoding)
 			throws IOException {
-		copy(input, output, Charsets.toCharset(inputEncoding));
+		copy(input, output, Charsets.toCharset(encoding));
 	}
 
 	// copy from Reader
@@ -1865,9 +1865,9 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final Reader input, final OutputStream output, final Charset outputEncoding)
+	public static void copy(final Reader input, final OutputStream output, final Charset encoding)
 			throws IOException {
-		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(outputEncoding));
+		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(encoding));
 		copy(input, out);
 		// XXX Unless anyone is planning on rewriting OutputStreamWriter,
 		// we have to flush here.
@@ -1890,15 +1890,15 @@ public class Streams {
 	 * 
 	 * @param input the <code>Reader</code> to read from
 	 * @param output the <code>OutputStream</code> to write to
-	 * @param outputEncoding the encoding to use for the OutputStream, null means platform default
+	 * @param encoding the encoding to use for the OutputStream, null means platform default
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
 	 *             version 2.2 if the encoding is not supported.
 	 */
-	public static void copy(final Reader input, final OutputStream output, final String outputEncoding)
+	public static void copy(final Reader input, final OutputStream output, final String encoding)
 			throws IOException {
-		copy(input, output, Charsets.toCharset(outputEncoding));
+		copy(input, output, Charsets.toCharset(encoding));
 	}
 
 	// content equals

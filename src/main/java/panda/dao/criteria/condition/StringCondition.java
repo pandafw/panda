@@ -16,7 +16,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field LIKE value" expression
-	 * @param field field 
 	 * @param value value
 	 * @return parent
 	 */
@@ -27,7 +26,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field NOT LIKE value" expression
-	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
@@ -38,7 +36,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field LIKE %value%" expression
-	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
@@ -49,7 +46,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field NOT LIKE %value%" expression
-	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
@@ -60,7 +56,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field LIKE value%" expression
-	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
@@ -81,7 +76,6 @@ public class StringCondition<E extends ConditionQuery> extends ComparableConditi
 
 	/**
 	 * add "field LIKE %value" expression
-	 * @param field field 
 	 * @param value value
 	 * @return this
 	 */
