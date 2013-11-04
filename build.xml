@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="panda-web" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 	<!-- set global properties for this build -->
+	<property name="prj.org" value="pandawind"/>
 	<property name="prj.name" value="panda-web"/>
 	<property name="prj.title" value="Panda Web Framework"/>
 	<property name="prj.author" value="yf.frank.wang@gmail.com"/>

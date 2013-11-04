@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="pandawind.com" module="panda-web" revision="${prj.version}"/>
+	<info organisation="pandawind" module="panda-web" revision="${prj.version}"/>
 	<configurations>
 		<conf name="tool" visibility="public" />
 	</configurations>
