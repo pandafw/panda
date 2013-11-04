@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="pandawind.com" module="panda-java" revision="${prj.version}"/>
+	<info organisation="${prj.org}" module="${prj.name}" revision="${prj.version}"/>
 	<configurations>
 		<conf name="api" visibility="public" />
 		<conf name="run" visibility="public" />
@@ -9,7 +9,6 @@
 	</configurations>
 	<publications>
 		<artifact name="${prj.name}" type="jar" conf="run" ext="jar" />
-		<artifact name="${prj.name}-test" type="jar" conf="test" ext="jar" />
 	</publications>
 	<dependencies>
 		<!-- API -->
