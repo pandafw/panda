@@ -201,7 +201,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		else if (Classes.isLong(clazz)) {
 			ef.setJdbcType(JdbcTypes.BIGINT);
 		}
-		else if (Classes.isStringLike(clazz)) {
+		else if (Classes.isCharSequence(clazz)) {
 			ef.setJdbcType(JdbcTypes.VARCHAR);
 			ef.setSize(50);
 		}

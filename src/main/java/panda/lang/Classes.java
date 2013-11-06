@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1959,12 +1960,12 @@ public abstract class Classes {
 	}
 
 	/**
-	 * 向父类递归查找某一个运行时注解
+	 * find a annotation from this class to super class
 	 * 
-	 * @param <A> 注解类型参数
+	 * @param <A> annotation type
 	 * @param clazz Class
-	 * @param annType 注解类型
-	 * @return 注解
+	 * @param annType annotation type
+	 * @return annotation instance
 	 */
 	public static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annType) {
 		A ann;
@@ -1977,161 +1978,150 @@ public abstract class Classes {
 	}
 
 	/**
-	 * @return 当前对象是否为字符串
+	 * @return true if the class is String
 	 */
 	public static boolean isString(Class<?> clazz) {
 		return String.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为CharSequence的子类
+	 * @return true if the class is CharSequence
 	 */
-	public static boolean isStringLike(Class<?> clazz) {
+	public static boolean isCharSequence(Class<?> clazz) {
 		return isAssignable(clazz, CharSequence.class);
 	}
 
 	/**
-	 * @return 当前对象是否为字符
+	 * @return true if the class is char or Character
 	 */
 	public static boolean isChar(Class<?> clazz) {
 		return char.class.equals(clazz) || Character.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为布尔
+	 * @return true if the class is boolean or Boolean
 	 */
 	public static boolean isBoolean(Class<?> clazz) {
 		return boolean.class.equals(clazz) || Boolean.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为浮点
+	 * @return true if the class is float or Float
 	 */
 	public static boolean isFloat(Class<?> clazz) {
 		return float.class.equals(clazz) || Float.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为双精度浮点
+	 * @return true if the class is double or Double
 	 */
 	public static boolean isDouble(Class<?> clazz) {
 		return double.class.equals(clazz) || Double.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为整型
+	 * @return true if the class is int or Integer
 	 */
 	public static boolean isInt(Class<?> clazz) {
 		return int.class.equals(clazz) || Integer.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为小数 (float, double)
+	 * @return true if the class is float or double or BigDecimal
 	 */
 	public static boolean isDecimal(Class<?> clazz) {
-		return isFloat(clazz) || isDouble(clazz);
+		return isFloat(clazz) || isDouble(clazz) || BigDecimal.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为长整型
+	 * @return true if the class is long or Long
 	 */
 	public static boolean isLong(Class<?> clazz) {
 		return long.class.equals(clazz) || Long.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为短整型
+	 * @return true if the class is short or Short
 	 */
 	public static boolean isShort(Class<?> clazz) {
 		return short.class.equals(clazz) || Short.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为字节型
+	 * @return true if the class is byte or Byte
 	 */
 	public static boolean isByte(Class<?> clazz) {
 		return byte.class.equals(clazz) || Byte.class.equals(clazz);
 	}
 
 	/**
-	 * @return 当前对象是否为整数（包括 int, long, short, byte, BigInteger）
+	 * @return true if the class is int, long, short, byte, BigInteger
 	 */
 	public static boolean isIntLike(Class<?> clazz) {
 		return clazz != null && (isInt(clazz) || isLong(clazz) || isShort(clazz) || isByte(clazz) || BigInteger.class.equals(clazz));
 	}
 
 	/**
-	 * @return 当前对象是否为原生的数字类型 （即不包括 boolean 和 char）
+	 * @return true if the class is a primitive number class
 	 */
 	public static boolean isPrimitiveNumber(Class<?> clazz) {
 		return clazz != null && (isInt(clazz) || isLong(clazz) || isFloat(clazz) || isDouble(clazz) || isByte(clazz) || isShort(clazz));
 	}
 
 	/**
-	 * @return 当前对象是否为数字
+	 * @return true if the class is a number class
 	 */
 	public static boolean isNumber(Class<?> clazz) {
 		return clazz != null && (Number.class.isAssignableFrom(clazz) || isPrimitiveNumber(clazz));
 	}
 
 	/**
-	 * @return 当前对象是否为枚举
+	 * @return true if the class is a enum class
 	 */
 	public static boolean isEnum(Class<?> clazz) {
 		return clazz != null && clazz.isEnum();
 	}
 
 	/**
-	 * @return 当前类型是不是接口
+	 * @return true if the class is a interface class
 	 */
 	public static boolean isInterface(Class<?> clazz) {
 		return clazz != null && clazz.isInterface();
 	}
 
 	/**
-	 * 判断当前类型是否为容器，包括 Map，Collection, 以及数组
-	 * 
-	 * @return true of false
+	 * @return true if the class is Array, Map, Collection
 	 */
 	public static boolean isContainer(Class<?> clazz) {
-		return isArray(clazz) || isCollection(clazz);
+		return isArray(clazz) || isCollection(clazz) || isMap(clazz);
 	}
 
 	/**
-	 * 判断当前类型是否为数组
-	 * 
-	 * @return true of false
+	 * @return true if the class is Array class
 	 */
 	public static boolean isArray(Class<?> clazz) {
 		return clazz != null && clazz.isArray();
 	}
 
 	/**
-	 * 判断当前类型是否为 Collection
-	 * 
-	 * @return true of false
+	 * @return true if the class is Collection class
 	 */
 	public static boolean isCollection(Class<?> clazz) {
 		return isAssignable(clazz, Collection.class);
 	}
 
 	/**
-	 * 判断当前类型是否为 Map
-	 * 
-	 * @return true of false
+	 * @return true if the class is Map class
 	 */
 	public static boolean isMap(Class<?> clazz) {
 		return isAssignable(clazz, Map.class);
 	}
 
 	/**
-	 * @return 当前对象是否在表示日期或时间
+	 * @return true if the class is a Date or Calendar class
 	 */
-	public static boolean isDateTimeLike(Class<?> clazz) {
-		return clazz != null
-				&& (Calendar.class.isAssignableFrom(clazz) || java.util.Date.class.isAssignableFrom(clazz)
-						|| java.sql.Date.class.isAssignableFrom(clazz) || java.sql.Time.class.isAssignableFrom(clazz)
-						|| java.sql.Timestamp.class.isAssignableFrom(clazz));
+	public static boolean isDateTime(Class<?> clazz) {
+		return clazz != null && (isAssignable(clazz, Calendar.class) || isAssignable(clazz, Date.class));
 	}
 
 	/**
