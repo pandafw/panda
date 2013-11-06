@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import panda.log.Log;
 import panda.log.Logs;
@@ -73,7 +74,15 @@ public abstract class SqlLogger {
 				sb.append("Result Values: [");
 				int cnt = meta.getColumnCount();
 				for (int i = 1; i <= cnt; i++) {
-					sb.append(String.valueOf(resultSet.getObject(i)));
+					int type = meta.getColumnType(i);
+					if (type == Types.BLOB || type == Types.CLOB) {
+						sb.append('<');
+						sb.append(JdbcTypes.getType(type));
+						sb.append('>');
+					}
+					else {
+						sb.append(String.valueOf(resultSet.getObject(i)));
+					}
 					if (i < cnt) {
 						sb.append(", ");
 					}
