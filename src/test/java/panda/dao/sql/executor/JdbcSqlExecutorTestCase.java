@@ -14,9 +14,6 @@ import org.junit.Test;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlResultSet;
 
-/**
- * SimpleSqlExecutorTestCase
- */
 public abstract class JdbcSqlExecutorTestCase extends SqlExecutorTestCase {
 	protected static String selectSql = "SELECT * FROM TEST WHERE ID=?";
 	protected static String updateSql = "UPDATE TEST SET "
@@ -74,7 +71,7 @@ public abstract class JdbcSqlExecutorTestCase extends SqlExecutorTestCase {
 			+ "?,    "
 			+ "?)    ";
 
-	protected static String selectBlobSql = "SELECT ID, FBLOB FROM TEST WHERE ID=:id";
+	protected static String selectBlobSql = "SELECT ID, FBLOB FROM TEST WHERE ID=?";
 	protected static String updateBlobSql = "UPDATE TEST SET "
 			+ "FBLOB  = ? "
 			+ "WHERE ID=?";

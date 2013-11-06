@@ -15,6 +15,8 @@ import oracle.sql.TIMESTAMP;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.lang.Strings;
+
 /**
  * PreparedSqlExecutorOracleTest
  */
@@ -47,6 +49,20 @@ public class SimpleSqlExecutorOracleTest extends SimpleSqlExecutorTestCase {
 				actual.put(e.getKey(), val);
 			}
 		}
+	}
+
+	private String fixBit(String sql) {
+		return Strings.replace(Strings.replace(sql, ":fbit", ":fbit:char"), ":fbool", ":fbool:char");
+	}
+
+	@Override
+	protected String getUpdateSql() {
+		return fixBit(updateSql);
+	}
+	
+	@Override
+	protected String getInsertSql() {
+		return fixBit(insertSql);
 	}
 
 	@Override

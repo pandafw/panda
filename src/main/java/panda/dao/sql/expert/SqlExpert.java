@@ -216,6 +216,10 @@ public abstract class SqlExpert {
 		return sql;
 	}
 
+	protected Object getFieldValue(EntityField ef, Object data) {
+		return ef.getValue(data);
+	}
+
 	public Sql insert(Entity<?> entity, Object data, boolean autoId) {
 		if (!isSupportAutoIncrement()) {
 			autoId = false;
@@ -238,7 +242,7 @@ public abstract class SqlExpert {
 				continue;
 			}
 			sql.append("?,");
-			Object v = ef.getValue(data);
+			Object v = getFieldValue(ef, data);
 			if (v == null && Strings.isNotEmpty(ef.getDefaultValue())) {
 				v = Texts.transform(ef.getDefaultValue(), data);
 				v = castors.cast(v, ef.getType());
@@ -258,7 +262,7 @@ public abstract class SqlExpert {
 				continue;
 			}
 			sql.append(' ').append(ef.getColumn()).append("=?,");
-			sql.addParam(ef.getValue(data));
+			sql.addParam(getFieldValue(ef, data));
 		}
 		sql.setLength(sql.length() - 1);
 		where(sql, entity, query);

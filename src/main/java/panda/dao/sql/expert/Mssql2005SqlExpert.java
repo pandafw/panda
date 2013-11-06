@@ -32,10 +32,11 @@ public class Mssql2005SqlExpert extends SqlExpert {
 			if (ef.isNotNull()) {
 				sb.append(" NOT NULL");
 			}
+			
 			if (ef.isAutoIncrement()) {
 				sb.append(" IDENTITY");
 			}
-			if (ef.hasDefaultValue()) {
+			else if (ef.hasDefaultValue()) {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
 			sb.append(',');

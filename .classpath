@@ -11,6 +11,7 @@
 	<classpathentry kind="lib" path="lib/api/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/api/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/derby.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/h2.jar" sourcepath="lib/jdbc/h2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>

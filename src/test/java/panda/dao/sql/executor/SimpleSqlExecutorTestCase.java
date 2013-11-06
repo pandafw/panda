@@ -156,12 +156,16 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 		
 		testQueryForObject(sql, null, (Map)null);
 	}
+
+	protected String nullColumn() {
+		return "NULL";
+	}
 	
 	/**
 	 */
 	@Test
 	public void testQueryForNullChar() {
-		String sql = "SELECT ID, FSTR, NULL AS fchar FROM TEST WHERE ID=1001";
+		String sql = "SELECT ID, FSTR, " + nullColumn() + " AS fchar FROM TEST WHERE ID=1001";
 		
 		TestBean expected = new TestBean();
 		expected.setId(1001);

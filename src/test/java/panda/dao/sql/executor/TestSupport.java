@@ -13,6 +13,14 @@ public class TestSupport extends TestHelper {
 	 * @param connection connection
 	 * @throws Exception if an error occurs
 	 */
+	public static void initDerbyTestData(Connection connection) throws Exception {
+		execSQL(TestSupport.class, connection, "derby.sql", "\\;");
+	}
+
+	/**
+	 * @param connection connection
+	 * @throws Exception if an error occurs
+	 */
 	public static void initSqliteTestData(Connection connection) throws Exception {
 		execSQL(TestSupport.class, connection, "sqlite.sql", "\\;");
 	}
@@ -76,6 +84,16 @@ public class TestSupport extends TestHelper {
 	 */
 	public static void initPostgreData(Connection connection) throws Exception {
 		execSQL(TestSupport.class, connection, "postgre.sql", "\\;");
+	}
+	
+	/**
+	 * @return derby connection 
+	 * @throws Exception if an error occurs
+	 */
+	public static Connection getDerbyConnection() throws Exception {
+		Connection connection = getConnection("derby");
+		initDerbyTestData(connection);
+		return connection;
 	}
 	
 	/**

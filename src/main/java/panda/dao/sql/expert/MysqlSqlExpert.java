@@ -65,24 +65,25 @@ public class MysqlSqlExpert extends SqlExpert {
 			if (ef.isAutoIncrement()) {
 				sb.append(" AUTO_INCREMENT");
 			}
-
-			if (JdbcTypes.TIMESTAMP.equals(ef.getJdbcType())) {
-				if (ef.hasDefaultValue()) {
-					sb.append(' ').append(ef.getDefaultValue());
-				}
-				else {
-					if (ef.isNotNull()) {
-						sb.append(" DEFAULT 0");
+			else {
+				if (JdbcTypes.TIMESTAMP.equals(ef.getJdbcType())) {
+					if (ef.hasDefaultValue()) {
+						sb.append(' ').append(ef.getDefaultValue());
 					}
 					else {
-						sb.append(" DEFAULT NULL");
+						if (ef.isNotNull()) {
+							sb.append(" DEFAULT 0");
+						}
+						else {
+							sb.append(" DEFAULT NULL");
+						}
 					}
 				}
+				else if (ef.hasDefaultValue()) {
+					sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
+				}
 			}
-			else if (ef.hasDefaultValue()) {
-				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
-			}
-
+			
 			if (Strings.isNotEmpty(ef.getComment())) {
 				sb.append(" COMMENT '").append(ef.getComment()).append("'");
 			}
