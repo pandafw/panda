@@ -86,8 +86,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Byte castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).byteValue();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? (byte)1 : (byte)0;
 			}
 			if (value instanceof CharSequence) {
 				try {
@@ -99,6 +99,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Number) {
+				return ((Number)value).byteValue();
 			}
 			throw castError(value, context);
 		}
@@ -120,17 +123,20 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Character castValue(Object value, CastContext context) {
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? '1' : '0';
+			}
 			if (value instanceof Character) {
 				return (Character)value;
-			}
-			if (value instanceof Number) {
-				return (char)((Number)value).intValue();
 			}
 			if (value instanceof CharSequence) {
 				String s = value.toString();
 				if (s.length() > 0) {
 					return s.charAt(0);
 				}
+			}
+			if (value instanceof Number) {
+				return (char)((Number)value).intValue();
 			}
 			throw castError(value, context);
 		}
@@ -152,8 +158,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Double castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).doubleValue();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? 1D : 0D;
 			}
 			if (value instanceof CharSequence) {
 				try {
@@ -165,6 +171,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Number) {
+				return ((Number)value).doubleValue();
 			}
 			throw castError(value, context);
 		}
@@ -186,8 +195,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Float castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).floatValue();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? 1F : 0F;
 			}
 			if (value instanceof CharSequence) {
 				try {
@@ -199,6 +208,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Number) {
+				return ((Number)value).floatValue();
 			}
 			throw castError(value, context);
 		}
@@ -220,8 +232,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Integer castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).intValue();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? 1 : 0;
 			}
 			if (value instanceof CharSequence) {
 				try {
@@ -233,6 +245,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Number) {
+				return ((Number)value).intValue();
 			}
 			throw castError(value, context);
 		}
@@ -253,20 +268,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Long castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).longValue();
-			}
-			if (value instanceof java.sql.Date) {
-				return ((java.sql.Date)value).getTime();
-			}
-			if (value instanceof java.sql.Time) {
-				return ((java.sql.Time)value).getTime();
-			}
-			if (value instanceof java.sql.Timestamp) {
-				return ((java.sql.Timestamp)value).getTime();
-			}
-			if (value instanceof Date) {
-				return ((Date)value).getTime();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? 1L : 0L;
 			}
 			if (value instanceof Calendar) {
 				return ((Calendar)value).getTimeInMillis();
@@ -281,6 +284,21 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Date) {
+				return ((Date)value).getTime();
+			}
+			if (value instanceof java.sql.Date) {
+				return ((java.sql.Date)value).getTime();
+			}
+			if (value instanceof java.sql.Time) {
+				return ((java.sql.Time)value).getTime();
+			}
+			if (value instanceof java.sql.Timestamp) {
+				return ((java.sql.Timestamp)value).getTime();
+			}
+			if (value instanceof Number) {
+				return ((Number)value).longValue();
 			}
 			throw castError(value, context);
 		}
@@ -301,8 +319,8 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Short castValue(Object value, CastContext context) {
-			if (value instanceof Number) {
-				return ((Number)value).shortValue();
+			if (value instanceof Boolean) {
+				return ((Boolean)value).booleanValue() ? (short)1 : (short)0;
 			}
 			if (value instanceof CharSequence) {
 				try {
@@ -314,6 +332,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 						+ value.getClass() + " - " + value
 						, e);
 				}
+			}
+			if (value instanceof Number) {
+				return ((Number)value).shortValue();
 			}
 			throw castError(value, context);
 		}
