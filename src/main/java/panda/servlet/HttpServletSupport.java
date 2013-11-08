@@ -3,10 +3,8 @@ package panda.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +15,7 @@ import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
+import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.UserAgent;
 
@@ -25,12 +24,6 @@ import panda.net.http.UserAgent;
  * @author yf.frank.wang@gmail.com
  */
 public class HttpServletSupport {
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
-	public static final SimpleDateFormat GMT_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
-	static {
-		GMT_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-	}
-	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
@@ -267,7 +260,7 @@ public class HttpServletSupport {
 		}
 
 		if (lastModified != null) {
-			response.setHeader(HttpHeader.LAST_MODIFIED, DATE_FORMAT.format(lastModified));
+			response.setHeader(HttpHeader.LAST_MODIFIED, HttpDates.format(lastModified));
 		}
 		
 		boolean noFileCache = true;
@@ -291,7 +284,7 @@ public class HttpServletSupport {
 
 			Date dexp = lastModified != null ? lastModified : Calendar.getInstance().getTime();
 			dexp.setTime(dexp.getTime() + (expires * 1000));
-			String sexp = GMT_FORMAT.format(dexp);
+			String sexp = HttpDates.format(dexp);
 			response.setHeader(HttpHeader.EXPIRES, sexp);
 		}
 		else if (expires == 0 && noFileCache) {
@@ -310,7 +303,7 @@ public class HttpServletSupport {
 	public static void setResponseNoCache(HttpServletResponse response) {
 		response.setHeader(HttpHeader.CACHE_CONTROL, HttpHeader.CACHE_CONTROL_NOCACHE);
 		response.setHeader(HttpHeader.PRAGMA, HttpHeader.CACHE_CONTROL_NOCACHE);
-		String expires = GMT_FORMAT.format(DateTimes.getDate());
+		String expires = HttpDates.format(DateTimes.getDate());
 		response.setHeader(HttpHeader.EXPIRES, expires);
 	}
 

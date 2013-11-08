@@ -2,6 +2,7 @@ package panda.net.http;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +83,9 @@ public class HttpHeader extends HashMap<String, Object> {
 	public static final String SET_COOKIE = "Set-Cookie";
 
 	// -------------------------------------------------------------
+	public static final String USER_AGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.186 Safari/535.1";
+	
+	// -------------------------------------------------------------
 	public static HttpHeader create() {
 		HttpHeader header = new HttpHeader();
 		return header;
@@ -92,48 +96,25 @@ public class HttpHeader extends HashMap<String, Object> {
 	}
 
 	public HttpHeader setDefault() {
-		put(HttpHeader.USER_AGENT, "Panda.Robot");
-		put(HttpHeader.ACCEPT_ENCODING, "gzip,deflate");
-		put(HttpHeader.ACCEPT, "text/xml,application/xml,application/xhtml+xml,text/html;"
+		put(USER_AGENT, "Panda.Robot");
+		put(ACCEPT_ENCODING, "gzip,deflate");
+		put(ACCEPT, "text/xml,application/xml,application/xhtml+xml,text/html;"
 				+ "q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
-		put(HttpHeader.ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN");
-		put(HttpHeader.ACCEPT_CHARSET, "ISO-8859-1,*,utf-8");
-		put(HttpHeader.CONNECTION, "keep-alive");
-		put(HttpHeader.CACHE_CONTROL, "max-age=0");
+		put(ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN");
+		put(ACCEPT_CHARSET, "ISO-8859-1,*,utf-8");
+		put(CONNECTION, "keep-alive");
+		//put(CACHE_CONTROL, "max-age=0");
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object put(String key, Object value) {
-		if (value == null) {
-			return remove(key);
-		}
-		
-		if (value instanceof String) {
-			return super.put(key, value);
-		}
-		
-		if (value instanceof String[]) {
-			List<String> vs = Arrays.toList(((String[])value));
-			return super.put(key, vs);
-		}
-		
-		if (value instanceof Enumeration) {
-			List vs = new ArrayList();
-			Collections.addAll(vs, (Enumeration)value);
-			return super.put(key, vs);
-		}
-
-		if (value instanceof List) {
-			return super.put(key, value);
-		}
-
-		throw new IllegalArgumentException("Invalid http header: key=" + key + ", value=" + value);
+	public HttpHeader setUserAgent(String agent) {
+		return set(USER_AGENT, agent);
 	}
 
+	public HttpHeader setDate(String key, Date value) {
+		return set(key, HttpDates.format(value));
+	}
+	
 	public HttpHeader set(String key, String value) {
 		put(key, value);
 		return this;
@@ -155,6 +136,19 @@ public class HttpHeader extends HashMap<String, Object> {
 			put(key, value);
 		}
 		return this;
+	}
+	
+	public Date getDate(String key) {
+		String str = getString(key);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return HttpDates.parse(str);
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 	
 	public String getString(String key) {
@@ -187,6 +181,38 @@ public class HttpHeader extends HashMap<String, Object> {
 			return (List<String>)value;
 		}
 		return Arrays.toList(value.toString());
+	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object put(String key, Object value) {
+		if (value == null) {
+			return remove(key);
+		}
+		
+		if (value instanceof String) {
+			return super.put(key, value);
+		}
+		
+		if (value instanceof String[]) {
+			List<String> vs = Arrays.toList(((String[])value));
+			return super.put(key, vs);
+		}
+		
+		if (value instanceof Enumeration) {
+			List vs = new ArrayList();
+			Collections.addAll(vs, (Enumeration)value);
+			return super.put(key, vs);
+		}
+
+		if (value instanceof List) {
+			return super.put(key, value);
+		}
+
+		throw new IllegalArgumentException("Invalid http header: key=" + key + ", value=" + value);
 	}
 
 	public void toString(Appendable writer) throws IOException {

@@ -35,7 +35,7 @@ import panda.lang.Systems;
  * public class MyStyle extends ToStringStyle {
  *   protected void appendDetail(StringBuilder buffer, String fieldName, Object value) {
  *     if (value instanceof Date) {
- *       value = new SimpleDateFormat("yyyy-MM-dd").format(value);
+ *       value = FastDateFormat.getInstance("yyyy-MM-dd").format(value);
  *     }
  *     buffer.append(value);
  *   }

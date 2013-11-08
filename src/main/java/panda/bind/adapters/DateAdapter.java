@@ -1,20 +1,21 @@
 package panda.bind.adapters;
 
-import java.text.SimpleDateFormat;
+import java.text.Format;
 import java.util.Calendar;
 import java.util.Date;
 
 import panda.bind.SourceAdapter;
+import panda.lang.time.FastDateFormat;
 
 /**
  * Convert Date to Long<br/>
- * setToTime(false) to use SimpleDateFormat to convert Date Type Value 
+ * setToTime(false) to use DateFormat to convert Date Type Value 
  * 
  * @author yf.frank.wang@gmail.com
  *
  */
 public class DateAdapter implements SourceAdapter {
-	private SimpleDateFormat dateFormat;
+	private Format dateFormat;
 	private boolean toTime = true;
 
 	/**
@@ -27,7 +28,7 @@ public class DateAdapter implements SourceAdapter {
 	 * @param dateFormat the dateFormat to set
 	 */
 	public void setDateFormat(String dateFormat) {
-		this.dateFormat = new SimpleDateFormat(dateFormat);
+		this.dateFormat = FastDateFormat.getInstance(dateFormat);
 	}
 
 	/**

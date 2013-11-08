@@ -225,7 +225,7 @@ public class TimeSpan implements Serializable {
 
 	@Override
 	public String toString() {
-		return DurationFormatUtils.formatDurationHMS(time);
+		return DurationFormats.formatDurationHMS(time);
 	}
 	
 	public int hashCode() {

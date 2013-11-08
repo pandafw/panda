@@ -84,22 +84,22 @@ public abstract class FileNames {
 	/**
 	 * The Unix separator character.
 	 */
-	private static final char UNIX_SEPARATOR = '/';
+	public static final char UNIX_SEPARATOR = '/';
 
 	/**
 	 * The Windows separator character.
 	 */
-	private static final char WINDOWS_SEPARATOR = '\\';
+	public static final char WINDOWS_SEPARATOR = '\\';
 
 	/**
 	 * The system separator character.
 	 */
-	private static final char SYSTEM_SEPARATOR = File.separatorChar;
+	public static final char SYSTEM_SEPARATOR = File.separatorChar;
 
 	/**
 	 * The separator character that is the opposite of the system separator.
 	 */
-	private static final char OTHER_SEPARATOR;
+	public static final char OTHER_SEPARATOR;
 	static {
 		if (isSystemWindows()) {
 			OTHER_SEPARATOR = UNIX_SEPARATOR;
@@ -629,7 +629,11 @@ public abstract class FileNames {
 				array[i] = separator;
 			}
 		}
-
+		
+		return normalize(array, size, prefix, separator, keepSeparator);
+	}
+	
+	public static String normalize(char[] array, int size, int prefix, char separator, boolean keepSeparator) {
 		// add extra separator on the end to simplify code below
 		boolean lastIsDirectory = true;
 		if (array[size - 1] != separator) {
@@ -1184,6 +1188,32 @@ public abstract class FileNames {
 		return filename.substring(0, end);
 	}
 
+	/**
+	 * Gets the parent path.
+	 * <p>
+	 * This method will handle a file in either Unix or Windows format. The text before the last
+	 * forward or backslash is returned.
+	 * 
+	 * <pre>
+	 * a/b/c.txt --> a/b
+	 * a.txt     --> ""
+	 * a/b/c     --> a/b
+	 * a/b/c/    --> a/b/c
+	 * </pre>
+	 * <p>
+	 * The output will be the same irrespective of the machine that the code is running on.
+	 * 
+	 * @param filename the filename to query, null returns null
+	 * @return the parent path of the file, or an empty string if none exists
+	 */
+	public static String getParent(String filename) {
+		if (filename == null) {
+			return null;
+		}
+		int index = indexOfLastSeparator(filename);
+		return index > 0 ? filename.substring(0, index) : Strings.EMPTY;
+	}
+	
 	/**
 	 * Gets the name minus the path from a full filename.
 	 * <p>

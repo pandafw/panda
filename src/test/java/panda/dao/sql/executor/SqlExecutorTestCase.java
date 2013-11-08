@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,6 +27,7 @@ import panda.dao.sql.SqlExecutor;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.TimeZones;
+import panda.lang.time.FastDateFormat;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mock.sql.MockConnection;
@@ -107,7 +107,7 @@ public abstract class SqlExecutorTestCase {
 	
 	protected Date convertToTime(String time) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			FastDateFormat sdf = FastDateFormat.getInstance("HH:mm:ss");
 			Date d = sdf.parse(time);
 			return d;
 		}
@@ -119,8 +119,7 @@ public abstract class SqlExecutorTestCase {
 	
 	protected Date convertToGMTTime(String time) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			sdf.setTimeZone(TimeZones.GMT);
+			FastDateFormat sdf = FastDateFormat.getInstance("HH:mm:ss", TimeZones.GMT);
 			Date d = sdf.parse(time);
 			return d;
 		}
@@ -132,7 +131,7 @@ public abstract class SqlExecutorTestCase {
 	
 	protected Date convertToDate(String date) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			FastDateFormat sdf = FastDateFormat.getInstance("yyyy-MM-dd");
 			Date d = sdf.parse(date);
 			return d;
 		}
@@ -144,8 +143,7 @@ public abstract class SqlExecutorTestCase {
 
 	protected Date convertToGMTDate(String date) {
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			sdf.setTimeZone(TimeZones.GMT);
+			FastDateFormat sdf = FastDateFormat.getInstance("yyyy-MM-dd", TimeZones.GMT);
 			Date d = sdf.parse(date);
 			return d;
 		}

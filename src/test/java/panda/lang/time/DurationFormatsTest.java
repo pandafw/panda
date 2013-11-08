@@ -2,7 +2,7 @@ package panda.lang.time;
 
 import org.junit.Test;
 
-import panda.lang.time.DurationFormatUtils;
+import panda.lang.time.DurationFormats;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
@@ -11,20 +11,19 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
- * TestCase for DurationFormatUtils.
- * 
+ * TestCase for DurationFormats.
  */
-public class DurationFormatUtilsTest {
+public class DurationFormatsTest {
 
 	// -----------------------------------------------------------------------
 	@Test
 	public void testConstructor() {
-		assertNotNull(new DurationFormatUtils());
-		final Constructor<?>[] cons = DurationFormatUtils.class.getDeclaredConstructors();
+		assertNotNull(new DurationFormats());
+		final Constructor<?>[] cons = DurationFormats.class.getDeclaredConstructors();
 		assertEquals(1, cons.length);
 		assertTrue(Modifier.isPublic(cons[0].getModifiers()));
-		assertTrue(Modifier.isPublic(DurationFormatUtils.class.getModifiers()));
-		assertFalse(Modifier.isFinal(DurationFormatUtils.class.getModifiers()));
+		assertTrue(Modifier.isPublic(DurationFormats.class.getModifiers()));
+		assertFalse(Modifier.isFinal(DurationFormats.class.getModifiers()));
 	}
 
 	// -----------------------------------------------------------------------
@@ -32,61 +31,61 @@ public class DurationFormatUtilsTest {
 	public void testFormatDurationWords() {
 		String text = null;
 
-		text = DurationFormatUtils.formatDurationWords(50 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(50 * 1000, true, false);
 		assertEquals("50 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(65 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(65 * 1000, true, false);
 		assertEquals("1 minute 5 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(120 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(120 * 1000, true, false);
 		assertEquals("2 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(121 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(121 * 1000, true, false);
 		assertEquals("2 minutes 1 second", text);
-		text = DurationFormatUtils.formatDurationWords(72 * 60 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(72 * 60 * 1000, true, false);
 		assertEquals("1 hour 12 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(24 * 60 * 60 * 1000, true, false);
+		text = DurationFormats.formatDurationWords(24 * 60 * 60 * 1000, true, false);
 		assertEquals("1 day 0 hours 0 minutes 0 seconds", text);
 
-		text = DurationFormatUtils.formatDurationWords(50 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(50 * 1000, true, true);
 		assertEquals("50 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(65 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(65 * 1000, true, true);
 		assertEquals("1 minute 5 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(120 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(120 * 1000, true, true);
 		assertEquals("2 minutes", text);
-		text = DurationFormatUtils.formatDurationWords(121 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(121 * 1000, true, true);
 		assertEquals("2 minutes 1 second", text);
-		text = DurationFormatUtils.formatDurationWords(72 * 60 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(72 * 60 * 1000, true, true);
 		assertEquals("1 hour 12 minutes", text);
-		text = DurationFormatUtils.formatDurationWords(24 * 60 * 60 * 1000, true, true);
+		text = DurationFormats.formatDurationWords(24 * 60 * 60 * 1000, true, true);
 		assertEquals("1 day", text);
 
-		text = DurationFormatUtils.formatDurationWords(50 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(50 * 1000, false, true);
 		assertEquals("0 days 0 hours 0 minutes 50 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(65 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(65 * 1000, false, true);
 		assertEquals("0 days 0 hours 1 minute 5 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(120 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(120 * 1000, false, true);
 		assertEquals("0 days 0 hours 2 minutes", text);
-		text = DurationFormatUtils.formatDurationWords(121 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(121 * 1000, false, true);
 		assertEquals("0 days 0 hours 2 minutes 1 second", text);
-		text = DurationFormatUtils.formatDurationWords(72 * 60 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(72 * 60 * 1000, false, true);
 		assertEquals("0 days 1 hour 12 minutes", text);
-		text = DurationFormatUtils.formatDurationWords(24 * 60 * 60 * 1000, false, true);
+		text = DurationFormats.formatDurationWords(24 * 60 * 60 * 1000, false, true);
 		assertEquals("1 day", text);
 
-		text = DurationFormatUtils.formatDurationWords(50 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(50 * 1000, false, false);
 		assertEquals("0 days 0 hours 0 minutes 50 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(65 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(65 * 1000, false, false);
 		assertEquals("0 days 0 hours 1 minute 5 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(120 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(120 * 1000, false, false);
 		assertEquals("0 days 0 hours 2 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(121 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(121 * 1000, false, false);
 		assertEquals("0 days 0 hours 2 minutes 1 second", text);
-		text = DurationFormatUtils.formatDurationWords(72 * 60 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(72 * 60 * 1000, false, false);
 		assertEquals("0 days 1 hour 12 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(24 * 60 * 60 * 1000 + 72 * 60 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(24 * 60 * 60 * 1000 + 72 * 60 * 1000, false, false);
 		assertEquals("1 day 1 hour 12 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(2 * 24 * 60 * 60 * 1000 + 72 * 60 * 1000, false, false);
+		text = DurationFormats.formatDurationWords(2 * 24 * 60 * 60 * 1000 + 72 * 60 * 1000, false, false);
 		assertEquals("2 days 1 hour 12 minutes 0 seconds", text);
 		for (int i = 2; i < 31; i++) {
-			text = DurationFormatUtils.formatDurationWords(i * 24 * 60 * 60 * 1000L, false, false);
+			text = DurationFormats.formatDurationWords(i * 24 * 60 * 60 * 1000L, false, false);
 			// assertEquals(i + " days 0 hours 0 minutes 0 seconds", text);
 			//
 			// junit.framework.ComparisonFailure: expected:<25 days 0 hours 0 minutes 0...> but
@@ -129,103 +128,103 @@ public class DurationFormatUtilsTest {
 		final long oneDay = oneHour * 24;
 		String text = null;
 
-		text = DurationFormatUtils.formatDurationWords(oneSecond, false, false);
+		text = DurationFormats.formatDurationWords(oneSecond, false, false);
 		assertEquals("0 days 0 hours 0 minutes 1 second", text);
-		text = DurationFormatUtils.formatDurationWords(oneSecond * 2, false, false);
+		text = DurationFormats.formatDurationWords(oneSecond * 2, false, false);
 		assertEquals("0 days 0 hours 0 minutes 2 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneSecond * 11, false, false);
+		text = DurationFormats.formatDurationWords(oneSecond * 11, false, false);
 		assertEquals("0 days 0 hours 0 minutes 11 seconds", text);
 
-		text = DurationFormatUtils.formatDurationWords(oneMinute, false, false);
+		text = DurationFormats.formatDurationWords(oneMinute, false, false);
 		assertEquals("0 days 0 hours 1 minute 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneMinute * 2, false, false);
+		text = DurationFormats.formatDurationWords(oneMinute * 2, false, false);
 		assertEquals("0 days 0 hours 2 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneMinute * 11, false, false);
+		text = DurationFormats.formatDurationWords(oneMinute * 11, false, false);
 		assertEquals("0 days 0 hours 11 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneMinute + oneSecond, false, false);
+		text = DurationFormats.formatDurationWords(oneMinute + oneSecond, false, false);
 		assertEquals("0 days 0 hours 1 minute 1 second", text);
 
-		text = DurationFormatUtils.formatDurationWords(oneHour, false, false);
+		text = DurationFormats.formatDurationWords(oneHour, false, false);
 		assertEquals("0 days 1 hour 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneHour * 2, false, false);
+		text = DurationFormats.formatDurationWords(oneHour * 2, false, false);
 		assertEquals("0 days 2 hours 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneHour * 11, false, false);
+		text = DurationFormats.formatDurationWords(oneHour * 11, false, false);
 		assertEquals("0 days 11 hours 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneHour + oneMinute + oneSecond, false, false);
+		text = DurationFormats.formatDurationWords(oneHour + oneMinute + oneSecond, false, false);
 		assertEquals("0 days 1 hour 1 minute 1 second", text);
 
-		text = DurationFormatUtils.formatDurationWords(oneDay, false, false);
+		text = DurationFormats.formatDurationWords(oneDay, false, false);
 		assertEquals("1 day 0 hours 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneDay * 2, false, false);
+		text = DurationFormats.formatDurationWords(oneDay * 2, false, false);
 		assertEquals("2 days 0 hours 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneDay * 11, false, false);
+		text = DurationFormats.formatDurationWords(oneDay * 11, false, false);
 		assertEquals("11 days 0 hours 0 minutes 0 seconds", text);
-		text = DurationFormatUtils.formatDurationWords(oneDay + oneHour + oneMinute + oneSecond, false, false);
+		text = DurationFormats.formatDurationWords(oneDay + oneHour + oneMinute + oneSecond, false, false);
 		assertEquals("1 day 1 hour 1 minute 1 second", text);
 	}
 
 	@Test
 	public void testFormatDurationHMS() {
 		long time = 0;
-		assertEquals("00:00:00.000", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:00.000", DurationFormats.formatDurationHMS(time));
 
 		time = 1;
-		assertEquals("00:00:00.001", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:00.001", DurationFormats.formatDurationHMS(time));
 
 		time = 15;
-		assertEquals("00:00:00.015", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:00.015", DurationFormats.formatDurationHMS(time));
 
 		time = 165;
-		assertEquals("00:00:00.165", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:00.165", DurationFormats.formatDurationHMS(time));
 
 		time = 1675;
-		assertEquals("00:00:01.675", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:01.675", DurationFormats.formatDurationHMS(time));
 
 		time = 13465;
-		assertEquals("00:00:13.465", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:00:13.465", DurationFormats.formatDurationHMS(time));
 
 		time = 72789;
-		assertEquals("00:01:12.789", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:01:12.789", DurationFormats.formatDurationHMS(time));
 
 		time = 12789 + 32 * 60000;
-		assertEquals("00:32:12.789", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("00:32:12.789", DurationFormats.formatDurationHMS(time));
 
 		time = 12789 + 62 * 60000;
-		assertEquals("01:02:12.789", DurationFormatUtils.formatDurationHMS(time));
+		assertEquals("01:02:12.789", DurationFormats.formatDurationHMS(time));
 	}
 
 	@Test
 	public void testFormatDurationISO() {
-		assertEquals("P0Y0M0DT0H0M0.000S", DurationFormatUtils.formatDurationISO(0L));
-		assertEquals("P0Y0M0DT0H0M0.001S", DurationFormatUtils.formatDurationISO(1L));
-		assertEquals("P0Y0M0DT0H0M0.010S", DurationFormatUtils.formatDurationISO(10L));
-		assertEquals("P0Y0M0DT0H0M0.100S", DurationFormatUtils.formatDurationISO(100L));
-		assertEquals("P0Y0M0DT0H1M15.321S", DurationFormatUtils.formatDurationISO(75321L));
+		assertEquals("P0Y0M0DT0H0M0.000S", DurationFormats.formatDurationISO(0L));
+		assertEquals("P0Y0M0DT0H0M0.001S", DurationFormats.formatDurationISO(1L));
+		assertEquals("P0Y0M0DT0H0M0.010S", DurationFormats.formatDurationISO(10L));
+		assertEquals("P0Y0M0DT0H0M0.100S", DurationFormats.formatDurationISO(100L));
+		assertEquals("P0Y0M0DT0H1M15.321S", DurationFormats.formatDurationISO(75321L));
 	}
 
 	@Test
 	public void testFormatDuration() {
 		long duration = 0;
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "y"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "M"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "d"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "H"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "m"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "s"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "S"));
-		assertEquals("0000", DurationFormatUtils.formatDuration(duration, "SSSS"));
-		assertEquals("0000", DurationFormatUtils.formatDuration(duration, "yyyy"));
-		assertEquals("0000", DurationFormatUtils.formatDuration(duration, "yyMM"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "y"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "M"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "d"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "H"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "m"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "s"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "S"));
+		assertEquals("0000", DurationFormats.formatDuration(duration, "SSSS"));
+		assertEquals("0000", DurationFormats.formatDuration(duration, "yyyy"));
+		assertEquals("0000", DurationFormats.formatDuration(duration, "yyMM"));
 
 		duration = 60 * 1000;
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "y"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "M"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "d"));
-		assertEquals("0", DurationFormatUtils.formatDuration(duration, "H"));
-		assertEquals("1", DurationFormatUtils.formatDuration(duration, "m"));
-		assertEquals("60", DurationFormatUtils.formatDuration(duration, "s"));
-		assertEquals("60000", DurationFormatUtils.formatDuration(duration, "S"));
-		assertEquals("01:00", DurationFormatUtils.formatDuration(duration, "mm:ss"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "y"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "M"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "d"));
+		assertEquals("0", DurationFormats.formatDuration(duration, "H"));
+		assertEquals("1", DurationFormats.formatDuration(duration, "m"));
+		assertEquals("60", DurationFormats.formatDuration(duration, "s"));
+		assertEquals("60000", DurationFormats.formatDuration(duration, "S"));
+		assertEquals("01:00", DurationFormats.formatDuration(duration, "mm:ss"));
 
 		final Calendar base = Calendar.getInstance();
 		base.set(2000, 0, 1, 0, 0, 0);
@@ -239,7 +238,7 @@ public class DurationFormatUtilsTest {
 		// don't use 1970 in test as time zones were less reliable in 1970 than now
 		// remember that duration formatting ignores time zones, working on strict hour lengths
 		final int days = 366 + 365 + 365 + 31;
-		assertEquals("0 0 " + days, DurationFormatUtils.formatDuration(duration, "y M d"));
+		assertEquals("0 0 " + days, DurationFormats.formatDuration(duration, "y M d"));
 	}
 
 	@Test
@@ -255,14 +254,14 @@ public class DurationFormatUtilsTest {
 		String text;
 		// repeat a test from testDateTimeISO to compare extended and not extended.
 		// test fixture is the same as above, but now with extended format.
-		text = DurationFormatUtils.formatPeriod(base.getTime().getTime(), cal.getTime().getTime(),
-			DurationFormatUtils.ISO_EXTENDED_FORMAT_PATTERN, false, timeZone);
+		text = DurationFormats.formatPeriod(base.getTime().getTime(), cal.getTime().getTime(),
+			DurationFormats.ISO_EXTENDED_FORMAT_PATTERN, false, timeZone);
 		assertEquals("P32Y1M22DT9H11M12.001S", text);
 		// test fixture from example in http://www.w3.org/TR/xmlschema-2/#duration
 		cal.set(1971, 1, 3, 10, 30, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		text = DurationFormatUtils.formatPeriod(base.getTime().getTime(), cal.getTime().getTime(),
-			DurationFormatUtils.ISO_EXTENDED_FORMAT_PATTERN, false, timeZone);
+		text = DurationFormats.formatPeriod(base.getTime().getTime(), cal.getTime().getTime(),
+			DurationFormats.ISO_EXTENDED_FORMAT_PATTERN, false, timeZone);
 		assertEquals("P1Y1M2DT10H30M0.000S", text);
 		// want a way to say 'don't print the seconds in format()' or other fields for that matter:
 		// assertEquals("P1Y2M3DT10H30M", text);
@@ -275,99 +274,99 @@ public class DurationFormatUtilsTest {
 		cal1970.set(Calendar.MILLISECOND, 0);
 		final long time1970 = cal1970.getTime().getTime();
 
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "y"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "M"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "d"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "H"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "m"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "s"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time1970, "S"));
-		assertEquals("0000", DurationFormatUtils.formatPeriod(time1970, time1970, "SSSS"));
-		assertEquals("0000", DurationFormatUtils.formatPeriod(time1970, time1970, "yyyy"));
-		assertEquals("0000", DurationFormatUtils.formatPeriod(time1970, time1970, "yyMM"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "y"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "M"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "d"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "H"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "m"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "s"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time1970, "S"));
+		assertEquals("0000", DurationFormats.formatPeriod(time1970, time1970, "SSSS"));
+		assertEquals("0000", DurationFormats.formatPeriod(time1970, time1970, "yyyy"));
+		assertEquals("0000", DurationFormats.formatPeriod(time1970, time1970, "yyMM"));
 
 		long time = time1970 + 60 * 1000;
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time, "y"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time, "M"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time, "d"));
-		assertEquals("0", DurationFormatUtils.formatPeriod(time1970, time, "H"));
-		assertEquals("1", DurationFormatUtils.formatPeriod(time1970, time, "m"));
-		assertEquals("60", DurationFormatUtils.formatPeriod(time1970, time, "s"));
-		assertEquals("60000", DurationFormatUtils.formatPeriod(time1970, time, "S"));
-		assertEquals("01:00", DurationFormatUtils.formatPeriod(time1970, time, "mm:ss"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time, "y"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time, "M"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time, "d"));
+		assertEquals("0", DurationFormats.formatPeriod(time1970, time, "H"));
+		assertEquals("1", DurationFormats.formatPeriod(time1970, time, "m"));
+		assertEquals("60", DurationFormats.formatPeriod(time1970, time, "s"));
+		assertEquals("60000", DurationFormats.formatPeriod(time1970, time, "S"));
+		assertEquals("01:00", DurationFormats.formatPeriod(time1970, time, "mm:ss"));
 
 		final Calendar cal = Calendar.getInstance();
 		cal.set(1973, 6, 1, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		time = cal.getTime().getTime();
-		assertEquals("36", DurationFormatUtils.formatPeriod(time1970, time, "yM"));
-		assertEquals("3 years 6 months", DurationFormatUtils.formatPeriod(time1970, time, "y' years 'M' months'"));
-		assertEquals("03/06", DurationFormatUtils.formatPeriod(time1970, time, "yy/MM"));
+		assertEquals("36", DurationFormats.formatPeriod(time1970, time, "yM"));
+		assertEquals("3 years 6 months", DurationFormats.formatPeriod(time1970, time, "y' years 'M' months'"));
+		assertEquals("03/06", DurationFormats.formatPeriod(time1970, time, "yy/MM"));
 
 		cal.set(1973, 10, 1, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		time = cal.getTime().getTime();
-		assertEquals("310", DurationFormatUtils.formatPeriod(time1970, time, "yM"));
-		assertEquals("3 years 10 months", DurationFormatUtils.formatPeriod(time1970, time, "y' years 'M' months'"));
-		assertEquals("03/10", DurationFormatUtils.formatPeriod(time1970, time, "yy/MM"));
+		assertEquals("310", DurationFormats.formatPeriod(time1970, time, "yM"));
+		assertEquals("3 years 10 months", DurationFormats.formatPeriod(time1970, time, "y' years 'M' months'"));
+		assertEquals("03/10", DurationFormats.formatPeriod(time1970, time, "yy/MM"));
 
 		cal.set(1974, 0, 1, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		time = cal.getTime().getTime();
-		assertEquals("40", DurationFormatUtils.formatPeriod(time1970, time, "yM"));
-		assertEquals("4 years 0 months", DurationFormatUtils.formatPeriod(time1970, time, "y' years 'M' months'"));
-		assertEquals("04/00", DurationFormatUtils.formatPeriod(time1970, time, "yy/MM"));
-		assertEquals("48", DurationFormatUtils.formatPeriod(time1970, time, "M"));
-		assertEquals("48", DurationFormatUtils.formatPeriod(time1970, time, "MM"));
-		assertEquals("048", DurationFormatUtils.formatPeriod(time1970, time, "MMM"));
+		assertEquals("40", DurationFormats.formatPeriod(time1970, time, "yM"));
+		assertEquals("4 years 0 months", DurationFormats.formatPeriod(time1970, time, "y' years 'M' months'"));
+		assertEquals("04/00", DurationFormats.formatPeriod(time1970, time, "yy/MM"));
+		assertEquals("48", DurationFormats.formatPeriod(time1970, time, "M"));
+		assertEquals("48", DurationFormats.formatPeriod(time1970, time, "MM"));
+		assertEquals("048", DurationFormats.formatPeriod(time1970, time, "MMM"));
 	}
 
 	@Test
 	public void testLexx() {
 		// tests each constant
-		assertArrayEquals(new DurationFormatUtils.Token[] { new DurationFormatUtils.Token(DurationFormatUtils.y, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.M, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.d, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.H, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.m, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.s, 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.S, 1) }, DurationFormatUtils.lexx("yMdHmsS"));
+		assertArrayEquals(new DurationFormats.Token[] { new DurationFormats.Token(DurationFormats.y, 1),
+				new DurationFormats.Token(DurationFormats.M, 1),
+				new DurationFormats.Token(DurationFormats.d, 1),
+				new DurationFormats.Token(DurationFormats.H, 1),
+				new DurationFormats.Token(DurationFormats.m, 1),
+				new DurationFormats.Token(DurationFormats.s, 1),
+				new DurationFormats.Token(DurationFormats.S, 1) }, DurationFormats.lexx("yMdHmsS"));
 
 		// tests the ISO8601-like
-		assertArrayEquals(new DurationFormatUtils.Token[] { new DurationFormatUtils.Token(DurationFormatUtils.H, 1),
-				new DurationFormatUtils.Token(new StringBuilder(":"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.m, 2),
-				new DurationFormatUtils.Token(new StringBuilder(":"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.s, 2),
-				new DurationFormatUtils.Token(new StringBuilder("."), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.S, 3) }, DurationFormatUtils.lexx("H:mm:ss.SSS"));
+		assertArrayEquals(new DurationFormats.Token[] { new DurationFormats.Token(DurationFormats.H, 1),
+				new DurationFormats.Token(new StringBuilder(":"), 1),
+				new DurationFormats.Token(DurationFormats.m, 2),
+				new DurationFormats.Token(new StringBuilder(":"), 1),
+				new DurationFormats.Token(DurationFormats.s, 2),
+				new DurationFormats.Token(new StringBuilder("."), 1),
+				new DurationFormats.Token(DurationFormats.S, 3) }, DurationFormats.lexx("H:mm:ss.SSS"));
 
 		// test the iso extended format
-		assertArrayEquals(new DurationFormatUtils.Token[] { new DurationFormatUtils.Token(new StringBuilder("P"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.y, 4),
-				new DurationFormatUtils.Token(new StringBuilder("Y"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.M, 1),
-				new DurationFormatUtils.Token(new StringBuilder("M"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.d, 1),
-				new DurationFormatUtils.Token(new StringBuilder("DT"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.H, 1),
-				new DurationFormatUtils.Token(new StringBuilder("H"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.m, 1),
-				new DurationFormatUtils.Token(new StringBuilder("M"), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.s, 1),
-				new DurationFormatUtils.Token(new StringBuilder("."), 1),
-				new DurationFormatUtils.Token(DurationFormatUtils.S, 1),
-				new DurationFormatUtils.Token(new StringBuilder("S"), 1) },
-			DurationFormatUtils.lexx(DurationFormatUtils.ISO_EXTENDED_FORMAT_PATTERN));
+		assertArrayEquals(new DurationFormats.Token[] { new DurationFormats.Token(new StringBuilder("P"), 1),
+				new DurationFormats.Token(DurationFormats.y, 4),
+				new DurationFormats.Token(new StringBuilder("Y"), 1),
+				new DurationFormats.Token(DurationFormats.M, 1),
+				new DurationFormats.Token(new StringBuilder("M"), 1),
+				new DurationFormats.Token(DurationFormats.d, 1),
+				new DurationFormats.Token(new StringBuilder("DT"), 1),
+				new DurationFormats.Token(DurationFormats.H, 1),
+				new DurationFormats.Token(new StringBuilder("H"), 1),
+				new DurationFormats.Token(DurationFormats.m, 1),
+				new DurationFormats.Token(new StringBuilder("M"), 1),
+				new DurationFormats.Token(DurationFormats.s, 1),
+				new DurationFormats.Token(new StringBuilder("."), 1),
+				new DurationFormats.Token(DurationFormats.S, 1),
+				new DurationFormats.Token(new StringBuilder("S"), 1) },
+			DurationFormats.lexx(DurationFormats.ISO_EXTENDED_FORMAT_PATTERN));
 
 		// test failures in equals
-		final DurationFormatUtils.Token token = new DurationFormatUtils.Token(DurationFormatUtils.y, 4);
+		final DurationFormats.Token token = new DurationFormats.Token(DurationFormats.y, 4);
 		assertFalse("Token equal to non-Token class. ", token.equals(new Object()));
 		assertFalse("Token equal to Token with wrong value class. ",
-			token.equals(new DurationFormatUtils.Token(new Object())));
+			token.equals(new DurationFormats.Token(new Object())));
 		assertFalse("Token equal to Token with different count. ",
-			token.equals(new DurationFormatUtils.Token(DurationFormatUtils.y, 1)));
-		final DurationFormatUtils.Token numToken = new DurationFormatUtils.Token(Integer.valueOf(1), 4);
+			token.equals(new DurationFormats.Token(DurationFormats.y, 1)));
+		final DurationFormats.Token numToken = new DurationFormats.Token(Integer.valueOf(1), 4);
 		assertTrue("Token with Number value not equal to itself. ", numToken.equals(numToken));
 	}
 
@@ -393,7 +392,7 @@ public class DurationFormatUtilsTest {
 		calendar.set(2012, 8, 8);
 		final long endMillis = calendar.getTimeInMillis();
 
-		assertEquals("1 9", DurationFormatUtils.formatPeriod(startMillis, endMillis, "M d"));
+		assertEquals("1 9", DurationFormats.formatPeriod(startMillis, endMillis, "M d"));
 	}
 
 	// Testing the under a day range in DurationFormatUtils.formatPeriod
@@ -523,7 +522,7 @@ public class DurationFormatUtilsTest {
 		cal2.set(Calendar.MILLISECOND, 0);
 		final long milli1 = cal1.getTime().getTime();
 		final long milli2 = cal2.getTime().getTime();
-		final String result = DurationFormatUtils.formatPeriod(milli1, milli2, format);
+		final String result = DurationFormats.formatPeriod(milli1, milli2, format);
 		if (message == null) {
 			assertEquals(expected, result);
 		}
@@ -532,7 +531,7 @@ public class DurationFormatUtilsTest {
 		}
 	}
 
-	private void assertArrayEquals(final DurationFormatUtils.Token[] obj1, final DurationFormatUtils.Token[] obj2) {
+	private void assertArrayEquals(final DurationFormats.Token[] obj1, final DurationFormats.Token[] obj2) {
 		assertEquals("Arrays are unequal length. ", obj1.length, obj2.length);
 		for (int i = 0; i < obj1.length; i++) {
 			assertTrue("Index " + i + " not equal, " + obj1[i] + " vs " + obj2[i], obj1[i].equals(obj2[i]));

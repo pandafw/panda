@@ -88,18 +88,18 @@ public class Files {
 	}
 
 	/**
-	 * 创建新文件，如果父目录不存在，也一并创建。可接受 null 参数
+	 * create a file. If the parent folder does not exist, the parent folder will be created.
 	 * 
-	 * @param f 文件对象
-	 * @return false，如果文件已存在。 true 创建成功
+	 * @param file file
+	 * @return false if file already exists or failed to create, true if created successfully
 	 * @throws IOException if an IO error occurs
 	 */
-	public static boolean createFile(File f) throws IOException {
-		if (null == f || f.exists()) {
+	public static boolean createFile(File file) throws IOException {
+		if (null == file || file.exists()) {
 			return false;
 		}
-		makeDirs(f.getParentFile());
-		return f.createNewFile();
+		makeDirs(file.getParentFile());
+		return file.createNewFile();
 	}
 
 	// -----------------------------------------------------------------------

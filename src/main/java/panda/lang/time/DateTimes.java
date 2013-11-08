@@ -1,28 +1,29 @@
 package panda.lang.time;
 
 import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
+
+import panda.lang.TimeZones;
 
 /**
- * <p>A suite of utilities surrounding the use of the
- * {@link java.util.Calendar} and {@link java.util.Date} object.</p>
- * 
- * <p>DateUtils contains a lot of common methods considering manipulations
- * of Dates or Calendars. Some methods require some extra explanation.
- * The truncate, ceiling and round methods could be considered the Math.floor(),
- * Math.ceil() or Math.round versions for dates
- * This way date-fields will be ignored in bottom-up order.
- * As a complement to these methods we've introduced some fragment-methods.
- * With these methods the Date-fields will be ignored in top-down order.
- * Since a date without a year is not a valid date, you have to decide in what
- * kind of date-field you want your result, for instance milliseconds or days.
+ * <p>
+ * A suite of utilities surrounding the use of the {@link java.util.Calendar} and
+ * {@link java.util.Date} object.
  * </p>
- *
+ * <p>
+ * DateUtils contains a lot of common methods considering manipulations of Dates or Calendars. Some
+ * methods require some extra explanation. The truncate, ceiling and round methods could be
+ * considered the Math.floor(), Math.ceil() or Math.round versions for dates This way date-fields
+ * will be ignored in bottom-up order. As a complement to these methods we've introduced some
+ * fragment-methods. With these methods the Date-fields will be ignored in top-down order. Since a
+ * date without a year is not a valid date, you have to decide in what kind of date-field you want
+ * your result, for instance milliseconds or days.
+ * </p>
  */
 public class DateTimes {
 
@@ -86,9 +87,8 @@ public class DateTimes {
 	 */
 	public static final int SEMI_MONTH = 1001;
 
-	private static final int[][] fields = { { Calendar.MILLISECOND }, { Calendar.SECOND },
-			{ Calendar.MINUTE }, { Calendar.HOUR_OF_DAY, Calendar.HOUR },
-			{ Calendar.DATE, Calendar.DAY_OF_MONTH, Calendar.AM_PM
+	private static final int[][] fields = { { Calendar.MILLISECOND }, { Calendar.SECOND }, { Calendar.MINUTE },
+			{ Calendar.HOUR_OF_DAY, Calendar.HOUR }, { Calendar.DATE, Calendar.DAY_OF_MONTH, Calendar.AM_PM
 			/* Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK, Calendar.DAY_OF_WEEK_IN_MONTH */
 			}, { Calendar.MONTH, DateTimes.SEMI_MONTH }, { Calendar.YEAR }, { Calendar.ERA } };
 
@@ -130,11 +130,90 @@ public class DateTimes {
 	 */
 	private static final int MODIFY_CEILING = 2;
 
+	/**
+	 * The UTC time zone (often referred to as GMT). This is private as it is mutable.
+	 */
+	private static final TimeZone UTC_TIME_ZONE = TimeZones.GMT;
+
 	// -----------------------------------------------------------------------
+	/**
+	 * ISO8601 formatter for date-time without time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
+	 */
+	public static final FastDateFormat ISO_DATETIME_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss");
+
+	/**
+	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
+	 */
+	public static final FastDateFormat ISO_DATETIME_NO_T_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+
+	/**
+	 * ISO8601 formatter for date-time with time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
+	 */
+	public static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT = FastDateFormat
+		.getInstance("yyyy-MM-dd'T'HH:mm:ssZZ");
+
+	/**
+	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
+	 */
+	public static final FastDateFormat ISO_DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
+
+	/**
+	 * ISO8601-like formatter for date with time zone. The format used is <tt>yyyy-MM-ddZZ</tt>.
+	 * This pattern does not comply with the formal ISO8601 specification as the standard does not
+	 * allow a time zone without a time.
+	 */
+	public static final FastDateFormat ISO_DATE_TIME_ZONE_FORMAT = FastDateFormat.getInstance("yyyy-MM-ddZZ");
+
+	/**
+	 * ISO8601 formatter for time without time zone. The format used is <tt>'T'HH:mm:ss</tt>.
+	 */
+	public static final FastDateFormat ISO_TIME_FORMAT = FastDateFormat.getInstance("'T'HH:mm:ss");
+
+	/**
+	 * ISO8601 formatter for time with time zone. The format used is <tt>'T'HH:mm:ssZZ</tt>.
+	 */
+	public static final FastDateFormat ISO_TIME_TIME_ZONE_FORMAT = FastDateFormat.getInstance("'T'HH:mm:ssZZ");
+
+	/**
+	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. This
+	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
+	 * 'T' prefix for times.
+	 */
+	public static final FastDateFormat ISO_TIME_NO_T_FORMAT = FastDateFormat.getInstance("HH:mm:ss");
+
+	/**
+	 * ISO8601-like formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>. This
+	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
+	 * 'T' prefix for times.
+	 */
+	public static final FastDateFormat ISO_TIME_NO_T_TIME_ZONE_FORMAT = FastDateFormat.getInstance("HH:mm:ssZZ");
+
+	/**
+	 * SMTP (and probably other) date headers. The format used is
+	 * <tt>EEE, dd MMM yyyy HH:mm:ss Z</tt> in US locale.
+	 */
+	public static final FastDateFormat SMTP_DATETIME_FORMAT = FastDateFormat.getInstance("EEE, dd MMM yyyy HH:mm:ss Z",
+		Locale.US);
+
+	/**
+	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
+	 */
+	public static final FastDateFormat TIMESTAMP_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
+
+	// -----------------------------------------------------------------------
+	/**
+	 * @return current Date
+	 */
 	public static Date getDate() {
 		return Calendar.getInstance().getTime();
 	}
-	
+
+	/**
+	 * @return current time in milliseconds
+	 */
 	public static long getTime() {
 		return getDate().getTime();
 	}
@@ -154,13 +233,13 @@ public class DateTimes {
 	 * @return true if they represent the same day
 	 * @throws IllegalArgumentException if either date is <code>null</code>
 	 */
-	public static boolean isSameDay(Date date1, Date date2) {
+	public static boolean isSameDay(final Date date1, final Date date2) {
 		if (date1 == null || date2 == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar cal1 = Calendar.getInstance();
+		final Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(date1);
-		Calendar cal2 = Calendar.getInstance();
+		final Calendar cal2 = Calendar.getInstance();
 		cal2.setTime(date2);
 		return isSameDay(cal1, cal2);
 	}
@@ -179,12 +258,11 @@ public class DateTimes {
 	 * @return true if they represent the same day
 	 * @throws IllegalArgumentException if either calendar is <code>null</code>
 	 */
-	public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+	public static boolean isSameDay(final Calendar cal1, final Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
-				&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1
+		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1
 			.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
 	}
 
@@ -202,7 +280,7 @@ public class DateTimes {
 	 * @return true if they represent the same millisecond instant
 	 * @throws IllegalArgumentException if either date is <code>null</code>
 	 */
-	public static boolean isSameInstant(Date date1, Date date2) {
+	public static boolean isSameInstant(final Date date1, final Date date2) {
 		if (date1 == null || date2 == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -222,7 +300,7 @@ public class DateTimes {
 	 * @return true if they represent the same millisecond instant
 	 * @throws IllegalArgumentException if either date is <code>null</code>
 	 */
-	public static boolean isSameInstant(Calendar cal1, Calendar cal2) {
+	public static boolean isSameInstant(final Calendar cal1, final Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -244,7 +322,7 @@ public class DateTimes {
 	 * @return true if they represent the same millisecond instant
 	 * @throws IllegalArgumentException if either date is <code>null</code>
 	 */
-	public static boolean isSameLocalTime(Calendar cal1, Calendar cal2) {
+	public static boolean isSameLocalTime(final Calendar cal1, final Calendar cal2) {
 		if (cal1 == null || cal2 == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -254,103 +332,7 @@ public class DateTimes {
 				&& cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY)
 				&& cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 				&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
-				&& cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.getClass() == cal2
-			.getClass());
-	}
-
-	// -----------------------------------------------------------------------
-	/**
-	 * <p>
-	 * Parses a string representing a date by trying a variety of different parsers.
-	 * </p>
-	 * <p>
-	 * The parse will try each parse pattern in turn. A parse is only deemed successful if it parses
-	 * the whole of the input string. If no parse patterns match, a ParseException is thrown.
-	 * </p>
-	 * The parser will be lenient toward the parsed date.
-	 * 
-	 * @param str the date to parse, not null
-	 * @param parsePatterns the date format patterns to use, see SimpleDateFormat, not null
-	 * @return the parsed date
-	 * @throws IllegalArgumentException if the date string or pattern array is null
-	 * @throws ParseException if none of the date patterns were suitable (or there were none)
-	 */
-	public static Date parseDate(String str, String... parsePatterns) throws ParseException {
-		return parseDateWithLeniency(str, parsePatterns, true);
-	}
-
-	// -----------------------------------------------------------------------
-	/**
-	 * <p>
-	 * Parses a string representing a date by trying a variety of different parsers.
-	 * </p>
-	 * <p>
-	 * The parse will try each parse pattern in turn. A parse is only deemed successful if it parses
-	 * the whole of the input string. If no parse patterns match, a ParseException is thrown.
-	 * </p>
-	 * The parser parses strictly - it does not allow for dates such as "February 942, 1996".
-	 * 
-	 * @param str the date to parse, not null
-	 * @param parsePatterns the date format patterns to use, see SimpleDateFormat, not null
-	 * @return the parsed date
-	 * @throws IllegalArgumentException if the date string or pattern array is null
-	 * @throws ParseException if none of the date patterns were suitable
-	 */
-	public static Date parseDateStrictly(String str, String... parsePatterns) throws ParseException {
-		return parseDateWithLeniency(str, parsePatterns, false);
-	}
-
-	/**
-	 * <p>
-	 * Parses a string representing a date by trying a variety of different parsers.
-	 * </p>
-	 * <p>
-	 * The parse will try each parse pattern in turn. A parse is only deemed successful if it parses
-	 * the whole of the input string. If no parse patterns match, a ParseException is thrown.
-	 * </p>
-	 * 
-	 * @param str the date to parse, not null
-	 * @param parsePatterns the date format patterns to use, see SimpleDateFormat, not null
-	 * @param lenient Specify whether or not date/time parsing is to be lenient.
-	 * @return the parsed date
-	 * @throws IllegalArgumentException if the date string or pattern array is null
-	 * @throws ParseException if none of the date patterns were suitable
-	 * @see java.util.Calender#isLenient()
-	 */
-	private static Date parseDateWithLeniency(String str, String[] parsePatterns, boolean lenient)
-			throws ParseException {
-		if (str == null || parsePatterns == null) {
-			throw new IllegalArgumentException("Date and Patterns must not be null");
-		}
-
-		SimpleDateFormat parser = new SimpleDateFormat();
-		parser.setLenient(lenient);
-		ParsePosition pos = new ParsePosition(0);
-		for (String parsePattern : parsePatterns) {
-
-			String pattern = parsePattern;
-
-			// LANG-530 - need to make sure 'ZZ' output doesn't get passed to SimpleDateFormat
-			if (parsePattern.endsWith("ZZ")) {
-				pattern = pattern.substring(0, pattern.length() - 1);
-			}
-
-			parser.applyPattern(pattern);
-			pos.setIndex(0);
-
-			String str2 = str;
-			// LANG-530 - need to make sure 'ZZ' output doesn't hit SimpleDateFormat as it will
-			// ParseException
-			if (parsePattern.endsWith("ZZ")) {
-				str2 = str.replaceAll("([-+][0-9][0-9]):([0-9][0-9])$", "$1$2");
-			}
-
-			Date date = parser.parse(str2, pos);
-			if (date != null && pos.getIndex() == str2.length()) {
-				return date;
-			}
-		}
-		throw new ParseException("Unable to parse the date: " + str, -1);
+				&& cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) && cal1.getClass() == cal2.getClass());
 	}
 
 	// -----------------------------------------------------------------------
@@ -363,7 +345,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addYears(Date date, int amount) {
+	public static Date addYears(final Date date, final int amount) {
 		return add(date, Calendar.YEAR, amount);
 	}
 
@@ -377,7 +359,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addMonths(Date date, int amount) {
+	public static Date addMonths(final Date date, final int amount) {
 		return add(date, Calendar.MONTH, amount);
 	}
 
@@ -391,7 +373,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addWeeks(Date date, int amount) {
+	public static Date addWeeks(final Date date, final int amount) {
 		return add(date, Calendar.WEEK_OF_YEAR, amount);
 	}
 
@@ -405,7 +387,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addDays(Date date, int amount) {
+	public static Date addDays(final Date date, final int amount) {
 		return add(date, Calendar.DAY_OF_MONTH, amount);
 	}
 
@@ -419,7 +401,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addHours(Date date, int amount) {
+	public static Date addHours(final Date date, final int amount) {
 		return add(date, Calendar.HOUR_OF_DAY, amount);
 	}
 
@@ -433,7 +415,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addMinutes(Date date, int amount) {
+	public static Date addMinutes(final Date date, final int amount) {
 		return add(date, Calendar.MINUTE, amount);
 	}
 
@@ -447,7 +429,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addSeconds(Date date, int amount) {
+	public static Date addSeconds(final Date date, final int amount) {
 		return add(date, Calendar.SECOND, amount);
 	}
 
@@ -461,7 +443,7 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date addMilliseconds(Date date, int amount) {
+	public static Date addMilliseconds(final Date date, final int amount) {
 		return add(date, Calendar.MILLISECOND, amount);
 	}
 
@@ -475,11 +457,11 @@ public class DateTimes {
 	 * @return the new {@code Date} with the amount added
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	private static Date add(Date date, int calendarField, int amount) {
+	private static Date add(final Date date, final int calendarField, final int amount) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.add(calendarField, amount);
 		return c.getTime();
@@ -495,7 +477,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setYears(Date date, int amount) {
+	public static Date setYears(final Date date, final int amount) {
 		return set(date, Calendar.YEAR, amount);
 	}
 
@@ -509,7 +491,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setMonths(Date date, int amount) {
+	public static Date setMonths(final Date date, final int amount) {
 		return set(date, Calendar.MONTH, amount);
 	}
 
@@ -523,7 +505,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setDays(Date date, int amount) {
+	public static Date setDays(final Date date, final int amount) {
 		return set(date, Calendar.DAY_OF_MONTH, amount);
 	}
 
@@ -537,7 +519,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setHours(Date date, int amount) {
+	public static Date setHours(final Date date, final int amount) {
 		return set(date, Calendar.HOUR_OF_DAY, amount);
 	}
 
@@ -551,7 +533,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setMinutes(Date date, int amount) {
+	public static Date setMinutes(final Date date, final int amount) {
 		return set(date, Calendar.MINUTE, amount);
 	}
 
@@ -565,7 +547,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setSeconds(Date date, int amount) {
+	public static Date setSeconds(final Date date, final int amount) {
 		return set(date, Calendar.SECOND, amount);
 	}
 
@@ -579,7 +561,7 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	public static Date setMilliseconds(Date date, int amount) {
+	public static Date setMilliseconds(final Date date, final int amount) {
 		return set(date, Calendar.MILLISECOND, amount);
 	}
 
@@ -594,12 +576,12 @@ public class DateTimes {
 	 * @return a new {@code Date} set with the specified value
 	 * @throws IllegalArgumentException if the date is null
 	 */
-	private static Date set(Date date, int calendarField, int amount) {
+	private static Date set(final Date date, final int calendarField, final int amount) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
 		// getInstance() returns a new object, so this method is thread safe.
-		Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance();
 		c.setLenient(false);
 		c.setTime(date);
 		c.set(calendarField, amount);
@@ -614,8 +596,8 @@ public class DateTimes {
 	 * @return the created Calendar
 	 * @throws NullPointerException if null is passed in
 	 */
-	public static Calendar toCalendar(Date date) {
-		Calendar c = Calendar.getInstance();
+	public static Calendar toCalendar(final Date date) {
+		final Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		return c;
 	}
@@ -647,11 +629,11 @@ public class DateTimes {
 	 * @return the different rounded date, not null
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date round(Date date, int field) {
+	public static Date round(final Date date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar gval = Calendar.getInstance();
+		final Calendar gval = Calendar.getInstance();
 		gval.setTime(date);
 		modify(gval, field, MODIFY_ROUND);
 		return gval.getTime();
@@ -684,11 +666,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Calendar round(Calendar date, int field) {
+	public static Calendar round(final Calendar date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar rounded = (Calendar)date.clone();
+		final Calendar rounded = (Calendar)date.clone();
 		modify(rounded, field, MODIFY_ROUND);
 		return rounded;
 	}
@@ -721,7 +703,7 @@ public class DateTimes {
 	 * @throws ClassCastException if the object type is not a {@code Date} or {@code Calendar}
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date round(Object date, int field) {
+	public static Date round(final Object date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -753,11 +735,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date truncate(Date date, int field) {
+	public static Date truncate(final Date date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar gval = Calendar.getInstance();
+		final Calendar gval = Calendar.getInstance();
 		gval.setTime(date);
 		modify(gval, field, MODIFY_TRUNCATE);
 		return gval.getTime();
@@ -779,11 +761,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Calendar truncate(Calendar date, int field) {
+	public static Calendar truncate(final Calendar date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar truncated = (Calendar)date.clone();
+		final Calendar truncated = (Calendar)date.clone();
 		modify(truncated, field, MODIFY_TRUNCATE);
 		return truncated;
 	}
@@ -805,7 +787,7 @@ public class DateTimes {
 	 * @throws ClassCastException if the object type is not a {@code Date} or {@code Calendar}
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date truncate(Object date, int field) {
+	public static Date truncate(final Object date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -837,11 +819,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date ceiling(Date date, int field) {
+	public static Date ceiling(final Date date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar gval = Calendar.getInstance();
+		final Calendar gval = Calendar.getInstance();
 		gval.setTime(date);
 		modify(gval, field, MODIFY_CEILING);
 		return gval.getTime();
@@ -863,11 +845,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Calendar ceiling(Calendar date, int field) {
+	public static Calendar ceiling(final Calendar date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar ceiled = (Calendar)date.clone();
+		final Calendar ceiled = (Calendar)date.clone();
 		modify(ceiled, field, MODIFY_CEILING);
 		return ceiled;
 	}
@@ -889,7 +871,7 @@ public class DateTimes {
 	 * @throws ClassCastException if the object type is not a {@code Date} or {@code Calendar}
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	public static Date ceiling(Object date, int field) {
+	public static Date ceiling(final Object date, final int field) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -915,7 +897,7 @@ public class DateTimes {
 	 * @param modType type to truncate, round or ceiling
 	 * @throws ArithmeticException if the year is over 280 million
 	 */
-	private static void modify(Calendar val, int field, int modType) {
+	private static void modify(final Calendar val, final int field, final int modType) {
 		if (val.get(Calendar.YEAR) > 280000000) {
 			throw new ArithmeticException("Calendar value too large for accurate calculations");
 		}
@@ -930,12 +912,12 @@ public class DateTimes {
 		// Manually truncate milliseconds, seconds and minutes, rather than using
 		// Calendar methods.
 
-		Date date = val.getTime();
+		final Date date = val.getTime();
 		long time = date.getTime();
 		boolean done = false;
 
 		// truncate milliseconds
-		int millisecs = val.get(Calendar.MILLISECOND);
+		final int millisecs = val.get(Calendar.MILLISECOND);
 		if (MODIFY_TRUNCATE == modType || millisecs < 500) {
 			time = time - millisecs;
 		}
@@ -944,7 +926,7 @@ public class DateTimes {
 		}
 
 		// truncate seconds
-		int seconds = val.get(Calendar.SECOND);
+		final int seconds = val.get(Calendar.SECOND);
 		if (!done && (MODIFY_TRUNCATE == modType || seconds < 30)) {
 			time = time - (seconds * 1000L);
 		}
@@ -953,7 +935,7 @@ public class DateTimes {
 		}
 
 		// truncate minutes
-		int minutes = val.get(Calendar.MINUTE);
+		final int minutes = val.get(Calendar.MINUTE);
 		if (!done && (MODIFY_TRUNCATE == modType || minutes < 30)) {
 			time = time - (minutes * 60000L);
 		}
@@ -966,8 +948,8 @@ public class DateTimes {
 		// ----------------- Fix for LANG-59 ----------------------- END ----------------
 
 		boolean roundUp = false;
-		for (int[] aField : fields) {
-			for (int element : aField) {
+		for (final int[] aField : fields) {
+			for (final int element : aField) {
 				if (element == field) {
 					// This is our field... we stop looping
 					if (modType == MODIFY_CEILING || (modType == MODIFY_ROUND && roundUp)) {
@@ -1043,8 +1025,8 @@ public class DateTimes {
 				break;
 			}
 			if (!offsetSet) {
-				int min = val.getActualMinimum(aField[0]);
-				int max = val.getActualMaximum(aField[0]);
+				final int min = val.getActualMinimum(aField[0]);
+				final int max = val.getActualMaximum(aField[0]);
 				// Calculate the offset from the minimum allowed value
 				offset = val.get(aField[0]) - min;
 				// Set roundUp if this is more than half way between the minimum and maximum
@@ -1084,11 +1066,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws IllegalArgumentException if the rangeStyle is invalid
 	 */
-	public static Iterator<Calendar> iterator(Date focus, int rangeStyle) {
+	public static Iterator<Calendar> iterator(final Date focus, final int rangeStyle) {
 		if (focus == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar gval = Calendar.getInstance();
+		final Calendar gval = Calendar.getInstance();
 		gval.setTime(focus);
 		return iterator(gval, rangeStyle);
 	}
@@ -1117,7 +1099,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws IllegalArgumentException if the rangeStyle is invalid
 	 */
-	public static Iterator<Calendar> iterator(Calendar focus, int rangeStyle) {
+	public static Iterator<Calendar> iterator(final Calendar focus, final int rangeStyle) {
 		if (focus == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -1207,7 +1189,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code>
 	 * @throws ClassCastException if the object type is not a {@code Date} or {@code Calendar}
 	 */
-	public static Iterator<?> iterator(Object focus, int rangeStyle) {
+	public static Iterator<?> iterator(final Object focus, final int rangeStyle) {
 		if (focus == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
@@ -1256,7 +1238,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInMilliseconds(Date date, int fragment) {
+	public static long getFragmentInMilliseconds(final Date date, final int fragment) {
 		return getFragment(date, fragment, Calendar.MILLISECOND);
 	}
 
@@ -1296,7 +1278,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInSeconds(Date date, int fragment) {
+	public static long getFragmentInSeconds(final Date date, final int fragment) {
 		return getFragment(date, fragment, Calendar.SECOND);
 	}
 
@@ -1336,7 +1318,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInMinutes(Date date, int fragment) {
+	public static long getFragmentInMinutes(final Date date, final int fragment) {
 		return getFragment(date, fragment, Calendar.MINUTE);
 	}
 
@@ -1375,7 +1357,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInHours(Date date, int fragment) {
+	public static long getFragmentInHours(final Date date, final int fragment) {
 		return getFragment(date, fragment, Calendar.HOUR_OF_DAY);
 	}
 
@@ -1414,7 +1396,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInDays(Date date, int fragment) {
+	public static long getFragmentInDays(final Date date, final int fragment) {
 		return getFragment(date, fragment, Calendar.DAY_OF_YEAR);
 	}
 
@@ -1454,7 +1436,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInMilliseconds(Calendar calendar, int fragment) {
+	public static long getFragmentInMilliseconds(final Calendar calendar, final int fragment) {
 		return getFragment(calendar, fragment, Calendar.MILLISECOND);
 	}
 
@@ -1494,7 +1476,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInSeconds(Calendar calendar, int fragment) {
+	public static long getFragmentInSeconds(final Calendar calendar, final int fragment) {
 		return getFragment(calendar, fragment, Calendar.SECOND);
 	}
 
@@ -1534,7 +1516,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInMinutes(Calendar calendar, int fragment) {
+	public static long getFragmentInMinutes(final Calendar calendar, final int fragment) {
 		return getFragment(calendar, fragment, Calendar.MINUTE);
 	}
 
@@ -1573,7 +1555,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInHours(Calendar calendar, int fragment) {
+	public static long getFragmentInHours(final Calendar calendar, final int fragment) {
 		return getFragment(calendar, fragment, Calendar.HOUR_OF_DAY);
 	}
 
@@ -1614,7 +1596,7 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	public static long getFragmentInDays(Calendar calendar, int fragment) {
+	public static long getFragmentInDays(final Calendar calendar, final int fragment) {
 		return getFragment(calendar, fragment, Calendar.DAY_OF_YEAR);
 	}
 
@@ -1628,11 +1610,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	private static long getFragment(Date date, int fragment, int unit) {
+	private static long getFragment(final Date date, final int fragment, final int unit) {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return getFragment(calendar, fragment, unit);
 	}
@@ -1647,11 +1629,11 @@ public class DateTimes {
 	 * @throws IllegalArgumentException if the date is <code>null</code> or fragment is not
 	 *             supported
 	 */
-	private static long getFragment(Calendar calendar, int fragment, int unit) {
+	private static long getFragment(final Calendar calendar, final int fragment, final int unit) {
 		if (calendar == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
-		long millisPerUnit = getMillisPerUnit(unit);
+		final long millisPerUnit = getMillisPerUnit(unit);
 		long result = 0;
 
 		// Fragments bigger than a day require a breakdown to days
@@ -1703,7 +1685,7 @@ public class DateTimes {
 	 * @see #truncate(Calendar, int)
 	 * @see #truncatedEquals(Date, Date, int)
 	 */
-	public static boolean truncatedEquals(Calendar cal1, Calendar cal2, int field) {
+	public static boolean truncatedEquals(final Calendar cal1, final Calendar cal2, final int field) {
 		return truncatedCompareTo(cal1, cal2, field) == 0;
 	}
 
@@ -1718,7 +1700,7 @@ public class DateTimes {
 	 * @see #truncate(Date, int)
 	 * @see #truncatedEquals(Calendar, Calendar, int)
 	 */
-	public static boolean truncatedEquals(Date date1, Date date2, int field) {
+	public static boolean truncatedEquals(final Date date1, final Date date2, final int field) {
 		return truncatedCompareTo(date1, date2, field) == 0;
 	}
 
@@ -1734,9 +1716,9 @@ public class DateTimes {
 	 * @see #truncate(Calendar, int)
 	 * @see #truncatedCompareTo(Date, Date, int)
 	 */
-	public static int truncatedCompareTo(Calendar cal1, Calendar cal2, int field) {
-		Calendar truncatedCal1 = truncate(cal1, field);
-		Calendar truncatedCal2 = truncate(cal2, field);
+	public static int truncatedCompareTo(final Calendar cal1, final Calendar cal2, final int field) {
+		final Calendar truncatedCal1 = truncate(cal1, field);
+		final Calendar truncatedCal2 = truncate(cal2, field);
 		return truncatedCal1.compareTo(truncatedCal2);
 	}
 
@@ -1752,9 +1734,9 @@ public class DateTimes {
 	 * @see #truncate(Calendar, int)
 	 * @see #truncatedCompareTo(Date, Date, int)
 	 */
-	public static int truncatedCompareTo(Date date1, Date date2, int field) {
-		Date truncatedDate1 = truncate(date1, field);
-		Date truncatedDate2 = truncate(date2, field);
+	public static int truncatedCompareTo(final Date date1, final Date date2, final int field) {
+		final Date truncatedDate1 = truncate(date1, field);
+		final Date truncatedDate2 = truncate(date2, field);
 		return truncatedDate1.compareTo(truncatedDate2);
 	}
 
@@ -1766,7 +1748,7 @@ public class DateTimes {
 	 * @return the number of milliseconds in the field
 	 * @throws IllegalArgumentException if date can't be represented in milliseconds
 	 */
-	private static long getMillisPerUnit(int unit) {
+	private static long getMillisPerUnit(final int unit) {
 		long result = Long.MAX_VALUE;
 		switch (unit) {
 		case Calendar.DAY_OF_YEAR:
@@ -1786,8 +1768,7 @@ public class DateTimes {
 			result = 1;
 			break;
 		default:
-			throw new IllegalArgumentException("The unit " + unit
-					+ " cannot be represented is milleseconds");
+			throw new IllegalArgumentException("The unit " + unit + " cannot be represented is milleseconds");
 		}
 		return result;
 	}
@@ -1808,7 +1789,7 @@ public class DateTimes {
 		 * @param startFinal start date (inclusive)
 		 * @param endFinal end date (not inclusive)
 		 */
-		DateIterator(Calendar startFinal, Calendar endFinal) {
+		DateIterator(final Calendar startFinal, final Calendar endFinal) {
 			super();
 			this.endFinal = endFinal;
 			spot = startFinal;
@@ -1820,6 +1801,7 @@ public class DateTimes {
 		 * 
 		 * @return <code>true</code> if the iterator has yet to reach the end date
 		 */
+		@Override
 		public boolean hasNext() {
 			return spot.before(endFinal);
 		}
@@ -1829,6 +1811,7 @@ public class DateTimes {
 		 * 
 		 * @return Object calendar for the next date
 		 */
+		@Override
 		public Calendar next() {
 			if (spot.equals(endFinal)) {
 				throw new NoSuchElementException();
@@ -1842,9 +1825,308 @@ public class DateTimes {
 		 * 
 		 * @see java.util.Iterator#remove()
 		 */
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
 	}
 
+	// -----------------------------------------------------------------------
+	/**
+	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
+	 */
+	public static FastDateFormat datetimeFormat() {
+		return ISO_DATETIME_NO_T_FORMAT;
+	}
+	
+	/**
+	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
+	 */
+	public static FastDateFormat dateFormat() {
+		return ISO_DATE_FORMAT;
+	}
+	
+	/**
+	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. This
+	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
+	 * 'T' prefix for times.
+	 */
+	public static FastDateFormat timeFormat() {
+		return ISO_TIME_NO_T_FORMAT;
+	}
+	
+	/**
+	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
+	 */
+	public static FastDateFormat timestampFormat() {
+		return TIMESTAMP_FORMAT;
+	}
+	
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern using the UTC time zone.
+	 * </p>
+	 * 
+	 * @param millis the date to format expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @return the formatted date
+	 */
+	public static String formatUTC(final long millis, final String pattern) {
+		return format(new Date(millis), pattern, UTC_TIME_ZONE, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern using the UTC time zone.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null
+	 * @return the formatted date
+	 */
+	public static String formatUTC(final Date date, final String pattern) {
+		return format(date, pattern, UTC_TIME_ZONE, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern using the UTC time zone.
+	 * </p>
+	 * 
+	 * @param millis the date to format expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String formatUTC(final long millis, final String pattern, final Locale locale) {
+		return format(new Date(millis), pattern, UTC_TIME_ZONE, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern using the UTC time zone.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String formatUTC(final Date date, final String pattern, final Locale locale) {
+		return format(date, pattern, UTC_TIME_ZONE, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern.
+	 * </p>
+	 * 
+	 * @param millis the date to format expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @return the formatted date
+	 */
+	public static String format(final long millis, final String pattern) {
+		return format(new Date(millis), pattern, null, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null
+	 * @return the formatted date
+	 */
+	public static String format(final Date date, final String pattern) {
+		return format(date, pattern, null, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a calendar into a specific pattern.
+	 * </p>
+	 * 
+	 * @param calendar the calendar to format, not null
+	 * @param pattern the pattern to use to format the calendar, not null
+	 * @return the formatted calendar
+	 * @see FastDateFormat#format(Calendar)
+	 */
+	public static String format(final Calendar calendar, final String pattern) {
+		return format(calendar, pattern, null, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a time zone.
+	 * </p>
+	 * 
+	 * @param millis the time expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final long millis, final String pattern, final TimeZone timeZone) {
+		return format(new Date(millis), pattern, timeZone, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a time zone.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final Date date, final String pattern, final TimeZone timeZone) {
+		return format(date, pattern, timeZone, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a calendar into a specific pattern in a time zone.
+	 * </p>
+	 * 
+	 * @param calendar the calendar to format, not null
+	 * @param pattern the pattern to use to format the calendar, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @return the formatted calendar
+	 * @see FastDateFormat#format(Calendar)
+	 */
+	public static String format(final Calendar calendar, final String pattern, final TimeZone timeZone) {
+		return format(calendar, pattern, timeZone, null);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a locale.
+	 * </p>
+	 * 
+	 * @param millis the date to format expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final long millis, final String pattern, final Locale locale) {
+		return format(new Date(millis), pattern, null, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a locale.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final Date date, final String pattern, final Locale locale) {
+		return format(date, pattern, null, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a calendar into a specific pattern in a locale.
+	 * </p>
+	 * 
+	 * @param calendar the calendar to format, not null
+	 * @param pattern the pattern to use to format the calendar, not null
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted calendar
+	 * @see FastDateFormat#format(Calendar)
+	 */
+	public static String format(final Calendar calendar, final String pattern, final Locale locale) {
+		return format(calendar, pattern, null, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a time zone and locale.
+	 * </p>
+	 * 
+	 * @param millis the date to format expressed in milliseconds
+	 * @param pattern the pattern to use to format the date, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final long millis, final String pattern, final TimeZone timeZone, final Locale locale) {
+		return format(new Date(millis), pattern, timeZone, locale);
+	}
+
+	/**
+	 * <p>
+	 * Formats a date/time into a specific pattern in a time zone and locale.
+	 * </p>
+	 * 
+	 * @param date the date to format, not null
+	 * @param pattern the pattern to use to format the date, not null, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted date
+	 */
+	public static String format(final Date date, final String pattern, final TimeZone timeZone, final Locale locale) {
+		final FastDateFormat df = FastDateFormat.getInstance(pattern, timeZone, locale);
+		return df.format(date);
+	}
+
+	/**
+	 * <p>
+	 * Formats a calendar into a specific pattern in a time zone and locale.
+	 * </p>
+	 * 
+	 * @param calendar the calendar to format, not null
+	 * @param pattern the pattern to use to format the calendar, not null
+	 * @param timeZone the time zone to use, may be <code>null</code>
+	 * @param locale the locale to use, may be <code>null</code>
+	 * @return the formatted calendar
+	 * @see FastDateFormat#format(Calendar)
+	 */
+	public static String format(final Calendar calendar, final String pattern, final TimeZone timeZone,
+			final Locale locale) {
+		final FastDateFormat df = FastDateFormat.getInstance(pattern, timeZone, locale);
+		return df.format(calendar);
+	}
+
+	// -----------------------------------------------------------------------
+	public static Date parse(final String source, final String ... patterns) throws ParseException {
+		return parse(source, null, patterns);
+	}
+	
+	public static Date parse(final String source, Locale locale, final String ... patterns) throws ParseException {
+		if (source == null || patterns == null) {
+			throw new IllegalArgumentException("Date and Patterns must not be null");
+		}
+		
+		for (String pattern : patterns) {
+			try {
+				return parse(source, pattern, null, locale);
+			}
+			catch (ParseException e) {
+				//skip
+			}
+		}
+		throw new ParseException("Unable to parse the date: " + source, -1);
+	}
+	
+	public static Date parse(final String source, final String pattern) throws ParseException {
+		return parse(source, pattern, null, null);
+	}
+	
+	public static Date parse(final String source, final String pattern, final TimeZone timeZone) throws ParseException {
+		return parse(source, pattern, timeZone, null);
+	}
+	
+	public static Date parse(final String source, final String pattern, final Locale locale) throws ParseException {
+		return parse(source, pattern, null, locale);
+	}
+	
+	public static Date parse(final String source, final String pattern, final TimeZone timeZone, final Locale locale) throws ParseException {
+		final FastDateFormat df = FastDateFormat.getInstance(pattern, timeZone, locale);
+		return df.parse(source);
+	}
 }

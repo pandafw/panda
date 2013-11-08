@@ -160,6 +160,17 @@ public class StringsTrimEmptyTest  {
     }
     
     @Test
+    public void testStripStart_String() {
+        assertEquals(null, Strings.stripStart(null));
+        assertEquals("", Strings.stripStart(""));
+        assertEquals("", Strings.stripStart("        "));
+        assertEquals("abc  ", Strings.stripStart("  abc  "));
+        assertEquals(StringsTest.NON_WHITESPACE + StringsTest.WHITESPACE, 
+            Strings.stripStart(StringsTest.WHITESPACE + StringsTest.NON_WHITESPACE + StringsTest.WHITESPACE));
+
+    }
+    
+    @Test
     public void testStripStart_StringString() {
         // null stripStart
         assertEquals(null, Strings.stripStart(null, null));
@@ -189,6 +200,17 @@ public class StringsTrimEmptyTest  {
         assertEquals("  abc  ", Strings.stripStart("  abc  ", "ab"));
         assertEquals("cabab", Strings.stripStart("abcabab", "ab"));
         assertEquals(StringsTest.WHITESPACE, Strings.stripStart(StringsTest.WHITESPACE, ""));
+    }
+    
+    @Test
+    public void testStripEnd_String() {
+        assertEquals(null, Strings.stripEnd(null));
+        assertEquals("", Strings.stripEnd(""));
+        assertEquals("", Strings.stripEnd("        "));
+        assertEquals("  abc", Strings.stripEnd("  abc  "));
+        assertEquals(StringsTest.WHITESPACE + StringsTest.NON_WHITESPACE, 
+            Strings.stripEnd(StringsTest.WHITESPACE + StringsTest.NON_WHITESPACE + StringsTest.WHITESPACE));
+
     }
     
     @Test

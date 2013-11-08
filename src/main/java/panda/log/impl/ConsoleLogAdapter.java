@@ -1,9 +1,6 @@
 package panda.log.impl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.LogAdapter;
 
@@ -20,8 +17,6 @@ public class ConsoleLogAdapter implements LogAdapter {
 	 * Console log to System.out and System.err
 	 */
 	public static class ConsoleLog extends AbstractLog {
-
-		private final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		private ConsoleLog() {
 			isInfoEnabled = true;
@@ -60,22 +55,24 @@ public class ConsoleLogAdapter implements LogAdapter {
 
 		private void printOut(String level, Object message, Throwable t) {
 			System.out.printf("%s %s [%s] %s\n", 
-				DATE_FORMAT.format(new Date()), 
+				DateTimes.timeFormat().format(DateTimes.getDate()), 
 				level, 
 				Thread.currentThread().getName(), 
 				message);
-			if (t != null)
+			if (t != null) {
 				t.printStackTrace(System.out);
+			}
 		}
 
 		private void errorOut(String level, Object message, Throwable t) {
 			System.err.printf("%s %s [%s] %s\n", 
-				DATE_FORMAT.format(new Date()), 
+				DateTimes.timeFormat().format(DateTimes.getDate()), 
 				level, 
 				Thread.currentThread().getName(), 
 				message);
-			if (t != null)
+			if (t != null) {
 				t.printStackTrace(System.err);
+			}
 		}
 
 		@Override

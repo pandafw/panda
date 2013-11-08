@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.io.FileNames;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Collections;
@@ -21,15 +22,20 @@ import panda.lang.Strings;
  * @author yf.frank.wang@gmail.com
  */
 public class URLHelper {
+	public static final char SEPARATOR = '/';
 	public static final String AMP = "&";
 	public static final String EAMP = "&amp;";
 	
 	/**
 	 * get schema from url
+	 * <pre>
+	 *   "http://www.test.com/app" -> "http"
+	 *   "https://www.test.com/app" -> "https"
+	 * </pre>
 	 * @param url url string
 	 * @return schema
 	 */
-	public static String getUrlSchema(String url) {
+	public static String getURLSchema(String url) {
 		if (Strings.isEmpty(url)) {
 			return url;
 		}
@@ -45,20 +51,23 @@ public class URLHelper {
 	
 	/**
 	 * get domain from url
+	 * <pre>
+	 *   "http://www.test.com/app" -> "www.test.com"
+	 * </pre>
 	 * @param url url string
 	 * @return domain
 	 */
-	public static String getUrlDomain(String url) {
+	public static String getURLDomain(String url) {
 		if (Strings.isEmpty(url)) {
 			return url;
 		}
 		
 		int i = url.indexOf("://");
 		if (i >= 0) {
-			url = Strings.stripStart(url.substring(i + 3), "/");
+			url = Strings.stripStart(url.substring(i + 3), '/');
 		}
 
-		i = url.indexOf('/');
+		i = url.indexOf(SEPARATOR);
 		if (i >= 0) {
 			url = url.substring(0, i);
 		}
@@ -72,22 +81,158 @@ public class URLHelper {
 	}
 	
 	/**
-	 * get root from url
+	 * get root length from url
+	 * <pre>
+	 *   http://www.test.com     = [http://www.test.com]
+	 *   http://www.test.com/    = [http://www.test.com]
+	 *   http://www.test.com/app = [http://www.test.com]
+	 *   null                    = -1
+	 *   ""                      = -1
+	 *   /app                    = -1
+	 *   app                     = -1
+	 * </pre>
 	 * @param url url string
-	 * @return root
+	 * @return root length
 	 */
-	public static String getUrlRoot(String url) {
+	public static int getURLRootLength(String url) {
 		if (Strings.isEmpty(url)) {
-			return url;
+			return -1;
 		}
 		
 		int i = url.indexOf("://");
-		i = url.indexOf('/', i);
-		if (i >= 0) {
-			url = url.substring(0, i);
+		if (i < 0) {
+			return -1;
 		}
 
-		return url;
+		i = url.indexOf('/', i + 3);
+		if (i < 0) {
+			return url.length();
+		}
+
+		return i;
+	}
+	
+	/**
+	 * get root from url
+	 * <pre>
+	 *   "http://www.test.com/app" -> "http://www.test.com"
+	 * </pre>
+	 * @param url url string
+	 * @return root
+	 */
+	public static String getURLRoot(String url) {
+		int len = getURLRootLength(url);
+		return len < 0 ? null : url.substring(0, len);
+	}
+
+	/**
+	 * Gets the parent path of URL.
+	 * <pre>
+	 * a/b/c.txt --> a/b
+	 * a.txt     --> ""
+	 * a/b/c     --> a/b
+	 * a/b/c/    --> a/b/c
+	 * </pre>
+	 * <p>
+	 * 
+	 * @param url the url to query, null returns null
+	 * @return the parent path of the url, or an empty string if none exists
+	 */
+	public static String getURLParent(String url) {
+		if (url == null) {
+			return null;
+		}
+		
+		int index = url.lastIndexOf(SEPARATOR);
+		return index > 0 ? url.substring(0, index) : Strings.EMPTY;
+	}
+	
+	/**
+	 * concat url to base
+	 * <pre>
+	 *   null                    + *             = null
+	 *   ""                      + *             = null
+	 *   http://a.b.c            + null          = http://a.b.c
+	 *   http://a.b.c            + ""            = http://a.b.c
+	 *   http://a.b.c            + http://x.y.z  = http://x.y.z
+	 *   http://a.b.c            + /x            = http://a.b.c/x
+	 *   http://a.b.c/           + /x            = http://a.b.c/x
+	 *   http://a.b.c/d          + /x            = null
+	 *   http://a.b.c/d/         + /x            = http://a.b.c/x
+	 *   http://a.b.c/d/e        + /x            = http://a.b.c/x
+	 *   http://a.b.c            + ../x          = null
+	 *   http://a.b.c/           + ../x          = null
+	 *   http://a.b.c/d          + ../x          = http://a.b.c/x
+	 *   http://a.b.c/d/e        + ../x          = http://a.b.c/x
+	 *   http://a.b.c/d/e/       + ../x          = http://a.b.c/d/x
+	 *   http://a.b.c/d/e/f      + ../x          = http://a.b.c/d/x
+	 *   http://a.b.c            + x             = http://a.b.c/x
+	 *   http://a.b.c/           + x             = http://a.b.c/x
+	 *   http://a.b.c/d          + x             = http://a.b.c/x
+	 *   http://a.b.c/d/         + x             = http://a.b.c/d/x
+	 *   http://a.b.c/d/e        + x             = http://a.b.c/d/x
+	 * </pre>
+	 * @param base
+	 * @param add
+	 * @return url
+	 */
+	public static String concatURL(String base, String add) {
+		if (Strings.isEmpty(add)) {
+			return base;
+		}
+		
+		if (getURLRootLength(add) >= 0) {
+			return add;
+		}
+
+		int prefix = getURLRootLength(base);
+		if (prefix < 0) {
+			return null;
+		}
+
+		String root = base.substring(0, prefix);
+		String path = getURLParent(base.substring(prefix));
+		String uri;
+		
+		if (add.charAt(0) == SEPARATOR) {
+			uri = normalize(add);
+		}
+		else {
+			int len = path.length();
+			if (len > 0 && path.charAt(len - 1) == SEPARATOR) {
+				uri = normalize(path + add);
+			}
+			else {
+				uri = normalize(path + SEPARATOR + add);
+			}
+		}
+
+		if (uri == null) {
+			return null;
+		}
+		
+		return root + uri;
+	}
+	
+	public static String normalize(String url) {
+		if (url == null) {
+			return null;
+		}
+		
+		int size = url.length();
+		if (size == 0) {
+			return url;
+		}
+		
+		int prefix = getURLRootLength(url);
+		if (prefix < 0) {
+			prefix = url.charAt(0) == SEPARATOR ? 1 : 0;
+		}
+
+		char[] array = new char[size + 2]; // +1 for possible extra slash, +2 for arraycopy
+		url.getChars(0, url.length(), array, 0);
+
+		return FileNames.normalize(array, size, prefix, SEPARATOR, true);
 	}
 	
 	/**

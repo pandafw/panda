@@ -18,13 +18,20 @@ import panda.lang.Strings;
  * @author yf.frank.wang@gmail.com
  */
 public class HttpRequest {
-
 	public static HttpRequest get(String url) {
-		return create(url, HttpMethod.GET, new HashMap<String, Object>());
+		return new HttpRequest().setUrl(url).setMethod(HttpMethod.GET);
 	}
 
 	public static HttpRequest get(String url, HttpHeader header) {
-		return HttpRequest.create(url, HttpMethod.GET, new HashMap<String, Object>(), header);
+		return new HttpRequest().setUrl(url).setMethod(HttpMethod.GET).setHeader(header);
+	}
+
+	public static HttpRequest post(String url) {
+		return new HttpRequest().setUrl(url).setMethod(HttpMethod.POST);
+	}
+
+	public static HttpRequest post(String url, HttpHeader header) {
+		return new HttpRequest().setUrl(url).setMethod(HttpMethod.POST).setHeader(header);
 	}
 
 	public static HttpRequest create(String url, HttpMethod method) {
@@ -114,7 +121,17 @@ public class HttpRequest {
 		return new Cookie(s);
 	}
 
-	public URL getUrl() {
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+	
+	/**
+	 * @return the url with query string
+	 */
+	public URL getURL() {
 		StringBuilder sb = new StringBuilder(url);
 		try {
 			if (isGet() && Collections.isNotEmpty(params)) {
@@ -147,7 +164,7 @@ public class HttpRequest {
 	}
 
 	public void toString(Appendable writer) throws IOException {
-		writer.append(String.valueOf(method)).append(' ').append(getUrl().toString());
+		writer.append(String.valueOf(method)).append(' ').append(getURL().toString());
 		if (header != null) {
 			writer.append(Strings.CRLF);
 			header.toString(writer);

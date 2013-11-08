@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateUtilsFragmentTest {
+public class DateTimesFragmentTest {
 
 	private static final int months = 7; // second final prime before 12
 	private static final int days = 23; // second final prime before 31 (and valid)

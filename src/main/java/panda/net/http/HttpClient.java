@@ -206,7 +206,7 @@ public class HttpClient {
 
 		}
 		catch (IOException e) {
-			throw new IOException(request.getUrl().toString(), e);
+			throw new IOException(request.getURL().toString(), e);
 		}
 	}
 
@@ -215,36 +215,36 @@ public class HttpClient {
 			return doSend();
 		}
 
-		HttpResponse hr = doSend();
-		if (!hr.isMoved()) {
-			return hr;
+		HttpResponse res = doSend();
+		if (!res.isMoved()) {
+			return res;
 		}
-		
-		String location = hr.getHeader().getString(HttpHeader.LOCATION);
-		if (Strings.isEmpty(location)) {
-			return hr;
-		}
-			
-		Set<String> locations = new HashSet<String>();
-		locations.add(location);
+
+		String url = request.getURL().toString();
+		Set<String> urls = new HashSet<String>();
+		urls.add(url);
+
 		request.setMethod(HttpMethod.GET);
-
+		request.setParams(null);
+		
 		while (true) {
-			request.setUrl(location);
+			String location = res.getHeader().getString(HttpHeader.LOCATION);
+			url = URLHelper.concatURL(url, location);
+			if (Strings.isEmpty(url)) {
+				return res;
+			}
 
-			hr = doSend();
-			if (!hr.isMoved()) {
-				return hr;
+			if (urls.contains(url)) {
+				log.info("infinite redirect loop detected: " + url);
+				return res;
 			}
-			
-			location = hr.getHeader().getString(HttpHeader.LOCATION);
-			if (Strings.isEmpty(location)) {
-				return hr;
-			}
-			
-			if (locations.contains(location)) {
-				log.info("infinite redirect loop detected: " + location);
-				return hr;
+
+			urls.add(url);
+			request.setUrl(url);
+
+			res = doSend();
+			if (!res.isMoved()) {
+				return res;
 			}
 		}
 	}
@@ -256,7 +256,7 @@ public class HttpClient {
 			log.debug(request.toString());
 		}
 		else if (log.isInfoEnabled()) {
-			log.info(request.getMethod() + " " + request.getUrl());
+			log.info(request.getMethod() + " " + request.getURL());
 		}
 		
 		HttpResponse response;
@@ -289,7 +289,7 @@ public class HttpClient {
 
 		if (log.isInfoEnabled()) {
 			StringBuilder msg = new StringBuilder();
-			msg.append(request.getUrl()).append(" - ").append(response.getStatusLine());
+			msg.append(request.getURL()).append(" - ").append(response.getStatusLine());
 			msg.append(" (");
 			if (response.getContentLength() != null) {
 				msg.append(response.getContentLength()).append("B ");
@@ -332,10 +332,10 @@ public class HttpClient {
 
 	protected void openConnection() throws IOException {
 		if (proxy != null) {
-			conn = (HttpURLConnection)request.getUrl().openConnection(proxy);
+			conn = (HttpURLConnection)request.getURL().openConnection(proxy);
 		}
 		else {
-			conn = (HttpURLConnection)request.getUrl().openConnection();
+			conn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
 		conn.setConnectTimeout(DEFAULT_CONN_TIMEOUT);
@@ -343,7 +343,7 @@ public class HttpClient {
 	}
 
 	protected void setupRequestHeader() {
-		URL url = request.getUrl();
+		URL url = request.getURL();
 		String host = url.getHost();
 		if (url.getPort() > 0 && url.getPort() != 80) {
 			host += ":" + url.getPort();

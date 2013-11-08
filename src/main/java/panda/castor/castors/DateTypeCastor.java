@@ -1,20 +1,17 @@
 package panda.castor.castors;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.ConcurrentHashMap;
 
 import panda.castor.CastContext;
 import panda.castor.CastException;
 import panda.castor.Castor;
-import panda.lang.collection.MultiKey;
+import panda.lang.time.DateTimes;
+import panda.lang.time.FastDateFormat;
 
 /**
  * 
@@ -23,22 +20,11 @@ import panda.lang.collection.MultiKey;
  */
 public class DateTypeCastor {
 	public static class DateCastor extends Castor<Object, Date> {
-		/**
-		 * DateFormat cache
-		 */
-		private Map<MultiKey, DateFormat> formatCache = new ConcurrentHashMap<MultiKey, DateFormat>();
-	
-		public static String DATE_FORMAT_TIMESTAMP = "yyyy-MM-dd HH:mm:ss.SSS";
-		public static String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
-		public static String DATE_FORMAT_DATE = "yyyy-MM-dd";
-		public static String DATE_FORMAT_TIME = "HH:mm:ss";
-		public static String DATE_FORMAT = DATE_FORMAT_TIMESTAMP;
-	
-		public static String[] DATE_FORMATS = {
-			DATE_FORMAT_TIMESTAMP,
-			DATE_FORMAT_DATETIME,
-			DATE_FORMAT_DATE,
-			DATE_FORMAT_TIME,
+		public static FastDateFormat[] DATE_FORMATS = {
+			DateTimes.timestampFormat(),
+			DateTimes.datetimeFormat(),
+			DateTimes.dateFormat(),
+			DateTimes.timeFormat(),
 		};
 	
 		public DateCastor() {
@@ -67,12 +53,9 @@ public class DateTypeCastor {
 				String sv = value.toString();
 	
 				ParseException ex = null;
-				for (String f : DATE_FORMATS) {
+				for (FastDateFormat df : DATE_FORMATS) {
 					try {
-						DateFormat df = getDateFormat(f, Locale.getDefault(), null);
-						if (df != null) {
-							return df.parse(sv);
-						}
+						return df.parse(sv);
 					}
 					catch (ParseException e) {
 						ex = e;
@@ -94,34 +77,10 @@ public class DateTypeCastor {
 		}
 		
 		/**
-		 * get the cached DateFormat
-		 * @param pattern pattern string
-		 * @param locale locale
-		 * @param timezone time zone
-		 * @return cached DateFormat
-		 */
-		private DateFormat getCachedDateFormat(String pattern, Locale locale, TimeZone timezone) {
-			MultiKey key = new MultiKey(pattern, locale, timezone);
-			return formatCache.get(key);
-		}
-		
-		/**
-		 * set the DateFormat to cache
-		 * @param dateForamt DateFormat object
-		 * @param pattern pattern string
-		 * @param locale locale
-		 * @param timezone time zone
-		 */
-		private void setCachedDateFormat(DateFormat dateForamt, String pattern, Locale locale, TimeZone timezone) {
-			MultiKey key = new MultiKey(pattern, locale, timezone);
-			formatCache.put(key, dateForamt);
-		}
-
-		/**
 		 * @return default date format
 		 */
-		public DateFormat getDefaultDateFormat() {
-			return getDateFormat(DATE_FORMAT, Locale.getDefault(), null);
+		public FastDateFormat getDefaultDateFormat() {
+			return DateTimes.timestampFormat();
 		}
 	
 		/**
@@ -132,21 +91,8 @@ public class DateTypeCastor {
 		 * @param timezone time zone
 		 * @return DateFormat object
 		 */
-		public DateFormat getDateFormat(String pattern, Locale locale, TimeZone timezone) {
-			DateFormat df = getCachedDateFormat(pattern, locale, timezone);
-			if (df == null) {
-				try {
-					df = new SimpleDateFormat(pattern, locale);
-					if (timezone != null) {
-						df.setTimeZone(timezone);
-					}
-				}
-				catch (Exception e) {
-					throw new IllegalArgumentException("The DateFormat pattern [" + pattern + "] is invalid.", e);
-				}
-				setCachedDateFormat(df, pattern, locale, timezone);
-			}
-			return df;
+		public FastDateFormat getDateFormat(String pattern, Locale locale, TimeZone timezone) {
+			return FastDateFormat.getInstance(pattern, timezone, locale);
 		}
 	}
 

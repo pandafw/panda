@@ -1,0 +1,108 @@
+package panda.net.http;
+
+import java.text.ParseException;
+import java.util.Date;
+
+import panda.lang.time.DateTimes;
+import panda.lang.time.FastDateFormat;
+
+/**
+ * A utility class for parsing and formatting HTTP dates as used in cookies and other headers. This
+ * class handles dates as defined by RFC 2616 section 3.3.1 as well as some other common
+ * non-standard formats.
+ */
+public class HttpDates {
+	/**
+	 * Date format pattern used to parse HTTP date headers in RFC 1123 format.
+	 */
+	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+	/**
+	 * Date format pattern used to parse HTTP date headers in RFC 1036 format.
+	 */
+	public static final String PATTERN_RFC1036 = "EEEE, dd-MMM-yy HH:mm:ss zzz";
+
+	/**
+	 * Date format pattern used to parse HTTP date headers in ANSI C <code>asctime()</code> format.
+	 */
+	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
+
+	private static final String[] DEFAULT_PATTERNS = new String[] { PATTERN_RFC1036, PATTERN_RFC1123, PATTERN_ASCTIME };
+
+	/**
+	 * Parses a date value. The formats used for parsing the date value are retrieved from the
+	 * default http params.
+	 * 
+	 * @param dateValue the date value to parse
+	 * @return the parsed date
+	 * @throws DateParseException if the value could not be parsed using any of the supported date
+	 *             formats
+	 */
+	public static Date parse(String dateValue) throws ParseException {
+		return parse(dateValue, null);
+	}
+
+	/**
+	 * Parses the date value using the given date formats.
+	 * 
+	 * @param dateValue the date value to parse
+	 * @param dateFormats the date formats to use
+	 * @return the parsed date
+	 * @throws DateParseException if none of the dataFormats could parse the dateValue
+	 */
+	public static Date parse(String dateValue, String[] dateFormats) throws ParseException {
+		if (dateValue == null) {
+			return null;
+		}
+		if (dateFormats == null) {
+			dateFormats = DEFAULT_PATTERNS;
+		}
+
+		// trim single quotes around date if present
+		if (dateValue.length() > 1 && dateValue.startsWith("'") && dateValue.endsWith("'")) {
+			dateValue = dateValue.substring(1, dateValue.length() - 1);
+		}
+
+		for (String pattern : dateFormats) {
+			try {
+				return DateTimes.parse(dateValue, pattern);
+			}
+			catch (ParseException pe) {
+				// ignore this exception, we will try the next format
+			}
+		}
+
+		// we were unable to parse the date
+		throw new ParseException("Unable to parse the date " + dateValue, 0);
+	}
+
+	/**
+	 * Formats the given date according to the RFC 1123 pattern.
+	 * 
+	 * @param date The date to format.
+	 * @return An RFC 1123 formatted date string.
+	 * @see #PATTERN_RFC1123
+	 */
+	public static String format(Date date) {
+		return format(date, PATTERN_RFC1123);
+	}
+
+	/**
+	 * Formats the given date according to the specified pattern. The pattern must conform to that
+	 * used by the {@link FastDateFormat date format} class.
+	 * 
+	 * @param date The date to format.
+	 * @param pattern The pattern to use for formatting the date.
+	 * @return A formatted date string.
+	 * @throws IllegalArgumentException If the given date pattern is invalid.
+	 */
+	public static String format(Date date, String pattern) {
+		if (date == null) {
+			return null;
+		}
+		if (pattern == null)
+			throw new IllegalArgumentException("pattern is null");
+
+		return DateTimes.format(date, pattern);
+	}
+}
