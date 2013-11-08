@@ -455,6 +455,84 @@ public class Strings {
 		return stripEnd(str, stripChars);
 	}
 
+
+	/**
+	 * <p>
+	 * Strips whitespace from the start of a String.
+	 * </p>
+	 * <p>
+	 * A {@code null} input String returns {@code null}. An empty string ("") input returns the
+	 * empty string.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripStart(null)       = null
+	 * Strings.stripStart("")         = ""
+	 * Strings.stripStart("abc")      = "abc"
+	 * Strings.stripStart("abc")      = "abc"
+	 * Strings.stripStart("  abc")    = "abc"
+	 * Strings.stripStart("abc  ")    = "abc  "
+	 * Strings.stripStart(" abc ")    = "abc "
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @return the stripped String, {@code null} if null String input
+	 */
+	public static String stripStart(final CharSequence str) {
+		return stripStart(str, null);
+	}
+	
+	/**
+	 * <p>
+	 * Strips specified character from the start of a String.
+	 * </p>
+	 * <p>
+	 * A {@code null} input String returns {@code null}. An empty string ("") input returns the
+	 * empty string.
+	 * </p>
+	 * <p>
+	 * If the strip char is {@code 0}, whitespace is stripped as defined by
+	 * {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripStart(null, *)          = null
+	 * Strings.stripStart("", *)            = ""
+	 * Strings.stripStart("abc", 0)         = "abc"
+	 * Strings.stripStart("  abc", 0)    = "abc"
+	 * Strings.stripStart("abc  ", 0)    = "abc  "
+	 * Strings.stripStart(" abc ", 0)    = "abc "
+	 * Strings.stripStart("yxabc  ", 'y') = "xabc  "
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param chr the character to remove, null treated as whitespace
+	 * @return the stripped String, {@code null} if null String input
+	 */
+	public static String stripStart(final CharSequence str, final char chr) {
+		if (str == null) {
+			return null;
+		}
+		
+		int strLen = str.length();
+		if (strLen == 0) {
+			return str.toString();
+		}
+
+		int start = 0;
+		if (chr == 0) {
+			while (start != strLen && Character.isWhitespace(str.charAt(start))) {
+				start++;
+			}
+		}
+		else {
+			while (start != strLen && chr == str.charAt(start)) {
+				start++;
+			}
+		}
+		return str.subSequence(start, str.length()).toString();
+	}
+	
 	/**
 	 * <p>
 	 * Strips any of a set of characters from the start of a String.
@@ -508,6 +586,83 @@ public class Strings {
 			}
 		}
 		return str.subSequence(start, str.length()).toString();
+	}
+
+	/**
+	 * <p>
+	 * Strips whitespace from the end of a String.
+	 * </p>
+	 * <p>
+	 * A {@code null} input String returns {@code null}. An empty string ("") input returns the
+	 * empty string.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripEnd(null)          = null
+	 * Strings.stripEnd("")            = ""
+	 * Strings.stripEnd("abc")         = "abc"
+	 * Strings.stripEnd("abc")         = "abc"
+	 * Strings.stripEnd("  abc")       = "  abc"
+	 * Strings.stripEnd("abc  ")       = "abc"
+	 * Strings.stripEnd(" abc ")       = " abc"
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param stripChars the set of characters to remove, null treated as whitespace
+	 * @return the stripped String, {@code null} if null String input
+	 */
+	public static String stripEnd(final CharSequence str) {
+		return stripEnd(str, null);
+	}
+	
+	/**
+	 * <p>
+	 * Strips specified character from the end of a String.
+	 * </p>
+	 * <p>
+	 * A {@code null} input String returns {@code null}. An empty string ("") input returns the
+	 * empty string.
+	 * </p>
+	 * <p>
+	 * If the strip char is {@code 0}, whitespace is stripped as defined by
+	 * {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripEnd(null, *)          = null
+	 * Strings.stripEnd("", *)            = ""
+	 * Strings.stripEnd("abc", 0)         = "abc"
+	 * Strings.stripEnd("  abc", 0)    = "  abc"
+	 * Strings.stripEnd("abc  ", 0)    = "abc"
+	 * Strings.stripEnd(" abc ", 0)    = " abc"
+	 * Strings.stripEnd("  abcyx", 'x') = "  abcy"
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param chr the character to remove, null treated as whitespace
+	 * @return the stripped String, {@code null} if null String input
+	 */
+	public static String stripEnd(final CharSequence str, final char chr) {
+		if (str == null) {
+			return null;
+		}
+		
+		int end = str.length();
+		if (end == 0) {
+			return str.toString();
+		}
+
+		if (chr == 0) {
+			while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+				end--;
+			}
+		}
+		else {
+			while (end != 0 && chr == str.charAt(end - 1)) {
+				end--;
+			}
+		}
+		return str.subSequence(0, end).toString();
 	}
 
 	/**
