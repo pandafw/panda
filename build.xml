@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-	<property name="prj.org" value="pandawind"/>
+	<property name="prj.org" value="com.pandawind"/>
 	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
 	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
