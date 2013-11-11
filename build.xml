@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property name="prj.org" value="com.pandawind"/>
 	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
 	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
 	<property name="prj.site" value="github.com/pandawind/panda-java"/>
+	<property name="prj.scm" value="git@github.com:pandawind/panda-java.git"/>
+	<property name="prj.repo" location="../panda-repo"/>
+
+	<!-- defined maven snapshots and staging repository id and url -->
+	<property name="mvn.ssr.id" value="sonatype-nexus-snapshots" />
+	<property name="mvn.ssr.url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+	<property name="mvn.sgr.id" value="sonatype-nexus-staging" />
+	<property name="mvn.sgr.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+	
 	<!-- get prj.version -->
 	<loadfile srcFile="src/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8">
 		<filterchain>
@@ -21,51 +30,6 @@
 		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
 	</tstamp>
 	
-	<path id="main.cp">
-		<pathelement path="out/classes"/>
-		<fileset dir="lib/api">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/run">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-
-	<path id="lib.cp">
-		<fileset dir="lib/3rd">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/api">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/run">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/jdbc">
-			<include name="*.jar"/>
-		</fileset>
-		<fileset dir="lib/test">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-	
-	<path id="test.cp">
-		<pathelement path="out/classes"/>
-		<pathelement path="out/test-classes"/>
-		<path refid="lib.cp"/>
-	</path>
-
-	<path id="junit.cp">
-		<pathelement path="out/emma-classes"/>
-		<pathelement path="out/test-classes"/>
-		<path refid="lib.cp"/>
-	</path>
-
-	<path id="emma.cp">
-		<pathelement location="lib/test/emma.jar"/>
-		<pathelement location="lib/test/emma_ant.jar"/>
-	</path>
-
 	<!-- get revision -->
 	<script language="javascript">
 		var ver = project.getProperty("VERSION");
@@ -113,6 +77,48 @@
 			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
 		}
 	</script>
+
+	<path id="main.cp">
+		<pathelement path="out/classes"/>
+		<fileset dir="lib/api">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="lib/run">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="lib.cp">
+		<fileset dir="lib/api">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="lib/run">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="lib/jdbc">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="lib/test">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="test.cp">
+		<pathelement path="out/classes"/>
+		<pathelement path="out/test-classes"/>
+		<path refid="lib.cp"/>
+	</path>
+
+	<path id="junit.cp">
+		<pathelement path="out/emma-classes"/>
+		<pathelement path="out/test-classes"/>
+		<path refid="lib.cp"/>
+	</path>
+
+	<path id="emma.cp">
+		<pathelement location="lib/test/emma.jar"/>
+		<pathelement location="lib/test/emma_ant.jar"/>
+	</path>
 
 	<!-- usage -->
 	<target name="usage">
@@ -216,6 +222,8 @@
 		<delete>
 			<fileset dir="out" includes="*.jar"/>
 		</delete>
+		<copy file="LICENSE" todir="out/classes/META-INF" overwrite="true" force="true"/>
+		<copy file="pom.xml" todir="out" overwrite="true" force="true"/>
 		<jar destfile="out/${prj.name}-${VERSION}.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.author}"/>
@@ -237,6 +245,7 @@
 				<attribute name="Implementation-Vendor" value="${prj.site}"/>
 			</manifest>
 			<fileset dir="src/main/java"/>
+			<fileset dir="out/classes" includes="META-INF/**"/>
 		</jar>
 		<jar destfile="out/${prj.name}-${VERSION}-javadoc.jar">
 			<manifest>
@@ -335,8 +344,8 @@
 
 		<emma>
 			<report sourcepath="src/main/java"
-				  sort="+name,+class,+method,+block"
-				  metrics="method:70,block:80,line:80,class:100"
+				sort="+name,+class,+method,+block"
+				metrics="method:70,block:80,line:80,class:100"
 			>
 				<!-- collect all EMMA data dumps (metadata and runtime)
 					 [this can be done via nested <fileset> fileset elements
@@ -386,4 +395,61 @@
 
 	<!-- all -->
 	<target name="all" depends="dist, test"/>
+
+	<!-- maven deploy -->
+	<target name="mvn-deploy" description="deploy snapshot version to Maven snapshot repository">
+		<!-- set version to pom -->
+		<replaceregexp file="out/pom.xml"
+			match="&lt;version&gt;.*&lt;/version&gt;"
+			replace="&lt;version&gt;${prj.version}-SNAPSHORT&lt;/version&gt;"/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=${mvn.ssr.url}" />
+			<arg value="-DrepositoryId=${mvn.ssr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
+
+	<target name="mvn-stage" description="deploy release version to Maven staging repository">
+		<!-- set version to pom -->
+		<replaceregexp file="out/pom.xml"
+			match="&lt;version&gt;.*&lt;/version&gt;"
+			replace="&lt;version&gt;${prj.version}&lt;/version&gt;"/>
+
+		<!-- sign and deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
+			<arg value="-Durl=${mvn.sgr.url}" />
+			<arg value="-DrepositoryId=${mvn.sgr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Dsources=${prj.name}-${VERSION}-sources.jar" />
+			<arg value="-Djavadoc=${prj.name}-${VERSION}-javadoc.jar" />
+			<arg value="-Pgpg" />
+		</artifact:mvn>
+	</target>
+
+	<!-- panda-repo deploy -->
+	<target name="panda-deploy" description="deploy release version to panda-repo repository">
+		<!-- set version to pom -->
+		<replaceregexp file="out/pom.xml"
+			match="&lt;version&gt;.*&lt;/version&gt;"
+			replace="&lt;version&gt;${prj.version}&lt;/version&gt;"/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=file://${prj.repo}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Dsources=${prj.name}-${VERSION}-sources.jar" />
+			<arg value="-Djavadoc=${prj.name}-${VERSION}-javadoc.jar" />
+		</artifact:mvn>
+	</target>
 </project>
