@@ -3,9 +3,7 @@
 	<property name="prj.org" value="com.pandawind"/>
 	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
-	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
-	<property name="prj.site" value="github.com/pandawind/panda-java"/>
-	<property name="prj.scm" value="git@github.com:pandawind/panda-java.git"/>
+	<property name="prj.url" value="https://github.com/pandawind/panda-java"/>
 	<property name="prj.repo" location="../panda-repo"/>
 
 	<!-- defined maven snapshots and staging repository id and url -->
@@ -29,7 +27,7 @@
 	<tstamp>
 		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
 	</tstamp>
-	
+
 	<!-- get revision -->
 	<script language="javascript">
 		var ver = project.getProperty("VERSION");
@@ -122,33 +120,38 @@
 
 	<!-- usage -->
 	<target name="usage">
-		<echo message=""/>
-		<echo message="${prj.name}-${VERSION} build file"/>
-		<echo message="-----------------------------------"/>
-		<echo message=""/>
-		<echo message="Available targets are:"/>
-		<echo message=""/>
-		<echo message="all          --> dist &amp; test"/>
-		<echo message="build        --> Build the project (clean, cp-res, javac)"/>
-		<echo message="clean        --> Delete everything in the output directory"/>
-		<echo message="cp-res       --> Copy resource files to the classes directory"/>
-		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
-		<echo message="ivy-resolve  --> retreive dependencies"/>
-		<echo message="ivy-report   --> generates a report of dependencies"/>
-		<echo message="ivy-clean    --> clean the cache"/>
-		<echo message="jar          --> Make the project as a jar file"/>
-		<echo message="javac        --> Compile java source files"/>
-		<echo message="javadoc      --> Generate java documents"/>
-		<echo message="test         --> Test the project (test-build, test-run, test-report)"/>
-		<echo message="test-build   --> Build the test suite of project (test-clean, test-rescp, test-emma, test-javac)"/>
-		<echo message="test-clean   --> Delete test output files in the output directory"/>
-		<echo message="test-emma    --> EMMA instruments main classes"/>
-		<echo message="test-javac   --> Compile test java source files"/>
-		<echo message="test-javadoc --> Generate test java documents"/>
-		<echo message="test-report  --> Build the test report"/>
-		<echo message="test-rescp   --> Copy test resource to the test classes directory"/>
-		<echo message="test-run     --> Run all junit test case"/>
-		<echo message=""/>
+		<echo><![CDATA[
+${prj.name}-${VERSION} build file
+-----------------------------------
+
+Available targets are:
+
+all          --> dist & test
+build        --> Build the project (clean, cp-res, javac)
+clean        --> Delete everything in the output directory
+cp-res       --> Copy resource files to the classes directory
+dist         --> Distribute project as a jar file (build, jar)
+ivy-resolve  --> Retreive dependencies
+ivy-report   --> Generates a report of dependencies
+ivy-clean    --> Clean the cache
+jar          --> Make the project as a jar file
+javac        --> Compile java source files
+javadoc      --> Generate java documents
+test         --> Test the project (test-build, test-run, test-report)
+test-build   --> Build the test suite of project (test-clean, test-rescp, test-emma, test-javac)
+test-clean   --> Delete test output files in the output directory
+test-emma    --> EMMA instruments main classes
+test-javac   --> Compile test java source files
+test-javadoc --> Generate test java documents
+test-report  --> Build the test report
+test-rescp   --> Copy test resource to the test classes directory
+test-run     --> Run all junit test case
+pom          --> Generate pom.xml
+mvn-deploy   --> Deploy snapshot version to maven snapshot repository
+mvn-stage    --> Deploy release version to maven staging repository
+panda-deploy --> Deploy release version to panda-repo repository
+]]>
+		</echo>
 	</target>
 
 	<!-- ivy -->
@@ -212,7 +215,7 @@
 			use="true" splitindex="true"
 			windowTitle="${prj.title} ${prj.version} API"
 			doctitle="${prj.title} ${prj.version} API"
-			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+			footer="&lt;a href=&quot;${prj.url}&quot;&gt;${prj.url}&lt;/a&gt;"
 		>
 			<classpath refid="main.cp"/>
 		</javadoc>
@@ -223,38 +226,37 @@
 			<fileset dir="out" includes="*.jar"/>
 		</delete>
 		<copy file="LICENSE" todir="out/classes/META-INF" overwrite="true" force="true"/>
-		<copy file="pom.xml" todir="out" overwrite="true" force="true"/>
 		<jar destfile="out/${prj.name}-${VERSION}.jar">
 			<manifest>
-				<attribute name="Created-By" value="${prj.author}"/>
-				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
 				<attribute name="Implementation-Title" value="${prj.title}"/>
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="out/classes"/>
 		</jar>
 		<jar destfile="out/${prj.name}-${VERSION}-sources.jar">
 			<manifest>
-				<attribute name="Created-By" value="${prj.author}"/>
-				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
 				<attribute name="Implementation-Title" value="${prj.title}"/>
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="src/main/java"/>
 			<fileset dir="out/classes" includes="META-INF/**"/>
 		</jar>
 		<jar destfile="out/${prj.name}-${VERSION}-javadoc.jar">
 			<manifest>
-				<attribute name="Created-By" value="${prj.author}"/>
-				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
 				<attribute name="Implementation-Title" value="${prj.title}"/>
 				<attribute name="Implementation-Version" value="${VERSION}"/>
-				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="out/javadoc"/>
 		</jar>
@@ -383,7 +385,7 @@
 			use="true" splitindex="true"
 			windowTitle="${prj.title} ${VERSION} Test API"
 			doctitle="${prj.title} ${VERSION} Test API"
-			footer="&lt;a href=&quot;http://${prj.site}&quot;&gt;${prj.site}&lt;/a&gt;"
+			footer="&lt;a href=&quot;http://${prj.url}&quot;&gt;${prj.url}&lt;/a&gt;"
 		>
 			<classpath refid="test.cp"/>
 		</javadoc>
@@ -396,12 +398,74 @@
 	<!-- all -->
 	<target name="all" depends="dist, test"/>
 
-	<!-- maven deploy -->
-	<target name="mvn-deploy" description="deploy snapshot version to Maven snapshot repository">
-		<!-- set version to pom -->
-		<replaceregexp file="out/pom.xml"
-			match="&lt;version&gt;.*&lt;/version&gt;"
-			replace="&lt;version&gt;${prj.version}-SNAPSHORT&lt;/version&gt;"/>
+	<!-- maven -->
+	<macrodef name="writepom">
+		<attribute name="version" default="${prj.version}"/>
+		<sequential>
+			<echo>version = @{version}</echo>
+			<echo file="out/pom.xml"><![CDATA[
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${prj.org}</groupId>
+	<artifactId>${prj.name}</artifactId>
+	<packaging>jar</packaging>
+	<name>${prj.title}</name>
+	<version>@{version}</version>
+	<description>A lightweight java framework</description>
+	<url>${prj.url}</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE v3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:pandawind/panda-java.git</connection>
+		<developerConnection>scm:git:git@github.com:pandawind/panda-java.git</developerConnection>
+		<url>git@github.com:pandawind/panda-java.git</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>yf.frank.wang</id>
+			<name>Frank Wang</name>
+			<email>yf.frank.wang@gmail.com</email>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+</project>
+]]>
+			</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="pom" description="Write maven pom.xml">
+		<writepom/>
+	</target>
+	
+	<!-- sonatype deploy -->
+	<target name="mvn-deploy" description="Deploy snapshot version to Maven snapshot repository">
+		<!-- write pom.xml -->
+		<writepom version="${prj.version}-SNAPSHORT"/>
 
 		<!-- deploy the artifact -->
 		<artifact:mvn pom="out/pom.xml">
@@ -413,11 +477,9 @@
 		</artifact:mvn>
 	</target>
 
-	<target name="mvn-stage" description="deploy release version to Maven staging repository">
-		<!-- set version to pom -->
-		<replaceregexp file="out/pom.xml"
-			match="&lt;version&gt;.*&lt;/version&gt;"
-			replace="&lt;version&gt;${prj.version}&lt;/version&gt;"/>
+	<target name="mvn-stage" description="Deploy release version to Maven staging repository">
+		<!-- write pom.xml -->
+		<writepom/>
 
 		<!-- sign and deploy the artifact -->
 		<artifact:mvn pom="out/pom.xml">
@@ -434,19 +496,17 @@
 	</target>
 
 	<!-- panda-repo deploy -->
-	<target name="panda-deploy" description="deploy release version to panda-repo repository">
-		<!-- set version to pom -->
-		<replaceregexp file="out/pom.xml"
-			match="&lt;version&gt;.*&lt;/version&gt;"
-			replace="&lt;version&gt;${prj.version}&lt;/version&gt;"/>
+	<target name="panda-deploy" description="Deploy release version to panda-repo repository">
+		<!-- write pom.xml -->
+		<writepom/>
 
 		<!-- deploy the artifact -->
 		<artifact:mvn pom="out/pom.xml">
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
 			<arg value="-Durl=file://${prj.repo}" />
-			<arg value="-DpomFile=pom.xml" />
 			<arg value="-DcreateChecksum=true" />
 			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
 			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
 			<arg value="-Dsources=${prj.name}-${VERSION}-sources.jar" />
 			<arg value="-Djavadoc=${prj.name}-${VERSION}-javadoc.jar" />
