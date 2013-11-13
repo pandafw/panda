@@ -242,7 +242,7 @@ public class SqlDao extends Dao {
 	 * @param keys record keys (int, string or java bean with keys)
 	 */
 	@Override
-	public <T> T fetch(Entity<T> entity, Object ... keys) {
+	protected <T> T fetchByKeys(Entity<T> entity, Object ... keys) {
 		assertEntity(entity);
 
 		Query query = new Query();
@@ -260,7 +260,7 @@ public class SqlDao extends Dao {
 	 * @return record
 	 */
 	@Override
-	public <T> T fetch(Entity<T> entity, Query query) {
+	protected <T> T fetchByQuery(Entity<T> entity, Query query) {
 		assertEntity(entity);
 
 		if (query == null) {

@@ -191,7 +191,20 @@ public abstract class Dao {
 	 * @param entity entity
 	 * @param keys record keys (int, string or java bean with keys)
 	 */
-	public abstract <T> T fetch(Entity<T> entity, Object ... keys);
+	public <T> T fetch(Entity<T> entity, Object ... keys) {
+		if (keys != null && keys.length == 1 && keys[0] instanceof Query) {
+			return fetchByQuery(entity, (Query)(keys[0]));
+		}
+		return fetchByKeys(entity, keys);
+	}
+
+	/**
+	 * get a record by the supplied keys
+	 * 
+	 * @param entity entity
+	 * @param keys record keys (int, string or java bean with keys)
+	 */
+	protected abstract <T> T fetchByKeys(Entity<T> entity, Object ... keys);
 
 	/**
 	 * get a record by the supplied query
@@ -211,8 +224,20 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
-	public abstract <T> T fetch(Entity<T> entity, Query query);
+	public <T> T fetch(Entity<T> entity, Query query) {
+		return fetchByQuery(entity, query);
+	}
 
+
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record
+	 */
+	protected abstract <T> T fetchByQuery(Entity<T> entity, Query query);
+	
 	/**
 	 * get a record by the supplied query
 	 * 
