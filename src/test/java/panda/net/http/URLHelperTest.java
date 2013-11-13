@@ -62,8 +62,10 @@ public class URLHelperTest {
 		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e/", "../x"));
 		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e/f", "../x"));
 		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c", "x"));
+		assertEquals("http://a.b.c/x?a=1", URLHelper.concatURL("http://a.b.c", "x?a=1"));
 		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/", "x"));
 		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d", "x"));
+		assertEquals("http://a.b.c/x?b=1", URLHelper.concatURL("http://a.b.c/d?a=1", "x?b=1"));
 		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/", "x"));
 		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e", "x"));
 	}

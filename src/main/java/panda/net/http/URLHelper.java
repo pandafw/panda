@@ -234,6 +234,15 @@ public class URLHelper {
 
 		return FileNames.normalize(array, size, prefix, SEPARATOR, true);
 	}
+
+	/**
+	 * remove '#' anchor from url
+	 * @param url url string
+	 * @return url
+	 */
+	public static String removeURLAnchor(String url) {
+		return Strings.substringBefore(url, '#');
+	}
 	
 	/**
 	 * build the request URL, append parameters as query string
