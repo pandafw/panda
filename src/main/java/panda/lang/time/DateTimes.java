@@ -2129,4 +2129,51 @@ public class DateTimes {
 		final FastDateFormat df = FastDateFormat.getInstance(pattern, timeZone, locale);
 		return df.parse(source);
 	}
+
+	// -----------------------------------------------------------------------
+	public static Date safeParse(final String source, final String ... patterns) {
+		return safeParse(source, null, patterns);
+	}
+	
+	public static Date safeParse(final String source, Locale locale, final String ... patterns) {
+		if (source == null || patterns == null) {
+			return null;
+		}
+		
+		for (String pattern : patterns) {
+			try {
+				return parse(source, pattern, null, locale);
+			}
+			catch (ParseException e) {
+				//skip
+			}
+		}
+		return null;
+	}
+	
+	public static Date safeParse(final String source, final String pattern) {
+		return safeParse(source, pattern, null, null);
+	}
+	
+	public static Date safeParse(final String source, final String pattern, final TimeZone timeZone) {
+		return safeParse(source, pattern, timeZone, null);
+	}
+	
+	public static Date safeParse(final String source, final String pattern, final Locale locale) {
+		return safeParse(source, pattern, null, locale);
+	}
+	
+	public static Date safeParse(final String source, final String pattern, final TimeZone timeZone, final Locale locale) {
+		final FastDateFormat df = FastDateFormat.getInstance(pattern, timeZone, locale);
+		return safeParse(df, source);
+	}
+	
+	public static Date safeParse(final FastDateFormat format, final String source) {
+		try {
+			return format.parse(source);
+		}
+		catch (ParseException e) {
+			return null;
+		}
+	}
 }
