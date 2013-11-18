@@ -2,10 +2,12 @@ package panda.dao.criteria.condition;
 
 import java.util.Collection;
 
+import panda.dao.criteria.QueryWrapper;
+
 
 /**
  */
-public class ComparableCondition<E extends ConditionQuery> extends ObjectCondition<E> {
+public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent
 	 * @param field field

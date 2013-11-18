@@ -1,10 +1,12 @@
 package panda.dao.criteria.condition;
 
+import panda.dao.criteria.QueryWrapper;
+
 
 
 /**
  */
-public abstract class AbstractCondition<E extends ConditionQuery> {
+public abstract class AbstractCondition<E extends QueryWrapper> {
 	protected E parent;
 	protected String field;
 

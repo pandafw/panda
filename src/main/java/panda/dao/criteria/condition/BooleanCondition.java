@@ -1,10 +1,12 @@
 package panda.dao.criteria.condition;
 
+import panda.dao.criteria.QueryWrapper;
+
 
 
 /**
  */
-public class BooleanCondition<E extends ConditionQuery> extends ObjectCondition<E> {
+public class BooleanCondition<E extends QueryWrapper> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent
 	 * @param field field

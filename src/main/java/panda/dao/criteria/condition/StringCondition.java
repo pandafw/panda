@@ -1,11 +1,13 @@
 package panda.dao.criteria.condition;
 
+import panda.dao.criteria.QueryWrapper;
+
 
 
 
 /**
  */
-public class StringCondition<E extends ConditionQuery> extends ComparableCondition<E> {
+public class StringCondition<E extends QueryWrapper> extends ComparableCondition<E> {
 	/**
 	 * @param parent parent
 	 * @param field field 

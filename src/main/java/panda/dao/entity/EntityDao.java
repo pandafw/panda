@@ -8,6 +8,7 @@ import panda.dao.DaoClient;
 import panda.dao.DataHandler;
 import panda.dao.DatabaseMeta;
 import panda.dao.Transaction;
+import panda.dao.criteria.QueryWrapper;
 import panda.dao.criteria.Query;
 import panda.lang.Texts;
 
@@ -141,6 +142,16 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
+	public T fetch(QueryWrapper query) {
+		return dao.fetch(entity, query);
+	}
+
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param query WHERE conditions
+	 * @return record
+	 */
 	public T fetch(Query query) {
 		return dao.fetch(entity, query);
 	}
@@ -174,6 +185,16 @@ public class EntityDao<T> {
 	 */
 	public int delete(Object ... keys) {
 		return dao.delete(keys);
+	}
+
+	/**
+	 * delete records by the supplied query
+	 * 
+	 * @param query WHERE conditions
+	 * @return deleted count
+	 */
+	public int deletes(QueryWrapper query) {
+		return dao.deletes(entity, query);
 	}
 
 	/**
@@ -269,8 +290,31 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
+	public int updates(T obj, QueryWrapper query) {
+		return dao.updates(obj, query);
+	}
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
 	public int updates(T obj, Query query) {
 		return dao.updates(obj, query);
+	}
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	public int updatesIgnoreNull(T obj, QueryWrapper query) {
+		return dao.updatesIgnoreNull(obj, query);
 	}
 
 	/**
@@ -301,6 +345,17 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record list
 	 */
+	public List<T> select(QueryWrapper query) {
+		return dao.select(entity, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
 	public List<T> select(Query query) {
 		return dao.select(entity, query);
 	}
@@ -322,6 +377,17 @@ public class EntityDao<T> {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
+	public int select(QueryWrapper query, DataHandler<T> callback) {
+		return dao.select(entity, query, callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
 	public int select(Query query, DataHandler<T> callback) {
 		return dao.select(entity, query, callback);
 	}
@@ -333,6 +399,16 @@ public class EntityDao<T> {
 	 */
 	public int count() {
 		return dao.count(entity);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public int count(QueryWrapper query) {
+		return dao.count(entity, query);
 	}
 
 	/**

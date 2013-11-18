@@ -1,25 +1,24 @@
-package panda.dao.criteria.condition;
+package panda.dao.criteria;
 
-import panda.dao.criteria.Query;
 
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ConditionQuery {
+public class QueryWrapper {
 	protected Query query;
 
 	/**
 	 * Constructor
 	 */
-	public ConditionQuery() {
+	public QueryWrapper() {
 		query = new Query();
 	}
 	
 	/**
 	 * @param query the query to set
 	 */
-	public ConditionQuery(Query query) {
+	public QueryWrapper(Query query) {
 		this.query = query;
 	}
 

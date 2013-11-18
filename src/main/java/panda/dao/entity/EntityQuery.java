@@ -1,9 +1,11 @@
-package panda.dao.criteria;
+package panda.dao.entity;
 
-import panda.dao.criteria.condition.ConditionQuery;
+import panda.dao.criteria.QueryWrapper;
+import panda.dao.criteria.Query;
+
 
 @SuppressWarnings("unchecked")
-public class EntityQuery<T extends EntityQuery> extends ConditionQuery {
+public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 	/**
 	 * Constructor
 	 */
@@ -18,7 +20,11 @@ public class EntityQuery<T extends EntityQuery> extends ConditionQuery {
 		super(query);
 	}
 
-
+	//----------------------------------------------------------------------
+	public void reset() {
+		query.reset();
+	}
+	
 	//----------------------------------------------------------------------
 	// conjunction
 	//----------------------------------------------------------------------

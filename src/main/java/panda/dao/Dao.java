@@ -6,6 +6,7 @@ import java.util.Map;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.dao.criteria.QueryWrapper;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
@@ -192,8 +193,13 @@ public abstract class Dao {
 	 * @param keys record keys (int, string or java bean with keys)
 	 */
 	public <T> T fetch(Entity<T> entity, Object ... keys) {
-		if (keys != null && keys.length == 1 && keys[0] instanceof Query) {
-			return fetchByQuery(entity, (Query)(keys[0]));
+		if (keys != null && keys.length == 1) {
+			if (keys[0] instanceof Query) {
+				return fetchByQuery(entity, (Query)keys[0]);
+			}
+			if (keys[0] instanceof QueryWrapper) {
+				return fetchByQuery(entity, ((QueryWrapper)keys[0]).getQuery());
+			}
 		}
 		return fetchByKeys(entity, keys);
 	}
@@ -213,8 +219,30 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
+	public <T> T fetch(Class<T> type, QueryWrapper query) {
+		return fetch(type, getQuery(query));
+	}
+
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record
+	 */
 	public <T> T fetch(Class<T> type, Query query) {
 		return fetch(getEntity(type), query);
+	}
+
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record
+	 */
+	public <T> T fetch(Entity<T> entity, QueryWrapper query) {
+		return fetch(entity, getQuery(query));
 	}
 
 	/**
@@ -228,7 +256,6 @@ public abstract class Dao {
 		return fetchByQuery(entity, query);
 	}
 
-
 	/**
 	 * get a record by the supplied query
 	 * 
@@ -237,6 +264,17 @@ public abstract class Dao {
 	 * @return record
 	 */
 	protected abstract <T> T fetchByQuery(Entity<T> entity, Query query);
+	
+	/**
+	 * get a record by the supplied query
+	 * 
+	 * @param table table name
+	 * @param query WHERE conditions
+	 * @return record
+	 */
+	public Map fetch(String table, QueryWrapper query) {
+		return fetch(table, getQuery(query));
+	}
 	
 	/**
 	 * get a record by the supplied query
@@ -302,6 +340,17 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
+	public int deletes(Class<?> type, QueryWrapper query) {
+		return deletes(type, getQuery(query));
+	}
+
+	/**
+	 * delete records by the supplied query
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return deleted count
+	 */
 	public int deletes(Class<?> type, Query query) {
 		return deletes(getEntity(type), query);
 	}
@@ -313,7 +362,19 @@ public abstract class Dao {
 	 * @return deleted count
 	 */
 	public int deletes(Entity<?> entity) {
-		return deletes(entity, null);
+		return deletes(entity, (Query)null);
+	}
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return deleted count
+	 */
+	public int deletes(Entity<?> entity, QueryWrapper query) {
+		return deletes(entity, getQuery(query));
 	}
 
 	/**
@@ -425,7 +486,30 @@ public abstract class Dao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
+	public int updates(Object obj, QueryWrapper query) {
+		return updates(obj, getQuery(query));
+	}
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
 	public abstract int updates(Object obj, Query query);
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	public int updatesIgnoreNull(Object obj, QueryWrapper query) {
+		return updatesIgnoreNull(obj, getQuery(query));
+	}
 
 	/**
 	 * update records by the supplied object and query. 
@@ -475,6 +559,18 @@ public abstract class Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record list
 	 */
+	public <T> List<T> select(Class<T> type, QueryWrapper query) {
+		return select(type, getQuery(query));
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
 	public <T> List<T> select(Class<T> type, Query query) {
 		return select(getEntity(type), query);
 	}
@@ -487,8 +583,32 @@ public abstract class Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record list
 	 */
+	public <T> List<T> select(Entity<T> entity, QueryWrapper query) {
+		return select(entity, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
 	public abstract <T> List<T> select(Entity<T> entity, Query query);
 
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public List<Map> select(String table, QueryWrapper query) {
+		return select(table, query.getQuery());
+	}
+	
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
@@ -518,7 +638,7 @@ public abstract class Dao {
 	 * @return callback processed count
 	 */
 	public <T> int select(Entity<T> entity, DataHandler<T> callback) {
-		return select(entity, null, callback);
+		return select(entity, (Query)null, callback);
 	}
 
 	/**
@@ -529,7 +649,19 @@ public abstract class Dao {
 	 * @return callback processed count
 	 */
 	public int select(String table, DataHandler<Map> callback) {
-		return select(table, null, callback);
+		return select(table, (Query)null, callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public <T> int select(Class<T> type, QueryWrapper query, DataHandler<T> callback) {
+		return select(type, getQuery(query), callback);
 	}
 
 	/**
@@ -552,7 +684,31 @@ public abstract class Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
+	public <T> int select(Entity<T> entity, QueryWrapper query, DataHandler<T> callback) {
+		return select(entity, getQuery(query), callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
 	public abstract <T> int select(Entity<T> entity, Query query, DataHandler<T> callback);
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param table table name
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public int select(String table, QueryWrapper query, DataHandler<Map> callback) {
+		return select(table, getQuery(query), callback);
+	}
 
 	/**
 	 * select records by the supplied query.
@@ -581,7 +737,7 @@ public abstract class Dao {
 	 * @return record count
 	 */
 	public int count(Entity<?> entity) {
-		return count(entity, null);
+		return count(entity, (Query)null);
 	}
 
 	/**
@@ -591,7 +747,18 @@ public abstract class Dao {
 	 * @return record count
 	 */
 	public int count(String table) {
-		return count(table, null);
+		return count(table, (Query)null);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public int count(Class<?> type, QueryWrapper query) {
+		return count(type, getQuery(query));
 	}
 
 	/**
@@ -612,7 +779,29 @@ public abstract class Dao {
 	 * @param query WHERE conditions
 	 * @return record count
 	 */
+	public int count(Entity<?> entity, QueryWrapper query) {
+		return count(entity, getQuery(query));
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
 	public abstract int count(Entity<?> entity, Query query);
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param table table name
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public int count(String table, QueryWrapper query) {
+		return count(table, getQuery(query));
+	}
 
 	/**
 	 * count records by the supplied query.
@@ -644,7 +833,6 @@ public abstract class Dao {
 	 */
 	public abstract void rollback();
 
-	//--------------------------------------------------------------------
 	/**
 	 * check the identity value
 	 * @param id identity
@@ -652,6 +840,11 @@ public abstract class Dao {
 	 */
 	public boolean isValidIdentity(Object id) {
 		return id != null && !id.equals(0);
+	}
+	
+	//--------------------------------------------------------------------
+	protected Query getQuery(QueryWrapper query) {
+		return query == null ? null : query.getQuery();
 	}
 	
 	//--------------------------------------------------------------------
