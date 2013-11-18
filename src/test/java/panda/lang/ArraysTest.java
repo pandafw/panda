@@ -11,13 +11,12 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
-
-import panda.lang.Arrays;
-import panda.lang.Strings;
 
 /**
  * Unit tests {@link Arrays}.
@@ -2730,5 +2729,17 @@ public class ArraysTest {
 		
 		assertEquals(l, Arrays.toList("1", "2"));
 		assertEquals(l, Arrays.toList(new String[] { "1", "2" }));
+	}
+
+	// ------------------------------------------------------------------------
+	@Test
+	public void testToSet() {
+		Set<String> l = new HashSet<String>();
+		l.add("1");
+		l.add("2");
+		l.add("2");
+		
+		assertEquals(l, Arrays.toSet("1", "2", "2"));
+		assertEquals(l, Arrays.toSet(new String[] { "1", "2", "2" }));
 	}
 }

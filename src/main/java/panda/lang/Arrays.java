@@ -8037,12 +8037,32 @@ public abstract class Arrays {
 	 * @param a the array 
 	 * @return a list 
 	 */
-	public static <T> List<T> toList(T... a) {
-		List<T> list = new ArrayList<T>();
+	public static <T> List<T> toList(T ... a) {
+		if (a == null) {
+			return null;
+		}
+		
+		List<T> list = new ArrayList<T>(a.length);
 		for (T e : a) {
 			list.add(e);
 		}
 		return list;
 	}
 
+	/**
+	 * Returns a new set contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a set 
+	 */
+	public static <T> Set<T> toSet(T ... a) {
+		if (a == null) {
+			return null;
+		}
+		
+		Set<T> set = new HashSet<T>(a.length);
+		for (T e : a) {
+			set.add(e);
+		}
+		return set;
+	}
 }
