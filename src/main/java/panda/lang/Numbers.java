@@ -10,20 +10,48 @@ import java.math.BigInteger;
 public class Numbers {
 	/** 1KB */
 	public static final int KB = 1024;
+	/** 1KB BigInteger */
+	public static final BigInteger BI_KB = BigInteger.valueOf(KB);
+	/** 1KB BigDecimal */
+	public static final BigDecimal BD_KB = BigDecimal.valueOf(KB);
 	/** 1MB */
 	public static final int MB = KB * KB;
+	/** 1MB BigInteger */
+	public static final BigInteger BI_MB = BigInteger.valueOf(MB);
+	/** 1MB BigDecimal */
+	public static final BigDecimal BD_MB = BigDecimal.valueOf(MB);
 	/** 1GB */
 	public static final long GB = MB * 1024L;
+	/** 1GB BigInteger */
+	public static final BigInteger BI_GB = BigInteger.valueOf(GB);
+	/** 1GB BigDecimal */
+	public static final BigDecimal BD_GB = BigDecimal.valueOf(GB);
 	/** 1TB */
 	public static final long TB = GB * KB;
+	/** 1TB BigInteger */
+	public static final BigInteger BI_TB = BigInteger.valueOf(TB);
+	/** 1TB BigDecimal */
+	public static final BigDecimal BD_TB = BigDecimal.valueOf(TB);
 	/** 1PB */
 	public static final long PB = TB * KB;
+	/** 1PB BigInteger */
+	public static final BigInteger BI_PB = BigInteger.valueOf(PB);
+	/** 1PB BigDecimal */
+	public static final BigDecimal BD_PB = BigDecimal.valueOf(PB);
 	/** 1EB */
 	public static final long EB = PB * KB;
-	/** 1ZB */
-	public static final BigInteger ZB = BigInteger.valueOf(KB).multiply(BigInteger.valueOf(EB));
-	/** 1YB: yottabyte. */
-	public static final BigInteger YB = ZB.multiply(BigInteger.valueOf(KB));
+	/** 1EB BigInteger */
+	public static final BigInteger BI_EB = BigInteger.valueOf(EB);
+	/** 1EB BigDecimal */
+	public static final BigDecimal BD_EB = BigDecimal.valueOf(EB);
+	/** 1ZB BigInteger */
+	public static final BigInteger BI_ZB = BigInteger.valueOf(KB).multiply(BI_EB);
+	/** 1ZB BigDecimal */
+	public static final BigDecimal BD_ZB = BigDecimal.valueOf(KB).multiply(BD_EB);
+	/** 1YB BigInteger */
+	public static final BigInteger BI_YB = BI_ZB.multiply(BI_KB);
+	/** 1YB BigDecimal */
+	public static final BigDecimal BD_YB = BD_ZB.multiply(BD_KB);
 
     /** Reusable Long constant for zero. */
 	public static final Long LONG_ZERO = Long.valueOf(0L);

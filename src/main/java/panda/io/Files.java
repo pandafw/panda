@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -278,6 +280,11 @@ public class Files {
 	}
 
 	// -----------------------------------------------------------------------
+	private static DecimalFormat szFormat = new DecimalFormat("#.##");
+	private static String formatSize(final double size) {
+		return szFormat.format(size);
+	}
+	
 	/**
 	 * Returns a human-readable version of the file size, where the input represents a specific
 	 * number of bytes.
@@ -297,12 +304,34 @@ public class Files {
 			return Strings.EMPTY;
 		}
 
-		String sz;
-		if (size.compareTo(Numbers.YB) > 0) {
-			sz = Math.round(size.divide(Numbers.YB).longValue()) + " YB";
+		return toDisplaySize(new BigDecimal(size));
+	}
+	
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String toDisplaySize(final BigDecimal size) {
+		if (size == null) {
+			return Strings.EMPTY;
 		}
-		else if (size.compareTo(Numbers.ZB) > 0) {
-			sz = Math.round(size.divide(Numbers.ZB).longValue()) + " ZB";
+
+		String sz;
+		if (size.compareTo(Numbers.BD_YB) > 0) {
+			sz = formatSize(size.divide(Numbers.BD_YB).doubleValue()) + " YB";
+		}
+		else if (size.compareTo(Numbers.BD_ZB) > 0) {
+			sz = formatSize(size.divide(Numbers.BD_ZB).doubleValue()) + " ZB";
 		}
 		else {
 			sz = toDisplaySize(size.longValue());
@@ -347,27 +376,46 @@ public class Files {
 	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
 	 */
 	public static String toDisplaySize(final long size) {
+		return toDisplaySize((double)size);
+	}
+	
+
+	/**
+	 * Returns a human-readable version of the file size, where the input represents a specific
+	 * number of bytes.
+	 * <p>
+	 * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is
+	 * rounded down to the nearest GB boundary.
+	 * </p>
+	 * <p>
+	 * Similarly for the 1MB and 1KB boundaries.
+	 * </p>
+	 * 
+	 * @param size the number of bytes
+	 * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
+	 */
+	public static String toDisplaySize(final double size) {
 		String sz;
 		if (size >= Numbers.EB) {
-			sz = Math.round(size / Numbers.EB) + " EB";
+			sz = formatSize(size / Numbers.EB) + " EB";
 		}
 		else if (size >= Numbers.PB) {
-			sz = Math.round(size / Numbers.PB) + " PB";
+			sz = formatSize(size / Numbers.PB) + " PB";
 		}
 		else if (size >= Numbers.TB) {
-			sz = Math.round(size / Numbers.TB) + " TB";
+			sz = formatSize(size / Numbers.TB) + " TB";
 		}
 		else if (size >= Numbers.GB) {
-			sz = Math.round(size / Numbers.GB) + " GB";
+			sz = formatSize(size / Numbers.GB) + " GB";
 		}
 		else if (size >= Numbers.MB) {
-			sz = Math.round(size / Numbers.MB) + " MB";
+			sz = formatSize(size / Numbers.MB) + " MB";
 		}
 		else if (size >= Numbers.KB) {
-			sz = Math.round(size / Numbers.KB) + " KB";
+			sz = formatSize(size / Numbers.KB) + " KB";
 		}
 		else {
-			sz = size + " bytes";
+			sz = formatSize(size) + " bytes";
 		}
 		return sz;
 	}
@@ -392,6 +440,70 @@ public class Files {
 		}
 
 		return toDisplaySize(size.longValue());
+	}
+
+	/**
+	 * parse display size to number.
+	 * return null if the input string is not a valid display size string.
+	 * 
+	 * @param str display size string
+	 * @return number
+	 */
+	public static BigDecimal parseDisplaySize(final String str) {
+		if (Strings.isEmpty(str)) {
+			return null;
+		}
+
+		int i = 0;
+		while (i < str.length() && !Character.isLetter(str.charAt(i))) {
+			i++;
+		}
+
+		BigDecimal n = Numbers.toBigDecimal(Strings.strip(str.substring(0, i)));
+		if (n == null) {
+			return null;
+		}
+
+		if (i == str.length()) {
+			return n;
+		}
+
+		char unit = str.charAt(i);
+		switch (unit) {
+		case 'Y':
+		case 'y':
+			n = n.multiply(Numbers.BD_YB);
+			break;
+		case 'Z':
+		case 'z':
+			n = n.multiply(Numbers.BD_ZB);
+			break;
+		case 'E':
+		case 'e':
+			n = n.multiply(Numbers.BD_EB);
+			break;
+		case 'P':
+		case 'p':
+			n = n.multiply(Numbers.BD_PB);
+			break;
+		case 'T':
+		case 't':
+			n = n.multiply(Numbers.BD_TB);
+			break;
+		case 'G':
+		case 'g':
+			n = n.multiply(Numbers.BD_GB);
+			break;
+		case 'M':
+		case 'm':
+			n = n.multiply(Numbers.BD_MB);
+			break;
+		case 'K':
+		case 'k':
+			n = n.multiply(Numbers.BD_KB);
+			break;
+		}
+		return n;
 	}
 
 	// -----------------------------------------------------------------------
