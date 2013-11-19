@@ -203,11 +203,15 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 		else if (Classes.isCharSequence(clazz)) {
 			ef.setJdbcType(JdbcTypes.VARCHAR);
-			ef.setSize(50);
+			if (ef.getSize() == 0) {
+				ef.setSize(50);
+			}
 		}
 		else if (Classes.isEnum(clazz)) {
 			ef.setJdbcType(JdbcTypes.VARCHAR);
-			ef.setSize(20);
+			if (ef.getSize() == 0) {
+				ef.setSize(20);
+			}
 		}
 		else if (Classes.isAssignable(clazz, java.sql.Timestamp.class)) {
 			ef.setJdbcType(JdbcTypes.TIMESTAMP);
@@ -223,8 +227,10 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 		else if (Classes.isAssignable(clazz, BigDecimal.class)) {
 			ef.setJdbcType(JdbcTypes.DECIMAL);
-			ef.setSize(20);
-			ef.setScale(2);
+			if (ef.getSize() == 0) {
+				ef.setSize(20);
+				ef.setScale(2);
+			}
 		}
 		else if (Classes.isAssignable(clazz, Reader.class)) {
 			ef.setJdbcType(JdbcTypes.CLOB);
@@ -238,7 +244,9 @@ public class AnnotationEntityMaker implements EntityMaker {
 				log.debugf("take field '%s(%s)' as VARCHAR(50)", ef.getName(), clazz.toString());
 			}
 			ef.setJdbcType(JdbcTypes.VARCHAR);
-			ef.setSize(50);
+			if (ef.getSize() == 0) {
+				ef.setSize(50);
+			}
 		}
 	}
 
