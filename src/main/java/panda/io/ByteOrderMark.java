@@ -1,6 +1,7 @@
 package panda.io;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 /**
  * Byte Order Mark (BOM) representation
@@ -31,6 +32,13 @@ public class ByteOrderMark implements Serializable {
 	 * UTF-32LE BOM (Little-Endian)
 	 */
 	public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFF, 0xFE, 0x00, 0x00);
+
+	/**
+	 * ALL UNICODE BOM
+	 */
+	public static final ByteOrderMark[] ALL = {
+		UTF_8, UTF_16BE, UTF_16LE, UTF_32BE, UTF_32LE
+	};
 
 	/**
 	 * Unicode BOM character; external form depends on the encoding.
@@ -69,6 +77,15 @@ public class ByteOrderMark implements Serializable {
 	 */
 	public String getCharsetName() {
 		return charsetName;
+	}
+
+	/**
+	 * Return the charset of the {@link java.nio.charset.Charset} the BOM represents.
+	 * 
+	 * @return the character
+	 */
+	public Charset getCharset() {
+		return Charset.forName(charsetName);
 	}
 
 	/**

@@ -480,17 +480,11 @@ public class HttpResponse implements Closeable {
 	
 	/**
 	 * get charset from HTTP headers
-	 * @return charset
+	 * @return charset name
 	 */
 	public String getContentCharset() {
-		String contextType = header.getString(HttpHeader.CONTENT_TYPE);
-		if (null != contextType) {
-			int position = contextType.indexOf("charset=");
-			if (position > 0) {
-				return Strings.trim(contextType.substring(position + 8));
-			}
-		}
-		return null;
+		String contentType = header.getString(HttpHeader.CONTENT_TYPE);
+		return Streams.getCharsetFromContentTypeString(contentType);
 	}
 
 	/**

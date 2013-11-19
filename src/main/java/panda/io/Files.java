@@ -36,6 +36,7 @@ import panda.io.filter.FileFilters;
 import panda.io.filter.IOFileFilter;
 import panda.io.filter.SuffixFileFilter;
 import panda.io.filter.TrueFileFilter;
+import panda.io.stream.BOMInputStream;
 import panda.lang.Charsets;
 import panda.lang.Numbers;
 import panda.lang.Strings;
@@ -1773,7 +1774,15 @@ public class Files {
 	 * @throws IOException in case of an I/O error
 	 */
 	public static String readFileToString(File file) throws IOException {
-		return readFileToString(file, Charset.defaultCharset());
+		BOMInputStream in = null;
+		try {
+			in = new BOMInputStream(openInputStream(file));
+			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
+			return Streams.toString(in, cs);
+		}
+		finally {
+			Streams.safeClose(in);
+		}
 	}
 
 	/**
@@ -1835,7 +1844,15 @@ public class Files {
 	 * @throws IOException in case of an I/O error
 	 */
 	public static List<String> readLines(final File file) throws IOException {
-		return readLines(file, Charset.defaultCharset());
+		BOMInputStream in = null;
+		try {
+			in = new BOMInputStream(openInputStream(file));
+			Charset cs = in.hasBOM() ? in.getBOMCharset() : Charset.defaultCharset();
+			return Streams.readLines(in, cs);
+		}
+		finally {
+			Streams.safeClose(in);
+		}
 	}
 
 	/**

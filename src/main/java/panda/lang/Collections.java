@@ -2193,4 +2193,40 @@ public abstract class Collections {
 	public static <T> Queue<T> asLifoQueue(Deque<T> deque) {
 		return java.util.Collections.asLifoQueue(deque);
 	}
+	
+	/**
+	 * invert copy map, the key/value pair is inverted.
+	 * @param des destination map
+	 * @param src source map array
+	 */
+	public static Map invertAddAll(Map des, Map ... src) {
+		if (src == null || src.length == 0) {
+			return des;
+		}
+		Asserts.notNull(des);
+		
+		for (Map m : src) {
+			for (Entry en : (Set<Entry>)m.entrySet()) {
+				des.put(en.getValue(), en.getKey());
+			}
+		}
+		return des;
+	}
+	
+	/**
+	 * copy source maps to des map
+	 * @param des destination map
+	 * @param src source map array
+	 */
+	public static Map addAll(Map des, Map ... src) {
+		if (src == null || src.length == 0) {
+			return des;
+		}
+		Asserts.notNull(des);
+		
+		for (Map m : src) {
+			des.putAll(m);
+		}
+		return des;
+	}
 }

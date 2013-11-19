@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import panda.io.stream.BOMInputStream;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.io.stream.ClosedInputStream;
 import panda.io.stream.ClosedOutputStream;
@@ -575,19 +576,21 @@ public class Streams {
 	// read char[]
 	// -----------------------------------------------------------------------
 	/**
-	 * Get the contents of an <code>InputStream</code> as a character array using the default
+	 * Get the contents of an <code>InputStream</code> as a character array using the detected
 	 * character encoding of the platform.
 	 * <p>
 	 * This method buffers the input internally, so there is no need to use a
 	 * <code>BufferedInputStream</code>.
 	 * 
-	 * @param is the <code>InputStream</code> to read from
+	 * @param input the <code>InputStream</code> to read from
 	 * @return the requested character array
 	 * @throws NullPointerException if the input is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static char[] toCharArray(final InputStream is) throws IOException {
-		return toCharArray(is, Charset.defaultCharset());
+	public static char[] toCharArray(final InputStream input) throws IOException {
+		BOMInputStream bis = toBOMInputStream(input);
+		Charset cs = bis.hasBOM() ? bis.getBOMCharset() : Charset.defaultCharset();
+		return toCharArray(bis, cs);
 	}
 
 	/**
@@ -652,7 +655,7 @@ public class Streams {
 	// read toString
 	// -----------------------------------------------------------------------
 	/**
-	 * Get the contents of an <code>InputStream</code> as a String using the default character
+	 * Get the contents of an <code>InputStream</code> as a String using the detected character
 	 * encoding of the platform.
 	 * <p>
 	 * This method buffers the input internally, so there is no need to use a
@@ -664,7 +667,21 @@ public class Streams {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static String toString(InputStream input) throws IOException {
-		return toString(input, Charset.defaultCharset());
+		BOMInputStream bis = toBOMInputStream(input);
+		Charset cs = bis.hasBOM() ? bis.getBOMCharset() : Charset.defaultCharset();
+		return toString(bis, cs);
+	}
+
+	/**
+	 * Convert input stream to BOMInputStream
+	 * @param input the input stream
+	 * @return a new BOMInputStream
+	 */
+	public static BOMInputStream toBOMInputStream(InputStream input) {
+		if (input instanceof BOMInputStream) {
+			return ((BOMInputStream)input);
+		}
+		return new BOMInputStream(input);
 	}
 
 	/**
@@ -734,7 +751,7 @@ public class Streams {
 	 * @throws IOException if an I/O exception occurs.
 	 */
 	public static String toString(final URI uri) throws IOException {
-		return toString(uri, Charset.defaultCharset());
+		return toString(uri.toURL());
 	}
 
 	/**
@@ -756,11 +773,9 @@ public class Streams {
 	 * @param encoding The encoding name for the URL contents.
 	 * @return The contents of the URL as a String.
 	 * @throws IOException if an I/O exception occurs.
-	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
-	 *             version 2.2 if the encoding is not supported.
 	 */
 	public static String toString(final URI uri, final String encoding) throws IOException {
-		return toString(uri, Charsets.toCharset(encoding));
+		return toString(uri.toURL(), Charsets.toCharset(encoding));
 	}
 
 	/**
@@ -771,7 +786,31 @@ public class Streams {
 	 * @throws IOException if an I/O exception occurs.
 	 */
 	public static String toString(final URL url) throws IOException {
-		return toString(url, Charset.defaultCharset());
+		URLConnection urlc = url.openConnection();
+		urlc.connect();
+
+		String charset = getCharsetFromContentTypeString(urlc.getHeaderField("Content-Type"));
+		if (charset == null) {
+			charset = Charsets.UTF_8;
+		}
+
+		InputStream is = urlc.getInputStream();
+		try {
+			return toString(is, charset);
+		}
+		finally {
+			is.close();
+		}
+	}
+
+	public static String getCharsetFromContentTypeString(String contentType) {
+		if (contentType != null) {
+			int position = Strings.indexOfIgnoreCase(contentType, "charset=");
+			if (position > 0) {
+				return Strings.trim(contentType.substring(position + 8));
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -799,8 +838,6 @@ public class Streams {
 	 * @param encoding The encoding name for the URL contents.
 	 * @return The contents of the URL as a String.
 	 * @throws IOException if an I/O exception occurs.
-	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
-	 *             version 2.2 if the encoding is not supported.
 	 */
 	public static String toString(final URL url, final String encoding) throws IOException {
 		return toString(url, Charsets.toCharset(encoding));

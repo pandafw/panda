@@ -111,6 +111,9 @@ public class Charsets {
 	 */
 	public static final String UTF_16LE = "UTF-16LE";
 
+	public static final String UTF_32BE = "UTF-32BE";
+	public static final String UTF_32LE = "UTF-32LE";
+	
 	/**
 	 * <p>
 	 * Eight-bit Unicode Transformation Format.
@@ -180,6 +183,9 @@ public class Charsets {
 	 *      charsets</a>
 	 */
 	public static final Charset CS_UTF_16LE = Charset.forName(UTF_16LE);
+
+	public static final Charset CS_UTF_32BE = Charset.forName(UTF_32BE);
+	public static final Charset CS_UTF_32LE = Charset.forName(UTF_32LE);
 
 	/**
 	 * Eight-bit Unicode Transformation Format.

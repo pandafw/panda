@@ -2,16 +2,17 @@ package panda.lang.escape;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Translates a value using a lookup table.
  * 
  */
 public class LookupTranslator extends CharSequenceTranslator {
-
-	private final HashMap<String, CharSequence> lookupMap;
-	private final int shortest;
-	private final int longest;
+	private final Map<String, String> lookupMap;
+	private int shortest;
+	private int longest;
 
 	/**
 	 * Define the lookup table to be used in translation Note that, as of Lang 3.1, the key to the
@@ -21,22 +22,42 @@ public class LookupTranslator extends CharSequenceTranslator {
 	 * 
 	 * @param lookup CharSequence[][] table of size [*][2]
 	 */
-	public LookupTranslator(final CharSequence[]... lookup) {
-		lookupMap = new HashMap<String, CharSequence>();
-		int _shortest = Integer.MAX_VALUE;
-		int _longest = 0;
+	public LookupTranslator(final Map<String, String> lookup) {
+		lookupMap = lookup;
+		init();
+	}
+
+	/**
+	 * Define the lookup table to be used in translation Note that, as of Lang 3.1, the key to the
+	 * lookup table is converted to a java.lang.String, while the value remains as a
+	 * java.lang.CharSequence. This is because we need the key to support hashCode and
+	 * equals(Object), allowing it to be the key for a HashMap. See LANG-882.
+	 * 
+	 * @param lookup CharSequence[][] table of size [*][2]
+	 */
+	public LookupTranslator(final String[] ... lookup) {
+		lookupMap = new HashMap<String, String>();
 		if (lookup != null) {
-			for (final CharSequence[] seq : lookup) {
+			for (final String[] seq : lookup) {
 				this.lookupMap.put(seq[0].toString(), seq[1]);
-				final int sz = seq[0].length();
-				if (sz < _shortest) {
-					_shortest = sz;
-				}
-				if (sz > _longest) {
-					_longest = sz;
-				}
 			}
 		}
+		init();
+	}
+
+	private void init() {
+		int _shortest = Integer.MAX_VALUE;
+		int _longest = 0;
+		for (Entry<String, String> en : lookupMap.entrySet()) {
+			final int sz = en.getKey().length();
+			if (sz < _shortest) {
+				_shortest = sz;
+			}
+			if (sz > _longest) {
+				_longest = sz;
+			}
+		}
+
 		shortest = _shortest;
 		longest = _longest;
 	}

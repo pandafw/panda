@@ -2,6 +2,7 @@ package panda.lang;
 
 import java.io.IOException;
 
+import panda.doc.html.HTMLEntities;
 import panda.lang.escape.AggregateTranslator;
 import panda.lang.escape.CharSequenceTranslator;
 import panda.lang.escape.CsvEscaper;
@@ -9,7 +10,6 @@ import panda.lang.escape.CsvUnescaper;
 import panda.lang.escape.EntityArrays;
 import panda.lang.escape.JavaUnicodeEscaper;
 import panda.lang.escape.LookupTranslator;
-import panda.lang.escape.NumericEntityUnescaper;
 import panda.lang.escape.OctalUnescaper;
 import panda.lang.escape.UnicodeUnescaper;
 
@@ -53,25 +53,21 @@ public abstract class StringEscapes {
 	 * of use, this object allows the XML escaping functionality to be used as the foundation for a
 	 * custom translator.
 	 */
-	public static final CharSequenceTranslator ESCAPE_XML = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_ESCAPE()), new LookupTranslator(EntityArrays.APOS_ESCAPE()));
+	public static final CharSequenceTranslator ESCAPE_XML = new AggregateTranslator(new LookupTranslator(HTMLEntities.XML_ESCAPE));
 
 	/**
 	 * Translator object for escaping HTML version 3.0. While {@link #escapeHtml3(String)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator ESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_ESCAPE()), new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()));
+	public static final CharSequenceTranslator ESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML3_ESCAPE));
 
 	/**
 	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(String)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator ESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_ESCAPE()), new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()), new LookupTranslator(
-		EntityArrays.HTML40_EXTENDED_ESCAPE()));
+	public static final CharSequenceTranslator ESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML4_ESCAPE));
 
 	/**
 	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(String)} is the
@@ -85,9 +81,9 @@ public abstract class StringEscapes {
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator ESCAPE_PHTML = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_ESCAPE()), new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE()), new LookupTranslator(
-		EntityArrays.HTML40_EXTENDED_ESCAPE()), new LookupTranslator(new String[][] { { "\t", "&nbsp;&nbsp;" },
+	public static final CharSequenceTranslator ESCAPE_PHTML = new AggregateTranslator(
+		ESCAPE_HTML, 
+		new LookupTranslator(new String[][] { { "\t", "&nbsp;&nbsp;" },
 			{ "\n", "<br/>" }, { "\r", "" } }));
 
 	/**
@@ -130,27 +126,21 @@ public abstract class StringEscapes {
 	 * the expected method of use, this object allows the HTML unescaping functionality to be used
 	 * as the foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator UNESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_UNESCAPE()), new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE()),
-		new NumericEntityUnescaper());
+	public static final CharSequenceTranslator UNESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML3_UNESCAPE));
 
 	/**
 	 * Translator object for unescaping escaped HTML 4.0. While {@link #unescapeHtml4(String)} is
 	 * the expected method of use, this object allows the HTML unescaping functionality to be used
 	 * as the foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator UNESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_UNESCAPE()), new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE()), new LookupTranslator(
-		EntityArrays.HTML40_EXTENDED_UNESCAPE()), new NumericEntityUnescaper());
+	public static final CharSequenceTranslator UNESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML4_UNESCAPE));
 
 	/**
 	 * Translator object for unescaping escaped XML. While {@link #unescapeXml(String)} is the
 	 * expected method of use, this object allows the XML unescaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
-	public static final CharSequenceTranslator UNESCAPE_XML = new AggregateTranslator(new LookupTranslator(
-		EntityArrays.BASIC_UNESCAPE()), new LookupTranslator(EntityArrays.APOS_UNESCAPE()),
-		new NumericEntityUnescaper());
+	public static final CharSequenceTranslator UNESCAPE_XML = new AggregateTranslator(new LookupTranslator(HTMLEntities.XML_UNESCAPE));
 
 	/**
 	 * Translator object for unescaping escaped Comma Separated Value entries. While

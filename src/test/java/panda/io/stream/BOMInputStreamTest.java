@@ -27,8 +27,6 @@ import panda.lang.Charsets;
 
 /**
  * Test case for {@link BOMInputStream}.
- * 
- * @version $Id: BOMInputStreamTest.java 1471765 2013-04-24 23:20:29Z sebb $
  */
 public class BOMInputStreamTest {
 	// ----------------------------------------------------------------------------

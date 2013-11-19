@@ -1,0 +1,13 @@
+# Test 1 (paragraph splitting)
+This is the first paragraph.
+This ends with br.  
+This is normal.
+
+And this is the second.
+
+# Result 1
+<p>This is the first paragraph.
+This ends with br.<br />
+This is normal.</p>
+<p>And this is the second.</p>
+

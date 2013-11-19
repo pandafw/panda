@@ -2,6 +2,7 @@ package panda.io.stream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -23,7 +24,7 @@ import panda.io.ByteOrderMark;
  * <h3>Example 1 - Detect and exclude a UTF-8 BOM</h3>
  * 
  * <pre>
- * BOMInputStream bomIn = new BOMInputStream(in);
+ * BOMInputStream bomIn = new BOMInputStream(in, ByteOrderMark.UTF_8);
  * if (bomIn.hasBOM()) {
  * 	// has a UTF-8 BOM
  * }
@@ -33,7 +34,7 @@ import panda.io.ByteOrderMark;
  * 
  * <pre>
  * boolean include = true;
- * BOMInputStream bomIn = new BOMInputStream(in, include);
+ * BOMInputStream bomIn = new BOMInputStream(in, include, ByteOrderMark.UTF_8);
  * if (bomIn.hasBOM()) {
  * 	// has a UTF-8 BOM
  * }
@@ -82,7 +83,7 @@ public class BOMInputStream extends ProxyInputStream {
 	 * @param delegate the InputStream to delegate to
 	 */
 	public BOMInputStream(final InputStream delegate) {
-		this(delegate, false, ByteOrderMark.UTF_8);
+		this(delegate, false, ByteOrderMark.ALL);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class BOMInputStream extends ProxyInputStream {
 	 * @param include true to include the UTF-8 BOM or false to exclude it
 	 */
 	public BOMInputStream(final InputStream delegate, final boolean include) {
-		this(delegate, include, ByteOrderMark.UTF_8);
+		this(delegate, include, ByteOrderMark.ALL);
 	}
 
 	/**
@@ -215,6 +216,17 @@ public class BOMInputStream extends ProxyInputStream {
 	public String getBOMCharsetName() throws IOException {
 		getBOM();
 		return byteOrderMark == null ? null : byteOrderMark.getCharsetName();
+	}
+
+	/**
+	 * Return the BOM charset - {@link ByteOrderMark#getCharset()}.
+	 * 
+	 * @return The BOM charset or null if no BOM found
+	 * @throws IOException if an error reading the first bytes of the stream occurs
+	 */
+	public Charset getBOMCharset() throws IOException {
+		getBOM();
+		return byteOrderMark == null ? null : byteOrderMark.getCharset();
 	}
 
 	/**

@@ -8065,4 +8065,21 @@ public abstract class Arrays {
 		}
 		return set;
 	}
+
+	/**
+	 * Returns a new map contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a set 
+	 */
+	public static <T> Map<T, T> toMap(T[][] a) {
+		if (a == null) {
+			return null;
+		}
+		
+		Map<T, T> map = new HashMap<T, T>(a.length);
+		for (T[] e : a) {
+			map.put(e[0], e[1]);
+		}
+		return map;
+	}
 }
