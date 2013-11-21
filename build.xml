@@ -239,6 +239,7 @@
 			<fileset dir="src/main">
 				<include name="panda/**"/>
 				<include name="bootstrap3/**"/>
+				<include name="jquery/**"/>
 			</fileset>
 		</copy>
 	</target>
