@@ -1,25 +1,52 @@
 (function() {
-	var m = {
-		'\b': '\\b',
-		'\t': '\\t',
-		'\n': '\\n',
-		'\f': '\\f',
-		'\r': '\\r',
-		'"' : '\\"',
-		'\\': '\\\\'
-	};
 	if (typeof JSON == 'undefined') {
-		var s = {
-			'array': function (x, r, w) {
+		var m = {
+			'\b' : '\\b',
+			'\t' : '\\t',
+			'\n' : '\\n',
+			'\f' : '\\f',
+			'\r' : '\\r',
+			'"' : '\\"',
+			'\\' : '\\\\'
+		};
+
+		var pr = function(r, k, v) {
+			if (r === undefined) {
+				return v;
+			}
+			if (typeof (r) == 'function') {
+				return r(k, v);
+			}
+			return r.indexOf(k) >= 0 ? v : undefined;
+		}
+		var ps = function(d, w) {
+			if (w.length < 1) {
+				return '';
+			}
+			var s = '';
+			for (var i = 0; i < d; i++) {
+				s += w;
+			}
+			return s;
+		}
+		var pp = {
+			'array': function (x, r, d, w, p) {
 				var a = [], f, i, l = x.length, v;
+				if (l < 1) return '[]';
 				for (i = 0; i < l; i++) {
-					v = x[i];
-					f = s[typeof v];
+					v = pr(r, i, x[i]);
+					f = pp[typeof v];
 					if (f) {
-						a.push(f(v, r, w));
+						v = f(v, r, d + p, w, p);
+						a.push(ps(d + p, w) + v);
 					}
 				}
-				return '[' + w + a.join(',' + w) + w + ']';
+				if (p) {
+					return '[\n' + a.join(',\n') + '\n' + ps(d, w) + ']';
+				}
+				else {
+					return '[' + a.join(',') + ']';
+				}
 			},
 			'boolean': function (x) {
 				return String(x);
@@ -30,21 +57,27 @@
 			'number': function (x) {
 				return isFinite(x) ? String(x) : 'null';
 			},
-			'object': function (x, r, w) {
+			'object': function (x, r, d, w, p) {
 				if (x) {
 					if (x instanceof Array) {
-						return s.array(x, r, w);
+						return pp.array(x, r, d, w, p);
 					}
 					var a = [], f, i, v;
 					for (i in x) {
-						v = x[i];
-						f = s[typeof v];
+						v = pr(r, s, x[i]);
+						f = pp[typeof v];
 						if (f) {
-							v = f(v, r, w);
-							a.push(s.string(i) + ':' + v);
+							v = f(v, r, d + p, w, p);
+							a.push(ps(d + p, w) + pp.string(i) + ':' + (p ? ' ' : '') + v);
 						}
 					}
-					return '{' + w + a.join(w) + w + '}';
+					if (a.length < 1) return '{}';
+					if (p) {
+						return '{\n' + a.join(',\n') + '\n' + ps(d, w) + '}';
+					}
+					else {
+						return '{' + a.join(',') + '}';
+					}
 				}
 				return 'null';
 			},
@@ -56,20 +89,19 @@
 							return c;
 						}
 						c = b.charCodeAt();
-						return '\\u00' +
-							Math.floor(c / 16).toString(16) +
-							(c % 16).toString(16);
+						return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
 					});
 				}
 				return '"' + x + '"';
 			}
 		};
-	
+
 		JSON = {
 			stringify: function(v, r, w) {
 				w = w || '';
-				var f = isNaN(v) ? s[typeof v] : s['number'];
-				if (f) return f(v, r, w);
+				var f = isNaN(v) ? pp[typeof v] : pp['number'];
+				if (f) return f(v, r, 1, w, w.length > 0 ? 1 : 0);
+				return "undefined";
 			},
 		
 			parse: function(v, safe) {
@@ -84,77 +116,11 @@
 		JSON.parse.safe = false;
 	}
 	
-	var ps = function(d, w) {
-		var s = '';
-		for (var i = 0; i < d; i++) {
-			s += w;
-		}
-		return s;
-	}
-	var pp = {
-		'array': function (x, d, w) {
-			var a = [], f, i, l = x.length, v;
-			if (l < 1) return '[]';
-			for (i = 0; i < l; i++) {
-				v = x[i];
-				f = pp[typeof v];
-				if (f) {
-					v = f(v, d + 1, w);
-					a.push(ps(d + 1, w) + v);
-				}
-			}
-			return '[\n' + a.join(',\n') + '\n' + ps(d, w) + ']';
-		},
-		'boolean': function (x) {
-			return String(x);
-		},
-		'null': function (x) {
-			return "null";
-		},
-		'number': function (x) {
-			return isFinite(x) ? String(x) : 'null';
-		},
-		'object': function (x, d, w) {
-			if (x) {
-				if (x instanceof Array) {
-					return pp.array(x, d, w);
-				}
-				var a = [], f, i, v;
-				for (i in x) {
-					v = x[i];
-					f = pp[typeof v];
-					if (f) {
-						v = f(v, d + 1, w);
-						a.push(ps(d + 1, w) + pp.string(i) + ': ' + v);
-					}
-				}
-				if (a.length < 1) return '{}';
-				return '{\n' + a.join(',\n') + '\n' + ps(d, w) + '}';
-			}
-			return 'null';
-		},
-		'string': function (x) {
-			if (/["\\\x00-\x1f]/.test(x)) {
-				x = x.replace(/([\x00-\x1f\\"])/g, function(a, b) {
-					var c = m[b];
-					if (c) {
-						return c;
-					}
-					c = b.charCodeAt();
-					return '\\u00' +
-						Math.floor(c / 16).toString(16) +
-						(c % 16).toString(16);
-				});
-			}
-			return '"' + x + '"';
-		}
-	};
-	
 	JSON.pprint = function(v, w) {
 		w = w || '  ';
 		var f = isNaN(v) ? pp[typeof v] : pp['number'];
-		if (f) return f(v, 0, w);
-		return "undefined";
+		if (f) return f(v, r, 0, w, 1);
+		return JSON.stringify(v, null, w);
 	};
 })();
 
