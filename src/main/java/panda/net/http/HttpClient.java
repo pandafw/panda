@@ -261,7 +261,7 @@ public class HttpClient {
 		
 		HttpResponse response;
 
-		StopWatch sw = new StopWatch(true);
+		StopWatch sw = new StopWatch();
 		if (request.isPost()) {
 			openConnection();
 			setupRequestHeader();
