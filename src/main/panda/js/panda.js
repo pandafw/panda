@@ -616,27 +616,54 @@ if (typeof Function.prototype.createInterceptor != "function") {
 }
 
 (function() {
-	var m = {
-		'\b': '\\b',
-		'\t': '\\t',
-		'\n': '\\n',
-		'\f': '\\f',
-		'\r': '\\r',
-		'"' : '\\"',
-		'\\': '\\\\'
-	};
 	if (typeof JSON == 'undefined') {
-		var s = {
-			'array': function (x, r, w) {
+		var m = {
+			'\b' : '\\b',
+			'\t' : '\\t',
+			'\n' : '\\n',
+			'\f' : '\\f',
+			'\r' : '\\r',
+			'"' : '\\"',
+			'\\' : '\\\\'
+		};
+
+		var pr = function(r, k, v) {
+			if (r === undefined) {
+				return v;
+			}
+			if (typeof (r) == 'function') {
+				return r(k, v);
+			}
+			return r.indexOf(k) >= 0 ? v : undefined;
+		}
+		var ps = function(d, w) {
+			if (w.length < 1) {
+				return '';
+			}
+			var s = '';
+			for (var i = 0; i < d; i++) {
+				s += w;
+			}
+			return s;
+		}
+		var pp = {
+			'array': function (x, r, d, w, p) {
 				var a = [], f, i, l = x.length, v;
+				if (l < 1) return '[]';
 				for (i = 0; i < l; i++) {
-					v = x[i];
-					f = s[typeof v];
+					v = pr(r, i, x[i]);
+					f = pp[typeof v];
 					if (f) {
-						a.push(f(v, r, w));
+						v = f(v, r, d + p, w, p);
+						a.push(ps(d + p, w) + v);
 					}
 				}
-				return '[' + w + a.join(',' + w) + w + ']';
+				if (p) {
+					return '[\n' + a.join(',\n') + '\n' + ps(d, w) + ']';
+				}
+				else {
+					return '[' + a.join(',') + ']';
+				}
 			},
 			'boolean': function (x) {
 				return String(x);
@@ -647,21 +674,27 @@ if (typeof Function.prototype.createInterceptor != "function") {
 			'number': function (x) {
 				return isFinite(x) ? String(x) : 'null';
 			},
-			'object': function (x, r, w) {
+			'object': function (x, r, d, w, p) {
 				if (x) {
 					if (x instanceof Array) {
-						return s.array(x, r, w);
+						return pp.array(x, r, d, w, p);
 					}
 					var a = [], f, i, v;
 					for (i in x) {
-						v = x[i];
-						f = s[typeof v];
+						v = pr(r, s, x[i]);
+						f = pp[typeof v];
 						if (f) {
-							v = f(v, r, w);
-							a.push(s.string(i) + ':' + v);
+							v = f(v, r, d + p, w, p);
+							a.push(ps(d + p, w) + pp.string(i) + ':' + (p ? ' ' : '') + v);
 						}
 					}
-					return '{' + w + a.join(w) + w + '}';
+					if (a.length < 1) return '{}';
+					if (p) {
+						return '{\n' + a.join(',\n') + '\n' + ps(d, w) + '}';
+					}
+					else {
+						return '{' + a.join(',') + '}';
+					}
 				}
 				return 'null';
 			},
@@ -673,20 +706,19 @@ if (typeof Function.prototype.createInterceptor != "function") {
 							return c;
 						}
 						c = b.charCodeAt();
-						return '\\u00' +
-							Math.floor(c / 16).toString(16) +
-							(c % 16).toString(16);
+						return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
 					});
 				}
 				return '"' + x + '"';
 			}
 		};
-	
+
 		JSON = {
 			stringify: function(v, r, w) {
 				w = w || '';
-				var f = isNaN(v) ? s[typeof v] : s['number'];
-				if (f) return f(v, r, w);
+				var f = isNaN(v) ? pp[typeof v] : pp['number'];
+				if (f) return f(v, r, 1, w, w.length > 0 ? 1 : 0);
+				return "undefined";
 			},
 		
 			parse: function(v, safe) {
@@ -701,77 +733,11 @@ if (typeof Function.prototype.createInterceptor != "function") {
 		JSON.parse.safe = false;
 	}
 	
-	var ps = function(d, w) {
-		var s = '';
-		for (var i = 0; i < d; i++) {
-			s += w;
-		}
-		return s;
-	}
-	var pp = {
-		'array': function (x, d, w) {
-			var a = [], f, i, l = x.length, v;
-			if (l < 1) return '[]';
-			for (i = 0; i < l; i++) {
-				v = x[i];
-				f = pp[typeof v];
-				if (f) {
-					v = f(v, d + 1, w);
-					a.push(ps(d + 1, w) + v);
-				}
-			}
-			return '[\n' + a.join(',\n') + '\n' + ps(d, w) + ']';
-		},
-		'boolean': function (x) {
-			return String(x);
-		},
-		'null': function (x) {
-			return "null";
-		},
-		'number': function (x) {
-			return isFinite(x) ? String(x) : 'null';
-		},
-		'object': function (x, d, w) {
-			if (x) {
-				if (x instanceof Array) {
-					return pp.array(x, d, w);
-				}
-				var a = [], f, i, v;
-				for (i in x) {
-					v = x[i];
-					f = pp[typeof v];
-					if (f) {
-						v = f(v, d + 1, w);
-						a.push(ps(d + 1, w) + pp.string(i) + ': ' + v);
-					}
-				}
-				if (a.length < 1) return '{}';
-				return '{\n' + a.join(',\n') + '\n' + ps(d, w) + '}';
-			}
-			return 'null';
-		},
-		'string': function (x) {
-			if (/["\\\x00-\x1f]/.test(x)) {
-				x = x.replace(/([\x00-\x1f\\"])/g, function(a, b) {
-					var c = m[b];
-					if (c) {
-						return c;
-					}
-					c = b.charCodeAt();
-					return '\\u00' +
-						Math.floor(c / 16).toString(16) +
-						(c % 16).toString(16);
-				});
-			}
-			return '"' + x + '"';
-		}
-	};
-	
 	JSON.pprint = function(v, w) {
 		w = w || '  ';
 		var f = isNaN(v) ? pp[typeof v] : pp['number'];
-		if (f) return f(v, 0, w);
-		return "undefined";
+		if (f) return f(v, r, 0, w, 1);
+		return JSON.stringify(v, null, w);
 	};
 })();
 
@@ -1096,6 +1062,11 @@ DecimalFormat.prototype.getNumericString = function(str){
 		return numStr;
 	}
 	return str;
+}
+if (typeof String.prototype.isEmpty != "function") {
+	String.prototype.isEmpty = function(s) {
+		return this.length < 1;
+	};
 }
 if (typeof String.prototype.contains != "function") {
 	String.prototype.contains = function(s) {
@@ -1702,6 +1673,90 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		return false;
 	};
 })();
+if (typeof(panda) == "undefined") { panda = {}; }
+
+(function() {
+	function preload() {
+		$('body').append(
+			'<div id="preload" class="p-vhidden">'
+				+ '<div class="ui-loadmask"></div>'
+				+ '<div class="p-loader-large-snake"></div>'
+			+ '</div>');
+	}
+	
+	function focus_form($w) {
+		var $i = $w.find('form').eq(0);
+		$i = $i.find('input,select,textarea,button');
+		$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
+		if ($i.length > 0) {
+			$i.focus();
+			$('body').scrollTop(0).scrollLeft(0);
+		}
+	}
+	
+	function submit_form() {
+		var form = this, 
+			$f = $(this), 
+			$b = $(this).closest('.popup, .inner'),
+			lm = ($f.height() > 20 && $f.attr('loadmask') != 'false');
+		if ($b.length > 0) {
+			setTimeout(function() {
+				var data = $f.serializeArray();
+				if ($b.hasClass('inner')) {
+					data.push({ name: '__inner', value: 'true' });
+				}
+				else {
+					data.push({ name: '__popup', value: 'true' });
+				}
+				if (lm) {
+					$b.parent().loadmask();
+				}
+				$.get(form.action, data, function(html) {
+					$b.parent().unloadmask().html(html);
+				}, 'html');
+			}, 10);
+			return false;
+		}
+		else {
+			if (lm) {
+				$f.loadmask();
+			}
+			return true;
+		}
+	}
+	
+	function hook_forms($w) {
+		$w.find('form[hooked!=true]').each(function() {
+			var $t = $(this);
+			$t.attr('hooked', 'true');
+			if (this.target == '' || this.target == '_self'
+				|| this.target == '_top' || this.target == '_parent') {
+				$t.submit(submit_form);
+			}
+		});
+	}
+
+	function ie6_hack_forms($w) {
+		if ($.browser.msie && $.browser.majorVersion < 7) {
+			var onclick = function() {
+				var t = this;
+				$(this).closest('form').find('input[type=submit],button').each(function() {
+					if (this != t) {
+						this.disabled = true;
+					}
+				});
+			};
+			
+			$w.find('form[hacked!=true]')
+				.find('button[type=submit]').each(function() {
+					if (!this.onclick) {
+						$(this).click(onclick);
+					}
+				}).end()
+				.attr('hacked', 'true');
+		}
+	}
+})();
 if (typeof(pw) == "undefined") { pw = {}; }
 
 function nlv_options(id, options) {
@@ -2226,6 +2281,11 @@ if (typeof(pw) == "undefined") { pw = {}; }
 		return this;
 	};
 })();
+$(function() {
+	if (window.onPageLoad) {
+		window.onPageLoad();
+	}
+});
 if (typeof(panda) == "undefined") { panda = {}; }
 
 panda.upload = function(id) {

@@ -1,5 +1,5 @@
 $(function() {
-	if (window.pandaDocOnLoad) {
-		window.pandaDocOnLoad();
+	if (window.onPageLoad) {
+		window.onPageLoad();
 	}
 });

@@ -23,32 +23,32 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	cursor: pointer;
 }
 /* LOADER */
-.n-loader-squares-circle {
+.p-loader-squares-circle {
 	background: url("../img/loader/squares-circle.gif") center center no-repeat;
 	width: 31px;
 	height: 31px;
 }
-.n-loader-snake {
+.p-loader-snake {
 	background: url("../img/loader/snake.gif") center center no-repeat;
 	width: 16px;
 	height: 16px;
 }
-.n-loader-big-snake {
+.p-loader-big-snake {
 	background: url("../img/loader/big-snake.gif") center center no-repeat;
 	width: 24px;
 	height: 24px;
 }
-.n-loader-large-snake {
+.p-loader-large-snake {
 	background: url("../img/loader/large-snake.gif") center center no-repeat;
 	width: 48px;
 	height: 48px;
 }
 
 /* background-image */
-.n-bimg-magnifier24 {
+.p-bimg-magnifier24 {
 	background-image: url("../img/magnifier-24.png");
 }
-.n-bimg-magnifier32 {
+.p-bimg-magnifier32 {
 	background-image: url("../img/magnifier-32.png");
 }
 

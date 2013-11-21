@@ -429,6 +429,13 @@ jQuery.jcookie = function(name, value, options) {
 	}
 };
 
+(function ($) {
+	$.fn.disable = function(state) {
+		return this.each(function() {
+			this.disabled = state;
+		});
+	};
+})(jQuery);
 /**
   @author: remy sharp / http://remysharp.com
   @params:
@@ -1157,11 +1164,10 @@ jQuery.jcookie = function(name, value, options) {
 		}
 		return this.each(function() {
 			if (conf.delay !== undefined && conf.delay > 0) {
-		        var $el = $(this);
-		        $el.data("_mask_timeout", 
-		        		setTimeout(function() { 
-		        			maskElement($el, conf);
-		        		}, conf.delay));
+				var $el = $(this);
+				$el.data("_mask_timeout", setTimeout(function() {
+					maskElement($el, conf);
+				}, conf.delay));
 			}
 			else {
 				maskElement($(this), conf);

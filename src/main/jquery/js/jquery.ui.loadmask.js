@@ -95,11 +95,10 @@
 		}
 		return this.each(function() {
 			if (conf.delay !== undefined && conf.delay > 0) {
-		        var $el = $(this);
-		        $el.data("_mask_timeout", 
-		        		setTimeout(function() { 
-		        			maskElement($el, conf);
-		        		}, conf.delay));
+				var $el = $(this);
+				$el.data("_mask_timeout", setTimeout(function() {
+					maskElement($el, conf);
+				}, conf.delay));
 			}
 			else {
 				maskElement($(this), conf);
