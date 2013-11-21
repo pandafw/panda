@@ -1,3 +1,8 @@
+if (typeof String.prototype.isEmpty != "function") {
+	String.prototype.isEmpty = function(s) {
+		return this.length < 1;
+	};
+}
 if (typeof String.prototype.contains != "function") {
 	String.prototype.contains = function(s) {
 		return this.indexOf(s) >= 0;
