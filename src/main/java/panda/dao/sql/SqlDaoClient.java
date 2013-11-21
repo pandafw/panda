@@ -46,8 +46,9 @@ public class SqlDaoClient extends DaoClient {
 
 	/**
 	 * @param dataSource the dataSource to set
+	 * @throws SQLException if a sql error occurs
 	 */
-	public void setDataSource(DataSource dataSource) {
+	public void setDataSource(DataSource dataSource) throws SQLException {
 		this.dataSource = dataSource;
 		this.sqlExpert = getExpert(dataSource);
 	}
@@ -83,8 +84,9 @@ public class SqlDaoClient extends DaoClient {
 	/**
 	 * set jndi data source
 	 * @param jndi jndi string such as "java:comp/env/jdbc/xxx"
+	 * @throws SQLException if a sql error occurs
 	 */
-	public void setJndiDataSource(String jndi) throws NamingException {
+	public void setJndiDataSource(String jndi) throws NamingException, SQLException {
 		Context ic = new InitialContext();
 		DataSource ds = (DataSource)ic.lookup(jndi);
 		if (ds == null) {
@@ -98,8 +100,9 @@ public class SqlDaoClient extends DaoClient {
 	 * 
 	 * @param dataSource data source
 	 * @return SqlExpert
+	 * @throws SQLException if a sql error occurs
 	 */
-	public SqlExpert getExpert(DataSource dataSource) {
+	public SqlExpert getExpert(DataSource dataSource) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = dataSource.getConnection();
@@ -107,9 +110,6 @@ public class SqlDaoClient extends DaoClient {
 			String pnm = meta.getDatabaseProductName();
 			String ver = meta.getDatabaseProductVersion();
 			return getExpert(pnm, ver);
-		}
-		catch (SQLException e) {
-			throw Exceptions.wrapThrow(e);
 		}
 		finally {
 			Sqls.safeClose(conn);

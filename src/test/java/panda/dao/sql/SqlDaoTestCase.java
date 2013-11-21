@@ -1,5 +1,6 @@
 package panda.dao.sql;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,13 @@ public abstract class SqlDaoTestCase {
 		DataSource ds = TestHelper.getDataSource(db);
 		if (!(ds instanceof MockDataSource)) {
 			SqlDaoClient sdc = new SqlDaoClient();
-			sdc.setDataSource(ds);
+			try {
+				sdc.setDataSource(ds);
+			}
+			catch (SQLException e) {
+				log.error("Failed to set data source", e);
+				return null;
+			}
 			return sdc;
 		}
 		return null;
