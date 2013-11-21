@@ -2,12 +2,9 @@ package panda.doc.html;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import panda.lang.Arrays;
 import panda.lang.Collections;
-import panda.lang.Strings;
 
 /**
  * HTML entities
@@ -423,13 +420,5 @@ public class HTMLEntities {
 		Map<String, String> des = new HashMap<String, String>();
 		Collections.addAll(des, src);
 		return des;
-	}
-	
-	public static void main(String[] args) {
-		TreeMap<String, String> m = new TreeMap<String, String>();
-		m.putAll(HTML4_ESCAPE);
-		for (Entry<String, String> e : m.entrySet()) {
-			System.out.println("\\u" + Strings.leftPad(Integer.toString(e.getKey().charAt(0), 16), 4, '0') + ", " + e.getValue() + "//" + e.getKey());
-		}
 	}
 }
