@@ -183,6 +183,30 @@ public class Doms {
 		return targets.isEmpty() ? null : targets.get(0);
 	}
 
+	public static String getNodeText(Node node) {
+		if (node == null) {
+			return null;
+		}
+		
+		if (node.getNodeType() == Node.TEXT_NODE) {
+			return node.getNodeValue();
+		}
+
+		NodeList nl = node.getChildNodes();
+		if (nl == null) {
+			return null;
+		}
+
+		StringBuilder txt = new StringBuilder();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+			if (n.getNodeType() == Node.TEXT_NODE) {
+				txt.append(n.getNodeValue());
+			}
+		}
+		return txt.toString();
+	}
+	
 	public static void transform(Result result, Node node, boolean noXmlDeclare) throws TransformerException {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 
