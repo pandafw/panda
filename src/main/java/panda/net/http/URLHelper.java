@@ -423,6 +423,17 @@ public class URLHelper {
 	}
 
 	/**
+	 * encodes the URL (UTF-8)
+	 * using {@link java.net.URLEncoder#encode}.
+	 * 
+	 * @param url url to encode
+	 * @return the encoded string
+	 */
+	public static String encodeURL(String url) {
+		return encodeURL(url, Charsets.UTF_8);
+	}
+
+	/**
 	 * encodes the URL
 	 * using {@link java.net.URLEncoder#encode}.
 	 * 
@@ -439,6 +450,21 @@ public class URLHelper {
 		}
 	}
 
+	/**
+	 * decode url use UTF-8 encoding
+	 * @param input input string
+	 * @return decoded string
+	 */
+	public static String decodeURL(String input) {
+		return decodeURL(input, Charsets.UTF_8);
+	}
+
+	/**
+	 * decode url use the specified encoding
+	 * @param input input string
+	 * @param encoding encoding
+	 * @return decoded string
+	 */
 	public static String decodeURL(String input, String encoding) {
 		try {
 			return URLDecoder.decode(input, encoding);
