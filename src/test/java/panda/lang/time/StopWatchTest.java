@@ -19,7 +19,7 @@ public class StopWatchTest {
 	// -----------------------------------------------------------------------
 	@Test
 	public void testStopWatchSimple() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		watch.start();
 		try {
 			Thread.sleep(550);
@@ -39,7 +39,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testStopWatchSimpleGet() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		assertEquals(0, watch.getTime());
 		assertEquals("00:00:00.000", watch.toString());
 
@@ -54,7 +54,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testStopWatchSplit() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		watch.start();
 		try {
 			Thread.sleep(550);
@@ -87,7 +87,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testStopWatchSuspend() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		watch.start();
 		try {
 			Thread.sleep(550);
@@ -118,7 +118,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testLang315() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		watch.start();
 		try {
 			Thread.sleep(200);
@@ -140,7 +140,7 @@ public class StopWatchTest {
 	// test bad states
 	@Test
 	public void testBadStates() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		try {
 			watch.stop();
 			fail("Calling stop on an unstarted StopWatch should throw an exception. ");
@@ -237,7 +237,7 @@ public class StopWatchTest {
 	@Test
 	public void testGetStartTime() {
 		final long beforeStopWatch = System.currentTimeMillis();
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		try {
 			watch.getStartTime();
 			fail("Calling getStartTime on an unstarted StopWatch should throw an exception");
@@ -265,7 +265,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testBooleanStates() {
-		final StopWatch watch = new StopWatch();
+		final StopWatch watch = new StopWatch(false);
 		assertFalse(watch.isStarted());
 		assertFalse(watch.isSuspended());
 		assertTrue(watch.isStopped());
