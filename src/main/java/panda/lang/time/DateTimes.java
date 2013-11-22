@@ -30,56 +30,56 @@ public class DateTimes {
 	/**
 	 * Number of milliseconds in a standard minute.
 	 */
-	public static final long SEC_PER_MINUTE = 60;
+	public static final long SEC_MINUTE = 60;
 	/**
 	 * Number of milliseconds in a standard hour.
 	 */
-	public static final long SEC_PER_HOUR = 60 * SEC_PER_MINUTE;
+	public static final long SEC_HOUR = 60 * SEC_MINUTE;
 	/**
 	 * Number of milliseconds in a standard day.
 	 */
-	public static final long SEC_PER_DAY = 24 * SEC_PER_HOUR;
+	public static final long SEC_DAY = 24 * SEC_HOUR;
 	/**
 	 * Number of milliseconds in a standard week.
 	 */
-	public static final long SEC_PER_WEEK = SEC_PER_DAY * 7;
+	public static final long SEC_WEEK = SEC_DAY * 7;
 	/**
 	 * Number of milliseconds in a standard month (30 days).
 	 */
-	public static final long SEC_PER_MONTH = SEC_PER_DAY * 30;
+	public static final long SEC_MONTH = SEC_DAY * 30;
 	/**
 	 * Number of milliseconds in a standard year (365 dys).
 	 */
-	public static final long SEC_PER_YEAR = SEC_PER_DAY * 365;
+	public static final long SEC_YEAR = SEC_DAY * 365;
 
 	/**
 	 * Number of milliseconds in a standard second.
 	 */
-	public static final long MILLIS_PER_SECOND = 1000;
+	public static final long MS_SECOND = 1000;
 	/**
 	 * Number of milliseconds in a standard minute.
 	 */
-	public static final long MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND;
+	public static final long MS_MINUTE = 60 * MS_SECOND;
 	/**
 	 * Number of milliseconds in a standard hour.
 	 */
-	public static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE;
+	public static final long MS_HOUR = 60 * MS_MINUTE;
 	/**
 	 * Number of milliseconds in a standard day.
 	 */
-	public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR;
+	public static final long MS_DAY = 24 * MS_HOUR;
 	/**
 	 * Number of milliseconds in a standard week.
 	 */
-	public static final long MILLIS_PER_WEEK = MILLIS_PER_DAY * 7;
+	public static final long MS_WEEK = MS_DAY * 7;
 	/**
 	 * Number of milliseconds in a standard month (30 days).
 	 */
-	public static final long MILLIS_PER_MONTH = MILLIS_PER_DAY * 30;
+	public static final long MS_MONTH = MS_DAY * 30;
 	/**
 	 * Number of milliseconds in a standard year (365 dys).
 	 */
-	public static final long MILLIS_PER_YEAR = MILLIS_PER_DAY * 365;
+	public static final long MS_YEAR = MS_DAY * 365;
 
 	/**
 	 * This is half a month, so this represents whether a date is in the top or bottom half of the
@@ -1639,10 +1639,10 @@ public class DateTimes {
 		// Fragments bigger than a day require a breakdown to days
 		switch (fragment) {
 		case Calendar.YEAR:
-			result += (calendar.get(Calendar.DAY_OF_YEAR) * MILLIS_PER_DAY) / millisPerUnit;
+			result += (calendar.get(Calendar.DAY_OF_YEAR) * MS_DAY) / millisPerUnit;
 			break;
 		case Calendar.MONTH:
-			result += (calendar.get(Calendar.DAY_OF_MONTH) * MILLIS_PER_DAY) / millisPerUnit;
+			result += (calendar.get(Calendar.DAY_OF_MONTH) * MS_DAY) / millisPerUnit;
 			break;
 		}
 
@@ -1654,13 +1654,13 @@ public class DateTimes {
 			// The rest of the valid cases
 		case Calendar.DAY_OF_YEAR:
 		case Calendar.DATE:
-			result += (calendar.get(Calendar.HOUR_OF_DAY) * MILLIS_PER_HOUR) / millisPerUnit;
+			result += (calendar.get(Calendar.HOUR_OF_DAY) * MS_HOUR) / millisPerUnit;
 			//$FALL-THROUGH$
 		case Calendar.HOUR_OF_DAY:
-			result += (calendar.get(Calendar.MINUTE) * MILLIS_PER_MINUTE) / millisPerUnit;
+			result += (calendar.get(Calendar.MINUTE) * MS_MINUTE) / millisPerUnit;
 			//$FALL-THROUGH$
 		case Calendar.MINUTE:
-			result += (calendar.get(Calendar.SECOND) * MILLIS_PER_SECOND) / millisPerUnit;
+			result += (calendar.get(Calendar.SECOND) * MS_SECOND) / millisPerUnit;
 			//$FALL-THROUGH$
 		case Calendar.SECOND:
 			result += (calendar.get(Calendar.MILLISECOND) * 1) / millisPerUnit;
@@ -1753,16 +1753,16 @@ public class DateTimes {
 		switch (unit) {
 		case Calendar.DAY_OF_YEAR:
 		case Calendar.DATE:
-			result = MILLIS_PER_DAY;
+			result = MS_DAY;
 			break;
 		case Calendar.HOUR_OF_DAY:
-			result = MILLIS_PER_HOUR;
+			result = MS_HOUR;
 			break;
 		case Calendar.MINUTE:
-			result = MILLIS_PER_MINUTE;
+			result = MS_MINUTE;
 			break;
 		case Calendar.SECOND:
-			result = MILLIS_PER_SECOND;
+			result = MS_SECOND;
 			break;
 		case Calendar.MILLISECOND:
 			result = 1;

@@ -2,6 +2,8 @@ package panda.lang.time;
 
 import java.io.Serializable;
 
+import panda.lang.Numbers;
+
 
 
 /**
@@ -9,16 +11,16 @@ import java.io.Serializable;
  * @author yf.frank.wang@gmail.com
  */
 public class TimeSpan implements Serializable {
-	public static final long MS_SECOND = 1000;
-	public static final long MS_MINUTE = MS_SECOND * 60;
-	public static final long MS_HOUR = MS_MINUTE * 60;
-	public static final long MS_DAY = MS_HOUR * 24;
-	public static final long MS_WEEK = MS_DAY * 7;
-	public static final long MS_MONTH = MS_DAY * 30;
-	public static final long MS_YEAR = MS_DAY * 365;
-	
-	private static final long serialVersionUID = 8986342425776326722L;
+	private static final long serialVersionUID = 1L;
 
+	public static final long MS_SECOND = DateTimes.MS_SECOND;
+	public static final long MS_MINUTE = DateTimes.MS_MINUTE;
+	public static final long MS_HOUR = DateTimes.MS_HOUR;
+	public static final long MS_DAY = DateTimes.MS_DAY;
+	public static final long MS_WEEK = DateTimes.MS_WEEK;
+	public static final long MS_MONTH = DateTimes.MS_MONTH;
+	public static final long MS_YEAR = DateTimes.MS_YEAR;
+	
 	/**
 	 * millisecond
 	 */
@@ -174,7 +176,7 @@ public class TimeSpan implements Serializable {
 
 	public boolean equals(Object ts) {
 		if (this == ts) {
-		    return true;
+			return true;
 		}
 		if (ts instanceof TimeSpan) {
 			return ((TimeSpan)ts).time == time;
@@ -203,6 +205,14 @@ public class TimeSpan implements Serializable {
 		return subtract(ts.time);
 	}
 
+	public double totalYears() {
+		return (double)time / MS_YEAR;
+	}
+
+	public double totalMonths() {
+		return (double)time / MS_MONTH;
+	}
+
 	public double totalDays() {
 		return (double)time / MS_DAY;
 	}
@@ -223,11 +233,42 @@ public class TimeSpan implements Serializable {
 		return time;
 	}
 
-	@Override
-	public String toString() {
-		return DurationFormats.formatDurationHMS(time);
+	private static String formatSpan(double span) {
+		return Numbers.cutFormat(span, 2);
 	}
 	
+	public static String toDisplayString(TimeSpan ts) {
+		if (ts.time >= MS_YEAR) {
+			return formatSpan(ts.totalYears()) + " years";
+		}
+		if (ts.time >= MS_MONTH) {
+			return formatSpan(ts.totalMonths()) + " months";
+		}
+		if (ts.time >= MS_DAY) {
+			return formatSpan(ts.totalDays()) + " days";
+		}
+		if (ts.time >= MS_HOUR) {
+			return formatSpan(ts.totalHours()) + " hours";
+		}
+		if (ts.time >= MS_MINUTE) {
+			return formatSpan(ts.totalMinutes()) + " minutes";
+		}
+		if (ts.time >= MS_SECOND) {
+			return formatSpan(ts.totalSeconds()) + " seconds";
+		}
+		return ts.time + " ms";
+	}
+
+	public static String toDisplayString(long time) {
+		return toDisplayString(new TimeSpan(time));
+	}
+
+	@Override
+	public String toString() {
+		return toDisplayString(this);
+	}
+	
+	@Override
 	public int hashCode() {
 		return new Long(time).hashCode();
 	}

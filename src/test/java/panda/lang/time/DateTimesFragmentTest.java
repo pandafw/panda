@@ -281,13 +281,13 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMillisecondsOfMinuteWithDate() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.MINUTE);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND), testResult);
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND), testResult);
 	}
 
 	@Test
 	public void testMillisecondsOfMinuteWithCalender() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.MINUTE);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND), testResult);
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND), testResult);
 	}
 
 	@Test
@@ -308,27 +308,27 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMillisecondsOfHourWithDate() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.HOUR_OF_DAY);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE),
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE),
 			testResult);
 	}
 
 	@Test
 	public void testMillisecondsOfHourWithCalendar() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.HOUR_OF_DAY);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE),
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE),
 			testResult);
 	}
 
 	@Test
 	public void testSecondsofHourWithDate() {
 		final long testResult = DateTimes.getFragmentInSeconds(aDate, Calendar.HOUR_OF_DAY);
-		assertEquals(seconds + (minutes * DateTimes.MILLIS_PER_MINUTE / DateTimes.MILLIS_PER_SECOND), testResult);
+		assertEquals(seconds + (minutes * DateTimes.MS_MINUTE / DateTimes.MS_SECOND), testResult);
 	}
 
 	@Test
 	public void testSecondsofHourWithCalendar() {
 		final long testResult = DateTimes.getFragmentInSeconds(aCalendar, Calendar.HOUR_OF_DAY);
-		assertEquals(seconds + (minutes * DateTimes.MILLIS_PER_MINUTE / DateTimes.MILLIS_PER_SECOND), testResult);
+		assertEquals(seconds + (minutes * DateTimes.MS_MINUTE / DateTimes.MS_SECOND), testResult);
 	}
 
 	@Test
@@ -347,8 +347,8 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMillisecondsOfDayWithDate() {
 		long testresult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.DATE);
-		final long expectedValue = millis + (seconds * DateTimes.MILLIS_PER_SECOND)
-				+ (minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR);
+		final long expectedValue = millis + (seconds * DateTimes.MS_SECOND)
+				+ (minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR);
 		assertEquals(expectedValue, testresult);
 		testresult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testresult);
@@ -357,8 +357,8 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMillisecondsOfDayWithCalendar() {
 		long testresult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.DATE);
-		final long expectedValue = millis + (seconds * DateTimes.MILLIS_PER_SECOND)
-				+ (minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR);
+		final long expectedValue = millis + (seconds * DateTimes.MS_SECOND)
+				+ (minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR);
 		assertEquals(expectedValue, testresult);
 		testresult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testresult);
@@ -368,8 +368,8 @@ public class DateTimesFragmentTest {
 	public void testSecondsOfDayWithDate() {
 		long testresult = DateTimes.getFragmentInSeconds(aDate, Calendar.DATE);
 		final long expectedValue = seconds
-				+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR))
-				/ DateTimes.MILLIS_PER_SECOND;
+				+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR))
+				/ DateTimes.MS_SECOND;
 		assertEquals(expectedValue, testresult);
 		testresult = DateTimes.getFragmentInSeconds(aDate, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testresult);
@@ -379,8 +379,8 @@ public class DateTimesFragmentTest {
 	public void testSecondsOfDayWithCalendar() {
 		long testresult = DateTimes.getFragmentInSeconds(aCalendar, Calendar.DATE);
 		final long expectedValue = seconds
-				+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR))
-				/ DateTimes.MILLIS_PER_SECOND;
+				+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR))
+				/ DateTimes.MS_SECOND;
 		assertEquals(expectedValue, testresult);
 		testresult = DateTimes.getFragmentInSeconds(aCalendar, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testresult);
@@ -389,7 +389,7 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMinutesOfDayWithDate() {
 		long testResult = DateTimes.getFragmentInMinutes(aDate, Calendar.DATE);
-		final long expectedValue = minutes + ((hours * DateTimes.MILLIS_PER_HOUR)) / DateTimes.MILLIS_PER_MINUTE;
+		final long expectedValue = minutes + ((hours * DateTimes.MS_HOUR)) / DateTimes.MS_MINUTE;
 		assertEquals(expectedValue, testResult);
 		testResult = DateTimes.getFragmentInMinutes(aDate, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testResult);
@@ -398,7 +398,7 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMinutesOfDayWithCalendar() {
 		long testResult = DateTimes.getFragmentInMinutes(aCalendar, Calendar.DATE);
-		final long expectedValue = minutes + ((hours * DateTimes.MILLIS_PER_HOUR)) / DateTimes.MILLIS_PER_MINUTE;
+		final long expectedValue = minutes + ((hours * DateTimes.MS_HOUR)) / DateTimes.MS_MINUTE;
 		assertEquals(expectedValue, testResult);
 		testResult = DateTimes.getFragmentInMinutes(aCalendar, Calendar.DAY_OF_YEAR);
 		assertEquals(expectedValue, testResult);
@@ -426,15 +426,15 @@ public class DateTimesFragmentTest {
 	@Test
 	public void testMillisecondsOfMonthWithDate() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.MONTH);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE)
-				+ (hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY), testResult);
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE)
+				+ (hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY), testResult);
 	}
 
 	@Test
 	public void testMillisecondsOfMonthWithCalendar() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.MONTH);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE)
-				+ (hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY), testResult);
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE)
+				+ (hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY), testResult);
 	}
 
 	@Test
@@ -442,8 +442,8 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInSeconds(aDate, Calendar.MONTH);
 		assertEquals(
 			seconds
-					+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY))
-					/ DateTimes.MILLIS_PER_SECOND, testResult);
+					+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY))
+					/ DateTimes.MS_SECOND, testResult);
 	}
 
 	@Test
@@ -451,34 +451,34 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInSeconds(aCalendar, Calendar.MONTH);
 		assertEquals(
 			seconds
-					+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY))
-					/ DateTimes.MILLIS_PER_SECOND, testResult);
+					+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY))
+					/ DateTimes.MS_SECOND, testResult);
 	}
 
 	@Test
 	public void testMinutesOfMonthWithDate() {
 		final long testResult = DateTimes.getFragmentInMinutes(aDate, Calendar.MONTH);
-		assertEquals(minutes + ((hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY))
-				/ DateTimes.MILLIS_PER_MINUTE, testResult);
+		assertEquals(minutes + ((hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY))
+				/ DateTimes.MS_MINUTE, testResult);
 	}
 
 	@Test
 	public void testMinutesOfMonthWithCalendar() {
 		final long testResult = DateTimes.getFragmentInMinutes(aCalendar, Calendar.MONTH);
-		assertEquals(minutes + ((hours * DateTimes.MILLIS_PER_HOUR) + (days * DateTimes.MILLIS_PER_DAY))
-				/ DateTimes.MILLIS_PER_MINUTE, testResult);
+		assertEquals(minutes + ((hours * DateTimes.MS_HOUR) + (days * DateTimes.MS_DAY))
+				/ DateTimes.MS_MINUTE, testResult);
 	}
 
 	@Test
 	public void testHoursOfMonthWithDate() {
 		final long testResult = DateTimes.getFragmentInHours(aDate, Calendar.MONTH);
-		assertEquals(hours + ((days * DateTimes.MILLIS_PER_DAY)) / DateTimes.MILLIS_PER_HOUR, testResult);
+		assertEquals(hours + ((days * DateTimes.MS_DAY)) / DateTimes.MS_HOUR, testResult);
 	}
 
 	@Test
 	public void testHoursOfMonthWithCalendar() {
 		final long testResult = DateTimes.getFragmentInHours(aCalendar, Calendar.MONTH);
-		assertEquals(hours + ((days * DateTimes.MILLIS_PER_DAY)) / DateTimes.MILLIS_PER_HOUR, testResult);
+		assertEquals(hours + ((days * DateTimes.MS_DAY)) / DateTimes.MS_HOUR, testResult);
 	}
 
 	// Calendar.YEAR as useful fragment
@@ -487,17 +487,17 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aDate, Calendar.YEAR);
 		final Calendar cal = Calendar.getInstance();
 		cal.setTime(aDate);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE)
-				+ (hours * DateTimes.MILLIS_PER_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY),
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE)
+				+ (hours * DateTimes.MS_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY),
 			testResult);
 	}
 
 	@Test
 	public void testMillisecondsOfYearWithCalendar() {
 		final long testResult = DateTimes.getFragmentInMilliseconds(aCalendar, Calendar.YEAR);
-		assertEquals(millis + (seconds * DateTimes.MILLIS_PER_SECOND) + (minutes * DateTimes.MILLIS_PER_MINUTE)
-				+ (hours * DateTimes.MILLIS_PER_HOUR)
-				+ (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY), testResult);
+		assertEquals(millis + (seconds * DateTimes.MS_SECOND) + (minutes * DateTimes.MS_MINUTE)
+				+ (hours * DateTimes.MS_HOUR)
+				+ (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY), testResult);
 	}
 
 	@Test
@@ -507,8 +507,8 @@ public class DateTimesFragmentTest {
 		cal.setTime(aDate);
 		assertEquals(
 			seconds
-					+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY))
-					/ DateTimes.MILLIS_PER_SECOND, testResult);
+					+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY))
+					/ DateTimes.MS_SECOND, testResult);
 	}
 
 	@Test
@@ -516,8 +516,8 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInSeconds(aCalendar, Calendar.YEAR);
 		assertEquals(
 			seconds
-					+ ((minutes * DateTimes.MILLIS_PER_MINUTE) + (hours * DateTimes.MILLIS_PER_HOUR) + (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY))
-					/ DateTimes.MILLIS_PER_SECOND, testResult);
+					+ ((minutes * DateTimes.MS_MINUTE) + (hours * DateTimes.MS_HOUR) + (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY))
+					/ DateTimes.MS_SECOND, testResult);
 	}
 
 	@Test
@@ -526,8 +526,8 @@ public class DateTimesFragmentTest {
 		final Calendar cal = Calendar.getInstance();
 		cal.setTime(aDate);
 		assertEquals(minutes
-				+ ((hours * DateTimes.MILLIS_PER_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY))
-				/ DateTimes.MILLIS_PER_MINUTE, testResult);
+				+ ((hours * DateTimes.MS_HOUR) + (cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY))
+				/ DateTimes.MS_MINUTE, testResult);
 	}
 
 	@Test
@@ -535,8 +535,8 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInMinutes(aCalendar, Calendar.YEAR);
 		assertEquals(
 			minutes
-					+ ((hours * DateTimes.MILLIS_PER_HOUR) + (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY))
-					/ DateTimes.MILLIS_PER_MINUTE, testResult);
+					+ ((hours * DateTimes.MS_HOUR) + (aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY))
+					/ DateTimes.MS_MINUTE, testResult);
 	}
 
 	@Test
@@ -544,14 +544,14 @@ public class DateTimesFragmentTest {
 		final long testResult = DateTimes.getFragmentInHours(aDate, Calendar.YEAR);
 		final Calendar cal = Calendar.getInstance();
 		cal.setTime(aDate);
-		assertEquals(hours + ((cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY)) / DateTimes.MILLIS_PER_HOUR,
+		assertEquals(hours + ((cal.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY)) / DateTimes.MS_HOUR,
 			testResult);
 	}
 
 	@Test
 	public void testHoursOfYearWithCalendar() {
 		final long testResult = DateTimes.getFragmentInHours(aCalendar, Calendar.YEAR);
-		assertEquals(hours + ((aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MILLIS_PER_DAY))
-				/ DateTimes.MILLIS_PER_HOUR, testResult);
+		assertEquals(hours + ((aCalendar.get(Calendar.DAY_OF_YEAR) * DateTimes.MS_DAY))
+				/ DateTimes.MS_HOUR, testResult);
 	}
 }

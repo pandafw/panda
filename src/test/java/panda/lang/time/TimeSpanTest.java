@@ -1,12 +1,11 @@
 package panda.lang.time;
 
-import panda.lang.time.TimeSpan;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
-public class TimeSpanTest extends TestCase {
-
+public class TimeSpanTest {
 	/**
 	 * TimeSpan(1)  "00.001"
 	 *  Days               0       TotalDays          1.1574074074074074E-8
@@ -15,22 +14,21 @@ public class TimeSpanTest extends TestCase {
 		Seconds            0       TotalSeconds       0.0010
 		Milliseconds       0       TotalMilliseconds  1
 	 */
+	@Test
 	public void test01() {
 		TimeSpan ts = new TimeSpan(1);
 		
-		assertEquals("00:00:00.001", ts.toString());
-		
-		assertEquals(0, ts.getDays());
-		assertEquals(0, ts.getHours());
-		assertEquals(0, ts.getMinutes());
-		assertEquals(0, ts.getSeconds());
-		assertEquals(1, ts.getMilliseconds());
+		Assert.assertEquals(0, ts.getDays());
+		Assert.assertEquals(0, ts.getHours());
+		Assert.assertEquals(0, ts.getMinutes());
+		Assert.assertEquals(0, ts.getSeconds());
+		Assert.assertEquals(1, ts.getMilliseconds());
 
-		assertEquals("1.1574074074074074E-8", String.valueOf(ts.totalDays()));
-		assertEquals("2.7777777777777776E-7", String.valueOf(ts.totalHours()));
-		assertEquals("1.6666666666666667E-5", String.valueOf(ts.totalMinutes()));
-		assertEquals("0.0010", String.valueOf(ts.totalSeconds()));
-		assertEquals(1L, ts.totalMilliseconds());
+		Assert.assertEquals("1.1574074074074074E-8", String.valueOf(ts.totalDays()));
+		Assert.assertEquals("2.7777777777777776E-7", String.valueOf(ts.totalHours()));
+		Assert.assertEquals("1.6666666666666667E-5", String.valueOf(ts.totalMinutes()));
+		Assert.assertEquals("0.0010", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals(1L, ts.totalMilliseconds());
 	}
 
 	/**
@@ -41,22 +39,21 @@ public class TimeSpanTest extends TestCase {
 		Seconds           33       TotalSeconds           1.1122233344E7
 		Milliseconds     344       TotalMilliseconds      11122233344
 	*/
+	@Test
 	public void test02() {
 		TimeSpan ts = new TimeSpan( 11122233344L );
 		
-		assertEquals("3089:30:33.344", ts.toString());
-		
-		assertEquals(128, ts.getDays());
-		assertEquals(17, ts.getHours());
-		assertEquals(30, ts.getMinutes());
-		assertEquals(33, ts.getSeconds());
-		assertEquals(344, ts.getMilliseconds());
+		Assert.assertEquals(128, ts.getDays());
+		Assert.assertEquals(17, ts.getHours());
+		Assert.assertEquals(30, ts.getMinutes());
+		Assert.assertEquals(33, ts.getSeconds());
+		Assert.assertEquals(344, ts.getMilliseconds());
 
-		assertEquals("128.7295525925926", String.valueOf(ts.totalDays()));
-		assertEquals("3089.5092622222223", String.valueOf(ts.totalHours()));
-		assertEquals("185370.55573333334", String.valueOf(ts.totalMinutes()));
-		assertEquals("1.1122233344E7", String.valueOf(ts.totalSeconds()));
-		assertEquals(11122233344L, ts.totalMilliseconds());
+		Assert.assertEquals("128.7295525925926", String.valueOf(ts.totalDays()));
+		Assert.assertEquals("3089.5092622222223", String.valueOf(ts.totalHours()));
+		Assert.assertEquals("185370.55573333334", String.valueOf(ts.totalMinutes()));
+		Assert.assertEquals("1.1122233344E7", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals(11122233344L, ts.totalMilliseconds());
 	}
 
 	/**
@@ -67,23 +64,22 @@ public class TimeSpanTest extends TestCase {
 		Seconds           40       TotalSeconds                  937840.05
 		Milliseconds      50       TotalMilliseconds             937840050
 	*/
+	@Test
 	public void test03() {
 		TimeSpan ts = new TimeSpan(10, 20, 30, 40, 50);
 		
-		assertEquals("260:30:40.050", ts.toString());
-		
-		assertEquals(10, ts.getDays());
-		assertEquals(20, ts.getHours());
-		assertEquals(30, ts.getMinutes());
-		assertEquals(40, ts.getSeconds());
-		assertEquals(50, ts.getMilliseconds());
+		Assert.assertEquals(10, ts.getDays());
+		Assert.assertEquals(20, ts.getHours());
+		Assert.assertEquals(30, ts.getMinutes());
+		Assert.assertEquals(40, ts.getSeconds());
+		Assert.assertEquals(50, ts.getMilliseconds());
 
-		assertEquals("10.854630208333333", String.valueOf(ts.totalDays()));
-		assertEquals("260.511125", String.valueOf(ts.totalHours()));
-		assertEquals("15630.6675", String.valueOf(ts.totalMinutes()));
-		assertEquals("937840.05", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals("10.854630208333333", String.valueOf(ts.totalDays()));
+		Assert.assertEquals("260.511125", String.valueOf(ts.totalHours()));
+		Assert.assertEquals("15630.6675", String.valueOf(ts.totalMinutes()));
+		Assert.assertEquals("937840.05", String.valueOf(ts.totalSeconds()));
 		
-		assertEquals(937840050, ts.totalMilliseconds());
+		Assert.assertEquals(937840050, ts.totalMilliseconds());
 	}
 	
 	/**
@@ -94,23 +90,22 @@ public class TimeSpanTest extends TestCase {
 	Seconds            9       TotalSeconds              1.04194029555E8
 	Milliseconds     555       TotalMilliseconds          104194029555
 	*/
+	@Test
 	public void test04() {
 		TimeSpan ts = new TimeSpan(1111, 2222, 3333, 4444, 5555);
 		
-		assertEquals("28942:47:09.555", ts.toString());
-		
-		assertEquals(1205, ts.getDays());
-		assertEquals(22, ts.getHours());
-		assertEquals(47, ts.getMinutes());
-		assertEquals(9, ts.getSeconds());
-		assertEquals(555, ts.getMilliseconds());
+		Assert.assertEquals(1205, ts.getDays());
+		Assert.assertEquals(22, ts.getHours());
+		Assert.assertEquals(47, ts.getMinutes());
+		Assert.assertEquals(9, ts.getSeconds());
+		Assert.assertEquals(555, ts.getMilliseconds());
 
-		assertEquals("1205.9494161458333", String.valueOf(ts.totalDays()));
-		assertEquals("28942.7859875", String.valueOf(ts.totalHours()));
-		assertEquals("1736567.15925", String.valueOf(ts.totalMinutes()));
-		assertEquals("1.04194029555E8", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals("1205.9494161458333", String.valueOf(ts.totalDays()));
+		Assert.assertEquals("28942.7859875", String.valueOf(ts.totalHours()));
+		Assert.assertEquals("1736567.15925", String.valueOf(ts.totalMinutes()));
+		Assert.assertEquals("1.04194029555E8", String.valueOf(ts.totalSeconds()));
 		
-		assertEquals(104194029555L, ts.totalMilliseconds());
+		Assert.assertEquals(104194029555L, ts.totalMilliseconds());
 	}
 	
 	/**
@@ -121,22 +116,29 @@ public class TimeSpanTest extends TestCase {
 	Seconds           20       TotalSeconds                  1801220.2
 	Milliseconds     200       TotalMilliseconds            1801220200
 	 */
+	@Test
 	public void test05() {
 		TimeSpan ts = TimeSpan.fromDays(20.84745602);
 		
-		assertEquals("500:20:20.200", ts.toString());
-		
-		assertEquals(20, ts.getDays());
-		assertEquals(20, ts.getHours());
-		assertEquals(20, ts.getMinutes());
-		assertEquals(20, ts.getSeconds());
-		assertEquals(200, ts.getMilliseconds());
+		Assert.assertEquals(20, ts.getDays());
+		Assert.assertEquals(20, ts.getHours());
+		Assert.assertEquals(20, ts.getMinutes());
+		Assert.assertEquals(20, ts.getSeconds());
+		Assert.assertEquals(200, ts.getMilliseconds());
 
-		assertEquals("20.847456018518518", String.valueOf(ts.totalDays()));
-		assertEquals("500.33894444444445", String.valueOf(ts.totalHours()));
-		assertEquals("30020.336666666666", String.valueOf(ts.totalMinutes()));
-		assertEquals("1801220.2", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals("20.847456018518518", String.valueOf(ts.totalDays()));
+		Assert.assertEquals("500.33894444444445", String.valueOf(ts.totalHours()));
+		Assert.assertEquals("30020.336666666666", String.valueOf(ts.totalMinutes()));
+		Assert.assertEquals("1801220.2", String.valueOf(ts.totalSeconds()));
 		
-		assertEquals(1801220200L, ts.totalMilliseconds());
+		Assert.assertEquals(1801220200L, ts.totalMilliseconds());
+	}
+	
+	@Test
+	public void testToDisplayString() {
+		Assert.assertEquals("100 ms", TimeSpan.toDisplayString(100));
+		Assert.assertEquals("1 seconds", TimeSpan.toDisplayString(1000));
+		Assert.assertEquals("1 seconds", TimeSpan.toDisplayString(1001));
+		Assert.assertEquals("1.1 seconds", TimeSpan.toDisplayString(1100));
 	}
 }

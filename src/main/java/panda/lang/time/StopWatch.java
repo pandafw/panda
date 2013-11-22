@@ -368,7 +368,7 @@ public class StopWatch {
 	 * @return the time in nanoseconds
 	 */
 	public long getNanoTime() {
-        if (this.runningState == State.STOPPED || this.runningState == State.SUSPENDED) {
+		if (this.runningState == State.STOPPED || this.runningState == State.SUSPENDED) {
 			return this.stopTime - this.startTime;
 		}
 		else if (this.runningState == State.UNSTARTED) {
@@ -431,31 +431,23 @@ public class StopWatch {
 	 * <p>
 	 * Gets a summary of the time that the stopwatch recorded as a string.
 	 * </p>
-	 * <p>
-	 * The format used is ISO8601-like,
-	 * <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
-	 * </p>
 	 * 
 	 * @return the time as a String
 	 */
 	@Override
 	public String toString() {
-		return DurationFormats.formatDurationHMS(getTime());
+		return TimeSpan.toDisplayString(getTime());
 	}
 
 	/**
 	 * <p>
 	 * Gets a summary of the split time that the stopwatch recorded as a string.
 	 * </p>
-	 * <p>
-	 * The format used is ISO8601-like,
-	 * <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
-	 * </p>
 	 * 
 	 * @return the split time as a String
 	 */
 	public String toSplitString() {
-		return DurationFormats.formatDurationHMS(getSplitTime());
+		return TimeSpan.toDisplayString(getSplitTime());
 	}
 
 	/**
