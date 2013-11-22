@@ -188,22 +188,15 @@ public class Doms {
 			return null;
 		}
 		
-		if (node.getNodeType() == Node.TEXT_NODE) {
-			return node.getNodeValue();
-		}
-
-		NodeList nl = node.getChildNodes();
-		if (nl == null) {
-			return null;
-		}
-
-		StringBuilder txt = new StringBuilder();
-		for (int i = 0; i < nl.getLength(); i++) {
-			Node n = nl.item(i);
-			if (n.getNodeType() == Node.TEXT_NODE) {
-				txt.append(n.getNodeValue());
+		final StringBuilder txt = new StringBuilder();
+		traverse(node, new SimpleDomTraverser() {
+			public int handle(Node node, int level) {
+				if (node.getNodeType() == Node.TEXT_NODE) {
+					txt.append(node.getNodeValue());
+				}
+				return TRAVERSE;
 			}
-		}
+		});
 		return txt.toString();
 	}
 	
