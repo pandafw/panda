@@ -339,19 +339,19 @@ public class FilesTest extends FileBasedTestCase {
 		assertEquals(Files.toDisplaySize(MB1.subtract(KB1)), "1023 KB");
 		assertEquals(Files.toDisplaySize(MB1), "1 MB");
 		assertEquals(Files.toDisplaySize(MB1.add(BigInteger.ONE)), "1 MB");
-		assertEquals(Files.toDisplaySize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.99 MB");
+		assertEquals(Files.toDisplaySize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.98 MB");
 		assertEquals(Files.toDisplaySize(GB1), "1 GB");
 		assertEquals(Files.toDisplaySize(GB1.add(BigInteger.ONE)), "1 GB");
 		assertEquals(Files.toDisplaySize(GB2), "2 GB");
-		assertEquals(Files.toDisplaySize(GB2.subtract(BigInteger.ONE)), "2 GB");
+		assertEquals(Files.toDisplaySize(GB2.subtract(BigInteger.ONE)), "1.99 GB");
 		assertEquals(Files.toDisplaySize(TB1), "1 TB");
 		assertEquals(Files.toDisplaySize(PB1), "1 PB");
 		assertEquals(Files.toDisplaySize(EB1), "1 EB");
 		assertEquals(Files.toDisplaySize(Long.MAX_VALUE), "8 EB");
 		// Other MAX_VALUEs
-		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)), "64 KB");
-		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)), "32 KB");
-		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)), "2 GB");
+		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)), "63.99 KB");
+		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)), "31.99 KB");
+		assertEquals(Files.toDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)), "1.99 GB");
 	}
 
 	public void testByteCountToDisplaySizeLong() {
@@ -367,15 +367,15 @@ public class FilesTest extends FileBasedTestCase {
 		assertEquals(Files.toDisplaySize(1024 * 1024 * 1024), "1 GB");
 		assertEquals(Files.toDisplaySize(1024 * 1024 * 1025), "1 GB");
 		assertEquals(Files.toDisplaySize(1024L * 1024 * 1024 * 2), "2 GB");
-		assertEquals(Files.toDisplaySize(1024 * 1024 * 1024 * 2 - 1), "2 GB");
+		assertEquals(Files.toDisplaySize(1024 * 1024 * 1024 * 2 - 1), "1.99 GB");
 		assertEquals(Files.toDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
 		assertEquals(Files.toDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
 		assertEquals(Files.toDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
 		assertEquals(Files.toDisplaySize(Long.MAX_VALUE), "8 EB");
 		// Other MAX_VALUEs
-		assertEquals(Files.toDisplaySize(Character.MAX_VALUE), "64 KB");
-		assertEquals(Files.toDisplaySize(Short.MAX_VALUE), "32 KB");
-		assertEquals(Files.toDisplaySize(Integer.MAX_VALUE), "2 GB");
+		assertEquals(Files.toDisplaySize(Character.MAX_VALUE), "63.99 KB");
+		assertEquals(Files.toDisplaySize(Short.MAX_VALUE), "31.99 KB");
+		assertEquals(Files.toDisplaySize(Integer.MAX_VALUE), "1.99 GB");
 	}
 
 	// -----------------------------------------------------------------------

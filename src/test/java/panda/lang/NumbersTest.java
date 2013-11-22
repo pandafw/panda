@@ -8,8 +8,11 @@ import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 import org.junit.Test;
+
+import panda.lang.time.StopWatch;
 
 /**
  */
@@ -1285,4 +1288,55 @@ public class NumbersTest {
 		assertTrue(Float.isNaN(Numbers.max(bF)));
 	}
 
+	@Test
+	public void testCurFormat() {
+		assertEquals("1.23", Numbers.cutFormat(1.2345, 2));
+		assertEquals("1.234", Numbers.cutFormat(1.2345, 3));
+	}
+	
+	public static String cutFormat2(double n, int frac) {
+		String s = String.valueOf(n);
+		int dot = s.indexOf('.');
+		if (dot > 0) {
+			int end = dot + frac;
+			if (end < s.length()) {
+				int i = end;
+				for ( ; i >= dot; i--) {
+					char c = s.charAt(i);
+					if (c != '0' && c != '.') {
+						break;
+					}
+				};
+				s = s.substring(0, i + 1);
+			}
+		}
+		
+		return s;
+	}
+
+	@Test
+	public void testSpeed() {
+		assertEquals("1.23", cutFormat2(1.2345, 2));
+		assertEquals("1.234", cutFormat2(1.2345, 3));
+		
+		final double d = 1.234567;
+		final int c = 100000;
+		StopWatch sw = new StopWatch();
+		for (int i = 0; i < c; i++) {
+			Numbers.cutFormat(d, 2);
+		}
+		System.out.println("curFormat - " + sw);
+
+		sw.restart();
+		for (int i = 0; i < c; i++) {
+			cutFormat2(d, 2);
+		}
+		System.out.println("curFormat2 - " + sw);
+
+		sw.restart();
+		for (int i = 0; i < c; i++) {
+			(new DecimalFormat("#.##")).format(d);
+		}
+		System.out.println("DecimalFormat - " + sw);
+	}
 }
