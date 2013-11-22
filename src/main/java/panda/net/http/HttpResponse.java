@@ -7,13 +7,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
+import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
@@ -21,6 +24,9 @@ import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.chardet.LangHint;
+import panda.lang.time.StopWatch;
+import panda.log.Log;
+import panda.net.Nets;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -383,6 +389,9 @@ public class HttpResponse implements Closeable {
 	}
 
 	//---------------------------------------------------------------------
+	private static final Log log = HttpClient.log;
+	
+	private URL url;
 	private HttpHeader header;
 	private List<Cookie> cookies;
 	private String protocol;
@@ -393,7 +402,8 @@ public class HttpResponse implements Closeable {
 	private InputStream stream;
 	private byte[] content;
 
-	public HttpResponse(HttpURLConnection conn) throws IOException {
+	public HttpResponse(URL url, HttpURLConnection conn) throws IOException {
+		this.url = url;
 		statusLine = conn.getHeaderField(0);
 		statusCode = conn.getResponseCode();
 		if (statusCode < 0) {
@@ -462,6 +472,14 @@ public class HttpResponse implements Closeable {
 		return statusCode >= 400 && statusCode < 500;
 	}
 
+	/**
+	 * get Last-Modified date from HTTP headers
+	 * @return date
+	 */
+	public Date getLastModified() {
+		return header.getDate(HttpHeader.LAST_MODIFIED);
+	}
+	
 	/**
 	 * get encoding from HTTP headers
 	 * @return encoding
@@ -559,8 +577,16 @@ public class HttpResponse implements Closeable {
 	public byte[] getContent() throws IOException {
 		if (content == null) {
 			try {
+				StopWatch sw = new StopWatch();
 				InputStream is = getStream();
 				content = Streams.toByteArray(is);
+				sw.stop();
+
+				if (log.isInfoEnabled()) {
+					log.info("DOWN " + url + " - (" 
+							+ Files.toDisplaySize(content.length) + " / " + sw 
+							+ ") [" + Nets.toSpeedString(content.length, sw.getTime()) + "]");
+				}
 			}
 			finally {
 				close();

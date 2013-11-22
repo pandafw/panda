@@ -140,15 +140,7 @@ public class HttpHeader extends HashMap<String, Object> {
 	
 	public Date getDate(String key) {
 		String str = getString(key);
-		if (str == null) {
-			return null;
-		}
-		try {
-			return HttpDates.parse(str);
-		}
-		catch (Exception e) {
-			return null;
-		}
+		return HttpDates.safeParse(str);
 	}
 	
 	public String getString(String key) {

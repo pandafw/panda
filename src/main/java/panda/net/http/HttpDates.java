@@ -43,6 +43,19 @@ public class HttpDates {
 	}
 
 	/**
+	 * Parses a date value. The formats used for parsing the date value are retrieved from the
+	 * default http params.
+	 * 
+	 * @param dateValue the date value to parse
+	 * @return the parsed date
+	 * @throws DateParseException if the value could not be parsed using any of the supported date
+	 *             formats
+	 */
+	public static Date safeParse(String dateValue) {
+		return safeParse(dateValue, null);
+	}
+
+	/**
 	 * Parses the date value using the given date formats.
 	 * 
 	 * @param dateValue the date value to parse
@@ -51,6 +64,35 @@ public class HttpDates {
 	 * @throws DateParseException if none of the dataFormats could parse the dateValue
 	 */
 	public static Date parse(String dateValue, String[] dateFormats) throws ParseException {
+		return parse(dateValue, dateFormats, false);
+	}
+
+	/**
+	 * Parses the date value using the given date formats.
+	 * 
+	 * @param dateValue the date value to parse
+	 * @param dateFormats the date formats to use
+	 * @return the parsed date
+	 * @throws DateParseException if none of the dataFormats could parse the dateValue
+	 */
+	public static Date safeParse(String dateValue, String[] dateFormats) {
+		try {
+			return parse(dateValue, dateFormats, true);
+		}
+		catch (ParseException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Parses the date value using the given date formats.
+	 * 
+	 * @param dateValue the date value to parse
+	 * @param dateFormats the date formats to use
+	 * @return the parsed date
+	 * @throws DateParseException if none of the dataFormats could parse the dateValue
+	 */
+	private static Date parse(String dateValue, String[] dateFormats, boolean safe) throws ParseException {
 		if (dateValue == null) {
 			return null;
 		}
@@ -72,8 +114,12 @@ public class HttpDates {
 			}
 		}
 
+		if (safe) {
+			return null;
+		}
+		
 		// we were unable to parse the date
-		throw new ParseException("Unable to parse the date " + dateValue, 0);
+		throw new ParseException("Unable to parse the date " + dateValue, -1);
 	}
 
 	/**

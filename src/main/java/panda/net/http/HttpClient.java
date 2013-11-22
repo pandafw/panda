@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Strings;
@@ -26,7 +27,7 @@ import panda.log.Logs;
  */
 //TODO: local cache
 public class HttpClient {
-	private static Log log = Logs.getLog(HttpClient.class);
+	protected static Log log = Logs.getLog(HttpClient.class);
 
 	/**
 	 * DEFAULT_CONN_TIMEOUT = 30 seconds
@@ -255,9 +256,6 @@ public class HttpClient {
 		if (log.isDebugEnabled()) {
 			log.debug(request.toString());
 		}
-		else if (log.isInfoEnabled()) {
-			log.info(request.getMethod() + " " + request.getURL());
-		}
 		
 		HttpResponse response;
 
@@ -289,12 +287,12 @@ public class HttpClient {
 
 		if (log.isInfoEnabled()) {
 			StringBuilder msg = new StringBuilder();
-			msg.append(request.getURL()).append(" - ").append(response.getStatusLine());
-			msg.append(" (");
+			msg.append(request.getMethod()).append(' ').append(request.getURL())
+				.append(" - ").append(response.getStatusLine());
 			if (response.getContentLength() != null) {
-				msg.append(response.getContentLength()).append("B ");
+				msg.append(" (").append(Files.toDisplaySize(response.getContentLength())).append(')');
 			}
-			msg.append(sw.getTime()).append("ms)");
+			msg.append(" [").append(sw).append(']');
 
 			if (log.isDebugEnabled()) {
 				if (response.getHeader() != null) {
@@ -321,7 +319,7 @@ public class HttpClient {
 	}
 
 	protected HttpResponse createResponse() throws IOException {
-		response = new HttpResponse(conn);
+		response = new HttpResponse(request.getURL(), conn);
 		return response;
 	}
 
