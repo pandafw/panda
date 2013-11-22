@@ -513,6 +513,10 @@ public abstract class SqlExpert {
 		
 		StringBuilder sb = new StringBuilder();
 		for (EntityIndex index : indexs) {
+			if (!index.isReal()) {
+				continue;
+			}
+			
 			sb.setLength(0);
 			sb.append("Create");
 			if (index.isUnique())

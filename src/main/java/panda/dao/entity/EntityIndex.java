@@ -10,6 +10,7 @@ import java.util.List;
 public class EntityIndex {
 	private String name;
 	private boolean unique;
+	private boolean real;
 	private List<EntityField> fields = new ArrayList<EntityField>();
 
 	/**
@@ -43,6 +44,19 @@ public class EntityIndex {
 	protected void setUnique(boolean unique) {
 		this.unique = unique;
 	}
+	/**
+	 * @return the real
+	 */
+	public boolean isReal() {
+		return real;
+	}
+	/**
+	 * @param real the real to set
+	 */
+	protected void setReal(boolean real) {
+		this.real = real;
+	}
+
 	/**
 	 * @return the fields
 	 */

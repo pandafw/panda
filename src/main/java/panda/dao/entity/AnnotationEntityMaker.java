@@ -32,6 +32,7 @@ import panda.dao.entity.annotation.Table;
 import panda.dao.entity.annotation.View;
 import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.SqlNamings;
+import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -406,19 +407,21 @@ public class AnnotationEntityMaker implements EntityMaker {
 		en.addIndex(ei);
 	}
 
-	private void evalEntityIndex(Entity<?> en, String name, String[] fields, boolean unique) {
+	private void evalEntityIndex(Entity<?> en, Index idx) {
 		EntityIndex ei = new EntityIndex();
-		ei.setUnique(unique);
-		ei.setName(Strings.isEmpty(name) ? Strings.join(fields, '_') : name);
-		if (fields == null || fields.length == 0) {
+		
+		ei.setUnique(idx.unique());
+		ei.setReal(idx.real());
+		ei.setName(Strings.isEmpty(idx.name()) ? Strings.join(idx.fields(), '_') : idx.name());
+		if (Arrays.isEmpty(idx.fields())) {
 			throw Exceptions.makeThrow("Empty fields for @Index(%s: %s)", 
-				ei.getName(), Strings.join(fields, '|'));
+				ei.getName(), Strings.join(idx.fields(), '|'));
 		}
-		for (String in : fields) {
+		for (String in : idx.fields()) {
 			EntityField ef = en.getField(in);
 			if (null == ef) {
 				throw Exceptions.makeThrow("Failed to find field '%s' in '%s' for @Index(%s: %s)", 
-					in, en.getType(), ei.getName(), Strings.join(fields, '|'));
+					in, en.getType(), ei.getName(), Strings.join(idx.fields(), '|'));
 			}
 			ei.addField(ef);
 		}
@@ -427,7 +430,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 	private void evalEntityIndexes(Entity<?> en, Indexes indexes) {
 		for (Index idx : indexes.value()) {
-			evalEntityIndex(en, idx.name(), idx.fields(), idx.unique());
+			evalEntityIndex(en, idx);
 		}
 	}
 

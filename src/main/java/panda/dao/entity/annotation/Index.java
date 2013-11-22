@@ -20,4 +20,6 @@ public @interface Index {
 	String[] fields() default {};
 
 	boolean unique() default false;
+
+	boolean real() default true;
 }

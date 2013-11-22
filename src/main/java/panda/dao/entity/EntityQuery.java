@@ -21,8 +21,9 @@ public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 	}
 
 	//----------------------------------------------------------------------
-	public void reset() {
+	public T reset() {
 		query.reset();
+		return (T)this;
 	}
 	
 	//----------------------------------------------------------------------
