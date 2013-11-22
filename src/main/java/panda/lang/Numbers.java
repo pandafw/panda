@@ -2129,4 +2129,32 @@ public class Numbers {
 		// found digit it to make sure weird stuff like '.' and '1E-' doesn't pass
 		return !allowSigns && foundDigit;
 	}
+
+	// -----------------------------------------------------------------------
+	public static String cutFormat(double n, int frac) {
+		boolean minus = false;
+		if (n < 0) {
+			minus = true;
+			n = -n;
+		}
+
+		long i = (long)n;
+		double d = n - i;
+		double p = Math.pow(10, frac);
+		double dp = d * p;
+		long f = (long)(dp);
+
+		StringBuilder sb = new StringBuilder();
+		if (minus) {
+			sb.append('-');
+		};
+		sb.append(i);
+		
+		String fs = Strings.stripEnd(String.valueOf(f), '0');
+		if (!fs.isEmpty()) {
+			sb.append('.').append(fs);
+		}
+		
+		return sb.toString();
+	}
 }

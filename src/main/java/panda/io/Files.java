@@ -20,7 +20,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -281,9 +280,8 @@ public class Files {
 	}
 
 	// -----------------------------------------------------------------------
-	private static DecimalFormat szFormat = new DecimalFormat("#.##");
 	private static String formatSize(final double size) {
-		return szFormat.format(size);
+		return Numbers.cutFormat(size, 2);
 	}
 	
 	/**
