@@ -4,6 +4,7 @@
 	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
 	<property name="prj.url" value="https://github.com/pandawind/panda-java"/>
+	<property name="prj.scm" value="git@github.com:pandawind/panda-java.git"/>
 	<property name="prj.repo" location="../panda-repo"/>
 
 	<!-- defined maven snapshots and staging repository id and url -->
@@ -421,9 +422,9 @@ panda-deploy --> Deploy release version to panda-repo repository
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:git:git@github.com:pandawind/panda-java.git</connection>
-		<developerConnection>scm:git:git@github.com:pandawind/panda-java.git</developerConnection>
-		<url>git@github.com:pandawind/panda-java.git</url>
+		<connection>scm:git:${prj.scm}</connection>
+		<developerConnection>scm:git:${prj.scm}</developerConnection>
+		<url>${prj.scm}</url>
 	</scm>
 	<developers>
 		<developer>
