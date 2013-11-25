@@ -128,6 +128,28 @@ public class EntityDao<T> {
 	}
 
 	/**
+	 * check a record exists in the data store.
+	 * if the query is not supplied, then check the table existence.
+	 * 
+	 * @param query WHERE conditions
+	 * @return true if the record or the table exists in the data store
+	 */
+	public boolean exists(QueryWrapper query) {
+		return dao.exists(entity, query);
+	}
+
+	/**
+	 * check a record exists in the data store.
+	 * if the query is not supplied, then check the table existence.
+	 * 
+	 * @param query WHERE conditions
+	 * @return true if the record or the table exists in the data store
+	 */
+	public boolean exists(Query query) {
+		return dao.exists(entity, query);
+	}
+
+	/**
 	 * get a record by the supplied keys
 	 * 
 	 * @param keys record keys (int, string or java bean with keys)
