@@ -17,14 +17,26 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 
+import panda.lang.Arrays;
+import panda.lang.codec.binary.Hex;
+
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class JavaImages extends Images {
 	@Override
-	public ImageWrapper makeImage(byte[] data) throws Exception {
-		BufferedImage bi = JavaImages.read(new ByteArrayInputStream(data));
-		return bi == null ? null : new JavaImageWrapper(bi);
+	public ImageWrapper makeImage(byte[] data) {
+		BufferedImage bi;
+		try {
+			bi = JavaImages.read(new ByteArrayInputStream(data));
+		}
+		catch (IOException e) {
+			throw new IllegalArgumentException(e);
+		}
+		if (bi == null) {
+			throw new IllegalArgumentException("Unknown image: " + Hex.encodeHexString(Arrays.copyOf(data, 10)));
+		}
+		return new JavaImageWrapper(bi);
 	}
 	
 	//-------------------------------------------------------------------------------

@@ -28,5 +28,10 @@ public abstract class Images {
 		Images.me = instance;
 	}
 
-	public abstract ImageWrapper makeImage(byte[] data) throws Exception;
+	/**
+	 * @param data image data
+	 * @return image wrapper
+	 * @throws IllegalArgumentException if the data is not a image
+	 */
+	public abstract ImageWrapper makeImage(byte[] data);
 }
