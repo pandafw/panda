@@ -20,8 +20,8 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.CycleDetector;
 import panda.lang.Strings;
-import panda.tool.codegen.bean.Model;
-import panda.tool.codegen.bean.ModelProperty;
+import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -79,7 +79,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 	
 	@Override
 	protected void processModule(Module module) throws Exception {
-		for (Model model : module.getModelList()) {
+		for (Entity model : module.getModelList()) {
 			if (Boolean.TRUE.equals(model.getGenerate())) {
 				print2("Processing model - " + model.getName());
 
@@ -137,8 +137,8 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		}
 	}
 	
-	protected void prepareImportList(List<ModelProperty> ps, Set<String> imports) {
-		for (ModelProperty p : ps) {
+	protected void prepareImportList(List<EntityProperty> ps, Set<String> imports) {
+		for (EntityProperty p : ps) {
 			String type = p.getFullJavaType();
 			if (type.endsWith("[]")) {
 				type = type.substring(0, type.length() - 2);
@@ -147,7 +147,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		}
 	}
 
-	private void addFieldRestrict(Set<String> imports, ModelProperty p) {
+	private void addFieldRestrict(Set<String> imports, EntityProperty p) {
 		if ("boolean".equals(p.getFieldKind())) {
 			imports.add(BooleanCondition.class.getName());
 		}
@@ -163,30 +163,30 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		}
 	}
 
-	protected Set<String> setJavaModelExampleImportList(Map<String, Object> wrapper, Model model) {
+	protected Set<String> setJavaModelExampleImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = new TreeSet<String>();
 
-		Set<ModelProperty> ps = new HashSet<ModelProperty>();
-		for (ModelProperty p : model.getColumnList()) {
+		Set<EntityProperty> ps = new HashSet<EntityProperty>();
+		for (EntityProperty p : model.getColumnList()) {
 			if (!"bin".equals(p.getFieldKind())) {
 				ps.add(p);
 			}
 			addFieldRestrict(imports, p);
 		}
-		for (ModelProperty p : model.getSqlExpressionList()) {
+		for (EntityProperty p : model.getSqlExpressionList()) {
 			if (!"bin".equals(p.getFieldKind())) {
 				ps.add(p);
 			}
 			addFieldRestrict(imports, p);
 		}
-		for (ModelProperty p : model.getJoinColumnList()) {
+		for (EntityProperty p : model.getJoinColumnList()) {
 			if (!"bin".equals(p.getFieldKind())) {
 				ps.add(p);
 			}
 			addFieldRestrict(imports, p);
 		}
 		
-		List<ModelProperty> pl = new ArrayList<ModelProperty>();
+		List<EntityProperty> pl = new ArrayList<EntityProperty>();
 		pl.addAll(ps);
 		
 		prepareImportList(pl, imports);
@@ -199,7 +199,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		return imports;
 	}
 
-	protected void setJavaModelMetaDataImportList(Map<String, Object> wrapper, Model model) {
+	protected void setJavaModelMetaDataImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = new TreeSet<String>();
 
 		prepareImportList(model.getPropertyList(), imports);
@@ -214,7 +214,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		setImports(wrapper, imports);
 	}
 
-	protected void setJavaModelBeanImportList(Map<String, Object> wrapper, Model model) {
+	protected void setJavaModelBeanImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = new TreeSet<String>();
 
 		prepareImportList(model.getOrgPropertyList(), imports);
@@ -228,7 +228,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		setImports(wrapper, imports);
 	}
 
-	protected Set<String> setModelDaoImportList(Map<String, Object> wrapper, Model model) {
+	protected Set<String> setModelDaoImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = new TreeSet<String>();
 
 		prepareImportList(model.getPrimaryKeyList(), imports);
@@ -244,7 +244,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		return imports;
 	}
 
-	protected Map<String, Object> getWrapper(Module module, Model model) {
+	protected Map<String, Object> getWrapper(Module module, Entity model) {
 		Map<String, Object> wrapper = new HashMap<String, Object>();
 		
 		if ("true".equals(module.getProps().getProperty("source.datetime"))) {
@@ -258,7 +258,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		return wrapper;
 	}
 	
-	protected void processJavaModel(Module module, Model model) throws Exception {
+	protected void processJavaModel(Module module, Entity model) throws Exception {
 		Map<String, Object> wrapper = getWrapper(module, model);
 
 		String pkg = Classes.getPackageName(model.getModelBeanClass());
@@ -287,7 +287,7 @@ public abstract class ModelGenerator extends AbstractCodeGenerator {
 		}
 	}
 
-	protected void processModelDao(Module module, Model model) throws Exception {
+	protected void processModelDao(Module module, Entity model) throws Exception {
 		Map<String, Object> wrapper = getWrapper(module, model);
 		setModelDaoImportList(wrapper, model);
 		processTpl(Classes.getPackageName(model.getModelDaoClass()), 

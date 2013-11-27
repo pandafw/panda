@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.lang.Strings;
-import panda.tool.codegen.bean.Model;
+import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import freemarker.template.Configuration;
 
@@ -46,7 +46,7 @@ public class GaeModelGenerator extends ModelGenerator {
 
 	@Override
 	protected void processModule(Module module) throws Exception {
-		for (Model model : module.getModelList()) {
+		for (Entity model : module.getModelList()) {
 			if (Boolean.TRUE.equals(model.getGenerate())) {
 				print2("Processing model - " + model.getName());
 
@@ -79,7 +79,7 @@ public class GaeModelGenerator extends ModelGenerator {
 	}
 
 	@Override
-	protected Set<String> setJavaModelExampleImportList(Map<String, Object> wrapper, Model model) {
+	protected Set<String> setJavaModelExampleImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = super.setJavaModelExampleImportList(wrapper, model);
 
 		imports.add(com.google.appengine.api.datastore.Query.class.getName());
@@ -87,7 +87,7 @@ public class GaeModelGenerator extends ModelGenerator {
 		return imports;
 	}
 
-	protected Set<String> setModelDaoImportList(Map<String, Object> wrapper, Model model) {
+	protected Set<String> setModelDaoImportList(Map<String, Object> wrapper, Entity model) {
 		Set<String> imports = super.setModelDaoImportList(wrapper, model);
 
 		imports.add(model.getModelMetaDataClass());

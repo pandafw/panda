@@ -34,7 +34,7 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
 			</#if></#list>
@@ -44,7 +44,7 @@
 			<#if tag.cssClass??>
 				cssClass="${tag.cssClass}"
 			</#if>
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 				disabled="${d}{successMethodResult?string}"
 				readonly="true"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
@@ -59,10 +59,10 @@
 					|| ui.templates?seq_contains("view")
 					|| ui.templates?seq_contains("print")>
 					<#assign tab = "\t"/>
-					<#if f.modelField>
-				${s}#if ${actionDataFieldName}?? && ${actionDataFieldName}.${f.name}?? && ${actionDataFieldName}.${f.name}.exist>
-					<#else>
+					<#if f.actionField>
 				${s}#if ${f.name}?? && ${f.name}.exist>
+					<#else>
+				${s}#if ${actionDataFieldName}?? && ${actionDataFieldName}.${f.name}?? && ${actionDataFieldName}.${f.name}.exist>
 					</#if>
 				</#if>
 				<#list f.editTag.paramList as tp>
@@ -86,7 +86,7 @@
 			<#if tag.cssClass??>
 				cssClass="${tag.cssClass}"
 			</#if>
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
@@ -107,17 +107,17 @@
 			</#if>
 		<#else>
 			<#assign p = ""/>
-			<#if f.modelField>
-				<#list model.propertyList as mp>
-					<#if mp.name == f.name>
-						<#assign p = mp/>
+			<#if f.actionField>
+				<#list action.propertyList as ap>
+					<#if ap.name == f.name>
+						<#assign p = ap/>
 						<#break/>
 					</#if>
 				</#list>
 			<#else>
-				<#list action.propertyList as ap>
-					<#if ap.name == f.name>
-						<#assign p = ap/>
+				<#list model.propertyList as mp>
+					<#if mp.name == f.name>
+						<#assign p = mp/>
 						<#break/>
 					</#if>
 				</#list>
@@ -130,7 +130,7 @@
 				</#if>
 			</#list>
 			${s}@n.viewfield
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 			<#if _format?has_content>
 				format="${_format}"
 			<#elseif tag.name?ends_with(".checkbox")>

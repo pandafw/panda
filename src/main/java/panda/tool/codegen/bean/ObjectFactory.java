@@ -27,12 +27,12 @@ public class ObjectFactory {
 	}
 
 	/**
-	 * Create an instance of {@link Model }
+	 * Create an instance of {@link Entity }
 	 * 
 	 * @return new Model
 	 */
-	public Model createModel() {
-		return new Model();
+	public Entity createModel() {
+		return new Entity();
 	}
 
 	/**
@@ -54,12 +54,12 @@ public class ObjectFactory {
 	}
 
 	/**
-	 * Create an instance of {@link ModelProperty }
+	 * Create an instance of {@link EntityProperty }
 	 * 
 	 * @return new ModelProperty
 	 */
-	public ModelProperty createModelProperty() {
-		return new ModelProperty();
+	public EntityProperty createModelProperty() {
+		return new EntityProperty();
 	}
 
 	/**

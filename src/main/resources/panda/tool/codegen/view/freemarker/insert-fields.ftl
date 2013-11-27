@@ -27,24 +27,24 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 		<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 		</#if></#list>
 			/>
 	<#elseif f.editTag??>
 		<#assign p = ""/>
-		<#if f.modelField>
-			<#list model.propertyList as mp>
-				<#if mp.name == f.name>
-					<#assign p = mp/>
+		<#if f.actionField>
+			<#list action.propertyList as ap>
+				<#if ap.name == f.name>
+					<#assign p = ap/>
 					<#break/>
 				</#if>
 			</#list>
 		<#else>
-			<#list action.propertyList as ap>
-				<#if ap.name == f.name>
-					<#assign p = ap/>
+			<#list model.propertyList as mp>
+				<#if mp.name == f.name>
+					<#assign p = mp/>
 					<#break/>
 				</#if>
 			</#list>

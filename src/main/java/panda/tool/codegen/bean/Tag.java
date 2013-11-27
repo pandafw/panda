@@ -24,7 +24,7 @@ import panda.lang.Strings;
  *   &lt;complexContent&gt;
  *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
  *       &lt;sequence&gt;
- *         &lt;element name=&quot;param&quot; type=&quot;{nuts.tools.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;param&quot; type=&quot;{panda.tool.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;cssClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;

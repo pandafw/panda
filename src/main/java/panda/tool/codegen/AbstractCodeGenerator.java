@@ -39,7 +39,7 @@ import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.tool.IllegalLicenseException;
-import panda.tool.codegen.bean.Model;
+import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import panda.util.tool.AbstractCommandTool;
 import freemarker.template.Configuration;
@@ -205,7 +205,7 @@ public abstract class AbstractCodeGenerator {
 			throw new RuntimeException("Failed to load resource Module.xsd");
 		}
 		
-	    // create a SchemaFactory capable of understanding WXS schemas
+		// create a SchemaFactory capable of understanding WXS schemas
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
 		// load a WXS schema, represented by a Schema instance
@@ -286,7 +286,7 @@ public abstract class AbstractCodeGenerator {
 
 		Document doc = loadDocument(f, properties);
 		
-		JAXBContext context = JAXBContext.newInstance(Classes.getPackageName(Model.class), 
+		JAXBContext context = JAXBContext.newInstance(Classes.getPackageName(Entity.class), 
 			getClass().getClassLoader());
 		Unmarshaller unmarshaller = context.createUnmarshaller();
  

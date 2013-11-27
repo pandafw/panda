@@ -20,8 +20,8 @@ import panda.io.Streams;
 import panda.io.stream.CsvReader;
 import panda.lang.Arrays;
 import panda.lang.Strings;
-import panda.tool.codegen.bean.Model;
-import panda.tool.codegen.bean.ModelProperty;
+import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
 import panda.tool.codegen.bean.Resource;
 import panda.util.tool.AbstractCommandTool;
@@ -215,9 +215,9 @@ public class DDLGenerator extends AbstractCodeGenerator {
 	
 	@Override
 	protected void processModule(Module module) throws Exception {
-		Map<String, Model> tables = new HashMap<String, Model>();
+		Map<String, Entity> tables = new HashMap<String, Entity>();
 		
-		for (Model model : module.getModelList()) {
+		for (Entity model : module.getModelList()) {
 			if (Boolean.TRUE.equals(model.getGenerate())) {
 				tables.put(model.getTable(), model);
 			}
@@ -225,7 +225,7 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		
 		for (String t : dbtypes) {
 			handler = handlers.get(t);
-			for (Model model : tables.values()) {
+			for (Entity model : tables.values()) {
 				print2("Processing table - " + model.getTable() + " [" + t + "]");
 				prepareModel(model, handler);
 				prepareResource(module, model);
@@ -300,7 +300,7 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		print0(cntModule + " modules processed, " + cntFile + " SQL scripts of " + (int)(cntTable / dbtypes.length) + " tables generated successfully.");
 	}
 
-	private Map<String, Object> getWrapper(Module module, Model model, Handler handler) {
+	private Map<String, Object> getWrapper(Module module, Entity model, Handler handler) {
 		Map<String, Object> wrapper = new HashMap<String, Object>();
 		
 		if ("true".equals(module.getProps().getProperty("source.datetime"))) {
@@ -315,10 +315,10 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		return wrapper;
 	}
 	
-	private Model findResourceModel(Module module, Model model) {
+	private Entity findResourceModel(Module module, Entity model) {
 		for (Resource r : module.getResourceList()) {
 			if (locale.equals(Strings.defaultString(r.getLocale()))) {
-				for (Model m : r.getModelList()) {
+				for (Entity m : r.getEntityList()) {
 					if (m.getName().equals(model.getName())) {
 						return m; 
 					}
@@ -328,15 +328,15 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		return null;
 	}
 	
-	private void prepareResource(Module module, Model model) throws Exception {
-		Model rm = findResourceModel(module, model);
+	private void prepareResource(Module module, Entity model) throws Exception {
+		Entity rm = findResourceModel(module, model);
 		if (rm != null) {
 			if (Strings.isNotEmpty(rm.getLabel())) {
 				model.setLabel(rm.getLabel());
 			}
-			for (ModelProperty p : model.getPropertyList()) {
+			for (EntityProperty p : model.getPropertyList()) {
 				if (Strings.isEmpty(p.getLabel())) {
-					for (ModelProperty rp : rm.getPropertyList()) {
+					for (EntityProperty rp : rm.getPropertyList()) {
 						if (p.getName().equals(rp.getName())) {
 							p.setLabel(rp.getLabel());
 							break;
@@ -347,7 +347,7 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		}
 		
 		Properties props = module.getProps();
-		for (ModelProperty p : model.getPropertyList()) {
+		for (EntityProperty p : model.getPropertyList()) {
 			if (Strings.isEmpty(p.getLabel())) {
 				p.setLabel(props.getProperty("model.label." + p.getName()));
 			}
@@ -355,8 +355,8 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		}
 	}
 	
-	private void prepareModel(Model model, Handler handler) throws Exception {
-		for (ModelProperty mp : model.getPropertyList()) {
+	private void prepareModel(Entity model, Handler handler) throws Exception {
+		for (EntityProperty mp : model.getPropertyList()) {
 			if (Strings.isEmpty(mp.getColumn())) {
 				continue;
 			}
@@ -394,7 +394,7 @@ public class DDLGenerator extends AbstractCodeGenerator {
 		}
 	}
 	
-	private void processModel(Module module, Model model, Handler handler) throws Exception {
+	private void processModel(Module module, Entity model, Handler handler) throws Exception {
 		Map<String, Object> wrapper = getWrapper(module, model, handler);
 
 		processTpl(handler.dbtype + ".table", model.getTable() + ".sql", wrapper, handler.tplTable);

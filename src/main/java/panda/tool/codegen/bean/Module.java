@@ -24,9 +24,9 @@ import panda.lang.Strings;
  *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
  *       &lt;sequence&gt;
  *         &lt;element name=&quot;include&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
- *         &lt;element name=&quot;model&quot; type=&quot;{nuts.tools.codegen}Model&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
- *         &lt;element name=&quot;action&quot; type=&quot;{nuts.tools.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
- *         &lt;element name=&quot;resource&quot; type=&quot;{nuts.tools.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;model&quot; type=&quot;{panda.tool.codegen}Model&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;action&quot; type=&quot;{panda.tool.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;resource&quot; type=&quot;{panda.tool.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,7 +37,7 @@ import panda.lang.Strings;
 @XmlType(name = "Module")
 public class Module {
 	@XmlElement(name = "model")
-	protected List<Model> modelList;
+	protected List<Entity> modelList;
 
 	@XmlElement(name = "action")
 	protected List<Action> actionList;
@@ -59,9 +59,9 @@ public class Module {
 	 * @param module source module
 	 */
 	public Module(Module module) {
-		modelList = new LinkedList<Model>();
-		for (Model m : module.getModelList()) {
-			modelList.add(new Model(m));
+		modelList = new LinkedList<Entity>();
+		for (Entity m : module.getModelList()) {
+			modelList.add(new Entity(m));
 		}
 
 		actionList = new LinkedList<Action>();
@@ -85,35 +85,6 @@ public class Module {
 	public void prepare() throws Exception {
 		boolean extend = true;
 
-		while (extend) {
-			extend = false;
-			for (Model model : getModelList()) {
-				if (Strings.isNotEmpty(model.getExtend())) {
-					Model parent = null;
-					for (Model m2 : getModelList()) {
-						if (m2.getName().equals(model.getExtend())) {
-							parent = m2;
-							break;
-						}
-					}
-					if (parent == null) {
-						throw new Exception("Can not find extend module[" + model.getExtend()
-								+ "] of " + model.getName());
-					}
-
-					getModelList().remove(model);
-					getModelList().add(Model.extend(model, parent));
-
-					extend = true;
-					break;
-				}
-			}
-		}
-		for (Model model : getModelList()) {
-			model.prepare("false".equals(getProps().get("sql.joinable")));
-		}
-
-		extend = true;
 		while (extend) {
 			extend = false;
 			for (Action action : getActionList()) {
@@ -163,9 +134,9 @@ public class Module {
 	/**
 	 * @return the modelList
 	 */
-	public List<Model> getModelList() {
+	public List<Entity> getModelList() {
 		if (modelList == null) {
-			modelList = new ArrayList<Model>();
+			modelList = new ArrayList<Entity>();
 		}
 		return this.modelList;
 	}

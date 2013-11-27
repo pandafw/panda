@@ -1,20 +1,20 @@
 <#list ui.displayFieldList as f>
 <#assign p = ""/>
 <#assign required = false/>
-<#if f.modelField>
+<#if f.actionField>
+	<#list action.propertyList as ap>
+		<#if ap.name == f.name>
+			<#assign p = ap/>
+			<#break/>
+		</#if>
+	</#list>
+<#else>
 	<#list model.propertyList as mp>
 		<#if mp.name == f.name>
 			<#assign p = mp/>
 			<#if requiredPK && p.primaryKey!false>
 				<#assign required = true/>
 			</#if>
-			<#break/>
-		</#if>
-	</#list>
-<#else>
-	<#list action.propertyList as ap>
-		<#if ap.name == f.name>
-			<#assign p = ap/>
 			<#break/>
 		</#if>
 	</#list>

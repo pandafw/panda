@@ -1,21 +1,3 @@
-<#--
-/*
- * This file is part of Nuts Framework.
- * Copyright(C) 2009-2012 Nuts Develop Team.
- *
- * Nuts Framework is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- *
- * Nuts Framework is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Nuts Framework. If not, see <http://www.gnu.org/licenses/>.
- */
--->
 <#include "common.ftl"/>
 package ${modelBeanPackage};
 
@@ -115,7 +97,7 @@ public class ${modelBeanClass} <#if model.baseBeanClass?has_content>extends ${cl
 	}
 
 	/**
-     * @return  a hash code value for this object.
+	 * @return  a hash code value for this object.
 	 */
 	@Override
 	public int hashCode() {
@@ -132,8 +114,8 @@ public class ${modelBeanClass} <#if model.baseBeanClass?has_content>extends ${cl
 	}
 
 	/**
-     * @return  <code>true</code> if this object is the same as the obj argument; 
-     * 			<code>false</code> otherwise.
+	 * @return  <code>true</code> if this object is the same as the obj argument; 
+	 * 			<code>false</code> otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -168,7 +150,7 @@ public class ${modelBeanClass} <#if model.baseBeanClass?has_content>extends ${cl
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return  a string representation of the object.
 	 */
 	@Override
 	public String toString() {

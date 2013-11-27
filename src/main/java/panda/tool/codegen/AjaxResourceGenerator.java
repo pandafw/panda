@@ -9,7 +9,7 @@ import org.apache.commons.cli.CommandLine;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ListUI;
-import panda.tool.codegen.bean.Model;
+import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import panda.tool.codegen.bean.Resource;
 import freemarker.template.Configuration;
@@ -102,8 +102,8 @@ public class AjaxResourceGenerator extends AbstractCodeGenerator {
 			if (Boolean.TRUE.equals(action.getGenerate())) {
 				print2("Processing text of action - " + action.getName() + locale);
 				
-				Model am = null;
-				for (Model model : resource.getModelList()) {
+				Entity am = null;
+				for (Entity model : resource.getEntityList()) {
 					if (model.getName().equals(action.getModel())) {
 						am = model;
 						break;
