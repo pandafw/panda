@@ -7,7 +7,7 @@ import panda.dao.criteria.QueryWrapper;
 
 /**
  */
-public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition<E> {
+public class ComparableCondition<E extends QueryWrapper, T> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent
 	 * @param field field
@@ -20,7 +20,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E equalTo(Object value) {
+	public E equalTo(T value) {
 		parent.getQuery().equalTo(field, value);
 		return parent;
 	}
@@ -38,7 +38,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E notEqualTo(Object value) {
+	public E notEqualTo(T value) {
 		parent.getQuery().notEqualTo(field, value);
 		return parent;
 	}
@@ -56,7 +56,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E greaterThan(Object value) {
+	public E greaterThan(T value) {
 		parent.getQuery().greaterThan(field, value);
 		return parent;
 	}
@@ -74,7 +74,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E greaterThanOrEqualTo(Object value) {
+	public E greaterThanOrEqualTo(T value) {
 		parent.getQuery().greaterThanOrEqualTo(field, value);
 		return parent;
 	}
@@ -92,7 +92,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E lessThan(Object value) {
+	public E lessThan(T value) {
 		parent.getQuery().lessThan(field, value);
 		return parent;
 	}
@@ -110,7 +110,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param value value
 	 * @return parent
 	 */
-	public E lessThanOrEqualTo(Object value) {
+	public E lessThanOrEqualTo(T value) {
 		parent.getQuery().lessThanOrEqualTo(field, value);
 		return parent;
 	}
@@ -128,7 +128,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param values value array
 	 * @return parent
 	 */
-	public E in(Object[] values) {
+	public E in(T[] values) {
 		parent.getQuery().in(field, values);
 		return parent;
 	}
@@ -137,7 +137,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param values value list
 	 * @return parent
 	 */
-	public E in(Collection<?> values) {
+	public E in(Collection<T> values) {
 		parent.getQuery().in(field, values);
 		return parent;
 	}
@@ -146,7 +146,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param values value list
 	 * @return parent
 	 */
-	public E notIn(Object[] values) {
+	public E notIn(T[] values) {
 		parent.getQuery().notIn(field, values);
 		return parent;
 	}
@@ -155,7 +155,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param values value list
 	 * @return parent
 	 */
-	public E notIn(Collection<?> values) {
+	public E notIn(Collection<T> values) {
 		parent.getQuery().notIn(field, values);
 		return parent;
 	}
@@ -165,7 +165,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param maxValue maxValue
 	 * @return parent
 	 */
-	public E between(Object minValue, Object maxValue) {
+	public E between(T minValue, T maxValue) {
 		parent.getQuery().between(field, minValue, maxValue);
 		return parent;
 	}
@@ -175,7 +175,7 @@ public class ComparableCondition<E extends QueryWrapper> extends ObjectCondition
 	 * @param maxValue maxValue
 	 * @return parent
 	 */
-	public E notBetween(Object minValue, Object maxValue) {
+	public E notBetween(T minValue, T maxValue) {
 		parent.getQuery().notBetween(field, minValue, maxValue);
 		return parent;
 	}
