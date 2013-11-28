@@ -41,11 +41,11 @@ public class EntityDao<T> {
 		Entity<T> en = dao.getEntity(type);
 		if (param != null && isNeedCopyEntity(en)) {
 			Entity<T> sen = new Entity<T>(en);
-			sen.setTableName(Texts.transform(sen.getTableName(), param));
-			sen.setViewName(Texts.transform(sen.getViewName(), param));
+			sen.setTableName(Texts.translate(sen.getTableName(), param));
+			sen.setViewName(Texts.translate(sen.getViewName(), param));
 			for (EntityField ef : en.getFields()) {
 				if (ef.hasDefaultValue()) {
-					ef.setDefaultValue(Texts.transform(ef.getDefaultValue(), param));
+					ef.setDefaultValue(Texts.translate(ef.getDefaultValue(), param));
 				}
 			}
 			this.entity = sen;

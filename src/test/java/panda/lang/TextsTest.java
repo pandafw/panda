@@ -345,7 +345,7 @@ public class TextsTest {
 		m.put("a.b", "2");
 		m.put("a.b.c", "3");
 		
-		assertEquals("1.23-${8}-xx", Texts.transform("${a}.${a.b}${a.b.c}-${8}-xx", m));
+		assertEquals("1.23-${8}-xx", Texts.translate("${a}.${a.b}${a.b.c}-${8}-xx", m));
 	}
 
 	// -----------------------------------------------------------------------

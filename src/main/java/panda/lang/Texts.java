@@ -502,31 +502,31 @@ public abstract class Texts {
 
 	// -----------------------------------------------------------------------
 	/**
-	 * transform "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
+	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
 	 * @param expression expression
 	 * @param wrapper object wrapper
 	 * @return translated string
 	 */
-	public static String transform(String expression, Object wrapper) {
-		return transform(expression, wrapper, '$');
+	public static String translate(String expression, Object wrapper) {
+		return translate(expression, wrapper, '$');
 	}
 	
 
 	/**
-	 * transform "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
+	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
 	 * @param expression expression 
 	 * @param wrapper object wrapper
 	 * @param prefix prefix char 
 	 * @return translated string
 	 */
-	public static String transform(String expression, Object wrapper, char prefix) {
-		return transform(expression, wrapper, prefix, '{', '}');
+	public static String translate(String expression, Object wrapper, char prefix) {
+		return translate(expression, wrapper, prefix, '{', '}');
 	}
 
 	/**
-	 * transform "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
+	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
 	 * @param prefix prefix char $ or %
 	 * @param open open char ( or {
@@ -536,7 +536,7 @@ public abstract class Texts {
 	 * @return translated string
 	 */
 	@SuppressWarnings("unchecked")
-	public static String transform(String expression, Object wrapper, char prefix, char open, char close) {
+	public static String translate(String expression, Object wrapper, char prefix, char open, char close) {
 		if (Strings.isEmpty(expression) || wrapper == null) {
 			return expression;
 		}

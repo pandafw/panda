@@ -244,7 +244,7 @@ public abstract class SqlExpert {
 			sql.append("?,");
 			Object v = getFieldValue(ef, data);
 			if (v == null && Strings.isNotEmpty(ef.getDefaultValue())) {
-				v = Texts.transform(ef.getDefaultValue(), data);
+				v = Texts.translate(ef.getDefaultValue(), data);
 				v = castors.cast(v, ef.getType());
 			}
 			sql.addParam(v);

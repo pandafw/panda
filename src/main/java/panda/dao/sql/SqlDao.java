@@ -492,8 +492,8 @@ public class SqlDao extends AbstractDao {
 			post = getSqlExpert().postIdentity(entity);
 		}
 		else {
-			prep = Texts.transform(prep, m);
-			post = Texts.transform(post, m);
+			prep = Texts.translate(prep, m);
+			post = Texts.translate(post, m);
 		}
 
 		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
