@@ -8,14 +8,49 @@ import panda.lang.Texts;
  * @author yf.frank.wang@gmail.com
  */
 public class SqlNamings {
+	private static boolean isAllUpperCase(final CharSequence cs) {
+		if (Strings.isEmpty(cs)) {
+			return false;
+		}
+		final int sz = cs.length();
+		for (int i = 0; i < sz; i++) {
+			char c = cs.charAt(i);
+			if (Character.isLetter(c) && !Character.isUpperCase(c)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean isJavaName(final CharSequence cs) {
+		if (Strings.isEmpty(cs)) {
+			return false;
+		}
+
+		boolean au = true;
+		final int sz = cs.length();
+		for (int i = 0; i < sz; i++) {
+			char c = cs.charAt(i);
+			if (c == '_') {
+				return false;
+			}
+			if (au && Character.isLetter(c)) {
+				if (!Character.isUpperCase(c)) {
+					au = false;
+				}
+			}
+		}
+		return !au;
+	}
+
 	/**
 	 * javaName2ColumnLabel
 	 * @param javaName java style name
 	 * @return sql column label
 	 */
 	public static String javaName2ColumnLabel(String javaName) {
-		if (Strings.isAllUpperCase(javaName)) {
-			return javaName;
+		if (isAllUpperCase(javaName)) {
+			return Strings.replace(javaName, ".", "_0_");
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -50,9 +85,12 @@ public class SqlNamings {
 			return Strings.EMPTY;
 		}
 		
-		StringBuilder sb = new StringBuilder();
 		String javaName = Strings.replace(columnLabel, "_0_", ".");
+		if (isJavaName(javaName)) {
+			return javaName;
+		}
 		
+		StringBuilder sb = new StringBuilder();
 		boolean toUpper = false;
 		int len = javaName.length();
 		for (int i = 0; i < len; i++) {

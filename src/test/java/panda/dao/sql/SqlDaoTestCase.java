@@ -194,6 +194,15 @@ public abstract class SqlDaoTestCase {
 	}
 	
 	@Test
+	public void testSelectCamel() {
+		Klass expect = Klass.create(1);
+		
+		Klass actual = dao.fetch(Klass.class, expect);
+		
+		Assert.assertEquals(expect, actual);
+	}
+	
+	@Test
 	public void testSelectIn() {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);

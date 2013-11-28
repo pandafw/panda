@@ -19,6 +19,7 @@ import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
 import panda.dao.sql.Sql;
+import panda.dao.sql.SqlNamings;
 import panda.dao.sql.Sqls;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -173,7 +174,11 @@ public abstract class SqlExpert {
 			if (query != null && query.shouldExclude(ef.getName())) {
 				continue;
 			}
-			sql.append(' ').append(ef.getColumn()).append(" AS ").append(ef.getName()).append(',');
+			sql.append(' ')
+				.append(ef.getColumn())
+				.append(" AS ")
+				.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
+				.append(',');
 		}
 		sql.setCharAt(sql.length() - 1, ' ');
 		sql.append("FROM ").append(entity.getViewName());

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.PK;
@@ -14,13 +15,17 @@ public class Klass {
 	String name;
 
 	@Index(unique=true)
+	@Column
 	String alias;
 	
 	@FK(target=Teacher.class)
-	String teacher;
+	@Column
+	String teacherName;
 
+	@Column(size=10, scale=2)
 	BigDecimal price;
 	
+	@Column
 	Boolean closed;
 	
 	public String getName() {
@@ -39,12 +44,12 @@ public class Klass {
 		this.alias = alias;
 	}
 
-	public String getTeacher() {
-		return teacher;
+	public String getTeacherName() {
+		return teacherName;
 	}
 
-	public void setTeacher(String teacher) {
-		this.teacher = teacher;
+	public void setTeacherName(String teacher) {
+		this.teacherName = teacher;
 	}
 
 	public BigDecimal getPrice() {
@@ -68,7 +73,7 @@ public class Klass {
 		return Objects.toStringBuilder(this)
 				.append("name", name)
 				.append("alias", alias)
-				.append("teacher", teacher)
+				.append("teacherName", teacherName)
 				.append("price", price)
 				.append("closed", closed)
 				.toString();
@@ -79,7 +84,7 @@ public class Klass {
 		return Objects.hashCodeBuilder()
 				.append(name)
 				.append(alias)
-				.append(teacher)
+				.append(teacherName)
 				.append(price)
 				.append(closed)
 				.toHashCode();
@@ -98,8 +103,8 @@ public class Klass {
 		return Objects.equalsBuilder()
 				.append(name, rhs.name)
 				.append(alias, rhs.alias)
-				.append(teacher, rhs.teacher)
-				.append(price, rhs.price)
+				.append(teacherName, rhs.teacherName)
+				.append(price.intValue(), rhs.price.intValue())
 				.append(closed, rhs.closed)
 				.isEquals();
 	}
@@ -110,7 +115,7 @@ public class Klass {
 	public Klass(int i) {
 		this.name = "K" + i;
 		this.alias = "A" + i;
-		this.teacher = "T" + i;
+		this.teacherName = "T" + i;
 		this.price = new BigDecimal(i * 100101 / 100).setScale(2);
 		this.closed = (i % 2 == 0);
 	}

@@ -1888,6 +1888,8 @@ public class StringsTest {
 		assertTrue(Strings.isAllUpperCase("ABC"));
 		assertFalse(Strings.isAllUpperCase("ABC "));
 		assertFalse(Strings.isAllUpperCase("aBC"));
+		assertFalse(Strings.isAllUpperCase("ABC.D"));
+		assertFalse(Strings.isAllUpperCase("ABC_D"));
 	}
 
 	@Test
