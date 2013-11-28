@@ -2,7 +2,7 @@
 	color: #FF0000;
 }
 
-.p-field-errors {
+.p-error, .p-field-errors {
 	color: #b94a48;
 }
 
