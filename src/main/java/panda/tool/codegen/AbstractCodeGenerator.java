@@ -171,7 +171,7 @@ public abstract class AbstractCodeGenerator {
 	}
 
 	protected String translateValue(String val, Properties properties) throws Exception {
-		return Texts.transform(val, properties);
+		return Texts.translate(val, properties);
 	}
 
 	protected void translateDom(Node node, Properties properties) throws Exception {
