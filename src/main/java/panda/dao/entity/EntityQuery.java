@@ -1,7 +1,8 @@
 package panda.dao.entity;
 
-import panda.dao.criteria.QueryWrapper;
+import panda.dao.criteria.Order;
 import panda.dao.criteria.Query;
+import panda.dao.criteria.QueryWrapper;
 
 
 @SuppressWarnings("unchecked")
@@ -62,6 +63,87 @@ public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 	 */
 	public T or() {
 		getQuery().or();
+		return (T)this;
+	}
+
+	/**
+	 * set start
+	 * @return this
+	 */
+	public T start(int start) {
+		getQuery().start(start);
+		return (T)this;
+	}
+
+	/**
+	 * set limit
+	 * @return this
+	 */
+	public T limit(int limit) {
+		getQuery().limit(limit);
+		return (T)this;
+	}
+
+	/**
+	 * add ascend order
+	 * @param column column
+	 * @return this
+	 */
+	public T orderBy(String column) {
+		getQuery().orderBy(column);
+		return (T)this;
+	}
+
+	/**
+	 * add order
+	 * @param name name
+	 * @param order order direction
+	 * @return this
+	 */
+	public T orderBy(String name, Order order) {
+		getQuery().orderBy(name, order);
+		return (T)this;
+	}
+
+	/**
+	 * add order
+	 * @param name name
+	 * @param order order direction
+	 * @return this
+	 */
+	public T orderBy(String name, String order) {
+		getQuery().orderBy(name, order);
+		return (T)this;
+	}
+
+	/**
+	 * add order
+	 * @param name name
+	 * @param ascend direction
+	 * @return this
+	 */
+	public T orderBy(String name, boolean ascend) {
+		getQuery().orderBy(name, ascend);
+		return (T)this;
+	}
+
+	/**
+	 * add ascend order
+	 * @param name		name
+	 * @return this
+	 */
+	public T orderByAsc(String name) {
+		getQuery().orderByAsc(name);
+		return (T)this;
+	}
+
+	/**
+	 * add descend order
+	 * @param name		name
+	 * @return this
+	 */
+	public T orderByDesc(String name) {
+		getQuery().orderByDesc(name);
 		return (T)this;
 	}
 }
