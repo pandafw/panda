@@ -317,6 +317,7 @@ public class HttpServletSupport {
 
 	public void writeResponseData(byte[] data) throws IOException {
 		response.getOutputStream().write(data);
+		response.getOutputStream().flush();
 	}
 
 	public void writeResponseData(InputStream is) throws IOException {
