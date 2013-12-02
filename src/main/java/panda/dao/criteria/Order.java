@@ -26,5 +26,9 @@ public enum Order {
 		}
 		return ASC;
 	}
+	
+	public static Order reverse(Order order) {
+		return order == ASC ? DESC : ASC;
+	}
 }
 
