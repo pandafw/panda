@@ -66,7 +66,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 				print2("Processing action - " + action.getName());
 				
 				Entity am = null;
-				for (Entity model : module.getModelList()) {
+				for (Entity model : module.getEntityList()) {
 					if (model.getName().equals(action.getModel())) {
 						am = model;
 						break;
@@ -95,7 +95,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 			if (type.endsWith("[]")) {
 				type = type.substring(0, type.length() - 2);
 			}
-			ModelGenerator.addImportType(imports, type);
+			addImportType(imports, type);
 		}
 	}
 

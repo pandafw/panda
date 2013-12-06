@@ -54,7 +54,7 @@ public class AjaxGenerator extends AbstractCodeGenerator {
 				print2("Processing action - " + action.getName());
 				
 				Entity am = null;
-				for (Entity model : module.getModelList()) {
+				for (Entity model : module.getEntityList()) {
 					if (model.getName().equals(action.getModel())) {
 						am = model;
 						break;

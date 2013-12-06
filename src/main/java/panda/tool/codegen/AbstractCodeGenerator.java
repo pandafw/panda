@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -498,6 +499,8 @@ public abstract class AbstractCodeGenerator {
 	}
 
 	protected void processTpl(String pkg, String name, Map<String, Object> context, Template tpl, boolean serializable) throws Exception {
+		context.put("package", pkg);
+		context.put("name", FileNames.removeExtension(name));
 		if (serializable) {
 			context.put("svuid", 1);
 
@@ -537,5 +540,33 @@ public abstract class AbstractCodeGenerator {
 //		}
 //
 //		throw new IllegalLicenseException("Illegal license: " + pkg);
+	}
+
+	/**
+	 * add type to set
+	 * @param imports import set
+	 * @param type java type
+	 */
+	protected void addImportType(Set<String> imports, String type) {
+		if (type.endsWith(Classes.ARRAY_SUFFIX)) {
+			type = type.substring(0, type.length() - Classes.ARRAY_SUFFIX.length());
+		}
+		
+		int lt = type.indexOf('<');
+		int gt = type.lastIndexOf('>');
+		
+		if (lt > 0 && gt > 0 && gt > lt) {
+			addImportType(imports, type.substring(0, lt));
+			type = type.substring(lt + 1, gt);
+			String[] ts = Strings.split(type, ", ");
+			for (String t : ts) {
+				addImportType(imports, t);
+			}
+		}
+		else {
+			if (type.indexOf(".") > 0 && !type.startsWith("java.lang.")) {
+				imports.add(type);
+			}
+		}
 	}
 }

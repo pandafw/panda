@@ -24,9 +24,9 @@ import panda.lang.Strings;
  *     &lt;restriction base=&quot;{http://www.w3.org/2001/XMLSchema}anyType&quot;&gt;
  *       &lt;sequence&gt;
  *         &lt;element name=&quot;include&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
- *         &lt;element name=&quot;model&quot; type=&quot;{panda.tool.codegen}Model&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;entity&quot; type=&quot;{panda.tool.codegen}Entity&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *         &lt;element name=&quot;action&quot; type=&quot;{panda.tool.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
- *         &lt;element name=&quot;resource&quot; type=&quot;{panda.tool.codegen}Action&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
+ *         &lt;element name=&quot;resource&quot; type=&quot;{panda.tool.codegen}Resource&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,8 +36,8 @@ import panda.lang.Strings;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Module")
 public class Module {
-	@XmlElement(name = "model")
-	protected List<Entity> modelList;
+	@XmlElement(name = "entity")
+	protected List<Entity> entityList;
 
 	@XmlElement(name = "action")
 	protected List<Action> actionList;
@@ -59,9 +59,9 @@ public class Module {
 	 * @param module source module
 	 */
 	public Module(Module module) {
-		modelList = new LinkedList<Entity>();
-		for (Entity m : module.getModelList()) {
-			modelList.add(new Entity(m));
+		entityList = new LinkedList<Entity>();
+		for (Entity e : module.getEntityList()) {
+			entityList.add(new Entity(e));
 		}
 
 		actionList = new LinkedList<Action>();
@@ -85,6 +85,9 @@ public class Module {
 	public void prepare() throws Exception {
 		boolean extend = true;
 
+		for (Entity entity : getEntityList()) {
+			entity.prepare();
+		}
 		while (extend) {
 			extend = false;
 			for (Action action : getActionList()) {
@@ -132,13 +135,13 @@ public class Module {
 	}
 
 	/**
-	 * @return the modelList
+	 * @return the entityList
 	 */
-	public List<Entity> getModelList() {
-		if (modelList == null) {
-			modelList = new ArrayList<Entity>();
+	public List<Entity> getEntityList() {
+		if (entityList == null) {
+			entityList = new ArrayList<Entity>();
 		}
-		return this.modelList;
+		return this.entityList;
 	}
 
 	/**

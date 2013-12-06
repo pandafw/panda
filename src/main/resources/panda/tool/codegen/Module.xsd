@@ -25,6 +25,17 @@
 		<sequence>
 			<element name="property" type="tns:EntityProperty" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
+		<attribute name="identitySequence" type="string"></attribute>
+		<attribute name="identityIncrement" type="int"></attribute>
+		<attribute name="identityStart" type="int"></attribute>
+		<attribute name="identity" type="string"></attribute>
+		<attribute name="table" type="string"></attribute>
+		<attribute name="trimString" type="string"></attribute>
+		<attribute name="baseBeanClass" type="string"></attribute>
+		<attribute name="baseQueryClass" type="string"></attribute>
+		<attribute name="package" type="string"></attribute>
+		<attribute name="generate" type="boolean" default="true"></attribute>
+		<attribute name="comment" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 
@@ -58,6 +69,32 @@
 			<element name="validator" type="tns:Validator" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="tooltip" type="string"></attribute>
+		<attribute name="joinRefs" type="string"></attribute>
+		<attribute name="joinKeys" type="string"></attribute>
+		<attribute name="joinType" type="string"></attribute>
+		<attribute name="joinField" type="string"></attribute>
+		<attribute name="joinName" type="string"></attribute>
+		<attribute name="joinEntity" type="string"></attribute>
+		<attribute name="foreignEntity" type="string"></attribute>
+		<attribute name="foreignKey" type="string"></attribute>
+		<attribute name="uniqueKey" type="string"></attribute>
+		<attribute name="primaryKey" type="boolean"></attribute>
+		<attribute name="defaultValue" type="string"></attribute>
+		<attribute name="notNull" type="boolean"></attribute>
+		<attribute name="scale" type="int"></attribute>
+		<attribute name="size" type="int"></attribute>
+		<attribute name="fieldKind" type="string"></attribute>
+		<attribute name="dbType" type="string"></attribute>
+		<attribute name="jdbcType" type="string"></attribute>
+		<attribute name="comment" type="string"></attribute>
+		<attribute name="column" type="string"></attribute>
+		<attribute name="getterTrim" type="string"></attribute>
+		<attribute name="setterTrim" type="string"></attribute>
+		<attribute name="setterCode" type="string"></attribute>
+		<attribute name="getterCode" type="string"></attribute>
+		<attribute name="initValue" type="string"></attribute>
+		<attribute name="modifier" type="string"></attribute>
+		<attribute name="type" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>

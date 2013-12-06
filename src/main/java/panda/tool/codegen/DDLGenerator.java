@@ -217,7 +217,7 @@ public class DDLGenerator extends AbstractCodeGenerator {
 	protected void processModule(Module module) throws Exception {
 		Map<String, Entity> tables = new HashMap<String, Entity>();
 		
-		for (Entity model : module.getModelList()) {
+		for (Entity model : module.getEntityList()) {
 			if (Boolean.TRUE.equals(model.getGenerate())) {
 				tables.put(model.getTable(), model);
 			}

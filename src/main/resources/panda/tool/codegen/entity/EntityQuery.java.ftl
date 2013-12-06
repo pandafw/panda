@@ -1,23 +1,31 @@
 <#include "common.ftl"/>
 <#include "EntityQueryCondition.ftl"/>
-package ${entityQueryPackage};
+package ${package};
 
 <#list imports as i>
 import ${i};
 </#list>
 
-public class ${entityQueryClass} extends ${class_name(model.baseExampleClass)}<${entityQueryClass}> {
+public class ${name} extends ${class_name(entity.baseQueryClass)}<${name}> {
 	/**
 	 * Constructor
 	 */
-	public ${entityQueryClass}() {
+	public ${name}() {
 		super();
+	}
+
+	/**
+	 * Constructor
+	 * @param query the query to set
+	 */
+	public ${name}(Query query) {
+		super(query);
 	}
 
 	//----------------------------------------------------------------------
 	// field conditions
 	//----------------------------------------------------------------------
-<#list model.columnList as p>
+<#list entity.columnList as p>
 	<@condition p=p/>
 </#list>
 }
