@@ -301,6 +301,22 @@ public class Strings {
 	}
 
 	/**
+	 * @param str the string to trim
+	 * @return upperCase(trimToNull(str));
+	 */
+	public static String trimToUpperNull(final String str) {
+		return upperCase(trimToNull(str));
+	}
+
+	/**
+	 * @param str the string to trim
+	 * @return lowerrCase(trimToNull(str));
+	 */
+	public static String trimToLowerNull(final String str) {
+		return lowerCase(trimToNull(str));
+	}
+
+	/**
 	 * <p>
 	 * Removes control characters (char &lt;= 32) from both ends of this String returning an empty
 	 * String ("") if the String is empty ("") after the trim or if it is {@code null}.
@@ -322,6 +338,22 @@ public class Strings {
 	 */
 	public static String trimToEmpty(final String str) {
 		return str == null ? EMPTY : str.trim();
+	}
+
+	/**
+	 * @param str the string to trim
+	 * @return upperCase(trimToEmpty(str));
+	 */
+	public static String trimToUpperEmpty(final String str) {
+		return upperCase(trimToEmpty(str));
+	}
+
+	/**
+	 * @param str the string to trim
+	 * @return lowerrCase(trimToEmpty(str));
+	 */
+	public static String trimToLowerEmpty(final String str) {
+		return lowerCase(trimToEmpty(str));
 	}
 
 	// Stripping
@@ -389,6 +421,22 @@ public class Strings {
 	}
 
 	/**
+	 * @param str the string to strip
+	 * @return upperCase(stripToNull(str));
+	 */
+	public static String stripToUpperNull(final String str) {
+		return upperCase(stripToNull(str));
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @return lowerrCase(stripToNull(str));
+	 */
+	public static String stripToLowerNull(final String str) {
+		return lowerCase(stripToNull(str));
+	}
+
+	/**
 	 * <p>
 	 * Strips whitespace from the start and end of a String returning an empty String if
 	 * {@code null} input.
@@ -414,6 +462,22 @@ public class Strings {
 	 */
 	public static String stripToEmpty(final CharSequence str) {
 		return str == null ? EMPTY : strip(str, null);
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @return upperCase(stripToEmpty(str));
+	 */
+	public static String stripToUpperEmpty(final String str) {
+		return upperCase(stripToEmpty(str));
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @return lowerrCase(stripToEmpty(str));
+	 */
+	public static String stripToLowerEmpty(final String str) {
+		return lowerCase(stripToEmpty(str));
 	}
 
 	/**
