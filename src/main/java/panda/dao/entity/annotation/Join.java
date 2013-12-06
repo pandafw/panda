@@ -1,37 +1,33 @@
 package panda.dao.entity.annotation;
 
-import java.lang.annotation.ElementType;
-
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A one to many mapping:
- * <h4 style=color:red>Can be Many:</h4>
- * <p>
- * <blockquote>
- * '@Many' declared field may be a collection or array.
- * Example: 
+ * A JOIN mapping:
  * <pre>
- * &#064;Many(target = Pet.class, fields = { &quot;id&quot; })
- * private List<Pet> pets;
+ *   select * from [this] 
+ *     [LEFT OUTER] JOIN [target] ON [keys] = [refs]  
  * </pre>
- * 
- * </blockquote>
- * 
  * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.METHOD })
+@Target(ElementType.TYPE)
 @Documented
-public @interface Many {
+public @interface Join {
 
 	/**
-	 * related fields of this class
+	 * join name
 	 */
-	String[] fields();
+	String name();
+
+	/**
+	 * join type: default is 'LEFT OUTER'
+	 */
+	String type() default "";
 
 	/**
 	 * target class
@@ -39,9 +35,14 @@ public @interface Many {
 	Class<?> target();
 
 	/**
+	 * query key fields of this entity
+	 */
+	String[] keys();
+
+	/**
 	 * the related keys of the target class.
 	 * if not supplied, the primary keys of the target class will be used.
 	 */
-	String[] keys() default {};
+	String[] refs() default {};
 
 }

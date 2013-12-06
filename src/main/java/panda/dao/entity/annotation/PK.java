@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.lang.Strings;
-
 /**
  * Declare primary key。
  * <p>
@@ -43,5 +41,5 @@ public @interface PK {
 	/**
 	 * key name
 	 */
-	String value() default Strings.EMPTY;
+	String value() default "";
 }

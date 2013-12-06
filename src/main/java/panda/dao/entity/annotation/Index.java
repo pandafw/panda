@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.lang.Strings;
-
 /**
  * @author yf.frank.wang@gmail.com
  */
@@ -15,7 +13,7 @@ import panda.lang.Strings;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Documented
 public @interface Index {
-	String name() default Strings.EMPTY;
+	String name() default "";
 
 	String[] fields() default {};
 

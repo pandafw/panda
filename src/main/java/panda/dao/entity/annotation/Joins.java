@@ -6,22 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * @author yf.frank.wang@gmail.com
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Documented
-public @interface FK {
-	String name() default "";
-
-	/**
-	 * target class
-	 */
-	Class<?> target();
-	
-	/**
-	 * fields
-	 */
-	String[] fields() default {};
+public @interface Joins {
+	Join[] value();
 }

@@ -7,27 +7,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * A JOIN Column mapping:
  * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.METHOD })
 @Documented
-public @interface One {
+public @interface JoinColumn {
+	/**
+	 * join name
+	 */
+	String name();
 
 	/**
-	 * related fields of this entity
+	 * target field
 	 */
-	String[] fields();
-
-	/**
-	 * target class
-	 */
-	Class<?> target();
-
-	/**
-	 * the related keys of the target class.
-	 * if not supplied, the primary keys of the target class will be used.
-	 */
-	String[] keys() default {};
-
+	String field();
 }

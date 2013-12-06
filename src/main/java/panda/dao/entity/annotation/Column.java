@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.lang.Strings;
-
 /**
  * 声明一个 Java 字段是否有对应的数据库字段
  * <p>
@@ -32,13 +30,13 @@ public @interface Column {
 	/**
 	 * column name
 	 */
-	String value() default Strings.EMPTY;
+	String value() default "";
 
 	/**
 	 * jdbc type
 	 * @see panda.dao.sql.JdbcTypes
 	 */
-	String type() default Strings.EMPTY;
+	String type() default "";
 
 	int size() default 0;
 
@@ -51,10 +49,10 @@ public @interface Column {
 	/**
 	 * real database column type
 	 */
-	String dbType() default Strings.EMPTY;
+	String dbType() default "";
 	
 	/**
 	 * database default value
 	 */
-	String defaults() default Strings.EMPTY;
+	String defaults() default "";
 }
