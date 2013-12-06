@@ -1,0 +1,19 @@
+@page { 
+	size: 210mm 297mm;
+	margin: 10mm; 
+}
+@page { 
+	@top-center { content: element(header) }
+	@bottom-center { content: element(footer) }
+}
+@media print {
+	#page_header {
+		display: block;
+		position: running(header);
+	}
+	#page_footer {
+		display: block;
+		position: running(footer);
+		text-align: center;
+	}
+}
