@@ -1302,7 +1302,7 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 */
-	public static Object newInstance(Class<?> clazz) throws InstantiationException, IllegalAccessException {
+	public static <T> T newInstance(Class<T> clazz) throws InstantiationException, IllegalAccessException {
 		return clazz.newInstance();
 	}
 
@@ -1316,7 +1316,7 @@ public abstract class Classes {
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
 	 */
-	public static Object newInstance(Class<?> clazz, Object argValue, Class<?> argType)
+	public static <T> T newInstance(Class<T> clazz, Object argValue, Class<?> argType)
 		throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		return newInstance(clazz, new Object[] { argValue }, new Class<?>[] { argType });
 	}
@@ -1332,7 +1332,7 @@ public abstract class Classes {
 	 * @throws InvocationTargetException if InvocationTargetException occurs
 	 * @see Constructors#invokeConstructor(Class, Class[], Object[])
 	 */
-	public static Object newInstance(Class<?> clazz, Object[] argValues, Class<?>[] argTypes)
+	public static <T> T newInstance(Class<T> clazz, Object[] argValues, Class<?>[] argTypes)
 		throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		return Constructors.invokeConstructor(clazz, argTypes, argValues);
 	}
@@ -1347,7 +1347,7 @@ public abstract class Classes {
 	 *         if no such <tt>Constructor</tt> can be found.
 	 * @see Constructors#getConstructor(Class, Class[])
 	 */
-	public static Constructor getConstructor(Class<?> type, Class<?>[] argTypes) {
+	public static <T> Constructor<T> getConstructor(Class<T> type, Class<?>[] argTypes) {
 		return Constructors.getConstructor(type, argTypes);
 	}
 	
@@ -1473,21 +1473,23 @@ public abstract class Classes {
 	}
 
 
-    // ----------------------------------------------------------------------
-    /**
-     * <p>Gets the class name minus the package name for an <code>Object</code>.</p>
-     *
-     * @param object  the class to get the short name for, may be null
-     * @param valueIfNull  the value to return if null
-     * @return the class name of the object without the package name, or the null value
-     */
-    public static String getSimpleClassName(Object object, String valueIfNull) {
-        if (object == null) {
-            return valueIfNull;
-        }
-        return getSimpleClassName(object.getClass().getName());
-    }
-    
+	// ----------------------------------------------------------------------
+	/**
+	 * <p>
+	 * Gets the class name minus the package name for an <code>Object</code>.
+	 * </p>
+	 * 
+	 * @param object the class to get the short name for, may be null
+	 * @param valueIfNull the value to return if null
+	 * @return the class name of the object without the package name, or the null value
+	 */
+	public static String getSimpleClassName(Object object, String valueIfNull) {
+		if (object == null) {
+			return valueIfNull;
+		}
+		return getSimpleClassName(object.getClass().getName());
+	}
+
 	/**
 	 * Get the class name without the qualified package name.
 	 * @param className the className to get the short name for

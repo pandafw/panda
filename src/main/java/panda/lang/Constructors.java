@@ -22,11 +22,12 @@ public class Constructors {
 	 *         <tt>Constructor</tt> can be found.
 	 * @see #invokeConstructor
 	 */
-	public static Constructor getConstructor(Class type, Class[] argTypes) {
+	public static <T> Constructor<T> getConstructor(Class<T> type, Class[] argTypes) {
 		if (null == type || null == argTypes) {
 			throw new NullPointerException();
 		}
-		Constructor ctor = null;
+		
+		Constructor<T> ctor = null;
 		try {
 			ctor = type.getConstructor(argTypes);
 		}
@@ -77,7 +78,7 @@ public class Constructors {
 	 * @exception IllegalAccessException if an error occurs
 	 * @exception InvocationTargetException if an error occurs
 	 */
-	public static Object invokeConstructor(Class<?> type, Class<?>[] argTypes, Object[] argValues)
+	public static <T> T invokeConstructor(Class<T> type, Class<?>[] argTypes, Object[] argValues)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		return Constructors.getConstructor(type, argTypes).newInstance(argValues);
 	}
