@@ -84,16 +84,16 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 			if (Boolean.TRUE.equals(action.getGenerate())) {
 				print2("Processing action - " + action.getName());
 				
-				Entity am = null;
-				for (Entity model : module.getEntityList()) {
-					if (model.getName().equals(action.getModel())) {
-						am = model;
+				Entity ae = null;
+				for (Entity entity : module.getEntityList()) {
+					if (entity.getName().equals(action.getEntity())) {
+						ae = entity;
 						break;
 					}
 				}
 				
-				if (am == null) {
-					throw new Exception("Can not find model[" + action.getModel() + "] of action[" + action.getName() + "]");
+				if (ae == null) {
+					throw new Exception("Can not find entity[" + action.getEntity() + "] of action[" + action.getName() + "]");
 				}
 
 				Map<String, Object> wrapper = new HashMap<String, Object>();
@@ -104,10 +104,10 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 				wrapper.put("module", module);
 				wrapper.put("props", module.getProps());
 				wrapper.put("action", action);
-				wrapper.put("model", am);
+				wrapper.put("model", ae);
 				wrapper.put("gen", this);
 
-				String pkg = action.getPackage() + "." + action.getName();
+				String pkg = action.getActionPackage() + "." + action.getName();
 				
 				checkLicense(module, pkg);
 				

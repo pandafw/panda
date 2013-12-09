@@ -80,10 +80,11 @@ public class AjaxResourceGenerator extends AbstractCodeGenerator {
 	
 	@Override
 	protected void prepareModule(Module module) throws Exception {
-		for (Resource resource : module.getResourceList()) {
-			resource.merge(module);
-			resource.prepare();
-		}			
+		//TODO:
+//		for (Resource resource : module.getResourceList()) {
+//			resource.merge(module);
+//			resource.prepare();
+//		}			
 	}
 	
 	@Override
@@ -104,14 +105,14 @@ public class AjaxResourceGenerator extends AbstractCodeGenerator {
 				
 				Entity am = null;
 				for (Entity model : resource.getEntityList()) {
-					if (model.getName().equals(action.getModel())) {
+					if (model.getName().equals(action.getEntity())) {
 						am = model;
 						break;
 					}
 				}
 				
 				if (am == null) {
-					throw new Exception("Can not find model[" + action.getModel() + "] of action[" + action.getName() + "]");
+					throw new Exception("Can not find model[" + action.getEntity() + "] of action[" + action.getName() + "]");
 				}
 
 				Map<String, Object> wrapper = new HashMap<String, Object>();
@@ -125,8 +126,8 @@ public class AjaxResourceGenerator extends AbstractCodeGenerator {
 				wrapper.put("model", am);
 				wrapper.put("locale", locale);
 
-				String pkg = locale + "/" + action.getPackage();
-				checkLicense(module, action.getPackage());
+				String pkg = locale + "/" + action.getActionPackage();
+				checkLicense(module, action.getActionPackage());
 				
 				for (ListUI lui : action.getListUIList()) {
 					if (Boolean.TRUE.equals(lui.getGenerate())) {

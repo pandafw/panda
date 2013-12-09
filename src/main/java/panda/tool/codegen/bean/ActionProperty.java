@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name=&quot;setterCode&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;getterCode&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;initValue&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;modifier&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;type&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -56,6 +57,8 @@ public class ActionProperty implements Comparable<ActionProperty> {
 	@XmlAttribute
 	private String initValue;
 	@XmlAttribute
+	private String modifier = "protected";
+	@XmlAttribute
 	private String type;
 	@XmlAttribute
 	private String label;
@@ -80,6 +83,7 @@ public class ActionProperty implements Comparable<ActionProperty> {
 		this.setterCode = property.setterCode;
 		this.getterCode = property.getterCode;
 		this.initValue = property.initValue;
+		this.modifier = property.modifier;
 		this.type = property.type;
 		this.label = property.label;
 		this.name = property.name;
@@ -117,6 +121,9 @@ public class ActionProperty implements Comparable<ActionProperty> {
 		}
 		if (src.initValue != null) {
 			me.initValue = src.initValue;
+		}
+		if (src.modifier != null) {
+			me.modifier = src.modifier;
 		}
 		if (src.type != null) {
 			me.type = src.type;
@@ -256,6 +263,24 @@ public class ActionProperty implements Comparable<ActionProperty> {
 	 */
 	public void setInitValue(String value) {
 		this.initValue = value;
+	}
+	
+	/**
+	 * Gets the value of the type property.
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getModifier() {
+		return modifier;
+	}
+
+	/**
+	 * Sets the value of the type property.
+	 * 
+	 * @param value allowed object is {@link String }
+	 */
+	public void setModifier(String value) {
+		this.modifier = value;
 	}
 
 	/**

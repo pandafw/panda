@@ -4,18 +4,16 @@
 		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
 
 <validators>
-	<#list model.primaryKeyList as p>
+	<#list entity.primaryKeyList as p>
 	<field name="${actionDataFieldName}.${p.name}">
 		<field-validator type="required<#if p.simpleJavaType == 'String'>string</#if>">
 			<message key="validation-required<#if p.simpleJavaType == 'String'>string</#if>"/>
 		</field-validator>
+		<#if p.simpleJavaType != "String">
 		<field-validator type="conversion">
 			<message key="validation-conversion-${p.simpleJavaType?html}"/>
 		</field-validator>
+		</#if>
 	</field>
 	</#list>
-
-<#--
-	<#include "model-validation.xml.ftl"/>
--->
 </validators>

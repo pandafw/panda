@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 
 import panda.io.Streams;
-import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
@@ -236,10 +235,8 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		}
 		
 		for (Action action : resource.getActionList()) {
-			if (Boolean.TRUE.equals(action.getGenerate())) {
-				print2("Processing text of action - " + action.getName() + locale);
-				processLocaleAction(action, locale);
-			}
+			print2("Processing text of action - " + action.getName() + locale);
+			processLocaleAction(action, locale);
 		}
 	}
 
@@ -252,10 +249,10 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		PrintWriter pwmbp = null;
 
 		try {
-			File fmdir = new File(out, Classes.getPackageName(entity.getName()).replace('.', '/'));
+			File fmdir = new File(out, entity.getPackage().replace('.', '/'));
 			fmdir.mkdirs();
 			
-			File fmbp = new File(fmdir.getPath(), Classes.getSimpleClassName(entity.getName()) + locale + PRO_EXT);
+			File fmbp = new File(fmdir.getPath(), entity.getSimpleName() + locale + PRO_EXT);
 			print3("Generating - " + fmbp.getPath());
 
 			pwmbp = new PrintWriter(fmbp, CHARSET);
@@ -286,10 +283,10 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 	protected void processLocaleAction(Action action, String locale) throws Exception {
 		PrintWriter pwabp = null;
 		try {
-			File foutdir = new File(out, Classes.getPackageName(action.getFullActionClass()).replace('.', '/'));
+			File foutdir = new File(out, action.getActionPackage().replace('.', '/'));
 			foutdir.mkdirs();
 
-			File fabp = new File(foutdir.getPath(), Classes.getSimpleClassName(action.getFullActionClass()) + locale + PRO_EXT);
+			File fabp = new File(foutdir.getPath(), action.getSimpleActionClass() + locale + PRO_EXT);
 			print3("Generating - " + fabp.getPath());
 
 			pwabp = new PrintWriter(fabp, CHARSET);

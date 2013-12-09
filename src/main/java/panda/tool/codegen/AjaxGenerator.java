@@ -55,14 +55,14 @@ public class AjaxGenerator extends AbstractCodeGenerator {
 				
 				Entity am = null;
 				for (Entity model : module.getEntityList()) {
-					if (model.getName().equals(action.getModel())) {
+					if (model.getName().equals(action.getEntity())) {
 						am = model;
 						break;
 					}
 				}
 				
 				if (am == null) {
-					throw new Exception("Can not find model[" + action.getModel() + "] of action[" + action.getName() + "]");
+					throw new Exception("Can not find model[" + action.getEntity() + "] of action[" + action.getName() + "]");
 				}
 
 				Map<String, Object> wrapper = new HashMap<String, Object>();
@@ -75,7 +75,7 @@ public class AjaxGenerator extends AbstractCodeGenerator {
 				wrapper.put("action", action);
 				wrapper.put("model", am);
 
-				String pkg = action.getPackage();
+				String pkg = action.getActionPackage();
 				checkLicense(module, pkg);
 				
 				for (ListUI lui : action.getListUIList()) {

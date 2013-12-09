@@ -33,7 +33,6 @@
 		<attribute name="trimString" type="string"></attribute>
 		<attribute name="baseBeanClass" type="string"></attribute>
 		<attribute name="baseQueryClass" type="string"></attribute>
-		<attribute name="package" type="string"></attribute>
 		<attribute name="generate" type="boolean" default="true"></attribute>
 		<attribute name="comment" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
@@ -55,13 +54,12 @@
 		<attribute name="trimString" type="string"></attribute>
 		<attribute name="dataListFieldName" type="string"></attribute>
 		<attribute name="dataFieldName" type="string"></attribute>
-		<attribute name="entity" type="string"></attribute>
-		<attribute name="package" type="string"></attribute>
 		<attribute name="actionBaseClass" type="string"></attribute>
 		<attribute name="actionClass" type="string"></attribute>
 		<attribute name="extend" type="string"></attribute>
 		<attribute name="title" type="string"></attribute>
-		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="entity" type="string"></attribute>
+		<attribute name="name" type="string"></attribute>
 	</complexType>
 
 	<complexType name="EntityProperty">
@@ -109,6 +107,7 @@
 		<attribute name="setterCode" type="string"></attribute>
 		<attribute name="getterCode" type="string"></attribute>
 		<attribute name="initValue" type="string"></attribute>
+		<attribute name="modifier" type="string"></attribute>
 		<attribute name="type" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>

@@ -54,7 +54,7 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 		<#if f.editTag.name?ends_with(".file")>
 				value=""
 		</#if>

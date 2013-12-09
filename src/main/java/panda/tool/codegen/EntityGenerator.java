@@ -146,7 +146,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 		
 		imports.add(Query.class.getName());
-		imports.add(entity.getBaseQueryClass());
+		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
+			imports.add(entity.getBaseQueryClass());
+		}
 
 		setImports(wrapper, imports);
 		
@@ -227,15 +229,15 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		checkLicense(module, pkg);
 		
 		setJavaEntityBeanImportList(wrapper, entity);
-		processTpl(entity.getPackage(), entity.getName() + ".java", 
+		processTpl(entity.getPackage(), entity.getSimpleName() + ".java", 
 			wrapper, tplEntityBean, true);
 
 		setJavaEntityQueryImportList(wrapper, entity);
-		processTpl(entity.getPackage() + ".query", entity.getName() + "Query.java", 
+		processTpl(entity.getPackage() + ".query", entity.getSimpleName() + "Query.java", 
 			wrapper, tplEntityQuery);
 
 		if (!entity.getPropertyList().isEmpty()) {
-			processTpl(entity.getPackage(), entity.getName() + "-validation.xml", 
+			processTpl(entity.getPackage(), entity.getSimpleName() + "-validation.xml", 
 				wrapper, tplEntityValidate);
 		}
 	}

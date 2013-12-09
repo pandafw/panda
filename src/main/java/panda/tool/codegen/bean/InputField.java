@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;modelField&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;actionField&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;order&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -63,7 +63,7 @@ public class InputField implements Comparable<InputField> {
 	@XmlAttribute
 	private String label;
 	@XmlAttribute
-	private Boolean modelField = true;
+	private Boolean actionField = false;
 	@XmlAttribute
 	private Boolean required;
 	@XmlAttribute
@@ -89,7 +89,7 @@ public class InputField implements Comparable<InputField> {
 		this.display = ifd.display;
 		this.tooltip = ifd.tooltip;
 		this.label = ifd.label;
-		this.modelField = ifd.modelField;
+		this.actionField = ifd.actionField;
 		this.required = ifd.required;
 		this.order = ifd.order;
 		this.name = ifd.name;
@@ -136,8 +136,8 @@ public class InputField implements Comparable<InputField> {
 		if (src.label != null) {
 			me.label = src.label;
 		}
-		if (src.modelField != null) {
-			me.modelField = src.modelField;
+		if (src.actionField != null) {
+			me.actionField = src.actionField;
 		}
 		if (src.required != null) {
 			me.required = src.required;
@@ -287,17 +287,17 @@ public class InputField implements Comparable<InputField> {
 	}
 
 	/**
-	 * @return the modelField
+	 * @return the actionField
 	 */
-	public Boolean getModelField() {
-		return modelField;
+	public Boolean getActionField() {
+		return actionField;
 	}
 
 	/**
-	 * @param modelField the modelField to set
+	 * @param actionField the actionField to set
 	 */
-	public void setModelField(Boolean modelField) {
-		this.modelField = modelField;
+	public void setActionField(Boolean modelField) {
+		this.actionField = modelField;
 	}
 
 	/**

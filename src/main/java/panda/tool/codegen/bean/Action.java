@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Classes;
 import panda.lang.Strings;
 
 /**
@@ -30,8 +31,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;dataListFieldName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;dataFieldName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;model&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;package&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;entity&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;actionBaseClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;actionClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -62,13 +62,11 @@ public class Action {
 	@XmlAttribute
 	private String dataFieldName;
 	@XmlAttribute
-	private String model;
+	private String entity;
 	@XmlAttribute
 	private String actionBaseClass;
 	@XmlAttribute
 	private String actionClass;
-	@XmlAttribute(name = "package")
-	private String _package;
 	@XmlAttribute
 	private String extend;
 	@XmlAttribute
@@ -92,8 +90,7 @@ public class Action {
 		this.trimString = action.trimString;
 		this.dataListFieldName = action.dataListFieldName;
 		this.dataFieldName = action.dataFieldName;
-		this.model = action.model;
-		this._package = action._package;
+		this.entity = action.entity;
 		this.actionBaseClass = action.actionBaseClass;
 		this.actionClass = action.actionClass;
 		this.extend = action.extend;
@@ -214,11 +211,8 @@ public class Action {
 		if (src.dataFieldName != null) {
 			me.dataFieldName = src.dataFieldName;
 		}
-		if (src.model != null) {
-			me.model = src.model;
-		}
-		if (src._package != null) {
-			me._package = src._package;
+		if (src.entity != null) {
+			me.entity = src.entity;
 		}
 		if (src.actionBaseClass != null) {
 			me.actionBaseClass = src.actionBaseClass;
@@ -375,17 +369,17 @@ public class Action {
 	}
 
 	/**
-	 * @return the model
+	 * @return the entity
 	 */
-	public String getModel() {
-		return model;
+	public String getEntity() {
+		return entity;
 	}
 
 	/**
-	 * @param model the model to set
+	 * @param entity the entity to set
 	 */
-	public void setModel(String model) {
-		this.model = model;
+	public void setEntity(String model) {
+		this.entity = model;
 	}
 
 	/**
@@ -403,19 +397,9 @@ public class Action {
 	}
 
 	/**
-	 * @return the fullActionClass
-	 */
-	public String getFullActionClass() {
-		return (Strings.isEmpty(_package) ? "" : _package + '.') + name + '.' + actionClass;
-	}
-
-	/**
 	 * @return the actionClass
 	 */
 	public String getActionClass() {
-		if (actionClass == null) {
-			return Strings.capitalize(name) + "Action";
-		}
 		return actionClass;
 	}
 
@@ -427,17 +411,17 @@ public class Action {
 	}
 
 	/**
-	 * @return the _package
+	 * @return the simple name of actionClass
 	 */
-	public String getPackage() {
-		return _package;
+	public String getSimpleActionClass() {
+		return Classes.getSimpleClassName(actionClass);
 	}
 
 	/**
-	 * @param _package the _package to set
+	 * @return the package of actionClass
 	 */
-	public void setPackage(String _package) {
-		this._package = _package;
+	public String getActionPackage() {
+		return Classes.getPackageName(actionClass);
 	}
 
 	/**

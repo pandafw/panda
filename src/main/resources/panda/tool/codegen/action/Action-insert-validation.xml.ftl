@@ -7,5 +7,5 @@
 	<#assign requiredPK = false/>
 	<#include "field-validation.xml.ftl"/>
 
-	<#include "model-validation.xml.ftl"/>
+	<#include "data-validation.xml.ftl"/>
 </validators>

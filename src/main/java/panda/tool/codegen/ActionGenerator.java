@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import panda.lang.Classes;
+import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
+import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListUI;
-import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -63,21 +63,25 @@ public class ActionGenerator extends AbstractCodeGenerator {
 	protected void processModule(Module module) throws Exception {
 		for (Action action : module.getActionList()) {
 			if (Boolean.TRUE.equals(action.getGenerate())) {
-				print2("Processing action - " + action.getName());
+				print2("Processing action - " + action.getName() + " / " + action.getEntity());
 				
-				Entity am = null;
-				for (Entity model : module.getEntityList()) {
-					if (model.getName().equals(action.getModel())) {
-						am = model;
+				if (Strings.isEmpty(action.getEntity())) {
+					throw new IllegalArgumentException("Missing entity: " + action.getName());
+				}
+
+				Entity ae = null;
+				for (Entity entity : module.getEntityList()) {
+					if (action.getEntity().equals(entity.getName())) {
+						ae = entity;
 						break;
 					}
 				}
 				
-				if (am == null) {
-					throw new Exception("Can not find model[" + action.getModel() + "] of action[" + action.getName() + "]");
+				if (ae == null) {
+					throw new IllegalArgumentException("Can not find entity[" + action.getEntity() + "] of action[" + action.getName() + "]");
 				}
 	
-				processJavaAction(module, action, am);
+				processJavaAction(module, action, ae);
 				
 				cntAction++;
 			}
@@ -100,11 +104,11 @@ public class ActionGenerator extends AbstractCodeGenerator {
 	}
 
 	private void processJavaAction(Module module, Action action, Entity entity) throws Exception {
-		String pkg = Classes.getPackageName(action.getFullActionClass());
+		String pkg = action.getActionPackage();
 
 		checkLicense(module, pkg);
 		
-		String cls = Classes.getSimpleClassName(action.getFullActionClass());
+		String cls = action.getSimpleActionClass();
 
 		Map<String, Object> wrapper = getWrapper(module, action, entity);
 
@@ -170,7 +174,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		}
 	}
 
-	private Map<String, Object> getWrapper(Module module, Action action, Entity model) {
+	private Map<String, Object> getWrapper(Module module, Action action, Entity entity) {
 		Map<String, Object> wrapper = new HashMap<String, Object>();
 		
 		if ("true".equals(module.getProps().getProperty("source.datetime"))) {
@@ -179,7 +183,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		wrapper.put("module", module);
 		wrapper.put("props", module.getProps());
 		wrapper.put("action", action);
-		wrapper.put("model", model);
+		wrapper.put("entity", entity);
 		wrapper.put("gen", this);
 		
 		return wrapper;

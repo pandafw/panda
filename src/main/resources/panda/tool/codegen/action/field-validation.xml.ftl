@@ -9,7 +9,7 @@
 		</#if>
 	</#list>
 <#else>
-	<#list model.propertyList as mp>
+	<#list entity.propertyList as mp>
 		<#if mp.name == f.name>
 			<#assign p = mp/>
 			<#if requiredPK && p.primaryKey!false>
@@ -23,8 +23,8 @@
 	<#assign required = true/>
 </#if>
 <#if required || f.validatorList?has_content>
-	<#if p == "">${action.error("Can not find property [" + f.name + "] of model [" + model.name + "]")}</#if>
-	<field name="<#if f.modelField>${actionDataFieldName}.</#if>${f.name}">
+	<#if p == "">${action.error("Can not find property [" + f.name + "] of entity [" + entity.name + "]")}</#if>
+	<field name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}">
 </#if>
 <#if required>
 		<field-validator type="required<#if p.simpleJavaType == 'String'>string<#elseif p.simpleJavaType?starts_with('Upload')>file</#if>">

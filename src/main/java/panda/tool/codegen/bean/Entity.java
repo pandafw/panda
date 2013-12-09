@@ -71,8 +71,6 @@ public class Entity {
 	private String baseBeanClass;
 	@XmlAttribute
 	private String baseQueryClass;
-	@XmlAttribute(name = "package")
-	private String _package;
 	@XmlAttribute
 	private String comment;
 	@XmlAttribute(required = true)
@@ -105,7 +103,6 @@ public class Entity {
 		this.trimString = model.trimString;
 		this.baseBeanClass = model.baseBeanClass;
 		this.baseQueryClass = model.baseQueryClass;
-		this._package = model._package;
 		this.generate = model.generate;
 		this.comment = model.comment;
 		this.name = model.name;
@@ -320,17 +317,17 @@ public class Entity {
 	}
 
 	/**
-	 * @return the _package
+	 * @return the package of entity
 	 */
 	public String getPackage() {
-		return _package;
+		return Classes.getPackageName(name);
 	}
 
 	/**
-	 * @param _package the _package to set
+	 * @return the package of entity
 	 */
-	public void setPackage(String _package) {
-		this._package = _package;
+	public String getSimpleName() {
+		return Classes.getSimpleClassName(name);
 	}
 
 	/**
@@ -440,7 +437,7 @@ public class Entity {
 		sb.append("target=");
 		String pkg = Classes.getPackageName(target);
 		String cls = Classes.getSimpleClassName(target);
-		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, _package)) {
+		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, getPackage())) {
 			sb.append(pkg).append('.');
 		}
 		sb.append(cls).append(".class");
@@ -497,7 +494,7 @@ public class Entity {
 		sb.append("target=");
 		String pkg = Classes.getPackageName(target);
 		String cls = Classes.getSimpleClassName(target);
-		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, _package)) {
+		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, getPackage())) {
 			sb.append(pkg).append('.');
 		}
 		sb.append(cls).append(".class, ");
