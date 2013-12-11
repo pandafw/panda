@@ -372,6 +372,7 @@ public class SimpleSqlExecutor extends SqlExecutor {
 	 * @param sqlParams sql parameter list
 	 * @throws SQLException if an sql error occurs
 	 */
+	@SuppressWarnings("unchecked")
 	protected void setStatementParams(PreparedStatement ps, Object parameter,
 			List<SqlParameter> sqlParams) throws SQLException {
 		if (ps instanceof CallableStatement) {

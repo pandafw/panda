@@ -198,6 +198,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 	 * @param params sql parameter list
 	 * @throws SQLException if an sql error occurs
 	 */
+	@SuppressWarnings("unchecked")
 	protected void setStatementParams(PreparedStatement ps, List<?> params) throws SQLException {
 		if (params == null) {
 			return;
@@ -211,7 +212,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 			else {
 				TypeAdapter ta = typeAdapters.getTypeAdapter(p.getClass());
 				if (ta == null) {
-					
+					throw new IllegalArgumentException("Missing TypeAdapter for " + p.getClass());
 				}
 				ta.setParameter(ps, i + 1, p);
 			}

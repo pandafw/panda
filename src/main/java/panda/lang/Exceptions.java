@@ -45,7 +45,6 @@ public abstract class Exceptions {
 	 * @param args 参数
 	 * @return 异常对象
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T extends Throwable> T makeThrow(Class<T> type, String format, Object... args) {
 		try {
 			return (T)Classes.newInstance(type, String.format(format, args), String.class);

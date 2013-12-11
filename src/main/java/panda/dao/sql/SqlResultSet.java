@@ -194,6 +194,7 @@ public class SqlResultSet<T> {
 	 * @param resultObject The result data object.
 	 * @throws SQLException If anSQL error occurs.
 	 */
+	@SuppressWarnings("unchecked")
 	public void updateResult(T resultObject) throws SQLException {
 		for (ResultColumn rc : resultColumns) {
 			Object value = beanHandler.getBeanValue(resultObject, rc.propertyName);
