@@ -274,6 +274,14 @@ public abstract class SqlExpert {
 		return sql;
 	}
 	
+	protected EntityField getEntityField(Entity<?> entity, String field, String name) {
+		EntityField ef = entity.getField(field);
+		if (ef == null) {
+			throw new IllegalArgumentException("invalid " + name + " field '" + field + "' of entity " + entity.getType());
+		}
+		return ef;
+	}
+	
 	protected void where(Sql sql, Entity<?> entity, Query query) {
 		if (query == null || !query.hasConditions()) {
 			return;
@@ -283,34 +291,18 @@ public abstract class SqlExpert {
 		for (Expression exp : query.getExpressions()) {
 			if (exp instanceof Expression.ValueCompare) {
 				Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-				EntityField ef = entity.getField(evc.getField());
-				if (ef == null) {
-					throw new IllegalArgumentException("invalid where field '" + evc.getField() + "' of entity " + entity.getType());
-				}
-
+				EntityField ef = getEntityField(entity, evc.getField(), "where");
 				whereValueCompare(sql, ef.getColumn(), evc);
 			}
 			else if (exp instanceof Expression.FieldCompare) {
 				Expression.FieldCompare efc = (Expression.FieldCompare)exp;
-				EntityField ef = entity.getField(efc.getField());
-				if (ef == null) {
-					throw new IllegalArgumentException("invalid where field '" + efc.getField() + "' of entity " + entity.getType());
-				}
-
-				EntityField ef2 = entity.getField(efc.getValue());
-				if (ef2 == null) {
-					throw new IllegalArgumentException("invalid compare field '" + efc.getValue() + "' of entity " + entity.getType());
-				}
-
+				EntityField ef = getEntityField(entity, efc.getField(), "where");
+				EntityField ef2 = getEntityField(entity, efc.getValue(), "compare");
 				sql.append(' ').append(ef.getColumn()).append(' ').append(efc.getOperator()).append(ef2.getColumn());
 			}
 			else if (exp instanceof Expression.Simple) {
 				Expression.Simple es = (Expression.Simple)exp;
-				EntityField ef = entity.getField(es.getField());
-				if (ef == null) {
-					throw new IllegalArgumentException("invalid where field '" + es.getField() + "' of entity " + entity.getType());
-				}
-
+				EntityField ef = getEntityField(entity, es.getField(), "simple");
 				sql.append(' ').append(ef.getColumn()).append(' ').append(es.getOperator());
 			}
 			else {
@@ -393,10 +385,7 @@ public abstract class SqlExpert {
 		
 		sql.append(" ORDER BY");
 		for (Entry<String, Order> en : query.getOrders().entrySet()) {
-			EntityField ef = entity.getField(en.getKey());
-			if (ef == null) {
-				throw new IllegalArgumentException("invalid order field '" + en.getKey() + "' of entity " + entity.getType());
-			}
+			EntityField ef = getEntityField(entity, en.getKey(), "order");
 			sql.append(' ').append(ef.getColumn()).append(' ').append(en.getValue()).append(',');
 		}
 		sql.setCharAt(sql.length() - 1, ' ');
