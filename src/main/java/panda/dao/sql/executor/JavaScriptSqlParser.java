@@ -291,7 +291,7 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 		}
 
 		//TODO: 
-		TypeAdapters typeAdapters = TypeAdapters.me();
+		TypeAdapters typeAdapters = TypeAdapters.i();
 		Object paramValue = bean.get(name);
 		if (paramValue != null) {
 			TypeAdapter typeAdapter = typeAdapters.getTypeAdapter(paramValue.getClass(), type);

@@ -43,7 +43,7 @@ public abstract class SqlManager {
 	/**
 	 * typeAdapters
 	 */
-	protected TypeAdapters typeAdapters = TypeAdapters.me();
+	protected TypeAdapters typeAdapters = TypeAdapters.i();
 	
 	/**
 	 * @return the beans

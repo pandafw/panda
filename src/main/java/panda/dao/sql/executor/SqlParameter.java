@@ -62,7 +62,7 @@ public class SqlParameter {
 	 * @param mode mode
 	 */
 	public SqlParameter(String name, Object value, String jdbcType, Integer scale, String mode) {
-		this(name, value, jdbcType, scale, mode, TypeAdapters.me());
+		this(name, value, jdbcType, scale, mode, TypeAdapters.i());
 	}
 
 	/**

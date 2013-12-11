@@ -21,27 +21,27 @@ import panda.lang.collection.MultiKey;
  * @author yf.frank.wang@gmail.com
  */
 public class TypeAdapters {
-	private static TypeAdapters me = new TypeAdapters();
+	private static TypeAdapters i = new TypeAdapters();
 	
 	/**
 	 * @return instance
 	 */
-	public static TypeAdapters me() {
-		return me;
+	public static TypeAdapters i() {
+		return i;
 	}
 
 	/**
 	 * @return instance
 	 */
-	public static TypeAdapters getMe() {
-		return me;
+	public static TypeAdapters getInstance() {
+		return i;
 	}
 
 	/**
 	 * @param instance the instance to set
 	 */
-	public static void setMe(TypeAdapters instance) {
-		TypeAdapters.me = instance;
+	public static void setInstance(TypeAdapters instance) {
+		TypeAdapters.i = instance;
 	}
 
 	//------------------------------------------------------------------
