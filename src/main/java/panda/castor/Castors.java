@@ -70,7 +70,7 @@ public class Castors {
 		
 		Asserts.notNull(target);
 		
-		Castor<Object, T> c = (Castor<Object, T>)me().getCastor(value == null ? Object.class : target.getClass());
+		Castor<Object, T> c = (Castor<Object, T>)me().getCastor(value.getClass(), target.getClass());
 		return c.castTo(value, target, new CastContext());
 	}
 
