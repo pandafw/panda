@@ -644,7 +644,7 @@ public class Query {
 	 * @return this
 	 */
 	public Query greaterThan(String field, Object value) {
-		return addCompareValueExpression(field, Operator.GREAT_THAN, value);
+		return addCompareValueExpression(field, Operator.GREATER_THAN, value);
 	}
 
 	/**
@@ -654,7 +654,7 @@ public class Query {
 	 * @return this
 	 */
 	public Query greaterThanOrEqualTo(String field, Object value) {
-		return addCompareValueExpression(field, Operator.GREAT_EQUAL, value);
+		return addCompareValueExpression(field, Operator.GREATER_EQUAL, value);
 	}
 
 	/**
@@ -784,7 +784,7 @@ public class Query {
 	 * @return this
 	 */
 	public Query greaterThanField(String field, String compareField) {
-		return addCompareFieldExpression(field, Operator.GREAT_THAN, compareField);
+		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
 	/**
@@ -794,7 +794,7 @@ public class Query {
 	 * @return this
 	 */
 	public Query greaterThanOrEqualToField(String field, String compareField) {
-		return addCompareFieldExpression(field, Operator.GREAT_EQUAL, compareField);
+		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
 	/**

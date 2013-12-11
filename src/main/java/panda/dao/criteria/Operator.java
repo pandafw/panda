@@ -66,17 +66,17 @@ public enum Operator {
 		}
 	},
 	/**
-	 * GREAT_THAN = ">";
+	 * GREATER_THAN = ">";
 	 */
-	GREAT_THAN {
+	GREATER_THAN {
 		public String toString() {
 			return ">";
 		}
 	},
 	/**
-	 * GREAT_EQUAL = ">=";
+	 * GREATER_EQUAL = ">=";
 	 */
-	GREAT_EQUAL {
+	GREATER_EQUAL {
 		public String toString() {
 			return ">=";
 		}
