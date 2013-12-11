@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import panda.castor.CastContext;
-import panda.castor.CastException;
 import panda.castor.Castor;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
@@ -61,10 +60,7 @@ public class DateTypeCastor {
 						ex = e;
 					}
 				}
-				throw new CastException(context.toPath() 
-						+ "Failed to convert date: " 
-						+ value.getClass() + " - " + sv
-						, ex);
+				throw castError(value, context, ex);
 			}
 			throw castError(value, context);
 		}

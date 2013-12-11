@@ -5,6 +5,7 @@ import java.util.Map;
 
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Objects;
+import panda.lang.Strings;
 import panda.lang.Types;
 import panda.lang.builder.ToStringBuilder;
 import panda.lang.collection.KeyValue;
@@ -182,13 +183,21 @@ public class Castor<S, T> {
 	protected CastException cycleError(CastContext context, String name, Object value) {
 		throw new CastException("Cycle object detected: " + context.toPath(name) + " : " + Objects.identityToString(value));
 	}
+
+	protected String castErrorMsg(Object value, CastContext context) {
+		return context.toPath() + ": Failed to cast " 
+				+ (value == null ? "null" : value.getClass()) 
+				+ (value instanceof CharSequence ? ("[" + Strings.left((CharSequence)value, 20) + "]") : "")
+				+ " -> "
+				+ Types.getRawType(toType);
+	}
+	
+	protected CastException castError(Object value, CastContext context, Throwable e) {
+		return new CastException(castErrorMsg(value, context), e);
+	}
 	
 	protected CastException castError(Object value, CastContext context) {
-		return new CastException(context.toPath() 
-				+ ": Failed to cast " 
-				+ (value == null ? "null" : value.getClass())
-				+ " -> "
-				+ Types.getRawType(toType));
+		return new CastException(castErrorMsg(value, context));
 	}
 	
 	@SuppressWarnings("unchecked")

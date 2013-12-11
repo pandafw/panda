@@ -79,7 +79,7 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 				return Streams.toString((Reader)value);
 			}
 			if (value instanceof Clob) {
-				return ((Clob)value).getSubString(0, (int)((Clob)value).length());
+				return ((Clob)value).getSubString(1, (int)((Clob)value).length());
 			}
 			return value.toString();
 		}
