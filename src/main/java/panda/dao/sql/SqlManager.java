@@ -12,27 +12,27 @@ import panda.dao.sql.executor.DynamicSqlManager;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class SqlManager {
-	private static SqlManager me = new DynamicSqlManager();
+	private static SqlManager i = new DynamicSqlManager();
 
 	/**
-	 * @return the me
+	 * @return the instance
 	 */
-	public static SqlManager me() {
-		return me;
+	public static SqlManager i() {
+		return i;
 	}
 
 	/**
-	 * @return the me
+	 * @return the instance
 	 */
-	public static SqlManager getMe() {
-		return me;
+	public static SqlManager getInstance() {
+		return i;
 	}
 
 	/**
-	 * @param me the me to set
+	 * @param instance the instance to set
 	 */
-	public static void setMe(SqlManager me) {
-		SqlManager.me = me;
+	public static void setInstance(SqlManager instance) {
+		SqlManager.i = instance;
 	}
 	
 	/**
