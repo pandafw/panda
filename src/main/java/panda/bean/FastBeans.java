@@ -8,6 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.Set;
 
 import panda.bean.handlers.AbstractFastBeanHandler;
 import panda.lang.Arrays;
@@ -17,10 +18,10 @@ import panda.lang.Exceptions;
 import panda.lang.Types;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.servlet.HttpServletSupport;
 
 
 /**
- * 
  * @author yf.frank.wang@gmail.com
  *
  */
@@ -35,6 +36,10 @@ public class FastBeans extends Beans {
 	 */
 	private DynamicClassLoader dynamicClassLoader = new DynamicClassLoader();
 
+	/**
+	 * excludes
+	 */
+	private Set<String> excludes = Arrays.toSet(HttpServletSupport.class.getName());
 	
 	/**
 	 * clear bean handlers
@@ -52,8 +57,13 @@ public class FastBeans extends Beans {
 	 */
 	@Override
 	protected BeanHandler createJavaBeanHandler(Type type) {
+		Class clazz = Types.getRawType(type);
+		if (excludes.contains(clazz.getName())) {
+			return super.createJavaBeanHandler(type);
+		}
+
 		try {
-			return createFastBeanHandler(Types.getRawType(type));
+			return createFastBeanHandler(clazz);
 		}
 		catch (Throwable e) {
 			log.warn("Failed to create FastBeanHandler, use default JavaBeanHandler instead.", e);
@@ -61,6 +71,7 @@ public class FastBeans extends Beans {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private synchronized BeanHandler createFastBeanHandler(Class type) throws Exception {
 		String packageName = "panda.runtime." + type.getPackage().getName();
 		String simpleName = type.getSimpleName() + "BeanHandler";
