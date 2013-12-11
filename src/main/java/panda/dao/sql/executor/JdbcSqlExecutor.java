@@ -109,7 +109,7 @@ public class JdbcSqlExecutor extends SqlExecutor {
 	 */
 	@SuppressWarnings("unchecked")
 	protected BeanHandler getBeanHandler(Class type) {
-		return Beans.me().getBeanHandler(type);
+		return Beans.i().getBeanHandler(type);
 	}
 
 	/**

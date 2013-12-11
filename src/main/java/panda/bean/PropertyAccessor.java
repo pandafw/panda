@@ -17,7 +17,7 @@ public class PropertyAccessor {
 	 */
 	public PropertyAccessor(Object bean) {
 		this.bean = bean;
-		this.beanHandler = Beans.me().getBeanHandler(
+		this.beanHandler = Beans.i().getBeanHandler(
 			bean == null ? null : bean.getClass());
 	}
 

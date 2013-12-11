@@ -75,7 +75,7 @@ public class Castors {
 	}
 
 	// ------------------------------------------------------------------------
-	private Beans beans = Beans.me();
+	private Beans beans = Beans.i();
 	private Map<MultiKey, Castor> castors = new ConcurrentHashMap<MultiKey, Castor>();
 	
 	/**

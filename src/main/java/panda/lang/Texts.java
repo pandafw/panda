@@ -541,7 +541,7 @@ public abstract class Texts {
 			return expression;
 		}
 		
-		BeanHandler bh = Beans.me().getBeanHandler(wrapper.getClass());
+		BeanHandler bh = Beans.i().getBeanHandler(wrapper.getClass());
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i = 0; i < expression.length(); i++) {

@@ -485,7 +485,7 @@ public abstract class ExternalResourceLoader {
 		Map<String, String> properties = null;
 
 		for (Object o : resList) {
-			BeanHandler bh = Beans.me().getBeanHandler(o.getClass());
+			BeanHandler bh = Beans.i().getBeanHandler(o.getClass());
 			
 			String clazz = null;
 			String language = null;

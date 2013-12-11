@@ -27,38 +27,38 @@ public class Beans {
 	/**
 	 * instance
 	 */
-	private static Beans me;
+	private static Beans i;
 
 	static {
 		try {
-			me = (Beans)Classes.newInstance(
+			i = (Beans)Classes.newInstance(
 					Beans.class.getPackage().getName().toString()
 					+ ".FastBeans");
 		}
 		catch (Throwable e) {
-			me = new Beans();
+			i = new Beans();
 		}
 	}
 
 	/**
-	 * @return instance
+	 * @return singleton instance
 	 */
-	public static Beans me() {
-		return me;
+	public static Beans i() {
+		return i;
 	}
 
 	/**
 	 * @return instance
 	 */
-	public static Beans getMe() {
-		return me;
+	public static Beans getInstance() {
+		return i;
 	}
 
 	/**
 	 * @param instance the instance to set
 	 */
-	public static void setMe(Beans instance) {
-		Beans.me = instance;
+	public static void setInstance(Beans instance) {
+		Beans.i = instance;
 	}
 
 	// ------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public class Beans {
 	public static Object getBean(Object bean, String name) {
 		assertBeanAndName(bean, name);
 		
-		BeanHandler bh = me().getBeanHandler(bean.getClass());
+		BeanHandler bh = i().getBeanHandler(bean.getClass());
 
 		return bh.getBeanValue(bean, name);
 	}
@@ -146,7 +146,7 @@ public class Beans {
 	public static boolean setBean(Object bean, String name, Object value) {
 		assertBeanAndName(bean, name);
 		
-		BeanHandler bh = me().getBeanHandler(bean.getClass());
+		BeanHandler bh = i().getBeanHandler(bean.getClass());
 
 		return bh.setBeanValue(bean, name, value);
 	}
@@ -169,7 +169,7 @@ public class Beans {
 	public static Object getProperty(Object bean, String name) {
 		assertBeanAndName(bean, name);
 		
-		BeanHandler bh = me().getBeanHandler(bean.getClass());
+		BeanHandler bh = i().getBeanHandler(bean.getClass());
 
 		return bh.getPropertyValue(bean, name);
 	}
@@ -192,7 +192,7 @@ public class Beans {
 	public static boolean setProperty(Object bean, String name, Object value) {
 		assertBeanAndName(bean, name);
 		
-		BeanHandler bh = me().getBeanHandler(bean.getClass());
+		BeanHandler bh = i().getBeanHandler(bean.getClass());
 
 		return bh.setPropertyValue(bean, name, value);
 	}

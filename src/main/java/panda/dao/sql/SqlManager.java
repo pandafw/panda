@@ -38,7 +38,7 @@ public abstract class SqlManager {
 	/**
 	 * Beans
 	 */
-	protected Beans beans = Beans.me();
+	protected Beans beans = Beans.i();
 
 	/**
 	 * typeAdapters
