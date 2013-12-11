@@ -33,32 +33,32 @@ import panda.lang.collection.MultiKey;
  * @author yf.frank.wang@gmail.com
  */
 public class Castors {
-	private static Castors me = new Castors();
+	private static Castors i = new Castors();
 
 	/**
 	 * @return instance
 	 */
-	public static Castors me() {
-		return me;
+	public static Castors i() {
+		return i;
 	}
 
 	/**
 	 * @return instance
 	 */
-	public static Castors getMe() {
-		return me;
+	public static Castors getInstance() {
+		return i;
 	}
 
 	/**
 	 * @param instance the instance to set
 	 */
-	public static void setMe(Castors instance) {
-		Castors.me = instance;
+	public static void setInstance(Castors instance) {
+		Castors.i = instance;
 	}
 
 	public static <T> T scast(Object value, Type toType) {
 		Asserts.notNull(toType);
-		Castor<Object, T> c = me().getCastor(value == null ? Object.class : value.getClass(), toType);
+		Castor<Object, T> c = i().getCastor(value == null ? Object.class : value.getClass(), toType);
 		return c.cast(value, new CastContext());
 	}
 
@@ -70,7 +70,7 @@ public class Castors {
 		
 		Asserts.notNull(target);
 		
-		Castor<Object, T> c = (Castor<Object, T>)me().getCastor(value.getClass(), target.getClass());
+		Castor<Object, T> c = (Castor<Object, T>)i().getCastor(value.getClass(), target.getClass());
 		return c.castTo(value, target, new CastContext());
 	}
 

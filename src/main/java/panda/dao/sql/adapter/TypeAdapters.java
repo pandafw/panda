@@ -48,7 +48,7 @@ public class TypeAdapters {
 	/**
 	 * casters used for cast value
 	 */
-	private Castors castors = Castors.me();
+	private Castors castors = Castors.i();
 	
 	/**
 	 * all adapters should be registered before use

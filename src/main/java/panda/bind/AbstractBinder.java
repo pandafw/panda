@@ -18,7 +18,7 @@ import panda.lang.Arrays;
  *
  */
 public abstract class AbstractBinder {
-	private Castors castors = Castors.me();
+	private Castors castors = Castors.i();
 
 	private boolean ignoreNullProperty = true;
 

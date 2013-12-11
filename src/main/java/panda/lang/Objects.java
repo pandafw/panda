@@ -862,12 +862,12 @@ public abstract class Objects {
 	}
 
 	public static <T> T cast(Object value, Class<T> toType) {
-		Castors c = Castors.me();
+		Castors c = Castors.i();
 		return c.cast(value, toType, new CastContext());
 	}
 
 	public static <T> T cast(Object value, Type toType) {
-		Castors c = Castors.me();
+		Castors c = Castors.i();
 		return c.cast(value, toType, new CastContext());
 	}
 
