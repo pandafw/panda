@@ -1,4 +1,4 @@
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
 (function() {
 	function _click(evt) {
@@ -13,7 +13,7 @@ if (typeof(pw) == "undefined") { pw = {}; }
 		}
 	}
 	
-	pw.pager = function(o) {
+	panda.pager = function(o) {
 		var $p = $(o);
 		if ($p.attr("pager") != "true") {
 			$p.attr("pager", "true");

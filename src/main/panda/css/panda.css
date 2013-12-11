@@ -440,7 +440,7 @@ tbody.n-lv-tbody tr.n-lv-hover td.n-lv-column {
 .p-fnone 		{ float: none !important; }
 
 .p-show			{ display: block !important; }
-.p-hidden 		{ display: none !important; visibility: hidden !important; }
+.p-hidden 		{ display: none !important; }
 .p-vhidden 		{ position: absolute; top: -999999px; left: -999999px; }
 .p-inline 		{ display: inline; }
 .p-iblock 		{ display: inline-block; }
@@ -450,19 +450,7 @@ tbody.n-lv-tbody tr.n-lv-hover td.n-lv-column {
 .p-noborder		{ border: 0 none; }
 
 
-.n-uploader-hidden {
-	display: none;
-}
-.n-uploader-error {
-	display: none;
-}
-.n-uploader-image {
-	border: 1px solid #ddd;
-	display: none;
-	padding: 2px;
-}
-.n-uploader-text {
-	display: none;
-}
-.n-uploader-icon {
+.p-uploader-text {
+	margin-bottom: 0;
+	padding-top: 7px;
 }

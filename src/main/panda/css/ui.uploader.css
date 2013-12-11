@@ -1,16 +1,4 @@
-.n-uploader-hidden {
-	display: none;
-}
-.n-uploader-error {
-	display: none;
-}
-.n-uploader-image {
-	border: 1px solid #ddd;
-	display: none;
-	padding: 2px;
-}
-.n-uploader-text {
-	display: none;
-}
-.n-uploader-icon {
+.p-uploader-text {
+	margin-bottom: 0;
+	padding-top: 7px;
 }

@@ -1,8 +1,6 @@
 if (typeof(panda) == "undefined") { panda = {}; }
 
-panda.upload = function(id) {
-	var id = id;
-	var $u = $('#' + id);
+panda.uploader = function($u) {
 	var pua = $u.attr('uploadAction');
 	var pup = $u.attr('uploadParam');
 	var pda = $u.attr('dnloadAction');
@@ -10,16 +8,20 @@ panda.upload = function(id) {
 	var pdl = $u.attr('defaultLink');
 	var pdt = $u.attr('defaultText');
 	
-	var $uf = $u.children('.n-uploader-file');
-	var $up = $u.children('.n-uploader-progress');
-	var $ue = $u.children('.n-uploader-error');
-	var $ui = $u.children('.n-uploader-image');
-	var $ut = $u.children('.n-uploader-text');
+	var $uf = $u.children('.p-uploader-file');
+	var $ut = $u.children('.p-uploader-text');
+	var $ui = $u.children('.p-uploader-image');
 
-	var $uct = $u.children('.n-uploader-ct');
-	var $ufn = $u.children('.n-uploader-fn');
-	var $ufs = $u.children('.n-uploader-fs');
-	var $usn = $u.children('.n-uploader-sn');
+	var $uct = $u.children('.p-uploader-ct');
+	var $ufn = $u.children('.p-uploader-fn');
+	var $ufs = $u.children('.p-uploader-fs');
+	var $usn = $u.children('.p-uploader-sn');
+	
+	var $up = $('<div class="progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
+	$up.insertAfter($uf);
+
+	var $ue = $('<div class="p-uploader-error"></div>');
+	$ue.insertAfter($ut);
 	
 	function _filesize(fs) {
 		var sz = String.formatSize(fs);
@@ -37,43 +39,45 @@ panda.upload = function(id) {
 
 		if (ufn) {
 			if (usn) {
-				$ut.html('<a class="n-a n-a-it" href="' + pda + '?' + pdp + '=' + encodeURIComponent(usn) + '">'
-						+ '<em class="ui-icon ui-icon-check n-a-icon n-uploader-icon"></em>'
+				$ut.html('<a href="' + pda + '?' + pdp + '=' + encodeURIComponent(usn) + '">'
+						+ '<i class="fa fa-check p-uploader-icon"></i> '
 						+ ufn + ' ' + _filesize(ufs)
 						+ '</a>');
 			}
 			else {
-				$ut.html('<span><em class="ui-icon ui-icon-check n-a-icon n-uploader-icon"></em>'
+				$ut.html('<span><i class="fa fa-check n-uploader-icon"></i>'
 						+ ufn + ' ' + _filesize(ufs)
 						+ '</span>');
 			}
 			$ut.show();
 		}
 		else if (pdl) {
-			$ut.html('<a class="n-a'
-					+ (String.isEmpty(pdt) ? ' n-a-io' : ' n-a-it')
-					+ '" href="' + pdl + '">'
-					+ '<em class="n-icon '
-					+ (uct.startsWith('image') ? 'n-icon-file_img' : 'n-icon-attach')
-					+ ' n-a-icon n-uploader-icon"></em>'
+			$ut.html('<a href="' + pdl + '">'
+					+ '<i class="fa '
+					+ (uct.startsWith('image') ? 'fa-picture-o' : 'fa-paperclip')
+					+ ' p-uploader-icon"></i> '
 					+ String.defaults(pdt)
 					+ '</a>')
 				.show();
 		}
 
 		if (usn && uct.startsWith('image')) {
-			$ui.html('<img src="' + pda + '?' + pdp + '=' + usn + '"></img>').fadeIn();
+			$ui.html('<img class="img-thumbnail" src="' + pda + '?' + pdp + '=' + usn + '"></img>').fadeIn();
 		}
 		else if (pdl && uct.startsWith('image')) {
-			$ui.html('<img src="' + pdl + '"></img>').fadeIn();
+			$ui.html('<img class="img-thumbnail" src="' + pdl + '"></img>').fadeIn();
 		}
 	}
 	
 	function _error(uct, ufn, ufs, usn) {
-		$ut.html('<span><em class="ui-icon ui-icon-close n-uploader-icon"></em>'
+		$ut.html('<span><i class="fa fa-times-circle p-uploader-icon"></i>'
 			+ ((ufn || $uf.val()) + ' ' + _filesize(ufs))
 			+ '</span>')
 			.show();
+	}
+	
+	function _progress(v) {
+		$up.children('.progress-bar').css({width: v + '%'});
 	}
 	
 	function _upload() {
@@ -89,15 +93,15 @@ panda.upload = function(id) {
 		$ut.hide().empty();
 		$uf.hide();		
 
-		$up.css({
-			width: $uf.width() + 'px',
-			height: Math.floor($uf.height() * 0.8) + 'px'
-		})
-		.show()
-		.progressbar('value', progress);
+//		$up.css({
+//			width: $uf.width() + 'px',
+//			height: Math.floor($uf.height() * 0.8) + 'px'
+//		})
+		$up.show();
+		_progress(progress);
 
 		var timer = setInterval(function() {
-			$up.progressbar('value', progress++);
+			_progress(progress++);
 			if (progress >= 90) {
 				if (timer) {
 					clearInterval(timer);
@@ -107,9 +111,9 @@ panda.upload = function(id) {
 		}, 20);
 
 		function _endUpload() {
-			$uf = $u.children('.n-uploader-file');
-			progress = 100;
-			$up.progressbar('value', progress).css({display: 'none'});
+			$uf = $u.children('.p-uploader-file');
+			_progress(100);
+			$up.hide();
 			$uf.show();
 		}
 
@@ -145,8 +149,23 @@ panda.upload = function(id) {
 	}
 
 	_info();
-	$up.hide().progressbar();
 	$uf.change(function() { 
 		setTimeout(_upload, 10); 
 	});
 };
+
+
+(function($) {
+	$.fn.puploader = function(c) {
+		c = c || {};
+		return this.each(function() {
+			panda.uploader($(this));
+		});
+	};
+	
+	// UPLOADER DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[data-spy="puploader"]').puploader();
+	});
+})(window.jQuery);

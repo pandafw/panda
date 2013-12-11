@@ -23,7 +23,7 @@
 .p-fnone 		{ float: none !important; }
 
 .p-show			{ display: block !important; }
-.p-hidden 		{ display: none !important; visibility: hidden !important; }
+.p-hidden 		{ display: none !important; }
 .p-vhidden 		{ position: absolute; top: -999999px; left: -999999px; }
 .p-inline 		{ display: inline; }
 .p-iblock 		{ display: inline-block; }

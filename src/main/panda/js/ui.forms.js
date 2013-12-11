@@ -10,6 +10,6 @@ panda.focus_form = function($i) {
 }
 
 $(window).on('load', function() {
-	var $i = $w.find('form[init-focus="true"]').eq(0);
+	var $i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
 	panda.focus_form($i);
 });

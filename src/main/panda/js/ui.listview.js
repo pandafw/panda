@@ -1,4 +1,4 @@
-if (typeof(pw) == "undefined") { pw = {}; }
+if (typeof(panda) == "undefined") { panda = {}; }
 
 function nlv_options(id, options) {
 	var lv = document.getElementById(id);
