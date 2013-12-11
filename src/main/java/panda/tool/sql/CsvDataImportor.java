@@ -120,7 +120,7 @@ public class CsvDataImportor extends AbstractDataImportor {
 
 		String insertSql = getInsertSql(tableName, columns, types);
 		try {
-			SqlExecutor executor = SqlManager.me().getExecutor(connection); 
+			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
 
 			int cnt = 0;
 			for (int i = 3; ; i++) {

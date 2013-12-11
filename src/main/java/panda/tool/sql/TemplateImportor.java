@@ -245,7 +245,7 @@ public class TemplateImportor extends AbstractSqlTool {
 		println1("Importing template file: " + f.getPath());
 		
 		FileInputStream fis = null;
-		SqlExecutor executor = SqlManager.me().getExecutor(connection); 
+		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
 		
 		try {
 			fis = new FileInputStream(f);

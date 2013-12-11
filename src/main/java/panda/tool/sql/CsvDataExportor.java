@@ -210,9 +210,9 @@ public class CsvDataExportor extends AbstractDataExportor {
 		int cnt = 0;
 		try {
 			Class<?> recClass = createDataClass();
-			BeanHandler beanh = Beans.me().getBeanHandler(recClass);
+			BeanHandler beanh = Beans.i().getBeanHandler(recClass);
 
-			SqlExecutor executor = SqlManager.me().getExecutor(connection); 
+			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
 			SqlResultSet<?> srs = executor.selectResultSet(selectSql, recClass);
 			while (srs.next()) {
 				Object data = srs.getResult();

@@ -262,7 +262,7 @@ public class PropertyImportor extends AbstractSqlTool {
 			Streams.safeClose(fis);
 		}
 
-		SqlExecutor executor = SqlManager.me().getExecutor(connection); 
+		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
 		try {
 			if (Strings.isNotEmpty(deleteSql)) {
 				cntDel = executor.update(deleteSql, param);

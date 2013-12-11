@@ -85,7 +85,7 @@ public class XlsDataImportor extends AbstractDataImportor {
 		int line = 2;
 		Map<String, Object> values = null;
 		try {
-			SqlExecutor executor = SqlManager.me().getExecutor(connection); 
+			SqlExecutor executor = SqlManager.i().getExecutor(connection); 
 
 			int cnt = 0;
 			for (; ; line++) {
