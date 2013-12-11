@@ -77,7 +77,7 @@ public class LongTypeAdapter<T> extends AbstractCastTypeAdapter<T, Long> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
 			rs.updateNull(column);
@@ -95,7 +95,7 @@ public class LongTypeAdapter<T> extends AbstractCastTypeAdapter<T, Long> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
 			rs.updateNull(column);
@@ -113,7 +113,7 @@ public class LongTypeAdapter<T> extends AbstractCastTypeAdapter<T, Long> {
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, T value) throws SQLException {
 		Long l = castToJdbc(value);
 		if (l == null) {
 			ps.setNull(i, Types.BIGINT);

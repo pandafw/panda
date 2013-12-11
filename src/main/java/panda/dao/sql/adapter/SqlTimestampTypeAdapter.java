@@ -24,7 +24,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(ResultSet rs, String column) throws SQLException {
-		Object sqlTimestamp = rs.getTimestamp(column);
+		Timestamp sqlTimestamp = rs.getTimestamp(column);
 		return castToJava(sqlTimestamp);
 	}
 
@@ -37,7 +37,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(ResultSet rs, int column) throws SQLException {
-		Object sqlTimestamp = rs.getTimestamp(column);
+		Timestamp sqlTimestamp = rs.getTimestamp(column);
 		return castToJava(sqlTimestamp);
 	}
 
@@ -50,7 +50,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(CallableStatement cs, int column) throws SQLException {
-		Object sqlTimestamp = cs.getTimestamp(column);
+		Timestamp sqlTimestamp = cs.getTimestamp(column);
 		return castToJava(sqlTimestamp);
 	}
 
@@ -62,7 +62,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		Timestamp ts = castToJdbc(value);
 		if (ts == null) {
 			rs.updateNull(column);
@@ -80,7 +80,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		Timestamp ts = castToJdbc(value);
 		if (ts == null) {
 			rs.updateNull(column);
@@ -98,7 +98,7 @@ public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Times
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, T value) throws SQLException {
 		Timestamp ts = castToJdbc(value);
 		ps.setTimestamp(i, ts);
 	}

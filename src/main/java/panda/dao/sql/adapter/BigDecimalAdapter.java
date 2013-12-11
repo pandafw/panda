@@ -62,7 +62,7 @@ public class BigDecimalAdapter<T> extends AbstractCastTypeAdapter<T, BigDecimal>
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		BigDecimal bd = castToJdbc(value);
 		if (value == null) {
 			rs.updateNull(column);
@@ -80,7 +80,7 @@ public class BigDecimalAdapter<T> extends AbstractCastTypeAdapter<T, BigDecimal>
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		BigDecimal bd = castToJdbc(value);
 		if (value == null) {
 			rs.updateNull(column);
@@ -98,7 +98,7 @@ public class BigDecimalAdapter<T> extends AbstractCastTypeAdapter<T, BigDecimal>
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, T value) throws SQLException {
 		BigDecimal bd = castToJdbc(value);
 		ps.setBigDecimal(i, bd);
 	}

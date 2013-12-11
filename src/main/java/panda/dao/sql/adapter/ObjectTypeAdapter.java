@@ -13,9 +13,9 @@ import java.sql.Timestamp;
  * Object implementation of TypeAdapter
  * @author yf.frank.wang@gmail.com
  */
-public class ObjectTypeAdapter<T, P> extends AbstractCastTypeAdapter<T, P> {
-	public ObjectTypeAdapter(TypeAdapters adapters, Class<T> javaType, Class<P> jdbcType) {
-		super(adapters, javaType, jdbcType);
+public class ObjectTypeAdapter<T> extends AbstractCastTypeAdapter<T, Object> {
+	public ObjectTypeAdapter(TypeAdapters adapters, Class<T> javaType) {
+		super(adapters, javaType, Object.class);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class ObjectTypeAdapter<T, P> extends AbstractCastTypeAdapter<T, P> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
 			rs.updateNull(column);
@@ -115,7 +115,7 @@ public class ObjectTypeAdapter<T, P> extends AbstractCastTypeAdapter<T, P> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
 			rs.updateNull(column);
@@ -165,7 +165,7 @@ public class ObjectTypeAdapter<T, P> extends AbstractCastTypeAdapter<T, P> {
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value) throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, T value) throws SQLException {
 		Object obj = castToJdbc(value);
 		if (obj == null) {
 			ps.setObject(i, obj);

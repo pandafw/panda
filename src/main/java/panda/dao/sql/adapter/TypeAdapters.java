@@ -194,7 +194,7 @@ public class TypeAdapters {
 		//----------------------------------------------------
 		// binary
 		//
-		adapter = new ObjectTypeAdapter<Object, Object>(this, Object.class, Object.class);
+		adapter = new ObjectTypeAdapter<Object>(this, Object.class);
 		register(Object.class, adapter);
 		register(Object.class, JdbcTypes.JAVAOBJECT, adapter);
 
@@ -320,7 +320,7 @@ public class TypeAdapters {
 					adapter = new ByteArrayTypeAdapter(this, javaType);
 					break;
 				case java.sql.Types.JAVA_OBJECT:
-					adapter = new ObjectTypeAdapter(this, javaType, Object.class);
+					adapter = new ObjectTypeAdapter(this, javaType);
 					break;
 				case java.sql.Types.LONGVARBINARY:
 				case java.sql.Types.BLOB:

@@ -1,7 +1,9 @@
 package panda.dao.sql.adapter;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,20 +30,28 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(ResultSet rs, String column) throws SQLException {
-		Object blob;
+		InputStream is;
 		try {
-			blob = rs.getBlob(column);
+			Blob blob = rs.getBlob(column);
+			if (rs.wasNull()) {
+				return null;
+			}
+			is = blob.getBinaryStream();
 		}
 		catch (SQLException e) {
 			// patch for sqlite
-			blob = rs.getBytes(column);
+			byte[] data = rs.getBytes(column);
+			if (rs.wasNull()) {
+				return null;
+			}
+			is = new ByteArrayInputStream(data);
 		}
 
-		if (rs.wasNull()) {
-			return null;
+		try {
+			return castToJava(is);
 		}
-		else {
-			return castToJava(blob);
+		finally {
+			Streams.safeClose(is);
 		}
 	}
 
@@ -54,20 +64,28 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(ResultSet rs, int column) throws SQLException {
-		Object blob;
+		InputStream is;
 		try {
-			blob = rs.getBlob(column);
+			Blob blob = rs.getBlob(column);
+			if (rs.wasNull()) {
+				return null;
+			}
+			is = blob.getBinaryStream();
 		}
 		catch (SQLException e) {
 			// patch for sqlite
-			blob = rs.getBytes(column);
+			byte[] data = rs.getBytes(column);
+			if (rs.wasNull()) {
+				return null;
+			}
+			is = new ByteArrayInputStream(data);
 		}
 
-		if (rs.wasNull()) {
-			return null;
+		try {
+			return castToJava(is);
 		}
-		else {
-			return castToJava(blob);
+		finally {
+			Streams.safeClose(is);
 		}
 	}
 
@@ -80,20 +98,28 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @throws SQLException if getting the value fails
 	 */
 	public T getResult(CallableStatement cs, int column) throws SQLException {
-		Object blob;
+		InputStream is;
 		try {
-			blob = cs.getBlob(column);
+			Blob blob = cs.getBlob(column);
+			if (cs.wasNull()) {
+				return null;
+			}
+			is = blob.getBinaryStream();
 		}
 		catch (SQLException e) {
 			// patch for sqlite
-			blob = cs.getBytes(column);
+			byte[] data = cs.getBytes(column);
+			if (cs.wasNull()) {
+				return null;
+			}
+			is = new ByteArrayInputStream(data);
 		}
 
-		if (cs.wasNull()) {
-			return null;
+		try {
+			return castToJava(is);
 		}
-		else {
-			return castToJava(blob);
+		finally {
+			Streams.safeClose(is);
 		}
 	}
 
@@ -105,7 +131,7 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		if (value == null) {
 			rs.updateNull(column);
 		}
@@ -137,7 +163,7 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		if (value == null) {
 			rs.updateNull(column);
 		}
@@ -169,8 +195,7 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value)
-			throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, T value) throws SQLException {
 		if (value == null) {
 			ps.setNull(i, Types.BLOB);
 		}

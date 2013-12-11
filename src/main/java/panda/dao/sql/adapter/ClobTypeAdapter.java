@@ -33,8 +33,13 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 		if (rs.wasNull()) {
 			return null;
 		}
-		else {
-			return castToJava(clob);
+
+		Reader r = clob.getCharacterStream();
+		try {
+			return castToJava(r);
+		}
+		finally {
+			Streams.safeClose(r);
 		}
 	}
 
@@ -51,8 +56,13 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 		if (rs.wasNull()) {
 			return null;
 		}
-		else {
-			return castToJava(clob);
+
+		Reader r = clob.getCharacterStream();
+		try {
+			return castToJava(r);
+		}
+		finally {
+			Streams.safeClose(r);
 		}
 	}
 
@@ -69,8 +79,13 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 		if (cs.wasNull()) {
 			return null;
 		}
-		else {
-			return castToJava(clob);
+
+		Reader r = clob.getCharacterStream();
+		try {
+			return castToJava(r);
+		}
+		finally {
+			Streams.safeClose(r);
 		}
 	}
 
@@ -82,7 +97,7 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, String column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, String column, T value) throws SQLException {
 		if (value == null) {
 			rs.updateNull(column);
 		}
@@ -114,7 +129,7 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 	 * @param value - the value to update
 	 * @throws SQLException if getting the value fails
 	 */
-	public void updateResult(ResultSet rs, int column, Object value) throws SQLException {
+	public void updateResult(ResultSet rs, int column, T value) throws SQLException {
 		if (value == null) {
 			rs.updateNull(column);
 		}
@@ -146,7 +161,7 @@ public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 	 * @param value - the parameter value
 	 * @throws SQLException if setting the parameter fails
 	 */
-	public void setParameter(PreparedStatement ps, int i, Object value)
+	public void setParameter(PreparedStatement ps, int i, T value)
 			throws SQLException {
 		if (value == null) {
 			ps.setNull(i, Types.CLOB);

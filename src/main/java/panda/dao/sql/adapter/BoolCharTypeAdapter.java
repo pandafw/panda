@@ -26,10 +26,10 @@ public abstract class BoolCharTypeAdapter<T> extends AbstractCastTypeAdapter<T, 
 		
 		char c = s.charAt(0);
 		if (c == chTrue) {
-			return castToJava(Boolean.TRUE);
+			return castToJava(Boolean.TRUE.toString());
 		}
 		if (c == chFalse) {
-			return castToJava(Boolean.FALSE);
+			return castToJava(Boolean.FALSE.toString());
 		}
 		throw new SQLException(
 			"Unexpected value [" + s + "] found where " + chTrue + '/' + chFalse + " was expected.");
