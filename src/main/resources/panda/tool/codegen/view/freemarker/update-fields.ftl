@@ -1,21 +1,3 @@
-<#--
-/*
- * This file is part of Nuts Framework.
- * Copyright(C) 2009-2012 Nuts Develop Team.
- *
- * Nuts Framework is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- *
- * Nuts Framework is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Nuts Framework. If not, see <http://www.gnu.org/licenses/>.
- */
--->
 <#list ui.displayFieldList as f>
 	<#if f.before?has_content>
 			${f.before}
@@ -33,33 +15,14 @@
 		</#if></#list>
 			/>
 	<#elseif f.editTag??>
-		<#assign p = ""/>
-		<#if f.actionField>
-			<#list action.propertyList as ap>
-				<#if ap.name == f.name>
-					<#assign p = ap/>
-					<#break/>
-				</#if>
-			</#list>
-		<#else>
-			<#list model.propertyList as mp>
-				<#if mp.name == f.name>
-					<#assign p = mp/>
-					<#break/>
-				</#if>
-			</#list>
-		</#if>
-		<#if p == "">${action.error(f.name)}</#if>
-		<#if p.primaryKey!false>
-			${s}@n.viewfield
-				name="${actionDataFieldName}.${f.name}"
+		<#if entity.isPrimaryKey(f.name)>
+			${s}@p.viewfield
+				key="${actionDataFieldName}.${f.name}"
 			<#list f.editTag.paramList as tp>
 				<#if tp.name == "list" || tp.name == "listKey" || tp.name == "listValue">
 				${tp.name}="${tp.value}"
 				</#if>
 			</#list>
-				label="%{getText('${ui.name}-${f.name}', '')}"
-<#--				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"-->
 				required="true"
 			<#if f.editTag.hasParamStartsWith("_")>
 			>
@@ -77,7 +40,7 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
+				key="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
 			<#if f.editTag.name?ends_with(".file")>
 				value=""
 			</#if>
@@ -87,10 +50,6 @@
 			<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
-				label="%{getText('${ui.name}-${f.name}', '')}"
-<#if !(f.editTag.name?ends_with(".viewfield"))>
-				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
-</#if>
 			<#if f.editTag.hasParamStartsWithAny("+_")>
 			>
 				<#list f.editTag.paramList as tp>

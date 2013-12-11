@@ -104,10 +104,10 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 				wrapper.put("module", module);
 				wrapper.put("props", module.getProps());
 				wrapper.put("action", action);
-				wrapper.put("model", ae);
+				wrapper.put("entity", ae);
 				wrapper.put("gen", this);
 
-				String pkg = action.getActionPackage() + "." + action.getName();
+				String pkg = action.getActionPackage();
 				
 				checkLicense(module, pkg);
 				

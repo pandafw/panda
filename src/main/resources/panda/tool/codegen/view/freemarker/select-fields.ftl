@@ -1,6 +1,6 @@
 <#list ui.displayFieldList as f><#if !f.actionField>
 	<#assign p = {}/>
-	<#list model.primaryKeyList as mp>
+	<#list entity.primaryKeyList as mp>
 		<#if mp.name == f.name>
 			<#assign p = mp/>
 			<#break/>
@@ -11,7 +11,7 @@
 			${f.before}
 		</#if>
 		<#if f.editTag?? && (f.editTag.name?ends_with(".hidden") || f.editTag.name?ends_with(".viewfield"))>
-			${s}@n.textfield
+			${s}@p.textfield
 				name="${actionDataFieldName}.${f.name}"
 				required="true"
 				label="%{getText('${ui.name}-${f.name}', '')}"
@@ -23,7 +23,7 @@
 					${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
 				</#if>
 			</#list>
-			${s}/@n.textfield>
+			${s}/@p.textfield>
 			<#else>
 			/>
 			</#if>

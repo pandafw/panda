@@ -33,6 +33,7 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;footer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;1&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;focus&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;theme&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;formId&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;template&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -59,6 +60,8 @@ public class InputUI implements Comparable<InputUI> {
 	@XmlAttribute
 	private Boolean generate;
 	@XmlAttribute
+	private Boolean focus = true;
+	@XmlAttribute
 	private String theme;
 	@XmlAttribute
 	private String formId;
@@ -82,6 +85,7 @@ public class InputUI implements Comparable<InputUI> {
 	 */
 	public InputUI(InputUI iui) {
 		this.generate = iui.generate;
+		this.focus = iui.focus;
 		this.theme = iui.theme;
 		this.formId = iui.formId;
 		this.template = iui.template;
@@ -114,6 +118,9 @@ public class InputUI implements Comparable<InputUI> {
 
 		if (src.generate != null) {
 			me.generate = src.generate;
+		}
+		if (src.focus != null) {
+			me.focus = src.focus;
 		}
 		if (src.theme != null) {
 			me.theme = src.theme;
@@ -257,6 +264,20 @@ public class InputUI implements Comparable<InputUI> {
 	 */
 	public void setGenerate(Boolean generate) {
 		this.generate = generate;
+	}
+
+	/**
+	 * @return the focus
+	 */
+	public Boolean getFocus() {
+		return focus;
+	}
+
+	/**
+	 * @param focus the focus to set
+	 */
+	public void setFocus(Boolean focus) {
+		this.focus = focus;
 	}
 
 	/**

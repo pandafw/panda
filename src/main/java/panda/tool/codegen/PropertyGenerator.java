@@ -214,19 +214,19 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		
 		if (Strings.isEmpty(locale)) {
 			for (Resource resource : module.getResourceList()) {
-				processLocaleResource(resource);
+				processLocaleResource(module, resource);
 			}
 		}
 		else {
 			for (Resource resource : module.getResourceList()) {
 				if (locale.equals(resource.getLocale())) {
-					processLocaleResource(resource);
+					processLocaleResource(module, resource);
 				}
 			}
 		}
 	}
 	
-	protected void processLocaleResource(Resource resource) throws Exception {
+	protected void processLocaleResource(Module module, Resource resource) throws Exception {
 		String locale = Strings.isEmpty(resource.getLocale()) ? "" : "_" + resource.getLocale();
 
 		for (Entity entity : resource.getEntityList()) {
@@ -235,7 +235,23 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		}
 		
 		for (Action action : resource.getActionList()) {
-			print2("Processing text of action - " + action.getName() + locale);
+			if (Strings.isEmpty(action.getActionClass()) && Strings.isEmpty(action.getName())) {
+				throw new IllegalArgumentException("Missing name or actionClass: " + resource.getLocale()); 
+			}
+			
+			if (Strings.isEmpty(action.getActionClass())) {
+				for (Action a : module.getActionList()) {
+					if (action.getName().equals(a.getName())) {
+						action.setActionClass(a.getActionClass());
+						break;
+					}
+				}
+			}
+
+			if (Strings.isEmpty(action.getActionClass())) {
+				throw new IllegalArgumentException("Missing actionClass: " + action.getName() + "/" + resource.getLocale()); 
+			}
+			print2("Processing text of action - " + action.getActionClass() + locale);
 			processLocaleAction(action, locale);
 		}
 	}

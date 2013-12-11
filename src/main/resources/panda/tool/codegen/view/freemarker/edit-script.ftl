@@ -1,21 +1,3 @@
-<#--
-/*
- * This file is part of Nuts Framework.
- * Copyright(C) 2009-2012 Nuts Develop Team.
- *
- * Nuts Framework is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License any later version.
- *
- * Nuts Framework is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Nuts Framework. If not, see <http://www.gnu.org/licenses/>.
- */
--->
 		<script type="text/javascript"><!--
 		<#list ui.displayFieldList as f>
 			<#assign _popup = {}/>
@@ -53,13 +35,13 @@
 				<#assign pid = "popup_" + action.name + f.actionField?string("", "_" + actionDataFieldName) + "_" + f.name/>
 				$.popup({
 					id: "${pid}",
-					url: "${s}@n.url<#if _popup.namespace??> namespace="${_popup.namespace}"</#if> action="${_popup.action}" escapeAmp="false"><#rt>
+					url: "${s}@p.url<#if _popup.namespace??> namespace="${_popup.namespace}"</#if> action="${_popup.action}" escapeAmp="false"><#rt>
 				<#if _popup.params?has_content>
 					<#list _popup.params?keys as pn>
 ${s}@s.param name="${pn}" value="${_popup.params[pn]}"/><#rt>
 					</#list>
 				</#if>
-${s}/@n.url>"
+${s}/@p.url>"
 				});
 				
 			</#if>
