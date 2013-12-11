@@ -5,27 +5,27 @@ package panda.image;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Images {
-	private static Images me = new JavaImages();
+	private static Images i = new JavaImages();
 	
 	/**
 	 * @return the instance
 	 */
-	public static Images me() {
-		return me;
+	public static Images i() {
+		return i;
 	}
 
 	/**
 	 * @return the instance
 	 */
-	public static Images getMe() {
-		return me;
+	public static Images getInstance() {
+		return i;
 	}
 
 	/**
 	 * @param instance the instance to set
 	 */
-	public static void setMe(Images instance) {
-		Images.me = instance;
+	public static void setInstance(Images instance) {
+		Images.i = instance;
 	}
 
 	/**
