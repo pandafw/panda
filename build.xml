@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="panda-web" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-	<!-- set global properties for this build -->
+<project name="panda-web" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property name="prj.org" value="com.pandawind"/>
 	<property name="prj.name" value="panda-web"/>
 	<property name="prj.title" value="Panda Web Framework"/>
-	<property name="prj.author" value="yf.frank.wang@gmail.com"/>
-	<property name="prj.site" value="github.com/pandawind/panda-web"/>
-	<loadfile srcFile="${basedir}/../panda-java/src/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8" failonerror="false">
+	<property name="prj.url" value="https://github.com/pandawind/panda-web"/>
+	<property name="prj.scm" value="git@github.com:pandawind/panda-web.git"/>
+	<property name="prj.repo" location="../panda-repo"/>
+
+	<!-- defined maven snapshots and staging repository id and url -->
+	<property name="mvn.ssr.id" value="sonatype-nexus-snapshots" />
+	<property name="mvn.ssr.url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+	<property name="mvn.sgr.id" value="sonatype-nexus-staging" />
+	<property name="mvn.sgr.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+	
+	<!-- get prj.version -->
+	<loadfile srcFile="../panda-java/src/main/java/panda/Panda.java" property="prj.version" encoding="UTF-8" failonerror="false">
 		<filterchain>
 			<striplinebreaks/>
 			<linecontains>
@@ -17,32 +25,81 @@
 			</tokenfilter>
 		</filterchain>
 	</loadfile>
-	<property name="prj.version" value="0.1.0"/>
+	<property name="prj.version" value="1.0.0"/>
+
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
+	</tstamp>
 
 	<exec dir="${basedir}" executable="git" outputproperty="git.info" failifexecutionfails="false">
 		<arg line="rev-list --all --count"/>
 	</exec>
 	<script language="javascript">
-		var gi = project.getProperty("git.info");
-		var rev = gi == null ? "0" : gi.trim();
-		project.setProperty("REVISION", rev);
-		project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		var ver = project.getProperty("VERSION");
+		if (ver == null) {
+			function run(cmd) {
+				var is = null;
+				try {
+					var p = java.lang.Runtime.getRuntime().exec(cmd);
+					is = p.getInputStream();
+					var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+					var o = "";
+					var s;
+					while ((s = br.readLine()) != null) {
+						o += s.trim();
+					}
+					return o;
+				}
+				catch (e) {
+					java.lang.System.err.println(e);
+					return "";
+				}
+				finally {
+					if (is != null) {
+						is.close();
+					}
+				}
+			}
+			
+			var rev = "0";
+			if (new java.io.File(".git").exists()) {
+				var s = run("git rev-list --all --count");
+				if (s != "") {
+					rev = s;
+				}
+			}
+			else if (new java.io.File(".svn").exists()) {
+				var si = run("svn info . --xml");
+				if (si != "") {
+					var b = si.indexOf("revision=\"") + 10;
+					var e = si.indexOf("\"", b);
+					rev = si.substring(b, e);
+				}
+			}
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		}
 	</script>
 
 	<target name="usage">
-		<echo message=""/>
-		<echo message="${prj.name}-${VERSION} build file"/>
-		<echo message="-----------------------------------"/>
-		<echo message=""/>
-		<echo message="Available targets are:"/>
-		<echo message=""/>
-		<echo message="all          --> dist &amp; test"/>
-		<echo message="build        --> Build the project (minjs, mincss)"/>
-		<echo message="min-css      --> Merge &amp; minify css files"/>
-		<echo message="min-js       --> Merge &amp; minify javascript files"/>
-		<echo message="dist         --> Distribute project as a jar file (build, jar)"/>
-		<echo message="jar          --> Make the project as a jar file"/>
-		<echo message=""/>
+		<echo><![CDATA[
+${prj.name}-${VERSION} build file
+-----------------------------------
+
+Available targets are:
+
+all          --> dist & test
+build        --> Build the project (minjs, mincss)
+min-css      --> Merge & minify css files
+min-js       --> Merge & minify javascript files
+dist         --> Distribute project as a jar file (build, jar)
+jar          --> Make the project as a jar file
+pom          --> Generate pom.xml
+mvn-deploy   --> Deploy snapshot version to maven snapshot repository
+mvn-stage    --> Deploy release version to maven staging repository
+panda-deploy --> Deploy release version to panda-repo repository
+]]>
+		</echo>
 	</target>
 
 	<!-- ivy -->
@@ -53,7 +110,7 @@
 		<ivy:retrieve conf="tool" pattern="lib/tool/[artifact](-[classifier]).[ext]"/>
 	</target>
 
-	<target name="ivy-cleancache" description="ivy --> clean the cache">
+	<target name="ivy-clean" description="ivy --> clean the cache">
 		<ivy:cleancache />
 	</target>
 
@@ -219,12 +276,12 @@
 		<delete dir="out"/>
 		<jar destfile="out/${prj.name}-${VERSION}.jar">
 			<manifest>
-				<attribute name="Created-By" value="${prj.author}"/>
-				<attribute name="Built-By" value="${prj.author}"/>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
 				<attribute name="Implementation-Title" value="${prj.title}"/>
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.site}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="src/main">
 				<include name="**"/>
@@ -247,4 +304,100 @@
 	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
 
 	<target name="all" depends="dist"/>
+
+	<!-- maven -->
+	<macrodef name="writepom">
+		<attribute name="version" default="${prj.version}"/>
+		<sequential>
+			<echo>version = @{version}</echo>
+			<echo file="out/pom.xml"><![CDATA[
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${prj.org}</groupId>
+	<artifactId>${prj.name}</artifactId>
+	<packaging>jar</packaging>
+	<name>${prj.title}</name>
+	<version>@{version}</version>
+	<description>Panda Web Framework</description>
+	<url>${prj.url}</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE v3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:${prj.scm}</connection>
+		<developerConnection>scm:git:${prj.scm}</developerConnection>
+		<url>${prj.scm}</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>yf.frank.wang</id>
+			<name>Frank Wang</name>
+			<email>yf.frank.wang@gmail.com</email>
+		</developer>
+	</developers>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+</project>
+]]>
+			</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="pom" description="Write maven pom.xml">
+		<writepom/>
+	</target>
+	
+	<!-- sonatype deploy -->
+	<target name="mvn-deploy" description="Deploy snapshot version to Maven snapshot repository">
+		<!-- write pom.xml -->
+		<writepom version="${prj.version}-SNAPSHORT"/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=${mvn.ssr.url}" />
+			<arg value="-DrepositoryId=${mvn.ssr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
+
+	<target name="mvn-stage" description="Deploy release version to Maven staging repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<!-- sign and deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
+			<arg value="-Durl=${mvn.sgr.url}" />
+			<arg value="-DrepositoryId=${mvn.sgr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Pgpg" />
+		</artifact:mvn>
+	</target>
+
+	<!-- panda-repo deploy -->
+	<target name="panda-deploy" description="Deploy release version to panda-repo repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=file://${prj.repo}" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
 </project>
