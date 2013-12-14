@@ -869,15 +869,15 @@ public abstract class Classes {
 	public static Class<?> getClass(ClassLoader classLoader, String className, boolean initialize)
 			throws ClassNotFoundException {
 		try {
-			Class<?> clazz;
+			Class<?> cls;
 			if (abbreviationMap.containsKey(className)) {
 				String clsName = "[" + abbreviationMap.get(className);
-				clazz = Class.forName(clsName, initialize, classLoader).getComponentType();
+				cls = Class.forName(clsName, initialize, classLoader).getComponentType();
 			}
 			else {
-				clazz = Class.forName(toCanonicalName(className), initialize, classLoader);
+				cls = Class.forName(toCanonicalName(className), initialize, classLoader);
 			}
-			return clazz;
+			return cls;
 		}
 		catch (ClassNotFoundException ex) {
 			// allow path separators (.) as inner class name separators
@@ -1296,19 +1296,19 @@ public abstract class Classes {
 	}
 
 	/**
-	 * new instance by the clazz 
-	 * @param clazz class
+	 * new instance by the class 
+	 * @param cls class
 	 * @return object instance
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 */
-	public static <T> T newInstance(Class<T> clazz) throws InstantiationException, IllegalAccessException {
-		return clazz.newInstance();
+	public static <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException {
+		return cls.newInstance();
 	}
 
 	/**
-	 * new instance by the clazz 
-	 * @param clazz class
+	 * new instance by the class 
+	 * @param cls class
 	 * @param argValue constructor argument value
 	 * @param argType constructor argument type
 	 * @return class instance
@@ -1316,14 +1316,14 @@ public abstract class Classes {
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
 	 */
-	public static <T> T newInstance(Class<T> clazz, Object argValue, Class<?> argType)
+	public static <T> T newInstance(Class<T> cls, Object argValue, Class<?> argType)
 		throws InstantiationException, IllegalAccessException, InvocationTargetException {
-		return newInstance(clazz, new Object[] { argValue }, new Class<?>[] { argType });
+		return newInstance(cls, new Object[] { argValue }, new Class<?>[] { argType });
 	}
 
 	/**
-	 * new instance by the clazz
-	 * @param clazz class
+	 * new instance by the class
+	 * @param cls class
 	 * @return object instance
 	 * @param argValues constructor arguments value
 	 * @param argTypes constructor arguments type
@@ -1332,23 +1332,23 @@ public abstract class Classes {
 	 * @throws InvocationTargetException if InvocationTargetException occurs
 	 * @see Constructors#invokeConstructor(Class, Class[], Object[])
 	 */
-	public static <T> T newInstance(Class<T> clazz, Object[] argValues, Class<?>[] argTypes)
+	public static <T> T newInstance(Class<T> cls, Object[] argValues, Class<?>[] argTypes)
 		throws InstantiationException, IllegalAccessException, InvocationTargetException {
-		return Constructors.invokeConstructor(clazz, argTypes, argValues);
+		return Constructors.invokeConstructor(cls, argTypes, argValues);
 	}
 
 	/**
 	 * Returns a {@link Constructor} for the given method signature, or <tt>null</tt>
 	 * if no such <tt>Constructor</tt> can be found.
 	 *
-	 * @param type     the (non-<tt>null</tt>) type of {@link Object} the returned {@link Constructor} should create
+	 * @param cls     the (non-<tt>null</tt>) type of {@link Object} the returned {@link Constructor} should create
 	 * @param argTypes a non-<tt>null</tt> array of types describing the parameters to the {@link Constructor}.
 	 * @return a {@link Constructor} for the given method signature, or <tt>null</tt>
 	 *         if no such <tt>Constructor</tt> can be found.
 	 * @see Constructors#getConstructor(Class, Class[])
 	 */
-	public static <T> Constructor<T> getConstructor(Class<T> type, Class<?>[] argTypes) {
-		return Constructors.getConstructor(type, argTypes);
+	public static <T> Constructor<T> getConstructor(Class<T> cls, Class<?>[] argTypes) {
+		return Constructors.getConstructor(cls, argTypes);
 	}
 	
 	/**
@@ -1403,24 +1403,24 @@ public abstract class Classes {
 
 	/**
 	 * Primitive Class to Wrapper Class: int.class -> Integer.class
-	 * @param type the type of the potentially primitive class
+	 * @param cls the type of the potentially primitive class
 	 * @return the primitive wrapper class
 	 */
-	public static Class<?> primitive2Wrapper(Class<?> type) {
-		if (type != null && type.isPrimitive()) {
-			type = primitive2WrapperTypeMap.get(type);
+	public static Class<?> primitive2Wrapper(Class<?> cls) {
+		if (cls != null && cls.isPrimitive()) {
+			cls = primitive2WrapperTypeMap.get(cls);
 		}
-		return type;
+		return cls;
 	}
 	
 	/**
 	 * Wrapper Class to Primitive Class: Integer.class -> int.class
-	 * @param type the type of the potentially primitive wrapper class
+	 * @param cls the type of the potentially primitive wrapper class
 	 * @return the primitive class
 	 */
-	public static Class<?> wrapper2Primitive(Class<?> type) {
-		Class<?> wrapper = wrapper2PrimitiveTypeMap.get(type);
-		return (wrapper == null ? type : wrapper);
+	public static Class<?> wrapper2Primitive(Class<?> cls) {
+		Class<?> wrapper = wrapper2PrimitiveTypeMap.get(cls);
+		return (wrapper == null ? cls : wrapper);
 	}
 	
 	/**
@@ -1438,24 +1438,24 @@ public abstract class Classes {
 	/**
 	 * Return the user-defined class for the given class: usually simply the given
 	 * class, but the original class in case of a CGLIB-generated subclass.
-	 * @param clazz the class to check
+	 * @param cls the class to check
 	 * @return the user-defined class
 	 */
-	public static Class<?> getUserClass(Class<?> clazz) {
-		return (clazz != null && clazz.getName().indexOf(CGLIB_CLASS_SEPARATOR) != -1 ?
-				clazz.getSuperclass() : clazz);
+	public static Class<?> getUserClass(Class<?> cls) {
+		return (cls != null && cls.getName().indexOf(CGLIB_CLASS_SEPARATOR) != -1 ?
+				cls.getSuperclass() : cls);
 	}
 
 	/**
 	 * Check whether the given class is cache-safe in the given context,
 	 * i.e. whether it is loaded by the given ClassLoader or a parent of it.
-	 * @param clazz the class to analyze
+	 * @param cls the class to analyze
 	 * @param classLoader the ClassLoader to potentially cache metadata in
 	 * @return true if the given class is cache-safe
 	 */
-	public static boolean isCacheSafe(Class<?> clazz, ClassLoader classLoader) {
-		Asserts.notNull(clazz, "Class must not be null");
-		ClassLoader target = clazz.getClassLoader();
+	public static boolean isCacheSafe(Class<?> cls, ClassLoader classLoader) {
+		Asserts.notNull(cls, "Class must not be null");
+		ClassLoader target = cls.getClassLoader();
 		if (target == null) {
 			return false;
 		}
@@ -1502,22 +1502,22 @@ public abstract class Classes {
 
 	/**
 	 * Get the class name without the qualified package name.
-	 * @param clazz the class to get the short name for
+	 * @param cls the class to get the short name for
 	 * @return the class name of the class without the package name
 	 */
-	public static String getSimpleClassName(Class<?> clazz) {
-		return getSimpleClassName(getQualifiedClassName(clazz));
+	public static String getSimpleClassName(Class<?> cls) {
+		return getSimpleClassName(getQualifiedClassName(cls));
 	}
 
 	/**
 	 * Determine the name of the class file, relative to the containing
 	 * package: e.g. "String.class"
-	 * @param clazz the class
+	 * @param cls the class
 	 * @return the file name of the ".class" file
 	 */
-	public static String getClassFileName(Class<?> clazz) {
-		Asserts.notNull(clazz, "Class must not be null");
-		String className = clazz.getName();
+	public static String getClassFileName(Class<?> cls) {
+		Asserts.notNull(cls, "Class must not be null");
+		String className = cls.getName();
 		int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
 		return className.substring(lastDotIndex + 1) + CLASS_FILE_SUFFIX;
 	}
@@ -1525,56 +1525,56 @@ public abstract class Classes {
 	/**
 	 * Return the qualified name of the given class: usually simply
 	 * the class name, but component type class name + "[]" for arrays.
-	 * @param clazz the class
+	 * @param cls the class
 	 * @return the qualified name of the class
 	 */
-	public static String getCastableClassName(String clazz) {
-		return clazz.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
+	public static String getCastableClassName(String cls) {
+		return cls.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
 	}
 	
 	/**
 	 * Return the qualified name of the given class: usually simply
 	 * the class name, but component type class name + "[]" for arrays.
-	 * @param clazz the class
+	 * @param cls the class
 	 * @return the qualified name of the class
 	 */
-	public static String getQualifiedClassName(Class<?> clazz) {
-		Asserts.notNull(clazz, "Class must not be null");
-		if (clazz.isArray()) {
+	public static String getQualifiedClassName(Class<?> cls) {
+		Asserts.notNull(cls, "Class must not be null");
+		if (cls.isArray()) {
 			StringBuilder sb = new StringBuilder();
-			while (clazz.isArray()) {
-				clazz = clazz.getComponentType();
+			while (cls.isArray()) {
+				cls = cls.getComponentType();
 				sb.append(Classes.ARRAY_SUFFIX);
 			}
-			sb.insert(0, getQualifiedClassName(clazz));
+			sb.insert(0, getQualifiedClassName(cls));
 			return sb.toString();
 		}
 		else {
-			return getCastableClassName(clazz.getName());
+			return getCastableClassName(cls.getName());
 		}
 	}
 
 	/**
 	 * Return the castable class name of the given class, usually wrap
 	 * the class name: "int" -> "Integer".
-	 * @param clazz the class
+	 * @param cls the class
 	 * @return the castable class name
 	 */
-	public static String getCastableClassName(Class<?> clazz) {
-		if (clazz.isArray()) {
+	public static String getCastableClassName(Class<?> cls) {
+		if (cls.isArray()) {
 			StringBuilder sb = new StringBuilder();
-			while (clazz.isArray()) {
-				clazz = clazz.getComponentType();
+			while (cls.isArray()) {
+				cls = cls.getComponentType();
 				sb.append("[]");
 			}
-			sb.insert(0, getQualifiedClassName(clazz));
+			sb.insert(0, getQualifiedClassName(cls));
 			return sb.toString();
 		}
-		else if (clazz.isPrimitive()) {
-			return primitive2Wrapper(clazz).getName();
+		else if (cls.isPrimitive()) {
+			return primitive2Wrapper(cls).getName();
 		}
 		else {
-			return getCastableClassName(clazz.getName());
+			return getCastableClassName(cls.getName());
 		}
 	}
 
@@ -1593,28 +1593,28 @@ public abstract class Classes {
 	/**
 	 * Determine whether the given class has a constructor with the given signature.
 	 * <p>Essentially translates <code>NoSuchMethodException</code> to "false".
-	 * @param clazz	the clazz to analyze
+	 * @param cls	the class to analyze
 	 * @param paramTypes the parameter types of the method
 	 * @return whether the class has a corresponding constructor
 	 * @see java.lang.Class#getMethod
 	 */
-	public static boolean hasConstructor(Class<?> clazz, Class<?>[] paramTypes) {
-		return (getConstructorIfAvailable(clazz, paramTypes) != null);
+	public static boolean hasConstructor(Class<?> cls, Class<?>[] paramTypes) {
+		return (getConstructorIfAvailable(cls, paramTypes) != null);
 	}
 
 	/**
 	 * Determine whether the given class has a constructor with the given signature,
 	 * and return it if available (else return <code>null</code>).
 	 * <p>Essentially translates <code>NoSuchMethodException</code> to <code>null</code>.
-	 * @param clazz	the clazz to analyze
+	 * @param cls	the class to analyze
 	 * @param paramTypes the parameter types of the method
 	 * @return the constructor, or <code>null</code> if not found
 	 * @see java.lang.Class#getConstructor
 	 */
-	public static Constructor getConstructorIfAvailable(Class<?> clazz, Class<?>[] paramTypes) {
-		Asserts.notNull(clazz, "Class must not be null");
+	public static Constructor getConstructorIfAvailable(Class<?> cls, Class<?>[] paramTypes) {
+		Asserts.notNull(cls, "Class must not be null");
 		try {
-			return clazz.getConstructor(paramTypes);
+			return cls.getConstructor(paramTypes);
 		}
 		catch (NoSuchMethodException ex) {
 			return null;
@@ -1624,40 +1624,40 @@ public abstract class Classes {
 	/**
 	 * Check if the given class represents an array of primitives,
 	 * i.e. boolean, byte, char, short, int, long, float, or double.
-	 * @param clazz the class to check
+	 * @param cls the class to check
 	 * @return whether the given class is a primitive array class
 	 */
-	public static boolean isPrimitiveArray(Class<?> clazz) {
-		if (clazz == null) {
+	public static boolean isPrimitiveArray(Class<?> cls) {
+		if (cls == null) {
 			return false;
 		}
-		return (clazz.isArray() && clazz.getComponentType().isPrimitive());
+		return (cls.isArray() && cls.getComponentType().isPrimitive());
 	}
 
 	/**
 	 * Check if the given class represents an array of primitive wrappers,
 	 * i.e. Boolean, Byte, Character, Short, Integer, Long, Float, or Double.
-	 * @param clazz the class to check
+	 * @param cls the class to check
 	 * @return whether the given class is a primitive wrapper array class
 	 */
-	public static boolean isPrimitiveWrapperArray(Class<?> clazz) {
-		if (clazz == null) {
+	public static boolean isPrimitiveWrapperArray(Class<?> cls) {
+		if (cls == null) {
 			return false;
 		}
-		return (clazz.isArray() && isPrimitiveWrapper(clazz.getComponentType()));
+		return (cls.isArray() && isPrimitiveWrapper(cls.getComponentType()));
 	}
 
 	/**
 	 * Determine if the given type is assignable from the given value,
 	 * assuming setting by reflection. Considers primitive wrapper classes
 	 * as assignable to the corresponding primitive types.
-	 * @param type	the target type
+	 * @param cls	the target type
 	 * @param value the value that should be assigned to the type
 	 * @return if the type is assignable from the value
 	 */
-	public static boolean isAssignableValue(Class<?> type, Object value) {
-		Asserts.notNull(type, "Type must not be null");
-		return (value != null ? isAssignable(value.getClass(), type) : !type.isPrimitive());
+	public static boolean isAssignableValue(Class<?> cls, Object value) {
+		Asserts.notNull(cls, "Class must not be null");
+		return (value != null ? isAssignable(value.getClass(), cls) : !cls.isPrimitive());
 	}
 
 	/**
@@ -1686,18 +1686,18 @@ public abstract class Classes {
 	 * if necesssary, and concatenating the specified resource name to this.
 	 * <br/>As such, this function may be used to build a path suitable for
 	 * loading a resource file that is in the same package as a class file.
-	 * @param clazz	the Class whose package will be used as the base
+	 * @param cls	the Class whose package will be used as the base
 	 * @param resourceName the resource name to append. A leading slash is optional.
 	 * @return the built-up resource path
 	 * @see java.lang.ClassLoader#getResource
 	 * @see java.lang.Class#getResource
 	 */
-	public static String getResourcePath(Class<?> clazz, String resourceName) {
+	public static String getResourcePath(Class<?> cls, String resourceName) {
 		Asserts.notNull(resourceName, "Resource name must not be null");
 		if (!resourceName.startsWith("/")) {
-			return classPackageAsResourcePath(clazz) + "/" + resourceName;
+			return classPackageAsResourcePath(cls) + "/" + resourceName;
 		}
-		return classPackageAsResourcePath(clazz) + resourceName;
+		return classPackageAsResourcePath(cls) + resourceName;
 	}
 
 	/**
@@ -1708,17 +1708,17 @@ public abstract class Classes {
 	 * directly to <code>ClassLoader.getResource()</code>. For it to be fed to
 	 * <code>Class.getResource</code> instead, a leading slash would also have
 	 * to be prepended to the returned value.
-	 * @param clazz the input class. A <code>null</code> value or the default
+	 * @param cls the input class. A <code>null</code> value or the default
 	 * (empty) package will result in an empty string ("") being returned.
 	 * @return a path which represents the package name
 	 * @see ClassLoader#getResource
 	 * @see Class#getResource
 	 */
-	public static String classPackageAsResourcePath(Class<?> clazz) {
-		if (clazz == null) {
+	public static String classPackageAsResourcePath(Class<?> cls) {
+		if (cls == null) {
 			return "";
 		}
-		String className = clazz.getName();
+		String className = cls.getName();
 		int packageEndIndex = className.lastIndexOf('.');
 		if (packageEndIndex == -1) {
 			return "";
@@ -1755,8 +1755,8 @@ public abstract class Classes {
 		}
 		StringBuilder sb = new StringBuilder("[");
 		for (Iterator it = classes.iterator(); it.hasNext(); ) {
-			Class<?> clazz = (Class<?>) it.next();
-			sb.append(clazz.getName());
+			Class<?> cls = (Class<?>) it.next();
+			sb.append(cls.getName());
 			if (it.hasNext()) {
 				sb.append(", ");
 			}
@@ -1768,8 +1768,8 @@ public abstract class Classes {
 
 	/**
 	 * Return all interfaces that the given instance implements as array,
-	 * including ones implemented by superclasses.
-	 * @param instance the instance to analyse for interfaces
+	 * including ones implemented by super classes.
+	 * @param instance the instance to analyze for interfaces
 	 * @return all interfaces that the given instance implements as array
 	 */
 	public static Class<?>[] getAllInterfaces(Object instance) {
@@ -1781,37 +1781,37 @@ public abstract class Classes {
 	 * Return all interfaces that the given class implements as array,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyse for interfaces
+	 * @param cls the class to analyse for interfaces
 	 * @return all interfaces that the given object implements as array
 	 */
-	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz) {
-		return getAllInterfacesForClass(clazz, null);
+	public static Class<?>[] getAllInterfacesForClass(Class<?> cls) {
+		return getAllInterfacesForClass(cls, null);
 	}
 
 	/**
 	 * Return all interfaces that the given class implements as array,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyse for interfaces
+	 * @param cls the class to analyse for interfaces
 	 * @param classLoader the ClassLoader that the interfaces need to be visible in
 	 * (may be <code>null</code> when accepting all declared interfaces)
 	 * @return all interfaces that the given object implements as array
 	 */
-	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz, ClassLoader classLoader) {
-		Asserts.notNull(clazz, "Class must not be null");
-		if (clazz.isInterface()) {
-			return new Class<?>[] {clazz};
+	public static Class<?>[] getAllInterfacesForClass(Class<?> cls, ClassLoader classLoader) {
+		Asserts.notNull(cls, "Class must not be null");
+		if (cls.isInterface()) {
+			return new Class<?>[] {cls};
 		}
 		List<Class<?>> interfaces = new ArrayList<Class<?>>();
-		while (clazz != null) {
-			for (int i = 0; i < clazz.getInterfaces().length; i++) {
-				Class<?> ifc = clazz.getInterfaces()[i];
+		while (cls != null) {
+			for (int i = 0; i < cls.getInterfaces().length; i++) {
+				Class<?> ifc = cls.getInterfaces()[i];
 				if (!interfaces.contains(ifc) &&
 						(classLoader == null || isVisible(ifc, classLoader))) {
 					interfaces.add(ifc);
 				}
 			}
-			clazz = clazz.getSuperclass();
+			cls = cls.getSuperclass();
 		}
 		return (Class<?>[]) interfaces.toArray(new Class<?>[interfaces.size()]);
 	}
@@ -1822,8 +1822,8 @@ public abstract class Classes {
 	 * 
 	 * @return 属性列表
 	 */
-	public static Collection<Field> getFields(Class<?> clazz) {
-		return _getFields(clazz, true, false, true, true);
+	public static Collection<Field> getFields(Class<?> cls) {
+		return _getFields(cls, true, false, true, true);
 	}
 
 	/**
@@ -1832,8 +1832,8 @@ public abstract class Classes {
 	 * @param noFinal 是否包括 final 修饰符的字段
 	 * @return 字段列表
 	 */
-	public static Collection<Field> getStaticFields(Class<?> clazz, boolean noFinal) {
-		return _getFields(clazz, false, true, noFinal, true);
+	public static Collection<Field> getStaticFields(Class<?> cls, boolean noFinal) {
+		return _getFields(cls, false, true, noFinal, true);
 	}
 
 	private static Collection<Field> _getFields(Class<?> cc, boolean noStatic, boolean noMember, boolean noFinal, boolean noInner) {
@@ -1890,36 +1890,36 @@ public abstract class Classes {
 	 * Return all interfaces that the given class implements as Set,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyse for interfaces
+	 * @param cls the class to analyse for interfaces
 	 * @return all interfaces that the given object implements as Set
 	 */
-	public static Set getAllInterfacesForClassAsSet(Class<?> clazz) {
-		return getAllInterfacesForClassAsSet(clazz, null);
+	public static Set getAllInterfacesForClassAsSet(Class<?> cls) {
+		return getAllInterfacesForClassAsSet(cls, null);
 	}
 
 	/**
 	 * Return all interfaces that the given class implements as Set,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
-	 * @param clazz the class to analyse for interfaces
+	 * @param cls the class to analyse for interfaces
 	 * @param classLoader the ClassLoader that the interfaces need to be visible in
 	 * (may be <code>null</code> when accepting all declared interfaces)
 	 * @return all interfaces that the given object implements as Set
 	 */
-	public static Set getAllInterfacesForClassAsSet(Class<?> clazz, ClassLoader classLoader) {
-		Asserts.notNull(clazz, "Class must not be null");
-		if (clazz.isInterface()) {
-			return Collections.singleton(clazz);
+	public static Set getAllInterfacesForClassAsSet(Class<?> cls, ClassLoader classLoader) {
+		Asserts.notNull(cls, "Class must not be null");
+		if (cls.isInterface()) {
+			return Collections.singleton(cls);
 		}
 		Set<Class<?>> interfaces = new LinkedHashSet<Class<?>>();
-		while (clazz != null) {
-			for (int i = 0; i < clazz.getInterfaces().length; i++) {
-				Class<?> ifc = clazz.getInterfaces()[i];
+		while (cls != null) {
+			for (int i = 0; i < cls.getInterfaces().length; i++) {
+				Class<?> ifc = cls.getInterfaces()[i];
 				if (classLoader == null || isVisible(ifc, classLoader)) {
 					interfaces.add(ifc);
 				}
 			}
-			clazz = clazz.getSuperclass();
+			cls = cls.getSuperclass();
 		}
 		return interfaces;
 	}
@@ -1941,18 +1941,18 @@ public abstract class Classes {
 
 	/**
 	 * Check whether the given class is visible in the given ClassLoader.
-	 * @param clazz the class to check (typically an interface)
+	 * @param cls the class to check (typically an interface)
 	 * @param classLoader the ClassLoader to check against (may be <code>null</code>,
 	 * in which case this method will always return <code>true</code>)
 	 * @return true if the given class is visible
 	 */
-	public static boolean isVisible(Class<?> clazz, ClassLoader classLoader) {
+	public static boolean isVisible(Class<?> cls, ClassLoader classLoader) {
 		if (classLoader == null) {
 			return true;
 		}
 		try {
-			Class<?> actualClass = classLoader.loadClass(clazz.getName());
-			return (clazz == actualClass);
+			Class<?> actualClass = classLoader.loadClass(cls.getName());
+			return (cls == actualClass);
 			// Else: different interface class found...
 		}
 		catch (ClassNotFoundException ex) {
@@ -1965,165 +1965,165 @@ public abstract class Classes {
 	 * find a annotation from this class to super class
 	 * 
 	 * @param <A> annotation type
-	 * @param clazz Class
+	 * @param cls Class
 	 * @param annType annotation type
 	 * @return annotation instance
 	 */
-	public static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annType) {
+	public static <A extends Annotation> A getAnnotation(Class<?> cls, Class<A> annType) {
 		A ann;
 		do {
-			ann = clazz.getAnnotation(annType);
-			clazz = clazz.getSuperclass();
+			ann = cls.getAnnotation(annType);
+			cls = cls.getSuperclass();
 		}
-		while (null == ann && clazz != null && clazz != Object.class);
+		while (null == ann && cls != null && cls != Object.class);
 		return ann;
 	}
 
 	/**
 	 * @return true if the class is String
 	 */
-	public static boolean isString(Class<?> clazz) {
-		return String.class.equals(clazz);
+	public static boolean isString(Class<?> cls) {
+		return String.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is CharSequence
 	 */
-	public static boolean isCharSequence(Class<?> clazz) {
-		return isAssignable(clazz, CharSequence.class);
+	public static boolean isCharSequence(Class<?> cls) {
+		return isAssignable(cls, CharSequence.class);
 	}
 
 	/**
 	 * @return true if the class is char or Character
 	 */
-	public static boolean isChar(Class<?> clazz) {
-		return char.class.equals(clazz) || Character.class.equals(clazz);
+	public static boolean isChar(Class<?> cls) {
+		return char.class.equals(cls) || Character.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is boolean or Boolean
 	 */
-	public static boolean isBoolean(Class<?> clazz) {
-		return boolean.class.equals(clazz) || Boolean.class.equals(clazz);
+	public static boolean isBoolean(Class<?> cls) {
+		return boolean.class.equals(cls) || Boolean.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is float or Float
 	 */
-	public static boolean isFloat(Class<?> clazz) {
-		return float.class.equals(clazz) || Float.class.equals(clazz);
+	public static boolean isFloat(Class<?> cls) {
+		return float.class.equals(cls) || Float.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is double or Double
 	 */
-	public static boolean isDouble(Class<?> clazz) {
-		return double.class.equals(clazz) || Double.class.equals(clazz);
+	public static boolean isDouble(Class<?> cls) {
+		return double.class.equals(cls) || Double.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is int or Integer
 	 */
-	public static boolean isInt(Class<?> clazz) {
-		return int.class.equals(clazz) || Integer.class.equals(clazz);
+	public static boolean isInt(Class<?> cls) {
+		return int.class.equals(cls) || Integer.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is float or double or BigDecimal
 	 */
-	public static boolean isDecimal(Class<?> clazz) {
-		return isFloat(clazz) || isDouble(clazz) || BigDecimal.class.equals(clazz);
+	public static boolean isDecimal(Class<?> cls) {
+		return isFloat(cls) || isDouble(cls) || BigDecimal.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is long or Long
 	 */
-	public static boolean isLong(Class<?> clazz) {
-		return long.class.equals(clazz) || Long.class.equals(clazz);
+	public static boolean isLong(Class<?> cls) {
+		return long.class.equals(cls) || Long.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is short or Short
 	 */
-	public static boolean isShort(Class<?> clazz) {
-		return short.class.equals(clazz) || Short.class.equals(clazz);
+	public static boolean isShort(Class<?> cls) {
+		return short.class.equals(cls) || Short.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is byte or Byte
 	 */
-	public static boolean isByte(Class<?> clazz) {
-		return byte.class.equals(clazz) || Byte.class.equals(clazz);
+	public static boolean isByte(Class<?> cls) {
+		return byte.class.equals(cls) || Byte.class.equals(cls);
 	}
 
 	/**
 	 * @return true if the class is int, long, short, byte, BigInteger
 	 */
-	public static boolean isIntLike(Class<?> clazz) {
-		return clazz != null && (isInt(clazz) || isLong(clazz) || isShort(clazz) || isByte(clazz) || BigInteger.class.equals(clazz));
+	public static boolean isIntLike(Class<?> cls) {
+		return cls != null && (isInt(cls) || isLong(cls) || isShort(cls) || isByte(cls) || BigInteger.class.equals(cls));
 	}
 
 	/**
 	 * @return true if the class is a primitive number class
 	 */
-	public static boolean isPrimitiveNumber(Class<?> clazz) {
-		return clazz != null && (isInt(clazz) || isLong(clazz) || isFloat(clazz) || isDouble(clazz) || isByte(clazz) || isShort(clazz));
+	public static boolean isPrimitiveNumber(Class<?> cls) {
+		return cls != null && (isInt(cls) || isLong(cls) || isFloat(cls) || isDouble(cls) || isByte(cls) || isShort(cls));
 	}
 
 	/**
 	 * @return true if the class is a number class
 	 */
-	public static boolean isNumber(Class<?> clazz) {
-		return clazz != null && (Number.class.isAssignableFrom(clazz) || isPrimitiveNumber(clazz));
+	public static boolean isNumber(Class<?> cls) {
+		return cls != null && (Number.class.isAssignableFrom(cls) || isPrimitiveNumber(cls));
 	}
 
 	/**
 	 * @return true if the class is a enum class
 	 */
-	public static boolean isEnum(Class<?> clazz) {
-		return clazz != null && clazz.isEnum();
+	public static boolean isEnum(Class<?> cls) {
+		return cls != null && cls.isEnum();
 	}
 
 	/**
 	 * @return true if the class is a interface class
 	 */
-	public static boolean isInterface(Class<?> clazz) {
-		return clazz != null && clazz.isInterface();
+	public static boolean isInterface(Class<?> cls) {
+		return cls != null && cls.isInterface();
 	}
 
 	/**
 	 * @return true if the class is Array, Map, Collection
 	 */
-	public static boolean isContainer(Class<?> clazz) {
-		return isArray(clazz) || isCollection(clazz) || isMap(clazz);
+	public static boolean isContainer(Class<?> cls) {
+		return isArray(cls) || isCollection(cls) || isMap(cls);
 	}
 
 	/**
 	 * @return true if the class is Array class
 	 */
-	public static boolean isArray(Class<?> clazz) {
-		return clazz != null && clazz.isArray();
+	public static boolean isArray(Class<?> cls) {
+		return cls != null && cls.isArray();
 	}
 
 	/**
 	 * @return true if the class is Collection class
 	 */
-	public static boolean isCollection(Class<?> clazz) {
-		return isAssignable(clazz, Collection.class);
+	public static boolean isCollection(Class<?> cls) {
+		return isAssignable(cls, Collection.class);
 	}
 
 	/**
 	 * @return true if the class is Map class
 	 */
-	public static boolean isMap(Class<?> clazz) {
-		return isAssignable(clazz, Map.class);
+	public static boolean isMap(Class<?> cls) {
+		return isAssignable(cls, Map.class);
 	}
 
 	/**
 	 * @return true if the class is a Date or Calendar class
 	 */
-	public static boolean isDateTime(Class<?> clazz) {
-		return clazz != null && (isAssignable(clazz, Calendar.class) || isAssignable(clazz, Date.class));
+	public static boolean isDateTime(Class<?> cls) {
+		return cls != null && (isAssignable(cls, Calendar.class) || isAssignable(cls, Date.class));
 	}
 
 	/**
@@ -2131,19 +2131,19 @@ public abstract class Classes {
 	 * enum, primitive type, primitive wrapper, all class inherit from
 	 * CharSequence, Date, Calendar, Number 
 	 *  
-	 * @param clazz class
+	 * @param cls class
 	 * @return true if the class is a immutable type
 	 */
-	public static boolean isImmutable(Class<?> clazz) {
-		if (clazz.isEnum()) {
+	public static boolean isImmutable(Class<?> cls) {
+		if (cls.isEnum()) {
 			return true;
 		}
-		if (Classes.isPrimitiveOrWrapper(clazz)) {
+		if (Classes.isPrimitiveOrWrapper(cls)) {
 			return true;
 		}
 		
 		for (Class<?> c : IMMUTABLE_TYPES) {
-			if (c.isAssignableFrom(clazz)) {
+			if (c.isAssignableFrom(cls)) {
 				return true;
 			}
 		}
