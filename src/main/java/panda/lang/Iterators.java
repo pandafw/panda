@@ -96,6 +96,18 @@ public abstract class Iterators {
 		}
 	}
 
+	public static class IteratorIterable implements Iterable {
+		private final Iterator iterator;
+		
+		public IteratorIterable(Iterator iterator) {
+			this.iterator = iterator;
+		}
+
+		public Iterator iterator() {
+			return iterator;
+		}
+	}
+	
 	public static Iterator asIterator(Object value) {
 		if (value == null) {
 			return null;
@@ -133,8 +145,12 @@ public abstract class Iterators {
 			return (Iterable)value;
 		}
 
+		if (value instanceof Iterator) {
+			return new IteratorIterable((Iterator)value);
+		}
+
 		if (value instanceof Map) {
-			value = ((Map)value).entrySet();
+			return ((Map)value).entrySet();
 		}
 
 		if (value.getClass().isArray()) {
