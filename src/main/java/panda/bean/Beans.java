@@ -31,9 +31,7 @@ public class Beans {
 
 	static {
 		try {
-			i = (Beans)Classes.newInstance(
-					Beans.class.getPackage().getName().toString()
-					+ ".FastBeans");
+			i = (Beans)Classes.newInstance(Beans.class.getPackage().getName() + ".FastBeans");
 		}
 		catch (Throwable e) {
 			i = new Beans();

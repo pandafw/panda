@@ -201,8 +201,7 @@ public abstract class Types {
 	 *         {@link GenericArrayType}.
 	 */
 	public static boolean isArrayType(Type type) {
-		return type instanceof GenericArrayType || type instanceof Class<?>
-				&& ((Class<?>)type).isArray();
+		return type instanceof GenericArrayType || type instanceof Class<?> && ((Class<?>)type).isArray();
 	}
 
 	/**
