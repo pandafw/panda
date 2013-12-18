@@ -6,6 +6,18 @@
 	color: #b94a48;
 }
 
+/** form layout */
+.p-form.form-horizontal .form-group {
+	border-bottom: 1px dashed #ccc;
+	margin: 0;
+	padding: 5px 0 5px 0;
+}
+.p-form.form-horizontal .p-buttons.form-group {
+	border-bottom: 0;
+}
+
+
+/** form inputs */
 .p-checkboxlist label.checkbox-inline {
 	padding-right: 10px;
 }
@@ -15,8 +27,8 @@
 }
 
 
-/** datetimepicker 
-  .p-datepicker, .p-timepicker, .p-datetimepicker {
+/** datetimepicker */
+/* .p-datepicker, .p-timepicker, .p-datetimepicker {
 }
 */
 i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
