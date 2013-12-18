@@ -1,22 +1,156 @@
-package panda.dao.sql;
+package panda.dao.sql.executor;
 
+import java.lang.reflect.Type;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import panda.bean.BeanHandler;
+import panda.dao.sql.JdbcTypes;
+import panda.dao.sql.SqlNamings;
+import panda.dao.sql.SqlResultSet;
+import panda.dao.sql.Sqls;
+import panda.dao.sql.adapter.TypeAdapter;
+import panda.lang.Types;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public interface SqlResultSet<T> {
+public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
+	protected static Log log = Logs.getLog(JdbcSqlResultSet.class);
+
+	protected JdbcSqlExecutor executor;
+	protected ResultSet resultSet;
+
+	/**
+	 * ResultColumn
+	 */
+	private class ResultColumn {
+		protected int columnIndex;
+		protected String columnLabel;
+		protected int columnType;
+		protected String jdbcType;
+		protected String propertyName;
+		protected Type propertyType;
+		protected TypeAdapter typeAdapter;
+	}
+
+	private List<ResultColumn> resultColumns;
+	private BeanHandler<T> beanHandler;
+	private boolean immutableType;
+
+	/**
+	 * Constructor
+	 * @param executor the sql executor
+	 * @param resultSet the sql result set
+	 * @param resultType the result bean type
+	 * @throws SQLException if a SQL error occurs
+	 */
+	public JdbcSqlResultSet(JdbcSqlExecutor executor, ResultSet resultSet, Class<T> resultType)
+			throws SQLException {
+		this(executor, resultSet, resultType, null, null);
+	}
+	
+	/**
+	 * Constructor
+	 * @param executor the sql executor
+	 * @param resultSet the sql result set
+	 * @param resultType the result bean type
+	 * @param resultObject the initial result object
+	 * @throws SQLException if a SQL error occurs
+	 */
+	public JdbcSqlResultSet(JdbcSqlExecutor executor, ResultSet resultSet, Class<T> resultType, T resultObject)
+			throws SQLException {
+		this(executor, resultSet, resultType, resultObject, null);
+	}
+	
+	/**
+	 * Constructor
+	 * @param executor the sql executor
+	 * @param resultSet the sql result set
+	 * @param resultType the result bean type
+	 * @param resultObject the initial result object
+	 * @param keyProp the generated key property
+	 * @throws SQLException if a SQL error occurs
+	 */
+	public JdbcSqlResultSet(JdbcSqlExecutor executor, ResultSet resultSet, Class<T> resultType, T resultObject, String keyProp)
+			throws SQLException {
+		this.executor = executor;
+		this.resultSet = resultSet;
+		init(resultType, resultObject, keyProp);
+	}
+
+	private void init(Class<T> beanType, T resultObject, String keyProp) throws SQLException {
+		beanHandler = executor.getBeans().getBeanHandler(beanType);
+		immutableType = executor.getBeans().isImmutableBeanHandler(beanHandler);
+		resultColumns = new ArrayList<ResultColumn>();
+
+		ResultSetMetaData meta = resultSet.getMetaData();
+		if (keyProp == null && immutableType && meta.getColumnCount() != 1) {
+			throw new IllegalArgumentException("Too many result columns for the result: " + beanType);
+		}
+
+		int cnt = meta.getColumnCount();
+		for (int i = 1; i <= cnt; i++) {
+			ResultColumn rc = new ResultColumn();
+			rc.columnIndex = i;
+			rc.columnLabel = meta.getColumnLabel(i);
+			rc.columnType = meta.getColumnType(i);
+			rc.jdbcType = JdbcTypes.getType(rc.columnType);
+			if (keyProp == null) {
+				rc.propertyName = SqlNamings.columnLabel2JavaName(rc.columnLabel);
+			}
+			else {
+				if (cnt > 1) {
+					rc.propertyName = SqlNamings.columnLabel2JavaName(rc.columnLabel);
+					if (!keyProp.equals(rc.propertyName)) {
+						continue;
+					}
+				}
+				else {
+					rc.propertyName = keyProp;
+				}
+			}
+
+			rc.propertyType = beanHandler.getBeanType(resultObject, rc.propertyName);
+			if (rc.propertyType == null) {
+				if (rc.columnLabel.endsWith("_")) {
+					// skip unmapping special column
+					continue;
+				}
+				else {
+					throw new IllegalArgumentException("Unknown Type for " + rc.propertyName);
+				}
+			}
+			rc.typeAdapter = executor.getTypeAdapters().getTypeAdapter(Types.getRawType(rc.propertyType), rc.jdbcType);
+			if (rc.typeAdapter == null) {
+				throw new IllegalArgumentException("Unknown TypeAdapter for " + rc.propertyName + "["
+						+ rc.propertyType + " <-> " + rc.jdbcType + "].");
+			}
+			resultColumns.add(rc);
+		}
+		
+		if (resultColumns.isEmpty()) {
+			throw new IllegalArgumentException("Failed to init column mapping for " + meta + " -> " + beanType);
+		}
+	}
+
 	// ---------------------------------------------------------------------
 	// Get/Update
 	// ---------------------------------------------------------------------
 	/**
 	 * @return the resultSet
 	 */
-	public ResultSet getResultSet();
+	public ResultSet getResultSet() {
+		return resultSet;
+	}
 
 	/**
 	 * returns data to populate a single object instance.
@@ -25,7 +159,9 @@ public interface SqlResultSet<T> {
 	 *         found
 	 * @throws SQLException If anSQL error occurs.
 	 */
-	public T getResult() throws SQLException;
+	public T getResult() throws SQLException {
+		return getResult((T)null);
+	}
 
 	/**
 	 * returns data to populate a single object instance.
@@ -35,7 +171,26 @@ public interface SqlResultSet<T> {
 	 *         the result set data, or null if no result was found
 	 * @throws SQLException If a SQL error occurs.
 	 */
-	public T getResult(T resultObject) throws SQLException;
+	@SuppressWarnings("unchecked")
+	public T getResult(T resultObject) throws SQLException {
+		if (immutableType) {
+			ResultColumn rc = resultColumns.get(0);
+			resultObject = (T)rc.typeAdapter.getResult(resultSet, rc.columnIndex);
+		}
+		else {
+			if (resultObject == null) {
+				resultObject = beanHandler.createObject();
+			}
+
+			for (ResultColumn rc : resultColumns) {
+				Object value = rc.typeAdapter.getResult(resultSet, rc.columnIndex);
+				if (!beanHandler.setBeanValue(resultObject, rc.propertyName, value)) {
+					log.warn("Failed to set " + rc.propertyName + " of " + resultObject.getClass());
+				}
+			}
+		}
+		return resultObject;
+	}
 
 	/**
 	 * update data to result set.
@@ -43,7 +198,13 @@ public interface SqlResultSet<T> {
 	 * @param resultObject The result data object.
 	 * @throws SQLException If anSQL error occurs.
 	 */
-	public void updateResult(T resultObject) throws SQLException;
+	@SuppressWarnings("unchecked")
+	public void updateResult(T resultObject) throws SQLException {
+		for (ResultColumn rc : resultColumns) {
+			Object value = beanHandler.getBeanValue(resultObject, rc.propertyName);
+			rc.typeAdapter.updateResult(resultSet, rc.columnIndex, value);
+		}
+	}
 
 	// ---------------------------------------------------------------------
 	// Traversal/Positioning
@@ -55,7 +216,9 @@ public interface SqlResultSet<T> {
 	 *         cursor is at any other position or the result set contains no rows
 	 * @exception SQLException if a database access error occurs
 	 */
-	public boolean isBeforeFirst() throws SQLException;
+	public boolean isBeforeFirst() throws SQLException {
+		return resultSet.isBeforeFirst();
+	}
 
 	/**
 	 * Retrieves whether the cursor is after the last row in this <code>ResultSet</code> object.
@@ -64,7 +227,9 @@ public interface SqlResultSet<T> {
 	 *         cursor is at any other position or the result set contains no rows
 	 * @exception SQLException if a database access error occurs
 	 */
-	public boolean isAfterLast() throws SQLException;
+	public boolean isAfterLast() throws SQLException {
+		return resultSet.isAfterLast();
+	}
 
 	/**
 	 * Retrieves whether the cursor is on the first row of this <code>ResultSet</code> object.
@@ -72,7 +237,9 @@ public interface SqlResultSet<T> {
 	 * @return <code>true</code> if the cursor is on the first row; <code>false</code> otherwise
 	 * @exception SQLException if a database access error occurs
 	 */
-	public boolean isFirst() throws SQLException;
+	public boolean isFirst() throws SQLException {
+		return resultSet.isFirst();
+	}
 
 	/**
 	 * Retrieves whether the cursor is on the last row of this <code>ResultSet</code> object. Note:
@@ -83,7 +250,9 @@ public interface SqlResultSet<T> {
 	 * @return <code>true</code> if the cursor is on the last row; <code>false</code> otherwise
 	 * @exception SQLException if a database access error occurs
 	 */
-	public boolean isLast() throws SQLException;
+	public boolean isLast() throws SQLException {
+		return resultSet.isLast();
+	}
 
 	/**
 	 * Moves the cursor to the front of this <code>ResultSet</code> object, just before the first
@@ -92,7 +261,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public void beforeFirst() throws SQLException;
+	public void beforeFirst() throws SQLException {
+		resultSet.beforeFirst();
+	}
 
 	/**
 	 * Moves the cursor to the end of this <code>ResultSet</code> object, just after the last row.
@@ -101,7 +272,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public void afterLast() throws SQLException;
+	public void afterLast() throws SQLException {
+		resultSet.afterLast();
+	}
 
 	/**
 	 * Moves the cursor to the first row in this <code>ResultSet</code> object.
@@ -111,7 +284,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public boolean first() throws SQLException;
+	public boolean first() throws SQLException {
+		return resultSet.first();
+	}
 
 	/**
 	 * Moves the cursor to the last row in this <code>ResultSet</code> object.
@@ -121,7 +296,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public boolean last() throws SQLException;
+	public boolean last() throws SQLException {
+		return resultSet.last();
+	}
 
 	/**
 	 * Retrieves the current row number. The first row is number 1, the second number 2, and so on.
@@ -129,7 +306,9 @@ public interface SqlResultSet<T> {
 	 * @return the current row number; <code>0</code> if there is no current row
 	 * @exception SQLException if a database access error occurs
 	 */
-	public int getRow() throws SQLException;
+	public int getRow() throws SQLException {
+		return resultSet.getRow();
+	}
 
 	/**
 	 * Moves the cursor to the given row number in this <code>ResultSet</code> object.
@@ -159,7 +338,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs, or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public boolean absolute(int row) throws SQLException;
+	public boolean absolute(int row) throws SQLException {
+		return resultSet.absolute(row);
+	}
 
 	/**
 	 * Moves the cursor a relative number of rows, either positive or negative. Attempting to move
@@ -179,7 +360,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs, there is no current row, or the
 	 *                result set type is <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public boolean relative(int rows) throws SQLException;
+	public boolean relative(int rows) throws SQLException {
+		return resultSet.relative(rows);
+	}
 
 	/**
 	 * Moves the cursor to the previous row in this <code>ResultSet</code> object.
@@ -189,7 +372,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or the result set type is
 	 *                <code>TYPE_FORWARD_ONLY</code>
 	 */
-	public boolean previous() throws SQLException;
+	public boolean previous() throws SQLException {
+		return resultSet.previous();
+	}
 
 	/**
 	 * Moves the cursor down one row from its current position. A <code>ResultSet</code> cursor is
@@ -206,7 +391,9 @@ public interface SqlResultSet<T> {
 	 *         more rows
 	 * @exception SQLException if a database access error occurs
 	 */
-	public boolean next() throws SQLException;
+	public boolean next() throws SQLException {
+		return resultSet.next();
+	}
 
 	// ---------------------------------------------------------------------
 	// Row Updates
@@ -220,7 +407,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs
 	 * @see DatabaseMetaData#updatesAreDetected
 	 */
-	public boolean rowUpdated() throws SQLException;
+	public boolean rowUpdated() throws SQLException {
+		return resultSet.rowUpdated();
+	}
 
 	/**
 	 * Retrieves whether the current row has had an insertion. The value returned depends on whether
@@ -232,7 +421,9 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @see DatabaseMetaData#insertsAreDetected
 	 */
-	public boolean rowInserted() throws SQLException;
+	public boolean rowInserted() throws SQLException {
+		return resultSet.rowInserted();
+	}
 
 	/**
 	 * Retrieves whether a row has been deleted. A deleted row may leave a visible "hole" in a
@@ -245,7 +436,9 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @see DatabaseMetaData#deletesAreDetected
 	 */
-	public boolean rowDeleted() throws SQLException;
+	public boolean rowDeleted() throws SQLException {
+		return resultSet.rowDeleted();
+	}
 
 	/**
 	 * Inserts the contents of the insert row into this <code>ResultSet</code> object and into the
@@ -255,7 +448,9 @@ public interface SqlResultSet<T> {
 	 *                cursor is not on the insert row, or if not all of non-nullable columns in the
 	 *                insert row have been given a value
 	 */
-	public void insertRow() throws SQLException;
+	public void insertRow() throws SQLException {
+		resultSet.insertRow();
+	}
 
 	/**
 	 * Updates the underlying database with the new contents of the current row of this
@@ -265,7 +460,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or if this method is called when
 	 *                the cursor is on the insert row
 	 */
-	public void updateRow() throws SQLException;
+	public void updateRow() throws SQLException {
+		resultSet.updateRow();
+	}
 
 	/**
 	 * Deletes the current row from this <code>ResultSet</code> object and from the underlying
@@ -274,7 +471,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or if this method is called when
 	 *                the cursor is on the insert row
 	 */
-	public void deleteRow() throws SQLException;
+	public void deleteRow() throws SQLException {
+		resultSet.deleteRow();
+	}
 
 	/**
 	 * Refreshes the current row with its most recent value in the database. This method cannot be
@@ -296,7 +495,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or if this method is called when
 	 *                the cursor is on the insert row
 	 */
-	public void refreshRow() throws SQLException;
+	public void refreshRow() throws SQLException {
+		resultSet.refreshRow();
+	}
 
 	/**
 	 * Cancels the updates made to the current row in this <code>ResultSet</code> object. This
@@ -307,7 +508,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or if this method is called when
 	 *                the cursor is on the insert row
 	 */
-	public void cancelRowUpdates() throws SQLException;
+	public void cancelRowUpdates() throws SQLException {
+		resultSet.cancelRowUpdates();
+	}
 
 	/**
 	 * Moves the cursor to the insert row. The current cursor position is remembered while the
@@ -324,7 +527,9 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @exception SQLException if a database access error occurs or the result set is not updatable
 	 */
-	public void moveToInsertRow() throws SQLException;
+	public void moveToInsertRow() throws SQLException {
+		resultSet.moveToInsertRow();
+	}
 
 	/**
 	 * Moves the cursor to the remembered cursor position, usually the current row. This method has
@@ -332,7 +537,9 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @exception SQLException if a database access error occurs or the result set is not updatable
 	 */
-	public void moveToCurrentRow() throws SQLException;
+	public void moveToCurrentRow() throws SQLException {
+		resultSet.moveToCurrentRow();
+	}
 
 	// ---------------------------------------------------------------------
 	// Properties
@@ -350,7 +557,9 @@ public interface SqlResultSet<T> {
 	 *                <code>FETCH_FORWARD</code>
 	 * @see #getFetchDirection
 	 */
-	public void setFetchDirection(int direction) throws SQLException;
+	public void setFetchDirection(int direction) throws SQLException {
+		resultSet.setFetchDirection(direction);
+	}
 
 	/**
 	 * Retrieves the fetch direction for this <code>ResultSet</code> object.
@@ -359,7 +568,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs
 	 * @see #setFetchDirection
 	 */
-	public int getFetchDirection() throws SQLException;
+	public int getFetchDirection() throws SQLException {
+		return resultSet.getFetchDirection();
+	}
 
 	/**
 	 * Gives the JDBC driver a hint as to the number of rows that should be fetched from the
@@ -373,7 +584,9 @@ public interface SqlResultSet<T> {
 	 *                <code>0 <= rows <= Statement.getMaxRows()</code> is not satisfied
 	 * @see #getFetchSize
 	 */
-	public void setFetchSize(int rows) throws SQLException;
+	public void setFetchSize(int rows) throws SQLException {
+		resultSet.setFetchSize(rows);
+	}
 
 	/**
 	 * Retrieves the fetch size for this <code>ResultSet</code> object.
@@ -382,7 +595,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs
 	 * @see #setFetchSize
 	 */
-	public int getFetchSize() throws SQLException;
+	public int getFetchSize() throws SQLException {
+		return resultSet.getFetchSize();
+	}
 
 	/**
 	 * Retrieves the type of this <code>ResultSet</code> object. The type is determined by the
@@ -393,7 +608,9 @@ public interface SqlResultSet<T> {
 	 *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
 	 * @exception SQLException if a database access error occurs
 	 */
-	public int getType() throws SQLException;
+	public int getType() throws SQLException {
+		return resultSet.getType();
+	}
 
 	/**
 	 * Retrieves the concurrency mode of this <code>ResultSet</code> object. The concurrency used is
@@ -403,7 +620,9 @@ public interface SqlResultSet<T> {
 	 *         <code>ResultSet.CONCUR_UPDATABLE</code>
 	 * @exception SQLException if a database access error occurs
 	 */
-	public int getConcurrency() throws SQLException;
+	public int getConcurrency() throws SQLException {
+		return resultSet.getConcurrency();
+	}
 
 	/**
 	 * Retrieves the first warning reported by calls on this <code>ResultSet</code> object.
@@ -424,7 +643,9 @@ public interface SqlResultSet<T> {
 	 * @exception SQLException if a database access error occurs or this method is called on a
 	 *                closed result set
 	 */
-	public SQLWarning getWarnings() throws SQLException;
+	public SQLWarning getWarnings() throws SQLException {
+		return resultSet.getWarnings();
+	}
 
 	/**
 	 * Clears all warnings reported on this <code>ResultSet</code> object. After this method is
@@ -433,7 +654,9 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @exception SQLException if a database access error occurs
 	 */
-	public void clearWarnings() throws SQLException;
+	public void clearWarnings() throws SQLException {
+		resultSet.clearWarnings();
+	}
 
 	/**
 	 * Retrieves the name of the SQL cursor used by this <code>ResultSet</code> object.
@@ -457,7 +680,9 @@ public interface SqlResultSet<T> {
 	 * @return the SQL name for this <code>ResultSet</code> object's cursor
 	 * @exception SQLException if a database access error occurs
 	 */
-	public String getCursorName() throws SQLException;
+	public String getCursorName() throws SQLException {
+		return resultSet.getCursorName();
+	}
 
 	/**
 	 * Retrieves the number, types and properties of this <code>ResultSet</code> object's columns.
@@ -465,7 +690,9 @@ public interface SqlResultSet<T> {
 	 * @return the description of this <code>ResultSet</code> object's columns
 	 * @exception SQLException if a database access error occurs
 	 */
-	public ResultSetMetaData getMetaData() throws SQLException;
+	public ResultSetMetaData getMetaData() throws SQLException {
+		return resultSet.getMetaData();
+	}
 
 	/**
 	 * Releases this <code>ResultSet</code> object's database and JDBC resources immediately instead
@@ -480,10 +707,24 @@ public interface SqlResultSet<T> {
 	 * 
 	 * @exception SQLException if a database access error occurs
 	 */
-	public void close() throws SQLException;
+	public void close() throws SQLException {
+		Statement st = resultSet.getStatement();
+		resultSet.close();
+		st.close();
+	}
 
 	/**
 	 * safe close the <code>ResultSet</code> and <code>Statement</code>
 	 */
-	public void safeClose();
+	public void safeClose() {
+		Statement st = null;
+		try {
+			st = resultSet.getStatement();
+		}
+		catch (SQLException e) {
+		}
+		finally {
+			Sqls.safeClose(resultSet, st);
+		}
+	}
 }

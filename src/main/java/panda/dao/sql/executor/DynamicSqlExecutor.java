@@ -53,10 +53,10 @@ public class DynamicSqlExecutor extends SimpleSqlExecutor {
 	/**
 	 * createSqlParser
 	 * @param sql sql
-	 * @return SqlParser instance
+	 * @return JdbcSqlParser instance
 	 */
 	@Override
-	protected SqlParser createSqlParser(String sql) {
+	protected JdbcSqlParser createSqlParser(String sql) {
 		return new DynamicSqlParser(sql);
 	}
 }

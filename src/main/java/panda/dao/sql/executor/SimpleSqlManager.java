@@ -22,7 +22,7 @@ public class SimpleSqlManager extends SqlManager {
 	/**
 	 * sqlParserCache
 	 */
-	private Map<String, SqlParser> sqlParserCache = new WeakHashMap<String, SqlParser>();
+	private Map<String, JdbcSqlParser> sqlParserCache = new WeakHashMap<String, JdbcSqlParser>();
 	
 	/**
 	 * Constructor
@@ -49,7 +49,7 @@ public class SimpleSqlManager extends SqlManager {
 	/**
 	 * @return the sqlParserCache
 	 */
-	public SqlParser getSqlParser(String key) {
+	public JdbcSqlParser getSqlParser(String key) {
 		if (sqlParserCache == null) {
 			return null;
 		}
@@ -68,7 +68,7 @@ public class SimpleSqlManager extends SqlManager {
 	 * @param key key
 	 * @param parser parser
 	 */
-	public void putSqlParser(String key, SqlParser parser) {
+	public void putSqlParser(String key, JdbcSqlParser parser) {
 		if (sqlParserCache == null) {
 			return;
 		}

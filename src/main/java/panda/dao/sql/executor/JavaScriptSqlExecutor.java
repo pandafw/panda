@@ -152,9 +152,9 @@ public class JavaScriptSqlExecutor extends SimpleSqlExecutor {
 	 * @throws Exception if an error occurs
 	 */
 	@Override
-	protected String parseSqlStatement(String sql, Object parameter, List<SqlParameter> sqlParams) {
-		Map<String, Class<SqlParser>> sqlParserCache = getJavaScriptSqlManager().getSqlParserCache();
-		Class<SqlParser> parserClass = sqlParserCache.get(sql);
+	protected String parseSqlStatement(String sql, Object parameter, List<JdbcSqlParameter> sqlParams) {
+		Map<String, Class<JdbcSqlParser>> sqlParserCache = getJavaScriptSqlManager().getSqlParserCache();
+		Class<JdbcSqlParser> parserClass = sqlParserCache.get(sql);
 		if (parserClass == null) {
 			synchronized (sqlParserCache) {
 				parserClass = sqlParserCache.get(sql);
@@ -166,7 +166,7 @@ public class JavaScriptSqlExecutor extends SimpleSqlExecutor {
 		}
 		
 		try {
-			SqlParser parser = parserClass.newInstance();
+			JdbcSqlParser parser = parserClass.newInstance();
 			return parser.parse(this, parameter, sqlParams);
 		}
 		catch (Exception e) {
@@ -177,10 +177,10 @@ public class JavaScriptSqlExecutor extends SimpleSqlExecutor {
 	/**
 	 * createSqlParser
 	 * @param sql sql
-	 * @return SqlParser instance
+	 * @return JdbcSqlParser instance
 	 */
 	@SuppressWarnings("unchecked")
-	protected Class<SqlParser> createSqlParserClass(String sql) {
+	protected Class<JdbcSqlParser> createSqlParserClass(String sql) {
 		String packageName = JavaScriptSqlParser.class.getPackage().getName();
 		String simpleName = JavaScriptSqlParser.class.getSimpleName() + getJavaScriptSqlManager().getSequence();
 		String className = packageName + "." + simpleName;

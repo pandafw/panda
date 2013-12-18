@@ -42,7 +42,7 @@ public class FreemarkerSqlExecutor extends SimpleSqlExecutor {
 	 * @return translated sql
 	 */
 	@Override
-	protected String parseSqlStatement(String sql, Object parameterObject, List<SqlParameter> sqlParams) {
+	protected String parseSqlStatement(String sql, Object parameterObject, List<JdbcSqlParameter> sqlParams) {
 		StringBuilderWriter sw = new StringBuilderWriter();
 		try {
 			Template template = getFreemarkerSqlManager().getConfiguration().getTemplate(sql);

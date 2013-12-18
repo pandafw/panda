@@ -17,7 +17,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 		return new DynamicSqlManager().getExecutor();
 	}
 	
-	protected SqlParser createParser(String sql) {
+	protected JdbcSqlParser createParser(String sql) {
 		return new DynamicSqlParser(sql);
 	}
 
@@ -53,10 +53,10 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN( ?,?,?)";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("list", "a"));
-		parameters.add(new SqlParameter("list", "b"));
-		parameters.add(new SqlParameter("list", "c"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("list", "a"));
+		parameters.add(new JdbcSqlParameter("list", "b"));
+		parameters.add(new JdbcSqlParameter("list", "c"));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -73,8 +73,8 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE KIND= ?";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("kind", "a"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("kind", "a"));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -106,9 +106,9 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE ID= ? AND NAME= ? AND KIND IS NULL";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("id", "Id"));
-		parameters.add(new SqlParameter("name", "Name"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("id", "Id"));
+		parameters.add(new JdbcSqlParameter("name", "Name"));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -150,9 +150,9 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 		String translatedSql = "SELECT * FROM SAMPLE"
 			+ " WHERE( NAME= ?) AND KIND= ? ORDER BY ID";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("name", "Name"));
-		parameters.add(new SqlParameter("kind", 'K'));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("name", "Name"));
+		parameters.add(new JdbcSqlParameter("kind", 'K'));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -175,9 +175,9 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 
 		String translatedSql = "UPDATE SAMPLE SET KIND= ? , OTHER= '@kind[,''KIND=:kind]' WHERE ID= ?";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("kind", 'K'));
-		parameters.add(new SqlParameter("id", null));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("kind", 'K'));
+		parameters.add(new JdbcSqlParameter("id", null));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -200,9 +200,9 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 
 		String translatedSql = "UPDATE SAMPLE SET KIND= ? , OTHER= '@kind[,KIND=:kind]' WHERE ID= ?";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("kind", 'K', "CHAR"));
-		parameters.add(new SqlParameter("id", null));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("kind", 'K', "CHAR"));
+		parameters.add(new JdbcSqlParameter("id", null));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}

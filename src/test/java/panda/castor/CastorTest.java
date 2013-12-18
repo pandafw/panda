@@ -154,8 +154,8 @@ public class CastorTest extends TestCase {
 			1, 2, -3, 0
 		};
 		
-		assertEquals(Strings.join(ii), Strings.join(Objects.cast(ss, int[].class)));
-		assertTrue(Arrays.equals(ii, Objects.cast(ss, int[].class)));
+		assertEquals(Strings.join(ii), Strings.join(Castors.scast(ss, int[].class)));
+		assertTrue(Arrays.equals(ii, Castors.scast(ss, int[].class)));
 	}
 
 	public void testStringArrayToIntList() throws Exception {
@@ -170,7 +170,7 @@ public class CastorTest extends TestCase {
 //		System.out.println(ii.length);
 //		System.out.println(Strings.join(ii, ", "));
 		
-		List<Integer> il = Objects.cast(ss, new TypeToken<List<Integer>>(){}.getType());
+		List<Integer> il = Castors.scast(ss, new TypeToken<List<Integer>>(){}.getType());
 		Integer[] iii = il.toArray(new Integer[0]);
 		
 		assertEquals(Strings.join(ii), Strings.join(iii));
@@ -187,7 +187,7 @@ public class CastorTest extends TestCase {
 		al.add(new A());
 		a.setLst(al);
 		
-		B b = Objects.cast(a, B.class);
+		B b = Castors.scast(a, B.class);
 		B[] bl = b.getLst().toArray(new B[0]);
 		assertNotNull(bl);
 		
@@ -203,7 +203,7 @@ public class CastorTest extends TestCase {
 		m.put("dummy", true);
 		m.put("obj.dummy", true);
 		
-		A a = Objects.cast(m, A.class);
+		A a = Castors.scast(m, A.class);
 		assertNotNull(a);
 		assertTrue(a.bol);
 		assertNotNull(a.obj);
@@ -217,7 +217,7 @@ public class CastorTest extends TestCase {
 		m.put("obj", "test");
 		
 		try {
-			Objects.cast(m, A.class);
+			Castors.scast(m, A.class);
 			fail();
 		}
 		catch (CastException e) {

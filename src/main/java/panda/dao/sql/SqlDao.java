@@ -15,6 +15,7 @@ import panda.dao.Transaction;
 import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -34,7 +35,7 @@ public class SqlDao extends AbstractDao {
 	private int autoCount;
 	
 	private Connection connection;
-	private SqlExecutor executor;
+	private JdbcSqlExecutor executor;
 	
 	public SqlDao(SqlDaoClient daoClient) {
 		super(daoClient);
@@ -52,24 +53,26 @@ public class SqlDao extends AbstractDao {
 	//-------------------------------------------------------------------------
 	@Override
 	protected void autoStart() {
-		if (connection == null) {
-			try {
-				connection = getSqlDaoClient().getDataSource().getConnection();
-				connection.setAutoCommit(false);
-				if (transactionLevel != Connection.TRANSACTION_NONE) {
-					connection.setTransactionIsolation(transactionLevel);
+		if (autoCount < 1) {
+			if (connection == null) {
+				try {
+					connection = getSqlDaoClient().getDataSource().getConnection();
+					connection.setAutoCommit(false);
+					if (transactionLevel != Connection.TRANSACTION_NONE) {
+						connection.setTransactionIsolation(transactionLevel);
+					}
+				}
+				catch (SQLException e) {
+					Sqls.safeClose(connection);
+					throw new DaoException("Failed to open connection", e);
 				}
 			}
-			catch (SQLException e) {
-				Sqls.safeClose(connection);
-				throw new DaoException("Failed to open connection", e);
+			if (executor == null) {
+				executor = getSqlDaoClient().getJdbcSqlExecutor();
 			}
-		}
-		if (executor == null) {
-			executor = getSqlDaoClient().getSqlManager().getExecutor(connection);
-		}
-		else {
-			executor.reset();
+			else {
+				executor.reset();
+			}
 			executor.setConnection(connection);
 		}
 		autoCount++;
@@ -94,6 +97,7 @@ public class SqlDao extends AbstractDao {
 			}
 			finally {
 				connection = null;
+				executor.setConnection(null);
 			}
 		}
 	}

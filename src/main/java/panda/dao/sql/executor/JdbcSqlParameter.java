@@ -8,7 +8,7 @@ import panda.lang.Objects;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SqlParameter {
+public class JdbcSqlParameter {
 	public static enum Mode {
 		IN,
 		OUT,
@@ -28,7 +28,7 @@ public class SqlParameter {
 	 * @param name name
 	 * @param value value
 	 */
-	public SqlParameter(String name, Object value) {
+	public JdbcSqlParameter(String name, Object value) {
 		this(name, value, null, null, null);
 	}
 
@@ -38,7 +38,7 @@ public class SqlParameter {
 	 * @param value value
 	 * @param jdbcType jdbc type
 	 */
-	public SqlParameter(String name, Object value, String jdbcType) {
+	public JdbcSqlParameter(String name, Object value, String jdbcType) {
 		this(name, value, jdbcType, null, null);
 	}
 
@@ -49,7 +49,7 @@ public class SqlParameter {
 	 * @param jdbcType jdbc type
 	 * @param mode mode
 	 */
-	public SqlParameter(String name, Object value, String jdbcType, String mode) {
+	public JdbcSqlParameter(String name, Object value, String jdbcType, String mode) {
 		this(name, value, jdbcType, null, mode);
 	}
 
@@ -61,10 +61,20 @@ public class SqlParameter {
 	 * @param scale scale
 	 * @param mode mode
 	 */
-	public SqlParameter(String name, Object value, String jdbcType, Integer scale, String mode) {
+	public JdbcSqlParameter(String name, Object value, String jdbcType, Integer scale, String mode) {
 		this(name, value, jdbcType, scale, mode, TypeAdapters.i());
 	}
 
+	/**
+	 * Constructor.
+	 * @param name name
+	 * @param value value
+	 * @param typeAdapters typeAdapters
+	 */
+	public JdbcSqlParameter(String name, Object value, TypeAdapters typeAdapters) {
+		this(name, value, null, null, null, typeAdapters);
+	}
+	
 	/**
 	 * Constructor.
 	 * @param name name
@@ -75,7 +85,7 @@ public class SqlParameter {
 	 * @param typeAdapters typeAdapters
 	 */
 	@SuppressWarnings("unchecked")
-	public SqlParameter(String name, Object value, String jdbcType, Integer scale, String mode, TypeAdapters typeAdapters) {
+	public JdbcSqlParameter(String name, Object value, String jdbcType, Integer scale, String mode, TypeAdapters typeAdapters) {
 		this.name = name;
 		this.value = value;
 
@@ -228,7 +238,7 @@ public class SqlParameter {
 			return false;
 		}
 
-		final SqlParameter rhs = (SqlParameter) obj;
+		final JdbcSqlParameter rhs = (JdbcSqlParameter) obj;
 		return Objects.equalsBuilder()
 				.append(name, rhs.name)
 				.append(jdbcType, rhs.jdbcType)

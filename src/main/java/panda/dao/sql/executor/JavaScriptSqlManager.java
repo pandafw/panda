@@ -26,7 +26,7 @@ public class JavaScriptSqlManager extends SqlManager {
 	/**
 	 * sqlParserCache
 	 */
-	private Map<String, Class<SqlParser>> sqlParserCache = new ConcurrentHashMap<String, Class<SqlParser>>();
+	private Map<String, Class<JdbcSqlParser>> sqlParserCache = new ConcurrentHashMap<String, Class<JdbcSqlParser>>();
 	
 	/**
 	 * Constructor
@@ -69,7 +69,7 @@ public class JavaScriptSqlManager extends SqlManager {
 	/**
 	 * @return the sqlParserCache
 	 */
-	public Map<String, Class<SqlParser>> getSqlParserCache() {
+	public Map<String, Class<JdbcSqlParser>> getSqlParserCache() {
 		return sqlParserCache;
 	}
 }

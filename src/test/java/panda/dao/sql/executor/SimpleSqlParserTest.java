@@ -31,22 +31,22 @@ public class SimpleSqlParserTest {
 		return new SimpleSqlManager().getExecutor();
 	}
 	
-	protected SqlParser createParser(String sql) {
+	protected JdbcSqlParser createParser(String sql) {
 		return new SimpleSqlParser(sql);
 	}
 
-	protected void testTranslate(String originalSql, Object paramObject, String translatedSql, List<SqlParameter> parameters) {
+	protected void testTranslate(String originalSql, Object paramObject, String translatedSql, List<JdbcSqlParameter> parameters) {
 		log.debug("");
 		log.debug(getTestMethodName());
 		log.debug("original SQL: [" + originalSql + "]");
 
 		String actTranslatedSql = null;
-		List<SqlParameter> actParameters = null;
+		List<JdbcSqlParameter> actParameters = null;
 		try {
-			SqlExecutor executor = createExecutor();
-			SqlParser parser = createParser(originalSql);
+			JdbcSqlExecutor executor = (JdbcSqlExecutor)createExecutor();
+			JdbcSqlParser parser = createParser(originalSql);
 			
-			actParameters = new ArrayList<SqlParameter>();
+			actParameters = new ArrayList<JdbcSqlParameter>();
 			actTranslatedSql = parser.parse(executor, paramObject, actParameters);
 		}
 		catch (Exception e) {
@@ -105,8 +105,8 @@ public class SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE NAME= ?";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("a.name", "test"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("a.name", "test"));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}
@@ -122,9 +122,9 @@ public class SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE ID= ? and NAME= ?";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("0", "id"));
-		parameters.add(new SqlParameter("1", "name"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("0", "id"));
+		parameters.add(new JdbcSqlParameter("1", "name"));
 		
 		testTranslate(originalSql, a, translatedSql, parameters);
 	}
@@ -161,10 +161,10 @@ public class SimpleSqlParserTest {
 
 		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN( ?,?,?)";
 		
-		List<SqlParameter> parameters = new ArrayList<SqlParameter>();
-		parameters.add(new SqlParameter("list", "a"));
-		parameters.add(new SqlParameter("list", "b"));
-		parameters.add(new SqlParameter("list", "c"));
+		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
+		parameters.add(new JdbcSqlParameter("list", "a"));
+		parameters.add(new JdbcSqlParameter("list", "b"));
+		parameters.add(new JdbcSqlParameter("list", "c"));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}

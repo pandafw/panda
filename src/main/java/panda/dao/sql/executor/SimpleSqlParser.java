@@ -7,7 +7,6 @@ import java.util.List;
 
 import panda.bean.BeanHandler;
 import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlNamings;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
@@ -16,7 +15,7 @@ import panda.lang.Strings;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SimpleSqlParser implements SqlParser {
+public class SimpleSqlParser extends JdbcSqlParser {
 	/**
 	 * SqlSegment
 	 */
@@ -28,7 +27,7 @@ public class SimpleSqlParser implements SqlParser {
 		 * @param sqlParams sql parameters
 		 * @return true if sql appended
 		 */
-		boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams);
+		boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams);
 	}
 
 	//-------------------------------------------------------------------------
@@ -48,7 +47,7 @@ public class SimpleSqlParser implements SqlParser {
 			this.alias = SqlNamings.javaName2ColumnLabel(alias);
 		}
 
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			sql.append(' ').append(alias);
 			return true;
 		}
@@ -117,7 +116,7 @@ public class SimpleSqlParser implements SqlParser {
 		}
 
 		@SuppressWarnings("unchecked")
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
@@ -125,7 +124,7 @@ public class SimpleSqlParser implements SqlParser {
 			}
 
 			TypeAdapters typeAdapters = executor.getTypeAdapters();
-			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
+			sqlParams.add(new JdbcSqlParameter(name, paramValue, type, scale, mode, typeAdapters));
 
 			sql.append(" ?");
 			return true;
@@ -142,7 +141,7 @@ public class SimpleSqlParser implements SqlParser {
 		}
 		
 		@SuppressWarnings("unchecked")
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
@@ -159,7 +158,7 @@ public class SimpleSqlParser implements SqlParser {
 							sql.append(' ');
 							for (int i = 0; i < len; i++) {
 								Object v = Array.get(paramValue, i);
-								sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
+								sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
 								sql.append("?,");
 							}
 							sql.setLength(sql.length() - 1);
@@ -171,7 +170,7 @@ public class SimpleSqlParser implements SqlParser {
 						if (!c.isEmpty()) {
 							sql.append(' ');
 							for (Object v : c) {
-								sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
+								sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
 								sql.append("?,");
 							}
 							sql.setLength(sql.length() - 1);
@@ -181,7 +180,7 @@ public class SimpleSqlParser implements SqlParser {
 				}
 			}
 
-			sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
+			sqlParams.add(new JdbcSqlParameter(name, paramValue, type, scale, mode, typeAdapters));
 			sql.append(" ?");
 			return true;
 		}
@@ -199,7 +198,7 @@ public class SimpleSqlParser implements SqlParser {
 		}
 		
 		@SuppressWarnings("unchecked")
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object rv = null;
 			if (parameter != null) {
 				BeanHandler bh = executor.getBeans().getBeanHandler(parameter.getClass());
@@ -229,7 +228,7 @@ public class SimpleSqlParser implements SqlParser {
 			this.comment = comment;
 		}
 
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			sql.append(' ').append(comment);
 			return false;
 		}
@@ -248,7 +247,7 @@ public class SimpleSqlParser implements SqlParser {
 			this.string = string;
 		}
 
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			sql.append(' ').append(string);
 			return true;
 		}
@@ -294,7 +293,7 @@ public class SimpleSqlParser implements SqlParser {
 			}
 		}
 
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			if (kind == AND || kind == OR) {
 				if (Strings.endsWith(sql, "(") || Strings.endsWithIgnoreCase(sql, " WHERE")) {
 					return false;
@@ -344,7 +343,7 @@ public class SimpleSqlParser implements SqlParser {
 	 * @param sqlParams parameter list (output)
 	 * @return jdbc sql  
 	 */
-	public String parse(SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+	public String parse(JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 		StringBuilder sql = new StringBuilder();
 		for (SqlSegment seg : segments) {
 			seg.translate(sql, executor, parameter, sqlParams);

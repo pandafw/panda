@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DatabaseMeta;
+import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
@@ -81,6 +82,13 @@ public class SqlDaoClient extends DaoClient {
 		this.sqlManager = sqlManager;
 	}
 
+	/**
+	 * @return the jdbcSqlExecutor
+	 */
+	public JdbcSqlExecutor getJdbcSqlExecutor() {
+		return (JdbcSqlExecutor)sqlManager.getExecutor();
+	}
+	
 	/**
 	 * set jndi data source
 	 * @param jndi jndi string such as "java:comp/env/jdbc/xxx"

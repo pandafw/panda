@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import panda.bean.Beans;
-import panda.dao.sql.SqlExecutor;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -26,7 +25,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 			this.items = items;
 		}
 
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			if (items == null || items.isEmpty()) {
 				return false;
 			}
@@ -113,7 +112,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 			}
 		}
 		
-		public boolean translate(StringBuilder sql, SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			if (items == null || items.isEmpty() || !isExpressionTrue(parameter)) {
 				return false;
 			}

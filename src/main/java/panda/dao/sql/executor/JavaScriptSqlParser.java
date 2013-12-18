@@ -6,7 +6,6 @@ import java.util.List;
 
 import panda.bean.PropertyAccessor;
 import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlNamings;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
@@ -14,7 +13,7 @@ import panda.dao.sql.adapter.TypeAdapters;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class JavaScriptSqlParser implements SqlParser {
+public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 	private StringBuilder sql;
 	private StringBuilder buf;
 	private String last;
@@ -24,7 +23,7 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 	private boolean quote;
 	private boolean escape;
 
-	protected List<SqlParameter> sqlParams;
+	protected List<JdbcSqlParameter> sqlParams;
 	
 	protected Object parameter;
 	protected PropertyAccessor bean;
@@ -47,7 +46,8 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 	 * @param sqlParams parameter list (output)
 	 * @return jdbc sql  
 	 */
-	public String parse(SqlExecutor executor, Object parameter, List<SqlParameter> sqlParams) {
+	@Override
+	public String parse(JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 		this.sqlParams = sqlParams;
 		this.parameter = parameter;
 		this.bean = new PropertyAccessor(this.parameter);
@@ -302,7 +302,7 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 						StringBuilder sb = null;
 						for (i = 0; i < len; i++) {
 							Object v = Array.get(paramValue, i);
-							this.sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
+							this.sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
 							if (sb == null) {
 								sb = new StringBuilder(len * 2);
 							}
@@ -319,7 +319,7 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 					if (!c.isEmpty()) {
 						StringBuilder sb = null;
 						for (Object v : c) {
-							this.sqlParams.add(new SqlParameter(name, v, type, scale, mode, typeAdapters));
+							this.sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
 							if (sb == null) {
 								sb = new StringBuilder(c.size() * 2);
 							}
@@ -334,7 +334,7 @@ public abstract class JavaScriptSqlParser implements SqlParser {
 			}
 		}
 
-		this.sqlParams.add(new SqlParameter(name, paramValue, type, scale, mode, typeAdapters));
+		this.sqlParams.add(new JdbcSqlParameter(name, paramValue, type, scale, mode, typeAdapters));
 		return "?";
 	}
 	
