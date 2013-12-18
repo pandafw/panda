@@ -24,7 +24,7 @@
 
 	${s}@p.form cssClass="p-cform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" initfocus="${ui.focus?c}" method="post"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
 		<#include "view-fields.ftl"/>
-		${s}@p.div>
+		${s}@p.div cssClass="p-buttons">
 			${s}@p.submit icon="icon-${ui.name}-execute" action="${action.name}_${ui.name}_execute">${s}@p.text name="button-${ui.name}-execute"/>${s}/@p.submit>
 			${s}@p.submit icon="icon-back" action="${action.name}_${ui.name}_input">${s}@p.text name="button-back"/>${s}/@p.submit>
 		${s}/@p.div>

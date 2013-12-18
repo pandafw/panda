@@ -177,6 +177,17 @@ public class TypeUtils {
 		checkJavaType(type, name);
 		return type;
 	}
+
+	/**
+	 * getSimpleJavaWrapType
+	 * @param value value
+	 * @param name name
+	 * @return simple java type
+	 */
+	public static String getSimpleJavaWrapType(String value, String name) {
+		String type = getSimpleJavaType(value, name);
+		return toSimpleWrap(type);
+	}
 	
 	/**
 	 * getSimpleJavaType
@@ -252,28 +263,27 @@ public class TypeUtils {
 		return simpleType;
 	}
 
-	private static Map<String, String> ALIAS_MAP = new HashMap<String, String>();
-
+	private final static Map<String, String> ALIAS_MAP = new HashMap<String, String>();
 	static {
-		ALIAS_MAP.put("bool", Boolean.class.getName());
+		ALIAS_MAP.put("bool", boolean.class.getName());
 		ALIAS_MAP.put("boolean", Boolean.class.getName());
 		ALIAS_MAP.put("Boolean", Boolean.class.getName());
-		ALIAS_MAP.put("byte", Byte.class.getName());
+		ALIAS_MAP.put("byte", byte.class.getName());
 		ALIAS_MAP.put("Byte", Byte.class.getName());
-		ALIAS_MAP.put("char", Character.class.getName());
-		ALIAS_MAP.put("character", Character.class.getName());
+		ALIAS_MAP.put("char", char.class.getName());
+		ALIAS_MAP.put("character", char.class.getName());
 		ALIAS_MAP.put("Character", Character.class.getName());
-		ALIAS_MAP.put("double", Double.class.getName());
+		ALIAS_MAP.put("double", double.class.getName());
 		ALIAS_MAP.put("Double", Double.class.getName());
-		ALIAS_MAP.put("float", Float.class.getName());
+		ALIAS_MAP.put("float", float.class.getName());
 		ALIAS_MAP.put("Float", Float.class.getName());
-		ALIAS_MAP.put("int", Integer.class.getName());
-		ALIAS_MAP.put("integer", Integer.class.getName());
+		ALIAS_MAP.put("int", int.class.getName());
+		ALIAS_MAP.put("integer", int.class.getName());
 		ALIAS_MAP.put("Integer", Integer.class.getName());
-		ALIAS_MAP.put("long", Long.class.getName());
+		ALIAS_MAP.put("long", long.class.getName());
 		ALIAS_MAP.put("Long", Long.class.getName());
-		ALIAS_MAP.put("short", Long.class.getName());
-		ALIAS_MAP.put("Short", Long.class.getName());
+		ALIAS_MAP.put("short", short.class.getName());
+		ALIAS_MAP.put("Short", Short.class.getName());
 
 		ALIAS_MAP.put("string", String.class.getName());
 		ALIAS_MAP.put("String", String.class.getName());
@@ -308,9 +318,23 @@ public class TypeUtils {
 		ALIAS_MAP.put("uploadimage", UploadImage.class.getName());
 		ALIAS_MAP.put("UploadImage", UploadImage.class.getName());
 	}
-
 	private static String classByAlias(String type) {
 		return ALIAS_MAP.get(type);
+	}
+
+	private final static Map<String, String> WRAP_MAP = new HashMap<String, String>();
+	static {
+		WRAP_MAP.put("boolean", "Boolean");
+		WRAP_MAP.put("byte", "Byte");
+		WRAP_MAP.put("char", "Character");
+		WRAP_MAP.put("double", "Double");
+		WRAP_MAP.put("float", "Float");
+		WRAP_MAP.put("int", "Integer");
+		WRAP_MAP.put("long", "Long");
+		WRAP_MAP.put("short", "Short");
+	}
+	private static String toSimpleWrap(String type) {
+		return WRAP_MAP.containsKey(type) ? WRAP_MAP.get(type) : type;
 	}
 
 	// private static String classByName(ClassLoader classLoader, String type) {

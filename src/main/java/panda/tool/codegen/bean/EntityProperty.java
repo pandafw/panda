@@ -314,6 +314,15 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 * 
 	 * @return possible object is {@link String }
 	 */
+	public String getSimpleJavaWrapType() {
+		return TypeUtils.getSimpleJavaWrapType(type, name);
+	}
+
+	/**
+	 * Gets the value of the type property.
+	 * 
+	 * @return possible object is {@link String }
+	 */
 	public String getSimpleGenericJavaType() {
 		return TypeUtils.getSimpleGenericJavaType(type, name);
 	}
