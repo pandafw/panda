@@ -7993,6 +7993,57 @@ public abstract class Arrays {
 	}
 
 	/**
+	 * Returns a new list contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a list 
+	 */
+	public static <T> List<T> toList(T... a) {
+		if (a == null) {
+			return null;
+		}
+		
+		List<T> list = new ArrayList<T>(a.length);
+		for (T e : a) {
+			list.add(e);
+		}
+		return list;
+	}
+
+	/**
+	 * Returns a new set contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a set 
+	 */
+	public static <T> Set<T> toSet(T... a) {
+		if (a == null) {
+			return null;
+		}
+		
+		Set<T> set = new HashSet<T>(a.length);
+		for (T e : a) {
+			set.add(e);
+		}
+		return set;
+	}
+
+	/**
+	 * Returns a new map contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a set 
+	 */
+	public static <T> Map<T, T> toMap(T[][] a) {
+		if (a == null) {
+			return null;
+		}
+		
+		Map<T, T> map = new HashMap<T, T>(a.length);
+		for (T[] e : a) {
+			map.put(e[0], e[1]);
+		}
+		return map;
+	}
+
+	/**
 	 * <p>
 	 * Outputs an array as a String, treating {@code null} as an empty array.
 	 * </p>
@@ -8030,56 +8081,5 @@ public abstract class Arrays {
 			return stringIfNull;
 		}
 		return new ToStringBuilder(array, ToStringStyle.SIMPLE_STYLE).append(array).toString();
-	}
-
-	/**
-	 * Returns a new list contains all elements of the specified array.
-	 * @param a the array 
-	 * @return a list 
-	 */
-	public static <T> List<T> toList(T ... a) {
-		if (a == null) {
-			return null;
-		}
-		
-		List<T> list = new ArrayList<T>(a.length);
-		for (T e : a) {
-			list.add(e);
-		}
-		return list;
-	}
-
-	/**
-	 * Returns a new set contains all elements of the specified array.
-	 * @param a the array 
-	 * @return a set 
-	 */
-	public static <T> Set<T> toSet(T ... a) {
-		if (a == null) {
-			return null;
-		}
-		
-		Set<T> set = new HashSet<T>(a.length);
-		for (T e : a) {
-			set.add(e);
-		}
-		return set;
-	}
-
-	/**
-	 * Returns a new map contains all elements of the specified array.
-	 * @param a the array 
-	 * @return a set 
-	 */
-	public static <T> Map<T, T> toMap(T[][] a) {
-		if (a == null) {
-			return null;
-		}
-		
-		Map<T, T> map = new HashMap<T, T>(a.length);
-		for (T[] e : a) {
-			map.put(e[0], e[1]);
-		}
-		return map;
 	}
 }

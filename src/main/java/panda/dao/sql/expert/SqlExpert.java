@@ -2,7 +2,6 @@ package panda.dao.sql.expert;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,7 +20,7 @@ import panda.dao.entity.EntityIndex;
 import panda.dao.sql.Sql;
 import panda.dao.sql.SqlNamings;
 import panda.dao.sql.Sqls;
-import panda.lang.Objects;
+import panda.lang.Iterators;
 import panda.lang.Strings;
 import panda.lang.Texts;
 
@@ -340,10 +339,9 @@ public abstract class SqlExpert {
 		}
 		else if (op == Operator.IN || op == Operator.NOT_IN) {
 			sql.append(op).append('(');
-			Iterator it = Objects.toIterator(evc.getValue());
-			while (it.hasNext()) {
+			for (Object v : Iterators.asIterable(evc.getValue())) {
 				sql.append('?').append(',');
-				sql.addParam(it.next());
+				sql.addParam(v);
 			}
 			sql.setCharAt(sql.length() - 1, ')');
 		}
