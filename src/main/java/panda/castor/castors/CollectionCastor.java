@@ -8,6 +8,7 @@ import java.util.Iterator;
 import panda.castor.CastContext;
 import panda.castor.Castor;
 import panda.castor.Castors;
+import panda.lang.Iterators;
 import panda.lang.Types;
 
 /**
@@ -82,12 +83,12 @@ public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T>
 				coll.add(v);
 			}
 		}
-		else if (value instanceof Iterable) {
+		else if (Iterators.isIterable(value)) {
 			Type fType = getFromComponentType();
 			Castor castor = castors.getCastor(fType, toElementType);
 
 			int i = 0;
-			Iterator it = ((Iterable)value).iterator();
+			Iterator it = Iterators.asIterator(value);
 			while (it.hasNext()) {
 				Object v = it.next();
 				v = castChild(context, castor, i++, v);

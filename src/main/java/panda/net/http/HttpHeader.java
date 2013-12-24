@@ -1,17 +1,19 @@
 package panda.net.http;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import panda.lang.Arrays;
 import panda.lang.Chars;
-import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.lang.Numbers;
@@ -24,11 +26,8 @@ import panda.lang.Numbers;
  * http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
  * @author yf.frank.wang@gmail.com
  */
-public class HttpHeader extends HashMap<String, Object> {
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 2L;
+public class HttpHeader implements Map<String, Object>, Cloneable, Serializable {
+	private static final long serialVersionUID = 3L;
 	
 	public static final String ACCEPT                = "Accept";
 	public static final String ACCEPT_CHARSET        = "Accept-Charset";
@@ -95,6 +94,8 @@ public class HttpHeader extends HashMap<String, Object> {
 	}
 
 	// -------------------------------------------------------------
+	private Map<String, Object> map = new HashMap<String, Object>();
+
 	public HttpHeader() {
 	}
 
@@ -114,53 +115,7 @@ public class HttpHeader extends HashMap<String, Object> {
 		return set(USER_AGENT, agent);
 	}
 
-	public HttpHeader setInt(String key, int value) {
-		return set(key, String.valueOf(value));
-	}
-
-	public HttpHeader setDate(String key, long value) {
-		return setDate(key, new Date(value));
-	}
-
-	public HttpHeader setDate(String key, Date value) {
-		return set(key, HttpDates.format(value));
-	}
-	
-	public HttpHeader set(String key, String value) {
-		put(key, value);
-		return this;
-	}
-	
-	public HttpHeader addInt(String key, int value) {
-		return add(key, String.valueOf(value));
-	}
-
-	public HttpHeader addDate(String key, long value) {
-		return addDate(key, new Date(value));
-	}
-
-	public HttpHeader addDate(String key, Date value) {
-		return add(key, HttpDates.format(value));
-	}
-	
-	@SuppressWarnings("unchecked")
-	public HttpHeader add(String key, String value) {
-		Object object = get(key);
-		if (object == null) {
-			put(key, value);
-		}
-		else if (object instanceof List) {
-			((List)object).add(value);
-		}
-		else {
-			List vs = new ArrayList<String>();
-			vs.add(object);
-			vs.add(value);
-			put(key, value);
-		}
-		return this;
-	}
-	
+	//-------------------------------------------------
 	public int getInt(String key) {
 		String str = getString(key);
 		return Numbers.toInt(str, -1);
@@ -194,8 +149,9 @@ public class HttpHeader extends HashMap<String, Object> {
 	@SuppressWarnings("unchecked")
 	public List<String> getStrings(String key) {
 		Object value = get(key);
-		if (value == null)
+		if (value == null) {
 			return null;
+		}
 		
 		if (value instanceof List) {
 			return (List<String>)value;
@@ -203,35 +159,197 @@ public class HttpHeader extends HashMap<String, Object> {
 		return Arrays.toList(value.toString());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	//-------------------------------------------------
+	public HttpHeader setInt(String key, int value) {
+		return set(key, String.valueOf(value));
+	}
+
+	public HttpHeader setDate(String key, long value) {
+		return setDate(key, new Date(value));
+	}
+
+	public HttpHeader setDate(String key, Date value) {
+		return set(key, HttpDates.format(value));
+	}
+	
+	public HttpHeader set(String key, String value) {
+		put(key, value);
+		return this;
+	}
+	public HttpHeader setAll(Map<? extends String, ? extends Object> m) {
+		putAll(m);
+		return this;
+	}
+
+	//-------------------------------------------------
+	public HttpHeader addInt(String key, int value) {
+		return add(key, String.valueOf(value));
+	}
+
+	public HttpHeader addDate(String key, long value) {
+		return addDate(key, new Date(value));
+	}
+
+	public HttpHeader addDate(String key, Date value) {
+		return add(key, HttpDates.format(value));
+	}
+	
+	public HttpHeader add(String key, String value) {
+		add(key, value);
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void add(String key, Object value) {
+		Object object = get(key);
+		if (object == null) {
+			put(key, value);
+		}
+		else if (object instanceof List) {
+			((List)object).add(value);
+		}
+		else {
+			List vs = new ArrayList<String>();
+			vs.add(object);
+			
+			value = convertValue(value);
+			if (value instanceof List) {
+				vs.addAll((List)value);
+			}
+			else {
+				vs.add(value);
+			}
+			put(key, vs);
+		}
+	}
+	
+	public HttpHeader addAll(Map<? extends String, ? extends Object> m) {
+		for (Entry<? extends String, ? extends Object> en : m.entrySet()) {
+			add(en.getKey(), en.getValue());
+		}
+		return this;
+	}
+
+	//-------------------------------------------------
+	private Object toCompareKey(Object key) {
+		return key instanceof String ? ((String)key).toLowerCase() : key; 
+	}
+
+	@SuppressWarnings("unchecked")
+	private Object convertValue(Object value) {
+		if (value instanceof Date) {
+			return HttpDates.format((Date)value);
+		}
+		if (value instanceof Calendar) {
+			return HttpDates.format(((Calendar)value).getTime());
+		}
+		if (value instanceof List) {
+			return value;
+		}
+
+		if (Iterators.isIterable(value)) {
+			List vs = new ArrayList();
+			for (Object v : Iterators.asIterable(value)) {
+				v = convertValue(v);
+				if (v instanceof List) {
+					for (Object c : (List)v) {
+						vs.add(c);
+					}
+				}
+				else {
+					vs.add(v);
+				}
+			}
+			return vs;
+		}
+
+		return value.toString();
+	}
+
+	public void clear() {
+		map.clear();
+	}
+
+	public boolean containsKey(Object key) {
+		return map.containsKey(toCompareKey(key));
+	}
+
+	public boolean containsValue(Object value) {
+		return map.containsValue(value);
+	}
+
+	public Set<Entry<String, Object>> entrySet() {
+		return map.entrySet();
+	}
+
+	public Object get(Object key) {
+		return map.get(toCompareKey(key));
+	}
+
+	public boolean isEmpty() {
+		return map.isEmpty();
+	}
+
+	public Set<String> keySet() {
+		return map.keySet();
+	}
+
 	@Override
 	public Object put(String key, Object value) {
+		key = (String)toCompareKey(key);
 		if (value == null) {
-			return remove(key);
-		}
-		
-		if (value instanceof String) {
-			return super.put(key, value);
-		}
-		
-		if (value instanceof String[]) {
-			List<String> vs = Arrays.toList(((String[])value));
-			return super.put(key, vs);
-		}
-		
-		if (value instanceof Enumeration) {
-			List vs = new ArrayList();
-			Collections.addAll(vs, (Enumeration)value);
-			return super.put(key, vs);
+			return map.remove(key);
 		}
 
-		if (value instanceof List) {
-			return super.put(key, value);
-		}
+		value = convertValue(value);
+		return map.put(key, value);
+	}
 
-		throw new IllegalArgumentException("Invalid http header: key=" + key + ", value=" + value);
+	public void putAll(Map<? extends String, ? extends Object> m) {
+		for (Entry<? extends String, ? extends Object> en : m.entrySet()) {
+			put(en.getKey(), en.getValue());
+		}
+	}
+
+	public Object remove(Object key) {
+		return map.remove(toCompareKey(key));
+	}
+
+	public int size() {
+		return map.size();
+	}
+
+	public Collection<Object> values() {
+		return map.values();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return map.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return map.hashCode();
+	}
+
+	@Override
+	public Object clone() {
+		HttpHeader hh = new HttpHeader();
+		hh.map.putAll(map);
+		return hh;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			toString(sb);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		return sb.toString();
 	}
 
 	public void toString(Appendable writer) throws IOException {
@@ -248,17 +366,5 @@ public class HttpHeader extends HashMap<String, Object> {
 			}
 			writer.append(Chars.LF);
 		}
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		try {
-			toString(sb);
-		}
-		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
-		}
-		return sb.toString();
 	}
 }

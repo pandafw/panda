@@ -19,6 +19,7 @@ import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
+import panda.lang.Iterators;
 import panda.lang.Types;
 
 /**
@@ -79,13 +80,13 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 			}
 			return (T)array; 
 		}
-		else if (value instanceof Iterable) {
+		else if (Iterators.isIterable(value)) {
 			Type fType = getFromComponentType();
 			Castor conv = castors.getCastor(fType, toComponentType);
 
 			int i = 0;
 			List list = new ArrayList();
-			Iterator it = ((Iterable)value).iterator();
+			Iterator it = Iterators.asIterator(value);
 			while (it.hasNext()) {
 				Object v = it.next();
 				list.add(castChild(context, conv, i++, v));

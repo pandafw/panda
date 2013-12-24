@@ -59,7 +59,7 @@ public class CaseInsensitiveMap<K, V> implements Map<K, V> {
 		return map.containsValue(value);
 	}
 
-	public Set<java.util.Map.Entry<K, V>> entrySet() {
+	public Set<Entry<K, V>> entrySet() {
 		return map.entrySet();
 	}
 
@@ -99,14 +99,14 @@ public class CaseInsensitiveMap<K, V> implements Map<K, V> {
 	}
 
 	public boolean equals(Object o) {
-        return map.equals(o);
-    }
-	
+		return map.equals(o);
+	}
+
 	public int hashCode() {
-        return map.hashCode();
-    }
+		return map.hashCode();
+	}
 
 	public String toString() {
 		return map.toString();
-    }
+	}
 }
