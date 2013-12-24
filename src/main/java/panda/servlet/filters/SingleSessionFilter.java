@@ -1,4 +1,4 @@
-package panda.servlet;
+package panda.servlet.filters;
 
 import java.io.IOException;
 

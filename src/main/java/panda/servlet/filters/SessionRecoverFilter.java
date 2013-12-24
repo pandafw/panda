@@ -1,4 +1,4 @@
-package panda.servlet;
+package panda.servlet.filters;
 
 import java.io.IOException;
 
@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import panda.log.Log;
 import panda.log.Logs;
+import panda.servlet.HttpServletUtils;
+import panda.servlet.ServletURLHelper;
 
 
 /**
@@ -69,7 +71,7 @@ public class SessionRecoverFilter implements Filter {
 		HttpSession session = request.getSession(false);
 
 		if (log.isDebugEnabled()) {
-			log.debug("filter - " + request.getRequestURI() + " [" + (session == null ? "null" : session.getId()) + "]");
+			log.debug("[" + (session == null ? "null" : session.getId()) + "] " + request.getRequestURI());
 		}
 		
 		String csessionId = null;
@@ -95,9 +97,9 @@ public class SessionRecoverFilter implements Filter {
 
 				String url = ServletURLHelper.buildURL(request);
 				if (log.isDebugEnabled()) {
-					log.debug("Redirect - " + url + " [" + JSESSIONID + "=" + c.getValue() + "]");
+					log.debug("[" + JSESSIONID + "=" + c.getValue() + "] redirect: " + url);
 				}
-				response.sendRedirect(url);
+				HttpServletUtils.sendRedirect(response, url);
 
 				return;
 			}

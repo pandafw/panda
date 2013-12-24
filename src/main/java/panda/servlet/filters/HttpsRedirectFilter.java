@@ -1,4 +1,4 @@
-package panda.servlet;
+package panda.servlet.filters;
 
 import java.io.IOException;
 
@@ -11,21 +11,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.servlet.HttpServletUtils;
+import panda.servlet.ServletURLHelper;
+
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class RequestRedirectFilter implements Filter {
-	/**
-	 * redirect
-	 */
-	private String redirect;
-
+public class HttpsRedirectFilter implements Filter {
 	/**
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
-		redirect = config.getInitParameter("redirect");
 	}
 
 	/**
@@ -36,11 +33,16 @@ public class RequestRedirectFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)res;
-		
-		String url = ServletURLHelper.buildURL(request);
-		
-		HttpServletUtils.sendRedirect(response, redirect + url);
+		String schema = request.getScheme();
+		if (!"https".equals(schema)) {
+			String url = ServletURLHelper.buildURL(request, request.getParameterMap(), "https", 0, true, false);
+			
+			HttpServletResponse response = (HttpServletResponse)res;
+			HttpServletUtils.sendRedirect(response, url);
+		}
+		else {
+			chain.doFilter(req, res);
+		}
 	}
 
 	/**

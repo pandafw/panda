@@ -137,11 +137,22 @@ public class HttpServletUtils {
 		return getRequestURI(request).substring(request.getContextPath().length());
 	}
 
-	public static void logException(Throwable e, HttpServletRequest request) {
-		logException(e, request, null);
+	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
+		// send a http error response to use the servlet defined error handler
+		// make the exception availible to the web.xml defined error page
+		request.setAttribute("javax.servlet.error.exception", e);
+
+		// for compatibility
+		request.setAttribute("javax.servlet.jsp.jspException", e);
+
+		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 	
-	public static void logException(Throwable e, HttpServletRequest request, String msg) {
+	public static void logException(HttpServletRequest request, Throwable e) {
+		logException(request, e, null);
+	}
+	
+	public static void logException(HttpServletRequest request, Throwable e, String msg) {
 		Log log = Logs.getLog(e.getClass());
 
 		StringBuilder sb = new StringBuilder();

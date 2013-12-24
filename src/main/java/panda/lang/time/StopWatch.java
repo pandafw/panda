@@ -37,9 +37,6 @@ package panda.lang.time;
  * 
  */
 public class StopWatch {
-
-	private static final long NANO_2_MILLIS = 1000000L;
-
 	/**
 	 * Enumeration type which indicates the status of stopwatch.
 	 */
@@ -176,6 +173,11 @@ public class StopWatch {
 	private long stopTime;
 
 	/**
+	 * The stop time in Milis.
+	 */
+	private long stopTimeMillis;
+
+	/**
 	 * Constructor.
 	 */
 	public StopWatch() {
@@ -231,6 +233,7 @@ public class StopWatch {
 		}
 		if (this.runningState == State.RUNNING) {
 			this.stopTime = System.nanoTime();
+			this.stopTimeMillis = System.currentTimeMillis();
 		}
 		this.runningState = State.STOPPED;
 		return this;
@@ -278,6 +281,7 @@ public class StopWatch {
 			throw new IllegalStateException("Stopwatch is not running. ");
 		}
 		this.stopTime = System.nanoTime();
+		this.stopTimeMillis = System.currentTimeMillis();
 		this.splitState = SplitState.SPLIT;
 		return this;
 	}
@@ -317,6 +321,7 @@ public class StopWatch {
 			throw new IllegalStateException("Stopwatch must be running to suspend. ");
 		}
 		this.stopTime = System.nanoTime();
+		this.stopTimeMillis = System.currentTimeMillis();
 		this.runningState = State.SUSPENDED;
 		return this;
 	}
@@ -337,6 +342,7 @@ public class StopWatch {
 			throw new IllegalStateException("Stopwatch must be suspended to resume. ");
 		}
 		this.startTime += System.nanoTime() - this.stopTime;
+		this.startTimeMillis += System.currentTimeMillis() - this.stopTimeMillis;
 		this.runningState = State.RUNNING;
 		return this;
 	}
@@ -353,7 +359,16 @@ public class StopWatch {
 	 * @return the time in milliseconds
 	 */
 	public long getTime() {
-		return getNanoTime() / NANO_2_MILLIS;
+		if (this.runningState == State.STOPPED || this.runningState == State.SUSPENDED) {
+			return this.stopTimeMillis - this.startTimeMillis;
+		}
+		else if (this.runningState == State.UNSTARTED) {
+			return 0;
+		}
+		else if (this.runningState == State.RUNNING) {
+			return System.currentTimeMillis() - this.startTimeMillis;
+		}
+		throw new RuntimeException("Illegal running state has occured. ");
 	}
 
 	/**
@@ -392,7 +407,10 @@ public class StopWatch {
 	 * @throws IllegalStateException if the StopWatch has not yet been split.
 	 */
 	public long getSplitTime() {
-		return getSplitNanoTime() / NANO_2_MILLIS;
+		if (this.splitState != SplitState.SPLIT) {
+			throw new IllegalStateException("Stopwatch must be split to get the split time. ");
+		}
+		return this.stopTimeMillis - this.startTimeMillis;
 	}
 
 	/**
@@ -423,8 +441,48 @@ public class StopWatch {
 		if (this.runningState == State.UNSTARTED) {
 			throw new IllegalStateException("Stopwatch has not been started");
 		}
-		// System.nanoTime is for elapsed time
 		return this.startTimeMillis;
+	}
+
+	/**
+	 * Returns the time this stopwatch was started.
+	 * 
+	 * @return the time this stopwatch was started
+	 * @throws IllegalStateException if this StopWatch has not been started
+	 */
+	public long getStartNanoTime() {
+		if (this.runningState == State.UNSTARTED) {
+			throw new IllegalStateException("Stopwatch has not been started");
+		}
+		return this.startTime;
+	}
+
+	/**
+	 * Returns the time this stopwatch was stopped or suspended.
+	 * 
+	 * @return the time this stopwatch was stopped or suspended
+	 * @throws IllegalStateException if this StopWatch has not been stopped or suspended
+	 */
+	public long getStopTime() {
+		if (this.runningState != State.STOPPED && this.runningState != State.SUSPENDED) {
+			throw new IllegalStateException("Stopwatch must be stopped or suspended to get the stop time. ");
+		}
+
+		return this.stopTimeMillis;
+	}
+
+	/**
+	 * Returns the time this stopwatch was stopped or suspended.
+	 * 
+	 * @return the time this stopwatch was stopped or suspended
+	 * @throws IllegalStateException if this StopWatch has not been stopped or suspended
+	 */
+	public long getStopNanoTime() {
+		if (this.runningState != State.STOPPED || this.runningState != State.SUSPENDED) {
+			throw new IllegalStateException("Stopwatch must be stopped or suspended to get the stop time. ");
+		}
+
+		return this.stopTime;
 	}
 
 	/**

@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -31,7 +30,8 @@ import javax.servlet.http.HttpSession;
 
 import panda.lang.Asserts;
 import panda.lang.Collections;
-import panda.lang.collection.CaseInsensitiveMap;
+import panda.net.http.HttpHeader;
+import panda.servlet.DelegatingServletInputStream;
 
 /**
  * Mock implementation of the {@link javax.servlet.http.HttpServletRequest} interface.
@@ -130,7 +130,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	private Cookie[] cookies;
 
-	private final Map<String, HeaderValueHolder> headers = new CaseInsensitiveMap<String, HeaderValueHolder>(new LinkedHashMap<String, HeaderValueHolder>());
+	private final HttpHeader headers = new HttpHeader();
 
 	private String method;
 
@@ -646,7 +646,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @see #getDateHeader
 	 * @see #getIntHeader
 	 */
-	public void addHeader(String name, Object value) {
+	public void addHeader(String name, String value) {
 		if (CONTENT_TYPE_HEADER.equalsIgnoreCase(name)) {
 			setContentType((String) value);
 			return;
@@ -654,68 +654,32 @@ public class MockHttpServletRequest implements HttpServletRequest {
 		doAddHeaderValue(name, value, false);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private void doAddHeaderValue(String name, Object value, boolean replace) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		Asserts.notNull(value, "Header value must not be null");
-		if (header == null || replace) {
-			header = new HeaderValueHolder();
-			this.headers.put(name, header);
-		}
-		if (value instanceof Collection) {
-			header.addValues((Collection) value);
-		}
-		else if (value.getClass().isArray()) {
-			header.addValueArray(value);
+	private void doAddHeaderValue(String name, String value, boolean replace) {
+		if (replace) {
+			headers.set(name, value);
 		}
 		else {
-			header.addValue(value);
+			headers.add(name, value);
 		}
 	}
 
 	public long getDateHeader(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		Object value = (header != null ? header.getValue() : null);
-		if (value instanceof Date) {
-			return ((Date) value).getTime();
-		}
-		else if (value instanceof Number) {
-			return ((Number) value).longValue();
-		}
-		else if (value != null) {
-			throw new IllegalArgumentException("Value for header '" + name + "' is neither a Date nor a Number: "
-					+ value);
-		}
-		else {
-			return -1L;
-		}
+		Date d = headers.getDate(name);
+		return d == null ? -1 : d.getTime();
 	}
 
 	public int getIntHeader(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		Object value = (header != null ? header.getValue() : null);
-		if (value instanceof Number) {
-			return ((Number) value).intValue();
-		}
-		else if (value instanceof String) {
-			return Integer.parseInt((String) value);
-		}
-		else if (value != null) {
-			throw new NumberFormatException("Value for header '" + name + "' is not a Number: " + value);
-		}
-		else {
-			return -1;
-		}
+		return headers.getInt(name);
 	}
 
 	public String getHeader(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		return (header != null ? header.getStringValue() : null);
+		return headers.getString(name);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Enumeration<String> getHeaders(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		return Collections.enumeration(header != null ? header.getStringValues() : new LinkedList<String>());
+		List<String> ss = headers.getStrings(name);
+		return Collections.enumeration(ss != null ? ss : Collections.EMPTY_LIST);
 	}
 
 	public Enumeration<String> getHeaderNames() {

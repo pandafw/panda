@@ -1,4 +1,4 @@
-package panda.servlet;
+package panda.servlet.filters;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ import javax.servlet.ServletResponse;
  *
  * &lt;filter&gt;
  *  &lt;filter-name&gt;encoding-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;panda.servlet.RequestEncodingFilter&lt;/filter-class&gt;
+ *  &lt;filter-class&gt;panda.servlet.filters.RequestEncodingFilter&lt;/filter-class&gt;
  *  &lt;init-param&gt;            
  *    &lt;param-name&gt;encoding&lt;/param-name&gt;            
  *    &lt;param-value&gt;UTF-8&lt;/param-value&gt;        
@@ -33,16 +33,15 @@ import javax.servlet.ServletResponse;
  * @author yf.frank.wang@gmail.com
  */
 public class RequestEncodingFilter implements Filter {
-	/**
-	 * encoding
-	 */
 	private String encoding;
+	private boolean forceEncoding = false;
 
 	/**
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
 		encoding = config.getInitParameter("encoding");
+		forceEncoding = Boolean.TRUE.equals(config.getInitParameter("forceEncoding"));
 	}
 
 	/**
@@ -51,8 +50,7 @@ public class RequestEncodingFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
-
-		if (encoding != null) {
+		if (encoding != null && (forceEncoding || req.getCharacterEncoding() == null)) {
 			req.setCharacterEncoding(encoding);
 		}
 

@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import javax.servlet.ServletOutputStream;
 
 import panda.lang.Asserts;
+import panda.mock.web.MockHttpServletResponse;
 
 /**
  * Delegating implementation of {@link javax.servlet.ServletOutputStream}.
@@ -49,7 +50,6 @@ public class ConsoleServletOutputStream extends ServletOutputStream {
 	}
 
 	public void flush() throws IOException {
-		super.flush();
 		this.targetStream.flush();
 	}
 

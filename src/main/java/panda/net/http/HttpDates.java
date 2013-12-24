@@ -2,7 +2,9 @@ package panda.net.http;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 
+import panda.lang.TimeZones;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 
@@ -107,7 +109,7 @@ public class HttpDates {
 
 		for (String pattern : dateFormats) {
 			try {
-				return DateTimes.parse(dateValue, pattern);
+				return DateTimes.parse(dateValue, pattern, TimeZones.GMT, Locale.US);
 			}
 			catch (ParseException pe) {
 				// ignore this exception, we will try the next format
@@ -146,9 +148,9 @@ public class HttpDates {
 		if (date == null) {
 			return null;
 		}
-		if (pattern == null)
+		if (pattern == null) {
 			throw new IllegalArgumentException("pattern is null");
-
-		return DateTimes.format(date, pattern);
+		}
+		return DateTimes.format(date, pattern, TimeZones.GMT, Locale.US);
 	}
 }

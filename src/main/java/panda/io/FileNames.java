@@ -1972,10 +1972,17 @@ public abstract class FileNames {
 	 * @return a String indicating the MIME type for the specified file name.
 	 */
 	public static String getContentTypeFor(String filename) {
+		if (Strings.isEmpty(filename)) {
+			return filename;
+		}
 		return URLConnection.getFileNameMap().getContentTypeFor(filename);
 	}
 
 	public static boolean isAbsolutePath(String path) {
+		if (Strings.isEmpty(path)) {
+			return false;
+		}
+		
 		Matcher m = ABS_PATH.matcher(path);
 		return m.find();
 	}

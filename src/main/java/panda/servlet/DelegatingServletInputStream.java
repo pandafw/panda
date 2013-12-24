@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,7 @@ import java.io.InputStream;
 import javax.servlet.ServletInputStream;
 
 import panda.lang.Asserts;
+import panda.mock.web.MockHttpServletRequest;
 
 /**
  * Delegating implementation of {@link javax.servlet.ServletInputStream}.
@@ -42,7 +43,6 @@ public class DelegatingServletInputStream extends ServletInputStream {
 	}
 
 	public void close() throws IOException {
-		super.close();
 		this.sourceStream.close();
 	}
 

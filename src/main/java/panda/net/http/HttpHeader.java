@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import panda.lang.Arrays;
+import panda.lang.Chars;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
-import panda.lang.Strings;
+import panda.lang.Iterators;
+import panda.lang.Numbers;
 
 
 
@@ -25,7 +28,7 @@ public class HttpHeader extends HashMap<String, Object> {
 	/**
 	 * serialVersionUID
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	public static final String ACCEPT                = "Accept";
 	public static final String ACCEPT_CHARSET        = "Accept-Charset";
@@ -111,6 +114,14 @@ public class HttpHeader extends HashMap<String, Object> {
 		return set(USER_AGENT, agent);
 	}
 
+	public HttpHeader setInt(String key, int value) {
+		return set(key, String.valueOf(value));
+	}
+
+	public HttpHeader setDate(String key, long value) {
+		return setDate(key, new Date(value));
+	}
+
 	public HttpHeader setDate(String key, Date value) {
 		return set(key, HttpDates.format(value));
 	}
@@ -118,6 +129,18 @@ public class HttpHeader extends HashMap<String, Object> {
 	public HttpHeader set(String key, String value) {
 		put(key, value);
 		return this;
+	}
+	
+	public HttpHeader addInt(String key, int value) {
+		return add(key, String.valueOf(value));
+	}
+
+	public HttpHeader addDate(String key, long value) {
+		return addDate(key, new Date(value));
+	}
+
+	public HttpHeader addDate(String key, Date value) {
+		return add(key, HttpDates.format(value));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -136,6 +159,11 @@ public class HttpHeader extends HashMap<String, Object> {
 			put(key, value);
 		}
 		return this;
+	}
+	
+	public int getInt(String key) {
+		String str = getString(key);
+		return Numbers.toInt(str, -1);
 	}
 	
 	public Date getDate(String key) {
@@ -175,7 +203,6 @@ public class HttpHeader extends HashMap<String, Object> {
 		return Arrays.toList(value.toString());
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -210,21 +237,16 @@ public class HttpHeader extends HashMap<String, Object> {
 	public void toString(Appendable writer) throws IOException {
 		for (Map.Entry<String, Object> en : entrySet()) {
 			String key = en.getKey();
-			Object value = en.getValue();
-			if (value instanceof List) {
-				for (Object v : ((List)value)) {
-					if (Strings.isNotEmpty(key)) {
-						writer.append(key).append(": ");
-					}
-					writer.append(String.valueOf(v)).append(Strings.CRLF);
+			writer.append(key).append(':').append(' ');
+
+			Iterator it = Iterators.asIterator(en.getValue());
+			while (it.hasNext()) {
+				writer.append(it.next().toString());
+				if (it.hasNext()) {
+					writer.append(',');
 				}
 			}
-			else if (value != null) {
-				if (Strings.isNotEmpty(key)) {
-					writer.append(key).append(": ");
-				}
-				writer.append(String.valueOf(value)).append(Strings.CRLF);
-			}
+			writer.append(Chars.LF);
 		}
 	}
 

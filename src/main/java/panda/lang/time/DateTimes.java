@@ -203,6 +203,11 @@ public class DateTimes {
 	 */
 	public static final FastDateFormat TIMESTAMP_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
 
+	/**
+	 * Timestamp format for log. The format used is <tt>yyyyMMddTHHmmss.SSS</tt>. 
+	 */
+	public static final FastDateFormat TIMESTAMP_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HHmmss.SSS");
+
 	// -----------------------------------------------------------------------
 	/**
 	 * @return current Date
@@ -1861,6 +1866,13 @@ public class DateTimes {
 	 */
 	public static FastDateFormat timestampFormat() {
 		return TIMESTAMP_FORMAT;
+	}
+	
+	/**
+	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
+	 */
+	public static FastDateFormat timestampLogFormat() {
+		return TIMESTAMP_LOG_FORMAT;
 	}
 	
 	/**

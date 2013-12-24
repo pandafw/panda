@@ -7,11 +7,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
@@ -22,8 +19,8 @@ import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Asserts;
 import panda.lang.Chars;
 import panda.lang.Strings;
-import panda.lang.collection.CaseInsensitiveMap;
 import panda.net.http.HttpHeader;
+import panda.servlet.DelegatingServletOutputStream;
 import panda.servlet.HttpServletUtils;
 
 /**
@@ -52,8 +49,6 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 	private PrintWriter writer;
 
-	private int contentLength = 0;
-
 	private String contentType;
 
 	private int bufferSize = 4096;
@@ -69,7 +64,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 	private final List<Cookie> cookies = new ArrayList<Cookie>();
 
-	private final Map<String, HeaderValueHolder> headers = new CaseInsensitiveMap<String, HeaderValueHolder>(new LinkedHashMap<String, HeaderValueHolder>());
+	private final HttpHeader headers = new HttpHeader();
 
 	private int status = HttpServletResponse.SC_OK;
 
@@ -126,7 +121,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 			if (this.contentType.toLowerCase().indexOf(HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX) == -1 && this.charset) {
 				sb.append(";").append(HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX).append(this.characterEncoding);
 			}
-			doAddHeaderValue(HttpHeader.CONTENT_TYPE, sb.toString(), true);
+			headers.set(HttpHeader.CONTENT_TYPE, sb.toString());
 		}
 	}
 	
@@ -181,12 +176,12 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	public void setContentLength(int contentLength) {
-		this.contentLength = contentLength;
-		doAddHeaderValue(HttpHeader.CONTENT_LENGTH, contentLength, true);
+		setIntHeader(HttpHeader.CONTENT_LENGTH, contentLength);
 	}
 
 	public int getContentLength() {
-		return this.contentLength;
+		int cl = headers.getInt(HttpHeader.CONTENT_LENGTH);
+		return cl < 0 ? 0 : cl;
 	}
 
 	public void setContentType(String contentType) {
@@ -243,7 +238,6 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public void reset() {
 		resetBuffer();
 		this.characterEncoding = null;
-		this.contentLength = 0;
 		this.contentType = null;
 		this.locale = null;
 		this.cookies.clear();
@@ -285,7 +279,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	public boolean containsHeader(String name) {
-		return (HeaderValueHolder.getByName(this.headers, name) != null);
+		return this.headers.containsKey(name);
 	}
 
 	/**
@@ -300,15 +294,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	/**
 	 * Return the primary value for the given header as a String, if any.
 	 * Will return the first value in case of multiple values.
-	 * <p>As of Servlet 3.0, this method is also defined HttpServletResponse.
-	 * As of Spring 3.1, it returns a stringified value for Servlet 3.0 compatibility.
-	 * Consider using {@link #getHeaderValue(String)} for raw Object access.
 	 * @param name the name of the header
 	 * @return the associated header value, or <code>null<code> if none
 	 */
 	public String getHeader(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		return (header != null ? header.getStringValue() : null);
+		return headers.getString(name);
 	}
 
 	/**
@@ -320,39 +310,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	 * @return the associated header values, or an empty List if none
 	 */
 	public List<String> getHeaders(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		if (header != null) {
-			return header.getStringValues();
-		}
-		else {
-			return Collections.emptyList();
-		}
-	}
-
-	/**
-	 * Return the primary value for the given header, if any.
-	 * <p>Will return the first value in case of multiple values.
-	 * @param name the name of the header
-	 * @return the associated header value, or <code>null<code> if none
-	 */
-	public Object getHeaderValue(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		return (header != null ? header.getValue() : null);
-	}
-
-	/**
-	 * Return all values for the given header as a List of value objects.
-	 * @param name the name of the header
-	 * @return the associated header values, or an empty List if none
-	 */
-	public List<Object> getHeaderValues(String name) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		if (header != null) {
-			return header.getValues();
-		}
-		else {
-			return Collections.emptyList();
-		}
+		return headers.getStrings(name);
 	}
 
 	/**
@@ -415,11 +373,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	public void setDateHeader(String name, long value) {
-		setHeaderValue(name, value);
+		headers.setDate(name, (value));
 	}
 
 	public void addDateHeader(String name, long value) {
-		addHeaderValue(name, value);
+		headers.addDate(name, (value));
 	}
 
 	public void setHeader(String name, String value) {
@@ -431,53 +389,30 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	}
 
 	public void setIntHeader(String name, int value) {
-		setHeaderValue(name, value);
+		setHeaderValue(name, String.valueOf(value));
 	}
 
 	public void addIntHeader(String name, int value) {
-		addHeaderValue(name, value);
+		addHeaderValue(name, String.valueOf(value));
 	}
 
-	private void setHeaderValue(String name, Object value) {
-		if (setSpecialHeader(name, value)) {
-			return;
-		}
-		doAddHeaderValue(name, value, true);
+	private void setHeaderValue(String name, String value) {
+		setSpecialHeader(name, value);
+		headers.add(name, value);
 	}
 
-	private void addHeaderValue(String name, Object value) {
-		if (setSpecialHeader(name, value)) {
-			return;
-		}
-		doAddHeaderValue(name, value, false);
+	private void addHeaderValue(String name, String value) {
+		setSpecialHeader(name, value);
+		headers.add(name, value);
 	}
 	
-	private boolean setSpecialHeader(String name, Object value) {
+	private boolean setSpecialHeader(String name, String value) {
 		if (HttpHeader.CONTENT_TYPE.equalsIgnoreCase(name)) {
 			setContentType((String) value);
 			return true;
 		}
-		else if (HttpHeader.CONTENT_LENGTH.equalsIgnoreCase(name)) {
-			setContentLength(Integer.parseInt((String) value));
-			return true;
-		}
 		else {
 			return false;
-		}
-	}
-
-	private void doAddHeaderValue(String name, Object value, boolean replace) {
-		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
-		Asserts.notNull(value, "Header value must not be null");
-		if (header == null) {
-			header = new HeaderValueHolder();
-			this.headers.put(name, header);
-		}
-		if (replace) {
-			header.setValue(value);
-		}
-		else {
-			header.addValue(value);
 		}
 	}
 
