@@ -12,5 +12,5 @@ public interface DataHandler<T> {
 	 * @param data data
 	 * @return false to stop the process
 	 */
-	boolean handleData(T data) throws Exception;
+	boolean handle(T data) throws Exception;
 }

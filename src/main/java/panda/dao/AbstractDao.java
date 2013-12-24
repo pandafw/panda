@@ -1285,7 +1285,7 @@ public abstract class AbstractDao implements Dao {
 	
 	protected <T> boolean callback(DataHandler<T> callback, T data, int index) {
 		try {
-			return callback.handleData(data);
+			return callback.handle(data);
 		}
 		catch (Exception ex) {
 			throw new DaoException("Data Handle Error [" + index + "]: " + data, ex);
