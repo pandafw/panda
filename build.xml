@@ -222,7 +222,7 @@ panda-deploy --> Deploy release version to panda-repo repository
 		</javadoc>
 	</target>
 
-	<target name="jar" description="Make project as a jar file">
+	<target name="jar" depends="javadoc" description="Make project as a jar file">
 		<delete>
 			<fileset dir="out" includes="*.jar"/>
 		</delete>
