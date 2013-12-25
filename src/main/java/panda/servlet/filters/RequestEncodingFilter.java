@@ -34,14 +34,14 @@ import javax.servlet.ServletResponse;
  */
 public class RequestEncodingFilter implements Filter {
 	private String encoding;
-	private boolean forceEncoding = false;
+	private boolean force = false;
 
 	/**
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
 		encoding = config.getInitParameter("encoding");
-		forceEncoding = Boolean.TRUE.equals(config.getInitParameter("forceEncoding"));
+		force = Boolean.TRUE.equals(config.getInitParameter("force"));
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class RequestEncodingFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 			ServletException {
-		if (encoding != null && (forceEncoding || req.getCharacterEncoding() == null)) {
+		if (encoding != null && (force || req.getCharacterEncoding() == null)) {
 			req.setCharacterEncoding(encoding);
 		}
 
