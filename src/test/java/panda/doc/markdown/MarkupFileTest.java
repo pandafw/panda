@@ -3,6 +3,7 @@ package panda.doc.markdown;
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -46,27 +47,30 @@ public class MarkupFileTest {
 		}
 	}
 
-	private final static String[] TEST_FILENAMES = new String[] { "dingus.txt", "paragraphs.txt", "snippets.txt",
-			"lists.txt" };
+	private final static String MARKDOWN_TEST_DIR = "markup";
 
 	TestResultPair pair;
 
 	@Parameters(name="{index}: {0}/{1}")
 	public static Collection<Object[]> testResultPairs() throws IOException {
 		List<Object[]> fullResultPairList = new ArrayList<Object[]>();
-		for (String filename : TEST_FILENAMES) {
-			addTestResultPairList(fullResultPairList, filename);
+		URL fileUrl = MarkdownTest.class.getResource(MARKDOWN_TEST_DIR);
+		File dir = new File(fileUrl.getFile());
+		File[] dirEntries = dir.listFiles();
+
+		for (int i = 0; i < dirEntries.length; i++) {
+			File dirEntry = dirEntries[i];
+			String fileName = dirEntry.getName();
+			if (fileName.endsWith(".txt")) {
+				addTestResultPairList(fullResultPairList, fileName);
+			}
 		}
 
 		return fullResultPairList;
 	}
 
-	public MarkupFileTest(String file, String id, String test, String result) {
-		this.pair = new TestResultPair(id, test, result);
-	}
-
 	public static void addTestResultPairList(List<Object[]> list, String filename) throws IOException {
-		URL fileUrl = MarkupFileTest.class.getResource("markup/" + filename);
+		URL fileUrl = MarkupFileTest.class.getResource(MARKDOWN_TEST_DIR + "/" + filename);
 		FileReader file = new FileReader(fileUrl.getFile());
 		BufferedReader in = new BufferedReader(file);
 		StringBuffer test = null;
@@ -133,9 +137,17 @@ public class MarkupFileTest {
 		list.add(new Object[] { fileName, id, test, result });
 	}
 
+	public MarkupFileTest(String file, String id, String test, String result) {
+		this.pair = new TestResultPair(id, test, result);
+	}
+
 	private static String chomp(String s) {
+		if (s.length() < 1) {
+			return s;
+		}
+
 		int lastPos = s.length() - 1;
-		while (s.charAt(lastPos) == '\n' || s.charAt(lastPos) == '\r') {
+		while (lastPos >= 0 && (s.charAt(lastPos) == '\n' || s.charAt(lastPos) == '\r')) {
 			lastPos--;
 		}
 		return s.substring(0, lastPos + 1);

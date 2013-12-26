@@ -270,6 +270,9 @@ class Emitter {
 				link = lr.link;
 				comment = lr.title;
 			}
+			else if (temp.length() <= 0) {
+				return -1;
+			}
 		}
 		else {
 			final LinkRef lr = this.linkRefs.get(name.toLowerCase());
@@ -284,15 +287,12 @@ class Emitter {
 			}
 		}
 
-		if (link == null)
-			return -1;
-
 		if (token == MarkToken.LINK) {
 			if (isAbbrev && comment != null) {
 				if (!this.useExtensions)
 					return -1;
 				out.append("<abbr title=\"");
-				Utils.appendValue(out, comment, 0, comment.length());
+				Utils.appendValue(out, comment);
 				out.append("\">");
 				this.recursiveEmitLine(out, name, 0, MarkToken.NONE);
 				out.append("</abbr>");
@@ -300,11 +300,11 @@ class Emitter {
 			else {
 				this.config.decorator.openLink(out);
 				out.append(" href=\"");
-				Utils.appendValue(out, link, 0, link.length());
+				Utils.appendValue(out, link);
 				out.append('"');
-				if (comment != null) {
+				if (comment != null && comment.length() > 0) {
 					out.append(" title=\"");
-					Utils.appendValue(out, comment, 0, comment.length());
+					Utils.appendValue(out, comment);
 					out.append('"');
 				}
 				out.append('>');
@@ -315,13 +315,16 @@ class Emitter {
 		else {
 			this.config.decorator.openImage(out);
 			out.append(" src=\"");
-			Utils.appendValue(out, link, 0, link.length());
-			out.append("\" alt=\"");
-			Utils.appendValue(out, name, 0, name.length());
+			Utils.appendValue(out, link);
 			out.append('"');
-			if (comment != null) {
+			if (name != null && name.length() > 0) {
+				out.append(" alt=\"");
+				Utils.appendValue(out, name);
+				out.append('"');
+			}
+			if (comment != null && comment.length() > 0) {
 				out.append(" title=\"");
-				Utils.appendValue(out, comment, 0, comment.length());
+				Utils.appendValue(out, comment);
 				out.append('"');
 			}
 			this.config.decorator.closeImage(out);

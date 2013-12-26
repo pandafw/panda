@@ -352,6 +352,13 @@ class Utils {
 		}
 	}
 
+	public final static void appendValue(final StringBuilder out, final String in) {
+		if (in == null || in.length() <= 0) {
+			return;
+		}
+		appendValue(out, in, 0, in.length());
+	}
+	
 	/**
 	 * Appends the given string encoding special HTML characters (used in HTML attribute values).
 	 * 

@@ -1,0 +1,18 @@
+# Test 1 (Refer missing images)
+![alt text][id]
+# Result 1
+<p><img src="" alt="alt text" /></p>
+
+# Test 2 (Refer images)
+![alt text][id]
+[id]: /path/img.jpg "Title"
+# Result 2
+<p><img src="/path/img.jpg" alt="alt text" title="Title" /></p>
+
+# Test 3 (Inline images)
+![](/path/img.jpg "Title")
+![alt textPane](/path/img.jpg "Title")
+# Result 3
+<p><img src="/path/img.jpg" alt="" title="Title" />
+<img src="/path/img.jpg" alt="alt textPane" title="Title" /></p>
+
