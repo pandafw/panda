@@ -1,6 +1,8 @@
 package panda.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,9 @@ import panda.dao.criteria.QueryWrapper;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityField;
+import panda.dao.handlers.GroupDataHandler;
+import panda.dao.handlers.ListDataHandler;
+import panda.dao.handlers.MapDataHandler;
 import panda.lang.Asserts;
 import panda.lang.Objects;
 
@@ -127,6 +132,7 @@ public abstract class AbstractDao implements Dao {
 		return new EntityDao<T>(this, type, param);
 	}
 
+	//---------------------------------------------------------------------------------
 	/**
 	 * drop a table if exists
 	 * 
@@ -416,441 +422,106 @@ public abstract class AbstractDao implements Dao {
 
 	//-------------------------------------------------------------------------
 	/**
-	 * delete a object.
-	 * 
-	 * @param obj object to be deleted
-	 * @return deleted count
-	 */
-	@Override
-	public int delete(Object obj) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		Query query = new Query();
-		queryPrimaryKey(entity, query, obj);
-
-		return deletes(entity, query);
-	}
-
-	/**
-	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
+	 * count all records.
 	 * 
 	 * @param type record type
-	 * @param keys a record contains key property or composite keys
-	 * @return deleted count
+	 * @return record count
 	 */
 	@Override
-	public <T> int delete(Class<T> type, Object ... keys) {
-		return delete(getEntity(type), keys);
+	public int count(Class<?> type) {
+		return count(getEntity(type));
 	}
 
-
 	/**
-	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
+	 * count all records.
 	 * 
 	 * @param entity entity
-	 * @param keys a record contains key property or composite keys
-	 * @return deleted count
+	 * @return record count
 	 */
 	@Override
-	public <T> int delete(Entity<T> entity, Object ... keys) {
-		assertTable(entity);
-
-		if (keys == null || keys.length == 0) {
-			return deletes(entity);
-		}
-
-		Query query = new Query();
-		queryPrimaryKey(entity, query, keys);
-		
-		return deletes(entity, query);
+	public int count(Entity<?> entity) {
+		return count(entity, (Query)null);
 	}
 
 	/**
-	 * delete object collection
-	 * 
-	 * @param col object collection to be deleted
-	 * @return deleted count
-	 */
-	@Override
-	public int deletes(Collection<?> col) {
-		assertCollection(col);
-
-		autoStart();
-		try {
-			int cnt = 0;
-			for (Object obj : col) {
-				if (obj == null) {
-					continue;
-				}
-				cnt += delete(obj);
-			}
-
-			autoCommit();
-			return cnt;
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * delete all records.
-	 * 
-	 * @param type record type
-	 * @return deleted count
-	 */
-	public <T> int deletes(Class<T> type) {
-		return deletes(getEntity(type));
-	}
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Class<?> type, QueryWrapper query) {
-		return deletes(type, getQuery(query));
-	}
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Class<?> type, Query query) {
-		return deletes(getEntity(type), query);
-	}
-
-	/**
-	 * delete all records.
-	 * 
-	 * @param entity entity
-	 * @return deleted count
-	 */
-	public int deletes(Entity<?> entity) {
-		return deletes(entity, (Query)null);
-	}
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Entity<?> entity, QueryWrapper query) {
-		return deletes(entity, getQuery(query));
-	}
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public abstract int deletes(Entity<?> entity, Query query);
-
-	/**
-	 * delete all records.
+	 * count all records.
 	 * 
 	 * @param table table name
-	 * @return deleted count
+	 * @return record count
 	 */
-	public int deletes(String table) {
-		return deletes(table, null);
+	@Override
+	public int count(String table) {
+		return count(table, (Query)null);
 	}
 
 	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
+	 * count records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	@Override
+	public int count(Class<?> type, QueryWrapper query) {
+		return count(type, getQuery(query));
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	@Override
+	public int count(Class<?> type, Query query) {
+		return count(getEntity(type), query);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	@Override
+	public int count(Entity<?> entity, QueryWrapper query) {
+		return count(entity, getQuery(query));
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	@Override
+	public abstract int count(Entity<?> entity, Query query);
+
+	/**
+	 * count records by the supplied query.
 	 * 
 	 * @param table table name
 	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public abstract int deletes(String table, Query query);
-
-	//-------------------------------------------------------------------------
-	/**
-	 * insert the object if not exists, 
-	 * or update the record by the object.
-	 * 
-	 * @param obj object
-	 * @return the saved record
+	 * @return record count
 	 */
 	@Override
-	public <T> T save(T obj) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-
-		EntityField eid = entity.getIdentity();
-		if (eid != null) {
-			Object iid = eid.getValue(obj);
-			if (!isValidIdentity(iid)) {
-				return insert(obj);
-			}
-		}
-		
-		if (update(obj) == 0) {
-			return insert(obj);
-		}
-		return obj;
+	public int count(String table, QueryWrapper query) {
+		return count(table, getQuery(query));
 	}
 
-	//-------------------------------------------------------------------------
 	/**
-	 * insert a record.
-	 * <p>
-	 * a '@Id' field will be set after insert. 
-	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
-	 * <p>
-	 * the '@Prep("SELECT ...")' sql will be executed before insert.
-	 * <p>
-	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * count records by the supplied query.
 	 * 
-	 * @param obj the record to be inserted (@Id property will be setted)
-	 * @return the inserted record
+	 * @param table table name
+	 * @param query WHERE conditions
+	 * @return record count
 	 */
 	@Override
-	public <T> T insert(T obj) {
-		assertObject(obj);
+	public abstract int count(String table, Query query);
 
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		autoStart();
-		try {
-			T d = insert(entity, obj);
-			autoCommit();
-			return d;
-		}
-		catch (Exception e) {
-			rollback();
-			throw new DaoException("Failed to insert entity " + entity.getType(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	protected abstract <T> T insert(Entity<?> entity, T obj) throws Exception;
-
-	/**
-	 * insert record collections.
-	 * <p>
-	 * a '@Id' field will be set after insert. 
-	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
-	 * <p>
-	 * the '@Prep("SELECT ...")' sql will be executed before insert.
-	 * <p>
-	 * the '@Post("SELECT ...")' sql will be executed after insert.
-	 * 
-	 * @param col the record collection to be inserted
-	 * @return the inserted record collection
-	 */
-	@Override
-	public Collection<?> inserts(Collection<?> col) {
-		assertCollection(col);
-
-		autoStart();
-		try {
-			for (Object obj : col) {
-				if (obj == null) {
-					continue;
-				}
-				insert(obj);
-			}
-
-			autoCommit();
-			return col;
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	//-------------------------------------------------------------------------
-	/**
-	 * update a record by the supplied object. 
-	 * 
-	 * @param obj sample object
-	 * @return updated count
-	 */
-	@Override
-	public int update(Object obj) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		Query query = new Query();
-		queryPrimaryKey(entity, query, obj);
-
-		return update(entity, obj, query);
-	}
-
-	/**
-	 * update a record by the supplied object. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @return updated count
-	 */
-	@Override
-	public int updateIgnoreNull(Object obj) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		Query query = new Query();
-		excludeNullProperties(entity, query, obj);
-
-		return update(entity, obj, query);
-	}
-
-	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	@Override
-	public int updates(Collection<?> col) {
-		assertCollection(col);
-
-		autoStart();
-		try {
-			int cnt = 0;
-			for (Object obj : col) {
-				if (obj == null) {
-					continue;
-				}
-				cnt += update(obj);
-			}
-
-			autoCommit();
-			return cnt;
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	@Override
-	public int updatesIgnoreNull(Collection<?> col) {
-		assertCollection(col);
-
-		autoStart();
-		try {
-			int cnt = 0;
-			for (Object obj : col) {
-				if (obj == null) {
-					continue;
-				}
-				cnt += updateIgnoreNull(obj);
-			}
-
-			autoCommit();
-			return cnt;
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	public int updates(Object obj, QueryWrapper query) {
-		return updates(obj, getQuery(query));
-	}
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	@Override
-	public int updates(Object obj, Query query) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-
-		return update(entity, obj, query);
-	}
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	public int updatesIgnoreNull(Object obj, QueryWrapper query) {
-		return updatesIgnoreNull(obj, getQuery(query));
-	}
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	@Override
-	public int updatesIgnoreNull(Object obj, Query query) {
-		assertObject(obj);
-
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-		
-		if (query == null) {
-			query = new Query();
-		}
-		excludeNullProperties(entity, query, obj);
-
-		return update(entity, obj, query);
-	}
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	protected abstract int update(Entity<?> entity, Object obj, Query query);
-	
 	//-------------------------------------------------------------------------
 	/**
 	 * select all records.
@@ -1069,108 +740,1123 @@ public abstract class AbstractDao implements Dao {
 	@Override
 	public abstract int select(String table, Query query, DataHandler<Map> callback);
 
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to list.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
+	 */
+	@SuppressWarnings("unchecked")
+	public List<?> list(Class<?> type, String prop) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, new ListDataHandler(list, prop, bh));
+		return list;
+	}
+
+	/**
+	 * select all records to list.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
+	 */
+	@SuppressWarnings("unchecked")
+	public List<?> list(Entity<?> entity, String prop) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, new ListDataHandler(list, prop, bh));
+		return list;
+	}
+
+	/**
+	 * select all records to list.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
+	 */
+	public List<?> list(String table, String prop) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, new ListDataHandler<Map>(list, prop, bh));
+		return list;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(Class<?> type, String prop, QueryWrapper query) {
+		return list(type, prop, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	@SuppressWarnings("unchecked")
+	public List<?> list(Class<?> type, String prop, Query query) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, query, new ListDataHandler(list, prop, bh));
+		return list;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(Entity<?> entity, String prop, QueryWrapper query) {
+		return list(entity, prop, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	@SuppressWarnings("unchecked")
+	public List<?> list(Entity<?> entity, String prop, Query query) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, query, new ListDataHandler(list, prop, bh));
+		return list;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(String table, String prop, QueryWrapper query) {
+		return list(table, prop, query.getQuery());
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(String table, String prop, Query query) {
+		List<?> list = new ArrayList<Object>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, query, new ListDataHandler<Map>(list, prop, bh));
+		return list;
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record map
+	 */
+	public <T> Map<?, T> map(Class<T> type, String keyProp) {
+		Map<?, T> map = new HashMap<Object, T>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, new MapDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record list
+	 */
+	public <T> Map<?, T> map(Entity<T> entity, String keyProp) {
+		Map<?, T> map = new HashMap<Object, T>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, new MapDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record(a map) list
+	 */
+	public Map<?, Map> map(String table, String keyProp) {
+		Map<?, Map> map = new HashMap<Object, Map>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, new MapDataHandler<Map>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query) {
+		return map(type, keyProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, T> map(Class<T> type, String keyProp, Query query) {
+		Map<?, T> map = new HashMap<Object, T>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, query, new MapDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query) {
+		return map(entity, keyProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, T> map(Entity<T> entity, String keyProp, Query query) {
+		Map<?, T> map = new HashMap<Object, T>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, query, new MapDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, Map> map(String table, String keyProp, QueryWrapper query) {
+		return map(table, keyProp, query.getQuery());
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, Map> map(String table, String keyProp, Query query) {
+		Map<?, Map> map = new HashMap<Object, Map>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, query, new MapDataHandler<Map>(map, keyProp, bh));
+		return map;
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, ?> map(Class<?> type, String keyProp, String valProp) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, new MapDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, new MapDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record(a map) list
+	 */
+	public Map<?, ?> map(String table, String keyProp, String valProp) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, new MapDataHandler<Map>(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
+		return map(type, keyProp, valProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, query, new MapDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
+		return map(entity, keyProp, valProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, query, new MapDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query) {
+		return map(table, keyProp, valProp, query.getQuery());
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, ?> map(String table, String keyProp, String valProp, Query query) {
+		Map<?, ?> map = new HashMap<Object, Object>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, query, new MapDataHandler<Map>(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record map
+	 */
+	public <T> Map<?, List<T>> group(Class<T> type, String keyProp) {
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, new GroupDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record list
+	 */
+	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp) {
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, new GroupDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record(a map) list
+	 */
+	public Map<?, List<Map>> group(String table, String keyProp) {
+		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, new GroupDataHandler<Map>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query) {
+		return group(type, keyProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query) {
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, query, new GroupDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query) {
+		return group(entity, keyProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query) {
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, query, new GroupDataHandler<T>(map, keyProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query) {
+		return group(table, keyProp, query.getQuery());
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, List<Map>> group(String table, String keyProp, Query query) {
+		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, query, new GroupDataHandler<Map>(map, keyProp, bh));
+		return map;
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, new GroupDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, new GroupDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record(a map) list
+	 */
+	public Map<?, List<?>> group(String table, String keyProp, String valProp) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, new GroupDataHandler<Map>(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
+		return group(type, keyProp, valProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		select(type, query, new GroupDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
+		return group(entity, keyProp, valProp, query.getQuery());
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		select(entity, query, new GroupDataHandler(map, keyProp, valProp, bh));
+		return map;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query) {
+		return group(table, keyProp, valProp, query.getQuery());
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	public Map<?, List<?>> group(String table, String keyProp, String valProp, Query query) {
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		select(table, query, new GroupDataHandler<Map>(map, keyProp, valProp, bh));
+		return map;
+	}
+
 	//-------------------------------------------------------------------------
 	/**
-	 * count all records.
+	 * delete a object.
+	 * 
+	 * @param obj object to be deleted
+	 * @return deleted count
+	 */
+	@Override
+	public int delete(Object obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		Query query = new Query();
+		queryPrimaryKey(entity, query, obj);
+
+		return deletes(entity, query);
+	}
+
+	/**
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
 	 * 
 	 * @param type record type
-	 * @return record count
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
 	 */
 	@Override
-	public int count(Class<?> type) {
-		return count(getEntity(type));
+	public <T> int delete(Class<T> type, Object ... keys) {
+		return delete(getEntity(type), keys);
 	}
 
+
 	/**
-	 * count all records.
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
 	 * 
 	 * @param entity entity
-	 * @return record count
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
 	 */
 	@Override
-	public int count(Entity<?> entity) {
-		return count(entity, (Query)null);
+	public <T> int delete(Entity<T> entity, Object ... keys) {
+		assertTable(entity);
+
+		if (keys == null || keys.length == 0) {
+			return deletes(entity);
+		}
+
+		Query query = new Query();
+		queryPrimaryKey(entity, query, keys);
+		
+		return deletes(entity, query);
 	}
 
 	/**
-	 * count all records.
+	 * delete object collection
 	 * 
-	 * @param table table name
-	 * @return record count
+	 * @param col object collection to be deleted
+	 * @return deleted count
 	 */
 	@Override
-	public int count(String table) {
-		return count(table, (Query)null);
+	public int deletes(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				cnt += delete(obj);
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		finally {
+			autoClose();
+		}
 	}
 
 	/**
-	 * count records by the supplied query.
+	 * delete all records.
+	 * 
+	 * @param type record type
+	 * @return deleted count
+	 */
+	public <T> int deletes(Class<T> type) {
+		return deletes(getEntity(type));
+	}
+
+	/**
+	 * delete records by the supplied query
 	 * 
 	 * @param type record type
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	@Override
-	public int count(Class<?> type, QueryWrapper query) {
-		return count(type, getQuery(query));
+	public int deletes(Class<?> type, QueryWrapper query) {
+		return deletes(type, getQuery(query));
 	}
 
 	/**
-	 * count records by the supplied query.
+	 * delete records by the supplied query
 	 * 
 	 * @param type record type
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	@Override
-	public int count(Class<?> type, Query query) {
-		return count(getEntity(type), query);
+	public int deletes(Class<?> type, Query query) {
+		return deletes(getEntity(type), query);
 	}
 
 	/**
-	 * count records by the supplied query.
+	 * delete all records.
+	 * 
+	 * @param entity entity
+	 * @return deleted count
+	 */
+	public int deletes(Entity<?> entity) {
+		return deletes(entity, (Query)null);
+	}
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	@Override
-	public int count(Entity<?> entity, QueryWrapper query) {
-		return count(entity, getQuery(query));
+	public int deletes(Entity<?> entity, QueryWrapper query) {
+		return deletes(entity, getQuery(query));
 	}
 
 	/**
-	 * count records by the supplied query.
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	@Override
-	public abstract int count(Entity<?> entity, Query query);
+	public abstract int deletes(Entity<?> entity, Query query);
 
 	/**
-	 * count records by the supplied query.
+	 * delete all records.
 	 * 
 	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	@Override
-	public int count(String table, QueryWrapper query) {
-		return count(table, getQuery(query));
+	public int deletes(String table) {
+		return deletes(table, null);
 	}
 
 	/**
-	 * count records by the supplied query.
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param table table name
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
+	 */
+	public abstract int deletes(String table, Query query);
+
+	//-------------------------------------------------------------------------
+	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param obj the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
 	 */
 	@Override
-	public abstract int count(String table, Query query);
+	public <T> T insert(T obj) {
+		assertObject(obj);
 
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		autoStart();
+		try {
+			T d = insert(entity, obj);
+			autoCommit();
+			return d;
+		}
+		catch (Exception e) {
+			rollback();
+			throw new DaoException("Failed to insert entity " + entity.getType(), e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	protected abstract <T> T insert(Entity<?> entity, T obj) throws Exception;
+
+	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	@Override
+	public Collection<?> inserts(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				insert(obj);
+			}
+
+			autoCommit();
+			return col;
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	//-------------------------------------------------------------------------
+	/**
+	 * insert the object if not exists, 
+	 * or update the record by the object.
+	 * 
+	 * @param obj object
+	 * @return the saved record
+	 */
+	@Override
+	public <T> T save(T obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+
+		EntityField eid = entity.getIdentity();
+		if (eid != null) {
+			Object iid = eid.getValue(obj);
+			if (!isValidIdentity(iid)) {
+				return insert(obj);
+			}
+		}
+		
+		if (update(obj) == 0) {
+			return insert(obj);
+		}
+		return obj;
+	}
+
+	//-------------------------------------------------------------------------
+	/**
+	 * update a record by the supplied object. 
+	 * 
+	 * @param obj sample object
+	 * @return updated count
+	 */
+	@Override
+	public int update(Object obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		Query query = new Query();
+		queryPrimaryKey(entity, query, obj);
+
+		return update(entity, obj, query);
+	}
+
+	/**
+	 * update a record by the supplied object. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @return updated count
+	 */
+	@Override
+	public int updateIgnoreNull(Object obj) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		Query query = new Query();
+		excludeNullProperties(entity, query, obj);
+
+		return update(entity, obj, query);
+	}
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	@Override
+	public int updates(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				cnt += update(obj);
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	@Override
+	public int updatesIgnoreNull(Collection<?> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			int cnt = 0;
+			for (Object obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				cnt += updateIgnoreNull(obj);
+			}
+
+			autoCommit();
+			return cnt;
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	public int updates(Object obj, QueryWrapper query) {
+		return updates(obj, getQuery(query));
+	}
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	@Override
+	public int updates(Object obj, Query query) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+
+		return update(entity, obj, query);
+	}
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	public int updatesIgnoreNull(Object obj, QueryWrapper query) {
+		return updatesIgnoreNull(obj, getQuery(query));
+	}
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	@Override
+	public int updatesIgnoreNull(Object obj, Query query) {
+		assertObject(obj);
+
+		Entity<?> entity = getEntity(obj.getClass());
+		assertTable(entity);
+		
+		if (query == null) {
+			query = new Query();
+		}
+		excludeNullProperties(entity, query, obj);
+
+		return update(entity, obj, query);
+	}
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	protected abstract int update(Entity<?> entity, Object obj, Query query);
+	
 	//-------------------------------------------------------------------------
 	/**
 	 * execute a transaction

@@ -2,14 +2,15 @@ package panda.dao.entity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DataHandler;
 import panda.dao.DatabaseMeta;
 import panda.dao.Transaction;
-import panda.dao.criteria.QueryWrapper;
 import panda.dao.criteria.Query;
+import panda.dao.criteria.QueryWrapper;
 import panda.lang.Texts;
 
 
@@ -93,6 +94,7 @@ public class EntityDao<T> {
 		return entity;
 	}
 
+	//-------------------------------------------------------------------------
 	/**
 	 * drop a table if exists
 	 */
@@ -100,6 +102,7 @@ public class EntityDao<T> {
 		dao.drop(entity);
 	}
 
+	//-------------------------------------------------------------------------
 	/**
 	 * create table
 	 */
@@ -107,6 +110,7 @@ public class EntityDao<T> {
 		dao.create(entity);
 	}
 
+	//-------------------------------------------------------------------------
 	/**
 	 * check a table exists in the data store.
 	 * 
@@ -149,6 +153,7 @@ public class EntityDao<T> {
 		return dao.exists(entity, query);
 	}
 
+	//-------------------------------------------------------------------------
 	/**
 	 * get a record by the supplied keys
 	 * 
@@ -178,6 +183,248 @@ public class EntityDao<T> {
 		return dao.fetch(entity, query);
 	}
 
+	//-------------------------------------------------------------------------
+	/**
+	 * count all records.
+	 * 
+	 * @return record count
+	 */
+	public int count() {
+		return dao.count(entity);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public int count(QueryWrapper query) {
+		return dao.count(entity, query);
+	}
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	public int count(Query query) {
+		return dao.count(entity, query);
+	}
+
+	//-------------------------------------------------------------------------
+	/**
+	 * select all records.
+	 * 
+	 * @return record list
+	 */
+	public List<T> select() {
+		return dao.select(entity);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public List<T> select(QueryWrapper query) {
+		return dao.select(entity, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public List<T> select(Query query) {
+		return dao.select(entity, query);
+	}
+
+	/**
+	 * select all records.
+	 * 
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public int select(DataHandler<T> callback) {
+		return dao.select(entity, callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public int select(QueryWrapper query, DataHandler<T> callback) {
+		return dao.select(entity, query, callback);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * 
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param callback DataHandler callback
+	 * @return callback processed count
+	 */
+	public int select(Query query, DataHandler<T> callback) {
+		return dao.select(entity, query, callback);
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to list.
+	 * 
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
+	 */
+	public List<?> list(String prop) {
+		return dao.list(entity, prop);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(String prop, QueryWrapper query) {
+		return dao.list(entity, prop, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	public List<?> list(String prop, Query query) {
+		return dao.list(entity, prop, query);
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record map
+	 */
+	public Map<?, T> map(String keyProp) {
+		return dao.map(entity, keyProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, T> map(String keyProp, QueryWrapper query) {
+		return dao.map(entity, keyProp, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, T> map(String keyProp, Query query) {
+		return dao.map(entity, keyProp, query);
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	public Map<?, ?> map(String keyProp, String valProp) {
+		return dao.map(entity, keyProp, valProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, ?> map(String keyProp, String valProp, QueryWrapper query) {
+		return dao.map(entity, keyProp, valProp, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, ?> map(String keyProp, String valProp, Query query) {
+		return dao.map(entity, keyProp, valProp, query);
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	public Map<?, List<?>> group(String keyProp, String valProp) {
+		return dao.group(entity, keyProp, valProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, List<?>> group(String keyProp, String valProp, QueryWrapper query) {
+		return dao.group(entity, keyProp, valProp, query);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	public Map<?, List<?>> group(String keyProp, String valProp, Query query) {
+		return dao.group(entity, keyProp, valProp, query);
+	}
+
+	//-------------------------------------------------------------------------
 	/**
 	 * delete a object.
 	 * 
@@ -229,6 +476,7 @@ public class EntityDao<T> {
 		return dao.deletes(entity, query);
 	}
 
+	//-------------------------------------------------------------------------
 	/**
 	 * insert a record.
 	 * <p>
@@ -264,6 +512,19 @@ public class EntityDao<T> {
 		return (Collection<T>)dao.inserts(col);
 	}
 
+	//-------------------------------------------------------------------------
+	/**
+	 * insert the object if not exists, 
+	 * or update the record by the object.
+	 * 
+	 * @param obj object
+	 * @return the saved record
+	 */
+	public T save(T obj) {
+		return dao.save(obj);
+	}
+	
+	//-------------------------------------------------------------------------
 	/**
 	 * update a record by the supplied object. 
 	 * 
@@ -351,98 +612,7 @@ public class EntityDao<T> {
 		return dao.updatesIgnoreNull(obj, query);
 	}
 
-	/**
-	 * select all records.
-	 * 
-	 * @return record list
-	 */
-	public List<T> select() {
-		return dao.select(entity);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	public List<T> select(QueryWrapper query) {
-		return dao.select(entity, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	public List<T> select(Query query) {
-		return dao.select(entity, query);
-	}
-
-	/**
-	 * select all records.
-	 * 
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	public int select(DataHandler<T> callback) {
-		return dao.select(entity, callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	public int select(QueryWrapper query, DataHandler<T> callback) {
-		return dao.select(entity, query, callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	public int select(Query query, DataHandler<T> callback) {
-		return dao.select(entity, query, callback);
-	}
-
-	/**
-	 * count all records.
-	 * 
-	 * @return record count
-	 */
-	public int count() {
-		return dao.count(entity);
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	public int count(QueryWrapper query) {
-		return dao.count(entity, query);
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	public int count(Query query) {
-		return dao.count(entity, query);
-	}
-
+	//-------------------------------------------------------------------------
 	/**
 	 * execute a transaction
 	 */
@@ -457,6 +627,7 @@ public class EntityDao<T> {
 		dao.exec(transaction, level);
 	}
 	
+	//-------------------------------------------------------------------------
 	/**
 	 * commit a transaction
 	 */

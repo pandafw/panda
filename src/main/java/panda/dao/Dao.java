@@ -43,6 +43,7 @@ public interface Dao {
 	 */
 	<T> EntityDao<T> getEntityDao(Class<T> type, Object param);
 
+	//--------------------------------------------------------------------
 	/**
 	 * drop a table if exists
 	 * 
@@ -64,6 +65,7 @@ public interface Dao {
 	 */
 	void drop(String table);
 
+	//--------------------------------------------------------------------
 	/**
 	 * create table
 	 * 
@@ -78,6 +80,7 @@ public interface Dao {
 	 */
 	void create(Entity<?> entity);
 
+	//--------------------------------------------------------------------
 	/**
 	 * check a table exists in the data store.
 	 * 
@@ -146,6 +149,7 @@ public interface Dao {
 	 */
 	boolean exists(Entity<?> entity, Query query);
 
+	//--------------------------------------------------------------------
 	/**
 	 * get a record by the supplied keys
 	 * 
@@ -216,224 +220,86 @@ public interface Dao {
 	 */
 	Map fetch(String table, Query query);
 
+	//--------------------------------------------------------------------
 	/**
-	 * delete a object.
-	 * 
-	 * @param obj object to be deleted
-	 * @return deleted count
-	 */
-	int delete(Object obj);
-
-	/**
-	 * delete all records.
+	 * count all records.
 	 * 
 	 * @param type record type
-	 * @return deleted count
+	 * @return record count
 	 */
-	<T> int deletes(Class<T> type);
+	int count(Class<?> type);
 
 	/**
-	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
-	 * 
-	 * @param type record type
-	 * @param keys a record contains key property or composite keys
-	 * @return deleted count
-	 */
-	<T> int delete(Class<T> type, Object ... keys);
-
-	/**
-	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
+	 * count all records.
 	 * 
 	 * @param entity entity
-	 * @param keys a record contains key property or composite keys
-	 * @return deleted count
+	 * @return record count
 	 */
-	<T> int delete(Entity<T> entity, Object ... keys);
+	int count(Entity<?> entity);
 
 	/**
-	 * delete object collection
-	 * 
-	 * @param col object collection to be deleted
-	 * @return deleted count
-	 */
-	int deletes(Collection<?> col);
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	int deletes(Class<?> type, QueryWrapper query);
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	int deletes(Class<?> type, Query query);
-
-	/**
-	 * delete all records.
-	 * 
-	 * @param entity entity
-	 * @return deleted count
-	 */
-	int deletes(Entity<?> entity);
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	int deletes(Entity<?> entity, QueryWrapper query);
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	int deletes(Entity<?> entity, Query query);
-
-	/**
-	 * delete all records.
+	 * count all records.
 	 * 
 	 * @param table table name
-	 * @return deleted count
+	 * @return record count
 	 */
-	int deletes(String table);
+	int count(String table);
 
 	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
+	 * count records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	int count(Class<?> type, QueryWrapper query);
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param type record type
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	int count(Class<?> type, Query query);
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	int count(Entity<?> entity, QueryWrapper query);
+
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param entity entity
+	 * @param query WHERE conditions
+	 * @return record count
+	 */
+	int count(Entity<?> entity, Query query);
+
+	/**
+	 * count records by the supplied query.
 	 * 
 	 * @param table table name
 	 * @param query WHERE conditions
-	 * @return deleted count
+	 * @return record count
 	 */
-	int deletes(String table, Query query);
+	int count(String table, QueryWrapper query);
 
 	/**
-	 * insert a record.
-	 * <p>
-	 * a '@Id' field will be set after insert. 
-	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
-	 * <p>
-	 * the '@Prep("SELECT ...")' sql will be executed before insert.
-	 * <p>
-	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * count records by the supplied query.
 	 * 
-	 * @param obj the record to be inserted (@Id property will be setted)
-	 * @return the inserted record
+	 * @param table table name
+	 * @param query WHERE conditions
+	 * @return record count
 	 */
-	<T> T insert(T obj);
+	int count(String table, Query query);
 
-	/**
-	 * insert record collections.
-	 * <p>
-	 * a '@Id' field will be set after insert. 
-	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
-	 * <p>
-	 * the '@Prep("SELECT ...")' sql will be executed before insert.
-	 * <p>
-	 * the '@Post("SELECT ...")' sql will be executed after insert.
-	 * 
-	 * @param col the record collection to be inserted
-	 * @return the inserted record collection
-	 */
-	Collection<?> inserts(Collection<?> col);
-
-	/**
-	 * insert the object if not exists, 
-	 * or update the record by the object.
-	 * 
-	 * @param obj object
-	 * @return the saved record
-	 */
-	<T> T save(T obj);
-
-	/**
-	 * update a record by the supplied object. 
-	 * 
-	 * @param obj sample object
-	 * @return updated count
-	 */
-	int update(Object obj);
-
-	/**
-	 * update a record by the supplied object. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @return updated count
-	 */
-	int updateIgnoreNull(Object obj);
-
-	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	int updates(Collection<?> col);
-
-	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	int updatesIgnoreNull(Collection<?> col);
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	int updates(Object obj, QueryWrapper query);
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	int updates(Object obj, Query query);
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	int updatesIgnoreNull(Object obj, QueryWrapper query);
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	int updatesIgnoreNull(Object obj, Query query);
-
+	//--------------------------------------------------------------------
 	/**
 	 * select all records.
 	 * 
@@ -605,84 +471,717 @@ public interface Dao {
 	 */
 	int select(String table, Query query, DataHandler<Map> callback);
 
+	//--------------------------------------------------------------------
 	/**
-	 * count all records.
+	 * select all records to list.
 	 * 
 	 * @param type record type
-	 * @return record count
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
 	 */
-	int count(Class<?> type);
+	List<?> list(Class<?> type, String prop);
 
 	/**
-	 * count all records.
+	 * select all records to list.
 	 * 
 	 * @param entity entity
-	 * @return record count
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
 	 */
-	int count(Entity<?> entity);
+	List<?> list(Entity<?> entity, String prop);
 
 	/**
-	 * count all records.
+	 * select all records to list.
 	 * 
 	 * @param table table name
-	 * @return record count
+	 * @param prop The property to be used as the value in the list.
+	 * @return record value list
 	 */
-	int count(String table);
+	List<?> list(String table, String prop);
 
 	/**
-	 * count records by the supplied query.
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(Class<?> type, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(Class<?> type, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(Entity<?> entity, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(Entity<?> entity, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(String table, String prop, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the list.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value list
+	 */
+	List<?> list(String table, String prop, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record map
+	 */
+	<T> Map<?, T> map(Class<T> type, String keyProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record list
+	 */
+	<T> Map<?, T> map(Entity<T> entity, String keyProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record(a map) list
+	 */
+	Map<?, Map> map(String table, String keyProp);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, T> map(Class<T> type, String keyProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, T> map(Entity<T> entity, String keyProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, Map> map(String table, String keyProp, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, Map> map(String table, String keyProp, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	Map<?, ?> map(Class<?> type, String keyProp, String valProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record list
+	 */
+	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record(a map) list
+	 */
+	Map<?, ?> map(String table, String keyProp, String valProp);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, ?> map(String table, String keyProp, String valProp, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record map
+	 */
+	<T> Map<?, List<T>> group(Class<T> type, String keyProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record list
+	 */
+	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @return record(a map) list
+	 */
+	Map<?, List<Map>> group(String table, String keyProp);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, List<Map>> group(String table, String keyProp, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to map.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record map
+	 */
+	Map<?, List<?>> group(Class<?> type, String keyProp, String valProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record list
+	 */
+	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp);
+
+	/**
+	 * select all records to map.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @return record(a map) list
+	 */
+	Map<?, List<?>> group(String table, String keyProp, String valProp);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record list
+	 */
+	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record(a map) list
+	 */
+	Map<?, List<?>> group(String table, String keyProp, String valProp, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * delete a object.
+	 * 
+	 * @param obj object to be deleted
+	 * @return deleted count
+	 */
+	int delete(Object obj);
+
+	/**
+	 * delete all records.
+	 * 
+	 * @param type record type
+	 * @return deleted count
+	 */
+	<T> int deletes(Class<T> type);
+
+	/**
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
+	 * 
+	 * @param type record type
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
+	 */
+	<T> int delete(Class<T> type, Object ... keys);
+
+	/**
+	 * delete records by the supplied keys.
+	 * if the supplied keys is null, all records will be deleted.
+	 * 
+	 * @param entity entity
+	 * @param keys a record contains key property or composite keys
+	 * @return deleted count
+	 */
+	<T> int delete(Entity<T> entity, Object ... keys);
+
+	/**
+	 * delete object collection
+	 * 
+	 * @param col object collection to be deleted
+	 * @return deleted count
+	 */
+	int deletes(Collection<?> col);
+
+	/**
+	 * delete records by the supplied query
 	 * 
 	 * @param type record type
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	int count(Class<?> type, QueryWrapper query);
+	int deletes(Class<?> type, QueryWrapper query);
 
 	/**
-	 * count records by the supplied query.
+	 * delete records by the supplied query
 	 * 
 	 * @param type record type
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	int count(Class<?> type, Query query);
+	int deletes(Class<?> type, Query query);
 
 	/**
-	 * count records by the supplied query.
+	 * delete all records.
+	 * 
+	 * @param entity entity
+	 * @return deleted count
+	 */
+	int deletes(Entity<?> entity);
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	int count(Entity<?> entity, QueryWrapper query);
+	int deletes(Entity<?> entity, QueryWrapper query);
 
 	/**
-	 * count records by the supplied query.
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	int count(Entity<?> entity, Query query);
+	int deletes(Entity<?> entity, Query query);
 
 	/**
-	 * count records by the supplied query.
+	 * delete all records.
+	 * 
+	 * @param table table name
+	 * @return deleted count
+	 */
+	int deletes(String table);
+
+	/**
+	 * delete records by the supplied query.
+	 * if query is empty, all records will be deleted.
 	 * 
 	 * @param table table name
 	 * @param query WHERE conditions
-	 * @return record count
+	 * @return deleted count
 	 */
-	int count(String table, QueryWrapper query);
+	int deletes(String table, Query query);
+
+	//--------------------------------------------------------------------
+	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param obj the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
+	 */
+	<T> T insert(T obj);
 
 	/**
-	 * count records by the supplied query.
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
 	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record count
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
 	 */
-	int count(String table, Query query);
+	Collection<?> inserts(Collection<?> col);
 
+	//--------------------------------------------------------------------
+	/**
+	 * insert the object if not exists, 
+	 * or update the record by the object.
+	 * 
+	 * @param obj object
+	 * @return the saved record
+	 */
+	<T> T save(T obj);
+
+	//--------------------------------------------------------------------
+	/**
+	 * update a record by the supplied object. 
+	 * 
+	 * @param obj sample object
+	 * @return updated count
+	 */
+	int update(Object obj);
+
+	/**
+	 * update a record by the supplied object. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @return updated count
+	 */
+	int updateIgnoreNull(Object obj);
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	int updates(Collection<?> col);
+
+	/**
+	 * update records by the supplied object collection. 
+	 * 
+	 * @param col record collection
+	 * @return updated count
+	 */
+	int updatesIgnoreNull(Collection<?> col);
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	int updates(Object obj, QueryWrapper query);
+
+	/**
+	 * update records by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	int updates(Object obj, Query query);
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	int updatesIgnoreNull(Object obj, QueryWrapper query);
+
+	/**
+	 * update records by the supplied object and query. 
+	 * the null properties will be ignored.
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	int updatesIgnoreNull(Object obj, Query query);
+
+	//--------------------------------------------------------------------
 	/**
 	 * execute a transaction
 	 */
@@ -694,6 +1193,7 @@ public interface Dao {
 	 */
 	void exec(Transaction transaction, int level);
 	
+	//--------------------------------------------------------------------
 	/**
 	 * commit a transaction
 	 */
