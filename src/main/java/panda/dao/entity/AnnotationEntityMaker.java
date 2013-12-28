@@ -434,9 +434,16 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 	}
 
+	private Entity<?> getTargetEntity(Entity<?> en, Class<?> target) {
+		if (en.getType().equals(target)) {
+			return en;
+		}
+		return client.getEntity(target);
+	}
+
 	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, String[] fields) {
 		EntityFKey efk = new EntityFKey();
-		Entity<?> ref = client.getEntity(target);
+		Entity<?> ref = getTargetEntity(en, target);
 		if (ref == null) {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
@@ -475,7 +482,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 
 	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, EntityField field) {
 		EntityFKey efk = new EntityFKey();
-		Entity<?> ref = client.getEntity(target);
+		Entity<?> ref = getTargetEntity(en, target);
 		if (null == ref) {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
