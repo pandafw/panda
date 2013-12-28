@@ -235,7 +235,7 @@ public class Query implements Cloneable {
 	 * @return this
 	 */
 	protected Query removeExclude(String name) {
-		if (excludes == null) {
+		if (excludes != null) {
 			excludes.remove(name);
 		}
 		return this;
