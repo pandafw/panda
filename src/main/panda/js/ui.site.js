@@ -74,8 +74,8 @@ function s_ie6_hack_forms($w) {
 function sl_sort(id, el) {
 	var co = el.value.split(' ');
 	if (co.length == 2) {
-		$('#' + id + '_st_c').val(co[0]);
-		$('#' + id + '_st_d').val(co[1]);
+		$('#' + id + '_so_c').val(co[0]);
+		$('#' + id + '_so_d').val(co[1]);
 		sl_submit(id);
 	}
 }
@@ -83,8 +83,8 @@ function sl_sorta(id, name, dir) {
 	sl_sortn(id, name, dir.toLowerCase() == "asc" ? "desc" : "asc");
 }
 function sl_sortn(id, name, dir) {
-	$('#' + id + '_st_c').val(name);
-	$('#' + id + '_st_d').val(dir);
+	$('#' + id + '_so_c').val(name);
+	$('#' + id + '_so_d').val(dir);
 	sl_submit(id);
 }
 function sl_goto(id, s) {
