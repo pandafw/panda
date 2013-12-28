@@ -269,7 +269,11 @@ public class HttpServletUtils {
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getRemoteAddr());
 		sb.append(" -> ");
-		sb.append(request.getRequestURL());
+		sb.append(request.getRequestURI());
+		if (Strings.isNotEmpty(request.getQueryString())) {
+			sb.append('?');
+			sb.append(request.getQueryString());
+		}
 		return sb.toString();
 	}
 
