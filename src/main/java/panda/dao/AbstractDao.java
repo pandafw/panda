@@ -747,12 +747,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the list.
 	 * @return record value list
 	 */
-	@SuppressWarnings("unchecked")
 	public List<?> list(Class<?> type, String prop) {
-		List<?> list = new ArrayList<Object>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, new ListDataHandler(list, prop, bh));
-		return list;
+		return list(type, prop, (Query)null);
 	}
 
 	/**
@@ -762,12 +758,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the list.
 	 * @return record value list
 	 */
-	@SuppressWarnings("unchecked")
 	public List<?> list(Entity<?> entity, String prop) {
-		List<?> list = new ArrayList<Object>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, new ListDataHandler(list, prop, bh));
-		return list;
+		return list(entity, prop, (Query)null);
 	}
 
 	/**
@@ -778,10 +770,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(String table, String prop) {
-		List<?> list = new ArrayList<Object>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, new ListDataHandler<Map>(list, prop, bh));
-		return list;
+		return list(table, prop, (Query)null);
 	}
 
 	/**
@@ -794,7 +783,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(Class<?> type, String prop, QueryWrapper query) {
-		return list(type, prop, query.getQuery());
+		return list(type, prop, getQuery(query));
 	}
 
 	/**
@@ -808,8 +797,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<?> list(Class<?> type, String prop, Query query) {
-		List<?> list = new ArrayList<Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+
+		List<?> list = new ArrayList<Object>();
 		select(type, query, new ListDataHandler(list, prop, bh));
 		return list;
 	}
@@ -824,7 +817,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(Entity<?> entity, String prop, QueryWrapper query) {
-		return list(entity, prop, query.getQuery());
+		return list(entity, prop, getQuery(query));
 	}
 
 	/**
@@ -838,8 +831,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<?> list(Entity<?> entity, String prop, Query query) {
-		List<?> list = new ArrayList<Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+
+		List<?> list = new ArrayList<Object>();
 		select(entity, query, new ListDataHandler(list, prop, bh));
 		return list;
 	}
@@ -854,7 +851,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(String table, String prop, QueryWrapper query) {
-		return list(table, prop, query.getQuery());
+		return list(table, prop, getQuery(query));
 	}
 	
 	/**
@@ -867,8 +864,12 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(String table, String prop, Query query) {
-		List<?> list = new ArrayList<Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+
+		List<?> list = new ArrayList<Object>();
 		select(table, query, new ListDataHandler<Map>(list, prop, bh));
 		return list;
 	}
@@ -882,10 +883,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record map
 	 */
 	public <T> Map<?, T> map(Class<T> type, String keyProp) {
-		Map<?, T> map = new HashMap<Object, T>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, new MapDataHandler<T>(map, keyProp, bh));
-		return map;
+		return map(type, keyProp, (Query)null);
 	}
 
 	/**
@@ -896,10 +894,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp) {
-		Map<?, T> map = new HashMap<Object, T>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, new MapDataHandler<T>(map, keyProp, bh));
-		return map;
+		return map(entity, keyProp, (Query)null);
 	}
 
 	/**
@@ -910,10 +905,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, Map> map(String table, String keyProp) {
-		Map<?, Map> map = new HashMap<Object, Map>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, new MapDataHandler<Map>(map, keyProp, bh));
-		return map;
+		return map(table, keyProp, (Query)null);
 	}
 
 	/**
@@ -926,7 +918,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query) {
-		return map(type, keyProp, query.getQuery());
+		return map(type, keyProp, getQuery(query));
 	}
 
 	/**
@@ -955,7 +947,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query) {
-		return map(entity, keyProp, query.getQuery());
+		return map(entity, keyProp, getQuery(query));
 	}
 
 	/**
@@ -984,7 +976,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, Map> map(String table, String keyProp, QueryWrapper query) {
-		return map(table, keyProp, query.getQuery());
+		return map(table, keyProp, getQuery(query));
 	}
 	
 	/**
@@ -1012,12 +1004,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record map
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp) {
-		Map<?, ?> map = new HashMap<Object, Object>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, new MapDataHandler(map, keyProp, valProp, bh));
-		return map;
+		return map(type, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1028,12 +1016,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record list
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp) {
-		Map<?, ?> map = new HashMap<Object, Object>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, new MapDataHandler(map, keyProp, valProp, bh));
-		return map;
+		return map(entity, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1045,10 +1029,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp) {
-		Map<?, ?> map = new HashMap<Object, Object>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, new MapDataHandler<Map>(map, keyProp, valProp, bh));
-		return map;
+		return map(table, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1062,7 +1043,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
-		return map(type, keyProp, valProp, query.getQuery());
+		return map(type, keyProp, valProp, getQuery(query));
 	}
 
 	/**
@@ -1077,8 +1058,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query) {
-		Map<?, ?> map = new HashMap<Object, Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+
+		Map<?, ?> map = new HashMap<Object, Object>();
 		select(type, query, new MapDataHandler(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1094,7 +1079,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
-		return map(entity, keyProp, valProp, query.getQuery());
+		return map(entity, keyProp, valProp, getQuery(query));
 	}
 
 	/**
@@ -1109,8 +1094,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query) {
-		Map<?, ?> map = new HashMap<Object, Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+	
+		Map<?, ?> map = new HashMap<Object, Object>();
 		select(entity, query, new MapDataHandler(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1126,7 +1115,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query) {
-		return map(table, keyProp, valProp, query.getQuery());
+		return map(table, keyProp, valProp, getQuery(query));
 	}
 	
 	/**
@@ -1140,8 +1129,12 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp, Query query) {
-		Map<?, ?> map = new HashMap<Object, Object>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+
+		Map<?, ?> map = new HashMap<Object, Object>();
 		select(table, query, new MapDataHandler<Map>(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1155,10 +1148,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record map
 	 */
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp) {
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, new GroupDataHandler<T>(map, keyProp, bh));
-		return map;
+		return group(type, keyProp, (Query)null);
 	}
 
 	/**
@@ -1169,10 +1159,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp) {
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, new GroupDataHandler<T>(map, keyProp, bh));
-		return map;
+		return group(entity, keyProp, (Query)null);
 	}
 
 	/**
@@ -1183,10 +1170,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp) {
-		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, new GroupDataHandler<Map>(map, keyProp, bh));
-		return map;
+		return group(table, keyProp, (Query)null);
 	}
 
 	/**
@@ -1199,7 +1183,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query) {
-		return group(type, keyProp, query.getQuery());
+		return group(type, keyProp, getQuery(query));
 	}
 
 	/**
@@ -1212,8 +1196,9 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query) {
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
 		select(type, query, new GroupDataHandler<T>(map, keyProp, bh));
 		return map;
 	}
@@ -1228,7 +1213,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query) {
-		return group(entity, keyProp, query.getQuery());
+		return group(entity, keyProp, getQuery(query));
 	}
 
 	/**
@@ -1241,8 +1226,9 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query) {
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+
+		Map<?, List<T>> map = new HashMap<Object, List<T>>();
 		select(entity, query, new GroupDataHandler<T>(map, keyProp, bh));
 		return map;
 	}
@@ -1257,7 +1243,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query) {
-		return group(table, keyProp, query.getQuery());
+		return group(table, keyProp, getQuery(query));
 	}
 	
 	/**
@@ -1270,8 +1256,9 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp, Query query) {
-		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+
+		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
 		select(table, query, new GroupDataHandler<Map>(map, keyProp, bh));
 		return map;
 	}
@@ -1285,12 +1272,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record map
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, new GroupDataHandler(map, keyProp, valProp, bh));
-		return map;
+		return group(type, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1301,12 +1284,8 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record list
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, new GroupDataHandler(map, keyProp, valProp, bh));
-		return map;
+		return group(entity, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1318,10 +1297,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, new GroupDataHandler<Map>(map, keyProp, valProp, bh));
-		return map;
+		return group(table, keyProp, valProp, (Query)null);
 	}
 
 	/**
@@ -1335,7 +1311,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
-		return group(type, keyProp, valProp, query.getQuery());
+		return group(type, keyProp, valProp, getQuery(query));
 	}
 
 	/**
@@ -1350,8 +1326,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+		
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
 		select(type, query, new GroupDataHandler(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1367,7 +1347,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record list
 	 */
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
-		return group(entity, keyProp, valProp, query.getQuery());
+		return group(entity, keyProp, valProp, getQuery(query));
 	}
 
 	/**
@@ -1382,8 +1362,12 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+		
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
 		select(entity, query, new GroupDataHandler(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1399,7 +1383,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query) {
-		return group(table, keyProp, valProp, query.getQuery());
+		return group(table, keyProp, valProp, getQuery(query));
 	}
 	
 	/**
@@ -1413,8 +1397,12 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp, Query query) {
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
+		query = cloneQuery(query);
+		query.clearIncludes().include(keyProp).include(valProp);
+		
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+
+		Map<?, List<?>> map = new HashMap<Object, List<?>>();
 		select(table, query, new GroupDataHandler<Map>(map, keyProp, valProp, bh));
 		return map;
 	}
@@ -1903,6 +1891,10 @@ public abstract class AbstractDao implements Dao {
 	//--------------------------------------------------------------------
 	protected Query getQuery(QueryWrapper query) {
 		return query == null ? null : query.getQuery();
+	}
+	
+	protected Query cloneQuery(Query query) {
+		return query == null ? new Query() : query.clone();
 	}
 	
 	//--------------------------------------------------------------------

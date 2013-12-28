@@ -135,6 +135,30 @@ public class Query implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * clearIncludes
+	 * 
+	 * @return this
+	 */
+	public Query clearIncludes() {
+		if (includes != null) {
+			includes.clear();
+		}
+		return this;
+	}
+
+	/**
+	 * clearExcludes
+	 * 
+	 * @return this
+	 */
+	public Query clearExcludes() {
+		if (excludes == null) {
+			excludes.clear();
+		}
+		return this;
+	}
+
 	//---------------------------------------------------------------
 	// include
 	//
@@ -176,18 +200,6 @@ public class Query implements Cloneable {
 		return this;
 	}
 
-	/**
-	 * clearIncludes
-	 * 
-	 * @return this
-	 */
-	protected Query clearIncludes() {
-		if (includes != null) {
-			includes.clear();
-		}
-		return this;
-	}
-
 	//---------------------------------------------------------------
 	// exclude
 	//
@@ -225,18 +237,6 @@ public class Query implements Cloneable {
 	protected Query removeExclude(String name) {
 		if (excludes == null) {
 			excludes.remove(name);
-		}
-		return this;
-	}
-
-	/**
-	 * clearExcludes
-	 * 
-	 * @return this
-	 */
-	protected Query clearExcludes() {
-		if (excludes == null) {
-			excludes.clear();
 		}
 		return this;
 	}
