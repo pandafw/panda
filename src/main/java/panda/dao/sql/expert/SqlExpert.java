@@ -154,7 +154,6 @@ public abstract class SqlExpert {
 		Sql sql = new Sql();
 		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(entity.getTableName()));
 		where(sql, entity, query);
-		order(sql, entity, query);
 		return sql;
 	}
 
@@ -162,7 +161,6 @@ public abstract class SqlExpert {
 		Sql sql = new Sql();
 		sql.append("SELECT COUNT(*) FROM ").append(table);
 		where(sql, query);
-		order(sql, query);
 		return sql;
 	}
 
