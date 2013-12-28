@@ -383,7 +383,6 @@ public abstract class AbstractDao implements Dao {
 		assertEntity(entity);
 
 		Query query = new Query();
-		query.setLimit(1);
 		queryPrimaryKey(entity, query, keys);
 
 		return fetchByQuery(entity, query);

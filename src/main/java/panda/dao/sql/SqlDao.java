@@ -339,9 +339,7 @@ public class SqlDao extends AbstractDao {
 	protected <T> T fetchByQuery(Entity<T> entity, Query query) {
 		assertEntity(entity);
 
-		if (query == null) {
-			query = new Query();
-		}
+		query = (query == null ? new Query() : query.clone());
 
 		query.setLimit(1);
 		Sql sql = getSqlExpert().select(entity, query);
@@ -369,9 +367,7 @@ public class SqlDao extends AbstractDao {
 	public Map fetch(String table, Query query) {
 		assertTable(table);
 
-		if (query == null) {
-			query = new Query();
-		}
+		query = (query == null ? new Query() : query.clone());
 
 		query.setLimit(1);
 		Sql sql = getSqlExpert().select(table, query);
@@ -542,9 +538,7 @@ public class SqlDao extends AbstractDao {
 	 * @return updated count
 	 */
 	protected int update(Entity<?> entity, Object obj, Query query) {
-		if (query == null) {
-			query = new Query();
-		}
+		query = (query == null ? new Query() : query.clone());
 		excludePrimaryKeys(entity, query);
 
 		Sql sql = getSqlExpert().update(entity, obj, query);

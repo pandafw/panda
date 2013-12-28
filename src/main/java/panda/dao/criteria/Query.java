@@ -16,14 +16,14 @@ import panda.lang.Strings;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class Query {
-	protected Set<String> includes;
-	protected Set<String> excludes;
+public class Query implements Cloneable {
+	protected Operator conjunction = Operator.AND;
 	protected int start;
 	protected int limit;
-	protected Operator conjunction = Operator.AND;
 	protected List<Expression> expressions;
 	protected Map<String, Order> orders;
+	protected Set<String> includes;
+	protected Set<String> excludes;
 
 	public static Query create() {
 		return new Query();
@@ -36,36 +36,23 @@ public class Query {
 	}
 
 	/**
-	 * constructor
-	 * 
-	 * @param qp query
-	 */
-	public Query(Query qp) {
-		includes = qp.includes;
-		excludes = qp.excludes;
-		start = qp.start;
-		limit = qp.limit;
-		conjunction = qp.conjunction;
-		expressions = qp.expressions;
-		orders = qp.orders;
-	}
-
-	/**
 	 * reset
 	 */
 	public void reset() {
+		conjunction = Operator.AND;
+		start = 0;
+		limit = 0;
+		if (expressions != null) {
+			expressions.clear();
+		}
+		if (orders != null) {
+			orders.clear();
+		};
 		if (includes != null) {
 			includes.clear();
 		};
 		if (excludes != null) {
 			excludes.clear();
-		};
-		start = 0;
-		limit = 0;
-		conjunction = Operator.AND;
-		if (expressions != null) expressions.clear();
-		if (orders != null) {
-			orders.clear();
 		};
 	}
 
@@ -449,7 +436,7 @@ public class Query {
 	/**
 	 * @param expressions the expressions to set
 	 */
-	public void setExpressions(List<Expression> expressions) {
+	protected void setExpressions(List<Expression> expressions) {
 		this.expressions = expressions;
 	}
 
@@ -879,20 +866,50 @@ public class Query {
 		return addCompareRanageExpression(field, Operator.NOT_BETWEEN, value1, value2);
 	}
 
-	
+	@Override
+	public Query clone() {
+		Query q = new Query();
+
+		q.conjunction = conjunction;
+		q.start = start;
+		q.limit = limit;
+
+		if (Collections.isNotEmpty(expressions)) {
+			q.expressions = new ArrayList<Expression>();
+			q.expressions.addAll(expressions);
+		}
+		
+		if (orders != null && !orders.isEmpty()) {
+			q.orders = new LinkedHashMap<String, Order>();
+			q.orders.putAll(orders);
+		}
+
+		if (Collections.isNotEmpty(includes)) {
+			q.includes = new HashSet<String>();
+			q.includes.addAll(includes);
+		}
+
+		if (Collections.isNotEmpty(excludes)) {
+			q.excludes = new HashSet<String>();
+			q.excludes.addAll(excludes);
+		}
+		
+		return q;
+	}
+
 	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		return Objects.hashCodeBuilder()
-				.append(includes)
-				.append(excludes)
 				.append(conjunction)
-				.append(expressions)
-				.append(orders)
 				.append(start)
 				.append(limit)
+				.append(expressions)
+				.append(orders)
+				.append(includes)
+				.append(excludes)
 				.toHashCode();
 	}
 
@@ -910,13 +927,13 @@ public class Query {
 		
 		Query rhs = (Query) obj;
 		return Objects.equalsBuilder()
-				.append(includes, rhs.includes)
-				.append(excludes, rhs.excludes)
 				.append(conjunction, rhs.conjunction)
-				.append(expressions, rhs.expressions)
-				.append(orders, rhs.orders)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
+				.append(expressions, rhs.expressions)
+				.append(orders, rhs.orders)
+				.append(includes, rhs.includes)
+				.append(excludes, rhs.excludes)
 				.isEquals();
 	}
 
@@ -926,13 +943,13 @@ public class Query {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder(this)
-				.append("includes", excludes)
-				.append("excludes", excludes)
 				.append("conjunction", conjunction)
-				.append("expressions", expressions)
-				.append("orders", orders)
 				.append("start", start)
 				.append("limit", limit)
+				.append("expressions", expressions)
+				.append("orders", orders)
+				.append("includes", excludes)
+				.append("excludes", excludes)
 				.toString();
 	}
 }
