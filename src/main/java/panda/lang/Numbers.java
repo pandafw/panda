@@ -2,6 +2,7 @@ package panda.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * Utility class for Number.
@@ -2157,4 +2158,36 @@ public class Numbers {
 		
 		return sb.toString();
 	}
+
+	// -----------------------------------------------------------------------
+	private static final Random rand = new Random();
+	
+	public static int randInt() {
+		return rand.nextInt();
+	}
+
+	public static int randInt(int max) {
+		return rand.nextInt(max);
+	}
+
+	public static int randInt(int min, int max) {
+		return rand.nextInt(max - min) + min;
+	}
+	
+	public static boolean randBoolean() {
+		return rand.nextBoolean();
+	}
+
+	public static long randLong() {
+		return rand.nextLong();
+	}
+
+	public static float randFloat() {
+		return rand.nextFloat();
+	}
+
+	public static double randDouble() {
+		return rand.nextDouble();
+	}
+
 }
