@@ -361,71 +361,15 @@ tbody.n-lv-tbody tr.n-lv-hover td.n-lv-column {
 /*---------------------------------------------*/
 /* pager.css                                   */
 /*---------------------------------------------*/
-.n-p {
-	background: transparent;
+.pagination.p-pager > li > a,
+.pagination.p-pager > li > span {
+	margin-left: 3px;
+}
+.pagination.p-pager > li.p-pager-ellipsis > span {
 	border: 0 none;
-	font-weight: normal;
-}
-.n-p-table {
-	border: 0 none;
-	border-collapse: collapse;
-}
-.n-p-table td {
-	padding: 0;
-	vertical-align: middle;
-	white-space: nowrap;
-}
-.n-p-table .n-p-info {
-	padding: 2px 10px;
-}
-.n-p-table .n-p-limitLabel {
-	padding: 2px 2px 2px 15px;
-}
-.n-p-table .n-p-limitSelect {
-}
-.n-p-hidden {
-	display: none;
-}
-.n-p .n-p-ellipsis {
-	display: block;
-	padding: 0;
-	text-decoration: none;
-}
-.n-p .n-p-text {
-	padding: 0px 5px;
-}
-.n-p a.n-p-active {
-	border: 0 none;
-	color: #DC143C;
-	display: block;
 	font-weight: bold;
-	padding: 6px;
-	text-decoration: none;
-}
-.n-p a.n-p-pageno, 
-.n-p a.n-p-prev, .n-p a.n-p-next, 
-.n-p a.n-p-first, .n-p a.n-p-last {
-	border: solid 1px #ccc;
-	color: #36a;
-	cursor: pointer;
-	display: block;
-	font-weight: normal;
-	margin: 0px 3px;
-	padding: 6px;
-	text-decoration: none;
-}
-.n-p a.n-p-active:hover, .n-p a.n-p-pageno:hover, 
-.n-p a.n-p-prev:hover, .n-p a.n-p-next:hover, 
-.n-p a.n-p-first:hover, .n-p a.n-p-last:hover {
-	background-color: #ffef8f;
-	color: #DC143C;
-}
-.n-p a.n-p-disabled, .n-p a.n-p-disabled:link, .n-p a.n-p-disabled:hover, .n-p a.n-p-disabled:visited {
-	background-color: transparent;
-	border: 0 none;
-	color: #aaa;
-	cursor: default;
-	text-decoration: none;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 /* TOOLS */
 .p-btrans 		{ background: transparent; }
