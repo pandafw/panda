@@ -39,7 +39,9 @@ public class FastBeans extends Beans {
 	/**
 	 * excludes
 	 */
-	private Set<String> excludes = Arrays.toSet(HttpServletSupport.class.getName());
+	private Set<String> excludes = Arrays.toSet(
+		HttpServletSupport.class.getName(),
+		"javax.servlet.http.Cookie");
 	
 	/**
 	 * clear bean handlers
