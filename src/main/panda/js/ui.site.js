@@ -8,25 +8,36 @@ function s_preload() {
 }
 
 function s_submit_form() {
-	var form = this, 
-		$f = $(this), 
-		$b = $(this).closest('.popup, .inner'),
-		lm = ($f.height() > 20 && $f.attr('loadmask') != 'false');
-	if ($b.length > 0) {
+	var form = this;
+	var $f = $(form);
+	var $c = $f.closest('.p-popup, .p-inner');
+	var lm = ($f.height() > 20 && $f.attr('loadmask') != 'false');
+	if ($c.length > 0) {
 		setTimeout(function() {
 			var data = $f.serializeArray();
-			if ($b.hasClass('inner')) {
+			if ($c.hasClass('p-inner')) {
 				data.push({ name: '__inner', value: 'true' });
 			}
 			else {
 				data.push({ name: '__popup', value: 'true' });
 			}
 			if (lm) {
-				$b.parent().loadmask();
+				$c.parent().loadmask();
 			}
-			$.get(form.action, data, function(html) {
-				$b.parent().unloadmask().html(html);
-			}, 'html');
+			$.ajax({
+				url: form.action,
+				data: data,
+				dataType: 'html',
+				success: function(html, ts, xhr) {
+					$c.parent().html(html);
+				},
+				error: function(xhr, ts, err) {
+					$c.parent().html(xhr.responseText);
+				},
+				complete: function(xhr, ts) {
+					$c.parent().unloadmask();
+				}
+			});
 		}, 10);
 		return false;
 	}
@@ -97,7 +108,7 @@ function sl_limit(id, el) {
 }
 function sl_submit(id) {
 	var $form = $('#' + id);
-	var $pi = $form.closest('.inner');
+	var $pi = $form.closest('.p-inner');
 	if ($pi.size() > 0) {
 		var data = $form.serializeArray();
 		data[data.length] = { name: '__inner', value: 'true' };
