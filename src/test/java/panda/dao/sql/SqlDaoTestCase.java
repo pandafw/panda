@@ -382,6 +382,21 @@ public abstract class SqlDaoTestCase {
 		Teacher actual = dao.fetch(Teacher.class, expect);
 		Assert.assertEquals(expect, actual);
 	}
+	
+	@Test
+	public void testUpdateIgnoreNull() {
+		Teacher expect = Teacher.create(2);
+		Teacher update = Teacher.create(2);
+		expect.setMemo("update");
+	
+		update.setMemo(expect.getMemo());
+		update.setData(null);
+
+		Assert.assertEquals(1, dao.updateIgnoreNull(update));
+		
+		Teacher actual = dao.fetch(Teacher.class, expect);
+		Assert.assertEquals(expect, actual);
+	}
 
 	@Test
 	public void testUpdates() {

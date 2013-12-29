@@ -1678,6 +1678,21 @@ public abstract class AbstractDao implements Dao {
 
 	//-------------------------------------------------------------------------
 	/**
+	 * update one record by the supplied object and query
+	 * 
+	 * @param obj sample object
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	protected int updateOne(Entity<?> entity, Object obj, Query query) {
+		int cnt = update(entity, obj, query);
+		if (cnt > 1) {
+			throw new DaoException("Too many (" + cnt + ") records updated.");
+		}
+		return cnt;
+	}
+	
+	/**
 	 * update a record by the supplied object. 
 	 * 
 	 * @param obj sample object
@@ -1693,7 +1708,7 @@ public abstract class AbstractDao implements Dao {
 		Query query = new Query();
 		queryPrimaryKey(entity, query, obj);
 
-		return update(entity, obj, query);
+		return updateOne(entity, obj, query);
 	}
 
 	/**
@@ -1711,9 +1726,10 @@ public abstract class AbstractDao implements Dao {
 		assertTable(entity);
 		
 		Query query = new Query();
+		queryPrimaryKey(entity, query, obj);
 		excludeNullProperties(entity, query, obj);
 
-		return update(entity, obj, query);
+		return updateOne(entity, obj, query);
 	}
 
 	/**
