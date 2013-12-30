@@ -167,6 +167,7 @@ public abstract class SqlExpert {
 	public Sql select(Entity<?> entity, Query query) {
 		Sql sql = new Sql();
 		sql.append("SELECT");
+		boolean sel = false;
 		for (EntityField ef : entity.getFields()) {
 			if (query != null && query.shouldExclude(ef.getName())) {
 				continue;
@@ -176,6 +177,10 @@ public abstract class SqlExpert {
 				.append(" AS ")
 				.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
 				.append(',');
+			sel = true;
+		}
+		if (!sel) {
+			throw new IllegalArgumentException("Nothing to SELECT!");
 		}
 		sql.setCharAt(sql.length() - 1, ' ');
 		sql.append("FROM ").append(entity.getViewName());
@@ -259,13 +264,19 @@ public abstract class SqlExpert {
 		Sql sql = new Sql();
 		sql.append("UPDATE ").append(escapeTable(entity.getTableName()));
 		sql.append(" SET");
+		boolean set = false;
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly() || (query != null && query.shouldExclude(ef.getName()))) {
 				continue;
 			}
 			sql.append(' ').append(ef.getColumn()).append("=?,");
 			sql.addParam(getFieldValue(ef, data));
+			set = true;
 		}
+		if (!set) {
+			throw new IllegalArgumentException("Nothing to UPDATE!");
+		}
+
 		sql.setLength(sql.length() - 1);
 		where(sql, entity, query);
 		return sql;
