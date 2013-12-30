@@ -2,6 +2,7 @@ package panda.lang.comparator;
 
 import java.util.Comparator;
 
+import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.lang.Asserts;
 import panda.lang.Objects;
@@ -12,40 +13,30 @@ import panda.lang.Objects;
  * comparator for property
  * @author yf.frank.wang@gmail.com
  */
-public class PropertyComparator implements Comparator<Object> {
-	protected String propertyName;
+public class PropertyComparator<T> implements Comparator<T> {
+	protected BeanHandler<T> bh;
+	protected String prop;
 	
 	/**
-	 * @param propertyName property name
+	 * @param type class type
+	 * @param prop property name
 	 */
-	public PropertyComparator(String propertyName) {
-		this.propertyName = propertyName;
-	}
+	public PropertyComparator(Class<T> type, String prop) {
+		Asserts.notNull(type);
+		Asserts.notEmpty(prop);
 
-	/**
-	 * @return the propertyName
-	 */
-	public String getPropertyName() {
-		return propertyName;
-	}
-
-	/**
-	 * @param propertyName the propertyName to set
-	 */
-	public void setPropertyName(String propertyName) {
-		Asserts.notEmpty(propertyName);
-		this.propertyName = propertyName;
+		this.bh = Beans.i().getBeanHandler(type);
+		this.prop = prop;
 	}
 
 	/**
 	 * @param o1 object1
 	 * @param o2 object2
-     * @return a negative integer, zero, or a positive integer as the
-     * 	       first argument is less than, equal to, or greater than the
-     *	       second.
+	 * @return a negative integer, zero, or a positive integer as the first argument is less than,
+	 *         equal to, or greater than the second.
 	 */
 	@SuppressWarnings("unchecked")
-	public int compare(Object o1, Object o2) {
+	public int compare(T o1, T o2) {
 		if (o1 == null && o2 == null) {
 			return 0;
 		}
@@ -58,23 +49,13 @@ public class PropertyComparator implements Comparator<Object> {
 		if (o1 == o2) {
 			return 0;
 		}
-		Object v1 = null;
-		try {
-			v1 = Beans.getProperty(o1, propertyName);
-		}
-		catch (Exception e) {
-		}
 
-		Object v2 = null;
-		try {
-			v2 = Beans.getProperty(o2, propertyName);
-		}
-		catch (Exception e) {
-		}
-		
+		Object v1 = bh.getPropertyValue(o1, prop);
 		if (v1 == null) {
 			return -1;
 		}
+
+		Object v2 = bh.getPropertyValue(o2, prop);
 		if (v2 == null) {
 			return 1;
 		}
@@ -92,6 +73,9 @@ public class PropertyComparator implements Comparator<Object> {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this).append("propertyName", propertyName).toString();
+		return Objects.toStringBuilder(this)
+				.append("prop", prop)
+				.append("bh", bh)
+				.toString();
 	}
 }
