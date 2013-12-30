@@ -12,7 +12,7 @@
 	${s}#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": action.getText("${ui.name}-column-_number_", ""),
+		"header": action.getText("_number_", ""),
 		"nowrap": true,
 		"fixed": true
 	}] />
@@ -55,7 +55,7 @@
 	</#list>
 	${s}#if _actions_?has_content || _ash_?has_content>
 		${s}#if !(_ash_?has_content)>
-			${s}#assign _ash_ = action.getText("${ui.name}-column-_actions_", "")/>
+			${s}#assign _ash_ = action.getText("_actions_", "")/>
 		${s}/#if>
 		${s}#assign _actionc_ = [{
 			"name": "_actions_",
@@ -104,7 +104,7 @@
 		<#if entity.isPrimaryKey(c.name)>
 			"pkey" : true,
 		</#if>
-			"header": action.getText("${ui.name}-column-${c.name}"),
+			"header": action.getText("${actionDataFieldName}.${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -157,7 +157,7 @@
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": action.getText("${ui.name}-column-${c.name}-tip", "")
+			"tooltip": action.getText("${actionDataFieldName}.${c.name}-tip", "")
 		}<#if c_has_next>, </#if><#rt/>
 </#list>
 

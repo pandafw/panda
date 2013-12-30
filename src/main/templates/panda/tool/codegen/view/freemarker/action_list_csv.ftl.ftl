@@ -19,7 +19,7 @@ ${s}#assign _columns_ = [<#rt/>
 <#list ui.displayColumnList as c>
 {
 	"name": "${c.name}",
-	"header": action.getText("${ui.name}-column-${c.name}"), 
+	"header": action.getText("${actionDataFieldName}.${c.name}"), 
 <#if c.format??>
 	"format": {
 	<#list c.format.paramList as fp>

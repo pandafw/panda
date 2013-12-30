@@ -17,7 +17,7 @@
 <#list ui.orderedColumnList as c>
 {
 			"name": "${c.name}",
-			"header": action.getText("${ui.name}-column-${c.name}"),
+			"header": action.getText("${actionDataFieldName}.${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -67,7 +67,7 @@
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": action.getText("${ui.name}-column-${c.name}-tip", "")
+			"tooltip": action.getText("${actionDataFieldName}.${c.name}-tip", "")
 		}<#if c_has_next>, </#if><#rt/>
 </#list>
 
