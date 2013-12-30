@@ -165,6 +165,14 @@ public class RequestLoggingFilter implements Filter {
 			//pass
 		}
 	}
+
+	private void append(StringBuilder msg, String value) {
+		append(msg, value, "");
+	}
+	
+	private void append(StringBuilder msg, String value, String defv) {
+		msg.append(Strings.isEmpty(value) ? defv : value);
+	}
 	
 	private void logAccess(HttpServletRequest request, FilterResponseWrapper response, StopWatch sw) {
 		try {
@@ -176,46 +184,46 @@ public class RequestLoggingFilter implements Filter {
 				for (String s : accessFormat) {
 					char f = s.charAt(0);
 					switch (f) {
-					case 't': // Date and time, in Common Log Format</li>
-						msg.append(DateTimes.timestampFormat().format(sw.getStartTime()));
+					case 't': // Date and time, in Common Log Format
+						append(msg, DateTimes.timestampFormat().format(sw.getStartTime()));
 						break;
-					case 'a': // Remote IP address</li>
-						msg.append(request.getRemoteAddr());
+					case 'a': // Remote IP address
+						append(msg, request.getRemoteAddr());
 						break;
-					case 'h': // Remote host name</li>
-						msg.append(request.getRemoteHost());
+					case 'h': // Remote host name
+						append(msg, request.getRemoteHost());
 						break;
-					case 'p': // Request protocol</li>
-						msg.append(request.getProtocol());
+					case 'p': // Request protocol
+						append(msg, request.getProtocol());
 						break;
-					case 'm': // Request method (GET, POST, etc.)</li>
-						msg.append(request.getMethod());
+					case 'm': // Request method (GET, POST, etc.)
+						append(msg, request.getMethod());
 						break;
-					case 'q': // Query string (prepended with a '?' if it exists)</li>
-						msg.append(request.getQueryString());
+					case 'q': // Query string (prepended with a '?' if it exists)
+						append(msg, request.getQueryString());
 						break;
-					case 's': // Requested session ID</li>
-						msg.append(request.getRequestedSessionId());
+					case 's': // Requested session ID
+						append(msg, request.getRequestedSessionId());
 						break;
-					case 'A': // Local IP address</li>
-						msg.append(request.getLocalAddr());
+					case 'A': // Local IP address
+						append(msg, request.getLocalAddr());
 						break;
-					case 'V': // Local server name</li>
-						msg.append(request.getLocalName());
+					case 'V': // Local server name
+						append(msg, request.getLocalName());
 						break;
-					case 'P': // Local port on which this request was received</li>
+					case 'P': // Local port on which this request was received
 						msg.append(request.getLocalPort());
 						break;
-					case 'S': // HTTP status code of the response</li>
+					case 'S': // HTTP status code of the response
 						msg.append(response.status);
 						break;
-					case 'T': // Time taken to process the request, in milliseconds</li>
+					case 'T': // Time taken to process the request, in milliseconds
 						msg.append(sw.getTime());
 						break;
-					case 'I': // current request thread name (can compare later with stacktraces)</li>
-						msg.append(Thread.currentThread().getName());
+					case 'I': // current request thread name (can compare later with stacktraces)
+						append(msg, Thread.currentThread().getName());
 						break;
-					case 'u': // Requested URL path</li>
+					case 'u': // Requested URL path
 						msg.append(request.getRequestURL());
 						break;
 					default:
