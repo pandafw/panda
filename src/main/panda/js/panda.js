@@ -1523,9 +1523,7 @@ if (typeof String.formatSize != "function") {
 	};
 }
 
-if (typeof(panda) == "undefined") { panda = {}; }
-
-(function() {
+(function($) {
 	function setContentType($p, t) {
 		if (t == 'error') {
 			if (!$p.hasClass('error')) {
@@ -1578,14 +1576,26 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 	}
 	
-	panda.alert = function(s) {
-		if (typeof(s) == 'string') {
-			s = { container: s };
+	$.palert = {
+		ulCls: 'fa-ul',
+		icons: {
+			'help':'fa-li fa fa-question-circle',
+			'info': 'fa-li fa fa-info-circle',
+			'error': 'fa-li fa fa-times-circle',
+			'warn': 'fa-li fa fa-exclamation-triangle',
+			'down': 'fa-caret-down',
+			'up': 'fa-caret-up'
 		}
-		s = $.extend({}, panda.alert.defaults, s);
+	};
+	
+	var palert = function($c, s) {
+		s = $.extend({}, $.palert, s);
 		return {
+			api: function() {
+				return this;
+			},
 			clear: function() {
-				$(s.container).children('.alert').remove();
+				$c.children('.alert').remove();
 				return this;
 			},
 			error: function(m) {
@@ -1606,7 +1616,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 			},
 			add: function(m, t) {
 				t = t || 'info';
-				var $c = $(s.container);
 				var $p = $c.children('.alert');
 				var a = false;
 				if ($p.size() < 1) {
@@ -1645,23 +1654,20 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 	};
 	
-	panda.alert.defaults = {
-		container: 'body',
-		ulCls: 'fa-ul',
-		icons: {
-			'help':'fa-li fa fa-question-circle',
-			'info': 'fa-li fa fa-info-circle',
-			'error': 'fa-li fa fa-times-circle',
-			'warn': 'fa-li fa fa-exclamation-triangle',
-			'down': 'fa-caret-down',
-			'up': 'fa-caret-up'
-		}
+	$.fn.palert = function(option, v1, v2) {
+		return this.each(function () {
+			var ops = typeof option === 'object' && option;
+			var pa = palert($(this), ops);
+			if (typeof option === 'string') {
+				pa[option](v1, v2);
+			}
+		});
 	};
 	
-	panda.alert.toggleFieldErrors = function(el) {
+	$.palert.toggleFieldErrors = function(el) {
 		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
-		var id = panda.alert.defaults.icons.down;
-		var iu = panda.alert.defaults.icons.up;
+		var id = $.palert.icons.down;
+		var iu = $.palert.icons.up;
 		if ($fes.is(':hidden')) {
 			$fes.slideDown();
 			$(el).children('i').removeClass(id).addClass(iu);
@@ -1672,22 +1678,22 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 		return false;
 	};
-})();
-if (typeof(panda) == "undefined") { panda = {}; }
-
-panda.focus_form = function($i) {
-	$i = $i.find('input,select,textarea,button');
-	$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
-	if ($i.length > 0) {
-		$i.focus();
-		$('body').scrollTop(0).scrollLeft(0);
+})(jQuery);
+(function($) {
+	function focusForm($i) {
+		$i = $i.find('input,select,textarea,button');
+		$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
+		if ($i.length > 0) {
+			$i.focus();
+			$('body').scrollTop(0).scrollLeft(0);
+		}
 	}
-}
 
-$(window).on('load', function() {
-	var $i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
-	panda.focus_form($i);
-});
+	$(window).on('load', function() {
+		var $i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
+		focusForm($i);
+	});
+})(jQuery);
 if (typeof(panda) == "undefined") { panda = {}; }
 
 function nlv_options(id, options) {
@@ -1816,56 +1822,62 @@ function nlv_checkRow(id, row, check) {
 	_nlv_selectRow(trs.eq(row), check);
 }
 
-function _nlv_init_filters(id, collapse) {
-	$("#" + id).find(".n-lv-filters").fieldset({
-		collapse: collapse
-	}).find('.n-tr-input').each(function() {
-		if ($(this).hasClass('n-hidden')) {
-			$(this).find("input,select,textarea").prop('disabled', true);
-		}
-	}).end().find('form').submit(function() {
-		$('#' + id).loadmask();
-	});
+function _nlv_init_filters(id) {
+	$("#" + id).find(".p-lv-filters")
+		.find('tr.p-lv-input')
+			.each(function() {
+				if ($(this).hasClass('p-hidden')) {
+					$(this).find("input,select,textarea").prop('disabled', true);
+				}
+			}).end()
+		.find('.p-lv-f-number-c, .p-lv-f-date-c, .p-lv-f-datetime-c, .p-lv-f-time-c')
+			.on('change', _nlv_onBetweenChange)
+			.end()
+		.find('form')
+			.submit(function() {
+				$('#' + id).loadmask();
+			}
+		);
 }
 
 function _nlv_init_table(id, cfg) {
 	var $lv = $("#" + id);
 
-	if (cfg.autosize && !($.browser.ios || $.browser.android)) {
+	if (cfg.autosize) {
 		$lv.addClass("n-lv-autosize");
 		var $lvb = $lv.children(".n-lv-body").autosize();
 
-		var $sth = $lv.find(".n-lv-thead");
-		var $cth = $sth.clone();
-		
-		$cth.find('tr').append('<th><div class="n-lv-cell-last"></div></th>');
-		
-		var $bht = $('<table class="n-table"></table>').css('visibility', 'hidden').append($cth);
-		
-		$sth.removeClass('n-lv-thead').addClass('n-lv-thead-shadow');
-		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
-		
-		$('<div class="n-lv-body-head n-table-wrapper"></div>')
-			.append($bht)
-			.insertBefore($lvb).autosize({ 
-				overflow: 'hidden',
-				callback: function() {
-					var $cths = $cth.find('.n-lv-cell');
-					var $sths = $sth.find('.n-lv-cell');
-					$cths.each(function(i) {
-						var $sc = $sths.eq(i);
-						if (!$sc.parent().is(':hidden')) {
-							var cw = $sc.width();
-							var hw = $sc.parent().width();
-							$(this).width(cw >= hw ? cw : hw + 1);
-						}
-					});
-					$bht.css('visibility', 'visible');
-				}
-			});
-		$lvb.scroll(function() {
-			$bht.css('margin-left', -1 - $lvb.scrollLeft() + "px");
-		});
+//		var $sth = $lv.find(".n-lv-thead");
+//		var $cth = $sth.clone();
+//		
+//		$cth.find('tr').append('<th><div class="n-lv-cell-last"></div></th>');
+//		
+//		var $bht = $('<table class="n-table"></table>').css('visibility', 'hidden').append($cth);
+//		
+//		$sth.removeClass('n-lv-thead').addClass('n-lv-thead-shadow');
+//		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
+//		
+//		$('<div class="n-lv-body-head n-table-wrapper"></div>')
+//			.append($bht)
+//			.insertBefore($lvb).autosize({ 
+//				overflow: 'hidden',
+//				callback: function() {
+//					var $cths = $cth.find('.n-lv-cell');
+//					var $sths = $sth.find('.n-lv-cell');
+//					$cths.each(function(i) {
+//						var $sc = $sths.eq(i);
+//						if (!$sc.parent().is(':hidden')) {
+//							var cw = $sc.width();
+//							var hw = $sc.parent().width();
+//							$(this).width(cw >= hw ? cw : hw + 1);
+//						}
+//					});
+//					$bht.css('visibility', 'visible');
+//				}
+//			});
+//		$lvb.scroll(function() {
+//			$bht.css('margin-left', -1 - $lvb.scrollLeft() + "px");
+//		});
 	}
 
 	$lv.find(".n-lv-thead > tr > th").each(function() {
@@ -2003,8 +2015,8 @@ function _nlv_toggleRow($tr, ts) {
 	_nlv_setCheckAll($lv, all);
 }
 
-function _nlv_onBetweenChange(el) {
-	var $t = $(el),
+function _nlv_onBetweenChange() {
+	var $t = $(this),
 		d = $t.val() != 'bt',
 		v = d ? 'hidden' : 'visible';
 	if (d) {
@@ -2455,168 +2467,166 @@ $(function() {
 		window.onPageLoad();
 	}
 });
-if (typeof(panda) == "undefined") { panda = {}; }
-
-panda.uploader = function($u) {
-	var pua = $u.attr('uploadAction');
-	var pup = $u.attr('uploadParam');
-	var pda = $u.attr('dnloadAction');
-	var pdp = $u.attr('dnloadParam');
-	var pdl = $u.attr('defaultLink');
-	var pdt = $u.attr('defaultText');
-	
-	var $uf = $u.children('.p-uploader-file');
-	var $ut = $u.children('.p-uploader-text');
-	var $ui = $u.children('.p-uploader-image');
-
-	var $uct = $u.children('.p-uploader-ct');
-	var $ufn = $u.children('.p-uploader-fn');
-	var $ufs = $u.children('.p-uploader-fs');
-	var $usn = $u.children('.p-uploader-sn');
-	
-	var $up = $('<div class="progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
-	$up.insertAfter($uf);
-
-	var $ue = $('<div class="p-uploader-error"></div>');
-	$ue.insertAfter($ut);
-	
-	function _filesize(fs) {
-		var sz = String.formatSize(fs);
-		if (sz.length > 0) {
-			sz = '(' + sz + ')';
-		}
-		return sz;
-	}
-
-	function _info(uct, ufn, ufs, usn) {
-		uct = uct || $uct.val();
-		ufn = ufn || $ufn.val();
-		ufs = ufs || $ufs.val();
-		usn = usn || $usn.val();
-
-		if (ufn) {
-			if (usn) {
-				$ut.html('<a href="' + pda + '?' + pdp + '=' + encodeURIComponent(usn) + '">'
-						+ '<i class="fa fa-check p-uploader-icon"></i> '
-						+ ufn + ' ' + _filesize(ufs)
-						+ '</a>');
-			}
-			else {
-				$ut.html('<span><i class="fa fa-check n-uploader-icon"></i>'
-						+ ufn + ' ' + _filesize(ufs)
-						+ '</span>');
-			}
-			$ut.show();
-		}
-		else if (pdl) {
-			$ut.html('<a href="' + pdl + '">'
-					+ '<i class="fa '
-					+ (uct.startsWith('image') ? 'fa-picture-o' : 'fa-paperclip')
-					+ ' p-uploader-icon"></i> '
-					+ String.defaults(pdt)
-					+ '</a>')
-				.show();
-		}
-
-		if (usn && uct.startsWith('image')) {
-			$ui.html('<img class="img-thumbnail" src="' + pda + '?' + pdp + '=' + usn + '"></img>').fadeIn();
-		}
-		else if (pdl && uct.startsWith('image')) {
-			$ui.html('<img class="img-thumbnail" src="' + pdl + '"></img>').fadeIn();
-		}
-	}
-	
-	function _error(uct, ufn, ufs, usn) {
-		$ut.html('<span><i class="fa fa-times-circle p-uploader-icon"></i>'
-			+ ((ufn || $uf.val()) + ' ' + _filesize(ufs))
-			+ '</span>')
-			.show();
-	}
-	
-	function _progress(v) {
-		$up.children('.progress-bar').css({width: v + '%'});
-	}
-	
-	function _upload() {
-		var progress = 0;
-
-		$uct.val('');
-		$ufn.val('');
-		$ufs.val('');
-		$usn.val('');
+(function($) {
+	var puploader = function($u) {
+		var pua = $u.attr('uploadAction');
+		var pup = $u.attr('uploadParam');
+		var pda = $u.attr('dnloadAction');
+		var pdp = $u.attr('dnloadParam');
+		var pdl = $u.attr('defaultLink');
+		var pdt = $u.attr('defaultText');
 		
-		$ue.hide().empty();
-		$ui.hide().empty();
-		$ut.hide().empty();
-		$uf.hide();		
+		var $uf = $u.children('.p-uploader-file');
+		var $ut = $u.children('.p-uploader-text');
+		var $ui = $u.children('.p-uploader-image');
 
-//		$up.css({
-//			width: $uf.width() + 'px',
-//			height: Math.floor($uf.height() * 0.8) + 'px'
-//		})
-		$up.show();
-		_progress(progress);
+		var $uct = $u.children('.p-uploader-ct');
+		var $ufn = $u.children('.p-uploader-fn');
+		var $ufs = $u.children('.p-uploader-fs');
+		var $usn = $u.children('.p-uploader-sn');
+		
+		var $up = $('<div class="progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
+		$up.insertAfter($uf);
 
-		var timer = setInterval(function() {
-			_progress(progress++);
-			if (progress >= 90) {
-				if (timer) {
-					clearInterval(timer);
-					timer = null;
-				}
+		var $ue = $('<div class="p-uploader-error"></div>');
+		$ue.insertAfter($ut);
+		
+		function _filesize(fs) {
+			var sz = String.formatSize(fs);
+			if (sz.length > 0) {
+				sz = '(' + sz + ')';
 			}
-		}, 20);
-
-		function _endUpload() {
-			$uf = $u.children('.p-uploader-file');
-			_progress(100);
-			$up.hide();
-			$uf.show();
+			return sz;
 		}
 
-		var file = {}; file[pup] = $uf; 
-		$.ajaf({
-			url: pua,
-			file: file,
-			dataType: 'json',
-			success: function(d) {
-				_endUpload();
-				var r = d[pup];
-				if (d.success) {
-					$uct.val(r.contentType);
-					$ufn.val(r.fileName);
-					$ufs.val(r.fileSize);
-					$usn.val(r.saveName);
-					_info();
+		function _info(uct, ufn, ufs, usn) {
+			uct = uct || $uct.val();
+			ufn = ufn || $ufn.val();
+			ufs = ufs || $ufs.val();
+			usn = usn || $usn.val();
+
+			if (ufn) {
+				if (usn) {
+					$ut.html('<a href="' + pda + '?' + pdp + '=' + encodeURIComponent(usn) + '">'
+							+ '<i class="fa fa-check p-uploader-icon"></i> '
+							+ ufn + ' ' + _filesize(ufs)
+							+ '</a>');
 				}
 				else {
-					_error(r.contentType, r.fileName, r.fileSize, r.saveName);
-					panda.alert({ container: $ue }).add(d);
+					$ut.html('<span><i class="fa fa-check n-uploader-icon"></i>'
+							+ ufn + ' ' + _filesize(ufs)
+							+ '</span>');
+				}
+				$ut.show();
+			}
+			else if (pdl) {
+				$ut.html('<a href="' + pdl + '">'
+						+ '<i class="fa '
+						+ (uct.startsWith('image') ? 'fa-picture-o' : 'fa-paperclip')
+						+ ' p-uploader-icon"></i> '
+						+ String.defaults(pdt)
+						+ '</a>')
+					.show();
+			}
+
+			if (usn && uct.startsWith('image')) {
+				$ui.html('<img class="img-thumbnail" src="' + pda + '?' + pdp + '=' + usn + '"></img>').fadeIn();
+			}
+			else if (pdl && uct.startsWith('image')) {
+				$ui.html('<img class="img-thumbnail" src="' + pdl + '"></img>').fadeIn();
+			}
+		}
+		
+		function _error(uct, ufn, ufs, usn) {
+			$ut.html('<span><i class="fa fa-times-circle p-uploader-icon"></i>'
+				+ ((ufn || $uf.val()) + ' ' + _filesize(ufs))
+				+ '</span>')
+				.show();
+		}
+		
+		function _progress(v) {
+			$up.children('.progress-bar').css({width: v + '%'});
+		}
+		
+		function _upload() {
+			var progress = 0;
+
+			$uct.val('');
+			$ufn.val('');
+			$ufs.val('');
+			$usn.val('');
+			
+			$ue.hide().empty();
+			$ui.hide().empty();
+			$ut.hide().empty();
+			$uf.hide();		
+
+//			$up.css({
+//				width: $uf.width() + 'px',
+//				height: Math.floor($uf.height() * 0.8) + 'px'
+//			})
+			$up.show();
+			_progress(progress);
+
+			var timer = setInterval(function() {
+				_progress(progress++);
+				if (progress >= 90) {
+					if (timer) {
+						clearInterval(timer);
+						timer = null;
+					}
+				}
+			}, 20);
+
+			function _endUpload() {
+				$uf = $u.children('.p-uploader-file');
+				_progress(100);
+				$up.hide();
+				$uf.show();
+			}
+
+			var file = {}; file[pup] = $uf; 
+			$.ajaf({
+				url: pua,
+				file: file,
+				dataType: 'json',
+				success: function(d) {
+					_endUpload();
+					var r = d[pup];
+					if (d.success) {
+						$uct.val(r.contentType);
+						$ufn.val(r.fileName);
+						$ufs.val(r.fileSize);
+						$usn.val(r.saveName);
+						_info();
+					}
+					else {
+						_error(r.contentType, r.fileName, r.fileSize, r.saveName);
+						panda.alert({ container: $ue }).add(d);
+						$ue.slideDown();
+					}
+				},
+				error: function(xhr, status, e) {
+					_endUpload();
+					panda.alert({ container: $ue }).error(
+							(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status))
+						);
 					$ue.slideDown();
 				}
-			},
-			error: function(xhr, status, e) {
-				_endUpload();
-				panda.alert({ container: $ue }).error(
-						(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status))
-					);
-				$ue.slideDown();
-			}
+			});
+		}
+
+		_info();
+		$uf.change(function() { 
+			setTimeout(_upload, 10); 
 		});
-	}
+	};
 
-	_info();
-	$uf.change(function() { 
-		setTimeout(_upload, 10); 
-	});
-};
-
-
-(function($) {
+	// UPLOADER FUNCTION
+	// ==================
 	$.fn.puploader = function(c) {
-		c = c || {};
 		return this.each(function() {
-			panda.uploader($(this));
+			puploader($(this));
 		});
 	};
 	
@@ -2625,7 +2635,7 @@ panda.uploader = function($u) {
 	$(window).on('load', function () {
 		$('[data-spy="puploader"]').puploader();
 	});
-})(window.jQuery);
+})(jQuery);
 if (typeof(panda) == "undefined") { panda = {}; }
 
 panda.viewfield = function(o) {

@@ -15,15 +15,34 @@
 .p-form.form-horizontal .p-buttons.form-group {
 	border-bottom: 0;
 }
-
-
-/** form inputs */
-.p-checkboxlist label.checkbox-inline {
-	padding-right: 10px;
+.p-form .form-control {
+	height: auto;
+	padding: 5px 10px;
+}
+.p-form input.form-control, .p-form select.form-control,
+.p-form .input-group-addon, .p-form .input-group-btn {
+	width: auto;
+	padding: 5px 10px;
+}
+.p-form.form-horizontal .control-label,
+.p-form.form-horizontal .radio,
+.p-form.form-horizontal .checkbox,
+.p-form.form-horizontal .radio-inline,
+.p-form.form-horizontal .checkbox-inline {
+	padding-top: 6px;
 }
 
+/** form inputs */
+.p-form label {
+	font-weight: normal;
+}
+.p-checkboxlist label.checkbox-inline,
 .p-radiomap label.radio-inline {
 	padding-right: 10px;
+}
+.p-checkboxlist .checkbox-inline+.checkbox-inline,
+.p-radiomap .radio-inline+.radio-inline {
+	margin-left: 0;
 }
 
 
@@ -67,34 +86,37 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 .p-section {
 }
 .p-header {
-	padding-bottom: 9px;
+	padding-bottom: 5px;
 	margin: 10px 0 20px;
 	border-bottom: 1px solid #eee;
+}
+.p-header > h3 {
+	margin-bottom: 5px;
 }
 /*---------------------------------------------*/
 /* listview.css                                */
 /*---------------------------------------------*/
-.n-lv {
+.p-lv {
 	margin: 0;
 	padding: 0;
 }
 
 /* form */
-.n-lv-form {
+.p-lv-form {
 	display: none;
 }
-.n-lv-submit {
+.p-lv-submit {
 }
 
 /* header */
-.n-lv-header {
+.p-lv-header {
 }
 .n-lv-header .n-lv-toolbar {
 	margin: 0 0 -1px 0;
 }
 
 /* footer */
-.n-lv-footer {
+.p-lv-footer {
 }
 .n-lv-footer .n-lv-toolbar {
 	margin: -1px 0 0 0;
@@ -124,7 +146,7 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 
 /* pager */
-.n-lv-pager {
+.p-lv-pager {
 	margin: 2px 0;
 }
 
@@ -160,87 +182,115 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 
 /* checkbox all */
-.n-lv-ca {
+.p-lv-ca {
 }
 /* checkbox row */
-.n-lv-cb {
+.p-lv-cb {
 }
 
 /* filters */
-.n-lv-filters {
-	margin: 0 0 10px 0;
+.p-lv-filters {
 }
-.n-lv-filters-t {
+.p-lv-filters legend {
+}
+
+.p-lv-filters-t {
 	width: 100%;
 }
-.n-lv-filters-t td.n-td-submit td {
+.p-lv-filters-t > tbody > tr > td {
+	padding: 2px;
+}
+.p-lv-filters-t .form-control {
+	display: inline;
+	padding: 4px 6px;
+}
+.p-lv-filters-t .input-group-addon {
+	padding: 4px 6px;
+}
+.p-lv-filters-t td.p-lv-submit td {
 	white-space: nowrap;
 }
-.n-lv-filters-t td.n-td-label {
+.p-lv-filters-t td.p-lv-label {
+	padding-right: 6px;
 	width: 80px;
 	min-width: 80px;
+	text-align: right;
 }
-.n-lv-filters-t td.n-td-input {
+.p-lv-filters-t td.p-lv-label * {
+}
+.p-lv-filters-t td.p-lv-input {
 	min-width: 390px;
 	white-space: nowrap;
 }
-.n-lv-filters-t td.n-td-input .n-checkboxlist,
-.n-lv-filters-t td.n-td-input .n-radiomap {
+.p-lv-filters-t td.p-lv-input .p-checkboxlist,
+.p-lv-filters-t td.p-lv-input .p-radiomap {
 	white-space: normal;
 }
-.n-lv-filters-t td.n-td-tooltip {
+.p-lv-filters-t td.p-lv-remove {
 	width: auto;
 }
-.n-lv-filters-t .n-lv-f-string-v {
-	width: 280px !important;
+.p-lv-filters-t .p-lv-f-string-v {
+	width: 280px;
 }
-.n-lv-filters-t .n-lv-f-string-c {
+.p-lv-filters-t .p-lv-f-string-c {
 	/*width: 80px !important;*/
 }
-.n-lv-filters-t .n-lv-f-date-v, .n-lv-filters-t .n-lv-f-date-v2,
-.n-lv-filters-t .n-lv-f-time-v, .n-lv-filters-t .n-lv-f-time-v2,
-.n-lv-filters-t .n-lv-f-datetime-v, .n-lv-filters-t .n-lv-f-datetime-v2 {
-	width: 140px !important;
-	padding-right: 20px !important;
+.p-lv-filters-t .p-datepicker,
+.p-lv-filters-t .p-timepicker,
+.p-lv-filters-t .p-datetimepicker {
+	display: inline-block;
 }
-.n-lv-filters-t .n-lv-f-date-c,
-.n-lv-filters-t .n-lv-f-datetime-c,
-.n-lv-filters-t .n-lv-f-time-c {
+.p-lv-filters-t .p-datepicker-icon,
+.p-lv-filters-t .p-timepicker-icon,
+.p-lv-filters-t .p-datetimepicker-icon {
+	display: inline;
+}
+.p-lv-filters-t .p-lv-f-date-v, .p-lv-filters-t .p-lv-f-date-v2,
+.p-lv-filters-t .p-lv-f-time-v, .p-lv-filters-t .p-lv-f-time-v2,
+.p-lv-filters-t .p-lv-f-datetime-v, .p-lv-filters-t .p-lv-f-datetime-v2 {
+	width: 150px;
+}
+.p-lv-filters-t .p-lv-f-date-c,
+.p-lv-filters-t .p-lv-f-datetime-c,
+.p-lv-filters-t .p-lv-f-time-c {
 /*	width: 40px !important;*/
 }
-.n-lv-filters-t .n-lv-f-number-v, .n-lv-filters-t .n-lv-f-number-v2 {
-	width: 160px !important;
+.p-lv-filters-t .p-lv-f-number-v, .p-lv-filters-t .p-lv-f-number-v2 {
+	width: 160px;
 }
-.n-lv-filters-t .n-lv-f-number-c {
+.p-lv-filters-t .p-lv-f-number-c {
 /*	width: 40px !important;*/
 }
-.n-lv-filters-t .n-lv-f-boolean-true {
+.p-lv-filters-t .p-lv-f-boolean-true {
 }
-.n-lv-filters-t .n-lv-f-boolean-false {
+.n-lv-filters-t .p-lv-f-boolean-false {
 }
-.n-lv-filters-t .n-checkboxlist {
+.p-lv-filters-t .p-checkboxlist {
 }
-.n-lv-filters-t .n-lv-filters-sep td {
+.p-lv-filters-t .p-lv-filters-sep td {
 	padding: 10px 0;
 }
-.n-lv-filters-t .n-lv-filters-sep div {
+.p-lv-filters-t .p-lv-filters-sep div {
 	border-top: 1px dashed #ccc;
 	width: 100%;
 }
-.n-lv-filters-t tr.n-tr-submit {
+.p-lv-filters-t tr.p-lv-submit {
 }
-.n-lv-filters-t tr.n-tr-submit td.n-td-submit {
-	padding: 2px;
+.p-lv-filters-t tr.p-lv-submit td.p-lv-submit {
+	padding: 12px 2px 2px 2px;
 }
-.n-lv-fs-tb-options {
+.p-lv-fs-tb-options {
 	margin: 0;
 }
-.n-lv-fs-tb-options td {
+.p-lv-fs-tb-options td {
 	white-space: nowrap;
+}
+.p-lv-filters-t .p-lv-fs-select {
+	margin-left: 14px;
 }
 
 /* body */
-.n-lv-body {
+.p-lv-body {
 	margin: 0;
 	padding: 0;
 }

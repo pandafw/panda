@@ -537,9 +537,9 @@ jQuery.jcookie = function(name, value, options) {
 		if (!$el.hasClass('ui-collapsed')) {
 			$el.addClass('ui-collapsed')
 				.children(':not(legend)').slideUp().end()
-				.find('.ui-fieldset-icon')
-					.removeClass('ui-icon-triangle-1-s')
-					.addClass('ui-icon-triangle-1-e');
+				.find('legend>i.ui-fieldset-icon')
+					.removeClass('fa-caret-down')
+					.addClass('fa-caret-right');
 		}
 	}
 	
@@ -547,18 +547,20 @@ jQuery.jcookie = function(name, value, options) {
 		if ($el.hasClass('ui-collapsed')) {
 			$el.removeClass('ui-collapsed')
 				.children(':not(legend)').slideDown().end()
-				.find('.ui-fieldset-icon')
-					.removeClass('ui-icon-triangle-1-e')
-					.addClass('ui-icon-triangle-1-s');
+				.find('legend>i.ui-fieldset-icon')
+					.removeClass('fa-caret-right')
+					.addClass('fa-caret-down');
 		}
 	}
 	
 	$.fn.fieldset = function(config) {
 		config = config || {};
 		return this.each(function() {
-			if (!$(this).data('fieldset')) {
-				$(this).data('fieldset', true)
-					.addClass('ui-collapsible' + (config.collapse ? ' ui-collapsed' : ''))
+			var $t = $(this);
+			if (!$t.data('fieldset')) {
+				var c = config.collapsed && !($t.hasClass('ui-collapsed'));
+				$t.data('fieldset', true)
+					.addClass('ui-collapsible' + (c ? ' ui-collapsed' : ''))
 					.children('legend')
 						.click(function() {
 							var $el = $(this).closest('fieldset');
@@ -570,25 +572,32 @@ jQuery.jcookie = function(name, value, options) {
 							}
 						});
 
-				if (config.icon !== false) {
-					$(this).children('legend')
-						.prepend('<em class="ui-fieldset-icon ui-icon ui-icon-triangle-1-'
-								+ ($(this).hasClass('collapsed') ? 'e' : 's')
-								+ '"></em>');
+				c = $t.hasClass('ui-collapsed');
+				if (config.icon !== false && $t.find('legend>i.ui-fieldset-icon').size() == 0) {
+					$t.children('legend')
+						.prepend('<i class="ui-fieldset-icon fa fa-caret-'
+								+ (c ? 'right' : 'down')
+								+ '"></i>');
 				}
-				$(this).children(':not(legend)')[config.collapse ? 'hide' : 'show']();
+				$t.children(':not(legend)')[c ? 'hide' : 'show']();
 			}
 			
 			switch(config) {
 			case 'collapse':
-				collapse($(this));
+				collapse($t);
 				break;
 			case 'expand':
-				expand($(this));
+				expand($t);
 				break;
 			}
 		});
 	};
+
+	// FIELDSET DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[data-spy="fieldset"]').fieldset();
+	});
 })(jQuery);
 /**
  * jQuery lightBox plugin

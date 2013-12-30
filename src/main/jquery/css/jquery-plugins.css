@@ -1,15 +1,22 @@
-fieldset.ui-collapsible legend {
-	cursor: pointer;
-}
 fieldset.ui-collapsible {
-	border-width: 1px;
+	border: solid 1px #ccc;
+	margin: 10px 0;
+	padding: 10px;
+}
+fieldset.ui-collapsible legend {
+	border: 0;
+	cursor: pointer;
+	font-size: inherit;
+	margin: 0;
+	padding: 0 5px;
+	width: auto;
 }
 fieldset.ui-collapsed {
 	border-width: 1px 0 0 0;
 }
 .ui-fieldset-icon {
-	display: block;
-	float: left;
+	color: #36a;
+	margin-right: 5px;
 }
 /**
  * jQuery lightBox plugin

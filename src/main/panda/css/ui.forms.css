@@ -15,15 +15,34 @@
 .p-form.form-horizontal .p-buttons.form-group {
 	border-bottom: 0;
 }
-
-
-/** form inputs */
-.p-checkboxlist label.checkbox-inline {
-	padding-right: 10px;
+.p-form .form-control {
+	height: auto;
+	padding: 5px 10px;
+}
+.p-form input.form-control, .p-form select.form-control,
+.p-form .input-group-addon, .p-form .input-group-btn {
+	width: auto;
+	padding: 5px 10px;
+}
+.p-form.form-horizontal .control-label,
+.p-form.form-horizontal .radio,
+.p-form.form-horizontal .checkbox,
+.p-form.form-horizontal .radio-inline,
+.p-form.form-horizontal .checkbox-inline {
+	padding-top: 6px;
 }
 
+/** form inputs */
+.p-form label {
+	font-weight: normal;
+}
+.p-checkboxlist label.checkbox-inline,
 .p-radiomap label.radio-inline {
 	padding-right: 10px;
+}
+.p-checkboxlist .checkbox-inline+.checkbox-inline,
+.p-radiomap .radio-inline+.radio-inline {
+	margin-left: 0;
 }
 
 

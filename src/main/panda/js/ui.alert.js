@@ -1,6 +1,4 @@
-if (typeof(panda) == "undefined") { panda = {}; }
-
-(function() {
+(function($) {
 	function setContentType($p, t) {
 		if (t == 'error') {
 			if (!$p.hasClass('error')) {
@@ -53,14 +51,26 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 	}
 	
-	panda.alert = function(s) {
-		if (typeof(s) == 'string') {
-			s = { container: s };
+	$.palert = {
+		ulCls: 'fa-ul',
+		icons: {
+			'help':'fa-li fa fa-question-circle',
+			'info': 'fa-li fa fa-info-circle',
+			'error': 'fa-li fa fa-times-circle',
+			'warn': 'fa-li fa fa-exclamation-triangle',
+			'down': 'fa-caret-down',
+			'up': 'fa-caret-up'
 		}
-		s = $.extend({}, panda.alert.defaults, s);
+	};
+	
+	var palert = function($c, s) {
+		s = $.extend({}, $.palert, s);
 		return {
+			api: function() {
+				return this;
+			},
 			clear: function() {
-				$(s.container).children('.alert').remove();
+				$c.children('.alert').remove();
 				return this;
 			},
 			error: function(m) {
@@ -81,7 +91,6 @@ if (typeof(panda) == "undefined") { panda = {}; }
 			},
 			add: function(m, t) {
 				t = t || 'info';
-				var $c = $(s.container);
 				var $p = $c.children('.alert');
 				var a = false;
 				if ($p.size() < 1) {
@@ -120,23 +129,20 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 	};
 	
-	panda.alert.defaults = {
-		container: 'body',
-		ulCls: 'fa-ul',
-		icons: {
-			'help':'fa-li fa fa-question-circle',
-			'info': 'fa-li fa fa-info-circle',
-			'error': 'fa-li fa fa-times-circle',
-			'warn': 'fa-li fa fa-exclamation-triangle',
-			'down': 'fa-caret-down',
-			'up': 'fa-caret-up'
-		}
+	$.fn.palert = function(option, v1, v2) {
+		return this.each(function () {
+			var ops = typeof option === 'object' && option;
+			var pa = palert($(this), ops);
+			if (typeof option === 'string') {
+				pa[option](v1, v2);
+			}
+		});
 	};
 	
-	panda.alert.toggleFieldErrors = function(el) {
+	$.palert.toggleFieldErrors = function(el) {
 		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
-		var id = panda.alert.defaults.icons.down;
-		var iu = panda.alert.defaults.icons.up;
+		var id = $.palert.icons.down;
+		var iu = $.palert.icons.up;
 		if ($fes.is(':hidden')) {
 			$fes.slideDown();
 			$(el).children('i').removeClass(id).addClass(iu);
@@ -147,4 +153,4 @@ if (typeof(panda) == "undefined") { panda = {}; }
 		}
 		return false;
 	};
-})();
+})(jQuery);

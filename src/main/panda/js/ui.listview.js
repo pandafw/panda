@@ -126,56 +126,62 @@ function nlv_checkRow(id, row, check) {
 	_nlv_selectRow(trs.eq(row), check);
 }
 
-function _nlv_init_filters(id, collapse) {
-	$("#" + id).find(".n-lv-filters").fieldset({
-		collapse: collapse
-	}).find('.n-tr-input').each(function() {
-		if ($(this).hasClass('n-hidden')) {
-			$(this).find("input,select,textarea").prop('disabled', true);
-		}
-	}).end().find('form').submit(function() {
-		$('#' + id).loadmask();
-	});
+function _nlv_init_filters(id) {
+	$("#" + id).find(".p-lv-filters")
+		.find('tr.p-lv-input')
+			.each(function() {
+				if ($(this).hasClass('p-hidden')) {
+					$(this).find("input,select,textarea").prop('disabled', true);
+				}
+			}).end()
+		.find('.p-lv-f-number-c, .p-lv-f-date-c, .p-lv-f-datetime-c, .p-lv-f-time-c')
+			.on('change', _nlv_onBetweenChange)
+			.end()
+		.find('form')
+			.submit(function() {
+				$('#' + id).loadmask();
+			}
+		);
 }
 
 function _nlv_init_table(id, cfg) {
 	var $lv = $("#" + id);
 
-	if (cfg.autosize && !($.browser.ios || $.browser.android)) {
+	if (cfg.autosize) {
 		$lv.addClass("n-lv-autosize");
 		var $lvb = $lv.children(".n-lv-body").autosize();
 
-		var $sth = $lv.find(".n-lv-thead");
-		var $cth = $sth.clone();
-		
-		$cth.find('tr').append('<th><div class="n-lv-cell-last"></div></th>');
-		
-		var $bht = $('<table class="n-table"></table>').css('visibility', 'hidden').append($cth);
-		
-		$sth.removeClass('n-lv-thead').addClass('n-lv-thead-shadow');
-		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
-		
-		$('<div class="n-lv-body-head n-table-wrapper"></div>')
-			.append($bht)
-			.insertBefore($lvb).autosize({ 
-				overflow: 'hidden',
-				callback: function() {
-					var $cths = $cth.find('.n-lv-cell');
-					var $sths = $sth.find('.n-lv-cell');
-					$cths.each(function(i) {
-						var $sc = $sths.eq(i);
-						if (!$sc.parent().is(':hidden')) {
-							var cw = $sc.width();
-							var hw = $sc.parent().width();
-							$(this).width(cw >= hw ? cw : hw + 1);
-						}
-					});
-					$bht.css('visibility', 'visible');
-				}
-			});
-		$lvb.scroll(function() {
-			$bht.css('margin-left', -1 - $lvb.scrollLeft() + "px");
-		});
+//		var $sth = $lv.find(".n-lv-thead");
+//		var $cth = $sth.clone();
+//		
+//		$cth.find('tr').append('<th><div class="n-lv-cell-last"></div></th>');
+//		
+//		var $bht = $('<table class="n-table"></table>').css('visibility', 'hidden').append($cth);
+//		
+//		$sth.removeClass('n-lv-thead').addClass('n-lv-thead-shadow');
+//		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
+//		
+//		$('<div class="n-lv-body-head n-table-wrapper"></div>')
+//			.append($bht)
+//			.insertBefore($lvb).autosize({ 
+//				overflow: 'hidden',
+//				callback: function() {
+//					var $cths = $cth.find('.n-lv-cell');
+//					var $sths = $sth.find('.n-lv-cell');
+//					$cths.each(function(i) {
+//						var $sc = $sths.eq(i);
+//						if (!$sc.parent().is(':hidden')) {
+//							var cw = $sc.width();
+//							var hw = $sc.parent().width();
+//							$(this).width(cw >= hw ? cw : hw + 1);
+//						}
+//					});
+//					$bht.css('visibility', 'visible');
+//				}
+//			});
+//		$lvb.scroll(function() {
+//			$bht.css('margin-left', -1 - $lvb.scrollLeft() + "px");
+//		});
 	}
 
 	$lv.find(".n-lv-thead > tr > th").each(function() {
@@ -313,8 +319,8 @@ function _nlv_toggleRow($tr, ts) {
 	_nlv_setCheckAll($lv, all);
 }
 
-function _nlv_onBetweenChange(el) {
-	var $t = $(el),
+function _nlv_onBetweenChange() {
+	var $t = $(this),
 		d = $t.val() != 'bt',
 		v = d ? 'hidden' : 'visible';
 	if (d) {
