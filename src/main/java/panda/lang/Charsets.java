@@ -502,8 +502,24 @@ public class Charsets {
 		return Charset.defaultCharset();
 	}
 	
+	public static Charset defaultCharset(Charset cs) {
+		return cs == null ? defaultCharset() : cs;
+	}
+	
+	public static Charset defaultCharset(Charset cs, Charset def) {
+		return cs == null ? def : cs;
+	}
+	
 	public static String defaultEncoding() {
 		return Charset.defaultCharset().name();
+	}
+
+	public static String defaultEncoding(String enc) {
+		return enc == null ? defaultEncoding() : enc;
+	}
+
+	public static String defaultEncoding(String enc, String def) {
+		return enc == null ? def : enc;
 	}
 
 	//-----------------------------------------------------------------------------

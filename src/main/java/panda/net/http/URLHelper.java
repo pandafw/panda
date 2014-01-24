@@ -2,7 +2,6 @@ package panda.net.http;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Iterators;
 import panda.lang.Strings;
 
 /**
@@ -381,23 +381,12 @@ public class URLHelper {
 				String name = (String) entry.getKey();
 				Object value = entry.getValue();
 
-				if (value != null && value.getClass().isArray()) {
-					int len = Array.getLength(value);
-					for (int i = 0; i < len; i++) {
-						Object paramValue = Array.get(value, i);
-						buildParameterSubstring(name, paramValue, encoding, link);
+				if (Iterators.isIterable(value)) {
+					for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
+						Object pv = it.next();
+						buildParameterSubstring(name, pv, encoding, link);
 
-						if (i < len - 1) {
-							link.append(paramSeparator);
-						}
-					}
-				}
-				else if (value instanceof Iterable) {
-					for (Iterator iterator = ((Iterable) value).iterator(); iterator.hasNext();) {
-						Object paramValue = iterator.next();
-						buildParameterSubstring(name, paramValue, encoding, link);
-
-						if (iterator.hasNext()) {
+						if (it.hasNext()) {
 							link.append(paramSeparator);
 						}
 					}

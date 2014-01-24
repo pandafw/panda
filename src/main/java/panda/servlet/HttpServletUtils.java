@@ -28,6 +28,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
+import panda.net.http.HttpMethod;
 import panda.net.http.UserAgent;
 
 
@@ -91,6 +92,16 @@ public class HttpServletUtils {
 	 * directory for the current web application, of type <code>java.io.File</code>.
 	 */
 	public static final String TEMP_DIR_CONTEXT_ATTRIBUTE = "javax.servlet.context.tempdir";
+
+	public static boolean isFormUrlEncoded(HttpServletRequest request) {
+		String ct = request.getContentType();
+		if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod()) 
+				&& ct != null
+				&& ct.startsWith(HttpHeader.X_WWW_FORM_URLECODED)) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * @param request request

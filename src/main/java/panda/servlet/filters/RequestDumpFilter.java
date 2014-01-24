@@ -159,6 +159,8 @@ public class RequestDumpFilter implements Filter {
 			sb.append(req.getMethod()).append(' ').append(req.getRequestURL()).append(' ').append(req.getProtocol()).append('\n');
 			
 			HttpHeader hh = new HttpHeader();
+			hh.add("#remote-addr", req.getRemoteAddr());
+			hh.add("#remote-user", req.getRemoteUser());
 			hh.putAll(new ServletRequestHeaderMap(req));
 			hh.toString(sb);
 
