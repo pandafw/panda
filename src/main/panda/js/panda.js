@@ -2469,12 +2469,12 @@ $(function() {
 });
 (function($) {
 	var puploader = function($u) {
-		var pua = $u.attr('uploadAction');
-		var pup = $u.attr('uploadParam');
-		var pda = $u.attr('dnloadAction');
-		var pdp = $u.attr('dnloadParam');
-		var pdl = $u.attr('defaultLink');
-		var pdt = $u.attr('defaultText');
+		var pua = $u.data('uploadAction');
+		var pup = $u.data('uploadParam');
+		var pda = $u.data('dnloadAction');
+		var pdp = $u.data('dnloadParam');
+		var pdl = $u.data('defaultLink');
+		var pdt = $u.data('defaultText');
 		
 		var $uf = $u.children('.p-uploader-file');
 		var $ut = $u.children('.p-uploader-text');
@@ -2602,15 +2602,13 @@ $(function() {
 					}
 					else {
 						_error(r.contentType, r.fileName, r.fileSize, r.saveName);
-						panda.alert({ container: $ue }).add(d);
+						$ue.palert('add', d);
 						$ue.slideDown();
 					}
 				},
 				error: function(xhr, status, e) {
 					_endUpload();
-					panda.alert({ container: $ue }).error(
-							(e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status))
-						);
+					$ue.palert('error', (e ? "<pre>" + (e + "").escapeHtml() + "</pre>" : (xhr ? xhr.responseText : status)));
 					$ue.slideDown();
 				}
 			});
