@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Locale;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -169,11 +168,6 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	@Override
-	public boolean isCommitted() {
-		return false;
-	}
-
-	@Override
 	public void reset() {
 		super.reset();
 		
@@ -187,11 +181,6 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	public void resetBuffer() {
 		super.resetBuffer();
 		body.reset();
-	}
-
-	@Override
-	public void setLocale(Locale loc) {
-		super.setLocale(loc);
 	}
 
 }

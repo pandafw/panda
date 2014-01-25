@@ -179,6 +179,9 @@ public class RequestDumpFilter implements Filter {
 	private void dumpResponse(HttpServletRequest request, HttpServletResponse response,
 			HttpBufferedResponseWrapper wrapper, long time, int serial) throws IOException {
 
+		// flush wrapper
+		wrapper.flushBuffer();
+		
 		// write body to real response
 		Streams.copy(wrapper.getBodyStream(), response.getOutputStream());
 
