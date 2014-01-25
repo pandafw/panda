@@ -7,10 +7,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import panda.lang.Arrays;
 import panda.lang.Chars;
@@ -98,7 +98,7 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 	}
 
 	// -------------------------------------------------------------
-	private Map<String, Object> map = new LinkedHashMap<String, Object>();
+	private Map<String, Object> map = new TreeMap<String, Object>();
 
 	public HttpHeader() {
 	}

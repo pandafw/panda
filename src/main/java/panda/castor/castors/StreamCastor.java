@@ -1,7 +1,6 @@
 package panda.castor.castors;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -34,13 +33,7 @@ public class StreamCastor {
 				return new ReaderInputStream((Reader)value, Charsets.CS_UTF_8);
 			}
 			if (value instanceof CharSequence) {
-				String sv = value.toString();
-				try {
-					return Streams.toInputStream(sv, Charsets.UTF_8);
-				}
-				catch (IOException e) {
-					throw wrapError(e, context);
-				}
+				return Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
 			}
 			throw castError(value, context);
 		}

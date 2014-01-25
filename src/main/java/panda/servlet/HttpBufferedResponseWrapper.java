@@ -1,6 +1,7 @@
 package panda.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import panda.io.stream.ByteArrayOutputStream;
+import panda.lang.Charsets;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpResponse;
 
@@ -17,6 +19,8 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	private HttpHeader head;
 	private int statusCode = SC_OK;
 	private String statusMsg = HttpResponse.getStatusReason(SC_OK);
+	private ServletOutputStream stream;
+	private PrintWriter writer;
 	
 	private ByteArrayOutputStream body;
 
@@ -50,8 +54,8 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * @return the body
 	 */
-	public byte[] getBody() {
-		return body.toByteArray();
+	public InputStream getBodyStream() {
+		return body.toInputStream();
 	}
 
 	//------------------------------------------------------------------
@@ -67,12 +71,6 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 		statusCode = sc;
 		statusMsg = HttpResponse.getStatusReason(sc);
 		super.sendError(sc);
-	}
-
-	@Override
-	public void sendRedirect(String location) throws IOException {
-		// TODO Auto-generated method stub
-		super.sendRedirect(location);
 	}
 
 	@Override
@@ -127,13 +125,25 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 
 	@Override
 	public PrintWriter getWriter() throws IOException {
-		String cs = this.getCharacterEncoding();
-		return new PrintWriter(new OutputStreamWriter(body, cs));
+		if (stream != null) {
+			throw new IllegalStateException("the getOutputStream() method has already been called on this response");
+		}
+		if (writer == null) {
+			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+			writer = new PrintWriter(new OutputStreamWriter(body, cs));
+		}
+		return writer;
 	}
 
 	@Override
 	public ServletOutputStream getOutputStream() {
-		return new DelegatingServletOutputStream(body);
+		if (writer != null) {
+			throw new IllegalStateException("the getWriter() method has already been called on this response");
+		}
+		if (stream == null) {
+			stream = new DelegatingServletOutputStream(body);
+		}
+		return stream;
 	}
 
 	@Override
@@ -150,6 +160,12 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 
 	@Override
 	public void flushBuffer() throws IOException {
+		if (writer != null) {
+			writer.flush();
+		}
+		if (stream != null) {
+			stream.flush();
+		}
 	}
 
 	@Override

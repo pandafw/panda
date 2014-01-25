@@ -1091,10 +1091,9 @@ public class Streams {
 	 * 
 	 * @param input the CharSequence to convert
 	 * @param encoding the encoding to use, null means platform default
-	 * @throws IOException if the encoding is invalid
 	 * @return an input stream
 	 */
-	public static InputStream toInputStream(final CharSequence input, final String encoding) throws IOException {
+	public static InputStream toInputStream(final CharSequence input, final String encoding) {
 		return toInputStream(input, Charsets.toCharset(encoding));
 	}
 
@@ -1132,11 +1131,8 @@ public class Streams {
 	 * @param input the string to convert
 	 * @param encoding the encoding to use, null means platform default
 	 * @return an input stream
-	 * @throws IOException if the encoding is invalid
-	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
-	 *             version 2.2 if the encoding is not supported.
 	 */
-	public static InputStream toInputStream(final String input, final String encoding) throws IOException {
+	public static InputStream toInputStream(final String input, final String encoding) {
 		final byte[] bytes = input.getBytes(Charsets.toCharset(encoding));
 		return new ByteArrayInputStream(bytes);
 	}

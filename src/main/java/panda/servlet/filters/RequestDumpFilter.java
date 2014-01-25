@@ -166,10 +166,12 @@ public class RequestDumpFilter implements Filter {
 
 			fos.write(sb.toString().getBytes(Charsets.CS_UTF_8));
 			fos.write('\n');
-			fos.write(req.getBody());
+			Streams.copy(req.getBodyStream(), fos);
 		}
 		catch (Throwable e) {
 			log.warn("Failed to dump request to " + dumpFile.getPath(), e);
+		}
+		finally {
 			Streams.safeClose(fos);
 		}
 	}
@@ -178,8 +180,7 @@ public class RequestDumpFilter implements Filter {
 			HttpBufferedResponseWrapper wrapper, long time, int serial) throws IOException {
 
 		// write body to real response
-		byte[] body = wrapper.getBody();
-		response.getOutputStream().write(body);
+		Streams.copy(wrapper.getBodyStream(), response.getOutputStream());
 
 		String date = DateTimes.dateFormat().format(time);
 		String fn = DateTimes.timestampLogFormat().format(time);
@@ -201,10 +202,12 @@ public class RequestDumpFilter implements Filter {
 
 			fos.write(sb.toString().getBytes(Charsets.CS_UTF_8));
 			fos.write('\n');
-			fos.write(wrapper.getBody());
+			Streams.copy(wrapper.getBodyStream(), fos);
 		}
 		catch (Throwable e) {
 			log.warn("Failed to dump response to " + dumpFile.getPath(), e);
+		}
+		finally {
 			Streams.safeClose(fos);
 		}
 	}
