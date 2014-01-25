@@ -19,17 +19,13 @@ public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> 
 		boolean writable;
 	}
 	
-
-	protected Type type;
-
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public AbstractJavaBeanHandler(Beans factory, Type type) {
-		super(factory);
-		this.type = type;
+	public AbstractJavaBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 	}
 
 	/**

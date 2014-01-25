@@ -41,11 +41,11 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public JavaBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public JavaBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 
 		BeanInfo beanInfo;
 		try {

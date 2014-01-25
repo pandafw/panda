@@ -10,6 +10,11 @@ import java.lang.reflect.Type;
  */
 public interface PropertyHandler<T> {
 	/**
+	 * get object type
+	 */
+	Type getType();
+	
+	/**
 	 * get read property names
 	 * @param beanObject bean object (can be null)
 	 * @return property names

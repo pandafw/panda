@@ -3,13 +3,11 @@ package panda.bind.json;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
 import panda.bind.PropertyFilter;
-import panda.io.Streams;
 import panda.lang.Numbers;
 import panda.lang.Types;
 
@@ -59,30 +57,25 @@ public class JsonDeserializer extends AbstractDeserializer {
 	 * Creates a object from a JSON, with a specific target class.<br>
 	 */
 	public <T> T deserialize(Reader json, Type type) {
-		try {
-			tokener = new JsonTokener(json);
-			
-			char c = tokener.nextClean();
-			if (c == '[') {
-				if (isArrayType(type)) {
-					tokener.back();
-					return parseJsonArray(type);
-				}
-				throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
+		tokener = new JsonTokener(json);
+		
+		char c = tokener.nextClean();
+		if (c == '[') {
+			if (isArrayType(type)) {
+				tokener.back();
+				return parseJsonArray(type);
 			}
-			else if (c == '{') {
-				if (!isArrayType(type)) {
-					tokener.back();
-					return parseJsonObject(type);
-				}
-				throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
-			}
-			else {
-				throw syntaxError("Invalid json character: " + c);
-			}
+			throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
 		}
-		finally {
-			Streams.safeClose(json);
+		else if (c == '{') {
+			if (!isArrayType(type)) {
+				tokener.back();
+				return parseJsonObject(type);
+			}
+			throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
+		}
+		else {
+			throw syntaxError("Invalid json character: " + c);
 		}
 	}
 
@@ -93,7 +86,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 	 * @throws JsonException If syntax error.
 	 * @return An object.
 	 */
-	private <E> E nextValue(Type type) {
+	private <T> T nextValue(Type type) {
 		char c = tokener.nextClean();
 		String s;
 
@@ -201,20 +194,11 @@ public class JsonDeserializer extends AbstractDeserializer {
 		return convertValue(s, type);
 	}
 
-	private boolean isArrayType(Type type) {
-		return Types.isArrayType(type) || Types.isAssignable(type, Collection.class);
-	}
-
-	private Type getArrayElementType(Type type) {
-		Type etype = Types.getArrayElementType(type);
-		return etype == null ? Object.class : etype;
-	}
-	
 	private JsonException syntaxError(String message) {
 		return tokener.syntaxError(message);
 	}
 
-	private <E> E parseJsonObject(Type type) {
+	private <T> T parseJsonObject(Type type) {
 		try {
 			if (Object.class.equals(type)) {
 				type = defaultJsonObjectType;
@@ -228,13 +212,13 @@ public class JsonDeserializer extends AbstractDeserializer {
 				throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
 			}
 			
-			E obj = null;
-			BeanHandler<E> bh = null;
-			PropertyFilter<E> jsonPropertyFilter = null;
+			T obj = null;
+			BeanHandler<T> bh = null;
+			PropertyFilter<T> pf = null;
 			if (type != null) {
 				bh = getBeanHandler(type);
 				obj = bh.createObject();
-				jsonPropertyFilter = getPropertyFilter(type);
+				pf = getPropertyFilter(type);
 			}
 
 			String key;
@@ -271,23 +255,31 @@ public class JsonDeserializer extends AbstractDeserializer {
 				}
 				else {
 					if (bh.canWriteProperty(key)) {
-						Type valCls = bh.getPropertyType(key);
-						if (isExcludeProperty(Types.getRawType(valCls))) {
+						Type pt = bh.getPropertyType(key);
+						if (isExcludeProperty(Types.getRawType(pt))) {
 							nextValue(null);
 						}
 						else {
-							Object val = nextValue(valCls);
-							if (jsonPropertyFilter == null || jsonPropertyFilter.accept(obj, key, val)) {
+							Object val = nextValue(pt);
+							if (pf == null || pf.accept(obj, key, val)) {
 								bh.setPropertyValue(obj, key, val);
 							}
 						}
 					}
-					else {
+					else if (bh.canReadProperty(key)) {
 						if (isIgnoreReadonlyProperty()) {
 							nextValue(null);
 						}
 						else {
 							throw syntaxError("readonly property: " + key);
+						}
+					}
+					else {
+						if (isIgnoreMissingProperty()) {
+							nextValue(null);
+						}
+						else {
+							throw syntaxError("missing property: " + key);
 						}
 					}
 				}

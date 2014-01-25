@@ -13,15 +13,23 @@ import panda.bean.Beans;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
-
-	private Beans beans;
+	protected Beans beans;
+	protected Type type;
 
 	/**
 	 * Constructor
 	 * @param beans bean handler beans
 	 */
-	public AbstractBeanHandler(Beans beans) {
+	public AbstractBeanHandler(Beans beans, Type type) {
 		this.beans = beans;
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
 	}
 
 	/**

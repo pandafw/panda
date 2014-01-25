@@ -21,8 +21,8 @@ public class XmlBinderTest extends TestCase {
 	public static class A {
 		private Object obj = null;
 		private boolean bol = false;
-		private String str = "A";
 		private Integer num = 1;
+		private String str = "A";
 		private A[] ary;
 		private List<A> lst;
 		private Map<String, A> map;
@@ -34,6 +34,7 @@ public class XmlBinderTest extends TestCase {
 			str = s;
 			num = n;
 		}
+		
 		public Object getObj() {
 			return obj;
 		}
@@ -46,17 +47,17 @@ public class XmlBinderTest extends TestCase {
 		public void setBol(boolean bol) {
 			this.bol = bol;
 		}
-		public String getStr() {
-			return str;
-		}
-		public void setStr(String str) {
-			this.str = str;
-		}
 		public Integer getNum() {
 			return num;
 		}
 		public void setNum(Integer num) {
 			this.num = num;
+		}
+		public String getStr() {
+			return str;
+		}
+		public void setStr(String str) {
+			this.str = str;
 		}
 		public A[] getAry() {
 			return ary;
@@ -76,7 +77,6 @@ public class XmlBinderTest extends TestCase {
 		public void setMap(Map<String, A> map) {
 			this.map = map;
 		}
-		
 		@Override
 		public boolean equals(Object rhs) {
 			if (this == rhs) {
@@ -132,6 +132,50 @@ public class XmlBinderTest extends TestCase {
 		assertEquals(list, abc);
 	}
 
+	public void testClassProp() {
+		Map<String, String> m = new LinkedHashMap<String, String>();
+		
+		m.put("class", "cls");
+		m.put("clazz", "clz");
+
+		String s = Xmls.toXml(m);
+		assertEquals("<doc><class>cls</class><clazz>clz</clazz></doc>", s);
+		
+		Map dm = Xmls.fromXml(s, LinkedHashMap.class);
+		assertEquals(m, dm);
+		
+//		JsonDeserializer jd = new JsonDeserializer();
+//		jd.setIgnoreReadonlyProperty(true);
+//		jd.setIgnoreMissingProperty(true);
+//		jd.deserialize(s, A.class);
+	}
+	
+	public void testMapMap() {
+		Map<String, Map> m = new LinkedHashMap<String, Map>();
+		Map<String, Number> m1 = new LinkedHashMap<String, Number>();
+		m1.put("i1", 1);
+		m.put("m1", m1);
+
+		Map<String, Number> m2 = new LinkedHashMap<String, Number>();
+		m2.put("i1", 1);
+		m2.put("i2", 2);
+		m.put("m2", m2);
+
+		Map<String, Number> m3 = new LinkedHashMap<String, Number>();
+		m3.put("i1", 1);
+		m3.put("i2", 2);
+		m3.put("i3", 3);
+		m.put("m3", m3);
+
+		String s = Xmls.toXml(m, true);
+		System.out.println(s);
+		
+		Map<String, Map<String, Number>> md = Xmls.fromXml(
+			s, new TypeToken<Map<String, Map<String, Number>>>() {}.getType());
+		
+		assertTrue(Objects.equals(m, md));
+	}
+	
 	public void testMapList() {
 		Map<String, List<Number>> m = new LinkedHashMap<String, List<Number>>();
 		List<Number> l0 = new ArrayList<Number>();

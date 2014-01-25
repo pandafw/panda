@@ -17,11 +17,11 @@ public class ListBeanHandler<T extends List> extends AbstractArrayBeanHandler<T>
 	
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public ListBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public ListBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 		
 		elementType = Types.getCollectionElementType(type);
 	}

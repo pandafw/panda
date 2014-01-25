@@ -148,6 +148,7 @@ public class JsonBinderTest extends TestCase {
 		
 		JsonDeserializer jd = new JsonDeserializer();
 		jd.setIgnoreReadonlyProperty(true);
+		jd.setIgnoreMissingProperty(true);
 		jd.deserialize(s, A.class);
 	}
 	

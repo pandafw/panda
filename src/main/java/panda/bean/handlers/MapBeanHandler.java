@@ -21,11 +21,11 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public MapBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public MapBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 
 		elementType = Types.getMapKeyAndValueTypes(type)[1];
 	}

@@ -15,11 +15,11 @@ import panda.lang.Types;
 public class ArrayBeanHandler<T> extends AbstractArrayBeanHandler<T> {
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public ArrayBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public ArrayBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 
 		if (!Types.isArrayType(type)) {
 			throw new IllegalArgumentException(type + " is not a array type");

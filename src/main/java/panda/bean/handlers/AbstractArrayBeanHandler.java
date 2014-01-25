@@ -96,7 +96,13 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		if (array == null) {
 			return getElementType();
 		}
-		Object val = getPropertyValue(array, propertyName);
+
+		int index = toIndex(propertyName);
+		if (index < 0) {
+			return null;
+		}
+
+		Object val = getElement(array, index);
 		return val == null ? getElementType() : val.getClass();
 	}
 	

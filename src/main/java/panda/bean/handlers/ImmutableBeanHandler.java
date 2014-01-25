@@ -12,14 +12,12 @@ import panda.lang.Types;
  * @param <T> class type
  */
 public class ImmutableBeanHandler<T> extends AbstractSimpleBeanHandler<T> {
-	private Type type;
-	
 	/**
 	 * Constructor
 	 * @param type bean type
 	 */
 	public ImmutableBeanHandler(Type type) {
-		this.type = type;
+		super(type);
 	}
 
 	/**

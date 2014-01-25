@@ -11,6 +11,23 @@ import panda.bean.BeanHandler;
  * @param <T> class type
  */
 public abstract class AbstractSimpleBeanHandler<T> implements BeanHandler<T> {
+	protected Type type;
+
+	/**
+	 * Constructor
+	 * @param type bean type
+	 */
+	public AbstractSimpleBeanHandler(Type type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
+	}
+
 	/**
 	 * get bean type
 	 * @param beanName bean name

@@ -26,11 +26,11 @@ public abstract class AbstractFastBeanHandler<T> extends AbstractJavaBeanHandler
 
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public AbstractFastBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public AbstractFastBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 		init();
 	}
 

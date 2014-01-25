@@ -18,11 +18,11 @@ public class IterableBeanHandler<T extends Iterable> extends ArrayBeanHandler<T>
 	
 	/**
 	 * Constructor
-	 * @param factory bean handler factory
+	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public IterableBeanHandler(Beans factory, Type type) {
-		super(factory, type);
+	public IterableBeanHandler(Beans beans, Type type) {
+		super(beans, type);
 		
 		elementType = Types.getCollectionElementType(type);
 	}
