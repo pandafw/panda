@@ -1,5 +1,6 @@
 package panda.net.http;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -222,21 +223,30 @@ public class Cookie {
 		return this;
 	}
 
+	private Map<String, String> attrs() {
+		if (attrs == null) {
+			attrs = new LinkedHashMap<String, String>();
+		}
+		return attrs;
+	}
+
 	public void parse(String str) {
 		String[] ss = Strings.split(str, ";");
 		for (int i = 0; i < ss.length; i++) {
 			String s = Strings.trim(ss[i]);
 			int sep = s.indexOf('=');
+			String k = s;
+			String v = "";
 			if (sep > 0) {
-				String k = s.substring(0, sep);
-				String v = s.substring(sep);
-				if (i == 0) {
-					name = k;
-					value = v;
-				}
-				else {
-					attrs.put(k, v);
-				}
+				k = s.substring(0, sep);
+				v = s.substring(sep + 1);
+			}
+			if (i == 0) {
+				name = k;
+				value = v;
+			}
+			else {
+				attrs().put(k, v);
 			}
 		}
 	}

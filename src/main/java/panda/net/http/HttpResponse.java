@@ -525,10 +525,12 @@ public class HttpResponse implements Closeable {
 		if (cookies == null) {
 			cookies = new ArrayList<Cookie>();
 			List<String> cs = header.getStrings(HttpHeader.SET_COOKIE);
-			for (String s : cs) {
-				Cookie c = new Cookie(s);
-				if (c.isValid()) {
-					cookies.add(c);
+			if (cs != null) {
+				for (String s : cs) {
+					Cookie c = new Cookie(s);
+					if (c.isValid()) {
+						cookies.add(c);
+					}
 				}
 			}
 		}
@@ -624,12 +626,13 @@ public class HttpResponse implements Closeable {
 		writer.append(statusLine);
 		
 		if (header != null) {
+			writer.append(Streams.LINE_SEPARATOR);
 			header.toString(writer);
 		}
 
 		String text = getContentText();
 		if (Strings.isNotEmpty(text)) {
-			writer.append(Strings.CRLF);
+			writer.append(Streams.LINE_SEPARATOR);
 			writer.append(text);
 		}
 	}

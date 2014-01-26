@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import panda.io.Streams;
 import panda.lang.Arrays;
-import panda.lang.Chars;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.lang.Numbers;
@@ -300,6 +300,10 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 
 	@Override
 	public Object put(String key, Object value) {
+		if (key == null) {
+			return null;
+		}
+		
 		key = (String)toCompareKey(key);
 		if (value == null) {
 			return map.remove(key);
@@ -368,7 +372,7 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 					writer.append(',');
 				}
 			}
-			writer.append(Chars.LF);
+			writer.append(Streams.LINE_SEPARATOR);
 		}
 	}
 }

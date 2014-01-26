@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import panda.io.Streams;
@@ -110,15 +114,44 @@ public class HttpRequest {
 			this.url = url;
 		return this;
 	}
-
-	public HttpRequest setCookies(Cookie cookies) {
-		getHeader().set(HttpHeader.COOKIE, cookies.toString());
+	
+	public HttpRequest setCookies(Collection<Cookie> cookies) {
+		if (Collections.isEmpty(cookies)) {
+			getHeader().remove(HttpHeader.COOKIE);
+			return this;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (Cookie c : cookies) {
+			if (sb.length() > 0) {
+				sb.append("; ");
+			}
+			if (c.isValid()) {
+				sb.append(c.getName()).append('=').append(c.getValue());
+			}
+		}
+		
+		if (sb.length() > 0) {
+			getHeader().set(HttpHeader.COOKIE, sb.toString());
+		}
+		else {
+			getHeader().remove(HttpHeader.COOKIE);
+		}
 		return this;
 	}
 
-	public Cookie getCookies() {
-		String s = getHeader().getString(HttpHeader.COOKIE);
-		return new Cookie(s);
+	public HttpRequest setCookies(Cookie ... cookies) {
+		return setCookies(Arrays.asList(cookies));
+	}
+
+	public List<Cookie> getCookies() {
+		List<Cookie> cs = new ArrayList<Cookie>();
+		String hc = getHeader().getString(HttpHeader.COOKIE);
+		String[] ss = Strings.split(hc, ';');
+		for (String s : ss) {
+			cs.add(new Cookie(s));
+		}
+		return cs;
 	}
 
 	/**
@@ -166,11 +199,11 @@ public class HttpRequest {
 	public void toString(Appendable writer) throws IOException {
 		writer.append(String.valueOf(method)).append(' ').append(getURL().toString());
 		if (header != null) {
-			writer.append(Strings.CRLF);
+			writer.append(Streams.LINE_SEPARATOR);
 			header.toString(writer);
 		}
 		if (!isGet()) {
-			writer.append(Strings.CRLF);
+			writer.append(Streams.LINE_SEPARATOR);
 			Streams.copy(getInputStream(), writer, encoding);
 		}
 	}

@@ -251,7 +251,7 @@ public class HttpClient {
 	}
 	
 	protected HttpResponse doSend() throws IOException {
-		final String CLRF = Streams.LINE_SEPARATOR;
+		final String CRLF = Streams.LINE_SEPARATOR;
 
 		if (log.isDebugEnabled()) {
 			log.debug(request.toString());
@@ -296,20 +296,15 @@ public class HttpClient {
 
 			if (log.isDebugEnabled()) {
 				if (response.getHeader() != null) {
-					msg.append(CLRF); 
+					msg.append(CRLF); 
 					response.getHeader().toString(msg);
 				}
 
-				if (log.isTraceEnabled()) {
-					String text = response.getContentText();
-					if (Strings.isNotEmpty(text)) {
-						msg.append(Strings.CRLF).append(text);
-					}
-					log.trace(msg);
+				String text = response.getContentText();
+				if (Strings.isNotEmpty(text)) {
+					msg.append(CRLF).append(text);
 				}
-				else {
-					log.debug(msg);
-				}
+				log.debug(msg);
 			}
 			else {
 				log.info(msg);
