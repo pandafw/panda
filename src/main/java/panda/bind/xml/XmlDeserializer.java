@@ -207,6 +207,9 @@ public class XmlDeserializer extends AbstractDeserializer {
 		}
 
 		protected Object convertText(Elem em) {
+			if (em.text == null) {
+				return null;
+			}
 			try {
 				return deser.convertValue(em.text.toString(), em.type);
 			}
