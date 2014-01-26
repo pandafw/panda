@@ -53,8 +53,18 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	/**
 	 * @return the body
 	 */
-	public InputStream getBodyStream() {
+	public InputStream getBodyStream() throws IOException {
+		flush();
 		return body.toInputStream();
+	}
+
+	private void flush() throws IOException {
+		if (writer != null) {
+			writer.flush();
+		}
+		if (stream != null) {
+			stream.flush();
+		}
 	}
 
 	//------------------------------------------------------------------
@@ -129,20 +139,24 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 		}
 		if (writer == null) {
 			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
-			writer = new PrintWriter(new OutputStreamWriter(body, cs));
+			writer = new PrintWriter(new OutputStreamWriter(delegateServletOutputStream(), cs));
 		}
 		return writer;
 	}
-
+	
 	@Override
-	public ServletOutputStream getOutputStream() {
+	public ServletOutputStream getOutputStream() throws IOException {
 		if (writer != null) {
 			throw new IllegalStateException("the getWriter() method has already been called on this response");
 		}
 		if (stream == null) {
-			stream = new DelegatingServletOutputStream(body);
+			stream = delegateServletOutputStream();
 		}
 		return stream;
+	}
+
+	private ServletOutputStream delegateServletOutputStream() throws IOException {
+		return new DelegatingServletOutputStream(body, super.getOutputStream());
 	}
 
 	@Override
@@ -159,20 +173,16 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 
 	@Override
 	public void flushBuffer() throws IOException {
-		if (writer != null) {
-			writer.flush();
-		}
-		if (stream != null) {
-			stream.flush();
-		}
+		super.flushBuffer();
+		flush();
 	}
-
+	
 	@Override
 	public void reset() {
 		super.reset();
 		
-		statusCode = 0;
-		statusMsg = null;
+		statusCode = SC_OK;
+		statusMsg = HttpResponse.getStatusReason(SC_OK);
 		head.clear();
 		body.reset();
 	}
@@ -180,6 +190,7 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	@Override
 	public void resetBuffer() {
 		super.resetBuffer();
+
 		body.reset();
 	}
 

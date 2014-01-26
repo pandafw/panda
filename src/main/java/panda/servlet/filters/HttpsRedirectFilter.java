@@ -35,7 +35,7 @@ public class HttpsRedirectFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		String schema = request.getScheme();
 		if (!"https".equals(schema)) {
-			String url = ServletURLHelper.buildURL(request, request.getParameterMap(), "https", 0, true, false);
+			String url = ServletURLHelper.buildURL(request, "https", 0, request.getParameterMap(), true, false);
 			
 			HttpServletResponse response = (HttpServletResponse)res;
 			HttpServletUtils.sendRedirect(response, url);

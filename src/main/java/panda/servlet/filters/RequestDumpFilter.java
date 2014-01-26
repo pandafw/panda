@@ -26,6 +26,7 @@ import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpBufferedRequestWrapper;
 import panda.servlet.HttpBufferedResponseWrapper;
+import panda.servlet.HttpServletUtils;
 import panda.servlet.ServletRequestHeaderMap;
 
 
@@ -156,7 +157,9 @@ public class RequestDumpFilter implements Filter {
 			fos = new FileOutputStream(dumpFile);
 			
 			StringBuilder sb = new StringBuilder();
-			sb.append(req.getMethod()).append(' ').append(req.getRequestURL()).append(' ').append(req.getProtocol()).append('\n');
+			sb.append(req.getMethod()).append(' ');
+			sb.append(HttpServletUtils.getRequestLink(req)).append(' ');
+			sb.append(req.getProtocol()).append('\n');
 			
 			HttpHeader hh = new HttpHeader();
 			hh.add("#remote-addr", req.getRemoteAddr());
@@ -182,9 +185,6 @@ public class RequestDumpFilter implements Filter {
 		// flush wrapper
 		wrapper.flushBuffer();
 		
-		// write body to real response
-		Streams.copy(wrapper.getBodyStream(), response.getOutputStream());
-
 		String date = DateTimes.dateFormat().format(time);
 		String fn = DateTimes.timestampLogFormat().format(time);
 		File dumpFolder = new File(dumpPath, date);

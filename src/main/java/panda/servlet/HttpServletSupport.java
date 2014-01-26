@@ -316,8 +316,9 @@ public class HttpServletSupport {
 	}
 
 	public void writeResponseData(byte[] data) throws IOException {
-		response.getOutputStream().write(data);
-		response.getOutputStream().flush();
+		OutputStream os = response.getOutputStream();
+		os.write(data);
+		os.flush();
 	}
 
 	public void writeResponseData(InputStream is) throws IOException {
@@ -325,25 +326,12 @@ public class HttpServletSupport {
 	}
 	
 	public void writeResponseData(InputStream is, int bufferSize) throws IOException {
-		OutputStream os = null;
-
-		try {
-			// Get the outputstream
-			os = response.getOutputStream();
-
-			// Copy input to output
-			byte[] buf = new byte[bufferSize];
-			int sz;
-			while (-1 != (sz = is.read(buf))) {
-				os.write(buf, 0, sz);
-			}
-
-			// Flush
-			os.flush();
-		}
-		finally {
-			Streams.safeClose(is);
-			Streams.safeClose(os);
-		}
+		OutputStream os = response.getOutputStream();
+		Streams.copy(is, os, bufferSize);
+		os.flush();
+	}
+	
+	public void flush() throws IOException {
+		response.flushBuffer();
 	}
 }

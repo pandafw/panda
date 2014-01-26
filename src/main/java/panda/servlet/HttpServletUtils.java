@@ -29,6 +29,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
+import panda.net.http.URLHelper;
 import panda.net.http.UserAgent;
 
 
@@ -105,24 +106,28 @@ public class HttpServletUtils {
 
 	/**
 	 * @param request request
-	 * @return requestURI
+	 * @return requestURL + QueryString
 	 */
-	public static String getRequestURL(HttpServletRequest request) {
-		String url;
+	public static String getRequestLink(HttpServletRequest request) {
 		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
+		String query = null;
 		if (Strings.isEmpty(uri)) {
-			url = request.getRequestURL().toString();
+			uri = request.getRequestURI();
+			query = request.getQueryString();
 		}
 		else {
-			String qs = (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
-			if (Strings.isEmpty(qs)) {
-				url = uri;
-			}
-			else {
-				url = uri + '?' + qs;
-			}
+			query = (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
 		}
-		return url;
+
+		return URLHelper.buildURL(request.getScheme(), request.getServerName(), request.getServerPort(), uri, query);
+	}
+
+	/**
+	 * @param request request
+	 * @return requestURL without QueryString
+	 */
+	public static String getRequestURL(HttpServletRequest request) {
+		return ServletURLHelper.buildURL(request, null, null, true, false);
 	}
 	
 	/**
@@ -135,6 +140,18 @@ public class HttpServletUtils {
 			uri = request.getRequestURI();
 		}
 		return uri;
+	}
+	
+	/**
+	 * @param request request
+	 * @return request query string
+	 */
+	public static String getRequestQueryString(HttpServletRequest request) {
+		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
+		if (Strings.isEmpty(uri)) {
+			return request.getQueryString();
+		}
+		return (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
 	}
 	
 	/**

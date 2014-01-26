@@ -273,19 +273,160 @@ public class URLHelper {
 	 * @param uri request uri
 	 * @param params parameters
 	 * @param escapeAmp escape &
+	 * @param encoding url encoding
 	 * @return URL
 	 */
 	public static String buildURL(String uri, Map params, boolean escapeAmp, String encoding) {
-		StringBuilder link = new StringBuilder();
+		return buildURL(null, null, 0, uri, null, params, escapeAmp, encoding);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param params parameters
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, Map params) {
+		return buildURL(scheme, host, port, uri, null, params, false, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query) {
+		return buildURL(scheme, host, port, uri, query, null, false, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, Map params, boolean escapeAmp) {
+		return buildURL(scheme, host, port, uri, null, params, escapeAmp, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, Map params, boolean escapeAmp, String encoding) {
+		return buildURL(scheme, host, port, uri, null, params, escapeAmp, encoding);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Map params) {
+		return buildURL(scheme, host, port, uri, query, params, false, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Map params, boolean escapeAmp) {
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Map params, 
+			boolean escapeAmp, String encoding) {
+		StringBuilder url = new StringBuilder();
 
-		link.append(uri);
+		if (Strings.isNotEmpty(host)) {
+			if (Strings.isNotEmpty(scheme)) {
+				url.append(scheme).append("://");
+			}
+			url.append(host);
+			appendPort(url, scheme, port);
+		}
+		
+		url.append(uri);
 
+		if (Strings.isNotEmpty(query)) {
+			appendParamSeparator(url, escapeAmp);
+			url.append(query);
+		}
+		
 		if (Collections.isNotEmpty(params)) {
-			appendParamSeparator(link, escapeAmp);
-			buildParametersString(link, params, escapeAmp, encoding);
+			appendParamSeparator(url, escapeAmp);
+			buildParametersString(url, params, escapeAmp, encoding);
 		}
 
-		return link.toString();
+		return url.toString();
+	}
+
+	public static void appendPort(StringBuilder link, String scheme, int port) {
+		if (port > 0) {
+			if ((scheme.equals("http") && (port != 80))
+					|| (scheme.equals("https") && port != 443)) {
+				link.append(":").append(port);
+			}
+		}
 	}
 
 	public static void appendParamSeparator(StringBuilder link, boolean escapeAmp) {

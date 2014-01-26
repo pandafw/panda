@@ -18,36 +18,33 @@ import panda.mock.web.MockHttpServletResponse;
  */
 public class DelegatingServletOutputStream extends ServletOutputStream {
 
-	private final OutputStream targetStream;
-
+	private final OutputStream[] ostreams;
 
 	/**
 	 * Create a DelegatingServletOutputStream for the given target stream.
-	 * @param targetStream the target stream (never <code>null</code>)
+	 * @param targetStreams the target streams (never <code>null</code>)
 	 */
-	public DelegatingServletOutputStream(OutputStream targetStream) {
-		Asserts.notNull(targetStream, "Target OutputStream must not be null");
-		this.targetStream = targetStream;
+	public DelegatingServletOutputStream(OutputStream ... targetStreams) {
+		Asserts.notNull(targetStreams, "Target OutputStreams must not be null");
+		Asserts.noNullElements(targetStreams);
+		this.ostreams = targetStreams;
 	}
-
-	/**
-	 * Return the underlying target stream (never <code>null</code>).
-	 */
-	public final OutputStream getTargetStream() {
-		return this.targetStream;
-	}
-
 
 	public void write(int b) throws IOException {
-		this.targetStream.write(b);
+		for (OutputStream os : ostreams) {
+			os.write(b);
+		}
 	}
 
 	public void flush() throws IOException {
-		this.targetStream.flush();
+		for (OutputStream os : ostreams) {
+			os.flush();
+		}
 	}
 
 	public void close() throws IOException {
-		this.targetStream.close();
+		for (OutputStream os : ostreams) {
+			os.close();
+		}
 	}
-
 }

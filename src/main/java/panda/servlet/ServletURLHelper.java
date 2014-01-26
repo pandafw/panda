@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import panda.lang.Charsets;
-import panda.lang.Collections;
+import panda.lang.Strings;
 import panda.net.http.URLHelper;
 
 
@@ -40,6 +40,17 @@ public class ServletURLHelper extends URLHelper {
 	 * 
 	 * @param request http request
 	 * @param params parameters
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, String query) {
+		return buildURL(request, query, false);
+	}
+
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param params parameters
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
@@ -52,12 +63,11 @@ public class ServletURLHelper extends URLHelper {
 	 * 
 	 * @param request http request
 	 * @param params parameters
-	 * @param forceAddSchemeHostAndPort add schema and port
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, Map params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
-		return buildURL(request, null, params, null, 0, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	public static String buildURL(HttpServletRequest request, String query, boolean escapeAmp) {
+		return buildURL(request, query, false, escapeAmp);
 	}
 
 	/**
@@ -65,16 +75,58 @@ public class ServletURLHelper extends URLHelper {
 	 * 
 	 * @param request http request
 	 * @param params parameters
-	 * @param scheme scheme
-	 * @param port port
 	 * @param forceAddSchemeHostAndPort add schema and port
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, Map params, String scheme, int port,
-			boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
-		return buildURL(request, null, params, scheme, port, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	public static String buildURL(HttpServletRequest request, Map params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+		return buildURL(request, null, 0, null, null, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
 	}
+
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param query query string
+	 * @param forceAddSchemeHostAndPort add schema and port
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, String query, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+		return buildURL(request, null, 0, null, query, null, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	}
+
+
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param query query string
+	 * @param params parameters
+	 * @param forceAddSchemeHostAndPort add schema and port
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, String query, Map params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+		return buildURL(request, null, 0, null, query, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	}
+
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param scheme scheme
+	 * @param port port
+	 * @param params parameters
+	 * @param forceAddSchemeHostAndPort add schema and port
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, String scheme, int port, Map params,
+			boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+		return buildURL(request, scheme, port, null, null, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	}
+
 
 	/**
 	 * build the request URL, append parameters as query string
@@ -88,41 +140,45 @@ public class ServletURLHelper extends URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, String uri, Map params, String scheme, int port,
+	public static String buildURL(HttpServletRequest request, 
+			String scheme, int port, String uri, String query, Map params,
+			boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+		return buildURL(request, scheme, port, uri, query, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param uri request uri
+	 * @param params parameters
+	 * @param scheme scheme
+	 * @param port port
+	 * @param forceAddSchemeHostAndPort add schema and port
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, 
+			String scheme, int port, String uri, String query, Map params,
 			boolean forceAddSchemeHostAndPort, boolean escapeAmp, String encoding) {
-		StringBuilder link = new StringBuilder();
 
+		String host = null;
+		
 		// only append scheme if it is different to the current scheme *OR*
-		// if we explicity want it to be appended by having forceAddSchemeHostAndPort = true
+		// if we explicitly want it to be appended by having forceAddSchemeHostAndPort = true
 		if (forceAddSchemeHostAndPort) {
-			String reqScheme = request.getScheme();
-			link.append(scheme != null ? scheme : reqScheme);
-			link.append("://").append(request.getServerName());
-
-			if (scheme != null) {
-				// If switching schemes, use the configured port for the particular scheme.
-				if (!scheme.equals(reqScheme)) {
-					if (port > 0) {
-						link.append(":").append(port);
-					}
-					// Else use the port from the current request.
-				}
-				else {
-					int reqPort = request.getServerPort();
-
-					if ((scheme.equals("http") && (reqPort != 80))
-							|| (scheme.equals("https") && reqPort != 443)) {
-						link.append(":").append(reqPort);
-					}
-				}
+			host = request.getServerName();
+			if (Strings.isEmpty(scheme)) {
+				scheme = request.getScheme();
+				port = request.getServerPort();
+			}
+			if (port <= 0) {
+				port = request.getServerPort();
 			}
 		}
-		else if ((scheme != null) && !scheme.equals(request.getScheme())) {
-			link.append(scheme).append("://").append(request.getServerName());
-
-			if (port > 0) {
-				link.append(":").append(port);
-			}
+		else if (scheme != null && scheme.equals(request.getScheme())) {
+			scheme = null;
 		}
 
 		if (uri == null) {
@@ -132,13 +188,6 @@ public class ServletURLHelper extends URLHelper {
 			uri = HttpServletUtils.getRequestURI(request);
 		}
 
-		link.append(uri);
-
-		if (Collections.isNotEmpty(params)) {
-			appendParamSeparator(link, escapeAmp);
-			buildParametersString(link, params, escapeAmp, encoding);
-		}
-
-		return link.toString();
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, encoding);
 	}
 }
