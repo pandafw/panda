@@ -88,16 +88,17 @@ ${prj.name}-${VERSION} build file
 
 Available targets are:
 
-all          --> dist & test
-build        --> Build the project (minjs, mincss)
-min-css      --> Merge & minify css files
-min-js       --> Merge & minify javascript files
-dist         --> Distribute project as a jar file (build, jar)
-jar          --> Make the project as a jar file
-pom          --> Generate pom.xml
-mvn-deploy   --> Deploy snapshot version to maven snapshot repository
-mvn-stage    --> Deploy release version to maven staging repository
-panda-deploy --> Deploy release version to panda-repo repository
+all               --> dist & test
+build             --> Build the project (minjs, mincss)
+min-css           --> Merge & minify css files
+min-js            --> Merge & minify javascript files
+dist              --> Distribute project as a jar file (build, jar)
+jar               --> Make the project as a jar file
+mvn-pom           --> Generate pom.xml
+mvn-local-install --> Deploy release version to maven local repository
+mvn-panda-deploy  --> Deploy release version to panda-repo repository
+mvn-oss-deploy    --> Deploy snapshot version to maven snapshot repository
+mvn-oss-stage     --> Deploy release version to maven staging repository
 ]]>
 		</echo>
 	</target>
@@ -350,12 +351,43 @@ panda-deploy --> Deploy release version to panda-repo repository
 		</sequential>
 	</macrodef>
 
-	<target name="pom" description="Write maven pom.xml">
+	<target name="mvn-pom" description="Write maven pom.xml">
 		<writepom/>
 	</target>
 	
-	<!-- sonatype deploy -->
-	<target name="mvn-deploy" description="Deploy snapshot version to Maven snapshot repository">
+	<!-- local deploy -->
+	<target name="mvn-local-install" description="Deploy release version to Maven local repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="install:install-file" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
+
+	<!-- mvn panda-repo deploy -->
+	<target name="mvn-panda-deploy" description="Deploy release version to panda-repo repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="out/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=file://${prj.repo}" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
+	
+	<!-- mvn sonatype snapshot deploy -->
+	<target name="mvn-oss-snapshot" description="Deploy snapshot version to maven snapshot repository">
 		<!-- write pom.xml -->
 		<writepom version="${prj.version}-SNAPSHORT"/>
 
@@ -369,7 +401,8 @@ panda-deploy --> Deploy release version to panda-repo repository
 		</artifact:mvn>
 	</target>
 
-	<target name="mvn-stage" description="Deploy release version to Maven staging repository">
+	<!-- mvn sonatype release deploy -->
+	<target name="mvn-oss-stage" description="Deploy release version to maven staging repository">
 		<!-- write pom.xml -->
 		<writepom/>
 
@@ -382,22 +415,6 @@ panda-deploy --> Deploy release version to panda-repo repository
 			<arg value="-DupdateReleaseInfo=true" />
 			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
 			<arg value="-Pgpg" />
-		</artifact:mvn>
-	</target>
-
-	<!-- panda-repo deploy -->
-	<target name="panda-deploy" description="Deploy release version to panda-repo repository">
-		<!-- write pom.xml -->
-		<writepom/>
-
-		<!-- deploy the artifact -->
-		<artifact:mvn pom="out/pom.xml">
-			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
-			<arg value="-Durl=file://${prj.repo}" />
-			<arg value="-DcreateChecksum=true" />
-			<arg value="-DupdateReleaseInfo=true" />
-			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
 		</artifact:mvn>
 	</target>
 </project>
