@@ -26,8 +26,20 @@ public class HttpClientTest {
 		assertNotNull(response.getStatusReason());
 		assertNotNull(response.getHeader());
 		assertNotNull(response.getProtocol());
-		assertTrue(response.getStatusCode() > 0);
+		assertEquals(response.getStatusCode(), 200);
 		assertNotNull(response.getStream());
+	}
+
+	@Test
+	public void testEmptyHeadValue() throws Exception {
+		HttpClient hc = new HttpClient();
+		hc.getRequest().getHeader().set("X-Empty", "");
+		hc.getRequest().setUrl("http://www.msn.com/");
+		HttpResponse response = hc.send();
+
+		assertNotNull(response);
+		assertEquals(response.getStatusCode(), 200);
+		assertNotNull(response.getContent());
 	}
 
 	@Test
