@@ -1,8 +1,10 @@
 package panda.net.http;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,8 +13,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import panda.io.Streams;
+import panda.io.stream.WriterOutputStream;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -87,6 +91,20 @@ public class HttpRequest {
 	public HttpRequest setHeader(HttpHeader header) {
 		this.header = header;
 		return this;
+	}
+
+	/**
+	 * @return the encoding
+	 */
+	public String getEncoding() {
+		return encoding;
+	}
+
+	/**
+	 * @param encoding the encoding to set
+	 */
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 
 	public byte[] getData() {
@@ -168,13 +186,13 @@ public class HttpRequest {
 		StringBuilder sb = new StringBuilder(url);
 		try {
 			if (isGet() && Collections.isNotEmpty(params)) {
-				sb.append(url.indexOf('?') > 0 ? '&' : '?');
-				sb.append(getURLEncodedParams());
+				URLHelper.appendQuerySeparator(sb, false);
+				URLHelper.appendQueryString(sb, params, false, encoding);
 			}
 			return new URL(sb.toString());
 		}
 		catch (MalformedURLException e) {
-			throw new IllegalArgumentException(sb.toString(), e);
+			throw new IllegalArgumentException("Invalid URL: " + sb, e);
 		}
 	}
 
@@ -186,14 +204,78 @@ public class HttpRequest {
 	}
 
 	public String getURLEncodedParams() {
-		return URLHelper.buildParametersString(params, encoding);
+		return URLHelper.buildQueryString(params, encoding);
 	}
 
-	public InputStream getInputStream() {
-		if (data == null) {
-			return new ByteArrayInputStream(Strings.getBytesUtf8(getURLEncodedParams()));
+	private boolean isFile(Object v) {
+		return (v instanceof File);
+	}
+
+	public String getMultipartBoundary() {
+		return "---------------------------[Panda]7d91571440efc";
+	}
+
+	public boolean isPostForm() {
+		return (HttpMethod.POST.equals(method) && Collections.isNotEmpty(params));
+	}
+
+	public boolean isPostFile() {
+		if (HttpMethod.POST.equals(method) && Collections.isNotEmpty(params)) {
+			for (Entry<String, ?> en : params.entrySet()) {
+				if (isFile(en.getValue())) {
+					return true;
+				}
+			}
 		}
-		return new ByteArrayInputStream(data);
+		
+		return false;
+	}
+
+	public void writeBody(OutputStream os) throws IOException {
+		BufferedOutputStream bos = new BufferedOutputStream(os);
+		DataOutputStream outs = new DataOutputStream(bos);
+		if (isPostFile()) {
+			for (Entry<String, ?> en : params.entrySet()) {
+				outs.writeBytes("--");
+				outs.writeBytes(getMultipartBoundary());
+				outs.writeBytes(Strings.CRLF);
+				
+				String key = en.getKey();
+				Object val = en.getValue();
+				File f = null;
+				if (isFile(val)) {
+					f = (File)val;
+				}
+				if (f != null && f.exists()) {
+					outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\";    filename=\"" + f.getPath() + "\"");
+					outs.writeBytes(Strings.CRLF);
+					outs.writeBytes("Content-Type:   application/octet-stream");
+					outs.writeBytes(Strings.CRLF);
+					outs.writeBytes(Strings.CRLF);
+					if (f.length() > 0) {
+						Streams.copy(f, outs);
+						outs.writeBytes(Strings.CRLF);
+					}
+				}
+				else {
+					outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\"");
+					outs.writeBytes(Strings.CRLF);
+					outs.writeBytes(Strings.CRLF);
+					outs.writeBytes(val.toString());
+					outs.writeBytes(Strings.CRLF);
+				}
+			}
+
+			outs.writeBytes("--");
+			outs.writeBytes(getMultipartBoundary());
+			outs.writeBytes("--");
+			outs.writeBytes(Strings.CRLF);
+		}
+		else {
+			outs.writeBytes(getURLEncodedParams());
+		}
+
+		outs.flush();;
 	}
 
 	public void toString(Appendable writer) throws IOException {
@@ -204,7 +286,8 @@ public class HttpRequest {
 		}
 		if (!isGet()) {
 			writer.append(Streams.LINE_SEPARATOR);
-			Streams.copy(getInputStream(), writer, encoding);
+			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
+			writeBody(wos);
 		}
 	}
 

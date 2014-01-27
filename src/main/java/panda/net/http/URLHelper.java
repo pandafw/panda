@@ -408,13 +408,13 @@ public class URLHelper {
 		url.append(uri);
 
 		if (Strings.isNotEmpty(query)) {
-			appendParamSeparator(url, escapeAmp);
+			appendQuerySeparator(url, escapeAmp);
 			url.append(query);
 		}
 		
 		if (Collections.isNotEmpty(params)) {
-			appendParamSeparator(url, escapeAmp);
-			buildParametersString(url, params, escapeAmp, encoding);
+			appendQuerySeparator(url, escapeAmp);
+			appendQueryString(url, params, escapeAmp, encoding);
 		}
 
 		return url.toString();
@@ -429,7 +429,7 @@ public class URLHelper {
 		}
 	}
 
-	public static void appendParamSeparator(StringBuilder link, boolean escapeAmp) {
+	public static void appendQuerySeparator(StringBuilder link, boolean escapeAmp) {
 		if (Strings.contains(link, '?')) {
 			if (link.length() > 0 && link.charAt(link.length() - 1) != '?') {
 				link.append(escapeAmp ? EAMP : AMP);
@@ -445,24 +445,24 @@ public class URLHelper {
 	/**
 	 * @param params parameter map
 	 */
-	public static String buildParametersString(Map params) {
-		return buildParametersString(params, Charsets.UTF_8);
+	public static String buildQueryString(Map params) {
+		return buildQueryString(params, Charsets.UTF_8);
 	}
 
 	/**
 	 * @param link link
 	 * @param params parameter map
 	 */
-	public static void buildParametersString(Appendable link, Map params) {
-		buildParametersString(link, params, Charsets.UTF_8);
+	public static void appendQueryString(Appendable link, Map params) {
+		appendQueryString(link, params, Charsets.UTF_8);
 	}
 
 	/**
 	 * @param params parameter map
 	 * @param encoding encoding
 	 */
-	public static String buildParametersString(Map params, String encoding) {
-		return buildParametersString(params, false, encoding);
+	public static String buildQueryString(Map params, String encoding) {
+		return buildQueryString(params, false, encoding);
 	}
 	
 	/**
@@ -470,8 +470,8 @@ public class URLHelper {
 	 * @param params parameter map
 	 * @param encoding encoding
 	 */
-	public static void buildParametersString(Appendable link, Map params, String encoding) {
-		buildParametersString(link, params, false, encoding);
+	public static void appendQueryString(Appendable link, Map params, String encoding) {
+		appendQueryString(link, params, false, encoding);
 	}
 	
 	/**
@@ -479,8 +479,8 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @param encoding encoding
 	 */
-	public static String buildParametersString(Map params, boolean escapeAmp, String encoding) {
-		return buildParametersString(params, escapeAmp ? EAMP : AMP, encoding);
+	public static String buildQueryString(Map params, boolean escapeAmp, String encoding) {
+		return buildQueryString(params, escapeAmp ? EAMP : AMP, encoding);
 	}
 
 	/**
@@ -489,8 +489,8 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @param encoding encoding
 	 */
-	public static void buildParametersString(Appendable link, Map params, boolean escapeAmp, String encoding) {
-		buildParametersString(link, params, escapeAmp ? EAMP : AMP, encoding);
+	public static void appendQueryString(Appendable link, Map params, boolean escapeAmp, String encoding) {
+		appendQueryString(link, params, escapeAmp ? EAMP : AMP, encoding);
 	}
 
 	/**
@@ -498,9 +498,9 @@ public class URLHelper {
 	 * @param encoding encoding
 	 * @param paramSeparator parameter separator
 	 */
-	public static String buildParametersString(Map params, String paramSeparator, String encoding) {
+	public static String buildQueryString(Map params, String paramSeparator, String encoding) {
 		StringBuilder link = new StringBuilder();
-		buildParametersString(link, params, paramSeparator, encoding);
+		appendQueryString(link, params, paramSeparator, encoding);
 		return link.toString();
 	}
 	
@@ -510,7 +510,7 @@ public class URLHelper {
 	 * @param paramSeparator parameter separator
 	 * @param encoding encoding
 	 */
-	public static void buildParametersString(Appendable link, Map params, String paramSeparator, String encoding) {
+	public static void appendQueryString(Appendable link, Map params, String paramSeparator, String encoding) {
 		if (Collections.isEmpty(params)) {
 			return;
 		}
@@ -525,7 +525,7 @@ public class URLHelper {
 				if (Iterators.isIterable(value)) {
 					for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
 						Object pv = it.next();
-						buildParameterSubstring(name, pv, encoding, link);
+						buildQuerySubstring(name, pv, encoding, link);
 
 						if (it.hasNext()) {
 							link.append(paramSeparator);
@@ -533,7 +533,7 @@ public class URLHelper {
 					}
 				}
 				else {
-					buildParameterSubstring(name, value, encoding, link);
+					buildQuerySubstring(name, value, encoding, link);
 				}
 
 				if (iter.hasNext()) {
@@ -546,7 +546,7 @@ public class URLHelper {
 		}
 	}
 
-	private static void buildParameterSubstring(String name, Object value, String encoding, Appendable writer) throws IOException {
+	private static void buildQuerySubstring(String name, Object value, String encoding, Appendable writer) throws IOException {
 		writer.append(name);
 		writer.append('=');
 		writer.append(value == null ? "" : encodeURL(value.toString(), encoding));

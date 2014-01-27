@@ -111,7 +111,7 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 		put(ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN");
 		put(ACCEPT_CHARSET, "ISO-8859-1,*,utf-8");
 		put(CONNECTION, "keep-alive");
-		//put(CACHE_CONTROL, "max-age=0");
+		//put(CACHE_CONTROL, "no-cache");
 		return this;
 	}
 

@@ -72,8 +72,8 @@ public class URLHelperTest {
 
 	@Test
 	public void testBuildParametersString() throws Exception {
-		assertEquals("", URLHelper.buildParametersString(Collections.emptyMap()));
-		assertEquals("a=s&n=100", URLHelper.buildParametersString(params));
+		assertEquals("", URLHelper.buildQueryString(Collections.emptyMap()));
+		assertEquals("a=s&n=100", URLHelper.buildQueryString(params));
 	}
 	
 	@Test

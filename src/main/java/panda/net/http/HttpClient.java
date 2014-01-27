@@ -1,9 +1,6 @@
 package panda.net.http;
 
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
@@ -44,7 +41,7 @@ public class HttpClient {
 	}
 	
 	public static HttpResponse get(String url, int timeout) throws IOException {
-		return new HttpClient(HttpRequest.get(url)).setTimeout(timeout).send();
+		return send(url, HttpMethod.GET, null, timeout);
 	}
 
 	public static HttpResponse get(String url, Map<String, Object> params) throws IOException {
@@ -55,12 +52,21 @@ public class HttpClient {
 		return send(url, HttpMethod.POST, null);
 	}
 	
-	public static HttpResponse post(String url, Map<String, Object> forms) throws IOException {
-		return send(url, HttpMethod.POST, forms);
+	public static HttpResponse post(String url, Map<String, Object> params) throws IOException {
+		return send(url, HttpMethod.POST, params);
 	}
 	
-	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> forms) throws IOException {
-		return new HttpClient(HttpRequest.create(url, method, forms)).send();
+	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> params) throws IOException {
+		return send(url, method, params, 0);
+	}
+	
+	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> params, int timeout) throws IOException {
+		HttpRequest hr = HttpRequest.create(url, method, params);
+		hr.getHeader().setDefault();
+		
+		HttpClient hc = new HttpClient(hr);
+		hc.setReadTimeout(timeout);
+		return hc.send();
 	}
 	
 	//---------------------------------------------------------------------
@@ -69,7 +75,9 @@ public class HttpClient {
 
 	protected Proxy proxy;
 	protected HttpURLConnection conn;
-	protected int timeout;
+
+	protected int connTimeout;
+	protected int readTimeout;
 
 	protected boolean autoRedirect;
 	
@@ -127,18 +135,31 @@ public class HttpClient {
 	}
 
 	/**
-	 * @return the timeout
+	 * @return the connTimeout
 	 */
-	public int getTimeout() {
-		return timeout;
+	public int getConnTimeout() {
+		return connTimeout;
 	}
 
 	/**
-	 * @param timeout the timeout to set
+	 * @param connTimeout the connTimeout to set
 	 */
-	public HttpClient setTimeout(int timeout) {
-		this.timeout = timeout;
-		return this;
+	public void setConnTimeout(int connTimeout) {
+		this.connTimeout = connTimeout;
+	}
+
+	/**
+	 * @return the readTimeout
+	 */
+	public int getReadTimeout() {
+		return readTimeout;
+	}
+
+	/**
+	 * @param readTimeout the readTimeout to set
+	 */
+	public void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
 	}
 
 	/**
@@ -163,52 +184,6 @@ public class HttpClient {
 	public HttpResponse doPost() throws IOException {
 		request.setMethod(HttpMethod.POST);
 		return send();
-	}
-
-	public HttpResponse doPostFiles() throws IOException {
-		try {
-			String boundary = "---------------------------[Panda]7d91571440efc";
-			openConnection();
-			setupRequestHeader();
-			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-			setupDoInputOutputFlag();
-			Map<String, Object> params = request.getParams();
-			if (null != params && params.size() > 0) {
-				DataOutputStream outs = new DataOutputStream(conn.getOutputStream());
-				for (Entry<String, ?> entry : params.entrySet()) {
-					outs.writeBytes("--" + boundary + Strings.CRLF);
-					String key = entry.getKey();
-					File f = null;
-					if (entry.getValue() instanceof File)
-						f = (File)entry.getValue();
-					else if (entry.getValue() instanceof String)
-						f = new File(entry.getValue().toString());
-					if (f != null && f.exists()) {
-						outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\";    filename=\""
-								+ entry.getValue() + "\"\r\n");
-						outs.writeBytes("Content-Type:   application/octet-stream\r\n\r\n");
-						if (f.length() == 0)
-							continue;
-
-						Streams.copy(f, outs);
-						outs.writeBytes("\r\n");
-					}
-					else {
-						outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\"\r\n\r\n");
-						outs.writeBytes(entry.getValue() + "\r\n");
-					}
-				}
-				outs.writeBytes("--" + boundary + "--" + Strings.CRLF);
-				Streams.safeFlush(outs);
-				Streams.safeClose(outs);
-			}
-
-			return createResponse();
-
-		}
-		catch (IOException e) {
-			throw new IOException(request.getURL().toString(), e);
-		}
 	}
 
 	public HttpResponse send() throws IOException {
@@ -264,18 +239,15 @@ public class HttpClient {
 			openConnection();
 			setupRequestHeader();
 			setupDoInputOutputFlag();
-			InputStream ins = request.getInputStream();
-			if (null != ins) {
-				OutputStream ops = null;
-				try {
-					ops = conn.getOutputStream();
-					Streams.copy(ins, ops);
-				}
-				finally {
-					Streams.safeClose(ins);
-					Streams.safeFlush(ops);
-					Streams.safeClose(ops);
-				}
+
+			OutputStream os = null;
+			try {
+				os = conn.getOutputStream();
+				request.writeBody(os);
+				os.flush();
+			}
+			finally {
+				Streams.safeClose(os);
 			}
 			response = createResponse();
 		}
@@ -331,8 +303,8 @@ public class HttpClient {
 			conn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
-		conn.setConnectTimeout(DEFAULT_CONN_TIMEOUT);
-		conn.setReadTimeout(timeout > 0 ? timeout : DEFAULT_READ_TIMEOUT);
+		conn.setConnectTimeout(connTimeout > 0 ? connTimeout : DEFAULT_CONN_TIMEOUT);
+		conn.setReadTimeout(readTimeout > 0 ? readTimeout : DEFAULT_READ_TIMEOUT);
 	}
 
 	protected void setupRequestHeader() {
@@ -357,6 +329,13 @@ public class HttpClient {
 					conn.addRequestProperty(key, val.toString());
 				}
 			}
+		}
+		
+		if (request.isPostFile()) {
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpHeader.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
+		}
+		else if (request.isPostForm()) {
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpHeader.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
 		}
 	}
 }

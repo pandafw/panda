@@ -55,7 +55,7 @@ import java.nio.charset.CodingErrorAction;
 public class WriterOutputStream extends OutputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;
 
-	private final Writer writer;
+	private final Appendable writer;
 	private final CharsetDecoder decoder;
 	private final boolean writeImmediately;
 
@@ -79,7 +79,7 @@ public class WriterOutputStream extends OutputStream {
 	 * @param writer the target {@link Writer}
 	 * @param decoder the charset decoder
 	 */
-	public WriterOutputStream(Writer writer, CharsetDecoder decoder) {
+	public WriterOutputStream(Appendable writer, CharsetDecoder decoder) {
 		this(writer, decoder, DEFAULT_BUFFER_SIZE, false);
 	}
 
@@ -94,7 +94,7 @@ public class WriterOutputStream extends OutputStream {
 	 *            {@link Writer} immediately. If <tt>false</tt>, the output buffer will only be
 	 *            flushed when it overflows or when {@link #flush()} or {@link #close()} is called.
 	 */
-	public WriterOutputStream(Writer writer, CharsetDecoder decoder, int bufferSize, boolean writeImmediately) {
+	public WriterOutputStream(Appendable writer, CharsetDecoder decoder, int bufferSize, boolean writeImmediately) {
 		this.writer = writer;
 		this.decoder = decoder;
 		this.writeImmediately = writeImmediately;
@@ -112,7 +112,7 @@ public class WriterOutputStream extends OutputStream {
 	 *            {@link Writer} immediately. If <tt>false</tt>, the output buffer will only be
 	 *            flushed when it overflows or when {@link #flush()} or {@link #close()} is called.
 	 */
-	public WriterOutputStream(Writer writer, Charset charset, int bufferSize, boolean writeImmediately) {
+	public WriterOutputStream(Appendable writer, Charset charset, int bufferSize, boolean writeImmediately) {
 		this(writer, charset.newDecoder().onMalformedInput(CodingErrorAction.REPLACE)
 			.onUnmappableCharacter(CodingErrorAction.REPLACE).replaceWith("?"), bufferSize, writeImmediately);
 	}
@@ -125,7 +125,7 @@ public class WriterOutputStream extends OutputStream {
 	 * @param writer the target {@link Writer}
 	 * @param charset the charset encoding
 	 */
-	public WriterOutputStream(Writer writer, Charset charset) {
+	public WriterOutputStream(Appendable writer, Charset charset) {
 		this(writer, charset, DEFAULT_BUFFER_SIZE, false);
 	}
 
@@ -140,7 +140,7 @@ public class WriterOutputStream extends OutputStream {
 	 *            {@link Writer} immediately. If <tt>false</tt>, the output buffer will only be
 	 *            flushed when it overflows or when {@link #flush()} or {@link #close()} is called.
 	 */
-	public WriterOutputStream(Writer writer, String charsetName, int bufferSize, boolean writeImmediately) {
+	public WriterOutputStream(Appendable writer, String charsetName, int bufferSize, boolean writeImmediately) {
 		this(writer, Charset.forName(charsetName), bufferSize, writeImmediately);
 	}
 
@@ -152,7 +152,7 @@ public class WriterOutputStream extends OutputStream {
 	 * @param writer the target {@link Writer}
 	 * @param charsetName the name of the charset encoding
 	 */
-	public WriterOutputStream(Writer writer, String charsetName) {
+	public WriterOutputStream(Appendable writer, String charsetName) {
 		this(writer, charsetName, DEFAULT_BUFFER_SIZE, false);
 	}
 
@@ -163,7 +163,7 @@ public class WriterOutputStream extends OutputStream {
 	 * 
 	 * @param writer the target {@link Writer}
 	 */
-	public WriterOutputStream(Writer writer) {
+	public WriterOutputStream(Appendable writer) {
 		this(writer, Charset.defaultCharset(), DEFAULT_BUFFER_SIZE, false);
 	}
 
@@ -220,7 +220,9 @@ public class WriterOutputStream extends OutputStream {
 	@Override
 	public void flush() throws IOException {
 		flushOutput();
-		writer.flush();
+		if (writer instanceof Writer) {
+			((Writer)writer).flush();
+		}
 	}
 
 	/**
@@ -233,7 +235,9 @@ public class WriterOutputStream extends OutputStream {
 	public void close() throws IOException {
 		processInput(true);
 		flushOutput();
-		writer.close();
+		if (writer instanceof Writer) {
+			((Writer)writer).close();
+		}
 	}
 
 	/**
@@ -271,7 +275,8 @@ public class WriterOutputStream extends OutputStream {
 	 */
 	private void flushOutput() throws IOException {
 		if (decoderOut.position() > 0) {
-			writer.write(decoderOut.array(), 0, decoderOut.position());
+			CharSequence cs = CharBuffer.wrap(decoderOut.array(), 0, decoderOut.position());
+			writer.append(cs);
 			decoderOut.rewind();
 		}
 	}
