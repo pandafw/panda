@@ -210,7 +210,12 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 
 	<!-- dist -->
 	<target name="javadoc" description="Generate java documents">
-		<delete dir="out/javadoc"/>
+		<delete includeemptydirs="true">
+			<fileset dir="out">
+				<include name="javadoc/**"/>
+				<include name="*-javadoc.jar"/>
+			</fileset>
+		</delete>
 		<javadoc 
 			sourcepath="src/main/java" destdir="out/javadoc"
 			encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" locale="en_US"
@@ -221,11 +226,25 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		>
 			<classpath refid="main.cp"/>
 		</javadoc>
+		<jar destfile="out/${prj.name}-${VERSION}-javadoc.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
+			</manifest>
+			<fileset dir="out/javadoc"/>
+		</jar>
 	</target>
 
-	<target name="jar" depends="javadoc" description="Make project as a jar file">
+	<target name="jar" description="Make project as a jar file">
 		<delete>
-			<fileset dir="out" includes="*.jar"/>
+			<fileset dir="out">
+				<include name="*.jar"/>
+				<exclude name="*-javadoc.jar"/>
+			</fileset>
 		</delete>
 		<copy file="LICENSE" todir="out/classes/META-INF" overwrite="true" force="true"/>
 		<jar destfile="out/${prj.name}-${VERSION}.jar">
@@ -249,18 +268,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="src/main/java"/>
-			<fileset dir="out/classes" includes="META-INF/**"/>
-		</jar>
-		<jar destfile="out/${prj.name}-${VERSION}-javadoc.jar">
-			<manifest>
-				<attribute name="Created-By" value="${prj.org}"/>
-				<attribute name="Built-By" value="${prj.org}"/>
-				<attribute name="Built-Date" value="${TODAY}"/>
-				<attribute name="Implementation-Title" value="${prj.title}"/>
-				<attribute name="Implementation-Version" value="${VERSION}"/>
-				<attribute name="Implementation-Vendor" value="${prj.url}"/>
-			</manifest>
-			<fileset dir="out/javadoc"/>
+			<fileset dir="out/classes" includes="META-INF/LICENSE"/>
 		</jar>
 	</target>
 
