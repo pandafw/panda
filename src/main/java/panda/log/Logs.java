@@ -66,10 +66,11 @@ public final class Logs {
 		for (String a : adapters) {
 			try {
 				adapter = (LogAdapter)Classes.newInstance(a);
+				adapter.getLogger("panda");
 				break;
 			}
 			catch (Throwable e) {
-				//pass
+				adapter = null;
 			}
 		}
 

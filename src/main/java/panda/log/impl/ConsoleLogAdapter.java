@@ -21,6 +21,13 @@ public class ConsoleLogAdapter implements LogAdapter {
 		private ConsoleLog() {
 			isInfoEnabled = true;
 			isDebugEnabled = true;
+
+			isFatalEnabled = true;
+			isErrorEnabled = true;
+			isWarnEnabled = true;
+			isInfoEnabled = false;
+			isDebugEnabled = false;
+			isTraceEnabled = false;
 		}
 
 		public void debug(Object message, Throwable t) {

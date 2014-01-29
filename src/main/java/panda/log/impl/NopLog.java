@@ -88,8 +88,4 @@ public class NopLog implements Log, LogAdapter {
 	
 	public void debug(Object message) {
 	}
-	
-	public Log setTag(String tag) {
-		return this;
-	}
 }
