@@ -5,19 +5,27 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+
 import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Asserts;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.http.ssl.ValidCertTrustManage;
+import panda.net.http.ssl.ValidHostnameVerifier;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -25,6 +33,9 @@ import panda.log.Logs;
 //TODO: local cache
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);
+	private static TrustManager[] validSslCertTrusts = { new ValidCertTrustManage() }; 
+	private static ValidHostnameVerifier validHostnameVerifier = new ValidHostnameVerifier();
+	
 
 	/**
 	 * DEFAULT_CONN_TIMEOUT = 30 seconds
@@ -80,6 +91,7 @@ public class HttpClient {
 	protected int readTimeout;
 
 	protected boolean autoRedirect;
+	protected boolean ignoreValidSslCertification;
 	
 	public HttpClient() {
 		this(new HttpRequest());
@@ -132,6 +144,20 @@ public class HttpClient {
 	 */
 	public void setAutoRedirect(boolean autoRedirect) {
 		this.autoRedirect = autoRedirect;
+	}
+
+	/**
+	 * @return the ignoreValidSslCertification
+	 */
+	public boolean isIgnoreValidSslCertification() {
+		return ignoreValidSslCertification;
+	}
+
+	/**
+	 * @param ignoreValidSslCertification the ignoreValidSslCertification to set
+	 */
+	public void setIgnoreValidSslCertification(boolean ignoreValidSslCertification) {
+		this.ignoreValidSslCertification = ignoreValidSslCertification;
 	}
 
 	/**
@@ -303,8 +329,24 @@ public class HttpClient {
 			conn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
+		if (ignoreValidSslCertification && conn instanceof HttpsURLConnection) {
+			ignoreValidateCertification((HttpsURLConnection)conn);
+		}
 		conn.setConnectTimeout(connTimeout > 0 ? connTimeout : DEFAULT_CONN_TIMEOUT);
 		conn.setReadTimeout(readTimeout > 0 ? readTimeout : DEFAULT_READ_TIMEOUT);
+	}
+
+	protected void ignoreValidateCertification(HttpsURLConnection sconn) {
+
+		try {
+			SSLContext sslcontext = SSLContext.getInstance("SSL");
+			sslcontext.init(null, validSslCertTrusts, new SecureRandom());
+			sconn.setSSLSocketFactory(sslcontext.getSocketFactory());
+			sconn.setHostnameVerifier(validHostnameVerifier);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
 	protected void setupRequestHeader() {
