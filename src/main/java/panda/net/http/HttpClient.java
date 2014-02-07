@@ -90,8 +90,8 @@ public class HttpClient {
 	protected int connTimeout;
 	protected int readTimeout;
 
-	protected boolean autoRedirect;
-	protected boolean ignoreValidSslCertification;
+	protected boolean autoRedirect = false;
+	protected boolean validateSslCert = true;
 	
 	public HttpClient() {
 		this(new HttpRequest());
@@ -147,17 +147,17 @@ public class HttpClient {
 	}
 
 	/**
-	 * @return the ignoreValidSslCertification
+	 * @return the validateSslCert
 	 */
-	public boolean isIgnoreValidSslCertification() {
-		return ignoreValidSslCertification;
+	public boolean isValidateSslCert() {
+		return validateSslCert;
 	}
 
 	/**
-	 * @param ignoreValidSslCertification the ignoreValidSslCertification to set
+	 * @param validateSslCert the validateSslCert to set
 	 */
-	public void setIgnoreValidSslCertification(boolean ignoreValidSslCertification) {
-		this.ignoreValidSslCertification = ignoreValidSslCertification;
+	public void setValidateSslCert(boolean validateSslCert) {
+		this.validateSslCert = validateSslCert;
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class HttpClient {
 			conn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
-		if (ignoreValidSslCertification && conn instanceof HttpsURLConnection) {
+		if (!validateSslCert && conn instanceof HttpsURLConnection) {
 			ignoreValidateCertification((HttpsURLConnection)conn);
 		}
 		conn.setConnectTimeout(connTimeout > 0 ? connTimeout : DEFAULT_CONN_TIMEOUT);
@@ -337,7 +337,6 @@ public class HttpClient {
 	}
 
 	protected void ignoreValidateCertification(HttpsURLConnection sconn) {
-
 		try {
 			SSLContext sslcontext = SSLContext.getInstance("SSL");
 			sslcontext.init(null, validSslCertTrusts, new SecureRandom());
