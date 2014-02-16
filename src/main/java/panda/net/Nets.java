@@ -13,6 +13,7 @@ public class Nets {
 			return false;
 		}
 		return ipAddr.startsWith("127.") 
+				|| ipAddr.startsWith("192.")
 				|| ipAddr.startsWith("10.")
 				|| ipAddr.startsWith("0.1.")
 				|| ipAddr.startsWith("0:0:0:0:");
