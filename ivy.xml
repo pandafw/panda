@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="pandawind" module="panda-web" revision="${prj.version}"/>
+	<info organisation="foolite" module="panda-web" revision="${prj.version}"/>
 	<configurations>
 		<conf name="tool" visibility="public" />
 	</configurations>
