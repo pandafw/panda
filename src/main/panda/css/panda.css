@@ -10,26 +10,26 @@
 .p-form.form-horizontal .form-group {
 	border-bottom: 1px dashed #ccc;
 	margin: 0;
-	padding: 5px 0 5px 0;
+	padding: 5px 0;
 }
 .p-form.form-horizontal .p-buttons.form-group {
 	border-bottom: 0;
 }
 .p-form .form-control {
 	height: auto;
-	padding: 5px 10px;
+	padding: 4px 10px;
 }
 .p-form input.form-control, .p-form select.form-control,
 .p-form .input-group-addon, .p-form .input-group-btn {
 	width: auto;
-	padding: 5px 10px;
+	padding: 4px 10px;
 }
 .p-form.form-horizontal .control-label,
 .p-form.form-horizontal .radio,
 .p-form.form-horizontal .checkbox,
 .p-form.form-horizontal .radio-inline,
 .p-form.form-horizontal .checkbox-inline {
-	padding-top: 6px;
+	padding-top: 5px;
 }
 
 /** form inputs */
@@ -200,12 +200,17 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 .p-lv-filters-t > tbody > tr > td {
 	padding: 2px;
 }
-.p-lv-filters-t .form-control {
+.p-lv-filters-t .form-control,
+.p-form .p-lv-filters-t .form-control {
 	display: inline;
-	padding: 4px 6px;
 }
-.p-lv-filters-t .input-group-addon {
-	padding: 4px 6px;
+.p-lv-filters-t .form-control, 
+.p-form .p-lv-filters-t .form-control {
+	padding: 3px 6px;
+}
+.p-lv-filters-t .input-group-addon, 
+.p-form .p-lv-filters-t .input-group-addon {
+	padding: 5px 6px;
 }
 .p-lv-filters-t td.p-lv-submit td {
 	white-space: nowrap;

@@ -105,12 +105,17 @@
 .p-lv-filters-t > tbody > tr > td {
 	padding: 2px;
 }
-.p-lv-filters-t .form-control {
+.p-lv-filters-t .form-control,
+.p-form .p-lv-filters-t .form-control {
 	display: inline;
-	padding: 4px 6px;
 }
-.p-lv-filters-t .input-group-addon {
-	padding: 4px 6px;
+.p-lv-filters-t .form-control, 
+.p-form .p-lv-filters-t .form-control {
+	padding: 3px 6px;
+}
+.p-lv-filters-t .input-group-addon, 
+.p-form .p-lv-filters-t .input-group-addon {
+	padding: 5px 6px;
 }
 .p-lv-filters-t td.p-lv-submit td {
 	white-space: nowrap;
