@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="panda-java" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-	<property name="prj.org" value="com.pandawind"/>
+	<property name="prj.org" value="com.foolite"/>
 	<property name="prj.name" value="panda-java"/>
 	<property name="prj.title" value="Panda Java Framework"/>
-	<property name="prj.url" value="https://github.com/pandawind/panda-java"/>
-	<property name="prj.scm" value="git@github.com:pandawind/panda-java.git"/>
+	<property name="prj.url" value="https://github.com/foolite/panda-java"/>
+	<property name="prj.scm" value="git@github.com:foolite/panda-java.git"/>
 	<property name="prj.repo" location="../panda-repo"/>
 
 	<!-- defined maven snapshots and staging repository id and url -->
