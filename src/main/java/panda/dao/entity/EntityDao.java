@@ -304,7 +304,6 @@ public class EntityDao<T> {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param entity entity
 	 * @param prop The property to be used as the value in the list.
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value list
