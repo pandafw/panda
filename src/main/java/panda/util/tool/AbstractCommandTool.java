@@ -72,8 +72,10 @@ public abstract class AbstractCommandTool {
 	}
 	
 	protected void errorRequired(Options options, String name) {
+		String msg = "Parameter [" + name + "] is required.";
+		System.out.println(msg);
 		printHelp(options);
-		throw new HandledException("parameter [" + name + "] is required.");
+		throw new HandledException(msg);
 	}
 
 	protected void setParameter(String name, Object value) {
