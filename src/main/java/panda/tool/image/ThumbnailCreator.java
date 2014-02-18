@@ -1,6 +1,5 @@
 package panda.tool.image;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,8 +7,8 @@ import java.io.OutputStream;
 
 import org.apache.commons.cli.CommandLine;
 
-import panda.image.JavaGraphics;
-import panda.image.JavaImages;
+import panda.image.ImageWrapper;
+import panda.image.Images;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Strings;
@@ -41,13 +40,15 @@ public class ThumbnailCreator extends AbstractFileTool {
 			
 			addCommandLineOption("o", "output", "Output directory");
 
-			addCommandLineOption("w", "width", "Thumbnal width");
+			addCommandLineOption("f", "format", "Tumbnail format");
+			
+			addCommandLineOption("w", "width", "Thumbnail width");
 
 			addCommandLineOption("h", "height", "Tumbnail height");
 
-			addCommandLineOption("z", "size", "Thumbnal size");
+			addCommandLineOption("z", "size", "Thumbnail size");
 
-			addCommandLineOption("q", "quality", "Thumbnal quality");
+			addCommandLineOption("q", "quality", "Thumbnail quality");
 		}
 
 		@Override
@@ -60,6 +61,10 @@ public class ThumbnailCreator extends AbstractFileTool {
 			
 			if (!cl.hasOption("w") && !cl.hasOption("h") && !cl.hasOption("z")) {
 				errorRequired(options, "width/height/size");
+			}
+			
+			if (cl.hasOption("f")) {
+				setParameter("format", cl.getOptionValue("f").trim());
 			}
 			
 			if (cl.hasOption("w")) {
@@ -85,14 +90,14 @@ public class ThumbnailCreator extends AbstractFileTool {
 	protected int height = 0;
 	protected int size = 0;
 	protected int quality = 100;
+	protected String format;
 	
 	/**
 	 * Constructor
 	 */
 	public ThumbnailCreator() {
 		out = ".thumbs";
-		includes = new String[] { "**/*.jpg", "**/*.jpeg" };
-		excludes =  new String[] { "**/.*" };
+		includes = new String[] { "**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif" };
 	}
 
 	/**
@@ -128,6 +133,27 @@ public class ThumbnailCreator extends AbstractFileTool {
 	 */
 	public int getQuality() {
 		return quality;
+	}
+
+	/**
+	 * @param quality the quality to set
+	 */
+	public void setQuality(int quality) {
+		this.quality = quality;
+	}
+
+	/**
+	 * @return the format
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * @param format the format to set
+	 */
+	public void setFormat(String format) {
+		this.format = Strings.lowerCase(Strings.stripToNull(format));
 	}
 
 	/**
@@ -203,22 +229,25 @@ public class ThumbnailCreator extends AbstractFileTool {
 		else {
 			n = new File(new File(file.getParent(), out), file.getName());
 		}
-
+		if (Strings.isNotEmpty(format)) {
+			n = new File(FileNames.removeExtension(n) + "." + format);
+		}
+		
 		if (n.exists()) {
 			try {
-				BufferedImage bi = JavaImages.read(n);
-				if (size > 0 && (bi.getWidth() == size || bi.getHeight() == size)) {
+				ImageWrapper iw = Images.i().read(n);
+				if (size > 0 && (iw.getWidth() == size || iw.getHeight() == size)) {
 					return;
 				}
 				else if (width > 0 && height > 0
-						&& width == bi.getWidth() 
-						&& height == bi.getHeight()) {
+						&& width == iw.getWidth() 
+						&& height == iw.getHeight()) {
 					return;
 				}
-				else if (width > 0 && width == bi.getWidth()) {
+				else if (width > 0 && width == iw.getWidth()) {
 					return;
 				}
-				else if (height > 0 && height == bi.getHeight()) {
+				else if (height > 0 && height == iw.getHeight()) {
 					return;
 				}
 			}
@@ -228,12 +257,12 @@ public class ThumbnailCreator extends AbstractFileTool {
 		}
 
 		print2("Creating thumbnail: " + file.getName());
-		BufferedImage bi = JavaImages.read(file);
+		ImageWrapper iw = Images.i().read(file);
 		if (size > 0) {
-			bi = JavaGraphics.createScaledImageSlow(bi, size);
+			iw = iw.resize(size);
 		}
 		else {
-			bi = JavaGraphics.createScaledImageSlow(bi, width, height);
+			iw = iw.resize(width, height);
 		}
 
 		n.getParentFile().mkdirs();
@@ -241,7 +270,11 @@ public class ThumbnailCreator extends AbstractFileTool {
 		OutputStream os = null;
 		try {
 			os = new BufferedOutputStream(new FileOutputStream(n));
-			JavaImages.write(bi, "jpg", os, quality);
+			if (Strings.isNotEmpty(format)) {
+				iw.setFormat(format);
+			}
+			iw.setQuality(quality);
+			iw.write(os);
 		}
 		finally {
 			Streams.safeClose(os);
