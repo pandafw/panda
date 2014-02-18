@@ -2,6 +2,7 @@ package panda.image;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import panda.io.stream.ByteArrayOutputStream;
 
@@ -44,10 +45,18 @@ public class JavaImageWrapper extends AbstractImageWrapper {
 		this.image = image;
 	}
 
+	public int getWidth() {
+		return image.getWidth();
+	}
+	
+	public int getHeight() {
+		return image.getHeight();
+	}
+
 	public byte[] getData() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			JavaImages.write(image, format, baos, quality);
+			write(baos);
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
@@ -55,12 +64,8 @@ public class JavaImageWrapper extends AbstractImageWrapper {
 		return baos.toByteArray();
 	}
 	
-	public int getWidth() {
-		return image.getWidth();
-	}
-	
-	public int getHeight() {
-		return image.getHeight();
+	public void write(OutputStream os) throws IOException {
+		JavaImages.write(image, format, os, quality);
 	}
 	
 	public ImageWrapper resize(int width, int height) {

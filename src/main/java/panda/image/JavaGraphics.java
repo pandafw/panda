@@ -372,6 +372,10 @@ public abstract class JavaGraphics {
 		return temp;
 	}
 
+	public static boolean isTransparency(BufferedImage image) {
+		return image.getTransparency() != Transparency.OPAQUE;
+	}
+
 	/**
 	 * <p>
 	 * Returns a scaled image of a source image. <code>newSize</code> defines the length of the
@@ -424,7 +428,7 @@ public abstract class JavaGraphics {
 			ratio = (float)height / (float)width;
 		}
 
-		boolean transparent = image.getTransparency() != Transparency.OPAQUE;
+		boolean transparent = isTransparency(image);
 
 		BufferedImage scale = image;
 		BufferedImage temp = null;
@@ -570,7 +574,7 @@ public abstract class JavaGraphics {
 			}
 		}
 
-		boolean transparent = image.getTransparency() != Transparency.OPAQUE;
+		boolean transparent = isTransparency(image);
 
 		boolean wexpand = newWidth > width;
 		boolean hexpand = newHeight > height;

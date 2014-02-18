@@ -1,89 +1,42 @@
 package panda.image;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
-
-import panda.lang.Arrays;
-import panda.lang.codec.binary.Hex;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class JavaImages extends Images {
 	@Override
-	public ImageWrapper makeImage(byte[] data) {
+	public ImageWrapper read(InputStream is) {
 		BufferedImage bi;
 		try {
-			bi = JavaImages.read(new ByteArrayInputStream(data));
+			bi = ImageIO.read(is);
 		}
 		catch (IOException e) {
-			throw new IllegalArgumentException(e);
+			throw new RuntimeException(e);
 		}
+
 		if (bi == null) {
-			throw new IllegalArgumentException("Unknown image: " + Hex.encodeHexString(Arrays.copyOf(data, 10)));
+			throw new IllegalArgumentException("Invalid image stream");
 		}
 		return new JavaImageWrapper(bi);
 	}
 	
 	//-------------------------------------------------------------------------------
-	/**
-	 * @param input a <code>File</code> to read from.
-	 * @return a <code>BufferedImage</code> containing the decoded contents of the input, or
-	 *         <code>null</code>.
-	 * @throws IOException if an error occurs during reading.
-	 * @see javax.imageio.ImageIO#read(File)
-	 */
-	public static BufferedImage read(File input) throws IOException {
-		return ImageIO.read(input);
-	}
-
-	/**
-	 * @param input an <code>InputStream</code> to read from.
-	 * @return a <code>BufferedImage</code> containing the decoded contents of the input, or
-	 *         <code>null</code>.
-	 * @exception IOException if an error occurs during reading.
-	 * @see javax.imageio.ImageIO#read(InputStream)
-	 */
-	public static BufferedImage read(InputStream input) throws IOException {
-		return ImageIO.read(input);
-	}
-
-	/**
-	 * @param input a <code>URL</code> to read from.
-	 * @return a <code>BufferedImage</code> containing the decoded contents of the input, or
-	 *         <code>null</code>.
-	 * @exception IOException if an error occurs during reading.
-	 * @see javax.imageio.ImageIO#read(URL)
-	 */
-	public static BufferedImage read(URL input) throws IOException {
-		return ImageIO.read(input);
-	}
-
-	/**
-	 * @param stream an <code>ImageInputStream</code> to read from.
-	 * @return a <code>BufferedImage</code> containing the decoded contents of the input, or
-	 *         <code>null</code>.
-	 * @exception IOException if an error occurs during reading.
-	 * @see javax.imageio.ImageIO#read(ImageInputStream)
-	 */
-	public static BufferedImage read(ImageInputStream stream) throws IOException {
-		return ImageIO.read(stream);
-	}
-
 	/**
 	 * Writes an image using an arbitrary <code>ImageWriter</code> that supports the given format to
 	 * a <code>File</code>. If there is already a <code>File</code> present, its contents are
@@ -153,20 +106,39 @@ public class JavaImages extends Images {
 	 */
 	public static void write(RenderedImage im, String format, ImageOutputStream output, int quality)
 			throws IOException {
-		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(format);
-		if (!writers.hasNext()) {
-			throw new IllegalArgumentException("No writers for [" + format + "]");
-		}
 		if (quality < 0 || quality > 100) {
 			throw new IllegalArgumentException("Illegal quality(0-100): " + quality);
 		}
 
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(format);
+		if (!writers.hasNext()) {
+			throw new IllegalArgumentException("No writers for [" + format + "]");
+		}
 		ImageWriter writer = writers.next();
+
+		if (im instanceof BufferedImage) {
+			BufferedImage bi = (BufferedImage)im;
+			if (JavaGraphics.isTransparency(bi) 
+					&& !"png".equalsIgnoreCase(format)
+					&& !"gif".equalsIgnoreCase(format)) {
+				BufferedImage nbi = new BufferedImage(im.getWidth(), im.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g2 = nbi.createGraphics();
+				g2.drawImage(bi, 0, 0, Color.WHITE, null);
+				g2.dispose();
+				im = nbi;
+			}
+		}
+
 		writer.setOutput(output);
 		ImageWriteParam param = writer.getDefaultWriteParam();
 		if (quality > 0) {
-			param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-			param.setCompressionQuality(quality / 100);
+			try {
+				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				param.setCompressionQuality(quality / 100);
+			}
+			catch (UnsupportedOperationException e) {
+				// skip;
+			}
 		}
 		writer.write(null, new IIOImage(im, null, null), param);
 	}
