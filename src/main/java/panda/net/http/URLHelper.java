@@ -172,9 +172,9 @@ public class URLHelper {
 	 *   http://a.b.c/d/         + x             = http://a.b.c/d/x
 	 *   http://a.b.c/d/e        + x             = http://a.b.c/d/x
 	 * </pre>
-	 * @param base
-	 * @param add
-	 * @return url
+	 * @param base base url
+	 * @param add append url
+	 * @return url url
 	 */
 	public static String concatURL(String base, String add) {
 		if (Strings.isEmpty(add)) {
@@ -352,8 +352,6 @@ public class URLHelper {
 	 * @param uri request uri
 	 * @param query query string
 	 * @param params parameters
-	 * @param escapeAmp escape &
-	 * @param encoding url encoding
 	 * @return URL
 	 */
 	public static String buildURL(String scheme, String host, int port, 
@@ -371,7 +369,6 @@ public class URLHelper {
 	 * @param query query string
 	 * @param params parameters
 	 * @param escapeAmp escape &
-	 * @param encoding url encoding
 	 * @return URL
 	 */
 	public static String buildURL(String scheme, String host, int port, 
@@ -572,6 +569,10 @@ public class URLHelper {
 	 * @return the encoded string
 	 */
 	public static String encodeURL(String url, String encoding) {
+		if (Strings.isEmpty(url)) {
+			return url;
+		}
+		
 		try {
 			return URLEncoder.encode(url, encoding);
 		}
@@ -596,6 +597,10 @@ public class URLHelper {
 	 * @return decoded string
 	 */
 	public static String decodeURL(String input, String encoding) {
+		if (Strings.isEmpty(input)) {
+			return input;
+		}
+		
 		try {
 			return URLDecoder.decode(input, encoding);
 		}
