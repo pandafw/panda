@@ -116,6 +116,7 @@ public class HttpServletUtils {
 			query = request.getQueryString();
 		}
 		else {
+			uri = URLHelper.decodeURL(uri);
 			query = (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
 		}
 
@@ -138,6 +139,9 @@ public class HttpServletUtils {
 		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
+		}
+		else {
+			uri = URLHelper.decodeURL(uri);
 		}
 		return uri;
 	}
