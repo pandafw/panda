@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import panda.io.Files;
@@ -549,7 +548,7 @@ public class HttpResponse implements Closeable {
 			if (rawStream != null) {
 				String encoding = getContentEncoding();
 				if (encoding != null && encoding.contains("gzip")) {
-					stream = new GZIPInputStream(rawStream);
+					stream = Streams.gzip(rawStream);
 				}
 				else if (encoding != null && encoding.contains("deflate")) {
 					stream = new InflaterInputStream(rawStream);

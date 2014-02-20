@@ -1,9 +1,10 @@
 package panda.net.http;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,7 +59,7 @@ public class HttpRequest {
 	private HttpMethod method;
 	private HttpHeader header;
 	private Map<String, Object> params;
-	private byte[] data;
+	private InputStream body;
 	private String encoding = Charsets.UTF_8;
 
 	public HttpRequest() {
@@ -107,16 +108,16 @@ public class HttpRequest {
 		this.encoding = encoding;
 	}
 
-	public byte[] getData() {
-		return data;
+	public InputStream getBody() {
+		return body;
 	}
 
-	public void setData(byte[] data) {
-		this.data = data;
+	public void setBody(InputStream body) {
+		this.body = body;
 	}
 
-	public void setData(String data) {
-		this.data = Strings.getBytes(data, encoding);
+	public void setBody(String body) {
+		this.body = new ByteArrayInputStream(Strings.getBytes(body, encoding));
 	}
 
 	public HttpRequest setParams(Map<String, Object> params) {
@@ -216,11 +217,11 @@ public class HttpRequest {
 	}
 
 	public boolean isPostForm() {
-		return (HttpMethod.POST.equals(method) && Collections.isNotEmpty(params));
+		return (HttpMethod.POST.equals(method) && body == null && Collections.isNotEmpty(params));
 	}
 
 	public boolean isPostFile() {
-		if (HttpMethod.POST.equals(method) && Collections.isNotEmpty(params)) {
+		if (HttpMethod.POST.equals(method) && body == null && Collections.isNotEmpty(params)) {
 			for (Entry<String, ?> en : params.entrySet()) {
 				if (isFile(en.getValue())) {
 					return true;
@@ -231,14 +232,28 @@ public class HttpRequest {
 		return false;
 	}
 
+	public boolean isGzipEncoding() {
+		return "gzip".equalsIgnoreCase(getHeader().getString(HttpHeader.CONTENT_ENCODING));
+	}
+
 	public void writeBody(OutputStream os) throws IOException {
-		BufferedOutputStream bos = new BufferedOutputStream(os);
-		DataOutputStream outs = new DataOutputStream(bos);
+		if (body != null) {
+			Streams.copy(body, os);
+			os.flush();
+			return;
+		}
+
+		os = Streams.buffer(os);
+		if (isGzipEncoding()) {
+			os = Streams.gzip(os);
+		}
+
+		DataOutputStream dos = new DataOutputStream(os);
 		if (isPostFile()) {
 			for (Entry<String, ?> en : params.entrySet()) {
-				outs.writeBytes("--");
-				outs.writeBytes(getMultipartBoundary());
-				outs.writeBytes(Strings.CRLF);
+				dos.writeBytes("--");
+				dos.writeBytes(getMultipartBoundary());
+				dos.writeBytes(Strings.CRLF);
 				
 				String key = en.getKey();
 				Object val = en.getValue();
@@ -247,35 +262,34 @@ public class HttpRequest {
 					f = (File)val;
 				}
 				if (f != null && f.exists()) {
-					outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\";    filename=\"" + f.getPath() + "\"");
-					outs.writeBytes(Strings.CRLF);
-					outs.writeBytes("Content-Type:   application/octet-stream");
-					outs.writeBytes(Strings.CRLF);
-					outs.writeBytes(Strings.CRLF);
+					dos.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\";    filename=\"" + f.getPath() + "\"");
+					dos.writeBytes(Strings.CRLF);
+					dos.writeBytes("Content-Type:   application/octet-stream");
+					dos.writeBytes(Strings.CRLF);
+					dos.writeBytes(Strings.CRLF);
 					if (f.length() > 0) {
-						Streams.copy(f, outs);
-						outs.writeBytes(Strings.CRLF);
+						Streams.copy(f, dos);
+						dos.writeBytes(Strings.CRLF);
 					}
 				}
 				else {
-					outs.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\"");
-					outs.writeBytes(Strings.CRLF);
-					outs.writeBytes(Strings.CRLF);
-					outs.writeBytes(val.toString());
-					outs.writeBytes(Strings.CRLF);
+					dos.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\"");
+					dos.writeBytes(Strings.CRLF);
+					dos.writeBytes(Strings.CRLF);
+					dos.writeBytes(val.toString());
+					dos.writeBytes(Strings.CRLF);
 				}
 			}
 
-			outs.writeBytes("--");
-			outs.writeBytes(getMultipartBoundary());
-			outs.writeBytes("--");
-			outs.writeBytes(Strings.CRLF);
+			dos.writeBytes("--");
+			dos.writeBytes(getMultipartBoundary());
+			dos.writeBytes("--");
+			dos.writeBytes(Strings.CRLF);
 		}
-		else {
-			outs.writeBytes(getURLEncodedParams());
+		else if (Collections.isNotEmpty(params)) {
+			dos.writeBytes(getURLEncodedParams());
 		}
-
-		outs.flush();;
+		dos.flush();
 	}
 
 	public void toString(Appendable writer) throws IOException {
@@ -287,7 +301,19 @@ public class HttpRequest {
 		if (!isGet()) {
 			writer.append(Streams.LINE_SEPARATOR);
 			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
-			writeBody(wos);
+			if (body != null) {
+				if (body.available() > 100 || !body.markSupported()) {
+					writer.append("<<stream: " + body + " - " + body.available() + ">>");
+				}
+				else {
+					body.mark(Integer.MAX_VALUE);
+					writeBody(wos);
+					body.reset();
+				}
+			}
+			else {
+				writeBody(wos);
+			}
 		}
 	}
 
