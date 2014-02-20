@@ -321,7 +321,7 @@ public abstract class AbstractCodeGenerator {
 	 * execute
 	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		try {
 			cntFile = 0;
 			cntModule = 0;
@@ -340,10 +340,6 @@ public abstract class AbstractCodeGenerator {
 		}
 		catch (IllegalLicenseException e) {
 			throw new IllegalLicenseException(e.getMessage());
-		}
-		catch (HandledException e) {
-			System.err.println(e.getMessage());
-			throw e;
 		}
 		catch (Exception e) {
 			e.printStackTrace();

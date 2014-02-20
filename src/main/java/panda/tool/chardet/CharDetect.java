@@ -101,7 +101,7 @@ public class CharDetect {
 	 * execute
 	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		InputStream is = null;
 		try {
 			checkParameters();
@@ -115,10 +115,6 @@ public class CharDetect {
 			String charset = Charsets.detectCharset(is, hint);
 			
 			System.out.println(charset);
-		}
-		catch (HandledException e) {
-			System.err.println(e.getMessage());
-			throw e;
 		}
 		catch (Exception e) {
 			e.printStackTrace();

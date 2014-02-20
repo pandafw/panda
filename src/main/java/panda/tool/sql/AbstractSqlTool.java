@@ -252,7 +252,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	}
 
 	@Override
-	protected void finalProcess() throws Exception {
+	protected void finalProcess() {
 		super.finalProcess();
 		disconnect();
 	}
