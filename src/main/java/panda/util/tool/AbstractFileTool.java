@@ -181,19 +181,14 @@ public abstract class AbstractFileTool {
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		try {
 			checkParameters();
 			printParameters();
 			beforeProcess();
 			doProcess();
 			afterProcess();
-		}
-		catch (HandledException e) {
-			System.err.println(e.getMessage());
-			throw e;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -334,7 +329,7 @@ public abstract class AbstractFileTool {
 	protected void afterProcess() throws Exception {
 	}
 
-	protected void finalProcess() throws Exception {
+	protected void finalProcess() {
 	}
 
 	protected void print(int level, String s) {

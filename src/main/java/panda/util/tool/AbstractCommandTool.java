@@ -71,11 +71,9 @@ public abstract class AbstractCommandTool {
 		formatter.printHelp(this.getClass().getName(), options);
 	}
 	
-	protected void errorRequired(Options options, String name) {
+	protected void errorRequired(Options options, String name) throws ParseException {
 		String msg = "Parameter [" + name + "] is required.";
-		System.out.println(msg);
-		printHelp(options);
-		throw new HandledException(msg);
+		throw new ParseException(msg);
 	}
 
 	protected void setParameter(String name, Object value) {
