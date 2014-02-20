@@ -35,6 +35,8 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import panda.io.stream.BOMInputStream;
 import panda.io.stream.ByteArrayOutputStream;
@@ -363,6 +365,44 @@ public class Streams {
 			throw new NullPointerException();
 		}
 		return inputStream instanceof BufferedInputStream ? (BufferedInputStream)inputStream : new BufferedInputStream(
+			inputStream);
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * Returns the given OutputStream if it is already a {@link GZIPOutputStream}, otherwise
+	 * creates a GZIPOutputStream from the given OutputStream.
+	 * 
+	 * @param outputStream the OutputStream to wrap or return (not null)
+	 * @return the given OutputStream or a new {@link GZIPOutputStream} for the given
+	 *         OutputStream
+	 * @throws IOException If an I/O error has occurred
+	 * @throws NullPointerException if the input parameter is null
+	 */
+	public static GZIPOutputStream gzip(final OutputStream outputStream) throws IOException {
+		// reject null early on rather than waiting for IO operation to fail
+		if (outputStream == null) {
+			throw new NullPointerException();
+		}
+		return outputStream instanceof GZIPOutputStream ? (GZIPOutputStream)outputStream : new GZIPOutputStream(
+			outputStream);
+	}
+
+	/**
+	 * Returns the given InputStream if it is already a {@link GZIPInputStream}, otherwise
+	 * creates a GZIPInputStream from the given InputStream.
+	 * 
+	 * @param inputStream the InputStream to wrap or return (not null)
+	 * @return the given InputStream or a new {@link GZIPInputStream} for the given InputStream
+	 * @throws IOException If an I/O error has occurred
+	 * @throws NullPointerException if the input parameter is null
+	 */
+	public static GZIPInputStream gzip(final InputStream inputStream) throws IOException {
+		// reject null early on rather than waiting for IO operation to fail
+		if (inputStream == null) {
+			throw new NullPointerException();
+		}
+		return inputStream instanceof GZIPInputStream ? (GZIPInputStream)inputStream : new GZIPInputStream(
 			inputStream);
 	}
 
