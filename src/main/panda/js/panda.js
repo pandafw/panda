@@ -2398,10 +2398,14 @@ function s_setLang(v) {
 	location.href = u + '?__locale=' + v;
 }
 
+function s_addScript(url) {
+	$.jscript(url);
+}
+
 //------------------------------------------------------
-//google analytics
+// google analytics
 var _gaq = [];
-function s_ga_analytics(c) {
+function s_google_analytics(c) {
 	if (c.ga_account) {
 		_gaq.push(['_setAccount', c.ga_account]);
 		if (c.ga_domain) {
@@ -2409,14 +2413,22 @@ function s_ga_analytics(c) {
 		}
 		_gaq.push(['_trackPageview']);
 		
-		var ga = document.createElement('script');
-		ga.type = 'text/javascript';
-		ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		$('body').append(ga);
+		s_addScript(('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
 	}
 }
 
+
+//------------------------------------------------------
+// facebook comments
+function s_facebook_comments(i, h, w) {
+	h = h || document.location;
+	$(i).attr({
+		"data-href": h || document.location,
+		"data-num-posts": '2',
+		"data-width": w || '500'
+	});
+	s_addScript("http://connect.facebook.net/ja_JP/all.js#xfbml=1");
+}
 
 //------------------------------------------------------
 // site vars
@@ -2451,7 +2463,7 @@ function s_main(c) {
 		s_ie6_hack_forms($w);
 
 		// google analytics
-		s_ga_analytics(c);
+		s_google_analytics(c);
 	});
 }
 

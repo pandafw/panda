@@ -533,6 +533,17 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
+	$.jscript = function(url) {
+		var s = document.createElement('script');
+		s.type = 'text/javascript';
+		s.async = true;
+		s.src = url;
+		$('body').append(s);
+		return $;
+	};
+})(jQuery);
+
+(function($) {
 	function collapse($el) {
 		if (!$el.hasClass('ui-collapsed')) {
 			$el.addClass('ui-collapsed')
