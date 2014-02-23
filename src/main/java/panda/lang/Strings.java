@@ -672,7 +672,6 @@ public class Strings {
 	 * </pre>
 	 * 
 	 * @param str the String to remove characters from, may be null
-	 * @param stripChars the set of characters to remove, null treated as whitespace
 	 * @return the stripped String, {@code null} if null String input
 	 */
 	public static String stripEnd(final CharSequence str) {
