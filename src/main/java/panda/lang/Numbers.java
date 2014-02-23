@@ -91,6 +91,32 @@ public class Numbers {
 	/** Reusable Float constant for minus one. */
 	public static final Float FLOAT_MINUS_ONE = Float.valueOf(-1.0f);
 
+	//----------------------------------------------------------------
+	public static byte defaultByte(Number n) {
+		return n == null ? 0 : n.byteValue();
+	}
+	
+	public static short defaultShort(Number n) {
+		return n == null ? 0 : n.shortValue();
+	}
+	
+	public static int defaultInt(Number n) {
+		return n == null ? 0 : n.intValue();
+	}
+	
+	public static long defaultLong(Number n) {
+		return n == null ? 0 : n.longValue();
+	}
+	
+	public static float defaultFloat(Number n) {
+		return n == null ? 0 : n.floatValue();
+	}
+	
+	public static double defaultDouble(Number n) {
+		return n == null ? 0 : n.doubleValue();
+	}
+	
+	//----------------------------------------------------------------
 	/**
 	 * <p>
 	 * Checks if the value can safely be converted to a byte primitive.
