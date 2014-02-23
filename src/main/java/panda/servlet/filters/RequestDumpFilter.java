@@ -85,8 +85,11 @@ public class RequestDumpFilter implements Filter {
 			return;
 		}
 		
-		serial = new AtomicInteger();
+		if (dumpFolder.startsWith("web://")) {
+			dumpFolder = config.getServletContext().getRealPath(dumpFolder.substring(6));
+		}
 		dumpPath = new File(dumpFolder);
+		
 		try {
 			Files.makeDirs(dumpPath);
 		}
@@ -98,6 +101,7 @@ public class RequestDumpFilter implements Filter {
 			return;
 		}
 
+		serial = new AtomicInteger();
 		log.info("RequestDumpFilter is enabled to dump " 
 				+ ((dumpRequest && dumpResponse) ? "request & response" : (dumpRequest ? "request" : "response")) 
 				+ " to " + dumpPath.getAbsolutePath());
