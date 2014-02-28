@@ -22,7 +22,7 @@ public class HTMLEntities {
 	});
 
 	/**
-	 * Reverse of {@link #BASIC_ESCAPE()} for unescaping purposes.
+	 * Reverse of {@link #BASIC_ESCAPE} for unescaping purposes.
 	 */
 	public static final Map<String, String> BASIC_UNESCAPE = invert(BASIC_ESCAPE);
 
@@ -34,7 +34,7 @@ public class HTMLEntities {
 	});
 
 	/**
-	 * Reverse of {@link #APOS_ESCAPE()} for unescaping purposes.
+	 * Reverse of {@link #APOS_ESCAPE} for unescaping purposes.
 	 */
 	public static final Map<String, String> APOS_UNESCAPE = invert(APOS_ESCAPE);
 

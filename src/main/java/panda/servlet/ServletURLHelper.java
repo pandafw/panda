@@ -39,7 +39,7 @@ public class ServletURLHelper extends URLHelper {
 	 * build the request URL, append parameters as query string
 	 * 
 	 * @param request http request
-	 * @param params parameters
+	 * @param query query string
 	 * @return URL
 	 */
 	public static String buildURL(HttpServletRequest request, String query) {
@@ -62,7 +62,7 @@ public class ServletURLHelper extends URLHelper {
 	 * build the request URL, append parameters as query string
 	 * 
 	 * @param request http request
-	 * @param params parameters
+	 * @param query query string
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */

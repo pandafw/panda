@@ -37,7 +37,7 @@ public class HttpDates {
 	 * 
 	 * @param dateValue the date value to parse
 	 * @return the parsed date
-	 * @throws DateParseException if the value could not be parsed using any of the supported date
+	 * @throws ParseException if the value could not be parsed using any of the supported date
 	 *             formats
 	 */
 	public static Date parse(String dateValue) throws ParseException {
@@ -50,8 +50,6 @@ public class HttpDates {
 	 * 
 	 * @param dateValue the date value to parse
 	 * @return the parsed date
-	 * @throws DateParseException if the value could not be parsed using any of the supported date
-	 *             formats
 	 */
 	public static Date safeParse(String dateValue) {
 		return safeParse(dateValue, null);
@@ -63,7 +61,7 @@ public class HttpDates {
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @return the parsed date
-	 * @throws DateParseException if none of the dataFormats could parse the dateValue
+	 * @throws ParseException if none of the dataFormats could parse the dateValue
 	 */
 	public static Date parse(String dateValue, String[] dateFormats) throws ParseException {
 		return parse(dateValue, dateFormats, false);
@@ -75,7 +73,6 @@ public class HttpDates {
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @return the parsed date
-	 * @throws DateParseException if none of the dataFormats could parse the dateValue
 	 */
 	public static Date safeParse(String dateValue, String[] dateFormats) {
 		try {

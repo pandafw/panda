@@ -403,7 +403,7 @@ public class FastDateParserTest {
 	/**
 	 * Test case for {@link FastDateParser#FastDateParser(String, TimeZone, Locale)}.
 	 * 
-	 * @throws ParseException
+	 * @throws ParseException occurs
 	 */
 	@Test
 	public void testShortDateStyleWithLocales() throws ParseException {
@@ -420,8 +420,6 @@ public class FastDateParserTest {
 
 	/**
 	 * Tests that pre-1000AD years get padded with yyyy
-	 * 
-	 * @throws ParseException
 	 */
 	@Test
 	public void testLowYearPadding() throws ParseException {
@@ -440,7 +438,6 @@ public class FastDateParserTest {
 	}
 
 	/**
-	 * @throws ParseException
 	 */
 	@Test
 	public void testMilleniumBug() throws ParseException {
