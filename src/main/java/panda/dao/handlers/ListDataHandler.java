@@ -9,6 +9,7 @@ import panda.lang.Asserts;
 
 
 /**
+ * get the property value from the data, and add it to the list 
  * @param <T> data type
  * @author yf.frank.wang@gmail.com
  */
@@ -19,22 +20,22 @@ public class ListDataHandler<T> implements DataHandler<T> {
 	
 	/**
 	 * @param type bean type
-	 * @param list
-	 * @param prop
+	 * @param list the list to store the property value
+	 * @param prop property name
 	 */
 	public ListDataHandler(Class<T> type, List list, String prop) {
-		this(list, prop, Beans.i().getBeanHandler(type));
+		this(Beans.i().getBeanHandler(type), list, prop);
 	}
 
 	/**
-	 * @param list
-	 * @param prop
-	 * @param bh
+	 * @param bh BeanHandler
+	 * @param list the list to store the property value
+	 * @param prop property name
 	 */
-	public ListDataHandler(List list, String prop, BeanHandler<T> bh) {
+	public ListDataHandler(BeanHandler<T> bh, List list, String prop) {
+		Asserts.notNull(prop, "The parameter bean handler is null");
 		Asserts.notNull(list, "The parameter list is null");
 		Asserts.notEmpty(prop, "The parameter prop is empty");
-		Asserts.notNull(prop, "The parameter bean handler is null");
 
 		this.list = list;
 		this.prop = prop;

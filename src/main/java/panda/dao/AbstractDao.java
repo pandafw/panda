@@ -803,7 +803,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
 
 		List<?> list = new ArrayList<Object>();
-		select(type, query, new ListDataHandler(list, prop, bh));
+		select(type, query, new ListDataHandler(bh, list, prop));
 		return list;
 	}
 
@@ -837,7 +837,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
 
 		List<?> list = new ArrayList<Object>();
-		select(entity, query, new ListDataHandler(list, prop, bh));
+		select(entity, query, new ListDataHandler(bh, list, prop));
 		return list;
 	}
 
@@ -870,7 +870,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
 
 		List<?> list = new ArrayList<Object>();
-		select(table, query, new ListDataHandler<Map>(list, prop, bh));
+		select(table, query, new ListDataHandler<Map>(bh, list, prop));
 		return list;
 	}
 
@@ -933,7 +933,7 @@ public abstract class AbstractDao implements Dao {
 	public <T> Map<?, T> map(Class<T> type, String keyProp, Query query) {
 		Map<?, T> map = new HashMap<Object, T>();
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, query, new MapDataHandler<T>(map, keyProp, bh));
+		select(type, query, new MapDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -962,7 +962,7 @@ public abstract class AbstractDao implements Dao {
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp, Query query) {
 		Map<?, T> map = new HashMap<Object, T>();
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, query, new MapDataHandler<T>(map, keyProp, bh));
+		select(entity, query, new MapDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -991,7 +991,7 @@ public abstract class AbstractDao implements Dao {
 	public Map<?, Map> map(String table, String keyProp, Query query) {
 		Map<?, Map> map = new HashMap<Object, Map>();
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, query, new MapDataHandler<Map>(map, keyProp, bh));
+		select(table, query, new MapDataHandler<Map>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1064,7 +1064,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
 
 		Map<?, ?> map = new HashMap<Object, Object>();
-		select(type, query, new MapDataHandler(map, keyProp, valProp, bh));
+		select(type, query, new MapDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1100,7 +1100,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
 	
 		Map<?, ?> map = new HashMap<Object, Object>();
-		select(entity, query, new MapDataHandler(map, keyProp, valProp, bh));
+		select(entity, query, new MapDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1135,7 +1135,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
 
 		Map<?, ?> map = new HashMap<Object, Object>();
-		select(table, query, new MapDataHandler<Map>(map, keyProp, valProp, bh));
+		select(table, query, new MapDataHandler<Map>(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1199,7 +1199,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
 
 		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		select(type, query, new GroupDataHandler<T>(map, keyProp, bh));
+		select(type, query, new GroupDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1229,7 +1229,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
 
 		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		select(entity, query, new GroupDataHandler<T>(map, keyProp, bh));
+		select(entity, query, new GroupDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1259,7 +1259,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
 
 		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
-		select(table, query, new GroupDataHandler<Map>(map, keyProp, bh));
+		select(table, query, new GroupDataHandler<Map>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1332,7 +1332,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
 
 		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(type, query, new GroupDataHandler(map, keyProp, valProp, bh));
+		select(type, query, new GroupDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1368,7 +1368,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
 
 		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(entity, query, new GroupDataHandler(map, keyProp, valProp, bh));
+		select(entity, query, new GroupDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1403,7 +1403,7 @@ public abstract class AbstractDao implements Dao {
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
 
 		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(table, query, new GroupDataHandler<Map>(map, keyProp, valProp, bh));
+		select(table, query, new GroupDataHandler<Map>(bh, map, keyProp, valProp));
 		return map;
 	}
 

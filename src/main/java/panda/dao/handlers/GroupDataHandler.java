@@ -11,7 +11,7 @@ import panda.lang.Asserts;
 
 
 /**
- * DataHandler
+ * DataHandler for group data.
  * @param <T> data type
  * @author yf.frank.wang@gmail.com
  */
@@ -23,8 +23,8 @@ public class GroupDataHandler<T> implements DataHandler<T> {
 	
 	/**
 	 * @param type bean type
-	 * @param map
-	 * @param key
+	 * @param map the map to store data
+	 * @param key the key property name
 	 */
 	public GroupDataHandler(Class<T> type, Map map, String key) {
 		this(type, map, key, null);
@@ -32,33 +32,33 @@ public class GroupDataHandler<T> implements DataHandler<T> {
 
 	/**
 	 * @param type bean type
-	 * @param map
-	 * @param key
-	 * @param val
+	 * @param map the map to store data
+	 * @param key the key property name
+	 * @param val the val property name
 	 */
 	public GroupDataHandler(Class<T> type, Map map, String key, String val) {
-		this(map, key, val, Beans.i().getBeanHandler(type));
+		this(Beans.i().getBeanHandler(type), map, key, val);
 	}
 
 	/**
-	 * @param map
-	 * @param key
-	 * @param bh
+	 * @param bh bean handler
+	 * @param map the map to store data
+	 * @param key the key property name
 	 */
-	public GroupDataHandler(Map map, String key, BeanHandler<T> bh) {
-		this(map, key, null, bh);
+	public GroupDataHandler(BeanHandler<T> bh, Map map, String key) {
+		this(bh, map, key, null);
 	}
 
 	/**
-	 * @param map
-	 * @param key
-	 * @param val
-	 * @param bh
+	 * @param bh bean handler
+	 * @param map the map to store data
+	 * @param key the key property name
+	 * @param val the val property name
 	 */
-	public GroupDataHandler(Map map, String key, String val, BeanHandler<T> bh) {
+	public GroupDataHandler(BeanHandler<T> bh, Map map, String key, String val) {
+		Asserts.notNull(key, "The parameter bean handler is null");
 		Asserts.notNull(map, "The parameter map is null");
 		Asserts.notEmpty(key, "The parameter key is empty");
-		Asserts.notNull(key, "The parameter bean handler is null");
 
 		this.map = map;
 		this.key = key;
