@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import panda.lang.time.StopWatch;
@@ -1339,13 +1338,5 @@ public class NumbersTest {
 			(new DecimalFormat("#.##")).format(d);
 		}
 		System.out.println("DecimalFormat - " + sw);
-	}
-
-	@Test
-	public void testRandom() {
-		for (int i = 0; i < 100; i++) {
-			int r = Numbers.randInt(0, 5);
-			Assert.assertTrue("0 <= " + r + " <= 5", (0 <= r && r <= 5));
-		}
 	}
 }
