@@ -3,6 +3,7 @@ package panda.dao;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import panda.dao.criteria.Query;
 import panda.dao.criteria.QueryWrapper;
@@ -473,6 +474,100 @@ public interface Dao {
 
 	//--------------------------------------------------------------------
 	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	Collection<?> coll(Collection<?> coll, Class<?> type, String prop);
+
+	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop);
+
+	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	Collection<?> coll(Collection<?> coll, String table, String prop);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, Class<?> type, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, Class<?> type, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, String table, String prop, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	Collection<?> coll(Collection<?> coll, String table, String prop, Query query);
+
+	//--------------------------------------------------------------------
+	/**
 	 * select all records to list.
 	 * 
 	 * @param type record type
@@ -567,6 +662,100 @@ public interface Dao {
 
 	//--------------------------------------------------------------------
 	/**
+	 * select all records to set.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	Set<?> set(Class<?> type, String prop);
+
+	/**
+	 * select all records to set.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	Set<?> set(Entity<?> entity, String prop);
+
+	/**
+	 * select all records to set.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	Set<?> set(String table, String prop);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(Class<?> type, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(Class<?> type, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(Entity<?> entity, String prop, QueryWrapper query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(Entity<?> entity, String prop, Query query);
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(String table, String prop, QueryWrapper query);
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	Set<?> set(String table, String prop, Query query);
+
+	//--------------------------------------------------------------------
+	/**
 	 * select all records to map.
 	 * 
 	 * @param type record type
@@ -580,7 +769,7 @@ public interface Dao {
 	 * 
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record list
+	 * @return record map
 	 */
 	<T> Map<?, T> map(Entity<T> entity, String keyProp);
 
@@ -589,7 +778,7 @@ public interface Dao {
 	 * 
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, Map> map(String table, String keyProp);
 
@@ -600,7 +789,7 @@ public interface Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	<T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query);
 
@@ -611,7 +800,7 @@ public interface Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	<T> Map<?, T> map(Class<T> type, String keyProp, Query query);
 
@@ -622,7 +811,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	<T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query);
 
@@ -633,7 +822,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	<T> Map<?, T> map(Entity<T> entity, String keyProp, Query query);
 
@@ -644,7 +833,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, Map> map(String table, String keyProp, QueryWrapper query);
 	
@@ -655,7 +844,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, Map> map(String table, String keyProp, Query query);
 
@@ -676,7 +865,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record list
+	 * @return record map
 	 */
 	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp);
 
@@ -686,7 +875,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, ?> map(String table, String keyProp, String valProp);
 
@@ -698,7 +887,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query);
 
@@ -710,7 +899,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query);
 
@@ -722,7 +911,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query);
 
@@ -734,7 +923,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query);
 
@@ -746,7 +935,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query);
 	
@@ -758,7 +947,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	Map<?, ?> map(String table, String keyProp, String valProp, Query query);
 
@@ -777,7 +966,7 @@ public interface Dao {
 	 * 
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record list
+	 * @return record group
 	 */
 	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp);
 
@@ -786,7 +975,7 @@ public interface Dao {
 	 * 
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<Map>> group(String table, String keyProp);
 
@@ -797,7 +986,7 @@ public interface Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	<T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query);
 
@@ -808,7 +997,7 @@ public interface Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	<T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query);
 
@@ -819,7 +1008,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query);
 
@@ -830,7 +1019,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	<T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query);
 
@@ -841,7 +1030,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query);
 	
@@ -852,7 +1041,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<Map>> group(String table, String keyProp, Query query);
 
@@ -873,7 +1062,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record list
+	 * @return record group
 	 */
 	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp);
 
@@ -883,7 +1072,7 @@ public interface Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<?>> group(String table, String keyProp, String valProp);
 
@@ -895,7 +1084,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query);
 
@@ -907,7 +1096,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query);
 
@@ -919,7 +1108,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query);
 
@@ -931,7 +1120,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query);
 
@@ -943,7 +1132,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query);
 	
@@ -955,7 +1144,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	Map<?, List<?>> group(String table, String keyProp, String valProp, Query query);
 

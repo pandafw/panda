@@ -3,8 +3,10 @@ package panda.dao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -15,7 +17,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityField;
 import panda.dao.handlers.GroupDataHandler;
-import panda.dao.handlers.ListDataHandler;
+import panda.dao.handlers.CollectionDataHandler;
 import panda.dao.handlers.MapDataHandler;
 import panda.lang.Asserts;
 import panda.lang.Objects;
@@ -741,6 +743,138 @@ public abstract class AbstractDao implements Dao {
 
 	//--------------------------------------------------------------------
 	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop) {
+		return coll(coll, type, prop, (Query)null);
+	}
+
+	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop) {
+		return coll(coll, entity, prop, (Query)null);
+	}
+
+	/**
+	 * select all records to collection.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 */
+	public Collection<?> coll(Collection<?> coll, String table, String prop) {
+		return coll(coll, table, prop, (Query)null);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop, QueryWrapper query) {
+		return coll(coll, type, prop, getQuery(query));
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param type record type
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop, Query query) {
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+
+		select(type, query, new CollectionDataHandler(bh, coll, prop));
+		return coll;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, QueryWrapper query) {
+		return coll(coll, entity, prop, getQuery(query));
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, Query query) {
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+
+		select(entity, query, new CollectionDataHandler(bh, coll, prop));
+		return coll;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	public Collection<?> coll(Collection<?> coll, String table, String prop, QueryWrapper query) {
+		return coll(coll, table, prop, getQuery(query));
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param coll the collection to store the value
+	 * @param table table name
+	 * @param prop The property to be used as the value in the collection.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 */
+	public Collection<?> coll(Collection<?> coll, String table, String prop, Query query) {
+		query = cloneQuery(query);
+		query.clearIncludes().include(prop);
+
+		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+
+		select(table, query, new CollectionDataHandler<Map>(bh, coll, prop));
+		return coll;
+	}
+
+	//--------------------------------------------------------------------
+	/**
 	 * select all records to list.
 	 * 
 	 * @param type record type
@@ -795,15 +929,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value list
 	 */
-	@SuppressWarnings("unchecked")
 	public List<?> list(Class<?> type, String prop, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(prop);
-
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-
 		List<?> list = new ArrayList<Object>();
-		select(type, query, new ListDataHandler(bh, list, prop));
+		coll(list, type, prop, query);
 		return list;
 	}
 
@@ -829,15 +957,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value list
 	 */
-	@SuppressWarnings("unchecked")
 	public List<?> list(Entity<?> entity, String prop, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(prop);
-
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-
 		List<?> list = new ArrayList<Object>();
-		select(entity, query, new ListDataHandler(bh, list, prop));
+		coll(list, entity, prop, query);
 		return list;
 	}
 
@@ -864,14 +986,127 @@ public abstract class AbstractDao implements Dao {
 	 * @return record value list
 	 */
 	public List<?> list(String table, String prop, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(prop);
-
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-
 		List<?> list = new ArrayList<Object>();
-		select(table, query, new ListDataHandler<Map>(bh, list, prop));
+		coll(list, table, prop, query);
 		return list;
+	}
+
+	//--------------------------------------------------------------------
+	/**
+	 * select all records to set.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	public Set<?> set(Class<?> type, String prop) {
+		return set(type, prop, (Query)null);
+	}
+
+	/**
+	 * select all records to set.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	public Set<?> set(Entity<?> entity, String prop) {
+		return set(entity, prop, (Query)null);
+	}
+
+	/**
+	 * select all records to set.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @return record value set
+	 */
+	public Set<?> set(String table, String prop) {
+		return set(table, prop, (Query)null);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(Class<?> type, String prop, QueryWrapper query) {
+		return set(type, prop, getQuery(query));
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param type record type
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(Class<?> type, String prop, Query query) {
+		Set<?> set = new HashSet<Object>();
+		coll(set, type, prop, query);
+		return set;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(Entity<?> entity, String prop, QueryWrapper query) {
+		return set(entity, prop, getQuery(query));
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(Entity<?> entity, String prop, Query query) {
+		Set<?> set = new HashSet<Object>();
+		coll(set, entity, prop, query);
+		return set;
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(String table, String prop, QueryWrapper query) {
+		return set(table, prop, getQuery(query));
+	}
+	
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param table table name
+	 * @param prop The property to be used as the value in the set.
+	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return record value set
+	 */
+	public Set<?> set(String table, String prop, Query query) {
+		Set<?> set = new HashSet<Object>();
+		coll(set, table, prop, query);
+		return set;
 	}
 
 	//--------------------------------------------------------------------
@@ -891,7 +1126,7 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record list
+	 * @return record map
 	 */
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp) {
 		return map(entity, keyProp, (Query)null);
@@ -902,7 +1137,7 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, Map> map(String table, String keyProp) {
 		return map(table, keyProp, (Query)null);
@@ -915,7 +1150,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public <T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query) {
 		return map(type, keyProp, getQuery(query));
@@ -928,7 +1163,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public <T> Map<?, T> map(Class<T> type, String keyProp, Query query) {
 		Map<?, T> map = new HashMap<Object, T>();
@@ -944,7 +1179,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query) {
 		return map(entity, keyProp, getQuery(query));
@@ -957,7 +1192,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp, Query query) {
 		Map<?, T> map = new HashMap<Object, T>();
@@ -973,7 +1208,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, Map> map(String table, String keyProp, QueryWrapper query) {
 		return map(table, keyProp, getQuery(query));
@@ -986,7 +1221,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, Map> map(String table, String keyProp, Query query) {
 		Map<?, Map> map = new HashMap<Object, Map>();
@@ -1014,7 +1249,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record list
+	 * @return record map
 	 */
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp) {
 		return map(entity, keyProp, valProp, (Query)null);
@@ -1026,7 +1261,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp) {
 		return map(table, keyProp, valProp, (Query)null);
@@ -1040,7 +1275,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
 		return map(type, keyProp, valProp, getQuery(query));
@@ -1054,7 +1289,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query) {
@@ -1076,7 +1311,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
 		return map(entity, keyProp, valProp, getQuery(query));
@@ -1090,7 +1325,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record map
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query) {
@@ -1112,7 +1347,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query) {
 		return map(table, keyProp, valProp, getQuery(query));
@@ -1126,7 +1361,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) map
 	 */
 	public Map<?, ?> map(String table, String keyProp, String valProp, Query query) {
 		query = cloneQuery(query);
@@ -1156,7 +1391,7 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record list
+	 * @return record group
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp) {
 		return group(entity, keyProp, (Query)null);
@@ -1167,7 +1402,7 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp) {
 		return group(table, keyProp, (Query)null);
@@ -1180,7 +1415,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query) {
 		return group(type, keyProp, getQuery(query));
@@ -1193,7 +1428,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query) {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
@@ -1210,7 +1445,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query) {
 		return group(entity, keyProp, getQuery(query));
@@ -1223,7 +1458,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query) {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
@@ -1240,7 +1475,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query) {
 		return group(table, keyProp, getQuery(query));
@@ -1253,7 +1488,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<Map>> group(String table, String keyProp, Query query) {
 		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
@@ -1282,7 +1517,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record list
+	 * @return record group
 	 */
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp) {
 		return group(entity, keyProp, valProp, (Query)null);
@@ -1294,7 +1529,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp) {
 		return group(table, keyProp, valProp, (Query)null);
@@ -1308,7 +1543,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
 		return group(type, keyProp, valProp, getQuery(query));
@@ -1322,7 +1557,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query) {
@@ -1344,7 +1579,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
 		return group(entity, keyProp, valProp, getQuery(query));
@@ -1358,7 +1593,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
+	 * @return record group
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query) {
@@ -1380,7 +1615,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query) {
 		return group(table, keyProp, valProp, getQuery(query));
@@ -1394,7 +1629,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
+	 * @return record(a map) group
 	 */
 	public Map<?, List<?>> group(String table, String keyProp, String valProp, Query query) {
 		query = cloneQuery(query);

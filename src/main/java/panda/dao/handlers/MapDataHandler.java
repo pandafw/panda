@@ -54,7 +54,7 @@ public class MapDataHandler<T> implements DataHandler<T> {
 	 * @param val the val property name
 	 */
 	public MapDataHandler(BeanHandler<T> bh, Map map, String key, String val) {
-		Asserts.notNull(key, "The parameter bean handler is null");
+		Asserts.notNull(bh, "The parameter bean handler is null");
 		Asserts.notNull(map, "The parameter map is null");
 		Asserts.notEmpty(key, "The parameter key is empty");
 

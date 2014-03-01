@@ -16,10 +16,10 @@ import panda.lang.Asserts;
  * @author yf.frank.wang@gmail.com
  */
 public class GroupDataHandler<T> implements DataHandler<T> {
+	private BeanHandler<T> bh;
 	private Map map;
 	private String key;
 	private String val;
-	private BeanHandler<T> bh;
 	
 	/**
 	 * @param type bean type
@@ -56,7 +56,7 @@ public class GroupDataHandler<T> implements DataHandler<T> {
 	 * @param val the val property name
 	 */
 	public GroupDataHandler(BeanHandler<T> bh, Map map, String key, String val) {
-		Asserts.notNull(key, "The parameter bean handler is null");
+		Asserts.notNull(bh, "The parameter bean handler is null");
 		Asserts.notNull(map, "The parameter map is null");
 		Asserts.notEmpty(key, "The parameter key is empty");
 
