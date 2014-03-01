@@ -93,6 +93,9 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 .p-header > h3 {
 	margin-bottom: 5px;
 }
+.p-header > h3 > i {
+	color: #2f6f9f;
+}
 /*---------------------------------------------*/
 /* listview.css                                */
 /*---------------------------------------------*/
