@@ -205,6 +205,12 @@ function s_facebook_comments(i, h, w) {
 }
 
 //------------------------------------------------------
+// google plus one
+function s_google_plusone() {
+	s_addScript("https://apis.google.com/js/plusone.js");
+}
+
+//------------------------------------------------------
 // site vars
 var site = {
 	statics: 'static'
@@ -224,15 +230,28 @@ function s_decorate(selector) {
 	});
 }
 
-function s_main(c) {
-	c = $.extend({ main: "#main, #admin" }, c);
+function s_init(c) {
+	var p = [ 's:static', 's:base', 's:google:analytics' ];
+	var m = { body: 'body' };
+	$('meta').each(function() {
+		var $t = $(this);
+		var a = $t.attr('property');
+		if (p.contains(a)) {
+			var v = $t.attr('content');
+			if (v) {
+				m[a] = v;
+			}
+		}
+	});
+
+	c = $.extend(m, c);
 	c = s_setbase(c);
 
 	// document - onload
 	$(function() {
 		s_preload();
 		
-		var $w = $(c.main);
+		var $w = $(c.body);
 		s_hook_forms($w);
 		s_ie6_hack_forms($w);
 
@@ -247,9 +266,3 @@ s_setbase({
 	cookie: { expires: 180 }
 });
 
-// invoke onPageLoad function
-$(function() {
-	if (window.onPageLoad) {
-		window.onPageLoad();
-	}
-});
