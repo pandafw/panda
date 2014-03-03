@@ -10,6 +10,7 @@ import panda.castor.Castors;
 import panda.dao.DB;
 import panda.dao.DatabaseMeta;
 import panda.dao.criteria.Expression;
+import panda.dao.criteria.Join;
 import panda.dao.criteria.Operator;
 import panda.dao.criteria.Order;
 import panda.dao.criteria.Query;
@@ -173,7 +174,7 @@ public abstract class SqlExpert {
 				continue;
 			}
 			sql.append(' ')
-				.append(ef.getColumn())
+				.append("t0." + escapeColumn(ef.getColumn()))
 				.append(" AS ")
 				.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
 				.append(',');
@@ -183,7 +184,8 @@ public abstract class SqlExpert {
 			throw new IllegalArgumentException("Nothing to SELECT!");
 		}
 		sql.setCharAt(sql.length() - 1, ' ');
-		sql.append("FROM ").append(entity.getViewName());
+		sql.append("FROM ").append(escapeTable(entity.getViewName())).append(" t0");
+		join(sql, entity, query);
 		where(sql, entity, query);
 		order(sql, entity, query);
 		_limit(sql, query);
@@ -195,14 +197,17 @@ public abstract class SqlExpert {
 		sql.append("SELECT");
 		if (query != null && query.hasIncludes()) {
 			for (String column : query.getIncludes()) {
-				sql.append(' ').append(column).append(',');
+				sql.append(' ')
+					.append("t0." + escapeColumn(column))
+					.append(',');
 			}
 			sql.setCharAt(sql.length() - 1, ' ');
 		}
 		else {
-			sql.append(" * ");
+			sql.append(" t0.* ");
 		}
-		sql.append("FROM ").append(table);
+		sql.append("FROM ").append(escapeTable(table)).append(" t0");
+		join(sql, query);
 		where(sql, query);
 		order(sql, query);
 		_limit(sql, query);
@@ -288,6 +293,34 @@ public abstract class SqlExpert {
 			throw new IllegalArgumentException("invalid " + name + " field '" + field + "' of entity " + entity.getType());
 		}
 		return ef;
+	}
+	
+	protected void join(Sql sql, Entity<?> entity, Query query) {
+		//TODO: extended join expression with entity
+		join(sql, query);
+	}
+	
+	protected void join(Sql sql, Query query) {
+		if (query == null || !query.hasJoins()) {
+			return;
+		}
+		
+		for (Join join : query.getJoins()) {
+			sql.append(' ').append(join.getType()).append(" JOIN ");
+			sql.append(join.getTable()).append(' ').append(join.getAlias());
+			sql.append(" ON (");
+			for (String s : join.getConditions()) {
+				sql.append(s).append(" AND ");
+			}
+			// remove last " AND ";
+			sql.setLength(sql.length() - 5);
+			sql.append(')');
+			if (join.getParameters() != null) {
+				for (Object o : join.getParameters()) {
+					sql.addParam(o);
+				}
+			}
+		}
 	}
 	
 	protected void where(Sql sql, Entity<?> entity, Query query) {

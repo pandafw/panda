@@ -66,6 +66,9 @@ public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 		return (T)this;
 	}
 
+	//----------------------------------------------------------------------
+	// limit
+	//----------------------------------------------------------------------
 	/**
 	 * set start
 	 * @return this
@@ -84,6 +87,10 @@ public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 		return (T)this;
 	}
 
+	
+	//----------------------------------------------------------------------
+	// order
+	//----------------------------------------------------------------------
 	/**
 	 * add ascend order
 	 * @param column column
@@ -144,6 +151,123 @@ public class EntityQuery<T extends EntityQuery> extends QueryWrapper {
 	 */
 	public T orderByDesc(String name) {
 		getQuery().orderByDesc(name);
+		return (T)this;
+	}
+	
+	//----------------------------------------------------------------------
+	// join
+	//----------------------------------------------------------------------
+	/**
+	 * add left join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public T leftJoin(String table, String alias, String ... conditions) {
+		getQuery().leftJoin(table, alias, conditions);
+		return (T)this;
+	}
+
+	/**
+	 * add left join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public T leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		getQuery().leftJoin(table, alias, conditions, parameters);
+		return (T)this;
+	}
+
+	/**
+	 * add right join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public T rightJoin(String table, String alias, String ... conditions) {
+		getQuery().rightJoin(table, alias, conditions);
+		return (T)this;
+	}
+
+	/**
+	 * add right join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public T rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		getQuery().rightJoin(table, alias, conditions, parameters);
+		return (T)this;
+	}
+
+	/**
+	 * add inner join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public T innerJoin(String table, String alias, String ... conditions) {
+		getQuery().innerJoin(table, alias, conditions);
+		return (T)this;
+	}
+
+	/**
+	 * add inner join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public T innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		getQuery().innerJoin(table, alias, conditions, parameters);
+		return (T)this;
+	}
+
+	/**
+	 * add join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public T join(String table, String alias, String ... conditions) {
+		getQuery().join(table, alias, conditions);
+		return (T)this;
+	}
+
+	/**
+	 * add join
+	 * @param type join type
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public T join(String type, String table, String alias, String ... conditions) {
+		getQuery().join(type, table, alias, conditions);
+		return (T)this;
+	}
+
+	/**
+	 * add join
+	 * @param type join type
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public T join(String type, String table, String alias, String[] conditions, Object[] parameters) {
+		getQuery().join(type, table, alias, conditions, parameters);
 		return (T)this;
 	}
 }

@@ -11,7 +11,6 @@ import java.util.Set;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
-import panda.lang.Strings;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -24,6 +23,7 @@ public class Query implements Cloneable {
 	protected Map<String, Order> orders;
 	protected Set<String> includes;
 	protected Set<String> excludes;
+	protected List<Join> joins;
 
 	public static Query create() {
 		return new Query();
@@ -242,6 +242,132 @@ public class Query implements Cloneable {
 	}
 
 	//---------------------------------------------------------------
+	// join
+	//
+	/**
+	 * @return true if has orders
+	 */
+	public boolean hasJoins() {
+		return joins != null && !joins.isEmpty();
+	}
+
+	/**
+	 * @return joins
+	 */
+	public List<Join> getJoins() {
+		return joins;
+	}
+
+	/**
+	 * add left join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public Query leftJoin(String table, String alias, String ... conditions) {
+		return join(Join.LEFT, table, alias, conditions);
+	}
+
+	/**
+	 * add left join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public Query leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		return join(Join.LEFT, table, alias, conditions, parameters);
+	}
+
+	/**
+	 * add right join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public Query rightJoin(String table, String alias, String ... conditions) {
+		return join(Join.RIGHT, table, alias, conditions);
+	}
+
+	/**
+	 * add right join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public Query rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		return join(Join.RIGHT, table, alias, conditions, parameters);
+	}
+
+	/**
+	 * add inner join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public Query innerJoin(String table, String alias, String ... conditions) {
+		return join(Join.INNER, table, alias, conditions);
+	}
+
+	/**
+	 * add inner join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public Query innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
+		return join(Join.INNER, table, alias, conditions, parameters);
+	}
+
+	/**
+	 * add join
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public Query join(String table, String alias, String ... conditions) {
+		return join(null, table, alias, conditions);
+	}
+
+	/**
+	 * add join
+	 * @param type join type
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @return this
+	 */
+	public Query join(String type, String table, String alias, String ... conditions) {
+		return join(type, table, alias, conditions, (Object[])null);
+	}
+
+	/**
+	 * add join
+	 * @param type join type
+	 * @param table join table name
+	 * @param alias join table alias
+	 * @param conditions join conditions
+	 * @param parameters join parameters
+	 * @return this
+	 */
+	public Query join(String type, String table, String alias, String[] conditions, Object[] parameters) {
+		if (joins == null) {
+			joins = new ArrayList<Join>();
+		}
+		joins.add(new Join(type, table, alias, conditions, parameters));
+		return this;
+	}
+
+	//---------------------------------------------------------------
 	// order
 	//
 	/**
@@ -274,12 +400,11 @@ public class Query implements Cloneable {
 	 * @return this
 	 */
 	public Query orderBy(String name, Order order) {
-		if (Strings.isNotEmpty(name)) {
-			if (orders == null) {
-				orders = new LinkedHashMap<String, Order>();
-			}
-			orders.put(name, order);
+		Asserts.notEmpty(name, "The parameter name is empty");
+		if (orders == null) {
+			orders = new LinkedHashMap<String, Order>();
 		}
+		orders.put(name, order);
 		return this;
 	}
 

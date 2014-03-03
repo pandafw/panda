@@ -107,6 +107,10 @@ public class DatabaseMeta {
 		return DB.GAE == type;
 	}
 
+	public boolean isRDBMS() {
+		return DB.GAE != type;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%s:[%s - %s]", type.name(), name, version);
