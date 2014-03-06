@@ -11,14 +11,14 @@ import java.util.Set;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.castor.Castors;
-import panda.dao.criteria.Query;
-import panda.dao.criteria.QueryWrapper;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityField;
-import panda.dao.handlers.GroupDataHandler;
 import panda.dao.handlers.CollectionDataHandler;
+import panda.dao.handlers.GroupDataHandler;
 import panda.dao.handlers.MapDataHandler;
+import panda.dao.query.GenericQuery;
+import panda.dao.query.Query;
 import panda.lang.Asserts;
 import panda.lang.Objects;
 
@@ -80,6 +80,15 @@ public abstract class AbstractDao implements Dao {
 
 	protected void assertEntity(Entity<?> entity) {
 		Asserts.notNull(entity, "The entity is null");
+	}
+
+	protected void assertEntityQuery(Query<?> query) {
+		assertQuery(query);
+		Asserts.notNull(query.getEntity(), "This entity of query is null");
+	}
+
+	protected void assertQuery(Query<?> query) {
+		Asserts.notNull(query, "The query is null");
 	}
 	
 	protected void assertCallback(DataHandler callback) {
@@ -188,8 +197,10 @@ public abstract class AbstractDao implements Dao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	public abstract boolean exists(String table);
-
+	public boolean exists(String table) {
+		return existsByTable(table);
+	}
+	
 	/**
 	 * check a record exists in the data store.
 	 * if the keys is not supplied, then check the table existence.
@@ -200,9 +211,9 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public boolean exists(Class<?> type, Object ... keys) {
-		return exists(getEntity(type), keys);
+		return existsByKeys(getEntity(type), keys);
 	}
-
+	
 	/**
 	 * check a record exists in the data store.
 	 * if the keys is not supplied, then check the table existence.
@@ -213,14 +224,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public boolean exists(Entity<?> entity, Object ... keys) {
-		if (keys != null && keys.length == 1) {
-			if (keys[0] instanceof Query) {
-				return existsByQuery(entity, (Query)keys[0]);
-			}
-			if (keys[0] instanceof QueryWrapper) {
-				return existsByQuery(entity, ((QueryWrapper)keys[0]).getQuery());
-			}
-		}
+		assertEntity(entity);
 		return existsByKeys(entity, keys);
 	}
 
@@ -228,53 +232,21 @@ public abstract class AbstractDao implements Dao {
 	 * check a record exists in the data store.
 	 * if the query is not supplied, then check the table existence.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public boolean exists(Class<?> type, QueryWrapper query) {
-		return exists(type, getQuery(query));
-	}
-
-	/**
-	 * check a record exists in the data store.
-	 * if the query is not supplied, then check the table existence.
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public boolean exists(Class<?> type, Query query) {
-		return exists(getEntity(type), query);
-	}
-
-	/**
-	 * check a record exists in the data store.
-	 * if the query is not supplied, then check the table existence.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	public boolean exists(Entity<?> entity, QueryWrapper query) {
-		return exists(entity, getQuery(query));
+	public boolean exists(Query<?> query) {
+		return existsByQuery(cloneQuery(query));
 	}
 
 	/**
-	 * check a record exists in the data store.
-	 * if the query is not supplied, then check the table existence.
+	 * check a table exists in the data store.
 	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param table table name
 	 * @return true if the record or the table exists in the data store
 	 */
-	@Override
-	public boolean exists(Entity<?> entity, Query query) {
-		return existsByQuery(entity, query);
-	}
+	protected abstract boolean existsByTable(String table);
 
 	/**
 	 * check a record exists in the data store.
@@ -291,10 +263,9 @@ public abstract class AbstractDao implements Dao {
 	 * if the query is not supplied, then check the table existence.
 	 * 
 	 * @param entity entity
-	 * @param query WHERE conditions
 	 * @return true if the record or the table exists in the data store
 	 */
-	protected abstract boolean existsByQuery(Entity<?> entity, Query query);
+	protected abstract boolean existsByQuery(GenericQuery<?> query);
 
 	//-------------------------------------------------------------------------
 	/**
@@ -305,7 +276,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> T fetch(Class<T> type, Object ... keys) {
-		return fetch(getEntity(type), keys);
+		return fetchByKeys(getEntity(type), keys);
 	}
 
 	/**
@@ -316,63 +287,19 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> T fetch(Entity<T> entity, Object ... keys) {
-		if (keys != null && keys.length == 1) {
-			if (keys[0] instanceof Query) {
-				return fetchByQuery(entity, (Query)keys[0]);
-			}
-			if (keys[0] instanceof QueryWrapper) {
-				return fetchByQuery(entity, ((QueryWrapper)keys[0]).getQuery());
-			}
-		}
+		assertEntity(entity);
 		return fetchByKeys(entity, keys);
 	}
 
 	/**
 	 * get a record by the supplied query
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return record
 	 */
 	@Override
-	public <T> T fetch(Class<T> type, QueryWrapper query) {
-		return fetch(type, getQuery(query));
-	}
-
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public <T> T fetch(Class<T> type, Query query) {
-		return fetch(getEntity(type), query);
-	}
-
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public <T> T fetch(Entity<T> entity, QueryWrapper query) {
-		return fetch(entity, getQuery(query));
-	}
-
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public <T> T fetch(Entity<T> entity, Query query) {
-		return fetchByQuery(entity, query);
+	public <T> T fetch(Query<T> query) {
+		return fetchByQuery(cloneQuery(query));
 	}
 
 	/**
@@ -384,43 +311,20 @@ public abstract class AbstractDao implements Dao {
 	protected <T> T fetchByKeys(Entity<T> entity, Object ... keys) {
 		assertEntity(entity);
 
-		Query query = new Query();
-		queryPrimaryKey(entity, query, keys);
+		GenericQuery<T> query = createQuery(entity);
+		queryPrimaryKey(query, keys);
 
-		return fetchByQuery(entity, query);
+		return fetchByQuery(query);
 	}
 
 	/**
 	 * get a record by the supplied query
 	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return record
 	 */
-	protected abstract <T> T fetchByQuery(Entity<T> entity, Query query);
+	protected abstract <T> T fetchByQuery(GenericQuery<T> query);
 	
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public Map fetch(String table, QueryWrapper query) {
-		return fetch(table, getQuery(query));
-	}
-	
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	@Override
-	public abstract Map fetch(String table, Query query);
-
 	//-------------------------------------------------------------------------
 	/**
 	 * count all records.
@@ -430,7 +334,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int count(Class<?> type) {
-		return count(getEntity(type));
+		return count(createQuery(type));
 	}
 
 	/**
@@ -441,7 +345,8 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int count(Entity<?> entity) {
-		return count(entity, (Query)null);
+		assertEntity(entity);
+		return count(createQuery(entity));
 	}
 
 	/**
@@ -452,76 +357,27 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int count(String table) {
-		return count(table, (Query)null);
+		return count(createQuery(table));
 	}
 
 	/**
 	 * count records by the supplied query.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return record count
 	 */
 	@Override
-	public int count(Class<?> type, QueryWrapper query) {
-		return count(type, getQuery(query));
+	public int count(Query<?> query) {
+		return countByQuery(cloneQuery(query));
 	}
 
 	/**
 	 * count records by the supplied query.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return record count
 	 */
-	@Override
-	public int count(Class<?> type, Query query) {
-		return count(getEntity(type), query);
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public int count(Entity<?> entity, QueryWrapper query) {
-		return count(entity, getQuery(query));
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public abstract int count(Entity<?> entity, Query query);
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public int count(String table, QueryWrapper query) {
-		return count(table, getQuery(query));
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public abstract int count(String table, Query query);
+	protected abstract int countByQuery(Query<?> query);
 
 	//-------------------------------------------------------------------------
 	/**
@@ -532,7 +388,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> List<T> select(Class<T> type) {
-		return select(getEntity(type));
+		return selectByQuery(createQuery(type));
 	}
 
 	/**
@@ -543,7 +399,8 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> List<T> select(Entity<T> entity) {
-		return select(entity, (Query)null);
+		assertEntity(entity);
+		return selectByQuery(createQuery(entity));
 	}
 
 	/**
@@ -554,82 +411,29 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public List<Map> select(String table) {
-		return select(table, (Query)null);
+		return selectByQuery(createQuery(table));
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record list
 	 */
 	@Override
-	public <T> List<T> select(Class<T> type, QueryWrapper query) {
-		return select(type, getQuery(query));
+	public <T> List<T> select(Query<T> query) {
+		return selectByQuery(cloneQuery(query));
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record list
 	 */
-	@Override
-	public <T> List<T> select(Class<T> type, Query query) {
-		return select(getEntity(type), query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	@Override
-	public <T> List<T> select(Entity<T> entity, QueryWrapper query) {
-		return select(entity, query.getQuery());
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	@Override
-	public abstract <T> List<T> select(Entity<T> entity, Query query);
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
-	 */
-	@Override
-	public List<Map> select(String table, QueryWrapper query) {
-		return select(table, query.getQuery());
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
-	 */
-	@Override
-	public abstract List<Map> select(String table, Query query);
+	protected abstract <T> List<T> selectByQuery(Query<T> query);
 
 	/**
 	 * select all records.
@@ -640,7 +444,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> int select(Class<T> type, DataHandler<T> callback) {
-		return select(getEntity(type), callback);
+		return selectByQuery(createQuery(type), callback);
 	}
 
 	/**
@@ -652,7 +456,8 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public <T> int select(Entity<T> entity, DataHandler<T> callback) {
-		return select(entity, (Query)null, callback);
+		assertEntity(entity);
+		return selectByQuery(createQuery(entity), callback);
 	}
 
 	/**
@@ -664,82 +469,29 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int select(String table, DataHandler<Map> callback) {
-		return select(table, (Query)null, callback);
+		return selectByQuery(createQuery(table), callback);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int select(Class<T> type, QueryWrapper query, DataHandler<T> callback) {
-		return select(type, getQuery(query), callback);
+	public <T> int select(Query<T> query, DataHandler<T> callback) {
+		return selectByQuery(cloneQuery(query), callback);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * 
-	 * @param type record type
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	@Override
-	public <T> int select(Class<T> type, Query query, DataHandler<T> callback) {
-		return select(getEntity(type), query, callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public <T> int select(Entity<T> entity, QueryWrapper query, DataHandler<T> callback) {
-		return select(entity, getQuery(query), callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public abstract <T> int select(Entity<T> entity, Query query, DataHandler<T> callback);
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public int select(String table, QueryWrapper query, DataHandler<Map> callback) {
-		return select(table, getQuery(query), callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public abstract int select(String table, Query query, DataHandler<Map> callback);
+	protected abstract <T> int selectByQuery(Query<T> query, DataHandler<T> callback);
 
 	//--------------------------------------------------------------------
 	/**
@@ -749,8 +501,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param prop The property to be used as the value in the collection.
 	 */
+	@Override
 	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop) {
-		return coll(coll, type, prop, (Query)null);
+		return collByQuery(coll, createQuery(type), prop);
 	}
 
 	/**
@@ -760,8 +513,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param prop The property to be used as the value in the collection.
 	 */
+	@Override
 	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop) {
-		return coll(coll, entity, prop, (Query)null);
+		assertEntity(entity);
+		return collByQuery(coll, createQuery(entity), prop);
 	}
 
 	/**
@@ -771,8 +526,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @param prop The property to be used as the value in the collection.
 	 */
+	@Override
 	public Collection<?> coll(Collection<?> coll, String table, String prop) {
-		return coll(coll, table, prop, (Query)null);
+		return collByQuery(coll, createQuery(table), prop);
 	}
 
 	/**
@@ -780,96 +536,21 @@ public abstract class AbstractDao implements Dao {
 	 * if query is null then select all records.
 	 * 
 	 * @param coll the collection to store the value
-	 * @param type record type
 	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 */
-	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop, QueryWrapper query) {
-		return coll(coll, type, prop, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param type record type
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	@SuppressWarnings("unchecked")
-	public Collection<?> coll(Collection<?> coll, Class<?> type, String prop, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(prop);
-
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-
-		select(type, query, new CollectionDataHandler(bh, coll, prop));
-		return coll;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, QueryWrapper query) {
-		return coll(coll, entity, prop, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	@SuppressWarnings("unchecked")
-	public Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(prop);
-
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-
-		select(entity, query, new CollectionDataHandler(bh, coll, prop));
-		return coll;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param table table name
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	public Collection<?> coll(Collection<?> coll, String table, String prop, QueryWrapper query) {
-		return coll(coll, table, prop, getQuery(query));
+	@Override
+	public Collection<?> coll(Collection<?> coll, Query<?> query, String prop) {
+		return collByQuery(coll, cloneQuery(query), prop);
 	}
 	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param table table name
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	public Collection<?> coll(Collection<?> coll, String table, String prop, Query query) {
-		query = cloneQuery(query);
+	@SuppressWarnings("unchecked")
+	protected Collection<?> collByQuery(Collection<?> coll, GenericQuery<?> query, String prop) {
 		query.clearIncludes().include(prop);
 
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		select(table, query, new CollectionDataHandler<Map>(bh, coll, prop));
+		selectByQuery(query, new CollectionDataHandler(bh, coll, prop));
 		return coll;
 	}
 
@@ -881,8 +562,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the list.
 	 * @return record value list
 	 */
+	@Override
 	public List<?> list(Class<?> type, String prop) {
-		return list(type, prop, (Query)null);
+		return listByQuery(createQuery(type), prop);
 	}
 
 	/**
@@ -892,8 +574,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the list.
 	 * @return record value list
 	 */
+	@Override
 	public List<?> list(Entity<?> entity, String prop) {
-		return list(entity, prop, (Query)null);
+		assertEntity(entity);
+		return listByQuery(createQuery(entity), prop);
 	}
 
 	/**
@@ -903,91 +587,27 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the list.
 	 * @return record value list
 	 */
+	@Override
 	public List<?> list(String table, String prop) {
-		return list(table, prop, (Query)null);
+		return listByQuery(createQuery(table), prop);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record value list
 	 */
-	public List<?> list(Class<?> type, String prop, QueryWrapper query) {
-		return list(type, prop, getQuery(query));
+	@Override
+	public List<?> list(Query<?> query, String prop) {
+		return listByQuery(cloneQuery(query), prop);
 	}
 
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param type record type
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(Class<?> type, String prop, Query query) {
+	protected List<?> listByQuery(GenericQuery<?> query, String prop) {
 		List<?> list = new ArrayList<Object>();
-		coll(list, type, prop, query);
-		return list;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(Entity<?> entity, String prop, QueryWrapper query) {
-		return list(entity, prop, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(Entity<?> entity, String prop, Query query) {
-		List<?> list = new ArrayList<Object>();
-		coll(list, entity, prop, query);
-		return list;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(String table, String prop, QueryWrapper query) {
-		return list(table, prop, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(String table, String prop, Query query) {
-		List<?> list = new ArrayList<Object>();
-		coll(list, table, prop, query);
+		collByQuery(list, query, prop);
 		return list;
 	}
 
@@ -999,8 +619,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the set.
 	 * @return record value set
 	 */
+	@Override
 	public Set<?> set(Class<?> type, String prop) {
-		return set(type, prop, (Query)null);
+		return setByQuery(createQuery(type), prop);
 	}
 
 	/**
@@ -1010,8 +631,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the set.
 	 * @return record value set
 	 */
+	@Override
 	public Set<?> set(Entity<?> entity, String prop) {
-		return set(entity, prop, (Query)null);
+		assertEntity(entity);
+		return setByQuery(createQuery(entity), prop);
 	}
 
 	/**
@@ -1021,8 +644,22 @@ public abstract class AbstractDao implements Dao {
 	 * @param prop The property to be used as the value in the set.
 	 * @return record value set
 	 */
+	@Override
 	public Set<?> set(String table, String prop) {
-		return set(table, prop, (Query)null);
+		return setByQuery(createQuery(table), prop);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param prop The property to be used as the value in the set.
+	 * @param query query
+	 * @return record value set
+	 */
+	@Override
+	public Set<?> set(Query<?> query, String prop) {
+		return setByQuery(cloneQuery(query), prop);
 	}
 
 	/**
@@ -1031,81 +668,12 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param type record type
 	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record value set
 	 */
-	public Set<?> set(Class<?> type, String prop, QueryWrapper query) {
-		return set(type, prop, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param type record type
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(Class<?> type, String prop, Query query) {
+	protected Set<?> setByQuery(GenericQuery<?> query, String prop) {
 		Set<?> set = new HashSet<Object>();
-		coll(set, type, prop, query);
-		return set;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(Entity<?> entity, String prop, QueryWrapper query) {
-		return set(entity, prop, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(Entity<?> entity, String prop, Query query) {
-		Set<?> set = new HashSet<Object>();
-		coll(set, entity, prop, query);
-		return set;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(String table, String prop, QueryWrapper query) {
-		return set(table, prop, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(String table, String prop, Query query) {
-		Set<?> set = new HashSet<Object>();
-		coll(set, table, prop, query);
+		collByQuery(set, query, prop);
 		return set;
 	}
 
@@ -1117,8 +685,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record map
 	 */
+	@Override
 	public <T> Map<?, T> map(Class<T> type, String keyProp) {
-		return map(type, keyProp, (Query)null);
+		return mapByQuery(createQuery(type), keyProp);
 	}
 
 	/**
@@ -1128,8 +697,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record map
 	 */
+	@Override
 	public <T> Map<?, T> map(Entity<T> entity, String keyProp) {
-		return map(entity, keyProp, (Query)null);
+		assertEntity(entity);
+		return mapByQuery(createQuery(entity), keyProp);
 	}
 
 	/**
@@ -1139,8 +710,22 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record(a map) map
 	 */
+	@Override
 	public Map<?, Map> map(String table, String keyProp) {
-		return map(table, keyProp, (Query)null);
+		return mapByQuery(createQuery(table), keyProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query query
+	 * @return record map
+	 */
+	@Override
+	public <T> Map<?, T> map(Query<T> query, String keyProp) {
+		return mapByQuery(cloneQuery(query), keyProp);
 	}
 
 	/**
@@ -1149,84 +734,13 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record map
 	 */
-	public <T> Map<?, T> map(Class<T> type, String keyProp, QueryWrapper query) {
-		return map(type, keyProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param type record type
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public <T> Map<?, T> map(Class<T> type, String keyProp, Query query) {
+	protected <T> Map<?, T> mapByQuery(GenericQuery<T> query, String keyProp) {
 		Map<?, T> map = new HashMap<Object, T>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
-		select(type, query, new MapDataHandler<T>(bh, map, keyProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public <T> Map<?, T> map(Entity<T> entity, String keyProp, QueryWrapper query) {
-		return map(entity, keyProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public <T> Map<?, T> map(Entity<T> entity, String keyProp, Query query) {
-		Map<?, T> map = new HashMap<Object, T>();
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-		select(entity, query, new MapDataHandler<T>(bh, map, keyProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) map
-	 */
-	public Map<?, Map> map(String table, String keyProp, QueryWrapper query) {
-		return map(table, keyProp, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) map
-	 */
-	public Map<?, Map> map(String table, String keyProp, Query query) {
-		Map<?, Map> map = new HashMap<Object, Map>();
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-		select(table, query, new MapDataHandler<Map>(bh, map, keyProp));
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
+		selectByQuery(query, new MapDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1239,8 +753,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record map
 	 */
+	@Override
 	public Map<?, ?> map(Class<?> type, String keyProp, String valProp) {
-		return map(type, keyProp, valProp, (Query)null);
+		return mapByQuery(createQuery(type), keyProp, valProp);
 	}
 
 	/**
@@ -1251,8 +766,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record map
 	 */
+	@Override
 	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp) {
-		return map(entity, keyProp, valProp, (Query)null);
+		assertEntity(entity);
+		return mapByQuery(createQuery(entity), keyProp, valProp);
 	}
 
 	/**
@@ -1263,8 +780,23 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record(a map) map
 	 */
+	@Override
 	public Map<?, ?> map(String table, String keyProp, String valProp) {
-		return map(table, keyProp, valProp, (Query)null);
+		return mapByQuery(createQuery(table), keyProp, valProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
+	 * @param query query
+	 * @return record map
+	 */
+	@Override
+	public Map<?, ?> map(Query<?> query, String keyProp, String valProp) {
+		return mapByQuery(cloneQuery(query), keyProp, valProp);
 	}
 
 	/**
@@ -1274,103 +806,17 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
-		return map(type, keyProp, valProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param type record type
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record map
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<?, ?> map(Class<?> type, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
+	protected Map<?, ?> mapByQuery(GenericQuery<?> query, String keyProp, String valProp) {
 		query.clearIncludes().include(keyProp).include(valProp);
 
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
 		Map<?, ?> map = new HashMap<Object, Object>();
-		select(type, query, new MapDataHandler(bh, map, keyProp, valProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
-		return map(entity, keyProp, valProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	@SuppressWarnings("unchecked")
-	public Map<?, ?> map(Entity<?> entity, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(keyProp).include(valProp);
-
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-	
-		Map<?, ?> map = new HashMap<Object, Object>();
-		select(entity, query, new MapDataHandler(bh, map, keyProp, valProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) map
-	 */
-	public Map<?, ?> map(String table, String keyProp, String valProp, QueryWrapper query) {
-		return map(table, keyProp, valProp, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) map
-	 */
-	public Map<?, ?> map(String table, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(keyProp).include(valProp);
-
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-
-		Map<?, ?> map = new HashMap<Object, Object>();
-		select(table, query, new MapDataHandler<Map>(bh, map, keyProp, valProp));
+		selectByQuery(query, new MapDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1382,8 +828,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record map
 	 */
+	@Override
 	public <T> Map<?, List<T>> group(Class<T> type, String keyProp) {
-		return group(type, keyProp, (Query)null);
+		return groupByQuery(createQuery(type), keyProp);
 	}
 
 	/**
@@ -1391,10 +838,12 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @return record group
+	 * @return record map
 	 */
+	@Override
 	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp) {
-		return group(entity, keyProp, (Query)null);
+		assertEntity(entity);
+		return groupByQuery(createQuery(entity), keyProp);
 	}
 
 	/**
@@ -1404,8 +853,22 @@ public abstract class AbstractDao implements Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record(a map) group
 	 */
+	@Override
 	public Map<?, List<Map>> group(String table, String keyProp) {
-		return group(table, keyProp, (Query)null);
+		return groupByQuery(createQuery(table), keyProp);
+	}
+
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param query query
+	 * @return record group
+	 */
+	@Override
+	public <T> Map<?, List<T>> group(Query<T> query, String keyProp) {
+		return groupByQuery(cloneQuery(query), keyProp);
 	}
 
 	/**
@@ -1414,87 +877,14 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record group
 	 */
-	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, QueryWrapper query) {
-		return group(type, keyProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param type record type
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	public <T> Map<?, List<T>> group(Class<T> type, String keyProp, Query query) {
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(type);
+	protected <T> Map<?, List<T>> groupByQuery(GenericQuery<T> query, String keyProp) {
+		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
 		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		select(type, query, new GroupDataHandler<T>(bh, map, keyProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, QueryWrapper query) {
-		return group(entity, keyProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	public <T> Map<?, List<T>> group(Entity<T> entity, String keyProp, Query query) {
-		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
-
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
-		select(entity, query, new GroupDataHandler<T>(bh, map, keyProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) group
-	 */
-	public Map<?, List<Map>> group(String table, String keyProp, QueryWrapper query) {
-		return group(table, keyProp, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) group
-	 */
-	public Map<?, List<Map>> group(String table, String keyProp, Query query) {
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-
-		Map<?, List<Map>> map = new HashMap<Object, List<Map>>();
-		select(table, query, new GroupDataHandler<Map>(bh, map, keyProp));
+		selectByQuery(query, new GroupDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
 
@@ -1507,8 +897,9 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record map
 	 */
+	@Override
 	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp) {
-		return group(type, keyProp, valProp, (Query)null);
+		return groupByQuery(createQuery(type), keyProp, valProp);
 	}
 
 	/**
@@ -1517,10 +908,11 @@ public abstract class AbstractDao implements Dao {
 	 * @param entity entity
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @return record group
+	 * @return record map
 	 */
+	@Override
 	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp) {
-		return group(entity, keyProp, valProp, (Query)null);
+		return groupByQuery(createQuery(entity), keyProp, valProp);
 	}
 
 	/**
@@ -1531,114 +923,42 @@ public abstract class AbstractDao implements Dao {
 	 * @param valProp The property to be used as the value in the Map.
 	 * @return record(a map) group
 	 */
+	@Override
 	public Map<?, List<?>> group(String table, String keyProp, String valProp) {
-		return group(table, keyProp, valProp, (Query)null);
+		return group(createQuery(table), keyProp, valProp);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record group
 	 */
-	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, QueryWrapper query) {
-		return group(type, keyProp, valProp, getQuery(query));
+	@Override
+	public Map<?, List<?>> group(Query<?> query, String keyProp, String valProp) {
+		return groupByQuery(cloneQuery(query), keyProp, valProp);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	@SuppressWarnings("unchecked")
-	public Map<?, List<?>> group(Class<?> type, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(keyProp).include(valProp);
-		
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(type);
-
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(type, query, new GroupDataHandler(bh, map, keyProp, valProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, QueryWrapper query) {
-		return group(entity, keyProp, valProp, getQuery(query));
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @param query query
 	 * @return record group
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<?, List<?>> group(Entity<?> entity, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
+	public Map<?, List<?>> groupByQuery(GenericQuery<?> query, String keyProp, String valProp) {
 		query.clearIncludes().include(keyProp).include(valProp);
 		
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(entity.getType());
+		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
 		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(entity, query, new GroupDataHandler(bh, map, keyProp, valProp));
-		return map;
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) group
-	 */
-	public Map<?, List<?>> group(String table, String keyProp, String valProp, QueryWrapper query) {
-		return group(table, keyProp, valProp, getQuery(query));
-	}
-	
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) group
-	 */
-	public Map<?, List<?>> group(String table, String keyProp, String valProp, Query query) {
-		query = cloneQuery(query);
-		query.clearIncludes().include(keyProp).include(valProp);
-		
-		BeanHandler<Map> bh = getDaoClient().getBeans().getBeanHandler(Map.class);
-
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		select(table, query, new GroupDataHandler<Map>(bh, map, keyProp, valProp));
+		selectByQuery(query, new GroupDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
 
@@ -1656,46 +976,46 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		Query query = new Query();
-		queryPrimaryKey(entity, query, obj);
+		GenericQuery query = createQuery(entity);
+		queryPrimaryKey(query, obj);
 
-		return deletes(entity, query);
+		return deletes(query);
 	}
 
 	/**
 	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
 	 * 
 	 * @param type record type
 	 * @param keys a record contains key property or composite keys
 	 * @return deleted count
+	 * @throws IllegalArgumentException if the supplied keys is null
 	 */
 	@Override
-	public <T> int delete(Class<T> type, Object ... keys) {
-		return delete(getEntity(type), keys);
+	public int delete(Class<?> type, Object ... keys) {
+		Entity<?> entity = getEntity(type);
+		return delete(entity, keys);
 	}
-
 
 	/**
 	 * delete records by the supplied keys.
-	 * if the supplied keys is null, all records will be deleted.
 	 * 
 	 * @param entity entity
 	 * @param keys a record contains key property or composite keys
 	 * @return deleted count
+	 * @throws IllegalArgumentException if the supplied keys is null
 	 */
 	@Override
-	public <T> int delete(Entity<T> entity, Object ... keys) {
-		assertTable(entity);
-
+	public int delete(Entity<?> entity, Object ... keys) {
 		if (keys == null || keys.length == 0) {
-			return deletes(entity);
+			throw new IllegalArgumentException("Illegal primary keys for [" + entity.getType() + "]: " + Objects.toString(keys));
 		}
 
-		Query query = new Query();
-		queryPrimaryKey(entity, query, keys);
+		assertTable(entity);
+
+		GenericQuery query = createQuery(entity);
+		queryPrimaryKey(query, keys);
 		
-		return deletes(entity, query);
+		return deletesByQuery(query);
 	}
 
 	/**
@@ -1732,63 +1052,10 @@ public abstract class AbstractDao implements Dao {
 	 * @param type record type
 	 * @return deleted count
 	 */
-	public <T> int deletes(Class<T> type) {
-		return deletes(getEntity(type));
+	@Override
+	public int deletes(Class<?> type) {
+		return deletesByQuery(createQuery(type));
 	}
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Class<?> type, QueryWrapper query) {
-		return deletes(type, getQuery(query));
-	}
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param type record type
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Class<?> type, Query query) {
-		return deletes(getEntity(type), query);
-	}
-
-	/**
-	 * delete all records.
-	 * 
-	 * @param entity entity
-	 * @return deleted count
-	 */
-	public int deletes(Entity<?> entity) {
-		return deletes(entity, (Query)null);
-	}
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Entity<?> entity, QueryWrapper query) {
-		return deletes(entity, getQuery(query));
-	}
-
-	/**
-	 * delete records by the supplied query.
-	 * if query is empty, all records will be deleted.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public abstract int deletes(Entity<?> entity, Query query);
 
 	/**
 	 * delete all records.
@@ -1796,19 +1063,30 @@ public abstract class AbstractDao implements Dao {
 	 * @param table table name
 	 * @return deleted count
 	 */
+	@Override
 	public int deletes(String table) {
-		return deletes(table, null);
+		return deletesByQuery(createQuery(table));
+	}
+
+	/**
+	 * delete records by the supplied query
+	 * 
+	 * @param query query
+	 * @return deleted count
+	 */
+	@Override
+	public int deletes(Query<?> query) {
+		return deletesByQuery(cloneQuery(query));
 	}
 
 	/**
 	 * delete records by the supplied query.
 	 * if query is empty, all records will be deleted.
 	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return deleted count
 	 */
-	public abstract int deletes(String table, Query query);
+	protected abstract int deletesByQuery(Query<?> query);
 
 	//-------------------------------------------------------------------------
 	/**
@@ -1913,21 +1191,6 @@ public abstract class AbstractDao implements Dao {
 
 	//-------------------------------------------------------------------------
 	/**
-	 * update one record by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	protected int updateOne(Entity<?> entity, Object obj, Query query) {
-		int cnt = update(entity, obj, query);
-		if (cnt > 1) {
-			throw new DaoException("Too many (" + cnt + ") records updated.");
-		}
-		return cnt;
-	}
-	
-	/**
 	 * update a record by the supplied object. 
 	 * 
 	 * @param obj sample object
@@ -1940,10 +1203,10 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		Query query = new Query();
-		queryPrimaryKey(entity, query, obj);
+		GenericQuery query = createQuery(entity);
+		queryPrimaryKey(query, obj);
 
-		return updateOne(entity, obj, query);
+		return updatesByQuery(obj, query, 1);
 	}
 
 	/**
@@ -1960,11 +1223,11 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		Query query = new Query();
-		queryPrimaryKey(entity, query, obj);
-		excludeNullProperties(entity, query, obj);
+		GenericQuery query = createQuery(entity);
+		queryPrimaryKey(query, obj);
+		excludeNullProperties(query, obj);
 
-		return updateOne(entity, obj, query);
+		return updatesByQuery(obj, query, 1);
 	}
 
 	/**
@@ -2027,28 +1290,14 @@ public abstract class AbstractDao implements Dao {
 	 * update records by the supplied object and query
 	 * 
 	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	public int updates(Object obj, QueryWrapper query) {
-		return updates(obj, getQuery(query));
-	}
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
+	 * @param query query
 	 * @return updated count
 	 */
 	@Override
-	public int updates(Object obj, Query query) {
+	public int updates(Object obj, Query<?> query) {
 		assertObject(obj);
 
-		Entity<?> entity = getEntity(obj.getClass());
-		assertTable(entity);
-
-		return update(entity, obj, query);
+		return updatesByQuery(obj, cloneQuery(query), Integer.MAX_VALUE);
 	}
 
 	/**
@@ -2056,44 +1305,31 @@ public abstract class AbstractDao implements Dao {
 	 * the null properties will be ignored.
 	 * 
 	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	public int updatesIgnoreNull(Object obj, QueryWrapper query) {
-		return updatesIgnoreNull(obj, getQuery(query));
-	}
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
+	 * @param query query
 	 * @return updated count
 	 */
 	@Override
-	public int updatesIgnoreNull(Object obj, Query query) {
+	public int updatesIgnoreNull(Object obj, Query<?> query) {
 		assertObject(obj);
 
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		if (query == null) {
-			query = new Query();
-		}
-		excludeNullProperties(entity, query, obj);
+		GenericQuery gq = cloneQuery(query);
+		excludeNullProperties(gq, obj);
 
-		return update(entity, obj, query);
+		return updatesByQuery(obj, gq, Integer.MAX_VALUE);
 	}
 
 	/**
 	 * update records by the supplied object and query
 	 * 
 	 * @param obj sample object
-	 * @param query where condition and update fields filter
+	 * @param query query
+	 * @param limit limit count of updated items
 	 * @return updated count
 	 */
-	protected abstract int update(Entity<?> entity, Object obj, Query query);
+	protected abstract int updatesByQuery(Object obj, GenericQuery<?> query, int limit);
 	
 	//-------------------------------------------------------------------------
 	/**
@@ -2140,16 +1376,36 @@ public abstract class AbstractDao implements Dao {
 	}
 	
 	//--------------------------------------------------------------------
-	protected Query getQuery(QueryWrapper query) {
-		return query == null ? null : query.getQuery();
+	protected <T> GenericQuery<T> createQuery(Class<T> type) {
+		return new GenericQuery<T>(getEntity(type));
 	}
 	
-	protected Query cloneQuery(Query query) {
-		return query == null ? new Query() : query.clone();
+	protected <T> GenericQuery<T> createQuery(Entity<T> entity) {
+		return new GenericQuery<T>(entity);
+	}
+	
+	protected GenericQuery<Map> createQuery(String table) {
+		return new GenericQuery<Map>(table);
+	}
+	
+	protected <T> GenericQuery<T> cloneQuery(Query<T> query) {
+		assertQuery(query);
+		GenericQuery<T> q = new GenericQuery<T>(query);
+		if (q.getEntity() == null && q.getType() != null) {
+			Object target = query.getTarget();
+			if (target instanceof Class) {
+				Entity<T> entity = getEntity(q.getType());
+				q.setEntity(entity);
+			}
+		}
+		
+		return q;
 	}
 	
 	//--------------------------------------------------------------------
-	protected void queryPrimaryKey(Entity<?> entity, Query query, Object ... keys) {
+	protected void queryPrimaryKey(GenericQuery<?> query, Object ... keys) {
+		Entity<?> entity = query.getEntity();
+		
 		if (keys == null || keys.length == 0) {
 			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
 		}
@@ -2178,7 +1434,8 @@ public abstract class AbstractDao implements Dao {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void excludeNullProperties(Entity<?> entity, Query query, Object obj) {
+	protected void excludeNullProperties(GenericQuery<?> query, Object obj) {
+		Entity<?> entity = query.getEntity();
 		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());
 		for (EntityField ef : entity.getFields()) {
 			if (bh.getPropertyValue(obj, ef.getName()) == null) {
@@ -2187,7 +1444,8 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected void excludePrimaryKeys(Entity<?> entity, Query query) {
+	protected void excludePrimaryKeys(GenericQuery<?> query) {
+		Entity<?> entity = query.getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isPrimaryKey()) {
 				query.exclude(ef.getName());
@@ -2195,7 +1453,8 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected void excludeNonPrimaryKeys(Entity<?> entity, Query query) {
+	protected void excludeNonPrimaryKeys(GenericQuery<?> query) {
+		Entity<?> entity = query.getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
 				query.exclude(ef.getName());
@@ -2203,7 +1462,8 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected void includePrimaryKeys(Entity<?> entity, Query query) {
+	protected void includePrimaryKeys(GenericQuery<?> query) {
+		Entity<?> entity = query.getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
 				query.include(ef.getName());

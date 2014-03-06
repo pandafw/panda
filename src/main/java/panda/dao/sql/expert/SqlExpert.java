@@ -8,16 +8,17 @@ import java.util.Map.Entry;
 
 import panda.castor.Castors;
 import panda.dao.DB;
+import panda.dao.DaoClient;
 import panda.dao.DatabaseMeta;
-import panda.dao.criteria.Expression;
-import panda.dao.criteria.Join;
-import panda.dao.criteria.Operator;
-import panda.dao.criteria.Order;
-import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
+import panda.dao.query.Expression;
+import panda.dao.query.Join;
+import panda.dao.query.Operator;
+import panda.dao.query.Order;
+import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 import panda.dao.sql.SqlNamings;
 import panda.dao.sql.Sqls;
@@ -35,6 +36,7 @@ public abstract class SqlExpert {
 	protected DatabaseMeta databaseMeta;
 	protected Map<String, Object> properties;
 	protected Castors castors;
+	protected DaoClient client;
 
 	/**
 	 * @return the databaseMeta
@@ -82,6 +84,20 @@ public abstract class SqlExpert {
 	 */
 	public void setCastors(Castors castors) {
 		this.castors = castors;
+	}
+
+	/**
+	 * @return the client
+	 */
+	public DaoClient getClient() {
+		return client;
+	}
+
+	/**
+	 * @param client the client to set
+	 */
+	public void setClient(DaoClient client) {
+		this.client = client;
 	}
 
 	protected String getEntityMeta(Entity<?> entity, String name) {
@@ -151,79 +167,66 @@ public abstract class SqlExpert {
 	
 	public abstract List<String> create(Entity<?> entity);
 
-	public Sql count(Entity<?> entity, Query query) {
+	public Sql count(Query<?> query) {
 		Sql sql = new Sql();
-		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(entity.getTableName()));
-		where(sql, entity, query);
-		return sql;
-	}
-
-	public Sql count(String table, Query query) {
-		Sql sql = new Sql();
-		sql.append("SELECT COUNT(*) FROM ").append(table);
+		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(query.getTable()));
 		where(sql, query);
 		return sql;
 	}
 
-	public Sql select(Entity<?> entity, Query query) {
+	public Sql select(Query<?> query) {
 		Sql sql = new Sql();
-		sql.append("SELECT");
-		boolean sel = false;
-		for (EntityField ef : entity.getFields()) {
-			if (query != null && query.shouldExclude(ef.getName())) {
-				continue;
-			}
-			sql.append(' ')
-				.append("t0." + escapeColumn(ef.getColumn()))
-				.append(" AS ")
-				.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
-				.append(',');
-			sel = true;
-		}
-		if (!sel) {
-			throw new IllegalArgumentException("Nothing to SELECT!");
-		}
-		sql.setCharAt(sql.length() - 1, ' ');
-		sql.append("FROM ").append(escapeTable(entity.getViewName())).append(" t0");
-		join(sql, entity, query);
-		where(sql, entity, query);
-		order(sql, entity, query);
-		_limit(sql, query);
+		select(sql, query);
 		return sql;
 	}
-
-	public Sql select(String table, Query query) {
-		Sql sql = new Sql();
+	
+	protected void select(Sql sql, Query<?> query) {
 		sql.append("SELECT");
-		if (query != null && query.hasIncludes()) {
-			for (String column : query.getIncludes()) {
+
+		Entity<?> entity = query.getEntity();
+		if (entity != null) {
+			boolean sel = false;
+			for (EntityField ef : entity.getFields()) {
+				if (query != null && query.shouldExclude(ef.getName())) {
+					continue;
+				}
 				sql.append(' ')
-					.append("t0." + escapeColumn(column))
+					.append("t0." + escapeColumn(ef.getColumn()))
+					.append(" AS ")
+					.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
 					.append(',');
+				sel = true;
+			}
+			if (!sel) {
+				throw new IllegalArgumentException("Nothing to SELECT!");
 			}
 			sql.setCharAt(sql.length() - 1, ' ');
+			sql.append("FROM ").append(escapeTable(entity.getViewName())).append(" t0");
 		}
 		else {
-			sql.append(" t0.* ");
+			String table = query.getTable();
+			if (query.hasIncludes()) {
+				for (String column : query.getIncludes()) {
+					sql.append(' ')
+						.append("t0." + escapeColumn(column))
+						.append(',');
+				}
+				sql.setCharAt(sql.length() - 1, ' ');
+			}
+			else {
+				sql.append(" t0.* ");
+			}
+			sql.append("FROM ").append(escapeTable(table)).append(" t0");
 		}
-		sql.append("FROM ").append(escapeTable(table)).append(" t0");
 		join(sql, query);
 		where(sql, query);
 		order(sql, query);
 		_limit(sql, query);
-		return sql;
 	}
 
-	public Sql delete(Entity<?> entity, Query query) {
+	public Sql delete(Query<?> query) {
 		Sql sql = new Sql();
-		sql.append("DELETE FROM ").append(escapeTable(entity.getTableName()));
-		where(sql, entity, query);
-		return sql;
-	}
-
-	public Sql delete(String table, Query query) {
-		Sql sql = new Sql();
-		sql.append("DELETE FROM ").append(table);
+		sql.append("DELETE FROM ").append(escapeTable(query.getTable()));
 		where(sql, query);
 		return sql;
 	}
@@ -265,10 +268,13 @@ public abstract class SqlExpert {
 		return sql;
 	}
 
-	public Sql update(Entity<?> entity, Object data, Query query) {
+	public Sql update(Object data, Query<?> query) {
 		Sql sql = new Sql();
-		sql.append("UPDATE ").append(escapeTable(entity.getTableName()));
+
+		sql.append("UPDATE ").append(escapeTable(query.getTable()));
 		sql.append(" SET");
+		
+		Entity<?> entity = query.getEntity();
 		boolean set = false;
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly() || (query != null && query.shouldExclude(ef.getName()))) {
@@ -283,7 +289,7 @@ public abstract class SqlExpert {
 		}
 
 		sql.setLength(sql.length() - 1);
-		where(sql, entity, query);
+		where(sql, query);
 		return sql;
 	}
 	
@@ -295,13 +301,9 @@ public abstract class SqlExpert {
 		return ef;
 	}
 	
-	protected void join(Sql sql, Entity<?> entity, Query query) {
+	protected void join(Sql sql, Query<?> query) {
 		//TODO: extended join expression with entity
-		join(sql, query);
-	}
-	
-	protected void join(Sql sql, Query query) {
-		if (query == null || !query.hasJoins()) {
+		if (!query.hasJoins()) {
 			return;
 		}
 		
@@ -323,49 +325,47 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void where(Sql sql, Entity<?> entity, Query query) {
-		if (query == null || !query.hasConditions()) {
+	protected void where(Sql sql, Query<?> query) {
+		if (!query.hasConditions()) {
 			return;
 		}
 		
 		sql.append(" WHERE");
-		for (Expression exp : query.getExpressions()) {
-			if (exp instanceof Expression.ValueCompare) {
-				Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-				EntityField ef = getEntityField(entity, evc.getField(), "where");
-				whereValueCompare(sql, ef.getColumn(), evc);
-			}
-			else if (exp instanceof Expression.FieldCompare) {
-				Expression.FieldCompare efc = (Expression.FieldCompare)exp;
-				EntityField ef = getEntityField(entity, efc.getField(), "where");
-				EntityField ef2 = getEntityField(entity, efc.getValue(), "compare");
-				sql.append(' ').append(ef.getColumn()).append(' ').append(efc.getOperator()).append(ef2.getColumn());
-			}
-			else if (exp instanceof Expression.Simple) {
-				Expression.Simple es = (Expression.Simple)exp;
-				EntityField ef = getEntityField(entity, es.getField(), "simple");
-				sql.append(' ').append(ef.getColumn()).append(' ').append(es.getOperator());
-			}
-			else {
-				sql.append(' ').append(exp.toString());
-			}
-		}
-	}
-	
-	protected void where(Sql sql, Query query) {
-		if (query == null || !query.hasConditions()) {
-			return;
-		}
 		
-		sql.append(" WHERE");
-		for (Expression exp : query.getExpressions()) {
-			if (exp instanceof Expression.ValueCompare) {
-				Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-				
-				whereValueCompare(sql, evc.getField(), evc);
+		Entity<?> entity = query.getEntity();
+		if (entity != null) {
+			for (Expression exp : query.getExpressions()) {
+				if (exp instanceof Expression.ValueCompare) {
+					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
+					EntityField ef = getEntityField(entity, evc.getField(), "where");
+					whereValueCompare(sql, ef.getColumn(), evc);
+				}
+				else if (exp instanceof Expression.FieldCompare) {
+					Expression.FieldCompare efc = (Expression.FieldCompare)exp;
+					EntityField ef = getEntityField(entity, efc.getField(), "where");
+					EntityField ef2 = getEntityField(entity, efc.getValue(), "compare");
+					sql.append(' ').append(ef.getColumn()).append(' ').append(efc.getOperator()).append(ef2.getColumn());
+				}
+				else if (exp instanceof Expression.Simple) {
+					Expression.Simple es = (Expression.Simple)exp;
+					EntityField ef = getEntityField(entity, es.getField(), "simple");
+					sql.append(' ').append(ef.getColumn()).append(' ').append(es.getOperator());
+				}
+				else {
+					sql.append(' ').append(exp.toString());
+				}
 			}
-			else {
-				sql.append(' ').append(exp.toString());
+		}
+		else {
+			for (Expression exp : query.getExpressions()) {
+				if (exp instanceof Expression.ValueCompare) {
+					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
+					
+					whereValueCompare(sql, evc.getField(), evc);
+				}
+				else {
+					sql.append(' ').append(exp.toString());
+				}
 			}
 		}
 	}
@@ -418,27 +418,24 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void order(Sql sql, Entity<?> entity, Query query) {
-		if (query == null || !query.hasOrders()) {
+	protected void order(Sql sql, Query<?> query) {
+		if (!query.hasOrders()) {
 			return;
 		}
 		
 		sql.append(" ORDER BY");
-		for (Entry<String, Order> en : query.getOrders().entrySet()) {
-			EntityField ef = getEntityField(entity, en.getKey(), "order");
-			sql.append(' ').append(ef.getColumn()).append(' ').append(en.getValue()).append(',');
-		}
-		sql.setCharAt(sql.length() - 1, ' ');
-	}
-	
-	protected void order(Sql sql, Query query) {
-		if (query == null || !query.hasOrders()) {
-			return;
-		}
 		
-		sql.append(" ORDER BY");
-		for (Entry<String, Order> en : query.getOrders().entrySet()) {
-			sql.append(' ').append(en.getKey()).append(' ').append(en.getValue()).append(',');
+		Entity<?> entity = query.getEntity();
+		if (entity != null) {
+			for (Entry<String, Order> en : query.getOrders().entrySet()) {
+				EntityField ef = getEntityField(entity, en.getKey(), "order");
+				sql.append(' ').append(ef.getColumn()).append(' ').append(en.getValue()).append(',');
+			}
+		}
+		else {
+			for (Entry<String, Order> en : query.getOrders().entrySet()) {
+				sql.append(' ').append(en.getKey()).append(' ').append(en.getValue()).append(',');
+			}
 		}
 		sql.setCharAt(sql.length() - 1, ' ');
 	}

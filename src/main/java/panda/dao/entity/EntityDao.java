@@ -10,8 +10,7 @@ import panda.dao.DaoClient;
 import panda.dao.DataHandler;
 import panda.dao.DatabaseMeta;
 import panda.dao.Transaction;
-import panda.dao.criteria.Query;
-import panda.dao.criteria.QueryWrapper;
+import panda.dao.query.Query;
 import panda.lang.Texts;
 
 
@@ -139,19 +138,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return true if the record or the table exists in the data store
 	 */
-	public boolean exists(QueryWrapper query) {
-		return dao.exists(entity, query);
-	}
-
-	/**
-	 * check a record exists in the data store.
-	 * if the query is not supplied, then check the table existence.
-	 * 
-	 * @param query WHERE conditions
-	 * @return true if the record or the table exists in the data store
-	 */
-	public boolean exists(Query query) {
-		return dao.exists(entity, query);
+	public boolean exists(Query<T> query) {
+		return dao.exists(query);
 	}
 
 	//-------------------------------------------------------------------------
@@ -170,18 +158,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return record
 	 */
-	public T fetch(QueryWrapper query) {
-		return dao.fetch(entity, query);
-	}
-
-	/**
-	 * get a record by the supplied query
-	 * 
-	 * @param query WHERE conditions
-	 * @return record
-	 */
-	public T fetch(Query query) {
-		return dao.fetch(entity, query);
+	public T fetch(Query<T> query) {
+		return dao.fetch(query);
 	}
 
 	//-------------------------------------------------------------------------
@@ -200,18 +178,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return record count
 	 */
-	public int count(QueryWrapper query) {
-		return dao.count(entity, query);
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	public int count(Query query) {
-		return dao.count(entity, query);
+	public int count(Query<T> query) {
+		return dao.count(query);
 	}
 
 	//-------------------------------------------------------------------------
@@ -231,19 +199,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record list
 	 */
-	public List<T> select(QueryWrapper query) {
-		return dao.select(entity, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	public List<T> select(Query query) {
-		return dao.select(entity, query);
+	public List<T> select(Query<T> query) {
+		return dao.select(query);
 	}
 
 	/**
@@ -263,19 +220,8 @@ public class EntityDao<T> {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	public int select(QueryWrapper query, DataHandler<T> callback) {
-		return dao.select(entity, query, callback);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	public int select(Query query, DataHandler<T> callback) {
-		return dao.select(entity, query, callback);
+	public int select(Query<T> query, DataHandler<T> callback) {
+		return dao.select(query, callback);
 	}
 
 	//--------------------------------------------------------------------
@@ -297,20 +243,8 @@ public class EntityDao<T> {
 	 * @param prop The property to be used as the value in the collection.
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 */
-	public Collection<?> coll(Collection<?> coll, String prop, QueryWrapper query) {
-		return dao.coll(coll, entity, prop, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param coll the collection to store the value
-	 * @param prop The property to be used as the value in the collection.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 */
-	public Collection<?> coll(Collection<?> coll, String prop, Query query) {
-		return dao.coll(coll, entity, prop, query);
+	public Collection<?> coll(Collection<?> coll, Query<?> query, String prop) {
+		return dao.coll(coll, query, prop);
 	}
 
 	//--------------------------------------------------------------------
@@ -332,20 +266,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value list
 	 */
-	public List<?> list(String prop, QueryWrapper query) {
-		return dao.list(entity, prop, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param prop The property to be used as the value in the list.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value list
-	 */
-	public List<?> list(String prop, Query query) {
-		return dao.list(entity, prop, query);
+	public List<?> list(Query<?> query, String prop) {
+		return dao.list(query, prop);
 	}
 
 	//--------------------------------------------------------------------
@@ -367,20 +289,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record value set
 	 */
-	public Set<?> set(String prop, QueryWrapper query) {
-		return dao.set(entity, prop, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param prop The property to be used as the value in the set.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record value set
-	 */
-	public Set<?> set(String prop, Query query) {
-		return dao.set(entity, prop, query);
+	public Set<?> set(Query<?> query, String prop) {
+		return dao.set(query, prop);
 	}
 
 	//--------------------------------------------------------------------
@@ -402,20 +312,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record map
 	 */
-	public Map<?, T> map(String keyProp, QueryWrapper query) {
-		return dao.map(entity, keyProp, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public Map<?, T> map(String keyProp, Query query) {
-		return dao.map(entity, keyProp, query);
+	public Map<?, T> map(Query<T> query, String keyProp) {
+		return dao.map(query, keyProp);
 	}
 
 	//--------------------------------------------------------------------
@@ -439,21 +337,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record map
 	 */
-	public Map<?, ?> map(String keyProp, String valProp, QueryWrapper query) {
-		return dao.map(entity, keyProp, valProp, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record map
-	 */
-	public Map<?, ?> map(String keyProp, String valProp, Query query) {
-		return dao.map(entity, keyProp, valProp, query);
+	public Map<?, ?> map(Query<T> query, String keyProp, String valProp) {
+		return dao.map(query, keyProp, valProp);
 	}
 
 	//--------------------------------------------------------------------
@@ -477,21 +362,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions, order, offset, limit and filters
 	 * @return record group
 	 */
-	public Map<?, List<?>> group(String keyProp, String valProp, QueryWrapper query) {
-		return dao.group(entity, keyProp, valProp, query);
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param keyProp The property to be used as the key in the Map.
-	 * @param valProp The property to be used as the value in the Map.
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record group
-	 */
-	public Map<?, List<?>> group(String keyProp, String valProp, Query query) {
-		return dao.group(entity, keyProp, valProp, query);
+	public Map<?, List<?>> group(Query<T> query, String keyProp, String valProp) {
+		return dao.group(query, keyProp, valProp);
 	}
 
 	//-------------------------------------------------------------------------
@@ -532,18 +404,8 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return deleted count
 	 */
-	public int deletes(QueryWrapper query) {
-		return dao.deletes(entity, query);
-	}
-
-	/**
-	 * delete records by the supplied query
-	 * 
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	public int deletes(Query query) {
-		return dao.deletes(entity, query);
+	public int deletes(Query<T> query) {
+		return dao.deletes(query);
 	}
 
 	//-------------------------------------------------------------------------
@@ -643,31 +505,8 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updates(T obj, QueryWrapper query) {
-		return dao.updates(obj, query);
-	}
-
-	/**
-	 * update records by the supplied object and query
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
 	public int updates(T obj, Query query) {
 		return dao.updates(obj, query);
-	}
-
-	/**
-	 * update records by the supplied object and query. 
-	 * the null properties will be ignored.
-	 * 
-	 * @param obj sample object
-	 * @param query where condition and update fields filter
-	 * @return updated count
-	 */
-	public int updatesIgnoreNull(T obj, QueryWrapper query) {
-		return dao.updatesIgnoreNull(obj, query);
 	}
 
 	/**

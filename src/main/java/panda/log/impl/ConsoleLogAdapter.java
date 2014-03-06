@@ -8,56 +8,91 @@ import panda.log.LogAdapter;
 public class ConsoleLogAdapter implements LogAdapter {
 
 	private final static ConsoleLog log = new ConsoleLog();
+	private static int level = Log.LEVEL_INFO;
 
 	public Log getLogger(String className) {
 		return log;
 	}
 
 	/**
+	 * @return the level
+	 */
+	public static int getLevel() {
+		return level;
+	}
+
+	/**
+	 * @param level the level to set
+	 */
+	public static void setLevel(int level) {
+		ConsoleLogAdapter.level = level;
+	}
+
+	/**
 	 * Console log to System.out and System.err
 	 */
 	public static class ConsoleLog extends AbstractLog {
-
 		private ConsoleLog() {
-			isInfoEnabled = true;
-			isDebugEnabled = true;
-
-			isFatalEnabled = true;
-			isErrorEnabled = true;
-			isWarnEnabled = true;
-			isInfoEnabled = false;
-			isDebugEnabled = false;
-			isTraceEnabled = false;
 		}
 
-		public void debug(Object message, Throwable t) {
-			if (isDebugEnabled())
-				printOut("DEBUG", message, t);
+		public boolean isFatalEnabled() {
+			return level >= Log.LEVEL_FATAL;
 		}
 
-		public void error(Object message, Throwable t) {
-			if (isErrorEnabled())
-				errorOut("ERROR", message, t);
+		public boolean isErrorEnabled() {
+			return level >= Log.LEVEL_ERROR;
 		}
 
+		public boolean isWarnEnabled() {
+			return level >= Log.LEVEL_WARN;
+		}
+
+		public boolean isInfoEnabled() {
+			return level >= Log.LEVEL_INFO;
+		}
+
+		public boolean isDebugEnabled() {
+			return level >= Log.LEVEL_DEBUG;
+		}
+
+		public boolean isTraceEnabled() {
+			return level >= Log.LEVEL_TRACE;
+		}
+		
 		public void fatal(Object message, Throwable t) {
-			if (isFatalEnabled())
+			if (isFatalEnabled()) {
 				errorOut("FATAL", message, t);
-		}
-
-		public void info(Object message, Throwable t) {
-			if (isInfoEnabled())
-				printOut("INFO", message, t);
-		}
-
-		public void trace(Object message, Throwable t) {
-			if (isTraceEnabled())
-				printOut("TRACE", message, t);
+			}
 		}
 
 		public void warn(Object message, Throwable t) {
-			if (isWarnEnabled())
+			if (isWarnEnabled()) {
 				errorOut("WARN", message, t);
+			}
+		}
+
+		public void error(Object message, Throwable t) {
+			if (isErrorEnabled()) {
+				errorOut("ERROR", message, t);
+			}
+		}
+
+		public void info(Object message, Throwable t) {
+			if (isInfoEnabled()) {
+				printOut("INFO", message, t);
+			}
+		}
+
+		public void debug(Object message, Throwable t) {
+			if (isDebugEnabled()) {
+				printOut("DEBUG", message, t);
+			}
+		}
+
+		public void trace(Object message, Throwable t) {
+			if (isTraceEnabled()) {
+				printOut("TRACE", message, t);
+			}
 		}
 
 		private void printOut(String level, Object message, Throwable t) {

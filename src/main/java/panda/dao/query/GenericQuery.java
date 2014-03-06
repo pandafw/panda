@@ -1,4 +1,4 @@
-package panda.dao.criteria;
+package panda.dao.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,14 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import panda.dao.entity.Entity;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
 
 /**
+ * 
  * @author yf.frank.wang@gmail.com
+ *
+ * @param <T> table
  */
-public class Query implements Cloneable {
+public class GenericQuery<T> implements Query<T>, Cloneable {
+	protected Object target;
 	protected Operator conjunction = Operator.AND;
 	protected int start;
 	protected int limit;
@@ -25,14 +30,112 @@ public class Query implements Cloneable {
 	protected Set<String> excludes;
 	protected List<Join> joins;
 
-	public static Query create() {
-		return new Query();
+	/**
+	 * constructor
+	 * @param type query type
+	 */
+	public GenericQuery(Class<T> type) {
+		this.target = type;
 	}
 
 	/**
 	 * constructor
+	 * @param entity query entity
 	 */
-	public Query() {
+	public GenericQuery(Entity<T> entity) {
+		this.target = entity;
+	}
+
+	/**
+	 * @param target query target
+	 */
+	public GenericQuery(String target) {
+		this.target = target;
+	}
+	
+	/**
+	 * @param query query to clone
+	 */
+	public GenericQuery(Query<T> query) {
+		target = query.getTarget();
+		conjunction = query.getConjunction();
+		start = query.getStart();
+		limit = query.getLimit();
+
+		if (query.hasConditions()) {
+			expressions = new ArrayList<Expression>();
+			expressions.addAll(query.getExpressions());
+		}
+		
+		if (query.hasOrders()) {
+			orders = new LinkedHashMap<String, Order>();
+			orders.putAll(query.getOrders());
+		}
+
+		if (query.hasIncludes()) {
+			includes = new HashSet<String>();
+			includes.addAll(query.getIncludes());
+		}
+
+		if (query.hasExcludes()) {
+			excludes = new HashSet<String>();
+			excludes.addAll(query.getExcludes());
+		}
+
+		if (query.hasJoins()) {
+			joins = new ArrayList<Join>();
+			joins.addAll(query.getJoins());
+		}
+	}
+
+	/**
+	 * @return the target
+	 */
+	public Object getTarget() {
+		return target;
+	}
+
+	/**
+	 * @return the entity
+	 */
+	@SuppressWarnings("unchecked")
+	public Entity<T> getEntity() {
+		return target instanceof Entity ? (Entity<T>)target : null;
+	}
+
+	/**
+	 * @param entity the entity to set
+	 */
+	public void setEntity(Entity<T> entity) {
+		this.target = entity;
+	}
+
+	/**
+	 * @return the type
+	 */
+	@SuppressWarnings("unchecked")
+	public Class<T> getType() {
+		if (target instanceof Entity) {
+			return ((Entity<T>)target).getType();
+		}
+		if (target instanceof Class) {
+			return (Class<T>)target;
+		}
+		return (Class<T>)Map.class;
+	}
+
+	/**
+	 * @return the table
+	 */
+	@SuppressWarnings("unchecked")
+	public String getTable() {
+		if (target instanceof Entity) {
+			return ((Entity<T>)target).getViewName();
+		}
+		if (target instanceof String) {
+			return (String)target;
+		}
+		return null;
 	}
 
 	/**
@@ -119,7 +222,7 @@ public class Query implements Cloneable {
 	 * @param name include name
 	 * @return this
 	 */
-	public Query include(String name) {
+	public GenericQuery include(String name) {
 		addInclude(name);
 		removeExclude(name);
 		return this;
@@ -129,7 +232,7 @@ public class Query implements Cloneable {
 	 * @param name the field name to exclude
 	 * @return this
 	 */
-	public Query exclude(String name) {
+	public GenericQuery exclude(String name) {
 		removeInclude(name);
 		addExclude(name);
 		return this;
@@ -140,7 +243,7 @@ public class Query implements Cloneable {
 	 * 
 	 * @return this
 	 */
-	public Query clearIncludes() {
+	public GenericQuery clearIncludes() {
 		if (includes != null) {
 			includes.clear();
 		}
@@ -152,7 +255,7 @@ public class Query implements Cloneable {
 	 * 
 	 * @return this
 	 */
-	public Query clearExcludes() {
+	public GenericQuery clearExcludes() {
 		if (excludes == null) {
 			excludes.clear();
 		}
@@ -181,7 +284,7 @@ public class Query implements Cloneable {
 	 * @param name the field name to include
 	 * @return this
 	 */
-	protected Query addInclude(String name) {
+	protected GenericQuery addInclude(String name) {
 		if (includes == null) {
 			includes = new HashSet<String>();
 		}
@@ -193,7 +296,7 @@ public class Query implements Cloneable {
 	 * @param name field name
 	 * @return this
 	 */
-	protected Query removeInclude(String name) {
+	protected GenericQuery removeInclude(String name) {
 		if (includes != null) {
 			includes.remove(name);
 		}
@@ -222,7 +325,7 @@ public class Query implements Cloneable {
 	 * @param name the field name to exclude
 	 * @return this
 	 */
-	protected Query addExclude(String name) {
+	protected GenericQuery addExclude(String name) {
 		if (excludes == null) {
 			excludes = new HashSet<String>();
 		}
@@ -234,7 +337,7 @@ public class Query implements Cloneable {
 	 * @param name the field name
 	 * @return this
 	 */
-	protected Query removeExclude(String name) {
+	protected GenericQuery removeExclude(String name) {
 		if (excludes != null) {
 			excludes.remove(name);
 		}
@@ -265,7 +368,7 @@ public class Query implements Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Query leftJoin(String table, String alias, String ... conditions) {
+	public GenericQuery leftJoin(String table, String alias, String ... conditions) {
 		return join(Join.LEFT, table, alias, conditions);
 	}
 
@@ -277,7 +380,7 @@ public class Query implements Cloneable {
 	 * @param parameters join parameters
 	 * @return this
 	 */
-	public Query leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
+	public GenericQuery leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
 		return join(Join.LEFT, table, alias, conditions, parameters);
 	}
 
@@ -288,7 +391,7 @@ public class Query implements Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Query rightJoin(String table, String alias, String ... conditions) {
+	public GenericQuery rightJoin(String table, String alias, String ... conditions) {
 		return join(Join.RIGHT, table, alias, conditions);
 	}
 
@@ -300,7 +403,7 @@ public class Query implements Cloneable {
 	 * @param parameters join parameters
 	 * @return this
 	 */
-	public Query rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
+	public GenericQuery rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
 		return join(Join.RIGHT, table, alias, conditions, parameters);
 	}
 
@@ -311,7 +414,7 @@ public class Query implements Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Query innerJoin(String table, String alias, String ... conditions) {
+	public GenericQuery innerJoin(String table, String alias, String ... conditions) {
 		return join(Join.INNER, table, alias, conditions);
 	}
 
@@ -323,7 +426,7 @@ public class Query implements Cloneable {
 	 * @param parameters join parameters
 	 * @return this
 	 */
-	public Query innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
+	public GenericQuery innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
 		return join(Join.INNER, table, alias, conditions, parameters);
 	}
 
@@ -334,7 +437,7 @@ public class Query implements Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Query join(String table, String alias, String ... conditions) {
+	public GenericQuery join(String table, String alias, String ... conditions) {
 		return join(null, table, alias, conditions);
 	}
 
@@ -346,7 +449,7 @@ public class Query implements Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Query join(String type, String table, String alias, String ... conditions) {
+	public GenericQuery join(String type, String table, String alias, String ... conditions) {
 		return join(type, table, alias, conditions, (Object[])null);
 	}
 
@@ -359,7 +462,7 @@ public class Query implements Cloneable {
 	 * @param parameters join parameters
 	 * @return this
 	 */
-	public Query join(String type, String table, String alias, String[] conditions, Object[] parameters) {
+	public GenericQuery join(String type, String table, String alias, String[] conditions, Object[] parameters) {
 		if (joins == null) {
 			joins = new ArrayList<Join>();
 		}
@@ -389,7 +492,7 @@ public class Query implements Cloneable {
 	 * @param column column
 	 * @return this
 	 */
-	public Query orderBy(String column) {
+	public GenericQuery orderBy(String column) {
 		return orderBy(column, true);
 	}
 
@@ -399,7 +502,7 @@ public class Query implements Cloneable {
 	 * @param order order direction
 	 * @return this
 	 */
-	public Query orderBy(String name, Order order) {
+	public GenericQuery orderBy(String name, Order order) {
 		Asserts.notEmpty(name, "The parameter name is empty");
 		if (orders == null) {
 			orders = new LinkedHashMap<String, Order>();
@@ -414,7 +517,7 @@ public class Query implements Cloneable {
 	 * @param order order direction
 	 * @return this
 	 */
-	public Query orderBy(String name, String order) {
+	public GenericQuery orderBy(String name, String order) {
 		return orderBy(name, Order.parse(order));
 	}
 
@@ -424,7 +527,7 @@ public class Query implements Cloneable {
 	 * @param ascend direction
 	 * @return this
 	 */
-	public Query orderBy(String name, boolean ascend) {
+	public GenericQuery orderBy(String name, boolean ascend) {
 		return orderBy(name, ascend ? Order.ASC : Order.DESC);
 	}
 
@@ -433,7 +536,7 @@ public class Query implements Cloneable {
 	 * @param name		name
 	 * @return this
 	 */
-	public Query orderByAsc(String name) {
+	public GenericQuery orderByAsc(String name) {
 		return orderBy(name, true);
 	}
 
@@ -442,7 +545,7 @@ public class Query implements Cloneable {
 	 * @param name		name
 	 * @return this
 	 */
-	public Query orderByDesc(String name) {
+	public GenericQuery orderByDesc(String name) {
 		return orderBy(name, false);
 	}
 
@@ -482,7 +585,7 @@ public class Query implements Cloneable {
 	/**
 	 * @param start the start to set
 	 */
-	public Query start(int start) {
+	public GenericQuery start(int start) {
 		setStart(start);
 		return this;
 	}
@@ -490,7 +593,7 @@ public class Query implements Cloneable {
 	/**
 	 * @param limit the limit to set
 	 */
-	public Query limit(int limit) {
+	public GenericQuery limit(int limit) {
 		setLimit(limit);
 		return this;
 	}
@@ -580,7 +683,7 @@ public class Query implements Cloneable {
 		expressions.clear();
 	}
 
-	protected Query conjunction(Operator conjunction, boolean force) {
+	protected GenericQuery conjunction(Operator conjunction, boolean force) {
 		if (expressions == null || expressions.isEmpty()) {
 			if (force) {
 				throw new IllegalArgumentException("Explicitly appending logical operator " + conjunction + " to empty filters is not allowed.");
@@ -613,47 +716,47 @@ public class Query implements Cloneable {
 		return this;
 	}
 
-	private Query addParenExpression(Operator operator) {
+	private GenericQuery addParenExpression(Operator operator) {
 		expressions().add(new Expression.Paren(operator));
 		return this;
 	}
 
-	private Query addConjunctionExpression(Operator operator) {
+	private GenericQuery addConjunctionExpression(Operator operator) {
 		expressions().add(new Expression.AndOr(operator));
 		return this;
 	}
 
-	private Query addSimpleExpression(String field, Operator operator) {
+	private GenericQuery addSimpleExpression(String field, Operator operator) {
 		conjunction();
 		expressions().add(new Expression.Simple(field, operator));
 		return this;
 	}
 
-	private Query addCompareValueExpression(String field, Operator operator, Object compareValue) {
+	private GenericQuery addCompareValueExpression(String field, Operator operator, Object compareValue) {
 		conjunction();
 		expressions().add(new Expression.ValueCompare(field, operator, compareValue));
 		return this;
 	}
 
-	private Query addCompareFieldExpression(String field, Operator operator, String compareField) {
+	private GenericQuery addCompareFieldExpression(String field, Operator operator, String compareField) {
 		conjunction();
 		expressions().add(new Expression.FieldCompare(field, operator, compareField));
 		return this;
 	}
 
-	private Query addCompareCollectionExpression(String field, Operator operator, Object[] values) {
+	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Object[] values) {
 		conjunction();
 		expressions().add(new Expression.ValueCompare(field, operator, values));
 		return this;
 	}
 
-	private Query addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
+	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
 		conjunction();
 		expressions().add(new Expression.ValueCompare(field, operator, values));
 		return this;
 	}
 
-	private Query addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
+	private GenericQuery addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
 		conjunction();
 		expressions().add(new Expression.ValueCompare(field, operator, new Object[] { minValue, maxValue }));
 		return this;
@@ -663,7 +766,7 @@ public class Query implements Cloneable {
 	 * add conjunction expression
 	 * @return this
 	 */
-	private Query conjunction() {
+	private GenericQuery conjunction() {
 		return conjunction(conjunction, false);
 	}
 	
@@ -682,7 +785,7 @@ public class Query implements Cloneable {
 	 * add AND expression 
 	 * @return this
 	 */
-	public Query and() {
+	public GenericQuery and() {
 		return conjunction(Operator.AND, true);
 	}
 	
@@ -690,7 +793,7 @@ public class Query implements Cloneable {
 	 * add OR expression 
 	 * @return this
 	 */
-	public Query or() {
+	public GenericQuery or() {
 		return conjunction(Operator.OR, true);
 	}
 	
@@ -698,7 +801,7 @@ public class Query implements Cloneable {
 	 * add open paren ( 
 	 * @return this
 	 */
-	public Query begin() {
+	public GenericQuery begin() {
 		conjunction();
 		return addParenExpression(Operator.BEG_PAREN);
 	}
@@ -707,7 +810,7 @@ public class Query implements Cloneable {
 	 * add close paren ) 
 	 * @return this
 	 */
-	public Query end() {
+	public GenericQuery end() {
 		return addParenExpression(Operator.END_PAREN);
 	}
 	
@@ -716,7 +819,7 @@ public class Query implements Cloneable {
 	 * @param field field 
 	 * @return this
 	 */
-	public Query isNull(String field) {
+	public GenericQuery isNull(String field) {
 		return addSimpleExpression(field, Operator.IS_NULL);
 	}
 
@@ -725,7 +828,7 @@ public class Query implements Cloneable {
 	 * @param field field 
 	 * @return this
 	 */
-	public Query isNotNull(String field) {
+	public GenericQuery isNotNull(String field) {
 		return addSimpleExpression(field, Operator.IS_NOT_NULL);
 	}
 
@@ -735,7 +838,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query equalTo(String field, Object value) {
+	public GenericQuery equalTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.EQUAL, value);
 	}
 
@@ -745,7 +848,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notEqualTo(String field, Object value) {
+	public GenericQuery notEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.NOT_EQUAL, value);
 	}
 
@@ -755,7 +858,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query greaterThan(String field, Object value) {
+	public GenericQuery greaterThan(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_THAN, value);
 	}
 
@@ -765,7 +868,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query greaterThanOrEqualTo(String field, Object value) {
+	public GenericQuery greaterThanOrEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_EQUAL, value);
 	}
 
@@ -775,7 +878,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query lessThan(String field, Object value) {
+	public GenericQuery lessThan(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_THAN, value);
 	}
 
@@ -785,7 +888,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query lessThanOrEqualTo(String field, Object value) {
+	public GenericQuery lessThanOrEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_EQUAL, value);
 	}
 
@@ -795,7 +898,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query like(String field, String value) {
+	public GenericQuery like(String field, String value) {
 		return addCompareValueExpression(field, Operator.LIKE, value);
 	}
 
@@ -805,7 +908,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notLike(String field, String value) {
+	public GenericQuery notLike(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, value);
 	}
 
@@ -815,7 +918,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query match(String field, String value) {
+	public GenericQuery match(String field, String value) {
 		return addCompareValueExpression(field, Operator.MATCH, value);
 	}
 
@@ -825,7 +928,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notMatch(String field, String value) {
+	public GenericQuery notMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_MATCH, value);
 	}
 
@@ -835,7 +938,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query leftMatch(String field, String value) {
+	public GenericQuery leftMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
 	}
 
@@ -845,7 +948,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notLeftMatch(String field, String value) {
+	public GenericQuery notLeftMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LEFT_MATCH, value);
 	}
 
@@ -855,7 +958,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query rightMatch(String field, String value) {
+	public GenericQuery rightMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
 	}
 
@@ -865,7 +968,7 @@ public class Query implements Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public Query notRightMatch(String field, String value) {
+	public GenericQuery notRightMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_RIGHT_MATCH, value);
 	}
 
@@ -875,7 +978,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query equalToField(String field, String compareField) {
+	public GenericQuery equalToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.EQUAL, compareField);
 	}
 
@@ -885,7 +988,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query notEqualToField(String field, String compareField) {
+	public GenericQuery notEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.NOT_EQUAL, compareField);
 	}
 
@@ -895,7 +998,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query greaterThanField(String field, String compareField) {
+	public GenericQuery greaterThanField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
@@ -905,7 +1008,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query greaterThanOrEqualToField(String field, String compareField) {
+	public GenericQuery greaterThanOrEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
@@ -915,7 +1018,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query lessThanField(String field, String compareField) {
+	public GenericQuery lessThanField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_THAN, compareField);
 	}
 
@@ -925,7 +1028,7 @@ public class Query implements Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public Query lessThanOrEqualToField(String field, String compareField) {
+	public GenericQuery lessThanOrEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_EQUAL, compareField);
 	}
 
@@ -935,7 +1038,7 @@ public class Query implements Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public Query in(String field, Object[] values) {
+	public GenericQuery in(String field, Object[] values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 
@@ -945,7 +1048,7 @@ public class Query implements Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public Query in(String field, Collection<?> values) {
+	public GenericQuery in(String field, Collection<?> values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 
@@ -955,7 +1058,7 @@ public class Query implements Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public Query notIn(String field, Object[] values) {
+	public GenericQuery notIn(String field, Object[] values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -965,7 +1068,7 @@ public class Query implements Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public Query notIn(String field, Collection values) {
+	public GenericQuery notIn(String field, Collection values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -976,7 +1079,7 @@ public class Query implements Cloneable {
 	 * @param value2 value to
 	 * @return this
 	 */
-	public Query between(String field, Object value1, Object value2) {
+	public GenericQuery between(String field, Object value1, Object value2) {
 		return addCompareRanageExpression(field, Operator.BETWEEN, value1, value2);
 	}
 
@@ -987,39 +1090,13 @@ public class Query implements Cloneable {
 	 * @param value2 value to
 	 * @return this
 	 */
-	public Query notBetween(String field, Object value1, Object value2) {
+	public GenericQuery notBetween(String field, Object value1, Object value2) {
 		return addCompareRanageExpression(field, Operator.NOT_BETWEEN, value1, value2);
 	}
 
 	@Override
-	public Query clone() {
-		Query q = new Query();
-
-		q.conjunction = conjunction;
-		q.start = start;
-		q.limit = limit;
-
-		if (Collections.isNotEmpty(expressions)) {
-			q.expressions = new ArrayList<Expression>();
-			q.expressions.addAll(expressions);
-		}
-		
-		if (orders != null && !orders.isEmpty()) {
-			q.orders = new LinkedHashMap<String, Order>();
-			q.orders.putAll(orders);
-		}
-
-		if (Collections.isNotEmpty(includes)) {
-			q.includes = new HashSet<String>();
-			q.includes.addAll(includes);
-		}
-
-		if (Collections.isNotEmpty(excludes)) {
-			q.excludes = new HashSet<String>();
-			q.excludes.addAll(excludes);
-		}
-		
-		return q;
+	public GenericQuery<T> clone() {
+		return new GenericQuery<T>(this);
 	}
 
 	/**
@@ -1028,6 +1105,7 @@ public class Query implements Cloneable {
 	@Override
 	public int hashCode() {
 		return Objects.hashCodeBuilder()
+				.append(target)
 				.append(conjunction)
 				.append(start)
 				.append(limit)
@@ -1035,6 +1113,7 @@ public class Query implements Cloneable {
 				.append(orders)
 				.append(includes)
 				.append(excludes)
+				.append(joins)
 				.toHashCode();
 	}
 
@@ -1050,8 +1129,9 @@ public class Query implements Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		
-		Query rhs = (Query) obj;
+		GenericQuery rhs = (GenericQuery) obj;
 		return Objects.equalsBuilder()
+				.append(target, rhs.target)
 				.append(conjunction, rhs.conjunction)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
@@ -1059,6 +1139,7 @@ public class Query implements Cloneable {
 				.append(orders, rhs.orders)
 				.append(includes, rhs.includes)
 				.append(excludes, rhs.excludes)
+				.append(joins, rhs.joins)
 				.isEquals();
 	}
 
@@ -1068,6 +1149,7 @@ public class Query implements Cloneable {
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder(this)
+				.append("target", target)
 				.append("conjunction", conjunction)
 				.append("start", start)
 				.append("limit", limit)
@@ -1075,6 +1157,7 @@ public class Query implements Cloneable {
 				.append("orders", orders)
 				.append("includes", excludes)
 				.append("excludes", excludes)
+				.append("joins", joins)
 				.toString();
 	}
 }

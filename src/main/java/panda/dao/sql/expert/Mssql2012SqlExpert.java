@@ -1,6 +1,6 @@
 package panda.dao.sql.expert;
 
-import panda.dao.criteria.Query;
+import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 
 public class Mssql2012SqlExpert extends Mssql2005SqlExpert {

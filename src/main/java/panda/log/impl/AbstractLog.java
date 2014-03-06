@@ -6,21 +6,6 @@ import panda.log.Log;
 
 
 public abstract class AbstractLog implements Log {
-
-	protected boolean isFatalEnabled = true;
-	protected boolean isErrorEnabled = true;
-	protected boolean isWarnEnabled = true;
-	protected boolean isInfoEnabled = false;
-	protected boolean isDebugEnabled = false;
-	protected boolean isTraceEnabled = false;
-
-	protected static final int LEVEL_FATAL = 50;
-	protected static final int LEVEL_ERROR = 40;
-	protected static final int LEVEL_WARN = 30;
-	protected static final int LEVEL_INFO = 20;
-	protected static final int LEVEL_DEBUG = 10;
-	protected static final int LEVEL_TRACE = 0;
-
 	protected abstract void log(int level, Object message, Throwable tx);
 
 	protected void log(int level, LogInfo info) {
@@ -62,15 +47,17 @@ public abstract class AbstractLog implements Log {
 			return info;
 		}
 		catch (Throwable e) {
-			if (isWarnEnabled())
+			if (isWarnEnabled()) {
 				warn("String format fail in log , fmt = " + obj + " , args = " + Arrays.toString(args), e);
+			}
 			return LOGINFO_ERROR;
 		}
 	}
 
 	public void debug(Object message) {
-		if (isDebugEnabled())
+		if (isDebugEnabled()) {
 			log(LEVEL_DEBUG, makeInfo(message));
+		}
 	}
 
 	public void debugf(String fmt, Object... args) {
@@ -84,71 +71,56 @@ public abstract class AbstractLog implements Log {
 	}
 
 	public void errorf(String fmt, Object... args) {
-		if (isErrorEnabled())
+		if (isErrorEnabled()) {
 			log(LEVEL_ERROR, makeInfo(fmt, args));
+		}
 	}
 
 	public void fatal(Object message) {
-		if (isFatalEnabled())
+		if (isFatalEnabled()) {
 			log(LEVEL_FATAL, makeInfo(message));
+		}
 	}
 
 	public void fatalf(String fmt, Object... args) {
-		if (isFatalEnabled())
+		if (isFatalEnabled()) {
 			log(LEVEL_FATAL, makeInfo(fmt, args));
+		}
 	}
 
 	public void info(Object message) {
-		if (isInfoEnabled())
+		if (isInfoEnabled()) {
 			log(LEVEL_INFO, makeInfo(message));
+		}
 	}
 
 	public void infof(String fmt, Object... args) {
-		if (isInfoEnabled())
+		if (isInfoEnabled()) {
 			log(LEVEL_INFO, makeInfo(fmt, args));
+		}
 	}
 
 	public void trace(Object message) {
-		if (isTraceEnabled())
+		if (isTraceEnabled()) {
 			log(LEVEL_TRACE, makeInfo(message));
+		}
 	}
 
 	public void tracef(String fmt, Object... args) {
-		if (isTraceEnabled())
+		if (isTraceEnabled()) {
 			log(LEVEL_TRACE, makeInfo(fmt, args));
+		}
 	}
 
 	public void warn(Object message) {
-		if (isWarnEnabled())
+		if (isWarnEnabled()) {
 			log(LEVEL_WARN, makeInfo(message));
+		}
 	}
 
 	public void warnf(String fmt, Object... args) {
-		if (isWarnEnabled())
+		if (isWarnEnabled()) {
 			log(LEVEL_WARN, makeInfo(fmt, args));
-	}
-
-	public boolean isDebugEnabled() {
-		return isDebugEnabled;
-	}
-
-	public boolean isErrorEnabled() {
-		return isErrorEnabled;
-	}
-
-	public boolean isFatalEnabled() {
-		return isFatalEnabled;
-	}
-
-	public boolean isInfoEnabled() {
-		return isInfoEnabled;
-	}
-
-	public boolean isTraceEnabled() {
-		return isTraceEnabled;
-	}
-
-	public boolean isWarnEnabled() {
-		return isWarnEnabled;
+		}
 	}
 }

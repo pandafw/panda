@@ -12,9 +12,10 @@ import panda.dao.DB;
 import panda.dao.DaoException;
 import panda.dao.DataHandler;
 import panda.dao.Transaction;
-import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.query.GenericQuery;
+import panda.dao.query.Query;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Exceptions;
@@ -176,7 +177,7 @@ public class SqlDao extends AbstractDao {
 		assertTable(entity);
 
 		if (!getSqlExpert().isSupportDropIfExists()) {
-			if (!exists(entity)) {
+			if (!existsByTable(entity.getTableName())) {
 				return;
 			}
 		}
@@ -209,7 +210,7 @@ public class SqlDao extends AbstractDao {
 		assertTable(table);
 
 		if (!getSqlExpert().isSupportDropIfExists()) {
-			if (!exists(table)) {
+			if (!existsByTable(table)) {
 				return;
 			}
 		}
@@ -265,7 +266,7 @@ public class SqlDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	public boolean exists(String table) {
+	public boolean existsByTable(String table) {
 		assertTable(table);
 
 		String sql = getSqlExpert().exists(table);
@@ -293,18 +294,19 @@ public class SqlDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	protected boolean existsByKeys(Entity<?> entity, Object ... keys) {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return exists(entity.getTableName());
+			return existsByTable(entity.getTableName());
 		}
 
-		Query query = new Query();
-		queryPrimaryKey(entity, query, keys);
-		includePrimaryKeys(entity, query);
+		GenericQuery query = createQuery(entity);
+		queryPrimaryKey(query, keys);
+		includePrimaryKeys(query);
 		
-		Object d = fetchByQuery(entity, query);
+		Object d = fetchByQuery(query);
 		return d != null;
 	}
 
@@ -313,18 +315,17 @@ public class SqlDao extends AbstractDao {
 	 * if the query is not supplied, then check the table existence.
 	 * 
 	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	protected boolean existsByQuery(Entity<?> entity, Query query) {
-		assertEntity(entity);
-
-		if (query == null || !query.hasConditions()) {
-			return exists(entity.getTableName());
+	protected boolean existsByQuery(GenericQuery<?> query) {
+		if (!query.hasConditions()) {
+			return existsByTable(query.getTable());
 		}
 
-		Object d = fetchByQuery(entity, query);
+		excludeNonPrimaryKeys(query);
+		Object d = fetchByQuery(query);
 		return d != null;
 	}
 
@@ -332,24 +333,81 @@ public class SqlDao extends AbstractDao {
 	 * get a record by the supplied query
 	 * 
 	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return record
 	 */
 	@Override
-	protected <T> T fetchByQuery(Entity<T> entity, Query query) {
-		assertEntity(entity);
-
-		query = cloneQuery(query);
-
+	protected <T> T fetchByQuery(GenericQuery<T> query) {
 		query.setLimit(1);
-		Sql sql = getSqlExpert().select(entity, query);
+		Sql sql = getSqlExpert().select(query);
 		
 		autoStart();
 		try {
-			return executor.fetch(sql.getSql(), sql.getParams(), entity.getType());
+			try {
+				return executor.fetch(sql.getSql(), sql.getParams(), query.getType());
+			}
+			catch (SQLException e) {
+				throw new DaoException("Failed to fetch query " + query.getTable() + ": " + sql.getSql(), e);
+			}
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	//-------------------------------------------------------------------------
+	/**
+	 * count records by the supplied query.
+	 * 
+	 * @param query query
+	 * @return record count
+	 */
+	@Override
+	protected int countByQuery(Query<?> query) {
+		Sql sql = getSqlExpert().count(query);
+		
+		autoStart();
+		try {
+			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
+			return i;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to fetch entity " + entity.getViewName() + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to count query " + query.getTable() + ": " + sql.getSql(), e);
+		}
+		finally {
+			autoClose();
+		}
+	}
+	
+	//-------------------------------------------------------------------------
+	/**
+	 * select records by the supplied query.
+	 * if query is null then select all records.
+	 * 
+	 * @param entity entity
+	 * @param query query
+	 * @return record list
+	 */
+	@Override
+	protected <T> List<T> selectByQuery(Query<T> query) {
+		Sql sql = getSqlExpert().select(query);
+		
+		autoStart();
+		try {
+			if (isClientPaginate(query)) {
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+				}
+				List<T> list = executor.selectList(sql.getSql(), sql.getParams(), query.getType(), query.getStart(), query.getLimit());
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+				}
+				return list;
+			}
+			return executor.selectList(sql.getSql(), sql.getParams(), query.getType());
+		}
+		catch (SQLException e) {
+			throw new DaoException("Failed to select query " + query.getTable() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -357,29 +415,51 @@ public class SqlDao extends AbstractDao {
 	}
 
 	/**
-	 * get a record by the supplied query
+	 * select records by the supplied query.
 	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record
+	 * @param query query
+	 * @param callback DataHandler callback
+	 * @return callback processed count
 	 */
 	@Override
-	public Map fetch(String table, Query query) {
-		assertTable(table);
-
-		query = cloneQuery(query);
-
-		query.setLimit(1);
-		Sql sql = getSqlExpert().select(table, query);
+	public <T> int selectByQuery(Query<T> query, DataHandler<T> callback) {
+		assertCallback(callback);
+		
+		SqlResultSet<T> srs = null;
+		Sql sql = getSqlExpert().select(query);
 		
 		autoStart();
 		try {
-			return executor.fetch(sql.getSql(), sql.getParams(), HashMap.class);
+			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), query.getType());
+			
+			int count = 0;
+			int max = Integer.MAX_VALUE;
+			if (isClientPaginate(query)) {
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+				}
+				Sqls.skipResultSet(srs, query.getStart());
+				if (getSqlExpert().isSupportScroll()) {
+					executor.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+				}
+				if (query.getLimit() > 0) {
+					max = query.getLimit();
+				}
+			}
+			
+			boolean next = true;
+			while (srs.next() && next && count < max) {
+				T data = srs.getResult();
+				next = callback(callback, data, count);
+				count++;
+			}
+			return count;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to fetch table " + table + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to select query " + query.getTable() + ": " + sql.getSql(), e);
 		}
 		finally {
+			Sqls.safeClose(srs);
 			autoClose();
 		}
 	}
@@ -389,14 +469,12 @@ public class SqlDao extends AbstractDao {
 	 * delete record by the supplied query
 	 * 
 	 * @param entity entity
-	 * @param query WHERE conditions
+	 * @param query query
 	 * @return deleted count
 	 */
 	@Override
-	public int deletes(Entity<?> entity, Query query) {
-		assertTable(entity);
-
-		Sql sql = getSqlExpert().delete(entity, query);
+	protected int deletesByQuery(Query<?> query) {
+		Sql sql = getSqlExpert().delete(query);
 		
 		autoStart();
 		try {
@@ -406,35 +484,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to delete entity " + entity.getType() + ": " + sql.getSql(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * delete record by the supplied query
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return deleted count
-	 */
-	@Override
-	public int deletes(String table, Query query) {
-		assertTable(table);
-
-		Sql sql = getSqlExpert().delete(table, query);
-		
-		autoStart();
-		try {
-			int cnt = executor.update(sql.getSql(), sql.getParams());
-			autoCommit();
-			return cnt;
-		}
-		catch (SQLException e) {
-			rollback();
-			throw new DaoException("Failed to delete table " + table + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to delete query " + query.getTable() + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -534,24 +584,27 @@ public class SqlDao extends AbstractDao {
 	 * update records by the supplied object and query
 	 * 
 	 * @param obj sample object
-	 * @param query where condition and update fields filter
+	 * @param query query
 	 * @return updated count
 	 */
-	protected int update(Entity<?> entity, Object obj, Query query) {
-		query = cloneQuery(query);
-		excludePrimaryKeys(entity, query);
+	@Override
+	protected int updatesByQuery(Object obj, GenericQuery<?> query, int limit) {
+		excludePrimaryKeys(query);
 
-		Sql sql = getSqlExpert().update(entity, obj, query);
+		Sql sql = getSqlExpert().update(obj, query);
 		
 		autoStart();
 		try {
 			int cnt = executor.update(sql.getSql(), sql.getParams());
+			if (cnt > limit) {
+				throw new DaoException("Too many (" + cnt + ") records updated.");
+			}
 			autoCommit();
 			return cnt;
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to update entity " + entity.getType() + ": " + sql, e);
+			throw new DaoException("Failed to update query " + query.getTable() + ": " + sql, e);
 		}
 		finally {
 			autoClose();
@@ -561,216 +614,4 @@ public class SqlDao extends AbstractDao {
 	private boolean isClientPaginate(Query query) {
 		return (query != null && query.needsPaginate() && !getSqlExpert().isSupportPaginate());
 	}
-	
-	//-------------------------------------------------------------------------
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record list
-	 */
-	@Override
-	public <T> List<T> select(Entity<T> entity, Query query) {
-		assertEntity(entity);
-
-		Sql sql = getSqlExpert().select(entity, query);
-		
-		autoStart();
-		try {
-			if (isClientPaginate(query)) {
-				if (getSqlExpert().isSupportScroll()) {
-					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
-				}
-				List<T> list = executor.selectList(sql.getSql(), sql.getParams(), entity.getType(), query.getStart(), query.getLimit());
-				if (getSqlExpert().isSupportScroll()) {
-					executor.setResultSetType(ResultSet.FETCH_FORWARD);
-				}
-				return list;
-			}
-			return executor.selectList(sql.getSql(), sql.getParams(), entity.getType());
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql.getSql(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * if query is null then select all records.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @return record(a map) list
-	 */
-	@Override
-	public List<Map> select(String table, Query query) {
-		assertTable(table);
-
-		Sql sql = getSqlExpert().select(table, query);
-		
-		autoStart();
-		try {
-			if (isClientPaginate(query)) {
-				return executor.selectList(sql.getSql(), sql.getParams(), Map.class, query.getStart(), query.getLimit());
-			}
-			return executor.selectList(sql.getSql(), sql.getParams(), Map.class);
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to select table " + table + ": " + sql.getSql(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public <T> int select(Entity<T> entity, Query query, DataHandler<T> callback) {
-		assertEntity(entity);
-		assertCallback(callback);
-		
-		SqlResultSet<T> srs = null;
-		Sql sql = getSqlExpert().select(entity, query);
-		
-		autoStart();
-		try {
-			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), entity.getType());
-			
-			int count = 0;
-			int max = Integer.MAX_VALUE;
-			if (isClientPaginate(query)) {
-				Sqls.skipResultSet(srs, query.getStart());
-				if (query.getLimit() > 0) {
-					max = query.getLimit();
-				}
-			}
-			
-			boolean next = true;
-			while (srs.next() && next && count < max) {
-				T data = srs.getResult();
-				next = callback(callback, data, count);
-				count++;
-			}
-			return count;
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to select entity " + entity.getViewName() + ": " + sql.getSql(), e);
-		}
-		finally {
-			Sqls.safeClose(srs);
-			autoClose();
-		}
-	}
-
-	/**
-	 * select records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
-	 */
-	@Override
-	public int select(String table, Query query, DataHandler<Map> callback) {
-		assertTable(table);
-		assertCallback(callback);
-
-		SqlResultSet<Map> srs = null;
-		Sql sql = getSqlExpert().select(table, query);
-
-		autoStart();
-		try {
-			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), Map.class);
-
-			int count = 0;
-			int max = Integer.MAX_VALUE;
-			if (isClientPaginate(query)) {
-				Sqls.skipResultSet(srs, query.getStart());
-				if (query.getLimit() > 0) {
-					max = query.getLimit();
-				}
-			}
-			
-			boolean next = true;
-			while (srs.next() && next && count < max) {
-				Map data = srs.getResult();
-				next = callback(callback, data, count);
-				count++;
-			}
-			return count;
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to select table " + table + ": " + sql.getSql(), e);
-		}
-		finally {
-			Sqls.safeClose(srs);
-			autoClose();
-		}
-	}
-
-	//-------------------------------------------------------------------------
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param entity entity
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public int count(Entity<?> entity, Query query) {
-		assertEntity(entity);
-
-		Sql sql = getSqlExpert().count(entity, query);
-		
-		autoStart();
-		try {
-			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
-			return i;
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to count entity " + entity.getViewName() + ": " + sql.getSql(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
-	/**
-	 * count records by the supplied query.
-	 * 
-	 * @param table table name
-	 * @param query WHERE conditions
-	 * @return record count
-	 */
-	@Override
-	public int count(String table, Query query) {
-		assertTable(table);
-
-		Sql sql = getSqlExpert().count(table, query);
-		
-		autoStart();
-		try {
-			int i = executor.fetch(sql.getSql(), sql.getParams(), int.class);
-			return i;
-		}
-		catch (SQLException e) {
-			throw new DaoException("Failed to count table " + table + ": " + sql.getSql(), e);
-		}
-		finally {
-			autoClose();
-		}
-	}
-
 }

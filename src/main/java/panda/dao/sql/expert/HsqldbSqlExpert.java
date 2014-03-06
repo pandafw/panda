@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
-import panda.dao.criteria.Query;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 
 /**

@@ -1,13 +1,11 @@
-package panda.dao.criteria.condition;
+package panda.dao.query;
 
 import java.util.Collection;
-
-import panda.dao.criteria.QueryWrapper;
 
 
 /**
  */
-public class ComparableCondition<E extends QueryWrapper, T> extends ObjectCondition<E> {
+public class ComparableCondition<E extends EntityQuery, T> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent
 	 * @param field field
@@ -137,6 +135,7 @@ public class ComparableCondition<E extends QueryWrapper, T> extends ObjectCondit
 	 * @param values value list
 	 * @return parent
 	 */
+	@SuppressWarnings("unchecked")
 	public E in(Collection<T> values) {
 		parent.getQuery().in(field, values);
 		return parent;

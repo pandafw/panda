@@ -1,4 +1,4 @@
-package panda.dao.criteria;
+package panda.dao.query;
 
 import panda.lang.Strings;
 

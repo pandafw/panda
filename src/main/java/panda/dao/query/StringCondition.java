@@ -1,13 +1,12 @@
-package panda.dao.criteria.condition;
+package panda.dao.query;
 
-import panda.dao.criteria.QueryWrapper;
 
 
 
 
 /**
  */
-public class StringCondition<E extends QueryWrapper> extends ComparableCondition<E, String> {
+public class StringCondition<E extends EntityQuery> extends ComparableCondition<E, String> {
 	/**
 	 * @param parent parent
 	 * @param field field 

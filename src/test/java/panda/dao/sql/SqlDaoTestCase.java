@@ -13,11 +13,11 @@ import org.junit.Test;
 
 import panda.dao.Dao;
 import panda.dao.Transaction;
-import panda.dao.criteria.Query;
 import panda.dao.entity.Klass;
 import panda.dao.entity.Score;
 import panda.dao.entity.Student;
 import panda.dao.entity.Teacher;
+import panda.dao.query.GenericQuery;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
@@ -98,9 +98,9 @@ public abstract class SqlDaoTestCase {
 
 	@Test
 	public void testCountQuery() {
-		Query q = new Query();
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
 		q.equalTo("name", "T1");
-		Assert.assertEquals(1,  dao.count(Teacher.class, q));
+		Assert.assertEquals(1,  dao.count(q));
 	}
 
 	@Test
@@ -207,7 +207,9 @@ public abstract class SqlDaoTestCase {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);
 		
-		List<Teacher> actual = dao.select(Teacher.class, Query.create().in("name", new String[] { "T1", "T3" }));
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.in("name", new String[] { "T1", "T3" });
+		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -216,7 +218,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotIn() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
-		List<Teacher> actual = dao.select(Teacher.class, Query.create().notIn("name", new String[] { "T1", "T2", "T3" }));
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.notIn("name", new String[] { "T1", "T2", "T3" });
+		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -225,7 +229,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectBetween() {
 		List<Student> expect = Student.creates(1, 3);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().between("id", 1, 3));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.between("id", 1, 3);
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -234,7 +240,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotBetween() {
 		List<Student> expect = Student.creates(4, 5);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().notBetween("id", 1, 3));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.notBetween("id", 1, 3);
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -243,7 +251,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectLike() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().like("name", "%1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.like("name", "%1");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -252,7 +262,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotLike() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().notLike("name", "%1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.notLike("name", "%1");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -261,7 +273,10 @@ public abstract class SqlDaoTestCase {
 	public void testSelectMatch() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().match("name", "1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.match("name", "1");
+		
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -270,7 +285,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotMatch() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.notMatch("name", "1");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -279,7 +296,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectLeftMatch() {
 		List<Student> expect = Student.creates(1, 5);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().match("name", "S"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.match("name", "S");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -288,7 +307,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotLeftMatch() {
 		List<Student> expect = new ArrayList<Student>();
 		
-		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "S"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.notMatch("name", "S");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -297,7 +318,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectRightMatch() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().match("name", "1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.match("name", "1");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -306,7 +329,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectNotRightMatch() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().notMatch("name", "1"));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.notMatch("name", "1");
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -315,7 +340,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectStart() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
-		List<Teacher> actual = dao.select(Teacher.class, Query.create().start(3));
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.start(3);
+		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -324,7 +351,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectLimit() {
 		List<Teacher> expect = Teacher.creates(1, 2);
 		
-		List<Teacher> actual = dao.select(Teacher.class, Query.create().limit(2));
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.limit(2);
+		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -333,7 +362,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectPage() {
 		List<Teacher> expect = Teacher.creates(2, 3);
 		
-		List<Teacher> actual = dao.select(Teacher.class, Query.create().start(1).limit(2));
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.start(1).limit(2);
+		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}
@@ -342,7 +373,9 @@ public abstract class SqlDaoTestCase {
 	public void testSelectPageWhere() {
 		List<Student> expect = Student.creates(2, 3);
 		
-		List<Student> actual = dao.select(Student.class, Query.create().greaterThan("id", 0).start(1).limit(2));
+		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		q.greaterThan("id", 0).start(1).limit(2);
+		List<Student> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);
 	}

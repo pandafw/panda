@@ -37,18 +37,36 @@ public class Log4jLogAdapter implements LogAdapter {
 
 		Log4JLogger(String className) {
 			logger = Logger.getLogger(className);
-			isFatalEnabled = logger.isEnabledFor(Level.FATAL);
-			isErrorEnabled = logger.isEnabledFor(Level.ERROR);
-			isWarnEnabled = logger.isEnabledFor(Level.WARN);
-			isInfoEnabled = logger.isEnabledFor(Level.INFO);
-			isDebugEnabled = logger.isEnabledFor(Level.DEBUG);
-			if (hasTrace)
-				isTraceEnabled = logger.isEnabledFor(Level.TRACE);
 		}
 
+		public boolean isFatalEnabled() {
+			return logger.isEnabledFor(Level.FATAL);
+		}
+
+		public boolean isErrorEnabled() {
+			return logger.isEnabledFor(Level.ERROR);
+		}
+
+		public boolean isWarnEnabled() {
+			return logger.isEnabledFor(Level.WARN);
+		}
+
+		public boolean isInfoEnabled() {
+			return logger.isEnabledFor(Level.INFO);
+		}
+
+		public boolean isDebugEnabled() {
+			return logger.isEnabledFor(Level.DEBUG);
+		}
+
+		public boolean isTraceEnabled() {
+			return hasTrace ? logger.isEnabledFor(Level.TRACE) : false;
+		}
+		
 		public void debug(Object message, Throwable t) {
-			if (isDebugEnabled())
+			if (isDebugEnabled()) {
 				logger.log(SELF_FQCN, Level.DEBUG, message, t);
+			}
 		}
 
 		public void error(Object message, Throwable t) {
