@@ -378,8 +378,8 @@ public class Action {
 	/**
 	 * @param entity the entity to set
 	 */
-	public void setEntity(String model) {
-		this.entity = model;
+	public void setEntity(String entity) {
+		this.entity = entity;
 	}
 
 	/**

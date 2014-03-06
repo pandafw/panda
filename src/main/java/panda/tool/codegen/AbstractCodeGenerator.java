@@ -319,7 +319,6 @@ public abstract class AbstractCodeGenerator {
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
 	public void execute() {
 		try {

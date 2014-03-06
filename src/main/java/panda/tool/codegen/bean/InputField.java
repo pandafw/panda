@@ -296,8 +296,8 @@ public class InputField implements Comparable<InputField> {
 	/**
 	 * @param actionField the actionField to set
 	 */
-	public void setActionField(Boolean modelField) {
-		this.actionField = modelField;
+	public void setActionField(Boolean actionField) {
+		this.actionField = actionField;
 	}
 
 	/**

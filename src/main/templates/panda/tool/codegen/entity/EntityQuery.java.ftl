@@ -6,19 +6,19 @@ package ${package};
 import ${i};
 </#list>
 
-public class ${name} extends ${class_name(entity.baseQueryClass)}<${name}> {
+public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpleName}, ${name}> {
 	/**
 	 * Constructor
 	 */
 	public ${name}() {
-		super();
+		super(${entity.simpleName}.class);
 	}
 
 	/**
 	 * Constructor
 	 * @param query the query to set
 	 */
-	public ${name}(Query query) {
+	public ${name}(GenericQuery<${entity.simpleName}> query) {
 		super(query);
 	}
 

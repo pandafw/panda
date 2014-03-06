@@ -39,7 +39,7 @@ public class PptTextReplacer extends PptTextProcessor {
 		private ESlide esd;
 		
 		/**
-		 * @param ewb
+		 * @param ess slide show
 		 */
 		public Converter(ESlideShow ess) {
 			this.ess = ess;

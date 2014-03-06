@@ -45,7 +45,7 @@ public class DocTextReplacer extends DocTextProcessor {
 		private ECharRun ecrun;
 		
 		/**
-		 * @param ewb
+		 * @param edoc document
 		 */
 		public Converter(EDocument edoc) {
 			this.edoc = edoc;

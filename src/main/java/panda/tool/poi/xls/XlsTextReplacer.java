@@ -42,7 +42,7 @@ public class XlsTextReplacer extends XlsTextProcessor {
 		private int last;
 		
 		/**
-		 * @param ewb
+		 * @param ewb workbook
 		 */
 		public Converter(EWorkbook ewb) {
 			this.ewb = ewb;

@@ -99,7 +99,6 @@ public class CharDetect {
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
 	public void execute() {
 		InputStream is = null;

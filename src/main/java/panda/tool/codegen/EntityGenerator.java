@@ -8,11 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import panda.dao.criteria.Query;
-import panda.dao.criteria.condition.BooleanCondition;
-import panda.dao.criteria.condition.ComparableCondition;
-import panda.dao.criteria.condition.ObjectCondition;
-import panda.dao.criteria.condition.StringCondition;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
@@ -25,6 +20,11 @@ import panda.dao.entity.annotation.JoinColumn;
 import panda.dao.entity.annotation.Joins;
 import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Table;
+import panda.dao.query.BooleanCondition;
+import panda.dao.query.ComparableCondition;
+import panda.dao.query.GenericQuery;
+import panda.dao.query.ObjectCondition;
+import panda.dao.query.StringCondition;
 import panda.dao.sql.JdbcTypes;
 import panda.lang.Classes;
 import panda.lang.Objects;
@@ -144,8 +144,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 				addImportType(imports, type);
 			}
 		}
-		
-		imports.add(Query.class.getName());
+
+		imports.add(entity.getName());
+		imports.add(GenericQuery.class.getName());
 		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
 			imports.add(entity.getBaseQueryClass());
 		}
