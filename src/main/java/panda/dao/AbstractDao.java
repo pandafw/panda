@@ -433,7 +433,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record list
 	 */
-	protected abstract <T> List<T> selectByQuery(Query<T> query);
+	protected abstract <T> List<T> selectByQuery(GenericQuery<T> query);
 
 	/**
 	 * select all records.
@@ -491,7 +491,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	protected abstract <T> int selectByQuery(Query<T> query, DataHandler<T> callback);
+	protected abstract <T> int selectByQuery(GenericQuery<T> query, DataHandler<T> callback);
 
 	//--------------------------------------------------------------------
 	/**

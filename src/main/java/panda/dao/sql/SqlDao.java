@@ -389,7 +389,7 @@ public class SqlDao extends AbstractDao {
 	 * @return record list
 	 */
 	@Override
-	protected <T> List<T> selectByQuery(Query<T> query) {
+	protected <T> List<T> selectByQuery(GenericQuery<T> query) {
 		Sql sql = getSqlExpert().select(query);
 		
 		autoStart();
@@ -422,7 +422,7 @@ public class SqlDao extends AbstractDao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int selectByQuery(Query<T> query, DataHandler<T> callback) {
+	public <T> int selectByQuery(GenericQuery<T> query, DataHandler<T> callback) {
 		assertCallback(callback);
 		
 		SqlResultSet<T> srs = null;
@@ -597,7 +597,7 @@ public class SqlDao extends AbstractDao {
 		try {
 			int cnt = executor.update(sql.getSql(), sql.getParams());
 			if (cnt > limit) {
-				throw new DaoException("Too many (" + cnt + ") records updated.");
+				throw new SQLException("Too many (" + cnt + ") records updated.");
 			}
 			autoCommit();
 			return cnt;
