@@ -266,7 +266,6 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * execSql
 	 * 
-	 * @param connection connection
 	 * @param file sql file
 	 * @throws Exception if an error occurs
 	 */
