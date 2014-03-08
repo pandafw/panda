@@ -1,5 +1,20 @@
 package panda.tool.codegen;
 
+import panda.io.FileNames;
+import panda.io.PropertiesEx;
+import panda.io.Streams;
+import panda.lang.Chars;
+import panda.lang.Charsets;
+import panda.lang.Classes;
+import panda.lang.HandledException;
+import panda.lang.Numbers;
+import panda.lang.Strings;
+import panda.lang.Texts;
+import panda.tool.IllegalLicenseException;
+import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.Module;
+import panda.util.tool.AbstractCommandTool;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -30,19 +45,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
-import panda.io.FileNames;
-import panda.io.PropertiesEx;
-import panda.io.Streams;
-import panda.lang.Charsets;
-import panda.lang.Classes;
-import panda.lang.HandledException;
-import panda.lang.Numbers;
-import panda.lang.Strings;
-import panda.lang.Texts;
-import panda.tool.IllegalLicenseException;
-import panda.tool.codegen.bean.Entity;
-import panda.tool.codegen.bean.Module;
-import panda.util.tool.AbstractCommandTool;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -501,7 +503,7 @@ public abstract class AbstractCodeGenerator {
 
 			StringWriter sw = new StringWriter();
 			tpl.process(context, sw);
-			int svuid = sw.toString().hashCode();
+			int svuid = Strings.remove(sw.toString(), Chars.CR).hashCode();
 			
 			context.put("svuid", svuid);
 		}
