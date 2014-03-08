@@ -262,7 +262,7 @@ public abstract class AbstractDao implements Dao {
 	 * check a record exists in the data store.
 	 * if the query is not supplied, then check the table existence.
 	 * 
-	 * @param entity entity
+	 * @param query query
 	 * @return true if the record or the table exists in the data store
 	 */
 	protected abstract boolean existsByQuery(GenericQuery<?> query);
@@ -666,7 +666,6 @@ public abstract class AbstractDao implements Dao {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param prop The property to be used as the value in the set.
 	 * @param query query
 	 * @return record value set
@@ -732,7 +731,6 @@ public abstract class AbstractDao implements Dao {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query query
 	 * @return record map
@@ -803,7 +801,6 @@ public abstract class AbstractDao implements Dao {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param valProp The property to be used as the value in the Map.
 	 * @param query query
@@ -875,7 +872,6 @@ public abstract class AbstractDao implements Dao {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param type record type
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @param query query
 	 * @return record group

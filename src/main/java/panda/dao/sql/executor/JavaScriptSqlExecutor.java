@@ -149,7 +149,6 @@ public class JavaScriptSqlExecutor extends SimpleSqlExecutor {
 	 * @param parameter parameter object
 	 * @param sqlParams sql parameter list
 	 * @return translated sql
-	 * @throws Exception if an error occurs
 	 */
 	@Override
 	protected String parseSqlStatement(String sql, Object parameter, List<JdbcSqlParameter> sqlParams) {

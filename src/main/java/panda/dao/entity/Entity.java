@@ -146,7 +146,7 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @param fields the fields to set
+	 * @param field the field to add
 	 */
 	protected void addField(EntityField field) {
 		if (fieldMap == null) {
@@ -176,7 +176,7 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @param primaryKeys the primaryKeys to set
+	 * @param ef entity field
 	 */
 	protected void addPrimaryKey(EntityField ef) {
 		if (primaryKeys == null) {
@@ -223,7 +223,7 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @param index the index to add
+	 * @param fkey the foreign key to add
 	 */
 	protected void addForeignKey(EntityFKey fkey) {
 		if (foreignKeyMap == null) {

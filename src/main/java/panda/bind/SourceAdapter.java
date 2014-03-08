@@ -15,8 +15,6 @@ public interface SourceAdapter<T> {
 	
 	/**
 	 * @param source the owner of the property
-	 * @param name the name of the property
-	 * @param value the value of the property
 	 * @return adapter type
 	 */
 	Object apply(T source);

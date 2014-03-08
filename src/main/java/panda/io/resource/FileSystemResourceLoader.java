@@ -21,7 +21,6 @@ public class FileSystemResourceLoader extends DefaultResourceLoader {
 	 * @param path the path to the resource
 	 * @return the corresponding Resource handle
 	 * @see FileSystemResource
-	 * @see org.springframework.web.context.support.ServletContextResourceLoader#getResourceByPath
 	 */
 	@Override
 	protected Resource getResourceByPath(String path) {

@@ -89,7 +89,7 @@ public class HttpDates {
 	 * @param dateValue the date value to parse
 	 * @param dateFormats the date formats to use
 	 * @return the parsed date
-	 * @throws DateParseException if none of the dataFormats could parse the dateValue
+	 * @throws ParseException if none of the dataFormats could parse the dateValue
 	 */
 	private static Date parse(String dateValue, String[] dateFormats, boolean safe) throws ParseException {
 		if (dateValue == null) {

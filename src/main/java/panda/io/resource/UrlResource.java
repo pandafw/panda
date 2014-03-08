@@ -77,7 +77,6 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @param originalUrl the original URL
 	 * @param originalPath the original URL path
 	 * @return the cleaned URL
-	 * @see org.Strings.util.StringUtils#cleanPath
 	 */
 	private URL getCleanedUrl(URL originalUrl, String originalPath) {
 		try {

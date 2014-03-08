@@ -50,7 +50,7 @@ public class FastDatePrinterTest {
 	 * @param format
 	 * @param timeZone
 	 * @param locale
-	 * @return
+	 * @return DatePrint instance
 	 */
 	protected DatePrinter getInstance(final String format, final TimeZone timeZone, final Locale locale) {
 		return new FastDatePrinter(format, timeZone, locale);

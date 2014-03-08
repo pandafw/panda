@@ -86,7 +86,7 @@ public class Streams {
 
 	/**
 	 * The default buffer size ({@value} ) to use for {@link #copyLarge(InputStream, OutputStream)}
-	 * and {@link #copyLarge(Reader, Writer)}
+	 * and {@link #copyLarge(Reader, Appendable)}
 	 */
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 

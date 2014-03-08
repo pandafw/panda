@@ -314,7 +314,6 @@ public class SqlDao extends AbstractDao {
 	 * check a record exists in the data store.
 	 * if the query is not supplied, then check the table existence.
 	 * 
-	 * @param entity entity
 	 * @param query query
 	 * @return true if the record or the table exists in the data store
 	 */
@@ -332,7 +331,6 @@ public class SqlDao extends AbstractDao {
 	/**
 	 * get a record by the supplied query
 	 * 
-	 * @param entity entity
 	 * @param query query
 	 * @return record
 	 */
@@ -384,7 +382,6 @@ public class SqlDao extends AbstractDao {
 	 * select records by the supplied query.
 	 * if query is null then select all records.
 	 * 
-	 * @param entity entity
 	 * @param query query
 	 * @return record list
 	 */
@@ -468,7 +465,6 @@ public class SqlDao extends AbstractDao {
 	/**
 	 * delete record by the supplied query
 	 * 
-	 * @param entity entity
 	 * @param query query
 	 * @return deleted count
 	 */

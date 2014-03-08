@@ -72,7 +72,7 @@ public interface PropertyHandler<T> {
 	
 	/**
 	 * is the property writable
-	 * @param beanName bean name
+	 * @param propertyName property name
 	 * @return true if property is writable
 	 */
 	boolean canWriteProperty(String propertyName);
@@ -80,7 +80,7 @@ public interface PropertyHandler<T> {
 	/**
 	 * is the property writable
 	 * @param beanObject bean object (can be null)
-	 * @param beanName bean name
+	 * @param propertyName property name
 	 * @return true if property is writable
 	 */
 	boolean canWriteProperty(T beanObject, String propertyName);

@@ -294,7 +294,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	/**
 	 * createStatement
 	 * @param sql sql
-	 * @param returGK generated keys should be made available for retrieval
+	 * @param returnGK generated keys should be made available for retrieval
 	 * @return JDBC PreparedStatement
 	 * @throws SQLException if an sql error occurs
 	 */
@@ -333,7 +333,7 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @param sql sql
 	 * @param parameter parameter object
 	 * @param sqlParams sql parameter list
-	 * @param returGK generated keys should be made available for retrieval
+	 * @param returnGK generated keys should be made available for retrieval
 	 * @return JDBC PreparedStatement
 	 * @throws SQLException if an sql error occurs
 	 */
@@ -353,7 +353,6 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @param parameter parameter object
 	 * @param sqlParams sql parameter list
 	 * @return translated sql
-	 * @throws Exception if an error occurs
 	 */
 	protected String parseSqlStatement(String sql, Object parameter, List<JdbcSqlParameter> sqlParams) {
 		if (parameter != null) {
