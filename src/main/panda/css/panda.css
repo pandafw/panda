@@ -7,8 +7,13 @@
 }
 
 /** form layout */
+.p-form.form-horizontal {
+	background-color: #f9f9f9;
+	color: #333;
+	padding: 10px;
+}
 .p-form.form-horizontal .form-group {
-	border-bottom: 1px dashed #ccc;
+	border-bottom: 1px solid #ccc;
 	margin: 0;
 	padding: 5px 0;
 }
@@ -192,11 +197,15 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 
 /* filters */
-.p-lv-filters {
+fieldset.p-lv-filters {
+	padding: 5px;
 }
-.p-lv-filters legend {
+fieldset.p-lv-filters legend {
 }
-
+.p-lv-fsform {
+	background-color: #f9f9f9;
+	padding: 10px;
+}
 .p-lv-filters-t {
 	width: 100%;
 }
@@ -301,6 +310,9 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 .p-lv-body {
 	margin: 0;
 	padding: 0;
+}
+.p-lv-bform {
+	background-color: transparent;
 }
 .n-lv-body-head {
 	margin: 0 0 -2px 0;

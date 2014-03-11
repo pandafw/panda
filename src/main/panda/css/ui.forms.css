@@ -7,8 +7,13 @@
 }
 
 /** form layout */
+.p-form.form-horizontal {
+	background-color: #f9f9f9;
+	color: #333;
+	padding: 10px;
+}
 .p-form.form-horizontal .form-group {
-	border-bottom: 1px dashed #ccc;
+	border-bottom: 1px solid #ccc;
 	margin: 0;
 	padding: 5px 0;
 }
