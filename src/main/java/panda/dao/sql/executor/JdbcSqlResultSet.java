@@ -714,6 +714,16 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 	}
 
 	/**
+	 * Retrieves whether this ResultSet object has been closed. 
+	 * A ResultSet is closed if the method close has been called on it, or if it is automatically closed.
+	 * @return true if this ResultSet object is closed; false if it is still open
+	 * @exception SQLException if a database access error occurs
+	 */
+	public boolean isClosed() throws SQLException {
+		return resultSet.isClosed();
+	}
+
+	/**
 	 * safe close the <code>ResultSet</code> and <code>Statement</code>
 	 */
 	public void safeClose() {

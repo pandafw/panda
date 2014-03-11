@@ -47,7 +47,7 @@
 		<dependency org="org.apache.derby" name="derby" rev="10.10.1.1" conf="jdbc->master,sources" />
 		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.0" conf="jdbc->master,sources" />
 		<dependency org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4" conf="jdbc->master,sources" />
-		<dependency org="org.xerial" name="sqlite-jdbc" rev="3.7.15-M1" conf="jdbc->master,sources" />
+		<dependency org="org.xerial" name="sqlite-jdbc4" rev="3.8.2-SNAPSHOT" conf="jdbc->master,sources" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
 
 		<!-- TEST -->

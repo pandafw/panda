@@ -29,7 +29,7 @@ import panda.log.Logs;
  * @author yf.frank.wang@gmail.com
  */
 public class JdbcSqlExecutor implements SqlExecutor {
-	private static Log log = Logs.getLog(JdbcSqlExecutor.class);
+	private static final Log log = Logs.getLog(JdbcSqlExecutor.class);
 
 	protected static final String BLANK_SQL_MESSAGE = "The sql is blank";
 

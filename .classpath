@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/postgresql.jar" sourcepath="lib/jdbc/postgresql-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc.jar" sourcepath="lib/jdbc/sqlite-jdbc-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/sqlite-jdbc4.jar" sourcepath="lib/jdbc/sqlite-jdbc4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/run/activation.jar" sourcepath="lib/run/activation-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>

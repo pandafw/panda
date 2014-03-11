@@ -483,6 +483,14 @@ public interface SqlResultSet<T> {
 	public void close() throws SQLException;
 
 	/**
+	 * Retrieves whether this ResultSet object has been closed. 
+	 * A ResultSet is closed if the method close has been called on it, or if it is automatically closed.
+	 * @return true if this ResultSet object is closed; false if it is still open
+	 * @exception SQLException if a database access error occurs
+	 */
+	public boolean isClosed() throws SQLException;
+	
+	/**
 	 * safe close the <code>ResultSet</code> and <code>Statement</code>
 	 */
 	public void safeClose();

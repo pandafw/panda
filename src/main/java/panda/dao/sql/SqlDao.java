@@ -1,12 +1,5 @@
 package panda.dao.sql;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import panda.dao.AbstractDao;
 import panda.dao.DB;
 import panda.dao.DaoException;
@@ -22,6 +15,13 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.lang.Types;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * !! thread-unsafe !!
@@ -91,10 +91,7 @@ public class SqlDao extends AbstractDao {
 		autoCount--;
 		if (autoCount == 0) {
 			try {
-				connection.close();
-			}
-			catch (SQLException e) {
-				throw new DaoException("Failed to close connection", e);
+				Sqls.safeClose(connection);
 			}
 			finally {
 				connection = null;

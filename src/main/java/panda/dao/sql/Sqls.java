@@ -1,5 +1,9 @@
 package panda.dao.sql;
 
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,14 +12,14 @@ import java.sql.Types;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import panda.lang.Strings;
-
 /**
  * utility class for sql
  * 
  * @author yf.frank.wang@gmail.coms
  */
 public class Sqls {
+	private static final Log log = Logs.getLog(Sqls.class);
+	
 	/**
 	 * escape sql Like string
 	 * 
@@ -122,11 +126,12 @@ public class Sqls {
 	 */
 	public static void safeClose(ResultSet resultSet) {
 		try {
-			if (resultSet != null) {
+			if (resultSet != null && !resultSet.isClosed()) {
 				resultSet.close();
 			}
 		}
 		catch (SQLException e) {
+			log.warn("Failed to close ResultSet", e);
 		}
 	}
 
@@ -136,11 +141,12 @@ public class Sqls {
 	 */
 	public static void safeClose(SqlResultSet resultSet) {
 		try {
-			if (resultSet != null) {
+			if (resultSet != null && !resultSet.isClosed()) {
 				resultSet.close();
 			}
 		}
 		catch (SQLException e) {
+			log.warn("Failed to close SqlResultSet", e);
 		}
 	}
 	
@@ -150,11 +156,12 @@ public class Sqls {
 	 */
 	public static void safeClose(Statement statement) {
 		try {
-			if (statement != null) {
+			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
 		}
 		catch (SQLException e) {
+			log.warn("Failed to close Statement", e);
 		}
 	}
 	
@@ -164,11 +171,12 @@ public class Sqls {
 	 */
 	public static void safeClose(Connection connection) {
 		try {
-			if (connection != null) {
+			if (connection != null && !connection.isClosed()) {
 				connection.close();
 			}
 		}
 		catch (SQLException e) {
+			log.warn("Failed to close Connection", e);
 		}
 	}
 	
@@ -183,6 +191,7 @@ public class Sqls {
 			}
 		}
 		catch (SQLException e) {
+			log.warn("Failed to rollback", e);
 		}
 	}
 
