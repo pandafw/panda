@@ -301,7 +301,7 @@ public class SimplePooledConnection implements Connection {
 	 * @see java.sql.Connection#isClosed()
 	 */
 	public boolean isClosed() throws SQLException {
-		return getValidConnection().isClosed();
+		return !valid;
 	}
 
 	/**

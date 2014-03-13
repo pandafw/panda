@@ -681,19 +681,18 @@ public class SimpleDataSource implements DataSource {
 	 * @return True if the connection is still usable
 	 */
 	protected boolean pingConnection(SimplePooledConnection conn) {
-		boolean result = true;
+		boolean closed = true;
 
 		try {
-			result = !conn.getRealConnection().isClosed();
+			closed = conn.getRealConnection().isClosed();
 		}
-		catch (SQLException e) {
+		catch (Exception e) {
 			if (log.isDebugEnabled()) {
 				log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
 			}
-			result = false;
 		}
 
-		if (result && pool.pingEnabled) {
+		if (!closed && pool.pingEnabled) {
 			if ((pool.pingConnectionsOlderThan > 0 
 					&& conn.getAge() > pool.pingConnectionsOlderThan)
 					|| (pool.pingConnectionsNotUsedFor > 0 
@@ -711,7 +710,7 @@ public class SimpleDataSource implements DataSource {
 					if (!realConn.getAutoCommit()) {
 						realConn.rollback();
 					}
-					result = true;
+					closed = false;
 					if (log.isDebugEnabled()) {
 						log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
 					}
@@ -725,7 +724,6 @@ public class SimpleDataSource implements DataSource {
 					catch (Exception e2) {
 						// ignore
 					}
-					result = false;
 					if (log.isDebugEnabled()) {
 						log.debug("Connection " + conn.getRealHashCode() + " is BAD: "
 								+ e.getMessage());
@@ -733,7 +731,7 @@ public class SimpleDataSource implements DataSource {
 				}
 			}
 		}
-		return result;
+		return !closed;
 	}
 
 	/**
