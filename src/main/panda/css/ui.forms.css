@@ -22,12 +22,14 @@
 }
 .p-form .form-control {
 	height: auto;
+}
+.p-form .form-control, .p-form input.form-control, .p-form select.form-control,
+.p-form .input-group-addon, .p-form .input-group-btn {
 	padding: 4px 10px;
 }
-.p-form input.form-control, .p-form select.form-control,
+.p-form input.form-control[size], .p-form select.form-control[size],
 .p-form .input-group-addon, .p-form .input-group-btn {
 	width: auto;
-	padding: 4px 10px;
 }
 .p-form.form-horizontal .control-label,
 .p-form.form-horizontal .radio,
