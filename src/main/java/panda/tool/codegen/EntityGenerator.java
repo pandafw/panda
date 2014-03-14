@@ -1,5 +1,6 @@
 package panda.tool.codegen;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import panda.lang.Strings;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -161,7 +163,10 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		prepareImportList(entity.getPropertyList(), imports);
 
-		if (Strings.isNotEmpty(entity.getBaseBeanClass())) {
+		if (Strings.isEmpty(entity.getBaseBeanClass())) {
+			imports.add(Serializable.class.getName());
+		}
+		else {
 			imports.add(entity.getBaseBeanClass());
 		}
 

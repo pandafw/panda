@@ -32,7 +32,7 @@ import ${i};
 </#list>
 })
 </#if>
-public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)} </#if>{
+public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)}<#else>implements Serializable</#if> {
 
 	private static final long serialVersionUID = ${svuid?c}L;
 
