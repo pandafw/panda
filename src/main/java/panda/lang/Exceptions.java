@@ -1,12 +1,12 @@
 package panda.lang;
 
+import panda.io.stream.StringBuilderWriter;
+
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import panda.io.stream.StringBuilderWriter;
 
 
 /**
@@ -55,31 +55,77 @@ public abstract class Exceptions {
 	}
 
 	/**
-	 * 用运行时异常包裹抛出对象，如果抛出对象本身就是运行时异常，则直接返回。
-	 * <p>
-	 * 如果是 InvocationTargetException，那么将其剥离，只包裹其 TargetException
+	 * wrap a exception
 	 * 
-	 * @param e 抛出对象
-	 * @return 运行时异常
+	 * @param e exception
+	 * @return RuntimeException
 	 */
 	public static RuntimeException wrapThrow(Throwable e) {
-		if (e instanceof RuntimeException)
+		if (e instanceof RuntimeException) {
 			return (RuntimeException)e;
-		if (e instanceof InvocationTargetException)
+		}
+		
+		if (e instanceof InvocationTargetException) {
 			return wrapThrow(((InvocationTargetException)e).getTargetException());
+		}
 		return new RuntimeException(e);
 	}
 
 	/**
-	 * 将抛出对象包裹成运行时异常，并增加自己的描述
+	 * wrap a exception with supplied message
 	 * 
-	 * @param e 抛出对象
-	 * @param fmt 格式
-	 * @param args 参数
-	 * @return 运行时异常
+	 * @param e exception
+	 * @param fmt format
+	 * @param args arguments
+	 * @return runtime exception
 	 */
 	public static RuntimeException wrapThrow(Throwable e, String fmt, Object... args) {
 		return new RuntimeException(String.format(fmt, args), e);
+	}
+
+	/**
+	 * Rethrow the given {@link Throwable exception}, which is presumably the
+	 * <em>target exception</em> of an {@link InvocationTargetException}. Should
+	 * only be called if no checked exception is expected to be thrown by the
+	 * target method.
+	 * <p>Rethrows the underlying exception cast to an {@link RuntimeException} or
+	 * {@link Error} if appropriate; otherwise, throws an
+	 * {@link IllegalStateException}.
+	 * @param ex the exception to rethrow
+	 * @throws RuntimeException the rethrown exception
+	 */
+	public static void rethrowRuntime(Throwable ex) {
+		if (ex instanceof RuntimeException) {
+			throw (RuntimeException) ex;
+		}
+		if (ex instanceof Error) {
+			throw (Error) ex;
+		}
+		if (ex instanceof InvocationTargetException) {
+			rethrowRuntime(((InvocationTargetException)ex).getTargetException());
+		}
+		throw new RuntimeException(ex);
+	}
+
+	/**
+	 * Rethrow the given {@link Throwable exception}, which is presumably the
+	 * <em>target exception</em> of an {@link InvocationTargetException}. Should
+	 * only be called if no checked exception is expected to be thrown by the
+	 * target method.
+	 * <p>Rethrows the underlying exception cast to an {@link Exception} or
+	 * {@link Error} if appropriate; otherwise, throws an
+	 * {@link IllegalStateException}.
+	 * @param ex the exception to rethrow
+	 * @throws Exception the rethrown exception (in case of a checked exception)
+	 */
+	public static void rethrowException(Throwable ex) throws Exception {
+		if (ex instanceof Exception) {
+			throw (Exception) ex;
+		}
+		if (ex instanceof Error) {
+			throw (Error) ex;
+		}
+		throw new IllegalStateException(ex);
 	}
 
 	// -----------------------------------------------------------------------
