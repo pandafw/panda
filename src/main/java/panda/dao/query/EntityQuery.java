@@ -139,8 +139,8 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	//----------------------------------------------------------------------
-	public Q reset() {
-		query.reset();
+	public Q clear() {
+		query.clear();
 		return (Q)this;
 	}
 	

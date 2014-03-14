@@ -139,9 +139,9 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
-	 * reset
+	 * clear
 	 */
-	public void reset() {
+	public void clear() {
 		conjunction = Operator.AND;
 		start = 0;
 		limit = 0;
@@ -157,6 +157,9 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (excludes != null) {
 			excludes.clear();
 		};
+		if (joins != null) {
+			joins.clear();
+		}
 	}
 
 	//---------------------------------------------------------------
@@ -675,14 +678,6 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		return expressions != null && !expressions.isEmpty();
 	}
 	
-	/**
-	 * clear
-	 */
-	public void clear() {
-		conjunction = Operator.AND;
-		expressions.clear();
-	}
-
 	protected GenericQuery conjunction(Operator conjunction, boolean force) {
 		if (expressions == null || expressions.isEmpty()) {
 			if (force) {
