@@ -147,7 +147,7 @@ fieldset.p-lv-filters legend {
 	width: 280px;
 }
 .p-lv-filters-t .p-lv-f-string-c {
-	/*width: 80px !important;*/
+	width: auto;
 }
 .p-lv-filters-t .p-datepicker,
 .p-lv-filters-t .p-timepicker,
@@ -167,13 +167,13 @@ fieldset.p-lv-filters legend {
 .p-lv-filters-t .p-lv-f-date-c,
 .p-lv-filters-t .p-lv-f-datetime-c,
 .p-lv-filters-t .p-lv-f-time-c {
-/*	width: 40px !important;*/
+	width: auto;
 }
 .p-lv-filters-t .p-lv-f-number-v, .p-lv-filters-t .p-lv-f-number-v2 {
 	width: 160px;
 }
 .p-lv-filters-t .p-lv-f-number-c {
-/*	width: 40px !important;*/
+	width: auto;
 }
 .p-lv-filters-t .p-lv-f-boolean-true {
 }
