@@ -512,7 +512,6 @@ public class StopWatch {
 	 * </p>
 	 * 
 	 * @return boolean If the StopWatch is started.
-	 * @see State#isStarted()
 	 */
 	public boolean isStarted() {
 		return runningState.isStarted();
@@ -524,7 +523,6 @@ public class StopWatch {
 	 * </p>
 	 * 
 	 * @return boolean If the StopWatch is suspended.
-	 * @see State#isSuspended()
 	 */
 	public boolean isSuspended() {
 		return runningState.isSuspended();
@@ -537,7 +535,6 @@ public class StopWatch {
 	 * </p>
 	 * 
 	 * @return boolean If the StopWatch is stopped.
-	 * @see State#isStopped()
 	 */
 	public boolean isStopped() {
 		return runningState.isStopped();
