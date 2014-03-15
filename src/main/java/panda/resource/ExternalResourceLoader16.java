@@ -37,6 +37,7 @@ public class ExternalResourceLoader16 extends ExternalResourceLoader {
 
 	public static class Control extends ResourceBundle.Control {
 		private static final String PANDA_EXT = "panda.ext";
+		
 		/**
 		 * The default format <code>List</code>, which contains the strings
 		 * <code>"panda.ext"</code> and <code>"java.class"</code> and <code>"java.properties"</code>, in

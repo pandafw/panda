@@ -1,5 +1,8 @@
 package panda.resource;
 
+import panda.lang.Classes;
+import panda.lang.Strings;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -8,19 +11,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import panda.lang.Classes;
-import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
-
 
 /**
  * A class for load external resource.
  * @author yf.frank.wang@gmail.com
  */
 public class ExternalResourceLoader15 extends ExternalResourceLoader {
-
-	private static final Log log = Logs.getLog(ExternalResourceLoader15.class);
 
 	private PropertiesLoader propertiesLoader = new PropertiesLoader(this);
 
@@ -80,13 +76,13 @@ public class ExternalResourceLoader15 extends ExternalResourceLoader {
 
 				try {
 					Properties p = new Properties();
-			        for (Entry<String, String> e : m.entrySet()) {
-			        	String key = e.getKey();
-			        	String val = e.getValue();
-			        	if (key != null) {
-			        		p.put(key, val == null ? Strings.EMPTY : val);
-			        	}
-			        }
+					for (Entry<String, String> e : m.entrySet()) {
+						String key = e.getKey();
+						String val = e.getValue();
+						if (key != null) {
+							p.put(key, val == null ? Strings.EMPTY : val);
+						}
+					}
 					
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					p.store(baos, null);

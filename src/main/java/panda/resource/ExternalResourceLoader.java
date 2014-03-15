@@ -15,7 +15,9 @@ import javax.sql.DataSource;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.dao.sql.SqlLogger;
+import panda.dao.sql.Sqls;
 import panda.lang.Classes;
+import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -28,7 +30,7 @@ import panda.log.Logs;
 public abstract class ExternalResourceLoader {
 	protected static Log log = Logs.getLog(ExternalResourceLoader.class);
 
-	protected Map<String, Map<String, String>> resourceMap = new HashMap<String, Map<String, String>>();
+	protected Map<String, Map<String, String>> resources = new HashMap<String, Map<String, String>>();
 
 	private static ExternalResourceLoader instance;
 	
@@ -87,7 +89,7 @@ public abstract class ExternalResourceLoader {
 	 * @return the contents map
 	 */
 	public Map<String, String> getContentsMap(String className) {
-		return resourceMap.get(className);
+		return resources.get(className);
 	}
 
 	/**
@@ -273,18 +275,18 @@ public abstract class ExternalResourceLoader {
 		}
 	
 		public Locale toLocale() {
-		    if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country) && Strings.isNotEmpty(variant)) {
-		    	return new Locale(language, country, variant);
-		    }
-		    else if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country)) {
-		    	return new Locale(language, country);
+			if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country) && Strings.isNotEmpty(variant)) {
+				return new Locale(language, country, variant);
 			}
-		    else if (Strings.isNotEmpty(language)) {
-		    	return new Locale(language);
+			else if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country)) {
+				return new Locale(language, country);
 			}
-		    else {
-		    	return Locale.getDefault();
-		    }
+			else if (Strings.isNotEmpty(language)) {
+				return new Locale(language);
+			}
+			else {
+				return Locale.getDefault();
+			}
 		}
 		
 		public String toMissesKey() {
@@ -293,13 +295,7 @@ public abstract class ExternalResourceLoader {
 
 		@Override
 		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((baseName == null) ? 0 : baseName.hashCode());
-			result = prime * result + ((country == null) ? 0 : country.hashCode());
-			result = prime * result + ((language == null) ? 0 : language.hashCode());
-			result = prime * result + ((variant == null) ? 0 : variant.hashCode());
-			return result;
+			return Objects.hashCodeBuilder().append(baseName).append(country).append(language).append(variant).toHashCode();
 		}
 
 		@Override
@@ -310,32 +306,13 @@ public abstract class ExternalResourceLoader {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			BundleKey other = (BundleKey) obj;
-			if (baseName == null) {
-				if (other.baseName != null)
-					return false;
-			}
-			else if (!baseName.equals(other.baseName))
-				return false;
-			if (country == null) {
-				if (other.country != null)
-					return false;
-			}
-			else if (!country.equals(other.country))
-				return false;
-			if (language == null) {
-				if (other.language != null)
-					return false;
-			}
-			else if (!language.equals(other.language))
-				return false;
-			if (variant == null) {
-				if (other.variant != null)
-					return false;
-			}
-			else if (!variant.equals(other.variant))
-				return false;
-			return true;
+			
+			BundleKey rhs = (BundleKey) obj;
+			return Objects.equalsBuilder().append(baseName, rhs.baseName)
+					.append(country, rhs.country)
+					.append(language, rhs.language)
+					.append(variant, rhs.variant)
+					.isEquals();
 		}
 	}
 
@@ -373,33 +350,34 @@ public abstract class ExternalResourceLoader {
 		return bk;
 	}
 
-	/**
-	 * @param clazz class name
-	 * @param language language
-	 * @param country country
-	 * @param variant variant
-	 * @param name resource name
-	 * @param value resource value 
-	 * @return true if put resource successfully
-	 */
-	public synchronized boolean putResource(String clazz, String language, String country, String variant, String name, String value) {
-		BundleKey bk = buildBundleKey(clazz, language, country, variant);
-		Map<String, String> rm = resourceMap.get(bk.toString());
-		if (rm != null) {
-			if (value == null) {
-				rm.remove(name);
-			}
-			else {
-				rm.put(name, value);
-			}
-			return true;
-		}
-		return false;
-	}
-	
+//  comment for thread unsafe
+//	/**
+//	 * @param clazz class name
+//	 * @param language language
+//	 * @param country country
+//	 * @param variant variant
+//	 * @param name resource name
+//	 * @param value resource value 
+//	 * @return true if put resource successfully
+//	 */
+//	public boolean putResource(String clazz, String language, String country, String variant, String name, String value) {
+//		BundleKey bk = buildBundleKey(clazz, language, country, variant);
+//		Map<String, String> rm = resources.get(bk.toString());
+//		if (rm != null) {
+//			if (value == null) {
+//				rm.remove(name);
+//			}
+//			else {
+//				rm.put(name, value);
+//			}
+//			return true;
+//		}
+//		return false;
+//	}
+
 	/**
 	 * load resources
-     * @throws Exception if an error occurs
+	 * @throws Exception if an error occurs
 	 */
 	public void loadResources() throws Exception {
 		String sql = "SELECT"
@@ -427,14 +405,13 @@ public abstract class ExternalResourceLoader {
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 
-			resourceMap.clear();
-
 			BundleKey lastBundle = null;
 
 			Map<String, String> properties = null;
 
 			SqlLogger.logResultHeader(rs);
 			
+			Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
 			while (rs.next()) {
 				SqlLogger.logResultValues(rs);
 
@@ -458,7 +435,7 @@ public abstract class ExternalResourceLoader {
 				if (!bk.equals(lastBundle)) {
 					lastBundle = bk;
 					properties = new HashMap<String, String>();
-					resourceMap.put(bk.toString(), properties);
+					res.put(bk.toString(), properties);
 					bkList.add(bk);
 				}
 
@@ -466,24 +443,25 @@ public abstract class ExternalResourceLoader {
 				String value = rs.getString(valueColumn);
 				properties.put(name, value);
 			}
+			resources = res;
 		}
 		finally {
-			conn.close();
+			Sqls.safeClose(conn);
 		}
 	}
 	
 	/**
 	 * load resources
-     * @throws Exception if an error occurs
+	 * 
+	 * @throws Exception if an error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadResources(List resList) throws Exception {
-		resourceMap.clear();
+		Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
 
 		BundleKey lastBundle = null;
-
 		Map<String, String> properties = null;
-
+		
 		for (Object o : resList) {
 			BeanHandler bh = Beans.i().getBeanHandler(o.getClass());
 			
@@ -507,13 +485,15 @@ public abstract class ExternalResourceLoader {
 			if (!bk.equals(lastBundle)) {
 				lastBundle = bk;
 				properties = new HashMap<String, String>();
-				resourceMap.put(bk.toString(), properties);
+				res.put(bk.toString(), properties);
 			}
 
 			String name = (String)bh.getPropertyValue(o, nameColumn);
 			String value = (String)bh.getPropertyValue(o, valueColumn);
 			properties.put(name, value);
 		}
+		
+		resources = res;
 	}
 	
 	public ResourceBundle getBundle(String baseName) {
