@@ -1,17 +1,16 @@
 package panda.dao.entity;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DataHandler;
 import panda.dao.DatabaseMeta;
-import panda.dao.Transaction;
 import panda.dao.query.Query;
 import panda.lang.Texts;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 
@@ -525,14 +524,14 @@ public class EntityDao<T> {
 	/**
 	 * execute a transaction
 	 */
-	public void exec(Transaction transaction) {
+	public void exec(Runnable transaction) {
 		dao.exec(transaction);
 	}
 	/**
 	 * execute a transaction
 	 * @param level transaction level
 	 */
-	public void exec(Transaction transaction, int level) {
+	public void exec(Runnable transaction, int level) {
 		dao.exec(transaction, level);
 	}
 	

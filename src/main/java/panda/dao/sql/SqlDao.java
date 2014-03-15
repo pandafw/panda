@@ -4,7 +4,6 @@ import panda.dao.AbstractDao;
 import panda.dao.DB;
 import panda.dao.DaoException;
 import panda.dao.DataHandler;
-import panda.dao.Transaction;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.GenericQuery;
@@ -136,7 +135,7 @@ public class SqlDao extends AbstractDao {
 	 * execute a transaction
 	 */
 	@Override
-	public void exec(Transaction transaction) {
+	public void exec(Runnable transaction) {
 		exec(transaction, Connection.TRANSACTION_NONE);
 	}
 	
@@ -145,7 +144,7 @@ public class SqlDao extends AbstractDao {
 	 * @param level transaction level
 	 */
 	@Override
-	public void exec(Transaction transaction, int level) {
+	public void exec(Runnable transaction, int level) {
 		assertTransaction(transaction);
 
 		transactionLevel = level;

@@ -678,13 +678,13 @@ public interface Dao {
 	/**
 	 * execute a transaction
 	 */
-	void exec(Transaction transaction);
+	void exec(Runnable transaction);
 	
 	/**
 	 * execute a transaction
 	 * @param level transaction level
 	 */
-	void exec(Transaction transaction, int level);
+	void exec(Runnable transaction, int level);
 	
 	//--------------------------------------------------------------------
 	/**

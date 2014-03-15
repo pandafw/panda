@@ -1,5 +1,16 @@
 package panda.dao.sql;
 
+import panda.dao.Dao;
+import panda.dao.entity.Klass;
+import panda.dao.entity.Score;
+import panda.dao.entity.Student;
+import panda.dao.entity.Teacher;
+import panda.dao.query.GenericQuery;
+import panda.lang.Exceptions;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.mock.sql.MockDataSource;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +21,6 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
-
-import panda.dao.Dao;
-import panda.dao.Transaction;
-import panda.dao.entity.Klass;
-import panda.dao.entity.Score;
-import panda.dao.entity.Student;
-import panda.dao.entity.Teacher;
-import panda.dao.query.GenericQuery;
-import panda.lang.Exceptions;
-import panda.log.Log;
-import panda.log.Logs;
-import panda.mock.sql.MockDataSource;
 
 
 /**
@@ -446,7 +445,7 @@ public abstract class SqlDaoTestCase {
 	@Test
 	public void testExecDelete() {
 		final Score expect = Score.create(2, 2, 2);
-		dao.exec(new Transaction() {
+		dao.exec(new Runnable() {
 			@Override
 			public void run() {
 				dao.delete(expect);

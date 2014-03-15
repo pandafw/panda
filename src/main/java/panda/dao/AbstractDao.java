@@ -107,7 +107,7 @@ public abstract class AbstractDao implements Dao {
 		Asserts.notNull(object, "The object is null");
 	}
 	
-	protected void assertTransaction(Transaction transaction) {
+	protected void assertTransaction(Runnable transaction) {
 		Asserts.notNull(transaction, "The transaction is null");
 	}
 	
@@ -1332,14 +1332,14 @@ public abstract class AbstractDao implements Dao {
 	 * execute a transaction
 	 */
 	@Override
-	public abstract void exec(Transaction transaction);
+	public abstract void exec(Runnable transaction);
 	
 	/**
 	 * execute a transaction
 	 * @param level transaction level
 	 */
 	@Override
-	public abstract void exec(Transaction transaction, int level);
+	public abstract void exec(Runnable transaction, int level);
 	
 	/**
 	 * commit a transaction
