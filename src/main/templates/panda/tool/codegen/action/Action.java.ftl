@@ -104,9 +104,8 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.list();
 	}
 	
@@ -114,9 +113,8 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.list_popup();
 	}
 	
@@ -124,9 +122,8 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.list_csv();
 	}
 	
@@ -134,9 +131,8 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.list_print();
 	}
 	
@@ -144,18 +140,16 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.bdelete();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.bdelete_execute();
 	}
 	
@@ -163,18 +157,16 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.bupdate();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.bupdate_execute();
 	}
 	
@@ -182,36 +174,32 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.bedit();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.bedit_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_confirm() throws Exception {
+	public String ${ui.name}_confirm() {
 		return super.bedit_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.bedit_execute();
 	}
 	
@@ -222,18 +210,16 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.view();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.view_input();
 	}
 
@@ -241,18 +227,16 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.print();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.print_input();
 	}
 
@@ -260,36 +244,32 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.insert();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.insert_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_confirm() throws Exception {
+	public String ${ui.name}_confirm() {
 		return super.insert_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.insert_execute();
 	}
 
@@ -297,36 +277,32 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.copy();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.copy_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_confirm() throws Exception {
+	public String ${ui.name}_confirm() {
 		return super.copy_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.copy_execute();
 	}
 
@@ -334,36 +310,32 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.update();
 	}
 
 	/**
 	 * ${ui.name}_input
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_input() throws Exception {
+	public String ${ui.name}_input() {
 		return super.update_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_confirm() throws Exception {
+	public String ${ui.name}_confirm() {
 		return super.update_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.update_execute();
 	}
 
@@ -371,18 +343,16 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}() throws Exception {
+	public String ${ui.name}() {
 		return super.delete();
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 * @return SUCCESS
-	 * @throws Exception if an error occurs
 	 */
-	public String ${ui.name}_execute() throws Exception {
+	public String ${ui.name}_execute() {
 		return super.delete_execute();
 	}
 
