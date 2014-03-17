@@ -155,7 +155,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (Throwable e) {
 			rollback();
-			throw Exceptions.wrapThrow(e);
+			Exceptions.rethrowRuntime(e);
 		}
 		finally {
 			autoClose();

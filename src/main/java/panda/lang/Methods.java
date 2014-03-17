@@ -224,6 +224,27 @@ public class Methods {
 	 * 
 	 * @param object invoke method on this object
 	 * @param methodName get method with this name
+	 * @return The value returned by the invoked method
+	 * @throws NoSuchMethodException if there is no such accessible method
+	 * @throws InvocationTargetException wraps an exception thrown by the method invoked
+	 * @throws IllegalAccessException if the requested method is not accessible via reflection
+	 */
+	public static Object invokeExactMethod(Object object, String methodName) throws NoSuchMethodException,
+			IllegalAccessException, InvocationTargetException {
+		return invokeExactMethod(object, methodName, null);
+	}
+
+	/**
+	 * <p>
+	 * Invoke a method whose parameter type matches exactly the object type.
+	 * </p>
+	 * <p>
+	 * This is a convenient wrapper for
+	 * {@link #invokeExactMethod(Object object,String methodName,Object [] args)}.
+	 * </p>
+	 * 
+	 * @param object invoke method on this object
+	 * @param methodName get method with this name
 	 * @param arg use this argument
 	 * @return The value returned by the invoked method
 	 * @throws NoSuchMethodException if there is no such accessible method
@@ -257,13 +278,13 @@ public class Methods {
 	 */
 	public static Object invokeExactMethod(Object object, String methodName, Object[] args)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (args == null) {
-			args = EMPTY_OBJECT_ARRAY;
-		}
-		int arguments = args.length;
-		Class[] parameterTypes = new Class[arguments];
-		for (int i = 0; i < arguments; i++) {
-			parameterTypes[i] = args[i].getClass();
+		Class[] parameterTypes = null;
+		if (args != null) {
+			int arguments = args.length;
+			parameterTypes = new Class[arguments];
+			for (int i = 0; i < arguments; i++) {
+				parameterTypes[i] = args[i].getClass();
+			}
 		}
 		return invokeExactMethod(object, methodName, args, parameterTypes);
 
@@ -478,6 +499,27 @@ public class Methods {
 	 * 
 	 * @param objectClass invoke static method on this class
 	 * @param methodName get method with this name
+	 * @return The value returned by the invoked method
+	 * @throws NoSuchMethodException if there is no such accessible method
+	 * @throws InvocationTargetException wraps an exception thrown by the method invoked
+	 * @throws IllegalAccessException if the requested method is not accessible via reflection
+	 */
+	public static Object invokeExactStaticMethod(Class objectClass, String methodName)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		return invokeExactStaticMethod(objectClass, methodName, null, null);
+	}
+
+	/**
+	 * <p>
+	 * Invoke a static method whose parameter type matches exactly the object type.
+	 * </p>
+	 * <p>
+	 * This is a convenient wrapper for
+	 * {@link #invokeExactStaticMethod(Class objectClass,String methodName,Object [] args)}.
+	 * </p>
+	 * 
+	 * @param objectClass invoke static method on this class
+	 * @param methodName get method with this name
 	 * @param arg use this argument
 	 * @return The value returned by the invoked method
 	 * @throws NoSuchMethodException if there is no such accessible method
@@ -486,10 +528,8 @@ public class Methods {
 	 */
 	public static Object invokeExactStaticMethod(Class objectClass, String methodName, Object arg)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
 		Object[] args = { arg };
 		return invokeExactStaticMethod(objectClass, methodName, args);
-
 	}
 
 	/**
@@ -511,16 +551,15 @@ public class Methods {
 	 */
 	public static Object invokeExactStaticMethod(Class objectClass, String methodName, Object[] args)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (args == null) {
-			args = EMPTY_OBJECT_ARRAY;
-		}
-		int arguments = args.length;
-		Class[] parameterTypes = new Class[arguments];
-		for (int i = 0; i < arguments; i++) {
-			parameterTypes[i] = args[i].getClass();
+		Class[] parameterTypes = null;
+		if (args != null) {
+			int arguments = args.length;
+			parameterTypes = new Class[arguments];
+			for (int i = 0; i < arguments; i++) {
+				parameterTypes[i] = args[i].getClass();
+			}
 		}
 		return invokeExactStaticMethod(objectClass, methodName, args, parameterTypes);
-
 	}
 
 	/**
@@ -539,7 +578,6 @@ public class Methods {
 
 		Class[] parameterTypes = { parameterType };
 		return getAccessibleMethod(clazz, methodName, parameterTypes);
-
 	}
 
 	/**
@@ -555,7 +593,6 @@ public class Methods {
 	 * @return The accessible method
 	 */
 	public static Method getAccessibleMethod(Class clazz, String methodName, Class[] parameterTypes) {
-
 		try {
 			MethodDescriptor md = new MethodDescriptor(clazz, methodName, parameterTypes, true);
 			// Check the cache first
@@ -571,7 +608,6 @@ public class Methods {
 		catch (NoSuchMethodException e) {
 			return (null);
 		}
-
 	}
 
 	/**
@@ -584,14 +620,12 @@ public class Methods {
 	 * @return The accessible method
 	 */
 	public static Method getAccessibleMethod(Method method) {
-
 		// Make sure we have a method to check
 		if (method == null) {
 			return (null);
 		}
 
 		return getAccessibleMethod(method.getDeclaringClass(), method);
-
 	}
 
 	/**

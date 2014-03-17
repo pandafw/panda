@@ -41,25 +41,6 @@ import panda.servlet.HttpServletUtils;
  * We generally do not recommend to unit-test your ServletContainerInitializers and
  * WebApplicationInitializers which is where those registration methods would be used.
  *
- * <p>Used for testing the Spring web framework; only rarely necessary for testing
- * application controllers. As long as application components don't explicitly
- * access the ServletContext, ClassPathXmlApplicationContext or
- * FileSystemXmlApplicationContext can be used to load the context files for testing,
- * even for DispatcherServlet context definitions.
- *
- * <p>For setting up a full WebApplicationContext in a test environment, you can
- * use XmlWebApplicationContext (or GenericWebApplicationContext), passing in an
- * appropriate MockServletContext instance. You might want to configure your
- * MockServletContext with a FileSystemResourceLoader in that case, to make your
- * resource paths interpreted as relative file system locations.
- *
- * <p>A common setup is to point your JVM working directory to the root of your
- * web application directory, in combination with filesystem-based resource loading.
- * This allows to load the context files as used in the web application, with
- * relative paths getting interpreted correctly. Such a setup will work with both
- * FileSystemXmlApplicationContext (which will load straight from the file system)
- * and XmlWebApplicationContext with an underlying MockServletContext (as long as
- * the MockServletContext has been configured with a FileSystemResourceLoader).
  */
 public class MockServletContext implements ServletContext {
 

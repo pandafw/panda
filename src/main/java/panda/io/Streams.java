@@ -105,6 +105,18 @@ public class Streams {
 	private static char[] SKIP_CHAR_BUFFER;
 	private static byte[] SKIP_BYTE_BUFFER;
 
+	
+	/**
+	 * Copy bytes from an <code>InputStream</code> to an null <code>OutputStream</code>.
+	 * 
+	 * @param is the input stream to copy from
+	 * @return the number of bytes copied
+	 * @throws IOException in case of I/O errors
+	 */
+	public static int drain(InputStream is) throws IOException {
+		return copy(is, nullOutputStream());
+	}
+	
 	/**
 	 * Copy the contents of the given input File to the given output File.
 	 * 

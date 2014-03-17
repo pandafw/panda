@@ -563,18 +563,16 @@ public class HttpServletUtils {
 	/**
 	 * @param res response 
 	 * @param url redirect url
-	 * @throws IOException if an I/O error occurs
 	 */
-	public static void sendRedirect(HttpServletResponse res, String url) throws IOException {
+	public static void sendRedirect(HttpServletResponse res, String url) {
 		sendRedirect(res, url, false);
 	}
 
 	/**
 	 * @param res response 
 	 * @param url redirect url
-	 * @throws IOException if an I/O error occurs
 	 */
-	public static void sendRedirect(HttpServletResponse res, String url, boolean permanently) throws IOException {
+	public static void sendRedirect(HttpServletResponse res, String url, boolean permanently) {
 		res.setStatus(permanently ? HttpServletResponse.SC_MOVED_PERMANENTLY : HttpServletResponse.SC_MOVED_TEMPORARILY);
 		res.setHeader(HttpHeader.LOCATION, res.encodeRedirectURL(url));
 	}

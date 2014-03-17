@@ -142,7 +142,7 @@ public class ThreadCreator implements ThreadFactory {
 	 */
 	protected String nextThreadName() {
 		int threadNumber = threadCount.incrementAndGet();
-		return getThreadNamePrefix() + threadNumber;
+		return getThreadNamePrefix() + '-' + threadNumber;
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class ThreadCreator implements ThreadFactory {
 	 * @return the default thread name prefix (never {@code null})
 	 */
 	protected String getDefaultThreadNamePrefix() {
-		return Classes.getSimpleClassName(getClass()) + "-";
+		return getClass().getSimpleName();
 	}
 
 }

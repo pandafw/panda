@@ -616,6 +616,7 @@ public class HttpResponse implements Closeable {
 		return getContentText(null);
 	}
 
+	@Override
 	public void close() throws IOException {
 		Streams.safeClose(stream);
 		Streams.safeClose(rawStream);
