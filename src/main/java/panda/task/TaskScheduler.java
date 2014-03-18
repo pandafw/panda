@@ -63,6 +63,20 @@ public interface TaskScheduler extends AsyncTaskExecutor {
 	 * <p>Execution will end once the scheduler shuts down or the returned
 	 * {@link ScheduledFuture} gets cancelled.
 	 * @param task the Runnable to execute whenever the trigger fires
+	 * @param initialDelay the time to delay first execution
+	 * (if this is in the past, the task will be executed immediately, i.e. as soon as possible)
+	 * @param period the interval between successive executions of the task (in milliseconds)
+	 * @return a {@link ScheduledFuture} representing pending completion of the task
+	 * for internal reasons (e.g. a pool overload handling policy or a pool shutdown in progress)
+	 */
+	ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long initialDelay, long period);
+
+	/**
+	 * Schedule the given {@link Runnable}, invoking it at the specified execution time
+	 * and subsequently with the given period.
+	 * <p>Execution will end once the scheduler shuts down or the returned
+	 * {@link ScheduledFuture} gets cancelled.
+	 * @param task the Runnable to execute whenever the trigger fires
 	 * @param startTime the desired first execution time for the task
 	 * (if this is in the past, the task will be executed immediately, i.e. as soon as possible)
 	 * @param period the interval between successive executions of the task (in milliseconds)
@@ -82,6 +96,22 @@ public interface TaskScheduler extends AsyncTaskExecutor {
 	 * for internal reasons (e.g. a pool overload handling policy or a pool shutdown in progress)
 	 */
 	ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long period);
+
+	/**
+	 * Schedule the given {@link Runnable}, invoking it at the specified execution time
+	 * and subsequently with the given delay between the completion of one execution
+	 * and the start of the next.
+	 * <p>Execution will end once the scheduler shuts down or the returned
+	 * {@link ScheduledFuture} gets cancelled.
+	 * @param task the Runnable to execute whenever the trigger fires
+	 * @param initialDelay the time to delay first execution
+	 * (if this is in the past, the task will be executed immediately, i.e. as soon as possible)
+	 * @param delay the delay between the completion of one execution and the start
+	 * of the next (in milliseconds)
+	 * @return a {@link ScheduledFuture} representing pending completion of the task
+	 * for internal reasons (e.g. a pool overload handling policy or a pool shutdown in progress)
+	 */
+	ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long initialDelay, long delay);
 
 	/**
 	 * Schedule the given {@link Runnable}, invoking it at the specified execution time
