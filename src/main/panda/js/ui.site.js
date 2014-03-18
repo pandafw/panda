@@ -180,10 +180,10 @@ function s_addScript(url) {
 // google analytics
 var _gaq = [];
 function s_google_analytics(c) {
-	if (c.ga_account) {
-		_gaq.push(['_setAccount', c.ga_account]);
-		if (c.ga_domain) {
-			_gaq.push(['_setDomainName', c.ga_domain]);
+	if (c.google_analytics) {
+		_gaq.push(['_setAccount', c.google_analytics]);
+		if (c.google_analytics_domain) {
+			_gaq.push(['_setDomainName', c.google_analytics_domain]);
 		}
 		_gaq.push(['_trackPageview']);
 		
@@ -231,7 +231,7 @@ function s_decorate(selector) {
 }
 
 function s_init(c) {
-	var p = [ 's:static', 's:base', 's:google:analytics' ];
+	var p = [ 's:static', 's:base', 's:google_analytics' ];
 	var m = { body: 'body' };
 	$('meta').each(function() {
 		var $t = $(this);
@@ -239,7 +239,7 @@ function s_init(c) {
 		if (p.contains(a)) {
 			var v = $t.attr('content');
 			if (v) {
-				m[a] = v;
+				m[a.substring(2)] = v;
 			}
 		}
 	});
