@@ -1,13 +1,5 @@
 package panda.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.castor.Castors;
@@ -18,9 +10,19 @@ import panda.dao.handlers.CollectionDataHandler;
 import panda.dao.handlers.GroupDataHandler;
 import panda.dao.handlers.MapDataHandler;
 import panda.dao.query.GenericQuery;
+import panda.dao.query.Join;
 import panda.dao.query.Query;
 import panda.lang.Asserts;
 import panda.lang.Objects;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * !! thread-unsafe !!
@@ -546,7 +548,7 @@ public abstract class AbstractDao implements Dao {
 	
 	@SuppressWarnings("unchecked")
 	protected Collection<?> collByQuery(Collection<?> coll, GenericQuery<?> query, String prop) {
-		query.clearIncludes().include(prop);
+		query.clearColumns().include(prop);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
@@ -808,7 +810,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Map<?, ?> mapByQuery(GenericQuery<?> query, String keyProp, String valProp) {
-		query.clearIncludes().include(keyProp).include(valProp);
+		query.clearColumns().include(keyProp).include(valProp);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
@@ -949,7 +951,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> groupByQuery(GenericQuery<?> query, String keyProp, String valProp) {
-		query.clearIncludes().include(keyProp).include(valProp);
+		query.clearColumns().include(keyProp).include(valProp);
 		
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
@@ -1384,14 +1386,26 @@ public abstract class AbstractDao implements Dao {
 		return new GenericQuery<Map>(table);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected <T> GenericQuery<T> cloneQuery(Query<T> query) {
 		assertQuery(query);
 		GenericQuery<T> q = new GenericQuery<T>(query);
 		if (q.getEntity() == null && q.getType() != null) {
-			Object target = query.getTarget();
-			if (target instanceof Class) {
-				Entity<T> entity = getEntity(q.getType());
-				q.setEntity(entity);
+			Entity<T> entity = getEntity(q.getType());
+			q.setEntity(entity);
+		}
+		if (q.hasJoins()) {
+			for (Entry<String, Join> en : q.getJoins().entrySet()) {
+				Join join = en.getValue();
+				Query<?> jq = join.getQuery();
+				if (jq.getEntity() == null && jq.getType() != null) {
+					GenericQuery gq = new GenericQuery(jq);
+					Entity entity = getEntity(gq.getType());
+					gq.setEntity(entity);
+
+					Join nj = new Join(join.getType(), gq, join.getConditions());
+					en.setValue(nj);
+				}
 			}
 		}
 		
@@ -1433,35 +1447,47 @@ public abstract class AbstractDao implements Dao {
 	protected void excludeNullProperties(GenericQuery<?> query, Object obj) {
 		Entity<?> entity = query.getEntity();
 		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());
-		for (EntityField ef : entity.getFields()) {
-			if (bh.getPropertyValue(obj, ef.getName()) == null) {
-				query.exclude(ef.getName());
+
+		if (query.hasColumns()) {
+			for (EntityField ef : entity.getFields()) {
+				if (bh.getPropertyValue(obj, ef.getName()) == null) {
+					query.exclude(ef.getName());
+				}
+			}
+		}
+		else {
+			for (EntityField ef : entity.getFields()) {
+				if (bh.getPropertyValue(obj, ef.getName()) != null) {
+					query.include(ef.getName());
+				}
 			}
 		}
 	}
 
 	protected void excludePrimaryKeys(GenericQuery<?> query) {
 		Entity<?> entity = query.getEntity();
+		if (query.hasColumns()) {
+			for (EntityField ef : entity.getFields()) {
+				if (ef.isPrimaryKey()) {
+					query.exclude(ef.getName());
+				}
+			}
+		}
+		else {
+			for (EntityField ef : entity.getFields()) {
+				if (!ef.isPrimaryKey()) {
+					query.include(ef.getName());
+				}
+			}
+		}
+	}
+
+	protected void selectPrimaryKeys(GenericQuery<?> query) {
+		query.clearColumns();
+		
+		Entity<?> entity = query.getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isPrimaryKey()) {
-				query.exclude(ef.getName());
-			}
-		}
-	}
-
-	protected void excludeNonPrimaryKeys(GenericQuery<?> query) {
-		Entity<?> entity = query.getEntity();
-		for (EntityField ef : entity.getFields()) {
-			if (!ef.isPrimaryKey()) {
-				query.exclude(ef.getName());
-			}
-		}
-	}
-
-	protected void includePrimaryKeys(GenericQuery<?> query) {
-		Entity<?> entity = query.getEntity();
-		for (EntityField ef : entity.getFields()) {
-			if (!ef.isPrimaryKey()) {
 				query.include(ef.getName());
 			}
 		}

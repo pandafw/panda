@@ -175,6 +175,12 @@ public class ThreadPoolTaskScheduler extends TaskExecutorSupport implements Task
 	}
 
 	@Override
+	public ScheduledFuture<?> schedule(Runnable task, long delay) {
+		ScheduledExecutorService executor = getScheduledExecutor();
+		return executor.schedule(errorHandlingTask(task, false), delay, TimeUnit.MILLISECONDS);
+	}
+
+	@Override
 	public ScheduledFuture<?> scheduleAtFixedRate(Runnable task, Date startTime, long period) {
 		ScheduledExecutorService executor = getScheduledExecutor();
 		long initialDelay = startTime.getTime() - System.currentTimeMillis();

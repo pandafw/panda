@@ -1,11 +1,10 @@
 package panda.dao.query;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import panda.dao.entity.Entity;
 import panda.lang.Objects;
+
+import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings("unchecked")
@@ -59,13 +58,49 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
-	public Set<String> getIncludes() {
-		return query.getIncludes();
+	public Map<String, String> getColumns() {
+		return query.getColumns();
 	}
 
 	@Override
-	public Set<String> getExcludes() {
-		return query.getExcludes();
+	public boolean hasColumns() {
+		return query.hasColumns();
+	}
+
+	/**
+	 * @param name column name
+	 * @return column value
+	 */
+	public String getColumn(String name) {
+		return query.getColumn(name);
+	}
+
+	/**
+	 * @param name column name
+	 * @param value column value
+	 * @return this
+	 */
+	public Q column(String name, String value) {
+		query.column(name, value);
+		return (Q)this;
+	}
+
+	/**
+	 * @param name include name
+	 * @return this
+	 */
+	public Q include(String name) {
+		query.include(name);
+		return (Q)this;
+	}
+
+	/**
+	 * @param name the field name to exclude
+	 * @return this
+	 */
+	public Q exclude(String name) {
+		query.exclude(name);
+		return (Q)this;
 	}
 
 	@Override
@@ -79,22 +114,12 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
-	public boolean hasIncludes() {
-		return query.hasIncludes();
-	}
-
-	@Override
-	public boolean hasExcludes() {
-		return query.hasExcludes();
-	}
-
-	@Override
 	public boolean hasJoins() {
 		return query.hasJoins();
 	}
 
 	@Override
-	public List<Join> getJoins() {
+	public Map<String, Join> getJoins() {
 		return query.getJoins();
 	}
 
@@ -271,120 +296,95 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		return (Q)this;
 	}
 	
+
+	//---------------------------------------------------------------
+	// groups
+	//---------------------------------------------------------------
+	/**
+	 * @return true if has groups
+	 */
+	public boolean hasGroups() {
+		return query.hasGroups();
+	}
+
+	/**
+	 * @return groups
+	 */
+	public List<String> getGroups() {
+		return query.getGroups();
+	}
+
+	/**
+	 * add group
+	 * @param column column
+	 * @return this
+	 */
+	public Q groupBy(String ... column) {
+		query.groupBy(column);
+		return (Q)this;
+	}
+
 	//----------------------------------------------------------------------
 	// join
 	//----------------------------------------------------------------------
 	/**
 	 * add left join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param jquery join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Q leftJoin(String table, String alias, String ... conditions) {
-		query.leftJoin(table, alias, conditions);
-		return (Q)this;
-	}
-
-	/**
-	 * add left join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public Q leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		query.leftJoin(table, alias, conditions, parameters);
+	public Q leftJoin(Query<?> jquery, String alias, String ... conditions) {
+		query.leftJoin(jquery, alias, conditions);
 		return (Q)this;
 	}
 
 	/**
 	 * add right join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param jquery join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Q rightJoin(String table, String alias, String ... conditions) {
-		query.rightJoin(table, alias, conditions);
-		return (Q)this;
-	}
-
-	/**
-	 * add right join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public Q rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		query.rightJoin(table, alias, conditions, parameters);
+	public Q rightJoin(Query<?> jquery, String alias, String ... conditions) {
+		query.rightJoin(jquery, alias, conditions);
 		return (Q)this;
 	}
 
 	/**
 	 * add inner join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param jquery join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Q innerJoin(String table, String alias, String ... conditions) {
-		query.innerJoin(table, alias, conditions);
-		return (Q)this;
-	}
-
-	/**
-	 * add inner join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public Q innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		query.innerJoin(table, alias, conditions, parameters);
+	public Q innerJoin(Query<?> jquery, String alias, String ... conditions) {
+		query.innerJoin(jquery, alias, conditions);
 		return (Q)this;
 	}
 
 	/**
 	 * add join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param jquery join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Q join(String table, String alias, String ... conditions) {
-		query.join(table, alias, conditions);
+	public Q join(Query<?> jquery, String alias, String ... conditions) {
+		query.join(query, alias, conditions);
 		return (Q)this;
 	}
 
 	/**
 	 * add join
 	 * @param type join type
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param jquery join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public Q join(String type, String table, String alias, String ... conditions) {
-		query.join(type, table, alias, conditions);
-		return (Q)this;
-	}
-
-	/**
-	 * add join
-	 * @param type join type
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public Q join(String type, String table, String alias, String[] conditions, Object[] parameters) {
-		query.join(type, table, alias, conditions, parameters);
+	public Q join(String type, Query<?> jquery, String alias, String ... conditions) {
+		query.join(type, jquery, alias, conditions);
 		return (Q)this;
 	}
 

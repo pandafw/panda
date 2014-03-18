@@ -48,6 +48,16 @@ public interface TaskScheduler extends AsyncTaskExecutor {
 	ScheduledFuture<?> schedule(Runnable task, Date startTime);
 
 	/**
+	 * Creates and executes a one-shot action that becomes enabled after the given delay.
+	 * 
+	 * @param task the task to execute
+	 * @param delay the milliseconds from now to delay execution
+	 * @return a ScheduledFuture representing pending completion of the task and whose
+	 *         <tt>get()</tt> method will return <tt>null</tt> upon completion
+	 */
+	ScheduledFuture<?> schedule(Runnable task, long delay);
+
+	/**
 	 * Schedule the given {@link Runnable}, invoking it at the specified execution time
 	 * and subsequently with the given period.
 	 * <p>Execution will end once the scheduler shuts down or the returned

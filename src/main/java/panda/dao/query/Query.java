@@ -1,10 +1,9 @@
 package panda.dao.query;
 
+import panda.dao.entity.Entity;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import panda.dao.entity.Entity;
 
 /**
  * 
@@ -34,17 +33,23 @@ public interface Query<T> {
 	public String getTable();
 
 	//---------------------------------------------------------------
-	// include & exclude
+	// columns
 	//
 	/**
-	 * @return the includes
+	 * @return true if has columns
 	 */
-	public Set<String> getIncludes();
+	public boolean hasColumns();
 
 	/**
-	 * @return the excludes
+	 * @return columns
 	 */
-	public Set<String> getExcludes();
+	public Map<String, String> getColumns();
+
+	/**
+	 * @param name column name
+	 * @return column value
+	 */
+	public String getColumn(String name);
 
 	/**
 	 * @param name field name
@@ -58,32 +63,21 @@ public interface Query<T> {
 	 */
 	public boolean shouldExclude(String name);
 
-	/**
-	 * @return true if the includes is not empty
-	 */
-	public boolean hasIncludes();
-
-	/**
-	 * @return true if the excludes is not empty
-	 */
-	public boolean hasExcludes();
-
-
 	//---------------------------------------------------------------
 	// join
 	//
 	/**
-	 * @return true if has orders
+	 * @return true if has joins
 	 */
 	public boolean hasJoins();
 
 	/**
 	 * @return joins
 	 */
-	public List<Join> getJoins();
+	public Map<String, Join> getJoins();
 
 	//---------------------------------------------------------------
-	// order
+	// orders
 	//
 	/**
 	 * @return true if has orders
@@ -95,6 +89,18 @@ public interface Query<T> {
 	 */
 	public Map<String, Order> getOrders();
 
+	//---------------------------------------------------------------
+	// groups
+	//
+	/**
+	 * @return true if has groups
+	 */
+	public boolean hasGroups();
+
+	/**
+	 * @return groups
+	 */
+	public List<String> getGroups();
 
 	//---------------------------------------------------------------
 	// start & limit

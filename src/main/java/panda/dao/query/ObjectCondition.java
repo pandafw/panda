@@ -45,4 +45,21 @@ public class ObjectCondition<E extends EntityQuery> extends AbstractCondition<E>
 		parent.getQuery().orderByDesc(field);
 		return parent;
 	}
+	
+	/**
+	 * @param value column value
+	 * @return parent
+	 */
+	public E column(String value) {
+		parent.getQuery().column(field, value);
+		return parent;
+	}
+
+	/**
+	 * @return parent
+	 */
+	public E group() {
+		parent.getQuery().groupBy(field);
+		return parent;
+	}
 }

@@ -300,7 +300,7 @@ public class SqlDao extends AbstractDao {
 
 		GenericQuery query = createQuery(entity);
 		queryPrimaryKey(query, keys);
-		includePrimaryKeys(query);
+		selectPrimaryKeys(query);
 		
 		Object d = fetchByQuery(query);
 		return d != null;
@@ -319,7 +319,7 @@ public class SqlDao extends AbstractDao {
 			return existsByTable(query.getTable());
 		}
 
-		excludeNonPrimaryKeys(query);
+		selectPrimaryKeys(query);
 		Object d = fetchByQuery(query);
 		return d != null;
 	}

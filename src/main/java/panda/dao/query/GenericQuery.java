@@ -1,17 +1,15 @@
 package panda.dao.query;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import panda.dao.entity.Entity;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -24,11 +22,15 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	protected Operator conjunction = Operator.AND;
 	protected int start;
 	protected int limit;
+	protected Map<String, String> columns;
+	protected Map<String, Join> joins;
 	protected List<Expression> expressions;
 	protected Map<String, Order> orders;
-	protected Set<String> includes;
-	protected Set<String> excludes;
-	protected List<Join> joins;
+	protected List<String> groups;
+	
+	protected static final int HAS_INCLUDES = 0x01;
+	protected static final int HAS_EXCLUDES = 0x02;
+	protected Integer flags;
 
 	/**
 	 * constructor
@@ -62,6 +64,16 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		start = query.getStart();
 		limit = query.getLimit();
 
+		if (query.hasColumns()) {
+			columns = new LinkedHashMap<String, String>();
+			columns.putAll(query.getColumns());
+		}
+
+		if (query.hasJoins()) {
+			joins = new LinkedHashMap<String, Join>();
+			joins.putAll(query.getJoins());
+		}
+
 		if (query.hasConditions()) {
 			expressions = new ArrayList<Expression>();
 			expressions.addAll(query.getExpressions());
@@ -71,20 +83,10 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			orders = new LinkedHashMap<String, Order>();
 			orders.putAll(query.getOrders());
 		}
-
-		if (query.hasIncludes()) {
-			includes = new HashSet<String>();
-			includes.addAll(query.getIncludes());
-		}
-
-		if (query.hasExcludes()) {
-			excludes = new HashSet<String>();
-			excludes.addAll(query.getExcludes());
-		}
-
-		if (query.hasJoins()) {
-			joins = new ArrayList<Join>();
-			joins.addAll(query.getJoins());
+		
+		if (query.hasGroups()) {
+			groups = new ArrayList<String>();
+			groups.addAll(query.getGroups());
 		}
 	}
 
@@ -145,80 +147,90 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		conjunction = Operator.AND;
 		start = 0;
 		limit = 0;
+		if (columns != null) {
+			columns.clear();
+		};
+		if (joins != null) {
+			joins.clear();
+		}
 		if (expressions != null) {
 			expressions.clear();
 		}
 		if (orders != null) {
 			orders.clear();
 		};
-		if (includes != null) {
-			includes.clear();
+		if (groups != null) {
+			groups.clear();
 		};
-		if (excludes != null) {
-			excludes.clear();
-		};
-		if (joins != null) {
-			joins.clear();
-		}
 	}
 
 	//---------------------------------------------------------------
-	// include & exclude
+	// columns
 	//
 	/**
-	 * @return the includes
+	 * @return the columns
 	 */
-	public Set<String> getIncludes() {
-		return includes;
+	public Map<String, String> getColumns() {
+		return columns;
 	}
 
 	/**
-	 * @return the excludes
+	 * @return true if the columns is not empty
 	 */
-	public Set<String> getExcludes() {
-		return excludes;
+	public boolean hasColumns() {
+		return columns != null && !columns.isEmpty();
 	}
 
-	/**
-	 * @param name field name
-	 * @return true if the name should include
-	 */
-	public boolean shouldInclude(String name) {
-		if (Collections.isNotEmpty(excludes) && excludes.contains(name)) {
-			return false;
+	protected int flags() {
+		if (flags == null) {
+			flags = 0;
+			if (columns != null && !columns.isEmpty()) {
+				Collection<String> vs = columns.values();
+				if (Collections.contains(vs, "")) {
+					flags |= HAS_INCLUDES;
+				}
+				if (Collections.contains(vs, null)) {
+					flags |= HAS_EXCLUDES;
+				}
+			}
 		}
-		if (Collections.isNotEmpty(includes) && !includes.contains(name)) {
-			return false;
-		}
-		return true;
+		return flags;
+	}
+	
+	/**
+	 * @return true if has included columns
+	 */
+	protected boolean hasIncludes() {
+		return (flags() & HAS_INCLUDES) != 0;
+	}
+	
+	/**
+	 * @return true if has excluded columns
+	 */
+	protected boolean hasExcludes() {
+		return (flags() & HAS_EXCLUDES) != 0;
 	}
 
 	/**
-	 * @param name field name
-	 * @return true if the name should exclude
+	 * @param name column name
+	 * @return column value
 	 */
-	public boolean shouldExclude(String name) {
-		if (Collections.isNotEmpty(excludes) && excludes.contains(name)) {
-			return true;
+	public String getColumn(String name) {
+		if (columns == null) {
+			return null;
 		}
-		if (Collections.isNotEmpty(includes) && !includes.contains(name)) {
-			return true;
-		}
-		return false;
+		return columns.get(name);
 	}
 
 	/**
-	 * @return true if the includes is not empty
+	 * @param name column name
+	 * @param value column value
+	 * @return this
 	 */
-	public boolean hasIncludes() {
-		return includes != null && !includes.isEmpty();
-	}
-
-	/**
-	 * @return true if the excludes is not empty
-	 */
-	public boolean hasExcludes() {
-		return excludes != null && !excludes.isEmpty();
+	public GenericQuery column(String name, String value) {
+		setColumn(name, value);
+		flags = null;
+		return this;
 	}
 
 	/**
@@ -226,8 +238,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery include(String name) {
-		addInclude(name);
-		removeExclude(name);
+		setColumn(name, "");
+		flags = null;
 		return this;
 	}
 
@@ -236,114 +248,62 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery exclude(String name) {
-		removeInclude(name);
-		addExclude(name);
+		setColumn(name, null);
+		flags = null;
 		return this;
-	}
-
-	/**
-	 * clearIncludes
-	 * 
-	 * @return this
-	 */
-	public GenericQuery clearIncludes() {
-		if (includes != null) {
-			includes.clear();
-		}
-		return this;
-	}
-
-	/**
-	 * clearExcludes
-	 * 
-	 * @return this
-	 */
-	public GenericQuery clearExcludes() {
-		if (excludes == null) {
-			excludes.clear();
-		}
-		return this;
-	}
-
-	//---------------------------------------------------------------
-	// include
-	//
-	/**
-	 * @param includes the includes to set
-	 */
-	protected void setIncludes(Set<String> includes) {
-		this.includes = includes;
 	}
 
 	/**
 	 * @param name field name
-	 * @return true if the name is included
+	 * @return true if the name should include
 	 */
-	protected boolean isIncluded(String name) {
-		return includes != null && includes.contains(name);
+	public boolean shouldInclude(String name) {
+		return !hasIncludes() || columns.get(name) != null;
+	}
+
+	/**
+	 * @param name field name
+	 * @return true if the name should exclude
+	 */
+	public boolean shouldExclude(String name) {
+		if (hasIncludes()) {
+			return columns.get(name) == null;
+		}
+		if (hasExcludes()) {
+			return columns.containsKey(name) && columns.get(name) == null;
+		}
+		return false;
+	}
+
+	/**
+	 * clearColumns
+	 * 
+	 * @return this
+	 */
+	public GenericQuery clearColumns() {
+		if (columns != null) {
+			columns.clear();
+		}
+		return this;
+	}
+
+	/**
+	 * @param columns the columns to set
+	 */
+	protected void setColumns(Map<String, String> columns) {
+		this.columns = columns;
 	}
 
 	/**
 	 * @param name the field name to include
+	 * @param value the column value
 	 * @return this
 	 */
-	protected GenericQuery addInclude(String name) {
-		if (includes == null) {
-			includes = new HashSet<String>();
+	protected GenericQuery setColumn(String name, String value) {
+		if (columns == null) {
+			columns = new LinkedHashMap<String, String>();
 		}
-		includes.add(name);
-		return this;
-	}
-
-	/**
-	 * @param name field name
-	 * @return this
-	 */
-	protected GenericQuery removeInclude(String name) {
-		if (includes != null) {
-			includes.remove(name);
-		}
-		return this;
-	}
-
-	//---------------------------------------------------------------
-	// exclude
-	//
-	/**
-	 * @param excludes the excludes to set
-	 */
-	protected void setExcludes(Set<String> excludes) {
-		this.excludes = excludes;
-	}
-
-	/**
-	 * @param name field name
-	 * @return true if the name is excluded
-	 */
-	protected boolean isExcluded(String name) {
-		return excludes != null && excludes.contains(name);
-	}
-	
-	/**
-	 * @param name the field name to exclude
-	 * @return this
-	 */
-	protected GenericQuery addExclude(String name) {
-		if (excludes == null) {
-			excludes = new HashSet<String>();
-		}
-		excludes.add(name);
-		return this;
-	}
-
-	/**
-	 * @param name the field name
-	 * @return this
-	 */
-	protected GenericQuery removeExclude(String name) {
-		if (excludes != null) {
-			excludes.remove(name);
-		}
+		columns.put(name, value);
 		return this;
 	}
 
@@ -360,121 +320,73 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return joins
 	 */
-	public List<Join> getJoins() {
+	public Map<String, Join> getJoins() {
 		return joins;
 	}
 
 	/**
 	 * add left join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param query join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery leftJoin(String table, String alias, String ... conditions) {
-		return join(Join.LEFT, table, alias, conditions);
-	}
-
-	/**
-	 * add left join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public GenericQuery leftJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		return join(Join.LEFT, table, alias, conditions, parameters);
+	public GenericQuery leftJoin(Query<?> query, String alias, String ... conditions) {
+		return join(Join.LEFT, query, alias, conditions);
 	}
 
 	/**
 	 * add right join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param query join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery rightJoin(String table, String alias, String ... conditions) {
-		return join(Join.RIGHT, table, alias, conditions);
-	}
-
-	/**
-	 * add right join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public GenericQuery rightJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		return join(Join.RIGHT, table, alias, conditions, parameters);
+	public GenericQuery rightJoin(Query<?> query, String alias, String ... conditions) {
+		return join(Join.RIGHT, query, alias, conditions);
 	}
 
 	/**
 	 * add inner join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param query join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery innerJoin(String table, String alias, String ... conditions) {
-		return join(Join.INNER, table, alias, conditions);
-	}
-
-	/**
-	 * add inner join
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public GenericQuery innerJoin(String table, String alias, String[] conditions, Object[] parameters) {
-		return join(Join.INNER, table, alias, conditions, parameters);
+	public GenericQuery innerJoin(Query<?> query, String alias, String ... conditions) {
+		return join(Join.INNER, query, alias, conditions);
 	}
 
 	/**
 	 * add join
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param query join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery join(String table, String alias, String ... conditions) {
-		return join(null, table, alias, conditions);
+	public GenericQuery join(Query<?> query, String alias, String ... conditions) {
+		return join(null, query, alias, conditions);
 	}
 
 	/**
 	 * add join
 	 * @param type join type
-	 * @param table join table name
-	 * @param alias join table alias
+	 * @param query join query
+	 * @param alias join alias
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery join(String type, String table, String alias, String ... conditions) {
-		return join(type, table, alias, conditions, (Object[])null);
-	}
-
-	/**
-	 * add join
-	 * @param type join type
-	 * @param table join table name
-	 * @param alias join table alias
-	 * @param conditions join conditions
-	 * @param parameters join parameters
-	 * @return this
-	 */
-	public GenericQuery join(String type, String table, String alias, String[] conditions, Object[] parameters) {
+	public GenericQuery join(String type, Query<?> query, String alias, String ... conditions) {
+		Asserts.notEmpty(alias, "The parameter alias is empty");
 		if (joins == null) {
-			joins = new ArrayList<Join>();
+			joins = new LinkedHashMap<String, Join>();
 		}
-		joins.add(new Join(type, table, alias, conditions, parameters));
+		joins.put(alias, new Join(type, query, conditions));
 		return this;
 	}
 
 	//---------------------------------------------------------------
-	// order
+	// orders
 	//
 	/**
 	 * @return true if has orders
@@ -536,7 +448,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * add ascend order
-	 * @param name		name
+	 * @param name name
 	 * @return this
 	 */
 	public GenericQuery orderByAsc(String name) {
@@ -545,11 +457,43 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * add descend order
-	 * @param name		name
+	 * @param name name
 	 * @return this
 	 */
 	public GenericQuery orderByDesc(String name) {
 		return orderBy(name, false);
+	}
+
+	//---------------------------------------------------------------
+	// groups
+	//
+	/**
+	 * @return true if has groups
+	 */
+	public boolean hasGroups() {
+		return groups != null && !groups.isEmpty();
+	}
+
+	/**
+	 * @return groups
+	 */
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	/**
+	 * add group
+	 * @param column column
+	 * @return this
+	 */
+	public GenericQuery groupBy(String ... column) {
+		if (groups == null) {
+			groups = new ArrayList<String>();
+		}
+		for (String s : column) {
+			groups.add(s);
+		}
+		return this;
 	}
 
 	//---------------------------------------------------------------
@@ -1104,11 +1048,10 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 				.append(conjunction)
 				.append(start)
 				.append(limit)
+				.append(columns)
+				.append(joins)
 				.append(expressions)
 				.append(orders)
-				.append(includes)
-				.append(excludes)
-				.append(joins)
 				.toHashCode();
 	}
 
@@ -1130,11 +1073,10 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 				.append(conjunction, rhs.conjunction)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
+				.append(columns, rhs.columns)
+				.append(joins, rhs.joins)
 				.append(expressions, rhs.expressions)
 				.append(orders, rhs.orders)
-				.append(includes, rhs.includes)
-				.append(excludes, rhs.excludes)
-				.append(joins, rhs.joins)
 				.isEquals();
 	}
 
@@ -1148,11 +1090,10 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 				.append("conjunction", conjunction)
 				.append("start", start)
 				.append("limit", limit)
+				.append("columns", columns)
+				.append("joins", joins)
 				.append("expressions", expressions)
 				.append("orders", orders)
-				.append("includes", excludes)
-				.append("excludes", excludes)
-				.append("joins", joins)
 				.toString();
 	}
 }

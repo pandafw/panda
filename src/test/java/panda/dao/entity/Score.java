@@ -101,4 +101,18 @@ public class Score {
 		}
 		return l;
 	}
+
+	public static List<Score> sums(int f, int t) {
+		List<Score> l = new ArrayList<Score>();
+		for (int i = f; i <= t; i++) {
+			Score s = new Score();
+			s.student = i;
+			s.score = 0;
+			for (int k = 1; k < 5; k++) {
+				s.score += (i * 10 + k) * 10;
+			}
+			l.add(s);
+		}
+		return l;
+	}
 }

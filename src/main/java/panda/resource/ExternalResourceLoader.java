@@ -452,11 +452,9 @@ public abstract class ExternalResourceLoader {
 	
 	/**
 	 * load resources
-	 * 
-	 * @throws Exception if an error occurs
 	 */
 	@SuppressWarnings("unchecked")
-	public void loadResources(List resList) throws Exception {
+	public void loadResources(List resList) {
 		Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
 
 		BundleKey lastBundle = null;
