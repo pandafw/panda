@@ -41,6 +41,22 @@ public class SqlDao extends AbstractDao {
 		super(daoClient);
 	}
 
+
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the transactionLevel
+	 */
+	public int getTransactionLevel() {
+		return transactionLevel;
+	}
+
+	/**
+	 * @param transactionLevel the transactionLevel to set
+	 */
+	public void setTransactionLevel(int transactionLevel) {
+		this.transactionLevel = transactionLevel;
+	}
+
 	//-------------------------------------------------------------------------
 	protected SqlDaoClient getSqlDaoClient() {
 		return (SqlDaoClient)getDaoClient();
@@ -53,6 +69,10 @@ public class SqlDao extends AbstractDao {
 	//-------------------------------------------------------------------------
 	@Override
 	protected void autoStart() {
+		autoStart(transactionLevel);
+	}
+	
+	protected void autoStart(int transactionLevel) {
 		if (autoCount < 1) {
 			if (connection == null) {
 				try {
@@ -136,7 +156,7 @@ public class SqlDao extends AbstractDao {
 	 */
 	@Override
 	public void exec(Runnable transaction) {
-		exec(transaction, Connection.TRANSACTION_NONE);
+		exec(transaction, transactionLevel);
 	}
 	
 	/**
@@ -147,9 +167,8 @@ public class SqlDao extends AbstractDao {
 	public void exec(Runnable transaction, int level) {
 		assertTransaction(transaction);
 
-		transactionLevel = level;
 		try {
-			autoStart();
+			autoStart(level);
 			transaction.run();
 			autoCommit();
 		}
