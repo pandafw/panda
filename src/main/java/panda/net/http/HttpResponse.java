@@ -25,7 +25,7 @@ import panda.lang.Strings;
 import panda.lang.chardet.LangHint;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
-import panda.net.Nets;
+import panda.net.Inets;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -586,7 +586,7 @@ public class HttpResponse implements Closeable {
 				if (log.isInfoEnabled()) {
 					log.info("DOWN " + url + " - (" 
 							+ Files.toDisplaySize(content.length) + " / " + sw 
-							+ ") [" + Nets.toSpeedString(content.length, sw.getTime()) + "]");
+							+ ") [" + Inets.toSpeedString(content.length, sw.getTime()) + "]");
 				}
 			}
 			finally {

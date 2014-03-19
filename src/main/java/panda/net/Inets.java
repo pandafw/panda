@@ -4,10 +4,13 @@ import panda.io.Files;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class Nets {
+public class Inets {
 	public static boolean isIntranetHost(String ipAddr) {
 		if (Strings.isEmpty(ipAddr)) {
 			return false;
@@ -16,13 +19,13 @@ public class Nets {
 		// Class A: 10.0.0.0 ~ 10.255.255.255 （10.0.0.0/8）
 		// Class B: 172.16.0.0 ~ 172.31.255.255 （172.16.0.0/12）
 		// Class C: 192.168.0.0 ~ 192.168.255.255 （192.168.0.0/16）
-		
-		return ipAddr.startsWith("127.") 
-				|| ipAddr.startsWith("10.")
-				|| ipAddr.startsWith("172.")
-				|| ipAddr.startsWith("192.168.")
-				|| ipAddr.startsWith("0.1.")
-				|| ipAddr.startsWith("0:0:0:0:");
+		try {
+			InetAddress ia = InetAddress.getByName(ipAddr);
+			return ia.isLoopbackAddress() || ia.isAnyLocalAddress() || ia.isSiteLocalAddress();
+		}
+		catch (UnknownHostException e) {
+			return false;
+		}
 	}
 	
 	public static String toSpeedString(long size, long time) {
