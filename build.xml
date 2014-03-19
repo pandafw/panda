@@ -161,15 +161,14 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="lib/api"/>
 			<fileset dir="lib/run"/>
-			<fileset dir="lib/gae"/>
 			<fileset dir="lib/jdbc"/>
 			<fileset dir="lib/test"/>
 		</delete>
-		<ivy:retrieve conf="api,run,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="api,run,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
-		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,test"/>
+		<ivy:report todir="lib/ivy" conf="api,run,jdbc,test"/>
 	</target>
 
 	<target name="ivy-clean" description="ivy --> clean the cache">
@@ -293,6 +292,9 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<copy todir="out/test-classes" preservelastmodified="true">
 			<fileset dir="src/test/java">
 				<exclude name="**/*.java"/>
+			</fileset>
+			<fileset dir="src/test/resources">
+				<include name="**/*"/>
 			</fileset>
 		</copy>
 	</target>
