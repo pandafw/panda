@@ -653,19 +653,16 @@ public class FilesTest extends FileBasedTestCase {
 		assertFalse(Files.contentEqualsIgnoreEOL(tfile1, tfile3, null));
 		assertFalse(Files.contentEqualsIgnoreEOL(tfile2, tfile3, null));
 
-		final URL urlCR = getClass().getResource("FilesTestDataCR.dat");
-		assertNotNull(urlCR);
-		final File cr = new File(urlCR.getPath());
+		final File cr = new File(getTestDirectory(), "FilesTestDataCR.dat");
+		Files.write(cr, new byte[] { 0x31, 0x0D, 0x32, 0x0D, 0x33, 0x0D });
 		assertTrue(cr.exists());
 
-		final URL urlCRLF = getClass().getResource("FilesTestDataCRLF.dat");
-		assertNotNull(urlCRLF);
-		final File crlf = new File(urlCRLF.getPath());
+		final File crlf = new File(getTestDirectory(), "FilesTestDataCRLF.dat");
+		Files.write(crlf, new byte[] { 0x31, 0x0D, 0x0A, 0x32, 0x0D, 0x0A, 0x33, 0x0D, 0x0A });
 		assertTrue(crlf.exists());
 
-		final URL urlLF = getClass().getResource("FilesTestDataLF.dat");
-		assertNotNull(urlLF);
-		final File lf = new File(urlLF.getPath());
+		final File lf = new File(getTestDirectory(), "FilesTestDataLF.dat");
+		Files.write(lf, new byte[] { 0x31, 0x0A, 0x32, 0x0A, 0x33, 0x0A });
 		assertTrue(lf.exists());
 
 		assertTrue(Files.contentEqualsIgnoreEOL(cr, cr, null));

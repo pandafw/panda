@@ -1592,9 +1592,10 @@ public class Files {
 	 * @return {@code true} if the file or directory was deleted, otherwise {@code false}
 	 */
 	public static boolean safeDelete(final File file) {
-		if (file == null) {
+		if (file == null || !file.exists()) {
 			return false;
 		}
+		
 		try {
 			if (file.isDirectory()) {
 				cleanDir(file);
