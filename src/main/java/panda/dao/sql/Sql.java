@@ -22,6 +22,17 @@ public class Sql {
 		return this;
 	}
 
+	public Sql append(Sql rhs) {
+		sql.append(rhs.getSql());
+		if (rhs.params != null) {
+			if (params == null) {
+				params = new ArrayList<Object>();
+			}
+			params.addAll(rhs.params);
+		}
+		return this;
+	}
+	
 	public Sql append(CharSequence s) {
 		sql.append(s);
 		return this;

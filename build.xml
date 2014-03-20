@@ -191,6 +191,9 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<fileset dir="src/main/java">
 				<exclude name="**/*.java"/>
 			</fileset>
+			<fileset dir="src/main/resources">
+				<include name="**/*"/>
+			</fileset>
 		</copy>
 	</target>
 
@@ -267,6 +270,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 			</manifest>
 			<fileset dir="src/main/java"/>
+			<fileset dir="src/main/resources"/>
 			<fileset dir="out/classes" includes="META-INF/LICENSE"/>
 		</jar>
 	</target>

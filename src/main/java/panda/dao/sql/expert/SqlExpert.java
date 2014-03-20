@@ -170,26 +170,28 @@ public abstract class SqlExpert {
 	public Sql count(Query<?> query) {
 		Sql sql = new Sql();
 		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(query.getTable()));
-		where(sql, query);
+		where(sql, query, null);
 		return sql;
 	}
 
-	public Sql select(Query<?> query) {
-		Sql sql = new Sql();
-		select(sql, query);
-		return sql;
-	}
-	
 	private String normalizeColumn(String table, String column) {
 		if (column.charAt(0) == '(') {
 			return column;
 		}
+		if (Strings.isEmpty(table)) {
+			return escapeColumn(column);
+		}
 		return table + '.' + escapeColumn(column);
 	}
 
-	protected void select(Sql sql, Query<?> query) {
-		sql.append("SELECT");
+	public Sql select(Query<?> query) {
+		return select(query, "t");
+	}
+	
+	protected Sql select(Query<?> query, String alias) {
+		Sql sql = new Sql();
 
+		sql.append("SELECT");
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
 			boolean sel = false;
@@ -207,7 +209,7 @@ public abstract class SqlExpert {
 				}
 				
 				sql.append(' ')
-					.append(normalizeColumn("t", col))
+					.append(normalizeColumn(alias, col))
 					.append(" AS ")
 					.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
 					.append(',');
@@ -217,7 +219,10 @@ public abstract class SqlExpert {
 				throw new IllegalArgumentException("Nothing to SELECT!");
 			}
 			sql.setCharAt(sql.length() - 1, ' ');
-			sql.append("FROM ").append(escapeTable(entity.getViewName())).append(" t");
+			sql.append("FROM ").append(escapeTable(entity.getViewName()));
+			if (Strings.isNotEmpty(alias)) {
+				sql.append(' ').append(alias);
+			}
 		}
 		else {
 			boolean sel = false;
@@ -236,7 +241,7 @@ public abstract class SqlExpert {
 					}
 
 					sql.append(' ')
-						.append(normalizeColumn("t", col))
+						.append(normalizeColumn(alias, col))
 						.append(" AS ")
 						.append(SqlNamings.javaName2ColumnLabel(en.getKey()))
 						.append(',');
@@ -248,22 +253,27 @@ public abstract class SqlExpert {
 			}
 
 			if (!sel) {
-				sql.append(" t.* ");
+				if (Strings.isNotEmpty(alias)) {
+					sql.append(' ').append(alias).append('.');
+				}
+				sql.append("* ");
 			}
-			sql.append("FROM ").append(escapeTable(query.getTable())).append(" t");
+			sql.append("FROM ").append(escapeTable(query.getTable())).append(' ').append(alias);
 		}
 
-		join(sql, query);
-		where(sql, query);
+		join(sql, query, alias);
+		where(sql, query, alias);
 		order(sql, query);
-		group(sql, query);
+		group(sql, query, alias);
 		_limit(sql, query);
+
+		return sql;
 	}
 
 	public Sql delete(Query<?> query) {
 		Sql sql = new Sql();
 		sql.append("DELETE FROM ").append(escapeTable(query.getTable()));
-		where(sql, query);
+		where(sql, query, null);
 		return sql;
 	}
 
@@ -283,7 +293,7 @@ public abstract class SqlExpert {
 			if (ef.isReadonly() || (ef.isAutoIncrement() && autoId)) {
 				continue;
 			}
-			sql.append(' ').append(ef.getColumn()).append(',');
+			sql.append(' ').append(escapeColumn(ef.getColumn())).append(',');
 		}
 		sql.setCharAt(sql.length() - 1, ')');
 
@@ -316,7 +326,7 @@ public abstract class SqlExpert {
 			if (ef.isReadonly() || query.shouldExclude(ef.getName())) {
 				continue;
 			}
-			sql.append(' ').append(ef.getColumn()).append("=?,");
+			sql.append(' ').append(escapeColumn(ef.getColumn())).append("=?,");
 			sql.addParam(getFieldValue(ef, data));
 			set = true;
 		}
@@ -325,7 +335,7 @@ public abstract class SqlExpert {
 		}
 
 		sql.setLength(sql.length() - 1);
-		where(sql, query);
+		where(sql, query, null);
 		return sql;
 	}
 	
@@ -337,7 +347,7 @@ public abstract class SqlExpert {
 		return ef;
 	}
 	
-	protected void join(Sql sql, Query<?> query) {
+	protected void join(Sql sql, Query<?> query, String talias) {
 		if (!query.hasJoins()) {
 			return;
 		}
@@ -351,7 +361,7 @@ public abstract class SqlExpert {
 			Query<?> jq = join.getQuery();
 			if (jq.hasConditions()) {
 				sql.append('(');
-				select(sql, jq);
+				sql.append(select(jq));
 				sql.append(')');
 			}
 			else {
@@ -368,7 +378,7 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void where(Sql sql, Query<?> query) {
+	protected void where(Sql sql, Query<?> query, String alias) {
 		if (!query.hasConditions()) {
 			return;
 		}
@@ -381,18 +391,19 @@ public abstract class SqlExpert {
 				if (exp instanceof Expression.ValueCompare) {
 					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
 					EntityField ef = getEntityField(entity, evc.getField(), "where");
-					whereValueCompare(sql, ef.getColumn(), evc);
+					whereValueCompare(sql, alias, ef.getColumn(), evc);
 				}
 				else if (exp instanceof Expression.FieldCompare) {
 					Expression.FieldCompare efc = (Expression.FieldCompare)exp;
 					EntityField ef = getEntityField(entity, efc.getField(), "where");
 					EntityField ef2 = getEntityField(entity, efc.getValue(), "compare");
-					sql.append(' ').append(ef.getColumn()).append(' ').append(efc.getOperator()).append(ef2.getColumn());
+					sql.append(' ').append(escapeColumn(alias, ef.getColumn()))
+						.append(efc.getOperator()).append(escapeColumn(alias, ef2.getColumn()));
 				}
 				else if (exp instanceof Expression.Simple) {
 					Expression.Simple es = (Expression.Simple)exp;
 					EntityField ef = getEntityField(entity, es.getField(), "simple");
-					sql.append(' ').append(ef.getColumn()).append(' ').append(es.getOperator());
+					sql.append(' ').append(escapeColumn(alias, ef.getColumn())).append(' ').append(es.getOperator());
 				}
 				else {
 					sql.append(' ').append(exp.toString());
@@ -403,8 +414,7 @@ public abstract class SqlExpert {
 			for (Expression exp : query.getExpressions()) {
 				if (exp instanceof Expression.ValueCompare) {
 					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-					
-					whereValueCompare(sql, evc.getField(), evc);
+					whereValueCompare(sql, alias, evc.getField(), evc);
 				}
 				else {
 					sql.append(' ').append(exp.toString());
@@ -413,8 +423,8 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void whereValueCompare(Sql sql, String column, Expression.ValueCompare evc) {
-		sql.append(' ').append(column).append(' ');
+	protected void whereValueCompare(Sql sql, String table, String column, Expression.ValueCompare evc) {
+		sql.append(' ').append(escapeColumn(table, column)).append(' ');
 
 		Operator op = evc.getOperator();
 		if (op == Operator.BETWEEN || op == Operator.NOT_BETWEEN) {
@@ -483,7 +493,7 @@ public abstract class SqlExpert {
 		sql.setCharAt(sql.length() - 1, ' ');
 	}
 	
-	protected void group(Sql sql, Query<?> query) {
+	protected void group(Sql sql, Query<?> query, String alias) {
 		if (!query.hasGroups()) {
 			return;
 		}
@@ -494,7 +504,7 @@ public abstract class SqlExpert {
 		if (entity != null) {
 			for (String k : query.getGroups()) {
 				EntityField ef = getEntityField(entity, k, "order");
-				sql.append(' ').append(escapeColumn(ef.getColumn())).append(' ');
+				sql.append(' ').append(escapeColumn(alias, ef.getColumn())).append(' ');
 			}
 		}
 		else {
@@ -692,6 +702,13 @@ public abstract class SqlExpert {
 
 	protected String escapeTable(String table) {
 		return table;
+	}
+
+	protected String escapeColumn(String table, String column) {
+		if (Strings.isEmpty(table)) {
+			return escapeColumn(column);
+		}
+		return table + '.' + escapeColumn(column);
 	}
 
 	protected String escapeColumn(String column) {
