@@ -211,7 +211,7 @@ public abstract class SqlExpert {
 				sql.append(' ')
 					.append(normalizeColumn(alias, col))
 					.append(" AS ")
-					.append(SqlNamings.javaName2ColumnLabel(ef.getName()))
+					.append(escapeColumn(SqlNamings.javaName2ColumnLabel(ef.getName())))
 					.append(',');
 				sel = true;
 			}
@@ -243,7 +243,7 @@ public abstract class SqlExpert {
 					sql.append(' ')
 						.append(normalizeColumn(alias, col))
 						.append(" AS ")
-						.append(SqlNamings.javaName2ColumnLabel(en.getKey()))
+						.append(escapeColumn(SqlNamings.javaName2ColumnLabel(en.getKey())))
 						.append(',');
 					sel = true;
 				}

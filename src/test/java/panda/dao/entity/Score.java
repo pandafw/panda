@@ -18,6 +18,8 @@ public class Score {
 	@PK
 	String klass;
 
+	Integer key;
+
 	Integer score;
 
 	public int getStudent() {
@@ -36,6 +38,14 @@ public class Score {
 		this.klass = klassName;
 	}
 
+	public Integer getKey() {
+		return key;
+	}
+
+	public void setKey(Integer key) {
+		this.key = key;
+	}
+
 	public Integer getScore() {
 		return score;
 	}
@@ -49,6 +59,7 @@ public class Score {
 		return Objects.toStringBuilder(this)
 				.append("student", student)
 				.append("klass", klass)
+				.append("key", key)
 				.append("score", score)
 				.toString();
 	}
@@ -58,6 +69,7 @@ public class Score {
 		return Objects.hashCodeBuilder()
 				.append(student)
 				.append(klass)
+				.append(key)
 				.append(score)
 				.toHashCode();
 	}
@@ -75,6 +87,7 @@ public class Score {
 		return Objects.equalsBuilder()
 				.append(student, rhs.student)
 				.append(klass, rhs.klass)
+				.append(key, rhs.key)
 				.append(score, rhs.score)
 				.isEquals();
 	}
@@ -85,6 +98,7 @@ public class Score {
 	public Score(int i, int k, int s) {
 		this.student = i;
 		this.klass = "K" + k;
+		this.key = s;
 		this.score = s * 10;
 	}
 
