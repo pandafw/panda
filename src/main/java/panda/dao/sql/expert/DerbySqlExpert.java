@@ -20,12 +20,22 @@ public class DerbySqlExpert extends SqlExpert {
 	}
 
 	@Override
+	protected String escapeTable(String table) {
+		return '"' + table + '"'; 
+	}
+	
+	@Override
+	protected String escapeColumn(String column) {
+		return '"' + column + '"'; 
+	}
+
+	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 		
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(entity.getTableName()) + " (");
 		for (EntityField ef : entity.getFields()) {
-			sb.append('\n').append(ef.getColumn());
+			sb.append('\n').append(escapeColumn(ef.getColumn()));
 			sb.append(' ').append(evalFieldType(ef));
 			
 			// unsupported

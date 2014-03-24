@@ -19,6 +19,16 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	}
 
 	@Override
+	protected String escapeTable(String table) {
+		return '[' + table + ']'; 
+	}
+	
+	@Override
+	protected String escapeColumn(String column) {
+		return '[' + column + ']'; 
+	}
+
+	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
@@ -102,21 +112,36 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	protected void limit(Sql sql, Query query) {
 		// very rough, but works
 		if (query.getStart() > 0) {
-			StringBuilder beg = new StringBuilder(); 
-			beg.append("SELECT * FROM (");
-			beg.append("SELECT ROW_NUMBER() OVER(ORDER BY __tc__) __rn__, * FROM (");
-			beg.append("SELECT");
-			if (query.getLimit() > 0) {
-				beg.append(" TOP ").append(query.getStart() + query.getLimit());
-			}
-			beg.append(" 0 __tc__, * FROM (");
+			if (query.hasOrders()) {
+				int top = query.getLimit() > 0 ? query.getStart() + query.getLimit() : Integer.MAX_VALUE;
 
-			sql.insert(0, beg);
-			sql.append(") t1 ) t2 ) t3 WHERE __rn__ > ").append(query.getStart());
+				StringBuilder rn = new StringBuilder(); 
+				rn.append(" TOP ").append(top);
+				rn.append(" ROW_NUMBER() OVER(");
+				order(rn, query);
+				rn.append(") __rn__,");
+				
+				sql.insert(6, rn);
+
+				sql.insert(0, "SELECT * FROM (");
+				sql.append(") _t1_ WHERE __rn__ > ").append(query.getStart());
+			}
+			else {
+				StringBuilder beg = new StringBuilder(); 
+				beg.append("SELECT * FROM (");
+				beg.append("SELECT ROW_NUMBER() OVER(ORDER BY __tc__) __rn__, * FROM (");
+				beg.append("SELECT");
+				if (query.getLimit() > 0) {
+					beg.append(" TOP ").append(query.getStart() + query.getLimit());
+				}
+				beg.append(" 0 __tc__, * FROM (");
+	
+				sql.insert(0, beg);
+				sql.append(") _t1_ ) _t2_ ) _t3_ WHERE __rn__ > ").append(query.getStart());
+			}
 		}
 		else if (query.getLimit() > 0) {
-			sql.insert(0, "SELECT TOP " + query.getLimit() + " * FROM (");
-			sql.append(") t1");
+			sql.insert(6, " TOP " + query.getLimit());
 		}
 	}
 }

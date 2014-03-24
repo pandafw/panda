@@ -132,11 +132,11 @@ public abstract class SqlExpert {
 	}
 
 	public String meta(String tableName) {
-		return "SELECT * FROM " + tableName + " where 1!=1";
+		return "SELECT * FROM " + escapeTable(tableName) + " where 1!=1";
 	}
 
 	public String exists(String tableName) {
-		return "SELECT COUNT(1) FROM " + tableName + " where 1!=1";
+		return "SELECT COUNT(1) FROM " + escapeTable(tableName) + " where 1!=1";
 	}
 
 	public List<String> drop(Entity<?> entity) {
@@ -191,80 +191,11 @@ public abstract class SqlExpert {
 	protected Sql select(Query<?> query, String alias) {
 		Sql sql = new Sql();
 
-		sql.append("SELECT");
-		Entity<?> entity = query.getEntity();
-		if (entity != null) {
-			boolean sel = false;
-			for (EntityField ef : entity.getFields()) {
-				if (query.shouldExclude(ef.getName())) {
-					continue;
-				}
-				
-				String col = query.getColumn(ef.getName());
-				if (Strings.isEmpty(col)) {
-					col = ef.getColumn();
-				}
-				else {
-					col = '(' + col + ')';
-				}
-				
-				sql.append(' ')
-					.append(normalizeColumn(alias, col))
-					.append(" AS ")
-					.append(escapeColumn(SqlNamings.javaName2ColumnLabel(ef.getName())))
-					.append(',');
-				sel = true;
-			}
-			if (!sel) {
-				throw new IllegalArgumentException("Nothing to SELECT!");
-			}
-			sql.setCharAt(sql.length() - 1, ' ');
-			sql.append("FROM ").append(escapeTable(entity.getViewName()));
-			if (Strings.isNotEmpty(alias)) {
-				sql.append(' ').append(alias);
-			}
-		}
-		else {
-			boolean sel = false;
-			if (query.hasColumns()) {
-				for (Entry<String, String> en : query.getColumns().entrySet()) {
-					String col = en.getValue();
-					if (col == null) {
-						continue;
-					}
-					
-					if (col.length() == 0) {
-						col = en.getKey();
-					}
-					else {
-						col = '(' + col + ')';
-					}
-
-					sql.append(' ')
-						.append(normalizeColumn(alias, col))
-						.append(" AS ")
-						.append(escapeColumn(SqlNamings.javaName2ColumnLabel(en.getKey())))
-						.append(',');
-					sel = true;
-				}
-				if (sel) {
-					sql.setCharAt(sql.length() - 1, ' ');
-				}
-			}
-
-			if (!sel) {
-				if (Strings.isNotEmpty(alias)) {
-					sql.append(' ').append(alias).append('.');
-				}
-				sql.append("* ");
-			}
-			sql.append("FROM ").append(escapeTable(query.getTable())).append(' ').append(alias);
-		}
-
+		select(sql, query, alias);
 		join(sql, query, alias);
 		where(sql, query, alias);
-		order(sql, query);
 		group(sql, query, alias);
+		order(sql, query);
 		_limit(sql, query);
 
 		return sql;
@@ -345,6 +276,78 @@ public abstract class SqlExpert {
 			throw new IllegalArgumentException("invalid " + name + " field '" + field + "' of entity " + entity.getType());
 		}
 		return ef;
+	}
+	
+	protected void select(Sql sql, Query<?> query, String alias) {
+		sql.append("SELECT");
+		Entity<?> entity = query.getEntity();
+		if (entity != null) {
+			boolean sel = false;
+			for (EntityField ef : entity.getFields()) {
+				if (query.shouldExclude(ef.getName())) {
+					continue;
+				}
+				
+				String col = query.getColumn(ef.getName());
+				if (Strings.isEmpty(col)) {
+					col = ef.getColumn();
+				}
+				else {
+					col = '(' + col + ')';
+				}
+				
+				sql.append(' ')
+					.append(normalizeColumn(alias, col))
+					.append(" AS ")
+					.append(escapeColumn(SqlNamings.javaName2ColumnLabel(ef.getName())))
+					.append(',');
+				sel = true;
+			}
+			if (!sel) {
+				throw new IllegalArgumentException("Nothing to SELECT!");
+			}
+			sql.setCharAt(sql.length() - 1, ' ');
+			sql.append("FROM ").append(escapeTable(entity.getViewName()));
+			if (Strings.isNotEmpty(alias)) {
+				sql.append(' ').append(alias);
+			}
+		}
+		else {
+			boolean sel = false;
+			if (query.hasColumns()) {
+				for (Entry<String, String> en : query.getColumns().entrySet()) {
+					String col = en.getValue();
+					if (col == null) {
+						continue;
+					}
+					
+					if (col.length() == 0) {
+						col = en.getKey();
+					}
+					else {
+						col = '(' + col + ')';
+					}
+
+					sql.append(' ')
+						.append(normalizeColumn(alias, col))
+						.append(" AS ")
+						.append(escapeColumn(SqlNamings.javaName2ColumnLabel(en.getKey())))
+						.append(',');
+					sel = true;
+				}
+				if (sel) {
+					sql.setCharAt(sql.length() - 1, ' ');
+				}
+			}
+
+			if (!sel) {
+				if (Strings.isNotEmpty(alias)) {
+					sql.append(' ').append(alias).append('.');
+				}
+				sql.append("* ");
+			}
+			sql.append("FROM ").append(escapeTable(query.getTable())).append(' ').append(alias);
+		}
 	}
 	
 	protected void join(Sql sql, Query<?> query, String talias) {
@@ -472,6 +475,10 @@ public abstract class SqlExpert {
 	}
 	
 	protected void order(Sql sql, Query<?> query) {
+		order(sql.getSqlBuilder(), query);
+	}
+	
+	protected void order(StringBuilder sql, Query<?> query) {
 		if (!query.hasOrders()) {
 			return;
 		}
@@ -550,7 +557,7 @@ public abstract class SqlExpert {
 			sb.append('\n');
 			sb.append("PRIMARY KEY (");
 			for (EntityField pk : pks) {
-				sb.append(pk.getColumn()).append(',');
+				sb.append(escapeColumn(pk.getColumn())).append(',');
 			}
 			sb.setCharAt(sb.length() - 1, ')');
 			sb.append("\n ");
@@ -633,7 +640,7 @@ public abstract class SqlExpert {
 				.append(index.isUnique() ? "UX" : "IX")
 				.append('_')
 				.append(index.getName());
-			sb.append(" ON ").append(entity.getTableName()).append("(");
+			sb.append(" ON ").append(escapeTable(entity.getTableName())).append(" (");
 			for (EntityField ef : index.getFields()) {
 				sb.append(escapeColumn(ef.getColumn())).append(',');
 			}
@@ -656,14 +663,14 @@ public abstract class SqlExpert {
 				.append(fk.getName())
 				.append(" FOREIGN KEY (");
 			for (EntityField ef : fk.getFields()) {
-				sql.append(ef.getColumn()).append(',');
+				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
 			sql.setCharAt(sql.length() - 1, ')');
 
 			Entity<?> ref = fk.getReference();
-			sql.append(" REFERENCES ").append(ref.getTableName()).append(" (");
+			sql.append(" REFERENCES ").append(escapeTable(ref.getTableName())).append(" (");
 			for (EntityField ef : ref.getPrimaryKeys()) {
-				sql.append(ef.getColumn()).append(',');
+				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
 			sql.setCharAt(sql.length() - 1, ')');
 			sql.append(',');
@@ -679,21 +686,21 @@ public abstract class SqlExpert {
 		for (EntityFKey fk: fks) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("ALTER TABLE ")
-			.append(entity.getTableName())
+			.append(escapeTable(entity.getTableName()))
 			.append(" ADD CONSTRAINT ")
 			.append(entity.getTableName())
 			.append("_FK_")
 			.append(fk.getName())
 			.append(" FOREIGN KEY (");
 			for (EntityField ef : fk.getFields()) {
-				sb.append(ef.getColumn()).append(',');
+				sb.append(escapeColumn(ef.getColumn())).append(',');
 			}
 			sb.setCharAt(sb.length() - 1, ')');
 
 			Entity<?> ref = fk.getReference();
-			sb.append(" REFERENCES ").append(ref.getTableName()).append(" (");
+			sb.append(" REFERENCES ").append(escapeTable(ref.getTableName())).append(" (");
 			for (EntityField ef : ref.getPrimaryKeys()) {
-				sb.append(ef.getColumn()).append(',');
+				sb.append(escapeColumn(ef.getColumn())).append(',');
 			}
 			sb.setCharAt(sb.length() - 1, ')');
 			sqls.add(sb.toString());

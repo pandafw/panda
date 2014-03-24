@@ -65,12 +65,7 @@ public abstract class SqlDaoTestCase {
 	}
 
 	protected void drop(Class clazz) {
-		try {
-			dao.drop(clazz);
-		}
-		catch (Exception e) {
-			log.warn("failed to drop " + clazz + ": " + e);
-		}
+		dao.drop(clazz);
 	}
 
 	protected void init() {
@@ -394,6 +389,51 @@ public abstract class SqlDaoTestCase {
 		
 		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
 		q.limit(2);
+		List<Teacher> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectStartLimit() {
+		List<Teacher> expect = Teacher.creates(3, 4);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.start(2).limit(2);
+		List<Teacher> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+
+	@Test
+	public void testSelectOrderStart() {
+		List<Teacher> expect = Teacher.creates(4, 5);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.orderByAsc("name").start(3);
+		List<Teacher> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectOrderLimit() {
+		List<Teacher> expect = Teacher.creates(1, 2);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.orderByAsc("name").limit(2);
+		List<Teacher> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectOrderStartLimit() {
+		List<Teacher> expect = Teacher.creates(3, 4);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.orderByAsc("name").start(2).limit(2);
 		List<Teacher> actual = dao.select(q);
 		
 		Assert.assertEquals(expect, actual);

@@ -70,6 +70,13 @@ public class Sql {
 	}
 	
 	/**
+	 * @return the sql
+	 */
+	public StringBuilder getSqlBuilder() {
+		return sql;
+	}
+	
+	/**
 	 * @return the params
 	 */
 	public List<?> getParams() {
