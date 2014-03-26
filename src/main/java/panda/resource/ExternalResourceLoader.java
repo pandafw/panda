@@ -1,5 +1,18 @@
 package panda.resource;
 
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
+import panda.dao.sql.SqlLogger;
+import panda.dao.sql.Sqls;
+import panda.lang.Classes;
+import panda.lang.Exceptions;
+import panda.lang.Objects;
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -8,19 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.sql.DataSource;
-
-import panda.bean.BeanHandler;
-import panda.bean.Beans;
-import panda.dao.sql.SqlLogger;
-import panda.dao.sql.Sqls;
-import panda.lang.Classes;
-import panda.lang.Objects;
-import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
 
 
 /**
@@ -40,6 +45,7 @@ public abstract class ExternalResourceLoader {
 	protected String languageColumn;
 	protected String countryColumn;
 	protected String variantColumn;
+	protected String sourceColumn;
 	protected String nameColumn;
 	protected String valueColumn;
 	protected String whereClause;
@@ -174,6 +180,20 @@ public abstract class ExternalResourceLoader {
 	 */
 	public void setVariantColumn(String variantColumn) {
 		this.variantColumn = variantColumn;
+	}
+
+	/**
+	 * @return the sourceColumn
+	 */
+	public String getSourceColumn() {
+		return sourceColumn;
+	}
+
+	/**
+	 * @param sourceColumn the sourceColumn to set
+	 */
+	public void setSourceColumn(String sourceColumn) {
+		this.sourceColumn = sourceColumn;
 	}
 
 	/**
@@ -381,21 +401,20 @@ public abstract class ExternalResourceLoader {
 	 */
 	public void loadResources() throws Exception {
 		String sql = "SELECT"
-			+ " " + classColumn + ", "
-			+ (Strings.isEmpty(languageColumn) ? "" : (" " + languageColumn + ", "))
-			+ (Strings.isEmpty(countryColumn) ? "" : (" " + countryColumn + ", "))
-			+ (Strings.isEmpty(variantColumn) ? "" : (" " + variantColumn + ", "))
-			+ " " + nameColumn + ", "
-			+ " " + valueColumn
+			+ " " + classColumn
+			+ (Strings.isEmpty(languageColumn) ? "" : (", " + languageColumn))
+			+ (Strings.isEmpty(countryColumn) ? "" : (", " + countryColumn))
+			+ (Strings.isEmpty(variantColumn) ? "" : (", " + variantColumn))
+			+ (Strings.isEmpty(sourceColumn) ? (", " + nameColumn + ", " + valueColumn) : (", " + sourceColumn))
 			+ " FROM " + tableName
 			+ (Strings.isEmpty(whereClause) ? "" : " WHERE " + whereClause)
 			+ " ORDER BY "
-			+ " " + classColumn + ", "
-			+ (Strings.isEmpty(languageColumn) ? "" : (" " + languageColumn + ", "))
-			+ (Strings.isEmpty(countryColumn) ? "" : (" " + countryColumn + ", "))
-			+ (Strings.isEmpty(variantColumn) ? "" : (" " + variantColumn + ", "))
-			+ " " + nameColumn + ", "
-			+ " " + valueColumn;
+			+ " " + classColumn
+			+ (Strings.isEmpty(languageColumn) ? "" : (", " + languageColumn))
+			+ (Strings.isEmpty(countryColumn) ? "" : (", " + countryColumn))
+			+ (Strings.isEmpty(variantColumn) ? "" : (", " + variantColumn))
+			+ (Strings.isEmpty(sourceColumn) ? (", " + nameColumn) : "")
+			;
 
 		Connection conn = dataSource.getConnection();
 
@@ -439,9 +458,19 @@ public abstract class ExternalResourceLoader {
 					bkList.add(bk);
 				}
 
-				String name = rs.getString(nameColumn);
-				String value = rs.getString(valueColumn);
-				properties.put(name, value);
+				if (Strings.isEmpty(sourceColumn)) {
+					String name = rs.getString(nameColumn);
+					String value = rs.getString(valueColumn);
+					properties.put(name, value);
+				}
+				else {
+					Properties ps = new Properties();
+					String source = rs.getString(sourceColumn);
+					ps.load(new StringReader(source));
+					for (Entry<Object, Object> en : ps.entrySet()) {
+						properties.put((String)en.getKey(), (String)en.getValue());
+					}
+				}
 			}
 			resources = res;
 		}
@@ -486,9 +515,24 @@ public abstract class ExternalResourceLoader {
 				res.put(bk.toString(), properties);
 			}
 
-			String name = (String)bh.getPropertyValue(o, nameColumn);
-			String value = (String)bh.getPropertyValue(o, valueColumn);
-			properties.put(name, value);
+			if (Strings.isEmpty(sourceColumn)) {
+				String name = (String)bh.getPropertyValue(o, nameColumn);
+				String value = (String)bh.getPropertyValue(o, valueColumn);
+				properties.put(name, value);
+			}
+			else {
+				Properties ps = new Properties();
+				String source = (String)bh.getPropertyValue(o, sourceColumn);
+				try {
+					ps.load(new StringReader(source));
+				}
+				catch (IOException e) {
+					throw Exceptions.wrapThrow(e);
+				}
+				for (Entry<Object, Object> en : ps.entrySet()) {
+					properties.put((String)en.getKey(), (String)en.getValue());
+				}
+			}
 		}
 		
 		resources = res;
