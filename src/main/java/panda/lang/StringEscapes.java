@@ -22,7 +22,7 @@ public abstract class StringEscapes {
 	/* ESCAPE TRANSLATORS */
 
 	/**
-	 * Translator object for escaping Java. While {@link #escapeJava(String)} is the expected method
+	 * Translator object for escaping Java. While {@link #escapeJava(CharSequence)} is the expected method
 	 * of use, this object allows the Java escaping functionality to be used as the foundation for a
 	 * custom translator.
 	 */
@@ -31,7 +31,7 @@ public abstract class StringEscapes {
 		EntityArrays.JAVA_CTRL_CHARS_ESCAPE()), JavaUnicodeEscaper.outsideOf(32, 0x7f));
 
 	/**
-	 * Translator object for escaping EcmaScript/JavaScript. While {@link #escapeEcmaScript(String)}
+	 * Translator object for escaping EcmaScript/JavaScript. While {@link #escapeEcmaScript(CharSequence)}
 	 * is the expected method of use, this object allows the EcmaScript escaping functionality to be
 	 * used as the foundation for a custom translator.
 	 */
@@ -40,7 +40,7 @@ public abstract class StringEscapes {
 		EntityArrays.JAVA_CTRL_CHARS_ESCAPE()), JavaUnicodeEscaper.outsideOf(32, 0x7f));
 
 	/**
-	 * Translator object for escaping Json. While {@link #escapeJson(String)} is the expected method
+	 * Translator object for escaping Json. While {@link #escapeJson(CharSequence)} is the expected method
 	 * of use, this object allows the Json escaping functionality to be used as the foundation for a
 	 * custom translator.
 	 */
@@ -49,35 +49,35 @@ public abstract class StringEscapes {
 		EntityArrays.JAVA_CTRL_CHARS_ESCAPE()), JavaUnicodeEscaper.outsideOf(32, 0x7f));
 
 	/**
-	 * Translator object for escaping XML. While {@link #escapeXml(String)} is the expected method
+	 * Translator object for escaping XML. While {@link #escapeXml(CharSequence)} is the expected method
 	 * of use, this object allows the XML escaping functionality to be used as the foundation for a
 	 * custom translator.
 	 */
 	public static final CharSequenceTranslator ESCAPE_XML = new AggregateTranslator(new LookupTranslator(HTMLEntities.XML_ESCAPE));
 
 	/**
-	 * Translator object for escaping HTML version 3.0. While {@link #escapeHtml3(String)} is the
+	 * Translator object for escaping HTML version 3.0. While {@link #escapeHtml3(CharSequence)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator ESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML3_ESCAPE));
 
 	/**
-	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(String)} is the
+	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(CharSequence)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator ESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML4_ESCAPE));
 
 	/**
-	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(String)} is the
+	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(CharSequence)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator ESCAPE_HTML = ESCAPE_HTML4;
 
 	/**
-	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(String)} is the
+	 * Translator object for escaping HTML version 4.0. While {@link #escapeHtml4(CharSequence)} is the
 	 * expected method of use, this object allows the HTML escaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
@@ -88,7 +88,7 @@ public abstract class StringEscapes {
 
 	/**
 	 * Translator object for escaping individual Comma Separated Values. While
-	 * {@link #escapeCsv(String)} is the expected method of use, this object allows the CSV escaping
+	 * {@link #escapeCsv(CharSequence)} is the expected method of use, this object allows the CSV escaping
 	 * functionality to be used as the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator ESCAPE_CSV = new CsvEscaper();
@@ -96,7 +96,7 @@ public abstract class StringEscapes {
 	/* UNESCAPE TRANSLATORS */
 
 	/**
-	 * Translator object for unescaping escaped Java. While {@link #unescapeJava(String)} is the
+	 * Translator object for unescaping escaped Java. While {@link #unescapeJava(CharSequence)} is the
 	 * expected method of use, this object allows the Java unescaping functionality to be used as
 	 * the foundation for a custom translator.
 	 */
@@ -109,34 +109,34 @@ public abstract class StringEscapes {
 
 	/**
 	 * Translator object for unescaping escaped EcmaScript. While
-	 * {@link #unescapeEcmaScript(String)} is the expected method of use, this object allows the
+	 * {@link #unescapeEcmaScript(CharSequence)} is the expected method of use, this object allows the
 	 * EcmaScript unescaping functionality to be used as the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator UNESCAPE_ECMASCRIPT = UNESCAPE_JAVA;
 
 	/**
-	 * Translator object for unescaping escaped Json. While {@link #unescapeJson(String)} is the
+	 * Translator object for unescaping escaped Json. While {@link #unescapeJson(CharSequence)} is the
 	 * expected method of use, this object allows the Json unescaping functionality to be used as
 	 * the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator UNESCAPE_JSON = UNESCAPE_JAVA;
 
 	/**
-	 * Translator object for unescaping escaped HTML 3.0. While {@link #unescapeHtml3(String)} is
+	 * Translator object for unescaping escaped HTML 3.0. While {@link #unescapeHtml3(CharSequence)} is
 	 * the expected method of use, this object allows the HTML unescaping functionality to be used
 	 * as the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator UNESCAPE_HTML3 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML3_UNESCAPE));
 
 	/**
-	 * Translator object for unescaping escaped HTML 4.0. While {@link #unescapeHtml4(String)} is
+	 * Translator object for unescaping escaped HTML 4.0. While {@link #unescapeHtml4(CharSequence)} is
 	 * the expected method of use, this object allows the HTML unescaping functionality to be used
 	 * as the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator UNESCAPE_HTML4 = new AggregateTranslator(new LookupTranslator(HTMLEntities.HTML4_UNESCAPE));
 
 	/**
-	 * Translator object for unescaping escaped XML. While {@link #unescapeXml(String)} is the
+	 * Translator object for unescaping escaped XML. While {@link #unescapeXml(CharSequence)} is the
 	 * expected method of use, this object allows the XML unescaping functionality to be used as the
 	 * foundation for a custom translator.
 	 */
@@ -144,7 +144,7 @@ public abstract class StringEscapes {
 
 	/**
 	 * Translator object for unescaping escaped Comma Separated Value entries. While
-	 * {@link #unescapeCsv(String)} is the expected method of use, this object allows the CSV
+	 * {@link #unescapeCsv(CharSequence)} is the expected method of use, this object allows the CSV
 	 * unescaping functionality to be used as the foundation for a custom translator.
 	 */
 	public static final CharSequenceTranslator UNESCAPE_CSV = new CsvUnescaper();
@@ -180,12 +180,20 @@ public abstract class StringEscapes {
 	 * @param input String to escape values in, may be null
 	 * @return String with escaped values, {@code null} if null string input
 	 */
-	public static final String escapeJava(final String input) {
+	public static final String escapeJava(final CharSequence input) {
 		return ESCAPE_JAVA.translate(input);
 	}
 
-	public static final void escapeJava(final String input, final Appendable writer) throws IOException {
+	public static final void escapeJava(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_JAVA.translate(input, writer);
+	}
+
+	public static final void escapeJava(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_JAVA.translate(input, start, writer);
+	}
+
+	public static final void escapeJava(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_JAVA.translate(input, start, end, writer);
 	}
 
 	/**
@@ -219,12 +227,20 @@ public abstract class StringEscapes {
 	 * @param input String to escape values in, may be null
 	 * @return String with escaped values, {@code null} if null string input
 	 */
-	public static final String escapeEcmaScript(final String input) {
+	public static final String escapeEcmaScript(final CharSequence input) {
 		return ESCAPE_ECMASCRIPT.translate(input);
 	}
 
-	public static final void escapeEcmaScript(final String input, final Appendable writer) throws IOException {
+	public static final void escapeEcmaScript(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_ECMASCRIPT.translate(input, writer);
+	}
+
+	public static final void escapeEcmaScript(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_ECMASCRIPT.translate(input, start, writer);
+	}
+
+	public static final void escapeEcmaScript(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_ECMASCRIPT.translate(input, start, end, writer);
 	}
 
 	/**
@@ -258,12 +274,20 @@ public abstract class StringEscapes {
 	 * @param input String to escape values in, may be null
 	 * @return String with escaped values, {@code null} if null string input
 	 */
-	public static final String escapeJson(final String input) {
+	public static final String escapeJson(final CharSequence input) {
 		return ESCAPE_JSON.translate(input);
 	}
 
-	public static final void escapeJson(final String input, final Appendable writer) throws IOException {
+	public static final void escapeJson(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_JSON.translate(input, writer);
+	}
+
+	public static final void escapeJson(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_JSON.translate(input, start, writer);
+	}
+
+	public static final void escapeJson(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_JSON.translate(input, start, end, writer);
 	}
 
 	/**
@@ -276,12 +300,20 @@ public abstract class StringEscapes {
 	 * @param input the {@code String} to unescape, may be null
 	 * @return a new unescaped {@code String}, {@code null} if null string input
 	 */
-	public static final String unescapeJava(final String input) {
+	public static final String unescapeJava(final CharSequence input) {
 		return UNESCAPE_JAVA.translate(input);
 	}
 
-	public static final void unescapeJava(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeJava(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_JAVA.translate(input, writer);
+	}
+
+	public static final void unescapeJava(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_JAVA.translate(input, start, writer);
+	}
+
+	public static final void unescapeJava(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_JAVA.translate(input, start, end, writer);
 	}
 
 	/**
@@ -293,16 +325,24 @@ public abstract class StringEscapes {
 	 * unless the {@code '\'} is preceded by another {@code '\'}.
 	 * </p>
 	 * 
-	 * @see #unescapeJava(String)
+	 * @see #unescapeJava(CharSequence)
 	 * @param input the {@code String} to unescape, may be null
 	 * @return A new unescaped {@code String}, {@code null} if null string input
 	 */
-	public static final String unescapeEcmaScript(final String input) {
+	public static final String unescapeEcmaScript(final CharSequence input) {
 		return UNESCAPE_ECMASCRIPT.translate(input);
 	}
 
-	public static final void unescapeEcmaScript(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeEcmaScript(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_ECMASCRIPT.translate(input, writer);
+	}
+
+	public static final void unescapeEcmaScript(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_ECMASCRIPT.translate(input, start, writer);
+	}
+
+	public static final void unescapeEcmaScript(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_ECMASCRIPT.translate(input, start, end, writer);
 	}
 
 	/**
@@ -314,16 +354,24 @@ public abstract class StringEscapes {
 	 * unless the {@code '\'} is preceded by another {@code '\'}.
 	 * </p>
 	 * 
-	 * @see #unescapeJava(String)
+	 * @see #unescapeJava(CharSequence)
 	 * @param input the {@code String} to unescape, may be null
 	 * @return A new unescaped {@code String}, {@code null} if null string input
 	 */
-	public static final String unescapeJson(final String input) {
+	public static final String unescapeJson(final CharSequence input) {
 		return UNESCAPE_JSON.translate(input);
 	}
 
-	public static final void unescapeJson(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeJson(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_JSON.translate(input, writer);
+	}
+
+	public static final void unescapeJson(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_JSON.translate(input, start, writer);
+	}
+
+	public static final void unescapeJson(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_JSON.translate(input, start, end, writer);
 	}
 
 	// HTML and XML
@@ -360,12 +408,20 @@ public abstract class StringEscapes {
 	 * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code
 	 *      positions</a>
 	 */
-	public static final String escapeHtml4(final String input) {
+	public static final String escapeHtml4(final CharSequence input) {
 		return ESCAPE_HTML4.translate(input);
 	}
 
-	public static final void escapeHtml4(final String input, final Appendable writer) throws IOException {
+	public static final void escapeHtml4(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_HTML4.translate(input, writer);
+	}
+
+	public static final void escapeHtml4(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_HTML4.translate(input, start, writer);
+	}
+
+	public static final void escapeHtml4(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_HTML4.translate(input, start, end, writer);
 	}
 
 	/**
@@ -379,12 +435,20 @@ public abstract class StringEscapes {
 	 * @param input the {@code String} to escape, may be null
 	 * @return a new escaped {@code String}, {@code null} if null string input
 	 */
-	public static final String escapeHtml3(final String input) {
+	public static final String escapeHtml3(final CharSequence input) {
 		return ESCAPE_HTML3.translate(input);
 	}
 
-	public static final void escapeHtml3(final String input, final Appendable writer) throws IOException {
+	public static final void escapeHtml3(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_HTML3.translate(input, writer);
+	}
+
+	public static final void escapeHtml3(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_HTML3.translate(input, start, writer);
+	}
+
+	public static final void escapeHtml3(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_HTML3.translate(input, start, end, writer);
 	}
 
 	// -----------------------------------------------------------------------
@@ -405,12 +469,20 @@ public abstract class StringEscapes {
 	 * @param input the {@code String} to unescape, may be null
 	 * @return a new unescaped {@code String}, {@code null} if null string input
 	 */
-	public static final String unescapeHtml4(final String input) {
+	public static final String unescapeHtml4(final CharSequence input) {
 		return UNESCAPE_HTML4.translate(input);
 	}
 
-	public static final void unescapeHtml4(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeHtml4(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_HTML4.translate(input, writer);
+	}
+
+	public static final void unescapeHtml4(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_HTML4.translate(input, start, writer);
+	}
+
+	public static final void unescapeHtml4(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_HTML4.translate(input, start, end, writer);
 	}
 
 	/**
@@ -422,12 +494,20 @@ public abstract class StringEscapes {
 	 * @param input the {@code String} to unescape, may be null
 	 * @return a new unescaped {@code String}, {@code null} if null string input
 	 */
-	public static final String unescapeHtml3(final String input) {
+	public static final String unescapeHtml3(final CharSequence input) {
 		return UNESCAPE_HTML3.translate(input);
 	}
 
-	public static final void unescapeHtml3(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeHtml3(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_HTML3.translate(input, writer);
+	}
+
+	public static final void unescapeHtml3(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_HTML3.translate(input, start, writer);
+	}
+
+	public static final void unescapeHtml3(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_HTML3.translate(input, start, end, writer);
 	}
 
 	// -----------------------------------------------------------------------
@@ -451,14 +531,22 @@ public abstract class StringEscapes {
 	 * 
 	 * @param input the {@code String} to escape, may be null
 	 * @return a new escaped {@code String}, {@code null} if null string input
-	 * @see #unescapeXml(java.lang.String)
+	 * @see #unescapeXml(java.lang.CharSequence)
 	 */
-	public static final String escapeXml(final String input) {
+	public static final String escapeXml(final CharSequence input) {
 		return ESCAPE_XML.translate(input);
 	}
 
-	public static final void escapeXml(final String input, final Appendable writer) throws IOException {
+	public static final void escapeXml(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_XML.translate(input, writer);
+	}
+
+	public static final void escapeXml(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_XML.translate(input, start, writer);
+	}
+
+	public static final void escapeXml(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_XML.translate(input, start, end, writer);
 	}
 
 	// -----------------------------------------------------------------------
@@ -478,14 +566,22 @@ public abstract class StringEscapes {
 	 * 
 	 * @param input the {@code String} to unescape, may be null
 	 * @return a new unescaped {@code String}, {@code null} if null string input
-	 * @see #escapeXml(String)
+	 * @see #escapeXml(CharSequence)
 	 */
-	public static final String unescapeXml(final String input) {
+	public static final String unescapeXml(final CharSequence input) {
 		return UNESCAPE_XML.translate(input);
 	}
 
-	public static final void unescapeXml(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeXml(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_XML.translate(input, writer);
+	}
+
+	public static final void unescapeXml(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_XML.translate(input, start, writer);
+	}
+
+	public static final void unescapeXml(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_XML.translate(input, start, end, writer);
 	}
 
 	// -----------------------------------------------------------------------
@@ -513,12 +609,20 @@ public abstract class StringEscapes {
 	 * @return the input String, enclosed in double quotes if the value contains a comma, newline or
 	 *         double quote, {@code null} if null string input
 	 */
-	public static final String escapeCsv(final String input) {
+	public static final String escapeCsv(final CharSequence input) {
 		return ESCAPE_CSV.translate(input);
 	}
 
-	public static final void escapeCsv(final String input, final Appendable writer) throws IOException {
+	public static final void escapeCsv(final CharSequence input, final Appendable writer) throws IOException {
 		ESCAPE_CSV.translate(input, writer);
+	}
+
+	public static final void escapeCsv(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		ESCAPE_CSV.translate(input, start, writer);
+	}
+
+	public static final void escapeCsv(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		ESCAPE_CSV.translate(input, start, end, writer);
 	}
 
 	/**
@@ -544,12 +648,20 @@ public abstract class StringEscapes {
 	 * @return the input String, with enclosing double quotes removed and embedded double quotes
 	 *         unescaped, {@code null} if null string input
 	 */
-	public static final String unescapeCsv(String input) {
+	public static final String unescapeCsv(CharSequence input) {
 		return UNESCAPE_CSV.translate(input);
 	}
 
-	public static final void unescapeCsv(final String input, final Appendable writer) throws IOException {
+	public static final void unescapeCsv(final CharSequence input, final Appendable writer) throws IOException {
 		UNESCAPE_CSV.translate(input, writer);
+	}
+
+	public static final void unescapeCsv(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_CSV.translate(input, start, writer);
+	}
+
+	public static final void unescapeCsv(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_CSV.translate(input, start, end, writer);
 	}
 
 	/**
@@ -558,20 +670,36 @@ public abstract class StringEscapes {
 	 * @param str string
 	 * @return escaped string
 	 */
-	public static String escapeJavaScript(String str) {
+	public static String escapeJavaScript(CharSequence str) {
 		return escapeEcmaScript(str);
 	}
 
-	public static void escapeJavaScript(String str, Appendable writer) throws IOException {
+	public static void escapeJavaScript(CharSequence str, Appendable writer) throws IOException {
 		escapeEcmaScript(str, writer);
 	}
 
-	public static String escapeHtml(String input) {
+	public static void escapeJavaScript(CharSequence str, final int start, Appendable writer) throws IOException {
+		escapeEcmaScript(str, start, writer);
+	}
+
+	public static void escapeJavaScript(CharSequence str, final int start, final int end, Appendable writer) throws IOException {
+		escapeEcmaScript(str, start, end, writer);
+	}
+
+	public static String escapeHtml(CharSequence input) {
 		return ESCAPE_HTML.translate(input);
 	}
 
-	public static void escapeHtml(String input, Appendable writer) throws IOException {
+	public static void escapeHtml(CharSequence input, Appendable writer) throws IOException {
 		ESCAPE_HTML.translate(input, writer);
+	}
+
+	public static void escapeHtml(CharSequence input, final int start, Appendable writer) throws IOException {
+		ESCAPE_HTML.translate(input, start, writer);
+	}
+
+	public static void escapeHtml(CharSequence input, final int start, final int end, Appendable writer) throws IOException {
+		ESCAPE_HTML.translate(input, start, end, writer);
 	}
 
 	/**
@@ -596,11 +724,19 @@ public abstract class StringEscapes {
 	 * @param str the <code>String</code> to escape, may be null
 	 * @return a new escaped <code>String</code>, <code>null</code> if null string input
 	 */
-	public static String escapePhtml(String str) {
+	public static String escapePhtml(CharSequence str) {
 		return ESCAPE_PHTML.translate(str);
 	}
 
-	public static void escapePhtml(String str, Appendable writer) throws IOException {
+	public static void escapePhtml(CharSequence str, Appendable writer) throws IOException {
 		ESCAPE_PHTML.translate(str, writer);
+	}
+
+	public static void escapePhtml(CharSequence str, final int start, Appendable writer) throws IOException {
+		ESCAPE_PHTML.translate(str, start, writer);
+	}
+
+	public static void escapePhtml(CharSequence str, final int start, final int end, Appendable writer) throws IOException {
+		ESCAPE_PHTML.translate(str, start, end, writer);
 	}
 }

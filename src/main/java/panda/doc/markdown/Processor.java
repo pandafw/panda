@@ -625,7 +625,8 @@ public class Processor {
 					final LineType t = line.getLineType(this.useExtensions);
 					if ((listMode || this.useExtensions) && (t == LineType.OLIST || t == LineType.ULIST))
 						break;
-					if (this.useExtensions && (t == LineType.CODE || t == LineType.FENCED_CODE || t == LineType.PLUGIN))
+					if (this.useExtensions && (t == LineType.CODE || t == LineType.FENCED_CODE 
+							|| t == LineType.TABLE || t == LineType.PLUGIN))
 						break;
 					if (t == LineType.HEADLINE || t == LineType.HEADLINE1 || t == LineType.HEADLINE2
 							|| t == LineType.HR || t == LineType.BQUOTE || t == LineType.XML)
@@ -687,28 +688,11 @@ public class Processor {
 				line = root.lines;
 				break;
 			case FENCED_CODE:
-				line = line.next;
-				while (line != null) {
-					if (line.getLineType(this.useExtensions) == LineType.FENCED_CODE)
-						break;
-					// TODO ... is this really necessary? Maybe add a special
-					// flag?
-					line = line.next;
-				}
-				if (line != null)
-					line = line.next;
-				block = root.split(line != null ? line.previous : root.lineTail);
-				block.type = BlockType.FENCED_CODE;
-				block.meta = Utils.getMetaFromFence(block.lines.value);
-				block.lines.setEmpty();
-				if (block.lineTail.getLineType(this.useExtensions) == LineType.FENCED_CODE)
-					block.lineTail.setEmpty();
-				block.removeSurroundingEmptyLines();
-				break;
+			case TABLE:
 			case PLUGIN:
 				line = line.next;
 				while (line != null) {
-					if (line.getLineType(this.useExtensions) == LineType.PLUGIN)
+					if (line.getLineType(this.useExtensions) == type)
 						break;
 					// TODO ... is this really necessary? Maybe add a special
 					// flag?
@@ -717,10 +701,20 @@ public class Processor {
 				if (line != null)
 					line = line.next;
 				block = root.split(line != null ? line.previous : root.lineTail);
-				block.type = BlockType.PLUGIN;
+				switch (type) {
+				case TABLE:
+					block.type = BlockType.TABLE;
+					break;
+				case PLUGIN:
+					block.type = BlockType.PLUGIN;
+					break;
+				default:
+					block.type = BlockType.FENCED_CODE;
+					break;
+				}
 				block.meta = Utils.getMetaFromFence(block.lines.value);
 				block.lines.setEmpty();
-				if (block.lineTail.getLineType(this.useExtensions) == LineType.PLUGIN)
+				if (block.lineTail.getLineType(this.useExtensions) == type)
 					block.lineTail.setEmpty();
 				block.removeSurroundingEmptyLines();
 				break;

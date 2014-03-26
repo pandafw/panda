@@ -1,9 +1,9 @@
 package panda.lang.escape;
 
+import panda.io.stream.StringBuilderWriter;
+
 import java.io.IOException;
 import java.util.Locale;
-
-import panda.io.stream.StringBuilderWriter;
 
 /**
  * An API for translating text. 
@@ -24,7 +24,7 @@ public abstract class CharSequenceTranslator {
 	 * @return int count of codepoints consumed
 	 * @throws IOException if and only if the Writer produces an IOException
 	 */
-	public abstract int translate(CharSequence input, int index, Appendable out) throws IOException;
+	public abstract int translateChar(CharSequence input, int index, Appendable out) throws IOException;
 
 	/**
 	 * Helper for non-Writer usage.
@@ -56,16 +56,50 @@ public abstract class CharSequenceTranslator {
 	 * @throws IOException if and only if the Writer produces an IOException
 	 */
 	public final void translate(final CharSequence input, final Appendable out) throws IOException {
+		translate(input, 0, input.length(), out);
+	}
+
+	/**
+	 * Translate an input onto a Writer. This is intentionally final as its algorithm is tightly
+	 * coupled with the abstract method of this class.
+	 * 
+	 * @param input CharSequence that is being translated
+	 * @param start start position
+	 * @param out Writer to translate the text to
+	 * @throws IOException if and only if the Writer produces an IOException
+	 */
+	public final void translate(final CharSequence input, final int start, final Appendable out) throws IOException {
+		translate(input, start, input.length(), out);
+	}
+	
+	/**
+	 * Translate an input onto a Writer. This is intentionally final as its algorithm is tightly
+	 * coupled with the abstract method of this class.
+	 * 
+	 * @param input CharSequence that is being translated
+	 * @param start start position
+	 * @param end end position
+	 * @param out Writer to translate the text to
+	 * @throws IOException if and only if the Writer produces an IOException
+	 */
+	public final void translate(final CharSequence input, final int start, final int end, final Appendable out) throws IOException {
 		if (out == null) {
 			throw new IllegalArgumentException("The Writer must not be null");
 		}
 		if (input == null) {
 			return;
 		}
-		int pos = 0;
-		final int len = input.length();
+		if (start < 0) {
+			throw new StringIndexOutOfBoundsException(start);
+		}
+		if (end > input.length()) {
+			throw new StringIndexOutOfBoundsException(end);
+		}
+
+		int pos = start;
+		final int len = end;
 		while (pos < len) {
-			final int consumed = translate(input, pos, out);
+			final int consumed = translateChar(input, pos, out);
 			if (consumed == 0) {
 				final char[] cs = Character.toChars(Character.codePointAt(input, pos));
 				for (char c : cs) {

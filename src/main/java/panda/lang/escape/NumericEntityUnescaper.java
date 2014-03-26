@@ -51,11 +51,8 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
 		return options == null ? false : options.contains(option);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int translate(final CharSequence input, final int index, final Appendable out) throws IOException {
+	public int translateChar(final CharSequence input, final int index, final Appendable out) throws IOException {
 		final int seqEnd = input.length();
 		// Uses -2 to ensure there is something after the &#
 		if (input.charAt(index) == '&' && index < seqEnd - 2 && input.charAt(index + 1) == '#') {

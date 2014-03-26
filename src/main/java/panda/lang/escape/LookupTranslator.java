@@ -62,11 +62,8 @@ public class LookupTranslator extends CharSequenceTranslator {
 		longest = _longest;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int translate(final CharSequence input, final int index, final Appendable out) throws IOException {
+	public int translateChar(final CharSequence input, final int index, final Appendable out) throws IOException {
 		int max = longest;
 		if (index + longest > input.length()) {
 			max = input.length() - index;

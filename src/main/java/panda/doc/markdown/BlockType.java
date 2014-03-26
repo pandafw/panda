@@ -28,6 +28,8 @@ enum BlockType {
 	UNORDERED_LIST,
 	/** A XML block. */
 	XML,
+	/** A Table block. */
+	TABLE,
 	/** A plugin block. */
 	PLUGIN
 }

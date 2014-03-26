@@ -17,7 +17,7 @@ public class CsvUnescaper extends CharSequenceTranslator {
 			Chars.CR, Chars.LF };
 
 	@Override
-	public int translate(CharSequence input, int index, Appendable out) throws IOException {
+	public int translateChar(CharSequence input, int index, Appendable out) throws IOException {
 
 		if (index != 0) {
 			throw new IllegalStateException("CsvUnescaper should never reach the [1] index");

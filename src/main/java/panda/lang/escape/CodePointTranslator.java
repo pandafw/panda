@@ -13,7 +13,7 @@ public abstract class CodePointTranslator extends CharSequenceTranslator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final int translate(final CharSequence input, final int index, final Appendable out) throws IOException {
+	public final int translateChar(final CharSequence input, final int index, final Appendable out) throws IOException {
 		final int codepoint = Character.codePointAt(input, index);
 		final boolean consumed = translate(codepoint, out);
 		if (consumed) {

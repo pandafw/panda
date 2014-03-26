@@ -557,9 +557,17 @@ class Utils {
 	 * @return Rest of the line after trimming and backtick removal
 	 */
 	public final static String getMetaFromFence(String fenceLine) {
+		char f = ' ';
 		for (int i = 0; i < fenceLine.length(); i++) {
 			final char c = fenceLine.charAt(i);
-			if (!Character.isWhitespace(c) && c != '`' && c != '~' && c != '%') {
+			if (Character.isWhitespace(c)) {
+				continue;
+			}
+			if (f == ' ') {
+				f = c;
+				continue;
+			}
+			if (f != c) {
 				return fenceLine.substring(i).trim();
 			}
 		}

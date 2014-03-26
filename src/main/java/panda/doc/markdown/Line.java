@@ -162,7 +162,7 @@ class Line {
 	 * @param ch The char to count.
 	 * @return A value > 0 if this line only consists of 'ch' end spaces.
 	 */
-	private boolean isAllChars(char ch, int min) {
+	public boolean isAllChars(char ch, int min) {
 		if (this.value.length() < min) {
 			return false;
 		}
@@ -195,10 +195,11 @@ class Line {
 		if (this.leading > 3)
 			return LineType.CODE;
 
-		if (this.value.charAt(this.leading) == '#')
+		char lc = this.value.charAt(this.leading);
+		if (lc == '#')
 			return LineType.HEADLINE;
 
-		if (this.value.charAt(this.leading) == '>')
+		if (lc == '>')
 			return LineType.BQUOTE;
 
 		if (extendedMode) {
@@ -209,20 +210,23 @@ class Line {
 				if (this.value.startsWith("~~~"))
 					return LineType.FENCED_CODE;
 
+				if (this.value.startsWith("^^^"))
+					return LineType.TABLE;
+
 				if (this.value.startsWith("%%%"))
 					return LineType.PLUGIN;
 			}
 		}
 
 		if (this.value.length() - this.leading - this.trailing > 2
-				&& (this.value.charAt(this.leading) == '*' || this.value.charAt(this.leading) == '-' || this.value
+				&& (lc == '*' || lc == '-' || this.value
 					.charAt(this.leading) == '_')) {
-			if (this.isAllChars(this.value.charAt(this.leading), 3))
+			if (this.isAllChars(lc, 3))
 				return LineType.HR;
 		}
 
 		if (this.value.length() - this.leading >= 2 && this.value.charAt(this.leading + 1) == ' ') {
-			switch (this.value.charAt(this.leading)) {
+			switch (lc) {
 			case '*':
 			case '-':
 			case '+':
@@ -230,7 +234,7 @@ class Line {
 			}
 		}
 
-		if (this.value.length() - this.leading >= 3 && Character.isDigit(this.value.charAt(this.leading))) {
+		if (this.value.length() - this.leading >= 3 && Character.isDigit(lc)) {
 			int i = this.leading + 1;
 			while (i < this.value.length() && Character.isDigit(this.value.charAt(i)))
 				i++;
@@ -238,7 +242,7 @@ class Line {
 				return LineType.OLIST;
 		}
 
-		if (this.value.charAt(this.leading) == '<') {
+		if (lc == '<') {
 			if (this.checkHTML())
 				return LineType.XML;
 		}

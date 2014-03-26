@@ -24,6 +24,8 @@ enum LineType {
 	XML,
 	/** Fenced code block start/end */
 	FENCED_CODE,
+	/** Table */
+	TABLE,
 	/** plugin block */
 	PLUGIN
 }

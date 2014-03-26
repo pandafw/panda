@@ -1,5 +1,6 @@
 package panda.doc.markdown;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import panda.doc.html.HTML;
+import panda.lang.Exceptions;
+import panda.lang.StringEscapes;
+import panda.lang.Strings;
 
 /**
  * Emitter class responsible for generating HTML output.
@@ -158,6 +162,9 @@ class Emitter {
 			break;
 		case FENCED_CODE:
 			this.emitCodeLines(out, block.lines, block.meta, false);
+			break;
+		case TABLE:
+			this.emitTableLines(out, block.lines, block.meta);
 			break;
 		case PLUGIN:
 			this.emitPluginLines(out, block.lines, block.meta);
@@ -766,11 +773,10 @@ class Emitter {
 	 * Writes a set of markdown lines into the StringBuilder.
 	 * 
 	 * @param out The StringBuilder to write to.
-	 * @param lines The lines to write.
+	 * @param line The lines to write.
 	 */
-	private void emitMarkedLines(final StringBuilder out, final Line lines) {
+	private void emitMarkedLines(final StringBuilder out, Line line) {
 		final StringBuilder in = new StringBuilder();
-		Line line = lines;
 		while (line != null) {
 			if (!line.isEmpty) {
 				in.append(line.value.substring(line.leading, line.value.length() - line.trailing));
@@ -794,10 +800,9 @@ class Emitter {
 	 * Writes a set of raw lines into the StringBuilder.
 	 * 
 	 * @param out The StringBuilder to write to.
-	 * @param lines The lines to write.
+	 * @param line The lines to write.
 	 */
-	private void emitRawLines(final StringBuilder out, final Line lines) {
-		Line line = lines;
+	private void emitRawLines(final StringBuilder out, Line line) {
 		if (this.config.safeMode) {
 			final StringBuilder temp = new StringBuilder();
 			while (line != null) {
@@ -840,11 +845,10 @@ class Emitter {
 	 * Writes a code block into the StringBuilder.
 	 * 
 	 * @param out The StringBuilder to write to.
-	 * @param lines The lines to write.
+	 * @param line The lines to write.
 	 * @param meta Meta information.
 	 */
-	private void emitCodeLines(final StringBuilder out, final Line lines, final String meta, final boolean removeIndent) {
-		Line line = lines;
+	private void emitCodeLines(final StringBuilder out, Line line, final String meta, final boolean removeIndent) {
 		if (this.config.codeBlockEmitter != null) {
 			final ArrayList<String> list = new ArrayList<String>();
 			while (line != null) {
@@ -884,15 +888,108 @@ class Emitter {
 	}
 
 	/**
+	 * interprets a table block into the StringBuilder.
+	 * 
+	 * @param out The StringBuilder to write to.
+	 * @param lines The line to write.
+	 * @param meta Meta information.
+	 */
+	protected void emitTableLines(final StringBuilder out, final Line lines, final String meta) {
+		boolean thead = false;
+		boolean tfoot = false;
+		int cols = 0;
+		
+		Line line = lines;
+		while (line != null) {
+			if (!line.isEmpty) {
+				if (line.isAllChars('-', 4)) {
+					thead = true;
+					cols = Strings.split(line.value).length;
+				}
+				else if (line.isAllChars('~', 4)) {
+					tfoot = true;
+					if (cols <= 0) {
+						cols = Strings.split(line.value).length;
+					}
+				}
+			}
+			line = line.next;
+		}
+
+		out.append("<table>\n");
+		if (thead) {
+			out.append("<thead>\n");
+		}
+		else {
+			out.append("<tbody>\n");
+		}
+
+		line = lines;
+		for (line = lines; line != null; line = line.next) {
+			if (line.isEmpty) {
+				continue;
+			}
+			
+			if (line.isAllChars('-', 4)) {
+				out.append("</thead>\n<tbody>\n");
+				continue;
+			}
+			
+			if (line.isAllChars('~', 4)) {
+				out.append("</tbody>\n<tfoot>\n");
+				continue;
+			}
+
+			out.append("<tr>");
+			try {
+				int n = 0;
+				int s = line.leading, e = line.value.length() - line.trailing;
+				while (s < e) {
+					out.append("<td>");
+					int d = line.value.indexOf("    ", s);
+					if (d > 0) {
+						StringEscapes.escapeHtml(line.value, s, d, out);
+						s = d;
+						while (s < e && line.value.charAt(s) == ' ') {
+							s++;
+						}
+					}
+					else {
+						StringEscapes.escapeHtml(line.value, s, e, out);
+						s = e;
+					}
+					out.append("</td>");
+					n++;
+				}
+				while (n < cols) {
+					out.append("<td></td>");
+					n++;
+				}
+				out.append("</tr>\n");
+			}
+			catch (IOException ex) {
+				throw Exceptions.wrapThrow(ex);
+			}
+		}
+
+		if (tfoot) {
+			out.append("</tfoot>\n");
+		}
+		else {
+			out.append("<tbody>\n");
+		}
+		out.append("</table>\n");
+	}
+
+
+	/**
 	 * interprets a plugin block into the StringBuilder.
 	 * 
 	 * @param out The StringBuilder to write to.
-	 * @param lines The lines to write.
+	 * @param line The line to write.
 	 * @param meta Meta information.
 	 */
-	protected void emitPluginLines(final StringBuilder out, final Line lines, final String meta) {
-		Line line = lines;
-
+	protected void emitPluginLines(final StringBuilder out, Line line, final String meta) {
 		String idPlugin = meta;
 		String sparams = null;
 		Map<String, String> params = null;

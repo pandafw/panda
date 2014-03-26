@@ -16,11 +16,8 @@ public class OctalUnescaper extends CharSequenceTranslator {
 
 	private static int OCTAL_MAX = 377;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int translate(final CharSequence input, final int index, final Appendable out) throws IOException {
+	public int translateChar(final CharSequence input, final int index, final Appendable out) throws IOException {
 		if (input.charAt(index) == '\\' && index < (input.length() - 1) && Character.isDigit(input.charAt(index + 1))) {
 			final int start = index + 1;
 

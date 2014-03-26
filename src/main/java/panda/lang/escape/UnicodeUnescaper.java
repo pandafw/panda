@@ -10,11 +10,8 @@ import java.io.IOException;
  */
 public class UnicodeUnescaper extends CharSequenceTranslator {
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int translate(final CharSequence input, final int index, final Appendable out) throws IOException {
+	public int translateChar(final CharSequence input, final int index, final Appendable out) throws IOException {
 		if (input.charAt(index) == '\\' && index + 1 < input.length() && input.charAt(index + 1) == 'u') {
 			// consume optional additional 'u' chars
 			int i = 2;

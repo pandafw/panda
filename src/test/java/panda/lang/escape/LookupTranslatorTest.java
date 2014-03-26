@@ -18,7 +18,7 @@ public class LookupTranslatorTest {
 	public void testBasicLookup() throws IOException {
 		final LookupTranslator lt = new LookupTranslator(new String[][] { { "one", "two" } });
 		final StringWriter out = new StringWriter();
-		final int result = lt.translate("one", 0, out);
+		final int result = lt.translateChar("one", 0, out);
 		assertEquals("Incorrect codepoint consumption", 3, result);
 		assertEquals("Incorrect value", "two", out.toString());
 	}

@@ -1,0 +1,10 @@
+# Test 1 (yuml)
+%%% yuml style=nofunky scale=120 format=svg
+[Customer]<>-orders*>[Order] 
+[Order]++-0..*>[LineItem]
+[Order]-[note:Aggregate root.]
+%%%
+
+# Result 1
+<img src="http://yuml.me/diagram/nofunky;scale:120;/class/[Customer]<>-orders*>[Order], [Order]++-0..*>[LineItem], [Order]-[note:Aggregate root.].svg"/>
+
