@@ -1,8 +1,8 @@
 package panda.doc.markdown;
 
-import java.util.LinkedList;
-
 import panda.doc.html.HTML;
+
+import java.util.LinkedList;
 
 /**
  * This class represents a text line.
@@ -162,41 +162,24 @@ class Line {
 	 * @param ch The char to count.
 	 * @return A value > 0 if this line only consists of 'ch' end spaces.
 	 */
-	private int countChars(char ch) {
+	private boolean isAllChars(char ch, int min) {
+		if (this.value.length() < min) {
+			return false;
+		}
+		
 		int count = 0;
 		for (int i = 0; i < this.value.length(); i++) {
 			final char c = this.value.charAt(i);
-			if (c == ' ')
+			if (c == ' ') {
 				continue;
+			}
 			if (c == ch) {
 				count++;
 				continue;
 			}
-			count = 0;
-			break;
+			return false;
 		}
-		return count;
-	}
-
-	/**
-	 * Counts the amount of 'ch' at the start of this line ignoring spaces.
-	 * 
-	 * @param ch The char to count.
-	 * @return Number of characters found.
-	 * @since 0.7
-	 */
-	private int countCharsStart(char ch) {
-		int count = 0;
-		for (int i = 0; i < this.value.length(); i++) {
-			final char c = this.value.charAt(i);
-			if (c == ' ')
-				continue;
-			if (c == ch)
-				count++;
-			else
-				break;
-		}
-		return count;
+		return count >= min;
 	}
 
 	/**
@@ -220,13 +203,13 @@ class Line {
 
 		if (extendedMode) {
 			if (this.value.length() - this.leading - this.trailing > 2) {
-				if (this.value.charAt(this.leading) == '`' && this.countCharsStart('`') >= 3)
+				if (this.value.startsWith("```"))
 					return LineType.FENCED_CODE;
 
-				if (this.value.charAt(this.leading) == '~' && this.countCharsStart('~') >= 3)
+				if (this.value.startsWith("~~~"))
 					return LineType.FENCED_CODE;
 
-				if (this.value.charAt(this.leading) == '%' && this.countCharsStart('%') >= 3)
+				if (this.value.startsWith("%%%"))
 					return LineType.PLUGIN;
 			}
 		}
@@ -234,7 +217,7 @@ class Line {
 		if (this.value.length() - this.leading - this.trailing > 2
 				&& (this.value.charAt(this.leading) == '*' || this.value.charAt(this.leading) == '-' || this.value
 					.charAt(this.leading) == '_')) {
-			if (this.countChars(this.value.charAt(this.leading)) >= 3)
+			if (this.isAllChars(this.value.charAt(this.leading), 3))
 				return LineType.HR;
 		}
 
@@ -261,9 +244,9 @@ class Line {
 		}
 
 		if (this.next != null && !this.next.isEmpty) {
-			if ((this.next.value.charAt(0) == '-') && (this.next.countChars('-') > 0))
+			if ((this.next.value.charAt(0) == '-') && this.next.isAllChars('-', 2))
 				return LineType.HEADLINE2;
-			if ((this.next.value.charAt(0) == '=') && (this.next.countChars('=') > 0))
+			if ((this.next.value.charAt(0) == '=') && this.next.isAllChars('=', 2))
 				return LineType.HEADLINE1;
 		}
 

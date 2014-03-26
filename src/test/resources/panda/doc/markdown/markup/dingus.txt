@@ -21,7 +21,7 @@ An [example](http://www.example.com/)
 ![](/path/img.jpg "Title")
 ![alt textPane](/path/img.jpg "Title")
 # Result 4
-<p><img src="/path/img.jpg" alt="" title="Title" />
+<p><img src="/path/img.jpg" title="Title" />
 <img src="/path/img.jpg" alt="alt textPane" title="Title" /></p>
 
 # Test 5 (setext-style headers)
@@ -29,7 +29,7 @@ Header 1
 ========
 
 Header 2
---------
+- - - - -
 # Result 5
 <h1>Header 1</h1>
 <h2>Header 2</h2>
