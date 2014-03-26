@@ -263,6 +263,11 @@ public class TemplateImportor extends AbstractSqlTool {
 			param.put("name", name);
 			
 			Locale locale = Locales.localeFromFileName(f, defaultLocale);
+			if (Strings.isNotEmpty(locale.toString()) 
+					&& !Locales.isAvailableLocale(locale)) {
+				println0("Warning: " + locale + " is not a valid locale [" + f.getName() + "]");
+			}
+
 			param.put("language", getLocaleValue(locale.getLanguage()));
 			param.put("country", getLocaleValue(locale.getCountry()));
 			param.put("variant", getLocaleValue(locale.getVariant()));

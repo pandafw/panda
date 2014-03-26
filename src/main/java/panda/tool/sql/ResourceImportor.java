@@ -1,30 +1,28 @@
 package panda.tool.sql;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import org.apache.commons.cli.CommandLine;
-
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlManager;
 import panda.io.FileNames;
 import panda.io.Streams;
+import panda.lang.Charsets;
 import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.util.tool.AbstractCommandTool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import org.apache.commons.cli.CommandLine;
+
 /**
- * Import java properties to database
+ * Import resources to database
  */
-public class PropertyImportor extends AbstractSqlTool {
+public class ResourceImportor extends AbstractSqlTool {
 	/**
-	 * Main class for ImpProperties
+	 * Main class
 	 */
 	public static class Main extends AbstractSqlTool.Main {
 		/**
@@ -33,7 +31,7 @@ public class PropertyImportor extends AbstractSqlTool {
 		public static void main(String[] args) {
 			Main cgm = new Main();
 			
-			Object cg = new PropertyImportor();
+			Object cg = new ResourceImportor();
 
 			cgm.execute(cg, args);
 		}
@@ -42,10 +40,14 @@ public class PropertyImportor extends AbstractSqlTool {
 		protected void addCommandLineOptions() throws Exception {
 			super.addCommandLineOptions();
 			
-			addCommandLineOption("si", "insert sql", "insert sql template [e.g.: INSERT INTO PROPERTY VALUES(:clazz, :language, :country, :variant, :name, :value)", true);
-			addCommandLineOption("su", "update sql", "update sql template [e.g.: UPDATE PROPERTY SET VALUE=:value WHERE CLAZZ=:class AND LANGUAGE=:language AND COUNTRY=:country AND NAME=:name) ]");
-			addCommandLineOption("sd", "delete sql", "delete sql template [e.g.: DELETE FROM PROPERTY WHERE CLAZZ=:clazz AND LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant)");
+			addCommandLineOption("si", "insert sql", "insert sql template [e.g.: INSERT INTO RESOURCE VALUES(:language, :country:, :variant, :source) ]", true);
+
+			addCommandLineOption("su", "update sql", "update sql template [e.g.: UPDATE RESOURCE SET SOURCE=:source WHERE LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant) ]");
+
+			addCommandLineOption("ed", "encoding", "encoding of resource source file");
+
 			addCommandLineOption("pn", "prefix", "prefix of class name");
+
 			addCommandLineOption("es", "emptystr", "string for emtpy locale field (language, country, variant)");
 		}
 
@@ -53,10 +55,6 @@ public class PropertyImportor extends AbstractSqlTool {
 		protected void getCommandLineOptions(CommandLine cl) throws Exception {
 			super.getCommandLineOptions(cl);
 			
-			if (cl.hasOption("sd")) {
-				setParameter("deleteSql", cl.getOptionValue("sd"));
-			}
-
 			if (cl.hasOption("si")) {
 				setParameter("insertSql", cl.getOptionValue("si"));
 			}
@@ -65,43 +63,39 @@ public class PropertyImportor extends AbstractSqlTool {
 				setParameter("updateSql", cl.getOptionValue("su"));
 			}
 
+			if (cl.hasOption("ed")) {
+				setParameter("encoding", cl.getOptionValue("ed"));
+			}
+
 			if (cl.hasOption("pn")) {
 				setParameter("prefix", cl.getOptionValue("pn"));
 			}
 
 			if (cl.hasOption("es")) {
-				setParameter("emtpystr", cl.getOptionValue("es"));
+				setParameter("emptystr", cl.getOptionValue("es"));
 			}
 		}
 	}
-
+	
 	/**
 	 * Constructor
 	 */
-	public PropertyImportor() {
+	public ResourceImportor() {
 		includes = new String[] { "**/*.properties" };
 	}
 
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String deleteSql;
 	protected String updateSql;
 	protected String insertSql;
+	protected String encoding = Charsets.ISO_8859_1;
 	protected String prefix;
 	protected String emptystr;
 	
-	private int cntDel;
 	private int cntUpd;
 	private int cntIns;
 	
-	/**
-	 * @return the deleteSql
-	 */
-	public String getDeleteSql() {
-		return deleteSql;
-	}
-
 	/**
 	 * @return the updateSql
 	 */
@@ -114,6 +108,13 @@ public class PropertyImportor extends AbstractSqlTool {
 	 */
 	public String getInsertSql() {
 		return insertSql;
+	}
+
+	/**
+	 * @return the encoding
+	 */
+	public String getEncoding() {
+		return encoding;
 	}
 
 	/**
@@ -131,13 +132,6 @@ public class PropertyImportor extends AbstractSqlTool {
 	}
 
 	/**
-	 * @param deleteSql the deleteSql to set
-	 */
-	public void setDeleteSql(String deleteSql) {
-		this.deleteSql = Strings.stripToNull(deleteSql);
-	}
-
-	/**
 	 * @param updateSql the updateSql to set
 	 */
 	public void setUpdateSql(String updateSql) {
@@ -152,12 +146,19 @@ public class PropertyImportor extends AbstractSqlTool {
 	}
 
 	/**
+	 * @param encoding the encoding to set
+	 */
+	public void setEncoding(String encoding) {
+		this.encoding = Strings.stripToNull(encoding);
+	}
+	
+	/**
 	 * @param prefix the prefix to set
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = Strings.stripToNull(prefix);
 	}
-	
+
 	/**
 	 * @param emptystr the emptystr to set
 	 */
@@ -168,20 +169,18 @@ public class PropertyImportor extends AbstractSqlTool {
 	@Override
 	protected void checkParameters() throws Exception {
 		super.checkParameters();
-		
 		AbstractCommandTool.checkRequired(insertSql, "insertSql");
 	}
 
 	@Override
 	protected void beforeProcess() throws Exception {
 		super.beforeProcess();
-
-		cntDel = 0;
+		
 		cntUpd = 0;
 		cntIns = 0;
 
 		if (source.isDirectory()) {
-			println0("Importing properties: " + source.getPath());
+			println0("Importing resources: " + source.getPath());
 		}
 	}
 
@@ -190,17 +189,16 @@ public class PropertyImportor extends AbstractSqlTool {
 		super.afterProcess();
 		
 		String s = cntFile + " files processed";
-		if (cntDel > 0) {
-			s += ", " + cntDel + " properties deleted";
-		}
 		if (cntUpd > 0) {
-			s += ", " + cntUpd + " properties updated";
+			s += ", " + cntUpd + " resources updated";
 		}
 		if (cntIns > 0) {
-			s += ", " + cntIns + " properties inserted";
+			s += ", " + cntIns + " resources inserted";
 		}
+
 		println0(s + " successfully");
 	}
+	
 
 	private String getClazz(File f) {
 		String c = FileNames.removeLeadingPath(source, f);
@@ -218,7 +216,7 @@ public class PropertyImportor extends AbstractSqlTool {
 
 		return c;
 	}
-	
+
 	private String getLocaleValue(String val) {
 		return Strings.isEmpty(val) ? emptystr : val;
 	}
@@ -227,61 +225,62 @@ public class PropertyImportor extends AbstractSqlTool {
 	
 	@Override
 	protected void processFile(File f) throws Exception {
-		println1("Importing property file: " + f.getPath());
-
-		Locale locale = Locales.localeFromFileName(f, defaultLocale);
-		if (Strings.isNotEmpty(locale.toString()) 
-				&& !Locales.isAvailableLocale(locale)) {
-			println0("Warning: " + locale + " is not a valid locale [" + f.getName() + "]");
-		}
+		println1("Importing resource file: " + f.getPath());
 		
-		String clazz = getClazz(f);
-		if (clazz.startsWith(prefix)) {
-			clazz = clazz.substring(prefix.length());
-		}
-
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("clazz", clazz);
-		param.put("language", getLocaleValue(locale.getLanguage()));
-		param.put("country", getLocaleValue(locale.getCountry()));
-		param.put("variant", getLocaleValue(locale.getVariant()));
-
 		FileInputStream fis = null;
-		Properties p = new Properties();
+		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
+		
 		try {
 			fis = new FileInputStream(f);
-			p.load(fis);
-		}
-		catch (Exception e) {
-			throw new Exception("Failed to load " + f.getPath(), e);
-		}
-		finally {
-			Streams.safeClose(fis);
-		}
+			
+			byte[] buf = new byte[fis.available()];
 
-		SqlExecutor executor = SqlManager.i().getExecutor(connection); 
-		try {
-			if (Strings.isNotEmpty(deleteSql)) {
-				cntDel = executor.update(deleteSql, param);
+			fis.read(buf);
+			
+			Map<String, String> param = new HashMap<String, String>();
+			
+			String clazz = getClazz(f);
+			if (clazz.startsWith(prefix)) {
+				clazz = clazz.substring(prefix.length());
+			}
+			param.put("clazz", clazz);
+			
+			Locale locale = Locales.localeFromFileName(f, defaultLocale);
+			if (Strings.isNotEmpty(locale.toString()) 
+					&& !Locales.isAvailableLocale(locale)) {
+				println0("Warning: " + locale + " is not a valid locale [" + f.getName() + "]");
 			}
 
-			for (Iterator<Entry<Object, Object>> it = p.entrySet().iterator(); it.hasNext(); ) {
-				Entry<Object, Object> en = it.next();
-				String k = en.getKey().toString();
-				String v = en.getValue().toString();
-				
-				param.put("name", k);
-				param.put("value", v);
-				
-				int cu = 0;
-				if (Strings.isNotEmpty(updateSql)) {
-					cu = executor.update(updateSql, param);
-					cntUpd += cu;
-				}
+			param.put("language", getLocaleValue(locale.getLanguage()));
+			param.put("country", getLocaleValue(locale.getCountry()));
+			param.put("variant", getLocaleValue(locale.getVariant()));
 
-				if (cu == 0) {
-					cntIns += executor.update(insertSql, param);
+			String source;
+			if (Strings.isNotEmpty(encoding)) {
+				source = new String(buf, encoding);
+			}
+			else {
+				String c = Charsets.charsetFromLocale(locale);
+				if (Strings.isNotEmpty(c)) {
+					source = new String(buf, c);
 				}
+				else {
+					source = new String(buf); 
+				}
+			}
+			if (source.length() > 0 && source.charAt(0) == '\ufeff') {
+				source = source.substring(1);
+			}
+			param.put("source", source);
+			
+			int cu = 0;
+			if (Strings.isNotEmpty(updateSql)) {
+				cu = executor.update(updateSql, param);
+				cntUpd += cu;
+			}
+
+			if (cu == 0) {
+				cntIns += executor.update(insertSql, param);
 			}
 
 			connection.commit();
@@ -289,6 +288,9 @@ public class PropertyImportor extends AbstractSqlTool {
 		catch (Exception e) {
 			rollback();
 			throw e;
+		}
+		finally {
+			Streams.safeClose(fis);
 		}
 	}	
 }
