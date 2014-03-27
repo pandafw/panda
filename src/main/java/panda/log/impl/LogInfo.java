@@ -2,7 +2,7 @@ package panda.log.impl;
 
 public class LogInfo {
 
-	String message;
+	String msg;
 
-	Throwable e;
+	Throwable ex;
 }

@@ -6,17 +6,17 @@ import panda.log.Log;
 
 
 public abstract class AbstractLog implements Log {
-	protected abstract void log(int level, Object message, Throwable tx);
+	protected abstract void log(int level, Object msg, Throwable tx);
 
 	protected void log(int level, LogInfo info) {
-		log(level, info.message, info.e);
+		log(level, info.msg, info.ex);
 	}
 
 	private static final LogInfo LOGINFO_ERROR = new LogInfo();
 	private static final LogInfo LOGINFO_NULL = new LogInfo();
 	static {
-		LOGINFO_ERROR.message = "!!!!Log Fail!!";
-		LOGINFO_NULL.message = "null";
+		LOGINFO_ERROR.msg = "!!!!Log Fail!!";
+		LOGINFO_NULL.msg = "null";
 	}
 
 	/**
@@ -33,16 +33,16 @@ public abstract class AbstractLog implements Log {
 		try {
 			LogInfo info = new LogInfo();
 			if (obj instanceof Throwable) {
-				info.e = (Throwable)obj;
-				info.message = info.e.getMessage();
+				info.ex = (Throwable)obj;
+				info.msg = info.ex.getMessage();
 			}
 			else if (args == null || args.length == 0) {
-				info.message = obj.toString();
+				info.msg = obj.toString();
 			}
 			else {
-				info.message = String.format(obj.toString(), args);
+				info.msg = String.format(obj.toString(), args);
 				if (args[args.length - 1] instanceof Throwable)
-					info.e = (Throwable)args[args.length - 1];
+					info.ex = (Throwable)args[args.length - 1];
 			}
 			return info;
 		}
@@ -54,73 +54,85 @@ public abstract class AbstractLog implements Log {
 		}
 	}
 
-	public void debug(Object message) {
-		if (isDebugEnabled()) {
-			log(LEVEL_DEBUG, makeInfo(message));
-		}
-	}
-
-	public void debugf(String fmt, Object... args) {
-		if (isDebugEnabled())
-			log(LEVEL_DEBUG, makeInfo(fmt, args));
-	}
-
-	public void error(Object message) {
-		if (isErrorEnabled())
-			log(LEVEL_ERROR, makeInfo(message));
-	}
-
-	public void errorf(String fmt, Object... args) {
-		if (isErrorEnabled()) {
-			log(LEVEL_ERROR, makeInfo(fmt, args));
-		}
-	}
-
-	public void fatal(Object message) {
-		if (isFatalEnabled()) {
-			log(LEVEL_FATAL, makeInfo(message));
-		}
-	}
-
-	public void fatalf(String fmt, Object... args) {
-		if (isFatalEnabled()) {
-			log(LEVEL_FATAL, makeInfo(fmt, args));
-		}
-	}
-
-	public void info(Object message) {
-		if (isInfoEnabled()) {
-			log(LEVEL_INFO, makeInfo(message));
-		}
-	}
-
-	public void infof(String fmt, Object... args) {
-		if (isInfoEnabled()) {
-			log(LEVEL_INFO, makeInfo(fmt, args));
-		}
-	}
-
-	public void trace(Object message) {
+	@Override
+	public void trace(Object msg) {
 		if (isTraceEnabled()) {
-			log(LEVEL_TRACE, makeInfo(message));
+			log(LEVEL_TRACE, makeInfo(msg));
 		}
 	}
 
+	@Override
 	public void tracef(String fmt, Object... args) {
 		if (isTraceEnabled()) {
 			log(LEVEL_TRACE, makeInfo(fmt, args));
 		}
 	}
 
-	public void warn(Object message) {
-		if (isWarnEnabled()) {
-			log(LEVEL_WARN, makeInfo(message));
+	@Override
+	public void debug(Object msg) {
+		if (isDebugEnabled()) {
+			log(LEVEL_DEBUG, makeInfo(msg));
 		}
 	}
 
+	@Override
+	public void debugf(String fmt, Object... args) {
+		if (isDebugEnabled())
+			log(LEVEL_DEBUG, makeInfo(fmt, args));
+	}
+
+	@Override
+	public void info(Object msg) {
+		if (isInfoEnabled()) {
+			log(LEVEL_INFO, makeInfo(msg));
+		}
+	}
+
+	@Override
+	public void infof(String fmt, Object... args) {
+		if (isInfoEnabled()) {
+			log(LEVEL_INFO, makeInfo(fmt, args));
+		}
+	}
+
+	@Override
+	public void warn(Object msg) {
+		if (isWarnEnabled()) {
+			log(LEVEL_WARN, makeInfo(msg));
+		}
+	}
+
+	@Override
 	public void warnf(String fmt, Object... args) {
 		if (isWarnEnabled()) {
 			log(LEVEL_WARN, makeInfo(fmt, args));
+		}
+	}
+
+	@Override
+	public void error(Object msg) {
+		if (isErrorEnabled())
+			log(LEVEL_ERROR, makeInfo(msg));
+	}
+
+	@Override
+	public void errorf(String fmt, Object... args) {
+		if (isErrorEnabled()) {
+			log(LEVEL_ERROR, makeInfo(fmt, args));
+		}
+	}
+
+	@Override
+	public void fatal(Object msg) {
+		if (isFatalEnabled()) {
+			log(LEVEL_FATAL, makeInfo(msg));
+		}
+	}
+
+	@Override
+	public void fatalf(String fmt, Object... args) {
+		if (isFatalEnabled()) {
+			log(LEVEL_FATAL, makeInfo(fmt, args));
 		}
 	}
 }

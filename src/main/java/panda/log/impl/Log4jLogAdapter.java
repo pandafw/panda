@@ -13,8 +13,8 @@ import panda.log.LogAdapter;
  * 
  */
 public class Log4jLogAdapter implements LogAdapter {
-	public Log getLogger(String className) {
-		return new Log4JLogger(className);
+	public Log getLogger(String name) {
+		return new Log4JLogger(name);
 	}
 
 	static class Log4JLogger extends AbstractLog {
@@ -63,63 +63,65 @@ public class Log4jLogAdapter implements LogAdapter {
 			return hasTrace ? logger.isEnabledFor(Level.TRACE) : false;
 		}
 		
-		public void debug(Object message, Throwable t) {
+		public void debug(Object msg, Throwable t) {
 			if (isDebugEnabled()) {
-				logger.log(SELF_FQCN, Level.DEBUG, message, t);
+				logger.log(SELF_FQCN, Level.DEBUG, msg, t);
 			}
 		}
 
-		public void error(Object message, Throwable t) {
+		public void error(Object msg, Throwable t) {
 			if (isErrorEnabled())
-				logger.log(SELF_FQCN, Level.ERROR, message, t);
+				logger.log(SELF_FQCN, Level.ERROR, msg, t);
 
 		}
 
-		public void fatal(Object message, Throwable t) {
+		public void fatal(Object msg, Throwable t) {
 			if (isFatalEnabled())
-				logger.log(SELF_FQCN, Level.FATAL, message, t);
+				logger.log(SELF_FQCN, Level.FATAL, msg, t);
 		}
 
-		public void info(Object message, Throwable t) {
+		public void info(Object msg, Throwable t) {
 			if (isInfoEnabled())
-				logger.log(SELF_FQCN, Level.INFO, message, t);
+				logger.log(SELF_FQCN, Level.INFO, msg, t);
 		}
 
-		public void trace(Object message, Throwable t) {
+		public void trace(Object msg, Throwable t) {
 			if (isTraceEnabled())
-				logger.log(SELF_FQCN, Level.TRACE, message, t);
+				logger.log(SELF_FQCN, Level.TRACE, msg, t);
 			else if ((!hasTrace) && isDebugEnabled())
-				logger.log(SELF_FQCN, Level.DEBUG, message, t);
+				logger.log(SELF_FQCN, Level.DEBUG, msg, t);
 		}
 
-		public void warn(Object message, Throwable t) {
+		public void warn(Object msg, Throwable t) {
 			if (isWarnEnabled())
-				logger.log(SELF_FQCN, Level.WARN, message, t);
+				logger.log(SELF_FQCN, Level.WARN, msg, t);
 		}
 
 		@Override
-		protected void log(int level, Object message, Throwable tx) {
+		protected void log(int level, Object msg, Throwable tx) {
 			switch (level) {
 			case LEVEL_FATAL:
-				logger.log(SUPER_FQCN, Level.FATAL, message, tx);
+				logger.log(SUPER_FQCN, Level.FATAL, msg, tx);
 				break;
 			case LEVEL_ERROR:
-				logger.log(SUPER_FQCN, Level.ERROR, message, tx);
+				logger.log(SUPER_FQCN, Level.ERROR, msg, tx);
 				break;
 			case LEVEL_WARN:
-				logger.log(SUPER_FQCN, Level.WARN, message, tx);
+				logger.log(SUPER_FQCN, Level.WARN, msg, tx);
 				break;
 			case LEVEL_INFO:
-				logger.log(SUPER_FQCN, Level.INFO, message, tx);
+				logger.log(SUPER_FQCN, Level.INFO, msg, tx);
 				break;
 			case LEVEL_DEBUG:
-				logger.log(SUPER_FQCN, Level.DEBUG, message, tx);
+				logger.log(SUPER_FQCN, Level.DEBUG, msg, tx);
 				break;
 			case LEVEL_TRACE:
-				if (hasTrace)
-					logger.log(SUPER_FQCN, Level.TRACE, message, tx);
-				else
-					logger.log(SUPER_FQCN, Level.DEBUG, message, tx);
+				if (hasTrace) {
+					logger.log(SUPER_FQCN, Level.TRACE, msg, tx);
+				}
+				else {
+					logger.log(SUPER_FQCN, Level.DEBUG, msg, tx);
+				}
 				break;
 			default:
 				break;

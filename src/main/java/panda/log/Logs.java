@@ -60,7 +60,8 @@ public final class Logs {
 
 	private static void init() {
 		String[] adapters = new String[] {
-				ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter"
+				ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter",
+				ConsoleLogAdapter.class.getPackage().getName() + ".AndroidLogAdapter"
 		};
 
 		for (String a : adapters) {

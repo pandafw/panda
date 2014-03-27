@@ -8,7 +8,7 @@ import panda.log.LogAdapter;
  */
 public class NopLog implements Log, LogAdapter {
 
-	public Log getLogger(String className) {
+	public Log getLogger(String name) {
 		return NOP;
 	}
 	
@@ -19,15 +19,15 @@ public class NopLog implements Log, LogAdapter {
 	
 	public void warnf(String fmt, Object... args) {}
 	
-	public void warn(Object message, Throwable t) {}
+	public void warn(Object msg, Throwable t) {}
 	
-	public void warn(Object message) {}
+	public void warn(Object msg) {}
 	
 	public void tracef(String fmt, Object... args) {}
 	
-	public void trace(Object message, Throwable t) {}
+	public void trace(Object msg, Throwable t) {}
 	
-	public void trace(Object message) {}
+	public void trace(Object msg) {}
 	
 	public boolean isWarnEnabled() {
 		return false;
@@ -56,36 +56,36 @@ public class NopLog implements Log, LogAdapter {
 	public void infof(String fmt, Object... args) {
 	}
 	
-	public void info(Object message, Throwable t) {
+	public void info(Object msg, Throwable t) {
 	}
 	
-	public void info(Object message) {
+	public void info(Object msg) {
 	}
 	
 	public void fatalf(String fmt, Object... args) {
 	}
 	
-	public void fatal(Object message, Throwable t) {
+	public void fatal(Object msg, Throwable t) {
 	}
 	
-	public void fatal(Object message) {
+	public void fatal(Object msg) {
 	}
 	
 	public void errorf(String fmt, Object... args) {
 	}
 	
-	public void error(Object message, Throwable t) {
+	public void error(Object msg, Throwable t) {
 	}
 	
-	public void error(Object message) {
+	public void error(Object msg) {
 	}
 	
 	public void debugf(String fmt, Object... args) {
 	}
 	
-	public void debug(Object message, Throwable t) {
+	public void debug(Object msg, Throwable t) {
 	}
 	
-	public void debug(Object message) {
+	public void debug(Object msg) {
 	}
 }
