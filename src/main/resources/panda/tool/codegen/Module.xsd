@@ -82,7 +82,7 @@
 		<attribute name="scale" type="int"></attribute>
 		<attribute name="size" type="int"></attribute>
 		<attribute name="fieldKind" type="string"></attribute>
-		<attribute name="dbType" type="string"></attribute>
+		<attribute name="nativeType" type="string"></attribute>
 		<attribute name="jdbcType" type="string"></attribute>
 		<attribute name="comment" type="string"></attribute>
 		<attribute name="column" type="string"></attribute>

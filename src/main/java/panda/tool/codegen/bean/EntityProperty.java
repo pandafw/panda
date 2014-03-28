@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import panda.dao.sql.JdbcTypes;
+import panda.dao.DaoTypes;
 import panda.lang.Asserts;
 import panda.lang.Strings;
 
@@ -42,7 +42,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;scale&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;size&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;fieldKind&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;dbType&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;nativeType&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;jdbcType&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;comment&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;column&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -100,7 +100,6 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	@XmlAttribute
 	private String fieldKind;
 	@XmlAttribute
-	private String dbType;
 	private String nativeType;
 	@XmlAttribute
 	private String jdbcType;
@@ -155,7 +154,6 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		this.scale = property.scale;
 		this.size = property.size;
 		this.fieldKind = property.fieldKind;
-		this.dbType = property.dbType;
 		this.nativeType = property.nativeType;
 		this.jdbcType = property.jdbcType;
 		this.comment = property.comment;
@@ -233,9 +231,6 @@ public class EntityProperty implements Comparable<EntityProperty> {
 		}
 		if (src.fieldKind != null) {
 			me.fieldKind = src.fieldKind;
-		}
-		if (src.dbType != null) {
-			me.dbType = src.dbType;
 		}
 		if (src.nativeType != null) {
 			me.nativeType = src.nativeType;
@@ -651,8 +646,8 @@ public class EntityProperty implements Comparable<EntityProperty> {
 					|| sjt.startsWith("Upload")) {
 				fieldKind = "bin";
 			}
-			else if (JdbcTypes.CHAR.equalsIgnoreCase(jdbcType)
-					|| JdbcTypes.VARCHAR.equalsIgnoreCase(jdbcType)) {
+			else if (DaoTypes.CHAR.equalsIgnoreCase(jdbcType)
+					|| DaoTypes.VARCHAR.equalsIgnoreCase(jdbcType)) {
 				fieldKind = "string";
 			}
 			else {
@@ -667,24 +662,6 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 */
 	public void setFieldKind(String fieldKind) {
 		this.fieldKind = fieldKind;
-	}
-
-	/**
-	 * Gets the value of the dbType property.
-	 * 
-	 * @return possible object is {@link String }
-	 */
-	public String getDbType() {
-		return dbType == null ? null : dbType.toUpperCase();
-	}
-
-	/**
-	 * Sets the value of the dbType property.
-	 * 
-	 * @param value allowed object is {@link String }
-	 */
-	public void setDbType(String value) {
-		this.dbType = value;
 	}
 
 	/**
@@ -957,10 +934,10 @@ public class EntityProperty implements Comparable<EntityProperty> {
 			sb.append("value=\"").append(column).append("\", ");
 		}
 		if (Strings.isNotEmpty(jdbcType)) {
-			sb.append("type=JdbcTypes.").append(jdbcType).append(", ");
+			sb.append("type=").append(DaoTypes.class.getSimpleName()).append(".").append(jdbcType).append(", ");
 		}
-		if (Strings.isNotEmpty(dbType)) {
-			sb.append("dbType=\"").append(dbType).append("\", ");
+		if (Strings.isNotEmpty(nativeType)) {
+			sb.append("nativeType=\"").append(nativeType).append("\", ");
 		}
 		if (size != null) {
 			sb.append("size=").append(size).append(", ");

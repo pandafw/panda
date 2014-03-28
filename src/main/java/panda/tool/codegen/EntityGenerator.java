@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import panda.dao.DaoTypes;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
@@ -26,7 +27,6 @@ import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.ObjectCondition;
 import panda.dao.query.StringCondition;
-import panda.dao.sql.JdbcTypes;
 import panda.lang.Classes;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -203,7 +203,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 					imports.add(Comment.class.getName());
 				}
 				if (Strings.isNotEmpty(p.getJdbcType())) {
-					imports.add(JdbcTypes.class.getName());
+					imports.add(DaoTypes.class.getName());
 				}
 			}
 		}

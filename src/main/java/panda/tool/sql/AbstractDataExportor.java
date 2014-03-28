@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import panda.dao.sql.SqlNamings;
+import panda.dao.DaoNamings;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
@@ -32,7 +32,7 @@ public abstract class AbstractDataExportor extends AbstractSqlTool {
 		
 		public Column(String name, String type) throws Exception {
 			this.name = name;
-			this.property = SqlNamings.columnLabel2JavaName(name);
+			this.property = DaoNamings.columnLabel2JavaName(name);
 			
 			int i = type.indexOf(':');
 			if (i >= 0) {
