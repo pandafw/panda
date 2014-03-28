@@ -22,9 +22,7 @@
 	<classpathentry kind="lib" path="lib/run/activation.jar" sourcepath="lib/run/activation-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-email.jar" sourcepath="lib/run/commons-email-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/commons-vfs2.jar" sourcepath="lib/run/commons-vfs2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/jtidy.jar" sourcepath="lib/run/jtidy-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/mail.jar" sourcepath="lib/run/mail-sources.jar"/>
 	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
