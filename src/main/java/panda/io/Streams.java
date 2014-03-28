@@ -105,18 +105,6 @@ public class Streams {
 	private static char[] SKIP_CHAR_BUFFER;
 	private static byte[] SKIP_BYTE_BUFFER;
 
-	
-	/**
-	 * Copy bytes from an <code>InputStream</code> to an null <code>OutputStream</code>.
-	 * 
-	 * @param is the input stream to copy from
-	 * @return the number of bytes copied
-	 * @throws IOException in case of I/O errors
-	 */
-	public static int drain(InputStream is) throws IOException {
-		return copy(is, nullOutputStream());
-	}
-	
 	/**
 	 * Copy the contents of the given input File to the given output File.
 	 * 
@@ -2103,6 +2091,35 @@ public class Streams {
 		return -1;
 	}
 
+	
+	/**
+	 * Drain an <code>InputStream</code>.
+	 * 
+	 * @param input the input stream to drain
+	 * @return the number of bytes read
+	 * @throws IOException in case of I/O errors
+	 */
+	public static long drain(InputStream input) throws IOException {
+		/*
+		 * N.B. no need to synchronize this because: - we don't care if the buffer is created
+		 * multiple times (the data is ignored) - we always use the same size buffer, so if it it is
+		 * recreated it will still be OK (if the buffer size were variable, we would need to synch.
+		 * to ensure some other thread did not create a smaller one)
+		 */
+		if (SKIP_BYTE_BUFFER == null) {
+			SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
+		}
+		long read = 0;
+		while (true) {
+			final long n = input.read(SKIP_BYTE_BUFFER, 0, SKIP_BUFFER_SIZE);
+			if (n < 0) { // EOF
+				break;
+			}
+			read += n;
+		}
+		return read;
+	}
+	
 	/**
 	 * Skip bytes from an input byte stream. This implementation guarantees that it will read as
 	 * many bytes as possible before giving up; this may not always be the case for subclasses of
