@@ -1,12 +1,10 @@
 package panda.net.http;
 
+import panda.lang.Strings;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-
-import panda.lang.Strings;
 
 
 /**
@@ -34,13 +32,6 @@ public class UserAgent {
 
 	public static final String MOBILE = "mobile";
 	public static final String ROBOT = "robot";
-
-	/**
-	 * @param request request
-	 */
-	public UserAgent(HttpServletRequest request) {
-		this(request.getHeader(HttpHeader.USER_AGENT));
-	}
 
 	/**
 	 * @param userAgent user agent
