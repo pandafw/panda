@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import panda.io.stream.ByteArrayOutputStream;
-
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -45,35 +43,29 @@ public class JavaImageWrapper extends AbstractImageWrapper {
 		this.image = image;
 	}
 
+	@Override
 	public int getWidth() {
 		return image.getWidth();
 	}
 	
+	@Override
 	public int getHeight() {
 		return image.getHeight();
 	}
 
-	public byte[] getData() {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			write(baos);
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return baos.toByteArray();
-	}
-	
+	@Override
 	public void write(OutputStream os) throws IOException {
 		JavaImages.write(image, format, os, quality);
 	}
 	
+	@Override
 	public ImageWrapper resize(int width, int height) {
 		BufferedImage bi = JavaGraphics.createScaledImageSlow(image, width, height);
 		ImageWrapper iw = new JavaImageWrapper(bi, format, quality);
 		return iw;
 	}
 	
+	@Override
 	public ImageWrapper resize(int scale) {
 		BufferedImage bi = JavaGraphics.createScaledImageSlow(image, scale);
 		ImageWrapper iw = new JavaImageWrapper(bi, format, quality);

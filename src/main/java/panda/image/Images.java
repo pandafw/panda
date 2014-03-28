@@ -1,5 +1,9 @@
 package panda.image;
 
+import panda.lang.Classes;
+import panda.lang.Exceptions;
+import panda.lang.Systems;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +16,25 @@ import java.io.InputStream;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Images {
-	private static Images i = new JavaImages();
+	private static Images i = initInstance();
+	
+	private static Images initInstance() {
+		String prefix = Images.class.getPackage().getName() + ".";
+		try {
+			if (Systems.IS_OS_ANDROID) {
+				return (Images)Classes.newInstance(prefix + "AndroidImages");
+			}
+			else if (Systems.IS_OS_APPENGINE) {
+				return (Images)Classes.newInstance("panda.gae.image.GaeImages");
+			}
+			else {
+				return (Images)Classes.newInstance(prefix + "JavaImages");
+			}
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
 	
 	/**
 	 * @return the instance
