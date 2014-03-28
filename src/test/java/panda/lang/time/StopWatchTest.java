@@ -8,8 +8,6 @@ import static org.junit.Assert.fail;
 import org.junit.Assert;
 import org.junit.Test;
 
-import panda.lang.time.StopWatch;
-
 /**
  * TestCase for StopWatch.
  *
@@ -41,7 +39,7 @@ public class StopWatchTest {
 	public void testStopWatchSimpleGet() {
 		final StopWatch watch = new StopWatch(false);
 		assertEquals(0, watch.getTime());
-		assertEquals("00:00:00.000", watch.toString());
+		assertEquals("0 ms", watch.toString());
 
 		watch.start();
 		try {
@@ -63,7 +61,6 @@ public class StopWatchTest {
 		}
 		watch.split();
 		final long splitTime = watch.getSplitTime();
-		final String splitStr = watch.toSplitString();
 		try {
 			Thread.sleep(550);
 		}
@@ -78,7 +75,6 @@ public class StopWatchTest {
 		watch.stop();
 		final long totalTime = watch.getTime();
 
-		assertEquals("Formatted split string not the correct length", splitStr.length(), 12);
 		assertTrue(splitTime >= 500);
 		assertTrue(splitTime < 700);
 		assertTrue(totalTime >= 1500);

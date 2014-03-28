@@ -131,7 +131,7 @@ public class TestSupport extends TestHelper {
 	 * @throws Exception if an error occurs
 	 */
 	public static Connection getMssqlConnection() throws Exception {
-		Connection connection = getConnection("mssql");
+		Connection connection = getConnection("mssql2005");
 		connection.setAutoCommit(true);
 		initMssqlTestData(connection);
 		return connection;

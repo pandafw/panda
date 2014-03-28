@@ -56,7 +56,7 @@ public abstract class CharSequenceTranslator {
 	 * @throws IOException if and only if the Writer produces an IOException
 	 */
 	public final void translate(final CharSequence input, final Appendable out) throws IOException {
-		translate(input, 0, input.length(), out);
+		translate(input, 0, input == null ? 0 : input.length(), out);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public abstract class CharSequenceTranslator {
 	 * @throws IOException if and only if the Writer produces an IOException
 	 */
 	public final void translate(final CharSequence input, final int start, final Appendable out) throws IOException {
-		translate(input, start, input.length(), out);
+		translate(input, start, input == null ? 0 : input.length(), out);
 	}
 	
 	/**

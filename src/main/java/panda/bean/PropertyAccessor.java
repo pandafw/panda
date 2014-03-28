@@ -1,45 +1,58 @@
 package panda.bean;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
 /**
  * 
  * @author yf.frank.wang@gmail.com
  *
  */
 public class PropertyAccessor {
-	private Object bean;
-
-	private BeanHandler beanHandler;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param bean bean object
-	 */
-	public PropertyAccessor(Object bean) {
-		this.bean = bean;
-		this.beanHandler = Beans.i().getBeanHandler(
-			bean == null ? null : bean.getClass());
-	}
+	protected Type type;
+	protected Method getter;
+	protected Method setter;
 
 	/**
-	 * get property value
-	 * 
-	 * @param propertyName property name
-	 * @return value
+	 * @return the type
 	 */
-	@SuppressWarnings("unchecked")
-	public Object get(String propertyName) {
-		return beanHandler.getBeanValue(bean, propertyName);
+	public Type getType() {
+		return type;
+	}
+	
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(Type type) {
+		this.type = type;
+	}
+	
+	/**
+	 * @return the getter
+	 */
+	public Method getGetter() {
+		return getter;
+	}
+	
+	/**
+	 * @param getter the getter to set
+	 */
+	public void setGetter(Method getter) {
+		this.getter = getter;
+	}
+	
+	/**
+	 * @return the setter
+	 */
+	public Method getSetter() {
+		return setter;
+	}
+	
+	/**
+	 * @param setter the setter to set
+	 */
+	public void setSetter(Method setter) {
+		this.setter = setter;
 	}
 
-	/**
-	 * set property value
-	 * 
-	 * @param propertyName property name
-	 * @param value value
-	 */
-	@SuppressWarnings("unchecked")
-	public void set(String propertyName, Object value) {
-		beanHandler.setBeanValue(bean, propertyName, value);
-	}
 }

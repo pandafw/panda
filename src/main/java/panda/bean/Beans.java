@@ -1,12 +1,5 @@
 package panda.bean;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import panda.bean.handlers.ArrayBeanHandler;
 import panda.bean.handlers.ImmutableBeanHandler;
 import panda.bean.handlers.IterableBeanHandler;
@@ -17,6 +10,14 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.lang.Types;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
@@ -328,5 +329,117 @@ public class Beans {
 	 */
 	protected BeanHandler createJavaBeanHandler(Type type) {
 		return new JavaBeanHandler(this, type);
+	}
+	
+	private static void setGetter(Map<String, PropertyAccessor> accessors, String name, Method getter) {
+		Type type = getter.getGenericReturnType();
+		if (type == null) {
+			type = getter.getReturnType();
+		}
+
+		PropertyAccessor pa = accessors.get(name);
+		if (pa == null) {
+			pa = new PropertyAccessor();
+			pa.getter = getter;
+			pa.type = type;
+			accessors.put(name, pa);
+		}
+		else if (pa.getter == null) {
+			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+				pa.getter = getter;
+			}
+		}
+	}
+	
+	private static void setSetter(Map<String, PropertyAccessor> accessors, String name, Method setter) {
+		Type type = setter.getGenericParameterTypes()[0];
+		if (type == null) {
+			type = setter.getParameterTypes()[0];
+		}
+		
+		PropertyAccessor pa = accessors.get(name);
+		if (pa == null) {
+			pa = new PropertyAccessor();
+			pa.setter = setter;
+			pa.type = type;
+			accessors.put(name, pa);
+		}
+		else if (pa.setter == null) {
+			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+				pa.setter = setter;
+			}
+		}
+	}
+	
+	/**
+	 * get property accessor map according to the specified class
+	 * @param clazz class
+	 * @return accessor map
+	 */
+	public static Map<String, PropertyAccessor> getPropertyAccessors(Class<?> clazz) {
+		Map<String, PropertyAccessor> accessors = new TreeMap<String, PropertyAccessor>();
+
+		Method[] methods = clazz.getMethods();
+
+		// is
+		for (Method m : methods) {
+			if (m.getName().startsWith("is")) {
+				if (boolean.class != m.getReturnType()) {
+					continue;
+				}
+
+				Type[] pts = m.getGenericParameterTypes();
+				if (pts != null && pts.length != 0) {
+					continue;
+				}
+
+				String n = m.getName().substring(2);
+				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+					continue;
+				}
+				
+				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+				setGetter(accessors, n, m);
+			}
+		}
+		
+		// getter
+		for (Method m : methods) {
+			if (m.getName().startsWith("get")) {
+				Type[] pts = m.getGenericParameterTypes();
+				if (pts != null && pts.length != 0) {
+					continue;
+				}
+
+				String n = m.getName().substring(3);
+				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+					continue;
+				}
+				
+				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+				setGetter(accessors, n, m);
+			}
+		}
+		
+		
+		// setter
+		for (Method m : methods) {
+			if (m.getName().startsWith("set")) {
+				Type[] pts = m.getGenericParameterTypes();
+				if (pts == null || pts.length != 1) {
+					continue;
+				}
+
+				String n = m.getName().substring(3);
+				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+					continue;
+				}
+				
+				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+				setSetter(accessors, n, m);
+			}
+		}
+		
+		return accessors;
 	}
 }

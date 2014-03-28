@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.List;
 
-import panda.bean.PropertyAccessor;
+import panda.bean.BeanAccessor;
 import panda.dao.DaoNamings;
 import panda.dao.DaoTypes;
 import panda.dao.sql.adapter.TypeAdapter;
@@ -26,7 +26,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 	protected List<JdbcSqlParameter> sqlParams;
 	
 	protected Object parameter;
-	protected PropertyAccessor bean;
+	protected BeanAccessor bean;
 
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 	public String parse(JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 		this.sqlParams = sqlParams;
 		this.parameter = parameter;
-		this.bean = new PropertyAccessor(this.parameter);
+		this.bean = new BeanAccessor(this.parameter);
 
 		reset();
 		

@@ -1,19 +1,14 @@
 package panda.bean.handlers;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import panda.bean.Beans;
+import panda.bean.PropertyAccessor;
+import panda.lang.Types;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import panda.bean.Beans;
-import panda.lang.Types;
 
 /**
  * 
@@ -23,18 +18,6 @@ import panda.lang.Types;
  */
 public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 
-	private static class PropertyAccessor {
-		Type type;
-		Method getter;
-		Method setter;
-		
-		PropertyAccessor(Type beanType, PropertyDescriptor pd) {
-			getter = pd.getReadMethod();
-			setter = pd.getWriteMethod();
-			type = Types.getPropertyType(pd);
-		}
-	}
-	
 	private Map<String, PropertyAccessor> accessors;
 	private String[] readPropertyNames;
 	private String[] writePropertyNames;
@@ -47,29 +30,8 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	public JavaBeanHandler(Beans beans, Type type) {
 		super(beans, type);
 
-		BeanInfo beanInfo;
-		try {
-			beanInfo = Introspector.getBeanInfo(Types.getRawType(type));
-		}
-		catch (IntrospectionException e) {
-			throw new RuntimeException(e);
-		}
-
-		accessors = new HashMap<String, PropertyAccessor>();
-		for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
-			accessors.put(pd.getName(), new PropertyAccessor(type, pd));
-			try {
-				if (Character.isUpperCase(pd.getName().charAt(0))) {
-					String pn = pd.getName().substring(0, 1).toLowerCase()
-							+ pd.getName().substring(1);
-					PropertyDescriptor pd2 = new PropertyDescriptor(pn, pd.getReadMethod(), pd.getWriteMethod());
-					accessors.put(pd.getName(), new PropertyAccessor(type, pd2));
-				}
-			}
-			catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
+		Class clazz = Types.getRawType(type);
+		accessors = Beans.getPropertyAccessors(clazz);
 		
 		List<String> readPropertyNames = new ArrayList<String>();
 		List<String> writePropertyNames = new ArrayList<String>();
@@ -77,11 +39,11 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
 			
-			if (pa.getter != null) {
+			if (pa.getGetter() != null) {
 				readPropertyNames.add(pn);
 			}
 			
-			if (pa.setter != null) {
+			if (pa.getSetter() != null) {
 				writePropertyNames.add(pn);
 			}
 		}
@@ -115,7 +77,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canReadProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && pa.getter != null);
+		return (pa != null && pa.getGetter() != null);
 	}
 
 	/**
@@ -126,7 +88,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canWriteProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && pa.setter != null);
+		return (pa != null && pa.getSetter() != null);
 	}
 	
 	/**
@@ -137,7 +99,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public Type getPropertyType(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return pa == null ? null : pa.type;
+		return pa == null ? null : pa.getType();
 	}
 
 	/**
@@ -148,12 +110,12 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public Object getPropertyValue(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		if (pa == null || pa.getter == null) {
+		if (pa == null || pa.getGetter() == null) {
 			return null;
 		}
 		
 		try {
-			return pa.getter.invoke(beanObject);
+			return pa.getGetter().invoke(beanObject);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -168,12 +130,12 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean setPropertyValue(T beanObject, String propertyName, Object value) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		if (pa == null || pa.setter == null) {
+		if (pa == null || pa.getSetter() == null) {
 			return false;
 		}
 
 		try {
-			pa.setter.invoke(beanObject, value);
+			pa.getSetter().invoke(beanObject, value);
 			return true;
 		}
 		catch (Exception e) {

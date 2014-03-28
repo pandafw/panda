@@ -154,7 +154,7 @@ public class CastorTest extends TestCase {
 			1, 2, -3, 0
 		};
 		
-		assertEquals(Strings.join(ii), Strings.join(Castors.scast(ss, int[].class)));
+		assertEquals(Strings.join(ii), Strings.join((int[])Castors.scast(ss, int[].class)));
 		assertTrue(Arrays.equals(ii, Castors.scast(ss, int[].class)));
 	}
 

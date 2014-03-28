@@ -1,15 +1,5 @@
 package panda.bean;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.util.Set;
-
 import panda.bean.handlers.AbstractFastBeanHandler;
 import panda.lang.Arrays;
 import panda.lang.Classes;
@@ -19,6 +9,14 @@ import panda.lang.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.servlet.HttpServletSupport;
+
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 /**
@@ -105,64 +103,44 @@ public class FastBeans extends Beans {
 		src.append("    super(factory, ").append(typeName).append(".class);\n");
 		src.append("  }\n");
 
-		BeanInfo beanInfo = Introspector.getBeanInfo(type);
-		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+		Set<Entry<String, PropertyAccessor>> accessors = Beans.getPropertyAccessors(type).entrySet();
 
 		boolean first = true;
 		src.append("  protected void init() {\n");
 		src.append("    rpns = new String[] {\n");
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
-			if (pd.getReadMethod() != null) {
-				src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			String pn = en.getKey();
+			PropertyAccessor pa = en.getValue();
+			if (pa.getGetter() != null) {
+				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
-			}
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				if (pd.getReadMethod() != null) {
-					src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
-				}
 			}
 		}
 		src.append("    };\n");
 
 		first = true;
 		src.append("    wpns = new String[] {\n");
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
-			if (pd.getWriteMethod() != null) {
-				src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			String pn = en.getKey();
+			PropertyAccessor pa = en.getValue();
+			if (pa.getSetter() != null) {
+				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
-			}
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				if (pd.getWriteMethod() != null) {
-					src.append("      ").append(first ? "" : ", ").append("\"").append(propName).append("\"\n");
-				}
 			}
 		}
 		src.append("    };\n");
 
 		int i = 0;
 		src.append("    PropertyInfo pi;\n");
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			String pn = en.getKey();
+			PropertyAccessor pa = en.getValue();
+
 			src.append("    pi = new PropertyInfo();\n");
 			src.append("    pi.index = ").append(++i).append(";\n");;
-			src.append("    pi.readable = ").append(pd.getReadMethod() != null).append(";\n");;
-			src.append("    pi.writable = ").append(pd.getWriteMethod() != null).append(";\n");;
-			src.append("    mm.put(\"").append(propName).append("\", pi);\n");
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("    pi = new PropertyInfo();\n");
-				src.append("    pi.index = ").append(++i).append(";\n");;
-				src.append("    pi.readable = ").append(pd.getReadMethod() != null).append(";\n");;
-				src.append("    pi.writable = ").append(pd.getWriteMethod() != null).append(";\n");;
-				src.append("    mm.put(\"").append(propName).append("\", pi);\n");
-			}
+			src.append("    pi.readable = ").append(pa.getGetter() != null).append(";\n");;
+			src.append("    pi.writable = ").append(pa.getSetter() != null).append(";\n");;
+			src.append("    mm.put(\"").append(pn).append("\", pi);\n");
 		}
 		src.append("  }\n");
 
@@ -174,20 +152,13 @@ public class FastBeans extends Beans {
 		src.append("    }\n");
 		src.append("    switch (pi.index) {\n");
 		i = 0;
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
-			String propType = genPropertyType(pd);
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			PropertyAccessor pa = en.getValue();
+			String pt = genPropertyType(pa);
 
 			src.append("    case ").append(++i)
 				.append(": return ")
-				.append(propType).append(";\n");
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("    case ").append(++i)
-					.append(": return ")
-					.append(propType).append(";\n");
-			}
+				.append(pt).append(";\n");
 		}
 		src.append("    default:\n");
 		src.append("      return null;\n");
@@ -204,11 +175,12 @@ public class FastBeans extends Beans {
 		src.append("    try {\n");
 		src.append("      switch (pi.index) {\n");
 		i = 0;
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			PropertyAccessor pa = en.getValue();
+
 			String getter = null;
-			if (pd.getReadMethod() != null) {
-				getter = pd.getReadMethod().getName();
+			if (pa.getGetter() != null) {
+				getter = pa.getGetter().getName();
 			}
 
 			src.append("      case ").append(++i).append(": ");
@@ -218,18 +190,6 @@ public class FastBeans extends Beans {
 			}
 			else {
 				src.append("return bo.").append(getter).append("();\n");
-			}
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("      case ").append(++i).append(": ");
-				if (getter == null) {
-					src.append("return null;\n");
-//					src.append("throw noGetterMethodException(pn);\n");
-				}
-				else {
-					src.append("return bo.").append(getter).append("();\n");
-				}
 			}
 		}
 		src.append("      default:");
@@ -248,14 +208,13 @@ public class FastBeans extends Beans {
 		src.append("    try {\n");
 		src.append("      switch (pi.index) {\n");
 		i = 0;
-		for (PropertyDescriptor pd : propertyDescriptors) {
-			String propName = pd.getName();
-			Type pt = Types.getPropertyType(pd);
-			String propType = Types.getCastableClassName(pt);
+		for (Entry<String, PropertyAccessor> en : accessors) {
+			PropertyAccessor pa = en.getValue();
+			String pt = Types.getCastableClassName(pa.getType());
+
 			String setter = null;
-			
-			if (pd.getWriteMethod() != null) {
-				setter = pd.getWriteMethod().getName();
+			if (pa.getSetter() != null) {
+				setter = pa.getSetter().getName();
 			}
 
 			src.append("      case ").append(++i).append(": ");
@@ -265,20 +224,7 @@ public class FastBeans extends Beans {
 			}
 			else {
 				src.append("bo.").append(setter).append("((")
-					.append(propType).append(")value); return true;\n");
-			}
-
-			if (Character.isUpperCase(propName.charAt(0))) {
-				propName = propName.substring(0, 1).toLowerCase() + propName.substring(1);
-				src.append("      case ").append(++i).append(": ");
-				if (setter == null) {
-					src.append("return false;\n");
-//					src.append("throw noSetterMethodException(pn);\n");
-				}
-				else {
-					src.append("bo.").append(setter).append("((")
-						.append(propType).append(")value); return true;\n");
-				}
+					.append(pt).append(")value); return true;\n");
 			}
 		}
 		src.append("      default:");
@@ -351,12 +297,9 @@ public class FastBeans extends Beans {
 		}
 	}
 
-	private String genPropertyType(PropertyDescriptor descriptor) {
-		Type type = Types.getPropertyType(descriptor);
-
-		StringBuilder propType = new StringBuilder();
-		addPropertyType(propType, type);
-		
-		return propType.toString();
+	private String genPropertyType(PropertyAccessor pa) {
+		StringBuilder pt = new StringBuilder();
+		addPropertyType(pt, pa.getType());
+		return pt.toString();
 	}
 }

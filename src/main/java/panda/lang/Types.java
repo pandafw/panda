@@ -1,12 +1,10 @@
 package panda.lang;
 
-import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -85,29 +83,6 @@ public abstract class Types {
 		else {
 			return type.toString();
 		}
-	}
-
-	/**
-	 * get declared field type
-	 * @param descriptor property descriptor
-	 * @return property type
-	 */
-	public static Type getPropertyType(PropertyDescriptor descriptor) {
-		// Try to get ParameterType from setter method
-		Method setter = descriptor.getWriteMethod();
-		if (setter != null) {
-			Type[] types = setter.getGenericParameterTypes();
-			if (Arrays.isNotEmpty(types)) {
-				return types[0];
-			}
-		}
-
-		Method getter = descriptor.getReadMethod();
-		if (getter != null) {
-			return getter.getGenericReturnType();
-		}
-		
-		return descriptor.getPropertyType();
 	}
 
 	/**
