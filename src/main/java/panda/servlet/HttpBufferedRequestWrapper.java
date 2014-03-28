@@ -29,7 +29,7 @@ public class HttpBufferedRequestWrapper extends HttpServletRequestWrapper {
 			return body.toInputStream();
 		}
 
-		if (HttpServletUtils.isFormUrlEncoded(this)) {
+		if (HttpServlets.isFormUrlEncoded(this)) {
 			String ps = URLHelper.buildQueryString(getParameterMap());
 			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
 			return Streams.toInputStream(ps, cs);

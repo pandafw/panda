@@ -37,7 +37,7 @@ import panda.net.http.UserAgent;
  * utility class for http servlet
  * @author yf.frank.wang@gmail.com
  */
-public class HttpServletUtils {
+public class HttpServlets {
 
 	/**
 	 * Standard Servlet 2.3+ spec request attributes for include URI and paths.
@@ -192,7 +192,7 @@ public class HttpServletUtils {
 			sb.append(msg).append(Streams.LINE_SEPARATOR);
 		}
 		if (request != null) {
-			HttpServletUtils.dumpRequestTrace(request, sb);
+			HttpServlets.dumpRequestTrace(request, sb);
 			sb.append(Streams.LINE_SEPARATOR);
 		}
 		sb.append(Exceptions.getStackTrace(e));
@@ -450,6 +450,13 @@ public class HttpServletUtils {
 	}
 
 	/**
+	 * @return userAgent
+	 */
+	public static UserAgent getUserAgent(HttpServletRequest request) {
+		return new UserAgent(request.getHeader(HttpHeader.USER_AGENT));
+	}
+
+	/**
 	 * getCookie will return the cookie object that has the name in the Cookies
 	 * of the request
 	 * 
@@ -515,7 +522,7 @@ public class HttpServletUtils {
 			return URLEncoder.encode(filename, enc);
 		}
 		
-		UserAgent ua = new UserAgent(request);
+		UserAgent ua = getUserAgent(request);
 		if (ua.isChrome() || ua.isFirefox()) {
 			return MimeUtility.encodeWord(filename, enc, "B");
 		}

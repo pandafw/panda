@@ -185,7 +185,7 @@ public class ServletURLHelper extends URLHelper {
 			// Go to "same page"
 			// (Applicable to Servlet 2.4 containers)
 			// If the request was forwarded, the attribute below will be set with the original URL
-			uri = HttpServletUtils.getRequestURI(request);
+			uri = HttpServlets.getRequestURI(request);
 		}
 
 		return buildURL(scheme, host, port, uri, query, params, escapeAmp, encoding);

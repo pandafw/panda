@@ -26,7 +26,7 @@ import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpBufferedRequestWrapper;
 import panda.servlet.HttpBufferedResponseWrapper;
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 import panda.servlet.ServletRequestHeaderMap;
 
 
@@ -162,7 +162,7 @@ public class RequestDumpFilter implements Filter {
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append(req.getMethod()).append(' ');
-			sb.append(HttpServletUtils.getRequestLink(req)).append(' ');
+			sb.append(HttpServlets.getRequestLink(req)).append(' ');
 			sb.append(req.getProtocol()).append('\n');
 			
 			HttpHeader hh = new HttpHeader();

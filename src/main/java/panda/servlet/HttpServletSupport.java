@@ -265,12 +265,12 @@ public class HttpServletSupport {
 		
 		boolean noFileCache = true;
 		if (Strings.isNotEmpty(fileName)) {
-			String fn = HttpServletUtils.EncodeFileName(request, fileName);
+			String fn = HttpServlets.EncodeFileName(request, fileName);
 			response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
 					(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; filename=\"" + fn + "\"");
 			
 			if (request != null) {
-				UserAgent b = new UserAgent(request);
+				UserAgent b = HttpServlets.getUserAgent(request);
 				noFileCache = !b.isMsie();
 			}
 		}

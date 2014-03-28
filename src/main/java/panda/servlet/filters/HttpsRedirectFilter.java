@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
 
 
@@ -38,7 +38,7 @@ public class HttpsRedirectFilter implements Filter {
 			String url = ServletURLHelper.buildURL(request, "https", 0, request.getParameterMap(), true, false);
 			
 			HttpServletResponse response = (HttpServletResponse)res;
-			HttpServletUtils.sendRedirect(response, url);
+			HttpServlets.sendRedirect(response, url);
 		}
 		else {
 			chain.doFilter(req, res);

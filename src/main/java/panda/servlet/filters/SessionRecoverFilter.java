@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import panda.log.Log;
 import panda.log.Logs;
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
 
 
@@ -99,7 +99,7 @@ public class SessionRecoverFilter implements Filter {
 				if (log.isDebugEnabled()) {
 					log.debug("[" + JSESSIONID + "=" + c.getValue() + "] redirect: " + url);
 				}
-				HttpServletUtils.sendRedirect(response, url);
+				HttpServlets.sendRedirect(response, url);
 
 				return;
 			}

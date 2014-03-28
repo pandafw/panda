@@ -28,7 +28,7 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 
 
 /**
@@ -113,7 +113,7 @@ public class MockServletContext implements ServletContext {
 		// Use JVM temp dir as ServletContext temp dir.
 		String tempDir = System.getProperty(TEMP_DIR_SYSTEM_PROPERTY);
 		if (tempDir != null) {
-			this.attributes.put(HttpServletUtils.TEMP_DIR_CONTEXT_ATTRIBUTE, new File(tempDir));
+			this.attributes.put(HttpServlets.TEMP_DIR_CONTEXT_ATTRIBUTE, new File(tempDir));
 		}
 	}
 

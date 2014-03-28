@@ -17,7 +17,7 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 
 
 /**
@@ -141,7 +141,7 @@ public class RequestLoggingFilter implements Filter {
 			chain.doFilter(request, response);
 		}
 		catch (Throwable e) {
-			HttpServletUtils.logException(request, e);
+			HttpServlets.logException(request, e);
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 		finally {
@@ -152,13 +152,13 @@ public class RequestLoggingFilter implements Filter {
 	private void logRequest(HttpServletRequest request) {
 		try {
 			if (log.isTraceEnabled()) {
-				log.trace(HttpServletUtils.dumpRequestTrace(request));
+				log.trace(HttpServlets.dumpRequestTrace(request));
 			}
 			else if (log.isDebugEnabled()) {
-				log.debug(HttpServletUtils.dumpRequestDebug(request));
+				log.debug(HttpServlets.dumpRequestDebug(request));
 			}
 			else if (log.isInfoEnabled()) {
-				log.info(HttpServletUtils.dumpRequestInfo(request));
+				log.info(HttpServlets.dumpRequestInfo(request));
 			}
 		}
 		catch (Throwable e) {

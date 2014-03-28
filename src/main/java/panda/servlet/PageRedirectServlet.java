@@ -72,7 +72,7 @@ public class PageRedirectServlet extends HttpServlet {
 		
 		String url = this.getRedirectURL(page);
 		
-		HttpServletUtils.sendRedirect(response, url);
+		HttpServlets.sendRedirect(response, url);
 	}
 
 	/**

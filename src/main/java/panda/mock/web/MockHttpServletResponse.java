@@ -21,7 +21,7 @@ import panda.lang.Chars;
 import panda.lang.Strings;
 import panda.net.http.HttpHeader;
 import panda.servlet.DelegatingServletOutputStream;
-import panda.servlet.HttpServletUtils;
+import panda.servlet.HttpServlets;
 
 /**
  * Mock implementation of the {@link javax.servlet.http.HttpServletResponse} interface.
@@ -39,7 +39,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 	private boolean writerAccessAllowed = true;
 
-	private String characterEncoding = HttpServletUtils.DEFAULT_CHARACTER_ENCODING;
+	private String characterEncoding = HttpServlets.DEFAULT_CHARACTER_ENCODING;
 	
 	private boolean charset = false;
 
@@ -118,8 +118,8 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	private void updateContentTypeHeader() {
 		if (this.contentType != null) {
 			StringBuilder sb = new StringBuilder(this.contentType);
-			if (this.contentType.toLowerCase().indexOf(HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX) == -1 && this.charset) {
-				sb.append(";").append(HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX).append(this.characterEncoding);
+			if (this.contentType.toLowerCase().indexOf(HttpServlets.CONTENT_TYPE_CHARSET_PREFIX) == -1 && this.charset) {
+				sb.append(";").append(HttpServlets.CONTENT_TYPE_CHARSET_PREFIX).append(this.characterEncoding);
 			}
 			headers.set(HttpHeader.CONTENT_TYPE, sb.toString());
 		}
@@ -187,9 +187,9 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 		if (contentType != null) {
-			int charsetIndex = contentType.toLowerCase().indexOf(HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX);
+			int charsetIndex = contentType.toLowerCase().indexOf(HttpServlets.CONTENT_TYPE_CHARSET_PREFIX);
 			if (charsetIndex != -1) {
-				String encoding = contentType.substring(charsetIndex + HttpServletUtils.CONTENT_TYPE_CHARSET_PREFIX.length());
+				String encoding = contentType.substring(charsetIndex + HttpServlets.CONTENT_TYPE_CHARSET_PREFIX.length());
 				this.characterEncoding = encoding;
 				this.charset = true;
 			}
