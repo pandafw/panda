@@ -199,6 +199,8 @@ public class ArraysTest {
 			Arrays.toMap(new String[][] { { "foo", "bar" }, { "short" } });
 			fail("exception expected");
 		}
+		catch (final ArrayIndexOutOfBoundsException ex) {
+		}
 		catch (final IllegalArgumentException ex) {
 		}
 		try {

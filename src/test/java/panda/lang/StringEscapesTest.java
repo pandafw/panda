@@ -190,7 +190,7 @@ public class StringEscapesTest {
 			{ "quotes", "&quot;bread&quot; &amp; butter", "\"bread\" & butter" },
 			{ "final character only", "greater than &gt;", "greater than >" },
 			{ "first character only", "&lt; less than", "< less than" },
-			{ "apostrophe", "Huntington's chorea", "Huntington's chorea" },
+			{ "apostrophe", "Huntington&apos;s chorea", "Huntington's chorea" },
 			{ "languages", "English,Fran&ccedil;ais,\u65E5\u672C\u8A9E (nihongo)",
 					"English,Fran\u00E7ais,\u65E5\u672C\u8A9E (nihongo)" },
 			{ "8-bit ascii shouldn't number-escape", "\u0080\u009F", "\u0080\u009F" }, };

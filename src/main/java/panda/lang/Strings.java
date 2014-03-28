@@ -3484,6 +3484,9 @@ public class Strings {
 	 * @return the joined String, {@code null} if null array input
 	 */
 	public static <T> String join(final T... elements) {
+		if (elements != null && elements.length == 1 && elements instanceof Object[]) {
+			return join((Object[])elements, null);
+		}
 		return join(elements, null);
 	}
 
