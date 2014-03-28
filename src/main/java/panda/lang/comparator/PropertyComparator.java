@@ -60,8 +60,11 @@ public class PropertyComparator<T> implements Comparator<T> {
 			return 1;
 		}
 		
-		if (v1 instanceof Comparable && v1.getClass().equals(v2.getClass())) {
+		if (v1 instanceof Comparable) {
 			return ((Comparable)v1).compareTo(v2);
+		}
+		else if (v2 instanceof Comparable) {
+			return -((Comparable)v2).compareTo(v1);
 		}
 		else {
 			return v1.toString().compareTo(v2.toString());
