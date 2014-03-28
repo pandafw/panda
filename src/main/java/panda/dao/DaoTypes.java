@@ -1,6 +1,5 @@
-package panda.dao.sql;
+package panda.dao;
 
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.util.Map;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class JdbcTypes {
+public abstract class DaoTypes {
 	// ---------------------------------------------------
 	// boolean
 	public static final String BIT           = "BIT";
@@ -135,18 +134,4 @@ public abstract class JdbcTypes {
 		setType(VARBINARY, Types.VARBINARY);
 		setType(VARCHAR, Types.VARCHAR);
 	}
-
-	public static boolean likeIntType(int type) throws SQLException {
-		switch (type) {
-		case Types.BIGINT:
-		case Types.INTEGER:
-		case Types.SMALLINT:
-		case Types.TINYINT:
-		case Types.NUMERIC:
-			return true;
-		default:
-			return false;
-		}
-	}
-
 }

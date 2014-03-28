@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import panda.dao.DaoTypes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -47,7 +48,7 @@ public abstract class SqlLogger {
 				int cnt = meta.getColumnCount();
 				for (int i = 1; i <= cnt; i++) {
 					sb.append(meta.getColumnLabel(i));
-					sb.append('(').append(JdbcTypes.getType(meta.getColumnType(i))).append(')');
+					sb.append('(').append(DaoTypes.getType(meta.getColumnType(i))).append(')');
 					if (i < cnt) {
 						sb.append(", ");
 					}
@@ -77,7 +78,7 @@ public abstract class SqlLogger {
 					int type = meta.getColumnType(i);
 					if (type == Types.BLOB || type == Types.CLOB) {
 						sb.append('<');
-						sb.append(JdbcTypes.getType(type));
+						sb.append(DaoTypes.getType(type));
 						sb.append('>');
 					}
 					else {

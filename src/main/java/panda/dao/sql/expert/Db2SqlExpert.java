@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
-import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
@@ -54,27 +54,27 @@ public class Db2SqlExpert extends SqlExpert {
 
 	@Override
 	protected String evalFieldType(EntityField ef) {
-		if (Strings.isNotEmpty(ef.getDbType())) {
+		if (Strings.isNotEmpty(ef.getNativeType())) {
 			return super.evalFieldType(ef);
 		}
 		
-		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.BIT:
 		case Types.BOOLEAN:
 			return "CHAR(1)";
 		case Types.TINYINT:
-			return JdbcTypes.SMALLINT;
+			return DaoTypes.SMALLINT;
 		case Types.FLOAT:
 			return "DECFLOAT";
 		case Types.BINARY:
 		case Types.VARBINARY:
 		case Types.LONGVARBINARY:
 		case Types.BLOB:
-			return JdbcTypes.BLOB;
+			return DaoTypes.BLOB;
 		case Types.CLOB:
 		case Types.LONGVARCHAR:
-			return JdbcTypes.CLOB;
+			return DaoTypes.CLOB;
 		default:
 			break;
 		}

@@ -1,6 +1,6 @@
 package panda.dao.sql.executor;
 
-import panda.dao.sql.JdbcTypes;
+import panda.dao.DaoTypes;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Objects;
@@ -91,7 +91,7 @@ public class JdbcSqlParameter {
 
 		this.jdbcType = jdbcType;
 		if (jdbcType != null) {
-			this.sqlType = JdbcTypes.getType(jdbcType);
+			this.sqlType = DaoTypes.getType(jdbcType);
 			if (this.sqlType == null) {
 				throw new IllegalArgumentException("Illegal parameter '" + name + "': unknown JDBC type [" + jdbcType + "].");
 			}

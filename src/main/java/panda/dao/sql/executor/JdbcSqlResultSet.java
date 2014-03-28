@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.bean.BeanHandler;
-import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlNamings;
+import panda.dao.DaoNamings;
+import panda.dao.DaoTypes;
 import panda.dao.sql.SqlResultSet;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.adapter.TypeAdapter;
@@ -103,13 +103,13 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 			rc.columnIndex = i;
 			rc.columnLabel = meta.getColumnLabel(i);
 			rc.columnType = meta.getColumnType(i);
-			rc.jdbcType = JdbcTypes.getType(rc.columnType);
+			rc.jdbcType = DaoTypes.getType(rc.columnType);
 			if (keyProp == null) {
-				rc.propertyName = SqlNamings.columnLabel2JavaName(rc.columnLabel);
+				rc.propertyName = DaoNamings.columnLabel2JavaName(rc.columnLabel);
 			}
 			else {
 				if (cnt > 1) {
-					rc.propertyName = SqlNamings.columnLabel2JavaName(rc.columnLabel);
+					rc.propertyName = DaoNamings.columnLabel2JavaName(rc.columnLabel);
 					if (!keyProp.equals(rc.propertyName)) {
 						continue;
 					}

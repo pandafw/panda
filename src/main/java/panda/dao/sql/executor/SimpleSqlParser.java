@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 import panda.bean.BeanHandler;
-import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlNamings;
+import panda.dao.DaoNamings;
+import panda.dao.DaoTypes;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Strings;
@@ -44,7 +44,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 		 * @param alias alias
 		 */
 		public AsAliasSegment(String alias) {
-			this.alias = SqlNamings.javaName2ColumnLabel(alias);
+			this.alias = DaoNamings.javaName2ColumnLabel(alias);
 		}
 
 		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
@@ -108,7 +108,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 				}
 
 				// is this type check required?
-				Integer sqlType = JdbcTypes.getType(type);
+				Integer sqlType = DaoTypes.getType(type);
 				if (sqlType == null) {
 					throw new IllegalArgumentException("Illegal parameter '" + name + "': unknown JDBC type [" + type + "].");
 				}

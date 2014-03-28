@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import panda.bean.PropertyAccessor;
-import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlNamings;
+import panda.dao.DaoNamings;
+import panda.dao.DaoTypes;
 import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 
@@ -230,7 +230,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 				}
 			}
 			if (last.equalsIgnoreCase("AS")) {
-				str = SqlNamings.javaName2ColumnLabel(str);
+				str = DaoNamings.javaName2ColumnLabel(str);
 			}
 			else if (last.equalsIgnoreCase("WHERE")) {
 				if (str.equalsIgnoreCase("AND") || str.equalsIgnoreCase("OR")) {
@@ -284,7 +284,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 				type = type.substring(0, i);
 			}
 			
-			Integer sqlType = JdbcTypes.getType(type);
+			Integer sqlType = DaoTypes.getType(type);
 			if (sqlType == null) {
 				error("': unknown JDBC type [" + type + "].");
 			}

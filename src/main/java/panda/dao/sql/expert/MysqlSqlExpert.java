@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
-import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
@@ -58,7 +58,7 @@ public class MysqlSqlExpert extends SqlExpert {
 			if (ef.isNotNull()) {
 				sb.append(" NOT NULL");
 			}
-			else if (JdbcTypes.TIMESTAMP.equals(ef.getJdbcType())) {
+			else if (DaoTypes.TIMESTAMP.equals(ef.getJdbcType())) {
 				sb.append(" NULL");
 			}
 			
@@ -66,7 +66,7 @@ public class MysqlSqlExpert extends SqlExpert {
 				sb.append(" AUTO_INCREMENT");
 			}
 			else {
-				if (JdbcTypes.TIMESTAMP.equals(ef.getJdbcType())) {
+				if (DaoTypes.TIMESTAMP.equals(ef.getJdbcType())) {
 					if (ef.hasDefaultValue()) {
 						sb.append(' ').append(ef.getDefaultValue());
 					}
@@ -128,7 +128,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
-		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.TIMESTAMP:
 			return "DATETIME";

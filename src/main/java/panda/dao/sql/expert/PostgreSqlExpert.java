@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
-import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
@@ -37,7 +37,7 @@ public class PostgreSqlExpert extends SqlExpert {
 			sb.append('\n').append(ef.getColumn());
 
 			if (ef.isAutoIncrement()) {
-				if (JdbcTypes.BIGINT.equals(ef.getJdbcType())) {
+				if (DaoTypes.BIGINT.equals(ef.getJdbcType())) {
 					sb.append(" BIGSERIAL");
 				}
 				else {
@@ -83,11 +83,11 @@ public class PostgreSqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
-		if (Strings.isNotEmpty(ef.getDbType())) {
+		if (Strings.isNotEmpty(ef.getNativeType())) {
 			return super.evalFieldType(ef);
 		}
 		
-		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.BLOB:
 		case Types.BINARY:
@@ -102,7 +102,7 @@ public class PostgreSqlExpert extends SqlExpert {
 		case Types.FLOAT:
 			return "REAL";
 		case Types.TINYINT:
-			return JdbcTypes.SMALLINT;
+			return DaoTypes.SMALLINT;
 		default:
 			return super.evalFieldType(ef);
 		}

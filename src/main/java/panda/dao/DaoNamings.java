@@ -1,4 +1,4 @@
-package panda.dao.sql;
+package panda.dao;
 
 import panda.lang.Strings;
 import panda.lang.Texts;
@@ -7,7 +7,7 @@ import panda.lang.Texts;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class SqlNamings {
+public class DaoNamings {
 	private static boolean isAllUpperCase(final CharSequence cs) {
 		if (Strings.isEmpty(cs)) {
 			return false;

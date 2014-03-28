@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
-import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
@@ -74,19 +74,19 @@ public class H2SqlExpert extends SqlExpert {
 	 */
 	@Override
 	protected String evalFieldType(EntityField ef) {
-		if (Strings.isNotEmpty(ef.getDbType())) {
+		if (Strings.isNotEmpty(ef.getNativeType())) {
 			return super.evalFieldType(ef);
 		}
 		
-		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.BIT:
-			return JdbcTypes.BOOLEAN;
+			return DaoTypes.BOOLEAN;
 		case Types.LONGVARCHAR:
-			return evalFieldType(JdbcTypes.VARCHAR, ef.getSize(), ef.getScale());
+			return evalFieldType(DaoTypes.VARCHAR, ef.getSize(), ef.getScale());
 		case Types.VARBINARY:
 		case Types.LONGVARBINARY:
-			return evalFieldType(JdbcTypes.BINARY, ef.getSize(), ef.getScale());
+			return evalFieldType(DaoTypes.BINARY, ef.getSize(), ef.getScale());
 		default:
 			return super.evalFieldType(ef);
 		}

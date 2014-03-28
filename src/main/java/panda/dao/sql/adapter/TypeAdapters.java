@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.castor.Castors;
-import panda.dao.sql.JdbcTypes;
+import panda.dao.DaoTypes;
 import panda.lang.collection.MultiKey;
 
 /**
@@ -65,23 +65,23 @@ public class TypeAdapters {
 		// boolean
 		//
 		register(Boolean.TYPE, new BooleanTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.TYPE, JdbcTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.TYPE, JdbcTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.TYPE, JdbcTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.TYPE));
-		register(Boolean.TYPE, JdbcTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, DaoTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, DaoTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, DaoTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, DaoTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.TYPE));
 
 		adapter = new BooleanTypeAdapter<Boolean>(this, Boolean.class);
 		register(Boolean.class, adapter);
-		register(JdbcTypes.BOOLEAN, adapter);
-		register(Boolean.class, JdbcTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.class));
-		register(Boolean.class, JdbcTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.class));
-		register(Boolean.class, JdbcTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.class));
-		register(Boolean.class, JdbcTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.class));
+		register(DaoTypes.BOOLEAN, adapter);
+		register(Boolean.class, DaoTypes.TINYINT, new ByteTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, DaoTypes.SMALLINT, new ShortTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, DaoTypes.INTEGER, new IntegerTypeAdapter<Boolean>(this, Boolean.class));
+		register(Boolean.class, DaoTypes.BIGINT, new LongTypeAdapter<Boolean>(this, Boolean.class));
 
-		register(Boolean.TYPE, JdbcTypes.CHAR, new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.TYPE));
+		register(Boolean.TYPE, DaoTypes.CHAR, new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.TYPE));
 		adapter = new BoolCharTypeAdapter.ZeroOneBoolCharTypeAdapter<Boolean>(this, Boolean.class);
-		register(Boolean.class, JdbcTypes.CHAR, adapter);
-		register(JdbcTypes.CHAR, adapter);
+		register(Boolean.class, DaoTypes.CHAR, adapter);
+		register(DaoTypes.CHAR, adapter);
 
 		//----------------------------------------------------
 		// integer
@@ -98,10 +98,10 @@ public class TypeAdapters {
 		register(Long.TYPE, new LongTypeAdapter<Long>(this, Long.TYPE));
 		adapter = new LongTypeAdapter<Long>(this, Long.class);
 		register(Long.class, adapter);
-		register(JdbcTypes.TINYINT, adapter);
-		register(JdbcTypes.SMALLINT, adapter);
-		register(JdbcTypes.INTEGER, adapter);
-		register(JdbcTypes.BIGINT, adapter);
+		register(DaoTypes.TINYINT, adapter);
+		register(DaoTypes.SMALLINT, adapter);
+		register(DaoTypes.INTEGER, adapter);
+		register(DaoTypes.BIGINT, adapter);
 
 		//----------------------------------------------------
 		// float
@@ -112,14 +112,14 @@ public class TypeAdapters {
 		register(Double.TYPE, new DoubleTypeAdapter<Double>(this, Double.TYPE));
 		adapter = new DoubleTypeAdapter<Double>(this, Double.class);
 		register(Double.class, adapter);
-		register(JdbcTypes.FLOAT, adapter);
-		register(JdbcTypes.DOUBLE, adapter);
-		register(JdbcTypes.REAL, adapter);
+		register(DaoTypes.FLOAT, adapter);
+		register(DaoTypes.DOUBLE, adapter);
+		register(DaoTypes.REAL, adapter);
 
 		adapter = new BigDecimalAdapter<BigDecimal>(this, BigDecimal.class);
 		register(BigDecimal.class, adapter);
-		register(JdbcTypes.DECIMAL, adapter);
-		register(JdbcTypes.NUMERIC, adapter);
+		register(DaoTypes.DECIMAL, adapter);
+		register(DaoTypes.NUMERIC, adapter);
 
 		//----------------------------------------------------
 		// string
@@ -129,15 +129,15 @@ public class TypeAdapters {
 
 		adapter = new StringTypeAdapter<String>(this, String.class);
 		register(String.class, adapter);
-		register(JdbcTypes.CHAR, adapter);
-		register(JdbcTypes.VARCHAR, adapter);
+		register(DaoTypes.CHAR, adapter);
+		register(DaoTypes.VARCHAR, adapter);
 
 		register(StringBuilder.class, new StringTypeAdapter<StringBuilder>(this, StringBuilder.class));
 		register(StringBuffer.class, new StringTypeAdapter<StringBuffer>(this, StringBuffer.class));
 
 		adapter = new ClobTypeAdapter<String>(this, String.class);
-		register(JdbcTypes.CLOB, adapter);
-		register(JdbcTypes.LONGVARCHAR, adapter);
+		register(DaoTypes.CLOB, adapter);
+		register(DaoTypes.LONGVARCHAR, adapter);
 
 		
 		//----------------------------------------------------
@@ -146,57 +146,57 @@ public class TypeAdapters {
 		register(byte[].class, new ByteArrayTypeAdapter<byte[]>(this, byte[].class));
 
 		adapter = new BlobTypeAdapter<byte[]>(this, byte[].class);
-		register(byte[].class, JdbcTypes.BLOB, adapter);
-		register(byte[].class, JdbcTypes.LONGVARBINARY, adapter);
+		register(byte[].class, DaoTypes.BLOB, adapter);
+		register(byte[].class, DaoTypes.LONGVARBINARY, adapter);
 
 		//----------------------------------------------------
 		// date time
 		//
 		adapter = new LongTypeAdapter<Date>(this, Date.class);
-		register(Date.class, JdbcTypes.INTEGER, adapter);
-		register(Date.class, JdbcTypes.BIGINT, adapter);
-		register(Date.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Date>(this, Date.class));
-		register(Date.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Date>(this, Date.class));
+		register(Date.class, DaoTypes.INTEGER, adapter);
+		register(Date.class, DaoTypes.BIGINT, adapter);
+		register(Date.class, DaoTypes.DATE, new SqlDateTypeAdapter<Date>(this, Date.class));
+		register(Date.class, DaoTypes.TIME, new SqlTimeTypeAdapter<Date>(this, Date.class));
 		adapter = new SqlTimestampTypeAdapter<Date>(this, Date.class);
-		register(Date.class, JdbcTypes.TIMESTAMP, adapter);
+		register(Date.class, DaoTypes.TIMESTAMP, adapter);
 		register(Date.class, adapter);
 
 		adapter = new LongTypeAdapter<Calendar>(this, Calendar.class);
-		register(Calendar.class, JdbcTypes.INTEGER, adapter);
-		register(Calendar.class, JdbcTypes.BIGINT, adapter);
-		register(Calendar.class, JdbcTypes.DATE, new SqlDateTypeAdapter<Calendar>(this, Calendar.class));
-		register(Calendar.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<Calendar>(this, Calendar.class));
+		register(Calendar.class, DaoTypes.INTEGER, adapter);
+		register(Calendar.class, DaoTypes.BIGINT, adapter);
+		register(Calendar.class, DaoTypes.DATE, new SqlDateTypeAdapter<Calendar>(this, Calendar.class));
+		register(Calendar.class, DaoTypes.TIME, new SqlTimeTypeAdapter<Calendar>(this, Calendar.class));
 		adapter = new SqlTimestampTypeAdapter<Calendar>(this, Calendar.class);
-		register(Calendar.class, JdbcTypes.TIMESTAMP, adapter);
+		register(Calendar.class, DaoTypes.TIMESTAMP, adapter);
 		register(Calendar.class, adapter);
 
 		adapter = new LongTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class);
-		register(GregorianCalendar.class, JdbcTypes.INTEGER, adapter);
-		register(GregorianCalendar.class, JdbcTypes.BIGINT, adapter);
-		register(GregorianCalendar.class, JdbcTypes.DATE, new SqlDateTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
-		register(GregorianCalendar.class, JdbcTypes.TIME, new SqlTimeTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
+		register(GregorianCalendar.class, DaoTypes.INTEGER, adapter);
+		register(GregorianCalendar.class, DaoTypes.BIGINT, adapter);
+		register(GregorianCalendar.class, DaoTypes.DATE, new SqlDateTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
+		register(GregorianCalendar.class, DaoTypes.TIME, new SqlTimeTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class));
 		adapter = new SqlTimestampTypeAdapter<GregorianCalendar>(this, GregorianCalendar.class);
-		register(GregorianCalendar.class, JdbcTypes.TIMESTAMP, adapter);
+		register(GregorianCalendar.class, DaoTypes.TIMESTAMP, adapter);
 		register(GregorianCalendar.class, adapter);
 
 		adapter = new SqlDateTypeAdapter<java.sql.Date>(this, java.sql.Date.class);
 		register(java.sql.Date.class, adapter);
-		register(JdbcTypes.DATE, adapter);
+		register(DaoTypes.DATE, adapter);
 
 		adapter = new SqlTimeTypeAdapter<java.sql.Time>(this, java.sql.Time.class);
 		register(java.sql.Time.class, adapter);
-		register(JdbcTypes.TIME, adapter);
+		register(DaoTypes.TIME, adapter);
 		
 		adapter = new SqlTimestampTypeAdapter<java.sql.Timestamp>(this, java.sql.Timestamp.class);
 		register(java.sql.Timestamp.class, adapter);
-		register(JdbcTypes.TIMESTAMP, adapter);
+		register(DaoTypes.TIMESTAMP, adapter);
 
 		//----------------------------------------------------
 		// binary
 		//
 		adapter = new ObjectTypeAdapter<Object>(this, Object.class);
 		register(Object.class, adapter);
-		register(Object.class, JdbcTypes.JAVAOBJECT, adapter);
+		register(Object.class, DaoTypes.JAVAOBJECT, adapter);
 
 		//----------------------------------------------------
 		// json collection
@@ -262,7 +262,7 @@ public class TypeAdapters {
 			adapter = new EnumTypeAdapter(javaType);
 		}
 		else if (jdbcType != null) {
-			Integer sqlType = JdbcTypes.getType(jdbcType);
+			Integer sqlType = DaoTypes.getType(jdbcType);
 			if (sqlType == null) {
 				if ("LIST".equalsIgnoreCase(jdbcType) && List.class.isAssignableFrom(javaType)) {
 					adapter = new CollectionTypeAdapter(javaType);

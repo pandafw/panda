@@ -34,7 +34,7 @@ public @interface Column {
 
 	/**
 	 * jdbc type
-	 * @see panda.dao.sql.JdbcTypes
+	 * @see panda.dao.DaoTypes
 	 */
 	String type() default "";
 
@@ -47,9 +47,9 @@ public @interface Column {
 	boolean unsigned() default false;
 
 	/**
-	 * real database column type
+	 * native database column type
 	 */
-	String dbType() default "";
+	String nativeType() default "";
 	
 	/**
 	 * database default value

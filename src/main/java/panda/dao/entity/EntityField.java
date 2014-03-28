@@ -17,7 +17,7 @@ public class EntityField {
 	private String column;
 	private String comment;
 	private String jdbcType;
-	private String dbType;
+	private String nativeType;
 	private int size;
 	private int scale;
 	private boolean identity;
@@ -121,17 +121,17 @@ public class EntityField {
 	}
 
 	/**
-	 * @return the dbType
+	 * @return the nativeType
 	 */
-	public String getDbType() {
-		return dbType;
+	public String getNativeType() {
+		return nativeType;
 	}
 
 	/**
-	 * @param dbType the dbType to set
+	 * @param nativeType the nativeType to set
 	 */
-	public void setDbType(String dbType) {
-		this.dbType = dbType;
+	public void setNativeType(String nativeType) {
+		this.nativeType = nativeType;
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class EntityField {
 				.append("column", column)
 				.append("comment", comment)
 				.append("jdbcType", jdbcType)
-				.append("dbType", dbType)
+				.append("nativeType", nativeType)
 				.append("size", size)
 				.append("scale", scale)
 				.append("identity", identity)

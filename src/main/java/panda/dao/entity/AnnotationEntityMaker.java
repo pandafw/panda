@@ -15,6 +15,8 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonObject;
 import panda.dao.DaoClient;
+import panda.dao.DaoNamings;
+import panda.dao.DaoTypes;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
@@ -30,8 +32,6 @@ import panda.dao.entity.annotation.Readonly;
 import panda.dao.entity.annotation.SQL;
 import panda.dao.entity.annotation.Table;
 import panda.dao.entity.annotation.View;
-import panda.dao.sql.JdbcTypes;
-import panda.dao.sql.SqlNamings;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -141,7 +141,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		// table name
 		Table annTable = Classes.getAnnotation(type, Table.class);
 		if (annTable == null) {
-			en.setTableName(SqlNamings.javaName2TableName(type.getSimpleName()));
+			en.setTableName(DaoNamings.javaName2TableName(type.getSimpleName()));
 		}
 		else {
 			en.setTableName(annTable.value());
@@ -178,73 +178,73 @@ public class AnnotationEntityMaker implements EntityMaker {
 		Class<?> clazz = Types.getRawType(ef.getType());
 
 		if (Classes.isBoolean(clazz)) {
-			ef.setJdbcType(JdbcTypes.BOOLEAN);
+			ef.setJdbcType(DaoTypes.BOOLEAN);
 		}
 		else if (Classes.isChar(clazz)) {
-			ef.setJdbcType(JdbcTypes.CHAR);
+			ef.setJdbcType(DaoTypes.CHAR);
 			ef.setSize(1);
 		}
 		else if (Classes.isByte(clazz)) {
-			ef.setJdbcType(JdbcTypes.TINYINT);
+			ef.setJdbcType(DaoTypes.TINYINT);
 		}
 		else if (Classes.isFloat(clazz)) {
-			ef.setJdbcType(JdbcTypes.FLOAT);
+			ef.setJdbcType(DaoTypes.FLOAT);
 		}
 		else if (Classes.isDouble(clazz)) {
-			ef.setJdbcType(JdbcTypes.DOUBLE);
+			ef.setJdbcType(DaoTypes.DOUBLE);
 		}
 		else if (Classes.isInt(clazz)) {
-			ef.setJdbcType(JdbcTypes.INTEGER);
+			ef.setJdbcType(DaoTypes.INTEGER);
 		}
 		else if (Classes.isShort(clazz)) {
-			ef.setJdbcType(JdbcTypes.SMALLINT);
+			ef.setJdbcType(DaoTypes.SMALLINT);
 		}
 		else if (Classes.isLong(clazz)) {
-			ef.setJdbcType(JdbcTypes.BIGINT);
+			ef.setJdbcType(DaoTypes.BIGINT);
 		}
 		else if (Classes.isCharSequence(clazz)) {
-			ef.setJdbcType(JdbcTypes.VARCHAR);
+			ef.setJdbcType(DaoTypes.VARCHAR);
 			if (ef.getSize() == 0) {
 				ef.setSize(50);
 			}
 		}
 		else if (Classes.isEnum(clazz)) {
-			ef.setJdbcType(JdbcTypes.VARCHAR);
+			ef.setJdbcType(DaoTypes.VARCHAR);
 			if (ef.getSize() == 0) {
 				ef.setSize(20);
 			}
 		}
 		else if (Classes.isAssignable(clazz, java.sql.Timestamp.class)) {
-			ef.setJdbcType(JdbcTypes.TIMESTAMP);
+			ef.setJdbcType(DaoTypes.TIMESTAMP);
 		}
 		else if (Classes.isAssignable(clazz, java.sql.Date.class)) {
-			ef.setJdbcType(JdbcTypes.DATE);
+			ef.setJdbcType(DaoTypes.DATE);
 		}
 		else if (Classes.isAssignable(clazz, java.sql.Time.class)) {
-			ef.setJdbcType(JdbcTypes.TIME);
+			ef.setJdbcType(DaoTypes.TIME);
 		}
 		else if (Classes.isAssignable(clazz, Calendar.class) || Classes.isAssignable(clazz, java.util.Date.class)) {
-			ef.setJdbcType(JdbcTypes.TIMESTAMP);
+			ef.setJdbcType(DaoTypes.TIMESTAMP);
 		}
 		else if (Classes.isAssignable(clazz, BigDecimal.class)) {
-			ef.setJdbcType(JdbcTypes.DECIMAL);
+			ef.setJdbcType(DaoTypes.DECIMAL);
 			if (ef.getSize() == 0) {
 				ef.setSize(20);
 				ef.setScale(2);
 			}
 		}
 		else if (Classes.isAssignable(clazz, Reader.class)) {
-			ef.setJdbcType(JdbcTypes.CLOB);
+			ef.setJdbcType(DaoTypes.CLOB);
 		}
 		else if (Classes.isAssignable(clazz, InputStream.class) || byte[].class.equals(clazz)) {
-			ef.setJdbcType(JdbcTypes.BLOB);
+			ef.setJdbcType(DaoTypes.BLOB);
 		}
 		else {
 			// default to string
 			if (log.isDebugEnabled()) {
 				log.debugf("take field '%s(%s)' as VARCHAR(50)", ef.getName(), clazz.toString());
 			}
-			ef.setJdbcType(JdbcTypes.VARCHAR);
+			ef.setJdbcType(DaoTypes.VARCHAR);
 			if (ef.getSize() == 0) {
 				ef.setSize(50);
 			}
@@ -344,7 +344,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			ef.setScale(mi.annColumn.scale());
 			ef.setUnsigned(mi.annColumn.unsigned());
 			ef.setNotNull(mi.annColumn.notNull());
-			ef.setDbType(mi.annColumn.dbType());
+			ef.setNativeType(mi.annColumn.nativeType());
 			ef.setDefaultValue(mi.annColumn.defaults());
 		}
 

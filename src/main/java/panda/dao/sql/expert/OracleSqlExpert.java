@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
+import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
-import panda.dao.sql.JdbcTypes;
 import panda.dao.sql.Sql;
 import panda.lang.Strings;
 
@@ -84,11 +84,11 @@ public class OracleSqlExpert extends SqlExpert {
 	
 	@Override
 	protected String evalFieldType(EntityField ef) {
-		if (Strings.isNotEmpty(ef.getDbType())) {
+		if (Strings.isNotEmpty(ef.getNativeType())) {
 			return super.evalFieldType(ef);
 		}
 		
-		int jdbcType = JdbcTypes.getType(ef.getJdbcType());
+		int jdbcType = DaoTypes.getType(ef.getJdbcType());
 		switch (jdbcType) {
 		case Types.BIT:
 		case Types.BOOLEAN:
@@ -97,7 +97,7 @@ public class OracleSqlExpert extends SqlExpert {
 		case Types.VARBINARY:
 			return evalFieldType("RAW", ef.getSize(), ef.getScale());
 		case Types.BLOB:
-			return JdbcTypes.BLOB;
+			return DaoTypes.BLOB;
 		case Types.LONGVARBINARY:
 			return "LONG RAW";
 		case Types.CLOB:

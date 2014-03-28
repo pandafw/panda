@@ -10,6 +10,7 @@ import panda.castor.Castors;
 import panda.dao.DB;
 import panda.dao.DaoClient;
 import panda.dao.DatabaseMeta;
+import panda.dao.DaoNamings;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
@@ -20,7 +21,6 @@ import panda.dao.query.Operator;
 import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
-import panda.dao.sql.SqlNamings;
 import panda.dao.sql.Sqls;
 import panda.lang.Iterators;
 import panda.lang.Strings;
@@ -299,7 +299,7 @@ public abstract class SqlExpert {
 				sql.append(' ')
 					.append(normalizeColumn(alias, col))
 					.append(" AS ")
-					.append(escapeColumn(SqlNamings.javaName2ColumnLabel(ef.getName())))
+					.append(escapeColumn(DaoNamings.javaName2ColumnLabel(ef.getName())))
 					.append(',');
 				sel = true;
 			}
@@ -331,7 +331,7 @@ public abstract class SqlExpert {
 					sql.append(' ')
 						.append(normalizeColumn(alias, col))
 						.append(" AS ")
-						.append(escapeColumn(SqlNamings.javaName2ColumnLabel(en.getKey())))
+						.append(escapeColumn(DaoNamings.javaName2ColumnLabel(en.getKey())))
 						.append(',');
 					sel = true;
 				}
@@ -543,7 +543,7 @@ public abstract class SqlExpert {
 	}
 	
 	protected String evalFieldType(EntityField ef) {
-		String type = ef.getDbType();
+		String type = ef.getNativeType();
 		if (Strings.isEmpty(type)) {
 			type = ef.getJdbcType();
 		}
