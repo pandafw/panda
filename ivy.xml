@@ -41,12 +41,13 @@
 		<dependency org="org.apache.lucene" name="lucene-queries" rev="4.6.0" conf="run->master,sources" />
 		<dependency org="org.apache.lucene" name="lucene-queryparser" rev="4.6.0" conf="run->master,sources" />
 		<dependency org="org.apache.lucene" name="lucene-analyzers-common" rev="4.6.0" conf="run->master,sources" />
-		<dependency org="org.apache.poi" name="poi" rev="3.9" conf="run->master,sources" />
-		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.9" conf="run->master,sources" />
-		<dependency org="org.apache.poi" name="poi-scratchpad" rev="3.9" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi" rev="3.10-FINAL" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.10-FINAL" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-scratchpad" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.struts" name="struts2-core" rev="2.3.14.3" conf="run->master,sources" />
 		<dependency org="org.apache.struts.xwork" name="xwork-core" rev="2.3.14" conf="run->master,sources" />
 		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="run->master,sources" />
+		<dependency org="org.apache.xmlbeans" name="xmlbeans" rev="2.4.0" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
 		<dependency org="org.xhtmlrenderer" name="flying-saucer-core" rev="9.0.3" conf="run->master,sources" />
 		<dependency org="org.xhtmlrenderer" name="flying-saucer-pdf-itext5" rev="9.0.3" conf="run->master,sources" />
