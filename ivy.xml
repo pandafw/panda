@@ -3,7 +3,6 @@
 	<configurations>
 		<conf name="api" visibility="public" />
 		<conf name="run" visibility="public" />
-		<conf name="gae" visibility="public" />
 		<conf name="jdbc" visibility="public" />
 		<conf name="test" visibility="public" />
 	</configurations>
@@ -27,6 +26,7 @@
 		<dependency org="commons-io" name="commons-io" rev="2.4" conf="run->master,sources" />
 		<dependency org="commons-logging" name="commons-logging" rev="1.1.3" conf="run->master,sources" />
 		<dependency org="commons-net" name="commons-net" rev="3.3" conf="run->master,sources" />
+		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="run->master,sources" />
 		<dependency org="javassist" name="javassist" rev="3.12.1.GA" conf="run->master,sources" />
 		<dependency org="javax.activation" name="activation" rev="1.1.1" conf="run->master,sources" />
 		<dependency org="javax.mail" name="mail" rev="1.4.7" conf="run->master,sources" />
@@ -43,6 +43,7 @@
 		<dependency org="org.apache.lucene" name="lucene-analyzers-common" rev="4.6.0" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.10-FINAL" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-scratchpad" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.struts" name="struts2-core" rev="2.3.14.3" conf="run->master,sources" />
 		<dependency org="org.apache.struts.xwork" name="xwork-core" rev="2.3.14" conf="run->master,sources" />
@@ -51,12 +52,6 @@
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
 		<dependency org="org.xhtmlrenderer" name="flying-saucer-core" rev="9.0.3" conf="run->master,sources" />
 		<dependency org="org.xhtmlrenderer" name="flying-saucer-pdf-itext5" rev="9.0.3" conf="run->master,sources" />
-
-		<!-- GAE -->
-		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.8.3" conf="gae->master,sources" />
-		<dependency org="com.google.appengine" name="appengine-api-labs" rev="1.8.3" conf="gae->master,sources" />
-		<dependency org="com.google.appengine" name="appengine-jsr107cache" rev="1.8.3" conf="gae->master,sources" />
-		<dependency org="org.freemarker" name="freemarker-gae" rev="2.3.20" conf="gae->master,sources" />
 
 		<!-- JDBC -->
 		<dependency org="com.h2database" name="h2" rev="1.3.173" conf="jdbc->master,sources" />

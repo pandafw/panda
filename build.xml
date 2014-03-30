@@ -168,11 +168,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="lib/api"/>
 			<fileset dir="lib/run"/>
-			<fileset dir="lib/gae"/>
 			<fileset dir="lib/jdbc"/>
 			<fileset dir="lib/test"/>
 		</delete>
-		<ivy:retrieve conf="api,run,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="api,run,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
