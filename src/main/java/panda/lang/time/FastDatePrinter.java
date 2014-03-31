@@ -1138,8 +1138,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
 	// -----------------------------------------------------------------------
 
-	private static ConcurrentMap<TimeZoneDisplayKey, String> cTimeZoneDisplayCache = new ConcurrentHashMap<TimeZoneDisplayKey, String>(
-		7);
+	private static final ConcurrentMap<TimeZoneDisplayKey, String> cTimeZoneDisplayCache = new ConcurrentHashMap<TimeZoneDisplayKey, String>(7);
 
 	/**
 	 * <p>
@@ -1294,12 +1293,14 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * @param style the timezone style
 		 * @param locale the timezone locale
 		 */
-		TimeZoneDisplayKey(final TimeZone timeZone, final boolean daylight, int style, final Locale locale) {
+		TimeZoneDisplayKey(final TimeZone timeZone, final boolean daylight, final int style, final Locale locale) {
 			mTimeZone = timeZone;
 			if (daylight) {
-				style |= 0x80000000;
+				mStyle = style | 0x80000000;
 			}
-			mStyle = style;
+			else {
+				mStyle = style;
+			}
 			mLocale = locale;
 		}
 

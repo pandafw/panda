@@ -49,7 +49,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * 
 	 * @see java.io.Serializable
 	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
 	/**
 	 * FULL locale dependent date or time style.
@@ -320,10 +320,10 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return a localized standard date/time formatter
 	 * @throws IllegalArgumentException if the Locale has no date/time pattern defined
 	 */
-	public static FastDateFormat getDateTimeInstance(final int dateStyle, final int timeStyle, final TimeZone timeZone,
-			final Locale locale) {
-		return cache.getDateTimeInstance(dateStyle, timeStyle, timeZone, locale);
-	}
+    public static FastDateFormat getDateTimeInstance(
+            final int dateStyle, final int timeStyle, final TimeZone timeZone, final Locale locale) {
+        return cache.getDateTimeInstance(dateStyle, timeStyle, timeZone, locale);
+    }
 
 	// Constructor
 	// -----------------------------------------------------------------------
@@ -338,9 +338,24 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @throws NullPointerException if pattern, timeZone, or locale is null.
 	 */
 	protected FastDateFormat(final String pattern, final TimeZone timeZone, final Locale locale) {
-		printer = new FastDatePrinter(pattern, timeZone, locale);
-		parser = new FastDateParser(pattern, timeZone, locale);
-	}
+        this(pattern, timeZone, locale, null);
+    }
+
+    // Constructor
+    //-----------------------------------------------------------------------
+    /**
+     * <p>Constructs a new FastDateFormat.</p>
+     *
+     * @param pattern  {@link java.text.SimpleDateFormat} compatible pattern
+     * @param timeZone  non-null time zone to use
+     * @param locale  non-null locale to use
+     * @param centuryStart The start of the 100 year period to use as the "default century" for 2 digit year parsing.  If centuryStart is null, defaults to now - 80 years
+     * @throws NullPointerException if pattern, timeZone, or locale is null.
+     */
+    protected FastDateFormat(final String pattern, final TimeZone timeZone, final Locale locale, final Date centuryStart) {
+        printer= new FastDatePrinter(pattern, timeZone, locale);
+        parser= new FastDateParser(pattern, timeZone, locale, centuryStart);
+    }
 
 	// Format methods
 	// -----------------------------------------------------------------------
@@ -567,8 +582,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 */
 	@Override
 	public String toString() {
-		return "FastDateFormat[" + printer.getPattern() + "," + printer.getLocale() + ","
-				+ printer.getTimeZone().getID() + "]";
+        return "FastDateFormat[" + printer.getPattern() + "," + printer.getLocale() + "," + printer.getTimeZone().getID() + "]";
 	}
 
 	/**

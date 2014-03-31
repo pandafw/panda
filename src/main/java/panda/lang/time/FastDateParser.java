@@ -3,6 +3,7 @@ package panda.lang.time;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class FastDateParser implements DateParser, Serializable {
 	 * 
 	 * @see java.io.Serializable
 	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
 	static final Locale JAPANESE_IMPERIAL = new Locale("ja", "JP", "JP");
 
@@ -59,11 +60,12 @@ public class FastDateParser implements DateParser, Serializable {
 	private final String pattern;
 	private final TimeZone timeZone;
 	private final Locale locale;
+    private final int century;
+    private final int startYear;
 
 	// derived fields
 	private transient Pattern parsePattern;
 	private transient Strategy[] strategies;
-	private transient int thisYear;
 
 	// dynamic fields to communicate with Strategy
 	private transient String currentFormatField;
@@ -79,19 +81,52 @@ public class FastDateParser implements DateParser, Serializable {
 	 * @param locale non-null locale
 	 */
 	protected FastDateParser(final String pattern, final TimeZone timeZone, final Locale locale) {
+		this(pattern, timeZone, locale, null);
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new FastDateParser.
+	 * </p>
+	 * 
+	 * @param pattern non-null {@link java.text.SimpleDateFormat} compatible pattern
+	 * @param timeZone non-null time zone to use
+	 * @param locale non-null locale
+	 * @param centuryStart The start of the century for 2 digit year parsing
+	 */
+	protected FastDateParser(final String pattern, final TimeZone timeZone, final Locale locale, final Date centuryStart) {
 		this.pattern = pattern;
 		this.timeZone = timeZone;
 		this.locale = locale;
-		init();
+
+		final Calendar definingCalendar = Calendar.getInstance(timeZone, locale);
+		int centuryStartYear;
+		if (centuryStart != null) {
+			definingCalendar.setTime(centuryStart);
+			centuryStartYear = definingCalendar.get(Calendar.YEAR);
+		}
+		else if (locale.equals(JAPANESE_IMPERIAL)) {
+			centuryStartYear = 0;
+		}
+		else {
+			// from 80 years ago to 20 years from now
+			definingCalendar.setTime(new Date());
+			centuryStartYear = definingCalendar.get(Calendar.YEAR) - 80;
+		}
+		century = centuryStartYear / 100 * 100;
+		startYear = centuryStartYear - century;
+
+		init(definingCalendar);
 	}
 
 	/**
 	 * Initialize derived fields from defining fields. This is called from constructor and from
 	 * readObject (de-serialization)
+	 * 
+	 * @param definingCalendar the {@link java.util.Calendar} instance used to initialize this
+	 *            FastDateParser
 	 */
-	private void init() {
-		final Calendar definingCalendar = Calendar.getInstance(timeZone, locale);
-		thisYear = definingCalendar.get(Calendar.YEAR);
+	private void init(Calendar definingCalendar) {
 
 		final StringBuilder regex = new StringBuilder();
 		final List<Strategy> collector = new ArrayList<Strategy>();
@@ -223,7 +258,9 @@ public class FastDateParser implements DateParser, Serializable {
 	 */
 	private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		init();
+
+        final Calendar definingCalendar = Calendar.getInstance(timeZone, locale);
+        init(definingCalendar);
 	}
 
 	/*
@@ -328,6 +365,8 @@ public class FastDateParser implements DateParser, Serializable {
 					c = 'Q'; // appended below
 				}
 				break;
+			default:
+				break;
 			}
 			regex.append(c);
 		}
@@ -349,17 +388,14 @@ public class FastDateParser implements DateParser, Serializable {
 	}
 
 	/**
-	 * Adjust dates to be within 80 years before and 20 years after instantiation
+	 * Adjust dates to be within appropriate century
 	 * 
 	 * @param twoDigitYear The year to adjust
-	 * @return A value within -80 and +20 years from instantiation of this instance
+	 * @return A value between centuryStart(inclusive) to centuryStart+100(exclusive)
 	 */
-	int adjustYear(final int twoDigitYear) {
-		final int trial = twoDigitYear + thisYear - thisYear % 100;
-		if (trial < thisYear + 20) {
-			return trial;
-		}
-		return trial - 100;
+	private int adjustYear(final int twoDigitYear) {
+		int trial = century + twoDigitYear;
+		return twoDigitYear >= startYear ? trial : trial + 100;
 	}
 
 	/**
@@ -429,11 +465,11 @@ public class FastDateParser implements DateParser, Serializable {
 	 * @param definingCalendar The calendar to obtain the short and long values
 	 * @return The Strategy that will handle parsing for the field
 	 */
-	private Strategy getStrategy(String formatField, final Calendar definingCalendar) {
+	private Strategy getStrategy(final String formatField, final Calendar definingCalendar) {
 		switch (formatField.charAt(0)) {
 		case '\'':
 			if (formatField.length() > 2) {
-				formatField = formatField.substring(1, formatField.length() - 1);
+				return new CopyQuotedStrategy(formatField.substring(1, formatField.length() - 1));
 			}
 			//$FALL-THROUGH$
 		default:
@@ -478,9 +514,8 @@ public class FastDateParser implements DateParser, Serializable {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	// OK because we are creating an array with no entries
-	private static ConcurrentMap<Locale, Strategy>[] caches = new ConcurrentMap[Calendar.FIELD_COUNT];
+    @SuppressWarnings("unchecked") // OK because we are creating an array with no entries
+    private static final ConcurrentMap<Locale, Strategy>[] caches = new ConcurrentMap[Calendar.FIELD_COUNT];
 
 	/**
 	 * Get a cache of Strategies for a particular field
@@ -634,11 +669,13 @@ public class FastDateParser implements DateParser, Serializable {
 		 */
 		@Override
 		boolean addRegex(final FastDateParser parser, final StringBuilder regex) {
+			// See LANG-954: We use {Nd} rather than {IsNd} because Android does not support the Is
+			// prefix
 			if (parser.isNextNumber()) {
-				regex.append("(\\p{IsNd}{").append(parser.getFieldWidth()).append("}+)");
+				regex.append("(\\p{Nd}{").append(parser.getFieldWidth()).append("}+)");
 			}
 			else {
-				regex.append("(\\p{IsNd}++)");
+				regex.append("(\\p{Nd}++)");
 			}
 			return true;
 		}
@@ -685,21 +722,51 @@ public class FastDateParser implements DateParser, Serializable {
 		private final SortedMap<String, TimeZone> tzNames = new TreeMap<String, TimeZone>(String.CASE_INSENSITIVE_ORDER);
 
 		/**
+		 * Index of zone id
+		 */
+		private static final int ID = 0;
+		/**
+		 * Index of the long name of zone in standard time
+		 */
+		private static final int LONG_STD = 1;
+		/**
+		 * Index of the short name of zone in standard time
+		 */
+		private static final int SHORT_STD = 2;
+		/**
+		 * Index of the long name of zone in daylight saving time
+		 */
+		private static final int LONG_DST = 3;
+		/**
+		 * Index of the short name of zone in daylight saving time
+		 */
+		private static final int SHORT_DST = 4;
+
+		/**
 		 * Construct a Strategy that parses a TimeZone
 		 * 
 		 * @param locale The Locale
 		 */
 		TimeZoneStrategy(final Locale locale) {
-			for (final String id : TimeZone.getAvailableIDs()) {
-				if (id.startsWith("GMT")) {
+			final String[][] zones = DateFormatSymbols.getInstance(locale).getZoneStrings();
+			for (String[] zone : zones) {
+				if (zone[ID].startsWith("GMT")) {
 					continue;
 				}
-				final TimeZone tz = TimeZone.getTimeZone(id);
-				tzNames.put(tz.getDisplayName(false, TimeZone.SHORT, locale), tz);
-				tzNames.put(tz.getDisplayName(false, TimeZone.LONG, locale), tz);
+				final TimeZone tz = TimeZone.getTimeZone(zone[ID]);
+				if (!tzNames.containsKey(zone[LONG_STD])) {
+					tzNames.put(zone[LONG_STD], tz);
+				}
+				if (!tzNames.containsKey(zone[SHORT_STD])) {
+					tzNames.put(zone[SHORT_STD], tz);
+				}
 				if (tz.useDaylightTime()) {
-					tzNames.put(tz.getDisplayName(true, TimeZone.SHORT, locale), tz);
-					tzNames.put(tz.getDisplayName(true, TimeZone.LONG, locale), tz);
+					if (!tzNames.containsKey(zone[LONG_DST])) {
+						tzNames.put(zone[LONG_DST], tz);
+					}
+					if (!tzNames.containsKey(zone[SHORT_DST])) {
+						tzNames.put(zone[SHORT_DST], tz);
+					}
 				}
 			}
 			final StringBuilder sb = new StringBuilder();
