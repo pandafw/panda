@@ -165,21 +165,26 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 
 	//-------------------------------------------------
 	public HttpHeader setInt(String key, int value) {
-		return set(key, String.valueOf(value));
+		return set(key, value);
 	}
 
 	public HttpHeader setDate(String key, long value) {
-		return setDate(key, new Date(value));
+		return set(key, new Date(value));
 	}
 
 	public HttpHeader setDate(String key, Date value) {
-		return set(key, HttpDates.format(value));
+		return set(key, value);
 	}
 	
-	public HttpHeader set(String key, String value) {
+	public HttpHeader setString(String key, String value) {
+		return set(key, value);
+	}
+	
+	public HttpHeader set(String key, Object value) {
 		put(key, value);
 		return this;
 	}
+
 	public HttpHeader setAll(Map<? extends String, ? extends Object> m) {
 		putAll(m);
 		return this;
@@ -187,44 +192,55 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 
 	//-------------------------------------------------
 	public HttpHeader addInt(String key, int value) {
-		return add(key, String.valueOf(value));
+		return add(key, value);
 	}
 
 	public HttpHeader addDate(String key, long value) {
-		return addDate(key, new Date(value));
+		return add(key, new Date(value));
 	}
 
 	public HttpHeader addDate(String key, Date value) {
-		return add(key, HttpDates.format(value));
+		return add(key, value);
 	}
 	
-	public HttpHeader add(String key, String value) {
+	public HttpHeader addString(String key, String value) {
 		add(key, (Object)value);
 		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void add(String key, Object value) {
-		Object object = get(key);
-		if (object == null) {
-			put(key, value);
+	public HttpHeader add(String key, Object value) {
+		if (key == null || value == null) {
+			return this;
 		}
-		else if (object instanceof List) {
-			((List)object).add(value);
+
+		value = convertValue(value);
+
+		key = (String)toCompareKey(key);
+		Object object = map.get(key);
+		if (object == null) {
+			map.put(key, value);
+			return this;
+		}
+		
+		List vs = null;
+		if (object instanceof List) {
+			vs = (List)object;
 		}
 		else {
-			List vs = new ArrayList<String>();
+			vs = new ArrayList<String>();
 			vs.add(object);
-			
-			value = convertValue(value);
-			if (value instanceof List) {
-				vs.addAll((List)value);
-			}
-			else {
-				vs.add(value);
-			}
-			put(key, vs);
+			map.put(key, vs);
 		}
+		
+		if (value instanceof List) {
+			vs.addAll((List)value);
+		}
+		else {
+			vs.add(value);
+		}
+
+		return this;
 	}
 	
 	public HttpHeader addAll(Map<? extends String, ? extends Object> m) {
@@ -241,14 +257,15 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 
 	@SuppressWarnings("unchecked")
 	private Object convertValue(Object value) {
+		if (value == null) {
+			return null;
+		}
+		
 		if (value instanceof Date) {
 			return HttpDates.format((Date)value);
 		}
 		if (value instanceof Calendar) {
 			return HttpDates.format(((Calendar)value).getTime());
-		}
-		if (value instanceof List) {
-			return value;
 		}
 
 		if (Iterators.isIterable(value)) {

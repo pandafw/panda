@@ -94,6 +94,16 @@ public class HttpRequest {
 		return this;
 	}
 
+	public HttpRequest addHeader(String name, Object value) {
+		getHeader().add(name, value);
+		return this;
+	}
+
+	public HttpRequest setHeader(String name, Object value) {
+		getHeader().set(name, value);
+		return this;
+	}
+	
 	/**
 	 * @return the encoding
 	 */
@@ -120,9 +130,11 @@ public class HttpRequest {
 		this.body = new ByteArrayInputStream(Strings.getBytes(body, encoding));
 	}
 
-	public HttpRequest setParams(Map<String, Object> params) {
-		this.params = params;
-		return this;
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
 	}
 
 	public HttpRequest setUrl(String url) {
@@ -132,52 +144,6 @@ public class HttpRequest {
 		else
 			this.url = url;
 		return this;
-	}
-	
-	public HttpRequest setCookies(Collection<Cookie> cookies) {
-		if (Collections.isEmpty(cookies)) {
-			getHeader().remove(HttpHeader.COOKIE);
-			return this;
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (Cookie c : cookies) {
-			if (sb.length() > 0) {
-				sb.append("; ");
-			}
-			if (c.isValid()) {
-				sb.append(c.getName()).append('=').append(c.getValue());
-			}
-		}
-		
-		if (sb.length() > 0) {
-			getHeader().set(HttpHeader.COOKIE, sb.toString());
-		}
-		else {
-			getHeader().remove(HttpHeader.COOKIE);
-		}
-		return this;
-	}
-
-	public HttpRequest setCookies(Cookie ... cookies) {
-		return setCookies(Arrays.asList(cookies));
-	}
-
-	public List<Cookie> getCookies() {
-		List<Cookie> cs = new ArrayList<Cookie>();
-		String hc = getHeader().getString(HttpHeader.COOKIE);
-		String[] ss = Strings.split(hc, ';');
-		for (String s : ss) {
-			cs.add(new Cookie(s));
-		}
-		return cs;
-	}
-
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
 	}
 	
 	/**
@@ -206,6 +172,55 @@ public class HttpRequest {
 
 	public String getURLEncodedParams() {
 		return URLHelper.buildQueryString(params, encoding);
+	}
+
+	public HttpRequest setParams(Map<String, Object> params) {
+		this.params = params;
+		return this;
+	}
+
+	public HttpRequest addParam(String name, Object value) {
+		getParams().put(name, value);
+		return this;
+	}
+
+	public List<Cookie> getCookies() {
+		List<Cookie> cs = new ArrayList<Cookie>();
+		String hc = getHeader().getString(HttpHeader.COOKIE);
+		String[] ss = Strings.split(hc, ';');
+		for (String s : ss) {
+			cs.add(new Cookie(s));
+		}
+		return cs;
+	}
+
+	public HttpRequest setCookies(Cookie ... cookies) {
+		return setCookies(Arrays.asList(cookies));
+	}
+
+	public HttpRequest setCookies(Collection<Cookie> cookies) {
+		if (Collections.isEmpty(cookies)) {
+			getHeader().remove(HttpHeader.COOKIE);
+			return this;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (Cookie c : cookies) {
+			if (sb.length() > 0) {
+				sb.append("; ");
+			}
+			if (c.isValid()) {
+				sb.append(c.getName()).append('=').append(c.getValue());
+			}
+		}
+		
+		if (sb.length() > 0) {
+			getHeader().set(HttpHeader.COOKIE, sb.toString());
+		}
+		else {
+			getHeader().remove(HttpHeader.COOKIE);
+		}
+		return this;
 	}
 
 	private boolean isFile(Object v) {
