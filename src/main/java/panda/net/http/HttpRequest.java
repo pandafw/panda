@@ -317,7 +317,7 @@ public class HttpRequest {
 			writer.append(Streams.LINE_SEPARATOR);
 			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
 			if (body != null) {
-				if (body.available() > 100 || !body.markSupported()) {
+				if (body.available() > 1024 || !body.markSupported()) {
 					writer.append("<<stream: " + body + " - " + body.available() + ">>");
 				}
 				else {

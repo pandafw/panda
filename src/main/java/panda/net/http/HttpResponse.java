@@ -403,13 +403,17 @@ public class HttpResponse implements Closeable {
 
 	public HttpResponse(URL url, HttpURLConnection conn) throws IOException {
 		this.url = url;
-		statusLine = conn.getHeaderField(0);
 		statusCode = conn.getResponseCode();
 		if (statusCode < 0) {
 			throw new IOException("Invalid HTTP response");
 		}
 
 		statusReason = conn.getResponseMessage();
+		statusLine = conn.getHeaderField(0);
+		if (!statusLine.startsWith("HTTP/1.")) {
+			statusLine = statusCode + " " + statusReason;
+		}
+		
 		header = new HttpHeader();
 		header.putAll(conn.getHeaderFields());
 
