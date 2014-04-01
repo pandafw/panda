@@ -2,8 +2,9 @@
 	<info organisation="${prj.org}" module="${prj.name}" revision="${prj.version}"/>
 	<configurations>
 		<conf name="api" visibility="public" />
-		<conf name="run" visibility="public" />
+		<conf name="gae" visibility="public" />
 		<conf name="jdbc" visibility="public" />
+		<conf name="run" visibility="public" />
 		<conf name="test" visibility="public" />
 	</configurations>
 	<publications>
