@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-build">
+	<!-- version -->
+	<import file="ant-version.xml"/>
+
+	<!-- usage -->
+	<import file="ant-usage.xml"/>
+
+	<!-- ivy -->
+	<import file="ant-ivy.xml"/>
+
+	<!-- build -->
+	<import file="ant-build.xml"/>
+
+	<!-- test -->
+	<import file="ant-test.xml"/>
+
+	<!-- maven -->
+	<import file="ant-maven.xml"/>
+</project>

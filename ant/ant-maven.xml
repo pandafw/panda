@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant-maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<property name="out.dir" value="out"/>
+
+	<!-- defined maven snapshots and staging repository id and url -->
+	<property name="mvn.ssr.id" value="sonatype-nexus-snapshots" />
+	<property name="mvn.ssr.url" value="https://oss.sonatype.org/content/repositories/snapshots" />
+	<property name="mvn.sgr.id" value="sonatype-nexus-staging" />
+	<property name="mvn.sgr.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+
+	<!-- maven -->
+	<macrodef name="writepom">
+		<attribute name="version" default="${prj.version}"/>
+		<sequential>
+			<echo>version = @{version}</echo>
+			<echo file="${out.dir}/pom.xml"><![CDATA[
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${prj.org}</groupId>
+	<artifactId>${prj.name}</artifactId>
+	<packaging>jar</packaging>
+	<name>${prj.title}</name>
+	<version>@{version}</version>
+	<description>${prj.desc}</description>
+	<url>${prj.url}</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE v3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:${prj.scm}</connection>
+		<developerConnection>scm:git:${prj.scm}</developerConnection>
+		<url>${prj.scm}</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>${prj.author.id}</id>
+			<name>${prj.author.name}</name>
+			<email>${prj.author.email}</email>
+		</developer>
+	</developers>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+</project>
+]]>
+			</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="mvn-pom" description="Write maven pom.xml">
+		<writepom/>
+	</target>
+	
+	<!-- local deploy -->
+	<target name="mvn-local-install" description="Deploy release version to Maven local repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="install:install-file" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="install:install-file" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-Dpackaging=java-source" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}-sources.jar" />
+		</artifact:mvn>
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="install:install-file" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-Dpackaging=javadoc" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}-javadoc.jar" />
+		</artifact:mvn>
+	</target>
+
+	<!-- mvn panda-repo deploy -->
+	<target name="mvn-panda-deploy" description="Deploy release version to panda-repo repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<property name="location.repo" location="${prj.repo}"/>
+
+		<condition property="argsrc" value="-Dsources=${prj.name}-${VERSION}-sources.jar">
+			<available file="${out.dir}/${prj.name}-${VERSION}-sources.jar"/>
+		</condition>
+		<property name="argsrc" value="-Dsources.dummy=true"/>
+
+		<condition property="argdoc" value="-Djavadoc=${prj.name}-${VERSION}-javadoc.jar">
+			<available file="${out.dir}/${prj.name}-${VERSION}-javadoc.jar"/>
+		</condition>
+		<property name="argdoc" value="-Djavadoc.dummy=true"/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=file://${location.repo}" />
+			<arg value="-DcreateChecksum=true" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="${argsrc}" />
+			<arg value="${argdoc}" />
+		</artifact:mvn>
+	</target>
+	
+	<!-- mvn sonatype snapshot deploy -->
+	<target name="mvn-oss-snapshot" description="Deploy snapshot version to maven snapshot repository">
+		<!-- write pom.xml -->
+		<writepom version="${prj.version}-SNAPSHORT"/>
+
+		<!-- deploy the artifact -->
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.8.1:deploy-file" />
+			<arg value="-Durl=${mvn.ssr.url}" />
+			<arg value="-DrepositoryId=${mvn.ssr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+		</artifact:mvn>
+	</target>
+
+	<!-- mvn sonatype release deploy -->
+	<target name="mvn-oss-stage" description="Deploy release version to maven staging repository">
+		<!-- write pom.xml -->
+		<writepom/>
+
+		<condition property="argsrc" value="-Dsources=${prj.name}-${VERSION}-sources.jar">
+			<available file="${out.dir}/${prj.name}-${VERSION}-sources.jar"/>
+		</condition>
+		<property name="argsrc" value="-Dsources.dummy=true"/>
+
+		<condition property="argdoc" value="-Djavadoc=${prj.name}-${VERSION}-javadoc.jar">
+			<available file="${out.dir}/${prj.name}-${VERSION}-javadoc.jar"/>
+		</condition>
+		<property name="argdoc" value="-Djavadoc.dummy=true"/>
+
+		<!-- sign and deploy the artifact -->
+		<artifact:mvn pom="${out.dir}/pom.xml">
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
+			<arg value="-Pgpg" />
+			<arg value="-Durl=${mvn.sgr.url}" />
+			<arg value="-DrepositoryId=${mvn.sgr.id}" />
+			<arg value="-DpomFile=pom.xml" />
+			<arg value="-DupdateReleaseInfo=true" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="${argsrc}" />
+			<arg value="${argdoc}" />
+		</artifact:mvn>
+	</target>
+</project>

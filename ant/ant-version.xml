@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant-version">
+	<property name="ver.src" value="../panda-java/src/main/java/panda/Panda.java"/>
+
+	<!-- get prj.version -->
+	<loadfile srcFile="${ver.src}" property="prj.version" encoding="UTF-8" failonerror="false">
+		<filterchain>
+			<striplinebreaks/>
+			<linecontains>
+				<contains value="VERSION"/>
+			</linecontains>
+			<tokenfilter>
+				<replaceregex pattern="(.*)&quot;(.*)&quot;.*" replace="\2"/>
+			</tokenfilter>
+		</filterchain>
+	</loadfile>
+
+	<!-- get revision -->
+	<script language="javascript">
+		var ver = project.getProperty("VERSION");
+		if (ver == null) {
+			var prjs = project.getProperty("ver.prj");
+			if (prjs == null) {
+				prjs = ".";
+			}
+			prjs = prjs.split(';');
+
+			function run(cmd) {
+				var is = null;
+				try {
+					var p = java.lang.Runtime.getRuntime().exec(cmd);
+					is = p.getInputStream();
+					var br = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+					var o = "";
+					var s;
+					while ((s = br.readLine()) != null) {
+						o += s.trim();
+					}
+					return o;
+				}
+				catch (e) {
+					java.lang.System.err.println(e);
+					return "";
+				}
+				finally {
+					if (is != null) {
+						is.close();
+					}
+				}
+			}
+			
+			var rev = "";
+			for (var i = 0; i &lt; prjs.length; i++) {
+				var p = prjs[i];
+				var r = "0";
+				var git = new java.io.File(p + "/.git");
+				if (git.exists()) {
+					var s = run("git --git-dir=" + git.getPath() + " rev-list --all --count");
+					if (s != "") {
+						r = s;
+					}
+				}
+				else {
+					var svn = new java.io.File(p + "/.svn");
+					if (svn.exists()) {
+						var si = run("svn info --xml " + p);
+						if (si != "") {
+							var b = si.indexOf("revision=\"") + 10;
+							var e = si.indexOf("\"", b);
+							r = si.substring(b, e);
+						}
+					}
+				}
+				if (rev != "") {
+					rev += "-";
+				}
+				rev += r;
+			}
+			project.setProperty("REVISION", rev);
+			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+		}
+	</script>
+</project>
