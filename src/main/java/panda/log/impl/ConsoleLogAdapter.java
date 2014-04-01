@@ -8,7 +8,6 @@ import panda.log.LogAdapter;
 public class ConsoleLogAdapter implements LogAdapter {
 
 	private final static ConsoleLog log = new ConsoleLog();
-	private static int level = Log.LEVEL_INFO;
 
 	public Log getLogger(String name) {
 		return log;
@@ -18,45 +17,47 @@ public class ConsoleLogAdapter implements LogAdapter {
 	 * @return the level
 	 */
 	public static int getLevel() {
-		return level;
+		return log.level;
 	}
 
 	/**
 	 * @param level the level to set
 	 */
 	public static void setLevel(int level) {
-		ConsoleLogAdapter.level = level;
+		log.level = level;
 	}
 
 	/**
 	 * Console log to System.out and System.err
 	 */
 	public static class ConsoleLog extends AbstractLog {
+		private int level = Log.LEVEL_INFO;
+		
 		private ConsoleLog() {
 		}
 
 		public boolean isFatalEnabled() {
-			return level >= Log.LEVEL_FATAL;
+			return level <= Log.LEVEL_FATAL;
 		}
 
 		public boolean isErrorEnabled() {
-			return level >= Log.LEVEL_ERROR;
+			return level <= Log.LEVEL_ERROR;
 		}
 
 		public boolean isWarnEnabled() {
-			return level >= Log.LEVEL_WARN;
+			return level <= Log.LEVEL_WARN;
 		}
 
 		public boolean isInfoEnabled() {
-			return level >= Log.LEVEL_INFO;
+			return level <= Log.LEVEL_INFO;
 		}
 
 		public boolean isDebugEnabled() {
-			return level >= Log.LEVEL_DEBUG;
+			return level <= Log.LEVEL_DEBUG;
 		}
 
 		public boolean isTraceEnabled() {
-			return level >= Log.LEVEL_TRACE;
+			return level <= Log.LEVEL_TRACE;
 		}
 		
 		public void fatal(Object msg, Throwable t) {
