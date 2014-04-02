@@ -1,14 +1,11 @@
 package panda.lang;
 
-import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import panda.io.Streams;
-import panda.lang.Arrays;
-import panda.lang.Charsets;
 
 /**
  * test class for ClassUtils
@@ -60,7 +57,7 @@ public class CharsetsTest {
 
 	@Test
 	public void testDetectCharsets() throws Exception {
-		Assert.assertEquals("[GB18030]", Arrays.toString(Charsets.detectCharsets(Streams.toByteArray(new URL("http://www.sina.com.cn")))));
+		Assert.assertEquals("[Shift_JIS,GB18030]", Arrays.toString(Charsets.detectCharsets(Streams.toByteArray(getClass().getResource("Shift-JIS.txt")))));
 	}
 
 }
