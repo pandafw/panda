@@ -36,6 +36,9 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 
 		@Override
 		protected Boolean castValue(Object value, CastContext context) {
+			if (value instanceof Boolean) {
+				return (Boolean)value;
+			}
 			if (value instanceof Number) {
 				return ((Number)value).intValue() != 0;
 			}

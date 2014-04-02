@@ -6,16 +6,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.bind.json.JsonArray;
-import panda.bind.json.JsonDeserializer;
-import panda.bind.json.JsonObject;
-import panda.bind.json.Jsons;
+import junit.framework.TestCase;
+
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.TypeToken;
 import panda.lang.Types;
 import panda.lang.builder.EqualsBuilder;
-import junit.framework.TestCase;
 
 /**
  */
@@ -24,6 +21,7 @@ public class JsonBinderTest extends TestCase {
 		private Object obj = null;
 		private boolean bol = false;
 		private Integer num = 1;
+		private long lng = 2L;
 		private String str = "A";
 		private A[] ary;
 		private List<A> lst;
@@ -54,6 +52,12 @@ public class JsonBinderTest extends TestCase {
 		}
 		public void setNum(Integer num) {
 			this.num = num;
+		}
+		public long getLng() {
+			return lng;
+		}
+		public void setLng(long lng) {
+			this.lng = lng;
 		}
 		public String getStr() {
 			return str;
@@ -120,10 +124,13 @@ public class JsonBinderTest extends TestCase {
 		a.setMap(am);
 
 		String json = Jsons.toJson(a, true);
-		//System.out.println(json);
 		
 		A a2 = Jsons.fromJson(json, A.class);
 		assertEquals(a, a2);
+		
+		json = Jsons.toJson(al, true);
+		List<A> al2 = Jsons.fromJson(json, Types.paramTypeOf(List.class, A.class));
+		assertEquals(al, al2);
 	}
 
 	public void testStringList() {

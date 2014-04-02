@@ -208,7 +208,11 @@ public abstract class Types {
 	 * @return <code>true</code> if <code>type</code> is assignable to <code>toType</code>.
 	 */
 	public static boolean isAssignable(Type type, Type toType) {
-		return isAssignable(type, toType, null);
+		return isAssignable(type, toType, null, true);
+	}
+
+	public static boolean isAssignable(Type type, Type toType, boolean autoBoxing) {
+		return isAssignable(type, toType, null, autoBoxing);
 	}
 
 	/**
@@ -223,26 +227,26 @@ public abstract class Types {
 	 * @return <code>true</code> if <code>type</code> is assignable to <code>toType</code>.
 	 */
 	private static boolean isAssignable(Type type, Type toType,
-			Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean autoBoxing) {
 		if (toType == null || toType instanceof Class<?>) {
-			return isAssignable(type, (Class<?>)toType);
+			return isAssignable(type, (Class<?>)toType, autoBoxing);
 		}
 
 		if (toType instanceof ParameterizedType) {
-			return isAssignable(type, (ParameterizedType)toType, typeVarAssigns);
+			return isAssignable(type, (ParameterizedType)toType, typeVarAssigns, autoBoxing);
 		}
 
 		if (toType instanceof GenericArrayType) {
-			return isAssignable(type, (GenericArrayType)toType, typeVarAssigns);
+			return isAssignable(type, (GenericArrayType)toType, typeVarAssigns, autoBoxing);
 		}
 
 		if (toType instanceof WildcardType) {
-			return isAssignable(type, (WildcardType)toType, typeVarAssigns);
+			return isAssignable(type, (WildcardType)toType, typeVarAssigns, autoBoxing);
 		}
 
 		// *
 		if (toType instanceof TypeVariable<?>) {
-			return isAssignable(type, (TypeVariable<?>)toType, typeVarAssigns);
+			return isAssignable(type, (TypeVariable<?>)toType, typeVarAssigns, autoBoxing);
 		}
 		// */
 
@@ -259,7 +263,7 @@ public abstract class Types {
 	 * @param toClass the target class
 	 * @return true if <code>type</code> is assignable to <code>toClass</code>.
 	 */
-	private static boolean isAssignable(Type type, Class<?> toClass) {
+	private static boolean isAssignable(Type type, Class<?> toClass, boolean autoBoxing) {
 		if (type == null) {
 			// consistency with ClassUtils.isAssignable() behavior
 			return toClass == null || !toClass.isPrimitive();
@@ -278,12 +282,12 @@ public abstract class Types {
 
 		if (type instanceof Class<?>) {
 			// just comparing two classes
-			return Classes.isAssignable((Class<?>)type, toClass);
+			return Classes.isAssignable((Class<?>)type, toClass, autoBoxing);
 		}
 
 		if (type instanceof ParameterizedType) {
 			// only have to compare the raw type to the class
-			return isAssignable(getRawType((ParameterizedType)type), toClass);
+			return isAssignable(getRawType((ParameterizedType)type), toClass, autoBoxing);
 		}
 
 		// *
@@ -291,7 +295,7 @@ public abstract class Types {
 			// if any of the bounds are assignable to the class, then the
 			// type is assignable to the class.
 			for (Type bound : ((TypeVariable<?>)type).getBounds()) {
-				if (isAssignable(bound, toClass)) {
+				if (isAssignable(bound, toClass, autoBoxing)) {
 					return true;
 				}
 			}
@@ -305,7 +309,7 @@ public abstract class Types {
 			return toClass.equals(Object.class)
 					|| toClass.isArray()
 					&& isAssignable(((GenericArrayType)type).getGenericComponentType(),
-						toClass.getComponentType());
+						toClass.getComponentType(), autoBoxing);
 		}
 
 		// wildcard types are not assignable to a class (though one would think
@@ -329,7 +333,7 @@ public abstract class Types {
 	 * @return true if <code>type</code> is assignable to <code>toType</code>.
 	 */
 	private static boolean isAssignable(Type type, ParameterizedType toParameterizedType,
-			Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean autoBoxing) {
 		if (type == null) {
 			return true;
 		}
@@ -378,7 +382,7 @@ public abstract class Types {
 			if (fromTypeArg != null
 					&& !toTypeArg.equals(fromTypeArg)
 					&& !(toTypeArg instanceof WildcardType && isAssignable(fromTypeArg, toTypeArg,
-						typeVarAssigns))) {
+						typeVarAssigns, autoBoxing))) {
 				return false;
 			}
 		}
@@ -398,7 +402,7 @@ public abstract class Types {
 	 * @return true if <code>type</code> is assignable to <code>toGenericArrayType</code>.
 	 */
 	private static boolean isAssignable(Type type, GenericArrayType toGenericArrayType,
-			Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean autoBoxing) {
 		if (type == null) {
 			return true;
 		}
@@ -421,19 +425,19 @@ public abstract class Types {
 
 			// compare the component types
 			return cls.isArray()
-					&& isAssignable(cls.getComponentType(), toComponentType, typeVarAssigns);
+					&& isAssignable(cls.getComponentType(), toComponentType, typeVarAssigns, autoBoxing);
 		}
 
 		if (type instanceof GenericArrayType) {
 			// compare the component types
 			return isAssignable(((GenericArrayType)type).getGenericComponentType(),
-				toComponentType, typeVarAssigns);
+				toComponentType, typeVarAssigns, autoBoxing);
 		}
 
 		if (type instanceof WildcardType) {
 			// so long as one of the upper bounds is assignable, it's good
 			for (Type bound : getImplicitUpperBounds((WildcardType)type)) {
-				if (isAssignable(bound, toGenericArrayType)) {
+				if (isAssignable(bound, toGenericArrayType, autoBoxing)) {
 					return true;
 				}
 			}
@@ -445,7 +449,7 @@ public abstract class Types {
 			// probably should remove the following logic and just return false.
 			// type variables cannot specify arrays as bounds.
 			for (Type bound : getImplicitBounds((TypeVariable<?>)type)) {
-				if (isAssignable(bound, toGenericArrayType)) {
+				if (isAssignable(bound, toGenericArrayType, autoBoxing)) {
 					return true;
 				}
 			}
@@ -475,7 +479,7 @@ public abstract class Types {
 	 * @return true if <code>type</code> is assignable to <code>toWildcardType</code>.
 	 */
 	private static boolean isAssignable(Type type, WildcardType toWildcardType,
-			Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean autoBoxing) {
 		if (type == null) {
 			return true;
 		}
@@ -508,7 +512,7 @@ public abstract class Types {
 				// each
 				// upper bound of the target type
 				for (Type bound : upperBounds) {
-					if (!isAssignable(bound, toBound, typeVarAssigns)) {
+					if (!isAssignable(bound, toBound, typeVarAssigns, autoBoxing)) {
 						return false;
 					}
 				}
@@ -523,7 +527,7 @@ public abstract class Types {
 				// each
 				// lower bound of the subject type
 				for (Type bound : lowerBounds) {
-					if (!isAssignable(toBound, bound, typeVarAssigns)) {
+					if (!isAssignable(toBound, bound, typeVarAssigns, autoBoxing)) {
 						return false;
 					}
 				}
@@ -536,7 +540,7 @@ public abstract class Types {
 			// if there are assignments for unresolved type variables,
 			// now's the time to substitute them.
 			if (!isAssignable(type, substituteTypeVariables(toBound, typeVarAssigns),
-				typeVarAssigns)) {
+				typeVarAssigns, autoBoxing)) {
 				return false;
 			}
 		}
@@ -545,7 +549,7 @@ public abstract class Types {
 			// if there are assignments for unresolved type variables,
 			// now's the time to substitute them.
 			if (!isAssignable(substituteTypeVariables(toBound, typeVarAssigns), type,
-				typeVarAssigns)) {
+				typeVarAssigns, autoBoxing)) {
 				return false;
 			}
 		}
@@ -565,7 +569,7 @@ public abstract class Types {
 	 * @return true if <code>type</code> is assignable to <code>toTypeVariable</code>.
 	 */
 	private static boolean isAssignable(Type type, TypeVariable<?> toTypeVariable,
-			Map<TypeVariable<?>, Type> typeVarAssigns) {
+			Map<TypeVariable<?>, Type> typeVarAssigns, boolean autoBoxing) {
 		if (type == null) {
 			return true;
 		}
@@ -588,7 +592,7 @@ public abstract class Types {
 			Type[] bounds = getImplicitBounds((TypeVariable<?>)type);
 
 			for (Type bound : bounds) {
-				if (isAssignable(bound, toTypeVariable, typeVarAssigns)) {
+				if (isAssignable(bound, toTypeVariable, typeVarAssigns, autoBoxing)) {
 					return true;
 				}
 			}
@@ -1006,7 +1010,7 @@ public abstract class Types {
 		}
 
 		return value == null ? !(type instanceof Class<?>) || !((Class<?>)type).isPrimitive() : isAssignable(
-			value.getClass(), type, null);
+			value.getClass(), type, null, false);
 	}
 
 	/**
@@ -1047,7 +1051,7 @@ public abstract class Types {
 			boolean subtypeFound = false;
 
 			for (Type type2 : bounds) {
-				if (type1 != type2 && isAssignable(type2, type1, null)) {
+				if (type1 != type2 && isAssignable(type2, type1, null, false)) {
 					subtypeFound = true;
 					break;
 				}
@@ -1131,7 +1135,7 @@ public abstract class Types {
 
 			for (Type bound : getImplicitBounds(typeVar)) {
 				if (!isAssignable(type, substituteTypeVariables(bound, typeVarAssigns),
-					typeVarAssigns)) {
+					typeVarAssigns, false)) {
 					return false;
 				}
 			}

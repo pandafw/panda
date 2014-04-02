@@ -142,7 +142,7 @@ public class Castor<S, T> {
 	}
 	
 	protected boolean isAssignable(Object value) {
-		return Types.isAssignable(value.getClass(), toType);
+		return Types.isAssignable(value.getClass(), toType, false);
 	}
 	
 	/**

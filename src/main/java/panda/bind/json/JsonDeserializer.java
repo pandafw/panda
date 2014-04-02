@@ -199,173 +199,163 @@ public class JsonDeserializer extends AbstractDeserializer {
 	}
 
 	private <T> T parseJsonObject(Type type) {
-		try {
-			if (Object.class.equals(type)) {
-				type = defaultJsonObjectType;
+		if (Object.class.equals(type)) {
+			type = defaultJsonObjectType;
+		}
+
+		char c = tokener.nextClean();
+		if (c != '{') {
+			throw syntaxError("A json object text must begin with '{'");
+		}
+		if (type != null && isArrayType(type)) {
+			throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
+		}
+		
+		T obj = null;
+		BeanHandler<T> bh = null;
+		PropertyFilter<T> pf = null;
+		if (type != null) {
+			bh = getBeanHandler(type);
+			obj = bh.createObject();
+			pf = getPropertyFilter(type);
+		}
+
+		String key;
+		while (true) {
+			c = tokener.nextClean();
+			switch (c) {
+			case 0:
+				throw syntaxError("A JSONObject text must end with '}'");
+			case '}':
+				return obj;
+			case '"':
+			case '\'':
+				key = tokener.nextString(c);
+				break;
+			default:
+				throw syntaxError("Invalid json character: " + c);
 			}
 
-			char c = tokener.nextClean();
-			if (c != '{') {
-				throw syntaxError("A json object text must begin with '{'");
+			/*
+			 * The key is followed by ':'. We will also tolerate '=' or '=>'.
+			 */
+			c = tokener.nextClean();
+			if (c == '=') {
+				if (tokener.next() != '>') {
+					tokener.back();
+				}
 			}
-			if (type != null && isArrayType(type)) {
-				throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
-			}
-			
-			T obj = null;
-			BeanHandler<T> bh = null;
-			PropertyFilter<T> pf = null;
-			if (type != null) {
-				bh = getBeanHandler(type);
-				obj = bh.createObject();
-				pf = getPropertyFilter(type);
+			else if (c != ':') {
+				throw syntaxError("Expected a ':' after a key");
 			}
 
-			String key;
-			while (true) {
-				c = tokener.nextClean();
-				switch (c) {
-				case 0:
-					throw syntaxError("A JSONObject text must end with '}'");
-				case '}':
-					return obj;
-				case '"':
-				case '\'':
-					key = tokener.nextString(c);
-					break;
-				default:
-					throw syntaxError("Invalid json character: " + c);
-				}
-
-				/*
-				 * The key is followed by ':'. We will also tolerate '=' or '=>'.
-				 */
-				c = tokener.nextClean();
-				if (c == '=') {
-					if (tokener.next() != '>') {
-						tokener.back();
-					}
-				}
-				else if (c != ':') {
-					throw syntaxError("Expected a ':' after a key");
-				}
-
-				if (type == null || isExcludeProperty(key)) {
-					nextValue(null);
-				}
-				else {
-					if (bh.canWriteProperty(key)) {
-						Type pt = bh.getPropertyType(key);
-						if (isExcludeProperty(Types.getRawType(pt))) {
-							nextValue(null);
-						}
-						else {
-							Object val = nextValue(pt);
-							if (pf == null || pf.accept(obj, key, val)) {
-								bh.setPropertyValue(obj, key, val);
-							}
-						}
-					}
-					else if (bh.canReadProperty(key)) {
-						if (isIgnoreReadonlyProperty()) {
-							nextValue(null);
-						}
-						else {
-							throw syntaxError("readonly property: " + key);
-						}
+			if (type == null || isExcludeProperty(key)) {
+				nextValue(null);
+			}
+			else {
+				if (bh.canWriteProperty(key)) {
+					Type pt = bh.getPropertyType(key);
+					if (isExcludeProperty(Types.getRawType(pt))) {
+						nextValue(null);
 					}
 					else {
-						if (isIgnoreMissingProperty()) {
-							nextValue(null);
-						}
-						else {
-							throw syntaxError("missing property: " + key);
+						Object val = nextValue(pt);
+						if (pf == null || pf.accept(obj, key, val)) {
+							bh.setPropertyValue(obj, key, val);
 						}
 					}
 				}
-
-				/*
-				 * Pairs are separated by ','. We will also tolerate ';'.
-				 */
-				switch (tokener.nextClean()) {
-				case ';':
-				case ',':
-					if (tokener.nextClean() == '}') {
-						return obj;
+				else if (bh.canReadProperty(key)) {
+					if (isIgnoreReadonlyProperty()) {
+						nextValue(null);
 					}
-					tokener.back();
-					break;
-				case '}':
-					return obj;
-				default:
-					throw syntaxError("Expected a ',' or '}'");
+					else {
+						throw syntaxError("readonly property: " + key);
+					}
+				}
+				else {
+					if (isIgnoreMissingProperty()) {
+						nextValue(null);
+					}
+					else {
+						throw syntaxError("missing property: " + key);
+					}
 				}
 			}
-		}
-		catch (JsonException jsone) {
-			throw jsone;
+
+			/*
+			 * Pairs are separated by ','. We will also tolerate ';'.
+			 */
+			switch (tokener.nextClean()) {
+			case ';':
+			case ',':
+				if (tokener.nextClean() == '}') {
+					return obj;
+				}
+				tokener.back();
+				break;
+			case '}':
+				return obj;
+			default:
+				throw syntaxError("Expected a ',' or '}'");
+			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> T parseJsonArray(Type type) {
-		try {
-			if (Object.class.equals(type)) {
-				type = defaultJsonArrayType;
-			}
-
-			if (tokener.nextClean() != '[') {
-				throw syntaxError("A json array text must start with '['");
-			}
-			if (type != null && !isArrayType(type)) {
-				throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
-			}
-
-			List list = null;
-			Type etype = null;
-
-			if (type != null) {
-				list = new ArrayList();
-				etype = getArrayElementType(type);
-			}
-
-			if (tokener.nextClean() == ']') {
-				return (T)(list == null ? null : convertValue(list, type));
-			}
-
-			tokener.back();
-			for (;;) {
-				if (tokener.nextClean() == ',') {
-					tokener.back();
-					if (list != null) {
-						list.add(null);
-					}
-				}
-				else {
-					tokener.back();
-					Object v = nextValue(etype);
-					if (list != null) {
-						list.add(v);
-					}
-				}
-
-				switch (tokener.nextClean()) {
-				case ';':
-				case ',':
-					if (tokener.nextClean() == ']') {
-						return (T)(list == null ? null : convertValue(list, type));
-					}
-					tokener.back();
-					break;
-				case ']':
-					return (T)(list == null ? null : convertValue(list, type));
-				default:
-					throw syntaxError("Expected a ',' or ']'");
-				}
-			}
+		if (Object.class.equals(type)) {
+			type = defaultJsonArrayType;
 		}
-		catch (JsonException jsone) {
-			throw jsone;
+
+		if (tokener.nextClean() != '[') {
+			throw syntaxError("A json array text must start with '['");
+		}
+		if (type != null && !isArrayType(type)) {
+			throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
+		}
+
+		List list = null;
+		Type etype = null;
+
+		if (type != null) {
+			list = new ArrayList();
+			etype = getArrayElementType(type);
+		}
+
+		if (tokener.nextClean() == ']') {
+			return (T)(list == null ? null : convertValue(list, type));
+		}
+
+		tokener.back();
+		for (;;) {
+			if (tokener.nextClean() == ',') {
+				tokener.back();
+				if (list != null) {
+					list.add(null);
+				}
+			}
+			else {
+				tokener.back();
+				Object v = nextValue(etype);
+				if (list != null) {
+					list.add(v);
+				}
+			}
+
+			switch (tokener.nextClean()) {
+			case ';':
+			case ',':
+				if (tokener.nextClean() == ']') {
+					return (T)(list == null ? null : convertValue(list, type));
+				}
+				tokener.back();
+				break;
+			case ']':
+				return (T)(list == null ? null : convertValue(list, type));
+			default:
+				throw syntaxError("Expected a ',' or ']'");
+			}
 		}
 	}
 }
