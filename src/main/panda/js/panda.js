@@ -1581,7 +1581,7 @@ if (typeof String.formatSize != "function") {
 		icons: {
 			'help':'fa-li fa fa-question-circle',
 			'info': 'fa-li fa fa-info-circle',
-			'error': 'fa-li fa fa-times-circle',
+			'error': 'fa-li fa fa-exclamation-circle',
 			'warn': 'fa-li fa fa-exclamation-triangle',
 			'down': 'fa-caret-down',
 			'up': 'fa-caret-up'

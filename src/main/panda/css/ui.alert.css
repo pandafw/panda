@@ -1,0 +1,35 @@
+ul.p-application-errors i.fa-li, 
+ul.p-application-warnings i.fa-li, 
+ul.p-application-confirms i.fa-li, 
+ul.p-application-messages i.fa-li,
+ul.p-session-errors i.fa-li, 
+ul.p-session-warnings i.fa-li, 
+ul.p-session-confirms i.fa-li, 
+ul.p-session-messages i.fa-li,
+ul.p-action-errors i.fa-li, 
+ul.p-action-warnings i.fa-li, 
+ul.p-action-confirms i.fa-li, 
+ul.p-action-messages i.fa-li,
+ul.p-field-errors i.fa-li {
+	font-size: 200%;
+	left: -30px;
+	top: 0;
+	width: auto;
+}
+
+ul.p-application-errors li, 
+ul.p-application-warnings li, 
+ul.p-application-confirms li, 
+ul.p-application-messages li,
+ul.p-session-errors li, 
+ul.p-session-warnings li, 
+ul.p-session-confirms li, 
+ul.p-session-messages li,
+ul.p-action-errors li, 
+ul.p-action-warnings li, 
+ul.p-action-confirms li, 
+ul.p-action-messages li,
+ul.p-field-errors li {
+	padding: 5px 0;
+}
+
