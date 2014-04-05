@@ -44,6 +44,14 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	}
 
 	/*----------------------------------------------------------------------*
+	 * Constants
+	 *----------------------------------------------------------------------*/
+<#list entity.propertyList as p>
+	public static final String ${p.uname} = "${p.name}";
+
+</#list>
+
+	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
 <#list entity.propertyList as p>
@@ -193,7 +201,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	public String toString() {
 		return Objects.toStringBuilder(this)
 <#list entity.propertyList as p>
-				.append("${p.name}", ${p.name})
+				.append(${p.uname}, ${p.name})
 </#list>
 <#if entity.baseBeanClass?has_content>
 				.appendSuper(super.toString())

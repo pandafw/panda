@@ -80,7 +80,7 @@ public abstract class AbstractCodeGenerator {
 				setParameter("includes", cl.getOptionValues("i"));
 			}
 			else {
-                errorRequired(options, "includes");
+				errorRequired(options, "includes");
 			}
 
 			if (cl.hasOption("e")) {
@@ -230,7 +230,7 @@ public abstract class AbstractCodeGenerator {
 		}
 	}
 
-	protected void includeDom(File file, Document doc, Properties properties, String extension) throws Exception {
+	protected void includeDom(File file, Document doc, Properties properties) throws Exception {
 		List<Node> incList = new ArrayList<Node>();
 		
 		Element el = doc.getDocumentElement();
@@ -245,25 +245,28 @@ public abstract class AbstractCodeGenerator {
 			if (tn == null) {
 				throw new Exception("<include> mush have a text node");
 			}
+
 			String inc = tn.getNodeValue();
 			if (needTranslate(inc)) {
 				inc = translateValue(inc, properties);
 			}
 
-			if (inc.endsWith(extension)) {
-				File fi = new File(file.getParent(), inc);
-				if (inc.endsWith(".properties")) {
-					PropertiesEx.load(properties, fi);
-				}
-				else if (inc.endsWith(".xml")) {
-					Document idoc = loadDocument(fi, properties);
-					Node iec = doc.importNode(idoc.getDocumentElement(), true);
-					for (Node fc = iec.getFirstChild(); fc != null; fc = iec.getFirstChild()) {
-						el.appendChild(iec.removeChild(fc));
-					}
-				}
-				incList.add(in);
+			File fi = new File(file.getParent(), inc);
+			if (inc.endsWith(".properties")) {
+				PropertiesEx.load(properties, fi);
 			}
+			else if (inc.endsWith(".xml")) {
+				Document idoc = loadDocument(fi, properties);
+				Node iec = doc.importNode(idoc.getDocumentElement(), true);
+				for (Node fc = iec.getFirstChild(); fc != null; fc = iec.getFirstChild()) {
+					el.appendChild(iec.removeChild(fc));
+				}
+			}
+			incList.add(in);
+		}
+		
+		for (Node n : incList) {
+			n.getParentNode().removeChild(n);
 		}
 	}
 
@@ -273,11 +276,9 @@ public abstract class AbstractCodeGenerator {
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(file);
 		
-		includeDom(file, doc, properties, ".properties");
+		includeDom(file, doc, properties);
 		translateDom(doc, properties);
 		validateDom(file, doc);
-
-		includeDom(file, doc, properties, ".xml");
 		
 		return doc;
 	}
