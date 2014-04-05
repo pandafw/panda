@@ -145,6 +145,18 @@ public class ToStringBuilder implements Builder<String> {
 	 * <p>
 	 * This default style is obtained from {@link #getDefaultStyle()}.
 	 * </p>
+	 */
+	public ToStringBuilder() {
+		this(null, null, null);
+	}
+
+	/**
+	 * <p>
+	 * Constructs a builder for the specified object using the default output style.
+	 * </p>
+	 * <p>
+	 * This default style is obtained from {@link #getDefaultStyle()}.
+	 * </p>
 	 * 
 	 * @param object the Object to build a <code>toString</code> for, not recommended to be null
 	 */

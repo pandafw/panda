@@ -828,6 +828,14 @@ public abstract class Objects {
 
 	/**
 	 * create a ToStringBuilder instance
+	 * @return ToStringBuilder instance
+	 */
+	public static ToStringBuilder toStringBuilder() {
+		return new ToStringBuilder();
+	}
+
+	/**
+	 * create a ToStringBuilder instance
 	 * @param obj object
 	 * @return ToStringBuilder instance
 	 */
