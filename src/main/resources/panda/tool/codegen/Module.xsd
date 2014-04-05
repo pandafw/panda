@@ -42,15 +42,17 @@
 
 	<complexType name="Action">
 		<sequence>
-			<element name="property" type="tns:ActionProperty" minOccurs="0"
-				maxOccurs="unbounded">
-			</element>
-			<element name="list" type="tns:ListUI" minOccurs="0"
-				maxOccurs="unbounded">
-			</element>
-			<element name="input" type="tns:InputUI" minOccurs="0"
-				maxOccurs="unbounded">
-			</element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="property" type="tns:ActionProperty" minOccurs="0"
+					maxOccurs="unbounded">
+				</element>
+				<element name="list" type="tns:ListUI" minOccurs="0"
+					maxOccurs="unbounded">
+				</element>
+				<element name="input" type="tns:InputUI" minOccurs="0"
+					maxOccurs="unbounded">
+				</element>
+			</choice>
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
 		<attribute name="trimString" type="string"></attribute>
