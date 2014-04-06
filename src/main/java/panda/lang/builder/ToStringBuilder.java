@@ -1049,10 +1049,7 @@ public class ToStringBuilder implements Builder<String> {
 	 */
 	@Override
 	public String toString() {
-		if (this.getObject() == null) {
-			this.getStringBuilder().append(this.getStyle().getNullText());
-		}
-		else {
+		if (this.getObject() != null) {
 			style.appendEnd(this.getStringBuilder(), this.getObject());
 		}
 		return this.getStringBuilder().toString();

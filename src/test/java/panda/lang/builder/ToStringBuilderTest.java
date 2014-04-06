@@ -35,19 +35,24 @@ public class ToStringBuilderTest {
 	// -----------------------------------------------------------------------
 
 	@Test
+	public void testConstructorEx0() {
+		assertEquals("", new ToStringBuilder(null).toString());
+	}
+
+	@Test
 	public void testConstructorEx1() {
-		assertEquals("<null>", new ToStringBuilder(null).toString());
+		assertEquals("", new ToStringBuilder(null).toString());
 	}
 
 	@Test
 	public void testConstructorEx2() {
-		assertEquals("<null>", new ToStringBuilder(null, null).toString());
+		assertEquals("", new ToStringBuilder(null, null).toString());
 		new ToStringBuilder(this.base, null).toString();
 	}
 
 	@Test
 	public void testConstructorEx3() {
-		assertEquals("<null>", new ToStringBuilder(null, null, null).toString());
+		assertEquals("", new ToStringBuilder(null, null, null).toString());
 		new ToStringBuilder(this.base, null, null).toString();
 		new ToStringBuilder(this.base, ToStringStyle.DEFAULT_STYLE, null).toString();
 	}
