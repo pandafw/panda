@@ -25,8 +25,8 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	//----------------------------------------------------------------------
 	// field conditions
 	//----------------------------------------------------------------------
-<#list entity.columnList as p>
+<#list entity.propertyList as p><#if p.dbColumn || p.joinColumn>
 	<@condition p=p/>
-</#list>
+</#if></#list>
 }
 

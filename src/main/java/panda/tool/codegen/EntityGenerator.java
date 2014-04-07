@@ -125,11 +125,13 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		Set<String> imports = new TreeSet<String>();
 
 		Set<EntityProperty> ps = new HashSet<EntityProperty>();
-		for (EntityProperty p : entity.getColumnList()) {
-			if (!"bin".equals(p.getFieldKind())) {
-				ps.add(p);
+		for (EntityProperty p : entity.getPropertyList()) {
+			if (p.isDbColumn() || p.isJoinColumn()) {
+				if (!"bin".equals(p.getFieldKind())) {
+					ps.add(p);
+				}
+				addFieldCondition(imports, p);
 			}
-			addFieldCondition(imports, p);
 		}
 //		for (EntityProperty p : entity.getJoinColumnList()) {
 //			if (!"bin".equals(p.getFieldKind())) {
