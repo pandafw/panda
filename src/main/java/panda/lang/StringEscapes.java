@@ -151,6 +151,13 @@ public abstract class StringEscapes {
 		);
 
 	/**
+	 * Translator object for unescaping escaped HTML 4.0. While {@link #unescapeHtml4(CharSequence)} is
+	 * the expected method of use, this object allows the HTML unescaping functionality to be used
+	 * as the foundation for a custom translator.
+	 */
+	public static final CharSequenceTranslator UNESCAPE_HTML = UNESCAPE_HTML4;
+	
+	/**
 	 * Translator object for unescaping escaped XML. While {@link #unescapeXml(CharSequence)} is the
 	 * expected method of use, this object allows the XML unescaping functionality to be used as the
 	 * foundation for a custom translator.
@@ -470,6 +477,39 @@ public abstract class StringEscapes {
 	}
 
 	// -----------------------------------------------------------------------
+	/**
+	 * <p>
+	 * Unescapes a string containing entity escapes to a string containing the actual Unicode
+	 * characters corresponding to the escapes. Supports HTML 4.0 entities.
+	 * </p>
+	 * <p>
+	 * For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;" will become
+	 * "&lt;Fran&ccedil;ais&gt;"
+	 * </p>
+	 * <p>
+	 * If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
+	 * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
+	 * </p>
+	 * 
+	 * @param input the {@code String} to unescape, may be null
+	 * @return a new unescaped {@code String}, {@code null} if null string input
+	 */
+	public static final String unescapeHtml(final CharSequence input) {
+		return UNESCAPE_HTML.translate(input);
+	}
+
+	public static final void unescapeHtml(final CharSequence input, final Appendable writer) throws IOException {
+		UNESCAPE_HTML.translate(input, writer);
+	}
+
+	public static final void unescapeHtml(final CharSequence input, final int start, final Appendable writer) throws IOException {
+		UNESCAPE_HTML.translate(input, start, writer);
+	}
+
+	public static final void unescapeHtml(final CharSequence input, final int start, final int end, final Appendable writer) throws IOException {
+		UNESCAPE_HTML.translate(input, start, end, writer);
+	}
+
 	/**
 	 * <p>
 	 * Unescapes a string containing entity escapes to a string containing the actual Unicode
