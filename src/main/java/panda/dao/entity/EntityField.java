@@ -28,6 +28,8 @@ public class EntityField {
 	private boolean unsigned;
 	private String defaultValue;
 	private boolean readonly;
+	private String joinName;
+	private String joinField;
 	
 	/**
 	 * constructor
@@ -268,7 +270,7 @@ public class EntityField {
 	 * @return the readonly
 	 */
 	public boolean isReadonly() {
-		return readonly;
+		return readonly || isJoinField();
 	}
 
 	/**
@@ -276,6 +278,38 @@ public class EntityField {
 	 */
 	protected void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	public boolean isJoinField() {
+		return Strings.isNotEmpty(joinName);
+	}
+	
+	/**
+	 * @return the joinName
+	 */
+	public String getJoinName() {
+		return joinName;
+	}
+
+	/**
+	 * @param joinName the joinName to set
+	 */
+	protected void setJoinName(String joinName) {
+		this.joinName = joinName;
+	}
+
+	/**
+	 * @return the joinField
+	 */
+	public String getJoinField() {
+		return joinField;
+	}
+
+	/**
+	 * @param joinField the joinField to set
+	 */
+	protected void setJoinField(String joinField) {
+		this.joinField = joinField;
 	}
 
 	/**
@@ -316,6 +350,8 @@ public class EntityField {
 				.append("unsigned", unsigned)
 				.append("defaultValue", defaultValue)
 				.append("readonly", readonly)
+				.append("joinName", joinName)
+				.append("joinField", joinField)
 				.toString();
 	}
 }

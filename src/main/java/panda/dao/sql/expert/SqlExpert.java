@@ -291,6 +291,10 @@ public abstract class SqlExpert {
 				String col = query.getColumn(ef.getName());
 				if (Strings.isEmpty(col)) {
 					col = ef.getColumn();
+					// skip join column which has not joined
+					if (Strings.isEmpty(col)) {
+						continue;
+					}
 				}
 				else {
 					col = '(' + col + ')';

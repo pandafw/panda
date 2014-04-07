@@ -197,6 +197,21 @@ public abstract class SqlDaoTestCase {
 	}
 	
 	@Test
+	public void testSelectColumn() {
+		List<Teacher> expect = Teacher.creates(1, 3);
+		expect.remove(1);
+		for (Teacher t : expect) {
+			t.setMemo("m");
+		}
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+
+		q.in("name", new String[] { "T1", "T3" }).column("memo", "'m'");
+		List<Teacher> actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+	}
+	
+	@Test
 	public void testSelectInclude() {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);
@@ -238,6 +253,24 @@ public abstract class SqlDaoTestCase {
 		Assert.assertEquals(expect, actual);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelectQueryJoin() {
+		List<Score> expect = Score.creates(1, 2);
+		for (Score s : expect) {
+			s.setStudentName("S" + s.getStudent());
+		}
+
+		GenericQuery<Score> q = new GenericQuery<Score>(Score.class);
+		GenericQuery<Student> j = new GenericQuery<Student>(Student.class);
+
+		q.in("student", new Object[] { 1, 2 })
+			.leftJoin(j, "s", "t.student = s.id")
+			.column("studentName", "s.name");
+		List<Score> actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+	}
+
 	@Test
 	public void testSelectIn() {
 		List<Teacher> expect = Teacher.creates(1, 3);

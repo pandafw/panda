@@ -30,6 +30,7 @@ public class Entity<T> {
 	protected List<EntityField> primaryKeys;
 	protected Map<String, EntityIndex> indexMap;
 	protected Map<String, EntityFKey> foreignKeyMap;
+	protected Map<String, EntityJoin> joinMap;
 
 	protected Map<DB, String> prepSqls;
 	protected Map<DB, String> postSqls;
@@ -58,6 +59,7 @@ public class Entity<T> {
 		this.primaryKeys = entity.primaryKeys;
 		this.indexMap = entity.indexMap;
 		this.foreignKeyMap = entity.foreignKeyMap;
+		this.joinMap = entity.joinMap;
 		this.beanHandler = entity.beanHandler;
 	}
 
@@ -240,6 +242,35 @@ public class Entity<T> {
 	 */
 	public EntityFKey getForeignKey(String name) {
 		return foreignKeyMap.get(name);
+	}
+
+
+	/**
+	 * @return the joins
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<EntityJoin> getJoins() {
+		return joinMap == null ? Collections.EMPTY_LIST : joinMap.values();
+	}
+
+	/**
+	 * @param join the join to add
+	 */
+	protected void addJoin(EntityJoin join) {
+		if (joinMap == null) {
+			joinMap = new LinkedHashMap<String, EntityJoin>();
+		}
+		joinMap.put(join.getName(), join);
+	}
+
+	/**
+	 * get a join by name
+	 * 
+	 * @param name key name
+	 * @return join
+	 */
+	public EntityJoin getJoin(String name) {
+		return joinMap.get(name);
 	}
 
 	/**

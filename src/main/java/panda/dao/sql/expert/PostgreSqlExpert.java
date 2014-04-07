@@ -34,6 +34,10 @@ public class PostgreSqlExpert extends SqlExpert {
 
 		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
 		for (EntityField ef : entity.getFields()) {
+			if (ef.isReadonly()) {
+				continue;
+			}
+
 			sb.append('\n').append(ef.getColumn());
 
 			if (ef.isAutoIncrement()) {

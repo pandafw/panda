@@ -33,6 +33,10 @@ public class HsqldbSqlExpert extends SqlExpert {
 		
 		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
 		for (EntityField ef : entity.getFields()) {
+			if (ef.isReadonly()) {
+				continue;
+			}
+
 			sb.append('\n').append(ef.getColumn());
 			sb.append(' ').append(evalFieldType(ef));
 			

@@ -5,16 +5,23 @@ import java.util.List;
 
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
-import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.ForeignKeys;
+import panda.dao.entity.annotation.Join;
+import panda.dao.entity.annotation.JoinColumn;
+import panda.dao.entity.annotation.Joins;
+import panda.dao.entity.annotation.PK;
 import panda.lang.Objects;
 
 @Comment("Score of student")
 @ForeignKeys({@FK(target=Student.class, fields={"student"})})
+@Joins({@Join(name="s", target=Student.class, keys={"student"}, refs={"id"})})
 public class Score {
 	@PK
 	int student;
 
+	@JoinColumn(name="s", field="name")
+	String studentName;
+	
 	@PK
 	String klass;
 
@@ -28,6 +35,20 @@ public class Score {
 
 	public void setStudent(int studentId) {
 		this.student = studentId;
+	}
+
+	/**
+	 * @return the studentName
+	 */
+	public String getStudentName() {
+		return studentName;
+	}
+
+	/**
+	 * @param studentName the studentName to set
+	 */
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 
 	public String getKlass() {
@@ -58,6 +79,7 @@ public class Score {
 	public String toString() {
 		return Objects.toStringBuilder(this)
 				.append("student", student)
+				.append("studentName, studentName")
 				.append("klass", klass)
 				.append("key", key)
 				.append("score", score)

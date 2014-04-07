@@ -24,6 +24,9 @@ import panda.dao.entity.annotation.ForeignKeys;
 import panda.dao.entity.annotation.Id;
 import panda.dao.entity.annotation.Index;
 import panda.dao.entity.annotation.Indexes;
+import panda.dao.entity.annotation.Join;
+import panda.dao.entity.annotation.JoinColumn;
+import panda.dao.entity.annotation.Joins;
 import panda.dao.entity.annotation.Meta;
 import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Post;
@@ -116,6 +119,12 @@ public class AnnotationEntityMaker implements EntityMaker {
 		ForeignKeys annFKeys = Classes.getAnnotation(type, ForeignKeys.class);
 		if (annFKeys != null) {
 			evalEntityFKeys(en, annFKeys);
+		}
+
+		// evaluate joins
+		Joins annJoins = Classes.getAnnotation(type, Joins.class);
+		if (annJoins != null) {
+			evalEntityJoins(en, annJoins);
 		}
 
 		// done
@@ -262,6 +271,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		Column annColumn;
 		Comment annComment;
 		Readonly annReadonly;
+		JoinColumn annJoinColumn;
 		Prep annPrep;
 		Post annPost;
 		
@@ -272,13 +282,14 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.annFk = field.getAnnotation(FK.class);
 			mi.annIndex = field.getAnnotation(Index.class);
 			mi.annColumn = field.getAnnotation(Column.class);
+			mi.annJoinColumn = field.getAnnotation(JoinColumn.class);
 
 			if (Modifier.isTransient(field.getModifiers())) {
 				useColumn = true;
 			}
 
 			if (useColumn && mi.annColumn == null && mi.annId == null && mi.annPk == null && mi.annFk == null
-					&& mi.annIndex == null) {
+					&& mi.annIndex == null && mi.annJoinColumn == null) {
 				return null;
 			}
 
@@ -298,8 +309,10 @@ public class AnnotationEntityMaker implements EntityMaker {
 			mi.annFk = method.getAnnotation(FK.class);
 			mi.annIndex = method.getAnnotation(Index.class);
 			mi.annColumn = method.getAnnotation(Column.class);
+			mi.annJoinColumn = method.getAnnotation(JoinColumn.class);
 
-			if (mi.annColumn == null && mi.annId == null && mi.annPk == null && mi.annFk == null && mi.annIndex == null) {
+			if (mi.annColumn == null && mi.annId == null && mi.annPk == null && mi.annFk == null 
+					&& mi.annIndex == null && mi.annJoinColumn == null) {
 				return null;
 			}
 
@@ -348,9 +361,17 @@ public class AnnotationEntityMaker implements EntityMaker {
 			ef.setDefaultValue(mi.annColumn.defaults());
 		}
 
-		if (Strings.isBlank(ef.getColumn())) {
-			ef.setColumn(mi.name);
+		if (mi.annJoinColumn != null) {
+			ef.setJoinName(mi.annJoinColumn.name());
+			ef.setJoinField(mi.annJoinColumn.field());
+			ef.setColumn(null);
 		}
+		else {
+			if (Strings.isBlank(ef.getColumn())) {
+				ef.setColumn(mi.name);
+			}
+		}
+		
 		if (Strings.isBlank(ef.getJdbcType())) {
 			guessEntityFieldJdbcType(ef);
 		}
@@ -496,6 +517,60 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private void evalEntityFKeys(Entity<?> en, ForeignKeys fks) {
 		for (FK fk: fks.value()) {
 			evalEntityFKey(en, fk.name(), fk.target(), fk.fields());
+		}
+	}
+
+	private void evalEntityJoin(Entity<?> en, String name, String type, Class<?> target, String[] keys, String[] refs) {
+		EntityJoin ej = new EntityJoin();
+		Entity<?> ref = getTargetEntity(en, target);
+		if (ref == null) {
+			throw new IllegalArgumentException("Failed to find target entity for " + target);
+		}
+
+		ej.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+		ej.setType(type);
+		ej.setTarget(ref);
+
+		if (keys == null || keys.length == 0) {
+			throw Exceptions.makeThrow("Empty keys for @Join(%s: %s)", ej.getName(), Strings.join(keys, '|'));
+		}
+
+		if (refs == null || refs.length == 0) {
+			throw Exceptions.makeThrow("Empty refs for @Join(%s: %s)", ej.getName(), Strings.join(refs, '|'));
+		}
+
+		if (keys.length != refs.length) {
+			throw Exceptions.makeThrow("keys & refs for @Join(%s: %s, %s) is not valid", ej.getName(), Strings.join(keys, '|'), Strings.join(refs, '|'));
+		}
+		
+		for (int i = 0; i < keys.length; i++) {
+			String kn = keys[i];
+			String rn = refs[i];
+			
+			EntityField ef = en.getField(kn);
+			if (ef == null) {
+				throw Exceptions.makeThrow("Failed to find key field '%s' in '%s' for @Join(%s: %s)", 
+					kn, en.getType(), ej.getName(), Strings.join(keys, '|'));
+			}
+			
+			EntityField rf = ref.getField(rn);
+			
+			if (!Types.equals(ef.getType(), rf.getType())) {
+				throw Exceptions.makeThrow(
+					"The type '%s' of field '%s' is not equals to the field '%s' of target entity '%s' for '%s'@Join(%s: %s, %s)", 
+					ef.getType(), kn, rf.getName(), ref.getType(), en.getType(), ej.getName(), 
+					Strings.join(keys, '|'), Strings.join(refs, '|'));
+			}
+			
+			ej.addKeyField(ef);
+			ej.addRefField(rf);
+		}
+		en.addJoin(ej);
+	}
+
+	private void evalEntityJoins(Entity<?> en, Joins joins) {
+		for (Join join: joins.value()) {
+			evalEntityJoin(en, join.name(), join.type(), join.target(), join.keys(), join.refs());
 		}
 	}
 }
