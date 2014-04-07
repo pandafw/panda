@@ -5,7 +5,6 @@
 	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="out/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/api/android.jar" sourcepath="lib/api/android-sources.jar"/>
 	<classpathentry kind="lib" path="lib/api/el-api.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
