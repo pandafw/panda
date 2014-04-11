@@ -602,7 +602,7 @@ public class HttpServlets {
 		HttpServletSupport hss = new HttpServletSupport(res);
 		hss.setCharset(Charsets.UTF_8);
 		hss.setContentType("text/html");
-		hss.setExpires(0);
+		hss.setExpiry(0);
 		hss.writeResponseHeader();
 		
 		PrintWriter pw = res.getWriter();

@@ -33,7 +33,7 @@ public class HttpServletSupport {
 	private String contentType;
 	private Boolean attachment;
 	private Boolean bom;
-	private long expires = -1;
+	private int expiry = -1;
 	private String cacheControl;
 	private Date lastModified;
 	
@@ -165,17 +165,17 @@ public class HttpServletSupport {
 	}
 
 	/**
-	 * @return the expires
+	 * @return the expiry (seconds)
 	 */
-	public long getExpires() {
-		return expires;
+	public int getExpiry() {
+		return expiry;
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param expiry the expiry (seconds) to set
 	 */
-	public void setExpires(long expires) {
-		this.expires = expires;
+	public void setExpiry(int expiry) {
+		this.expiry = expiry;
 	}
 
 	/**
@@ -275,19 +275,19 @@ public class HttpServletSupport {
 			}
 		}
 
-		if (expires > 0) {
-			String cc = "max-age=" + expires;
+		if (expiry > 0) {
+			String cc = "max-age=" + expiry;
 			if (Strings.isNotEmpty(cacheControl)) {
 				cc += ", " + cacheControl;
 			}
 			response.setHeader(HttpHeader.CACHE_CONTROL, cc);
 
 			Date dexp = lastModified != null ? lastModified : Calendar.getInstance().getTime();
-			dexp.setTime(dexp.getTime() + (expires * 1000));
+			dexp.setTime(dexp.getTime() + (expiry * 1000));
 			String sexp = HttpDates.format(dexp);
 			response.setHeader(HttpHeader.EXPIRES, sexp);
 		}
-		else if (expires == 0 && noFileCache) {
+		else if (expiry == 0 && noFileCache) {
 			setResponseNoCache(response);
 		}
 
