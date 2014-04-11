@@ -30,56 +30,56 @@ public class DateTimes {
 	/**
 	 * Number of milliseconds in a standard minute.
 	 */
-	public static final long SEC_MINUTE = 60;
+	public static final int SEC_MINUTE = 60;
 	/**
 	 * Number of milliseconds in a standard hour.
 	 */
-	public static final long SEC_HOUR = 60 * SEC_MINUTE;
+	public static final int SEC_HOUR = 60 * SEC_MINUTE;
 	/**
 	 * Number of milliseconds in a standard day.
 	 */
-	public static final long SEC_DAY = 24 * SEC_HOUR;
+	public static final int SEC_DAY = 24 * SEC_HOUR;
 	/**
 	 * Number of milliseconds in a standard week.
 	 */
-	public static final long SEC_WEEK = SEC_DAY * 7;
+	public static final int SEC_WEEK = SEC_DAY * 7;
 	/**
 	 * Number of milliseconds in a standard month (30 days).
 	 */
-	public static final long SEC_MONTH = SEC_DAY * 30;
+	public static final int SEC_MONTH = SEC_DAY * 30;
 	/**
 	 * Number of milliseconds in a standard year (365 dys).
 	 */
-	public static final long SEC_YEAR = SEC_DAY * 365;
+	public static final int SEC_YEAR = SEC_DAY * 365;
 
 	/**
 	 * Number of milliseconds in a standard second.
 	 */
-	public static final long MS_SECOND = 1000;
+	public static final int MS_SECOND = 1000;
 	/**
 	 * Number of milliseconds in a standard minute.
 	 */
-	public static final long MS_MINUTE = 60 * MS_SECOND;
+	public static final int MS_MINUTE = 60 * MS_SECOND;
 	/**
 	 * Number of milliseconds in a standard hour.
 	 */
-	public static final long MS_HOUR = 60 * MS_MINUTE;
+	public static final int MS_HOUR = 60 * MS_MINUTE;
 	/**
 	 * Number of milliseconds in a standard day.
 	 */
-	public static final long MS_DAY = 24 * MS_HOUR;
+	public static final int MS_DAY = 24 * MS_HOUR;
 	/**
 	 * Number of milliseconds in a standard week.
 	 */
-	public static final long MS_WEEK = MS_DAY * 7;
+	public static final long MS_WEEK = MS_DAY * 7L;
 	/**
 	 * Number of milliseconds in a standard month (30 days).
 	 */
-	public static final long MS_MONTH = MS_DAY * 30;
+	public static final long MS_MONTH = MS_DAY * 30L;
 	/**
 	 * Number of milliseconds in a standard year (365 dys).
 	 */
-	public static final long MS_YEAR = MS_DAY * 365;
+	public static final long MS_YEAR = MS_DAY * 365L;
 
 	/**
 	 * This is half a month, so this represents whether a date is in the top or bottom half of the
