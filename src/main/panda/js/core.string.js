@@ -1,3 +1,14 @@
+if (typeof String.prototype.hashCode != "function") {
+	String.prototype.hashCode = function() {
+		var h = 0;
+		for (var i = 0; i < this.length; i++) {
+//			h = 31 * h + this.charCodeAt(i);
+			h = ((h << 5) - h) + this.charCodeAt(i); // faster
+			h |= 0; // Convert to 32bit integer
+		}
+		return h;
+	};
+}
 if (typeof String.prototype.isEmpty != "function") {
 	String.prototype.isEmpty = function(s) {
 		return this.length < 1;
@@ -340,6 +351,11 @@ if (typeof String.prototype.queryParams != "function") {
 if (typeof String.defaults != "function") {
 	String.defaults = function(s, d) {
 		return s == null ? d : s;
+	};
+}
+if (typeof String.hashCode != "function") {
+	String.hashCode = function(s) {
+		return s == null ? 0 : s.hashCode();
 	};
 }
 if (typeof String.isEmpty != "function") {
