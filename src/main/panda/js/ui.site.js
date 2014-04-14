@@ -213,14 +213,33 @@ function s_google_plusone() {
 //------------------------------------------------------
 // site vars
 var site = {
-	statics: 'static'
+	statics: '/static'
 };
 
 function s_setbase(c) {
 	c = $.extend(site, c);
-	$.cookie.defaults = c.cookie;
+	$.cookie.defaults = c.cookie || {};
 	return site;
 }
+
+//------------------------------------------------------
+//clipboard
+function s_copyToClipboard(s) {
+	try {
+		// ie
+		clipboardData.setData('Text', s);
+	}
+	catch (e) {
+		var swf = document.createElement('embed');
+		swf.src = site.statics + "/panda/swf/clipboard.swf";
+		swf.setAttribute('FlashVars','code=' + encodeURIComponent(s));
+		swf.type = 'application/x-shockwave-flash';
+		swf.width = '0';
+		swf.height = '0';
+		$('body').append(swf);
+	}
+}
+
 
 //------------------------------------------------------
 function s_decorate(selector) {
@@ -231,7 +250,7 @@ function s_decorate(selector) {
 }
 
 function s_init(c) {
-	var p = [ 's:static', 's:base', 's:google_analytics' ];
+	var p = [ 's:statics', 's:base', 's:google_analytics' ];
 	var m = { body: 'body' };
 	$('meta').each(function() {
 		var $t = $(this);

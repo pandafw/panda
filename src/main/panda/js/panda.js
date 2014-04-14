@@ -1063,6 +1063,17 @@ DecimalFormat.prototype.getNumericString = function(str){
 	}
 	return str;
 }
+if (typeof String.prototype.hashCode != "function") {
+	String.prototype.hashCode = function() {
+		var h = 0;
+		for (var i = 0; i < this.length; i++) {
+//			h = 31 * h + this.charCodeAt(i);
+			h = ((h << 5) - h) + this.charCodeAt(i); // faster
+			h |= 0; // Convert to 32bit integer
+		}
+		return h;
+	};
+}
 if (typeof String.prototype.isEmpty != "function") {
 	String.prototype.isEmpty = function(s) {
 		return this.length < 1;
@@ -1405,6 +1416,11 @@ if (typeof String.prototype.queryParams != "function") {
 if (typeof String.defaults != "function") {
 	String.defaults = function(s, d) {
 		return s == null ? d : s;
+	};
+}
+if (typeof String.hashCode != "function") {
+	String.hashCode = function(s) {
+		return s == null ? 0 : s.hashCode();
 	};
 }
 if (typeof String.isEmpty != "function") {
@@ -2439,14 +2455,33 @@ function s_google_plusone() {
 //------------------------------------------------------
 // site vars
 var site = {
-	statics: 'static'
+	statics: '/static'
 };
 
 function s_setbase(c) {
 	c = $.extend(site, c);
-	$.cookie.defaults = c.cookie;
+	$.cookie.defaults = c.cookie || {};
 	return site;
 }
+
+//------------------------------------------------------
+//clipboard
+function s_copyToClipboard(s) {
+	try {
+		// ie
+		clipboardData.setData('Text', s);
+	}
+	catch (e) {
+		var swf = document.createElement('embed');
+		swf.src = site.statics + "/panda/swf/clipboard.swf";
+		swf.setAttribute('FlashVars','code=' + encodeURIComponent(s));
+		swf.type = 'application/x-shockwave-flash';
+		swf.width = '0';
+		swf.height = '0';
+		$('body').append(swf);
+	}
+}
+
 
 //------------------------------------------------------
 function s_decorate(selector) {
@@ -2457,7 +2492,7 @@ function s_decorate(selector) {
 }
 
 function s_init(c) {
-	var p = [ 's:static', 's:base', 's:google_analytics' ];
+	var p = [ 's:statics', 's:base', 's:google_analytics' ];
 	var m = { body: 'body' };
 	$('meta').each(function() {
 		var $t = $(this);
