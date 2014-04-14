@@ -183,7 +183,7 @@ if (typeof String.prototype.unescapeHtml != "function") {
 }
 if (typeof String.prototype.escapePhtml != "function") {
 	String.prototype.escapePhtml = function() {
-		return this.escapeHtml().replace(/\n/g, "<br/>");
+		return this.escapeHtml().replace(/\r?\n/g, "<br/>");
 	};
 }
 if (typeof String.prototype.unescapePhtml != "function") {
