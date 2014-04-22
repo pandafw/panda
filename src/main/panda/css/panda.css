@@ -143,6 +143,16 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	font-size: 200%;
 	color: #DC143C;
 }
+
+/*
+ * Adblock
+ * --------------------------------------------------
+ */
+.p-adblock {
+	font-size: 150%;
+	color: #666;
+}
+
 /*---------------------------------------------*/
 /* listview.css                                */
 /*---------------------------------------------*/
