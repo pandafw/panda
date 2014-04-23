@@ -254,8 +254,8 @@ public class HttpClient {
 	protected HttpResponse doSend() throws IOException {
 		final String CRLF = Streams.LINE_SEPARATOR;
 
-		if (log.isDebugEnabled()) {
-			log.debug(request.toString());
+		if (log.isTraceEnabled()) {
+			log.trace(request.toString());
 		}
 		
 		HttpResponse response;
@@ -283,7 +283,7 @@ public class HttpClient {
 			response = createResponse();
 		}
 
-		if (log.isInfoEnabled()) {
+		if (log.isDebugEnabled()) {
 			StringBuilder msg = new StringBuilder();
 			msg.append(request.getMethod()).append(' ').append(request.getURL())
 				.append(" - ").append(response.getStatusLine());
@@ -292,7 +292,7 @@ public class HttpClient {
 			}
 			msg.append(" [").append(sw).append(']');
 
-			if (log.isDebugEnabled()) {
+			if (log.isTraceEnabled()) {
 				if (response.getHeader() != null) {
 					msg.append(CRLF); 
 					response.getHeader().toString(msg);
@@ -302,10 +302,10 @@ public class HttpClient {
 				if (Strings.isNotEmpty(text)) {
 					msg.append(CRLF).append(text);
 				}
-				log.debug(msg);
+				log.trace(msg);
 			}
 			else {
-				log.info(msg);
+				log.debug(msg);
 			}
 		}
 		return response;

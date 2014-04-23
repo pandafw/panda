@@ -587,8 +587,8 @@ public class HttpResponse implements Closeable {
 				content = Streams.toByteArray(is);
 				sw.stop();
 
-				if (log.isInfoEnabled()) {
-					log.info("DOWN " + url + " - (" 
+				if (log.isDebugEnabled()) {
+					log.debug("DOWN " + url + " - (" 
 							+ Files.toDisplaySize(content.length) + " / " + sw 
 							+ ") [" + Inets.toSpeedString(content.length, sw.getTime()) + "]");
 				}
