@@ -52,6 +52,12 @@ public abstract class DaoTypes {
 	public static final String LONGVARBINARY = "LONGVARBINARY";
 
 	// ---------------------------------------------------
+	// collection
+	public static final String LIST          = "LIST";
+	public static final String MAP           = "MAP";
+	public static final String SET           = "SET";
+
+	// ---------------------------------------------------
 	// other
 	public static final String ARRAY         = "ARRAY";
 	public static final String DATALINK      = "DATALINK";
@@ -133,5 +139,9 @@ public abstract class DaoTypes {
 		setType(TINYINT, Types.TINYINT);
 		setType(VARBINARY, Types.VARBINARY);
 		setType(VARCHAR, Types.VARCHAR);
+		
+		NAME_MAP.put(LIST, Types.VARCHAR);
+		NAME_MAP.put(MAP, Types.VARCHAR);
+		NAME_MAP.put(SET, Types.VARCHAR);
 	}
 }

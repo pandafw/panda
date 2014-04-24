@@ -220,7 +220,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void testQueryForListByInArray() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:intArray)";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:intArray:list)";
 
 		TestBean param = new TestBean();
 		param.setIntArray(new int[] { 1001, 1002, 1004, 1005 });
@@ -255,7 +255,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void testQueryForListByInArrayOrder() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:id) ORDER BY ::orderCol ::orderDir";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:id:list) ORDER BY ::orderCol ::orderDir";
 
 		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		List<Integer> ids = new ArrayList<Integer>();
@@ -276,7 +276,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void testQueryForListByInListOrder() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:intList) ORDER BY ::orderCol ::orderDir";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:intList:list) ORDER BY ::orderCol ::orderDir";
 
 		TestBean param = new TestBean();
 		List<Integer> ids = new ArrayList<Integer>();
@@ -297,7 +297,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void testQueryForMap() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:ids)";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:ids:list)";
 
 		Map<String, Object> param = new LinkedHashMap<String, Object>();
 		List<Integer> ids = new ArrayList<Integer>();
@@ -315,7 +315,7 @@ public abstract class SimpleSqlExecutorTestCase extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void testQueryForMapByInList() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:intList)";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:intList:list)";
 
 		TestBean param = new TestBean();
 		List<Integer> ids = new ArrayList<Integer>();

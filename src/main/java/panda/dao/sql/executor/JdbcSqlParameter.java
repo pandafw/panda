@@ -102,7 +102,6 @@ public class JdbcSqlParameter {
 		this.scale = scale;
 		
 		if (mode != null) {
-			mode = mode.toUpperCase();
 			this.mode = Mode.valueOf(mode);
 			if (this.mode == null) {
 				throw new IllegalArgumentException("Illegal parameter '" + name + "': unknown mode [" + mode + "], it must be IN/OUT/INOUT.");
@@ -185,25 +184,17 @@ public class JdbcSqlParameter {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("name: ").append(name);
-		sb.append(", ");
-		sb.append("value: ").append(value);
-		sb.append(", ");
-		sb.append("jdbcType: ").append(jdbcType);
-		sb.append(", ");
-		sb.append("scale: ").append(scale);
-		sb.append(", ");
-		sb.append("mode: ").append(mode);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder()
+				.append("name", name)
+				.append("value", value)
+				.append("jdbcType", jdbcType)
+				.append("scale", scale)
+				.append("mode", mode)
+				.toString();
 	}
 
 	/**

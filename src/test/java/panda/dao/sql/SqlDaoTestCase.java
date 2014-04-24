@@ -242,13 +242,17 @@ public abstract class SqlDaoTestCase {
 		Assert.assertEquals(expect, actual);
 	}
 	
+	protected String escapeColumn(String column) {
+		return column;
+	}
+	
 	@Test
 	public void testSelectSum() {
 		List<Score> expect = Score.sums(1, 2);
 		
 		GenericQuery<Score> q = new GenericQuery<Score>(Score.class);
 
-		q.in("student", new Object[] { 1, 2 }).include("student").column("score", "sum(score)").groupBy("student");
+		q.in("student", new Object[] { 1, 2 }).include("student").column("score", "sum(" + escapeColumn("score") + ")").groupBy("student");
 		List<Score> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);
 	}
@@ -265,8 +269,9 @@ public abstract class SqlDaoTestCase {
 		GenericQuery<Student> j = new GenericQuery<Student>(Student.class);
 
 		q.in("student", new Object[] { 1, 2 })
-			.leftJoin(j, "s", "t.student = s.id")
-			.column("studentName", "s.name");
+			.leftJoin(j, "s", "student = id")
+			.column("studentName", "s.name")
+			.orderBy("score");
 		List<Score> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);
 	}

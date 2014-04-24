@@ -360,7 +360,7 @@ public abstract class SqlExpert {
 		}
 		
 		for (Entry<String, Join> en : query.getJoins().entrySet()) {
-			String alias = en.getKey();
+			String jalias = en.getKey();
 			Join join = en.getValue();
 			
 			sql.append(' ').append(join.getType()).append(" JOIN ");
@@ -374,10 +374,32 @@ public abstract class SqlExpert {
 			else {
 				sql.append(escapeTable(jq.getTable()));
 			}
-			sql.append(' ').append(alias);
+			sql.append(' ').append(jalias);
 			sql.append(" ON (");
 			for (String s : join.getConditions()) {
-				sql.append(s).append(" AND ");
+				
+				int d = s.indexOf('=');
+				int l = 1;
+				if (d < 0) {
+					d = s.indexOf("<>");
+					l = 2;
+				}
+				if (d < 0) {
+					throw new IllegalArgumentException("Invalid join condition: " + s);
+				}
+
+				// main table alias
+				sql.append(talias).append('.');
+				// main table column
+				sql.append(escapeColumn(Strings.trim(s.substring(0, d))));
+				// operator
+				sql.append(s.substring(d, d + l));
+				// join table alias
+				sql.append(jalias).append('.');
+				// join table column
+				sql.append(escapeColumn(Strings.trim(s.substring(d + l))));
+				
+				sql.append(" AND ");
 			}
 			// remove last " AND ";
 			sql.setLength(sql.length() - 5);

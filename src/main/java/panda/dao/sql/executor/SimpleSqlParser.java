@@ -8,7 +8,6 @@ import java.util.List;
 import panda.bean.BeanHandler;
 import panda.dao.DaoNamings;
 import panda.dao.DaoTypes;
-import panda.dao.sql.adapter.TypeAdapter;
 import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Strings;
 
@@ -51,6 +50,11 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			sql.append(' ').append(alias);
 			return true;
 		}
+
+		@Override
+		public String toString() {
+			return "[A]: " + alias;
+		}
 	}
 
 	protected static class ParameterSegment implements SqlSegment {
@@ -87,7 +91,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			name = content;
 			int i = name.indexOf(':');
 			if (i > 0) {
-				type = name.substring(i + 1).toUpperCase();
+				type = name.substring(i + 1).toUpperCase().toUpperCase();
 				name = name.substring(0, i);
 
 				i = type.indexOf(':');
@@ -129,6 +133,27 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			sql.append(" ?");
 			return true;
 		}
+
+		protected void toString(StringBuilder sb) {
+			sb.append(name);
+			if (type != null) {
+				sb.append(':').append(type);
+				if (scale != null) {
+					sb.append('.').append(scale);
+				}
+			}
+			if (mode != null) {
+				sb.append(':').append(mode);
+			}
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[P]: ");
+			toString(sb);
+			return sb.toString();
+		}
 	}
 
 	protected static class VariableSegment extends ParameterSegment {
@@ -149,33 +174,30 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			}
 
 			TypeAdapters typeAdapters = executor.getTypeAdapters();
-			if (paramValue != null) {
-				TypeAdapter typeAdapter = typeAdapters.getTypeAdapter(paramValue.getClass(), type);
-				if (typeAdapter == null) {
-					if (paramValue.getClass().isArray()) {
-						int len = Array.getLength(paramValue);
-						if (len > 0) {
-							sql.append(' ');
-							for (int i = 0; i < len; i++) {
-								Object v = Array.get(paramValue, i);
-								sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
-								sql.append("?,");
-							}
-							sql.setLength(sql.length() - 1);
-							return true;
+			if (paramValue != null && (DaoTypes.LIST.equals(type) || DaoTypes.SET.equals(type))) {
+				if (paramValue.getClass().isArray()) {
+					int len = Array.getLength(paramValue);
+					if (len > 0) {
+						sql.append(' ');
+						for (int i = 0; i < len; i++) {
+							Object v = Array.get(paramValue, i);
+							sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
+							sql.append("?,");
 						}
+						sql.setLength(sql.length() - 1);
+						return true;
 					}
-					else if (paramValue instanceof Collection) {
-						Collection c = (Collection)paramValue;
-						if (!c.isEmpty()) {
-							sql.append(' ');
-							for (Object v : c) {
-								sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
-								sql.append("?,");
-							}
-							sql.setLength(sql.length() - 1);
-							return true;
+				}
+				else if (paramValue instanceof Collection) {
+					Collection c = (Collection)paramValue;
+					if (!c.isEmpty()) {
+						sql.append(' ');
+						for (Object v : c) {
+							sqlParams.add(new JdbcSqlParameter(name, v, type, scale, mode, typeAdapters));
+							sql.append("?,");
 						}
+						sql.setLength(sql.length() - 1);
+						return true;
 					}
 				}
 			}
@@ -183,6 +205,14 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			sqlParams.add(new JdbcSqlParameter(name, paramValue, type, scale, mode, typeAdapters));
 			sql.append(" ?");
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[V]: ");
+			toString(sb);
+			return sb.toString();
 		}
 	}
 
@@ -212,6 +242,11 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			
 			return false;
 		}
+
+		@Override
+		public String toString() {
+			return "[R]: " + propertyName;
+		}
 	}
 
 	/**
@@ -232,6 +267,11 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			sql.append(' ').append(comment);
 			return false;
 		}
+
+		@Override
+		public String toString() {
+			return "[C]: " + comment;
+		}
 	}
 
 	/**
@@ -250,6 +290,11 @@ public class SimpleSqlParser extends JdbcSqlParser {
 		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			sql.append(' ').append(string);
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "[S]: " + string;
 		}
 	}
 
@@ -310,6 +355,11 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			}
 			sql.append(content);
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "[W]: (" + kind + "): " + content;
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -201,9 +202,20 @@ public class TypeAdapters {
 		//----------------------------------------------------
 		// json collection
 		//
-		register("LIST", new CollectionTypeAdapter(ArrayList.class));
-		register("MAP", new CollectionTypeAdapter(LinkedHashMap.class));
-		register("SET", new CollectionTypeAdapter(LinkedHashSet.class));
+		adapter = new CollectionTypeAdapter(ArrayList.class);
+		register(List.class, adapter);
+		register(ArrayList.class, adapter);
+
+		adapter = new CollectionTypeAdapter(LinkedHashMap.class);
+		register(Map.class, adapter);
+		register(LinkedHashMap.class, adapter);
+
+		adapter = new CollectionTypeAdapter(LinkedHashSet.class);
+		register(Set.class, adapter);
+		register(LinkedHashSet.class, adapter);
+		
+		register(HashMap.class, new CollectionTypeAdapter(HashMap.class));
+		register(HashSet.class, new CollectionTypeAdapter(HashSet.class));
 	}
 
 	/**
@@ -259,81 +271,68 @@ public class TypeAdapters {
 		}
 
 		if (javaType.isEnum()) {
-			adapter = new EnumTypeAdapter(javaType);
+			return new EnumTypeAdapter(javaType);
 		}
-		else if (jdbcType != null) {
+		
+		if (jdbcType != null) {
 			Integer sqlType = DaoTypes.getType(jdbcType);
-			if (sqlType == null) {
-				if ("LIST".equalsIgnoreCase(jdbcType) && List.class.isAssignableFrom(javaType)) {
-					adapter = new CollectionTypeAdapter(javaType);
-				}
-				else if ("SET".equalsIgnoreCase(jdbcType) && Set.class.isAssignableFrom(javaType)) {
-					adapter = new CollectionTypeAdapter(javaType);
-				}
-				else if ("MAP".equalsIgnoreCase(jdbcType) && Map.class.isAssignableFrom(javaType)) {
-					adapter = new CollectionTypeAdapter(javaType);
-				}
-			}
-			else {
+			if (sqlType != null) {
 				switch (sqlType) {
 				case java.sql.Types.BIT:
 				case java.sql.Types.BOOLEAN:
-					adapter = new BooleanTypeAdapter(this, javaType);
-					break;
+					return new BooleanTypeAdapter(this, javaType);
 				case java.sql.Types.TINYINT:
-					adapter = new ByteTypeAdapter(this, javaType);
-					break;
+					return new ByteTypeAdapter(this, javaType);
 				case java.sql.Types.SMALLINT:
-					adapter = new ShortTypeAdapter(this, javaType);
-					break;
+					return new ShortTypeAdapter(this, javaType);
 				case java.sql.Types.INTEGER:
-					adapter = new IntegerTypeAdapter(this, javaType);
-					break;
+					return new IntegerTypeAdapter(this, javaType);
 				case java.sql.Types.BIGINT:
-					adapter = new LongTypeAdapter(this, javaType);
-					break;
+					return new LongTypeAdapter(this, javaType);
 				case java.sql.Types.FLOAT:
-					adapter = new FloatTypeAdapter(this, javaType);
-					break;
+					return new FloatTypeAdapter(this, javaType);
 				case java.sql.Types.DOUBLE:
-					adapter = new DoubleTypeAdapter(this, javaType);
-					break;
+					return new DoubleTypeAdapter(this, javaType);
 				case java.sql.Types.NUMERIC:
 				case java.sql.Types.DECIMAL:
-					adapter = new BigDecimalAdapter(this, javaType);
-					break;
+					return new BigDecimalAdapter(this, javaType);
 				case java.sql.Types.CHAR:
 				case java.sql.Types.VARCHAR:
-					adapter = new StringTypeAdapter(this, javaType);
-					break;
+					return new StringTypeAdapter(this, javaType);
 				case java.sql.Types.DATE:
-					adapter = new SqlDateTypeAdapter(this, javaType);
-					break;
+					return new SqlDateTypeAdapter(this, javaType);
 				case java.sql.Types.TIME:
-					adapter = new SqlTimeTypeAdapter(this, javaType);
-					break;
+					return new SqlTimeTypeAdapter(this, javaType);
 				case java.sql.Types.TIMESTAMP:
-					adapter = new SqlTimestampTypeAdapter(this, javaType);
-					break;
+					return new SqlTimestampTypeAdapter(this, javaType);
 				case java.sql.Types.BINARY:
 				case java.sql.Types.VARBINARY:
-					adapter = new ByteArrayTypeAdapter(this, javaType);
-					break;
+					return new ByteArrayTypeAdapter(this, javaType);
 				case java.sql.Types.JAVA_OBJECT:
-					adapter = new ObjectTypeAdapter(this, javaType);
-					break;
+					return new ObjectTypeAdapter(this, javaType);
 				case java.sql.Types.LONGVARBINARY:
 				case java.sql.Types.BLOB:
-					adapter = new BlobTypeAdapter(this, javaType);
-					break;
+					return new BlobTypeAdapter(this, javaType);
 				case java.sql.Types.LONGVARCHAR:
 				case java.sql.Types.CLOB:
-					adapter = new ClobTypeAdapter(this, javaType);
-					break;
+					return new ClobTypeAdapter(this, javaType);
 				}
 			}
 		}
-		return adapter;
+		
+		if (List.class.isAssignableFrom(javaType)) {
+			return new CollectionTypeAdapter(javaType);
+		}
+		
+		if (Set.class.isAssignableFrom(javaType)) {
+			return new CollectionTypeAdapter(javaType);
+		}
+		
+		if (Map.class.isAssignableFrom(javaType)) {
+			return new CollectionTypeAdapter(javaType);
+		}
+		
+		return null;
 	}
 
 	/**

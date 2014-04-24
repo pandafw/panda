@@ -79,7 +79,7 @@ public class Score {
 	public String toString() {
 		return Objects.toStringBuilder(this)
 				.append("student", student)
-				.append("studentName, studentName")
+				.append("studentName", studentName)
 				.append("klass", klass)
 				.append("key", key)
 				.append("score", score)

@@ -48,17 +48,22 @@ public class DynamicSqlParser extends SimpleSqlParser {
 			sql.setLength(size);
 			return false;
 		}
+
+		@Override
+		public String toString() {
+			return "[L]: " + items.toString();
+		}
 	}
 
 	/**
 	 * LogicalExpressionSegment
 	 */
 	protected static class LogicalExpressionSegment extends LogicalContainerSegment {
-		private final static int AT = 1;
-		private final static int NOT = 2;
+		private final static char AT = '@';
+		private final static char NOT = '!';
 
 		private String propertyName;
-		private int operator;
+		private char operator;
 		
 		/**
 		 * Constructor
@@ -67,14 +72,8 @@ public class DynamicSqlParser extends SimpleSqlParser {
 		 */
 		public LogicalExpressionSegment(String propertyName, List<SqlSegment> items) {
 			super(items);
-			if (propertyName.charAt(0) == '!') {
-				operator = NOT;
-				this.propertyName = propertyName;
-			}
-			else {
-				operator = AT;
-				this.propertyName = propertyName.substring(1);
-			}
+			operator = propertyName.charAt(0);
+			this.propertyName = propertyName.substring(1);
 		}
 
 		/**
@@ -83,7 +82,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 		 * @param items items
 		 * @param operator operator
 		 */
-		public LogicalExpressionSegment(String propertyName, List<SqlSegment> items, int operator) {
+		public LogicalExpressionSegment(String propertyName, List<SqlSegment> items, char operator) {
 			super(items);
 			this.operator = operator;
 			this.propertyName = propertyName;
@@ -124,6 +123,11 @@ public class DynamicSqlParser extends SimpleSqlParser {
 				}
 			}
 			return r;
+		}
+
+		@Override
+		public String toString() {
+			return "[E]: " + operator + propertyName;
 		}
 	}
 
