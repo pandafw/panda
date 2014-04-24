@@ -7,7 +7,7 @@ import javax.xml.namespace.QName;
 
 /**
  * This object contains factory methods for each Java content interface and Java element interface
- * generated in the nuts.tools.codegen.bean package.
+ * generated in the panda.tools.codegen.bean package.
  * <p>
  * An ObjectFactory allows you to programatically construct new instances of the Java representation
  * for XML content. The Java representation of XML content can consist of schema derived interfaces
@@ -21,7 +21,7 @@ public class ObjectFactory {
 
 	/**
 	 * Create a new ObjectFactory that can be used to create new instances of schema derived classes
-	 * for package: nuts.tools.codegen.bean
+	 * for package: panda.tools.codegen.bean
 	 */
 	public ObjectFactory() {
 	}

@@ -30,15 +30,13 @@
 			<#if _a0?has_content>
 				<#assign _a1 = _aa[1]!_a0/>
 	${s}#if action.hasPermission("${action.name}_${_a1}")>
-		${s}@p.url var="_u_" action="${action.name}_${_a1}"/>
-		${s}@p.text var="_icon_" name="icon-${_a0}"/>
-		${s}#assign _ash_ = "<a class=\"n-lv-ia\" href=\"" + _u_
-				+ "\" title=\"" + action.getText("tooltip-${_a0}", "")?html + "\">"/>
+		${s}@p.url var='_u_' action='${action.name}_${_a1}'/>
+		${s}@p.text var='_icon_' name='icon-${_a0}'/>
+		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + _u_ + '" title="' + action.getText("tooltip-${_a0}", "")?html + '">'/>
 		${s}#if _icon_?has_content>
-			${s}#assign _ash_ = _ash_ + "<img class=\"n-lv-i n-icon " + _icon_ 
-				+ "\" src=\"" + static + "/nuts/images/s.gif\"></img>"/>
+			${s}#assign _ash_ = _ash_ + '<i class="fa ' + _icon_ + '"></i>'/>
 		${s}/#if>
-		${s}#assign _ash_ = _ash_ + action.getText("label-${_a0}", "") + "</a>"/>
+		${s}#assign _ash_ = _ash_ + action.getText("label-${_a0}", "") + '</a>'/>
 	${s}/#if>
 			</#if>
 		<#else>

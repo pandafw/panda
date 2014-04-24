@@ -7,7 +7,7 @@ ${s}#if action.hasErrors()>
 		<h3>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></h3>
 	</div>
 
-	${s}#include "/nuts/exts/struts2/views/action-prompt-all.ftl"/>
+	${s}#include "/panda/exts/struts2/views/action-alert-all.ftl"/>
 </div>
 
 <@footer/>

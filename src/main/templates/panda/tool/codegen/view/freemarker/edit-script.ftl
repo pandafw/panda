@@ -10,12 +10,14 @@
 				</#list>
 			</#if>
 			<#if _popup?has_content>
+
+//TODO
 			function ${action.name}_${f.name}_onPopupCallback(sd) {
 				<#if _popup.fields?has_content>
 				<#list _popup.fields?keys as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
 						<#if f2.editTag?? && f2.editTag.name == "n.viewfield">
-				nuts.viewfield("#${action.name}<#if !f2.actionField>_${actionDataFieldName}</#if>_${fk}").val(sd.${_popup.fields[fk]});
+				panda.viewfield("#${action.name}<#if !f2.actionField>_${actionDataFieldName}</#if>_${fk}").val(sd.${_popup.fields[fk]});
 						<#else>
 				$("#${action.name}<#if !f2.actionField>_${actionDataFieldName}</#if>_${fk}").val(sd.${_popup.fields[fk]});
 						</#if>
@@ -26,7 +28,7 @@
 				$.popup().hide();
 			}
 		
-			$(function() {
+			function onPageLoad() {
 			<#assign pid = ""/>
 			<#if _popup.ref?has_content>
 				<#assign f2 = ui.getFieldByName(_popup.ref)/>
@@ -43,7 +45,7 @@ ${s}@s.param name="${pn}" value="${_popup.params[pn]}"/><#rt>
 				</#if>
 ${s}/@p.url>"
 				});
-				
+
 			</#if>
 				$('#${action.name}<#if !f.actionField>_${actionDataFieldName}</#if>_${f.name}').next().popup({
 					id: "${pid}",
