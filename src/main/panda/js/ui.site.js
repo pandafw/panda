@@ -272,7 +272,10 @@ function s_decorate(selector) {
 	$(selector).each(function() {
 		var $w = $(this);
 		s_hook_forms($w);
+		//$w.find('textarea[autosize="true"]').autosize();
 	});
+	
+	$(window).trigger('load');
 }
 
 function s_init(c) {
