@@ -47,7 +47,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -56,7 +56,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.min.js"/>
 		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -71,7 +71,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -80,7 +80,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
 		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -96,7 +96,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="ui.*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/panda/js/panda.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -109,7 +109,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
 			<fileset dir="src/main/jquery/js" includes="jquery.*.js"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/jquery/js/jquery-plugins.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -150,7 +150,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 
 	<target name="min-css" description="Merge &amp; minify css files">
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -159,7 +159,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
 		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -172,7 +172,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<concat destfile="src/main/panda/css/panda.css" binary="true">
 			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/panda/css/panda.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -185,7 +185,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
 			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true">
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/jquery/css/jquery-plugins.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>

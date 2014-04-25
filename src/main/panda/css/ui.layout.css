@@ -8,11 +8,11 @@
 .p-header > h3 {
 	margin-bottom: 5px;
 }
-.p-header > h3 > i {
+.p-header > h3 > i, .p-header > i {
 	color: #2f6f9f;
 	vertical-align: middle;
 }
-.p-header > h3.p-error > i {
+.p-header > h3.p-error > i, .p-header > i.p-error {
 	font-size: 200%;
 	color: #DC143C;
 }

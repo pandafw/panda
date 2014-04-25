@@ -107,21 +107,21 @@ function sl_limit(id, el) {
 	sl_submit(id);
 }
 function sl_submit(id) {
-	var $form = $('#' + id);
-	var $pi = $form.closest('.p-inner');
-	if ($pi.size() > 0) {
-		var data = $form.serializeArray();
-		data[data.length] = { name: '__inner', value: 'true' };
+	var $f = $('#' + id);
+	var $i = $f.closest('.p-inner');
+	if ($i.size() > 0) {
+		var d = $f.serializeArray();
+		d[d.length] = { name: '__inner', value: 'true' };
 		
-		$pi.parent()
-			.loadmask({ cssClass: 'p-loader-large-snake' })
-			.load($form.attr('action'), data, function() {
-				$pi.parent().unloadmask();
+		var $p = $i.parent();
+		$p.loadmask({ cssClass: 'p-loader-large-snake' });
+		$p.load($f.attr('action'), d, function() {
+				$p.unloadmask();
 			});
 	}
 	else {
 		s_loadmask();
-		$form.submit();
+		$f.submit();
 	}
 }
 

@@ -2171,74 +2171,43 @@ function _nlv_onTBodyMouseOut(evt) {
 	$(evt.target).closest("tr.n-lv-tr").removeClass("ui-state-hover n-lv-hover");
 	return false;
 }
-if (typeof(panda) == "undefined") { panda = {}; }
-
 (function() {
 	function _click(evt) {
 		var $el = $(this);
-		if (!$el.hasClass('n-p-disabled')) {
-			var pn = $el.attr("pageno");
-			if (pn) {
-				var $pg = $el.closest("div.n-p");
-				var cmd = $pg.attr("click").replace("#", (pn - 1) * $pg.attr("limit"));
-				eval(cmd);
+		if ($el.parent().hasClass('disabled')) {
+			evt.preventDefault();
+		}
+		else {
+			var pn = $el.data("pageno");
+			if (pn >= 0) {
+				var $pg = $el.closest(".p-pager");
+				var js = $pg.data("click");
+				if (js.contains('#')) {
+					evt.preventDefault();
+					js = js.replace("#", (pn - 1) * $pg.data("limit"));
+				}
+				eval(js);
 			}
 		}
 	}
 	
-	panda.pager = function(o) {
-		var $p = $(o);
-		if ($p.attr("pager") != "true") {
-			$p.attr("pager", "true");
-			var $pn = $p.find(".n-p-pageno, .n-p-prev, .n-p-next, .n-p-first, .n-p-last, .n-p-active");
-
-			if ($p.attr("click")) {
-				$pn.click(_click);
+	$.fn.ppager = function(api, pno) {
+		return this.each(function() {
+			var $p = $(this);
+			if ($p.attr("ppager") != "true") {
+				$p.attr("ppager", "true");
+				if ($p.data("click")) {
+					$p.find("a[data-pageno]").click(_click);
+				}
 			}
-		}
-		
-		this.$el = $p;
-		
-		this.has = function(n) {
-			return this.$el.find("[pageno=" + n + "]").size() > 0;
-		};
-		
-		this.val = function(n) {
-			this.$el.find(".n-p-active")
-				.removeClass("n-p-active")
-				.addClass("n-p-pageno")
-			 	.click(_click);
-			this.$el.find(".n-p-pageno[pageno=" + n + "]")
-				.unbind()
-				.removeClass("n-p-pageno")
-				.addClass("n-p-active");
-			
-			if (n <= 1) {
-				this.$el.find(".n-p-prev")
-					.children().attr("pageno", n - 1)
-					.end().parent().hide();
-			}
-			else {
-				this.$el.find(".n-p-prev")
-					.children().attr("pageno", n - 1)
-					.end().parent().show();
-			}
-			
-			if (n >= this.$el.attr("total")) {
-				this.$el.find(".n-p-next")
-					.children().attr("pageno", n + 1)
-					.end().parent().hide();
-			}
-			else {
-				this.$el.find(".n-p-next")
-					.children().attr("pageno", n + 1)
-					.end().parent().show();
-			}
-			return this;
-		};
-		
-		return this;
+		});
 	};
+	
+	// PAGER DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[data-spy="ppager"]').ppager();
+	});
 })();
 //------------------------------------------------------
 function s_preload() {
@@ -2349,21 +2318,21 @@ function sl_limit(id, el) {
 	sl_submit(id);
 }
 function sl_submit(id) {
-	var $form = $('#' + id);
-	var $pi = $form.closest('.p-inner');
-	if ($pi.size() > 0) {
-		var data = $form.serializeArray();
-		data[data.length] = { name: '__inner', value: 'true' };
+	var $f = $('#' + id);
+	var $i = $f.closest('.p-inner');
+	if ($i.size() > 0) {
+		var d = $f.serializeArray();
+		d[d.length] = { name: '__inner', value: 'true' };
 		
-		$pi.parent()
-			.loadmask({ cssClass: 'p-loader-large-snake' })
-			.load($form.attr('action'), data, function() {
-				$pi.parent().unloadmask();
+		var $p = $i.parent();
+		$p.loadmask({ cssClass: 'p-loader-large-snake' });
+		$p.load($f.attr('action'), d, function() {
+				$p.unloadmask();
 			});
 	}
 	else {
 		s_loadmask();
-		$form.submit();
+		$f.submit();
 	}
 }
 
