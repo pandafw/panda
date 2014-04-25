@@ -40,11 +40,9 @@
 	<classpathentry kind="lib" path="lib/run/poi-ooxml-schemas.jar" sourcepath="lib/run/poi-ooxml-schemas-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-scratchpad.jar" sourcepath="lib/run/poi-scratchpad-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/sitemesh.jar" sourcepath="lib/run/site-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/struts2-core.jar" sourcepath="lib/run/struts2-core-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/velocity.jar" sourcepath="lib/run/velocity-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/xmlbeans.jar" sourcepath="lib/run/xmlbeans-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/xmlworker.jar" sourcepath="lib/run/xmlworker-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/xwork-core.jar" sourcepath="lib/run/xwork-core-sources.jar"/>
 	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
 	<classpathentry kind="lib" path="lib/test/junit.jar" sourcepath="lib/test/junit-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-exts"/>
