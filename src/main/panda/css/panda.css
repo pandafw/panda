@@ -144,6 +144,33 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	color: #DC143C;
 }
 
+
+/*
+ * p-navih (ul, ol)
+ * --------------------------------------------------
+ */
+.p-navih {
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.p-navih li {
+	display: inline;
+	margin: 0;
+	padding: 0 1em;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #c6bcaa;
+	font-size: 0.88em;
+}
+.p-navih li:first-child {
+	border-left: none;
+	padding-left: 0;
+}
+.p-navih li:last-child {
+	border-right: none;
+}
+
 /*
  * Adblock
  * --------------------------------------------------
