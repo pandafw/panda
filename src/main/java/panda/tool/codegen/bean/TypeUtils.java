@@ -266,7 +266,7 @@ public class TypeUtils {
 	private final static Map<String, String> ALIAS_MAP = new HashMap<String, String>();
 	static {
 		ALIAS_MAP.put("bool", boolean.class.getName());
-		ALIAS_MAP.put("boolean", Boolean.class.getName());
+		ALIAS_MAP.put("boolean", boolean.class.getName());
 		ALIAS_MAP.put("Boolean", Boolean.class.getName());
 		ALIAS_MAP.put("byte", byte.class.getName());
 		ALIAS_MAP.put("Byte", Byte.class.getName());

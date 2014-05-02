@@ -79,7 +79,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	/**
 	 * @return the ${p.name}
 	 */
-	public ${p.simpleJavaType} get${p.name?cap_first}() {
+	public ${p.simpleJavaType} <#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}() {
 	<#assign getterTrim = "" />
 	<#if p.getterTrim??>
 		<#if p.getterTrim?has_content>
