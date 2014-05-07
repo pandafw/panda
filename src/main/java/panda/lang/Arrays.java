@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.RandomAccess;
@@ -8037,6 +8038,23 @@ public abstract class Arrays {
 		}
 		
 		Map<T, T> map = new HashMap<T, T>(a.length);
+		for (T[] e : a) {
+			map.put(e[0], e[1]);
+		}
+		return map;
+	}
+
+	/**
+	 * Returns a new map contains all elements of the specified array.
+	 * @param a the array 
+	 * @return a set 
+	 */
+	public static <T> LinkedHashMap<T, T> toLinkedMap(T[][] a) {
+		if (a == null) {
+			return null;
+		}
+		
+		LinkedHashMap<T, T> map = new LinkedHashMap<T, T>(a.length);
 		for (T[] e : a) {
 			map.put(e[0], e[1]);
 		}
