@@ -167,13 +167,6 @@ public abstract class SqlExpert {
 	
 	public abstract List<String> create(Entity<?> entity);
 
-	public Sql count(Query<?> query) {
-		Sql sql = new Sql();
-		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(query.getTable()));
-		where(sql, query, null);
-		return sql;
-	}
-
 	private String normalizeColumn(String table, String column) {
 		if (column.charAt(0) == '(') {
 			return column;
@@ -183,9 +176,24 @@ public abstract class SqlExpert {
 		}
 		return table + '.' + escapeColumn(column);
 	}
+	
+	public Sql count(Query<?> query) {
+		return count(query, "_c");
+	}
+	
+	protected Sql count(Query<?> query, String alias) {
+		Sql sql = new Sql();
+		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(query.getTable()));
+		if (Strings.isNotEmpty(alias)) {
+			sql.append(' ').append(alias);
+		}
+		join(sql, query, alias);
+		where(sql, query, alias);
+		return sql;
+	}
 
 	public Sql select(Query<?> query) {
-		return select(query, "t");
+		return select(query, "_s");
 	}
 	
 	protected Sql select(Query<?> query, String alias) {
