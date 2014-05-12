@@ -41,12 +41,12 @@ import panda.log.Logs;
  * <li>pool.maximumActiveConnections - default: 10</li>
  * <li>pool.maximumIdleConnections - default: 5</li>
  * <li>pool.maximumCheckoutTime - default: 20000</li>
- * <li>pool.timeToWait - default: 20000</li>
  * <li>pool.pingEnabled - default false</li>
  * <li>pool.pingQuery</li>
- * <li>pool.pingTimeout - default: 0</li>
+ * <li>pool.pingTimeout - default: 1000</li>
  * <li>pool.pingConnectionsOlderThan - default: 0</li>
- * <li>pool.pingConnectionsNotUsedFor - default: 0</li>
+ * <li>pool.pingConnectionsNotUsedFor - default: 600000</li>
+ * <li>pool.timeToWait - default: 20000</li>
  * </ul>
  * <p/>
  * 
@@ -100,12 +100,13 @@ public class SimpleDataSource implements DataSource {
 		private int maximumActiveConnections = 10;
 		private int maximumIdleConnections = 5;
 		private int maximumCheckoutTime = 20000;
-		private int timeToWait = 20000;
 		private boolean pingEnabled = false;
 		private String pingQuery;
-		private int pingTimeout;
+		private int pingTimeout = 1000;
 		private int pingConnectionsOlderThan;
-		private int pingConnectionsNotUsedFor;
+		private int pingConnectionsNotUsedFor = 600000;
+		private int timeToWait = 20000;
+
 		public int getMaximumActiveConnections() {
 			return maximumActiveConnections;
 		}
@@ -123,12 +124,6 @@ public class SimpleDataSource implements DataSource {
 		}
 		public void setMaximumCheckoutTime(int maximumCheckoutTime) {
 			this.maximumCheckoutTime = maximumCheckoutTime;
-		}
-		public int getTimeToWait() {
-			return timeToWait;
-		}
-		public void setTimeToWait(int timeToWait) {
-			this.timeToWait = timeToWait;
 		}
 		public boolean isPingEnabled() {
 			return pingEnabled;
@@ -159,6 +154,12 @@ public class SimpleDataSource implements DataSource {
 		}
 		public void setPingConnectionsNotUsedFor(int pingConnectionsNotUsedFor) {
 			this.pingConnectionsNotUsedFor = pingConnectionsNotUsedFor;
+		}
+		public int getTimeToWait() {
+			return timeToWait;
+		}
+		public void setTimeToWait(int timeToWait) {
+			this.timeToWait = timeToWait;
 		}
 	}
 
@@ -446,9 +447,10 @@ public class SimpleDataSource implements DataSource {
 		sb.append("\n pool.maxCheckoutTime            ").append(pool.maximumCheckoutTime);
 		sb.append("\n pool.pingEnabled                ").append(pool.pingEnabled);
 		sb.append("\n pool.pingQuery                  ").append(pool.pingQuery);
-		sb.append("\n pool.timeToWait                 ").append(pool.timeToWait);
+		sb.append("\n pool.pingTimeout                ").append(pool.pingTimeout);
 		sb.append("\n pool.pingConnectionsOlderThan   ").append(pool.pingConnectionsOlderThan);
 		sb.append("\n pool.pingConnectionsNotUsedFor  ").append(pool.pingConnectionsNotUsedFor);
+		sb.append("\n pool.timeToWait                 ").append(pool.timeToWait);
 		sb.append("\n --------------------------------------------------------------");
 		sb.append("\n activeConnections              ").append(activeConnections.size());
 		sb.append("\n idleConnections                ").append(idleConnections.size());
@@ -693,17 +695,15 @@ public class SimpleDataSource implements DataSource {
 		}
 
 		if (!closed && pool.pingEnabled) {
-			if ((pool.pingConnectionsOlderThan > 0 
-					&& conn.getAge() > pool.pingConnectionsOlderThan)
-					|| (pool.pingConnectionsNotUsedFor > 0 
-							&& conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor)) {
-
+			if ((pool.pingConnectionsOlderThan > 0 && conn.getAge() > pool.pingConnectionsOlderThan)
+					|| (pool.pingConnectionsNotUsedFor > 0 && conn.getTimeElapsedSinceLastUse() > pool.pingConnectionsNotUsedFor)) {
 				try {
 					if (log.isDebugEnabled()) {
 						log.debug("Testing connection " + conn.getRealHashCode() + " ...");
 					}
 					Connection realConn = conn.getRealConnection();
 					Statement statement = realConn.createStatement();
+					statement.setQueryTimeout(pool.pingTimeout);
 					ResultSet rs = statement.executeQuery(pool.pingQuery);
 					rs.close();
 					statement.close();
