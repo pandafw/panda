@@ -21,9 +21,9 @@
 		// Configuration related to navigation
 		fixedNavigation:		false,		// (boolean) Boolean that informs if the navigation (next and prev button) will be fixed or not in the interface.
 		// Configuration related to images
-		textBtnPrev:			'PREV',			// (string) the text of prev button
-		textBtnNext:			'NEXT',			// (string) the text of next button
-		textBtnClose:			'CLOSE',		// (string) the text of close button
+		textBtnPrev:			'&laquo;',			// (string) the text of prev button
+		textBtnNext:			'&raquo;',			// (string) the text of next button
+		textBtnClose:			'&times;',		// (string) the text of close button
 		// Configuration related to container image box
 		containerBorderSize:	10,			// (integer) If you adjust the padding in the CSS for the container, #lightbox-container-image-box, you will need to update this value
 		containerResizeSpeed:	400,		// (integer) Specify the resize duration of container image. These number are miliseconds. 400 is default.
@@ -47,23 +47,24 @@
 		// Settings to configure the jQuery lightBox plugin how you like
 		settings = jQuery.extend({}, $.lightBox, settings);
 		// Caching the jQuery object with all elements matched
-		var jQueryMatchedObj = this; // This, in this context, refer to jQuery object
+		var $jos = this; // This, in this context, refer to jQuery object
+		
 		/**
 		 * Initializing the plugin calling the start function
 		 *
 		 * @return boolean false
 		 */
 		function _initialize() {
-			_start(this,jQueryMatchedObj); // This, in this context, refer to object (link) which the user have clicked
+			_start(this, $jos); // This, in this context, refer to object (link) which the user have clicked
 			return false; // Avoid the browser following the link
 		}
 		/**
 		 * Start the jQuery lightBox plugin
 		 *
 		 * @param object objClicked The object (link) whick the user have clicked
-		 * @param object jQueryMatchedObj The jQuery object with all elements matched
+		 * @param object $jos The jQuery object with all elements matched
 		 */
-		function _start(objClicked,jQueryMatchedObj) {
+		function _start(objClicked, $jos) {
 			// Hime some elements to avoid conflict with overlay in IE. These elements appear above the overlay.
 			$('embed, object, select').css({ 'visibility' : 'hidden' });
 			// Call the function to create the markup structure; style some elements; assign events in some elements.
@@ -72,18 +73,20 @@
 			settings.imageArray.length = 0;
 			// Unset image active information
 			settings.activeImage = 0;
-			// We have an image set? Or just an image? Let's see it.
-			if ( jQueryMatchedObj.length == 1 ) {
-				settings.imageArray.push(new Array(objClicked.getAttribute('href'),objClicked.getAttribute('title')));
-			} else {
-				// Add an Array (as many as we have), with href and title atributes, inside the Array that storage the images references		
-				for ( var i = 0; i < jQueryMatchedObj.length; i++ ) {
-					settings.imageArray.push(new Array(jQueryMatchedObj[i].getAttribute('href'),jQueryMatchedObj[i].getAttribute('title')));
+			// Add an Array (as many as we have), with href and title atributes, inside the Array that storage the images references		
+			for ( var i = 0; i < $jos.length; i++ ) {
+				var el = $jos[i];
+				if (el.tagName == 'A') {
+					settings.imageArray.push(new Array(el.getAttribute('href'), el.getAttribute('title')));
+				}
+				else if (el.tagName == 'IMG') {
+					settings.imageArray.push(new Array(el.getAttribute('src'), el.getAttribute('alt')));
+				}
+				if (el == objClicked) {
+					settings.activeImage = i;
 				}
 			}
-			while ( settings.imageArray[settings.activeImage][0] != objClicked.getAttribute('href') ) {
-				settings.activeImage++;
-			}
+
 			// Call the function that prepares image exibition
 			_set_image_to_view();
 		}
@@ -163,6 +166,7 @@
 				});
 			});
 		}
+		
 		/**
 		 * Prepares image exibition; doing a image's preloader to calculate it's size
 		 *

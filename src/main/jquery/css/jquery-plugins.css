@@ -139,18 +139,22 @@ fieldset.ui-collapsed {
 	color: #666; 
 }
 #lightbox-container-image-data #lightbox-image-details { 
-	width: 70%; 
 	float: left; 
-	text-align: left; 
 	overflow-x: hidden;
+	padding: 2px 0;
+	text-align: left; 
+	width: 70%; 
 }	
-#lightbox-image-details-caption { font-weight: bold; }
+#lightbox-image-details-caption {
+	font-weight: bold;
+}
 #lightbox-image-details-currentNumber {
 	display: block; 
 	clear: left; 
 	padding-bottom: 1.0em;	
 }			
 #lightbox-secNav {
+	padding: 2px 0;
 	text-align: right;
 }
 #lightbox-secNav-btnClose {
