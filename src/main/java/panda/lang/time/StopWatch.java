@@ -540,4 +540,10 @@ public class StopWatch {
 		return runningState.isStopped();
 	}
 
+	public static StopWatch run(Runnable r) {
+		StopWatch sw = new StopWatch();
+		r.run();
+		sw.stop();
+		return sw;
+	}
 }

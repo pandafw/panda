@@ -76,8 +76,26 @@ public class Files {
 	 * 
 	 * @return false if file is null or not directory
 	 */
+	public static boolean isDirectory(String f) {
+		return null != f && isDirectory(new File(f));
+	}
+
+	/**
+	 * directory check
+	 * 
+	 * @return false if file is null or not directory
+	 */
 	public static boolean isDirectory(File f) {
 		return null != f && f.exists() && f.isDirectory();
+	}
+
+	/**
+	 * file check
+	 * 
+	 * @return false if file is null or not file
+	 */
+	public static boolean isFile(String f) {
+		return null != f && isFile(new File(f));
 	}
 
 	/**
@@ -2879,6 +2897,23 @@ public class Files {
 		}
 	}
 
+	/**
+	 * Determines whether the specified file is a Symbolic Link rather than an actual file.
+	 * <p>
+	 * Will not return true if there is a Symbolic Link anywhere in the path, only if the specific
+	 * file is.
+	 * <p>
+	 * <b>Note:</b> the current implementation always returns {@code false} if the system is
+	 * detected as Windows using {@link FileNames#isSystemWindows()}
+	 * 
+	 * @param file the file to check
+	 * @return true if the file is a Symbolic Link
+	 * @throws IOException if an IO error occurs while checking the file
+	 */
+	public static boolean isSymlink(final String file) throws IOException {
+		return null != file && isSymlink(new File(file));
+	}
+	
 	/**
 	 * Determines whether the specified file is a Symbolic Link rather than an actual file.
 	 * <p>

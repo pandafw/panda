@@ -439,7 +439,7 @@ public class Methods {
 		int arguments = args.length;
 		Class[] parameterTypes = new Class[arguments];
 		for (int i = 0; i < arguments; i++) {
-			parameterTypes[i] = args[i].getClass();
+			parameterTypes[i] = args[i] == null ? null : args[i].getClass();
 		}
 		return invokeStaticMethod(objectClass, methodName, args, parameterTypes);
 
@@ -1018,7 +1018,7 @@ public class Methods {
 	 */
 	public static final boolean isAssignmentCompatible(Class parameterType, Class parameterization) {
 		// try plain assignment
-		if (parameterType.isAssignableFrom(parameterization)) {
+		if (parameterization == null || parameterType.isAssignableFrom(parameterization)) {
 			return true;
 		}
 

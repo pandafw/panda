@@ -7,8 +7,7 @@ package panda.bean;
  */
 public class BeanAccessor {
 	private Object bean;
-
-	private BeanHandler beanHandler;
+	private BeanHandler handler;
 
 	/**
 	 * Constructor
@@ -16,30 +15,37 @@ public class BeanAccessor {
 	 * @param bean bean object
 	 */
 	public BeanAccessor(Object bean) {
+		this(bean, Beans.i().getBeanHandler(bean == null ? null : bean.getClass()));
+	}
+
+	/**
+	 * @param bean
+	 * @param handler
+	 */
+	public BeanAccessor(Object bean, BeanHandler handler) {
 		this.bean = bean;
-		this.beanHandler = Beans.i().getBeanHandler(
-			bean == null ? null : bean.getClass());
+		this.handler = handler;
 	}
 
 	/**
 	 * get property value
 	 * 
-	 * @param propertyName property name
+	 * @param name property name
 	 * @return value
 	 */
 	@SuppressWarnings("unchecked")
-	public Object get(String propertyName) {
-		return beanHandler.getBeanValue(bean, propertyName);
+	public Object get(String name) {
+		return handler.getBeanValue(bean, name);
 	}
 
 	/**
 	 * set property value
 	 * 
-	 * @param propertyName property name
+	 * @param name property name
 	 * @param value value
 	 */
 	@SuppressWarnings("unchecked")
-	public void set(String propertyName, Object value) {
-		beanHandler.setBeanValue(bean, propertyName, value);
+	public void set(String name, Object value) {
+		handler.setBeanValue(bean, name, value);
 	}
 }

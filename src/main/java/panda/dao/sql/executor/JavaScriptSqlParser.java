@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.List;
 
-import panda.bean.BeanAccessor;
+import panda.bean.BeanHandler;
 import panda.dao.DaoNamings;
 import panda.dao.DaoTypes;
 import panda.dao.sql.adapter.TypeAdapter;
@@ -26,7 +26,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 	protected List<JdbcSqlParameter> sqlParams;
 	
 	protected Object parameter;
-	protected BeanAccessor bean;
+	protected BeanHandler beanh;
 
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 	public String parse(JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 		this.sqlParams = sqlParams;
 		this.parameter = parameter;
-		this.bean = new BeanAccessor(this.parameter);
+		this.beanh = executor.getBeanHandler(parameter == null ? null : parameter.getClass());
 
 		reset();
 		
@@ -257,6 +257,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 		buf.setLength(0);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String parameter(String name) {
 		String type = null;
 		Integer scale = null; 
@@ -292,7 +293,7 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 
 		//TODO: 
 		TypeAdapters typeAdapters = TypeAdapters.i();
-		Object paramValue = bean.get(name);
+		Object paramValue = beanh.getBeanValue(parameter, name);
 		if (paramValue != null) {
 			TypeAdapter typeAdapter = typeAdapters.getTypeAdapter(paramValue.getClass(), type);
 			if (typeAdapter == null) {
@@ -338,8 +339,9 @@ public abstract class JavaScriptSqlParser extends JdbcSqlParser {
 		return "?";
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String replacement(String replacement) {
-		Object val = bean.get(replacement);
+		Object val = beanh.getBeanValue(parameter, replacement);
 		return val != null ? val.toString() : "";
 	}
 	

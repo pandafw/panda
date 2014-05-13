@@ -54,6 +54,22 @@ public abstract class Exceptions {
 		}
 	}
 
+	public static Throwable unwrapThrow(Throwable e) {
+		if (e == null) {
+			return null;
+		}
+		if (e instanceof InvocationTargetException) {
+			InvocationTargetException itE = (InvocationTargetException)e;
+			if (itE.getTargetException() != null) {
+				return unwrapThrow(itE.getTargetException());
+			}
+		}
+		if (e instanceof RuntimeException && e.getCause() != null) {
+			return unwrapThrow(e.getCause());
+		}
+		return e;
+	}
+
 	/**
 	 * wrap a exception
 	 * 
