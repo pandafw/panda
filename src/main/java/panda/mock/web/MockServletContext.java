@@ -19,9 +19,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 
-import panda.io.resource.DefaultResourceLoader;
-import panda.io.resource.Resource;
-import panda.io.resource.ResourceLoader;
+import panda.io.Files;
 import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -49,8 +47,6 @@ public class MockServletContext implements ServletContext {
 
 	private final Log logger = Logs.getLog(getClass());
 
-	private final ResourceLoader resourceLoader;
-
 	private final String resourceBasePath;
 
 	private String contextPath = "";
@@ -77,37 +73,16 @@ public class MockServletContext implements ServletContext {
 	/**
 	 * Create a new MockServletContext, using no base path and a
 	 * DefaultResourceLoader (i.e. the classpath root as WAR root).
-	 * @see panda.io.resource.DefaultResourceLoader
 	 */
 	public MockServletContext() {
-		this("", null);
+		this("");
 	}
 
 	/**
 	 * Create a new MockServletContext, using a DefaultResourceLoader.
 	 * @param resourceBasePath the WAR root directory (should not end with a slash)
-	 * @see panda.io.resource.DefaultResourceLoader
 	 */
 	public MockServletContext(String resourceBasePath) {
-		this(resourceBasePath, null);
-	}
-
-	/**
-	 * Create a new MockServletContext, using the specified ResourceLoader
-	 * and no base path.
-	 * @param resourceLoader the ResourceLoader to use (or null for the default)
-	 */
-	public MockServletContext(ResourceLoader resourceLoader) {
-		this("", resourceLoader);
-	}
-
-	/**
-	 * Create a new MockServletContext.
-	 * @param resourceBasePath the WAR root directory (should not end with a slash)
-	 * @param resourceLoader the ResourceLoader to use (or null for the default)
-	 */
-	public MockServletContext(String resourceBasePath, ResourceLoader resourceLoader) {
-		this.resourceLoader = (resourceLoader != null ? resourceLoader : new DefaultResourceLoader());
 		this.resourceBasePath = (resourceBasePath != null ? resourceBasePath : "");
 
 		// Use JVM temp dir as ServletContext temp dir.
@@ -189,57 +164,49 @@ public class MockServletContext implements ServletContext {
 	}
 
 	public Set<String> getResourcePaths(String path) {
-		String actualPath = (path.endsWith("/") ? path : path + "/");
-		Resource resource = this.resourceLoader.getResource(getResourceLocation(actualPath));
-		try {
-			File file = resource.getFile();
-			String[] fileList = file.list();
-			if (Objects.isEmpty(fileList)) {
-				return null;
-			}
-			Set<String> resourcePaths = new LinkedHashSet<String>(fileList.length);
-			for (String fileEntry : fileList) {
-				String resultPath = actualPath + fileEntry;
-				if (resource.createRelative(fileEntry).getFile().isDirectory()) {
-					resultPath += "/";
-				}
-				resourcePaths.add(resultPath);
-			}
-			return resourcePaths;
-		}
-		catch (IOException ex) {
-			logger.warn("Couldn't get resource paths for " + resource, ex);
+		path = (path.endsWith("/") ? path : path + "/");
+		String actualPath = getResourceLocation(path);
+
+		File file = new File(actualPath);
+		String[] fileList = file.list();
+		if (Objects.isEmpty(fileList)) {
 			return null;
 		}
+		
+		Set<String> resourcePaths = new LinkedHashSet<String>(fileList.length);
+		for (String fileEntry : fileList) {
+			String resultPath = actualPath + fileEntry;
+			if (Files.isDirectory(resultPath)) {
+				resultPath += "/";
+			}
+			resourcePaths.add(resultPath);
+		}
+		return resourcePaths;
 	}
 
 	public URL getResource(String path) throws MalformedURLException {
-		Resource resource = this.resourceLoader.getResource(getResourceLocation(path));
-		if (!resource.exists()) {
-			return null;
-		}
-		try {
-			return resource.getURL();
-		}
-		catch (MalformedURLException ex) {
-			throw ex;
-		}
-		catch (IOException ex) {
-			logger.warn("Couldn't get URL for " + resource, ex);
-			return null;
-		}
+		return new URL(getResourceLocation(path));
 	}
 
 	public InputStream getResourceAsStream(String path) {
-		Resource resource = this.resourceLoader.getResource(getResourceLocation(path));
-		if (!resource.exists()) {
+		URL url;
+		
+		try {
+			url = getResource(path);
+			if (url == null) {
+				return null;
+			}
+		}
+		catch (MalformedURLException ex) {
+			logger.warn("Couldn't open InputStream for " + path, ex);
 			return null;
 		}
+
 		try {
-			return resource.getInputStream();
+			return url.openStream();
 		}
 		catch (IOException ex) {
-			logger.warn("Couldn't open InputStream for " + resource, ex);
+			logger.warn("Couldn't open InputStream for " + url, ex);
 			return null;
 		}
 	}
@@ -280,14 +247,8 @@ public class MockServletContext implements ServletContext {
 	}
 
 	public String getRealPath(String path) {
-		Resource resource = this.resourceLoader.getResource(getResourceLocation(path));
-		try {
-			return resource.getFile().getAbsolutePath();
-		}
-		catch (IOException ex) {
-			logger.warn("Couldn't determine real path of resource " + resource, ex);
-			return null;
-		}
+		File file = new File(getResourceLocation(path));
+		return file.getAbsolutePath();
 	}
 
 	public String getServerInfo() {
