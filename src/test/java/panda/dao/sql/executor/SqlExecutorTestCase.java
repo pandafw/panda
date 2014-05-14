@@ -59,7 +59,9 @@ public abstract class SqlExecutorTestCase {
 
 	@After
 	public void tearDown() throws Exception {
-		((JdbcSqlExecutor)executor).getConnection().close();
+		if (executor != null) {
+			((JdbcSqlExecutor)executor).getConnection().close();
+		}
 	}
 
 	protected Object getExpectedBit(boolean b) {

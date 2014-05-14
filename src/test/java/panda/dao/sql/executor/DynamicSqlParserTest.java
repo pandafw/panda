@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import panda.dao.DaoTypes;
 import panda.dao.sql.SqlExecutor;
 
 
@@ -41,7 +42,7 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 	 */
 	@Test
 	public void testAtList() {
-		String originalSql = "SELECT * FROM SAMPLE WHERE @list[LIST IN (:list)]";
+		String originalSql = "SELECT * FROM SAMPLE WHERE @list[LIST IN (:list:list)]";
 
 		List<String> list = new ArrayList<String>();
 		list.add("a");
@@ -54,9 +55,9 @@ public class DynamicSqlParserTest extends SimpleSqlParserTest {
 		String translatedSql = "SELECT * FROM SAMPLE WHERE LIST IN( ?,?,?)";
 		
 		List<JdbcSqlParameter> parameters = new ArrayList<JdbcSqlParameter>();
-		parameters.add(new JdbcSqlParameter("list", "a"));
-		parameters.add(new JdbcSqlParameter("list", "b"));
-		parameters.add(new JdbcSqlParameter("list", "c"));
+		parameters.add(new JdbcSqlParameter("list", "a", DaoTypes.LIST));
+		parameters.add(new JdbcSqlParameter("list", "b", DaoTypes.LIST));
+		parameters.add(new JdbcSqlParameter("list", "c", DaoTypes.LIST));
 		
 		testTranslate(originalSql, map, translatedSql, parameters);
 	}

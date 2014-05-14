@@ -63,7 +63,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test05() {
-		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList)] @id[OR id=:id]]";
+		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList:list)] @id[OR id=:id]]";
 
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<Integer> idList = new ArrayList<Integer>();
@@ -83,7 +83,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test05a() {
-		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList)] @id[OR id=:id]]";
+		String sql = "SELECT * FROM TEST @[WHERE @intList[ID IN (:intList:list)] @id[OR id=:id]]";
 
 		TestBean param = new TestBean();
 		List<Integer> idList = new ArrayList<Integer>();
@@ -118,7 +118,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test05a3() {
-		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray)] @id[OR id=:id]]";
+		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray:list)] @id[OR id=:id]]";
 
 		TestBean param = new TestBean();
 		param.setIntArray(new int[] { 1001, 1005 });
@@ -134,7 +134,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test05a4() {
-		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray)] @id[OR id=:id]]";
+		String sql = "SELECT * FROM TEST @[WHERE @intArray[ID IN (:intArray:list)] @id[OR id=:id]]";
 
 		TestBean param = new TestBean();
 		param.setIntArray(new int[] { 1001, 1002, 1004, 1005 });
@@ -150,7 +150,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test06() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:id) @orderCol[ORDER BY ::orderCol ::orderDir]";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:id:list) @orderCol[ORDER BY ::orderCol ::orderDir]";
 
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<Integer> ids = new ArrayList<Integer>();
@@ -172,7 +172,7 @@ public class DynamicSqlExecutorTest extends SqlExecutorTestCase {
 	 */
 	@Test
 	public void test06a() {
-		String sql = "SELECT * FROM TEST WHERE ID IN (:intList) @orderCol[ORDER BY ::orderCol ::orderDir]";
+		String sql = "SELECT * FROM TEST WHERE ID IN (:intList:list) @orderCol[ORDER BY ::orderCol ::orderDir]";
 
 		TestBean param = new TestBean();
 		List<Integer> ids = new ArrayList<Integer>();
