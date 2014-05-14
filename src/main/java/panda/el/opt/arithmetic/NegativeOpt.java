@@ -22,7 +22,7 @@ public class NegativeOpt extends AbstractOpt {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object rval = calculateItem(ec, this.right);
+		Object rval = calculateItem(ec, right);
 		if (rval instanceof Double)
 			return 0 - (Double)rval;
 		if (rval instanceof Float)
@@ -32,7 +32,7 @@ public class NegativeOpt extends AbstractOpt {
 		return 0 - (Integer)rval;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "-";
 	}
 

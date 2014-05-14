@@ -17,8 +17,8 @@ public class ArrayOpt extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = calculateItem(ec, left);
-		Object rval = calculateItem(ec, right);
+		Object lval = getLeft(ec);
+		Object rval = getRight(ec);
 
 		// @ JKTODO 这里要不要与, AccessOpt 里面相同的代码合并呢?
 		if (lval instanceof Map) {
@@ -31,7 +31,7 @@ public class ArrayOpt extends TwoTernary {
 		return Array.get(lval, (Integer)rval);
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "[";
 	}
 }

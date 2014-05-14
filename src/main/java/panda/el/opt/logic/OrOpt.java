@@ -16,24 +16,26 @@ public class OrOpt extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = calculateItem(ec, left);
+		Object lval = getLeft(ec);
 		if (!(lval instanceof Boolean)) {
 			throw new ElException("操作数类型错误!");
 		}
 		if ((Boolean)lval) {
 			return true;
 		}
-		Object rval = calculateItem(ec, right);
+
+		Object rval = getRight(ec);
 		if (!(rval instanceof Boolean)) {
 			throw new ElException("操作数类型错误!");
 		}
 		if ((Boolean)rval) {
 			return true;
 		}
+
 		return false;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "||";
 	}
 

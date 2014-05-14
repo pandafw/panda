@@ -14,12 +14,12 @@ public class LeftShift extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		Integer lval = (Integer)calculateItem(ec, left);
-		Integer rval = (Integer)calculateItem(ec, right);
+		Integer lval = (Integer)getLeft(ec);
+		Integer rval = (Integer)getRight(ec);
 		return lval << rval;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "<<";
 	}
 

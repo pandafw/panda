@@ -14,19 +14,19 @@ public abstract class AbstractOpt implements Operator {
 	/**
 	 * 操作符对象自身的符号
 	 */
-	public abstract String fetchSelf();
+	public abstract String operator();
 
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		if (obj.equals(fetchSelf())) {
+		if (obj.equals(operator())) {
 			return true;
 		}
 		return super.equals(obj);
 	}
 
 	public String toString() {
-		return String.valueOf(fetchSelf());
+		return String.valueOf(operator());
 	}
 
 	/**

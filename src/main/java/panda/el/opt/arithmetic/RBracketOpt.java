@@ -17,7 +17,7 @@ public class RBracketOpt extends AbstractOpt {
 		return 100;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return ")";
 	}
 

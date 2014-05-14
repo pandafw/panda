@@ -28,7 +28,7 @@ public class FetchArrayOpt extends AbstractOpt {
 		return null;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "]";
 	}
 }

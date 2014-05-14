@@ -1,4 +1,4 @@
-package panda.el.issue125;
+package panda.el;
 
 public class StringUtil {
     public static String test(String[] names) {

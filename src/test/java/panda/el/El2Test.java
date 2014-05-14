@@ -15,9 +15,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.bind.json.Jsons;
-import panda.el.issue.Issue293;
-import panda.el.issue.Issue303;
-import panda.el.issue.Issue314;
 import panda.lang.Strings;
 
 @SuppressWarnings("unchecked")
@@ -333,7 +330,7 @@ public class El2Test {
 	}
 
 	@Test
-	public void testIssues87() {
+	public void testIntValue() {
 		Map context = new HashMap();
 		context.put("a", new BigDecimal("7"));
 		context.put("b", new BigDecimal("3"));
@@ -341,24 +338,19 @@ public class El2Test {
 	}
 
 	@Test
-	public void testIssue168() {
+	public void testFloat() {
 		assertEquals(El.eval("0.1354*((70-8)%70)*100"), 0.1354 * ((70 - 8) % 70) * 100);
 		assertEquals(El.eval("0.1354*((70d-8)/70)*100"), 0.1354 * ((70d - 8) / 70) * 100);
 		assertEquals(El.eval("0.5006*(70/600*100)"), 0.5006 * (70 / 600 * 100));
 	}
 
 	@Test
-	public void testIssue277() {
-		Map context = new HashMap();
-		context.put("strings", Strings.class);
-		assertEquals("a", El.eval(context, "strings.trim(\"  a  \")"));
-	}
-
-	@Test
 	public void testStaticMethod() {
 		Map context = new HashMap();
+		context.put("strings", Strings.class);
 		context.put("math", Math.class);
-		assertEquals(2, El.eval(context, "math.max(1, 2)"));
+		assertEquals("a", El.eval(context, "strings@trim(\"  a  \")"));
+		assertEquals(2, El.eval(context, "math@max(1, 2)"));
 	}
 
 	// @Test
@@ -373,7 +365,7 @@ public class El2Test {
 	// }
 
 	@Test
-	public void testIssue292() {
+	public void testIssueQuestionOpe() {
 		Map context = new HashMap();
 		context.put("a", 123);
 		context.put("b", 20);
@@ -381,21 +373,42 @@ public class El2Test {
 		assertEquals(123, o);
 	}
 
+	public static class Static {
+		public static final String info = "xxx";
+
+		public static String printParam(String x) {
+			return x;
+		}
+	}
+	
 	@Test
-	public void testIssue293() {
-
+	public void testStaticMember() {
 		Map context = new HashMap();
-		context.put("static", new Issue293());
-		context.put("a", Issue293.class);
+		context.put("static", new Static());
+		context.put("a", Static.class);
 
-		assertEquals("xxx", El.eval(context, "a.printParam(a.info)"));
+		assertEquals("xxx", El.eval(context, "a@printParam(a@info)"));
+	}
+
+	public static class SelfRef {
+		public String name;
+		public SelfRef child;
+		public List<String> list = new ArrayList<String>();
+
+		public SelfRef(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
 	}
 
 	@Test
-	public void testIssue303() {
+	public void testSelfRef() {
 		Map context = new HashMap();
-		Issue303 item = new Issue303("item");
-		item.child = new Issue303("child");
+		SelfRef item = new SelfRef("item");
+		item.child = new SelfRef("child");
 		context.put("item", item);
 
 		assertEquals("child", El.eval(context, "item.child.getName()"));
@@ -403,7 +416,7 @@ public class El2Test {
 	}
 
 	@Test
-	public void testIssue306() throws InterruptedException {
+	public void testThreadSafe1() throws InterruptedException {
 		int size = 100;
 		final CountDownLatch count = new CountDownLatch(size);
 		final List<Integer> error = new ArrayList<Integer>();
@@ -430,7 +443,42 @@ public class El2Test {
 	}
 
 	@Test
-	public void testIssue307() {
+	public void testThreadSafe2() throws InterruptedException {
+		final El el = El.parse("a+1");
+
+		int size = 100;
+		final CountDownLatch count = new CountDownLatch(size);
+		final List<Integer> error = new ArrayList<Integer>();
+		for (int index = 0; index < size; index++) {
+			new Thread() {
+				public void run() {
+					try {
+						Map m = new HashMap();
+						m.put("a", 0);
+						for (int i = 0; i < 10000; i++) {
+							m.put("a", el.eval(m));
+						}
+						assertEquals(10000, m.get("a"));
+					}
+					catch (Exception e) {
+						error.add(1);
+					}
+					finally {
+						count.countDown();
+					}
+				}
+
+			}.start();
+		}
+		count.await();
+		if (error.size() > 0) {
+			fail();
+		}
+	}
+
+
+	@Test
+	public void testList() {
 		Map context = new HashMap();
 		List<String> list = new ArrayList<String>();
 		list.add("jk");
@@ -442,38 +490,70 @@ public class El2Test {
 	}
 
 	@Test
-	public void testIssue308() {
+	public void testSystem() {
 		Map context = new HashMap();
 		List<String> list = new ArrayList<String>();
 		list.add("jk");
 		context.put("list", list);
 		context.put("System", System.class);
 
-		Object val = El.eval(context, "System.getenv('PATH').getClass().getName()");
+		Object val = El.eval(context, "System@getenv('PATH').getClass().getName()");
 		Assert.assertNotNull(val);
 	}
 
+	public static class ListTest {
+		private List<String> list;
+
+		public List<String> getList() {
+			return list;
+		}
+
+		public void setList(List<String> list) {
+			this.list = list;
+		}
+	}
+
 	@Test
-	public void test_issue314() {
+	public void testListTest() {
 		Map context = new HashMap();
 
 		context.put("String", String.class);
 
-		Issue314 i314 = new Issue314();
+		ListTest lt = new ListTest();
 		List<String> list = new ArrayList<String>();
 		list.add("123");
-		i314.setList(list);
-		context.put("map", i314);
+		lt.setList(list);
+		context.put("map", lt);
 
-		assertEquals("123", El.eval(context, "String.valueOf(123)"));
+		assertEquals("123", El.eval(context, "String@valueOf(123)"));
 		assertEquals("123", El.eval(context, "map.list.get(0)"));
 	}
 
+	public static class InnerClass {
+		public static class A {
+			B b = new B();
+
+			public B getB() {
+				return b;
+			}
+
+			public void setB(B b) {
+				this.b = b;
+			}
+		}
+
+		public static class B {
+			public boolean isPass(String a) {
+				return true;
+			}
+		}
+	}
+
 	@Test
-	public void test_issue411() {
+	public void testInnerClass() {
 		El el = new El("a[0].b.isPass('')?'1':'2'");
 		Map ctx = new HashMap();
-		ctx.put("a", new Object[] { new panda.el.issue411.Issue411.A() });
+		ctx.put("a", new Object[] { new InnerClass.A() });
 		assertEquals("1", el.eval(ctx));
 	}
 }

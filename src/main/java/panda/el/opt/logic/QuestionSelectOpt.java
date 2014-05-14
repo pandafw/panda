@@ -26,10 +26,10 @@ public class QuestionSelectOpt extends TwoTernary {
 		if (cval) {
 			return qo.getRight(ec);
 		}
-		return calculateItem(ec, right);
+		return getRight(ec);
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return ":";
 	}
 

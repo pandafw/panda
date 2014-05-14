@@ -12,11 +12,11 @@ import panda.el.obj.ElObj;
 import panda.el.obj.FieldObj;
 import panda.el.obj.IdentifierObj;
 import panda.el.obj.MethodObj;
+import panda.el.opt.RunMethod;
 import panda.el.opt.arithmetic.LBracketOpt;
 import panda.el.opt.arithmetic.NegativeOpt;
 import panda.el.opt.arithmetic.RBracketOpt;
 import panda.el.opt.arithmetic.SubOpt;
-import panda.el.opt.object.AccessOpt;
 import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.InvokeMethodOpt;
 import panda.el.opt.object.MethodOpt;
@@ -108,8 +108,9 @@ public class Converter {
 				continue;
 			}
 			// 属性对象
-			if (dest.size() > 0 && dest.getLast() instanceof AccessOpt && rpn.size() > 0
-					&& rpn.getFirst() instanceof AccessOpt) {
+			if (dest.size() > 0 && dest.getLast() instanceof RunMethod 
+					&& rpn.size() > 0
+					&& rpn.getFirst() instanceof RunMethod) {
 				dest.add(new FieldObj(obj.getVal()));
 				continue;
 			}

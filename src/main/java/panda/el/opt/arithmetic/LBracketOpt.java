@@ -12,7 +12,7 @@ import panda.el.opt.AbstractOpt;
  * @author juqkai(juqkai@gmail.com)
  */
 public class LBracketOpt extends AbstractOpt {
-	public String fetchSelf() {
+	public String operator() {
 		return "(";
 	}
 

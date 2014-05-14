@@ -15,14 +15,14 @@ public class AndOpt extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = calculateItem(ec, this.left);
+		Object lval = getLeft(ec);
 		if (!(lval instanceof Boolean)) {
 			throw new ElException("操作数类型错误!");
 		}
 		if (!(Boolean)lval) {
 			return false;
 		}
-		Object rval = calculateItem(ec, this.right);
+		Object rval = getRight(ec);
 		if (!(rval instanceof Boolean)) {
 			throw new ElException("操作数类型错误!");
 		}
@@ -32,7 +32,7 @@ public class AndOpt extends TwoTernary {
 		return true;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "&&";
 	}
 

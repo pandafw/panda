@@ -13,13 +13,13 @@ public class PlusOpt extends TwoTernary {
 		return 4;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "+";
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = calculateItem(ec, this.left);
-		Object rval = calculateItem(ec, this.right);
+		Object lval = getLeft(ec);
+		Object rval = getRight(ec);
 
 		if (lval instanceof String || rval instanceof String) {
 			return lval.toString() + rval.toString();

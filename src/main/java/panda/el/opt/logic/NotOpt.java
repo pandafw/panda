@@ -23,14 +23,14 @@ public class NotOpt extends AbstractOpt {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object rval = calculateItem(ec, this.right);
+		Object rval = calculateItem(ec, right);
 		if (rval instanceof Boolean) {
 			return !(Boolean)rval;
 		}
 		throw new ElException("'!'操作符操作失败!");
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "!";
 	}
 }

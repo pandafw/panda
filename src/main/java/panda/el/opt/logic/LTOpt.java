@@ -14,13 +14,13 @@ public class LTOpt extends TwoTernary {
 		return 6;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "<";
 	}
 
 	public Object calculate(ElContext ec) {
-		Number lval = (Number)calculateItem(ec, this.left);
-		Number rval = (Number)calculateItem(ec, this.right);
+		Number lval = (Number)getLeft(ec);
+		Number rval = (Number)getRight(ec);
 		if (rval instanceof Double || lval instanceof Double) {
 			return lval.doubleValue() < rval.doubleValue();
 		}

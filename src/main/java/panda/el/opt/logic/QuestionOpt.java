@@ -24,7 +24,7 @@ public class QuestionOpt extends TwoTernary {
 		throw new ElException("三元表达式错误! --> " + obj);
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "?";
 	}
 }

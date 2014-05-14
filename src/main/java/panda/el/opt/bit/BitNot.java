@@ -22,11 +22,11 @@ public class BitNot extends AbstractOpt {
 	}
 
 	public Object calculate(ElContext ec) {
-		Integer rval = (Integer)calculateItem(ec, right);
+		Integer rval = (Integer)this.calculateItem(ec, right);
 		return ~rval;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "~";
 	}
 }

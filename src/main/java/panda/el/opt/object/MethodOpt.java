@@ -50,8 +50,8 @@ public class MethodOpt extends TwoTernary {
 			return null;
 		}
 		
-		if (left instanceof AccessOpt) {
-			return (AccessOpt)left;
+		if (left instanceof RunMethod) {
+			return (RunMethod)left;
 		}
 		
 		throw new ElException(left + " is unsupported method");
@@ -81,7 +81,7 @@ public class MethodOpt extends TwoTernary {
 		return rvals;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "method";
 	}
 

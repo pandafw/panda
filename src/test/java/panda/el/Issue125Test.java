@@ -1,4 +1,4 @@
-package panda.el.issue125;
+package panda.el;
 
 import static org.junit.Assert.assertEquals;
 

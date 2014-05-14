@@ -33,6 +33,9 @@ public class ElContext {
 	 */
 	@SuppressWarnings("unchecked")
 	public Object get(String name) {
+		if (name == null) {
+			return null;
+		}
 		return handler.getBeanValue(context, name);
 	}
 

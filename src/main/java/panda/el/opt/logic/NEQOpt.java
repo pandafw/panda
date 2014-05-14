@@ -14,15 +14,15 @@ public class NEQOpt extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = calculateItem(ec, this.left);
-		Object rval = calculateItem(ec, this.right);
+		Object lval = getLeft(ec);
+		Object rval = getRight(ec);
 		if (lval == rval) {
 			return false;
 		}
 		return !lval.equals(rval);
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "!=";
 	}
 

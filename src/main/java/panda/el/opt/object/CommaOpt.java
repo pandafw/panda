@@ -26,13 +26,13 @@ public class CommaOpt extends TwoTernary {
 			}
 		}
 		else {
-			objs.add(calculateItem(ec, left));
+			objs.add(getLeft(ec));
 		}
-		objs.add(calculateItem(ec, right));
+		objs.add(getRight(ec));
 		return objs;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return ",";
 	}
 

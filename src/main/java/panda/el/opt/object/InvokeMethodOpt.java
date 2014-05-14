@@ -24,7 +24,7 @@ public class InvokeMethodOpt extends AbstractOpt {
 		return null;
 	}
 
-	public String fetchSelf() {
+	public String operator() {
 		return "method invoke";
 	}
 

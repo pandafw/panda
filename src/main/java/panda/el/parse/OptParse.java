@@ -31,6 +31,7 @@ import panda.el.opt.object.AccessOpt;
 import panda.el.opt.object.ArrayOpt;
 import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.FetchArrayOpt;
+import panda.el.opt.object.StaticOpt;
 
 /**
  * 操作符转换器
@@ -132,13 +133,18 @@ public class OptParse implements Parse {
 		case ':':
 			exp.poll();
 			return new QuestionSelectOpt();
-
 		case '.':
 			if (!Character.isJavaIdentifierStart(exp.peek(1))) {
 				return nullobj;
 			}
 			exp.poll();
 			return new AccessOpt();
+		case '@':
+			if (!Character.isJavaIdentifierStart(exp.peek(1))) {
+				return nullobj;
+			}
+			exp.poll();
+			return new StaticOpt();
 		case ',':
 			exp.poll();
 			return new CommaOpt();
