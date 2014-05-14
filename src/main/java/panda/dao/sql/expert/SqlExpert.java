@@ -178,7 +178,7 @@ public abstract class SqlExpert {
 	}
 	
 	public Sql count(Query<?> query) {
-		return count(query, "_c");
+		return count(query, "c_");
 	}
 	
 	protected Sql count(Query<?> query, String alias) {
@@ -193,7 +193,7 @@ public abstract class SqlExpert {
 	}
 
 	public Sql select(Query<?> query) {
-		return select(query, "_s");
+		return select(query, "s_");
 	}
 	
 	protected Sql select(Query<?> query, String alias) {
