@@ -111,7 +111,7 @@ public class FastBeans extends Beans {
 		for (Entry<String, PropertyAccessor> en : accessors) {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
-			if (pa.getGetter() != null) {
+			if (pa.getField() != null || pa.getGetter() != null) {
 				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
 			}
@@ -123,7 +123,7 @@ public class FastBeans extends Beans {
 		for (Entry<String, PropertyAccessor> en : accessors) {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
-			if (pa.getSetter() != null) {
+			if (pa.getField() != null || pa.getSetter() != null) {
 				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
 			}
@@ -138,8 +138,8 @@ public class FastBeans extends Beans {
 
 			src.append("    pi = new PropertyInfo();\n");
 			src.append("    pi.index = ").append(++i).append(";\n");;
-			src.append("    pi.readable = ").append(pa.getGetter() != null).append(";\n");;
-			src.append("    pi.writable = ").append(pa.getSetter() != null).append(";\n");;
+			src.append("    pi.readable = ").append(pa.getField() != null || pa.getGetter() != null).append(";\n");;
+			src.append("    pi.writable = ").append(pa.getField() != null || pa.getSetter() != null).append(";\n");;
 			src.append("    mm.put(\"").append(pn).append("\", pi);\n");
 		}
 		src.append("  }\n");
@@ -147,8 +147,8 @@ public class FastBeans extends Beans {
 		src.append("  public Type getPropertyType(").append(typeName).append(" bo, String pn) {\n");
 		src.append("    PropertyInfo pi = mm.get(pn);\n");
 		src.append("    if (pi == null) {\n");
-		src.append("      return null;\n");
 //		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("      return null;\n");
 		src.append("    }\n");
 		src.append("    switch (pi.index) {\n");
 		i = 0;
@@ -161,16 +161,16 @@ public class FastBeans extends Beans {
 				.append(pt).append(";\n");
 		}
 		src.append("    default:\n");
-		src.append("      return null;\n");
 //		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("      return null;\n");
 		src.append("    }\n");
 		src.append("  }\n");
 
 		src.append("  public Object getPropertyValue(").append(typeName).append(" bo, String pn) {\n");
 		src.append("    PropertyInfo pi = mm.get(pn);\n");
 		src.append("    if (pi == null) {\n");
-		src.append("      return null;\n");
 //		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("      return null;\n");
 		src.append("    }\n");
 		src.append("    try {\n");
 		src.append("      switch (pi.index) {\n");
@@ -178,23 +178,22 @@ public class FastBeans extends Beans {
 		for (Entry<String, PropertyAccessor> en : accessors) {
 			PropertyAccessor pa = en.getValue();
 
-			String getter = null;
-			if (pa.getGetter() != null) {
-				getter = pa.getGetter().getName();
-			}
-
 			src.append("      case ").append(++i).append(": ");
-			if (getter == null) {
-				src.append("return null;\n");
-//				src.append("throw noGetterMethodException(pn);\n");
+			if (pa.getField() != null) {
+				src.append("return bo.").append(pa.getField().getName());
+			}
+			else if (pa.getGetter() != null) {
+				src.append("return bo.").append(pa.getField().getName()).append("()");
 			}
 			else {
-				src.append("return bo.").append(getter).append("();\n");
+//				src.append("throw noGetterMethodException(pn);\n");
+				src.append("return null;");
 			}
+			src.append('\n');
 		}
 		src.append("      default:");
-		src.append("return null;\n");
 //		src.append("throw noSuchPropertyException(pn);\n");
+		src.append("return null;\n");
 		src.append("      }\n");
 		src.append("    } catch (Throwable e) { throw Exceptions.wrapThrow(e); }\n");
 		src.append("  }\n");
@@ -202,8 +201,8 @@ public class FastBeans extends Beans {
 		src.append("  public boolean setPropertyValue(").append(typeName).append(" bo, String pn, Object value) {\n");
 		src.append("    PropertyInfo pi = mm.get(pn);\n");
 		src.append("    if (pi == null) {\n");
-		src.append("      return false;\n");
 //		src.append("      throw noSuchPropertyException(pn);\n");
+		src.append("      return false;\n");
 		src.append("    }\n");
 		src.append("    try {\n");
 		src.append("      switch (pi.index) {\n");
@@ -212,24 +211,22 @@ public class FastBeans extends Beans {
 			PropertyAccessor pa = en.getValue();
 			String pt = Types.getCastableClassName(pa.getType());
 
-			String setter = null;
-			if (pa.getSetter() != null) {
-				setter = pa.getSetter().getName();
-			}
-
 			src.append("      case ").append(++i).append(": ");
-			if (setter == null) {
-				src.append("return false;\n");
-//				src.append("throw noSetterMethodException(pn);\n");
+			if (pa.getField() != null) {
+				src.append("bo.").append(pa.getField().getName()).append(" = (").append(pt).append(")value; return true;");
+			}
+			else if (pa.getSetter() != null) {
+				src.append("bo.").append(pa.getSetter().getName()).append("((").append(pt).append(")value); return true;");
 			}
 			else {
-				src.append("bo.").append(setter).append("((")
-					.append(pt).append(")value); return true;\n");
+//				src.append("throw noSetterMethodException(pn);\n");
+				src.append("return false;");
 			}
+			src.append('\n');
 		}
 		src.append("      default:");
-		src.append("return false;\n");
 //		src.append("throw noSuchPropertyException(pn);\n");
+		src.append("return false;\n");
 		src.append("      }\n");
 		src.append("    } catch (Throwable e) { throw Exceptions.wrapThrow(e); }\n");
 		src.append("  }\n");

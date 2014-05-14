@@ -2,6 +2,7 @@ package panda.bean.handlers;
 
 import panda.bean.Beans;
 import panda.bean.PropertyAccessor;
+import panda.lang.Exceptions;
 import panda.lang.Types;
 
 import java.lang.reflect.Type;
@@ -39,6 +40,12 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
 			
+			if (pa.getField() != null) {
+				readPropertyNames.add(pn);
+				writePropertyNames.add(pn);
+				continue;
+			}
+
 			if (pa.getGetter() != null) {
 				readPropertyNames.add(pn);
 			}
@@ -77,7 +84,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canReadProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && pa.getGetter() != null);
+		return (pa != null && (pa.getField() != null || pa.getGetter() != null));
 	}
 
 	/**
@@ -88,7 +95,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canWriteProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && pa.getSetter() != null);
+		return (pa != null && (pa.getField() != null || pa.getSetter() != null));
 	}
 	
 	/**
@@ -110,15 +117,21 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public Object getPropertyValue(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		if (pa == null || pa.getGetter() == null) {
+		if (pa == null) {
 			return null;
 		}
 		
 		try {
-			return pa.getGetter().invoke(beanObject);
+			if (pa.getField() != null) {
+				return pa.getField().get(beanObject);
+			}
+			else if (pa.getGetter() != null) {
+				return pa.getGetter().invoke(beanObject);
+			}
+			return null;
 		}
 		catch (Exception e) {
-			throw new RuntimeException(e);
+			throw Exceptions.wrapThrow(e);
 		}
 	}
 
@@ -130,13 +143,22 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean setPropertyValue(T beanObject, String propertyName, Object value) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		if (pa == null || pa.getSetter() == null) {
+		if (pa == null) {
 			return false;
 		}
 
 		try {
-			pa.getSetter().invoke(beanObject, value);
-			return true;
+			if (pa.getField() != null) {
+				pa.getField().set(beanObject, value);
+				return true;
+			}
+			
+			if (pa.getSetter() != null) {
+				pa.getSetter().invoke(beanObject, value);
+				return true;
+			}
+			
+			return false;
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

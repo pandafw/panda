@@ -1,5 +1,14 @@
 package panda.bean;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import panda.bean.handlers.ArrayBeanHandler;
 import panda.bean.handlers.ImmutableBeanHandler;
 import panda.bean.handlers.IterableBeanHandler;
@@ -10,14 +19,6 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.lang.Types;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 
@@ -331,6 +332,22 @@ public class Beans {
 		return new JavaBeanHandler(this, type);
 	}
 	
+	private static void setField(Map<String, PropertyAccessor> accessors, Field field) {
+		String name = field.getName();
+
+		Type type = field.getGenericType();
+		if (type == null) {
+			type = field.getType();
+		}
+
+		field.setAccessible(true);
+
+		PropertyAccessor pa = new PropertyAccessor();
+		pa.field = field;
+		pa.type = type;
+		accessors.put(name, pa);
+	}
+	
 	private static void setGetter(Map<String, PropertyAccessor> accessors, String name, Method getter) {
 		Type type = getter.getGenericReturnType();
 		if (type == null) {
@@ -339,13 +356,15 @@ public class Beans {
 
 		PropertyAccessor pa = accessors.get(name);
 		if (pa == null) {
+			getter.setAccessible(true);
 			pa = new PropertyAccessor();
 			pa.getter = getter;
 			pa.type = type;
 			accessors.put(name, pa);
 		}
-		else if (pa.getter == null) {
+		else if (pa.field == null && pa.getter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+				getter.setAccessible(true);
 				pa.getter = getter;
 			}
 		}
@@ -359,13 +378,15 @@ public class Beans {
 		
 		PropertyAccessor pa = accessors.get(name);
 		if (pa == null) {
+			setter.setAccessible(true);
 			pa = new PropertyAccessor();
 			pa.setter = setter;
 			pa.type = type;
 			accessors.put(name, pa);
 		}
-		else if (pa.setter == null) {
+		else if (pa.field == null && pa.setter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+				setter.setAccessible(true);
 				pa.setter = setter;
 			}
 		}
@@ -379,10 +400,14 @@ public class Beans {
 	public static Map<String, PropertyAccessor> getPropertyAccessors(Class<?> clazz) {
 		Map<String, PropertyAccessor> accessors = new TreeMap<String, PropertyAccessor>();
 
+		Field[] fields = clazz.getFields();
+		for (Field f : fields) {
+			setField(accessors, f);
+		}
+		
 		Method[] methods = clazz.getMethods();
-
-		// is
 		for (Method m : methods) {
+			// is
 			if (m.getName().startsWith("is")) {
 				if (boolean.class != m.getReturnType()) {
 					continue;
@@ -403,8 +428,8 @@ public class Beans {
 			}
 		}
 		
-		// getter
 		for (Method m : methods) {
+			// getter
 			if (m.getName().startsWith("get")) {
 				Type[] pts = m.getGenericParameterTypes();
 				if (pts != null && pts.length != 0) {
@@ -421,9 +446,8 @@ public class Beans {
 			}
 		}
 		
-		
-		// setter
 		for (Method m : methods) {
+			// setter
 			if (m.getName().startsWith("set")) {
 				Type[] pts = m.getGenericParameterTypes();
 				if (pts == null || pts.length != 1) {
