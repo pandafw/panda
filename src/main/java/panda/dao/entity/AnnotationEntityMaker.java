@@ -60,7 +60,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	public <T> Entity<T> make(Class<T> type) {
 		Entity<T> en = createEntity(type);
 
-		Collection<Field> fields = Classes.getFields(type);
+		Collection<Field> fields = Classes.getDeclaredFields(type);
 
 		// Is @Column declared
 		boolean shouldUseColumn = false;

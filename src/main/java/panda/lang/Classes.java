@@ -1817,12 +1817,12 @@ public abstract class Classes {
 	}
 
 	/**
-	 * 获得当前类以及所有父类的所有的属性，包括私有属性。 <br>
-	 * 但是父类不包括 Object 类，并且，如果子类的属性如果与父类重名，将会将其覆盖
+	 * Return all fields of the class and it's super class (exclude the Object class). <br>
+	 * 如果子类的属性如果与父类重名，将会将其覆盖
 	 * 
-	 * @return 属性列表
+	 * @return field list
 	 */
-	public static Collection<Field> getFields(Class<?> cls) {
+	public static Collection<Field> getDeclaredFields(Class<?> cls) {
 		return _getFields(cls, true, false, true, true);
 	}
 
