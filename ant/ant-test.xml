@@ -2,10 +2,12 @@
 <project name="ant-test">
 	<property name="src.dir" value="src"/>
 	<property name="out.dir" value="out"/>
+	<property name="javac.source" value="1.6"/>
+	<property name="javac.target" value="1.6"/>
 
 	<target name="test"
-		depends="test-build, test-run, test-report"
-		description="Test the project (test-build, test-run, test-report)"/>
+		depends="test-build, test-emma, test-run, test-report"
+		description="Test the project (test-build, test-emma, test-run, test-report)"/>
 
 	<!-- path -->
 	<path id="test.cp">
@@ -81,7 +83,7 @@
 	</target>
 
 	<target name="test-build"
-		depends="test-clean, test-rescp, test-emma, test-javac"
+		depends="test-clean, test-rescp, test-javac"
 		description="Build the test suite of project"/>
 
 	<target name="test-run" description="Run all junit test case">
