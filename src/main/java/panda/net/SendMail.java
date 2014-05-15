@@ -14,7 +14,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
-import panda.lang.PrivateAccessors;
+import panda.lang.Fields;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -36,10 +36,10 @@ public class SendMail {
 		
 		try {
 			if (email instanceof SimpleEmail) {
-				content = (String)PrivateAccessors.getFieldValue(email, "content");
+				content = (String)Fields.readField(email, "content", true);
 			}
 			else if (email instanceof HtmlEmail) {
-				content = (String)PrivateAccessors.getFieldValue(email, "html");
+				content = (String)Fields.readField(email, "html", true);
 			}
 		}
 		catch (Throwable e) {
@@ -149,7 +149,7 @@ public class SendMail {
 		
 		for (String host : hosts) {
 			try {
-				PrivateAccessors.setFieldValue(email, "session", null);
+				Fields.writeField(email, "session", null, true);
 			}
 			catch (Exception e) {
 				throw new EmailException("failed to clear session", e);

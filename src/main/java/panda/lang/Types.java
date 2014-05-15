@@ -124,22 +124,64 @@ public abstract class Types {
 	}
 	
 	/**
+	 * 获取一个类的泛型参数数组，如果这个类没有泛型参数，返回 null
+	 */
+	public static Type[] getDeclaredGenericTypeParams(Class<?> cls) {
+		if (cls == null)
+			return null;
+
+		// 看看父类
+		Type sc = cls.getGenericSuperclass();
+		if (null != sc && sc instanceof ParameterizedType)
+			return ((ParameterizedType)sc).getActualTypeArguments();
+
+		// 看看接口
+		Type[] interfaces = cls.getGenericInterfaces();
+		for (Type inf : interfaces) {
+			if (inf instanceof ParameterizedType) {
+				return ((ParameterizedType)inf).getActualTypeArguments();
+			}
+		}
+		return getDeclaredGenericTypeParams(cls.getSuperclass());
+	}
+	
+	/**
+	 * 获取一个类的某个一个泛型参数
+	 * 
+	 * @param klass 类
+	 * @param index 参数下标 （从 0 开始）
+	 * @return 泛型参数类型
+	 */
+//	@SuppressWarnings("unchecked")
+//	public static <T> Class<T> getDeclaredGenericTypeParam(Class<?> klass, int index) {
+//	}
+	
+	public static Type getDeclaredGenericTypeParam(Class<?> klass, int index) {
+		Type[] types = getDeclaredGenericTypeParams(klass);
+		if (index < 0 || index >= types.length) {
+			throw Exceptions.makeThrow("Class type param out of range %d/%d", index, types.length);
+		}
+
+		return types[index];
+	}
+
+	/**
 	 * <pre>
-	 *   class Test {
-	 *     List<String> list ;
-	 *     
-	 *     void test() {
-	 *       // return "java.lang.String";
-	 *       TypeUtils.getGenericFieldParameterTypes(Test.class, "list");
-	 *     }
-	 *   }
+	 * class Test {
+	 * 	List&lt;String&gt; list;
+	 * 
+	 * 	void test() {
+	 * 		// return &quot;java.lang.String&quot;;
+	 * 		Types.getGenericFieldParameterTypes(Test.class, &quot;list&quot;);
+	 * 	}
+	 * }
 	 * </pre>
-	 * @param owner  owner type
+	 * 
+	 * @param owner owner type
 	 * @param fieldName field name
 	 * @return element types
 	 * @throws SecurityException if an security error occurs
-     * @throws NoSuchFieldException if a field with the specified name is
-     *              not found.
+	 * @throws NoSuchFieldException if a field with the specified name is not found.
 	 */
 	public static Type[] getGenericFieldParameterTypes(Type owner, String fieldName)
 			throws SecurityException, NoSuchFieldException {
@@ -1229,7 +1271,6 @@ public abstract class Types {
 		if (type instanceof Class<?>) {
 			// type is a normal class.
 			return (Class<?>)type;
-
 		}
 		else if (type instanceof ParameterizedType) {
 			ParameterizedType parameterizedType = (ParameterizedType)type;
@@ -1250,11 +1291,9 @@ public abstract class Types {
 			// we could use the variable's bounds, but that won't work if there are multiple.
 			// having a raw type that's more general than necessary is okay
 			return Object.class;
-
 		}
 		else if (type instanceof WildcardType) {
 			return getRawType(((WildcardType)type).getUpperBounds()[0]);
-
 		}
 		else {
 			String className = type == null ? "null" : type.getClass().getName();

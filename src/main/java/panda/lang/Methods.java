@@ -3,6 +3,12 @@ package panda.lang;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import panda.lang.collection.MultiKey;
 
 /**
  * utility class for Method
@@ -11,6 +17,67 @@ import java.lang.reflect.Modifier;
  */
 @SuppressWarnings("unchecked")
 public class Methods {
+	/**
+	 * Gets all methods of the given class and its parents (if any).
+	 */
+	public static Method[] getAllMethods(Class<?> cls) {
+		final List<Method> all = getAllMethodsList(cls);
+		return all.toArray(new Method[all.size()]);
+	}
+
+	/**
+	 * Gets all methods of the given class and its parents (if any).
+	 */
+	public static List<Method> getAllMethodsList(Class<?> cls) {
+		List<Method> list = new ArrayList<Method>();
+		while (null != cls) {
+			Method[] ms = cls.getDeclaredMethods();
+			for (Method m : ms) {
+				list.add(m);
+			}
+			cls = cls.getSuperclass();
+		}
+		return list;
+	}
+
+	/**
+	 * call getDeclaredMethods(xx, null)
+	 */
+	public static Method[] getDeclaredMethods(Class<?> cls) {
+		return getDeclaredMethods(cls, null);
+	}
+
+	/**
+	 * call getDeclaredMethods(xx, Object.class)
+	 */
+	public static Method[] getDeclaredMethodsWithoutTop(Class<?> cls) {
+		return getDeclaredMethods(cls, Object.class);
+	}
+
+	/**
+	 * Gets declared methods of the given class and its parents until top class.
+	 * Discard duplicate method of parents.
+	 */
+	public static Method[] getDeclaredMethods(Class<?> cls, Class<?> top) {
+		Map<MultiKey, Method> map = new LinkedHashMap<MultiKey, Method>();
+		List<Object> mi = new ArrayList<Object>();
+		while (cls != top) {
+			Method[] ms = cls.getDeclaredMethods();
+			for (Method m : ms) {
+				mi.clear();
+				mi.add(m.getName());
+				Collections.addAll(mi, m.getParameterTypes());
+				
+				MultiKey key = new MultiKey(mi.toArray());
+				if (!map.containsKey(key)) {
+					map.put(key, m);
+				}
+			}
+			cls = cls.getSuperclass();
+		}
+		return map.values().toArray(new Method[map.size()]);
+	}
+
 	/**
 	 * <p>
 	 * Invoke a named method.

@@ -45,7 +45,7 @@ public class Constructors {
 				if (paramtypes.length == argTypes.length) {
 					boolean canuse = true;
 					for (int j = 0; j < paramtypes.length; j++) {
-						if (paramtypes[j].isAssignableFrom(argTypes[j])) {
+						if (argTypes[j] == null || paramtypes[j].isAssignableFrom(argTypes[j])) {
 							continue;
 						}
 						else {

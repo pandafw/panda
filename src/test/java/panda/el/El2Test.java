@@ -353,17 +353,6 @@ public class El2Test {
 		assertEquals(2, El.eval(context, "math@max(1, 2)"));
 	}
 
-	// @Test
-	// public void testIssue279() throws InterruptedException {
-	// Map context = new HashMap();
-	// context.put("math", Math.class);
-	// assertEquals("java.lang.Math", El.eval(context, "math.toString()"));
-	//
-	// NutConf.load("org/nutz/el/issue279/279.js");
-	// assertEquals(El.eval("uuuid(false)"), "abc");
-	// assertEquals(El.eval("uuuid()"), "abc");
-	// }
-
 	@Test
 	public void testIssueQuestionOpe() {
 		Map context = new HashMap();
@@ -433,7 +422,6 @@ public class El2Test {
 						count.countDown();
 					}
 				}
-
 			}.start();
 		}
 		count.await();

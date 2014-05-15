@@ -39,6 +39,7 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Methods;
 import panda.lang.Strings;
 import panda.lang.Types;
 import panda.log.Log;
@@ -77,7 +78,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		}
 
 		// loop for methods
-		for (Method method : Classes.getMethods(en.getType())) {
+		for (Method method : Methods.getAllMethodsList(en.getType())) {
 			addEntityField(en, method);
 		}
 

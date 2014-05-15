@@ -340,7 +340,9 @@ public class Beans {
 			type = field.getType();
 		}
 
-		field.setAccessible(true);
+		if (!field.isAccessible()) {
+			field.setAccessible(true);
+		}
 
 		PropertyAccessor pa = new PropertyAccessor();
 		pa.field = field;
@@ -356,7 +358,9 @@ public class Beans {
 
 		PropertyAccessor pa = accessors.get(name);
 		if (pa == null) {
-			getter.setAccessible(true);
+			if (!getter.isAccessible()) {
+				getter.setAccessible(true);
+			}
 			pa = new PropertyAccessor();
 			pa.getter = getter;
 			pa.type = type;
@@ -364,7 +368,9 @@ public class Beans {
 		}
 		else if (pa.field == null && pa.getter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
-				getter.setAccessible(true);
+				if (!getter.isAccessible()) {
+					getter.setAccessible(true);
+				}
 				pa.getter = getter;
 			}
 		}
@@ -378,7 +384,9 @@ public class Beans {
 		
 		PropertyAccessor pa = accessors.get(name);
 		if (pa == null) {
-			setter.setAccessible(true);
+			if (!setter.isAccessible()) {
+				setter.setAccessible(true);
+			}
 			pa = new PropertyAccessor();
 			pa.setter = setter;
 			pa.type = type;
@@ -386,6 +394,9 @@ public class Beans {
 		}
 		else if (pa.field == null && pa.setter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+				if (!setter.isAccessible()) {
+					setter.setAccessible(true);
+				}
 				setter.setAccessible(true);
 				pa.setter = setter;
 			}

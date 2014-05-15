@@ -1249,6 +1249,17 @@ public abstract class Classes {
 	}
 
 	/**
+	 * new instance by the class 
+	 * @param cls class
+	 * @return object instance
+	 * @throws InstantiationException if InstantiationException occurs 
+	 * @throws IllegalAccessException if IllegalAccessException occurs 
+	 */
+	public static <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException {
+		return cls.newInstance();
+	}
+
+	/**
 	 * new instance by the className
 	 * @param className class name
 	 * @return object instance
@@ -1259,6 +1270,22 @@ public abstract class Classes {
 	public static Object newInstance(String className) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		return newInstance(getClass(className));
+	}
+
+	/**
+	 * new instance by the className 
+	 * @param className class name
+	 * @param argValue constructor argument value
+	 * @return class instance
+	 * @throws ClassNotFoundException if ClassNotFoundException occurs
+	 * @throws InstantiationException if InstantiationException occurs 
+	 * @throws IllegalAccessException if IllegalAccessException occurs
+	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 */
+	public static Object newInstance(String className, Object argValue)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException,
+			ClassNotFoundException {
+		return newInstance(getClass(className), new Object[] { argValue }, toClass(argValue));
 	}
 
 	/**
@@ -1283,6 +1310,23 @@ public abstract class Classes {
 	 * @param className class name
 	 * @return object instance
 	 * @param argValues constructor arguments value
+	 * @throws ClassNotFoundException if class not found
+	 * @throws InstantiationException if InstantiationException occurs 
+	 * @throws IllegalAccessException if IllegalAccessException occurs 
+	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 */
+	public static Object newInstance(String className, Object[] argValues)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException,
+			ClassNotFoundException {
+		Class<?>[] argTypes = toClass(argValues);
+		return newInstance(getClass(className), argValues, argTypes);
+	}
+
+	/**
+	 * new instance by the className
+	 * @param className class name
+	 * @return object instance
+	 * @param argValues constructor arguments value
 	 * @param argTypes constructor arguments type
 	 * @throws ClassNotFoundException if class not found
 	 * @throws InstantiationException if InstantiationException occurs 
@@ -1298,12 +1342,15 @@ public abstract class Classes {
 	/**
 	 * new instance by the class 
 	 * @param cls class
-	 * @return object instance
+	 * @param argValue constructor argument value
+	 * @return class instance
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
+	 * @throws InvocationTargetException if InvocationTargetException occurs
 	 */
-	public static <T> T newInstance(Class<T> cls) throws InstantiationException, IllegalAccessException {
-		return cls.newInstance();
+	public static <T> T newInstance(Class<T> cls, Object argValue)
+		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		return newInstance(cls, new Object[] { argValue }, toClass(argValue));
 	}
 
 	/**
@@ -1336,6 +1383,160 @@ public abstract class Classes {
 		throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		return Constructors.invokeConstructor(cls, argTypes, argValues);
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * new instance by the class 
+	 * @param cls class
+	 * @return object instance
+	 */
+	public static <T> T born(Class<T> cls) {
+		try {
+			return cls.newInstance();
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the className
+	 * @param className class name
+	 * @return object instance
+	 */
+	public static Object born(String className) {
+		try {
+			return getClass(className).newInstance();
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the className 
+	 * @param className class name
+	 * @param argValue constructor argument value
+	 * @return class instance
+	 */
+	public static Object born(String className, Object argValue) {
+		try {
+			return newInstance(className, argValue);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the className 
+	 * @param className class name
+	 * @param argValue constructor argument value
+	 * @param argType constructor argument type
+	 * @return class instance
+	 */
+	public static Object born(String className, Object argValue, Class<?> argType) {
+		try {
+			return newInstance(className, argValue, argType);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the className
+	 * @param className class name
+	 * @return object instance
+	 * @param argValues constructor arguments value
+	 */
+	public static Object born(String className, Object[] argValues) {
+		try {
+			return newInstance(className, argValues);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the className
+	 * @param className class name
+	 * @return object instance
+	 * @param argValues constructor arguments value
+	 * @param argTypes constructor arguments type
+	 */
+	public static Object born(String className, Object[] argValues, Class<?>[] argTypes) {
+		try {
+			return newInstance(className, argValues, argTypes);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the class 
+	 * @param cls class
+	 * @param argValue constructor argument value
+	 * @return class instance
+	 */
+	public static <T> T born(Class<T> cls, Object argValue) {
+		try {
+			return newInstance(cls, argValue);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the class 
+	 * @param cls class
+	 * @param argValue constructor argument value
+	 * @param argType constructor argument type
+	 * @return class instance
+	 */
+	public static <T> T born(Class<T> cls, Object argValue, Class<?> argType) {
+		try {
+			return newInstance(cls, argValue, argType);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the class
+	 * @param cls class
+	 * @return object instance
+	 * @param argValues constructor arguments value
+	 */
+	public static <T> T born(Class<T> cls, Object[] argValues) {
+		try {
+			return newInstance(cls, argValues);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * new instance by the class
+	 * @param cls class
+	 * @return object instance
+	 * @param argValues constructor arguments value
+	 * @param argTypes constructor arguments type
+	 */
+	public static <T> T born(Class<T> cls, Object[] argValues, Class<?>[] argTypes) {
+		try {
+			return newInstance(cls, argValues, argTypes);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns a {@link Constructor} for the given method signature, or <tt>null</tt>
@@ -1858,21 +2059,6 @@ public abstract class Classes {
 			cc = cc.getSuperclass();
 		}
 		return map.values();
-	}
-
-	/**
-	 * 获取本类型所有的方法，包括私有方法。不包括 Object 的方法
-	 */
-	public static List<Method> getMethods(Class<?> cc) {
-		List<Method> list = new ArrayList<Method>();
-		while (null != cc && cc != Object.class) {
-			Method[] ms = cc.getDeclaredMethods();
-			for (Method m : ms) {
-				list.add(m);
-			}
-			cc = cc.getSuperclass();
-		}
-		return list;
 	}
 
 	/**
