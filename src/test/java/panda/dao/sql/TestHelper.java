@@ -118,7 +118,7 @@ public class TestHelper {
 
 				ds = sds;
 			}
-			catch (Exception e) {
+			catch (Throwable e) {
 				log.warn("Failed to connect " + sds.getJdbc().getUrl() + " - " + sds.getJdbc().getUsername() + ": " + e);
 				ds = new MockDataSource();
 			}
