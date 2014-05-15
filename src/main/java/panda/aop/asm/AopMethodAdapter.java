@@ -119,8 +119,7 @@ class AopMethodAdapter extends NormalMethodAdapter implements Opcodes {
 	}
 
 	void visitAttribute() {
-		Attribute attr = new Attribute("LocalVariableTable");
-		attr.value = new byte[] { 0, 0 };
+		Attribute attr = new Attribute("LocalVariableTable", new byte[] { 0, 0 });
 		mv.visitAttribute(attr);
 	}
 }
