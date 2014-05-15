@@ -1,5 +1,15 @@
 package panda.bean;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import panda.bean.handlers.AbstractFastBeanHandler;
 import panda.lang.Arrays;
 import panda.lang.Classes;
@@ -9,14 +19,6 @@ import panda.lang.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.servlet.HttpServletSupport;
-
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.util.Map.Entry;
-import java.util.Set;
 
 
 /**
@@ -111,7 +113,7 @@ public class FastBeans extends Beans {
 		for (Entry<String, PropertyAccessor> en : accessors) {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
-			if (pa.getField() != null || pa.getGetter() != null) {
+			if (pa.getGetter() != null) {
 				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
 			}
@@ -123,7 +125,7 @@ public class FastBeans extends Beans {
 		for (Entry<String, PropertyAccessor> en : accessors) {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
-			if (pa.getField() != null || pa.getSetter() != null) {
+			if (pa.getSetter() != null) {
 				src.append("      ").append(first ? "" : ", ").append("\"").append(pn).append("\"\n");
 				first = false;
 			}
@@ -138,8 +140,8 @@ public class FastBeans extends Beans {
 
 			src.append("    pi = new PropertyInfo();\n");
 			src.append("    pi.index = ").append(++i).append(";\n");;
-			src.append("    pi.readable = ").append(pa.getField() != null || pa.getGetter() != null).append(";\n");;
-			src.append("    pi.writable = ").append(pa.getField() != null || pa.getSetter() != null).append(";\n");;
+			src.append("    pi.readable = ").append(pa.getGetter() != null).append(";\n");;
+			src.append("    pi.writable = ").append(pa.getSetter() != null).append(";\n");;
 			src.append("    mm.put(\"").append(pn).append("\", pi);\n");
 		}
 		src.append("  }\n");
@@ -179,11 +181,11 @@ public class FastBeans extends Beans {
 			PropertyAccessor pa = en.getValue();
 
 			src.append("      case ").append(++i).append(": ");
-			if (pa.getField() != null) {
-				src.append("return bo.").append(pa.getField().getName());
+			if (pa.getGetter() instanceof Field) {
+				src.append("return bo.").append(pa.getGetter().getName()).append(';');
 			}
-			else if (pa.getGetter() != null) {
-				src.append("return bo.").append(pa.getField().getName()).append("()");
+			else if (pa.getGetter() instanceof Method) {
+				src.append("return bo.").append(pa.getGetter().getName()).append("();");
 			}
 			else {
 //				src.append("throw noGetterMethodException(pn);\n");
@@ -212,10 +214,10 @@ public class FastBeans extends Beans {
 			String pt = Types.getCastableClassName(pa.getType());
 
 			src.append("      case ").append(++i).append(": ");
-			if (pa.getField() != null) {
-				src.append("bo.").append(pa.getField().getName()).append(" = (").append(pt).append(")value; return true;");
+			if (pa.getSetter() instanceof Field) {
+				src.append("bo.").append(pa.getSetter().getName()).append(" = (").append(pt).append(")value; return true;");
 			}
-			else if (pa.getSetter() != null) {
+			else if (pa.getSetter() instanceof Method) {
 				src.append("bo.").append(pa.getSetter().getName()).append("((").append(pt).append(")value); return true;");
 			}
 			else {

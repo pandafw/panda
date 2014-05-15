@@ -1,7 +1,6 @@
 package panda.bean;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 
 /**
@@ -11,9 +10,8 @@ import java.lang.reflect.Type;
  */
 public class PropertyAccessor {
 	protected Type type;
-	protected Field field;
-	protected Method getter;
-	protected Method setter;
+	protected Member getter;
+	protected Member setter;
 
 
 	/**
@@ -31,45 +29,16 @@ public class PropertyAccessor {
 	}
 	
 	/**
-	 * @return the field
-	 */
-	public Field getField() {
-		return field;
-	}
-
-	/**
-	 * @param field the field to set
-	 */
-	public void setField(Field field) {
-		this.field = field;
-	}
-
-	/**
 	 * @return the getter
 	 */
-	public Method getGetter() {
+	public Member getGetter() {
 		return getter;
-	}
-	
-	/**
-	 * @param getter the getter to set
-	 */
-	public void setGetter(Method getter) {
-		this.getter = getter;
 	}
 	
 	/**
 	 * @return the setter
 	 */
-	public Method getSetter() {
+	public Member getSetter() {
 		return setter;
 	}
-	
-	/**
-	 * @param setter the setter to set
-	 */
-	public void setSetter(Method setter) {
-		this.setter = setter;
-	}
-
 }

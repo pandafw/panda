@@ -2,6 +2,7 @@ package panda.bean;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
@@ -345,7 +346,10 @@ public class Beans {
 		}
 
 		PropertyAccessor pa = new PropertyAccessor();
-		pa.field = field;
+		pa.getter = field;
+		if (!Modifier.isFinal(field.getModifiers())) {
+			pa.setter = field;
+		}
 		pa.type = type;
 		accessors.put(name, pa);
 	}
@@ -366,7 +370,7 @@ public class Beans {
 			pa.type = type;
 			accessors.put(name, pa);
 		}
-		else if (pa.field == null && pa.getter == null) {
+		else if (pa.getter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
 				if (!getter.isAccessible()) {
 					getter.setAccessible(true);
@@ -392,7 +396,7 @@ public class Beans {
 			pa.type = type;
 			accessors.put(name, pa);
 		}
-		else if (pa.field == null && pa.setter == null) {
+		else if (pa.setter == null) {
 			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
 				if (!setter.isAccessible()) {
 					setter.setAccessible(true);
@@ -413,6 +417,10 @@ public class Beans {
 
 		Field[] fields = clazz.getFields();
 		for (Field f : fields) {
+			int m = f.getModifiers();
+			if (f.isSynthetic() || Modifier.isStatic(m)) {
+				continue;
+			}
 			setField(accessors, f);
 		}
 		

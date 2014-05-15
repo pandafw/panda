@@ -1,15 +1,18 @@
 package panda.bean.handlers;
 
-import panda.bean.Beans;
-import panda.bean.PropertyAccessor;
-import panda.lang.Exceptions;
-import panda.lang.Types;
-
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import panda.bean.Beans;
+import panda.bean.PropertyAccessor;
+import panda.lang.Exceptions;
+import panda.lang.Types;
 
 /**
  * 
@@ -40,12 +43,6 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			String pn = en.getKey();
 			PropertyAccessor pa = en.getValue();
 			
-			if (pa.getField() != null) {
-				readPropertyNames.add(pn);
-				writePropertyNames.add(pn);
-				continue;
-			}
-
 			if (pa.getGetter() != null) {
 				readPropertyNames.add(pn);
 			}
@@ -84,7 +81,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canReadProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && (pa.getField() != null || pa.getGetter() != null));
+		return (pa != null && pa.getGetter() != null);
 	}
 
 	/**
@@ -95,7 +92,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	 */
 	public boolean canWriteProperty(T beanObject, String propertyName) {
 		PropertyAccessor pa = accessors.get(propertyName);
-		return (pa != null && (pa.getField() != null || pa.getSetter() != null));
+		return (pa != null && pa.getSetter() != null);
 	}
 	
 	/**
@@ -122,11 +119,12 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 		}
 		
 		try {
-			if (pa.getField() != null) {
-				return pa.getField().get(beanObject);
+			Member getter = pa.getGetter();
+			if (getter instanceof Field) {
+				return ((Field)getter).get(beanObject);
 			}
-			else if (pa.getGetter() != null) {
-				return pa.getGetter().invoke(beanObject);
+			else if (getter instanceof Method) {
+				return ((Method)getter).invoke(beanObject);
 			}
 			return null;
 		}
@@ -148,13 +146,13 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 		}
 
 		try {
-			if (pa.getField() != null) {
-				pa.getField().set(beanObject, value);
+			Member setter = pa.getSetter();
+			if (setter instanceof Field) {
+				((Field)setter).set(beanObject, value);
 				return true;
 			}
-			
-			if (pa.getSetter() != null) {
-				pa.getSetter().invoke(beanObject, value);
+			else if (setter instanceof Method) {
+				((Method)setter).invoke(beanObject, value);
 				return true;
 			}
 			
