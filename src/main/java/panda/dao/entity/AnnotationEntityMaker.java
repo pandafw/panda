@@ -39,6 +39,7 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Fields;
 import panda.lang.Methods;
 import panda.lang.Strings;
 import panda.lang.Types;
@@ -61,7 +62,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	public <T> Entity<T> make(Class<T> type) {
 		Entity<T> en = createEntity(type);
 
-		Collection<Field> fields = Classes.getDeclaredFields(type);
+		Collection<Field> fields = Fields.getDeclaredFields(type);
 
 		// Is @Column declared
 		boolean shouldUseColumn = false;

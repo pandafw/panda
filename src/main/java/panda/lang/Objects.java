@@ -14,7 +14,6 @@ import java.util.TreeSet;
 
 import panda.lang.builder.CompareToBuilder;
 import panda.lang.builder.EqualsBuilder;
-import panda.lang.builder.HashCodeBuilder;
 import panda.lang.builder.ToStringBuilder;
 import panda.lang.mutable.MutableInt;
 
@@ -184,22 +183,23 @@ public abstract class Objects {
 	 * </p>
 	 * 
 	 * <pre>
-	 * hashCodeMulti()                 = 1
-	 * hashCodeMulti((Object[]) null)  = 1
-	 * hashCodeMulti(a)                = 31 + a.hashCode()
-	 * hashCodeMulti(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
-	 * hashCodeMulti(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()
+	 * hashCodes((Object[]) null)  = 0
+	 * hashCodes(a)                = 31 + a.hashCode()
+	 * hashCodes(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
+	 * hashCodes(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()
 	 * </pre>
 	 * 
-	 * @param objects the objects to obtain the hash code of, may be {@code null}
+	 * @param a the objects to obtain the hash code of, may be {@code null}
 	 * @return the hash code of the objects, or zero if null
 	 */
-	public static int hashCodeMulti(final Object... objects) {
+	public static int hashCodes(final Object... a) {
+		if (a == null) {
+			return 0;
+		}
+		
 		int hash = 1;
-		if (objects != null) {
-			for (final Object object : objects) {
-				hash = hash * 31 + hashCode(object);
-			}
+		for (final Object object : a) {
+			hash = hash * 31 + hashCode(object);
 		}
 		return hash;
 	}
@@ -855,12 +855,5 @@ public abstract class Objects {
 	 */
 	public static CompareToBuilder compareToBuilder() {
 		return new CompareToBuilder();
-	}
-	
-	/**
-	 * @return HashCodeBuilder instance
-	 */
-	public static HashCodeBuilder hashCodeBuilder() {
-		return new HashCodeBuilder();
 	}
 }

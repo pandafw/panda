@@ -315,7 +315,7 @@ public abstract class ExternalResourceLoader {
 
 		@Override
 		public int hashCode() {
-			return Objects.hashCodeBuilder().append(baseName).append(country).append(language).append(variant).toHashCode();
+			return Objects.hashCodes(baseName, country, language, variant);
 		}
 
 		@Override

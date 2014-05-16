@@ -2,7 +2,6 @@ package panda.lang;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -16,7 +15,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -2015,50 +2013,6 @@ public abstract class Classes {
 			cls = cls.getSuperclass();
 		}
 		return (Class<?>[]) interfaces.toArray(new Class<?>[interfaces.size()]);
-	}
-
-	/**
-	 * Return all fields of the class and it's super class (exclude the Object class). <br>
-	 * 如果子类的属性如果与父类重名，将会将其覆盖
-	 * 
-	 * @return field list
-	 */
-	public static Collection<Field> getDeclaredFields(Class<?> cls) {
-		return _getFields(cls, true, false, true, true);
-	}
-
-	/**
-	 * 获得所有的静态变量属性
-	 * 
-	 * @param noFinal 是否包括 final 修饰符的字段
-	 * @return 字段列表
-	 */
-	public static Collection<Field> getStaticFields(Class<?> cls, boolean noFinal) {
-		return _getFields(cls, false, true, noFinal, true);
-	}
-
-	private static Collection<Field> _getFields(Class<?> cc, boolean noStatic, boolean noMember, boolean noFinal, boolean noInner) {
-		Map<String, Field> map = new LinkedHashMap<String, Field>();
-		while (null != cc && cc != Object.class) {
-			Field[] fs = cc.getDeclaredFields();
-			for (Field f : fs) {
-				int m = f.getModifiers();
-				if (noStatic && Modifier.isStatic(m))
-					continue;
-				if (noFinal && Modifier.isFinal(m))
-					continue;
-				if (noInner && f.isSynthetic())
-					continue;
-				if (noMember && !Modifier.isStatic(m))
-					continue;
-				if (map.containsKey(f.getName()))
-					continue;
-
-				map.put(f.getName(), f);
-			}
-			cc = cc.getSuperclass();
-		}
-		return map.values();
 	}
 
 	/**

@@ -1043,16 +1043,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(target)
-				.append(conjunction)
-				.append(start)
-				.append(limit)
-				.append(columns)
-				.append(joins)
-				.append(expressions)
-				.append(orders)
-				.toHashCode();
+		return Objects.hashCodes(target, conjunction, start, limit, columns, joins, expressions, orders);
 	}
 
 	/**

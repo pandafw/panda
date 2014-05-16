@@ -55,11 +55,7 @@ public class Student {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(id)
-				.append(name)
-				.append(dummy)
-				.toHashCode();
+		return Objects.hashCodes(id, name, dummy);
 	}
 
 	@Override

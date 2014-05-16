@@ -54,7 +54,7 @@ public class ArraysTest {
 
 		final Object[] arrayA = new Object[] { new boolean[] { true, false }, new int[] { 6, 7 } };
 		final Object[] arrayB = new Object[] { new boolean[] { true, false }, new int[] { 6, 7 } };
-		assertEquals(Arrays.hashCode(arrayB), Arrays.hashCode(arrayA));
+		assertEquals(Arrays.deepHashCode(arrayB), Arrays.deepHashCode(arrayA));
 	}
 
 	// -----------------------------------------------------------------------

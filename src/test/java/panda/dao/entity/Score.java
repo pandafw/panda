@@ -88,12 +88,7 @@ public class Score {
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(student)
-				.append(klass)
-				.append(key)
-				.append(score)
-				.toHashCode();
+		return Objects.hashCodes(student, klass, key, score);
 	}
 
 	@Override

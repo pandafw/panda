@@ -3,8 +3,7 @@ package panda.lang.collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import panda.lang.builder.EqualsBuilder;
-import panda.lang.builder.HashCodeBuilder;
+import panda.lang.Objects;
 
 
 /**
@@ -62,7 +61,7 @@ public class KeyValue<K, V> implements Entry<K, V> {
 	 */
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(key).append(value).hashCode();
+		return Objects.hashCodes(key, value);
 	}
 
 	/**
@@ -81,7 +80,7 @@ public class KeyValue<K, V> implements Entry<K, V> {
 		}
 
 		Map.Entry rhs = (Map.Entry)obj;
-		return new EqualsBuilder().append(key, rhs.getKey()).append(value, rhs.getValue()).isEquals();
+		return Objects.equalsBuilder().append(key, rhs.getKey()).append(value, rhs.getValue()).isEquals();
 	}
 
 	/**
@@ -91,6 +90,6 @@ public class KeyValue<K, V> implements Entry<K, V> {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder().append(getKey()).append('=').append(getValue()).toString();
+		return key + "=" + value;
 	}
 }

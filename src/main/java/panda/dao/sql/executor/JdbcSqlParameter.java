@@ -202,15 +202,7 @@ public class JdbcSqlParameter {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(name)
-				.append(jdbcType)
-				.append(sqlType)
-				.append(scale)
-				.append(mode)
-				.append(value)
-				.append(typeAdapter)
-				.hashCode();
+		return Objects.hashCodes(name, jdbcType, sqlType, scale, mode, value, typeAdapter);
 	}
 
 	/**

@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import panda.lang.builder.EqualsBuilder;
-import panda.lang.builder.HashCodeBuilder;
 import panda.lang.builder.ToStringBuilder;
 import panda.lang.builder.ToStringStyle;
 import panda.lang.mutable.MutableInt;
@@ -111,21 +110,355 @@ public abstract class Arrays {
 	 */
 	public static final int INDEX_NOT_FOUND = -1;
 
-	// Basic methods handling multi-dimensional arrays
+	// hashCode
 	// -----------------------------------------------------------------------
 	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>long</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
 	 * <p>
-	 * Get a hash code for an array handling multi-dimensional arrays correctly.
-	 * </p>
-	 * <p>
-	 * Multi-dimensional primitive arrays are also handled correctly by this method.
-	 * </p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Long} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
 	 * 
-	 * @param array the array to get a hash code for, {@code null} returns zero
-	 * @return a hash code for the array
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
 	 */
-	public static int hashCode(Object array) {
-		return new HashCodeBuilder().append(array).toHashCode();
+	public static int hashCode(long a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two non-null
+	 * <tt>int</tt> arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is
+	 * also the case that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Integer} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(int a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>short</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Short} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(short a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>char</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Character} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(char a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>byte</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Byte} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(byte a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two
+	 * <tt>boolean</tt> arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it
+	 * is also the case that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Boolean} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(boolean a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>float</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Float} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(float a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. For any two <tt>double</tt>
+	 * arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is also the case
+	 * that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is the same value that would be obtained by invoking the
+	 * {@link List#hashCode() <tt>hashCode</tt>} method on a {@link List} containing a sequence of
+	 * {@link Double} instances representing the elements of <tt>a</tt> in the same order. If
+	 * <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose hash value to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 */
+	public static int hashCode(double a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. If the array contains other
+	 * arrays as elements, the hash code is based on their identities rather than their contents. It
+	 * is therefore acceptable to invoke this method on an array that contains itself as an element,
+	 * either directly or indirectly through one or more levels of arrays.
+	 * <p>
+	 * For any two arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is
+	 * also the case that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is equal to the value that would be returned by
+	 * <tt>Arrays.asList(a).hashCode()</tt>, unless <tt>a</tt> is <tt>null</tt>, in which case
+	 * <tt>0</tt> is returned.
+	 * 
+	 * @param a the array whose content-based hash code to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 * @see #deepHashCode(Object[])
+	 */
+	public static int hashCode(Object a[]) {
+		return java.util.Arrays.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the contents of the specified array. If the array contains other
+	 * arrays as elements, the hash code is based on their identities rather than their contents. It
+	 * is therefore acceptable to invoke this method on an array that contains itself as an element,
+	 * either directly or indirectly through one or more levels of arrays.
+	 * <p>
+	 * For any two arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.equals(a, b)</tt>, it is
+	 * also the case that <tt>Arrays.hashCode(a) == Arrays.hashCode(b)</tt>.
+	 * <p>
+	 * The value returned by this method is equal to the value that would be returned by
+	 * <tt>Arrays.asList(a).hashCode()</tt>, unless <tt>a</tt> is <tt>null</tt>, in which case
+	 * <tt>0</tt> is returned.
+	 * 
+	 * @param a the array whose content-based hash code to compute
+	 * @return a content-based hash code for <tt>a</tt>
+	 * @see #deepHashCode(Object)
+	 */
+	public static int hashCode(Object a) {
+		if (a == null) {
+			return 0;
+		}
+		
+		if (a.getClass().isArray()) {
+			// 'Switch' on type of array, to dispatch to the correct handler
+			// This handles multi dimensional arrays
+			if (a instanceof long[]) {
+				return hashCode((long[])a);
+			}
+			
+			if (a instanceof int[]) {
+				return hashCode((int[])a);
+			}
+			
+			if (a instanceof short[]) {
+				return hashCode((short[])a);
+			}
+			
+			if (a instanceof char[]) {
+				return hashCode((char[])a);
+			}
+			
+			if (a instanceof byte[]) {
+				return hashCode((byte[])a);
+			}
+			
+			if (a instanceof double[]) {
+				return hashCode((double[])a);
+			}
+			
+			if (a instanceof float[]) {
+				return hashCode((float[])a);
+			}
+			
+			if (a instanceof boolean[]) {
+				return hashCode((boolean[])a);
+			}
+			
+			// Not an array of primitives
+			return hashCode((Object[])a);
+		}
+
+		return Objects.hashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the "deep contents" of the specified array. If the array
+	 * contains other arrays as elements, the hash code is based on their contents and so on, ad
+	 * infinitum. It is therefore unacceptable to invoke this method on an array that contains
+	 * itself as an element, either directly or indirectly through one or more levels of arrays. The
+	 * behavior of such an invocation is undefined.
+	 * <p>
+	 * For any two arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.deepEquals(a, b)</tt>, it
+	 * is also the case that <tt>Arrays.deepHashCode(a) == Arrays.deepHashCode(b)</tt>.
+	 * <p>
+	 * The computation of the value returned by this method is similar to that of the value returned
+	 * by {@link List#hashCode()} on a list containing the same elements as <tt>a</tt> in the same
+	 * order, with one difference: If an element <tt>e</tt> of <tt>a</tt> is itself an array, its
+	 * hash code is computed not by calling <tt>e.hashCode()</tt>, but as by calling the appropriate
+	 * overloading of <tt>Arrays.hashCode(e)</tt> if <tt>e</tt> is an array of a primitive type, or
+	 * as by calling <tt>Arrays.deepHashCode(e)</tt> recursively if <tt>e</tt> is an array of a
+	 * reference type. If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose deep-content-based hash code to compute
+	 * @return a deep-content-based hash code for <tt>a</tt>
+	 * @see #hashCode(Object[])
+	 */
+	public static int deepHashCode(Object a[]) {
+		return java.util.Arrays.deepHashCode(a);
+	}
+
+	/**
+	 * Returns a hash code based on the "deep contents" of the specified array. If the array
+	 * contains other arrays as elements, the hash code is based on their contents and so on, ad
+	 * infinitum. It is therefore unacceptable to invoke this method on an array that contains
+	 * itself as an element, either directly or indirectly through one or more levels of arrays. The
+	 * behavior of such an invocation is undefined.
+	 * <p>
+	 * For any two arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.deepEquals(a, b)</tt>, it
+	 * is also the case that <tt>Arrays.deepHashCode(a) == Arrays.deepHashCode(b)</tt>.
+	 * <p>
+	 * The computation of the value returned by this method is similar to that of the value returned
+	 * by {@link List#hashCode()} on a list containing the same elements as <tt>a</tt> in the same
+	 * order, with one difference: If an element <tt>e</tt> of <tt>a</tt> is itself an array, its
+	 * hash code is computed not by calling <tt>e.hashCode()</tt>, but as by calling the appropriate
+	 * overloading of <tt>Arrays.hashCode(e)</tt> if <tt>e</tt> is an array of a primitive type, or
+	 * as by calling <tt>Arrays.deepHashCode(e)</tt> recursively if <tt>e</tt> is an array of a
+	 * reference type. If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+	 * 
+	 * @param a the array whose deep-content-based hash code to compute
+	 * @return a deep-content-based hash code for <tt>a</tt>
+	 * @see #hashCode(Object)
+	 */
+	public static int deepHashCode(Object a) {
+		if (a == null) {
+			return 0;
+		}
+		
+		if (a.getClass().isArray()) {
+			// 'Switch' on type of array, to dispatch to the correct handler
+			// This handles multi dimensional arrays
+			if (a instanceof long[]) {
+				return deepHashCode((long[])a);
+			}
+			
+			if (a instanceof int[]) {
+				return deepHashCode((int[])a);
+			}
+			
+			if (a instanceof short[]) {
+				return deepHashCode((short[])a);
+			}
+			
+			if (a instanceof char[]) {
+				return deepHashCode((char[])a);
+			}
+			
+			if (a instanceof byte[]) {
+				return deepHashCode((byte[])a);
+			}
+			
+			if (a instanceof double[]) {
+				return deepHashCode((double[])a);
+			}
+			
+			if (a instanceof float[]) {
+				return deepHashCode((float[])a);
+			}
+			
+			if (a instanceof boolean[]) {
+				return deepHashCode((boolean[])a);
+			}
+			
+			// Not an array of primitives
+			return deepHashCode((Object[])a);
+		}
+
+		return Objects.hashCode(a);
+	}
+
+	/**
+	 * Returns <tt>true</tt> if the two specified arrays are <i>deeply equal</i> to one another.
+	 * Unlike the {@link #equals(Object[],Object[])} method, this method is appropriate for use with
+	 * nested arrays of arbitrary depth.
+	 * <p>
+	 * Two array references are considered deeply equal if both are <tt>null</tt>, or if they refer
+	 * to arrays that contain the same number of elements and all corresponding pairs of elements in
+	 * the two arrays are deeply equal.
+	 * <p>
+	 * Two possibly <tt>null</tt> elements <tt>e1</tt> and <tt>e2</tt> are deeply equal if any of
+	 * the following conditions hold:
+	 * <ul>
+	 * <li> <tt>e1</tt> and <tt>e2</tt> are both arrays of object reference types, and
+	 * <tt>Arrays.deepEquals(e1, e2) would return true</tt>
+	 * <li> <tt>e1</tt> and <tt>e2</tt> are arrays of the same primitive type, and the appropriate
+	 * overloading of <tt>Arrays.equals(e1, e2)</tt> would return true.
+	 * <li> <tt>e1 == e2</tt>
+	 * <li> <tt>e1.equals(e2)</tt> would return true.
+	 * </ul>
+	 * Note that this definition permits <tt>null</tt> elements at any depth.
+	 * <p>
+	 * If either of the specified arrays contain themselves as elements either directly or
+	 * indirectly through one or more levels of arrays, the behavior of this method is undefined.
+	 * 
+	 * @param a1 one array to be tested for equality
+	 * @param a2 the other array to be tested for equality
+	 * @return <tt>true</tt> if the two arrays are equal
+	 * @see #equals(Object[],Object[])
+	 */
+	public static boolean deepEquals(Object[] a1, Object[] a2) {
+		return java.util.Arrays.deepEquals(a1, a2);
 	}
 
 	// To map
@@ -7482,6 +7815,24 @@ public abstract class Arrays {
 	 * @see Float#equals(Object)
 	 */
 	public static boolean equals(float[] a, float[] a2) {
+		return java.util.Arrays.equals(a, a2);
+	}
+
+	/**
+	 * Returns <tt>true</tt> if the two specified arrays of Objects are <i>equal</i> to one another.
+	 * The two arrays are considered equal if both arrays contain the same number of elements, and
+	 * all corresponding pairs of elements in the two arrays are equal. Two objects <tt>e1</tt> and
+	 * <tt>e2</tt> are considered <i>equal</i> if <tt>(e1==null ? e2==null
+	 * : e1.equals(e2))</tt>. In other words, the two arrays are equal if they contain the same
+	 * elements in the same order. Also, two array references are considered equal if both are
+	 * <tt>null</tt>.
+	 * <p>
+	 * 
+	 * @param a one array to be tested for equality
+	 * @param a2 the other array to be tested for equality
+	 * @return <tt>true</tt> if the two arrays are equal
+	 */
+	public static boolean equals(Object[] a, Object[] a2) {
 		return java.util.Arrays.equals(a, a2);
 	}
 

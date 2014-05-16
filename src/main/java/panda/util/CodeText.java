@@ -75,10 +75,7 @@ public class CodeText implements Cloneable, Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(code)
-				.append(text)
-				.toHashCode();
+		return Objects.hashCodes(code, text);
 	}
 
 	/**

@@ -53,11 +53,7 @@ public class Teacher {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hashCodeBuilder()
-				.append(name)
-				.append(memo)
-				.append(data)
-				.toHashCode();
+		return Objects.hashCodes(name, memo, data);
 	}
 
 	@Override
