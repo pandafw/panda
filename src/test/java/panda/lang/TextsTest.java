@@ -2,15 +2,51 @@ package panda.lang;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+
+import panda.lang.time.StopWatch;
 
 /**
  * test class for Texts
  */
 public class TextsTest {
+	// -----------------------------------------------------------------------
+	private static class CLD {
+		String lhs;
+		String rhs;
+		int dis;
+	}
+	
+	@Test
+	public void testComputeLevenshteinDistance() {
+		assertEquals(1, Texts.computeLevenshteinDistance("abcdefg", "abcefg"));
+
+		int max = 1000;
+		int cnt = 1;
+		int len = 10;
+
+		List<CLD> clds = new ArrayList<CLD>();
+		for (int i = 0; i < max; i++) {
+			CLD cld = new CLD();
+			cld.lhs = Randoms.randString(len);
+			cld.rhs = Randoms.randString(len);
+			cld.dis = Texts.computeLevenshteinDistance(cld.lhs, cld.rhs);
+			clds.add(cld);
+		}
+
+		StopWatch sw = new StopWatch();
+		for (int i = 0; i < cnt; i++) {
+			for (CLD cld : clds) {
+				assertEquals(cld.dis, Texts.computeLevenshteinDistance(cld.lhs, cld.rhs));
+			}
+		}
+		System.out.println(sw);
+	}
 
 	// -----------------------------------------------------------------------
 	@Test

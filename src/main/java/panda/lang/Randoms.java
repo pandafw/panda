@@ -8,6 +8,7 @@ import java.util.Random;
  */
 public class Randoms {
 	private static final Random rand = new Random();
+	private static final char[] CHARS = (Strings.DIGITS + Strings.LOWER_LETTERS + Strings.UPPER_LETTERS + Strings.SYMBOLS).toCharArray();
 	
 	public static int randInt() {
 		return rand.nextInt();
@@ -49,10 +50,20 @@ public class Randoms {
 		return rand.nextDouble();
 	}
 
-	public static String GUID() {
+	public static String randGUID() {
 		return String.format("{%08X-%04X-%04X-%04X-%04X%08X}", 
 			randInt(), randShort(), 
 			randShort(), randShort(),
 			randShort(), randInt());
+	}
+	
+	public static String randString(int len) {
+		char buf[] = new char[len];
+		
+		for (int i = 0; i < buf.length; i++) {
+			buf[i] = CHARS[rand.nextInt(CHARS.length)];
+		}
+		
+		return new String(buf);
 	}
 }

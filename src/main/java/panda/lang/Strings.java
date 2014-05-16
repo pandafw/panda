@@ -122,6 +122,25 @@ public class Strings {
 	 */
 	public static final String CRLF = "\r\n";
 
+	/**
+	 * A String for digits "0123456789" 
+	 */
+	public static final String DIGITS = "0123456789";
+
+	/**
+	 * A String for lower letters "abcdefghijklmnopqrstuvwxyz"
+	 */
+	public static final String LOWER_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+
+	/**
+	 * A String for upper letters "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	 */
+	public static final String UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	/**
+	 * A String for symbols "!"#$%&'()-=^~|¥@`[]{};:+*,./<>?_"
+	 */
+	public static final String SYMBOLS = "!\"#$%&'()-=^~|\\@`[]{};:+*,./<>?_";
 
 	/**
 	 * Represents a failed index search.
