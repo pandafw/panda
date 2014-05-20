@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
+
 import panda.bind.json.Jsons;
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.TypeToken;
+import panda.lang.reflect.TypeToken;
 
 /**
  */

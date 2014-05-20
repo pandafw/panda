@@ -46,12 +46,7 @@ public abstract class Exceptions {
 	 * @return 异常对象
 	 */
 	public static <T extends Throwable> T makeThrow(Class<T> type, String format, Object... args) {
-		try {
-			return (T)Classes.newInstance(type, String.format(format, args), String.class);
-		}
-		catch (Exception e) {
-			throw wrapThrow(e);
-		}
+		return Classes.born(type, String.format(format, args), String.class);
 	}
 
 	public static Throwable unwrapThrow(Throwable e) {

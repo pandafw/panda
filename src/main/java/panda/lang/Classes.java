@@ -1,5 +1,8 @@
 package panda.lang;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +11,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -19,8 +24,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import panda.bind.json.Jsons;
+import panda.io.FileNames;
+import panda.io.Files;
+import panda.io.Streams;
+import panda.lang.reflect.Constructors;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * ulitity class for Class
@@ -28,7 +40,11 @@ import panda.bind.json.Jsons;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Classes {
+	private static final Log log = Logs.getLog(Classes.class);
+	
 	public final static Class[] EMPTY_CLASS_ARRAY = new Class[0];
+
+	public final static String PACKAGE_INFO_CLASS = "package-info.class";
 
 	/**
 	 * <p>
@@ -853,6 +869,109 @@ public abstract class Classes {
 	// Class loading
 	// ----------------------------------------------------------------------
 	/**
+	 * Returns the class represented by {@code className} using the current thread's context class
+	 * loader. This implementation supports the syntaxes "{@code java.util.Map.Entry[]}", "
+	 * {@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
+	 * {@code [Ljava.util.Map$Entry;}".
+	 * 
+	 * @param className the class name
+	 * @return the class represented by {@code className} using the current thread's context class
+	 *         loader, null if the class is not found
+	 */
+	public static Class<?> findClass(String className) {
+		try {
+			return getClass(className);
+		}
+		catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the class represented by {@code className} using the {@code classLoader}. This
+	 * implementation supports the syntaxes "{@code java.util.Map.Entry[]}", "
+	 * {@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
+	 * {@code [Ljava.util.Map$Entry;}".
+	 * 
+	 * @param classLoader the class loader to use to load the class
+	 * @param className the class name
+	 * @param initialize whether the class must be initialized
+	 * @return the class represented by {@code className} using the {@code classLoader}
+	 * @throws RuntimeException if the class is not found
+	 */
+	public static Class<?> load(ClassLoader classLoader, String className, boolean initialize) {
+		try {
+			return Classes.getClass(classLoader, className, initialize);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * Returns the (initialized) class represented by {@code className} using the
+	 * {@code classLoader}. This implementation supports the syntaxes "{@code java.util.Map.Entry[]}
+	 * ", "{@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
+	 * {@code [Ljava.util.Map$Entry;}".
+	 * 
+	 * @param classLoader the class loader to use to load the class
+	 * @param className the class name
+	 * @return the class represented by {@code className} using the {@code classLoader}
+	 * @throws RuntimeException if the class is not found
+	 */
+	public static Class<?> load(ClassLoader classLoader, String className) {
+		try {
+			return Classes.getClass(classLoader, className);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * Returns the (initialized) class represented by {@code className} using the current thread's
+	 * context class loader. This implementation supports the syntaxes "{@code java.util.Map.Entry[]}
+	 * ", "{@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
+	 * {@code [Ljava.util.Map$Entry;}".
+	 * 
+	 * @param className the class name
+	 * @return the class represented by {@code className} using the current thread's context class
+	 *         loader
+	 * @throws RuntimeException if the class is not found
+	 */
+	public static Class<?> load(String className) {
+		try {
+			return Classes.getClass(className);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	/**
+	 * Returns the class represented by {@code className} using the current thread's context class
+	 * loader. This implementation supports the syntaxes "{@code java.util.Map.Entry[]}", "
+	 * {@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
+	 * {@code [Ljava.util.Map$Entry;}".
+	 * 
+	 * @param className the class name
+	 * @param initialize whether the class must be initialized
+	 * @return the class represented by {@code className} using the current thread's context class
+	 *         loader
+	 * @throws RuntimeException if the class is not found
+	 */
+	public static Class<?> load(String className, boolean initialize) {
+		try {
+			return Classes.getClass(className, initialize);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	// Class loading
+	// ----------------------------------------------------------------------
+	/**
 	 * Returns the class represented by {@code className} using the {@code classLoader}. This
 	 * implementation supports the syntaxes "{@code java.util.Map.Entry[]}", "
 	 * {@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
@@ -945,25 +1064,6 @@ public abstract class Classes {
 		ClassLoader loader = contextCL == null ? Classes.class.getClassLoader() : contextCL;
 		return getClass(loader, className, initialize);
 	}
-
-	/**
-	 * Returns the class represented by {@code className} using the current thread's context class
-	 * loader. This implementation supports the syntaxes "{@code java.util.Map.Entry[]}", "
-	 * {@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}", and "
-	 * {@code [Ljava.util.Map$Entry;}".
-	 * 
-	 * @param className the class name
-	 * @return the class represented by {@code className} using the current thread's context class
-	 *         loader, null if the class is not found
-	 */
-	public static Class<?> findClass(String className) {
-		try {
-			return getClass(className);
-		}
-		catch (ClassNotFoundException e) {
-			return null;
-		}
-	}
 	
 	// Public method
 	// ----------------------------------------------------------------------
@@ -1016,7 +1116,7 @@ public abstract class Classes {
 		}
 
 		throw new NoSuchMethodException("Can't find a public method for " + methodName + " "
-				+ Jsons.toJson(parameterTypes));
+				+ Arrays.toString(parameterTypes));
 	}
 
 	// ----------------------------------------------------------------------
@@ -2288,5 +2388,86 @@ public abstract class Classes {
 			}
 		}
 		return false;
+	}
+	
+	//----------------------------------------------------
+	public static List<Class<?>> scan(String... packages) {
+		if (packages == null) {
+			throw new NullPointerException("packages is null!");
+		}
+		
+		List<String> pkgs = new ArrayList<String>(packages.length);
+		for (String p : packages) {
+			if (Strings.isNotEmpty(p)) {
+				p = Strings.replaceChars(p, '.', '/');
+				if (p.charAt(0) == '/') {
+					p = p.substring(1);
+				}
+				pkgs.add(p);
+			}
+		}
+
+		if (Collections.isEmpty(pkgs)) {
+			throw new IllegalArgumentException("No packages supplied!");
+		}
+
+		List<Class<?>> clss = new ArrayList<Class<?>>();
+		URL[] urls = ((URLClassLoader)getClassLoader()).getURLs();
+		for (URL url : urls) {
+			if (url.getFile().endsWith("jar")) {
+				ZipInputStream zis = null;
+				try {
+					zis = Streams.zip(new FileInputStream(url.getFile()));
+					ZipEntry ens = null;
+					while (null != (ens = zis.getNextEntry())) {
+						String cp = ens.getName();
+						if (cp.endsWith(CLASS_FILE_SUFFIX)) {
+							for (String pkg : pkgs) {
+								if (cp.startsWith(pkg)) {
+									String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
+									try {
+										clss.add(Classes.getClass(cn, false));
+										break;
+									}
+									catch (ClassNotFoundException e) {
+										log.warn("Failed to load class " + cp + " from " + url.getFile());
+									}
+								}
+							}
+						}
+					}
+				}
+				catch (IOException e) {
+					log.warn("Failed to open " + url.getFile());
+				}
+				finally {
+					Streams.safeClose(zis);
+				}
+			}
+			else {
+				File dir = new File(url.getFile());
+				Collection<File> files = Files.listFiles(dir, new String[] { CLASS_FILE_SUFFIX }, true);
+				for (File file : files) {
+					if (file.getName().equals(PACKAGE_INFO_CLASS)) {
+						continue;
+					}
+					
+					String cp = FileNames.getRelativePath(dir, file);
+					for (String pkg : pkgs) {
+						if (cp.startsWith(pkg)) {
+							String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
+							try {
+								clss.add(Classes.getClass(cn, false));
+								break;
+							}
+							catch (ClassNotFoundException e) {
+								log.warn("Failed to load class " + file.getAbsolutePath());
+							}
+						}
+					}
+				}
+			}
+		}
+		return clss;
 	}
 }

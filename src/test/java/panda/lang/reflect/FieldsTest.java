@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -16,6 +16,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import panda.lang.Arrays;
+import panda.lang.reflect.Fields;
 import panda.lang.reflect.testbed.Ambig;
 import panda.lang.reflect.testbed.Foo;
 import panda.lang.reflect.testbed.PrivatelyShadowedChild;

@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

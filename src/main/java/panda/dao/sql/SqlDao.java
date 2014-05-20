@@ -13,7 +13,7 @@ import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.Texts;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

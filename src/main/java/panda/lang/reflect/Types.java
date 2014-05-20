@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -21,6 +21,11 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
+
+import panda.lang.Arrays;
+import panda.lang.Asserts;
+import panda.lang.Classes;
+import panda.lang.Exceptions;
 
 /**
  * Static methods for working with types.

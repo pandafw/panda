@@ -36,25 +36,22 @@ import panda.io.stream.StringBuilderWriter;
  *
  */
 public class Doms {
-	public static Document parse(File file) throws SAXException, IOException, ParserConfigurationException {
+	public static DocumentBuilder builder() throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
+		return builder;
+	}
 	
-		return builder.parse(file);
+	public static Document parse(File file) throws SAXException, IOException, ParserConfigurationException {
+		return builder().parse(file);
 	}
 	
 	public static Document parse(InputStream input) throws SAXException, IOException, ParserConfigurationException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-	
-		return builder.parse(input);
+		return builder().parse(input);
 	}
 	
 	public static Document parse(String str) throws SAXException, IOException, ParserConfigurationException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-	
-		return builder.parse(str);
+		return builder().parse(str);
 	}
 	
 	public static interface DomTraverser {

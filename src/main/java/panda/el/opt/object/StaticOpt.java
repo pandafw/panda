@@ -6,9 +6,11 @@ import panda.el.ElContext;
 import panda.el.ElException;
 import panda.el.opt.RunMethod;
 import panda.el.opt.TwoTernary;
+import panda.lang.Classes;
 import panda.lang.Exceptions;
-import panda.lang.Fields;
-import panda.lang.Methods;
+import panda.lang.Strings;
+import panda.lang.reflect.Fields;
+import panda.lang.reflect.Methods;
 
 /**
  * operator: '@'
@@ -27,6 +29,18 @@ public class StaticOpt extends TwoTernary implements RunMethod {
 		Class clz;
 		if (obj instanceof Class) {
 			clz = (Class)obj;
+		}
+		else if (obj instanceof String) {
+			String c = (String)obj;
+			if (Strings.isEmpty(c)) {
+				throw new ElException("obj is EMPTY, can't call ''@" + right);
+			}
+
+			if (Character.isUpperCase(c.charAt(0))) {
+				c = "java.lang." + c;
+			}
+			
+			clz = Classes.load(c);
 		}
 		else {
 			clz = obj.getClass();

@@ -17,7 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

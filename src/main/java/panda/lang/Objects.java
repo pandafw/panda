@@ -184,6 +184,7 @@ public abstract class Objects {
 	 * 
 	 * <pre>
 	 * hashCodes((Object[]) null)  = 0
+	 * hashCodes(new Object[0])    = 1
 	 * hashCodes(a)                = 31 + a.hashCode()
 	 * hashCodes(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
 	 * hashCodes(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()

@@ -20,7 +20,7 @@ import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

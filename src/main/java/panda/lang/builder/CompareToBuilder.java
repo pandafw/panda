@@ -2,13 +2,15 @@ package panda.lang.builder;
 
 import java.util.Comparator;
 
+import panda.lang.Objects;
+
 
 /** 
  * Assists in implementing {@link java.lang.Comparable#compareTo(Object)} methods.
  *
  * It is consistent with <code>equals(Object)</code> and
  * <code>hashcode()</code> built with {@link EqualsBuilder} and
- * {@link HashCodeBuilder}.</p>
+ * {@link Objects#hashCode}.</p>
  *
  * <p>Two Objects that compare equal using <code>equals(Object)</code> should normally
  * also compare equal using <code>compareTo(Object)</code>.</p>
@@ -45,7 +47,6 @@ import java.util.Comparator;
  * @see java.lang.Object#equals(Object)
  * @see java.lang.Object#hashCode()
  * @see EqualsBuilder
- * @see HashCodeBuilder
  * 
  * @author yf.frank.wang@gmail.com
  */

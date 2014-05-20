@@ -16,7 +16,7 @@ import panda.dao.DaoTypes;
 import panda.dao.sql.SqlResultSet;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.adapter.TypeAdapter;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 

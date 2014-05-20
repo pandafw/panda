@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,6 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.lang.Arrays;
+import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.collection.MultiKey;
 
 /**
@@ -682,6 +685,12 @@ public class Methods {
 		return null;
 	}
 
+	public static Method getMatchingAccessibleMethod(Class cls, final String methodName,
+			final Object... args) {
+		Class<?>[] pts = Classes.toClass(args);
+		return getMatchingAccessibleMethod(cls, methodName, pts);
+	}
+	
 	/**
 	 * <p>
 	 * Find an accessible method that matches the given name and has compatible parameters.

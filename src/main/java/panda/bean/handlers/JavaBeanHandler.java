@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import panda.bean.Beans;
 import panda.bean.PropertyAccessor;
 import panda.lang.Exceptions;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

@@ -25,8 +25,8 @@ import panda.castor.castors.PrimitiveWrapCastor;
 import panda.castor.castors.StreamCastor;
 import panda.castor.castors.StringTypeCastor;
 import panda.lang.Asserts;
-import panda.lang.Types;
 import panda.lang.collection.MultiKey;
+import panda.lang.reflect.Types;
 
 /**
  * !! thread-safe !! 

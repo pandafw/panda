@@ -10,9 +10,9 @@ import junit.framework.TestCase;
 
 import panda.lang.Arrays;
 import panda.lang.Objects;
-import panda.lang.TypeToken;
-import panda.lang.Types;
 import panda.lang.builder.EqualsBuilder;
+import panda.lang.reflect.TypeToken;
+import panda.lang.reflect.Types;
 
 /**
  */

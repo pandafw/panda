@@ -19,7 +19,7 @@ import panda.bean.handlers.MapBeanHandler;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 
@@ -425,62 +425,81 @@ public class Beans {
 		}
 		
 		Method[] methods = clazz.getMethods();
+
+		// is
 		for (Method m : methods) {
-			// is
-			if (m.getName().startsWith("is")) {
-				if (boolean.class != m.getReturnType()) {
-					continue;
-				}
-
-				Type[] pts = m.getGenericParameterTypes();
-				if (pts != null && pts.length != 0) {
-					continue;
-				}
-
-				String n = m.getName().substring(2);
-				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
-					continue;
-				}
-				
-				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-				setGetter(accessors, n, m);
+			if (Modifier.isStatic(m.getModifiers())) {
+				continue;
 			}
+			
+			if (boolean.class != m.getReturnType()) {
+				continue;
+			}
+
+			Type[] pts = m.getGenericParameterTypes();
+			if (pts != null && pts.length != 0) {
+				continue;
+			}
+
+			if (!m.getName().startsWith("is")) {
+				continue;
+			}
+			
+			String n = m.getName().substring(2);
+			if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+				continue;
+			}
+
+			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+			setGetter(accessors, n, m);
 		}
 		
+		// getter
 		for (Method m : methods) {
-			// getter
-			if (m.getName().startsWith("get")) {
-				Type[] pts = m.getGenericParameterTypes();
-				if (pts != null && pts.length != 0) {
-					continue;
-				}
-
-				String n = m.getName().substring(3);
-				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
-					continue;
-				}
-				
-				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-				setGetter(accessors, n, m);
+			if (Modifier.isStatic(m.getModifiers())) {
+				continue;
 			}
+			
+			Type[] pts = m.getGenericParameterTypes();
+			if (pts != null && pts.length != 0) {
+				continue;
+			}
+
+			if (!m.getName().startsWith("get")) {
+				continue;
+			}
+			
+			String n = m.getName().substring(3);
+			if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+				continue;
+			}
+
+			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+			setGetter(accessors, n, m);
 		}
 		
+		// setter
 		for (Method m : methods) {
-			// setter
-			if (m.getName().startsWith("set")) {
-				Type[] pts = m.getGenericParameterTypes();
-				if (pts == null || pts.length != 1) {
-					continue;
-				}
-
-				String n = m.getName().substring(3);
-				if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
-					continue;
-				}
-				
-				n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-				setSetter(accessors, n, m);
+			if (Modifier.isStatic(m.getModifiers())) {
+				continue;
 			}
+			
+			Type[] pts = m.getGenericParameterTypes();
+			if (pts == null || pts.length != 1) {
+				continue;
+			}
+
+			if (!m.getName().startsWith("set")) {
+				continue;
+			}
+
+			String n = m.getName().substring(3);
+			if (n.isEmpty() || Character.isLowerCase(n.charAt(0))) {
+				continue;
+			}
+			
+			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
+			setSetter(accessors, n, m);
 		}
 		
 		return accessors;

@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import panda.bean.Beans;
 import panda.lang.Numbers;
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 
 /**

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import panda.bind.json.Jsons;
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * base collection implementation of TypeAdapter

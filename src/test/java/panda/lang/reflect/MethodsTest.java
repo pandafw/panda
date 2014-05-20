@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,8 +15,11 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import panda.lang.Arrays;
+import panda.lang.Numbers;
 import panda.lang.mutable.Mutable;
 import panda.lang.mutable.MutableObject;
+import panda.lang.reflect.Methods;
 
 /**
  * Unit tests Methods

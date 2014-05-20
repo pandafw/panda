@@ -478,7 +478,7 @@ public class El2Test {
 	}
 
 	@Test
-	public void testSystem() {
+	public void testStaticSystem() {
 		Map context = new HashMap();
 		List<String> list = new ArrayList<String>();
 		list.add("jk");
@@ -487,6 +487,12 @@ public class El2Test {
 
 		Object val = El.eval(context, "System@getenv('PATH').getClass().getName()");
 		Assert.assertNotNull(val);
+
+		Object val2 = El.eval(context, "'java.lang.System'@getenv('PATH').getClass().getName()");
+		Assert.assertEquals(val, val2);
+
+		Object val3 = El.eval(context, "'System'@getenv('PATH').getClass().getName()");
+		Assert.assertEquals(val, val3);
 	}
 
 	public static class ListTest {

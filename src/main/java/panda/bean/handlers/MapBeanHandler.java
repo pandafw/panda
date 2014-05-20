@@ -7,7 +7,7 @@ import java.util.Map;
 
 import panda.bean.Beans;
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

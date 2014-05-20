@@ -19,6 +19,7 @@ import panda.lang.builder.EqualsBuilder;
 import panda.lang.builder.ToStringBuilder;
 import panda.lang.builder.ToStringStyle;
 import panda.lang.mutable.MutableInt;
+import panda.lang.reflect.Types;
 
 /**
  * utility class for array

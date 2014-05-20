@@ -86,7 +86,7 @@ public class ObjectsTest {
 	@Test
 	public void testHashCodeMulti_multiple_emptyArray() {
 		final Object[] array = new Object[0];
-		assertEquals(0, Objects.hashCodes(array));
+		assertEquals(1, Objects.hashCodes(array));
 	}
 
 	@Test

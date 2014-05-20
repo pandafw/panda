@@ -3,6 +3,7 @@ package panda.bean;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -15,7 +16,7 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.DynamicClassLoader;
 import panda.lang.Exceptions;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.servlet.HttpServletSupport;
@@ -60,7 +61,7 @@ public class FastBeans extends Beans {
 	@Override
 	protected BeanHandler createJavaBeanHandler(Type type) {
 		Class clazz = Types.getRawType(type);
-		if (excludes.contains(clazz.getName())) {
+		if (!Modifier.isPublic(clazz.getModifiers()) || excludes.contains(clazz.getName())) {
 			return super.createJavaBeanHandler(type);
 		}
 
@@ -68,23 +69,27 @@ public class FastBeans extends Beans {
 			return createFastBeanHandler(clazz);
 		}
 		catch (Throwable e) {
-			log.warn("Failed to create FastBeanHandler, use default JavaBeanHandler instead.", e);
+			log.warn("Failed to create FastBeanHandler for " + clazz + " use default JavaBeanHandler instead.", e);
 			return super.createJavaBeanHandler(type);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private synchronized BeanHandler createFastBeanHandler(Class type) throws Exception {
-		String packageName = "panda.runtime." + type.getPackage().getName();
+		String packageName = "panda.bean.fast." + type.getPackage().getName();
 		String simpleName = type.getSimpleName() + "BeanHandler";
 		String className = packageName + "." + simpleName;
-		String typeName = type.getName().replace('$', '.');
+		String typeName = type.getName().replace(Classes.INNER_CLASS_SEPARATOR_CHAR, '.');
 
 		try {
 			Class clazz = dynamicClassLoader.loadClass(className);
 			return (BeanHandler)(Classes.newInstance(clazz, this, Beans.class));
 		}
 		catch (ClassNotFoundException e) {
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Build fast bean " + className + " for " + type);
 		}
 
 		StringBuilder src = new StringBuilder();

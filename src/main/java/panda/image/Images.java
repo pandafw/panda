@@ -1,15 +1,14 @@
 package panda.image;
 
-import panda.lang.Classes;
-import panda.lang.Exceptions;
-import panda.lang.Systems;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import panda.lang.Classes;
+import panda.lang.Systems;
 
 
 /**
@@ -20,19 +19,14 @@ public abstract class Images {
 	
 	private static Images initInstance() {
 		String prefix = Images.class.getPackage().getName() + ".";
-		try {
-			if (Systems.IS_OS_ANDROID) {
-				return (Images)Classes.newInstance(prefix + "AndroidImages");
-			}
-			else if (Systems.IS_OS_APPENGINE) {
-				return (Images)Classes.newInstance("panda.gae.image.GaeImages");
-			}
-			else {
-				return (Images)Classes.newInstance(prefix + "JavaImages");
-			}
+		if (Systems.IS_OS_ANDROID) {
+			return (Images)Classes.born(prefix + "AndroidImages");
 		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+		else if (Systems.IS_OS_APPENGINE) {
+			return (Images)Classes.born("panda.gae.image.GaeImages");
+		}
+		else {
+			return (Images)Classes.born(prefix + "JavaImages");
 		}
 	}
 	

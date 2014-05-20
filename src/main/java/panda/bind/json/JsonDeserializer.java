@@ -9,7 +9,7 @@ import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
 import panda.bind.PropertyFilter;
 import panda.lang.Numbers;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

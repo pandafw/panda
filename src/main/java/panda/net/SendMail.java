@@ -14,8 +14,8 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
-import panda.lang.Fields;
 import panda.lang.Strings;
+import panda.lang.reflect.Fields;
 import panda.log.Log;
 import panda.log.Logs;
 

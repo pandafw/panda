@@ -753,11 +753,19 @@ public class Files {
 	 * @return an array of suffixes. Format: {".java", ".xml"}
 	 */
 	private static String[] toSuffixes(final String[] extensions) {
-		final String[] suffixes = new String[extensions.length];
-		for (int i = 0; i < extensions.length; i++) {
-			suffixes[i] = "." + extensions[i];
+		final List<String> suffixes = new ArrayList<String>(extensions.length);
+		for (String e : extensions) {
+			if (Strings.isEmpty(e)) {
+				continue;
+			}
+			if (e.charAt(0) == '.') {
+				suffixes.add(e);
+			}
+			else {
+				suffixes.add('.' + e);
+			}
 		}
-		return suffixes;
+		return suffixes.toArray(new String[suffixes.size()]);
 	}
 
 	/**

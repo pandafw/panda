@@ -8,7 +8,7 @@ import panda.el.ElException;
 import panda.el.opt.RunMethod;
 import panda.el.opt.TwoTernary;
 import panda.lang.Exceptions;
-import panda.lang.Methods;
+import panda.lang.reflect.Methods;
 
 /**
  * 访问符:'.'

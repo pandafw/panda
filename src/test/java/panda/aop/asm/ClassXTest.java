@@ -16,8 +16,7 @@ import panda.aop.interceptor.LoggingMethodInterceptor;
 import panda.aop.matcher.MethodMatcherFactory;
 import panda.aop.matcher.RegexMethodMatcher;
 import panda.lang.Classes;
-import panda.lang.Exceptions;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 public class ClassXTest {
 
@@ -141,15 +140,10 @@ public class ClassXTest {
 	}
 
 	private <T> T getNewInstance(Class<T> klass) {
-		try {
-			Class<T> newClass = classAgent.define(Panda.cd(), klass);
-			T obj = Classes.newInstance(newClass, "AoP", String.class);
-			System.out.println(obj.getClass().getSuperclass());
-			return obj;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		Class<T> newClass = classAgent.define(Panda.cd(), klass);
+		T obj = Classes.born(newClass, "AoP", String.class);
+		System.out.println(obj.getClass().getSuperclass());
+		return obj;
 	}
 
 	@Test

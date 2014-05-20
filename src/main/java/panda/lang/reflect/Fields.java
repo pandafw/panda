@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -8,6 +8,10 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import panda.lang.Asserts;
+import panda.lang.Classes;
+import panda.lang.Strings;
 
 /**
  * Utilities for working with {@link Field}s by reflection. Adapted and refactored from the dormant

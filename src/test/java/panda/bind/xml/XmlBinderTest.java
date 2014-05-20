@@ -10,9 +10,10 @@ import panda.bind.json.Jsons;
 import panda.bind.xml.Xmls;
 import panda.lang.Arrays;
 import panda.lang.Objects;
-import panda.lang.TypeToken;
-import panda.lang.Types;
 import panda.lang.builder.EqualsBuilder;
+import panda.lang.reflect.TypeToken;
+import panda.lang.reflect.Types;
+
 import junit.framework.TestCase;
 
 /**

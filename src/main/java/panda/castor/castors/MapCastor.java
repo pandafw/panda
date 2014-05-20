@@ -11,7 +11,7 @@ import panda.bean.BeanHandler;
 import panda.castor.CastContext;
 import panda.castor.Castor;
 import panda.castor.Castors;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

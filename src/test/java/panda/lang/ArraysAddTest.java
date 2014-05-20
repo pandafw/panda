@@ -180,13 +180,13 @@ public class ArraysAddTest {
         //show that not casting is okay
         newArray = Arrays.add((Object[])null, "a");
         assertTrue(Arrays.equals(new String[]{"a"}, newArray));
-        assertTrue(!Arrays.equals(new Object[]{"a"}, newArray));
+        assertTrue(Arrays.equals(new Object[]{"a"}, newArray));
         assertEquals(String.class, newArray.getClass().getComponentType());
 
         //show that not casting to Object[] is okay and will assume String based on "a"
         final String[] newStringArray = Arrays.add(null, "a");
         assertTrue(Arrays.equals(new String[]{"a"}, newStringArray));
-        assertTrue(!Arrays.equals(new Object[]{"a"}, newStringArray));
+        assertTrue(Arrays.equals(new Object[]{"a"}, newStringArray));
         assertEquals(String.class, newStringArray.getClass().getComponentType());
 
         final String[] stringArray1 = new String[]{"a", "b", "c"};
@@ -354,7 +354,7 @@ public class ArraysAddTest {
         Object[] newArray;
         newArray = Arrays.add((Object[])null, 0, "a");
         assertTrue(Arrays.equals(new String[]{"a"}, newArray));
-        assertTrue(!Arrays.equals(new Object[]{"a"}, newArray));
+        assertTrue(Arrays.equals(new Object[]{"a"}, newArray));
         assertEquals(String.class, newArray.getClass().getComponentType());
         final String[] stringArray1 = new String[]{"a", "b", "c"};
         newArray = Arrays.add(stringArray1, 0, null);

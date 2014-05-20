@@ -3,7 +3,7 @@ package panda.bean.handlers;
 import java.lang.reflect.Type;
 
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

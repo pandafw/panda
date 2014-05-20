@@ -6,9 +6,9 @@ import java.util.Map;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.Types;
 import panda.lang.builder.ToStringBuilder;
 import panda.lang.collection.KeyValue;
+import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 

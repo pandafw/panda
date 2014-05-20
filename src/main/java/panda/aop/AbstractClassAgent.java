@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.lang.Classes;
-import panda.lang.Methods;
+import panda.lang.reflect.Methods;
 
 /**
  * 提供ClassAgent的基础实现,拦截不可能插入Aop代码的Class

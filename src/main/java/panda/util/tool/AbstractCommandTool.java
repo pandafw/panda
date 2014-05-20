@@ -13,9 +13,9 @@ import org.apache.commons.cli.PosixParser;
 import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.HandledException;
-import panda.lang.Methods;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.lang.reflect.Methods;
 
 /**
  * Base main class

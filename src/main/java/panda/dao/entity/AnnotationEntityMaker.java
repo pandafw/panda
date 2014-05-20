@@ -39,10 +39,10 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
-import panda.lang.Fields;
-import panda.lang.Methods;
 import panda.lang.Strings;
-import panda.lang.Types;
+import panda.lang.reflect.Fields;
+import panda.lang.reflect.Methods;
+import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 

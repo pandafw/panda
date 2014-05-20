@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 import panda.io.Streams;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

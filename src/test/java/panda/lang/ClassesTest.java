@@ -1,6 +1,11 @@
 package panda.lang;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,23 +15,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
-
-import panda.lang.Arrays;
-import panda.lang.Classes;
-import panda.lang.Collections;
 
 /**
  * test class for Classes
  */
-public class ClassesTest extends TestCase {
+public class ClassesTest {
+	// -------------------------------------------------------------------------
+	@Test
+	public void testScan() {
+		String[] pkgs = new String[] { "org.apache.log4j.jdbc", "panda.log.log4j" };
+		
+		List<Class<?>> clss = Classes.scan(pkgs);
+		Assert.assertNotNull(clss);
+		Assert.assertTrue(clss.size() > 0);
+		
+		for (Class<?> cls : clss) {
+			boolean m = false;
+			for (String pkg : pkgs) {
+				if (cls.getName().startsWith(pkg)) {
+					m = true;
+					break;
+				}
+			}
+			Assert.assertTrue(m);
+		}
+	}
+	
+	// -------------------------------------------------------------------------
 	/**
 	 * test method: getCastableClassName
 	 * 
 	 * @throws Exception if an error occurs
 	 */
+	@Test
 	public void testGetCastableClassName() throws Exception {
 		assertEquals("int[][]", Classes.getCastableClassName(int[][].class));
 		assertEquals("java.lang.Boolean[][]", Classes.getCastableClassName(Boolean[][].class));
@@ -857,7 +880,7 @@ public class ClassesTest extends TestCase {
 		// test an array of no primitive classes
 		final Class<?>[] noPrimitives = new Class[] { String.class, Classes.class, Void.TYPE };
 		// This used to return the exact same array, but no longer does.
-		assertNotSame("unmodified", noPrimitives, Classes.primitivesToWrappers(noPrimitives));
+		Assert.assertNotSame("unmodified", noPrimitives, Classes.primitivesToWrappers(noPrimitives));
 	}
 
 	@Test
@@ -1090,7 +1113,7 @@ public class ClassesTest extends TestCase {
 		final Class<?>[] castNull = Classes.toClass((Object)null); // == new Object[]{null}
 		assertTrue("(Object)null -> [null]", Arrays.equals(new Class<?>[] { null }, castNull));
 
-		assertSame(Arrays.EMPTY_CLASS_ARRAY, Classes.toClass(Arrays.EMPTY_OBJECT_ARRAY));
+		Assert.assertSame(Arrays.EMPTY_CLASS_ARRAY, Classes.toClass(Arrays.EMPTY_OBJECT_ARRAY));
 
 		assertTrue(Arrays.equals(new Class[] { String.class, Integer.class, Double.class },
 			Classes.toClass(new Object[] { "Test", Integer.valueOf(1), Double.valueOf(99d) })));

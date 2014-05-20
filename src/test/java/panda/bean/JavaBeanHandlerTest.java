@@ -11,9 +11,10 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bean.TestA.TestB;
 import panda.lang.Arrays;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
+
 import junit.framework.TestCase;
 
 

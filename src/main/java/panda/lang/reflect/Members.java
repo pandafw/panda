@@ -1,8 +1,10 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
+
+import panda.lang.Classes;
 
 /**
  * Contains common code for working with {@link java.lang.reflect.Method Methods}/

@@ -1,7 +1,9 @@
-package panda.lang;
+package panda.lang.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import panda.lang.Classes;
 
 /**
  * Miscellaneous {@link Constructor} related utility functions.
@@ -10,6 +12,11 @@ import java.lang.reflect.InvocationTargetException;
  */
 @SuppressWarnings("unchecked")
 public class Constructors {
+	public static <T> Constructor<T> getConstructor(Class<T> type, Object... args) {
+		Class<?>[] ats = Classes.toClass(args);
+		return getConstructor(type, ats);
+	}
+
 	/**
 	 * Returns a {@link Constructor} for the given method signature, or <tt>null</tt> if no such
 	 * <tt>Constructor</tt> can be found.
@@ -22,7 +29,7 @@ public class Constructors {
 	 *         <tt>Constructor</tt> can be found.
 	 * @see #invokeConstructor
 	 */
-	public static <T> Constructor<T> getConstructor(Class<T> type, Class[] argTypes) {
+	public static <T> Constructor<T> getConstructor(Class<T> type, Class<?>... argTypes) {
 		if (null == type || null == argTypes) {
 			throw new NullPointerException();
 		}

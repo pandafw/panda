@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 
 import panda.bean.Beans;
-import panda.lang.Types;
+import panda.lang.reflect.Types;
 
 /**
  * 

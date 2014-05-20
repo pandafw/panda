@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipInputStream;
 
 import panda.io.stream.BOMInputStream;
 import panda.io.stream.ByteArrayOutputStream;
@@ -403,6 +404,24 @@ public class Streams {
 			throw new NullPointerException();
 		}
 		return inputStream instanceof GZIPInputStream ? (GZIPInputStream)inputStream : new GZIPInputStream(
+			inputStream);
+	}
+
+	/**
+	 * Returns the given InputStream if it is already a {@link ZipInputStream}, otherwise
+	 * creates a ZipInputStream from the given InputStream.
+	 * 
+	 * @param inputStream the InputStream to wrap or return (not null)
+	 * @return the given InputStream or a new {@link ZipInputStream} for the given InputStream
+	 * @throws IOException If an I/O error has occurred
+	 * @throws NullPointerException if the input parameter is null
+	 */
+	public static ZipInputStream zip(final InputStream inputStream) throws IOException {
+		// reject null early on rather than waiting for IO operation to fail
+		if (inputStream == null) {
+			throw new NullPointerException();
+		}
+		return inputStream instanceof ZipInputStream ? (ZipInputStream)inputStream : new ZipInputStream(
 			inputStream);
 	}
 

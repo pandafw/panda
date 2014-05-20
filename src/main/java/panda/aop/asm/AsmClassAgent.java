@@ -8,8 +8,8 @@ import panda.aop.AbstractClassAgent;
 import panda.aop.ClassDefiner;
 import panda.aop.MethodInterceptor;
 import panda.asm.Opcodes;
-import panda.lang.Fields;
 import panda.lang.Systems;
+import panda.lang.reflect.Fields;
 import panda.log.Log;
 import panda.log.Logs;
 
