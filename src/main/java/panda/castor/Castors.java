@@ -17,6 +17,7 @@ import panda.castor.castors.ArrayCastor;
 import panda.castor.castors.ClassCastor;
 import panda.castor.castors.CollectionCastor;
 import panda.castor.castors.DateTypeCastor;
+import panda.castor.castors.EnumCastor;
 import panda.castor.castors.JavaBeanCastor;
 import panda.castor.castors.MapCastor;
 import panda.castor.castors.NumberTypeCastor;
@@ -210,13 +211,21 @@ public class Castors {
 		if (Object.class.equals(toType)) {
 			return new Castor(fromType, toType);
 		}
-		else if (Types.isArrayType(toType)) {
-			castor = new ArrayCastor(fromType, toType, this);
+		
+		Class<?> toClass = Types.getRawType(toType);
+		if (toClass.isEnum()) {
+			return (Castor<S, T>)new EnumCastor(toClass);
 		}
-		else if (Types.isAssignable(toType, Number.class)) {
-			castor = (Castor<S, T>)new NumberTypeCastor.NumberCastor();
+		
+		if (Types.isArrayType(toType)) {
+			return new ArrayCastor(fromType, toType, this);
 		}
-		else if (Types.isAbstractType(toType)) {
+		
+		if (Types.isAssignable(toType, Number.class)) {
+			return (Castor<S, T>)new NumberTypeCastor.NumberCastor();
+		}
+		
+		if (Types.isAbstractType(toType)) {
 			if (toType instanceof ParameterizedType) {
 				ParameterizedType pt = (ParameterizedType)toType;
 				Type rawType = pt.getRawType();
@@ -238,29 +247,29 @@ public class Castors {
 			}
 
 			if (Types.isAssignable(toType, List.class)) {
-				castor = (Castor<S, T>)new CollectionCastor(fromType, ArrayList.class, this);
+				return (Castor<S, T>)new CollectionCastor(fromType, ArrayList.class, this);
 			}
-			else if (Types.isAssignable(toType, Map.class)) {
-				castor = (Castor<S, T>)new MapCastor(fromType, LinkedHashMap.class, this);
+			
+			if (Types.isAssignable(toType, Map.class)) {
+				return (Castor<S, T>)new MapCastor(fromType, LinkedHashMap.class, this);
 			}
-			else if (Types.isAssignable(toType, Set.class)) {
-				castor = (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class, this);
+			
+			if (Types.isAssignable(toType, Set.class)) {
+				return (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class, this);
 			}
-			else {
-				return new Castor(fromType, toType);
-			}
-		}
-		else if (Types.isAssignable(toType, Map.class)) {
-			castor = (Castor<S, T>)new MapCastor(fromType, toType, this);
-		}
-		else if (Types.isAssignable(toType, Collection.class)) {
-			castor = (Castor<S, T>)new CollectionCastor(fromType, toType, this);
-		}
-		else {
-			castor = new JavaBeanCastor(fromType, toType, this);
+			
+			return new Castor(fromType, toType);
 		}
 
-		return castor;
+		if (Types.isAssignable(toType, Map.class)) {
+			return (Castor<S, T>)new MapCastor(fromType, toType, this);
+		}
+		
+		if (Types.isAssignable(toType, Collection.class)) {
+			return (Castor<S, T>)new CollectionCastor(fromType, toType, this);
+		}
+		
+		return new JavaBeanCastor(fromType, toType, this);
 	}
 
 	public <T> BeanHandler<T> getBeanHandler(Type type) {
