@@ -743,4 +743,28 @@ public class Methods {
 		}
 		return bestMatch;
 	}
+
+	public static Method getMatchingAccessibleMethod(Class cls, final String methodName,
+			final int parameterLength) {
+
+		// search through all methods
+		Method match = null;
+		final Method[] methods = cls.getMethods();
+		for (final Method method : methods) {
+			// compare name and parameters
+			if (method.getName().equals(methodName)
+					&& parameterLength == method.getParameterTypes().length) {
+				// get accessible version of method
+				match = getAccessibleMethod(method);
+				if (match != null) {
+					break;
+				}
+			}
+		}
+
+		if (match != null) {
+			Members.setAccessibleWorkaround(match);
+		}
+		return match;
+	}
 }
