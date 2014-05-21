@@ -40,10 +40,13 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 			return Strings.EMPTY_ARRAY;
 		}
 
-		List<String> ns = new ArrayList<String>();
+		List<String> ns = new ArrayList<String>(map.size());
 		for (Object o : map.keySet()) {
 			if (o != null) {
-				ns.add(o.toString());
+				String k = o.toString();
+				if (Strings.isNotEmpty(k)) {
+					ns.add(k);
+				}
 			}
 		}
 		return ns.toArray(new String[ns.size()]);
@@ -123,7 +126,7 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	}
 
 	/**
-	 * get property value 
+	 * get bean value 
 	 * @param map bean object
 	 * @param beanName bean name
 	 * @return bean value

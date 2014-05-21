@@ -7,25 +7,24 @@ import panda.lang.Injector;
  * @author yf.frank.wang@gmail.com
  *
  */
-public class BeanInjector implements Injector {
-	private BeanHandler handler;
+public class PropertyInjector implements Injector {
 	private String field;
+	private PropertyHandler handler;
 
 
 	/**
 	 * @param handler
 	 * @param field
 	 */
-	public BeanInjector(BeanHandler handler, String field) {
-		this.handler = handler;
+	public PropertyInjector(String field, PropertyHandler handler) {
 		this.field = field;
+		this.handler = handler;
 	}
 
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void inject(Object obj, Object value) {
-		// TODO Auto-generated method stub
 		handler.setPropertyValue(obj, field, value);
 	}
 }

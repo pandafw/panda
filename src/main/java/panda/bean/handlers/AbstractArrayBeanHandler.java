@@ -32,7 +32,6 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		}
 		
 		String[] pns = new String[getSize(array)];
-		
 		for (int i = 0; i < pns.length; i++) {
 			pns[i] = String.valueOf(i);
 		}
