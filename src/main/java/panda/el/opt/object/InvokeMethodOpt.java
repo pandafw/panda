@@ -3,6 +3,7 @@ package panda.el.opt.object;
 import java.util.Queue;
 
 import panda.el.ElContext;
+import panda.el.ElException;
 import panda.el.opt.AbstractOpt;
 
 /**
@@ -17,18 +18,18 @@ public class InvokeMethodOpt extends AbstractOpt {
 		return 1;
 	}
 
+	public void wrap(Queue<Object> operand) {
+		left = operand.poll();
+	}
+
 	public Object calculate(ElContext ec) {
 		if (left instanceof MethodOpt) {
 			return ((MethodOpt)left).calculate(ec);
 		}
-		return null;
+		throw new ElException("Invalid left method operator: " + left);
 	}
 
 	public String operator() {
 		return "method invoke";
-	}
-
-	public void wrap(Queue<Object> operand) {
-		left = operand.poll();
 	}
 }

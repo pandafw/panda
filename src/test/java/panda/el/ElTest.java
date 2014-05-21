@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ import panda.bind.json.Jsons;
 import panda.lang.Strings;
 
 @SuppressWarnings("unchecked")
-public class El2Test {
+public class ElTest {
 	@Test
 	public void notCalculateOneNumber() {
 		assertEquals(1, El.eval("1"));
@@ -549,5 +550,55 @@ public class El2Test {
 		Map ctx = new HashMap();
 		ctx.put("a", new Object[] { new InnerClass.A() });
 		assertEquals("1", el.eval(ctx));
+	}
+
+	public static class ArrayTest {
+		public static String test(String[] names) {
+			StringBuffer sb = new StringBuffer();
+			for (String name : names) {
+				sb.append(name);
+			}
+			return sb.toString();
+		}
+	}
+
+	@Test
+	public void testLiteralArray() throws InstantiationException, IllegalAccessException {
+		El exp = new El("{'a','b'}");
+		Assert.assertTrue(Arrays.equals(new Object[] { "a", "b" }, (Object[])exp.eval()));
+	}
+
+	@Test
+	public void testLiteralArrayParams() throws InstantiationException, IllegalAccessException {
+		El exp = new El("util.test({'a', 'b'})");
+		Map context = new HashMap();
+		context.put("util", ArrayTest.class.newInstance());
+		assertEquals("ab", exp.eval(context));
+	}
+	
+	@Test
+	public void testMapArray() throws InstantiationException, IllegalAccessException {
+		String[] a = new String[] { "a", "b" };
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put("a", a);
+		El exp = new El("util.test(map['a'])");
+		Map context = new HashMap();
+		context.put("util", ArrayTest.class.newInstance());
+		context.put("map", map);
+		assertEquals("ab", exp.eval(context));
+	}
+
+	@Test
+	public void testMapArray2() {
+		String[] a = new String[] { "a", "b" };
+		String[] b = new String[] { "1", "2" };
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("a", a);
+		map.put("b", b);
+		El exp = new El("util@test({map['a'][0],map['b'][0]})"); 
+		Map context = new HashMap();
+		context.put("util", new ArrayTest());
+		context.put("map", map);
+		System.out.println(exp.eval(context));
 	}
 }

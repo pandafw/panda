@@ -1,32 +1,34 @@
-package panda.el.opt.arithmetic;
+package panda.el.opt;
 
 import java.util.Queue;
 
 import panda.el.ElContext;
 import panda.el.ElException;
-import panda.el.opt.AbstractOpt;
 
 /**
- * 右括号')'
+ * 右括号'}'
  * 
  * @author juqkai(juqkai@gmail.com)
  */
-public class RBracketOpt extends AbstractOpt {
+public class RArrayOpt extends AbstractOpt {
+	public static final RArrayOpt INSTANCE = new RArrayOpt();
+	
+	private RArrayOpt() {
+	}
 
 	public int getPriority() {
 		return 100;
 	}
 
 	public String operator() {
-		return ")";
+		return "}";
 	}
 
 	public void wrap(Queue<Object> obj) {
-		throw new ElException("wrap() is unsupported by ')'");
 	}
 
 	public Object calculate(ElContext ec) {
-		throw new ElException("calculate() is unsupported by ')'");
+		throw new ElException("calculate() is unsupported by '}'");
 	}
 
 }

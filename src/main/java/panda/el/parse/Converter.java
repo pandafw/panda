@@ -12,13 +12,16 @@ import panda.el.obj.ElObj;
 import panda.el.obj.FieldObj;
 import panda.el.obj.IdentifierObj;
 import panda.el.obj.MethodObj;
+import panda.el.opt.LArrayOpt;
+import panda.el.opt.LBracketOpt;
+import panda.el.opt.RArrayOpt;
+import panda.el.opt.RBracketOpt;
 import panda.el.opt.RunMethod;
-import panda.el.opt.arithmetic.LBracketOpt;
 import panda.el.opt.arithmetic.NegativeOpt;
-import panda.el.opt.arithmetic.RBracketOpt;
 import panda.el.opt.arithmetic.SubOpt;
 import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.InvokeMethodOpt;
+import panda.el.opt.object.MakeArrayOpt;
 import panda.el.opt.object.MethodOpt;
 
 /**
@@ -101,6 +104,7 @@ public class Converter {
 				dest.add(rpn.removeFirst());
 				continue;
 			}
+			
 			ElObj obj = (ElObj)rpn.removeFirst();
 			// 方法对象
 			if (!rpn.isEmpty() && rpn.getFirst() instanceof MethodOpt) {
@@ -136,7 +140,7 @@ public class Converter {
 				return parseItem(obj);
 			}
 		}
-		throw new ElException("无法解析!");
+		throw new ElException("Failed to parse!");
 	}
 
 	/**
@@ -158,11 +162,11 @@ public class Converter {
 			}
 		}
 
-		// 左括号
+		// '('
 		if (item instanceof LBracketOpt) {
 			if (prev instanceof ElObj) {
 				MethodOpt prem = new MethodOpt();
-				item = new Object[] { prem, new LBracketOpt() };
+				item = new Object[] { prem, item };
 				methods.addFirst(prem);
 			}
 			else {
@@ -170,12 +174,27 @@ public class Converter {
 			}
 		}
 
-		// 右括号
+		// ')'
 		if (item instanceof RBracketOpt) {
 			if (methods.poll() != null) {
-				item = new Object[] { new RBracketOpt(), new InvokeMethodOpt() };
+				item = new Object[] { item, new InvokeMethodOpt() };
 			}
 		}
+
+		// '{'
+		if (item instanceof LArrayOpt) {
+			MethodOpt prem = new MethodOpt();
+			item = new Object[] { new MakeArrayOpt(), prem, LBracketOpt.INSTANCE };
+			methods.addFirst(prem);
+		}
+
+		// '}'
+		if (item instanceof RArrayOpt) {
+			if (methods.poll() != null) {
+				item = new Object[] { RBracketOpt.INSTANCE, new InvokeMethodOpt() };
+			}
+		}
+		
 		// 转换负号'-'
 		if (item instanceof SubOpt && NegativeOpt.isNegetive(prev)) {
 			item = new NegativeOpt();

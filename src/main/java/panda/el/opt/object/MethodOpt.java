@@ -46,10 +46,6 @@ public class MethodOpt extends TwoTernary {
 	}
 
 	private RunMethod fetchMethod() {
-		if (left == null) {
-			return null;
-		}
-		
 		if (left instanceof RunMethod) {
 			return (RunMethod)left;
 		}
@@ -71,6 +67,7 @@ public class MethodOpt extends TwoTernary {
 				rvals.add(calculateItem(ec, right));
 			}
 		}
+		
 		if (!rvals.isEmpty()) {
 			for (int i = 0; i < rvals.size(); i++) {
 				if (rvals.get(i) instanceof Operator) {

@@ -48,14 +48,14 @@ public class RPN {
 	 * 计算
 	 */
 	private Object calculate(ElContext ec, LinkedList<Object> el2) {
-		if (el2.peek() instanceof Operator) {
-			Operator obj = (Operator)el2.peek();
-			return obj.calculate(ec);
+		Object obj = el2.peek();
+		if (obj instanceof Operator) {
+			return ((Operator)obj).calculate(ec);
 		}
-		if (el2.peek() instanceof ElObj) {
-			return ((ElObj)el2.peek()).getObj(ec);
+		if (obj instanceof ElObj) {
+			return ((ElObj)obj).getObj(ec);
 		}
-		return el2.peek();
+		return obj;
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class StaticOpt extends TwoTernary implements RunMethod {
 		}
 	}
 
-	public Object run(ElContext ec, List<Object> param) {
+	public Object run(ElContext ec, List<?> param) {
 		Class clz = getClass(ec);
 
 		Object[] arg = param.toArray();

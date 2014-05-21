@@ -4,6 +4,8 @@ import java.util.Queue;
 
 import panda.el.ElContext;
 import panda.el.opt.AbstractOpt;
+import panda.el.opt.LArrayOpt;
+import panda.el.opt.LBracketOpt;
 
 /**
  * 负号:'-'
@@ -41,6 +43,9 @@ public class NegativeOpt extends AbstractOpt {
 			return true;
 		}
 		if (prev instanceof LBracketOpt) {
+			return true;
+		}
+		if (prev instanceof LArrayOpt) {
 			return true;
 		}
 		if (prev instanceof PlusOpt) {

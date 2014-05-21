@@ -13,7 +13,7 @@ import panda.el.opt.TwoTernary;
  */
 public class CommaOpt extends TwoTernary {
 	public int getPriority() {
-		return 99;
+		return 90;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -3,6 +3,8 @@ package panda.el.opt.object;
 import java.util.Queue;
 
 import panda.el.ElContext;
+import panda.el.ElException;
+import panda.el.Operator;
 import panda.el.opt.AbstractOpt;
 
 /**
@@ -13,19 +15,19 @@ import panda.el.opt.AbstractOpt;
 public class FetchArrayOpt extends AbstractOpt {
 	private Object left;
 
-	public void wrap(Queue<Object> operand) {
-		left = operand.poll();
-	}
-
 	public int getPriority() {
 		return 1;
 	}
 
+	public void wrap(Queue<Object> operand) {
+		left = operand.poll();
+	}
+
 	public Object calculate(ElContext ec) {
-		if (left instanceof ArrayOpt) {
-			return ((ArrayOpt)left).calculate(ec);
+		if (left instanceof Operator) {
+			return ((Operator)left).calculate(ec);
 		}
-		return null;
+		throw new ElException("Invalid left operator: " + left);
 	}
 
 	public String operator() {

@@ -22,6 +22,11 @@ public class El {
 	/**
 	 * 解析预编译后的EL表达式
 	 */
+	public Object eval() {
+		ElContext ec = new ElContext(null);
+		return rpn.calculate(ec);
+	}
+
 	public Object eval(Object context) {
 		ElContext ec = new ElContext(context);
 		return rpn.calculate(ec);

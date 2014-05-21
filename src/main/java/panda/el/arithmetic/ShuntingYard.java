@@ -4,8 +4,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import panda.el.Operator;
-import panda.el.opt.arithmetic.LBracketOpt;
-import panda.el.opt.arithmetic.RBracketOpt;
+import panda.el.opt.LArrayOpt;
+import panda.el.opt.LBracketOpt;
+import panda.el.opt.RArrayOpt;
+import panda.el.opt.RBracketOpt;
 import panda.el.opt.logic.QuestionOpt;
 import panda.el.opt.logic.QuestionSelectOpt;
 import panda.el.parse.Converter;
@@ -32,7 +34,7 @@ public class ShuntingYard {
 			return;
 		}
 		// 左括号
-		if (current instanceof LBracketOpt) {
+		if (current instanceof LBracketOpt || current instanceof LArrayOpt) {
 			opts.addFirst(current);
 			return;
 		}
@@ -44,6 +46,14 @@ public class ShuntingYard {
 			opts.poll();
 			return;
 		}
+		if (current instanceof RArrayOpt) {
+			while (!(opts.peek() instanceof LArrayOpt)) {
+				rpn.add(opts.poll());
+			}
+			opts.poll();
+			return;
+		}
+
 
 		// 符号队列top元素优先级大于当前,则直接添加到
 		if (!opts.isEmpty() && opts.peek().getPriority() > current.getPriority()) {

@@ -2,12 +2,14 @@ package panda.el.parse;
 
 import panda.el.ElException;
 import panda.el.Parse;
+import panda.el.opt.LArrayOpt;
+import panda.el.opt.LBracketOpt;
+import panda.el.opt.RArrayOpt;
+import panda.el.opt.RBracketOpt;
 import panda.el.opt.arithmetic.DivOpt;
-import panda.el.opt.arithmetic.LBracketOpt;
 import panda.el.opt.arithmetic.ModOpt;
 import panda.el.opt.arithmetic.MulOpt;
 import panda.el.opt.arithmetic.PlusOpt;
-import panda.el.opt.arithmetic.RBracketOpt;
 import panda.el.opt.arithmetic.SubOpt;
 import panda.el.opt.bit.BitAnd;
 import panda.el.opt.bit.BitNot;
@@ -59,10 +61,16 @@ public class OptParse implements Parse {
 			return new ModOpt();
 		case '(':
 			exp.poll();
-			return new LBracketOpt();
+			return LBracketOpt.INSTANCE;
 		case ')':
 			exp.poll();
-			return new RBracketOpt();
+			return RBracketOpt.INSTANCE;
+		case '{':
+			exp.poll();
+			return LArrayOpt.INSTANCE;
+		case '}':
+			exp.poll();
+			return RArrayOpt.INSTANCE;
 		case '>':
 			exp.poll();
 			switch (exp.peek()) {
@@ -150,10 +158,10 @@ public class OptParse implements Parse {
 			return new CommaOpt();
 		case '[':
 			exp.poll();
-			return new Object[] { new ArrayOpt(), new LBracketOpt() };
+			return new Object[] { new ArrayOpt(), LBracketOpt.INSTANCE };
 		case ']':
 			exp.poll();
-			return new Object[] { new RBracketOpt(), new FetchArrayOpt() };
+			return new Object[] { RBracketOpt.INSTANCE, new FetchArrayOpt() };
 		}
 		return nullobj;
 	}

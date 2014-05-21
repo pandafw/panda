@@ -19,7 +19,7 @@ public interface RunMethod {
 	 * @param ec context
 	 * @param ps 参数, 即EL表达式中, 函数括号内的内容.
 	 */
-	Object run(ElContext ec, List<Object> ps);
+	Object run(ElContext ec, List<?> ps);
 
 	/**
 	 * 取得方法自身的符号

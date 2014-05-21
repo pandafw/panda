@@ -29,7 +29,7 @@ public class AccessOpt extends TwoTernary implements RunMethod {
 		return Beans.getProperty(obj, right.toString());
 	}
 
-	public Object run(ElContext ec, List<Object> param) {
+	public Object run(ElContext ec, List<?> param) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
 			throw new NullPointerException();

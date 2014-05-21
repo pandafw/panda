@@ -1,10 +1,9 @@
-package panda.el.opt.arithmetic;
+package panda.el.opt;
 
 import java.util.Queue;
 
 import panda.el.ElContext;
 import panda.el.ElException;
-import panda.el.opt.AbstractOpt;
 
 /**
  * "("
@@ -12,6 +11,12 @@ import panda.el.opt.AbstractOpt;
  * @author juqkai(juqkai@gmail.com)
  */
 public class LBracketOpt extends AbstractOpt {
+	
+	public static final LBracketOpt INSTANCE = new LBracketOpt();
+	
+	private LBracketOpt() {
+	}
+
 	public String operator() {
 		return "(";
 	}

@@ -17,8 +17,10 @@ public abstract class AbstractOpt implements Operator {
 	public abstract String operator();
 
 	public boolean equals(Object obj) {
-		if (obj == null)
+		if (obj == null) {
 			return false;
+		}
+		
 		if (obj.equals(operator())) {
 			return true;
 		}
@@ -51,7 +53,7 @@ public abstract class AbstractOpt implements Operator {
 		if (obj instanceof Operator) {
 			return ((Operator)obj).calculate(ec);
 		}
-		throw new ElException("未知计算类型!" + obj);
+		throw new ElException("Unknown calculate value: " + obj);
 
 	}
 }
