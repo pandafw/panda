@@ -233,7 +233,13 @@ public class JsonDeserializer extends AbstractDeserializer {
 				key = tokener.nextString(c);
 				break;
 			default:
-				throw syntaxError("Invalid json character: " + c);
+				if (Character.isJavaIdentifierStart(c)) {
+					tokener.back();
+					key = tokener.nextId();
+				}
+				else {
+					throw syntaxError("Invalid json character: " + c);
+				}
 			}
 
 			/*

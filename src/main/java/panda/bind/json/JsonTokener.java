@@ -314,6 +314,26 @@ public class JsonTokener {
 	}
 
 	/**
+	 * Get the text up but not including the '='specified character or the end of line, whichever comes
+	 * first.
+	 * 
+	 * @return A id string.
+	 */
+	public String nextId() throws JsonException {
+		StringBuilder sb = new StringBuilder();
+		for (;;) {
+			char c = this.next();
+			if (c == 0 || !Character.isJavaIdentifierPart(c)) {
+				if (c != 0) {
+					this.back();
+				}
+				return sb.toString().trim();
+			}
+			sb.append(c);
+		}
+	}
+
+	/**
 	 * Get the text up but not including the specified character or the end of line, whichever comes
 	 * first.
 	 * 

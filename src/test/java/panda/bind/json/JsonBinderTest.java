@@ -6,7 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import panda.lang.Arrays;
 import panda.lang.Objects;
@@ -16,7 +17,7 @@ import panda.lang.reflect.Types;
 
 /**
  */
-public class JsonBinderTest extends TestCase {
+public class JsonBinderTest {
 	public static class A {
 		private Object obj = null;
 		private boolean bol = false;
@@ -108,6 +109,7 @@ public class JsonBinderTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSerialize() {
 		A a = new A();
 		
@@ -126,21 +128,23 @@ public class JsonBinderTest extends TestCase {
 		String json = Jsons.toJson(a, true);
 		
 		A a2 = Jsons.fromJson(json, A.class);
-		assertEquals(a, a2);
+		Assert.assertEquals(a, a2);
 		
 		json = Jsons.toJson(al, true);
 		List<A> al2 = Jsons.fromJson(json, Types.paramTypeOf(List.class, A.class));
-		assertEquals(al, al2);
+		Assert.assertEquals(al, al2);
 	}
 
+	@Test
 	public void testStringList() {
 		List<String> list = Arrays.asList("a", "b", "c");
 		String json = Jsons.toJson(list);
 
 		List<String> abc = Jsons.fromJson(json, Types.paramTypeOf(List.class, String.class));
-		assertEquals(list, abc);
+		Assert.assertEquals(list, abc);
 	}
 
+	@Test
 	public void testClassProp() {
 		Map<String, String> m = new LinkedHashMap<String, String>();
 		
@@ -148,10 +152,10 @@ public class JsonBinderTest extends TestCase {
 		m.put("clazz", "clz");
 
 		String s = Jsons.toJson(m);
-		assertEquals("{\"class\":\"cls\",\"clazz\":\"clz\"}", s);
+		Assert.assertEquals("{\"class\":\"cls\",\"clazz\":\"clz\"}", s);
 		
 		JsonObject jo = JsonObject.fromJson(s);
-		assertEquals(s, jo.toString());
+		Assert.assertEquals(s, jo.toString());
 		
 		JsonDeserializer jd = new JsonDeserializer();
 		jd.setIgnoreReadonlyProperty(true);
@@ -159,6 +163,7 @@ public class JsonBinderTest extends TestCase {
 		jd.deserialize(s, A.class);
 	}
 	
+	@Test
 	public void testMapList() {
 		Map<String, List<Number>> m = new LinkedHashMap<String, List<Number>>();
 		List<Number> l0 = new ArrayList<Number>();
@@ -180,45 +185,50 @@ public class JsonBinderTest extends TestCase {
 		Map<String, List<Number>> m2 = Jsons.fromJson(
 			s, new TypeToken<Map<String, List<Number>>>() {}.getType());
 		
-		assertTrue(Objects.equals(m, m2));
+		Assert.assertTrue(Objects.equals(m, m2));
 	}
 
+	@Test
 	public void testIgnoreBeanNullProperty() {
 		A a = new A();
 		String s = Jsons.toJson(a);
 		JsonObject jo = JsonObject.fromJson(s);
-		assertTrue(jo.isNull("obj"));
+		Assert.assertTrue(jo.isNull("obj"));
 	}
 
+	@Test
 	public void testIgnoreMapNullValue() {
 		Map<String, Number> m = new LinkedHashMap<String, Number>();
 		m.put("0", 0);
 		m.put("null", null);
-		assertEquals("{\"0\":0}", Jsons.toJson(m));
+		Assert.assertEquals("{\"0\":0}", Jsons.toJson(m));
 	}
 	
+	@Test
 	public void testArrayNullValue() {
 		List<Number> l = Arrays.asList(new Number[] { 0, null, 1, null, 2 });
-		assertEquals("[0,null,1,null,2]", Jsons.toJson(l));
+		Assert.assertEquals("[0,null,1,null,2]", Jsons.toJson(l));
 	}
 	
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testWriter() {
-		assertEquals("[]", Jsons.toJson(new ArrayList()));
-		assertEquals("[]", Jsons.toJson(new ArrayList(), true));
-		assertEquals("[1,2,3]", Jsons.toJson(new int[] { 1, 2, 3 }));
-		assertEquals("[\n\t1, \n\t2, \n\t3\n]", Jsons.toJson(new int[] { 1, 2, 3 }, true));
+		Assert.assertEquals("[]", Jsons.toJson(new ArrayList()));
+		Assert.assertEquals("[]", Jsons.toJson(new ArrayList(), true));
+		Assert.assertEquals("[1,2,3]", Jsons.toJson(new int[] { 1, 2, 3 }));
+		Assert.assertEquals("[\n\t1, \n\t2, \n\t3\n]", Jsons.toJson(new int[] { 1, 2, 3 }, true));
 
-		assertEquals("{}", Jsons.toJson(new HashMap()));
-		assertEquals("{}", Jsons.toJson(new HashMap(), true));
+		Assert.assertEquals("{}", Jsons.toJson(new HashMap()));
+		Assert.assertEquals("{}", Jsons.toJson(new HashMap(), true));
 		Map m = new LinkedHashMap();
 		m.put("0", 0);
 		m.put("1", 1);
 		m.put("2", 2);
-		assertEquals("{\"0\":0,\"1\":1,\"2\":2}", Jsons.toJson(m));
-		assertEquals("{\n\t\"0\": 0, \n\t\"1\": 1, \n\t\"2\": 2\n}", Jsons.toJson(m, true));
+		Assert.assertEquals("{\"0\":0,\"1\":1,\"2\":2}", Jsons.toJson(m));
+		Assert.assertEquals("{\n\t\"0\": 0, \n\t\"1\": 1, \n\t\"2\": 2\n}", Jsons.toJson(m, true));
 	}
 
+	@Test
 	public void testCycleNoProp() {
 		A a = new A();
 		
@@ -227,18 +237,29 @@ public class JsonBinderTest extends TestCase {
 		String s = Jsons.toJson(a);
 		JsonObject jo = JsonObject.fromJson(s);
 		JsonArray ja = jo.getJsonArray("ary"); 
-		assertEquals(2, ja.length());
-		assertNull(ja.get(1));
+		Assert.assertEquals(2, ja.length());
+		Assert.assertNull(ja.get(1));
 	}
 
+	@Test
 	public void testParseComments() {
 		String json = "[\n" + "  // this is a comment\n" + "\t\"a\",\n"
 				+ "  /* this is another comment */\n" + "  \"b\",\n"
 				+ "  # this is yet another comment\n" + "  \"c\"\n" + "]";
 
 		List<String> abc = Jsons.fromJson(json, new TypeToken<List<String>>() {}.getType());
-		assertEquals(Arrays.asList("a", "b", "c"), abc);
+		Assert.assertEquals(Arrays.asList("a", "b", "c"), abc);
 
 		//System.out.println(Jsons.toJson(abc, true));
+	}
+
+	@Test
+	public void testKeyUnquote() {
+		Map<String, Number> e = new LinkedHashMap<String, Number>();
+		e.put("a", 0);
+		e.put("null", null);
+
+		Map a = Jsons.fromJson("{a:0, 'null':null}", Map.class);
+		Assert.assertEquals(e, a);
 	}
 }
