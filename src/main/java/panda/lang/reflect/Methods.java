@@ -471,11 +471,10 @@ public class Methods {
 	 * @throws InvocationTargetException wraps an exception thrown by the method invoked
 	 * @throws IllegalAccessException if the requested method is not accessible via reflection
 	 */
-	public static Object invokeStaticMethod(Class cls, String methodName, Object[] args, Class[] parameterTypes)
+	public static Object invokeStaticMethod(Class cls, String methodName, Object[] args, final Class[] parameterTypes)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
 		args = Arrays.nullToEmpty(args);
-		parameterTypes = Classes.toClass(args);
 
 		Method method = getMatchingAccessibleMethod(cls, methodName, parameterTypes);
 		if (method == null) {

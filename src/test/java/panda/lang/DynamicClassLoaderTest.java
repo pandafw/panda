@@ -1,24 +1,28 @@
 package panda.lang;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import panda.io.Streams;
-import panda.lang.Classes;
-import panda.lang.DynamicClassLoader;
 
 /**
  * DynamicClassLoaderTest
  */
-public class DynamicClassLoaderTest extends TestCase {
+public class DynamicClassLoaderTest {
 	DynamicClassLoader loader;
 
-	@Override
+	@Before
 	public void setUp() {
 		loader = new DynamicClassLoader();
 	}
 
-	@Override
+	@After
 	public void tearDown() {
-		loader.clear();
+		if (loader != null) {
+			loader.clear();
+		}
 	}
 	
 	private Class loadClass(DynamicClassLoader loader, String className, String sourceName) throws Exception {
@@ -28,8 +32,8 @@ public class DynamicClassLoaderTest extends TestCase {
 		loader.defineClass(className, source);
 		
 		Class c = loader.loadClass(className);
-		assertNotNull(c);
-		assertEquals(className, c.getName());
+		Assert.assertNotNull(c);
+		Assert.assertEquals(className, c.getName());
 		
 		return c;
 	}
@@ -37,36 +41,37 @@ public class DynamicClassLoaderTest extends TestCase {
 	private void loadDynamicTest(DynamicClassLoader loader) throws Exception {
 		Class c = loadClass(loader, "DynamicTest", "DynamicTest.java.txt");
 		Object o = c.newInstance();
-		assertEquals("1", o.toString());
+		Assert.assertEquals("1", o.toString());
 
 		String classNameI = c.getName() + "$PublicInner"; 
 		Class ci = Classes.getClass(loader, classNameI);
-		assertNotNull(ci);
-		assertEquals(classNameI, ci.getName());
+		Assert.assertNotNull(ci);
+		Assert.assertEquals(classNameI, ci.getName());
 	}
 
 	private void loadDynamicTest2(DynamicClassLoader loader) throws Exception {
 		Class c = loadClass(loader, "DynamicTest2", "DynamicTest2.java.txt");
 		Object o = c.newInstance();
-		assertEquals("2", o.toString());
+		Assert.assertEquals("2", o.toString());
 
 		String classNameI = c.getName() + "$PublicInner"; 
 		Class ci = Classes.getClass(loader, classNameI);
-		assertNotNull(ci);
-		assertEquals(classNameI, ci.getName());
+		Assert.assertNotNull(ci);
+		Assert.assertEquals(classNameI, ci.getName());
 	}
 	
 	private void loadDynamicTestChild(DynamicClassLoader loader) throws Exception {
 		Class c = loadClass(loader, "DynamicTestChild", "DynamicTestChild.java.txt");
 
 		Object o = c.newInstance();
-		assertEquals("child", o.toString());
+		Assert.assertEquals("child", o.toString());
 	}
 
 	/**
 	 * test simple
 	 * @throws Exception if an error occurs
 	 */
+	@Test
 	public void testSimple() throws Exception {
 		loadDynamicTest(loader);
 	}
@@ -75,6 +80,7 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * test recompile
 	 * @throws Exception if an error occurs
 	 */
+	@Test
 	public void testRecompile() throws Exception {
 		loadDynamicTest(loader);
 		
@@ -82,17 +88,18 @@ public class DynamicClassLoaderTest extends TestCase {
 
 		String classNameI = c.getName() + "$PublicInner"; 
 		Class ci = Classes.getClass(loader, classNameI);
-		assertNotNull(ci);
-		assertEquals(classNameI, ci.getName());
+		Assert.assertNotNull(ci);
+		Assert.assertEquals(classNameI, ci.getName());
 
 		Object o = c.newInstance();
-		assertEquals("-1", o.toString());
+		Assert.assertEquals("-1", o.toString());
 	}
 
 	/**
 	 * test two class
 	 * @throws Exception if an error occurs
 	 */
+	@Test
 	public void testTwoClass() throws Exception {
 		loadDynamicTest(loader);
 		loadDynamicTest2(loader);
@@ -102,10 +109,11 @@ public class DynamicClassLoaderTest extends TestCase {
 	 * test inherit
 	 * @throws Exception if an error occurs
 	 */
+	@Test
 	public void testInherit() throws Exception {
 		try {
 			loadDynamicTestChild(loader);
-			fail("loadDynamicTestChild should failed!");
+			Assert.fail("loadDynamicTestChild should failed!");
 		}
 		catch (Throwable e) {
 		}

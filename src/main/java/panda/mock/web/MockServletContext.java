@@ -21,7 +21,7 @@ import javax.servlet.ServletContext;
 
 import panda.io.Files;
 import panda.lang.Asserts;
-import panda.lang.Classes;
+import panda.lang.ClassLoaders;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.log.Log;
@@ -311,7 +311,7 @@ public class MockServletContext implements ServletContext {
 	}
 
 	public ClassLoader getClassLoader() {
-		return Classes.getClassLoader();
+		return ClassLoaders.getClassLoader();
 	}
 
 	public void declareRoles(String... roleNames) {

@@ -1060,9 +1060,7 @@ public abstract class Classes {
 	 */
 	public static Class<?> getClass(String className, boolean initialize)
 			throws ClassNotFoundException {
-		ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
-		ClassLoader loader = contextCL == null ? Classes.class.getClassLoader() : contextCL;
-		return getClass(loader, className, initialize);
+		return getClass(ClassLoaders.getClassLoader(), className, initialize);
 	}
 	
 	// Public method
@@ -1322,28 +1320,6 @@ public abstract class Classes {
 				return canonicalClassNameBuffer.toString();
 			}
 		}
-	}
-
-	/**
-	 * @return the class loader
-	 */
-	public static ClassLoader getClassLoader() {
-		ClassLoader cl = null;
-
-		try {
-			cl = Thread.currentThread().getContextClassLoader();
-		}
-		catch (Throwable ex) {
-			// Cannot access thread context ClassLoader - falling back to system class loader...
-		}
-		if (cl == null) {
-			cl = Classes.class.getClassLoader();
-			if (cl == null) {
-				cl = ClassLoader.getSystemClassLoader();
-			}
-		}
-
-		return cl;
 	}
 
 	/**
@@ -1677,7 +1653,7 @@ public abstract class Classes {
 	 * @return whether the specified class is present
 	 */
 	public static boolean isPresent(String className) {
-		return isPresent(className, getClassLoader());
+		return isPresent(className, ClassLoaders.getClassLoader());
 	}
 
 	/**
@@ -2412,7 +2388,7 @@ public abstract class Classes {
 		}
 
 		List<Class<?>> clss = new ArrayList<Class<?>>();
-		URL[] urls = ((URLClassLoader)getClassLoader()).getURLs();
+		URL[] urls = ((URLClassLoader)ClassLoaders.getClassLoader()).getURLs();
 		for (URL url : urls) {
 			if (url.getFile().endsWith("jar")) {
 				ZipInputStream zis = null;

@@ -1,7 +1,7 @@
 package panda.log;
 
 import panda.Panda;
-import panda.lang.Classes;
+import panda.lang.ClassLoaders;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
 import panda.log.impl.NopLog;
@@ -64,9 +64,10 @@ public final class Logs {
 				"panda.android.log.AndroidLogAdapter"
 		};
 
+		ClassLoader cl = ClassLoaders.getClassLoader();
 		for (String a : adapters) {
 			try {
-				adapter = (LogAdapter)Classes.newInstance(a);
+				adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
 				adapter.getLogger("panda");
 				break;
 			}

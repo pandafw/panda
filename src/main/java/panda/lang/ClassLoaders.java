@@ -12,6 +12,29 @@ public class ClassLoaders {
 	private static ClassLoaderWrapper classLoaderWrapper = new ClassLoaderWrapper();
 
 	/**
+	 * @return the class loader
+	 */
+	public static ClassLoader getClassLoader() {
+		ClassLoader cl = null;
+
+		try {
+			cl = Thread.currentThread().getContextClassLoader();
+		}
+		catch (Throwable ex) {
+			// Cannot access thread context ClassLoader - falling back to system class loader...
+		}
+		
+		if (cl == null) {
+			cl = Classes.class.getClassLoader();
+			if (cl == null) {
+				cl = ClassLoader.getSystemClassLoader();
+			}
+		}
+
+		return cl;
+	}
+
+	/**
 	 * Load a given resource.
 	 * 
 	 * This method will try to load the resource using the following methods (in order):

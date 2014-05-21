@@ -1,8 +1,5 @@
 package panda.resource;
 
-import panda.lang.Classes;
-import panda.lang.Strings;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -10,6 +7,9 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+
+import panda.lang.ClassLoaders;
+import panda.lang.Strings;
 
 
 /**
@@ -95,7 +95,7 @@ public class ExternalResourceLoader15 extends ExternalResourceLoader {
 				}
 			}
 			
-			return Classes.getClassLoader().getResourceAsStream(name);
+			return ClassLoaders.getClassLoader().getResourceAsStream(name);
 		}
 	}
 }

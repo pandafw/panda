@@ -170,7 +170,7 @@ public class DynamicClassLoader extends ClassLoader {
 	private Map<String, ClassJavaFileObject> javaObjects = new HashMap<String, ClassJavaFileObject>();
 
 	public DynamicClassLoader() {
-		this(Classes.getClassLoader(), null);
+		this(ClassLoaders.getClassLoader(), null);
 	}
 
 	public DynamicClassLoader(final ClassLoader parent, final File workdir) {
