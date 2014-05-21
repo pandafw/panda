@@ -14,6 +14,10 @@ import java.util.StringTokenizer;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Exceptions {
+	public static RuntimeException impossible() {
+		return new RuntimeException("Are you kidding me?! It is impossible!");
+	}
+
 	public static RuntimeException unsupported() {
 		throw new UnsupportedOperationException();
 	}
