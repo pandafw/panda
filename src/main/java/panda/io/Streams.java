@@ -48,6 +48,7 @@ import panda.io.stream.StringBuilderWriter;
 import panda.lang.Arrays;
 import panda.lang.CharSequences;
 import panda.lang.Charsets;
+import panda.lang.ClassLoaders;
 import panda.lang.Strings;
 
 /**
@@ -1154,6 +1155,27 @@ public class Streams {
 	 */
 	public static InputStream toInputStream(final CharSequence input, final String encoding) {
 		return toInputStream(input, Charsets.toCharset(encoding));
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * Load file or class name to InputStream.
+	 * 
+	 * @param path the file name or class name to load
+	 * @return an input stream
+	 */
+	public static InputStream getStream(final String path) throws IOException {
+		InputStream is = null;
+		if (Files.isFile(path)) {
+			is = new FileInputStream(path);
+		}
+		else {
+			is = ClassLoaders.getResourceAsStream(path);
+		}
+		if (is == null) {
+			throw new FileNotFoundException("Failed to find file: " + path);
+		}
+		return is;
 	}
 
 	// -----------------------------------------------------------------------
