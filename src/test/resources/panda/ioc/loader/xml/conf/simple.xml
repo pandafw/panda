@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ioc>
+	<obj name="queen" type="panda.ioc.loader.xml.meta.Bee">
+		<args>
+			<str>TheQueen</str>
+		</args>
+	</obj>
+
+	<obj name="A" type="panda.ioc.loader.xml.meta.Bee">
+		<args>
+			<ref>queen</ref>
+			<str>TheA</str>
+		</args>
+	</obj>
+
+	<obj name="B" type="panda.ioc.loader.xml.meta.Bee">
+		<args>
+			<ref>queen</ref>
+			<str>TheB</str>
+		</args>
+	</obj>
+
+	<obj name="C" type="panda.ioc.loader.xml.meta.Bee">
+		<args>
+			<ref>queen</ref>
+			<str>TheC</str>
+		</args>
+		<events>
+			<create>onBorn</create>
+			<fetch>work</fetch>
+			<depose>onDead</depose>
+		</events>
+		<field name="age">
+			<int>15</int>
+		</field>
+		<field name="friends">
+			<array>
+				<ref>A</ref>
+				<ref>B</ref>
+				<obj type="panda.ioc.loader.xml.meta.Bee">
+					<field name="age"><int>123</int></field>
+				</obj>
+			</array>
+		</field>
+		<field name="map">
+			<map>
+				<item key="abc"><str>ABC</str></item>
+			</map>
+		</field>
+	</obj>
+</ioc>
