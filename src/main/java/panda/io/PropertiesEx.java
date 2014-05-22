@@ -20,6 +20,14 @@ import panda.lang.Strings;
  */
 @SuppressWarnings("serial")
 public class PropertiesEx extends Properties {
+	public PropertiesEx() throws IOException {
+		super();
+	}
+
+	public PropertiesEx(String... paths) throws IOException {
+		super();
+		setPaths(paths);
+	}
 
 	/**
 	 * @param file file
@@ -31,6 +39,28 @@ public class PropertiesEx extends Properties {
 		try {
 			is = new FileInputStream(file);
 			props.load(is);
+		}
+		finally {
+			Streams.safeClose(is);
+		}
+	}
+
+
+	/**
+	 * 加载指定文件/文件夹的Properties文件,合并成一个Properties对象
+	 * <p>
+	 * <b style=color:red>如果有重复的key,请务必注意加载的顺序!!<b/>
+	 * 
+	 * @param paths 需要加载的Properties文件路径
+	 */
+	public void setPaths(String... paths) throws IOException {
+		InputStream is = null;
+		try {
+			for (String path : paths) {
+				is = Streams.getStream(path);
+				load(is);
+				is.close();
+			}
 		}
 		finally {
 			Streams.safeClose(is);
@@ -132,8 +162,7 @@ public class PropertiesEx extends Properties {
 				expr = "[" + expr + "]";
 			}
 
-			String em = "Invalid json array expression: "
-				+ name + " - " + expr;
+			String em = "Invalid json array expression: " + name + " - " + expr;
 
 			list = Jsons.fromJson(expr, ArrayList.class);
 			if (list == null) {
