@@ -104,6 +104,13 @@ public class HttpServlets {
 		return false;
 	}
 
+	public static String getRemoteAddr(HttpServletRequest request) {
+		String ip = request.getHeader("X-Real-IP");
+		if (Strings.isEmpty(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
+	}
 	/**
 	 * @param request request
 	 * @return requestURL + QueryString

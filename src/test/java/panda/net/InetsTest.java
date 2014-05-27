@@ -33,15 +33,15 @@ public class InetsTest extends TestCase {
 		// Class A: 10.0.0.0 ~ 10.255.255.255 （10.0.0.0/8）
 		// Class B: 172.16.0.0 ~ 172.31.255.255 （172.16.0.0/12）
 		// Class C: 192.168.0.0 ~ 192.168.255.255 （192.168.0.0/16）
-		Assert.assertTrue("10.0.0.0", Inets.isIntranetHost("10.0.0.0"));
-		Assert.assertTrue("10.0.0.1", Inets.isIntranetHost("10.0.0.1"));
-		Assert.assertTrue("172.16.0.0", Inets.isIntranetHost("172.16.0.0"));
-		Assert.assertTrue("172.16.0.1", Inets.isIntranetHost("172.16.0.1"));
-		Assert.assertTrue("192.168.0.0", Inets.isIntranetHost("192.168.0.0"));
-		Assert.assertTrue("192.168.0.1", Inets.isIntranetHost("192.168.0.1"));
-		Assert.assertTrue("127.0.0.0", Inets.isIntranetHost("127.0.0.0"));
-		Assert.assertTrue("127.0.0.1", Inets.isIntranetHost("127.0.0.1"));
-		Assert.assertTrue("0:0:0:0:0:0:0:0", Inets.isIntranetHost("0:0:0:0:0:0:0:0"));
-		Assert.assertTrue("0:0:0:0:0:0:0:1", Inets.isIntranetHost("0:0:0:0:0:0:0:1"));
+		Assert.assertTrue("10.0.0.0", Inets.isIntranetAddr("10.0.0.0"));
+		Assert.assertTrue("10.0.0.1", Inets.isIntranetAddr("10.0.0.1"));
+		Assert.assertTrue("172.16.0.0", Inets.isIntranetAddr("172.16.0.0"));
+		Assert.assertTrue("172.16.0.1", Inets.isIntranetAddr("172.16.0.1"));
+		Assert.assertTrue("192.168.0.0", Inets.isIntranetAddr("192.168.0.0"));
+		Assert.assertTrue("192.168.0.1", Inets.isIntranetAddr("192.168.0.1"));
+		Assert.assertTrue("127.0.0.0", Inets.isIntranetAddr("127.0.0.0"));
+		Assert.assertTrue("127.0.0.1", Inets.isIntranetAddr("127.0.0.1"));
+		Assert.assertTrue("0:0:0:0:0:0:0:0", Inets.isIntranetAddr("0:0:0:0:0:0:0:0"));
+		Assert.assertTrue("0:0:0:0:0:0:0:1", Inets.isIntranetAddr("0:0:0:0:0:0:0:1"));
 	}
 }
