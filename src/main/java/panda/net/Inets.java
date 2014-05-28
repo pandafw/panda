@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
  * @author yf.frank.wang@gmail.com
  */
 public class Inets {
-	public static boolean isIntranetHost(String ipAddr) {
+	public static boolean isIntranetAddr(String ipAddr) {
 		if (Strings.isEmpty(ipAddr)) {
 			return false;
 		}
