@@ -163,6 +163,7 @@ public class DynamicClassLoader extends ClassLoader {
 		}
 	}
 
+	private JavaCompiler compiler;
 	private File workdir;
 	private List<String> options;
 	private ClassLoader parent;
@@ -171,6 +172,10 @@ public class DynamicClassLoader extends ClassLoader {
 
 	public DynamicClassLoader() {
 		this(ClassLoaders.getClassLoader(), null);
+		compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null) {
+			throw Exceptions.unsupported("Failed to getSystemJavaCompiler()");
+		}
 	}
 
 	public DynamicClassLoader(final ClassLoader parent, final File workdir) {
@@ -264,7 +269,6 @@ public class DynamicClassLoader extends ClassLoader {
 		
 		SourceJavaFileObject srcObj = new SourceJavaFileObject(className, source);
 		
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<JavaFileObject>();
 		JavaFileManager fileManager = new DynamicJavaFileManager(compiler, collector, this);
 

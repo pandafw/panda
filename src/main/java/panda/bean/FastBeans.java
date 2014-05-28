@@ -35,7 +35,7 @@ public class FastBeans extends Beans {
 	/**
 	 * dynamicClassLoader
 	 */
-	private DynamicClassLoader dynamicClassLoader = new DynamicClassLoader();
+	private DynamicClassLoader dynamicClassLoader;
 
 	/**
 	 * excludes
@@ -44,6 +44,13 @@ public class FastBeans extends Beans {
 		HttpServletSupport.class.getName(),
 		"javax.servlet.http.Cookie");
 	
+	/**
+	 * 
+	 */
+	public FastBeans() {
+		dynamicClassLoader = new DynamicClassLoader();
+	}
+
 	/**
 	 * clear bean handlers
 	 */
