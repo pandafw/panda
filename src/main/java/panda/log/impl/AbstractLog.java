@@ -6,17 +6,19 @@ import panda.log.Log;
 
 
 public abstract class AbstractLog implements Log {
-	protected abstract void log(int level, Object msg, Throwable tx);
-
-	protected void log(int level, LogInfo info) {
-		log(level, info.msg, info.ex);
-	}
-
 	private static final LogInfo LOGINFO_ERROR = new LogInfo();
 	private static final LogInfo LOGINFO_NULL = new LogInfo();
 	static {
 		LOGINFO_ERROR.msg = "!!!!Log Fail!!";
 		LOGINFO_NULL.msg = "null";
+	}
+
+	protected int level;
+	
+	protected abstract void log(int level, Object msg, Throwable tx);
+
+	protected void log(int level, LogInfo info) {
+		log(level, info.msg, info.ex);
 	}
 
 	/**
@@ -55,6 +57,36 @@ public abstract class AbstractLog implements Log {
 	}
 
 	@Override
+	public boolean isFatalEnabled() {
+		return level <= Log.LEVEL_FATAL;
+	}
+
+	@Override
+	public boolean isErrorEnabled() {
+		return level <= Log.LEVEL_ERROR;
+	}
+
+	@Override
+	public boolean isWarnEnabled() {
+		return level <= Log.LEVEL_WARN;
+	}
+
+	@Override
+	public boolean isInfoEnabled() {
+		return level <= Log.LEVEL_INFO;
+	}
+
+	@Override
+	public boolean isDebugEnabled() {
+		return level <= Log.LEVEL_DEBUG;
+	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return level <= Log.LEVEL_TRACE;
+	}
+	
+	@Override
 	public void trace(Object msg) {
 		if (isTraceEnabled()) {
 			log(LEVEL_TRACE, makeInfo(msg));
@@ -77,8 +109,9 @@ public abstract class AbstractLog implements Log {
 
 	@Override
 	public void debugf(String fmt, Object... args) {
-		if (isDebugEnabled())
+		if (isDebugEnabled()) {
 			log(LEVEL_DEBUG, makeInfo(fmt, args));
+		}
 	}
 
 	@Override

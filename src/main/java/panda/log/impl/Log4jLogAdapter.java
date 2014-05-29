@@ -9,8 +9,6 @@ import panda.log.LogAdapter;
 /**
  * Apache log4j adapter
  * 
- * <b>Log4J 1.2.11 does not support TRACE, use DEBUG for TRACE</b>
- * 
  */
 public class Log4jLogAdapter implements LogAdapter {
 	public Log getLogger(String name) {
@@ -18,51 +16,37 @@ public class Log4jLogAdapter implements LogAdapter {
 	}
 
 	static class Log4JLogger extends AbstractLog {
-
 		public static final String SUPER_FQCN = AbstractLog.class.getName();
 		public static final String SELF_FQCN = Log4JLogger.class.getName();
 
 		private Logger logger;
 
-		private static boolean hasTrace;
-
-		static {
-			try {
-				Level.class.getDeclaredField("TRACE");
-				hasTrace = true;
-			}
-			catch (Throwable e) {
-			}
-		}
-
 		Log4JLogger(String className) {
 			logger = Logger.getLogger(className);
+			
+			if (logger.isEnabledFor(Level.TRACE)) {
+				level = Log.LEVEL_TRACE;
+			}
+			else if (logger.isEnabledFor(Level.DEBUG)) {
+				level = Log.LEVEL_DEBUG;
+			}
+			else if (logger.isEnabledFor(Level.INFO)) {
+				level = Log.LEVEL_INFO;
+			}
+			else if (logger.isEnabledFor(Level.WARN)) {
+				level = Log.LEVEL_WARN;
+			}
+			else if (logger.isEnabledFor(Level.ERROR)) {
+				level = Log.LEVEL_ERROR;
+			}
+			else if (logger.isEnabledFor(Level.FATAL)) {
+				level = Log.LEVEL_FATAL;
+			}
+			else {
+				level = Log.LEVEL_TRACE;
+			}
 		}
 
-		public boolean isFatalEnabled() {
-			return logger.isEnabledFor(Level.FATAL);
-		}
-
-		public boolean isErrorEnabled() {
-			return logger.isEnabledFor(Level.ERROR);
-		}
-
-		public boolean isWarnEnabled() {
-			return logger.isEnabledFor(Level.WARN);
-		}
-
-		public boolean isInfoEnabled() {
-			return logger.isEnabledFor(Level.INFO);
-		}
-
-		public boolean isDebugEnabled() {
-			return logger.isEnabledFor(Level.DEBUG);
-		}
-
-		public boolean isTraceEnabled() {
-			return hasTrace ? logger.isEnabledFor(Level.TRACE) : false;
-		}
-		
 		public void debug(Object msg, Throwable t) {
 			if (isDebugEnabled()) {
 				logger.log(SELF_FQCN, Level.DEBUG, msg, t);
@@ -70,31 +54,33 @@ public class Log4jLogAdapter implements LogAdapter {
 		}
 
 		public void error(Object msg, Throwable t) {
-			if (isErrorEnabled())
+			if (isErrorEnabled()) {
 				logger.log(SELF_FQCN, Level.ERROR, msg, t);
-
+			}
 		}
 
 		public void fatal(Object msg, Throwable t) {
-			if (isFatalEnabled())
+			if (isFatalEnabled()) {
 				logger.log(SELF_FQCN, Level.FATAL, msg, t);
+			}
 		}
 
 		public void info(Object msg, Throwable t) {
-			if (isInfoEnabled())
+			if (isInfoEnabled()) {
 				logger.log(SELF_FQCN, Level.INFO, msg, t);
+			}
 		}
 
 		public void trace(Object msg, Throwable t) {
-			if (isTraceEnabled())
+			if (isTraceEnabled()) {
 				logger.log(SELF_FQCN, Level.TRACE, msg, t);
-			else if ((!hasTrace) && isDebugEnabled())
-				logger.log(SELF_FQCN, Level.DEBUG, msg, t);
+			}
 		}
 
 		public void warn(Object msg, Throwable t) {
-			if (isWarnEnabled())
+			if (isWarnEnabled()) {
 				logger.log(SELF_FQCN, Level.WARN, msg, t);
+			}
 		}
 
 		@Override
@@ -116,12 +102,7 @@ public class Log4jLogAdapter implements LogAdapter {
 				logger.log(SUPER_FQCN, Level.DEBUG, msg, tx);
 				break;
 			case LEVEL_TRACE:
-				if (hasTrace) {
-					logger.log(SUPER_FQCN, Level.TRACE, msg, tx);
-				}
-				else {
-					logger.log(SUPER_FQCN, Level.DEBUG, msg, tx);
-				}
+				logger.log(SUPER_FQCN, Level.TRACE, msg, tx);
 				break;
 			default:
 				break;

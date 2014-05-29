@@ -347,11 +347,7 @@ public class HttpServlets {
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getRemoteAddr());
 		sb.append(" -> ");
-		sb.append(request.getRequestURI());
-		if (Strings.isNotEmpty(request.getQueryString())) {
-			sb.append('?');
-			sb.append(request.getQueryString());
-		}
+		sb.append(request.getRequestURL());
 		return sb.toString();
 	}
 
