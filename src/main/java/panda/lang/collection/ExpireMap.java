@@ -14,9 +14,9 @@ import java.util.Set;
 public class ExpireMap<K, V> implements Map<K, V> {
 	private Map<K, Long> kts;
 	private Map<K, V> map;
-	private int expire;
+	private long expire;
 
-	public ExpireMap(Map<K, V> map, int expire) {
+	public ExpireMap(Map<K, V> map, long expire) {
 		this.map = map;
 		this.expire = expire;
 		this.kts = new HashMap<K, Long>();
@@ -25,7 +25,7 @@ public class ExpireMap<K, V> implements Map<K, V> {
 	/**
 	 * @return the expire
 	 */
-	public int getExpire() {
+	public long getExpire() {
 		return expire;
 	}
 
@@ -45,10 +45,9 @@ public class ExpireMap<K, V> implements Map<K, V> {
 		if (map.containsKey(key)) {
 			return true;
 		}
-		else {
-			kts.remove(key);
-			return false;
-		}
+		
+		kts.remove(key);
+		return false;
 	}
 
 	public boolean containsValue(Object value) {
@@ -65,10 +64,9 @@ public class ExpireMap<K, V> implements Map<K, V> {
 			if (System.currentTimeMillis() - t < expire) {
 				return map.get(key);
 			}
-			else {
-				kts.remove(key);
-				map.remove(key);
-			}
+			
+			kts.remove(key);
+			map.remove(key);
 		}
 		return null;
 	}

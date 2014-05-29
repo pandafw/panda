@@ -1,8 +1,6 @@
 package panda.net;
 
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -25,7 +23,6 @@ import panda.log.Logs;
  */
 public class SendMail {
 	private static Log log = Logs.getLog(SendMail.class);
-	private static Map<String, List<String>> hostsCache = new WeakHashMap<String, List<String>>();
 
 	/**
 	 * @param email email
@@ -135,16 +132,13 @@ public class SendMail {
 		if (ss.length != 2) {
 			throw ee;
 		}
-
-		List<String> hosts = hostsCache.get(ss[1]);
-		if (hosts == null || hosts.isEmpty()) {
-			try {
-				hosts = MXLookup.lookup(ss[1]);
-				hostsCache.put(ss[1], hosts);
-			}
-			catch (NamingException e) {
-				throw new EmailException(e);
-			}
+		
+		List<String> hosts;
+		try {
+			hosts = MXLookup.lookup(ss[1]);
+		}
+		catch (NamingException e) {
+			throw new EmailException(e);
 		}
 		
 		for (String host : hosts) {

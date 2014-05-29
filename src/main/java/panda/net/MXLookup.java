@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -14,6 +13,7 @@ import javax.naming.directory.InitialDirContext;
 
 import panda.lang.Collections;
 import panda.lang.collection.ExpireMap;
+import panda.lang.collection.LRUMap;
 
 /**
  * A utility class for mx records lookup.
@@ -21,28 +21,34 @@ import panda.lang.collection.ExpireMap;
  */
 public class MXLookup {
 	/**
-	 * default expire time 5m
+	 * default expire time 1h
 	 */
-	public static final int DEFAULT_EXPIRE = 5 * 60;
+	public static final long DEFAULT_CACHE_EXPIRE = 3600;
+	
+	/**
+	 * default expire time 1h
+	 */
+	public static final int DEFAULT_CACHE_LIMIT = 100;
 	
 	protected static Map<String, List<String>> cache;
 
 	/**
 	 * init cache
-	 * @param expire expire time (s)
+	 * @param limit limit count
+	 * @param expire expire time (ms)
 	 */
-	public static void initCache(int expire) {
-		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new WeakHashMap<String, List<String>>(), expire * 1000);
+	public static synchronized void initCache(int limit, long expire) {
+		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new LRUMap<String, List<String>>(limit), expire);
 		cache = Collections.synchronizedMap(em);
 	}
 
-	private static List<String> getCachedHosts(String hostname) {
+	private static synchronized List<String> getCachedHosts(String hostname) {
 		return cache == null ? null : cache.get(hostname);
 	}
 
-	private static void putHostsToCache(String hostname, List<String> hosts) {
+	private static synchronized void putHostsToCache(String hostname, List<String> hosts) {
 		if (cache == null) {
-			initCache(DEFAULT_EXPIRE);
+			initCache(DEFAULT_CACHE_LIMIT, DEFAULT_CACHE_EXPIRE);
 		}
 		cache.put(hostname, hosts);
 	}
@@ -59,7 +65,6 @@ public class MXLookup {
 			return hosts;
 		}
 		
-
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
 
