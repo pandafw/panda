@@ -1,5 +1,7 @@
 package panda.log.impl;
 
+import java.util.Properties;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -11,6 +13,9 @@ import panda.log.LogAdapter;
  * 
  */
 public class Log4jLogAdapter implements LogAdapter {
+	public void init(Properties props) {
+	}
+	
 	public Log getLogger(String name) {
 		return new Log4JLogger(name);
 	}
@@ -47,44 +52,8 @@ public class Log4jLogAdapter implements LogAdapter {
 			}
 		}
 
-		public void debug(Object msg, Throwable t) {
-			if (isDebugEnabled()) {
-				logger.log(SELF_FQCN, Level.DEBUG, msg, t);
-			}
-		}
-
-		public void error(Object msg, Throwable t) {
-			if (isErrorEnabled()) {
-				logger.log(SELF_FQCN, Level.ERROR, msg, t);
-			}
-		}
-
-		public void fatal(Object msg, Throwable t) {
-			if (isFatalEnabled()) {
-				logger.log(SELF_FQCN, Level.FATAL, msg, t);
-			}
-		}
-
-		public void info(Object msg, Throwable t) {
-			if (isInfoEnabled()) {
-				logger.log(SELF_FQCN, Level.INFO, msg, t);
-			}
-		}
-
-		public void trace(Object msg, Throwable t) {
-			if (isTraceEnabled()) {
-				logger.log(SELF_FQCN, Level.TRACE, msg, t);
-			}
-		}
-
-		public void warn(Object msg, Throwable t) {
-			if (isWarnEnabled()) {
-				logger.log(SELF_FQCN, Level.WARN, msg, t);
-			}
-		}
-
 		@Override
-		protected void log(int level, Object msg, Throwable tx) {
+		protected void log(int level, String msg, Throwable tx) {
 			switch (level) {
 			case LEVEL_FATAL:
 				logger.log(SUPER_FQCN, Level.FATAL, msg, tx);

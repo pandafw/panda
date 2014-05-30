@@ -28,7 +28,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.naming.NamingException;
 
-import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.helpers.CyclicBuffer;
@@ -46,7 +45,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.net.MXLookup;
 
-public class SmtpLogAppender extends AppenderSkeleton implements UnrecognizedElementHandler {
+public class SmtpLogAppender extends AbstractAppender implements UnrecognizedElementHandler {
 	/** subject layout */
 	protected Layout subjectLayout;
 
@@ -146,6 +145,8 @@ public class SmtpLogAppender extends AppenderSkeleton implements UnrecognizedEle
 	 * Activate the specified options, such as the smtp host, the recipient, from, etc.
 	 */
 	public void activateOptions() {
+		super.activateOptions();
+		
 		Session session = createSession();
 		msg = new MimeMessage(session);
 
@@ -246,12 +247,7 @@ public class SmtpLogAppender extends AppenderSkeleton implements UnrecognizedEle
 	 * Perform SMTPAppender specific appending actions, mainly adding the event to a cyclic buffer
 	 * and checking if the event triggers an e-mail to be sent.
 	 */
-	public void append(LoggingEvent event) {
-
-		if (!checkEntryConditions()) {
-			return;
-		}
-
+	protected void subAppend(LoggingEvent event) {
 		event.getThreadName();
 		event.getNDC();
 		event.getMDCCopy();
@@ -283,18 +279,14 @@ public class SmtpLogAppender extends AppenderSkeleton implements UnrecognizedEle
 			return false;
 		}
 
-		if (this.layout == null) {
-			errorHandler.error("No layout set for appender named [" + name + "].");
-			return false;
-		}
-		return true;
+		return super.checkEntryConditions();
 	}
 
 	synchronized public void close() {
-		this.closed = true;
 		if (sendOnClose && cb.length() > 0) {
 			sendBuffer();
 		}
+		this.closed = true;
 	}
 
 	InternetAddress getAddress(String addressStr) {
@@ -339,44 +331,31 @@ public class SmtpLogAppender extends AppenderSkeleton implements UnrecognizedEle
 	}
 
 	/**
-	 * The <code>SMTPAppender</code> requires a {@link org.apache.log4j.Layout layout}.
-	 */
-	public boolean requiresLayout() {
-		return true;
-	}
-
-	/**
 	 * Layout body of email message.
 	 */
 	protected String formatBody() {
 		// Note: this code already owns the monitor for this
 		// appender. This frees us from needing to synchronize on 'cb'.
 
-		StringBuffer sbuf = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		String t = layout.getHeader();
-		if (t != null)
-			sbuf.append(t);
+		if (t != null) {
+			sb.append(t);
+		}
+		
 		int len = cb.length();
 		for (int i = 0; i < len; i++) {
-			// sbuf.append(MimeUtility.encodeText(layout.format(cb.get())));
 			LoggingEvent event = cb.get();
-			sbuf.append(layout.format(event));
-			if (layout.ignoresThrowable()) {
-				String[] s = event.getThrowableStrRep();
-				if (s != null) {
-					for (int j = 0; j < s.length; j++) {
-						sbuf.append(s[j]);
-						sbuf.append(Layout.LINE_SEP);
-					}
-				}
-			}
+			outputLogEvent(sb, event);
+			sb.append(Layout.LINE_SEP);
 		}
+		
 		t = layout.getFooter();
 		if (t != null) {
-			sbuf.append(t);
+			sb.append(t);
 		}
 
-		return sbuf.toString();
+		return sb.toString();
 	}
 
 	/**

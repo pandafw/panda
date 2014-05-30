@@ -1,15 +1,21 @@
 package panda.log;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import panda.Panda;
 import panda.lang.ClassLoaders;
+import panda.lang.Classes;
+import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
-import panda.log.impl.NopLog;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public final class Logs {
+	private static final String CONFIG = "panda-log.properties";
+	
 	private static LogAdapter adapter;
 
 	static {
@@ -59,37 +65,56 @@ public final class Logs {
 	}
 
 	private static void init() {
-		String[] adapters = new String[] {
-				ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter",
-				"panda.android.log.AndroidLogAdapter"
-		};
+		Properties props = new Properties();
 
-		ClassLoader cl = ClassLoaders.getClassLoader();
-		for (String a : adapters) {
+		InputStream is = ClassLoaders.getResourceAsStream(CONFIG);
+		if (is != null) {
+			// load adapter from config
 			try {
-				adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
-				adapter.getLogger("panda");
-				break;
+				props.load(is);
+				String impl = props.getProperty(LogAdapter.class.getName());
+				if (Strings.isNotEmpty(impl)) {
+					adapter = (LogAdapter)Classes.newInstance(impl);
+					adapter.init(props);
+					adapter.getLogger("panda");
+				}
 			}
 			catch (Throwable e) {
+				e.printStackTrace();
 				adapter = null;
+			}
+			finally {
+				try {
+					is.close();
+				}
+				catch (Throwable e) {
+				}
+			}
+		}
+
+		if (adapter == null) {
+			String[] adapters = new String[] {
+					ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter",
+					"panda.android.log.AndroidLogAdapter"
+			};
+
+			ClassLoader cl = ClassLoaders.getClassLoader();
+			for (String a : adapters) {
+				try {
+					adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
+					adapter.init(props);
+					adapter.getLogger("panda");
+					break;
+				}
+				catch (Throwable e) {
+					adapter = null;
+				}
 			}
 		}
 
 		if (adapter == null) {
 			adapter = new ConsoleLogAdapter();
+			adapter.init(props);
 		}
-	}
-
-	/**
-	 * set the log adapter, null to disable log
-	 * 
-	 * @param adapter customer LogAdapter
-	 */
-	public static void setAdapter(LogAdapter adapter) {
-		if (adapter == null) {
-			adapter = NopLog.NOP;
-		}
-		Logs.adapter = adapter;
 	}
 }

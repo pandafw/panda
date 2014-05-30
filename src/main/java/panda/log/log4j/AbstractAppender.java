@@ -1,8 +1,14 @@
 package panda.log.log4j;
 
+import java.io.IOException;
+
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Layout;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
+
+import panda.lang.Exceptions;
 
 public abstract class AbstractAppender extends AppenderSkeleton {
 	/**
@@ -11,6 +17,23 @@ public abstract class AbstractAppender extends AppenderSkeleton {
 	public AbstractAppender() {
 	}
 
+	/**
+	 * The WriterAppender requires a layout. Hence, this method returns
+	 * <code>true</code>.
+	 */
+	public boolean requiresLayout() {
+		return true;
+	}
+
+	/**
+	 * Activate the specified options, such as the smtp host, the recipient, from, etc.
+	 */
+	public void activateOptions() {
+		if (layout == null) {
+			setLayout(new PatternLayout("%m%n"));
+		}
+	}
+	
 	/**
 	 * This method is called by the {@link AppenderSkeleton#doAppend} method.
 	 * 
@@ -38,6 +61,31 @@ public abstract class AbstractAppender extends AppenderSkeleton {
 	}
 	
 	protected abstract void subAppend(LoggingEvent event);
+	
+	protected void outputLogEvent(Appendable writer, LoggingEvent event) {
+		try {
+			writer.append(layout.format(event));
+			if (layout.ignoresThrowable()) {
+				String[] ss = event.getThrowableStrRep();
+				if (ss != null) {
+					writer.append(Layout.LINE_SEP);
+					for (String s : ss) {
+						writer.append(s);
+						writer.append(Layout.LINE_SEP);
+					}
+				}
+			}
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+	
+	protected String formatLogEvent(LoggingEvent event) {
+		StringBuilder sb = new StringBuilder();
+		outputLogEvent(sb, event);
+		return sb.toString();
+	}
 
 	/**
 	 * This method determines if there is a sense in attempting to append.

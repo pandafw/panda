@@ -1,5 +1,7 @@
 package panda.log.impl;
 
+import java.util.Properties;
+
 import panda.log.Log;
 import panda.log.LogAdapter;
 
@@ -7,12 +9,12 @@ import panda.log.LogAdapter;
  * log nothing
  */
 public class NopLog implements Log, LogAdapter {
-
-	public Log getLogger(String name) {
-		return NOP;
+	public void init(Properties props) {
 	}
 	
-	public static final NopLog NOP = new NopLog();
+	public Log getLogger(String name) {
+		return this;
+	}
 	
 	protected NopLog() {
 	}

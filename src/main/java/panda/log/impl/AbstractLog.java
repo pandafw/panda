@@ -12,15 +12,32 @@ public abstract class AbstractLog implements Log {
 		LOGINFO_ERROR.msg = "!!!!Log Fail!!";
 		LOGINFO_NULL.msg = "null";
 	}
+	
+	protected static class LogInfo {
+		String msg;
+		Throwable ex;
+
+		public LogInfo() {
+		}
+
+		public LogInfo(String msg, Throwable ex) {
+			this.msg = msg;
+			this.ex = ex;
+		}
+	}
 
 	protected int level;
 	
-	protected abstract void log(int level, Object msg, Throwable tx);
+	protected abstract void log(int level, String msg, Throwable tx);
 
 	protected void log(int level, LogInfo info) {
 		log(level, info.msg, info.ex);
 	}
-
+	
+	private LogInfo makeInfo(Object obj, Throwable ex) {
+		return new LogInfo(String.valueOf(obj), ex);
+	}
+	
 	/**
 	 * Create a LogInfo object
 	 * <p/>
@@ -94,6 +111,13 @@ public abstract class AbstractLog implements Log {
 	}
 
 	@Override
+	public void trace(Object msg, Throwable t) {
+		if (isTraceEnabled()) {
+			log(LEVEL_TRACE, makeInfo(msg, t));
+		}
+	}
+
+	@Override
 	public void tracef(String fmt, Object... args) {
 		if (isTraceEnabled()) {
 			log(LEVEL_TRACE, makeInfo(fmt, args));
@@ -104,6 +128,13 @@ public abstract class AbstractLog implements Log {
 	public void debug(Object msg) {
 		if (isDebugEnabled()) {
 			log(LEVEL_DEBUG, makeInfo(msg));
+		}
+	}
+
+	@Override
+	public void debug(Object msg, Throwable t) {
+		if (isDebugEnabled()) {
+			log(LEVEL_DEBUG, makeInfo(msg, t));
 		}
 	}
 
@@ -122,6 +153,13 @@ public abstract class AbstractLog implements Log {
 	}
 
 	@Override
+	public void info(Object msg, Throwable t) {
+		if (isInfoEnabled()) {
+			log(LEVEL_INFO, makeInfo(msg, t));
+		}
+	}
+
+	@Override
 	public void infof(String fmt, Object... args) {
 		if (isInfoEnabled()) {
 			log(LEVEL_INFO, makeInfo(fmt, args));
@@ -132,6 +170,13 @@ public abstract class AbstractLog implements Log {
 	public void warn(Object msg) {
 		if (isWarnEnabled()) {
 			log(LEVEL_WARN, makeInfo(msg));
+		}
+	}
+
+	@Override
+	public void warn(Object msg, Throwable t) {
+		if (isWarnEnabled()) {
+			log(LEVEL_WARN, makeInfo(msg, t));
 		}
 	}
 
@@ -149,6 +194,13 @@ public abstract class AbstractLog implements Log {
 	}
 
 	@Override
+	public void error(Object msg, Throwable t) {
+		if (isErrorEnabled()) {
+			log(LEVEL_ERROR, makeInfo(msg, t));
+		}
+	}
+
+	@Override
 	public void errorf(String fmt, Object... args) {
 		if (isErrorEnabled()) {
 			log(LEVEL_ERROR, makeInfo(fmt, args));
@@ -159,6 +211,13 @@ public abstract class AbstractLog implements Log {
 	public void fatal(Object msg) {
 		if (isFatalEnabled()) {
 			log(LEVEL_FATAL, makeInfo(msg));
+		}
+	}
+
+	@Override
+	public void fatal(Object msg, Throwable t) {
+		if (isFatalEnabled()) {
+			log(LEVEL_FATAL, makeInfo(msg, t));
 		}
 	}
 

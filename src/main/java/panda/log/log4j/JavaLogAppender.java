@@ -1,7 +1,6 @@
 package panda.log.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -10,14 +9,6 @@ public class JavaLogAppender extends AbstractAppender {
 	 * Construct
 	 */
 	public JavaLogAppender() {
-	}
-
-	/**
-	 * The WriterAppender requires a layout. Hence, this method returns
-	 * <code>true</code>.
-	 */
-	public boolean requiresLayout() {
-		return true;
 	}
 
 	/**
@@ -37,15 +28,14 @@ public class JavaLogAppender extends AbstractAppender {
 		java.util.logging.Level level = getJavaLogLevel(event);
 		if (logger.isLoggable(level)) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(layout.format(event));
+
+			outputLogEvent(sb, event);
 
 			if (layout.ignoresThrowable()) {
-				String[] ss = event.getThrowableStrRep();
-				if (ss != null) {
-					for (String s : ss) {
-						sb.append(s);
-						sb.append(Layout.LINE_SEP);
-					}
+				if (event.getThrowableInformation() != null) {
+					Throwable ex = event.getThrowableInformation().getThrowable();
+					logger.log(level, sb.toString(), ex);
+					return;
 				}
 			}
 			logger.log(level, sb.toString());

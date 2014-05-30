@@ -1,11 +1,12 @@
 package panda.log.impl;
 
+import java.io.PrintStream;
+
 import panda.lang.time.DateTimes;
 import panda.log.Log;
-import panda.log.LogAdapter;
 
 
-public class ConsoleLogAdapter implements LogAdapter {
+public class ConsoleLogAdapter extends AbstractLogAdapter {
 
 	public Log getLogger(String name) {
 		return new ConsoleLog(name);
@@ -14,66 +15,43 @@ public class ConsoleLogAdapter implements LogAdapter {
 	/**
 	 * Console log to System.out and System.err
 	 */
-	public static class ConsoleLog extends AbstractConfigLog {
+	public class ConsoleLog extends AbstractLog {
 		ConsoleLog(String name) {
-			super(name);
+			level = getLogLevel(name);
 		}
 
-		public void fatal(Object msg, Throwable t) {
-			if (isFatalEnabled()) {
-				errorOut("FATAL", msg, t);
+		@Override
+		protected void log(int level, String msg, Throwable t) {
+			switch (level) {
+			case LEVEL_FATAL:
+				output(System.err, "FATAL", msg, t);
+				break;
+			case LEVEL_ERROR:
+				output(System.err, "ERROR", msg, t);
+				break;
+			case LEVEL_WARN:
+				output(System.err, "WARN", msg, t);
+				break;
+			case LEVEL_INFO:
+				output(System.out, "INFO", msg, t);
+				break;
+			case LEVEL_DEBUG:
+				output(System.out, "DEBUG", msg, t);
+				break;
+			case LEVEL_TRACE:
+				output(System.out, "TRACE", msg, t);
+				break;
 			}
 		}
 
-		public void warn(Object msg, Throwable t) {
-			if (isWarnEnabled()) {
-				errorOut("WARN", msg, t);
-			}
-		}
-
-		public void error(Object msg, Throwable t) {
-			if (isErrorEnabled()) {
-				errorOut("ERROR", msg, t);
-			}
-		}
-
-		public void info(Object msg, Throwable t) {
-			if (isInfoEnabled()) {
-				printOut("INFO", msg, t);
-			}
-		}
-
-		public void debug(Object msg, Throwable t) {
-			if (isDebugEnabled()) {
-				printOut("DEBUG", msg, t);
-			}
-		}
-
-		public void trace(Object msg, Throwable t) {
-			if (isTraceEnabled()) {
-				printOut("TRACE", msg, t);
-			}
-		}
-
-		private void printOut(String level, Object msg, Throwable t) {
-			System.out.printf("%s %s [%s] %s\n", 
+		private void output(PrintStream out, String level, Object msg, Throwable t) {
+			out.printf("%s %s [%s] %s\n", 
 				DateTimes.timeFormat().format(DateTimes.getDate()), 
 				level, 
 				Thread.currentThread().getName(), 
 				msg);
 			if (t != null) {
-				t.printStackTrace(System.out);
-			}
-		}
-
-		private void errorOut(String level, Object msg, Throwable t) {
-			System.err.printf("%s %s [%s] %s\n", 
-				DateTimes.timeFormat().format(DateTimes.getDate()), 
-				level, 
-				Thread.currentThread().getName(), 
-				msg);
-			if (t != null) {
-				t.printStackTrace(System.err);
+				t.printStackTrace(out);
 			}
 		}
 	}
