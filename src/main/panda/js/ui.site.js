@@ -241,7 +241,7 @@ function s_copyToClipboard(s) {
 }
 
 //------------------------------------------------------
-function s_detect_adblock(el) {
+function s_detect_adblock(el, block) {
 	var $e = $(el);
 	if ($e.length > 0 && $e.height() < 10) {
 		var msg = {
@@ -263,7 +263,7 @@ function s_detect_adblock(el) {
 				+ '<div class="modal-content"><div class="modal-body"></div></div>'
 				+ '</div></div>')
 				.find('.modal-body').html(m).end()
-				.appendTo('body').modal({ backdrop: 'static', keyboard: false });
+				.appendTo('body').modal(block ? { backdrop: 'static', keyboard: false } : {});
 	}
 }
 
@@ -279,16 +279,13 @@ function s_decorate(selector) {
 }
 
 function s_init(c) {
-	var p = [ 's:statics', 's:base', 's:google_analytics' ];
 	var m = { body: 'body' };
 	$('meta').each(function() {
 		var $t = $(this);
 		var a = $t.attr('property');
-		if (p.contains(a)) {
+		if (a && a.startsWith('s:')) {
 			var v = $t.attr('content');
-			if (v) {
-				m[a.substring(2)] = v;
-			}
+			m[a.substring(2)] = v;
 		}
 	});
 
