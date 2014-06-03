@@ -70,10 +70,10 @@ class Line {
 	 * 
 	 * @return <code>false</code> if end of line is reached
 	 */
-	// TODO use Util#skipSpaces
 	public boolean skipSpaces() {
-		while (this.pos < this.value.length() && this.value.charAt(this.pos) == ' ')
+		while (this.pos < this.value.length() && this.value.charAt(this.pos) == ' ') {
 			this.pos++;
+		}
 		return this.pos < this.value.length();
 	}
 
@@ -83,7 +83,6 @@ class Line {
 	 * @param end Delimiting character(s)
 	 * @return The read String or <code>null</code> if no 'end' char was reached.
 	 */
-	// TODO use Util#readUntil
 	public String readUntil(char... end) {
 		final StringBuilder sb = new StringBuilder();
 		int pos = this.pos;

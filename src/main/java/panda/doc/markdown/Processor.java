@@ -504,14 +504,15 @@ public class Processor {
 						line.pos += 2;
 						line.skipSpaces();
 						// Check for link syntax
-						if (line.value.charAt(line.pos) == '<') {
+						if (line.pos < line.value.length() && line.value.charAt(line.pos) == '<') {
 							line.pos++;
 							link = line.readUntil('>');
 							line.pos++;
 						}
-						else
+						else {
 							link = line.readUntil(' ', '\n');
-
+						}
+						
 						// Is link valid?
 						if (link != null) {
 							// Any non-whitespace characters following?
@@ -526,8 +527,9 @@ public class Processor {
 										isLinkRef = true;
 								}
 							}
-							else
+							else {
 								isLinkRef = true;
+							}
 						}
 					}
 				}
