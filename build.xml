@@ -220,9 +220,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<mkdir dir="../panda-web-ghp/${prj.version}"/>
 		<copy todir="../panda-web-ghp/${prj.version}" preservelastmodified="true">
 			<fileset dir="src/main">
-				<include name="panda/**"/>
-				<include name="bootstrap3/**"/>
-				<include name="jquery/**"/>
+				<include name="**"/>
 			</fileset>
 		</copy>
 	</target>
