@@ -1,11 +1,11 @@
 package panda.tool.codegen.bean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -363,7 +363,7 @@ public class Entity {
 	}
 
 	private void prepareUniqueKeyMap() {
-		uniqueKeyMap = new HashMap<String, List<EntityProperty>>();
+		uniqueKeyMap = new TreeMap<String, List<EntityProperty>>();
 
 		Set<String> us = new HashSet<String>();
 		for (EntityProperty p : getPropertyList()) {
@@ -397,15 +397,15 @@ public class Entity {
 	private void prepareForeignKeyMap() {
 		int i = 0;
 		
-		foreignKeyMap = new HashMap<String, List<EntityProperty>>();
+		foreignKeyMap = new TreeMap<String, List<EntityProperty>>();
 		for (EntityProperty p : getPropertyList()) {
 			if (Strings.isEmpty(p.getForeignKey()) && Strings.isEmpty(p.getForeignEntity())) {
 				continue;
 			}
 
-			String fk = Strings.isEmpty(p.getForeignKey()) ? "__" + (i++) : p.getForeignKey();
+			String fk = Strings.isEmpty(p.getForeignKey()) ? " __" + p.getForeignEntity() + '_' + (i++) : p.getForeignKey();
 			
-			List<EntityProperty> eps = foreignKeyMap.get(p.getForeignKey());
+			List<EntityProperty> eps = foreignKeyMap.get(fk);
 			if (eps == null) {
 				eps = new ArrayList<EntityProperty>();
 				foreignKeyMap.put(fk, eps);
@@ -421,9 +421,7 @@ public class Entity {
 		String target = null;
 		for (EntityProperty ep : eps) {
 			name = ep.getForeignKey();
-			if (Strings.isNotEmpty(ep.getForeignEntity())) {
-				target = ep.getForeignEntity();
-			}
+			target = ep.getForeignEntity();
 		}
 		
 		if (Strings.isEmpty(target)) {
@@ -508,7 +506,7 @@ public class Entity {
 	}
 	
 	private void prepareJoinMap() {
-		joinMap = new HashMap<String, List<EntityProperty>>();
+		joinMap = new TreeMap<String, List<EntityProperty>>();
 		for (EntityProperty p : getPropertyList()) {
 			if (Strings.isEmpty(p.getJoinName())) {
 				continue;
