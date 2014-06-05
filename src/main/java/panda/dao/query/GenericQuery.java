@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class GenericQuery<T> implements Query<T>, Cloneable {
 	protected Object target;
+	protected boolean distinct;
 	protected Operator conjunction = Operator.AND;
 	protected int start;
 	protected int limit;
@@ -162,6 +163,22 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (groups != null) {
 			groups.clear();
 		};
+	}
+
+	//---------------------------------------------------------------
+	//
+	/**
+	 * @return the distinct
+	 */
+	public boolean isDistinct() {
+		return distinct;
+	}
+
+	/**
+	 * @param distinct the distinct to set
+	 */
+	public void setDistinct(boolean distinct) {
+		this.distinct = distinct;
 	}
 
 	//---------------------------------------------------------------

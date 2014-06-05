@@ -288,6 +288,11 @@ public abstract class SqlExpert {
 	
 	protected void select(Sql sql, Query<?> query, String alias) {
 		sql.append("SELECT");
+
+		if (query.isDistinct()) {
+			sql.append(" DISTINCT");
+		}
+
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
 			boolean sel = false;

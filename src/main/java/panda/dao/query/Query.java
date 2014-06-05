@@ -33,6 +33,11 @@ public interface Query<T> {
 	public String getTable();
 
 	//---------------------------------------------------------------
+	// distinct
+	//
+	public boolean isDistinct();
+	
+	//---------------------------------------------------------------
 	// columns
 	//
 	/**

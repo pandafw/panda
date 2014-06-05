@@ -58,6 +58,11 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
+	public boolean isDistinct() {
+		return query.isDistinct();
+	}
+	
+	@Override
 	public Map<String, String> getColumns() {
 		return query.getColumns();
 	}
@@ -169,6 +174,16 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		return (Q)this;
 	}
 	
+	//----------------------------------------------------------------------
+	public Q distinct() {
+		return distinct(true);
+	}
+	
+	public Q distinct(boolean distinct) {
+		query.setDistinct(distinct);
+		return (Q)this;
+	}
+
 	//----------------------------------------------------------------------
 	// conjunction
 	//----------------------------------------------------------------------
