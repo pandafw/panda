@@ -17,6 +17,10 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+
+import panda.lang.Exceptions;
+import panda.lang.reflect.Methods;
 
 /**
  * SimplePooledConnection
@@ -596,25 +600,50 @@ public class SimplePooledConnection implements Connection {
 	}
 
 	//--------------------------------------------------------------------
-	// JDK 1.7 Methods below
+	// JDBC 4.1 JDK 1.7 Methods below
 	//--------------------------------------------------------------------
-//	public void setSchema(String schema) throws SQLException {
-//		getValidConnection().setSchema(schema);
-//	}
-//
-//	public String getSchema() throws SQLException {
-//		return getValidConnection().getSchema();
-//	}
-//
-//	public void abort(Executor executor) throws SQLException {
-//		getValidConnection().abort(executor);
-//	}
-//
-//	public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-//		getValidConnection().setNetworkTimeout(executor, milliseconds);
-//	}
-//
-//	public int getNetworkTimeout() throws SQLException {
-//		return getValidConnection().getNetworkTimeout();
-//	}
+	public void setSchema(String schema) throws SQLException {
+		try {
+			Methods.invokeMethod(getValidConnection(), "setSchema", schema);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public String getSchema() throws SQLException {
+		try {
+			return (String)Methods.invokeMethod(getValidConnection(), "getSchema");
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public void abort(Executor executor) throws SQLException {
+		try {
+			Methods.invokeMethod(getValidConnection(), "abort", executor);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+		try {
+			Methods.invokeMethod(getValidConnection(), "setNetworkTimeout", new Object[] { executor, milliseconds });
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public int getNetworkTimeout() throws SQLException {
+		try {
+			return (Integer)Methods.invokeMethod(getValidConnection(), "getNetworkTimeout");
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
 }
