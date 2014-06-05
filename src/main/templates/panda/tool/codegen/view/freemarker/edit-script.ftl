@@ -14,7 +14,7 @@
 //TODO
 			function ${action.name}_${f.name}_onPopupCallback(sd) {
 				<#if _popup.fields?has_content>
-				<#list _popup.fields?keys as fk>
+				<#list _popup.fields?keys?sort as fk>
 					<#list ui.fieldList as f2><#if f2.name == fk>
 						<#if f2.editTag?? && f2.editTag.name == "n.viewfield">
 				panda.viewfield("#${action.name}<#if !f2.actionField>_${actionDataFieldName}</#if>_${fk}").val(sd.${_popup.fields[fk]});
