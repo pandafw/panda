@@ -3,6 +3,7 @@ package panda.log.impl;
 
 import panda.lang.Arrays;
 import panda.log.Log;
+import panda.log.LogLevel;
 
 
 public abstract class AbstractLog implements Log {
@@ -26,13 +27,13 @@ public abstract class AbstractLog implements Log {
 		}
 	}
 
-	protected int level;
+	protected LogLevel level;
 	
-	protected abstract void log(int level, String msg, Throwable tx);
-
-	protected void log(int level, LogInfo info) {
-		log(level, info.msg, info.ex);
+	protected void safeLog(LogLevel level, LogInfo info) {
+		safeLog(level, info.msg, info.ex);
 	}
+
+	protected abstract void safeLog(LogLevel level, String msg, Throwable tx);
 	
 	private LogInfo makeInfo(Object obj, Throwable ex) {
 		return new LogInfo(String.valueOf(obj), ex);
@@ -75,156 +76,157 @@ public abstract class AbstractLog implements Log {
 
 	@Override
 	public boolean isFatalEnabled() {
-		return level <= Log.LEVEL_FATAL;
+		return level.ordinal() <= LogLevel.FATAL.ordinal();
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
-		return level <= Log.LEVEL_ERROR;
+		return level.ordinal() <= LogLevel.ERROR.ordinal();
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
-		return level <= Log.LEVEL_WARN;
+		return level.ordinal() <= LogLevel.WARN.ordinal();
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
-		return level <= Log.LEVEL_INFO;
+		return level.ordinal() <= LogLevel.INFO.ordinal();
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
-		return level <= Log.LEVEL_DEBUG;
+		return level.ordinal() <= LogLevel.DEBUG.ordinal();
 	}
 
 	@Override
 	public boolean isTraceEnabled() {
-		return level <= Log.LEVEL_TRACE;
+		return level.ordinal() <= LogLevel.TRACE.ordinal();
 	}
 	
 	@Override
 	public void trace(Object msg) {
 		if (isTraceEnabled()) {
-			log(LEVEL_TRACE, makeInfo(msg));
+			safeLog(LogLevel.TRACE, makeInfo(msg));
 		}
 	}
 
 	@Override
 	public void trace(Object msg, Throwable t) {
 		if (isTraceEnabled()) {
-			log(LEVEL_TRACE, makeInfo(msg, t));
+			safeLog(LogLevel.TRACE, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void tracef(String fmt, Object... args) {
 		if (isTraceEnabled()) {
-			log(LEVEL_TRACE, makeInfo(fmt, args));
+			safeLog(LogLevel.TRACE, makeInfo(fmt, args));
 		}
 	}
 
 	@Override
 	public void debug(Object msg) {
 		if (isDebugEnabled()) {
-			log(LEVEL_DEBUG, makeInfo(msg));
+			safeLog(LogLevel.DEBUG, makeInfo(msg));
 		}
 	}
 
 	@Override
 	public void debug(Object msg, Throwable t) {
 		if (isDebugEnabled()) {
-			log(LEVEL_DEBUG, makeInfo(msg, t));
+			safeLog(LogLevel.DEBUG, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void debugf(String fmt, Object... args) {
 		if (isDebugEnabled()) {
-			log(LEVEL_DEBUG, makeInfo(fmt, args));
+			safeLog(LogLevel.DEBUG, makeInfo(fmt, args));
 		}
 	}
 
 	@Override
 	public void info(Object msg) {
 		if (isInfoEnabled()) {
-			log(LEVEL_INFO, makeInfo(msg));
+			safeLog(LogLevel.INFO, makeInfo(msg));
 		}
 	}
 
 	@Override
 	public void info(Object msg, Throwable t) {
 		if (isInfoEnabled()) {
-			log(LEVEL_INFO, makeInfo(msg, t));
+			safeLog(LogLevel.INFO, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void infof(String fmt, Object... args) {
 		if (isInfoEnabled()) {
-			log(LEVEL_INFO, makeInfo(fmt, args));
+			safeLog(LogLevel.INFO, makeInfo(fmt, args));
 		}
 	}
 
 	@Override
 	public void warn(Object msg) {
 		if (isWarnEnabled()) {
-			log(LEVEL_WARN, makeInfo(msg));
+			safeLog(LogLevel.WARN, makeInfo(msg));
 		}
 	}
 
 	@Override
 	public void warn(Object msg, Throwable t) {
 		if (isWarnEnabled()) {
-			log(LEVEL_WARN, makeInfo(msg, t));
+			safeLog(LogLevel.WARN, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void warnf(String fmt, Object... args) {
 		if (isWarnEnabled()) {
-			log(LEVEL_WARN, makeInfo(fmt, args));
+			safeLog(LogLevel.WARN, makeInfo(fmt, args));
 		}
 	}
 
 	@Override
 	public void error(Object msg) {
-		if (isErrorEnabled())
-			log(LEVEL_ERROR, makeInfo(msg));
+		if (isErrorEnabled()) {
+			safeLog(LogLevel.ERROR, makeInfo(msg));
+		}
 	}
 
 	@Override
 	public void error(Object msg, Throwable t) {
 		if (isErrorEnabled()) {
-			log(LEVEL_ERROR, makeInfo(msg, t));
+			safeLog(LogLevel.ERROR, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void errorf(String fmt, Object... args) {
 		if (isErrorEnabled()) {
-			log(LEVEL_ERROR, makeInfo(fmt, args));
+			safeLog(LogLevel.ERROR, makeInfo(fmt, args));
 		}
 	}
 
 	@Override
 	public void fatal(Object msg) {
 		if (isFatalEnabled()) {
-			log(LEVEL_FATAL, makeInfo(msg));
+			safeLog(LogLevel.FATAL, makeInfo(msg));
 		}
 	}
 
 	@Override
 	public void fatal(Object msg, Throwable t) {
 		if (isFatalEnabled()) {
-			log(LEVEL_FATAL, makeInfo(msg, t));
+			safeLog(LogLevel.FATAL, makeInfo(msg, t));
 		}
 	}
 
 	@Override
 	public void fatalf(String fmt, Object... args) {
 		if (isFatalEnabled()) {
-			log(LEVEL_FATAL, makeInfo(fmt, args));
+			safeLog(LogLevel.FATAL, makeInfo(fmt, args));
 		}
 	}
 }

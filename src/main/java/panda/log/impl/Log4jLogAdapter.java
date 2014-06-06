@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogLevel;
 
 /**
  * Apache log4j adapter
@@ -20,9 +21,8 @@ public class Log4jLogAdapter implements LogAdapter {
 		return new Log4JLogger(name);
 	}
 
-	static class Log4JLogger extends AbstractLog {
+	private static class Log4JLogger extends AbstractLog {
 		public static final String SUPER_FQCN = AbstractLog.class.getName();
-		public static final String SELF_FQCN = Log4JLogger.class.getName();
 
 		private Logger logger;
 
@@ -30,52 +30,51 @@ public class Log4jLogAdapter implements LogAdapter {
 			logger = Logger.getLogger(className);
 			
 			if (logger.isEnabledFor(Level.TRACE)) {
-				level = Log.LEVEL_TRACE;
+				level = LogLevel.TRACE;
 			}
 			else if (logger.isEnabledFor(Level.DEBUG)) {
-				level = Log.LEVEL_DEBUG;
+				level = LogLevel.DEBUG;
 			}
 			else if (logger.isEnabledFor(Level.INFO)) {
-				level = Log.LEVEL_INFO;
+				level = LogLevel.INFO;
 			}
 			else if (logger.isEnabledFor(Level.WARN)) {
-				level = Log.LEVEL_WARN;
+				level = LogLevel.WARN;
 			}
 			else if (logger.isEnabledFor(Level.ERROR)) {
-				level = Log.LEVEL_ERROR;
+				level = LogLevel.ERROR;
 			}
 			else if (logger.isEnabledFor(Level.FATAL)) {
-				level = Log.LEVEL_FATAL;
+				level = LogLevel.FATAL;
 			}
 			else {
-				level = Log.LEVEL_TRACE;
+				level = LogLevel.TRACE;
 			}
 		}
 
-		@Override
-		protected void log(int level, String msg, Throwable tx) {
-			switch (level) {
-			case LEVEL_FATAL:
-				logger.log(SUPER_FQCN, Level.FATAL, msg, tx);
-				break;
-			case LEVEL_ERROR:
-				logger.log(SUPER_FQCN, Level.ERROR, msg, tx);
-				break;
-			case LEVEL_WARN:
-				logger.log(SUPER_FQCN, Level.WARN, msg, tx);
-				break;
-			case LEVEL_INFO:
-				logger.log(SUPER_FQCN, Level.INFO, msg, tx);
-				break;
-			case LEVEL_DEBUG:
-				logger.log(SUPER_FQCN, Level.DEBUG, msg, tx);
-				break;
-			case LEVEL_TRACE:
-				logger.log(SUPER_FQCN, Level.TRACE, msg, tx);
-				break;
-			default:
-				break;
+		protected Level toLog4jLevel(LogLevel level) {
+			if (level == LogLevel.DEBUG) {
+				return Level.DEBUG;
 			}
+			if (level == LogLevel.INFO) {
+				return Level.INFO;
+			}
+			if (level == LogLevel.WARN) {
+				return Level.WARN;
+			}
+			if (level == LogLevel.ERROR) {
+				return Level.ERROR;
+			}
+			if (level == LogLevel.FATAL) {
+				return Level.FATAL;
+			}
+			return Level.TRACE;
+		}
+		
+		@Override
+		protected void safeLog(LogLevel level, String msg, Throwable tx) {
+			Level lvl = toLog4jLevel(level);
+			logger.log(SUPER_FQCN, lvl, msg, tx);
 		}
 	}
 }

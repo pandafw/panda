@@ -7,25 +7,27 @@ import java.util.Properties;
 
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogLevel;
 
 
 public abstract class AbstractLogAdapter implements LogAdapter {
-	private int rootLvl = Log.LEVEL_TRACE;
+	private LogLevel rootLvl = LogLevel.TRACE;
 
-	private Map<String, Integer> levels;
+	private Map<String, LogLevel> levels;
 
 	@Override
 	public void init(Properties props) {
-		rootLvl = Log.LEVEL_TRACE;
+		rootLvl = LogLevel.TRACE;
 		
-		levels = new HashMap<String, Integer>();
+		String self = getClass().getName() + ".";
+		
+		levels = new HashMap<String, LogLevel>();
 		for (Entry<Object, Object> en : props.entrySet()) {
 			String key = en.getKey().toString();
 			if (key.startsWith("log.")) {
 				key = key.substring(4);
-				int lvl = parseLevel(en.getValue().toString());
+				LogLevel lvl = LogLevel.parse(en.getValue().toString());
 				if ("*".equals(key)) {
 					rootLvl = lvl;
 				}
@@ -33,37 +35,17 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 					levels.put(key, lvl);
 				}
 			}
+			else if (key.startsWith(self)) {
+				key = key.substring(self.length());
+				setProperty(key, en.getKey().toString());
+			}
 		}
 	}
 	
-	private int parseLevel(String level) {
-		if ("debug".equalsIgnoreCase(level)) {
-			return Log.LEVEL_DEBUG;
-		}
-		if ("info".equalsIgnoreCase(level)) {
-			return Log.LEVEL_INFO;
-		}
-		if ("warn".equalsIgnoreCase(level)) {
-			return Log.LEVEL_WARN;
-		}
-		if ("error".equalsIgnoreCase(level)) {
-			return Log.LEVEL_ERROR;
-		}
-		if ("fatal".equalsIgnoreCase(level)) {
-			return Log.LEVEL_FATAL;
-		}
-		return Log.LEVEL_TRACE;
-	}
-
-	protected void LogLogInfo(String msg) {
-		System.out.println(msg);
-	}
-
-	protected void LogLogError(String msg) {
-		System.err.println(msg);
+	protected void setProperty(String name, String value) {
 	}
 	
-	protected int getLogLevel(String name) {
+	protected LogLevel getLogLevel(String name) {
 		if (Collections.isNotEmpty(levels) && Strings.isNotEmpty(name)) {
 			String key = "";
 			for (String k : levels.keySet()) {
@@ -74,7 +56,7 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 				}
 			}
 
-			Integer lvl = levels.get(key);
+			LogLevel lvl = levels.get(key);
 			if (lvl != null) {
 				return lvl;
 			}

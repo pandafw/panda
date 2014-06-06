@@ -1277,38 +1277,6 @@ public class StringsTest {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	// intentional test of deprecated method
-	@Test
-	public void testChomp() {
-
-		final String[][] chompCases = { { FOO_UNCAP + "\r\n", FOO_UNCAP }, { FOO_UNCAP + "\n", FOO_UNCAP },
-				{ FOO_UNCAP + "\r", FOO_UNCAP }, { FOO_UNCAP + " \r", FOO_UNCAP + " " }, { FOO_UNCAP, FOO_UNCAP },
-				{ FOO_UNCAP + "\n\n", FOO_UNCAP + "\n" }, { FOO_UNCAP + "\r\n\r\n", FOO_UNCAP + "\r\n" },
-				{ "foo\nfoo", "foo\nfoo" }, { "foo\n\rfoo", "foo\n\rfoo" }, { "\n", "" }, { "\r", "" }, { "a", "a" },
-				{ "\r\n", "" }, { "", "" }, { null, null }, { FOO_UNCAP + "\n\r", FOO_UNCAP + "\n" } };
-		for (final String[] chompCase : chompCases) {
-			final String original = chompCase[0];
-			final String expectedResult = chompCase[1];
-			assertEquals("chomp(String) failed", expectedResult, Strings.chomp(original));
-		}
-
-		assertEquals("chomp(String, String) failed", "foo", Strings.chomp("foobar", "bar"));
-		assertEquals("chomp(String, String) failed", "foobar", Strings.chomp("foobar", "baz"));
-		assertEquals("chomp(String, String) failed", "foo", Strings.chomp("foo", "foooo"));
-		assertEquals("chomp(String, String) failed", "foobar", Strings.chomp("foobar", ""));
-		assertEquals("chomp(String, String) failed", "foobar", Strings.chomp("foobar", null));
-		assertEquals("chomp(String, String) failed", "", Strings.chomp("", "foo"));
-		assertEquals("chomp(String, String) failed", "", Strings.chomp("", null));
-		assertEquals("chomp(String, String) failed", "", Strings.chomp("", ""));
-		assertEquals("chomp(String, String) failed", null, Strings.chomp(null, "foo"));
-		assertEquals("chomp(String, String) failed", null, Strings.chomp(null, null));
-		assertEquals("chomp(String, String) failed", null, Strings.chomp(null, ""));
-		assertEquals("chomp(String, String) failed", "", Strings.chomp("foo", "foo"));
-		assertEquals("chomp(String, String) failed", " ", Strings.chomp(" foo", "foo"));
-		assertEquals("chomp(String, String) failed", "foo ", Strings.chomp("foo ", "foo"));
-	}
-
 	// -----------------------------------------------------------------------
 	@Test
 	public void testRightPad_StringInt() {

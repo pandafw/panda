@@ -95,7 +95,7 @@ public final class Logs {
 		if (adapter == null) {
 			String[] adapters = new String[] {
 					ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter",
-					"panda.android.log.AndroidLogAdapter"
+					"panda.android.log.LogCatAdapter"
 			};
 
 			ClassLoader cl = ClassLoaders.getClassLoader();

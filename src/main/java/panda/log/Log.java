@@ -4,14 +4,6 @@ package panda.log;
  * @author yf.frank.wang@gmail.com
  */
 public interface Log {
-	public static final int LEVEL_TRACE = 0;
-	public static final int LEVEL_DEBUG = 10;
-	public static final int LEVEL_INFO = 20;
-	public static final int LEVEL_WARN = 30;
-	public static final int LEVEL_ERROR = 40;
-	public static final int LEVEL_FATAL = 50;
-
-
 	boolean isTraceEnabled();
 	boolean isInfoEnabled();
 	boolean isDebugEnabled();
