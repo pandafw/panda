@@ -436,7 +436,7 @@ public class Strings {
 			return null;
 		}
 		String s = strip(str, null);
-		return s.isEmpty() ? null : s;
+		return (s == null || s.length() == 0) ? null : s;
 	}
 
 	/**
@@ -4466,6 +4466,34 @@ public class Strings {
 		return str;
 	}
 
+	public static String removeStart(final String str, final char remove) {
+		if (isEmpty(str)) {
+			return str;
+		}
+		
+		for (int i = 0; i < str.length(); i++) {
+			if (remove != str.charAt(i)) {
+				return str.substring(i);
+			}
+		}
+
+		return str;
+	}
+
+	public static String removeEnd(final String str, final char remove) {
+		if (isEmpty(str)) {
+			return str;
+		}
+		
+		for (int i = str.length() - 1; i >= 0; i--) {
+			if (remove != str.charAt(i)) {
+				return str.substring(0, i + 1);
+			}
+		}
+
+		return str;
+	}
+
 	/**
 	 * <p>
 	 * Removes all occurrences of a substring from within the source string.
@@ -4524,6 +4552,21 @@ public class Strings {
 		int pos = 0;
 		for (int i = 0; i < chars.length; i++) {
 			if (chars[i] != remove) {
+				chars[pos++] = chars[i];
+			}
+		}
+		return new String(chars, 0, pos);
+	}
+
+	public static String removeChars(final String str, final String remove) {
+		if (isEmpty(str) || isEmpty(remove)) {
+			return str;
+		}
+
+		final char[] chars = str.toCharArray();
+		int pos = 0;
+		for (int i = 0; i < chars.length; i++) {
+			if (remove.indexOf(chars[i]) != INDEX_NOT_FOUND) {
 				chars[pos++] = chars[i];
 			}
 		}
@@ -5197,41 +5240,6 @@ public class Strings {
 			lastIdx++;
 		}
 		return str.substring(0, lastIdx);
-	}
-
-	/**
-	 * <p>
-	 * Removes {@code separator} from the end of {@code str} if it's there, otherwise leave it
-	 * alone.
-	 * </p>
-	 * <p>
-	 * NOTE: This method changed in version 2.0. It now more closely matches Perl chomp. For the
-	 * previous behavior, use {@link #substringBeforeLast(String, String)}. This method uses
-	 * {@link String#endsWith(String)}.
-	 * </p>
-	 * 
-	 * <pre>
-	 * Strings.chomp(null, *)         = null
-	 * Strings.chomp("", *)           = ""
-	 * Strings.chomp("foobar", "bar") = "foo"
-	 * Strings.chomp("foobar", "baz") = "foobar"
-	 * Strings.chomp("foo", "foo")    = ""
-	 * Strings.chomp("foo ", "foo")   = "foo "
-	 * Strings.chomp(" foo", "foo")   = " "
-	 * Strings.chomp("foo", "foooo")  = "foo"
-	 * Strings.chomp("foo", "")       = "foo"
-	 * Strings.chomp("foo", null)     = "foo"
-	 * </pre>
-	 * 
-	 * @param str the String to chomp from, may be null
-	 * @param separator separator String, may be null
-	 * @return String without trailing separator, {@code null} if null String input
-	 * @deprecated This feature will be removed in Lang 4.0, use
-	 *             {@link Strings#removeEnd(String, String)} instead
-	 */
-	@Deprecated
-	public static String chomp(final String str, final String separator) {
-		return removeEnd(str, separator);
 	}
 
 	// Chopping
