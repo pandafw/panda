@@ -13,8 +13,7 @@ ${s}#if action.hasErrors()>
 <@footer/>
 ${s}#else>
 ${s}@p.text var="_fn_" name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text>
-${s}@p.head charset="UTF-8" bom="true" contentType="text/comma-separated-values"
-	noCache="true" attachment="true" filename="%{#_fn_ + '.csv'}"/>
+${s}@p.head expiry="0" charset="UTF-8" bom="true" filename="%{#_fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
 ${s}#assign _columns_ = [<#rt/>
 <#list ui.displayColumnList as c>
 {
