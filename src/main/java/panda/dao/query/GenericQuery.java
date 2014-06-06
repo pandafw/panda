@@ -64,6 +64,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		conjunction = query.getConjunction();
 		start = query.getStart();
 		limit = query.getLimit();
+		distinct = query.isDistinct();
 
 		if (query.hasColumns()) {
 			columns = new LinkedHashMap<String, String>();
