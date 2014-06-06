@@ -40,8 +40,6 @@ import panda.log.Logs;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class Classes {
-	private static final Log log = Logs.getLog(Classes.class);
-	
 	public final static Class[] EMPTY_CLASS_ARRAY = new Class[0];
 
 	public final static String PACKAGE_INFO_CLASS = "package-info.class";
@@ -2387,6 +2385,8 @@ public abstract class Classes {
 			throw new IllegalArgumentException("No packages supplied!");
 		}
 
+		final Log log = Logs.getLog(Classes.class);
+		
 		List<Class<?>> clss = new ArrayList<Class<?>>();
 		URL[] urls = ((URLClassLoader)ClassLoaders.getClassLoader()).getURLs();
 		for (URL url : urls) {

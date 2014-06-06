@@ -2344,6 +2344,10 @@ public class Files {
 		}
 	}
 
+	public static void makeDirs(final String directory) throws IOException {
+		makeDirs(new File(directory));
+	}
+	
 	/**
 	 * Makes a directory, including any necessary but nonexistent parent directories. If a file
 	 * already exists with specified name but it is not a directory then an IOException is thrown.

@@ -37,7 +37,7 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 			}
 			else if (key.startsWith(self)) {
 				key = key.substring(self.length());
-				setProperty(key, en.getKey().toString());
+				setProperty(key, en.getValue().toString());
 			}
 		}
 	}

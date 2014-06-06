@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import panda.io.FileNames;
+import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -58,11 +59,14 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		if (writer == null || now > next) {
 			if (writer != null) {
 				Streams.safeClose(writer);
+				writer = null;
 			}
 			
 			String date = sdf.format(new Date(now));
 			String file = FileNames.removeExtension(path) + '.' + date + '.' + FileNames.getExtension(path);
 			try {
+				Files.makeDirs(FileNames.getParent(file));
+
 				FileOutputStream fos = new FileOutputStream(file, true);
 				writer = new OutputStreamWriter(fos, "UTF-8");
 				
@@ -79,9 +83,11 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		}
 	}
 
-	protected synchronized void safeLog(LogLevel level, String msg) {
+	protected synchronized void print(String msg) {
 		try {
 			rollOver();
+			writer.write(msg);
+			writer.flush();
 		}
 		catch (Throwable e) {
 			e.printStackTrace();
@@ -113,10 +119,10 @@ public class FileLogAdapter extends AbstractLogAdapter {
 				.append('\n');
 
 			if (t != null) {
-				sb.append(Exceptions.getStackTrace(t));
+				sb.append(Exceptions.getStackTrace(t)).append('\n');
 			}
 
-			FileLogAdapter.this.safeLog(level, msg);
+			FileLogAdapter.this.print(sb.toString());
 		}
 	}
 }
