@@ -14,7 +14,6 @@ import panda.io.Streams;
 import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Strings;
-import panda.lang.time.DateTimes;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.UserAgent;
@@ -288,23 +287,12 @@ public class HttpServletSupport {
 			response.setHeader(HttpHeader.EXPIRES, sexp);
 		}
 		else if (expiry == 0 && noFileCache) {
-			setResponseNoCache(response);
+			HttpServlets.setResponseNoCache(response);
 		}
 
 		if (Boolean.TRUE.equals(bom) && Charsets.isUnicodeCharset(charset)) {
 			writeResponseBom();
 		}
-	}
-
-	/**
-	 * Set no cache to response header
-	 * @param response HttpServletResponse
-	 */
-	public static void setResponseNoCache(HttpServletResponse response) {
-		response.setHeader(HttpHeader.CACHE_CONTROL, HttpHeader.CACHE_CONTROL_NOCACHE);
-		response.setHeader(HttpHeader.PRAGMA, HttpHeader.CACHE_CONTROL_NOCACHE);
-		String expires = HttpDates.format(DateTimes.getDate());
-		response.setHeader(HttpHeader.EXPIRES, expires);
 	}
 
 	public void writeResponseBom() throws IOException {
