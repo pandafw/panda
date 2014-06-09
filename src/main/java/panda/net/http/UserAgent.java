@@ -27,8 +27,10 @@ public class UserAgent {
 	public static final String IPOD = "iPod";
 	public static final String ANDROID = "Android";
 	
-	public static final String GOOGLEBOT = "Googlebot";
-	public static final String BINGBOT = "bingbot";
+	private static final String[] ROBOTS = { 
+		"robot", "Googlebot", "bingbot", "yahoo", "baidu", 
+		"msnbot", "ask.", "naver.", "DotBot", "Yandex", "goo.ne.jp"
+	};
 
 	public static final String MOBILE = "mobile";
 	public static final String ROBOT = "robot";
@@ -42,63 +44,6 @@ public class UserAgent {
 		init();
 	}
 
-	private void init() {
-		browsers = new HashMap<String, String>();
-		
-		if (Strings.isEmpty(userAgent)) {
-			return;
-		}
-		
-		parse(CHROME);
-		parse(FIREFOX);
-		parse(MSIE);
-		parse(NETSCAPE);
-		parse(OPERA);
-		parse(WEBKIT);
-		parse(SAFARI);
-		parse(IPHONE);
-		parse(IPAD);
-		parse(IPOD);
-		parse(ANDROID);
-		
-		parse(GOOGLEBOT);
-		parse(BINGBOT);
-		
-		if (isGooglebot() || isBingbot()) {
-			browsers.put(ROBOT, "");
-		}
-		if (isAndroid() || isIphone() || isIpad() || isIpod()) {
-			browsers.put(MOBILE, "");
-		}
-	}
-	
-	private void parse(String client) {
-		int i = userAgent.indexOf(client);
-		if (i >= 0) {
-			for (i += client.length(); i < userAgent.length(); i++) {
-				char c = userAgent.charAt(i);
-				if (Character.isDigit(c)) {
-					break;
-				}
-			}
-			
-			int j = i;
-			for (; j < userAgent.length(); j++) {
-				char c = userAgent.charAt(j);
-				if (!Character.isDigit(c) && c != '.') {
-					break;
-				}
-			}
-			
-			String ver = "";
-			if (i < userAgent.length()) {
-				ver = userAgent.substring(i, j);
-			}
-			
-			browsers.put(client, ver);
-		}
-	}
-	
 	/**
 	 * @return true if user agent is Chrome
 	 */
@@ -156,20 +101,6 @@ public class UserAgent {
 	}
 
 	/**
-	 * @return true if user agent is Googlebot
-	 */
-	public boolean isGooglebot() {
-		return browsers.containsKey(GOOGLEBOT);
-	}
-
-	/**
-	 * @return true if user agent is Bingbot
-	 */
-	public boolean isBingbot() {
-		return browsers.containsKey(BINGBOT);
-	}
-
-	/**
 	 * @return true if user agent is Android
 	 */
 	public boolean isAndroid() {
@@ -204,6 +135,70 @@ public class UserAgent {
 		return browsers.containsKey("ios");
 	}
 
+	private void init() {
+		browsers = new HashMap<String, String>();
+		
+		if (Strings.isEmpty(userAgent)) {
+			return;
+		}
+		
+		parse(CHROME);
+		parse(FIREFOX);
+		parse(MSIE);
+		parse(NETSCAPE);
+		parse(OPERA);
+		parse(WEBKIT);
+		parse(SAFARI);
+		parse(IPHONE);
+		parse(IPAD);
+		parse(IPOD);
+		parse(ANDROID);
+		
+		if (checkRobot()) {
+			browsers.put(ROBOT, "");
+		}
+		
+		if (isAndroid() || isIphone() || isIpad() || isIpod()) {
+			browsers.put(MOBILE, "");
+		}
+	}
+	
+	private void parse(String client) {
+		int i = userAgent.indexOf(client);
+		if (i >= 0) {
+			for (i += client.length(); i < userAgent.length(); i++) {
+				char c = userAgent.charAt(i);
+				if (Character.isDigit(c)) {
+					break;
+				}
+			}
+			
+			int j = i;
+			for (; j < userAgent.length(); j++) {
+				char c = userAgent.charAt(j);
+				if (!Character.isDigit(c) && c != '.') {
+					break;
+				}
+			}
+			
+			String ver = "";
+			if (i < userAgent.length()) {
+				ver = userAgent.substring(i, j);
+			}
+			
+			browsers.put(client, ver);
+		}
+	}
+	
+	private boolean checkRobot() {
+		for (String s : ROBOTS) {
+			if (userAgent.indexOf(s) >= 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private Integer parseMajorVersion(String ver) {
 		if (ver != null) {
 			int i = ver.indexOf('.');
