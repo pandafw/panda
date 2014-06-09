@@ -46,6 +46,10 @@ public enum DB {
 	 */
 	DERBY,
 	/**
+	 * Mongo
+	 */
+	MONGO,
+	/**
 	 * Google App Engine Data Store
 	 */
 	GAE

@@ -13,6 +13,7 @@
 	<classpathentry kind="lib" path="lib/jdbc/derby.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/h2.jar" sourcepath="lib/jdbc/h2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/mongo-java-driver.jar" sourcepath="lib/jdbc/mongo-java-driver-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/postgresql.jar" sourcepath="lib/jdbc/postgresql-sources.jar"/>

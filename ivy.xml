@@ -33,6 +33,7 @@
 		<dependency org="com.oracle" name="ojdbc6" rev="11.2.0.4" conf="jdbc->master,sources" />
 		<dependency org="org.apache.derby" name="derby" rev="10.10.1.1" conf="jdbc->master,sources" />
 		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.0" conf="jdbc->master,sources" />
+		<dependency org="org.mongodb" name="mongo-java-driver" rev="2.12.2" conf="jdbc->master,sources" />
 		<dependency org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4" conf="jdbc->master,sources" />
 		<dependency org="org.xerial" name="sqlite-jdbc4" rev="3.8.2-SNAPSHOT" conf="jdbc->master,sources" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
