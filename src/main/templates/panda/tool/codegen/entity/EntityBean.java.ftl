@@ -119,14 +119,14 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 </#list>
 
 	/**
-	 * set properties from the specified object.
+	 * copy properties from the specified object.
 	 */
-	public void set(${name} src) {
+	public void copy(${name} src) {
 <#list entity.propertyList as p>
 		this.${p.name} = src.${p.name};
 </#list>
 <#if entity.baseBeanClass?has_content>
-		super.set(src);
+		super.copy(src);
 </#if>
 	}
 
@@ -141,7 +141,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	public ${name} clone() {
 		${name} copy = new ${name}();
 		
-		copy.set(this);
+		copy.copy(this);
 
 		return copy;
 	}
