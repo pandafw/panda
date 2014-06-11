@@ -9,33 +9,6 @@ import panda.lang.Strings;
  * @author yf.frank.wang@gmail.com
  */
 public enum Operator {
-	/**
-	 * AND = "AND";
-	 */
-	AND,
-	/**
-	 * OR = "OR";
-	 */
-	OR,
-	/**
-	 * OPEN_PAREN = "(";
-	 */
-	BEG_PAREN {
-		public String toString() {
-			return "(";
-		}
-	},
-	/**
-	 * CLOSE_PAREN = ")";
-	 */
-	END_PAREN {
-		public String toString() {
-			return ")";
-		}
-	},
-	/**
-	 * "IS NULL";
-	 */
 	IS_NULL {
 		public String toString() {
 			return "IS NULL";

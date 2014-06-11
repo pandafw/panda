@@ -1101,10 +1101,11 @@ public abstract class AbstractDao implements Dao {
 	 * @return the inserted record
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T insert(T obj) {
 		assertObject(obj);
 
-		Entity<?> entity = getEntity(obj.getClass());
+		Entity<T> entity = getEntity((Class<T>)obj.getClass());
 		assertTable(entity);
 		
 		autoStart();
@@ -1122,7 +1123,7 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected abstract <T> T insert(Entity<?> entity, T obj) throws Exception;
+	protected abstract <T> T insert(Entity<T> entity, T obj) throws Exception;
 
 	/**
 	 * insert record collections.

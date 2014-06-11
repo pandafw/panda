@@ -2,6 +2,7 @@ package panda.dao.sql.expert;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,13 +10,14 @@ import java.util.Map.Entry;
 import panda.castor.Castors;
 import panda.dao.DB;
 import panda.dao.DaoClient;
-import panda.dao.DatabaseMeta;
 import panda.dao.DaoNamings;
+import panda.dao.DatabaseMeta;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
-import panda.dao.query.Expression;
+import panda.dao.query.Filter;
+import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Join;
 import panda.dao.query.Operator;
 import panda.dao.query.Order;
@@ -379,7 +381,7 @@ public abstract class SqlExpert {
 			sql.append(' ').append(join.getType()).append(" JOIN ");
 
 			Query<?> jq = join.getQuery();
-			if (jq.hasConditions()) {
+			if (jq.hasFilters()) {
 				sql.append('(');
 				sql.append(select(jq));
 				sql.append(')');
@@ -420,63 +422,91 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void where(Sql sql, Query<?> query, String alias) {
-		if (!query.hasConditions()) {
-			return;
-		}
-		
-		sql.append(" WHERE");
-		
-		Entity<?> entity = query.getEntity();
-		if (entity != null) {
-			for (Expression exp : query.getExpressions()) {
-				if (exp instanceof Expression.ValueCompare) {
-					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-					EntityField ef = getEntityField(entity, evc.getField(), "where");
-					whereValueCompare(sql, alias, ef.getColumn(), evc);
-				}
-				else if (exp instanceof Expression.FieldCompare) {
-					Expression.FieldCompare efc = (Expression.FieldCompare)exp;
-					EntityField ef = getEntityField(entity, efc.getField(), "where");
-					EntityField ef2 = getEntityField(entity, efc.getValue(), "compare");
-					sql.append(' ').append(escapeColumn(alias, ef.getColumn()))
-						.append(efc.getOperator()).append(escapeColumn(alias, ef2.getColumn()));
-				}
-				else if (exp instanceof Expression.Simple) {
-					Expression.Simple es = (Expression.Simple)exp;
-					EntityField ef = getEntityField(entity, es.getField(), "simple");
-					sql.append(' ').append(escapeColumn(alias, ef.getColumn())).append(' ').append(es.getOperator());
-				}
-				else {
-					sql.append(' ').append(exp.toString());
-				}
+	private void whereCompositeFilter(Sql sql, Entity<?> entity, String alias, ComboFilter cf) {
+		Iterator<Filter> it = cf.getFilters().iterator();
+		while (it.hasNext()) {
+			Filter exp = it.next();
+			if (exp instanceof Filter.ValueFilter) {
+				Filter.ValueFilter evc = (Filter.ValueFilter)exp;
+				EntityField ef = getEntityField(entity, evc.getField(), "where");
+				whereValueFilter(sql, alias, ef.getColumn(), evc);
 			}
-		}
-		else {
-			for (Expression exp : query.getExpressions()) {
-				if (exp instanceof Expression.ValueCompare) {
-					Expression.ValueCompare evc = (Expression.ValueCompare)exp;
-					whereValueCompare(sql, alias, evc.getField(), evc);
-				}
-				else {
-					sql.append(' ').append(exp.toString());
-				}
+			else if (exp instanceof Filter.ReferFilter) {
+				Filter.ReferFilter efc = (Filter.ReferFilter)exp;
+				EntityField ef = getEntityField(entity, efc.getField(), "where");
+				EntityField ef2 = getEntityField(entity, efc.getRefer(), "compare");
+				sql.append(escapeColumn(alias, ef.getColumn()))
+					.append(efc.getOperator()).append(escapeColumn(alias, ef2.getColumn()));
+			}
+			else if (exp instanceof Filter.SimpleFilter) {
+				Filter.SimpleFilter es = (Filter.SimpleFilter)exp;
+				EntityField ef = getEntityField(entity, es.getField(), "simple");
+				sql.append(escapeColumn(alias, ef.getColumn())).append(' ').append(es.getOperator());
+			}
+			else if (exp instanceof Filter.ComboFilter) {
+				// AND/OR
+				sql.append('(');
+				whereCompositeFilter(sql, entity, alias, (ComboFilter)exp);
+				sql.append(')');
+			}
+			if (it.hasNext()) {
+				sql.append(' ').append(cf.getLogical()).append(' ');
 			}
 		}
 	}
 	
-	protected void whereValueCompare(Sql sql, String table, String column, Expression.ValueCompare evc) {
-		sql.append(' ').append(escapeColumn(table, column)).append(' ');
+	private void whereCompositeFilter(Sql sql, String alias, ComboFilter cf) {
+		Iterator<Filter> it = cf.getFilters().iterator();
+		while (it.hasNext()) {
+			Filter f = it.next();
+			if (f instanceof Filter.ValueFilter) {
+				Filter.ValueFilter vf = (Filter.ValueFilter)f;
+				whereValueFilter(sql, alias, vf.getField(), vf);
+			}
+			else if (f instanceof Filter.ReferFilter || f instanceof Filter.SimpleFilter) {
+				sql.append(f.toString());
+			}
+			else if (f instanceof Filter.ComboFilter) {
+				// AND/OR
+				sql.append('(');
+				whereCompositeFilter(sql, alias, (ComboFilter)f);
+				sql.append(')');
+			}
 
-		Operator op = evc.getOperator();
+			if (it.hasNext()) {
+				sql.append(' ').append(cf.getLogical()).append(' ');
+			}
+		}
+	}
+
+	protected void where(Sql sql, Query<?> query, String alias) {
+		if (!query.hasFilters()) {
+			return;
+		}
+		
+		sql.append(" WHERE ");
+		
+		Entity<?> entity = query.getEntity();
+		if (entity != null) {
+			whereCompositeFilter(sql, entity, alias, query.getFilters());
+		}
+		else {
+			whereCompositeFilter(sql, alias, query.getFilters());
+		}
+	}
+	
+	protected void whereValueFilter(Sql sql, String table, String column, Filter.ValueFilter vf) {
+		sql.append(escapeColumn(table, column)).append(' ');
+
+		Operator op = vf.getOperator();
 		if (op == Operator.BETWEEN || op == Operator.NOT_BETWEEN) {
 			sql.append(op).append(" ? AND ?");
-			sql.addParam(evc.getValue(0));
-			sql.addParam(evc.getValue(1));
+			sql.addParam(vf.getValue(0));
+			sql.addParam(vf.getValue(1));
 		}
 		else if (op == Operator.IN || op == Operator.NOT_IN) {
 			sql.append(op).append('(');
-			for (Object v : Iterators.asIterable(evc.getValue())) {
+			for (Object v : Iterators.asIterable(vf.getValue())) {
 				sql.append('?').append(',');
 				sql.addParam(v);
 			}
@@ -484,32 +514,32 @@ public abstract class SqlExpert {
 		}
 		else if (op == Operator.MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.stringLike((String)evc.getValue()));
+			sql.addParam(Sqls.stringLike((String)vf.getValue()));
 		}
 		else if (op == Operator.NOT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.stringLike((String)evc.getValue()));
+			sql.addParam(Sqls.stringLike((String)vf.getValue()));
 		}
 		else if (op == Operator.LEFT_MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.startsLike((String)evc.getValue()));
+			sql.addParam(Sqls.startsLike((String)vf.getValue()));
 		}
 		else if (op == Operator.NOT_LEFT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.startsLike((String)evc.getValue()));
+			sql.addParam(Sqls.startsLike((String)vf.getValue()));
 		}
 		else if (op == Operator.RIGHT_MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.endsLike((String)evc.getValue()));
+			sql.addParam(Sqls.endsLike((String)vf.getValue()));
 		}
 		else if (op == Operator.NOT_RIGHT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.endsLike((String)evc.getValue()));
+			sql.addParam(Sqls.endsLike((String)vf.getValue()));
 		}
 		else {
 			sql.append(op).append(' ');
 			sql.append('?');
-			sql.addParam(evc.getValue());
+			sql.addParam(vf.getValue());
 		}
 	}
 	

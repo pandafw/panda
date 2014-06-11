@@ -1,9 +1,10 @@
 package panda.dao.query;
 
-import panda.dao.entity.Entity;
-
 import java.util.List;
 import java.util.Map;
+
+import panda.dao.entity.Entity;
+import panda.dao.query.Filter.ComboFilter;
 
 /**
  * 
@@ -130,17 +131,12 @@ public interface Query<T> {
 	// conditions
 	//
 	/**
-	 * @return conjunction
+	 * @return filters
 	 */
-	public Operator getConjunction();
+	public ComboFilter getFilters();
 
 	/**
-	 * @return expressions
+	 * @return true if has filters
 	 */
-	public List<Expression> getExpressions();
-
-	/**
-	 * @return true if has conditions
-	 */
-	public boolean hasConditions();
+	public boolean hasFilters();
 }

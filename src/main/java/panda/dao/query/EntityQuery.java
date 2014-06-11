@@ -1,10 +1,11 @@
 package panda.dao.query;
 
-import panda.dao.entity.Entity;
-import panda.lang.Objects;
-
 import java.util.List;
 import java.util.Map;
+
+import panda.dao.entity.Entity;
+import panda.dao.query.Filter.ComboFilter;
+import panda.lang.Objects;
 
 
 @SuppressWarnings("unchecked")
@@ -154,18 +155,13 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
-	public Operator getConjunction() {
-		return query.getConjunction();
+	public ComboFilter getFilters() {
+		return query.getFilters();
 	}
 
 	@Override
-	public List<Expression> getExpressions() {
-		return query.getExpressions();
-	}
-
-	@Override
-	public boolean hasConditions() {
-		return query.hasConditions();
+	public boolean hasFilters() {
+		return query.hasFilters();
 	}
 
 	//----------------------------------------------------------------------
@@ -188,25 +184,7 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	// conjunction
 	//----------------------------------------------------------------------
 	/**
-	 * append begin paren
-	 * @return this
-	 */
-	public Q begin() {
-		query.begin();
-		return (Q)this;
-	}
-
-	/**
-	 * append end paren
-	 * @return this
-	 */
-	public Q end() {
-		query.end();
-		return (Q)this;
-	}
-
-	/**
-	 * append AND
+	 * start with AND
 	 * @return this
 	 */
 	public Q and() {
@@ -215,11 +193,20 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
-	 * append OR
+	 * start with OR
 	 * @return this
 	 */
 	public Q or() {
 		query.or();
+		return (Q)this;
+	}
+
+	/**
+	 * end with AND/OR
+	 * @return this
+	 */
+	public Q end() {
+		query.end();
 		return (Q)this;
 	}
 

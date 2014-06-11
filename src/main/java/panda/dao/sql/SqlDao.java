@@ -334,7 +334,7 @@ public class SqlDao extends AbstractDao {
 	 */
 	@Override
 	protected boolean existsByQuery(GenericQuery<?> query) {
-		if (!query.hasConditions()) {
+		if (!query.hasFilters()) {
 			return existsByTable(query.getTable());
 		}
 
@@ -503,7 +503,7 @@ public class SqlDao extends AbstractDao {
 	}
 
 	//-------------------------------------------------------------------------
-	protected <T> T insert(Entity<?> entity, T obj) throws Exception {
+	protected <T> T insert(Entity<T> entity, T obj) throws Exception {
 		EntityField eid = entity.getIdentity();
 		if (eid == null) {
 			Sql sql = getSqlExpert().insert(entity, obj, false);

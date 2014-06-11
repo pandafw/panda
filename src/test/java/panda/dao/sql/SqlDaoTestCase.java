@@ -277,6 +277,18 @@ public abstract class SqlDaoTestCase {
 	}
 
 	@Test
+	public void testSelectOr() {
+		List<Teacher> expect = Teacher.creates(1, 3);
+		expect.remove(1);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		q.or().equalTo("name", "T1").equalTo("name", "T3").end();
+		List<Teacher> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
 	public void testSelectIn() {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);

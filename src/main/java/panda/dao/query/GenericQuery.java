@@ -1,15 +1,16 @@
 package panda.dao.query;
 
-import panda.dao.entity.Entity;
-import panda.lang.Asserts;
-import panda.lang.Collections;
-import panda.lang.Objects;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import panda.dao.entity.Entity;
+import panda.dao.query.Filter.ComboFilter;
+import panda.lang.Asserts;
+import panda.lang.Collections;
+import panda.lang.Objects;
 
 /**
  * 
@@ -20,12 +21,16 @@ import java.util.Map;
 public class GenericQuery<T> implements Query<T>, Cloneable {
 	protected Object target;
 	protected boolean distinct;
-	protected Operator conjunction = Operator.AND;
 	protected int start;
 	protected int limit;
 	protected Map<String, String> columns;
 	protected Map<String, Join> joins;
-	protected List<Expression> expressions;
+
+	protected ComboFilter filters;
+	
+	/** current filter */
+	protected List<ComboFilter> cfilter;
+
 	protected Map<String, Order> orders;
 	protected List<String> groups;
 	
@@ -61,7 +66,6 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	public GenericQuery(Query<T> query) {
 		target = query.getTarget();
-		conjunction = query.getConjunction();
 		start = query.getStart();
 		limit = query.getLimit();
 		distinct = query.isDistinct();
@@ -76,9 +80,9 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			joins.putAll(query.getJoins());
 		}
 
-		if (query.hasConditions()) {
-			expressions = new ArrayList<Expression>();
-			expressions.addAll(query.getExpressions());
+		if (query.hasFilters()) {
+			// shadow clone
+			filters = query.getFilters().clone();
 		}
 		
 		if (query.hasOrders()) {
@@ -146,7 +150,6 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * clear
 	 */
 	public void clear() {
-		conjunction = Operator.AND;
 		start = 0;
 		limit = 0;
 		if (columns != null) {
@@ -155,8 +158,9 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (joins != null) {
 			joins.clear();
 		}
-		if (expressions != null) {
-			expressions.clear();
+		if (filters != null) {
+			filters.setLogical(Logical.AND);
+			filters.clear();
 		}
 		if (orders != null) {
 			orders.clear();
@@ -575,200 +579,107 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	// conditions
 	//
 	/**
-	 * @return conjunction
+	 * @return filters
 	 */
-	public Operator getConjunction() {
-		return conjunction;
-	}
-
-	/**
-	 * @param conjunction the conjunction to set
-	 */
-	public void setConjunction(String conjunction) {
-		setConjunction(Operator.parse(conjunction));
-	}
-
-	/**
-	 * @param conjunction the conjunction to set
-	 */
-	public void setConjunction(Operator conjunction) {
-		if (conjunction == null) {
-			throw new IllegalArgumentException(
-					"the conjunction is required; it can not be null");
-		}
-
-		if (Operator.AND != conjunction && Operator.OR != conjunction) {
-			throw new IllegalArgumentException("Invalid conjunction ["
-					+ conjunction + "], must be AND/OR");
-		}
-
-		this.conjunction = conjunction;
-	}
-
-	/**
-	 * setConjunctionToAnd
-	 */
-	public void setConjunctionToAnd() {
-		this.conjunction = Operator.AND;
-	}
-
-	/**
-	 * setConjunctionToOr
-	 */
-	public void setConjunctionToOr() {
-		this.conjunction = Operator.OR;
-	}
-
-	/**
-	 * @return expressions
-	 */
-	public List<Expression> getExpressions() {
-		return expressions;
-	}
-
-	/**
-	 * @param expressions the expressions to set
-	 */
-	protected void setExpressions(List<Expression> expressions) {
-		this.expressions = expressions;
+	public ComboFilter getFilters() {
+		return filters;
 	}
 
 	/**
 	 * @return true if has conditions
 	 */
-	public boolean hasConditions() {
-		return expressions != null && !expressions.isEmpty();
+	public boolean hasFilters() {
+		return filters != null && !filters.isEmpty();
 	}
 	
-	protected GenericQuery conjunction(Operator conjunction, boolean force) {
-		if (expressions == null || expressions.isEmpty()) {
-			if (force) {
-				throw new IllegalArgumentException("Explicitly appending logical operator " + conjunction + " to empty filters is not allowed.");
-			}
-		}
-		else {
-			Expression last = expressions.get(expressions.size() - 1); 
-			if (last instanceof Expression.Paren) {
-				Expression.Paren pe = (Expression.Paren)last;
-				if (Operator.END_PAREN == pe.getOperator()) {
-					return addConjunctionExpression(conjunction);
-				}
-				else {
-					if (force) {
-						throw new IllegalArgumentException("Explicitly appending explicit logical operator " + conjunction + " after '" + pe.getOperator() + "' is not allowed.");
-					}
-				}
-			}
-			else if (last instanceof Expression.AndOr) {
-				if (force) {
-					throw new IllegalArgumentException("Explicitly appending logical operator " + conjunction + " after '" + last.getOperator() + "' is not allowed.");
-				}
-				// 'and' 'or' already appended, so skip
-				return this;
-			}
-			else {
-				return addConjunctionExpression(conjunction);
-			}
-		}
-		return this;
-	}
-
-	private GenericQuery addParenExpression(Operator operator) {
-		expressions().add(new Expression.Paren(operator));
-		return this;
-	}
-
-	private GenericQuery addConjunctionExpression(Operator operator) {
-		expressions().add(new Expression.AndOr(operator));
-		return this;
-	}
-
 	private GenericQuery addSimpleExpression(String field, Operator operator) {
-		conjunction();
-		expressions().add(new Expression.Simple(field, operator));
+		cfilter().add(new Filter.SimpleFilter(field, operator));
 		return this;
 	}
 
 	private GenericQuery addCompareValueExpression(String field, Operator operator, Object compareValue) {
-		conjunction();
-		expressions().add(new Expression.ValueCompare(field, operator, compareValue));
+		cfilter().add(new Filter.ValueFilter(field, operator, compareValue));
 		return this;
 	}
 
 	private GenericQuery addCompareFieldExpression(String field, Operator operator, String compareField) {
-		conjunction();
-		expressions().add(new Expression.FieldCompare(field, operator, compareField));
+		cfilter().add(new Filter.ReferFilter(field, operator, compareField));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Object[] values) {
-		conjunction();
-		expressions().add(new Expression.ValueCompare(field, operator, values));
+		cfilter().add(new Filter.ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
-		conjunction();
-		expressions().add(new Expression.ValueCompare(field, operator, values));
+		cfilter().add(new Filter.ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
-		conjunction();
-		expressions().add(new Expression.ValueCompare(field, operator, new Object[] { minValue, maxValue }));
+		cfilter().add(new Filter.ValueFilter(field, operator, new Object[] { minValue, maxValue }));
 		return this;
 	}
 
-	/**
-	 * add conjunction expression
-	 * @return this
-	 */
-	private GenericQuery conjunction() {
-		return conjunction(conjunction, false);
-	}
-	
-	/**
-	 * add conjunction expression
-	 * @return this
-	 */
-	private List<Expression> expressions() {
-		if (expressions == null) {
-			expressions = new ArrayList<Expression>();
+	private ComboFilter cfilter() {
+		if (Collections.isNotEmpty(cfilter)) {
+			return cfilter.get(cfilter.size() - 1);
 		}
-		return expressions;
+		
+		if (filters == null) {
+			filters = new ComboFilter(Logical.AND);
+		}
+		return filters;
+	}
+	
+	private void setCurrentFilter(ComboFilter cf) {
+		if (cfilter == null) {
+			cfilter = new ArrayList<ComboFilter>();
+		}
+		cfilter.add(cf);
 	}
 	
 	/**
-	 * add AND expression 
+	 * starts with AND
 	 * @return this
 	 */
 	public GenericQuery and() {
-		return conjunction(Operator.AND, true);
+		ComboFilter cf = new ComboFilter(Logical.AND);
+		cfilter().add(cf);
+		setCurrentFilter(cf);
+		return this;
 	}
 	
 	/**
-	 * add OR expression 
+	 * starts with OR
 	 * @return this
 	 */
 	public GenericQuery or() {
-		return conjunction(Operator.OR, true);
+		ComboFilter cf = new ComboFilter(Logical.OR);
+		cfilter().add(cf);
+		setCurrentFilter(cf);
+		return this;
 	}
 	
 	/**
-	 * add open paren ( 
-	 * @return this
-	 */
-	public GenericQuery begin() {
-		conjunction();
-		return addParenExpression(Operator.BEG_PAREN);
-	}
-	
-	/**
-	 * add close paren ) 
+	 * end with AND/OR
 	 * @return this
 	 */
 	public GenericQuery end() {
-		return addParenExpression(Operator.END_PAREN);
+		ComboFilter cf = cfilter();
+		
+		if (cf.isEmpty()) {
+			throw new IllegalArgumentException("Empty " + cf.getLogical());
+		}
+
+		if (Collections.isNotEmpty(cfilter)) {
+			cfilter.remove(cfilter.size() - 1);
+			if (cf.getFilters().size() == 1 && cf != filters) {
+				cfilter().add(cf.last());
+			}
+		}
+		return this;
 	}
 	
 	/**
@@ -1061,7 +972,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(target, conjunction, start, limit, columns, joins, expressions, orders);
+		return Objects.hashCodes(target, distinct, start, limit, columns, joins, filters, orders, groups);
 	}
 
 	/**
@@ -1079,13 +990,14 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		GenericQuery rhs = (GenericQuery) obj;
 		return Objects.equalsBuilder()
 				.append(target, rhs.target)
-				.append(conjunction, rhs.conjunction)
+				.append(distinct, rhs.distinct)
 				.append(start, rhs.start)
 				.append(limit, rhs.limit)
 				.append(columns, rhs.columns)
 				.append(joins, rhs.joins)
-				.append(expressions, rhs.expressions)
+				.append(filters, rhs.filters)
 				.append(orders, rhs.orders)
+				.append(groups, rhs.groups)
 				.isEquals();
 	}
 
@@ -1096,13 +1008,14 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	public String toString() {
 		return Objects.toStringBuilder(this)
 				.append("target", target)
-				.append("conjunction", conjunction)
+				.append("distinct", distinct)
 				.append("start", start)
 				.append("limit", limit)
 				.append("columns", columns)
 				.append("joins", joins)
-				.append("expressions", expressions)
+				.append("filters", filters)
 				.append("orders", orders)
+				.append("groups", groups)
 				.toString();
 	}
 }
