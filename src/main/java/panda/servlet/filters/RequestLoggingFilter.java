@@ -111,6 +111,9 @@ public class RequestLoggingFilter implements Filter {
 		String accessLogName = config.getInitParameter("accessLogName");
 		if (Strings.isNotEmpty(accessLogName)) {
 			accessLog = Logs.getLog(accessLogName);
+			if (!accessLog.isInfoEnabled()) {
+				accessLog = null;
+			}
 		}
 
 		if (accessLog != null) {
@@ -130,22 +133,29 @@ public class RequestLoggingFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
-		FilterResponseWrapper response = new FilterResponseWrapper((HttpServletResponse)res);
+
+		FilterResponseWrapper frw = null;
+		if (accessLog != null) {
+			frw = new FilterResponseWrapper((HttpServletResponse)res);
+		}
 
 		StopWatch sw = new StopWatch();
+
 		request.setAttribute(REQUEST_TIME, sw.getStartTime());
 
 		logRequest(request);
 		
 		try {
-			chain.doFilter(request, response);
+			chain.doFilter(req, frw == null ? res : frw);
 		}
 		catch (Throwable e) {
 			HttpServlets.logException(request, e);
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			frw.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 		finally {
-			logAccess(request, response, sw);
+			if (accessLog != null) {
+				logAccess(request, frw, sw);
+			}
 		}
 	}
 
@@ -176,7 +186,7 @@ public class RequestLoggingFilter implements Filter {
 	
 	private void logAccess(HttpServletRequest request, FilterResponseWrapper response, StopWatch sw) {
 		try {
-			if (accessLog != null && accessLog.isInfoEnabled()) {
+			if (accessLog != null) {
 				sw.stop();
 	
 				StringBuilder msg = new StringBuilder();
