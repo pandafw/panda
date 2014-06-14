@@ -50,7 +50,7 @@ public class H2SqlExpert extends SqlExpert {
 			}
 
 			if (ef.isAutoIncrement()) {
-				sb.append(" AUTO_INCREMENT(").append(ef.getStartWith()).append(")");
+				sb.append(" AUTO_INCREMENT(").append(ef.getIdStartWith()).append(")");
 			}
 			else {
 				if (ef.hasDefaultValue()) {

@@ -39,6 +39,7 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.reflect.Fields;
 import panda.lang.reflect.Methods;
@@ -337,21 +338,11 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private void addEntityField(Entity<?> entity, MappingInfo mi) {
 		EntityField ef = new EntityField();
 
-		if (mi.annId != null) {
-			ef.setIdentity(true);
-			ef.setAutoIncrement(mi.annId.auto());
-			ef.setStartWith(mi.annId.start());
-			ef.setPrimaryKey(true);
-		}
-		if (mi.annPk != null) {
-			ef.setPrimaryKey(true);
-		}
-		if (mi.annReadonly != null) {
-			ef.setReadonly(true);
-		}
-
+		Class cls = Types.getRawType(mi.type);
+		
 		ef.setName(mi.name);
 		ef.setType(mi.type);
+
 		if (mi.annColumn != null) {
 			ef.setColumn(mi.annColumn.value());
 			ef.setJdbcType(mi.annColumn.type());
@@ -363,10 +354,37 @@ public class AnnotationEntityMaker implements EntityMaker {
 			ef.setDefaultValue(mi.annColumn.defaults());
 		}
 
+		if (mi.annId != null) {
+			if (Classes.isNumber(cls)) {
+				ef.setNumberIdentity(true);
+				ef.setAutoGenerate(mi.annId.auto());
+			}
+			else if (Classes.isCharSequence(cls)) {
+				ef.setStringIdentity(true);
+				ef.setAutoGenerate(mi.annId.auto());
+				if (ef.getSize() > 0 && ef.getSize() < Randoms.UUID32_LENGTH) {
+					throw new IllegalArgumentException("Identity length (" + ef.getSize() + ") of " + entity.type + "is too small, must >= " + Randoms.UUID32_LENGTH);
+				}
+			}
+			else {
+				throw new IllegalArgumentException("Illegal identity type (" + cls + ") of " + entity.type);
+			}
+			
+			ef.setIdStartWith(mi.annId.start());
+			ef.setPrimaryKey(true);
+		}
+		if (mi.annPk != null) {
+			ef.setPrimaryKey(true);
+		}
+		if (mi.annReadonly != null) {
+			ef.setReadonly(true);
+		}
+
 		if (mi.annJoinColumn != null) {
 			ef.setJoinName(mi.annJoinColumn.name());
 			ef.setJoinField(mi.annJoinColumn.field());
 			ef.setColumn(null);
+			ef.setReadonly(true);
 		}
 		else {
 			if (Strings.isBlank(ef.getColumn())) {

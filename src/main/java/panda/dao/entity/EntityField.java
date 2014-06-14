@@ -11,6 +11,16 @@ import panda.lang.Strings;
  *
  */
 public class EntityField {
+	private static final int PRIMARY_KEY = 0x0001;
+	private static final int NOT_NULL = 0x0002;
+	private static final int UNSIGNED = 0x0004;
+	private static final int READONLY = 0x0008;
+	private static final int NUMBER_IDENTITY = 0x0010;
+	private static final int STRING_IDENTITY = 0x0020;
+	private static final int IDENTITY = NUMBER_IDENTITY | STRING_IDENTITY;
+	private static final int AUTO_GENERATE = 0x0040;
+	private static final int AUTO_INCREMENT = NUMBER_IDENTITY | AUTO_GENERATE;
+
 	private Entity<?> entity;
 	private String name;
 	private Type type;
@@ -18,16 +28,11 @@ public class EntityField {
 	private String comment;
 	private String jdbcType;
 	private String nativeType;
+	private int flag;
 	private int size;
 	private int scale;
-	private boolean identity;
-	private boolean autoIncrement;
-	private int startWith;
-	private boolean primaryKey;
-	private boolean notNull;
-	private boolean unsigned;
+	private int idStartWith;
 	private String defaultValue;
-	private boolean readonly;
 	private String joinName;
 	private String joinField;
 	
@@ -168,84 +173,161 @@ public class EntityField {
 	 * @return the identity
 	 */
 	public boolean isIdentity() {
-		return identity;
+		return (flag & IDENTITY) != 0;
+	}
+
+	/**
+	 * @return the identity
+	 */
+	public boolean isNumberIdentity() {
+		return (flag & NUMBER_IDENTITY) != 0;
 	}
 
 	/**
 	 * @param identity the identity to set
 	 */
-	protected void setIdentity(boolean identity) {
-		this.identity = identity;
+	protected void setNumberIdentity(boolean identity) {
+		if (identity) {
+			flag |= NUMBER_IDENTITY;
+		}
+		else {
+			flag &= ~NUMBER_IDENTITY;
+		}
+	}
+
+	/**
+	 * @return the identity
+	 */
+	public boolean isStringIdentity() {
+		return (flag & STRING_IDENTITY) != 0;
+	}
+
+	/**
+	 * @param identity the identity to set
+	 */
+	protected void setStringIdentity(boolean identity) {
+		if (identity) {
+			flag |= STRING_IDENTITY;
+		}
+		else {
+			flag &= ~STRING_IDENTITY;
+		}
 	}
 
 	/**
 	 * @return the autoIncrement
 	 */
 	public boolean isAutoIncrement() {
-		return autoIncrement;
+		return (flag & AUTO_INCREMENT) != 0;
 	}
 
 	/**
-	 * @param autoIncrement the autoIncrement to set
+	 * @return the autoGenerate
 	 */
-	protected void setAutoIncrement(boolean autoIncrement) {
-		this.autoIncrement = autoIncrement;
+	public boolean isAutoGenerate() {
+		return (flag & AUTO_GENERATE) != 0;
 	}
 
 	/**
-	 * @return the startWith
+	 * @param autoGenerate the autoGenerate to set
 	 */
-	public int getStartWith() {
-		return startWith;
+	protected void setAutoGenerate(boolean autoGenerate) {
+		if (autoGenerate) {
+			flag |= AUTO_GENERATE;
+		}
+		else {
+			flag &= ~AUTO_GENERATE;
+		}
 	}
 
 	/**
-	 * @param startWith the startWith to set
+	 * @return the idStartWith
 	 */
-	protected void setStartWith(int startWith) {
-		this.startWith = startWith;
+	public int getIdStartWith() {
+		return idStartWith;
+	}
+
+	/**
+	 * @param idStartWith the idStartWith to set
+	 */
+	protected void setIdStartWith(int idStartWith) {
+		this.idStartWith = idStartWith;
 	}
 
 	/**
 	 * @return the primaryKey
 	 */
 	public boolean isPrimaryKey() {
-		return primaryKey;
+		return (flag & PRIMARY_KEY) != 0;
 	}
 
 	/**
 	 * @param primaryKey the primaryKey to set
 	 */
 	protected void setPrimaryKey(boolean primaryKey) {
-		this.primaryKey = primaryKey;
+		if (primaryKey) {
+			flag |= PRIMARY_KEY;
+		}
+		else {
+			flag &= ~PRIMARY_KEY;
+		}
 	}
 
 	/**
 	 * @return the notNull
 	 */
 	public boolean isNotNull() {
-		return notNull;
+		return (flag & NOT_NULL) != 0;
 	}
 
 	/**
 	 * @param notNull the notNull to set
 	 */
 	protected void setNotNull(boolean notNull) {
-		this.notNull = notNull;
+		if (notNull) {
+			flag |= NOT_NULL;
+		}
+		else {
+			flag &= ~NOT_NULL;
+		}
 	}
 
 	/**
 	 * @return the unsigned
 	 */
 	public boolean isUnsigned() {
-		return unsigned;
+		return (flag & UNSIGNED) != 0;
 	}
 
 	/**
 	 * @param unsigned the unsigned to set
 	 */
 	protected void setUnsigned(boolean unsigned) {
-		this.unsigned = unsigned;
+		if (unsigned) {
+			flag |= UNSIGNED;
+		}
+		else {
+			flag &= ~UNSIGNED;
+		}
+	}
+	
+	/**
+	 * @return the readonly
+	 */
+	public boolean isReadonly() {
+		return (flag & READONLY) != 0;
+	}
+
+	/**
+	 * @param readonly the readonly to set
+	 */
+	protected void setReadonly(boolean readonly) {
+		if (readonly) {
+			flag |= READONLY;
+		}
+		else {
+			flag &= ~READONLY;
+		}
 	}
 
 	/**
@@ -265,21 +347,6 @@ public class EntityField {
 	public boolean hasDefaultValue() {
 		return Strings.isNotBlank(defaultValue);
 	}
-	
-	/**
-	 * @return the readonly
-	 */
-	public boolean isReadonly() {
-		return readonly || isJoinField();
-	}
-
-	/**
-	 * @param readonly the readonly to set
-	 */
-	protected void setReadonly(boolean readonly) {
-		this.readonly = readonly;
-	}
-
 	public boolean isJoinField() {
 		return Strings.isNotEmpty(joinName);
 	}
@@ -344,12 +411,12 @@ public class EntityField {
 				.append("nativeType", nativeType)
 				.append("size", size)
 				.append("scale", scale)
-				.append("identity", identity)
-				.append("primaryKey", primaryKey)
-				.append("notNull", notNull)
-				.append("unsigned", unsigned)
+				.append("identity", isIdentity())
+				.append("primaryKey", isPrimaryKey())
+				.append("notNull", isNotNull())
+				.append("unsigned", isUnsigned())
+				.append("readonly", isReadonly())
 				.append("defaultValue", defaultValue)
-				.append("readonly", readonly)
 				.append("joinName", joinName)
 				.append("joinField", joinField)
 				.toString();

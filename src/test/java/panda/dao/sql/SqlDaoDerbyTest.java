@@ -1,5 +1,7 @@
 package panda.dao.sql;
 
+import panda.dao.DaoClient;
+
 
 
 
@@ -8,7 +10,7 @@ package panda.dao.sql;
 public class SqlDaoDerbyTest extends SqlDaoTestCase {
 	private static SqlDaoClient client = createSqlDaoClient("derby");
 	
-	protected SqlDaoClient getDaoClient() {
+	protected DaoClient getDaoClient() {
 		return client;
 	}
 

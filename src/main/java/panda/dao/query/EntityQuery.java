@@ -140,12 +140,12 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
-	public int getStart() {
+	public long getStart() {
 		return query.getStart();
 	}
 
 	@Override
-	public int getLimit() {
+	public long getLimit() {
 		return query.getLimit();
 	}
 
@@ -223,10 +223,28 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
+	 * set start
+	 * @return this
+	 */
+	public Q start(long start) {
+		query.start(start);
+		return (Q)this;
+	}
+
+	/**
 	 * set limit
 	 * @return this
 	 */
 	public Q limit(int limit) {
+		query.limit(limit);
+		return (Q)this;
+	}
+
+	/**
+	 * set limit
+	 * @return this
+	 */
+	public Q limit(long limit) {
 		query.limit(limit);
 		return (Q)this;
 	}

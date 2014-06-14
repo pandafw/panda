@@ -1,5 +1,7 @@
 package panda.dao.sql;
 
+import panda.dao.DaoClient;
+
 
 
 /**
@@ -7,7 +9,7 @@ package panda.dao.sql;
 public class SqlDaoHsqldbTest extends SqlDaoTestCase {
 	private static SqlDaoClient client = createSqlDaoClient("hsqldb");
 
-	protected SqlDaoClient getDaoClient() {
+	protected DaoClient getDaoClient() {
 		return client;
 	}
 }

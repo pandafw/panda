@@ -69,7 +69,7 @@ public class OracleSqlExpert extends SqlExpert {
 		// add sequence
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement()) {
-			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getStartWith();
+			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 

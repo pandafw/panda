@@ -114,12 +114,12 @@ public interface Query<T> {
 	/**
 	 * @return the start
 	 */
-	public int getStart();
+	public long getStart();
 
 	/**
 	 * @return the limit
 	 */
-	public int getLimit();
+	public long getLimit();
 
 	/**
 	 * is this query needs paginate

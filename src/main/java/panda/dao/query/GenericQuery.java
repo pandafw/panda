@@ -21,8 +21,8 @@ import panda.lang.Objects;
 public class GenericQuery<T> implements Query<T>, Cloneable {
 	protected Object target;
 	protected boolean distinct;
-	protected int start;
-	protected int limit;
+	protected long start;
+	protected long limit;
 	protected Map<String, String> columns;
 	protected Map<String, Join> joins;
 
@@ -524,14 +524,14 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the start
 	 */
-	public int getStart() {
+	public long getStart() {
 		return start;
 	}
 
 	/**
 	 * @param start the start to set
 	 */
-	public void setStart(int start) {
+	public void setStart(long start) {
 		Asserts.isTrue(start >= 0, "The start must >= 0");
 		this.start = start;
 	}
@@ -539,14 +539,14 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the limit
 	 */
-	public int getLimit() {
+	public long getLimit() {
 		return limit;
 	}
 
 	/**
 	 * @param limit the limit to set
 	 */
-	public void setLimit(int limit) {
+	public void setLimit(long limit) {
 		Asserts.isTrue(limit >= 0, "The limit must >= 0");
 		this.limit = limit;
 	}
@@ -554,7 +554,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @param start the start to set
 	 */
-	public GenericQuery start(int start) {
+	public GenericQuery start(long start) {
 		setStart(start);
 		return this;
 	}
@@ -562,7 +562,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @param limit the limit to set
 	 */
-	public GenericQuery limit(int limit) {
+	public GenericQuery limit(long limit) {
 		setLimit(limit);
 		return this;
 	}
@@ -906,7 +906,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public GenericQuery in(String field, Object[] values) {
+	public GenericQuery in(String field, Object... values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 

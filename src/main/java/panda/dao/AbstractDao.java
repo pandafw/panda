@@ -112,7 +112,17 @@ public abstract class AbstractDao implements Dao {
 	protected void assertTransaction(Runnable transaction) {
 		Asserts.notNull(transaction, "The transaction is null");
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	protected <T> T createEntityData(Entity<T> en) throws DaoException {
+		try {
+			return en == null ? (T)(new HashMap()) : en.getType().newInstance();
+		}
+		catch (Exception e) {
+			throw new DaoException(e);
+		}
+	}
+
 	//---------------------------------------------------------------------------------
 	/**
 	 * @param type record type
@@ -335,7 +345,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record count
 	 */
 	@Override
-	public int count(Class<?> type) {
+	public long count(Class<?> type) {
 		return count(createQuery(type));
 	}
 
@@ -346,7 +356,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record count
 	 */
 	@Override
-	public int count(Entity<?> entity) {
+	public long count(Entity<?> entity) {
 		assertEntity(entity);
 		return count(createQuery(entity));
 	}
@@ -358,7 +368,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record count
 	 */
 	@Override
-	public int count(String table) {
+	public long count(String table) {
 		return count(createQuery(table));
 	}
 
@@ -369,7 +379,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record count
 	 */
 	@Override
-	public int count(Query<?> query) {
+	public long count(Query<?> query) {
 		return countByQuery(cloneQuery(query));
 	}
 
@@ -379,7 +389,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record count
 	 */
-	protected abstract int countByQuery(Query<?> query);
+	protected abstract long countByQuery(Query<?> query);
 
 	//-------------------------------------------------------------------------
 	/**
@@ -445,7 +455,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int select(Class<T> type, DataHandler<T> callback) {
+	public <T> long select(Class<T> type, DataHandler<T> callback) {
 		return selectByQuery(createQuery(type), callback);
 	}
 
@@ -457,7 +467,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int select(Entity<T> entity, DataHandler<T> callback) {
+	public <T> long select(Entity<T> entity, DataHandler<T> callback) {
 		assertEntity(entity);
 		return selectByQuery(createQuery(entity), callback);
 	}
@@ -470,7 +480,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return callback processed count
 	 */
 	@Override
-	public int select(String table, DataHandler<Map> callback) {
+	public long select(String table, DataHandler<Map> callback) {
 		return selectByQuery(createQuery(table), callback);
 	}
 
@@ -482,7 +492,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int select(Query<T> query, DataHandler<T> callback) {
+	public <T> long select(Query<T> query, DataHandler<T> callback) {
 		return selectByQuery(cloneQuery(query), callback);
 	}
 
@@ -493,7 +503,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	protected abstract <T> int selectByQuery(GenericQuery<T> query, DataHandler<T> callback);
+	protected abstract <T> long selectByQuery(GenericQuery<T> query, DataHandler<T> callback);
 
 	//--------------------------------------------------------------------
 	/**
@@ -1371,7 +1381,19 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public boolean isValidIdentity(Object id) {
-		return id != null && !id.equals(0);
+		if (id == null) {
+			return false;
+		}
+		
+		if (id instanceof Number) {
+			return ((Number)id).longValue() > 0;
+		}
+
+		if (id instanceof CharSequence) {
+			return ((CharSequence)id).length() > 0;
+		}
+
+		return false;
 	}
 	
 	//--------------------------------------------------------------------
@@ -1494,7 +1516,7 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 	
-	protected <T> boolean callback(DataHandler<T> callback, T data, int index) {
+	protected <T> boolean callback(DataHandler<T> callback, T data, long index) {
 		try {
 			return callback.handle(data);
 		}

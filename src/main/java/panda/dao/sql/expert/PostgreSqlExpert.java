@@ -70,8 +70,8 @@ public class PostgreSqlExpert extends SqlExpert {
 
 		// alter sequence start value
 		EntityField eid = entity.getIdentity();
-		if (eid != null && eid.isAutoIncrement() && eid.getStartWith() > 1) {
-			String sql = "ALTER SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ RESTART WITH " + eid.getStartWith();
+		if (eid != null && eid.isAutoIncrement() && eid.getIdStartWith() > 1) {
+			String sql = "ALTER SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ RESTART WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 

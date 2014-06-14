@@ -150,7 +150,7 @@ public interface Dao {
 	 * @param type record type
 	 * @return record count
 	 */
-	int count(Class<?> type);
+	long count(Class<?> type);
 
 	/**
 	 * count all records.
@@ -158,7 +158,7 @@ public interface Dao {
 	 * @param entity entity
 	 * @return record count
 	 */
-	int count(Entity<?> entity);
+	long count(Entity<?> entity);
 
 	/**
 	 * count all records.
@@ -166,7 +166,7 @@ public interface Dao {
 	 * @param table table name
 	 * @return record count
 	 */
-	int count(String table);
+	long count(String table);
 
 	/**
 	 * count records by the supplied query.
@@ -174,7 +174,7 @@ public interface Dao {
 	 * @param query query
 	 * @return record count
 	 */
-	int count(Query<?> query);
+	long count(Query<?> query);
 
 	//--------------------------------------------------------------------
 	/**
@@ -217,7 +217,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	<T> int select(Class<T> type, DataHandler<T> callback);
+	<T> long select(Class<T> type, DataHandler<T> callback);
 
 	/**
 	 * select all records.
@@ -226,7 +226,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	<T> int select(Entity<T> entity, DataHandler<T> callback);
+	<T> long select(Entity<T> entity, DataHandler<T> callback);
 
 	/**
 	 * select all records.
@@ -235,7 +235,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	int select(String table, DataHandler<Map> callback);
+	long select(String table, DataHandler<Map> callback);
 
 	/**
 	 * select records by the supplied query.
@@ -244,7 +244,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	<T> int select(Query<T> query, DataHandler<T> callback);
+	<T> long select(Query<T> query, DataHandler<T> callback);
 
 	//--------------------------------------------------------------------
 	/**

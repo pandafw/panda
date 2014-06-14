@@ -422,7 +422,7 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	private void whereCompositeFilter(Sql sql, Entity<?> entity, String alias, ComboFilter cf) {
+	private void whereComboFilter(Sql sql, Entity<?> entity, String alias, ComboFilter cf) {
 		Iterator<Filter> it = cf.getFilters().iterator();
 		while (it.hasNext()) {
 			Filter exp = it.next();
@@ -446,7 +446,7 @@ public abstract class SqlExpert {
 			else if (exp instanceof Filter.ComboFilter) {
 				// AND/OR
 				sql.append('(');
-				whereCompositeFilter(sql, entity, alias, (ComboFilter)exp);
+				whereComboFilter(sql, entity, alias, (ComboFilter)exp);
 				sql.append(')');
 			}
 			if (it.hasNext()) {
@@ -455,7 +455,7 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	private void whereCompositeFilter(Sql sql, String alias, ComboFilter cf) {
+	private void whereComboFilter(Sql sql, String alias, ComboFilter cf) {
 		Iterator<Filter> it = cf.getFilters().iterator();
 		while (it.hasNext()) {
 			Filter f = it.next();
@@ -469,7 +469,7 @@ public abstract class SqlExpert {
 			else if (f instanceof Filter.ComboFilter) {
 				// AND/OR
 				sql.append('(');
-				whereCompositeFilter(sql, alias, (ComboFilter)f);
+				whereComboFilter(sql, alias, (ComboFilter)f);
 				sql.append(')');
 			}
 
@@ -488,10 +488,10 @@ public abstract class SqlExpert {
 		
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
-			whereCompositeFilter(sql, entity, alias, query.getFilters());
+			whereComboFilter(sql, entity, alias, query.getFilters());
 		}
 		else {
-			whereCompositeFilter(sql, alias, query.getFilters());
+			whereComboFilter(sql, alias, query.getFilters());
 		}
 	}
 	
@@ -514,27 +514,27 @@ public abstract class SqlExpert {
 		}
 		else if (op == Operator.MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.stringLike((String)vf.getValue()));
+			sql.addParam(Sqls.stringLike(vf.getValue().toString()));
 		}
 		else if (op == Operator.NOT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.stringLike((String)vf.getValue()));
+			sql.addParam(Sqls.stringLike(vf.getValue().toString()));
 		}
 		else if (op == Operator.LEFT_MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.startsLike((String)vf.getValue()));
+			sql.addParam(Sqls.startsLike(vf.getValue().toString()));
 		}
 		else if (op == Operator.NOT_LEFT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.startsLike((String)vf.getValue()));
+			sql.addParam(Sqls.startsLike(vf.getValue().toString()));
 		}
 		else if (op == Operator.RIGHT_MATCH) {
 			sql.append("LIKE ?");
-			sql.addParam(Sqls.endsLike((String)vf.getValue()));
+			sql.addParam(Sqls.endsLike(vf.getValue().toString()));
 		}
 		else if (op == Operator.NOT_RIGHT_MATCH) {
 			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.endsLike((String)vf.getValue()));
+			sql.addParam(Sqls.endsLike(vf.getValue().toString()));
 		}
 		else {
 			sql.append(op).append(' ');
@@ -701,8 +701,9 @@ public abstract class SqlExpert {
 			
 			sb.setLength(0);
 			sb.append("Create");
-			if (index.isUnique())
+			if (index.isUnique()) {
 				sb.append(" UNIQUE");
+			}
 			sb.append(" Index ");
 			sb.append(entity.getTableName())
 				.append("_")

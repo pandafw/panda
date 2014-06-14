@@ -126,7 +126,7 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param values value array
 	 * @return parent
 	 */
-	public E in(T[] values) {
+	public E in(T... values) {
 		parent.getQuery().in(field, values);
 		return parent;
 	}

@@ -11,6 +11,7 @@ import panda.dao.query.Query;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.expert.SqlExpert;
 import panda.lang.Exceptions;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.lang.reflect.Types;
@@ -376,7 +377,7 @@ public class SqlDao extends AbstractDao {
 	 * @return record count
 	 */
 	@Override
-	protected int countByQuery(Query<?> query) {
+	protected long countByQuery(Query<?> query) {
 		Sql sql = getSqlExpert().count(query);
 		
 		autoStart();
@@ -434,7 +435,7 @@ public class SqlDao extends AbstractDao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> int selectByQuery(GenericQuery<T> query, DataHandler<T> callback) {
+	public <T> long selectByQuery(GenericQuery<T> query, DataHandler<T> callback) {
 		assertCallback(callback);
 		
 		SqlResultSet<T> srs = null;
@@ -444,13 +445,15 @@ public class SqlDao extends AbstractDao {
 		try {
 			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), query.getType());
 			
-			int count = 0;
-			int max = Integer.MAX_VALUE;
+			long count = 0;
+			long max = Long.MAX_VALUE;
 			if (isClientPaginate(query)) {
 				if (getSqlExpert().isSupportScroll()) {
 					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
 				}
+				
 				Sqls.skipResultSet(srs, query.getStart());
+
 				if (getSqlExpert().isSupportScroll()) {
 					executor.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
 				}
@@ -508,25 +511,36 @@ public class SqlDao extends AbstractDao {
 		if (eid == null) {
 			Sql sql = getSqlExpert().insert(entity, obj, false);
 			int c = executor.update(sql.getSql(), sql.getParams());
-			return c > 0 ? obj : null;
+			if (c != 1) {
+				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
+			}
+			return obj;
 		}
 		
 		Object iid = eid.getValue(obj);
 		if (isValidIdentity(iid)) {
-			String s = getSqlExpert().identityInsertOn(entity);
-			if (Strings.isNotEmpty(s)) {
-				executor.execute(s);
+			if (eid.isNumberIdentity()) {
+				String s = getSqlExpert().identityInsertOn(entity);
+				if (Strings.isNotEmpty(s)) {
+					executor.execute(s);
+				}
 			}
 			
 			Sql sql = getSqlExpert().insert(entity, obj, false);
 			int c = executor.update(sql.getSql(), sql.getParams());
-			
-			s = getSqlExpert().identityInsertOff(entity);
-			if (Strings.isNotEmpty(s)) {
-				executor.execute(s);
+
+			if (eid.isNumberIdentity()) {
+				String s = getSqlExpert().identityInsertOff(entity);
+				if (Strings.isNotEmpty(s)) {
+					executor.execute(s);
+				}
 			}
 			
-			return c > 0 ? obj : null;
+			if (c != 1) {
+				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
+			}
+
+			return obj;
 		}
 		
 		if (eid.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
@@ -534,6 +548,20 @@ public class SqlDao extends AbstractDao {
 			return executor.insert(sql.getSql(), sql.getParams(), obj, eid.getName());
 		}
 
+		if (eid.isAutoGenerate()) {
+			String aid = Randoms.randUUID32();
+			if (!eid.setValue(obj, aid)) {
+				throw new DaoException("Failed to set identity to entity: " + entity.getType());
+			}
+
+			Sql sql = getSqlExpert().insert(entity, obj, false);
+			int c = executor.update(sql.getSql(), sql.getParams());
+			if (c != 1) {
+				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
+			}
+			return obj;
+		}
+		
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("view", entity.getViewName());
 		m.put("table", entity.getTableName());
@@ -573,8 +601,8 @@ public class SqlDao extends AbstractDao {
 		
 		Sql sql = getSqlExpert().insert(entity, obj, false);
 		int c = executor.update(sql.getSql(), sql.getParams());
-		if (c == 0) {
-			return null;
+		if (c != 1) {
+			throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
 		}
 
 		if (Strings.isNotEmpty(post)) {

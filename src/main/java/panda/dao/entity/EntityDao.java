@@ -167,7 +167,7 @@ public class EntityDao<T> {
 	 * 
 	 * @return record count
 	 */
-	public int count() {
+	public long count() {
 		return dao.count(entity);
 	}
 
@@ -177,7 +177,7 @@ public class EntityDao<T> {
 	 * @param query WHERE conditions
 	 * @return record count
 	 */
-	public int count(Query<T> query) {
+	public long count(Query<T> query) {
 		return dao.count(query);
 	}
 
@@ -208,7 +208,7 @@ public class EntityDao<T> {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	public int select(DataHandler<T> callback) {
+	public long select(DataHandler<T> callback) {
 		return dao.select(entity, callback);
 	}
 
@@ -219,7 +219,7 @@ public class EntityDao<T> {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	public int select(Query<T> query, DataHandler<T> callback) {
+	public long select(Query<T> query, DataHandler<T> callback) {
 		return dao.select(query, callback);
 	}
 

@@ -269,5 +269,16 @@ public class Filter {
 			copy.filters.addAll(this.filters);
 			return copy;
 		}
+
+		/**
+		 * @return a string representation of the object.
+		 */
+		@Override
+		public String toString() {
+			return Objects.toStringBuilder()
+					.append("logical", logical)
+					.append("filters", filters)
+					.toString();
+		}
 	}
 }

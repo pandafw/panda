@@ -117,7 +117,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 		// very rough, but works
 		if (query.getStart() > 0) {
 			if (query.hasOrders()) {
-				int top = query.getLimit() > 0 ? query.getStart() + query.getLimit() : Integer.MAX_VALUE;
+				long top = query.getLimit() > 0 ? query.getStart() + query.getLimit() : Long.MAX_VALUE;
 
 				StringBuilder rn = new StringBuilder(); 
 				rn.append(" TOP ").append(top);

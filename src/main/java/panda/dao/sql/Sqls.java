@@ -201,6 +201,16 @@ public class Sqls {
 	 * @param skip            The number of results to ignore.
 	 * @throws SQLException if a SQL exception occurs
 	 */
+	public static void skipResultSet(ResultSet resultSet, long skip) throws SQLException {
+		skipResultSet(resultSet, (int)skip);
+	}
+
+	/**
+	 * skip result
+	 * @param resultSet result set
+	 * @param skip            The number of results to ignore.
+	 * @throws SQLException if a SQL exception occurs
+	 */
 	public static void skipResultSet(ResultSet resultSet, int skip) throws SQLException {
 		if (skip > 0) {
 			if (resultSet.getType() != ResultSet.TYPE_FORWARD_ONLY) {
@@ -214,6 +224,16 @@ public class Sqls {
 				}
 			}
 		}
+	}
+
+	/**
+	 * skip result
+	 * @param resultSet result set
+	 * @param skip            The number of results to ignore.
+	 * @throws SQLException if a SQL exception occurs
+	 */
+	public static void skipResultSet(SqlResultSet resultSet, long skip) throws SQLException {
+		skipResultSet(resultSet, (int)skip);
 	}
 
 	/**
