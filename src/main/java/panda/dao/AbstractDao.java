@@ -73,7 +73,7 @@ public abstract class AbstractDao implements Dao {
 	
 	protected void assertTable(Entity<?> entity) {
 		assertEntity(entity);
-		Asserts.notEmpty(entity.getTableName(), "The table of [%s] is undefined", entity.getType().toString());
+		Asserts.notEmpty(entity.getTable(), "The table of [%s] is undefined", entity.getType().toString());
 	}
 	
 	protected void assertType(Class<?> type) {

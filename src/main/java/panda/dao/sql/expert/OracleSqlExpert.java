@@ -24,7 +24,7 @@ public class OracleSqlExpert extends SqlExpert {
 		
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement()) {
-			String sql = "DROP SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ";
+			String sql = "DROP SEQUENCE " + entity.getTable() + '_' + eid.getColumn() + "_SEQ";
 			sqls.add(sql);
 		}
 		return sqls;
@@ -34,7 +34,7 @@ public class OracleSqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTable() + "(");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
@@ -69,7 +69,7 @@ public class OracleSqlExpert extends SqlExpert {
 		// add sequence
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement()) {
-			String sql = "CREATE SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getIdStartWith();
+			String sql = "CREATE SEQUENCE " + entity.getTable() + '_' + eid.getColumn() + "_SEQ START WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 
@@ -83,7 +83,7 @@ public class OracleSqlExpert extends SqlExpert {
 	@Override
 	public String prepIdentity(Entity<?> entity) {
 		EntityField eid = entity.getIdentity();
-		return "SELECT " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
+		return "SELECT " + entity.getTable() + '_' + eid.getColumn() + "_SEQ.NEXTVAL AS ID FROM DUAL";
 	}
 	
 	@Override

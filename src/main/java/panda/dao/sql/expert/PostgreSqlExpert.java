@@ -32,7 +32,7 @@ public class PostgreSqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTableName() + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTable() + "(");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
@@ -71,7 +71,7 @@ public class PostgreSqlExpert extends SqlExpert {
 		// alter sequence start value
 		EntityField eid = entity.getIdentity();
 		if (eid != null && eid.isAutoIncrement() && eid.getIdStartWith() > 1) {
-			String sql = "ALTER SEQUENCE " + entity.getTableName() + '_' + eid.getColumn() + "_SEQ RESTART WITH " + eid.getIdStartWith();
+			String sql = "ALTER SEQUENCE " + entity.getTable() + '_' + eid.getColumn() + "_SEQ RESTART WITH " + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 

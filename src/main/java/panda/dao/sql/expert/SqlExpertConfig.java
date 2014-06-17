@@ -20,7 +20,7 @@ public class SqlExpertConfig {
 
 	private Map<Pattern, Class<? extends SqlExpert>> _experts;
 
-	private Map<String, Object> properties;
+	private Map<String, Object> options;
 
 	public SqlExpertConfig() {
 		InputStream is = ClassLoaders.getResourceAsStream("sql-experts.json");
@@ -35,15 +35,15 @@ public class SqlExpertConfig {
 		JsonObject jo = JsonObject.fromJson(is, Charsets.UTF_8);
 		
 		setExperts(jo.getJsonObject("experts"));
-		setProperties(jo.optJsonObject("properties"));
+		setOptions(jo.optJsonObject("options"));
 	}
 
-	public Map<String, Object> getProperties() {
-		return properties;
+	public Map<String, Object> getOptions() {
+		return options;
 	}
 
-	public void setProperties(Map<String, Object> properties) {
-		this.properties = properties;
+	public void setOptions(Map<String, Object> options) {
+		this.options = options;
 	}
 
 	public SqlExpert getExpert(String str) {

@@ -19,9 +19,9 @@
 	},
 
 	/*
-	 * global properties
+	 * global options
 	 */
-	"properties": {
+	"options": {
 		"mysql-engine" : "InnoDB"
 	}
 }

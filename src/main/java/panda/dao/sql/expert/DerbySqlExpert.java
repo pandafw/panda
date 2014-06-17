@@ -33,7 +33,7 @@ public class DerbySqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 		
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(entity.getTableName()) + " (");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(entity.getTable()) + " (");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;

@@ -11,28 +11,40 @@ import panda.bean.BeanHandler;
 import panda.bind.json.JsonObject;
 import panda.dao.DB;
 import panda.lang.Collections;
+import panda.lang.Objects;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class Entity<T> {
 	protected Class<T> type;
-	protected String tableName;
-	protected JsonObject tableMeta;
-	protected String viewName;
+	
+	/** database table name */
+	protected String table;
+	
+	/** database view name */
+	protected String view;
+
 	protected String comment;
+	
+	protected JsonObject options;
 	
 	protected EntityField identity;
 	
-	protected Map<String, EntityField> fieldMap;
-	protected Map<String, EntityField> columnMap;
+	protected Map<String, EntityField> fields;
+	protected Map<String, EntityField> columns;
 	
-	protected List<EntityField> primaryKeys;
-	protected Map<String, EntityIndex> indexMap;
-	protected Map<String, EntityFKey> foreignKeyMap;
-	protected Map<String, EntityJoin> joinMap;
+	/** primary keys */
+	protected List<EntityField> pkeys;
+	protected Map<String, EntityIndex> indexes;
+	/** foreign keys */
+	protected Map<String, EntityFKey> fkeys;
+	protected Map<String, EntityJoin> joins;
 
+	/** prepare sqls */
 	protected Map<DB, String> prepSqls;
+	
+	/** post sqls */
 	protected Map<DB, String> postSqls;
 	
 	protected BeanHandler<T> beanHandler;
@@ -49,17 +61,17 @@ public class Entity<T> {
 	 */
 	public Entity(Entity<T> entity) {
 		this.type = entity.type;
-		this.tableName = entity.tableName;
-		this.tableMeta = entity.tableMeta;
-		this.viewName = entity.viewName;
+		this.table = entity.table;
+		this.view = entity.view;
 		this.comment = entity.comment;
 		this.identity = entity.identity;
-		this.fieldMap = entity.fieldMap;
-		this.columnMap = entity.columnMap;
-		this.primaryKeys = entity.primaryKeys;
-		this.indexMap = entity.indexMap;
-		this.foreignKeyMap = entity.foreignKeyMap;
-		this.joinMap = entity.joinMap;
+		this.fields = entity.fields;
+		this.columns = entity.columns;
+		this.pkeys = entity.pkeys;
+		this.indexes = entity.indexes;
+		this.fkeys = entity.fkeys;
+		this.joins = entity.joins;
+		this.options = entity.options;
 		this.beanHandler = entity.beanHandler;
 	}
 
@@ -71,45 +83,31 @@ public class Entity<T> {
 	}
 
 	/**
-	 * @return the tableName
+	 * @return the table
 	 */
-	public String getTableName() {
-		return tableName;
+	public String getTable() {
+		return table;
 	}
 
 	/**
-	 * @param tableName the tableName to set
+	 * @param table the table to set
 	 */
-	protected void setTableName(String tableName) {
-		this.tableName = tableName;
+	protected void setTable(String table) {
+		this.table = table;
 	}
 
 	/**
-	 * @return the tableMeta
+	 * @return the view
 	 */
-	public JsonObject getTableMeta() {
-		return tableMeta;
+	public String getView() {
+		return view;
 	}
 
 	/**
-	 * @param tableMeta the tableMeta to set
+	 * @param view the view to set
 	 */
-	protected void setTableMeta(JsonObject tableMeta) {
-		this.tableMeta = tableMeta;
-	}
-
-	/**
-	 * @return the viewName
-	 */
-	public String getViewName() {
-		return viewName;
-	}
-
-	/**
-	 * @param viewName the viewName to set
-	 */
-	protected void setViewName(String viewName) {
-		this.viewName = viewName;
+	protected void setView(String view) {
+		this.view = view;
 	}
 
 	/**
@@ -124,6 +122,20 @@ public class Entity<T> {
 	 */
 	protected void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	/**
+	 * @return the props
+	 */
+	public JsonObject getOptions() {
+		return options;
+	}
+
+	/**
+	 * @param options the options to set
+	 */
+	protected void setOptions(JsonObject options) {
+		this.options = options;
 	}
 
 	/**
@@ -144,47 +156,47 @@ public class Entity<T> {
 	 * @return the fields
 	 */
 	public Collection<EntityField> getFields() {
-		return fieldMap.values();
+		return fields.values();
 	}
 
 	/**
 	 * @param field the field to add
 	 */
 	protected void addField(EntityField field) {
-		if (fieldMap == null) {
-			fieldMap = new LinkedHashMap<String, EntityField>();
+		if (fields == null) {
+			fields = new LinkedHashMap<String, EntityField>();
 		}
-		if (columnMap == null) {
-			columnMap = new LinkedHashMap<String, EntityField>();
+		if (columns == null) {
+			columns = new LinkedHashMap<String, EntityField>();
 		}
 
 		field.setEntity(this);
-		fieldMap.put(field.getName(), field);
-		columnMap.put(field.getColumn(), field);
+		fields.put(field.getName(), field);
+		columns.put(field.getColumn(), field);
 	}
 
 	/**
 	 * @return the columns
 	 */
 	public Collection<EntityField> getColumns() {
-		return columnMap.values();
+		return columns.values();
 	}
 
 	/**
-	 * @return the primaryKeys
+	 * @return the pkeys
 	 */
 	public List<EntityField> getPrimaryKeys() {
-		return primaryKeys;
+		return pkeys;
 	}
 
 	/**
 	 * @param ef entity field
 	 */
 	protected void addPrimaryKey(EntityField ef) {
-		if (primaryKeys == null) {
-			primaryKeys = new ArrayList<EntityField>();
+		if (pkeys == null) {
+			pkeys = new ArrayList<EntityField>();
 		}
-		primaryKeys.add(ef);
+		pkeys.add(ef);
 	}
 
 	/**
@@ -192,17 +204,17 @@ public class Entity<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<EntityIndex> getIndexes() {
-		return indexMap == null ? Collections.EMPTY_LIST : indexMap.values();
+		return indexes == null ? Collections.EMPTY_LIST : indexes.values();
 	}
 
 	/**
 	 * @param index the index to add
 	 */
 	protected void addIndex(EntityIndex index) {
-		if (indexMap == null) {
-			indexMap = new LinkedHashMap<String, EntityIndex>();
+		if (indexes == null) {
+			indexes = new LinkedHashMap<String, EntityIndex>();
 		}
-		indexMap.put(index.getName(), index);
+		indexes.put(index.getName(), index);
 	}
 
 	/**
@@ -212,7 +224,7 @@ public class Entity<T> {
 	 * @return index
 	 */
 	public EntityIndex getIndex(String name) {
-		return indexMap.get(name);
+		return indexes.get(name);
 	}
 
 
@@ -221,17 +233,17 @@ public class Entity<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<EntityFKey> getForeignKeys() {
-		return foreignKeyMap == null ? Collections.EMPTY_LIST : foreignKeyMap.values();
+		return fkeys == null ? Collections.EMPTY_LIST : fkeys.values();
 	}
 
 	/**
 	 * @param fkey the foreign key to add
 	 */
 	protected void addForeignKey(EntityFKey fkey) {
-		if (foreignKeyMap == null) {
-			foreignKeyMap = new LinkedHashMap<String, EntityFKey>();
+		if (fkeys == null) {
+			fkeys = new LinkedHashMap<String, EntityFKey>();
 		}
-		foreignKeyMap.put(fkey.getName(), fkey);
+		fkeys.put(fkey.getName(), fkey);
 	}
 
 	/**
@@ -241,7 +253,7 @@ public class Entity<T> {
 	 * @return foreign key
 	 */
 	public EntityFKey getForeignKey(String name) {
-		return foreignKeyMap.get(name);
+		return fkeys.get(name);
 	}
 
 
@@ -250,17 +262,17 @@ public class Entity<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<EntityJoin> getJoins() {
-		return joinMap == null ? Collections.EMPTY_LIST : joinMap.values();
+		return joins == null ? Collections.EMPTY_LIST : joins.values();
 	}
 
 	/**
 	 * @param join the join to add
 	 */
 	protected void addJoin(EntityJoin join) {
-		if (joinMap == null) {
-			joinMap = new LinkedHashMap<String, EntityJoin>();
+		if (joins == null) {
+			joins = new LinkedHashMap<String, EntityJoin>();
 		}
-		joinMap.put(join.getName(), join);
+		joins.put(join.getName(), join);
 	}
 
 	/**
@@ -270,7 +282,7 @@ public class Entity<T> {
 	 * @return join
 	 */
 	public EntityJoin getJoin(String name) {
-		return joinMap.get(name);
+		return joins.get(name);
 	}
 
 	/**
@@ -280,7 +292,7 @@ public class Entity<T> {
 	 * @return entity field
 	 */
 	public EntityField getField(String name) {
-		return fieldMap.get(name);
+		return fields.get(name);
 	}
 
 	/**
@@ -290,47 +302,40 @@ public class Entity<T> {
 	 * @return entity field
 	 */
 	public EntityField getColumn(String name) {
-		return columnMap.get(name);
+		return columns.get(name);
 	}
 
 	/**
-	 * @return meta
+	 * @return option
 	 */
-	protected JsonObject getMetas() {
-		return tableMeta;
-	}
-
-	/**
-	 * @return meta
-	 */
-	public String getMeta(String name) {
-		if (tableMeta == null) {
+	public Object getOption(String name) {
+		if (options == null) {
 			return null;
 		}
-		return tableMeta.optString(name);
+		return options.opt(name);
 	}
 
 	/**
-	 * add meta data
-	 * @param name meta name
-	 * @param value meta value
+	 * add property
+	 * @param name property name
+	 * @param value property value
 	 */
-	public void addMeta(String name, String value) {
-		if (tableMeta == null) {
-			tableMeta = new JsonObject();
+	protected void addProperty(String name, String value) {
+		if (options == null) {
+			options = new JsonObject();
 		}
-		tableMeta.set(name, value);
+		options.set(name, value);
 	}
 
 	/**
-	 * add meta data map
-	 * @param map data map
+	 * add properties map
+	 * @param map properties map
 	 */
-	public void addMetas(Map<? extends String, ? extends Object> map) {
-		if (tableMeta == null) {
-			tableMeta = new JsonObject();
+	protected void addProperties(Map<? extends String, ? extends Object> map) {
+		if (options == null) {
+			options = new JsonObject();
 		}
-		tableMeta.putAll(map);
+		options.putAll(map);
 	}
 
 	/**
@@ -410,5 +415,13 @@ public class Entity<T> {
 	@SuppressWarnings("unchecked")
 	public boolean setFieldValue(Object data, String name, Object value) {
 		return beanHandler.setPropertyValue((T)data, name, value);
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("type", type)
+				.append("table", table)
+				.toString();
 	}
 }

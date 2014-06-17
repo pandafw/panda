@@ -193,7 +193,7 @@ public class SqlDao extends AbstractDao {
 		assertTable(entity);
 
 		if (!getSqlExpert().isSupportDropIfExists()) {
-			if (!existsByTable(entity.getTableName())) {
+			if (!existsByTable(entity.getTable())) {
 				return;
 			}
 		}
@@ -315,7 +315,7 @@ public class SqlDao extends AbstractDao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return existsByTable(entity.getTableName());
+			return existsByTable(entity.getTable());
 		}
 
 		GenericQuery query = createQuery(entity);
@@ -563,8 +563,8 @@ public class SqlDao extends AbstractDao {
 		}
 		
 		Map<String, String> m = new HashMap<String, String>();
-		m.put("view", entity.getViewName());
-		m.put("table", entity.getTableName());
+		m.put("view", entity.getView());
+		m.put("table", entity.getTable());
 		m.put("field", eid.getName());
 		
 		String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());

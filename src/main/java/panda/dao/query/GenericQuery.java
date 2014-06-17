@@ -138,7 +138,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	@SuppressWarnings("unchecked")
 	public String getTable() {
 		if (target instanceof Entity) {
-			return ((Entity<T>)target).getViewName();
+			return ((Entity<T>)target).getView();
 		}
 		if (target instanceof String) {
 			return (String)target;

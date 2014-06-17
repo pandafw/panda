@@ -37,6 +37,7 @@ import panda.dao.query.Operator;
 import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.io.Streams;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
@@ -175,7 +176,7 @@ public class MongoDao extends AbstractDao {
 	 */
 	@Override
 	public void drop(Entity<?> entity) {
-		drop(entity.getTableName());
+		drop(entity.getTable());
 	}
 
 	/**
@@ -196,40 +197,48 @@ public class MongoDao extends AbstractDao {
 	 */
 	@Override
 	public void create(Entity<?> entity) {
-		Collection<EntityIndex> indexs = entity.getIndexes();
-		if (indexs == null || indexs.isEmpty()) {
-			return;
-		}
-
 		if (log.isDebugEnabled()) {
-			log.debug("create: " + entity.getTableName());
+			log.debug("create: " + entity.getTable());
 		}
 		
 		autoStart();
 		try {
-			DBCollection dbc = db.getCollection(entity.getTableName());
-			for (EntityIndex index : indexs) {
-				if (!index.isReal()) {
-					continue;
+			// create collection
+			BasicDBObject dbo = new BasicDBObject();
+			if (Collections.isNotEmpty(entity.getOptions())) {
+				for (Entry<String, Object> en : entity.getOptions().entrySet()) {
+					dbo.put(en.getKey(), en.getValue());
 				}
+			}
+			db.createCollection(entity.getTable(), dbo);
+			
+			// create indexes
+			Collection<EntityIndex> indexs = entity.getIndexes();
+			if (Collections.isNotEmpty(indexs)) {
+				DBCollection dbc = db.getCollection(entity.getTable());
+				for (EntityIndex index : indexs) {
+					if (!index.isReal()) {
+						continue;
+					}
 
-				BasicDBObject opts = new BasicDBObject();
-				if (index.isUnique()) {
-					opts.append("unique", true);
-				}
-				opts.append("sparse", true);
-				opts.append("name", (index.isUnique() ? "ux_" : "ix_") + index.getName());
+					BasicDBObject opts = new BasicDBObject();
+					if (index.isUnique()) {
+						opts.append("unique", true);
+					}
+					opts.append("sparse", true);
+					opts.append("name", (index.isUnique() ? "ux_" : "ix_") + index.getName());
 
-				BasicDBObject keys = new BasicDBObject();
-				for (EntityField ef : index.getFields()) {
-					keys.append(ef.getColumn(), 1);
+					BasicDBObject keys = new BasicDBObject();
+					for (EntityField ef : index.getFields()) {
+						keys.append(ef.getColumn(), 1);
+					}
+					
+					dbc.createIndex(keys, opts);
 				}
-				
-				dbc.createIndex(keys, opts);
 			}
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to create index for table " + entity.getTableName(), e);
+			throw new DaoException("Failed to create index for table " + entity.getTable(), e);
 		}
 		finally {
 			autoClose();
@@ -261,7 +270,7 @@ public class MongoDao extends AbstractDao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return existsByTable(entity.getTableName());
+			return existsByTable(entity.getTable());
 		}
 
 		GenericQuery<?> query = createQuery(entity);
@@ -479,7 +488,7 @@ public class MongoDao extends AbstractDao {
 			return obj;
 		}
 
-		DBCollection dbc = db.getCollection(entity.getTableName());
+		DBCollection dbc = db.getCollection(entity.getTable());
 		DBObject dbo = convertDataToBson(entity, obj);
 
 		for (int i = 0; i < 100; i++) {
@@ -859,7 +868,7 @@ public class MongoDao extends AbstractDao {
 	//--------------------------------------------------------------------
 	private WriteResult insertData(Entity<?> entity, Object obj) {
 		DBObject dbo = convertDataToBson(entity, obj);
-		DBCollection dbc = db.getCollection(entity.getTableName());
+		DBCollection dbc = db.getCollection(entity.getTable());
 		return dbc.insert(dbo);
 	}
 

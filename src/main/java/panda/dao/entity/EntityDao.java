@@ -41,8 +41,8 @@ public class EntityDao<T> {
 		Entity<T> en = dao.getEntity(type);
 		if (param != null && isNeedCopyEntity(en)) {
 			Entity<T> sen = new Entity<T>(en);
-			sen.setTableName(Texts.translate(sen.getTableName(), param));
-			sen.setViewName(Texts.translate(sen.getViewName(), param));
+			sen.setTable(Texts.translate(sen.getTable(), param));
+			sen.setView(Texts.translate(sen.getView(), param));
 			for (EntityField ef : en.getFields()) {
 				if (ef.hasDefaultValue()) {
 					ef.setDefaultValue(Texts.translate(ef.getDefaultValue(), param));
@@ -56,10 +56,10 @@ public class EntityDao<T> {
 	}
 
 	private boolean isNeedCopyEntity(Entity<?> en) {
-		if (en.getTableName().indexOf('$') >= 0) {
+		if (en.getTable().indexOf('$') >= 0) {
 			return true;
 		}
-		if (en.getViewName().indexOf('$') >= 0) {
+		if (en.getView().indexOf('$') >= 0) {
 			return true;
 		}
 		

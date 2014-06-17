@@ -27,7 +27,7 @@ import panda.dao.entity.annotation.Indexes;
 import panda.dao.entity.annotation.Join;
 import panda.dao.entity.annotation.JoinColumn;
 import panda.dao.entity.annotation.Joins;
-import panda.dao.entity.annotation.Meta;
+import panda.dao.entity.annotation.Options;
 import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Post;
 import panda.dao.entity.annotation.Prep;
@@ -144,32 +144,32 @@ public class AnnotationEntityMaker implements EntityMaker {
 		en.setBeanHandler(bh);
 		
 		// table meta
-		Meta annMeta = Classes.getAnnotation(type, Meta.class);
+		Options annMeta = Classes.getAnnotation(type, Options.class);
 		if (annMeta != null) {
 			JsonObject jo = JsonObject.fromJson(annMeta.value());
-			en.setTableMeta(jo);
+			en.setOptions(jo);
 		}
 
 		// table name
 		Table annTable = Classes.getAnnotation(type, Table.class);
 		if (annTable == null) {
-			en.setTableName(DaoNamings.javaName2TableName(type.getSimpleName()));
+			en.setTable(DaoNamings.javaName2TableName(type.getSimpleName()));
 		}
 		else {
-			en.setTableName(annTable.value());
+			en.setTable(annTable.value());
 		}
 
 		// table view
 		View annView = Classes.getAnnotation(type, View.class);
 		if (annView == null) {
-			en.setViewName(en.getTableName());
+			en.setView(en.getTable());
 		}
 		else {
-			en.setViewName(annView.value());
+			en.setView(annView.value());
 		}
 
 		// check table or view
-		if (Strings.isEmpty(en.getTableName()) && Strings.isEmpty(en.getViewName())) {
+		if (Strings.isEmpty(en.getTable()) && Strings.isEmpty(en.getView())) {
 			throw new IllegalArgumentException("@Table or @View of [" + type + "] is not defined");
 		}
 		
@@ -489,7 +489,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
 		efk.setReference(ref);
-		efk.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+		efk.setName(Strings.isEmpty(name) ? ref.getTable() : name);
 
 		if (fields == null || fields.length == 0) {
 			throw Exceptions.makeThrow("Empty fields for @FK(%s: %s)", efk.getName(), Strings.join(fields, '|'));
@@ -528,7 +528,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
 		efk.setReference(ref);
-		efk.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+		efk.setName(Strings.isEmpty(name) ? ref.getTable() : name);
 
 		efk.addField(field);
 		en.addForeignKey(efk);
@@ -547,7 +547,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 			throw new IllegalArgumentException("Failed to find target entity for " + target);
 		}
 
-		ej.setName(Strings.isEmpty(name) ? ref.getTableName() : name);
+		ej.setName(Strings.isEmpty(name) ? ref.getTable() : name);
 		ej.setType(type);
 		ej.setTarget(ref);
 

@@ -141,7 +141,7 @@ public class SqlDaoClient extends DaoClient {
 		if (null == se) {
 			throw Exceptions.makeThrow("Can not support database '%s %s'", productName, version);
 		}
-		se.setProperties(sqlExpertConfig.getProperties());
+		se.setOptions(sqlExpertConfig.getOptions());
 		se.setClient(this);
 		se.setCastors(getCastors());
 		se.setDatabaseMeta(productName, version);
