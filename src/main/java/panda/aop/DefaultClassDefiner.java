@@ -108,4 +108,9 @@ public class DefaultClassDefiner extends ClassLoader implements ClassDefiner {
 		}
 		return super.loadClass(className);
 	}
+
+	public static void reset() {
+		one = null;
+		defaultOne();
+	}
 }
