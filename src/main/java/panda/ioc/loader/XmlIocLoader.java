@@ -1,7 +1,12 @@
 package panda.ioc.loader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,7 +24,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import panda.bind.json.Jsons;
+import panda.io.Files;
 import panda.io.Streams;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
@@ -59,26 +64,48 @@ public class XmlIocLoader implements IocLoader {
 	 */
 	private static int innerId;
 
-	public XmlIocLoader(String... files) {
-		InputStream is = null;
+	public XmlIocLoader(String... paths) {
 		try {
 			DocumentBuilder builder = Doms.builder();
-			Document document;
-			for (String file : files) {
-				is = Streams.getStream(file);
-				document = builder.parse(is);
-				document.normalizeDocument();
-				NodeList nodeListZ = ((Element)document.getDocumentElement()).getChildNodes();
-				for (int i = 0; i < nodeListZ.getLength(); i++) {
-					if (nodeListZ.item(i) instanceof Element) {
-						paserBean((Element)nodeListZ.item(i), false);
-					}
-				}
-				is.close();
+			for (String p : paths) {
+				loadFromPath(builder, p);
 			}
 			handleParent();
-			if (log.isDebugEnabled()) {
-				log.debug("Load complete :\n" + Jsons.toJson(iocMap));
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		
+		if (log.isDebugEnabled()) {
+			log.debugf("Loaded %d bean define from path=%s --> %s", 
+				iocMap.size(), Arrays.toString(paths), iocMap.keySet());
+		}
+	}
+	
+	private void loadFromPath(DocumentBuilder builder, String path) throws IOException {
+		File p = new File(path);
+		if (Files.isDirectory(p)) {
+			Collection<File> fs = Files.listFiles(p, new String[] { "xml" }, true);
+			for (File f : fs) {
+				InputStream is = new FileInputStream(f);
+				loadFromStream(builder, is);
+			}
+		}
+		else {
+			InputStream is = Streams.getStream(path);
+			loadFromStream(builder, is);
+		}
+	}
+	
+	private void loadFromStream(DocumentBuilder builder, InputStream is) throws IOException {
+		try {
+			Document document = builder.parse(is);
+			document.normalizeDocument();
+			NodeList nodeListZ = ((Element)document.getDocumentElement()).getChildNodes();
+			for (int i = 0; i < nodeListZ.getLength(); i++) {
+				if (nodeListZ.item(i) instanceof Element) {
+					paserBean((Element)nodeListZ.item(i), false);
+				}
 			}
 		}
 		catch (Throwable e) {
