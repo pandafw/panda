@@ -254,7 +254,7 @@ public abstract class ToStringStyle implements Serializable {
 	 * The value to use when fullDetail is <code>null</code>, the default value is <code>true</code>
 	 * .
 	 */
-	private boolean defaultFullDetail = true;
+	private boolean defaultFullDetail = false;
 
 	/**
 	 * The <code>null</code> text <code>'&lt;null&gt;'</code>.
@@ -1195,11 +1195,9 @@ public abstract class ToStringStyle implements Serializable {
 
 		if (array == null) {
 			appendNullText(buffer, fieldName);
-
 		}
 		else if (isFullDetail(fullDetail)) {
 			appendDetail(buffer, fieldName, array);
-
 		}
 		else {
 			appendSummary(buffer, fieldName, array);
