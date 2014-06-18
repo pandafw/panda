@@ -52,7 +52,7 @@ public class FastDateParser implements DateParser, Serializable {
 	 * 
 	 * @see java.io.Serializable
 	 */
-    private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 2L;
 
 	static final Locale JAPANESE_IMPERIAL = new Locale("ja", "JP", "JP");
 
@@ -60,8 +60,8 @@ public class FastDateParser implements DateParser, Serializable {
 	private final String pattern;
 	private final TimeZone timeZone;
 	private final Locale locale;
-    private final int century;
-    private final int startYear;
+	private final int century;
+	private final int startYear;
 
 	// derived fields
 	private transient Pattern parsePattern;

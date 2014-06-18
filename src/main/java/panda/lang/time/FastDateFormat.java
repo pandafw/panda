@@ -49,7 +49,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * 
 	 * @see java.io.Serializable
 	 */
-    private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 2L;
 
 	/**
 	 * FULL locale dependent date or time style.

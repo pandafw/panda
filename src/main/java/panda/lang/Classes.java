@@ -2446,4 +2446,30 @@ public abstract class Classes {
 		}
 		return clss;
 	}
+
+	/**
+	 * 获取基本类型的默认值
+	 * 
+	 * @param cls 基本类型
+	 * @return 0/false,如果传入的pClass不是基本类型的类,则返回null
+	 */
+	public static Object getPrimitiveDefaultValue(Class<?> cls) {
+		if (int.class.equals(cls))
+			return Integer.valueOf(0);
+		if (long.class.equals(cls))
+			return Long.valueOf(0);
+		if (short.class.equals(cls))
+			return Short.valueOf((short)0);
+		if (float.class.equals(cls))
+			return Float.valueOf(0f);
+		if (double.class.equals(cls))
+			return Double.valueOf(0);
+		if (byte.class.equals(cls))
+			return Byte.valueOf((byte)0);
+		if (char.class.equals(cls))
+			return Character.valueOf((char)0);
+		if (boolean.class.equals(cls))
+			return Boolean.FALSE;
+		return null;
+	}
 }
