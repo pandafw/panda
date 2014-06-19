@@ -9,6 +9,10 @@
 		<fileset dir="lib/run" erroronmissingdir="false">
 			<include name="commons-cli.jar"/>
 			<include name="freemarker.jar"/>
+			<include name="panda-*.jar"/>
+		</fileset>
+		<fileset dir="lib/tool" erroronmissingdir="false">
+			<include name="panda-*.jar"/>
 		</fileset>
 	</path>
 
