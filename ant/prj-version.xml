@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="prj-version">
-	<property name="ver.src" value="../panda-java/src/main/java/panda/Panda.java"/>
-
 	<!-- get prj.version -->
-	<loadfile srcFile="${ver.src}" property="prj.version" encoding="UTF-8" failonerror="false">
+	<property name="ver.src" value=".project"/>
+	<loadfile srcFile="${ver.src}" property="prj.version" encoding="UTF-8" quiet="true" failonerror="false">
 		<filterchain>
 			<striplinebreaks/>
 			<linecontains>
@@ -14,7 +13,7 @@
 			</tokenfilter>
 		</filterchain>
 	</loadfile>
-
+	
 	<!-- get revision -->
 	<script language="javascript">
 		var ver = project.getProperty("VERSION");
@@ -55,7 +54,7 @@
 			var rev = "";
 			for (var i = 0; i &lt; prjs.length; i++) {
 				var p = prjs[i];
-				var r = "0";
+				var r = "";
 				var git = new java.io.File(p + "/.git");
 				if (git.exists()) {
 					var s = run("git --git-dir=" + git.getPath() + " rev-list --all --count");
@@ -74,13 +73,21 @@
 						}
 					}
 				}
-				if (rev != "") {
-					rev += "-";
+				if (r != "") {
+					if (rev != "") {
+						rev += "-";
+					}
+					rev += r;
 				}
-				rev += r;
 			}
+
+			if (rev == "") {
+				rev = "0";
+			}
+			ver = project.getProperty("prj.version") + "." + rev;
 			project.setProperty("REVISION", rev);
-			project.setProperty("VERSION", project.getProperty("prj.version") + "." + rev);
+			project.setProperty("VERSION", ver);
+			project.setProperty("GVERSION", ver.replace(/\./g, '-'));
 		}
 	</script>
 </project>

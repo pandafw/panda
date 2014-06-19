@@ -2,16 +2,5 @@
 <project name="panda-version">
 	<property name="ver.src" value="../panda-java/src/main/java/panda/Panda.java"/>
 
-	<!-- get prj.version -->
-	<loadfile srcFile="${ver.src}" property="prj.version" encoding="UTF-8" failonerror="false">
-		<filterchain>
-			<striplinebreaks/>
-			<linecontains>
-				<contains value="VERSION"/>
-			</linecontains>
-			<tokenfilter>
-				<replaceregex pattern="(.*)&quot;(.*)&quot;.*" replace="\2"/>
-			</tokenfilter>
-		</filterchain>
-	</loadfile>
+	<import file="prj-version.xml"/>
 </project>

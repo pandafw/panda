@@ -2,7 +2,6 @@
 <project name="panda-build">
 	<!-- version -->
 	<import file="panda-version.xml"/>
-	<import file="prj-version.xml"/>
 
 	<!-- usage -->
 	<import file="prj-usage.xml"/>
