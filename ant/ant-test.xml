@@ -47,10 +47,27 @@
 			<fileset dir="${src.dir}/test/java">
 				<exclude name="**/*.java"/>
 			</fileset>
-			<fileset dir="${src.dir}/test/resources">
+			<fileset dir="${src.dir}/test/resources" erroronmissingdir="false">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="test-dir-chk">
+		<available file="${dir}" type="dir" property="dir.exists"/>
+	</target>
+	<target name="test-n2a-do" depends="test-dir-chk" if="dir.exists">
+		<native2ascii src="${dir}" dest="${out.dir}/test-classes" encoding="UTF-8" includes="**/*_*.properties"/>
+	</target>
+	<target name="test-n2a" description="Convert test native properties to ascii properties">
+		<delete>
+			<fileset dir="${out.dir}/test-classes">
+				<include name="**/*_*.properties"/>
+			</fileset>
+		</delete>
+		<antcall target="test-n2a-do">
+			<param name="dir" value="${src.dir}/test/resources"/>
+		</antcall>
 	</target>
 
 	<target name="test-emma" description="EMMA instruments classes">
@@ -83,7 +100,7 @@
 	</target>
 
 	<target name="test-build"
-		depends="test-clean, test-rescp, test-javac"
+		depends="test-clean, test-rescp, test-n2a, test-javac"
 		description="Build the test suite of project"/>
 
 	<target name="test-run" description="Run all junit test case">

@@ -37,6 +37,8 @@ public class ExternalResourceLoader16 extends ExternalResourceLoader {
 
 	public static class Control extends ResourceBundle.Control {
 		private static final String PANDA_EXT = "panda.ext";
+		private static final String JAVA_CLASS = "java.class";
+		private static final String JAVA_PROPS = "java.properties";
 		
 		/**
 		 * The default format <code>List</code>, which contains the strings
@@ -45,7 +47,7 @@ public class ExternalResourceLoader16 extends ExternalResourceLoader {
 		 * Collections#unmodifiableList(List) unmodifiable}.
 		 */
 		public static final List<String> FORMAT_DEFAULT = Collections.unmodifiableList(Arrays.asList(PANDA_EXT,
-			"java.class", "java.properties"));
+			JAVA_CLASS, JAVA_PROPS));
 
 		private ExternalResourceLoader externalResourceLoader;
 		
@@ -74,8 +76,30 @@ public class ExternalResourceLoader16 extends ExternalResourceLoader {
 					MapResourceBundle bundle = new MapResourceBundle(contents);
 					return bundle;
 				}
+				return null;
 			}
 			
+//			if (JAVA_CLASS.equals(format)) {
+//				try {
+//					String bundleName = toBundleName(baseName, locale);
+//					Class<? extends ResourceBundle> bundleClass = (Class<? extends ResourceBundle>)loader.loadClass(bundleName);
+//
+//					// If the class isn't a ResourceBundle subclass, throw a
+//					// ClassCastException.
+//					if (ResourceBundle.class.isAssignableFrom(bundleClass)) {
+//						return bundleClass.newInstance();
+//					}
+//
+//					throw new ClassCastException(bundleClass.getName() + " cannot be cast to ResourceBundle");
+//				}
+//				catch (ClassNotFoundException e) {
+//				}
+//				
+//				return null;
+//			}
+//			if (JAVA_PROPS.equals(format)) {
+//			}
+
 			return super.newBundle(baseName, locale, format, loader, reload);
 		}
 	}
