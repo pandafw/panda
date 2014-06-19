@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="panda-build">
 	<!-- version -->
+	<import file="panda-version.xml"/>
 	<import file="ant-version.xml"/>
 
 	<!-- usage -->
