@@ -25,7 +25,7 @@
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/mail.jar" sourcepath="lib/run/mail-sources.jar"/>
-	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
-	<classpathentry kind="lib" path="lib/test/junit.jar" sourcepath="lib/test/junit-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
+	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

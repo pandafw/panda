@@ -35,7 +35,7 @@
 			<include name="*.jar"/>
 			<exclude name="*-sources.jar"/>
 		</fileset>
-		<fileset dir="lib/test" erroronmissingdir="false">
+		<fileset dir="lib/tool" erroronmissingdir="false">
 			<include name="*.jar"/>
 			<exclude name="*-sources.jar"/>
 		</fileset>

@@ -5,7 +5,7 @@
 		<conf name="gae" visibility="public" />
 		<conf name="jdbc" visibility="public" />
 		<conf name="run" visibility="public" />
-		<conf name="test" visibility="public" />
+		<conf name="tool" visibility="public" />
 	</configurations>
 	<publications>
 		<artifact name="${prj.name}" type="jar" conf="run" ext="jar" />
@@ -38,9 +38,9 @@
 		<dependency org="org.xerial" name="sqlite-jdbc4" rev="3.8.2-SNAPSHOT" conf="jdbc->master,sources" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
 
-		<!-- TEST -->
-		<dependency org="emma" name="emma" rev="2.1.5320" conf="test->*"/>
-		<dependency org="emma" name="emma_ant" rev="2.1.5320" conf="test->*"/>
-		<dependency org="junit" name="junit" rev="4.11" conf="test->*"/>
+		<!-- TOOL -->
+		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>
+		<dependency org="emma" name="emma_ant" rev="2.1.5320" conf="tool->*"/>
+		<dependency org="junit" name="junit" rev="4.11" conf="tool->*"/>
 	</dependencies>
 </ivy-module>

@@ -7,13 +7,13 @@
 			<fileset dir="lib/run"/>
 			<fileset dir="lib/gae"/>
 			<fileset dir="lib/jdbc"/>
-			<fileset dir="lib/test"/>
+			<fileset dir="lib/tool"/>
 		</delete>
-		<ivy:retrieve conf="api,run,gae,jdbc,test" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
 	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
-		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,test"/>
+		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,tool"/>
 	</target>
 
 	<target name="ivy-clean" description="ivy --> clean the cache">

@@ -23,8 +23,8 @@
 	</path>
 
 	<path id="emma.cp">
-		<pathelement location="lib/test/emma.jar"/>
-		<pathelement location="lib/test/emma_ant.jar"/>
+		<pathelement location="lib/tool/emma.jar"/>
+		<pathelement location="lib/tool/emma_ant.jar"/>
 	</path>
 
 	<!-- test -->
