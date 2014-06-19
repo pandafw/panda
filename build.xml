@@ -42,6 +42,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 
 	<!-- build -->
 	<target name="min-js" description="Merge &amp; minify javascript files">
+		<!-- bootstrap2 -->
 		<concat destfile="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js" binary="true">
 			<fileset dir="src/main/bootstrap2/js/locales">
 				<include name="*.js"/>
@@ -66,6 +67,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
 		</java>
 
+		<!-- bootstrap3 -->
 		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
 			<fileset dir="src/main/bootstrap3/js/locales">
 				<include name="*.js"/>
@@ -89,7 +91,41 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
 		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-switch.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-switch.min.js"/>
+		</java>
 
+		<!-- plugins -->
+		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins.js" binary="true">
+			<fileset dir="src/main/bootstrap3/js">
+				<include name="bootstrap-*.js"/>
+				<exclude name="bootstrap-plugins*.js"/>
+				<exclude name="bootstrap-*.min.js"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-plugins.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
+		</java>
+		<copy overwrite="true" 
+			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" 
+			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.js"/>
+		<copy overwrite="true" 
+			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js" 
+			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.min.js"/>
+
+		<!-- panda -->
 		<concat destfile="src/main/panda/js/panda.js" binary="true">
 			<fileset dir="src/main/panda/js">
 				<include name="core.*.js"/>
@@ -150,6 +186,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 
 	<target name="min-css" description="Merge &amp; minify css files">
+		<!-- bootstrap2 -->
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
 			<arg value="--charset"/>
@@ -159,6 +196,8 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
 		</java>
+
+		<!-- bootstrap3 -->
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
 			<arg value="--charset"/>
@@ -168,7 +207,35 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
 		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/css/bootstrap-switch.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/css/bootstrap-switch.min.css"/>
+		</java>
+		
+		<!-- plugins -->
+		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
+			<fileset dir="src/main/bootstrap3/css">
+				<include name="bootstrap-*.css"/>
+				<exclude name="bootstrap-plugins*.css"/>
+				<exclude name="bootstrap-*.min.css"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/css/bootstrap-plugins.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/css/bootstrap-plugins.min.css"/>
+		</java>
 
+		<!-- panda -->
 		<concat destfile="src/main/panda/css/panda.css" binary="true">
 			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
 		</concat>
