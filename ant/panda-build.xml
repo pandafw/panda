@@ -2,20 +2,20 @@
 <project name="panda-build">
 	<!-- version -->
 	<import file="panda-version.xml"/>
-	<import file="ant-version.xml"/>
+	<import file="prj-version.xml"/>
 
 	<!-- usage -->
-	<import file="ant-usage.xml"/>
+	<import file="prj-usage.xml"/>
 
 	<!-- ivy -->
-	<import file="ant-ivy.xml"/>
+	<import file="prj-ivy.xml"/>
 
 	<!-- build -->
-	<import file="ant-build.xml"/>
+	<import file="prj-build.xml"/>
 
 	<!-- test -->
-	<import file="ant-test.xml"/>
+	<import file="prj-test.xml"/>
 
 	<!-- maven -->
-	<import file="ant-maven.xml"/>
+	<import file="prj-maven.xml"/>
 </project>

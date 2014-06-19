@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ant-version">
+<project name="prj-version">
 	<property name="ver.src" value="../panda-java/src/main/java/panda/Panda.java"/>
 
 	<!-- get prj.version -->
@@ -19,9 +19,12 @@
 	<script language="javascript">
 		var ver = project.getProperty("VERSION");
 		if (ver == null) {
-			var prjs = project.getProperty("ver.prj");
+			var prjs = project.getProperty("prj.deps");
 			if (prjs == null) {
 				prjs = ".";
+			}
+			else {
+				prjs += ";.";
 			}
 			prjs = prjs.split(';');
 

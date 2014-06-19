@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ant-test">
+<project name="prj-test">
 	<property name="src.dir" value="src"/>
 	<property name="out.dir" value="out"/>
 	<property name="javac.source" value="1.6"/>

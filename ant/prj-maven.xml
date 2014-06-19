@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ant-maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="prj-maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property name="out.dir" value="out"/>
 
 	<!-- defined maven snapshots and staging repository id and url -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ant-ivy" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="prj-ivy" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<!-- ivy -->
 	<target name="ivy-resolve" description="ivy --> retreive dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ant-usage">
+<project name="prj-usage">
 	<!-- usage -->
 	<target name="usage">
 		<echo><![CDATA[
