@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 
 import panda.io.Streams;
+import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
@@ -19,6 +20,7 @@ import panda.tool.codegen.bean.ListQuery;
 import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
 import panda.tool.codegen.bean.Resource;
+
 import freemarker.template.Configuration;
 
 /**
@@ -61,13 +63,15 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected static final String CHARSET = "8859_1";
 	protected static final String PRO_EXT = ".properties";
 	
 	protected String locale;
 	protected int cntModelFile = 0;
 	protected int cntActionFile = 0;
 
+	// disable unicode escape
+	protected boolean escapeUnicode = false;
+	protected String charset = "UTF-8";
 	protected boolean sourceTime = false;
 	
 	/**
@@ -86,9 +90,11 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		if (comment) {
 			pw.print("#>");
 		}
-		pw.print(saveConvert(key, true, true));
+		
+		pw.print(saveConvert(key, true, escapeUnicode));
 		pw.print("=");
-		pw.print(saveConvert(value, false, true));
+		pw.print(saveConvert(value, false, escapeUnicode));
+
 		pw.println();
 	}
 
@@ -211,6 +217,10 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 	@Override
 	protected void processModule(Module module) throws Exception {
 		sourceTime = "true".equals(module.getProps().getProperty("source.datetime"));
+		escapeUnicode = "true".equals(module.getProps().getProperty("resource.escapeUnicode"));
+		if (escapeUnicode) {
+			charset = Charsets.ISO_8859_1;
+		}
 		
 		if (Strings.isEmpty(locale)) {
 			for (Resource resource : module.getResourceList()) {
@@ -271,7 +281,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 			File fmbp = new File(fmdir.getPath(), entity.getSimpleName() + locale + PRO_EXT);
 			print3("Generating - " + fmbp.getPath());
 
-			pwmbp = new PrintWriter(fmbp, CHARSET);
+			pwmbp = new PrintWriter(fmbp, charset);
 			saveGenerateInfo(pwmbp);
 
 			for (EntityProperty p : entity.getPropertyList()) {
@@ -305,7 +315,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 			File fabp = new File(foutdir.getPath(), action.getSimpleActionClass() + locale + PRO_EXT);
 			print3("Generating - " + fabp.getPath());
 
-			pwabp = new PrintWriter(fabp, CHARSET);
+			pwabp = new PrintWriter(fabp, charset);
 			saveGenerateInfo(pwabp);
 
 			if (action.getTitle() != null) {
