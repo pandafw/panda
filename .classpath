@@ -43,8 +43,8 @@
 	<classpathentry kind="lib" path="lib/run/velocity.jar" sourcepath="lib/run/velocity-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/xmlbeans.jar" sourcepath="lib/run/xmlbeans-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/xmlworker.jar" sourcepath="lib/run/xmlworker-sources.jar"/>
-	<classpathentry kind="lib" path="lib/test/hamcrest-core.jar"/>
-	<classpathentry kind="lib" path="lib/test/junit.jar" sourcepath="lib/test/junit-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
+	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-exts"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-java"/>
 	<classpathentry kind="output" path="out/classes"/>
