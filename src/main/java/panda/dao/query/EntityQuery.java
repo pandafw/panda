@@ -92,20 +92,20 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
-	 * @param name include name
+	 * @param names include name
 	 * @return this
 	 */
-	public Q include(String name) {
-		query.include(name);
+	public Q include(String... names) {
+		query.include(names);
 		return (Q)this;
 	}
 
 	/**
-	 * @param name the field name to exclude
+	 * @param names the field name to exclude
 	 * @return this
 	 */
-	public Q exclude(String name) {
-		query.exclude(name);
+	public Q exclude(String... names) {
+		query.exclude(names);
 		return (Q)this;
 	}
 

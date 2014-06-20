@@ -256,21 +256,29 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
-	 * @param name include name
+	 * @param names include name
 	 * @return this
 	 */
-	public GenericQuery include(String name) {
-		setColumn(name, "");
+	public GenericQuery include(String... names) {
+		Asserts.notNull(names);
+		for (String name : names) {
+			Asserts.notEmpty(name);
+			setColumn(name, "");
+		}
 		flags = null;
 		return this;
 	}
 
 	/**
-	 * @param name the field name to exclude
+	 * @param names the field names to exclude
 	 * @return this
 	 */
-	public GenericQuery exclude(String name) {
-		setColumn(name, null);
+	public GenericQuery exclude(String... names) {
+		Asserts.notNull(names);
+		for (String name : names) {
+			Asserts.notEmpty(name);
+			setColumn(name, null);
+		}
 		flags = null;
 		return this;
 	}
