@@ -9,7 +9,7 @@
 	</path>
 
 	<!-- build -->
-	<import file="../panda-java/ant/lib-build.xml"/>
+	<import file="../panda-java/ant/panda-build.xml"/>
 	
 	<!-- release -->
 	<target name="release" description="Release the project">
