@@ -3,8 +3,7 @@
 	<property file="build.properties" />
 	
 	<!-- version -->
-	<import file="../panda-java/ant/ant-version.xml"/>
-	<property name="prj.version" value="1.0.0"/>
+	<import file="../panda-java/ant/panda-version.xml"/>
 
 	<target name="usage">
 		<echo><![CDATA[
@@ -295,7 +294,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
 
 	<!-- maven -->
-	<import file="../panda-java/ant/ant-maven.xml"/>
+	<import file="../panda-java/ant/prj-maven.xml"/>
 	
 	<!-- release -->
 	<target name="release" description="Release the project">
