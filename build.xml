@@ -106,6 +106,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="bootstrap-*.js"/>
 				<exclude name="bootstrap-plugins*.js"/>
 				<exclude name="bootstrap-*.min.js"/>
+				<exclude name="bootstrap-*-i18n.*js"/>
 			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
@@ -141,6 +142,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/panda/js/panda.min.js"/>
 		</java>
 
+		<!-- jquery -->
 		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
 			<fileset dir="src/main/jquery/js" includes="jquery.*.js"/>
 		</concat>
@@ -220,6 +222,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
 			<fileset dir="src/main/bootstrap3/css">
 				<include name="bootstrap-*.css"/>
+				<exclude name="bootstrap-theme*.css"/>
 				<exclude name="bootstrap-plugins*.css"/>
 				<exclude name="bootstrap-*.min.css"/>
 			</fileset>
@@ -248,6 +251,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/panda/css/panda.min.css"/>
 		</java>
 
+		<!-- jquery -->
 		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
 			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
 		</concat>
