@@ -16,36 +16,36 @@
 /* header */
 .p-lv-header {
 }
-.n-lv-header .n-lv-toolbar {
+.p-lv-header .p-lv-toolbar {
 	margin: 0 0 -1px 0;
 }
 
 /* footer */
 .p-lv-footer {
 }
-.n-lv-footer .n-lv-toolbar {
+.p-lv-footer .p-lv-toolbar {
 	margin: -1px 0 0 0;
 }
 
 /* toolbar */
-.n-lv-toolbar {
+.p-lv-toolbar {
 	font-weight: normal !important;
 	padding: 0 8px;
 }
-.n-lv-toolbar .n-lv-toolbar-tb {
+.p-lv-toolbar .p-lv-toolbar-tb {
 	width: 100%;
 }
-.n-lv-toolbar .n-lv-td-tools {
+.p-lv-toolbar .p-lv-td-tools {
 	padding: 0 8px;
 	text-align: left;
 	white-space: nowrap;
 }
-.n-lv-toolbar .n-lv-td-pager {
+.p-lv-toolbar .p-lv-td-pager {
 	text-align: left;
 	white-space: nowrap;
 	width: 1%;
 }
-.n-lv-toolbar .n-lv-td-addon {
+.p-lv-toolbar .p-lv-td-addon {
 	text-align: left;
 	white-space: nowrap;
 }
@@ -56,24 +56,24 @@
 }
 
 /* addon */
-.n-lv-addon {
+.p-lv-addon {
 	margin: 0;
 }
 
 /* action link */
-.n-lv a.n-lv-ia {
+.p-lv a.p-lv-ia {
 	display: inline-block;
 	padding: 1px;
 	white-space: nowrap;
 }
-.n-lv a.n-lv-ia, .n-lv a.n-lv-ia:hover {
+.p-lv a.p-lv-ia, .p-lv a.p-lv-ia:hover {
 	border: 0 none;
 	text-decoration: none;
 }
-.n-lv a.n-lv-ia:hover {
+.p-lv a.p-lv-ia:hover {
 	background-color: #ffef8f;
 }
-.n-lv a.n-lv-ia .n-lv-t {
+.p-lv a.p-lv-ia .p-lv-t {
 	border: solid 1px #999;
 	cursor: pointer;
 	display: inline-block;
@@ -83,7 +83,7 @@
 }
 
 /* normal link */
-.n-lv a.n-lv-a {
+.p-lv a.p-lv-a {
 }
 
 /* checkbox all */
@@ -177,7 +177,7 @@ fieldset.p-lv-filters legend {
 }
 .p-lv-filters-t .p-lv-f-boolean-true {
 }
-.n-lv-filters-t .p-lv-f-boolean-false {
+.p-lv-filters-t .p-lv-f-boolean-false {
 }
 .p-lv-filters-t .p-checkboxlist {
 }
@@ -211,116 +211,117 @@ fieldset.p-lv-filters legend {
 .p-lv-bform {
 	background-color: transparent;
 }
-.n-lv-body-head {
+.p-lv-body-head {
 	margin: 0 0 -2px 0;
 }
-.n-lv-cell-last {
+.p-lv-cell-last {
 	width: 100px;
 }
 
 /* table */
-.n-lv-table {
+.p-lv-table {
+	font-size: 90%;
 	margin: 0;
 	width: 100%;
 }
-.n-lv-hidden {
+.p-lv-hidden {
 	display: none;
 }
-.n-lv-nowrap {
+.p-lv-nowrap {
 	white-space: nowrap;
 }
-.n-lv-column {
+.p-lv-column {
 }
 
 
 /* table - thead */
-thead.n-lv-chead tr {
+thead.p-lv-chead tr {
 }
-thead.n-lv-chead th {
+thead.p-lv-chead th {
 	font-weight: normal;
 	padding: 4px 4px;
 	text-align: left;
 	vertical-align: middle;
 }
-thead.n-lv-chead th.n-lv-rownum,
-thead.n-lv-chead th.n-lv-number,
-thead.n-lv-chead th.n-lv-check,
-thead.n-lv-chead th.n-lv-actions {
+thead.p-lv-chead th.p-lv-rownum,
+thead.p-lv-chead th.p-lv-number,
+thead.p-lv-chead th.p-lv-check,
+thead.p-lv-chead th.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
-thead.n-lv-chead th.n-lv-hover {
+thead.p-lv-chead th.p-lv-hover {
 	font-weight: normal;
 }
-thead.n-lv-chead th.n-lv-filtered, thead.n-lv-chead th.n-lv-filtered:hover {
+thead.p-lv-chead th.p-lv-filtered, thead.p-lv-chead th.p-lv-filtered:hover {
 	font-style: italic;
 	font-weight: bold;
 }
-thead.n-lv-chead th.n-lv-sort-asc,
-thead.n-lv-chead th.n-lv-sort-desc,
-thead.n-lv-chead th.n-lv-sortable {
+thead.p-lv-chead th.p-lv-sort-asc,
+thead.p-lv-chead th.p-lv-sort-desc,
+thead.p-lv-chead th.p-lv-sortable {
 	cursor: pointer;
 }
-thead.n-lv-chead th .n-lv-sort-asc,
-thead.n-lv-chead th .n-lv-sort-desc,
-thead.n-lv-chead th .n-lv-sort-off {
+thead.p-lv-chead th .p-lv-sort-asc,
+thead.p-lv-chead th .p-lv-sort-desc,
+thead.p-lv-chead th .p-lv-sort-off {
 	display: inline-block;
 	vertical-align: middle;
 }
 
 /* table - tbody */
-tbody.n-lv-tbody {
+tbody.p-lv-tbody {
 }
-tbody.n-lv-tbody tr.n-lv-odd {
+tbody.p-lv-tbody tr.p-lv-odd {
 }
-tbody.n-lv-tbody tr.n-lv-even {
+tbody.p-lv-tbody tr.p-lv-even {
 }
-tbody.n-lv-tbody tr.n-lv-selected {
+tbody.p-lv-tbody tr.p-lv-selected {
 }
-tbody.n-lv-tbody tr.n-lv-hover {
+tbody.p-lv-tbody tr.p-lv-hover {
 }
-tbody.n-lv-tbody th {
+tbody.p-lv-tbody th {
 	font-weight: normal;
 }
-tbody.n-lv-tbody th, tbody.n-lv-tbody td {
+tbody.p-lv-tbody th, tbody.p-lv-tbody td {
 	padding: 2px 4px;
 	vertical-align: middle;
 }
-tbody.n-lv-tbody th.n-lv-check, tbody.n-lv-tbody td.n-lv-check,
-tbody.n-lv-tbody th.n-lv-number, tbody.n-lv-tbody td.n-lv-number,
-tbody.n-lv-tbody th.n-lv-rownum, tbody.n-lv-tbody td.n-lv-rownum,
-tbody.n-lv-tbody th.n-lv-actions, tbody.n-lv-tbody td.n-lv-actions {
+tbody.p-lv-tbody th.p-lv-check, tbody.p-lv-tbody td.p-lv-check,
+tbody.p-lv-tbody th.p-lv-number, tbody.p-lv-tbody td.p-lv-number,
+tbody.p-lv-tbody th.p-lv-rownum, tbody.p-lv-tbody td.p-lv-rownum,
+tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
 
-thead.n-lv-chead th, thead.n-lv-chead th .n-lv-cell,
-thead.n-lv-chead th.n-lv-actions, thead.n-lv-chead th.n-lv-actions .n-lv-cell,
-thead.n-lv-chead th.n-lv-number,  thead.n-lv-chead th.n-lv-number .n-lv-cell,
-thead.n-lv-chead th.n-lv-check,   thead.n-lv-chead th.n-lv-check .n-lv-cell,
-tbody.n-lv-tbody th.n-lv-number,  tbody.n-lv-tbody th.n-lv-number .n-lv-cell, 
-tbody.n-lv-tbody th.n-lv-rownum,  tbody.n-lv-tbody th.n-lv-rownum .n-lv-cell, 
-tbody.n-lv-tbody th.n-lv-check,   tbody.n-lv-tbody th.n-lv-check .n-lv-cell, 
-tbody.n-lv-tbody th.n-lv-actions, tbody.n-lv-tbody th.n-lv-actions .n-lv-cell, 
-tbody.n-lv-tbody td.n-lv-number,  tbody.n-lv-tbody td.n-lv-number .n-lv-cell,
-tbody.n-lv-tbody td.n-lv-rownum,  tbody.n-lv-tbody td.n-lv-rownum .n-lv-cell,
-tbody.n-lv-tbody td.n-lv-check,   tbody.n-lv-tbody td.n-lv-check .n-lv-cell,
-tbody.n-lv-tbody td.n-lv-actions, tbody.n-lv-tbody td.n-lv-actions .n-lv-cell {
+thead.p-lv-chead th, thead.p-lv-chead th .p-lv-cell,
+thead.p-lv-chead th.p-lv-actions, thead.p-lv-chead th.p-lv-actions .p-lv-cell,
+thead.p-lv-chead th.p-lv-number,  thead.p-lv-chead th.p-lv-number .p-lv-cell,
+thead.p-lv-chead th.p-lv-check,   thead.p-lv-chead th.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody th.p-lv-number,  tbody.p-lv-tbody th.p-lv-number .p-lv-cell, 
+tbody.p-lv-tbody th.p-lv-rownum,  tbody.p-lv-tbody th.p-lv-rownum .p-lv-cell, 
+tbody.p-lv-tbody th.p-lv-check,   tbody.p-lv-tbody th.p-lv-check .p-lv-cell, 
+tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody th.p-lv-actions .p-lv-cell, 
+tbody.p-lv-tbody td.p-lv-number,  tbody.p-lv-tbody td.p-lv-number .p-lv-cell,
+tbody.p-lv-tbody td.p-lv-rownum,  tbody.p-lv-tbody td.p-lv-rownum .p-lv-cell,
+tbody.p-lv-tbody td.p-lv-check,   tbody.p-lv-tbody td.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody td.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions .p-lv-cell {
 	white-space: nowrap;
 }
 
 /* theme */
 /*
-thead.n-lv-chead th.n-lv-column {
+thead.p-lv-chead th.p-lv-column {
 	border-left-style: dotted;
 	border-right-style: dotted;
 }
-tbody.n-lv-tbody td.n-lv-column,
-tbody.n-lv-tbody tr.n-lv-selected td.n-lv-column,
-tbody.n-lv-tbody tr:hover td.n-lv-column,
-tbody.n-lv-tbody tr.n-lv-hover td.n-lv-column {
+tbody.p-lv-tbody td.p-lv-column,
+tbody.p-lv-tbody tr.p-lv-selected td.p-lv-column,
+tbody.p-lv-tbody tr:hover td.p-lv-column,
+tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
 	border-left: dotted 1px #ccc;
 	border-right: dotted 1px #ccc;
 }
