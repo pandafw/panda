@@ -81,6 +81,8 @@ public class Entity {
 	private Map<String, List<EntityProperty>> uniqueKeyMap;
 	private Map<String, List<EntityProperty>> foreignKeyMap;
 	private List<EntityProperty> columnList;
+	private List<EntityProperty> joinList;
+	private List<EntityProperty> fieldList;
 	private Map<String, List<EntityProperty>> joinMap;
 
 	/**
@@ -145,6 +147,8 @@ public class Entity {
 		prepareUniqueKeyMap();
 		prepareForeignKeyMap();
 		prepareColumnList();
+		prepareJoinList();
+		prepareFieldList();
 		prepareJoinMap();
 	}
 
@@ -530,6 +534,24 @@ public class Entity {
 		}
 	}
 
+	private void prepareJoinList() {
+		joinList = new ArrayList<EntityProperty>();
+		for (EntityProperty p : getPropertyList()) {
+			if (p.isJoinColumn()) {
+				joinList.add(p);
+			}
+		}
+	}
+
+	private void prepareFieldList() {
+		fieldList = new ArrayList<EntityProperty>();
+		for (EntityProperty p : getPropertyList()) {
+			if (p.isDbColumn() || p.isJoinColumn()) {
+				fieldList.add(p);
+			}
+		}
+	}
+
 	/**
 	 * @return the primaryKeyList
 	 */
@@ -581,6 +603,20 @@ public class Entity {
 	 */
 	public List<EntityProperty> getColumnList() {
 		return columnList;
+	}
+
+	/**
+	 * @return the joinList
+	 */
+	public List<EntityProperty> getJoinList() {
+		return joinList;
+	}
+
+	/**
+	 * @return the fieldList
+	 */
+	public List<EntityProperty> getFieldList() {
+		return fieldList;
 	}
 
 	/**
