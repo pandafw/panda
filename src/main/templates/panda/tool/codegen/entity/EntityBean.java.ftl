@@ -56,12 +56,14 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 </#list>
 		};
 
+<#if entity.joinList?has_content>
 	public static final String[] JOINS = new String[] {
 <#list entity.joinList as p>
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
 		};
 
+</#if>
 	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
