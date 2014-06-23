@@ -1540,67 +1540,62 @@ if (typeof String.formatSize != "function") {
 }
 
 (function($) {
-	function setContentType($p, t) {
-		if (t == 'error') {
-			if (!$p.hasClass('error')) {
-				$p.addClass('error').removeClass('warn help info');
-			}
-		}
-		else if (t == 'warn') {
-			if (!$p.hasClass('error') && !$p.hasClass('warn')) {
-				$p.addClass('warn').removeClass('help info');
-			}
-		}
-		else if (t == 'confirm') {
-			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help')) {
-				$p.addClass('help').removeClass('info');
-			}
-		}
-		else {
-			if (!$p.hasClass('error') && !$p.hasClass('warn') && !$p.hasClass('help') && !$p.hasClass('info')) {
-				$p.addClass('info');
-			}
-		}
+	function setAlertType($p, s, t) {
+		$p.removeClass('alert-danger alert-warning alert-info alert-success').addClass(s.types[t]);
 	}
 	
 	function addMsg($p, s, m, t) {
 		var ic = s.icons[t];
-		$p.append('<ul class="' +  s.ulCls + '"><li><i class="' + ic + '"></i>' + m + '</li></ul>');
-		setContentType($p, t);
+		var tc = s.texts[t];
+		$p.append('<ul class="' +  s.ulCls + '"><li class="' + tc + '"><i class="' + ic + '"></i>' + m + '</li></ul>');
+		setAlertType($p, s, t);
 	}
 
 	function addMsgs($p, s, m, t) {
 		if (m) {
-			var ic = s.icons[t] + ' ' + c;
+			var ic = s.icons[t];
+			var tc = s.texts[t];
 			var h = '<ul class="' + s.ulCls + '">';
 			if ($.isArray(m)) {
 				for (var i = 0; i < m.length; i++) {
-					h += '<li><i class="' + ic + '"></i>' + m[i] + '</li>';
+					h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + m[i] + '</li>';
 				}
 			}
 			else {
 				for (var n in m) {
 					var v = m[n];
 					for (var i = 0; i < v.length; i++) {
-						h += '<li><i class="' + ic + '"></i>' + v[i] + '</li>';
+						h += '<li class="' + tc + '"><i class="' + ic + '"></i>' + v[i] + '</li>';
 					}
 				}
 			}
 			h += '</ul>';
 			$p.append(h);
-			setContentType($p, t);
+			setAlertType($p, s, t);
 		}
 	}
 	
 	$.palert = {
 		ulCls: 'fa-ul',
 		icons: {
-			'help':'fa-li fa fa-question-circle',
-			'info': 'fa-li fa fa-info-circle',
-			'error': 'fa-li fa fa-exclamation-circle',
-			'warn': 'fa-li fa fa-exclamation-triangle',
 			'down': 'fa-caret-down',
-			'up': 'fa-caret-up'
+			'up': 'fa-caret-up',
+			'info': 'fa-li fa fa-info-circle',
+			'help':'fa-li fa fa-question-circle',
+			'warn': 'fa-li fa fa-exclamation-triangle',
+			'error': 'fa-li fa fa-exclamation-circle'
+		},
+		texts: {
+			'info': 'text-success',
+			'help':'text-warning',
+			'warn': 'text-warning',
+			'error': 'text-dander'
+		},
+		types: {
+			'info': 'alert-success',
+			'help':'alert-info',
+			'warn': 'alert-warning',
+			'error': 'alert-dander'
 		}
 	};
 	

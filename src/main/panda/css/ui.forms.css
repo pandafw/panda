@@ -2,10 +2,6 @@
 	color: #FF0000;
 }
 
-.p-error, .p-field-errors {
-	color: #b94a48;
-}
-
 /** form layout */
 .p-form.form-horizontal {
 	background-color: #f9f9f9;
