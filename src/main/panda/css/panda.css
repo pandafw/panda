@@ -134,13 +134,14 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 .p-header > h3 {
 	margin-bottom: 5px;
+	margin-top: 0px;
 }
 .p-header > h3 > i, .p-header > i {
 	color: #2f6f9f;
+	font-size: 150%;
 	vertical-align: middle;
 }
 .p-header > h3.p-error > i, .p-header > i.p-error {
-	font-size: 200%;
 	color: #DC143C;
 }
 
