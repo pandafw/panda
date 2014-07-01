@@ -5431,7 +5431,7 @@ public class Strings {
 	 * @return right padded String or original String if no padding is necessary, {@code null} if
 	 *         null String input
 	 */
-	public static String rightPad(final String str, final int size) {
+	public static String rightPad(final CharSequence str, final int size) {
 		return rightPad(str, size, ' ');
 	}
 
@@ -5458,18 +5458,18 @@ public class Strings {
 	 * @return right padded String or original String if no padding is necessary, {@code null} if
 	 *         null String input
 	 */
-	public static String rightPad(final String str, final int size, final char padChar) {
+	public static String rightPad(final CharSequence str, final int size, final char padChar) {
 		if (str == null) {
 			return null;
 		}
 		final int pads = size - str.length();
 		if (pads <= 0) {
-			return str; // returns original String when possible
+			return str.toString(); // returns original String when possible
 		}
 		if (pads > PAD_LIMIT) {
 			return rightPad(str, size, String.valueOf(padChar));
 		}
-		return str.concat(repeat(padChar, pads));
+		return str.toString().concat(repeat(padChar, pads));
 	}
 
 	/**
@@ -5498,7 +5498,7 @@ public class Strings {
 	 * @return right padded String or original String if no padding is necessary, {@code null} if
 	 *         null String input
 	 */
-	public static String rightPad(final String str, final int size, String padStr) {
+	public static String rightPad(final CharSequence str, final int size, String padStr) {
 		if (str == null) {
 			return null;
 		}
@@ -5509,17 +5509,17 @@ public class Strings {
 		final int strLen = str.length();
 		final int pads = size - strLen;
 		if (pads <= 0) {
-			return str; // returns original String when possible
+			return str.toString(); // returns original String when possible
 		}
 		if (padLen == 1 && pads <= PAD_LIMIT) {
 			return rightPad(str, size, padStr.charAt(0));
 		}
 
 		if (pads == padLen) {
-			return str.concat(padStr);
+			return ((String)str).concat(padStr);
 		}
 		else if (pads < padLen) {
-			return str.concat(padStr.substring(0, pads));
+			return str.toString().concat(padStr.substring(0, pads));
 		}
 		else {
 			final char[] padding = new char[pads];
@@ -5527,7 +5527,7 @@ public class Strings {
 			for (int i = 0; i < pads; i++) {
 				padding[i] = padChars[i % padLen];
 			}
-			return str.concat(new String(padding));
+			return str.toString().concat(new String(padding));
 		}
 	}
 
