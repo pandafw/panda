@@ -89,6 +89,122 @@ public class Methods {
 	 * @param object object
 	 * @param methodName get method with this name
 	 * @return The value returned by the invoked method
+	 */
+	public static Object saveCall(Object object, String methodName) {
+		try {
+			return invokeMethod(object, methodName);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Invoke a named method whose parameter type matches the object type.
+	 * </p>
+	 * <p>
+	 * The behaviour of this method is less deterministic than <code>invokeExactMethod()</code>. It
+	 * loops through all methods with names that match and then executes the first it finds with
+	 * compatable parameters.
+	 * </p>
+	 * <p>
+	 * This method supports calls to methods taking primitive parameters via passing in wrapping
+	 * classes. So, for example, a <code>Boolean</code> class would match a <code>boolean</code>
+	 * primitive.
+	 * </p>
+	 * <p>
+	 * This is a convenient wrapper for
+	 * {@link #invokeMethod(Object object,String methodName,Object [] args)}.
+	 * </p>
+	 * 
+	 * @param object invoke method on this object
+	 * @param methodName get method with this name
+	 * @param arg use this argument
+	 * @return The value returned by the invoked method
+	 */
+	public static Object saveCall(Object object, String methodName, Object arg) {
+		try {
+			return invokeMethod(object, methodName, arg);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Invoke a named method whose parameter type matches the object type.
+	 * </p>
+	 * <p>
+	 * The behaviour of this method is less deterministic than
+	 * {@link #invokeExactMethod(Object object,String methodName,Object [] args)}. It loops through
+	 * all methods with names that match and then executes the first it finds with compatable
+	 * parameters.
+	 * </p>
+	 * <p>
+	 * This method supports calls to methods taking primitive parameters via passing in wrapping
+	 * classes. So, for example, a <code>Boolean</code> class would match a <code>boolean</code>
+	 * primitive.
+	 * </p>
+	 * <p>
+	 * This is a convenient wrapper for
+	 * {@link #invokeMethod(Object object,String methodName,Object [] args,Class[] parameterTypes)}.
+	 * </p>
+	 * 
+	 * @param object invoke method on this object
+	 * @param methodName get method with this name
+	 * @param args use these arguments - treat null as empty array
+	 * @return The value returned by the invoked method
+	 */
+	public static Object saveCall(Object object, String methodName, Object[] args) {
+		try {
+			return invokeMethod(object, methodName, args);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Invoke a named method whose parameter type matches the object type.
+	 * </p>
+	 * <p>
+	 * The behaviour of this method is less deterministic than
+	 * {@link #invokeExactMethod(Object object,String methodName,Object [] args,Class[] parameterTypes)}
+	 * . It loops through all methods with names that match and then executes the first it finds
+	 * with compatable parameters.
+	 * </p>
+	 * <p>
+	 * This method supports calls to methods taking primitive parameters via passing in wrapping
+	 * classes. So, for example, a <code>Boolean</code> class would match a <code>boolean</code>
+	 * primitive.
+	 * </p>
+	 * 
+	 * @param object invoke method on this object
+	 * @param methodName get method with this name
+	 * @param args use these arguments - treat null as empty array
+	 * @param parameterTypes match these parameters - treat null as empty array
+	 * @return The value returned by the invoked method
+	 */
+	public static Object safeCall(Object object, String methodName, Object[] args, Class[] parameterTypes) {
+		try {
+			return invokeMethod(object, methodName, args, parameterTypes);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Invoke a named method.
+	 * </p>
+	 * 
+	 * @param object object
+	 * @param methodName get method with this name
+	 * @return The value returned by the invoked method
 	 * @throws NoSuchMethodException if there is no such accessible method
 	 * @throws InvocationTargetException wraps an exception thrown by the method invoked
 	 * @throws IllegalAccessException if the requested method is not accessible via reflection
