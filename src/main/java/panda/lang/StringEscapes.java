@@ -52,7 +52,7 @@ public abstract class StringEscapes {
 	public static final CharSequenceTranslator ESCAPE_JSON = new AggregateTranslator(
 			new LookupTranslator(new String[][] { { "\"", "\\\"" }, { "\\", "\\\\" }, { "/", "\\/" } }), 
 			new LookupTranslator(EntityArrays.JAVA_CTRL_CHARS_ESCAPE()), 
-			JavaUnicodeEscaper.outsideOf(32, 0x7f)
+			JavaUnicodeEscaper.between(0x80, 0xFF)
 		);
 
 	/**
