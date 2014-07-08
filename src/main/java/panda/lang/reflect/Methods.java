@@ -90,7 +90,7 @@ public class Methods {
 	 * @param methodName get method with this name
 	 * @return The value returned by the invoked method
 	 */
-	public static Object saveCall(Object object, String methodName) {
+	public static Object safeCall(Object object, String methodName) {
 		try {
 			return invokeMethod(object, methodName);
 		}
@@ -123,7 +123,7 @@ public class Methods {
 	 * @param arg use this argument
 	 * @return The value returned by the invoked method
 	 */
-	public static Object saveCall(Object object, String methodName, Object arg) {
+	public static Object safeCall(Object object, String methodName, Object arg) {
 		try {
 			return invokeMethod(object, methodName, arg);
 		}
@@ -157,7 +157,7 @@ public class Methods {
 	 * @param args use these arguments - treat null as empty array
 	 * @return The value returned by the invoked method
 	 */
-	public static Object saveCall(Object object, String methodName, Object[] args) {
+	public static Object safeCall(Object object, String methodName, Object[] args) {
 		try {
 			return invokeMethod(object, methodName, args);
 		}
