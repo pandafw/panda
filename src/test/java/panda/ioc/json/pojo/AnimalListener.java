@@ -13,11 +13,13 @@ public class AnimalListener extends AbstractMethodInterceptor {
 	}
 
 	public boolean beforeInvoke(Object obj, Method method, Object... args) {
+		System.err.println("beforeInvoke");
 		sb.append("B:").append(method.getName()).append(args.length).append(';');
 		return true;
 	}
 
 	public Object afterInvoke(Object obj, Object returnObj, Method method, Object... args) {
+		System.err.println("afterInvoke");
 		sb.append("A:").append(method.getName()).append(args.length).append(';');
 		return returnObj;
 	}

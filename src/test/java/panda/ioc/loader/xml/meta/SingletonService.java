@@ -1,9 +1,9 @@
 package panda.ioc.loader.xml.meta;
 
-import panda.ioc.annotation.Bean;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 
-@Bean(singleton=false, create="create", depose="depose")
+@IocBean(singleton=false, create="create", depose="depose")
 public class SingletonService {
 	
 	public static int CreateCount;

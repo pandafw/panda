@@ -1,8 +1,9 @@
 package panda.ioc.impl;
 
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import panda.ioc.IocContext;
 import panda.ioc.ObjectProxy;
@@ -13,16 +14,21 @@ import panda.log.Logs;
 /**
  * 自定义级别上下文对象
  */
-public class ScopeContext implements IocContext {
+public class ScopeIocContext implements IocContext, Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private static final Log log = Logs.getLog(ScopeContext.class);
+	private static final Log log = Logs.getLog(ScopeIocContext.class);
 
+	public static final String APP = "app";
+	public static final String SES = "ses";
+	public static final String REQ = "req";
+	
 	private String scope;
 	private Map<String, ObjectProxy> objs;
 
-	public ScopeContext(String scope) {
+	public ScopeIocContext(String scope) {
 		this.scope = scope;
-		objs = new HashMap<String, ObjectProxy>();
+		objs = new ConcurrentHashMap<String, ObjectProxy>();
 	}
 
 	private void checkBuffer() {
@@ -51,14 +57,11 @@ public class ScopeContext implements IocContext {
 	public boolean save(String scope, String name, ObjectProxy obj) {
 		if (accept(scope)) {
 			checkBuffer();
-			synchronized (this) {
-				if (!objs.containsKey(name)) {
-					if (log.isDebugEnabled()) {
-						log.debugf("Save object '%s' to [%s] ", name, scope);
-					}
-					return null != objs.put(name, obj);
-				}
+			if (log.isDebugEnabled()) {
+				log.debugf("Save object '%s' to [%s] ", name, scope);
 			}
+			objs.put(name, obj);
+			return true;
 		}
 		return false;
 	}
@@ -71,13 +74,13 @@ public class ScopeContext implements IocContext {
 		if (accept(scope)) {
 			checkBuffer();
 
-			synchronized (this) {
-				if (objs.containsKey(name)) {
-					if (log.isDebugEnabled()) {
-						log.debugf("Remove object '%s' from [%s] ", name, scope);
-					}
-					return null != objs.remove(name);
+			ObjectProxy op = objs.remove(name);
+			if (op != null) {
+				if (log.isDebugEnabled()) {
+					log.debugf("Depose object '%s' ...", name);
 				}
+				op.depose();
+				return true;
 			}
 		}
 		return false;
@@ -95,15 +98,15 @@ public class ScopeContext implements IocContext {
 	}
 
 	public void depose() {
-		if (objs != null) {
-			clear();
-			objs = null;
-		}
-		else {
+		if (objs == null) {
 			if (log.isWarnEnabled()) {
-				log.warn("can't depose twice , skip");
+				log.warnf("%s IocContext already deposed", scope);
 			}
+			return;
 		}
+		
+		clear();
+		objs = null;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
-import panda.Panda;
+import panda.aop.DefaultClassDefiner;
 import panda.aop.asm.test.Aop1;
 import panda.aop.interceptor.AbstractMethodInterceptor;
 import panda.aop.interceptor.LoggingMethodInterceptor;
@@ -23,7 +23,7 @@ public class RegexMethodMatcherTest {
 		MyL interceptor = new MyL();
 		agent.addInterceptor(new RegexMethodMatcher(null, "nonArgsVoid", 0), interceptor);
 		agent.addInterceptor(MethodMatcherFactory.matcher(".*"), new LoggingMethodInterceptor());
-		Class<Aop1> cls = agent.define(Panda.cd(), Aop1.class);
+		Class<Aop1> cls = agent.define(DefaultClassDefiner.create(), Aop1.class);
 		Aop1 aop1 = Classes.born(cls, "Nutz");
 		aop1.nonArgsVoid();
 		assertFalse(interceptor.runned);

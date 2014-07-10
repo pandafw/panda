@@ -34,7 +34,6 @@ public class IocValue {
 	public static final String TYPE_FILE = "file";
 	public static final String TYPE_EL = "el";
 	public static final String TYPE_JNDI = "jndi";
-	public static final String TYPE_APP = "app";
 
 	private String type;
 

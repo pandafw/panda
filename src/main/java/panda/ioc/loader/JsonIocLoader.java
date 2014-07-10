@@ -69,7 +69,7 @@ public class JsonIocLoader extends MapIocLoader {
 	
 	private void loadFromStream(InputStream is) throws IOException {
 		try {
-			Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>)Jsons.fromJson(is, Charsets.UTF_8, Map.class);
+			Map map = Jsons.fromJson(is, Charsets.UTF_8, Map.class);
 			if (null != map && map.size() > 0) {
 				getMap().putAll(map);
 			}
@@ -80,7 +80,7 @@ public class JsonIocLoader extends MapIocLoader {
 	}
 	
 	private void loadFromReader(Reader reader) {
-		Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>)Jsons.fromJson(reader, Map.class);
+		Map map = Jsons.fromJson(reader, Map.class);
 		if (null != map && map.size() > 0) {
 			getMap().putAll(map);
 		}

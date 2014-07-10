@@ -9,6 +9,7 @@ import org.junit.Test;
 import panda.ioc.IocLoader;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.loader.annotation.meta.ClassA;
+import panda.ioc.loader.annotation.meta.ClassB;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 
@@ -24,12 +25,12 @@ public class AnnotationIocLoaderTest {
 
 	@Test
 	public void testHas() {
-		assertTrue(iocLoader.has("classA"));
+		assertTrue(iocLoader.has(ClassA.class.getName()));
 	}
 
 	@Test
 	public void testLoad() throws Throwable {
-		IocObject iocObject = iocLoader.load(null, "classB");
+		IocObject iocObject = iocLoader.load(null, ClassB.class.getName());
 		assertNotNull(iocObject);
 		assertNotNull(iocObject.getFields());
 		assertTrue(iocObject.getFields().length == 1);

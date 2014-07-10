@@ -5,8 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import panda.Panda;
 import panda.aop.ClassAgent;
+import panda.aop.DefaultClassDefiner;
 import panda.aop.asm.test.Aop1;
 import panda.aop.asm.test.MyMethodInterceptor;
 import panda.aop.matcher.MethodMatcherFactory;
@@ -18,7 +18,7 @@ public class Main2 {
 
 		ClassAgent agent = new AsmClassAgent();
 		agent.addInterceptor(MethodMatcherFactory.matcher(".*"), new MyMethodInterceptor());
-		Class<Aop1> classZ = agent.define(Panda.cd(), Aop1.class);
+		Class<Aop1> classZ = agent.define(DefaultClassDefiner.create(), Aop1.class);
 		System.out.println(classZ);
 		Field[] fields = classZ.getDeclaredFields();
 		for (Field field : fields) {

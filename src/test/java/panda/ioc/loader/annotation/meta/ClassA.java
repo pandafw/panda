@@ -1,8 +1,8 @@
 package panda.ioc.loader.annotation.meta;
 
-import panda.ioc.annotation.Bean;
+import panda.ioc.annotation.IocBean;
 
-@Bean
+@IocBean
 public class ClassA {
 
 }

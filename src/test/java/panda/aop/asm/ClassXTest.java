@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import panda.Panda;
 import panda.aop.ClassAgent;
 import panda.aop.ClassDefiner;
+import panda.aop.DefaultClassDefiner;
 import panda.aop.asm.test.Aop1;
 import panda.aop.asm.test.Aop7;
 import panda.aop.asm.test.MyMethodInterceptor;
@@ -36,34 +36,34 @@ public class ClassXTest {
 
 	@Test
 	public void testCreat() {
-		classAgent.define(Panda.cd(), Object.class);
-		classAgent.define(Panda.cd(), getClass());
+		classAgent.define(DefaultClassDefiner.create(), Object.class);
+		classAgent.define(DefaultClassDefiner.create(), getClass());
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testInterface() {
-		classAgent.define(Panda.cd(), Runnable.class);
+		classAgent.define(DefaultClassDefiner.create(), Runnable.class);
 	}
 
 	@Test
 	public void testDupAop() {
 		Class<Aop1> klass = Aop1.class;
 		for (int i = 0; i < 10000; i++) {
-			klass = classAgent.define(Panda.cd(), klass);
+			klass = classAgent.define(DefaultClassDefiner.create(), klass);
 		}
 		Assert.assertFalse(Aop1.class == klass);
 	}
 
 	@Test
 	public void testBorn() throws Exception {
-		Class<Aop1> klass = classAgent.define(Panda.cd(), Aop1.class);
+		Class<Aop1> klass = classAgent.define(DefaultClassDefiner.create(), Aop1.class);
 		Aop1 a1 = Classes.newInstance(klass, "Nut", String.class);
 		a1.returnObjectArray();
 	}
 
 	@Test
 	public void testCreate2() throws Throwable {
-		ClassDefiner cd = Panda.cd();
+		ClassDefiner cd = DefaultClassDefiner.create();
 
 		Class<?> obj = classAgent.define(cd, Aop1.class);
 		Class<?> obj2 = classAgent.define(cd, Aop1.class);
@@ -77,13 +77,13 @@ public class ClassXTest {
 
 	@Test
 	public void testConstructor2() {
-		Class<Aop1> newClass = classAgent.define(Panda.cd(), Aop1.class);
+		Class<Aop1> newClass = classAgent.define(DefaultClassDefiner.create(), Aop1.class);
 		Assert.assertTrue(newClass.getDeclaredConstructors().length > 0);
 	}
 
 	@Test
 	public void testReturnPrimitive() throws Throwable {
-		Aop1 a1 = classAgent.define(Panda.cd(), Aop1.class).getConstructor(String.class).newInstance("AoP");
+		Aop1 a1 = classAgent.define(DefaultClassDefiner.create(), Aop1.class).getConstructor(String.class).newInstance("AoP");
 		a1.returnLong();
 		a1.returnBoolean();
 		a1.returnByte();
@@ -140,7 +140,7 @@ public class ClassXTest {
 	}
 
 	private <T> T getNewInstance(Class<T> klass) {
-		Class<T> newClass = classAgent.define(Panda.cd(), klass);
+		Class<T> newClass = classAgent.define(DefaultClassDefiner.create(), klass);
 		T obj = Classes.born(newClass, "AoP", String.class);
 		System.out.println(obj.getClass().getSuperclass());
 		return obj;
@@ -154,7 +154,7 @@ public class ClassXTest {
 
 	@Test
 	public void test_signature() throws Throwable {
-		Class<?> clazz = classAgent.define(Panda.cd(), Aop7.class);
+		Class<?> clazz = classAgent.define(DefaultClassDefiner.create(), Aop7.class);
 		System.out.println(clazz.newInstance());
 		Assert.assertTrue(Aop1.class.equals(Types.getRawType(Types.getDeclaredGenericTypeParam(clazz, 0))));
 	}

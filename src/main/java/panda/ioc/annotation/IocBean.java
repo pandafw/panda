@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface Bean {
+public @interface IocBean {
 
 	/**
 	 * 指定一个名字, 默认为取类名的首字母小写, 如 STing,会设置为sTing
@@ -29,7 +29,7 @@ public @interface Bean {
 	 * 这些值,对应构造方法的参数
 	 * 
 	 * @see panda.ioc.meta.IocValue
-	 * @see panda.ioc.annotation.Inject
+	 * @see panda.ioc.annotation.IocInject
 	 */
 	String[] args() default {};
 

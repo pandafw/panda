@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import panda.ioc.Ioc2;
+import panda.ioc.Ioc;
 import panda.ioc.ObjectProxy;
-import panda.ioc.impl.ScopeContext;
+import panda.ioc.impl.ScopeIocContext;
 import panda.ioc.json.pojo.Animal;
 
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ public class ScopeJsonIocTest {
 
 	@Test
 	public void test_simple_scope() {
-		Ioc2 ioc = I(J("f1", "scope:'app',fields:{name:'F1'}"), J("f2", "scope:'MyScope',fields:{name:'F2'}"));
+		Ioc ioc = I(J("f1", "scope:'app',fields:{name:'F1'}"), J("f2", "scope:'MyScope',fields:{name:'F2'}"));
 
 		Animal f1 = ioc.get(Animal.class, "f1");
 		assertEquals("F1", f1.getName());
@@ -27,7 +27,7 @@ public class ScopeJsonIocTest {
 		assertEquals("F2", f22.getName());
 		assertFalse(f2 == f22);
 
-		ScopeContext ic = new ScopeContext("MyScope");
+		ScopeIocContext ic = new ScopeIocContext("MyScope");
 		Map<String, ObjectProxy> map = ic.getObjs();
 		f2 = ioc.get(Animal.class, "f2", ic);
 		assertEquals("F2", f2.getName());
@@ -44,7 +44,7 @@ public class ScopeJsonIocTest {
 
 	@Test
 	public void test_refer_from_diffenent_scope() {
-		Ioc2 ioc = I(J("f1", "type : '" + Animal.class.getName() + "' , scope:'app',fields:{name:'F1'}"),
+		Ioc ioc = I(J("f1", "type : '" + Animal.class.getName() + "' , scope:'app',fields:{name:'F1'}"),
 			J("f2", "type : '" + Animal.class.getName() + "' , scope:'MyScope',fields:{name:{refer : 'f3'}}"),
 			J("f3", "type : '" + Animal.class.getName() + "' , scope:'MyScope'}"));
 		ioc.get(null, "f2");

@@ -3,6 +3,7 @@ package panda.ioc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,7 +29,21 @@ public class IocLoading {
 
 	private Set<String> supportedTypes;
 
-	public IocLoading(Set<String> supportedTypes) {
+	public IocLoading() {
+		this.supportedTypes = new HashSet<String>(9); // count of IocValue.TYPE_XXX
+	}
+
+	/**
+	 * @return the supportedTypes
+	 */
+	public Set<String> getSupportedTypes() {
+		return supportedTypes;
+	}
+
+	/**
+	 * @param supportedTypes the supportedTypes to set
+	 */
+	public void setSupportedTypes(Set<String> supportedTypes) {
 		this.supportedTypes = supportedTypes;
 	}
 
@@ -148,7 +163,7 @@ public class IocLoading {
 		IocValue iv = new IocValue();
 		// Null
 		if (null == obj) {
-			iv.setType("null");
+			iv.setType(IocValue.TYPE_NULL);
 			return iv;
 		}
 		// IocValue

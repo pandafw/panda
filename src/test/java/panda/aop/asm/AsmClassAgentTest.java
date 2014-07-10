@@ -14,9 +14,9 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import panda.Panda;
 import panda.aop.ClassAgent;
 import panda.aop.ClassDefiner;
+import panda.aop.DefaultClassDefiner;
 import panda.aop.interceptor.LoggingMethodInterceptor;
 import panda.aop.javassist.lstn.MethodCounter;
 import panda.aop.javassist.lstn.RhinocerosListener;
@@ -41,7 +41,7 @@ public class AsmClassAgentTest {
 		ClassAgent ca2 = getNewClassAgent();
 		ca2.addInterceptor(MethodMatcherFactory.matcher(".*"), new MethodCounter(cc));
 
-		ClassDefiner cd = Panda.cd();
+		ClassDefiner cd = DefaultClassDefiner.create();
 
 		Class<? extends Moose> c = ca.define(cd, Moose.class);
 		Moose m = c.newInstance();
@@ -61,7 +61,7 @@ public class AsmClassAgentTest {
 		Arrays.fill(cc, 0);
 		ClassAgent aca = getNewClassAgent();
 		aca.addInterceptor(MethodMatcherFactory.matcher("returnArrayMethod"), new MethodCounter(cc));
-		Class<? extends Buffalo> c = aca.define(Panda.cd(), Buffalo.class);// RA.class;
+		Class<? extends Buffalo> c = aca.define(DefaultClassDefiner.create(), Buffalo.class);// RA.class;
 		Buffalo r = Classes.born(c);
 		String[] ss = r.returnArrayMethod();
 		assertEquals("1, 1, 0, 0", Strings.join(cc, ", "));
@@ -115,7 +115,7 @@ public class AsmClassAgentTest {
 		aca.addInterceptor(MethodMatcherFactory.matcher("run"), new MethodCounter(crun));
 		aca.addInterceptor(MethodMatcherFactory.matcher(".*"), new MethodCounter(cc));
 		aca.addInterceptor(MethodMatcherFactory.matcher("doSomething"), new RhinocerosListener());
-		Class<? extends Rhinoceros> c = aca.define(Panda.cd(), Rhinoceros.class);// RA.class;
+		Class<? extends Rhinoceros> c = aca.define(DefaultClassDefiner.create(), Rhinoceros.class);// RA.class;
 		Rhinoceros r = Classes.born(c);
 		r.doSomething(BEH.run);
 		r.doSomething(BEH.fight);
@@ -144,7 +144,7 @@ public class AsmClassAgentTest {
 		ClassAgent aca = getNewClassAgent();
 		aca.addInterceptor(MethodMatcherFactory.matcher(PUBLIC), new MethodCounter(cpub));
 		aca.addInterceptor(MethodMatcherFactory.matcher(PROTECTED), new MethodCounter(cpro));
-		Class<? extends Hippo> c = aca.define(Panda.cd(), Hippo.class);// RA.class;
+		Class<? extends Hippo> c = aca.define(DefaultClassDefiner.create(), Hippo.class);// RA.class;
 		Hippo r = Classes.born(c);
 		Vegetarians.run(r, 78);
 		r.doSomething(BEH.run);

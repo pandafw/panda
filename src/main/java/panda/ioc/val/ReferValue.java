@@ -1,7 +1,5 @@
 package panda.ioc.val;
 
-import panda.ioc.Ioc;
-import panda.ioc.Ioc2;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Classes;
@@ -34,12 +32,12 @@ public class ReferValue implements ValueProxy {
 		this.type = p.getValue();
 	}
 
+	public ReferValue(Class<?> type) {
+		this.type = type;
+	}
+
 	public Object get(IocMaking ing) {
-		Ioc ioc = ing.getIoc();
-		if (ioc instanceof Ioc2) {
-			return ((Ioc2)ioc).get(type, name, ing.getContext());
-		}
-		return ioc.get(type, name);
+		return ing.getIoc().get(type, name, ing.getContext());
 	}
 
 }

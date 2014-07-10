@@ -1,7 +1,6 @@
 package panda.ioc.json;
 
 import panda.ioc.Ioc;
-import panda.ioc.Ioc2;
 import panda.ioc.impl.PandaIoc;
 import panda.ioc.json.pojo.Animal;
 import panda.ioc.loader.MapIocLoader;
@@ -9,7 +8,7 @@ import panda.lang.Strings;
 
 class Utils {
 
-	static Ioc2 I(String... ss) {
+	static Ioc I(String... ss) {
 		String json = "{";
 		json += Strings.join(ss, ',');
 		json += "}";

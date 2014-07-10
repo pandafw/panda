@@ -12,8 +12,8 @@ import panda.ioc.IocException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
 import panda.ioc.ObjectLoadException;
-import panda.ioc.annotation.Inject;
-import panda.ioc.annotation.Bean;
+import panda.ioc.annotation.IocInject;
+import panda.ioc.annotation.IocBean;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
@@ -65,7 +65,7 @@ public class AnnotationIocLoader implements IocLoader {
 			return;
 		}
 		
-		Bean iocBean = clazz.getAnnotation(Bean.class);
+		IocBean iocBean = clazz.getAnnotation(IocBean.class);
 		if (iocBean != null) {
 			if (log.isDebugEnabled()) {
 				log.debugf("Found a Class with Ioc-Annotation : %s", clazz);
@@ -111,9 +111,9 @@ public class AnnotationIocLoader implements IocLoader {
 
 			// 处理字段(以@Inject方式,位于字段)
 			List<String> fieldList = new ArrayList<String>();
-			Field[] fields = Fields.getAnnotationFields(clazz, Inject.class);
+			Field[] fields = Fields.getAnnotationFields(clazz, IocInject.class);
 			for (Field field : fields) {
-				Inject inject = field.getAnnotation(Inject.class);
+				IocInject inject = field.getAnnotation(IocInject.class);
 				IocField iocField = new IocField();
 				iocField.setName(field.getName());
 	
@@ -121,7 +121,7 @@ public class AnnotationIocLoader implements IocLoader {
 				if (Strings.isBlank(inject.value())) {
 					iocValue = new IocValue();
 					iocValue.setType(IocValue.TYPE_REF);
-					iocValue.setValue(field.getName());
+					iocValue.setValue(Object.class.equals(inject.type()) ? field.getType() : inject.type());
 				}
 				else {
 					iocValue = convert(inject.value());
@@ -148,7 +148,7 @@ public class AnnotationIocLoader implements IocLoader {
 			}
 			
 			for (Method method : methods) {
-				Inject inject = method.getAnnotation(Inject.class);
+				IocInject inject = method.getAnnotation(IocInject.class);
 				if (inject == null) {
 					continue;
 				}
@@ -223,7 +223,7 @@ public class AnnotationIocLoader implements IocLoader {
 				if (log.isWarnEnabled()) {
 					Field[] fields = clazz.getDeclaredFields();
 					for (Field field : fields) {
-						if (field.getAnnotation(Inject.class) != null) {
+						if (field.getAnnotation(IocInject.class) != null) {
 							log.warnf("class(%s) don't has @IocBean, but field(%s) has @Inject! Miss @IocBean ??",
 								clazz.getName(), field.getName());
 							break;
@@ -238,15 +238,15 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 
 	public static String getBeanName(Class<?> cls) {
-		return getBeanName(cls, cls.getAnnotation(Bean.class));
+		return getBeanName(cls, cls.getAnnotation(IocBean.class));
 	}
 	
-	public static String getBeanName(Class<?> cls, Bean iocBean) {
+	public static String getBeanName(Class<?> cls, IocBean iocBean) {
 		String bn = iocBean.name();
 		if (Strings.isBlank(bn)) {
 			bn = iocBean.value();
 			if (Strings.isBlank(bn)) {
-				bn = Strings.uncapitalize(cls.getSimpleName());
+				bn = cls.getName();
 			}
 		}
 		return bn;
@@ -254,12 +254,17 @@ public class AnnotationIocLoader implements IocLoader {
 	
 	protected IocValue convert(String value) {
 		IocValue iocValue = new IocValue();
-		if (value.contains(":")) {
-			iocValue.setType(value.substring(0, value.indexOf(':')));
-			iocValue.setValue(value.substring(value.indexOf(':') + 1));
+		int colon = value.indexOf(':');
+		if (colon == 0) {
+			iocValue.setType(IocValue.TYPE_REF);
+			iocValue.setValue(value.substring(1));
+		}
+		else if (colon > 0) {
+			iocValue.setType(value.substring(0, colon));
+			iocValue.setValue(value.substring(colon + 1));
 		}
 		else {
-			iocValue.setValue(value); // TODO 是否应该改为默认refer呢?
+			iocValue.setValue(value);
 		}
 		return iocValue;
 	}
@@ -273,8 +278,9 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 
 	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
-		if (has(name))
+		if (has(name)) {
 			return map.get(name);
+		}
 		throw new ObjectLoadException("Object '" + name + "' without define!");
 	}
 

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.ioc.Ioc2;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.ValueProxyMaker;
@@ -19,7 +18,7 @@ public class IocCustomizedValueTypeTest {
 	@Test
 	public void test_simple_customized() {
 		String json = "{xb:{name:{cc:'XiaoBai'}}}";
-		Ioc2 ioc = new PandaIoc(new MapIocLoader(json));
+		PandaIoc ioc = new PandaIoc(new MapIocLoader(json));
 		ioc.addValueProxyMaker(new ValueProxyMaker() {
 			public ValueProxy make(IocMaking ing, IocValue iv) {
 				if ("cc".equalsIgnoreCase(iv.getType())) {

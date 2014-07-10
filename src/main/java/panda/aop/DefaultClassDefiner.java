@@ -3,6 +3,7 @@ package panda.aop;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import panda.Panda;
 import panda.lang.Classes;
 
 /**
@@ -11,42 +12,12 @@ import panda.lang.Classes;
  * @author Wendal(wendal1985@gmail.com)
  */
 public class DefaultClassDefiner extends ClassLoader implements ClassDefiner {
-
-	protected static ClassDefiner one;
-
-	protected static ClassLoader moreClassLoader;
-
-	public static void init(ClassLoader cd) {
-		if (one == null) {
-			synchronized (DefaultClassDefiner.class) {
-				if (one == null) {
-					AccessController.doPrivileged(new PrivilegedAction<DefaultClassDefiner>() {
-						public DefaultClassDefiner run() {
-							one = new DefaultClassDefiner(DefaultClassDefiner.class.getClassLoader());
-							return (DefaultClassDefiner)DefaultClassDefiner.defaultOne();
-						}
-					});
-				}
+	public static ClassDefiner create() {
+		return AccessController.doPrivileged(new PrivilegedAction<DefaultClassDefiner>() {
+			public DefaultClassDefiner run() {
+				return new DefaultClassDefiner(Panda.class.getClassLoader());
 			}
-		}
-		if (moreClassLoader == null)
-			moreClassLoader = cd;
-	}
-
-	public static ClassDefiner defaultOne() {
-		if (one == null)
-			init(null);
-		return one;
-	}
-
-	public static final Class<?> def(String className, byte[] bytes) {
-		try {
-			return defaultOne().load(className);
-		}
-		catch (Throwable e) {
-			// TODO: handle exception
-		}
-		return defaultOne().define(className, bytes);
+		});
 	}
 
 	/**
@@ -99,18 +70,6 @@ public class DefaultClassDefiner extends ClassLoader implements ClassDefiner {
 				}
 			}
 		}
-		if (moreClassLoader != null) {
-			try {
-				return moreClassLoader.loadClass(className);
-			}
-			catch (Throwable e) {
-			}
-		}
 		return super.loadClass(className);
-	}
-
-	public static void reset() {
-		one = null;
-		defaultOne();
 	}
 }

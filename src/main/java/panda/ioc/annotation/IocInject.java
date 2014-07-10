@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Inject {
+public @interface IocInject {
 
 	/**
 	 * 规则: type:value
@@ -26,4 +26,12 @@ public @interface Inject {
 	 * @return 需要注入的值的表达式
 	 */
 	String value() default "";
+	
+	/**
+	 * Bean type
+	 * This is ignored if value is specified.
+	 * 
+	 * @return Bean type
+	 */
+	Class<?> type() default Object.class;
 }

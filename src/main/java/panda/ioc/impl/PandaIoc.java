@@ -1,11 +1,10 @@
 package panda.ioc.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-import panda.ioc.Ioc2;
+import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.IocException;
 import panda.ioc.IocLoader;
@@ -27,13 +26,11 @@ import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 
-public class PandaIoc implements Ioc2 {
-
-	private final Object lock_get = new Object();
+public class PandaIoc implements Ioc {
 
 	private static final Log log = Logs.getLog(PandaIoc.class);
 
-	private static final String DEF_SCOPE = "app";
+	private final Object lock = new Object();
 
 	/**
 	 * 读取配置文件的 Loader
@@ -64,18 +61,14 @@ public class PandaIoc implements Ioc2 {
 	 * 对象默认生命周期范围名
 	 */
 	private String defaultScope;
-	
+
 	/**
-	 * <ul>
-	 * <li>缓存支持的对象值类型
-	 * <li>如果 addValueProxyMaker() 被调用，这个缓存会被清空
-	 * <li>createLoading() 将会检查这个缓存
-	 * </ul>
+	 * helper class for IocLoad
 	 */
-	private Set<String> supportedTypes;
+	private IocLoading loading;
 
 	public PandaIoc(IocLoader loader) {
-		this(loader, new ScopeContext(DEF_SCOPE), DEF_SCOPE);
+		this(loader, new ScopeIocContext(ScopeIocContext.APP), ScopeIocContext.APP);
 	}
 
 	public PandaIoc(IocLoader loader, IocContext context, String defaultScope) {
@@ -96,6 +89,7 @@ public class PandaIoc implements Ioc2 {
 		else {
 			this.loader = CachedIocLoaderImpl.create(loader);
 		}
+		this.loading = new IocLoading();
 		
 		vpms = new ArrayList<ValueProxyMaker>(5); // 预留五个位置，足够了吧
 		addValueProxyMaker(new DefaultValueProxyMaker());
@@ -109,51 +103,36 @@ public class PandaIoc implements Ioc2 {
 		}
 	}
 
-	/**
-	 * @return 一个新创建的 IocLoading 对象
-	 */
-	private IocLoading createLoading() {
-		if (null == supportedTypes) {
-			synchronized (this) {
-				if (null == supportedTypes) {
-					supportedTypes = new HashSet<String>();
-					for (ValueProxyMaker maker : vpms) {
-						String[] ss = maker.supportedTypes();
-						if (ss != null) {
-							for (String s : ss) {
-								supportedTypes.add(s);
-							}
-						}
-					}
-				}
-			}
-		}
-		return new IocLoading(supportedTypes);
+	public <T> T get(Class<T> type) throws IocException {
+		return get(type, null, null);
 	}
 
-	public <T> T get(Class<T> type) throws IocException {
-		String bn = AnnotationIocLoader.getBeanName(type);
-		return get(type, bn);
+	public <T> T get(Class<T> type, String name) {
+		return get(type, name, null);
 	}
 
 	public <T> T get(Class<T> type, String name, IocContext context) throws IocException {
+		if (name == null) {
+			name = AnnotationIocLoader.getBeanName(type);
+		}
+
 		if (log.isDebugEnabled()) {
 			log.debugf("Get '%s'<%s>", name, type);
 		}
 		
 		// 创建对象创建时
-		IocMaking ing = makeIocMaking(context, name);
-		IocContext cntx = ing.getContext();
+		IocMaking imk = makeIocMaking(context, name);
+		IocContext ictx = imk.getContext();
 
 		// 从上下文缓存中获取对象代理
-		ObjectProxy op = cntx.fetch(name);
+		ObjectProxy op = ictx.fetch(name);
 
 		// 如果未发现对象
 		if (null == op) {
 			// 线程同步
-			synchronized (lock_get) {
+			synchronized (lock) {
 				// 再次读取
-				op = cntx.fetch(name);
+				op = ictx.fetch(name);
 
 				// 如果未发现对象
 				if (null == op) {
@@ -163,7 +142,7 @@ public class PandaIoc implements Ioc2 {
 						}
 						
 						// 读取对象定义
-						IocObject iobj = loader.load(createLoading(), name);
+						IocObject iobj = loader.load(loading, name);
 						if (null == iobj) {
 							for (String iocBeanName : loader.getName()) {
 								// 相似性少于3 --> 大小写错误,1-2个字符调换顺序或写错
@@ -180,9 +159,7 @@ public class PandaIoc implements Ioc2 {
 							if (null == type) {
 								throw new IocException("NULL TYPE object '%s'", name);
 							}
-							else {
-								iobj.setType(type);
-							}
+							iobj.setType(type);
 						}
 						
 						// 检查对象级别
@@ -194,7 +171,7 @@ public class PandaIoc implements Ioc2 {
 						if (log.isDebugEnabled()) {
 							log.debugf("\t >> Make...'%s'<%s>", name, type);
 						}
-						op = maker.make(ing, iobj);
+						op = maker.make(imk, iobj);
 					}
 					// 处理异常
 					catch (IocException e) {
@@ -207,13 +184,9 @@ public class PandaIoc implements Ioc2 {
 			}
 		}
 		
-		synchronized (lock_get) {
-			return (T)op.get(type, ing);
+		synchronized (lock) {
+			return (T)op.get(type, imk);
 		}
-	}
-
-	public <T> T get(Class<T> type, String name) {
-		return this.get(type, name, null);
 	}
 
 	public boolean has(String name) {
@@ -229,18 +202,23 @@ public class PandaIoc implements Ioc2 {
 			}
 			return;
 		}
+		
 		context.depose();
 		deposed = true;
-		if (loader instanceof CachedIocLoader)
+		if (loader instanceof CachedIocLoader) {
 			((CachedIocLoader)loader).clear();
-		if (log.isDebugEnabled())
+		}
+
+		if (log.isDebugEnabled()) {
 			log.debug("!!!Ioc is deposed, you can't use it anymore");
+		}
 	}
 
 	public void reset() {
 		context.clear();
-		if (loader instanceof CachedIocLoader)
+		if (loader instanceof CachedIocLoader) {
 			((CachedIocLoader)loader).clear();
+		}
 	}
 
 	public String[] getNames() {
@@ -248,7 +226,10 @@ public class PandaIoc implements Ioc2 {
 	}
 
 	public void addValueProxyMaker(ValueProxyMaker vpm) {
-		vpms.add(0, vpm);// 优先使用最后加入的ValueProxyMaker
+		synchronized (lock) {
+			vpms.add(0, vpm);// 优先使用最后加入的ValueProxyMaker
+			loading.getSupportedTypes().addAll(Arrays.asList(vpm.supportedTypes()));
+		}
 	}
 
 	public IocContext getIocContext() {

@@ -4,6 +4,24 @@ package panda.ioc;
  * Ioc 容器接口
  */
 public interface Ioc {
+	/**
+	 * 获取容器的上下文对象
+	 * 
+	 * @return 当前容器的上下文对象
+	 */
+	IocContext getIocContext();
+
+	/**
+	 * 这是更高级的 Ioc 获取对象的方法，它传给 Ioc 容器一个上下文环境。 <br>
+	 * 容器以此作为参考，决定如何构建对象，或者将对象缓存在何处
+	 * 
+	 * @param type 对象的类型
+	 * @param name 对象的名称
+	 * @param context 对象的上下文环境
+	 * @return 对象本身
+	 * @see panda.ioc.Ioc
+	 */
+	<T> T get(Class<T> type, String name, IocContext context);
 
 	/**
 	 * 从容器中获取一个对象。同时会触发对象的 fetch 事件。如果第一次构建对象 则会先触发对象 create 事件
@@ -19,8 +37,8 @@ public interface Ioc {
 	/**
 	 * 从容器中获取一个对象。这个对象的名称会根据传入的类型按如下规则决定
 	 * <ul>
-	 * <li>如果定义了注解 '@InjectName'，采用其值为注入名
-	 * <li>否则采用类型 simpleName 的首字母小写形式作为注入名
+	 * <li>如果定义了注解 '@Inject'，采用其值为注入名
+	 * <li>否则采用类型 className 作为注入名
 	 * </ul>
 	 * 
 	 * @param <T>

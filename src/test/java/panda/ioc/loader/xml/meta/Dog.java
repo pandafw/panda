@@ -1,8 +1,8 @@
 package panda.ioc.loader.xml.meta;
 
-import panda.ioc.annotation.Bean;
+import panda.ioc.annotation.IocBean;
 
-@Bean
+@IocBean
 public class Dog {
 
 	public Dog() {

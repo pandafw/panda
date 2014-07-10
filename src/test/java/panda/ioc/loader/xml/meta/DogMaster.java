@@ -1,11 +1,11 @@
 package panda.ioc.loader.xml.meta;
 
-import panda.ioc.annotation.Inject;
-import panda.ioc.annotation.Bean;
+import panda.ioc.annotation.IocInject;
+import panda.ioc.annotation.IocBean;
 
-@Bean
+@IocBean
 public class DogMaster {
 
-	@Inject
+	@IocInject
 	public Dog dog;
 }

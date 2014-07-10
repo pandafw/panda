@@ -1,10 +1,5 @@
 package panda;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
-import panda.aop.ClassDefiner;
-import panda.aop.DefaultClassDefiner;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -12,11 +7,4 @@ import panda.aop.DefaultClassDefiner;
 public class Panda {
 	public static final String VERSION = "1.1.0";
 
-	public static ClassDefiner cd() {
-		return AccessController.doPrivileged(new PrivilegedAction<DefaultClassDefiner>() {
-			public DefaultClassDefiner run() {
-				return new DefaultClassDefiner(Panda.class.getClassLoader());
-			}
-		});
-	}
 }
