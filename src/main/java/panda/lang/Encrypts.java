@@ -11,30 +11,30 @@ import panda.lang.codec.binary.Base64;
  * @author yf.frank.wang@gmail.com
  */
 public class Encrypts {
-	public static final String ENCRYPT_AES = "AES";
-	public static final String ENCRYPT_AESWrap = "AESWrap";
-	public static final String ENCRYPT_AESFOUR = "AESFOUR";
-	public static final String ENCRYPT_Blowfish = "Blowfish";
-	public static final String ENCRYPT_DES = "DES";
-	public static final String ENCRYPT_DESede = "DESede";
-	public static final String ENCRYPT_DESedeWrap = "DESedeWrap";
-	public static final String ENCRYPT_ECIES = "ECIES";
-	public static final String ENCRYPT_RC2 = "RC2";
-	public static final String ENCRYPT_RC4 = "RC4";
-	public static final String ENCRYPT_RC5 = "RC5";
-	public static final String ENCRYPT_RSA = "RSA";
+	public static final String AES = "AES";
+	public static final String AESWrap = "AESWrap";
+	public static final String AESFOUR = "AESFOUR";
+	public static final String Blowfish = "Blowfish";
+	public static final String DES = "DES";
+	public static final String DESede = "DESede";
+	public static final String DESedeWrap = "DESedeWrap";
+	public static final String ECIES = "ECIES";
+	public static final String RC2 = "RC2";
+	public static final String RC4 = "RC4";
+	public static final String RC5 = "RC5";
+	public static final String RSA = "RSA";
 	
 	//------------------------------------------------------------------------------
-	public static String DEFAULT_TRANSFORM = Encrypts.ENCRYPT_Blowfish;
+	private static final String DEFAULT_TRANSFORM = Encrypts.Blowfish;
 
-	public static String DEFAULT_KEY = "panda";
+	private static final byte[] DEFAULT_KEY_BYTES = "== Panda Java ==".getBytes();
 
 	public static String encrypt(String text) {
-		return encrypt(text, DEFAULT_KEY, DEFAULT_TRANSFORM);
+		return encrypt(text, null, DEFAULT_TRANSFORM);
 	}
 
 	public static String decrypt(String text) {
-		return decrypt(text, DEFAULT_KEY, DEFAULT_TRANSFORM);
+		return decrypt(text, null, DEFAULT_TRANSFORM);
 	}
 	
 	public static String encrypt(String text, String key) {
@@ -47,14 +47,14 @@ public class Encrypts {
 	
 	public static String encrypt(String text, String key, String transform) {
 		byte[] t = Strings.getBytesUtf8(text);
-		byte[] k = Strings.getBytesUtf8(key);
+		byte[] k = key == null ? DEFAULT_KEY_BYTES : Strings.getBytesUtf8(key);
 		byte[] encrypted = encrypt(t, k, transform);
 		return Strings.newStringUtf8(Base64.encodeBase64(encrypted, false, false));
 	}
 
 	public static String decrypt(String text, String key, String transform) {
 		byte[] t = Base64.decodeBase64(text);
-		byte[] k = Strings.getBytesUtf8(key);
+		byte[] k = key == null ? DEFAULT_KEY_BYTES : Strings.getBytesUtf8(key);
 		byte[] decrypted = decrypt(t, k, transform);
 		return Strings.newStringUtf8(decrypted);
 	}
