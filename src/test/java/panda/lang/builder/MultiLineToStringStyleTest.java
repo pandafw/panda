@@ -84,24 +84,24 @@ public class MultiLineToStringStyleTest {
 		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=3" + Systems.LINE_SEPARATOR
 				+ "  b=4" + Systems.LINE_SEPARATOR + contentEnd, new ToStringBuilder(base).append("a", i3)
 			.append("b", i4).toString());
-		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<Integer>"
-				+ Systems.LINE_SEPARATOR + contentEnd, new ToStringBuilder(base).append("a", i3, false)
-			.toString());
-		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
-				+ Systems.LINE_SEPARATOR + contentEnd,
-			new ToStringBuilder(base).append("a", new ArrayList<Object>(), false).toString());
+//		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<Integer>"
+//				+ Systems.LINE_SEPARATOR + contentEnd, new ToStringBuilder(base).append("a", i3, false)
+//			.toString());
+//		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
+//				+ Systems.LINE_SEPARATOR + contentEnd,
+//			new ToStringBuilder(base).append("a", new ArrayList<Object>(), false).toString());
 		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=[]" + Systems.LINE_SEPARATOR
 				+ contentEnd, new ToStringBuilder(base).append("a", new ArrayList<Object>(), true)
 			.toString());
-		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
-				+ Systems.LINE_SEPARATOR + contentEnd,
-			new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), false).toString());
+//		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
+//				+ Systems.LINE_SEPARATOR + contentEnd,
+//			new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), false).toString());
 		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a={}" + Systems.LINE_SEPARATOR
 				+ contentEnd, new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), true)
 			.toString());
-		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
-				+ Systems.LINE_SEPARATOR + contentEnd,
-			new ToStringBuilder(base).append("a", (Object)new String[0], false).toString());
+//		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=<size=0>"
+//				+ Systems.LINE_SEPARATOR + contentEnd,
+//			new ToStringBuilder(base).append("a", (Object)new String[0], false).toString());
 		assertEquals(baseStr + contentStart + Systems.LINE_SEPARATOR + "  a=[]" + Systems.LINE_SEPARATOR
 				+ contentEnd, new ToStringBuilder(base).append("a", (Object)new String[0], true)
 			.toString());

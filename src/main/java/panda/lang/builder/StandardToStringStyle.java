@@ -172,34 +172,6 @@ public class StandardToStringStyle extends ToStringStyle {
 
 	/**
 	 * <p>
-	 * Gets whether to output array content detail.
-	 * </p>
-	 * 
-	 * @return the current array content detail setting
-	 */
-	@Override
-	public boolean isArrayContentDetail() { // NOPMD as this is implementing the abstract class
-		return super.isArrayContentDetail();
-	}
-
-	/**
-	 * <p>
-	 * Sets whether to output array content detail.
-	 * </p>
-	 * 
-	 * @param arrayContentDetail the new arrayContentDetail flag
-	 */
-	@Override
-	public void setArrayContentDetail(final boolean arrayContentDetail) { // NOPMD as this is
-																			// implementing the
-																			// abstract class
-		super.setArrayContentDetail(arrayContentDetail);
-	}
-
-	// ---------------------------------------------------------------------
-
-	/**
-	 * <p>
 	 * Gets the array start text.
 	 * </p>
 	 * 

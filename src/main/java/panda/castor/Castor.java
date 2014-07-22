@@ -6,7 +6,6 @@ import java.util.Map;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.builder.ToStringBuilder;
 import panda.lang.collection.KeyValue;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -281,7 +280,10 @@ public class Castor<S, T> {
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).append("fromType", fromType).append("toType", toType).toString();
+		return Objects.toStringBuilder(this)
+				.append("fromType", fromType)
+				.append("toType", toType)
+				.toString();
 	}
 	
 }
