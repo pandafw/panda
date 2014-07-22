@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 import panda.net.http.HttpHeader;
-import panda.net.http.HttpResponse;
+import panda.net.http.HttpStatus;
 
 public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	private HttpHeader head;
-	private int statusCode = SC_OK;
-	private String statusMsg = HttpResponse.getStatusReason(SC_OK);
+	private HttpStatus status = new HttpStatus(SC_OK);
 	private ServletOutputStream stream;
 	private PrintWriter writer;
 	
@@ -40,14 +39,14 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	 * @return the statusCode
 	 */
 	public int getStatusCode() {
-		return statusCode;
+		return status.getStatus();
 	}
 
 	/**
 	 * @return the statusMsg
 	 */
 	public String getStatusMsg() {
-		return statusMsg;
+		return status.getReason();
 	}
 
 	/**
@@ -70,15 +69,13 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	//------------------------------------------------------------------
 	@Override
 	public void sendError(int sc, String msg) throws IOException {
-		statusCode = sc;
-		statusMsg = msg;
+		status.setStatus(sc, msg);
 		super.sendError(sc, msg);
 	}
 
 	@Override
 	public void sendError(int sc) throws IOException {
-		statusCode = sc;
-		statusMsg = HttpResponse.getStatusReason(sc);
+		status.setStatus(sc);
 		super.sendError(sc);
 	}
 
@@ -120,15 +117,13 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 
 	@Override
 	public void setStatus(int sc) {
-		statusCode = sc;
-		statusMsg = HttpResponse.getStatusReason(sc);
+		status.setStatus(sc);
 		super.setStatus(sc);
 	}
 
 	@Override
 	public void setStatus(int sc, String sm) {
-		statusCode = sc;
-		statusMsg = sm;
+		status.setStatus(sc, sm);
 		super.setStatus(sc, sm);
 	}
 
@@ -181,8 +176,7 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	public void reset() {
 		super.reset();
 		
-		statusCode = SC_OK;
-		statusMsg = HttpResponse.getStatusReason(SC_OK);
+		status.setStatus(SC_OK);
 		head.clear();
 		body.reset();
 	}
