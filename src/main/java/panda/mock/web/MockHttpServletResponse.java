@@ -394,6 +394,14 @@ public class MockHttpServletResponse implements HttpServletResponse {
 		addHeaderValue(name, String.valueOf(value));
 	}
 
+	public void setLongHeader(String name, long value) {
+		setHeaderValue(name, String.valueOf(value));
+	}
+
+	public void addLongHeader(String name, long value) {
+		addHeaderValue(name, String.valueOf(value));
+	}
+
 	private void setHeaderValue(String name, String value) {
 		setSpecialHeader(name, value);
 		headers.add(name, value);
@@ -527,4 +535,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
 		}
 	}
 
+	//-----------------------------------------------------------
+	// Servlet 3.0
+	//
+	@Override
+	public void setContentLengthLong(long len) {
+		setLongHeader(HttpHeader.CONTENT_LENGTH, len);
+	}
 }

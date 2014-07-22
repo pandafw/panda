@@ -75,7 +75,6 @@ public class HttpSessionMap implements Map<String, Object> {
 		}
 
 		synchronized (session) {
-			@SuppressWarnings("unchecked")
 			Enumeration<String> attributeNamesEnum = session.getAttributeNames();
 			while (attributeNamesEnum.hasMoreElements()) {
 				session.removeAttribute(attributeNamesEnum.nextElement());

@@ -3,9 +3,11 @@ package panda.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 
 import panda.lang.Asserts;
+import panda.lang.Exceptions;
 import panda.mock.web.MockHttpServletRequest;
 
 /**
@@ -44,6 +46,26 @@ public class DelegatingServletInputStream extends ServletInputStream {
 
 	public void close() throws IOException {
 		this.sourceStream.close();
+	}
+
+	@Override
+	public boolean isFinished() {
+		try {
+			return sourceStream.available() > 0;
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	@Override
+	public boolean isReady() {
+		return true;
+	}
+
+	@Override
+	public void setReadListener(ReadListener readListener) {
+		throw Exceptions.unsupported();
 	}
 
 }

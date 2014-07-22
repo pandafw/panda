@@ -122,6 +122,7 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void setStatus(int sc, String sm) {
 		status.setStatus(sc, sm);
 		super.setStatus(sc, sm);

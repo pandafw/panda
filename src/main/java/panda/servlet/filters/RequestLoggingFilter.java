@@ -98,6 +98,7 @@ public class RequestLoggingFilter implements Filter {
 		}
 
 		@Override
+		@SuppressWarnings("deprecation")
 		public void setStatus(int sc, String sm) {
 			status = sc;
 			super.setStatus(sc, sm);

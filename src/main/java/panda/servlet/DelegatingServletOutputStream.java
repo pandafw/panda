@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 
 import panda.lang.Asserts;
+import panda.lang.Exceptions;
 import panda.mock.web.MockHttpServletResponse;
 
 /**
@@ -46,5 +48,15 @@ public class DelegatingServletOutputStream extends ServletOutputStream {
 		for (OutputStream os : ostreams) {
 			os.close();
 		}
+	}
+
+	@Override
+	public boolean isReady() {
+		return true;
+	}
+
+	@Override
+	public void setWriteListener(WriteListener writeListener) {
+		throw Exceptions.unsupported();
 	}
 }
