@@ -10,9 +10,7 @@ import panda.ioc.ValueProxy;
  * 通过静态 Java 函数
  * 
  * <pre>
- * {el : "com.you.app.ClassName"@funcName()}
- * 或者
- * {el : "com.you.app.ClassName.funcName()"}
+ * {el : "'com.you.app.ClassName'@funcName()"}
  * </pre>
  * 
  * 通过容器内对象提供的方法或属性
@@ -46,7 +44,7 @@ import panda.ioc.ValueProxy;
  * 容器，会尽量为你转换参数类型，比如你
  * 
  * <pre>
- * {el : "com.you.app.MyUtils"@getTime('2009-08-07 12:23:34')"}
+ * {el : "'com.you.app.MyUtils'@getTime('2009-08-07 12:23:34')"}
  * </pre>
  * 
  * 但是你的 getTime 函数的参数是一个 java.sql.Timestamp，那么容器会自动为你转型。<br>
