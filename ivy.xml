@@ -12,9 +12,8 @@
 	</publications>
 	<dependencies>
 		<!-- API -->
-		<dependency org="org.apache.tomcat" name="servlet-api" rev="6.0.37" conf="api->master,sources" />
-		<dependency org="org.apache.tomcat" name="el-api" rev="6.0.37" conf="api->master,sources" />
-		<dependency org="org.apache.tomcat" name="jsp-api" rev="6.0.37" conf="api->master,sources" />
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.1.0" conf="api->master,sources" />
+		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.3.1" conf="api->master,sources" />
 		<dependency org="net.sf.jsr107cache" name="jsr107cache" rev="1.1" conf="api->master,sources" />
 
 		<!-- RUN -->
