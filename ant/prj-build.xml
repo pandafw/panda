@@ -2,8 +2,7 @@
 <project name="prj-build">
 	<property name="src.dir" value="src"/>
 	<property name="out.dir" value="out"/>
-	<property name="javac.source" value="1.6"/>
-	<property name="javac.target" value="1.6"/>
+	<property name="javac.debug" value="true"/>
 
 	<tstamp>
 		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -101,14 +100,11 @@
 			<fileset dir="${src.dir}/main/java" includes="**/package-info.java"/>
 			<fileset dir="${src.dir}/gen/java" includes="**/package-info.java" erroronmissingdir="false"/>
 		</touch>
-		<condition property="srcdir" value="${src.dir}/main/java:src/gen/java">
+		<condition property="srcdir" value="${src.dir}/main/java:${src.dir}/gen/java">
 			<available file="${src.dir}/gen/java"/>
 		</condition>
 		<property name="srcdir" value="${src.dir}/main/java"/>
-		<javac
-			srcdir="${srcdir}" destdir="${out.dir}/classes" 
-			encoding="UTF-8" source="${javac.source}" target="${javac.target}" 
-			debug="true" includeAntRuntime="false">
+		<javac srcdir="${srcdir}" destdir="${out.dir}/classes" encoding="UTF-8" debug="${javac.debug}" includeAntRuntime="false">
 			<classpath refid="main.cp"/>
 		</javac>
 	</target>
