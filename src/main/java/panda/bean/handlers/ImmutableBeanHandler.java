@@ -25,12 +25,7 @@ public class ImmutableBeanHandler<T> extends AbstractSimpleBeanHandler<T> {
 	 * @return bean instance 
 	 */
 	public T createObject() {
-		try {
-			return Types.newInstance(type);
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return Types.born(type);
 	}
 
 	/**

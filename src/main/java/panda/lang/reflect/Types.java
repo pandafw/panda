@@ -127,6 +127,20 @@ public abstract class Types {
 	public static <T> T newInstance(Type type) throws InstantiationException, IllegalAccessException {
 		return (T)getRawType(type).newInstance();
 	}
+
+	/**
+	 * new instance by the type 
+	 * @param type type
+	 * @return object instance
+	 */
+	public static <T> T born(Type type) {
+		try {
+			return newInstance(type);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
 	
 	/**
 	 * 获取一个类的泛型参数数组，如果这个类没有泛型参数，返回 null

@@ -373,10 +373,10 @@ public class HttpClient {
 		}
 		
 		if (request.isPostFile()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpHeader.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpContentType.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
 		}
 		else if (request.isPostForm()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpHeader.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpContentType.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
 		}
 	}
 }

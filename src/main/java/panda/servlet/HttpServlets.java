@@ -28,6 +28,7 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.http.HttpContentType;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
@@ -100,7 +101,7 @@ public class HttpServlets {
 		String ct = request.getContentType();
 		if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod()) 
 				&& ct != null
-				&& ct.startsWith(HttpHeader.X_WWW_FORM_URLECODED)) {
+				&& ct.startsWith(HttpContentType.X_WWW_FORM_URLECODED)) {
 			return true;
 		}
 		return false;

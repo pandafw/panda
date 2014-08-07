@@ -31,15 +31,7 @@ public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 			return null;
 		}
 		else if (Strings.isEmpty(value)) {
-			try {
-				return Types.newInstance(type);
-			}
-			catch (InstantiationException e) {
-				throw new SQLException(e);
-			}
-			catch (IllegalAccessException e) {
-				throw new SQLException(e);
-			}
+			return Types.born(type);
 		}
 		else {
 			try {

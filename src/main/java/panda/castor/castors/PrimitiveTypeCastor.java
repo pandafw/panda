@@ -45,7 +45,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 			if (value instanceof CharSequence) {
 				String s = value.toString();
 				if (s.length() < 1) {
-					return false;
+					return defaultValue();
 				}
 				
 				switch (s.charAt(0)) {
@@ -62,11 +62,27 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 				case 'y':
 				case 'T':
 				case 't':
+					return true;
+				case '0':
+				case 'f':
+				case 'F':
+				case 'n':
+				case 'N':
+					return false;
 				case 'O':
 				case 'o':
-					return true;
+					if (s.length() > 1) {
+						char c2 = s.charAt(1);
+						if (c2 == 'n' || c2 == 'N') {
+							return true;
+						}
+						if (c2 == 'f' || c2 == 'F') {
+							return false;
+						}
+					}
+					return defaultValue();
 				default:
-					return false;
+					return defaultValue();
 				}
 			}
 			throw castError(value, context);

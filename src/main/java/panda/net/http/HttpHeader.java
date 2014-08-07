@@ -85,10 +85,6 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 	public static final String SET_COOKIE = "Set-Cookie";
 
 	// -------------------------------------------------------------
-	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
-	public static final String X_WWW_FORM_URLECODED = "application/x-www-form-urlencoded";
-	
-	// -------------------------------------------------------------
 	public static final String USER_AGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.186 Safari/535.1";
 	
 	// -------------------------------------------------------------

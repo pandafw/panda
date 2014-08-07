@@ -33,12 +33,7 @@ public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> 
 	 * @return bean instance 
 	 */
 	public T createObject() {
-		try {
-			return Types.newInstance(Types.getDefaultImplType(type));
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return Types.born(Types.getDefaultImplType(type));
 	}
 
 //	/**

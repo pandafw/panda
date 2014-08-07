@@ -91,28 +91,37 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		return Types.getArrayComponentType(type);
 	}
 	
-	public Type getPropertyType(T array, String propertyName) {
+	public Type getPropertyType(T array, String index) {
 		if (array == null) {
 			return getElementType();
 		}
 
-		int index = toIndex(propertyName);
-		if (index < 0) {
-			return null;
+		int idx = toIndex(index);
+		if (isValidIndex(array, idx)) {
+			Object val = getElement(array, idx);
+			return val == null ? getElementType() : val.getClass();
 		}
+		return getElementType();
+	}
+	
+	protected boolean isValidIndex(T array, int index) {
+		return index >= 0 && index < getSize(array);
+	}
 
-		Object val = getElement(array, index);
-		return val == null ? getElementType() : val.getClass();
+	public Object getPropertyValue(T array, String index) {
+		int idx = toIndex(index);
+		if (isValidIndex(array, idx)) {
+			return getElement(array, idx);
+		}
+		return null;
 	}
 	
-	public Object getPropertyValue(T array, String propertyName) {
-		int index = toIndex(propertyName);
-		return getElement(array, index);
-	}
-	
-	public boolean setPropertyValue(T array, String propertyName, Object propertyValue) {
-		int index = toIndex(propertyName);
-		return setElement(array, index, propertyValue);
+	public boolean setPropertyValue(T array, String index, Object value) {
+		int idx = toIndex(index);
+		if (isValidIndex(array, idx)) {
+			return setElement(array, idx, value);
+		}
+		return false;
 	}
 
 	protected abstract int getSize(T array);

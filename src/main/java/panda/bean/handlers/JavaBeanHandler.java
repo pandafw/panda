@@ -159,7 +159,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			return false;
 		}
 		catch (Exception e) {
-			throw new RuntimeException(e);
+			throw Exceptions.wrapThrow(e);
 		}
 	}
 }

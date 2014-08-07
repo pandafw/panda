@@ -219,6 +219,28 @@ public class Charsets {
 		return charset == null ? Charset.defaultCharset() : Charset.forName(charset);
 	}
 
+	/**
+	 * Returns a Charset for the named charset. If the name is null, return the default Charset.
+	 * 
+	 * @param charset The name of the requested charset, may be null.
+	 * @param defCharset Default charset value
+	 * @return a Charset for the named charset
+	 */
+	public static Charset toCharset(final String charset, Charset defCharset) {
+		if (defCharset == null) {
+			defCharset = Charset.defaultCharset();
+		}
+		if (charset != null) {
+			try {
+				return Charset.forName(charset);
+			}
+			catch (Exception e) {
+				//skip
+			}
+		}
+		return defCharset;
+	}
+
 	private final static Map<String, String> charsetMap = new ConcurrentHashMap<String, String>();
 
 	static {

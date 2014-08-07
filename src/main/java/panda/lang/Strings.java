@@ -4558,6 +4558,27 @@ public class Strings {
 		return new String(chars, 0, pos);
 	}
 
+
+	/**
+	 * <p>
+	 * Removes all occurrences of characters from within the source string.
+	 * </p>
+	 * <p>
+	 * A {@code null} source string will return {@code null}. An empty ("") source string will
+	 * return the empty string.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.removeChars(null, *)       = null
+	 * Strings.removeChars("", *)         = ""
+	 * Strings.removeChars("queued", "qe") = "uud"
+	 * Strings.removeChars("queued", 'z') = "queued"
+	 * </pre>
+	 * 
+	 * @param str the source String to search, may be null
+	 * @param remove the chars to search for and remove, may be null
+	 * @return the substring with the chars removed if found, {@code null} if null String input
+	 */
 	public static String removeChars(final String str, final String remove) {
 		if (isEmpty(str) || isEmpty(remove)) {
 			return str;
