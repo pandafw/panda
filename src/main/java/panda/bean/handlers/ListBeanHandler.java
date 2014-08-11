@@ -42,8 +42,20 @@ public class ListBeanHandler<T extends List> extends AbstractArrayBeanHandler<T>
 	}
 	
 	@Override
+	protected boolean isValidSetIndex(T array, int index) {
+		return index >= 0;
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	protected boolean setElement(T list, int index, Object value) {
+		// append null elements
+		if (index >= list.size()) {
+			for (int i = list.size(); i <= index; i++) {
+				list.add(null);
+			}
+		}
+
 		list.set(index, value);
 		return true;
 	}

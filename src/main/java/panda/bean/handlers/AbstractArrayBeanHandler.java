@@ -97,20 +97,24 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		}
 
 		int idx = toIndex(index);
-		if (isValidIndex(array, idx)) {
+		if (isValidGetIndex(array, idx)) {
 			Object val = getElement(array, idx);
 			return val == null ? getElementType() : val.getClass();
 		}
 		return getElementType();
 	}
 	
-	protected boolean isValidIndex(T array, int index) {
+	protected boolean isValidGetIndex(T array, int index) {
 		return index >= 0 && index < getSize(array);
+	}
+
+	protected boolean isValidSetIndex(T array, int index) {
+		return isValidGetIndex(array, index);
 	}
 
 	public Object getPropertyValue(T array, String index) {
 		int idx = toIndex(index);
-		if (isValidIndex(array, idx)) {
+		if (isValidGetIndex(array, idx)) {
 			return getElement(array, idx);
 		}
 		return null;
@@ -118,7 +122,7 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 	
 	public boolean setPropertyValue(T array, String index, Object value) {
 		int idx = toIndex(index);
-		if (isValidIndex(array, idx)) {
+		if (isValidSetIndex(array, idx)) {
 			return setElement(array, idx, value);
 		}
 		return false;

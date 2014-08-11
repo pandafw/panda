@@ -97,6 +97,15 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 		Object val = getPropertyValue(map, propertyName);
 		return val == null ? elementType : val.getClass();
 	}
+
+	public Object getPropertyValue(T map, String propertyName) {
+		return map.get(propertyName);
+	}
+	
+	public boolean setPropertyValue(T map, String propertyName, Object propertyValue) {
+		map.put(propertyName, propertyValue);
+		return true;
+	}
 	
 	/**
 	 * get bean type
@@ -114,15 +123,6 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 			return super.getBeanType(map, beanName);
 		}
 		return elementType;
-	}
-
-	public Object getPropertyValue(T map, String propertyName) {
-		return map.get(propertyName);
-	}
-	
-	public boolean setPropertyValue(T map, String propertyName, Object propertyValue) {
-		map.put(propertyName, propertyValue);
-		return true;
 	}
 
 	/**

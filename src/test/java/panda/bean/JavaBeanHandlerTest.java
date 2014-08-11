@@ -194,9 +194,12 @@ public class JavaBeanHandlerTest extends TestCase {
 		testSetGetValue(a, "charArray", new char[] { 'a', 'b' });
 		testSetGetValue(a, "doubleArray", new double[] { 1.1, 2.2 });
 		testSetGetValue(a, "floatArray", new float[] { 3.3F, 4.4F });
-		testSetGetValue(a, "intArray", new int[] { 101, 102 });
+		testSetGetValue(a, "shortArray", new short[] { 11, 12, 13 });
 		testSetGetValue(a, "longArray", new long[] { 1001L, 1002L });
-		testSetGetValue(a, "shortArray", new short[] { 11, 12 });
+		testSetGetValue(a, "intArray", new int[] { 101, 102, 103 });
+		testSetGetValue(a, "intArray:0", 21);
+		testSetGetValue(a, "intArray(1)", 22);
+		testSetGetValue(a, "intArray[2]", 23);
 
 		testSetGetValue(a, "boolWrap", Boolean.TRUE);
 		testSetGetValue(a, "byteWrap", new Byte((byte)10));
@@ -209,7 +212,11 @@ public class JavaBeanHandlerTest extends TestCase {
 
 		testSetGetValue(a, "stringField", "String");
 		testSetGetValue(a, "stringArray", new String[] { "abc", "efd" });
-		testSetGetValue(a, "stringList", Arrays.asList(new String[] { "zzz", "yyy" }));
+		testSetGetValue(a, "stringList", Arrays.toList(new String[] { "xxx", "yyy", "zzz" }));
+		testSetGetValue(a, "stringList:0", "z");
+		testSetGetValue(a, "stringList(1)", "y");
+		testSetGetValue(a, "stringList[2]", "x");
+		testSetGetValue(a, "stringList[10]", "a");
 
 		testSetGetValue(a, "dateField", Calendar.getInstance().getTime());
 		testSetGetValue(a, "dateArray", new Date[] { Calendar.getInstance().getTime() });

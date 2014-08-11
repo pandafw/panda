@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.lang.Strings;
 
 /**
  * 
@@ -67,8 +68,19 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	}
 
 	/**
+	 * x[1].y -> x.1.y
+	 * x(1).y -> x.1.y
+	 * 
+	 * @param beanName bean name
+	 * @return normalized bean name
+	 */
+	protected String normalizeBeanName(String beanName) {
+		return Strings.replaceChars(beanName, ":[()]", "...");
+	}
+	
+	/**
 	 * get bean type
-	 * @param beanName property name
+	 * @param beanName bean name
 	 * @return bean type
 	 */
 	public Type getBeanType(String beanName) {
@@ -82,27 +94,28 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	 * @return property type
 	 */
 	public Type getBeanType(T beanObject, String beanName) {
+		beanName = normalizeBeanName(beanName);
+		
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
 			return getPropertyType(beanObject, beanName);
 		} 
-		else {
-			String itemName = beanName.substring(0, dot);
-			String nestName = beanName.substring(dot + 1);
 
-			Object itemValue = null;
-			if (beanObject != null) {
-				itemValue = getPropertyValue(beanObject, itemName);
-			}
-			
-			Type itemType = getPropertyType(beanObject, itemName); 
-			if (itemType == null) {
-				return null;
-			}
+		String itemName = beanName.substring(0, dot);
+		String nestName = beanName.substring(dot + 1);
 
-			BeanHandler bh = getBeanHandler(itemType);
-			return bh.getBeanType(itemValue, nestName);
+		Type itemType = getPropertyType(beanObject, itemName); 
+		if (itemType == null) {
+			return null;
 		}
+
+		Object itemValue = null;
+		if (beanObject != null) {
+			itemValue = getPropertyType(beanObject, itemName);
+		}
+		
+		BeanHandler bh = getBeanHandler(itemType);
+		return bh.getBeanType(itemValue, nestName);
 	}
 
 	/**
@@ -130,27 +143,28 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	 * @return bean type
 	 */
 	public boolean canReadBean(T beanObject, String beanName) {
+		beanName = normalizeBeanName(beanName);
+		
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
 			return canReadProperty(beanObject, beanName);
 		} 
-		else {
-			String itemName = beanName.substring(0, dot);
-			String nestName = beanName.substring(dot + 1);
 
-			Object itemValue = null;
-			if (beanObject != null) {
-				itemValue = getPropertyValue(beanObject, itemName);
-			}
-			
-			Type itemType = getPropertyType(beanObject, itemName);
-			if (itemType == null) {
-				return false;
-			}
+		String itemName = beanName.substring(0, dot);
+		String nestName = beanName.substring(dot + 1);
 
-			BeanHandler bh = getBeanHandler(itemType);
-			return bh.canReadBean(itemValue, nestName);
+		Object itemValue = null;
+		if (beanObject != null) {
+			itemValue = getPropertyValue(beanObject, itemName);
 		}
+		
+		Type itemType = getPropertyType(beanObject, itemName);
+		if (itemType == null) {
+			return false;
+		}
+
+		BeanHandler bh = getBeanHandler(itemType);
+		return bh.canReadBean(itemValue, nestName);
 	}
 	
 	/**
@@ -178,27 +192,28 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	 * @return bean writable
 	 */
 	public boolean canWriteBean(T beanObject, String beanName) {
+		beanName = normalizeBeanName(beanName);
+		
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
 			return canWriteProperty(beanObject, beanName);
 		}
-		else {
-			String itemName = beanName.substring(0, dot);
-			String nestName = beanName.substring(dot + 1);
 
-			Object itemValue = null;
-			if (beanObject != null) {
-				itemValue = getPropertyValue(beanObject, itemName);
-			}
-			
-			Type itemType = getPropertyType(beanObject, itemName);
-			if (itemType == null) {
-				return false;
-			}
+		String itemName = beanName.substring(0, dot);
+		String nestName = beanName.substring(dot + 1);
 
-			BeanHandler bh = getBeanHandler(itemType);
-			return bh.canWriteBean(itemValue, nestName);
+		Object itemValue = null;
+		if (beanObject != null) {
+			itemValue = getPropertyValue(beanObject, itemName);
 		}
+		
+		Type itemType = getPropertyType(beanObject, itemName);
+		if (itemType == null) {
+			return false;
+		}
+
+		BeanHandler bh = getBeanHandler(itemType);
+		return bh.canWriteBean(itemValue, nestName);
 	}
 
 	/**
@@ -208,22 +223,23 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	 * @return bean value
 	 */
 	public Object getBeanValue(T beanObject, String beanName) {
+		beanName = normalizeBeanName(beanName);
+		
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
 			return getPropertyValue(beanObject, beanName);
 		}
-		else {
-			String itemName = beanName.substring(0, dot);
 
-			Object itemValue = getPropertyValue(beanObject, itemName);
-			if (itemValue == null) {
-				return null;
-			} 
+		String itemName = beanName.substring(0, dot);
 
-			String nestName = beanName.substring(dot + 1);
-			BeanHandler bh = getBeanHandler(itemValue.getClass());
-			return bh.getBeanValue(itemValue, nestName);
-		}
+		Object itemValue = getPropertyValue(beanObject, itemName);
+		if (itemValue == null) {
+			return null;
+		} 
+
+		String nestName = beanName.substring(dot + 1);
+		BeanHandler bh = getBeanHandler(itemValue.getClass());
+		return bh.getBeanValue(itemValue, nestName);
 	}
 
 	/**
@@ -233,29 +249,30 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	 * @param value value
 	 */
 	public boolean setBeanValue(T beanObject, String beanName, Object value) {
+		beanName = normalizeBeanName(beanName);
+		
 		int index = beanName.indexOf(".");
 		if (index < 0) {
 			return setPropertyValue(beanObject, beanName, value);
 		} 
-		else {
-			String itemName = beanName.substring(0, index);
-			Object itemValue = getPropertyValue(beanObject, itemName);
 
-			Type itemType = getPropertyType(beanObject, itemName);
-			if (itemType == null) {
+		String itemName = beanName.substring(0, index);
+		Object itemValue = getPropertyValue(beanObject, itemName);
+
+		Type itemType = getPropertyType(beanObject, itemName);
+		if (itemType == null) {
+			return false;
+		}
+
+		BeanHandler bh = getBeanHandler(itemType);
+		if (itemValue == null) {
+			itemValue = bh.createObject(); 
+			if (!setPropertyValue(beanObject, itemName, itemValue)) {
 				return false;
 			}
-
-			BeanHandler bh = getBeanHandler(itemType);
-			if (itemValue == null) {
-				itemValue = bh.createObject(); 
-				if (!setPropertyValue(beanObject, itemName, itemValue)) {
-					return false;
-				}
-			}
-			
-			String nestName = beanName.substring(index + 1);
-			return bh.setBeanValue(itemValue, nestName, value);
 		}
+		
+		String nestName = beanName.substring(index + 1);
+		return bh.setBeanValue(itemValue, nestName, value);
 	}
 }
