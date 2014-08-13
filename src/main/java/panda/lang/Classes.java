@@ -2327,6 +2327,13 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @return true if the class is Array class or Collection class
+	 */
+	public static boolean isArrayOrCollection(Class<?> cls) {
+		return isArray(cls) || isCollection(cls);
+	}
+
+	/**
 	 * @return true if the class is Map class
 	 */
 	public static boolean isMap(Class<?> cls) {
