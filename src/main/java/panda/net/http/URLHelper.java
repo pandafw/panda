@@ -613,7 +613,7 @@ public class URLHelper {
 	 * @param queryString query string
 	 * @return parameter map
 	 */
-	public static Map parseQueryString(String queryString) {
+	public static Map<String, Object> parseQueryString(String queryString) {
 		return parseQueryString(queryString, false, Charsets.UTF_8);
 	}
 
@@ -621,7 +621,7 @@ public class URLHelper {
 	 * @param queryString query string
 	 * @return parameter map
 	 */
-	public static Map parseQueryString(String queryString, String encoding) {
+	public static Map<String, Object> parseQueryString(String queryString, String encoding) {
 		return parseQueryString(queryString, false, encoding);
 	}
 
@@ -631,8 +631,8 @@ public class URLHelper {
 	 * @return parameter map
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map parseQueryString(String queryString, boolean forceValueArray, String encoding) {
-		Map queryParams = new LinkedHashMap();
+	public static Map<String, Object> parseQueryString(String queryString, boolean forceValueArray, String encoding) {
+		Map<String, Object> queryParams = new LinkedHashMap<String, Object>();
 		if (queryString != null) {
 			String[] params = queryString.split("&");
 			for (int a = 0; a < params.length; a++) {
