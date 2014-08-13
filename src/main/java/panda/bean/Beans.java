@@ -510,4 +510,115 @@ public class Beans {
 		
 		return accessors;
 	}
+
+	/**
+	 * <p>
+	 * Return the value of the property of the specified name,
+	 * for the specified bean, with no type conversions.
+	 * </p>
+	 * 
+	 * @param bean Bean whose property is to be extracted
+	 * @param name the property to be extracted
+	 * @return the property value
+	 * 
+	 * @exception IllegalArgumentException if <code>bean</code> or
+	 *                <code>name</code> is null
+	 *                throws an exception
+	 */
+	@SuppressWarnings("unchecked")
+	public Object getBeanValue(Object bean, String name) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.getBeanValue(bean, name);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Type getBeanType(Object bean, String name) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.getBeanType(bean, name);
+	}
+
+	/**
+	 * <p>
+	 * set the value of the property of the specified name.
+	 * for the specified bean, with no type conversions.
+	 * </p>
+	 * 
+	 * @param bean Bean whose property is to be set
+	 * @param name the property name 
+	 * @param value the property value to be set
+	 * 
+	 * @exception IllegalArgumentException if <code>bean</code> or
+	 *                <code>name</code> is null
+	 *                throws an exception
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean setBeanValue(Object bean, String name, Object value) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.setBeanValue(bean, name, value);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Type getPropertyType(Object bean, String name) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.getPropertyType(bean, name);
+	}
+
+	/**
+	 * <p>
+	 * Return the value of the property of the specified name,
+	 * for the specified bean, with no type conversions.
+	 * </p>
+	 * 
+	 * @param bean Bean whose property is to be extracted
+	 * @param name the property to be extracted
+	 * @return the property value
+	 * 
+	 * @exception IllegalArgumentException if <code>bean</code> or
+	 *                <code>name</code> is null
+	 *                throws an exception
+	 */
+	@SuppressWarnings("unchecked")
+	public Object getPropertyValue(Object bean, String name) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.getPropertyValue(bean, name);
+	}
+
+	/**
+	 * <p>
+	 * set the value of the property of the specified name.
+	 * for the specified bean, with no type conversions.
+	 * </p>
+	 * 
+	 * @param bean Bean whose property is to be set
+	 * @param name the property name 
+	 * @param value the property value to be set
+	 * 
+	 * @exception IllegalArgumentException if <code>bean</code> or
+	 *                <code>name</code> is null
+	 *                throws an exception
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean setPropertyValue(Object bean, String name, Object value) {
+		assertBeanAndName(bean, name);
+		
+		BeanHandler bh = getBeanHandler(bean.getClass());
+
+		return bh.setPropertyValue(bean, name, value);
+	}
+
 }

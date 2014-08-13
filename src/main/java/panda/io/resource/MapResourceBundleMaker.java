@@ -1,22 +1,7 @@
-package panda.resource;
-
-import panda.bean.BeanHandler;
-import panda.bean.Beans;
-import panda.dao.sql.SqlLogger;
-import panda.dao.sql.Sqls;
-import panda.lang.Classes;
-import panda.lang.Exceptions;
-import panda.lang.Objects;
-import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
+package panda.io.resource;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,21 +10,24 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javax.sql.DataSource;
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
+import panda.lang.Exceptions;
+import panda.lang.Objects;
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 
 
 /**
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-public abstract class ExternalResourceLoader {
-	protected static Log log = Logs.getLog(ExternalResourceLoader.class);
+public class MapResourceBundleMaker implements ResourceBundleMaker {
+	protected static Log log = Logs.getLog(MapResourceBundleMaker.class);
 
 	protected Map<String, Map<String, String>> resources = new HashMap<String, Map<String, String>>();
 
-	private static ExternalResourceLoader instance;
-	
-	protected DataSource dataSource;
 	protected String tableName;
 	protected String classColumn;
 	protected String languageColumn;
@@ -52,64 +40,15 @@ public abstract class ExternalResourceLoader {
 	protected String emptyString = "*";
 	protected String packageName;
 
-	/**
-	 * @return the instance
-	 */
-	public static ExternalResourceLoader getInstance() {
-		if (instance == null) {
-			instance = newInstance();
+	@SuppressWarnings("unchecked")
+	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader,
+			boolean reload) throws IllegalAccessException, InstantiationException, IOException {
+		Map contents = resources.get(Resources.toBundleName(baseName, locale));
+		if (contents != null) {
+			MapResourceBundle bundle = new MapResourceBundle(contents);
+			return bundle;
 		}
-		return instance;
-	}
-
-	/**
-	 * @param instance the instance to set
-	 */
-	public static void setInstance(ExternalResourceLoader instance) {
-		ExternalResourceLoader.instance = instance;
-	}
-
-	/**
-	 * @return new instance
-	 */
-	public static ExternalResourceLoader newInstance() {
-		try {
-			return (ExternalResourceLoader)Classes.newInstance(ExternalResourceLoader.class.getName() + "16");
-		}
-		catch (Throwable ex) {
-			log.warn("Failed to create " + ExternalResourceLoader.class.getName() 
-				+ "16 instance, use " + ExternalResourceLoader15.class.getName() + " instead.");
-			return new ExternalResourceLoader15();
-		}
-	}
-	
-	/**
-	 * @return the classLoader
-	 */
-	public ClassLoader getClassLoader() {
 		return null;
-	}
-
-    /**
-	 * @param className class name
-	 * @return the contents map
-	 */
-	public Map<String, String> getContentsMap(String className) {
-		return resources.get(className);
-	}
-
-	/**
-	 * @return the dataSource
-	 */
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-
-	/**
-	 * @param dataSource the dataSource to set
-	 */
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
 	}
 
 	/**
@@ -397,90 +336,6 @@ public abstract class ExternalResourceLoader {
 
 	/**
 	 * load resources
-	 * @throws Exception if an error occurs
-	 */
-	public void loadResources() throws Exception {
-		String sql = "SELECT"
-			+ " " + classColumn
-			+ (Strings.isEmpty(languageColumn) ? "" : (", " + languageColumn))
-			+ (Strings.isEmpty(countryColumn) ? "" : (", " + countryColumn))
-			+ (Strings.isEmpty(variantColumn) ? "" : (", " + variantColumn))
-			+ (Strings.isEmpty(sourceColumn) ? (", " + nameColumn + ", " + valueColumn) : (", " + sourceColumn))
-			+ " FROM " + tableName
-			+ (Strings.isEmpty(whereClause) ? "" : " WHERE " + whereClause)
-			+ " ORDER BY "
-			+ " " + classColumn
-			+ (Strings.isEmpty(languageColumn) ? "" : (", " + languageColumn))
-			+ (Strings.isEmpty(countryColumn) ? "" : (", " + countryColumn))
-			+ (Strings.isEmpty(variantColumn) ? "" : (", " + variantColumn))
-			+ (Strings.isEmpty(sourceColumn) ? (", " + nameColumn) : "")
-			;
-
-		Connection conn = dataSource.getConnection();
-
-		List<BundleKey> bkList = new ArrayList<BundleKey>();
-		
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-
-			BundleKey lastBundle = null;
-
-			Map<String, String> properties = null;
-
-			SqlLogger.logResultHeader(rs);
-			
-			Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
-			while (rs.next()) {
-				SqlLogger.logResultValues(rs);
-
-				String clazz = null;
-				String language = null;
-				String country = null;
-				String variant = null;
-				
-				clazz = rs.getString(classColumn);
-				if (Strings.isNotEmpty(languageColumn)) {
-					language = rs.getString(languageColumn);
-				}
-				if (Strings.isNotEmpty(countryColumn)) {
-					country = rs.getString(countryColumn);
-				}
-				if (Strings.isNotEmpty(variantColumn)) {
-					variant = rs.getString(variantColumn);
-				}
-				
-				BundleKey bk = buildBundleKey(clazz, language, country, variant);
-				if (!bk.equals(lastBundle)) {
-					lastBundle = bk;
-					properties = new HashMap<String, String>();
-					res.put(bk.toString(), properties);
-					bkList.add(bk);
-				}
-
-				if (Strings.isEmpty(sourceColumn)) {
-					String name = rs.getString(nameColumn);
-					String value = rs.getString(valueColumn);
-					properties.put(name, value);
-				}
-				else {
-					Properties ps = new Properties();
-					String source = rs.getString(sourceColumn);
-					ps.load(new StringReader(source));
-					for (Entry<Object, Object> en : ps.entrySet()) {
-						properties.put((String)en.getKey(), (String)en.getValue());
-					}
-				}
-			}
-			resources = res;
-		}
-		finally {
-			Sqls.safeClose(conn);
-		}
-	}
-	
-	/**
-	 * load resources
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadResources(List resList) {
@@ -536,17 +391,5 @@ public abstract class ExternalResourceLoader {
 		}
 		
 		resources = res;
-	}
-	
-	public ResourceBundle getBundle(String baseName) {
-		return ResourceBundle.getBundle(baseName);
-	}
-
-	public ResourceBundle getBundle(String baseName, Locale locale) {
-		return ResourceBundle.getBundle(baseName, locale);
-	}
-
-	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader) {
-		return ResourceBundle.getBundle(baseName, locale, loader);
 	}
 }

@@ -1,4 +1,4 @@
-package panda.resource;
+package panda.io.resource;
 
 import java.util.Enumeration;
 import java.util.Iterator;
