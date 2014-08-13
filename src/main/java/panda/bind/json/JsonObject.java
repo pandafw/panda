@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import panda.lang.Strings;
 
@@ -114,9 +115,9 @@ public class JsonObject extends HashMap<String, Object> {
 		if (map != null) {
 			Iterator i = map.entrySet().iterator();
 			while (i.hasNext()) {
-				Map.Entry e = (Map.Entry)i.next();
+				Entry e = (Entry)i.next();
 				Object value = e.getValue();
-				this.set(e.getKey().toString(), wrap(value));
+				this.set(e.getKey().toString(), value);
 			}
 		}
 	}
@@ -144,6 +145,13 @@ public class JsonObject extends HashMap<String, Object> {
 		}
 		else {
 			this.put(key, new JsonArray().put(object).put(value));
+		}
+		return this;
+	}
+
+	public JsonObject accumulateAll(Map<String, Object> map) throws JsonException {
+		for (Entry<String, Object> en : map.entrySet()) {
+			accumulate(en.getKey(), en.getValue());
 		}
 		return this;
 	}
@@ -729,7 +737,7 @@ public class JsonObject extends HashMap<String, Object> {
 	 * @throws JsonException If the value is non-finite number or if the key is null.
 	 */
 	public JsonObject set(String key, Object value) throws JsonException {
-		this.put(key, wrap(value));
+		this.put(key, value);
 		return this;
 	}
 
@@ -758,7 +766,7 @@ public class JsonObject extends HashMap<String, Object> {
 		if (key == null) {
 			throw new NullPointerException("Null key.");
 		}
-		return super.put(key, value);
+		return super.put(key, wrap(value));
 	}
 
 	/**

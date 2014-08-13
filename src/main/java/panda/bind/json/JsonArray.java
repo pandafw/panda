@@ -10,46 +10,38 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * A JsonArray is an ordered sequence of values. Its external text form is a
- * string wrapped in square brackets with commas separating the values. The
- * internal form is an object having <code>get</code> and <code>opt</code>
- * methods for accessing the values by index, and <code>put</code> methods for
- * adding or replacing values. The values can be any of these types:
- * <code>Boolean</code>, <code>JsonArray</code>, <code>JsonObject</code>,
- * <code>Number</code>, <code>String</code>, or the
- * <code>JsonObject.NULL object</code>.
+ * A JsonArray is an ordered sequence of values. Its external text form is a string wrapped in
+ * square brackets with commas separating the values. The internal form is an object having
+ * <code>get</code> and <code>opt</code> methods for accessing the values by index, and
+ * <code>put</code> methods for adding or replacing values. The values can be any of these types:
+ * <code>Boolean</code>, <code>JsonArray</code>, <code>JsonObject</code>, <code>Number</code>,
+ * <code>String</code>, or the <code>JsonObject.NULL object</code>.
  * <p>
- * The constructor can convert a JSON text into a Java object. The
- * <code>toString</code> method converts to JSON text.
+ * The constructor can convert a JSON text into a Java object. The <code>toString</code> method
+ * converts to JSON text.
  * <p>
- * A <code>get</code> method returns a value if one can be found, and throws an
- * exception if one cannot be found. An <code>opt</code> method returns a
- * default value instead of throwing an exception, and so is useful for
- * obtaining optional values.
+ * A <code>get</code> method returns a value if one can be found, and throws an exception if one
+ * cannot be found. An <code>opt</code> method returns a default value instead of throwing an
+ * exception, and so is useful for obtaining optional values.
  * <p>
- * The generic <code>get()</code> and <code>opt()</code> methods return an
- * object which you can cast or query for type. There are also typed
- * <code>get</code> and <code>opt</code> methods that do type checking and type
- * coercion for you.
+ * The generic <code>get()</code> and <code>opt()</code> methods return an object which you can cast
+ * or query for type. There are also typed <code>get</code> and <code>opt</code> methods that do
+ * type checking and type coercion for you.
  * <p>
- * The texts produced by the <code>toString</code> methods strictly conform to
- * JSON syntax rules. The constructors are more forgiving in the texts they will
- * accept:
+ * The texts produced by the <code>toString</code> methods strictly conform to JSON syntax rules.
+ * The constructors are more forgiving in the texts they will accept:
  * <ul>
- * <li>An extra <code>,</code>&nbsp;<small>(comma)</small> may appear just
- * before the closing bracket.</li>
+ * <li>An extra <code>,</code>&nbsp;<small>(comma)</small> may appear just before the closing
+ * bracket.</li>
  * <li>The <code>null</code> value will be inserted when there is <code>,</code>
  * &nbsp;<small>(comma)</small> elision.</li>
- * <li>Strings may be quoted with <code>'</code>&nbsp;<small>(single
- * quote)</small>.</li>
- * <li>Strings do not need to be quoted at all if they do not begin with a quote
- * or single quote, and if they do not contain leading or trailing spaces, and
- * if they do not contain any of these characters:
- * <code>{ } [ ] / \ : , #</code> and if they do not look like numbers and
- * if they are not the reserved words <code>true</code>, <code>false</code>, or
- * <code>null</code>.</li>
+ * <li>Strings may be quoted with <code>'</code>&nbsp;<small>(single quote)</small>.</li>
+ * <li>Strings do not need to be quoted at all if they do not begin with a quote or single quote,
+ * and if they do not contain leading or trailing spaces, and if they do not contain any of these
+ * characters: <code>{ } [ ] / \ : , #</code> and if they do not look like numbers and if they are
+ * not the reserved words <code>true</code>, <code>false</code>, or <code>null</code>.</li>
  * </ul>
- *
+ * 
  * @see <a href="http://JSON.org">JSON.org</a>
  * @author yf.frank.wang@gmail.com
  */
@@ -81,7 +73,7 @@ public class JsonArray extends ArrayList<Object> {
 		if (collection != null) {
 			Iterator iter = collection.iterator();
 			while (iter.hasNext()) {
-				this.add(JsonObject.wrap(iter.next()));
+				this.add(iter.next());
 			}
 		}
 	}
@@ -95,7 +87,7 @@ public class JsonArray extends ArrayList<Object> {
 		if (array.getClass().isArray()) {
 			int length = Array.getLength(array);
 			for (int i = 0; i < length; i += 1) {
-				this.put(JsonObject.wrap(Array.get(array, i)));
+				this.add(Array.get(array, i));
 			}
 		}
 		else {
@@ -620,41 +612,63 @@ public class JsonArray extends ArrayList<Object> {
 	}
 
 	/**
+	 * Replaces the element at the specified position in this list with the specified element.
+	 * 
+	 * @param index index of the element to replace
+	 * @param element element to be stored at the specified position
+	 * @return the element previously at the specified position
+	 * @throws IndexOutOfBoundsException {@inheritDoc}
+	 */
+	public Object set(int index, Object element) {
+		return super.set(index, JsonObject.wrap(element));
+	}
+
+	/**
+	 * Appends the specified element to the end of this list.
+	 * 
+	 * @param e element to be appended to this list
+	 * @return <tt>true</tt> (as specified by {@link Collection#add})
+	 */
+	public boolean add(Object e) {
+		return super.add(JsonObject.wrap(e));
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public String toString() {
 		return Jsons.toJson(this);
 	}
-	
+
 	public String toString(boolean pretty) {
 		return Jsons.toJson(this, pretty);
 	}
-	
+
 	public String toString(int indent) {
 		return Jsons.toJson(this, indent);
 	}
-	
+
 	public static JsonArray fromJson(InputStream json, String encoding) {
 		if (json == null) {
 			return null;
 		}
-		
+
 		return Jsons.fromJson(json, encoding, JsonArray.class);
 	}
-	
+
 	public static JsonArray fromJson(Reader json) {
 		if (json == null) {
 			return null;
 		}
-		
+
 		return Jsons.fromJson(json, JsonArray.class);
 	}
-	
+
 	public static JsonArray fromJson(String json) {
 		if (json == null) {
 			return null;
 		}
-		
+
 		JsonTokener jt = new JsonTokener(new StringReader(json));
 		char c = jt.nextClean();
 		if (c != '[') {
