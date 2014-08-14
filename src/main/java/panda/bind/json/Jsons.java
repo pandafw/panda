@@ -1,14 +1,12 @@
 package panda.bind.json;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 
 import panda.bind.Binds;
+import panda.io.Streams;
 import panda.lang.Chars;
-import panda.lang.Exceptions;
 
 /**
  * 
@@ -17,13 +15,7 @@ import panda.lang.Exceptions;
  */
 public abstract class Jsons extends Binds {
 	public static <T> T fromJson(InputStream is, String encoding, Type type) {
-		Reader json;
-		try {
-			json = new InputStreamReader(is, encoding);
-		}
-		catch (UnsupportedEncodingException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		Reader json = Streams.toReader(is, encoding);
 		JsonDeserializer jd = new JsonDeserializer();
 		return jd.deserialize(json, type);
 	}

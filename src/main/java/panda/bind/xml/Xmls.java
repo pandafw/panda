@@ -1,8 +1,11 @@
 package panda.bind.xml;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Type;
 
 import panda.bind.Binds;
+import panda.io.Streams;
 
 /**
  * 
@@ -13,6 +16,17 @@ public abstract class Xmls extends Binds {
 	public static <T> T fromXml(String xml, Type type) {
 		XmlDeserializer xd = new XmlDeserializer();
 		return xd.deserialize(xml, type);
+	}
+
+	public static <T> T fromXml(Reader xml, Type type) {
+		XmlDeserializer xd = new XmlDeserializer();
+		return xd.deserialize(xml, type);
+	}
+
+	public static <T> T fromXml(InputStream xml, String encoding, Type type) {
+		Reader r = Streams.toReader(xml, encoding);
+		XmlDeserializer xd = new XmlDeserializer();
+		return xd.deserialize(r, type);
 	}
 
 	private static XmlSerializer createXmlSerializer() {

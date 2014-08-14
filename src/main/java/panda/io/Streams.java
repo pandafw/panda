@@ -49,6 +49,7 @@ import panda.lang.Arrays;
 import panda.lang.CharSequences;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 
 /**
@@ -1216,6 +1217,16 @@ public class Streams {
 	public static InputStream toInputStream(final String input, final String encoding) {
 		final byte[] bytes = input.getBytes(Charsets.toCharset(encoding));
 		return new ByteArrayInputStream(bytes);
+	}
+
+	// -----------------------------------------------------------------------
+	public static Reader toReader(final InputStream input, final String encoding) {
+		try {
+			return new InputStreamReader(input, encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
 	// write byte[]
