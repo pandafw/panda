@@ -4,11 +4,13 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import panda.io.SizeLimitExceededException;
+
 /**
  * An input stream, which limits its data size. This stream is used, if the content length is
  * unknown.
  */
-public abstract class LimitedInputStream extends FilterInputStream {
+public class LimitedInputStream extends FilterInputStream {
 
 	/**
 	 * The maximum size of an item, in bytes.
@@ -39,7 +41,9 @@ public abstract class LimitedInputStream extends FilterInputStream {
 	 * @param pCount The actual number of bytes.
 	 * @throws IOException The called method is expected to raise an IOException.
 	 */
-	protected abstract void raiseError(long pSizeMax, long pCount) throws IOException;
+	protected void raiseError(long pSizeMax, long pCount) throws IOException {
+		throw new SizeLimitExceededException("The input stream exceeds the limited size (" + pSizeMax + ")", pCount, pSizeMax);
+	}
 
 	/**
 	 * Called to check, whether the input streams limit is reached.

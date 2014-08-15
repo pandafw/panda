@@ -77,8 +77,7 @@ public class HttpServlets {
 	public static final String ERROR_REQUEST_URI_ATTRIBUTE = "javax.servlet.error.request_uri";
 	public static final String ERROR_SERVLET_NAME_ATTRIBUTE = "javax.servlet.error.servlet_name";
 
-	public static final String CONTENT_TYPE_TEXT_HTML = "text/html";
-	public static final String CONTENT_TYPE_TEXT_XML = "text/xml";
+	public static final String CONTENT_TYPE_BOUNDARY_PREFIX = "boundary=";
 	
 	/**
 	 * Prefix of the charset clause in a content type String: "charset="
@@ -494,6 +493,37 @@ public class HttpServlets {
 		return cm;
 	}
 
+	public static String getBoundary(HttpServletRequest request) {
+		String contentType = request.getContentType();
+		if (Strings.isEmpty(contentType)) {
+			return null;
+		}
+		
+		for (String s : contentType.split(";")) {
+			s = s.trim();
+			if (s.startsWith(CONTENT_TYPE_BOUNDARY_PREFIX)) {
+				return s.substring(CONTENT_TYPE_BOUNDARY_PREFIX.length());
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve the content length of the request.
+	 * 
+	 * @return The content length of the request.
+	 */
+	public static long getContentLength(HttpServletRequest request) {
+		long size;
+		try {
+			size = Long.parseLong(request.getHeader(HttpHeader.CONTENT_LENGTH));
+		}
+		catch (NumberFormatException e) {
+			size = request.getContentLength();
+		}
+		return size;
+	}
+
 	/**
 	 * @return userAgent
 	 */
@@ -501,6 +531,27 @@ public class HttpServlets {
 		return new UserAgent(request.getHeader(HttpHeader.USER_AGENT));
 	}
 
+	/**
+	 * @param request request
+	 * @return character encoding
+	 */
+	public static String getEncoding(HttpServletRequest request) {
+		return getEncoding(request, Charsets.UTF_8);
+	}
+	
+
+	/**
+	 * @param request request
+	 * @return character encoding
+	 */
+	public static String getEncoding(HttpServletRequest request, String defaultEncoding) {
+		String cs = request.getCharacterEncoding();
+		if (!Charsets.isSupportedCharset(cs)) {
+			cs = defaultEncoding;
+		}
+		return cs;
+	}
+	
 	/**
 	 * getCookie will return the cookie object that has the name in the Cookies
 	 * of the request
