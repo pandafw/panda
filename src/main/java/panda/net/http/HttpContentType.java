@@ -3,6 +3,7 @@ package panda.net.http;
 
 
 public class HttpContentType {
+	public static final String MULTIPART_PREFIX = "multipart/";
 	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 	public static final String X_WWW_FORM_URLECODED = "application/x-www-form-urlencoded";
 	public static final String TEXT_JAVASCRIPT = "text/javascript";

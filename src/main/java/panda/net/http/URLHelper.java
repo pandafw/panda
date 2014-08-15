@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.io.FileNames;
-import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -614,68 +613,55 @@ public class URLHelper {
 	 * @return parameter map
 	 */
 	public static Map<String, Object> parseQueryString(String queryString) {
-		return parseQueryString(queryString, false, Charsets.UTF_8);
+		return parseQueryString(queryString, Charsets.UTF_8);
 	}
 
 	/**
 	 * @param queryString query string
-	 * @return parameter map
-	 */
-	public static Map<String, Object> parseQueryString(String queryString, String encoding) {
-		return parseQueryString(queryString, false, encoding);
-	}
-
-	/**
-	 * @param queryString query string
-	 * @param forceValueArray if true each parameter is array
 	 * @return parameter map
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> parseQueryString(String queryString, boolean forceValueArray, String encoding) {
-		Map<String, Object> queryParams = new LinkedHashMap<String, Object>();
-		if (queryString != null) {
-			String[] params = queryString.split("&");
-			for (int a = 0; a < params.length; a++) {
-				if (params[a].trim().length() > 0) {
-					String[] tmpParams = params[a].split("=");
-					String paramName = null;
-					String paramValue = "";
-					if (tmpParams.length > 0) {
-						paramName = tmpParams[0];
-					}
-					if (tmpParams.length > 1) {
-						paramValue = tmpParams[1];
-					}
-					if (paramName != null) {
-						String translatedParamValue = decodeURL(paramValue, encoding);
+	public static Map<String, Object> parseQueryString(String queryString, String encoding) {
+		Map<String, Object> qparams = new LinkedHashMap<String, Object>();
+		if (queryString == null) {
+			return qparams;
+		}
+		
+		String[] params = queryString.split("&");
+		for (int a = 0; a < params.length; a++) {
+			if (params[a].trim().length() > 0) {
+				String[] tmpParams = params[a].split("=");
+				String paramName = null;
+				String paramValue = "";
+				if (tmpParams.length > 0) {
+					paramName = tmpParams[0];
+				}
+				if (tmpParams.length > 1) {
+					paramValue = tmpParams[1];
+				}
+				if (paramName != null) {
+					String translatedParamValue = decodeURL(paramValue, encoding);
 
-						if (queryParams.containsKey(paramName) || forceValueArray) {
-							Object currentParam = queryParams.get(paramName);
-							if (currentParam instanceof String) {
-								queryParams.put(paramName, new String[] { (String) currentParam,
-										translatedParamValue });
-							}
-							else {
-								String currentParamValues[] = (String[]) currentParam;
-								if (currentParamValues != null) {
-									List paramList = new ArrayList(Arrays.asList(currentParamValues));
-									paramList.add(translatedParamValue);
-									String newParamValues[] = new String[paramList.size()];
-									queryParams.put(paramName, paramList.toArray(newParamValues));
-								}
-								else {
-									queryParams.put(paramName,
-										new String[] { translatedParamValue });
-								}
-							}
+					if (qparams.containsKey(paramName)) {
+						Object currentParam = qparams.get(paramName);
+						if (currentParam instanceof String) {
+							List<String> ss = new ArrayList<String>();
+							ss.add((String)currentParam);
+							ss.add(translatedParamValue);
+							qparams.put(paramName, ss);
 						}
 						else {
-							queryParams.put(paramName, translatedParamValue);
+							List<String> ss = (List<String>)currentParam;
+							ss.add(translatedParamValue);
+							qparams.put(paramName, ss);
 						}
+					}
+					else {
+						qparams.put(paramName, translatedParamValue);
 					}
 				}
 			}
 		}
-		return queryParams;
+		return qparams;
 	}
 }
