@@ -53,6 +53,13 @@ public class ParameterParser {
 	}
 
 	/**
+	 * ParameterParser constructor.
+	 */
+	public ParameterParser(boolean lowerCaseNames) {
+		this.lowerCaseNames = lowerCaseNames;
+	}
+
+	/**
 	 * Are there any characters left to parse?
 	 * 
 	 * @return <tt>true</tt> if there are unparsed characters, <tt>false</tt> otherwise.
@@ -182,6 +189,22 @@ public class ParameterParser {
 		this.lowerCaseNames = b;
 	}
 
+	private char getSeparator(final String str, final String separators) {
+		char separator = separators.charAt(0);
+		if (str != null) {
+			int idx = str.length();
+			for (int i = 0; i < separators.length(); i++) {
+				char separator2 = separators.charAt(i);
+				int tmp = str.indexOf(separator2);
+				if (tmp != -1 && tmp < idx) {
+					idx = tmp;
+					separator = separator2;
+				}
+			}
+		}
+		return separator;
+	}
+
 	/**
 	 * Extracts a map of name/value pairs from the given string. Names are expected to be unique.
 	 * Multiple separators may be specified and the earliest found in the input string is used.
@@ -190,22 +213,29 @@ public class ParameterParser {
 	 * @param separators the name/value pairs separators
 	 * @return a map of name/value pairs
 	 */
-	public Map<String, String> parse(final String str, char[] separators) {
-		if (separators == null || separators.length == 0) {
+	public Map<String, String> parse(final String str, final String separators) {
+		if (separators == null || separators.length() == 0) {
 			return new HashMap<String, String>();
 		}
-		char separator = separators[0];
-		if (str != null) {
-			int idx = str.length();
-			for (char separator2 : separators) {
-				int tmp = str.indexOf(separator2);
-				if (tmp != -1 && tmp < idx) {
-					idx = tmp;
-					separator = separator2;
-				}
-			}
-		}
+		char separator = getSeparator(str, separators);
 		return parse(str, separator);
+	}
+
+	/**
+	 * Extracts a map of name/value pairs from the given string. Names are expected to be unique.
+	 * Multiple separators may be specified and the earliest found in the input string is used.
+	 * 
+	 * @param str the string that contains a sequence of name/value pairs
+	 * @param separators the name/value pairs separators
+	 * @return a map of name/value pairs
+	 */
+	public String get(final String str, String key, String separators) {
+		if (separators == null || separators.length() == 0) {
+			return null;
+		}
+
+		char separator = getSeparator(str, separators);
+		return get(str, key, separator);
 	}
 
 	/**
@@ -215,11 +245,25 @@ public class ParameterParser {
 	 * @param separator the name/value pairs separator
 	 * @return a map of name/value pairs
 	 */
-	public Map<String, String> parse(final String str, char separator) {
+	public Map<String, String> parse(final String str, final char separator) {
 		if (str == null) {
 			return new HashMap<String, String>();
 		}
 		return parse(str.toCharArray(), separator);
+	}
+
+	/**
+	 * Extracts a map of name/value pairs from the given string. Names are expected to be unique.
+	 * 
+	 * @param str the string that contains a sequence of name/value pairs
+	 * @param separator the name/value pairs separator
+	 * @return a map of name/value pairs
+	 */
+	public String get(final String str, final String key, final char separator) {
+		if (str == null) {
+			return null;
+		}
+		return get(str.toCharArray(), key, separator);
 	}
 
 	/**
@@ -230,11 +274,26 @@ public class ParameterParser {
 	 * @param separator the name/value pairs separator
 	 * @return a map of name/value pairs
 	 */
-	public Map<String, String> parse(final char[] charArray, char separator) {
+	public Map<String, String> parse(final char[] charArray, final char separator) {
 		if (charArray == null) {
 			return new HashMap<String, String>();
 		}
 		return parse(charArray, 0, charArray.length, separator);
+	}
+
+	/**
+	 * Extracts a map of name/value pairs from the given array of characters. Names are expected to
+	 * be unique.
+	 * 
+	 * @param charArray the array of characters that contains a sequence of name/value pairs
+	 * @param separator the name/value pairs separator
+	 * @return a map of name/value pairs
+	 */
+	public String get(final char[] charArray, final String key, final char separator) {
+		if (charArray == null) {
+			return null;
+		}
+		return get(charArray, 0, charArray.length, key, separator);
 	}
 
 	/**
@@ -248,7 +307,6 @@ public class ParameterParser {
 	 * @return a map of name/value pairs
 	 */
 	public Map<String, String> parse(final char[] charArray, int offset, int length, char separator) {
-
 		if (charArray == null) {
 			return new HashMap<String, String>();
 		}
@@ -289,4 +347,60 @@ public class ParameterParser {
 		return params;
 	}
 
+
+	/**
+	 * Extracts a map of name/value pairs from the given array of characters. Names are expected to
+	 * be unique.
+	 * 
+	 * @param charArray the array of characters that contains a sequence of name/value pairs
+	 * @param offset - the initial offset.
+	 * @param length - the length.
+	 * @param separator the name/value pairs separator
+	 * @return a map of name/value pairs
+	 */
+	public String get(final char[] charArray, int offset, int length, final String key, final char separator) {
+		if (charArray == null) {
+			return null;
+		}
+
+		this.chars = charArray;
+		this.pos = offset;
+		this.len = length;
+
+		String paramName = null;
+		String paramValue = null;
+		while (hasChar()) {
+			paramName = parseToken(new char[] { '=', separator });
+			paramValue = null;
+			if (hasChar() && (charArray[pos] == '=')) {
+				pos++; // skip '='
+				paramValue = parseQuotedToken(new char[] { separator });
+
+				if (paramValue != null) {
+					try {
+						paramValue = Mimes.decodeText(paramValue);
+					}
+					catch (UnsupportedEncodingException e) {
+						// let's keep the original value in this case
+					}
+				}
+			}
+			if (hasChar() && (charArray[pos] == separator)) {
+				pos++; // skip separator
+			}
+			if ((paramName != null) && (paramName.length() > 0)) {
+				if (this.lowerCaseNames) {
+					if (paramName.equalsIgnoreCase(key)) {
+						return paramValue;
+					}
+				}
+				else {
+					if (paramName.equals(key)) {
+						return paramValue;
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

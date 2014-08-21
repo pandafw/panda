@@ -32,6 +32,7 @@ import panda.net.http.HttpContentType;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
+import panda.net.http.ParameterParser;
 import panda.net.http.URLHelper;
 import panda.net.http.UserAgent;
 
@@ -77,7 +78,7 @@ public class HttpServlets {
 	public static final String ERROR_REQUEST_URI_ATTRIBUTE = "javax.servlet.error.request_uri";
 	public static final String ERROR_SERVLET_NAME_ATTRIBUTE = "javax.servlet.error.servlet_name";
 
-	public static final String CONTENT_TYPE_BOUNDARY_PREFIX = "boundary=";
+	public static final String CONTENT_TYPE_BOUNDARY = "boundary";
 	
 	/**
 	 * Prefix of the charset clause in a content type String: "charset="
@@ -494,18 +495,38 @@ public class HttpServlets {
 	}
 
 	public static String getBoundary(HttpServletRequest request) {
-		String contentType = request.getContentType();
+		return getBoundary(request.getContentType());
+	}
+	
+	public static byte[] getBoundaryBytes(HttpServletRequest request) {
+		return getBoundaryBytes(request.getContentType());
+	}
+	
+	public static String getBoundary(String contentType) {
 		if (Strings.isEmpty(contentType)) {
 			return null;
 		}
-		
-		for (String s : contentType.split(";")) {
-			s = s.trim();
-			if (s.startsWith(CONTENT_TYPE_BOUNDARY_PREFIX)) {
-				return s.substring(CONTENT_TYPE_BOUNDARY_PREFIX.length());
-			}
+
+		ParameterParser parser = new ParameterParser(true);
+		// Parameter parser can handle null input
+		return parser.get(contentType, CONTENT_TYPE_BOUNDARY, ";,");
+	}
+	
+	public static byte[] getBoundaryBytes(String contentType) {
+		String boundaryStr = getBoundary(contentType);
+
+		if (boundaryStr == null) {
+			return null;
 		}
-		return null;
+
+		byte[] boundary;
+		try {
+			boundary = boundaryStr.getBytes(Charsets.ISO_8859_1);
+		}
+		catch (UnsupportedEncodingException e) {
+			boundary = boundaryStr.getBytes(); // Intentionally falls back to default charset
+		}
+		return boundary;
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class ParameterParserTest {
 		assertEquals("stuff; stuff", params.get("test2"));
 		assertEquals("\"stuff", params.get("test3"));
 
-		params = parser.parse(s, new char[] { ',', ';' });
+		params = parser.parse(s, ",;");
 		assertEquals(null, params.get("test"));
 		assertEquals("stuff", params.get("test1"));
 		assertEquals("stuff; stuff", params.get("test2"));
@@ -79,15 +79,15 @@ public class ParameterParserTest {
 	public void testFileUpload139() {
 		ParameterParser parser = new ParameterParser();
 		String s = "Content-type: multipart/form-data , boundary=AaB03x";
-		Map<String, String> params = parser.parse(s, new char[] { ',', ';' });
+		Map<String, String> params = parser.parse(s, ",;");
 		assertEquals("AaB03x", params.get("boundary"));
 
 		s = "Content-type: multipart/form-data, boundary=AaB03x";
-		params = parser.parse(s, new char[] { ';', ',' });
+		params = parser.parse(s, ";,");
 		assertEquals("AaB03x", params.get("boundary"));
 
 		s = "Content-type: multipart/mixed, boundary=BbC04y";
-		params = parser.parse(s, new char[] { ',', ';' });
+		params = parser.parse(s, ",;");
 		assertEquals("BbC04y", params.get("boundary"));
 	}
 
@@ -98,7 +98,7 @@ public class ParameterParserTest {
 	public void fileUpload199() {
 		ParameterParser parser = new ParameterParser();
 		String s = "Content-Disposition: form-data; name=\"file\"; filename=\"=?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?= =?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=\"\r\n";
-		Map<String, String> params = parser.parse(s, new char[] { ',', ';' });
+		Map<String, String> params = parser.parse(s, ",;");
 		assertEquals("If you can read this you understand the example.", params.get("filename"));
 	}
 
