@@ -19,7 +19,6 @@ import panda.lang.Exceptions;
 import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.servlet.HttpServletSupport;
 
 
 /**
@@ -41,7 +40,6 @@ public class FastBeans extends Beans {
 	 * excludes
 	 */
 	private Set<String> excludes = Arrays.toSet(
-		HttpServletSupport.class.getName(),
 		"javax.servlet.http.Cookie");
 	
 	/**
