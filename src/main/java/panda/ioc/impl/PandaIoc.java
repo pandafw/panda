@@ -189,6 +189,11 @@ public class PandaIoc implements Ioc {
 		}
 	}
 
+	public boolean has(Class<?> type) {
+		String name = AnnotationIocLoader.getBeanName(type);
+		return has(name);
+	}
+
 	public boolean has(String name) {
 		return loader.has(name);
 	}

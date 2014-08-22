@@ -24,6 +24,11 @@ public @interface IocBean {
 	String value() default "";
 
 	/**
+	 * type
+	 */
+	Class<?> type() default Object.class;
+	
+	/**
 	 * 每个单一的值,规则与 org.nutz.ioc.loader.annotation.Inject一致
 	 * <p/>
 	 * 这些值,对应构造方法的参数

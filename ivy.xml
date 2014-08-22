@@ -38,8 +38,8 @@
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
 
 		<!-- GAE -->
-		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.9.0" conf="gae->master,sources" />
-		<dependency org="com.google.appengine" name="appengine-api-labs" rev="1.9.0" conf="gae->master,sources" />
+		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.9.9" conf="gae->master,sources" />
+		<dependency org="com.google.appengine" name="appengine-api-labs" rev="1.9.9" conf="gae->master,sources" />
 
 		<!-- TOOL -->
 		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>

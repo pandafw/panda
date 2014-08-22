@@ -224,7 +224,7 @@ public class AnnotationIocLoader implements IocLoader {
 					Field[] fields = clazz.getDeclaredFields();
 					for (Field field : fields) {
 						if (field.getAnnotation(IocInject.class) != null) {
-							log.warnf("class(%s) don't has @IocBean, but field(%s) has @Inject! Miss @IocBean ??",
+							log.warnf("class(%s) don't has @IocBean, but field(%s) has @IocInject! Miss @IocBean ??",
 								clazz.getName(), field.getName());
 							break;
 						}
@@ -246,7 +246,13 @@ public class AnnotationIocLoader implements IocLoader {
 		if (Strings.isBlank(bn)) {
 			bn = iocBean.value();
 			if (Strings.isBlank(bn)) {
-				bn = cls.getName();
+				Class<?> cn = iocBean.type();
+				if (cn == Object.class) {
+					bn = cls.getName();
+				}
+				else {
+					bn = cn.getName();
+				}
 			}
 		}
 		return bn;

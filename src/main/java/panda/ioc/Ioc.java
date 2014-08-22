@@ -37,7 +37,7 @@ public interface Ioc {
 	/**
 	 * 从容器中获取一个对象。这个对象的名称会根据传入的类型按如下规则决定
 	 * <ul>
-	 * <li>如果定义了注解 '@Inject'，采用其值为注入名
+	 * <li>如果定义了注解 '@IocInject'，采用其值为注入名
 	 * <li>否则采用类型 className 作为注入名
 	 * </ul>
 	 * 
@@ -47,6 +47,12 @@ public interface Ioc {
 	 * @throws IocException
 	 */
 	<T> T get(Class<T> type) throws IocException;
+
+	/**
+	 * @param type 类型
+	 * @return 是否存在某一特定对象
+	 */
+	boolean has(Class<?> type) throws IocException;
 
 	/**
 	 * @param name 对象名
