@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import panda.lang.Strings;
+
 /**
  * A simple parser intended to parse sequences of name/value pairs. Parameter values are expected to
  * be enclosed in quotes if they contain unsafe characters, such as '=' characters or separators.
@@ -332,6 +334,9 @@ public class ParameterParser {
 						// let's keep the original value in this case
 					}
 				}
+				else {
+					paramValue = Strings.EMPTY;
+				}
 			}
 			if (hasChar() && (charArray[pos] == separator)) {
 				pos++; // skip separator
@@ -356,7 +361,7 @@ public class ParameterParser {
 	 * @param offset - the initial offset.
 	 * @param length - the length.
 	 * @param separator the name/value pairs separator
-	 * @return a map of name/value pairs
+	 * @return value
 	 */
 	public String get(final char[] charArray, int offset, int length, final String key, final char separator) {
 		if (charArray == null) {
@@ -383,6 +388,9 @@ public class ParameterParser {
 					catch (UnsupportedEncodingException e) {
 						// let's keep the original value in this case
 					}
+				}
+				else {
+					paramValue = Strings.EMPTY;
 				}
 			}
 			if (hasChar() && (charArray[pos] == separator)) {

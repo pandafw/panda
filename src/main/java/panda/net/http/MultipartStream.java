@@ -552,7 +552,7 @@ public class MultipartStream {
 	 * @throws IOException if an i/o error occurs.
 	 */
 	public int discardBodyData() throws MalformedStreamException, IOException {
-		return readBodyData(null);
+		return readBodyData(Streams.nullOutputStream());
 	}
 
 	/**

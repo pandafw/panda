@@ -34,7 +34,7 @@ public class ParameterParserTest {
 		params = parser.parse(s, ',');
 		assertEquals(null, params.get("test"));
 		assertEquals("stuff", params.get("test1"));
-		assertEquals(null, params.get("test2"));
+		assertEquals("", params.get("test2"));
 		assertEquals(null, params.get("test3"));
 
 		s = "  test";
