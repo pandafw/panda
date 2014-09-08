@@ -126,6 +126,10 @@ public class HttpRequest {
 		this.body = body;
 	}
 
+	public void setBody(byte[] body) {
+		this.body = new ByteArrayInputStream(body);
+	}
+
 	public void setBody(String body) {
 		this.body = new ByteArrayInputStream(Strings.getBytes(body, encoding));
 	}
