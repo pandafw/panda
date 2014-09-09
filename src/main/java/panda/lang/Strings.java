@@ -9089,6 +9089,29 @@ public class Strings {
 	}
 
 	/**
+	 * Copy the given arguments into a String array. 
+	 * 
+	 * @param args arguments
+	 * @return the String array (<code>null</code> if the passed-in args was <code>null</code>
+	 *         )
+	 */
+	public static String[] toStringArray(Object... args) {
+		if (args == null) {
+			return null;
+		}
+		String[] ss = new String[args.length];
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] == null) {
+				ss[i] = null;
+			}
+			else {
+				ss[i] = args.toString();
+			}
+		}
+		return ss;
+	}
+
+	/**
 	 * Copy the given Enumeration into a String array. The Enumeration must contain String elements
 	 * only.
 	 * 

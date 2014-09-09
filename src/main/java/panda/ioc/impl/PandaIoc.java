@@ -12,6 +12,7 @@ import panda.ioc.IocLoading;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
+import panda.ioc.Scope;
 import panda.ioc.ValueProxyMaker;
 import panda.ioc.aop.MirrorFactory;
 import panda.ioc.aop.impl.DefaultMirrorFactory;
@@ -68,7 +69,7 @@ public class PandaIoc implements Ioc {
 	private IocLoading loading;
 
 	public PandaIoc(IocLoader loader) {
-		this(loader, new ScopeIocContext(ScopeIocContext.APP), ScopeIocContext.APP);
+		this(loader, new ScopeIocContext(Scope.APP), Scope.APP);
 	}
 
 	public PandaIoc(IocLoader loader, IocContext context, String defaultScope) {

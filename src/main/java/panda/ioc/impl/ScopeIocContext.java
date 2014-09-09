@@ -19,10 +19,6 @@ public class ScopeIocContext implements IocContext, Serializable {
 
 	private static final Log log = Logs.getLog(ScopeIocContext.class);
 
-	public static final String APP = "app";
-	public static final String SES = "ses";
-	public static final String REQ = "req";
-	
 	private String scope;
 	private Map<String, ObjectProxy> objs;
 

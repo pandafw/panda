@@ -2,8 +2,6 @@ package panda.ioc;
 
 /**
  * 进行对象装配的上下文环境。
- * 
- * @author zozoh(zozohtnt@gmail.com)
  */
 public interface IocContext {
 

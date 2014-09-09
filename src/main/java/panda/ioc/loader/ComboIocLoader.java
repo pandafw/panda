@@ -12,58 +12,62 @@ import panda.ioc.IocLoading;
 import panda.ioc.ObjectLoadException;
 import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
+import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
-/**
- * 融化多种IocLoader
- */
 public class ComboIocLoader implements IocLoader {
 
 	private static final Log log = Logs.getLog(ComboIocLoader.class);
 
+	/**
+	 * 类别名
+	 */
+	private static Map<String, Class<? extends IocLoader>> loaders = new HashMap<String, Class<? extends IocLoader>>();
+	static {
+		loaders.put("js", JsonIocLoader.class);
+		loaders.put("json", JsonIocLoader.class);
+		loaders.put("xml", XmlIocLoader.class);
+		loaders.put("anno", AnnotationIocLoader.class);
+		loaders.put("annotation", AnnotationIocLoader.class);
+	}
+
 	private List<IocLoader> iocLoaders = new ArrayList<IocLoader>();
 
 	/**
-	 * 这个构造方法需要一组特殊的参数
 	 * <p/>
-	 * 第一种,以*开头,后面接类名, 如 <code>*org.nutz.ioc.loader.json.JsonLoader</code>
+	 * Example:
 	 * <p/>
-	 * 1.b.45版开始支持类别名: js , json, xml, annotation 分别对应其加载类
+	 * <code>{ JsonIocLoader.class,"dao.js","service.js", XmlIocLoader.class,"config.xml"}</code>
 	 * <p/>
-	 * 第二种,为具体的参数
-	 * <p/>
-	 * 处理规律, 当遇到第一种参数(*),则认为接下来的一个或多个参数为这一个IocLoader的参数,直至遇到另外一个*开头的参数
-	 * <p/>
-	 * <p/>
-	 * 例子:
-	 * <p/>
-	 * <code>{"*org.nutz.ioc.loader.json.JsonLoader","dao.js","service.js","*org.nutz.ioc.loader.xml.XmlIocLoader","config.xml"}</code>
-	 * <p/>
-	 * 这样的参数, 会生成一个以{"dao.js","service.js"}作为参数的JsonLoader,一个以{"dao.xml"} 作为参数的XmlIocLoader
-	 * 
-	 * @throws ClassNotFoundException 如果*开头的参数所指代的类不存在
 	 */
-	public ComboIocLoader(String... args) throws ClassNotFoundException {
+	public ComboIocLoader(Object ... args) {
 		ArrayList<String> argsList = null;
-		String currentClassName = null;
-		for (String str : args) {
-			if (str.length() > 0 && str.charAt(0) == '*') {
+		Class loaderCls = null;
+		for (Object a : args) {
+			if (a instanceof Class) {
 				if (argsList != null) {
-					createIocLoader(currentClassName, argsList);
+					createIocLoader(loaderCls, argsList);
 				}
-				currentClassName = str.substring(1);
+				loaderCls = (Class)a;
+				argsList = new ArrayList<String>();
+			}
+			else if (a instanceof String && ((String)a).length() > 0 && ((String)a).charAt(0) == '*') {
+				if (argsList != null) {
+					createIocLoader(loaderCls, argsList);
+				}
+				loaderCls = getLoaderClass(((String)a).substring(1));
 				argsList = new ArrayList<String>();
 			}
 			else {
 				if (argsList == null) {
 					throw new IllegalArgumentException("ioc args without Loader ClassName. " + args);
 				}
-				argsList.add(str);
+				argsList.add(a.toString());
 			}
 		}
-		if (currentClassName != null) {
-			createIocLoader(currentClassName, argsList);
+		if (loaderCls != null) {
+			createIocLoader(loaderCls, argsList);
 		}
 		
 		Set<String> beanNames = new HashSet<String>();
@@ -77,12 +81,22 @@ public class ComboIocLoader implements IocLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createIocLoader(String className, List<String> args) throws ClassNotFoundException {
-		Class<? extends IocLoader> klass = loaders.get(className);
-		if (klass == null) {
-			klass = (Class<? extends IocLoader>)Classes.getClass(className);
-		}
+	private void createIocLoader(Class cls, List<String> args) {
+		Class<? extends IocLoader> klass = (Class<? extends IocLoader>)cls;
 		iocLoaders.add(Classes.born(klass, args.toArray(new Object[args.size()])));
+	}
+
+	private Class getLoaderClass(String className) {
+		Class cls = loaders.get(className);
+		if (cls == null) {
+			try {
+				cls = Classes.getClass(className);
+			}
+			catch (ClassNotFoundException e) {
+				throw Exceptions.wrapThrow(e);
+			}
+		}
+		return cls;
 	}
 
 	public ComboIocLoader(IocLoader... loaders) {
@@ -124,17 +138,6 @@ public class ComboIocLoader implements IocLoader {
 			}
 		}
 		throw new ObjectLoadException("Object '" + name + "' without define!");
-	}
-
-	/**
-	 * 类别名
-	 */
-	private static Map<String, Class<? extends IocLoader>> loaders = new HashMap<String, Class<? extends IocLoader>>();
-	static {
-		loaders.put("js", JsonIocLoader.class);
-		loaders.put("json", JsonIocLoader.class);
-		loaders.put("xml", XmlIocLoader.class);
-		loaders.put("annotation", AnnotationIocLoader.class);
 	}
 
 	public String toString() {
