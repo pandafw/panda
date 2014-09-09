@@ -1,0 +1,71 @@
+<!DOCTYPE validators PUBLIC
+		"-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+	<field name="c">
+		<field-validator type="constant">
+			<param name="ignoreCase">false</param>
+			<param name="list">{ "lt", "le", "gt", "ge", "eq", "bt", "lk", "mt", "lm", "rm", "in" }</param>
+			<message key="validation-constant"/>
+		</field-validator>
+	</field>
+
+	<field name="bv">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Boolean"/>
+		</field-validator>
+	</field>
+	<field name="bv2">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Boolean"/>
+		</field-validator>
+	</field>
+	<field name="bvs">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Boolean"/>
+		</field-validator>
+	</field>
+
+	<field name="dv">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Date"/>
+		</field-validator>
+	</field>
+	<field name="dv2">
+		<field-validator type="compare">
+			<param name="target">dv</param>
+			<param name="comparator">ge</param>
+			<message key="validation-compare-daterange-to"/>
+		</field-validator>
+		<field-validator type="conversion">
+			<message key="validation-conversion-Date"/>
+		</field-validator>
+	</field>
+	<field name="dvs">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Date"/>
+		</field-validator>
+	</field>
+
+	<field name="nv">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Number"/>
+		</field-validator>
+	</field>
+	<field name="nv2">
+		<field-validator type="compare">
+			<param name="target">nv</param>
+			<param name="comparator">ge</param>
+			<message key="validation-compare-numberrange-to"/>
+		</field-validator>
+		<field-validator type="conversion">
+			<message key="validation-conversion-Number"/>
+		</field-validator>
+	</field>
+	<field name="nvs">
+		<field-validator type="conversion">
+			<message key="validation-conversion-Number"/>
+		</field-validator>
+	</field>
+</validators>

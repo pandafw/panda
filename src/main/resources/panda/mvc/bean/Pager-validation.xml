@@ -1,0 +1,33 @@
+<!DOCTYPE validators PUBLIC
+		"-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+	<field name="s">
+		<field-validator type="int">
+			<param name="min">0</param>
+			<message key="validation-intrange"/>
+		</field-validator>
+		<field-validator type="conversion">
+			<message key="validation-conversion-Integer"/>
+		</field-validator>
+	</field>
+	<field name="l">
+		<field-validator type="int">
+			<param name="min">0</param>
+			<message key="validation-intrange"/>
+		</field-validator>
+		<field-validator type="conversion">
+			<message key="validation-conversion-Integer"/>
+		</field-validator>
+	</field>
+	<field name="t">
+		<field-validator type="int">
+			<param name="min">0</param>
+			<message key="validation-intrange"/>
+		</field-validator>
+		<field-validator type="conversion">
+			<message key="validation-conversion-Integer"/>
+		</field-validator>
+	</field>
+</validators>

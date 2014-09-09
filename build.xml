@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-gear" default="usage" basedir=".">
+	<property file="build.properties"/>
+	
+	<path id="dep.cp">
+		<pathelement path="../panda-java/out/classes"/>
+		<path refid="lib.cp"/>
+	</path>
+
+	<!-- build -->
+	<import file="../panda-java/ant/panda-build.xml"/>
+	
+	<!-- release -->
+	<target name="release" description="Release the project">
+		<antcall target="ivy-report"/>
+		<antcall target="dist"/>
+		<antcall target="mvn-panda-deploy"/>
+	</target>
+
+</project>

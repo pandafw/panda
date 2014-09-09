@@ -1,0 +1,11 @@
+<!DOCTYPE validators PUBLIC
+		"-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="bean.charField">
+		<field-validator type="constant">
+			<param name="list">charConstantList</param>
+			<message>value should be in ${constants}.</message>
+		</field-validator>
+	</field>
+</validators>

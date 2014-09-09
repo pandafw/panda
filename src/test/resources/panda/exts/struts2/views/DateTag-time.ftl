@@ -1,0 +1,1 @@
+<@p.date name="bean.dateField" format="time"/>

@@ -1,0 +1,13 @@
+<!DOCTYPE validators PUBLIC
+		"-//Apache Struts//XWork Validator 1.0.3//EN"
+		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+	<field name="d">
+		<field-validator type="constant">
+			<param name="ignoreCase">true</param>
+			<param name="list">{ "ASC", "DESC" }</param>
+			<message key="validation-constant"/>
+		</field-validator>
+	</field>
+</validators>

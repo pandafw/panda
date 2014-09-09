@@ -1,0 +1,1 @@
+<@p.boolean name="bean.booleanField" format="ognl"/>
