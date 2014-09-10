@@ -33,16 +33,19 @@ public class ForwardView extends AbstractPathView {
 
 	public void render(ActionContext ac, Object obj) throws Exception {
 		HttpServletRequest req = ac.getRequest();
-		HttpServletResponse res = ac.getResponse();
 
 		String path = evalPath(ac, obj);
 		String args = "";
-		if (path != null && path.contains("?")) { // 将参数部分分解出来
-			args = path.substring(path.indexOf('?'));
-			path = path.substring(0, path.indexOf('?'));
+		if (path != null) {
+			int q = path.indexOf("?");
+			if (q >= 0) { // 将参数部分分解出来
+				args = path.substring(q);
+				path = path.substring(0, q);
+			}
 		}
 
 		String ext = getExt();
+		
 		// 空路径，采用默认规则
 		if (Strings.isBlank(path)) {
 			path = RequestPath.getRequestPath(req);
@@ -50,14 +53,25 @@ public class ForwardView extends AbstractPathView {
 		}
 		// 绝对路径 : 以 '/' 开头的路径不增加 '/WEB-INF'
 		else if (path.charAt(0) == '/') {
-			if (!path.toLowerCase().endsWith(ext))
+			if (!path.toLowerCase().endsWith(ext)) {
 				path += ext;
+			}
 		}
 		else {
-			path = "/WEB-INF/" + path + ext;
+			if (!path.toLowerCase().endsWith(ext)) {
+				path += ext;
+			}
+			path = "/WEB-INF/" + path;
 		}
 
 		// 执行 Forward
+		forward(ac, path, args);
+	}
+
+	protected void forward(ActionContext ac, String path, String args) throws Exception {
+		HttpServletRequest req = ac.getRequest();
+		HttpServletResponse res = ac.getResponse();
+
 		path = path + args;
 		RequestDispatcher rd = req.getRequestDispatcher(path);
 		if (rd == null) {
@@ -67,7 +81,7 @@ public class ForwardView extends AbstractPathView {
 		// Do rendering
 		rd.forward(req, res);
 	}
-
+	
 	/**
 	 * 子类可以覆盖这个方法，给出自己特殊的后缀,必须小写哦
 	 * 

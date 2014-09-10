@@ -38,7 +38,7 @@ public abstract class AbstractPathView implements View {
 	 * @param obj 入口函数的返回值
 	 * @return 上下文对象
 	 */
-	private static Object createContext(ActionContext ac, Object obj) {
+	protected Object createContext(ActionContext ac, Object obj) {
 		Map<String, Object> context = new HashMap<String, Object>();
 
 		//TODO
