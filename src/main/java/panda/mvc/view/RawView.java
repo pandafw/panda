@@ -51,7 +51,7 @@ import panda.mvc.View;
  */
 public class RawView implements View {
 
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(RawView.class);
 
 	public static final boolean DISABLE_RANGE_DOWNLOAD = false; // 禁用断点续传
 

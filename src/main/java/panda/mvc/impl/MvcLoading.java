@@ -37,7 +37,7 @@ import panda.mvc.view.DefaultViewMaker;
 
 public class MvcLoading implements Loading {
 
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(MvcLoading.class);
 
 	public UrlMapping load(AbstractMvcConfig config) {
 		if (log.isInfoEnabled()) {
@@ -48,12 +48,12 @@ public class MvcLoading implements Loading {
 		if (log.isDebugEnabled()) {
 			log.debug("Web Container Information:");
 			log.debugf(" - Default Charset : %s", Charsets.defaultEncoding());
-			log.debugf(" - Current Path  : %s", new File(".").getAbsolutePath());
+			log.debugf(" - Current Path    : %s", new File(".").getAbsolutePath());
 			log.debugf(" - Java Version    : %s", Systems.JAVA_VERSION);
 			log.debugf(" - File separator  : %s", Systems.FILE_SEPARATOR);
 			log.debugf(" - Timezone        : %s", Systems.USER_TIMEZONE);
 			log.debugf(" - OS              : %s %s", Systems.OS_NAME, Systems.OS_ARCH);
-			log.debugf(" - ServerInfo      : %s", config.getServletContext().getServerInfo());
+			log.debugf(" - Server Info     : %s", config.getServletContext().getServerInfo());
 			log.debugf(" - Servlet API     : %d.%d", 
 				config.getServletContext().getMajorVersion(), config.getServletContext().getMinorVersion());
 
@@ -73,11 +73,6 @@ public class MvcLoading implements Loading {
 		StopWatch sw = new StopWatch();
 		try {
 			/*
-			 * 检查主模块，调用本函数前，已经确保过有声明 MainModule 了
-			 */
-			Class<?> mainModule = config.getMainModule();
-
-			/*
 			 * 创建上下文
 			 */
 			createLoadingContext(config);
@@ -85,12 +80,12 @@ public class MvcLoading implements Loading {
 			/*
 			 * 检查 Ioc 容器并创建和保存它
 			 */
-			Ioc ioc = createIoc(config, mainModule);
+			createIoc(config);
 
 			/*
 			 * 组装UrlMapping
 			 */
-			mapping = evalUrlMapping(config, mainModule, ioc);
+			mapping = evalUrlMapping(config);
 
 			/*
 			 * 执行用户自定义 Setup
@@ -114,7 +109,7 @@ public class MvcLoading implements Loading {
 
 	}
 
-	protected UrlMapping evalUrlMapping(AbstractMvcConfig config, Class<?> mainModule, Ioc ioc) throws Exception {
+	protected UrlMapping evalUrlMapping(AbstractMvcConfig config) throws Exception {
 		/*
 		 * @ TODO 个人建议可以将这个方法所涉及的内容转换到Loadings类或相应的组装类中,
 		 * 以便将本类加以隔离,使本的职责仅限于MVC整体的初使化,而不再负责UrlMapping的加载
@@ -125,12 +120,14 @@ public class MvcLoading implements Loading {
 		if (log.isInfoEnabled()) {
 			log.infof("Build URL mapping by %s ...", mapping.getClass().getName());
 		}
+
+		Class<?> mainModule = config.getMainModule();
 		
 		// 创建视图工厂
-		ViewMaker[] makers = createViewMakers(mainModule, ioc);
+		ViewMaker[] makers = createViewMakers(config);
 
 		// 创建动作链工厂
-		ActionChainMaker maker = createChainMaker(config, mainModule);
+		ActionChainMaker maker = createChainMaker(config);
 
 		// 创建主模块的配置信息
 		ActionInfo mainInfo = Loadings.createInfo(mainModule);
@@ -217,7 +214,8 @@ public class MvcLoading implements Loading {
 		return new UrlMappingImpl();
 	}
 
-	protected ActionChainMaker createChainMaker(MvcConfig config, Class<?> mainModule) {
+	protected ActionChainMaker createChainMaker(MvcConfig config) {
+		Class<?> mainModule = config.getMainModule();
 		ChainBy ann = mainModule.getAnnotation(ChainBy.class);
 		ActionChainMaker maker;
 		
@@ -236,7 +234,7 @@ public class MvcLoading implements Loading {
 
 	protected void evalSetup(MvcConfig config, boolean init) throws Exception {
 		Ioc ioc = config.getIoc();
-		if (ioc.has(Setup.class)) {
+		if (ioc != null && ioc.has(Setup.class)) {
 			Setup setup = ioc.get(Setup.class);
 			if (init) {
 				setup.init(config);
@@ -247,7 +245,10 @@ public class MvcLoading implements Loading {
 		}
 	}
 
-	protected ViewMaker[] createViewMakers(Class<?> mainModule, Ioc ioc) throws Exception {
+	protected ViewMaker[] createViewMakers(MvcConfig config) throws Exception {
+		Class<?> mainModule = config.getMainModule();
+		Ioc ioc = config.getIoc();
+
 		Views vms = mainModule.getAnnotation(Views.class);
 		ViewMaker[] makers;
 		int i = 0;
@@ -279,11 +280,15 @@ public class MvcLoading implements Loading {
 		return makers;
 	}
 
-	protected Ioc createIoc(AbstractMvcConfig config, Class<?> mainModule) throws Exception {
+	protected Ioc createIoc(AbstractMvcConfig config) throws Exception {
+		Class<?> mainModule = config.getMainModule();
+
 		IocBy ib = mainModule.getAnnotation(IocBy.class);
 		if (null == ib) {
-			throw new IllegalArgumentException("@IocBy is required for " + mainModule);
+			log.info("@IocBy is not defined for " + mainModule);
+			return null;
 		}
+		
 		if (log.isDebugEnabled()) {
 			log.debugf("@IocBy(type=%s, args=%s)", ib.type().getName(), Jsons.toJson(ib.args()));
 		}

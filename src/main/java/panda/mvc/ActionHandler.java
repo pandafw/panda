@@ -20,6 +20,27 @@ public class ActionHandler {
 		this.mapping = loading.load(config);
 	}
 
+	/**
+	 * @return the loading
+	 */
+	public Loading getLoading() {
+		return loading;
+	}
+
+	/**
+	 * @return the mapping
+	 */
+	public UrlMapping getMapping() {
+		return mapping;
+	}
+
+	/**
+	 * @return the config
+	 */
+	public MvcConfig getConfig() {
+		return config;
+	}
+
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
 		ActionContext ac = new ActionContext();
 		ac.setIoc(config.getIoc());

@@ -25,9 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-/**
- * @version $Id: MockHttpServletRequest.java 1565255 2014-02-06 13:49:17Z ggregory $
- */
 class MockHttpServletRequest implements HttpServletRequest {
 
 	private final InputStream m_requestData;

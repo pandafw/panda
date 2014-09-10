@@ -15,7 +15,7 @@ import panda.log.Logs;
 
 public class RawView2 extends RawView {
 	
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(RawView2.class);
 	
 	protected DataInputStream in;
 	

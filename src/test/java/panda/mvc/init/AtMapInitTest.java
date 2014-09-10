@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import org.junit.Test;
 
 import panda.mvc.AbstractMvcTest;
-import panda.mvc.Mvcs;
 import panda.mvc.config.AtMap;
 import panda.mvc.init.conf.MainModuleAtMap;
 
@@ -24,16 +23,14 @@ public class AtMapInitTest extends AbstractMvcTest {
 	public void test_at_map() throws ServletException, IOException {
 		request.setPathInfo("/atmap/ABC");
 		servlet.service(request, response);
-		assertEquals("\">>abc\"", response.getContentAsString());
+		assertEquals("{\"success\":true,\"result\":\">>abc\"}", response.getContentAsString());
 
 		newreq();
 		request.setPathInfo("/atmap/xyz");
 		servlet.service(request, response);
-		assertEquals("\">>xyz\"", response.getContentAsString());
+		assertEquals("{\"success\":true,\"result\":\">>xyz\"}", response.getContentAsString());
 
-		Mvcs.set("nutz", request, response);
-
-		AtMap am = Mvcs.getAtMap();
+		AtMap am = servlet.getHandler().getConfig().getAtMap();
 		assertEquals("/atmap/ABC", am.get("at.abc"));
 		assertEquals("/atmap/xyz", am.get("at.xyz"));
 	}

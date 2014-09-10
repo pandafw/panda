@@ -24,7 +24,7 @@ import panda.mvc.config.FilterMvcConfig;
  */
 public class MvcFilter implements Filter {
 
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(MvcFilter.class);
 
 	protected ActionHandler handler;
 

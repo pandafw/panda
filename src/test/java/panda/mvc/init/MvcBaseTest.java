@@ -8,12 +8,13 @@ import org.junit.Test;
 
 import panda.mvc.AbstractMvcTest;
 import panda.mvc.RequestPath;
+import panda.mvc.init.module.MainModule;
 
 public class MvcBaseTest extends AbstractMvcTest {
 
 	@Override
 	protected void initServletConfig() {
-		servletConfig.addInitParameter("modules", "org.nutz.mvc.init.module.MainModule");
+		servletConfig.addInitParameter("modules", MainModule.class.getName());
 	}
 
 	@Test

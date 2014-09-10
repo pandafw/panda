@@ -1,7 +1,5 @@
 package panda.mvc;
 
-import javax.servlet.Servlet;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -11,13 +9,12 @@ import panda.mock.web.MockHttpServletResponse;
 import panda.mock.web.MockHttpSession;
 import panda.mock.web.MockServletConfig;
 import panda.mock.web.MockServletContext;
-import panda.mvc.MvcServlet;
 import panda.mvc.mock.Mock;
 
 @Ignore
 public abstract class AbstractMvcTest {
 
-	protected Servlet servlet;
+	protected MvcServlet servlet;
 
 	protected MockHttpServletRequest request;
 
@@ -43,6 +40,7 @@ public abstract class AbstractMvcTest {
 
 	protected void newreq() {
 		request = new MockHttpServletRequest();
+		request.setMethod("GET");
 		request.setContextPath("");
 		request.setSession(session);
 		response = new MockHttpServletResponse();

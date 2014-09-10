@@ -47,4 +47,11 @@ public class MvcServlet extends HttpServlet {
 			resp.sendError(404);
 		}
 	}
+
+	/**
+	 * @return the handler
+	 */
+	public ActionHandler getHandler() {
+		return handler;
+	}
 }

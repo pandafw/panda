@@ -16,7 +16,7 @@ import panda.net.http.HttpMethod;
  */
 public class ActionInvoker {
 
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(ActionInvoker.class);
 
 	private ActionChain defaultChain;
 

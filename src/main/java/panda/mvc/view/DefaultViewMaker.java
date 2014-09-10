@@ -16,6 +16,7 @@ public class DefaultViewMaker implements ViewMaker {
 
 	public static final String VIEW_JSP = "jsp";
 	public static final String VIEW_JSON = "json";
+	public static final String VIEW_XML = "xml";
 	public static final String VIEW_REDIRECT = "redirect";
 	public static final String VIEW_REDIRECT2 = ">>";
 	public static final String VIEW_VOID = "void";
@@ -33,7 +34,7 @@ public class DefaultViewMaker implements ViewMaker {
 		
 		if (VIEW_JSON.equals(type)) {
 			if (Strings.isBlank(value)) {
-				return JsonView.COMPACT;
+				return JsonView.DEFAULT;
 			}
 			
 			// 除高级的json format定义之外,也支持简单的缩写
@@ -46,6 +47,23 @@ public class DefaultViewMaker implements ViewMaker {
 			JsonView jv = new JsonView();
 			jv.setLocation(value);
 			return jv;
+		}
+		
+		if (VIEW_XML.equals(type)) {
+			if (Strings.isBlank(value)) {
+				return XmlView.DEFAULT;
+			}
+			
+			// 除高级的json format定义之外,也支持简单的缩写
+			if (value.charAt(0) == '{') {
+				JsonObject jo = JsonObject.fromJson(value);
+				XmlView xv = Castors.scast(jo, XmlView.class);
+				return xv;
+			}
+
+			XmlView xv = new XmlView();
+			xv.setLocation(value);
+			return xv;
 		}
 		
 		if (VIEW_REDIRECT.equals(type) || VIEW_REDIRECT2.equals(type)) {

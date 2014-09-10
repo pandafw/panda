@@ -10,8 +10,6 @@
 	<classpathentry kind="lib" path="lib/api/javax.servlet.jsp-api.jar" sourcepath="lib/api/javax.servlet.jsp-api-sources.jar"/>
 	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
-	<classpathentry kind="lib" path="lib/gae/appengine-api-1.0-sdk.jar"/>
-	<classpathentry kind="lib" path="lib/gae/appengine-api-labs.jar"/>
 	<classpathentry kind="lib" path="lib/run/activation.jar" sourcepath="lib/run/activation-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-email.jar" sourcepath="lib/run/commons-email-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/flying-saucer-core.jar" sourcepath="lib/run/flying-saucer-core-sources.jar"/>

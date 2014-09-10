@@ -1,52 +1,49 @@
 package panda.mvc.view;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import panda.mvc.ActionContext;
-import panda.mvc.View;
+import panda.bind.json.JsonSerializer;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.net.http.HttpContentType;
 
 /**
  * 将数据采用json方式输出的试图实现
  */
-public class JsonView implements View {
+public class JsonView extends AbstractOMView {
+	private static final Log log = Logs.getLog(JsonView.class);
 
-	private boolean pretty;
-	private String location;
-
-	public static final JsonView COMPACT = new JsonView();
+	public static final JsonView DEFAULT = new JsonView();
 	
 	public JsonView() {
+		super();
+		setContentType(HttpContentType.TEXT_JAVASCRIPT);
 	}
 
 	/**
-	 * @return the pretty
+	 * write result
+	 * @param writer response writer
+	 * @param result result object
+	 * @throws IOException
 	 */
-	public boolean isPretty() {
-		return pretty;
-	}
+	@Override
+	protected void writeResult(PrintWriter writer, Object result) throws IOException {
+		if (result != null) {
+			JsonSerializer js = new JsonSerializer();
+			setSerializerOptions(js);
 
-	/**
-	 * @param pretty the pretty to set
-	 */
-	public void setPretty(boolean pretty) {
-		this.pretty = pretty;
-	}
-
-	/**
-	 * @return the location
-	 */
-	public String getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public void render(ActionContext ac, Object obj) throws IOException {
-		//TODO
+			if (log.isDebugEnabled()) {
+				if (js.isPrettyPrint()) {
+					log.debug(js.serialize(result));
+				}
+				else {
+					js.setPrettyPrint(true);
+					log.debug(js.serialize(result));
+					js.setPrettyPrint(false);
+				}
+			}
+			js.serialize(result, writer);
+		}
 	}
 }
