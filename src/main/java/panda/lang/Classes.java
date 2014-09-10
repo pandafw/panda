@@ -880,6 +880,9 @@ public abstract class Classes {
 		try {
 			return getClass(className);
 		}
+		catch (Error e) {
+			return null;
+		}
 		catch (ClassNotFoundException e) {
 			return null;
 		}

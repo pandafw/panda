@@ -31,7 +31,7 @@ import panda.log.Logs;
  */
 public class DefaultObjectMaker implements ObjectMaker {
 
-	private static final Log log = Logs.get();
+	private static final Log log = Logs.getLog(DefaultObjectMaker.class);
 
 	@SuppressWarnings("unchecked")
 	public ObjectProxy make(IocMaking ing, IocObject iobj) {
