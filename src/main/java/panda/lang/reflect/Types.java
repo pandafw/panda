@@ -138,7 +138,7 @@ public abstract class Types {
 			return newInstance(type);
 		}
 		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+			throw new RuntimeException("Failed to create instance of " + type, e);
 		}
 	}
 	

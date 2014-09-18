@@ -18,16 +18,26 @@ import panda.lang.time.FastDateFormat;
  *
  */
 public class DateTypeCastor {
+	public static FastDateFormat[] DATE_FORMATS = {
+		DateTimes.isoDatetimeFormat(),
+		DateTimes.isoAltDatetimeFormat(),
+		DateTimes.timestampFormat(),
+		DateTimes.datetimeFormat(),
+		DateTimes.dateFormat(),
+		DateTimes.timeFormat(),
+	};
+
 	public static class DateCastor extends Castor<Object, Date> {
-		public static FastDateFormat[] DATE_FORMATS = {
-			DateTimes.timestampFormat(),
-			DateTimes.datetimeFormat(),
-			DateTimes.dateFormat(),
-			DateTimes.timeFormat(),
-		};
 	
+		private FastDateFormat[] formats;
+		
 		public DateCastor() {
+			this(DATE_FORMATS);
+		}
+		
+		public DateCastor(FastDateFormat[] formats) {
 			super(Object.class, Date.class);
+			this.formats = formats;
 		}
 		
 		@Override
@@ -52,7 +62,7 @@ public class DateTypeCastor {
 				String sv = value.toString();
 	
 				ParseException ex = null;
-				for (FastDateFormat df : DATE_FORMATS) {
+				for (FastDateFormat df : formats) {
 					try {
 						return df.parse(sv);
 					}

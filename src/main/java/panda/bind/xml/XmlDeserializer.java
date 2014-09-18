@@ -3,21 +3,18 @@ package panda.bind.xml;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractDeserializer;
-import panda.lang.reflect.Types;
 
 /**
  * 
@@ -25,25 +22,10 @@ import panda.lang.reflect.Types;
  *
  */
 public class XmlDeserializer extends AbstractDeserializer {
-	private boolean ignoreXmlAttributes = false;
-	private Class<?> defaultXmlObjectType = LinkedHashMap.class;
+	private Class<?> defaultXmlObjectType = HashMap.class;
 	private Class<?> defaultXmlArrayType = ArrayList.class;
 
 	public XmlDeserializer() {
-	}
-
-	/**
-	 * @return the ignoreXmlAttributes
-	 */
-	public boolean isIgnoreXmlAttributes() {
-		return ignoreXmlAttributes;
-	}
-
-	/**
-	 * @param ignoreXmlAttributes the ignoreXmlAttributes to set
-	 */
-	public void setIgnoreXmlAttributes(boolean ignoreXmlAttributes) {
-		this.ignoreXmlAttributes = ignoreXmlAttributes;
 	}
 
 	/**
@@ -79,10 +61,13 @@ public class XmlDeserializer extends AbstractDeserializer {
 	 */
 	public <T> T deserialize(Reader xml, Type type) {
 		try {
-			SAXParserFactory parserFactor = SAXParserFactory.newInstance();
-			SAXParser parser = parserFactor.newSAXParser();
-			SAXHandler handler = new SAXHandler(this, type);
-			parser.parse(new InputSource(xml), handler);
+			XMLReader xr = XMLReaderFactory.createXMLReader();
+
+			SaxHandler handler = new SaxHandler(this, type);
+			xr.setContentHandler(handler);
+			
+			xr.parse(new InputSource(xml));
+			
 			T obj = convertValue(handler.root(), type);
 			return obj;
 		}
@@ -98,28 +83,33 @@ public class XmlDeserializer extends AbstractDeserializer {
 		return new XmlException(e);
 	}
 
-	protected static class SAXHandler<T> extends DefaultHandler {
+	protected static class SaxHandler extends DefaultHandler {
 		private static class Elem {
-			private String name;
 			private Type type;
+			private String name;
 			private Object value;
 			private StringBuilder text;
 			private BeanHandler beanh;
-			private boolean leaf = true;
+			private int leaf = 0;
 		}
 		
 		private XmlDeserializer deser;
 		private Type type;
 		private Object root;
-		private List<Elem> stack;
+		private List<Elem> elems;
 
-		public SAXHandler(XmlDeserializer deserializer, Type type) {
+		public SaxHandler(XmlDeserializer deserializer, Type type) {
 			this.deser = deserializer;
 			this.type = type;
+			elems = new ArrayList<Elem>();
 		}
 		
 		protected XmlException error(String message) {
 			return new XmlException(message + at());
+		}
+
+		protected XmlException error(String message, Throwable e) {
+			return new XmlException(message + at(), e);
 		}
 
 		protected Object root() {
@@ -127,9 +117,9 @@ public class XmlDeserializer extends AbstractDeserializer {
 		}
 		
 		protected String at() {
-			StringBuilder sb = new StringBuilder();
-			sb.append("at ");
-			for (Elem e : stack) {
+			StringBuilder sb = new StringBuilder(128);
+			sb.append(" at ");
+			for (Elem e : elems) {
 				sb.append('/').append(e.name);
 			}
 			return sb.toString();
@@ -137,7 +127,6 @@ public class XmlDeserializer extends AbstractDeserializer {
 
 		@Override
 		public void startDocument() throws SAXException {
-			stack = new LinkedList<Elem>();
 		}
 
 		@Override
@@ -145,97 +134,121 @@ public class XmlDeserializer extends AbstractDeserializer {
 		}
 
 		protected Elem lastElem() {
-			return stack.get(stack.size() - 1);
+			return elems.get(elems.size() - 1);
 		}
 		
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			Elem em = new Elem();
-			em.name = qName;
+			em.name = localName;
 			
-			if (stack.isEmpty()) {
+			if (elems.isEmpty()) {
 				em.type = type;
+				elems.add(em);
+				return;
 			}
-			else {
-				Elem pm = lastElem();
-				if (pm.beanh == null) {
-					// initialize parent element
-					if (deser.isArrayType(pm.type)) {
-						pm.beanh = deser.getBeanHandler(deser.getDefaultXmlArrayType());
-						pm.value = pm.beanh.createObject();
-						em.type = deser.getArrayElementType(pm.type);
-					}
-					else if (Object.class == pm.type) {
-						pm.beanh = deser.getBeanHandler(deser.getDefaultXmlObjectType());
-						pm.value = pm.beanh.createObject();
-						em.type = Object.class;
+
+			Elem ep = lastElem();
+			elems.add(em);
+
+			if (ep.type == null) {
+				return;
+			}
+			
+			if (ep.beanh == null) {
+				// initialize parent element
+				if (deser.isArrayType(ep.type)) {
+					ep.beanh = deser.getBeanHandler(deser.getDefaultXmlArrayType());
+					ep.value = ep.beanh.createObject();
+					em.type = deser.getArrayElementType(ep.type);
+					em.name = String.valueOf(ep.leaf);
+				}
+				else if (Object.class == ep.type) {
+					ep.beanh = deser.getBeanHandler(deser.getDefaultXmlObjectType());
+					ep.value = ep.beanh.createObject();
+					em.type = Object.class;
+				}
+				else {
+					ep.beanh = deser.getBeanHandler(ep.type);
+					ep.value = ep.beanh.createObject();
+				}
+			}
+
+			if (em.type == null) {
+				if (deser.isArrayType(ep.type)) {
+					em.type = deser.getArrayElementType(ep.type);
+					em.name = String.valueOf(ep.leaf);
+				}
+				else if (Object.class == ep.type) {
+					em.type = Object.class;
+				}
+				else {
+					if (ep.beanh.canWriteProperty(em.name)) {
+						em.type = ep.beanh.getPropertyType(em.name);
 					}
 					else {
-						pm.beanh = deser.getBeanHandler(pm.type);
-						pm.value = pm.beanh.createObject();
-					}
-				}
-				pm.leaf = false;
+						em.type = null;
 
-				if (em.type == null) {
-					if (deser.isArrayType(pm.type)) {
-						em.type = deser.getArrayElementType(pm.type);
-					}
-					else if (Object.class == pm.type) {
-						em.type = Object.class;
-					}
-					else {
-						em.type = pm.beanh.getPropertyType(qName);
+						if (!deser.isIgnoreReadonlyProperty() || !deser.isIgnoreMissingProperty()) {
+							if (ep.beanh.canReadProperty(em.name)) {
+								if (deser.isIgnoreReadonlyProperty()) {
+									return;
+								}
+								throw error("readonly property: " + em.name);
+							}
+	
+							if (deser.isIgnoreMissingProperty()) {
+								return;
+							}
+							throw error("missing property: " + em.name);
+						}
 					}
 				}
 			}
-			stack.add(em);
 
-			if (!deser.isIgnoreXmlAttributes()
-					&& attributes != null 
-					&& attributes.getLength() > 0
-					) {
-				if (deser.isArrayType(em.type)) {
-					throw error("Xml attributes can not be serialized to the " + Types.typeToString(em.type));
-				}
-
-				// TODO
-				for (int i = 0; i < attributes.getLength(); i++) {
-//					vs.put(attributes.getQName(i), attributes.getValue(i));
-				}
-			}
+			ep.leaf++;
 		}
 
 		protected Object convertText(Elem em) {
-			if (em.text == null) {
-				return null;
+			Object v = null;
+			if (em.text != null && em.text.length() > 0) {
+				v = em.text.toString();
 			}
+
 			try {
-				return deser.convertValue(em.text.toString(), em.type);
+				return deser.convertValue(v, em.type);
 			}
-			catch (RuntimeException e) {
-				throw new XmlException("Failed to convert text of property '" + em.name + "'", e);
+			catch (Exception e) {
+				throw error("Failed to convert text of property '" + em.name + "'", e);
 			}
 		}
 
 		protected Object convertValue(Elem em) {
+			if (em.type == null) {
+				return null;
+			}
+
 			try {
 				return deser.convertValue(em.value, em.type);
 			}
-			catch (RuntimeException e) {
-				throw new XmlException("Failed to convert value of property '" + em.name + "'", e);
+			catch (Exception e) {
+				throw error("Failed to convert value of property '" + em.name + "'", e);
 			}
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			Elem em = stack.remove(stack.size() - 1);
-			if (em.leaf) {
+			Elem em = elems.remove(elems.size() - 1);
+			if (em.type == null) {
+				return;
+			}
+			
+			if (em.leaf == 0) {
 				em.value = convertText(em);
 			}
 			
-			if (stack.isEmpty()) {
+			if (elems.isEmpty()) {
 				root = em.value;
 				return;
 			}
@@ -246,24 +259,29 @@ public class XmlDeserializer extends AbstractDeserializer {
 				return;
 			}
 			
+			if (deser.isIgnoreReadonlyProperty() && deser.isIgnoreMissingProperty()) {
+				return;
+			}
+			
 			if (ep.beanh.canReadProperty(em.name)) {
-				if (!deser.isIgnoreReadonlyProperty()) {
-					throw error("readonly property: " + em.name);
+				if (deser.isIgnoreReadonlyProperty()) {
+					return;
 				}
+				throw error("readonly property: " + em.name);
 			}
-			else {
-				if (!deser.isIgnoreMissingProperty()) {
-					throw error("missing property: " + em.name);
-				}
+
+			if (deser.isIgnoreMissingProperty()) {
+				return;
 			}
+			throw error("missing property: " + em.name);
 		}
 
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
 			Elem em = lastElem();
-			if (em.leaf) {
+			if (em.leaf == 0) {
 				if (em.text == null) {
-					em.text = new StringBuilder();
+					em.text = new StringBuilder(length);
 				}
 				em.text.append(ch, start, length);
 			}

@@ -280,7 +280,7 @@ public class Castor<S, T> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("fromType", fromType)
 				.append("toType", toType)
 				.toString();

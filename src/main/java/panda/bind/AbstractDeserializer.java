@@ -3,7 +3,6 @@ package panda.bind;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 import panda.io.Streams;
 import panda.lang.reflect.Types;
@@ -62,10 +61,6 @@ public abstract class AbstractDeserializer extends AbstractBinder implements Des
 		finally {
 			Streams.safeClose(r);
 		}
-	}
-
-	protected boolean isArrayType(Type type) {
-		return Types.isArrayType(type) || Types.isAssignable(type, Collection.class);
 	}
 
 	protected Type getArrayElementType(Type type) {

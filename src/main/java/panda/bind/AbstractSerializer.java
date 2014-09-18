@@ -3,6 +3,8 @@ package panda.bind;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +15,6 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.Chars;
-import panda.lang.Classes;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Objects;
@@ -144,24 +145,24 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	public void serialize(Object src, Appendable writer) {
 		this.writer = writer;
 		
-		this.startDocument(src);
+		startDocument(src);
 
 		if (src == null) {
 			if (!isIgnoreNullProperty()) {
-				this.writeNull();
+				writeNull();
 			}
 		}
 		else {
 			serializeSource(Strings.EMPTY, src);
 		}
 		
-		this.endDocument(src);
+		endDocument(src);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void serializeSource(String name, Object src) {
 		if (src == null) {
-			this.writeNull();
+			writeNull();
 			return;
 		}
 
@@ -174,80 +175,45 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 
 		cycleDetector.push(name, src);
 		try {
-			Class type = src.getClass();
-			if (type.isArray()) {
-				this.startArray(src);
-				int len = Array.getLength(src);
-				for (int i = 0; i < len; i++) {
-					serializeArrayElement(src, Array.get(src, i), i);
-				}
-				this.endArray(src, len);
+			Class<?> type = src.getClass();
+			if (type == byte[].class) {
+				serializeByteArray(name, (byte[])src);
+			}
+			else if (type == char[].class) {
+				serializeCharArray(name, (char[])src);
+			}
+			else if (type.isArray()) {
+				serializeArray(name, type, src);
 			}
 			else if (src instanceof Map) {
-				Map m = (Map)src;
-				PropertyFilter pf = getPropertyFilter(type);
-
-				int len = 0;
-				this.startObject(m);
-				for (Object o : m.entrySet()) {
-					Entry en = (Entry)o;
-					String key = en.getKey().toString();
-					Object val = en.getValue();
-					if (serializeObjectProperty(src, key, val, len, pf)) {
-						len++;
-					}
-				}
-				this.endObject(src, len);
+				serializeMap(name, type, (Map)src);
 			}
 			else if (src instanceof Iterable) {
-				this.startArray(src);
-				Iterator it = ((Iterable)src).iterator();
-				int i = 0;
-				while (it.hasNext()) {
-					serializeArrayElement(src, it.next(), i++);
-				}
-				this.endArray(src, i);
+				serializeIterable(name, type, (Iterable)src);
 			}
 			else if (src instanceof Enumeration) {
-				this.startArray(src);
-				Enumeration en = (Enumeration)src;
-				int i = 0;
-				while (en.hasMoreElements()) {
-					serializeArrayElement(src, en.nextElement(), i++);
-				}
-				this.endArray(src, i);
+				serializeEnumeration(name, type, (Enumeration)src);
+			}
+			else if (src instanceof Date) {
+				writeDate((Date)src);
+			}
+			else if (src instanceof Calendar) {
+				writeCalendar((Calendar)src);
 			}
 			else if (src instanceof Boolean) {
-				this.writeBoolean((Boolean)src);
+				writeBoolean((Boolean)src);
 			}
 			else if (src instanceof Number) {
-				this.writeNumber((Number)src);
+				writeNumber((Number)src);
 			}
 			else if (src instanceof CharSequence) {
-				this.writeString(src.toString());
+				writeString(src.toString());
 			}
 			else if (isImmutableType(type)) {
-				String s = convertValue(src, String.class);
-				this.writeString(s);
+				writeImmutable(src);
 			}
 			else {
-				BeanHandler bh = getBeanHandler(type);
-				PropertyFilter pf = getPropertyFilter(type);
-
-				int len = 0;
-				this.startObject(src);
-				String[] pns = bh.getReadPropertyNames(src);
-				for (String key : pns) {
-					if (isExcludeProperty(key)) {
-						continue;
-					}
-					
-					Object val = bh.getPropertyValue(src, key);
-					if (serializeObjectProperty(src, key, val, len, pf)) {
-						len++;
-					}
-				}
-				this.endObject(src, len);
+				serializeBean(name, type, src);
 			}
 		}
 		finally {
@@ -255,8 +221,8 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		}
 	}
 
-	private void serializeArrayElement(Object src, Object val, int idx) {
-		this.startArrayElement(val, idx);
+	private void serializeArrayElement(String name, Object src, Object val, int idx) {
+		startArrayElement(name, val, idx);
 
 		if (cycleDetector.isCycled(val)) {
 			switch (cycleDetectStrategy) {
@@ -274,7 +240,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		}
 
 		serializeSource(String.valueOf(idx), val);
-		this.endArrayElement(val, idx);
+		endArrayElement(name, val, idx);
 	}
 
 	private boolean serializeObjectProperty(Object src, String key, Object val, int idx, PropertyFilter pf) {
@@ -296,17 +262,13 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 					return false;
 				}
 
-				this.startObjectProperty(key, val, idx);
+				startObjectProperty(key, val, idx);
 				serializeSource(key, val);
-				this.endObjectProperty(key, val, idx);
+				endObjectProperty(key, val, idx);
 				return true;
 			}
 		}
 		return false;
-	}
-
-	protected boolean isImmutableType(Class type) {
-		return Classes.isImmutable(type);
 	}
 
 	protected void writeIndent(int indent) throws IOException {
@@ -319,30 +281,124 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	}
 	
 	//-------------------------------------------------------------
+	// serialize methods
+	//-------------------------------------------------------------
+	protected void serializeByteArray(String name, byte[] src) {
+		startArray(name, src);
+		int len = src.length;
+		for (int i = 0; i < len; i++) {
+			serializeArrayElement(name, src, src[i], i);
+		}
+		endArray(name, src, len);
+	}
+	
+	protected void serializeCharArray(String name, char[] src) {
+		writeString(new String(src));
+	}
+	
+	protected void serializeArray(String name, Class<?> type, Object src) {
+		startArray(name, src);
+		int len = Array.getLength(src);
+		for (int i = 0; i < len; i++) {
+			serializeArrayElement(name, src, Array.get(src, i), i);
+		}
+		endArray(name, src, len);
+	}
+
+	protected void serializeMap(String name, Class<?> type, Map src) {
+		PropertyFilter pf = getPropertyFilter(type);
+
+		int len = 0;
+		startObject(name, src);
+		for (Object o : src.entrySet()) {
+			Entry en = (Entry)o;
+			String key = en.getKey().toString();
+			Object val = en.getValue();
+			if (serializeObjectProperty(src, key, val, len, pf)) {
+				len++;
+			}
+		}
+		endObject(name, src, len);
+	}
+	
+	protected void serializeIterable(String name, Class<?> type, Iterable src) {
+		startArray(name, src);
+		Iterator it = src.iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			serializeArrayElement(name, src, it.next(), i++);
+		}
+		endArray(name, src, i);
+	}
+
+	protected void serializeEnumeration(String name, Class<?> type, Enumeration src) {
+		startArray(name, src);
+		int i = 0;
+		while (src.hasMoreElements()) {
+			serializeArrayElement(name, src, src.nextElement(), i++);
+		}
+		endArray(name, src, i);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void serializeBean(String name, Class<?> type, Object src) {
+		BeanHandler bh = getBeanHandler(type);
+		PropertyFilter pf = getPropertyFilter(type);
+
+		int len = 0;
+		startObject(name, src);
+		String[] pns = bh.getReadPropertyNames(src);
+		for (String key : pns) {
+			if (isExcludeProperty(key)) {
+				continue;
+			}
+			
+			Object val = bh.getPropertyValue(src, key);
+			if (serializeObjectProperty(src, key, val, len, pf)) {
+				len++;
+			}
+		}
+		endObject(name, src, len);
+	}
+
+	protected void writeCalendar(Calendar src) {
+		writeImmutable(src);
+	}
+
+	protected void writeDate(Date src) {
+		writeImmutable(src);
+	}
+	
+	protected void writeImmutable(Object src) {
+		String s = convertValue(src, String.class);
+		writeString(s);
+	}
+	
+	//-------------------------------------------------------------
 	// abstract methods
 	//-------------------------------------------------------------
 	protected abstract void startDocument(Object src);
 	
 	protected abstract void endDocument(Object src);
 
-	protected abstract void startArray(Object src);
+	protected abstract void startArray(String name, Object src);
 
-	protected abstract void endArray(Object src, int len);
+	protected abstract void endArray(String name, Object src, int len);
 
-	protected abstract void startArrayElement(Object src, int index);
+	protected abstract void startArrayElement(String name, Object src, int index);
 	
-	protected abstract void endArrayElement(Object src, int index);
+	protected abstract void endArrayElement(String name, Object src, int index);
 
-	protected abstract void startObject(Object src);
+	protected abstract void startObject(String name, Object src);
 	
-	protected abstract void endObject(Object src, int len);
+	protected abstract void endObject(String name, Object src, int len);
 
 	protected abstract void startObjectProperty(String key, Object val, int index);
 	
 	protected abstract void endObjectProperty(String key, Object val, int index);
 	
 	protected abstract void writeNull();
-	
+
 	protected abstract void writeString(String str);
 
 	protected abstract void writeNumber(Number num);

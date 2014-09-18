@@ -1,6 +1,7 @@
 package panda.bind;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,6 +12,7 @@ import panda.bean.Beans;
 import panda.castor.Castor;
 import panda.castor.Castors;
 import panda.lang.Arrays;
+import panda.lang.reflect.Types;
 
 /**
  * 
@@ -123,5 +125,13 @@ public abstract class AbstractBinder {
 	
 	protected boolean isExcludeProperty(Class type) {
 		return excludePropertyTypes != null && excludePropertyTypes.contains(type);
+	}
+
+	protected boolean isArrayType(Type type) {
+		return Types.isArrayType(type) || Types.isAssignable(type, Collection.class);
+	}
+
+	protected boolean isImmutableType(Type type) {
+		return Types.isImmutableType(type);
 	}
 }

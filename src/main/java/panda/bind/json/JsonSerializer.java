@@ -37,13 +37,13 @@ public class JsonSerializer extends AbstractSerializer {
 	}
 
 	@Override
-	protected void startArray(Object src) {
+	protected void startArray(String name, Object src) {
 		write(ARRAY_START_CHAR);
 		indent += indentFactor;
 	}
 
 	@Override
-	protected void endArray(Object src, int len) {
+	protected void endArray(String name, Object src, int len) {
 		indent -= indentFactor;
 		if (len > 0) {
 			writeIndent();
@@ -52,7 +52,7 @@ public class JsonSerializer extends AbstractSerializer {
 	}
 
 	@Override
-	protected void startArrayElement(Object src, int index) {
+	protected void startArrayElement(String name, Object src, int index) {
 		if (index > 0) {
 			writeSeparator(FIELD_SEPARATOR);
 		}
@@ -60,17 +60,17 @@ public class JsonSerializer extends AbstractSerializer {
 	}
 	
 	@Override
-	protected void endArrayElement(Object src, int index) {
+	protected void endArrayElement(String name, Object src, int index) {
 	}
 
 	@Override
-	protected void startObject(Object src) {
+	protected void startObject(String name, Object src) {
 		write(OBJECT_START_CHAR);
 		indent += indentFactor;
 	}
 	
 	@Override
-	protected void endObject(Object src, int len) {
+	protected void endObject(String name, Object src, int len) {
 		indent -= indentFactor;
 		if (len > 0) {
 			writeIndent();

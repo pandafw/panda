@@ -7,22 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.bean.BeanHandler;
-import panda.bean.Beans;
+import org.junit.Assert;
+import org.junit.Test;
+
 import panda.bean.TestA.TestB;
 import panda.lang.Arrays;
 import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 
-import junit.framework.TestCase;
-
 
 /**
  * JavaBeanHandlerTest
  */
 @SuppressWarnings("unchecked")
-public class JavaBeanHandlerTest extends TestCase {
+public class JavaBeanHandlerTest {
 
 	private static Log log = Logs.getLog(JavaBeanHandlerTest.class);
 
@@ -31,7 +30,7 @@ public class JavaBeanHandlerTest extends TestCase {
 	protected BeanHandler getBeanHandler(Class type) {
 		return bhf.getBeanHandler(type);
 	}
-
+	
 	protected void testGetType(Object beanObject, String propertyName, Type expected) {
 		log.debug("testGetType: " + beanObject.getClass().getName() + " - " + propertyName + " [ "
 				+ expected + " ]");
@@ -45,7 +44,24 @@ public class JavaBeanHandlerTest extends TestCase {
 			log.error("exception", e);
 			throw e;
 		}
-		assertEquals(expected, actual);
+		Assert.assertEquals(expected, actual);
+	}
+
+	protected void testGetElemType(Object beanObject, String propertyName, Type expected) {
+		log.debug("testGetElemType: " + beanObject.getClass().getName() + " - " + propertyName + " [ "
+				+ expected + " ]");
+
+		Type actual;
+		try {
+			BeanHandler bh = getBeanHandler(beanObject.getClass());
+			Type pt = bh.getBeanType(beanObject, propertyName);
+			actual = Types.getArrayElementType(pt);
+		}
+		catch (RuntimeException e) {
+			log.error("exception", e);
+			throw e;
+		}
+		Assert.assertEquals(expected, actual);
 	}
 
 	protected void testSetGetValue(Object beanObject, String propertyName, Object expected) {
@@ -62,12 +78,13 @@ public class JavaBeanHandlerTest extends TestCase {
 			log.error("exception", e);
 			throw e;
 		}
-		assertEquals(expected, actual);
+		Assert.assertEquals(expected, actual);
 	}
 
 	/**
 	 * testCreateObject
 	 */
+	@Test
 	public void testCreateObject() {
 		TestA actual;
 		try {
@@ -78,12 +95,40 @@ public class JavaBeanHandlerTest extends TestCase {
 			log.error("exception", e);
 			throw e;
 		}
-		assertNotNull(actual);
+		Assert.assertNotNull(actual);
 	}
 
+
+	public static class TestH extends TestG<TestA> {
+		/**
+		 * Override is required for Generic Type
+		 */
+		@Override
+		public TestA getObj() {
+			return super.getObj();
+		}
+
+		/**
+		 * Override is required for Generic Type
+		 */
+		@Override
+		public List<TestA> getLst() {
+			return super.getLst();
+		}
+		
+	}
+	
+	@Test
+	public void testGetGenericType() {
+		TestH h = new TestH();
+		testGetType(h, "obj", TestA.class);
+		testGetElemType(h, "lst", TestA.class);
+	}
+	
 	/**
 	 * testGetPropertyType
 	 */
+	@Test
 	public void testGetPropertyType() {
 		TestA a = new TestA();
 
@@ -177,6 +222,7 @@ public class JavaBeanHandlerTest extends TestCase {
 	/**
 	 * testSetGetPropertyValue
 	 */
+	@Test
 	public void testSetGetPropertyValue() {
 		TestA a = new TestA();
 
@@ -231,6 +277,7 @@ public class JavaBeanHandlerTest extends TestCase {
 	/**
 	 * testSetGetPropertyValue02
 	 */
+	@Test
 	public void testSetGetPropertyValue02() {
 		TestA a = new TestA();
 
@@ -272,6 +319,7 @@ public class JavaBeanHandlerTest extends TestCase {
 	/**
 	 * testGetPropertyValueOnly
 	 */
+	@Test
 	public void testGetPropertyValueOnly() {
 		String expected = "test getField ";
 		Object actual;
@@ -288,12 +336,13 @@ public class JavaBeanHandlerTest extends TestCase {
 			log.error("exception", e);
 			throw e;
 		}
-		assertEquals(expected, actual);
+		Assert.assertEquals(expected, actual);
 	}
 
 	/**
 	 * testSetPropertyValueOnly
 	 */
+	@Test
 	public void testSetPropertyValueOnly() {
 		String expected = "test getField ";
 		Object actual;
@@ -310,6 +359,6 @@ public class JavaBeanHandlerTest extends TestCase {
 			log.error("exception", e);
 			throw e;
 		}
-		assertEquals(expected, actual);
+		Assert.assertEquals(expected, actual);
 	}
 }

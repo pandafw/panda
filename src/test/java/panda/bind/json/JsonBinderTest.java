@@ -110,6 +110,19 @@ public class JsonBinderTest {
 	}
 
 	@Test
+	public void testImmutable() {
+		Assert.assertEquals("true", Jsons.toJson(true));
+		Assert.assertEquals(true, Jsons.fromJson("true", boolean.class));
+		Assert.assertEquals(true, Jsons.fromJson("/**aa*/true", boolean.class));
+
+		Assert.assertEquals("\"12\"", Jsons.toJson("12"));
+		Assert.assertEquals("12", Jsons.fromJson("'12'", String.class));
+
+		Assert.assertEquals("34", Jsons.toJson(34));
+		Assert.assertEquals(34, Jsons.fromJson("34", int.class));
+	}
+	
+	@Test
 	public void testSerialize() {
 		A a = new A();
 		
@@ -158,9 +171,31 @@ public class JsonBinderTest {
 		Assert.assertEquals(s, jo.toString());
 		
 		JsonDeserializer jd = new JsonDeserializer();
+		try {
+			jd.setIgnoreReadonlyProperty(false);
+			jd.setIgnoreMissingProperty(true);
+			jd.deserialize(s, A.class);
+			Assert.fail("ignore readonly property");
+		}
+		catch (JsonException e) {
+			Assert.assertEquals("readonly property: class at 9 [character 10 line 1]", e.getMessage());
+		}
+		
+		try {
+			jd.setIgnoreReadonlyProperty(true);
+			jd.setIgnoreMissingProperty(false);
+			jd.deserialize(s, A.class);
+			Assert.fail("ignore missing property");
+		}
+		catch (JsonException e) {
+			Assert.assertEquals("missing property: clazz at 23 [character 24 line 1]", e.getMessage());
+		}
+
 		jd.setIgnoreReadonlyProperty(true);
 		jd.setIgnoreMissingProperty(true);
-		jd.deserialize(s, A.class);
+		A actual = jd.deserialize(s, A.class);
+		A expect = new A();
+		Assert.assertEquals(expect, actual);
 	}
 	
 	@Test
@@ -243,7 +278,7 @@ public class JsonBinderTest {
 
 	@Test
 	public void testParseComments() {
-		String json = "[\n" + "  // this is a comment\n" + "\t\"a\",\n"
+		String json = "/* this is outer comment */[\n" + "  // this is a comment\n" + "\t\"a\",\n"
 				+ "  /* this is another comment */\n" + "  \"b\",\n"
 				+ "  # this is yet another comment\n" + "  \"c\"\n" + "]";
 

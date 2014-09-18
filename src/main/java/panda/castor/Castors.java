@@ -287,6 +287,16 @@ public class Castors {
 		return c.cast(value, context);
 	}
 
+	public <T> T castTo(Object value, T target) {
+		Asserts.notNull(target);
+		return castTo(value, target, null, new CastContext());
+	}
+
+	public <T> T castTo(Object value, T target, CastContext context) {
+		Asserts.notNull(target);
+		return castTo(value, target, null, context);
+	}
+
 	public <T> T castTo(Object value, T target, Type toType) {
 		Asserts.notNull(target);
 		return castTo(value, target, toType, new CastContext());

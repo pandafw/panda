@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.bind.AbstractSerializer;
-import panda.bind.json.JsonException;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 
@@ -51,13 +50,13 @@ public class XmlSerializer extends AbstractSerializer {
 		
 	}
 	
-	private void writeBeginTag(String tagName) {
-		validateTagName(tagName);
-		nodes.add(tagName);
+	private void writeBeginTag(String tag) {
+		validateTagName(tag);
+		nodes.add(tag);
 
 		try {
 			writer.append('<');
-			StringEscapes.escapeXml(tagName, writer);
+			writer.append(tag);
 			writer.append('>');
 		}
 		catch (IOException e) {
@@ -66,10 +65,10 @@ public class XmlSerializer extends AbstractSerializer {
 	}
 
 	private void writeEndTag() {
-		String tagName = nodes.remove(nodes.size() - 1);
+		String tag = nodes.remove(nodes.size() - 1);
 		try {
 			writer.append("</");
-			writer.append(tagName);
+			writer.append(tag);
 			writer.append('>');
 		}
 		catch (IOException e) {
@@ -83,12 +82,12 @@ public class XmlSerializer extends AbstractSerializer {
 	}
 
 	@Override
-	protected void startArray(Object src) {
+	protected void startArray(String name, Object src) {
 		indent += indentFactor;
 	}
 
 	@Override
-	protected void endArray(Object src, int len) {
+	protected void endArray(String name, Object src, int len) {
 		indent -= indentFactor;
 		if (len > 0) {
 			writeIndent();
@@ -96,23 +95,23 @@ public class XmlSerializer extends AbstractSerializer {
 	}
 
 	@Override
-	protected void startArrayElement(Object src, int index) {
+	protected void startArrayElement(String name, Object src, int index) {
 		writeIndent();
 		writeBeginTag(itemName);
 	}
 	
 	@Override
-	protected void endArrayElement(Object src, int index) {
+	protected void endArrayElement(String name, Object src, int index) {
 		writeEndTag();
 	}
 
 	@Override
-	protected void startObject(Object src) {
+	protected void startObject(String name, Object src) {
 		indent += indentFactor;
 	}
 	
 	@Override
-	protected void endObject(Object src, int len) {
+	protected void endObject(String name, Object src, int len) {
 		indent -= indentFactor;
 		if (len > 0) {
 			writeIndent();
@@ -135,7 +134,7 @@ public class XmlSerializer extends AbstractSerializer {
 			writeIndent(indent);
 		}
 		catch (IOException e) {
-			throw new JsonException(e);
+			throw new XmlException(e);
 		}
 	}
 	
@@ -149,7 +148,7 @@ public class XmlSerializer extends AbstractSerializer {
 			StringEscapes.escapeXml(str, writer);
 		}
 		catch (IOException e) {
-			throw new JsonException(e);
+			throw new XmlException(e);
 		}
 	}
 
@@ -172,7 +171,7 @@ public class XmlSerializer extends AbstractSerializer {
 			writer.append(str);
 		}
 		catch (IOException e) {
-			throw new JsonException(e);
+			throw new XmlException(e);
 		}
 	}
 }

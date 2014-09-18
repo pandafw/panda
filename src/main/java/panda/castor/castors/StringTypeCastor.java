@@ -15,6 +15,7 @@ import panda.castor.Castor;
 import panda.castor.castors.DateTypeCastor.DateCastor;
 import panda.io.Streams;
 import panda.lang.Charsets;
+import panda.lang.codec.binary.Base64;
 
 
 /**
@@ -69,17 +70,17 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 			if (value instanceof char[]) {
 				return new String((char[])value);
 			}
-			if (value instanceof byte[]) {
-				return new String((byte[])value, Charsets.CS_UTF_8);
-			}
-			if (value instanceof InputStream) {
-				return Streams.toString((InputStream)value, Charsets.UTF_8);
-			}
 			if (value instanceof Reader) {
 				return Streams.toString((Reader)value);
 			}
 			if (value instanceof Clob) {
 				return ((Clob)value).getSubString(1, (int)((Clob)value).length());
+			}
+			if (value instanceof byte[]) {
+				return Base64.encodeBase64String((byte[])value);
+			}
+			if (value instanceof InputStream) {
+				return Base64.encodeBase64String((InputStream)value);
 			}
 			return value.toString();
 		}

@@ -185,6 +185,10 @@ public class HttpResponse implements Closeable {
 		return rawStream;
 	}
 
+	public void drain() throws IOException {
+		Streams.drain(rawStream);
+	}
+	
 	public InputStream getStream() throws IOException {
 		if (content != null) {
 			stream = new ByteArrayInputStream(content);

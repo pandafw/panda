@@ -256,15 +256,15 @@ public class HttpRequest {
 	}
 
 	public void writeBody(OutputStream os) throws IOException {
+		os = Streams.buffer(os);
+		if (isGzipEncoding()) {
+			os = Streams.gzip(os);
+		}
+
 		if (body != null) {
 			Streams.copy(body, os);
 			os.flush();
 			return;
-		}
-
-		os = Streams.buffer(os);
-		if (isGzipEncoding()) {
-			os = Streams.gzip(os);
 		}
 
 		DataOutputStream dos = new DataOutputStream(os);

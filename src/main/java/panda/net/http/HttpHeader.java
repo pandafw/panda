@@ -100,14 +100,13 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 	}
 
 	public HttpHeader setDefault() {
-		put(USER_AGENT, "Panda.Robot");
+		put(USER_AGENT, HttpClient.DEFAULT_USERAGENT);
 		put(ACCEPT_ENCODING, "gzip,deflate");
 		put(ACCEPT, "text/xml,application/xml,application/xhtml+xml,text/html;"
 				+ "q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
-		put(ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN");
+		put(ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN,zh-TW");
 		put(ACCEPT_CHARSET, "ISO-8859-1,*,utf-8");
 		put(CONNECTION, "keep-alive");
-		//put(CACHE_CONTROL, "no-cache");
 		return this;
 	}
 

@@ -17,9 +17,9 @@ import panda.castor.Castor;
 import panda.castor.Castors;
 import panda.io.Streams;
 import panda.lang.Arrays;
-import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
+import panda.lang.codec.binary.Base64;
 import panda.lang.reflect.Types;
 
 /**
@@ -67,75 +67,77 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected T castValueTo(S value, T target, CastContext context) {
-		if (value.getClass().isArray()) {
-			Type fType = value.getClass().getComponentType();
-			Castor conv = castors.getCastor(fType, toComponentType);
-
-			int size = Array.getLength(value);
-			Object array = createArray(target, size);
-			for (int i = 0; i < size; i++) {
-				Object v = Array.get(value, i);
-				v = castChild(context, conv, i, v);
-				Array.set(array, i, v);
-			}
-			return (T)array; 
-		}
-		else if (Iterators.isIterable(value)) {
-			Type fType = getFromComponentType();
-			Castor conv = castors.getCastor(fType, toComponentType);
-
-			int i = 0;
-			List list = new ArrayList();
-			Iterator it = Iterators.asIterator(value);
-			while (it.hasNext()) {
-				Object v = it.next();
-				list.add(castChild(context, conv, i++, v));
-			}
-
-			Object array = createArray(target, list.size());
-			int index = 0;
-			for (Object v : list) {
-				Array.set(array, index++, v);
-			}
-			return (T)array; 
-		}
-		else {
-			return convert(target, value, context);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private T convert(T target, Object value, CastContext context) {
 		try {
 			if (byte.class.equals(toComponentType)) {
+				if (value instanceof Blob) {
+					return (T)((Blob)value).getBytes(1, (int)((Blob)value).length());
+				}
 				if (value instanceof InputStream) {
 					return (T)Streams.toByteArray((InputStream)value);
 				}
 				if (value instanceof Reader) {
-					return (T)Streams.toByteArray((Reader)value, Charsets.UTF_8);
-				}
-				if (value instanceof Blob) {
-					return (T)((Blob)value).getBytes(1, (int)((Blob)value).length());
+					return (T)Base64.decodeBase64((Reader)value);
 				}
 				if (value instanceof CharSequence) {
-					return (T)value.toString().getBytes(Charsets.CS_UTF_8);
+					return (T)Base64.decodeBase64(((CharSequence)value).toString());
+				}
+				if (value instanceof char[]) {
+					return (T)Base64.decodeBase64(new String((char[])value));
 				}
 				throw castError(value, context);
 			}
+			
 			if (char.class.equals(toComponentType)) {
-				if (value instanceof InputStream) {
-					return (T)Streams.toCharArray((InputStream)value, Charsets.UTF_8);
-				}
-				if (value instanceof Reader) {
-					return (T)Streams.toCharArray((Reader)value);
-				}
 				if (value instanceof Clob) {
 					return (T)Streams.toCharArray(((Clob)value).getCharacterStream());
 				}
 				if (value instanceof CharSequence) {
 					return (T)value.toString().toCharArray();
 				}
+				if (value instanceof Reader) {
+					return (T)Streams.toCharArray((Reader)value);
+				}
+				if (value instanceof byte[]) {
+					return (T)Base64.encodeBase64String((byte[])value).toCharArray();
+				}
+				if (value instanceof InputStream) {
+					return (T)Base64.encodeBase64String((InputStream)value).toCharArray();
+				}
 				throw castError(value, context);
+			}
+			
+			if (value.getClass().isArray()) {
+				Type fType = value.getClass().getComponentType();
+				Castor conv = castors.getCastor(fType, toComponentType);
+	
+				int size = Array.getLength(value);
+				Object array = createArray(target, size);
+				for (int i = 0; i < size; i++) {
+					Object v = Array.get(value, i);
+					v = castChild(context, conv, i, v);
+					Array.set(array, i, v);
+				}
+				return (T)array; 
+			}
+			
+			if (Iterators.isIterable(value)) {
+				Type fType = getFromComponentType();
+				Castor conv = castors.getCastor(fType, toComponentType);
+	
+				int i = 0;
+				List list = new ArrayList();
+				Iterator it = Iterators.asIterator(value);
+				while (it.hasNext()) {
+					Object v = it.next();
+					list.add(castChild(context, conv, i++, v));
+				}
+	
+				Object array = createArray(target, list.size());
+				int index = 0;
+				for (Object v : list) {
+					Array.set(array, index++, v);
+				}
+				return (T)array; 
 			}
 
 			Object array = createArray(target, 1);

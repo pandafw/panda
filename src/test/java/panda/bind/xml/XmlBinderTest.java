@@ -6,19 +6,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import panda.bind.json.Jsons;
-import panda.bind.xml.Xmls;
+import org.junit.Assert;
+import org.junit.Test;
+
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.builder.EqualsBuilder;
 import panda.lang.reflect.TypeToken;
 import panda.lang.reflect.Types;
 
-import junit.framework.TestCase;
-
 /**
  */
-public class XmlBinderTest extends TestCase {
+public class XmlBinderTest {
 	public static class A {
 		private Object obj = null;
 		private boolean bol = false;
@@ -103,6 +102,19 @@ public class XmlBinderTest extends TestCase {
 		}
 	}
 
+	@Test
+	public void testImmutable() {
+		Assert.assertEquals("<doc>true</doc>", Xmls.toXml(true));
+		Assert.assertEquals(true, Xmls.fromXml("<doc>true</doc>", boolean.class));
+
+		Assert.assertEquals("<doc>12</doc>", Xmls.toXml("12"));
+		Assert.assertEquals("12", Xmls.fromXml("<doc>12</doc>", String.class));
+
+		Assert.assertEquals("<doc>34</doc>", Xmls.toXml(34));
+		Assert.assertEquals(34, Xmls.fromXml("<doc>34</doc>", int.class));
+	}
+
+	@Test
 	public void testSerialize() {
 		A a = new A();
 		
@@ -114,25 +126,28 @@ public class XmlBinderTest extends TestCase {
 		a.setLst(al);
 
 		Map<String, A> am = new HashMap<String, A>();
-		am.put("1", new A(false, "m1", 31));
-		am.put("2", new A(true, "m2", 32));
+		am.put("e1", new A(false, "m1", 31));
+		am.put("e2", new A(true, "m2", 32));
 		a.setMap(am);
 
-		String json = Jsons.toJson(a, true);
-		//System.out.println(json);
+		String xml = Xmls.toXml(a, true);
+		System.out.println(xml);
 		
-		A a2 = Jsons.fromJson(json, A.class);
-		assertEquals(a, a2);
+		A a2 = Xmls.fromXml(xml, A.class);
+		Assert.assertEquals(a, a2);
 	}
 
+	@Test
 	public void testStringList() {
 		List<String> list = Arrays.asList("a", "b", "c");
-		String json = Jsons.toJson(list);
+		String xml = Xmls.toXml(list);
+//		System.out.println(xml);
 
-		List<String> abc = Jsons.fromJson(json, Types.paramTypeOf(List.class, String.class));
-		assertEquals(list, abc);
+		List<String> abc = Xmls.fromXml(xml, Types.paramTypeOf(List.class, String.class));
+		Assert.assertEquals(list, abc);
 	}
 
+	@Test
 	public void testClassProp() {
 		Map<String, String> m = new LinkedHashMap<String, String>();
 		
@@ -140,17 +155,40 @@ public class XmlBinderTest extends TestCase {
 		m.put("clazz", "clz");
 
 		String s = Xmls.toXml(m);
-		assertEquals("<doc><class>cls</class><clazz>clz</clazz></doc>", s);
+		Assert.assertEquals("<doc><class>cls</class><clazz>clz</clazz></doc>", s);
 		
 		Map dm = Xmls.fromXml(s, LinkedHashMap.class);
-		assertEquals(m, dm);
+		Assert.assertEquals(m, dm);
 		
-//		JsonDeserializer jd = new JsonDeserializer();
-//		jd.setIgnoreReadonlyProperty(true);
-//		jd.setIgnoreMissingProperty(true);
-//		jd.deserialize(s, A.class);
+		XmlDeserializer xd = new XmlDeserializer();
+		try {
+			xd.setIgnoreReadonlyProperty(false);
+			xd.setIgnoreMissingProperty(true);
+			xd.deserialize(s, A.class);
+			Assert.fail("ignore readonly property");
+		}
+		catch (XmlException e) {
+			Assert.assertEquals("readonly property: class at /doc/class", e.getMessage());
+		}
+		
+		try {
+			xd.setIgnoreReadonlyProperty(true);
+			xd.setIgnoreMissingProperty(false);
+			xd.deserialize(s, A.class);
+			Assert.fail("ignore missing property");
+		}
+		catch (XmlException e) {
+			Assert.assertEquals("missing property: clazz at /doc/clazz", e.getMessage());
+		}
+
+		xd.setIgnoreReadonlyProperty(true);
+		xd.setIgnoreMissingProperty(true);
+		A actual = xd.deserialize(s, A.class);
+		A expect = new A();
+		Assert.assertEquals(expect, actual);
 	}
 	
+	@Test
 	public void testMapMap() {
 		Map<String, Map> m = new LinkedHashMap<String, Map>();
 		Map<String, Number> m1 = new LinkedHashMap<String, Number>();
@@ -169,77 +207,86 @@ public class XmlBinderTest extends TestCase {
 		m.put("m3", m3);
 
 		String s = Xmls.toXml(m, true);
-		System.out.println(s);
+//		System.out.println(s);
 		
 		Map<String, Map<String, Number>> md = Xmls.fromXml(
 			s, new TypeToken<Map<String, Map<String, Number>>>() {}.getType());
 		
-		assertTrue(Objects.equals(m, md));
+		Assert.assertTrue(Objects.equals(m, md));
 	}
 	
+	@Test
 	public void testMapList() {
 		Map<String, List<Number>> m = new LinkedHashMap<String, List<Number>>();
 		List<Number> l0 = new ArrayList<Number>();
-		m.put("0", l0);
+		m.put("m0", l0);
 
 		List<Number> l1 = new ArrayList<Number>();
 		l1.add(11);
 		l1.add(12);
-		m.put("1", l1);
+		m.put("m1", l1);
 
 		List<Number> l2 = new ArrayList<Number>();
 		l2.add(21);
 		l2.add(22);
-		m.put("2", l2);
+		m.put("m2", l2);
 		
-		String s = Jsons.toJson(m, true);
-		//System.out.println(s);
+		String s = Xmls.toXml(m, true);
+//		System.out.println(s);
+	
+		// NOTE: <m0></m0> -> null
+		m.put("m0", null);
 		
-		Map<String, List<Number>> m2 = Jsons.fromJson(
+		Map<String, List<Number>> m2 = Xmls.fromXml(
 			s, new TypeToken<Map<String, List<Number>>>() {}.getType());
 		
-		assertTrue(Objects.equals(m, m2));
+		Assert.assertTrue(Objects.equals(m, m2));
 	}
 
+	@Test
 	public void testIgnoreBeanNullProperty() {
 		A a = new A();
-		assertEquals("<doc><bol>false</bol><num>1</num><str>A</str></doc>", Xmls.toXml(a));
+		Assert.assertEquals("<doc><bol>false</bol><num>1</num><str>A</str></doc>", Xmls.toXml(a));
 	}
 
+	@Test
 	public void testIgnoreMapNullValue() {
 		Map<String, Number> m = new LinkedHashMap<String, Number>();
 		m.put("i0", 0);
 		m.put("null", null);
-		assertEquals("<doc><i0>0</i0></doc>", Xmls.toXml(m));
+		Assert.assertEquals("<doc><i0>0</i0></doc>", Xmls.toXml(m));
 	}
 	
+	@Test
 	public void testArrayNullValue() {
 		List<Number> l = Arrays.asList(new Number[] { 0, null, 1, null, 2 });
-		assertEquals("<doc><i>0</i><i></i><i>1</i><i></i><i>2</i></doc>", Xmls.toXml(l));
+		Assert.assertEquals("<doc><i>0</i><i></i><i>1</i><i></i><i>2</i></doc>", Xmls.toXml(l));
 	}
 	
+	@Test
 	@SuppressWarnings("unchecked")
 	public void testWriter() {
-		assertEquals("<doc></doc>", Xmls.toXml(new ArrayList()));
-		assertEquals("<doc></doc>", Xmls.toXml(new ArrayList(), true));
-		assertEquals("<doc><i>1</i><i>2</i><i>3</i></doc>", Xmls.toXml(new int[] { 1, 2, 3 }));
-		assertEquals("<doc>\n\t<i>1</i>\n\t<i>2</i>\n\t<i>3</i>\n</doc>", Xmls.toXml(new int[] { 1, 2, 3 }, true));
+		Assert.assertEquals("<doc></doc>", Xmls.toXml(new ArrayList()));
+		Assert.assertEquals("<doc></doc>", Xmls.toXml(new ArrayList(), true));
+		Assert.assertEquals("<doc><i>1</i><i>2</i><i>3</i></doc>", Xmls.toXml(new int[] { 1, 2, 3 }));
+		Assert.assertEquals("<doc>\n\t<i>1</i>\n\t<i>2</i>\n\t<i>3</i>\n</doc>", Xmls.toXml(new int[] { 1, 2, 3 }, true));
 
-		assertEquals("<doc></doc>", Xmls.toXml(new HashMap()));
-		assertEquals("<doc></doc>", Xmls.toXml(new HashMap(), true));
+		Assert.assertEquals("<doc></doc>", Xmls.toXml(new HashMap()));
+		Assert.assertEquals("<doc></doc>", Xmls.toXml(new HashMap(), true));
 		Map m = new LinkedHashMap();
 		m.put("m0", 0);
 		m.put("m1", 1);
 		m.put("m2", 2);
-		assertEquals("<doc><m0>0</m0><m1>1</m1><m2>2</m2></doc>", Xmls.toXml(m));
-		assertEquals("<doc>\n\t<m0>0</m0>\n\t<m1>1</m1>\n\t<m2>2</m2>\n</doc>", Xmls.toXml(m, true));
+		Assert.assertEquals("<doc><m0>0</m0><m1>1</m1><m2>2</m2></doc>", Xmls.toXml(m));
+		Assert.assertEquals("<doc>\n\t<m0>0</m0>\n\t<m1>1</m1>\n\t<m2>2</m2>\n</doc>", Xmls.toXml(m, true));
 	}
 
+	@Test
 	public void testCycleNoProp() {
 		A a = new A();
 		
 		a.setAry(new A[] { new A(true, "a1", 11), a });
 
-		assertEquals("<doc><ary><i><bol>true</bol><num>11</num><str>a1</str></i><i></i></ary><bol>false</bol><num>1</num><str>A</str></doc>", Xmls.toXml(a));
+		Assert.assertEquals("<doc><ary><i><bol>true</bol><num>11</num><str>a1</str></i><i></i></ary><bol>false</bol><num>1</num><str>A</str></doc>", Xmls.toXml(a));
 	}
 }

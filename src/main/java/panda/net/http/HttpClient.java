@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
+import panda.Panda;
 import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Asserts;
@@ -33,9 +34,11 @@ import panda.net.http.ssl.ValidHostnameVerifier;
 //TODO: local cache
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);
-	private static TrustManager[] validSslCertTrusts = { new ValidCertTrustManage() }; 
-	private static ValidHostnameVerifier validHostnameVerifier = new ValidHostnameVerifier();
+
+	private static final TrustManager[] validSslCertTrusts = { new ValidCertTrustManage() }; 
+	private static final ValidHostnameVerifier validHostnameVerifier = new ValidHostnameVerifier();
 	
+	public static final String DEFAULT_USERAGENT = HttpClient.class + " (" + Panda.VERSION + ")";
 
 	/**
 	 * DEFAULT_CONN_TIMEOUT = 30 seconds

@@ -155,14 +155,35 @@ public class CastorTest extends TestCase {
 			1, 2, -3, 0
 		};
 		
-		assertEquals(Strings.join(ii), Strings.join((int[])Castors.scast(ss, int[].class)));
-		assertTrue(Arrays.equals(ii, Castors.scast(ss, int[].class)));
+		int[] iii = Castors.scast(ss, int[].class);
+
+		assertEquals(Strings.join(ii), Strings.join(iii));
+		assertTrue(Arrays.equals(ii, iii));
 	}
 
 	public void testStringArrayToIntList() throws Exception {
 		String[] ss = {
 			"1", "2", "-3", null
 		};
+		
+		Integer[] ii = new Integer[] {
+			1, 2, -3, null
+		};
+		
+//		System.out.println(ii.length);
+//		System.out.println(Strings.join(ii, ", "));
+		
+		List<Integer> il = Castors.scast(ss, new TypeToken<List<Integer>>(){}.getType());
+		Integer[] iii = il.toArray(new Integer[0]);
+		
+		assertEquals(Strings.join(ii), Strings.join(iii));
+		assertTrue(Arrays.equals(ii, iii));
+	}
+	
+	public void testStringListToIntList() throws Exception {
+		List<String> ss = Arrays.asList(new String[] {
+			"1", "2", "-3", null
+		});
 		
 		Integer[] ii = new Integer[] {
 			1, 2, -3, null

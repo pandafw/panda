@@ -223,7 +223,9 @@ public class JsonTokener {
 				if (c == 0) {
 					break;
 				}
-				c = this.skipBlank();
+				if (c <= ' ') {
+					c = this.skipBlank();
+				}
 			}
 		}
 		return c;

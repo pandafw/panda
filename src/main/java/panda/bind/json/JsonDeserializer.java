@@ -75,6 +75,10 @@ public class JsonDeserializer extends AbstractDeserializer {
 			throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
 		}
 		else {
+			if (isImmutableType(type)) {
+				tokener.back();
+				return nextValue(type);
+			}
 			throw syntaxError("Invalid json character: " + c);
 		}
 	}
@@ -271,20 +275,27 @@ public class JsonDeserializer extends AbstractDeserializer {
 						}
 					}
 				}
-				else if (bh.canReadProperty(key)) {
-					if (isIgnoreReadonlyProperty()) {
-						nextValue(null);
-					}
-					else {
-						throw syntaxError("readonly property: " + key);
-					}
-				}
 				else {
-					if (isIgnoreMissingProperty()) {
+					if (isIgnoreReadonlyProperty() && isIgnoreMissingProperty()) {
 						nextValue(null);
 					}
 					else {
-						throw syntaxError("missing property: " + key);
+						if (bh.canReadProperty(key)) {
+							if (isIgnoreReadonlyProperty()) {
+								nextValue(null);
+							}
+							else {
+								throw syntaxError("readonly property: " + key);
+							}
+						}
+						else {
+							if (isIgnoreMissingProperty()) {
+								nextValue(null);
+							}
+							else {
+								throw syntaxError("missing property: " + key);
+							}
+						}
 					}
 				}
 			}
