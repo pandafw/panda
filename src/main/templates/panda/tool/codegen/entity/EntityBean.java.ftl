@@ -164,11 +164,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(
-<#list entity.primaryKeyList as p>
-				${p.name}<#if p_has_next>,</#if>
-</#list>
-			);
+		return Objects.hashCodes(<#list entity.primaryKeyList as p>${p.name}<#if p_has_next>,</#if></#list>);
 	}
 
 	/**
@@ -212,7 +208,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 <#list entity.propertyList as p>
 				.append(${p.uname}, ${p.name})
 </#list>
