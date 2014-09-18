@@ -241,6 +241,19 @@ public abstract class Types {
 	}
 
 	/**
+	 * The immutable type is:
+	 * enum, primitive type, primitive wrapper, all class inherit from
+	 * CharSequence, Date, Calendar, Number 
+	 *  
+	 * @param type the type to be checked
+	 * @return true if the class is a immutable type
+	 */
+	public static boolean isImmutableType(Type type) {
+		Class clazz = getRawType(type);
+		return Classes.isImmutable(clazz);
+	}
+	
+	/**
 	 * Get the array component type of <code>type</code>.
 	 * 
 	 * @param type the type to be checked

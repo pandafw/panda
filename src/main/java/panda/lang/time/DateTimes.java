@@ -143,6 +143,12 @@ public class DateTimes {
 	public static final FastDateFormat ISO_DATETIME_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss");
 
 	/**
+	 * ISO8601 formatter for date-time without time zone and separator '-'. The format used is
+	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
+	 */
+	public static final FastDateFormat ISO_DATETIME_NO_H_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HH:mm:ss");
+
+	/**
 	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
@@ -1838,11 +1844,27 @@ public class DateTimes {
 
 	// -----------------------------------------------------------------------
 	/**
+	 * ISO8601 formatter for date-time without time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
+	 */
+	public static FastDateFormat isoDatetimeFormat() {
+		return ISO_DATETIME_FORMAT;
+	}
+	
+	/**
 	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
 	public static FastDateFormat datetimeFormat() {
 		return ISO_DATETIME_NO_T_FORMAT;
+	}
+	
+	/**
+	 * ISO8601 formatter for date-time without time zone and separator '-' char. The format used is
+	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
+	 */
+	public static FastDateFormat isoAltDatetimeFormat() {
+		return ISO_DATETIME_NO_H_FORMAT;
 	}
 	
 	/**

@@ -56,7 +56,7 @@ public class StringComparator implements Comparator<String> {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 			.append("ignoreCase", ignoreCase)
 			.toString();
 	}

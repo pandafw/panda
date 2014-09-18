@@ -64,7 +64,7 @@ public class CodeText implements Cloneable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("code", code)
 				.append("text", text)
 				.toString();

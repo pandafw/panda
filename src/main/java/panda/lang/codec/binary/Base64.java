@@ -1,7 +1,15 @@
 package panda.lang.codec.binary;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.math.BigInteger;
 
+import panda.io.Streams;
+import panda.io.stream.ByteArrayOutputStream;
+import panda.io.stream.ReaderInputStream;
+import panda.lang.Charsets;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 
 /**
@@ -496,8 +504,36 @@ public class Base64 extends BaseNCodec {
 	 * @param binaryData binary data to encode
 	 * @return byte[] containing Base64 characters in their UTF-8 representation.
 	 */
+	public static byte[] encodeBase64(final InputStream binaryData) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Base64OutputStream b64os = new Base64OutputStream(baos);
+		try {
+			Streams.copy(binaryData, b64os);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		return baos.toByteArray();
+	}
+
+	/**
+	 * Encodes binary data using the base64 algorithm but does not chunk the output.
+	 * 
+	 * @param binaryData binary data to encode
+	 * @return byte[] containing Base64 characters in their UTF-8 representation.
+	 */
 	public static byte[] encodeBase64(final byte[] binaryData) {
 		return encodeBase64(binaryData, false);
+	}
+
+	/**
+	 * Encodes binary data using the base64 algorithm but does not chunk the output.
+	 * 
+	 * @param binaryData binary data to encode
+	 * @return String containing Base64 characters.
+	 */
+	public static String encodeBase64String(final InputStream binaryData) {
+		return Strings.newStringUtf8(encodeBase64(binaryData));
 	}
 
 	/**
@@ -629,6 +665,42 @@ public class Base64 extends BaseNCodec {
 	 */
 	public static byte[] decodeBase64(final byte[] base64Data) {
 		return new Base64().decode(base64Data);
+	}
+
+	/**
+	 * Decodes Base64 data into octets
+	 * 
+	 * @param base64Data Byte array containing Base64 data
+	 * @return Array containing decoded data.
+	 */
+	public static byte[] decodeBase64(final InputStream base64Data) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Base64InputStream b64is = new Base64InputStream(base64Data);
+		try {
+			Streams.copy(b64is, baos);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		return baos.toByteArray();
+	}
+
+	/**
+	 * Decodes Base64 data into octets
+	 * 
+	 * @param base64Data Byte array containing Base64 data
+	 * @return Array containing decoded data.
+	 */
+	public static byte[] decodeBase64(final Reader base64Data) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Base64InputStream b64is = new Base64InputStream(new ReaderInputStream(base64Data, Charsets.CS_UTF_8));
+		try {
+			Streams.copy(b64is, baos);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+		return baos.toByteArray();
 	}
 
 	// Implementation of the Encoder Interface

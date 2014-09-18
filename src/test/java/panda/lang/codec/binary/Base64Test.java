@@ -320,7 +320,7 @@ public class Base64Test {
         byte[] empty = new byte[0];
         byte[] result = Base64.encodeBase64(empty);
         assertEquals("empty base64 encode", 0, result.length);
-        assertEquals("empty base64 encode", null, Base64.encodeBase64(null));
+        assertEquals("empty base64 encode", null, Base64.encodeBase64((byte[])null));
 
         empty = new byte[0];
         result = Base64.decodeBase64(empty);

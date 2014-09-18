@@ -836,15 +836,6 @@ public abstract class Objects {
 	}
 
 	/**
-	 * create a ToStringBuilder instance
-	 * @param obj object
-	 * @return ToStringBuilder instance
-	 */
-	public static ToStringBuilder toStringBuilder(Object obj) {
-		return new ToStringBuilder(obj);
-	}
-	
-	/**
 	 * @return EqualsBuilder instance
 	 */
 	public static EqualsBuilder equalsBuilder() {

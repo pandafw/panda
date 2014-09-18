@@ -1014,7 +1014,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("target", target)
 				.append("distinct", distinct)
 				.append("start", start)

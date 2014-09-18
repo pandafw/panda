@@ -76,7 +76,7 @@ public class PropertyComparator<T> implements Comparator<T> {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("prop", prop)
 				.append("bh", bh)
 				.toString();

@@ -375,7 +375,7 @@ public class CronSequencer {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this).append(expression).toString();
+		return Objects.toStringBuilder().append(expression).toString();
 	}
 
 }

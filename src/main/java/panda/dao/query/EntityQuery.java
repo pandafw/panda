@@ -438,7 +438,7 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("query", query)
 				.toString();
 	}

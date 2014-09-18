@@ -74,7 +74,7 @@ public class NumericStringComparator implements Comparator<String> {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this).append("radix", radix).toString();
+		return Objects.toStringBuilder().append("radix", radix).toString();
 	}
 	
 }

@@ -654,7 +654,7 @@ public class TestBean implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("id", id)
 				.append("fbit", fbit)
 				.append("fbool", fbool)

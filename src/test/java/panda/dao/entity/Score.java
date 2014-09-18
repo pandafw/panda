@@ -77,7 +77,7 @@ public class Score {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("student", student)
 				.append("studentName", studentName)
 				.append("klass", klass)

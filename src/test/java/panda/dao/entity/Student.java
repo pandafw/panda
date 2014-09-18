@@ -46,7 +46,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("id", id)
 				.append("name", name)
 				.append("dummy", dummy)

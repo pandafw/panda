@@ -127,11 +127,11 @@ public class HttpRequest {
 	}
 
 	public void setBody(byte[] body) {
-		this.body = new ByteArrayInputStream(body);
+		this.body = (body == null ? null : new ByteArrayInputStream(body));
 	}
 
 	public void setBody(String body) {
-		this.body = new ByteArrayInputStream(Strings.getBytes(body, encoding));
+		this.body = (body == null ? null : new ByteArrayInputStream(Strings.getBytes(body, encoding)));
 	}
 
 	/**

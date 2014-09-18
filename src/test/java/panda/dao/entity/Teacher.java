@@ -44,7 +44,7 @@ public class Teacher {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("name", name)
 				.append("memo", memo)
 				.append("data", Strings.newStringUtf8(data))

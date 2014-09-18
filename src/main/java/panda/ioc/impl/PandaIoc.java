@@ -274,7 +274,7 @@ public class PandaIoc implements Ioc {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("loader", loader)
 				.toString();
 	}
