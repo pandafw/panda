@@ -128,7 +128,7 @@ public class SimpleQuery implements Cloneable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("key", key)
 				.append("targets", targets)
 				.toString();

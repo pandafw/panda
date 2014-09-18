@@ -327,7 +327,7 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("start", getStart())
 				.append("limit", getLimit())
 				.append("count", getCount())

@@ -105,7 +105,7 @@ public class Sorter implements Cloneable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder(this)
+		return Objects.toStringBuilder()
 				.append("column", column)
 				.append("direction", direction)
 				.toString();
