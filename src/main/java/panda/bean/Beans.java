@@ -621,4 +621,63 @@ public class Beans {
 		return bh.setPropertyValue(bean, name, value);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void copyProperties(Object des, Object src, String ... props) {
+		if (src == null || des == null || props == null || props.length == 0) {
+			return;
+		}
+		
+		BeanHandler sbh = getBeanHandler(src.getClass());
+		BeanHandler dbh = getBeanHandler(des.getClass());
+		for (String p : props) {
+			Object v = sbh.getPropertyValue(src, p);
+			dbh.setPropertyValue(des, p, v);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void copyNotNullProperties(Object des, Object src, String ... props) {
+		if (src == null || des == null || props == null || props.length == 0) {
+			return;
+		}
+		
+		BeanHandler sbh = getBeanHandler(src.getClass());
+		BeanHandler dbh = getBeanHandler(des.getClass());
+		for (String p : props) {
+			Object v = sbh.getPropertyValue(src, p);
+			if (v != null) {
+				dbh.setPropertyValue(des, p, v);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void copyBeans(Object des, Object src, String ... props) {
+		if (src == null || des == null || props == null || props.length == 0) {
+			return;
+		}
+		
+		BeanHandler sbh = getBeanHandler(src.getClass());
+		BeanHandler dbh = getBeanHandler(des.getClass());
+		for (String p : props) {
+			Object v = sbh.getBeanValue(src, p);
+			dbh.setBeanValue(des, p, v);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void copyNotNullBeans(Object des, Object src, String ... props) {
+		if (src == null || des == null || props == null || props.length == 0) {
+			return;
+		}
+		
+		BeanHandler sbh = getBeanHandler(src.getClass());
+		BeanHandler dbh = getBeanHandler(des.getClass());
+		for (String p : props) {
+			Object v = sbh.getBeanValue(src, p);
+			if (v != null) {
+				dbh.setBeanValue(des, p, v);
+			}
+		}
+	}
 }

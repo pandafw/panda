@@ -8,6 +8,7 @@ import panda.bind.xmlrpc.XmlRpcDocument;
 import panda.bind.xmlrpc.XmlRpcs;
 import panda.castor.Castors;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
@@ -36,13 +37,19 @@ public class XmlRpcClient {
 		http = new HttpClient();
 	}
 
-	public <T> T call(String method, Object param, Type resultType) throws XmlRpcFaultException, IOException {
+	public <T> T call(String method, Type resultType, Object... params) throws XmlRpcFaultException, IOException {
 		XmlRpcDocument<Object> xreq = new XmlRpcDocument<Object>();
 		
 		xreq.setMethodName(method);
 
-		List<Object> params = castors.cast(param, List.class);
-		xreq.setParams(params);
+		List<Object> pls = Arrays.toList(params);
+		while (pls.size() > 0) {
+			if (pls.get(pls.size() - 1) != null) {
+				break;
+			}
+			pls.remove(pls.size() - 1);
+		}
+		xreq.setParams(pls);
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
 		HttpRequest hreq = HttpRequest.post(url);

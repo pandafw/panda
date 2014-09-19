@@ -8600,6 +8600,9 @@ public abstract class Arrays {
 	 * @return a list view of the specified array
 	 */
 	public static <T> List<T> asList(T... a) {
+		if (a == null) {
+			return null;
+		}
 		return java.util.Arrays.asList(a);
 	}
 
