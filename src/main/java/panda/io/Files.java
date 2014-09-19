@@ -626,6 +626,33 @@ public class Files {
 	}
 
 	/**
+	 * Finds files within a given directory (and optionally its subdirectories). All files found are
+	 * filtered by an IOFileFilter.
+	 * <p>
+	 * If your search should recurse into subdirectories you can pass in an IOFileFilter for
+	 * directories. You don't need to bind a DirectoryFileFilter (via logical AND) to this filter.
+	 * This method does that for you.
+	 * <p>
+	 * An example: If you want to search through all directories called "temp" you pass in
+	 * <code>FileFilterUtils.NameFileFilter("temp")</code>
+	 * <p>
+	 * Another common usage of this method is find files in a directory tree but ignoring the
+	 * directories generated CVS. You can simply pass in
+	 * <code>FileFilterUtils.makeCVSAware(null)</code>.
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param recursive if true all subdirectories are searched as well
+	 * @return an collection of java.io.File with the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter,
+		final boolean recursive) {
+		return listFiles(directory, fileFilter, recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
+	}
+
+	/**
 	 * Validates the given arguments.
 	 * <ul>
 	 * <li>Throws {@link IllegalArgumentException} if {@code directory} is not a directory</li>
@@ -726,6 +753,26 @@ public class Files {
 	 * Allows iteration over the files in given directory (and optionally its subdirectories).
 	 * <p>
 	 * All files found are filtered by an IOFileFilter. This method is based on
+	 * {@link #listFiles(File, IOFileFilter, IOFileFilter)}, which supports Iterable ('foreach'
+	 * loop).
+	 * <p>
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param recursive if true all subdirectories are searched as well
+	 * @return an iterator of java.io.File for the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter,
+			final boolean recursive) {
+		return listFiles(directory, fileFilter, recursive).iterator();
+	}
+
+	/**
+	 * Allows iteration over the files in given directory (and optionally its subdirectories).
+	 * <p>
+	 * All files found are filtered by an IOFileFilter. This method is based on
 	 * {@link #listFilesAndDirs(File, IOFileFilter, IOFileFilter)}, which supports Iterable
 	 * ('foreach' loop).
 	 * <p>
@@ -787,7 +834,7 @@ public class Files {
 			final String[] suffixes = toSuffixes(extensions);
 			filter = new SuffixFileFilter(suffixes);
 		}
-		return listFiles(directory, filter, recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
+		return listFiles(directory, filter, recursive);
 	}
 
 	/**
