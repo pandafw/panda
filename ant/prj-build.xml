@@ -8,9 +8,6 @@
 		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss"/>
 	</tstamp>
 
-	<target name="build" depends="clean, cp-res, n2a, javac" description="Build the project"/>
-	<target name="dist" depends="build, javadoc, jar" description="Distribute project as a jar file"/>
-
 	<!-- path -->
 	<path id="main.cp">
 		<pathelement path="out/classes"/>
@@ -19,10 +16,6 @@
 
 	<path id="lib.cp">
 		<fileset dir="lib/api" erroronmissingdir="false">
-			<include name="*.jar"/>
-			<exclude name="*-sources.jar"/>
-		</fileset>
-		<fileset dir="lib/gae" erroronmissingdir="false">
 			<include name="*.jar"/>
 			<exclude name="*-sources.jar"/>
 		</fileset>
@@ -43,6 +36,13 @@
 	<!-- build -->
 	<target name="clean" description="Delete everything in the output directory">
 		<delete dir="${out.dir}"/>
+	</target>
+
+	<target name="cp-fonts" description="Copy fonts to the web/WEB-INF/fonts directory">
+		<delete dir="web/WEB-INF/fonts" />
+		<copy todir="web/WEB-INF/fonts" preservelastmodified="true">
+			<fileset dir="../panda-asserts/fonts" />
+		</copy>
 	</target>
 
 	<target name="cp-res" description="Copy resource files to the classes directory">

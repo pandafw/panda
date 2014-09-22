@@ -11,10 +11,19 @@
 
 	<!-- build -->
 	<import file="prj-build.xml"/>
+	<target name="build" depends="clean, cp-res, n2a, javac" description="Build the project"/>
+	<target name="dist" depends="build, javadoc, jar" description="Distribute project as a jar file"/>
 
 	<!-- test -->
 	<import file="prj-test.xml"/>
 
 	<!-- maven -->
 	<import file="prj-maven.xml"/>
+
+	<!-- release -->
+	<target name="release" description="Release the project">
+		<antcall target="ivy-report"/>
+		<antcall target="dist"/>
+		<antcall target="mvn-panda-deploy"/>
+	</target>
 </project>

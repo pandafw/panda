@@ -4,6 +4,10 @@
 	
 	<path id="dep.cp">
 		<path refid="lib.cp"/>
+		<fileset dir="lib/gae" erroronmissingdir="false">
+			<include name="*.jar"/>
+			<exclude name="*-sources.jar"/>
+		</fileset>
 	</path>
 
 	<!-- build -->
