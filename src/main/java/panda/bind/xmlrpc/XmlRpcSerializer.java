@@ -9,6 +9,7 @@ import java.util.List;
 import panda.bind.AbstractSerializer;
 import panda.bind.json.JsonException;
 import panda.lang.StringEscapes;
+import panda.lang.codec.binary.Base64;
 import panda.lang.time.DateTimes;
 
 /**
@@ -197,6 +198,14 @@ public class XmlRpcSerializer extends AbstractSerializer {
 			indent -= indentFactor;
 			writeEndTag();
 		}
+	}
+
+	@Override
+	protected void serializeByteArray(String name, byte[] src) {
+		String b64 = Base64.encodeBase64String(src);
+		writeBeginTag(XmlRpcTags.T_BASE64);
+		write(b64);
+		writeEndTag();
 	}
 	
 	private void writeIndent() {

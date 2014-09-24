@@ -35,6 +35,10 @@ public class XmlRpcSaxHandlerTest {
 		}
 
 		@Override
+		public void changeToArray() {
+		}
+		
+		@Override
 		public void endElement(Object value) {
 			if (value instanceof Date) {
 				value = DateTimes.datetimeFormat().format((Date)value);

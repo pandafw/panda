@@ -19,6 +19,7 @@ import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.lang.codec.binary.Base64;
 
 /**
  * 
@@ -284,12 +285,14 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	// serialize methods
 	//-------------------------------------------------------------
 	protected void serializeByteArray(String name, byte[] src) {
-		startArray(name, src);
-		int len = src.length;
-		for (int i = 0; i < len; i++) {
-			serializeArrayElement(name, src, src[i], i);
-		}
-		endArray(name, src, len);
+		String b64 = Base64.encodeBase64String(src);
+		writeString(b64);
+//		startArray(name, src);
+//		int len = src.length;
+//		for (int i = 0; i < len; i++) {
+//			serializeArrayElement(name, src, src[i], i);
+//		}
+//		endArray(name, src, len);
 	}
 	
 	protected void serializeCharArray(String name, char[] src) {

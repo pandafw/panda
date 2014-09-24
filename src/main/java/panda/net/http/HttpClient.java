@@ -295,10 +295,11 @@ public class HttpClient {
 			StringBuilder msg = new StringBuilder();
 			msg.append(request.getMethod()).append(' ').append(request.getURL())
 				.append(" - ").append(response.getStatusLine());
+			msg.append(" (");
 			if (response.getContentLength() != null) {
-				msg.append(" (").append(Files.toDisplaySize(response.getContentLength())).append(')');
+				msg.append(Files.toDisplaySize(response.getContentLength())).append(" / ");
 			}
-			msg.append(" [").append(sw).append(']');
+			msg.append(sw).append(')');
 
 			if (log.isTraceEnabled()) {
 				if (response.getHeader() != null) {

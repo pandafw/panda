@@ -74,7 +74,7 @@ public class XmlRpcDocument<T> {
 		return Objects.equalsBuilder()
 				.append(methodName, rhs.methodName)
 				.append(fault, rhs.fault)
-				.append(params, rhs.params)
+				.append(params == null ? null : params.toArray(), rhs.params == null ? null : rhs.params.toArray())
 				.isEquals();
 	}
 

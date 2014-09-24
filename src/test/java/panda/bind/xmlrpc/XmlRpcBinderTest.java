@@ -24,6 +24,7 @@ public class XmlRpcBinderTest {
 		private List<A> lst;
 		private Map<String, A> map;
 		private A aaa;
+		private byte[] bin;
 
 		public A() {
 		}
@@ -81,6 +82,12 @@ public class XmlRpcBinderTest {
 		public void setMap(Map<String, A> map) {
 			this.map = map;
 		}
+		public byte[] getBin() {
+			return bin;
+		}
+		public void setBin(byte[] bin) {
+			this.bin = bin;
+		}
 		
 		@Override
 		public String toString() {
@@ -93,6 +100,7 @@ public class XmlRpcBinderTest {
 					.append("lst", lst)
 					.append("map", map)
 					.append("aaa", aaa)
+					.append("bin", bin)
 					.toString();
 		}
 		
@@ -118,6 +126,7 @@ public class XmlRpcBinderTest {
 				.append(lst, a.lst)
 				.append(map, a.map)
 				.append(aaa, a.aaa)
+				.append(bin, a.bin)
 				.build();
 		}
 	}
@@ -193,6 +202,9 @@ public class XmlRpcBinderTest {
 				+ "		<param>\n"
 				+ "			<value><dateTime.iso8601>20101001T12:00:01</dateTime.iso8601></value>\n"
 				+ "		</param>\n"
+				+ "		<param>\n"
+				+ "			<value><base64>SGVsbG8gV29ybGQh</base64></value>\n"
+				+ "		</param>\n"
 				+ "	</params>\n"
 				+ "</methodCall>";
 
@@ -203,6 +215,7 @@ public class XmlRpcBinderTest {
 		obj.getParams().add("str");
 		obj.getParams().add(12.5);
 		obj.getParams().add(DateTimes.datetimeFormat().parse("2010-10-01 12:00:01"));
+		obj.getParams().add("Hello World!".getBytes());
 
 		Xdo oa = XmlRpcs.fromXml(xml, Xdo.class);
 		Assert.assertEquals(obj, oa);
