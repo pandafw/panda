@@ -19,6 +19,7 @@ import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
 import panda.io.resource.ResourceBundleLoader;
+import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.ClassLoaders;
@@ -30,7 +31,7 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.TextProvider;
 
-@IocBean(type=TextProvider.class)
+@IocBean(type=TextProvider.class, singleton=false, scope=Scope.REQUEST)
 public class DefaultTextProvider implements TextProvider {
 	private final static Log log = Logs.getLog(DefaultTextProvider.class);
 
@@ -71,6 +72,7 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * @param beans the beans to set
 	 */
+	@IocInject
 	public void setBeans(Beans beans) {
 		this.beans = beans;
 	}

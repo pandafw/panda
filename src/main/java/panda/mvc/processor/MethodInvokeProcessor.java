@@ -1,4 +1,4 @@
-package panda.mvc.impl.processor;
+package panda.mvc.processor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

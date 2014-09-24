@@ -24,15 +24,13 @@ public class ActionInfo {
 
 	private ObjectInfo<? extends ParamAdaptor> adaptorInfo;
 
-	private ViewMaker[] viewMakers;
+	private ViewMaker viewMaker;
 
 	private String okView;
 
 	private String failView;
 
 	private List<HttpMethod> httpMethods;
-
-	private String actionName;
 
 	private Class<?> actionType;
 
@@ -73,7 +71,6 @@ public class ActionInfo {
 		adaptorInfo = null == adaptorInfo ? parent.adaptorInfo : adaptorInfo;
 		okView = null == okView ? parent.okView : okView;
 		failView = null == failView ? parent.failView : failView;
-		actionName = null == actionName ? parent.actionName : actionName;
 		actionType = null == actionType ? parent.actionType : actionType;
 		chainName = null == chainName ? parent.chainName : chainName;
 		return this;
@@ -157,12 +154,12 @@ public class ActionInfo {
 		this.chainName = chainName;
 	}
 
-	public ViewMaker[] getViewMakers() {
-		return viewMakers;
+	public ViewMaker getViewMaker() {
+		return viewMaker;
 	}
 
-	public void setViewMakers(ViewMaker[] makers) {
-		this.viewMakers = makers;
+	public void setViewMaker(ViewMaker maker) {
+		this.viewMaker = maker;
 	}
 
 	public String getOkView() {
@@ -179,14 +176,6 @@ public class ActionInfo {
 
 	public void setFailView(String failView) {
 		this.failView = failView;
-	}
-
-	public String getActionName() {
-		return actionName;
-	}
-
-	public void setActionName(String moduleName) {
-		this.actionName = moduleName;
 	}
 
 	public Class<?> getActionType() {

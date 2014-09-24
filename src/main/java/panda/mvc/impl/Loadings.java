@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.bind.json.Jsons;
-import panda.ioc.annotation.IocBean;
-import panda.ioc.loader.AnnotationIocLoader;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
@@ -49,7 +47,7 @@ public abstract class Loadings {
 		evalPathMap(ai, type.getAnnotation(PathMap.class));
 		evalOk(ai, type.getAnnotation(Ok.class));
 		evalFail(ai, type.getAnnotation(Fail.class));
-		evalAt(ai, type.getAnnotation(At.class), type.getSimpleName());
+		evalAt(ai, type.getAnnotation(At.class), null);
 		evalActionChainMaker(ai, type.getAnnotation(Chain.class));
 		evalAction(ai, type);
 		return ai;
@@ -143,13 +141,13 @@ public abstract class Loadings {
 		}
 	}
 
-	public static void evalAt(ActionInfo ai, At at, String def) {
+	private static void evalAt(ActionInfo ai, At at, String def) {
 		if (null != at) {
-			if (null == at.value() || at.value().length == 0) {
-				ai.setPaths(Arrays.toArray("/" + def.toLowerCase()));
-			}
-			else {
+			if (at.value() != null && at.value().length > 0) {
 				ai.setPaths(at.value());
+			}
+			else if (def != null) {
+				ai.setPaths(Arrays.toArray("/" + def.toLowerCase()));
 			}
 
 			if (!Strings.isBlank(at.key()))
@@ -178,12 +176,6 @@ public abstract class Loadings {
 
 	public static void evalAction(ActionInfo ai, Class<?> type) {
 		ai.setActionType(type);
-		
-		IocBean iocBean = type.getAnnotation(IocBean.class);
-		if (iocBean != null) {
-			String beanName = AnnotationIocLoader.getBeanName(type);
-			ai.setActionName(beanName);
-		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

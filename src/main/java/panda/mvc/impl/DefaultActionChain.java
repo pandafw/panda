@@ -1,6 +1,5 @@
 package panda.mvc.impl;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,25 +12,18 @@ public class DefaultActionChain implements ActionChain {
 
 	private Processor head;
 
-	private Processor error;
-
-	private Method method;
-
-	public DefaultActionChain(List<Processor> procs, Processor error, Method method) {
+	public DefaultActionChain(List<Processor> procs) {
 		if (null != procs) {
 			Iterator<Processor> it = procs.iterator();
 			if (it.hasNext()) {
 				head = it.next();
-				Processor p = head;
-				while (it.hasNext()) {
+				for (Processor p = head; it.hasNext(); ) {
 					Processor next = it.next();
 					p.setNext(next);
 					p = next;
 				}
 			}
 		}
-		this.error = error;
-		this.method = method;
 	}
 
 	public void doChain(ActionContext ac) {
@@ -41,17 +33,8 @@ public class DefaultActionChain implements ActionChain {
 			}
 			catch (Throwable e) {
 				ac.setError(e);
-				try {
-					error.process(ac);
-				}
-				catch (Throwable ee) {
-					throw Exceptions.wrapThrow(ee);
-				}
+				throw Exceptions.wrapThrow(e);
 			}
 		}
-	}
-
-	public String toString() {
-		return method.toString();
 	}
 }

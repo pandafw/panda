@@ -9,8 +9,7 @@ import org.junit.Test;
 import panda.mvc.AbstractMvcTest;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
-import panda.mvc.impl.processor.ViewProcessor;
-import panda.mvc.view.VoidView;
+import panda.mvc.processor.ViewProcessor;
 
 public class ViewProcessorTest extends AbstractMvcTest {
 
@@ -31,6 +30,13 @@ public class ViewProcessorTest extends AbstractMvcTest {
 	@Override
 	protected void initServletConfig() {
 		servletConfig.addInitParameter("modules", "org.nutz.mvc.init.module.MainModule");
+	}
+
+}
+
+class VoidView implements View {
+
+	public void render(ActionContext ac, Object obj) throws Throwable {
 	}
 
 }

@@ -11,12 +11,15 @@ import panda.filepool.FileItem;
 import panda.filepool.FilePool;
 import panda.io.FileNames;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
 import panda.mvc.adaptor.multipart.FileItemStream;
 
+@IocBean(type=FilePool.class)
 public class DaoFilePool implements FilePool {
-	private DaoClient daoClient;
-	private int blockSize = Integer.MAX_VALUE;
+	protected DaoClient daoClient;
+	protected int blockSize = Integer.MAX_VALUE;
 
 	/**
 	 * @return the daoClient
@@ -28,8 +31,23 @@ public class DaoFilePool implements FilePool {
 	/**
 	 * @param daoClient the daoClient to set
 	 */
+	@IocInject
 	public void setDaoClient(DaoClient daoClient) {
 		this.daoClient = daoClient;
+	}
+
+	/**
+	 * @return the blockSize
+	 */
+	public int getBlockSize() {
+		return blockSize;
+	}
+
+	/**
+	 * @param blockSize the blockSize to set
+	 */
+	public void setBlockSize(int blockSize) {
+		this.blockSize = blockSize;
 	}
 
 	public FileItem saveFile(String name, final InputStream body, boolean temporary) throws IOException {

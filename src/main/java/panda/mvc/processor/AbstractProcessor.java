@@ -1,4 +1,4 @@
-package panda.mvc.impl.processor;
+package panda.mvc.processor;
 
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;

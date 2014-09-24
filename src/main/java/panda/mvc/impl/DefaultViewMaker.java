@@ -1,4 +1,4 @@
-package panda.mvc.view;
+package panda.mvc.impl;
 
 import panda.bind.json.JsonObject;
 import panda.castor.Castors;
@@ -8,6 +8,13 @@ import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.View;
 import panda.mvc.ViewMaker;
+import panda.mvc.view.ForwardView;
+import panda.mvc.view.HttpStatusView;
+import panda.mvc.view.JsonView;
+import panda.mvc.view.JspView;
+import panda.mvc.view.RawView;
+import panda.mvc.view.ServerRedirectView;
+import panda.mvc.view.XmlView;
 
 /**
  * 默认的的视图工厂类
@@ -19,7 +26,6 @@ public class DefaultViewMaker implements ViewMaker {
 	public static final String VIEW_XML = "xml";
 	public static final String VIEW_REDIRECT = "redirect";
 	public static final String VIEW_REDIRECT2 = ">>";
-	public static final String VIEW_VOID = "void";
 	public static final String VIEW_IOC = "ioc";
 	public static final String VIEW_HTTP = "http";
 	public static final String VIEW_FORWARD = "forward";
@@ -72,10 +78,6 @@ public class DefaultViewMaker implements ViewMaker {
 		
 		if (VIEW_FORWARD.equals(type) || VIEW_FORWARD2.equals(type)) {
 			return new ForwardView(value);
-		}
-		
-		if (VIEW_VOID.equals(type)) {
-			return new VoidView();
 		}
 		
 		if (VIEW_IOC.equals(type)) {

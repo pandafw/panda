@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import panda.mvc.view.DefaultViewMaker;
+import panda.mvc.impl.DefaultViewMaker;
 
 public class DefaultViewMakerTest {
 

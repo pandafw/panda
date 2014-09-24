@@ -11,8 +11,7 @@ import java.util.Map.Entry;
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.ioc.Ioc;
-import panda.ioc.annotation.IocBean;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Systems;
@@ -31,9 +30,8 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.ChainBy;
 import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.UrlMappingBy;
-import panda.mvc.annotation.Views;
+import panda.mvc.annotation.ViewBy;
 import panda.mvc.config.AbstractMvcConfig;
-import panda.mvc.view.DefaultViewMaker;
 
 public class MvcLoading implements Loading {
 
@@ -124,10 +122,10 @@ public class MvcLoading implements Loading {
 		Class<?> mainModule = config.getMainModule();
 		
 		// 创建视图工厂
-		ViewMaker[] makers = createViewMakers(config);
+		ViewMaker viewMaker = createViewMaker(config);
 
 		// 创建动作链工厂
-		ActionChainMaker maker = createChainMaker(config);
+		ActionChainMaker chainMaker = createChainMaker(config);
 
 		// 创建主模块的配置信息
 		ActionInfo mainInfo = Loadings.createInfo(mainModule);
@@ -152,8 +150,8 @@ public class MvcLoading implements Loading {
 				if (Modifier.isPublic(method.getModifiers())  && method.isAnnotationPresent(At.class)) {
 					// 增加到映射中
 					ActionInfo info = Loadings.createInfo(method).mergeWith(actionInfo);
-					info.setViewMakers(makers);
-					mapping.add(maker, info, config);
+					info.setViewMaker(viewMaker);
+					mapping.add(chainMaker, info, config);
 					atMethods++;
 				}
 			}
@@ -231,6 +229,24 @@ public class MvcLoading implements Loading {
 		}
 		return maker;
 	}
+	
+	protected ViewMaker createViewMaker(MvcConfig config) {
+		Class<?> mainModule = config.getMainModule();
+		ViewBy ann = mainModule.getAnnotation(ViewBy.class);
+		ViewMaker maker;
+		
+		if (null == ann) {
+			maker = new DefaultViewMaker();
+		}
+		else {
+			maker = Loadings.evalObj(config, ann.type(), ann.args());
+		}
+		
+		if (log.isDebugEnabled()) {
+			log.debugf("@ViewBy(%s)", maker.getClass().getName());
+		}
+		return maker;
+	}
 
 	protected void evalSetup(MvcConfig config, boolean init) throws Exception {
 		Ioc ioc = config.getIoc();
@@ -243,41 +259,6 @@ public class MvcLoading implements Loading {
 				setup.destroy(config);
 			}
 		}
-	}
-
-	protected ViewMaker[] createViewMakers(MvcConfig config) throws Exception {
-		Class<?> mainModule = config.getMainModule();
-		Ioc ioc = config.getIoc();
-
-		Views vms = mainModule.getAnnotation(Views.class);
-		ViewMaker[] makers;
-		int i = 0;
-		if (null != vms) {
-			makers = new ViewMaker[vms.value().length + 1];
-			for (; i < vms.value().length; i++) {
-				if (vms.value()[i].getAnnotation(IocBean.class) != null && ioc != null) {
-					makers[i] = ioc.get(vms.value()[i]);
-				}
-				else {
-					makers[i] = Classes.born(vms.value()[i]);
-				}
-			}
-		}
-		else {
-			makers = new ViewMaker[1];
-		}
-		makers[i] = new DefaultViewMaker();// 优先使用用户自定义
-
-		if (log.isDebugEnabled()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(makers[0].getClass().getSimpleName());
-			for (i = 0; i < makers.length - 1; i++) {
-				sb.append(',').append(makers[i].getClass().getSimpleName());
-			}
-			log.debugf("@Views(%s)", sb);
-		}
-
-		return makers;
 	}
 
 	protected Ioc createIoc(AbstractMvcConfig config) throws Exception {
@@ -294,8 +275,8 @@ public class MvcLoading implements Loading {
 		}
 		
 		Ioc ioc = Classes.born(ib.type()).create(config, (Object[])ib.args());
-		if (ioc instanceof PandaIoc) {
-			((PandaIoc)ioc).addValueProxyMaker(new ServletValueProxyMaker(config.getServletContext()));
+		if (ioc instanceof DefaultIoc) {
+			((DefaultIoc)ioc).addValueProxyMaker(new ServletValueProxyMaker(config.getServletContext()));
 		}
 
 		config.setIoc(ioc);
