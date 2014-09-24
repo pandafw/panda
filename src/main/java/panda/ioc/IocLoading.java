@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 import panda.castor.CastException;
 import panda.castor.Castors;
 import panda.ioc.meta.IocEventSet;
-import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
@@ -126,10 +125,7 @@ public class IocLoading {
 				if (null != v) {
 					Map<String, Object> fields = (Map<String, Object>)v;
 					for (Entry<String, Object> en : fields.entrySet()) {
-						IocField ifld = new IocField();
-						ifld.setName(en.getKey());
-						ifld.setValue(object2value(en.getValue()));
-						iobj.addField(ifld);
+						iobj.addField(en.getKey(), object2value(en.getValue()));
 					}
 				}
 			}
@@ -145,10 +141,7 @@ public class IocLoading {
 		}
 		else {
 			for (Entry<String, Object> en : map.entrySet()) {
-				IocField ifld = new IocField();
-				ifld.setName(en.getKey());
-				ifld.setValue(object2value(en.getValue()));
-				iobj.addField(ifld);
+				iobj.addField(en.getKey(), object2value(en.getValue()));
 			}
 			if (log.isWarnEnabled()) {
 				log.warn("Using *Declared* ioc-define (without type or events)!!! Please use Standard Ioc-Define!!"

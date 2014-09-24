@@ -1,7 +1,9 @@
 package panda.ioc.meta;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import panda.lang.Objects;
 
@@ -10,7 +12,6 @@ import panda.lang.Objects;
  * 
  * @see panda.ioc.meta.IocEventSet
  * @see panda.ioc.meta.IocValue
- * @see panda.ioc.meta.IocField
  */
 public class IocObject {
 
@@ -38,7 +39,7 @@ public class IocObject {
 	/**
 	 * 对象的字段
 	 */
-	private List<IocField> fields;
+	private Map<String, IocValue> fields;
 
 	/**
 	 * 对象基本，容器根据这个字段，来决定将这个对象保存在哪一个上下文范围中<br>
@@ -50,7 +51,7 @@ public class IocObject {
 
 	public IocObject() {
 		args = new ArrayList<IocValue>();
-		fields = new ArrayList<IocField>();
+		fields = new LinkedHashMap<String, IocValue>();
 		singleton = true;
 	}
 
@@ -105,19 +106,16 @@ public class IocObject {
 		}
 	}
 
-	public IocField[] getFields() {
-		return fields.toArray(new IocField[fields.size()]);
+	public Map<String, IocValue> getFields() {
+		return fields;
 	}
 
-	public void addField(IocField field) {
-		this.fields.add(field);
+	public void addField(String name, IocValue value) {
+		this.fields.put(name, value);
 	}
 
 	public boolean hasField(String name) {
-		for (IocField fld : fields)
-			if (fld.getName().equals(name))
-				return true;
-		return false;
+		return fields.containsKey(name);
 	}
 
 	public void setFactory(String factory) {

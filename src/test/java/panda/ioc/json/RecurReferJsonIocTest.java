@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.MapIocLoader;
 
 public class RecurReferJsonIocTest {
@@ -37,7 +37,7 @@ public class RecurReferJsonIocTest {
 		s += "}";
 		s += "}";
 
-		Ioc ioc = new PandaIoc(new MapIocLoader(s));
+		Ioc ioc = new DefaultIoc(new MapIocLoader(s));
 		RA a = ioc.get(RA.class, "a");
 		assertEquals("A", a.nm);
 		assertEquals("B", a.rb.nm);

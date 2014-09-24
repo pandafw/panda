@@ -17,9 +17,6 @@ import panda.log.Logs;
 
 /**
  * 通过AopConfigration来识别需要拦截的方法,并根据需要生成新的类
- * 
- * @author zozoh(zozohtnt@gmail.com)
- * @author Wendal(wendal1985@gmail.com)
  */
 public class DefaultMirrorFactory implements MirrorFactory {
 

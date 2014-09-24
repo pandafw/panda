@@ -7,7 +7,7 @@ import static panda.ioc.json.Utils.J;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Animal;
 import panda.ioc.json.pojo.WhenCreateAnimal;
 import panda.ioc.json.pojo.WhenCreateFox;
@@ -139,7 +139,7 @@ public class EvensJsonIocTest {
 
 	@Test
 	public void test_event_from_parent() {
-		Ioc ioc = new PandaIoc(new JsonIocLoader(this.getClass().getPackage().getName().replace('.', '/') + "/events.js"));
+		Ioc ioc = new DefaultIoc(new JsonIocLoader(this.getClass().getPackage().getName().replace('.', '/') + "/events.js"));
 		Animal f = ioc.get(Animal.class, "fox");
 		assertEquals(1, f.getCreateTime());
 		assertEquals(1, f.getFetchTime());

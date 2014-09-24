@@ -8,7 +8,7 @@ import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.impl.ComboContext;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.impl.ScopeIocContext;
 import panda.ioc.loader.MapIocLoader;
 
@@ -23,7 +23,7 @@ public class DefaultValueTypes {
 	public void test_refer_context() {
 		IocContext context = new ScopeIocContext("abc");
 		String json = "{obj:{singleton:false,fields:{ic:{ref:'$conText'}}}}";
-		Ioc ioc = new PandaIoc(new MapIocLoader(json), context, "abc");
+		Ioc ioc = new DefaultIoc(new MapIocLoader(json), context, "abc");
 		TestReferContext trc = ioc.get(TestReferContext.class);
 		assertTrue(context == trc.ic);
 

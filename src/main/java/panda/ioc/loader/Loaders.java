@@ -1,8 +1,10 @@
 package panda.ioc.loader;
 
+import java.util.Map.Entry;
+
 import panda.ioc.meta.IocEventSet;
-import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocValue;
 import panda.lang.Strings;
 
 abstract class Loaders {
@@ -47,9 +49,9 @@ abstract class Loaders {
 		}
 		
 		// merge fields
-		for (IocField fld : it.getFields()) {
-			if (!me.hasField(fld.getName())) {
-				me.addField(fld);
+		for (Entry<String, IocValue> en : it.getFields().entrySet()) {
+			if (!me.hasField(en.getKey())) {
+				me.addField(en.getKey(), en.getValue());
 			}
 		}
 

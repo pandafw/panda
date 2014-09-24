@@ -23,36 +23,6 @@ public class ResourceBundleLoader {
 	private Map<String, ResourceBundleMaker> markers;
 	private List<String> formats;
 
-	/**
-	 * Constructor
-	 */
-	public ResourceBundleLoader() {
-		control = new Control();
-		markers = new LinkedHashMap<String, ResourceBundleMaker>();
-
-		// add defaults
-		addResourceBundleMaker(JAVA_CLASS, null);
-		addResourceBundleMaker(JAVA_PROPS, null);
-	}
-
-	public ResourceBundle getBundle(String baseName) {
-		return ResourceBundle.getBundle(baseName, control);
-	}
-
-	public ResourceBundle getBundle(String baseName, Locale locale) {
-		return ResourceBundle.getBundle(baseName, locale, control);
-	}
-
-	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader) {
-		return ResourceBundle.getBundle(baseName, locale, loader, control);
-	}
-
-	public void addResourceBundleMaker(String format, ResourceBundleMaker rbm) {
-		markers.put(format, rbm);
-		List<String> keys = new ArrayList<String>(markers.keySet());
-		formats = Collections.unmodifiableList(keys);
-	}
-	
 	private class Control extends ResourceBundle.Control {
 		public List<String> getFormats(String baseName) {
 			if (baseName == null) {
@@ -75,5 +45,35 @@ public class ResourceBundleLoader {
 
 			return super.newBundle(baseName, locale, format, loader, reload);
 		}
+	}
+
+	/**
+	 * Constructor
+	 */
+	public ResourceBundleLoader() {
+		control = new Control();
+		markers = new LinkedHashMap<String, ResourceBundleMaker>();
+
+		// add defaults
+		addResourceBundleMaker(JAVA_CLASS, null);
+		addResourceBundleMaker(JAVA_PROPS, null);
+	}
+
+	public void addResourceBundleMaker(String format, ResourceBundleMaker rbm) {
+		markers.put(format, rbm);
+		List<String> keys = new ArrayList<String>(markers.keySet());
+		formats = Collections.unmodifiableList(keys);
+	}	
+
+	public ResourceBundle getBundle(String baseName) {
+		return ResourceBundle.getBundle(baseName, control);
+	}
+
+	public ResourceBundle getBundle(String baseName, Locale locale) {
+		return ResourceBundle.getBundle(baseName, locale, control);
+	}
+
+	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader) {
+		return ResourceBundle.getBundle(baseName, locale, loader, control);
 	}
 }

@@ -2,6 +2,8 @@ package panda.io.resource;
 
 import java.util.Locale;
 
+import panda.lang.Strings;
+
 public class Resources {
 	/**
 	 * Converts the given <code>baseName</code> and <code>locale</code> to the bundle name. 
@@ -40,16 +42,16 @@ public class Resources {
 		String country = locale.getCountry();
 		String variant = locale.getVariant();
 
-		if (language == "" && country == "" && variant == "") {
+		if (Strings.isEmpty(language) && Strings.isEmpty(country) && Strings.isEmpty(variant)) {
 			return baseName;
 		}
 
 		StringBuilder sb = new StringBuilder(baseName);
 		sb.append('_');
-		if (variant != "") {
+		if (Strings.isNotEmpty(variant)) {
 			sb.append(language).append('_').append(country).append('_').append(variant);
 		}
-		else if (country != "") {
+		else if (Strings.isNotEmpty(country)) {
 			sb.append(language).append('_').append(country);
 		}
 		else {

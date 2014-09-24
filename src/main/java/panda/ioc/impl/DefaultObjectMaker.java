@@ -3,6 +3,7 @@ package panda.ioc.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Map.Entry;
 
 import panda.ioc.IocEventTrigger;
 import panda.ioc.IocException;
@@ -11,8 +12,8 @@ import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
 import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocEventSet;
-import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
+import panda.ioc.meta.IocValue;
 import panda.ioc.weaver.DefaultWeaver;
 import panda.ioc.weaver.IocFieldInjector;
 import panda.lang.Classes;
@@ -113,15 +114,15 @@ public class DefaultObjectMaker implements ObjectMaker {
 			}
 
 			// 获得每个字段的注入方式
-			IocFieldInjector[] fields = new IocFieldInjector[iobj.getFields().length];
-			for (int i = 0; i < fields.length; i++) {
-				IocField ifld = iobj.getFields()[i];
+			IocFieldInjector[] fields = new IocFieldInjector[iobj.getFields().size()];
+			int i = 0;
+			for (Entry<String, IocValue> en : iobj.getFields().entrySet()) {
 				try {
-					ValueProxy vp = ing.makeValueProxy(ifld.getValue());
-					fields[i] = IocFieldInjector.create(mirror, ifld.getName(), vp);
+					ValueProxy vp = ing.makeValueProxy(en.getValue());
+					fields[i] = IocFieldInjector.create(mirror, en.getKey(), vp);
 				}
 				catch (Exception e) {
-					throw Exceptions.wrapThrow(e, "Fail to eval Injector for field: '%s'", ifld.getName());
+					throw Exceptions.wrapThrow(e, "Fail to eval Injector for field: '%s'", en.getKey());
 				}
 			}
 			dw.setFields(fields);

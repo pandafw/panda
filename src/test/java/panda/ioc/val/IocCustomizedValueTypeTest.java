@@ -7,7 +7,7 @@ import org.junit.Test;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.ValueProxyMaker;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.MapIocLoader;
 import panda.ioc.loader.xml.meta.Pet;
 import panda.ioc.meta.IocValue;
@@ -18,7 +18,7 @@ public class IocCustomizedValueTypeTest {
 	@Test
 	public void test_simple_customized() {
 		String json = "{xb:{name:{cc:'XiaoBai'}}}";
-		PandaIoc ioc = new PandaIoc(new MapIocLoader(json));
+		DefaultIoc ioc = new DefaultIoc(new MapIocLoader(json));
 		ioc.addValueProxyMaker(new ValueProxyMaker() {
 			public ValueProxy make(IocMaking ing, IocValue iv) {
 				if ("cc".equalsIgnoreCase(iv.getType())) {

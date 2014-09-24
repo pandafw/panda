@@ -33,8 +33,8 @@ public class AnnotationIocLoaderTest {
 		IocObject iocObject = iocLoader.load(null, ClassB.class.getName());
 		assertNotNull(iocObject);
 		assertNotNull(iocObject.getFields());
-		assertTrue(iocObject.getFields().length == 1);
-		assertEquals(IocValue.TYPE_REF, iocObject.getFields()[0].getValue().getType());
+		assertTrue(iocObject.getFields().size() == 1);
+		assertEquals(IocValue.TYPE_REF, iocObject.getFields().values().iterator().next().getType());
 	}
 
 }

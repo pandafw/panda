@@ -30,7 +30,6 @@ import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
 import panda.ioc.ObjectLoadException;
 import panda.ioc.meta.IocEventSet;
-import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
@@ -202,18 +201,17 @@ public class XmlIocLoader implements IocLoader {
 	protected void parseFields(Element beanElement, IocObject iocObject) throws Throwable {
 		List<Element> list = getChildNodesByTagName(beanElement, TAG_FIELD);
 		for (Element fieldElement : list) {
-			IocField iocField = new IocField();
-			iocField.setName(fieldElement.getAttribute("name"));
 			if (fieldElement.hasChildNodes()) {
 				NodeList nodeList = fieldElement.getChildNodes();
 				for (int j = 0; j < nodeList.getLength(); j++) {
 					if (nodeList.item(j) instanceof Element) {
-						iocField.setValue(parseX((Element)nodeList.item(j)));
+						String name = fieldElement.getAttribute("name");
+						IocValue value = parseX((Element)nodeList.item(j));
+						iocObject.addField(name, value);
 						break;
 					}
 				}
 			}
-			iocObject.addField(iocField);
 		}
 	}
 

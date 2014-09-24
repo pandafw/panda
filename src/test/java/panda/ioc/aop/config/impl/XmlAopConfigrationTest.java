@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import panda.ioc.aop.impl.DefaultMirrorFactory;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 
 public class XmlAopConfigrationTest {
 
@@ -21,7 +21,7 @@ public class XmlAopConfigrationTest {
 		mirrorFactory.setAopConfigration(new XmlAopConfigration(xml));
 		assertNotNull(mirrorFactory.getMirror(XmlAopConfigration.class, null));
 		assertNotNull(mirrorFactory.getMirror(DefaultMirrorFactory.class, null));
-		assertNotNull(mirrorFactory.getMirror(PandaIoc.class, null));
+		assertNotNull(mirrorFactory.getMirror(DefaultIoc.class, null));
 	}
 
 }

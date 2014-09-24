@@ -14,6 +14,7 @@ import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
 import panda.ioc.Scope;
 import panda.ioc.ValueProxyMaker;
+import panda.ioc.annotation.IocBean;
 import panda.ioc.aop.MirrorFactory;
 import panda.ioc.aop.impl.DefaultMirrorFactory;
 import panda.ioc.loader.AnnotationIocLoader;
@@ -27,9 +28,9 @@ import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 
-public class PandaIoc implements Ioc {
+public class DefaultIoc implements Ioc {
 
-	private static final Log log = Logs.getLog(PandaIoc.class);
+	private static final Log log = Logs.getLog(DefaultIoc.class);
 
 	private final Object lock = new Object();
 
@@ -68,19 +69,19 @@ public class PandaIoc implements Ioc {
 	 */
 	private IocLoading loading;
 
-	public PandaIoc(IocLoader loader) {
+	public DefaultIoc(IocLoader loader) {
 		this(loader, new ScopeIocContext(Scope.APP), Scope.APP);
 	}
 
-	public PandaIoc(IocLoader loader, IocContext context, String defaultScope) {
+	public DefaultIoc(IocLoader loader, IocContext context, String defaultScope) {
 		this(new DefaultObjectMaker(), loader, context, defaultScope);
 	}
 
-	protected PandaIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope) {
+	protected DefaultIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope) {
 		this(maker, loader, context, defaultScope, null);
 	}
 
-	protected PandaIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
+	protected DefaultIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
 		this.maker = maker;
 		this.defaultScope = defaultScope;
 		this.context = context;
@@ -112,9 +113,13 @@ public class PandaIoc implements Ioc {
 		return get(type, name, null);
 	}
 
+	public <T> T get(Class<T> type, IocContext context) {
+		return get(type, null, null);
+	}
+
 	public <T> T get(Class<T> type, String name, IocContext context) throws IocException {
 		if (name == null) {
-			name = AnnotationIocLoader.getBeanName(type);
+			name = getBeanName(type);
 		}
 
 		if (log.isDebugEnabled()) {
@@ -191,7 +196,7 @@ public class PandaIoc implements Ioc {
 	}
 
 	public boolean has(Class<?> type) {
-		String name = AnnotationIocLoader.getBeanName(type);
+		String name = getBeanName(type);
 		return has(name);
 	}
 
@@ -254,9 +259,10 @@ public class PandaIoc implements Ioc {
 		this.defaultScope = defaultScope;
 	}
 
-	/**
-	 * 暴露IocMaking的创建过程
-	 */
+	protected String getBeanName(Class<?> type) {
+		return AnnotationIocLoader.getBeanName(type, type.getAnnotation(IocBean.class));
+	}
+	
 	protected IocMaking makeIocMaking(IocContext context, String name) {
 		// 连接上下文
 		IocContext cntx;

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocLoader;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Mammal;
 import panda.ioc.loader.JsonIocLoader;
 
@@ -15,7 +15,7 @@ public class AopJsonIocTest {
 	@Test
 	public void test_simple() {
 		IocLoader il = new JsonIocLoader(AopJsonIocTest.class.getPackage().getName().replace('.', '/') + "/aop.js");
-		Ioc ioc = new PandaIoc(il);
+		Ioc ioc = new DefaultIoc(il);
 		StringBuilder sb = ioc.get(StringBuilder.class, "sb");
 		Mammal fox = ioc.get(Mammal.class, "fox");
 

@@ -22,7 +22,7 @@ import panda.ioc.Ioc;
 import panda.ioc.IocException;
 import panda.ioc.IocLoader;
 import panda.ioc.ObjectLoadException;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Animal;
 import panda.ioc.json.pojo.AnimalRace;
 import panda.ioc.json.pojo.IocSelf;
@@ -45,7 +45,7 @@ public class SimpleJsonIocTest {
 		objMap.put("args", new Object[] { strss });
 
 		map.put("obj", objMap);
-		Ioc ioc = new PandaIoc(new MapIocLoader(map));
+		Ioc ioc = new DefaultIoc(new MapIocLoader(map));
 
 		IocTO00 obj = ioc.get(IocTO00.class, "obj");
 		assertEquals(2, obj.getStrss().length);

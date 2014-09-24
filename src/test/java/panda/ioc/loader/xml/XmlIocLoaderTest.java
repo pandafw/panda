@@ -1,18 +1,20 @@
 package panda.ioc.loader.xml;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocLoader;
 import panda.ioc.ObjectLoadException;
-import panda.ioc.impl.PandaIoc;
+import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.XmlIocLoader;
 import panda.ioc.loader.xml.meta.Bee;
-import panda.ioc.meta.IocField;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 
@@ -41,16 +43,19 @@ public class XmlIocLoaderTest {
 				}
 			}
 			if (iocObject.getFields() != null) {
-				for (IocField iocField : iocObject.getFields()) {
-					assertNotNull(iocField.getName());
-					if (iocField.getValue() != null) {
-						IocValue iocValue = iocField.getValue();
+				for (Entry<String, IocValue> en : iocObject.getFields().entrySet()) {
+					assertNotNull(en.getKey());
+					if (en.getValue() != null) {
+						IocValue iocValue = en.getValue();
 						checkValue(iocValue);
 					}
 				}
 			}
 		}
-		iocLoader.load(null, "obj").getFields()[0].getValue().getValue();
+		
+		for (IocValue iv : iocLoader.load(null, "obj").getFields().values()) {
+			iv.getValue();
+		}
 	}
 
 	private void checkValue(IocValue iocValue) {
@@ -65,7 +70,7 @@ public class XmlIocLoaderTest {
 
 	@Test
 	public void test_simple_case() {
-		Ioc ioc = new PandaIoc(getNew("conf/simple.xml"));
+		Ioc ioc = new DefaultIoc(getNew("conf/simple.xml"));
 		Bee c = ioc.get(Bee.class, "C");
 		assertEquals("TheC", c.getName());
 		assertEquals(15, c.getAge());
