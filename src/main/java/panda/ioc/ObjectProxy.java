@@ -9,8 +9,6 @@ import panda.lang.Exceptions;
  * 创建一个 ObjectProxy， 存入上下文。 然后慢慢的设置它的 weaver 和 fetch。
  * <p>
  * 在出现异常的时候，一定要将该对象从上下文中移除掉。
- * 
- * @author zozoh(zozohtnt@gmail.com)
  */
 public class ObjectProxy {
 

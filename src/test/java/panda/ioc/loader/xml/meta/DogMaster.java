@@ -8,4 +8,6 @@ public class DogMaster {
 
 	@IocInject
 	public Dog dog;
+	
+	
 }

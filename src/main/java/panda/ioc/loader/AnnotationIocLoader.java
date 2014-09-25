@@ -247,7 +247,7 @@ public class AnnotationIocLoader implements IocLoader {
 	
 	public static String getBeanName(Class<?> cls, IocBean iocBean) {
 		if (iocBean == null) {
-			return null;
+			return cls.getName();
 		}
 		
 		String bn = iocBean.name();
