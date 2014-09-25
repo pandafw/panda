@@ -35,6 +35,5 @@ public class FailedProcessor extends ViewProcessor {
 
 			view.render(ac, e);
 		}
-
 	}
 }

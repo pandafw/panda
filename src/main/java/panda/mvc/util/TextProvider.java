@@ -1,4 +1,4 @@
-package panda.mvc;
+package panda.mvc.util;
 
 import java.util.List;
 import java.util.Map;

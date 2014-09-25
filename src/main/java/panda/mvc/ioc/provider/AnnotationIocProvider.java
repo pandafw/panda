@@ -45,15 +45,14 @@ public class AnnotationIocProvider implements IocProvider {
 		}
 
 		public static String getBeanName(Class<?> cls, IocBean iocBean, At at) {
-			String bn = getBeanName(cls, iocBean);
-			if (bn != null) {
-				return bn;
+			if (iocBean != null) {
+				return getBeanName(cls, iocBean);
 			}
 			
 			if (at != null) {
-				bn = cls.getName();
+				return cls.getName();
 			}
-			return bn;
+			return null;
 		}
 	}
 	

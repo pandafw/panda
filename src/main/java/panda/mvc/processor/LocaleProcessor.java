@@ -120,7 +120,7 @@ public class LocaleProcessor extends AbstractProcessor {
 	}
 
 	public void process(ActionContext ac) throws Throwable {
-		HttpSession session = ac.getRequest().getSession();
+		HttpSession session = ac.getRequest().getSession(false);
 
 		Locale locale = null;
 

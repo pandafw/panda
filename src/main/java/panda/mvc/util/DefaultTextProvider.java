@@ -1,4 +1,4 @@
-package panda.mvc.impl;
+package panda.mvc.util;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -29,7 +29,6 @@ import panda.lang.collection.MultiKey;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.TextProvider;
 
 @IocBean(type=TextProvider.class, singleton=false, scope=Scope.REQUEST)
 public class DefaultTextProvider implements TextProvider {
