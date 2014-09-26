@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.github.com/foolite/panda-repo/master/com/foolite/panda-tool/1.0.0/panda-codegen-module.xsd">
+	<include>codegen.properties</include>
+
+	<!-- entity -->
+	<entity name="panda.filepool.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="file id"/>
+		<property name="name" type="String" size="250" notNull="true" comment="file name">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="250"/>
+			</validator>
+		</property>
+		<property name="size" type="Long" notNull="true" comment="file size"/>
+		<property name="date" type="Long" notNull="true" comment="file date"/>
+		<property name="flag" type="Integer" notNull="true" comment="flag"/>
+	</entity>
+
+	<!-- action -->
+	<action name="action.FilePool" entity="panda.filepool.dao.DaoFileItem" trimString="${action.trimString}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
+		<list name="basicList">
+			<column name="id" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="name" sortable="true">
+				<filter type="string"/>
+			</column>
+			<column name="size" sortable="true">
+				<format type="integer"/>
+				<filter type="number"/>
+			</column>
+			<column name="date" sortable="true">
+				<format type="timestamp"/>
+				<filter type="datetime"/>
+			</column>
+			<column name="flag" sortable="true">
+				<format type="integer"/>
+				<filter type="number"/>
+			</column>
+
+			<param name="actions" value="@insert copy update delete"/>
+			<param name="options" value="bdelete ^print:list_print ^csv:list_csv"/>
+			<param name="buttons" value="*list"/>
+		</list>
+		<input name="basicInput" theme="${ui.input.theme}">
+			<field name="id">
+				<editTag name="n.viewfield"/>
+			</field>
+			<field name="name" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="255"/>
+					<param name="size" value="50"/>
+				</editTag>
+			</field>
+			<field name="size">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="date">
+				<editTag name="${tag.datetimepicker}">
+					<param name="format" value="timestamp"/>
+					<param name="maxlength" value="28"/>
+					<param name="size" value="30"/>
+				</editTag>
+			</field>
+			<field name="flag">
+				<editTag name="${tag.checkbox}"/>
+			</field>
+			<field name="readable">
+				<editTag name="${tag.checkbox}"/>
+			</field>
+			<field name="writeable">
+				<editTag name="${tag.checkbox}"/>
+			</field>
+			<param name="toolbar" value="%^print *list"/>
+			<param name="actions" value="%update %copy insert %delete *list"/>
+		</input>
+	</action>
+	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
+		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="list_popup" extend="basicList" template="${template.list_popup}" generate="true"/>
+		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="@refresh %^print list"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
+		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="list"/>
+			<param name="actions" value="*list"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="panda.filepool.dao.DaoFileItem">
+			<property name="id" label="ID"/>
+			<property name="name" label="Name"/>
+			<property name="size" label="Size"/>
+			<property name="date" label="Date"/>
+			<property name="flag" label="Flag"/>
+		</entity>
+		<action actionClass="${action.package}.filepool.FilePoolAction" title="File Pool"/>
+	</resource>
+	<resource locale="ja">
+		<entity name="panda.filepool.dao.DaoFileItem">
+			<property name="id" label="ファイルID"/>
+			<property name="name" label="ファイル名"/>
+			<property name="size" label="サイズ"/>
+			<property name="date" label="更新日付"/>
+			<property name="flag" label="フラグ"/>
+		</entity>
+	</resource>
+	<resource locale="zh">
+		<entity name="panda.filepool.dao.DaoFileItem">
+			<property name="id" label="文件ID"/>
+			<property name="name" label="文件名"/>
+			<property name="size" label="大小"/>
+			<property name="date" label="更新日期"/>
+			<property name="flag" label="flag"/>
+		</entity>
+	</resource>
+</module>

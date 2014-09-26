@@ -1,0 +1,13 @@
+title=数据汇入
+
+target=汇入目标
+file=数据文件
+deleteAll=删除原有数据
+
+button-import=汇入
+
+success-import={1}件数据成功汇入表[{0}]中。
+
+error-value=[{0}]数据错误({1}, {2}): {3} - {4}
+
+error-file-format=请指定CSV或者XLS文件。

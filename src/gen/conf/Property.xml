@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.github.com/foolite/panda-repo/master/com/foolite/panda-tool/1.0.0/panda-codegen-module.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Property" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
+		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="CLCN" comment="class name">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="100"/>
+			</validator>
+		</property>
+		<property name="language" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="language code">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="2"/>
+			</validator>
+			<validator type="constant" message="validation-constant">
+				<param name="list" value="consts.localeLanguageMap"/>
+			</validator>
+		</property>
+		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="country code">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="2"/>
+			</validator>
+			<validator type="constant" message="validation-constant">
+				<param name="list" value="consts.localeCountryMap"/>
+			</validator>
+		</property>
+		<property name="name" type="String" size="50" notNull="true" uniqueKey="CLCN" comment="property name">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="50"/>
+			</validator>
+		</property>
+		<property name="value" type="String" size="5000" setterTrim="" comment="property value">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="5000"/>
+			</validator>
+		</property>
+		<property name="memo" type="String" size="1000" comment="memo">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="1000"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Property" entity="${entity.package}.Property" extend="baseAction">
+		<list name="basicList" extend="scuList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="clazz" hidden="false" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+			<column name="language" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.localeLanguageMap"/>
+				</format>
+				<filter type="select">
+					<param name="list" value="consts.localeLanguageMap"/>
+				</filter>
+			</column>
+			<column name="country" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.localeCountryMap"/>
+				</format>
+				<filter type="select">
+					<param name="list" value="consts.localeCountryMap"/>
+				</filter>
+			</column>
+			<column name="name" hidden="false" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+			<column name="value" hidden="false" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+			<column name="memo" hidden="false" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+		</list>
+		<input name="basicInput" extend="scuInput">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="clazz" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="language" required="true">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="consts.localeLanguageMap"/>
+				</editTag>
+			</field>
+			<field name="country" required="true">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="consts.localeCountryMap"/>
+				</editTag>
+				<validator type="el" message="validation-locale-invalid">
+					<param name="el" value="a.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
+				</validator>
+			</field>
+			<field name="name" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="50"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="value">
+				<editTag name="${tag.textarea}">
+					<param name="maxlength" value="5000"/>
+					<param name="cols" value="${tag.textarea.cols}"/>
+					<param name="rows" value="8"/>
+				</editTag>
+			</field>
+			<field name="memo">
+				<editTag name="${tag.textarea}">
+					<param name="maxlength" value="1000"/>
+					<param name="cols" value="${tag.textarea.cols}"/>
+					<param name="rows" value="5"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
+		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="@refresh %^print @^${pdf.action}:print list"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
+		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="list"/>
+			<param name="actions" value="*list"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Property">
+			<property name="clazz" label="Class"/>
+			<property name="language" label="Language"/>
+			<property name="country" label="Country"/>
+			<property name="name" label="Name"/>
+			<property name="value" label="Value"/>
+			<property name="memo" label="Memo"/>
+		</entity>
+		<action actionClass="${action.package}.property.PropertyAction" title="Property"/>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Property">
+			<property name="clazz" label="クラス名"/>
+			<property name="language" label="言語"/>
+			<property name="country" label="国・地域"/>
+			<property name="name" label="項目名"/>
+			<property name="value" label="内容"/>
+			<property name="memo" label="備考"/>
+		</entity>
+		<action actionClass="${action.package}.property.PropertyAction" title="プロパティ"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Property">
+			<property name="clazz" label="类名"/>
+			<property name="language" label="语言"/>
+			<property name="country" label="国家・地区"/>
+			<property name="name" label="项目名"/>
+			<property name="value" label="内容"/>
+			<property name="memo" label="备注"/>
+		</entity>
+		<action actionClass="${action.package}.property.PropertyAction" title="配置"/>
+	</resource>
+</module>

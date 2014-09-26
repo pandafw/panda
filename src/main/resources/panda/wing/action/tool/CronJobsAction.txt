@@ -1,0 +1,14 @@
+title=Cron Jobs
+
+label-no=No.
+label-url=URL
+label-description=Description
+label-schedule=Schedule
+label-result=Result
+
+button-start=Start
+button-stop=Stop
+button-start-all=Start All
+button-stop-all=Stop All
+
+

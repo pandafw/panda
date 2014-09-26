@@ -1,0 +1,15 @@
+title=Cronジョブ
+
+label-no=番号
+label-url=URL
+label-description=説明
+label-schedule=実行計画
+label-result=実行結果
+
+button-exec=実行
+button-start=開始
+button-stop=停止
+button-start-all=全開始
+button-stop-all=全停止
+
+

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.github.com/foolite/panda-repo/master/com/foolite/panda-tool/1.0.0/panda-codegen-module.xsd">
+	<include>codegen.properties</include>
+
+	<!-- action -->
+	<action name="baseAction" trimString="${action.trimString}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
+		<list name="baseList" cssColumn="status">
+			<param name="toolbar" value="@refresh"/>
+			<param name="actions" value="@insert copy update delete"/>
+			<param name="options" value="bdelete ^print:list_print ^csv:list_csv @^${pdf.action}:list_print"/>
+			<param name="buttons" value="*list"/>
+		</list>
+		
+		<list name="scuList" extend="baseList" cssColumn="status">
+			<column name="status" hidden="false" sortable="true" link="false" order="100100">
+				<format type="code">
+					<param name="codemap" value="consts.dataStatusMap"/>
+				</format>
+				<filter type="radio">
+					<param name="list" value="consts.dataStatusMap"/>
+				</filter>
+			</column>
+			<column name="cusid" hidden="false" sortable="true" link="false" order="100200">
+				<filter type="number"/>
+			</column>
+			<column name="ctime" hidden="false" sortable="true" link="false" order="100300">
+				<format type="datetime"/>
+				<filter type="datetime"/>
+			</column>
+			<column name="uusid" hidden="false" sortable="true" link="false" order="100400">
+				<filter type="number"/>
+			</column>
+			<column name="utime" hidden="false" sortable="true" link="false" order="100500">
+				<format type="datetime"/>
+				<filter type="datetime"/>
+			</column>
+		</list>
+		<list name="sPopup" cssColumn="status">
+			<column name="status" hidden="false" sortable="true" link="false" order="100100">
+				<format type="code">
+					<param name="codemap" value="consts.dataStatusMap"/>
+				</format>
+				<filter type="radio">
+					<param name="list" value="consts.dataStatusMap"/>
+				</filter>
+			</column>
+		</list>
+		<input name="baseInput" theme="${ui.input.theme}">
+			<param name="toolbar" value="%^print @^${pdf.action}:print *list"/>
+			<param name="actions" value="%update %copy insert %delete *list"/>
+		</input>
+		<input name="scuInput" extend="baseInput">
+			<field name="status" order="100100">
+				<editTag name="${tag.radio}">
+					<param name="emptyOption" value="true"/>
+					<param name="list" value="consts.dataStatusMap"/>
+				</editTag>
+			</field>
+			<field name="cusid" order="100200">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="cusnm" order="100300">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="ctime" order="100400">
+				<editTag name="${tag.viewfield}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+			<field name="uusid" order="100500">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="uusnm" order="100600">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="utime" order="100700">
+				<editTag name="${tag.viewfield}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+</module>

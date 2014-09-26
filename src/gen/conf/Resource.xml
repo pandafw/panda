@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.github.com/foolite/panda-repo/master/com/foolite/panda-tool/1.0.0/panda-codegen-module.xsd">
+	<include>codegen.xml</include>
+
+	<!-- entity -->
+	<entity name="${entity.package}.Resource" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
+		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
+		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="NLC" comment="class name">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="100"/>
+			</validator>
+		</property>
+		<property name="language" type="String" notNull="true" uniqueKey="NLC" comment="language code">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="2"/>
+			</validator>
+			<validator type="constant" message="validation-constant">
+				<param name="list" value="consts.localeLanguageMap"/>
+			</validator>
+		</property>
+		<property name="country" type="String" size="2" notNull="true" uniqueKey="NLC" comment="country code">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="2"/>
+			</validator>
+			<validator type="constant" message="validation-constant">
+				<param name="list" value="consts.localeCountryMap"/>
+			</validator>
+		</property>
+		<property name="source" type="String" size="50000" jdbcType="CLOB" setterTrim="" comment="resource source">
+			<validator type="stringlength" message="validation-stringlength">
+				<param name="maxLength" value="50000"/>
+			</validator>
+		</property>
+	</entity>
+
+	<!-- action -->
+	<action name="action.Resource" entity="${entity.package}.Resource" extend="baseAction">
+		<list name="basicList" extend="scuList">
+			<column name="id" hidden="false" sortable="true" link="true">
+				<filter type="number"/>
+			</column>
+			<column name="clazz" hidden="false" sortable="true" link="true">
+				<filter type="string"/>
+			</column>
+			<column name="language" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.localeLanguageMap"/>
+				</format>
+				<filter type="select">
+					<param name="list" value="consts.localeLanguageMap"/>
+				</filter>
+			</column>
+			<column name="country" hidden="false" sortable="true" link="false">
+				<format type="code">
+					<param name="codemap" value="consts.localeCountryMap"/>
+				</format>
+				<filter type="select">
+					<param name="list" value="consts.localeCountryMap"/>
+				</filter>
+			</column>
+			<column name="source" hidden="true" sortable="true" link="false">
+				<filter type="string"/>
+			</column>
+		</list>
+		<input name="basicInput" extend="scuInput">
+			<field name="id">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="clazz" required="true">
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="100"/>
+					<param name="size" value="${tag.textfield.size}"/>
+				</editTag>
+			</field>
+			<field name="language" required="true">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="consts.localeLanguageMap"/>
+				</editTag>
+			</field>
+			<field name="country" required="true">
+				<editTag name="${tag.select}">
+					<param name="emptyOption" value="false"/>
+					<param name="list" value="consts.localeCountryMap"/>
+				</editTag>
+				<validator type="fieldexpression" message="validation-locale-invalid">
+					<param name="expression" value="isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
+				</validator>
+			</field>
+			<field name="source">
+				<editTag name="${tag.textarea}">
+					<param name="maxlength" value="50000"/>
+					<param name="cols" value="${tag.textarea.cols}"/>
+					<param name="rows" value="20"/>
+				</editTag>
+			</field>
+		</input>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
+		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
+		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+		<input name="view" extend="basicInput" template="${template.view}" generate="true">
+			<param name="toolbar" value="@refresh %^print @^${pdf.action}:print list"/>
+		</input>
+		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
+		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
+		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
+		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
+			<param name="toolbar" value="list"/>
+			<param name="actions" value="*list"/>
+		</input>
+	</action>
+
+	<!-- resource -->
+	<resource>
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="Class"/>
+			<property name="language" label="Language"/>
+			<property name="country" label="Country"/>
+			<property name="source" label="Source"/>
+		</entity>
+		<action actionClass="${action.package}.resource.ResourceAction" title="Resource"/>
+	</resource>
+	<resource locale="ja">
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="クラス名"/>
+			<property name="language" label="言語"/>
+			<property name="country" label="国・地域"/>
+			<property name="source" label="内容"/>
+		</entity>
+		<action actionClass="${action.package}.resource.ResourceAction" title="リソース"/>
+	</resource>
+	<resource locale="zh">
+		<entity name="${entity.package}.Resource">
+			<property name="clazz" label="类名"/>
+			<property name="language" label="语言"/>
+			<property name="country" label="国家・地区"/>
+			<property name="source" label="内容"/>
+		</entity>
+		<action actionClass="${action.package}.resource.ResourceAction" title="资源"/>
+	</resource>
+</module>

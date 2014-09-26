@@ -1,0 +1,4 @@
+title=应用缓存管理
+
+resource=资源
+template=模板

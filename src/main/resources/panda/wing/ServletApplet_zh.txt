@@ -1,0 +1,78 @@
+#########################################################################
+# application resource
+#########################################################################
+#navigation
+navi-home=主页
+
+navi-search=检索
+navi-tag=标签
+navi-theme=主题
+navi-language=语言
+
+navi-help=帮助
+navi-help-contact=联系我们
+navi-help-privacy=个人隐私规约
+navi-help-termsofuse=使用条款
+navi-help-payment=付款方式
+navi-help-ship=关于送货
+
+navi-user=我的账户
+navi-user-register=会员注册
+navi-user-login=登入
+navi-user-logout=登出
+navi-user-signin=登入
+navi-user-signout=登出
+
+navi-user-account=姓名・邮件地址変更
+navi-user-passwordchange=密码变更
+navi-user-profile=用户信息变更
+
+
+navi-admin=管理中心
+navi-admin-account=账户
+navi-admin-account-user=用户
+navi-admin-account-usergroup=用户组
+
+navi-admin-site=网站管理
+navi-admin-site-category=类别
+navi-admin-site-index=检索索引
+
+navi-admin-system=系统管理
+navi-admin-system-memcache=应用缓存
+navi-admin-system-property=配置
+navi-admin-system-resource=资源
+navi-admin-system-template=模板
+navi-admin-system-cronjobs=Cron任务
+navi-admin-system-dataimp=数据汇入
+navi-admin-system-html2pdf=HTML⇒PDF打印
+navi-admin-system-ndfsfile=NDFS工具
+navi-admin-system-ognleval=OGNL工具
+navi-admin-system-sqlexec=SQL工具
+
+
+#reload
+message-category-reload=「类别」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「类别」。
+message-property-reload=「配置」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「配置」。
+message-resource-reload=「资源」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「资源」。
+message-template-reload=「模板」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「模板」。
+error-resource-reload=「资源」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「资源」。
+error-property-reload=「配置」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「配置」。
+error-template-reload=「模板」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「模板」。
+error-category-reload=「类别」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「类别」。
+
+#label
+label-page-size=显示件数：
+label-sort=排序：
+label-attachment=附件
+label-search-result="{0}"的检索结果
+
+#tip
+tip-access=围观
+tip-voteup=顶一下
+tip-votedn=踩一下
+tip-bookmark=书签
+
+#d.statusMap
+data-statusMap=\
+	"0": "有効", \
+	"X": "无効"

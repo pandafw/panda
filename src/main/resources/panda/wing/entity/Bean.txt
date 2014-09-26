@@ -1,0 +1,12 @@
+id=ID
+status=Status
+cusid=Create ID
+cusnm=Create User
+ctime=Create Date
+uusid=Update ID
+uusnm=Update User
+utime=Update Date
+
+statusMap=\
+	"0": "Enbaled", \
+	"X": "Disabled"

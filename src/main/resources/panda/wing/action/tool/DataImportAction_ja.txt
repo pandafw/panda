@@ -1,0 +1,13 @@
+title=データインポート
+
+target=インポート先
+file=データファイル
+deleteAll=既存データを削除する
+
+button-import=インポート
+
+success-import=テーブル[{0}]に{1}件のデータをインポートしました。
+
+error-value=[{0}]データ不正({1}, {2}): {3} - {4}
+
+error-file-format=CSVまたはXLSファイルを指定してください。

@@ -1,0 +1,46 @@
+package panda.wing.action;
+
+import panda.wing.mvc.AbstractDaoAction;
+
+/**
+ */
+public class BaseAction extends AbstractDaoAction {
+
+	/**
+	 * Constructor
+	 */
+	public BaseAction() {
+	}
+
+	/**
+	 * @return the assist
+	 */
+	protected BaseActionAssist assist() {
+		return (BaseActionAssist)super.getAssist();
+	}
+
+	/**
+	 * @return the consts
+	 */
+	protected BaseActionConsts consts() {
+		return (BaseActionConsts)super.getConsts();
+	}
+
+	/**
+	 * hasPermission
+	 * @param path path
+	 * @return true if action has access permit
+	 */
+	public boolean hasPermission(String path) {
+		return assist().hasPermission(path);
+	}
+
+	/**
+	 * hasPermission
+	 * @param path path
+	 * @return true if action has access permit
+	 */
+	public boolean hasDataPermission(Object data, String path) {
+		return assist().hasDataPermission(data, path);
+	}
+}

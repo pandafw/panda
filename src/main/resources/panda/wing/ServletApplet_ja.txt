@@ -1,0 +1,78 @@
+#########################################################################
+# application resource
+#########################################################################
+#navigation
+navi-home=ホーム
+
+navi-search=検索
+navi-tag=タグ
+navi-theme=テーマ
+navi-language=言語
+
+navi-help=ヘルプ
+navi-help-contact=問い合わせ
+navi-help-privacy=プライバシー規約
+navi-help-termsofuse=利用規約
+navi-help-payment=支払い方法
+navi-help-ship=配送について
+
+navi-user=アカウント
+navi-user-register=登録
+navi-user-login=ログイン
+navi-user-logout=ログアウト
+navi-user-signin=サインイン
+navi-user-signout=サインアウト
+
+navi-user-account=名前・メールアドレス変更
+navi-user-passwordchange=パスワード変更
+navi-user-profile=プロフィール作成・編集
+
+navi-admin=管理センター
+navi-admin-account=アカウント
+navi-admin-account-user=ユーザー
+navi-admin-account-usergroup=グループ
+
+navi-admin-site=サイト管理
+navi-admin-site-category=カテゴリ
+navi-admin-site-index=検索インデックス
+
+navi-admin-system=システム管理
+navi-admin-system-memcache=メモリキャッシュ
+navi-admin-system-property=プロパティ
+navi-admin-system-resource=リソース
+navi-admin-system-template=テンプレート
+navi-admin-system-cronjobs=Cronジョブ
+navi-admin-system-dataimp=データインポート
+navi-admin-system-html2pdf=HTML⇒PDF出力
+navi-admin-system-ndfsfile=NDFSツール
+navi-admin-system-ognleval=OGNLツール
+navi-admin-system-sqlexec=SQLツール
+
+
+#reload
+message-category-reload=「カテゴリ」のデータが変更されました。\n変更を有効するには、カテゴリを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+message-property-reload=「プロパティ」のデータが変更されました。\n変更を有効するには、プロパティを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+message-resource-reload=「リソース」のデータが変更されました。\n変更を有効するには、リソースを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+message-template-reload=「テンプレート」のデータが変更されました。\n変更を有効するには、テンプレートを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+error-category-reload=「カテゴリ」のリロードが失敗しました。\nエラー情報：{0}\nカテゴリを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+error-property-reload=「プロパティ」のリロードが失敗しました。\nエラー情報：{0}\nプロパティを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+error-resource-reload=「リソース」のリロードが失敗しました。\nエラー情報：{0}\nリソースを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+error-template-reload=「テンプレート」のリロードが失敗しました。\nエラー情報：{0}\nテンプレートを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+
+#label
+label-page-size=表示件数：
+label-sort=並び順：
+label-attachment=添付ファイル
+label-search-result="{0}"の検索結果
+
+#tip
+tip-access=表示回数
+tip-voteup=良い投票
+tip-votedn=悪い投票
+tip-bookmark=ブックマーク
+
+#d.statusMap
+data-statusMap=\
+	"0": "有効", \
+	"X": "無効"
+

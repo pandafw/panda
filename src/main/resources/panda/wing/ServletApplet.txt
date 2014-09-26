@@ -1,0 +1,82 @@
+#########################################################################
+# application resource
+#########################################################################
+#navigation
+navi-top=TOP
+navi-home=Home
+
+navi-search=Search
+navi-tag=Tag
+navi-theme=Theme
+navi-language=Languages
+
+navi-help=Help
+navi-help-contact=Contact
+navi-help-privacy=Privacy
+navi-help-termsofuse=Terms of use
+navi-help-payment=Payment
+navi-help-ship=Ship
+
+
+navi-user=My Account
+navi-user-register=Register
+navi-user-login=Login
+navi-user-logout=Logout
+navi-user-signin=Sign in
+navi-user-signout=Sign out
+
+navi-user-account=Account change
+navi-user-passwordchange=Password change
+navi-user-profile=Profile
+
+
+navi-admin=Administration
+navi-admin-account=Account
+navi-admin-account-user=User
+navi-admin-account-usergroup=User Group
+
+navi-admin-site=Site
+navi-admin-site-category=Category
+navi-admin-site-index=Search Index
+
+navi-admin-system=System
+navi-admin-system-memcache=Memcache
+navi-admin-system-property=Property
+navi-admin-system-resource=Resource
+navi-admin-system-template=Template
+navi-admin-system-cronjobs=Cron Jobs
+navi-admin-system-dataimp=Data Import
+navi-admin-system-html2pdf=HTML->PDF
+navi-admin-system-ndfsfile=NDFS Tool
+navi-admin-system-ognleval=OGNL Tool
+navi-admin-system-sqlexec=SQL Tool
+
+
+#reload
+message-category-reload=The category has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload category</a> to apply the changes.
+message-property-reload=The property has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload property</a> to apply the changes.
+message-resource-reload=The resource has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload resource</a> to apply the changes.
+message-template-reload=The template has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload template</a> to apply the changes.
+error-category-reload=Failed to load category.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload category</a>
+error-property-reload=Failed to load property.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload property</a>
+error-resource-reload=Failed to load resource.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload resource</a>
+error-template-reload=Failed to load template.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload template</a>
+
+#label
+label-page-size=Page Size:
+label-sort=Sort:
+label-attachment=Attachment
+label-search-result=Search result of "{0}"
+
+
+#tip
+tip-access=Access Count
+tip-voteup=Good
+tip-votedn=Bad
+tip-bookmark=Bookmark
+
+
+#d.statusMap
+data-statusMap=\
+	"0": "Enbaled", \
+	"X": "Disabled"
