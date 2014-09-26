@@ -6,18 +6,21 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.mvc.init.module.MainModule;
 import panda.mvc.processor.ViewProcessor;
 
-public class ViewProcessorTest extends AbstractMvcTest {
+public class ViewProcessorTest extends AbstractMvcTestCase {
 
 	@Test
 	public void test_error_processor() throws Throwable {
 		ViewProcessor p = new EViewProcessor();
 		ActionContext ac = new ActionContext();
-		ac.setRequest(request).setResponse(response).setServletContext(servletContext);
+		ac.setRequest(request);
+		ac.setResponse(response);
+		ac.setServlet(servletContext);
 		Throwable t = new Throwable();
 		ac.setError(t);
 		p.process(ac);
@@ -29,14 +32,14 @@ public class ViewProcessorTest extends AbstractMvcTest {
 
 	@Override
 	protected void initServletConfig() {
-		servletConfig.addInitParameter("modules", "org.nutz.mvc.init.module.MainModule");
+		servletConfig.addInitParameter("modules", MainModule.class.getName());
 	}
 
 }
 
 class VoidView implements View {
 
-	public void render(ActionContext ac, Object obj) throws Throwable {
+	public void render(ActionContext ac) throws Throwable {
 	}
 
 }

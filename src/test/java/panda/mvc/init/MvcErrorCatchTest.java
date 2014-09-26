@@ -2,7 +2,7 @@ package panda.mvc.init;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.LoadingException;
 import panda.mvc.init.errmodule.ErrorCatchMainModule;
 
@@ -10,7 +10,7 @@ public class MvcErrorCatchTest {
 
 	private void _mvc(final Class<?> mainModuleType) throws Throwable {
 		try {
-			(new AbstractMvcTest() {
+			(new AbstractMvcTestCase() {
 				protected void initServletConfig() {
 					servletConfig.addInitParameter("modules", mainModuleType.getName());
 				}

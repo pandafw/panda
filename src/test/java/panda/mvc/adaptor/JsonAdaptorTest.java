@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import panda.lang.Charsets;
 import panda.lang.Strings;
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.adaptor.meta.BaseModule;
 
-public class JsonAdaptorTest extends AbstractMvcTest {
+public class JsonAdaptorTest extends AbstractMvcTestCase {
 
 	@Override
 	protected void initServletConfig() {

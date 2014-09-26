@@ -2,26 +2,18 @@ package panda.mvc.view;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import panda.mvc.Mvcs;
 import panda.mvc.mock.Mock;
 import panda.mvc.mock.Mock.MockActionContext;
-import panda.mvc.view.JspView;
 
 public class JspViewTest {
-
-	@Before
-	public void before() {
-		Mvcs.setServletContext(Mock.servlet.context());
-	}
 
 	@Test
 	public void test_name() throws Exception {
 		MockActionContext ac = Mock.actionContext();
-		JspView fv = new JspView("abc.bcd");
-		fv.render(ac, null);
+		JspView fv = new JspView("abc/bcd");
+		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 
@@ -30,7 +22,7 @@ public class JspViewTest {
 		MockActionContext ac = Mock.actionContext();
 		ac.getMockRequest().setPathInfo("/abc/bcd.do");
 		JspView fv = new JspView(null);
-		fv.render(ac, null);
+		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 
@@ -39,7 +31,7 @@ public class JspViewTest {
 		MockActionContext ac = Mock.actionContext();
 		ac.getMockRequest().setPathInfo("/abc/bcd.do");
 		JspView fv = new JspView("");
-		fv.render(ac, null);
+		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 
@@ -48,7 +40,7 @@ public class JspViewTest {
 		MockActionContext ac = Mock.actionContext();
 		ac.getMockRequest().setPathInfo("/abc/bcd.do");
 		JspView fv = new JspView("  \r\n\t  ");
-		fv.render(ac, null);
+		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 
@@ -56,7 +48,7 @@ public class JspViewTest {
 	public void test_dest_path() throws Exception {
 		MockActionContext ac = Mock.actionContext();
 		JspView fv = new JspView("/abc/bcd.jsp");
-		fv.render(ac, null);
+		fv.render(ac);
 		assertEquals("/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
 	}
 }

@@ -21,7 +21,7 @@ public class AdaptorProcessor extends AbstractProcessor {
 
 	public void process(ActionContext ac) throws Throwable {
 		Object[] args = adaptor.adapt(ac);
-		ac.setArgumens(args);
+		ac.setArgs(args);
 		doNext(ac);
 	}
 }

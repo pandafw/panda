@@ -5,7 +5,6 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.meta.IocObject;
-import panda.lang.Strings;
 import panda.mvc.IocProvider;
 import panda.mvc.MvcConfig;
 import panda.mvc.annotation.At;
@@ -56,15 +55,11 @@ public class AnnotationIocProvider implements IocProvider {
 		}
 	}
 	
-	public Ioc create(MvcConfig config, Object... args) {
-		String[] pkgs;
+	public Ioc create(MvcConfig config, String... args) {
 		if (args == null || args.length == 0) {
-			pkgs = new String[] { config.getMainModule().getPackage().getName() };
+			args = new String[] { config.getMainModule().getPackage().getName() };
 		}
-		else {
-			pkgs = Strings.toStringArray(args);
-		}
-		return new MvcIoc(new MvcAnnotationIocLoader(pkgs));
+		return new MvcIoc(new MvcAnnotationIocLoader(args));
 	}
 
 }

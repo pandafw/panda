@@ -8,7 +8,7 @@ import panda.mvc.ioc.MvcIoc;
 
 public class ComboIocProvider implements IocProvider {
 
-	public Ioc create(MvcConfig config, Object ... args) {
+	public Ioc create(MvcConfig config, String ... args) {
 		return new MvcIoc(new ComboIocLoader(args));
 	}
 

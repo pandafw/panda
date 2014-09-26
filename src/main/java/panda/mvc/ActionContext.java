@@ -1,9 +1,9 @@
 package panda.mvc;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -11,216 +11,237 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.filepool.FilePool;
 import panda.ioc.Ioc;
+import panda.servlet.HttpSessionMap;
+import panda.servlet.ServletContextMap;
+import panda.servlet.ServletRequestMap;
 
-public class ActionContext extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
-
-	private static final String IOC = "ioc";
+public class ActionContext {
+	private Ioc ioc;
 	
-	private static final String PATH = "path";
-	private static final String PATH_ARGS = "pathArgs";
+	private String path;
+	private List<String> pathArgs;
 
-	private static final String REQUEST = "request";
-	private static final String RESPONSE = "response";
-	private static final String SERVLET = "servlet";
+	private HttpServletRequest request;
+	private HttpServletResponse response;
+	private ServletContext servlet;
 
-	private static final String ACTION = "action";
-	private static final String METHOD = "method";
-	private static final String ARGS = "args";
-	private static final String RESULT = "result";
+	private Object action;
+	private Method method;
+	private Object[] args;
+	private Object result;
+	private Locale locale;
 
-	private static final String LOCALE = "locale";
+	private Throwable error;
 
-	private static final String FILE_POOL = "filepool";
-	
-	private static final String ERROR = "error";
-
-	public ActionContext() {
-		
-	}
-	
 	/**
-	 * 获取全局的Ioc对象
-	 * 
-	 * @return 如果定义了IocBy注解,则肯定返回非空对象
+	 * Constructor
+	 */
+	public ActionContext() {
+	}
+
+	/**
+	 * @return the ioc
 	 */
 	public Ioc getIoc() {
-		return (Ioc)get(IOC);
-	}
-	
-	public ActionContext setIoc(Ioc ioc) {
-		put(IOC, ioc);
-		return this;
+		return ioc;
 	}
 
 	/**
-	 * 获取异常对象
+	 * @param ioc the ioc to set
 	 */
-	public Throwable getError() {
-		return (Throwable)get(ERROR);
+	protected void setIoc(Ioc ioc) {
+		this.ioc = ioc;
 	}
 
 	/**
-	 * 设置异常对象,一般由ActionChain捕捉到异常后调用
-	 * 
-	 * @param error 异常对象
-	 * @return 当前上下文,即被调用者本身
-	 */
-	public ActionContext setError(Throwable error) {
-		put(ERROR, error);
-		return this;
-	}
-
-	/**
-	 * 获取当前请求的path,经过去后缀处理
-	 * 
-	 * @return 当前请求的path,经过去后缀处理
+	 * @return the path
 	 */
 	public String getPath() {
-		return (String)get(PATH);
+		return path;
 	}
 
 	/**
-	 * 设置当前请求的path,经过去后缀处理
-	 * 
-	 * @param ph 请求的path,,经过去后缀处理
-	 * @return 当前上下文,即被调用者本身
+	 * @param path the path to set
 	 */
-	public ActionContext setPath(String ph) {
-		put(PATH, ph);
-		return this;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	/**
-	 * 获取路径参数
-	 * 
-	 * @return 路径参数
+	 * @return the pathArgs
 	 */
-	@SuppressWarnings("unchecked")
 	public List<String> getPathArgs() {
-		return (List)get(PATH_ARGS);
-	}
-
-	public ActionContext setPathArgs(List<String> args) {
-		put(PATH_ARGS, args);
-		return this;
+		return pathArgs;
 	}
 
 	/**
-	 * 获取这个Action对应的Method
+	 * @param pathArgs the pathArgs to set
 	 */
-	public Method getMethod() {
-		return (Method)get(METHOD);
+	public void setPathArgs(List<String> pathArgs) {
+		this.pathArgs = pathArgs;
 	}
 
 	/**
-	 * 设置这个Action对应的Method
-	 * 
-	 * @param m 这个Action对应的Method
-	 * @return 当前上下文,即被调用者本身
-	 */
-	public ActionContext setMethod(Method m) {
-		put(METHOD, m);
-		return this;
-	}
-
-	/**
-	 * 获取将要执行Method的对象
-	 * 
-	 * @return 执行对象,即模块类的实例
-	 */
-	public Object getAction() {
-		return get(ACTION);
-	}
-
-	public ActionContext setAction(Object obj) {
-		put(ACTION, obj);
-		return this;
-	}
-
-	/**
-	 * 获取将要执行Method的参数
-	 * 
-	 * @return method的参数
-	 */
-	public Object[] getArguments() {
-		return (Object[])get(ARGS);
-	}
-
-	public ActionContext setArgumens(Object[] args) {
-		put(ARGS, args);
-		return this;
-	}
-
-	/**
-	 * 获取method返回值
-	 */
-	public Object getResult() {
-		return this.get(RESULT);
-	}
-
-	public ActionContext setResult(Object re) {
-		put(RESULT, re);
-		return this;
-	}
-
-	/**
-	 * 获取请求的HttpServletRequest
-	 * 
-	 * @return 请求的HttpServletRequest
+	 * @return the request
 	 */
 	public HttpServletRequest getRequest() {
-		return (HttpServletRequest)get(REQUEST);
-	}
-
-	public ActionContext setRequest(HttpServletRequest req) {
-		put(REQUEST, req);
-		return this;
+		return request;
 	}
 
 	/**
-	 * 获取请求的HttpServletResponse
-	 * 
-	 * @return 请求的HttpServletResponse
+	 * @param request the request to set
+	 */
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	/**
+	 * @return the response
 	 */
 	public HttpServletResponse getResponse() {
-		return (HttpServletResponse)get(RESPONSE);
-	}
-
-	public ActionContext setResponse(HttpServletResponse resp) {
-		put(RESPONSE, resp);
-		return this;
+		return response;
 	}
 
 	/**
-	 * 获取ServletContext
-	 * 
-	 * @return ServletContext
+	 * @param response the response to set
+	 */
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
+
+	/**
+	 * @return the servlet
 	 */
 	public ServletContext getServlet() {
-		return (ServletContext)get(SERVLET);
+		return servlet;
 	}
 
-	public ActionContext setServletContext(ServletContext sc) {
-		put(SERVLET, sc);
-		return this;
+	/**
+	 * @param servlet the servlet to set
+	 */
+	public void setServlet(ServletContext servlet) {
+		this.servlet = servlet;
 	}
 
+	/**
+	 * @return the action
+	 */
+	public Object getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(Object action) {
+		this.action = action;
+	}
+
+	/**
+	 * @return the method
+	 */
+	public Method getMethod() {
+		return method;
+	}
+
+	/**
+	 * @param method the method to set
+	 */
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+
+	/**
+	 * @return the args
+	 */
+	public Object[] getArgs() {
+		return args;
+	}
+
+	/**
+	 * @param args the args to set
+	 */
+	public void setArgs(Object[] args) {
+		this.args = args;
+	}
+
+	/**
+	 * @return the result
+	 */
+	public Object getResult() {
+		return result;
+	}
+
+	/**
+	 * @param result the result to set
+	 */
+	public void setResult(Object result) {
+		this.result = result;
+	}
+
+	/**
+	 * @return the locale
+	 */
 	public Locale getLocale() {
-		return (Locale)get(LOCALE);
+		return locale;
 	}
 
-	public ActionContext setLocale(Locale locale) {
-		put(LOCALE, locale);
-		return this;
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 
+	/**
+	 * @return the error
+	 */
+	public Throwable getError() {
+		return error;
+	}
+
+	/**
+	 * @param error the error to set
+	 */
+	public void setError(Throwable error) {
+		this.error = error;
+	}
+
+	//----------------------------------------------------
+	/**
+	 * @return the filePool
+	 */
 	public FilePool getFilePool() {
-		return (FilePool)get(FILE_POOL);
+		return ioc.get(FilePool.class);
 	}
 
-	public ActionContext setFilePool(FilePool fp) {
-		put(FILE_POOL, fp);
-		return this;
+
+	/**
+	 * @return the request attributes map
+	 */
+	public Map<String, Object> getReq() {
+		return new ServletRequestMap(request);
+	}
+
+	/**
+	 * @return the session attributes map
+	 */
+	public Map<String, Object> getSes() {
+		return new HttpSessionMap(request);
+	}
+
+	/**
+	 * @return the servlet context attributes map
+	 */
+	public Map<String, Object> getApp() {
+		return new ServletContextMap(servlet);
+	}
+
+	/**
+	 * @return the result object
+	 * @see #getResult()
+	 */
+	public Object getObj() {
+		return getResult();
 	}
 }

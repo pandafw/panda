@@ -10,7 +10,7 @@ import panda.lang.Objects;
 
 /**
  */
-public class FileData implements Serializable {
+public class DaoFileData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*----------------------------------------------------------------------*
@@ -48,7 +48,7 @@ public class FileData implements Serializable {
 	/**
 	 * Constructor
 	 */
-	public FileData() {
+	public DaoFileData() {
 		super();
 	}
 
@@ -147,7 +147,7 @@ public class FileData implements Serializable {
 			return false;
 		}
 		
-		FileData rhs = (FileData)obj;
+		DaoFileData rhs = (DaoFileData)obj;
 		return Objects.equalsBuilder()
 				.append(fid, rhs.fid)
 				.append(bno, rhs.bno)

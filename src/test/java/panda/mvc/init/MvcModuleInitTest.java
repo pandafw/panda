@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.init.conf.MainModuleA;
 
-public class MvcModuleInitTest extends AbstractMvcTest {
+public class MvcModuleInitTest extends AbstractMvcTestCase {
 
 	protected void initServletConfig() {
 		servletConfig.addInitParameter("modules", MainModuleA.class.getName());

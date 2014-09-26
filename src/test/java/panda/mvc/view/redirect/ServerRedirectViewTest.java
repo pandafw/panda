@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 
-public class ServerRedirectViewTest extends AbstractMvcTest {
+public class ServerRedirectViewTest extends AbstractMvcTestCase {
 
 	@Override
 	protected void initServletConfig() {

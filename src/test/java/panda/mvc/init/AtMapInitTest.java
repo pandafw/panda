@@ -8,11 +8,11 @@ import javax.servlet.ServletException;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.config.AtMap;
 import panda.mvc.init.conf.MainModuleAtMap;
 
-public class AtMapInitTest extends AbstractMvcTest {
+public class AtMapInitTest extends AbstractMvcTestCase {
 
 	@Override
 	protected void initServletConfig() {

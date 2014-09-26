@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.init.conf.RestModule;
 
-public class RestModuleTest extends AbstractMvcTest {
+public class RestModuleTest extends AbstractMvcTestCase {
 
 	protected void initServletConfig() {
 		servletConfig.addInitParameter("modules", RestModule.class.getName());

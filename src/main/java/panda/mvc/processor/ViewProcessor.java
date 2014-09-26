@@ -27,10 +27,10 @@ public class ViewProcessor extends AbstractProcessor {
 	public void process(ActionContext ac) throws Throwable {
 		Object re = ac.getResult();
 		if (re instanceof View) {
-			((View)re).render(ac, null);
+			((View)re).render(ac);
 		}
 		else if (view != null) {
-			view.render(ac, re);
+			view.render(ac);
 		}
 		doNext(ac);
 	}

@@ -10,7 +10,5 @@ public interface FilePool {
 	
 	FileItem saveFile(FileItemStream fis, boolean temporary) throws IOException;
 
-	InputStream openFile(Long id) throws IOException;
-
-	InputStream openFile(FileItem fi) throws IOException;
+	FileItem findFile(Long id);
 }

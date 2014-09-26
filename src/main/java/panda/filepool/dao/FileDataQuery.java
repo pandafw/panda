@@ -6,12 +6,12 @@ import panda.dao.query.ObjectCondition;
 
 /**
  */
-public class FileDataQuery extends EntityQuery<FileData, FileDataQuery> {
+public class FileDataQuery extends EntityQuery<DaoFileData, FileDataQuery> {
 	/**
 	 * Constructor
 	 */
 	public FileDataQuery() {
-		super(FileData.class);
+		super(DaoFileData.class);
 	}
 
 	//----------------------------------------------------------------------
@@ -21,28 +21,28 @@ public class FileDataQuery extends EntityQuery<FileData, FileDataQuery> {
 	 * @return condition of fid
 	 */
 	public ComparableCondition<FileDataQuery, Long> fid() {
-		return new ComparableCondition<FileDataQuery, Long>(this, FileData.FID);
+		return new ComparableCondition<FileDataQuery, Long>(this, DaoFileData.FID);
 	}
 
 	/**
 	 * @return condition of bno
 	 */
 	public ComparableCondition<FileDataQuery, Integer> bno() {
-		return new ComparableCondition<FileDataQuery, Integer>(this, FileData.BNO);
+		return new ComparableCondition<FileDataQuery, Integer>(this, DaoFileData.BNO);
 	}
 
 	/**
 	 * @return condition of size
 	 */
 	public ComparableCondition<FileDataQuery, Integer> size() {
-		return new ComparableCondition<FileDataQuery, Integer>(this, FileData.SIZE);
+		return new ComparableCondition<FileDataQuery, Integer>(this, DaoFileData.SIZE);
 	}
 
 	/**
 	 * @return condition of data
 	 */
 	public ObjectCondition<FileDataQuery> data() {
-		return new ObjectCondition<FileDataQuery>(this, FileData.DATA);
+		return new ObjectCondition<FileDataQuery>(this, DaoFileData.DATA);
 	}
 }
 

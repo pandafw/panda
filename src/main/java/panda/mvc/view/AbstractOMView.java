@@ -248,7 +248,7 @@ public abstract class AbstractOMView implements View {
 		writer.flush();
 	}
 
-	public void render(ActionContext ac, Object obj) throws IOException {
+	public void render(ActionContext ac) throws IOException {
 		Object o = ac.getError();
 		if (o == null || !(o instanceof Throwable)) {
 			o = ac.getRequest().getAttribute("exception");
@@ -313,7 +313,7 @@ public abstract class AbstractOMView implements View {
 //		}
 
 		result.put("success", success);
-		result.put("result", obj);
+		result.put("result", ac.getResult());
 
 		if (properties != null) {
 			Ioc ioc = ac.getIoc();

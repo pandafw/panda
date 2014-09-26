@@ -63,9 +63,10 @@ public class RawView implements View {
 		this.contentType = Strings.defaultString(contentTypeMap.get(contentType.toLowerCase()), contentType);
 	}
 
-	public void render(ActionContext ac, Object obj) throws Throwable {
+	public void render(ActionContext ac) throws Throwable {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
+		Object obj = ac.getResult();
 
 		// 如果用户自行设置了,那就不要再设置了!
 		if (res.getContentType() == null) {

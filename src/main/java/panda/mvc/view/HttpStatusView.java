@@ -56,7 +56,8 @@ public class HttpStatusView implements View {
 		this.statusCode = statusCode;
 	}
 
-	public void render(ActionContext ac, Object obj) {
+	public void render(ActionContext ac) {
+		Object obj = ac.getResult();
 		HttpServletResponse res = ac.getResponse();
 
 		int code = this.statusCode;

@@ -23,11 +23,11 @@ public class ServerRedirectView extends AbstractPathView {
 		super(dest);
 	}
 
-	public void render(ActionContext ac, Object obj) throws Exception {
+	public void render(ActionContext ac) throws Exception {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
 
-		String path = evalPath(ac, obj);
+		String path = evalPath(ac);
 
 		// This site
 		if (path.startsWith("//")) {

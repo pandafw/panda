@@ -44,10 +44,10 @@ public class ActionHandler {
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
 		ActionContext ac = new ActionContext();
 		ac.setIoc(config.getIoc());
-		ac.setServletContext(config.getServletContext());
+		ac.setServlet(config.getServletContext());
 		ac.setRequest(req);
 		ac.setResponse(res);
-		ac.setFilePool(Mvcs.getFilePool());
+		req.setAttribute(ActionContext.class.getName(), ac);
 
 		ActionInvoker invoker = mapping.get(ac);
 		if (null == invoker) {

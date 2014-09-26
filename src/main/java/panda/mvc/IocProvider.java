@@ -12,6 +12,6 @@ import panda.ioc.Ioc;
  */
 public interface IocProvider {
 
-	Ioc create(MvcConfig config, Object... args);
+	Ioc create(MvcConfig config, String... args);
 
 }

@@ -31,10 +31,10 @@ public class ForwardView extends AbstractPathView {
 		super(dest == null ? null : dest.replace('\\', '/'));
 	}
 
-	public void render(ActionContext ac, Object obj) throws Exception {
+	public void render(ActionContext ac) throws Exception {
 		HttpServletRequest req = ac.getRequest();
 
-		String path = evalPath(ac, obj);
+		String path = evalPath(ac);
 		String args = "";
 		if (path != null) {
 			int q = path.indexOf("?");

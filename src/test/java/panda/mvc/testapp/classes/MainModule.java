@@ -2,7 +2,6 @@ package panda.mvc.testapp.classes;
 
 import panda.mvc.annotation.Fail;
 import panda.mvc.annotation.IocBy;
-import panda.mvc.annotation.Localization;
 import panda.mvc.annotation.Modules;
 import panda.mvc.annotation.Ok;
 import panda.mvc.ioc.provider.ComboIocProvider;
@@ -11,9 +10,8 @@ import panda.mvc.ioc.provider.ComboIocProvider;
 @Ok("json")
 @Fail("json")
 @IocBy(type=ComboIocProvider.class,
-        args={"*org.nutz.ioc.loader.json.JsonLoader","org/nutz/mvc/testapp/classes/ioc",
-              "*org.nutz.ioc.loader.annotation.AnnotationIocLoader","org.nutz.mvc.testapp.classes"})
-@Localization("org/nutz/mvc/testapp/classes/message/")
+        args={"*panda.ioc.loader.JsonIocLoader","panda/mvc/testapp/classes/ioc",
+              "*panda.ioc.loader.AnnotationIocLoader","panda.mvc.testapp.classes"})
 public class MainModule {
 
 }

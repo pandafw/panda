@@ -1,6 +1,5 @@
 package panda.filepool.dao;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,7 +17,10 @@ import panda.mvc.adaptor.multipart.FileItemStream;
 
 @IocBean(type=FilePool.class)
 public class DaoFilePool implements FilePool {
+	@IocInject
 	protected DaoClient daoClient;
+
+	@IocInject("ref:filepool.data.blocksize")
 	protected int blockSize = Integer.MAX_VALUE;
 
 	/**
@@ -31,7 +33,6 @@ public class DaoFilePool implements FilePool {
 	/**
 	 * @param daoClient the daoClient to set
 	 */
-	@IocInject
 	public void setDaoClient(DaoClient daoClient) {
 		this.daoClient = daoClient;
 	}
@@ -51,11 +52,14 @@ public class DaoFilePool implements FilePool {
 	}
 
 	public FileItem saveFile(String name, final InputStream body, boolean temporary) throws IOException {
-		final FileItem fi = new FileItem();
+		final DaoFileItem fi = new DaoFileItem();
 		
+		final byte[] data = Streams.toByteArray(body);
+		
+		fi.setDaoFilePool(this);
 		fi.setName(name);
 		fi.setDate(DateTimes.getDate());
-		fi.setData(Streams.toByteArray(body));
+		fi.setData(data);
 		fi.setFlag(temporary ? FileItem.TEMPORARY : FileItem.ARCHIVE);
 		
 		final Dao dao = getDaoClient().getDao();
@@ -63,9 +67,9 @@ public class DaoFilePool implements FilePool {
 			public void run() {
 				dao.insert(fi);
 
-				int len = fi.getData().length;
+				int len = data.length;
 				for (int i = 0; i < len; i += blockSize) {
-					FileData fd = new FileData();
+					DaoFileData fd = new DaoFileData();
 					fd.setFid(fi.getId());
 					fd.setBno(i);
 					int bs = blockSize;
@@ -74,7 +78,7 @@ public class DaoFilePool implements FilePool {
 					}
 
 					byte[] buf = new byte[bs];
-					System.arraycopy(fi.getData(), i, buf, 0, bs);
+					System.arraycopy(data, i, buf, 0, bs);
 
 					fd.setSize(bs);
 					fd.setData(buf);
@@ -91,32 +95,34 @@ public class DaoFilePool implements FilePool {
 		return saveFile(name, fis.openStream(), temporary);
 	}
 
-	public InputStream openFile(Long id) throws IOException {
+	public FileItem findFile(Long id) {
 		Dao dao = getDaoClient().getDao();
-		FileItem fi = dao.fetch(FileItem.class, id);
-		return openFile(fi);
+		DaoFileItem fi = dao.fetch(DaoFileItem.class, id);
+		return fi;
 	}
 	
-	public InputStream openFile(FileItem fi) throws IOException {
+	protected byte[] readFile(DaoFileItem fi) {
 		final byte[] buf = new byte[fi.getSize()];
 
-		Dao dao = getDaoClient().getDao();
-		FileDataQuery fdq = new FileDataQuery();
-		
-		fdq.fid().equalTo(fi.getId()).bno().asc();
-		
-		dao.select(fdq, new DataHandler<FileData>() {
-			private int len = 0;
-
-			public boolean handle(FileData data) throws Exception {
-				System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
-				len += data.getData().length;
-				return true;
-			}
-		});
+		if (fi.getSize() > 0) {
+			Dao dao = getDaoClient().getDao();
+			FileDataQuery fdq = new FileDataQuery();
+			
+			fdq.fid().equalTo(fi.getId()).bno().asc();
+			
+			dao.select(fdq, new DataHandler<DaoFileData>() {
+				private int len = 0;
+	
+				public boolean handle(DaoFileData data) throws Exception {
+					System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
+					len += data.getData().length;
+					return true;
+				}
+			});
+		}
 		
 		fi.setData(buf);
 		
-		return new ByteArrayInputStream(buf);
+		return buf;
 	}
 }

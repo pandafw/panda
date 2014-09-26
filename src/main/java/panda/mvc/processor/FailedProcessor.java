@@ -33,7 +33,7 @@ public class FailedProcessor extends ViewProcessor {
 				log.warn(String.format("Error@[ %s ]:", uri), e);
 			}
 
-			view.render(ac, e);
+			view.render(ac);
 		}
 	}
 }

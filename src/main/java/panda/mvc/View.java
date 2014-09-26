@@ -13,6 +13,6 @@ public interface View {
 	public static final String ATTR_PATHARGS = "path";
 	public static final String ATTR_ARGUMENTS = "args";
 
-	void render(ActionContext ac, Object obj) throws Throwable;
+	void render(ActionContext ac) throws Throwable;
 
 }

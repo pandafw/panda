@@ -117,7 +117,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	private boolean secure = false;
 
-	private final ServletContext servletContext;
+	private final MockServletContext servletContext;
 
 	private int remotePort = DEFAULT_SERVER_PORT;
 
@@ -199,7 +199,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * <code>null</code> to use a default MockServletContext)
 	 * @see MockServletContext
 	 */
-	public MockHttpServletRequest(ServletContext servletContext) {
+	public MockHttpServletRequest(MockServletContext servletContext) {
 		this(servletContext, "", "");
 	}
 
@@ -213,13 +213,21 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * @see #setRequestURI
 	 * @see MockServletContext
 	 */
-	public MockHttpServletRequest(ServletContext servletContext, String method, String requestURI) {
+	public MockHttpServletRequest(MockServletContext servletContext, String method, String requestURI) {
 		this.servletContext = (servletContext != null ? servletContext : new MockServletContext());
 		this.method = method;
 		this.requestURI = requestURI;
 		this.locales.add(Locale.ENGLISH);
 	}
 
+
+	/**
+	 * Return the ServletContext that this request is associated with. (Not
+	 * available in the standard HttpServletRequest interface for some reason.)
+	 */
+	public MockServletContext getMockServletContext() {
+		return this.servletContext;
+	}
 
 	// ---------------------------------------------------------------------
 	// Lifecycle methods

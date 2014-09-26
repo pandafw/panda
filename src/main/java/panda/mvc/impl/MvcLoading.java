@@ -274,7 +274,7 @@ public class MvcLoading implements Loading {
 			log.debugf("@IocBy(type=%s, args=%s)", ib.type().getName(), Jsons.toJson(ib.args()));
 		}
 		
-		Ioc ioc = Classes.born(ib.type()).create(config, (Object[])ib.args());
+		Ioc ioc = Classes.born(ib.type()).create(config, ib.args());
 		if (ioc instanceof DefaultIoc) {
 			((DefaultIoc)ioc).addValueProxyMaker(new ServletValueProxyMaker(config.getServletContext()));
 		}

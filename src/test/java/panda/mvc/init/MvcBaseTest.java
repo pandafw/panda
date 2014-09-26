@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import panda.mvc.AbstractMvcTest;
+import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.RequestPath;
 import panda.mvc.init.module.MainModule;
 
-public class MvcBaseTest extends AbstractMvcTest {
+public class MvcBaseTest extends AbstractMvcTestCase {
 
 	@Override
 	protected void initServletConfig() {
