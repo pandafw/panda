@@ -1356,10 +1356,11 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static Object newInstance(String className, Object argValue)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException,
-			ClassNotFoundException {
+			ClassNotFoundException, NoSuchMethodException {
 		return newInstance(getClass(className), new Object[] { argValue }, toClass(argValue));
 	}
 
@@ -1373,10 +1374,11 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static Object newInstance(String className, Object argValue, Class<?> argType)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException,
-			ClassNotFoundException {
+			ClassNotFoundException, NoSuchMethodException {
 		return newInstance(getClass(className), new Object[] { argValue }, new Class<?>[] { argType });
 	}
 
@@ -1389,10 +1391,11 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static Object newInstance(String className, Object[] argValues)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException,
-			ClassNotFoundException {
+			ClassNotFoundException, NoSuchMethodException {
 		Class<?>[] argTypes = toClass(argValues);
 		return newInstance(getClass(className), argValues, argTypes);
 	}
@@ -1407,10 +1410,11 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static Object newInstance(String className, Object[] argValues, Class<?>[] argTypes)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException,
-			ClassNotFoundException {
+			ClassNotFoundException, NoSuchMethodException {
 		return newInstance(getClass(className), argValues, argTypes);
 	}
 
@@ -1422,9 +1426,10 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static <T> T newInstance(Class<T> cls, Object argValue)
-		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		return newInstance(cls, new Object[] { argValue }, toClass(argValue));
 	}
 
@@ -1437,9 +1442,10 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 */
 	public static <T> T newInstance(Class<T> cls, Object argValue, Class<?> argType)
-		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		return newInstance(cls, new Object[] { argValue }, new Class<?>[] { argType });
 	}
 
@@ -1452,10 +1458,11 @@ public abstract class Classes {
 	 * @throws InstantiationException if InstantiationException occurs 
 	 * @throws IllegalAccessException if IllegalAccessException occurs 
 	 * @throws InvocationTargetException if InvocationTargetException occurs
+	 * @throws NoSuchMethodException if Constructor does not exist
 	 * @see Constructors#invokeConstructor(Class, Class[], Object[])
 	 */
 	public static <T> T newInstance(Class<T> cls, Object[] argValues, Class<?>[] argTypes)
-		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		return Constructors.invokeConstructor(cls, argTypes, argValues);
 	}
 
@@ -1611,22 +1618,8 @@ public abstract class Classes {
 			throw Exceptions.wrapThrow(e);
 		}
 	}
-	////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Returns a {@link Constructor} for the given method signature, or <tt>null</tt>
-	 * if no such <tt>Constructor</tt> can be found.
-	 *
-	 * @param cls     the (non-<tt>null</tt>) type of {@link Object} the returned {@link Constructor} should create
-	 * @param argTypes a non-<tt>null</tt> array of types describing the parameters to the {@link Constructor}.
-	 * @return a {@link Constructor} for the given method signature, or <tt>null</tt>
-	 *         if no such <tt>Constructor</tt> can be found.
-	 * @see Constructors#getConstructor(Class, Class[])
-	 */
-	public static <T> Constructor<T> getConstructor(Class<T> cls, Class<?>[] argTypes) {
-		return Constructors.getConstructor(cls, argTypes);
-	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Override the thread context ClassLoader with the environment's bean ClassLoader
 	 * if necessary, i.e. if the bean ClassLoader is not equivalent to the thread

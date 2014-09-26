@@ -38,6 +38,23 @@ public class ComboIocLoader implements IocLoader {
 	 * <p/>
 	 * Example:
 	 * <p/>
+	 * <pre>{ 
+	 *   "*panda.ioc.loader.JsonIocLoader",
+	 *   "dao.js",
+	 *   "service.js", 
+	 *   "*panda.ioc.loader.XmlIocLoader",
+	 *   "config.xml"
+	 * }</code>
+	 * <p/>
+	 */
+	public ComboIocLoader(String ... args) {
+		this((Object[])args);
+	}
+	
+	/**
+	 * <p/>
+	 * Example:
+	 * <p/>
 	 * <code>{ JsonIocLoader.class,"dao.js","service.js", XmlIocLoader.class,"config.xml"}</code>
 	 * <p/>
 	 */
@@ -83,7 +100,7 @@ public class ComboIocLoader implements IocLoader {
 	@SuppressWarnings("unchecked")
 	private void createIocLoader(Class cls, List<String> args) {
 		Class<? extends IocLoader> klass = (Class<? extends IocLoader>)cls;
-		iocLoaders.add(Classes.born(klass, args.toArray(new Object[args.size()])));
+		iocLoaders.add(Classes.born(klass, args.toArray(new String[args.size()])));
 	}
 
 	private Class getLoaderClass(String className) {

@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import panda.lang.Classes;
+import panda.lang.Strings;
 
 /**
  * Miscellaneous {@link Constructor} related utility functions.
@@ -115,9 +116,14 @@ public class Constructors {
 	 * @exception InstantiationException if an error occurs
 	 * @exception IllegalAccessException if an error occurs
 	 * @exception InvocationTargetException if an error occurs
+	 * @exception NoSuchMethodException if an Constructor does not exists
 	 */
 	public static <T> T invokeConstructor(Class<T> type, Class<?>[] argTypes, Object[] argValues)
-			throws InstantiationException, IllegalAccessException, InvocationTargetException {
-		return Constructors.getConstructor(type, argTypes).newInstance(argValues);
+			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		Constructor<T> c = Constructors.getConstructor(type, argTypes);
+		if (c == null) {
+			throw new NoSuchMethodException("Failed to find constructor for " + type + '(' + Strings.join(argTypes, ", ") + ')');
+		}
+		return c.newInstance(argValues);
 	}
 }

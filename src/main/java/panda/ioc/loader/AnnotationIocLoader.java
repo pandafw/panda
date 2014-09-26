@@ -32,9 +32,9 @@ public class AnnotationIocLoader implements IocLoader {
 	private HashMap<String, IocObject> map = new HashMap<String, IocObject>();
 
 	public AnnotationIocLoader(String... packages) {
-		for (String packageZ : packages) {
-			for (Class<?> classZ : Classes.scan(packageZ)) {
-				addClass(classZ);
+		for (String pkg : packages) {
+			for (Class<?> cls : Classes.scan(pkg)) {
+				addClass(cls);
 			}
 		}
 		
