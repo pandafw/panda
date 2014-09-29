@@ -34,4 +34,9 @@ public @interface IocInject {
 	 * @return Bean type
 	 */
 	Class<?> type() default Object.class;
+
+	/**
+	 * @return required or not
+	 */
+	boolean required() default true;
 }

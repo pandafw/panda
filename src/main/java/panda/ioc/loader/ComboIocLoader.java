@@ -9,7 +9,7 @@ import java.util.Set;
 
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
@@ -143,7 +143,7 @@ public class ComboIocLoader implements IocLoader {
 		return false;
 	}
 
-	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
+	public IocObject load(IocLoading loading, String name) throws IocLoadException {
 		for (IocLoader iocLoader : iocLoaders) {
 			if (iocLoader.has(name)) {
 				IocObject iocObject = iocLoader.load(loading, name);
@@ -154,7 +154,7 @@ public class ComboIocLoader implements IocLoader {
 				return iocObject;
 			}
 		}
-		throw new ObjectLoadException("Object '" + name + "' without define!");
+		return null;
 	}
 
 	public String toString() {

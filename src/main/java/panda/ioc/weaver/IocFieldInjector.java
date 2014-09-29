@@ -52,9 +52,13 @@ public class IocFieldInjector {
 	private IocFieldInjector() {
 	}
 
-	void inject(IocMaking ing, Object obj) {
+	public void inject(IocMaking ing, Object obj) {
 		Object value = proxy.get(ing);
-		if (value != null && !Types.isAssignable(value.getClass(), type, false)) {
+		if (value == ValueProxy.UNDEFINED) {
+			return;
+		}
+		
+		if (value == null || !Types.isAssignable(value.getClass(), type, false)) {
 			value = Castors.i().cast(value, type);
 		}
 		injector.inject(obj, value);

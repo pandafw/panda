@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.el.El;
+import panda.el.Evaluator;
 import panda.io.Streams;
 import panda.io.stream.CsvReader;
 import panda.io.stream.CsvWriter;
@@ -501,6 +503,33 @@ public abstract class Texts {
 	}
 
 	// -----------------------------------------------------------------------
+	public static class BeanEvaluator implements Evaluator {
+		private Object context;
+		private BeanHandler beanh;
+		
+		public BeanEvaluator(Object context) {
+			this.context = context;
+			this.beanh = Beans.i().getBeanHandler(context.getClass());
+		}
+		
+		@SuppressWarnings("unchecked")
+		public Object evaluate(String expression) {
+			return beanh.getBeanValue(context, expression);
+		}
+	}
+
+	public static class ElEvaluator implements Evaluator {
+		private Object context;
+		
+		public ElEvaluator(Object context) {
+			this.context = context;
+		}
+		
+		public Object evaluate(String expression) {
+			return El.eval(context, expression);
+		}
+	}
+	
 	/**
 	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
 	 * 
@@ -522,7 +551,41 @@ public abstract class Texts {
 	 * @return translated string
 	 */
 	public static String translate(String expression, Object wrapper, char prefix) {
-		return translate(expression, wrapper, prefix, '{', '}');
+		if (Strings.isEmpty(expression) || wrapper == null) {
+			return expression;
+		}
+		
+		Evaluator eva = new BeanEvaluator(wrapper);
+		return translate(expression, eva, prefix, '{', '}');
+	}
+
+	
+	/**
+	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
+	 * 
+	 * @param expression expression
+	 * @param wrapper object wrapper
+	 * @return translated string
+	 */
+	public static String elTranslate(String expression, Object wrapper) {
+		return elTranslate(expression, wrapper, '$');
+	}
+	
+	/**
+	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
+	 * 
+	 * @param expression expression 
+	 * @param wrapper object wrapper
+	 * @param prefix prefix char 
+	 * @return translated string
+	 */
+	public static String elTranslate(String expression, Object wrapper, char prefix) {
+		if (Strings.isEmpty(expression) || wrapper == null) {
+			return expression;
+		}
+		
+		Evaluator eva = new ElEvaluator(wrapper);
+		return translate(expression, eva, prefix, '{', '}');
 	}
 
 	/**
@@ -532,18 +595,15 @@ public abstract class Texts {
 	 * @param open open char ( or {
 	 * @param close close char ) or } 
 	 * @param expression expression string
-	 * @param wrapper object wrapper
+	 * @param eval object evaluator
 	 * @return translated string
 	 */
-	@SuppressWarnings("unchecked")
-	public static String translate(String expression, Object wrapper, char prefix, char open, char close) {
-		if (Strings.isEmpty(expression) || wrapper == null) {
+	public static String translate(String expression, Evaluator eval, char prefix, char open, char close) {
+		if (Strings.isEmpty(expression) || eval == null) {
 			return expression;
 		}
 		
-		BeanHandler bh = Beans.i().getBeanHandler(wrapper.getClass());
 		StringBuilder sb = new StringBuilder();
-		
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
 			if (c == prefix && i < expression.length() - 1 && expression.charAt(i + 1) == open) {
@@ -562,7 +622,7 @@ public abstract class Texts {
 					throw new IllegalArgumentException("Illegal statement (" + i + "): the paramenter can not be empty.");
 				}
 				
-				Object v = bh.getBeanValue(wrapper, pn);
+				Object v = eval.evaluate(pn);
 				if (v == null) {
 					sb.append(prefix);
 					sb.append(open);

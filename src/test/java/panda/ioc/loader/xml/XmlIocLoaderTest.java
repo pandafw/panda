@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocLoader;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.XmlIocLoader;
 import panda.ioc.loader.xml.meta.Bee;
@@ -26,7 +26,7 @@ public class XmlIocLoaderTest {
 	}
 
 	@Test
-	public void testXmlIocLoader() throws ObjectLoadException {
+	public void testXmlIocLoader() throws IocLoadException {
 		IocLoader iocLoader = getNew("conf/offered.xml");
 		assertTrue(iocLoader.getName() != null);
 		assertTrue(iocLoader.getName().length > 0);

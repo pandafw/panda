@@ -14,9 +14,9 @@ public interface IocLoader {
 	 * 
 	 * @param name
 	 * @return IocObject
-	 * @throws ObjectLoadException
+	 * @throws IocLoadException
 	 */
-	IocObject load(IocLoading loading, String name) throws ObjectLoadException;
+	IocObject load(IocLoading loading, String name) throws IocLoadException;
 
 	/**
 	 * @param name

@@ -12,7 +12,6 @@ import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -2389,10 +2388,14 @@ public abstract class Classes {
 		}
 
 		final Log log = Logs.getLog(Classes.class);
-		
+
 		List<Class<?>> clss = new ArrayList<Class<?>>();
-		URL[] urls = ((URLClassLoader)ClassLoaders.getClassLoader()).getURLs();
+
+		Set<URL> urls = ClassLoaders.getAllClassLoaderURLs();
 		for (URL url : urls) {
+			if (log.isDebugEnabled()) {
+				log.debug("Scan " + url);
+			}
 			if (url.getFile().endsWith("jar")) {
 				ZipInputStream zis = null;
 				try {

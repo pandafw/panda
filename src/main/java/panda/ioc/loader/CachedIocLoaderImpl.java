@@ -5,7 +5,7 @@ import java.util.Map;
 
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocObject;
 
 /**
@@ -40,14 +40,16 @@ public class CachedIocLoaderImpl implements CachedIocLoader {
 		return proxyIocLoader.has(name);
 	}
 
-	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
+	public IocObject load(IocLoading loading, String name) throws IocLoadException {
 		IocObject iocObject = map.get(name);
 		if (iocObject == null) {
 			iocObject = proxyIocLoader.load(loading, name);
-			if (iocObject == null)
+			if (iocObject == null) {
 				return null;
-			if (iocObject.isSingleton() && iocObject.getType() != null)
+			}
+			if (iocObject.isSingleton() && iocObject.getType() != null) {
 				map.put(name, iocObject);
+			}
 		}
 		return iocObject;
 	}

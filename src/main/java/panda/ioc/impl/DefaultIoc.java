@@ -10,6 +10,7 @@ import panda.ioc.IocException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
 import panda.ioc.IocMaking;
+import panda.ioc.IocLoadException;
 import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
 import panda.ioc.Scope;
@@ -157,7 +158,7 @@ public class DefaultIoc implements Ioc {
 										iocBeanName);
 								}
 							}
-							throw new IocException("Undefined object '%s'", name);
+							throw new IocLoadException("Undefined object '" + name + "'");
 						}
 
 						// 修正对象类型
@@ -201,6 +202,16 @@ public class DefaultIoc implements Ioc {
 	}
 
 	public boolean has(String name) {
+		// 创建对象创建时
+		IocMaking imk = makeIocMaking(context, name);
+		IocContext ictx = imk.getContext();
+
+		// 从上下文缓存中获取对象代理
+		ObjectProxy op = ictx.fetch(name);
+		if (op != null) {
+			return true;
+		}
+
 		return loader.has(name);
 	}
 

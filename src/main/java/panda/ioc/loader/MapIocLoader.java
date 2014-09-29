@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import panda.bind.json.Jsons;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocObject;
 import panda.lang.Exceptions;
 import panda.log.Log;
@@ -53,12 +53,12 @@ public class MapIocLoader implements IocLoader {
 	}
 
 	/**
-	 * {@link ObjectLoadException}
+	 * {@link IocLoadException}
 	 */
-	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
+	public IocObject load(IocLoading loading, String name) throws IocLoadException {
 		Map<String, Object> m = getMap(name);
 		if (null == m) {
-			throw new ObjectLoadException("Object '" + name + "' without define!");
+			return null;
 		}
 		
 		if (log.isDebugEnabled()) {
@@ -91,10 +91,10 @@ public class MapIocLoader implements IocLoader {
 	 * 检查继承关系,如果发现循环继承,或其他错误的继承关系,则抛出ObjectLoadException
 	 * 
 	 * @param name beanId
-	 * @throws ObjectLoadException if Inheritance errors or Inheritance cycle founded.
+	 * @throws IocLoadException if Inheritance errors or Inheritance cycle founded.
 	 */
 	@SuppressWarnings("unchecked")
-	private void checkParents(String name) throws ObjectLoadException {
+	private void checkParents(String name) throws IocLoadException {
 		ArrayList<String> list = new ArrayList<String>();
 		list.add(name);
 		String currentParent = map.get(name).get("parent").toString();
@@ -104,7 +104,7 @@ public class MapIocLoader implements IocLoader {
 			}
 			
 			if (list.contains(currentParent)) {
-				throw Exceptions.makeThrow(ObjectLoadException.class, "!!!Inheritance cycle! id = %s", name);
+				throw Exceptions.makeThrow(IocLoadException.class, "!!!Inheritance cycle! id = %s", name);
 			}
 			
 			list.add(currentParent);
@@ -113,7 +113,7 @@ public class MapIocLoader implements IocLoader {
 				currentParent = (String)((Map<String, Object>)obj).get("parent");
 			}
 			else {
-				throw Exceptions.makeThrow(ObjectLoadException.class, "!!!Inheritance errors! id = %s", name);
+				throw Exceptions.makeThrow(IocLoadException.class, "!!!Inheritance errors! id = %s", name);
 			}
 		}
 	}

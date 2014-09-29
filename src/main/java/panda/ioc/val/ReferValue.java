@@ -1,5 +1,6 @@
 package panda.ioc.val;
 
+import panda.ioc.Ioc;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Classes;
@@ -7,9 +8,9 @@ import panda.lang.Strings;
 import panda.util.Pair;
 
 public class ReferValue implements ValueProxy {
-
 	private String name;
 	private Class<?> type;
+	private boolean required = true;
 
 	public static Pair<Class<?>> parseName(String name) {
 		String _name = null;
@@ -26,10 +27,11 @@ public class ReferValue implements ValueProxy {
 		return new Pair<Class<?>>(_name, type);
 	}
 
-	public ReferValue(String name) {
+	public ReferValue(String name, boolean required) {
 		Pair<Class<?>> p = parseName(name);
 		this.name = p.getName();
 		this.type = p.getValue();
+		this.required = required;
 	}
 
 	public ReferValue(Class<?> type) {
@@ -37,7 +39,16 @@ public class ReferValue implements ValueProxy {
 	}
 
 	public Object get(IocMaking ing) {
-		return ing.getIoc().get(type, name, ing.getContext());
+		Ioc ioc = ing.getIoc();
+		if (required) {
+			return ioc.get(type, name, ing.getContext());
+		}
+		
+		if (ioc.has(name)) {
+			return ioc.get(type, name, ing.getContext());
+		}
+		
+		return UNDEFINED;
 	}
 
 }

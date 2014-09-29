@@ -46,8 +46,8 @@ public class IocLoading {
 		this.supportedTypes = supportedTypes;
 	}
 
-	private static ObjectLoadException E(Throwable e, String fmt, Object... args) {
-		return new ObjectLoadException(String.format(fmt, args), e);
+	private static IocLoadException E(Throwable e, String fmt, Object... args) {
+		return new IocLoadException(String.format(fmt, args), e);
 	}
 
 	private static final Pattern OBJFIELDS = Pattern.compile("^(type|scope|singleton|fields|args|events|factory)$");
@@ -61,7 +61,7 @@ public class IocLoading {
 	}
 
 	@SuppressWarnings("unchecked")
-	public IocObject map2iobj(Map<String, Object> map) throws ObjectLoadException {
+	public IocObject map2iobj(Map<String, Object> map) throws IocLoadException {
 		final IocObject iobj = new IocObject();
 		if (isIocObject(map)) {
 			Object v = map.get("type");
@@ -182,7 +182,7 @@ public class IocLoading {
 				try {
 					iv.setValue(map2iobj(map));
 				}
-				catch (ObjectLoadException e) {
+				catch (IocLoadException e) {
 					throw Exceptions.wrapThrow(e);
 				}
 				return iv;

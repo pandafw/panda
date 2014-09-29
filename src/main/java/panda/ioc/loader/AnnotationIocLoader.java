@@ -9,7 +9,7 @@ import panda.bind.json.Jsons;
 import panda.ioc.IocException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.ioc.meta.IocEventSet;
@@ -52,6 +52,9 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 
 	protected void addClass(Class<?> clazz) {
+		if (log.isTraceEnabled()) {
+			log.trace("Check " + clazz);
+		}
 		if (clazz.isInterface() || clazz.isMemberClass() || clazz.isEnum() || clazz.isAnnotation()
 				|| clazz.isAnonymousClass()) {
 			return;
@@ -62,12 +65,12 @@ public class AnnotationIocLoader implements IocLoader {
 			return;
 		}
 		
-		String beanName = getBeanName(clazz);
-		if (beanName == null) {
+		if (!isBeanAnnotated(clazz)) {
 			checkInject(clazz);
 			return;
 		}
 
+		String beanName = getBeanName(clazz);
 		if (map.containsKey(beanName)) {
 			throw new IocException("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
 				beanName, clazz, map.get(beanName).getClass());
@@ -146,6 +149,7 @@ public class AnnotationIocLoader implements IocLoader {
 			else {
 				iocValue = convert(inject.value());
 			}
+			iocValue.setRequired(inject.required());
 			
 			iocObject.addField(field.getName(), iocValue);
 		}
@@ -189,10 +193,12 @@ public class AnnotationIocLoader implements IocLoader {
 					iocValue = new IocValue();
 					iocValue.setType(IocValue.TYPE_REF);
 					iocValue.setValue(Strings.uncapitalize(methodName.substring(3)));
+					iocValue.setValue(Object.class.equals(inject.type()) ? method.getParameterTypes()[0] : inject.type());
 				}
 				else {
 					iocValue = convert(inject.value());
 				}
+				iocValue.setRequired(inject.required());
 
 				iocObject.addField(name, iocValue);
 			}
@@ -239,6 +245,10 @@ public class AnnotationIocLoader implements IocLoader {
 		catch (Exception e) {
 			// skip.
 		}
+	}
+	
+	protected boolean isBeanAnnotated(Class<?> cls) {
+		return cls.getAnnotation(IocBean.class) != null;
 	}
 	
 	protected String getBeanName(Class<?> cls) {
@@ -291,11 +301,8 @@ public class AnnotationIocLoader implements IocLoader {
 		return map.containsKey(name);
 	}
 
-	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
-		if (has(name)) {
-			return map.get(name);
-		}
-		throw new ObjectLoadException("Object '" + name + "' without define!");
+	public IocObject load(IocLoading loading, String name) throws IocLoadException {
+		return map.get(name);
 	}
 
 	private static final IocException duplicateField(Class<?> classZ, String name) {

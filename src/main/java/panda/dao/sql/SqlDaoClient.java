@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
@@ -16,6 +14,8 @@ import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
@@ -23,6 +23,7 @@ import panda.log.Logs;
 /**
  * @author yf.frank.wang@gmail.com
  */
+@IocBean(type=DaoClient.class)
 public class SqlDaoClient extends DaoClient {
 	private static Log log = Logs.getLog(SqlDaoClient.class);
 	
@@ -49,6 +50,7 @@ public class SqlDaoClient extends DaoClient {
 	 * @param dataSource the dataSource to set
 	 * @throws SQLException if a sql error occurs
 	 */
+	@IocInject
 	public void setDataSource(DataSource dataSource) throws SQLException {
 		this.dataSource = dataSource;
 		this.sqlExpert = getExpert(dataSource);
@@ -95,11 +97,7 @@ public class SqlDaoClient extends DaoClient {
 	 * @throws SQLException if a sql error occurs
 	 */
 	public void setJndiDataSource(String jndi) throws NamingException, SQLException {
-		Context ic = new InitialContext();
-		DataSource ds = (DataSource)ic.lookup(jndi);
-		if (ds == null) {
-			throw new NamingException("Failed to lookup data source: " + jndi);
-		}
+		DataSource ds = Sqls.lookupJndiDataSource(jndi);
 		setDataSource(ds);
 	}
 

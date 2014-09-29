@@ -10,12 +10,12 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -226,7 +226,7 @@ public class DynamicClassLoader extends ClassLoader {
 			buf.append('.');
 			buf.append(Systems.PATH_SEPARATOR).append(getBinFolder().getCanonicalPath());
 
-			URL[] urls = ((URLClassLoader)parent).getURLs();
+			Set<URL> urls = ClassLoaders.getAllClassLoaderURLs();
 			for (URL url : urls) {
 				buf.append(Systems.PATH_SEPARATOR).append(url.getFile());
 			}

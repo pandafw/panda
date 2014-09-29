@@ -118,6 +118,7 @@ public class Castors {
 		register(new StringTypeCastor.StringBuilderCastor(dc));
 		
 		register(new StreamCastor.InputStreamCastor());
+		register(new StreamCastor.ReaderCastor());
 
 		register(new ClassCastor());
 	}
@@ -258,7 +259,10 @@ public class Castors {
 				return (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class, this);
 			}
 			
-			return new Castor(fromType, toType);
+			if (Types.isAssignable(fromType, toType, false)) {
+				return new Castor(fromType, toType);
+			}
+			throw new RuntimeException("Failed to find Castor(" + fromType + " -> " + toType + ")");
 		}
 
 		if (Types.isAssignable(toType, Map.class)) {

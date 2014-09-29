@@ -3,6 +3,7 @@ package panda.dao.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.ForeignKeys;
@@ -25,8 +26,10 @@ public class Score {
 	@PK
 	String klass;
 
+	@Column
 	Integer key;
 
+	@Column(notNull=true, defaults="0")
 	Integer score;
 
 	public int getStudent() {

@@ -36,8 +36,11 @@ public class IocValue {
 	public static final String TYPE_JNDI = "jndi";
 
 	private String type;
-
 	private Object value;
+	private boolean required = true;
+
+	public IocValue() {
+	}
 
 	public String getType() {
 		return type;
@@ -55,11 +58,26 @@ public class IocValue {
 		this.value = value;
 	}
 
+	/**
+	 * @return the required
+	 */
+	public boolean isRequired() {
+		return required;
+	}
+
+	/**
+	 * @param required the required to set
+	 */
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append("type", type)
 				.append("value", value)
+				.append("required", required)
 				.toString();
 	}
 

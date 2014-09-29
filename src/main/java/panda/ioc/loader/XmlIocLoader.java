@@ -28,7 +28,7 @@ import panda.io.Files;
 import panda.io.Streams;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
@@ -123,11 +123,11 @@ public class XmlIocLoader implements IocLoader {
 		return iocMap.containsKey(name);
 	}
 
-	public IocObject load(IocLoading loading, String name) throws ObjectLoadException {
+	public IocObject load(IocLoading loading, String name) throws IocLoadException {
 		if (has(name)) {
 			return iocMap.get(name);
 		}
-		throw new ObjectLoadException("Object '" + name + "' without define!");
+		throw new IocLoadException("Object '" + name + "' without define!");
 	}
 
 	protected String paserBean(Element beanElement, boolean innerBean) throws Throwable {
@@ -257,6 +257,10 @@ public class XmlIocLoader implements IocLoader {
 		else if (REFER_TAG.equalsIgnoreCase(type)) {
 			iocValue.setType(REFER_TAG);
 			iocValue.setValue(element.getTextContent());
+			String req = element.getAttribute("required");
+			if (Strings.isNotEmpty(req)) {
+				iocValue.setRequired(Boolean.parseBoolean(req));
+			}
 		}
 		else if (FILE_TAG.equalsIgnoreCase(type)) {
 			iocValue.setType(FILE_TAG);

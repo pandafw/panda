@@ -21,7 +21,7 @@ import org.junit.Test;
 import panda.ioc.Ioc;
 import panda.ioc.IocException;
 import panda.ioc.IocLoader;
-import panda.ioc.ObjectLoadException;
+import panda.ioc.IocLoadException;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Animal;
 import panda.ioc.json.pojo.AnimalRace;
@@ -233,7 +233,7 @@ public class SimpleJsonIocTest {
 	}
 
 	@Test
-	public void test_load_from_reader() throws ObjectLoadException {
+	public void test_load_from_reader() throws IocLoadException {
 		Reader r = new InputStreamReader(getClass().getResourceAsStream("main.js"));
 		IocLoader loader = new JsonIocLoader(r);
 		assertTrue(loader.getName().length > 0);

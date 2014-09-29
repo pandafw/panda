@@ -1,9 +1,5 @@
 package panda.dao.sql;
 
-import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +7,15 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * utility class for sql
@@ -20,6 +25,20 @@ import java.util.regex.Pattern;
 public class Sqls {
 	private static final Log log = Logs.getLog(Sqls.class);
 	
+	/**
+	 * @param jndi
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	public static DataSource lookupJndiDataSource(String jndi) throws NamingException, SQLException {
+		Context ic = new InitialContext();
+		DataSource ds = (DataSource)ic.lookup(jndi);
+		if (ds == null) {
+			throw new NamingException("Failed to lookup data source: " + jndi);
+		}
+		return ds;
+	}
+
 	/**
 	 * escape sql Like string
 	 * 
@@ -267,5 +286,30 @@ public class Sqls {
 				|| type == Types.BLOB
 				|| type == Types.LONGVARBINARY
 				|| type == Types.VARBINARY);
+	}
+
+	/**
+	 * @param type SQL type from java.sql.Types
+	 * @return true if the type is a number type
+	 * @see Types
+	 */
+	public static boolean isCharType(int type) {
+		return (type == Types.CHAR 
+				|| type == Types.VARCHAR
+				|| type == Types.LONGNVARCHAR);
+	}
+
+	/**
+	 * @param type SQL type from java.sql.Types
+	 * @return true if the type is a number type
+	 * @see Types
+	 */
+	public static boolean isNumberType(int type) {
+		return (type == Types.TINYINT 
+				|| type == Types.INTEGER
+				|| type == Types.DECIMAL
+				|| type == Types.REAL
+				|| type == Types.FLOAT
+				|| type == Types.DOUBLE);
 	}
 }

@@ -3,6 +3,7 @@ package panda.ioc.impl;
 import java.util.Collection;
 import java.util.Map;
 
+import panda.ioc.IocException;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.ValueProxyMaker;
@@ -23,6 +24,7 @@ import panda.ioc.val.StaticValue;
 import panda.ioc.val.SysPropValue;
 import panda.lang.Arrays;
 import panda.lang.Classes;
+import panda.lang.Strings;
 
 public class DefaultValueProxyMaker implements ValueProxyMaker {
 
@@ -75,24 +77,26 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 			}
 
 			String s = value.toString();
-			if (null != s) {
-				String renm = s.toLowerCase();
-				// $ioc
-				if ("$ioc".equals(renm)) {
-					return IocSelfValue.i();
-				}
-
-				// $name
-				if ("$name".equals(renm)) {
-					return IocBeanNameValue.i();
-				}
-				
-				// $context
-				if ("$context".equals(renm)) {
-					return IocContextValue.i();
-				}
+			if (Strings.isEmpty(s)) {
+				throw new IocException("Empty ref ioc value");
 			}
-			return new ReferValue(s);
+
+			String ls = s.toLowerCase();
+			// $ioc
+			if ("$ioc".equals(ls)) {
+				return IocSelfValue.i();
+			}
+
+			// $name
+			if ("$name".equals(ls)) {
+				return IocBeanNameValue.i();
+			}
+			
+			// $context
+			if ("$context".equals(ls)) {
+				return IocContextValue.i();
+			}
+			return new ReferValue(s, iv.isRequired());
 		}
 
 		// EL

@@ -214,12 +214,11 @@ public class SimpleDataSource implements DataSource {
 	 * 
 	 * @param props - the configuration parameters
 	 */
-	@SuppressWarnings("unchecked")
 	public SimpleDataSource(Properties props) {
 		initialize((Map)props);
 	}
 
-	private void initialize(Map<String, String> props) {
+	private void initialize(Map props) {
 		if (props == null) {
 			throw new IllegalArgumentException(
 					"SimpleDataSource: The properties map passed to the initializer was null.");
@@ -470,7 +469,7 @@ public class SimpleDataSource implements DataSource {
 	/**
 	 * Closes all of the connections in the pool
 	 */
-	public void forceCloseAll() {
+	public void close() {
 		synchronized (POOL_LOCK) {
 			for (int i = activeConnections.size(); i > 0; i--) {
 				try {
@@ -750,7 +749,7 @@ public class SimpleDataSource implements DataSource {
 	}
 
 	protected void finalize() throws Throwable {
-		forceCloseAll();
+		close();
 	}
 
 	/**

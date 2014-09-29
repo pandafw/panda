@@ -38,7 +38,7 @@ public class HttpClient {
 	private static final TrustManager[] validSslCertTrusts = { new ValidCertTrustManage() }; 
 	private static final ValidHostnameVerifier validHostnameVerifier = new ValidHostnameVerifier();
 	
-	public static final String DEFAULT_USERAGENT = HttpClient.class + " (" + Panda.VERSION + ")";
+	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
 
 	/**
 	 * DEFAULT_CONN_TIMEOUT = 30 seconds
