@@ -5,14 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import panda.ioc.annotation.IocBean;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.testapp.classes.bean.UserT;
 
-@IocBean
 @At("/common")
 @Ok("raw")
 public class CommonTest extends BaseWebappTest {

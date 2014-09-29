@@ -8,70 +8,57 @@ import java.util.Map;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.After;
 import org.junit.Before;
 
-import panda.lang.Charsets;
 import panda.lang.Exceptions;
-import panda.lang.Strings;
 import panda.net.http.HttpClient;
+import panda.net.http.HttpHeader;
+import panda.net.http.HttpMethod;
+import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
 
 /**
  * 需要Jetty 7.3.1 的jar包
- * 
- * @author wendal
  */
 public abstract class BaseWebappTest {
 
-	protected Server server;
+	protected static Server server;
 
-	protected HttpResponse resp;
+	protected static HttpResponse resp;
 
-	private boolean isRunInMaven = false;
-
-	private String serverURL = "http://localhost:8888";
-
-	{
-		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			if (ste.getClassName().startsWith("org.apache.maven.surefire")) {
-				isRunInMaven = true;
-				serverURL = "http://nutztest.herokuapp.com";
-				break;
-			}
-		}
-	}
+	private static final String serverURL = "http://localhost:9999";
 
 	@Before
 	public void startServer() throws Throwable {
-		if (!isRunInMaven) {
-			try {
-				URL url = getClass().getClassLoader().getResource("org/nutz/mvc/testapp/Root/FLAG");
+		try {
+			if (server == null) {
+				String xml = "WEB-INF/web.xml";
+				URL url = BaseWebappTest.class.getResource(xml);
 				String path = url.toExternalForm();
 				System.err.println(url);
-				server = new Server(8888);
-				String warUrlString = path.substring(0, path.length() - 4);
+				server = new Server(9999);
+				String warUrlString = path.substring(0, path.length() - xml.length());
 				server.setHandler(new WebAppContext(warUrlString, getContextPath()));
 				server.start();
 			}
-			catch (Throwable e) {
-				if (server != null)
-					server.stop();
-				throw e;
+		}
+		catch (Throwable e) {
+			if (server != null) {
+				server.stop();
+				server = null;
 			}
+			throw e;
 		}
 	}
 
-	@After
 	public void shutdownServer() throws Throwable {
-		if (!isRunInMaven) {
-			if (server != null)
-				server.stop();
+		if (server != null) {
+			server.stop();
 		}
 	}
 
 	public String getContextPath() {
-		return "/nutztest";
+		return "/mvctest";
 	}
 
 	public String getBaseURL() {
@@ -101,8 +88,20 @@ public abstract class BaseWebappTest {
 	}
 
 	public HttpResponse post(String path, String data) {
+		return post(path, data, null);
+	}
+	
+	public HttpResponse post(String path, String data, String contentType) {
 		try {
-			resp = HttpClient.post(getBaseURL() + path, Strings.getBytes(data, Charsets.UTF_8));
+			HttpRequest hr = HttpRequest.create(getBaseURL() + path, HttpMethod.POST);
+			hr.getHeader().setDefault();
+			hr.setBody(data);
+			if (contentType != null) {
+				hr.getHeader().add(HttpHeader.CONTENT_TYPE, contentType);
+			}
+			HttpClient hc = new HttpClient(hr);
+
+			resp = hc.send();
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);

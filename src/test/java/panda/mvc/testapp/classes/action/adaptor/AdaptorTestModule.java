@@ -3,34 +3,23 @@ package panda.mvc.testapp.classes.action.adaptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
 import panda.io.Streams;
-import panda.ioc.annotation.IocBean;
 import panda.mvc.adaptor.meta.Pet;
-import panda.mvc.annotation.AdaptBy;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Fail;
 import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.testapp.BaseWebappTest;
 
-@IocBean
 @At("/adaptor")
 @Ok("raw")
 @Fail("http:500")
 public class AdaptorTestModule extends BaseWebappTest {
-
-	@At("/github/issue/543")
-	public long issue_543(@Param(value = "d", dfmt = "yyyyMMdd") Date d, @Param("..") Issue543 o) {
-		if (d.getTime() != o.d.getTime())
-			throw Lang.impossible();
-		return d.getTime();
-	}
 
 	/*
 	 * Githut : #352
@@ -62,14 +51,15 @@ public class AdaptorTestModule extends BaseWebappTest {
 	}
 
 	// 传入的id,会是一个非法的字符串!!
-	@At({ "/err/param", "/err/param/?" })
-	public void errParam(@Param("id") long id, AdaptorErrorContext errCtx) {
-		TestCase.assertNotNull(errCtx);
-		TestCase.assertNotNull(errCtx.getErrors()[0]);
-	}
+	//TODO
+//	@At({ "/err/param", "/err/param/?" })
+//	public void errParam(@Param("id") long id, AdaptorErrorContext errCtx) {
+//		TestCase.assertNotNull(errCtx);
+//		TestCase.assertNotNull(errCtx.getErrors()[0]);
+//	}
 
 	@At("/json/type")
-	public void jsonMapType(Map<String, Double> map) {
+	public void jsonMapType(@Param Map<String, Double> map) {
 		TestCase.assertNotNull(map);
 		TestCase.assertEquals(1, map.size());
 		TestCase.assertEquals(123456.0, map.get("abc").doubleValue());

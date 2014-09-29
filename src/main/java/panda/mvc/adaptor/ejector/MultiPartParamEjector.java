@@ -52,10 +52,6 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	}
 
 	protected void parse(HttpServletRequest req) throws IOException {
-		if (log.isDebugEnabled()) {
-			log.debug("Parse: " + RequestPath.getRequestPath(req));
-		}
-		
 		String encoding = HttpServlets.getEncoding(req);
 		
 		try {
@@ -65,10 +61,10 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 				final FileItemStream item = iter.next();
 				Object val = null;
 				if (item.isFormField()) {
-					val = saveUploadFile(item);
+					val = Streams.toString(item.openStream(), encoding);
 				}
 				else {
-					val = Streams.toString(item.openStream(), encoding);
+					val = saveUploadFile(item);
 				}
 				addParam(item.getFieldName(), val);
 			}

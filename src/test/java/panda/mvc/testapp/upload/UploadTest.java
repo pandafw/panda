@@ -18,7 +18,7 @@ public class UploadTest extends BaseWebappTest {
 	@Test
 	public void test_upload() throws Throwable {
 		Map<String, Object> params = new HashMap<String, Object>();
-		File f = File.createTempFile("panda", "data");
+		File f = File.createTempFile("panda", ".data");
 		FileWriter fw = new FileWriter(f);
 		fw.write("abc");
 		fw.flush();
@@ -27,7 +27,7 @@ public class UploadTest extends BaseWebappTest {
 		params.put("file", f);
 		HttpResponse resp = HttpClient.post(getBaseURL() + "/upload/image", params);
 
-		assertEquals("image&3", resp.getContent());
+		assertEquals("data&3", resp.getContentText());
 	}
 
 }

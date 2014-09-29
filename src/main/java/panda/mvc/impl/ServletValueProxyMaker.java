@@ -31,7 +31,11 @@ public class ServletValueProxyMaker implements ValueProxyMaker {
 			if ("$servlet".equalsIgnoreCase(value)) {
 				return new StaticValue(sc);
 			}
-			return new StaticValue(sc.getAttribute(value));
+			
+			Object obj = sc.getAttribute(value);
+			if (obj != null) {
+				return new StaticValue(obj);
+			}
 		}
 		return null;
 	}

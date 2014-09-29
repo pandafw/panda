@@ -20,7 +20,7 @@ public class DaoFilePool implements FilePool {
 	@IocInject
 	protected DaoClient daoClient;
 
-	@IocInject("ref:filepool.data.blocksize")
+	@IocInject(value="ref:filepool.data.blocksize", required=false)
 	protected int blockSize = Integer.MAX_VALUE;
 
 	/**
@@ -60,6 +60,7 @@ public class DaoFilePool implements FilePool {
 		fi.setName(name);
 		fi.setDate(DateTimes.getDate());
 		fi.setData(data);
+		fi.setSize(data.length);
 		fi.setFlag(temporary ? FileItem.TEMPORARY : FileItem.ARCHIVE);
 		
 		final Dao dao = getDaoClient().getDao();
@@ -91,7 +92,7 @@ public class DaoFilePool implements FilePool {
 	}
 	
 	public FileItem saveFile(FileItemStream fis, boolean temporary) throws IOException {
-		String name = FileNames.getBaseName(fis.getName());
+		String name = FileNames.getName(fis.getName());
 		return saveFile(name, fis.openStream(), temporary);
 	}
 

@@ -369,7 +369,7 @@ public class HttpServlets {
 		if (request == null)
 			return;
 
-		ServletRequestMap rm = new ServletRequestMap(request);
+		ServletRequestAttrMap rm = new ServletRequestAttrMap(request);
 		Jsons.toJson(rm, writer, 2);
 	}
 

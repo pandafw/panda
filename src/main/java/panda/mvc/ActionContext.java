@@ -13,7 +13,8 @@ import panda.filepool.FilePool;
 import panda.ioc.Ioc;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
-import panda.servlet.ServletRequestMap;
+import panda.servlet.ServletRequestAttrMap;
+import panda.servlet.ServletRequestParamMap;
 
 public class ActionContext {
 	private Ioc ioc;
@@ -215,12 +216,12 @@ public class ActionContext {
 		return ioc.get(FilePool.class);
 	}
 
-
+	//----------------------------------------------------
 	/**
-	 * @return the request attributes map
+	 * @return the servlet context attributes map
 	 */
-	public Map<String, Object> getReq() {
-		return new ServletRequestMap(request);
+	public Map<String, Object> getApp() {
+		return new ServletContextMap(servlet);
 	}
 
 	/**
@@ -231,12 +232,27 @@ public class ActionContext {
 	}
 
 	/**
-	 * @return the servlet context attributes map
+	 * @return the request attributes map
 	 */
-	public Map<String, Object> getApp() {
-		return new ServletContextMap(servlet);
+	public Map<String, Object> getReq() {
+		return new ServletRequestAttrMap(request);
 	}
 
+	/**
+	 * @return the request parameters map
+	 */
+	public Map<String, Object> getParam() {
+		return new ServletRequestParamMap(request);
+	}
+	
+	/**
+	 * @return the base context path
+	 */
+	public String getBase() {
+		return servlet.getContextPath();
+	}
+	
+	//----------------------------------------------------
 	/**
 	 * @return the result object
 	 * @see #getResult()

@@ -306,7 +306,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		for (String key : pe.keys()) {
 			if (Strings.isEmpty(prefix) || key.startsWith(prefix)) {
 				Object val = pe.eject(key);
-				String bn = key.substring(prefix.length());
+				String bn = prefix == null ? key : key.substring(prefix.length());
 				Type pt = bh.getBeanType(target, bn);
 				if (pt == null) {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);

@@ -23,14 +23,15 @@ public class NemberTwoModule {
 		return !(userName == null || password == null);
 	}
 
-	@At("/need")
-	@Ok("json")
-	@Fail("json")
-	@Filters(@By(type = CheckSession.class, args = { "AUTH", "/two/abc" }))
-	public String needLogin() {
-		System.out.println("abc");
-		return "ABC";
-	}
+	//TODO
+//	@At("/need")
+//	@Ok("json")
+//	@Fail("json")
+//	@Filters(@By(type = CheckSession.class, args = { "AUTH", "/two/abc" }))
+//	public String needLogin() {
+//		System.out.println("abc");
+//		return "ABC";
+//	}
 
 	@At("/pathme/*")
 	@Ok("json")

@@ -8,11 +8,13 @@ import java.util.Date;
 
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Id;
+import panda.dao.entity.annotation.Table;
 import panda.filepool.FileItem;
 import panda.lang.Objects;
 
 /**
  */
+@Table("FileItem")
 public class DaoFileItem implements FileItem, Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -40,33 +40,33 @@ public class ViewTestModule {
 
 	// -------------ServerRedirectView
 	@At("/red")
-	@Ok(">>:/${p.to}.jsp")
+	@Ok(">>:/${param.to}.jsp")
 	public void serverRedirectView() {
 	}
 
 	@At("/red2")
-	@Ok("RedirEct:/${p.to}.jsp")
+	@Ok("RedirEct:/${param.to}.jsp")
 	public void serverRedirectView2() {
 	}
 
 	@At("/red3")
-	@Ok("redirect:/${p.to}.jsp")
+	@Ok("redirect:/${param.to}.jsp")
 	public void serverRedirectView3() {
 	}
 
 	// -------------ForwardView
 	@At("/for")
-	@Ok("->:/${p.to}.jsp")
+	@Ok("->:/${param.to}.jsp")
 	public void forwardView() {
 	}
 
 	@At("/for2")
-	@Ok("fOrWard:/${p.to}.jsp")
+	@Ok("fOrWard:/${param.to}.jsp")
 	public void forwardView2() {
 	}
 
 	@At("/for3")
-	@Ok("forward:/${p.to == null ? 'base' : 'base'}.jsp")
+	@Ok("forward:/${param.to == null ? 'base' : 'base'}.jsp")
 	public void forwardView3() {
 	}
 

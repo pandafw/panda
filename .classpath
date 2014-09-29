@@ -31,10 +31,21 @@
 	<classpathentry kind="lib" path="lib/run/sitemesh.jar" sourcepath="lib/run/site-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-continuation.jar" sourcepath="lib/tool/jetty-continuation-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-http.jar" sourcepath="lib/tool/jetty-http-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-io.jar" sourcepath="lib/tool/jetty-io-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-jsp.jar" sourcepath="lib/tool/jetty-jsp-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-security.jar" sourcepath="lib/tool/jetty-security-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-server.jar" sourcepath="lib/tool/jetty-server-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-servlet.jar" sourcepath="lib/tool/jetty-servlet-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-webapp.jar" sourcepath="lib/tool/jetty-webapp-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-util.jar" sourcepath="lib/tool/jetty-util-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/jetty-xml.jar" sourcepath="lib/tool/jetty-xml-sources.jar"/>
+	<classpathentry kind="lib" path="lib/tool/org.apache.jasper.glassfish.jar"/>
+	<classpathentry kind="lib" path="lib/tool/org.apache.taglibs.standard.glassfish.jar"/>
+	<classpathentry kind="lib" path="lib/tool/org.eclipse.jdt.core.jar"/>
+	<classpathentry kind="lib" path="lib/tool/javax.el.jar"/>
+	<classpathentry kind="lib" path="lib/tool/com.sun.el.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-java"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

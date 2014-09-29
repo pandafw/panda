@@ -18,6 +18,6 @@ public abstract class AbstractPathView implements View {
 			return null;
 		}
 
-		return Texts.translate(dest, ac);
+		return Texts.elTranslate(dest, ac);
 	}
 }

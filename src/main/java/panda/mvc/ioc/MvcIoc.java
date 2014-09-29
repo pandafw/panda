@@ -6,8 +6,7 @@ import panda.ioc.ObjectMaker;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.aop.MirrorFactory;
 import panda.ioc.impl.DefaultIoc;
-import panda.mvc.annotation.At;
-import panda.mvc.ioc.provider.AnnotationIocProvider.MvcAnnotationIocLoader;
+import panda.ioc.loader.AnnotationIocLoader;
 
 public class MvcIoc extends DefaultIoc {
 	/**
@@ -49,7 +48,7 @@ public class MvcIoc extends DefaultIoc {
 
 	@Override
 	protected String getBeanName(Class<?> type) {
-		return MvcAnnotationIocLoader.getBeanName(type, type.getAnnotation(IocBean.class), type.getAnnotation(At.class));
+		return AnnotationIocLoader.getBeanName(type, type.getAnnotation(IocBean.class));
 	}
 	
 }

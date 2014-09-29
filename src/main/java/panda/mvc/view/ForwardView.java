@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import panda.io.FileNames;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.RequestPath;
 
@@ -27,6 +29,8 @@ import panda.mvc.RequestPath;
  */
 public class ForwardView extends AbstractPathView {
 
+	private static final Log log = Logs.getLog(ForwardView.class);
+	
 	public ForwardView(String dest) {
 		super(dest == null ? null : dest.replace('\\', '/'));
 	}
@@ -73,6 +77,10 @@ public class ForwardView extends AbstractPathView {
 		HttpServletResponse res = ac.getResponse();
 
 		path = path + args;
+		if (log.isDebugEnabled()) {
+			log.debug("Forward: " + path);
+		}
+		
 		RequestDispatcher rd = req.getRequestDispatcher(path);
 		if (rd == null) {
 			throw Exceptions.makeThrow("Fail to find Forward '%s'", path);

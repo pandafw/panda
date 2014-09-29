@@ -5,11 +5,12 @@ import java.io.Serializable;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.FK;
 import panda.dao.entity.annotation.PK;
-import panda.filepool.FileItem;
+import panda.dao.entity.annotation.Table;
 import panda.lang.Objects;
 
 /**
  */
+@Table("FileData")
 public class DaoFileData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +33,7 @@ public class DaoFileData implements Serializable {
 	 * Properties
 	 *----------------------------------------------------------------------*/
 	@PK
-	@FK(target=FileItem.class)
+	@FK(target=DaoFileItem.class)
 	protected Long fid;
 	
 	@PK

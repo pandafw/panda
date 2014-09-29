@@ -21,7 +21,7 @@ import panda.lang.collection.MapEntry;
  * 
  * @author yf.frank.wang@gmail.com
  */
-public class ServletRequestMap implements Map<String, Object> {
+public class ServletRequestAttrMap implements Map<String, Object> {
 	private ServletRequest request;
 
 	/**
@@ -29,7 +29,7 @@ public class ServletRequestMap implements Map<String, Object> {
 	 * 
 	 * @param request the http servlet request.
 	 */
-	public ServletRequestMap(final ServletRequest request) {
+	public ServletRequestAttrMap(final ServletRequest request) {
 		this.request = request;
 	}
 
