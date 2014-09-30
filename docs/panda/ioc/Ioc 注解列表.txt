@@ -1,5 +1,4 @@
 Ioc 注解列表
-2014-4-23 23:58:59作者: zozoh
 Ioc 部分用到的 Java 注解比较少，具体请看下表
 @InjectName	 用来与 Mvc 容器的扩展点，声明了这个注解的模块，会被 Ioc 容器管理
 @IocBean	 AnnotationIocLoader 根据这个注解来判断哪些类应该被自己加载

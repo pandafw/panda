@@ -1,37 +1,37 @@
 用json文件声明Aop切片
 2014-4-23 23:58:59作者: wendal
 需使用的类
-org.nutz.ioc.aop.config.impl.JsonAopConfigration
+org.panda.ioc.aop.config.impl.JsonAopConfigration
 看看一个示例的ioc配置文件
 配置示例:
 
 var ioc = {
     log : {
-        type :'org.nutz.aop.interceptor.LoggingMethodInterceptor'
+        type :'org.panda.aop.interceptor.LoggingMethodInterceptor'
     },
     myMI : {
-        type : 'org.nutz.ioc.aop.config.impl.MyMI'
+        type : 'org.panda.ioc.aop.config.impl.MyMI'
     },
     pet2 : {
-    type : "org.nutz.ioc.aop.config.impl.Pet2"
+    type : "org.panda.ioc.aop.config.impl.Pet2"
     },
 
     $aop : {
-        type : 'org.nutz.ioc.aop.config.impl.JsonAopConfigration',
+        type : 'org.panda.ioc.aop.config.impl.JsonAopConfigration',
         fields : {
             itemList : [
                 ['.+','toString','ioc:log'],
                 ['.+','.+','ioc:myMI'],
-                ['.+','.+','org.nutz.ioc.aop.config.impl.MyMI2','false']
+                ['.+','.+','org.panda.ioc.aop.config.impl.MyMI2','false']
             ]
         }
     }
 }
 可以看到, 除了$aop这个beanName外,其他的与普通的ioc配置文件没有任何区别.
 
-$aop ,其实是org.nutz.ioc.aop.config.AopConfigration接口的IOCNAME字段的值, 只有你声明这个名字,且类型为这个接口的实现,就能轻易的配置Ioc.
+$aop ,其实是org.panda.ioc.aop.config.AopConfigration接口的IOCNAME字段的值, 只有你声明这个名字,且类型为这个接口的实现,就能轻易的配置Ioc.
 
-估计你已经猜到,org.nutz.ioc.aop.config.impl.JsonAopConfigration就是其中一个实现!
+估计你已经猜到,org.panda.ioc.aop.config.impl.JsonAopConfigration就是其中一个实现!
 
 细看这个部分代码:
 
@@ -39,7 +39,7 @@ $aop ,其实是org.nutz.ioc.aop.config.AopConfigration接口的IOCNAME字段的�
             itemList : [
                 ['.+','toString','ioc:log'],
                 ['.+','.+','ioc:myMI'],
-                ['.+','.+','org.nutz.ioc.aop.config.impl.MyMI2','false']
+                ['.+','.+','org.panda.ioc.aop.config.impl.MyMI2','false']
             ]
         }
 使用JsonAopConfigration,只需要为其itemList赋值.
@@ -50,43 +50,43 @@ $aop ,其实是org.nutz.ioc.aop.config.AopConfigration接口的IOCNAME字段的�
 
 ['.+','toString','ioc:log'],
 ['.+','.+','ioc:myMI']
-['com\.wendal\.nutz\..+','get.+','org.nutz.ioc.aop.config.impl.MyMI2','false']
+['com\.wendal\.panda\..+','get.+','org.panda.ioc.aop.config.impl.MyMI2','false']
 规则如下:
 第一个值,对应className,必选,用于匹配类的全称的正则表达式
 第二个值,对应methodName,必选,用于匹配方法名的正则表达式
 第三个值,对应interceptorName,必选,如果以ioc:开头,则代表对于ioc容器的一个对象,否则,将认为是一个类名
 第四个值,对应singleton,可选,仅当interceptorName为类名时有效
 拓展使用 -- 声明式事务
-首先,声明5种事务等级对应的拦截器(使用内置的事务拦截器 org.nutz.aop.interceptor.TransactionInterceptor)
+首先,声明5种事务等级对应的拦截器(使用内置的事务拦截器 org.panda.aop.interceptor.TransactionInterceptor)
 
     txNONE : {
-        type : 'org.nutz.aop.interceptor.TransactionInterceptor',
+        type : 'org.panda.aop.interceptor.TransactionInterceptor',
         args : [0]
     },
     txREAD_UNCOMMITTED : {
-        type : 'org.nutz.aop.interceptor.TransactionInterceptor',
+        type : 'org.panda.aop.interceptor.TransactionInterceptor',
         args : [1]
     },
     txREAD_COMMITTED : {
-        type : 'org.nutz.aop.interceptor.TransactionInterceptor',
+        type : 'org.panda.aop.interceptor.TransactionInterceptor',
         args : [2]
     },
     txREPEATABLE_READ : {
-        type : 'org.nutz.aop.interceptor.TransactionInterceptor',
+        type : 'org.panda.aop.interceptor.TransactionInterceptor',
         args : [4]
     },
     txSERIALIZABLE : {
-        type : 'org.nutz.aop.interceptor.TransactionInterceptor',
+        type : 'org.panda.aop.interceptor.TransactionInterceptor',
         args : [8]
     },
     //声明一个log进行日志记录
     log : {
-        type :'org.nutz.aop.interceptor.LoggingMethodInterceptor'
+        type :'org.panda.aop.interceptor.LoggingMethodInterceptor'
     }
 然后,定义哪些类的什么方法需要进行声明,继续添加 (一般来说,应该把等级高的往后放)
 
     $aop : {
-        type : 'org.nutz.ioc.aop.config.impl.JsonAopConfigration',
+        type : 'org.panda.ioc.aop.config.impl.JsonAopConfigration',
         fields : {
             itemList : [
                 ['com\\.service\\..+','.+','ioc:log'],
@@ -109,10 +109,10 @@ $aop ,其实是org.nutz.ioc.aop.config.AopConfigration接口的IOCNAME字段的�
 如果你既使用了@Aop注解,又配置了上述的声明式Aop,你需要ComboAopConfigration来整合两种配置,示例:
 
 $aop : {
-    type : 'org.nutz.ioc.aop.config.impl.ComboAopConfigration',
+    type : 'org.panda.ioc.aop.config.impl.ComboAopConfigration',
     fields : {
         aopConfigrations  : [
-            {	type : 'org.nutz.ioc.aop.config.impl.JsonAopConfigration',
+            {	type : 'org.panda.ioc.aop.config.impl.JsonAopConfigration',
                 fields : {
                     itemList : [
                         ['com\\.service\\..+','.+','ioc:log'],
@@ -124,7 +124,7 @@ $aop : {
                     ]
                 }
             },
-            {	type : 'org.nutz.ioc.aop.config.impl.AnnotationAopConfigration'}
+            {	type : 'org.panda.ioc.aop.config.impl.AnnotationAopConfigration'}
         ]
     }
 }

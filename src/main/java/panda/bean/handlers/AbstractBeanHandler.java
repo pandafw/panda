@@ -111,7 +111,7 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 
 		Object itemValue = null;
 		if (beanObject != null) {
-			itemValue = getPropertyType(beanObject, itemName);
+			itemValue = getPropertyValue(beanObject, itemName);
 		}
 		
 		BeanHandler bh = getBeanHandler(itemType);

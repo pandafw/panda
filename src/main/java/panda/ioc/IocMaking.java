@@ -15,28 +15,21 @@ public class IocMaking {
 
 	private Ioc ioc;
 
-	private IocContext context;
-
 	private List<ValueProxyMaker> vpms;
 
 	private MirrorFactory mirrors;
 
-	public IocMaking(Ioc ioc, MirrorFactory mirrors, IocContext context, ObjectMaker maker, List<ValueProxyMaker> vpms,
+	public IocMaking(Ioc ioc, MirrorFactory mirrors, ObjectMaker maker, List<ValueProxyMaker> vpms,
 			String objName) {
 		this.name = objName;
 		this.maker = maker;
 		this.ioc = ioc;
-		this.context = context;
 		this.vpms = vpms;
 		this.mirrors = mirrors;
 	}
 
 	public Ioc getIoc() {
 		return ioc;
-	}
-
-	public IocContext getContext() {
-		return context;
 	}
 
 	public String getName() {
@@ -52,7 +45,7 @@ public class IocMaking {
 	}
 
 	public IocMaking clone(String objectName) {
-		return new IocMaking(ioc, mirrors, context, maker, vpms, objectName);
+		return new IocMaking(ioc, mirrors, maker, vpms, objectName);
 	}
 
 	public ValueProxy makeValueProxy(IocValue iv) {

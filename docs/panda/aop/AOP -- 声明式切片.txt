@@ -3,13 +3,13 @@ AOP -- 声明式切片
 单纯的AOP
 创建一个拦截器类,在方法执行前后打印一句日志
 package aop;
-import org.nutz.aop.ClassAgent;
-import org.nutz.aop.ClassDefiner;
-import org.nutz.aop.DefaultClassDefiner;
-import org.nutz.aop.InterceptorChain;
-import org.nutz.aop.MethodInterceptor;
-import org.nutz.aop.asm.AsmClassAgent;
-import org.nutz.aop.matcher.MethodMatcherFactory;
+import org.panda.aop.ClassAgent;
+import org.panda.aop.ClassDefiner;
+import org.panda.aop.DefaultClassDefiner;
+import org.panda.aop.InterceptorChain;
+import org.panda.aop.MethodInterceptor;
+import org.panda.aop.asm.AsmClassAgent;
+import org.panda.aop.matcher.MethodMatcherFactory;
 
 public class UserAction { //被AOP的类,必须是public的非abstract类!
 
@@ -70,12 +70,12 @@ class LogInterceptor implements MethodInterceptor {
 方法所在的对象必须是Ioc容器中的对象
 将上一个例子,改造为Ioc形式
 package aop;
-import org.nutz.ioc.aop.Aop;
-import org.nutz.ioc.loader.annotation.IocBean;
+import org.panda.ioc.aop.Aop;
+import org.panda.ioc.loader.annotation.IocBean;
 
-import org.nutz.ioc.loader.annotation.AnnotationIocLoader;
-import org.nutz.ioc.Ioc;
-import org.nutz.ioc.impl.NutIoc;
+import org.panda.ioc.loader.annotation.AnnotationIocLoader;
+import org.panda.ioc.Ioc;
+import org.panda.ioc.impl.NutIoc;
 
 @IocBean
 public class UserAction { //被AOP的类,必须是public的非abstract类!
@@ -98,9 +98,9 @@ public class UserAction { //被AOP的类,必须是public的非abstract类!
 }
 //另外一个类文件
 package aop;
-import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.aop.InterceptorChain;
-import org.nutz.aop.MethodInterceptor;
+import org.panda.ioc.loader.annotation.IocBean;
+import org.panda.aop.InterceptorChain;
+import org.panda.aop.MethodInterceptor;
 
 @IocBean //声明为一个Ioc的bean,名字为logInterceptor
 public class LogInterceptor implements MethodInterceptor {
@@ -111,5 +111,5 @@ public class LogInterceptor implements MethodInterceptor {
     }
 }
 已经为你准备好的拦截器
-org.nutz.aop.interceptor.LoggingMethodInterceptor 添加日志记录
-org.nutz.aop.interceptor.TransactionInterceptor 添加数据库事务(用于NutDao)
+org.panda.aop.interceptor.LoggingMethodInterceptor 添加日志记录
+org.panda.aop.interceptor.TransactionInterceptor 添加数据库事务(用于NutDao)

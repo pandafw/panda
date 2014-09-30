@@ -1,5 +1,4 @@
 你都可以注入什么
-2014-4-23 23:58:59作者: zozoh
 从哪里注入？
 你可以向对象注入值的位置有两个
 
@@ -10,7 +9,7 @@
 
 {
     xb : {
-        type : 'nutz.demo.ioc.book.Pet',
+        type : 'panda.demo.ioc.book.Pet',
         args : ['XiaoBai']
     }
 }
@@ -21,7 +20,7 @@ args 的值时一个数组，里面每一个元素都将对应构造函数的一
 
 {
     xb : {
-        type : 'nutz.demo.ioc.book.Pet',
+        type : 'panda.demo.ioc.book.Pet',
         fields : {
             name : 'XiaoBai'
         }
@@ -47,7 +46,7 @@ xb : { name: 'XiaoBai'	}
 {
     xb : {
         friend: {
-            type : 'nutz.demo.ioc.book.Pet',
+            type : 'panda.demo.ioc.book.Pet',
             fields : {name : 'XiaoHei'}
         }
     }
@@ -62,21 +61,21 @@ xb : { name: 'XiaoBai'	}
 
 容器自身
 {
-    xb : { myIoc : {refer: '$Ioc'} }
+    xb : { myIoc : {refer: '$ioc'} }
 }
 一种特殊的引用，大小写不敏感，值就是 Ioc 容器本身
 
 对象的名称
 {
-    xb : { myIoc : {refer: '$Name'} }
+    xb : { myIoc : {refer: '$ibn'} }
 }
 一种特殊的引用，大小写不敏感，值就是对象的名称，即 "xb"
 
 容器上下文
 {
-    xb : { myIoc : {refer: '$Context'} }
+    xb : { myIoc : {refer: '$ictx'} }
 }
-一种特殊的引用，大小写不敏感，值就是当前容器的上下文环境接口 org.nutz.ioc.IocContext
+一种特殊的引用，大小写不敏感，值就是当前容器的上下文环境接口 org.panda.ioc.IocContext
 
 环境变量
 {
@@ -96,7 +95,7 @@ xb : { name: 'XiaoBai'	}
 Java 调用
 这是个极度灵活的注入方式，它几乎可以让你 做任何事情。 因为它允许你直接调用一个 JAVA 函数。
 
-更详细的说明，请参看 org.nutz.ioc.val.JavaValue 的 JDoc
+更详细的说明，请参看 org.panda.ioc.val.JavaValue 的 JDoc
 
 下面只是列出主要的几种应用方式
 
@@ -151,15 +150,15 @@ oneField : {scan : '扫描仪地址'}
 如何支持这种新的值的类型呢？
 
 实现一个扩展接口
-实现 org.nutz.ioc.ValueProxyMaker 接口：
+实现 org.panda.ioc.ValueProxyMaker 接口：
 
-package nutz.demo.ioc.book;
+package panda.demo.ioc.book;
 
-import org.nutz.ioc.IocMaking;
-import org.nutz.ioc.ValueProxy;
-import org.nutz.ioc.ValueProxyMaker;
-import org.nutz.ioc.meta.IocValue;
-import org.nutz.lang.Lang;
+import org.panda.ioc.IocMaking;
+import org.panda.ioc.ValueProxy;
+import org.panda.ioc.ValueProxyMaker;
+import org.panda.ioc.meta.IocValue;
+import org.panda.lang.Lang;
 
 public class ScanValueProxyMaker implements ValueProxyMaker {
 

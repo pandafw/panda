@@ -83,17 +83,17 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 
 			String ls = s.toLowerCase();
 			// $ioc
-			if ("$ioc".equals(ls)) {
+			if (ValueProxyMaker.IOC.equals(ls)) {
 				return IocSelfValue.i();
 			}
 
-			// $name
-			if ("$name".equals(ls)) {
+			// ioc bean name
+			if (ValueProxyMaker.IBN.equals(ls)) {
 				return IocBeanNameValue.i();
 			}
 			
-			// $context
-			if ("$context".equals(ls)) {
+			// ioc context
+			if (ValueProxyMaker.ICTX.equals(ls)) {
 				return IocContextValue.i();
 			}
 			return new ReferValue(s, iv.isRequired());

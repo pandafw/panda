@@ -12,12 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.handlers.ArrayBeanHandler;
 import panda.bean.handlers.ImmutableBeanHandler;
-import panda.bean.handlers.IocBeanHandler;
+import panda.bean.handlers.IocProxyBeanHandler;
 import panda.bean.handlers.IterableBeanHandler;
 import panda.bean.handlers.JavaBeanHandler;
 import panda.bean.handlers.ListBeanHandler;
 import panda.bean.handlers.MapBeanHandler;
-import panda.ioc.Ioc;
+import panda.ioc.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
@@ -308,8 +308,8 @@ public class Beans {
 			else if (isImmutableJavaType(type)) {
 				handler = new ImmutableBeanHandler(type); 
 			}
-			else if (Types.isAssignable(type, Ioc.class)) {
-				handler = new IocBeanHandler(this, type);
+			else if (Types.isAssignable(type, IocProxy.class)) {
+				handler = new IocProxyBeanHandler(this, type);
 				register(type, handler);
 			}
 			else {

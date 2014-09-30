@@ -1,8 +1,10 @@
 package panda.bean.handlers;
 
 import java.lang.reflect.Type;
+import java.util.Set;
 
 import panda.bean.Beans;
+import panda.lang.Arrays;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
@@ -12,6 +14,8 @@ import panda.lang.reflect.Types;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandler<T> {
+	protected static final Set<String> SIZES = Arrays.toSet("size", "length" );
+	
 	/**
 	 * Constructor
 	 * @param beans bean handler beans
@@ -113,6 +117,10 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 	}
 
 	public Object getPropertyValue(T array, String index) {
+		if (SIZES.contains(index)) {
+			return getSize(array);
+		}
+
 		int idx = toIndex(index);
 		if (isValidGetIndex(array, idx)) {
 			return getElement(array, idx);

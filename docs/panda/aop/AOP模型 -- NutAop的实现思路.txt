@@ -11,7 +11,7 @@ public void exe(){
 }
 被改造后
 
-import org.nutz.aop.InterceptorChain;
+import org.panda.aop.InterceptorChain;
 ....
 
 public void exe(){
@@ -33,17 +33,17 @@ public void exe(){
 如果在你的方法中打印堆栈,你将看到类似的信息
 
 java.lang.Throwable
-    at org.nutz.aop.asm.test.Aop1.mixArgsVoid(Aop1.java:55)
-    at org.nutz.aop.asm.test.Aop1$$NUTZAOP._aop_invoke(Unknown Source)
-    at org.nutz.aop.InterceptorChain.invoke(InterceptorChain.java:51)
-    at org.nutz.aop.InterceptorChain.doChain(InterceptorChain.java:39)
-    at org.nutz.aop.interceptor.LoggingMethodInterceptor.filter(LoggingMethodInterceptor.java:29) //拦截器B
-    at org.nutz.aop.InterceptorChain.doChain(InterceptorChain.java:42)
-    at org.nutz.aop.AbstractMethodInterceptor.filter(AbstractMethodInterceptor.java:10) //拦截器A
-    at org.nutz.aop.InterceptorChain.doChain(InterceptorChain.java:42)
-    at org.nutz.aop.asm.test.Aop1$$NUTZAOP.mixArgsVoid(Unknown Source)
+    at org.panda.aop.asm.test.Aop1.mixArgsVoid(Aop1.java:55)
+    at org.panda.aop.asm.test.Aop1$$NUTZAOP._aop_invoke(Unknown Source)
+    at org.panda.aop.InterceptorChain.invoke(InterceptorChain.java:51)
+    at org.panda.aop.InterceptorChain.doChain(InterceptorChain.java:39)
+    at org.panda.aop.interceptor.LoggingMethodInterceptor.filter(LoggingMethodInterceptor.java:29) //拦截器B
+    at org.panda.aop.InterceptorChain.doChain(InterceptorChain.java:42)
+    at org.panda.aop.AbstractMethodInterceptor.filter(AbstractMethodInterceptor.java:10) //拦截器A
+    at org.panda.aop.InterceptorChain.doChain(InterceptorChain.java:42)
+    at org.panda.aop.asm.test.Aop1$$NUTZAOP.mixArgsVoid(Unknown Source)
 mixArgsVoid 就是你原本方法
 
 注意
-切勿自行实现org.nutz.aop.AopCallback接口,并不要使用该接口声明的方法签名
-虽然org.nutz.aop.MethodInterceptor接口允许你抛出任何异常,但*请不要抛出原方法未声明的受检异常*
+切勿自行实现org.panda.aop.AopCallback接口,并不要使用该接口声明的方法签名
+虽然org.panda.aop.MethodInterceptor接口允许你抛出任何异常,但*请不要抛出原方法未声明的受检异常*

@@ -23,23 +23,14 @@ public class ScopeJsonIocTest {
 
 		Animal f2 = ioc.get(Animal.class, "f2");
 		assertEquals("F2", f2.getName());
+		
 		Animal f22 = ioc.get(Animal.class, "f2");
 		assertEquals("F2", f22.getName());
 		assertFalse(f2 == f22);
 
-		ScopeIocContext ic = new ScopeIocContext("MyScope");
+		ScopeIocContext ic = (ScopeIocContext)ioc.getContext();
 		Map<String, ObjectProxy> map = ic.getObjs();
-		f2 = ioc.get(Animal.class, "f2", ic);
-		assertEquals("F2", f2.getName());
-		f22 = ioc.get(Animal.class, "f2", ic);
-		assertEquals("F2", f22.getName());
-		assertTrue(f2 == f22);
 		assertEquals(1, map.size());
-
-		ioc.get(Animal.class, "f1", ic);
-
-		assertEquals(1, map.size());
-
 	}
 
 	@Test

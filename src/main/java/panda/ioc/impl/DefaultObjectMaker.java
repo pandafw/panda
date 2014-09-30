@@ -47,7 +47,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
 		ObjectProxy op = new ObjectProxy();
 		if (iobj.isSingleton() && null != ing.getName()) {
-			ing.getContext().save(iobj.getScope(), ing.getName(), op);
+			ing.getIoc().getContext().save(iobj.getScope(), ing.getName(), op);
 		}
 
 		// 为对象代理设置触发事件
@@ -134,7 +134,6 @@ public class DefaultObjectMaker implements ObjectMaker {
 			
 			// 对象创建完毕，如果有 create 事件，调用它
 			dw.onCreate(obj);
-
 		}
 		// 当异常发生，从 context 里移除 ObjectProxy
 		catch (Throwable e) {
@@ -142,7 +141,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 				log.warn(String.format("IobObj: \n%s", iobj.toString()), e);
 			}
 			
-			ing.getContext().remove(iobj.getScope(), ing.getName());
+			ing.getIoc().getContext().remove(iobj.getScope(), ing.getName());
 			throw new IocException("Failed to create ioc bean: " + ing.getName(), e);
 		}
 

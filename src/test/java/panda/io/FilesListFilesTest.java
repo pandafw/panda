@@ -100,7 +100,7 @@ public class FilesListFilesTest extends FileBasedTestCase {
 		assertTrue(filenames.contains("dummy-file.txt"));
 		assertFalse(filenames.contains("dummy-index.html"));
 
-		files = Files.iterateFiles(getLocalTestDirectory(), (IOFileFilter)null, false);
+		files = Files.iterateFiles(getLocalTestDirectory(), (String[])null, false);
 		filenames = filesToFilenames(files);
 		assertEquals(2, filenames.size());
 		assertTrue(filenames.contains("dummy-build.xml"));
@@ -124,7 +124,7 @@ public class FilesListFilesTest extends FileBasedTestCase {
 		assertTrue(filenames.contains("dummy-file.txt"));
 		assertFalse(filenames.contains("dummy-index.html"));
 
-		files = Files.listFiles(getLocalTestDirectory(), (IOFileFilter)null, false);
+		files = Files.listFiles(getLocalTestDirectory(), (String[])null, false);
 		assertEquals(2, files.size());
 		filenames = filesToFilenames(files);
 		assertTrue(filenames.contains("dummy-build.xml"));

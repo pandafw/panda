@@ -31,7 +31,7 @@ var ioc = {
     },
     // Dao
     dao : {
-        type :'org.nutz.dao.impl.NutDao',
+        type :'org.panda.dao.impl.NutDao',
         args : [ {refer :"dataSource"}]
     }
 };
@@ -57,7 +57,7 @@ TA 看到会欢喜的不得了。
 
 总之，有没有什么办法，能够让运维人员之看到他们喜欢看到的文件，而程序员则继续维护自己的 Ioc 文件呢？ 怎么把 这两种文件连接起来呢？
 
-有，实际上，从很早以前，Nutz 就很好的支持了这样的做法，不过这次，郑重写个文档出来，也是为了避免有人再有 这个问题
+有，实际上，从很早以前，Panda 就很好的支持了这样的做法，不过这次，郑重写个文档出来，也是为了避免有人再有 这个问题
 
 答案是：采用 java 型注入值
 
@@ -74,7 +74,7 @@ db-password=123456
 var ioc = {
     // 读取配置文件
     config : {
-        type : "org.nutz.ioc.impl.PropertiesProxy",
+        type : "org.panda.ioc.impl.PropertiesProxy",
         fields : {
             paths : ["myapp.properties"]
         }
@@ -99,19 +99,19 @@ var ioc = {
     },
     // Dao
     dao : {
-        type :'org.nutz.dao.impl.NutDao',
+        type :'org.panda.dao.impl.NutDao',
         args : [ {refer :"dataSource"}]
     }
 };
 这里有几个重点
 
-Nutz 提供了一个类 org.nutz.ioc.impl.PropertiesProxy，他能读取并解析一个 properties 文件
+Panda 提供了一个类 org.panda.ioc.impl.PropertiesProxy，他能读取并解析一个 properties 文件
 在 Ioc 容器中，我们创建一个这样的单例对象，随便起个名字，比如叫 "config"
 那么根据配置 "myapp.properties" 会被 PropertiesProxy 类加载
 通过 java 调用，你可以直接调用 "config" 对象的 get 方法
 这样，你就能将分散在各个 Ioc 文件中的值集中到一个 properties 文件里了
 关于XML
-如果你打算给你的运维人员看 XML 怎么办呢？抱歉，Nutz 木有给出内部支持，但是简单的要命，你需要：
+如果你打算给你的运维人员看 XML 怎么办呢？抱歉，Panda 木有给出内部支持，但是简单的要命，你需要：
 
 提供一个 XML 配置解析类，从xml读取内容，然后，提供 get 方法
 在 Ioc 配置的任何地方，你都可以用 java 调用的方式，调用 get 方法

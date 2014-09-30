@@ -1,9 +1,8 @@
 匿名对象
-2014-4-23 23:58:59作者: zozoh
 鸭子法则
 如果它走路像鸭子，说话像鸭子，样子像鸭子，叫声也像鸭子，那它就是一只鸭子。
 
-对于 Nutz Ioc 来说，它面对的配置文件就是层层嵌套的 "名值对集合"，或者说是 Map 集合。 事实上，它是先把整个配置文件解析成 Map 再做判断的。
+对于 Panda Ioc 来说，它面对的配置文件就是层层嵌套的 "名值对集合"，或者说是 Map 集合。 事实上，它是先把整个配置文件解析成 Map 再做判断的。
 
 如果一个 Map 仅包括如下的键，则被认为是一个注入对象：
 nulltypenull	null对象类型null
@@ -25,7 +24,7 @@ var ioc = {
         name : 'XiaoBai',
         // 请注意，在这里， friend 字段，直接声明了另外一个对象
         friend : {
-            type : 'nutz.demo.ioc.book.Pet',
+            type : 'panda.demo.ioc.book.Pet',
             fields : {
                 name : 'XiaoHei'
             }
@@ -33,7 +32,7 @@ var ioc = {
     }
 }
 调用代码
-Ioc ioc = new NutIoc(new JsonLoader("nutz/demo/ioc/book/inner.js"));
+Ioc ioc = new NutIoc(new JsonLoader("panda/demo/ioc/book/inner.js"));
 Pet pet = ioc.get(Pet.class, "xb");
 System.out.println(pet.getFriend().getName());
 控制台输出

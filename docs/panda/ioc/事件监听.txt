@@ -1,7 +1,6 @@
 事件监听
-2014-4-23 23:58:59作者: zozoh
 都有哪些事件
-Nutz.Ioc 容器有三种事件：
+Panda.Ioc 容器有三种事件：
 
 对象被创建
 对象被从容器中取出
@@ -20,9 +19,9 @@ public class Pet {
     ... // 省略其他属性以及 getter 和 setter
 通过实现一个触发器
 触发器
-package nutz.demo.ioc.book;//提醒: 不要把你的类放在缺省包中!!
+package panda.demo.ioc.book;//提醒: 不要把你的类放在缺省包中!!
 
-import org.nutz.ioc.IocEventTrigger;
+import org.panda.ioc.IocEventTrigger;
 
 public class OnFetchPet implements IocEventTrigger<Pet> {
 
@@ -37,7 +36,7 @@ IocEventTrigger 接口只有一个方法，当它被调用的时候，就表示�
 var ioc = {
     xb : {
         events : {
-            fetch : 'nutz.demo.ioc.book.OnFetchPet'
+            fetch : 'panda.demo.ioc.book.OnFetchPet'
         },
         fields : {
             name : 'XiaoBai'
@@ -45,7 +44,7 @@ var ioc = {
     }
 }
 调用代码
-Ioc ioc = new NutIoc(new JsonLoader("nutz/demo/ioc/book/events.js"));
+Ioc ioc = new NutIoc(new JsonLoader("panda/demo/ioc/book/events.js"));
 Pet pet = ioc.get(Pet.class, "xb");
 ioc.get(Pet.class, "xb");
 ioc.get(Pet.class, "xb");

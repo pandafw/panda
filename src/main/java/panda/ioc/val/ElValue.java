@@ -2,6 +2,7 @@ package panda.ioc.val;
 
 import panda.el.El;
 import panda.ioc.IocMaking;
+import panda.ioc.IocProxy;
 import panda.ioc.ValueProxy;
 
 /**
@@ -36,9 +37,9 @@ import panda.ioc.ValueProxy;
  * <li>'ddd' 字符串，只支持单/双引号
  * <li>true | false 布尔类型
  * <li>数字
- * <li>常量： @ioc 容器自身
- * <li>常量： @name 对象名称
- * <li>常量： @context 容器上下文对象
+ * <li>常量： $ioc 容器自身
+ * <li>常量： $ibn 对象名称
+ * <li>常量： $ictx 容器上下文对象
  * <li>常量不区分大小写
  * </ul>
  * 容器，会尽量为你转换参数类型，比如你
@@ -58,6 +59,6 @@ public class ElValue implements ValueProxy {
 	}
 
 	public Object get(IocMaking ing) {
-		return el.eval(ing.getIoc());
+		return el.eval(new IocProxy(ing.getIoc()));
 	}
 }

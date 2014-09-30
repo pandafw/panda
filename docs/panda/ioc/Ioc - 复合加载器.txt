@@ -1,9 +1,8 @@
 Ioc - 复合加载器
-2014-4-23 23:58:59作者: zozoh
 为什么需要复合加载器
 Ioc 实际上一种将应用的耦合集中在一起管理的一种程序结构设计方式。耦合集中的具体形式 一般是各种格式的配置文件。比如 Spring 就有它自己的配置文件格式的规定。
 
-Nutz.Ioc 在设计之初就没有特别假定用户会把配置文件存成某种特定的格式，关于这点，各位 可以参看 定义自己的配置文件格式 一文。
+Panda.Ioc 在设计之初就没有特别假定用户会把配置文件存成某种特定的格式，关于这点，各位 可以参看 定义自己的配置文件格式 一文。
 
 同时，我们发现，在实际应用的时候，应用程序的耦合大概分做两种：
 
@@ -15,7 +14,7 @@ Nutz.Ioc 在设计之初就没有特别假定用户会把配置文件存成某�
 
 或者可怜的部署工程师手里拿的是你几个星期吐血写出来的长长的系统参数手册， 那么写这个手册之前，感到恐怖的可能就是你了，我亲爱的同学。 之后，他在鼓起勇气阅读的之前，通常也会倒吸一口凉气。
 
-当然，人的智慧就是在这过程中得到了淬炼，你的意志力，你的智慧，都会得到不同程度的升华。 但是 Nutz 这个小框架开发的初衷并不是希望锻炼你，折磨你，事实上，它希望尽一切可能， 让你远离这种锻炼...
+当然，人的智慧就是在这过程中得到了淬炼，你的意志力，你的智慧，都会得到不同程度的升华。 但是 Panda 这个小框架开发的初衷并不是希望锻炼你，折磨你，事实上，它希望尽一切可能， 让你远离这种锻炼...
 
 ...为此，我们也提供一个复合加载器，你可以将你的耦合关系写在配置文件中，或者Annotation 中，怎样分配则由亲爱的程序员同学你来亲自决定。
 
@@ -23,10 +22,10 @@ Nutz.Ioc 在设计之初就没有特别假定用户会把配置文件存成某�
 复合加载器非常简单，似乎只花了 Wendal 同学不到 1 个小时的时间，因为它本身并不做任何 事情，它只是调用其他的加载器：
 
 Ioc ioc = new NutIoc(new ComboIocLoader(
-                 "*org.nutz.ioc.loader.json.JsonLoader",
+                 "*org.panda.ioc.loader.json.JsonLoader",
                  "dao.js", 
                  "service.js", 
-                 "*org.nutz.ioc.loader.annotation.AnnotationIocLoader", 
+                 "*org.panda.ioc.loader.annotation.AnnotationIocLoader", 
                  "com.myapp.module",
                  "com.myapp.service"
          )); 
@@ -43,7 +42,7 @@ ComboIocLoader 的构造函数是个字符串形变参数组，所有的参数�
 在本节的例子中， JsonLoader 加载器比 AnnotationIocLoader 更加优先. 就是说，如果两个加载器都加载了同名对象，则以 JsonLoader 的为准
 
 在 Mvc 中的用法
-在 Nutz.Mvc 中，Ioc 容器是由 IocProvider 接口来提供的，所以，每个加载器都由一个类似 的 IocProvier 实现。比如 ComboIocLoader，也就有一个 ComboIocProvider。
+在 Panda.Mvc 中，Ioc 容器是由 IocProvider 接口来提供的，所以，每个加载器都由一个类似 的 IocProvier 实现。比如 ComboIocLoader，也就有一个 ComboIocProvider。
 
 但是，请千万要注意: 对于 ComboIocProvider:
 
@@ -56,10 +55,10 @@ ComboIocLoader 的构造函数是个字符串形变参数组，所有的参数�
 下面给个例子：
 
 @IocBy(type = ComboIocProvider.class,
-       args = {"*org.nutz.ioc.loader.json.JsonLoader",
+       args = {"*org.panda.ioc.loader.json.JsonLoader",
                "dao.js", 
                "service.js", 
-               "*org.nutz.ioc.loader.annotation.AnnotationIocLoader", 
+               "*org.panda.ioc.loader.annotation.AnnotationIocLoader", 
                "com.myapp.module",
                "com.myapp.service"
         })

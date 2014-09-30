@@ -29,11 +29,14 @@ import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 
-public class DefaultIoc implements Ioc {
+public class DefaultIoc implements Ioc, Cloneable {
 
 	private static final Log log = Logs.getLog(DefaultIoc.class);
-
-	private final Object lock = new Object();
+	
+	/**
+	 * 装配对象的逻辑
+	 */
+	private ObjectMaker maker;
 
 	/**
 	 * 读取配置文件的 Loader
@@ -46,29 +49,40 @@ public class DefaultIoc implements Ioc {
 	private IocContext context;
 	
 	/**
-	 * 装配对象的逻辑
+	 * 对象默认生命周期范围名
 	 */
-	private ObjectMaker maker;
-	
-	/**
-	 * 可扩展的"字段值"生成器
-	 */
-	private List<ValueProxyMaker> vpms;
+	private String defaultScope;
 	
 	/**
 	 * 反射工厂，封装 AOP 的逻辑
 	 */
 	private MirrorFactory mirrors;
+
+	//-----------------------------------------------------------
+	// internal use
+	//
+	/**
+	 * lock
+	 */
+	private Object lock;
 	
 	/**
-	 * 对象默认生命周期范围名
+	 * 可扩展的"字段值"生成器
 	 */
-	private String defaultScope;
+	private List<ValueProxyMaker> vpms;
 
 	/**
 	 * helper class for IocLoad
 	 */
 	private IocLoading loading;
+
+	/**
+	 * deposed
+	 */
+	private boolean deposed = false;
+
+	private DefaultIoc() {
+	}
 
 	public DefaultIoc(IocLoader loader) {
 		this(loader, new ScopeIocContext(Scope.APP), Scope.APP);
@@ -83,6 +97,7 @@ public class DefaultIoc implements Ioc {
 	}
 
 	protected DefaultIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
+		this.lock = new Object();
 		this.maker = maker;
 		this.defaultScope = defaultScope;
 		this.context = context;
@@ -107,18 +122,10 @@ public class DefaultIoc implements Ioc {
 	}
 
 	public <T> T get(Class<T> type) throws IocException {
-		return get(type, null, null);
+		return get(type, null);
 	}
 
-	public <T> T get(Class<T> type, String name) {
-		return get(type, name, null);
-	}
-
-	public <T> T get(Class<T> type, IocContext context) {
-		return get(type, null, null);
-	}
-
-	public <T> T get(Class<T> type, String name, IocContext context) throws IocException {
+	public <T> T get(Class<T> type, String name) throws IocException {
 		if (name == null) {
 			name = getBeanName(type);
 		}
@@ -128,18 +135,17 @@ public class DefaultIoc implements Ioc {
 		}
 		
 		// 创建对象创建时
-		IocMaking imk = makeIocMaking(context, name);
-		IocContext ictx = imk.getContext();
+		IocMaking imk = makeIocMaking(name);
 
 		// 从上下文缓存中获取对象代理
-		ObjectProxy op = ictx.fetch(name);
+		ObjectProxy op = context.fetch(name);
 
 		// 如果未发现对象
 		if (null == op) {
 			// 线程同步
 			synchronized (lock) {
 				// 再次读取
-				op = ictx.fetch(name);
+				op = context.fetch(name);
 
 				// 如果未发现对象
 				if (null == op) {
@@ -202,20 +208,14 @@ public class DefaultIoc implements Ioc {
 	}
 
 	public boolean has(String name) {
-		// 创建对象创建时
-		IocMaking imk = makeIocMaking(context, name);
-		IocContext ictx = imk.getContext();
-
 		// 从上下文缓存中获取对象代理
-		ObjectProxy op = ictx.fetch(name);
+		ObjectProxy op = context.fetch(name);
 		if (op != null) {
 			return true;
 		}
 
 		return loader.has(name);
 	}
-
-	private boolean deposed = false;
 
 	public void depose() {
 		if (deposed) {
@@ -254,8 +254,12 @@ public class DefaultIoc implements Ioc {
 		}
 	}
 
-	public IocContext getIocContext() {
+	public IocContext getContext() {
 		return context;
+	}
+	
+	public void setContext(IocContext context) {
+		this.context = context;
 	}
 
 	public void setMaker(ObjectMaker maker) {
@@ -274,19 +278,24 @@ public class DefaultIoc implements Ioc {
 		return AnnotationIocLoader.getBeanName(type, type.getAnnotation(IocBean.class));
 	}
 	
-	protected IocMaking makeIocMaking(IocContext context, String name) {
-		// 连接上下文
-		IocContext cntx;
-		if (null == context || context == this.context) {
-			cntx = this.context;
-		}
-		else {
-			if (log.isTraceEnabled()) {
-				log.trace("Link contexts");
-			}
-			cntx = new ComboContext(context, this.context);
-		}
-		return new IocMaking(this, mirrors, cntx, maker, vpms, name);
+	protected IocMaking makeIocMaking(String name) {
+		return new IocMaking(this, mirrors, maker, vpms, name);
+	}
+
+	@Override
+	public DefaultIoc clone() {
+		DefaultIoc ni = new DefaultIoc();
+
+		ni.maker = this.maker;
+		ni.loader = this.loader;
+		ni.context = this.context;
+		ni.defaultScope = this.defaultScope;
+		ni.mirrors = this.mirrors;
+		ni.lock = this.lock;
+		ni.vpms = this.vpms;
+		ni.loading = this.loading;
+		
+		return ni;
 	}
 
 	@Override

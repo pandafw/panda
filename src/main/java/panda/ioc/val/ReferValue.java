@@ -41,11 +41,11 @@ public class ReferValue implements ValueProxy {
 	public Object get(IocMaking ing) {
 		Ioc ioc = ing.getIoc();
 		if (required) {
-			return ioc.get(type, name, ing.getContext());
+			return ioc.get(type, name);
 		}
 		
 		if (ioc.has(name)) {
-			return ioc.get(type, name, ing.getContext());
+			return ioc.get(type, name);
 		}
 		
 		return UNDEFINED;

@@ -12,7 +12,7 @@ public class IocContextValue implements ValueProxy {
 	}
 	
 	public Object get(IocMaking ing) {
-		return ing.getContext();
+		return ing.getIoc().getContext();
 	}
 
 }

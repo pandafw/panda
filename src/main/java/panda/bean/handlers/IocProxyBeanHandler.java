@@ -3,7 +3,8 @@ package panda.bean.handlers;
 import java.lang.reflect.Type;
 
 import panda.bean.Beans;
-import panda.ioc.Ioc;
+import panda.ioc.IocProxy;
+import panda.ioc.ValueProxyMaker;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -14,13 +15,13 @@ import panda.lang.Strings;
  *
  * @param <T> class type
  */
-public class IocBeanHandler<T extends Ioc> extends AbstractJavaBeanHandler<T> {
+public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHandler<T> {
 	/**
 	 * Constructor
 	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public IocBeanHandler(Beans beans, Type type) {
+	public IocProxyBeanHandler(Beans beans, Type type) {
 		super(beans, type);
 	}
 	
@@ -44,6 +45,11 @@ public class IocBeanHandler<T extends Ioc> extends AbstractJavaBeanHandler<T> {
 	 * @return property type
 	 */
 	public boolean canReadProperty(T ioc, String propertyName) {
+		if (ValueProxyMaker.IOC.equals(propertyName)
+				|| ValueProxyMaker.ICTX.equals(propertyName)) {
+			return true;
+		}
+		
 		if (ioc == null) {
 			return false;
 		}
@@ -63,10 +69,10 @@ public class IocBeanHandler<T extends Ioc> extends AbstractJavaBeanHandler<T> {
 
 	/**
 	 * get write property names
-	 * @param map bean object (can be null)
+	 * @param ioc bean object (can be null)
 	 * @return property names
 	 */
-	public String[] getWritePropertyNames(T map) {
+	public String[] getWritePropertyNames(T ioc) {
 		return Arrays.EMPTY_STRING_ARRAY;
 	}
 
@@ -85,6 +91,13 @@ public class IocBeanHandler<T extends Ioc> extends AbstractJavaBeanHandler<T> {
 	}
 	
 	public Object getPropertyValue(T ioc, String propertyName) {
+		if (ValueProxyMaker.IOC.equals(propertyName)) {
+			return ioc == null ? null : ioc.getIoc();
+		}
+		if (ValueProxyMaker.ICTX.equals(propertyName)) {
+			return ioc == null ? null : ioc.getContext();
+		}
+		
 		return ioc.get(Object.class, propertyName);
 	}
 	

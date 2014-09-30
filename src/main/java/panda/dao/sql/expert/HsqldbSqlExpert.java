@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.dao.DB;
-import panda.dao.DaoTypes;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
-import panda.dao.sql.Sqls;
 
 /**
  */
@@ -53,14 +51,6 @@ public class HsqldbSqlExpert extends SqlExpert {
 			else {
 				if (ef.hasDefaultValue()) {
 					sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
-
-//					int jdbcType = DaoTypes.getType(ef.getJdbcType());
-//					if (Sqls.isCharType(jdbcType)) {
-//						sb.append('\'').append(ef.getDefaultValue()).append('\'');
-//					}
-//					else {
-//						sb.append(ef.getDefaultValue());
-//					}
 				}
 				if (ef.isNotNull()) {
 					sb.append(" NOT NULL");

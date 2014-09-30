@@ -1,5 +1,4 @@
 表达式引擎简介
-2014-4-23 23:58:59作者: zozoh wendal juqkai
 为什么需要 EL 表达式引擎
 你，对，就是你，正在看这篇文章的人，我虽然不认识你，但是 我可以负责任的说， 如果你看到这个标题就心里在悄悄的呼喊： “靠，他们连这个都有！我省事了，哇哈哈哈和”。 那么，你绝对属于百分之一的特例。 就是说，绝大多数人的绝大多数项目，是不需要 一个嵌入式的表达式引擎的。因此，提供这个功能的目的就是：
 
@@ -8,8 +7,8 @@
 但是，"一小撮人"的"一小撮要求"有很多，作为一个小众类库，为什么单单打算支持这个特性呢？ 下面是我的理由：
 
 这个功能是其它模块功能的基础，我们需要它
-可能因此吸引其他的开发者对 Nutz 的兴趣
-需要嵌入式表达式引擎的人是 Java 开发者的少数人，但是这些人也应该比 Nutz 的用户要多
+可能因此吸引其他的开发者对 Panda 的兴趣
+需要嵌入式表达式引擎的人是 Java 开发者的少数人，但是这些人也应该比 Panda 的用户要多
 这些人基本上编程水平要强一些
 其他的提交者对增加这个特性没有特别强烈的反对
 近一步介绍表达式引擎
@@ -115,7 +114,7 @@ trim	 一个String	 去掉字符串两边的空格	 trim(" 1 ")=> "1"
 
 当EL里面的功能无法满足你的需求时, 你可以自定义一些功能来实现, 怎么自定义呢?
 
-# 创建一个类, 使它实现 org.nutz.el.opt.RunMethod, org.nutz.plugin.Plugin 这两个接口.
+# 创建一个类, 使它实现 org.panda.el.opt.RunMethod, org.panda.plugin.Plugin 这两个接口.
 # 在配置文件中添加一个配置项:
 {
 "EL": {"custom":[...函数列表...]}
@@ -148,7 +147,7 @@ public class Trim implements RunMethod, Plugin{
 其实我们的 EL 很强悍的, 有好多功能, 好多使用技巧等待着你的发现. 现在简单的罗列一下, EL中的一些特性吧.
 
 忠于 Java
-Nutz中的 EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比如最常见的, 数据类型转换, 在 JAVA 中进行数值运算的过程中, 是根据运算符两边的类型而最终决定运算结果的类型的, 比如:
+Panda中的 EL 完全忠实于 JAVA 基本运算规则, 并没有做一些扩展, 比如最常见的, 数据类型转换, 在 JAVA 中进行数值运算的过程中, 是根据运算符两边的类型而最终决定运算结果的类型的, 比如:
 
 7/3  // 将返回int型
 而 
@@ -175,7 +174,7 @@ assertEquals(10, El.eval(context, "a.add(b).intValue()"));
 
 Context context = Lang.context();
 context.set("strings", Strings.class);
-assertEquals("nutz", El.eval(context, "strings.trim(\"    nutz   \")"));
+assertEquals("panda", El.eval(context, "strings.trim(\"    panda   \")"));
 一些表达式的例子
 普通运算
 System.out.println(El.eval("3+2*5"));

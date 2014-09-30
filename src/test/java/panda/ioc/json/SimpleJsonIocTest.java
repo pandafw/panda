@@ -15,13 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Assume;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocException;
-import panda.ioc.IocLoader;
 import panda.ioc.IocLoadException;
+import panda.ioc.IocLoader;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Animal;
 import panda.ioc.json.pojo.AnimalRace;
@@ -175,13 +174,10 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_el_simple() {
-		Assume.assumeTrue(false);
-
-		//TODO
-		Ioc ioc = I(J("fox", "name:{el: '@Name.toUpperCase()'}, age:{el:'@Name.length()'}"));
+		Ioc ioc = I(J("fox", "name:{el: '\"fox\".toUpperCase()'}, age:{el:'$ioc.names.length'}"));
 		Animal fox = ioc.get(Animal.class, "fox");
 		assertEquals("FOX", fox.getName());
-		assertEquals(3, fox.getAge());
+		assertEquals(1, fox.getAge());
 	}
 
 	@Test
