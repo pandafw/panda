@@ -1,42 +1,36 @@
 package panda.mvc.init.conf;
 
-import panda.mvc.annotation.*;
-import panda.mvc.annotation.method.DELETE;
-import panda.mvc.annotation.method.GET;
-import panda.mvc.annotation.method.POST;
-import panda.mvc.annotation.method.PUT;
+import panda.mvc.annotation.At;
+import panda.mvc.annotation.Fail;
+import panda.mvc.annotation.Ok;
+import panda.net.http.HttpMethod;
 
+@At
 @Ok("raw")
 @Fail("json")
 public class RestModule {
 
-	@At("/abc")
-	@GET
+	@At(value="/abc", method=HttpMethod.GET)
 	public String get() {
 		return "get";
 	}
 
-	@At("/abc")
-	@PUT
+	@At(value="/abc", method=HttpMethod.PUT)
 	public String put() {
 		return "put";
 	}
 
-	@At("/abc")
-	@POST
+	@At(value="/abc", method=HttpMethod.POST)
 	public String post() {
 		return "post";
 	}
 
-	@At("/abc")
-	@DELETE
+	@At(value="/abc", method=HttpMethod.DELETE)
 	public String delete() {
 		return "delete";
 	}
 
-	@At("/xyz")
-	@GET
-	@POST
+	@At(value="/xyz", method={ HttpMethod.GET, HttpMethod.POST })
 	public String getAndPost() {
 		return "get&post";
 	}

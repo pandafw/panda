@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import panda.ioc.Ioc;
-import panda.mvc.config.AtMap;
 
 /**
  * 这个接口是一个抽象封装
@@ -52,11 +51,6 @@ public interface MvcConfig {
 	 * @return 配置的主模块，null - 如果没有定义这个参数
 	 */
 	Class<?> getMainModule();
-
-	/**
-	 * 在你的模块中通过 '@At' 声明的入口函数，可以存储在 AtMap 中，这个函数提供一个 AtMap 的实例
-	 */
-	AtMap getAtMap();
 
 	/**
 	 * 根据 MainModule 中的 '@LoadingBy' 得到一个加载逻辑的实现类

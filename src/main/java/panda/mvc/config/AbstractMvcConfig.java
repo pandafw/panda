@@ -25,8 +25,6 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 	private static final String ATTR_IOC = "$ioc";
 	private static final String ATTR_LOADCTX = "$loadctx";
 
-	private AtMap atMap;
-	
 	public AbstractMvcConfig(ServletContext context) {
 	}
 
@@ -113,14 +111,6 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 		}
 	}
 
-	public AtMap getAtMap() {
-		return atMap;
-	}
-
-	protected void setAtMap(AtMap atMap) {
-		this.atMap = atMap;
-	}
-	
 	protected List<String> enum2list(Enumeration<?> enums) {
 		LinkedList<String> re = new LinkedList<String>();
 		while (enums.hasMoreElements()) {

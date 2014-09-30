@@ -15,7 +15,6 @@ import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.RequestPath;
 import panda.mvc.UrlMapping;
-import panda.mvc.config.AtMap;
 import panda.net.http.HttpMethod;
 
 public class UrlMappingImpl implements UrlMapping {
@@ -23,9 +22,11 @@ public class UrlMappingImpl implements UrlMapping {
 	private static final Log log = Logs.getLog(UrlMappingImpl.class);
 
 	private MappingNode<ActionInvoker> root;
-
+	private Map<String, ActionInvoker> map;
+	
 	public UrlMappingImpl() {
-		this.root = new MappingNode<ActionInvoker>();
+		root = new MappingNode<ActionInvoker>();
+		map = new HashMap<String, ActionInvoker>();
 	}
 
 	public void add(ActionChainMaker maker, ActionInfo ai, MvcConfig config) {
@@ -42,9 +43,6 @@ public class UrlMappingImpl implements UrlMapping {
 			}
 		}
 
-		Map<String, ActionInvoker> map = new HashMap<String, ActionInvoker>();
-		AtMap atmap = config.getAtMap();
-		
 		ActionChain chain = maker.eval(config, ai);
 		for (String path : ai.getPaths()) {
 			// 尝试获取，看看有没有创建过这个 URL 调用者
@@ -55,13 +53,10 @@ public class UrlMappingImpl implements UrlMapping {
 				invoker = new ActionInvoker();
 				map.put(path, invoker);
 				root.add(path, invoker);
-				
-				// 记录一下方法与 url 的映射
-				atmap.addMethod(path, ai.getMethod());
 			}
 
 			// 将动作链，根据特殊的 HTTP 方法，保存到调用者内部
-			if (ai.isForSpecialHttpMethod()) {
+			if (ai.hasHttpMethod()) {
 				for (HttpMethod httpMethod : ai.getHttpMethods()) {
 					invoker.addChain(httpMethod, chain);
 				}
@@ -73,11 +68,6 @@ public class UrlMappingImpl implements UrlMapping {
 		}
 
 		printActionMapping(ai);
-
-		// 记录一个 @At.key
-		if (Strings.isNotBlank(ai.getPathKey())) {
-			atmap.add(ai.getPathKey(), ai.getPaths()[0]);
-		}
 	}
 
 	public ActionInvoker get(ActionContext ac) {
@@ -108,20 +98,23 @@ public class UrlMappingImpl implements UrlMapping {
 			StringBuilder sb = new StringBuilder();
 			if (null != paths && paths.length > 0) {
 				sb.append("   '").append(paths[0]).append("'");
-				for (int i = 1; i < paths.length; i++)
-					sb.append(", '").append(paths[i]).append("'");
+				for (String p : paths) {
+					sb.append(", '").append(p).append("'");
+				}
 			}
 			else {
 				throw Exceptions.impossible();
 			}
+
 			// 打印方法名
 			Method method = ai.getMethod();
 			String str;
-			if (null != method)
-				str = String.format("%-30s : %-10s", method.toString(), method.getReturnType()
-					.getSimpleName());
-			else
+			if (null != method) {
+				str = String.format("%-30s : %-10s", method.toString(), method.getReturnType().getSimpleName());
+			}
+			else {
 				throw Exceptions.impossible();
+			}
 
 			log.debugf("%s >> %s | @Ok(%-5s) @Fail(%-5s) | (I:%s/O:%s)",
 				Strings.rightPad(sb, 30), str, ai.getOkView(), ai.getFailView(),

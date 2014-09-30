@@ -152,13 +152,6 @@ public class MvcLoading implements Loading {
 					atMethods++;
 				}
 			}
-
-			// 记录pathMap
-			if (null != actionInfo.getPathMap()) {
-				for (Entry<String, String> en : actionInfo.getPathMap().entrySet()) {
-					config.getAtMap().add(en.getKey(), en.getValue());
-				}
-			}
 		}
 
 		if (atMethods == 0) {

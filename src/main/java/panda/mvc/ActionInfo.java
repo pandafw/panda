@@ -3,8 +3,6 @@ package panda.mvc;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import panda.net.http.HttpMethod;
 
@@ -14,11 +12,7 @@ public class ActionInfo {
 
 	private String outputEncoding;
 
-	private String pathKey;
-
 	private String[] paths;
-
-	private Map<String, String> pathMap;
 
 	private String chainName;
 
@@ -53,18 +47,6 @@ public class ActionInfo {
 			paths = myPaths.toArray(new String[myPaths.size()]);
 		}
 
-		if (null == pathMap) {
-			pathMap = parent.pathMap;
-		}
-		else {
-			for (Entry<String, String> en : parent.pathMap.entrySet()) {
-				if (pathMap.containsKey(en.getKey())) {
-					continue;
-				}
-				pathMap.put(en.getKey(), en.getValue());
-			}
-		}
-
 		// 填充默认值
 		inputEncoding = null == inputEncoding ? parent.inputEncoding : inputEncoding;
 		outputEncoding = null == outputEncoding ? parent.outputEncoding : outputEncoding;
@@ -79,7 +61,7 @@ public class ActionInfo {
 	/**
 	 * @return 这个入口函数是不是只匹配特殊的 http 方法。
 	 */
-	public boolean isForSpecialHttpMethod() {
+	public boolean hasHttpMethod() {
 		return httpMethods.size() > 0;
 	}
 
@@ -96,14 +78,6 @@ public class ActionInfo {
 	 */
 	public List<HttpMethod> getHttpMethods() {
 		return httpMethods;
-	}
-
-	public String getPathKey() {
-		return pathKey;
-	}
-
-	public void setPathKey(String pathKey) {
-		this.pathKey = pathKey;
 	}
 
 	public String getInputEncoding() {
@@ -128,14 +102,6 @@ public class ActionInfo {
 
 	public void setPaths(String[] paths) {
 		this.paths = paths;
-	}
-
-	public Map<String, String> getPathMap() {
-		return pathMap;
-	}
-
-	public void setPathMap(Map<String, String> pathMap) {
-		this.pathMap = pathMap;
 	}
 
 	public ObjectInfo<? extends ParamAdaptor> getAdaptorInfo() {

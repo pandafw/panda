@@ -5,10 +5,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import panda.bind.json.Jsons;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
@@ -28,12 +26,6 @@ import panda.mvc.annotation.Encoding;
 import panda.mvc.annotation.Fail;
 import panda.mvc.annotation.Modules;
 import panda.mvc.annotation.Ok;
-import panda.mvc.annotation.PathMap;
-import panda.mvc.annotation.method.DELETE;
-import panda.mvc.annotation.method.GET;
-import panda.mvc.annotation.method.HEAD;
-import panda.mvc.annotation.method.POST;
-import panda.mvc.annotation.method.PUT;
 import panda.net.http.HttpMethod;
 
 public abstract class Loadings {
@@ -44,7 +36,6 @@ public abstract class Loadings {
 		ActionInfo ai = new ActionInfo();
 		evalEncoding(ai, type.getAnnotation(Encoding.class));
 		evalHttpAdaptor(ai, type.getAnnotation(AdaptBy.class));
-		evalPathMap(ai, type.getAnnotation(PathMap.class));
 		evalOk(ai, type.getAnnotation(Ok.class));
 		evalFail(ai, type.getAnnotation(Fail.class));
 		evalAt(ai, type.getAnnotation(At.class), null);
@@ -61,7 +52,6 @@ public abstract class Loadings {
 		evalFail(ai, method.getAnnotation(Fail.class));
 		evalAt(ai, method.getAnnotation(At.class), method.getName());
 		evalActionChainMaker(ai, method.getAnnotation(Chain.class));
-		evalHttpMethod(ai, method);
 		ai.setMethod(method);
 		return ai;
 	}
@@ -117,24 +107,6 @@ public abstract class Loadings {
 		}
 	}
 	
-	public static void evalHttpMethod(ActionInfo ai, Method method) {
-		if (method.getAnnotation(HEAD.class) != null) {
-			ai.getHttpMethods().add(HttpMethod.HEAD);
-		}
-		if (method.getAnnotation(GET.class) != null) {
-			ai.getHttpMethods().add(HttpMethod.GET);
-		}
-		if (method.getAnnotation(POST.class) != null) {
-			ai.getHttpMethods().add(HttpMethod.POST);
-		}
-		if (method.getAnnotation(PUT.class) != null) {
-			ai.getHttpMethods().add(HttpMethod.PUT);
-		}
-		if (method.getAnnotation(DELETE.class) != null) {
-			ai.getHttpMethods().add(HttpMethod.DELETE);
-		}
-	}
-
 	public static void evalActionChainMaker(ActionInfo ai, Chain cb) {
 		if (null != cb) {
 			ai.setChainName(cb.value());
@@ -150,15 +122,11 @@ public abstract class Loadings {
 				ai.setPaths(Arrays.toArray("/" + def.toLowerCase()));
 			}
 
-			if (!Strings.isBlank(at.key()))
-				ai.setPathKey(at.key());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void evalPathMap(ActionInfo ai, PathMap pathMap) {
-		if (pathMap != null) {
-			ai.setPathMap((Map<String, String>)Jsons.fromJson(pathMap.value(), Map.class));
+			if (at.method() != null && at.method().length > 0) {
+				for (HttpMethod m : at.method()) {
+					ai.getHttpMethods().add(m);
+				}
+			}
 		}
 	}
 

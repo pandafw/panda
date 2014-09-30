@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import panda.net.http.HttpMethod;
+
 /**
  * 声明了一组URL。
  * <p>
@@ -73,12 +75,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface At {
 
-	/**
-	 * 如果为这个映射声明一个 key，哪么，可以通过 key 来访问这个 @At 的一个值
-	 * <p>
-	 * 默认的，你不需要关心这个属性
-	 */
-	String key() default "";
-
 	String[] value() default {};
+
+	HttpMethod[] method() default {};
 }

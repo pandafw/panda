@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import panda.mvc.AbstractMvcTestCase;
-import panda.mvc.init.conf.MainModuleA;
+import panda.mvc.init.conf.MainModule;
 
 public class MvcModuleInitTest extends AbstractMvcTestCase {
 
 	protected void initServletConfig() {
-		servletConfig.addInitParameter("modules", MainModuleA.class.getName());
+		servletConfig.addInitParameter("modules", MainModule.class.getName());
 	}
 
 	@Test

@@ -12,7 +12,6 @@ public class ServletMvcConfig extends AbstractMvcConfig {
 	public ServletMvcConfig(ServletConfig config) {
 		super(config.getServletContext());
 		this.config = config;
-		setAtMap(new AtMap());
 	}
 
 	public ServletContext getServletContext() {

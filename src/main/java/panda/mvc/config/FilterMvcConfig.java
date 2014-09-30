@@ -12,7 +12,6 @@ public class FilterMvcConfig extends AbstractMvcConfig {
 	public FilterMvcConfig(FilterConfig config) {
 		super(config.getServletContext());
 		this.config = config;
-		setAtMap(new AtMap());
 	}
 
 	public ServletContext getServletContext() {
