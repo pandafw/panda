@@ -25,6 +25,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.net.http.HttpContentType;
 
 /**
  * 将数据对象直接写入 HTTP 响应
@@ -55,11 +56,27 @@ public class RawView implements View {
 
 	public static final boolean DISABLE_RANGE_DOWNLOAD = false; // 禁用断点续传
 
+	protected static final Map<String, String> contentTypeMap = new HashMap<String, String>();
+
+	static {
+		contentTypeMap.put("xml", "application/xml");
+		contentTypeMap.put("html", "text/html");
+		contentTypeMap.put("htm", "text/html");
+		contentTypeMap.put("stream", "application/octet-stream");
+		contentTypeMap.put("js", "application/javascript");
+		contentTypeMap.put("json", "application/json");
+		contentTypeMap.put("jpg", "image/jpeg");
+		contentTypeMap.put("jpeg", "image/jpeg");
+		contentTypeMap.put("png", "image/png");
+		contentTypeMap.put("webp", "image/webp");
+	}
+
 	protected String contentType;
 
 	public RawView(String contentType) {
-		if (Strings.isBlank(contentType))
-			contentType = "text/plain";
+		if (Strings.isBlank(contentType)) {
+			contentType = HttpContentType.TEXT_PLAIN;
+		}
 		this.contentType = Strings.defaultString(contentTypeMap.get(contentType.toLowerCase()), contentType);
 	}
 
@@ -70,7 +87,7 @@ public class RawView implements View {
 
 		// 如果用户自行设置了,那就不要再设置了!
 		if (res.getContentType() == null) {
-			if (obj != null && obj instanceof BufferedImage && "text/plain".equals(contentType)) {
+			if (obj != null && obj instanceof BufferedImage && HttpContentType.TEXT_PLAIN.equals(contentType)) {
 				contentType = contentTypeMap.get("png");
 			}
 			res.setContentType(contentType);
@@ -160,21 +177,6 @@ public class RawView implements View {
 			OutputStream out = res.getOutputStream();
 			Streams.write(data, out);
 		}
-	}
-
-	protected static final Map<String, String> contentTypeMap = new HashMap<String, String>();
-
-	static {
-		contentTypeMap.put("xml", "application/xml");
-		contentTypeMap.put("html", "text/html");
-		contentTypeMap.put("htm", "text/html");
-		contentTypeMap.put("stream", "application/octet-stream");
-		contentTypeMap.put("js", "application/javascript");
-		contentTypeMap.put("json", "application/json");
-		contentTypeMap.put("jpg", "image/jpeg");
-		contentTypeMap.put("jpeg", "image/jpeg");
-		contentTypeMap.put("png", "image/png");
-		contentTypeMap.put("webp", "image/webp");
 	}
 
 	public static class RangeRange {

@@ -12,15 +12,15 @@ public class ServerRedirectViewTest extends BaseWebappTest {
 
 	@Test
 	public void test_simple() throws IOException {
-		get("/views/red?to=base");
+		get("/views/red?to=redbase");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
 
-		get("/views/red2?to=base");
+		get("/views/red2?to=redbase");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
 
-		get("/views/red3?to=base");
+		get("/views/red3?to=redbase");
 		assertEquals(200, resp.getStatusCode());
 		assertEquals(getContextPath(), resp.getContentText());
 	}

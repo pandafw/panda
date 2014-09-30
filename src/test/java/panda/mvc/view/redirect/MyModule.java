@@ -7,10 +7,10 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
 
+@At
 public class MyModule {
-
 	@At("/register")
-	@Ok("redirect:/jsp/user/information.nut?id=${obj.id}")
+	@Ok("redirect:/jsp/user/information.do?id=${obj.id}")
 	public User register(HttpServletRequest request, HttpSession session) {
 		User user = new User();
 		user.setId(373);
@@ -18,7 +18,7 @@ public class MyModule {
 	}
 
 	@At("/login")
-	@Ok("redirect:/jsp/user/${p.name}")
+	@Ok("redirect:/jsp/user/${param.name}")
 	public boolean login(@Param("name") String name, @Param("password") String password) {
 		return "wendal".equals(name) && "123456".equals(password);
 	}

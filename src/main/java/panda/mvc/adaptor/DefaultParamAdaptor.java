@@ -34,9 +34,9 @@ import panda.mvc.adaptor.ejector.JsonParamEjector;
 import panda.mvc.adaptor.ejector.MultiPartParamEjector;
 import panda.mvc.adaptor.ejector.XmlParamEjector;
 import panda.mvc.annotation.param.Attr;
+import panda.mvc.annotation.param.Header;
 import panda.mvc.annotation.param.IocObj;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.param.Header;
 import panda.net.http.HttpContentType;
 import panda.net.http.HttpMethod;
 import panda.servlet.ServletRequestHeaderMap;
@@ -94,6 +94,20 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		Type[] types = method.getGenericParameterTypes();
 		Object[] objs = new Object[types.length];
 
+		if (objs.length == 1 && annss[0].length == 0) {
+			objs[0] = adaptByParamType(ac, clazs[0]);
+			if (objs[0] == null) {
+				// adapt by path arguments
+				objs[0] = adaptByPathArg(ac, types[0], 0);
+
+				if (objs[0] == null) {
+					objs[0] = ejectByAll(ac, types[0]);
+				}
+			}
+			
+			return objs;
+		}
+
 		int p = 0;
 		for (int i = 0; i < annss.length; i++) {
 			Annotation[] anns = annss[i];
@@ -139,13 +153,13 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				continue;
 			}
 
-			// And eval as default suport types
+			// And adapt by default support types
 			objs[i] = adaptByParamType(ac, clazs[i]);
 			if (objs[i] != null) {
 				continue;
 			}
 			
-			// Eval by param annotation
+			// Adapt by @param annotation
 			if (param != null) {
 				objs[i] = adaptByParamAnno(ac, types[i], param);
 				if (objs[i] != null) {
@@ -154,6 +168,11 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			}
 			
 			objs[i] = adaptByPathArg(ac, types[i], p++);
+			if (objs[i] != null) {
+				continue;
+			}
+			
+			objs[i] = cast(null, types[i]);
 		}
 		
 		return objs;
@@ -206,14 +225,14 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	protected Object adaptByReqHeader(ActionContext ac, Type type, String name) {
 		Object val;
 		HttpServletRequest req = ac.getRequest();
-		if ("*".equals(name)) {
+		if (ParamEjector.ALL.equals(name)) {
 			val = new ServletRequestHeaderMap(req);
 		}
 		else {
 			val = req.getHeader(name);
 		}
 
-		return Castors.scast(val, type);
+		return cast(val, type);
 	}
 
 	protected Object adaptByParamType(ActionContext ac, Class<?> type) {
@@ -270,10 +289,10 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 
 		// FORM
 		if (Strings.isEmpty(pm)) {
-			return ejectByHttpForm(ac, type, null);
+			return ejectByAll(ac, type);
 		}
 		if (pm.startsWith("^")) {
-			return ejectByHttpForm(ac, type, pm.substring(1));
+			return ejectByPrefix(ac, type, pm.substring(1));
 		}
 		
 		return ejectByNamedParam(ac, type, pm);
@@ -294,11 +313,18 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			}
 		}
 		
-		return Castors.scast(param, type);
+		return cast(param, type);
+	}
+
+	protected Object ejectByAll(ActionContext ac, Type type) {
+		ParamEjector pe = getParamEjector(ac);
+		Object a = pe.eject();
+		Object o = cast(a, type);
+		return o;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Object ejectByHttpForm(ActionContext ac, Type type, String prefix) {
+	protected Object ejectByPrefix(ActionContext ac, Type type, String prefix) {
 		BeanHandler bh = Beans.i().getBeanHandler(type);
 		Object target = Types.born(Types.getDefaultImplType(type));
 		
@@ -312,7 +338,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);
 				}
 				else {
-					Object cv = Castors.scast(val, pt);
+					Object cv = cast(val, pt);
 					if (!bh.setBeanValue(target, bn, cv)) {
 						log.warn("Failed to set form value (" + key + "=" + val + ") to " + type);
 					}
@@ -323,13 +349,16 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return target;
 	}
 
-	//FIXME
 	protected Object adaptByPathArg(ActionContext ac, Type type, int index) {
 		List<String> args = ac.getPathArgs();
 		if (index < args.size()) {
-			return Castors.scast(args.get(index), type);
+			return cast(args.get(index), type);
 		}
 
 		return null;
+	}
+	
+	protected <T> T cast(Object value, Type type) {
+		return Castors.scast(value, type);
 	}
 }

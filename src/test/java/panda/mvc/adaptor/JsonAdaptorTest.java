@@ -12,6 +12,8 @@ import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.adaptor.meta.BaseModule;
+import panda.net.http.HttpContentType;
+import panda.net.http.HttpMethod;
 
 public class JsonAdaptorTest extends AbstractMvcTestCase {
 
@@ -22,7 +24,9 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 
 	private void initreq(String path, String json) {
 		request.setPathInfo(path);
+		request.setMethod(HttpMethod.POST.toString());
 		request.setContent(Strings.getBytes(json, Charsets.UTF_8));
+		request.setContentType(HttpContentType.APP_JSON);
 	}
 
 	@Test
@@ -31,7 +35,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "{map:{a:{name:'a'},b:{name:'b'},c:{name:'c'}}}";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals(3, response.getContentAsString());
+		assertEquals("3", response.getContentAsString());
 	}
 
 	@Test
@@ -40,7 +44,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "[{name:'a'},{name:'b'},{name:'c'}]";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals(3, response.getContentAsString());
+		assertEquals("3", response.getContentAsString());
 	}
 
 	@Test
@@ -49,7 +53,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "[{name:'a'},{name:'b'},{name:'c'}]";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals(3, response.getContentAsString());
+		assertEquals("3", response.getContentAsString());
 	}
 
 	@Test
@@ -58,7 +62,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "{pet : {name:'测试'}}";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals("\"!!测试!!\"", response.getContentAsString());
+		assertEquals("{\"success\":true,\"result\":\"!!测试!!\"}", response.getContentAsString());
 	}
 
 	@Test
@@ -67,7 +71,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "{a:3,b:4,e:5}";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals(3, response.getContentAsString());
+		assertEquals("3", response.getContentAsString());
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
 import panda.bind.json.JsonObject;
+import panda.bind.json.Jsons;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.net.http.URLHelper;
@@ -45,8 +46,22 @@ public class JsonParamEjector extends AbstractParamEjector {
 		return json;
 	}
 	
-	protected JsonObject toJson(InputStream is, String encoding) {
-		return JsonObject.fromJson(is, encoding);
+	@Override
+	public Object eject() {
+		Object o = getParams().get(ALL);
+		if (o != null) {
+			return o;
+		}
+		return getParams();
 	}
 	
+	protected JsonObject toJson(InputStream is, String encoding) {
+		Object json = Jsons.fromJson(is, encoding);
+		if (!(json instanceof JsonObject)) {
+			JsonObject jo = new JsonObject();
+			jo.put(ALL, json);
+			return jo;
+		}
+		return (JsonObject)json;
+	}
 }

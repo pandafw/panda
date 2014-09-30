@@ -19,6 +19,7 @@ public class RestModuleTest extends AbstractMvcTestCase {
 		request.setMethod("Get");
 		servlet.service(request, response);
 		String re = response.getContentAsString();
+		assertEquals(200, response.getStatus());
 		assertEquals("get", re);
 	}
 
@@ -28,6 +29,7 @@ public class RestModuleTest extends AbstractMvcTestCase {
 		request.setMethod("Post");
 		servlet.service(request, response);
 		String re = response.getContentAsString();
+		assertEquals(200, response.getStatus());
 		assertEquals("post", re);
 	}
 
@@ -37,6 +39,7 @@ public class RestModuleTest extends AbstractMvcTestCase {
 		request.setMethod("PUT");
 		servlet.service(request, response);
 		String re = response.getContentAsString();
+		assertEquals(200, response.getStatus());
 		assertEquals("put", re);
 	}
 
@@ -46,6 +49,7 @@ public class RestModuleTest extends AbstractMvcTestCase {
 		request.setMethod("Delete");
 		servlet.service(request, response);
 		String re = response.getContentAsString();
+		assertEquals(200, response.getStatus());
 		assertEquals("delete", re);
 	}
 

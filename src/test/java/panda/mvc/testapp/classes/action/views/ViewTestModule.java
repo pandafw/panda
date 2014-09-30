@@ -18,10 +18,6 @@ public class ViewTestModule {
 
 	// ---------------JSP View
 
-	@At("/jsp")
-	@Ok("jsp:jsp.views.jspView")
-	public void jspView() {
-	}
 
 	@At("/jsp2")
 	@Ok("jsp:jsp/views/jspView")

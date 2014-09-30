@@ -20,22 +20,26 @@ public class JsonModule {
 	}
 
 	@At("/map")
+	@Ok("raw")
 	public int jsonMap(Map map) {
 		return map.size();
 	}
 
 	@At("/list")
-	public int jsonList(List<Pet> pets) {
+	@Ok("raw")
+	public int jsonList(@Param List<Pet> pets) {
 		return pets.size();
 	}
 
 	@At("/array")
-	public int jsonArray(Pet[] pets) {
+	@Ok("raw")
+	public int jsonArray(@Param Pet[] pets) {
 		return pets.length;
 	}
 
 	@At("/map/obj")
-	public int mapPet(Pet pet) {
+	@Ok("raw")
+	public int mapPet(@Param Pet pet) {
 		return pet.map.size();
 	}
 

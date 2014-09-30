@@ -6,13 +6,20 @@ import java.util.Set;
  * 参数提取器
  */
 public interface ParamEjector {
-	/**
-	 * 根据名称提取值
-	 */
-	public Object eject(String name);
+	public final static String ALL = "*";
 
 	/**
-	 * 键
+	 * eject all
 	 */
-	public Set<String> keys();
+	Object eject();
+	
+	/**
+	 * eject by name
+	 */
+	Object eject(String name);
+
+	/**
+	 * keys
+	 */
+	Set<String> keys();
 }

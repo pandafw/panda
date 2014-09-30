@@ -10,8 +10,6 @@ import panda.mvc.ActionContext;
 import panda.net.http.URLHelper;
 
 public class StreamParamEjector extends AbstractParamEjector {
-	private final static String NAME = "file";
-	
 	private Map<String, Object> params;
 
 	public StreamParamEjector(ActionContext ac) {
@@ -27,13 +25,18 @@ public class StreamParamEjector extends AbstractParamEjector {
 				String qs = req.getQueryString();
 				params = URLHelper.parseQueryString(qs);
 				
-				FileItem fi = getActionContext().getFilePool().saveFile(NAME, req.getInputStream(), true);
-				params.put(NAME, fi);
+				FileItem fi = getActionContext().getFilePool().saveFile(ALL, req.getInputStream(), true);
+				params.put(ALL, fi);
 			}
 			catch (Exception e) {
 				throw Exceptions.wrapThrow(e);
 			}
 		}
 		return params;
+	}
+	
+	@Override
+	public Object eject() {
+		return getParams().get(ALL);
 	}
 }

@@ -10,6 +10,7 @@ import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
 
 @Fail("json")
+@At
 public class MainModuleA {
 
 	@At("/param/a")

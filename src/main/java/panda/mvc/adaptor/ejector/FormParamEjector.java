@@ -17,7 +17,11 @@ public class FormParamEjector implements ParamEjector {
 		this.req = ac.getRequest();
 	}
 
-	public String[] eject(String name) {
+	public Object eject() {
+		return req.getParameterMap();
+	}
+	
+	public Object eject(String name) {
 		return req.getParameterValues(name);
 	}
 

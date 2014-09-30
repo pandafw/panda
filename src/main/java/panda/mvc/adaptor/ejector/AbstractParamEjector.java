@@ -19,6 +19,10 @@ public abstract class AbstractParamEjector implements ParamEjector {
 	
 	protected abstract Map<String, Object> getParams();
 	
+	public Object eject() {
+		return getParams();
+	}
+
 	public Object eject(String name) {
 		return getParams().get(name);
 	}

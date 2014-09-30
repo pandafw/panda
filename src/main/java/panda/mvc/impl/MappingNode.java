@@ -38,8 +38,10 @@ public class MappingNode<T> {
 			}
 			// '?'
 			else if ("?".equals(key)) {
-				if (quesmark == null) // 也许这个节点之前就已经有值呢
+				if (quesmark == null) {
+					// 也许这个节点之前就已经有值呢
 					quesmark = new MappingNode<T>();
+				}
 				quesmark.add(it, obj);
 			}
 			// 其它节点，加入 map
@@ -51,10 +53,9 @@ public class MappingNode<T> {
 				}
 				node.add(it, obj);
 			}
-
 		}
-		// 没有路径了
 		else {
+			// 没有路径了
 			this.obj = obj;
 		}
 	}
@@ -68,9 +69,10 @@ public class MappingNode<T> {
 		String key = it.next();
 		// 先在 map 里寻找，
 		MappingNode<T> node = map.get(key.toLowerCase());
-		if (null != node)
+		if (null != node) {
 			return node.get(ac, it);
-
+		}
+		
 		// 如果没有看看是否有 '?' 的匹配
 		if (quesmark != null) {
 			ac.getPathArgs().add(key);
@@ -81,8 +83,9 @@ public class MappingNode<T> {
 		if (null != asterisk) {
 			List<String> pathArgs = ac.getPathArgs();
 			pathArgs.add(key);
-			while (it.hasNext())
+			while (it.hasNext()) {
 				pathArgs.add(it.next());
+			}
 			return asterisk;
 		}
 

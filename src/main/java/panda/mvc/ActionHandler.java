@@ -3,8 +3,13 @@ package panda.mvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.ioc.Ioc;
+import panda.ioc.impl.ComboContext;
+import panda.ioc.impl.DefaultIoc;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
+import panda.mvc.ioc.RequestIocContext;
+import panda.mvc.ioc.SessionIocContext;
 
 public class ActionHandler {
 
@@ -43,7 +48,29 @@ public class ActionHandler {
 
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
 		ActionContext ac = new ActionContext();
-		ac.setIoc(config.getIoc());
+
+		Ioc ioc = config.getIoc();
+		if (ioc instanceof DefaultIoc) {
+			if (IocRequestListener.isRequestScopeEnable || IocSessionListener.isSessionScopeEnable) {
+				DefaultIoc di = ((DefaultIoc)ioc).clone();
+
+				ComboContext ctx = new ComboContext();
+				if (IocRequestListener.isRequestScopeEnable) {
+					ctx.addContext(RequestIocContext.get(req));
+				}
+				
+				if (IocSessionListener.isSessionScopeEnable) {
+					ctx.addContext(SessionIocContext.get(req.getSession()));
+				}
+				
+				ctx.addContext(di.getContext());
+				di.setContext(ctx);
+				
+				ioc = di;
+			}
+		}
+
+		ac.setIoc(ioc);
 		ac.setServlet(config.getServletContext());
 		ac.setRequest(req);
 		ac.setResponse(res);

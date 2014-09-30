@@ -20,7 +20,6 @@ public class DefaultViewMakerTest {
 		assertNotNull(maker.make(null, null, "json", "{}"));
 		assertNotNull(maker.make(null, null, "json", "{compact:false,ignoreNull:false}"));
 		assertNotNull(maker.make(null, null, "json", null));
-		assertNotNull(maker.make(null, null, "void", "void"));
 		assertNotNull(maker.make(null, null, "redirect", "/auth/login"));
 		assertNotNull(maker.make(null, null, ">>", "/auth/login"));
 		assertNotNull(maker.make(null, null, "forward", "/auth/login"));

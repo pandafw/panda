@@ -23,8 +23,9 @@ public class AtMap {
 	}
 
 	public void add(String key, String actionPath) {
-		if (actionPath.endsWith("/*"))
+		if (actionPath.endsWith("/*")) {
 			actionPath = actionPath.substring(0, actionPath.length() - 2);
+		}
 		ats.put(Strings.trim(key), Strings.trim(actionPath));
 	}
 

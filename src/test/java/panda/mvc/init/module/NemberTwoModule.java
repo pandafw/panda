@@ -9,14 +9,14 @@ import panda.mvc.annotation.param.Param;
 public class NemberTwoModule {
 
 	@At("/abc")
-	@Ok("json")
+	@Ok("raw")
 	public String say() {
 		System.out.println("java");
 		return "haha";
 	}
 
 	@At
-	@Ok("json")
+	@Ok("raw")
 	@Fail("json")
 	public boolean login(@Param("username") String userName, @Param("password") String password,
 			@Param("authCode") Long authCode) {
@@ -34,9 +34,14 @@ public class NemberTwoModule {
 //	}
 
 	@At("/pathme/*")
-	@Ok("json")
-	@Fail("json")
+	@Ok("raw")
 	public String pathme(int abc, long xyz) {
-		return "" + abc;
+		return abc + "+" + xyz;
+	}
+
+	@At("/pathtwo/?/?")
+	@Ok("raw")
+	public String pathtwo(int abc, long xyz) {
+		return abc + "+" + xyz;
 	}
 }

@@ -21,16 +21,16 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 	public void testAnotherModule() throws Throwable {
 		request.setPathInfo("/two/abc");
 		servlet.service(request, response);
-		assertEquals("\"haha\"", response.getContentAsString());
+		assertEquals("haha", response.getContentAsString());
 	}
 
 	@Test
 	public void testPointPath() throws Throwable {
-		request.setPathInfo("/1.2/say.nutz");
+		request.setPathInfo("/1.2/say.do");
 		RequestPath path = RequestPath.getRequestPathObject(request);
 		assertNotNull(path);
 		assertEquals("/1.2/say", path.getPath());
-		assertEquals("nutz", path.getSuffix());
+		assertEquals("do", path.getSuffix());
 
 		request.setPathInfo("/1.2/say");
 		path = RequestPath.getRequestPathObject(request);
@@ -50,7 +50,7 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 
 	@Test
 	public void testRequestParms_error() throws Throwable {
-		request.setPathInfo("/two/login.nutz");
+		request.setPathInfo("/two/login.do");
 		request.addParameter("username", "wendal");
 		request.addParameter("password", "123456");
 		request.addParameter("authCode", "Nutz");
@@ -62,7 +62,7 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 
 	@Test
 	public void testRequestParms() throws Throwable {
-		request.setPathInfo("/two/login.nutz");
+		request.setPathInfo("/two/login.do");
 		request.addParameter("username", "wendal");
 		request.addParameter("password", "123456");
 		request.addParameter("authCode", "236475");
@@ -72,7 +72,7 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 
 	@Test
 	public void test_CheckSession() throws Throwable {
-		request.setPathInfo("/two/need.nutz");
+		request.setPathInfo("/two/need.do");
 		servlet.service(request, response);
 		assertEquals("/two/abc", response.getHeader("Location"));
 	}
@@ -85,9 +85,23 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 	}
 
 	@Test
-	public void test_PathArgs() throws Throwable {
-		request.setPathInfo("/two/pathme/123.nutz");
+	public void test_PathMeOne() throws Throwable {
+		request.setPathInfo("/two/pathme/123.do");
 		servlet.service(request, response);
-		assertEquals("\"123\"", response.getContentAsString());
+		assertEquals("123+0", response.getContentAsString());
+	}
+
+	@Test
+	public void test_PathMeTwo() throws Throwable {
+		request.setPathInfo("/two/pathme/123/456.do");
+		servlet.service(request, response);
+		assertEquals("123+456", response.getContentAsString());
+	}
+
+	@Test
+	public void test_PathTwoTwo() throws Throwable {
+		request.setPathInfo("/two/pathtwo/123/456.do");
+		servlet.service(request, response);
+		assertEquals("123+456", response.getContentAsString());
 	}
 }

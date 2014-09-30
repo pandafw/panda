@@ -55,6 +55,7 @@ public class UrlMappingImpl implements UrlMapping {
 				invoker = new ActionInvoker();
 				map.put(path, invoker);
 				root.add(path, invoker);
+				
 				// 记录一下方法与 url 的映射
 				atmap.addMethod(path, ai.getMethod());
 			}
@@ -73,7 +74,6 @@ public class UrlMappingImpl implements UrlMapping {
 
 		printActionMapping(ai);
 
-		// TODO 下面个IF要不要转换到NutLoading中去呢?
 		// 记录一个 @At.key
 		if (Strings.isNotBlank(ai.getPathKey())) {
 			atmap.add(ai.getPathKey(), ai.getPaths()[0]);

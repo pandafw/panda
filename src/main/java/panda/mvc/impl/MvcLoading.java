@@ -20,6 +20,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionInfo;
+import panda.mvc.IocProvider;
 import panda.mvc.Loading;
 import panda.mvc.LoadingException;
 import panda.mvc.MvcConfig;
@@ -32,6 +33,7 @@ import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.UrlMappingBy;
 import panda.mvc.annotation.ViewBy;
 import panda.mvc.config.AbstractMvcConfig;
+import panda.mvc.ioc.provider.AnnotationIocProvider;
 
 public class MvcLoading implements Loading {
 
@@ -108,11 +110,6 @@ public class MvcLoading implements Loading {
 	}
 
 	protected UrlMapping evalUrlMapping(AbstractMvcConfig config) throws Exception {
-		/*
-		 * @ TODO 个人建议可以将这个方法所涉及的内容转换到Loadings类或相应的组装类中,
-		 * 以便将本类加以隔离,使本的职责仅限于MVC整体的初使化,而不再负责UrlMapping的加载
-		 */
-
 		// 准备 UrlMapping
 		UrlMapping mapping = createUrlMapping(config);
 		if (log.isInfoEnabled()) {
@@ -264,17 +261,24 @@ public class MvcLoading implements Loading {
 	protected Ioc createIoc(AbstractMvcConfig config) throws Exception {
 		Class<?> mainModule = config.getMainModule();
 
+		Class<? extends IocProvider> ip = null;
+		String[] args = null;
+		
 		IocBy ib = mainModule.getAnnotation(IocBy.class);
-		if (null == ib) {
-			log.info("@IocBy is not defined for " + mainModule);
-			return null;
+		if (ib == null) {
+			log.warn("@IocBy is not defined for " + mainModule + ", use default ioc setting");
+			ip = AnnotationIocProvider.class;
+		}
+		else {
+			ip = ib.type();
+			args = ib.args();
 		}
 		
 		if (log.isDebugEnabled()) {
-			log.debugf("@IocBy(type=%s, args=%s)", ib.type().getName(), Jsons.toJson(ib.args()));
+			log.debugf("@IocBy(type=%s, args=%s)", ip.getName(), Jsons.toJson(args));
 		}
 		
-		Ioc ioc = Classes.born(ib.type()).create(config, ib.args());
+		Ioc ioc = Classes.born(ip).create(config, args);
 		if (ioc instanceof DefaultIoc) {
 			((DefaultIoc)ioc).addValueProxyMaker(new ServletValueProxyMaker(config.getServletContext()));
 		}
