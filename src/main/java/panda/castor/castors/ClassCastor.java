@@ -1,15 +1,14 @@
 package panda.castor.castors;
 
 import panda.castor.CastContext;
-import panda.castor.Castor;
 import panda.lang.Classes;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class ClassCastor extends Castor<Object, Class> {
+public class ClassCastor extends AbstractObjectCastor<Class> {
 	public ClassCastor() {
-		super(Object.class, Class.class);
+		super(Class.class);
 	}
 
 	@Override

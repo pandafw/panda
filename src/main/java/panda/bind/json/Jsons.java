@@ -14,6 +14,18 @@ import panda.lang.Chars;
  *
  */
 public abstract class Jsons extends Binds {
+	public static Object fromJson(InputStream is, String encoding) {
+		return fromJson(is, encoding, Object.class);
+	}
+
+	public static Object fromJson(Reader json) {
+		return fromJson(json, Object.class);
+	}
+
+	public static Object fromJson(String json) {
+		return fromJson(json, Object.class);
+	}
+
 	public static <T> T fromJson(InputStream is, String encoding, Type type) {
 		Reader json = Streams.toReader(is, encoding);
 		JsonDeserializer jd = new JsonDeserializer();

@@ -23,13 +23,13 @@ public class ComboIocLoader implements IocLoader {
 	/**
 	 * 类别名
 	 */
-	private static Map<String, Class<? extends IocLoader>> loaders = new HashMap<String, Class<? extends IocLoader>>();
+	private static Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
 	static {
-		loaders.put("js", JsonIocLoader.class);
-		loaders.put("json", JsonIocLoader.class);
-		loaders.put("xml", XmlIocLoader.class);
-		loaders.put("anno", AnnotationIocLoader.class);
-		loaders.put("annotation", AnnotationIocLoader.class);
+		alias.put("js", JsonIocLoader.class);
+		alias.put("json", JsonIocLoader.class);
+		alias.put("xml", XmlIocLoader.class);
+		alias.put("anno", AnnotationIocLoader.class);
+		alias.put("annotation", AnnotationIocLoader.class);
 	}
 
 	private List<IocLoader> iocLoaders = new ArrayList<IocLoader>();
@@ -103,8 +103,12 @@ public class ComboIocLoader implements IocLoader {
 		iocLoaders.add(Classes.born(klass, args.toArray(new String[args.size()])));
 	}
 
-	private Class getLoaderClass(String className) {
-		Class cls = loaders.get(className);
+	protected Class<? extends IocLoader> getAliasClass(String name) {
+		return alias.get(name);
+	}
+	
+	protected Class getLoaderClass(String className) {
+		Class cls = getAliasClass(className);
 		if (cls == null) {
 			try {
 				cls = Classes.getClass(className);

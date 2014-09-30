@@ -3,7 +3,6 @@ package panda.lang;
 import java.lang.reflect.Array;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * utility class for Iterator. 
@@ -22,10 +21,7 @@ public abstract class Iterators {
 			return false;
 		}
 
-		if (object instanceof Map) {
-			return true;
-		}
-		else if (object instanceof Iterable) {
+		if (object instanceof Iterable) {
 			return true;
 		}
 		else if (object.getClass().isArray()) {
@@ -117,10 +113,6 @@ public abstract class Iterators {
 			return (Iterator)value;
 		}
 
-		if (value instanceof Map) {
-			value = ((Map)value).entrySet();
-		}
-
 		if (value instanceof Iterable) {
 			return ((Iterable)value).iterator();
 		}
@@ -147,10 +139,6 @@ public abstract class Iterators {
 
 		if (value instanceof Iterator) {
 			return new IteratorIterable((Iterator)value);
-		}
-
-		if (value instanceof Map) {
-			return ((Map)value).entrySet();
 		}
 
 		if (value.getClass().isArray()) {

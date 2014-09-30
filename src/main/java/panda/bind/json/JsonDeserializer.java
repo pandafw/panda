@@ -61,6 +61,9 @@ public class JsonDeserializer extends AbstractDeserializer {
 		
 		char c = tokener.nextClean();
 		if (c == '[') {
+			if (Object.class.equals(type)) {
+				type = defaultJsonArrayType;
+			}
 			if (isArrayType(type)) {
 				tokener.back();
 				return parseJsonArray(type);
@@ -68,6 +71,9 @@ public class JsonDeserializer extends AbstractDeserializer {
 			throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
 		}
 		else if (c == '{') {
+			if (Object.class.equals(type)) {
+				type = defaultJsonObjectType;
+			}
 			if (!isArrayType(type)) {
 				tokener.back();
 				return parseJsonObject(type);

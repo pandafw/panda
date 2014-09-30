@@ -27,7 +27,7 @@ public class DateTypeCastor {
 		DateTimes.timeFormat(),
 	};
 
-	public static class DateCastor extends Castor<Object, Date> {
+	public static class DateCastor extends AbstractObjectCastor<Date> {
 	
 		private FastDateFormat[] formats;
 		
@@ -36,7 +36,7 @@ public class DateTypeCastor {
 		}
 		
 		public DateCastor(FastDateFormat[] formats) {
-			super(Object.class, Date.class);
+			super(Date.class);
 			this.formats = formats;
 		}
 		

@@ -1,18 +1,17 @@
 package panda.castor.castors;
 
 import panda.castor.CastContext;
-import panda.castor.Castor;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class EnumCastor extends Castor<Object, Enum> {
+public class EnumCastor extends AbstractObjectCastor<Enum> {
 	public EnumCastor(Class<?> toType) {
-		super(Object.class, toType);
+		super(toType);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	protected Enum castValue(Object value, CastContext context) {
 		if (value instanceof CharSequence) {
 			try {

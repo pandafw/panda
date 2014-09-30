@@ -305,7 +305,7 @@ public class Beans {
 			else if (Types.isAssignable(type, Iterable.class)) {
 				handler = new IterableBeanHandler(this, type);
 			}
-			else if (isImmutableJavaType(type)) {
+			else if (Types.isImmutableType(type)) {
 				handler = new ImmutableBeanHandler(type); 
 			}
 			else if (Types.isAssignable(type, IocProxy.class)) {
@@ -318,16 +318,6 @@ public class Beans {
 			}
 		}
 		return handler;
-	}
-
-	/**
-	 * is a immutable java type
-	 * @param type class type
-	 * @return true if the type is a simple java type
-	 */
-	protected boolean isImmutableJavaType(Type type) {
-		Class clazz = Types.getRawType(type);
-		return Classes.isImmutable(clazz);
 	}
 
 	/**

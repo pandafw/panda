@@ -11,7 +11,6 @@ import java.util.Date;
 
 import panda.castor.CastContext;
 import panda.castor.CastException;
-import panda.castor.Castor;
 import panda.castor.castors.DateTypeCastor.DateCastor;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -22,15 +21,22 @@ import panda.lang.codec.binary.Base64;
  * 
  * @author yf.frank.wang@gmail.com
  *
- * @param <S> source type
  * @param <T> target type
  */
-public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
+public abstract class StringTypeCastor<T> extends AbstractObjectCastor<T> {
 	protected DateCastor dateCastor;
 	
-	public StringTypeCastor(Type fromType, Type toType, DateCastor dateCastor) {
-		super(fromType, toType);
+	public StringTypeCastor(Type toType, DateCastor dateCastor) {
+		super(toType);
 		this.dateCastor = dateCastor;
+	}
+
+	@Override
+	protected Object getOne(Object value) {
+		if (value instanceof byte[] || value instanceof char[]) {
+			return null;
+		}
+		return super.getOne(value);
 	}
 
 	protected void write(Object value, Appendable a) {
@@ -92,9 +98,9 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 	
-	public static class StringCastor extends StringTypeCastor<Object, String> {
+	public static class StringCastor extends StringTypeCastor<String> {
 		public StringCastor(DateCastor dateCastor) {
-			super(Object.class, String.class, dateCastor);
+			super(String.class, dateCastor);
 		}
 		
 		@Override
@@ -103,9 +109,9 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class StringBufferCastor extends StringTypeCastor<Object, StringBuffer> {
+	public static class StringBufferCastor extends StringTypeCastor<StringBuffer> {
 		public StringBufferCastor(DateCastor dateCastor) {
-			super(Object.class, StringBuffer.class, dateCastor);
+			super(StringBuffer.class, dateCastor);
 		}
 		
 		@Override
@@ -123,9 +129,9 @@ public abstract class StringTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class StringBuilderCastor extends StringTypeCastor<Object, StringBuilder> {
+	public static class StringBuilderCastor extends StringTypeCastor<StringBuilder> {
 		public StringBuilderCastor(DateCastor dateCastor) {
-			super(Object.class, StringBuilder.class, dateCastor);
+			super(StringBuilder.class, dateCastor);
 		}
 		
 		@Override

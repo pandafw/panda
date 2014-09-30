@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import panda.castor.CastContext;
-import panda.castor.Castor;
 import panda.lang.Numbers;
 
 
@@ -13,15 +12,14 @@ import panda.lang.Numbers;
  * 
  * @author yf.frank.wang@gmail.com
  *
- * @param <S> source type
  * @param <T> target type
  */
-public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
+public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 	public PrimitiveTypeCastor(Type type) {
-		super(Object.class, type);
+		super(type);
 	}
 	
-	public static class BooleanCastor extends PrimitiveTypeCastor<Object, Boolean> {
+	public static class BooleanCastor extends PrimitiveTypeCastor<Boolean> {
 		protected BooleanCastor(Type type) {
 			super(type);
 		}
@@ -89,7 +87,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class ByteCastor extends PrimitiveTypeCastor<Object, Byte> {
+	public static class ByteCastor extends PrimitiveTypeCastor<Byte> {
 		protected ByteCastor(Type type) {
 			super(type);
 		}
@@ -123,7 +121,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 	}
 
 
-	public static class CharacterCastor extends PrimitiveTypeCastor<Object, Character> {
+	public static class CharacterCastor extends PrimitiveTypeCastor<Character> {
 		protected CharacterCastor(Type type) {
 			super(type);
 		}
@@ -157,7 +155,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class DoubleCastor extends PrimitiveTypeCastor<Object, Double> {
+	public static class DoubleCastor extends PrimitiveTypeCastor<Double> {
 		protected DoubleCastor(Type type) {
 			super(type);
 		}
@@ -191,7 +189,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class FloatCastor extends PrimitiveTypeCastor<Object, Float> {
+	public static class FloatCastor extends PrimitiveTypeCastor<Float> {
 		protected FloatCastor(Type type) {
 			super(type);
 		}
@@ -225,7 +223,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class IntegerCastor extends PrimitiveTypeCastor<Object, Integer> {
+	public static class IntegerCastor extends PrimitiveTypeCastor<Integer> {
 		protected IntegerCastor(Type type) {
 			super(type);
 		}
@@ -259,7 +257,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class LongCastor extends PrimitiveTypeCastor<Object, Long> {
+	public static class LongCastor extends PrimitiveTypeCastor<Long> {
 		protected LongCastor(Type type) {
 			super(type);
 		}
@@ -307,7 +305,7 @@ public abstract class PrimitiveTypeCastor<S, T> extends Castor<S, T> {
 		}
 	}
 
-	public static class ShortCastor extends PrimitiveTypeCastor<Object, Short> {
+	public static class ShortCastor extends PrimitiveTypeCastor<Short> {
 		protected ShortCastor(Type type) {
 			super(type);
 		}

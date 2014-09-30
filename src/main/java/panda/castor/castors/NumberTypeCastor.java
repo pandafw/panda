@@ -6,16 +6,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 import panda.castor.CastContext;
-import panda.castor.Castor;
 import panda.lang.Numbers;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class NumberTypeCastor {
-	public static class NumberCastor extends Castor<Object, Number> {
+	public static class NumberCastor extends AbstractObjectCastor<Number> {
 		public NumberCastor() {
-			super(Object.class, Number.class);
+			super(Number.class);
 		}
 
 		@Override
@@ -33,9 +32,9 @@ public class NumberTypeCastor {
 		}
 	}
 
-	public static class BigDecimalCastor extends Castor<Object, BigDecimal> {
+	public static class BigDecimalCastor extends AbstractObjectCastor<BigDecimal> {
 		public BigDecimalCastor() {
-			super(Object.class, BigDecimal.class);
+			super(BigDecimal.class);
 		}
 
 		@Override
@@ -51,9 +50,9 @@ public class NumberTypeCastor {
 		}
 	}
 
-	public static class BigIntegerCastor extends Castor<Object, BigInteger> {
+	public static class BigIntegerCastor extends AbstractObjectCastor<BigInteger> {
 		public BigIntegerCastor() {
-			super(Object.class, BigInteger.class);
+			super(BigInteger.class);
 		}
 		
 		@Override

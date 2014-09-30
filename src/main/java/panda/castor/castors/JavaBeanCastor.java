@@ -1,6 +1,7 @@
 package panda.castor.castors;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import panda.bean.BeanHandler;
 import panda.castor.CastContext;
@@ -42,7 +43,10 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 		BeanHandler bh = castors.getBeanHandler(value.getClass());
 		String[] pns = bh.getReadPropertyNames(value);
 		if (pns.length == 0) {
-			throw castError(value, context);
+			if (!(value instanceof Map)) {
+				throw castError(value, context);
+			}
+			return bean;
 		}
 		
 		for (String pn : pns) {
