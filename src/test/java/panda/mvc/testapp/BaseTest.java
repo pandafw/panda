@@ -6,14 +6,16 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import panda.net.http.HttpContentType;
+
 public class BaseTest extends BaseWebappTest {
 
 	@Test
 	public void test_json_adaptor() throws IOException {
-		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'wendal'}]}");
+		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'wendal'}]}", HttpContentType.APP_JSON);
 		assertEquals("pets(2) array", resp.getContentText());
 
-		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'wendal'}]}");
+		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'wendal'}]}", HttpContentType.APP_JSON);
 		assertEquals("pets(2) list", resp.getContentText());
 	}
 
@@ -38,11 +40,11 @@ public class BaseTest extends BaseWebappTest {
 		get("/common/pathArgs3/puZ");
 		assertEquals("puZ&Z", resp.getContentText());
 
-		get("/common/pathArgs4/nutz?name=wendal");
-		assertEquals("nutz&wendal", resp.getContentText());
+		get("/common/pathArgs4/zzz?name=wendal");
+		assertEquals("zzz&wendal", resp.getContentText());
 
-		get("/common/pathArgs5/nutz?user.name=wendal&user2.name=zozoh");
-		assertEquals("nutz&wendal&zozoh", resp.getContentText());
+		get("/common/pathArgs5/yyy?user.name=wendal&user2.name=zozoh");
+		assertEquals("yyy&wendal&zozoh", resp.getContentText());
 	}
 
 	@Test
@@ -66,7 +68,6 @@ public class BaseTest extends BaseWebappTest {
 		assertEquals(getContextPath(), resp.getContentText());
 	}
 
-	// 有用户报告测试 resp.getOutputStream失败
 	@Test
 	public void test_servlet_obj() {
 		get("/common/servlet_obj");

@@ -41,13 +41,13 @@ public class CommonTest extends BaseWebappTest {
 
 	// 与Parms混用
 	@At("/pathArgs4/*")
-	public String test_base_pathargs4(String key, @Param("..") UserT userT) {
+	public String test_base_pathargs4(String key, @Param UserT userT) {
 		return key + "&" + userT.getName();
 	}
 
 	// 与Parms混用
 	@At("/pathArgs5/*")
-	public String test_base_pathargs5(String key, @Param("::user.") UserT user1, @Param("::user2.") UserT user2) {
+	public String test_base_pathargs5(String key, @Param("^user.") UserT user1, @Param("^user2.") UserT user2) {
 		return key + "&" + user1.getName() + "&" + user2.getName();
 	}
 
@@ -59,13 +59,13 @@ public class CommonTest extends BaseWebappTest {
 
 	// Parms混用
 	@At("/path")
-	@Ok(">>:/${key}.jsp")
+	@Ok(">>:/${param.key}.jsp")
 	public void test_req_param() {
 	}
 
 	// Test EL
 	@At("/path2")
-	@Ok("->:/${key.length() == 1 ? 'base' : 'false'}.jsp")
+	@Ok("->:/${param.key.length() == 1 ? 'base' : 'false'}.jsp")
 	public void test_req_param2() {
 	}
 
