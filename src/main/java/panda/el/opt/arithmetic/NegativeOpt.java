@@ -9,8 +9,6 @@ import panda.el.opt.LBracketOpt;
 
 /**
  * 负号:'-'
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class NegativeOpt extends AbstractOpt {
 	private Object right;

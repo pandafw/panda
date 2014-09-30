@@ -4,8 +4,6 @@ import java.util.Queue;
 
 /**
  * 操作符
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public interface Operator {
 

@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 左移
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class LeftShift extends TwoTernary {
 	public int getPriority() {

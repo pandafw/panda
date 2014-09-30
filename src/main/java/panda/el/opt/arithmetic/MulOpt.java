@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 乘
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class MulOpt extends TwoTernary {
 	public int getPriority() {

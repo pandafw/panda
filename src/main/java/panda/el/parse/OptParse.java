@@ -37,8 +37,6 @@ import panda.el.opt.object.StaticOpt;
 
 /**
  * 操作符转换器
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class OptParse implements Parse {
 
@@ -143,13 +141,13 @@ public class OptParse implements Parse {
 			return new QuestionSelectOpt();
 		case '.':
 			if (!Character.isJavaIdentifierStart(exp.peek(1))) {
-				return nullobj;
+				return NULL;
 			}
 			exp.poll();
 			return new AccessOpt();
 		case '@':
 			if (!Character.isJavaIdentifierStart(exp.peek(1))) {
-				return nullobj;
+				return NULL;
 			}
 			exp.poll();
 			return new StaticOpt();
@@ -163,7 +161,7 @@ public class OptParse implements Parse {
 			exp.poll();
 			return new Object[] { RBracketOpt.INSTANCE, new FetchArrayOpt() };
 		}
-		return nullobj;
+		return NULL;
 	}
 
 }

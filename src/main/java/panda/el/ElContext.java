@@ -49,4 +49,11 @@ public class ElContext {
 	public void set(String name, Object value) {
 		handler.setBeanValue(context, name, value);
 	}
+	
+	/**
+	 * @return context object
+	 */
+	public Object context() {
+		return context;
+	}
 }

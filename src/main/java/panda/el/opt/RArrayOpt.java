@@ -7,8 +7,6 @@ import panda.el.ElException;
 
 /**
  * 右括号'}'
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class RArrayOpt extends AbstractOpt {
 	public static final RArrayOpt INSTANCE = new RArrayOpt();

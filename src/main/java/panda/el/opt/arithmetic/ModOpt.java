@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 取模
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class ModOpt extends TwoTernary {
 	public int getPriority() {

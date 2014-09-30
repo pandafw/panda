@@ -7,13 +7,12 @@ import java.util.Queue;
 import panda.el.ElContext;
 import panda.el.ElException;
 import panda.el.Operator;
+import panda.el.obj.ElObj;
 import panda.el.opt.RunMethod;
 import panda.el.opt.TwoTernary;
 
 /**
  * 方法体封装. 主要是把方法的左括号做为边界
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class MethodOpt extends TwoTernary {
 
@@ -42,15 +41,19 @@ public class MethodOpt extends TwoTernary {
 	}
 
 	public Object calculate(ElContext ec) {
-		return fetchMethod().run(ec, fetchParam(ec));
+		return fetchMethod(ec).run(ec, fetchParam(ec));
 	}
 
-	private RunMethod fetchMethod() {
+	private RunMethod fetchMethod(ElContext ec) {
 		if (left instanceof RunMethod) {
 			return (RunMethod)left;
 		}
 		
-		throw new ElException(left + " is unsupported method");
+		if (left instanceof ElObj) {
+			return new AccessOpt(null, left);
+		}
+		
+		throw new ElException("left is unsupported method: " + left + (left == null ? "" : " / " + left.getClass()));
 	}
 
 	/**

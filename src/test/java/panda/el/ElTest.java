@@ -2,6 +2,7 @@ package panda.el;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
@@ -236,20 +237,37 @@ public class ElTest {
 		Map context = new HashMap();
 		context.put("a", new abc());
 		assertEquals("jk", El.eval(context, "a.name"));
-		// 这个功能放弃
-		// assertFalse((Boolean)El.eval("java.lang.Boolean.FALSE"));
-		// assertFalse((Boolean)El.eval("Boolean.FALSE"));
+		assertFalse((Boolean)El.eval("'java.lang.Boolean'@FALSE"));
 	}
 
-//	/**
-//	 * 自定义函数
-//	 */
-//	@Test
-//	public void custom() {
-//		assertEquals(2, El.eval("max(1, 2)"));
-//		assertEquals(1, El.eval("min(1, 2)"));
-//		assertEquals("jk", El.eval("trim('    jk    ')"));
-//	}
+	public static class MethodUtil {
+		public int max(int i, int j) {
+			return Math.max(i, j);
+		}
+		
+		public int min(int a, int b) {
+			return Math.min(a, b);
+		}
+		
+		public String trim(String s) {
+			return Strings.trim(s);
+		}
+	}
+	
+	/**
+	 * 自定义函数
+	 */
+	@Test
+	public void testCustomMethod() {
+		Object mu = new MethodUtil();
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("a", mu);
+		
+		assertEquals(2, El.eval(mu, "max(1, 2)"));
+		assertEquals(2, El.eval(mu, "min(max(1, 2), 4)"));
+		assertEquals(1, El.eval(ctx, "a.min(1, 2)"));
+		assertEquals("jk", El.eval(ctx, "a.trim('    jk    ')"));
+	}
 
 	@Test
 	public void speed() {
@@ -374,9 +392,15 @@ public class ElTest {
 	@Test
 	public void testStaticMember() {
 		Map context = new HashMap();
-		context.put("static", new Static());
-		context.put("a", Static.class);
+		context.put("s", Static.class);
+		context.put("a", new Static());
 
+		//TODO
+		//assertEquals("xxx", El.eval(new Static(), "@printParam(@info)"));
+		
+		assertEquals("yyy", El.eval(new Static(), "@printParam('yyy')"));
+		assertEquals("xxx", El.eval(new Static(), "@info"));
+		assertEquals("xxx", El.eval(context, "s@printParam(s@info)"));
 		assertEquals("xxx", El.eval(context, "a@printParam(a@info)"));
 	}
 

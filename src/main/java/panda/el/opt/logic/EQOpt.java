@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 等于
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class EQOpt extends TwoTernary {
 	public int getPriority() {

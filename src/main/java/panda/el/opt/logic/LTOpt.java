@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 小于
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class LTOpt extends TwoTernary {
 

@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 异或
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class BitXro extends TwoTernary {
 	public int getPriority() {

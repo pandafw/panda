@@ -7,8 +7,6 @@ import panda.el.ElException;
 
 /**
  * 右括号')'
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class RBracketOpt extends AbstractOpt {
 	public static final RBracketOpt INSTANCE = new RBracketOpt();

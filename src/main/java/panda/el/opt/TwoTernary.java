@@ -8,8 +8,6 @@ import panda.el.obj.ElObj;
 
 /**
  * 二元运算,只是提取了公共部分
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public abstract class TwoTernary extends AbstractOpt {
 	protected Object right;
@@ -32,6 +30,10 @@ public abstract class TwoTernary extends AbstractOpt {
 	 * 取得变得的值
 	 */
 	protected Object getLeftVar(ElContext ec) {
+		if (left == null) {
+			return ec.context();
+		}
+		
 		if (left instanceof Operator) {
 			return ((Operator)left).calculate(ec);
 		}

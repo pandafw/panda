@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 除
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class DivOpt extends TwoTernary {
 

@@ -6,8 +6,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * and
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class AndOpt extends TwoTernary {
 	public int getPriority() {

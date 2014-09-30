@@ -8,8 +8,6 @@ import panda.el.opt.AbstractOpt;
 
 /**
  * Not(!)
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class NotOpt extends AbstractOpt {
 	private Object right;

@@ -9,14 +9,10 @@ import java.util.List;
 import panda.el.ElException;
 import panda.el.Parse;
 import panda.el.obj.ElObj;
-import panda.el.obj.FieldObj;
-import panda.el.obj.IdentifierObj;
-import panda.el.obj.MethodObj;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
 import panda.el.opt.RArrayOpt;
 import panda.el.opt.RBracketOpt;
-import panda.el.opt.RunMethod;
 import panda.el.opt.arithmetic.NegativeOpt;
 import panda.el.opt.arithmetic.SubOpt;
 import panda.el.opt.object.CommaOpt;
@@ -26,8 +22,6 @@ import panda.el.opt.object.MethodOpt;
 
 /**
  * 转换器,也就是用来将字符串转换成队列. 这个类的名字不知道取什么好...
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class Converter {
 	private final List<Parse> parses = new ArrayList<Parse>();
@@ -89,53 +83,62 @@ public class Converter {
 			}
 			itemCache.add(obj);
 		}
-		itemCache = clearUp(itemCache);
+//		itemCache = clearUp(itemCache);
 	}
 
-	/**
-	 * 清理转换后的结果, 主要做一些标识性的转换
-	 * 
-	 * @param rpn
-	 */
-	private LinkedList<Object> clearUp(LinkedList<Object> rpn) {
-		LinkedList<Object> dest = new LinkedList<Object>();
-		while (!rpn.isEmpty()) {
-			if (!(rpn.getFirst() instanceof ElObj)) {
-				dest.add(rpn.removeFirst());
-				continue;
-			}
-			
-			ElObj obj = (ElObj)rpn.removeFirst();
-			// 方法对象
-			if (!rpn.isEmpty() && rpn.getFirst() instanceof MethodOpt) {
-				dest.add(new MethodObj(obj.getVal()));
-				continue;
-			}
-			// 属性对象
-			if (dest.size() > 0 && dest.getLast() instanceof RunMethod 
-					&& rpn.size() > 0
-					&& rpn.getFirst() instanceof RunMethod) {
-				dest.add(new FieldObj(obj.getVal()));
-				continue;
-			}
-			// //普通的对象
-			// if(!(dest.getLast() instanceof AccessOpt) && !(rpn.peekFirst()
-			// instanceof MethodOpt)){
-			// continue;
-			// }
-			dest.add(new IdentifierObj(obj.getVal()));
-		}
-		return dest;
-	}
+//	/**
+//	 * 清理转换后的结果, 主要做一些标识性的转换
+//	 * 
+//	 * @param rpn
+//	 */
+//	private void clearUp(List<Object> rpn) {
+//		for (int i = 0; i < rpn.size(); i++) {
+//			Object obj = rpn.get(i);
+//			if (!(obj instanceof ElObj)) {
+//				rpn.set(i, )dest.add(rpn.removeFirst());
+//				continue;
+//			}
+//		}
+//		LinkedList<Object> dest = new LinkedList<Object>();
+//		while (!rpn.isEmpty()) {
+//			Object obj = rpn.removeFirst();
+//			
+//			if (!obj instanceof ElObj) {
+//				dest.add(rpn.removeFirst());
+//				continue;
+//			}
+//			
+//			ElObj obj = (ElObj)rpn.removeFirst();
+//			// 方法对象
+//			if (!rpn.isEmpty() && rpn.getFirst() instanceof MethodOpt) {
+//				dest.add(new MethodObj(obj.getVal()));
+//				continue;
+//			}
+//			// 属性对象
+//			if (dest.size() > 0 && dest.getLast() instanceof RunMethod 
+//					&& rpn.size() > 0
+//					&& rpn.getFirst() instanceof RunMethod) {
+//				dest.add(new IdentifierObj(obj.getVal()));
+//				continue;
+//			}
+//			// //普通的对象
+//			// if(!(dest.getLast() instanceof AccessOpt) && !(rpn.peekFirst()
+//			// instanceof MethodOpt)){
+//			// continue;
+//			// }
+//			dest.add(new IdentifierObj(obj.getVal()));
+//		}
+//		return dest;
+//	}
 
 	/**
 	 * 解析数据
 	 */
 	private Object parseItem() {
-		Object obj = Parse.nullobj;
+		Object obj = Parse.NULL;
 		for (Parse parse : parses) {
 			obj = parse.fetchItem(exp);
-			if (obj != Parse.nullobj) {
+			if (obj != Parse.NULL) {
 				skipSpace();
 				return parseItem(obj);
 			}

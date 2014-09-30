@@ -8,8 +8,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * "," 逗号操作符,将左右两边的数据组织成一个数据
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class CommaOpt extends TwoTernary {
 	public int getPriority() {

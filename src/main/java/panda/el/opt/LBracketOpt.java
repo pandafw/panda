@@ -7,8 +7,6 @@ import panda.el.ElException;
 
 /**
  * "("
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class LBracketOpt extends AbstractOpt {
 	

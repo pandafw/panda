@@ -7,8 +7,6 @@ import panda.el.opt.AbstractOpt;
 
 /**
  * 非
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class BitNot extends AbstractOpt {
 	private Object right;

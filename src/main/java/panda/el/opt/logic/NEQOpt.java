@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 不等于
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class NEQOpt extends TwoTernary {
 	public int getPriority() {

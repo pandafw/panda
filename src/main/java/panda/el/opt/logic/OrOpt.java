@@ -6,8 +6,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * or(||)
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class OrOpt extends TwoTernary {
 

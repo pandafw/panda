@@ -7,8 +7,6 @@ import panda.el.obj.ElObj;
 
 /**
  * 操作符抽象类
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public abstract class AbstractOpt implements Operator {
 	/**

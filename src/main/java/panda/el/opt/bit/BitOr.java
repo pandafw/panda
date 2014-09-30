@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 或
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class BitOr extends TwoTernary {
 	public int getPriority() {

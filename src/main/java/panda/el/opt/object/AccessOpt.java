@@ -12,10 +12,17 @@ import panda.lang.reflect.Methods;
 
 /**
  * 访问符:'.'
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class AccessOpt extends TwoTernary implements RunMethod {
+	
+	public AccessOpt() {
+	}
+
+	public AccessOpt(Object left, Object right) {
+		this.left = left;
+		this.right = right;
+	}
+
 	public int getPriority() {
 		return 1;
 	}

@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 大于等于
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class GTEOpt extends TwoTernary {
 

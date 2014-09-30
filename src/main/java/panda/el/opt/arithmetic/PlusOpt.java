@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * "+"
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class PlusOpt extends TwoTernary {
 	public int getPriority() {

@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 与
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class BitAnd extends TwoTernary {
 	public int getPriority() {

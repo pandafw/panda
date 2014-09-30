@@ -5,15 +5,13 @@ import panda.el.parse.CharQueue;
 /**
  * 转换器接口.<br>
  * 负责对字符队列进行转意,将其零散的字符转换成有具体意义的对象.
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public interface Parse {
 
 	/**
 	 * 空对象, 这样更好判断空值
 	 */
-	static final Object nullobj = new Object();
+	static final Object NULL = new Object();
 
 	/**
 	 * 提取队列顶部元素<br>

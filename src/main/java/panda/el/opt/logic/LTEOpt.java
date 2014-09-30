@@ -5,8 +5,6 @@ import panda.el.opt.TwoTernary;
 
 /**
  * 小于等于
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class LTEOpt extends TwoTernary {
 	public int getPriority() {

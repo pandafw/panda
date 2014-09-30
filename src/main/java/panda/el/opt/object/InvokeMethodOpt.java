@@ -8,8 +8,6 @@ import panda.el.opt.AbstractOpt;
 
 /**
  * 方法执行 以方法体右括号做为边界
- * 
- * @author juqkai(juqkai@gmail.com)
  */
 public class InvokeMethodOpt extends AbstractOpt {
 	private Object left;

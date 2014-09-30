@@ -2,8 +2,22 @@ package panda.el.obj;
 
 import panda.el.ElContext;
 
-public interface ElObj {
-	public String getVal();
+public class ElObj {
+	private String val;
 
-	public Object getObj(ElContext ec);
+	public ElObj(String val) {
+		this.val = val;
+	}
+
+	public String getVal() {
+		return val;
+	}
+
+	public Object getObj(ElContext ec) {
+		return ec.get(val);
+	}
+
+	public String toString() {
+		return val;
+	}
 }
