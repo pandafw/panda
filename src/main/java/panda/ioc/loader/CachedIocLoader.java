@@ -8,6 +8,6 @@ import panda.ioc.IocLoader;
  */
 public interface CachedIocLoader extends IocLoader {
 
-    void clear();
+	void clear();
 
 }

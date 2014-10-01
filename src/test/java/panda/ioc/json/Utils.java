@@ -8,7 +8,7 @@ import panda.lang.Strings;
 
 class Utils {
 
-	static Ioc I(String... ss) {
+	static DefaultIoc I(String... ss) {
 		String json = "{";
 		json += Strings.join(ss, ',');
 		json += "}";

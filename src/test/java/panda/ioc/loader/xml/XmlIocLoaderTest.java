@@ -28,10 +28,10 @@ public class XmlIocLoaderTest {
 	@Test
 	public void testXmlIocLoader() throws IocLoadException {
 		IocLoader iocLoader = getNew("conf/offered.xml");
-		assertTrue(iocLoader.getName() != null);
-		assertTrue(iocLoader.getName().length > 0);
+		assertTrue(iocLoader.getNames() != null);
+		assertTrue(iocLoader.getNames().size() > 0);
 
-		for (String name : iocLoader.getName()) {
+		for (String name : iocLoader.getNames()) {
 			assertNotNull(name);
 			assertNotNull(iocLoader.load(null, name));
 			IocObject iocObject = iocLoader.load(null, name);

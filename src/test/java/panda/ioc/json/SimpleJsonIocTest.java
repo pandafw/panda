@@ -232,7 +232,7 @@ public class SimpleJsonIocTest {
 	public void test_load_from_reader() throws IocLoadException {
 		Reader r = new InputStreamReader(getClass().getResourceAsStream("main.js"));
 		IocLoader loader = new JsonIocLoader(r);
-		assertTrue(loader.getName().length > 0);
+		assertTrue(loader.getNames().size() > 0);
 	}
 
 	@Test

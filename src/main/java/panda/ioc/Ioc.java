@@ -1,5 +1,7 @@
 package panda.ioc;
 
+import java.util.Set;
+
 /**
  * Ioc 容器接口
  */
@@ -51,7 +53,7 @@ public interface Ioc {
 	/**
 	 * @return 所有在容器中定义了的对象名称列表。
 	 */
-	String[] getNames();
+	Set<String> getNames();
 
 	/**
 	 * 将容器恢复成初始创建状态，所有的缓存都将被清空

@@ -1,5 +1,7 @@
 package panda.ioc;
 
+import java.util.Set;
+
 public class IocProxy implements Ioc {
 	private Ioc ioc;
 	
@@ -81,7 +83,7 @@ public class IocProxy implements Ioc {
 	/**
 	 * @return 所有在容器中定义了的对象名称列表。
 	 */
-	public String[] getNames() {
+	public Set<String> getNames() {
 		return ioc.getNames();
 	}
 

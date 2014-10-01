@@ -1,6 +1,7 @@
 package panda.bean.handlers;
 
 import java.lang.reflect.Type;
+import java.util.Set;
 
 import panda.bean.Beans;
 import panda.ioc.IocProxy;
@@ -35,7 +36,8 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 			return Strings.EMPTY_ARRAY;
 		}
 		
-		return ioc.getNames();
+		Set<String> ns = ioc.getNames();
+		return ns.toArray(new String[ns.size()]);
 	}
 
 	/**

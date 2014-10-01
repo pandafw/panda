@@ -3,6 +3,7 @@ package panda.ioc.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocContext;
@@ -157,7 +158,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						// 读取对象定义
 						IocObject iobj = loader.load(loading, name);
 						if (null == iobj) {
-							for (String iocBeanName : loader.getName()) {
+							for (String iocBeanName : loader.getNames()) {
 								// 相似性少于3 --> 大小写错误,1-2个字符调换顺序或写错
 								if (3 > Texts.computeLevenshteinDistance(name.toLowerCase(), iocBeanName.toLowerCase())) {
 									throw new IocException("Undefined object '%s' but found similar name '%s'", name,
@@ -243,8 +244,8 @@ public class DefaultIoc implements Ioc, Cloneable {
 		}
 	}
 
-	public String[] getNames() {
-		return loader.getName();
+	public Set<String> getNames() {
+		return loader.getNames();
 	}
 
 	public void addValueProxyMaker(ValueProxyMaker vpm) {

@@ -14,7 +14,8 @@ public class JsonAopConfigrationTest {
 	@Test
 	public void test_jsonAop() {
 		Ioc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
-		Assert.assertTrue(ioc.getNames().length > 0);
+		Assert.assertTrue(ioc.getNames().size() > 0);
+
 		for (String name : ioc.getNames()) {
 			ioc.get(null, name);
 		}

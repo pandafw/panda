@@ -47,7 +47,9 @@ public class DefaultObjectMaker implements ObjectMaker {
 		// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
 		ObjectProxy op = new ObjectProxy();
 		if (iobj.isSingleton() && null != ing.getName()) {
-			ing.getIoc().getContext().save(iobj.getScope(), ing.getName(), op);
+			if (!ing.getIoc().getContext().save(iobj.getScope(), ing.getName(), op)) {
+				throw new IocException("Failed to save '" + ing.getName() + "' to " + iobj.getScope() + " IocContext");
+			}
 		}
 
 		// 为对象代理设置触发事件

@@ -19,8 +19,8 @@ public class AnnotationIocLoaderTest {
 
 	@Test
 	public void testGetName() {
-		assertNotNull(iocLoader.getName());
-		assertTrue(iocLoader.getName().length > 0);
+		assertNotNull(iocLoader.getNames());
+		assertTrue(iocLoader.getNames().size() > 0);
 	}
 
 	@Test

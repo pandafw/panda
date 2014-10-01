@@ -3,6 +3,7 @@ package panda.ioc.loader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import panda.bind.json.Jsons;
@@ -44,8 +45,8 @@ public class MapIocLoader implements IocLoader {
 		this.map = map;
 	}
 
-	public String[] getName() {
-		return map.keySet().toArray(new String[map.size()]);
+	public Set<String> getNames() {
+		return map.keySet();
 	}
 
 	public boolean has(String name) {

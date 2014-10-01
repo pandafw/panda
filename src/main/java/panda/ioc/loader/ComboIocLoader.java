@@ -34,6 +34,15 @@ public class ComboIocLoader implements IocLoader {
 
 	private List<IocLoader> iocLoaders = new ArrayList<IocLoader>();
 
+	public ComboIocLoader(IocLoader... loaders) {
+		for (IocLoader iocLoader : loaders) {
+			if (iocLoader != null) {
+				iocLoaders.add(iocLoader);
+			}
+		}
+		checkBeanNames();
+	}
+
 	/**
 	 * <p/>
 	 * Example:
@@ -86,12 +95,16 @@ public class ComboIocLoader implements IocLoader {
 		if (loaderCls != null) {
 			createIocLoader(loaderCls, argsList);
 		}
-		
+
+		checkBeanNames();
+	}
+
+	private void checkBeanNames() {
 		Set<String> beanNames = new HashSet<String>();
 		for (IocLoader loader : iocLoaders) {
-			for (String beanName : loader.getName()) {
+			for (String beanName : loader.getNames()) {
 				if (!beanNames.add(beanName) && log.isWarnEnabled()) {
-					log.warnf("Found Duplicate beanName=%s, pls check you config!", beanName);
+					log.warnf("Found Duplicate beanName=%s, please check you config!", beanName);
 				}
 			}
 		}
@@ -120,22 +133,12 @@ public class ComboIocLoader implements IocLoader {
 		return cls;
 	}
 
-	public ComboIocLoader(IocLoader... loaders) {
-		for (IocLoader iocLoader : loaders) {
-			if (iocLoader != null) {
-				iocLoaders.add(iocLoader);
-			}
-		}
-	}
-
-	public String[] getName() {
-		ArrayList<String> list = new ArrayList<String>();
+	public Set<String> getNames() {
+		Set<String> ns = new HashSet<String>();
 		for (IocLoader iocLoader : iocLoaders) {
-			for (String name : iocLoader.getName()) {
-				list.add(name);
-			}
+			ns.addAll(iocLoader.getNames());
 		}
-		return list.toArray(new String[list.size()]);
+		return ns;
 	}
 
 	public boolean has(String name) {

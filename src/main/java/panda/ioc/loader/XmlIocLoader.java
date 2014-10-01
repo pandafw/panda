@@ -115,8 +115,8 @@ public class XmlIocLoader implements IocLoader {
 		}
 	}
 
-	public String[] getName() {
-		return iocMap.keySet().toArray(new String[iocMap.keySet().size()]);
+	public Set<String> getNames() {
+		return iocMap.keySet();
 	}
 
 	public boolean has(String name) {

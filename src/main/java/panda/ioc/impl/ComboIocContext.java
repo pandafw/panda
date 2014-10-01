@@ -12,7 +12,7 @@ import panda.ioc.ObjectProxy;
  * 每当获取时 按照构造Context的顺序，依次获取。 只要有一个 Context 返回了非 null 对象，就立即返回
  * 
  */
-public class ComboContext implements IocContext {
+public class ComboIocContext implements IocContext {
 
 	private List<IocContext> contexts = new ArrayList<IocContext>();
 
@@ -21,7 +21,7 @@ public class ComboContext implements IocContext {
 	 * 
 	 * @param contexts
 	 */
-	public ComboContext(IocContext... contexts) {
+	public ComboIocContext(IocContext... contexts) {
 		if (contexts != null) {
 			for (IocContext ic : contexts) {
 				addContext(ic);
@@ -34,8 +34,8 @@ public class ComboContext implements IocContext {
 	}
 	
 	public void addContext(IocContext ic) {
-		if (ic instanceof ComboContext) {
-			ComboContext cc = (ComboContext)ic;
+		if (ic instanceof ComboIocContext) {
+			ComboIocContext cc = (ComboIocContext)ic;
 			for (IocContext ic2 : cc.contexts) {
 				addContext(ic2);
 			}
@@ -49,24 +49,28 @@ public class ComboContext implements IocContext {
 	public ObjectProxy fetch(String key) {
 		for (IocContext c : contexts) {
 			ObjectProxy re = c.fetch(key);
-			if (null != re)
+			if (null != re) {
 				return re;
+			}
 		}
 		return null;
 	}
 
 	public boolean save(String scope, String name, ObjectProxy obj) {
-		boolean re = false;
 		for (IocContext c : contexts) {
-			re &= c.save(scope, name, obj);
+			if (c.save(scope, name, obj)) {
+				return true;
+			}
 		}
-		return re;
+		return false;
 	}
 
 	public boolean remove(String scope, String name) {
 		boolean re = false;
 		for (IocContext c : contexts) {
-			re &= c.remove(scope, name);
+			if (c.remove(scope, name)) {
+				re = true;
+			}
 		}
 		return re;
 	}

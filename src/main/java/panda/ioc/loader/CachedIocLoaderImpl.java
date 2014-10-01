@@ -2,6 +2,7 @@ package panda.ioc.loader;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
@@ -10,8 +11,6 @@ import panda.ioc.meta.IocObject;
 
 /**
  * 简单的带缓存的IocLoader <b/>仅对singleton == true的IocObject对象进行缓存,
- * 
- * @author wendal(wendal1985@gmail.com)
  */
 public class CachedIocLoaderImpl implements CachedIocLoader {
 
@@ -19,36 +18,36 @@ public class CachedIocLoaderImpl implements CachedIocLoader {
 		return new CachedIocLoaderImpl(proxyIocLoader);
 	}
 
-	private IocLoader proxyIocLoader;
+	private IocLoader loader;
 
-	private Map<String, IocObject> map;
+	private Map<String, IocObject> cache;
 
-	private CachedIocLoaderImpl(IocLoader proxyIocLoader) {
-		this.proxyIocLoader = proxyIocLoader;
-		this.map = new HashMap<String, IocObject>();
+	private CachedIocLoaderImpl(IocLoader loader) {
+		this.loader = loader;
+		this.cache = new HashMap<String, IocObject>();
 	}
 
 	public void clear() {
-		map.clear();
+		cache.clear();
 	}
 
-	public String[] getName() {
-		return proxyIocLoader.getName();
+	public Set<String> getNames() {
+		return loader.getNames();
 	}
 
 	public boolean has(String name) {
-		return proxyIocLoader.has(name);
+		return loader.has(name);
 	}
 
 	public IocObject load(IocLoading loading, String name) throws IocLoadException {
-		IocObject iocObject = map.get(name);
+		IocObject iocObject = cache.get(name);
 		if (iocObject == null) {
-			iocObject = proxyIocLoader.load(loading, name);
+			iocObject = loader.load(loading, name);
 			if (iocObject == null) {
 				return null;
 			}
 			if (iocObject.isSingleton() && iocObject.getType() != null) {
-				map.put(name, iocObject);
+				cache.put(name, iocObject);
 			}
 		}
 		return iocObject;
@@ -56,6 +55,6 @@ public class CachedIocLoaderImpl implements CachedIocLoader {
 
 	@Override
 	public String toString() {
-		return proxyIocLoader.toString();
+		return loader.toString();
 	}
 }

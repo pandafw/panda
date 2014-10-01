@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Set;
 
 import panda.bind.json.Jsons;
 import panda.ioc.IocException;
@@ -40,14 +41,28 @@ public class AnnotationIocLoader implements IocLoader {
 		
 		if (map.size() > 0) {
 			if (log.isInfoEnabled()) {
-				log.info("Successfully scan " + packages.length + " packages: " + Strings.join(packages, ' ') + "\n"
-					+ "Found " + map.size() + " bean classes\n"
-					+ Strings.join(map.keySet(), '\n'));
+				log.info("Successfully scan " + packages.length + " packages:\n" + Strings.join(packages, '\n'));
+				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
 			}
 		}
 		else {
-			log.warn("NONE Annotation-Class found!! Check your configure or report a bug!! packages: "
-					+ Strings.join(packages, ' '));
+			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:\n" + Strings.join(packages, '\n'));
+		}
+	}
+	
+	public AnnotationIocLoader(Class<?>... classes) {
+		for (Class<?> cls : classes) {
+			addClass(cls);
+		}
+		
+		if (map.size() > 0) {
+			if (log.isInfoEnabled()) {
+				log.info("Successfully add " + classes.length + " classes:\n" + Strings.join(classes, '\n'));
+				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
+			}
+		}
+		else {
+			log.warn("NONE Annotation-Class found!\nCheck your configure for classes:\n" + Strings.join(classes, '\n'));
 		}
 	}
 
@@ -55,6 +70,7 @@ public class AnnotationIocLoader implements IocLoader {
 		if (log.isTraceEnabled()) {
 			log.trace("Check " + clazz);
 		}
+		
 		if (clazz.isInterface() || clazz.isMemberClass() || clazz.isEnum() || clazz.isAnnotation()
 				|| clazz.isAnonymousClass()) {
 			return;
@@ -293,8 +309,8 @@ public class AnnotationIocLoader implements IocLoader {
 		return iocValue;
 	}
 
-	public String[] getName() {
-		return map.keySet().toArray(new String[map.size()]);
+	public Set<String> getNames() {
+		return map.keySet();
 	}
 
 	public boolean has(String name) {
