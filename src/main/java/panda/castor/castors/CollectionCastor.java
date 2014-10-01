@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 import panda.castor.CastContext;
 import panda.castor.Castor;
-import panda.castor.Castors;
 import panda.lang.Iterators;
 import panda.lang.reflect.Types;
 
@@ -18,17 +17,15 @@ import panda.lang.reflect.Types;
  * @param <T> target type
  */
 public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T> {
-	protected Castors castors;
 	protected Type toElementType;
 	
-	public CollectionCastor(Type fromType, Type toType, Castors castors) {
+	public CollectionCastor(Type fromType, Type toType) {
 		super(fromType, toType);
 		
 		if (!Types.isAssignable(toType, Collection.class)) {
 			throw new IllegalArgumentException("The argument is not a collection type: " + toType);
 		}
 
-		this.castors = castors;
 		this.toElementType = Types.getCollectionElementType(toType);
 	}
 
@@ -74,7 +71,7 @@ public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T>
 		Collection coll = createTarget();
 		if (value.getClass().isArray()) {
 			Type fType = value.getClass().getComponentType();
-			Castor castor = castors.getCastor(fType, toElementType);
+			Castor castor = getCastor(context, fType, toElementType);
 			int size = Array.getLength(value);
 
 			for (int i = 0; i < size; i++) {
@@ -85,7 +82,7 @@ public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T>
 		}
 		else if (Iterators.isIterable(value)) {
 			Type fType = getFromComponentType();
-			Castor castor = castors.getCastor(fType, toElementType);
+			Castor castor = getCastor(context, fType, toElementType);
 
 			int i = 0;
 			Iterator it = Iterators.asIterator(value);
@@ -96,7 +93,7 @@ public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T>
 			}
 		}
 		else {
-			Castor castor = castors.getCastor(value.getClass(), toElementType);
+			Castor castor = getCastor(context, value.getClass(), toElementType);
 			value = castChild(context, castor, 0, value);
 			coll.add(value);
 		}

@@ -6,16 +6,19 @@ import java.util.Map;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 
-/**
- * 
- * @author yf.frank.wang@gmail.com
- *
- */
 public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	private int cycleDetectStrategy = CYCLE_DETECT_NOPROP;
 
+	private Castors castors;
 	private Map<String, Object> context;
 	
+	/**
+	 * @param castors
+	 */
+	public CastContext(Castors castors) {
+		this.castors = castors;
+	}
+
 	/**
 	 * @return the cycleDetectStrategy
 	 */
@@ -30,6 +33,13 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 		this.cycleDetectStrategy = cycleDetectStrategy;
 	}
 	
+	/**
+	 * @return the castors
+	 */
+	public Castors getCastors() {
+		return castors;
+	}
+
 	public Object get(String key) {
 		if (context == null) {
 			return null;

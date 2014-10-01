@@ -59,11 +59,9 @@ public class Castors {
 
 	public static <T> T scast(Object value, Type toType) {
 		Asserts.notNull(toType);
-		Castor<Object, T> c = i().getCastor(value == null ? Object.class : value.getClass(), toType);
-		return c.cast(value, new CastContext());
+		return i().cast(value, toType);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T scastTo(Object value, T target) {
 		if (value == null) {
 			return target;
@@ -71,8 +69,7 @@ public class Castors {
 		
 		Asserts.notNull(target);
 		
-		Castor<Object, T> c = (Castor<Object, T>)i().getCastor(value.getClass(), target.getClass());
-		return c.castTo(value, target, new CastContext());
+		return i().castTo(value, target);
 	}
 
 	// ------------------------------------------------------------------------
@@ -166,6 +163,10 @@ public class Castors {
 		castors.clear();
 	}
 	
+	public CastContext getCastContext() {
+		return new CastContext(this);
+	}
+	
 	/**
 	 * getCastor
 	 * @param type object type
@@ -219,7 +220,7 @@ public class Castors {
 		}
 		
 		if (Types.isArrayType(toType)) {
-			return new ArrayCastor(fromType, toType, this);
+			return new ArrayCastor(fromType, toType);
 		}
 		
 		if (Types.isAssignable(toType, Number.class)) {
@@ -248,7 +249,7 @@ public class Castors {
 			}
 
 			if (Types.isAssignable(toType, List.class)) {
-				return (Castor<S, T>)new CollectionCastor(fromType, ArrayList.class, this);
+				return (Castor<S, T>)new CollectionCastor(fromType, ArrayList.class);
 			}
 			
 			if (Types.isAssignable(toType, Map.class)) {
@@ -256,7 +257,7 @@ public class Castors {
 			}
 			
 			if (Types.isAssignable(toType, Set.class)) {
-				return (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class, this);
+				return (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class);
 			}
 			
 			if (Types.isAssignable(fromType, toType, false)) {
@@ -270,10 +271,10 @@ public class Castors {
 		}
 		
 		if (Types.isAssignable(toType, Collection.class)) {
-			return (Castor<S, T>)new CollectionCastor(fromType, toType, this);
+			return (Castor<S, T>)new CollectionCastor(fromType, toType);
 		}
 		
-		return new JavaBeanCastor(fromType, toType, this);
+		return new JavaBeanCastor(fromType, toType, beans);
 	}
 
 	public <T> BeanHandler<T> getBeanHandler(Type type) {
@@ -282,7 +283,7 @@ public class Castors {
 
 	public <T> T cast(Object value, Type toType) {
 		Asserts.notNull(toType);
-		return cast(value, toType, new CastContext());
+		return cast(value, toType, getCastContext());
 	}
 
 	public <T> T cast(Object value, Type toType, CastContext context) {
@@ -293,7 +294,7 @@ public class Castors {
 
 	public <T> T castTo(Object value, T target) {
 		Asserts.notNull(target);
-		return castTo(value, target, null, new CastContext());
+		return castTo(value, target, null, getCastContext());
 	}
 
 	public <T> T castTo(Object value, T target, CastContext context) {
@@ -303,7 +304,7 @@ public class Castors {
 
 	public <T> T castTo(Object value, T target, Type toType) {
 		Asserts.notNull(target);
-		return castTo(value, target, toType, new CastContext());
+		return castTo(value, target, toType, getCastContext());
 	}
 
 	public <T> T castTo(Object value, T target, Type toType, CastContext context) {

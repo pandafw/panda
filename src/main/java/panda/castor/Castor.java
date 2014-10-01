@@ -63,15 +63,6 @@ public class Castor<S, T> {
 
 	/**
 	 * cast value
-	 * @param value value
-	 * @return casted value
-	 */
-	public T cast(S value) {
-		return cast(value, new CastContext());
-	}
-	
-	/**
-	 * cast value
 	 * @param context context
 	 * @param value value
 	 * @return casted value
@@ -197,6 +188,10 @@ public class Castor<S, T> {
 	
 	protected CastException castError(Object value, CastContext context) {
 		return new CastException(castErrorMsg(value, context));
+	}
+	
+	protected Castor getCastor(CastContext context, Type fromType, Type toType) {
+		return context.getCastors().getCastor(fromType, toType);
 	}
 	
 	@SuppressWarnings("unchecked")

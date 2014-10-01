@@ -4,9 +4,9 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import panda.bean.BeanHandler;
+import panda.bean.Beans;
 import panda.castor.CastContext;
 import panda.castor.Castor;
-import panda.castor.Castors;
 import panda.lang.CycleDetectStrategy;
 
 /**
@@ -16,14 +16,12 @@ import panda.lang.CycleDetectStrategy;
  * @param <T> target type
  */
 public class JavaBeanCastor<T> extends Castor<Object, T> {
-	private Castors castors;
 	private BeanHandler<T> beanHandler;
 	
-	public JavaBeanCastor(Type fromType, Type toType, Castors castors) {
+	public JavaBeanCastor(Type fromType, Type toType, Beans beans) {
 		super(fromType, toType);
 		
-		this.castors = castors;
-		beanHandler = castors.getBeanHandler(toType);
+		beanHandler = beans.getBeanHandler(toType);
 	}
 
 	@Override
@@ -40,7 +38,7 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected T castValueTo(Object value, T bean, CastContext context) {
-		BeanHandler bh = castors.getBeanHandler(value.getClass());
+		BeanHandler bh = context.getCastors().getBeanHandler(value.getClass());
 		String[] pns = bh.getReadPropertyNames(value);
 		if (pns.length == 0) {
 			if (!(value instanceof Map)) {
@@ -73,11 +71,11 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 				Object bv = beanHandler.getBeanValue(bean, pn);
 
 				if (bv == null) {
-					bv = castors.cast(pv, pt, context);
+					bv = context.getCastors().cast(pv, pt, context);
 					beanHandler.setBeanValue(bean, pn, bv);
 				}
 				else {
-					Object cv = castors.castTo(pv, bv, pt, context);
+					Object cv = context.getCastors().castTo(pv, bv, pt, context);
 					if (cv != bv) {
 						beanHandler.setBeanValue(bean, pn, cv);
 					}

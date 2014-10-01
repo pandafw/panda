@@ -14,7 +14,6 @@ import java.util.List;
 
 import panda.castor.CastContext;
 import panda.castor.Castor;
-import panda.castor.Castors;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
@@ -30,14 +29,11 @@ import panda.lang.reflect.Types;
  * @param <T> target type
  */
 public class ArrayCastor<S, T> extends Castor<S, T> {
-	private Castors castors;
 	private Type toComponentType;
 	
-	public ArrayCastor(Type fromType, Type toType, Castors castors) {
+	public ArrayCastor(Type fromType, Type toType) {
 		super(fromType, toType);
 		
-		this.castors = castors;
-
 		if (!Types.isArrayType(toType)) {
 			throw new IllegalArgumentException("The argument is not a array type: " + toType);
 		}
@@ -108,7 +104,7 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 			
 			if (value.getClass().isArray()) {
 				Type fType = value.getClass().getComponentType();
-				Castor conv = castors.getCastor(fType, toComponentType);
+				Castor conv = getCastor(context, fType, toComponentType);
 	
 				int size = Array.getLength(value);
 				Object array = createArray(target, size);
@@ -122,7 +118,7 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 			
 			if (Iterators.isIterable(value)) {
 				Type fType = getFromComponentType();
-				Castor conv = castors.getCastor(fType, toComponentType);
+				Castor conv = getCastor(context, fType, toComponentType);
 	
 				int i = 0;
 				List list = new ArrayList();
@@ -141,7 +137,7 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 			}
 
 			Object array = createArray(target, 1);
-			Castor conv = castors.getCastor(value.getClass(), toComponentType);
+			Castor conv = getCastor(context, value.getClass(), toComponentType);
 			Array.set(array, 0, castChild(context, conv, 0, value));
 			return (T)array;
 		}
