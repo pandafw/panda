@@ -35,7 +35,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 	public DefaultActionChainMaker(String... paths) {
 		try {
 			// load default settings
-			loadFromPath(getClass().getPackage().getName().replace('.', '/') + "/default-chains.js");
+			loadFromPath(getClass().getPackage().getName().replace('.', '/') + "/chains.json");
 			
 			// load customized settings
 			if (Arrays.isNotEmpty(paths)) {

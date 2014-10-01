@@ -1,6 +1,7 @@
 package panda.mvc;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.filepool.FilePool;
 import panda.ioc.Ioc;
+import panda.lang.Collections;
+import panda.mvc.util.StateProvider;
+import panda.mvc.util.TextProvider;
+import panda.mvc.validation.ParamValidationAware;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
@@ -33,6 +38,9 @@ public class ActionContext {
 	private Locale locale;
 
 	private Throwable error;
+	
+	private List<Object> tops;
+	
 
 	/**
 	 * Constructor
@@ -216,6 +224,20 @@ public class ActionContext {
 		return ioc.get(FilePool.class);
 	}
 
+	/**
+	 * @return the text provider
+	 */
+	public TextProvider getTextProvider() {
+		return ioc.get(TextProvider.class);
+	}
+
+	/**
+	 * @return the state provider
+	 */
+	public StateProvider getStateProvider() {
+		return ioc.get(StateProvider.class);
+	}
+	
 	//----------------------------------------------------
 	/**
 	 * @return the servlet context attributes map
@@ -252,6 +274,35 @@ public class ActionContext {
 		return servlet.getContextPath();
 	}
 	
+	/**
+	 * @return parameter validation errors
+	 */
+	public ParamValidationAware getParamErrors() {
+		return ioc.get(ParamValidationAware.class);
+	}
+
+	//----------------------------------------------------
+	// top
+	//
+	public Object getTop() {
+		return Collections.isEmpty(tops) ? null : tops.get(tops.size() - 1);
+	}
+	
+	private List<Object> getTops() {
+		if (tops == null) {
+			tops = new ArrayList<Object>();
+		}
+		return tops;
+	}
+	
+	public void push(Object top) {
+		getTops().add(top);
+	}
+	
+	public Object pop(Object top) {
+		return Collections.isEmpty(tops) ? null : tops.remove(tops.size() - 1);
+	}
+
 	//----------------------------------------------------
 	// shortcut alias
 	//

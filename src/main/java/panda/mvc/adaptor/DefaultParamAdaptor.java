@@ -152,12 +152,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				objs[i] = adaptByReqHeader(ac, types[i], reqHeader.value());
 				continue;
 			}
-
-			// And adapt by default support types
-			objs[i] = adaptByParamType(ac, clazs[i]);
-			if (objs[i] != null) {
-				continue;
-			}
 			
 			// Adapt by @param annotation
 			if (param != null) {
@@ -165,6 +159,12 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				if (objs[i] != null) {
 					continue;
 				}
+			}
+
+			// And adapt by default support types
+			objs[i] = adaptByParamType(ac, clazs[i]);
+			if (objs[i] != null) {
+				continue;
 			}
 			
 			objs[i] = adaptByPathArg(ac, types[i], p++);
@@ -256,6 +256,11 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			return ac.getServlet();
 		}
 
+		// ActionContext
+		if (ActionContext.class.isAssignableFrom(type)) {
+			return ac;
+		}
+		
 		// Ioc
 		if (Ioc.class.isAssignableFrom(type)) {
 			return ac.getIoc();

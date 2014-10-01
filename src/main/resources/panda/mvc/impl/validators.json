@@ -1,0 +1,49 @@
+{
+	"expression":         "panda.mvc.validator.ExpressionValidator",
+	
+	"empty":              "panda.mvc.validator.EmptyFieldValidator",
+	"required":           "panda.mvc.validator.RequiredFieldValidator",
+	"conversion":         "panda.mvc.validator.ConversionErrorFieldValidator",
+	
+	"requiredcollection": "panda.mvc.validator.RequiredCollectionFieldValidator",
+	"requiredstring":     "panda.mvc.validator.RequiredStringFieldValidator",
+	"requiredfile":       "panda.mvc.validator.RequiredFileFieldValidator",
+	"requiredimage":      "panda.mvc.validator.RequiredImageFieldValidator",
+	
+	"el":                 "panda.mvc.validator.ElFieldValidator",
+	"regex":              "panda.mvc.validator.RegexFieldValidator",
+	"email":              "panda.mvc.validator.EmailFieldValidator",
+	"compare":            "panda.mvc.validator.CompareFieldValidator",
+	
+	"date":               "panda.mvc.validator.DateRangeFieldValidator",
+	"byte":               "panda.mvc.validator.ByteRangeFieldValidator",
+	"short":              "panda.mvc.validator.ShortRangeFieldValidator",
+	"int":                "panda.mvc.validator.IntRangeFieldValidator",
+	"long":               "panda.mvc.validator.LongRangeFieldValidator",
+	"float":              "panda.mvc.validator.FloatRangeFieldValidator",
+	"double":             "panda.mvc.validator.DoubleRangeFieldValidator",
+	"bigint":             "panda.mvc.validator.BigIntRangeFieldValidator",
+	"decimal":            "panda.mvc.validator.DecimalRangeFieldValidator",
+	"number":             "panda.mvc.validator.NumberRangeFieldValidator",
+	"precision":          "panda.mvc.validator.DecimalPrecisionFieldValidator",
+	
+	"binarylength":       "panda.mvc.validator.BinaryLengthFieldValidator",
+	"stringlength":       "panda.mvc.validator.StringLengthFieldValidator",
+	"filelength":         "panda.mvc.validator.FileLengthFieldValidator",
+	"filename":           "panda.mvc.validator.FileNameFieldValidator",
+	"image":              "panda.mvc.validator.ImageFieldValidator",
+	"imagesize":          "panda.mvc.validator.ImageSizeFieldValidator",
+	
+	"constant":           "panda.mvc.validator.ConstantFieldValidator",
+	"prohibited":         "panda.mvc.validator.ProhibitedFieldValidator",
+	
+	"alphanumericstring":    "panda.mvc.validator.AlphaNumericStringFieldValidator",
+	"creditcardnumber":      "panda.mvc.validator.CreditCardNumberFieldValidator",
+	"hankakustring":         "panda.mvc.validator.HankakuStringFieldValidator",
+	"hankakukatakanastring": "panda.mvc.validator.HankakuKatakanaStringFieldValidator",
+	"zenkakustring":         "panda.mvc.validator.ZenkakuStringFieldValidator",
+	"zenkakukatakanastring": "panda.mvc.validator.ZenkakuKatakanaStringFieldValidator",
+	
+	"visitor":               "panda.mvc.validator.VisitorFieldValidator",
+	"conditionalvisitor":    "panda.mvc.validator.ConditionalVisitorFieldValidator"
+}

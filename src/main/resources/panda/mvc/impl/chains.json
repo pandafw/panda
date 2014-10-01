@@ -1,5 +1,5 @@
 {
-	"default" : [
+	"default": [
 		"panda.mvc.processor.FailedProcessor",
 		"panda.mvc.processor.EncodingProcessor",
 		"panda.mvc.processor.ActionProcessor",
