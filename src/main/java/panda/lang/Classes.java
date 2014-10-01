@@ -2372,24 +2372,47 @@ public abstract class Classes {
 			throw new NullPointerException("packages is null!");
 		}
 		
-		List<String> pkgs = new ArrayList<String>(packages.length);
-		for (String p : packages) {
-			if (Strings.isNotEmpty(p)) {
-				p = Strings.replaceChars(p, '.', '/');
-				if (p.charAt(0) == '/') {
-					p = p.substring(1);
-				}
-				pkgs.add(p);
-			}
-		}
-
-		if (Collections.isEmpty(pkgs)) {
+		Set<String> pkgs = Arrays.toSet(packages);
+		
+		return scan(pkgs);
+	}
+	
+	public static List<Class<?>> scan(Set<String> packages) {
+		if (Collections.isEmpty(packages)) {
 			throw new IllegalArgumentException("No packages supplied!");
 		}
 
 		final Log log = Logs.getLog(Classes.class);
 
 		List<Class<?>> clss = new ArrayList<Class<?>>();
+
+		Set<String> cns = getAllClasses();
+		for (String cn : cns) {
+			for (String pkg : packages) {
+				if (cn.startsWith(pkg)) {
+					try {
+						clss.add(Classes.getClass(cn, false));
+						break;
+					}
+					catch (ClassNotFoundException e) {
+						log.warn("Failed to load class " + cn);
+					}
+				}
+			}
+		}
+		return clss;
+	}
+	
+	private static Set<String> classes;
+	
+	public synchronized static Set<String> getAllClasses() {
+		if (classes != null) {
+			return classes;
+		}
+		
+		final Log log = Logs.getLog(Classes.class);
+
+		classes = new HashSet<String>();
 
 		Set<URL> urls = ClassLoaders.getAllClassLoaderURLs();
 		for (URL url : urls) {
@@ -2404,18 +2427,8 @@ public abstract class Classes {
 					while (null != (ens = zis.getNextEntry())) {
 						String cp = ens.getName();
 						if (cp.endsWith(CLASS_FILE_SUFFIX)) {
-							for (String pkg : pkgs) {
-								if (cp.startsWith(pkg)) {
-									String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
-									try {
-										clss.add(Classes.getClass(cn, false));
-										break;
-									}
-									catch (ClassNotFoundException e) {
-										log.warn("Failed to load class " + cp + " from " + url.getFile());
-									}
-								}
-							}
+							String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
+							classes.add(cn);
 						}
 					}
 				}
@@ -2435,22 +2448,12 @@ public abstract class Classes {
 					}
 					
 					String cp = FileNames.getRelativePath(dir, file);
-					for (String pkg : pkgs) {
-						if (cp.startsWith(pkg)) {
-							String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
-							try {
-								clss.add(Classes.getClass(cn, false));
-								break;
-							}
-							catch (ClassNotFoundException e) {
-								log.warn("Failed to load class " + file.getAbsolutePath());
-							}
-						}
-					}
+					String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
+					classes.add(cn);
 				}
 			}
 		}
-		return clss;
+		return classes;
 	}
 
 	/**
