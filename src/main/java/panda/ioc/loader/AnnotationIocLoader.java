@@ -3,14 +3,16 @@ package panda.ioc.loader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
 import panda.bind.json.Jsons;
 import panda.ioc.IocException;
+import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
-import panda.ioc.IocLoadException;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.ioc.meta.IocEventSet;
@@ -51,13 +53,17 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 	
 	public AnnotationIocLoader(Class<?>... classes) {
+		this(Arrays.asList(classes));
+	}
+	
+	public AnnotationIocLoader(Collection<Class<?>> classes) {
 		for (Class<?> cls : classes) {
 			addClass(cls);
 		}
 		
 		if (map.size() > 0) {
 			if (log.isInfoEnabled()) {
-				log.info("Successfully add " + classes.length + " classes:\n" + Strings.join(classes, '\n'));
+				log.info("Successfully add " + classes.size() + " classes:\n" + Strings.join(classes, '\n'));
 				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
 			}
 		}

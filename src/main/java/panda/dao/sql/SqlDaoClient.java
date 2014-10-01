@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import panda.dao.Dao;
@@ -91,16 +90,6 @@ public class SqlDaoClient extends DaoClient {
 		return (JdbcSqlExecutor)sqlManager.getExecutor();
 	}
 	
-	/**
-	 * set jndi data source
-	 * @param jndi jndi string such as "java:comp/env/jdbc/xxx"
-	 * @throws SQLException if a sql error occurs
-	 */
-	public void setJndiDataSource(String jndi) throws NamingException, SQLException {
-		DataSource ds = Sqls.lookupJndiDataSource(jndi);
-		setDataSource(ds);
-	}
-
 	/**
 	 * get SqlExpert by DataSource
 	 * 

@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
 
 /**
@@ -15,6 +16,7 @@ import panda.lang.Collections;
  * 
  * @author yf.frank.wang@gmail.com
  */
+@IocBean
 public class ResourceBundleLoader {
 	private static final String JAVA_CLASS = "java.class";
 	private static final String JAVA_PROPS = "java.properties";
