@@ -2,7 +2,6 @@ package panda.mvc.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +69,7 @@ public abstract class Loadings {
 		}
 
 		// scan packages
-		List<String> packages = new ArrayList<String>();
+		Set<String> packages = new HashSet<String>();
 
 		if (ann.scan()) {
 			// add default main package
@@ -86,7 +85,7 @@ public abstract class Loadings {
 				log.debug(" > scan " + Arrays.toString(packages));
 			}
 			
-			List<Class<?>> subs = Classes.scan(packages.toArray(new String[packages.size()]));
+			List<Class<?>> subs = Classes.scan(packages);
 			for (Class<?> sub : subs) {
 				addAction(actions, sub, false);
 			}

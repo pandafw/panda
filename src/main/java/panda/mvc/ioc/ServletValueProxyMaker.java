@@ -1,4 +1,4 @@
-package panda.mvc.impl;
+package panda.mvc.ioc;
 
 import javax.servlet.ServletContext;
 
@@ -8,6 +8,7 @@ import panda.ioc.ValueProxyMaker;
 import panda.ioc.meta.IocValue;
 import panda.ioc.val.StaticValue;
 import panda.lang.Arrays;
+import panda.lang.Strings;
 
 public class ServletValueProxyMaker implements ValueProxyMaker {
 
@@ -22,17 +23,17 @@ public class ServletValueProxyMaker implements ValueProxyMaker {
 	}
 
 	public ValueProxy make(IocMaking ing, IocValue iv) {
-		if (iv.getValue() == null) {
-			return null;
-		}
-		
-		String value = iv.getValue().toString();
 		if (IocValue.TYPE_REF.equals(iv.getType())) {
-			if ("$servlet".equalsIgnoreCase(value)) {
+			String name = iv.getValue().toString();
+			if (Strings.isEmpty(name)) {
+				return null;
+			}
+
+			if (ServletContext.class.getName().equals(name) || "$servlet".equalsIgnoreCase(name)) {
 				return new StaticValue(sc);
 			}
 			
-			Object obj = sc.getAttribute(value);
+			Object obj = sc.getAttribute(name);
 			if (obj != null) {
 				return new StaticValue(obj);
 			}

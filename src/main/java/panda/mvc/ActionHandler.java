@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.ioc.Ioc;
-import panda.ioc.impl.ComboContext;
+import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
@@ -54,7 +54,7 @@ public class ActionHandler {
 			if (IocRequestListener.isRequestScopeEnable || IocSessionListener.isSessionScopeEnable) {
 				DefaultIoc di = ((DefaultIoc)ioc).clone();
 
-				ComboContext ctx = new ComboContext();
+				ComboIocContext ctx = new ComboIocContext();
 				if (IocRequestListener.isRequestScopeEnable) {
 					ctx.addContext(RequestIocContext.get(req));
 				}

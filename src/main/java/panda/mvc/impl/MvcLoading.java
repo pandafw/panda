@@ -33,6 +33,7 @@ import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.UrlMappingBy;
 import panda.mvc.annotation.ViewBy;
 import panda.mvc.config.AbstractMvcConfig;
+import panda.mvc.ioc.ServletValueProxyMaker;
 import panda.mvc.ioc.provider.AnnotationIocProvider;
 
 public class MvcLoading implements Loading {

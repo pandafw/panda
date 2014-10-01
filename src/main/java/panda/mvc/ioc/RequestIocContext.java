@@ -11,7 +11,7 @@ public class RequestIocContext extends ScopeIocContext {
 
 	private ServletRequest request;
 
-	public RequestIocContext() {
+	private RequestIocContext() {
 		super(Scope.REQUEST);
 	}
 
