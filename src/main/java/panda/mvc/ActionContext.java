@@ -33,7 +33,7 @@ public class ActionContext {
 
 	private Object action;
 	private Method method;
-	private Object[] args;
+	private Map<String, Object> args;
 	private Object result;
 	private Locale locale;
 
@@ -163,14 +163,18 @@ public class ActionContext {
 	/**
 	 * @return the args
 	 */
-	public Object[] getArgs() {
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getArgs() {
+		if (args == null) {
+			args = Collections.EMPTY_MAP;
+		}
 		return args;
 	}
 
 	/**
 	 * @param args the args to set
 	 */
-	public void setArgs(Object[] args) {
+	public void setArgs(Map<String, Object> args) {
 		this.args = args;
 	}
 

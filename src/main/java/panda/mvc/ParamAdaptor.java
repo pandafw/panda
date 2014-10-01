@@ -1,5 +1,7 @@
 package panda.mvc;
 
+import java.util.LinkedHashMap;
+
 /**
  * 这是一个处理 HTTP 请求的扩展点。通过它，你可以用任何你想要的方式来为你的入口函数准备参数。 
  * 你可以通过注解 '@AdaptBy' 来声明你的入口函数具体将采用哪个适配器，默认的 框架将采用 DefaultParamAdaptor 来适配参数。当然，你也可以声明你自己的适配方法
@@ -28,6 +30,6 @@ public interface ParamAdaptor {
 	 * @param ac ActionContext
 	 * @return 调用参数数组
 	 */
-	Object[] adapt(ActionContext ac);
+	LinkedHashMap<String, Object> adapt(ActionContext ac);
 
 }

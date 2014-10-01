@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpSession;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.castor.CastContext;
 import panda.castor.Castors;
+import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.lang.Classes;
@@ -28,6 +31,7 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
+import panda.mvc.Mvcs;
 import panda.mvc.ParamAdaptor;
 import panda.mvc.adaptor.ejector.FormParamEjector;
 import panda.mvc.adaptor.ejector.JsonParamEjector;
@@ -87,25 +91,45 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return ejector;
 	}
 	
-	public Object[] adapt(ActionContext ac) {
+	protected String indexedName(int i) {
+		return indexedName(i, null);
+	}
+	
+	protected String indexedName(int i, Param param) {
+		if (param == null || Strings.isEmpty(param.value())) {
+			return "a" + i;
+		}
+		
+		return param.value();
+	}
+	
+	protected void addArg(LinkedHashMap<String, Object> args, String name, Object obj) {
+		if (args.containsKey(name)) {
+			throw new IllegalArgumentException("Duplicated @Param(" + name + ").");
+		}
+		args.put(name, obj);
+	}
+	
+	public LinkedHashMap<String, Object> adapt(ActionContext ac) {
 		Method method = ac.getMethod();
 		Annotation[][] annss = method.getParameterAnnotations();
 		Class<?>[] clazs = method.getParameterTypes();
 		Type[] types = method.getGenericParameterTypes();
-		Object[] objs = new Object[types.length];
+		LinkedHashMap<String, Object> args = new LinkedHashMap<String, Object>(types.length);
 
-		if (objs.length == 1 && annss[0].length == 0) {
-			objs[0] = adaptByParamType(ac, clazs[0]);
-			if (objs[0] == null) {
+		if (types.length == 1 && annss[0].length == 0) {
+			Object o = adaptByParamType(ac, clazs[0]);
+			if (o == null) {
 				// adapt by path arguments
-				objs[0] = adaptByPathArg(ac, types[0], 0);
+				o = adaptByPathArg(ac, types[0], 0);
 
-				if (objs[0] == null) {
-					objs[0] = ejectByAll(ac, types[0]);
+				if (o == null) {
+					o = ejectByAll(ac, types[0]);
 				}
 			}
 			
-			return objs;
+			args.put(indexedName(0), o);
+			return args;
 		}
 
 		int p = 0;
@@ -113,8 +137,8 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			Annotation[] anns = annss[i];
 			Param param = null;
 			Attr attr = null;
-			IocObj iocObj = null;
-			Header reqHeader = null;
+			IocObj ioco = null;
+			Header reqh = null;
 
 			// find @Param & @Attr & @IocObj in current annotations
 			for (int x = 0; x < anns.length; x++) {
@@ -127,55 +151,61 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 					break;
 				}
 				else if (anns[x] instanceof IocObj) {
-					iocObj = (IocObj)anns[x];
+					ioco = (IocObj)anns[x];
 					break;
 				}
 				else if (anns[x] instanceof Header) {
-					reqHeader = (Header)anns[x];
+					reqh = (Header)anns[x];
 					break;
 				}
 			}
 			
+			String name = indexedName(i, param);
+			
 			// If has @Attr
 			if (null != attr) {
-				objs[i] = adaptByAttr(ac, attr);
+				addArg(args, name, adaptByAttr(ac, attr));
 				continue;
 			}
 
 			// If has @IocObj
-			if (null != iocObj) {
-				objs[i] = adaptByIoc(ac, clazs[i], iocObj.value());
+			if (null != ioco) {
+				addArg(args, name, adaptByIoc(ac, clazs[i], ioco.value()));
 				continue;
 			}
 
-			if (null != reqHeader) {
-				objs[i] = adaptByReqHeader(ac, types[i], reqHeader.value());
+			if (null != reqh) {
+				addArg(args, name, adaptByReqHeader(ac, types[i], reqh.value()));
 				continue;
 			}
 			
 			// Adapt by @param annotation
 			if (param != null) {
-				objs[i] = adaptByParamAnno(ac, types[i], param);
-				if (objs[i] != null) {
+				Object o = adaptByParamAnno(ac, types[i], param);
+				if (o != null) {
+					addArg(args, name, o);
 					continue;
 				}
 			}
 
 			// And adapt by default support types
-			objs[i] = adaptByParamType(ac, clazs[i]);
-			if (objs[i] != null) {
+			Object o = adaptByParamType(ac, clazs[i]);
+			if (o != null) {
+				addArg(args, name, o);
 				continue;
 			}
 			
-			objs[i] = adaptByPathArg(ac, types[i], p++);
-			if (objs[i] != null) {
+			o = adaptByPathArg(ac, types[i], p++);
+			if (o != null) {
+				addArg(args, name, o);
 				continue;
 			}
 			
-			objs[i] = cast(null, types[i]);
+			o = cast(ac, null, types[i]);
+			addArg(args, name, o);
 		}
 		
-		return objs;
+		return args;
 	}
 
 	protected Object adaptByAttr(ActionContext ac, Attr attr) {
@@ -232,7 +262,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			val = req.getHeader(name);
 		}
 
-		return cast(val, type);
+		return cast(ac, val, type);
 	}
 
 	protected Object adaptByParamType(ActionContext ac, Class<?> type) {
@@ -318,13 +348,13 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			}
 		}
 		
-		return cast(param, type);
+		return cast(ac, param, type);
 	}
 
 	protected Object ejectByAll(ActionContext ac, Type type) {
 		ParamEjector pe = getParamEjector(ac);
 		Object a = pe.eject();
-		Object o = cast(a, type);
+		Object o = cast(ac, a, type);
 		return o;
 	}
 
@@ -343,7 +373,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);
 				}
 				else {
-					Object cv = cast(val, pt);
+					Object cv = cast(ac, val, pt);
 					if (!bh.setBeanValue(target, bn, cv)) {
 						log.warn("Failed to set form value (" + key + "=" + val + ") to " + type);
 					}
@@ -357,13 +387,16 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	protected Object adaptByPathArg(ActionContext ac, Type type, int index) {
 		List<String> args = ac.getPathArgs();
 		if (index < args.size()) {
-			return cast(args.get(index), type);
+			return cast(ac, args.get(index), type);
 		}
 
 		return null;
 	}
 	
-	protected <T> T cast(Object value, Type type) {
-		return Castors.scast(value, type);
+	protected <T> T cast(ActionContext ac, Object value, Type type) {
+		Castors cs = Mvcs.getCastors();
+		CastContext cc = new CastContext();
+		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		return cs.cast(value, type, cc);
 	}
 }

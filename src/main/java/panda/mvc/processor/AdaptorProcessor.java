@@ -1,5 +1,7 @@
 package panda.mvc.processor;
 
+import java.util.LinkedHashMap;
+
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
@@ -20,7 +22,7 @@ public class AdaptorProcessor extends AbstractProcessor {
 	}
 
 	public void process(ActionContext ac) throws Throwable {
-		Object[] args = adaptor.adapt(ac);
+		LinkedHashMap<String, Object> args = adaptor.adapt(ac);
 		ac.setArgs(args);
 		doNext(ac);
 	}

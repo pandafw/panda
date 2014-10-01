@@ -97,6 +97,10 @@ public abstract class AbstractFieldValidator implements FieldValidator {
 	protected Object getFieldValue(Object object, String name) {
 		return Beans.getBean(object, name);
 	}
+
+	protected Object getContextValue(ActionContext ac, String name) {
+		return Beans.getBean(ac, name);
+	}
 	
 	protected String getFullFieldName(String name) {
 		if (parent != null) {
