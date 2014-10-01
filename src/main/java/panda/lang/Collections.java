@@ -36,6 +36,26 @@ public abstract class Collections {
 	private static Integer INTEGER_ONE = new Integer(1);
 
 	/**
+	 * Clear collection
+	 * @param c collection
+	 */
+	public static void clear(Collection<?> c) {
+		if (c != null) {
+			c.clear();
+		}
+	}
+
+	/**
+	 * Clear map
+	 * @param m map
+	 */
+	public static void clear(Map<?, ?> m) {
+		if (m != null) {
+			m.clear();
+		}
+	}
+	
+	/**
 	 * Returns a {@link Collection} containing the union of the given {@link Collection}s.
 	 * <p>
 	 * The cardinality of each element in the returned {@link Collection} will be equal to the
