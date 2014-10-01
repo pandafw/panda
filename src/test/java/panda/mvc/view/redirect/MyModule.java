@@ -10,7 +10,7 @@ import panda.mvc.annotation.param.Param;
 @At
 public class MyModule {
 	@At("/register")
-	@Ok("redirect:/jsp/user/information.do?id=${obj.id}")
+	@Ok("redirect:/jsp/user/information.do?id=${r.id}")
 	public User register(HttpServletRequest request, HttpSession session) {
 		User user = new User();
 		user.setId(373);

@@ -30,7 +30,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 
-@IocBean(type=TextProvider.class, singleton=false, scope=Scope.REQUEST)
+@IocBean(type=TextProvider.class, scope=Scope.REQUEST)
 public class DefaultTextProvider implements TextProvider {
 	private final static Log log = Logs.getLog(DefaultTextProvider.class);
 
@@ -51,9 +51,15 @@ public class DefaultTextProvider implements TextProvider {
 	protected static final ConcurrentMap<String, ResourceBundle> bundlesMap = new ConcurrentHashMap<String, ResourceBundle>();
 	protected static final ConcurrentMap<MultiKey, MessageFormat> messageFormats = new ConcurrentHashMap<MultiKey, MessageFormat>();
 
+	@IocInject(required=false)
 	private Beans beans;
+
+	@IocInject
 	private ActionContext context;
+
+	@IocInject
 	private ResourceBundleLoader resourceBundleLoader;
+
 	private ClassLoader resourceClassLoader;
 
 	public DefaultTextProvider() {
@@ -71,7 +77,6 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * @param beans the beans to set
 	 */
-	@IocInject
 	public void setBeans(Beans beans) {
 		this.beans = beans;
 	}
@@ -86,7 +91,6 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * @param context the context to set
 	 */
-	@IocInject
 	public void setContext(ActionContext context) {
 		this.context = context;
 	}
@@ -108,7 +112,6 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * @param resourceBundleLoader the resourceBundleLoader to set
 	 */
-	@IocInject
 	public void setResourceBundleLoader(ResourceBundleLoader resourceBundleLoader) {
 		this.resourceBundleLoader = resourceBundleLoader;
 	}
@@ -396,7 +399,7 @@ public class DefaultTextProvider implements TextProvider {
 		return beans.getBeanValue(parent, property);
 	}
 
-	protected String translateValue(String text, Object model) {
+	protected String evalValue(String text, Object model) {
 		// TODO: use EL
 		return Texts.translate(text, model);
 	}
@@ -457,7 +460,7 @@ public class DefaultTextProvider implements TextProvider {
 
 			// defaultMessage may be null
 			if (message != null) {
-				MessageFormat mf = buildMessageFormat(translateValue(message, valueStack), locale);
+				MessageFormat mf = buildMessageFormat(evalValue(message, valueStack), locale);
 
 				String msg = formatWithNullDetection(mf, args);
 				result = new GetDefaultMessageReturnArg(msg, found);
@@ -652,7 +655,7 @@ public class DefaultTextProvider implements TextProvider {
 		reloadBundles();
 
 		try {
-			String message = translateValue(bundle.getString(key), valueStack);
+			String message = evalValue(bundle.getString(key), valueStack);
 			MessageFormat mf = buildMessageFormat(message, locale);
 			return formatWithNullDetection(mf, args);
 		}
@@ -689,8 +692,7 @@ public class DefaultTextProvider implements TextProvider {
 		ResourceBundle bundle = bundlesMap.get(key);
 		if (bundle == null) {
 			try {
-				ClassLoader cl = getResourceClassLoader();
-				bundle = resourceBundleLoader.getBundle(aBundleName, locale, cl);
+				bundle = resourceBundleLoader.getBundle(aBundleName, locale, resourceClassLoader);
 			}
 			catch (MissingResourceException ex) {
 			}

@@ -2,6 +2,8 @@ package panda.mvc.util;
 
 import javax.servlet.http.Cookie;
 
+import panda.ioc.Scope;
+import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Encrypts;
 import panda.lang.Strings;
@@ -12,6 +14,7 @@ import panda.servlet.HttpServlets;
 /**
  * CookieStateProvider
  */
+@IocBean(type=StateProvider.class, scope=Scope.REQUEST)
 public class CookieStateProvider implements StateProvider {
 	private final static String DOMAIN = "cookie-state-domain";
 	private final static String PATH = "cookie-state-path";

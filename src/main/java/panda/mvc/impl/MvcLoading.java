@@ -34,7 +34,7 @@ import panda.mvc.annotation.UrlMappingBy;
 import panda.mvc.annotation.ViewBy;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.ioc.ServletValueProxyMaker;
-import panda.mvc.ioc.provider.AnnotationIocProvider;
+import panda.mvc.ioc.provider.DefaultIocProvider;
 
 public class MvcLoading implements Loading {
 
@@ -252,7 +252,7 @@ public class MvcLoading implements Loading {
 		}
 	}
 
-	protected Ioc createIoc(AbstractMvcConfig config) throws Exception {
+	protected void createIoc(AbstractMvcConfig config) throws Exception {
 		Class<?> mainModule = config.getMainModule();
 
 		Class<? extends IocProvider> ip = null;
@@ -261,7 +261,7 @@ public class MvcLoading implements Loading {
 		IocBy ib = mainModule.getAnnotation(IocBy.class);
 		if (ib == null) {
 			log.warn("@IocBy is not defined for " + mainModule + ", use default ioc setting");
-			ip = AnnotationIocProvider.class;
+			ip = DefaultIocProvider.class;
 		}
 		else {
 			ip = ib.type();
@@ -278,7 +278,6 @@ public class MvcLoading implements Loading {
 		}
 
 		config.setIoc(ioc);
-		return ioc;
 	}
 
 	public void depose(MvcConfig config) {

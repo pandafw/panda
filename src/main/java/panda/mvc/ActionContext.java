@@ -253,11 +253,30 @@ public class ActionContext {
 	}
 	
 	//----------------------------------------------------
+	// shortcut alias
+	//
+	/**
+	 * @return the action object
+	 * @see #getAction()
+	 */
+	public Object getA() {
+		return getAction();
+	}
+
+	/**
+	 * @return the request parameters map
+	 * @see #getParam()
+	 */
+	public Map<String, Object> getP() {
+		return getParam();
+	}
+
 	/**
 	 * @return the result object
 	 * @see #getResult()
 	 */
-	public Object getObj() {
+	public Object getR() {
 		return getResult();
 	}
+
 }

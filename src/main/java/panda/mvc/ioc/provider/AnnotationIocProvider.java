@@ -13,19 +13,22 @@ public class AnnotationIocProvider extends AbstractIocProvider {
 
 	public Ioc create(MvcConfig config, String... args) {
 		if (args == null || args.length == 0) {
-			Set<String> pkgs = new HashSet<String>();
-
-			Class<?> mm = config.getMainModule();
-			pkgs.add(mm.getPackage().getName());
-			Modules ms = mm.getAnnotation(Modules.class);
-			if (ms != null) {
-				for (Class<?> cls : ms.value()) {
-					pkgs.add(cls.getPackage().getName());
-				}
-			}
-			args = pkgs.toArray(new String[pkgs.size()]);
+			args = getDefaultPackages(config);
 		}
 		return create(new MvcAnnotationIocLoader(args));
 	}
 
+	public static String[] getDefaultPackages(MvcConfig config) {
+		Set<String> pkgs = new HashSet<String>();
+
+		Class<?> mm = config.getMainModule();
+		pkgs.add(mm.getPackage().getName());
+		Modules ms = mm.getAnnotation(Modules.class);
+		if (ms != null) {
+			for (Class<?> cls : ms.value()) {
+				pkgs.add(cls.getPackage().getName());
+			}
+		}
+		return pkgs.toArray(new String[pkgs.size()]);
+	}
 }
