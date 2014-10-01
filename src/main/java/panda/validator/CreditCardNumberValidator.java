@@ -6,14 +6,9 @@ package panda.validator;
  */
 public class CreditCardNumberValidator {
 	/**
-	 * NONE = '0';
+	 * ALL = '*';
 	 */
-	public static final char NONE = '0';
-
-	/**
-	 * ALL = '1';
-	 */
-	public static final char ALL = '1';
+	public static final char ALL = '*';
 
 	/**
 	 * AMEX = 'A';
