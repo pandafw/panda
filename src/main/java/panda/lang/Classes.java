@@ -2266,10 +2266,17 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @return true if the class is float, double, BigDecimal
+	 */
+	public static boolean isFloatLike(Class<?> cls) {
+		return cls != null && (isFloat(cls) || isDouble(cls) || BigDecimal.class.isAssignableFrom(cls));
+	}
+
+	/**
 	 * @return true if the class is int, long, short, byte, BigInteger
 	 */
 	public static boolean isIntLike(Class<?> cls) {
-		return cls != null && (isInt(cls) || isLong(cls) || isShort(cls) || isByte(cls) || BigInteger.class.equals(cls));
+		return cls != null && (isInt(cls) || isLong(cls) || isShort(cls) || isByte(cls) || BigInteger.class.isAssignableFrom(cls));
 	}
 
 	/**

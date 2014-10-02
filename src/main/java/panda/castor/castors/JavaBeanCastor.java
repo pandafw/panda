@@ -42,7 +42,7 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 		String[] pns = bh.getReadPropertyNames(value);
 		if (pns.length == 0) {
 			if (!(value instanceof Map)) {
-				throw castError(value, context);
+				return castError(value, context);
 			}
 			return bean;
 		}
@@ -82,7 +82,7 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 				}
 			}
 			catch (Throwable e) {
-				throw wrapError(e, context);
+				castError(pv, context, e);
 			}
 			finally {
 				context.popup();

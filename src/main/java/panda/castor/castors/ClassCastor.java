@@ -18,9 +18,9 @@ public class ClassCastor extends AbstractObjectCastor<Class> {
 				return Classes.getClass(value.toString());
 			}
 			catch (ClassNotFoundException e) {
-				throw wrapError(e, context);
+				return castError(value, context, e);
 			}
 		}
-		throw castError(value, context);
+		return castError(value, context);
 	}
 }

@@ -67,6 +67,7 @@ public abstract class AbstractObjectCastor<T> extends Castor<Object, T> {
 					+ (value == null ? "NULL" : value.getClass().toString())
 					+ " -> " + Objects.identityToString(target));
 		}
+		
 		try {
 			if (value == null) {
 				return defaultValue();

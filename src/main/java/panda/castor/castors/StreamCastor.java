@@ -52,7 +52,7 @@ public abstract class StreamCastor<T> extends AbstractObjectCastor<T> {
 				return Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
 			}
 
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 

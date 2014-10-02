@@ -182,12 +182,20 @@ public class Castor<S, T> {
 				+ Types.getRawType(toType);
 	}
 	
-	protected CastException castError(Object value, CastContext context, Throwable e) {
-		return new CastException(castErrorMsg(value, context), e);
+	protected T castError(Object value, CastContext context, Throwable e) {
+		if (context.isSkipCastError()) {
+			context.addError(context.toName(), value);
+			return defaultValue();
+		}
+		throw new CastException(castErrorMsg(value, context), e);
 	}
 	
-	protected CastException castError(Object value, CastContext context) {
-		return new CastException(castErrorMsg(value, context));
+	protected T castError(Object value, CastContext context) {
+		if (context.isSkipCastError()) {
+			context.addError(context.toName(), value);
+			return defaultValue();
+		}
+		throw new CastException(castErrorMsg(value, context));
 	}
 	
 	protected Castor getCastor(CastContext context, Type fromType, Type toType) {

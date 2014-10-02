@@ -18,9 +18,9 @@ public class EnumCastor extends AbstractObjectCastor<Enum> {
 				return Enum.valueOf((Class)getToType(), value.toString());
 			}
 			catch (IllegalArgumentException e) {
-				throw wrapError(e, context);
+				return castError(value, context, e);
 			}
 		}
-		throw castError(value, context);
+		return castError(value, context);
 	}
 }

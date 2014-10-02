@@ -80,7 +80,7 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 				if (value instanceof char[]) {
 					return (T)Base64.decodeBase64(new String((char[])value));
 				}
-				throw castError(value, context);
+				return castError(value, context);
 			}
 			
 			if (char.class.equals(toComponentType)) {
@@ -99,7 +99,7 @@ public class ArrayCastor<S, T> extends Castor<S, T> {
 				if (value instanceof InputStream) {
 					return (T)Base64.encodeBase64String((InputStream)value).toCharArray();
 				}
-				throw castError(value, context);
+				return castError(value, context);
 			}
 			
 			if (value.getClass().isArray()) {

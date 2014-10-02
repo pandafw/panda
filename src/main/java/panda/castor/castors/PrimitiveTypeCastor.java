@@ -83,7 +83,7 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return defaultValue();
 				}
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -110,13 +110,13 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createByte(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Number) {
 				return ((Number)value).byteValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -151,7 +151,7 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 			if (value instanceof Number) {
 				return (char)((Number)value).intValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -179,13 +179,13 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createDouble(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Number) {
 				return ((Number)value).doubleValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -213,13 +213,13 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createFloat(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Number) {
 				return ((Number)value).floatValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -247,13 +247,13 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createInteger(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Number) {
 				return ((Number)value).intValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -283,7 +283,7 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createLong(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Date) {
@@ -301,7 +301,7 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 			if (value instanceof Number) {
 				return ((Number)value).longValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -328,13 +328,13 @@ public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
 					return Numbers.createShort(value.toString());
 				}
 				catch (NumberFormatException e) {
-					throw castError(value, context, e);
+					return castError(value, context, e);
 				}
 			}
 			if (value instanceof Number) {
 				return ((Number)value).shortValue();
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 }

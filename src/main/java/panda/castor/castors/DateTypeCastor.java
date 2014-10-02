@@ -70,9 +70,9 @@ public class DateTypeCastor {
 						ex = e;
 					}
 				}
-				throw castError(value, context, ex);
+				return castError(value, context, ex);
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	
 		@Override

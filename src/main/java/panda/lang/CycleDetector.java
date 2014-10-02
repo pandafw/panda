@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class CycleDetector {
 	/** cycle detect value stack */
-	private List<Object> stack = new ArrayList<Object>();
+	protected List<Object> stack = new ArrayList<Object>();
 
 	/** cycle detect name stack */
-	private List<String> names = new ArrayList<String>();
+	protected List<String> names = new ArrayList<String>();
 
 
 	public void push(String name, Object value) {
@@ -29,7 +29,7 @@ public class CycleDetector {
 	}
 	
 	public String toPath() {
-		return '/' + Strings.join(names, "/");
+		return '/' + Strings.join(names, '/');
 	}
 	
 	public String toPath(String name) {

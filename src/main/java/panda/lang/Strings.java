@@ -290,8 +290,8 @@ public class Strings {
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed string, {@code null} if null String input
 	 */
-	public static String trim(final String str) {
-		return str == null ? null : str.trim();
+	public static String trim(final CharSequence str) {
+		return str == null ? null : str.toString().trim();
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class Strings {
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed String, {@code null} if only chars &lt;= 32, empty or null String input
 	 */
-	public static String trimToNull(final String str) {
+	public static String trimToNull(final CharSequence str) {
 		final String ts = trim(str);
 		return isEmpty(ts) ? null : ts;
 	}
@@ -355,15 +355,15 @@ public class Strings {
 	 * @param str the String to be trimmed, may be null
 	 * @return the trimmed String, or an empty String if {@code null} input
 	 */
-	public static String trimToEmpty(final String str) {
-		return str == null ? EMPTY : str.trim();
+	public static String trimToEmpty(final CharSequence str) {
+		return str == null ? EMPTY : str.toString().trim();
 	}
 
 	/**
 	 * @param str the string to trim
 	 * @return upperCase(trimToEmpty(str));
 	 */
-	public static String trimToUpperEmpty(final String str) {
+	public static String trimToUpperEmpty(final CharSequence str) {
 		return upperCase(trimToEmpty(str));
 	}
 
@@ -371,7 +371,7 @@ public class Strings {
 	 * @param str the string to trim
 	 * @return lowerrCase(trimToEmpty(str));
 	 */
-	public static String trimToLowerEmpty(final String str) {
+	public static String trimToLowerEmpty(final CharSequence str) {
 		return lowerCase(trimToEmpty(str));
 	}
 
@@ -382,7 +382,7 @@ public class Strings {
 	 * Strips whitespace from the start and end of a String.
 	 * </p>
 	 * <p>
-	 * This is similar to {@link #trim(String)} but removes whitespace. Whitespace is defined by
+	 * This is similar to {@link #trim(CharSequence)} but removes whitespace. Whitespace is defined by
 	 * {@link Character#isWhitespace(char)}.
 	 * </p>
 	 * <p>
@@ -413,7 +413,7 @@ public class Strings {
 	 * empty ("") after the strip.
 	 * </p>
 	 * <p>
-	 * This is similar to {@link #trimToNull(String)} but removes whitespace. Whitespace is defined
+	 * This is similar to {@link #trimToNull(CharSequence)} but removes whitespace. Whitespace is defined
 	 * by {@link Character#isWhitespace(char)}.
 	 * </p>
 	 * 
@@ -461,7 +461,7 @@ public class Strings {
 	 * {@code null} input.
 	 * </p>
 	 * <p>
-	 * This is similar to {@link #trimToEmpty(String)} but removes whitespace. Whitespace is defined
+	 * This is similar to {@link #trimToEmpty(CharSequence)} but removes whitespace. Whitespace is defined
 	 * by {@link Character#isWhitespace(char)}.
 	 * </p>
 	 * 
@@ -7473,7 +7473,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * The function returns the argument string with whitespace normalized by using
-	 * <code>{@link #trim(String)}</code> to remove leading and trailing whitespace and then
+	 * <code>{@link #trim(CharSequence)}</code> to remove leading and trailing whitespace and then
 	 * replacing sequences of whitespace characters by a single space.
 	 * </p>
 	 * In XML Whitespace characters are the same as those allowed by the <a
@@ -7494,12 +7494,12 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * The difference is that Java's whitespace includes vertical tab and form feed, which this
-	 * functional will also normalize. Additionally <code>{@link #trim(String)}</code> removes
+	 * functional will also normalize. Additionally <code>{@link #trim(CharSequence)}</code> removes
 	 * control characters (char &lt;= 32) from both ends of this String.
 	 * </p>
 	 * 
 	 * @see Pattern
-	 * @see #trim(String)
+	 * @see #trim(CharSequence)
 	 * @see <a
 	 *      href="http://www.w3.org/TR/xpath/#function-normalize-space">http://www.w3.org/TR/xpath/#function-normalize-space</a>
 	 * @param str the source String to normalize whitespaces from, may be null

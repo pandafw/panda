@@ -28,7 +28,7 @@ public class NumberTypeCastor {
 			if (value instanceof CharSequence) {
 				return Numbers.createNumber(value.toString());
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class NumberTypeCastor {
 			if (value instanceof CharSequence) {
 				return Numbers.createBigDecimal(value.toString());
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class NumberTypeCastor {
 			if (value instanceof CharSequence) {
 				return Numbers.createBigInteger(value.toString());
 			}
-			throw castError(value, context);
+			return castError(value, context);
 		}
 	}
 }
