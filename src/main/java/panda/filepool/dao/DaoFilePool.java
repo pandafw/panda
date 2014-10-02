@@ -8,6 +8,7 @@ import panda.dao.DaoClient;
 import panda.dao.DataHandler;
 import panda.filepool.FileItem;
 import panda.filepool.FilePool;
+import panda.filepool.NullFileItem;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
@@ -99,7 +100,7 @@ public class DaoFilePool implements FilePool {
 	public FileItem findFile(Long id) {
 		Dao dao = getDaoClient().getDao();
 		DaoFileItem fi = dao.fetch(DaoFileItem.class, id);
-		return fi;
+		return fi == null ? new NullFileItem(id) : fi;
 	}
 	
 	protected byte[] readFile(DaoFileItem fi) {

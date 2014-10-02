@@ -42,6 +42,11 @@ public interface FileItem {
 	boolean isTemporary();
 
 	/**
+	 * @return exists
+	 */
+	boolean isExists();
+	
+	/**
 	 * @return the data
 	 */
 	byte[] getData() throws IOException;

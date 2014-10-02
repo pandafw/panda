@@ -155,6 +155,13 @@ public class DaoFileItem implements FileItem, Serializable {
 	}
 
 	/**
+	 * @return true
+	 */
+	public boolean isExists() {
+		return true;
+	}
+
+	/**
 	 * @return the data
 	 */
 	public byte[] getData() throws IOException {
