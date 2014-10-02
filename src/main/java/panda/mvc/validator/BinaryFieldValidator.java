@@ -3,10 +3,14 @@ package panda.mvc.validator;
 import panda.io.Files;
 import panda.mvc.ActionContext;
 
-public class BinaryLengthFieldValidator extends AbstractFieldValidator {
+public class BinaryFieldValidator extends AbstractFieldValidator {
 
 	private Integer minLength = null;
 	private Integer maxLength = null;
+	
+	/**
+	 * byte array length
+	 */
 	private Integer length = null;
 
 	/**

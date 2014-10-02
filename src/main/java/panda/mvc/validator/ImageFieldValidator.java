@@ -5,22 +5,115 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.apache.commons.vfs2.FileObject;
-
-import panda.exts.fileupload.UploadFile;
-import panda.exts.fileupload.UploadImage;
-import panda.exts.vfs.Vfs;
+import panda.filepool.FileItem;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.image.JavaImageWrapper;
 import panda.io.Streams;
+import panda.mvc.ActionContext;
 
-import com.opensymphony.xwork2.validator.ValidationException;
-
-/**
- * image size field validator.
- */
 public class ImageFieldValidator extends AbstractFieldValidator {
+
+	private boolean required;
+	private Integer minWidth;
+	private Integer minHeight;
+	private Integer maxWidth;
+	private Integer maxHeight;
+
+	/**
+	 * image width
+	 */
+	private Integer width;
+	
+	/**
+	 * image height
+	 */
+	private Integer height;
+	
+
+	/**
+	 * @return the required
+	 */
+	public boolean isRequired() {
+		return required;
+	}
+
+	/**
+	 * @param required the required to set
+	 */
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	/**
+	 * @return the width
+	 */
+	public Integer getWidth() {
+		return width;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public Integer getHeight() {
+		return height;
+	}
+
+	/**
+	 * @return the minWidth
+	 */
+	public Integer getMinWidth() {
+		return minWidth;
+	}
+
+	/**
+	 * @param minWidth the minWidth to set
+	 */
+	public void setMinWidth(Integer minWidth) {
+		this.minWidth = minWidth;
+	}
+
+	/**
+	 * @return the minHeight
+	 */
+	public Integer getMinHeight() {
+		return minHeight;
+	}
+
+	/**
+	 * @param minHeight the minHeight to set
+	 */
+	public void setMinHeight(Integer minHeight) {
+		this.minHeight = minHeight;
+	}
+
+	/**
+	 * @return the maxWidth
+	 */
+	public Integer getMaxWidth() {
+		return maxWidth;
+	}
+
+	/**
+	 * @param maxWidth the maxWidth to set
+	 */
+	public void setMaxWidth(Integer maxWidth) {
+		this.maxWidth = maxWidth;
+	}
+
+	/**
+	 * @return the maxHeight
+	 */
+	public Integer getMaxHeight() {
+		return maxHeight;
+	}
+
+	/**
+	 * @param maxHeight the maxHeight to set
+	 */
+	public void setMaxHeight(Integer maxHeight) {
+		this.maxHeight = maxHeight;
+	}
 
 	protected ImageWrapper getImage(Object value) throws ValidationException {
 		ImageWrapper img = null;
@@ -51,63 +144,43 @@ public class ImageFieldValidator extends AbstractFieldValidator {
 					img = Images.i().read(data);
 				}
 			}
-			else if (value instanceof FileObject) {
-				FileObject f = (FileObject)value;
-				if (f.exists()) {
-					byte[] data = Vfs.toByteArray(f);
-					img = Images.i().read(data);
-				}
-			}
-			else if (value instanceof UploadImage) {
-				img = ((UploadImage)value).getImage();
-			}
-			else if (value instanceof UploadFile) {
-				byte[] data = ((UploadFile)value).getData();
-				if (data != null) {
-					img = Images.i().read(data);
-				}
+			else if (value instanceof FileItem) {
+				FileItem f = (FileItem)value;
+				img = Images.i().read(f.getData());
 			}
 			else {
-				throw new ValidationException("The value type of [" + getFieldName() + "] is invalid. (only RenderedImage/byte[]/File/URL/InputStream is allowed)");
+				throw new ValidationException("The value type of '" + getName() + "' is invalid. (only RenderedImage/byte[]/File/URL/InputStream is allowed)");
 			}
 		}
 		catch (Exception e) {
-			log.warn("Failed to read image of [" + getFieldName() + "]", e);
+			// skip
 		}
 		return img;
 	}
-	
-	/**
-	 * @see com.opensymphony.xwork2.validator.Validator#validate(java.lang.Object)
-	 */
-	public void validate(Object object) throws ValidationException {
+
+	@Override
+	public boolean validate(ActionContext ac, Object object) throws ValidationException {
 		Object value = getFieldValue(object, getName());
-
 		if (value == null) {
-			return;
+			return !required;
 		}
-		else if (value instanceof UploadFile) {
-			byte[] data;
-			try {
-				data = ((UploadFile)value).getData();
-				if (data == null) {
-					return;
-				}
-			}
-			catch (Exception e) {
-				return;
-			}
 
-			try {
-				value = Images.i().read(data);
-			}
-			catch (Exception e) {
-				addFieldError(ac, object, getName());
-			}
+		ImageWrapper img = getImage(value);
+		if (img == null) {
+			return !required;
+		}
+
+		width = img.getWidth();
+		height = img.getHeight();
+		
+		if ((minWidth != null && width < minWidth) 
+				|| (minHeight != null && height < minHeight)
+				|| (maxWidth != null && width > maxWidth) 
+				|| (maxHeight != null && height > maxHeight)) {
+			addFieldError(ac, getName(), value);
+			return false;
 		}
 		
-		if (getImage(value) == null) {
-			addFieldError(ac, object, getName());
-		}
+		return true;
 	}
 }

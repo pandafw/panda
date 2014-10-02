@@ -2,58 +2,59 @@ package panda.mvc.validator;
 
 import java.util.Collection;
 
-import com.opensymphony.xwork2.validator.ValidationException;
+import panda.mvc.ActionContext;
 
 
 /**
  * RequiredCollectionFieldValidator
  */
 public class RequiredCollectionFieldValidator extends AbstractFieldValidator {
-	protected Boolean trimNull;
+	protected Boolean allowNullElem;
 
 	/**
-	 * @return the trimNull
+	 * @return the allowNullElem
 	 */
-	public Boolean getTrimNull() {
-		return trimNull;
+	public Boolean getAllowNullElem() {
+		return allowNullElem;
 	}
 
 	/**
-	 * @param trimNull the trimNull to set
+	 * @param allowNullElem the allowNullElem to set
 	 */
-	public void setTrimNull(Boolean trimNull) {
-		this.trimNull = trimNull;
+	public void setAllowNullElem(Boolean allowNullElem) {
+		this.allowNullElem = allowNullElem;
 	}
 
-	/**
-	 * @see com.opensymphony.xwork2.validator.Validator#validate(java.lang.Object)
-	 */
-	public void validate(Object object) throws ValidationException {
+
+	@Override
+	public boolean validate(ActionContext ac, Object object) throws ValidationException {
 		Object value = getFieldValue(object, getName());
 
 		if (value == null) {
-			addFieldError(ac, object, getName());
-			return;
+			addFieldError(ac, getName(), value);
+			return false;
 		}
 
 		if (!(value instanceof Collection)) {
-			throw new ValidationException("filed [" + getFieldName() + "] (" + value.getClass()
+			throw new ValidationException("The value of field '" + getName() + "' (" + value.getClass()
 					+ ") is not a instance of " + Collection.class);
 		}
 
 		Collection c = (Collection)value;
 		if (c.isEmpty()) {
-			addFieldError(ac, object, getName());
-			return;
+			addFieldError(ac, getName(), value);
+			return false;
 		}
 
-		if (Boolean.TRUE.equals(trimNull)) {
+		if (Boolean.FALSE.equals(allowNullElem)) {
 			for (Object o : c) {
-				if (o != null) {
-					return;
+				if (o == null) {
+					addFieldError(ac, getName(), value);
+					return false;
 				}
 			}
-			addFieldError(ac, object, getName());
 		}
+		
+		return true;
 	}
 }

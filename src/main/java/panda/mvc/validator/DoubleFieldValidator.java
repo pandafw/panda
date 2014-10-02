@@ -1,37 +1,35 @@
 package panda.mvc.validator;
 
-import java.util.Date;
+public class DoubleFieldValidator extends AbstractRangeValidator {
 
-public class DateRangeFieldValidator extends AbstractRangeValidator {
-
-	private Date max;
-	private Date min;
+	private Double max = null;
+	private Double min = null;
 
 	/**
 	 * @return the max
 	 */
-	public Date getMax() {
+	public Double getMax() {
 		return max;
 	}
 
 	/**
 	 * @param max the max to set
 	 */
-	public void setMax(Date max) {
+	public void setMax(Double max) {
 		this.max = max;
 	}
 
 	/**
 	 * @return the min
 	 */
-	public Date getMin() {
+	public Double getMin() {
 		return min;
 	}
 
 	/**
 	 * @param min the min to set
 	 */
-	public void setMin(Date min) {
+	public void setMin(Double min) {
 		this.min = min;
 	}
 

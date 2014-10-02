@@ -40,16 +40,17 @@ public abstract class AbstractStringFieldValidator extends AbstractFieldValidato
 	}
 
 	protected String trimFieldValue(Object object) throws ValidationException {
-		String value = (String)getFieldValue(object, getName());
+		CharSequence value = (CharSequence)getFieldValue(object, getName());
 
 		if (strip) {
-			value = Strings.strip(value);
+			return Strings.strip(value);
 		}
-		else if (trim) {
-			value = Strings.trim(value);
+		
+		if (trim) {
+			return Strings.trim(value);
 		}
 
-		return value;
+		return value == null ? null : value.toString();
 	}
 
 	public boolean validate(ActionContext ac, Object object) throws ValidationException {

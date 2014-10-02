@@ -2,7 +2,7 @@ package panda.mvc.validator;
 
 import java.math.BigDecimal;
 
-public class DecimalRangeFieldValidator extends AbstractRangeValidator {
+public class DecimalFieldValidator extends AbstractRangeValidator {
 
 	private BigDecimal max = null;
 	private BigDecimal min = null;

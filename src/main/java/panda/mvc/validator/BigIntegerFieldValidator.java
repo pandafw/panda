@@ -1,35 +1,37 @@
 package panda.mvc.validator;
 
-public class ByteRangeFieldValidator extends AbstractRangeValidator {
+import java.math.BigInteger;
 
-	private Byte max = null;
-	private Byte min = null;
+public class BigIntegerFieldValidator extends AbstractRangeValidator {
+
+	private BigInteger max = null;
+	private BigInteger min = null;
 
 	/**
 	 * @return the max
 	 */
-	public Byte getMax() {
+	public BigInteger getMax() {
 		return max;
 	}
 
 	/**
 	 * @param max the max to set
 	 */
-	public void setMax(Byte max) {
+	public void setMax(BigInteger max) {
 		this.max = max;
 	}
 
 	/**
 	 * @return the min
 	 */
-	public Byte getMin() {
+	public BigInteger getMin() {
 		return min;
 	}
 
 	/**
 	 * @param min the min to set
 	 */
-	public void setMin(Byte min) {
+	public void setMin(BigInteger min) {
 		this.min = min;
 	}
 

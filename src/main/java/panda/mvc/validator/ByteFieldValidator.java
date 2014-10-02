@@ -1,35 +1,35 @@
 package panda.mvc.validator;
 
-public class DoubleRangeFieldValidator extends AbstractRangeValidator {
+public class ByteFieldValidator extends AbstractRangeValidator {
 
-	private Double max = null;
-	private Double min = null;
+	private Byte max = null;
+	private Byte min = null;
 
 	/**
 	 * @return the max
 	 */
-	public Double getMax() {
+	public Byte getMax() {
 		return max;
 	}
 
 	/**
 	 * @param max the max to set
 	 */
-	public void setMax(Double max) {
+	public void setMax(Byte max) {
 		this.max = max;
 	}
 
 	/**
 	 * @return the min
 	 */
-	public Double getMin() {
+	public Byte getMin() {
 		return min;
 	}
 
 	/**
 	 * @param min the min to set
 	 */
-	public void setMin(Double min) {
+	public void setMin(Byte min) {
 		this.min = min;
 	}
 

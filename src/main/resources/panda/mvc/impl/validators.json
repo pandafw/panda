@@ -32,7 +32,6 @@
 	"filelength":         "panda.mvc.validator.FileLengthFieldValidator",
 	"filename":           "panda.mvc.validator.FileNameFieldValidator",
 	"image":              "panda.mvc.validator.ImageFieldValidator",
-	"imagesize":          "panda.mvc.validator.ImageSizeFieldValidator",
 	
 	"constant":           "panda.mvc.validator.ConstantFieldValidator",
 	"prohibited":         "panda.mvc.validator.ProhibitedFieldValidator",

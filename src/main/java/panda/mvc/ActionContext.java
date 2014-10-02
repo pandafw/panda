@@ -41,6 +41,12 @@ public class ActionContext {
 	
 	private List<Object> tops;
 	
+	//--------------------------
+	// cached ioc bean
+	//
+	private FilePool filePool;
+	private TextProvider textProvider;
+	private StateProvider stateProvider;
 
 	/**
 	 * Constructor
@@ -225,21 +231,30 @@ public class ActionContext {
 	 * @return the filePool
 	 */
 	public FilePool getFilePool() {
-		return ioc.get(FilePool.class);
+		if (filePool == null) {
+			filePool = ioc.get(FilePool.class);
+		}
+		return filePool;
 	}
 
 	/**
 	 * @return the text provider
 	 */
 	public TextProvider getTextProvider() {
-		return ioc.get(TextProvider.class);
+		if (textProvider == null) {
+			textProvider = ioc.get(TextProvider.class);
+		}
+		return textProvider;
 	}
 
 	/**
 	 * @return the state provider
 	 */
 	public StateProvider getStateProvider() {
-		return ioc.get(StateProvider.class);
+		if (stateProvider == null) {
+			stateProvider = ioc.get(StateProvider.class);
+		}
+		return stateProvider;
 	}
 	
 	//----------------------------------------------------
@@ -288,6 +303,9 @@ public class ActionContext {
 	//----------------------------------------------------
 	// top
 	//
+	/**
+	 * @return the top object
+	 */
 	public Object getTop() {
 		return Collections.isEmpty(tops) ? null : tops.get(tops.size() - 1);
 	}
@@ -305,6 +323,13 @@ public class ActionContext {
 	
 	public Object pop(Object top) {
 		return Collections.isEmpty(tops) ? null : tops.remove(tops.size() - 1);
+	}
+
+	//----------------------------------------------------
+	// utility functions
+	//
+	public String text(String key, String def) {
+		return getTextProvider().getText(key, def);
 	}
 
 	//----------------------------------------------------
@@ -334,4 +359,11 @@ public class ActionContext {
 		return getResult();
 	}
 
+	/**
+	 * @return the top object
+	 * @see #getResult()
+	 */
+	public Object getT() {
+		return getTop();
+	}
 }

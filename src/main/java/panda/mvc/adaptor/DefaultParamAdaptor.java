@@ -395,7 +395,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	
 	protected <T> T cast(ActionContext ac, Object value, Type type) {
 		Castors cs = Mvcs.getCastors();
-		CastContext cc = new CastContext();
+		CastContext cc = cs.getCastContext();
 		cc.set(FileItemCastor.KEY, ac.getFilePool());
 		return cs.cast(value, type, cc);
 	}

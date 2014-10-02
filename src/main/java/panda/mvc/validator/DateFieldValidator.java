@@ -1,37 +1,37 @@
 package panda.mvc.validator;
 
-import java.math.BigInteger;
+import java.util.Date;
 
-public class BigIntRangeFieldValidator extends AbstractRangeValidator {
+public class DateFieldValidator extends AbstractRangeValidator {
 
-	private BigInteger max = null;
-	private BigInteger min = null;
+	private Date max;
+	private Date min;
 
 	/**
 	 * @return the max
 	 */
-	public BigInteger getMax() {
+	public Date getMax() {
 		return max;
 	}
 
 	/**
 	 * @param max the max to set
 	 */
-	public void setMax(BigInteger max) {
+	public void setMax(Date max) {
 		this.max = max;
 	}
 
 	/**
 	 * @return the min
 	 */
-	public BigInteger getMin() {
+	public Date getMin() {
 		return min;
 	}
 
 	/**
 	 * @param min the min to set
 	 */
-	public void setMin(BigInteger min) {
+	public void setMin(Date min) {
 		this.min = min;
 	}
 
