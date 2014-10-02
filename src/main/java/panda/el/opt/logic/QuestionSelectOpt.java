@@ -19,6 +19,7 @@ public class QuestionSelectOpt extends TwoTernary {
 		if (!(left instanceof QuestionOpt)) {
 			throw new ElException("三元表达式错误!");
 		}
+		
 		QuestionOpt qo = (QuestionOpt)left;
 		Boolean cval = (Boolean)qo.calculate(ec);
 		if (cval) {

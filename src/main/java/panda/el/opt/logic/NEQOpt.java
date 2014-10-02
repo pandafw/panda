@@ -17,6 +17,11 @@ public class NEQOpt extends TwoTernary {
 		if (lval == rval) {
 			return false;
 		}
+		
+		if (lval == null || rval == null) {
+			return true;
+		}
+		
 		return !lval.equals(rval);
 	}
 

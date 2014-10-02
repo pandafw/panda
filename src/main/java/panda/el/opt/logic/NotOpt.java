@@ -25,7 +25,7 @@ public class NotOpt extends AbstractOpt {
 		if (rval instanceof Boolean) {
 			return !(Boolean)rval;
 		}
-		throw new ElException("'!'操作符操作失败!");
+		throw new ElException("Invalid bool object for '!': " + rval);
 	}
 
 	public String operator() {

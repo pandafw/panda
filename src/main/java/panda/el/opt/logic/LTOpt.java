@@ -2,6 +2,7 @@ package panda.el.opt.logic;
 
 import panda.el.ElContext;
 import panda.el.opt.TwoTernary;
+import panda.lang.Classes;
 
 /**
  * 小于
@@ -16,19 +17,18 @@ public class LTOpt extends TwoTernary {
 		return "<";
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object calculate(ElContext ec) {
-		Number lval = (Number)getLeft(ec);
-		Number rval = (Number)getRight(ec);
-		if (rval instanceof Double || lval instanceof Double) {
-			return lval.doubleValue() < rval.doubleValue();
+		Comparable lval = (Comparable)getLeft(ec);
+		Comparable rval = (Comparable)getRight(ec);
+
+		if (Classes.isFloatLike(lval.getClass()) || Classes.isFloatLike(rval.getClass())) {
+			return ((Number)lval).doubleValue() < ((Number)rval).doubleValue();
 		}
-		if (rval instanceof Float || lval instanceof Float) {
-			return lval.floatValue() < rval.floatValue();
+		if (Classes.isIntLike(lval.getClass()) || Classes.isIntLike(rval.getClass())) {
+			return ((Number)lval).longValue() < ((Number)rval).longValue();
 		}
-		if (rval instanceof Long || lval instanceof Long) {
-			return lval.longValue() < rval.longValue();
-		}
-		return lval.intValue() < rval.intValue();
+		return lval.compareTo(rval) < 0;
 	}
 
 }

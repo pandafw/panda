@@ -16,7 +16,7 @@ public class OrOpt extends TwoTernary {
 	public Object calculate(ElContext ec) {
 		Object lval = getLeft(ec);
 		if (!(lval instanceof Boolean)) {
-			throw new ElException("操作数类型错误!");
+			throw new ElException("Invalid left bool object for '||': " + lval);
 		}
 		if ((Boolean)lval) {
 			return true;
@@ -24,7 +24,7 @@ public class OrOpt extends TwoTernary {
 
 		Object rval = getRight(ec);
 		if (!(rval instanceof Boolean)) {
-			throw new ElException("操作数类型错误!");
+			throw new ElException("Invalid right bool object for '||': " + rval);
 		}
 		if ((Boolean)rval) {
 			return true;

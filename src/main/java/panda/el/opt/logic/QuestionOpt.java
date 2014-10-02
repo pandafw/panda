@@ -17,8 +17,9 @@ public class QuestionOpt extends TwoTernary {
 
 	public Object calculate(ElContext ec) {
 		Object obj = getLeft(ec);
-		if (obj instanceof Boolean)
+		if (obj instanceof Boolean) {
 			return (Boolean)obj;
+		}
 		throw new ElException("三元表达式错误! --> " + obj);
 	}
 

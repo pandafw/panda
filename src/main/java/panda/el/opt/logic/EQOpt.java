@@ -17,6 +17,11 @@ public class EQOpt extends TwoTernary {
 		if (lval == rval) {
 			return true;
 		}
+
+		if (lval == null || rval == null) {
+			return false;
+		}
+		
 		return lval.equals(rval);
 	}
 
