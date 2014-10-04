@@ -13,56 +13,6 @@ import com.opensymphony.xwork2.validator.DelegatingValidatorContext;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.ValidatorContext;
 
-/**
- * <!-- START SNIPPET: javadoc --> The VisitorFieldValidator allows you to
- * forward validation to object properties of your action using the object's own
- * validation files. This allows you to use the ModelDriven development pattern
- * and manage your validations for your models in one place, where they belong,
- * next to your model classes. The VisitorFieldValidator can handle either
- * simple Object properties, Collections of Objects, or Arrays. <!-- END
- * SNIPPET: javadoc -->
- * <p/>
- * 
- * <!-- START SNIPPET: parameters -->
- * <ul>
- * <li>fieldName - field name if plain-validator syntax is used, not needed if
- * field-validator syntax is used</li>
- * <li>context - the context of which validation should take place. Optional</li>
- * <li>appendPrefix - the prefix to be added to field. Optional</li>
- * </ul>
- * <!-- END SNIPPET: parameters -->
- * 
- * <pre>
- * &lt;!-- START SNIPPET: example --&gt;
- *    &lt;validators&gt;
- *        &lt;!-- Plain Validator Syntax --&gt;
- *        &lt;validator type=&quot;visitor&quot;&gt;
- *            &lt;param name=&quot;fieldName&quot;&gt;user&lt;/param&gt;
- *            &lt;param name=&quot;context&quot;&gt;myContext&lt;/param&gt;
- *            &lt;param name=&quot;appendPrefix&quot;&gt;true&lt;/param&gt;
- *        &lt;/validator&gt;
- * 
- *        &lt;!-- Field Validator Syntax --&gt;
- *        &lt;field name=&quot;user&quot;&gt;
- *           &lt;field-validator type=&quot;visitor&quot;&gt;
- *              &lt;param name=&quot;context&quot;&gt;myContext&lt;/param&gt;
- *              &lt;param name=&quot;appendPrefix&quot;&gt;true&lt;/param&gt;
- *           &lt;/field-validator&gt;
- *        &lt;/field&gt;
- *    &lt;/validators&gt;
- * &lt;!-- END SNIPPET: example --&gt;
- * </pre>
- * 
- * <!-- START SNIPPET: explanation -->
- * <p>
- * In the example above, if the acion's getUser() method return User object,
- * XWork will look for User-myContext-validation.xml for the validators. Since
- * appednPrefix is true, every field name will be prefixed with 'user' such that
- * if the actual field name for 'name' is 'user.name'
- * </p>
- * <!-- END SNIPPET: explanation -->
- * 
- */
 public class VisitorFieldValidator extends AbstractFieldValidator {
 
 	private String context;

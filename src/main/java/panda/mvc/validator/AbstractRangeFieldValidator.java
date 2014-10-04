@@ -5,7 +5,11 @@ import panda.mvc.ActionContext;
 /**
  * Base class for range based validators.
  */
-public abstract class AbstractRangeValidator extends AbstractFieldValidator {
+public abstract class AbstractRangeFieldValidator<T extends Comparable> extends AbstractFieldValidator {
+
+	protected abstract T getMax();
+
+	protected abstract T getMin();
 
 	@SuppressWarnings("unchecked")
 	public boolean validate(ActionContext ac, Object object) throws ValidationException {
@@ -19,20 +23,16 @@ public abstract class AbstractRangeValidator extends AbstractFieldValidator {
 		}
 
 		// only check for a minimum value if the min parameter is set
-		if ((getMinComparatorValue() != null) && (value.compareTo(getMinComparatorValue()) < 0)) {
+		if ((getMin() != null) && (value.compareTo(getMin()) < 0)) {
 			addFieldError(ac, getName(), value);
 			return false;
 		}
 		
-		if ((getMaxComparatorValue() != null) && (value.compareTo(getMaxComparatorValue()) > 0)) {
+		if ((getMax() != null) && (value.compareTo(getMax()) > 0)) {
 			addFieldError(ac, getName(), object);
 			return false;
 		}
 		
 		return true;
 	}
-
-	protected abstract Comparable getMaxComparatorValue();
-
-	protected abstract Comparable getMinComparatorValue();
 }

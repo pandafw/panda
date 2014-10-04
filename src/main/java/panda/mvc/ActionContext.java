@@ -2,6 +2,7 @@ package panda.mvc;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -40,6 +41,8 @@ public class ActionContext {
 	private Throwable error;
 	
 	private List<Object> tops;
+
+	private Map<String, Object> castErrors;
 	
 	//--------------------------
 	// cached ioc bean
@@ -330,6 +333,21 @@ public class ActionContext {
 	//
 	public String text(String key, String def) {
 		return getTextProvider().getText(key, def);
+	}
+
+	//----------------------------------------------------
+	/**
+	 * @return the castErrors
+	 */
+	public Map<String, Object> getCastErrors() {
+		if (castErrors == null) {
+			castErrors = new HashMap<String, Object>();
+		}
+		return castErrors;
+	}
+	
+	public void addCastErrors(Map<String, Object> errors) {
+		getCastErrors().putAll(errors);
 	}
 
 	//----------------------------------------------------

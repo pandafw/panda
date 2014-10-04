@@ -5,24 +5,36 @@ import java.util.Collection;
 import panda.mvc.ActionContext;
 
 
-/**
- * RequiredCollectionFieldValidator
- */
-public class RequiredCollectionFieldValidator extends AbstractFieldValidator {
-	protected Boolean allowNullElem;
+public class CollectionFieldValidator extends AbstractFieldValidator {
+	private boolean emtpy = false;
+	private boolean nullElem = true;
 
 	/**
-	 * @return the allowNullElem
+	 * @return the emtpy
 	 */
-	public Boolean getAllowNullElem() {
-		return allowNullElem;
+	public boolean isEmtpy() {
+		return emtpy;
 	}
 
 	/**
-	 * @param allowNullElem the allowNullElem to set
+	 * @param emtpy the emtpy to set
 	 */
-	public void setAllowNullElem(Boolean allowNullElem) {
-		this.allowNullElem = allowNullElem;
+	public void setEmtpy(boolean emtpy) {
+		this.emtpy = emtpy;
+	}
+
+	/**
+	 * @return the nullElem
+	 */
+	public boolean isNullElem() {
+		return nullElem;
+	}
+
+	/**
+	 * @param nullElem the nullElem to set
+	 */
+	public void setNullElem(boolean nullElem) {
+		this.nullElem = nullElem;
 	}
 
 
@@ -31,8 +43,7 @@ public class RequiredCollectionFieldValidator extends AbstractFieldValidator {
 		Object value = getFieldValue(object, getName());
 
 		if (value == null) {
-			addFieldError(ac, getName(), value);
-			return false;
+			return true;
 		}
 
 		if (!(value instanceof Collection)) {
@@ -46,7 +57,7 @@ public class RequiredCollectionFieldValidator extends AbstractFieldValidator {
 			return false;
 		}
 
-		if (Boolean.FALSE.equals(allowNullElem)) {
+		if (!nullElem) {
 			for (Object o : c) {
 				if (o == null) {
 					addFieldError(ac, getName(), value);

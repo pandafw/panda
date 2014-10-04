@@ -2,7 +2,6 @@ package panda.mvc.validator;
 
 
 import panda.lang.Strings;
-import panda.mvc.ActionContext;
 import panda.validator.CreditCardNumberValidator;
 
 
@@ -48,18 +47,13 @@ public class CreditCardNumberFieldValidator extends AbstractStringFieldValidator
 	}
 	
 	@Override
-	protected boolean validateString(ActionContext ac, Object object, String value) throws ValidationException {
+	protected boolean validateString(String value) throws ValidationException {
 		String cardno = value;
 		if (normalize) {
 			cardno = normalizeCardNumber(value);
 		}
 		
 		CreditCardNumberValidator ccv = new CreditCardNumberValidator(cardType);
-		if (ccv.isValid(cardno)) {
-			return true;
-		}
-		
-		addFieldError(ac, getName(), value);
-		return false;
+		return ccv.isValid(cardno);
 	}
 }

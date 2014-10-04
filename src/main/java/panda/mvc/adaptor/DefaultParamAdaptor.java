@@ -23,6 +23,7 @@ import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
@@ -118,17 +119,18 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		LinkedHashMap<String, Object> args = new LinkedHashMap<String, Object>(types.length);
 
 		if (types.length == 1 && annss[0].length == 0) {
+			String name = indexedName(0);
 			Object o = adaptByParamType(ac, clazs[0]);
 			if (o == null) {
 				// adapt by path arguments
-				o = adaptByPathArg(ac, types[0], 0);
+				o = adaptByPathArg(ac, name, types[0], 0);
 
 				if (o == null) {
 					o = ejectByAll(ac, types[0]);
 				}
 			}
 			
-			args.put(indexedName(0), o);
+			args.put(name, o);
 			return args;
 		}
 
@@ -181,7 +183,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			
 			// Adapt by @param annotation
 			if (param != null) {
-				Object o = adaptByParamAnno(ac, types[i], param);
+				Object o = adaptByParamAnno(ac, name, types[i], param);
 				if (o != null) {
 					addArg(args, name, o);
 					continue;
@@ -195,13 +197,13 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				continue;
 			}
 			
-			o = adaptByPathArg(ac, types[i], p++);
+			o = adaptByPathArg(ac, name, types[i], p++);
 			if (o != null) {
 				addArg(args, name, o);
 				continue;
 			}
 			
-			o = cast(ac, null, types[i]);
+			o = cast(ac, name, null, types[i]);
 			addArg(args, name, o);
 		}
 		
@@ -262,7 +264,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			val = req.getHeader(name);
 		}
 
-		return cast(ac, val, type);
+		return cast(ac, '^' + name, val, type);
 	}
 
 	protected Object adaptByParamType(ActionContext ac, Class<?> type) {
@@ -319,7 +321,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return null;
 	}
 
-	protected Object adaptByParamAnno(ActionContext ac, Type type, Param param) {
+	protected Object adaptByParamAnno(ActionContext ac, String name, Type type, Param param) {
 		String pm = param.value();
 
 		// FORM
@@ -348,24 +350,28 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			}
 		}
 		
-		return cast(ac, param, type);
+		return cast(ac, name, param, type);
 	}
 
 	protected Object ejectByAll(ActionContext ac, Type type) {
 		ParamEjector pe = getParamEjector(ac);
 		Object a = pe.eject();
-		Object o = cast(ac, a, type);
+		Object o = cast(ac, null, a, type);
 		return o;
 	}
 
 	@SuppressWarnings("unchecked")
 	protected Object ejectByPrefix(ActionContext ac, Type type, String prefix) {
+		if (Strings.isEmpty(prefix)) {
+			throw new IllegalArgumentException("Illegal @Param prefix value: '" + prefix + "'");
+		}
+
 		BeanHandler bh = Beans.i().getBeanHandler(type);
 		Object target = Types.born(Types.getDefaultImplType(type));
 		
 		ParamEjector pe = getParamEjector(ac);
 		for (String key : pe.keys()) {
-			if (Strings.isEmpty(prefix) || key.startsWith(prefix)) {
+			if (key.startsWith(prefix)) {
 				Object val = pe.eject(key);
 				String bn = prefix == null ? key : key.substring(prefix.length());
 				Type pt = bh.getBeanType(target, bn);
@@ -373,7 +379,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);
 				}
 				else {
-					Object cv = cast(ac, val, pt);
+					Object cv = cast(ac, key, val, pt);
 					if (!bh.setBeanValue(target, bn, cv)) {
 						log.warn("Failed to set form value (" + key + "=" + val + ") to " + type);
 					}
@@ -384,19 +390,27 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return target;
 	}
 
-	protected Object adaptByPathArg(ActionContext ac, Type type, int index) {
+	protected Object adaptByPathArg(ActionContext ac, String name, Type type, int index) {
 		List<String> args = ac.getPathArgs();
 		if (index < args.size()) {
-			return cast(ac, args.get(index), type);
+			return cast(ac, name, args.get(index), type);
 		}
 
 		return null;
 	}
 	
-	protected <T> T cast(ActionContext ac, Object value, Type type) {
+	protected <T> T cast(ActionContext ac, String name, Object value, Type type) {
 		Castors cs = Mvcs.getCastors();
 		CastContext cc = cs.getCastContext();
+		
+		cc.setSkipCastError(true);
+		cc.setPrefix(name);
 		cc.set(FileItemCastor.KEY, ac.getFilePool());
-		return cs.cast(value, type, cc);
+		
+		T o = cs.cast(value, type, cc);
+		if (Collections.isNotEmpty(cc.getErrors())) {
+			ac.addCastErrors(cc.getErrors());
+		}
+		return o;
 	}
 }

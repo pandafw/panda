@@ -7,9 +7,23 @@ import panda.mvc.ActionContext;
  * Base class for string field validators.
  */
 public abstract class AbstractStringFieldValidator extends AbstractFieldValidator {
+	private boolean empty = false;
 	private boolean strip = false;
-
 	private boolean trim = false;
+
+	/**
+	 * @return the empty
+	 */
+	public boolean isEmpty() {
+		return empty;
+	}
+
+	/**
+	 * @param empty the empty to set
+	 */
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
+	}
 
 	/**
 	 * @return the strip
@@ -39,7 +53,7 @@ public abstract class AbstractStringFieldValidator extends AbstractFieldValidato
 		this.trim = trim;
 	}
 
-	protected String trimFieldValue(Object object) throws ValidationException {
+	private String trimFieldValue(Object object) {
 		CharSequence value = (CharSequence)getFieldValue(object, getName());
 
 		if (strip) {
@@ -57,11 +71,24 @@ public abstract class AbstractStringFieldValidator extends AbstractFieldValidato
 		String value = trimFieldValue(object);
 
 		if (Strings.isEmpty(value)) {
-			return true;
+			if (!empty) {
+				addFieldError(ac, getName(), value);
+			}
+			return empty;
 		}
 		
 		return validateString(ac, object, value);
 	}
 
-	protected abstract boolean validateString(ActionContext ac, Object object, String value) throws ValidationException;
+	protected boolean validateString(ActionContext ac, Object object, String value) {
+		if (validateString(value)) {
+			return true;
+		}
+
+		addFieldError(ac, getName(), value);
+		return false;
+	}
+	
+
+	protected abstract boolean validateString(String value);
 }

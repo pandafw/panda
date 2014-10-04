@@ -115,14 +115,20 @@ public abstract class AbstractFieldValidator implements FieldValidator {
 		return name;
 	}
 	
-	protected String evalMessage(Object value) {
-		//TODO
+	protected String evalMessage(ActionContext ac, Object value) {
+		try {
+			ac.push(value);
+			
+		}
+		finally {
+			ac.pop(value);
+		}
 		return null;
 	}
 	
 	protected void addFieldError(ActionContext ac, String name, Object value) {
-		String msg = evalMessage(value);
 		String fn = getFullFieldName(name);
+		String msg = evalMessage(ac, value);
 		ac.getParamErrors().addError(fn, msg);
 	}
 }

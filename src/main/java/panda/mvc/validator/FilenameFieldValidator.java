@@ -3,11 +3,11 @@ package panda.mvc.validator;
 /**
  * FileNameFieldValidator
  */
-public class FileNameFieldValidator extends RegexFieldValidator {
+public class FilenameFieldValidator extends RegexFieldValidator {
 
 	public static final String filenamePattern = "[^\\\\/:*?\"<>|]*";
 
-	public FileNameFieldValidator() {
+	public FilenameFieldValidator() {
 		setRegex(filenamePattern);
 		setCaseSensitive(false);
 	}

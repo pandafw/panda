@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import panda.lang.Strings;
-import panda.mvc.ActionContext;
 
 public class RegexFieldValidator extends AbstractStringFieldValidator {
 
@@ -43,7 +42,7 @@ public class RegexFieldValidator extends AbstractStringFieldValidator {
 	}
 
 	@Override
-	protected boolean validateString(ActionContext ac, Object object, String value) throws ValidationException {
+	protected boolean validateString(String value) throws ValidationException {
 		if (Strings.isEmpty(regex)) {
 			throw new IllegalArgumentException("Empty regex expression of field '" + getName() + "': " + regex);
 		}
@@ -63,11 +62,6 @@ public class RegexFieldValidator extends AbstractStringFieldValidator {
 		}
 		
 		Matcher matcher = pattern.matcher(value);
-		if (matcher.matches()) {
-			return true;
-		}
-		
-		addFieldError(ac, getName(), value);
-		return false;
+		return matcher.matches();
 	}
 }

@@ -13,6 +13,10 @@ public class FileLengthFieldValidator extends AbstractFieldValidator {
 
 	private Long minLength = null;
 	private Long maxLength = null;
+	
+	/**
+	 * file length
+	 */
 	private Long length = null;
 
 	/**

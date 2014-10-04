@@ -1,12 +1,38 @@
 package panda.mvc.validator;
 
-import panda.mvc.ActionContext;
+import panda.lang.AsiaStrings;
 
-public class StringLengthFieldValidator extends AbstractStringFieldValidator {
+public class StringFieldValidator extends AbstractStringFieldValidator {
 
+	public static final char ANY = '*';
+	public static final char ALPHA_NUMBER = 'A';
+	public static final char HANKAKU = 'H';
+	public static final char HANKAKU_KATAKANA = 'h';
+	public static final char ZENKAKU = 'Z';
+	public static final char ZENKAKU_KATAKANA = 'z';
+	
+	private char type = ANY;
 	private Integer maxLength = null;
 	private Integer minLength = null;
+	
+	/**
+	 * string length
+	 */
 	private Integer length = null;
+
+	/**
+	 * @return the type
+	 */
+	public char getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(char type) {
+		this.type = type;
+	}
 
 	/**
 	 * @return the maxLength
@@ -51,19 +77,28 @@ public class StringLengthFieldValidator extends AbstractStringFieldValidator {
 	}
 
 	@Override
-	protected boolean validateString(ActionContext ac, Object object, String value) throws ValidationException {
+	protected boolean validateString(String value) {
 		length = value.length();
-
+		
 		// only check for a minimum value if the min parameter is set
 		if (minLength != null && length < minLength) {
-			addFieldError(ac, getName(), value);
 			return false;
 		}
 
 		// only check for a maximum value if the max parameter is set
 		if (maxLength != null && length > maxLength) {
-			addFieldError(ac, getName(), value);
 			return false;
+		}
+
+		switch (type) {
+		case HANKAKU: 
+			return AsiaStrings.isHankakuString(value);
+		case HANKAKU_KATAKANA:
+			return AsiaStrings.isHankakuKatakanaString(value);
+		case ZENKAKU:
+			return AsiaStrings.isZenkakuString(value);
+		case  ZENKAKU_KATAKANA:
+			return AsiaStrings.isZenkakuKatakanaString(value);
 		}
 		
 		return true;

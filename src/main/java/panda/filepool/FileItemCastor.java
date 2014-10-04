@@ -21,7 +21,7 @@ public class FileItemCastor extends AbstractObjectCastor<FileItem> {
 		
 		Long id = Numbers.toLong(value.toString());
 		if (id == null) {
-			throw castError("Invalid file item id: " + value, context);
+			return castError(value, context);
 		}
 
 		return fp.findFile(id);
