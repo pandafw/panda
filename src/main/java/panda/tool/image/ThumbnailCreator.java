@@ -77,7 +77,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 				setParameter("size", Integer.parseInt(cl.getOptionValue("z").trim()));
 			}
 			if (cl.hasOption("q")) {
-				setParameter("quality", Integer.parseInt(cl.getOptionValue("1").trim()));
+				setParameter("quality", Integer.parseInt(cl.getOptionValue("q").trim()));
 			}
 		}
 	}
@@ -210,13 +210,13 @@ public class ThumbnailCreator extends AbstractFileTool {
 	@Override
 	protected void beforeProcess() throws Exception {
 		super.beforeProcess();
-		print0("Thumbnail create: " + source.getPath());
+		println0("Thumbnail create: " + source.getPath());
 	}
 
 	@Override
 	protected void afterProcess() throws Exception {
 		super.afterProcess();
-		print0(cntFile + " thumbnail files created successfully.");
+		println0(cntFile + " thumbnail files created successfully.");
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 			}
 		}
 
-		print2("Creating thumbnail: " + file.getName());
+		println2("Creating thumbnail: " + file.getName());
 		ImageWrapper iw = Images.i().read(file);
 		if (size > 0) {
 			iw = iw.resize(size);
