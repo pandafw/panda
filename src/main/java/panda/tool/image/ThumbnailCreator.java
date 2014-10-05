@@ -1,14 +1,21 @@
 package panda.tool.image;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.cli.CommandLine;
 
 import panda.image.ImageWrapper;
 import panda.image.Images;
+import panda.image.JavaGraphics;
+import panda.image.JavaImages;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Strings;
@@ -51,6 +58,8 @@ public class ThumbnailCreator extends AbstractFileTool {
 			addCommandLineOption("q", "quality", "Thumbnail quality");
 
 			addCommandLineFlag("ow", "overwrite", "Overwrite existing file");
+
+			addCommandLineFlag("sw", "slow", "Use slow resize algorithm");
 		}
 
 		@Override
@@ -84,6 +93,9 @@ public class ThumbnailCreator extends AbstractFileTool {
 			if (cl.hasOption("ow")) {
 				setParameter("overwrite", true);
 			}
+			if (cl.hasOption("sw")) {
+				setParameter("slow", true);
+			}
 		}
 	}
 
@@ -97,6 +109,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	protected int quality = 100;
 	protected String format;
 	protected boolean overwrite = false;
+	protected boolean slow = false;
 	
 	/**
 	 * Constructor
@@ -211,6 +224,20 @@ public class ThumbnailCreator extends AbstractFileTool {
 		this.overwrite = overwrite;
 	}
 
+	/**
+	 * @return the slow
+	 */
+	public boolean isSlow() {
+		return slow;
+	}
+
+	/**
+	 * @param slow the slow to set
+	 */
+	public void setSlow(boolean slow) {
+		this.slow = slow;
+	}
+
 	protected void checkParameters() throws Exception {
 		super.checkParameters();
 		
@@ -277,27 +304,47 @@ public class ThumbnailCreator extends AbstractFileTool {
 		}
 
 		println2("Creating thumbnail: " + file.getName() + " -> " + n.getName());
-		ImageWrapper iw = Images.i().read(file);
-		if (size > 0) {
-			iw = iw.resize(size);
+		n.getParentFile().mkdirs();
+
+		if (slow) {
+			ImageWrapper iw = Images.i().read(file);
+			if (size > 0) {
+				iw = iw.resize(size);
+			}
+			else {
+				iw = iw.resize(width, height);
+			}
+			OutputStream os = null;
+			try {
+				os = new BufferedOutputStream(new FileOutputStream(n));
+				if (Strings.isNotEmpty(format)) {
+					iw.setFormat(format);
+				}
+				iw.setQuality(quality);
+				iw.write(os);
+			}
+			finally {
+				Streams.safeClose(os);
+			}
 		}
 		else {
-			iw = iw.resize(width, height);
-		}
-
-		n.getParentFile().mkdirs();
-		
-		OutputStream os = null;
-		try {
-			os = new BufferedOutputStream(new FileOutputStream(n));
-			if (Strings.isNotEmpty(format)) {
-				iw.setFormat(format);
+			InputStream is = new FileInputStream(file);
+			BufferedImage bi = ImageIO.read(is);
+			if (size > 0) {
+				bi = JavaGraphics.createScaledImage(bi, size);
 			}
-			iw.setQuality(quality);
-			iw.write(os);
-		}
-		finally {
-			Streams.safeClose(os);
+			else {
+				bi = JavaGraphics.createScaledImage(bi, width, height);
+			}
+	
+			OutputStream os = null;
+			try {
+				os = new BufferedOutputStream(new FileOutputStream(n));
+				JavaImages.write(bi, format, os, quality);
+			}
+			finally {
+				Streams.safeClose(os);
+			}
 		}
 	}
 }
