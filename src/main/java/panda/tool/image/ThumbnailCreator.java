@@ -49,6 +49,8 @@ public class ThumbnailCreator extends AbstractFileTool {
 			addCommandLineOption("z", "size", "Thumbnail size");
 
 			addCommandLineOption("q", "quality", "Thumbnail quality");
+
+			addCommandLineFlag("ow", "overwrite", "Overwrite existing file");
 		}
 
 		@Override
@@ -79,6 +81,9 @@ public class ThumbnailCreator extends AbstractFileTool {
 			if (cl.hasOption("q")) {
 				setParameter("quality", Integer.parseInt(cl.getOptionValue("q").trim()));
 			}
+			if (cl.hasOption("ow")) {
+				setParameter("overwrite", true);
+			}
 		}
 	}
 
@@ -91,6 +96,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	protected int size = 0;
 	protected int quality = 100;
 	protected String format;
+	protected boolean overwrite = false;
 	
 	/**
 	 * Constructor
@@ -191,6 +197,20 @@ public class ThumbnailCreator extends AbstractFileTool {
 		this.verbose = verbose;
 	}
 
+	/**
+	 * @return the overwrite
+	 */
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+
+	/**
+	 * @param overwrite the overwrite to set
+	 */
+	public void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
+	}
+
 	protected void checkParameters() throws Exception {
 		super.checkParameters();
 		
@@ -210,7 +230,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	@Override
 	protected void beforeProcess() throws Exception {
 		super.beforeProcess();
-		println0("Thumbnail create: " + source.getPath());
+		println0("Thumbnail create: " + source.getPath() + " -> " + out);
 	}
 
 	@Override
@@ -233,7 +253,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 			n = new File(FileNames.removeExtension(n) + "." + format);
 		}
 		
-		if (n.exists()) {
+		if (n.exists() && !overwrite) {
 			try {
 				ImageWrapper iw = Images.i().read(n);
 				if (size > 0 && (iw.getWidth() == size || iw.getHeight() == size)) {
@@ -256,7 +276,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 			}
 		}
 
-		println2("Creating thumbnail: " + file.getName());
+		println2("Creating thumbnail: " + file.getName() + " -> " + n.getName());
 		ImageWrapper iw = Images.i().read(file);
 		if (size > 0) {
 			iw = iw.resize(size);
@@ -279,6 +299,5 @@ public class ThumbnailCreator extends AbstractFileTool {
 		finally {
 			Streams.safeClose(os);
 		}
-		cntFile++;
 	}
 }
