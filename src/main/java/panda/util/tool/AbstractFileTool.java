@@ -8,6 +8,7 @@ import panda.io.FileNames;
 import panda.lang.HandledException;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.lang.Systems;
 
 /**
  * Base class for file process.
@@ -85,7 +86,7 @@ public abstract class AbstractFileTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected File source = new File(".");
+	protected File source = Systems.getUserDir();
 	protected File target;
 	protected String[] includes = new String[] { "**/*" };
 	protected String[] excludes;
