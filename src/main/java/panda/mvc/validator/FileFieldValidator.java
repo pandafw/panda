@@ -9,11 +9,16 @@ import panda.mvc.ActionContext;
 /**
  * FileLengthFieldValidator
  */
-public class FileLengthFieldValidator extends AbstractFieldValidator {
+public class FileFieldValidator extends AbstractFieldValidator {
 
 	private Long minLength = null;
 	private Long maxLength = null;
 	
+	/**
+	 * file exists
+	 */
+	private Boolean exists = null;
+
 	/**
 	 * file length
 	 */
@@ -55,6 +60,13 @@ public class FileLengthFieldValidator extends AbstractFieldValidator {
 	}
 
 	/**
+	 * @return the exists
+	 */
+	public Boolean getExists() {
+		return exists;
+	}
+
+	/**
 	 * @return minFileSize
 	 */
 	public String getMinFileSize() {
@@ -83,17 +95,30 @@ public class FileLengthFieldValidator extends AbstractFieldValidator {
 			return true;
 		}
 
+		if (validateFile(ac, value)) {
+			return true;
+		}
+		
+		addFieldError(ac, getName(), value);
+		return false;
+	}
+	
+	protected boolean validateFile(ActionContext ac, Object value) {
 		if (value instanceof File) {
 			File f = (File)value;
 
-			if (!f.exists() || !f.isFile()) {
-				addFieldError(ac, getName(), value);
+			exists = f.exists();
+			if (!exists || !f.isFile()) {
 				return false;
 			}
 			length = f.length();
 		}
 		else if (value instanceof FileItem) {
 			FileItem f = (FileItem)value;
+			exists = f.isExists();
+			if (!exists) {
+				return false;
+			}
 			length = (long)f.getSize();
 		}
 		else {
@@ -104,13 +129,11 @@ public class FileLengthFieldValidator extends AbstractFieldValidator {
 
 		// only check for a minimum value if the min parameter is set
 		if (minLength != null && length < minLength) {
-			addFieldError(ac, getName(), value);
 			return false;
 		}
 
 		// only check for a maximum value if the max parameter is set
 		if (maxLength != null && length > maxLength) {
-			addFieldError(ac, getName(), value);
 			return false;
 		}
 		

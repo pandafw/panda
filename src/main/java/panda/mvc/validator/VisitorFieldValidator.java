@@ -5,19 +5,27 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.validator.ActionValidatorManager;
-import com.opensymphony.xwork2.validator.DelegatingValidatorContext;
-import com.opensymphony.xwork2.validator.ValidationException;
-import com.opensymphony.xwork2.validator.ValidatorContext;
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.mvc.ActionContext;
 
 public class VisitorFieldValidator extends AbstractFieldValidator {
 
+	private static final Log log = Logs.getLog(VisitorFieldValidator.class);
+
+	private String expression;
 	private String context;
 	private boolean appendPrefix = true;
 	private ActionValidatorManager actionValidatorManager;
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+
+	public String getExpression() {
+		return expression;
+	}
 
 	/**
 	 * @param mgr ActionValidatorManager
@@ -61,16 +69,16 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 		return context;
 	}
 
-	/**
-	 * @see com.opensymphony.xwork2.validator.Validator#validate(java.lang.Object)
-	 */
-	public void validate(Object object) throws ValidationException {
-		String fieldName = getFieldName();
-		Object value = this.getFieldValue(fieldName, object);
+	public boolean validate(ActionContext ac, Object object) throws ValidationException {
+		Object value = getFieldValue(object, getName());
 		if (value == null) {
-			return;
+			return true;
 		}
 
+		if (!checkCondition(ac, value)) {
+			return true;
+		}
+		
 		ValueStack stack = ActionContext.getContext().getValueStack();
 
 		stack.push(object);
@@ -98,7 +106,25 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 
 		stack.pop();
 	}
+	
+	private boolean checkCondition(ActionContext ac, Object value) throws ValidationException {
+		if (Strings.isEmpty(expression)) {
+			return true;
+		}
+		
+		Boolean answer = Boolean.FALSE;
+		Object obj = evalExpression(ac, value, expression);
 
+		if ((obj != null) && (obj instanceof Boolean)) {
+			answer = (Boolean)obj;
+		}
+		else {
+			log.warn("Got result of " + obj + " when trying to get Boolean.");
+		}
+
+		return answer;
+	}
+	
 	private void validateMapElements(Map map, String fieldName, String visitorContext)
 			throws ValidationException {
 		if (map == null) {
@@ -150,63 +176,4 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 		stack.pop();
 	}
 
-	/**
-	 * AppendingValidatorContext
-	 */
-	public static class AppendingValidatorContext extends DelegatingValidatorContext {
-		private String field;
-		private String message;
-		private ValidatorContext parent;
-
-		/**
-		 * Constructor
-		 * @param parent parent
-		 * @param object object
-		 * @param field field
-		 * @param message message
-		 */
-		public AppendingValidatorContext(ValidatorContext parent, Object object, String field,
-				String message) {
-			super(parent, makeTextProvider(object, parent), parent);
-
-			this.field = field;
-			this.message = message;
-			this.parent = parent;
-		}
-
-		/**
-		 * Translates a simple field name into a full field name in Ognl syntax
-		 * 
-		 * @param fieldName field name in OGNL syntax
-		 * @return field name in OGNL syntax
-		 */
-		@Override
-		public String getFullFieldName(String fieldName) {
-			return field + "." + fieldName;
-		}
-
-		/**
-		 * @param fieldName field name
-		 * @return full field name
-		 */
-		public String getFullFieldNameFromParent(String fieldName) {
-			return parent.getFullFieldName(field + "." + fieldName);
-		}
-
-		/**
-		 * @see com.opensymphony.xwork2.validator.DelegatingValidatorContext#addActionError(java.lang.String)
-		 */
-		@Override
-		public void addActionError(String anErrorMessage) {
-			super.addFieldError(getFullFieldName(field), message + anErrorMessage);
-		}
-
-		/**
-		 * @see com.opensymphony.xwork2.validator.DelegatingValidatorContext#addFieldError(java.lang.String, java.lang.String)
-		 */
-		@Override
-		public void addFieldError(String fieldName, String errorMessage) {
-			super.addFieldError(getFullFieldName(fieldName), message + errorMessage);
-		}
-	}
 }

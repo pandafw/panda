@@ -1,6 +1,7 @@
 package panda.mvc.validator;
 
 import panda.bean.Beans;
+import panda.el.El;
 import panda.mvc.ActionContext;
 
 
@@ -113,6 +114,16 @@ public abstract class AbstractFieldValidator implements FieldValidator {
 			return sb.toString();
 		}
 		return name;
+	}
+	
+	protected Object evalExpression(ActionContext ac, Object value, String expression) {
+		try {
+			ac.push(value);
+			return El.eval(expression);
+		}
+		finally {
+			ac.pop(value);
+		}
 	}
 	
 	protected String evalMessage(ActionContext ac, Object value) {
