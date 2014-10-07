@@ -1,6 +1,7 @@
 package panda.bean.handlers;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Iterator;
 
 import panda.bean.Beans;
@@ -13,7 +14,7 @@ import panda.lang.reflect.Types;
  *
  * @param <T> class type
  */
-public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHandler<T> {
+public class CollectionBeanHandler<T extends Collection> extends AbstractArrayBeanHandler<T> {
 	protected Type elementType;
 	
 	/**
@@ -21,7 +22,7 @@ public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHa
 	 * @param beans bean handler factory
 	 * @param type bean type
 	 */
-	public IterableBeanHandler(Beans beans, Type type) {
+	public CollectionBeanHandler(Beans beans, Type type) {
 		super(beans, type);
 		
 		elementType = Types.getCollectionElementType(type);
@@ -43,16 +44,13 @@ public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHa
 	}
 
 	@Override
-	protected int getSize(T list) {
-		Iterator it = list.iterator();
-		int n = 0;
-		for ( ; it.hasNext(); it.next(), n++) {}
-		return n;
+	protected int getSize(T coll) {
+		return coll.size();
 	}
 	
 	@Override
-	protected Object getElement(T list, int index) {
-		Iterator it = list.iterator();
+	protected Object getElement(T coll, int index) {
+		Iterator it = coll.iterator();
 		int n = 0;
 		for ( ; it.hasNext() && n < index; it.next(), n++) {}
 		if (n != index || !it.hasNext()) {

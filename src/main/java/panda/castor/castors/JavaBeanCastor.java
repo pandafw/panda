@@ -51,11 +51,14 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 		}
 		
 		for (String pn : pns) {
+			Object pv = sbh.getPropertyValue(value, pn);
+
 			if (!tbh.canWriteBean(pn)) {
+				// add readonly bean error
+				context.addError(context.toName(), pv);
 				continue;
 			}
 
-			Object pv = sbh.getPropertyValue(value, pn);
 			if (context.isCycled(pv)) {
 				switch (context.getCycleDetectStrategy()) {
 				case CycleDetectStrategy.CYCLE_DETECT_NOPROP:

@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.handlers.ArrayBeanHandler;
+import panda.bean.handlers.CollectionBeanHandler;
 import panda.bean.handlers.ImmutableBeanHandler;
 import panda.bean.handlers.IocProxyBeanHandler;
 import panda.bean.handlers.IterableBeanHandler;
@@ -301,6 +302,9 @@ public class Beans {
 			}
 			else if (Types.isAssignable(type, List.class)) {
 				handler = new ListBeanHandler(this, type);
+			}
+			else if (Types.isAssignable(type, Collection.class)) {
+				handler = new CollectionBeanHandler(this, type);
 			}
 			else if (Types.isAssignable(type, Iterable.class)) {
 				handler = new IterableBeanHandler(this, type);

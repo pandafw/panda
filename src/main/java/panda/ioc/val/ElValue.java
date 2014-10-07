@@ -38,7 +38,6 @@ import panda.ioc.ValueProxy;
  * <li>true | false 布尔类型
  * <li>数字
  * <li>常量： $ioc 容器自身
- * <li>常量： $ibn 对象名称
  * <li>常量： $ictx 容器上下文对象
  * <li>常量不区分大小写
  * </ul>

@@ -3,13 +3,14 @@ package panda.castor;
 import java.util.HashMap;
 import java.util.Map;
 
+import panda.lang.Collections;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Strings;
 
 public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	private String prefix;
-	private boolean skipCastError = true;
+	private boolean skipCastError = false;
 	private int cycleDetectStrategy = CYCLE_DETECT_NOPROP;
 
 	private Castors castors;
@@ -98,6 +99,12 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 		errors.put(key, value);
 	}
 
+	/**
+	 * @return has error
+	 */
+	public boolean hasError() {
+		return Collections.isEmpty(errors);
+	}
 	//----------------------------------------------------
 	public Object get(String key) {
 		if (context == null) {
