@@ -621,16 +621,7 @@ public abstract class Objects {
 			return true;
 		}
 
-		if (o instanceof String) {
-			return ((String)o).length() == 0;
-		}
-		else if (o instanceof StringBuffer) {
-			return ((StringBuffer)o).length() == 0;
-		}
-		else if (o instanceof StringBuilder) {
-			return ((StringBuilder)o).length() == 0;
-		}
-		else if (o instanceof CharSequence) {
+		if (o instanceof CharSequence) {
 			return ((CharSequence)o).length() == 0;
 		}
 		else if (o instanceof Collection) {
