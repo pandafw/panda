@@ -87,16 +87,19 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		return ejector;
 	}
 	
-	protected String indexedName(int i) {
-		return indexedName(i, null);
-	}
-	
-	protected String indexedName(int i, Param param) {
-		if (param == null || Strings.isEmpty(param.value())) {
-			return "a" + i;
+	public static String indexedName(int i, Param param) {
+		String pn = param.value();
+		if (param == null || Strings.isEmpty(pn)) {
+			return String.valueOf(i);
 		}
 		
-		return param.value();
+		if (pn.charAt(0) == '^') {
+			if (pn.length() > 2 && pn.charAt(pn.length() - 1) == '.') {
+				return pn.substring(1, pn.length() - 2);
+			}
+			throw new IllegalArgumentException("Illegal prefix of @Param('" + param.value() + "')");
+		}
+		return pn;
 	}
 	
 	protected void addArg(LinkedHashMap<String, Object> args, String name, Object obj) {
@@ -106,53 +109,61 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		args.put(name, obj);
 	}
 	
-	public LinkedHashMap<String, Object> adapt(ActionContext ac) {
+	public static boolean hasParam(Annotation[] as) {
+		for (Annotation a : as) {
+			if (a instanceof Param) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void adapt(ActionContext ac) {
 		Method method = ac.getMethod();
-		Annotation[][] annss = method.getParameterAnnotations();
+		Annotation[][] pass = method.getParameterAnnotations();
 		Class<?>[] clazs = method.getParameterTypes();
 		Type[] types = method.getGenericParameterTypes();
-		LinkedHashMap<String, Object> args = new LinkedHashMap<String, Object>(types.length);
 
-		if (types.length == 1 && annss[0].length == 0) {
-			String name = indexedName(0);
+		if (pass.length == 1 && !hasParam(pass[0])) {
 			Object o = adaptByParamType(ac, clazs[0]);
 			if (o == null) {
 				// adapt by path arguments
-				o = adaptByPathArg(ac, name, types[0], 0);
-
+				o = adaptByPathArg(ac, "0", types[0], 0);
 				if (o == null) {
 					o = ejectByAll(ac, types[0]);
 				}
 			}
 			
-			args.put(name, o);
-			return args;
+			ac.setArgs(new Object[] { o });
+			ac.setParams(o);
+			return;
 		}
 
+		LinkedHashMap<String, Object> args = new LinkedHashMap<String, Object>(types.length);
 		int p = 0;
-		for (int i = 0; i < annss.length; i++) {
-			Annotation[] anns = annss[i];
+		for (int i = 0; i < pass.length; i++) {
+			Annotation[] pas = pass[i];
 			Param param = null;
 			Attr attr = null;
 			IocObj ioco = null;
 			Header reqh = null;
 
 			// find @Param & @Attr & @IocObj in current annotations
-			for (int x = 0; x < anns.length; x++) {
-				if (anns[x] instanceof Param) {
-					param = (Param)anns[x];
+			for (Annotation pa : pas) {
+				if (pa instanceof Param) {
+					param = (Param)pa;
 					break;
 				}
-				else if (anns[x] instanceof Attr) {
-					attr = (Attr)anns[x];
+				else if (pa instanceof Attr) {
+					attr = (Attr)pa;
 					break;
 				}
-				else if (anns[x] instanceof IocObj) {
-					ioco = (IocObj)anns[x];
+				else if (pa instanceof IocObj) {
+					ioco = (IocObj)pa;
 					break;
 				}
-				else if (anns[x] instanceof Header) {
-					reqh = (Header)anns[x];
+				else if (pa instanceof Header) {
+					reqh = (Header)pa;
 					break;
 				}
 			}
@@ -179,10 +190,8 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			// Adapt by @param annotation
 			if (param != null) {
 				Object o = adaptByParamAnno(ac, name, types[i], param);
-				if (o != null) {
-					addArg(args, name, o);
-					continue;
-				}
+				addArg(args, name, o);
+				continue;
 			}
 
 			// And adapt by default support types
@@ -202,7 +211,8 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			addArg(args, name, o);
 		}
 		
-		return args;
+		ac.setParams(args);
+		ac.setArgs(args.values().toArray());
 	}
 
 	protected Object adaptByAttr(ActionContext ac, Attr attr) {
@@ -323,7 +333,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		if (Strings.isEmpty(pm)) {
 			return ejectByAll(ac, type);
 		}
-		if (pm.startsWith("^")) {
+		if (pm.charAt(0) == '^') {
 			return ejectByPrefix(ac, type, pm.substring(1));
 		}
 		

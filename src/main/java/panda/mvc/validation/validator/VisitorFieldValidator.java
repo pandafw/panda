@@ -9,16 +9,12 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.validation.Validators;
 
 public class VisitorFieldValidator extends AbstractFieldValidator {
 
 	private static final Log log = Logs.getLog(VisitorFieldValidator.class);
 
 	private String condition;
-	private String context;
-	private boolean appendPrefix = true;
-	private Validators actionValidatorManager;
 
 	/**
 	 * @return the condition
@@ -34,40 +30,6 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 		this.condition = condition;
 	}
 
-	/**
-	 * Sets whether the field name of this field validator should be prepended
-	 * to the field name of the visited field to determine the full field name
-	 * when an error occurs. The default is true.
-	 * @param appendPrefix the appendPrefix to set
-	 */
-	public void setAppendPrefix(boolean appendPrefix) {
-		this.appendPrefix = appendPrefix;
-	}
-
-	/**
-	 * Flags whether the field name of this field validator should be prepended
-	 * to the field name of the visited field to determine the full field name
-	 * when an error occurs. The default is true.
-	 * @return appendPrefix
-	 */
-	public boolean isAppendPrefix() {
-		return appendPrefix;
-	}
-
-	/**
-	 * @param context the context to set
-	 */
-	public void setContext(String context) {
-		this.context = context;
-	}
-
-	/**
-	 * @return the context
-	 */
-	public String getContext() {
-		return context;
-	}
-
 	public boolean validate(ActionContext ac, Object object) throws ValidationException {
 		Object value = getFieldValue(object, getName());
 		if (value == null) {
@@ -78,32 +40,26 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 			return true;
 		}
 		
-		ValueStack stack = ActionContext.getContext().getValueStack();
-
-		stack.push(object);
-
-		String visitorContext = (context == null) ? ActionContext.getContext().getName() : context;
-
 		if (value instanceof Collection) {
 			Collection coll = (Collection) value;
 			Object[] array = coll.toArray();
 
-			validateArrayElements(array, fieldName, visitorContext);
+			return validateArrayElements(ac, array);
 		}
-		else if (value instanceof Map) {
+		
+		if (value instanceof Map) {
 			Map map = (Map) value;
-			validateMapElements(map, fieldName, visitorContext);
+
+			return validateMapElements(ac, map);
 		}
-		else if (value instanceof Object[]) {
+		
+		if (value instanceof Object[]) {
 			Object[] array = (Object[]) value;
 
-			validateArrayElements(array, fieldName, visitorContext);
-		}
-		else {
-			validateObject(fieldName, value, visitorContext);
+			return validateArrayElements(ac, array);
 		}
 
-		stack.pop();
+		return validateObject(ac, getName(), value);
 	}
 	
 	private boolean checkCondition(ActionContext ac, Object value) throws ValidationException {
@@ -124,55 +80,39 @@ public class VisitorFieldValidator extends AbstractFieldValidator {
 		return answer;
 	}
 	
-	private void validateMapElements(Map map, String fieldName, String visitorContext)
+	private boolean validateMapElements(ActionContext ac, Map map)
 			throws ValidationException {
-		if (map == null) {
-			return;
-		}
-
 		for (Iterator it = map.entrySet().iterator(); it.hasNext(); ) {
 			Entry es = (Entry)it.next();
 			Object k = es.getKey();
 			Object o = es.getValue();
 			if (k != null && o != null) {
-				validateObject(fieldName + "." + k.toString(), o, visitorContext);
+				if (!validateObject(ac, getName() + '.' + k.toString(), o)) {
+					return false;
+				}
 			}
 		}
+		return true;
 	}
 
-	private void validateArrayElements(Object[] array, String fieldName, String visitorContext)
+	private boolean validateArrayElements(ActionContext ac, Object[] array)
 			throws ValidationException {
-		if (array == null) {
-			return;
-		}
-
 		for (int i = 0; i < array.length; i++) {
 			Object o = array[i];
 			if (o != null) {
-				validateObject(fieldName + "[" + i + "]", o, visitorContext);
+				if (!validateObject(ac, getName() + '[' + i + ']', o)) {
+					return false;
+				}
 			}
 		}
+		return true;
 	}
 
-	private void validateObject(String fieldName, Object o, String visitorContext)
+	private boolean validateObject(ActionContext ac, String fieldName, Object o)
 			throws ValidationException {
-		ValueStack stack = ActionContext.getContext().getValueStack();
-		stack.push(o);
-
-		ValidatorContext validatorContext;
-
-		if (appendPrefix) {
-			validatorContext = new AppendingValidatorContext(getValidatorContext(), o, fieldName,
-					getMessage(o));
-		}
-		else {
-			ValidatorContext parent = getValidatorContext();
-			validatorContext = new DelegatingValidatorContext(parent, DelegatingValidatorContext
-					.makeTextProvider(o, parent), parent);
-		}
-
-		actionValidatorManager.validate(o, visitorContext, validatorContext);
-		stack.pop();
+		
+		//TODO
+		return false;
 	}
 
 }

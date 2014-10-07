@@ -9,11 +9,12 @@ import panda.mvc.ActionContext;
 public class MethodInvokeProcessor extends AbstractProcessor {
 
 	public void process(ActionContext ac) throws Throwable {
-		Object module = ac.getAction();
+		Object action = ac.getAction();
 		Method method = ac.getMethod();
-		Object[] args = ac.getArgs().values().toArray();
+		Object args = ac.getArgs();
 		try {
-			ac.setResult(method.invoke(module, args));
+			Object r = method.invoke(action, args);
+			ac.setResult(r);
 			doNext(ac);
 		}
 		catch (IllegalAccessException e) {

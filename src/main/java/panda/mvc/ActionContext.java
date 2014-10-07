@@ -34,7 +34,8 @@ public class ActionContext {
 
 	private Object action;
 	private Method method;
-	private Map<String, Object> args;
+	private Object[] args;
+	private Object params;
 	private Object result;
 	private Locale locale;
 
@@ -172,19 +173,29 @@ public class ActionContext {
 	/**
 	 * @return the args
 	 */
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getArgs() {
-		if (args == null) {
-			args = Collections.EMPTY_MAP;
-		}
+	public Object[] getArgs() {
 		return args;
 	}
 
 	/**
 	 * @param args the args to set
 	 */
-	public void setArgs(Map<String, Object> args) {
+	public void setArgs(Object[] args) {
 		this.args = args;
+	}
+
+	/**
+	 * @return the params
+	 */
+	public Object getParams() {
+		return params;
+	}
+
+	/**
+	 * @param params the params to set
+	 */
+	public void setParams(Object params) {
+		this.params = params;
 	}
 
 	/**
@@ -285,7 +296,7 @@ public class ActionContext {
 	/**
 	 * @return the request parameters map
 	 */
-	public Map<String, Object> getParam() {
+	public Map<String, Object> getReqp() {
 		return new ServletRequestParamMap(request);
 	}
 	
@@ -362,11 +373,11 @@ public class ActionContext {
 	}
 
 	/**
-	 * @return the request parameters map
-	 * @see #getParam()
+	 * @return the request parameters
+	 * @see #getParams()
 	 */
-	public Map<String, Object> getP() {
-		return getParam();
+	public Object getP() {
+		return getParams();
 	}
 
 	/**

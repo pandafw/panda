@@ -1,8 +1,5 @@
 package panda.mvc.processor;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
@@ -24,12 +21,7 @@ public class ValidateProcessor extends AbstractProcessor {
 	}
 
 	public void process(ActionContext ac) throws Throwable {
-		Map<String, Object> args = ac.getArgs();
-		for (Entry<String, Object> en : args.entrySet()) {
-			if (!validators.valiate(ac, en.getKey(), en.getValue())) {
-				break;
-			}
-		}
+		validators.validate(ac);
 		doNext(ac);
 	}
 }

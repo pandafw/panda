@@ -14,7 +14,7 @@ public @interface Validator {
 	/**
 	 * The validator type
 	 */
-	Class<? extends FieldValidator> type();
+	Class<? extends FieldValidator> type() default FieldValidator.class;
 
 	/**
 	 * The default error message for this validator. NOTE: It is required to set a message, if you
@@ -37,4 +37,9 @@ public @interface Validator {
 	 * JSON String of validator parameters
 	 */
 	String params() default "";
+
+	/**
+	 * validator name
+	 */
+	String value() default "";
 }

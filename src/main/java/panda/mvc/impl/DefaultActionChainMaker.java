@@ -44,15 +44,19 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 	}
 	
 	protected void setExternal() {
+		InputStream is = null;
 		try {
 			// load default custom settings
-			InputStream is = ClassLoaders.getResourceAsStream("mvc-chains.json");
+			is = ClassLoaders.getResourceAsStream("mvc-chains.json");
 			if (is != null) {
 				loadFromStream(is);
 			}
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
+		}
+		finally {
+			Streams.safeClose(is);
 		}
 	}
 
