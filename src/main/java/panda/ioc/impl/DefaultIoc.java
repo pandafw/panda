@@ -122,6 +122,24 @@ public class DefaultIoc implements Ioc, Cloneable {
 		}
 	}
 
+	public <T> T getIfExists(Class<T> type) throws IocException {
+		if (has(type)) {
+			return get(type);
+		}
+		return null;
+	}
+
+	public <T> T getIfExists(Class<T> type, String name) throws IocException {
+		if (name == null) {
+			name = getBeanName(type);
+		}
+		
+		if (has(name)) {
+			return get(type, name);
+		}
+		return null;
+	}
+	
 	public <T> T get(Class<T> type) throws IocException {
 		return get(type, null);
 	}

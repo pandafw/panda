@@ -39,6 +39,7 @@ import panda.io.stream.BOMInputStream;
 import panda.lang.Charsets;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.lang.Systems;
 
 /**
  * File Utilities class.
@@ -172,7 +173,7 @@ public class Files {
 	 * @return the path to the system temporary directory.
 	 */
 	public static String getTempDirectoryPath() {
-		return System.getProperty("java.io.tmpdir");
+		return Systems.JAVA_IO_TMPDIR;
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class Files {
 	 * @return the system temporary directory.
 	 */
 	public static File getTempDirectory() {
-		return new File(getTempDirectoryPath());
+		return Systems.getJavaIoTmpDir();
 	}
 
 	/**
@@ -2136,6 +2137,38 @@ public class Files {
 		try {
 			out = openOutputStream(file, append);
 			out.write(data, off, len);
+			out.close(); // don't swallow close Exception if copy completes normally
+		}
+		finally {
+			Streams.safeClose(out);
+		}
+	}
+
+	/**
+	 * Writes stream to a file, creating the file if it does not exist.
+	 * 
+	 * @param file the file to write to
+	 * @param stream the content to write to the file
+	 * @throws IOException in case of an I/O error
+	 */
+	public static void write(final File file, final InputStream stream) throws IOException {
+		write(file, stream, false);
+	}
+	
+	/**
+	 * Writes stream to a file, creating the file if it does not exist.
+	 * 
+	 * @param file the file to write to
+	 * @param stream the content to write to the file
+	 * @param append if {@code true}, then bytes will be added to the end of the file rather than
+	 *            overwriting
+	 * @throws IOException in case of an I/O error
+	 */
+	public static void write(final File file, final InputStream stream, final boolean append) throws IOException {
+		OutputStream out = null;
+		try {
+			out = openOutputStream(file, append);
+			Streams.copy(stream, out);
 			out.close(); // don't swallow close Exception if copy completes normally
 		}
 		finally {

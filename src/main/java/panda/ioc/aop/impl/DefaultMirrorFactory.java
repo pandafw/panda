@@ -41,12 +41,10 @@ public class DefaultMirrorFactory implements MirrorFactory {
 		}
 
 		if (aopConfigration == null) {
-			if (ioc.has(AopConfigration.IOCNAME)) {
-				aopConfigration = ioc.get(AopConfigration.class, AopConfigration.IOCNAME);
-			}
-			else {
-				aopConfigration = new AnnotationAopConfigration();
-			}
+			aopConfigration = ioc.getIfExists(AopConfigration.class, AopConfigration.IOCNAME);
+		}
+		if (aopConfigration == null) {
+			aopConfigration = new AnnotationAopConfigration();
 		}
 		
 		List<InterceptorPair> interceptorPairs = aopConfigration.getInterceptorPairList(ioc, type);

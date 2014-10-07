@@ -12,6 +12,7 @@ import panda.ioc.IocLoading;
 import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
@@ -113,7 +114,12 @@ public class ComboIocLoader implements IocLoader {
 	@SuppressWarnings("unchecked")
 	private void createIocLoader(Class cls, List<String> args) {
 		Class<? extends IocLoader> klass = (Class<? extends IocLoader>)cls;
-		iocLoaders.add(Classes.born(klass, args.toArray(new String[args.size()])));
+		if (Collections.isEmpty(args)) {
+			iocLoaders.add(Classes.born(klass));
+		}
+		else {
+			iocLoaders.add(Classes.born(klass, args.toArray(new String[args.size()])));
+		}
 	}
 
 	protected Class<? extends IocLoader> getAliasClass(String name) {

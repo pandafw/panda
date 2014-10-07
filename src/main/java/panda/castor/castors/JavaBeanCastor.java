@@ -16,17 +16,20 @@ import panda.lang.CycleDetectStrategy;
  * @param <T> target type
  */
 public class JavaBeanCastor<T> extends Castor<Object, T> {
-	private BeanHandler<T> beanHandler;
+	/**
+	 * target bean handler
+	 */
+	private BeanHandler<T> tbh;
 	
 	public JavaBeanCastor(Type fromType, Type toType, Beans beans) {
 		super(fromType, toType);
 		
-		beanHandler = beans.getBeanHandler(toType);
+		tbh = beans.getBeanHandler(toType);
 	}
 
 	@Override
 	protected T createTarget() {
-		return beanHandler.createObject();
+		return tbh.createObject();
 	}
 
 	@Override
@@ -38,8 +41,8 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected T castValueTo(Object value, T bean, CastContext context) {
-		BeanHandler bh = context.getCastors().getBeanHandler(value.getClass());
-		String[] pns = bh.getReadPropertyNames(value);
+		BeanHandler sbh = context.getCastors().getBeanHandler(value.getClass());
+		String[] pns = sbh.getReadPropertyNames(value);
 		if (pns.length == 0) {
 			if (!(value instanceof Map)) {
 				return castError(value, context);
@@ -48,11 +51,11 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 		}
 		
 		for (String pn : pns) {
-			if (!beanHandler.canWriteBean(pn)) {
+			if (!tbh.canWriteBean(pn)) {
 				continue;
 			}
 
-			Object pv = bh.getPropertyValue(value, pn);
+			Object pv = sbh.getPropertyValue(value, pn);
 			if (context.isCycled(pv)) {
 				switch (context.getCycleDetectStrategy()) {
 				case CycleDetectStrategy.CYCLE_DETECT_NOPROP:
@@ -67,17 +70,17 @@ public class JavaBeanCastor<T> extends Castor<Object, T> {
 
 			context.push(pn, pv);
 			try {
-				Type pt = beanHandler.getBeanType(pn);
-				Object bv = beanHandler.getBeanValue(bean, pn);
+				Type pt = tbh.getBeanType(pn);
+				Object bv = tbh.getBeanValue(bean, pn);
 
 				if (bv == null) {
 					bv = context.getCastors().cast(pv, pt, context);
-					beanHandler.setBeanValue(bean, pn, bv);
+					tbh.setBeanValue(bean, pn, bv);
 				}
 				else {
 					Object cv = context.getCastors().castTo(pv, bv, pt, context);
 					if (cv != bv) {
-						beanHandler.setBeanValue(bean, pn, cv);
+						tbh.setBeanValue(bean, pn, cv);
 					}
 				}
 			}
