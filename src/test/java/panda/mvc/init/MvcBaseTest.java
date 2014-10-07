@@ -53,7 +53,7 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 		request.setPathInfo("/two/login.do");
 		request.addParameter("username", "wendal");
 		request.addParameter("password", "123456");
-		request.addParameter("authCode", "Nutz");
+		request.addParameter("authCode", "dummy");
 		servlet.service(request, response);
 		String resp = response.getContentAsString();
 		System.out.println(resp);

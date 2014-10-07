@@ -2,6 +2,7 @@ package panda.mvc.impl;
 
 import panda.bind.json.JsonObject;
 import panda.castor.Castors;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.mvc.ActionInfo;
@@ -19,6 +20,7 @@ import panda.mvc.view.XmlView;
 /**
  * 默认的的视图工厂类
  */
+@IocBean(type=ViewMaker.class)
 public class DefaultViewMaker implements ViewMaker {
 
 	public static final String VIEW_JSP = "jsp";

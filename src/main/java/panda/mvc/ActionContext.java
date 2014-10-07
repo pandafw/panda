@@ -16,7 +16,7 @@ import panda.ioc.Ioc;
 import panda.lang.Collections;
 import panda.mvc.util.StateProvider;
 import panda.mvc.util.TextProvider;
-import panda.mvc.validation.ParamValidationAware;
+import panda.mvc.validation.aware.ParamValidationAware;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;

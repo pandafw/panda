@@ -21,7 +21,7 @@ public class DaoFilePool implements FilePool {
 	@IocInject
 	protected DaoClient daoClient;
 
-	@IocInject(value="ref:filepool.data.blocksize", required=false)
+	@IocInject(value="ref:panda.filepool.dao.blocksize", required=false)
 	protected int blockSize = Integer.MAX_VALUE;
 
 	/**
@@ -62,7 +62,7 @@ public class DaoFilePool implements FilePool {
 		fi.setDate(DateTimes.getDate());
 		fi.setData(data);
 		fi.setSize(data.length);
-		fi.setFlag(temporary ? FileItem.TEMPORARY : FileItem.ARCHIVE);
+		fi.setFlag(temporary ? DaoFileItem.TEMPORARY : DaoFileItem.ARCHIVE);
 		
 		final Dao dao = getDaoClient().getDao();
 		dao.exec(new Runnable() {

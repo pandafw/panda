@@ -20,11 +20,6 @@ import java.util.LinkedHashMap;
  */
 public interface ParamAdaptor {
 	/**
-	 * 这个函数将在你的适配器生命周期内，这个函数将只被调用一次。它用来告诉你的适配器，你需要适配什么方法。
-	 */
-	void init(MvcConfig config, ActionInfo ai);
-
-	/**
 	 * 你的适配器需要根据传入的 request 生成函数的调用参数
 	 * 
 	 * @param ac ActionContext

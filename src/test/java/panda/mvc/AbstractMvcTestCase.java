@@ -23,11 +23,15 @@ public abstract class AbstractMvcTestCase {
 	protected MockServletContext servletContext;
 
 	protected MockServletConfig servletConfig;
+	
+	protected IocRequestListener iocRequestListener;
 
 	@Before
 	public void init() throws Throwable {
 		servletContext = Mock.servletContext();
 		servletConfig = Mock.servletConfig(servletContext, "test");
+		iocRequestListener = new IocRequestListener();
+		
 		initServletConfig();
 		servlet = new MvcServlet();
 		servlet.init(servletConfig);
@@ -48,8 +52,9 @@ public abstract class AbstractMvcTestCase {
 
 	@After
 	public void destroy() {
-		if (servlet != null)
+		if (servlet != null) {
 			servlet.destroy();
+		}
 	}
 
 }

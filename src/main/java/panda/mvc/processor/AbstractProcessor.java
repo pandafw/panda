@@ -3,9 +3,7 @@ package panda.mvc.processor;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
-import panda.mvc.ObjectInfo;
 import panda.mvc.Processor;
-import panda.mvc.impl.Loadings;
 
 /**
  * 抽象的Processor实现. 任何Processor实现都应该继承这个类,以获取正确的执行逻辑.
@@ -42,10 +40,6 @@ public abstract class AbstractProcessor implements Processor {
 	protected void doNext(ActionContext ac) throws Throwable {
 		if (null != next)
 			next.process(ac);
-	}
-
-	protected <T> T evalObj(MvcConfig config, ObjectInfo<T> info) {
-		return null == info ? null : Loadings.evalObj(config, info.getType(), info.getArgs());
 	}
 
 	protected void renderView(ActionContext ac) throws Throwable {

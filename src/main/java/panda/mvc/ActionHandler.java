@@ -8,6 +8,7 @@ import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
+import panda.mvc.impl.DefaultMvcLoading;
 import panda.mvc.ioc.RequestIocContext;
 import panda.mvc.ioc.SessionIocContext;
 
@@ -21,7 +22,7 @@ public class ActionHandler {
 
 	public ActionHandler(AbstractMvcConfig config) {
 		this.config = config;
-		this.loading = config.createLoading();
+		this.loading = new DefaultMvcLoading();
 		this.mapping = loading.load(config);
 	}
 

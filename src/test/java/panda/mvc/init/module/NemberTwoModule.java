@@ -20,7 +20,7 @@ public class NemberTwoModule {
 	@Fail("json")
 	public boolean login(@Param("username") String userName, @Param("password") String password,
 			@Param("authCode") Long authCode) {
-		return !(userName == null || password == null);
+		return !(userName == null || password == null || authCode == null);
 	}
 
 	//TODO

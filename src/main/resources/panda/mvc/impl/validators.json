@@ -1,39 +1,25 @@
 {
-	"expression":         "panda.mvc.validator.ExpressionValidator",
-	
-	"empty":              "panda.mvc.validator.EmptyFieldValidator",
+	"cast":               "panda.mvc.validator.CastErrorFieldValidator",
 	"required":           "panda.mvc.validator.RequiredFieldValidator",
-	"conversion":         "panda.mvc.validator.ConversionErrorFieldValidator",
-	
-	"requiredcollection": "panda.mvc.validator.RequiredCollectionFieldValidator",
-	"requiredstring":     "panda.mvc.validator.RequiredStringFieldValidator",
-	"requiredfile":       "panda.mvc.validator.RequiredFileFieldValidator",
-	"requiredimage":      "panda.mvc.validator.RequiredImageFieldValidator",
+	"empty":              "panda.mvc.validator.EmptyFieldValidator",
 	
 	"el":                 "panda.mvc.validator.ElFieldValidator",
 	"regex":              "panda.mvc.validator.RegexFieldValidator",
 	"email":              "panda.mvc.validator.EmailFieldValidator",
-	"compare":            "panda.mvc.validator.CompareFieldValidator",
+	"filename":           "panda.mvc.validator.FileNameFieldValidator",
+	"creditcardno":       "panda.mvc.validator.CreditCardNumberFieldValidator",
 	
 	"binary":             "panda.mvc.validator.BinaryFieldValidator",
 	"date":               "panda.mvc.validator.DateFieldValidator",
 	"number":             "panda.mvc.validator.NumberFieldValidator",
 	"string":             "panda.mvc.validator.StringFieldValidator",
-	"precision":          "panda.mvc.validator.DecimalPrecisionFieldValidator",
+	"decimal":            "panda.mvc.validator.DecimalFieldValidator",
 	
 	"file":               "panda.mvc.validator.FileFieldValidator",
-	"filename":           "panda.mvc.validator.FileNameFieldValidator",
 	"image":              "panda.mvc.validator.ImageFieldValidator",
 	
 	"constant":           "panda.mvc.validator.ConstantFieldValidator",
 	"prohibited":         "panda.mvc.validator.ProhibitedFieldValidator",
 	
-	"creditcardno":          "panda.mvc.validator.CreditCardNumberFieldValidator",
-	"hankakustring":         "panda.mvc.validator.HankakuStringFieldValidator",
-	"hankakukatakanastring": "panda.mvc.validator.HankakuKatakanaStringFieldValidator",
-	"zenkakustring":         "panda.mvc.validator.ZenkakuStringFieldValidator",
-	"zenkakukatakanastring": "panda.mvc.validator.ZenkakuKatakanaStringFieldValidator",
-	
-	"visitor":               "panda.mvc.validator.VisitorFieldValidator",
-	"conditionalvisitor":    "panda.mvc.validator.ConditionalVisitorFieldValidator"
+	"visitor":            "panda.mvc.validator.VisitorFieldValidator"
 }

@@ -25,7 +25,7 @@ public class StreamParamEjector extends AbstractParamEjector {
 				String qs = req.getQueryString();
 				params = URLHelper.parseQueryString(qs);
 				
-				FileItem fi = getActionContext().getFilePool().saveFile(ALL, req.getInputStream(), true);
+				FileItem fi = getActionContext().getFilePool().saveFile("noname", req.getInputStream(), true);
 				params.put(ALL, fi);
 			}
 			catch (Exception e) {

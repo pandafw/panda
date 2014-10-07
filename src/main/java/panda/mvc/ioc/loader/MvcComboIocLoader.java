@@ -10,7 +10,7 @@ import panda.ioc.loader.XmlIocLoader;
 
 public class MvcComboIocLoader extends ComboIocLoader {
 	/**
-	 * 类别名
+	 * alias
 	 */
 	private static Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
 	static {
@@ -19,6 +19,7 @@ public class MvcComboIocLoader extends ComboIocLoader {
 		alias.put("xml", XmlIocLoader.class);
 		alias.put("anno", MvcAnnotationIocLoader.class);
 		alias.put("annotation", MvcAnnotationIocLoader.class);
+		alias.put("default", MvcDefaultIocLoader.class);
 	}
 
 	public MvcComboIocLoader(IocLoader... loaders) {

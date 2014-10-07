@@ -16,9 +16,7 @@ public class ActionInfo {
 
 	private String chainName;
 
-	private ObjectInfo<? extends ParamAdaptor> adaptorInfo;
-
-	private ViewMaker viewMaker;
+	private Class<? extends ParamAdaptor> adaptor;
 
 	private String okView;
 
@@ -50,7 +48,7 @@ public class ActionInfo {
 		// 填充默认值
 		inputEncoding = null == inputEncoding ? parent.inputEncoding : inputEncoding;
 		outputEncoding = null == outputEncoding ? parent.outputEncoding : outputEncoding;
-		adaptorInfo = null == adaptorInfo ? parent.adaptorInfo : adaptorInfo;
+		adaptor = null == adaptor ? parent.adaptor : adaptor;
 		okView = null == okView ? parent.okView : okView;
 		failView = null == failView ? parent.failView : failView;
 		actionType = null == actionType ? parent.actionType : actionType;
@@ -104,12 +102,12 @@ public class ActionInfo {
 		this.paths = paths;
 	}
 
-	public ObjectInfo<? extends ParamAdaptor> getAdaptorInfo() {
-		return adaptorInfo;
+	public Class<? extends ParamAdaptor> getAdaptor() {
+		return adaptor;
 	}
 
-	public void setAdaptorInfo(ObjectInfo<? extends ParamAdaptor> adaptorInfo) {
-		this.adaptorInfo = adaptorInfo;
+	public void setAdaptor(Class<? extends ParamAdaptor> adaptor) {
+		this.adaptor = adaptor;
 	}
 
 	public String getChainName() {
@@ -118,14 +116,6 @@ public class ActionInfo {
 
 	public void setChainName(String chainName) {
 		this.chainName = chainName;
-	}
-
-	public ViewMaker getViewMaker() {
-		return viewMaker;
-	}
-
-	public void setViewMaker(ViewMaker maker) {
-		this.viewMaker = maker;
 	}
 
 	public String getOkView() {

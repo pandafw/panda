@@ -1,7 +1,6 @@
 package panda.mvc;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -53,24 +52,9 @@ public interface MvcConfig {
 	Class<?> getMainModule();
 
 	/**
-	 * 根据 MainModule 中的 '@LoadingBy' 得到一个加载逻辑的实现类
-	 * 
-	 * @return 加载逻辑
-	 */
-	Loading createLoading();
-
-	/**
 	 * 如果在非 JSP/SERVLET 容器内，这个函数不保证返回正确的结果
 	 * 
 	 * @return 当前应用的上下文对象
 	 */
 	ServletContext getServletContext();
-
-	/**
-	 * 加载时上下文包括环境变量，以及 "app.root" 等信息
-	 * 
-	 * @return 加载时上下文
-	 */
-	Map<String, Object> getLoadingContext();
-
 }

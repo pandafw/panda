@@ -30,8 +30,6 @@ import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
 import panda.mvc.Mvcs;
 import panda.mvc.ParamAdaptor;
 import panda.mvc.adaptor.ejector.FormParamEjector;
@@ -55,9 +53,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 
 	private static final String ATTR_EJECTOR = ParamEjector.class.getName();
 	
-	public void init(MvcConfig config, ActionInfo ai) {
-	}
-
 	protected ParamEjector getParamEjector(ActionContext ac) {
 		ParamEjector ejector = (ParamEjector)ac.getRequest().getAttribute(ATTR_EJECTOR);
 		if (ejector != null) {

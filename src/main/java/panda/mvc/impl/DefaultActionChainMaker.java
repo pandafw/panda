@@ -13,8 +13,10 @@ import java.util.Map;
 import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
+import panda.lang.ClassLoaders;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -26,17 +28,36 @@ import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.Processor;
 
+@IocBean(type=ActionChainMaker.class)
 public class DefaultActionChainMaker implements ActionChainMaker {
 
 	private static final Log log = Logs.getLog(DefaultActionChainMaker.class);
 
 	protected Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
 
-	public DefaultActionChainMaker(String... paths) {
+	public DefaultActionChainMaker() {
+		// load default settings
+		setChains(DefaultActionChainMaker.class.getPackage().getName().replace('.', '/') + "/chains.json");
+		
+		// external
+		setExternal();
+	}
+	
+	protected void setExternal() {
 		try {
-			// load default settings
-			loadFromPath(getClass().getPackage().getName().replace('.', '/') + "/chains.json");
-			
+			// load default custom settings
+			InputStream is = ClassLoaders.getResourceAsStream("mvc-chains.json");
+			if (is != null) {
+				loadFromStream(is);
+			}
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public void setChains(String... paths) {
+		try {
 			// load customized settings
 			if (Arrays.isNotEmpty(paths)) {
 				for (String p : paths) {

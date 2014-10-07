@@ -7,10 +7,6 @@ import java.util.Date;
 /**
  */
 public interface FileItem {
-	public static final int TEMPORARY = 0;
-	public static final int ARCHIVE = 1;
-	
-
 	/**
 	 * @return the id
 	 */
@@ -30,11 +26,6 @@ public interface FileItem {
 	 * @return the date
 	 */
 	Date getDate();
-
-	/**
-	 * @return the flag
-	 */
-	int getFlag();
 
 	/**
 	 * @return true if this is a temporary file

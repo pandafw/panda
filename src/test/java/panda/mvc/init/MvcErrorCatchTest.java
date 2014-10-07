@@ -3,7 +3,6 @@ package panda.mvc.init;
 import org.junit.Test;
 
 import panda.mvc.AbstractMvcTestCase;
-import panda.mvc.LoadingException;
 import panda.mvc.init.errmodule.ErrorCatchMainModule;
 
 public class MvcErrorCatchTest {
@@ -15,9 +14,6 @@ public class MvcErrorCatchTest {
 					servletConfig.addInitParameter("modules", mainModuleType.getName());
 				}
 			}).init();
-		}
-		catch (LoadingException e) {
-			throw e.getCause();
 		}
 		catch (Exception e) {
 			throw e;

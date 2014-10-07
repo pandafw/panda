@@ -16,6 +16,9 @@ import panda.lang.Objects;
  */
 @Table("FileItem")
 public class DaoFileItem implements FileItem, Serializable {
+	public static final int TEMPORARY = 0;
+	public static final int ARCHIVE = 1;
+
 	private static final long serialVersionUID = 1L;
 	
 	/*----------------------------------------------------------------------*
@@ -165,10 +168,10 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * @return the data
 	 */
 	public byte[] getData() throws IOException {
-		if (data != null) {
-			return data;
+		if (data == null) {
+			data = daoFilePool.readFile(this);
 		}
-		return daoFilePool.readFile(this);
+		return data;
 	}
 
 	/**

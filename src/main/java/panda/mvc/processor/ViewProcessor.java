@@ -8,6 +8,8 @@ import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.View;
+import panda.mvc.ViewMaker;
+import panda.mvc.impl.DefaultViewMaker;
 
 public class ViewProcessor extends AbstractProcessor {
 	private static final Log log = Logs.getLog(ViewProcessor.class);
@@ -35,6 +37,14 @@ public class ViewProcessor extends AbstractProcessor {
 		doNext(ac);
 	}
 
+	protected ViewMaker getViewMaker(MvcConfig config) {
+		ViewMaker maker = config.getIoc().getIfExists(ViewMaker.class);
+		if (maker == null) {
+			maker = new DefaultViewMaker();
+		}
+		return maker;
+	}
+	
 	protected View evalView(MvcConfig config, ActionInfo ai, String viewType) {
 		if (Strings.isBlank(viewType)) {
 			return null;
@@ -52,7 +62,7 @@ public class ViewProcessor extends AbstractProcessor {
 			value = null;
 		}
 
-		View view = ai.getViewMaker().make(config, ai, type, value);
+		View view = getViewMaker(config).make(config, ai, type, value);
 		if (view != null) {
 			return view;
 		}

@@ -11,14 +11,10 @@ import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.lang.Texts;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
-import panda.mvc.ObjectInfo;
-import panda.mvc.ParamAdaptor;
-import panda.mvc.annotation.AdaptBy;
+import panda.mvc.annotation.Adapt;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
 import panda.mvc.annotation.Encoding;
@@ -34,7 +30,7 @@ public abstract class Loadings {
 	public static ActionInfo createInfo(Class<?> type) {
 		ActionInfo ai = new ActionInfo();
 		evalEncoding(ai, type.getAnnotation(Encoding.class));
-		evalHttpAdaptor(ai, type.getAnnotation(AdaptBy.class));
+		evalHttpAdaptor(ai, type.getAnnotation(Adapt.class));
 		evalOk(ai, type.getAnnotation(Ok.class));
 		evalFail(ai, type.getAnnotation(Fail.class));
 		evalAt(ai, type.getAnnotation(At.class), null);
@@ -46,7 +42,7 @@ public abstract class Loadings {
 	public static ActionInfo createInfo(Method method) {
 		ActionInfo ai = new ActionInfo();
 		evalEncoding(ai, method.getAnnotation(Encoding.class));
-		evalHttpAdaptor(ai, method.getAnnotation(AdaptBy.class));
+		evalHttpAdaptor(ai, method.getAnnotation(Adapt.class));
 		evalOk(ai, method.getAnnotation(Ok.class));
 		evalFail(ai, method.getAnnotation(Fail.class));
 		evalAt(ai, method.getAnnotation(At.class), method.getName());
@@ -145,10 +141,9 @@ public abstract class Loadings {
 		ai.setActionType(type);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void evalHttpAdaptor(ActionInfo ai, AdaptBy ab) {
+	public static void evalHttpAdaptor(ActionInfo ai, Adapt ab) {
 		if (null != ab) {
-			ai.setAdaptorInfo((ObjectInfo<? extends ParamAdaptor>)new ObjectInfo(ab.type(), ab.args()));
+			ai.setAdaptor(ab.type());
 		}
 	}
 
@@ -161,26 +156,6 @@ public abstract class Loadings {
 			ai.setInputEncoding(Strings.defaultString(encoding.input(), Charsets.UTF_8));
 			ai.setOutputEncoding(Strings.defaultString(encoding.output(), Charsets.UTF_8));
 		}
-	}
-
-	public static <T> T evalObj(MvcConfig config, Class<T> type, String[] args) {
-		Object[] as = args;
-		
-		if (Arrays.isNotEmpty(args)) {
-			// 判断是否是 Ioc 注入
-			if (args.length == 1 && args[0].startsWith("ioc:")) {
-				String name = Strings.trim(args[0].substring(4));
-				return config.getIoc().get(type, name);
-			}
-
-			// 用上下文替换参数
-			Object context = config.getLoadingContext();
-			for (int i = 0; i < args.length; i++) {
-				as[i] = Texts.translate(args[i], context);
-			}
-		}
-
-		return Classes.born(type, as);
 	}
 
 	private static boolean isAction(Class<?> cls) {
