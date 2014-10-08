@@ -17,8 +17,8 @@ import javax.servlet.http.HttpSession;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.castor.CastContext;
-import panda.castor.Castors;
+import panda.cast.CastContext;
+import panda.cast.Castors;
 import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;

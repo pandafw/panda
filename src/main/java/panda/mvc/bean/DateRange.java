@@ -1,7 +1,12 @@
-package panda.util.bean;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import panda.lang.Objects;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 /**
  * DateRange
@@ -47,6 +52,9 @@ public class DateRange implements Cloneable, Serializable {
 	/**
 	 * @return the from
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE)
+	})
 	public Date getF() {
 		return from;
 	}
@@ -61,6 +69,10 @@ public class DateRange implements Cloneable, Serializable {
 	/**
 	 * @return the to
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE),
+		@Validate(value=Validators.EL, params="top.value > top.parent.value.f", msgId=Validators.MSG_DATE_RANGE_TO)
+	})
 	public Date getT() {
 		return to;
 	}
@@ -73,36 +85,27 @@ public class DateRange implements Cloneable, Serializable {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("from: ").append(from);
-		sb.append(", ");
-		sb.append("to: ").append(to);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder()
+				.append("from", from)
+				.append("to", to)
+				.toString();
 	}
 
 	/**
-     * @return  a hash code value for this object.
+	 * @return a hash code value for this object.
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
-		return result;
+		return Objects.hashCodes(from, to);
 	}
 
 	/**
-     * @return  <code>true</code> if this object is the same as the obj argument; 
-     * 			<code>false</code> otherwise.
+	 * @return <code>true</code> if this object is the same as the obj argument; <code>false</code>
+	 *         otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -112,20 +115,12 @@ public class DateRange implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DateRange other = (DateRange) obj;
-		if (from == null) {
-			if (other.from != null)
-				return false;
-		}
-		else if (!from.equals(other.from))
-			return false;
-		if (to == null) {
-			if (other.to != null)
-				return false;
-		}
-		else if (!to.equals(other.to))
-			return false;
-		return true;
+
+		DateRange rhs = (DateRange) obj;
+		return Objects.equalsBuilder()
+				.append(from, rhs.from)
+				.append(to, rhs.to)
+				.isEquals();
 	}
 
 	/**
@@ -135,8 +130,8 @@ public class DateRange implements Cloneable, Serializable {
 	public Object clone() {
 		DateRange clone = new DateRange();
 		
-		clone.from = (Date)this.from.clone();
-		clone.to = (Date)this.to.clone();
+		clone.from = new Date(this.from.getTime());
+		clone.to = new Date(this.to.getTime());
 		
 		return clone;
 	}

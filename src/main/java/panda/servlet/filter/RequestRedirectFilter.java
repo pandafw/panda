@@ -1,4 +1,4 @@
-package panda.servlet.filters;
+package panda.servlet.filter;
 
 import java.io.IOException;
 
@@ -18,11 +18,17 @@ import panda.servlet.ServletURLHelper;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class HttpsRedirectFilter implements Filter {
+public class RequestRedirectFilter implements Filter {
+	/**
+	 * redirect
+	 */
+	private String redirect;
+
 	/**
 	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
 	 */
 	public void init(FilterConfig config) throws ServletException {
+		redirect = config.getInitParameter("redirect");
 	}
 
 	/**
@@ -33,16 +39,11 @@ public class HttpsRedirectFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
-		String schema = request.getScheme();
-		if (!"https".equals(schema)) {
-			String url = ServletURLHelper.buildURL(request, "https", 0, request.getParameterMap(), true, false);
-			
-			HttpServletResponse response = (HttpServletResponse)res;
-			HttpServlets.sendRedirect(response, url);
-		}
-		else {
-			chain.doFilter(req, res);
-		}
+		HttpServletResponse response = (HttpServletResponse)res;
+		
+		String url = ServletURLHelper.buildURL(request);
+		
+		HttpServlets.sendRedirect(response, redirect + url);
 	}
 
 	/**

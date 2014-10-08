@@ -1,8 +1,11 @@
-package panda.util.bean;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 
 import panda.lang.Objects;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 /**
  * Pager bean object
@@ -269,6 +272,10 @@ public class Pager implements Cloneable, Serializable {
 	/**
 	 * @return the start
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER),
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSG_NUMBER_MIN)
+	})
 	public Long getS() {
 		return getStart();
 	}
@@ -297,6 +304,10 @@ public class Pager implements Cloneable, Serializable {
 	/**
 	 * @return the limit
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER),
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSG_NUMBER_MIN)
+	})
 	public Long getL() {
 		return getLimit();
 	}
@@ -311,6 +322,10 @@ public class Pager implements Cloneable, Serializable {
 	/**
 	 * @return the total
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER),
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSG_NUMBER_MIN)
+	})
 	public Long getT() {
 		return getTotal();
 	}

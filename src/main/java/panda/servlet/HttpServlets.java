@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Charsets;

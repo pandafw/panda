@@ -19,7 +19,7 @@ cookie-state-expire=2592000
 
 #boolean - ChoiceFormat
 boolean-format=0#NO|1#YES
-#boolean-format-check=0#\u25a1|1#\u2714
+#boolean-format-check=0#□|1#✔
 boolean-format-check=0#''<i class="fa fa-square-o"></i>''|1#''<i class="fa fa-check-square-o"></i>''
 
 #boolean - OGNL expression
@@ -56,14 +56,14 @@ pager-label-info=$(begin)~$(end)/$(total)
 pager-label-infoz=$(begin)~$(end)
 pager-label-prev=&nbsp;&lt;&nbsp;
 pager-label-next=&nbsp;&gt;&nbsp;
-pager-label-first=&nbsp;\u226a&nbsp;
-pager-label-last=&nbsp;\u226b&nbsp;
+pager-label-first=&nbsp;≪&nbsp;
+pager-label-last=&nbsp;≫&nbsp;
 pager-label-empty=-- NOTHING --
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300
 pager-tooltip-prev=&lt; Previous {0}
 pager-tooltip-next=Next {0} &gt;
-pager-tooltip-first=\u226a First Page
+pager-tooltip-first=≪ First Page
 pager-tooltip-last=Last Page &raquo;
 
 
@@ -89,9 +89,9 @@ listview-filter-bools=\
 	"false": "No" 
 
 listview-filter-dates=\
-	"bt": "\uff5e", \
-	"eq": "\uff1d", \
-	"ne": "\u2260" 
+	"bt": "～", \
+	"eq": "＝", \
+	"ne": "≠" 
 
 listview-filter-strings=\
 	"mt": "contains", \
@@ -106,9 +106,9 @@ listview-filter-strings=\
 #	"nk": "not likes"
 
 listview-filter-numbers=\
-	"bt": "\uff5e", \
-	"eq": "\uff1d", \
-	"ne": "\u2260" 
+	"bt": "～", \
+	"eq": "＝", \
+	"ne": "≠" 
 
 
 #const
@@ -217,7 +217,7 @@ validation-compare=The value is not ${(comparator == "eq" ? "=" : \
 (comparator == "lt" ? "<=" : \
 (comparator == "ge" ? ">" : \
 (comparator == "gt" ? "<" : "")))))}\
-\u300c${target}\u300d.
+「${target}」.
 validation-compare-daterange-to=The end date must be after than start date.
 validation-compare-numberrange-to=The number range is incorrect.
 
@@ -249,7 +249,7 @@ error-fieldvalue-duplicate=The field value is duplicated.
 error-file-notfound=The file "{0}" is not found.
 
 #info messages
-message-cart-empty=There is no items in the cart\u3002
+message-cart-empty=There is no items in the cart。
 message-file-uploading=File uploading...
 message-processing=Processing...
 message-processed=Process completed.
@@ -480,23 +480,23 @@ title-list_print={0} - List
 title-view={0} - View
 title-print={0} - View
 title-copy={0} - Insert
-title-copy_confirm={0} - Insert \u226b\u3000Confirm
-title-copy_success={0} - Insert \u226b\u3000Complete
+title-copy_confirm={0} - Insert ≫　Confirm
+title-copy_success={0} - Insert ≫　Complete
 title-delete={0} - Delete
-title-delete_success={0} - Delete \u226b Complete
+title-delete_success={0} - Delete ≫ Complete
 title-insert={0} - Insert
-title-insert_confirm={0} - Insert \u226b Confirm
-title-insert_success={0} - Insert \u226b Complete
+title-insert_confirm={0} - Insert ≫ Confirm
+title-insert_success={0} - Insert ≫ Complete
 title-update={0} - Update
-title-update_confirm={0} - Update \u226b Confirm
-title-update_success={0} - Update \u226b Complete
+title-update_confirm={0} - Update ≫ Confirm
+title-update_success={0} - Update ≫ Complete
 
 title-bdelete={0} - Bulk Delete 
-title-bdelete_confirm={0} - Bulk Delete \u226b Confirm
-title-bdelete_success={0} - Bulk Delete \u226b Complete
+title-bdelete_confirm={0} - Bulk Delete ≫ Confirm
+title-bdelete_success={0} - Bulk Delete ≫ Complete
 title-bupdate={0} - Bulk Update 
-title-bupdate_confirm={0} - Bulk Update \u226b Confirm
-title-bupdate_success={0} - Bulk Update \u226b Complete
+title-bupdate_confirm={0} - Bulk Update ≫ Confirm
+title-bupdate_success={0} - Bulk Update ≫ Complete
 
 #step
 step-arrow-e=&gt;

@@ -1,10 +1,13 @@
-package panda.util.bean;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 
 import panda.dao.query.Order;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 
 /**
@@ -89,6 +92,7 @@ public class Sorter implements Cloneable, Serializable {
 	/**
 	 * @return the direction
 	 */
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'asc', 'desc' ]}", msgId=Validators.MSG_CONSTANT))
 	public String getD() {
 		return getDirection();
 	}

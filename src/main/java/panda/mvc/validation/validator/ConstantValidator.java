@@ -2,6 +2,7 @@ package panda.mvc.validation.validator;
 
 import java.util.Map;
 
+import panda.bind.json.Jsons;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Iterators;
 import panda.lang.Objects;
@@ -13,8 +14,7 @@ import panda.mvc.ActionContext;
 public class ConstantValidator extends AbstractValidator {
 
 	protected Boolean ignoreCase = false;
-	protected String list;
-	protected Object consts;
+	protected Object list;
 
 	/**
 	 * @return the ignoreCase
@@ -33,27 +33,27 @@ public class ConstantValidator extends AbstractValidator {
 	/**
 	 * @return list
 	 */
-	public String getList() {
+	public Object getList() {
 		return list;
 	}
 
 	/**
 	 * @param list the list to set
 	 */
-	public void setList(String list) {
-		this.list = Strings.strip(list);
+	public void setList(Object list) {
+		this.list = list;
 	}
 
 	/**
 	 * @return the constants
 	 */
 	public String getConsts() {
-		if (consts instanceof Map) {
-			return '[' + Strings.join(((Map)consts).values(), ", ", "'", "'") + ']';
+		if (list instanceof Map) {
+			return '[' + Strings.join(((Map)list).values(), ", ", "'", "'") + ']';
 		}
 		
-		if (consts != null) {
-			return '[' + Strings.join(Iterators.asIterator(consts), ", ", "'", "'") + ']';
+		if (list != null) {
+			return '[' + Strings.join(Iterators.asIterator(list), ", ", "'", "'") + ']';
 		}
 		
 		return "[]";
@@ -65,13 +65,17 @@ public class ConstantValidator extends AbstractValidator {
 			return true;
 		}
 		
-		if (Objects.isEmpty(consts)) {
+		if (Objects.isEmpty(list)) {
 			throw new IllegalArgumentException("The constant values of '" + getName() + "' is empty.");
+		}
+		
+		if (list instanceof CharSequence) {
+			list = Jsons.fromJson((CharSequence)list);
 		}
 
 		if (Iterators.isIterable(value)) {
 			for (Object v : Iterators.asIterable(value)) {
-				if (!validate(ac, v, consts)) {
+				if (!validate(ac, v, list)) {
 					addFieldError(ac);
 					return false;
 				}
@@ -79,7 +83,7 @@ public class ConstantValidator extends AbstractValidator {
 			return true;
 		}
 
-		if (!validate(ac, value, consts)) {
+		if (!validate(ac, value, list)) {
 			addFieldError(ac);
 			return false;
 		}

@@ -1,0 +1,394 @@
+#########################################################################
+#boolean
+boolean-format=0#否|1#是
+
+#date
+date-format=yyyy-MM-dd HH:mm:ss.SSS
+date-format-timestamp=yyyy-MM-dd HH:mm:ss.SSS
+date-format-datetime=yyyy-MM-dd HH:mm:ss
+date-format-date=yyyy-MM-dd
+date-format-time=HH:mm:ss
+
+date-timezone=GMT+8:00
+
+#number
+number-format-currency=#,###.00
+
+#password
+password-format=●●●●●●
+
+#pager - total, start(0-index), begin, end, count, limit, page, pages
+pager-label-info=$(begin)~$(end)/全$(total)件
+pager-label-infoz=$(begin)件~$(end)件
+pager-label-empty=-- 没有数据 --
+pager-label-limit=显示件数：
+pager-tooltip-prev=&lt; 上一页
+pager-tooltip-next=下一页 &gt;
+pager-tooltip-first=≪ 最前页
+pager-tooltip-last=最后页 ≫
+
+#listview - filters
+listview-filters-caption=检索条件
+listview-filters-label-add=检索条件追加
+listview-filters-button-query=检索
+listview-filters-button-clear=清除
+listview-filters-label-method=检索方法
+
+listview-filter-bools=\
+	"true":  "是", \
+	"false": "否"
+
+listview-filter-strings=\
+	"mt": "包含", \
+	"lm": "开头", \
+	"rm": "结尾", \
+	"ge": "大于", \
+	"le": "小于", \
+	"eq": "相同", \
+	"ne": "不同"
+#	, \
+#	"lk": "相像", \
+#	"nk": "不像"
+
+
+
+#const
+const-booleans=\
+	"true": "是", \
+	"false": "否"
+	
+const-genders=\
+	"F": "女", \
+	"M": "男"
+
+
+#servlet error
+servlet-error-title-404=网页不存在
+servlet-error-title-403=禁止访问
+servlet-error-title-500=服务器内部错误发生,网页无法显示。
+servlet-error-title-503=服务器超负荷,网页无法显示。
+servlet-error-message-404=指定的网页不存在。
+servlet-error-message-403=没有权限访问指定的网页。
+servlet-error-message-500=服务器内部错误，无法显示指定的网页。\n\
+请按F5键刷新画面，如果持续发生错误，请向网站管理人员汇报错误。
+servlet-error-message-503=服务器超负荷，无法显示指定的网页。\n\
+请稍稍等待片刻之后重新访问网站。
+servlet-error-status-code=HTTP状态码 {0}
+servlet-error-request-url=请求网页: <span class="request-url">{0}</span>
+servlet-error-exception=例外信息:
+
+
+#invalid.fieldvalue.xxx=
+xwork.default.invalid.fieldvalue=该项目内容不正确。
+
+#validation error message
+validation-incorrect=该项目内容不正确。
+validation-empty=该项目必须为空。
+validation-required=请输入该项目内容。
+validation-requiredcollection=请输入该项目内容。
+validation-requiredstring=请输入该项目内容。
+validation-requiredfile=请指定上传文件。
+validation-requiredimage=请指定上传图像文件。
+validation-binarylength=输入文字字数(${BinSize})不正确。请输入\
+${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize + "以内") : \
+(minLength != null ? (minBinSize + "以上") : \
+(maxLength != null ? (maxBinSize + "以下") : ""))}\
+的文字。
+validation-daterange=请输入${(min != null && max != null) ? (min + "~" + max + "之内") : \
+(min != null ? (min + "之后") : \
+(max != null ? (max + "之前") : ""))}\
+的日期。
+validation-numberrange=请输入${(min != null && max != null) ? (min + "~" + max + "以内") : \
+(min != null ? (min + "以上") : \
+(max != null ? (max + "以下") : ""))}\
+的数字。
+validation-filelength=文件大小${fileSize}不正确。请指定\
+${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize + "以内") : \
+(minLength != null ? (minFileSize + "以上") : \
+(maxLength != null ? (maxFileSize + "以下") : ""))}\
+的文件。
+validation-image=图像文件格式不正确。
+validation-imagesize=图像大小${width}x${height}不正确。请指定\
+${(minWidth != null && maxWidth != null) ? ("宽" + minWidth + "~" + maxWidth + "以内") : \
+(minWidth != null ? ("宽" + minWidth + "以上") : \
+(maxWidth != null ? ("宽" + maxWidth + "以下") : ""))}\
+${((minWidth != null || maxWidth != null) && (minHeight != null || maxHeight != null)) ? ", " : ""}\
+${(minHeight != null && maxHeight != null) ? ("高" + minHeight + "~" + maxHeight + "以内") : \
+(minHeight != null ? ("高" + minHeight + "以上") : \
+(maxHeight != null ? ("高" + maxHeight + "以下") : ""))}\
+的图像文件。
+validation-stringlength=输入文字数：${length}。请输入\
+${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength + "个字符以内") : \
+(minLength != null ? (minLength + "个字符以上") : \
+(maxLength != null ? (maxLength + "个字符以下") : ""))}\
+的文字。
+validation-precision=请按"整数${precision-scale}.小数${scale}"的格式输入。
+validation-constant=请选择${constants}中的内容。
+validation-prohibited=${constants}中的内容不可以输入。
+validation-alphastring=请输入英文。
+validation-numericstring=请输入数字。
+validation-alphanumericstring=请输入英数字。
+validation-creditcardnumber=请按"XXXX-XXXX-XXXX-XXXX"的格式输入正确的信用卡号码。
+validation-hankakustring=请输入半角文字。
+validation-hankakukatakanastring=请输入半角片假名。
+validation-zenkakustring=请输入全角文字。
+validation-zenkakukatakanastring=请输入全角片假名。
+validation-email=请按"user@domain.com"的格式输入电子邮件地址。
+validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
+validation-url=请按"http://www.domain.com"的格式输入URL。
+validation-zipcode=请按"123-4567"的格式输入邮政编码。
+validation-phonenumber=请按"1234-5678-9999"的格式输入电话号码。
+validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
+validation-futuredate=不允许输入未来的日期。
+validation-passeddate=不允许输入过去的日期。
+validation-regex=该项目输入内容不符合正规表达式"${expression}"。
+validation-fieldexpression=该项目输入内容不符合OGNL表达式"${expression}"。
+validation-compare=该项目的内容必须${(comparator == "eq" ? "=" : \
+(comparator == "le" ? "<" : \
+(comparator == "lt" ? "<=" : \
+(comparator == "ge" ? ">" : \
+(comparator == "gt" ? "<" : "")))))}\
+项目「${target}」。
+validation-compare-daterange-to=「终了日期」必须大于「开始日期」。
+validation-compare-numberrange-to=数字范围的设定不正确。
+
+validation-conversion=输入内容不正确。
+validation-conversion-Boolean=请输入true或者false。
+validation-conversion-Byte=请输入整数字。
+validation-conversion-Char=请输入字符。
+validation-conversion-Short=请输入整数字。
+validation-conversion-Integer=请输入整数字。
+validation-conversion-Long=请输入整数字。
+validation-conversion-BigInteger=请输入整数字。
+validation-conversion-Float=请输入数字。
+validation-conversion-Double=请输入数字。
+validation-conversion-BigDecimal=请输入数字。
+validation-conversion-Number=请输入数字。
+validation-conversion-Date=请输入"yyyy/MM/dd"格式的日期。
+
+
+#custom validation error message
+validation-email-notsame=电子邮件和确认电子邮件不一致。
+validation-password=密码必须输入英数字。
+validation-password-notsame=输入密码和确认密码不一致。
+validation-password-incorrect=密码错误。
+validation-locale-invalid=语言和国家・地区的组合不正确。
+
+
+#error messages
+error-input=输入内容有错误。
+error-input-detail=错误信息
+error-data-notfound=该数据不存在。
+error-data-list-empty=対象数据不存在。
+error-data-duplicate=该数据已经被登录。\n{0}
+error-fieldvalue-notnull=该项目必须为空。
+error-fieldvalue-required=该项目不能为空。
+error-fieldvalue-incorrect=该项目输入内容不正确。
+error-fieldvalue-duplicate=该项目输入内容重复。
+error-file-notfound=该文件"{0}"不存在。
+
+
+#customer error messages
+error-unlogin=用户未登录!
+error-unsecure=为了确保用户资料安全，请登陆。
+error-nopermit=用户没有权限!
+error-email-is-used=电子邮件地址已经被使用。
+error-data-is-updated=该数据 已经在{0,date,yyyy/MM/dd HH:mm:ss}被[{1}]更新过。
+error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址[{0}]是否正确。
+error-file-upload=文件上传失敗。
+
+#info messages
+message-cart-empty=购物篮里面没有商品。
+message-file-uploading=文件上传中...
+message-processing=处理中...
+message-processed=处理成功。
+
+#confirm messages
+confirm-data-overwrite=您确定覆写该数据吗？
+
+
+#action messages
+action-confirm-cancel=您确定取消该数据吗？
+action-failed-cancel=该数据取消失败。\n{0}
+action-success-cancel=该数据被成功取消。
+
+action-confirm-copy=您确定登录该数据吗？
+action-failed-copy=该数据登录失败。\n{0}
+action-success-copy=该数据被成功登录。
+
+action-confirm-delete=您确定删除该数据吗？
+action-failed-delete=该数据删除失败。\n{0}
+action-success-delete=该数据被成功删除。
+
+action-confirm-insert=您确定登录该数据吗？
+action-failed-insert=该数据登录失败。\n{0}
+action-success-insert=该数据被成功登录。
+
+action-confirm-update=您确定变更该数据吗？
+action-failed-update=该数据变更失败。\n{0}
+action-success-update=该数据被成功变更。
+
+
+action-confirm-bcancel=您确定取消这{0}件数据吗？
+action-failed-bcancel=数据取消失败。\n{0}
+action-success-bcancel={0}件数据被成功取消。
+
+action-confirm-bdelete=您确定删除这{0}件数据吗？
+action-failed-bdelete=数据删除失败。\n{0}
+action-success-bdelete={0}件数据被成功删除。
+
+action-confirm-bupdate=您确定变更这{0}件数据吗？
+action-failed-bupdate=数据变更失败。\n{0}
+action-success-bupdate={0}件数据被成功变更。
+
+
+#title
+title-error=错误
+title-reload={0}「重新加载确认」
+title-reloaded={0}「重新加载结果」
+
+
+#tooltip
+tooltip-add=追加
+tooltip-cancel=取消
+tooltip-copy=复写
+tooltip-delete=删除
+tooltip-edit=编辑
+tooltip-insert=登录
+tooltip-selectAll=全部选择
+tooltip-selectNone=不选择任何项目
+tooltip-update=变更
+
+
+#placeholder
+placeholder-search=检索...
+
+#text
+text-copy-to-clipboard=拷贝至剪贴板
+
+
+#button
+button-home=主页
+button-toHome=返回主页
+button-login=登录
+button-toLogin=登录画面
+button-signin=登录
+button-toSignin=登录画面
+
+button-shopping=继续购物
+button-layoutPC=PC版显示
+button-layoutMB=手机版显示
+
+button-change=变更
+button-add=追加
+button-approve=批准
+button-back=返回
+button-clear=清除
+button-close=关闭
+button-confirm=确认
+button-json=JSON汇出
+button-csv=CSV汇出
+button-deny=否决
+button-execute=实行
+button-pdf=PDF打印
+button-pdf-print=PDF打印
+button-pdf-list_print=PDF打印
+button-disable=无效
+button-edit=编辑
+button-list=浏览
+button-next=下一步
+button-print=印刷画面
+button-refresh=刷新
+button-reload=重新加载
+button-reset=重置
+button-save=保存
+button-search=检索
+button-selectAll=全部选择
+button-selectNone=取消选择
+button-status=状态
+button-stop=停止
+button-submit=提交
+button-view=显示
+button-xml=XML汇出
+
+button-cancel=取消
+button-cancel-confirm=确认
+button-cancel-execute=提交
+button-copy=复写
+button-copy-confirm=确认
+button-copy-execute=提交
+button-delete=删除
+button-delete-confirm=確認
+button-delete-execute=删除
+button-insert=追加
+button-insert-confirm=确认
+button-insert-execute=提交
+button-import=汇入
+button-import-confirm=確認
+button-import-execute=汇入执行
+button-update=修改
+button-update-confirm=确认
+button-update-execute=提交
+
+button-bcancel=取消
+button-bcancel-confirm=確認
+button-bcancel-execute=提交
+button-bdelete=删除
+button-bdelete-confirm=確認
+button-bdelete-execute=删除
+button-bupdate=修改
+button-bupdate-confirm=确认
+button-bupdate-execute=提交
+
+
+#title
+title-list={0} - 浏览
+title-list_csv={0} - 列表_${assist.csvFileTime}
+title-list_popup={0} - 浏览
+title-list_print={0} - 浏览
+title-view={0} - 显示
+title-print={0} - 显示
+
+title-cancel={0} - 取消
+title-cancel_confirm={0} - 取消 ⇒ 确认
+title-cancel_success={0} - 取消 ⇒ 完成
+title-copy={0} - 登录
+title-copy_confirm={0} - 登录 ⇒ 确认
+title-copy_success={0} - 登录 ⇒ 完成
+title-delete={0} - 删除
+title-delete_confirm={0} - 删除 ⇒ 确认
+title-delete_success={0} - 删除 ⇒ 完成
+title-insert={0} - 登录
+title-insert_confirm={0} - 登录 ⇒ 确认
+title-insert_success={0} - 登录 ⇒ 完成
+title-update={0} - 变更
+title-update_confirm={0} - 变更 ⇒ 确认
+title-update_success={0} - 变更 ⇒ 完成
+
+title-bcancel={0} - 取消
+title-bcancel_confirm={0} - 取消 ⇒ 确认
+title-bcancel_success={0} - 取消 ⇒ 完成
+title-bdelete={0} - 删除
+title-bdelete_confirm={0} - 删除 ⇒ 确认
+title-bdelete_success={0} - 删除 ⇒ 完成
+title-bupdate={0} - 变更
+title-bupdate_confirm={0} - 变更 ⇒ 确认
+title-bupdate_success={0} - 变更 ⇒ 完成
+
+#step
+step-cancel_input=输入
+step-cancel_confirm=取消确认
+step-cancel_success=取消完成
+step-copy_input=输入
+step-copy_confirm=确认
+step-copy_success=完成
+step-delete_input=输入
+step-delete_confirm=删除确认
+step-delete_success=删除完成
+step-insert_input=输入
+step-insert_confirm=确认
+step-insert_success=完成
+step-update_input=输入
+step-update_confirm=确认
+step-update_success=完成
+

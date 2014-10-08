@@ -3,7 +3,7 @@ package panda.mvc;
 import javax.servlet.ServletContext;
 
 import panda.bean.Beans;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.filepool.FileItemCastor;
 
 /**

@@ -3,7 +3,7 @@ package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.validator.CreditCardNumberValidator;
+import panda.util.validator.CreditCardNumberValidator;
 
 
 @IocBean(singleton=false)

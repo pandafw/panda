@@ -1,4 +1,4 @@
-package panda.servlet.filters;
+package panda.servlet.filter;
 
 import java.io.File;
 import java.io.FileOutputStream;

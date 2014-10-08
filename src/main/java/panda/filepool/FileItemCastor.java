@@ -1,11 +1,11 @@
 package panda.filepool;
 
-import panda.castor.CastContext;
-import panda.castor.castors.AbstractObjectCastor;
+import panda.cast.CastContext;
+import panda.cast.castor.AnySingleCastor;
 import panda.lang.Numbers;
 
 
-public class FileItemCastor extends AbstractObjectCastor<FileItem> {
+public class FileItemCastor extends AnySingleCastor<FileItem> {
 	public static final String KEY = FilePool.class.getName();
 	
 	public FileItemCastor() {

@@ -9,8 +9,8 @@ import java.util.Map.Entry;
 
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
-import panda.castor.CastContext;
-import panda.castor.Castors;
+import panda.cast.CastContext;
+import panda.cast.Castors;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -47,33 +47,6 @@ import panda.mvc.validation.validator.VisitorValidator;
 
 @IocBean(type=Validators.class)
 public class DefaultValidators implements Validators {
-	// -------------------------------------------------------
-	// alias
-	//
-	public static final String CAST = "cast";
-	public static final String REQUIRED = "required";
-	public static final String EMPTY = "empty";
-
-	public static final String EL = "el";
-	public static final String REGEX = "regex";
-	public static final String EMAIL = "email";
-	public static final String FILENAME = "filename";
-	public static final String CREDITCARDNO = "creditcardno";
-
-	public static final String BINARY = "binary";
-	public static final String DATE = "date";
-	public static final String NUMBER = "number";
-	public static final String STRING = "string";
-	public static final String DECIMAL = "decimal";
-
-	public static final String FILE = "file";
-	public static final String IMAGE = "image";
-
-	public static final String CONSTANT = "constant";
-	public static final String PROHIBITED = "prohibited";
-
-	public static final String VISITOR = "visitor";
-
 	// -------------------------------------------------------
 	@IocInject(required=false)
 	private Castors castors = Castors.i();

@@ -1,4 +1,4 @@
-package panda.util.bean;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,14 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 /**
  * Filter bean object
  * @author yf.frank.wang@gmail.com
  */
-@SuppressWarnings({ "unchecked", "serial" })
 public class Filter implements Cloneable, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * constructor
@@ -132,6 +137,7 @@ public class Filter implements Cloneable, Serializable {
 	private List values;
 	private String type;
 
+	@SuppressWarnings("unchecked")
 	private <T> T getObject(int idx, Class<T> cls) {
 		if (values == null || values.size() <= idx) {
 			return null;
@@ -144,6 +150,7 @@ public class Filter implements Cloneable, Serializable {
 		return cls.isAssignableFrom(v.getClass()) ? (T)v : null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setObject(int idx, Object o) {
 		if (o == null) {
 			return;
@@ -264,6 +271,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the booleanValues
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Boolean> getBooleanValues() {
 		return (List<Boolean>)values;
 	}
@@ -307,6 +315,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dateValues
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Date> getDateValues() {
 		return (List<Date>)values;
 	}
@@ -350,6 +359,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the numberValues
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Number> getNumberValues() {
 		return (List<Number>)values;
 	}
@@ -393,6 +403,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the stringValues
 	 */
+	@SuppressWarnings("unchecked")
 	public List<String> getStringValues() {
 		return (List<String>)values;
 	}
@@ -460,6 +471,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the comparison
 	 */
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'lt', 'le', 'gt', 'ge', 'eq', 'bt', 'lk', 'mt', 'lm', 'rm', 'in' ]}", msgId=Validators.MSG_CONSTANT))
 	public String getC() {
 		return getComparator();
 	}
@@ -509,6 +521,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bvs
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
 	public List<Boolean> getBvs() {
 		return getBooleanValues();
 	}
@@ -523,6 +536,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bv
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
 	public Boolean getBv() {
 		return getBooleanValue();
 	}
@@ -537,6 +551,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bv2
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
 	public Boolean getBv2() {
 		return getBooleanValue2();
 	}
@@ -551,6 +566,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dvs
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE))
 	public List<Date> getDvs() {
 		return getDateValues();
 	}
@@ -565,6 +581,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dv
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE))
 	public Date getDv() {
 		return getDateValue();
 	}
@@ -579,6 +596,10 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dv2
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE),
+		@Validate(value=Validators.EL, params="top.dv2 > top.parent.value.dv", msgId=Validators.MSG_DATE_RANGE_TO)
+	})
 	public Date getDv2() {
 		return getDateValue2();
 	}
@@ -593,6 +614,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the nvs
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER))
 	public List<Number> getNvs() {
 		return getNumberValues();
 	}
@@ -607,6 +629,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the nv
 	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER))
 	public Number getNv() {
 		return getNumberValue();
 	}
@@ -621,6 +644,10 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the nv2
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER),
+		@Validate(value=Validators.EL, params="top.value > top.parent.value.nv", msgId=Validators.MSG_NUMBER_RANGE_TO)
+	})
 	public Number getNv2() {
 		return getNumberValue2();
 	}
@@ -675,42 +702,29 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-     * @return  a string representation of the object.
+	 * @return a string representation of the object.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{ ");
-		sb.append("name: ").append(name);
-		sb.append(", ");
-		sb.append("comparator: ").append(comparator);
-		sb.append(", ");
-		sb.append("type: ").append(type);
-		sb.append(", ");
-		sb.append("values: ").append(values);
-		sb.append(" }");
-		
-		return sb.toString();
+		return Objects.toStringBuilder()
+				.append("name", name)
+				.append("comparator", comparator)
+				.append("values", values)
+				.append("type", type)
+				.toString();
 	}
 
 	/**
-     * @return  a hash code value for this object.
+	 * @return a hash code value for this object.
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((comparator == null) ? 0 : comparator.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((values == null) ? 0 : values.hashCode());
-		return result;
+		return Objects.hashCodes(name, comparator, values, type);
 	}
 
 	/**
-     * @return  <code>true</code> if this object is the same as the obj argument; 
-     * 			<code>false</code> otherwise.
+	 * @return <code>true</code> if this object is the same as the obj argument; <code>false</code>
+	 *         otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -720,38 +734,21 @@ public class Filter implements Cloneable, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Filter other = (Filter) obj;
-		if (comparator == null) {
-			if (other.comparator != null)
-				return false;
-		}
-		else if (!comparator.equals(other.comparator))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		}
-		else if (!type.equals(other.type))
-			return false;
-		if (values == null) {
-			if (other.values != null)
-				return false;
-		}
-		else if (!values.equals(other.values))
-			return false;
-		return true;
+		
+		Filter rhs = (Filter) obj;
+		return Objects.equalsBuilder()
+				.append(name, rhs.name)
+				.append(comparator, rhs.comparator)
+				.append(values, rhs.values)
+				.append(type, rhs.type)
+				.isEquals();
 	}
 
 	/**
 	 * Clone
 	 * @return Clone Object
 	 */
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		Filter clone = new Filter();
 		

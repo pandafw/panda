@@ -1,0 +1,389 @@
+#########################################################################
+#boolean
+boolean-format=0#×|1#○
+
+#date
+date-format=yyyy/MM/dd HH:mm:ss.SSS
+date-format-timestamp=yyyy/MM/dd HH:mm:ss.SSS
+date-format-datetime=yyyy/MM/dd HH:mm:ss
+date-format-date=yyyy/MM/dd
+date-format-time=HH:mm:ss
+
+date-timezone=Asia/Tokyo
+
+#number
+number-format-currency=#,###
+
+#password
+password-format=●●●●●●
+
+#pager - total, start(0-index), begin, end, count, limit, page, pages
+pager-label-info=$(begin)~$(end)/全$(total)件
+pager-label-infoz=$(begin)件~$(end)件
+pager-label-empty=-- データありません --
+pager-label-limit=表示件数：
+pager-tooltip-prev=&lt; 前の{0}件
+pager-tooltip-next=次の{0}件 &gt;
+pager-tooltip-first=≪ 最初のページ
+pager-tooltip-last=最後のページ ≫
+
+
+#listview - filters
+listview-filters-caption=検索条件
+listview-filters-label-add=検索条件の追加
+listview-filters-button-query=検索
+listview-filters-button-clear=クリア
+listview-filters-label-method=検索方法
+
+
+listview-filter-bools=\
+	"true":  "はい", \
+	"false": "いいえ" 
+
+listview-filter-strings=\
+	"mt": "を含む", \
+	"lm": "で始まる", \
+	"rm": "で終わる", \
+	"ge": "より大きい", \
+	"le": "より小さい", \
+	"eq": "で一致する", \
+	"ne": "で一致しない"
+#	, \
+#	"lk": "をLIKEする", \
+#	"nk": "をLIKEしない"
+
+
+#const
+const-booleans=\
+	"true": "はい", \
+	"false": "いいえ"
+	
+const-genders=\
+	"F": "女", \
+	"M": "男"
+
+
+#servlet error
+servlet-error-title-404=ページ表示エラー
+servlet-error-title-403=ページアクセスエラー
+servlet-error-title-500=サーバー内部処理エラー
+servlet-error-title-503=サーバー過負荷
+servlet-error-message-404=該当ページが存在していません。
+servlet-error-message-403=該当ページにアクセスする権限がありません。
+servlet-error-message-500=サーバー内部処理エラーが発生しているため、該当ページが表示できません。\n\
+F5キーで画面リフレッシュをして、同じエラーが表示される場合、サイト管理者に連絡してください。
+servlet-error-message-503=サーバー過負荷のため、該当ページが表示できません。\n\
+しばらくお待ちしてから、再度アクセスしてください。
+servlet-error-request-url=リクエスト: <span class="request-url">{0}</span>
+servlet-error-exception=例外情報:
+
+
+#invalid.fieldvalue.xxx=
+xwork.default.invalid.fieldvalue=項目の値が正しくありません。
+
+#validation error message
+validation-incorrect=項目の値が正しくありません。
+validation-empty=項目の値は空ではありません。
+validation-required=必須項目です。
+validation-requiredcollection=必須項目です。
+validation-requiredstring=必須項目です。
+validation-requiredfile=ファイルを指定してください。
+validation-requiredimage=画像ファイルを指定してください。
+validation-binarylength=入力バイト数(${binSize})が\
+${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize + "以内") : \
+(minLength != null ? (minBinSize + "以上") : \
+(maxLength != null ? (maxBinSize + "以下") : ""))}\
+で入力してください。
+validation-daterange=${(min != null && max != null) ? (min + "~" + max + "以内") : \
+(min != null ? (min + "以後") : \
+(max != null ? (max + "以前") : ""))}\
+の日付を入力してください。
+validation-numberrange=${(min != null && max != null) ? (min + "~" + max + "以内") : \
+(min != null ? (min + "以上") : \
+(max != null ? (max + "以下") : ""))}\
+の数字を入力してください。
+validation-filelength=ファイルサイズ(${fileSize})が\
+${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize + "以内") : \
+(minLength != null ? (minFileSize + "以上") : \
+(maxLength != null ? (maxFileSize + "以下") : ""))}\
+のファイルを指定してください。
+validation-image=画像ファイルのフォーマットが正しくありません。
+validation-imagesize=画像サイズが(${width}x${height})が\
+${(minWidth != null && maxWidth != null) ? ("幅" + minWidth + "~" + maxWidth + "以内") : \
+(minWidth != null ? ("幅" + minWidth + "以上") : \
+(maxWidth != null ? ("幅" + maxWidth + "以下") : ""))}\
+${((minWidth != null || maxWidth != null) && (minHeight != null || maxHeight != null)) ? "、" : ""}\
+${(minHeight != null && maxHeight != null) ? ("高さ" + minHeight + "~" + maxHeight + "以内") : \
+(minHeight != null ? ("高さ" + minHeight + "以上") : \
+(maxHeight != null ? ("高さ" + maxHeight + "以下") : ""))}\
+の画像ファイルを指定してください。
+validation-stringlength=入力文字数(${length})が\
+${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength + "文字以内") : \
+(minLength != null ? (minLength + "文字以上") : \
+(maxLength != null ? (maxLength + "文字以下") : ""))}\
+で入力してください。
+validation-precision="整数${precision-scale}.小数${scale}"の形式で入力してください。
+validation-constant=${constants}中の値を選んでください。
+validation-prohibited=${constants}中の値が入力不可です。
+validation-alphastring=英文字を入力してください。
+validation-numericstring=数字を入力してください。
+validation-alphanumericstring=英数字を入力してください。
+validation-creditcardnumber=正しいクレジットカード番号を"XXXX-XXXX-XXXX-XXXX"の形で入力してください。
+validation-hankakustring=半角文字を入力してください。
+validation-hankakukatakanastring=半角カナを入力してください。
+validation-zenkakustring=全角文字を入力してください。
+validation-zenkakukatakanastring=全角カタカナを入力してください。
+validation-email=メールアドレスを"user@domain.com"の形式で入力してください。
+validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
+validation-url=URLを"http://www.domain.com"の形式で入力してください。
+validation-zipcode=郵便番号を"123-4567"の形式で入力してください。
+validation-phonenumber=電話番号を"1234-5678-9999"の形式で入力してください。
+validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
+validation-futuredate=未来の日付を入力できません。
+validation-passeddate=過去の日付を入力できません。
+validation-regex=項目の値が正規表現式"${expression}"にマーチできません。
+validation-fieldexpression=項目の値がOGNL式"${expression}"にマーチできません。
+validation-compare=項目の値が${(comparator == "eq" ? "=" : \
+(comparator == "le" ? "<" : \
+(comparator == "lt" ? "<=" : \
+(comparator == "ge" ? ">" : \
+(comparator == "gt" ? "<" : "")))))}\
+項目「${target}」になっていません。
+validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
+validation-compare-numberrange-to=数字範囲の設定が正しくありません。
+
+validation-conversion=項目の値が正しくありません。
+validation-conversion-Boolean=trueまたはfalseを入力してください。
+validation-conversion-Byte=整数を入力してください。
+validation-conversion-Char=文字を入力してください。
+validation-conversion-Short=整数を入力してください。
+validation-conversion-Integer=整数を入力してください。
+validation-conversion-Long=整数を入力してください。
+validation-conversion-BigInteger=整数を入力してください。
+validation-conversion-Float=数字を入力してください。
+validation-conversion-Double=数字を入力してください。
+validation-conversion-BigDecimal=数字を入力してください。
+validation-conversion-Number=数字を入力してください。
+validation-conversion-Date=日付形式"yyyy/MM/dd"で入力してください。
+
+#custom validation error message
+validation-email-notsame=メールアドレスが一致していません。
+validation-password=パスワードが英数字で入力してください。
+validation-password-notsame=パスワードが一致していません。
+validation-password-incorrect=パスワードが正しくありません。
+validation-locale-invalid=言語と国・地域の組合せは正しくありません。
+
+
+#error messages
+error-input=入力した内容に誤りがあります。
+error-input-detail=エラー詳細
+error-data-notfound=データが見つかりません。
+error-data-list-empty=対象データがありません。
+error-data-duplicate=該当データが既に登録されています。\n{0}
+error-fieldvalue-notnull=項目の値は空ではありません。
+error-fieldvalue-required=必須項目です。
+error-fieldvalue-incorrect=項目の値が不正です。
+error-fieldvalue-duplicate=項目の値が重複です。
+error-file-notfound=ファイル"{0}"が見つかりません。
+
+#customer error messages
+error-unlogin=ログインしていません!
+error-unsecure=安全性を確保するため、ログインしてください。
+error-nopermit=権限ありません!
+error-email-is-used=入力したメールアドレスは既に登録されています。
+error-data-is-updated=該当データが {0,date,yyyy/MM/dd HH:mm:ss} [{1}]に更新されました。
+error-sendmail=<{0}>にメール送信が失敗しました。\nメールアドレスが正しいかどうかを確認してください。
+error-file-upload=ファイル転送失敗しました。
+
+#info messages
+message-cart-empty=ショッピングカートの中に商品がありません。
+message-file-uploading=ファイル転送中...
+message-processing=処理中...
+message-processed=処理完了。
+
+#confirm messages
+confirm-data-overwrite=データを上書きして宜しいでしょうか？
+
+#action messages
+action-confirm-cancel=データを取消して宜しいでしょうか？
+action-failed-cancel=該当データを取消できませんでした。\n{0}
+action-success-cancel=データを取消しました。
+
+action-confirm-copy=データを登録して宜しいでしょうか？
+action-failed-copy=該当データを新規できませんでした。\n{0}
+action-success-copy=データを登録しました。
+
+action-confirm-delete=データを削除して宜しいでしょうか？
+action-failed-delete=該当データを削除できませんでした。\n{0}
+action-success-delete=データを削除しました。
+
+action-confirm-insert=データを登録して宜しいでしょうか？
+action-failed-insert=該当データを新規できませんでした。\n{0}
+action-success-insert=データを登録しました。
+
+action-confirm-update=データを変更して宜しいでしょうか？
+action-failed-update=該当データを変更できませんでした。\n{0}
+action-success-update=データを変更しました。
+
+action-confirm-bcancel=これらの{0}件のデータを取消して宜しいでしょうか？
+action-failed-bcancel=これらのデータを取消できませんでした。\n{0}
+action-success-bcancel={0}件のデータを取消しました。
+
+action-confirm-bdelete=これらの{0}件のデータを削除して宜しいでしょうか？
+action-failed-bdelete=これらのデータを削除できませんでした。\n{0}
+action-success-bdelete={0}件のデータを削除しました。
+
+action-confirm-bupdate=これらの{0}件のデータを変更して宜しいでしょうか？
+action-failed-bupdate=これらのデータを変更できませんでした。\n{0}
+action-success-bupdate={0}件のデータを変更しました。
+
+
+
+#tooltip
+tooltip-add=追加
+tooltip-cancel=取消
+tooltip-copy=複写
+tooltip-delete=削除
+tooltip-edit=編集
+tooltip-insert=新規
+tooltip-selectAll=すべて選択
+tooltip-selectNone=未選択の状態にします
+tooltip-update=変更
+
+#placeholder
+placeholder-search=検索...
+
+#text
+text-copy-to-clipboard=コピー
+
+#button
+button-home=ホーム
+button-toHome=ホームへ
+button-login=ログイン
+button-toLogin=ログイン画面へ
+button-signin=サインイン
+button-toSignin=サインイン画面へ
+
+button-shopping=ショッピングを続ける
+button-layoutPC=PCサイトに切り替える
+button-layoutMB=モバイルサイトに切り替える
+
+button-back=戻る
+button-next=次へ
+
+button-add=追加
+button-change=変更
+button-clear=クリア
+button-close=閉じる
+
+button-approve=承認
+button-deny=否認
+
+button-disable=無効
+button-confirm=確認
+button-execute=実行
+
+button-csv=CSV出力
+button-json=JSON出力
+button-pdf=PDF出力
+button-pdf-print=PDF出力
+button-pdf-list_print=PDF出力
+
+button-edit=編集
+button-list=一覧へ
+button-print=印刷画面
+button-refresh=最新情報に更新
+button-reload=リロード
+button-reset=リセット
+button-save=保存
+button-search=検索
+button-select-all=全選択
+button-select-none=全解除
+button-status=ステータス
+button-stop=停止
+button-submit=保存
+button-view=照会
+button-xml=XML出力
+
+button-cancel=取消
+button-cancel-confirm=確認画面へ
+button-cancel-execute=取消
+button-copy=複写
+button-copy-confirm=確認画面へ
+button-copy-execute=登録
+button-delete=削除
+button-delete-confirm=確認画面へ
+button-delete-execute=削除
+button-insert=新規
+button-insert-confirm=確認画面へ
+button-insert-execute=登録
+button-import=インポート
+button-import-confirm=確認画面へ
+button-import-execute=インポート
+button-update=変更
+button-update-confirm=確認画面へ
+button-update-execute=登録
+
+button-bcancel=取消
+button-bcancel-confirm=確認画面へ
+button-bcancel-execute=取消
+button-bdelete=削除
+button-bdelete-confirm=確認画面へ
+button-bdelete-execute=削除
+button-bupdate=変更
+button-bupdate-confirm=確認画面へ
+button-bupdate-execute=変更
+
+
+#title
+title-error=エラー
+title-reload={0}「リロード確認」
+title-reloadex={0}「リロード結果」
+
+title-list={0} - 一覧
+title-list_csv={0} - 一覧_${assist.csvFileTime}
+title-list_popup={0} - 一覧
+title-list_print={0} - 一覧
+title-view={0} - 照会
+title-print={0} - 照会
+title-cancel={0} - 取消
+title-cancel_confirm={0} - 取消 ⇒ 確認
+title-cancel_success={0} - 取消 ⇒ 完了
+title-copy={0} - 新規
+title-copy_confirm={0} - 新規 ⇒ 確認
+title-copy_success={0} - 新規 ⇒ 完了
+title-delete={0} - 削除
+title-delete_success={0} - 削除 ⇒ 完了
+title-insert={0} - 新規
+title-insert_confirm={0} - 新規 ⇒ 確認
+title-insert_success={0} - 新規 ⇒ 完了
+title-update={0} - 変更
+title-update_confirm={0} - 変更 ⇒ 確認
+title-update_success={0} - 変更 ⇒ 完了
+
+title-bcancel={0} - 取消
+title-bcancel_confirm={0} - 取消 ⇒ 確認
+title-bcancel_success={0} - 取消 ⇒ 完了
+title-bdelete={0} - 削除
+title-bdelete_confirm={0} - 削除 ⇒ 確認
+title-bdelete_success={0} - 削除 ⇒ 完了
+title-bupdate={0} - 変更
+title-bupdate_confirm={0} - 変更 ⇒ 確認
+title-bupdate_success={0} - 変更 ⇒ 完了
+
+#step
+step-cancel_input=入力
+step-cancel_confirm=取消確認
+step-cancel_success=取消完了
+step-copy_input=入力
+step-copy_confirm=確認
+step-copy_success=完了
+step-delete_input=入力
+step-delete_confirm=削除確認
+step-delete_success=削除完了
+step-insert_input=入力
+step-insert_confirm=確認
+step-insert_success=完了
+step-update_input=入力
+step-update_confirm=確認
+step-update_success=完了

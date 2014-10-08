@@ -1,7 +1,7 @@
 package panda.mvc.impl;
 
 import panda.bind.json.JsonObject;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
 import panda.lang.Strings;

@@ -1,4 +1,4 @@
-package panda.util.bean;
+package panda.mvc.bean;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 /**
  * Query bean object
@@ -134,6 +137,7 @@ public class CompositeQuery implements Cloneable, Serializable {
 	/**
 	 * @return the method
 	 */
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'and', 'or' ]}", msgId=Validators.MSG_CONSTANT))
 	public String getM() {
 		return method;
 	}
@@ -148,6 +152,7 @@ public class CompositeQuery implements Cloneable, Serializable {
 	/**
 	 * @return the filters
 	 */
+	@Validates
 	public Map<String, Filter> getFs() {
 		return filters;
 	}

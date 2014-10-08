@@ -22,9 +22,10 @@ import panda.mvc.validation.annotation.Validate;
 
 @IocBean(singleton=false)
 public class VisitorValidator extends AbstractValidator {
-	protected static class NameFieldValidator extends AbstractValidator {
-		public NameFieldValidator(Validator parent) {
+	protected static class ParentValidator extends AbstractValidator {
+		public ParentValidator(Validator parent, Object value) {
 			setParent(parent);
+			setValue(value);
 		}
 		
 		@Override
@@ -102,14 +103,16 @@ public class VisitorValidator extends AbstractValidator {
 	
 	private boolean validateMapElements(ActionContext ac, Map map) {
 		boolean r = true;
-		NameFieldValidator nfv = new NameFieldValidator(this);
+
+		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
 		for (Iterator it = map.entrySet().iterator(); it.hasNext(); ) {
 			Entry es = (Entry)it.next();
 			Object k = es.getKey();
 			Object o = es.getValue();
 			if (k != null && o != null) {
-				nfv.setName(k.toString());
-				if (!validateObject(ac, nfv, o)) {
+				vv.setParent(this);
+				vv.setName(k.toString());
+				if (!vv.validate(ac, o)) {
 					r = false;
 					if (isShortCircuit()) {
 						return false;
@@ -122,12 +125,13 @@ public class VisitorValidator extends AbstractValidator {
 
 	private boolean validateArrayElements(ActionContext ac, Object[] array) {
 		boolean r = true;
-		NameFieldValidator nfv = new NameFieldValidator(this);
+
+		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
 		for (int i = 0; i < array.length; i++) {
 			Object o = array[i];
 			if (o != null) {
-				nfv.setName('[' + String.valueOf(i) + ']');
-				if (!validateObject(ac, nfv, o)) {
+				vv.setName('[' + String.valueOf(i) + ']');
+				if (!vv.validate(ac, o)) {
 					r = false;
 					if (isShortCircuit()) {
 						return false;
@@ -140,12 +144,13 @@ public class VisitorValidator extends AbstractValidator {
 
 	private boolean validateCollectionElements(ActionContext ac, Collection coll) {
 		boolean r = true;
-		NameFieldValidator nfv = new NameFieldValidator(this);
+
+		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
 		int i = 0;
 		for (Object o : coll) {
 			if (o != null) {
-				nfv.setName('[' + String.valueOf(i) + ']');
-				if (!validateObject(ac, nfv, o)) {
+				vv.setName('[' + String.valueOf(i) + ']');
+				if (!vv.validate(ac, o)) {
 					r = false;
 					if (isShortCircuit()) {
 						return false;

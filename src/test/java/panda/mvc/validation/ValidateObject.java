@@ -12,6 +12,6 @@ public class ValidateObject {
 	@Validates(@Validate(value="number", params="{min: -100, max: 100}", message="${top.length} / ${top.min} ~ ${top.max}"))
 	public int number;
 	
-	@Validates(@Validate(value="email", message="${top.value} is not a email"))
+	@Validates(@Validate(value="email", message="'${top.value}' is not a email"))
 	public String email;
 }
