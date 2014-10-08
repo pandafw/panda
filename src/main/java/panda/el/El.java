@@ -17,10 +17,15 @@ public class El {
 	 * compile
 	 */
 	public El(CharSequence cs) {
-		expr = cs;
-		ShuntingYard sy = new ShuntingYard();
-		Queue<Object> que = sy.parseToRPN(cs.toString());
-		rpn = new RPN(que);
+		try {
+			expr = cs;
+			ShuntingYard sy = new ShuntingYard();
+			Queue<Object> que = sy.parseToRPN(cs.toString());
+			rpn = new RPN(que);
+		}
+		catch (Exception e) {
+			throw new ElException("Failed to parse El expression '" + cs + "'", e);
+		}
 	}
 
 	/**
@@ -72,7 +77,12 @@ public class El {
 	}
 
 	public static Object eval(String expr, Object context) {
-		return get(expr).eval(context);
+		try {
+			return get(expr).eval(context);
+		}
+		catch (Exception e) {
+			throw new ElException("Failed to eval('" + expr + "', " + (context == null ? "null" : context.getClass()) + ")", e);
+		}
 	}
 
 	/**

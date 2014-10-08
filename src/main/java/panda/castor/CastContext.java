@@ -103,8 +103,9 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	 * @return has error
 	 */
 	public boolean hasError() {
-		return Collections.isEmpty(errors);
+		return Collections.isNotEmpty(errors);
 	}
+	
 	//----------------------------------------------------
 	public Object get(String key) {
 		if (context == null) {
