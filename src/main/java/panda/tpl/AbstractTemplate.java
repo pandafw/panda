@@ -1,23 +1,15 @@
 package panda.tpl;
 
-import java.io.IOException;
-
-import panda.lang.Exceptions;
 
 public abstract class AbstractTemplate implements Template {
 
-	public String evaluate() {
+	public String evaluate() throws TemplateException {
 		return evaluate((Object)null);
 	}
 	
-	public String evaluate(Object context) {
+	public String evaluate(Object context) throws TemplateException {
 		StringBuilder sb = new StringBuilder();
-		try {
-			evaluate(sb, context);
-		}
-		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		evaluate(sb, context);
 		return sb.toString();
 	}
 

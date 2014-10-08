@@ -3,64 +3,63 @@ package panda.el;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import panda.lang.Asserts;
+import panda.lang.collection.LRUMap;
 import panda.tpl.AbstractTemplate;
 import panda.tpl.TemplateException;
 
 public class ElTemplate extends AbstractTemplate {
+	private static Map<String, ElTemplate> cache = new LRUMap<String, ElTemplate>(1000);
+	
 	private List<Object> segments;
 
-	public ElTemplate(String expression) {
+	public ElTemplate(String expression) throws TemplateException {
 		this(expression, '$');
 	}
 
-	public ElTemplate(String expression, char prefix) {
+	public ElTemplate(String expression, char prefix) throws TemplateException {
 		this(expression, prefix, '{', '}');
 	}
 
-	public ElTemplate(String expression, char prefix, char open, char close) {
-		Asserts.notNull(expression);
+	public ElTemplate(String expr, char prefix, char open, char close) throws TemplateException {
+		Asserts.notNull(expr);
 		
 		segments = new ArrayList<Object>();
 		
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < expression.length(); i++) {
-			char c = expression.charAt(i);
-			if (c == prefix && i < expression.length() - 1 && expression.charAt(i + 1) == open) {
-				String exp = null;
+		int x = 0, len = expr.length();
+		for (int i = 0; i < len; i++) {
+			char c = expr.charAt(i);
+			if (c == prefix && i < len - 1 && expr.charAt(i + 1) == open) {
+				String el = null;
 				int j = i + 2;
-				for (; j < expression.length(); j++) {
-					if (expression.charAt(j) == close) {
-						exp = expression.substring(i + 2, j);
+				for (; j < len; j++) {
+					if (expr.charAt(j) == close) {
+						el = expr.substring(i + 2, j);
 						break;
 					}
 				}
-				if (exp == null) {
-					throw new IllegalArgumentException("Illegal statement (" + i + "): unexpected end of tag reached.");
+				if (el == null) {
+					throw new TemplateException("Illegal statement (" + i + "): unexpected end of tag reached.");
 				}
-				else if (exp.length() < 1) {
-					throw new IllegalArgumentException("Illegal statement (" + i + "): the paramenter can not be empty.");
+				else if (el.length() < 1) {
+					throw new TemplateException("Illegal statement (" + i + "): the paramenter can not be empty.");
 				}
 				
-				if (sb.length() > 0) {
-					segments.add(sb.toString());
-					sb.setLength(0);
+				if (i > x) {
+					segments.add(expr.substring(x, i));
 				}
 
-				El el = new El(exp);
-				segments.add(el);
+				segments.add(El.get(el));
 
 				i = j;
-			}
-			else {
-				sb.append(c);
+				x = i + 1;
 			}
 		}
 
-		if (sb.length() > 0) {
-			segments.add(sb.toString());
-			sb.setLength(0);
+		if (x < len) {
+			segments.add(expr.substring(x, len));
 		}
 	}
 
@@ -81,5 +80,41 @@ public class ElTemplate extends AbstractTemplate {
 		catch (IOException e) {
 			throw new TemplateException(e);
 		}
+	}
+	
+	//-----------------------------------------------------------------------
+	// static methods
+	//
+	private static ElTemplate get(String expression) throws TemplateException {
+		ElTemplate elt = cache.get(expression);
+		if (elt != null) {
+			return elt;
+		}
+		synchronized(cache) {
+			elt = cache.get(expression);
+			if (elt != null) {
+				return elt;
+			}
+			
+			elt = new ElTemplate(expression);
+			cache.put(expression, elt);
+			return elt;
+		}
+	}
+
+	public static String evaluate(String expression) throws TemplateException {
+		return get(expression).evaluate();
+	}
+	
+	public static String evaluate(String expression, Object context) throws TemplateException {
+		return get(expression).evaluate(context);
+	}
+
+	public static void evaluate(String expression, Appendable out) throws TemplateException {
+		get(expression).evaluate(out);
+	}
+
+	public static void evaluate(String expression, Appendable out, Object context) throws TemplateException {
+		get(expression).evaluate(out, context);
 	}
 }

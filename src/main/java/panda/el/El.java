@@ -1,11 +1,15 @@
 package panda.el;
 
+import java.util.Map;
 import java.util.Queue;
 
 import panda.el.arithmetic.RPN;
 import panda.el.arithmetic.ShuntingYard;
+import panda.lang.collection.LRUMap;
 
 public class El {
+	private static Map<String, El> cache = new LRUMap<String, El>(1000);
+	
 	private RPN rpn;
 	private CharSequence expr;
 
@@ -36,6 +40,25 @@ public class El {
 		return expr.toString();
 	}
 
+	//---------------------------------------------------------------
+	// static methods
+	//
+	public static El get(String expr) {
+		El el = cache.get(expr);
+		if (el != null) {
+			return el;
+		}
+		synchronized(cache) {
+			el = cache.get(expr);
+			if (el != null) {
+				return el;
+			}
+			el = new El(expr);
+			cache.put(expr, el);
+			return el;
+		}
+	}
+
 	public static El parse(String expr) {
 		return new El(expr);
 	}
@@ -49,7 +72,7 @@ public class El {
 	}
 
 	public static Object eval(Object context, String expr) {
-		return new El(expr).eval(context);
+		return get(expr).eval(context);
 	}
 
 	/**

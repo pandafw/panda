@@ -371,17 +371,38 @@ public class TextsTest {
 
 	// -----------------------------------------------------------------------
 	/**
-	 * test method: transform
+	 * test method: translate
 	 * @throws Exception if an error occurs
 	 */
 	@Test
-	public void testTransform() throws Exception {
+	public void testTranslate() throws Exception {
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("a", "1");
 		m.put("a.b", "2");
 		m.put("a.b.c", "3");
 		
 		assertEquals("1.23-${8}-xx", Texts.translate("${a}.${a.b}${a.b.c}-${8}-xx", m));
+	}
+
+	/**
+	 * test method: elTranslate
+	 * @throws Exception if an error occurs
+	 */
+	@Test
+	public void testElTranslate() throws Exception {
+		Map<String, Object> m = new HashMap<String, Object>();
+
+		Map<String, Object> a = new HashMap<String, Object>();
+		a.put("a", "aa");
+
+		Map<String, Object> b = new HashMap<String, Object>();
+		b.put("b", "bb");
+
+		m.put("a", a);
+		m.put("b", b);
+		m.put("c", "c");
+		
+		assertEquals("aa.bb.c-8-xx", Texts.elTranslate("${a.a}.${b.b}.${c}-${8}-xx", m));
 	}
 
 	// -----------------------------------------------------------------------

@@ -1,8 +1,7 @@
 package panda.tpl;
 
-import java.io.IOException;
 
-public class TemplateException extends IOException {
+public class TemplateException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

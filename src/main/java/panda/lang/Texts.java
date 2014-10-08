@@ -526,7 +526,7 @@ public abstract class Texts {
 		}
 		
 		public Object evaluate(String expression) {
-			return El.eval(context, expression);
+			return new El(expression).eval(context);
 		}
 	}
 	
@@ -558,7 +558,6 @@ public abstract class Texts {
 		Evaluator eva = new BeanEvaluator(wrapper);
 		return translate(expression, eva, prefix, '{', '}');
 	}
-
 	
 	/**
 	 * translate "${a}-${b}" with Map { "a": 1, "b": 2 } -> "1-2".
@@ -603,13 +602,15 @@ public abstract class Texts {
 			return expression;
 		}
 		
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < expression.length(); i++) {
+		int x = 0;
+		int len = expression.length();
+		StringBuilder sb = null;
+		for (int i = 0; i < len; i++) {
 			char c = expression.charAt(i);
-			if (c == prefix && i < expression.length() - 1 && expression.charAt(i + 1) == open) {
+			if (c == prefix && i < len - 1 && expression.charAt(i + 1) == open) {
 				String pn = null;
 				int j = i + 2;
-				for (; j < expression.length(); j++) {
+				for (; j < len; j++) {
 					if (expression.charAt(j) == close) {
 						pn = expression.substring(i + 2, j);
 						break;
@@ -623,23 +624,23 @@ public abstract class Texts {
 				}
 				
 				Object v = eval.evaluate(pn);
-				if (v == null) {
-					sb.append(prefix);
-					sb.append(open);
-					sb.append(pn);
-					sb.append(close);
-				}
-				else {
+				if (v != null) {
+					if (sb == null) {
+						sb = new StringBuilder();
+					}
+					sb.append(expression.substring(x, i));
 					sb.append(v);
+					x = j + 1;
 				}
 				i = j;
 			}
-			else {
-				sb.append(c);
-			}
 		}
 		
-		return sb.toString();
+		if (sb != null && x < len) {
+			sb.append(expression.substring(x, len));
+		}
+		
+		return sb == null ? expression : sb.toString();
 	}
 
 	// -----------------------------------------------------------------------
