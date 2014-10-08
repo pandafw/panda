@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.Beans;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.dao.entity.AnnotationEntityMaker;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;

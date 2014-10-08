@@ -9,8 +9,8 @@ import java.util.Set;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.castor.Castor;
-import panda.castor.Castors;
+import panda.cast.Castor;
+import panda.cast.Castors;
 import panda.lang.Arrays;
 import panda.lang.reflect.Types;
 

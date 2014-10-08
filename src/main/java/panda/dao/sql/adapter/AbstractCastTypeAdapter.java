@@ -1,7 +1,7 @@
 package panda.dao.sql.adapter;
 
-import panda.castor.Castor;
-import panda.castor.Castors;
+import panda.cast.Castor;
+import panda.cast.Castors;
 
 
 /**

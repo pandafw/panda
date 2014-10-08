@@ -10,8 +10,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import panda.castor.CastException;
-import panda.castor.Castors;
+import panda.cast.CastException;
+import panda.cast.Castors;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;

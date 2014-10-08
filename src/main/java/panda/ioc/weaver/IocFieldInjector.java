@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bean.PropertyInjector;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Injector;

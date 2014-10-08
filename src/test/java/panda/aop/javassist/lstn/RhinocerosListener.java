@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import panda.aop.interceptor.AbstractMethodInterceptor;
 import panda.aop.javassist.meta.Vegetarian;
-import panda.castor.Castors;
+import panda.cast.Castors;
 
 public class RhinocerosListener extends AbstractMethodInterceptor {
 

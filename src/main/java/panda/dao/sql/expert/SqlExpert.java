@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.dao.DB;
 import panda.dao.DaoClient;
 import panda.dao.DaoNamings;

@@ -6,7 +6,7 @@ import java.util.List;
 
 import panda.bind.xmlrpc.XmlRpcDocument;
 import panda.bind.xmlrpc.XmlRpcs;
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.time.StopWatch;

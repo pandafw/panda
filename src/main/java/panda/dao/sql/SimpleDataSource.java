@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.lang.Asserts;
 import panda.lang.Strings;
 import panda.log.Log;

@@ -5,8 +5,9 @@ import java.util.HashMap;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.bean.handlers.ListBeanHandler;
-import panda.bean.handlers.MapBeanHandler;
+import panda.bean.handler.ListBeanHandler;
+import panda.bean.handler.MapBeanHandler;
+
 import junit.framework.TestCase;
 
 public class BeansTest extends TestCase {

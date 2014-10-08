@@ -2,7 +2,7 @@ package panda.ioc.weaver;
 
 import java.lang.reflect.Type;
 
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.ioc.IocEventTrigger;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectWeaver;

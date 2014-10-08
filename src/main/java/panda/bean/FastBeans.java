@@ -11,7 +11,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import panda.bean.handlers.AbstractFastBeanHandler;
+import panda.bean.handler.AbstractFastBeanHandler;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.DynamicClassLoader;

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import panda.castor.Castors;
+import panda.cast.Castors;
 import panda.dao.DaoTypes;
 import panda.lang.collection.MultiKey;
 
