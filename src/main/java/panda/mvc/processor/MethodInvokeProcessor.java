@@ -11,7 +11,7 @@ public class MethodInvokeProcessor extends AbstractProcessor {
 	public void process(ActionContext ac) throws Throwable {
 		Object action = ac.getAction();
 		Method method = ac.getMethod();
-		Object args = ac.getArgs();
+		Object[] args = ac.getArgs();
 		try {
 			Object r = method.invoke(action, args);
 			ac.setResult(r);

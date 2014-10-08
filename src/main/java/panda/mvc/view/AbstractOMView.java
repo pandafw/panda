@@ -22,6 +22,8 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.mvc.aware.ActionAware;
+import panda.mvc.aware.ParamAware;
 import panda.servlet.HttpServletSupport;
 import panda.servlet.HttpServlets;
 import panda.util.bean.CompositeQuery;
@@ -279,39 +281,24 @@ public abstract class AbstractOMView implements View {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		Boolean success = true;
+		
+		// put success to first position
 		result.put("success", success);
 		
-//		Object action = ac.getAction();
-//		if (action instanceof ValidationAware) {
-//			ValidationAware va = (ValidationAware)action;
-//
-//			if (va.hasErrors()) {
-//				success = false;
-//			}
-//
-//			if (va.hasFieldErrors()) {
-//				result.put("fieldErrors", va.getFieldErrors());
-//			}
-//
-//			if (va.hasActionErrors()) {
-//				result.put("actionErrors", va.getActionErrors());
-//			}
-//
-//			if (action instanceof ActionValidationAware) {
-//				ActionValidationAware ava = (ActionValidationAware)action;
-//				if (ava.hasActionWarnings()) {
-//					result.put("actionWarnings", ava.getActionWarnings());
-//				}
-//				if (ava.hasActionConfirms()) {
-//					result.put("actionConfirms", ava.getActionConfirms());
-//				}
-//			}
-//
-//			if (va.hasActionMessages()) {
-//				result.put("actionMessages", va.getActionMessages());
-//			}
-//		}
-
+		ParamAware pva = ac.getParamAware();
+		if (pva != null && pva.hasErrors()) {
+			success = false;
+			result.put("param", pva);
+		}
+		
+		ActionAware ava = ac.getActionAware();
+		if (ava != null && !ava.isEmpty()) {
+			if (ava.hasErrors()) {
+				success = false;
+			}
+			result.put("action", ava);
+		}
+		
 		result.put("success", success);
 		result.put("result", ac.getResult());
 

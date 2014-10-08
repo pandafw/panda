@@ -19,8 +19,8 @@ public class ActionInfo {
 	private Class<? extends ParamAdaptor> adaptor;
 
 	private String okView;
-
-	private String failView;
+	private String errorView;
+	private String fatalView;
 
 	private List<HttpMethod> httpMethods;
 
@@ -50,7 +50,8 @@ public class ActionInfo {
 		outputEncoding = null == outputEncoding ? parent.outputEncoding : outputEncoding;
 		adaptor = null == adaptor ? parent.adaptor : adaptor;
 		okView = null == okView ? parent.okView : okView;
-		failView = null == failView ? parent.failView : failView;
+		errorView = null == errorView ? parent.errorView : errorView;
+		fatalView = null == fatalView ? parent.fatalView : fatalView;
 		actionType = null == actionType ? parent.actionType : actionType;
 		chainName = null == chainName ? parent.chainName : chainName;
 		return this;
@@ -126,12 +127,20 @@ public class ActionInfo {
 		this.okView = okView;
 	}
 
-	public String getFailView() {
-		return failView;
+	public String getErrorView() {
+		return errorView;
 	}
 
-	public void setFailView(String failView) {
-		this.failView = failView;
+	public void setErrorView(String errorView) {
+		this.errorView = errorView;
+	}
+
+	public String getFatalView() {
+		return fatalView;
+	}
+
+	public void setFatalView(String fatalView) {
+		this.fatalView = fatalView;
 	}
 
 	public Class<?> getActionType() {

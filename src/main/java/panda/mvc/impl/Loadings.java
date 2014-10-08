@@ -18,9 +18,10 @@ import panda.mvc.annotation.Adapt;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
 import panda.mvc.annotation.Encoding;
-import panda.mvc.annotation.Fail;
 import panda.mvc.annotation.Modules;
-import panda.mvc.annotation.Ok;
+import panda.mvc.annotation.view.Err;
+import panda.mvc.annotation.view.Fatal;
+import panda.mvc.annotation.view.Ok;
 import panda.net.http.HttpMethod;
 
 public abstract class Loadings {
@@ -31,8 +32,9 @@ public abstract class Loadings {
 		ActionInfo ai = new ActionInfo();
 		evalEncoding(ai, type.getAnnotation(Encoding.class));
 		evalHttpAdaptor(ai, type.getAnnotation(Adapt.class));
-		evalOk(ai, type.getAnnotation(Ok.class));
-		evalFail(ai, type.getAnnotation(Fail.class));
+		evalOkView(ai, type.getAnnotation(Ok.class));
+		evalErrorView(ai, type.getAnnotation(Err.class));
+		evalFatalView(ai, type.getAnnotation(Fatal.class));
 		evalAt(ai, type.getAnnotation(At.class), null);
 		evalActionChainMaker(ai, type.getAnnotation(Chain.class));
 		evalAction(ai, type);
@@ -43,8 +45,9 @@ public abstract class Loadings {
 		ActionInfo ai = new ActionInfo();
 		evalEncoding(ai, method.getAnnotation(Encoding.class));
 		evalHttpAdaptor(ai, method.getAnnotation(Adapt.class));
-		evalOk(ai, method.getAnnotation(Ok.class));
-		evalFail(ai, method.getAnnotation(Fail.class));
+		evalOkView(ai, method.getAnnotation(Ok.class));
+		evalErrorView(ai, method.getAnnotation(Err.class));
+		evalFatalView(ai, method.getAnnotation(Fatal.class));
 		evalAt(ai, method.getAnnotation(At.class), method.getName());
 		evalActionChainMaker(ai, method.getAnnotation(Chain.class));
 		ai.setMethod(method);
@@ -125,13 +128,19 @@ public abstract class Loadings {
 		}
 	}
 
-	public static void evalFail(ActionInfo ai, Fail fail) {
-		if (null != fail) {
-			ai.setFailView(fail.value());
+	public static void evalFatalView(ActionInfo ai, Fatal fatal) {
+		if (null != fatal) {
+			ai.setFatalView(fatal.value());
 		}
 	}
 
-	public static void evalOk(ActionInfo ai, Ok ok) {
+	public static void evalErrorView(ActionInfo ai, Err error) {
+		if (null != error) {
+			ai.setErrorView(error.value());
+		}
+	}
+
+	public static void evalOkView(ActionInfo ai, Ok ok) {
 		if (null != ok) {
 			ai.setOkView(ok.value());
 		}

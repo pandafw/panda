@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import panda.filepool.FilePool;
 import panda.ioc.Ioc;
 import panda.lang.Collections;
+import panda.mvc.aware.ActionAware;
+import panda.mvc.aware.ApplicationAware;
+import panda.mvc.aware.ParamAware;
+import panda.mvc.aware.SessionAware;
 import panda.mvc.util.StateProvider;
 import panda.mvc.util.TextProvider;
-import panda.mvc.validation.aware.ParamValidationAware;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
@@ -308,10 +311,31 @@ public class ActionContext {
 	}
 	
 	/**
-	 * @return parameter validation errors
+	 * @return action aware
 	 */
-	public ParamValidationAware getParamErrors() {
-		return ioc.get(ParamValidationAware.class);
+	public ActionAware getActionAware() {
+		return ioc.get(ActionAware.class);
+	}
+	
+	/**
+	 * @return parameter aware
+	 */
+	public ParamAware getParamAware() {
+		return ioc.get(ParamAware.class);
+	}
+	
+	/**
+	 * @return session aware
+	 */
+	public SessionAware getSessionAware() {
+		return ioc.get(SessionAware.class);
+	}
+	
+	/**
+	 * @return application aware
+	 */
+	public ApplicationAware getApplicationAware() {
+		return ioc.get(ApplicationAware.class);
 	}
 
 	//----------------------------------------------------
@@ -335,7 +359,7 @@ public class ActionContext {
 		getTops().add(top);
 	}
 	
-	public Object pop(Object top) {
+	public Object pop() {
 		return Collections.isEmpty(tops) ? null : tops.remove(tops.size() - 1);
 	}
 

@@ -4,8 +4,8 @@ import panda.filepool.FileItem;
 import panda.io.FileNames;
 import panda.ioc.annotation.IocBean;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Ok;
 
 @IocBean
 @Ok("raw")

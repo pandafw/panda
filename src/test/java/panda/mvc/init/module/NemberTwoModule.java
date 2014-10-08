@@ -1,9 +1,9 @@
 package panda.mvc.init.module;
 
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Fail;
-import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Fatal;
+import panda.mvc.annotation.view.Ok;
 
 @At("/two")
 public class NemberTwoModule {
@@ -17,7 +17,7 @@ public class NemberTwoModule {
 
 	@At
 	@Ok("raw")
-	@Fail("json")
+	@Fatal("json")
 	public boolean login(@Param("username") String userName, @Param("password") String password,
 			@Param("authCode") Long authCode) {
 		return !(userName == null || password == null || authCode == null);

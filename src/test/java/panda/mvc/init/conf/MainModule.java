@@ -5,12 +5,12 @@ import java.util.List;
 
 import panda.bind.json.Jsons;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Fail;
-import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Fatal;
+import panda.mvc.annotation.view.Ok;
 
 @At
-@Fail("json")
+@Fatal("json")
 public class MainModule {
 
 	@At("/param/a")

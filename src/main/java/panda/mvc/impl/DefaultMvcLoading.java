@@ -90,7 +90,7 @@ public class DefaultMvcLoading implements Loading {
 			throw Exceptions.wrapThrow(e);
 		}
 
-		// ~ Done ^_^
+		// Done
 		sw.stop();
 		if (log.isInfoEnabled()) {
 			log.infof("Panda.Mvc [%s] is up in %s", config.getAppName(), sw.toString());

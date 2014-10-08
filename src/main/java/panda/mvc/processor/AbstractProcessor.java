@@ -38,8 +38,9 @@ public abstract class AbstractProcessor implements Processor {
 	 * @throws Throwable
 	 */
 	protected void doNext(ActionContext ac) throws Throwable {
-		if (null != next)
+		if (null != next) {
 			next.process(ac);
+		}
 	}
 
 	protected void renderView(ActionContext ac) throws Throwable {

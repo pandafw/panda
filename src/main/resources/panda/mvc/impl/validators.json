@@ -6,7 +6,7 @@
 	"el":                 "panda.mvc.validator.ElFieldValidator",
 	"regex":              "panda.mvc.validator.RegexFieldValidator",
 	"email":              "panda.mvc.validator.EmailFieldValidator",
-	"filename":           "panda.mvc.validator.FileNameFieldValidator",
+	"filename":           "panda.mvc.validator.FilenameFieldValidator",
 	"creditcardno":       "panda.mvc.validator.CreditCardNumberFieldValidator",
 	
 	"binary":             "panda.mvc.validator.BinaryFieldValidator",

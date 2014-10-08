@@ -4,13 +4,13 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Fail;
-import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Fatal;
+import panda.mvc.annotation.view.Ok;
 
 @At("/simple")
 @Ok("json")
-@Fail("json")
+@Fatal("json")
 public class SimpleTestModule {
 
 	@At

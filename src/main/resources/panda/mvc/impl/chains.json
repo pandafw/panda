@@ -1,6 +1,6 @@
 {
 	"default": [
-		"panda.mvc.processor.FailedProcessor",
+		"panda.mvc.processor.FatalProcessor",
 		"panda.mvc.processor.EncodingProcessor",
 		"panda.mvc.processor.ActionProcessor",
 		"panda.mvc.processor.AdaptProcessor",

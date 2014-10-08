@@ -10,7 +10,7 @@ import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Charsets;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Ok;
+import panda.mvc.annotation.view.Ok;
 
 @IocBean
 @At("/views")

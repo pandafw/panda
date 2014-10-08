@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Ok;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Ok;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.testapp.classes.bean.UserT;
 
@@ -47,7 +47,7 @@ public class CommonTest extends BaseWebappTest {
 
 	// 与Parms混用
 	@At("/pathArgs5/*")
-	public String test_base_pathargs5(String key, @Param("^user.") UserT user1, @Param("^user2.") UserT user2) {
+	public String test_base_pathargs5(String key, @Param("user.*") UserT user1, @Param("user2.*") UserT user2) {
 		return key + "&" + user1.getName() + "&" + user2.getName();
 	}
 

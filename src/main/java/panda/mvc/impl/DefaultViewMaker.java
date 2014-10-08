@@ -5,6 +5,8 @@ import panda.castor.Castors;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.View;
@@ -15,6 +17,7 @@ import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
 import panda.mvc.view.RawView;
 import panda.mvc.view.ServerRedirectView;
+import panda.mvc.view.VoidView;
 import panda.mvc.view.XmlView;
 
 /**
@@ -22,7 +25,8 @@ import panda.mvc.view.XmlView;
  */
 @IocBean(type=ViewMaker.class)
 public class DefaultViewMaker implements ViewMaker {
-
+	private static final Log log = Logs.getLog(DefaultViewMaker.class);
+	
 	public static final String VIEW_JSP = "jsp";
 	public static final String VIEW_JSON = "json";
 	public static final String VIEW_XML = "xml";
@@ -33,6 +37,8 @@ public class DefaultViewMaker implements ViewMaker {
 	public static final String VIEW_FORWARD = "forward";
 	public static final String VIEW_FORWARD2 = "->";
 	public static final String VIEW_RAW = "raw";
+	public static final String VIEW_NULL = "";
+	public static final String VIEW_VOID = "void";
 
 	public View make(MvcConfig conf, ActionInfo ai, String type, String value) {
 		type = type.toLowerCase();
@@ -94,6 +100,15 @@ public class DefaultViewMaker implements ViewMaker {
 			return new RawView(value);
 		}
 		
+		if (VIEW_VOID.equals(type)) {
+			return new VoidView();
+		}
+		
+		if (VIEW_NULL.equals(type)) {
+			return null;
+		}
+		
+		log.error("Failed to find view('" + type + "')");
 		return null;
 	}
 

@@ -88,16 +88,20 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	}
 	
 	public static String indexedName(int i, Param param) {
-		String pn = param.value();
-		if (param == null || Strings.isEmpty(pn)) {
+		if (param == null) {
 			return String.valueOf(i);
 		}
+
+		String pn = param.value();
+		if (Strings.isEmpty(pn)) {
+			return "";
+		}
 		
-		if (pn.charAt(0) == '^') {
-			if (pn.length() > 2 && pn.charAt(pn.length() - 1) == '.') {
-				return pn.substring(1, pn.length() - 2);
+		if (pn.endsWith(".*")) {
+			pn = pn.substring(0, pn.length() - 2);
+			if (pn.length() == 0) {
+				throw new IllegalArgumentException("Illegal prefix of @Param('" + param.value() + "')");
 			}
-			throw new IllegalArgumentException("Illegal prefix of @Param('" + param.value() + "')");
 		}
 		return pn;
 	}
@@ -333,8 +337,8 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		if (Strings.isEmpty(pm)) {
 			return ejectByAll(ac, type);
 		}
-		if (pm.charAt(0) == '^') {
-			return ejectByPrefix(ac, type, pm.substring(1));
+		if (pm.endsWith(".*")) {
+			return ejectByPrefix(ac, type, pm.substring(0, pm.length() - 1));
 		}
 		
 		return ejectByNamedParam(ac, type, pm);

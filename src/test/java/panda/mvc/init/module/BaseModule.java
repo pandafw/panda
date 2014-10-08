@@ -1,7 +1,7 @@
 package panda.mvc.init.module;
 
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.Ok;
+import panda.mvc.annotation.view.Ok;
 
 @At("/base")
 @Ok("json")

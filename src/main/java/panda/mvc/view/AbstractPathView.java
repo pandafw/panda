@@ -1,7 +1,7 @@
 package panda.mvc.view;
 
+import panda.el.ElTemplate;
 import panda.lang.Strings;
-import panda.lang.Texts;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 
@@ -18,6 +18,6 @@ public abstract class AbstractPathView implements View {
 			return null;
 		}
 
-		return Texts.elTranslate(dest, ac);
+		return ElTemplate.evaluate(dest, ac);
 	}
 }

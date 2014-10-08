@@ -18,7 +18,7 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 
 	private static final Log log = Logs.getLog(AbstractMvcConfig.class);
 
-	private static final String ATTR_IOC = "$ioc";
+	private Ioc ioc;
 
 	public AbstractMvcConfig(ServletContext context) {
 	}
@@ -43,11 +43,11 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 	}
 
 	public Ioc getIoc() {
-		return (Ioc)getAttribute(ATTR_IOC);
+		return ioc;
 	}
 
 	public void setIoc(Ioc ioc) {
-		setAttribute(ATTR_IOC, ioc);
+		this.ioc = ioc;
 	}
 
 	protected Object getAttribute(String name) {
