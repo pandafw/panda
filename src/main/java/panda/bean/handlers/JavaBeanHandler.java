@@ -1,8 +1,5 @@
 package panda.bean.handlers;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +8,6 @@ import java.util.Map.Entry;
 
 import panda.bean.Beans;
 import panda.bean.PropertyAccessor;
-import panda.lang.Exceptions;
 import panda.lang.reflect.Types;
 
 /**
@@ -118,19 +114,7 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			return null;
 		}
 		
-		try {
-			Member getter = pa.getGetter();
-			if (getter instanceof Field) {
-				return ((Field)getter).get(beanObject);
-			}
-			else if (getter instanceof Method) {
-				return ((Method)getter).invoke(beanObject);
-			}
-			return null;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return pa.getValue(beanObject);
 	}
 
 	/**
@@ -145,21 +129,6 @@ public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 			return false;
 		}
 
-		try {
-			Member setter = pa.getSetter();
-			if (setter instanceof Field) {
-				((Field)setter).set(beanObject, value);
-				return true;
-			}
-			else if (setter instanceof Method) {
-				((Method)setter).invoke(beanObject, value);
-				return true;
-			}
-			
-			return false;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return pa.setValue(beanObject, value);
 	}
 }

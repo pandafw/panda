@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -30,6 +31,8 @@ import panda.lang.reflect.Types;
  *
  */
 public class Beans {
+	private static Map<Class<?>, Map<String, PropertyAccessor>> accessors = new HashMap<Class<?>, Map<String, PropertyAccessor>>();
+	
 	/**
 	 * instance
 	 */
@@ -413,7 +416,24 @@ public class Beans {
 	 * @return accessor map
 	 */
 	public static Map<String, PropertyAccessor> getPropertyAccessors(Class<?> clazz) {
-		Map<String, PropertyAccessor> accessors = new TreeMap<String, PropertyAccessor>();
+		Map<String, PropertyAccessor> pas = accessors.get(clazz);
+		if (pas != null) {
+			return pas;
+		}
+
+		synchronized(accessors) {
+			pas = accessors.get(clazz);
+			if (pas != null) {
+				return pas;
+			}
+			pas = resolvePropertyAccessors(clazz);
+			accessors.put(clazz, pas);
+			return pas;
+		}
+	}
+
+	public static Map<String, PropertyAccessor> resolvePropertyAccessors(Class<?> clazz) {
+		Map<String, PropertyAccessor> pas = new TreeMap<String, PropertyAccessor>();
 
 		Field[] fields = clazz.getFields();
 		for (Field f : fields) {
@@ -421,7 +441,7 @@ public class Beans {
 			if (f.isSynthetic() || Modifier.isStatic(m)) {
 				continue;
 			}
-			setField(accessors, f);
+			setField(pas, f);
 		}
 		
 		Method[] methods = clazz.getMethods();
@@ -451,7 +471,7 @@ public class Beans {
 			}
 
 			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-			setGetter(accessors, n, m);
+			setGetter(pas, n, m);
 		}
 		
 		// getter
@@ -475,7 +495,7 @@ public class Beans {
 			}
 
 			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-			setGetter(accessors, n, m);
+			setGetter(pas, n, m);
 		}
 		
 		// setter
@@ -499,10 +519,10 @@ public class Beans {
 			}
 			
 			n = Character.toLowerCase(n.charAt(0)) + n.substring(1);
-			setSetter(accessors, n, m);
+			setSetter(pas, n, m);
 		}
 		
-		return accessors;
+		return pas;
 	}
 
 	/**

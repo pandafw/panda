@@ -3,7 +3,6 @@ package panda.ioc.loader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -34,44 +33,33 @@ public class AnnotationIocLoader implements IocLoader {
 
 	private HashMap<String, IocObject> map = new HashMap<String, IocObject>();
 
-	public AnnotationIocLoader(String... packages) {
-		for (String pkg : packages) {
-			for (Class<?> cls : Classes.scan(pkg)) {
-				addClass(cls);
+	public AnnotationIocLoader(String... args) {
+		this((Object[])args);
+	}
+	
+	public AnnotationIocLoader(Object... args) {
+		for (Object a : args) {
+			if (a instanceof Class) {
+				addClass((Class<?>)a);
+			}
+			else {
+				for (Class<?> cls : Classes.scan(a.toString())) {
+					addClass(cls);
+				}
 			}
 		}
 		
 		if (map.size() > 0) {
 			if (log.isInfoEnabled()) {
-				log.info("Successfully scan " + packages.length + " packages:\n" + Strings.join(packages, '\n'));
+				log.info("Successfully scan/add " + args.length + " args:\n" + Strings.join(args, '\n'));
 				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
 			}
 		}
 		else {
-			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:\n" + Strings.join(packages, '\n'));
+			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:\n" + Strings.join(args, '\n'));
 		}
 	}
 	
-	public AnnotationIocLoader(Class<?>... classes) {
-		this(Arrays.asList(classes));
-	}
-	
-	public AnnotationIocLoader(Collection<Class<?>> classes) {
-		for (Class<?> cls : classes) {
-			addClass(cls);
-		}
-		
-		if (map.size() > 0) {
-			if (log.isInfoEnabled()) {
-				log.info("Successfully add " + classes.size() + " classes:\n" + Strings.join(classes, '\n'));
-				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
-			}
-		}
-		else {
-			log.warn("NONE Annotation-Class found!\nCheck your configure for classes:\n" + Strings.join(classes, '\n'));
-		}
-	}
-
 	protected void addClass(Class<?> clazz) {
 		if (log.isTraceEnabled()) {
 			log.trace("Check " + clazz);
@@ -158,7 +146,7 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 	
 	protected void setIocInjects(IocObject iocObject, Class<?> clazz) {
-		Field[] fields = Fields.getAnnotationFields(clazz, IocInject.class);
+		Collection<Field> fields = Fields.getAnnotationFields(clazz, IocInject.class);
 		for (Field field : fields) {
 			IocInject inject = field.getAnnotation(IocInject.class);
 

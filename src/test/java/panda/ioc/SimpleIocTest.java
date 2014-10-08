@@ -3,12 +3,15 @@ package panda.ioc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.AnnotationIocLoader;
+import panda.ioc.loader.xml.meta.BlackHorse;
 import panda.ioc.loader.xml.meta.Cat;
 import panda.ioc.loader.xml.meta.DogMaster;
+import panda.ioc.loader.xml.meta.Horse;
 import panda.ioc.loader.xml.meta.SingletonService;
 
 public class SimpleIocTest {
@@ -35,6 +38,18 @@ public class SimpleIocTest {
 		catch (IocException e) {
 		}
 		ioc.get(DogMaster.class);
+	}
+
+	@Test
+	public void test_override_inject() {
+		Ioc ioc = new DefaultIoc(new AnnotationIocLoader(Horse.class.getPackage().getName()));
+
+		Horse h = ioc.get(Horse.class);
+		Assert.assertEquals("horse", h.getName());
+		
+		BlackHorse bh = ioc.get(BlackHorse.class);
+		Assert.assertEquals("black horse", bh.getName());
+		Assert.assertEquals("alias", bh.getAlias());
 	}
 
 	@Test

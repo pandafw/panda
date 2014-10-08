@@ -159,14 +159,15 @@ public abstract class Fields {
 	 * @param ann 注解类型
 	 * @return 字段数组
 	 */
-	public static <AT extends Annotation> Field[] getAnnotationFields(Class<?> cls, Class<AT> ann) {
+	public static <A extends Annotation> Collection<Field> getAnnotationFields(Class<?> cls, Class<A> ann) {
 		List<Field> fields = new ArrayList<Field>();
 		for (Field f : getDeclaredFields(cls)) {
 			if (f.isAnnotationPresent(ann))
 				fields.add(f);
 		}
-		return fields.toArray(new Field[fields.size()]);
+		return fields;
 	}
+
 	/**
 	 * Return all fields of the class and it's super class (exclude the Object class). <br>
 	 * 如果子类的属性如果与父类重名，将会将其覆盖

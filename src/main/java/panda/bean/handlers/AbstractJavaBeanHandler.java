@@ -13,12 +13,6 @@ import panda.lang.reflect.Types;
  * @param <T> class type
  */
 public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> {
-	protected static class PropertyInfo {
-		int index;
-		boolean readable;
-		boolean writable;
-	}
-	
 	/**
 	 * Constructor
 	 * @param beans bean handler factory
@@ -36,26 +30,6 @@ public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> 
 		return Types.born(Types.getDefaultImplType(type));
 	}
 
-//	/**
-//	 * is the property readable
-//	 * @param beanObject bean object (can be null)
-//	 * @param propertyName property name
-//	 * @return property type
-//	 */
-//	public boolean canReadProperty(T beanObject, String propertyName) {
-//		return Arrays.contains(getReadPropertyNames(beanObject), propertyName);
-//	}
-//
-//	/**
-//	 * is the property writable
-//	 * @param beanObject bean object (can be null)
-//	 * @param propertyName property name
-//	 * @return property writable
-//	 */
-//	public boolean canWriteProperty(T beanObject, String propertyName) {
-//		return Arrays.contains(getWritePropertyNames(beanObject), propertyName);
-//	}
-	
 //	/**
 //	 * @param propertyName property name
 //	 * @return NoSuchPropertyException
