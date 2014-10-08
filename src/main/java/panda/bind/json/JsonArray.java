@@ -2,12 +2,13 @@ package panda.bind.json;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
+import panda.io.stream.CharSequenceReader;
 
 /**
  * A JsonArray is an ordered sequence of values. Its external text form is a string wrapped in
@@ -664,12 +665,12 @@ public class JsonArray extends ArrayList<Object> {
 		return Jsons.fromJson(json, JsonArray.class);
 	}
 
-	public static JsonArray fromJson(String json) {
+	public static JsonArray fromJson(CharSequence json) {
 		if (json == null) {
 			return null;
 		}
 
-		JsonTokener jt = new JsonTokener(new StringReader(json));
+		JsonTokener jt = new JsonTokener(new CharSequenceReader(json));
 		char c = jt.nextClean();
 		if (c != '[') {
 			json = "[" + json + "]";

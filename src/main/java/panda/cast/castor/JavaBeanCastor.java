@@ -6,7 +6,6 @@ import java.util.Map;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.cast.CastContext;
-import panda.cast.Castor;
 import panda.lang.CycleDetectStrategy;
 
 /**
@@ -15,14 +14,14 @@ import panda.lang.CycleDetectStrategy;
  *
  * @param <T> target type
  */
-public class JavaBeanCastor<T> extends Castor<Object, T> {
+public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 	/**
 	 * target bean handler
 	 */
 	private BeanHandler<T> tbh;
 	
-	public JavaBeanCastor(Type fromType, Type toType, Beans beans) {
-		super(fromType, toType);
+	public JavaBeanCastor(Type toType, Beans beans) {
+		super(toType);
 		
 		tbh = beans.getBeanHandler(toType);
 	}

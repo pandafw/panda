@@ -12,7 +12,7 @@ import panda.lang.Numbers;
  * @author yf.frank.wang@gmail.com
  */
 public class NumberTypeCastor {
-	public static class NumberCastor extends AbstractObjectCastor<Number> {
+	public static class NumberCastor extends AnySingleCastor<Number> {
 		public NumberCastor() {
 			super(Number.class);
 		}
@@ -32,7 +32,7 @@ public class NumberTypeCastor {
 		}
 	}
 
-	public static class BigDecimalCastor extends AbstractObjectCastor<BigDecimal> {
+	public static class BigDecimalCastor extends AnySingleCastor<BigDecimal> {
 		public BigDecimalCastor() {
 			super(BigDecimal.class);
 		}
@@ -50,7 +50,7 @@ public class NumberTypeCastor {
 		}
 	}
 
-	public static class BigIntegerCastor extends AbstractObjectCastor<BigInteger> {
+	public static class BigIntegerCastor extends AnySingleCastor<BigInteger> {
 		public BigIntegerCastor() {
 			super(BigInteger.class);
 		}

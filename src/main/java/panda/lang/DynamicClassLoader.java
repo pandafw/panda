@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import javax.tools.ToolProvider;
 
 import panda.io.Files;
 import panda.io.Streams;
+import panda.io.stream.CharSequenceReader;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -120,7 +120,7 @@ public class DynamicClassLoader extends ClassLoader {
 		}
 	}
 	
-	private static void logSource(String className, String source) throws Exception {
+	private static void logSource(CharSequence className, String source) throws Exception {
 		if (!log.isTraceEnabled()) {
 			return;
 		}
@@ -128,12 +128,13 @@ public class DynamicClassLoader extends ClassLoader {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Compile: ").append(className).append('\n');
 
-		LineNumberReader lnr = new LineNumberReader(new StringReader(source));
+		LineNumberReader lnr = new LineNumberReader(new CharSequenceReader(source));
 		String line;
 		while ((line = lnr.readLine()) != null) {
 			sb.append(Strings.rightPad(String.valueOf(lnr.getLineNumber()), 5));
 			sb.append(":  ").append(line).append('\n');
 		}
+		lnr.close();
 		log.trace(sb.toString());
 	}
 	

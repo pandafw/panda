@@ -1,10 +1,10 @@
 package panda.bind;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.lang.reflect.Type;
 
 import panda.io.Streams;
+import panda.io.stream.CharSequenceReader;
 import panda.lang.reflect.Types;
 
 /**
@@ -53,8 +53,8 @@ public abstract class AbstractDeserializer extends AbstractBinder implements Des
 	/**
 	 * Creates a object from a string, with a specific target class.<br>
 	 */
-	public <T> T deserialize(String source, Type type) {
-		Reader r = new StringReader(source);
+	public <T> T deserialize(CharSequence source, Type type) {
+		Reader r = new CharSequenceReader(source);
 		try {
 			return deserialize(r, type);
 		}

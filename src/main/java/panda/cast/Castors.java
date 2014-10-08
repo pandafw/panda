@@ -17,6 +17,7 @@ import panda.cast.castor.ArrayCastor;
 import panda.cast.castor.ClassCastor;
 import panda.cast.castor.CollectionCastor;
 import panda.cast.castor.DateTypeCastor;
+import panda.cast.castor.DirectCastor;
 import panda.cast.castor.EnumCastor;
 import panda.cast.castor.JavaBeanCastor;
 import panda.cast.castor.MapCastor;
@@ -211,7 +212,7 @@ public class Castors {
 		
 		// default castor
 		if (Object.class.equals(toType)) {
-			return new Castor(fromType, toType);
+			return new DirectCastor(fromType, toType);
 		}
 		
 		Class<?> toClass = Types.getRawType(toType);
@@ -241,7 +242,7 @@ public class Castors {
 					rawType = LinkedHashSet.class;
 				}
 				else {
-					return new Castor(fromType, toType);
+					return new DirectCastor(fromType, toType);
 				}
 				
 				toType = Types.paramTypeOfOwner(pt.getOwnerType(), rawType, pt.getActualTypeArguments());
@@ -253,7 +254,7 @@ public class Castors {
 			}
 			
 			if (Types.isAssignable(toType, Map.class)) {
-				return (Castor<S, T>)new MapCastor(fromType, LinkedHashMap.class, this);
+				return (Castor<S, T>)new MapCastor(LinkedHashMap.class, this);
 			}
 			
 			if (Types.isAssignable(toType, Set.class)) {
@@ -261,20 +262,20 @@ public class Castors {
 			}
 			
 			if (Types.isAssignable(fromType, toType, false)) {
-				return new Castor(fromType, toType);
+				return new DirectCastor(fromType, toType);
 			}
 			throw new RuntimeException("Failed to find Castor(" + fromType + " -> " + toType + ")");
 		}
 
 		if (Types.isAssignable(toType, Map.class)) {
-			return (Castor<S, T>)new MapCastor(fromType, toType, this);
+			return (Castor<S, T>)new MapCastor(toType, this);
 		}
 		
 		if (Types.isAssignable(toType, Collection.class)) {
 			return (Castor<S, T>)new CollectionCastor(fromType, toType);
 		}
 		
-		return new JavaBeanCastor(fromType, toType, beans);
+		return new JavaBeanCastor(toType, beans);
 	}
 
 	public <T> BeanHandler<T> getBeanHandler(Type type) {

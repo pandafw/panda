@@ -1,7 +1,6 @@
 package panda.el.parse;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +18,7 @@ import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.InvokeMethodOpt;
 import panda.el.opt.object.MakeArrayOpt;
 import panda.el.opt.object.MethodOpt;
+import panda.io.stream.CharSequenceReader;
 
 /**
  * 转换器,也就是用来将字符串转换成队列. 这个类的名字不知道取什么好...
@@ -43,8 +43,8 @@ public class Converter {
 		initParse();
 	}
 
-	public Converter(String val) {
-		this(new StringReader(val));
+	public Converter(CharSequence val) {
+		this(new CharSequenceReader(val));
 	}
 
 	public Converter(Reader reader) {

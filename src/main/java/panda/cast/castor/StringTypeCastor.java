@@ -23,7 +23,7 @@ import panda.lang.codec.binary.Base64;
  *
  * @param <T> target type
  */
-public abstract class StringTypeCastor<T> extends AbstractObjectCastor<T> {
+public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 	protected DateCastor dateCastor;
 	
 	public StringTypeCastor(Type toType, DateCastor dateCastor) {
@@ -32,11 +32,11 @@ public abstract class StringTypeCastor<T> extends AbstractObjectCastor<T> {
 	}
 
 	@Override
-	protected Object getOne(Object value) {
+	protected Object prepare(Object value) {
 		if (value instanceof byte[] || value instanceof char[]) {
-			return null;
+			return value;
 		}
-		return super.getOne(value);
+		return super.prepare(value);
 	}
 
 	protected void write(Object value, Appendable a) {

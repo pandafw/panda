@@ -5,7 +5,7 @@ import panda.cast.CastContext;
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class EnumCastor extends AbstractObjectCastor<Enum> {
+public class EnumCastor extends AnySingleCastor<Enum> {
 	public EnumCastor(Class<?> toType) {
 		super(toType);
 	}

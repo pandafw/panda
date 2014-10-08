@@ -22,7 +22,7 @@ public abstract class Jsons extends Binds {
 		return fromJson(json, Object.class);
 	}
 
-	public static Object fromJson(String json) {
+	public static Object fromJson(CharSequence json) {
 		return fromJson(json, Object.class);
 	}
 
@@ -37,7 +37,7 @@ public abstract class Jsons extends Binds {
 		return jd.deserialize(json, type);
 	}
 
-	public static <T> T fromJson(String json, Type type) {
+	public static <T> T fromJson(CharSequence json, Type type) {
 		JsonDeserializer jd = new JsonDeserializer();
 		return jd.deserialize(json, type);
 	}

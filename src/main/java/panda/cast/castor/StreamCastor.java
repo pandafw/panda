@@ -17,17 +17,17 @@ import panda.lang.Charsets;
  * @author yf.frank.wang@gmail.com
  *
  */
-public abstract class StreamCastor<T> extends AbstractObjectCastor<T> {
+public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 	public StreamCastor(Type toType) {
 		super(toType);
 	}
 
 	@Override
-	protected Object getOne(Object value) {
+	protected Object prepare(Object value) {
 		if (value instanceof byte[] || value instanceof char[]) {
-			return null;
+			return value;
 		}
-		return super.getOne(value);
+		return super.prepare(value);
 	}
 
 	public static class InputStreamCastor extends StreamCastor<InputStream> {

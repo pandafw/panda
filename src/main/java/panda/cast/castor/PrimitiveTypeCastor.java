@@ -14,7 +14,7 @@ import panda.lang.Numbers;
  *
  * @param <T> target type
  */
-public abstract class PrimitiveTypeCastor<T> extends AbstractObjectCastor<T> {
+public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 	public PrimitiveTypeCastor(Type type) {
 		super(type);
 	}

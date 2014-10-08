@@ -1,19 +1,17 @@
 package panda.cast.castor;
 
 import java.lang.reflect.Type;
-import java.util.Iterator;
 
 import panda.cast.CastContext;
 import panda.cast.Castor;
-import panda.lang.Iterators;
 import panda.lang.Objects;
 import panda.lang.reflect.Types;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class AbstractObjectCastor<T> extends Castor<Object, T> {
-	public AbstractObjectCastor(Type toType) {
+public abstract class AnyObjectCastor<T> extends Castor<Object, T> {
+	public AnyObjectCastor(Type toType) {
 		super(Object.class, toType);
 	}
 
@@ -40,11 +38,11 @@ public abstract class AbstractObjectCastor<T> extends Castor<Object, T> {
 				return (T)value;
 			}
 
-			Object one = getOne(value);
-			if (one != null) {
-				return cast(one, context);
+			value = prepare(value);
+			if (isAssignable(value)) {
+				return (T)value;
 			}
-			
+
 			return castValue(value, context);
 		}
 		catch (Throwable e) {
@@ -73,10 +71,7 @@ public abstract class AbstractObjectCastor<T> extends Castor<Object, T> {
 				return defaultValue();
 			}
 
-			Object one = getOne(value);
-			if (one != null) {
-				return castTo(one, target, context);
-			}
+			value = prepare(value);
 			
 			return castValueTo(value, target, context);
 		}
@@ -87,18 +82,9 @@ public abstract class AbstractObjectCastor<T> extends Castor<Object, T> {
 
 	/**
 	 * @param value value
-	 * @return one value of the array[1]
+	 * @return prepared value
 	 */
-	protected Object getOne(Object value) {
-		if (Iterators.isIterable(value)) {
-			Iterator it = Iterators.asIterator(value);
-			if (it.hasNext()) {
-				value = it.next();
-				if (!it.hasNext()) {
-					return value;
-				}
-			}
-		}
-		return null;
+	protected Object prepare(Object value) {
+		return value;
 	}
 }

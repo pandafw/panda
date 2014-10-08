@@ -20,7 +20,7 @@ import panda.log.Logs;
  * 
  * @author yf.frank.wang@gmail.com
  */
-public class Castor<S, T> {
+public abstract class Castor<S, T> {
 	protected final static Log log = Logs.getLog(Castor.class);
 
 	protected final Type fromType;
@@ -141,11 +141,7 @@ public class Castor<S, T> {
 	 * @param context context
 	 * @return casted value
 	 */
-	@SuppressWarnings("unchecked")
-	protected T castValue(S value, CastContext context) {
-		// throw CastException
-		return (T)value;
-	}
+	protected abstract T castValue(S value, CastContext context);
 
 	/**
 	 * cast value to target

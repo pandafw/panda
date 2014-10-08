@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
+
+import panda.io.stream.CharSequenceReader;
 
 /**
  * Markdown processor class.
@@ -67,9 +68,9 @@ public class Processor {
 	 * @return The processed String.
 	 * @see Configuration
 	 */
-	public final static String process(final String input, final Configuration configuration) {
+	public final static String process(final CharSequence input, final Configuration configuration) {
 		try {
-			return process(new StringReader(input), configuration);
+			return process(new CharSequenceReader(input), configuration);
 		}
 		catch (IOException e) {
 			// This _can never_ happen

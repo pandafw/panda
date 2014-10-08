@@ -2,13 +2,13 @@ package panda.bind.json;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.io.stream.CharSequenceReader;
 import panda.lang.Strings;
 
 /**
@@ -833,12 +833,12 @@ public class JsonObject extends HashMap<String, Object> {
 		return Jsons.fromJson(json, JsonObject.class);
 	}
 	
-	public static JsonObject fromJson(String json) {
+	public static JsonObject fromJson(CharSequence json) {
 		if (json == null) {
 			return null;
 		}
 		
-		JsonTokener jt = new JsonTokener(new StringReader(json));
+		JsonTokener jt = new JsonTokener(new CharSequenceReader(json));
 		char c = jt.nextClean();
 		if (c != '{') {
 			json = "{" + json + "}";

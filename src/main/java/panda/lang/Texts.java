@@ -1,7 +1,6 @@
 package panda.lang;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -10,6 +9,7 @@ import panda.bean.Beans;
 import panda.el.El;
 import panda.el.Evaluator;
 import panda.io.Streams;
+import panda.io.stream.CharSequenceReader;
 import panda.io.stream.CsvReader;
 import panda.io.stream.CsvWriter;
 import panda.io.stream.StringBuilderWriter;
@@ -773,12 +773,12 @@ public abstract class Texts {
 	 * @param quotechar the character to use for quoted elements
 	 * @return string list
 	 */
-	public static List<String> parseCsv(String str, char separator, char quotechar) {
+	public static List<String> parseCsv(CharSequence str, char separator, char quotechar) {
 		if (str == null) {
 			return null;
 		}
 
-		CsvReader cr = new CsvReader(new StringReader(str), separator, quotechar);
+		CsvReader cr = new CsvReader(new CharSequenceReader(str), separator, quotechar);
 		try {
 			return cr.readNext();
 		}

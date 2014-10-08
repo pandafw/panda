@@ -17,18 +17,17 @@ import panda.lang.reflect.Types;
  * 
  * @author yf.frank.wang@gmail.com
  *
- * @param <S> source type
  * @param <T> target type
  */
-public class MapCastor<S, T extends Map<?,?>> extends Castor<S, T> {
+public class MapCastor<T extends Map<?,?>> extends AnyJsonCastor<T> {
 	private Castors castors;
 	private Type keyType;
 	private Type valType;
 	private Castor keyCastor;
 	private Castor valCastor;
 	
-	public MapCastor(Type fromType, Type toType, Castors castors) {
-		super(fromType, toType);
+	public MapCastor(Type toType, Castors castors) {
+		super(toType);
 		
 		if (!Types.isAssignable(toType, Map.class)) {
 			throw new IllegalArgumentException("The argument is not a map type: " + toType);
@@ -74,14 +73,14 @@ public class MapCastor<S, T extends Map<?,?>> extends Castor<S, T> {
 	}
 
 	@Override
-	protected T castValue(S value, CastContext context) {
+	protected T castValue(Object value, CastContext context) {
 		T map = createTarget();
 		return castValueTo(value, map, context);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected T castValueTo(S value, T target, CastContext context) {
+	protected T castValueTo(Object value, T target, CastContext context) {
 		if (keyCastor == null) {
 			keyCastor = castors.getCastor(keyType);
 		}

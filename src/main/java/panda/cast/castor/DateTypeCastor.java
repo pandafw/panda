@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import panda.cast.CastContext;
-import panda.cast.Castor;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 
@@ -27,7 +26,7 @@ public class DateTypeCastor {
 		DateTimes.timeFormat(),
 	};
 
-	public static class DateCastor extends AbstractObjectCastor<Date> {
+	public static class DateCastor extends AnySingleCastor<Date> {
 	
 		private FastDateFormat[] formats;
 		
@@ -103,11 +102,11 @@ public class DateTypeCastor {
 	}
 
 	//------------------------------------------------------------------------------------
-	public static class CalendarCastor extends Castor<Object, Calendar> {
+	public static class CalendarCastor extends AnySingleCastor<Calendar> {
 		private DateCastor dateCastor;
 		
 		public CalendarCastor(DateCastor dateCastor) {
-			super(Object.class, Calendar.class);
+			super(Calendar.class);
 			this.dateCastor = dateCastor;
 		}
 		
@@ -128,11 +127,11 @@ public class DateTypeCastor {
 	}
 
 	//------------------------------------------------------------------------------------
-	public static class GregorianCalendarCastor extends Castor<Object, GregorianCalendar> {
+	public static class GregorianCalendarCastor extends AnySingleCastor<GregorianCalendar> {
 		private DateCastor dateCastor;
 		
 		public GregorianCalendarCastor(DateCastor dateCastor) {
-			super(Object.class, GregorianCalendar.class);
+			super(GregorianCalendar.class);
 			this.dateCastor = dateCastor;
 		}
 		
@@ -153,11 +152,11 @@ public class DateTypeCastor {
 	}
 	
 	//------------------------------------------------------------------------------------
-	public static class SqlDateCastor extends Castor<Object, java.sql.Date> {
+	public static class SqlDateCastor extends AnySingleCastor<java.sql.Date> {
 		private DateCastor dateCastor;
 		
 		public SqlDateCastor(DateCastor dateCastor) {
-			super(Object.class, java.sql.Date.class);
+			super(java.sql.Date.class);
 			this.dateCastor = dateCastor;
 		}
 		
@@ -177,11 +176,11 @@ public class DateTypeCastor {
 	}
 	
 	//------------------------------------------------------------------------------------
-	public static class SqlTimeCastor extends Castor<Object, java.sql.Time> {
+	public static class SqlTimeCastor extends AnySingleCastor<java.sql.Time> {
 		private DateCastor dateCastor;
 		
 		public SqlTimeCastor(DateCastor dateCastor) {
-			super(Object.class, java.sql.Time.class);
+			super(java.sql.Time.class);
 			this.dateCastor = dateCastor;
 		}
 		
@@ -201,11 +200,11 @@ public class DateTypeCastor {
 	}
 	
 	//------------------------------------------------------------------------------------
-	public static class SqlTimestampCastor extends Castor<Object, java.sql.Timestamp> {
+	public static class SqlTimestampCastor extends AnySingleCastor<java.sql.Timestamp> {
 		private DateCastor dateCastor;
 		
 		public SqlTimestampCastor(DateCastor dateCastor) {
-			super(Object.class, java.sql.Timestamp.class);
+			super(java.sql.Timestamp.class);
 			this.dateCastor = dateCastor;
 		}
 		
