@@ -68,10 +68,10 @@ public class El {
 	 */
 	public static Object eval(String expr) {
 		// 逆波兰表示法（Reverse Polish notation，RPN，或逆波兰记法）
-		return eval(null, expr);
+		return eval(expr, null);
 	}
 
-	public static Object eval(Object context, String expr) {
+	public static Object eval(String expr, Object context) {
 		return get(expr).eval(context);
 	}
 

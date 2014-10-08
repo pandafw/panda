@@ -1,17 +1,20 @@
 package panda.ioc.loader.annotation.meta;
 
-import panda.dao.Dao;
-import panda.ioc.annotation.IocInject;
+import java.io.InputStream;
+
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 
 @IocBean
 public class ClassB {
 
-	@IocInject("ref:dao")
-	public Dao dao;
+	@IocInject
+	public ClassA a;
 
-	public void setDao(Dao dao) {
-		this.dao = dao;
-	}
+	@IocInject(value="ref:xxx", required=false)
+	public String xxx;
+
+	@IocInject(type=InputStream.class, required=false)
+	public InputStream yyy;
 
 }

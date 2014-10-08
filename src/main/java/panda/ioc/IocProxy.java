@@ -95,6 +95,15 @@ public class IocProxy implements Ioc {
 
 	/**
 	 * @param type 类型
+	 * @param name 对象名
+	 * @return 是否存在某一特定对象
+	 */
+	public boolean has(Class<?> type, String name) throws IocException {
+		return ioc.has(type, name);
+	}
+
+	/**
+	 * @param type 类型
 	 * @return 是否存在某一特定对象
 	 */
 	public boolean has(Class<?> type) throws IocException {

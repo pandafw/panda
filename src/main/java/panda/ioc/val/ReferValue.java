@@ -34,8 +34,9 @@ public class ReferValue implements ValueProxy {
 		this.required = required;
 	}
 
-	public ReferValue(Class<?> type) {
+	public ReferValue(Class<?> type, boolean required) {
 		this.type = type;
+		this.required = required;
 	}
 
 	public Object get(IocMaking ing) {
@@ -44,7 +45,7 @@ public class ReferValue implements ValueProxy {
 			return ioc.get(type, name);
 		}
 		
-		if (ioc.has(name)) {
+		if (ioc.has(type, name)) {
 			return ioc.get(type, name);
 		}
 		

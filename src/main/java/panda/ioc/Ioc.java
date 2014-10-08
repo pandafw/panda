@@ -31,6 +31,13 @@ public interface Ioc {
 	boolean has(String name) throws IocException;
 
 	/**
+	 * @param type 类型
+	 * @param name 对象名
+	 * @return 是否存在某一特定对象
+	 */
+	boolean has(Class<?> type, String name) throws IocException;
+
+	/**
 	 * 从容器中获取一个对象。这个对象的名称会根据传入的类型按如下规则决定
 	 * <ul>
 	 * <li>如果定义了注解 '@IocInject'，采用其值为注入名

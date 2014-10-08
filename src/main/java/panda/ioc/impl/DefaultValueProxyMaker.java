@@ -73,7 +73,7 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		// Refer
 		if (IocValue.TYPE_REF.equals(type)) {
 			if (value instanceof Class) {
-				return new ReferValue((Class<?>)value);
+				return new ReferValue((Class<?>)value, iv.isRequired());
 			}
 
 			String s = value.toString();

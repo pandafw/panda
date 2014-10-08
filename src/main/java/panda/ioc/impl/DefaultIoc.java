@@ -221,6 +221,13 @@ public class DefaultIoc implements Ioc, Cloneable {
 		}
 	}
 
+	public boolean has(Class<?> type, String name) {
+		if (Strings.isEmpty(name)) {
+			name = getBeanName(type);
+		}
+		return has(name);
+	}
+
 	public boolean has(Class<?> type) {
 		String name = getBeanName(type);
 		return has(name);

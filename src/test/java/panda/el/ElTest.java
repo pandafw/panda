@@ -175,16 +175,16 @@ public class ElTest {
 	public void test_simple_condition() {
 		Map context = new HashMap();
 		context.put("a", 10);
-		assertEquals(10, El.eval(context, "a"));
-		assertEquals(20, El.eval(context, "a + a"));
+		assertEquals(10, El.eval("a", context));
+		assertEquals(20, El.eval("a + a", context));
 
 		context.put("b", "abc");
-		assertEquals(25, El.eval(context, "a + 2 +a+ b.length()"));
+		assertEquals(25, El.eval("a + 2 +a+ b.length()", context));
 
 		String s = "a>5?'GT 5':'LTE 5'";
-		assertEquals("GT 5", El.eval(context, s));
+		assertEquals("GT 5", El.eval(s, context));
 		context.put("a", 5);
-		assertEquals("LTE 5", El.eval(context, s));
+		assertEquals("LTE 5", El.eval(s, context));
 
 		assertEquals("jk", El.eval("\"j\"+\"k\""));
 
@@ -196,13 +196,13 @@ public class ElTest {
 		List<String> list = new ArrayList<String>();
 		list.add("jk");
 		context.put("a", list);
-		assertEquals("jk", El.eval(context, "a.get((1-1))"));
-		assertEquals("jk", El.eval(context, "a.get(1-1)"));
-		assertEquals("jk", El.eval(context, "a.get(0)"));
+		assertEquals("jk", El.eval("a.get((1-1))", context));
+		assertEquals("jk", El.eval("a.get(1-1)", context));
+		assertEquals("jk", El.eval("a.get(0)", context));
 
-		assertTrue((Boolean)El.eval(new HashMap(), "a==null"));
+		assertTrue((Boolean)El.eval("a==null", new HashMap()));
 		try {
-			assertTrue((Boolean)El.eval(new HashMap(), "a.a"));
+			assertTrue((Boolean)El.eval("a.a", new HashMap()));
 			fail();
 		}
 		catch (Exception e) {
@@ -219,10 +219,10 @@ public class ElTest {
 		String[][] bb = new String[][] { { "a", "b" }, { "c", "d" } };
 		context.put("a", str);
 		context.put("b", bb);
-		assertEquals("b", El.eval(context, "a[1]"));
-		assertEquals("b", El.eval(context, "a[1].toString()"));
-		assertEquals("b", El.eval(context, "a[2-1]"));
-		assertEquals("d", El.eval(context, "b[1][1]"));
+		assertEquals("b", El.eval("a[1]", context));
+		assertEquals("b", El.eval("a[1].toString()", context));
+		assertEquals("b", El.eval("a[2-1]", context));
+		assertEquals("d", El.eval("b[1][1]", context));
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class ElTest {
 		}
 		Map context = new HashMap();
 		context.put("a", new abc());
-		assertEquals("jk", El.eval(context, "a.name"));
+		assertEquals("jk", El.eval("a.name", context));
 		assertFalse((Boolean)El.eval("'java.lang.Boolean'@FALSE"));
 	}
 
@@ -263,10 +263,10 @@ public class ElTest {
 		Map<String, Object> ctx = new HashMap<String, Object>();
 		ctx.put("a", mu);
 		
-		assertEquals(2, El.eval(mu, "max(1, 2)"));
-		assertEquals(2, El.eval(mu, "min(max(1, 2), 4)"));
-		assertEquals(1, El.eval(ctx, "a.min(1, 2)"));
-		assertEquals("jk", El.eval(ctx, "a.trim('    jk    ')"));
+		assertEquals(2, El.eval("max(1, 2)", mu));
+		assertEquals(2, El.eval("min(max(1, 2), 4)", mu));
+		assertEquals(1, El.eval("a.min(1, 2)", ctx));
+		assertEquals("jk", El.eval("a.trim('    jk    ')", ctx));
 	}
 
 	@Test
@@ -279,7 +279,7 @@ public class ElTest {
 		con.put("num", num);
 		con.put("i", i);
 		con.put("z", z);
-		assertEquals(num + (i - 1 + 2 - 3 + 4 - 5 + 6 - 7) - z.abc(i), El.eval(con, elstr));
+		assertEquals(num + (i - 1 + 2 - 3 + 4 - 5 + 6 - 7) - z.abc(i), El.eval(elstr, con));
 	}
 
 	@Test
@@ -300,10 +300,10 @@ public class ElTest {
 		Map context = new HashMap();
 		context.put("a", Jsons.fromJson("{'x':10,'y':50,'txt':'Hello'}", Map.class));
 
-		assertEquals(100, El.eval(context, "a.get('x')*10"));
-		assertEquals(100, El.eval(context, "a.x*10"));
-		assertEquals(100, El.eval(context, "a['x']*10"));
-		assertEquals("Hello-40", El.eval(context, "a.get('txt')+(a.get('x')-a.get('y'))"));
+		assertEquals(100, El.eval("a.get('x')*10", context));
+		assertEquals(100, El.eval("a.x*10", context));
+		assertEquals(100, El.eval("a['x']*10", context));
+		assertEquals("Hello-40", El.eval("a.get('txt')+(a.get('x')-a.get('y'))", context));
 	}
 
 	/**
@@ -314,11 +314,11 @@ public class ElTest {
 		Map context = new HashMap();
 		List<String> list = new ArrayList<String>();
 		context.put("b", list);
-		assertEquals(0, El.eval(context, "b.size()"));
+		assertEquals(0, El.eval("b.size()", context));
 		list.add("");
-		assertEquals(1, El.eval(context, "b.size()"));
-		El.eval(context, "b.add('Q\nQ')");
-		assertEquals(2, El.eval(context, "b.size()"));
+		assertEquals(1, El.eval("b.size()", context));
+		El.eval("b.add('Q\nQ')", context);
+		assertEquals(2, El.eval("b.size()", context));
 	}
 
 	@SuppressWarnings("unused")
@@ -339,13 +339,13 @@ public class ElTest {
 		String t = "i * pi + (d * b - 199) / (1 - d * pi) - (2 + 100 - i / pi) % 99 ==i * pi + (d * b - 199) / (1 - d * pi) - (2 + 100 - i / pi) % 99";
 		// t =
 		// "i * pi + (d * b - 199) / (1 - d * pi) - (2 + 100 - i / pi) % 99";
-		assertEquals(true, El.eval(vars, t));
+		assertEquals(true, El.eval(t, vars));
 
 		// assertEquals('A' == ('A') || 'B' == 'B' && "ABCD" == "" && 'A' ==
 		// 'A', el.eval(vars,
 		// "'A' == 'A' || 'B' == 'B' && 'ABCD' == t &&  'A' == 'A'"));
 		assertEquals(true || true && false && true,
-			El.eval(vars, "'A' == 'A' || 'B' == 'B' && 'ABCD' == t &&  'A' == 'A'"));
+			El.eval("'A' == 'A' || 'B' == 'B' && 'ABCD' == t &&  'A' == 'A'", vars));
 	}
 
 	@Test
@@ -353,7 +353,7 @@ public class ElTest {
 		Map context = new HashMap();
 		context.put("a", new BigDecimal("7"));
 		context.put("b", new BigDecimal("3"));
-		assertEquals(10, El.eval(context, "a.add(b).intValue()"));
+		assertEquals(10, El.eval("a.add(b).intValue()", context));
 	}
 
 	@Test
@@ -368,8 +368,8 @@ public class ElTest {
 		Map context = new HashMap();
 		context.put("strings", Strings.class);
 		context.put("math", Math.class);
-		assertEquals("a", El.eval(context, "strings@trim(\"  a  \")"));
-		assertEquals(2, El.eval(context, "math@max(1, 2)"));
+		assertEquals("a", El.eval("strings@trim(\"  a  \")", context));
+		assertEquals(2, El.eval("math@max(1, 2)", context));
 	}
 
 	@Test
@@ -377,7 +377,7 @@ public class ElTest {
 		Map context = new HashMap();
 		context.put("a", 123);
 		context.put("b", 20);
-		Object o = El.eval(context, "a>b?a:b");
+		Object o = El.eval("a>b?a:b", context);
 		assertEquals(123, o);
 	}
 
@@ -398,10 +398,10 @@ public class ElTest {
 		//TODO
 		//assertEquals("xxx", El.eval(new Static(), "@printParam(@info)"));
 		
-		assertEquals("yyy", El.eval(new Static(), "@printParam('yyy')"));
-		assertEquals("xxx", El.eval(new Static(), "@info"));
-		assertEquals("xxx", El.eval(context, "s@printParam(s@info)"));
-		assertEquals("xxx", El.eval(context, "a@printParam(a@info)"));
+		assertEquals("yyy", El.eval("@printParam('yyy')", new Static()));
+		assertEquals("xxx", El.eval("@info", new Static()));
+		assertEquals("xxx", El.eval("s@printParam(s@info)", context));
+		assertEquals("xxx", El.eval("a@printParam(a@info)", context));
 	}
 
 	public static class SelfRef {
@@ -425,8 +425,8 @@ public class ElTest {
 		item.child = new SelfRef("child");
 		context.put("item", item);
 
-		assertEquals("child", El.eval(context, "item.child.getName()"));
-		assertEquals(0, El.eval(context, "item.list.size()"));
+		assertEquals("child", El.eval("item.child.getName()", context));
+		assertEquals(0, El.eval("item.list.size()", context));
 	}
 
 	@Test
@@ -498,7 +498,7 @@ public class ElTest {
 		context.put("list", list);
 		context.put("System", System.class);
 
-		El.eval(context, "list.add(list.get(0))");
+		El.eval("list.add(list.get(0))", context);
 		assertEquals(2, list.size());
 	}
 
@@ -510,13 +510,13 @@ public class ElTest {
 		context.put("list", list);
 		context.put("System", System.class);
 
-		Object val = El.eval(context, "System@getenv('PATH').getClass().getName()");
+		Object val = El.eval("System@getenv('PATH').getClass().getName()", context);
 		Assert.assertNotNull(val);
 
-		Object val2 = El.eval(context, "'java.lang.System'@getenv('PATH').getClass().getName()");
+		Object val2 = El.eval("'java.lang.System'@getenv('PATH').getClass().getName()", context);
 		Assert.assertEquals(val, val2);
 
-		Object val3 = El.eval(context, "'System'@getenv('PATH').getClass().getName()");
+		Object val3 = El.eval("'System'@getenv('PATH').getClass().getName()", context);
 		Assert.assertEquals(val, val3);
 	}
 
@@ -544,8 +544,8 @@ public class ElTest {
 		lt.setList(list);
 		context.put("map", lt);
 
-		assertEquals("123", El.eval(context, "String@valueOf(123)"));
-		assertEquals("123", El.eval(context, "map.list.get(0)"));
+		assertEquals("123", El.eval("String@valueOf(123)", context));
+		assertEquals("123", El.eval("map.list.get(0)", context));
 	}
 
 	public static class InnerClass {
