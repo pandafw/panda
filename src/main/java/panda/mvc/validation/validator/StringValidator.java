@@ -2,6 +2,7 @@ package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.AsiaStrings;
+import panda.lang.Strings;
 
 @IocBean(singleton=false)
 public class StringValidator extends AbstractStringValidator {
@@ -93,6 +94,8 @@ public class StringValidator extends AbstractStringValidator {
 		}
 
 		switch (type) {
+		case ALPHA_NUMBER:
+			return Strings.isAlphanumeric(value);
 		case HANKAKU: 
 			return AsiaStrings.isHankakuString(value);
 		case HANKAKU_KATAKANA:

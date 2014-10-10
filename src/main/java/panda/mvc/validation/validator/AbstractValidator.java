@@ -122,6 +122,7 @@ public abstract class AbstractValidator implements Validator {
 		while (p != null) {
 			sb.insert(0, '.');
 			sb.insert(0, p.getName());
+			p = p.getParent();
 		}
 		return sb.toString();
 	}

@@ -16,7 +16,6 @@ import panda.mvc.ActionContext;
 @IocBean(singleton=false)
 public class ImageValidator extends AbstractValidator {
 
-	private boolean required;
 	private Integer minWidth;
 	private Integer minHeight;
 	private Integer maxWidth;
@@ -32,21 +31,6 @@ public class ImageValidator extends AbstractValidator {
 	 */
 	private Integer height;
 	
-
-	/**
-	 * @return the required
-	 */
-	public boolean isRequired() {
-		return required;
-	}
-
-	/**
-	 * @param required the required to set
-	 */
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-
 	/**
 	 * @return the width
 	 */
@@ -162,21 +146,22 @@ public class ImageValidator extends AbstractValidator {
 
 	@Override
 	protected boolean validateValue(ActionContext ac, Object value) {
-		if (validateValue(value)) {
+		if (value == null) {
 			return true;
 		}
+
+		if (validateImage(value)) {
+			return true;
+		}
+		
 		addFieldError(ac);
 		return false;
 	}
 	
-	private boolean validateValue(Object value) {
-		if (value == null) {
-			return !required;
-		}
-
+	private boolean validateImage(Object value) {
 		ImageWrapper img = getImage(value);
 		if (img == null) {
-			return !required;
+			return false;
 		}
 
 		width = img.getWidth();

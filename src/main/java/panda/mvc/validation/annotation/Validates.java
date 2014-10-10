@@ -13,4 +13,6 @@ public @interface Validates {
 	 * Used for class or interface validation rules.
 	 */
 	Validate[] value() default {};
+	
+	boolean shortCircuit() default false;
 }

@@ -69,8 +69,11 @@ public abstract class AbstractStringValidator extends AbstractValidator {
 
 	@Override
 	protected boolean validateValue(ActionContext ac, Object value) {
+		if (value == null) {
+			return true;
+		}
+		
 		String str = trimFieldValue(value);
-
 		if (Strings.isEmpty(str)) {
 			if (!empty) {
 				addFieldError(ac);

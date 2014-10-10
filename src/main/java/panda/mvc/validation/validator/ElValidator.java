@@ -10,26 +10,31 @@ public class ElValidator extends AbstractValidator {
 
 	private static final Log log = Logs.getLog(ElValidator.class);
 	
-	private String expression;
+	private String el;
 
-	public void setExpression(String expression) {
-		this.expression = expression;
+	public void setEl(String el) {
+		this.el = el;
 	}
 
-	public String getExpression() {
-		return expression;
+	public String getEl() {
+		return el;
 	}
 
 	@Override
 	protected boolean validateValue(ActionContext ac, Object value) {
-		Object result = evalExpression(ac, expression);
+		if (getName() != null && value == null) {
+			// skip null field value
+			return true;
+		}
+		
+		Object result = evalExpression(ac, el);
 
 		Boolean answer = false;
 		if ((result != null) && (result instanceof Boolean)) {
 			answer = (Boolean)result;
 		}
 		else {
-			log.warn("Got result of '" + result + "' when trying to get Boolean of '" + expression + "'.");
+			log.warn("Got result of '" + result + "' when trying to get Boolean of '" + el + "'.");
 		}
 
 		if (answer.booleanValue()) {

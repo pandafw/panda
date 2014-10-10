@@ -43,7 +43,7 @@ import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
-import panda.mvc.validation.validator.VisitorValidator;
+import panda.mvc.validation.validator.VisitValidator;
 
 @IocBean(type=Validators.class)
 public class DefaultValidators implements Validators {
@@ -73,7 +73,7 @@ public class DefaultValidators implements Validators {
 		map.put(IMAGE, ImageValidator.class);
 		map.put(CONSTANT, ConstantValidator.class);
 		map.put(PROHIBITED, ProhibitedValidator.class);
-		map.put(VISITOR, VisitorValidator.class);
+		map.put(VISIT, VisitValidator.class);
 		
 		InputStream is = null;
 		try {
@@ -118,7 +118,7 @@ public class DefaultValidators implements Validators {
 
 		for (int i = 0; i < pass.length; i++) {
 			Param param = null;
-			Validates valid = null;
+			Validates vs = null;
 
 			Annotation[] pas = pass[i];
 			for (Annotation pa : pas) {
@@ -126,42 +126,46 @@ public class DefaultValidators implements Validators {
 					param = (Param)pa;
 				}
 				if (pa instanceof Validates) {
-					valid = (Validates)pa;
+					vs = (Validates)pa;
 				}
 			}
 
-			if (valid == null) {
+			if (vs == null) {
 				continue;
 			}
 
 			Object obj = ac.getArgs()[i];
 			String name = DefaultParamAdaptor.indexedName(i, param);
 
-			if (Arrays.isEmpty(valid.value())) {
-				Validator fv = createValidator(ac, VisitorValidator.class, "visitor");
-				fv.setName(name);
-				if (!fv.validate(ac, obj)) {
-					if (fv.isShortCircuit()) {
-						break;
-					}
+			if (!validate(ac, null, name, obj, vs)) {
+				if (vs.shortCircuit()) {
+					break;
 				}
-			}
-			else {
-				validate(ac, name, obj, valid);
 			}
 		}
 	}
 
-	protected boolean validate(ActionContext ac, String name, Object value, Validates av) {
-		for (Validate v : av.value()) {
+	@Override
+	public boolean validate(ActionContext ac, Validator parent, String name, Object value, Validates vs) {
+		if (Arrays.isEmpty(vs.value())) {
+			Validator fv = createValidator(ac, VisitValidator.class, Validators.VISIT);
+			fv.setName(name);
+			return fv.validate(ac, value);
+		}
+
+		boolean r = true;
+		for (Validate v : vs.value()) {
 			Validator fv = createValidator(ac, v);
 			fv.setName(name);
-			
+			fv.setParent(parent);
 			if (!fv.validate(ac, value)) {
-				return false;
+				if (fv.isShortCircuit()) {
+					return false;
+				}
+				r = false;
 			}
 		}
-		return true;
+		return r;
 	}
 
 	/**
@@ -190,6 +194,14 @@ public class DefaultValidators implements Validators {
 	}
 	
 	public Validator createValidator(ActionContext ac, Class<? extends Validator> type, String alias) {
+		Validator v = _createValidator(ac, type, alias);
+		if (v instanceof VisitValidator) {
+			((VisitValidator)v).setValidators(this);
+		}
+		return v;
+	}
+	
+	private Validator _createValidator(ActionContext ac, Class<? extends Validator> type, String alias) {
 		if (type != Validator.class) {
 			Validator fv = ac.getIoc().getIfExists(type);
 			if (fv != null) {

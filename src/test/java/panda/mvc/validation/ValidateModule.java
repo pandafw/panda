@@ -24,7 +24,7 @@ public class ValidateModule {
 	@At
 	public Object one(
 			@Param("one")
-			@Validates(@Validate(value="number", params="{min: -100, max: 100}", message="min: ${top.min}, max: ${top.max}"))
+			@Validates(@Validate(value=Validators.NUMBER, params="{min: -100, max: 100}", message="min: ${top.min}, max: ${top.max}"))
 			int one) {
 
 		return 1;
@@ -34,8 +34,8 @@ public class ValidateModule {
 	public Object oneCast(
 			@Param("one")
 			@Validates({
-				@Validate(value="number", params="{min: -100, max: 100}", message="min: ${top.min}, max: ${top.max}"),
-				@Validate(value="cast", message="int cast error")
+				@Validate(value=Validators.NUMBER, params="{min: -100, max: 100}", message="min: ${top.min}, max: ${top.max}"),
+				@Validate(value=Validators.CAST, message="int cast error")
 				})
 			int one) {
 
@@ -45,7 +45,7 @@ public class ValidateModule {
 	@At
 	public Object visitOne(
 			@Param("one.*")
-			@Validates(@Validate(value="visit"))
+			@Validates(@Validate(value=Validators.VISIT))
 			ValidateObject one) {
 
 		return 1;

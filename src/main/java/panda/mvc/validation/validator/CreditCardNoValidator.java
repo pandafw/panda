@@ -8,7 +8,7 @@ import panda.util.validator.CreditCardNumberValidator;
 
 @IocBean(singleton=false)
 public class CreditCardNoValidator extends AbstractStringValidator {
-	private boolean normalize = false;
+	private boolean normalize = true;
 	private char cardType = CreditCardNumberValidator.ALL;
 
 	/**

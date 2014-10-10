@@ -14,7 +14,6 @@ public class EmptyValidator extends AbstractValidator {
 
 	@Override
 	protected boolean validateValue(ActionContext ac, Object value) {
-
 		if (value == null) {
 			return true;
 		}

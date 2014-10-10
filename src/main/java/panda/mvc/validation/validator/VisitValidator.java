@@ -18,10 +18,9 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
-import panda.mvc.validation.annotation.Validate;
 
 @IocBean(singleton=false)
-public class VisitorValidator extends AbstractValidator {
+public class VisitValidator extends AbstractValidator {
 	protected static class ParentValidator extends AbstractValidator {
 		public ParentValidator(Validator parent, Object value) {
 			setParent(parent);
@@ -34,7 +33,7 @@ public class VisitorValidator extends AbstractValidator {
 		}
 	}
 	
-	private static final Log log = Logs.getLog(VisitorValidator.class);
+	private static final Log log = Logs.getLog(VisitValidator.class);
 
 	@IocInject
 	private Validators validators;
@@ -53,6 +52,20 @@ public class VisitorValidator extends AbstractValidator {
 	 */
 	public void setCondition(String condition) {
 		this.condition = condition;
+	}
+
+	/**
+	 * @return the validators
+	 */
+	public Validators getValidators() {
+		return validators;
+	}
+
+	/**
+	 * @param validators the validators to set
+	 */
+	public void setValidators(Validators validators) {
+		this.validators = validators;
 	}
 
 	@Override
@@ -104,7 +117,7 @@ public class VisitorValidator extends AbstractValidator {
 	private boolean validateMapElements(ActionContext ac, Map map) {
 		boolean r = true;
 
-		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
+		VisitValidator vv = ac.getIoc().get(VisitValidator.class);
 		for (Iterator it = map.entrySet().iterator(); it.hasNext(); ) {
 			Entry es = (Entry)it.next();
 			Object k = es.getKey();
@@ -126,7 +139,7 @@ public class VisitorValidator extends AbstractValidator {
 	private boolean validateArrayElements(ActionContext ac, Object[] array) {
 		boolean r = true;
 
-		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
+		VisitValidator vv = ac.getIoc().get(VisitValidator.class);
 		for (int i = 0; i < array.length; i++) {
 			Object o = array[i];
 			if (o != null) {
@@ -145,7 +158,7 @@ public class VisitorValidator extends AbstractValidator {
 	private boolean validateCollectionElements(ActionContext ac, Collection coll) {
 		boolean r = true;
 
-		VisitorValidator vv = ac.getIoc().get(VisitorValidator.class);
+		VisitValidator vv = ac.getIoc().get(VisitValidator.class);
 		int i = 0;
 		for (Object o : coll) {
 			if (o != null) {
@@ -173,29 +186,23 @@ public class VisitorValidator extends AbstractValidator {
 				continue;
 			}
 			
-			Validates av = null;
+			Validates vs = null;
 			if (pg instanceof Field) {
-				av = ((Field)pg).getAnnotation(Validates.class);
+				vs = ((Field)pg).getAnnotation(Validates.class);
 			}
 			else if (pg instanceof Method) {
-				av = ((Method)pg).getAnnotation(Validates.class);
+				vs = ((Method)pg).getAnnotation(Validates.class);
 			}
-			if (av == null) {
+			if (vs == null) {
 				continue;
 			}
 			
 			Object val = en.getValue().getValue(obj);
-			for (Validate v : av.value()) {
-				Validator fv = validators.createValidator(ac, v);
-				fv.setName(fn);
-				fv.setParent(parent);
-				
-				if (!fv.validate(ac, val)) {
-					r = false;
-					if (isShortCircuit()) {
-						return false;
-					}
+			if (!validators.validate(ac, this, fn, val, vs)) {
+				if (vs.shortCircuit()) {
+					return false;
 				}
+				r = false;
 			}
 		}
 		return r;
