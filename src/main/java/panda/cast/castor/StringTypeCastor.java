@@ -31,14 +31,6 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		this.dateCastor = dateCastor;
 	}
 
-	@Override
-	protected Object prepare(Object value) {
-		if (value instanceof byte[] || value instanceof char[]) {
-			return value;
-		}
-		return super.prepare(value);
-	}
-
 	protected void write(Object value, Appendable a) {
 		try {
 			if (value instanceof InputStream) {

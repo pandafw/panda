@@ -22,14 +22,6 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 		super(toType);
 	}
 
-	@Override
-	protected Object prepare(Object value) {
-		if (value instanceof byte[] || value instanceof char[]) {
-			return value;
-		}
-		return super.prepare(value);
-	}
-
 	public static class InputStreamCastor extends StreamCastor<InputStream> {
 		public InputStreamCastor() {
 			super(InputStream.class);

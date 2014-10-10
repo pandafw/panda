@@ -1,13 +1,14 @@
 package panda.el;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,9 +210,6 @@ public class ElTest {
 		}
 	}
 
-	/**
-	 * 数组测试
-	 */
 	@Test
 	public void array() {
 		Map context = new HashMap();
@@ -225,18 +223,19 @@ public class ElTest {
 		assertEquals("d", El.eval("b[1][1]", context));
 	}
 
-	/**
-	 * 属性测试
-	 */
 	@Test
 	public void field() {
+		@SuppressWarnings("unused")
 		class abc {
-			@SuppressWarnings("unused")
 			public String name = "jk";
+			public Date date = new Date(1900);
 		}
+
 		Map context = new HashMap();
 		context.put("a", new abc());
 		assertEquals("jk", El.eval("a.name", context));
+		assertEquals(new Long(1900), El.eval("a.date.getTime()", context));
+		
 		assertFalse((Boolean)El.eval("'java.lang.Boolean'@FALSE"));
 	}
 

@@ -18,6 +18,10 @@ public abstract class AnySingleCastor<T> extends AnyObjectCastor<T> {
 	 * @return one value of the array[1]
 	 */
 	protected Object prepare(Object value) {
+		if (value instanceof byte[] || value instanceof char[]) {
+			return value;
+		}
+
 		if (Iterators.isIterable(value)) {
 			Iterator it = Iterators.asIterator(value);
 			if (it.hasNext()) {
