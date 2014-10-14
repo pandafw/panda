@@ -730,4 +730,14 @@ public abstract class Fields {
 		// already forced access above, don't repeat it here:
 		writeField(field, target, value, false);
 	}
+
+	/**
+	 * transient field
+	 * 
+	 * @param field field
+	 * @return true - field is transient
+	 */
+	public static boolean isTransientField(Field field) {
+		return (field.getModifiers() & Modifier.TRANSIENT) == Modifier.TRANSIENT;
+	}
 }

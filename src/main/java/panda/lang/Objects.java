@@ -2,10 +2,8 @@ package panda.lang;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -649,100 +647,6 @@ public abstract class Objects {
 	}
 
 	/**
-	 * transient field
-	 * 
-	 * @param fieldName field name
-	 * @param clazz class
-	 * @return true - field is transient, false - field not found or is not transient
-	 */
-	public static boolean isTransientField(String fieldName, Class clazz) {
-		try {
-			return isTransientField(clazz.getDeclaredField(fieldName));
-		}
-		catch (Exception e) {
-		}
-		return false;
-	}
-
-	/**
-	 * transient field
-	 * 
-	 * @param field field
-	 * @return true - field is transient
-	 */
-	public static boolean isTransientField(Field field) {
-		return (field.getModifiers() & Modifier.TRANSIENT) == Modifier.TRANSIENT;
-	}
-
-	/**
-	 * get field value
-	 * 
-	 * @param object object
-	 * @param name field name
-	 * @return field field value
-	 * @throws NoSuchFieldException if an error occurs
-	 * @throws IllegalAccessException if an error occurs
-	 * @throws SecurityException if an error occurs
-	 * @throws IllegalArgumentException if an error occurs
-	 */
-	public static Object getFieldValue(Object object, String name) throws NoSuchFieldException,
-			IllegalArgumentException, SecurityException, IllegalAccessException {
-		Field field = object.getClass().getField(name);
-		return field.get(object);
-	}
-
-	/**
-	 * set field value
-	 * 
-	 * @param object object
-	 * @param name field name
-	 * @param value field value
-	 * @throws NoSuchFieldException if an error occurs
-	 * @throws IllegalArgumentException if an error occurs
-	 * @throws SecurityException if an error occurs
-	 * @throws IllegalAccessException if an error occurs
-	 */
-	public static void setFieldValue(Object object, String name, Object value) throws NoSuchFieldException,
-			IllegalArgumentException, SecurityException, IllegalAccessException {
-		Field field = object.getClass().getField(name);
-		field.set(object, value);
-	}
-
-	/**
-	 * get static field value
-	 * 
-	 * @param clazz class
-	 * @param name field name
-	 * @return field field value
-	 * @throws NoSuchFieldException if an error occurs
-	 * @throws IllegalArgumentException if an error occurs
-	 * @throws SecurityException if an error occurs
-	 * @throws IllegalAccessException if an error occurs
-	 */
-	public static Object getStaticFieldValue(Class clazz, String name) throws NoSuchFieldException,
-			IllegalArgumentException, SecurityException, IllegalAccessException {
-		Field field = clazz.getField(name);
-		return field.get(null);
-	}
-
-	/**
-	 * set static field value
-	 * 
-	 * @param clazz class
-	 * @param name field name
-	 * @param value field value
-	 * @throws NoSuchFieldException if an error occurs
-	 * @throws IllegalArgumentException if an error occurs
-	 * @throws SecurityException if an error occurs
-	 * @throws IllegalAccessException if an error occurs
-	 */
-	public static void setStaticFieldValue(Class clazz, String name, Object value) throws NoSuchFieldException,
-			IllegalArgumentException, SecurityException, IllegalAccessException {
-		Field field = clazz.getField(name);
-		field.set(null, value);
-	}
-
-	/**
 	 * Determine if the given objects are equal, returning <code>true</code> if both are
 	 * <code>null</code> or <code>false</code> if only one is <code>null</code>.
 	 * <p>
@@ -838,5 +742,81 @@ public abstract class Objects {
 	 */
 	public static CompareToBuilder compareToBuilder() {
 		return new CompareToBuilder();
+	}
+
+	/**
+	 * Determine if <code>obj2</code> exists in <code>obj1</code>.
+	 * <table borer="1">
+	 * <tr>
+	 * <td>Type Of obj1</td>
+	 * <td>Comparison type</td>
+	 * </tr>
+	 * <tr>
+	 * <td>null
+	 * <td>
+	 * <td>always return false</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Map</td>
+	 * <td>Map containsKey(obj2)</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Collection</td>
+	 * <td>Collection contains(obj2)</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Array</td>
+	 * <td>there's an array element (e) where e.equals(obj2)</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Object</td>
+	 * <td>obj1.equals(obj2)</td>
+	 * </tr>
+	 * </table>
+	 * 
+	 * @param obj1
+	 * @param obj2
+	 * @return true if obj1 contains obj2
+	 */
+	public static boolean contains(Object obj1, Object obj2) {
+		if ((obj1 == null) || (obj2 == null)) {
+			// log.debug("obj1 or obj2 are null.");
+			return false;
+		}
+
+		if (obj1 instanceof Map) {
+			if (((Map)obj1).containsKey(obj2) || ((Map)obj1).containsKey(obj2.toString())) {
+				// log.debug("obj1 is a map and contains obj2");
+				return true;
+			}
+		}
+		if (obj1 instanceof Iterable) {
+			for (Object value : ((Iterable)obj1)) {
+				if (obj2.equals(value) || obj2.toString().equals(value)) {
+					return true;
+				}
+			}
+		}
+		else if (obj1.getClass().isArray()) {
+			for (int i = 0; i < Array.getLength(obj1); i++) {
+				Object value = Array.get(obj1, i);
+
+				if (obj2.equals(value) || obj2.toString().equals(value)) {
+					// log.debug("obj1 is an array and contains obj2");
+					return true;
+				}
+			}
+		}
+		else if (obj1.toString().equals(obj2.toString())) {
+			// log.debug("obj1 is an object and it's String representation equals obj2's String representation.");
+			return true;
+		}
+		else if (obj1.equals(obj2)) {
+			// log.debug("obj1 is an object and equals obj2");
+			return true;
+		}
+
+		// log.debug("obj1 does not contain obj2: " + obj1 + ", " + obj2);
+		return false;
 	}
 }
