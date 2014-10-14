@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import panda.exts.fileupload.UploadFile;
-import panda.exts.fileupload.UploadImage;
 import panda.lang.Classes;
 import panda.lang.Strings;
 
@@ -313,10 +311,14 @@ public class TypeUtils {
 
 		ALIAS_MAP.put("file", File.class.getName());
 		ALIAS_MAP.put("File", File.class.getName());
-		ALIAS_MAP.put("uploadfile", UploadFile.class.getName());
-		ALIAS_MAP.put("UploadFile", UploadFile.class.getName());
-		ALIAS_MAP.put("uploadimage", UploadImage.class.getName());
-		ALIAS_MAP.put("UploadImage", UploadImage.class.getName());
+
+		ALIAS_MAP.put("fileitem", "panda.filepool.FileItem");
+		ALIAS_MAP.put("FileItem", "panda.filepool.FileItem");
+
+		ALIAS_MAP.put("uploadfile", "panda.exts.fileupload.UploadFile");
+		ALIAS_MAP.put("UploadFile", "panda.exts.fileupload.UploadFile");
+		ALIAS_MAP.put("uploadimage", "panda.exts.fileupload.UploadImage");
+		ALIAS_MAP.put("UploadImage", "panda.exts.fileupload.UploadImage");
 	}
 	private static String classByAlias(String type) {
 		return ALIAS_MAP.get(type);
