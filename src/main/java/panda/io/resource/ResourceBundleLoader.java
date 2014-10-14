@@ -59,6 +59,7 @@ public class ResourceBundleLoader {
 		// add defaults
 		addResourceBundleMaker(JAVA_CLASS, null);
 		addResourceBundleMaker(JAVA_PROPS, null);
+		addResourceBundleMaker(TxtResourceBundleMaker.TXT, new TxtResourceBundleMaker());
 	}
 
 	public void addResourceBundleMaker(String format, ResourceBundleMaker rbm) {

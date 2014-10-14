@@ -21,10 +21,25 @@ import panda.lang.Charsets;
  */
 public class TxtResourceBundleMaker implements ResourceBundleMaker {
 	
+	public static String TXT = "txt";
+	
+	private String format;
+	
+	public TxtResourceBundleMaker() {
+		this(TXT);
+	}
+
+	/**
+	 * @param format
+	 */
+	public TxtResourceBundleMaker(String format) {
+		this.format = format;
+	}
+
 	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader,
 			boolean reload) throws IllegalAccessException, InstantiationException, IOException {
 		
-		final String resourceName = Resources.toResourceName(Resources.toBundleName(baseName, locale), "txt");
+		final String resourceName = Resources.toResourceName(Resources.toBundleName(baseName, locale), format);
 		final ClassLoader classLoader = loader;
 		final boolean reloadFlag = reload;
 		Reader reader = null;
