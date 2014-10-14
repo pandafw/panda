@@ -46,5 +46,10 @@ public interface FileItem {
 	 * @return the input stream
 	 */
 	InputStream getInputStream() throws IOException;
+
+	/**
+	 * delete self
+	 */
+	void delete() throws IOException;
 }
 

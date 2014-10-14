@@ -78,6 +78,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	/**
 	 * @return the data
 	 */
+	@Override
 	public byte[] getData() throws IOException {
 		return Streams.toByteArray(file);
 	}
@@ -85,8 +86,14 @@ public class LocalFileItem implements FileItem, Serializable {
 	/**
 	 * @return the input stream
 	 */
+	@Override
 	public InputStream getInputStream() throws IOException {
 		return new FileInputStream(file);
+	}
+
+	@Override
+	public void delete() {
+		file.delete();
 	}
 
 	/**

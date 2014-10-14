@@ -127,4 +127,20 @@ public class DaoFilePool implements FilePool {
 		
 		return buf;
 	}
+
+	protected void deleteFile(final DaoFileItem file) throws IOException {
+		final Dao dao = getDaoClient().getDao();
+		dao.exec(new Runnable() {
+			public void run() {
+				FileDataQuery fdq = new FileDataQuery();
+				fdq.fid().equalTo(file.getId());
+				dao.deletes(fdq);
+				
+				dao.delete(file);
+			}
+		});
+		
+		file.setExists(false);
+		file.setData(null);
+	}
 }

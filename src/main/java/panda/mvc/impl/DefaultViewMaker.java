@@ -2,13 +2,12 @@ package panda.mvc.impl;
 
 import panda.bind.json.JsonObject;
 import panda.cast.Castors;
+import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
 import panda.mvc.View;
 import panda.mvc.ViewMaker;
 import panda.mvc.view.ForwardView;
@@ -40,7 +39,7 @@ public class DefaultViewMaker implements ViewMaker {
 	public static final String VIEW_NULL = "";
 	public static final String VIEW_VOID = "void";
 
-	public View make(MvcConfig conf, ActionInfo ai, String type, String value) {
+	public View make(Ioc ioc, String type, String value) {
 		type = type.toLowerCase();
 		if (VIEW_JSP.equals(type)) {
 			return new JspView(value);
@@ -89,7 +88,7 @@ public class DefaultViewMaker implements ViewMaker {
 		}
 		
 		if (VIEW_IOC.equals(type)) {
-			return conf.getIoc().get(View.class, value);
+			return ioc.get(View.class, value);
 		}
 		
 		if (VIEW_HTTP.equals(type)) {
@@ -101,7 +100,7 @@ public class DefaultViewMaker implements ViewMaker {
 		}
 		
 		if (VIEW_VOID.equals(type)) {
-			return new VoidView();
+			return VoidView.INSTANCE;
 		}
 		
 		if (VIEW_NULL.equals(type)) {

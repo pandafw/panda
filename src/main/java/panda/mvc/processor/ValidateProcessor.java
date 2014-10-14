@@ -14,7 +14,7 @@ public class ValidateProcessor extends ViewProcessor {
 
 	@Override
 	public void init(MvcConfig config, ActionInfo ai) throws Throwable {
-		view = evalView(config, ai, ai.getErrorView());
+		view = evalView(config.getIoc(), ai.getErrorView());
 
 		validators = config.getIoc().getIfExists(Validators.class);
 		if (validators == null) {

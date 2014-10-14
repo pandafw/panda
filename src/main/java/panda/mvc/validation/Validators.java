@@ -44,6 +44,7 @@ public interface Validators {
 	public static final String MSG_DATE_RANGE_TO = "validation-date-range-to";
 	public static final String MSG_NUMBER_RANGE_TO = "validation-number-range-to";
 	public static final String MSG_NUMBER_MIN = "validation-number-min";
+	public static final String MSG_REQUIRED = "validation-required";
 	
 	/**
 	 * @param ac action context

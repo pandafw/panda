@@ -1,5 +1,7 @@
 package panda.mvc;
 
+import panda.ioc.Ioc;
+
 
 /**
  * 这是一个扩展点，你可以通过实现这个接口，让注解 @Ok和 @Fail 支持更多的模板引擎。 这两个注解值的格式为：
@@ -24,6 +26,6 @@ public interface ViewMaker {
 	 * @param value 视图的值
 	 * @return 产生的视图对象
 	 */
-	View make(MvcConfig conf, ActionInfo ai, String type, String value);
+	View make(Ioc ioc, String type, String value);
 
 }

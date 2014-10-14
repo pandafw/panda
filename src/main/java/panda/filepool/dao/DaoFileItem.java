@@ -59,6 +59,8 @@ public class DaoFileItem implements FileItem, Serializable {
 	@Column(notNull=true, defaults="0")
 	protected int flag = 0;
 
+	private boolean exists = true;
+	
 	/**
 	 * Constructor
 	 */
@@ -161,12 +163,20 @@ public class DaoFileItem implements FileItem, Serializable {
 	 * @return true
 	 */
 	public boolean isExists() {
-		return true;
+		return exists;
+	}
+
+	/**
+	 * @param exists the exists to set
+	 */
+	public void setExists(boolean exists) {
+		this.exists = exists;
 	}
 
 	/**
 	 * @return the data
 	 */
+	@Override
 	public byte[] getData() throws IOException {
 		if (data == null) {
 			data = daoFilePool.readFile(this);
@@ -184,8 +194,14 @@ public class DaoFileItem implements FileItem, Serializable {
 	/**
 	 * @return the input stream
 	 */
+	@Override
 	public InputStream getInputStream() throws IOException {
 		return new ByteArrayInputStream(getData());
+	}
+
+	@Override
+	public void delete() throws IOException {
+		daoFilePool.deleteFile(this);
 	}
 
 	/**

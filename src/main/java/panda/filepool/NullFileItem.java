@@ -91,6 +91,10 @@ public class NullFileItem implements FileItem {
 		throw error();
 	}
 
+	public void delete() throws IOException {
+		throw error();
+	}
+
 	private IOException error() {
 		return new FileNotFoundException(toString());
 	}

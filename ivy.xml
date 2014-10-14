@@ -33,6 +33,7 @@
 		<dependency org="org.apache.poi" name="poi" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.10-FINAL" conf="run->master,sources" />
+		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
 		<dependency org="org.jsoup" name="jsoup" rev="1.7.3" conf="run->master,sources" />
 		<dependency org="org.xhtmlrenderer" name="flying-saucer-core" rev="9.0.3" conf="run->master,sources" />
