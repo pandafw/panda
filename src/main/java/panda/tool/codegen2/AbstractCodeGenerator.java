@@ -1,20 +1,5 @@
 package panda.tool.codegen2;
 
-import panda.io.FileNames;
-import panda.io.PropertiesEx;
-import panda.io.Streams;
-import panda.lang.Chars;
-import panda.lang.Charsets;
-import panda.lang.Classes;
-import panda.lang.HandledException;
-import panda.lang.Numbers;
-import panda.lang.Strings;
-import panda.lang.Texts;
-import panda.tool.IllegalLicenseException;
-import panda.tool.codegen.bean.Entity;
-import panda.tool.codegen.bean.Module;
-import panda.util.tool.AbstractCommandTool;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -22,7 +7,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.XMLConstants;
@@ -48,6 +32,21 @@ import org.xml.sax.SAXParseException;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
+
+import panda.io.FileNames;
+import panda.io.Settings;
+import panda.io.Streams;
+import panda.lang.Chars;
+import panda.lang.Charsets;
+import panda.lang.Classes;
+import panda.lang.HandledException;
+import panda.lang.Numbers;
+import panda.lang.Strings;
+import panda.lang.Texts;
+import panda.tool.IllegalLicenseException;
+import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.Module;
+import panda.util.tool.AbstractCommandTool;
 
 /**
  * Base class for code generator.
@@ -173,11 +172,11 @@ public abstract class AbstractCodeGenerator {
 		return Strings.isNotEmpty(val) && val.indexOf("${") >= 0;
 	}
 
-	protected String translateValue(String val, Properties properties) throws Exception {
+	protected String translateValue(String val, Settings properties) throws Exception {
 		return Texts.translate(val, properties);
 	}
 
-	protected void translateDom(Node node, Properties properties) throws Exception {
+	protected void translateDom(Node node, Settings properties) throws Exception {
 		NamedNodeMap nnm = node.getAttributes();
 		for (int i = 0; nnm != null && i < nnm.getLength(); i++) {
 			Node n = nnm.item(i);
@@ -230,7 +229,7 @@ public abstract class AbstractCodeGenerator {
 		}
 	}
 
-	protected void includeDom(File file, Document doc, Properties properties) throws Exception {
+	protected void includeDom(File file, Document doc, Settings properties) throws Exception {
 		List<Node> incList = new ArrayList<Node>();
 		
 		Element el = doc.getDocumentElement();
@@ -253,7 +252,7 @@ public abstract class AbstractCodeGenerator {
 
 			File fi = new File(file.getParent(), inc);
 			if (inc.endsWith(".properties")) {
-				PropertiesEx.load(properties, fi);
+				properties.load(fi);
 			}
 			else if (inc.endsWith(".xml")) {
 				Document idoc = loadDocument(fi, properties);
@@ -270,7 +269,7 @@ public abstract class AbstractCodeGenerator {
 		}
 	}
 
-	protected Document loadDocument(File file, Properties properties) throws Exception {
+	protected Document loadDocument(File file, Settings properties) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -284,7 +283,7 @@ public abstract class AbstractCodeGenerator {
 	}
 	
 	protected Module parseModule(File f) throws Exception {
-		Properties properties = new Properties();
+		Settings properties = new Settings();
 		
 		properties.load(getClass().getResourceAsStream("default.properties"));
 

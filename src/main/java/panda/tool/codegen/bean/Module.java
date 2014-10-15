@@ -3,13 +3,13 @@ package panda.tool.codegen.bean;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.io.Settings;
 import panda.lang.Strings;
 
 /**
@@ -45,7 +45,7 @@ public class Module {
 	@XmlElement(name = "resource")
 	protected List<Resource> resourceList;
 
-	protected Properties props;
+	protected Settings props;
 	
 	/**
 	 * Constructor
@@ -120,9 +120,9 @@ public class Module {
 	/**
 	 * @return the props
 	 */
-	public Properties getProps() {
+	public Settings getProps() {
 		if (props == null) {
-			props = new Properties();
+			props = new Settings();
 		}
 		return props;
 	}
@@ -130,7 +130,7 @@ public class Module {
 	/**
 	 * @param props the props to set
 	 */
-	public void setProps(Properties props) {
+	public void setProps(Settings props) {
 		this.props = props;
 	}
 
