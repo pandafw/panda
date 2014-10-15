@@ -23,7 +23,7 @@ public abstract class Images {
 			return (Images)Classes.born(prefix + "AndroidImages");
 		}
 		else if (Systems.IS_OS_APPENGINE) {
-			return (Images)Classes.born("panda.gae.image.GaeImages");
+			return (Images)Classes.born(prefix + "GaeImages");
 		}
 		else {
 			return (Images)Classes.born(prefix + "JavaImages");
