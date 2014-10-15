@@ -3,6 +3,7 @@ package panda.ioc.loader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -38,6 +39,10 @@ public class AnnotationIocLoader implements IocLoader {
 	}
 	
 	public AnnotationIocLoader(Object... args) {
+		init(Arrays.asList(args));
+	}
+	
+	protected void init(Collection<Object> args) {
 		for (Object a : args) {
 			if (a instanceof Class) {
 				addClass((Class<?>)a);
@@ -51,7 +56,7 @@ public class AnnotationIocLoader implements IocLoader {
 		
 		if (map.size() > 0) {
 			if (log.isInfoEnabled()) {
-				log.info("Successfully scan/add " + args.length + " args:\n" + Strings.join(args, '\n'));
+				log.info("Successfully scan/add " + args.size() + " args:\n" + Strings.join(args, '\n'));
 				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
 			}
 		}
