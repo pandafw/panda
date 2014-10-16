@@ -1,11 +1,10 @@
-package panda.mvc;
+package panda.mvc.ioc;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ioc.SessionIocContext;
 
 /**
  * 如果你的应用，在 Session 中保存了一些需要注销的对象，比如你在 Ioc 容器中将一个 DataSource 对象的范围设成 "session"，那么请启用本的监听器，它会在一个

@@ -8,6 +8,7 @@ import panda.mock.web.MockHttpServletResponse;
 import panda.mock.web.MockHttpSession;
 import panda.mock.web.MockServletConfig;
 import panda.mock.web.MockServletContext;
+import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.mock.Mock;
 
 public abstract class AbstractMvcTestCase {
