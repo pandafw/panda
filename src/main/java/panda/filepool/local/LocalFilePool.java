@@ -15,13 +15,14 @@ import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
+import panda.mvc.MvcConstants;
 import panda.mvc.adaptor.multipart.FileItemStream;
 
 @IocBean(type=FilePool.class)
 public class LocalFilePool implements FilePool {
 	protected final static FastDateFormat fdf = FastDateFormat.getInstance("yyyy/MM/dd/HH/mm/ss/SSS");
 
-	@IocInject(value="ref:panda.filepool.local.path", required=false)
+	@IocInject(value=MvcConstants.FILEPOOL_LOCAL_PATH, required=false)
 	protected String path;
 
 	public LocalFilePool() {

@@ -14,6 +14,7 @@ import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
+import panda.mvc.MvcConstants;
 import panda.mvc.adaptor.multipart.FileItemStream;
 
 @IocBean(type=FilePool.class)
@@ -21,7 +22,7 @@ public class DaoFilePool implements FilePool {
 	@IocInject
 	protected DaoClient daoClient;
 
-	@IocInject(value="ref:panda.filepool.dao.blocksize", required=false)
+	@IocInject(value=MvcConstants.FILEPOOL_DAO_BLOCK_SIZE, required=false)
 	protected int blockSize = Integer.MAX_VALUE;
 
 	/**

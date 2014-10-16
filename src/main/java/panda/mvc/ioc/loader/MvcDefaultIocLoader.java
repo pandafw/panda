@@ -12,6 +12,7 @@ import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.validator.AbstractValidator;
+import panda.mvc.view.ftl.MvcFreemarkerTemplateLoader;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	protected static final Object[] DEFAULTS = {
@@ -33,7 +34,10 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		
 		// validators
 		DefaultValidators.class,
-		AbstractValidator.class.getPackage().getName()
+		AbstractValidator.class.getPackage().getName(),
+		
+		// Freemarker
+		MvcFreemarkerTemplateLoader.class
 	};
 	
 	public MvcDefaultIocLoader() {
