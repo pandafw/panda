@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 import panda.bean.Beans;
+import panda.ioc.IocConstants;
 import panda.ioc.IocProxy;
-import panda.ioc.ValueProxyMaker;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -47,8 +47,8 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	 * @return property type
 	 */
 	public boolean canReadProperty(T ioc, String propertyName) {
-		if (ValueProxyMaker.IOC.equals(propertyName)
-				|| ValueProxyMaker.ICTX.equals(propertyName)) {
+		if (IocConstants.IOC.equals(propertyName)
+				|| IocConstants.IOC_CONTEXT.equals(propertyName)) {
 			return true;
 		}
 		
@@ -93,10 +93,10 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	}
 	
 	public Object getPropertyValue(T ioc, String propertyName) {
-		if (ValueProxyMaker.IOC.equals(propertyName)) {
+		if (IocConstants.IOC.equals(propertyName)) {
 			return ioc == null ? null : ioc.getIoc();
 		}
-		if (ValueProxyMaker.ICTX.equals(propertyName)) {
+		if (IocConstants.IOC_CONTEXT.equals(propertyName)) {
 			return ioc == null ? null : ioc.getContext();
 		}
 		

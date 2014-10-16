@@ -23,12 +23,11 @@ import panda.log.Logs;
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-public class MapResourceBundleMaker implements ResourceBundleMaker {
-	protected static Log log = Logs.getLog(MapResourceBundleMaker.class);
+public class ExternalResourceBundleMaker implements ResourceBundleMaker {
+	protected static Log log = Logs.getLog(ExternalResourceBundleMaker.class);
 
 	protected Map<String, Map<String, String>> resources = new HashMap<String, Map<String, String>>();
 
-	protected String tableName;
 	protected String classColumn;
 	protected String languageColumn;
 	protected String countryColumn;
@@ -36,7 +35,6 @@ public class MapResourceBundleMaker implements ResourceBundleMaker {
 	protected String sourceColumn;
 	protected String nameColumn;
 	protected String valueColumn;
-	protected String whereClause;
 	protected String emptyString = "*";
 	protected String packageName;
 
@@ -49,20 +47,6 @@ public class MapResourceBundleMaker implements ResourceBundleMaker {
 			return bundle;
 		}
 		return null;
-	}
-
-	/**
-	 * @return the tableName
-	 */
-	public String getTableName() {
-		return tableName;
-	}
-
-	/**
-	 * @param tableName the tableName to set
-	 */
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
 	}
 
 	/**
@@ -161,20 +145,6 @@ public class MapResourceBundleMaker implements ResourceBundleMaker {
 	 */
 	public void setValueColumn(String valueColumn) {
 		this.valueColumn = valueColumn;
-	}
-
-	/**
-	 * @return the whereClause
-	 */
-	public String getWhereClause() {
-		return whereClause;
-	}
-
-	/**
-	 * @param whereClause the whereClause to set
-	 */
-	public void setWhereClause(String whereClause) {
-		this.whereClause = whereClause;
 	}
 
 	/**

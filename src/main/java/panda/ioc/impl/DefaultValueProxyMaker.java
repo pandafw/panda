@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.ioc.Ioc;
+import panda.ioc.IocConstants;
 import panda.ioc.IocContext;
 import panda.ioc.IocException;
 import panda.ioc.IocMaking;
@@ -92,17 +93,17 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 
 			String ls = s.toLowerCase();
 			// $ioc
-			if (ValueProxyMaker.IOC.equals(ls) || Ioc.class.getName().equals(s)) {
+			if (IocConstants.IOC.equals(ls) || Ioc.class.getName().equals(s)) {
 				return IocSelfValue.i();
 			}
 			
 			// ioc context
-			if (ValueProxyMaker.ICTX.equals(ls) || IocContext.class.getName().equals(s)) {
+			if (IocConstants.IOC_CONTEXT.equals(ls) || IocContext.class.getName().equals(s)) {
 				return IocContextValue.i();
 			}
 
 			// ioc bean name
-			if (ValueProxyMaker.IBN.equals(ls)) {
+			if (IocConstants.IOC_BEAN_NAME.equals(ls)) {
 				return IocBeanNameValue.i();
 			}
 			return new ReferValue(s, iv.isRequired());

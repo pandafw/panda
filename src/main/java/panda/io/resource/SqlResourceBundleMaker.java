@@ -24,14 +24,18 @@ import panda.log.Logs;
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-public class SqlResourceBundleMaker extends MapResourceBundleMaker {
+public class SqlResourceBundleMaker extends ExternalResourceBundleMaker {
 	protected static Log log = Logs.getLog(SqlResourceBundleMaker.class);
-
+	
+	public void loadResources(DataSource dataSource, String tableName) throws Exception {
+		loadResources(dataSource, tableName, null);
+	}
+	
 	/**
 	 * load resources
 	 * @throws Exception if an error occurs
 	 */
-	public void loadResources(DataSource dataSource) throws Exception {
+	public void loadResources(DataSource dataSource, String tableName, String whereClause) throws Exception {
 		String sql = "SELECT"
 			+ " " + classColumn
 			+ (Strings.isEmpty(languageColumn) ? "" : (", " + languageColumn))

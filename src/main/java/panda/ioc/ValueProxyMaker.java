@@ -11,10 +11,6 @@ import panda.ioc.meta.IocValue;
  * 
  */
 public interface ValueProxyMaker {
-	public static final String IOC = "$ioc";
-	public static final String IBN = "$ibn";
-	public static final String ICTX = "$ictx";
-	
 	/**
 	 * 通过这个函数， NutIoc 会传递给 Loader 的 IocLoading 类会集中你的类型，帮助你从一个 Map 获得 一个 IocObject
 	 * 
