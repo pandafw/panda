@@ -2,7 +2,6 @@ package panda.mvc.init;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -46,18 +45,6 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 		path = RequestPath.getRequestPathObject(request);
 		assertNotNull(path);
 		assertEquals("/1.2/say.po/", path.getPath());
-	}
-
-	@Test
-	public void testRequestParms_error() throws Throwable {
-		request.setPathInfo("/two/login.do");
-		request.addParameter("username", "wendal");
-		request.addParameter("password", "123456");
-		request.addParameter("authCode", "dummy");
-		servlet.service(request, response);
-		String resp = response.getContentAsString();
-		System.out.println(resp);
-		assertTrue(resp.indexOf("NumberFormatException") > -1);
 	}
 
 	@Test

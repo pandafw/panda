@@ -9,13 +9,14 @@ import panda.ioc.meta.IocValue;
 import panda.ioc.val.StaticValue;
 import panda.lang.Arrays;
 import panda.lang.Strings;
+import panda.mvc.MvcConfig;
 
-public class ServletValueProxyMaker implements ValueProxyMaker {
+public class MvcValueProxyMaker implements ValueProxyMaker {
 
-	private ServletContext sc;
+	private MvcConfig config;
 
-	public ServletValueProxyMaker(ServletContext sc) {
-		this.sc = sc;
+	public MvcValueProxyMaker(MvcConfig config) {
+		this.config = config;
 	}
 
 	public String[] supportedTypes() {
@@ -24,18 +25,24 @@ public class ServletValueProxyMaker implements ValueProxyMaker {
 
 	public ValueProxy make(IocMaking ing, IocValue iv) {
 		if (IocValue.TYPE_REF.equals(iv.getType())) {
-			String name = iv.getValue().toString();
+			Object ivv = iv.getValue();
+			if (ivv instanceof Class) {
+				if (MvcConfig.class.equals(ivv)) {
+					return new StaticValue(config);
+				}
+				if (ServletContext.class.equals(ivv)) {
+					return new StaticValue(config.getServletContext());
+				}
+				return null;
+			}
+
+			String name = ivv.toString();
 			if (Strings.isEmpty(name)) {
 				return null;
 			}
 
 			if (ServletContext.class.getName().equals(name) || "$servlet".equalsIgnoreCase(name)) {
-				return new StaticValue(sc);
-			}
-			
-			Object obj = sc.getAttribute(name);
-			if (obj != null) {
-				return new StaticValue(obj);
+				return new StaticValue(config.getServletContext());
 			}
 		}
 		return null;

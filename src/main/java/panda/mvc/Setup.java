@@ -7,16 +7,11 @@ public interface Setup {
 
 	/**
 	 * 启动时，额外逻辑
-	 * 
-	 * @param config
 	 */
-	void init(MvcConfig config);
+	void init();
 
 	/**
 	 * 关闭时，额外逻辑
-	 * 
-	 * @param config
 	 */
-	void destroy(MvcConfig config);
-
+	void destroy();
 }

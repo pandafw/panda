@@ -1,9 +1,13 @@
 package panda.mvc;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.ioc.Ioc;
+import panda.ioc.ObjectProxy;
+import panda.ioc.Scope;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.mvc.config.AbstractMvcConfig;
@@ -57,11 +61,20 @@ public class ActionHandler {
 
 				ComboIocContext ctx = new ComboIocContext();
 				if (IocRequestListener.isRequestScopeEnable) {
-					ctx.addContext(RequestIocContext.get(req));
+					RequestIocContext ric = RequestIocContext.get(req);
+
+					ric.save(Scope.REQUEST, ActionContext.class.getName(), new ObjectProxy(ac));
+					ric.save(Scope.REQUEST, ServletRequest.class.getName(), new ObjectProxy(req));
+					ric.save(Scope.REQUEST, ServletResponse.class.getName(), new ObjectProxy(res));
+					ric.save(Scope.REQUEST, HttpServletRequest.class.getName(), new ObjectProxy(req));
+					ric.save(Scope.REQUEST, HttpServletResponse.class.getName(), new ObjectProxy(res));
+					
+					ctx.addContext(ric);
 				}
 				
 				if (IocSessionListener.isSessionScopeEnable) {
-					ctx.addContext(SessionIocContext.get(req.getSession()));
+					SessionIocContext sic = SessionIocContext.get(req.getSession());
+					ctx.addContext(sic);
 				}
 				
 				ctx.addContext(di.getContext());
@@ -75,7 +88,6 @@ public class ActionHandler {
 		ac.setServlet(config.getServletContext());
 		ac.setRequest(req);
 		ac.setResponse(res);
-		req.setAttribute(ActionContext.class.getName(), ac);
 
 		ActionInvoker invoker = mapping.get(ac);
 		if (null == invoker) {

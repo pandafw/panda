@@ -24,15 +24,6 @@ public class SimpleAdaptorTest extends BaseWebappTest {
 	}
 
 	@Test
-	public void test_err_param() {
-		get("/adaptor/err/param?id=ABC");
-		assertEquals(200, resp.getStatusCode());
-
-		get("/adaptor/err/param/ABC");
-		assertEquals(200, resp.getStatusCode());
-	}
-
-	@Test
 	public void test_json_map_type() {
 		resp = post("/adaptor/json/type", "{'abc': 123456}", HttpContentType.TEXT_JSON);
 		assertEquals(200, resp.getStatusCode());

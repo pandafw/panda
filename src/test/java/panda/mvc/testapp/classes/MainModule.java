@@ -10,8 +10,8 @@ import panda.mvc.ioc.provider.ComboIocProvider;
 @Ok("json")
 @Fatal("json")
 @IocBy(type=ComboIocProvider.class,
-        args={"*panda.ioc.loader.JsonIocLoader","panda/mvc/testapp/classes/ioc/test.js",
-              "*panda.mvc.ioc.loader.MvcAnnotationIocLoader","panda.mvc.testapp.classes", "panda.filepool.dao", "panda.dao.sql"})
+        args={"*default", "*panda.ioc.loader.JsonIocLoader","panda/mvc/testapp/classes/ioc/test.js",
+              "*panda.mvc.ioc.loader.MvcAnnotationIocLoader","panda.mvc.testapp.classes", "panda.dao.sql"})
 public class MainModule {
 
 }

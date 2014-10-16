@@ -5,7 +5,6 @@ import panda.filepool.dao.DaoFileData;
 import panda.filepool.dao.DaoFileItem;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.mvc.MvcConfig;
 import panda.mvc.Setup;
 
 @IocBean(type=Setup.class)
@@ -14,12 +13,12 @@ public class TestSetup implements Setup {
 	@IocInject
 	private DaoClient daoClient;
 	
-	public void init(MvcConfig config) {
+	public void init() {
 		daoClient.getDao().create(DaoFileItem.class);
 		daoClient.getDao().create(DaoFileData.class);
 	}
 
-	public void destroy(MvcConfig config) {
+	public void destroy() {
 
 	}
 

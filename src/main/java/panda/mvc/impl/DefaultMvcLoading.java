@@ -27,7 +27,7 @@ import panda.mvc.ViewMaker;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.IocBy;
 import panda.mvc.config.AbstractMvcConfig;
-import panda.mvc.ioc.ServletValueProxyMaker;
+import panda.mvc.ioc.MvcValueProxyMaker;
 import panda.mvc.ioc.provider.DefaultIocProvider;
 
 public class DefaultMvcLoading implements Loading {
@@ -197,10 +197,10 @@ public class DefaultMvcLoading implements Loading {
 		if (ioc != null && ioc.has(Setup.class)) {
 			Setup setup = ioc.get(Setup.class);
 			if (init) {
-				setup.init(config);
+				setup.init();
 			}
 			else {
-				setup.destroy(config);
+				setup.destroy();
 			}
 		}
 	}
@@ -227,7 +227,7 @@ public class DefaultMvcLoading implements Loading {
 		
 		Ioc ioc = Classes.born(ip).create(config, args);
 		if (ioc instanceof DefaultIoc) {
-			((DefaultIoc)ioc).addValueProxyMaker(new ServletValueProxyMaker(config.getServletContext()));
+			((DefaultIoc)ioc).addValueProxyMaker(new MvcValueProxyMaker(config));
 		}
 
 		config.setIoc(ioc);

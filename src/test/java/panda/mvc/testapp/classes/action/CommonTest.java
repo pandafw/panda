@@ -59,13 +59,13 @@ public class CommonTest extends BaseWebappTest {
 
 	// Parms混用
 	@At("/path")
-	@Ok(">>:/${param.key}.jsp")
+	@Ok(">>:/${reqp.key}.jsp")
 	public void test_req_param() {
 	}
 
 	// Test EL
 	@At("/path2")
-	@Ok("->:/${param.key.length() == 1 ? 'base' : 'false'}.jsp")
+	@Ok("->:/${reqp.key.length() == 1 ? 'base' : 'false'}.jsp")
 	public void test_req_param2() {
 	}
 

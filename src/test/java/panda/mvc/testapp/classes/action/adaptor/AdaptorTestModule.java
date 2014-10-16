@@ -21,17 +21,11 @@ import panda.mvc.testapp.BaseWebappTest;
 @Fatal("http:500")
 public class AdaptorTestModule extends BaseWebappTest {
 
-	/*
-	 * Githut : #352
-	 */
 	@At("/reader")
 	public String getInputStream(Reader reader) throws IOException {
 		return Streams.toString(reader);
 	}
 
-	/*
-	 * Githut : #352
-	 */
 	@At("/ins")
 	public String getInputStream(InputStream ins) throws IOException {
 		return new String(Streams.toByteArray(ins));
@@ -49,14 +43,6 @@ public class AdaptorTestModule extends BaseWebappTest {
 			sb.append(',').append(pet.getName());
 		return String.format("pets(%d) %s", lst.size(), "list");
 	}
-
-	// 传入的id,会是一个非法的字符串!!
-	//TODO
-//	@At({ "/err/param", "/err/param/?" })
-//	public void errParam(@Param("id") long id, AdaptorErrorContext errCtx) {
-//		TestCase.assertNotNull(errCtx);
-//		TestCase.assertNotNull(errCtx.getErrors()[0]);
-//	}
 
 	@At("/json/type")
 	public void jsonMapType(@Param Map<String, Double> map) {

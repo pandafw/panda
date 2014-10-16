@@ -18,7 +18,7 @@ public class MyModule {
 	}
 
 	@At("/login")
-	@Ok("redirect:/jsp/user/${param.name}")
+	@Ok("redirect:/jsp/user/${params.name}")
 	public boolean login(@Param("name") String name, @Param("password") String password) {
 		return "wendal".equals(name) && "123456".equals(password);
 	}

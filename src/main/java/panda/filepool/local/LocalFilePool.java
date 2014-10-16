@@ -20,7 +20,6 @@ import panda.mvc.adaptor.multipart.FileItemStream;
 @IocBean(type=FilePool.class)
 public class LocalFilePool implements FilePool {
 	protected final static FastDateFormat fdf = FastDateFormat.getInstance("yyyy/MM/dd/HH/mm/ss/SSS");
-	protected final static String INDEX = "panda.filepool.txt";
 
 	@IocInject(value="ref:panda.filepool.local.path", required=false)
 	protected String path;
@@ -54,7 +53,7 @@ public class LocalFilePool implements FilePool {
 	
 	public FileItem saveFile(String name, final InputStream body, boolean temporary) throws IOException {
 		LocalFileItem fi = randFile(name ,temporary);
-		fi.getFile().mkdirs();
+		fi.getFile().getParentFile().mkdirs();
 		Files.write(fi.getFile(), body);
 		return fi;
 	}
