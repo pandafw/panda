@@ -7,9 +7,6 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import panda.bind.json.Jsons;
-import panda.cast.CastException;
-import panda.cast.Castors;
 import panda.lang.Arrays;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -211,11 +208,13 @@ public class CastorTest extends TestCase {
 		al.add(new A());
 		a.setLst(al);
 		
-		B b = Castors.scast(a, B.class);
-		B[] bl = b.getLst().toArray(new B[0]);
-		assertNotNull(bl);
-		
-		assertEquals(Jsons.toJson(a, true), Jsons.toJson(b, true));
+		try {
+			Castors.scast(a, B.class);
+			fail();
+		}
+		catch (CastException e) {
+			assertEquals("/: Failed to cast class panda.cast.CastorTest$A -> class panda.cast.CastorTest$B", e.getMessage());
+		}
 	}
 
 	

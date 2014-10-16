@@ -40,12 +40,13 @@ public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected T castValueTo(Object value, T bean, CastContext context) {
+		if (!(value instanceof Map)) {
+			return castError(value, context);
+		}
+
 		BeanHandler sbh = context.getCastors().getBeanHandler(value.getClass());
 		String[] pns = sbh.getReadPropertyNames(value);
 		if (pns.length == 0) {
-			if (!(value instanceof Map)) {
-				return castError(value, context);
-			}
 			return bean;
 		}
 		
