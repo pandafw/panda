@@ -1,5 +1,7 @@
 package panda.ioc;
 
+import java.util.Set;
+
 import panda.ioc.meta.IocValue;
 
 /**
@@ -18,7 +20,7 @@ public interface ValueProxyMaker {
 	 * 
 	 * @return 一个字符串数组，表示你支持的 Value类型
 	 */
-	String[] supportedTypes();
+	Set<String> supportedTypes();
 
 	/**
 	 * 如果返回的是 null，则表示当前的实现不能解释这个 IocValue，容器会调用下一个 ValueProxyMaker 来做解析

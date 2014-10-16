@@ -1,6 +1,5 @@
 package panda.ioc;
 
-import java.util.List;
 import java.util.Map;
 
 import panda.bind.json.Jsons;
@@ -16,19 +15,19 @@ public class IocMaking {
 
 	private Ioc ioc;
 
-	private List<ValueProxyMaker> vpms;
+	private ValueProxyMaker vpm;
 
 	private MirrorFactory mirrors;
 
 	private Map<String, ObjectWeaver> weavers;
 	
 	public IocMaking(String objName, Ioc ioc, MirrorFactory mirrors, ObjectMaker maker, 
-			List<ValueProxyMaker> vpms,
+			ValueProxyMaker vpm,
 			Map<String, ObjectWeaver> weavers) {
 		this.name = objName;
 		this.maker = maker;
 		this.ioc = ioc;
-		this.vpms = vpms;
+		this.vpm = vpm;
 		this.mirrors = mirrors;
 		this.weavers = weavers;
 	}
@@ -54,15 +53,13 @@ public class IocMaking {
 	}
 
 	public IocMaking clone(String objectName) {
-		return new IocMaking(objectName, ioc, mirrors, maker, vpms, weavers);
+		return new IocMaking(objectName, ioc, mirrors, maker, vpm, weavers);
 	}
 
 	public ValueProxy makeValueProxy(IocValue iv) {
-		for (ValueProxyMaker vpm : vpms) {
-			ValueProxy vp = vpm.make(this, iv);
-			if (null != vp) {
-				return vp;
-			}
+		ValueProxy vp = vpm.make(this, iv);
+		if (vp != null) {
+			return vp;
 		}
 		
 		throw Exceptions.makeThrow("Unknown value {'%s':%s} for object [%s]", 

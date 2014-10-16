@@ -1,9 +1,6 @@
 package panda.ioc.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,7 +37,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	/**
 	 * 装配对象的逻辑
 	 */
-	private ObjectMaker maker;
+	private ObjectMaker objMaker;
 
 	/**
 	 * 读取配置文件的 Loader
@@ -73,7 +70,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	/**
 	 * 可扩展的"字段值"生成器
 	 */
-	private List<ValueProxyMaker> vpms;
+	private ValueProxyMaker vpMaker;
 
 	/**
 	 * weaver cache
@@ -105,9 +102,9 @@ public class DefaultIoc implements Ioc, Cloneable {
 		this(maker, loader, context, defaultScope, null);
 	}
 
-	protected DefaultIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
+	protected DefaultIoc(ObjectMaker objMaker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
 		this.lock = new Object();
-		this.maker = maker;
+		this.objMaker = objMaker;
 		this.defaultScope = defaultScope;
 		this.context = context;
 		if (loader instanceof CachedIocLoader) {
@@ -118,10 +115,8 @@ public class DefaultIoc implements Ioc, Cloneable {
 		}
 		this.loading = new IocLoading();
 		
+		setValueProxyMaker(new DefaultValueProxyMaker());
 		weavers = new HashMap<String, ObjectWeaver>();
-		
-		vpms = new ArrayList<ValueProxyMaker>(5); // 预留五个位置，足够了吧
-		addValueProxyMaker(new DefaultValueProxyMaker());
 
 		// 初始化类工厂， 这是同 AOP 的连接点
 		if (mirrors == null) {
@@ -213,7 +208,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						if (log.isDebugEnabled()) {
 							log.debugf("\t >> Make...'%s'<%s>", name, type);
 						}
-						op = maker.make(imk, iobj);
+						op = objMaker.make(imk, iobj);
 					}
 					// 处理异常
 					catch (IocException e) {
@@ -283,10 +278,10 @@ public class DefaultIoc implements Ioc, Cloneable {
 		return loader.getNames();
 	}
 
-	public void addValueProxyMaker(ValueProxyMaker vpm) {
+	public void setValueProxyMaker(ValueProxyMaker vpm) {
 		synchronized (lock) {
-			vpms.add(0, vpm);// 优先使用最后加入的ValueProxyMaker
-			loading.getSupportedTypes().addAll(Arrays.asList(vpm.supportedTypes()));
+			vpMaker = vpm;
+			loading.setSupportedTypes(vpm.supportedTypes());
 		}
 	}
 
@@ -298,8 +293,8 @@ public class DefaultIoc implements Ioc, Cloneable {
 		this.context = context;
 	}
 
-	public void setMaker(ObjectMaker maker) {
-		this.maker = maker;
+	public void setObjMaker(ObjectMaker maker) {
+		this.objMaker = maker;
 	}
 
 	public void setMirrorFactory(MirrorFactory mirrors) {
@@ -315,20 +310,20 @@ public class DefaultIoc implements Ioc, Cloneable {
 	}
 	
 	protected IocMaking makeIocMaking(String name) {
-		return new IocMaking(name, this, mirrors, maker, vpms, weavers);
+		return new IocMaking(name, this, mirrors, objMaker, vpMaker, weavers);
 	}
 
 	@Override
 	public DefaultIoc clone() {
 		DefaultIoc ni = new DefaultIoc();
 
-		ni.maker = this.maker;
+		ni.objMaker = this.objMaker;
 		ni.loader = this.loader;
 		ni.context = this.context;
 		ni.defaultScope = this.defaultScope;
 		ni.mirrors = this.mirrors;
 		ni.lock = this.lock;
-		ni.vpms = this.vpms;
+		ni.vpMaker = this.vpMaker;
 		ni.weavers = this.weavers;
 		ni.loading = this.loading;
 		

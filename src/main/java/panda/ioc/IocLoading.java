@@ -51,7 +51,7 @@ public class IocLoading {
 	}
 
 	private static final Pattern OBJFIELDS = Pattern.compile("^(type|scope|singleton|fields|args|events|factory)$");
-	public static boolean isIocObject(Map<String, ?> map) {
+	private boolean isIocObject(Map<String, ?> map) {
 		for (Entry<String, ?> en : map.entrySet()) {
 			if (!OBJFIELDS.matcher(en.getKey()).matches()) {
 				return false;

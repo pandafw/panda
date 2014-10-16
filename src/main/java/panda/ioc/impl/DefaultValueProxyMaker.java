@@ -2,7 +2,10 @@ package panda.ioc.impl;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
+import panda.ioc.Ioc;
+import panda.ioc.IocContext;
 import panda.ioc.IocException;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
@@ -73,6 +76,12 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		// Refer
 		if (IocValue.TYPE_REF.equals(type)) {
 			if (value instanceof Class) {
+				if (Ioc.class.equals(value)) {
+					return IocSelfValue.i();
+				}
+				if (IocContext.class.equals(value)) {
+					return IocContextValue.i();
+				}
 				return new ReferValue((Class<?>)value, iv.isRequired());
 			}
 
@@ -83,18 +92,18 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 
 			String ls = s.toLowerCase();
 			// $ioc
-			if (ValueProxyMaker.IOC.equals(ls)) {
+			if (ValueProxyMaker.IOC.equals(ls) || Ioc.class.getName().equals(s)) {
 				return IocSelfValue.i();
+			}
+			
+			// ioc context
+			if (ValueProxyMaker.ICTX.equals(ls) || IocContext.class.getName().equals(s)) {
+				return IocContextValue.i();
 			}
 
 			// ioc bean name
 			if (ValueProxyMaker.IBN.equals(ls)) {
 				return IocBeanNameValue.i();
-			}
-			
-			// ioc context
-			if (ValueProxyMaker.ICTX.equals(ls)) {
-				return IocContextValue.i();
 			}
 			return new ReferValue(s, iv.isRequired());
 		}
@@ -132,14 +141,15 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		return null;
 	}
 
-	public String[] supportedTypes() {
-		return Arrays.toArray(
-			IocValue.TYPE_REF, 
+	public Set<String> supportedTypes() {
+		return Arrays.toSet(
 			IocValue.TYPE_EL, 
 			IocValue.TYPE_ENV, 
 			IocValue.TYPE_FILE,
-			IocValue.TYPE_SYS,
-			IocValue.TYPE_JNDI);
+			IocValue.TYPE_JNDI,
+			IocValue.TYPE_REF, 
+			IocValue.TYPE_SYS
+			);
 	}
 
 }
