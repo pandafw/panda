@@ -78,7 +78,7 @@ public class ElTemplate extends AbstractTemplate {
 			}
 		}
 		catch (IOException e) {
-			throw new TemplateException(e);
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -103,18 +103,38 @@ public class ElTemplate extends AbstractTemplate {
 	}
 
 	public static String evaluate(String expression) throws TemplateException {
-		return get(expression).evaluate();
+		try {
+			return get(expression).evaluate();
+		}
+		catch (Exception e) {
+			throw new TemplateException("Failed to evaluate(" + expression + ")");
+		}
 	}
 	
 	public static String evaluate(String expression, Object context) throws TemplateException {
-		return get(expression).evaluate(context);
+		try {
+			return get(expression).evaluate(context);
+		}
+		catch (Exception e) {
+			throw new TemplateException("Failed to evaluate(" + expression + ")");
+		}
 	}
 
 	public static void evaluate(String expression, Appendable out) throws TemplateException {
-		get(expression).evaluate(out);
+		try {
+			get(expression).evaluate(out);
+		}
+		catch (Exception e) {
+			throw new TemplateException("Failed to evaluate(" + expression + ")");
+		}
 	}
 
 	public static void evaluate(String expression, Appendable out, Object context) throws TemplateException {
-		get(expression).evaluate(out, context);
+		try {
+			get(expression).evaluate(out, context);
+		}
+		catch (Exception e) {
+			throw new TemplateException("Failed to evaluate(" + expression + ")");
+		}
 	}
 }

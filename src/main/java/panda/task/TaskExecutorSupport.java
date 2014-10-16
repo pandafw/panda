@@ -1,5 +1,6 @@
 package panda.task;
 
+import panda.lang.Asserts;
 import panda.lang.ThreadCreator;
 import panda.log.Log;
 import panda.log.Logs;
@@ -117,10 +118,11 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * Set up the ExecutorService.
 	 */
 	public void initialize() {
+		Asserts.validState(executor == null, "ExecutorService " + getName() + " already initialized");
 		if (log.isInfoEnabled()) {
 			log.info("Initializing ExecutorService " + getName());
 		}
-		this.executor = initializeExecutor(this.threadFactory, this.rejectedExecutionHandler);
+		executor = initializeExecutor(this.threadFactory, this.rejectedExecutionHandler);
 	}
 
 	/**
@@ -141,16 +143,19 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * @see #awaitTerminationIfNecessary()
 	 */
 	public void shutdown() {
+		Asserts.validState(executor != null, "ExecutorService " + getName() + " not initialized");
+
 		if (log.isInfoEnabled()) {
 			log.info("Shutting down ExecutorService " + getName());
 		}
-		if (this.waitForTasksToCompleteOnShutdown) {
-			this.executor.shutdown();
+		if (waitForTasksToCompleteOnShutdown) {
+			executor.shutdown();
 		}
 		else {
-			this.executor.shutdownNow();
+			executor.shutdownNow();
 		}
 		awaitTerminationIfNecessary();
+		executor = null;
 	}
 
 	/**
@@ -158,9 +163,9 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * {@link #setAwaitTerminationSeconds "awaitTerminationSeconds"} property.
 	 */
 	private void awaitTerminationIfNecessary() {
-		if (this.awaitTerminationSeconds > 0) {
+		if (awaitTerminationSeconds > 0) {
 			try {
-				if (!this.executor.awaitTermination(this.awaitTerminationSeconds, TimeUnit.SECONDS)) {
+				if (!executor.awaitTermination(awaitTerminationSeconds, TimeUnit.SECONDS)) {
 					if (log.isWarnEnabled()) {
 						log.warn("Timed out while waiting for executor" + getName() + " to terminate");
 					}
