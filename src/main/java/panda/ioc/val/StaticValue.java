@@ -5,6 +5,8 @@ import panda.ioc.ValueProxy;
 
 public class StaticValue implements ValueProxy {
 
+	public static final StaticValue NULL = new StaticValue(null);
+	
 	private Object obj;
 
 	public StaticValue(Object obj) {

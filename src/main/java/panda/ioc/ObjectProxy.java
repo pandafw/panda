@@ -62,10 +62,10 @@ public class ObjectProxy {
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> classOfT, IocMaking ing) {
 		Object re;
-		if (null != obj) {
+		if (obj != null) {
 			re = obj;
 		}
-		else if (null != weaver) {
+		else if (weaver != null) {
 			re = weaver.onCreate(weaver.fill(ing, weaver.born(ing)));
 		}
 		else {

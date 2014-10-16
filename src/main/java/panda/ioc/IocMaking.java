@@ -1,6 +1,7 @@
 package panda.ioc;
 
 import java.util.List;
+import java.util.Map;
 
 import panda.bind.json.Jsons;
 import panda.ioc.aop.MirrorFactory;
@@ -19,13 +20,17 @@ public class IocMaking {
 
 	private MirrorFactory mirrors;
 
-	public IocMaking(Ioc ioc, MirrorFactory mirrors, ObjectMaker maker, List<ValueProxyMaker> vpms,
-			String objName) {
+	private Map<String, ObjectWeaver> weavers;
+	
+	public IocMaking(String objName, Ioc ioc, MirrorFactory mirrors, ObjectMaker maker, 
+			List<ValueProxyMaker> vpms,
+			Map<String, ObjectWeaver> weavers) {
 		this.name = objName;
 		this.maker = maker;
 		this.ioc = ioc;
 		this.vpms = vpms;
 		this.mirrors = mirrors;
+		this.weavers = weavers;
 	}
 
 	public Ioc getIoc() {
@@ -44,8 +49,12 @@ public class IocMaking {
 		return mirrors;
 	}
 
+	public Map<String, ObjectWeaver> getWeavers() {
+		return weavers;
+	}
+
 	public IocMaking clone(String objectName) {
-		return new IocMaking(ioc, mirrors, maker, vpms, objectName);
+		return new IocMaking(objectName, ioc, mirrors, maker, vpms, weavers);
 	}
 
 	public ValueProxy makeValueProxy(IocValue iv) {

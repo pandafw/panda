@@ -1,10 +1,6 @@
 package panda.ioc.loader.annotation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
@@ -22,22 +18,22 @@ public class AnnotationIocLoaderTest {
 
 	@Test
 	public void testGetName() {
-		assertNotNull(iocLoader.getNames());
-		assertTrue(iocLoader.getNames().size() > 0);
+		Assert.assertNotNull(iocLoader.getNames());
+		Assert.assertTrue(iocLoader.getNames().size() > 0);
 	}
 
 	@Test
 	public void testHas() {
-		assertTrue(iocLoader.has(ClassA.class.getName()));
+		Assert.assertTrue(iocLoader.has(ClassA.class.getName()));
 	}
 
 	@Test
 	public void testLoad() throws Throwable {
 		IocObject iocObject = iocLoader.load(null, ClassB.class.getName());
-		assertNotNull(iocObject);
-		assertNotNull(iocObject.getFields());
-		assertTrue(iocObject.getFields().size() == 3);
-		assertEquals(IocValue.TYPE_REF, iocObject.getFields().values().iterator().next().getType());
+		Assert.assertNotNull(iocObject);
+		Assert.assertNotNull(iocObject.getFields());
+		Assert.assertEquals(5, iocObject.getFields().size());
+		Assert.assertEquals(IocValue.TYPE_REF, iocObject.getFields().values().iterator().next().getType());
 	}
 
 	@Test
@@ -45,9 +41,10 @@ public class AnnotationIocLoaderTest {
 		Ioc ioc = new DefaultIoc(iocLoader);
 		ClassB b = ioc.get(ClassB.class);
 		
-		assertNotNull(b);
-		assertNotNull(b.a);
-		assertNull(b.xxx);
-		assertNull(b.yyy);
+		Assert.assertNotNull(b);
+		Assert.assertNotNull(b.a);
+		Assert.assertNull(b.xxx);
+		Assert.assertNull(b.yyy);
+		Assert.assertEquals(b.c, b.cc);
 	}
 }

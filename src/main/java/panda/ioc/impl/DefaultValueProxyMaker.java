@@ -35,7 +35,7 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 
 		// Null
 		if (IocValue.TYPE_NULL.equals(type) || null == value) {
-			return new StaticValue(null);
+			return StaticValue.NULL;
 		}
 		
 		// String, Number, .....

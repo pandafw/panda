@@ -22,7 +22,12 @@ public class IocCustomizedValueTypeTest {
 		ioc.addValueProxyMaker(new ValueProxyMaker() {
 			public ValueProxy make(IocMaking ing, IocValue iv) {
 				if ("cc".equalsIgnoreCase(iv.getType())) {
-					return new StaticValue("CC:" + iv.getValue());
+					final String v = ("CC:" + iv.getValue());
+					return new ValueProxy() {
+						public Object get(IocMaking ing) {
+							return v;
+						}
+					};
 				}
 				return null;
 			}

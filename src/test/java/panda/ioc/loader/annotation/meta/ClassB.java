@@ -11,6 +11,12 @@ public class ClassB {
 	@IocInject
 	public ClassA a;
 
+	@IocInject
+	public ClassC c;
+
+	@IocInject(type=ClassC.class)
+	public ClassCC cc;
+	
 	@IocInject(value="ref:xxx", required=false)
 	public String xxx;
 

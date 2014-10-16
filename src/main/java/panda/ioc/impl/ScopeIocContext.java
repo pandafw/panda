@@ -63,7 +63,7 @@ public class ScopeIocContext implements IocContext, Serializable {
 	}
 
 	protected boolean accept(String scope) {
-		return null != scope && this.scope.equals(scope);
+		return this.scope.equals(scope);
 	}
 
 	public boolean remove(String scope, String name) {

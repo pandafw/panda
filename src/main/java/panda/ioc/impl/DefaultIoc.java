@@ -2,18 +2,21 @@ package panda.ioc.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.IocException;
+import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.IocLoading;
 import panda.ioc.IocMaking;
-import panda.ioc.IocLoadException;
 import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
+import panda.ioc.ObjectWeaver;
 import panda.ioc.Scope;
 import panda.ioc.ValueProxyMaker;
 import panda.ioc.annotation.IocBean;
@@ -73,6 +76,11 @@ public class DefaultIoc implements Ioc, Cloneable {
 	private List<ValueProxyMaker> vpms;
 
 	/**
+	 * weaver cache
+	 */
+	private Map<String, ObjectWeaver> weavers;
+	
+	/**
 	 * helper class for IocLoad
 	 */
 	private IocLoading loading;
@@ -109,6 +117,8 @@ public class DefaultIoc implements Ioc, Cloneable {
 			this.loader = CachedIocLoaderImpl.create(loader);
 		}
 		this.loading = new IocLoading();
+		
+		weavers = new HashMap<String, ObjectWeaver>();
 		
 		vpms = new ArrayList<ValueProxyMaker>(5); // 预留五个位置，足够了吧
 		addValueProxyMaker(new DefaultValueProxyMaker());
@@ -305,7 +315,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	}
 	
 	protected IocMaking makeIocMaking(String name) {
-		return new IocMaking(this, mirrors, maker, vpms, name);
+		return new IocMaking(name, this, mirrors, maker, vpms, weavers);
 	}
 
 	@Override
@@ -319,6 +329,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 		ni.mirrors = this.mirrors;
 		ni.lock = this.lock;
 		ni.vpms = this.vpms;
+		ni.weavers = this.weavers;
 		ni.loading = this.loading;
 		
 		return ni;
