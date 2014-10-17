@@ -6,169 +6,124 @@ import java.util.Map;
 public interface TextProvider {
 
 	/**
-	 * Checks if a message key exists.
+	 * Checks if a message name exists.
 	 * 
-	 * @param key message key to check for
-	 * @return boolean true if key exists, false otherwise.
+	 * @param key message name to check for
+	 * @return boolean true if name exists, false otherwise.
 	 */
 	boolean hasKey(String key);
 
 	/**
-	 * Gets a message based on a message key or if no message is found the provided key is returned.
+	 * Gets a message based on a message name or if no message is found the provided name is returned.
 	 * 
 	 * @param key the resource bundle key that is to be searched for
-	 * @return the message as found in the resource bundle, or the provided key if none is found.
+	 * @return the message as found in the resource bundle, or the provided name if none is found.
 	 */
 	String getText(String key);
 
 	/**
-	 * Gets a message based on a key, or, if the message is not found, a supplied default value is
+	 * Gets a message based on a name, or, if the message is not found, a supplied default value is
 	 * returned.
 	 * 
 	 * @param key the resource bundle key that is to be searched for
-	 * @param defaultValue the default value which will be returned if no message is found
-	 * @return the message as found in the resource bundle, or defaultValue if none is found
+	 * @param def the default value which will be returned if no message is found
+	 * @return the message as found in the resource bundle, or def if none is found
 	 */
-	String getText(String key, String defaultValue);
+	String getText(String key, String def);
 
 	/**
-	 * Gets a message based on a key using the supplied obj, as defined in
-	 * {@link java.text.MessageFormat}, or, if the message is not found, a supplied default value is
-	 * returned.
+	 * Gets a message based on a name using the supplied arg, or, if the message is not found, a
+	 * supplied default value is returned.
 	 * 
 	 * @param key the resource bundle key that is to be searched for
-	 * @param defaultValue the default value which will be returned if no message is found
-	 * @param obj obj to be used in a {@link java.text.MessageFormat} message
-	 * @return the message as found in the resource bundle, or defaultValue if none is found
+	 * @param def the default value which will be returned if no message is found
+	 * @param arg object to be used in a EL expression such as "${top}"
+	 * @return the message as found in the resource bundle, or def if none is found
 	 */
-	String getText(String key, String defaultValue, String obj);
-
-	/**
-	 * Gets a message based on a key using the supplied args, as defined in
-	 * {@link java.text.MessageFormat} or the provided key if no message is found.
-	 * 
-	 * @param key the resource bundle key that is to be searched for
-	 * @param args a list args to be used in a {@link java.text.MessageFormat} message
-	 * @return the message as found in the resource bundle, or the provided key if none is found.
-	 */
-	String getText(String key, List<?> args);
-
-	/**
-	 * Gets a message based on a key using the supplied args, as defined in
-	 * {@link java.text.MessageFormat}, or the provided key if no message is found.
-	 * 
-	 * @param key the resource bundle key that is to be searched for
-	 * @param args an array args to be used in a {@link java.text.MessageFormat} message
-	 * @return the message as found in the resource bundle, or the provided key if none is found.
-	 */
-	String getText(String key, String[] args);
-
-	/**
-	 * Gets a message based on a key using the supplied args, as defined in
-	 * {@link java.text.MessageFormat}, or, if the message is not found, a supplied default value is
-	 * returned.
-	 * 
-	 * @param key the resource bundle key that is to be searched for
-	 * @param defaultValue the default value which will be returned if no message is found
-	 * @param args a list args to be used in a {@link java.text.MessageFormat} message
-	 * @return the message as found in the resource bundle, or defaultValue if none is found
-	 */
-	String getText(String key, String defaultValue, List<?> args);
-
-	/**
-	 * Gets a message based on a key using the supplied args, as defined in
-	 * {@link java.text.MessageFormat}, or, if the message is not found, a supplied default value is
-	 * returned.
-	 * 
-	 * @param key the resource bundle key that is to be searched for
-	 * @param defaultValue the default value which will be returned if no message is found
-	 * @param args an array args to be used in a {@link java.text.MessageFormat} message
-	 * @return the message as found in the resource bundle, or defaultValue if none is found
-	 */
-	String getText(String key, String defaultValue, String[] args);
+	String getText(String key, String def, Object arg);
 
 	/**
 	 * getTextAsBoolean
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return boolean value
 	 */
-	Boolean getTextAsBoolean(String name);
+	Boolean getTextAsBoolean(String key);
 
 	/**
 	 * getTextAsBoolean
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return boolean value
 	 */
-	Boolean getTextAsBoolean(String name, Boolean defaultValue);
+	Boolean getTextAsBoolean(String key, Boolean def);
 
 	/**
 	 * getTextAsInt
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return integer value
 	 */
-	Integer getTextAsInt(String name);
+	Integer getTextAsInt(String key);
 
 	/**
 	 * getTextAsInt
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return integer value
 	 */
-	Integer getTextAsInt(String name, Integer defaultValue);
+	Integer getTextAsInt(String key, Integer def);
 
 	/**
 	 * getTextAsLong
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return long value
 	 */
-	Long getTextAsLong(String name);
+	Long getTextAsLong(String key);
 
 	/**
 	 * getTextAsLong
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return long value
 	 */
-	Long getTextAsLong(String name, Long defaultValue);
+	Long getTextAsLong(String key, Long def);
 
 	/**
 	 * getTextAsList
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return list value
 	 */
-	List getTextAsList(String name);
+	List getTextAsList(String key);
 
 	/**
 	 * getTextAsList
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return list value
 	 */
-	List getTextAsList(String name, List defaultValue);
+	List getTextAsList(String key, List def);
 
 	/**
 	 * getTextAsMap
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return map value
 	 */
-	Map getTextAsMap(String name);
+	Map getTextAsMap(String key);
 
 	/**
 	 * getTextAsMap
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return map value
 	 */
-	Map getTextAsMap(String name, Map defaultValue);
+	Map getTextAsMap(String key, Map def);
 }

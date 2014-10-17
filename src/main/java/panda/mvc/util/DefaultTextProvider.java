@@ -1,8 +1,5 @@
 package panda.mvc.util;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -18,14 +15,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
+import panda.el.ElTemplate;
 import panda.io.resource.ResourceBundleLoader;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.ClassLoaders;
 import panda.lang.Strings;
-import panda.lang.Texts;
-import panda.lang.collection.MultiKey;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -46,10 +42,12 @@ public class DefaultTextProvider implements TextProvider {
 		}
 	}
 
-	private static final List<String> DEFAULT_RESOURCE_BUNDLES = new CopyOnWriteArrayList<String>();
-	private static final ResourceBundle EMPTY_BUNDLE = new EmptyResourceBundle();
-	protected static final ConcurrentMap<String, ResourceBundle> bundlesMap = new ConcurrentHashMap<String, ResourceBundle>();
-	protected static final ConcurrentMap<MultiKey, MessageFormat> messageFormats = new ConcurrentHashMap<MultiKey, MessageFormat>();
+	private final static Object NULL = new Object();
+	private final static ResourceBundle EMPTY_BUNDLE = new EmptyResourceBundle();
+	
+
+	private final static List<String> DEFAULT_RESOURCE_BUNDLES = new CopyOnWriteArrayList<String>();
+	private final ConcurrentMap<String, ResourceBundle> bundlesMap = new ConcurrentHashMap<String, ResourceBundle>();
 
 	@IocInject(required=false)
 	private Beans beans;
@@ -65,6 +63,26 @@ public class DefaultTextProvider implements TextProvider {
 	public DefaultTextProvider() {
 		beans = Beans.i();
 		resourceClassLoader = ClassLoaders.getClassLoader();
+	}
+
+	/**
+	 * Add's the bundle to the internal list of default bundles.
+	 * <p/>
+	 * If the bundle already exists in the list it will be read.
+	 * 
+	 * @param resourceBundleName the name of the bundle to add.
+	 */
+	public static void addDefaultResourceBundle(String resourceBundleName) {
+		// make sure this doesn't get added more than once
+		synchronized (DEFAULT_RESOURCE_BUNDLES) {
+			DEFAULT_RESOURCE_BUNDLES.remove(resourceBundleName);
+			DEFAULT_RESOURCE_BUNDLES.add(0, resourceBundleName);
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Added default resource bundle '" + resourceBundleName + "' to default resource bundles = "
+					+ DEFAULT_RESOURCE_BUNDLES);
+		}
 	}
 
 	/**
@@ -145,7 +163,7 @@ public class DefaultTextProvider implements TextProvider {
 	 * @return value of named text or the provided key if no value is found
 	 */
 	public String getText(String key) {
-		return getText(key, key, Collections.emptyList());
+		return getText(key, key, NULL);
 	}
 
 	/**
@@ -156,206 +174,139 @@ public class DefaultTextProvider implements TextProvider {
 	 * If no text is found for this text name, the default value is returned.
 	 * 
 	 * @param key name of text to be found
-	 * @param defaultValue the default value which will be returned if no text is found
-	 * @return value of named text or the provided defaultValue if no value is found
+	 * @param def the default value which will be returned if no text is found
+	 * @return value of named text or the provided def if no value is found
 	 */
-	public String getText(String key, String defaultValue) {
-		return getText(key, defaultValue, Collections.emptyList());
+	public String getText(String key, String def) {
+		return getText(key, def, NULL);
 	}
 
 	/**
-	 * Get a text from the resource bundles associated with this action. The resource bundles are
-	 * searched, starting with the one associated with this particular action, and testing all its
-	 * superclasses' bundles. It will stop once a bundle is found that contains the given text. This
-	 * gives a cascading style that allow global texts to be defined for an application base class.
-	 * If no text is found for this text name, the default value is returned.
+	 * Gets a message based on a name using the supplied arg, or, if the message is not found, a
+	 * supplied default value is returned.
 	 * 
-	 * @param key name of text to be found
-	 * @param defaultValue the default value which will be returned if no text is found
-	 * @return value of named text or the provided defaultValue if no value is found
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def the default value which will be returned if no message is found
+	 * @param arg object to be used in a EL expression such as "${top}"
+	 * @return the message as found in the resource bundle, or def if none is found
 	 */
-	public String getText(String key, String defaultValue, String arg) {
-		List<Object> args = new ArrayList<Object>();
-		args.add(arg);
-		return getText(key, defaultValue, args);
-	}
-
-	/**
-	 * Get a text from the resource bundles associated with this action. The resource bundles are
-	 * searched, starting with the one associated with this particular action, and testing all its
-	 * superclasses' bundles. It will stop once a bundle is found that contains the given text. This
-	 * gives a cascading style that allow global texts to be defined for an application base class.
-	 * If no text is found for this text name, the default value is returned.
-	 * 
-	 * @param key name of text to be found
-	 * @param args a List of args to be used in a MessageFormat message
-	 * @return value of named text or the provided key if no value is found
-	 */
-	public String getText(String key, List<?> args) {
-		return getText(key, key, args);
-	}
-
-	/**
-	 * Get a text from the resource bundles associated with this action. The resource bundles are
-	 * searched, starting with the one associated with this particular action, and testing all its
-	 * superclasses' bundles. It will stop once a bundle is found that contains the given text. This
-	 * gives a cascading style that allow global texts to be defined for an application base class.
-	 * If no text is found for this text name, the default value is returned.
-	 * 
-	 * @param key name of text to be found
-	 * @param args an array of args to be used in a MessageFormat message
-	 * @return value of named text or the provided key if no value is found
-	 */
-	public String getText(String key, String[] args) {
-		return getText(key, key, args);
-	}
-
-	/**
-	 * Get a text from the resource bundles associated with this action. The resource bundles are
-	 * searched, starting with the one associated with this particular action, and testing all its
-	 * superclasses' bundles. It will stop once a bundle is found that contains the given text. This
-	 * gives a cascading style that allow global texts to be defined for an application base class.
-	 * If no text is found for this text name, the default value is returned.
-	 * 
-	 * @param key name of text to be found
-	 * @param defaultValue the default value which will be returned if no text is found
-	 * @param args a List of args to be used in a MessageFormat message
-	 * @return value of named text or the provided defaultValue if no value is found
-	 */
-	public String getText(String key, String defaultValue, List<?> args) {
-		Object[] argsArray = ((args != null && !args.equals(Collections.emptyList())) ? args.toArray() : null);
-		return findText(key, defaultValue, argsArray);
-	}
-
-	/**
-	 * Get a text from the resource bundles associated with this action. The resource bundles are
-	 * searched, starting with the one associated with this particular action, and testing all its
-	 * superclasses' bundles. It will stop once a bundle is found that contains the given text. This
-	 * gives a cascading style that allow global texts to be defined for an application base class.
-	 * If no text is found for this text name, the default value is returned.
-	 * 
-	 * @param key name of text to be found
-	 * @param defaultValue the default value which will be returned if no text is found
-	 * @param args an array of args to be used in a MessageFormat message
-	 * @return value of named text or the provided defaultValue if no value is found
-	 */
-	public String getText(String key, String defaultValue, String[] args) {
-		return findText(key, defaultValue, args);
+	public String getText(String key, String def, Object arg) {
+		return findText(key, def, arg);
 	}
 
 	/**
 	 * getTextAsBoolean
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return boolean value
 	 */
-	public Boolean getTextAsBoolean(String name) {
-		return getTextAsBoolean(name, null);
+	public Boolean getTextAsBoolean(String key) {
+		return getTextAsBoolean(key, null);
 	}
 
 	/**
 	 * getTextAsBoolean
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return boolean value
 	 */
-	public Boolean getTextAsBoolean(String name, Boolean defaultValue) {
-		String s = getText(name, (String)null);
-		return s == null ? defaultValue : Boolean.valueOf(s);
+	public Boolean getTextAsBoolean(String key, Boolean def) {
+		String s = getText(key, null);
+		return s == null ? def : Boolean.valueOf(s);
 	}
 
 	/**
 	 * getTextAsInt
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return integer value
 	 */
-	public Integer getTextAsInt(String name) {
-		return getTextAsInt(name, null);
+	public Integer getTextAsInt(String key) {
+		return getTextAsInt(key, null);
 	}
 
 	/**
 	 * getTextAsInt
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return integer value
 	 */
-	public Integer getTextAsInt(String name, Integer defaultValue) {
-		String s = getText(name, (String)null);
-		return s == null ? defaultValue : Integer.valueOf(s);
+	public Integer getTextAsInt(String key, Integer def) {
+		String s = getText(key, null);
+		return s == null ? def : Integer.valueOf(s);
 	}
 
 	/**
 	 * getTextAsLong
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return long value
 	 */
-	public Long getTextAsLong(String name) {
-		return getTextAsLong(name, null);
+	public Long getTextAsLong(String key) {
+		return getTextAsLong(key, null);
 	}
 
 	/**
 	 * getTextAsLong
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return long value
 	 */
-	public Long getTextAsLong(String name, Long defaultValue) {
-		String s = getText(name, (String)null);
-		return s == null ? defaultValue : Long.valueOf(s);
+	public Long getTextAsLong(String key, Long def) {
+		String s = getText(key, null);
+		return s == null ? def : Long.valueOf(s);
 	}
 
 	/**
 	 * getTextAsList
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return List value
 	 */
-	public List getTextAsList(String name) {
-		return getTextAsList(name, null);
+	public List getTextAsList(String key) {
+		return getTextAsList(key, null);
 	}
 
 	/**
 	 * getTextAsList
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return list value
 	 */
-	public List getTextAsList(String name, List defaultValue) {
-		String expr = getText(name, (String)null);
-		return parseTextAsList(expr, defaultValue);
+	public List getTextAsList(String key, List def) {
+		String expr = getText(key, null);
+		return parseTextAsList(expr, def);
 	}
 
 	/**
 	 * getTextAsMap
 	 * 
-	 * @param name resource name
+	 * @param key the resource bundle key that is to be searched for
 	 * @return map value
 	 */
-	public Map getTextAsMap(String name) {
-		return getTextAsMap(name, null);
+	public Map getTextAsMap(String key) {
+		return getTextAsMap(key, null);
 	}
 
 	/**
 	 * getTextAsMap
 	 * 
-	 * @param name resource name
-	 * @param defaultValue default value
+	 * @param key the resource bundle key that is to be searched for
+	 * @param def default value
 	 * @return map value
 	 */
-	public Map getTextAsMap(String name, Map defaultValue) {
-		String expr = getText(name, (String)null);
-		return parseTextAsMap(expr, defaultValue);
+	public Map getTextAsMap(String key, Map def) {
+		String expr = getText(key, null);
+		return parseTextAsMap(expr, def);
 	}
 
 	// ----------------------------------------------------------
-	protected List parseTextAsList(String text, List defaultValue) {
-		List list = defaultValue;
+	protected List parseTextAsList(String text, List def) {
+		List list = def;
 
 		if (Strings.isNotEmpty(text)) {
 			text = Strings.strip(text);
@@ -372,8 +323,8 @@ public class DefaultTextProvider implements TextProvider {
 		return list;
 	}
 
-	protected Map parseTextAsMap(String text, Map defaultValue) {
-		Map map = defaultValue;
+	protected Map parseTextAsMap(String text, Map def) {
+		Map map = def;
 
 		if (Strings.isNotEmpty(text)) {
 			text = Strings.strip(text);
@@ -391,47 +342,43 @@ public class DefaultTextProvider implements TextProvider {
 	}
 
 	// ----------------------------------------------------------
-	protected String findText(String aTextName, String defaultMessage, Object[] args) {
-		return findText(context.getAction().getClass(), aTextName, context.getLocale(), defaultMessage, args, context);
+	private String findText(String key, String def, Object arg) {
+		return findText(context.getLocale(), context.getAction().getClass(), context, key, def, arg);
 	}
 
-	protected Object findValue(Object parent, String property) {
+	private Object findValue(Object parent, String property) {
 		return beans.getBeanValue(parent, property);
 	}
 
-	protected String evalValue(String text, Object model) {
-		// TODO: use EL
-		return Texts.translate(text, model);
-	}
-
-	static class GetDefaultMessageReturnArg {
-		String message;
-		boolean foundInBundle;
-
-		public GetDefaultMessageReturnArg(String message, boolean foundInBundle) {
-			this.message = message;
-			this.foundInBundle = foundInBundle;
+	private String evalMessage(String text, Object arg) {
+		if (arg != NULL) {
+			try {
+				context.push(arg);
+				return ElTemplate.evaluate(text, context);
+			}
+			finally {
+				context.pop();
+			}
 		}
+		return ElTemplate.evaluate(text, context);
 	}
 
 	/**
 	 * Returns a localized message for the specified key, aTextName. Neither the key nor the message
 	 * is evaluated.
 	 * 
-	 * @param aTextName the message key
+	 * @param key the message key
 	 * @param locale the locale the message should be for
 	 * @return a localized message based on the specified key, or null if no localized message can
 	 *         be found for it
 	 */
-	protected String findDefaultText(String aTextName, Locale locale) {
-		List<String> localList = DEFAULT_RESOURCE_BUNDLES;
-
-		for (String bundleName : localList) {
-			ResourceBundle bundle = findResourceBundle(bundleName, locale);
+	private String findDefaultText(Locale locale, String key) {
+		for (String bn : DEFAULT_RESOURCE_BUNDLES) {
+			ResourceBundle bundle = findResourceBundle(locale, bn);
 			if (bundle != null) {
-				reloadBundles();
+//				reloadBundles();
 				try {
-					return bundle.getString(aTextName);
+					return bundle.getString(key);
 				}
 				catch (MissingResourceException e) {
 					// ignore and try others
@@ -445,76 +392,43 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * Gets the default message.
 	 */
-	protected GetDefaultMessageReturnArg getDefaultMessage(String key, Locale locale, Object valueStack, Object[] args,
-			String defaultMessage) {
-		GetDefaultMessageReturnArg result = null;
-		boolean found = true;
-
-		if (key != null) {
-			String message = findDefaultText(key, locale);
-
-			if (message == null) {
-				message = defaultMessage;
-				found = false; // not found in bundles
-			}
-
-			// defaultMessage may be null
-			if (message != null) {
-				MessageFormat mf = buildMessageFormat(evalValue(message, valueStack), locale);
-
-				String msg = formatWithNullDetection(mf, args);
-				result = new GetDefaultMessageReturnArg(msg, found);
-			}
+	private String getDefaultMessage(Locale locale, String key, String def, Object arg) {
+		String txt = findDefaultText(locale, key);
+		if (txt == null) {
+			return null;
 		}
 
-		return result;
+		String msg = evalMessage(txt, arg);
+		return msg;
 	}
 
-	/**
-	 * Determines if we found the text in the bundles.
-	 * 
-	 * @param result the result so far
-	 * @return <tt>true</tt> if we could <b>not</b> find the text, <tt>false</tt> if the text was
-	 *         found (=success).
-	 */
-	protected boolean unableToFindTextForKey(GetDefaultMessageReturnArg result) {
-		if (result == null || result.message == null) {
-			return true;
-		}
-
-		// did we find it in the bundle, then no problem?
-		if (result.foundInBundle) {
-			return false;
-		}
-
-		// not found in bundle
-		return true;
-	}
-
-	protected String findText(Class aClass, String aTextName, Locale locale, String defaultMessage, Object[] args,
-			Object valueStack) {
-		if (aTextName == null) {
+	private String findText(Locale locale, Class clazz, Object base, String key, String def, Object arg) {
+		if (Strings.isEmpty(key)) {
 			if (log.isWarnEnabled()) {
-				log.warn("Trying to find text with null key!");
+				log.warn("Trying to find text with empty key!");
 			}
-			aTextName = "";
+			return def;
 		}
 
 		// search up class hierarchy
-		String msg = findMessage(aClass, aTextName, locale, args, null, valueStack);
-
+		String msg = findMessage(locale, clazz, key, arg, null);
 		if (msg != null) {
 			return msg;
 		}
 
 		// nothing still? Aright, search the package hierarchy now
-		for (Class clazz = aClass; (clazz != null) && !clazz.equals(Object.class); clazz = clazz.getSuperclass()) {
-			String basePackageName = clazz.getName();
-			while (basePackageName.lastIndexOf('.') != -1) {
-				basePackageName = basePackageName.substring(0, basePackageName.lastIndexOf('.'));
-				String packageName = basePackageName + ".package";
-				msg = getMessage(packageName, locale, aTextName, valueStack, args);
+		for (Class cls = clazz.getClass(); (cls != null) && !cls.equals(Object.class); cls = cls.getSuperclass()) {
+			String pkg = cls.getName();
+			while (true) {
+				int dot = pkg.lastIndexOf('.');
+				if (dot <= 0) {
+					break;
+				}
+				
+				pkg = pkg.substring(0, dot);
+				String pn = pkg + ".package";
 
+				msg = getMessage(locale, pn, key, arg);
 				if (msg != null) {
 					return msg;
 				}
@@ -522,57 +436,52 @@ public class DefaultTextProvider implements TextProvider {
 		}
 
 		// see if it's a child property
-		int idx = aTextName.indexOf(".");
-
+		int idx = key.indexOf(".");
 		if (idx != -1) {
-			String newKey = null;
-			String prop = null;
+			String kn = null;
+			String pv = null;
 
-			prop = aTextName.substring(0, idx);
-			newKey = aTextName.substring(idx + 1);
+			pv = key.substring(0, idx);
+			kn = key.substring(idx + 1);
 
-			if (prop != null) {
-				Object obj = findValue(valueStack, prop);
+			if (pv != null) {
+				Object obj = findValue(base, pv);
 				try {
-					Class clazz = null;
+					Class cls = null;
 					if (obj != null) {
-						clazz = obj.getClass();
+						cls = obj.getClass();
 					}
 
-					if (clazz != null) {
-						msg = findText(clazz, newKey, locale, null, args, obj);
-
+					if (cls != null) {
+						msg = findText(locale, cls, obj, kn, null, arg);
 						if (msg != null) {
 							return msg;
 						}
 					}
 				}
 				catch (Exception e) {
-					log.debug("unable to find property " + prop, e);
+					log.debug("unable to find property " + pv, e);
 				}
 			}
 		}
 
 		// get default
-		GetDefaultMessageReturnArg result = null;
-		result = getDefaultMessage(aTextName, locale, valueStack, args, defaultMessage);
-
-		// could we find the text, if not log a warn
-		if (unableToFindTextForKey(result) && log.isDebugEnabled()) {
-			String warn = "Unable to find text for key '" + aTextName + "' ";
-			warn += "in class '" + aClass.getName() + "' and locale '" + locale + "'";
-			log.debug(warn);
+		msg = getDefaultMessage(locale, key, def, arg);
+		if (msg == null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Unable to find text for key '" + key + "' in class '" + clazz.getName() + "' and locale '" + locale + "'");
+			}
+			return def;
 		}
-
-		return result != null ? result.message : null;
+		
+		return msg;
 	}
 
 	/**
 	 * Traverse up class hierarchy looking for message. Looks at class, then implemented interface,
 	 * before going up hierarchy.
 	 */
-	protected String findMessage(Class clazz, String key, Locale locale, Object[] args, Set<String> checked,
-			Object valueStack) {
+	private String findMessage(Locale locale, Class clazz, String key, Object arg, Set<String> checked) {
 		if (checked == null) {
 			checked = new TreeSet<String>();
 		}
@@ -581,17 +490,15 @@ public class DefaultTextProvider implements TextProvider {
 		}
 
 		// look in properties of this class
-		String msg = getMessage(clazz.getName(), locale, key, valueStack, args);
-
+		String msg = getMessage(locale, clazz.getName(), key, arg);
 		if (msg != null) {
 			return msg;
 		}
 
 		// look in properties of implemented interfaces
-		Class[] interfaces = clazz.getInterfaces();
-
-		for (Class anInterface : interfaces) {
-			msg = getMessage(anInterface.getName(), locale, key, valueStack, args);
+		Class[] ifs = clazz.getInterfaces();
+		for (Class i : ifs) {
+			msg = getMessage(locale, i.getName(), key, arg);
 			if (msg != null) {
 				return msg;
 			}
@@ -599,11 +506,8 @@ public class DefaultTextProvider implements TextProvider {
 
 		// traverse up hierarchy
 		if (clazz.isInterface()) {
-			interfaces = clazz.getInterfaces();
-
-			for (Class anInterface : interfaces) {
-				msg = findMessage(anInterface, key, locale, args, checked, valueStack);
-
+			for (Class i : ifs) {
+				msg = findMessage(locale, i, key, arg, checked);
 				if (msg != null) {
 					return msg;
 				}
@@ -611,53 +515,27 @@ public class DefaultTextProvider implements TextProvider {
 		}
 		else {
 			if (!clazz.equals(Object.class) && !clazz.isPrimitive()) {
-				return findMessage(clazz.getSuperclass(), key, locale, args, checked, valueStack);
+				return findMessage(locale, clazz.getSuperclass(), key, arg, checked);
 			}
 		}
 
 		return null;
 	}
 
-	protected MessageFormat buildMessageFormat(String pattern, Locale locale) {
-		MultiKey key = new MultiKey(pattern, locale);
-		MessageFormat format = messageFormats.get(key);
-		if (format == null) {
-			format = new MessageFormat(pattern);
-			format.setLocale(locale);
-			format.applyPattern(pattern);
-			messageFormats.put(key, format);
-		}
-
-		return format;
-	}
-
-	protected String formatWithNullDetection(MessageFormat mf, Object[] args) {
-		String message = mf.format(args);
-		if ("null".equals(message)) {
-			return null;
-		}
-
-		return message;
-	}
-
-	protected void reloadBundles() {
-	}
-
 	/**
 	 * Gets the message from the named resource bundle.
 	 */
-	protected String getMessage(String bundleName, Locale locale, String key, Object valueStack, Object[] args) {
-		ResourceBundle bundle = findResourceBundle(bundleName, locale);
+	private String getMessage(Locale locale, String src, String key, Object arg) {
+		ResourceBundle bundle = findResourceBundle(locale, src);
 		if (bundle == null) {
 			return null;
 		}
 
-		reloadBundles();
-
+//		reloadBundles();
 		try {
-			String message = evalValue(bundle.getString(key), valueStack);
-			MessageFormat mf = buildMessageFormat(message, locale);
-			return formatWithNullDetection(mf, args);
+			String txt = bundle.getString(key);
+			String msg = evalMessage(txt, arg);
+			return msg;
 		}
 		catch (MissingResourceException e) {
 			return null;
@@ -667,12 +545,12 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * Creates a key to used for lookup/storing in the bundle misses cache.
 	 * 
-	 * @param aBundleName the name of the bundle (usually it's FQN classname).
+	 * @param src the name of the bundle (usually it's FQN classname).
 	 * @param locale the locale.
 	 * @return the key to use for lookup/storing in the bundle misses cache.
 	 */
-	protected String createMissesKey(String aBundleName, Locale locale) {
-		return aBundleName + "_" + locale.toString();
+	private String createMissesKey(String src, Locale locale) {
+		return src + "_" + locale.toString();
 	}
 
 	/**
@@ -682,17 +560,17 @@ public class DefaultTextProvider implements TextProvider {
 	 * {@link #resourceClassLoader} is defined and the bundle cannot be found the current
 	 * classloader it will delegate to that.
 	 * 
-	 * @param aBundleName the name of the bundle (usually it's FQN classname).
+	 * @param src the name of the bundle (usually it's FQN classname).
 	 * @param locale the locale.
 	 * @return the bundle, <tt>null</tt> if not found.
 	 */
-	public ResourceBundle findResourceBundle(String aBundleName, Locale locale) {
-		String key = createMissesKey(aBundleName, locale);
+	private ResourceBundle findResourceBundle(Locale locale, String src) {
+		String key = createMissesKey(src, locale);
 
 		ResourceBundle bundle = bundlesMap.get(key);
 		if (bundle == null) {
 			try {
-				bundle = resourceBundleLoader.getBundle(aBundleName, locale, resourceClassLoader);
+				bundle = resourceBundleLoader.getBundle(src, locale, resourceClassLoader);
 			}
 			catch (MissingResourceException ex) {
 			}
