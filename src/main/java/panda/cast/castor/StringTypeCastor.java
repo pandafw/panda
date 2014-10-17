@@ -1,11 +1,10 @@
 package panda.cast.castor;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,7 +13,6 @@ import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
 import panda.io.Streams;
 import panda.lang.Charsets;
-import panda.lang.codec.binary.Base64;
 
 
 /**
@@ -31,10 +29,19 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		this.dateCastor = dateCastor;
 	}
 
-	protected void write(Object value, Appendable a) {
+	protected boolean write(Object value, Appendable a, CastContext context) {
 		try {
-			if (value instanceof InputStream) {
-				Streams.copy((InputStream)value, a, Charsets.UTF_8);
+			if (value instanceof Class) {
+				a.append(((Class)value).getName().toString());
+			}
+			else if (value instanceof Date) {
+				a.append(dateCastor.getDefaultDateFormat().format((Date)value));
+			}
+			else if (value instanceof Calendar) {
+				a.append(dateCastor.getDefaultDateFormat().format(((Calendar)value).getTime()));
+			}
+			else if (value instanceof char[]) {
+				a.append(new String((char[])value));
 			}
 			else if (value instanceof Reader) {
 				Streams.copy((Reader)value, a);
@@ -42,54 +49,34 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof Clob) {
 				Streams.copy(((Clob)value).getCharacterStream(), a);
 			}
-			else {
-				a.append(convertToString(value));
+			else if (value instanceof byte[]) {
+				InputStream bis = new ByteArrayInputStream((byte[])value);
+				Streams.copy(bis, a, Charsets.UTF_8);
 			}
+			else if (value instanceof InputStream) {
+				Streams.copy((InputStream)value, a, Charsets.UTF_8);
+			}
+			else if (value instanceof Number || value instanceof Boolean) {
+				a.append(value.toString());
+			}
+			else if (value instanceof Character) {
+				a.append((Character)value);
+			}
+			else {
+				castError(value, context);
+				return false;
+			}
+			return true;
 		}
 		catch (CastException e) {
 			throw e;
 		}
 		catch (Exception e) {
-			throw new CastException(e);
+			castError(value, context, e);
+			return false;
 		}
 	}
 
-	protected String convertToString(Object value) {
-		try {
-			if (value instanceof Class) {
-				return ((Class)value).getName().toString();
-			}
-			if (value instanceof Date) {
-				return dateCastor.getDefaultDateFormat().format((Date)value);
-			}
-			if (value instanceof Calendar) {
-				return dateCastor.getDefaultDateFormat().format(((Calendar)value).getTime());
-			}
-			if (value instanceof char[]) {
-				return new String((char[])value);
-			}
-			if (value instanceof Reader) {
-				return Streams.toString((Reader)value);
-			}
-			if (value instanceof Clob) {
-				return ((Clob)value).getSubString(1, (int)((Clob)value).length());
-			}
-			if (value instanceof byte[]) {
-				return Base64.encodeBase64String((byte[])value);
-			}
-			if (value instanceof InputStream) {
-				return Base64.encodeBase64String((InputStream)value);
-			}
-			return value.toString();
-		}
-		catch (SQLException e) {
-			throw new CastException(e);
-		}
-		catch (IOException e) {
-			throw new CastException(e);
-		}
-	}
-	
 	public static class StringCastor extends StringTypeCastor<String> {
 		public StringCastor(DateCastor dateCastor) {
 			super(String.class, dateCastor);
@@ -97,7 +84,11 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		
 		@Override
 		protected String castValue(Object value, CastContext context) {
-			return convertToString(value);
+			StringBuilder sb = new StringBuilder();
+			if (write(value, sb, context)) {
+				return sb.toString();
+			}
+			return null;
 		}
 	}
 
@@ -109,14 +100,16 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		@Override
 		protected StringBuffer castValue(Object value, CastContext context) {
 			StringBuffer sb = new StringBuffer();
-			write(value, sb);
-			return sb;
+			if (write(value, sb, context)) {
+				return sb;
+			}
+			return null;
 		}
 		
 		@Override
 		protected StringBuffer castValueTo(Object value, StringBuffer sb, CastContext context) {
 			sb.setLength(0);
-			write(value, sb);
+			write(value, sb, context);
 			return sb;
 		}
 	}
@@ -129,14 +122,16 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		@Override
 		protected StringBuilder castValue(Object value, CastContext context) {
 			StringBuilder sb = new StringBuilder();
-			write(value, sb);
-			return sb;
+			if (write(value, sb, context)) {
+				return sb;
+			}
+			return null;
 		}
 		
 		@Override
 		protected StringBuilder castValueTo(Object value, StringBuilder sb, CastContext context) {
 			sb.setLength(0);
-			write(value, sb);
+			write(value, sb, context);
 			return sb;
 		}
 	}
