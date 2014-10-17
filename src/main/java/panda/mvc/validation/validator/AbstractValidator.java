@@ -149,7 +149,7 @@ public abstract class AbstractValidator implements Validator {
 		}
 		
 		if (Strings.isNotEmpty(msgId)) {
-			TextProvider tp = ac.getTextProvider();
+			TextProvider tp = ac.getText();
 			if (tp == null) {
 				log.error("Null TextProvider of " + this.getClass() + "('" + getName() + "')");
 				return msgId;

@@ -30,6 +30,7 @@ import panda.mvc.UrlMapping;
 import panda.mvc.ViewMaker;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.IocBy;
+import panda.mvc.annotation.Modules;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.ioc.provider.DefaultIocProvider;
 
@@ -59,6 +60,7 @@ public class DefaultMvcLoading implements Loading {
 			if (config.getServletContext().getMajorVersion() > 2 || config.getServletContext().getMinorVersion() > 4) {
 				log.debugf(" - ContextPath     : %s", config.getServletContext().getContextPath());
 			}
+			log.debugf(" - Web Directory  : %s", config.getServletContext().getRealPath("/"));
 		}
 
 		/*
@@ -71,6 +73,8 @@ public class DefaultMvcLoading implements Loading {
 		 */
 		StopWatch sw = new StopWatch();
 		try {
+			setContextClass(config);
+			
 			/*
 			 * 检查 Ioc 容器并创建和保存它
 			 */
@@ -208,6 +212,12 @@ public class DefaultMvcLoading implements Loading {
 		}
 	}
 
+	protected void setContextClass(AbstractMvcConfig config) {
+		Class<?> mm = config.getMainModule();
+		Modules ms = mm.getAnnotation(Modules.class);
+		config.setContextClass(ms.context());
+	}
+	
 	protected void createIoc(AbstractMvcConfig config) {
 		Class<?> mainModule = config.getMainModule();
 

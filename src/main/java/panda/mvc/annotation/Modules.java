@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import panda.mvc.ActionContext;
+
 /**
  * 声明了一个应用所有的模块
  */
@@ -30,4 +32,9 @@ public @interface Modules {
 	 * 是否搜索模块类同包以及子包的其他类
 	 */
 	boolean scan() default false;
+	
+	/**
+	 * ActionContext Type
+	 */
+	Class<? extends ActionContext> context() default ActionContext.class;
 }

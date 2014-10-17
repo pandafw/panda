@@ -12,6 +12,7 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.ActionContext;
 import panda.mvc.MvcConfig;
 
 public abstract class AbstractMvcConfig implements MvcConfig {
@@ -19,27 +20,31 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 	private static final Log log = Logs.getLog(AbstractMvcConfig.class);
 
 	private Ioc ioc;
+	private ServletContext servlet;
+	private Class<?> mainModule;
+	private Class<? extends ActionContext> contextClass;
 
-	public AbstractMvcConfig(ServletContext context) {
+	public AbstractMvcConfig() {
 	}
+	
+	protected void init(ServletContext servlet) {
+		this.servlet = servlet;
 
-	public String getAppRoot() {
-		String webinf = getServletContext().getRealPath("/WEB-INF/");
-		if (webinf == null) {
-			log.info("/WEB-INF/ not Found?!");
-			return "";
+		String name = Strings.trim(getInitParameter("modules"));
+		if (Strings.isBlank(name)) {
+			throw new IllegalArgumentException(
+				"You need declare 'modules' parameter in your context configuration file or web.xml! Only found -> "
+						+ getInitParameterNames());
 		}
 
-		String root = getServletContext().getRealPath("/").replace('\\', '/');
-		if (root.endsWith("/")) {
-			return root.substring(0, root.length() - 1);
+		try {
+			mainModule = Classes.getClass(name);
 		}
-		
-		if (root.endsWith("/.")) {
-			return root.substring(0, root.length() - 2);
+		catch (ClassNotFoundException e) {
+			throw Exceptions.wrapThrow(e);
 		}
-		
-		return root;
+
+		log.debugf("MainModule: <%s>", mainModule.getName());
 	}
 
 	public Ioc getIoc() {
@@ -50,31 +55,26 @@ public abstract class AbstractMvcConfig implements MvcConfig {
 		this.ioc = ioc;
 	}
 
-	protected Object getAttribute(String name) {
-		return this.getServletContext().getAttribute(name);
-	}
-
-	protected void setAttribute(String name, Object obj) {
-		this.getServletContext().setAttribute(name, obj);
+	public ServletContext getServletContext() {
+		return servlet;
 	}
 
 	public Class<?> getMainModule() {
-		try {
-			String name = Strings.trim(getInitParameter("modules"));
-			Class<?> mainModule = null;
-			if (Strings.isBlank(name)) {
-				throw new IllegalArgumentException(
-					"You need declare 'modules' parameter in your context configuration file or web.xml ! Only found -> "
-							+ getInitParameterNames());
-			}
-	
-			mainModule = Classes.getClass(name);
-			log.debugf("MainModule: <%s>", mainModule.getName());
-			return mainModule;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return mainModule;
+	}
+
+	/**
+	 * @return the contextClass
+	 */
+	public Class<? extends ActionContext> getContextClass() {
+		return contextClass;
+	}
+
+	/**
+	 * @param contextClass the contextClass to set
+	 */
+	public void setContextClass(Class<? extends ActionContext> contextClass) {
+		this.contextClass = contextClass;
 	}
 
 	protected List<String> enum2list(Enumeration<?> enums) {

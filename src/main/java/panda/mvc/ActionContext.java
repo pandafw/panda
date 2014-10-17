@@ -52,8 +52,14 @@ public class ActionContext {
 	// cached ioc bean
 	//
 	private FilePool filePool;
-	private TextProvider textProvider;
-	private StateProvider stateProvider;
+	private TextProvider text;
+	private StateProvider state;
+
+	private ActionAware actionAware;
+	private ParamAware paramAware;
+	private ApplicationAware applicationAware;
+	private SessionAware sessionAware;
+	
 
 	/**
 	 * Constructor
@@ -167,6 +173,13 @@ public class ActionContext {
 	}
 
 	/**
+	 * @return the method name
+	 */
+	public String getMethodName() {
+		return method == null ? null : method.getName();
+	}
+
+	/**
 	 * @param method the method to set
 	 */
 	public void setMethod(Method method) {
@@ -244,6 +257,8 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
+	// ioc object
+	//
 	/**
 	 * @return the filePool
 	 */
@@ -257,23 +272,63 @@ public class ActionContext {
 	/**
 	 * @return the text provider
 	 */
-	public TextProvider getTextProvider() {
-		if (textProvider == null) {
-			textProvider = ioc.get(TextProvider.class);
+	public TextProvider getText() {
+		if (text == null) {
+			text = ioc.get(TextProvider.class);
 		}
-		return textProvider;
+		return text;
 	}
 
 	/**
 	 * @return the state provider
 	 */
-	public StateProvider getStateProvider() {
-		if (stateProvider == null) {
-			stateProvider = ioc.get(StateProvider.class);
+	public StateProvider getState() {
+		if (state == null) {
+			state = ioc.get(StateProvider.class);
 		}
-		return stateProvider;
+		return state;
 	}
 	
+	/**
+	 * @return action aware
+	 */
+	public ActionAware getActionAware() {
+		if (actionAware == null) {
+			actionAware = ioc.get(ActionAware.class);
+		}
+		return actionAware;
+	}
+	
+	/**
+	 * @return parameter aware
+	 */
+	public ParamAware getParamAware() {
+		if (paramAware == null) {
+			paramAware = ioc.get(ParamAware.class);
+		}
+		return paramAware;
+	}
+	
+	/**
+	 * @return session aware
+	 */
+	public SessionAware getSessionAware() {
+		if (sessionAware == null) {
+			sessionAware = ioc.get(SessionAware.class);
+		}
+		return sessionAware;
+	}
+	
+	/**
+	 * @return application aware
+	 */
+	public ApplicationAware getApplicationAware() {
+		if (applicationAware == null) {
+			applicationAware = ioc.get(ApplicationAware.class);
+		}
+		return applicationAware;
+	}
+
 	//----------------------------------------------------
 	/**
 	 * @return the servlet context attributes map
@@ -309,34 +364,6 @@ public class ActionContext {
 	public String getBase() {
 		return servlet.getContextPath();
 	}
-	
-	/**
-	 * @return action aware
-	 */
-	public ActionAware getActionAware() {
-		return ioc.get(ActionAware.class);
-	}
-	
-	/**
-	 * @return parameter aware
-	 */
-	public ParamAware getParamAware() {
-		return ioc.get(ParamAware.class);
-	}
-	
-	/**
-	 * @return session aware
-	 */
-	public SessionAware getSessionAware() {
-		return ioc.get(SessionAware.class);
-	}
-	
-	/**
-	 * @return application aware
-	 */
-	public ApplicationAware getApplicationAware() {
-		return ioc.get(ApplicationAware.class);
-	}
 
 	//----------------------------------------------------
 	// top
@@ -367,7 +394,7 @@ public class ActionContext {
 	// utility functions
 	//
 	public String text(String key, String def) {
-		return getTextProvider().getText(key, def);
+		return getText().getText(key, def);
 	}
 
 	//----------------------------------------------------

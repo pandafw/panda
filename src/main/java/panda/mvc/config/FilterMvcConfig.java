@@ -3,19 +3,14 @@ package panda.mvc.config;
 import java.util.List;
 
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 
 public class FilterMvcConfig extends AbstractMvcConfig {
 
 	private FilterConfig config;
 
 	public FilterMvcConfig(FilterConfig config) {
-		super(config.getServletContext());
 		this.config = config;
-	}
-
-	public ServletContext getServletContext() {
-		return config.getServletContext();
+		init(config.getServletContext());
 	}
 
 	public String getInitParameter(String name) {

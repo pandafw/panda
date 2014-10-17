@@ -69,8 +69,9 @@ public class SessionStateProvider implements StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	public void saveState(String name, Object value) {
+	public StateProvider saveState(String name, Object value) {
 		getSession().put(getKey(name), value);
+		return this;
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import panda.ioc.ObjectProxy;
 import panda.ioc.Scope;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
+import panda.lang.Classes;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.impl.ActionInvoker;
 import panda.mvc.impl.DefaultMvcLoading;
@@ -54,7 +55,7 @@ public class ActionHandler {
 	}
 
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
-		ActionContext ac = new ActionContext();
+		ActionContext ac = Classes.born(config.getContextClass());
 
 		Ioc ioc = config.getIoc();
 		if (ioc instanceof DefaultIoc) {

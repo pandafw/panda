@@ -20,14 +20,16 @@ public interface MvcConfig {
 	Ioc getIoc();
 
 	/**
-	 * @return 当前应用的根路径
-	 */
-	String getAppRoot();
-
-	/**
 	 * @return 当前应用的名称
 	 */
 	String getAppName();
+
+	/**
+	 * 如果在非 JSP/SERVLET 容器内，这个函数不保证返回正确的结果
+	 * 
+	 * @return 当前应用的上下文对象
+	 */
+	ServletContext getServletContext();
 
 	/**
 	 * 获取配置的参数
@@ -50,11 +52,9 @@ public interface MvcConfig {
 	 * @return 配置的主模块，null - 如果没有定义这个参数
 	 */
 	Class<?> getMainModule();
-
+	
 	/**
-	 * 如果在非 JSP/SERVLET 容器内，这个函数不保证返回正确的结果
-	 * 
-	 * @return 当前应用的上下文对象
+	 * @return ActionContext type
 	 */
-	ServletContext getServletContext();
+	Class<? extends ActionContext> getContextClass();
 }

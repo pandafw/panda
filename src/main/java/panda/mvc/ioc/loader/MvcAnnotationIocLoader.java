@@ -1,5 +1,7 @@
 package panda.mvc.ioc.loader;
 
+import java.util.Collection;
+
 import panda.ioc.Scope;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.meta.IocObject;
@@ -11,6 +13,10 @@ public class MvcAnnotationIocLoader extends AnnotationIocLoader {
 	}
 
 	public MvcAnnotationIocLoader(Object... args) {
+		super(args);
+	}
+
+	public MvcAnnotationIocLoader(Collection<Object> args) {
 		super(args);
 	}
 

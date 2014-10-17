@@ -3,14 +3,17 @@ package panda.mvc.validation;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
-import panda.cast.CastContext;
 import panda.cast.Castors;
+import panda.el.El;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -23,8 +26,8 @@ import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.adaptor.DefaultParamAdaptor;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.validator.BinaryValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
 import panda.mvc.validation.validator.ConstantValidator;
@@ -34,7 +37,6 @@ import panda.mvc.validation.validator.DecimalValidator;
 import panda.mvc.validation.validator.ElValidator;
 import panda.mvc.validation.validator.EmailValidator;
 import panda.mvc.validation.validator.EmptyValidator;
-import panda.mvc.validation.validator.Validator;
 import panda.mvc.validation.validator.FileValidator;
 import panda.mvc.validation.validator.FilenameFieldValidator;
 import panda.mvc.validation.validator.ImageValidator;
@@ -43,11 +45,15 @@ import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
+import panda.mvc.validation.validator.Validator;
 import panda.mvc.validation.validator.VisitValidator;
 
 @IocBean(type=Validators.class)
 public class DefaultValidators implements Validators {
 	// -------------------------------------------------------
+	@IocInject(required=false)
+	private Beans beans = Beans.i();
+
 	@IocInject(required=false)
 	private Castors castors = Castors.i();
 	
@@ -174,6 +180,7 @@ public class DefaultValidators implements Validators {
 	 * @param v validator annotation
 	 * @return validator
 	 */
+	@SuppressWarnings("unchecked")
 	public Validator createValidator(ActionContext ac, Validate v) {
 		Validator fv = createValidator(ac, v.type(), v.value());
 
@@ -182,11 +189,30 @@ public class DefaultValidators implements Validators {
 		fv.setShortCircuit(v.shortCircuit());
 		
 		if (Strings.isNotEmpty(v.params())) {
+			BeanHandler bh = beans.getBeanHandler(fv.getClass());
 			JsonObject jo = JsonObject.fromJson(v.params());
-			CastContext cctx = castors.getCastContext();
-			castors.castTo(jo, fv, cctx);
-			if (cctx.hasError()) {
-				throw new IllegalArgumentException("Failed to set params(\"" + v.params() + "\") to " + fv.getClass() + "\nErrors: " + Jsons.toJson(cctx.getErrors(), true));
+			
+			// translate # expression
+			for (Entry<String, Object> en : jo.entrySet()) {
+				String pn = en.getKey();
+				Object pv = en.getValue();
+				
+				if (pv instanceof String) {
+					String sv = (String)pv;
+					if (sv.length() > 0 && sv.charAt(0) == '#') {
+						pv = El.eval(sv.substring(1), ac);
+					}
+				}
+				
+				Type pt = bh.getPropertyType(pn);
+				if (pt == null) {
+					throw new IllegalArgumentException("Failed to find property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
+				}
+				
+				Object cv = castors.cast(pv, pt);
+				if (!bh.setPropertyValue(fv, pn, cv)) {
+					throw new IllegalArgumentException("Failed to set property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
+				}
 			}
 		}
 		

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import panda.ioc.Ioc;
+import panda.lang.Arrays;
 import panda.mvc.MvcConfig;
 import panda.mvc.annotation.Modules;
 import panda.mvc.ioc.loader.MvcAnnotationIocLoader;
@@ -12,23 +13,32 @@ import panda.mvc.ioc.loader.MvcAnnotationIocLoader;
 public class AnnotationIocProvider extends AbstractIocProvider {
 
 	public Ioc create(MvcConfig config, String... args) {
-		if (args == null || args.length == 0) {
-			args = getDefaultPackages(config);
+		Set<Object> as = getDefaultPackages(config);
+		if (Arrays.isNotEmpty(args)) {
+			as.addAll(Arrays.asList(args));
 		}
-		return create(new MvcAnnotationIocLoader(args));
+		return create(new MvcAnnotationIocLoader(as));
 	}
 
-	public static String[] getDefaultPackages(MvcConfig config) {
-		Set<String> pkgs = new HashSet<String>();
+	public static Set<Object> getDefaultPackages(MvcConfig config) {
+		Set<Object> pkgs = new HashSet<Object>();
 
 		Class<?> mm = config.getMainModule();
-		pkgs.add(mm.getPackage().getName());
 		Modules ms = mm.getAnnotation(Modules.class);
+
+		if (ms.scan()) {
+			pkgs.add(mm.getPackage().getName());
+		}
+		
 		if (ms != null) {
 			for (Class<?> cls : ms.value()) {
-				pkgs.add(cls.getPackage().getName());
+				pkgs.add(cls);
+			}
+
+			for (String pkg : ms.packages()) {
+				pkgs.add(pkg);
 			}
 		}
-		return pkgs.toArray(new String[pkgs.size()]);
+		return pkgs;
 	}
 }

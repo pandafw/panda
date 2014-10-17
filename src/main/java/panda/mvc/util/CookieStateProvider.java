@@ -160,7 +160,7 @@ public class CookieStateProvider implements StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	public void saveState(String name, Object value) {
+	public StateProvider saveState(String name, Object value) {
 		String key = getKey(name);
 		String val = encodeValue(value);
 
@@ -187,6 +187,8 @@ public class CookieStateProvider implements StateProvider {
 		}
 		
 		context.getResponse().addCookie(c);
+		
+		return this;
 	}
 	
 	/**

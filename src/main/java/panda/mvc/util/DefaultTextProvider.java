@@ -21,6 +21,7 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.ClassLoaders;
+import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -42,7 +43,6 @@ public class DefaultTextProvider implements TextProvider {
 		}
 	}
 
-	private final static Object NULL = new Object();
 	private final static ResourceBundle EMPTY_BUNDLE = new EmptyResourceBundle();
 	
 
@@ -163,7 +163,7 @@ public class DefaultTextProvider implements TextProvider {
 	 * @return value of named text or the provided key if no value is found
 	 */
 	public String getText(String key) {
-		return getText(key, key, NULL);
+		return getText(key, key, Objects.NULL);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class DefaultTextProvider implements TextProvider {
 	 * @return value of named text or the provided def if no value is found
 	 */
 	public String getText(String key, String def) {
-		return getText(key, def, NULL);
+		return getText(key, def, Objects.NULL);
 	}
 
 	/**
@@ -351,7 +351,7 @@ public class DefaultTextProvider implements TextProvider {
 	}
 
 	private String evalMessage(String text, Object arg) {
-		if (arg != NULL) {
+		if (arg != Objects.NULL) {
 			try {
 				context.push(arg);
 				return ElTemplate.evaluate(text, context);
@@ -581,6 +581,10 @@ public class DefaultTextProvider implements TextProvider {
 
 		bundlesMap.putIfAbsent(key, bundle);
 		return (bundle == EMPTY_BUNDLE) ? null : bundle;
+	}
+
+	public void clearResourceBundlesCache() {
+		bundlesMap.clear();
 	}
 
 }

@@ -10,7 +10,7 @@ public interface StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	void saveState(String name, Object value);
+	StateProvider saveState(String name, Object value);
 	
 	/**
 	 * Load state

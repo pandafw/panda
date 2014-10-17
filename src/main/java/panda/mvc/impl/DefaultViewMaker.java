@@ -36,7 +36,6 @@ public class DefaultViewMaker implements ViewMaker {
 	public static final String VIEW_FORWARD = "forward";
 	public static final String VIEW_FORWARD2 = "->";
 	public static final String VIEW_RAW = "raw";
-	public static final String VIEW_NULL = "";
 	public static final String VIEW_VOID = "void";
 
 	public View make(Ioc ioc, String type, String value) {
@@ -103,7 +102,7 @@ public class DefaultViewMaker implements ViewMaker {
 			return VoidView.INSTANCE;
 		}
 		
-		if (VIEW_NULL.equals(type)) {
+		if (Strings.isEmpty(type)) {
 			return null;
 		}
 		

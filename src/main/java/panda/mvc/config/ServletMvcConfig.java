@@ -3,19 +3,14 @@ package panda.mvc.config;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 
 public class ServletMvcConfig extends AbstractMvcConfig {
 
 	private ServletConfig config;
 
 	public ServletMvcConfig(ServletConfig config) {
-		super(config.getServletContext());
 		this.config = config;
-	}
-
-	public ServletContext getServletContext() {
-		return config.getServletContext();
+		init(config.getServletContext());
 	}
 
 	public String getInitParameter(String name) {
