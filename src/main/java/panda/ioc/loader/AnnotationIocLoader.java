@@ -42,6 +42,10 @@ public class AnnotationIocLoader implements IocLoader {
 		init(Arrays.asList(args));
 	}
 	
+	public AnnotationIocLoader(Collection<Object> args) {
+		init(args);
+	}
+	
 	protected void init(Collection<Object> args) {
 		for (Object a : args) {
 			if (a instanceof Class) {

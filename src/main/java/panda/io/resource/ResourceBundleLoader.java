@@ -1,15 +1,14 @@
 package panda.io.resource;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Collections;
 
 /**
  * A class for load external resource.
@@ -54,8 +53,9 @@ public class ResourceBundleLoader {
 	 */
 	public ResourceBundleLoader() {
 		control = new Control();
-		markers = new LinkedHashMap<String, ResourceBundleMaker>();
-
+		markers = new ConcurrentHashMap<String, ResourceBundleMaker>();
+		formats = new CopyOnWriteArrayList<String>();
+		
 		// add defaults
 		addResourceBundleMaker(JAVA_CLASS, null);
 		addResourceBundleMaker(JAVA_PROPS, null);
@@ -64,8 +64,11 @@ public class ResourceBundleLoader {
 
 	public void addResourceBundleMaker(String format, ResourceBundleMaker rbm) {
 		markers.put(format, rbm);
-		List<String> keys = new ArrayList<String>(markers.keySet());
-		formats = Collections.unmodifiableList(keys);
+		formats.add(format);
+	}	
+
+	public ResourceBundleMaker getResourceBundleMaker(String format) {
+		return markers.get(format);
 	}	
 
 	public ResourceBundle getBundle(String baseName) {
