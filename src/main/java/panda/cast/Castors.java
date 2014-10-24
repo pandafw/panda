@@ -21,13 +21,17 @@ import panda.cast.castor.CollectionCastor;
 import panda.cast.castor.DateTypeCastor;
 import panda.cast.castor.DirectCastor;
 import panda.cast.castor.EnumCastor;
+import panda.cast.castor.IterableCastor;
+import panda.cast.castor.IteratorCastor;
 import panda.cast.castor.JavaBeanCastor;
+import panda.cast.castor.LocaleCastor;
 import panda.cast.castor.MapCastor;
 import panda.cast.castor.NumberTypeCastor;
 import panda.cast.castor.PrimitiveTypeCastor;
 import panda.cast.castor.PrimitiveWrapCastor;
 import panda.cast.castor.StreamCastor;
 import panda.cast.castor.StringTypeCastor;
+import panda.cast.castor.TimeZoneCastor;
 import panda.lang.Asserts;
 import panda.lang.collection.MultiKey;
 import panda.lang.reflect.Types;
@@ -124,6 +128,12 @@ public class Castors {
 		register(new StreamCastor.ReaderCastor());
 
 		register(new ClassCastor());
+		
+		register(new IterableCastor());
+		register(new IteratorCastor());
+
+		register(new LocaleCastor());
+		register(new TimeZoneCastor());
 	}
 	
 	public Beans getBeans() {
