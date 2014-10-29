@@ -18,7 +18,7 @@ public class ClassB {
 	public ClassCC cc;
 	
 	@IocInject(value="ref:xxx", required=false)
-	public String xxx;
+	public String xxx = "default";
 
 	@IocInject(type=InputStream.class, required=false)
 	public InputStream yyy;

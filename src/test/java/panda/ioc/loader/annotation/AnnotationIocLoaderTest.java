@@ -43,7 +43,7 @@ public class AnnotationIocLoaderTest {
 		
 		Assert.assertNotNull(b);
 		Assert.assertNotNull(b.a);
-		Assert.assertNull(b.xxx);
+		Assert.assertEquals("default", b.xxx);
 		Assert.assertNull(b.yyy);
 		Assert.assertEquals(b.c, b.cc);
 	}

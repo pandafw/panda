@@ -289,8 +289,7 @@ public class URLHelper {
 	 * @param params parameters
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, Map params) {
+	public static String buildURL(String scheme, String host, int port, String uri, Map params) {
 		return buildURL(scheme, host, port, uri, null, params, false, Charsets.UTF_8);
 	}
 	
@@ -304,8 +303,7 @@ public class URLHelper {
 	 * @param query query string
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, String query) {
+	public static String buildURL(String scheme, String host, int port, String uri, String query) {
 		return buildURL(scheme, host, port, uri, query, null, false, Charsets.UTF_8);
 	}
 	
@@ -320,8 +318,7 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, Map params, boolean escapeAmp) {
+	public static String buildURL(String scheme, String host, int port, String uri, Map params, boolean escapeAmp) {
 		return buildURL(scheme, host, port, uri, null, params, escapeAmp, Charsets.UTF_8);
 	}
 	
@@ -353,8 +350,7 @@ public class URLHelper {
 	 * @param params parameters
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, String query, Map params) {
+	public static String buildURL(String scheme, String host, int port, String uri, String query, Map params) {
 		return buildURL(scheme, host, port, uri, query, params, false, Charsets.UTF_8);
 	}
 	

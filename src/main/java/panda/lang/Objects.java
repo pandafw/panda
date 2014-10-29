@@ -807,12 +807,12 @@ public abstract class Objects {
 				}
 			}
 		}
-		else if (obj1.toString().equals(obj2.toString())) {
-			// log.debug("obj1 is an object and it's String representation equals obj2's String representation.");
-			return true;
-		}
 		else if (obj1.equals(obj2)) {
 			// log.debug("obj1 is an object and equals obj2");
+			return true;
+		}
+		else if (obj1.toString().equals(obj2.toString())) {
+			// log.debug("obj1 is an object and it's String representation equals obj2's String representation.");
 			return true;
 		}
 
