@@ -1,0 +1,339 @@
+package panda.mvc.view.tag.ui.theme.simple;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import panda.el.ElTemplate;
+import panda.lang.Strings;
+import panda.mvc.view.tag.ui.Pager;
+import panda.mvc.view.tag.ui.Select;
+import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
+import panda.mvc.view.tag.ui.theme.Attributes;
+import panda.mvc.view.tag.ui.theme.RenderingContext;
+
+public class PagerRenderer extends AbstractEndRenderer<Pager> {
+
+	private String id;
+	/** start index */
+	private Integer start;
+	/** item count of current page */
+	private Integer count;
+	/** item limit per page */
+	private Integer limit;
+	/** total item count */
+	private Integer total;
+	/** total pages */
+	private Integer pages;
+	/** page no */
+	private Integer page;
+	
+	private String linkHref;
+	private Map<String, Object> linkBean;
+	
+	private boolean hiddenStyle;
+	private String linkStyle;
+	private int linkSize;
+
+	public PagerRenderer(RenderingContext context) {
+		super(context);
+	}
+
+	@Override
+	protected void render() throws IOException {
+		id = tag.getId();
+		start = defi(tag.getStart());
+		count = defi(tag.getCount());
+		limit = defi(tag.getLimit());
+		total = defi(tag.getTotal());
+		page = defi(tag.getPage());
+		pages = defi(tag.getPages());
+
+		linkHref = Strings.replaceChars(defs(tag.getLinkHref(), "#"), '!', '$');
+		linkStyle = defs(tag.getLinkStyle());
+		linkSize = defi(tag.getLinkSize());
+		hiddenStyle = Strings.contains(linkStyle, 'h');
+		
+		Attributes attr = new Attributes();
+		attr.add("id", id)
+			.cssClass(tag, "pagination p-pager")
+			.data("start", defs(start))
+			.data("count", defs(count))
+			.data("limit", defs(limit))
+			.data("total", defs(total))
+			.data("click", tag.getOnLinkClick())
+			.data("spy", "ppager")
+			.cssStyle(tag);
+		stag("ul", attr);
+		
+		if (total > 0) {
+			writePagerTextInfo();
+			writePagerLinkFirst();
+			writePagerLinkPrev(false);
+			writePagerLinkPages();
+			writePagerLinkNext(false);
+			writePagerLinkLast();
+			writePagerLimit();
+		}
+		else if (count > 0) {
+			writePagerLinkPrev(true);
+			writePagerTextInfo();
+			writePagerLinkNext(true);
+			writePagerLimit();
+		}
+		else if (start > 0) {
+			writePagerLinkFirst();
+			writePagerLinkPrev(true);
+			writePagerEmptyInfo();
+			writePagerLimit();
+		}
+		else {
+			writePagerEmptyInfo();
+		}
+		
+		etag("ul");
+	}
+
+	private void writePagerInfo(String info) throws IOException {
+		write("<li class=\"p-pager-info\"><span>");
+		write(info);
+		write("</span></li>");
+	}
+
+	private void writePagerEmptyInfo() throws IOException {
+		if (Strings.contains(linkStyle, 'i')) {
+			writePagerInfo(tag.getEmptyText());
+		}
+	}
+	
+	private void writePagerTextInfo() throws IOException {
+		if (Strings.contains(linkStyle, 'i')) {
+			writePagerInfo(tag.getInfoText());
+		}
+	}
+
+	private void writePagerLimit() throws IOException {
+		if (limit == null || limit < 1 || !Strings.contains(linkStyle, 's')) {
+			return;
+		}
+
+		String onLimitChange = tag.getOnLimitChange();
+	
+		write("<li class=\"p-pager-limit\"><span>");
+		write(tag.getLimitLabel());
+		if (Strings.isEmpty(onLimitChange)) {
+			write(limit.toString());
+		}
+		else {
+			Select select = context.getIoc().get(Select.class);
+			
+			select.setTheme("simple");
+			select.setId(id + "_limit");
+			String limitName = tag.getLimitName();
+			if (Strings.isEmpty(limitName)) {
+				select.setName(id + "_limit");
+			}
+			select.setCssClass("select");
+			select.setValue(limit.toString());
+			select.setList(tag.getLimitList());
+			select.setOnchange(onLimitChange);
+			
+			select.start(writer);
+			select.end(writer, "");
+		}
+		write("</span></li>");
+	}
+
+	private String getLinkHref(int pn) {
+		if (linkBean == null) {
+			linkBean = new HashMap<String, Object>();
+			linkBean.put("limit", limit);
+		}
+		
+		pn = pn < 1 ? 1 : (pn > pages ? pages : pn);
+		linkBean.put("page", pn);
+		linkBean.put("start", (pn - 1) * limit);
+		return ElTemplate.evaluate(linkHref, linkBean);
+	}
+	
+	private void writePagerLinkFirst() throws IOException {
+		boolean hasFirst = (page > 1);
+		write("<li");
+		if ((!hasFirst && hiddenStyle) || !Strings.contains(linkStyle, 'f')) {
+			write(" class=\"hidden\"");
+		}
+		else if (!hasFirst) {
+			write(" class=\"disabled\"");
+		}
+		write("><a href=\"");
+		write(getLinkHref(1));
+		write('"');
+		write(" data-pageno=\"1");
+		if (hasFirst) {
+			write("\" data-toggle=\"tooltip\" title=\"");
+			write(tag.getFirstTooltip());
+			write('"');
+		}
+		else {
+			write("\" onclick=\"return false\"");
+		}
+		write('>');
+		write(tag.getFirstText());
+		write("</a></li>");
+	}
+	
+	private void writePagerLinkPrev(boolean force) throws IOException {
+		boolean hasPrev = (page > 1);
+		write("<li");
+		if ((!hasPrev && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'p'))) {
+			write(" class=\"hidden\"");
+		}
+		else if (!hasPrev) {
+			write(" class=\"disabled\"");
+		}
+		write("><a href=\"");
+		write(getLinkHref(page - 1));
+		write("\" data-pageno=\"");
+		write(String.valueOf(page - 1));
+		if (hasPrev) {
+			write("\" data-toggle=\"tooltip\" title=\"");
+			write(tag.getPrevTooltip());
+			write('"');
+		}
+		else {
+			write("\" onclick=\"return false\"");
+		}
+		write('>');
+		write(tag.getPrevText());
+		write("</a></li>");
+	}
+
+	private void writePagerLinkNext(boolean force) throws IOException {
+		boolean hasNext = (limit == null || (count >= limit && total < 1) || page < pages);
+		write("<li");
+		if ((!hasNext && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'n'))) {
+			write(" class=\"hidden\"");
+		}
+		else if (!hasNext) {
+			write(" class=\"disabled\"");
+		}
+		write("><a href=\"");
+		write(getLinkHref(page + 1));
+		write("\" data-pageno=\"");
+		write(String.valueOf(page + 1));
+		if (hasNext) {
+			write("\" data-toggle=\"tooltip\" title=\"");
+			write(tag.getNextTooltip());
+			write('"');
+		}
+		else {
+			write("\" onclick=\"return false\"");
+		}
+		write('>');
+		write(tag.getNextText());
+		write("</a></li>");
+	}
+
+	private void writePagerLinkLast() throws IOException {
+		boolean hasLast = (page < pages);
+		write("<li");
+		if ((!hasLast && hiddenStyle) || !Strings.contains(linkStyle, 'l')) {
+			write(" class=\"hidden\"");
+		}
+		else if (!hasLast) {
+			write(" class=\"disabled\"");
+		}
+		write("><a href=\"");
+		write(getLinkHref(pages));
+		write("\" data-pageno=\"");
+		write(pages.toString());
+		if (hasLast) {
+			write("\" data-toggle=\"tooltip\" title=\"");
+			write(tag.getLastTooltip());
+			write('"');
+		}
+		else {
+			write("\" onclick=\"return false\"");
+		}
+		write('>');
+		write(tag.getLastText());
+		write("</a></li>");
+	}
+
+	private void writePagerLinkPages() throws IOException {
+		if (!Strings.contains(linkStyle, '#')) {
+			return;
+		}
+		
+		int p = 1;
+		if (page > linkSize / 2) {
+			p = page - (linkSize / 2);
+		}
+		if (p + linkSize > pages) {
+			p = pages - linkSize + 1;
+		}
+		if (p < 1) {
+			p = 1;
+		}
+
+		boolean ep = Strings.contains(linkStyle, '.');
+		boolean p1 = Strings.contains(linkStyle, '1');
+		boolean px = Strings.contains(linkStyle, 'x');
+
+		if (p > 1 && p1) {
+			linkp(1);
+		}
+		
+		if (p > 2 && (p1 || ep)) {
+			ellipsis();
+		}
+
+		for (int i = 0; i < linkSize && p <= pages; i++, p++) {
+			linkp(p);
+		}
+		
+		if (p < pages - 1) {
+			if (ep || px) {
+				ellipsis();
+			}
+			if (px) {
+				linkp(pages);
+			}
+		}
+		else if (p == pages - 1) {
+			if (px) {
+				linkp(p);
+				linkp(pages);
+			}
+			else if (ep) {
+				ellipsis();
+			}
+		}
+		else if (p == pages) {
+			if (px) {
+				linkp(pages);
+			}
+			else if (ep) {
+				ellipsis();
+			}
+		}
+	}
+
+	private void ellipsis() throws IOException {
+		write("<li class=\"p-pager-ellipsis\"><span>&hellip;</span></li>");
+	}
+
+	private void linkp(int p) throws IOException {
+		write("<li");
+		if (page == p) {
+			write(" class=\"active\"");
+		}
+		write("><a href=\"");
+		write(getLinkHref(p));
+		write("\" data-pageno=\"");
+		write(String.valueOf(p));
+		write("\">");
+		write(String.valueOf(p));
+		write("</a></li>");
+	}
+}

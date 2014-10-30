@@ -192,15 +192,15 @@ public class DefaultValidators implements Validators {
 			BeanHandler bh = beans.getBeanHandler(fv.getClass());
 			JsonObject jo = JsonObject.fromJson(v.params());
 			
-			// translate # expression
+			// translate ${..} expression
 			for (Entry<String, Object> en : jo.entrySet()) {
 				String pn = en.getKey();
 				Object pv = en.getValue();
 				
 				if (pv instanceof String) {
 					String sv = (String)pv;
-					if (sv.length() > 0 && sv.charAt(0) == '#') {
-						pv = El.eval(sv.substring(1), ac);
+					if (sv.length() > 3 && sv.charAt(0) == '$' && sv.charAt(1) == '{' && sv.charAt(sv.length() - 1) == '}') {
+						pv = El.eval(sv.substring(2, sv.length() - 1), ac);
 					}
 				}
 				

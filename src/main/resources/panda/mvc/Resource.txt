@@ -52,8 +52,8 @@ regex-faxnumber='\\d{1,3}?-\\d{1,4}?-\\d{1,4}'
 regex-zipcode='\\d{3}-\\d{4}'
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=$(begin)~$(end)/$(total)
-pager-label-infoz=$(begin)~$(end)
+pager-label-info=${begin}~${end}/${total}
+pager-label-infoz=${begin}~${end}
 pager-label-prev=&nbsp;&lt;&nbsp;
 pager-label-next=&nbsp;&gt;&nbsp;
 pager-label-first=&nbsp;≪&nbsp;
@@ -61,10 +61,10 @@ pager-label-last=&nbsp;≫&nbsp;
 pager-label-empty=-- NOTHING --
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300
-pager-tooltip-prev=&lt; Previous {0}
-pager-tooltip-next=Next {0} &gt;
+pager-tooltip-prev=&lt; Previous ${limit}
+pager-tooltip-next=Next ${limit} &gt;
 pager-tooltip-first=≪ First Page
-pager-tooltip-last=Last Page &raquo;
+pager-tooltip-last=Last Page ≫
 
 
 #listview - sortable

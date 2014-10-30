@@ -18,8 +18,8 @@ number-format-currency=#,###.00
 password-format=●●●●●●
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=$(begin)~$(end)/全$(total)件
-pager-label-infoz=$(begin)件~$(end)件
+pager-label-info=${begin}~${end}/全${total}件
+pager-label-infoz=${begin}件~${end}件
 pager-label-empty=-- 没有数据 --
 pager-label-limit=显示件数：
 pager-tooltip-prev=&lt; 上一页

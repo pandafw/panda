@@ -199,12 +199,32 @@ public class HttpServlets {
 	 * @param request request
 	 * @return request query string
 	 */
-	public static String getRequestQueryString(HttpServletRequest request) {
+	public static String getRequestQuery(HttpServletRequest request) {
 		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
 		if (Strings.isEmpty(uri)) {
 			return request.getQueryString();
 		}
 		return (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
+	}
+
+	/**
+	 * @param request request
+	 * @return request query string
+	 */
+	public static String getRequestQueryString(HttpServletRequest request) {
+		String q = getRequestQuery(request);
+		String s = Strings.substringBefore(q, '#');
+		return s;
+	}
+	
+	/**
+	 * @param request request
+	 * @return request query string
+	 */
+	public static String getRequestQueryAnchor(HttpServletRequest request) {
+		String q = getRequestQuery(request);
+		String s = Strings.substringAfter(q, '#');
+		return s;
 	}
 	
 	/**

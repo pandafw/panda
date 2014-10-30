@@ -145,6 +145,20 @@ public class Pager implements Cloneable, Serializable {
 	
 	//--------------------------------------------------------------
 	/**
+	 * @return the begin page no
+	 */
+	public Long getBegin() {
+		return start == null ? null : start + 1;
+	}
+	
+	/**
+	 * @return the end page no
+	 */
+	public Long getEnd() {
+		return start == null || count == null ? null : start + count;
+	}
+	
+	/**
 	 * @return page
 	 */
 	public Long getPage() {

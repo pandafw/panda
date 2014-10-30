@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.bean.Beans;
 import panda.filepool.FilePool;
 import panda.ioc.Ioc;
 import panda.lang.Collections;
@@ -45,6 +46,7 @@ public class ActionContext {
 	private Throwable error;
 	
 	private List<Object> tops;
+	private Map<String, Object> vars;
 
 	private Map<String, Object> castErrors;
 	
@@ -208,6 +210,18 @@ public class ActionContext {
 	}
 
 	/**
+	 * @param name parameter name
+	 * @return parameter
+	 */
+	public Object getParameter(String name) {
+		if (params == null) {
+			return null;
+		}
+		
+		return Beans.i().getBeanValue(params, name);
+	}
+	
+	/**
 	 * @param params the params to set
 	 */
 	public void setParams(Object params) {
@@ -366,7 +380,7 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
-	// top
+	// top stack
 	//
 	/**
 	 * @return the top object
@@ -375,7 +389,7 @@ public class ActionContext {
 		return Collections.isEmpty(tops) ? null : tops.get(tops.size() - 1);
 	}
 	
-	private List<Object> getTops() {
+	public List<Object> getTops() {
 		if (tops == null) {
 			tops = new ArrayList<Object>();
 		}
@@ -391,11 +405,30 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
-	// utility functions
+	// vars map
 	//
+	public Map<String, Object> getVars() {
+		if (vars == null) {
+			vars = new HashMap<String, Object>();
+		}
+		return vars;
+	}
+
+	//----------------------------------------------------
+	// text functions
+	//
+	public String text(String key) {
+		return getText().getText(key);
+	}
+
 	public String text(String key, String def) {
 		return getText().getText(key, def);
 	}
+
+	public String text(String key, String def, Object arg) {
+		return getText().getText(key, def, arg);
+	}
+
 
 	//----------------------------------------------------
 	/**

@@ -18,12 +18,12 @@ number-format-currency=#,###
 password-format=●●●●●●
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=$(begin)~$(end)/全$(total)件
-pager-label-infoz=$(begin)件~$(end)件
+pager-label-info=${begin}~${end}/全${total}件
+pager-label-infoz=${begin}件~${end}件
 pager-label-empty=-- データありません --
 pager-label-limit=表示件数：
-pager-tooltip-prev=&lt; 前の{0}件
-pager-tooltip-next=次の{0}件 &gt;
+pager-tooltip-prev=&lt; 前の${limit}件
+pager-tooltip-next=次の${limit}件 &gt;
 pager-tooltip-first=≪ 最初のページ
 pager-tooltip-last=最後のページ ≫
 
