@@ -209,7 +209,7 @@ public class Form extends UIBean {
 	/**
 	 * @param loadmask the loadmask to set
 	 */
-	@IocInject(value = MvcConstants.PANDA_FORM_LOADMASK, required = false)
+	@IocInject(value = MvcConstants.UI_FORM_LOADMASK, required = false)
 	public void setLoadmask(Boolean loadmask) {
 		this.loadmask = loadmask;
 	}

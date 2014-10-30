@@ -3,7 +3,7 @@ package panda.mvc.view.taglib;
 import java.util.List;
 
 import panda.mvc.ActionContext;
-import panda.mvc.view.tag.ftl.TagModels;
+import panda.mvc.view.tag.io.ftl.TagModels;
 
 public class DefaultTagLibrary implements TagLibraryModelProvider, TagLibraryDirectiveProvider {
 	@Override

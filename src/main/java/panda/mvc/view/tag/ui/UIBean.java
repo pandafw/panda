@@ -52,7 +52,7 @@ public abstract class UIBean extends Component {
 	protected String tooltip;
 	protected String tooltipConfig;
 
-	@IocInject(value=MvcConstants.PANDA_UI_THEME, required=false)
+	@IocInject(value=MvcConstants.UI_THEME, required=false)
 	protected String defaultUITheme = "simple";
 
 	@IocInject

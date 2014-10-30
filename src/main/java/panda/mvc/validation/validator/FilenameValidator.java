@@ -2,15 +2,12 @@ package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
 
-/**
- * FileNameFieldValidator
- */
 @IocBean(singleton=false)
-public class FilenameFieldValidator extends RegexValidator {
+public class FilenameValidator extends RegexValidator {
 
 	public static final String filenamePattern = "[^\\\\/:*?\"<>|]*";
 
-	public FilenameFieldValidator() {
+	public FilenameValidator() {
 		setRegex(filenamePattern);
 		setCaseSensitive(false);
 	}

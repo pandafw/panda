@@ -38,7 +38,7 @@ import panda.mvc.validation.validator.ElValidator;
 import panda.mvc.validation.validator.EmailValidator;
 import panda.mvc.validation.validator.EmptyValidator;
 import panda.mvc.validation.validator.FileValidator;
-import panda.mvc.validation.validator.FilenameFieldValidator;
+import panda.mvc.validation.validator.FilenameValidator;
 import panda.mvc.validation.validator.ImageValidator;
 import panda.mvc.validation.validator.NumberValidator;
 import panda.mvc.validation.validator.ProhibitedValidator;
@@ -68,7 +68,7 @@ public class DefaultValidators implements Validators {
 		map.put(EL, ElValidator.class);
 		map.put(REGEX, RegexValidator.class);
 		map.put(EMAIL, EmailValidator.class);
-		map.put(FILENAME, FilenameFieldValidator.class);
+		map.put(FILENAME, FilenameValidator.class);
 		map.put(CREDITCARDNO, CreditCardNoValidator.class);
 		map.put(BINARY, BinaryValidator.class);
 		map.put(DATE, DateValidator.class);
@@ -244,12 +244,7 @@ public class DefaultValidators implements Validators {
 		if (Strings.isNotEmpty(alias)) {
 			Class<? extends Validator> c = map.get(alias);
 			if (c != null) {
-				try {
-					return Classes.newInstance(c);
-				}
-				catch (Exception e) {
-					throw new IllegalArgumentException("Failed to create validator(" + c + ")", e);
-				}
+				return _createValidator(ac, c, null);
 			}
 
 			try {

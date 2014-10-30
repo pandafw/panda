@@ -1,4 +1,4 @@
-package panda.mvc.view.tag.ftl;
+package panda.mvc.view.tag.io.ftl;
 
 import panda.mvc.ActionContext;
 import panda.mvc.view.tag.CBoolean;

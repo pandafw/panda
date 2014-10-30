@@ -1,4 +1,4 @@
-package panda.mvc.view.tag.ftl;
+package panda.mvc.view.tag.io.ftl;
 
 import java.io.IOException;
 import java.io.Writer;

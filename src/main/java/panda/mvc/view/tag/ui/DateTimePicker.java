@@ -62,7 +62,7 @@ public class DateTimePicker extends DatePicker {
 	/**
 	 * @param defaults defaults
 	 */
-	@IocInject(value = MvcConstants.PANDA_DATETIMEPICKER_DEFAULTS, required = false)
+	@IocInject(value = MvcConstants.UI_DATETIMEPICKER_DEFAULTS, required = false)
 	public void setDefaults(String defaults) {
 		this.defaults = defaults;
 	}

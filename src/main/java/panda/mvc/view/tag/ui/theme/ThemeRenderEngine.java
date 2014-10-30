@@ -2,10 +2,11 @@ package panda.mvc.view.tag.ui.theme;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
+import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
@@ -18,13 +19,14 @@ import panda.mvc.view.tag.ui.theme.xhtml.XhtmlTheme;
 /**
  * Template engine that renders tags using java implementations
  */
-public class JavaRenderEngine implements RendererEngine {
+@IocBean(type=RendererEngine.class)
+public class ThemeRenderEngine implements RendererEngine {
 
-	private static final Log log = Logs.getLog(JavaRenderEngine.class);
+	private static final Log log = Logs.getLog(ThemeRenderEngine.class);
 
 	private Map<String, Theme> themes = new HashMap<String, Theme>();
 	
-	public JavaRenderEngine() {
+	public ThemeRenderEngine() {
 		Theme simpleTheme = new SimpleTheme();
 		addTheme(simpleTheme);
 		addTheme(new Bs3Theme(simpleTheme));
@@ -64,31 +66,23 @@ public class JavaRenderEngine implements RendererEngine {
 	 * org.apache.struts2.views.java.Theme) interface for custom rendering of
 	 * tags using the javatemplates engine
 	 * 
-	 * @param themeClasses a comma delimited list of custom theme class names
+	 * @param themes a space delimited list of theme class names
 	 */
-	@IocInject(value = MvcConstants.PANDA_CUSTOM_THEMES, required = false)
-	public void setThemeClasses(String themeClasses) throws Exception {
-		StringTokenizer customThemes = new StringTokenizer(themeClasses, ",");
-
-		while (customThemes.hasMoreTokens()) {
-			String themeClass = customThemes.nextToken().trim();
+	@IocInject(value = MvcConstants.UI_CUSTOM_THEMES, required = false)
+	public void setThemeClasses(String themes) throws Exception {
+		String[] ts = Strings.split(themes);
+		for (String t : ts) {
 			try {
-				log.info("Registering custom theme '" + themeClass + "' to javatemplates engine");
-				addTheme((Theme)Classes.newInstance(themeClass));
+				log.info("Register theme '" + t + "'.");
+				addTheme((Theme)Classes.newInstance(t));
 			}
 			catch (ClassCastException cce) {
-				log.error("Invalid java them class '"
-						+ themeClass
-						+ "'. Class does not implement 'org.apache.struts2.views.java.Theme' interface");
+				log.error("Invalid theme " + t + ". Class does not implement " + Theme.class);
 				throw cce;
 			}
 			catch (ClassNotFoundException cnf) {
-				log.error("Invalid java theme class '" + themeClass + "'. Class not found");
+				log.error("Invalid theme " + t + ". Class not found");
 				throw cnf;
-			}
-			catch (Exception e) {
-				log.error("Could not find messages file " + themeClass + ".properties. Skipping");
-				throw e;
 			}
 		}
 	}

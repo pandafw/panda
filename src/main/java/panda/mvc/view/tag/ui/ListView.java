@@ -6,6 +6,7 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
 import panda.lang.Objects;
+import panda.lang.Strings;
 import panda.mvc.view.tag.ListColumn;
 
 /**
@@ -18,14 +19,8 @@ public class ListView extends UIBean {
 		public Map<String, Object> params;
 	}
 	
-	//--------------------------------------------
-	// pager, tools, addon
-	// 
-	public static final String AUTO = "auto";
-	public static final String ALL = "all";
-	public static final String HEAD = "head";
-	public static final String FOOT = "foot";
-
+	public static final int THRESHOLD = 10;
+	
 	// attributes
 	protected String list;
 	protected List<ListColumn> columns;
@@ -36,17 +31,29 @@ public class ListView extends UIBean {
 
 	protected Boolean sortable;
 	protected String cssColumn;
+
+	// form attributes
 	protected String action;
+	protected String method;
 	protected String target;
 	protected String onsubmit;
 	protected String onreset;
 
+	//
 	protected boolean autosize = true;
 	protected boolean script = true;
 
-	protected String pages = AUTO;
-	protected String tools = AUTO;
-	protected String addon = AUTO;
+	//--------------------------------------------
+	// style option
+	// p : pager
+	// t : tools
+	// a : addon
+	// 
+	protected String header;
+	protected String footer;
+
+	protected String tools;
+	protected String addon;
 
 	protected ItemLink link;
 
@@ -176,6 +183,44 @@ public class ListView extends UIBean {
 		return Objects.contains(obj1, obj2);
 	}
 
+	private boolean isShowHeadPart(int part, int count) {
+		if (Strings.isEmpty(header)) {
+			return count > THRESHOLD;
+		}
+		return Strings.contains(header, part);
+	}
+
+	private boolean isShowFootPart(int part, int count) {
+		if (Strings.isEmpty(footer)) {
+			return count > THRESHOLD;
+		}
+		return Strings.contains(footer, part);
+	}
+	
+	public boolean isShowHeadPager(int count) {
+		return isShowHeadPart('p', count);
+	}
+	
+	public boolean isShowHeadTools(int count) {
+		return Strings.isNotEmpty(tools) && isShowHeadPart('t', count);
+	}
+	
+	public boolean isShowHeadAddon(int count) {
+		return Strings.isNotEmpty(addon) && isShowHeadPart('a', count);
+	}
+	
+	public boolean isShowFootPager(int count) {
+		return isShowFootPart('p', count);
+	}
+	
+	public boolean isShowFootTools(int count) {
+		return Strings.isNotEmpty(tools) && isShowFootPart('t', count);
+	}
+	
+	public boolean isShowFootAddon(int count) {
+		return Strings.isNotEmpty(addon) && isShowFootPart('a', count);
+	}
+	
 	/**
 	 * @return the list
 	 */
@@ -233,6 +278,20 @@ public class ListView extends UIBean {
 	}
 
 	/**
+	 * @return the method
+	 */
+	public String getMethod() {
+		return method;
+	}
+
+	/**
+	 * @param method the method to set
+	 */
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	/**
 	 * @return the target
 	 */
 	public String getTarget() {
@@ -265,13 +324,6 @@ public class ListView extends UIBean {
 	 */
 	public boolean isScript() {
 		return script;
-	}
-
-	/**
-	 * @return the pages
-	 */
-	public String getPages() {
-		return pages;
 	}
 
 	/**
@@ -457,13 +509,6 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @param pages the pages to set
-	 */
-	public void setPages(String pages) {
-		this.pages = pages;
-	}
-
-	/**
 	 * @param tools the tools to set
 	 */
 	public void setTools(String tools) {
@@ -518,4 +563,34 @@ public class ListView extends UIBean {
 	public void setHiddens(String hiddens) {
 		this.hiddens = hiddens;
 	}
+
+	/**
+	 * @return the header
+	 */
+	public String getHeader() {
+		return header;
+	}
+
+	/**
+	 * @param header the header to set
+	 */
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	/**
+	 * @return the footer
+	 */
+	public String getFooter() {
+		return footer;
+	}
+
+	/**
+	 * @param footer the footer to set
+	 */
+	public void setFooter(String footer) {
+		this.footer = footer;
+	}
+	
+	
 }

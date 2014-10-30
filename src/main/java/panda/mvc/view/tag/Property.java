@@ -138,14 +138,14 @@ public class Property extends ContextBean {
 	}
 
 	public String formatValue() {
-		String actualValue = null;
+		String ev = null;
 		
 		if (name == null) {
 			name = "top";
 		}
 
 		if (format == null) {
-			actualValue = prepare(getStringValue());
+			ev = escape(getStringValue());
 		}
 		else {
 			Object av = value != null ? value : eval(name);
@@ -153,18 +153,18 @@ public class Property extends ContextBean {
 			if (av == null) {
 			}
 			else if ("password".equalsIgnoreCase(format)) {
-				actualValue = context.text(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
+				ev = context.text(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
 			}
 			else if ("link".equalsIgnoreCase(format)) {
 				String s = StringEscapes.escapeHtml(av.toString());
 				if (Strings.isNotEmpty(s)) {
-					actualValue = "<a href=\"" + s + "\">" + s + "</a>";
+					ev = "<a href=\"" + s + "\">" + s + "</a>";
 				}
 			}
 			else if ("extlink".equalsIgnoreCase(format)) {
 				String s = StringEscapes.escapeHtml(av.toString());
 				if (Strings.isNotEmpty(s)) {
-					actualValue = "<a target=\"_blank\" href=\"" + s + "\">" + s + "</a>";
+					ev = "<a target=\"_blank\" href=\"" + s + "\">" + s + "</a>";
 				}
 			}
 			else {
@@ -175,7 +175,7 @@ public class Property extends ContextBean {
 					b.setFormat(format);
 					b.start(sw);
 					b.end(sw, "");
-					actualValue = sw.toString();
+					ev = sw.toString();
 				}
 				else if (av instanceof Date || av instanceof Calendar) {
 					StringBuilderWriter sw = new StringBuilderWriter();
@@ -184,7 +184,7 @@ public class Property extends ContextBean {
 					d.setFormat(format);
 					d.start(sw);
 					d.end(sw, "");
-					actualValue = sw.toString();
+					ev = sw.toString();
 				}
 				else if (av instanceof Number) {
 					StringBuilderWriter sw = new StringBuilderWriter();
@@ -193,17 +193,17 @@ public class Property extends ContextBean {
 					n.setFormat(format);
 					n.start(sw);
 					n.end(sw, "");
-					actualValue = sw.toString();
+					ev = sw.toString();
 				}
 				else if (av instanceof String) {
-					actualValue = prepare((String)av);
+					ev = escape((String)av);
 				}
 				else {
-					actualValue = prepare(getStringValue());
+					ev = escape(getStringValue());
 				}
 			}
 		}
-		return actualValue;
+		return ev;
 	}
 	
 	private String getStringValue() {
@@ -229,7 +229,7 @@ public class Property extends ContextBean {
 		}
 	}
 
-	private String prepare(String value) {
+	private String escape(String value) {
 		String result = value;
 		if (value != null) {
 			if (ESCAPE_HTML.equals(escape)) {

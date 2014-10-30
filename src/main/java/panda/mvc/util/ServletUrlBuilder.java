@@ -41,7 +41,7 @@ public class ServletUrlBuilder implements UrlBuilder {
 
 	protected boolean escapeAmp;
 
-	@IocInject(value = MvcConstants.PANDA_URL_ENCODE, required = false)
+	@IocInject(value = MvcConstants.UI_URL_ENCODE, required = false)
 	protected String encoding = Charsets.UTF_8;
 
 	protected boolean forceAddSchemeHostAndPort;

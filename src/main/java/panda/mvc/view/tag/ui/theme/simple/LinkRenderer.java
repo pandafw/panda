@@ -101,7 +101,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (suri == null) {
 			suri = ((Link)tag).getStatics();
 			if (suri == null) {
-				suri = context.getIoc().getIfExists(String.class, MvcConstants.PANDA_STATIC_BASE);
+				suri = context.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
 			}
 		}
 		if (Strings.isNotEmpty(version)) {

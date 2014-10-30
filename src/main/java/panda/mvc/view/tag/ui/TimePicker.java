@@ -67,7 +67,7 @@ public class TimePicker extends DatePicker {
 	/**
 	 * @param defaults defaults
 	 */
-	@IocInject(value = MvcConstants.PANDA_TIMEPICKER_DEFAULTS, required = false)
+	@IocInject(value = MvcConstants.UI_TIMEPICKER_DEFAULTS, required = false)
 	public void setDefaults(String defaults) {
 		this.defaults = defaults;
 	}

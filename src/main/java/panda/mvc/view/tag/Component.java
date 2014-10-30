@@ -164,6 +164,10 @@ public class Component {
 	}
 
 	public void copyParams(Map<String, Object> params) {
+		copyParams(params, Objects.NULL);
+	}
+	
+	public void copyParams(Map<String, Object> params, Object arg) {
 		if (Collections.isEmpty(params)) {
 			return;
 		}
@@ -174,13 +178,16 @@ public class Component {
 			if (v instanceof String) {
 				String s = (String)v;
 				if (s.length() > 3) {
-					if (s.charAt(0) == '$' && s.charAt(1) == '{' && s.charAt(s.length() - 1) == '}') {
-						v = eval(s.substring(2, s.length() - 1));
+					char c0 = s.charAt(0);
+					char c1 = s.charAt(1);
+					char cx = s.charAt(s.length() - 1);
+					if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
+						v = eval(s.substring(2, s.length() - 1), arg);
 					}
-					else if (s.charAt(0) == '#' && s.charAt(1) == '{' && s.charAt(s.length() - 1) == '}') {
+					else if (c0 == '#' && c1 == '{' && cx == '}') {
 						v = JsonObject.fromJson(s.substring(1));
 					}
-					else if (s.charAt(0) == '#' && s.charAt(1) == '[' && s.charAt(s.length() - 1) == ']') {
+					else if (c0 == '#' && c1 == '[' && cx == ']') {
 						v = JsonArray.fromJson(s.substring(1));
 					}
 				}
