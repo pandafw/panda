@@ -10,10 +10,7 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.bind.json.JsonArray;
-import panda.bind.json.JsonObject;
 import panda.cast.Castors;
-import panda.el.El;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Asserts;
 import panda.lang.Collections;
@@ -21,6 +18,7 @@ import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcException;
+import panda.mvc.Mvcs;
 
 /**
  * Base class to extend for UI components.
@@ -164,7 +162,15 @@ public class Component {
 	}
 
 	public void copyParams(Map<String, Object> params) {
-		copyParams(params, Objects.NULL);
+		if (Collections.isEmpty(params)) {
+			return;
+		}
+		
+		for (Entry<String, Object> en : params.entrySet()) {
+			String p = en.getKey();
+			Object v = Mvcs.translate(en.getValue(), context);
+			setParameter(p, v);
+		}
 	}
 	
 	public void copyParams(Map<String, Object> params, Object arg) {
@@ -174,45 +180,17 @@ public class Component {
 		
 		for (Entry<String, Object> en : params.entrySet()) {
 			String p = en.getKey();
-			Object v = en.getValue();
-			if (v instanceof String) {
-				String s = (String)v;
-				if (s.length() > 3) {
-					char c0 = s.charAt(0);
-					char c1 = s.charAt(1);
-					char cx = s.charAt(s.length() - 1);
-					if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
-						v = eval(s.substring(2, s.length() - 1), arg);
-					}
-					else if (c0 == '#' && c1 == '{' && cx == '}') {
-						v = JsonObject.fromJson(s.substring(1));
-					}
-					else if (c0 == '#' && c1 == '[' && cx == ']') {
-						v = JsonArray.fromJson(s.substring(1));
-					}
-				}
-			}
-			
+			Object v = Mvcs.translate(en.getValue(), context, arg);
 			setParameter(p, v);
 		}
 	}
 	
 	public Object eval(String expr) {
-		return eval(expr, Objects.NULL);
+		return Mvcs.eval(expr, context);
 	}
 	
 	public Object eval(String expr, Object arg) {
-		if (Objects.NULL == arg) {
-			return El.eval(expr, context);
-		}
-
-		try {
-			context.push(arg);
-			return El.eval(expr, context);
-		}
-		finally {
-			context.pop();
-		}
+		return Mvcs.eval(expr, context, arg);
 	}
 
 	public String evalString(String expr) {

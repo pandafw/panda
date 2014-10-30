@@ -3,8 +3,12 @@ package panda.mvc;
 import javax.servlet.ServletContext;
 
 import panda.bean.Beans;
+import panda.bind.json.JsonArray;
+import panda.bind.json.JsonObject;
 import panda.cast.Castors;
+import panda.el.El;
 import panda.filepool.FileItemCastor;
+import panda.lang.Objects;
 
 /**
  * Mvc 相关帮助函数
@@ -86,4 +90,54 @@ public abstract class Mvcs {
 		Mvcs.castors = castors;
 	}
 	
+	/**
+	 * eval parameter
+	 */
+	public static Object eval(String expr, ActionContext context) {
+		return eval(expr, context, Objects.NULL);
+	}
+	
+	/**
+	 * eval parameter
+	 */
+	public static Object eval(String expr, ActionContext ac, Object arg) {
+		if (Objects.NULL == arg) {
+			return El.eval(expr, ac);
+		}
+
+		try {
+			ac.push(arg);
+			return El.eval(expr, ac);
+		}
+		finally {
+			ac.pop();
+		}
+	}
+	
+	public static Object translate(Object val, ActionContext ac) {
+		return translate(val, ac, Objects.NULL);
+	}
+	
+	public static Object translate(Object val, ActionContext ac, Object arg) {
+		if (val instanceof String) {
+			String s = (String)val;
+			if (s.length() > 3) {
+				char c0 = s.charAt(0);
+				char c1 = s.charAt(1);
+				char cx = s.charAt(s.length() - 1);
+				if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
+					val = eval(s.substring(2, s.length() - 1), ac, arg);
+				}
+				else if (c0 == '#' && c1 == '{' && cx == '}') {
+					val = JsonObject.fromJson(s.substring(1));
+				}
+				else if (c0 == '#' && c1 == '[' && cx == ']') {
+					val = JsonArray.fromJson(s.substring(1));
+				}
+			}
+		}
+		
+		return val;
+	}
 }
+
