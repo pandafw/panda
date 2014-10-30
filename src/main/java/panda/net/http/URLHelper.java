@@ -400,8 +400,10 @@ public class URLHelper {
 		url.append(uri);
 
 		if (Strings.isNotEmpty(query)) {
+			Map<String, Object> qs = parseQueryString(query);
+
 			appendQuerySeparator(url, escapeAmp);
-			url.append(query);
+			appendQueryString(url, qs, escapeAmp, encoding);
 		}
 		
 		if (Collections.isNotEmpty(params)) {
