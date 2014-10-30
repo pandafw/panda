@@ -33,6 +33,7 @@ public class IocValue {
 	public static final String TYPE_SYS = "sys";
 	public static final String TYPE_FILE = "file";
 	public static final String TYPE_EL = "el";
+	public static final String TYPE_JSON = "json";
 	public static final String TYPE_JNDI = "jndi";
 
 	private String type;

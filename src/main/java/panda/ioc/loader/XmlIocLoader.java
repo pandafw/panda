@@ -232,6 +232,7 @@ public class XmlIocLoader implements IocLoader {
 	protected static final String EL_TAG = IocValue.TYPE_EL;
 	protected static final String FILE_TAG = IocValue.TYPE_FILE;
 	protected static final String EVN_TAG = IocValue.TYPE_ENV;
+	protected static final String JSON_TAG = IocValue.TYPE_JSON;
 	protected static final String JNDI_TAG = IocValue.TYPE_JNDI;
 	protected static final String SYS_TAG = IocValue.TYPE_SYS;
 
@@ -244,6 +245,10 @@ public class XmlIocLoader implements IocLoader {
 		}
 		else if (SYS_TAG.equalsIgnoreCase(type)) {
 			iocValue.setType(SYS_TAG);
+			iocValue.setValue(element.getTextContent());
+		}
+		else if (JSON_TAG.equalsIgnoreCase(type)) {
+			iocValue.setType(JSON_TAG);
 			iocValue.setValue(element.getTextContent());
 		}
 		else if (JNDI_TAG.equalsIgnoreCase(type)) {

@@ -210,21 +210,16 @@ public class IocLoading {
 		}
 		// Collection
 		else if (obj instanceof Collection<?>) {
-			try {
-				Collection<IocValue> values = new ArrayList<IocValue>(((Collection)obj).size());
-				Iterator<?> it = ((Collection<?>)obj).iterator();
-				while (it.hasNext()) {
-					Object o = it.next();
-					IocValue v = object2value(o);
-					values.add(v);
-				}
-				iv.setType(IocValue.TYPE_NORMAL);
-				iv.setValue(values);
-				return iv;
+			Collection<IocValue> values = new ArrayList<IocValue>(((Collection)obj).size());
+			Iterator<?> it = ((Collection<?>)obj).iterator();
+			while (it.hasNext()) {
+				Object o = it.next();
+				IocValue v = object2value(o);
+				values.add(v);
 			}
-			catch (Exception e) {
-				throw Exceptions.wrapThrow(e);
-			}
+			iv.setType(IocValue.TYPE_NORMAL);
+			iv.setValue(values);
+			return iv;
 		}
 		
 		// Normal

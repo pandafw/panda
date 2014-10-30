@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import panda.bind.json.Jsons;
 import panda.ioc.Ioc;
 import panda.ioc.IocConstants;
 import panda.ioc.IocContext;
@@ -134,6 +135,12 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 			return new InnerValue((IocObject)value);
 		}
 		
+		// JSON
+		if (IocValue.TYPE_JSON.equals(type)) {
+			Object jv = Jsons.fromJson(value.toString());
+			return new StaticValue(jv);
+		}
+
 		// JNDI
 		if (IocValue.TYPE_JNDI.equals(type)) {
 			// for android compile

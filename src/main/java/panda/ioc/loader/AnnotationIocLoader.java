@@ -307,6 +307,7 @@ public class AnnotationIocLoader implements IocLoader {
 			iocValue.setValue(value.substring(colon + 1));
 		}
 		else {
+			iocValue.setType(IocValue.TYPE_REF);
 			iocValue.setValue(value);
 		}
 		return iocValue;
