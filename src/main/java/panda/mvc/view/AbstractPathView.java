@@ -1,23 +1,21 @@
 package panda.mvc.view;
 
-import panda.el.ElTemplate;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.View;
+import panda.mvc.Mvcs;
 
-public abstract class AbstractPathView implements View {
+public abstract class AbstractPathView extends AbstractView {
 
-	private String dest;
-
-	public AbstractPathView(String dest) {
-		this.dest = dest;
+	public AbstractPathView(String path) {
+		super(path);
 	}
-
+	
 	protected String evalPath(ActionContext ac) {
-		if (Strings.isEmpty(dest)) {
+		if (Strings.isEmpty(location)) {
 			return null;
 		}
 
-		return ElTemplate.evaluate(dest, ac);
+		return Mvcs.translate(location, ac);
 	}
 }
+

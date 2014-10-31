@@ -1,6 +1,12 @@
 package panda.mvc.view;
 
+import panda.io.FileNames;
+import panda.lang.Charsets;
+import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.RequestPath;
+import panda.mvc.view.ftl.MvcFreemarkerHelper;
+import panda.net.http.HttpContentType;
 
 /**
  * 内部重定向视图
@@ -17,19 +23,66 @@ import panda.mvc.ActionContext;
  * <li>'@Ok("ftl:/abc/cbc.ftl")' => /abc/cbc.ftl
  * </ul>
  */
-public class FreemarkerView extends ForwardView {
+public class FreemarkerView extends AbstractPathView {
 
-	public FreemarkerView(String dest) {
-		super(dest);
+	private static final String EXT = ".ftl";
+	
+	protected String encoding = Charsets.UTF_8;
+	protected String contentType = HttpContentType.TEXT_HTML;
+
+	public FreemarkerView(String location) {
+		super(location);
 	}
 
-	protected void forward(ActionContext ac, String path, String args) throws Exception {
-		//TODO
+	/**
+	 * @return the encoding
+	 */
+	public String getEncoding() {
+		return encoding;
+	}
+
+	/**
+	 * @param encoding the encoding to set
+	 */
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
+	}
+
+	/**
+	 * @return the contentType
+	 */
+	public String getContentType() {
+		return contentType;
+	}
+
+	/**
+	 * @param contentType the contentType to set
+	 */
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override
-	protected String getExt() {
-		return "";
-	}
+	public void render(ActionContext ac) throws Exception {
+		String path = evalPath(ac);
 
+		// 空路径，采用默认规则
+		if (Strings.isBlank(path)) {
+			path = RequestPath.getRequestPath(ac.getRequest());
+			path = FileNames.removeExtension(path) + EXT;
+		}
+		else {
+			if (!path.toLowerCase().endsWith(EXT)) {
+				path += EXT;
+			}
+		}
+
+		ac.getResponse().setCharacterEncoding(encoding);
+		ac.getResponse().setContentType(contentType + "; charset=" + encoding);
+		
+		MvcFreemarkerHelper mfh = ac.getIoc().get(MvcFreemarkerHelper.class);
+		mfh.execTemplate(ac.getResponse().getWriter(), path, ac);
+	}
 }
+
+

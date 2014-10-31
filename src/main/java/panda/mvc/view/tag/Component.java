@@ -10,11 +10,9 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.cast.Castors;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Asserts;
 import panda.lang.Collections;
-import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcException;
@@ -62,7 +60,7 @@ public class Component {
 
 		if (bean.canWriteBean(name)) {
 			Type pt = bean.getBeanType(name);
-			Object cv = Castors.scast(value, pt);
+			Object cv = Mvcs.getCastors().cast(value, pt);
 			bean.setBeanValue(this, name, cv);
 			return;
 		}
@@ -168,7 +166,7 @@ public class Component {
 		
 		for (Entry<String, Object> en : params.entrySet()) {
 			String p = en.getKey();
-			Object v = Mvcs.translate(en.getValue(), context);
+			Object v = Mvcs.evaluate(en.getValue(), context);
 			setParameter(p, v);
 		}
 	}
@@ -180,25 +178,26 @@ public class Component {
 		
 		for (Entry<String, Object> en : params.entrySet()) {
 			String p = en.getKey();
-			Object v = Mvcs.translate(en.getValue(), context, arg);
+			Object v = Mvcs.evaluate(en.getValue(), context, arg);
 			setParameter(p, v);
 		}
 	}
 	
-	public Object eval(String expr) {
-		return Mvcs.eval(expr, context);
+	public Object findValue(String expr) {
+		return Mvcs.findValue(expr, context);
 	}
 	
-	public Object eval(String expr, Object arg) {
-		return Mvcs.eval(expr, context, arg);
+	public Object findValue(String expr, Object arg) {
+		return Mvcs.findValue(expr, context, arg);
 	}
 
-	public String evalString(String expr) {
-		return evalString(expr, Objects.NULL);
+	public String findString(String expr) {
+		Object o = findValue(expr);
+		return o == null ? null : o.toString();
 	}
 	
-	public String evalString(String expr, Object arg) {
-		Object o = eval(expr, arg);
+	public String findString(String expr, Object arg) {
+		Object o = findValue(expr, arg);
 		return o == null ? null : o.toString();
 	}
 	

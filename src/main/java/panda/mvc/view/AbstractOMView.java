@@ -21,7 +21,6 @@ import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.View;
 import panda.mvc.aware.ActionAware;
 import panda.mvc.aware.ParamAware;
 import panda.mvc.bean.CompositeQuery;
@@ -32,13 +31,12 @@ import panda.mvc.bind.filter.CompositeQueryPropertyFilter;
 import panda.mvc.bind.filter.FilterPropertyFilter;
 import panda.mvc.bind.filter.PagerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
+import panda.net.http.HttpContentType;
 import panda.servlet.HttpServletSupport;
 import panda.servlet.HttpServlets;
 
 
-public abstract class AbstractOMView implements View {
-	protected static final String DEFAULT_CONTENT_TYPE = "text/plain";
-
+public abstract class AbstractOMView extends AbstractView {
 	protected static final String SEPERATOR = ", ";
 
 	protected static final String DATE_FORMAT_LONG = "long";
@@ -53,7 +51,7 @@ public abstract class AbstractOMView implements View {
 
 	protected int expiry = 0;
 
-	protected String contentType = DEFAULT_CONTENT_TYPE;
+	protected String contentType = HttpContentType.TEXT_PLAIN;
 
 	protected String encoding = Charsets.UTF_8;
 
@@ -65,15 +63,11 @@ public abstract class AbstractOMView implements View {
 
 	protected Boolean prettyPrint = false;
 	
-	protected String properties;
-	
-	protected String location;
-
 	/**
 	 * Constructor.
 	 */
-	public AbstractOMView() {
-		super();
+	public AbstractOMView(String location) {
+		super(location);
 	}
 
 	/**
@@ -192,28 +186,14 @@ public abstract class AbstractOMView implements View {
 	 * @return the properties
 	 */
 	public String getProperties() {
-		return properties;
+		return getLocation();
 	}
 
 	/**
 	 * @param properties the properties to set
 	 */
 	public void setProperties(String properties) {
-		this.properties = properties;
-	}
-
-	/**
-	 * @return the location
-	 */
-	public String getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(String location) {
-		this.location = location;
+		setLocation(properties);
 	}
 
 	/**
@@ -274,10 +254,6 @@ public abstract class AbstractOMView implements View {
 			return;
 		}
 
-		if (Strings.isBlank(properties)) {
-			properties = location;
-		}
-
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
 		Boolean success = true;
@@ -302,10 +278,10 @@ public abstract class AbstractOMView implements View {
 		result.put("success", success);
 		result.put("result", ac.getResult());
 
-		if (properties != null) {
+		if (location != null) {
 			Ioc ioc = ac.getIoc();
 			if (ioc != null) {
-				List<String> pnl = toList(properties);
+				List<String> pnl = toList(location);
 				for (String pn : pnl) {
 					Object value = ioc.get(null, pn);
 					if (value != null) {
@@ -363,3 +339,4 @@ public abstract class AbstractOMView implements View {
 		as.setPrettyPrint(prettyPrint);
 	}
 }
+

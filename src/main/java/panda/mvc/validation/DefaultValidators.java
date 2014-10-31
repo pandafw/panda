@@ -55,7 +55,7 @@ public class DefaultValidators implements Validators {
 	private Beans beans = Beans.i();
 
 	@IocInject(required=false)
-	private Castors castors = Castors.i();
+	private Castors castors = Mvcs.getCastors();
 	
 	private Map<String, Class<? extends Validator>> map;
 
@@ -195,7 +195,7 @@ public class DefaultValidators implements Validators {
 			// translate ${..} expression
 			for (Entry<String, Object> en : jo.entrySet()) {
 				String pn = en.getKey();
-				Object pv = Mvcs.translate(en.getValue(), ac);
+				Object pv = Mvcs.evaluate(en.getValue(), ac);
 				
 				Type pt = bh.getPropertyType(pn);
 				if (pt == null) {

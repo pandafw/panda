@@ -75,6 +75,7 @@ public class HttpServlets {
 	public static final String ERROR_EXCEPTION_TYPE_ATTRIBUTE = "javax.servlet.error.exception_type";
 	public static final String ERROR_MESSAGE_ATTRIBUTE = "javax.servlet.error.message";
 	public static final String ERROR_EXCEPTION_ATTRIBUTE = "javax.servlet.error.exception";
+	public static final String ERROR_JSP_EXCEPTION_ATTRIBUTE = "javax.servlet.error.JspException";
 	public static final String ERROR_REQUEST_URI_ATTRIBUTE = "javax.servlet.error.request_uri";
 	public static final String ERROR_SERVLET_NAME_ATTRIBUTE = "javax.servlet.error.servlet_name";
 
@@ -154,6 +155,17 @@ public class HttpServlets {
 		return uri;
 	}
 	
+	public static Throwable getServletException(HttpServletRequest request) {
+		// support for JSP exception pages, exposing the servlet or JSP exception
+		Throwable ex = (Throwable)request.getAttribute(ERROR_EXCEPTION_ATTRIBUTE);
+
+		if (ex == null) {
+			ex = (Throwable)request.getAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE);
+		}
+		
+		return ex;
+	}
+
 	/**
 	 * Retrieves the current request servlet path. Deals with differences between servlet specs (2.2
 	 * vs 2.3+)
@@ -241,10 +253,10 @@ public class HttpServlets {
 	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
 		// send a http error response to use the servlet defined error handler
 		// make the exception availible to the web.xml defined error page
-		request.setAttribute("javax.servlet.error.exception", e);
+		request.setAttribute(ERROR_EXCEPTION_ATTRIBUTE, e);
 
 		// for compatibility
-		request.setAttribute("javax.servlet.jsp.jspException", e);
+		request.setAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE, e);
 
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 	}

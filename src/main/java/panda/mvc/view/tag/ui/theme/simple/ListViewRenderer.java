@@ -918,7 +918,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 									}
 								}
 								else if ("expression".equals(c.format.type)) {
-									Object v = tag.eval(c.format.expression, d);
+									Object v = tag.findValue(c.format.expression, d);
 									if (v != null) {
 										String escape = c.format.escape;
 										write(escapeValue(v, escape));
@@ -1015,7 +1015,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		if (cm instanceof String) {
 			Map m = codemaps.get(cm);
 			if (m == null) {
-				m = (Map)tag.eval((String)cm);
+				m = (Map)tag.findValue((String)cm);
 			}
 			if (m == null) {
 				throw new IllegalArgumentException("Null codemap: " + cm);

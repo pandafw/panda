@@ -32,8 +32,6 @@ public class MvcFilter implements Filter {
 
 	protected Pattern ignorePtn;
 
-	private String selfName;
-
 	/**
 	 * 需要排除的路径前缀
 	 */
@@ -49,13 +47,8 @@ public class MvcFilter implements Filter {
 
 	public void init(FilterConfig conf) throws ServletException {
 		log.infof("MvcFilter[%s] starting ...", conf.getFilterName());
-		Mvcs.setServletContext(conf.getServletContext());
-
-		this.selfName = conf.getFilterName();
-		Mvcs.setName(selfName);
 
 		FilterMvcConfig config = new FilterMvcConfig(conf);
-		Mvcs.setMvcConfig(config);
 		
 		handler = new ActionHandler(config);
 		String regx = Strings.defaultString(config.getInitParameter("ignore"), IGNORE);
@@ -151,7 +144,6 @@ public class MvcFilter implements Filter {
 
 	protected void nextChain(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException,
 			ServletException {
-		// 本过滤器没有找到入口函数，继续其他的过滤器
 		chain.doFilter(req, resp);
 	}
 }

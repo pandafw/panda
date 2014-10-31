@@ -14,10 +14,10 @@ import panda.net.http.HttpContentType;
 public class JsonView extends AbstractOMView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
-	public static final JsonView DEFAULT = new JsonView();
+	public static final JsonView DEFAULT = new JsonView("");
 	
-	public JsonView() {
-		super();
+	public JsonView(String location) {
+		super(location);
 		setContentType(HttpContentType.TEXT_JAVASCRIPT);
 	}
 

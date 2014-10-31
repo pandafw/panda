@@ -29,6 +29,8 @@ import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
 import panda.mvc.validation.validator.VisitValidator;
+import panda.mvc.view.ftl.MvcFreemarkerHelper;
+import panda.mvc.view.ftl.MvcFreemarkerManager;
 import panda.mvc.view.ftl.MvcFreemarkerTemplateLoader;
 import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
@@ -71,6 +73,7 @@ import panda.mvc.view.tag.ui.TriggerField;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.ViewField;
 import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
+import panda.mvc.view.taglib.TagLibraryManager;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	protected static final Object[] DEFAULTS = {
@@ -160,8 +163,13 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		Uploader.class,
 		ViewField.class,
 
+		// taglibs
+		TagLibraryManager.class,
+		
 		// Freemarker
-		MvcFreemarkerTemplateLoader.class
+		MvcFreemarkerTemplateLoader.class,
+		MvcFreemarkerManager.class,
+		MvcFreemarkerHelper.class
 	};
 	
 	public MvcDefaultIocLoader() {

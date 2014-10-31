@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import panda.Panda;
 import panda.lang.Strings;
-import panda.mvc.MvcConstants;
+import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
@@ -96,18 +96,15 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 	
-	private String suri;
+	private String sbase;
 	protected String suri(String uri, String version) {
-		if (suri == null) {
-			suri = ((Link)tag).getStatics();
-			if (suri == null) {
-				suri = context.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
-			}
+		if (sbase == null) {
+			sbase = Mvcs.getStaticBase(context, ((Link)tag).getStatics());
 		}
 		if (Strings.isNotEmpty(version)) {
 			uri += "?v=" + version;
 		}
-		return suri + uri;
+		return sbase + uri;
 	}
 
 	private void writeJquery() throws IOException {

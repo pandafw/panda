@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import panda.el.ElTemplate;
 import panda.lang.Strings;
+import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Select;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
@@ -153,7 +153,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		pn = pn < 1 ? 1 : (pn > pages ? pages : pn);
 		linkBean.put("page", pn);
 		linkBean.put("start", (pn - 1) * limit);
-		return ElTemplate.evaluate(linkHref, linkBean);
+		return Mvcs.translate(linkHref, linkBean);
 	}
 	
 	private void writePagerLinkFirst() throws IOException {

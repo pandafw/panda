@@ -77,4 +77,9 @@ public class HttpStatusView implements View {
 			res.setStatus(code);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getName() + ": " + statusCode;
+	}
 }

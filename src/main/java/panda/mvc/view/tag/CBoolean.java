@@ -84,7 +84,7 @@ public class CBoolean extends ContextBean {
 			
 			String msg = null;
 			if (pattern != null) {
-				msg = evalString(pattern, value);
+				msg = findString(pattern, value);
 			}
 
 			if (msg == null) {

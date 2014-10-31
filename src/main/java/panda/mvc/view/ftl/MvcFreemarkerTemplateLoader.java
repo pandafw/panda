@@ -24,15 +24,15 @@ public class MvcFreemarkerTemplateLoader extends MultiTemplateLoader {
 	public MvcFreemarkerTemplateLoader() {
 	}
 
-	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATE_PATH, required=false)
-	private String templatePath;
+	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATES, required=false)
+	private String templates;
 	
 	@IocInject(required=false)
 	private ServletContext servlet;
 	
 	public void initialize() {
-		if (templatePath != null) {
-			String[] ts = Strings.split(templatePath);
+		if (templates != null) {
+			String[] ts = Strings.split(templates);
 			for (String t : ts) {
 				try {
 					if (t.startsWith("file://")) {
@@ -52,11 +52,11 @@ public class MvcFreemarkerTemplateLoader extends MultiTemplateLoader {
 						addTemplateLoader(new ClassTemplateLoader(path));
 					}
 					else {
-						log.warn("Invalid template path - " + t);
+						log.warn("Invalid template setting - " + t);
 					}
 				}
 				catch (Exception e) {
-					log.warn("Invalid template path - " + t, e);
+					log.warn("Invalid template setting - " + t, e);
 				}
 			}
 		}

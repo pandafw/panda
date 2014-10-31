@@ -1,7 +1,5 @@
 package panda.mvc.impl;
 
-import panda.bind.json.JsonObject;
-import panda.cast.Castors;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Numbers;
@@ -11,6 +9,7 @@ import panda.log.Logs;
 import panda.mvc.View;
 import panda.mvc.ViewMaker;
 import panda.mvc.view.ForwardView;
+import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
@@ -33,6 +32,7 @@ public class DefaultViewMaker implements ViewMaker {
 	public static final String VIEW_REDIRECT2 = ">>";
 	public static final String VIEW_IOC = "ioc";
 	public static final String VIEW_HTTP = "http";
+	public static final String VIEW_FREEMARKER = "ftl";
 	public static final String VIEW_FORWARD = "forward";
 	public static final String VIEW_FORWARD2 = "->";
 	public static final String VIEW_RAW = "raw";
@@ -48,34 +48,21 @@ public class DefaultViewMaker implements ViewMaker {
 			if (Strings.isBlank(value)) {
 				return JsonView.DEFAULT;
 			}
-			
-			// 除高级的json format定义之外,也支持简单的缩写
-			if (value.charAt(0) == '{') {
-				JsonObject jo = JsonObject.fromJson(value);
-				JsonView jv = Castors.scast(jo, JsonView.class);
-				return jv;
-			}
-
-			JsonView jv = new JsonView();
-			jv.setLocation(value);
-			return jv;
+			return new JsonView(value);
 		}
 		
 		if (VIEW_XML.equals(type)) {
 			if (Strings.isBlank(value)) {
 				return XmlView.DEFAULT;
 			}
-			
-			// 除高级的json format定义之外,也支持简单的缩写
-			if (value.charAt(0) == '{') {
-				JsonObject jo = JsonObject.fromJson(value);
-				XmlView xv = Castors.scast(jo, XmlView.class);
-				return xv;
+			return new XmlView(value);
+		}
+		
+		if (VIEW_FREEMARKER.equals(type)) {
+			if (Strings.isBlank(value)) {
+				throw new IllegalArgumentException("Invalid freemarker view: " + value);
 			}
-
-			XmlView xv = new XmlView();
-			xv.setLocation(value);
-			return xv;
+			return new FreemarkerView(value);
 		}
 		
 		if (VIEW_REDIRECT.equals(type) || VIEW_REDIRECT2.equals(type)) {
@@ -109,5 +96,4 @@ public class DefaultViewMaker implements ViewMaker {
 		log.error("Failed to find view('" + type + "')");
 		return null;
 	}
-
 }

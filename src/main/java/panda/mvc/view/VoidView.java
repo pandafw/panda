@@ -12,4 +12,9 @@ public class VoidView implements View {
 	@Override
 	public void render(ActionContext ac) throws Throwable {
 	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName();
+	}
 }

@@ -1,11 +1,11 @@
 package panda.mvc.validation.validator;
 
 import panda.el.El;
-import panda.el.ElTemplate;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 import panda.mvc.util.TextProvider;
 
 
@@ -139,13 +139,7 @@ public abstract class AbstractValidator implements Validator {
 	
 	protected String evalMessage(ActionContext ac) {
 		if (Strings.isNotEmpty(message)) {
-			try {
-				ac.push(this);
-				return (String)ElTemplate.evaluate(message, ac);
-			}
-			finally {
-				ac.pop();
-			}
+			return Mvcs.translate(message, ac, this);
 		}
 		
 		if (Strings.isNotEmpty(msgId)) {

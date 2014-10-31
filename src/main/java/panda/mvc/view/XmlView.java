@@ -13,15 +13,15 @@ public class XmlView extends AbstractOMView {
 
 	protected static final Log log = Logs.getLog(XmlView.class);
 
-	public static final XmlView DEFAULT = new XmlView();
+	public static final XmlView DEFAULT = new XmlView("");
 
 	private String rootName = "result";
 	
 	/**
 	 * Constructor.
 	 */
-	public XmlView() {
-		super();
+	public XmlView(String location) {
+		super(location);
 		setContentType(HttpContentType.TEXT_XML);
 	}
 

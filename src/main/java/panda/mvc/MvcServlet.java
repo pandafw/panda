@@ -15,23 +15,13 @@ import panda.mvc.config.ServletMvcConfig;
  * 
  */
 public class MvcServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
 
 	protected ActionHandler handler;
 
-	private String selfName;
-
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
-		Mvcs.setServletContext(servletConfig.getServletContext());
-		
-		selfName = servletConfig.getServletName();
-		Mvcs.setName(selfName);
-		
 		ServletMvcConfig config = new ServletMvcConfig(servletConfig);
-		Mvcs.setMvcConfig(config);
-
 		handler = new ActionHandler(config);
 	}
 

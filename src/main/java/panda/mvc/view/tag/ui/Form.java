@@ -1,7 +1,5 @@
 package panda.mvc.view.tag.ui;
 
-import org.apache.struts2.components.UrlRenderer;
-
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
@@ -61,9 +59,6 @@ public class Form extends UIBean {
 	protected Boolean hooked;
 	protected Boolean loadmask;
 	
-	@IocInject
-	protected UrlRenderer urlRenderer;
-
 	/*
 	 * Revised for Portlet actionURL as form action, and add wwAction as hidden field. Refer to
 	 * template.simple/form.vm
@@ -213,6 +208,4 @@ public class Form extends UIBean {
 	public void setLoadmask(Boolean loadmask) {
 		this.loadmask = loadmask;
 	}
-	
-	
 }

@@ -5,10 +5,9 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
-import panda.mvc.RequestPath;
+import panda.servlet.HttpServlets;
 
 public class FatalProcessor extends ViewProcessor {
-
 	private static final Log log = Logs.getLog(FatalProcessor.class);
 
 	@Override
@@ -17,23 +16,22 @@ public class FatalProcessor extends ViewProcessor {
 	}
 
 	public void process(ActionContext ac) throws Throwable {
-		if (view == null) {
-			doNext(ac);
-			return;
-		}
-		
 		try {
 			doNext(ac);
 		}
 		catch (Throwable e) {
 			ac.setError(e);
 
-			if (log.isWarnEnabled()) {
-				String uri = RequestPath.getRequestPath(ac.getRequest());
-				log.warn(String.format("Error@[ %s ]:", uri), e);
-			}
+			HttpServlets.logException(ac.getRequest(), e);
 
-			view.render(ac);
+			if (view != null) {
+				try {
+					view.render(ac);
+				}
+				catch (Throwable e2) {
+					log.error("Failed to render fatal view: " + view, e2);
+				}
+			}
 		}
 	}
 }

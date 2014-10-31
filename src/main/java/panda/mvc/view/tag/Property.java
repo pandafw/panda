@@ -148,7 +148,7 @@ public class Property extends ContextBean {
 			ev = escape(getStringValue());
 		}
 		else {
-			Object av = value != null ? value : eval(name);
+			Object av = value != null ? value : findValue(name);
 
 			if (av == null) {
 			}
@@ -215,7 +215,7 @@ public class Property extends ContextBean {
 			av = value.toString();
 		}
 		else {
-			av = evalString(name);
+			av = findString(name);
 		}
 		return av;
 	}

@@ -268,4 +268,9 @@ public class RawView implements View {
 			Streams.safeClose(fin);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getName() + ": " + contentType;
+	}
 }

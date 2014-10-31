@@ -15,7 +15,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
-import panda.el.ElTemplate;
 import panda.io.resource.ResourceBundleLoader;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -26,6 +25,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 
 @IocBean(type=TextProvider.class, scope=Scope.REQUEST)
 public class DefaultTextProvider implements TextProvider {
@@ -351,16 +351,7 @@ public class DefaultTextProvider implements TextProvider {
 	}
 
 	private String evalMessage(String text, Object arg) {
-		if (arg != Objects.NULL) {
-			try {
-				context.push(arg);
-				return ElTemplate.evaluate(text, context);
-			}
-			finally {
-				context.pop();
-			}
-		}
-		return ElTemplate.evaluate(text, context);
+		return Mvcs.translate(text, context, arg);
 	}
 
 	/**

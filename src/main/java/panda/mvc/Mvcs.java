@@ -1,22 +1,19 @@
 package panda.mvc;
 
-import javax.servlet.ServletContext;
-
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
 import panda.cast.Castors;
 import panda.el.El;
+import panda.el.ElTemplate;
 import panda.filepool.FileItemCastor;
 import panda.lang.Objects;
+import panda.lang.Strings;
 
 /**
  * Mvc 相关帮助函数
  */
 public abstract class Mvcs {
-	private static String name;
-	private static ServletContext servletContext;
-	private static MvcConfig mvcConfig;
 	private static Beans beans = Beans.i();
 	private static Castors castors = Castors.i();
 	
@@ -24,44 +21,6 @@ public abstract class Mvcs {
 		castors.register(new FileItemCastor());
 	}
 	
-	/**
-	 * @return the name
-	 */
-	public static String getName() {
-		return name;
-	}
-	
-	/**
-	 * @param name the name to set
-	 */
-	public static void setName(String name) {
-		Mvcs.name = name;
-	}
-	/**
-	 * @return the servletContext
-	 */
-	public static ServletContext getServletContext() {
-		return servletContext;
-	}
-	/**
-	 * @param servletContext the servletContext to set
-	 */
-	public static void setServletContext(ServletContext servletContext) {
-		Mvcs.servletContext = servletContext;
-	}
-	/**
-	 * @return the mvcConfig
-	 */
-	public static MvcConfig getMvcConfig() {
-		return mvcConfig;
-	}
-	/**
-	 * @param mvcConfig the mvcConfig to set
-	 */
-	public static void setMvcConfig(MvcConfig mvcConfig) {
-		Mvcs.mvcConfig = mvcConfig;
-	}
-
 	/**
 	 * @return the beans
 	 */
@@ -91,16 +50,33 @@ public abstract class Mvcs {
 	}
 	
 	/**
-	 * eval parameter
+	 * @return static base path
 	 */
-	public static Object eval(String expr, ActionContext context) {
-		return eval(expr, context, Objects.NULL);
+	public static String getStaticBase(ActionContext ac, String sb) {
+		if (sb == null) {
+			sb = ac.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
+		}
+
+		if (Strings.isEmpty(sb)) {
+			sb = ac.getServlet().getContextPath() + "/static";
+		}
+		else if (sb.charAt(0) == '~') {
+			sb = ac.getRequest().getContextPath() + sb.substring(1);
+		}
+		return sb;
+	}
+
+	/**
+	 * find value in context
+	 */
+	public static Object findValue(String expr, ActionContext context) {
+		return findValue(expr, context, Objects.NULL);
 	}
 	
 	/**
-	 * eval parameter
+	 * find value in context with argument
 	 */
-	public static Object eval(String expr, ActionContext ac, Object arg) {
+	public static Object findValue(String expr, ActionContext ac, Object arg) {
 		if (Objects.NULL == arg) {
 			return El.eval(expr, ac);
 		}
@@ -113,12 +89,24 @@ public abstract class Mvcs {
 			ac.pop();
 		}
 	}
-	
-	public static Object translate(Object val, ActionContext ac) {
-		return translate(val, ac, Objects.NULL);
+
+	/**
+	 * evaluate string value
+	 * ${...}, %{...} : el eval
+	 * #{...} : json object eval
+	 * #[...] : json array eval
+	 */
+	public static Object evaluate(Object val, ActionContext ac) {
+		return evaluate(val, ac, Objects.NULL);
 	}
 	
-	public static Object translate(Object val, ActionContext ac, Object arg) {
+	/**
+	 * evaluate string value
+	 * ${...}, %{...} : el eval
+	 * #{...} : json object eval
+	 * #[...] : json array eval
+	 */
+	public static Object evaluate(Object val, ActionContext ac, Object arg) {
 		if (val instanceof String) {
 			String s = (String)val;
 			if (s.length() > 3) {
@@ -126,7 +114,7 @@ public abstract class Mvcs {
 				char c1 = s.charAt(1);
 				char cx = s.charAt(s.length() - 1);
 				if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
-					val = eval(s.substring(2, s.length() - 1), ac, arg);
+					val = findValue(s.substring(2, s.length() - 1), ac, arg);
 				}
 				else if (c0 == '#' && c1 == '{' && cx == '}') {
 					val = JsonObject.fromJson(s.substring(1));
@@ -138,6 +126,37 @@ public abstract class Mvcs {
 		}
 		
 		return val;
+	}
+	
+
+	/**
+	 * translate expression
+	 */
+	public static String translate(String expr, ActionContext ac) {
+		return translate(expr, ac, Objects.NULL);
+	}
+	
+	/**
+	 * translate expression
+	 */
+	public static String translate(String expr, ActionContext ac, Object arg) {
+		if (arg != Objects.NULL) {
+			try {
+				ac.push(arg);
+				return ElTemplate.evaluate(expr, ac);
+			}
+			finally {
+				ac.pop();
+			}
+		}
+		return ElTemplate.evaluate(expr, ac);
+	}
+	
+	/**
+	 * translate expression
+	 */
+	public static String translate(String expr, Object arg) {
+		return ElTemplate.evaluate(expr, arg);
 	}
 }
 

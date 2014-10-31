@@ -56,7 +56,7 @@ public class Csv extends Component {
 		if (cm instanceof String) {
 			Map m = codemaps.get(cm);
 			if (m == null) {
-				m = (Map)eval((String)cm);
+				m = (Map)findValue((String)cm);
 				codemaps.put((String)cm, m);
 			}
 			cm = m;
