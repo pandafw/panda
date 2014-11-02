@@ -16,6 +16,7 @@ import panda.dao.DaoTypes;
 import panda.dao.sql.SqlResultSet;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.adapter.TypeAdapter;
+import panda.lang.Classes;
 import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
@@ -44,7 +45,6 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 
 	private List<ResultColumn> resultColumns;
 	private BeanHandler<T> beanHandler;
-	private boolean immutableType;
 
 	/**
 	 * Constructor
@@ -88,12 +88,13 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 	}
 
 	private void init(Class<T> beanType, T resultObject, String keyProp) throws SQLException {
-		beanHandler = executor.getBeans().getBeanHandler(beanType);
-		immutableType = executor.getBeans().isImmutableBeanHandler(beanHandler);
+		if (!Classes.isImmutable(beanType)) {
+			beanHandler = executor.getBeans().getBeanHandler(beanType);
+		}
 		resultColumns = new ArrayList<ResultColumn>();
 
 		ResultSetMetaData meta = resultSet.getMetaData();
-		if (keyProp == null && immutableType && meta.getColumnCount() != 1) {
+		if (keyProp == null && beanHandler == null && meta.getColumnCount() != 1) {
 			throw new IllegalArgumentException("Too many result columns for the result: " + beanType);
 		}
 
@@ -119,16 +120,17 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 				}
 			}
 
-			rc.propertyType = beanHandler.getBeanType(resultObject, rc.propertyName);
+			rc.propertyType = beanHandler == null ? beanType : beanHandler.getBeanType(resultObject, rc.propertyName);
 			if (rc.propertyType == null) {
 				if (rc.columnLabel.endsWith("_")) {
 					// skip unmapping special column
 					continue;
 				}
 				else {
-					throw new IllegalArgumentException("Unknown Type for " + rc.propertyName);
+					throw new IllegalArgumentException("Unknown type for property " + rc.propertyName);
 				}
 			}
+			
 			rc.typeAdapter = executor.getTypeAdapters().getTypeAdapter(Types.getRawType(rc.propertyType), rc.jdbcType);
 			if (rc.typeAdapter == null) {
 				throw new IllegalArgumentException("Unknown TypeAdapter for " + rc.propertyName + "["
@@ -173,7 +175,7 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T getResult(T resultObject) throws SQLException {
-		if (immutableType) {
+		if (beanHandler == null) {
 			ResultColumn rc = resultColumns.get(0);
 			resultObject = (T)rc.typeAdapter.getResult(resultSet, rc.columnIndex);
 		}

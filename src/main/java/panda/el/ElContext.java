@@ -9,20 +9,17 @@ public class ElContext {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param context context object
 	 */
-	public ElContext(Object context) {
-		this(context, Beans.i().getBeanHandler(context == null ? null : context.getClass()));
+	public ElContext() {
+		this(null);
 	}
 
 	/**
 	 * @param context
-	 * @param handler
 	 */
-	public ElContext(Object context, BeanHandler handler) {
+	public ElContext(Object context) {
 		this.context = context;
-		this.handler = handler;
+		this.handler = context == null ? null : Beans.i().getBeanHandler(context.getClass());
 	}
 
 	/**
@@ -36,6 +33,9 @@ public class ElContext {
 		if (name == null) {
 			return null;
 		}
+		if (handler == null) {
+			return null;
+		}
 		return handler.getBeanValue(context, name);
 	}
 
@@ -47,7 +47,9 @@ public class ElContext {
 	 */
 	@SuppressWarnings("unchecked")
 	public void set(String name, Object value) {
-		handler.setBeanValue(context, name, value);
+		if (handler != null) {
+			handler.setBeanValue(context, name, value);
+		}
 	}
 	
 	/**

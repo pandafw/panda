@@ -28,6 +28,7 @@ public class MultiTemplateLoader implements StatefulTemplateLoader {
 
 	public void addTemplateLoader(TemplateLoader loader) {
 		synchronized (loaders) {
+			loaders.remove(loader);
 			loaders.add(loader);
 		}
 	}

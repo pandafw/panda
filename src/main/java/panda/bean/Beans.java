@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.handler.ArrayBeanHandler;
 import panda.bean.handler.CollectionBeanHandler;
-import panda.bean.handler.ImmutableBeanHandler;
 import panda.bean.handler.IocProxyBeanHandler;
 import panda.bean.handler.IterableBeanHandler;
 import panda.bean.handler.JavaBeanHandler;
@@ -266,14 +265,6 @@ public class Beans {
 	public void clear() {
 		handlers.clear();
 	}
-
-	/**
-	 * @param handler bean handler
-	 * @return true if the handler is a immutable bean handler
-	 */
-	public boolean isImmutableBeanHandler(BeanHandler<?> handler) {
-		return handler instanceof ImmutableBeanHandler;
-	}
 	
 	/**
 	 * getBeanHandler
@@ -292,7 +283,7 @@ public class Beans {
 	@SuppressWarnings("unchecked")
 	public <T> BeanHandler<T> getBeanHandler(Type type) {
 		if (type == null) {
-			return new ImmutableBeanHandler(Object.class); 
+			throw new NullPointerException("type is null");
 		}
 
 		BeanHandler<T> handler = handlers.get(type);
@@ -312,12 +303,12 @@ public class Beans {
 			else if (Types.isAssignable(type, Iterable.class)) {
 				handler = new IterableBeanHandler(this, type);
 			}
-			else if (Types.isImmutableType(type)) {
-				handler = new ImmutableBeanHandler(type); 
-			}
 			else if (Types.isAssignable(type, IocProxy.class)) {
 				handler = new IocProxyBeanHandler(this, type);
 				register(type, handler);
+			}
+			else if (Types.isImmutableType(type)) {
+				throw new IllegalArgumentException("Illegal bean type: " + type);
 			}
 			else {
 				handler = createJavaBeanHandler(type);

@@ -10,21 +10,11 @@ public class BeanAccessor {
 	private BeanHandler handler;
 
 	/**
-	 * Constructor
-	 * 
-	 * @param bean bean object
+	 * @param bean
 	 */
 	public BeanAccessor(Object bean) {
-		this(bean, Beans.i().getBeanHandler(bean == null ? null : bean.getClass()));
-	}
-
-	/**
-	 * @param bean
-	 * @param handler
-	 */
-	public BeanAccessor(Object bean, BeanHandler handler) {
 		this.bean = bean;
-		this.handler = handler;
+		this.handler = bean == null ? null : Beans.i().getBeanHandler(bean.getClass());
 	}
 
 	/**
@@ -35,7 +25,7 @@ public class BeanAccessor {
 	 */
 	@SuppressWarnings("unchecked")
 	public Object get(String name) {
-		return handler.getBeanValue(bean, name);
+		return handler == null ? null : handler.getBeanValue(bean, name);
 	}
 
 	/**
@@ -46,6 +36,8 @@ public class BeanAccessor {
 	 */
 	@SuppressWarnings("unchecked")
 	public void set(String name, Object value) {
-		handler.setBeanValue(bean, name, value);
+		if (handler != null) {
+			handler.setBeanValue(bean, name, value);
+		}
 	}
 }
