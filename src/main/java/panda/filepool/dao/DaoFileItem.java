@@ -199,6 +199,22 @@ public class DaoFileItem implements FileItem, Serializable {
 		return new ByteArrayInputStream(getData());
 	}
 
+	/**
+	 * save data
+	 */
+	@Override
+	public void save(byte[] data) throws IOException {
+		daoFilePool.saveFile(this, data);
+	}
+	
+	/**
+	 * save data
+	 */
+	@Override
+	public void save(InputStream data) throws IOException {
+		daoFilePool.saveFile(this, data);
+	}
+
 	@Override
 	public void delete() throws IOException {
 		daoFilePool.deleteFile(this);

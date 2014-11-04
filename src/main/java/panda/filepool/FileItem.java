@@ -48,6 +48,16 @@ public interface FileItem {
 	InputStream getInputStream() throws IOException;
 
 	/**
+	 * save data
+	 */
+	void save(byte[] data) throws IOException;
+	
+	/**
+	 * save data
+	 */
+	void save(InputStream data) throws IOException;
+	
+	/**
 	 * delete self
 	 */
 	void delete() throws IOException;

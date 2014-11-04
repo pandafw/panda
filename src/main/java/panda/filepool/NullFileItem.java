@@ -91,6 +91,20 @@ public class NullFileItem implements FileItem {
 		throw error();
 	}
 
+	/**
+	 * save data
+	 */
+	public void save(byte[] data) throws IOException {
+		error();
+	}
+	
+	/**
+	 * save data
+	 */
+	public void save(InputStream data) throws IOException {
+		error();
+	}
+
 	public void delete() throws IOException {
 		throw error();
 	}

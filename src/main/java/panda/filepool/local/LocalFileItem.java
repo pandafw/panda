@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import panda.filepool.FileItem;
+import panda.io.Files;
 import panda.io.Streams;
 
 /**
@@ -89,6 +90,22 @@ public class LocalFileItem implements FileItem, Serializable {
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return new FileInputStream(file);
+	}
+	
+	/**
+	 * save data
+	 */
+	@Override
+	public void save(byte[] data) throws IOException {
+		Files.write(file, data);
+	}
+
+	/**
+	 * save data
+	 */
+	@Override
+	public void save(InputStream data) throws IOException {
+		Files.write(file, data);
 	}
 
 	@Override

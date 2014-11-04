@@ -53,10 +53,36 @@ public class DaoFilePool implements FilePool {
 		this.blockSize = blockSize;
 	}
 
-	public FileItem saveFile(String name, final InputStream body, boolean temporary) throws IOException {
-		final DaoFileItem fi = new DaoFileItem();
-		
+	protected FileItem saveFile(FileItem file, final InputStream body) throws IOException {
 		final byte[] data = Streams.toByteArray(body);
+		return saveFile(file, data);
+	}
+	
+	protected FileItem saveFile(FileItem file, final byte[] data) throws IOException {
+		final DaoFileItem fi = (DaoFileItem)file;
+		
+		fi.setDaoFilePool(this);
+		fi.setDate(DateTimes.getDate());
+		fi.setData(data);
+		fi.setSize(data.length);
+		
+		final Dao dao = getDaoClient().getDao();
+		dao.exec(new Runnable() {
+			public void run() {
+				dao.update(fi);
+
+				saveData(dao, fi, data);
+			}
+		});
+		return fi;
+	}
+
+	public FileItem saveFile(String name, final InputStream data, boolean temporary) throws IOException {
+		return saveFile(name, Streams.toByteArray(data), temporary);
+	}
+	
+	public FileItem saveFile(String name, final byte[] data, boolean temporary) throws IOException {
+		final DaoFileItem fi = new DaoFileItem();
 		
 		fi.setDaoFilePool(this);
 		fi.setName(name);
@@ -70,29 +96,37 @@ public class DaoFilePool implements FilePool {
 			public void run() {
 				dao.insert(fi);
 
-				int len = data.length;
-				for (int i = 0; i < len; i += blockSize) {
-					DaoFileData fd = new DaoFileData();
-					fd.setFid(fi.getId());
-					fd.setBno(i);
-					int bs = blockSize;
-					if (i + bs > len) {
-						bs = len- i;
-					}
+				FileDataQuery fdq = new FileDataQuery();
+				fdq.fid().equalTo(fi.getId());
+				dao.deletes(fdq);
 
-					byte[] buf = new byte[bs];
-					System.arraycopy(data, i, buf, 0, bs);
-
-					fd.setSize(bs);
-					fd.setData(buf);
-	
-					dao.insert(fd);
-				}
+				saveData(dao, fi, data);
 			}
 		});
 		return fi;
 	}
-	
+
+	private void saveData(Dao dao, FileItem fi, byte[] data) {
+		int len = data.length;
+		for (int i = 0; i < len; i += blockSize) {
+			DaoFileData fd = new DaoFileData();
+			fd.setFid(fi.getId());
+			fd.setBno(i);
+			int bs = blockSize;
+			if (i + bs > len) {
+				bs = len- i;
+			}
+
+			byte[] buf = new byte[bs];
+			System.arraycopy(data, i, buf, 0, bs);
+
+			fd.setSize(bs);
+			fd.setData(buf);
+
+			dao.insert(fd);
+		}
+	}
+
 	public FileItem saveFile(FileItemStream fis, boolean temporary) throws IOException {
 		String name = FileNames.getName(fis.getName());
 		return saveFile(name, fis.openStream(), temporary);

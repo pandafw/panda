@@ -52,13 +52,23 @@ public class LocalFilePool implements FilePool {
 		return saveFile(name, fis.openStream(), temporary);
 	}
 	
-	public FileItem saveFile(String name, final InputStream body, boolean temporary) throws IOException {
+	@Override
+	public FileItem saveFile(String name, final byte[] data, boolean temporary) throws IOException {
 		LocalFileItem fi = randFile(name ,temporary);
 		fi.getFile().getParentFile().mkdirs();
-		Files.write(fi.getFile(), body);
+		Files.write(fi.getFile(), data);
 		return fi;
 	}
-
+	
+	@Override
+	public FileItem saveFile(String name, final InputStream data, boolean temporary) throws IOException {
+		LocalFileItem fi = randFile(name ,temporary);
+		fi.getFile().getParentFile().mkdirs();
+		Files.write(fi.getFile(), data);
+		return fi;
+	}
+	
+	@Override
 	public FileItem findFile(Long id) {
 		File dir = new File(path, fdf.format(id));
 		if (dir.exists()) {
