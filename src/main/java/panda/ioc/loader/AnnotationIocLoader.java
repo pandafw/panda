@@ -92,7 +92,7 @@ public class AnnotationIocLoader implements IocLoader {
 		String beanName = getBeanName(clazz);
 		if (map.containsKey(beanName)) {
 			throw new IocException("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
-				beanName, clazz, map.get(beanName).getClass());
+				beanName, clazz, map.get(beanName).getType());
 		}
 
 		if (log.isDebugEnabled()) {
