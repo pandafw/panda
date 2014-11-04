@@ -2,9 +2,12 @@ package panda.filepool.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.dao.DaoException;
 import panda.dao.DataHandler;
 import panda.filepool.FileItem;
 import panda.filepool.FilePool;
@@ -13,6 +16,7 @@ import panda.io.FileNames;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
 import panda.lang.time.DateTimes;
 import panda.mvc.MvcConstants;
 import panda.mvc.adaptor.multipart.FileItemStream;
@@ -24,6 +28,12 @@ public class DaoFilePool implements FilePool {
 
 	@IocInject(value=MvcConstants.FILEPOOL_DAO_BLOCK_SIZE, required=false)
 	protected int blockSize = Integer.MAX_VALUE;
+
+	/**
+	 * milliseconds since last modified. (default: 1h) 
+	 */
+	@IocInject(value=MvcConstants.FILEPOOL_EXPIRES, required=false)
+	protected long expires = 60 * 60 * 1000;
 
 	/**
 	 * @return the daoClient
@@ -66,14 +76,18 @@ public class DaoFilePool implements FilePool {
 		fi.setData(data);
 		fi.setSize(data.length);
 		
-		final Dao dao = getDaoClient().getDao();
-		dao.exec(new Runnable() {
-			public void run() {
-				dao.update(fi);
-
-				saveData(dao, fi, data);
-			}
-		});
+		try {
+			final Dao dao = getDaoClient().getDao();
+			dao.exec(new Runnable() {
+				public void run() {
+					dao.update(fi);
+					saveData(dao, fi, data);
+				}
+			});
+		}
+		catch (DaoException e) {
+			throw new IOException("Failed to save file " + fi.getName());
+		}
 		return fi;
 	}
 
@@ -91,18 +105,23 @@ public class DaoFilePool implements FilePool {
 		fi.setSize(data.length);
 		fi.setFlag(temporary ? DaoFileItem.TEMPORARY : DaoFileItem.ARCHIVE);
 		
-		final Dao dao = getDaoClient().getDao();
-		dao.exec(new Runnable() {
-			public void run() {
-				dao.insert(fi);
-
-				FileDataQuery fdq = new FileDataQuery();
-				fdq.fid().equalTo(fi.getId());
-				dao.deletes(fdq);
-
-				saveData(dao, fi, data);
-			}
-		});
+		try {
+			final Dao dao = getDaoClient().getDao();
+			dao.exec(new Runnable() {
+				public void run() {
+					dao.insert(fi);
+	
+					FileDataQuery fdq = new FileDataQuery();
+					fdq.fid().equalTo(fi.getId());
+					dao.deletes(fdq);
+	
+					saveData(dao, fi, data);
+				}
+			});
+		}
+		catch (DaoException e) {
+			throw new IOException("Failed to save file " + name);
+		}
 		return fi;
 	}
 
@@ -138,44 +157,86 @@ public class DaoFilePool implements FilePool {
 		return fi == null ? new NullFileItem(id) : fi;
 	}
 	
-	protected byte[] readFile(DaoFileItem fi) {
-		final byte[] buf = new byte[fi.getSize()];
-
-		if (fi.getSize() > 0) {
-			Dao dao = getDaoClient().getDao();
-			FileDataQuery fdq = new FileDataQuery();
-			
-			fdq.fid().equalTo(fi.getId()).bno().asc();
-			
-			dao.select(fdq, new DataHandler<DaoFileData>() {
-				private int len = 0;
+	protected byte[] readFile(DaoFileItem fi) throws IOException {
+		try {
+			final byte[] buf = new byte[fi.getSize()];
 	
-				public boolean handle(DaoFileData data) throws Exception {
-					System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
-					len += data.getData().length;
-					return true;
-				}
-			});
+			if (fi.getSize() > 0) {
+				Dao dao = getDaoClient().getDao();
+				FileDataQuery fdq = new FileDataQuery();
+				
+				fdq.fid().equalTo(fi.getId()).bno().asc();
+				
+				dao.select(fdq, new DataHandler<DaoFileData>() {
+					private int len = 0;
+		
+					public boolean handle(DaoFileData data) throws Exception {
+						System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
+						len += data.getData().length;
+						return true;
+					}
+				});
+			}
+			
+			fi.setData(buf);
+			
+			return buf;
+		}
+		catch (DaoException e) {
+			throw new IOException("Failed to read file: " + fi.getId());
+		}
+	}
+
+	private static class DeleteFile implements Runnable {
+		private Dao dao;
+		private FileItem file;
+		
+		public DeleteFile(Dao dao, FileItem file) {
+			this.dao = dao;
+			this.file = file;
 		}
 		
-		fi.setData(buf);
-		
-		return buf;
+		public void run() {
+			FileDataQuery fdq = new FileDataQuery();
+			fdq.fid().equalTo(file.getId());
+			dao.deletes(fdq);
+			
+			dao.delete(file);
+		}
 	}
 
 	protected void deleteFile(final DaoFileItem file) throws IOException {
+		try {
+			final Dao dao = getDaoClient().getDao();
+			dao.exec(new DeleteFile(dao, file));
+	
+			file.setExists(false);
+			file.setData(null);
+		}
+		catch (DaoException e) {
+			throw new IOException("Failed to delete file: " + file.getId());
+		}
+	}
+	
+	public void clean() throws IOException {
 		final Dao dao = getDaoClient().getDao();
-		dao.exec(new Runnable() {
-			public void run() {
-				FileDataQuery fdq = new FileDataQuery();
-				fdq.fid().equalTo(file.getId());
-				dao.deletes(fdq);
-				
-				dao.delete(file);
-			}
-		});
+		final Date time = new Date(System.currentTimeMillis() - expires);
 		
-		file.setExists(false);
-		file.setData(null);
+		FileItemQuery fiq = new FileItemQuery();
+		fiq.flag().equalTo(DaoFileItem.TEMPORARY).date().lessThan(time);
+		
+		final List<DaoFileItem> fis = dao.select(fiq);
+		if (Collections.isEmpty(fis)) {
+			return;
+		}
+		
+		for (DaoFileItem fi : fis) {
+			try {
+				dao.exec(new DeleteFile(dao, fi));
+			}
+			catch (DaoException e) {
+				throw new IOException("Failed to delete file: " + fi.getId());
+			}
+		}
 	}
 }

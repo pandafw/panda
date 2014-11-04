@@ -13,4 +13,6 @@ public interface FilePool {
 	FileItem saveFile(FileItemStream fis, boolean temporary) throws IOException;
 
 	FileItem findFile(Long id);
+	
+	void clean() throws IOException;
 }

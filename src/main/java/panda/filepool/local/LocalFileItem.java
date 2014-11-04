@@ -16,13 +16,15 @@ import panda.io.Streams;
 public class LocalFileItem implements FileItem, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private LocalFilePool localFilePool;
 	private Long id;
 	private File file;
 	
 	/**
 	 * Constructor
 	 */
-	public LocalFileItem(Long id, File file) {
+	public LocalFileItem(LocalFilePool localFilePool, Long id, File file) {
+		this.localFilePool = localFilePool;
 		this.id = id;
 		this.file = file;
 	}
@@ -110,7 +112,7 @@ public class LocalFileItem implements FileItem, Serializable {
 
 	@Override
 	public void delete() {
-		file.delete();
+		localFilePool.removeFile(file);
 	}
 
 	/**
@@ -164,8 +166,7 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public LocalFileItem clone() {
-		LocalFileItem copy = new LocalFileItem(id, file);
-		
+		LocalFileItem copy = new LocalFileItem(localFilePool, id, file);
 		return copy;
 	}
 }

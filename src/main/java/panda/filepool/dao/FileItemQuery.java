@@ -36,8 +36,8 @@ public class FileItemQuery extends EntityQuery<DaoFileItem, FileItemQuery> {
 	/**
 	 * @return condition of size
 	 */
-	public ComparableCondition<FileItemQuery, Long> size() {
-		return new ComparableCondition<FileItemQuery, Long>(this, DaoFileItem.SIZE);
+	public ComparableCondition<FileItemQuery, Integer> size() {
+		return new ComparableCondition<FileItemQuery, Integer>(this, DaoFileItem.SIZE);
 	}
 
 	/**
@@ -45,6 +45,13 @@ public class FileItemQuery extends EntityQuery<DaoFileItem, FileItemQuery> {
 	 */
 	public ComparableCondition<FileItemQuery, Date> date() {
 		return new ComparableCondition<FileItemQuery, Date>(this, DaoFileItem.DATE);
+	}
+
+	/**
+	 * @return condition of id
+	 */
+	public ComparableCondition<FileItemQuery, Integer> flag() {
+		return new ComparableCondition<FileItemQuery, Integer>(this, DaoFileItem.FLAG);
 	}
 }
 
