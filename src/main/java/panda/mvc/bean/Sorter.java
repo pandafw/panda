@@ -92,7 +92,7 @@ public class Sorter implements Cloneable, Serializable {
 	/**
 	 * @return the direction
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'asc', 'desc' ]}", msgId=Validators.MSG_CONSTANT))
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'asc', 'desc' ]}", msgId=Validators.MSGID_CONSTANT))
 	public String getD() {
 		return getDirection();
 	}

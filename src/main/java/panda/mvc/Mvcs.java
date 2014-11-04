@@ -7,6 +7,8 @@ import panda.cast.Castors;
 import panda.el.El;
 import panda.el.ElTemplate;
 import panda.filepool.FileItemCastor;
+import panda.ioc.Ioc;
+import panda.lang.Classes;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
@@ -64,6 +66,17 @@ public abstract class Mvcs {
 			sb = ac.getRequest().getContextPath() + sb.substring(1);
 		}
 		return sb;
+	}
+
+	/**
+	 * create a instance
+	 */
+	public static <T> T born(Ioc ioc, Class<T> type) {
+		T obj = ioc.getIfExists(type);
+		if (obj == null) {
+			obj = Classes.born(type);
+		}
+		return obj;
 	}
 
 	/**

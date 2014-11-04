@@ -37,14 +37,14 @@ public interface Validators {
 	// -------------------------------------------------------
 	// validation message id
 	//
-	public static final String MSG_CAST_BOOLEAN = "validation-cast-boolean";
-	public static final String MSG_CAST_DATE = "validation-cast-date";
-	public static final String MSG_CAST_NUMBER = "validation-cast-number";
-	public static final String MSG_CONSTANT = "validation-constant";
-	public static final String MSG_DATE_RANGE_TO = "validation-date-range-to";
-	public static final String MSG_NUMBER_RANGE_TO = "validation-number-range-to";
-	public static final String MSG_NUMBER_MIN = "validation-number-min";
-	public static final String MSG_REQUIRED = "validation-required";
+	public static final String MSGID_CAST_BOOLEAN = "validation-cast-boolean";
+	public static final String MSGID_CAST_DATE = "validation-cast-date";
+	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
+	public static final String MSGID_CONSTANT = "validation-constant";
+	public static final String MSGID_DATE_RANGE_TO = "validation-date-range-to";
+	public static final String MSGID_NUMBER_RANGE_TO = "validation-number-range-to";
+	public static final String MSGID_NUMBER_MIN = "validation-number-min";
+	public static final String MSGID_REQUIRED = "validation-required";
 	
 	/**
 	 * @param ac action context

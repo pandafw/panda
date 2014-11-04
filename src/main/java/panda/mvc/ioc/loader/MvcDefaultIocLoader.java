@@ -8,6 +8,13 @@ import panda.mvc.aware.ParamAwareSupport;
 import panda.mvc.aware.SessionAwareSupport;
 import panda.mvc.impl.DefaultActionChainMaker;
 import panda.mvc.impl.DefaultUrlMapping;
+import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.FatalProcessor;
+import panda.mvc.processor.LayoutProcessor;
+import panda.mvc.processor.LocaleProcessor;
+import panda.mvc.processor.InvokeProcessor;
+import panda.mvc.processor.ValidateProcessor;
+import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.validation.DefaultValidators;
@@ -83,9 +90,19 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		// file pool used by Upload
 		LocalFilePool.class,
 		
+		// utility
 		ResourceBundleLoader.class,
 		CookieStateProvider.class,
 		DefaultTextProvider.class,
+
+		// processor
+		AdaptProcessor.class,
+		FatalProcessor.class,
+		LayoutProcessor.class,
+		LocaleProcessor.class,
+		InvokeProcessor.class,
+		ValidateProcessor.class,
+		ViewProcessor.class,
 		
 		// validation
 		ActionAwareSupport.class,

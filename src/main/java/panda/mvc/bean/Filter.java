@@ -471,7 +471,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the comparison
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'lt', 'le', 'gt', 'ge', 'eq', 'bt', 'lk', 'mt', 'lm', 'rm', 'in' ]}", msgId=Validators.MSG_CONSTANT))
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'lt', 'le', 'gt', 'ge', 'eq', 'bt', 'lk', 'mt', 'lm', 'rm', 'in' ]}", msgId=Validators.MSGID_CONSTANT))
 	public String getC() {
 		return getComparator();
 	}
@@ -521,7 +521,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bvs
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_BOOLEAN))
 	public List<Boolean> getBvs() {
 		return getBooleanValues();
 	}
@@ -536,7 +536,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bv
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_BOOLEAN))
 	public Boolean getBv() {
 		return getBooleanValue();
 	}
@@ -551,7 +551,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the bv2
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_BOOLEAN))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_BOOLEAN))
 	public Boolean getBv2() {
 		return getBooleanValue2();
 	}
@@ -566,7 +566,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dvs
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE))
 	public List<Date> getDvs() {
 		return getDateValues();
 	}
@@ -581,7 +581,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the dv
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE))
 	public Date getDv() {
 		return getDateValue();
 	}
@@ -597,8 +597,8 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the dv2
 	 */
 	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE),
-		@Validate(value=Validators.EL, params="top.dv2 > top.parent.value.dv", msgId=Validators.MSG_DATE_RANGE_TO)
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
+		@Validate(value=Validators.EL, params="top.dv2 > top.parent.value.dv", msgId=Validators.MSGID_DATE_RANGE_TO)
 	})
 	public Date getDv2() {
 		return getDateValue2();
@@ -614,7 +614,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the nvs
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER))
 	public List<Number> getNvs() {
 		return getNumberValues();
 	}
@@ -629,7 +629,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the nv
 	 */
-	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER))
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER))
 	public Number getNv() {
 		return getNumberValue();
 	}
@@ -645,8 +645,8 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the nv2
 	 */
 	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_NUMBER),
-		@Validate(value=Validators.EL, params="top.value > top.parent.value.nv", msgId=Validators.MSG_NUMBER_RANGE_TO)
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
+		@Validate(value=Validators.EL, params="top.value > top.parent.value.nv", msgId=Validators.MSGID_NUMBER_RANGE_TO)
 	})
 	public Number getNv2() {
 		return getNumberValue2();

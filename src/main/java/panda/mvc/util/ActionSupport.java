@@ -267,6 +267,10 @@ public class ActionSupport {
 	//----------------------------------------------------------------------
 	// Aware
 	//
+	public void addFieldError(String field, String msg) {
+		getParamAware().addError(field, msg);
+	}
+
 	public void addActionError(String msg) {
 		getActionAware().addError(msg);
 	}

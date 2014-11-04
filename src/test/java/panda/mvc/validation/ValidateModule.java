@@ -9,8 +9,8 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.annotation.Validate;
 
-@At
 @Modules(scan = true)
+@At
 @Ok("raw")
 @Err("json")
 @Fatal("json")

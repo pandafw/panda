@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Documented
 public @interface Fatal {
-
 	String value();
 }

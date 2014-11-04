@@ -7,17 +7,14 @@ import java.util.List;
 import java.util.Set;
 
 import panda.lang.Arrays;
-import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionInfo;
 import panda.mvc.annotation.Adapt;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
-import panda.mvc.annotation.Encoding;
 import panda.mvc.annotation.Modules;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Fatal;
@@ -30,7 +27,6 @@ public abstract class Loadings {
 
 	public static ActionInfo createInfo(Class<?> type) {
 		ActionInfo ai = new ActionInfo();
-		evalEncoding(ai, type.getAnnotation(Encoding.class));
 		evalHttpAdaptor(ai, type.getAnnotation(Adapt.class));
 		evalOkView(ai, type.getAnnotation(Ok.class));
 		evalErrorView(ai, type.getAnnotation(Err.class));
@@ -43,7 +39,6 @@ public abstract class Loadings {
 
 	public static ActionInfo createInfo(Method method) {
 		ActionInfo ai = new ActionInfo();
-		evalEncoding(ai, method.getAnnotation(Encoding.class));
 		evalHttpAdaptor(ai, method.getAnnotation(Adapt.class));
 		evalOkView(ai, method.getAnnotation(Ok.class));
 		evalErrorView(ai, method.getAnnotation(Err.class));
@@ -153,17 +148,6 @@ public abstract class Loadings {
 	public static void evalHttpAdaptor(ActionInfo ai, Adapt ab) {
 		if (null != ab) {
 			ai.setAdaptor(ab.type());
-		}
-	}
-
-	public static void evalEncoding(ActionInfo ai, Encoding encoding) {
-		if (null == encoding) {
-			ai.setInputEncoding(Charsets.UTF_8);
-			ai.setOutputEncoding(Charsets.UTF_8);
-		}
-		else {
-			ai.setInputEncoding(Strings.defaultString(encoding.input(), Charsets.UTF_8));
-			ai.setOutputEncoding(Strings.defaultString(encoding.output(), Charsets.UTF_8));
 		}
 	}
 

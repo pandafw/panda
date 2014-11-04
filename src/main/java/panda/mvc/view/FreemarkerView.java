@@ -64,12 +64,17 @@ public class FreemarkerView extends AbstractPathView {
 
 	@Override
 	public void render(ActionContext ac) throws Exception {
+		MvcFreemarkerHelper mfh = ac.getIoc().get(MvcFreemarkerHelper.class);
+
 		String path = evalPath(ac);
 
-		// 空路径，采用默认规则
+		// not definition
 		if (Strings.isBlank(path)) {
-			path = RequestPath.getRequestPath(ac.getRequest());
-			path = FileNames.removeExtension(path) + EXT;
+			path = '/' + ac.getAction().getClass().getName().replace('.', '/') + ".ftl";
+			if (!mfh.hasTemplate(path)) {
+				path = RequestPath.getRequestPath(ac.getRequest());
+				path = FileNames.removeExtension(path) + EXT;
+			}
 		}
 		else {
 			if (!path.toLowerCase().endsWith(EXT)) {
@@ -80,7 +85,6 @@ public class FreemarkerView extends AbstractPathView {
 		ac.getResponse().setCharacterEncoding(encoding);
 		ac.getResponse().setContentType(contentType + "; charset=" + encoding);
 		
-		MvcFreemarkerHelper mfh = ac.getIoc().get(MvcFreemarkerHelper.class);
 		mfh.execTemplate(ac.getResponse().getWriter(), path, ac);
 	}
 }

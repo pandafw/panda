@@ -14,6 +14,9 @@ public interface MvcConstants extends IocConstants {
 	/** Cache model instances at BeanWrapper level */
 	public static final String FREEMARKER_BEANWRAPPER_CACHE = "panda.freemarker.beanwrapper.cache";
 
+	/** Input encoding */
+	public static final String IO_INPUT_ENCODING = "panda.io.input.encoding";
+
 	/** The default loadmask option of form */
 	public static final String UI_FORM_LOADMASK = "panda.ui.form.loadmask";
 
@@ -37,4 +40,7 @@ public interface MvcConstants extends IocConstants {
 
 	/** The custom themes */
 	public static final String UI_CUSTOM_THEMES = "panda.ui.themes";
+
+	/** The valid locale */
+	public static final String LOCALE_VALID = "panda.locale.valid";
 }

@@ -22,6 +22,9 @@ import panda.cast.Castors;
 import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
+import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -30,6 +33,7 @@ import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 import panda.mvc.ParamAdaptor;
 import panda.mvc.adaptor.ejector.FormParamEjector;
@@ -48,10 +52,14 @@ import panda.servlet.ServletRequestHeaderMap;
 /**
  * 将整个 HTTP 请求作为名值对来处理
  */
+@IocBean
 public class DefaultParamAdaptor implements ParamAdaptor {
 	private static Log log = Logs.getLog(DefaultParamAdaptor.class);
 
 	private static final String ATTR_EJECTOR = ParamEjector.class.getName();
+
+	@IocInject(value=MvcConstants.IO_INPUT_ENCODING, required=false)
+	protected String encoding = Charsets.UTF_8;
 	
 	protected ParamEjector getParamEjector(ActionContext ac) {
 		ParamEjector ejector = (ParamEjector)ac.getRequest().getAttribute(ATTR_EJECTOR);

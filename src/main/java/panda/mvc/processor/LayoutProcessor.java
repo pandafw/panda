@@ -3,13 +3,13 @@ package panda.mvc.processor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
+import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 
+@IocBean
 public class LayoutProcessor extends AbstractProcessor {
 
 	/**
@@ -121,10 +121,6 @@ public class LayoutProcessor extends AbstractProcessor {
 	 */
 	public void setSaveToCookie(boolean saveToCookie) {
 		this.saveToCookie = saveToCookie;
-	}
-
-	@Override
-	public void init(MvcConfig config, ActionInfo ai) throws Throwable {
 	}
 
 	public void process(ActionContext ac) throws Throwable {

@@ -53,7 +53,7 @@ public class DateRange implements Cloneable, Serializable {
 	 * @return the from
 	 */
 	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE)
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE)
 	})
 	public Date getF() {
 		return from;
@@ -70,8 +70,8 @@ public class DateRange implements Cloneable, Serializable {
 	 * @return the to
 	 */
 	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSG_CAST_DATE),
-		@Validate(value=Validators.EL, params="top.value > top.parent.value.f", msgId=Validators.MSG_DATE_RANGE_TO)
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
+		@Validate(value=Validators.EL, params="top.value > top.parent.value.f", msgId=Validators.MSGID_DATE_RANGE_TO)
 	})
 	public Date getT() {
 		return to;

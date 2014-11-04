@@ -1,28 +1,24 @@
 package panda.mvc.processor;
 
 import panda.bind.json.Jsons;
+import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
+import panda.mvc.View;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.ValidateException;
 import panda.mvc.validation.Validators;
 
+@IocBean
 public class ValidateProcessor extends ViewProcessor {
-
-	private Validators validators;
-
 	@Override
-	public void init(MvcConfig config, ActionInfo ai) throws Throwable {
-		view = evalView(config.getIoc(), ai.getErrorView());
+	public void process(ActionContext ac) throws Throwable {
+		View view = evalView(ac.getIoc(), ac.getInfo().getErrorView());
 
-		validators = config.getIoc().getIfExists(Validators.class);
+		Validators validators = ac.getIoc().getIfExists(Validators.class);
 		if (validators == null) {
 			validators = new DefaultValidators();
 		}
-	}
 
-	public void process(ActionContext ac) throws Throwable {
 		if (validators.validate(ac)) {
 			doNext(ac);
 			return;

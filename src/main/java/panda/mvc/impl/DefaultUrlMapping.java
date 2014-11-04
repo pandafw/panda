@@ -117,9 +117,8 @@ public class DefaultUrlMapping implements UrlMapping {
 				throw Exceptions.impossible();
 			}
 
-			log.debugf("%s >> %s | @Ok(%-5s) @Fail(%-5s) | (I:%s/O:%s)",
-				Strings.rightPad(sb, 30), str, ai.getOkView(), ai.getFatalView(),
-				ai.getInputEncoding(), ai.getOutputEncoding());
+			log.debugf("%s >> %s | @Ok(%-5s) @Err(%-5s) @Fail(%-5s)",
+				Strings.rightPad(sb, 30), str, ai.getOkView(), ai.getErrorView(), ai.getFatalView());
 		}
 	}
 }

@@ -28,6 +28,7 @@ import panda.servlet.ServletRequestParamMap;
 
 public class ActionContext {
 	private Ioc ioc;
+	private ActionInfo info;
 	
 	private String path;
 	private List<String> pathArgs;
@@ -37,7 +38,6 @@ public class ActionContext {
 	private ServletContext servlet;
 
 	private Object action;
-	private Method method;
 	private Object[] args;
 	private Object params;
 	private Object result;
@@ -81,6 +81,20 @@ public class ActionContext {
 	 */
 	protected void setIoc(Ioc ioc) {
 		this.ioc = ioc;
+	}
+
+	/**
+	 * @return the info
+	 */
+	public ActionInfo getInfo() {
+		return info;
+	}
+
+	/**
+	 * @param info the info to set
+	 */
+	public void setInfo(ActionInfo info) {
+		this.info = info;
 	}
 
 	/**
@@ -171,23 +185,23 @@ public class ActionContext {
 	 * @return the method
 	 */
 	public Method getMethod() {
-		return method;
+		return info.getMethod();
 	}
 
 	/**
 	 * @return the method name
 	 */
 	public String getMethodName() {
-		return method == null ? null : method.getName();
+		return info.getMethod() == null ? null : info.getMethod().getName();
 	}
 
 	/**
-	 * @param method the method to set
+	 * @return the adapter type
 	 */
-	public void setMethod(Method method) {
-		this.method = method;
+	public Class<? extends ParamAdaptor> getAdaptorType() {
+		return info.getAdaptor();
 	}
-
+	
 	/**
 	 * @return the args
 	 */

@@ -27,22 +27,40 @@ import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.Processor;
+import panda.mvc.processor.AdaptProcessor;
+import panda.mvc.processor.FatalProcessor;
+import panda.mvc.processor.LocaleProcessor;
+import panda.mvc.processor.InvokeProcessor;
+import panda.mvc.processor.ValidateProcessor;
+import panda.mvc.processor.ViewProcessor;
 
 @IocBean(type=ActionChainMaker.class)
 public class DefaultActionChainMaker implements ActionChainMaker {
 
 	private static final Log log = Logs.getLog(DefaultActionChainMaker.class);
 
-	protected Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+	protected Map<String, List<String>> map = new HashMap<String, List<String>>();
 
 	public DefaultActionChainMaker() {
 		// load default settings
-		setChains(DefaultActionChainMaker.class.getPackage().getName().replace('.', '/') + "/chains.json");
+		setDefault();
 		
 		// external
 		setExternal();
 	}
-	
+
+	protected void setDefault() {
+		List<String> defs = Arrays.toList(
+			FatalProcessor.class.getName(),
+			AdaptProcessor.class.getName(),
+			LocaleProcessor.class.getName(),
+			ValidateProcessor.class.getName(),
+			InvokeProcessor.class.getName(),
+			ViewProcessor.class.getName()
+		);
+		map.put("default", defs);
+	}
+
 	protected void setExternal() {
 		InputStream is = null;
 		try {
@@ -82,7 +100,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 				procs.add(processor);
 			}
 
-			ActionChain chain = new DefaultActionChain(procs);
+			ActionChain chain = new DefaultActionChain(ai, procs);
 			return chain;
 		}
 		catch (Throwable e) {
@@ -101,7 +119,6 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		else {
 			p = (Processor)Classes.born(name);
 		}
-		p.init(config, ai);
 		return p;
 	}
 
@@ -137,7 +154,6 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<String> getProcessors(String key) {
 		if (Strings.isEmpty(key)) {
 			key = "default";

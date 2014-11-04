@@ -1,8 +1,6 @@
 package panda.mvc.processor;
 
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
 import panda.mvc.Processor;
 
 /**
@@ -11,12 +9,6 @@ import panda.mvc.Processor;
 public abstract class AbstractProcessor implements Processor {
 
 	private Processor next;
-
-	/**
-	 * 建议覆盖这个方法,以便从NutConfig/ActionInfo获取需要的信息
-	 */
-	public void init(MvcConfig config, ActionInfo ai) throws Throwable {
-	}
 
 	/**
 	 * 设置下一个Processor
@@ -40,17 +32,6 @@ public abstract class AbstractProcessor implements Processor {
 	protected void doNext(ActionContext ac) throws Throwable {
 		if (null != next) {
 			next.process(ac);
-		}
-	}
-
-	protected void renderView(ActionContext ac) throws Throwable {
-		Processor p = next;
-		while (p != null) {
-			if (p instanceof ViewProcessor) {
-				p.process(ac);
-				return;
-			}
-			p = p.getNext();
 		}
 	}
 

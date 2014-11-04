@@ -21,6 +21,7 @@ import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChainMaker;
+import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.IocProvider;
 import panda.mvc.Loading;
@@ -215,7 +216,7 @@ public class DefaultMvcLoading implements Loading {
 	protected void setContextClass(AbstractMvcConfig config) {
 		Class<?> mm = config.getMainModule();
 		Modules ms = mm.getAnnotation(Modules.class);
-		config.setContextClass(ms.context());
+		config.setContextClass(ms == null ? ActionContext.class : ms.context());
 	}
 	
 	protected void createIoc(AbstractMvcConfig config) {

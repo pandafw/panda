@@ -137,7 +137,7 @@ public class CompositeQuery implements Cloneable, Serializable {
 	/**
 	 * @return the method
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'and', 'or' ]}", msgId=Validators.MSG_CONSTANT))
+	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'and', 'or' ]}", msgId=Validators.MSGID_CONSTANT))
 	public String getM() {
 		return method;
 	}

@@ -6,11 +6,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.servlet.HttpServlets;
 
+@IocBean
 public class LocaleProcessor extends AbstractProcessor {
 
 	/**
@@ -31,7 +35,7 @@ public class LocaleProcessor extends AbstractProcessor {
 	/**
 	 * DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
 	 */
-	public static final Integer DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
+	public static final int DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
 
 	protected String parameterName = DEFAULT_PARAMETER;
 	protected String requestName = DEFAULT_ATTRIBUTE;
@@ -39,7 +43,7 @@ public class LocaleProcessor extends AbstractProcessor {
 	protected String cookieName = DEFAULT_COOKIE;
 	protected String cookieDomain;
 	protected String cookiePath;
-	protected Integer cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
+	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 	protected String[] validLocales;
 	protected boolean fromAcceptLanguage = true;
 
@@ -90,12 +94,13 @@ public class LocaleProcessor extends AbstractProcessor {
 	/**
 	 * @param cookieMaxAge the cookieMaxAge to set
 	 */
-	public void setCookieMaxAge(Integer cookieMaxAge) {
+	public void setCookieMaxAge(int cookieMaxAge) {
 		this.cookieMaxAge = cookieMaxAge;
 	}
 
+	@IocInject(MvcConstants.LOCALE_VALID)
 	public void setValidLocale(String validLocale) {
-		this.validLocales = Strings.split(validLocale, ',');
+		this.validLocales = Strings.split(validLocale);
 	}
 
 	/**

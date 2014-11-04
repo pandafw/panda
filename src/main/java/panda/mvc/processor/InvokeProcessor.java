@@ -3,11 +3,12 @@ package panda.mvc.processor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 
-public class MethodInvokeProcessor extends AbstractProcessor {
-
+@IocBean
+public class InvokeProcessor extends AbstractProcessor {
 	public void process(ActionContext ac) throws Throwable {
 		Object action = ac.getAction();
 		Method method = ac.getMethod();

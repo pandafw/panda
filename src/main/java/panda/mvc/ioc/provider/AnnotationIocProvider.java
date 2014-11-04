@@ -24,17 +24,19 @@ public class AnnotationIocProvider extends AbstractIocProvider {
 		Set<Object> pkgs = new HashSet<Object>();
 
 		Class<?> mm = config.getMainModule();
-		Modules ms = mm.getAnnotation(Modules.class);
-
-		if (ms.scan()) {
-			pkgs.add(mm.getPackage().getName());
-		}
+		pkgs.add(mm);
 		
+		Modules ms = mm.getAnnotation(Modules.class);
 		if (ms != null) {
+			if (ms.scan()) {
+				pkgs.remove(mm);
+				pkgs.add(mm.getPackage().getName());
+			}
+			
 			for (Class<?> cls : ms.value()) {
 				pkgs.add(cls);
 			}
-
+	
 			for (String pkg : ms.packages()) {
 				pkgs.add(pkg);
 			}

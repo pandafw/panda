@@ -8,10 +8,6 @@ import panda.net.http.HttpMethod;
 
 public class ActionInfo {
 
-	private String inputEncoding;
-
-	private String outputEncoding;
-
 	private String[] paths;
 
 	private String chainName;
@@ -46,8 +42,6 @@ public class ActionInfo {
 		}
 
 		// 填充默认值
-		inputEncoding = null == inputEncoding ? parent.inputEncoding : inputEncoding;
-		outputEncoding = null == outputEncoding ? parent.outputEncoding : outputEncoding;
 		adaptor = null == adaptor ? parent.adaptor : adaptor;
 		okView = null == okView ? parent.okView : okView;
 		errorView = null == errorView ? parent.errorView : errorView;
@@ -77,22 +71,6 @@ public class ActionInfo {
 	 */
 	public List<HttpMethod> getHttpMethods() {
 		return httpMethods;
-	}
-
-	public String getInputEncoding() {
-		return inputEncoding;
-	}
-
-	public void setInputEncoding(String inputEncoding) {
-		this.inputEncoding = inputEncoding;
-	}
-
-	public String getOutputEncoding() {
-		return outputEncoding;
-	}
-
-	public void setOutputEncoding(String outputEncoding) {
-		this.outputEncoding = outputEncoding;
 	}
 
 	public String[] getPaths() {
