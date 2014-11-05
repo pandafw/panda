@@ -32,7 +32,7 @@ public class AnnotationIocLoaderTest {
 		IocObject iocObject = iocLoader.load(null, ClassB.class.getName());
 		Assert.assertNotNull(iocObject);
 		Assert.assertNotNull(iocObject.getFields());
-		Assert.assertEquals(5, iocObject.getFields().size());
+		Assert.assertEquals(6, iocObject.getFields().size());
 		Assert.assertEquals(IocValue.TYPE_REF, iocObject.getFields().values().iterator().next().getType());
 	}
 
@@ -46,5 +46,6 @@ public class AnnotationIocLoaderTest {
 		Assert.assertEquals("default", b.xxx);
 		Assert.assertNull(b.yyy);
 		Assert.assertEquals(b.c, b.cc);
+		Assert.assertEquals(b.c, b.cc2);
 	}
 }

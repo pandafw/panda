@@ -16,6 +16,9 @@ public class ClassB {
 
 	@IocInject(type=ClassC.class)
 	public ClassCC cc;
+
+	@IocInject
+	public ClassCC cc2;
 	
 	@IocInject(value="ref:xxx", required=false)
 	public String xxx = "default";
