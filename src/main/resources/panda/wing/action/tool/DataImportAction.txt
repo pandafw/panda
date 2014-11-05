@@ -6,8 +6,8 @@ deleteAll=Delete data before import
 
 button-import=Import
 
-success-import=The data ({1} items) is successfully imported to [{0}].
+success-import=The data (${count} items) is successfully imported to [${target}].
 
-error-value=[{0}]Incorrect data({1}, {2}): {3} - {4}
+error-value=[${target}] Incorrect data(${row}, ${col}): ${value} - ${error}
 
 error-file-format=The data file must be CSV or XLS file.

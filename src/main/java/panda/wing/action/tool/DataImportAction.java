@@ -38,6 +38,7 @@ import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
+import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
@@ -74,7 +75,8 @@ public class DataImportAction extends AbstractDaoAction {
 		protected FileItem file;
 		protected List tableList = new ArrayList();
 		protected int commitSize = 1000;
-		
+		protected int count;
+
 		/**
 		 * @return the deleteAll
 		 */
@@ -146,6 +148,7 @@ public class DataImportAction extends AbstractDaoAction {
 		}
 	}
 
+	protected Arg arg;
 	protected Set<String> targetSet;
 	
 	/**
@@ -161,10 +164,6 @@ public class DataImportAction extends AbstractDaoAction {
 		return targetSet;
 	}
 
-	protected String getText(String id) {
-		return ac.getText().getText(id);
-	}
-	
 	/**
 	 * @return INPUT
 	 * @throws Exception if an error occurs
@@ -175,27 +174,27 @@ public class DataImportAction extends AbstractDaoAction {
 			@Param("*")
 			@Validates
 			Arg arg) throws Exception {
-		
+		this.arg = arg;
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
 			if ("xls".equalsIgnoreCase(fext)) {
-				byte[] data = file.getData();
+				byte[] data = arg.file.getData();
 				if (data != null) {
 					impXls(data, false);
 				}
 			}
 			else if ("xlsx".equalsIgnoreCase(fext)) {
-				byte[] data = file.getData();
+				byte[] data = arg.file.getData();
 				if (data != null) {
 					impXls(data, true);
 				}
 			}
 			else if ("csv".equalsIgnoreCase(fext)) {
-				if (Strings.isEmpty(target)) {
-					addFieldError("target", getText(Validators.MSG_REQUIRED));
+				if (Strings.isEmpty(arg.target)) {
+					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}
 				else {
-					byte[] data = file.getData();
+					byte[] data = arg.file.getData();
 					if (data != null) {
 						impCsv(data, CsvReader.COMMA_SEPARATOR);
 					}
@@ -203,17 +202,17 @@ public class DataImportAction extends AbstractDaoAction {
 			}
 			else if ("tsv".equalsIgnoreCase(fext) 
 					|| "txt".equalsIgnoreCase(fext)) {
-				if (Strings.isEmpty(target)) {
-					addFieldError("target", getText(Validators.MSG_REQUIRED));
+				if (Strings.isEmpty(arg.target)) {
+					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}
 				else {
-					byte[] data = file.getData();
+					byte[] data = arg.file.getData();
 					if (data != null) {
 						impCsv(data, CsvReader.TAB_SEPARATOR);
 					}
 				}
 			}
-			else if (Strings.isNotEmpty(file.getName())) {
+			else if (Strings.isNotEmpty(arg.file.getName())) {
 				addFieldError("file", getText("error-file-format"));
 			}
 		}
@@ -314,7 +313,7 @@ public class DataImportAction extends AbstractDaoAction {
 	}
 
 	protected void logException(String method, Throwable e) {
-		log.warn(method, e);
+		Logs.getLog(getClass()).warn(method, e);
 		if (getAssist().isDebugEnabled()) {
 			String s = Exceptions.getStackTrace(e);
 			ac.getActionAware().addError(e.getMessage() + "\n" + s);
@@ -376,6 +375,7 @@ public class DataImportAction extends AbstractDaoAction {
 		return values;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected Map<String, Object> getRowValues(Sheet sheet, int r,
 			List<String> columns, List<DataType> types, List uploadData) {
 		Row row = sheet.getRow(r);
@@ -440,11 +440,7 @@ public class DataImportAction extends AbstractDaoAction {
 				values.put(columns.get(c), cv);
 			}
 			catch (Exception e) {
-				String msg = getText("error-value", new String[] {
-						sheet.getSheetName(), 
-						String.valueOf(r + 1), String.valueOf(c + 1),
-						String.valueOf(v), e.getMessage()
-				});
+				String msg = getError(sheet.getSheetName(), r + 1, c + 1, v, e);
 				throw new RuntimeException(msg);
 			}
 		}
@@ -478,22 +474,23 @@ public class DataImportAction extends AbstractDaoAction {
 		BeanHandler bh = Beans.i().getBeanHandler(type);
 		for (String c : columns) {
 			if (!bh.canWriteProperty(c)) {
-				throw new RuntimeException("[" + file.getName() + "!" + target + "] - the table column(" + c + ") is incorrect!");
+				throw new RuntimeException("[" + arg.file.getName() + "!" + arg.target + "] - the table column(" + c + ") is incorrect!");
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void impXlsSheetData(final Sheet sheet) throws Exception {
 		final List table = new ArrayList();
 		
-		target = sheet.getSheetName();
-		final Class<?> targetType = resolveTargetType(target);
+		arg.target = sheet.getSheetName();
+		final Class<?> targetType = resolveTargetType(arg.target);
 
-		table.add(target);
+		table.add(arg.target);
 
 		final List<String> columns = getHeadValues(sheet, 0);
 		if (columns.isEmpty()) {
-			throw new Exception("[" + file.getName() + "!" + target + "] - the table column is empty!");
+			throw new Exception("[" + arg.file.getName() + "!" + arg.target + "] - the table column is empty!");
 		}
 		table.add(columns);
 
@@ -501,7 +498,7 @@ public class DataImportAction extends AbstractDaoAction {
 		
 		List<String> row2 = getHeadValues(sheet, 1);
 		if (row2.size() != columns.size()) {
-			throw new Exception("[" + file.getName() + "!" + target + "] - the column types is incorrect!");
+			throw new Exception("[" + arg.file.getName() + "!" + arg.target + "] - the column types is incorrect!");
 		}
 		table.add(row2);
 		
@@ -511,7 +508,7 @@ public class DataImportAction extends AbstractDaoAction {
 		}
 		
 		final Dao dao = getDaoClient().getDao();
-		if (deleteAll) {
+		if (arg.deleteAll) {
 			dao.deletes(targetType);
 		}
 
@@ -528,19 +525,19 @@ public class DataImportAction extends AbstractDaoAction {
 					saveRow(dao, targetType, values);
 
 					cnt++;
-					if (cnt % commitSize == 0) {
+					if (cnt % arg.commitSize == 0) {
 						dao.commit();
 					}
 				}
-				if (cnt > 0 && cnt % commitSize != 0) {
+				if (cnt > 0 && cnt % arg.commitSize != 0) {
 					dao.commit();
 				}
-				addActionMessage(getText("success-import", 
-					new String[] { target, String.valueOf(cnt) }));
+				arg.count = cnt;
+				addActionMessage(getText("success-import", "success-import", arg));
 			}
 		});
 
-		tableList.add(table);
+		arg.tableList.add(table);
 	}
 	
 	/**
@@ -548,18 +545,19 @@ public class DataImportAction extends AbstractDaoAction {
 	 * @param data data
 	 * @param separator separator
 	 */
+	@SuppressWarnings("unchecked")
 	protected void impCsv(byte[] data, char separator) {
 		try {
 			final List table = new ArrayList();
 			
-			table.add(target);
-			final Class<?> targetType = resolveTargetType(target);
+			table.add(arg.target);
+			final Class<?> targetType = resolveTargetType(arg.target);
 
 			final CsvReader csv = getCsvReader(data, separator);
 
 			final List<String> columns = csv.readNext();
 			if (columns == null || columns.isEmpty()) {
-				throw new Exception("[" + file.getName() + "] - the table column is empty!");
+				throw new Exception("[" + arg.file.getName() + "] - the table column is empty!");
 			}
 			table.add(columns);
 
@@ -567,7 +565,7 @@ public class DataImportAction extends AbstractDaoAction {
 			
 			List<String> row2 = csv.readNext();
 			if (row2 == null || row2.size() != columns.size()) {
-				throw new Exception("[" + file.getName() + "] - the column types is incorrect!");
+				throw new Exception("[" + arg.file.getName() + "] - the column types is incorrect!");
 			}
 			table.add(row2);
 			
@@ -577,7 +575,7 @@ public class DataImportAction extends AbstractDaoAction {
 			}
 
 			final Dao dao = getDaoClient().getDao();
-			if (deleteAll) {
+			if (arg.deleteAll) {
 				dao.deletes(targetType);
 			}
 
@@ -594,27 +592,28 @@ public class DataImportAction extends AbstractDaoAction {
 						saveRow(dao, targetType, values);
 
 						cnt++;
-						if (cnt % commitSize == 0) {
+						if (cnt % arg.commitSize == 0) {
 							dao.commit();
 						}
 					}
 
-					if (cnt > 0 && cnt % commitSize != 0) {
+					if (cnt > 0 && cnt % arg.commitSize != 0) {
 						dao.commit();
 					}
 
-					addActionMessage(getText("success-import", 
-							new String[] { target, String.valueOf(cnt) }));
+					arg.count = cnt;
+					addActionMessage(getText("success-import", "success-import", arg));
 				}
 			});
 
-			tableList.add(table);
+			arg.tableList.add(table);
 		}
 		catch (Throwable e) {
 			logException("CsvImport", e);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Map<String, Object> getRowValues(CsvReader csv, int r,
 			List<String> columns, List<DataType> types, List uploadData) {
 		try {
@@ -641,10 +640,7 @@ public class DataImportAction extends AbstractDaoAction {
 					values.put(columns.get(c), cv);
 				}
 				catch (Exception e) {
-					String msg = getText("error-value", new String[] {
-							target, String.valueOf(r), String.valueOf(c),
-							String.valueOf(v), e.getMessage()
-					});
+					String msg = getError(arg.target, r, c, v, e);
 					throw new Exception(msg);
 				}
 			}
@@ -656,18 +652,29 @@ public class DataImportAction extends AbstractDaoAction {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	protected String getError(String sheet, int row, int col, Object val, Throwable e) {
+		Map m = new HashMap();
+		m.put("target", sheet);
+		m.put("row", row);
+		m.put("col", col);
+		m.put("value", val);
+		m.put("error", e.getMessage());
+
+		return getText("error-value", e.getMessage(), m);
+	}
 	protected CsvReader getCsvReader(byte[] data, char separator) throws Exception {
 		int offset = 0;
 		int length = data.length;
 		
-		if (length > 3 && Charsets.UTF_8.equalsIgnoreCase(encoding)) {
+		if (length > 3 && Charsets.UTF_8.equalsIgnoreCase(arg.encoding)) {
 			if (data[0] == -17 && data[1] == -69 && data[2] == -65) {
 				offset = 3;
 				length -= 3;
 			}
 		}
 		return new CsvReader(new InputStreamReader(
-				new ByteArrayInputStream(data, offset, length), encoding),
+				new ByteArrayInputStream(data, offset, length), arg.encoding),
 				separator);
 	}
 
@@ -679,7 +686,7 @@ public class DataImportAction extends AbstractDaoAction {
 	protected void saveRow(Dao dao, Class targetType, Object row) {
 		Object data = Castors.scast(row, targetType);
 		prepareData(data);
-		if (deleteAll) {
+		if (arg.deleteAll) {
 			dao.insert(data);
 		}
 		else {

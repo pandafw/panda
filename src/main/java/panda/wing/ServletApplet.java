@@ -88,24 +88,10 @@ public class ServletApplet implements Setup {
 	public void init() {
 	}
 
-	protected void initialize() throws Exception {
-		loadSystemProps();
-
-		buildCache();
-		
-		initDatabaseResourcesLoader();
-		
-		initDatabaseTemplateLoader();
-
-		initTaskService();
-	}
-
 	/**
 	 * destroy
 	 */
 	public void destroy() {
-		shutdownTaskService();
-		
 		closeLucene();
 		
 		Beans.i().clear();

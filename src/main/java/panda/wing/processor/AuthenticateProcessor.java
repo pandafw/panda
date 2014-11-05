@@ -14,14 +14,13 @@ import javax.servlet.http.HttpSession;
 import panda.bind.json.JsonObject;
 import panda.io.FileNames;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
-import panda.mvc.MvcConfig;
 import panda.mvc.View;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
@@ -29,6 +28,7 @@ import panda.wing.mvc.ActionRC;
 
 /**
  */
+@IocBean(create="initialize")
 public class AuthenticateProcessor extends ViewProcessor {
 	//--------------------------------------------------------
 	// permission
@@ -103,10 +103,10 @@ public class AuthenticateProcessor extends ViewProcessor {
 	}
 
 	/**
-	 * @param allowUnknownUri the allowUnknownUri to set
+	 * @param val the allowUnknownUri to set
 	 */
-	public void setAllowUnknownUri(boolean allowUnknownUri) {
-		AuthenticateProcessor.allowUnknownUri = allowUnknownUri;
+	public void setAllowUnknownUri(boolean val) {
+		allowUnknownUri = val;
 	}
 
 	/**
@@ -121,6 +121,13 @@ public class AuthenticateProcessor extends ViewProcessor {
 	 */
 	public void setSecureResult(String secureResult) {
 		this.secureResult = secureResult;
+	}
+	
+	/**
+	 * initialize
+	 */
+	public void initialize() throws Throwable {
+		loadActionPermits();
 	}
 
 	/**
@@ -241,11 +248,6 @@ public class AuthenticateProcessor extends ViewProcessor {
 		if (view != null) {
 			view.render(ac);
 		}
-	}
-	
-	@Override
-	public void init(MvcConfig config, ActionInfo ai) throws Throwable {
-		loadActionPermits();
 	}
 
 	public void process(ActionContext ac) throws Throwable {

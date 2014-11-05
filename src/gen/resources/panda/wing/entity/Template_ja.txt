@@ -1,0 +1,9 @@
+name=名称
+
+language=言語
+
+country=国・地域
+
+source=内容
+
+

@@ -6,7 +6,7 @@
 	<entity name="panda.filepool.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="file id"/>
 		<property name="name" type="String" size="250" notNull="true" comment="file name">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="250"/>
 			</validator>
 		</property>

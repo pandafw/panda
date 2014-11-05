@@ -6,28 +6,28 @@
 	<entity name="${entity.package}.Template" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
 		<property name="name" type="String" size="100" notNull="true" uniqueKey="NLC" comment="file name">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="100"/>
 			</validator>
 		</property>
 		<property name="language" type="String" notNull="true" uniqueKey="NLC" comment="language code">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
-			<validator type="constant" message="validation-constant">
-				<param name="list" value="consts.localeLanguageMap"/>
+			<validator type="constant">
+				<param name="list" value="'${consts.localeLanguageMap}'"/>
 			</validator>
 		</property>
 		<property name="country" type="String" size="2" notNull="true" uniqueKey="NLC" comment="country code">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
-			<validator type="constant" message="validation-constant">
-				<param name="list" value="consts.localeCountryMap"/>
+			<validator type="constant">
+				<param name="list" value="'${consts.localeCountryMap}'"/>
 			</validator>
 		</property>
 		<property name="source" type="String" size="50000" jdbcType="CLOB" setterTrim="" comment="template source">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="50000"/>
 			</validator>
 		</property>

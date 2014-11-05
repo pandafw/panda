@@ -1,0 +1,11 @@
+id=文件ID
+
+name=文件名
+
+size=大小
+
+date=更新日期
+
+flag=flag
+
+

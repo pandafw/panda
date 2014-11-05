@@ -85,9 +85,8 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	//--------------------------------------------------------------------------
 	/**
 	 * list
-	 * @return SUCCESS
 	 */
-	protected String list() {
+	protected Object list() {
 		if (get_save() == null) {
 			set_save(true);
 		}
@@ -96,9 +95,8 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	
 	/**
 	 * list_csv
-	 * @return SUCCESS
 	 */
-	protected String list_csv() {
+	protected Object list_csv() {
 		if (get_load() == null) {
 			set_load(false);
 		}
@@ -110,9 +108,8 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	
 	/**
 	 * list_print
-	 * @return SUCCESS
 	 */
-	protected String list_print() {
+	protected Object list_print() {
 		if (get_load() == null) {
 			set_load(false);
 		}
@@ -124,9 +121,8 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	
 	/**
 	 * list_popup
-	 * @return SUCCESS
 	 */
-	protected String list_popup() {
+	protected Object list_popup() {
 		addLimitToPager();
 		if (get_save() == null) {
 			set_save(true);
@@ -137,38 +133,34 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	//--------------------------------------------------------------------------
 	/**
 	 * bdelete
-	 * @return SUCCESS
 	 */
-	protected String bdelete() {
+	protected Object bdelete() {
 		doBulkDeleteSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * bdelete_execute
-	 * @return SUCCESS
 	 */
-	protected String bdelete_execute() {
+	protected Object bdelete_execute() {
 		doBulkDeleteExecute();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * bupdate
-	 * @return SUCCESS
 	 */
-	protected String bupdate() {
+	protected Object bupdate() {
 		doBulkUpdateSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * bupdate_execute
-	 * @return SUCCESS
 	 */
-	protected String bupdate_execute() {
+	protected Object bupdate_execute() {
 		doBulkUpdateExecute();
-		return SUCCESS;
+		return null;
 	}
 	
 //	/**
@@ -206,164 +198,146 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	//--------------------------------------------------------------------------
 	/**
 	 * view
-	 * @return SUCCESS
 	 */
-	protected String view() {
+	protected Object view() {
 		doViewSelect();
-		return SUCCESS;
+		return null;
 	}
 	
 	/**
 	 * view_input
-	 * @return SUCCESS
 	 */
-	protected String view_input() {
+	protected Object view_input() {
 		doViewInput();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * print
-	 * @return SUCCESS
 	 */
-	protected String print() {
+	protected Object print() {
 		doViewSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * print_input
-	 * @return SUCCESS
 	 */
-	protected String print_input() {
+	protected Object print_input() {
 		doViewInput();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * copy
-	 * @return SUCCESS
 	 */
-	protected String copy() {
+	protected Object copy() {
 		doInsertSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * copy_input
-	 * @return SUCCESS
 	 */
-	protected String copy_input() {
+	protected Object copy_input() {
 		doInsertInput();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * copy_confirm
-	 * @return SUCCESS
 	 */
-	protected String copy_confirm() {
+	protected Object copy_confirm() {
 		doInsertConfirm();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * copy_execute
-	 * @return SUCCESS
 	 */
-	public String copy_execute() {
+	public Object copy_execute() {
 		doInsertExecute();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * insert
-	 * @return SUCCESS
 	 */
-	protected String insert() {
+	protected Object insert() {
 		doInsertClear();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * insert_input
-	 * @return SUCCESS
 	 */
-	protected String insert_input() {
+	protected Object insert_input() {
 		doInsertInput();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * insert_confirm
-	 * @return SUCCESS
 	 */
-	protected String insert_confirm() {
+	protected Object insert_confirm() {
 		doInsertConfirm();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * insert_execute
-	 * @return SUCCESS
 	 */
-	protected String insert_execute() {
+	protected Object insert_execute() {
 		doInsertExecute();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * update
-	 * @return SUCCESS
 	 */
-	protected String update() {
+	protected Object update() {
 		doUpdateSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * update_input
-	 * @return SUCCESS
 	 */
-	protected String update_input() {
+	protected Object update_input() {
 		doUpdateInput();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * update_confirm
-	 * @return SUCCESS
 	 */
-	public String update_confirm() {
+	public Object update_confirm() {
 		doUpdateConfirm();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * update_execute
-	 * @return SUCCESS
 	 */
-	protected String update_execute() {
+	protected Object update_execute() {
 		doUpdateExecute();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * delete
-	 * @return SUCCESS
 	 */
-	protected String delete() {
+	protected Object delete() {
 		doDeleteSelect();
-		return SUCCESS;
+		return null;
 	}
 
 	/**
 	 * delete_execute
-	 * @return SUCCESS
 	 */
-	protected String delete_execute() {
+	protected Object delete_execute() {
 		doDeleteExecute();
-		return SUCCESS;
+		return null;
 	}
 
 }

@@ -3,17 +3,29 @@ package panda.wing.action.tool;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.wing.ServletApplet;
+import freemarker.cache.TemplateLoader;
+
+import panda.io.resource.ResourceBundleLoader;
+import panda.ioc.annotation.IocInject;
+import panda.mvc.annotation.At;
+import panda.mvc.annotation.view.Ok;
 import panda.wing.action.BaseAction;
+import panda.wing.util.AppFreemarkerTemplateLoader;
+import panda.wing.util.AppResourceBundleLoader;
 
 
-/**
- */
+@At
 public class MemCacheAction extends BaseAction {
 	protected final static String CKEY_RESOURCE = "resource";
 	
 	protected final static String CKEY_TEMPLATE = "template";
 	
+	@IocInject(type=ResourceBundleLoader.class)
+	protected AppResourceBundleLoader arbLoader;
+
+	@IocInject(type=TemplateLoader.class)
+	protected AppFreemarkerTemplateLoader aftLoader;
+
 	/**
 	 * Constructor
 	 */
@@ -24,24 +36,19 @@ public class MemCacheAction extends BaseAction {
 	/**
 	 * @return cache key list
 	 */
+	@At("/admin/memcache")
+	@Ok("ftl")
 	public List<String> getCacheKeyList() {
 		List<String> ckl = new ArrayList<String>();
 
-		if (ServletApplet.i().getDatabaseResourceLoader() != null) {
+		if (arbLoader.getDatabaseResourceLoader() != null) {
 			ckl.add(CKEY_RESOURCE);
 		}
 
-		if (ServletApplet.i().getDatabaseTemplateLoader() != null) {
+		if (aftLoader.getDatabaseTemplateLoader() != null) {
 			ckl.add(CKEY_TEMPLATE);
 		}
 		
 		return ckl;
-	}
-
-	/**
-	 * @return SUCCESS
-	 */
-	public String index() {
-		return SUCCESS;
 	}
 }

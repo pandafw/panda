@@ -1,25 +1,26 @@
 package panda.wing.action.tool;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 
 import panda.filepool.FileItem;
 import panda.filepool.FilePool;
+import panda.io.Streams;
 import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.HttpStatusView;
+import panda.mvc.view.VoidView;
 import panda.servlet.HttpServletSupport;
 import panda.wing.mvc.AbstractAction;
 
 /**
  * File download/upload for temporary image
  */
+@At("/file")
 public class FileServeAction extends AbstractAction {
 	@IocInject
-	protected FilePool pool;
+	protected FilePool filePool;
 	
 	protected int bufferSize = 4096;
 	protected boolean cache = true;
@@ -84,26 +85,28 @@ public class FileServeAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	public void download(@Param("id") String id) throws Exception {
-		if (pool.openFile(id) == null) {
-			return NONE;
+	public Object download(@Param("id") Long id) throws Exception {
+		FileItem file = filePool.findFile(id);
+		if (file == null) {
+			return HttpStatusView.HTTP_404;
 		}
 
-		HttpServletRequest servletRequest = getServletRequest();
-		HttpServletResponse servletResponse = getServletResponse();
-
-		FileContent fc = file.getFile().getContent();
-		String filename = file.getFile().getName().getBaseName();
+		String filename = file.getName();
+		InputStream fis = file.getInputStream();
 		
-		HttpServletSupport hss = new HttpServletSupport(servletRequest, servletResponse);
-		hss.setContentLength(Integer.valueOf((int)fc.getSize()));
-		hss.setFileName(filename);
-		hss.setExpiry(cache ? DateTimes.SEC_WEEK : 0);
-
-		hss.writeResponseHeader();
-		hss.writeResponseData(fc.getInputStream(), bufferSize);
-		
-		return NONE;
+		try {
+			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
+			hss.setContentLength(file.getSize());
+			hss.setFileName(filename);
+			hss.setExpiry(cache ? DateTimes.SEC_WEEK : 0);
+	
+			hss.writeResponseHeader();
+			hss.writeResponseData(fis, bufferSize);
+		}
+		finally {
+			Streams.safeClose(fis);
+		}
+		return VoidView.INSTANCE;
 	}
 
 }

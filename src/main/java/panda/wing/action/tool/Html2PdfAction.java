@@ -29,24 +29,29 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
-import com.opensymphony.xwork2.inject.Inject;
 
 import panda.io.stream.ByteArrayOutputStream;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.mvc.annotation.At;
+import panda.mvc.view.VoidView;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletSupport;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletURLHelper;
+import panda.wing.WingConstants;
 import panda.wing.mvc.AbstractAction;
-import panda.wing.mvc.PandaStrutsConstants;
-import panda.wing.mvc.util.StrutsContextUtils;
 
-
+@At("/admin")
 public class Html2PdfAction extends AbstractAction {
+	private static final Log log = Logs.getLog(Html2PdfAction.class);
+	
 	protected HttpClient agent;
 	protected ITextRenderer renderer;
 	
@@ -64,7 +69,7 @@ public class Html2PdfAction extends AbstractAction {
 	/**
 	 * @param fonts the fonts to set
 	 */
-	@Inject(value=PandaStrutsConstants.PANDA_FONTS_PATH, required=false)
+	@IocInject(value=WingConstants.PANDA_FONTS_PATH, required=false)
 	public void setFonts(String fonts) {
 		this.fonts = fonts;
 	}
@@ -319,7 +324,7 @@ public class Html2PdfAction extends AbstractAction {
 	protected void createHttpClientAgent() {
 		agent = new HttpClient();
 
-		HttpServletRequest request = StrutsContextUtils.getServletRequest();
+		HttpServletRequest request = getRequest();
 
 		String domain = ServletURLHelper.getURLDomain(url);
 		String server = request.getServerName();
@@ -342,7 +347,7 @@ public class Html2PdfAction extends AbstractAction {
 		if (Strings.isNotEmpty(fonts)) {
 			File fontdir;
 			if (fonts.startsWith("web://")) {
-				fontdir = new File(StrutsContextUtils.getServletContext().getRealPath(fonts.substring(5)));
+				fontdir = new File(context.getServlet().getRealPath(fonts.substring(5)));
 			}
 			else {
 				fontdir = new File(fonts);
@@ -446,13 +451,14 @@ public class Html2PdfAction extends AbstractAction {
 	 * @return INPUT
 	 * @throws Exception if an error occurs
 	 */
-	public String execute() throws Exception {
+	@At("html2pdf")
+	public Object execute() throws Exception {
 		if (normalizeUrl()) {
 			try {
 				byte[] pdf = html2pdf();
 				
-				HttpServletRequest request = StrutsContextUtils.getServletRequest();
-				HttpServletResponse response = StrutsContextUtils.getServletResponse();
+				HttpServletRequest request = getRequest();
+				HttpServletResponse response = getResponse();
 
 				HttpServletSupport hss = new HttpServletSupport(request, response);
 				hss.setContentLength(Integer.valueOf(pdf.length));
@@ -463,7 +469,7 @@ public class Html2PdfAction extends AbstractAction {
 				hss.writeResponseHeader();
 				hss.writeResponseData(pdf);
 
-				return NONE;
+				return VoidView.INSTANCE;
 			}
 			catch (Throwable e) {
 				log.warn("html2pdf execute error", e);
@@ -471,7 +477,7 @@ public class Html2PdfAction extends AbstractAction {
 			}
 		}
 
-		return INPUT;
+		return null;
 	}
 
 }

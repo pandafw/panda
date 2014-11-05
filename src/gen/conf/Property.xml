@@ -6,16 +6,16 @@
 	<entity name="${entity.package}.Property" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
 		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="CLCN" comment="class name">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="100"/>
 			</validator>
 		</property>
 		<property name="language" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="language code">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
-			<validator type="constant" message="validation-constant">
-				<param name="list" value="consts.localeLanguageMap"/>
+			<validator type="constant">
+				<param name="list" value="'${consts.localeLanguageMap}'"/>
 			</validator>
 		</property>
 		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="country code">

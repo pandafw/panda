@@ -6,8 +6,8 @@ deleteAll=既存データを削除する
 
 button-import=インポート
 
-success-import=テーブル[{0}]に{1}件のデータをインポートしました。
+success-import=テーブル[${target}]に${count}件のデータをインポートしました。
 
-error-value=[{0}]データ不正({1}, {2}): {3} - {4}
+error-value=[${target}]データ不正(${row}, ${col}): ${value} - ${error}
 
 error-file-format=CSVまたはXLSファイルを指定してください。

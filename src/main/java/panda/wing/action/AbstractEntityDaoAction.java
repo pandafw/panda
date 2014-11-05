@@ -27,6 +27,8 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.mutable.MutableInt;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.bean.CompositeQuery;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
@@ -34,18 +36,21 @@ import panda.mvc.bean.Sorter;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.SessionStateProvider;
 import panda.mvc.util.StateProvider;
+import panda.mvc.view.VoidView;
+import panda.mvc.view.tag.Property;
 import panda.net.http.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
-import panda.wing.entity.Property;
-import panda.wing.mvc.ActionRC;
 import panda.wing.mvc.AbstractDaoAction;
+import panda.wing.mvc.ActionRC;
 
 
 /**
  * @param <T> data type
  */
 public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
+	private static final Log log = Logs.getLog(AbstractEntityDaoAction.class);
+	
 	/**
 	 * DEFAULT_DATA_NAME = "d";
 	 */
@@ -389,7 +394,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 */
 	public String getMethodResult() {
 		if (methodResult == null) {
-			String m = ContextUtils.getActionMethod();
+			String m = context.getMethodName();
 			int i = m.indexOf(METHOD_SEPARATOR);
 			methodResult = i < 0 ? RESULT_DEFAULT : m.substring(i + 1);
 		}
@@ -401,8 +406,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 */
 	public String getActionScenario() {
 		if (actionScenario == null) {
-			actionScenario = Strings.substringBefore(
-				ContextUtils.getActionMethod(), METHOD_SEPARATOR);
+			actionScenario = Strings.substringBefore(context.getMethodName(), METHOD_SEPARATOR);
 		}
 		return actionScenario;
 	}
@@ -419,14 +423,6 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 		}
 	}
 
-	/**
-	 * default execute method
-	 * @return NONE
-	 */
-	public String execute() {
-		return NONE;
-	}
-	
 	//------------------------------------------------------------
 	// protected getter & setter
 	//------------------------------------------------------------
@@ -754,8 +750,8 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 				Map params = ServletURLHelper.parseQueryString(qs);
 				removeRedundantParams(params);
 				if (Collections.isNotEmpty(params)) {
-					HttpServletRequest request = StrutsContextUtils.getServletRequest();
-					HttpServletResponse response = StrutsContextUtils.getServletResponse();
+					HttpServletRequest request = getRequest();
+					HttpServletResponse response = getResponse();
 					String url = ServletURLHelper.buildURL(request, params);
 					HttpServlets.sendRedirect(response, url);
 					return false;
@@ -814,49 +810,22 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 		}
 
 		if (Strings.isNotEmpty(query.getMethod())) {
-			params.put("qm", query.getMethod());
+			params.put("q.m", query.getMethod());
 		}
 		if (Collections.isNotEmpty(query.getFilters())) {
-			ValueStack stack = ContextUtils.getValueStack();
 			for (Entry<String, Filter> e : query.getFilters().entrySet()) {
 				Filter f = e.getValue();
 				if (f != null && Collections.isNotEmpty(f.getValues())) {
-					String prex = "qf." + e.getKey() + "."; 
+					String prex = "q.f." + e.getKey() + "."; 
 					params.put(prex + "c", f.getComparator());
 					
 					List<?> vs = f.getValues();
-					List<String> cvs = new ArrayList<String>(vs.size());
-					for (Object v : vs) {
-						if (v != null) {
-							stack.push(v);
-							try {
-								cvs.add((String)stack.findValue("top", String.class));
-							}
-							finally {
-								stack.pop();
-							}
-						}
-						else {
-							cvs.add("");
-						}
-					}
-					params.put(prex + f.getType() + "vs", cvs);
+					params.put(prex + f.getType() + "vs", vs);
 				}
 			}
 		}
 
 		return params;
-	}
-
-	/**
-	 * @return "success"
-	 */
-	@Override
-	public String getInputResultName() {
-		if (methodResult == null) {
-			methodResult = RESULT_DEFAULT;
-		}
-		return SUCCESS;
 	}
 
 	/**
@@ -875,7 +844,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 * @return message string
 	 */
 	protected String getMessage(String msg, String[] params) {
-		return getText(msg, params);
+		return getText(msg, msg, params);
 	}
 
 	//------------------------------------------------------------
@@ -939,7 +908,8 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 			setMethodResult(RESULT_CONFIRM);
 		}
 		else {
-			if (!hasErrors()) {
+			if (!hasActionErrors() && !hasFieldErrors()) {
+				setMethodResult(RESULT_DEFAULT);
 				setMethodResult(RESULT_CONFIRM);
 			}
 		}
@@ -975,7 +945,8 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 			setMethodResult(RESULT_SUCCESS);
 		}
 		else {
-			if (!hasErrors() && getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
+			if (!hasActionErrors() && !hasFieldErrors() 
+					&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
 				setMethodResult(RESULT_CONFIRM);
 			}
 		}
@@ -1012,7 +983,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 				setMethodResult(RESULT_CONFIRM);
 			}
 			else {
-				if (!hasErrors()) {
+				if (!hasActionErrors() && !hasFieldErrors()) {
 					setMethodResult(RESULT_CONFIRM);
 				}
 			}
@@ -1050,7 +1021,8 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 				setMethodResult(RESULT_SUCCESS);
 			}
 			else {
-				if (!hasErrors() && getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
+				if (!hasActionErrors() && !hasFieldErrors()
+						&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
 					setMethodResult(RESULT_CONFIRM);
 				}
 			}
@@ -1220,7 +1192,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 */
 	protected boolean isNeedLoadListParameters() {
 		if (_load == null) {
-			return Collections.isEmpty(getParameters());
+			return Strings.isEmpty(HttpServlets.getRequestQuery(getRequest()));
 		}
 		return _load;
 	}
@@ -1229,10 +1201,10 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 * doList
 	 * @return SUCCESS
 	 */
-	protected String doList() {
+	protected Object doList() {
 		if (isNeedLoadListParameters()) {
 			if (!loadListParameters()) {
-				return NONE;
+				return VoidView.INSTANCE;
 			}
 		}
 
@@ -1241,7 +1213,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 		if (Boolean.TRUE.equals(_save)) {
 			saveListParameters();
 		}
-		return SUCCESS;
+		return null;
 	}
 
 	//------------------------------------------------------------
@@ -1303,7 +1275,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 */
 	protected void addLimitToPager(long def) {
 		if (pager.getLimit() == null || pager.getLimit() < 1) {
-			String tx = ContextUtils.getActionMethod() + ActionRC.PAGER_LIMIT_SUFFIX;
+			String tx = context.getMethodName() + ActionRC.PAGER_LIMIT_SUFFIX;
 			Long l = getTextAsLong(tx);
 			if (l == null && !ActionRC.LIST_PAGER_LIMIT.equals(tx)) {
 				l = getTextAsLong(ActionRC.LIST_PAGER_LIMIT);
@@ -1427,7 +1399,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 */
 	protected void addOrder(GenericQuery q) {
 		if (Strings.isEmpty(sorter.getColumn())) {
-			String tx = ContextUtils.getActionMethod() + ActionRC.SORTER_COLUMN_SUFFIX;
+			String tx = context.getMethodName() + ActionRC.SORTER_COLUMN_SUFFIX;
 			String sc = getText(tx, (String)null);
 			if (sc == null && !ActionRC.LIST_SORTER_COLUMN.equals(tx)) {
 				sc = getText(ActionRC.LIST_SORTER_COLUMN, (String)null);
@@ -1437,7 +1409,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 			}
 		}
 		if (Strings.isEmpty(sorter.getDirection())) {
-			String tx = ContextUtils.getActionMethod() + ActionRC.SORTER_DIRECTION_SUFFIX;
+			String tx = context.getMethodName() + ActionRC.SORTER_DIRECTION_SUFFIX;
 			String sd = getText(tx, (String)null);
 			if (sd == null && !ActionRC.LIST_SORTER_DIRECTION.equals(tx)) {
 				sd = getText(ActionRC.LIST_SORTER_DIRECTION, (String)null);
@@ -1896,26 +1868,17 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	protected void addDataDuplateError(T data, Collection<EntityField> efs) {
 		StringBuilder sb = new StringBuilder();
 		for (EntityField ef :efs) {
-			String fn = getDataFieldName(ef.getName());
-			
-//			addFieldError(fn, getMessage(ActionRC.ERROR_FIELDVALUE_DUPLICATE));
+			String fn = getFullDataFieldName(ef.getName());
 			
 			addFieldError(fn, Strings.EMPTY);
 
 			sb.append(getText(fn));
 			sb.append(": ");
 			
-			
-			Property ptag = new Property(ContextUtils.getValueStack());
-			try {
-				ptag.setValue(ef.getValue(data));
-				ptag.setEscape(null);
-				sb.append(ptag.formatValue());
-			}
-			finally {
-				ptag.getComponentStack().pop();
-			}
-			
+			Property ptag = context.getIoc().get(Property.class);
+			ptag.setValue(ef.getValue(data));
+			ptag.setEscape(null);
+			sb.append(ptag.formatValue());
 			sb.append(Streams.LINE_SEPARATOR);
 		}
 
@@ -1974,7 +1937,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 			Object dv = ef.getValue(data);
 			if (dv == null) {
 				hasNull = true;
-				addFieldError(getDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_REQUIRED));
+				addFieldError(getFullDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_REQUIRED));
 			}
 		}
 		if (hasNull) {
@@ -2103,7 +2066,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 				q.setLimit(1);
 				if (daoCount(q) < 1) {
 					for (EntityField ef : efk.getFields()) {
-						addFieldError(getDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_INCORRECT));
+						addFieldError(getFullDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_INCORRECT));
 					}
 					return false;
 				}
@@ -2202,7 +2165,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 	 * @param propertyName property name
 	 * @return dataName + "." + propertyName
 	 */
-	protected String getDataFieldName(String propertyName) {
+	protected String getFullDataFieldName(String propertyName) {
 		return dataFieldName + "." + propertyName;
 	}
 

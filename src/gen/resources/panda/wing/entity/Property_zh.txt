@@ -1,0 +1,13 @@
+clazz=类名
+
+language=语言
+
+country=国家・地区
+
+name=项目名
+
+value=内容
+
+memo=备注
+
+

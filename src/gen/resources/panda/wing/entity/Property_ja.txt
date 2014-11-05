@@ -1,0 +1,13 @@
+clazz=クラス名
+
+language=言語
+
+country=国・地域
+
+name=項目名
+
+value=内容
+
+memo=備考
+
+

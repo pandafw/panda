@@ -37,7 +37,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<#list cacheKeyList as c>
+	<#list result as c>
 		<tr>
 			<td class="mc-td-no">${c_index + 1}.</td>
 			<td class="mc-td-name"><@p.text name=c/></td>

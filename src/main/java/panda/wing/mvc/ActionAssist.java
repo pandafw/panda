@@ -63,18 +63,19 @@ public class ActionAssist extends ActionSupport {
 		return HttpStatus.getStatusReason(sc);
 	}
 	
+	public Throwable getServletException() {
+		return HttpServlets.getServletException(getRequest());
+	}
+	
 	/**
 	 * @return servlet exception stack trace
 	 */
 	public String getServletExceptionStackTrace() {
-		HttpServletRequest req = getRequest();
-		Throwable ex = (Throwable)req.getAttribute(HttpServlets.ERROR_EXCEPTION_ATTRIBUTE);
+		Throwable ex = getServletException();
 		if (ex != null) {
 			return Exceptions.getStackTrace(ex);
 		}
-		else {
-			return Strings.EMPTY;
-		}
+		return Strings.EMPTY;
 	}
 
 	/**

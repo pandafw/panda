@@ -9,6 +9,7 @@ import panda.io.resource.ResourceBundleLoader;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Systems;
 import panda.lang.time.DateTimes;
+import panda.mvc.util.PermissionProvider;
 import panda.wing.constant.VC;
 import panda.wing.entity.ICreate;
 import panda.wing.entity.IStatus;
@@ -19,7 +20,7 @@ import panda.wing.util.AppResourceBundleLoader;
 import panda.wing.util.AppSettings;
 
 
-public class BaseActionAssist extends ActionAssist {
+public class BaseActionAssist extends ActionAssist implements PermissionProvider {
 	@IocInject(type=Settings.class)
 	protected AppSettings settings;
 
@@ -62,6 +63,7 @@ public class BaseActionAssist extends ActionAssist {
 	 * @param path path
 	 * @return true if action has access permit
 	 */
+	@Override
 	public boolean hasPermission(String path) {
 		return true;
 	}
@@ -71,6 +73,7 @@ public class BaseActionAssist extends ActionAssist {
 	 * @param path path
 	 * @return true if action has access permit
 	 */
+	@Override
 	public boolean hasDataPermission(Object data, String path) {
 		return true;
 	}

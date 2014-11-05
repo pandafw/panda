@@ -1,12 +1,5 @@
 package panda.wing.action.tool;
 
-import panda.io.Streams;
-import panda.lang.Exceptions;
-import panda.net.http.HttpClient;
-import panda.net.http.HttpResponse;
-import panda.wing.mvc.AbstractAction;
-import panda.wing.mvc.util.StrutsContextUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -17,7 +10,18 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.Streams;
+import panda.lang.Exceptions;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.net.http.HttpClient;
+import panda.net.http.HttpResponse;
+import panda.wing.mvc.AbstractAction;
+
 public class HttpClientAction extends AbstractAction {
+	
+	private static final Log log = Logs.getLog(HttpClientAction.class);
+	
 	private String __url;
 	
 	/**
@@ -35,7 +39,7 @@ public class HttpClientAction extends AbstractAction {
 	}
 
 	private void transferResponse(HttpResponse hr) throws Exception {
-		HttpServletResponse response = StrutsContextUtils.getServletResponse();
+		HttpServletResponse response = getResponse();
 		
 		response.setStatus(hr.getStatusCode());
 		for (Entry<String, Object> en : hr.getHeader().entrySet()) {
@@ -60,7 +64,7 @@ public class HttpClientAction extends AbstractAction {
 		}
 	}
 	
-	public String doGet() {
+	public void doGet() {
 		try {
 			HttpResponse hr = HttpClient.get(__url);
 
@@ -70,12 +74,11 @@ public class HttpClientAction extends AbstractAction {
 			log.warn("Failed to get " + __url, e);
 			sendError(e);
 		}
-		return NONE;
 	}
 	
-	public String doPost() {
+	public void doPost() {
 		try {
-			HttpServletRequest request = StrutsContextUtils.getServletRequest();
+			HttpServletRequest request = getRequest();
 			
 			Map<String, Object> params = new HashMap<String, Object>();
 			for (Object o : request.getParameterMap().entrySet()) {
@@ -93,22 +96,12 @@ public class HttpClientAction extends AbstractAction {
 			log.warn("Failed to post " + __url, e);
 			sendError(e);
 		}
-		return NONE;
 	}
 
-	public String doError() {
-		try {
-			__url.charAt(0);
-		}
-		catch (Exception e) {
-			sendError(e);
-		}
-		return NONE;
-	}
-	
 	private void sendError(Exception e) {
 		String stack = Exceptions.getStackTrace(e);
-		HttpServletResponse response = StrutsContextUtils.getServletResponse();
+		
+		HttpServletResponse response = getResponse();
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		try {
 			response.getWriter().write(stack);
@@ -121,11 +114,10 @@ public class HttpClientAction extends AbstractAction {
 	/**
 	 * execute
 	 * 
-	 * @return INPUT
 	 * @throws Exception if an error occurs
 	 */
-	public String execute() throws Exception {
-		return doGet();
+	public void execute() throws Exception {
+		doGet();
 	}
 
 }

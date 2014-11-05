@@ -1,0 +1,13 @@
+clazz=Class
+
+language=Language
+
+country=Country
+
+name=Name
+
+value=Value
+
+memo=Memo
+
+
