@@ -144,16 +144,15 @@ xwork.default.invalid.fieldvalue=invalid field value.
 validation-incorrect=Incorrect value.
 validation-empty=This field should be empty.
 validation-required=This field is required.
-validation-requiredcollection=This field is required.
-validation-requiredstring=This field is required.
 validation-requiredfile=Please specified the upload file.
 validation-requiredimage=Please specified the upload image file.
-validation-binarylength=The binary size (${BinSize}) must be \
+validation-binary-length=The binary size (${BinSize}) must be \
 ${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize) : \
 (minLength != null ? (">= " + minBinSize) : \
 (maxLength != null ? ("<= " + maxBinSize) : ""))}\
 .
-validation-daterange=The date must be \
+validation-date-to=The date must be larger than start date.
+validation-date-range=The date must be \
 ${(min != null && max != null) ? (min + "~" + max) : \
 (min != null ? (">= " + min) : \
 (max != null ? ("<= " + max) : ""))}\
@@ -164,7 +163,7 @@ ${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize) :
 (maxLength != null ? ("<= " + maxFileSize) : ""))}\
 .
 validation-image=The image format is not correct.
-validation-imagesize=The image size (${width}x${height}) must be \
+validation-image-size=The image size (${width}x${height}) must be \
 ${(minWidth != null && maxWidth != null) ? ("W:(" + minWidth + "~" + maxWidth + ")") : \
 (minWidth != null ? ("W:(>=" + minWidth + ")") : \
 (maxWidth != null ? ("W:(<=" + maxWidth + ")") : ""))}\
@@ -173,20 +172,13 @@ ${(minHeight != null && maxHeight != null) ? ("H: (" + minHeight + "~" + maxHeig
 (minHeight != null ? ("H:(>=" + minHeight + ")") : \
 (maxHeight != null ? ("H:(<=" + maxHeight + ")") : ""))}\
 .
-validation-byterange=${getText("validation-numberrange")}
-validation-shortrange=${getText("validation-numberrange")}
-validation-intrange=${getText("validation-numberrange")}
-validation-longrange=${getText("validation-numberrange")}
-validation-floatrange=${getText("validation-numberrange")}
-validation-doublerange=${getText("validation-numberrange")}
-validation-bigintrange=${getText("validation-numberrange")}
-validation-decimalrange=${getText("validation-numberrange")}
-validation-numberrange=The number must be \
+validation-number-range=The number must be \
 ${(min != null && max != null) ? (min + "~" + max) : \
 (min != null ? (">= " + min) : \
 (max != null ? ("<= " + max) : ""))}\
 .
-validation-stringlength=The string length (${length}) must be \
+validation-number-to=The number must be larger than start number.
+validation-string-length=The string length (${length}) must be \
 ${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength) : \
 (minLength != null ? (">= " + minLength) : \
 (maxLength != null ? ("<= " + maxLength) : ""))}\
@@ -221,19 +213,15 @@ validation-compare=The value is not ${(comparator == "eq" ? "=" : \
 validation-compare-daterange-to=The end date must be after than start date.
 validation-compare-numberrange-to=The number range is incorrect.
 
-validation-conversion=Invalid value.
-validation-conversion-Boolean=Please input "true" or "false".
-validation-conversion-Byte=Please input integer number.
-validation-conversion-Char=Please input character.
-validation-conversion-Short=Please input integer number.
-validation-conversion-Integer=Please input integer number.
-validation-conversion-Long=Please input integer number.
-validation-conversion-BigInteger=Please input integer number.
-validation-conversion-Float=Please input decimal number.
-validation-conversion-Souble=Please input decimal number.
-validation-conversion-BigDecimal=Please input decimal number.
-validation-conversion-Number=Please input number.
-validation-conversion-Date=Please input "yyyy-MM-dd" date string.
+validation-cast=Invalid value.
+validation-cast-boolean=Please input "true" or "false".
+validation-cast-number=Please input integer number.
+validation-cast-char=Please input character.
+validation-cast-Float=Please input decimal number.
+validation-cast-Souble=Please input decimal number.
+validation-cast-BigDecimal=Please input decimal number.
+validation-cast-Number=Please input number.
+validation-cast-Date=Please input "yyyy-MM-dd" date string.
 
 #validation-vistior=
 

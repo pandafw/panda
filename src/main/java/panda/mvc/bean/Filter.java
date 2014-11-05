@@ -598,7 +598,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
-		@Validate(value=Validators.EL, params="top.dv2 > top.parent.value.dv", msgId=Validators.MSGID_DATE_RANGE_TO)
+		@Validate(value=Validators.EL, params="top.dv2 > top.parent.value.dv", msgId=Validators.MSGID_DATE_TO)
 	})
 	public Date getDv2() {
 		return getDateValue2();
@@ -646,7 +646,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-		@Validate(value=Validators.EL, params="top.value > top.parent.value.nv", msgId=Validators.MSGID_NUMBER_RANGE_TO)
+		@Validate(value=Validators.EL, params="top.value > top.parent.value.nv", msgId=Validators.MSGID_NUMBER_TO)
 	})
 	public Number getNv2() {
 		return getNumberValue2();

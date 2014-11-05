@@ -40,11 +40,15 @@ public interface Validators {
 	public static final String MSGID_CAST_BOOLEAN = "validation-cast-boolean";
 	public static final String MSGID_CAST_DATE = "validation-cast-date";
 	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
+	public static final String MSGID_CAST_DECIMAL = "validation-cast-decimal";
 	public static final String MSGID_CONSTANT = "validation-constant";
-	public static final String MSGID_DATE_RANGE_TO = "validation-date-range-to";
-	public static final String MSGID_NUMBER_RANGE_TO = "validation-number-range-to";
-	public static final String MSGID_NUMBER_MIN = "validation-number-min";
+	public static final String MSGID_PROHIBITED = "validation-prohibited";
+	public static final String MSGID_DATE_TO = "validation-date-to";
+	public static final String MSGID_DATE_RANGE = "validation-date-range";
+	public static final String MSGID_NUMBER_TO = "validation-number-to";
+	public static final String MSGID_NUMBER_RANGE = "validation-number-range";
 	public static final String MSGID_REQUIRED = "validation-required";
+	public static final String MSGID_STRING_LENTH = "validation-string-lenth";
 	
 	/**
 	 * @param ac action context

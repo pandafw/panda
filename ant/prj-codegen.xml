@@ -67,8 +67,8 @@
 			<fileset dir="src/gen/resources" includes="**/*.properties"/>
 		</delete>
 
-		<taskdef name="genpro" classname="panda.tool.codegen2.PropertyGenerator" classpathref="codegen.cp"/>
-		<genpro dir="src/gen/conf" includes="*.xml" out="src/gen/resources" verbose="${gen.verbose}"/>
+		<taskdef name="gentxt" classname="panda.tool.codegen2.TextGenerator" classpathref="codegen.cp"/>
+		<gentxt dir="src/gen/conf" includes="*.xml" out="src/gen/resources" verbose="${gen.verbose}"/>
 	</target>
 
 	<target name="gen-all" depends="gen-clean, gen-java, gen-ftl, gen-res" description="Generate all source files (gen-clean, gen-java, gen-ftl, gen-res)"/>

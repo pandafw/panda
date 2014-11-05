@@ -288,7 +288,7 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_MIN)
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_RANGE)
 	})
 	public Long getS() {
 		return getStart();
@@ -320,7 +320,7 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_MIN)
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_RANGE)
 	})
 	public Long getL() {
 		return getLimit();
@@ -338,7 +338,7 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER),
-		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_MIN)
+		@Validate(value=Validators.NUMBER, params="{min: 0}", msgId=Validators.MSGID_NUMBER_RANGE)
 	})
 	public Long getT() {
 		return getTotal();
