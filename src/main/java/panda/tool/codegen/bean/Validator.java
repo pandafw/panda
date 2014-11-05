@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Collections;
+
 /**
  * <p>
  * Java class for Validator complex type.
@@ -37,9 +39,13 @@ public class Validator {
 	private List<Param> paramList;
 
 	@XmlAttribute(required = true)
-	private String message;
-	@XmlAttribute(required = true)
 	private String type;
+
+	@XmlAttribute
+	private String message;
+
+	@XmlAttribute
+	private String msgId;
 
 	/**
 	 * Constructor
@@ -55,6 +61,7 @@ public class Validator {
 	public Validator(Validator validator) {
 		this.type = validator.type;
 		this.message = validator.message;
+		this.msgId = validator.msgId;
 
 		paramList = new LinkedList<Param>();
 		for (Param p : validator.getParamList()) {
@@ -72,6 +79,28 @@ public class Validator {
 		return this.paramList;
 	}
 
+	public boolean isHasParams() {
+		return Collections.isEmpty(paramList);
+	}
+	
+	public String getParams() {
+		if (paramList == null) {
+			return null;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		for (int i = 0; i < paramList.size(); i++) {
+			Param p = paramList.get(i);
+			sb.append("'").append(p.getName()).append("': ").append(p.getValue());
+			if (i < paramList.size() - 1) {
+				sb.append(", ");
+			}
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
 	/**
 	 * @return the message
 	 */
@@ -84,6 +113,20 @@ public class Validator {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	/**
+	 * @return the msgId
+	 */
+	public String getMsgId() {
+		return msgId == null ? type : msgId;
+	}
+
+	/**
+	 * @param msgId the msgId to set
+	 */
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
 	}
 
 	/**

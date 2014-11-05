@@ -26,7 +26,7 @@ import freemarker.template.Configuration;
 /**
  * generate ".properties" resource file 
  */
-public class PropertyGenerator extends AbstractCodeGenerator {
+public class TextGenerator extends AbstractCodeGenerator {
 	/**
 	 * Main class for PropertyResourceGenerator
 	 */
@@ -53,7 +53,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 		public static void main(String[] args) {
 			Main cgm = new Main();
 			
-			AbstractCodeGenerator cg = new PropertyGenerator();
+			AbstractCodeGenerator cg = new TextGenerator();
 
 			cgm.execute(cg, args);
 		}
@@ -63,7 +63,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected static final String PRO_EXT = ".txt";
+	protected static final String EXT = ".txt";
 	
 	protected String locale;
 	protected int cntModelFile = 0;
@@ -278,7 +278,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 			File fmdir = new File(out, entity.getPackage().replace('.', '/'));
 			fmdir.mkdirs();
 			
-			File fmbp = new File(fmdir.getPath(), entity.getSimpleName() + locale + PRO_EXT);
+			File fmbp = new File(fmdir.getPath(), entity.getSimpleName() + locale + EXT);
 			print3("Generating - " + fmbp.getPath());
 
 			pwmbp = new PrintWriter(fmbp, charset);
@@ -312,7 +312,7 @@ public class PropertyGenerator extends AbstractCodeGenerator {
 			File foutdir = new File(out, action.getActionPackage().replace('.', '/'));
 			foutdir.mkdirs();
 
-			File fabp = new File(foutdir.getPath(), action.getSimpleActionClass() + locale + PRO_EXT);
+			File fabp = new File(foutdir.getPath(), action.getSimpleActionClass() + locale + EXT);
 			print3("Generating - " + fabp.getPath());
 
 			pwabp = new PrintWriter(fabp, charset);

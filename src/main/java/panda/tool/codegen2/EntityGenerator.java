@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
 import panda.dao.DaoTypes;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
@@ -28,14 +31,15 @@ import panda.dao.query.GenericQuery;
 import panda.dao.query.ObjectCondition;
 import panda.dao.query.StringCondition;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 /**
  * entity source generator
@@ -62,7 +66,6 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	protected Template tplEntityBean;
 	protected Template tplEntityQuery;
-	protected Template tplEntityValidate;
 
 	protected int cntEntity = 0;
 
@@ -70,7 +73,6 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	protected void loadTemplates(Configuration cfg) throws Exception {
 		tplEntityBean = cfg.getTemplate("entity/EntityBean.java.ftl");
 		tplEntityQuery = cfg.getTemplate("entity/EntityQuery.java.ftl");
-		tplEntityValidate = cfg.getTemplate("entity/Entity-validation.xml.ftl");
 	}
 	
 	@Override
@@ -212,6 +214,14 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		imports.add(Objects.class.getName());
 
+		for (EntityProperty p : entity.getPropertyList()) {
+			if (Collections.isNotEmpty(p.getValidatorList())) {
+				imports.add(Validators.class.getName());
+				imports.add(Validates.class.getName());
+				imports.add(Validate.class.getName());
+			}
+		}
+
 		setImports(wrapper, imports);
 	}
 
@@ -243,15 +253,82 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		setJavaEntityQueryImportList(wrapper, entity);
 		processTpl(entity.getPackage() + ".query", entity.getSimpleName() + "Query.java", 
 			wrapper, tplEntityQuery);
-
-		if (!entity.getPropertyList().isEmpty()) {
-			processTpl(entity.getPackage(), entity.getSimpleName() + "-validation.xml", 
-				wrapper, tplEntityValidate);
-		}
 	}
 
 	protected void setImports(Map<String, Object> wrapper, Object imports) {
 		wrapper.put("imports", imports);
 	}
 
+	private static Map<String, String> vtmap = new HashMap<String, String>();
+	static {
+		vtmap.put("cast", "Validators.CAST");
+		vtmap.put("required", "Validators.REQUIRED");
+		vtmap.put("empty", "Validators.EMPTY");
+
+		vtmap.put("el", "Validators.EL");
+		vtmap.put("regex", "Validators.REGEX");
+		vtmap.put("email", "Validators.EMAIL");
+		vtmap.put("filename", "Validators.FILENAME");
+		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
+
+		vtmap.put("binary", "Validators.BINARY");
+		vtmap.put("date", "Validators.DATE");
+		vtmap.put("number", "Validators.NUMBER");
+
+		vtmap.put("stringlength", "Validators.STRING");
+		vtmap.put("stringrequired", "Validators.STRING");
+
+		vtmap.put("decimal", "Validators.DECIMAL");
+
+		vtmap.put("file", "Validators.FILE");
+		vtmap.put("image", "Validators.IMAGE");
+
+		vtmap.put("constant", "Validators.CONSTANT");
+		vtmap.put("prohibited", "Validators.PROHIBITED");
+
+		vtmap.put("visit", "Validators.VISIT");
+	}
+	public String validatorType(String alias) {
+		String vt = vtmap.get(alias);
+		if (vt == null) {
+			throw new IllegalArgumentException("Illegal validator type: " + alias);
+		}
+		return vt;
+	}
+
+	private static Map<String, String> vmmap = new HashMap<String, String>();
+	static {
+		vmmap.put("cast-boolean", "Validators.MSGID_CAST_BOOLEAN");
+		vmmap.put("cast-Boolean", "Validators.MSGID_CAST_BOOLEAN");
+
+		vmmap.put("cast-byte", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Byte", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-short", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Short", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-int", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Integer", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-long", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Long", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-BigInteger", "Validators.MSGID_CAST_NUMBER");
+
+		vmmap.put("cast-float", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-Float", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-double", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-Double", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-BigDecimal", "Validators.MSGID_CAST_DECIMAL");
+
+		vmmap.put("cast-Date", "Validators.MSGID_CAST_DATE");
+		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
+
+		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
+		vmmap.put("constant", "Validators.MSGID_CONSTANT");
+		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
+	}
+	public String validatorMsgId(String alias) {
+		String vm = vmmap.get(alias);
+		if (vm == null) {
+			throw new IllegalArgumentException("Illegal validator msg: " + alias);
+		}
+		return vm;
+	}
 }

@@ -103,103 +103,91 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 <#if ui.templates?seq_contains("list")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.list();
 	}
 	
 <#elseif ui.templates?seq_contains("list_popup")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.list_popup();
 	}
 	
 <#elseif ui.templates?seq_contains("list_csv")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.list_csv();
 	}
 	
 <#elseif ui.templates?seq_contains("list_print")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.list_print();
 	}
 	
 <#elseif ui.templates?seq_contains("bdelete")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.bdelete();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.bdelete_execute();
 	}
 	
 <#elseif ui.templates?seq_contains("bupdate")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.bupdate();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.bupdate_execute();
 	}
 	
 <#elseif ui.templates?seq_contains("bedit")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.bedit();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.bedit_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_confirm() {
+	public Object ${ui.name}_confirm() {
 		return super.bedit_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.bedit_execute();
 	}
 	
@@ -209,150 +197,132 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 <#if ui.templates?seq_contains("view")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.view();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.view_input();
 	}
 
 <#elseif ui.templates?seq_contains("print")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.print();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.print_input();
 	}
 
 <#elseif ui.templates?seq_contains("insert")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.insert();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.insert_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_confirm() {
+	public Object ${ui.name}_confirm() {
 		return super.insert_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.insert_execute();
 	}
 
 <#elseif ui.templates?seq_contains("copy")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.copy();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.copy_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_confirm() {
+	public Object ${ui.name}_confirm() {
 		return super.copy_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.copy_execute();
 	}
 
 <#elseif ui.templates?seq_contains("update")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.update();
 	}
 
 	/**
 	 * ${ui.name}_input
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_input() {
+	public Object ${ui.name}_input() {
 		return super.update_input();
 	}
 
 	/**
 	 * ${ui.name}_confirm
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_confirm() {
+	public Object ${ui.name}_confirm() {
 		return super.update_confirm();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.update_execute();
 	}
 
 <#elseif ui.templates?seq_contains("delete")>
 	/**
 	 * ${ui.name}
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}() {
+	public Object ${ui.name}() {
 		return super.delete();
 	}
 
 	/**
 	 * ${ui.name}_execute
-	 * @return SUCCESS
 	 */
-	public String ${ui.name}_execute() {
+	public Object ${ui.name}_execute() {
 		return super.delete_execute();
 	}
 

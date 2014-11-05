@@ -46,5 +46,6 @@
 	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-exts"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/panda-gear"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

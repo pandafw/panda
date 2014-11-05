@@ -81,6 +81,24 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 <#if p.comment?has_content>
 	@Comment("${p.comment}")
 </#if>
+<#-- validation -->
+	<#assign type = p.simpleJavaType/>
+	<#if type?ends_with('[]')>
+		<#assign type = type?substring(0, type?length - 2)/>
+	<#elseif type?ends_with('>') && type?index_of('<') gt 0> 
+		<#assign ilt = type?index_of('<')/>
+		<#assign type = type?substring(ilt + 1, type?length - 1)/>
+	</#if>
+	<#if p.validatorList?has_content || type != "String">
+	@Validates({
+	<#list p.validatorList as v>
+		@Validate(value=${gen.validatorType(v.type)}, <#if v.hasParams>params=${v.params}, </#if>msgId=${gen.validatorMsgId(v.msgId)})<#if p_has_next || type != "String">, </#if>
+	</#list>
+	<#if type != "String">
+		@Validate(value=${gen.validatorType('cast')}, msgId=${gen.validatorMsgId('cast-' + type)})
+	</#if>
+	})
+	</#if>
 	${p.modifier} ${p.simpleJavaType} ${p.name}<#if p.initValue?has_content> = ${p.initValue}</#if>;
 
 </#list>
