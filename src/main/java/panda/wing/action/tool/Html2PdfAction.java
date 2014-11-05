@@ -45,7 +45,7 @@ import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletSupport;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletURLHelper;
-import panda.wing.WingConstants;
+import panda.wing.AppConstants;
 import panda.wing.mvc.AbstractAction;
 
 @At("/admin")
@@ -69,7 +69,7 @@ public class Html2PdfAction extends AbstractAction {
 	/**
 	 * @param fonts the fonts to set
 	 */
-	@IocInject(value=WingConstants.PANDA_FONTS_PATH, required=false)
+	@IocInject(value=AppConstants.PANDA_FONTS_PATH, required=false)
 	public void setFonts(String fonts) {
 		this.fonts = fonts;
 	}

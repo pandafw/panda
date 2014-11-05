@@ -1,41 +1,30 @@
-package panda.wing;
+package panda.wing.lucene;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
-import panda.bean.Beans;
 import panda.io.Files;
-import panda.io.Settings;
-import panda.io.resource.SqlResourceBundleMaker;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
-import panda.lang.reflect.Methods;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Setup;
-import panda.task.TaskExecutor;
-import panda.task.TaskScheduler;
-import panda.tpl.ftl.SqlTemplateLoader;
-import panda.wing.lucene.LuceneWrapper;
+import panda.wing.util.AppSettings;
 
 
 @IocBean(type=Setup.class)
-public class ServletApplet implements Setup {
-	private static final Log log = Logs.getLog(ServletApplet.class);
+public class LuceneProvider {
+	private static final Log log = Logs.getLog(LuceneProvider.class);
 	
 	//--------------------------------------------------------------
 	@IocInject
-	protected Settings properties;
-	
-	@IocInject(required=false)
-	protected Beans beans = Beans.i();
+	protected AppSettings settings;
 	
 	protected LuceneWrapper luceneWrapper;
 	
@@ -83,37 +72,20 @@ public class ServletApplet implements Setup {
 	}
 
 	/**
-	 * initialize
-	 */
-	public void init() {
-	}
-
-	/**
 	 * destroy
 	 */
 	public void destroy() {
 		closeLucene();
-		
-		Beans.i().clear();
 	}
 
 	//-----------------------------------------------
 	protected File getLuceneLocation() throws IOException {
-		String path = getPropertyAsPath("lucene.location", "web://WEB-INF/_lucene");
+		String path = settings.getPropertyAsPath("lucene.location", "web://WEB-INF/_lucene");
 		File file = new File(path);
 		Files.makeDirs(file);
 		return file;
 	}
 	
-	protected void initLucene() throws Exception {
-		if (isGaeSupport()) {
-			initGaeLucene();
-		}
-		else {
-			initLocalLucene();
-		}
-	}
-
 	protected void closeLucene() {
 		try {
 			if (luceneWrapper != null) {
@@ -180,7 +152,7 @@ public class ServletApplet implements Setup {
 	
 	@SuppressWarnings("unchecked")
 	protected Class<? extends Analyzer> getLuceneAnalyzerType() {
-		String cls = getProperty("lucene.analyzer", StandardAnalyzer.class.getName());
+		String cls = settings.getProperty("lucene.analyzer", StandardAnalyzer.class.getName());
 		try {
 			return (Class<? extends Analyzer>)Classes.getClass(cls);
 		}

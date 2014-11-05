@@ -21,13 +21,13 @@ import panda.wing.util.AppSettings;
 
 
 public class BaseActionAssist extends ActionAssist implements PermissionProvider {
-	@IocInject(type=Settings.class)
+	@IocInject
 	protected AppSettings settings;
 
-	@IocInject(type=TemplateLoader.class)
+	@IocInject
 	protected AppFreemarkerTemplateLoader ftlTemplateLoader;
 
-	@IocInject(type=ResourceBundleLoader.class)
+	@IocInject
 	protected AppResourceBundleLoader resBundleLoader;
 
 	/**

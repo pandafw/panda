@@ -11,8 +11,8 @@ import panda.wing.util.AppResourceBundleLoader;
  */
 @At("/admin/task/resourceload")
 public class ResourceLoadAction extends BaseLoadAction {
-	@IocInject(type=ResourceBundleLoader.class)
-	protected AppResourceBundleLoader rbLoader;
+	@IocInject
+	protected AppResourceBundleLoader arbLoader;
 
 	@Override
 	protected void doExecute() throws Exception {
@@ -25,6 +25,6 @@ public class ResourceLoadAction extends BaseLoadAction {
 	protected void doLoad() throws Exception {
 		((DefaultTextProvider)getText()).clearResourceBundlesCache();
 
-		((AppResourceBundleLoader)rbLoader).reload();
+		((AppResourceBundleLoader)arbLoader).reload();
 	}
 }

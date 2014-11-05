@@ -20,10 +20,10 @@ public class MemCacheAction extends BaseAction {
 	
 	protected final static String CKEY_TEMPLATE = "template";
 	
-	@IocInject(type=ResourceBundleLoader.class)
+	@IocInject
 	protected AppResourceBundleLoader arbLoader;
 
-	@IocInject(type=TemplateLoader.class)
+	@IocInject
 	protected AppFreemarkerTemplateLoader aftLoader;
 
 	/**

@@ -10,8 +10,8 @@ import panda.wing.entity.Template;
 
 /**
  */
-public abstract class AppletHelper {
-	private static Log log = Logs.getLog(AppletHelper.class);
+public abstract class AppHelper {
+	private static Log log = Logs.getLog(AppHelper.class);
 	
 	public static void createTables(Dao dao, Class<?> ... classes) {
 		for (Class<?> c : classes) {
