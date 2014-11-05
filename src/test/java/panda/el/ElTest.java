@@ -131,12 +131,15 @@ public class ElTest {
 	 * 字符串测试
 	 */
 	@Test
-	public void stringTest() {
+	public void string() {
 		assertEquals("jk", El.eval("'jk'"));
 		assertEquals(2, El.eval("'jk'.length()"));
 		assertEquals(2, El.eval("\"jk\".length()"));
 		assertEquals("jk", El.eval("\"    jk   \".trim()"));
 		assertEquals("j\\n\\tk", El.eval("\"j\\n\\tk\""));
+		
+		assertEquals("jk", El.eval("'j' + 'k'"));
+		assertEquals("j0", El.eval("'j' + 0"));
 	}
 
 	@Test
@@ -345,6 +348,21 @@ public class ElTest {
 		// "'A' == 'A' || 'B' == 'B' && 'ABCD' == t &&  'A' == 'A'"));
 		assertEquals(true || true && false && true,
 			El.eval("'A' == 'A' || 'B' == 'B' && 'ABCD' == t &&  'A' == 'A'", vars));
+
+
+		String expr = "(min != null && max != null) ? (min + '~' + max) : (min != null ? ('>= ' + min) : (max != null ? ('<= ' + max) : ''))";
+		vars.clear();
+		vars.put("min", 1);
+		assertEquals(">= 1", El.eval(expr, vars));
+
+		vars.clear();
+		vars.put("max", 2);
+		assertEquals("<= 2", El.eval(expr, vars));
+
+		vars.clear();
+		vars.put("min", 1);
+		vars.put("max", 2);
+		assertEquals("1~2", El.eval(expr, vars));
 	}
 
 	@Test
