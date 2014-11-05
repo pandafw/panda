@@ -83,7 +83,7 @@ import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
-	protected static final Object[] DEFAULTS = {
+	public static final Object[] DEFAULTS = {
 		DefaultUrlMapping.class,
 		DefaultActionChainMaker.class,
 		
