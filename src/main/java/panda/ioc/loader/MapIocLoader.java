@@ -287,7 +287,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		IocValue iocValue = new IocValue();
 		int colon = value.indexOf(':');
 		if (colon == 0) {
-			iocValue.setType(IocValue.TYPE_REF);
+			iocValue.setType(IocValue.TYPE_NORMAL);
 			iocValue.setValue(value.substring(1));
 		}
 		else if (colon > 0) {
