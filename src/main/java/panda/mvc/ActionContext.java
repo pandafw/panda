@@ -19,6 +19,8 @@ import panda.mvc.aware.ActionAware;
 import panda.mvc.aware.ApplicationAware;
 import panda.mvc.aware.ParamAware;
 import panda.mvc.aware.SessionAware;
+import panda.mvc.util.ActionAssist;
+import panda.mvc.util.ActionConsts;
 import panda.mvc.util.StateProvider;
 import panda.mvc.util.TextProvider;
 import panda.servlet.HttpSessionMap;
@@ -36,6 +38,8 @@ public class ActionContext {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private ServletContext servlet;
+	private ActionAssist assist;
+	private ActionConsts consts;
 
 	private Object action;
 	private Object[] args;
@@ -357,6 +361,26 @@ public class ActionContext {
 		return applicationAware;
 	}
 
+	/**
+	 * @return the assist
+	 */
+	public ActionAssist getAssist() {
+		if (assist == null) {
+			assist = getIoc().get(ActionAssist.class);
+		}
+		return assist;
+	}
+
+	/**
+	 * @return the consts
+	 */
+	public ActionConsts getConsts() {
+		if (consts == null) {
+			consts = getIoc().get(ActionConsts.class);
+		}
+		return consts;
+	}
+	
 	//----------------------------------------------------
 	/**
 	 * @return the servlet context attributes map

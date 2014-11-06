@@ -15,6 +15,8 @@ import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
+import panda.mvc.util.ActionAssist;
+import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.validation.DefaultValidators;
@@ -36,9 +38,9 @@ import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
 import panda.mvc.validation.validator.VisitValidator;
-import panda.mvc.view.ftl.MvcFreemarkerHelper;
-import panda.mvc.view.ftl.MvcFreemarkerManager;
-import panda.mvc.view.ftl.MvcFreemarkerTemplateLoader;
+import panda.mvc.view.ftl.FreemarkerHelper;
+import panda.mvc.view.ftl.FreemarkerManager;
+import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
@@ -94,6 +96,8 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		ResourceBundleLoader.class,
 		CookieStateProvider.class,
 		DefaultTextProvider.class,
+		ActionAssist.class,
+		ActionConsts.class,
 
 		// processor
 		AdaptProcessor.class,
@@ -184,9 +188,9 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		TagLibraryManager.class,
 		
 		// Freemarker
-		MvcFreemarkerTemplateLoader.class,
-		MvcFreemarkerManager.class,
-		MvcFreemarkerHelper.class
+		FreemarkerTemplateLoader.class,
+		FreemarkerManager.class,
+		FreemarkerHelper.class
 	};
 	
 	public MvcDefaultIocLoader() {

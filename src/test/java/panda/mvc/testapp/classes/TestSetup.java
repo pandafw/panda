@@ -13,7 +13,7 @@ public class TestSetup implements Setup {
 	@IocInject
 	private DaoClient daoClient;
 	
-	public void init() {
+	public void initialize() {
 		daoClient.getDao().create(DaoFileItem.class);
 		daoClient.getDao().create(DaoFileData.class);
 	}

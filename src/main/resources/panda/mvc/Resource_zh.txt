@@ -52,16 +52,6 @@ listview-filter-strings=\
 
 
 
-#const
-const-booleans=\
-	"true": "是", \
-	"false": "否"
-	
-const-genders=\
-	"F": "女", \
-	"M": "男"
-
-
 #servlet error
 servlet-error-title-404=网页不存在
 servlet-error-title-403=禁止访问

@@ -135,6 +135,9 @@ public abstract class Mvcs {
 				else if (c0 == '#' && c1 == '[' && cx == ']') {
 					val = JsonArray.fromJson(s.substring(1));
 				}
+				else if (c0 == '#' && c1 == '(' && cx == ')') {
+					val = ac.text(s.substring(2, s.length() - 1));
+				}
 			}
 		}
 		

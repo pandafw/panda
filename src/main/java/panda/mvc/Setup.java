@@ -8,7 +8,7 @@ public interface Setup {
 	/**
 	 * 启动时，额外逻辑
 	 */
-	void init();
+	void initialize();
 
 	/**
 	 * 关闭时，额外逻辑

@@ -5,7 +5,7 @@ import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.RequestPath;
-import panda.mvc.view.ftl.MvcFreemarkerHelper;
+import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.http.HttpContentType;
 
 /**
@@ -64,7 +64,7 @@ public class FreemarkerView extends AbstractPathView {
 
 	@Override
 	public void render(ActionContext ac) throws Exception {
-		MvcFreemarkerHelper mfh = ac.getIoc().get(MvcFreemarkerHelper.class);
+		FreemarkerHelper mfh = ac.getIoc().get(FreemarkerHelper.class);
 
 		String path = evalPath(ac);
 

@@ -3,6 +3,7 @@ package panda.mvc.util;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,6 +43,13 @@ public class ActionSupport {
 	 */
 	public String getMethodName() {
 		return context.getMethodName();
+	}
+
+	/**
+	 * @return the servlet
+	 */
+	public ServletContext getServlet() {
+		return context.getServlet();
 	}
 	
 	/**
@@ -119,6 +127,20 @@ public class ActionSupport {
 	 */
 	public SessionAware getSessionAware() {
 		return context.getSessionAware();
+	}
+
+	/**
+	 * @return the assist
+	 */
+	public ActionAssist getAssist() {
+		return context.getAssist();
+	}
+
+	/**
+	 * @return the consts
+	 */
+	public ActionConsts getConsts() {
+		return context.getConsts();
 	}
 
 	//-----------------------------------------------------

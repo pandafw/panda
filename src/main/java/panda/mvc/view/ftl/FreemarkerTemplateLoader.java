@@ -18,11 +18,8 @@ import panda.tpl.ftl.ClassTemplateLoader;
 import panda.tpl.ftl.MultiTemplateLoader;
 
 @IocBean(type=TemplateLoader.class, create="initialize")
-public class MvcFreemarkerTemplateLoader extends MultiTemplateLoader {
-	private static final Log log = Logs.getLog(MvcFreemarkerTemplateLoader.class);
-
-	public MvcFreemarkerTemplateLoader() {
-	}
+public class FreemarkerTemplateLoader extends MultiTemplateLoader {
+	private static final Log log = Logs.getLog(FreemarkerTemplateLoader.class);
 
 	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATES, required=false)
 	private String templates;

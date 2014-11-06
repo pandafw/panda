@@ -27,8 +27,8 @@ import panda.mvc.view.taglib.TagLibrary;
 import panda.mvc.view.taglib.TagLibraryManager;
 
 @IocBean(create="initialize")
-public class MvcFreemarkerManager {
-	private static final Log LOG = Logs.getLog(MvcFreemarkerManager.class);
+public class FreemarkerManager {
+	private static final Log LOG = Logs.getLog(FreemarkerManager.class);
 
 	public static final String KEY_JSP_TAGLIBS = "JspTaglibs";
 	public static final String KEY_STATIC = "static";
@@ -70,12 +70,12 @@ public class MvcFreemarkerManager {
 		return config;
 	}
 
-	public ActionHashModel buildTemplateModel(ActionContext ac) {
+	public ActionHash buildTemplateModel(ActionContext ac) {
 		return buildTemplateModel(ac, wrapper);
 	}
 	
-	public ActionHashModel buildTemplateModel(ActionContext ac, ObjectWrapper wrapper) {
-		ActionHashModel model = new ActionHashModel(wrapper, ac);
+	public ActionHash buildTemplateModel(ActionContext ac, ObjectWrapper wrapper) {
+		ActionHash model = new ActionHash(wrapper, ac);
 
 		if (taglibManager != null) {
 			for (Entry<String, TagLibrary> en : taglibManager.getTagLibraries().entrySet()) {

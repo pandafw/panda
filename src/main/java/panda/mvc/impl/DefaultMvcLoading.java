@@ -205,7 +205,7 @@ public class DefaultMvcLoading implements Loading {
 		if (ioc != null && ioc.has(Setup.class)) {
 			Setup setup = ioc.get(Setup.class);
 			if (init) {
-				setup.init();
+				setup.initialize();
 			}
 			else {
 				setup.destroy();

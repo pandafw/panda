@@ -53,15 +53,6 @@ listview-filter-strings=\
 #	"nk": "をLIKEしない"
 
 
-#const
-const-booleans=\
-	"true": "はい", \
-	"false": "いいえ"
-	
-const-genders=\
-	"F": "女", \
-	"M": "男"
-
 
 #servlet error
 servlet-error-title-404=ページ表示エラー

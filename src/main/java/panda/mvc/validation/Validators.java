@@ -49,6 +49,8 @@ public interface Validators {
 	public static final String MSGID_NUMBER_RANGE = "validation-number-range";
 	public static final String MSGID_REQUIRED = "validation-required";
 	public static final String MSGID_STRING_LENTH = "validation-string-lenth";
+	public static final String MSGID_EMAIL = "validation-email";
+	public static final String MSGID_PASSWORD = "validation-password";
 	
 	/**
 	 * @param ac action context

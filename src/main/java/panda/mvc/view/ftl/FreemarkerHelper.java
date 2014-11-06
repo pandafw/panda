@@ -14,12 +14,12 @@ import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
 
 @IocBean(scope=Scope.REQUEST)
-public class MvcFreemarkerHelper {
+public class FreemarkerHelper {
 	@IocInject
-	protected MvcFreemarkerManager fm;
+	protected FreemarkerManager manager;
 
 	@IocInject
-	protected ActionContext ac;
+	protected ActionContext context;
 
 	/**
 	 * @param name template name
@@ -27,7 +27,7 @@ public class MvcFreemarkerHelper {
 	 * @throws IOException 
 	 */
 	public Template getTemplate(String name) throws IOException {
-		return fm.getConfiguration().getTemplate(name, ac.getLocale());
+		return manager.getConfiguration().getTemplate(name, context.getLocale());
 	}
 
 	/**
@@ -59,14 +59,14 @@ public class MvcFreemarkerHelper {
 	/**
 	 * process template
 	 * @param name template name
-	 * @param context context map
+	 * @param model model
 	 * @param writer writer
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void execTemplate(Writer writer, String name, Object context) throws TemplateException, IOException {
+	public void execTemplate(Writer writer, String name, Object model) throws TemplateException, IOException {
 		Template template = getTemplate(name);
-		execTemplate(writer, template, context);
+		execTemplate(writer, template, model);
 	}
 	
 	/**
@@ -83,32 +83,32 @@ public class MvcFreemarkerHelper {
 	/**
 	 * process template
 	 * @param name template name
-	 * @param context context object
+	 * @param model model
 	 * @return result
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public String execTemplate(String name, Object context) throws TemplateException, IOException {
+	public String execTemplate(String name, Object model) throws TemplateException, IOException {
 		StringBuilderWriter sw = new StringBuilderWriter();
-		execTemplate(sw, name, context);
+		execTemplate(sw, name, model);
 		return sw.toString();
 	}
 
 	/**
 	 * process template
 	 * @param template template
-	 * @param context context
+	 * @param model model
 	 * @param writer writer
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void execTemplate(Writer writer, Template template, Object context) throws TemplateException, IOException {
-		ActionHashModel model = fm.buildTemplateModel(ac);
+	public void execTemplate(Writer writer, Template template, Object model) throws TemplateException, IOException {
+		ActionHash hash = manager.buildTemplateModel(context);
 
 		if (context != null) {
-			model.setModel(context);
+			hash.setModel(model);
 		}
-		template.process(model, writer);
+		template.process(hash, writer);
 	}
 	
 	/**
@@ -125,14 +125,14 @@ public class MvcFreemarkerHelper {
 	/**
 	 * process template
 	 * @param template template
-	 * @param context context map
+	 * @param model model
 	 * @return result
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public String execTemplate(Template template, Object context) throws TemplateException, IOException {
+	public String execTemplate(Template template, Object model) throws TemplateException, IOException {
 		StringBuilderWriter sw = new StringBuilderWriter();
-		execTemplate(sw, template, context);
+		execTemplate(sw, template, model);
 		return sw.toString();
 	}
 
@@ -150,14 +150,14 @@ public class MvcFreemarkerHelper {
 	/**
 	 * process template
 	 * @param string template string
-	 * @param context context map
+	 * @param model model
 	 * @param writer writer
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public void evalTemplate(Writer writer, String string, Object context) throws TemplateException, IOException {
-		Template template = new Template("string", new StringReader(string), fm.getConfiguration());
-		execTemplate(writer, template, context);
+	public void evalTemplate(Writer writer, String string, Object model) throws TemplateException, IOException {
+		Template template = new Template("string", new StringReader(string), manager.getConfiguration());
+		execTemplate(writer, template, model);
 	}
 	
 	/**
@@ -174,14 +174,14 @@ public class MvcFreemarkerHelper {
 	/**
 	 * process template
 	 * @param string template string
-	 * @param context context map
+	 * @param model model
 	 * @return result
 	 * @throws TemplateException if a template error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public String evalTemplate(String string, Object context) throws TemplateException, IOException {
+	public String evalTemplate(String string, Object model) throws TemplateException, IOException {
 		StringBuilderWriter sw = new StringBuilderWriter();
-		evalTemplate(sw, string, context);
+		evalTemplate(sw, string, model);
 		return sw.toString();
 	}
 }

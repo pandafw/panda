@@ -111,17 +111,6 @@ listview-filter-numbers=\
 	"ne": "≠" 
 
 
-#const
-const-bloodTypes="A", "O", "B", "AB"
-
-const-booleans=\
-	"true": "YES", \
-	"false": "NO"
-	
-const-genders=\
-	"F": "Female", \
-	"M": "Male"
-
 
 #servlet error
 servlet-error-title-404=Page Not Found.

@@ -18,7 +18,7 @@ import panda.mvc.Mvcs;
  * Updated to subclass AllHttpScopesHashModel.java to incorporate invisible scopes and compatibility
  * with freemarker.
  */
-public class ActionHashModel extends SimpleHash {
+public class ActionHash extends SimpleHash {
 
 	public static class TopModel {
 		private Object top;
@@ -49,7 +49,7 @@ public class ActionHashModel extends SimpleHash {
 	private ActionContext ac;
 	private BeanHandler acb;
 
-	public ActionHashModel(ObjectWrapper wrapper, ActionContext context) {
+	public ActionHash(ObjectWrapper wrapper, ActionContext context) {
 		super(wrapper);
 		ac = context;
 		acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
