@@ -16,7 +16,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpResponse;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 public class HttpClientAction extends AbstractAction {
 	

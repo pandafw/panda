@@ -1,20 +1,39 @@
 package panda.wing.action;
 
+import java.util.List;
 import java.util.Map;
 
+import panda.ioc.Scope;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
+import panda.mvc.util.ActionConsts;
 import panda.wing.constant.RC;
-import panda.wing.mvc.ActionConsts;
 
 /**
  */
+@IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 @SuppressWarnings("unchecked")
 public class BaseActionConsts extends ActionConsts {
+
 	/**
-	 * Constructor
+	 * @return map
 	 */
-	public BaseActionConsts() {
-		super();
+	public Map<String, String> getBooleanMap() {
+		return getTextAsMap("const-booleans");
+	}
+
+	/**
+	 * @return list
+	 */
+	public List getBloodTypeList() {
+		return getTextAsList("const-bloodTypes");
+	}
+	
+	/**
+	 * @return map
+	 */
+	public Map<String, String> getGenderMap() {
+		return getTextAsMap("const-genders");
 	}
 	
 	/**

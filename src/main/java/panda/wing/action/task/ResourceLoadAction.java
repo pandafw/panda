@@ -1,6 +1,5 @@
 package panda.wing.action.task;
 
-import panda.io.resource.ResourceBundleLoader;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.mvc.util.DefaultTextProvider;

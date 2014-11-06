@@ -11,14 +11,14 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.view.ftl.MvcFreemarkerTemplateLoader;
+import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.tpl.ftl.ExternalTemplateLoader;
 import panda.wing.constant.VC;
 import panda.wing.entity.Template;
 import panda.wing.entity.query.TemplateQuery;
 
 @IocBean(type=TemplateLoader.class, create="initialize")
-public class AppFreemarkerTemplateLoader extends MvcFreemarkerTemplateLoader {
+public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	private static final Log log = Logs.getLog(AppFreemarkerTemplateLoader.class);
 
 	public AppFreemarkerTemplateLoader() {

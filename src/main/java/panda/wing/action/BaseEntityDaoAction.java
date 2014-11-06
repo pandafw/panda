@@ -15,30 +15,6 @@ public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	}
 
 	/**
-	 * @return the assist
-	 */
-	protected BaseActionAssist assist() {
-		return (BaseActionAssist)super.getAssist();
-	}
-
-	/**
-	 * @return the consts
-	 */
-	protected BaseActionConsts consts() {
-		return (BaseActionConsts)super.getConsts();
-	}
-
-	//--------------------------------------------------------------------------
-	/**
-	 * hasPermission
-	 * @param path path
-	 * @return true if action has access permit
-	 */
-	public boolean hasPermission(String path) {
-		return assist().hasPermission(path);
-	}
-
-	/**
 	 * checkUpdated
 	 * @param data data
 	 * @param srcData source data

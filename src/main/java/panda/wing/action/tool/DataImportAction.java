@@ -45,10 +45,10 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
-import panda.wing.mvc.AbstractDaoAction;
+import panda.wing.action.AbstractAction;
 
 @At("/admin")
-public class DataImportAction extends AbstractDaoAction {
+public class DataImportAction extends AbstractAction {
 	@IocInject
 	protected ActionContext ac;
 	

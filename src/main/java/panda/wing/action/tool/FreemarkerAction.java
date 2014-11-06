@@ -5,14 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.view.VoidView;
-import panda.mvc.view.ftl.MvcFreemarkerHelper;
+import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.servlet.HttpServlets;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 public class FreemarkerAction extends AbstractAction {
 
 	@IocInject
-	MvcFreemarkerHelper freemarker;
+	FreemarkerHelper freemarker;
 	
 	@Ok("ftl:${result}")
 	public Object execute() throws Exception {

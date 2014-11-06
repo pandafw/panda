@@ -18,13 +18,13 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
-import panda.wing.mvc.AbstractDaoAction;
+import panda.wing.action.AbstractAction;
 
 
 /**
  */
 @At
-public class SqlExecuteAction extends AbstractDaoAction {
+public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected String commenter = "--";
 		protected String delimiter = ";";

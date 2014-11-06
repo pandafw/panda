@@ -21,13 +21,13 @@ import panda.lang.Charsets;
 import panda.lang.reflect.Types;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.view.Ok;
-import panda.wing.mvc.AbstractDaoAction;
+import panda.wing.action.AbstractAction;
 import panda.wing.task.CronEntry;
 
 /**
  */
 @At("/admin")
-public class CronJobsAction extends AbstractDaoAction {
+public class CronJobsAction extends AbstractAction {
 	/**
 	 * execute
 	 * 

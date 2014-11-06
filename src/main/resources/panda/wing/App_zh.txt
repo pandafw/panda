@@ -76,3 +76,13 @@ tip-bookmark=书签
 data-statusMap=\
 	"0": "有効", \
 	"X": "无効"
+
+
+#const
+const-booleans=\
+	"true": "是", \
+	"false": "否"
+	
+const-genders=\
+	"F": "女", \
+	"M": "男"

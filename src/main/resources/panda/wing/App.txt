@@ -80,3 +80,16 @@ tip-bookmark=Bookmark
 data-statusMap=\
 	"0": "Enbaled", \
 	"X": "Disabled"
+
+
+#const
+const-bloodTypes="A", "O", "B", "AB"
+
+const-booleans=\
+	"true": "YES", \
+	"false": "NO"
+	
+const-genders=\
+	"F": "Female", \
+	"M": "Male"
+

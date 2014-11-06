@@ -17,7 +17,7 @@ import panda.wing.entity.SCUBean;
 })
 public class Resource extends SCUBean {
 
-	private static final long serialVersionUID = 1680805118L;
+	private static final long serialVersionUID = -1900495080L;
 
 	/**
 	 * Constructor
@@ -56,30 +56,30 @@ public class Resource extends SCUBean {
 	@Column(size=100, notNull=true)
 	@Comment("class name")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
 	})
 	protected String clazz;
 
 	@Column(notNull=true)
 	@Comment("language code")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
 	})
 	protected String language;
 
 	@Column(size=2, notNull=true)
 	@Comment("country code")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
 	})
 	protected String country;
 
 	@Column(type=DaoTypes.CLOB, size=50000)
 	@Comment("resource source")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50000 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	protected String source;
 

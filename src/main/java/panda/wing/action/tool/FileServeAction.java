@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.VoidView;
 import panda.servlet.HttpServletSupport;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 /**
  * File download/upload for temporary image

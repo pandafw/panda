@@ -15,9 +15,9 @@ import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
 
-@IocBean
-public class DaoClientMaker {
-	private static final Log log = Logs.getLog(DaoClientMaker.class);
+@IocBean(create="initialize")
+public class DaoClientProvider {
+	private static final Log log = Logs.getLog(DaoClientProvider.class);
 
 	@IocInject(required=false)
 	protected ServletContext servlet;
@@ -31,20 +31,14 @@ public class DaoClientMaker {
 	/**
 	 * @return the daoClient
 	 */
-	public DaoClient getDaoClient() throws Exception {
-		if (daoClient == null) {
-			daoClient = buildDaoClient();
-		}
+	public DaoClient getDaoClient() {
 		return daoClient;
 	}
 
-	/**
-	 * @param daoClient the daoClient to set
-	 */
-	public void setDaoClient(DaoClient daoClient) {
-		this.daoClient = daoClient;
+	public void initialize() throws Exception {
+		daoClient = buildDaoClient();
 	}
-
+	
 	protected DaoClient buildDaoClient() throws Exception {
 		String dstype = settings.getProperty("data.source");
 		if ("gae".equalsIgnoreCase(dstype)) {

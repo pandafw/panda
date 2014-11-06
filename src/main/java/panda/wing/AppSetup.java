@@ -7,14 +7,14 @@ import panda.mvc.Setup;
 
 
 @IocBean(type=Setup.class)
-public class ServletApp implements Setup {
+public class AppSetup implements Setup {
 	@IocInject(required=false)
 	protected Beans beans = Beans.i();
 	
 	/**
 	 * initialize
 	 */
-	public void init() {
+	public void initialize() {
 	}
 
 	/**
@@ -23,5 +23,4 @@ public class ServletApp implements Setup {
 	public void destroy() {
 		beans.clear();
 	}
-
 }

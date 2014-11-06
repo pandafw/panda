@@ -1,7 +1,7 @@
 package panda.wing.action.tool;
 
 import panda.mvc.annotation.At;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 @At("/admin")
 public class PingAction extends AbstractAction {

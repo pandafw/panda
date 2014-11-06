@@ -1,16 +1,22 @@
 package panda.wing.action;
 
+import panda.dao.DaoClient;
+import panda.ioc.annotation.IocInject;
+import panda.mvc.util.ActionSupport;
 import panda.mvc.util.PermissionProvider;
-import panda.wing.mvc.AbstractDaoAction;
 
-/**
- */
-public class BaseAction extends AbstractDaoAction implements PermissionProvider {
+public class AbstractAction extends ActionSupport implements PermissionProvider {
+	/*------------------------------------------------------------
+	 * bean
+	 *------------------------------------------------------------*/
+	@IocInject
+	protected DaoClient daoClient;
 
 	/**
-	 * Constructor
+	 * @return the daoClient
 	 */
-	public BaseAction() {
+	protected DaoClient getDaoClient() {
+		return daoClient;
 	}
 
 	/**
@@ -27,6 +33,9 @@ public class BaseAction extends AbstractDaoAction implements PermissionProvider 
 		return (BaseActionConsts)super.getConsts();
 	}
 
+	/*------------------------------------------------------------
+	 * PermissionProvider
+	 *------------------------------------------------------------*/
 	/**
 	 * hasPermission
 	 * @param path path

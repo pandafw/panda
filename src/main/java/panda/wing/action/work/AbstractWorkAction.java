@@ -13,7 +13,7 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.servlet.HttpServletSupport;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 
 public abstract class AbstractWorkAction extends AbstractAction {

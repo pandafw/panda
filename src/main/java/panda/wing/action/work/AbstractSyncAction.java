@@ -1,9 +1,9 @@
 package panda.wing.action.work;
 
-import panda.wing.mvc.AbstractDaoAction;
+import panda.wing.action.AbstractAction;
 
 
-public abstract class AbstractSyncAction extends AbstractDaoAction {
+public abstract class AbstractSyncAction extends AbstractAction {
 	protected static final Object lock = new Object();
 	
 	/**

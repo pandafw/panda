@@ -1,4 +1,0 @@
-{
-	"panda.dao.DaoClient": "el:$ioc.get('panda.wing.util.DaoClientMaker').daoClient",
-	
-}

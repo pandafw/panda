@@ -1,4 +1,4 @@
-package panda.wing.mvc;
+package panda.wing.action;
 
 /**
  */

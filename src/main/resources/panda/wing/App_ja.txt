@@ -76,3 +76,12 @@ data-statusMap=\
 	"0": "有効", \
 	"X": "無効"
 
+#const
+const-booleans=\
+	"true": "はい", \
+	"false": "いいえ"
+	
+const-genders=\
+	"F": "女", \
+	"M": "男"
+

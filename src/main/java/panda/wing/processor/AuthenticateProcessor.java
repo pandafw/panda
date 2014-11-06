@@ -24,10 +24,9 @@ import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
-import panda.wing.mvc.ActionRC;
+import panda.wing.action.ActionRC;
+import panda.wing.constant.REQ;
 
-/**
- */
 @IocBean(create="initialize")
 public class AuthenticateProcessor extends ViewProcessor {
 	//--------------------------------------------------------
@@ -47,11 +46,6 @@ public class AuthenticateProcessor extends ViewProcessor {
 	 * "action-permits.json"
 	 */
 	public static final String SETTING = "action-permits.json";
-
-	/**
-	 * USER_ATTRIBUTE = "user";
-	 */
-	public static final String USER_ATTRIBUTE = "user";
 
 	/**
 	 * action permit map
@@ -78,14 +72,14 @@ public class AuthenticateProcessor extends ViewProcessor {
 	private static boolean allowUnknownUri = true;
 
 	/**
-	 * loginResult
+	 * loginView
 	 */
-	private String loginResult;
+	private String loginView;
 	
 	/**
-	 * secureResult
+	 * secureView
 	 */
-	private String secureResult;
+	private String secureView;
 	
 	/**
 	 * @param check the check to set
@@ -110,17 +104,17 @@ public class AuthenticateProcessor extends ViewProcessor {
 	}
 
 	/**
-	 * @param loginResult the loginResult to set
+	 * @param loginView the loginView to set
 	 */
-	public void setLoginResult(String loginResult) {
-		this.loginResult = loginResult;
+	public void setLoginView(String loginView) {
+		this.loginView = loginView;
 	}
 
 	/**
-	 * @param secureResult the secureResult to set
+	 * @param secureView the secureView to set
 	 */
-	public void setSecureResult(String secureResult) {
-		this.secureResult = secureResult;
+	public void setSecureView(String secureView) {
+		this.secureView = secureView;
 	}
 	
 	/**
@@ -225,11 +219,11 @@ public class AuthenticateProcessor extends ViewProcessor {
 	}
 	
 	protected Object getSessionUser(ActionContext ac) {
-		Object u = ac.getRequest().getAttribute(USER_ATTRIBUTE);
+		Object u = ac.getRequest().getAttribute(REQ.USER);
 		if (u == null) {
 			HttpSession session = ac.getRequest().getSession(false);
 			if (session != null) {
-				u = session.getAttribute(USER_ATTRIBUTE);
+				u = session.getAttribute(REQ.USER);
 			}
 		}
 		return u;
@@ -259,13 +253,13 @@ public class AuthenticateProcessor extends ViewProcessor {
 
 		if (su == null) {
 			addActionError(ac, ActionRC.ERROR_UNLOGIN);
-			doView(ac, loginResult);
+			doView(ac, loginView);
 			return;
 		}
 		
 		if (check == CHECK_SECURE && !isSecureSessionUser(su)) {
 			addActionError(ac, ActionRC.ERROR_UNSECURE);
-			doView(ac, secureResult);
+			doView(ac, secureView);
 			return;
 		}
 

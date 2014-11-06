@@ -46,7 +46,7 @@ import panda.servlet.HttpServletSupport;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletURLHelper;
 import panda.wing.AppConstants;
-import panda.wing.mvc.AbstractAction;
+import panda.wing.action.AbstractAction;
 
 @At("/admin")
 public class Html2PdfAction extends AbstractAction {

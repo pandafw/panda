@@ -1,6 +1,6 @@
 package panda.wing.constant;
 
-import panda.wing.mvc.ActionRC;
+import panda.wing.action.ActionRC;
 
 
 /**

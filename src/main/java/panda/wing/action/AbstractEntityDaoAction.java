@@ -41,14 +41,12 @@ import panda.mvc.view.tag.Property;
 import panda.net.http.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
-import panda.wing.mvc.AbstractDaoAction;
-import panda.wing.mvc.ActionRC;
 
 
 /**
  * @param <T> data type
  */
-public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
+public abstract class AbstractEntityDaoAction<T> extends AbstractAction {
 	private static final Log log = Logs.getLog(AbstractEntityDaoAction.class);
 	
 	/**
@@ -1250,6 +1248,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 						q.setStart(pager.getStart());
 						q.setLimit(pager.getLimit());
 						dataList = daoSelect(q);
+						trimDataList(dataList);
 					}
 					else {
 						dataList = new ArrayList<T>();
@@ -1264,6 +1263,12 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 		});
 	}
 
+	protected void trimDataList(List<T> ds) {
+	}
+	
+	protected void trimData(T d) {
+	}
+	
 	/**
 	 */
 	protected void addLimitToPager() {
@@ -1439,6 +1444,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractDaoAction {
 		if (d == null) {
 			addActionError(getMessage(ActionRC.ERROR_DATA_NOTFOUND));
 		}
+		trimData(d);
 		return d;
 	}
 

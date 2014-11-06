@@ -16,7 +16,7 @@ import panda.wing.entity.SCUBean;
 })
 public class Property extends SCUBean {
 
-	private static final long serialVersionUID = -418608116L;
+	private static final long serialVersionUID = 632852446L;
 
 	/**
 	 * Constructor
@@ -59,44 +59,44 @@ public class Property extends SCUBean {
 	@Column(size=100, notNull=true)
 	@Comment("class name")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
 	})
 	protected String clazz;
 
 	@Column(size=2, notNull=true)
 	@Comment("language code")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
 	})
 	protected String language;
 
 	@Column(size=2, notNull=true)
 	@Comment("country code")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", msgId=Validators.MSGID_CONSTANT), 
 	})
 	protected String country;
 
 	@Column(size=50, notNull=true)
 	@Comment("property name")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", msgId=Validators.MSGID_STRING_LENTH), 
 	})
 	protected String name;
 
 	@Column(size=5000)
 	@Comment("property value")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", msgId=Validators.MSGID_STRING_LENTH), 
 	})
 	protected String value;
 
 	@Column(size=1000)
 	@Comment("memo")
 	@Validates({
-		@Validate(value=Validators.STRING, msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	protected String memo;
 
