@@ -273,6 +273,10 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		vtmap.put("binary", "Validators.BINARY");
 		vtmap.put("date", "Validators.DATE");
+		vtmap.put("byte", "Validators.NUMBER");
+		vtmap.put("short", "Validators.NUMBER");
+		vtmap.put("int", "Validators.NUMBER");
+		vtmap.put("long", "Validators.NUMBER");
 		vtmap.put("number", "Validators.NUMBER");
 
 		vtmap.put("stringlength", "Validators.STRING");
@@ -323,8 +327,20 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
 		vmmap.put("constant", "Validators.MSGID_CONSTANT");
 		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
+
+		vmmap.put("email", "Validators.MSGID_EMAIL");
+		vmmap.put("password", "Validators.MSGID_PASSWORD");
+		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("short", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("int", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("long", "Validators.MSGID_NUMBER_RANGE");
 	}
+
 	public String validatorMsgId(String alias) {
+		if (alias.startsWith("#")) {
+			return alias;
+		}
+		
 		String vm = vmmap.get(alias);
 		if (vm == null) {
 			throw new IllegalArgumentException("Illegal validator msg: " + alias);

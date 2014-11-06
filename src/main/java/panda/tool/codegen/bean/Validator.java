@@ -80,7 +80,7 @@ public class Validator {
 	}
 
 	public boolean isHasParams() {
-		return Collections.isEmpty(paramList);
+		return Collections.isNotEmpty(paramList);
 	}
 	
 	public String getParams() {
@@ -89,7 +89,7 @@ public class Validator {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("{");
+		sb.append("{ ");
 		for (int i = 0; i < paramList.size(); i++) {
 			Param p = paramList.get(i);
 			sb.append("'").append(p.getName()).append("': ").append(p.getValue());
@@ -97,7 +97,7 @@ public class Validator {
 				sb.append(", ");
 			}
 		}
-		sb.append("}");
+		sb.append(" }");
 		return sb.toString();
 	}
 
