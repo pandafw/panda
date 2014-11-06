@@ -14,8 +14,6 @@ import panda.ioc.ObjectWeaver;
 import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
-import panda.ioc.weaver.DefaultWeaver;
-import panda.ioc.weaver.IocFieldInjector;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -49,49 +47,53 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 
 		// 为对象代理设置触发事件
-		if (null != iobj.getEvents()) {
+		if (iobj.getEvents() != null) {
 			op.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
 			op.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
 		}
 
-		try {
-			ObjectWeaver ow = null;
-			if (ing.getName() == null) {
-				ow = createWeaver(mirror, ing, iobj);
-			}
-			else {
-				ow = ing.getWeavers().get(ing.getName());
-				if (ow == null) {
-					synchronized (ing.getWeavers()) {
-						ow = ing.getWeavers().get(ing.getName());
-						if (ow == null) {
-							ow = createWeaver(mirror, ing, iobj);
-							ing.getWeavers().put(ing.getName(), ow);
+		if (iobj.getValue() != null) {
+			op.setObj(iobj.getValue());
+		}
+		else {
+			try {
+				ObjectWeaver ow = null;
+				if (ing.getName() == null) {
+					ow = createWeaver(mirror, ing, iobj);
+				}
+				else {
+					ow = ing.getWeavers().get(ing.getName());
+					if (ow == null) {
+						synchronized (ing.getWeavers()) {
+							ow = ing.getWeavers().get(ing.getName());
+							if (ow == null) {
+								ow = createWeaver(mirror, ing, iobj);
+								ing.getWeavers().put(ing.getName(), ow);
+							}
 						}
 					}
 				}
+	
+				// set weaver to object proxy
+				op.setWeaver(ow);
+	
+				// 如果这个对象是容器中的单例，那么就可以生成实例了
+				if (iobj.isSingleton()) {
+					createObject(op, ow, ing);
+				}
 			}
-
-			// set weaver to object proxy
-			op.setWeaver(ow);
-
-			// 如果这个对象是容器中的单例，那么就可以生成实例了
-			if (iobj.isSingleton()) {
-				createObject(op, ow, ing);
+			catch (Throwable e) {
+				if (log.isWarnEnabled()) {
+					log.warn(String.format("IobObj: \n%s", iobj.toString()), e);
+				}
+				
+				// 当异常发生，从 context 里移除 ObjectProxy
+				if (iobj.isSingleton() && ing.getName() != null) {
+					ing.getIoc().getContext().remove(iobj.getScope(), ing.getName());
+				}
+				throw new IocException("Failed to create ioc bean: " + ing.getName(), e);
 			}
 		}
-		catch (Throwable e) {
-			if (log.isWarnEnabled()) {
-				log.warn(String.format("IobObj: \n%s", iobj.toString()), e);
-			}
-			
-			// 当异常发生，从 context 里移除 ObjectProxy
-			if (iobj.isSingleton() && ing.getName() != null) {
-				ing.getIoc().getContext().remove(iobj.getScope(), ing.getName());
-			}
-			throw new IocException("Failed to create ioc bean: " + ing.getName(), e);
-		}
-
 		return op;
 	}
 
@@ -129,9 +131,9 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 
 		// 构造函数参数
-		ValueProxy[] vps = new ValueProxy[iobj.getArgs().length];
+		ValueProxy[] vps = new ValueProxy[iobj.getArgs().size()];
 		for (int i = 0; i < vps.length; i++) {
-			vps[i] = ing.makeValueProxy(iobj.getArgs()[i]);
+			vps[i] = ing.makeValueProxy(iobj.getArgs().get(i));
 		}
 		dw.setArgs(vps);
 

@@ -2,7 +2,6 @@ package panda.ioc.impl;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import panda.bind.json.Jsons;
 import panda.ioc.Ioc;
@@ -27,7 +26,6 @@ import panda.ioc.val.MapValue;
 import panda.ioc.val.ReferValue;
 import panda.ioc.val.StaticValue;
 import panda.ioc.val.SysPropValue;
-import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
 
@@ -147,17 +145,6 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 			return (ValueProxy)Classes.born(InnerValue.class.getPackage().toString() + ".JndiValue", value.toString());
 		}
 		return null;
-	}
-
-	public Set<String> supportedTypes() {
-		return Arrays.toSet(
-			IocValue.TYPE_EL, 
-			IocValue.TYPE_ENV, 
-			IocValue.TYPE_FILE,
-			IocValue.TYPE_JNDI,
-			IocValue.TYPE_REF, 
-			IocValue.TYPE_SYS
-			);
 	}
 
 }

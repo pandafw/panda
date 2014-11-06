@@ -14,6 +14,16 @@ public class JsonAopConfigrationTest {
 	@Test
 	public void test_jsonAop() {
 		Ioc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
+		test(ioc);
+	}
+
+	@Test
+	public void test_jsonAop2() {
+		Ioc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop2.js"));
+		test(ioc);
+	}
+
+	private void test(Ioc ioc) {
 		Assert.assertTrue(ioc.getNames().size() > 0);
 
 		for (String name : ioc.getNames()) {

@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import panda.bind.json.Jsons;
+import panda.bind.json.JsonObject;
 import panda.io.Files;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -23,20 +21,17 @@ import panda.log.Logs;
  * <p>
  * 注，如果 JSON 配置文件被打入 Jar 包中，这个加载器将不能正常工作
  */
-@SuppressWarnings("unchecked")
 public class JsonIocLoader extends MapIocLoader {
-
 	private static final Log log = Logs.getLog(JsonIocLoader.class);
 
 	public JsonIocLoader(Reader reader) {
 		loadFromReader(reader);
 		if (log.isDebugEnabled()) {
-			log.debugf("Loaded %d bean define from reader --\n%s", getMap().size(), getMap().keySet());
+			log.debugf("Loaded %d bean define from reader --\n%s", beans.size(), beans.keySet());
 		}
 	}
 
 	public JsonIocLoader(String... paths) {
-		this.setMap(new HashMap<String, Map<String, Object>>());
 		try {
 			for (String p : paths) {
 				loadFromPath(p);
@@ -48,7 +43,7 @@ public class JsonIocLoader extends MapIocLoader {
 		
 		if (log.isDebugEnabled()) {
 			log.debugf("Loaded %d bean define from path=%s --> %s", 
-				getMap().size(), Arrays.toString(paths), getMap().keySet());
+				beans.size(), Arrays.toString(paths), beans.keySet());
 		}
 	}
 
@@ -69,9 +64,9 @@ public class JsonIocLoader extends MapIocLoader {
 	
 	private void loadFromStream(InputStream is) throws IOException {
 		try {
-			Map map = Jsons.fromJson(is, Charsets.UTF_8, Map.class);
-			if (null != map && map.size() > 0) {
-				getMap().putAll(map);
+			JsonObject jo = JsonObject.fromJson(is, Charsets.UTF_8);
+			if (null != jo && jo.size() > 0) {
+				initialize(jo);
 			}
 		}
 		finally {
@@ -80,9 +75,9 @@ public class JsonIocLoader extends MapIocLoader {
 	}
 	
 	private void loadFromReader(Reader reader) {
-		Map map = Jsons.fromJson(reader, Map.class);
-		if (null != map && map.size() > 0) {
-			getMap().putAll(map);
+		JsonObject jo = JsonObject.fromJson(reader);
+		if (null != jo && jo.size() > 0) {
+			initialize(jo);
 		}
 	}
 }

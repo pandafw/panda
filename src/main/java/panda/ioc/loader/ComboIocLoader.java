@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import panda.ioc.IocLoader;
-import panda.ioc.IocLoading;
 import panda.ioc.IocLoadException;
+import panda.ioc.IocLoader;
 import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -156,10 +155,10 @@ public class ComboIocLoader implements IocLoader {
 		return false;
 	}
 
-	public IocObject load(IocLoading loading, String name) throws IocLoadException {
+	public IocObject load(String name) throws IocLoadException {
 		for (IocLoader iocLoader : iocLoaders) {
 			if (iocLoader.has(name)) {
-				IocObject iocObject = iocLoader.load(loading, name);
+				IocObject iocObject = iocLoader.load(name);
 				if (log.isDebugEnabled()) {
 					log.debugf("Found IocObject(%s) in IocLoader(%s)", name, iocLoader.getClass().getSimpleName() + "@"
 							+ iocLoader.hashCode());

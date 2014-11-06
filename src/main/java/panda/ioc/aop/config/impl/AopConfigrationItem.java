@@ -7,9 +7,9 @@ import panda.aop.matcher.MethodMatcherFactory;
 
 public class AopConfigrationItem {
 
-	private String className;
+	private String name;
 
-	private String methodName;
+	private String method;
 
 	private String interceptor;
 
@@ -30,29 +30,29 @@ public class AopConfigrationItem {
 	public AopConfigrationItem() {
 	}
 
-	public AopConfigrationItem(String className, String methodName, String interceptor, boolean singleton) {
+	public AopConfigrationItem(String name, String method, String interceptor, boolean singleton) {
 		super();
-		this.className = className;
-		this.methodName = methodName;
+		this.name = name;
+		this.method = method;
 		this.interceptor = interceptor;
 		this.singleton = singleton;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getName() {
+		return name;
 	}
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setName(String className) {
+		this.name = className;
 		this.classnamePattern = Pattern.compile(className);
 	}
 
-	public String getMethodName() {
-		return methodName;
+	public String getMethod() {
+		return method;
 	}
 
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
+	public void setMethod(String methodName) {
+		this.method = methodName;
 		this.methodMatcher = MethodMatcherFactory.matcher(methodName);
 	}
 

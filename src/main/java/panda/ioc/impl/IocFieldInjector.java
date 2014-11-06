@@ -1,4 +1,4 @@
-package panda.ioc.weaver;
+package panda.ioc.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -13,7 +13,6 @@ import panda.ioc.ValueProxy;
 import panda.lang.Injector;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
-import panda.lang.reflect.Types;
 
 public class IocFieldInjector {
 
@@ -58,9 +57,7 @@ public class IocFieldInjector {
 			return;
 		}
 		
-		if (value == null || !Types.isAssignable(value.getClass(), type, false)) {
-			value = Castors.i().cast(value, type);
-		}
+		value = Castors.i().cast(value, type);
 		injector.inject(obj, value);
 	}
 }

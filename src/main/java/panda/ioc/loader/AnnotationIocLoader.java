@@ -5,14 +5,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
 
-import panda.bind.json.Jsons;
 import panda.ioc.IocException;
-import panda.ioc.IocLoadException;
-import panda.ioc.IocLoader;
-import panda.ioc.IocLoading;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.ioc.meta.IocEventSet;
@@ -28,11 +22,9 @@ import panda.log.Logs;
 /**
  * 基于注解的Ioc配置
  */
-public class AnnotationIocLoader implements IocLoader {
+public class AnnotationIocLoader extends AbstractIocLoader {
 
 	private static final Log log = Logs.getLog(AnnotationIocLoader.class);
-
-	private HashMap<String, IocObject> map = new HashMap<String, IocObject>();
 
 	public AnnotationIocLoader(String... args) {
 		this((Object[])args);
@@ -58,10 +50,10 @@ public class AnnotationIocLoader implements IocLoader {
 			}
 		}
 		
-		if (map.size() > 0) {
+		if (beans.size() > 0) {
 			if (log.isInfoEnabled()) {
 				log.info("Successfully scan/add " + args.size() + " args:\n" + Strings.join(args, '\n'));
-				log.info("Found " + map.size() + " bean classes:\n" + Strings.join(map.keySet(), '\n'));
+				log.info("Found " + beans.size() + " bean classes:\n" + Strings.join(beans.keySet(), '\n'));
 			}
 		}
 		else {
@@ -90,9 +82,9 @@ public class AnnotationIocLoader implements IocLoader {
 		}
 
 		String beanName = getBeanName(clazz);
-		if (map.containsKey(beanName)) {
+		if (beans.containsKey(beanName)) {
 			throw new IocException("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
-				beanName, clazz, map.get(beanName).getType());
+				beanName, clazz, beans.get(beanName).getType());
 		}
 
 		if (log.isDebugEnabled()) {
@@ -101,7 +93,7 @@ public class AnnotationIocLoader implements IocLoader {
 		
 		IocObject iocObject = createIocObject(clazz);
 		if (iocObject != null) {
-			map.put(beanName, iocObject);
+			beans.put(beanName, iocObject);
 		}
 	}
 	
@@ -295,11 +287,15 @@ public class AnnotationIocLoader implements IocLoader {
 		return bn;
 	}
 	
-	protected IocValue convert(String value) {
+	private static final IocException duplicateField(Class<?> classZ, String name) {
+		return Exceptions.makeThrow(IocException.class, "Duplicate filed defined! Class=%s,FileName=%s", classZ, name);
+	}
+
+	private IocValue convert(String value) {
 		IocValue iocValue = new IocValue();
 		int colon = value.indexOf(':');
 		if (colon == 0) {
-			iocValue.setType(IocValue.TYPE_REF);
+			iocValue.setType(IocValue.TYPE_NORMAL);
 			iocValue.setValue(value.substring(1));
 		}
 		else if (colon > 0) {
@@ -313,23 +309,4 @@ public class AnnotationIocLoader implements IocLoader {
 		return iocValue;
 	}
 
-	public Set<String> getNames() {
-		return map.keySet();
-	}
-
-	public boolean has(String name) {
-		return map.containsKey(name);
-	}
-
-	public IocObject load(IocLoading loading, String name) throws IocLoadException {
-		return map.get(name);
-	}
-
-	private static final IocException duplicateField(Class<?> classZ, String name) {
-		return Exceptions.makeThrow(IocException.class, "Duplicate filed defined! Class=%s,FileName=%s", classZ, name);
-	}
-
-	public String toString() {
-		return "/*AnnotationIocLoader*/\n" + Jsons.toJson(map);
-	}
 }

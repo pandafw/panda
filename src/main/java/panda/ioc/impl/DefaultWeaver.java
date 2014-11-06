@@ -1,4 +1,4 @@
-package panda.ioc.weaver;
+package panda.ioc.impl;
 
 import java.lang.reflect.Type;
 

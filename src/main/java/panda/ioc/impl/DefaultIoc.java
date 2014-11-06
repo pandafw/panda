@@ -9,7 +9,6 @@ import panda.ioc.IocContext;
 import panda.ioc.IocException;
 import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
-import panda.ioc.IocLoading;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectMaker;
 import panda.ioc.ObjectProxy;
@@ -78,11 +77,6 @@ public class DefaultIoc implements Ioc, Cloneable {
 	private Map<String, ObjectWeaver> weavers;
 	
 	/**
-	 * helper class for IocLoad
-	 */
-	private IocLoading loading;
-
-	/**
 	 * deposed
 	 */
 	private boolean deposed = false;
@@ -113,7 +107,6 @@ public class DefaultIoc implements Ioc, Cloneable {
 		else {
 			this.loader = CachedIocLoaderImpl.create(loader);
 		}
-		this.loading = new IocLoading();
 		
 		setValueProxyMaker(new DefaultValueProxyMaker());
 		weavers = new HashMap<String, ObjectWeaver>();
@@ -179,7 +172,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						}
 						
 						// 读取对象定义
-						IocObject iobj = loader.load(loading, name);
+						IocObject iobj = loader.load(name);
 						if (null == iobj) {
 							for (String iocBeanName : loader.getNames()) {
 								// 相似性少于3 --> 大小写错误,1-2个字符调换顺序或写错
@@ -190,18 +183,19 @@ public class DefaultIoc implements Ioc, Cloneable {
 							}
 							throw new IocLoadException("Undefined object '" + name + "'");
 						}
+						
+						// 检查对象级别
+						if (Strings.isBlank(iobj.getScope())) {
+							iobj.setScope(defaultScope);
+						}
 
 						// 修正对象类型
 						if (null == iobj.getType()) {
 							if (null == type) {
 								throw new IocException("NULL TYPE object '%s'", name);
 							}
+							iobj = iobj.clone();
 							iobj.setType(type);
-						}
-						
-						// 检查对象级别
-						if (Strings.isBlank(iobj.getScope())) {
-							iobj.setScope(defaultScope);
 						}
 
 						// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
@@ -281,7 +275,6 @@ public class DefaultIoc implements Ioc, Cloneable {
 	public void setValueProxyMaker(ValueProxyMaker vpm) {
 		synchronized (lock) {
 			vpMaker = vpm;
-			loading.setSupportedTypes(vpm.supportedTypes());
 		}
 	}
 
@@ -325,7 +318,6 @@ public class DefaultIoc implements Ioc, Cloneable {
 		ni.lock = this.lock;
 		ni.vpMaker = this.vpMaker;
 		ni.weavers = this.weavers;
-		ni.loading = this.loading;
 		
 		return ni;
 	}

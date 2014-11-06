@@ -30,10 +30,10 @@ public class RecurReferJsonIocTest {
 	public void test_refer_each_other() {
 		String s = "{";
 		s += "a:{type:'" + RA.class.getName() + "',";
-		s += "fields:{nm:'A', rb:{ref:'b'}}";
+		s += "fields:{nm:'A', rb:'ref:b'}";
 		s += "},";
 		s += "b:{type:'" + RB.class.getName() + "',";
-		s += "fields:{nm:'B', ra:{ref:'a'}}";
+		s += "fields:{nm:'B', ra:'ref:a'}";
 		s += "}";
 		s += "}";
 

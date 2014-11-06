@@ -33,8 +33,8 @@ public class XmlIocLoaderTest {
 
 		for (String name : iocLoader.getNames()) {
 			assertNotNull(name);
-			assertNotNull(iocLoader.load(null, name));
-			IocObject iocObject = iocLoader.load(null, name);
+			assertNotNull(iocLoader.load(name));
+			IocObject iocObject = iocLoader.load(name);
 			if (iocObject.hasArgs()) {
 				for (IocValue iocValue : iocObject.getArgs()) {
 					iocValue.getType();
@@ -53,7 +53,7 @@ public class XmlIocLoaderTest {
 			}
 		}
 		
-		for (IocValue iv : iocLoader.load(null, "obj").getFields().values()) {
+		for (IocValue iv : iocLoader.load("obj").getFields().values()) {
 			iv.getValue();
 		}
 	}

@@ -13,7 +13,7 @@ public class Horse {
 		return name;
 	}
 	
-	@IocInject("normal:horse")
+	@IocInject("el:'horse'")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -28,7 +28,7 @@ public class Horse {
 	/**
 	 * @param alias the alias to set
 	 */
-	@IocInject("normal:alias")
+	@IocInject("el:'alias'")
 	public void setAlias(String alias) {
 		this.alias = alias;
 	}

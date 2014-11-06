@@ -20,7 +20,7 @@ public abstract class AbstractAopConfigration implements AopConfigration {
 		for (AopConfigrationItem aopItem : aopItemList) {
 			if (aopItem.matchClassName(clazz.getName()))
 				ipList.add(new InterceptorPair(getMethodInterceptor(ioc, aopItem.getInterceptor(),
-					aopItem.isSingleton()), MethodMatcherFactory.matcher(aopItem.getMethodName())));
+					aopItem.isSingleton()), MethodMatcherFactory.matcher(aopItem.getMethod())));
 		}
 		return ipList;
 	}
@@ -29,21 +29,21 @@ public abstract class AbstractAopConfigration implements AopConfigration {
 		this.aopItemList = aopItemList;
 	}
 
-	protected MethodInterceptor getMethodInterceptor(Ioc ioc, String interceptorName, boolean singleton) {
-		if (interceptorName.startsWith("ioc:")) {
-			return ioc.get(MethodInterceptor.class, interceptorName.substring(4));
+	protected MethodInterceptor getMethodInterceptor(Ioc ioc, String interceptor, boolean singleton) {
+		if (interceptor.startsWith("$")) {
+			return ioc.get(MethodInterceptor.class, interceptor.substring(1));
 		}
 		
 		if (singleton == false) {
-			return (MethodInterceptor)Classes.born(interceptorName);
+			return (MethodInterceptor)Classes.born(interceptor);
 		}
 
-		MethodInterceptor methodInterceptor = cachedMethodInterceptor.get(interceptorName);
-		if (methodInterceptor == null) {
-			methodInterceptor = (MethodInterceptor)Classes.born(interceptorName);
-			cachedMethodInterceptor.put(interceptorName, methodInterceptor);
+		MethodInterceptor mi = cachedMethodInterceptor.get(interceptor);
+		if (mi == null) {
+			mi = (MethodInterceptor)Classes.born(interceptor);
+			cachedMethodInterceptor.put(interceptor, mi);
 		}
-		return methodInterceptor;
+		return mi;
 	}
 
 	private HashMap<String, MethodInterceptor> cachedMethodInterceptor = new HashMap<String, MethodInterceptor>();

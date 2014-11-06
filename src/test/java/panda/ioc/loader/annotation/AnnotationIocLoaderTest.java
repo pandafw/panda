@@ -29,7 +29,7 @@ public class AnnotationIocLoaderTest {
 
 	@Test
 	public void testLoad() throws Throwable {
-		IocObject iocObject = iocLoader.load(null, ClassB.class.getName());
+		IocObject iocObject = iocLoader.load(ClassB.class.getName());
 		Assert.assertNotNull(iocObject);
 		Assert.assertNotNull(iocObject.getFields());
 		Assert.assertEquals(6, iocObject.getFields().size());

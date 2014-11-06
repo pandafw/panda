@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
-import panda.ioc.IocException;
 import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
 import panda.ioc.impl.DefaultIoc;
@@ -33,7 +33,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_2darray_by_map_iocvalue() {
-		Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> objMap = new HashMap<String, Object>();
 		String[][] strss = new String[2][2];
@@ -69,7 +69,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_refer_self() {
-		Ioc ioc = I(J("fox", "name:'Fox',another:{ref:'fox'}"));
+		Ioc ioc = I(J("fox", "name:'Fox',another:'ref:fox'"));
 		Animal f = ioc.get(Animal.class, "fox");
 		assertEquals("Fox", f.getName());
 		assertTrue(f == f.getAnother());
@@ -106,7 +106,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_refer() {
 		Ioc ioc = I(J("fox", "type:'" + Animal.class.getName() + "',fields:{name:'Fox'}"),
-			J("rabit", "name:'Rabit',enemies:[{ref:'fox'},{ref:'fox'}]"));
+			J("rabit", "name:'Rabit',enemies:['ref:fox','ref:fox']"));
 		Animal r = ioc.get(Animal.class, "rabit");
 		Animal f = ioc.get(Animal.class, "fox");
 		assertEquals(2, r.getEnemies().length);
@@ -119,7 +119,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_array_and_refer() {
 		Ioc ioc = I(J("fox", "name:'Fox'"),
-			J("rabit", "name:'Rabit',enemies:[{ref:'fox:" + Animal.class.getName() + "'},null]"));
+			J("rabit", "name:'Rabit',enemies:['ref:fox:" + Animal.class.getName() + "',null]"));
 
 		Animal r = ioc.get(Animal.class, "rabit");
 		Animal f = ioc.get(Animal.class, "fox");
@@ -132,7 +132,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_env() {
-		Animal f = A("name:{env:'PATH'},misc:[{env:'PATH'}]");
+		Animal f = A("name:'env:PATH',misc:['env:PATH']");
 		assertTrue(f.getName().length() > 0);
 		assertEquals(f.getName(), f.getMisc().get(0).toString());
 	}
@@ -142,14 +142,14 @@ public class SimpleJsonIocTest {
 		Properties properties = System.getProperties();
 		properties.put("sysA", "XX");
 		properties.put("sysP", "ZZZ");
-		Animal f = A("name:{sys:'sysA'},misc:[{sys:'sysP'}]");
+		Animal f = A("name:'sys:sysA',misc:['sys:sysP']");
 		assertEquals("XX", f.getName());
 		assertEquals("ZZZ", f.getMisc().get(0).toString());
 	}
 
 	@Test
 	public void test_file() {
-		Animal f = A("misc:[{file:'panda/ioc/json/pojo/Animal.class'}]");
+		Animal f = A("misc:['file:panda/ioc/json/pojo/Animal.class']");
 		assertEquals("Animal.class", ((File)f.getMisc().get(0)).getName());
 	}
 
@@ -174,7 +174,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_el_simple() {
-		Ioc ioc = I(J("fox", "name:{el: '\"fox\".toUpperCase()'}, age:{el:'$ioc.names.length'}"));
+		Ioc ioc = I(J("fox", "name:'el:\"fox\".toUpperCase()', age:'el:$ioc.names.length'"));
 		Animal fox = ioc.get(Animal.class, "fox");
 		assertEquals("FOX", fox.getName());
 		assertEquals(1, fox.getAge());
@@ -183,7 +183,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_el_with_arguments() {
 		Ioc ioc = I(J("fox", "name:'Fox',age:10"),
-			J("wolf", "name:{el:'fox.showName(\"_\", 2, \"W\")'},age:{el:'fox.age'}"));
+			J("wolf", "name:'el:fox.showName(\"_\", 2, \"W\")',age:'el:fox.age'"));
 		Animal fox = ioc.get(Animal.class, "fox");
 		Animal wolf = ioc.get(Animal.class, "wolf");
 		assertEquals("Fox", fox.getName());
@@ -216,16 +216,28 @@ public class SimpleJsonIocTest {
 		assertEquals("XiaoBai", xb.getName());
 	}
 
-	@Test(expected = IocException.class)
+	@Test
 	public void test_break_parent() {
-		Ioc ioc = I(J("f2", "parent:'f3'"), J("f3", "parent:'f2'"));
-		ioc.get(Animal.class, "f3");
+		try {
+			Ioc ioc = I(J("f2", "parent:'f3'"), J("f3", "parent:'f2'"));
+			ioc.get(Animal.class, "f3");
+			Assert.fail();
+		}
+		catch (IllegalArgumentException e) {
+			assertEquals("Cycled parent (id: f3, parent: f3)", e.getMessage());
+		}
 	}
 
-	@Test(expected = IocException.class)
+	@Test
 	public void test_break_parent2() {
-		Ioc ioc = I(J("fox", "name:'P',age:10"), J("f2", "parent:'x'"), J("f3", "parent:'y'"));
-		ioc.get(Animal.class, "f3");
+		try {
+			Ioc ioc = I(J("fox", "name:'P',age:10"), J("f2", "parent:'x'"), J("f3", "parent:'y'"));
+			ioc.get(Animal.class, "f3");
+			Assert.fail();
+		}
+		catch (IllegalArgumentException e) {
+			assertEquals("Cycled parent (id: f3, parent: y)", e.getMessage());
+		}
 	}
 
 	@Test
@@ -237,7 +249,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_get_ioc_self() {
-		Ioc ioc = I(J("iocV", "type:'" + IocSelf.class.getName() + "',fields:{ioc:{ref : '$iOc'}}"));
+		Ioc ioc = I(J("iocV", "type:'" + IocSelf.class.getName() + "',fields:{ioc:'ref:$iOc'}"));
 		assertEquals(ioc, ioc.get(IocSelf.class, "iocV").getIoc());
 	}
 }

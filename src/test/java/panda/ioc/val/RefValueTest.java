@@ -21,7 +21,7 @@ public class RefValueTest {
 	@Test
 	public void test_refer_context() {
 		IocContext context = new ScopeIocContext("abc");
-		String json = "{obj:{singleton:false,fields:{ic:{ref:'$ictx'}}}}";
+		String json = "{obj:{singleton:false,fields:{ic:'ref:$ictx'}}}";
 		Ioc ioc = new DefaultIoc(new MapIocLoader(json), context, "abc");
 		TestReferContext trc = ioc.get(TestReferContext.class);
 		assertTrue(context == trc.ic);

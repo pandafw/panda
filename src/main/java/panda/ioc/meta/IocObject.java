@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.lang.Collections;
 import panda.lang.Objects;
 
 /**
@@ -13,8 +14,7 @@ import panda.lang.Objects;
  * @see panda.ioc.meta.IocEventSet
  * @see panda.ioc.meta.IocValue
  */
-public class IocObject {
-
+public class IocObject implements Cloneable {
 	/**
 	 * 对象类型，如果为 null，则使用 Ioc 接口函数的第一个参数作为本次获取的类型。
 	 */
@@ -49,9 +49,9 @@ public class IocObject {
 
 	private String factory;
 
+	private Object value;
+	
 	public IocObject() {
-		args = new ArrayList<IocValue>();
-		fields = new LinkedHashMap<String, IocValue>();
 		singleton = true;
 	}
 
@@ -87,35 +87,48 @@ public class IocObject {
 		this.events = events;
 	}
 
-	public IocValue[] getArgs() {
-		return args.toArray(new IocValue[args.size()]);
+	@SuppressWarnings("unchecked")
+	public List<IocValue> getArgs() {
+		return args == null ? Collections.EMPTY_LIST : args;
 	}
 
 	public boolean hasArgs() {
-		return args.size() > 0;
+		return Collections.isNotEmpty(args);
 	}
 
 	public void addArg(IocValue arg) {
+		if (this.args == null) {
+			this.args = new ArrayList<IocValue>();
+		}
 		this.args.add(arg);
 	}
 
-	public void copyArgs(IocValue[] args) {
-		this.args.clear();
-		for (IocValue arg : args) {
-			addArg(arg);
+	public void copyArgs(List<IocValue> args) {
+		if (Collections.isEmpty(args)) {
+			return;
 		}
+		
+		if (this.args == null) {
+			this.args = new ArrayList<IocValue>();
+		}
+		this.args.clear();
+		this.args.addAll(args);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, IocValue> getFields() {
-		return fields;
+		return fields == null ? Collections.EMPTY_MAP : fields;
 	}
 
 	public void addField(String name, IocValue value) {
-		this.fields.put(name, value);
+		if (fields == null) {
+			fields = new LinkedHashMap<String, IocValue>();
+		}
+		fields.put(name, value);
 	}
 
 	public boolean hasField(String name) {
-		return fields.containsKey(name);
+		return fields != null && fields.containsKey(name);
 	}
 
 	public void setFactory(String factory) {
@@ -126,15 +139,39 @@ public class IocObject {
 		return factory;
 	}
 
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+	@Override
+	public IocObject clone() {
+		IocObject io = new IocObject();
+		io.type = type;
+		io.singleton = singleton;
+		io.scope = scope;
+		io.args = args;
+		io.fields = fields;
+		io.events = events;
+		io.factory = factory;
+		io.value = value;
+		return io;
+	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append("type", type)
-				.append("singletion", singleton)
+				.append("singleton", singleton)
 				.append("scope", scope)
+				.append("args", args)
 				.append("fields", fields)
 				.append("events", events)
 				.append("factory", factory)
+				.append("value", value)
 				.toString();
 	}
 }

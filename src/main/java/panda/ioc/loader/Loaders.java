@@ -7,7 +7,7 @@ import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.lang.Strings;
 
-abstract class Loaders {
+public abstract class Loaders {
 	/**
 	 * 查看一下 me 中有没有缺少的属性，没有的话，从 it 补充
 	 */

@@ -13,14 +13,14 @@
 		type : 'panda.ioc.aop.config.impl.JsonAopConfigration',
 		fields : {
 			itemList : [
-				['.+','toString','ioc:log'],
-				['.+','.+','ioc:myMI'],
-				['com\\.service\\..+','.+','ioc:log'],
-				['com\\.service\\.auth\\..+','.+','ioc:txSERIALIZABLE'],
-				['com\\.service\\.blog\\..+','(get|save|update|delete).+','ioc:txREPEATABLE_READ'],
-				['com\\.service\\.news\\..+','(get|set).+','ioc:txREAD_COMMITTED'],
-				['com\\.service\\.media\\..+','(get|set).+','ioc:txREAD_UNCOMMITTED'],
-				['com\\.service\\.status\\..+','(get|set).+','ioc:txNONE']
+				['.+',                'toString',    '$log'],
+				['.+',    '.+', '$myMI'],
+				['com\\.service\\..+','.+','$log'],
+				['com\\.service\\.auth\\..+','.+','$txSERIALIZABLE'],
+				['com\\.service\\.blog\\..+','(get|save|update|delete).+','$txREPEATABLE_READ'],
+				['com\\.service\\.news\\..+','(get|set).+','$txREAD_COMMITTED'],
+				['com\\.service\\.media\\..+','(get|set).+','$txREAD_UNCOMMITTED'],
+				['com\\.service\\.status\\..+','(get|set).+','$txNONE']
 			]
 		}
 	}

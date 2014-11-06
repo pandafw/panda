@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,9 +25,6 @@ import org.w3c.dom.NodeList;
 
 import panda.io.Files;
 import panda.io.Streams;
-import panda.ioc.IocLoader;
-import panda.ioc.IocLoading;
-import panda.ioc.IocLoadException;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
@@ -44,11 +40,9 @@ import panda.log.Logs;
  * 限制: <br/>
  * <li>必须是良构的XML文件 <li> <li>obj必须定义type,当前实现中IocObject是共享的 <li>
  */
-public class XmlIocLoader implements IocLoader {
+public class XmlIocLoader extends AbstractIocLoader {
 
 	private static final Log log = Logs.getLog(XmlIocLoader.class);
-
-	protected Map<String, IocObject> iocMap = new LinkedHashMap<String, IocObject>();
 
 	protected Map<String, String> parentMap = new TreeMap<String, String>();
 
@@ -77,7 +71,7 @@ public class XmlIocLoader implements IocLoader {
 		
 		if (log.isDebugEnabled()) {
 			log.debugf("Loaded %d bean define from path=%s --> %s", 
-				iocMap.size(), Arrays.toString(paths), iocMap.keySet());
+				beans.size(), Arrays.toString(paths), beans.keySet());
 		}
 	}
 	
@@ -115,21 +109,6 @@ public class XmlIocLoader implements IocLoader {
 		}
 	}
 
-	public Set<String> getNames() {
-		return iocMap.keySet();
-	}
-
-	public boolean has(String name) {
-		return iocMap.containsKey(name);
-	}
-
-	public IocObject load(IocLoading loading, String name) throws IocLoadException {
-		if (has(name)) {
-			return iocMap.get(name);
-		}
-		throw new IocLoadException("Object '" + name + "' without define!");
-	}
-
 	protected String paserBean(Element beanElement, boolean innerBean) throws Throwable {
 		String beanId;
 		if (innerBean) {
@@ -144,7 +123,7 @@ public class XmlIocLoader implements IocLoader {
 			throw new RuntimeException("No name for one bean!");
 		}
 		
-		if (iocMap.containsKey(beanId)) {
+		if (beans.containsKey(beanId)) {
 			throw new RuntimeException("Name of bean is not unique! name=" + beanId);
 		}
 		
@@ -177,7 +156,7 @@ public class XmlIocLoader implements IocLoader {
 		parseFields(beanElement, iocObject);
 		parseEvents(beanElement, iocObject);
 
-		iocMap.put(beanId, iocObject);
+		beans.put(beanId, iocObject);
 		if (log.isDebugEnabled()) {
 			log.debugf("Resolved bean define, name = %s", beanId);
 		}
@@ -370,7 +349,7 @@ public class XmlIocLoader implements IocLoader {
 	protected void handleParent() {
 		// 检查parentId是否都存在.
 		for (String parentId : parentMap.values()) {
-			if (!iocMap.containsKey(parentId)) {
+			if (!beans.containsKey(parentId)) {
 				throw Exceptions.makeThrow("发现无效的parent=%s", parentId);
 			}
 		}
@@ -391,8 +370,8 @@ public class XmlIocLoader implements IocLoader {
 				String beanId = entry.getKey();
 				String parentId = entry.getValue();
 				if (parentMap.get(parentId) == null) {
-					IocObject newIocObject = Loaders.mergeWith(iocMap.get(beanId), iocMap.get(parentId));
-					iocMap.put(beanId, newIocObject);
+					IocObject newIocObject = Loaders.mergeWith(beans.get(beanId), beans.get(parentId));
+					beans.put(beanId, newIocObject);
 					it.remove();
 				}
 			}
