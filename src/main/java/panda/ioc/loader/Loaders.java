@@ -8,15 +8,49 @@ import panda.ioc.meta.IocValue;
 import panda.lang.Strings;
 
 public abstract class Loaders {
+	public static IocValue convert(String value, char defType) {
+		if (value == null) {
+			return new IocValue(IocValue.TYPE_NULL);
+		}
+		if (value.isEmpty()) {
+			return new IocValue(IocValue.TYPE_NORMAL, value);
+		}
+
+		int c0 = value.charAt(0);
+		if (c0 == '\'') {
+			return new IocValue(IocValue.TYPE_NORMAL, value.substring(1));
+		}
+		if (c0 == '#' && value.length() > 1) {
+			return new IocValue(IocValue.TYPE_REF, value.substring(1));
+		}
+		if (value.length() > 3) {
+			int c1 = value.charAt(1);
+			int cx = value.charAt(value.length() - 1);
+			
+			if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
+				return new IocValue(IocValue.TYPE_EL, value.substring(2, value.length() - 1));
+			}
+			if (c0 == '!' && c1 == '{' && cx == '}') {
+				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
+			}
+			if (c0 == '!' && c1 == '[' && cx == ']') {
+				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
+			}
+		}
+
+		return new IocValue(defType, value);
+	}
+
 	/**
 	 * 查看一下 me 中有没有缺少的属性，没有的话，从 it 补充
 	 */
 	public static IocObject mergeWith(IocObject me, IocObject it) {
 		// merge type
-		if (me.getType() == null)
+		if (me.getType() == null) {
 			me.setType(it.getType());
+		}
 
-		// don't need merge signleon
+		// don't need merge singleton
 
 		// merge events
 		if (me.getEvents() == null) {

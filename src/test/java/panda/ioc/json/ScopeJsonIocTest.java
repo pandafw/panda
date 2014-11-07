@@ -49,8 +49,8 @@ public class ScopeJsonIocTest {
 	@Test
 	public void test_refer_from_diffenent_scope() {
 		DefaultIoc ioc = I(J("f1", "type : '" + Animal.class.getName() + "' , scope:'app',fields:{name:'F1'}"),
-			J("f2", "type : '" + Animal.class.getName() + "' , scope:'MyScope',fields:{another:'ref:f3'}"),
-			J("f3", "type : '" + Animal.class.getName() + "' , scope:'MyScope',fields:{another:'ref:f1'}"));
+			J("f2", "type : '" + Animal.class.getName() + "' , scope:'MyScope',fields:{another:'#f3'}"),
+			J("f3", "type : '" + Animal.class.getName() + "' , scope:'MyScope',fields:{another:'#f1'}"));
 
 		ComboIocContext cic = new ComboIocContext(ioc.getContext(), new ScopeIocContext("MyScope"));
 		ioc.setContext(cic);

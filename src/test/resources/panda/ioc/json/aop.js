@@ -9,6 +9,6 @@
 	// ---------------------------------------------
 	lst : {
 		type : 'panda.ioc.json.pojo.AnimalListener',
-		args : [ 'ref: sb' ]
+		args : [ '#sb' ]
 	}
 }

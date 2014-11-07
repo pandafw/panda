@@ -8,14 +8,13 @@ import java.sql.Types;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.util.JndiLookup;
 
 /**
  * utility class for sql
@@ -28,15 +27,9 @@ public class Sqls {
 	/**
 	 * @param jndi
 	 * @throws NamingException
-	 * @throws SQLException
 	 */
-	public static DataSource lookupJndiDataSource(String jndi) throws NamingException, SQLException {
-		Context ic = new InitialContext();
-		DataSource ds = (DataSource)ic.lookup(jndi);
-		if (ds == null) {
-			throw new NamingException("Failed to lookup data source: " + jndi);
-		}
-		return ds;
+	public static DataSource lookupJndiDataSource(String jndi) throws NamingException {
+		return (DataSource)JndiLookup.lookup(jndi);
 	}
 
 	/**

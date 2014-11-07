@@ -30,7 +30,7 @@ public abstract class AbstractAopConfigration implements AopConfigration {
 	}
 
 	protected MethodInterceptor getMethodInterceptor(Ioc ioc, String interceptor, boolean singleton) {
-		if (interceptor.startsWith("$")) {
+		if (interceptor.startsWith("#")) {
 			return ioc.get(MethodInterceptor.class, interceptor.substring(1));
 		}
 		

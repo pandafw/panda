@@ -83,8 +83,8 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 
 		String beanName = getBeanName(clazz);
 		if (beans.containsKey(beanName)) {
-			throw new IocException("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
-				beanName, clazz, beans.get(beanName).getType());
+			throw new IocException(String.format("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
+				beanName, clazz, beans.get(beanName).getType()));
 		}
 
 		if (log.isDebugEnabled()) {
@@ -153,8 +153,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 
 			IocValue iocValue;
 			if (Strings.isBlank(inject.value())) {
-				iocValue = new IocValue();
-				iocValue.setType(IocValue.TYPE_REF);
+				iocValue = new IocValue(IocValue.TYPE_REF);
 				iocValue.setValue(Object.class.equals(inject.type()) ? field.getType() : inject.type());
 			}
 			else {
@@ -201,8 +200,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				
 				IocValue iocValue;
 				if (Strings.isBlank(inject.value())) {
-					iocValue = new IocValue();
-					iocValue.setType(IocValue.TYPE_REF);
+					iocValue = new IocValue(IocValue.TYPE_REF);
 					iocValue.setValue(Strings.uncapitalize(methodName.substring(3)));
 					iocValue.setValue(Object.class.equals(inject.type()) ? method.getParameterTypes()[0] : inject.type());
 				}
@@ -230,8 +228,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				}
 				else {
 					// 基本形式, 引用与自身同名的bean
-					IocValue iocValue = new IocValue();
-					iocValue.setType(IocValue.TYPE_REF);
+					IocValue iocValue = new IocValue(IocValue.TYPE_REF);
 					iocValue.setValue(fieldInfo);
 					iocObject.addField(fieldInfo, iocValue);
 				}
@@ -292,21 +289,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 	}
 
 	private IocValue convert(String value) {
-		IocValue iocValue = new IocValue();
-		int colon = value.indexOf(':');
-		if (colon == 0) {
-			iocValue.setType(IocValue.TYPE_NORMAL);
-			iocValue.setValue(value.substring(1));
-		}
-		else if (colon > 0) {
-			iocValue.setType(value.substring(0, colon));
-			iocValue.setValue(value.substring(colon + 1));
-		}
-		else {
-			iocValue.setType(IocValue.TYPE_REF);
-			iocValue.setValue(value);
-		}
-		return iocValue;
+		return Loaders.convert(value, IocValue.TYPE_REF);
 	}
 
 }

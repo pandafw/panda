@@ -8,6 +8,24 @@ import panda.lang.Strings;
 import panda.util.Pair;
 
 public class ReferValue implements ValueProxy {
+	public static ValueProxy IOC_SELF = new ValueProxy() {
+		public Object get(IocMaking ing) {
+			return ing.getIoc();
+		}
+	};
+
+	public static ValueProxy IOC_BEAN_NAME = new ValueProxy() {
+		public Object get(IocMaking ing) {
+			return ing.getName();
+		}
+	};
+
+	public static ValueProxy IOC_CONTEXT = new ValueProxy() {
+		public Object get(IocMaking ing) {
+			return ing.getIoc().getContext();
+		}
+	};
+
 	private String name;
 	private Class<?> type;
 	private boolean required = true;

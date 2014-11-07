@@ -25,29 +25,35 @@ import panda.lang.Objects;
  */
 public class IocValue {
 
-	public static final String TYPE_NULL = "null";
-	public static final String TYPE_NORMAL = "normal";
-	public static final String TYPE_INNER = "inner";
-	public static final String TYPE_REF = "ref";
-	public static final String TYPE_ENV = "env";
-	public static final String TYPE_SYS = "sys";
-	public static final String TYPE_FILE = "file";
-	public static final String TYPE_EL = "el";
-	public static final String TYPE_JSON = "json";
-	public static final String TYPE_JNDI = "jndi";
+	public static final char TYPE_NULL = '0';
+	public static final char TYPE_NORMAL = '1';
 
-	private String type;
+	public static final char TYPE_REF = 'R';
+	public static final char TYPE_EL = 'E';
+	public static final char TYPE_JSON = 'J';
+
+	private char type;
 	private Object value;
 	private boolean required = true;
 
-	public IocValue() {
+	public IocValue(char type) {
+		this.type = type;
 	}
 
-	public String getType() {
+	/**
+	 * @param type
+	 * @param value
+	 */
+	public IocValue(char type, Object value) {
+		this.type = type;
+		this.value = value;
+	}
+
+	public char getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 

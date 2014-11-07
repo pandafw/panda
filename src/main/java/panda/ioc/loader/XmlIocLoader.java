@@ -207,73 +207,48 @@ public class XmlIocLoader extends AbstractIocLoader {
 	protected static final String FLOAT_TAG = "float";
 	protected static final String DOUBLE_TAG = "double";
 	protected static final String BOOLEAN_TAG = "bool";
-	protected static final String REFER_TAG = IocValue.TYPE_REF;
-	protected static final String EL_TAG = IocValue.TYPE_EL;
-	protected static final String FILE_TAG = IocValue.TYPE_FILE;
-	protected static final String EVN_TAG = IocValue.TYPE_ENV;
-	protected static final String JSON_TAG = IocValue.TYPE_JSON;
-	protected static final String JNDI_TAG = IocValue.TYPE_JNDI;
-	protected static final String SYS_TAG = IocValue.TYPE_SYS;
+	protected static final String REFER_TAG = "ref";
+	protected static final String EL_TAG = "el";
+	protected static final String JSON_TAG = "json";
 
 	protected IocValue parseX(Element element) throws Throwable {
-		IocValue iocValue = new IocValue();
+		IocValue iocValue = new IocValue(IocValue.TYPE_NORMAL);
 		String type = element.getNodeName();
-		if (EVN_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(EVN_TAG);
-			iocValue.setValue(element.getTextContent());
-		}
-		else if (SYS_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(SYS_TAG);
-			iocValue.setValue(element.getTextContent());
-		}
-		else if (JSON_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(JSON_TAG);
-			iocValue.setValue(element.getTextContent());
-		}
-		else if (JNDI_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(JNDI_TAG);
+		if (JSON_TAG.equalsIgnoreCase(type)) {
+			iocValue.setType(IocValue.TYPE_JSON);
 			iocValue.setValue(element.getTextContent());
 		}
 		else if (EL_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(EL_TAG);
+			iocValue.setType(IocValue.TYPE_EL);
 			iocValue.setValue(element.getTextContent());
 		}
 		else if (REFER_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(REFER_TAG);
+			iocValue.setType(IocValue.TYPE_REF);
 			iocValue.setValue(element.getTextContent());
 			String req = element.getAttribute("required");
 			if (Strings.isNotEmpty(req)) {
 				iocValue.setRequired(Boolean.parseBoolean(req));
 			}
 		}
-		else if (FILE_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(FILE_TAG);
-			iocValue.setValue(element.getTextContent());
-		}
 		else if (OBJ_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(REFER_TAG);
+			iocValue.setType(IocValue.TYPE_REF);
 			iocValue.setValue(paserBean(element, true));
 		}
 		else if (MAP_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(null);
 			iocValue.setValue(paserMap(element));
 		}
 		else if (LIST_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(null);
 			iocValue.setValue(paserCollection(element));
 		}
 		else if (ARRAY_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(null);
 			iocValue.setValue(paserCollection(element).toArray());
 		}
 		else if (SET_TAG.equalsIgnoreCase(type)) {
-			iocValue.setType(null);
 			Set<Object> set = new HashSet<Object>();
 			set.addAll(paserCollection(element));
 			iocValue.setValue(set);
 		}
 		else {
-			iocValue.setType(null);
 			if (element.getFirstChild() != null) {
 				iocValue.setValue(element.getFirstChild().getTextContent());
 			}

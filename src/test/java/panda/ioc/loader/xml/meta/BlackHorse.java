@@ -6,7 +6,7 @@ import panda.ioc.annotation.IocInject;
 @IocBean
 public class BlackHorse extends Horse {
 
-	@IocInject("el:'black horse'")
+	@IocInject("'black horse")
 	public void setName(String name) {
 		super.setName(name);
 	}

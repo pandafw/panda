@@ -47,7 +47,7 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	 * @return property type
 	 */
 	public boolean canReadProperty(T ioc, String propertyName) {
-		if (IocConstants.IOC.equals(propertyName)
+		if (IocConstants.IOC_SELF.equals(propertyName)
 				|| IocConstants.IOC_CONTEXT.equals(propertyName)) {
 			return true;
 		}
@@ -93,11 +93,11 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	}
 	
 	public Object getPropertyValue(T ioc, String propertyName) {
-		if (IocConstants.IOC.equals(propertyName)) {
-			return ioc == null ? null : ioc.getIoc();
+		if (IocConstants.IOC_SELF.equals(propertyName)) {
+			return ioc.getIoc();
 		}
 		if (IocConstants.IOC_CONTEXT.equals(propertyName)) {
-			return ioc == null ? null : ioc.getContext();
+			return ioc.getContext();
 		}
 		
 		return ioc.get(Object.class, propertyName);

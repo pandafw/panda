@@ -177,8 +177,8 @@ public class DefaultIoc implements Ioc, Cloneable {
 							for (String iocBeanName : loader.getNames()) {
 								// 相似性少于3 --> 大小写错误,1-2个字符调换顺序或写错
 								if (3 > Texts.computeLevenshteinDistance(name.toLowerCase(), iocBeanName.toLowerCase())) {
-									throw new IocException("Undefined object '%s' but found similar name '%s'", name,
-										iocBeanName);
+									throw new IocException(String.format("Undefined object '%s' but found similar name '%s'", name,
+										iocBeanName));
 								}
 							}
 							throw new IocLoadException("Undefined object '" + name + "'");
@@ -192,7 +192,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						// 修正对象类型
 						if (null == iobj.getType()) {
 							if (null == type) {
-								throw new IocException("NULL TYPE object '%s'", name);
+								throw new IocException(String.format("NULL TYPE object '%s'", name));
 							}
 							iobj = iobj.clone();
 							iobj.setType(type);
@@ -209,7 +209,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						throw e;
 					}
 					catch (Throwable e) {
-						throw new IocException(Exceptions.unwrapThrow(e), "For object [%s] - type:[%s]", name, type);
+						throw new IocException(String.format("For object [%s] - type:[%s]", name, type), Exceptions.unwrapThrow(e));
 					}
 				}
 			}

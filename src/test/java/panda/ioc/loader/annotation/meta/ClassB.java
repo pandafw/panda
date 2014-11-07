@@ -20,7 +20,7 @@ public class ClassB {
 	@IocInject
 	public ClassCC cc2;
 	
-	@IocInject(value="ref:xxx", required=false)
+	@IocInject(value="xxx", required=false)
 	public String xxx = "default";
 
 	@IocInject(type=InputStream.class, required=false)

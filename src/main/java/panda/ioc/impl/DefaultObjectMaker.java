@@ -112,7 +112,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 	private ObjectWeaver createWeaver(Class<?> mirror, IocMaking ing, IocObject iobj) {
 		// 准备对象的编织方式
-		DefaultWeaver dw = new DefaultWeaver();
+		DefaultObjectWeaver dw = new DefaultObjectWeaver();
 
 		// 构造函数参数
 		setWeaverCreator(dw, mirror, ing, iobj);
@@ -124,7 +124,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setWeaverCreator(DefaultWeaver dw, Class<?> mirror, IocMaking ing, IocObject iobj) {
+	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> mirror, IocMaking ing, IocObject iobj) {
 		// 为编织器设置事件触发器：创建时
 		if (null != iobj.getEvents()) {
 			dw.setOnCreate(createTrigger(mirror, iobj.getEvents().getCreate()));
@@ -170,7 +170,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 	}
 
-	private void setWeaverFields(DefaultWeaver weaver, Class<?> mirror, IocMaking ing, IocObject iobj) {
+	private void setWeaverFields(DefaultObjectWeaver weaver, Class<?> mirror, IocMaking ing, IocObject iobj) {
 		// 获得每个字段的注入方式
 		IocFieldInjector[] fields = new IocFieldInjector[iobj.getFields().size()];
 		int i = 0;

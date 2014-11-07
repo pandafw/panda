@@ -76,6 +76,7 @@ public class MapIocLoader extends AbstractIocLoader {
 					}
 					newMap.put(en.getKey(), en.getValue());
 				}
+				
 				// Create self IocObject
 				IocObject self = map2iobj(newMap);
 	
@@ -213,12 +214,10 @@ public class MapIocLoader extends AbstractIocLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	IocValue object2value(Object obj) {
-		IocValue iv = new IocValue();
+	private IocValue object2value(Object obj) {
 		// Null
 		if (null == obj) {
-			iv.setType(IocValue.TYPE_NULL);
-			return iv;
+			return new IocValue(IocValue.TYPE_NULL);
 		}
 		
 		// IocValue
@@ -232,39 +231,33 @@ public class MapIocLoader extends AbstractIocLoader {
 
 		// Map
 		if (obj instanceof Map<?, ?>) {
+			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
 			Map<String, Object> map = (Map<String, Object>)obj;
-			// Inner
-			if (map.size() > 0 && isIocObject(map)) {
-				iv.setType(IocValue.TYPE_INNER);
-				iv.setValue(map2iobj(map));
-				return iv;
-			}
-			
 			// Normal map
 			Map<String, IocValue> newmap = new HashMap<String, IocValue>();
 			for (Entry<String, Object> en : map.entrySet()) {
 				IocValue v = object2value(en.getValue());
 				newmap.put(en.getKey(), v);
 			}
-			iv.setType(IocValue.TYPE_NORMAL);
 			iv.setValue(newmap);
 			return iv;
 		}
 		
 		// Array
 		if (obj.getClass().isArray()) {
+			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
 			Object[] array = (Object[])obj;
 			IocValue[] ivs = new IocValue[array.length];
 			for (int i = 0; i < ivs.length; i++) {
 				ivs[i] = object2value(array[i]);
 			}
-			iv.setType(IocValue.TYPE_NORMAL);
 			iv.setValue(ivs);
 			return iv;
 		}
 		
 		// Collection
 		if (obj instanceof Collection<?>) {
+			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
 			Collection<IocValue> values = new ArrayList<IocValue>(((Collection)obj).size());
 			Iterator<?> it = ((Collection<?>)obj).iterator();
 			while (it.hasNext()) {
@@ -272,32 +265,15 @@ public class MapIocLoader extends AbstractIocLoader {
 				IocValue v = object2value(o);
 				values.add(v);
 			}
-			iv.setType(IocValue.TYPE_NORMAL);
 			iv.setValue(values);
 			return iv;
 		}
 		
 		// Normal
-		iv.setType(IocValue.TYPE_NORMAL);
-		iv.setValue(obj);
-		return iv;
+		return new IocValue(IocValue.TYPE_NORMAL, obj);
 	}
 
 	private IocValue convert(String value) {
-		IocValue iocValue = new IocValue();
-		int colon = value.indexOf(':');
-		if (colon == 0) {
-			iocValue.setType(IocValue.TYPE_NORMAL);
-			iocValue.setValue(value.substring(1));
-		}
-		else if (colon > 0) {
-			iocValue.setType(value.substring(0, colon));
-			iocValue.setValue(value.substring(colon + 1));
-		}
-		else {
-			iocValue.setType(IocValue.TYPE_NORMAL);
-			iocValue.setValue(value);
-		}
-		return iocValue;
+		return Loaders.convert(value, IocValue.TYPE_NORMAL);
 	}
 }

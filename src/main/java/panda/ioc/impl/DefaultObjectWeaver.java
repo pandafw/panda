@@ -13,7 +13,7 @@ import panda.lang.reflect.Types;
 /**
  * 默认的对象编织过程
  */
-public class DefaultWeaver implements ObjectWeaver {
+public class DefaultObjectWeaver implements ObjectWeaver {
 
 	/**
 	 * 对象创建时的触发器

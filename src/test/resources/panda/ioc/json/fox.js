@@ -7,7 +7,7 @@
 
 	red : {
 		name : "Red",
-		race : "${MM}",
-		birthday : "${BB}"
+		race : "$${MM}",
+		birthday : "$${BB}"
 	}
 }

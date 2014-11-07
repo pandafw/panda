@@ -69,7 +69,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_refer_self() {
-		Ioc ioc = I(J("fox", "name:'Fox',another:'ref:fox'"));
+		Ioc ioc = I(J("fox", "name:'Fox',another:'#fox'"));
 		Animal f = ioc.get(Animal.class, "fox");
 		assertEquals("Fox", f.getName());
 		assertTrue(f == f.getAnother());
@@ -106,7 +106,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_refer() {
 		Ioc ioc = I(J("fox", "type:'" + Animal.class.getName() + "',fields:{name:'Fox'}"),
-			J("rabit", "name:'Rabit',enemies:['ref:fox','ref:fox']"));
+			J("rabit", "name:'Rabit',enemies:['#fox','#fox']"));
 		Animal r = ioc.get(Animal.class, "rabit");
 		Animal f = ioc.get(Animal.class, "fox");
 		assertEquals(2, r.getEnemies().length);
@@ -119,7 +119,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_array_and_refer() {
 		Ioc ioc = I(J("fox", "name:'Fox'"),
-			J("rabit", "name:'Rabit',enemies:['ref:fox:" + Animal.class.getName() + "',null]"));
+			J("rabit", "name:'Rabit',enemies:['#fox:" + Animal.class.getName() + "',null]"));
 
 		Animal r = ioc.get(Animal.class, "rabit");
 		Animal f = ioc.get(Animal.class, "fox");
@@ -138,35 +138,11 @@ public class SimpleJsonIocTest {
 	}
 
 	@Test
-	public void test_sys() {
-		Properties properties = System.getProperties();
-		properties.put("sysA", "XX");
-		properties.put("sysP", "ZZZ");
-		Animal f = A("name:'sys:sysA',misc:['sys:sysP']");
-		assertEquals("XX", f.getName());
-		assertEquals("ZZZ", f.getMisc().get(0).toString());
-	}
-
-	@Test
-	public void test_file() {
-		Animal f = A("misc:['file:panda/ioc/json/pojo/Animal.class']");
-		assertEquals("Animal.class", ((File)f.getMisc().get(0)).getName());
-	}
-
-	@Test
-	public void test_inner() {
-		Animal f = A("enemies: [ {type:'" + Animal.class.getName() + "', fields: {name:'xxx'}} ]");
-		assertEquals("xxx", f.getEnemies()[0].getName());
-	}
-
-	@Test
 	public void test_map() {
 		Animal f = A("map : {asia:34, europe: 45}");
 		assertEquals(34, f.getMap().get("asia").intValue());
 		assertEquals(45, f.getMap().get("europe").intValue());
-
-		f = A("relations: {a: {type:'" + Animal.class.getName() + "', fields: {name:'AAA'}}"
-				+ ",b: {type:'" + Animal.class.getName() + "', fields: {name:'BBB'}}}");
+		f = A("relations: { a: { name:'AAA' }, b: { name:'BBB' } }");
 		assertEquals(2, f.getRelations().size());
 		assertEquals("AAA", f.getRelations().get("a").getName());
 		assertEquals("BBB", f.getRelations().get("b").getName());
@@ -174,7 +150,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_el_simple() {
-		Ioc ioc = I(J("fox", "name:'el:\"fox\".toUpperCase()', age:'el:$ioc.names.length'"));
+		Ioc ioc = I(J("fox", "name:'${\"fox\".toUpperCase()}', age:'${$ioc.names.length}'"));
 		Animal fox = ioc.get(Animal.class, "fox");
 		assertEquals("FOX", fox.getName());
 		assertEquals(1, fox.getAge());
@@ -183,7 +159,7 @@ public class SimpleJsonIocTest {
 	@Test
 	public void test_el_with_arguments() {
 		Ioc ioc = I(J("fox", "name:'Fox',age:10"),
-			J("wolf", "name:'el:fox.showName(\"_\", 2, \"W\")',age:'el:fox.age'"));
+			J("wolf", "name:'${fox.showName(\"_\", 2, \"W\")}',age:'${fox.age}'"));
 		Animal fox = ioc.get(Animal.class, "fox");
 		Animal wolf = ioc.get(Animal.class, "wolf");
 		assertEquals("Fox", fox.getName());
@@ -249,7 +225,7 @@ public class SimpleJsonIocTest {
 
 	@Test
 	public void test_get_ioc_self() {
-		Ioc ioc = I(J("iocV", "type:'" + IocSelf.class.getName() + "',fields:{ioc:'ref:$iOc'}"));
+		Ioc ioc = I(J("iocV", "type:'" + IocSelf.class.getName() + "',fields:{ioc:'#$iOc'}"));
 		assertEquals(ioc, ioc.get(IocSelf.class, "iocV").getIoc());
 	}
 }
