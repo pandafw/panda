@@ -8,12 +8,10 @@ import static panda.ioc.json.Utils.A;
 import static panda.ioc.json.Utils.I;
 import static panda.ioc.json.Utils.J;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Test;
