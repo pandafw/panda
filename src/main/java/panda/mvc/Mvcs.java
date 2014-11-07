@@ -106,8 +106,9 @@ public abstract class Mvcs {
 	/**
 	 * evaluate string value
 	 * ${...}, %{...} : el eval
-	 * #{...} : json object eval
-	 * #[...] : json array eval
+	 * #{...} : json object
+	 * #[...] : json array
+	 * #(...) : text
 	 */
 	public static Object evaluate(Object val, ActionContext ac) {
 		return evaluate(val, ac, Objects.NULL);
@@ -116,8 +117,9 @@ public abstract class Mvcs {
 	/**
 	 * evaluate string value
 	 * ${...}, %{...} : el eval
-	 * #{...} : json object eval
-	 * #[...] : json array eval
+	 * #{...} : json object
+	 * #[...] : json array
+	 * #(...) : text
 	 */
 	public static Object evaluate(Object val, ActionContext ac, Object arg) {
 		if (val instanceof String) {
@@ -129,13 +131,13 @@ public abstract class Mvcs {
 				if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
 					val = findValue(s.substring(2, s.length() - 1), ac, arg);
 				}
-				else if (c0 == '#' && c1 == '{' && cx == '}') {
+				else if (c0 == '!' && c1 == '{' && cx == '}') {
 					val = JsonObject.fromJson(s.substring(1));
 				}
-				else if (c0 == '#' && c1 == '[' && cx == ']') {
+				else if (c0 == '!' && c1 == '[' && cx == ']') {
 					val = JsonArray.fromJson(s.substring(1));
 				}
-				else if (c0 == '#' && c1 == '(' && cx == ')') {
+				else if (c0 == '!' && c1 == '(' && cx == ')') {
 					val = ac.text(s.substring(2, s.length() - 1));
 				}
 			}

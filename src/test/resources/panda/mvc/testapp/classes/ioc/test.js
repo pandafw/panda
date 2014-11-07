@@ -7,7 +7,7 @@
 		args : [{
 			jdbc: {
 				driver : 'org.hsqldb.jdbcDriver',
-				url : ':jdbc:hsqldb:mem:mvc',
+				url : 'jdbc:hsqldb:mem:mvc',
 				username : 'sa',
 				password : 'sa'
 			}
