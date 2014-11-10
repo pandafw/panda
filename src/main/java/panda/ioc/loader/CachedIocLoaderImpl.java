@@ -10,7 +10,7 @@ import panda.ioc.meta.IocObject;
 public class CachedIocLoaderImpl extends AbstractIocLoader implements CachedIocLoader {
 
 	private static final IocObject NULL = new IocObject();
-	
+
 	public static CachedIocLoaderImpl create(IocLoader proxyIocLoader) {
 		return new CachedIocLoaderImpl(proxyIocLoader);
 	}
@@ -24,7 +24,7 @@ public class CachedIocLoaderImpl extends AbstractIocLoader implements CachedIocL
 
 		// cache names
 		for (String n : loader.getNames()) {
-			beans.put(n, null);
+			beans.put(n, NULL);
 		}
 	}
 
@@ -35,14 +35,13 @@ public class CachedIocLoaderImpl extends AbstractIocLoader implements CachedIocL
 
 	public IocObject load(String name) throws IocLoadException {
 		IocObject io = beans.get(name);
-		if (io == null) {
+		if (io == NULL) {
 			io = loader.load(name);
-			if (io == null) {
-				io = NULL;
+			if (io != null) {
+				beans.put(name, io);
 			}
-			beans.put(name, io);
 		}
-		return io == NULL ? null : io;
+		return io;
 	}
 
 	@Override
