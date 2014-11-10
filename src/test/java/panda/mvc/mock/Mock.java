@@ -1,11 +1,11 @@
 package panda.mvc.mock;
 
-import panda.mock.web.MockHttpServletRequest;
-import panda.mock.web.MockHttpServletResponse;
-import panda.mock.web.MockHttpSession;
-import panda.mock.web.MockServletConfig;
-import panda.mock.web.MockServletContext;
 import panda.mvc.ActionContext;
+import panda.servlet.mock.MockHttpServletRequest;
+import panda.servlet.mock.MockHttpServletResponse;
+import panda.servlet.mock.MockHttpSession;
+import panda.servlet.mock.MockServletConfig;
+import panda.servlet.mock.MockServletContext;
 
 /**
  * 一些方面的静态方法

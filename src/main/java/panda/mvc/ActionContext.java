@@ -35,9 +35,11 @@ public class ActionContext {
 	private String path;
 	private List<String> pathArgs;
 
+	private ServletContext servlet;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private ServletContext servlet;
+	private ActionChain chain;
+	
 	private ActionAssist assist;
 	private ActionConsts consts;
 
@@ -169,6 +171,20 @@ public class ActionContext {
 	 */
 	public void setServlet(ServletContext servlet) {
 		this.servlet = servlet;
+	}
+
+	/**
+	 * @return the chain
+	 */
+	public ActionChain getChain() {
+		return chain;
+	}
+
+	/**
+	 * @param chain the chain to set
+	 */
+	public void setChain(ActionChain chain) {
+		this.chain = chain;
 	}
 
 	/**

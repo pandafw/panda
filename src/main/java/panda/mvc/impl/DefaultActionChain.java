@@ -1,46 +1,69 @@
 package panda.mvc.impl;
 
-import java.util.Iterator;
 import java.util.List;
 
+import panda.lang.Classes;
 import panda.lang.Exceptions;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.Processor;
 
 public class DefaultActionChain implements ActionChain {
-
+	private static final Log log = Logs.getLog(DefaultActionChain.class);
+	
 	private ActionInfo info;
-	private Processor head;
+	private List<String> procs;
+	private int current;
 
-	public DefaultActionChain(ActionInfo ai, List<Processor> procs) {
+	public DefaultActionChain(ActionInfo ai, List<String> procs) {
 		info = ai;
-		if (null != procs) {
-			Iterator<Processor> it = procs.iterator();
-			if (it.hasNext()) {
-				head = it.next();
-				for (Processor p = head; it.hasNext(); ) {
-					Processor next = it.next();
-					p.setNext(next);
-					p = next;
-				}
-			}
-		}
+		this.procs = procs;
 	}
 
 	public void doChain(ActionContext ac) {
+		ac.setChain(this);
 		ac.setInfo(info);
 		ac.setAction(ac.getIoc().get(ac.getInfo().getActionType()));
+		current = -1;
+		doNext(ac);
+	}
 
-		if (null != head) {
-			try {
-				head.process(ac);
+	public void doNext(ActionContext ac) {
+		current++;
+		if (current >= procs.size()) {
+			return;
+		}
+		
+		String name = procs.get(current);
+		Processor processor = initProcessor(name, ac);
+		try {
+			processor.process(ac);
+		}
+		catch (Throwable e) {
+			ac.setError(e);
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	protected Processor initProcessor(String name, ActionContext ac) {
+		try {
+			Processor p;
+			if (name.startsWith("#")) {
+				p = ac.getIoc().get(Processor.class, name.substring(1));
 			}
-			catch (Throwable e) {
-				ac.setError(e);
-				throw Exceptions.wrapThrow(e);
+			else {
+				p = (Processor)Classes.born(name);
 			}
+			return p;
+		}
+		catch (Throwable e) {
+			if (log.isDebugEnabled()) {
+				log.debugf("Failed to init processor(%s) for action chain %s/%s", name, info.getChainName(), info.getMethod());
+			}
+			throw Exceptions.wrapThrow(e);
 		}
 	}
 }

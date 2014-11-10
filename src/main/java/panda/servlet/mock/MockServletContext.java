@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,13 +7,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.EventListener;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.Filter;
@@ -68,11 +68,11 @@ public class MockServletContext implements ServletContext {
 
 	private int effectiveMinorVersion = 5;
 
-	private final Map<String, ServletContext> contexts = new HashMap<String, ServletContext>();
+	private final Map<String, ServletContext> contexts = new ConcurrentHashMap<String, ServletContext>();
 
 	private final Map<String, String> initParameters = new LinkedHashMap<String, String>();
 
-	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	private final Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
 	private String servletContextName = "MockServletContext";
 

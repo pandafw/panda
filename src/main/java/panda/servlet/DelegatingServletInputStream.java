@@ -7,7 +7,7 @@ import javax.servlet.ServletInputStream;
 
 import panda.lang.Asserts;
 import panda.lang.Exceptions;
-import panda.mock.web.MockHttpServletRequest;
+import panda.servlet.mock.MockHttpServletRequest;
 
 /**
  * Delegating implementation of {@link javax.servlet.ServletInputStream}.

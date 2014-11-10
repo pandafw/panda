@@ -7,20 +7,6 @@ import panda.mvc.Processor;
  * 抽象的Processor实现. 任何Processor实现都应该继承这个类,以获取正确的执行逻辑.
  */
 public abstract class AbstractProcessor implements Processor {
-
-	private Processor next;
-
-	/**
-	 * 设置下一个Processor
-	 * <p/>
-	 * <b>一般情形下都不应该覆盖这个方法<b>
-	 * 
-	 * @param next 下一个Processor,一般不为null
-	 */
-	public void setNext(Processor next) {
-		this.next = next;
-	}
-
 	/**
 	 * 继续执行下一个Processor
 	 * <p/>
@@ -30,12 +16,6 @@ public abstract class AbstractProcessor implements Processor {
 	 * @throws Throwable
 	 */
 	protected void doNext(ActionContext ac) throws Throwable {
-		if (null != next) {
-			next.process(ac);
-		}
-	}
-
-	public Processor getNext() {
-		return next;
+		ac.getChain().doNext(ac);
 	}
 }

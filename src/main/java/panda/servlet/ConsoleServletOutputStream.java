@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import javax.servlet.ServletOutputStream;
 
 import panda.lang.Asserts;
-import panda.mock.web.MockHttpServletResponse;
+import panda.servlet.mock.MockHttpServletResponse;
 
 /**
  * Delegating implementation of {@link javax.servlet.ServletOutputStream}.

@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletRequest;

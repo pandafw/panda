@@ -10,4 +10,5 @@ public interface ActionChain {
 
 	void doChain(ActionContext ac);
 
+	void doNext(ActionContext ac);
 }

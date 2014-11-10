@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ELException;

@@ -3,13 +3,13 @@ package panda.mvc;
 import org.junit.After;
 import org.junit.Before;
 
-import panda.mock.web.MockHttpServletRequest;
-import panda.mock.web.MockHttpServletResponse;
-import panda.mock.web.MockHttpSession;
-import panda.mock.web.MockServletConfig;
-import panda.mock.web.MockServletContext;
 import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.mock.Mock;
+import panda.servlet.mock.MockHttpServletRequest;
+import panda.servlet.mock.MockHttpServletResponse;
+import panda.servlet.mock.MockHttpSession;
+import panda.servlet.mock.MockServletConfig;
+import panda.servlet.mock.MockServletContext;
 
 public abstract class AbstractMvcTestCase {
 

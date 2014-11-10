@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -420,17 +421,22 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * existing values. To replace existing values, use
 	 * {@link #setParameters(java.util.Map)}.
 	 */
-	@SuppressWarnings("rawtypes")
-	public void addParameters(Map params) {
+	@SuppressWarnings("unchecked")
+	public void addParameters(Map<String, Object> params) {
 		Asserts.notNull(params, "Parameter map must not be null");
-		for (Object key : params.keySet()) {
-			Asserts.isInstanceOf(String.class, key, "Parameter map key must be of type [" + String.class.getName() + "]");
-			Object value = params.get(key);
+		for (Entry<String, Object> en : params.entrySet()) {
+			String key = en.getKey();
+			Asserts.isInstanceOf(String.class, en.getKey(), "Parameter map key must be of type [" + String.class.getName() + "]");
+
+			Object value = en.getValue();
 			if (value instanceof String) {
-				this.addParameter((String) key, (String) value);
+				this.addParameter(key, (String) value);
 			}
 			else if (value instanceof String[]) {
-				this.addParameter((String) key, (String[]) value);
+				this.addParameter(key, (String[]) value);
+			}
+			else if (value instanceof Collection) {
+				this.addParameter(key, ((Collection<String>)value).toArray(new String[0]));
 			}
 			else {
 				throw new IllegalArgumentException("Parameter map value must be single value " + " or array of type ["
@@ -864,59 +870,49 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	//
 	@Override
 	public AsyncContext getAsyncContext() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public long getContentLengthLong() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getContentLength();
 	}
 
 	@Override
 	public DispatcherType getDispatcherType() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isAsyncStarted() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isAsyncSupported() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public AsyncContext startAsync() throws IllegalStateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public AsyncContext startAsync(ServletRequest arg0, ServletResponse arg1) throws IllegalStateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public String changeSessionId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Part getPart(String arg0) throws IOException, ServletException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Collection<Part> getParts() throws IOException, ServletException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

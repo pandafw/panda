@@ -16,7 +16,7 @@ public class IocTestModule {
 	@IocInject 
 	protected ServletContext servlet;
 	
-	@IocInject(value="ref:app.value", required=false)
+	@IocInject(value="app.value", required=false)
 	protected String appv;
 	
 	@At

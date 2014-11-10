@@ -1,4 +1,4 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import java.io.IOException;
 import java.io.PrintWriter;

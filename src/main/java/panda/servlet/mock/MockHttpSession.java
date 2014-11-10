@@ -1,12 +1,12 @@
-package panda.mock.web;
+package panda.servlet.mock;
 
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -38,7 +38,7 @@ public class MockHttpSession implements HttpSession {
 
 	private final ServletContext servletContext;
 
-	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+	private final Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
 	private boolean invalid = false;
 
