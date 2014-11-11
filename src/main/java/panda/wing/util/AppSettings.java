@@ -23,7 +23,7 @@ public class AppSettings extends Settings {
 	public AppSettings() throws IOException {
 		putAll(System.getProperties());
 
-		load("system.properties");
+		load("app.properties");
 		
 		if (Systems.IS_OS_APPENGINE) {
 			try {

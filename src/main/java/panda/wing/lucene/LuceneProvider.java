@@ -14,11 +14,10 @@ import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.Setup;
 import panda.wing.util.AppSettings;
 
 
-@IocBean(type=Setup.class)
+@IocBean
 public class LuceneProvider {
 	private static final Log log = Logs.getLog(LuceneProvider.class);
 	
