@@ -27,7 +27,7 @@ public class AppSettings extends Settings {
 		
 		if (Systems.IS_OS_APPENGINE) {
 			try {
-				load("appengine.properties");
+				load("gae.properties");
 			}
 			catch (IOException e) {
 				log.warn(e.getMessage());
