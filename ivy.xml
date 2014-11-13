@@ -14,7 +14,6 @@
 		<!-- API -->
 		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="api->master,sources" />
 		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.2.1" conf="api->master,sources" />
-		<dependency org="net.sf.jsr107cache" name="jsr107cache" rev="1.1" conf="api->master,sources" />
 
 		<!-- RUN -->
 		<dependency org="com.itextpdf" name="itextpdf" rev="5.4.4" conf="run->master,sources" />
@@ -23,6 +22,7 @@
 		<dependency org="javax.activation" name="activation" rev="1.1.1" conf="run->master,sources" />
 		<dependency org="javax.mail" name="mail" rev="1.4.7" conf="run->master,sources" />
 		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
+		<dependency org="net.sf.ehcache" name="ehcache-core" rev="2.6.9" conf="run->master,sources" />
 		<dependency org="net.sf.jtidy" name="jtidy" rev="r938" conf="run->master,sources" />
 		<dependency org="opensymphony" name="sitemesh" rev="2.4.2" conf="run->master,sources" />
 		<dependency org="org.apache.commons" name="commons-email" rev="1.2" conf="run->master,sources" />

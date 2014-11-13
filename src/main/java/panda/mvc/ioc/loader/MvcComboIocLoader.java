@@ -1,27 +1,9 @@
 package panda.mvc.ioc.loader;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import panda.ioc.IocLoader;
 import panda.ioc.loader.ComboIocLoader;
-import panda.ioc.loader.JsonIocLoader;
-import panda.ioc.loader.XmlIocLoader;
 
 public class MvcComboIocLoader extends ComboIocLoader {
-	/**
-	 * alias
-	 */
-	private static Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
-	static {
-		alias.put("js", JsonIocLoader.class);
-		alias.put("json", JsonIocLoader.class);
-		alias.put("xml", XmlIocLoader.class);
-		alias.put("anno", MvcAnnotationIocLoader.class);
-		alias.put("annotation", MvcAnnotationIocLoader.class);
-		alias.put("default", MvcDefaultIocLoader.class);
-	}
-
 	public MvcComboIocLoader(IocLoader... loaders) {
 		super(loaders);
 	}
@@ -35,7 +17,10 @@ public class MvcComboIocLoader extends ComboIocLoader {
 	}
 	
 	@Override
-	protected Class<? extends IocLoader> getAliasClass(String name) {
-		return alias.get(name);
+	protected void initAlias() {
+		super.initAlias();
+		alias.put("anno", MvcAnnotationIocLoader.class);
+		alias.put("annotation", MvcAnnotationIocLoader.class);
+		alias.put("default", MvcDefaultIocLoader.class);
 	}
 }

@@ -8,6 +8,9 @@ import panda.ioc.meta.IocObject;
 import panda.mvc.annotation.At;
 
 public class MvcAnnotationIocLoader extends AnnotationIocLoader {
+	protected MvcAnnotationIocLoader() {
+	}
+	
 	public MvcAnnotationIocLoader(String... args) {
 		super(args);
 	}

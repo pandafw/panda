@@ -1,7 +1,10 @@
 package panda.mvc.ioc.loader;
 
+import java.util.List;
+
 import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceBundleLoader;
+import panda.lang.Arrays;
 import panda.mvc.aware.ActionAwareSupport;
 import panda.mvc.aware.ApplicationAwareSupport;
 import panda.mvc.aware.ParamAwareSupport;
@@ -10,9 +13,9 @@ import panda.mvc.impl.DefaultActionChainMaker;
 import panda.mvc.impl.DefaultUrlMapping;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.FatalProcessor;
+import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
-import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.ActionAssist;
@@ -85,115 +88,118 @@ import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
-	public static final Object[] DEFAULTS = {
-		DefaultUrlMapping.class,
-		DefaultActionChainMaker.class,
-		
-		// file pool used by Upload
-		LocalFilePool.class,
-		
-		// utility
-		ResourceBundleLoader.class,
-		CookieStateProvider.class,
-		DefaultTextProvider.class,
-		ActionAssist.class,
-		ActionConsts.class,
-
-		// processor
-		AdaptProcessor.class,
-		FatalProcessor.class,
-		LayoutProcessor.class,
-		LocaleProcessor.class,
-		InvokeProcessor.class,
-		ValidateProcessor.class,
-		ViewProcessor.class,
-		
-		// validation
-		ActionAwareSupport.class,
-		ParamAwareSupport.class,
-		SessionAwareSupport.class,
-		ApplicationAwareSupport.class,
-		
-		// validator
-		DefaultValidators.class,
-		
-		// validators
-		BinaryValidator.class,
-		CastErrorValidator.class,
-		ConstantValidator.class,
-		CreditCardNoValidator.class,
-		DateValidator.class,
-		DecimalValidator.class,
-		ElValidator.class,
-		EmailValidator.class,
-		EmptyValidator.class,
-		FilenameValidator.class,
-		FileValidator.class,
-		ImageValidator.class,
-		NumberValidator.class,
-		ProhibitedValidator.class,
-		RegexValidator.class,
-		RequiredValidator.class,
-		StringValidator.class,
-		VisitValidator.class,
-		
-		// View
-		ThemeRenderEngine.class,
-
-		// Tags
-		CBoolean.class,
-		CDate.class,
-		CLog.class,
-		CNumber.class,
-		Csv.class,
-		CUrl.class,
-		Head.class,
-		Param.class,
-		Property.class,
-		Text.class,
-		
-		// UI Tags
-		ActionConfirm.class,
-		ActionError.class,
-		ActionMessage.class,
-		ActionWarning.class,
-		Anchor.class,
-		Button.class,
-		Checkbox.class,
-		CheckboxList.class,
-		DatePicker.class,
-		DateTimePicker.class,
-		Div.class,
-		FieldError.class,
-		File.class,
-		Form.class,
-		Hidden.class,
-		Link.class,
-		ListView.class,
-		OptGroup.class,
-		Pager.class,
-		Password.class,
-		Radio.class,
-		Reset.class,
-		Select.class,
-		Submit.class,
-		TextArea.class,
-		TextField.class,
-		TimePicker.class,
-		TriggerField.class,
-		Uploader.class,
-		ViewField.class,
-
-		// taglibs
-		TagLibraryManager.class,
-		
-		// Freemarker
-		FreemarkerTemplateLoader.class,
-		FreemarkerManager.class,
-		FreemarkerHelper.class
+	protected List<Object> getDefaults() {
+		return Arrays.toList(new Object[] {
+			DefaultUrlMapping.class,
+			DefaultActionChainMaker.class,
+			
+			// file pool used by Upload
+			LocalFilePool.class,
+			
+			// utility
+			ResourceBundleLoader.class,
+			CookieStateProvider.class,
+			DefaultTextProvider.class,
+			ActionAssist.class,
+			ActionConsts.class,
+	
+			// processor
+			AdaptProcessor.class,
+			FatalProcessor.class,
+			LayoutProcessor.class,
+			LocaleProcessor.class,
+			InvokeProcessor.class,
+			ValidateProcessor.class,
+			ViewProcessor.class,
+			
+			// validation
+			ActionAwareSupport.class,
+			ParamAwareSupport.class,
+			SessionAwareSupport.class,
+			ApplicationAwareSupport.class,
+			
+			// validator
+			DefaultValidators.class,
+			
+			// validators
+			BinaryValidator.class,
+			CastErrorValidator.class,
+			ConstantValidator.class,
+			CreditCardNoValidator.class,
+			DateValidator.class,
+			DecimalValidator.class,
+			ElValidator.class,
+			EmailValidator.class,
+			EmptyValidator.class,
+			FilenameValidator.class,
+			FileValidator.class,
+			ImageValidator.class,
+			NumberValidator.class,
+			ProhibitedValidator.class,
+			RegexValidator.class,
+			RequiredValidator.class,
+			StringValidator.class,
+			VisitValidator.class,
+			
+			// View
+			ThemeRenderEngine.class,
+	
+			// Tags
+			CBoolean.class,
+			CDate.class,
+			CLog.class,
+			CNumber.class,
+			Csv.class,
+			CUrl.class,
+			Head.class,
+			Param.class,
+			Property.class,
+			Text.class,
+			
+			// UI Tags
+			ActionConfirm.class,
+			ActionError.class,
+			ActionMessage.class,
+			ActionWarning.class,
+			Anchor.class,
+			Button.class,
+			Checkbox.class,
+			CheckboxList.class,
+			DatePicker.class,
+			DateTimePicker.class,
+			Div.class,
+			FieldError.class,
+			File.class,
+			Form.class,
+			Hidden.class,
+			Link.class,
+			ListView.class,
+			OptGroup.class,
+			Pager.class,
+			Password.class,
+			Radio.class,
+			Reset.class,
+			Select.class,
+			Submit.class,
+			TextArea.class,
+			TextField.class,
+			TimePicker.class,
+			TriggerField.class,
+			Uploader.class,
+			ViewField.class,
+	
+			// taglibs
+			TagLibraryManager.class,
+			
+			// Freemarker
+			FreemarkerTemplateLoader.class,
+			FreemarkerManager.class,
+			FreemarkerHelper.class
+		});
 	};
 	
 	public MvcDefaultIocLoader() {
-		super(DEFAULTS);
+		super();
+		init(getDefaults());
 	}
 }
