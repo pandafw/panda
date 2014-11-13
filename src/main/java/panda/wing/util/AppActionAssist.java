@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.util;
 
 import java.util.Date;
 
@@ -14,17 +14,15 @@ import panda.mvc.bean.Sorter;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.util.StateProvider;
+import panda.wing.action.ActionRC;
 import panda.wing.constant.VC;
 import panda.wing.entity.ICreate;
 import panda.wing.entity.IStatus;
 import panda.wing.entity.IUpdate;
-import panda.wing.util.AppFreemarkerTemplateLoader;
-import panda.wing.util.AppResourceBundleLoader;
-import panda.wing.util.AppSettings;
 
 
 @IocBean(type=ActionAssist.class, scope=Scope.REQUEST)
-public class BaseActionAssist extends ActionAssist implements PermissionProvider {
+public class AppActionAssist extends ActionAssist implements PermissionProvider {
 	@IocInject
 	protected AppSettings settings;
 

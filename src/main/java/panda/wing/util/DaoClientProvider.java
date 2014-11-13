@@ -12,6 +12,7 @@ import panda.dao.sql.Sqls;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -41,7 +42,7 @@ public class DaoClientProvider {
 	
 	protected DaoClient buildDaoClient() throws Exception {
 		String dstype = settings.getProperty("data.source");
-		if ("gae".equalsIgnoreCase(dstype)) {
+		if (Systems.IS_OS_APPENGINE || "gae".equalsIgnoreCase(dstype)) {
 			GaeDaoClient gdc = GaeDaoClient.i();
 			return gdc;
 		}

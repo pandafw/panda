@@ -4,6 +4,8 @@ import panda.dao.DaoClient;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.util.ActionSupport;
 import panda.mvc.util.PermissionProvider;
+import panda.wing.util.AppActionAssist;
+import panda.wing.util.AppActionConsts;
 
 public class AbstractAction extends ActionSupport implements PermissionProvider {
 	/*------------------------------------------------------------
@@ -22,15 +24,15 @@ public class AbstractAction extends ActionSupport implements PermissionProvider 
 	/**
 	 * @return the assist
 	 */
-	protected BaseActionAssist assist() {
-		return (BaseActionAssist)super.getAssist();
+	protected AppActionAssist assist() {
+		return (AppActionAssist)super.getAssist();
 	}
 
 	/**
 	 * @return the consts
 	 */
-	protected BaseActionConsts consts() {
-		return (BaseActionConsts)super.getConsts();
+	protected AppActionConsts consts() {
+		return (AppActionConsts)super.getConsts();
 	}
 
 	/*------------------------------------------------------------

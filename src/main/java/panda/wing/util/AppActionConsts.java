@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.util;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import panda.wing.constant.RC;
  */
 @IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 @SuppressWarnings("unchecked")
-public class BaseActionConsts extends ActionConsts {
+public class AppActionConsts extends ActionConsts {
 
 	/**
 	 * @return map
