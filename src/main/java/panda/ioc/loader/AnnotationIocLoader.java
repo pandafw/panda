@@ -26,6 +26,9 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 
 	private static final Log log = Logs.getLog(AnnotationIocLoader.class);
 
+	protected AnnotationIocLoader() {
+	}
+
 	public AnnotationIocLoader(String... args) {
 		this((Object[])args);
 	}

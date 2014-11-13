@@ -23,24 +23,26 @@ public class ComboIocLoader implements IocLoader {
 	/**
 	 * 类别名
 	 */
-	private static Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
-	static {
-		alias.put("js", JsonIocLoader.class);
-		alias.put("json", JsonIocLoader.class);
-		alias.put("xml", XmlIocLoader.class);
-		alias.put("anno", AnnotationIocLoader.class);
-		alias.put("annotation", AnnotationIocLoader.class);
-	}
+	protected Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
 
 	private List<IocLoader> iocLoaders = new ArrayList<IocLoader>();
 
 	public ComboIocLoader(IocLoader... loaders) {
+		initAlias();
 		for (IocLoader iocLoader : loaders) {
 			if (iocLoader != null) {
 				iocLoaders.add(iocLoader);
 			}
 		}
 		checkBeanNames();
+	}
+
+	protected void initAlias() {
+		alias.put("js", JsonIocLoader.class);
+		alias.put("json", JsonIocLoader.class);
+		alias.put("xml", XmlIocLoader.class);
+		alias.put("anno", AnnotationIocLoader.class);
+		alias.put("annotation", AnnotationIocLoader.class);
 	}
 
 	/**
