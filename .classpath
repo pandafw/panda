@@ -8,7 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/api/javax.servlet-api.jar" sourcepath="lib/api/javax.servlet-api-sources.jar"/>
 	<classpathentry kind="lib" path="lib/api/javax.servlet.jsp-api.jar" sourcepath="lib/api/javax.servlet.jsp-api-sources.jar"/>
-	<classpathentry kind="lib" path="lib/api/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/hsqldb.jar" sourcepath="lib/jdbc/hsqldb-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/activation.jar" sourcepath="lib/run/activation-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>

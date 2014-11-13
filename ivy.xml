@@ -14,7 +14,6 @@
 		<!-- API -->
 		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.1.0" conf="api->master,sources" />
 		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.3.1" conf="api->master,sources" />
-		<dependency org="net.sf.jsr107cache" name="jsr107cache" rev="1.1" conf="api->master,sources" />
 
 		<!-- RUN -->
 		<dependency org="com.amazonaws" name="aws-java-sdk" rev="1.5.5" conf="run->master,sources" />

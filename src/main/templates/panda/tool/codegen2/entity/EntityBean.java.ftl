@@ -89,7 +89,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 		<#assign ilt = type?index_of('<')/>
 		<#assign type = type?substring(ilt + 1, type?length - 1)/>
 	</#if>
-	<#if p.validatorList?has_content || type != "String">
+	<#if p.validatorList?has_content || (p.dbColumn && type != "String")>
 	@Validates({
 	<#list p.validatorList as v>
 		@Validate(value=${gen.validatorType(v.type)}, <#if v.hasParams>params="${v.params}", </#if>msgId=${gen.validatorMsgId(v.msgId)})<#if p_has_next || type != "String">, </#if>

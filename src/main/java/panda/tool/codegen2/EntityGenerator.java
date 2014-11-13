@@ -334,6 +334,10 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		vmmap.put("short", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("int", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("long", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("float", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("double", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("decimal", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("number", "Validators.MSGID_NUMBER_RANGE");
 	}
 
 	public String validatorMsgId(String alias) {
