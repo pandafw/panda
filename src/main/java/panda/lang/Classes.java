@@ -1595,7 +1595,7 @@ public abstract class Classes {
 	 */
 	public static <T> T born(Class<T> cls, Object[] argValues) {
 		try {
-			return newInstance(cls, argValues);
+			return newInstance(cls, argValues, toClass(argValues));
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

@@ -20,29 +20,32 @@ public class ComboIocLoader implements IocLoader {
 
 	private static final Log log = Logs.getLog(ComboIocLoader.class);
 
+	public static final String JS = "js";
+	public static final String JSON = "json";
+	public static final String XML = "xml";
+	public static final String ANNO = "anno";
+	public static final String ANNOTATION = "annotation";
+
 	/**
 	 * 类别名
 	 */
 	protected Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
 
 	private List<IocLoader> iocLoaders = new ArrayList<IocLoader>();
-
-	public ComboIocLoader(IocLoader... loaders) {
+	
+	protected ComboIocLoader() {
 		initAlias();
+	}
+	
+	public ComboIocLoader(IocLoader... loaders) {
+		this();
+		
 		for (IocLoader iocLoader : loaders) {
 			if (iocLoader != null) {
 				iocLoaders.add(iocLoader);
 			}
 		}
 		checkBeanNames();
-	}
-
-	protected void initAlias() {
-		alias.put("js", JsonIocLoader.class);
-		alias.put("json", JsonIocLoader.class);
-		alias.put("xml", XmlIocLoader.class);
-		alias.put("anno", AnnotationIocLoader.class);
-		alias.put("annotation", AnnotationIocLoader.class);
 	}
 
 	/**
@@ -59,46 +62,41 @@ public class ComboIocLoader implements IocLoader {
 	 * <p/>
 	 */
 	public ComboIocLoader(String ... args) {
-		this((Object[])args);
+		this();
+		initLoaders(args);
 	}
 	
-	/**
-	 * <p/>
-	 * Example:
-	 * <p/>
-	 * <code>{ JsonIocLoader.class,"dao.js","service.js", XmlIocLoader.class,"config.xml"}</code>
-	 * <p/>
-	 */
-	public ComboIocLoader(Object ... args) {
-		ArrayList<String> argsList = null;
-		Class loaderCls = null;
-		for (Object a : args) {
-			if (a instanceof Class) {
+	protected void initLoaders(String ... args) {
+		List<Object> argsList = null;
+		String loader = null;
+		for (String a : args) {
+			if (a.length() > 0 && a.charAt(0) == '*') {
 				if (argsList != null) {
-					createIocLoader(loaderCls, argsList);
+					addIocLoader(loader, argsList);
 				}
-				loaderCls = (Class)a;
-				argsList = new ArrayList<String>();
-			}
-			else if (a instanceof String && ((String)a).length() > 0 && ((String)a).charAt(0) == '*') {
-				if (argsList != null) {
-					createIocLoader(loaderCls, argsList);
-				}
-				loaderCls = getLoaderClass(((String)a).substring(1));
-				argsList = new ArrayList<String>();
+				loader = a.substring(1);
+				argsList = new ArrayList<Object>();
 			}
 			else {
 				if (argsList == null) {
 					throw new IllegalArgumentException("ioc args without Loader ClassName. " + args);
 				}
-				argsList.add(a.toString());
+				argsList.add(getLoaderArgument(a));
 			}
 		}
-		if (loaderCls != null) {
-			createIocLoader(loaderCls, argsList);
+		if (loader != null) {
+			addIocLoader(loader, argsList);
 		}
 
 		checkBeanNames();
+	}
+
+	protected void initAlias() {
+		alias.put(JS, JsonIocLoader.class);
+		alias.put(JSON, JsonIocLoader.class);
+		alias.put(XML, XmlIocLoader.class);
+		alias.put(ANNO, AnnotationIocLoader.class);
+		alias.put(ANNOTATION, AnnotationIocLoader.class);
 	}
 
 	private void checkBeanNames() {
@@ -111,27 +109,48 @@ public class ComboIocLoader implements IocLoader {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
-	private void createIocLoader(Class cls, List<String> args) {
-		Class<? extends IocLoader> klass = (Class<? extends IocLoader>)cls;
+	
+	protected void addIocLoader(String name, List<Object> args) {
+		iocLoaders.add(createIocLoader(name, args));
+	}
+	
+	protected IocLoader createIocLoader(String name, List<Object> args) {
+		Class<? extends IocLoader> klass = getLoaderClass(name);
 		if (Collections.isEmpty(args)) {
-			iocLoaders.add(Classes.born(klass));
+			return Classes.born(klass);
 		}
-		else {
-			iocLoaders.add(Classes.born(klass, args.toArray(new String[args.size()])));
+
+		boolean ss = true;
+		for (Object o : args) {
+			if (!(o instanceof String)) {
+				ss = false;
+				break;
+			}
 		}
+		
+		if (ss) {
+			String[] as = args.toArray(new String[args.size()]);
+			return Classes.born(klass, new Object[] { as }, new Class[] { String[].class });
+		}
+		
+		Object[] as = args.toArray(new Object[args.size()]);
+		return Classes.born(klass, as);
 	}
 
+	protected Object getLoaderArgument(String a) {
+		return a;
+	}
+	
 	protected Class<? extends IocLoader> getAliasClass(String name) {
 		return alias.get(name);
 	}
 	
-	protected Class getLoaderClass(String className) {
-		Class cls = getAliasClass(className);
+	@SuppressWarnings("unchecked")
+	protected Class<? extends IocLoader> getLoaderClass(String className) {
+		Class<? extends IocLoader> cls = getAliasClass(className);
 		if (cls == null) {
 			try {
-				cls = Classes.getClass(className);
+				cls = (Class<? extends IocLoader>)Classes.getClass(className);
 			}
 			catch (ClassNotFoundException e) {
 				throw Exceptions.wrapThrow(e);
