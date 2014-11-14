@@ -63,17 +63,6 @@
 	},
 	"hidden": false
 }, {
-	"name": "cusid",
-	"header": action.getText("d.cusid"), 
-	"hidden": false
-}, {
-	"name": "ctime",
-	"header": action.getText("d.ctime"), 
-	"format": {
-		"type": "datetime"
-	},
-	"hidden": false
-}, {
 	"name": "uusid",
 	"header": action.getText("d.uusid"), 
 	"hidden": false

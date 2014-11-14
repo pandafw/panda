@@ -14,7 +14,7 @@ import panda.wing.util.DaoClientProvider;
 public class AppIocProvider extends AbstractIocProvider {
 
 	public Ioc create(MvcConfig config, String ... args) {
-		DefaultIoc ioc = create(getIocLoader(args));
+		DefaultIoc ioc = create(getIocLoader(config, args));
 		
 		DaoClientProvider dcp = ioc.get(DaoClientProvider.class);
 		ioc.getContext().save(Scope.APP, DaoClient.class.getName(), new ObjectProxy(dcp.getDaoClient()));
@@ -24,8 +24,8 @@ public class AppIocProvider extends AbstractIocProvider {
 		return ioc;
 	}
 	
-	protected IocLoader getIocLoader(String ... args) {
-		return new AppIocLoader(args);
+	protected IocLoader getIocLoader(MvcConfig config, String ... args) {
+		return new AppIocLoader(config, args);
 	}
 }
 

@@ -41,16 +41,6 @@
 				list="consts.dataStatusMap"
 			/>
 			<@p.viewfield
-				key="d.cusid"
-			/>
-			<@p.viewfield
-				key="d.cusnm"
-			/>
-			<@p.viewfield
-				key="d.ctime"
-				format="datetime"
-			/>
-			<@p.viewfield
 				key="d.uusid"
 			/>
 			<@p.viewfield

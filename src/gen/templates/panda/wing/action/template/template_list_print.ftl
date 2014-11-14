@@ -71,23 +71,6 @@
 		"tooltip": action.getText("d.status-tip", ""),
 		"value": false			
 	}, {
-		"name": "cusid",
-		"header": action.getText("d.cusid", ""), 
-		"hidden": false,
-		"sortable": false,
-		"tooltip": action.getText("d.cusid-tip", ""),
-		"value": false			
-	}, {
-		"name": "ctime",
-		"header": action.getText("d.ctime", ""), 
-		"format": {
-			"type": "datetime"
-		},
-		"hidden": false,
-		"sortable": false,
-		"tooltip": action.getText("d.ctime-tip", ""),
-		"value": false			
-	}, {
 		"name": "uusid",
 		"header": action.getText("d.uusid", ""), 
 		"hidden": false,

@@ -9,10 +9,8 @@ import panda.lang.Collections;
 import panda.mvc.util.ActionConsts;
 import panda.wing.constant.RC;
 
-/**
- */
-@IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 @SuppressWarnings("unchecked")
+@IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 public class AppActionConsts extends ActionConsts {
 
 	/**

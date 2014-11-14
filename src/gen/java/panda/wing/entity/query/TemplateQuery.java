@@ -4,9 +4,9 @@ import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.StringCondition;
 import panda.wing.entity.Template;
-import panda.wing.entity.query.SCUQuery;
+import panda.wing.entity.query.SUQuery;
 
-public class TemplateQuery extends SCUQuery<Template, TemplateQuery> {
+public class TemplateQuery extends SUQuery<Template, TemplateQuery> {
 	/**
 	 * Constructor
 	 */

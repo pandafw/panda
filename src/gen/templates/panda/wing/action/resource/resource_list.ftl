@@ -161,29 +161,6 @@
 			"sortable": true,
 			"tooltip": action.getText("d.status-tip", "")
 		}, {
-			"name" : "cusid",
-			"header": action.getText("d.cusid"),
-			"filter": {
-				"type": "number"
-			},
-			"hidden": false,
-			"link": false,
-			"sortable": true,
-			"tooltip": action.getText("d.cusid-tip", "")
-		}, {
-			"name" : "ctime",
-			"header": action.getText("d.ctime"),
-			"format": {
-				"type": "datetime"
-			},
-			"filter": {
-				"type": "datetime"
-			},
-			"hidden": false,
-			"link": false,
-			"sortable": true,
-			"tooltip": action.getText("d.ctime-tip", "")
-		}, {
 			"name" : "uusid",
 			"header": action.getText("d.uusid"),
 			"filter": {

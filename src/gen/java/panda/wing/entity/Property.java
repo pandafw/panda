@@ -9,14 +9,14 @@ import panda.lang.Objects;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.wing.entity.SCUBean;
+import panda.wing.entity.SUBean;
 
 @Indexes({
 	@Index(name="CLCN", fields={ "clazz","language","country","name" }, unique=true)
 })
-public class Property extends SCUBean {
+public class Property extends SUBean {
 
-	private static final long serialVersionUID = 632852446L;
+	private static final long serialVersionUID = 1989458124L;
 
 	/**
 	 * Constructor

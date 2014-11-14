@@ -4,14 +4,13 @@
 
 	<!-- action -->
 	<action name="baseAction" trimString="${action.trimString}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
-		<list name="baseList" cssColumn="status">
+		<list name="baseList">
 			<param name="toolbar" value="@refresh"/>
 			<param name="actions" value="@insert copy update delete"/>
 			<param name="options" value="bdelete ^print:list_print ^csv:list_csv @^${pdf.action}:list_print"/>
 			<param name="buttons" value="*list"/>
 		</list>
-		
-		<list name="scuList" extend="baseList" cssColumn="status">
+		<list name="sList" extend="baseList" cssColumn="status">
 			<column name="status" hidden="false" sortable="true" link="false" order="100100">
 				<format type="code">
 					<param name="codemap" value="consts.dataStatusMap"/>
@@ -20,6 +19,26 @@
 					<param name="list" value="consts.dataStatusMap"/>
 				</filter>
 			</column>
+		</list>
+		<list name="scList" extend="sList">
+			<column name="cusid" hidden="false" sortable="true" link="false" order="100200">
+				<filter type="number"/>
+			</column>
+			<column name="ctime" hidden="false" sortable="true" link="false" order="100300">
+				<format type="datetime"/>
+				<filter type="datetime"/>
+			</column>
+		</list>
+		<list name="suList" extend="sList">
+			<column name="uusid" hidden="false" sortable="true" link="false" order="100400">
+				<filter type="number"/>
+			</column>
+			<column name="utime" hidden="false" sortable="true" link="false" order="100500">
+				<format type="datetime"/>
+				<filter type="datetime"/>
+			</column>
+		</list>
+		<list name="scuList" extend="sList">
 			<column name="cusid" hidden="false" sortable="true" link="false" order="100200">
 				<filter type="number"/>
 			</column>
@@ -49,13 +68,41 @@
 			<param name="toolbar" value="%^print @^${pdf.action}:print *list"/>
 			<param name="actions" value="%update %copy insert %delete *list"/>
 		</input>
-		<input name="scuInput" extend="baseInput">
+		<input name="sInput" extend="baseInput">
 			<field name="status" order="100100">
 				<editTag name="${tag.radio}">
 					<param name="emptyOption" value="true"/>
 					<param name="list" value="consts.dataStatusMap"/>
 				</editTag>
 			</field>
+		</input>
+		<input name="scInput" extend="sInput">
+			<field name="cusid" order="100200">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="cusnm" order="100300">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="ctime" order="100400">
+				<editTag name="${tag.viewfield}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="suInput" extend="sInput">
+			<field name="uusid" order="100500">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="uusnm" order="100600">
+				<editTag name="${tag.viewfield}"/>
+			</field>
+			<field name="utime" order="100700">
+				<editTag name="${tag.viewfield}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="scuInput" extend="sInput">
 			<field name="cusid" order="100200">
 				<editTag name="${tag.viewfield}"/>
 			</field>

@@ -1,30 +1,34 @@
 package panda.wing;
 
-import java.util.List;
+import java.util.Set;
 
 import panda.filepool.dao.DaoFilePool;
 import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceBundleLoader;
-import panda.ioc.IocLoader;
-import panda.ioc.loader.ComboIocLoader;
+import panda.mvc.MvcConfig;
+import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.wing.lucene.LuceneProvider;
+import panda.wing.util.AppActionAssist;
+import panda.wing.util.AppActionConsts;
 import panda.wing.util.AppCacheProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 import panda.wing.util.AppSettings;
-import panda.wing.util.AppActionAssist;
-import panda.wing.util.AppActionConsts;
 import panda.wing.util.DaoClientProvider;
 
-public class AppIocLoader extends ComboIocLoader {
+public class AppIocLoader extends MvcComboIocLoader {
 	public static class AppDefaultIocLoader extends MvcDefaultIocLoader {
+		public AppDefaultIocLoader(MvcConfig config) {
+			super(config);
+		}
+
 		@Override
-		protected List<Object> getDefaults() {
-			List<Object> clss = super.getDefaults();
+		protected Set<Object> getDefaults() {
+			Set<Object> clss = super.getDefaults();
 			
 			clss.remove(LocalFilePool.class);
 			clss.add(DaoFilePool.class);
@@ -49,22 +53,14 @@ public class AppIocLoader extends ComboIocLoader {
 		}
 	}
 	
-	public AppIocLoader(IocLoader... loaders) {
-		super(loaders);
-	}
-
-	public AppIocLoader(Object... args) {
-		super(args);
-	}
-
-	public AppIocLoader(String... packages) {
-		super(packages);
+	public AppIocLoader(MvcConfig config, String... packages) {
+		super(config, packages);
 	}
 	
 	@Override
 	protected void initAlias() {
 		super.initAlias();
-		alias.put("default", AppDefaultIocLoader.class);
+		alias.put(DEFAULT, AppDefaultIocLoader.class);
 	}
 }
 

@@ -76,23 +76,6 @@
 		"tooltip": action.getText("bdelete-column-status-tip", ""),
 		"value": false		
 	}, {
-		"name": "cusid",
-		"header": action.getText("bdelete-column-cusid", ""), 
-		"hidden": false,
-		"sortable": false,
-		"tooltip": action.getText("bdelete-column-cusid-tip", ""),
-		"value": false		
-	}, {
-		"name": "ctime",
-		"header": action.getText("bdelete-column-ctime", ""), 
-		"format": {
-			"type": "datetime"
-		},
-		"hidden": false,
-		"sortable": false,
-		"tooltip": action.getText("bdelete-column-ctime-tip", ""),
-		"value": false		
-	}, {
 		"name": "uusid",
 		"header": action.getText("bdelete-column-uusid", ""), 
 		"hidden": false,

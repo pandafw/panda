@@ -10,14 +10,14 @@ import panda.lang.Objects;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.wing.entity.SCUBean;
+import panda.wing.entity.SUBean;
 
 @Indexes({
 	@Index(name="NLC", fields={ "name","language","country" }, unique=true)
 })
-public class Template extends SCUBean {
+public class Template extends SUBean {
 
-	private static final long serialVersionUID = -1186302324L;
+	private static final long serialVersionUID = -1472118848L;
 
 	/**
 	 * Constructor

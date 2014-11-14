@@ -3,7 +3,7 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="${entity.package}.Template" baseBeanClass="${entity.scuBeanClass}" baseQueryClass="${entity.scuQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
+	<entity name="${entity.package}.Template" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
 		<property name="name" type="String" size="100" notNull="true" uniqueKey="NLC" comment="file name">
 			<validator type="stringlength">
@@ -35,7 +35,7 @@
 
 	<!-- action -->
 	<action name="action.Template" entity="${entity.package}.Template" extend="baseAction">
-		<list name="basicList" extend="scuList">
+		<list name="basicList" extend="suList">
 			<column name="id" hidden="false" sortable="true" link="true">
 				<filter type="number"/>
 			</column>
@@ -62,7 +62,7 @@
 				<filter type="string"/>
 			</column>
 		</list>
-		<input name="basicInput" extend="scuInput">
+		<input name="basicInput" extend="suInput">
 			<field name="id">
 				<editTag name="${tag.viewfield}"/>
 			</field>
