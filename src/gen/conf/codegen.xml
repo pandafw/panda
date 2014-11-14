@@ -54,6 +54,8 @@
 				<filter type="datetime"/>
 			</column>
 		</list>
+
+		<list name="basePopup"/>
 		<list name="sPopup" cssColumn="status">
 			<column name="status" hidden="false" sortable="true" link="false" order="100100">
 				<format type="code">
@@ -64,6 +66,7 @@
 				</filter>
 			</column>
 		</list>
+
 		<input name="baseInput" theme="${ui.input.theme}">
 			<param name="toolbar" value="%^print @^${pdf.action}:print *list"/>
 			<param name="actions" value="%update %copy insert %delete *list"/>
