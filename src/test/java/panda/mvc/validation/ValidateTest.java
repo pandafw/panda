@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.itextpdf.xmp.impl.Base64;
 
 import panda.mvc.AbstractMvcTestCase;
+import panda.mvc.validation.module.ValidateModule;
 
 public class ValidateTest extends AbstractMvcTestCase {
 

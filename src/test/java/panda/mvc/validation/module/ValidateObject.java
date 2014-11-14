@@ -1,7 +1,8 @@
-package panda.mvc.validation;
+package panda.mvc.validation.module;
 
 import java.util.Date;
 
+import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.validator.StringValidator;

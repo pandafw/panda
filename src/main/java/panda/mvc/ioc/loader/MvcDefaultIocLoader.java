@@ -1,10 +1,13 @@
 package panda.mvc.ioc.loader;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceBundleLoader;
 import panda.lang.Arrays;
+import panda.mvc.MvcConfig;
+import panda.mvc.annotation.Modules;
 import panda.mvc.aware.ActionAwareSupport;
 import panda.mvc.aware.ApplicationAwareSupport;
 import panda.mvc.aware.ParamAwareSupport;
@@ -88,8 +91,38 @@ import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
-	protected List<Object> getDefaults() {
-		return Arrays.toList(new Object[] {
+	protected Set<Object> getModules(MvcConfig config) {
+		Set<Object> pkgs = new HashSet<Object>();
+
+		Class<?> mm = config.getMainModule();
+		pkgs.add(mm);
+		
+		Modules ms = mm.getAnnotation(Modules.class);
+		if (ms != null) {
+			if (ms.scan()) {
+				pkgs.remove(mm);
+				pkgs.add(mm.getPackage().getName());
+			}
+			
+			for (Class<?> cls : ms.value()) {
+				pkgs.add(cls);
+			}
+	
+			for (String pkg : ms.packages()) {
+				pkgs.add(pkg);
+			}
+		}
+		return pkgs;
+	}
+	
+	protected Set<Object> getDefaults(MvcConfig config) {
+		Set<Object> ss = getModules(config);
+		ss.addAll(getDefaults());
+		return ss;
+	}
+	
+	protected Set<Object> getDefaults() {
+		return Arrays.toSet(new Object[] {
 			DefaultUrlMapping.class,
 			DefaultActionChainMaker.class,
 			
@@ -198,8 +231,8 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 		});
 	};
 	
-	public MvcDefaultIocLoader() {
+	public MvcDefaultIocLoader(MvcConfig config) {
 		super();
-		init(getDefaults());
+		init(getDefaults(config));
 	}
 }

@@ -1,4 +1,4 @@
-package panda.mvc.validation;
+package panda.mvc.validation.module;
 
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Modules;
@@ -6,6 +6,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Fatal;
 import panda.mvc.annotation.view.Ok;
+import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.annotation.Validate;
 
