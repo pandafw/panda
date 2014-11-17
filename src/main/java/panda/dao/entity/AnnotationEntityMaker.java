@@ -55,11 +55,33 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private static final Log log = Logs.getLog(AnnotationEntityMaker.class);
 
 	private DaoClient client;
+	private String prefix;
 	
 	public AnnotationEntityMaker(DaoClient client) {
-		this.client = client; 
+		this(client, "");
 	}
 
+	public AnnotationEntityMaker(DaoClient client, String prefix) {
+		this.client = client; 
+		this.prefix = prefix;
+	}
+
+	/**
+	 * @return the prefix
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * @param prefix the prefix to set
+	 */
+	@Override
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	@Override
 	public <T> Entity<T> make(Class<T> type) {
 		Entity<T> en = createEntity(type);
 
@@ -171,6 +193,16 @@ public class AnnotationEntityMaker implements EntityMaker {
 		// check table or view
 		if (Strings.isEmpty(en.getTable()) && Strings.isEmpty(en.getView())) {
 			throw new IllegalArgumentException("@Table or @View of [" + type + "] is not defined");
+		}
+		
+		// add prefix
+		if (Strings.isNotEmpty(prefix)) {
+			if (Strings.isNotEmpty(en.getTable())) {
+				en.setTable(prefix + en.getTable());
+			}
+			if (Strings.isNotEmpty(en.getView())) {
+				en.setView(prefix + en.getView());
+			}
 		}
 		
 		// table comment

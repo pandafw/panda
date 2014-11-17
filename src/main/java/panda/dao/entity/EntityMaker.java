@@ -14,4 +14,9 @@ public interface EntityMaker {
 	 */
 	<T> Entity<T> make(Class<T> type);
 
+	/**
+	 * set prefix for entity
+	 * @param prefix prefix
+	 */
+	void setPrefix(String prefix);
 }
