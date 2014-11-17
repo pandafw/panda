@@ -12,6 +12,7 @@ import panda.dao.sql.Sqls;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
@@ -38,6 +39,11 @@ public class DaoClientProvider {
 
 	public void initialize() throws Exception {
 		daoClient = buildDaoClient();
+		
+		String prefix = settings.getProperty("data.prefix");
+		if (Strings.isNotEmpty(prefix)) {
+			daoClient.getEntityMaker().setPrefix(prefix);
+		}
 	}
 	
 	protected DaoClient buildDaoClient() throws Exception {
