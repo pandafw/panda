@@ -9,7 +9,6 @@ import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
-import panda.lang.Systems;
 import panda.lang.collection.ExpireMap;
 import panda.log.Log;
 import panda.log.Logs;
@@ -19,13 +18,16 @@ public class AppCacheProvider {
 	private static final Log log = Logs.getLog(AppCacheProvider.class);
 
 	private static final String EHCACHE_CONFIG = "ehcache.xml";
+	private static final String GAE = "gae";
+	private static final String EHCACHE = "ehcache";
 
 	@IocInject
 	protected Settings settings;
 
-	private static final int EH = 1;
-	
-	protected int type;
+	/**
+	 * cache provider
+	 */
+	protected String provider;
 	
 	/**
 	 * cache name
@@ -55,21 +57,26 @@ public class AppCacheProvider {
 	 * initialize
 	 */
 	public void initialize() throws Exception {
+		provider = settings.getProperty("cache.provider");
 		name = settings.getProperty("cache.name");
 		expires = settings.getPropertyAsInt("cache.expires", 0);
 		cache = buildCache();
 	}
 	
 	protected Map buildCache() throws Exception {
-		if (Systems.IS_OS_APPENGINE) {
+		String cp = settings.getProperty("cache.provider");
+		if (GAE.equalsIgnoreCase(cp)) {
 			log.info("Build Gae Cache");
 			return GaeHelper.buildCache(expires);
 		}
 		
-		InputStream is = Streams.getStream(EHCACHE_CONFIG);
-		if (is != null) {
+		if (EHCACHE.equalsIgnoreCase(cp)) {
 			log.info("Build EHCache");
-			type = EH;
+
+			InputStream is = Streams.getStream(EHCACHE_CONFIG);
+			if (is == null) {
+				throw new IllegalArgumentException("Failed to config ehcache, missing " + EHCACHE_CONFIG);
+			}
 			return EHCacheHelper.buildCache(is, name, expires);
 		}
 		
@@ -83,7 +90,7 @@ public class AppCacheProvider {
 	}
 
 	public void depose() {
-		if (type == EH) {
+		if (EHCACHE.equalsIgnoreCase(provider)) {
 			EHCacheHelper.shutdownCache();
 		}
 	}

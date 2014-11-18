@@ -18,7 +18,7 @@ import panda.wing.util.AppCacheProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 import panda.wing.util.AppSettings;
-import panda.wing.util.DaoClientProvider;
+import panda.wing.util.AppDaoClientProvider;
 
 public class AppIocLoader extends MvcComboIocLoader {
 	public static class AppDefaultIocLoader extends MvcDefaultIocLoader {
@@ -46,7 +46,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(AppActionConsts.class);
 			
 			clss.add(AppSettings.class);
-			clss.add(DaoClientProvider.class);
+			clss.add(AppDaoClientProvider.class);
 			clss.add(LuceneProvider.class);
 			
 			return clss;
