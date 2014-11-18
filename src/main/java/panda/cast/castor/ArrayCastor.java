@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
 import panda.cast.Castor;
 import panda.lang.Arrays;
@@ -19,7 +20,7 @@ import panda.lang.reflect.Types;
  * @param <S> source type
  * @param <T> target type
  */
-public class ArrayCastor<S, T> extends Castor<S, T> {
+public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 	private Type toComponentType;
 	
 	public ArrayCastor(Type fromType, Type toType) {

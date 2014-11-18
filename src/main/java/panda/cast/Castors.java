@@ -4,11 +4,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.BeanHandler;
@@ -149,7 +146,7 @@ public class Castors {
 	 * 
 	 * @param castor - the castor instance
 	 */
-	public void register(Castor castor) {
+	public void register(AbstractCastor castor) {
 		register(castor.getFromType(), castor.getToType(), castor);
 	}
 
@@ -211,6 +208,11 @@ public class Castors {
 		Asserts.notNull(fromType, "The from type is null");
 		Asserts.notNull(toType, "The to type is null");
 
+		// same type
+		if (fromType.equals(toType)) {
+			return DirectCastor.i();
+		}
+
 		// type -> type castor
 		Castor<S, T> castor = castors.get(new MultiKey(fromType, toType));
 		if (castor != null) {
@@ -227,7 +229,7 @@ public class Castors {
 		
 		// default castor
 		if (Object.class.equals(toType)) {
-			return new DirectCastor(fromType, toType);
+			return DirectCastor.i();
 		}
 		
 		Class<?> toClass = Types.getRawType(toType);
@@ -243,49 +245,46 @@ public class Castors {
 			return (Castor<S, T>)new NumberTypeCastor.NumberCastor();
 		}
 		
+		if (Types.isAssignable(toType, Map.class)) {
+			return (Castor<S, T>)new MapCastor(toType, this);
+		}
+		
 		if (Types.isAbstractType(toType)) {
 			if (toType instanceof ParameterizedType) {
 				ParameterizedType pt = (ParameterizedType)toType;
 				Type rawType = pt.getRawType();
-				if (Types.isAssignable(rawType, List.class)) {
+				if (Types.isAssignable(ArrayList.class, rawType)) {
 					rawType = ArrayList.class;
 				}
-				else if (Types.isAssignable(rawType, Map.class)) {
-					rawType = LinkedHashMap.class;
-				}
-				else if (Types.isAssignable(rawType, Set.class)) {
+				else if (Types.isAssignable(LinkedHashSet.class, rawType)) {
 					rawType = LinkedHashSet.class;
 				}
+				else if (Types.isAssignable(fromType, toType)) {
+					return DirectCastor.i();
+				}
 				else {
-					return new DirectCastor(fromType, toType);
+					throw new RuntimeException("Failed to find Castor(" + fromType + " -> " + toType + ")");
 				}
 				
 				toType = Types.paramTypeOfOwner(pt.getOwnerType(), rawType, pt.getActualTypeArguments());
 				return (Castor<S, T>)getCastor(toType);
 			}
 
-			if (Types.isAssignable(toType, List.class)) {
+			if (Types.isAssignable(fromType, toType)) {
+				return DirectCastor.i();
+			}
+
+			if (Types.isAssignable(ArrayList.class, toType)) {
 				return (Castor<S, T>)new CollectionCastor(fromType, ArrayList.class);
 			}
 			
-			if (Types.isAssignable(toType, Map.class)) {
-				return (Castor<S, T>)new MapCastor(LinkedHashMap.class, this);
-			}
-			
-			if (Types.isAssignable(toType, Set.class)) {
+			if (Types.isAssignable(LinkedHashSet.class, toType)) {
 				return (Castor<S, T>)new CollectionCastor(fromType, LinkedHashSet.class);
 			}
 			
-			if (Types.isAssignable(fromType, toType, false)) {
-				return new DirectCastor(fromType, toType);
-			}
 			throw new RuntimeException("Failed to find Castor(" + fromType + " -> " + toType + ")");
 		}
 
-		if (Types.isAssignable(toType, Map.class)) {
-			return (Castor<S, T>)new MapCastor(toType, this);
-		}
-		
 		if (Types.isAssignable(toType, Collection.class)) {
 			return (Castor<S, T>)new CollectionCastor(fromType, toType);
 		}

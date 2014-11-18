@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 
+import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
 import panda.cast.Castor;
 import panda.lang.Iterators;
@@ -16,7 +17,7 @@ import panda.lang.reflect.Types;
  *
  * @param <T> target type
  */
-public class CollectionCastor<T extends Collection<?>> extends Castor<Object, T> {
+public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Object, T> {
 	protected Type toElementType;
 	
 	public CollectionCastor(Type fromType, Type toType) {

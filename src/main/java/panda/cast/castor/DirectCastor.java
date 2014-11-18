@@ -1,21 +1,36 @@
 package panda.cast.castor;
 
-import java.lang.reflect.Type;
-
 import panda.cast.CastContext;
 import panda.cast.Castor;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class DirectCastor<S, T> extends Castor<S, T> {
-	public DirectCastor(Type fromType, Type toType) {
-		super(fromType, toType);
+public class DirectCastor<S, T> implements Castor<S, T> {
+	public static DirectCastor INSTANCE = new DirectCastor();
+
+	public static Castor i() {
+		return INSTANCE;
+	}
+	
+	private DirectCastor() {
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected T castValue(Object value, CastContext context) {
+	public T cast(S value, CastContext context) {
+		return (T)value;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public T castTo(S value, T target) {
+		return (T)value;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public T castTo(S value, T target, CastContext context) {
 		return (T)value;
 	}
 

@@ -1,13 +1,13 @@
 package panda.cast.castor;
 
+import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
-import panda.cast.Castor;
 import panda.lang.Iterators;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class IterableCastor extends Castor<Object, Iterable> {
+public class IterableCastor extends AbstractCastor<Object, Iterable> {
 	public IterableCastor() {
 		super(Object.class, Iterable.class);
 	}

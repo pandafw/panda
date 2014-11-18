@@ -2,14 +2,14 @@ package panda.cast.castor;
 
 import java.util.Locale;
 
+import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
-import panda.cast.Castor;
 import panda.lang.Locales;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public class LocaleCastor extends Castor<Object, Locale> {
+public class LocaleCastor extends AbstractCastor<Object, Locale> {
 	public LocaleCastor() {
 		super(Object.class, Locale.class);
 	}

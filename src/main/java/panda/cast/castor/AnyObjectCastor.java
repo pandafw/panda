@@ -2,15 +2,15 @@ package panda.cast.castor;
 
 import java.lang.reflect.Type;
 
+import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
-import panda.cast.Castor;
 import panda.lang.Objects;
 import panda.lang.reflect.Types;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
-public abstract class AnyObjectCastor<T> extends Castor<Object, T> {
+public abstract class AnyObjectCastor<T> extends AbstractCastor<Object, T> {
 	public AnyObjectCastor(Type toType) {
 		super(Object.class, toType);
 	}
