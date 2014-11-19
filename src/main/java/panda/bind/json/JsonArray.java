@@ -650,18 +650,10 @@ public class JsonArray extends ArrayList<Object> {
 	}
 
 	public static JsonArray fromJson(InputStream json, String encoding) {
-		if (json == null) {
-			return null;
-		}
-
 		return Jsons.fromJson(json, encoding, JsonArray.class);
 	}
 
 	public static JsonArray fromJson(Reader json) {
-		if (json == null) {
-			return null;
-		}
-
 		return Jsons.fromJson(json, JsonArray.class);
 	}
 

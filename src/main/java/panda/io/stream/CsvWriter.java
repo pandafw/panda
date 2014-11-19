@@ -1,9 +1,8 @@
 package panda.io.stream;
 
 import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -15,11 +14,9 @@ import panda.lang.Systems;
  * CSV writer
  * @author yf.frank.wang@gmail.com
  */
-public class CsvWriter implements Closeable {
+public class CsvWriter implements Closeable, Flushable {
 
-	private Writer rawWriter;
-
-	private PrintWriter pw;
+	private Appendable writer;
 
 	private char separator;
 
@@ -55,7 +52,7 @@ public class CsvWriter implements Closeable {
 	 *
 	 * @param writer the writer to an underlying CSV source.
 	 */
-	public CsvWriter(Writer writer) {
+	public CsvWriter(Appendable writer) {
 		this(writer, DEFAULT_SEPARATOR);
 	}
 
@@ -65,7 +62,7 @@ public class CsvWriter implements Closeable {
 	 * @param writer the writer to an underlying CSV source.
 	 * @param separator the delimiter to use for separating entries.
 	 */
-	public CsvWriter(Writer writer, char separator) {
+	public CsvWriter(Appendable writer, char separator) {
 		this(writer, separator, DEFAULT_QUOTE_CHARACTER);
 	}
 
@@ -76,7 +73,7 @@ public class CsvWriter implements Closeable {
 	 * @param separator the delimiter to use for separating entries
 	 * @param quotechar the character to use for quoted elements
 	 */
-	public CsvWriter(Writer writer, char separator, char quotechar) {
+	public CsvWriter(Appendable writer, char separator, char quotechar) {
 		this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER);
 	}
 
@@ -88,7 +85,7 @@ public class CsvWriter implements Closeable {
 	 * @param quotechar the character to use for quoted elements
 	 * @param escapechar the character to use for escaping quotechars or escapechars
 	 */
-	public CsvWriter(Writer writer, char separator, char quotechar, char escapechar) {
+	public CsvWriter(Appendable writer, char separator, char quotechar, char escapechar) {
 		this(writer, separator, quotechar, escapechar, DEFAULT_LINE_END);
 	}
 
@@ -100,7 +97,7 @@ public class CsvWriter implements Closeable {
 	 * @param quotechar the character to use for quoted elements
 	 * @param lineEnd the line feed terminator to use
 	 */
-	public CsvWriter(Writer writer, char separator, char quotechar, String lineEnd) {
+	public CsvWriter(Appendable writer, char separator, char quotechar, String lineEnd) {
 		this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER, lineEnd);
 	}
 
@@ -113,9 +110,8 @@ public class CsvWriter implements Closeable {
 	 * @param escapechar the character to use for escaping quotechars or escapechars
 	 * @param lineEnd the line feed terminator to use
 	 */
-	public CsvWriter(Writer writer, char separator, char quotechar, char escapechar, String lineEnd) {
-		this.rawWriter = writer;
-		this.pw = new PrintWriter(writer);
+	public CsvWriter(Appendable writer, char separator, char quotechar, char escapechar, String lineEnd) {
+		this.writer = writer;
 		this.separator = separator;
 		this.quotechar = quotechar;
 		this.escapechar = escapechar;
@@ -127,7 +123,7 @@ public class CsvWriter implements Closeable {
 	 *
 	 * @param allLines a List of String[], with each String[] representing a line of the file.
 	 */
-	public void writeAll(List allLines) {
+	public void writeAll(List allLines) throws IOException {
 		for (Iterator iter = allLines.iterator(); iter.hasNext();) {
 			Object nextLine = iter.next();
 			if (nextLine == null){
@@ -178,7 +174,7 @@ public class CsvWriter implements Closeable {
 	 *
 	 * @param nextLine a collection with each comma-separated element as a separate entry.
 	 */
-	public void writeNext(Collection nextLine) {
+	public void writeNext(Collection nextLine) throws IOException {
 		StringBuilder sb = new StringBuilder();
 
 		int i = 0;
@@ -194,7 +190,7 @@ public class CsvWriter implements Closeable {
 		}
 
 		sb.append(lineEnd);
-		pw.write(sb.toString());
+		writer.append(sb);
 	}
 
 	/**
@@ -202,7 +198,7 @@ public class CsvWriter implements Closeable {
 	 *
 	 * @param nextLine a string array with each comma-separated element as a separate entry.
 	 */
-	public void writeNext(String[] nextLine) {
+	public void writeNext(String[] nextLine) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < nextLine.length; i++) {
 			if (i != 0) {
@@ -214,7 +210,7 @@ public class CsvWriter implements Closeable {
 		}
 
 		sb.append(lineEnd);
-		pw.write(sb.toString());
+		writer.append(sb);
 	}
 
 	/**
@@ -223,9 +219,9 @@ public class CsvWriter implements Closeable {
 	 * @throws IOException if bad things happen
 	 */
 	public void flush() throws IOException {
-
-		pw.flush();
-
+		if (writer instanceof Flushable) {
+			((Flushable)writer).flush();
+		}
 	}
 
 	/**
@@ -235,9 +231,9 @@ public class CsvWriter implements Closeable {
 	 *
 	 */
 	public void close() throws IOException {
-		pw.flush();
-		pw.close();
-		rawWriter.close();
+		if (writer instanceof Closeable) {
+			((Closeable)writer).close();
+		}
 	}
 
 	/**

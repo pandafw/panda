@@ -817,19 +817,15 @@ public class JsonObject extends HashMap<String, Object> {
 		return Jsons.toJson(this, indent);
 	}
 	
+	public static JsonObject fromJson(InputStream json) {
+		return Jsons.fromJson(json, JsonObject.class);
+	}
+	
 	public static JsonObject fromJson(InputStream json, String encoding) {
-		if (json == null) {
-			return null;
-		}
-		
 		return Jsons.fromJson(json, encoding, JsonObject.class);
 	}
 	
 	public static JsonObject fromJson(Reader json) {
-		if (json == null) {
-			return null;
-		}
-		
 		return Jsons.fromJson(json, JsonObject.class);
 	}
 	

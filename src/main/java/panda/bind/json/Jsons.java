@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import panda.bind.Binds;
 import panda.io.Streams;
 import panda.lang.Chars;
+import panda.lang.Charsets;
 
 /**
  * 
@@ -14,8 +15,8 @@ import panda.lang.Chars;
  *
  */
 public abstract class Jsons extends Binds {
-	public static Object fromJson(InputStream is, String encoding) {
-		return fromJson(is, encoding, Object.class);
+	public static Object fromJson(InputStream json, String encoding) {
+		return fromJson(json, encoding, Object.class);
 	}
 
 	public static Object fromJson(Reader json) {
@@ -26,18 +27,32 @@ public abstract class Jsons extends Binds {
 		return fromJson(json, Object.class);
 	}
 
-	public static <T> T fromJson(InputStream is, String encoding, Type type) {
-		Reader json = Streams.toReader(is, encoding);
+	public static <T> T fromJson(InputStream json, String encoding, Type type) {
+		if (json == null) {
+			return null;
+		}
+
+		Reader r = Streams.toReader(json, encoding);
 		JsonDeserializer jd = new JsonDeserializer();
-		return jd.deserialize(json, type);
+		return jd.deserialize(r, type);
+	}
+
+	public static <T> T fromJson(InputStream json, Type type) {
+		return fromJson(json, Charsets.UTF_8, type);
 	}
 
 	public static <T> T fromJson(Reader json, Type type) {
+		if (json == null) {
+			return null;
+		}
 		JsonDeserializer jd = new JsonDeserializer();
 		return jd.deserialize(json, type);
 	}
 
 	public static <T> T fromJson(CharSequence json, Type type) {
+		if (json == null) {
+			return null;
+		}
 		JsonDeserializer jd = new JsonDeserializer();
 		return jd.deserialize(json, type);
 	}

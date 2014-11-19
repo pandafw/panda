@@ -739,6 +739,9 @@ public abstract class Texts {
 			cw.writeAll(lines);
 			return sw.toString();
 		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 		finally {
 			Streams.safeClose(cw);
 		}
