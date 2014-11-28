@@ -3,6 +3,7 @@
 	<property file="build.properties"/>
 	
 	<path id="dep.cp">
+		<pathelement path="../panda-gear/out/classes"/>
 		<pathelement path="../panda-exts/out/classes"/>
 		<pathelement path="../panda-java/out/classes"/>
 		<path refid="lib.cp"/>
