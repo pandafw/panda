@@ -142,7 +142,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			try {
 				v = map.get("singleton");
 				if (v != null) {
-					boolean b = Castors.scast(v, boolean.class);
+					boolean b = (Boolean)Castors.scast(v, boolean.class);
 					iobj.setSingleton(b);
 				}
 			}

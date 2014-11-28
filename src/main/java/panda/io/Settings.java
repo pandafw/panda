@@ -187,7 +187,7 @@ public class Settings implements Map<String, String> {
 		if (Strings.isEmpty(v)) {
 			return defv;
 		}
-		return Castors.scast(v, boolean.class);
+		return (Boolean)Castors.scast(v, boolean.class);
 	}
 
 	/**
