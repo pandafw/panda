@@ -6,6 +6,10 @@
 		<pathelement path="../panda-gear/out/classes"/>
 		<pathelement path="../panda-java/out/classes"/>
 		<path refid="lib.cp"/>
+		<fileset dir="lib/gae" erroronmissingdir="false">
+			<include name="*.jar"/>
+			<exclude name="*-sources.jar"/>
+		</fileset>
 	</path>
 
 	<!-- build -->

@@ -12,8 +12,8 @@
 	</publications>
 	<dependencies>
 		<!-- API -->
-		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.1.0" conf="api->master,sources" />
-		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.3.1" conf="api->master,sources" />
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="api->master,sources" />
+		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.2.1" conf="api->master,sources" />
 
 		<!-- RUN -->
 		<dependency org="com.itextpdf" name="itextpdf" rev="5.4.4" conf="run->master,sources" />
