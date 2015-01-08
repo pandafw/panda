@@ -67,8 +67,8 @@ label-search-result="{0}"の検索結果
 
 #tip
 tip-access=表示回数
-tip-voteup=良い投票
-tip-votedn=悪い投票
+tip-voteup=いいね！
+tip-votedn=悪いよ！
 tip-bookmark=ブックマーク
 
 #d.statusMap

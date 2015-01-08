@@ -136,7 +136,7 @@ public class ActionTask implements Runnable {
 			}
 		}
 		catch (IOException e) {
-			log.error("Failed to GET " + getUrl());
+			log.error("Failed to GET " + getUrl(), e);
 		}
 		finally {
 			Streams.safeClose(hres);
