@@ -27,6 +27,7 @@ import panda.mvc.MvcConfig;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
+import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
@@ -51,6 +52,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 			FatalProcessor.class.getName(),
 			AdaptProcessor.class.getName(),
 			LocaleProcessor.class.getName(),
+			LayoutProcessor.class.getName(),
 			ValidateProcessor.class.getName(),
 			InvokeProcessor.class.getName(),
 			ViewProcessor.class.getName()
