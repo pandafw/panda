@@ -239,8 +239,6 @@ public abstract class AbstractOMView extends AbstractView {
 		if (o != null && o instanceof Throwable) {
 			Throwable e = (Throwable)o;
 
-			HttpServlets.logException(ac.getRequest(), e);
-
 			Map<String, Object> result = new LinkedHashMap<String, Object>();
 			result.put("success", false);
 

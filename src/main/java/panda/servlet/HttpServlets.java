@@ -265,7 +265,13 @@ public class HttpServlets {
 		logException(request, e, null);
 	}
 	
+	private static String[] EXCLUDE_ERRORS = { "org.apache.catalina.connector.ClientAbortException" };
+	
 	public static void logException(HttpServletRequest request, Throwable e, String msg) {
+		if (Arrays.contains(EXCLUDE_ERRORS, e.getClass().getName())) {
+			return;
+		}
+		
 		Log log = Logs.getLog(e.getClass());
 
 		StringBuilder sb = new StringBuilder();
