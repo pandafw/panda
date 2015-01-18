@@ -11,9 +11,9 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
-	private static final String JQUERY_VERSION = "1.10.2";
-	private static final String BOOTSTRAP_VERSION = "3.1.1";
-	private static final String FONTAWESOME_VERSION = "4.1.0";
+	private static final String JQUERY_VERSION = "1.11.2";
+	private static final String BOOTSTRAP_VERSION = "3.3.1";
+	private static final String FONTAWESOME_VERSION = "4.2.0";
 	
 	private boolean js;
 	private boolean css;

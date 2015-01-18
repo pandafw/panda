@@ -33,7 +33,6 @@ import panda.mvc.bind.filter.PagerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.net.http.HttpContentType;
 import panda.servlet.HttpServletSupport;
-import panda.servlet.HttpServlets;
 
 
 public abstract class AbstractOMView extends AbstractView {
