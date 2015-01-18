@@ -99,6 +99,15 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/js/bootstrap-switch.min.js"/>
 		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-patch.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-patch.min.js"/>
+		</java>
 
 		<!-- plugins -->
 		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins.js" binary="true">
