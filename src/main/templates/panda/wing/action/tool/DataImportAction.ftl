@@ -36,9 +36,9 @@
 		}
 	</script>
 
-<#if tableList?has_content>
+<#if result?has_content>
 	<hr/>
-	<#list tableList as t>
+	<#list result as t>
 	<div class="panel panel-success">
 		<div class="panel-heading">&lt;&lt;${t[0]}&gt;&gt; (${(t?size - 3)?c})</div>
 		<div class="panel-body">

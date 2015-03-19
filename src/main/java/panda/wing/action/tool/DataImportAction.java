@@ -73,7 +73,6 @@ public class DataImportAction extends AbstractAction {
 		protected String target;
 		protected String encoding = Charsets.UTF_8;
 		protected FileItem file;
-		protected List tableList = new ArrayList();
 		protected int commitSize = 1000;
 		protected int count;
 
@@ -89,13 +88,6 @@ public class DataImportAction extends AbstractAction {
 		 */
 		public void setDeleteAll(boolean deleteAll) {
 			this.deleteAll = deleteAll;
-		}
-	
-		/**
-		 * @return the tableList
-		 */
-		public List getTableList() {
-			return tableList;
 		}
 	
 		/**
@@ -150,6 +142,7 @@ public class DataImportAction extends AbstractAction {
 
 	protected Arg arg;
 	protected Set<String> targetSet;
+	protected List tableList = new ArrayList();
 	
 	/**
 	 * @return the targetSet
@@ -162,6 +155,13 @@ public class DataImportAction extends AbstractAction {
 			}
 		}
 		return targetSet;
+	}
+
+	/**
+	 * @return the tableList
+	 */
+	public List getTableList() {
+		return tableList;
 	}
 
 	/**
@@ -221,8 +221,9 @@ public class DataImportAction extends AbstractAction {
 				arg.file.delete();
 			}
 		}
-		return arg;
+		return tableList;
 	}
+
 	protected Date parseDate(String str, String format) throws Exception {
 		if ("now".equalsIgnoreCase(str)) {
 			return DateTimes.getDate();
@@ -537,7 +538,7 @@ public class DataImportAction extends AbstractAction {
 			}
 		});
 
-		arg.tableList.add(table);
+		tableList.add(table);
 	}
 	
 	/**
@@ -606,7 +607,7 @@ public class DataImportAction extends AbstractAction {
 				}
 			});
 
-			arg.tableList.add(table);
+			tableList.add(table);
 		}
 		catch (Throwable e) {
 			logException("CsvImport", e);

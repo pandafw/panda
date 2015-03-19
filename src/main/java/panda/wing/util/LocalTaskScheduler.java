@@ -1,7 +1,7 @@
 package panda.wing.util;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -49,11 +49,11 @@ public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
 			return;
 		}
 		
-		FileInputStream fis = null;
+		log.info("Loading cron.json ...");
+
+		InputStream fis = null;
 		try {
-			fis = new FileInputStream(servlet.getRealPath("/WEB-INF/cron.json"));
-			
-			log.info("Loading cron.json ...");
+			fis = Streams.getStream("cron.json");
 			
 			List<CronEntry> crons = Jsons.fromJson(fis, Charsets.UTF_8, Types.paramTypeOf(List.class, CronEntry.class));
 			for (CronEntry ce : crons) {
