@@ -1165,7 +1165,7 @@ public class Streams {
 	 * @param path the file name or class name to load
 	 * @return an input stream
 	 */
-	public static InputStream getStream(final String path) throws IOException {
+	public static InputStream getStream(final String path) throws FileNotFoundException {
 		InputStream is = null;
 		if (Files.isFile(path)) {
 			is = new FileInputStream(path);
