@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import panda.bean.handler.AbstractFastBeanHandler;
+import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.DynamicClassLoader;
@@ -74,7 +75,9 @@ public class FastBeans extends Beans {
 			return createFastBeanHandler(clazz);
 		}
 		catch (Throwable e) {
-			log.warn("Failed to create FastBeanHandler for " + clazz + " use default JavaBeanHandler instead.", e);
+			log.warn("Failed to create FastBeanHandler for " 
+					+ clazz + " use default JavaBeanHandler instead." 
+					+ Streams.LINE_SEPARATOR + e.getMessage());
 			return super.createJavaBeanHandler(type);
 		}
 	}

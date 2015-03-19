@@ -299,7 +299,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 								nextValue(null);
 							}
 							else {
-								throw syntaxError("missing property: " + key);
+								throw syntaxError("missing property [" + key + "] of " + type);
 							}
 						}
 					}

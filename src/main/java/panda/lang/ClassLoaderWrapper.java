@@ -167,10 +167,15 @@ public class ClassLoaderWrapper {
 				// look for the resource as passed in...
 				url = cl.getResource(resource);
 
-				// ...but some class loaders want this leading "/", so we'll add it
-				// and try again if we didn't find the resource
-				if (null == url && resource.charAt(0) == '/') {
-					url = cl.getResource("/" + resource);
+				if (null == url) {
+					if (resource.charAt(0) != '/') {
+						// some class loaders want this leading "/"
+						url = cl.getResource("/" + resource);
+					}
+					else {
+						// some class loaders do not want this leading "/"
+						url = cl.getResource(resource.substring(1));
+					}
 				}
 				
 				// "It's always in the last place I look for it!"

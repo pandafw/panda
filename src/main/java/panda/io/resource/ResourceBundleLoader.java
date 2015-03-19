@@ -20,6 +20,15 @@ public class ResourceBundleLoader {
 	private static final String JAVA_CLASS = "java.class";
 	private static final String JAVA_PROPS = "java.properties";
 
+	private static class SuperResourceBundleMaker implements ResourceBundleMaker {
+		@Override
+		public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader, boolean reload)
+				throws IllegalAccessException, InstantiationException, IOException {
+			return null;
+		}
+	}
+	public final static ResourceBundleMaker SUPER = new SuperResourceBundleMaker();
+	
 	private Control control;
 	private Map<String, ResourceBundleMaker> markers;
 	private List<String> formats;
@@ -40,7 +49,7 @@ public class ResourceBundleLoader {
 			}
 
 			ResourceBundleMaker rbm = markers.get(format);
-			if (rbm != null) {
+			if (rbm != SUPER) {
 				return rbm.getBundle(baseName, locale, loader, reload);
 			}
 
@@ -57,8 +66,8 @@ public class ResourceBundleLoader {
 		formats = new CopyOnWriteArrayList<String>();
 		
 		// add defaults
-		addResourceBundleMaker(JAVA_CLASS, null);
-		addResourceBundleMaker(JAVA_PROPS, null);
+		addResourceBundleMaker(JAVA_CLASS, SUPER);
+		addResourceBundleMaker(JAVA_PROPS, SUPER);
 		addResourceBundleMaker(TxtResourceBundleMaker.TXT, new TxtResourceBundleMaker());
 	}
 
