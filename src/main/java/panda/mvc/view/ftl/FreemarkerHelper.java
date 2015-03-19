@@ -16,10 +16,10 @@ import panda.mvc.ActionContext;
 @IocBean(scope=Scope.REQUEST)
 public class FreemarkerHelper {
 	@IocInject
-	protected FreemarkerManager manager;
+	protected FreemarkerManager fm;
 
 	@IocInject
-	protected ActionContext context;
+	protected ActionContext ac;
 
 	/**
 	 * @param name template name
@@ -27,7 +27,7 @@ public class FreemarkerHelper {
 	 * @throws IOException 
 	 */
 	public Template getTemplate(String name) throws IOException {
-		return manager.getConfiguration().getTemplate(name, context.getLocale());
+		return fm.getConfiguration().getTemplate(name, ac.getLocale());
 	}
 
 	/**
@@ -103,11 +103,8 @@ public class FreemarkerHelper {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void execTemplate(Writer writer, Template template, Object model) throws TemplateException, IOException {
-		ActionHash hash = manager.buildTemplateModel(context);
-
-		if (context != null) {
-			hash.setModel(model);
-		}
+		ActionHash hash = fm.buildTemplateModel(ac);
+		hash.setModel(model);
 		template.process(hash, writer);
 	}
 	
@@ -156,7 +153,7 @@ public class FreemarkerHelper {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void evalTemplate(Writer writer, String string, Object model) throws TemplateException, IOException {
-		Template template = new Template("string", new StringReader(string), manager.getConfiguration());
+		Template template = new Template("string", new StringReader(string), fm.getConfiguration());
 		execTemplate(writer, template, model);
 	}
 	

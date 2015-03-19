@@ -1,15 +1,16 @@
 package panda.mvc.view;
 
 import panda.io.FileNames;
+import panda.io.stream.StringBuilderWriter;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.RequestPath;
 import panda.mvc.view.ftl.FreemarkerHelper;
+import panda.mvc.view.sitemesh.Sitemesher;
 import panda.net.http.HttpContentType;
 
 /**
- * 内部重定向视图
  * <p/>
  * 根据传入的视图名，决定视图的路径：
  * <ul>
@@ -64,14 +65,15 @@ public class FreemarkerView extends AbstractPathView {
 
 	@Override
 	public void render(ActionContext ac) throws Exception {
-		FreemarkerHelper mfh = ac.getIoc().get(FreemarkerHelper.class);
+		FreemarkerHelper fh = ac.getIoc().get(FreemarkerHelper.class);
+		Sitemesher sm = ac.getIoc().get(Sitemesher.class);
 
 		String path = evalPath(ac);
 
 		// not definition
 		if (Strings.isBlank(path)) {
-			path = '/' + ac.getAction().getClass().getName().replace('.', '/') + ".ftl";
-			if (!mfh.hasTemplate(path)) {
+			path = '/' + ac.getAction().getClass().getName().replace('.', '/') + EXT;
+			if (!fh.hasTemplate(path)) {
 				path = RequestPath.getRequestPath(ac.getRequest());
 				path = FileNames.removeExtension(path) + EXT;
 			}
@@ -85,7 +87,15 @@ public class FreemarkerView extends AbstractPathView {
 		ac.getResponse().setCharacterEncoding(encoding);
 		ac.getResponse().setContentType(contentType + "; charset=" + encoding);
 		
-		mfh.execTemplate(ac.getResponse().getWriter(), path, ac);
+		if (sm.needMesh()) {
+			StringBuilderWriter sbw = new StringBuilderWriter();
+			fh.execTemplate(sbw, path, ac.getResult());
+			
+			sm.meshup(ac.getResponse().getWriter(), sbw.toString());
+		}
+		else {
+			fh.execTemplate(ac.getResponse().getWriter(), path, ac.getResult());
+		}
 	}
 }
 

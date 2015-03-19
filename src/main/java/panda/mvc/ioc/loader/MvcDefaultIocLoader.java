@@ -25,6 +25,7 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
+import panda.mvc.util.ServletUrlBuilder;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.validator.BinaryValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
@@ -47,6 +48,8 @@ import panda.mvc.validation.validator.VisitValidator;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.ftl.FreemarkerManager;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
+import panda.mvc.view.sitemesh.FreemarkerSitemesher;
+import panda.mvc.view.sitemesh.SitemeshManager;
 import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
@@ -174,8 +177,14 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			StringValidator.class,
 			VisitValidator.class,
 			
+			// util
+			ServletUrlBuilder.class,
+			
 			// View
 			ThemeRenderEngine.class,
+
+			// Taglibs
+			TagLibraryManager.class,
 	
 			// Tags
 			CBoolean.class,
@@ -220,14 +229,15 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			TriggerField.class,
 			Uploader.class,
 			ViewField.class,
-	
-			// taglibs
-			TagLibraryManager.class,
 			
 			// Freemarker
 			FreemarkerTemplateLoader.class,
 			FreemarkerManager.class,
-			FreemarkerHelper.class
+			FreemarkerHelper.class,
+			
+			// Sitemesh
+			SitemeshManager.class,
+			FreemarkerSitemesher.class
 		});
 	};
 	
