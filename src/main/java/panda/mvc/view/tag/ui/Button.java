@@ -30,10 +30,6 @@ public class Button extends UIBean {
 	protected String icon;
 	protected String sicon;
 
-	public boolean usesBody() {
-		return true;
-	}
-
 	/**
 	 * @return the btype
 	 */

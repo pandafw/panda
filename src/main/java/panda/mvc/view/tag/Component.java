@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.ioc.annotation.IocInject;
-import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -89,22 +88,6 @@ public class Component {
 	 * @return true if the body should be evaluated again
 	 */
 	public boolean end(Writer writer, String body) {
-		return end(writer, body, true);
-	}
-
-	/**
-	 * Callback for the start tag of this component. Should the body be evaluated again?
-	 * <p/>
-	 * <b>NOTE:</b> has a parameter to determine to pop the component stack.
-	 * 
-	 * @param writer the output writer.
-	 * @param body the rendered body.
-	 * @param popComponentStack should the component stack be popped?
-	 * @return true if the body should be evaluated again
-	 */
-	protected boolean end(Writer writer, String body, boolean popComponentStack) {
-		Asserts.notNull(body);
-
 		try {
 			if (Strings.isNotEmpty(body)) {
 				writer.write(body);
@@ -113,7 +96,7 @@ public class Component {
 		catch (IOException e) {
 			throw new MvcException("IOError while writing the body: " + e.getMessage(), e);
 		}
-		if (popComponentStack) {
+		finally {
 			popComponentStack();
 		}
 		return false;

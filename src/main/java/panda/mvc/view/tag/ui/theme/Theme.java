@@ -46,7 +46,7 @@ public abstract class Theme {
 			if (log.isTraceEnabled()) {
 				log.trace("End rendering [" + rctx.getTag().getClass() + "]");
 			}
-			renderer.renderStart();
+			renderer.renderEnd();
 		}
 		catch (Exception ex) {
 			throw new MvcException("Unable to render end: " + rctx.getTag().getClass(), ex);

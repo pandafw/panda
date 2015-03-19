@@ -78,12 +78,13 @@ public abstract class UIBean extends Component {
 
 			evaluateEndParams();
 			
-			super.end(writer, body);
-			
 			endRender(writer);
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
+		}
+		finally {
+			popComponentStack();
 		}
 
 		return false;
@@ -91,20 +92,20 @@ public abstract class UIBean extends Component {
 
 	protected void startRender(Writer writer) throws Exception {
 		if (log.isDebugEnabled()) {
-			log.debug("Start rendering tag: " + theme + "/" + getClass().getName());
+			log.debug("Start rendering tag: " + getTheme() + "/" + getClass().getName());
 		}
 
-		final RenderingContext trc = new RenderingContext(theme, writer, context, this);
+		final RenderingContext trc = new RenderingContext(getTheme(), writer, context, this);
 		rendererEngine.start(trc);
 	}
 
 	protected void endRender(Writer writer) throws Exception {
 		if (log.isDebugEnabled()) {
-			log.debug("End rendering tag: " + theme + "/" + getClass().getName());
+			log.debug("End rendering tag: " + getTheme() + "/" + getClass().getName());
 		}
 
-		final RenderingContext trc = new RenderingContext(theme, writer, context, this);
-		rendererEngine.start(trc);
+		final RenderingContext trc = new RenderingContext(getTheme(), writer, context, this);
+		rendererEngine.end(trc);
 	}
 
 	public String getTheme() {
@@ -134,7 +135,6 @@ public abstract class UIBean extends Component {
 	}
 
 	protected void evaluateEndParams() {
-		evaluateParams();
 	}
 
 	protected void evaluateParams() {

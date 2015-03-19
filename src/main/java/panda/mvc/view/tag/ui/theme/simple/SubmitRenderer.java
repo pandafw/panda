@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.FormButton;
-import panda.mvc.view.tag.ui.theme.AbstractTagRenderer;
+import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public class SubmitRenderer<T extends FormButton> extends AbstractTagRenderer<T> {
+public class SubmitRenderer<T extends FormButton> extends AbstractEndRenderer<T> {
 
 	protected String button = "submit";
 	
@@ -16,7 +16,7 @@ public class SubmitRenderer<T extends FormButton> extends AbstractTagRenderer<T>
 		super(context);
 	}
 
-	public void renderStart() throws IOException {
+	public void render() throws IOException {
 		Attributes attrs = new Attributes();
 
 		String type = defs(tag.getType(), "button");
@@ -68,14 +68,6 @@ public class SubmitRenderer<T extends FormButton> extends AbstractTagRenderer<T>
 
 			xtag("input", attrs);
 		}
-	}
-
-	public void renderEnd() throws IOException {
-		String type = defs(tag.getType(), "button");
-		String icon = tag.getIcon();
-		String sicon = tag.getSicon();
-		
-		boolean isButton = Strings.isNotEmpty(icon) || Strings.isNotEmpty(sicon) || "button".equals(type);
 
 		if (isButton) {
 			//button body

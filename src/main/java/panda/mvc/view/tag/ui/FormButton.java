@@ -20,14 +20,6 @@ public abstract class FormButton extends InputUIBean {
 	protected String sicon;
 	protected String btype;
 
-	/**
-	 * @return true
-	 */
-	@Override
-	public boolean usesBody() {
-		return true;
-	}
-
 	protected abstract String getDefaultValue();
 
 	public void evaluateParams() {
