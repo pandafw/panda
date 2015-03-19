@@ -70,12 +70,16 @@ public class FreemarkerView extends AbstractPathView {
 
 		String path = evalPath(ac);
 
-		// not definition
+		// not defined
 		if (Strings.isBlank(path)) {
-			path = '/' + ac.getAction().getClass().getName().replace('.', '/') + EXT;
+			path = RequestPath.getRequestPath(ac.getRequest());
+			path = FileNames.removeExtension(path) + EXT;
 			if (!fh.hasTemplate(path)) {
-				path = RequestPath.getRequestPath(ac.getRequest());
-				path = FileNames.removeExtension(path) + EXT;
+				String base = ac.getAction().getClass().getName().replace('.', '/');
+				path = '/' + base + '_' + ac.getMethodName() + EXT;
+				if (!fh.hasTemplate(path)) {
+					path = '/' + base + EXT;
+				}
 			}
 		}
 		else {

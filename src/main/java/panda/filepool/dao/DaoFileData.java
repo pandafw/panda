@@ -10,7 +10,7 @@ import panda.lang.Objects;
 
 /**
  */
-@Table("FileData")
+@Table("file_data")
 public class DaoFileData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -59,9 +59,6 @@ public class DefaultViewMaker implements ViewMaker {
 		}
 		
 		if (VIEW_FREEMARKER.equals(type)) {
-			if (Strings.isBlank(value)) {
-				throw new IllegalArgumentException("Invalid freemarker view: " + value);
-			}
 			return new FreemarkerView(value);
 		}
 		

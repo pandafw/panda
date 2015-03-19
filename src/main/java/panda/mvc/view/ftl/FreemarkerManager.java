@@ -1,5 +1,6 @@
 package panda.mvc.view.ftl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
@@ -48,7 +49,6 @@ public class FreemarkerManager {
 	@IocInject(value = MvcConstants.FREEMARKER_BEANWRAPPER_CACHE, required = false)
 	protected boolean cacheBeanWrapper;
 
-	@IocInject(value = MvcConstants.UI_STATIC_BASE, required = false)
 	protected String staticBase;
 	
 	@IocInject
@@ -95,7 +95,7 @@ public class FreemarkerManager {
 		return model;
 	}
 
-	public void initialize() throws TemplateException {
+	public void initialize() throws IOException, TemplateException {
 		// Process object_wrapper init-param out of order:
 		initObjectWrapper();
 		if (LOG.isDebugEnabled()) {
@@ -122,7 +122,7 @@ public class FreemarkerManager {
 	 * <li>loads settings from the classpath file /freemarker.properties
 	 * </ul>
 	 */
-	protected void initConfiguration() throws TemplateException {
+	protected void initConfiguration() throws IOException, TemplateException {
 		config = new Configuration();
 
 		config.setObjectWrapper(wrapper);
@@ -146,7 +146,7 @@ public class FreemarkerManager {
 	 * 
 	 * @see freemarker.template.Configuration#setSettings for the definition of valid settings
 	 */
-	protected void loadSettings() {
+	protected void loadSettings() throws IOException, TemplateException {
 		InputStream in = null;
 
 		try {
@@ -161,26 +161,19 @@ public class FreemarkerManager {
 					String value = (String)p.get(name);
 
 					if (name == null) {
-						throw new IOException(
+						throw new IllegalArgumentException(
 							"init-param without param-name.  Maybe the " + settings + " is not well-formed?");
 					}
 					if (value == null) {
-						throw new IOException(
+						throw new IllegalArgumentException(
 							"init-param without param-value.  Maybe the " + settings + " is not well-formed?");
 					}
 					config.setSetting(name, value);
 				}
 			}
 		}
-		catch (IOException e) {
-			if (LOG.isErrorEnabled()) {
-				LOG.error("Error while loading freemarker settings from " + settings, e);
-			}
-		}
-		catch (TemplateException e) {
-			if (LOG.isErrorEnabled()) {
-				LOG.error("Error while loading freemarker settings from " + settings, e);
-			}
+		catch (FileNotFoundException e) {
+			// skip
 		}
 		finally {
 			Streams.safeClose(in);

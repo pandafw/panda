@@ -14,7 +14,7 @@ import panda.lang.Objects;
 
 /**
  */
-@Table("FileItem")
+@Table("file_item")
 public class DaoFileItem implements FileItem, Serializable {
 	public static final int TEMPORARY = 0;
 	public static final int ARCHIVE = 1;

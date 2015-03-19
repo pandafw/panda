@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
@@ -20,11 +19,13 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.ClassLoaders;
+import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 
 @IocBean(type=TextProvider.class, scope=Scope.REQUEST)
@@ -45,8 +46,8 @@ public class DefaultTextProvider implements TextProvider {
 
 	private final static ResourceBundle EMPTY_BUNDLE = new EmptyResourceBundle();
 	
-
-	private final static List<String> DEFAULT_RESOURCE_BUNDLES = new CopyOnWriteArrayList<String>();
+	private List<String> defaultResourceBundles;
+	
 	private final ConcurrentMap<String, ResourceBundle> bundlesMap = new ConcurrentHashMap<String, ResourceBundle>();
 
 	@IocInject(required=false)
@@ -70,18 +71,14 @@ public class DefaultTextProvider implements TextProvider {
 	 * <p/>
 	 * If the bundle already exists in the list it will be read.
 	 * 
-	 * @param resourceBundleName the name of the bundle to add.
+	 * @param resourceBundles the names of the bundle to set.
 	 */
-	public static void addDefaultResourceBundle(String resourceBundleName) {
-		// make sure this doesn't get added more than once
-		synchronized (DEFAULT_RESOURCE_BUNDLES) {
-			DEFAULT_RESOURCE_BUNDLES.remove(resourceBundleName);
-			DEFAULT_RESOURCE_BUNDLES.add(0, resourceBundleName);
-		}
+	@IocInject(value=MvcConstants.DEFAULT_RESOURCE_BUNDLES, required=false)
+	public void setDefaultResourceBundle(List<String> resourceBundles) {
+		defaultResourceBundles = resourceBundles;
 
 		if (log.isDebugEnabled()) {
-			log.debug("Added default resource bundle '" + resourceBundleName + "' to default resource bundles = "
-					+ DEFAULT_RESOURCE_BUNDLES);
+			log.debug("set default resource bundle [" + Strings.join(defaultResourceBundles, ", ") + "]");
 		}
 	}
 
@@ -364,19 +361,20 @@ public class DefaultTextProvider implements TextProvider {
 	 *         be found for it
 	 */
 	private String findDefaultText(Locale locale, String key) {
-		for (String bn : DEFAULT_RESOURCE_BUNDLES) {
-			ResourceBundle bundle = findResourceBundle(locale, bn);
-			if (bundle != null) {
-//				reloadBundles();
-				try {
-					return bundle.getString(key);
-				}
-				catch (MissingResourceException e) {
-					// ignore and try others
+		if (Collections.isNotEmpty(defaultResourceBundles)) {
+			for (String bn : defaultResourceBundles) {
+				ResourceBundle bundle = findResourceBundle(locale, bn);
+				if (bundle != null) {
+	//				reloadBundles();
+					try {
+						return bundle.getString(key);
+					}
+					catch (MissingResourceException e) {
+						// ignore and try others
+					}
 				}
 			}
 		}
-
 		return null;
 	}
 

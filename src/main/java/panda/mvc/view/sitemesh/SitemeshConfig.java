@@ -36,7 +36,7 @@ public class SitemeshConfig {
 	protected List<Pattern> excludes;
 	public List<SitemeshDecorator> decorators;
 	
-	public void steExcludes(List<String> excludes) {
+	public void setExcludes(List<String> excludes) {
 		if (Collections.isEmpty(excludes)) {
 			return;
 		}

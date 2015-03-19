@@ -212,7 +212,7 @@ public class ActionContext {
 	 * @return the method name
 	 */
 	public String getMethodName() {
-		return info.getMethod() == null ? null : info.getMethod().getName();
+		return info.getMethod().getName();
 	}
 
 	/**
