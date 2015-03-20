@@ -12,6 +12,8 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.wing.lucene.LuceneProvider;
+import panda.wing.task.LocalTaskExecutor;
+import panda.wing.task.LocalTaskScheduler;
 import panda.wing.util.AppActionAssist;
 import panda.wing.util.AppActionConsts;
 import panda.wing.util.AppCacheProvider;
@@ -41,13 +43,16 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(AppCacheProvider.class);
 
 			clss.remove(ActionAssist.class);
-			clss.add(AppActionAssist.class);
 			clss.remove(ActionConsts.class);
+			clss.add(AppActionAssist.class);
 			clss.add(AppActionConsts.class);
 			
 			clss.add(AppSettings.class);
 			clss.add(AppDaoClientProvider.class);
 			clss.add(LuceneProvider.class);
+			
+			clss.add(LocalTaskExecutor.class);
+			clss.add(LocalTaskScheduler.class);
 			
 			return clss;
 		}

@@ -1,4 +1,4 @@
-package panda.wing.util;
+package panda.wing.task;
 
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
