@@ -143,7 +143,10 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * @see #awaitTerminationIfNecessary()
 	 */
 	public void shutdown() {
-		Asserts.validState(executor != null, "ExecutorService " + getName() + " not initialized");
+		if (executor == null) {
+			log.warn("ExecutorService " + getName() + " not initialized");
+			return;
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info("Shutting down ExecutorService " + getName());
