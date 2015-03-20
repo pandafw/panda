@@ -8,6 +8,8 @@ package panda.mvc;
  */
 public interface ActionChain {
 
+	ActionInfo getInfo();
+	
 	void doChain(ActionContext ac);
 
 	void doNext(ActionContext ac);

@@ -1,6 +1,7 @@
 package panda.mvc.impl;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,9 +72,13 @@ public class DefaultUrlMapping implements UrlMapping {
 		printActionMapping(ai);
 	}
 
-	public ActionInvoker get(ActionContext ac) {
+	public ActionInvoker getActionInvoker(ActionContext ac) {
 		String path = RequestPath.getRequestPath(ac.getRequest());
-		ActionInvoker invoker = root.get(ac, path);
+
+		ac.setPath(path);
+		ac.setPathArgs(new ArrayList<String>());
+
+		ActionInvoker invoker = root.get(path, ac.getPathArgs());
 		if (invoker != null) {
 			ActionChain chain = invoker.getActionChain(ac);
 			if (chain != null) {
@@ -81,6 +86,20 @@ public class DefaultUrlMapping implements UrlMapping {
 					log.debugf("Found mapping for [%s] path=%s : %s", ac.getRequest().getMethod(), path, chain);
 				}
 				return invoker;
+			}
+		}
+		if (log.isDebugEnabled()) {
+			log.debugf("Search mapping for path=%s : No action match", path);
+		}
+		return null;
+	}
+
+	public ActionInfo getActionInfo(String path) {
+		ActionInvoker invoker = root.get(path, null);
+		if (invoker != null) {
+			ActionChain chain = invoker.getDefaultChain();
+			if (chain != null) {
+				return chain.getInfo();
 			}
 		}
 		if (log.isDebugEnabled()) {

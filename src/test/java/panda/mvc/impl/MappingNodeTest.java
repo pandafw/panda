@@ -1,11 +1,12 @@
 package panda.mvc.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
-
-import panda.mvc.ActionContext;
-import panda.mvc.impl.MappingNode;
 
 public class MappingNodeTest {
 
@@ -17,21 +18,16 @@ public class MappingNodeTest {
 		root.add("/a/f", "C");
 		root.add("/a", "D");
 
-		ActionContext ac = new ActionContext();
-		assertEquals("A", root.get(ac, "/a/b/c"));
-		assertEquals("/a/b/c", ac.getPath());
+		List<String> args = new ArrayList<String>();
+		assertEquals("A", root.get("/a/b/c", args));
 
-		assertEquals("B", root.get(ac, "/a/c"));
-		assertEquals("/a/c", ac.getPath());
+		assertEquals("B", root.get("/a/c", args));
 
-		assertEquals("C", root.get(ac, "/a/f/"));
-		assertEquals("/a/f/", ac.getPath());
+		assertEquals("C", root.get("/a/f/", args));
 
-		assertEquals("D", root.get(ac, "/a/"));
-		assertEquals("/a/", ac.getPath());
+		assertEquals("D", root.get("/a/", args));
 
-		assertNull(root.get(ac, "/a/x"));
-		assertEquals("/a/x", ac.getPath());
+		assertNull(root.get("/a/x", args));
 	}
 
 	@Test
@@ -39,10 +35,10 @@ public class MappingNodeTest {
 		MappingNode<String> root = new MappingNode<String>();
 		root.add("/a/?/c", "A");
 
-		ActionContext ac = new ActionContext();
-		assertEquals("A", root.get(ac, "/a/b/c"));
-		assertEquals(1, ac.getPathArgs().size());
-		assertEquals("b", ac.getPathArgs().get(0));
+		List<String> args = new ArrayList<String>();
+		assertEquals("A", root.get("/a/b/c", args));
+		assertEquals(1, args.size());
+		assertEquals("b", args.get(0));
 	}
 
 	@Test
@@ -50,14 +46,14 @@ public class MappingNodeTest {
 		MappingNode<String> root = new MappingNode<String>();
 		root.add("/a/*", "A");
 
-		ActionContext ac = new ActionContext();
-		assertEquals("A", root.get(ac, "/a"));
-		assertEquals(0, ac.getPathArgs().size());
+		List<String> args = new ArrayList<String>();
+		assertEquals("A", root.get("/a", args));
+		assertEquals(0, args.size());
 
-		assertEquals("A", root.get(ac, "/a/b/c"));
-		assertEquals(2, ac.getPathArgs().size());
-		assertEquals("b", ac.getPathArgs().get(0));
-		assertEquals("c", ac.getPathArgs().get(1));
+		assertEquals("A", root.get("/a/b/c", args));
+		assertEquals(2, args.size());
+		assertEquals("b", args.get(0));
+		assertEquals("c", args.get(1));
 	}
 
 	@Test
@@ -65,22 +61,22 @@ public class MappingNodeTest {
 		MappingNode<String> root = new MappingNode<String>();
 		root.add("/a/?/c/*", "A");
 
-		ActionContext ac = new ActionContext();
+		List<String> args = new ArrayList<String>();
 
-		assertEquals("A", root.get(ac, "/a/b/c"));
-		assertEquals(1, ac.getPathArgs().size());
-		assertEquals("b", ac.getPathArgs().get(0));
+		assertEquals("A", root.get("/a/b/c", args));
+		assertEquals(1, args.size());
+		assertEquals("b", args.get(0));
 
-		assertEquals("A", root.get(ac, "/a/b/c/d"));
-		assertEquals(2, ac.getPathArgs().size());
-		assertEquals("b", ac.getPathArgs().get(0));
-		assertEquals("d", ac.getPathArgs().get(1));
+		assertEquals("A", root.get("/a/b/c/d", args));
+		assertEquals(2, args.size());
+		assertEquals("b", args.get(0));
+		assertEquals("d", args.get(1));
 
-		assertEquals("A", root.get(ac, "/a/b/c/d/e"));
-		assertEquals(3, ac.getPathArgs().size());
-		assertEquals("b", ac.getPathArgs().get(0));
-		assertEquals("d", ac.getPathArgs().get(1));
-		assertEquals("e", ac.getPathArgs().get(2));
+		assertEquals("A", root.get("/a/b/c/d/e", args));
+		assertEquals(3, args.size());
+		assertEquals("b", args.get(0));
+		assertEquals("d", args.get(1));
+		assertEquals("e", args.get(2));
 
 	}
 

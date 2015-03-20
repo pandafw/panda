@@ -25,64 +25,51 @@ import panda.mvc.view.XmlView;
 public class DefaultViewMaker implements ViewMaker {
 	private static final Log log = Logs.getLog(DefaultViewMaker.class);
 	
-	public static final String VIEW_JSP = "jsp";
-	public static final String VIEW_JSON = "json";
-	public static final String VIEW_XML = "xml";
-	public static final String VIEW_REDIRECT = "redirect";
-	public static final String VIEW_REDIRECT2 = ">>";
-	public static final String VIEW_IOC = "ioc";
-	public static final String VIEW_HTTP = "http";
-	public static final String VIEW_FREEMARKER = "ftl";
-	public static final String VIEW_FORWARD = "forward";
-	public static final String VIEW_FORWARD2 = "->";
-	public static final String VIEW_RAW = "raw";
-	public static final String VIEW_VOID = "void";
-
 	public View make(Ioc ioc, String type, String value) {
 		type = type.toLowerCase();
-		if (VIEW_JSP.equals(type)) {
+		if (View.JSP.equals(type)) {
 			return new JspView(value);
 		}
 		
-		if (VIEW_JSON.equals(type)) {
+		if (View.JSON.equals(type)) {
 			if (Strings.isBlank(value)) {
 				return JsonView.DEFAULT;
 			}
 			return new JsonView(value);
 		}
 		
-		if (VIEW_XML.equals(type)) {
+		if (View.XML.equals(type)) {
 			if (Strings.isBlank(value)) {
 				return XmlView.DEFAULT;
 			}
 			return new XmlView(value);
 		}
 		
-		if (VIEW_FREEMARKER.equals(type)) {
+		if (View.FREEMARKER.equals(type)) {
 			return new FreemarkerView(value);
 		}
 		
-		if (VIEW_REDIRECT.equals(type) || VIEW_REDIRECT2.equals(type)) {
+		if (View.REDIRECT.equals(type) || View.REDIRECT2.equals(type)) {
 			return new ServerRedirectView(value);
 		}
 		
-		if (VIEW_FORWARD.equals(type) || VIEW_FORWARD2.equals(type)) {
+		if (View.FORWARD.equals(type) || View.FORWARD2.equals(type)) {
 			return new ForwardView(value);
 		}
 		
-		if (VIEW_IOC.equals(type)) {
+		if (View.IOC.equals(type)) {
 			return ioc.get(View.class, value);
 		}
 		
-		if (VIEW_HTTP.equals(type)) {
+		if (View.HTTP.equals(type)) {
 			return new HttpStatusView(Numbers.toInt(value, 500));
 		}
 
-		if (VIEW_RAW.equals(type)) {
+		if (View.RAW.equals(type)) {
 			return new RawView(value);
 		}
 		
-		if (VIEW_VOID.equals(type)) {
+		if (View.VOID.equals(type)) {
 			return VoidView.INSTANCE;
 		}
 		

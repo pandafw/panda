@@ -32,10 +32,9 @@ public class ActionInfo {
 		// 组合路径 - 与父路径做一个笛卡尔积
 		if (null != paths && null != parent.paths && parent.paths.length > 0) {
 			List<String> myPaths = new ArrayList<String>(paths.length * parent.paths.length);
-			for (int i = 0; i < parent.paths.length; i++) {
-				String pp = parent.paths[i];
-				for (int x = 0; x < paths.length; x++) {
-					myPaths.add(pp + paths[x]);
+			for (String pp : parent.paths) {
+				for (String p : paths) {
+					myPaths.add(pp + p);
 				}
 			}
 			paths = myPaths.toArray(new String[myPaths.size()]);

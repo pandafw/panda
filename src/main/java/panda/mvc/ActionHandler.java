@@ -92,7 +92,7 @@ public class ActionHandler {
 		ac.setRequest(req);
 		ac.setResponse(res);
 
-		ActionInvoker invoker = mapping.get(ac);
+		ActionInvoker invoker = mapping.getActionInvoker(ac);
 		if (null == invoker) {
 			return false;
 		}

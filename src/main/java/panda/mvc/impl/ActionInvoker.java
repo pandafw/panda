@@ -36,6 +36,16 @@ public class ActionInvoker {
 		chainMap.put(method, chain);
 	}
 
+	/**
+	 * @return the defaultChain
+	 */
+	public ActionChain getDefaultChain() {
+		return defaultChain;
+	}
+
+	/**
+	 * @param defaultChain the defaultChain to set
+	 */
 	public void setDefaultChain(ActionChain defaultChain) {
 		this.defaultChain = defaultChain;
 	}
@@ -66,11 +76,7 @@ public class ActionInvoker {
 			return chain;
 		}
 		
-		if (null != defaultChain) {
-			return defaultChain;
-		}
-		
-		return null;
+		return defaultChain;
 	}
 
 }

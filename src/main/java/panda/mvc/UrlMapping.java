@@ -22,6 +22,13 @@ public interface UrlMapping {
 	 * @param ac 上下文对象
 	 * @return 动作链的调用者
 	 */
-	ActionInvoker get(ActionContext ac);
+	ActionInvoker getActionInvoker(ActionContext ac);
 
+	/**
+	 * find action info by path
+	 * 
+	 * @param path path
+	 * @return action info
+	 */
+	ActionInfo getActionInfo(String path);
 }

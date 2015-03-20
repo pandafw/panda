@@ -2,14 +2,12 @@ package panda.mvc.impl;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.lang.Strings;
-import panda.mvc.ActionContext;
 
 public class MappingNode<T> {
 
@@ -60,7 +58,7 @@ public class MappingNode<T> {
 		}
 	}
 
-	private T get(ActionContext ac, Iterator<String> it) {
+	private T get(List<String> args, Iterator<String> it) {
 		// 路径已经没有内容了，看看本节点是否有一个对象
 		if (!it.hasNext()) {
 			return obj == null ? asterisk : obj;
@@ -70,21 +68,24 @@ public class MappingNode<T> {
 		// 先在 map 里寻找，
 		MappingNode<T> node = map.get(key.toLowerCase());
 		if (null != node) {
-			return node.get(ac, it);
+			return node.get(args, it);
 		}
 		
 		// 如果没有看看是否有 '?' 的匹配
 		if (quesmark != null) {
-			ac.getPathArgs().add(key);
-			return quesmark.get(ac, it);
+			if (args != null) {
+				args.add(key);
+			}
+			return quesmark.get(args, it);
 		}
 
 		// 还没有则看看是否有 '*' 的匹配
 		if (null != asterisk) {
-			List<String> pathArgs = ac.getPathArgs();
-			pathArgs.add(key);
-			while (it.hasNext()) {
-				pathArgs.add(it.next());
+			if (args != null) {
+				args.add(key);
+				while (it.hasNext()) {
+					args.add(it.next());
+				}
 			}
 			return asterisk;
 		}
@@ -106,10 +107,8 @@ public class MappingNode<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public T get(ActionContext ac, String path) {
-		ac.setPath(path);
-		ac.setPathArgs(new LinkedList<String>());
-		return get(ac, Iterators.asIterator(Strings.split(path, '/')));
+	public T get(String path, List<String> args) {
+		return get(args, Iterators.asIterator(Strings.split(path, '/')));
 	}
 
 	public String toString() {

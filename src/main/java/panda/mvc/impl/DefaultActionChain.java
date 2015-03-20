@@ -23,6 +23,20 @@ public class DefaultActionChain implements ActionChain {
 		this.procs = procs;
 	}
 
+	/**
+	 * @return the info
+	 */
+	public ActionInfo getInfo() {
+		return info;
+	}
+
+	/**
+	 * @param info the info to set
+	 */
+	public void setInfo(ActionInfo info) {
+		this.info = info;
+	}
+
 	public void doChain(ActionContext ac) {
 		ac.setChain(this);
 		ac.setInfo(info);
