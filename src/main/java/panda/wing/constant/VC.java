@@ -1,6 +1,5 @@
 package panda.wing.constant;
 
-import panda.wing.processor.AuthenticateProcessor;
 
 
 /**
@@ -26,19 +25,6 @@ public interface VC {
 	 * LOCALE_ALL = "*";
 	 */
 	public final static String LOCALE_ALL = "*";
-
-	//--------------------------------------------------------
-	// permission
-	//--------------------------------------------------------
-	/**
-	 * PERMISSION_ALL = "*";
-	 */
-	public final static String PERMISSION_ALL = AuthenticateProcessor.PERMISSION_ALL;
-	
-	/**
-	 * PERMISSION_NONE = "-";
-	 */
-	public final static String PERMISSION_NONE = AuthenticateProcessor.PERMISSION_NONE;
 
 	//----------------------------------------------------
 	// USER CONSTANTS

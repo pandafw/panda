@@ -40,6 +40,7 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Ok;
@@ -169,11 +170,8 @@ public class DataImportAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("import")
-	@Ok("ftl")
-	public Object execute(
-			@Param("*")
-			@Validates
-			Arg arg) throws Exception {
+	@Ok(View.FREEMARKER)
+	public Object execute(@Param("*") @Validates Arg arg) throws Exception {
 		this.arg = arg;
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
