@@ -177,10 +177,7 @@ public class DefaultMvcLoading implements Loading {
 	}
 
 	protected ActionChainMaker createChainMaker(MvcConfig config) {
-		ActionChainMaker maker = config.getIoc().getIfExists(ActionChainMaker.class);
-		if (maker == null) {
-			maker = new DefaultActionChainMaker();
-		}
+		ActionChainMaker maker = config.getIoc().get(ActionChainMaker.class);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Use ActionChainMaker: " +  maker.getClass());
