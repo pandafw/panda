@@ -15,6 +15,7 @@ import panda.mvc.MvcConstants;
 import panda.task.CronTrigger;
 import panda.task.TaskScheduler;
 import panda.task.ThreadPoolTaskScheduler;
+import panda.wing.constant.SC;
 
 @IocBean(type=TaskScheduler.class, create="initialize", depose="shutdown")
 public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
@@ -30,11 +31,11 @@ public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
 	protected List<CronEntry> crons;
 	
 	public void initialize() {
-		if (settings.getPropertyAsBoolean("scheduler.enable")) {
+		if (settings.getPropertyAsBoolean(SC.SCHEDULER_ENABLE)) {
 			log.info("Starting scheduler ...");
 			
-			setName(settings.getProperty("scheduler.name", "scheduler"));
-			setPoolSize(settings.getPropertyAsInt("scheduler.poolSize", 1));
+			setName(settings.getProperty(SC.SCHEDULER_NAME, "scheduler"));
+			setPoolSize(settings.getPropertyAsInt(SC.SCHEDULER_POOL_SIZE, 1));
 			super.initialize();
 			
 			addCronTask();
@@ -76,9 +77,9 @@ public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
 
 	private ActionTask newActionTask(String url) {
 		if (url.startsWith("/")) {
-			String scheme = settings.getProperty("task.scheme", "http");
-			String server = settings.getProperty("task.server", "localhost");
-			int port = settings.getPropertyAsInt("task.port", 80);
+			String scheme = settings.getProperty(SC.TASK_SCHEME, "http");
+			String server = settings.getProperty(SC.TASK_SERVER, "localhost");
+			int port = settings.getPropertyAsInt(SC.TASK_PORT, 80);
 			url = scheme + "://" + server + ':' + port + servlet.getContextPath() + url;
 		}
 		return new ActionTask(url);

@@ -10,13 +10,12 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.constant.SC;
 
 @IocBean(type=Settings.class)
 public class AppSettings extends Settings {
 	private static final Log log = Logs.getLog(AppSettings.class);
 
-	public static final String APP_VERSION = "app.version";
-	
 	@IocInject(required=false)
 	protected ServletContext servlet;
 	
@@ -48,7 +47,7 @@ public class AppSettings extends Settings {
 	}
 	
 	public String getAppVersion() {
-		return get(APP_VERSION);
+		return get(SC.APP_VERSION);
 	}
 
 	public String getPropertyAsPath(String name) {

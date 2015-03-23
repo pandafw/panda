@@ -7,8 +7,12 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_FONTS_PATH = "panda.fonts.path";
 
 	/** The cache */
-	public static final String CACHE = "panda.cache";
+	public static final String PANDA_CACHE = "panda.cache";
 
 	/** The authenticate */
-	public static final String PANDA_AUTHENTICATE_ALLOW_UNKNOWN_URL = "panda.authenticate.allow.unknown.url";
+	public static final String PANDA_AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
+	
+	public static final String PANDA_AUTH_UNLOGIN_VIEW = "panda.auth.unlogin.view";
+	
+	public static final String PANDA_AUTH_UNSECURE_VIEW = "panda.auth.unsecure.view";
 }

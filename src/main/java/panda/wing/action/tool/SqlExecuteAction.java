@@ -19,11 +19,13 @@ import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.wing.action.AbstractAction;
+import panda.wing.auth.Auth;
 
 
 /**
  */
-@At
+@At("/admin/sql")
+@Auth("sysadmin")
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected String commenter = "--";
@@ -212,6 +214,7 @@ public class SqlExecuteAction extends AbstractAction {
 	 * @return INPUT
 	 * @throws Exception if an error occurs
 	 */
+	@At("")
 	public Object execute(@Param("*") Option o) throws Exception {
 		String sql = removeComment(o.sql, o.commenter);
 		

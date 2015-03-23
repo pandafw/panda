@@ -12,6 +12,7 @@ import panda.lang.Collections;
 import panda.lang.collection.ExpireMap;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.constant.SC;
 
 @IocBean(create="initialize", depose="depose")
 public class AppCacheProvider {
@@ -57,20 +58,19 @@ public class AppCacheProvider {
 	 * initialize
 	 */
 	public void initialize() throws Exception {
-		provider = settings.getProperty("cache.provider");
-		name = settings.getProperty("cache.name");
-		expires = settings.getPropertyAsInt("cache.expires", 0);
+		provider = settings.getProperty(SC.CACHE_PROVIDER);
+		name = settings.getProperty(SC.CACHE_NAME);
+		expires = settings.getPropertyAsInt(SC.CACHE_EXPIRES, 0);
 		cache = buildCache();
 	}
 	
 	protected Map buildCache() throws Exception {
-		String cp = settings.getProperty("cache.provider");
-		if (GAE.equalsIgnoreCase(cp)) {
+		if (GAE.equalsIgnoreCase(provider)) {
 			log.info("Build Gae Cache");
 			return GaeHelper.buildCache(expires);
 		}
 		
-		if (EHCACHE.equalsIgnoreCase(cp)) {
+		if (EHCACHE.equalsIgnoreCase(provider)) {
 			log.info("Build EHCache");
 
 			InputStream is = Streams.getStream(EHCACHE_CONFIG);

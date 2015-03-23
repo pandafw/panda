@@ -1,5 +1,7 @@
 package panda.wing.util;
 
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
@@ -12,9 +14,11 @@ import panda.dao.sql.Sqls;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.constant.SC;
 
 @IocBean(create="initialize")
 public class AppDaoClientProvider {
@@ -44,21 +48,21 @@ public class AppDaoClientProvider {
 	public void initialize() throws Exception {
 		daoClient = buildDaoClient();
 		
-		String prefix = settings.getProperty("data.prefix");
+		String prefix = settings.getProperty(SC.DATA_PREFIX);
 		if (Strings.isNotEmpty(prefix)) {
 			daoClient.getEntityMaker().setPrefix(prefix);
 		}
 	}
 	
 	protected DaoClient buildDaoClient() throws Exception {
-		String dstype = settings.getProperty("data.source");
+		String dstype = settings.getProperty(SC.DATA_SOURCE);
 		if (GAE.equalsIgnoreCase(dstype)) {
 			GaeDaoClient gdc = GaeDaoClient.i();
 			return gdc;
 		}
 		
 		if (MONGO.equalsIgnoreCase(dstype)) {
-			String url = settings.getProperty("mongo.url");
+			String url = settings.getProperty(SC.DATA_MONGO_URL);
 
 			log.info("mongo - " +  url);
 			MongoDaoClient daoClient = new MongoDaoClient(url);
@@ -69,7 +73,7 @@ public class AppDaoClientProvider {
 		if (JNDI.equalsIgnoreCase(dstype)) {
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 
-			String jndi = settings.getProperty("jndi.resource");
+			String jndi = settings.getProperty(SC.DATA_JNDI_RESOURCE);
 			log.info("jndi.resource - " + jndi);
 			try {
 				DataSource ds = Sqls.lookupJndiDataSource(jndi);
@@ -77,9 +81,10 @@ public class AppDaoClientProvider {
 			}
 			catch (Exception e) {
 				log.warn("Failed to use jndi resource - " + jndi + " : " + e.getMessage());
-				log.warn("Try to use SimpleDataSource - " + settings.getProperty("jdbc.driver") + ":" + settings.getProperty("jdbc.url"));
+				log.warn("Try to use SimpleDataSource - " + settings.getProperty(SC.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SC.DATA_JDBC_URL));
 
-				DataSource ds = new SimpleDataSource(settings);
+				Map<String, String> dps = Collections.subMap(settings, SC.DATA_PREFIX);
+				DataSource ds = new SimpleDataSource(dps);
 				sqlDaoClient.setDataSource(ds);
 			}
 			return sqlDaoClient;

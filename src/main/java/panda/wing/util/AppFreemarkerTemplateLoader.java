@@ -13,6 +13,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.tpl.ftl.ExternalTemplateLoader;
+import panda.wing.constant.SC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Template;
 import panda.wing.entity.query.TemplateQuery;
@@ -40,7 +41,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	}
 
 	public void initialize() {
-		if (settings.getPropertyAsBoolean("database.template")) {
+		if (settings.getPropertyAsBoolean(SC.DATABASE_TEMPLATE)) {
 			ExternalTemplateLoader etl = new ExternalTemplateLoader();
 			
 			etl.setNameColumn(Template.NAME);

@@ -47,8 +47,10 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.AbstractAction;
+import panda.wing.auth.Auth;
 
 @At("/admin")
+@Auth("sysadmin")
 public class DataImportAction extends AbstractAction {
 	@IocInject
 	protected ActionContext ac;

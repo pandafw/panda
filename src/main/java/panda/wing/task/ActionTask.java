@@ -98,6 +98,7 @@ public class ActionTask implements Runnable {
 		try {
 			HttpClient hc = new HttpClient();
 			
+			hc.setAutoRedirect(false);
 			HttpRequest hreq = HttpRequest.create(url, method);
 			if (params != null) {
 				hreq.getParams().putAll(params);
@@ -131,6 +132,7 @@ public class ActionTask implements Runnable {
 			}
 			else {
 				log.warn("Failed to GET " + url + " : " + hres.getStatusLine() 
+					+ hres.getHeader().toString()
 					+ Streams.LINE_SEPARATOR
 					+ hres.getContentText());
 			}

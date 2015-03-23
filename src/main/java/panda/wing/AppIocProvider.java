@@ -20,7 +20,7 @@ public class AppIocProvider extends AbstractIocProvider {
 		ioc.getContext().save(Scope.APP, DaoClient.class.getName(), new ObjectProxy(dcp.getDaoClient()));
 		
 		AppCacheProvider acp = ioc.get(AppCacheProvider.class);
-		ioc.getContext().save(Scope.APP, AppConstants.CACHE, new ObjectProxy(acp.getCache()));
+		ioc.getContext().save(Scope.APP, AppConstants.PANDA_CACHE, new ObjectProxy(acp.getCache()));
 		return ioc;
 	}
 	

@@ -14,6 +14,7 @@ import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.constant.SC;
 import panda.wing.util.AppSettings;
 
 
@@ -79,7 +80,7 @@ public class LuceneProvider {
 
 	//-----------------------------------------------
 	protected File getLuceneLocation() throws IOException {
-		String path = settings.getPropertyAsPath("lucene.location", "web://WEB-INF/_lucene");
+		String path = settings.getPropertyAsPath(SC.LUCENE_LOCATION, "web://WEB-INF/_lucene");
 		File file = new File(path);
 		Files.makeDirs(file);
 		return file;
@@ -151,7 +152,7 @@ public class LuceneProvider {
 	
 	@SuppressWarnings("unchecked")
 	protected Class<? extends Analyzer> getLuceneAnalyzerType() {
-		String cls = settings.getProperty("lucene.analyzer", StandardAnalyzer.class.getName());
+		String cls = settings.getProperty(SC.LUCENE_ANALYZER, StandardAnalyzer.class.getName());
 		try {
 			return (Class<? extends Analyzer>)Classes.getClass(cls);
 		}

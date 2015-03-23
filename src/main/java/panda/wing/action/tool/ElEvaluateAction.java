@@ -4,32 +4,35 @@ import panda.el.El;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Ok;
 import panda.wing.action.AbstractAction;
+import panda.wing.auth.Auth;
 
 /**
  */
 @At("/admin/el")
+@Auth("sysadmin")
 public class ElEvaluateAction extends AbstractAction {
 
 	@IocInject
 	protected ActionContext ac;
 
-	@At("input")
-	@Ok("ftl")
+	@At("")
+	@Ok(View.FREEMARKER)
 	public void input() {
 	}
 
 	@At("json")
-	@Ok("json")
+	@Ok(View.JSON)
 	public Object json(@Param("expr") String expr) throws Exception {
 		return exec(expr);
 	}
 	
 	@At("xml")
-	@Ok("xml")
+	@Ok(View.XML)
 	public Object xml(@Param("expr") String expr) throws Exception {
 		return exec(expr);
 	}

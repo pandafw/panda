@@ -7,6 +7,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.task.TaskExecutor;
 import panda.task.ThreadPoolTaskExecutor;
+import panda.wing.constant.SC;
 
 @IocBean(type=TaskExecutor.class, create="initialize", depose="shutdown")
 public class LocalTaskExecutor extends ThreadPoolTaskExecutor {
@@ -16,12 +17,12 @@ public class LocalTaskExecutor extends ThreadPoolTaskExecutor {
 	protected Settings settings;
 
 	public void initialize() {
-		if (settings.getPropertyAsBoolean("executor.enable")) {
+		if (settings.getPropertyAsBoolean(SC.EXECUTOR_ENABLE)) {
 			log.info("Starting executor ...");
 			
-			setName(settings.getProperty("executor.name", "executor"));
-			setCorePoolSize(settings.getPropertyAsInt("executor.corePoolSize", 1));
-			setMaxPoolSize(settings.getPropertyAsInt("executor.maxPoolSize", Integer.MAX_VALUE));
+			setName(settings.getProperty(SC.EXECUTOR_NAME, "executor"));
+			setCorePoolSize(settings.getPropertyAsInt(SC.EXECUTOR_CORE_POOL_SIZE, 1));
+			setMaxPoolSize(settings.getPropertyAsInt(SC.EXECUTOR_MAX_POOL_SIZE, Integer.MAX_VALUE));
 			super.initialize();
 		}
 	}

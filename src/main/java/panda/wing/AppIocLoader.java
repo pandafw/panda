@@ -11,7 +11,7 @@ import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
-import panda.wing.auth.AppAuthenticater;
+import panda.wing.auth.UserAuthenticator;
 import panda.wing.lucene.LuceneProvider;
 import panda.wing.task.LocalTaskExecutor;
 import panda.wing.task.LocalTaskScheduler;
@@ -55,7 +55,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(LocalTaskExecutor.class);
 			clss.add(LocalTaskScheduler.class);
 			
-			clss.add(AppAuthenticater.class);
+			clss.add(UserAuthenticator.class);
 			
 			return clss;
 		}

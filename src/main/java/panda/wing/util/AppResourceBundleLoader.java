@@ -11,6 +11,7 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.constant.SC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Property;
 import panda.wing.entity.Resource;
@@ -47,7 +48,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 	 * load external resources
 	 */
 	public void initialize() throws Exception {
-		if (settings.getPropertyAsBoolean("database.resource")) {
+		if (settings.getPropertyAsBoolean(SC.DATABASE_RESOURCE)) {
 			ExternalResourceBundleMaker mrbm = new ExternalResourceBundleMaker();
 
 			mrbm.setClassColumn(Resource.CLAZZ);
@@ -60,7 +61,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 			databaseResourceLoader = mrbm;
 			addResourceBundleMaker(DB, mrbm);
 		}
-		else if (settings.getPropertyAsBoolean("database.property")) {
+		else if (settings.getPropertyAsBoolean(SC.DATABASE_PROPERTY)) {
 			ExternalResourceBundleMaker mrbm = new ExternalResourceBundleMaker();
 
 			mrbm.setClassColumn(Property.CLAZZ);
@@ -83,7 +84,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 			return;
 		}
 		
-		if (settings.getPropertyAsBoolean("database.resource")) {
+		if (settings.getPropertyAsBoolean(SC.DATABASE_RESOURCE)) {
 			log.info("Loading database resources ...");
 
 			Dao dao = daoClient.getDao();
@@ -92,7 +93,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 			List<Resource> list = dao.select(rq);
 			databaseResourceLoader.loadResources(list);
 		}
-		else if (settings.getPropertyAsBoolean("database.property")) {
+		else if (settings.getPropertyAsBoolean(SC.DATABASE_PROPERTY)) {
 			log.info("Loading database properties ...");
 
 			Dao dao = daoClient.getDao();
