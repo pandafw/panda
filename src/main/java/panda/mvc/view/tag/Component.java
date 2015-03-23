@@ -51,6 +51,13 @@ public class Component {
 		return params;
 	}
 
+	public Object getParameter(String name) {
+		if (Collections.isEmpty(params)) {
+			return null;
+		}
+		return params.get(name);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void setParameter(String name, Object value) {
 		if (bean == null) {

@@ -177,13 +177,13 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes name(Object value) {
-		addIfExists("name", value);
-		return this;
+	public Attributes name(UIBean bean) {
+		return name(bean.getName());
 	}
 
-	public Attributes name(Map<String, Object> params) {
-		return name(params.get("name"));
+	public Attributes name(String value) {
+		addIfExists("name", value);
+		return this;
 	}
 
 	public Attributes id(Object id) {
@@ -195,13 +195,9 @@ public class Attributes {
 		return id(bean.getId());
 	}
 
-	public Attributes type(Object type) {
+	public Attributes type(String type) {
 		addIfExists("type", type);
 		return this;
-	}
-
-	public Attributes type(Map<String, Object> params) {
-		return type(params.get("type"));
 	}
 
 	public Attributes forId(UIBean tag) {

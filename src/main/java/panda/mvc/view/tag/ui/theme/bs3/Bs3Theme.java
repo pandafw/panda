@@ -50,7 +50,7 @@ public class Bs3Theme extends WrapTheme {
 
 		addWrapper(Div.class, new RendererWrapperFactory(Bs3InputWrapper.GroupWrapper.class, DivRenderer.class));
 
-		addWrapper(Checkbox.class, new RendererWrapperFactory(Bs3InputWrapper.ControlWrapper.class, CheckboxRenderer.class));
+		addWrapper(Checkbox.class, new RendererWrapperFactory(Bs3InputWrapper.NormalWrapper.class, CheckboxRenderer.class));
 		addWrapper(CheckboxList.class, new RendererWrapperFactory(Bs3InputWrapper.ControlWrapper.class, CheckboxListRenderer.class));
 		addWrapper(DatePicker.class, new RendererWrapperFactory(Bs3InputWrapper.ControlWrapper.class, DatePickerRenderer.class));
 		addWrapper(DateTimePicker.class, new RendererWrapperFactory(Bs3InputWrapper.ControlWrapper.class, DateTimePickerRenderer.class));
@@ -66,7 +66,7 @@ public class Bs3Theme extends WrapTheme {
 
 		addWrapper(ViewField.class, new RendererWrapperFactory(Bs3InputWrapper.StaticWrapper.class, ViewFieldRenderer.class));
 
-		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InputWrapper.ButtonWrapper.class, ResetRenderer.class));
-		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InputWrapper.ButtonWrapper.class, SubmitRenderer.class));
+		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InputWrapper.NormalWrapper.class, ResetRenderer.class));
+		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InputWrapper.NormalWrapper.class, SubmitRenderer.class));
 	}
 }

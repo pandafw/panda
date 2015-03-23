@@ -22,6 +22,11 @@ public abstract class FormButton extends InputUIBean {
 
 	protected abstract String getDefaultValue();
 
+	@Override
+	public boolean usesBody() {
+		return true;
+	}
+
 	public void evaluateParams() {
 		if ((key == null) && (value == null)) {
 			value = getDefaultValue();

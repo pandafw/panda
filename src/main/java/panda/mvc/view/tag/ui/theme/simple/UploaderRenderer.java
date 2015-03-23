@@ -68,7 +68,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		 .cssClass("p-uploader-fid")
 		 .disabled(disabled);
 		if (name != null) {
-			a.name(name);
+			a.addIfExists("name", name);
 			a.addIfExists("value", tag.getFileId());
 		}
 		xtag("input", a);

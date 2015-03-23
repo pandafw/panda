@@ -65,7 +65,7 @@ public class Bs3InlineTheme extends WrapTheme {
 
 		addWrapper(ViewField.class, new RendererWrapperFactory(Bs3InlineInputWrapper.StaticWrapper.class, ViewFieldRenderer.class));
 
-		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ButtonWrapper.class, ResetRenderer.class));
-		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ButtonWrapper.class, SubmitRenderer.class));
+		addWrapper(Reset.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, ResetRenderer.class));
+		addWrapper(Submit.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, SubmitRenderer.class));
 	}
 }

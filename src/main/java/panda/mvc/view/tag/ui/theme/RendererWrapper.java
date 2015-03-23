@@ -33,12 +33,12 @@ public abstract class RendererWrapper<T extends UIBean> extends AbstractTagRende
 	}
 
 	protected void writeBefore() throws IOException {
-		String before = (String)tag.getParameters().get("before");
+		String before = (String)tag.getParameter("before");
 		write(before);
 	}
 
 	protected void writeAfter() throws IOException {
-		String after = (String)tag.getParameters().get("after");
+		String after = (String)tag.getParameter("after");
 		write(after);
 	}
 	

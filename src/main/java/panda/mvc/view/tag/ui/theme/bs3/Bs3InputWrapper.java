@@ -185,11 +185,11 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 		}
 	}
 
-	public static class ButtonWrapper extends Bs3InputWrapper {
+	public static class NormalWrapper extends Bs3InputWrapper {
 		/**
 		 * @param context context
 		 */
-		public ButtonWrapper(RenderingContext context) {
+		public NormalWrapper(RenderingContext context) {
 			super(context);
 		}
 	}

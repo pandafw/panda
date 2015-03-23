@@ -533,4 +533,12 @@ public class ActionContext {
 	public Object getT() {
 		return getTop();
 	}
+
+	/**
+	 * @return the vars object
+	 * @see #getVars()
+	 */
+	public Object getV() {
+		return getVars();
+	}
 }

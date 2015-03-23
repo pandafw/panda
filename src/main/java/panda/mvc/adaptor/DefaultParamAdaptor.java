@@ -223,6 +223,9 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			addArg(args, name, o);
 		}
 		
+		if (args.size() == 1 && args.containsKey("")) {
+			ac.setParams(args.get(""));
+		}
 		ac.setParams(args);
 		ac.setArgs(args.values().toArray());
 	}

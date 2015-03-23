@@ -17,7 +17,7 @@ public class ViewProcessor extends AbstractProcessor {
 	public void process(ActionContext ac) throws Throwable {
 		if (log.isWarnEnabled()) {
 			// 需要特别提醒一下使用jsonView,但方法的返回值是String的!!
-			if ("json".equals(ac.getInfo().getOkView()) 
+			if (View.JSON.equals(ac.getInfo().getOkView()) 
 					&& String.class.equals(ac.getInfo().getMethod().getReturnType())) {
 				log.warn("Not a good idea : Return String for JsonView!! (Using @Ok(\"raw\") or return map/list/pojo)--> "
 						+ ac.getInfo().getMethod().toString());

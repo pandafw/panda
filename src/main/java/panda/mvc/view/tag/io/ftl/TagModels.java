@@ -5,6 +5,7 @@ import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
 import panda.mvc.view.tag.CNumber;
+import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.Head;
 import panda.mvc.view.tag.Param;
@@ -84,6 +85,7 @@ public class TagModels {
 	protected TagModel timepicker;
 	protected TagModel triggerfield;
 	protected TagModel uploader;
+	protected TagModel url;
 	protected TagModel viewfield;
 
 	/**
@@ -475,6 +477,16 @@ public class TagModels {
 			uploader = new TagModel(context, Uploader.class);
 		}
 		return uploader;
+	}
+
+	/**
+	 * @return urlModel
+	 */
+	public TagModel getUrl() {
+		if (url == null) {
+			url = new TagModel(context, CUrl.class);
+		}
+		return url;
 	}
 
 	/**
