@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Random;
@@ -2238,7 +2238,7 @@ public abstract class Collections {
 	 * @param des destination map
 	 * @param src source map array
 	 */
-	public static Map addAll(Map des, Map ... src) {
+	public static <K, V> Map<K, V> addAll(Map<K, V> des, Map<K, V> ... src) {
 		if (src == null || src.length == 0) {
 			return des;
 		}
@@ -2248,5 +2248,23 @@ public abstract class Collections {
 			des.putAll(m);
 		}
 		return des;
+	}
+
+	/**
+	 * remove prefix of key
+	 */
+	public static <T> Map<String, T> subMap(Map<String, T> map, String prefix) {
+		if (isEmpty(map) || Strings.isEmpty(prefix)) {
+			return map;
+		}
+		
+		Map<String, T> nm = new HashMap<String, T>();
+		int len = prefix.length();
+		for (Entry<String, T> en : map.entrySet()) {
+			if (en.getKey() != null && en.getKey().startsWith(prefix)) {
+				nm.put(en.getKey().substring(len), en.getValue());
+			}
+		}
+		return nm;
 	}
 }
