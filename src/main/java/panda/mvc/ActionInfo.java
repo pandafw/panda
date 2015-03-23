@@ -2,8 +2,11 @@ package panda.mvc;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import panda.lang.Strings;
 import panda.net.http.HttpMethod;
 
 public class ActionInfo {
@@ -31,10 +34,22 @@ public class ActionInfo {
 	public ActionInfo mergeWith(ActionInfo parent) {
 		// 组合路径 - 与父路径做一个笛卡尔积
 		if (null != paths && null != parent.paths && parent.paths.length > 0) {
-			List<String> myPaths = new ArrayList<String>(paths.length * parent.paths.length);
-			for (String pp : parent.paths) {
-				for (String p : paths) {
-					myPaths.add(pp + p);
+			Set<String> myPaths = new HashSet<String>(paths.length * parent.paths.length);
+			for (String p : paths) {
+				if (p.length() > 0 && p.charAt(0) == '/') {
+					myPaths.add(p);
+					continue;
+				}
+				for (String pp : parent.paths) {
+					if (Strings.isEmpty(pp)) {
+						myPaths.add(p);
+					}
+					else if (pp.charAt(pp.length() - 1) == '/') {
+						myPaths.add(pp + p);
+					}
+					else {
+						myPaths.add(pp + '/' + p);
+					}
 				}
 			}
 			paths = myPaths.toArray(new String[myPaths.size()]);

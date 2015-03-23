@@ -112,7 +112,7 @@ public abstract class Loadings {
 				ai.setPaths(at.value());
 			}
 			else if (def != null) {
-				ai.setPaths(Arrays.toArray("/" + def.toLowerCase()));
+				ai.setPaths(Arrays.toArray(def.toLowerCase()));
 			}
 
 			if (at.method() != null && at.method().length > 0) {

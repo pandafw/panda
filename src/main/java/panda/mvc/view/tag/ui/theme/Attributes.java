@@ -425,7 +425,7 @@ public class Attributes {
 	}
 
 	public Attributes multiple(Select tag) {
-		addIfExists("multiple", tag.isMultiple(), false);
+		addIfTrue("multiple", tag.isMultiple());
 		return this;
 	}
 
