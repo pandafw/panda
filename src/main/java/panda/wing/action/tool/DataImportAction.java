@@ -47,10 +47,7 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.AbstractAction;
-import panda.wing.auth.Auth;
 
-@At("/admin")
-@Auth("sysadmin")
 public class DataImportAction extends AbstractAction {
 	@IocInject
 	protected ActionContext ac;
@@ -72,75 +69,12 @@ public class DataImportAction extends AbstractAction {
 	}
 	
 	public static class Arg {
-		protected boolean deleteAll = false;
-		protected String target;
-		protected String encoding = Charsets.UTF_8;
-		protected FileItem file;
-		protected int commitSize = 1000;
-		protected int count;
-
-		/**
-		 * @return the deleteAll
-		 */
-		public boolean isDeleteAll() {
-			return deleteAll;
-		}
-	
-		/**
-		 * @param deleteAll the deleteAll to set
-		 */
-		public void setDeleteAll(boolean deleteAll) {
-			this.deleteAll = deleteAll;
-		}
-	
-		/**
-		 * @return the file
-		 */
-		public FileItem getFile() {
-			return file;
-		}
-	
-		/**
-		 * @return the target
-		 */
-		public String getTarget() {
-			return target;
-		}
-	
-		/**
-		 * @param target the target to set
-		 */
-		public void setTarget(String target) {
-			this.target = target;
-		}
-	
-		/**
-		 * @return the encoding
-		 */
-		public String getEncoding() {
-			return encoding;
-		}
-	
-		/**
-		 * @param encoding the encoding to set
-		 */
-		public void setEncoding(String encoding) {
-			this.encoding = encoding;
-		}
-	
-		/**
-		 * @return the commitSize
-		 */
-		public int getCommitSize() {
-			return commitSize;
-		}
-	
-		/**
-		 * @param commitSize the commitSize to set
-		 */
-		public void setCommitSize(int commitSize) {
-			this.commitSize = commitSize;
-		}
+		public boolean deleteAll = false;
+		public String target;
+		public String encoding = Charsets.UTF_8;
+		public FileItem file;
+		public int commitSize = 1000;
+		public int count;
 	}
 
 	protected Arg arg;
@@ -173,8 +107,12 @@ public class DataImportAction extends AbstractAction {
 	 */
 	@At("import")
 	@Ok(View.FREEMARKER)
-	public Object execute(@Param("*") @Validates Arg arg) throws Exception {
+	public Object execute(@Param @Validates Arg arg) throws Exception {
 		this.arg = arg;
+		if (arg.file == null) {
+			return null;
+		}
+		
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
 			if ("xls".equalsIgnoreCase(fext)) {

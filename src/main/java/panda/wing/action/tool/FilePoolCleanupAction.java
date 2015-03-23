@@ -5,12 +5,14 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.mvc.annotation.At;
 import panda.wing.action.work.AbstractSyncWorkAction;
+import panda.wing.auth.Auth;
 
 
 /**
  * delete upload temporary files
  */
-@At("/admin/filecleanup")
+@At("/admin/task/filecleanup")
+@Auth({"~local", "sysadmin"})
 public class FilePoolCleanupAction extends AbstractSyncWorkAction {
 	@IocInject
 	protected FilePool filePool;

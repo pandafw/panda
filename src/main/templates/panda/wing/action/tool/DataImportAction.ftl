@@ -9,17 +9,17 @@
 	<div class="p-header">
 		<h3><i class="fa fa-cloud-upload"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<@p.form id="dataimp" method="post" enctype="multipart/form-data" theme="bs3h">
-		<@p.select key="target" list="targetSet"/>
+		<@p.select key="target" list="%{action.targetSet}"/>
 		<@p.file
 			key="file"
 			value=""
 			size="50"
 			onchange="onFileChange(this)"
 		/>
-		<@p.checkbox name="deleteAll" clabel="${action.getText('deleteAll')}" fieldValue="true"/>
+		<@p.checkbox name="deleteAll" fieldLabel="#(deleteAll)" fieldValue="true"/>
 		<@p.submit icon="fa fa-inbox"><@p.text name="button-import"/></@p.submit>
 	</@p.form>
 	

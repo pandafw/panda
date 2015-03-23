@@ -1,7 +1,7 @@
 title=Data Import
 
-target=Target
-file=File
+p.target=Target
+p.file=File
 deleteAll=Delete data before import
 
 button-import=Import

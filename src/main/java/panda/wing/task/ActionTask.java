@@ -132,6 +132,7 @@ public class ActionTask implements Runnable {
 			}
 			else {
 				log.warn("Failed to GET " + url + " : " + hres.getStatusLine() 
+					+ Streams.LINE_SEPARATOR
 					+ hres.getHeader().toString()
 					+ Streams.LINE_SEPARATOR
 					+ hres.getContentText());

@@ -1,7 +1,7 @@
 title=データインポート
 
-target=インポート先
-file=データファイル
+p.target=インポート先
+p.file=データファイル
 deleteAll=既存データを削除する
 
 button-import=インポート
