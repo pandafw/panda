@@ -44,7 +44,13 @@ public class LocaleProcessor extends AbstractProcessor {
 	protected String cookieDomain;
 	protected String cookiePath;
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
+
+	@IocInject(value=MvcConstants.LOCALE_VALID, required=false)
 	protected String[] validLocales;
+	
+	@IocInject(value=MvcConstants.LOCALE_DEFAULT, required=false)
+	protected Locale defaultLocale = Locale.getDefault();
+	
 	protected boolean fromAcceptLanguage = true;
 
 	protected boolean saveToSession = false;
@@ -54,74 +60,6 @@ public class LocaleProcessor extends AbstractProcessor {
 	 * Constructor
 	 */
 	public LocaleProcessor() {
-	}
-
-	/**
-	 * @param sessionName the sessionName to set
-	 */
-	public void setSessionName(String sessionName) {
-		this.sessionName = sessionName;
-	}
-
-	/**
-	 * @param parameterName the parameterName to set
-	 */
-	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName;
-	}
-
-	/**
-	 * @param cookieName the cookieName to set
-	 */
-	public void setCookieName(String cookieName) {
-		this.cookieName = cookieName;
-	}
-
-	/**
-	 * @param cookieDomain the cookieDomain to set
-	 */
-	public void setCookieDomain(String cookieDomain) {
-		this.cookieDomain = cookieDomain;
-	}
-
-	/**
-	 * @param cookiePath the cookiePath to set
-	 */
-	public void setCookiePath(String cookiePath) {
-		this.cookiePath = cookiePath;
-	}
-
-	/**
-	 * @param cookieMaxAge the cookieMaxAge to set
-	 */
-	public void setCookieMaxAge(int cookieMaxAge) {
-		this.cookieMaxAge = cookieMaxAge;
-	}
-
-	@IocInject(MvcConstants.LOCALE_VALID)
-	public void setValidLocale(String validLocale) {
-		this.validLocales = Strings.split(validLocale);
-	}
-
-	/**
-	 * @param fromAcceptLanguage the fromAcceptLanguage to set
-	 */
-	public void setFromAcceptLanguage(String fromAcceptLanguage) {
-		this.fromAcceptLanguage = Boolean.parseBoolean(fromAcceptLanguage);
-	}
-
-	/**
-	 * @param saveToSession the saveToSession to set
-	 */
-	public void setSaveToSession(boolean saveToSession) {
-		this.saveToSession = saveToSession;
-	}
-
-	/**
-	 * @param saveToCookie the saveToCookie to set
-	 */
-	public void setSaveToCookie(boolean saveToCookie) {
-		this.saveToCookie = saveToCookie;
 	}
 
 	public void process(ActionContext ac) throws Throwable {
@@ -157,6 +95,11 @@ public class LocaleProcessor extends AbstractProcessor {
 			saveToCookie = false;
 		}
 
+		if (locale == null) {
+			locale = defaultLocale;
+			saveToCookie = false;
+		}
+		
 		// save locale
 		if (locale != null) {
 			saveLocale(ac, locale);

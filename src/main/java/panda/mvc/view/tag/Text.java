@@ -64,7 +64,7 @@ public class Text extends ContextBean {
 			defaultMessage = name;
 		}
 
-		String msg = context.text(name, defaultMessage);
+		String msg = context.getText().getText(name, defaultMessage, getParameters());
 
 		if (msg != null) {
 			try {

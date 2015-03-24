@@ -52,4 +52,10 @@ public interface MvcConstants extends IocConstants {
 
 	/** The valid locale */
 	public static final String LOCALE_VALID = "panda.locale.valid";
+
+	/** The default locale */
+	public static final String LOCALE_DEFAULT = "panda.locale.default";
+
+	/** The sitemesh configuration */
+	public static final String SITEMESH = "panda.sitemesh";
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.bean.Beans;
 import panda.filepool.FilePool;
 import panda.ioc.Ioc;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.mvc.aware.ActionAware;
 import panda.mvc.aware.ApplicationAware;
@@ -249,6 +250,10 @@ public class ActionContext {
 	 */
 	public Object getParameter(String name) {
 		if (params == null) {
+			return null;
+		}
+		
+		if (Classes.isImmutable(params.getClass())) {
 			return null;
 		}
 		
