@@ -47,7 +47,10 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.AbstractAction;
+import panda.wing.util.AppActionAssist;
 
+//@At("/admin")
+//@Auth("sysadmin")
 public class DataImportAction extends AbstractAction {
 	@IocInject
 	protected ActionContext ac;
@@ -618,8 +621,7 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	protected void prepareData(Object data) {
-		// do nothing
-		// give the subclass a chance to prepare data
+		((AppActionAssist)getAssist()).initCommonFields(data);
 	}
 
 	protected void saveRow(Dao dao, Class targetType, Object row) {
