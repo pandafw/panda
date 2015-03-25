@@ -152,17 +152,21 @@ public abstract class Loadings {
 	}
 
 	private static boolean isAction(Class<?> cls) {
-		int cm = cls.getModifiers();
-		if (!Modifier.isPublic(cm) || Modifier.isAbstract(cm) || Modifier.isInterface(cm)) {
-			return false;
-		}
-		
-		for (Method m : cls.getMethods()) {
-			if (m.isAnnotationPresent(At.class)) {
-				return true;
+		try {
+			int cm = cls.getModifiers();
+			if (!Modifier.isPublic(cm) || Modifier.isAbstract(cm) || Modifier.isInterface(cm)) {
+				return false;
+			}
+			
+			for (Method m : cls.getMethods()) {
+				if (m.isAnnotationPresent(At.class)) {
+					return true;
+				}
 			}
 		}
-		
+		catch (Throwable e) {
+			// skip
+		}
 		return false;
 	}
 
