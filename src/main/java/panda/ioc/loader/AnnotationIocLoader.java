@@ -253,7 +253,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				}
 			}
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			// skip.
 		}
 	}
