@@ -505,7 +505,7 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 * @return possible object is {@link String }
 	 */
 	public String[] getUniqueKeys() {
-		return Strings.split(uniqueKey);
+		return Strings.split(uniqueKey, " ,");
 	}
 
 	/**

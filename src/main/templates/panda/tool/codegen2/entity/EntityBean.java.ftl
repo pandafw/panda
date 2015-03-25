@@ -21,7 +21,7 @@ import ${i};
 <#if entity.uniqueKeyMap?has_content>
 @Indexes({
 <#list entity.uniqueKeyMap?keys as k>
-	@Index(name="${k}", fields={ <#list entity.uniqueKeyMap[k] as p>"${p.name}"<#if p_has_next>,</#if></#list> }, unique=true)<#if k_has_next>,</#if>
+	@Index(name="${k}", fields={ <#list entity.uniqueKeyMap[k] as p>"${p.name}"<#if p_has_next>, </#if></#list> }, unique=true)<#if k_has_next>,</#if>
 </#list>
 })
 </#if>
