@@ -3,8 +3,8 @@ package panda.bind.json;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -64,7 +64,7 @@ import panda.lang.Strings;
  * @see <a href="http://JSON.org">JSON.org</a>
  * @author yf.frank.wang@gmail.com
  */
-public class JsonObject extends HashMap<String, Object> {
+public class JsonObject extends LinkedHashMap<String, Object> {
 	/**
 	 * serialVersionUID
 	 */

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -284,7 +285,7 @@ public class Settings implements Map<String, String> {
 				expr = "{" + expr + "}";
 			}
 
-			map = Jsons.fromJson(expr, HashMap.class);
+			map = Jsons.fromJson(expr, LinkedHashMap.class);
 		}
 
 		return map;

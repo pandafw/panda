@@ -291,7 +291,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 								nextValue(null);
 							}
 							else {
-								throw syntaxError("readonly property: " + key);
+								throw syntaxError("readonly property [" + key + "] of " + type);
 							}
 						}
 						else {

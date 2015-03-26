@@ -178,7 +178,7 @@ public class JsonBinderTest {
 			Assert.fail("ignore readonly property");
 		}
 		catch (JsonException e) {
-			Assert.assertEquals("readonly property: class at 9 [character 10 line 1]", e.getMessage());
+			Assert.assertEquals("readonly property [class] of " + A.class + " at 9 [character 10 line 1]", e.getMessage());
 		}
 		
 		try {
@@ -188,7 +188,7 @@ public class JsonBinderTest {
 			Assert.fail("ignore missing property");
 		}
 		catch (JsonException e) {
-			Assert.assertEquals("missing property: clazz at 23 [character 24 line 1]", e.getMessage());
+			Assert.assertEquals("missing property [clazz] of " + A.class + " at 23 [character 24 line 1]", e.getMessage());
 		}
 
 		jd.setIgnoreReadonlyProperty(true);

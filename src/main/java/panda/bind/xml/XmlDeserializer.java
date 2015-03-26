@@ -194,13 +194,13 @@ public class XmlDeserializer extends AbstractDeserializer {
 								if (deser.isIgnoreReadonlyProperty()) {
 									return;
 								}
-								throw error("readonly property: " + em.name);
+								throw error("readonly property [" + em.name + "] of " + ep.type);
 							}
 	
 							if (deser.isIgnoreMissingProperty()) {
 								return;
 							}
-							throw error("missing property: " + em.name);
+							throw error("missing property [" + em.name + "] of " + ep.type);
 						}
 					}
 				}

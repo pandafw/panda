@@ -168,7 +168,7 @@ public class XmlBinderTest {
 			Assert.fail("ignore readonly property");
 		}
 		catch (XmlException e) {
-			Assert.assertEquals("readonly property: class at /doc/class", e.getMessage());
+			Assert.assertEquals("readonly property [class] of " + A.class + " at /doc/class", e.getMessage());
 		}
 		
 		try {
@@ -178,7 +178,7 @@ public class XmlBinderTest {
 			Assert.fail("ignore missing property");
 		}
 		catch (XmlException e) {
-			Assert.assertEquals("missing property: clazz at /doc/clazz", e.getMessage());
+			Assert.assertEquals("missing property [clazz] of " + A.class + " at /doc/clazz", e.getMessage());
 		}
 
 		xd.setIgnoreReadonlyProperty(true);
