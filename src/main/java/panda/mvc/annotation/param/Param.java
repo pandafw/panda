@@ -14,7 +14,12 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Param {
 	/**
-	 * 对应到 HTTP 参数里的参数名称
+	 * parameter name
 	 */
 	String value() default "";
+
+	/**
+	 * cast format
+	 */
+	String format() default "";
 }

@@ -404,7 +404,7 @@ public abstract class UIBean extends Component {
 
 	/** The name to set for element */
 	public void setName(String name) {
-		this.name = escape(name);
+		this.name = name;
 	}
 
 	/** Set the html tabindex attribute on rendered html element */

@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -97,7 +98,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	
 	public static String indexedName(int i, Param param) {
 		if (param == null) {
-			return String.valueOf(i);
+			return '~' + String.valueOf(i);
 		}
 
 		String pn = param.value();
@@ -142,7 +143,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				// adapt by path arguments
 				o = adaptByPathArg(ac, "0", types[0], 0);
 				if (o == null) {
-					o = ejectByAll(ac, types[0]);
+					o = ejectByAll(ac, types[0], null);
 				}
 			}
 			
@@ -219,14 +220,23 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				continue;
 			}
 			
-			o = cast(ac, name, null, types[i]);
+			o = cast(ac, name, null, types[i], null);
 			addArg(args, name, o);
 		}
 		
-		if (args.size() == 1 && args.containsKey("")) {
-			ac.setParams(args.get(""));
+		// remove unnamed parameter
+		LinkedHashMap<String, Object> params = new LinkedHashMap<String, Object>(types.length);
+		for (Entry<String, Object> en : args.entrySet()) {
+			if (en.getKey().length() == 0 || en.getKey().charAt(0) != '~') {
+				params.put(en.getKey(), en.getValue());
+			}
 		}
-		ac.setParams(args);
+		if (params.size() == 1 && params.containsKey("")) {
+			ac.setParams(params.get(""));
+		}
+		else {
+			ac.setParams(params);
+		}
 		ac.setArgs(args.values().toArray());
 	}
 
@@ -284,7 +294,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			val = req.getHeader(name);
 		}
 
-		return cast(ac, '^' + name, val, type);
+		return cast(ac, '^' + name, val, type, null);
 	}
 
 	protected Object adaptByParamType(ActionContext ac, Class<?> type) {
@@ -346,16 +356,16 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 
 		// FORM
 		if (Strings.isEmpty(pm)) {
-			return ejectByAll(ac, type);
+			return ejectByAll(ac, type, param.format());
 		}
 		if (pm.endsWith(".*")) {
-			return ejectByPrefix(ac, type, pm.substring(0, pm.length() - 1));
+			return ejectByPrefix(ac, type, pm.substring(0, pm.length() - 1), param.format());
 		}
 		
-		return ejectByNamedParam(ac, type, pm);
+		return ejectByNamedParam(ac, type, pm, param.format());
 	}
 	
-	protected Object ejectByNamedParam(ActionContext ac, Type type, String name) {
+	protected Object ejectByNamedParam(ActionContext ac, Type type, String name, String format) {
 		ParamEjector pe = getParamEjector(ac);
 		Object param = pe.eject(name);
 
@@ -370,18 +380,18 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			}
 		}
 		
-		return cast(ac, name, param, type);
+		return cast(ac, name, param, type, format);
 	}
 
-	protected Object ejectByAll(ActionContext ac, Type type) {
+	protected Object ejectByAll(ActionContext ac, Type type, String format) {
 		ParamEjector pe = getParamEjector(ac);
 		Object a = pe.eject();
-		Object o = cast(ac, null, a, type);
+		Object o = cast(ac, null, a, type, format);
 		return o;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Object ejectByPrefix(ActionContext ac, Type type, String prefix) {
+	protected Object ejectByPrefix(ActionContext ac, Type type, String prefix, String format) {
 		if (Strings.isEmpty(prefix)) {
 			throw new IllegalArgumentException("Illegal @Param prefix value: '" + prefix + "'");
 		}
@@ -399,7 +409,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);
 				}
 				else {
-					Object cv = cast(ac, key, val, pt);
+					Object cv = cast(ac, key, val, pt, format);
 					if (!bh.setBeanValue(target, bn, cv)) {
 						log.warn("Failed to set form value (" + key + "=" + val + ") to " + type);
 					}
@@ -413,19 +423,20 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	protected Object adaptByPathArg(ActionContext ac, String name, Type type, int index) {
 		List<String> args = ac.getPathArgs();
 		if (index < args.size()) {
-			return cast(ac, name, args.get(index), type);
+			return cast(ac, name, args.get(index), type, null);
 		}
 
 		return null;
 	}
 	
-	protected <T> T cast(ActionContext ac, String name, Object value, Type type) {
+	protected <T> T cast(ActionContext ac, String name, Object value, Type type, String format) {
 		Castors cs = Mvcs.getCastors();
 		CastContext cc = cs.getCastContext();
 		
 		cc.setSkipCastError(true);
 		cc.setPrefix(name);
 		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.setFormat(format);
 		
 		T o = cs.cast(value, type, cc);
 		if (Collections.isNotEmpty(cc.getErrors())) {

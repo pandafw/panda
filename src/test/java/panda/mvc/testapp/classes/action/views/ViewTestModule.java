@@ -19,78 +19,78 @@ public class ViewTestModule {
 	// ---------------JSP View
 
 
-	@At("/jsp2")
+	@At("jsp2")
 	@Ok("jsp:jsp/views/jspView")
 	public void jspView2() {
 	}
 
-	@At("/jsp3")
+	@At("jsp3")
 	@Ok("jsp:/WEB-INF/jsp/views/jspView")
 	public void jspView3() {
 	}
 
-	@At("/jsp4")
+	@At("jsp4")
 	@Ok("jsp:/WEB-INF/jsp/views/jspView.jsp")
 	public void jspView4() {
 	}
 
 	// -------------ServerRedirectView
-	@At("/red")
+	@At("red")
 	@Ok(">>:/${reqp.to}.jsp")
 	public void serverRedirectView() {
 	}
 
-	@At("/red2")
+	@At("red2")
 	@Ok("RedirEct:/${reqp.to}.jsp")
 	public void serverRedirectView2() {
 	}
 
-	@At("/red3")
+	@At("red3")
 	@Ok("redirect:/${reqp.to}.jsp")
 	public void serverRedirectView3() {
 	}
 
 	// -------------ForwardView
-	@At("/for")
+	@At("for")
 	@Ok("->:/${reqp.to}.jsp")
 	public void forwardView() {
 	}
 
-	@At("/for2")
+	@At("for2")
 	@Ok("fOrWard:/${reqp.to}.jsp")
 	public void forwardView2() {
 	}
 
-	@At("/for3")
+	@At("for3")
 	@Ok("forward:/${reqp.to == null ? 'base' : 'base'}.jsp")
 	public void forwardView3() {
 	}
 
 	// --------------Raw view
-	@At("/raw")
+	@At("raw")
 	@Ok("raw")
 	public String raw() {
 		return "ABC";
 	}
 
-	@At("/raw2")
+	@At("raw2")
 	@Ok("raw")
 	public InputStream raw2() throws Throwable {
 		return getClass().getResourceAsStream("abc.txt");
 	}
 
-	@At("/raw3")
+	@At("raw3")
 	@Ok("raw")
 	public Reader raw3() throws Throwable {
 		return Streams.toReader(getClass().getResourceAsStream("abc.txt"), Charsets.UTF_8);
 	}
 
-	@At("/raw4")
+	@At("raw4")
 	@Ok("raw")
 	public void raw4() {
 	}
 
-	@At("/raw5")
+	@At("raw5")
 	@Ok("raw:json")
 	public String raw5() {
 		Map<String, String> map = new HashMap<String, String>();

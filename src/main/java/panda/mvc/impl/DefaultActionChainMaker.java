@@ -34,7 +34,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		if (Collections.isEmpty(map)) {
 			map = new HashMap<String, List<String>>();
 		}
-		if (map.containsKey(DEFAULT_CHAIN)) {
+		if (!map.containsKey(DEFAULT_CHAIN)) {
 			List<String> defs = Arrays.toList(
 				FatalProcessor.class.getName(),
 				AdaptProcessor.class.getName(),
@@ -53,11 +53,14 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 			key = DEFAULT_CHAIN;
 		}
 
-		return (List<String>)map.get(key);
+		return map.get(key);
 	}
 	
 	public ActionChain eval(MvcConfig config, ActionInfo ai) {
 		List<String> procs = getProcessors(ai.getChainName());
+		if (procs == null) {
+			throw new IllegalArgumentException("Failed to find chain [" + ai.getChainName() + "] for " + ai.getActionType());
+		}
 		ActionChain chain = new DefaultActionChain(ai, procs);
 		return chain;
 	}

@@ -8,7 +8,7 @@ import panda.mvc.annotation.view.Ok;
 @At("/two")
 public class NemberTwoModule {
 
-	@At("/abc")
+	@At("abc")
 	@Ok("raw")
 	public String say() {
 		System.out.println("java");
@@ -23,23 +23,13 @@ public class NemberTwoModule {
 		return !(userName == null || password == null || authCode == null);
 	}
 
-	//TODO
-//	@At("/need")
-//	@Ok("json")
-//	@Fail("json")
-//	@Filters(@By(type = CheckSession.class, args = { "AUTH", "/two/abc" }))
-//	public String needLogin() {
-//		System.out.println("abc");
-//		return "ABC";
-//	}
-
-	@At("/pathme/*")
+	@At("pathme/*")
 	@Ok("raw")
 	public String pathme(int abc, long xyz) {
 		return abc + "+" + xyz;
 	}
 
-	@At("/pathtwo/?/?")
+	@At("pathtwo/?/?")
 	@Ok("raw")
 	public String pathtwo(int abc, long xyz) {
 		return abc + "+" + xyz;

@@ -58,13 +58,6 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 	}
 
 	@Test
-	public void test_CheckSession() throws Throwable {
-		request.setPathInfo("/two/need.do");
-		servlet.service(request, response);
-		assertEquals("/two/abc", response.getHeader("Location"));
-	}
-
-	@Test
 	public void test_NotPublicClass() throws Throwable {
 		request.setPathInfo("/here");
 		servlet.service(request, response);

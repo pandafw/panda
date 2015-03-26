@@ -14,30 +14,30 @@ import panda.mvc.annotation.view.Ok;
 @Fatal("json")
 public class JsonModule {
 
-	@At("/hello")
+	@At("hello")
 	public String hello(@Param("pet") Pet pet) throws UnsupportedEncodingException {
 		return "!!" + pet.getName() + "!!";
 	}
 
-	@At("/map")
+	@At("map")
 	@Ok("raw")
 	public int jsonMap(Map map) {
 		return map.size();
 	}
 
-	@At("/list")
+	@At("list")
 	@Ok("raw")
 	public int jsonList(@Param List<Pet> pets) {
 		return pets.size();
 	}
 
-	@At("/array")
+	@At("array")
 	@Ok("raw")
 	public int jsonArray(@Param Pet[] pets) {
 		return pets.length;
 	}
 
-	@At("/map/obj")
+	@At("map/obj")
 	@Ok("raw")
 	public int mapPet(@Param Pet pet) {
 		return pet.map.size();

@@ -79,7 +79,7 @@ public abstract class InputUIBean extends UIBean {
 		
 		if (id == null) {
 			if (name != null) {
-				id = form.getId() + '_' + name;
+				id = form.getId() + '_' + escape(name);
 			}
 			else {
 				id = form.getId() + '_' + form.getSequence();

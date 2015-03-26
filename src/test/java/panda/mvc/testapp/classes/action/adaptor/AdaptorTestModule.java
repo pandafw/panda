@@ -3,6 +3,7 @@ package panda.mvc.testapp.classes.action.adaptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,22 +22,27 @@ import panda.mvc.testapp.BaseWebappTest;
 @Fatal("http:500")
 public class AdaptorTestModule extends BaseWebappTest {
 
-	@At("/reader")
+	@At("edate")
+	public String getDate(@Param(value="d", format="yyyyMMdd") Date d) throws IOException {
+		return String.valueOf(d.getTime());
+	}
+
+	@At("reader")
 	public String getInputStream(Reader reader) throws IOException {
 		return Streams.toString(reader);
 	}
 
-	@At("/ins")
+	@At("ins")
 	public String getInputStream(InputStream ins) throws IOException {
 		return new String(Streams.toByteArray(ins));
 	}
 
-	@At("/json/pet/array")
+	@At("json/pet/array")
 	public String getJsonPetArray(@Param("pets") Pet[] pets) {
 		return String.format("pets(%d) %s", pets.length, "array");
 	}
 
-	@At("/json/pet/list")
+	@At("json/pet/list")
 	public String getJsonPetList(@Param("pets") List<Pet> lst) {
 		StringBuilder sb = new StringBuilder();
 		for (Pet pet : lst)
@@ -44,7 +50,7 @@ public class AdaptorTestModule extends BaseWebappTest {
 		return String.format("pets(%d) %s", lst.size(), "list");
 	}
 
-	@At("/json/type")
+	@At("json/type")
 	public void jsonMapType(@Param Map<String, Double> map) {
 		TestCase.assertNotNull(map);
 		TestCase.assertEquals(1, map.size());

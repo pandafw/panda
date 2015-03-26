@@ -62,16 +62,17 @@ public class MappingNodeTest {
 		root.add("/a/?/c/*", "A");
 
 		List<String> args = new ArrayList<String>();
-
 		assertEquals("A", root.get("/a/b/c", args));
 		assertEquals(1, args.size());
 		assertEquals("b", args.get(0));
 
+		args.clear();
 		assertEquals("A", root.get("/a/b/c/d", args));
 		assertEquals(2, args.size());
 		assertEquals("b", args.get(0));
 		assertEquals("d", args.get(1));
 
+		args.clear();
 		assertEquals("A", root.get("/a/b/c/d/e", args));
 		assertEquals(3, args.size());
 		assertEquals("b", args.get(0));
