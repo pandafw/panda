@@ -5,6 +5,7 @@ import java.util.Set;
 import panda.filepool.dao.DaoFilePool;
 import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceBundleLoader;
+import panda.lang.Systems;
 import panda.mvc.MvcConfig;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
@@ -13,15 +14,17 @@ import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.wing.auth.UserAuthenticator;
 import panda.wing.lucene.LuceneProvider;
-import panda.wing.task.LocalTaskExecutor;
-import panda.wing.task.LocalTaskScheduler;
+import panda.wing.task.gae.GaeTaskExecutor;
+import panda.wing.task.gae.GaeTaskScheduler;
+import panda.wing.task.java.JavaTaskExecutor;
+import panda.wing.task.java.JavaTaskScheduler;
 import panda.wing.util.AppActionAssist;
 import panda.wing.util.AppActionConsts;
 import panda.wing.util.AppCacheProvider;
+import panda.wing.util.AppDaoClientProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 import panda.wing.util.AppSettings;
-import panda.wing.util.AppDaoClientProvider;
 
 public class AppIocLoader extends MvcComboIocLoader {
 	public static class AppDefaultIocLoader extends MvcDefaultIocLoader {
@@ -52,8 +55,14 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(AppDaoClientProvider.class);
 			clss.add(LuceneProvider.class);
 			
-			clss.add(LocalTaskExecutor.class);
-			clss.add(LocalTaskScheduler.class);
+			if (Systems.IS_OS_APPENGINE) {
+				clss.add(GaeTaskExecutor.class);
+				clss.add(GaeTaskScheduler.class);
+			}
+			else {
+				clss.add(JavaTaskExecutor.class);
+				clss.add(JavaTaskScheduler.class);
+			}
 			
 			clss.add(UserAuthenticator.class);
 			

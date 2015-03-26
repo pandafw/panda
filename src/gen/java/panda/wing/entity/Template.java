@@ -13,11 +13,11 @@ import panda.mvc.validation.annotation.Validates;
 import panda.wing.entity.SUBean;
 
 @Indexes({
-	@Index(name="NLC", fields={ "name","language","country" }, unique=true)
+	@Index(name="NLC", fields={ "name", "language", "country" }, unique=true)
 })
 public class Template extends SUBean {
 
-	private static final long serialVersionUID = -1472118848L;
+	private static final long serialVersionUID = 1844881784L;
 
 	/**
 	 * Constructor

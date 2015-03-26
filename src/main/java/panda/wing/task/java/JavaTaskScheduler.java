@@ -1,4 +1,4 @@
-package panda.wing.task;
+package panda.wing.task.java;
 
 import java.util.List;
 
@@ -16,10 +16,12 @@ import panda.task.CronTrigger;
 import panda.task.TaskScheduler;
 import panda.task.ThreadPoolTaskScheduler;
 import panda.wing.constant.SC;
+import panda.wing.task.ActionTask;
+import panda.wing.task.CronEntry;
 
 @IocBean(type=TaskScheduler.class, create="initialize", depose="shutdown")
-public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
-	private static final Log log = Logs.getLog(LocalTaskScheduler.class);
+public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
+	private static final Log log = Logs.getLog(JavaTaskScheduler.class);
 
 	@IocInject(required=false)
 	protected ServletContext servlet;
@@ -32,7 +34,7 @@ public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
 	
 	public void initialize() {
 		if (settings.getPropertyAsBoolean(SC.SCHEDULER_ENABLE)) {
-			log.info("Starting scheduler ...");
+			log.info("Starting " + JavaTaskScheduler.class.getName() + " ...");
 			
 			setName(settings.getProperty(SC.SCHEDULER_NAME, "scheduler"));
 			setPoolSize(settings.getPropertyAsInt(SC.SCHEDULER_POOL_SIZE, 1));
@@ -61,16 +63,19 @@ public class LocalTaskScheduler extends ThreadPoolTaskScheduler {
 			if (ce.getFixedDelay() > 0) {
 				log.info("Add fixedDelay task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + at.getUrl());
 				scheduleWithFixedDelay(at, ce.getInitialDelay(), ce.getFixedDelay());
+				continue;
 			}
 
 			if (ce.getFixedRate() > 0) {
-				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + at.getUrl());
-				scheduleAtFixedRate(at, ce.getInitialDelay(), ce.getFixedDelay());
+				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedRate() + "): " + at.getUrl());
+				scheduleAtFixedRate(at, ce.getInitialDelay(), ce.getFixedRate());
+				continue;
 			}
 			
 			if (ce.getDelay() > 0) {
 				log.info("Add delay task (" + ce.getDelay() + "): " + at.getUrl());
 				schedule(at, ce.getDelay());
+				continue;
 			}
 		}
 	}
