@@ -83,7 +83,7 @@ public class AppCacheProvider {
 		log.info("Build Internal Java Cache");
 		if (expires > 0) {
 			return Collections.synchronizedMap(new ExpireMap<String, String>(
-					new WeakHashMap<String, String>(), expires));
+					new WeakHashMap<String, String>(), expires * 1000));
 		}
 
 		return Collections.synchronizedMap(new WeakHashMap<String, String>());
