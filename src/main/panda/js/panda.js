@@ -2291,6 +2291,9 @@ function s_ie6_hack_forms($w) {
 function sl_sort(id, el) {
 	var co = el.value.split(' ');
 	if (co.length == 2) {
+		$('#' + id + '_s_c').val(co[0]);
+		$('#' + id + '_s_d').val(co[1]);
+		// backward
 		$('#' + id + '_so_c').val(co[0]);
 		$('#' + id + '_so_d').val(co[1]);
 		sl_submit(id);
@@ -2300,16 +2303,26 @@ function sl_sorta(id, name, dir) {
 	sl_sortn(id, name, dir.toLowerCase() == "asc" ? "desc" : "asc");
 }
 function sl_sortn(id, name, dir) {
+	$('#' + id + '_s_c').val(name);
+	$('#' + id + '_s_d').val(dir);
+	// backward
 	$('#' + id + '_so_c').val(name);
 	$('#' + id + '_so_d').val(dir);
+
 	sl_submit(id);
 }
 function sl_goto(id, s) {
+	$('#' + id + '_p_s').val(s);
+	// backward
 	$('#' + id + '_pg_s').val(s);
+
 	sl_submit(id);
 }
 function sl_limit(id, el) {
+	$('#' + id + '_p_l').val(el.value);
+	// backward
 	$('#' + id + '_pg_l').val(el.value);
+
 	sl_submit(id);
 }
 function sl_submit(id) {
