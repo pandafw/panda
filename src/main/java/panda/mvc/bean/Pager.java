@@ -116,6 +116,7 @@ public class Pager implements Cloneable, Serializable {
 	 * @return the pages according to the start, total, count, limit
 	 */
 	public long getPages() {
+		long page = getPage();
 		long pages = 0;
 		if (total != null) {
 			if (total > 0) {
@@ -209,6 +210,15 @@ public class Pager implements Cloneable, Serializable {
 	 */
 	public Long getCount() {
 		return count;
+	}
+
+	/**
+	 * @param count the count to set
+	 */
+	public void setCount(int count) {
+		if (count >= 0) {
+			this.count = (long)count;
+		}
 	}
 
 	/**
@@ -399,9 +409,10 @@ public class Pager implements Cloneable, Serializable {
 	 * Clone
 	 * @return Clone Object
 	 */
-	public Object clone() {
+	public Pager clone() {
 		Pager clone = new Pager();
 
+		clone.page = this.page;
 		clone.start = this.start;
 		clone.limit = this.limit;
 		clone.count = this.count;

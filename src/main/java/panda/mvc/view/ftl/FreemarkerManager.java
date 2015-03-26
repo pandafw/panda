@@ -44,7 +44,7 @@ public class FreemarkerManager {
 	protected TemplateLoader templateLoader;
 	
 	@IocInject(value = MvcConstants.FREEMARKER_WRAPPER_ALT_MAP, required = false)
-	protected boolean altMapWrapper;
+	protected boolean altMapWrapper = true;
 
 	@IocInject(value = MvcConstants.FREEMARKER_BEANWRAPPER_CACHE, required = false)
 	protected boolean cacheBeanWrapper;

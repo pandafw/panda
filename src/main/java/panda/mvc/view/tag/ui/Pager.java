@@ -151,6 +151,22 @@ public class Pager extends UIBean {
 	}
 
 	/**
+	 * @return the pager
+	 */
+	public panda.mvc.bean.Pager getPager() {
+		return pager;
+	}
+
+	/**
+	 * @param pager the pager to set
+	 */
+	public void setPager(panda.mvc.bean.Pager pager) {
+		if (pager != null) {
+			this.pager = pager.clone();
+		}
+	}
+
+	/**
 	 * @return the begin page no
 	 */
 	public Long getBegin() {
