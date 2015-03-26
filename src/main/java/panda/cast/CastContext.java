@@ -9,6 +9,8 @@ import panda.lang.CycleDetector;
 import panda.lang.Strings;
 
 public class CastContext extends CycleDetector implements CycleDetectStrategy {
+	private String format;
+	
 	private String prefix;
 	private boolean skipCastError = false;
 	private int cycleDetectStrategy = CYCLE_DETECT_NOPROP;
@@ -23,6 +25,21 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	public CastContext(Castors castors) {
 		this.castors = castors;
 	}
+
+	/**
+	 * @return the format
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * @param format the format to set
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
 
 	/**
 	 * @return the prefix

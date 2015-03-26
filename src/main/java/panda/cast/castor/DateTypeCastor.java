@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import panda.cast.CastContext;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 
@@ -40,7 +41,7 @@ public class DateTypeCastor {
 		}
 		
 		@Override
-		protected Date castValue(Object value, CastContext context) {
+		protected Date castValue(Object value, CastContext cc) {
 			if (value instanceof Number) {
 				Number num = (Number)value;
 				return new Date(num.longValue());
@@ -61,17 +62,27 @@ public class DateTypeCastor {
 				String sv = value.toString();
 	
 				ParseException ex = null;
-				for (FastDateFormat df : formats) {
+				if (Strings.isNotEmpty(cc.getFormat())) {
 					try {
-						return df.parse(sv);
+						return DateTimes.parse(sv, cc.getFormat());
 					}
 					catch (ParseException e) {
 						ex = e;
 					}
 				}
-				return castError(value, context, ex);
+				else {
+					for (FastDateFormat df : formats) {
+						try {
+							return df.parse(sv);
+						}
+						catch (ParseException e) {
+							ex = e;
+						}
+					}
+				}
+				return castError(value, cc, ex);
 			}
-			return castError(value, context);
+			return castError(value, cc);
 		}
 	
 		@Override
