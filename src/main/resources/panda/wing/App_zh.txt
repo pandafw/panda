@@ -64,7 +64,7 @@ error-category-reload=「类别」加载失败。\n错误信息：{0}\n请<a hre
 label-page-size=显示件数：
 label-sort=排序：
 label-attachment=附件
-label-search-result="{0}"的检索结果
+label-search-result="${top.key}"的检索结果
 
 #tip
 tip-access=围观

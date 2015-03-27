@@ -63,7 +63,7 @@ error-template-reload=「テンプレート」のリロードが失敗しまし�
 label-page-size=表示件数：
 label-sort=並び順：
 label-attachment=添付ファイル
-label-search-result="{0}"の検索結果
+label-search-result="${top.key}"の検索結果
 
 #tip
 tip-access=表示回数

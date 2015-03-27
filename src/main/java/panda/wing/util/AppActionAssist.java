@@ -142,9 +142,8 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	/**
 	 * load sorter parameters from stateProvider
 	 * @param sorter sorter
-	 * @throws Exception if an error occurs
 	 */
-	public void loadSorterParams(Sorter sorter) throws Exception {
+	public void loadSorterParams(Sorter sorter) {
 		StateProvider sp = getState();
 		if (sp == null) {
 			return;
@@ -184,9 +183,8 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	/**
 	 * load pager limit parameters from stateProvider
 	 * @param pager pager
-	 * @throws Exception if an error occurs
 	 */
-	public void loadLimitParams(Pager pager) throws Exception {
+	public void loadLimitParams(Pager pager) {
 		if (pager.getLimit() == null || pager.getLimit() < 1) {
 			pager.setLimit(Numbers.toLong((String)getState().loadState("list.pl"), 0L));
 		}
@@ -207,9 +205,8 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	/**
 	 * save sorter parameters to stateProvider
 	 * @param sorter sorter
-	 * @throws Exception if an error occurs
 	 */
-	public void saveSorterParams(Sorter sorter) throws Exception {
+	public void saveSorterParams(Sorter sorter) {
 		getState().saveState("list.sc", sorter.getColumn());
 		getState().saveState("list.sd", sorter.getDirection());
 	}
@@ -217,9 +214,8 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	/**
 	 * save pager limit parameters to stateProvider
 	 * @param pager pager
-	 * @throws Exception if an error occurs
 	 */
-	public void saveLimitParams(Pager pager) throws Exception {
+	public void saveLimitParams(Pager pager) {
 		getState().saveState("list.pl", pager.getLimit());
 	}
 	
