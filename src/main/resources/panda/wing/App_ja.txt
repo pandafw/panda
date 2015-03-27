@@ -76,6 +76,18 @@ data-statusMap=\
 	"0": "有効", \
 	"X": "無効"
 
+#locale
+locale-languages=\
+	"*": "*", \
+	"en": "英語", \
+	"ja": "日本語", \
+	"zh": "中国語"
+
+locale-countries=\
+	"*": "*", \
+	"JP": "日本", \
+	"CN": "中国"
+
 #const
 const-booleans=\
 	"true": "はい", \
@@ -84,4 +96,3 @@ const-booleans=\
 const-genders=\
 	"F": "女", \
 	"M": "男"
-

@@ -10,11 +10,12 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Ok;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 
 /**
  */
 @At("/admin/el")
-@Auth("sysadmin")
+@Auth(AUTH.SYSADMIN)
 public class ElEvaluateAction extends AbstractAction {
 
 	@IocInject

@@ -77,6 +77,17 @@ data-statusMap=\
 	"0": "有効", \
 	"X": "无効"
 
+#locale
+locale-languages=\
+	"*": "*", \
+	"en": "英语", \
+	"ja": "日语", \
+	"zh": "中文"
+
+locale-countries=\
+	"*": "*", \
+	"JP": "日本", \
+	"CN": "中国"
 
 #const
 const-booleans=\

@@ -9,12 +9,13 @@ import panda.mvc.annotation.view.Ok;
 import panda.wing.AppConstants;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.task.CronEntry;
 
 /**
  */
 @At("/admin/crons")
-@Auth("sysadmin")
+@Auth(AUTH.SYSADMIN)
 public class CronJobsAction extends AbstractAction {
 	@IocInject(value=AppConstants.CRONS, required=false)
 	private List<CronEntry> crons;

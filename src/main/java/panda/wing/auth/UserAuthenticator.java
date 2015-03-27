@@ -18,6 +18,7 @@ import panda.mvc.UrlMapping;
 import panda.net.Inets;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
+import panda.wing.constant.AUTH;
 import panda.wing.constant.REQ;
 
 @IocBean
@@ -25,28 +26,11 @@ public class UserAuthenticator {
 	//--------------------------------------------------------
 	// result code
 	//--------------------------------------------------------
-	public final static int UNKNOWN = -1;
-	public final static int OK = 0;
-	public final static int UNLOGIN = 2;
-	public final static int UNSECURE = 3;
-	public final static int DENIED = 4;
-	
-	//--------------------------------------------------------
-	// permission
-	//--------------------------------------------------------
-	/**
-	 * PERMISSION_ALL = "*";
-	 */
-	public final static String PERMISSION_ALL = "*";
-	
-	/**
-	 * PERMISSION_NONE = "-";
-	 */
-	public final static String PERMISSION_NONE = "-";
-
-	public final static String PERM_LOCAL = "~local";
-	
-	public final static String PERM_SECURE = "+secure";
+	public static final int UNKNOWN = -1;
+	public static final int OK = 0;
+	public static final int UNLOGIN = 2;
+	public static final int UNSECURE = 3;
+	public static final int DENIED = 4;
 	
 	/**
 	 * allow unknown uri: true (default), false
@@ -121,18 +105,18 @@ public class UserAuthenticator {
 		Collection<String> uperms = getUserPermits(su);
 
 		// user has 'deny all' permits
-		if (Collections.contains(uperms, PERMISSION_NONE)) {
+		if (Collections.contains(uperms, AUTH.NONE)) {
 			return DENIED;
 		}
 
 		int r = OK;
 		// user does not has 'allow all' permits
-		if (!Collections.contains(uperms, PERMISSION_ALL)) {
+		if (!Collections.contains(uperms, AUTH.ALL)) {
 			for (String d : defines) {
 				if (Strings.isEmpty(d)) {
 					continue;
 				}
-				if (d.charAt(0) != '~') {
+				if (d.charAt(0) != AUTH.SPECIAL) {
 					int a = authenticatePermission(su, uperms, d);
 					if (a != OK) {
 						r = a;
@@ -150,7 +134,7 @@ public class UserAuthenticator {
 				if (Strings.isEmpty(d)) {
 					continue;
 				}
-				if (d.charAt(0) == '~') {
+				if (d.charAt(0) == AUTH.SPECIAL) {
 					int a = authenticateSpecial(ac, su, d);
 					if (a == OK) {
 						return a;
@@ -162,14 +146,14 @@ public class UserAuthenticator {
 	}
 
 	protected int authenticatePermission(Object su, Collection<String> uperms, String define) {
-		if (PERM_SECURE.equals(define)) {
+		if (AUTH.SECURE.equals(define)) {
 			return isSecureSessionUser(su) ? OK : UNSECURE;
 		}
 		return uperms.contains(define) ? OK : DENIED;
 	}
 
 	protected int authenticateSpecial(ActionContext ac, Object su, String define) {
-		if (PERM_LOCAL.equals(define)) {
+		if (AUTH.LOCAL.equals(define)) {
 			HttpServletRequest req = ac.getRequest();
 			return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}

@@ -20,12 +20,13 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 
 
 /**
  */
 @At("/admin/sql")
-@Auth("sysadmin")
+@Auth(AUTH.SYSADMIN)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected String commenter = "--";

@@ -1,5 +1,6 @@
 package panda.wing.action.work;
 
+import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Objects;
 import panda.lang.time.StopWatch;
@@ -147,7 +148,8 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	
 	protected String textSucceed(StopWatch sw) {
 		String msg = status.count + " items processed, took " + sw + ".";
-		msg = getText("text-finish", msg, new String[] { String.valueOf(status.count), sw.toString() });
+		msg = getText("text-finish", msg, Arrays.toMap(
+			new String[][] { { "count", String.valueOf(status.count) }, { "msg", sw.toString() }}));
 		return msg;
 	}
 	

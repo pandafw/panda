@@ -82,6 +82,19 @@ data-statusMap=\
 	"X": "Disabled"
 
 
+#locale
+locale-languages=\
+	"*": "*", \
+	"en": "English", \
+	"ja": "Japanese", \
+	"zh": "Chinese"
+
+locale-countries=\
+	"*": "*", \
+	"JP": "Japan", \
+	"CN": "China"
+
+
 #const
 const-bloodTypes="A", "O", "B", "AB"
 
