@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.bean.Beans;
 import panda.filepool.FilePool;
+import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -60,6 +61,7 @@ public class ActionContext {
 	//--------------------------
 	// cached ioc bean
 	//
+	private Settings settings;
 	private FilePool filePool;
 	private TextProvider text;
 	private StateProvider state;
@@ -313,6 +315,16 @@ public class ActionContext {
 	// ioc object
 	//
 	/**
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		if (settings == null) {
+			settings = ioc.get(Settings.class);
+		}
+		return settings;
+	}
+
+	/**
 	 * @return the filePool
 	 */
 	public FilePool getFilePool() {
@@ -532,6 +544,14 @@ public class ActionContext {
 	}
 
 	/**
+	 * @return the settings
+	 * @see #getSettings()
+	 */
+	public Settings getS() {
+		return getSettings();
+	}
+
+	/**
 	 * @return the top object
 	 * @see #getResult()
 	 */
@@ -543,7 +563,7 @@ public class ActionContext {
 	 * @return the vars object
 	 * @see #getVars()
 	 */
-	public Object getV() {
+	public Map<String, Object> getV() {
 		return getVars();
 	}
 }
