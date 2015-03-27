@@ -522,6 +522,14 @@ tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+/* PANEL */
+.p-panel-hscroll .panel-body {
+	overflow-y: hidden;
+	overflow-x: scroll;
+}
+.p-panel-hscroll .panel-body > div {
+	white-space: nowrap;
+}
 /* TOOLS */
 .p-btrans 		{ background: transparent; }
 

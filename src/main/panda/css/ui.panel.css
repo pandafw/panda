@@ -1,0 +1,8 @@
+/* PANEL */
+.p-panel-hscroll .panel-body {
+	overflow-y: hidden;
+	overflow-x: scroll;
+}
+.p-panel-hscroll .panel-body > div {
+	white-space: nowrap;
+}
