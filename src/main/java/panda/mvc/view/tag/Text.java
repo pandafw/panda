@@ -32,12 +32,20 @@ public class Text extends ContextBean {
 	private static final Log LOG = Logs.getLog(Text.class);
 
 	protected String name;
+	protected String escape;
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @param escape the escape to set
+	 */
+	public void setEscape(String escape) {
+		this.escape = escape;
 	}
 
 	/**
@@ -64,7 +72,8 @@ public class Text extends ContextBean {
 			defaultMessage = name;
 		}
 
-		String msg = context.getText().getText(name, defaultMessage, getParameters());
+		String txt = context.getText().getText(name, defaultMessage, getParameters());
+		String msg = Escapes.escape(txt, escape);
 
 		if (msg != null) {
 			try {
