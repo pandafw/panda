@@ -2448,15 +2448,17 @@ public abstract class Classes {
 			}
 			else {
 				File dir = new File(url.getFile());
-				Collection<File> files = Files.listFiles(dir, new String[] { CLASS_FILE_SUFFIX }, true);
-				for (File file : files) {
-					if (file.getName().equals(PACKAGE_INFO_CLASS)) {
-						continue;
+				if (dir.exists()) {
+					Collection<File> files = Files.listFiles(dir, new String[] { CLASS_FILE_SUFFIX }, true);
+					for (File file : files) {
+						if (file.getName().equals(PACKAGE_INFO_CLASS)) {
+							continue;
+						}
+						
+						String cp = FileNames.getRelativePath(dir, file);
+						String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
+						classes.add(cn);
 					}
-					
-					String cp = FileNames.getRelativePath(dir, file);
-					String cn = Strings.replaceChars(Strings.substring(cp, 0, -6), '/', '.');
-					classes.add(cn);
 				}
 			}
 		}

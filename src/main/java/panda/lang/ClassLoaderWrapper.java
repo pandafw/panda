@@ -138,12 +138,17 @@ public class ClassLoaderWrapper {
 				// try to find the resource as passed
 				InputStream is = cl.getResourceAsStream(resource);
 
-				// now, some class loaders want this leading "/", so we'll add it and try again if
-				// we didn't find the resource
-				if (null == is && resource.charAt(0) != '/') {
-					is = cl.getResourceAsStream("/" + resource);
+				if (null == is) {
+					if (resource.charAt(0) != '/') {
+						// some class loaders want this leading "/"
+						is = cl.getResourceAsStream("/" + resource);
+					}
+					else {
+						// some class loaders do not want this leading "/"
+						is = cl.getResourceAsStream(resource.substring(1));
+					}
 				}
-				
+
 				if (null != is) {
 					return is;
 				}

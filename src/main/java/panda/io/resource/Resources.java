@@ -5,6 +5,16 @@ import java.util.Locale;
 import panda.lang.Strings;
 
 public class Resources {
+	public static Locale getParentLocale(Locale locale) {
+		if (Strings.isNotEmpty(locale.getVariant())) {
+			return new Locale(locale.getLanguage(), locale.getCountry());
+		}
+		if (Strings.isNotEmpty(locale.getCountry())) {
+			return new Locale(locale.getLanguage());
+		}
+		return null;
+	}
+
 	/**
 	 * Converts the given <code>baseName</code> and <code>locale</code> to the bundle name. 
 	 * <p>
@@ -27,26 +37,30 @@ public class Resources {
 	 * Overriding this method allows applications to use different conventions in the organization
 	 * and packaging of localized resources.
 	 * 
-	 * @param baseName the base name of the resource bundle, a fully qualified class name
+	 * @param base the base name of the resource bundle, a fully qualified class name
 	 * @param locale the locale for which a resource bundle should be loaded
 	 * @return the bundle name for the resource bundle
 	 * @exception NullPointerException if <code>baseName</code> or <code>locale</code> is
 	 *                <code>null</code>
 	 */
-	public static String toBundleName(String baseName, Locale locale) {
-		if (locale == Locale.ROOT) {
-			return baseName;
+	public static String toBundleName(String base, Locale locale) {
+		if (locale == null || locale == Locale.ROOT) {
+			return base;
 		}
 
 		String language = locale.getLanguage();
 		String country = locale.getCountry();
 		String variant = locale.getVariant();
 
+		return toBundleName(base, language, country, variant);
+	}
+	
+	public static String toBundleName(String base, String language, String country, String variant) {
 		if (Strings.isEmpty(language) && Strings.isEmpty(country) && Strings.isEmpty(variant)) {
-			return baseName;
+			return base;
 		}
 
-		StringBuilder sb = new StringBuilder(baseName);
+		StringBuilder sb = new StringBuilder(base);
 		sb.append('_');
 		if (Strings.isNotEmpty(variant)) {
 			sb.append(language).append('_').append(country).append('_').append(variant);

@@ -1,6 +1,5 @@
 package panda.cast.castor;
 
-import java.util.Locale;
 import java.util.TimeZone;
 
 import panda.cast.AbstractCastor;
@@ -11,7 +10,7 @@ import panda.cast.CastContext;
  */
 public class TimeZoneCastor extends AbstractCastor<Object, TimeZone> {
 	public TimeZoneCastor() {
-		super(Object.class, Locale.class);
+		super(Object.class, TimeZone.class);
 	}
 
 	@Override

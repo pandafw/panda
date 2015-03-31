@@ -9,7 +9,7 @@ import java.util.Set;
  * Implements an Enumeration that combines elements from a Set and an Enumeration.
  * @author yf.frank.wang@gmail.com
  */
-public class ResourceBundleEnumeration implements Enumeration<String> {
+public class ResourceEnumeration implements Enumeration<String> {
 
 	Set<String> set;
 	Iterator<String> iterator;
@@ -21,7 +21,7 @@ public class ResourceBundleEnumeration implements Enumeration<String> {
 	 * @param enumeration an enumeration providing more elements of the enumeration.
 	 *        enumeration may be null.
 	 */
-	ResourceBundleEnumeration(Set<String> set, Enumeration<String> enumeration) {
+	ResourceEnumeration(Set<String> set, Enumeration<String> enumeration) {
 		this.set = set;
 		this.iterator = set.iterator();
 		this.enumeration = enumeration;
@@ -36,7 +36,8 @@ public class ResourceBundleEnumeration implements Enumeration<String> {
 		if (next == null) {
 			if (iterator.hasNext()) {
 				next = iterator.next();
-			} else if (enumeration != null) {
+			}
+			else if (enumeration != null) {
 				while (next == null && enumeration.hasMoreElements()) {
 					next = enumeration.nextElement();
 					if (set.contains(next)) {

@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -23,10 +22,10 @@ import panda.log.Logs;
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-public class ExternalResourceBundleMaker implements ResourceBundleMaker {
-	protected static Log log = Logs.getLog(ExternalResourceBundleMaker.class);
+public class BeanResourceMaker implements ResourceMaker {
+	protected static Log log = Logs.getLog(BeanResourceMaker.class);
 
-	protected Map<String, Map<String, String>> resources = new HashMap<String, Map<String, String>>();
+	protected Map<String, Map<String, Object>> resources = new HashMap<String, Map<String, Object>>();
 
 	protected String classColumn;
 	protected String languageColumn;
@@ -38,13 +37,12 @@ public class ExternalResourceBundleMaker implements ResourceBundleMaker {
 	protected String emptyString = "*";
 	protected String packageName;
 
-	@SuppressWarnings("unchecked")
-	public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader,
-			boolean reload) throws IllegalAccessException, InstantiationException, IOException {
-		Map contents = resources.get(Resources.toBundleName(baseName, locale));
-		if (contents != null) {
-			MapResourceBundle bundle = new MapResourceBundle(contents);
-			return bundle;
+	
+	public Resource getResource(Resource parent, String baseName, Locale locale, ClassLoader calssLoader) throws IOException {
+		Map<String, Object> map = resources.get(Resources.toBundleName(baseName, locale));
+		if (map != null) {
+			MapResource res = new MapResource(map, parent, locale);
+			return res;
 		}
 		return null;
 	}
@@ -309,10 +307,10 @@ public class ExternalResourceBundleMaker implements ResourceBundleMaker {
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadResources(List resList) {
-		Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, Object>> res = new HashMap<String, Map<String, Object>>();
 
 		BundleKey lastBundle = null;
-		Map<String, String> properties = null;
+		Map<String, Object> properties = null;
 		
 		for (Object o : resList) {
 			BeanHandler bh = Beans.i().getBeanHandler(o.getClass());
@@ -336,7 +334,7 @@ public class ExternalResourceBundleMaker implements ResourceBundleMaker {
 			BundleKey bk = buildBundleKey(clazz, language, country, variant);
 			if (!bk.equals(lastBundle)) {
 				lastBundle = bk;
-				properties = new HashMap<String, String>();
+				properties = new HashMap<String, Object>();
 				res.put(bk.toString(), properties);
 			}
 

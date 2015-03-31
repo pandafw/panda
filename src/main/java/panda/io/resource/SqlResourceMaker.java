@@ -24,8 +24,8 @@ import panda.log.Logs;
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-public class SqlResourceBundleMaker extends ExternalResourceBundleMaker {
-	protected static Log log = Logs.getLog(SqlResourceBundleMaker.class);
+public class SqlResourceMaker extends BeanResourceMaker {
+	protected static Log log = Logs.getLog(SqlResourceMaker.class);
 	
 	public void loadResources(DataSource dataSource, String tableName) throws Exception {
 		loadResources(dataSource, tableName, null);
@@ -62,11 +62,11 @@ public class SqlResourceBundleMaker extends ExternalResourceBundleMaker {
 
 			BundleKey lastBundle = null;
 
-			Map<String, String> properties = null;
+			Map<String, Object> properties = null;
 
 			SqlLogger.logResultHeader(rs);
 			
-			Map<String, Map<String, String>> res = new HashMap<String, Map<String, String>>();
+			Map<String, Map<String, Object>> res = new HashMap<String, Map<String, Object>>();
 			while (rs.next()) {
 				SqlLogger.logResultValues(rs);
 
@@ -89,7 +89,7 @@ public class SqlResourceBundleMaker extends ExternalResourceBundleMaker {
 				BundleKey bk = buildBundleKey(clazz, language, country, variant);
 				if (!bk.equals(lastBundle)) {
 					lastBundle = bk;
-					properties = new HashMap<String, String>();
+					properties = new HashMap<String, Object>();
 					res.put(bk.toString(), properties);
 					bkList.add(bk);
 				}
