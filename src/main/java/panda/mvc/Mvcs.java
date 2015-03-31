@@ -106,8 +106,8 @@ public abstract class Mvcs {
 	/**
 	 * evaluate string value
 	 * ${...}, %{...} : el eval
-	 * #{...} : json object
-	 * #[...] : json array
+	 * !{...} : json object
+	 * ![...] : json array
 	 * #(...) : text
 	 */
 	public static Object evaluate(Object val, ActionContext ac) {
@@ -117,8 +117,8 @@ public abstract class Mvcs {
 	/**
 	 * evaluate string value
 	 * ${...}, %{...} : el eval
-	 * #{...} : json object
-	 * #[...] : json array
+	 * !{...} : json object
+	 * ![...] : json array
 	 * #(...) : text
 	 */
 	public static Object evaluate(Object val, ActionContext ac, Object arg) {

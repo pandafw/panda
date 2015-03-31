@@ -204,13 +204,10 @@ validation-compare-numberrange-to=The number range is incorrect.
 
 validation-cast=Invalid value.
 validation-cast-boolean=Please input "true" or "false".
-validation-cast-number=Please input integer number.
-validation-cast-char=Please input character.
-validation-cast-Float=Please input decimal number.
-validation-cast-Souble=Please input decimal number.
-validation-cast-BigDecimal=Please input decimal number.
-validation-cast-Number=Please input number.
-validation-cast-Date=Please input "yyyy-MM-dd" date string.
+validation-cast-char=Please input a character.
+validation-cast-date=Please input "yyyy-MM-dd" date string.
+validation-cast-decimal=Please input a decimal number.
+validation-cast-number=Please input a number.
 
 #validation-vistior=
 

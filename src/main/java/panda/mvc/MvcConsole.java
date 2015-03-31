@@ -9,6 +9,7 @@ import javax.servlet.ServletRequestEvent;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.dao.entity.EntityDao;
 import panda.io.Streams;
 import panda.ioc.Ioc;
 import panda.lang.Strings;
@@ -57,36 +58,53 @@ public class MvcConsole {
 	public DaoClient getDaoClient() {
 		return getIoc().get(DaoClient.class);
 	}
+	/**
+	 * @param type record type
+	 * @return the entity
+	 */
+	public <T> EntityDao<T> getEntityDao(Class<T> type) {
+		return getDao().getEntityDao(type);
+	}
+
+	/**
+	 * @param type record type
+	 * @param param argument used for dynamic table
+	 * @return the entity
+	 */
+	public <T> EntityDao<T> getEntityDao(Class<T> type, Object param) {
+		return getDao().getEntityDao(type, param);
+	}
+
 	
 	public Dao getDao() {
 		return getDaoClient().getDao();
 	}
 	
-	public void doGet(String uri) throws Exception {
-		doRequest(uri, null, HttpMethod.GET.toString());
+	public MockHttpServletResponse doGet(String uri) throws Exception {
+		return doRequest(uri, HttpMethod.GET.toString(), null);
 	}
 
-	public void doGet(String uri, Map<String, Object> params) throws Exception {
-		doRequest(uri, params, HttpMethod.GET.toString());
+	public MockHttpServletResponse doGet(String uri, Map<String, Object> params) throws Exception {
+		return doRequest(uri, HttpMethod.GET.toString(), params);
 	}
 
-	public void doPost(String uri) throws Exception {
-		doRequest(uri, null, HttpMethod.POST.toString());
+	public MockHttpServletResponse doPost(String uri) throws Exception {
+		return doRequest(uri, HttpMethod.POST.toString(), null);
 	}
 
-	public void doPost(String uri, Map<String, Object> params) throws Exception {
-		doRequest(uri, params, HttpMethod.GET.toString());
+	public MockHttpServletResponse doPost(String uri, Map<String, Object> params) throws Exception {
+		return doRequest(uri, HttpMethod.GET.toString(), params);
 	}
 	
-	public void doRequest(String uri) throws Exception {
-		doRequest(uri, null);
+	public MockHttpServletResponse doRequest(String uri) throws Exception {
+		return doRequest(uri, null);
 	}
 
-	public void doRequest(String uri, Map<String, Object> params) throws Exception {
-		doRequest(uri, params, HttpMethod.GET.toString());
+	public MockHttpServletResponse doRequest(String uri, Map<String, Object> params) throws Exception {
+		return doRequest(uri, HttpMethod.GET.toString(), params);
 	}
 	
-	public void doRequest(String uri, Map<String, Object> params, String method) throws Exception {
+	public MockHttpServletRequest initRequest(String uri, String method, Map<String, Object> params) {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setRequestURI(uri);
 		request.setServletPath(uri);
@@ -94,7 +112,10 @@ public class MvcConsole {
 		if (params != null) {
 			request.addParameters(params);
 		}
+		return request;
+	}
 
+	public MockHttpServletResponse doRequest(MockHttpServletRequest request) throws ServletException, IOException {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		//response.setOutputStream(new ConsoleServletOutputStream());
 		
@@ -103,10 +124,16 @@ public class MvcConsole {
 		try {
 			irl.requestInitialized(sre);
 			service(request, response);
+			return response;
 		}
 		finally {
 			irl.requestDestroyed(sre);
 		}
+	}
+	
+	public MockHttpServletResponse doRequest(String uri, String method, Map<String, Object> params) throws ServletException, IOException {
+		MockHttpServletRequest request = initRequest(uri, method, params);
+		return doRequest(request);
 	}
 
 	public void service(MockHttpServletRequest request, MockHttpServletResponse response) throws ServletException, IOException {

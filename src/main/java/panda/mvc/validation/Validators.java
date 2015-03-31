@@ -38,9 +38,10 @@ public interface Validators {
 	// validation message id
 	//
 	public static final String MSGID_CAST_BOOLEAN = "validation-cast-boolean";
+	public static final String MSGID_CAST_CHAR = "validation-cast-char";
 	public static final String MSGID_CAST_DATE = "validation-cast-date";
-	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
 	public static final String MSGID_CAST_DECIMAL = "validation-cast-decimal";
+	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
 	public static final String MSGID_CONSTANT = "validation-constant";
 	public static final String MSGID_PROHIBITED = "validation-prohibited";
 	public static final String MSGID_DATE_TO = "validation-date-to";
