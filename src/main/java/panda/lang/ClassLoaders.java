@@ -47,11 +47,14 @@ public class ClassLoaders {
 			}
 		}
 		
-		{
+		try {
 			ClassLoader cl = ClassLoader.getSystemClassLoader();
 			if (cl != null) {
 				cls.add(cl);
 			}
+		}
+		catch (SecurityException e) {
+			// skip for GAE
 		}
 
 		return cls;
@@ -73,7 +76,12 @@ public class ClassLoaders {
 		if (cl == null) {
 			cl = ClassLoaders.class.getClassLoader();
 			if (cl == null) {
-				cl = ClassLoader.getSystemClassLoader();
+				try {
+					cl = ClassLoader.getSystemClassLoader();
+				}
+				catch (SecurityException e) {
+					// skip for GAE
+				}
 			}
 		}
 
