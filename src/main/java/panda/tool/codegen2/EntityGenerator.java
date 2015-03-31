@@ -215,10 +215,12 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		imports.add(Objects.class.getName());
 
 		for (EntityProperty p : entity.getPropertyList()) {
-			if (Collections.isNotEmpty(p.getValidatorList())) {
+			if (Collections.isNotEmpty(p.getValidatorList())
+					|| (p.isDbColumn() && !"String".equals(p.getType()))) {
 				imports.add(Validators.class.getName());
 				imports.add(Validates.class.getName());
 				imports.add(Validate.class.getName());
+				break;
 			}
 		}
 
@@ -304,6 +306,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	static {
 		vmmap.put("cast-boolean", "Validators.MSGID_CAST_BOOLEAN");
 		vmmap.put("cast-Boolean", "Validators.MSGID_CAST_BOOLEAN");
+
+		vmmap.put("cast-char", "Validators.MSGID_CAST_CHAR");
+		vmmap.put("cast-Character", "Validators.MSGID_CAST_CHAR");
 
 		vmmap.put("cast-byte", "Validators.MSGID_CAST_NUMBER");
 		vmmap.put("cast-Byte", "Validators.MSGID_CAST_NUMBER");
