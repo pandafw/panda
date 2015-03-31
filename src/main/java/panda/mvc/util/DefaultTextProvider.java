@@ -1,20 +1,17 @@
 package panda.mvc.util;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
-import panda.io.resource.ResourceBundleLoader;
+import panda.io.resource.Resource;
+import panda.io.resource.ResourceLoader;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -32,24 +29,8 @@ import panda.mvc.Mvcs;
 public class DefaultTextProvider implements TextProvider {
 	private final static Log log = Logs.getLog(DefaultTextProvider.class);
 
-	private static class EmptyResourceBundle extends ResourceBundle {
-		@Override
-		public Enumeration<String> getKeys() {
-			return null; // dummy
-		}
-
-		@Override
-		protected Object handleGetObject(String key) {
-			return null; // dummy
-		}
-	}
-
-	private final static ResourceBundle EMPTY_BUNDLE = new EmptyResourceBundle();
+	private List<String> defaultResources;
 	
-	private List<String> defaultResourceBundles;
-	
-	private final ConcurrentMap<String, ResourceBundle> bundlesMap = new ConcurrentHashMap<String, ResourceBundle>();
-
 	@IocInject(required=false)
 	private Beans beans;
 
@@ -57,7 +38,7 @@ public class DefaultTextProvider implements TextProvider {
 	private ActionContext context;
 
 	@IocInject
-	private ResourceBundleLoader resourceBundleLoader;
+	private ResourceLoader resourceLoader;
 
 	private ClassLoader resourceClassLoader;
 
@@ -75,67 +56,11 @@ public class DefaultTextProvider implements TextProvider {
 	 */
 	@IocInject(value=MvcConstants.DEFAULT_RESOURCE_BUNDLES, required=false)
 	public void setDefaultResourceBundle(List<String> resourceBundles) {
-		defaultResourceBundles = resourceBundles;
+		defaultResources = resourceBundles;
 
 		if (log.isDebugEnabled()) {
-			log.debug("set default resource bundle [" + Strings.join(defaultResourceBundles, ", ") + "]");
+			log.debug("set default resource bundle [" + Strings.join(defaultResources, ", ") + "]");
 		}
-	}
-
-	/**
-	 * @return the beans
-	 */
-	public Beans getBeans() {
-		return beans;
-	}
-
-	/**
-	 * @param beans the beans to set
-	 */
-	public void setBeans(Beans beans) {
-		this.beans = beans;
-	}
-
-	/**
-	 * @return the context
-	 */
-	public ActionContext getContext() {
-		return context;
-	}
-
-	/**
-	 * @param context the context to set
-	 */
-	public void setContext(ActionContext context) {
-		this.context = context;
-	}
-
-	/**
-	 * @return the resource ClassLoader
-	 */
-	public ClassLoader getResourceClassLoader() {
-		return resourceClassLoader;
-	}
-
-	/**
-	 * @return the resourceBundleLoader
-	 */
-	public ResourceBundleLoader getResourceBundleLoader() {
-		return resourceBundleLoader;
-	}
-
-	/**
-	 * @param resourceBundleLoader the resourceBundleLoader to set
-	 */
-	public void setResourceBundleLoader(ResourceBundleLoader resourceBundleLoader) {
-		this.resourceBundleLoader = resourceBundleLoader;
-	}
-
-	/**
-	 * @param resourceClassLoader the resourceClassLoader to set
-	 */
-	public void setResourceClassLoader(ClassLoader resourceClassLoader) {
-		this.resourceClassLoader = resourceClassLoader;
 	}
 
 	/**
@@ -361,16 +286,13 @@ public class DefaultTextProvider implements TextProvider {
 	 *         be found for it
 	 */
 	private String findDefaultText(Locale locale, String key) {
-		if (Collections.isNotEmpty(defaultResourceBundles)) {
-			for (String bn : defaultResourceBundles) {
-				ResourceBundle bundle = findResourceBundle(locale, bn);
-				if (bundle != null) {
-	//				reloadBundles();
-					try {
-						return bundle.getString(key);
-					}
-					catch (MissingResourceException e) {
-						// ignore and try others
+		if (Collections.isNotEmpty(defaultResources)) {
+			for (String src : defaultResources) {
+				Resource res = findResourceBundle(src, locale);
+				if (res != null) {
+					String txt = res.getString(key);
+					if (txt != null) {
+						return txt;
 					}
 				}
 			}
@@ -515,7 +437,7 @@ public class DefaultTextProvider implements TextProvider {
 	 * Gets the message from the named resource bundle.
 	 */
 	private String getMessage(Locale locale, String src, String key, Object arg) {
-		ResourceBundle bundle = findResourceBundle(locale, src);
+		Resource bundle = findResourceBundle(src, locale);
 		if (bundle == null) {
 			return null;
 		}
@@ -523,23 +445,15 @@ public class DefaultTextProvider implements TextProvider {
 //		reloadBundles();
 		try {
 			String txt = bundle.getString(key);
+			if (txt == null) {
+				return null;
+			}
 			String msg = evalMessage(txt, arg);
 			return msg;
 		}
 		catch (MissingResourceException e) {
 			return null;
 		}
-	}
-
-	/**
-	 * Creates a key to used for lookup/storing in the bundle misses cache.
-	 * 
-	 * @param src the name of the bundle (usually it's FQN classname).
-	 * @param locale the locale.
-	 * @return the key to use for lookup/storing in the bundle misses cache.
-	 */
-	private String createMissesKey(String src, Locale locale) {
-		return src + "_" + locale.toString();
 	}
 
 	/**
@@ -553,27 +467,12 @@ public class DefaultTextProvider implements TextProvider {
 	 * @param locale the locale.
 	 * @return the bundle, <tt>null</tt> if not found.
 	 */
-	private ResourceBundle findResourceBundle(Locale locale, String src) {
-		String key = createMissesKey(src, locale);
-
-		ResourceBundle bundle = bundlesMap.get(key);
-		if (bundle == null) {
-			try {
-				bundle = resourceBundleLoader.getBundle(src, locale, resourceClassLoader);
-			}
-			catch (MissingResourceException ex) {
-			}
-		}
-		if (bundle == null) {
-			bundle = EMPTY_BUNDLE;
-		}
-
-		bundlesMap.putIfAbsent(key, bundle);
-		return (bundle == EMPTY_BUNDLE) ? null : bundle;
+	private Resource findResourceBundle(String src, Locale locale) {
+		return resourceLoader.getResource(src, locale, resourceClassLoader);
 	}
 
 	public void clearResourceBundlesCache() {
-		bundlesMap.clear();
+		resourceLoader.clear();
 	}
 
 }

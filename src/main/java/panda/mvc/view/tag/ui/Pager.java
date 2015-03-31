@@ -115,11 +115,11 @@ public class Pager extends UIBean {
 		}
 		
 		if (prevTooltip == null) {
-			prevTooltip = txt.getText(TOOLTIP_PREV, "&lt; Previous ${limit}", this);
+			prevTooltip = txt.getText(TOOLTIP_PREV, "&lt; Previous ${top.limit}", this);
 		}
 		
 		if (nextTooltip == null) {
-			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${limit} &gt;", this);
+			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} &gt;", this);
 		}
 
 		if (linkSize == null) {
@@ -145,7 +145,7 @@ public class Pager extends UIBean {
 		if (infoText == null) {
 			infoText = txt.getText(
 				pager.getTotal() == null ? LABEL_INFOZ : LABEL_INFO, 
-				pager.getTotal() == null ? "${begin}~${end}" : "${begin}~${end}/${total}",
+				pager.getTotal() == null ? "${top.begin}~${top.end}" : "${top.begin}~${top.end}/${top.total}",
 				this);
 		}
 	}

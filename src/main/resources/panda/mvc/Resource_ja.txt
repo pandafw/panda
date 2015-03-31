@@ -18,12 +18,12 @@ number-format-currency=#,###
 password-format=●●●●●●
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=${begin}~${end}/全${total}件
-pager-label-infoz=${begin}件~${end}件
+pager-label-info=${top.begin}~${top.end}/全${top.total}件
+pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=-- データありません --
 pager-label-limit=表示件数：
-pager-tooltip-prev=&lt; 前の${limit}件
-pager-tooltip-next=次の${limit}件 &gt;
+pager-tooltip-prev=&lt; 前の${top.limit}件
+pager-tooltip-next=次の${top.limit}件 &gt;
 pager-tooltip-first=≪ 最初のページ
 pager-tooltip-last=最後のページ ≫
 
@@ -80,42 +80,42 @@ validation-requiredcollection=必須項目です。
 validation-requiredstring=必須項目です。
 validation-requiredfile=ファイルを指定してください。
 validation-requiredimage=画像ファイルを指定してください。
-validation-binarylength=入力バイト数(${binSize})が\
-${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize + "以内") : \
-(minLength != null ? (minBinSize + "以上") : \
-(maxLength != null ? (maxBinSize + "以下") : ""))}\
+validation-binarylength=入力バイト数(${top.binSize})が\
+${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
+(top.minLength != null ? (top.minBinSize + "以上") : \
+(top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 で入力してください。
-validation-daterange=${(min != null && max != null) ? (min + "~" + max + "以内") : \
-(min != null ? (min + "以後") : \
-(max != null ? (max + "以前") : ""))}\
+validation-daterange=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以後") : \
+(top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
-validation-numberrange=${(min != null && max != null) ? (min + "~" + max + "以内") : \
-(min != null ? (min + "以上") : \
-(max != null ? (max + "以下") : ""))}\
+validation-numberrange=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以上") : \
+(top.max != null ? (top.max + "以下") : ""))}\
 の数字を入力してください。
-validation-filelength=ファイルサイズ(${fileSize})が\
-${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize + "以内") : \
-(minLength != null ? (minFileSize + "以上") : \
-(maxLength != null ? (maxFileSize + "以下") : ""))}\
+validation-filelength=ファイルサイズ(${top.fileSize})が\
+${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
+(top.minLength != null ? (top.minFileSize + "以上") : \
+(top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 のファイルを指定してください。
 validation-image=画像ファイルのフォーマットが正しくありません。
-validation-imagesize=画像サイズが(${width}x${height})が\
-${(minWidth != null && maxWidth != null) ? ("幅" + minWidth + "~" + maxWidth + "以内") : \
-(minWidth != null ? ("幅" + minWidth + "以上") : \
-(maxWidth != null ? ("幅" + maxWidth + "以下") : ""))}\
-${((minWidth != null || maxWidth != null) && (minHeight != null || maxHeight != null)) ? "、" : ""}\
-${(minHeight != null && maxHeight != null) ? ("高さ" + minHeight + "~" + maxHeight + "以内") : \
-(minHeight != null ? ("高さ" + minHeight + "以上") : \
-(maxHeight != null ? ("高さ" + maxHeight + "以下") : ""))}\
+validation-imagesize=画像サイズが(${top.width}x${top.height})が\
+${(top.minWidth != null && top.maxWidth != null) ? ("幅" + top.minWidth + "~" + top.maxWidth + "以内") : \
+(top.minWidth != null ? ("幅" + top.minWidth + "以上") : \
+(top.maxWidth != null ? ("幅" + top.maxWidth + "以下") : ""))}\
+${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? "、" : ""}\
+${(top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "~" + top.maxHeight + "以内") : \
+(top.minHeight != null ? ("高さ" + top.minHeight + "以上") : \
+(top.maxHeight != null ? ("高さ" + top.maxHeight + "以下") : ""))}\
 の画像ファイルを指定してください。
-validation-stringlength=入力文字数(${length})が\
-${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength + "文字以内") : \
-(minLength != null ? (minLength + "文字以上") : \
-(maxLength != null ? (maxLength + "文字以下") : ""))}\
+validation-stringlength=入力文字数(${top.length})が\
+${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "文字以内") : \
+(top.minLength != null ? (top.minLength + "文字以上") : \
+(top.maxLength != null ? (top.maxLength + "文字以下") : ""))}\
 で入力してください。
-validation-precision="整数${precision-scale}.小数${scale}"の形式で入力してください。
-validation-constant=${constants}中の値を選んでください。
-validation-prohibited=${constants}中の値が入力不可です。
+validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
+validation-constant=${top.constants}中の値を選んでください。
+validation-prohibited=${top.constants}中の値が入力不可です。
 validation-alphastring=英文字を入力してください。
 validation-numericstring=数字を入力してください。
 validation-alphanumericstring=英数字を入力してください。
@@ -132,30 +132,29 @@ validation-phonenumber=電話番号を"1234-5678-9999"の形式で入力して�
 validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
 validation-futuredate=未来の日付を入力できません。
 validation-passeddate=過去の日付を入力できません。
-validation-regex=項目の値が正規表現式"${expression}"にマーチできません。
-validation-fieldexpression=項目の値がOGNL式"${expression}"にマーチできません。
-validation-compare=項目の値が${(comparator == "eq" ? "=" : \
-(comparator == "le" ? "<" : \
-(comparator == "lt" ? "<=" : \
-(comparator == "ge" ? ">" : \
-(comparator == "gt" ? "<" : "")))))}\
-項目「${target}」になっていません。
+validation-regex=項目の値が正規表現式"${top.regex}"にマーチできません。
+validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+項目「${top.target}」になっていません。
 validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
 validation-compare-numberrange-to=数字範囲の設定が正しくありません。
 
-validation-conversion=項目の値が正しくありません。
-validation-conversion-Boolean=trueまたはfalseを入力してください。
-validation-conversion-Byte=整数を入力してください。
-validation-conversion-Char=文字を入力してください。
-validation-conversion-Short=整数を入力してください。
-validation-conversion-Integer=整数を入力してください。
-validation-conversion-Long=整数を入力してください。
-validation-conversion-BigInteger=整数を入力してください。
-validation-conversion-Float=数字を入力してください。
-validation-conversion-Double=数字を入力してください。
-validation-conversion-BigDecimal=数字を入力してください。
-validation-conversion-Number=数字を入力してください。
-validation-conversion-Date=日付形式"yyyy/MM/dd"で入力してください。
+validation-cast=Invalid value.
+validation-cast-boolean=Please input "true" or "false".
+validation-cast-char=Please input a character.
+validation-cast-date=Please input "yyyy-MM-dd" date string.
+validation-cast-decimal=Please input a decimal number.
+validation-cast-number=Please input a number.
+
+validation-cast=項目の値が正しくありません。
+validation-cast-boolean=trueまたはfalseを入力してください。
+validation-cast-char=文字を入力してください。
+validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
+validation-cast-decimal=数字を入力してください。
+validation-cast-number=整数を入力してください。
 
 #custom validation error message
 validation-email-notsame=メールアドレスが一致していません。

@@ -18,8 +18,8 @@ number-format-currency=#,###.00
 password-format=●●●●●●
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=${begin}~${end}/全${total}件
-pager-label-infoz=${begin}件~${end}件
+pager-label-info=${top.begin}~${top.end}/全${top.total}件
+pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=-- 没有数据 --
 pager-label-limit=显示件数：
 pager-tooltip-prev=&lt; 上一页
@@ -79,42 +79,42 @@ validation-requiredcollection=请输入该项目内容。
 validation-requiredstring=请输入该项目内容。
 validation-requiredfile=请指定上传文件。
 validation-requiredimage=请指定上传图像文件。
-validation-binarylength=输入文字字数(${BinSize})不正确。请输入\
-${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize + "以内") : \
-(minLength != null ? (minBinSize + "以上") : \
-(maxLength != null ? (maxBinSize + "以下") : ""))}\
+validation-binarylength=输入文字字数(${top.binSize})不正确。请输入\
+${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
+(top.minLength != null ? (top.minBinSize + "以上") : \
+(top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 的文字。
-validation-daterange=请输入${(min != null && max != null) ? (min + "~" + max + "之内") : \
-(min != null ? (min + "之后") : \
-(max != null ? (max + "之前") : ""))}\
+validation-daterange=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
+(top.min != null ? (top.min + "之后") : \
+(top.max != null ? (top.max + "之前") : ""))}\
 的日期。
-validation-numberrange=请输入${(min != null && max != null) ? (min + "~" + max + "以内") : \
-(min != null ? (min + "以上") : \
-(max != null ? (max + "以下") : ""))}\
+validation-numberrange=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以上") : \
+(top.max != null ? (top.max + "以下") : ""))}\
 的数字。
-validation-filelength=文件大小${fileSize}不正确。请指定\
-${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize + "以内") : \
-(minLength != null ? (minFileSize + "以上") : \
-(maxLength != null ? (maxFileSize + "以下") : ""))}\
+validation-filelength=文件大小${top.fileSize}不正确。请指定\
+${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
+(top.minLength != null ? (top.minFileSize + "以上") : \
+(top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 的文件。
 validation-image=图像文件格式不正确。
-validation-imagesize=图像大小${width}x${height}不正确。请指定\
-${(minWidth != null && maxWidth != null) ? ("宽" + minWidth + "~" + maxWidth + "以内") : \
-(minWidth != null ? ("宽" + minWidth + "以上") : \
-(maxWidth != null ? ("宽" + maxWidth + "以下") : ""))}\
-${((minWidth != null || maxWidth != null) && (minHeight != null || maxHeight != null)) ? ", " : ""}\
-${(minHeight != null && maxHeight != null) ? ("高" + minHeight + "~" + maxHeight + "以内") : \
-(minHeight != null ? ("高" + minHeight + "以上") : \
-(maxHeight != null ? ("高" + maxHeight + "以下") : ""))}\
+validation-imagesize=图像大小${top.width}x${top.height}不正确。请指定\
+${(top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "~" + top.maxWidth + "以内") : \
+(top.minWidth != null ? ("宽" + top.minWidth + "以上") : \
+(top.maxWidth != null ? ("宽" + top.maxWidth + "以下") : ""))}\
+${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : ""}\
+${(top.minHeight != null && top.maxHeight != null) ? ("高" + top.minHeight + "~" + top.maxHeight + "以内") : \
+(top.minHeight != null ? ("高" + top.minHeight + "以上") : \
+(top.maxHeight != null ? ("高" + top.maxHeight + "以下") : ""))}\
 的图像文件。
-validation-stringlength=输入文字数：${length}。请输入\
-${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength + "个字符以内") : \
-(minLength != null ? (minLength + "个字符以上") : \
-(maxLength != null ? (maxLength + "个字符以下") : ""))}\
+validation-stringlength=输入文字数：${top.length}。请输入\
+${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "个字符以内") : \
+(top.minLength != null ? (top.minLength + "个字符以上") : \
+(top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
 的文字。
-validation-precision=请按"整数${precision-scale}.小数${scale}"的格式输入。
-validation-constant=请选择${constants}中的内容。
-validation-prohibited=${constants}中的内容不可以输入。
+validation-precision=请按"整数${top.precision - top.scale}.小数${top.scale}"的格式输入。
+validation-constant=请选择${top.constants}中的内容。
+validation-prohibited=${top.constants}中的内容不可以输入。
 validation-alphastring=请输入英文。
 validation-numericstring=请输入数字。
 validation-alphanumericstring=请输入英数字。
@@ -131,30 +131,22 @@ validation-phonenumber=请按"1234-5678-9999"的格式输入电话号码。
 validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
 validation-futuredate=不允许输入未来的日期。
 validation-passeddate=不允许输入过去的日期。
-validation-regex=该项目输入内容不符合正规表达式"${expression}"。
-validation-fieldexpression=该项目输入内容不符合OGNL表达式"${expression}"。
-validation-compare=该项目的内容必须${(comparator == "eq" ? "=" : \
-(comparator == "le" ? "<" : \
-(comparator == "lt" ? "<=" : \
-(comparator == "ge" ? ">" : \
-(comparator == "gt" ? "<" : "")))))}\
-项目「${target}」。
+validation-regex=该项目输入内容不符合正规表达式"${top.regex}"。
+validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+项目「${top.target}」。
 validation-compare-daterange-to=「终了日期」必须大于「开始日期」。
 validation-compare-numberrange-to=数字范围的设定不正确。
 
-validation-conversion=输入内容不正确。
-validation-conversion-Boolean=请输入true或者false。
-validation-conversion-Byte=请输入整数字。
-validation-conversion-Char=请输入字符。
-validation-conversion-Short=请输入整数字。
-validation-conversion-Integer=请输入整数字。
-validation-conversion-Long=请输入整数字。
-validation-conversion-BigInteger=请输入整数字。
-validation-conversion-Float=请输入数字。
-validation-conversion-Double=请输入数字。
-validation-conversion-BigDecimal=请输入数字。
-validation-conversion-Number=请输入数字。
-validation-conversion-Date=请输入"yyyy/MM/dd"格式的日期。
+validation-cast=输入内容不正确。
+validation-cast-boolean=请输入true或者false。
+validation-cast-char=请输入字符。
+validation-cast-date=请输入"yyyy/MM/dd"格式的日期。
+validation-cast-decimal=请输入数字。
+validation-cast-number=请输入整数字。
 
 
 #custom validation error message

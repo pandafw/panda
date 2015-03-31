@@ -14,6 +14,8 @@ import panda.mvc.Processor;
 public class DefaultActionChain implements ActionChain {
 	private static final Log log = Logs.getLog(DefaultActionChain.class);
 	
+	public static final String IOC_PREFIX = "#";
+	
 	private ActionInfo info;
 	private List<String> procs;
 	private int current;
@@ -65,7 +67,7 @@ public class DefaultActionChain implements ActionChain {
 	protected Processor initProcessor(String name, ActionContext ac) {
 		try {
 			Processor p;
-			if (name.startsWith("#")) {
+			if (name.startsWith(IOC_PREFIX)) {
 				p = ac.getIoc().get(Processor.class, name.substring(1));
 			}
 			else {

@@ -52,8 +52,8 @@ regex-faxnumber='\\d{1,3}?-\\d{1,4}?-\\d{1,4}'
 regex-zipcode='\\d{3}-\\d{4}'
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
-pager-label-info=${begin}~${end}/${total}
-pager-label-infoz=${begin}~${end}
+pager-label-info=${top.begin}~${top.end}/${top.total}
+pager-label-infoz=${top.begin}~${top.end}
 pager-label-prev=&nbsp;&lt;&nbsp;
 pager-label-next=&nbsp;&gt;&nbsp;
 pager-label-first=&nbsp;≪&nbsp;
@@ -61,8 +61,8 @@ pager-label-last=&nbsp;≫&nbsp;
 pager-label-empty=-- NOTHING --
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300
-pager-tooltip-prev=&lt; Previous ${limit}
-pager-tooltip-next=Next ${limit} &gt;
+pager-tooltip-prev=&lt; Previous ${top.limit}
+pager-tooltip-next=Next ${top.limit} &gt;
 pager-tooltip-first=≪ First Page
 pager-tooltip-last=Last Page ≫
 
@@ -135,46 +135,46 @@ validation-empty=This field should be empty.
 validation-required=This field is required.
 validation-requiredfile=Please specified the upload file.
 validation-requiredimage=Please specified the upload image file.
-validation-binary-length=The binary size (${BinSize}) must be \
-${(minLength != null && maxLength != null) ? (minBinSize + "~" + maxBinSize) : \
-(minLength != null ? (">= " + minBinSize) : \
-(maxLength != null ? ("<= " + maxBinSize) : ""))}\
+validation-binary-length=The binary size (${top.binSize}) must be \
+${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize) : \
+(top.minLength != null ? (">= " + top.minBinSize) : \
+(top.maxLength != null ? ("<= " + top.maxBinSize) : ""))}\
 .
 validation-date-to=The date must be larger than start date.
 validation-date-range=The date must be \
-${(min != null && max != null) ? (min + "~" + max) : \
-(min != null ? (">= " + min) : \
-(max != null ? ("<= " + max) : ""))}\
+${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
+(top.min != null ? (">= " + top.min) : \
+(top.max != null ? ("<= " + top.max) : ""))}\
 .
-validation-filelength=The file size (${fieSize}) must be \
-${(minLength != null && maxLength != null) ? (minFileSize + "~" + maxFileSize) : \
-(minLength != null ? (">= " + minFileSize) : \
-(maxLength != null ? ("<= " + maxFileSize) : ""))}\
+validation-filelength=The file size (${top.fieSize}) must be \
+${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
+(top.minLength != null ? (">= " + top.minFileSize) : \
+(top.maxLength != null ? ("<= " + top.maxFileSize) : ""))}\
 .
 validation-image=The image format is not correct.
-validation-image-size=The image size (${width}x${height}) must be \
-${(minWidth != null && maxWidth != null) ? ("W:(" + minWidth + "~" + maxWidth + ")") : \
-(minWidth != null ? ("W:(>=" + minWidth + ")") : \
-(maxWidth != null ? ("W:(<=" + maxWidth + ")") : ""))}\
-${((minWidth != null || maxWidth != null) && (minHeight != null || maxHeight != null)) ? ", " : ""}\
-${(minHeight != null && maxHeight != null) ? ("H: (" + minHeight + "~" + maxHeight + ")") : \
-(minHeight != null ? ("H:(>=" + minHeight + ")") : \
-(maxHeight != null ? ("H:(<=" + maxHeight + ")") : ""))}\
+validation-image-size=The image size (${top.width}x${top.height}) must be \
+${(top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "~" + top.maxWidth + ")") : \
+(top.minWidth != null ? ("W:(>=" + top.minWidth + ")") : \
+(top.maxWidth != null ? ("W:(<=" + top.maxWidth + ")") : ""))}\
+${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : ""}\
+${(top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "~" + top.maxHeight + ")") : \
+(top.minHeight != null ? ("H:(>=" + top.minHeight + ")") : \
+(top.maxHeight != null ? ("H:(<=" + top.maxHeight + ")") : ""))}\
 .
 validation-number-range=The number must be \
-${(min != null && max != null) ? (min + "~" + max) : \
-(min != null ? (">= " + min) : \
-(max != null ? ("<= " + max) : ""))}\
+${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
+(top.min != null ? (">= " + top.min) : \
+(top.max != null ? ("<= " + top.max) : ""))}\
 .
 validation-number-to=The number must be larger than start number.
-validation-string-length=The string length (${length}) must be \
-${(minLength != null && maxLength != null) ? (minLength + "~" + maxLength) : \
-(minLength != null ? (">= " + minLength) : \
-(maxLength != null ? ("<= " + maxLength) : ""))}\
+validation-string-length=The string length (${top.length}) must be \
+${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength) : \
+(top.minLength != null ? (">= " + top.minLength) : \
+(top.maxLength != null ? ("<= " + top.maxLength) : ""))}\
 .
-validation-precision=Please input with this format "Integer${precision-scale}.Decimal${scale}".
-validation-constant=Please input one of the ${constants}.
-validation-prohibited=The value of ${constants} is not allowed.
+validation-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
+validation-constant=Please input one of the ${top.constants}.
+validation-prohibited=The value of ${top.constants} is not allowed.
 validation-alphastring=Please input alphabet.
 validation-numericstring=Please input number.
 validation-alphanumericstring=Please input alphabet or number.
@@ -191,14 +191,13 @@ validation-phonenumber=The format of phone number must be "1234-5678-9999".
 validation-faxnumber=The format of FAX number must be "1234-5678-9999".
 validation-futuredate=The future date is not allowed.
 validation-passeddate=The past date is not allowed.
-validation-regex=The value dos not match the regular expression "${expression}".
-validation-fieldexpression=The value does not match the OGNL expression "${expression}".
-validation-compare=The value is not ${(comparator == "eq" ? "=" : \
-(comparator == "le" ? "<" : \
-(comparator == "lt" ? "<=" : \
-(comparator == "ge" ? ">" : \
-(comparator == "gt" ? "<" : "")))))}\
-「${target}」.
+validation-regex=The value dos not match the regular expression "${top.regex}".
+validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+「${top.target}」.
 validation-compare-daterange-to=The end date must be after than start date.
 validation-compare-numberrange-to=The number range is incorrect.
 

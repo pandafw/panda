@@ -36,13 +36,13 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		}
 		if (!map.containsKey(DEFAULT_CHAIN)) {
 			List<String> defs = Arrays.toList(
-				FatalProcessor.class.getName(),
-				AdaptProcessor.class.getName(),
-				LocaleProcessor.class.getName(),
-				LayoutProcessor.class.getName(),
-				ValidateProcessor.class.getName(),
-				InvokeProcessor.class.getName(),
-				ViewProcessor.class.getName()
+				DefaultActionChain.IOC_PREFIX + FatalProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + AdaptProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + LocaleProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + LayoutProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + ValidateProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + InvokeProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + ViewProcessor.class.getName()
 			);
 			map.put(DEFAULT_CHAIN, defs);
 		}

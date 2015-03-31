@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import panda.filepool.local.LocalFilePool;
-import panda.io.resource.ResourceBundleLoader;
+import panda.io.resource.ResourceLoader;
 import panda.lang.Arrays;
 import panda.mvc.MvcConfig;
 import panda.mvc.annotation.Modules;
@@ -133,7 +133,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			LocalFilePool.class,
 			
 			// utility
-			ResourceBundleLoader.class,
+			ResourceLoader.class,
 			CookieStateProvider.class,
 			DefaultTextProvider.class,
 			ActionAssist.class,
