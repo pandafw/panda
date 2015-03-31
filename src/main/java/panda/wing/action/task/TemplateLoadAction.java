@@ -7,7 +7,7 @@ import panda.wing.util.AppFreemarkerTemplateLoader;
 
 /**
  */
-@At("/admin/task/templateload")
+@At("/task/templateload")
 public class TemplateLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppFreemarkerTemplateLoader aftLoader;

@@ -16,7 +16,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean {
 
-	private static final long serialVersionUID = 76117446L;
+	private static final long serialVersionUID = 1053741083L;
 
 	/**
 	 * Constructor
@@ -74,29 +74,29 @@ public class Property extends SUBean {
 	@Column(size=2, notNull=true)
 	@Comment("country code")
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", message="validation-stringlength"), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant"), 
 	})
 	protected String country;
 
 	@Column(size=50, notNull=true)
 	@Comment("property name")
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength"), 
 	})
 	protected String name;
 
 	@Column(size=5000)
 	@Comment("property value")
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength"), 
 	})
 	protected String value;
 
 	@Column(size=1000)
 	@Comment("memo")
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", msgId=Validators.MSGID_STRING_LENTH)
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", message="validation-stringlength")
 	})
 	protected String memo;
 

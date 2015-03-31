@@ -4,7 +4,7 @@ import java.util.Set;
 
 import panda.filepool.dao.DaoFilePool;
 import panda.filepool.local.LocalFilePool;
-import panda.io.resource.ResourceBundleLoader;
+import panda.io.resource.ResourceLoader;
 import panda.lang.Systems;
 import panda.mvc.MvcConfig;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
@@ -39,7 +39,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.remove(LocalFilePool.class);
 			clss.add(DaoFilePool.class);
 
-			clss.remove(ResourceBundleLoader.class);
+			clss.remove(ResourceLoader.class);
 			clss.add(AppResourceBundleLoader.class);
 			
 			clss.remove(FreemarkerTemplateLoader.class);

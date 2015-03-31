@@ -5,8 +5,8 @@ import java.util.List;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.io.Settings;
-import panda.io.resource.ExternalResourceBundleMaker;
-import panda.io.resource.ResourceBundleLoader;
+import panda.io.resource.BeanResourceMaker;
+import panda.io.resource.ResourceLoader;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
@@ -23,8 +23,8 @@ import panda.wing.entity.query.ResourceQuery;
  * A class for load database resource.
  * @author yf.frank.wang@gmail.com
  */
-@IocBean(type=ResourceBundleLoader.class, create="initialize")
-public class AppResourceBundleLoader extends ResourceBundleLoader {
+@IocBean(type=ResourceLoader.class, create="initialize")
+public class AppResourceBundleLoader extends ResourceLoader {
 	private static final Log log = Logs.getLog(AppResourceBundleLoader.class);
 
 	protected static String DB = "db";
@@ -35,12 +35,12 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 	@IocInject
 	protected DaoClient daoClient;
 
-	protected ExternalResourceBundleMaker databaseResourceLoader;
+	protected BeanResourceMaker databaseResourceLoader;
 	
 	/**
 	 * @return the databaseResourceLoader
 	 */
-	public ExternalResourceBundleMaker getDatabaseResourceLoader() {
+	public BeanResourceMaker getDatabaseResourceLoader() {
 		return databaseResourceLoader;
 	}
 
@@ -49,7 +49,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 	 */
 	public void initialize() throws Exception {
 		if (settings.getPropertyAsBoolean(SC.DATABASE_RESOURCE)) {
-			ExternalResourceBundleMaker mrbm = new ExternalResourceBundleMaker();
+			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Resource.CLAZZ);
 			mrbm.setLanguageColumn(Resource.LANGUAGE);
@@ -59,10 +59,10 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 			mrbm.setPackageName(getClass().getPackage().getName());
 
 			databaseResourceLoader = mrbm;
-			addResourceBundleMaker(DB, mrbm);
+			addResourceMaker(mrbm);
 		}
 		else if (settings.getPropertyAsBoolean(SC.DATABASE_PROPERTY)) {
-			ExternalResourceBundleMaker mrbm = new ExternalResourceBundleMaker();
+			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Property.CLAZZ);
 			mrbm.setLanguageColumn(Property.LANGUAGE);
@@ -73,7 +73,7 @@ public class AppResourceBundleLoader extends ResourceBundleLoader {
 			mrbm.setPackageName(getClass().getPackage().getName());
 
 			databaseResourceLoader = mrbm;
-			addResourceBundleMaker(DB, mrbm);
+			addResourceMaker(mrbm);
 		}
 		
 		reload();

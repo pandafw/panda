@@ -21,7 +21,7 @@ import panda.task.Trigger;
 import panda.wing.constant.SC;
 import panda.wing.task.CronEntry;
 
-@IocBean(type=TaskScheduler.class, create="initialize", depose="shutdown")
+@IocBean(type=TaskScheduler.class, create="initialize")
 public class GaeTaskScheduler implements TaskScheduler {
 	private static final Log log = Logs.getLog(GaeTaskScheduler.class);
 

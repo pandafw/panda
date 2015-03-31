@@ -8,7 +8,7 @@ import panda.wing.util.AppResourceBundleLoader;
 
 /**
  */
-@At("/admin/task/resourceload")
+@At("/task/resourceload")
 public class ResourceLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppResourceBundleLoader arbLoader;
