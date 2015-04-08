@@ -55,14 +55,15 @@ public class LuceneProvider {
 			}
 		}
 		
-		LuceneWrapper lw = this.luceneWrapper;
+		LuceneWrapper lw = new LuceneWrapper(this.luceneWrapper);
 
 		log.info("set lucene: " + luceneWrapper);
-		this.luceneWrapper = luceneWrapper;
+		this.luceneWrapper.copy(luceneWrapper);
 		
 		// clear old lucene
 		if (lw != null) {
 			try {
+				lw.close();
 				lw.clean();
 			}
 			catch (IOException e) {

@@ -41,7 +41,7 @@ public class TemplateExAction extends TemplateAction {
 	}
 	
 	private void addReloadMessage() {
-		addApplicationMessage(AC.TEMPLATE_RELOAD);
+		addApplicationMessage(AC.TEMPLATE_LOAD_DATE);
 	}
 
 	@Override

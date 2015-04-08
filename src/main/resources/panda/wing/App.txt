@@ -40,7 +40,7 @@ navi-admin-site-category=Category
 navi-admin-site-index=Search Index
 
 navi-admin-system=System
-navi-admin-system-memcache=Memcache
+navi-admin-system-loadtask=Load Task
 navi-admin-system-property=Property
 navi-admin-system-resource=Resource
 navi-admin-system-template=Template
@@ -53,14 +53,9 @@ navi-admin-system-sqlexec=SQL Tool
 
 
 #reload
-message-category-reload=The category has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload category</a> to apply the changes.
-message-property-reload=The property has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload property</a> to apply the changes.
-message-resource-reload=The resource has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload resource</a> to apply the changes.
-message-template-reload=The template has been updated.\nPlease <a href="${assist.contextPath}/admin/memcache_index">reload template</a> to apply the changes.
-error-category-reload=Failed to load category.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload category</a>
-error-property-reload=Failed to load property.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload property</a>
-error-resource-reload=Failed to load resource.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload resource</a>
-error-template-reload=Failed to load template.\nError: {0}\n<a href="${assist.contextPath}/admin/memcache_index">Reload template</a>
+message-property-updated=The property has been updated.\nPlease <a href="${base}/admin/loadtask">reload property</a> to apply the changes.
+message-resource-updated=The resource has been updated.\nPlease <a href="${base}/admin/loadtask">reload resource</a> to apply the changes.
+message-template-updated=The template has been updated.\nPlease <a href="${base}/admin/loadtask">reload template</a> to apply the changes.
 
 #label
 label-page-size=Page Size:

@@ -34,6 +34,14 @@ public class LuceneWrapper implements Closeable {
 	protected IndexReader indexReader;
 	protected IndexWriter indexWriter;
 
+	protected LuceneWrapper() {
+		this(null, Version.LUCENE_46);
+	}
+
+	protected LuceneWrapper(LuceneWrapper lw) {
+		copy(lw);
+	}
+
 	/**
 	 * @param path lucene directory
 	 */
@@ -95,6 +103,15 @@ public class LuceneWrapper implements Closeable {
 		}
 	}
 	
+	protected void copy(LuceneWrapper lw) {
+		this.path = lw.path;
+		this.version = lw.version;
+		this.analyzer = lw.analyzer;
+		this.directory = lw.directory;
+		this.indexReader = lw.indexReader;
+		this.indexWriter = lw.indexWriter;
+	}
+
 	public void clean() throws IOException {
 		close();
 		

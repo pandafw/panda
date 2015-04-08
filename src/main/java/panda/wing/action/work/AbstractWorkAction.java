@@ -100,6 +100,9 @@ public abstract class AbstractWorkAction extends AbstractAction {
 	protected Status newStatus() {
 		return new Status();
 	}
+
+	protected void init() {
+	}
 	
 	protected void init(Events es) {
 		events = es;
@@ -115,6 +118,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 				throw Exceptions.wrapThrow(e);
 			}
 		}
+		init();
 	}
 
 	protected void updateStatus(char level, String msg) {

@@ -113,6 +113,6 @@ public class Html2PdfAction extends AbstractAction {
 				addActionError(Exceptions.getStackTrace(e));
 			}
 		}
-		return FreemarkerView.INSTANCE;
+		return FreemarkerView.DEFAULT;
 	}
 }

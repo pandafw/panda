@@ -9,6 +9,12 @@ public interface AppConstants extends MvcConstants {
 	/** The cache */
 	public static final String PANDA_CACHE = "panda.cache";
 
+	/** The cache keys */
+	public static final String PANDA_CACHE_KEYS = "panda.cache.keys";
+
+	/** The lucene */
+	public static final String PANDA_LUCENE = "panda.lucene";
+
 	/** The authenticate */
 	public static final String PANDA_AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
 	

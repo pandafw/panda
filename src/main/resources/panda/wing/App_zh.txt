@@ -38,7 +38,7 @@ navi-admin-site-category=类别
 navi-admin-site-index=检索索引
 
 navi-admin-system=系统管理
-navi-admin-system-memcache=应用缓存
+navi-admin-system-loadtask=应用缓存
 navi-admin-system-property=配置
 navi-admin-system-resource=资源
 navi-admin-system-template=模板
@@ -51,14 +51,9 @@ navi-admin-system-sqlexec=SQL工具
 
 
 #reload
-message-category-reload=「类别」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「类别」。
-message-property-reload=「配置」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「配置」。
-message-resource-reload=「资源」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「资源」。
-message-template-reload=「模板」表里面的数据已经被变更。\n若要使变更有效、请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「模板」。
-error-resource-reload=「资源」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「资源」。
-error-property-reload=「配置」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「配置」。
-error-template-reload=「模板」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「模板」。
-error-category-reload=「类别」加载失败。\n错误信息：{0}\n请<a href="${assist.contextPath}/admin/memcache_index">重新加载</a>「类别」。
+message-property-updated=「配置」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「配置」。
+message-resource-updated=「资源」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「资源」。
+message-template-updated=「模板」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「模板」。
 
 #label
 label-page-size=显示件数：

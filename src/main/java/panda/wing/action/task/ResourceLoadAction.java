@@ -6,9 +6,7 @@ import panda.mvc.util.DefaultTextProvider;
 import panda.wing.action.BaseLoadAction;
 import panda.wing.util.AppResourceBundleLoader;
 
-/**
- */
-@At("/task/resourceload")
+@At("/task/resource/load")
 public class ResourceLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppResourceBundleLoader arbLoader;
@@ -24,6 +22,6 @@ public class ResourceLoadAction extends BaseLoadAction {
 	protected void doLoad() throws Exception {
 		((DefaultTextProvider)getText()).clearResourceBundlesCache();
 
-		((AppResourceBundleLoader)arbLoader).reload();
+		arbLoader.reload();
 	}
 }

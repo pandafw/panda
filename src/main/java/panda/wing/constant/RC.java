@@ -44,42 +44,17 @@ public interface RC extends ActionRC {
 	public final static String MESSAGE_SUCCESS = "message-success";
 
 	/**
-	 * MESSAGE_CATEGORY_RELOAD = "message-category-reload";
+	 * MESSAGE_PROPERTY_UPDATED = "message-property-updated";
 	 */
-	public final static String MESSAGE_CATEGORY_RELOAD = "message-category-reload";
+	public final static String MESSAGE_PROPERTY_UPDATED = "message-property-updated";
 
 	/**
-	 * ERROR_CATEGORY_RELOAD = "error-category-reload";
+	 * MESSAGE_RESOURCE_UPDATED = "message-resource-updated";
 	 */
-	public final static String ERROR_CATEGORY_RELOAD = "error-category-reload";
+	public final static String MESSAGE_RESOURCE_UPDATED = "message-resource-updated";
 
 	/**
-	 * MESSAGE_PROPERTY_RELOAD = "message-property-reload";
+	 * MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
 	 */
-	public final static String MESSAGE_PROPERTY_RELOAD = "message-property-reload";
-
-	/**
-	 * ERROR_PROPERTY_RELOAD = "error-property-reload";
-	 */
-	public final static String ERROR_PROPERTY_RELOAD = "error-property-reload";
-
-	/**
-	 * MESSAGE_RESOURCE_RELOAD = "message-resource-reload";
-	 */
-	public final static String MESSAGE_RESOURCE_RELOAD = "message-resource-reload";
-
-	/**
-	 * ERROR_RESOURCE_RELOAD = "error-resource-reload";
-	 */
-	public final static String ERROR_RESOURCE_RELOAD = "error-resource-reload";
-	
-	/**
-	 * MESSAGE_TEMPLATE_RELOAD = "message-template-reload";
-	 */
-	public final static String MESSAGE_TEMPLATE_RELOAD = "message-template-reload";
-	
-	/**
-	 * ERROR_TEMPLATE_RELOAD = "error-template-reload";
-	 */
-	public final static String ERROR_TEMPLATE_RELOAD = "error-template-reload";
+	public final static String MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
 }

@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import panda.lang.Locales;
 import panda.lang.Strings;
-import panda.wing.constant.AC;
+import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Resource;
 
@@ -33,7 +33,7 @@ public class ResourceExAction extends ResourceAction {
 	}
 	
 	private void addReloadMessage() {
-		addApplicationMessage(AC.RESOURCE_RELOAD);
+		addApplicationMessage(RC.MESSAGE_RESOURCE_UPDATED);
 	}
 
 	@Override

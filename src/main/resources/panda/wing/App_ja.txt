@@ -37,7 +37,7 @@ navi-admin-site-category=カテゴリ
 navi-admin-site-index=検索インデックス
 
 navi-admin-system=システム管理
-navi-admin-system-memcache=メモリキャッシュ
+navi-admin-system-loadtask=メモリキャッシュ
 navi-admin-system-property=プロパティ
 navi-admin-system-resource=リソース
 navi-admin-system-template=テンプレート
@@ -50,14 +50,9 @@ navi-admin-system-sqlexec=SQLツール
 
 
 #reload
-message-category-reload=「カテゴリ」のデータが変更されました。\n変更を有効するには、カテゴリを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-message-property-reload=「プロパティ」のデータが変更されました。\n変更を有効するには、プロパティを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-message-resource-reload=「リソース」のデータが変更されました。\n変更を有効するには、リソースを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-message-template-reload=「テンプレート」のデータが変更されました。\n変更を有効するには、テンプレートを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-error-category-reload=「カテゴリ」のリロードが失敗しました。\nエラー情報：{0}\nカテゴリを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-error-property-reload=「プロパティ」のリロードが失敗しました。\nエラー情報：{0}\nプロパティを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-error-resource-reload=「リソース」のリロードが失敗しました。\nエラー情報：{0}\nリソースを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
-error-template-reload=「テンプレート」のリロードが失敗しました。\nエラー情報：{0}\nテンプレートを<a href="${assist.contextPath}/admin/memcache_index">リロード</a>してください。
+message-property-updated=「プロパティ」のデータが変更されました。\n変更を有効するには、プロパティを<a href="${base}/admin/loadtask">リロード</a>してください。
+message-resource-updated=「リソース」のデータが変更されました。\n変更を有効するには、リソースを<a href="${base}/admin/loadtask">リロード</a>してください。
+message-template-updated=「テンプレート」のデータが変更されました。\n変更を有効するには、テンプレートを<a href="${base}/admin/loadtask">リロード</a>してください。
 
 #label
 label-page-size=表示件数：

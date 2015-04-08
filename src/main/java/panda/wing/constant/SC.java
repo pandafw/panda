@@ -94,14 +94,14 @@ public interface SC {
 	public static final String MAIL_SMTP_PASSWORD = "mail.smtp.password";
 	
 	/**
-	 * MAIL_FROM_MAIL = "mail.from-mail";
+	 * MAIL_FROM_MAIL = "mail.from.mail";
 	 */
-	public static final String MAIL_FROM_MAIL = "mail.from-mail";
+	public static final String MAIL_FROM_MAIL = "mail.from.mail";
 	
 	/**
-	 * MAIL_FROM_NAME = "mail.from-name";
+	 * MAIL_FROM_NAME = "mail.from.name";
 	 */
-	public static final String MAIL_FROM_NAME = "mail.from-name";
+	public static final String MAIL_FROM_NAME = "mail.from.name";
 	
 	/**
 	 * MAIL_BOUNCE = "mail.smtp.bounce";

@@ -88,7 +88,7 @@ public class FileServeAction extends AbstractAction {
 	public Object download(@Param("id") Long id) throws Exception {
 		FileItem file = filePool.findFile(id);
 		if (file == null) {
-			return HttpStatusView.HTTP_404;
+			return HttpStatusView.NOT_FOUND;
 		}
 
 		String filename = file.getName();
