@@ -25,7 +25,8 @@ import panda.net.http.HttpContentType;
  * </ul>
  */
 public class FreemarkerView extends AbstractPathView {
-	public static final FreemarkerView INSTANCE = new FreemarkerView(null);
+	public static final FreemarkerView DEFAULT = new FreemarkerView(null);
+	public static final FreemarkerView INPUT = new FreemarkerView("~input");
 
 	private static final String EXT = ".ftl";
 	
