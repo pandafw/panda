@@ -35,9 +35,11 @@ public class DatePicker extends TextField {
 
 	protected static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 
-	protected String inline;
 	protected String pattern;
 	protected String options;
+
+	//NOT USED
+	protected String inline;
 	protected String defaults;
 	
 	/**

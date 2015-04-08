@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.net.http.HttpStatus;
 
 /**
  * 返回特定的响应码
@@ -16,10 +17,11 @@ import panda.mvc.View;
  */
 public class HttpStatusView implements View {
 
-	public static final View HTTP_404 = new HttpStatusView(404);
-	// public static final View HTTP_400 = new HttpStatusView(400);
-	public static final View HTTP_500 = new HttpStatusView(500);
-	public static final View HTTP_502 = new HttpStatusView(502);
+	public static final View BAD_REQUEST = new HttpStatusView(HttpStatus.SC_BAD_REQUEST);
+	public static final View FORBIDDEN = new HttpStatusView(HttpStatus.SC_FORBIDDEN);
+	public static final View NOT_FOUND = new HttpStatusView(HttpStatus.SC_NOT_FOUND);
+	public static final View SERVER_ERROR = new HttpStatusView(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+	public static final View BAD_GATEWAY = new HttpStatusView(HttpStatus.SC_BAD_GATEWAY);
 
 	/**
 	 * 这个异常用于，在某个入口函数,如果你声明了 `@Fail("http:500")` 但是你真正的返回值想根据运行时决定。 <br>
