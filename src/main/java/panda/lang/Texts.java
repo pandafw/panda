@@ -966,4 +966,21 @@ public abstract class Texts {
 		// the distance is the cost for transforming all letters in both strings
 		return cost[len0 - 1];
 	}
+
+	public static String maskPassword(String pwd) {
+		if (Strings.isEmpty(pwd)) {
+			return pwd;
+		}
+		
+		StringBuilder sb = new StringBuilder(pwd.length());
+		for (int i = 0; i < pwd.length(); i++) {
+			if (i > 1 && i < pwd.length() - 1) {
+				sb.append('*');
+			}
+			else {
+				sb.append(pwd.charAt(i));
+			}
+		}
+		return sb.toString();
+	}
 }
