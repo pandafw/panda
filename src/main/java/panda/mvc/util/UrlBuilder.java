@@ -78,13 +78,13 @@ public interface UrlBuilder {
 	/**
 	 * @return the includeParams
 	 */
-	public boolean isIncludeParams();
+	public String getIncludeParams();
 
 
 	/**
 	 * @param includeParams the includeParams to set
 	 */
-	public void setIncludeParams(boolean includeParams);
+	public void setIncludeParams(String includeParams);
 
 
 	/**
@@ -97,7 +97,6 @@ public interface UrlBuilder {
 	 * @param includeContext the includeContext to set
 	 */
 	public void setIncludeContext(boolean includeContext);
-
 
 	/**
 	 * @return the anchor

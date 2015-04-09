@@ -71,7 +71,7 @@ public class CUrl extends ContextBean {
 		urlbuilder.setParams(params);
 	}
 
-	public void setIncludeParams(boolean includeParams) {
+	public void setIncludeParams(String includeParams) {
 		urlbuilder.setIncludeParams(includeParams);
 	}
 

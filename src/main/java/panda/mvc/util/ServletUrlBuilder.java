@@ -33,9 +33,10 @@ public class ServletUrlBuilder implements UrlBuilder {
 	
 	protected Map params;
 
-	protected boolean includeParams;
+	protected String includeParams;
 
-	protected boolean includeContext;
+	@IocInject(value = MvcConstants.UI_URL_INCLUDE_CONTEXT, required = false)
+	protected boolean includeContext = true;
 
 	protected String anchor;
 
@@ -50,16 +51,13 @@ public class ServletUrlBuilder implements UrlBuilder {
 	@Override
 	public String build() {
 		String uri;
-		if (action != null) {
+		if (Strings.isNotEmpty(action)) {
 			uri = action;
 			
 			// Check if context path needs to be added
-			if (action.startsWith("/")) {
+			if (action.charAt(0) != '/') {
 				if (includeContext) {
-					String base = request.getContextPath();
-					if (!base.equals("/")) {
-						uri = base + action;
-					}
+					uri = request.getContextPath() + action;
 				}
 			}
 			else {
@@ -181,14 +179,14 @@ public class ServletUrlBuilder implements UrlBuilder {
 	/**
 	 * @return the includeParams
 	 */
-	public boolean isIncludeParams() {
+	public String getIncludeParams() {
 		return includeParams;
 	}
 
 	/**
 	 * @param includeParams the includeParams to set
 	 */
-	public void setIncludeParams(boolean includeParams) {
+	public void setIncludeParams(String includeParams) {
 		this.includeParams = includeParams;
 	}
 

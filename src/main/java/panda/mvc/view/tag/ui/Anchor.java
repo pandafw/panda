@@ -66,7 +66,7 @@ public class Anchor extends UIBean {
 	 * @param urlbuilder the urlbuilder to set
 	 */
 	@IocInject
-	public void setUrlbuilder(UrlBuilder urlbuilder) {
+	protected void setUrlbuilder(UrlBuilder urlbuilder) {
 		this.urlbuilder = urlbuilder;
 		urlbuilder.setEscapeAmp(true);
 	}
@@ -157,7 +157,7 @@ public class Anchor extends UIBean {
 		urlbuilder.setParams(params);
 	}
 
-	public void setIncludeParams(boolean includeParams) {
+	public void setIncludeParams(String includeParams) {
 		urlbuilder.setIncludeParams(includeParams);
 	}
 

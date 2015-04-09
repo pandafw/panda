@@ -1,9 +1,12 @@
 package panda.mvc.view.tag.ui;
 
+import java.util.Map;
+
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.MvcConstants;
+import panda.mvc.util.UrlBuilder;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -59,20 +62,30 @@ public class Form extends UIBean {
 	protected Boolean hooked;
 	protected Boolean loadmask;
 	
-	/*
-	 * Revised for Portlet actionURL as form action, and add wwAction as hidden field. Refer to
-	 * template.simple/form.vm
-	 */
+	protected UrlBuilder urlbuilder;
+
 	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
 
-		if (name == null) {
+		if (Strings.isNotEmpty(name)) {
 			// make the name the same as the id
 			if (Strings.isNotEmpty(id)) {
 				name = id;
 			}
 		}
+		if (Strings.isNotEmpty(action)) {
+			action = urlbuilder.build();
+		}
+	}
+
+	/**
+	 * @param urlbuilder the urlbuilder to set
+	 */
+	@IocInject
+	protected void setUrlbuilder(UrlBuilder urlbuilder) {
+		this.urlbuilder = urlbuilder;
+		urlbuilder.setEscapeAmp(true);
 	}
 
 	/**
@@ -177,10 +190,6 @@ public class Form extends UIBean {
 		this.onreset = onreset;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
-	}
-
 	public void setTarget(String target) {
 		this.target = target;
 	}
@@ -207,5 +216,47 @@ public class Form extends UIBean {
 	@IocInject(value = MvcConstants.UI_FORM_LOADMASK, required = false)
 	public void setLoadmask(Boolean loadmask) {
 		this.loadmask = loadmask;
+	}
+
+	//----------------------------------------------------------
+	public void setScheme(String scheme) {
+		urlbuilder.setScheme(scheme);
+	}
+	
+	public void setPort(int port) {
+		urlbuilder.setPort(port);
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+		urlbuilder.setAction(action);
+	}
+
+	public void setQuery(String query) {
+		urlbuilder.setQuery(query);
+	}
+	
+	public void setParams(Map params) {
+		urlbuilder.setParams(params);
+	}
+
+	public void setIncludeParams(String includeParams) {
+		urlbuilder.setIncludeParams(includeParams);
+	}
+
+	public void setIncludeContext(boolean includeContext) {
+		urlbuilder.setIncludeContext(includeContext);
+	}
+
+	public void setAnchor(String anchor) {
+		urlbuilder.setAnchor(anchor);
+	}
+
+	public void setEscapeAmp(boolean escapeAmp) {
+		urlbuilder.setEscapeAmp(escapeAmp);
+	}
+
+	public void setForceAddSchemeHostAndPort(boolean forceAddSchemeHostAndPort) {
+		urlbuilder.setForceAddSchemeHostAndPort(forceAddSchemeHostAndPort);
 	}
 }

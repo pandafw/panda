@@ -32,6 +32,9 @@ public interface MvcConstants extends IocConstants {
 	/** The default encode method to generate Struts URLs */
 	public static final String UI_URL_ENCODE = "panda.ui.url.encode";
 
+	/** incude context path of url */
+	public static final String UI_URL_INCLUDE_CONTEXT = "panda.url.include.context";
+
 	/** The defaults of datepicker */
 	public static final String UI_DATEPICKER_DEFAULTS = "panda.ui.datepicker.defaults";
 
