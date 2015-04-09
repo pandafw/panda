@@ -45,7 +45,7 @@ navi-admin-system-cronjobs=Cronジョブ
 navi-admin-system-dataimp=データインポート
 navi-admin-system-html2pdf=HTML⇒PDF出力
 navi-admin-system-ndfsfile=NDFSツール
-navi-admin-system-ognleval=OGNLツール
+navi-admin-system-eleval=ELツール
 navi-admin-system-sqlexec=SQLツール
 
 

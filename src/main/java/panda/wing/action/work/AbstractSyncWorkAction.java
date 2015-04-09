@@ -6,8 +6,10 @@ import panda.lang.Objects;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Ok;
 
 
 public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
@@ -34,6 +36,10 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 
 	protected SyncStatus getStatus() {
 		return (SyncStatus)status;
+	}
+	
+	protected boolean isStop() {
+		return getStatus().stop;
 	}
 	
 	/**
@@ -68,7 +74,13 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 		}
 	}
 	
+	@At("")
+	@Ok("ftl:/panda/wing/action/work/SyncWork.ftl")
+	public void input() {
+	}
+
 	@At
+	@Ok(View.JSON)
 	@Override
 	public Object stop() {
 		AbstractSyncWorkAction aswa = getSelf();
@@ -91,6 +103,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	}
 	
 	@At
+	@Ok(View.JSON)
 	@Override
 	public Object status() {
 		AbstractSyncWorkAction aswa = getSelf();
@@ -101,6 +114,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	}
 
 	@At
+	@Ok(View.VOID)
 	public Object start(@Param("e.*") Events es) {
 		init(es);
 

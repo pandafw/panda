@@ -36,8 +36,8 @@ public class LoadTaskAction extends AbstractAction {
 	/**
 	 * @return cache key list
 	 */
-	@At
-	public List<String> getCacheKeyList() {
+	@At("")
+	public List<String> input() {
 		List<String> ckl = new ArrayList<String>();
 
 		if (arbLoader.getDatabaseResourceLoader() != null) {

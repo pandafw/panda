@@ -1,9 +1,9 @@
 package panda.wing.action.work;
 
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 import java.util.Date;
 
+import panda.el.ElTemplate;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -18,36 +18,37 @@ import panda.wing.action.AbstractAction;
 
 public abstract class AbstractWorkAction extends AbstractAction {
 	private static final Log log = Logs.getLog(AbstractWorkAction.class);
-	
+
+	protected static final char PREFIX = '%';
 	protected static final char L_INFO = 'i';
 	protected static final char L_WARN = 'w';
 	protected static final char L_ERROR = 'e';
 	protected static final char L_SUCCESS = 's';
 	
 	public static class Events {
-		protected MessageFormat onStart;
-		protected MessageFormat onStatus;
-		protected MessageFormat onFinish;
+		protected ElTemplate onStart;
+		protected ElTemplate onStatus;
+		protected ElTemplate onFinish;
 
 		/**
 		 * @param onStart the onStart to set
 		 */
 		public void setOnStart(String onStart) {
-			this.onStart = new MessageFormat(onStart);
+			this.onStart = new ElTemplate(onStart, PREFIX);
 		}
 
 		/**
 		 * @param onStatus the onStatus to set
 		 */
 		public void setOnStatus(String onStatus) {
-			this.onStatus = new MessageFormat(onStatus);
+			this.onStatus = new ElTemplate(onStatus, PREFIX);;
 		}
 
 		/**
 		 * @param onFinish the onFinish to set
 		 */
 		public void setOnFinish(String onFinish) {
-			this.onFinish = new MessageFormat(onFinish);
+			this.onFinish = new ElTemplate(onFinish, PREFIX);;
 		}
 	}
 
@@ -67,6 +68,10 @@ public abstract class AbstractWorkAction extends AbstractAction {
 		 */
 		public String getDate() {
 			return time == null ? null : DateTimes.TIMESTAMP_FORMAT.format(time);
+		}
+		
+		public String getMsg() {
+			return StringEscapes.escapeJavaScript(status);
 		}
 	}
 	
@@ -168,14 +173,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 			printLine(s);
 		}
 		else {
-			printScript(events.onStatus.format(
-				new Object[] { 
-						String.valueOf(level), 
-						StringEscapes.escapeJavaScript(msg),
-						(status.count == 0 ? "" : String.valueOf(status.count)), 
-						(status.total == 0 ? "" : String.valueOf(status.total))
-						}
-				));
+			printScript(events.onStatus.evaluate(status));
 		}
 	}
 	
@@ -190,7 +188,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 			printLine(">>> " + msg);
 		}
 		else {
-			printScript(events.onStart.format(new Object[] { StringEscapes.escapeJavaScript(msg) }));
+			printScript(events.onStart.evaluate(status));
 		}
 	}
 	
@@ -205,7 +203,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 			printLine("<<< " + msg);
 		}
 		else {
-			printScript(events.onFinish.format(new Object[] { StringEscapes.escapeJavaScript(msg) }));
+			printScript(events.onFinish.evaluate(status));
 		}
 	}
 	

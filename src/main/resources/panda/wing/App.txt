@@ -48,7 +48,7 @@ navi-admin-system-cronjobs=Cron Jobs
 navi-admin-system-dataimp=Data Import
 navi-admin-system-html2pdf=HTML->PDF
 navi-admin-system-ndfsfile=NDFS Tool
-navi-admin-system-ognleval=OGNL Tool
+navi-admin-system-eleval=EL Tool
 navi-admin-system-sqlexec=SQL Tool
 
 

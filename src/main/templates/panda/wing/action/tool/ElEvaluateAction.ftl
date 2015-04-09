@@ -9,9 +9,9 @@
 	<div class="p-header">
 		<h3><i class="fa fa-keyboard-o"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
-	<@p.form id="eleval" method="get" theme="simple" action="eval" onsubmit="return elevaluate();">
+	<@p.form id="eleval" method="get" theme="simple" action="${path}/xml" onsubmit="return elevaluate();">
 	<table width="100%">
 		<tr><td>Expression: (Ctrl+Enter to evaluate)</td></tr>
 		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%"/></td></tr>

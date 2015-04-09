@@ -46,7 +46,7 @@ navi-admin-system-cronjobs=Cron任务
 navi-admin-system-dataimp=数据汇入
 navi-admin-system-html2pdf=HTML⇒PDF打印
 navi-admin-system-ndfsfile=NDFS工具
-navi-admin-system-ognleval=OGNL工具
+navi-admin-system-eleval=EL工具
 navi-admin-system-sqlexec=SQL工具
 
 

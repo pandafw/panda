@@ -18,12 +18,11 @@
 	<div class="p-header">
 		<h3><i class="fa fa-cog"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 	
 	<div>
-		<@p.submit icon="fa-cog" btype="primary" id="btnExec" onclick="doExecute()"><@p.text name="button-execute"/></@p.submit>
-		
-		<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="doStop()"><@p.text name="button-stop"/></@p.submit>
+		<@p.submit icon="fa-cog" btype="primary" id="btnExec" onclick="doExecute()" value="#(button-execute)"/>
+		<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="doStop()" value="#(button-stop)"/>
 	</div>
 	
 	<hr/>
@@ -36,8 +35,7 @@
 
 		function doStop() {
 			$.ajaf({
-				url: "<@p.url action='${actionPrefix}_stop'/>",
-				data: { __decorator: 'none' },
+				url: "<@p.url action='${path}/stop'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					print_status(o.time, o.level, o.status, o.count, o.total);
@@ -63,8 +61,7 @@
 		function doStatus() {
 			workOnStart();
 			$.ajaf({
-				url: "<@p.url action='${actionPrefix}_status'/>",
-				data: { __decorator: 'none' },
+				url: "<@p.url action='${path}/status'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					print_status(o.time, o.level, o.status, o.count, o.total);
@@ -83,7 +80,7 @@
 		}
 		
 		function doExecute() {
-			doWork("<@p.url action='${actionPrefix}_execute'/>");
+			doWork("<@p.url action='${path}/execute'/>");
 			return false;
 		}
 
@@ -93,10 +90,9 @@
 			
 			pms = [];
 			var data = {
-				__decorator: 'none',
-				onStart: 'parent.work_start("{0}");',
-				onStatus: 'parent.work_status("{0}", "{1}", "{2}", "{3}");',
-				onFinish: 'parent.work_finish("{0}");'
+				'e.onStart': 'parent.work_start("%{msg}");',
+				'e.onStatus': 'parent.work_status("%{level}", "%{msg}", "%{count}", "%{total}");',
+				'e.onFinish': 'parent.work_finish("%{msg}");'
 			};
 			
 			$.ajaf({
@@ -114,6 +110,18 @@
 
 		function work_start(msg) {
 			work_info(msg);
+		}
+		function work_status(level, msg, count, total) { 
+			print_status((new Date()).format('yyyy-MM-dd HH:mm:ss.SSS'), level, msg, count, total); 
+		}
+		function work_info(m) { 
+			work_status('i', m);
+		}
+		function work_error(m) {
+			work_status('e', m);
+		}
+		function work_success(m) {
+			work_status('s', m);
 		}
 		function work_finish(msg) {
 			work_success(msg);
@@ -147,11 +155,6 @@
 				}
 			}
 		}
-
-		function work_status(level, msg, count, total) { print_status((new Date()).format('yyyy-MM-dd HH:mm:ss.SSS'), level, msg, count, total); }
-		function work_info(m) { work_status('i', m); }
-		function work_error(m) { work_status('e', m); }
-		function work_success(m) { work_status('s', m); }
 		
 		function onPageLoad() { doStatus(); }
 	</script>

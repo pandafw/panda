@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<h3><i class="fa fa-strikethrough"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<@p.form id="sqlexec" method="post" theme="simple">
 	<table class="sqlexec-tb" style="width: 100%">
@@ -19,7 +19,7 @@
 			</td>
 		</tr>
 		<tr><td colspan="2"><@p.textarea name="sql" rows="15" cssStyle="width:100%"/></td></tr>
-		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash"><@p.text name="button-execute"/></@p.submit></td></tr>
+		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" value="#(button-execute)"/></td></tr>
 	</table>
 	</@p.form>
 	
