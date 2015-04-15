@@ -9,17 +9,12 @@ import panda.lang.Systems;
 import panda.mvc.MvcConfig;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
-import panda.mvc.util.ActionAssist;
-import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
-import panda.wing.auth.UserAuthenticator;
 import panda.wing.lucene.LuceneProvider;
 import panda.wing.task.gae.GaeTaskExecutor;
 import panda.wing.task.gae.GaeTaskScheduler;
 import panda.wing.task.java.JavaTaskExecutor;
 import panda.wing.task.java.JavaTaskScheduler;
-import panda.wing.util.AppActionAssist;
-import panda.wing.util.AppActionConsts;
 import panda.wing.util.AppCacheProvider;
 import panda.wing.util.AppDaoClientProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
@@ -46,11 +41,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(AppFreemarkerTemplateLoader.class);
 			clss.add(AppCacheProvider.class);
 
-			clss.remove(ActionAssist.class);
-			clss.remove(ActionConsts.class);
-			clss.add(AppActionAssist.class);
-			clss.add(AppActionConsts.class);
-			
 			clss.add(AppSettings.class);
 			clss.add(AppDaoClientProvider.class);
 			clss.add(LuceneProvider.class);
@@ -63,8 +53,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 				clss.add(JavaTaskExecutor.class);
 				clss.add(JavaTaskScheduler.class);
 			}
-			
-			clss.add(UserAuthenticator.class);
 			
 			return clss;
 		}
