@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import panda.lang.Asserts;
+import panda.lang.Marks;
 import panda.lang.collection.LRUMap;
 import panda.tpl.AbstractTemplate;
 import panda.tpl.TemplateException;
@@ -16,11 +17,11 @@ public class ElTemplate extends AbstractTemplate {
 	private List<Object> segments;
 
 	public ElTemplate(String expression) throws TemplateException {
-		this(expression, '$');
+		this(expression, Marks.DOLLAR);
 	}
 
 	public ElTemplate(String expression, char prefix) throws TemplateException {
-		this(expression, prefix, '{', '}');
+		this(expression, prefix, Marks.BRACES_LEFT, Marks.BRACES_RIGHT);
 	}
 
 	public ElTemplate(String expr, char prefix, char open, char close) throws TemplateException {

@@ -567,7 +567,7 @@ public abstract class Texts {
 	 * @return translated string
 	 */
 	public static String elTranslate(String expression, Object wrapper) {
-		return elTranslate(expression, wrapper, '$');
+		return elTranslate(expression, wrapper, Marks.DOLLAR);
 	}
 	
 	/**
@@ -584,7 +584,7 @@ public abstract class Texts {
 		}
 		
 		Evaluator eva = new ElEvaluator(wrapper);
-		return translate(expression, eva, prefix, '{', '}');
+		return translate(expression, eva, prefix, Marks.BRACES_LEFT, Marks.BRACES_RIGHT);
 	}
 
 	/**
