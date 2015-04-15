@@ -1,12 +1,14 @@
 package panda.mvc.util;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.io.Settings;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
 import panda.mvc.aware.ActionAware;
@@ -31,6 +33,20 @@ public class ActionSupport {
 		return context;
 	}
 
+	/**
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		return context.getSettings();
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return context.getLocale();
+	}
+	
 	/**
 	 * @return the action
 	 */
