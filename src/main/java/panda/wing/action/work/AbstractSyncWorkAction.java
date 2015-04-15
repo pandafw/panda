@@ -34,7 +34,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 		return new SyncStatus();
 	}
 
-	protected SyncStatus getStatus() {
+	public SyncStatus getStatus() {
 		return (SyncStatus)status;
 	}
 	

@@ -106,6 +106,10 @@ public abstract class AbstractWorkAction extends AbstractAction {
 		return new Status();
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+	
 	protected void init() {
 	}
 	
