@@ -9,6 +9,7 @@ import panda.el.ElTemplate;
 import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
+import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
 
@@ -128,16 +129,16 @@ public abstract class Mvcs {
 				char c0 = s.charAt(0);
 				char c1 = s.charAt(1);
 				char cx = s.charAt(s.length() - 1);
-				if ((c0 == '$' || c0 == '%') && c1 == '{' && cx == '}') {
+				if ((c0 == Marks.DOLLAR || c0 == Marks.PERCENT) && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
 					val = findValue(s.substring(2, s.length() - 1), ac, arg);
 				}
-				else if (c0 == '!' && c1 == '{' && cx == '}') {
+				else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
 					val = JsonObject.fromJson(s.substring(1));
 				}
-				else if (c0 == '!' && c1 == '[' && cx == ']') {
+				else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACKETS_LEFT && cx == Marks.BRACKETS_RIGHT) {
 					val = JsonArray.fromJson(s.substring(1));
 				}
-				else if (c0 == '#' && c1 == '(' && cx == ')') {
+				else if (c0 == Marks.SHARP && c1 == Marks.PARENTHESES_LEFT && cx == Marks.PARENTHESES_RIGHT) {
 					val = ac.text(s.substring(2, s.length() - 1));
 				}
 			}

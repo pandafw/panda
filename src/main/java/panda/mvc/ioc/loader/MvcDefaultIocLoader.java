@@ -21,8 +21,6 @@ import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
-import panda.mvc.util.ActionAssist;
-import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.util.ServletUrlBuilder;
@@ -136,8 +134,6 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			ResourceLoader.class,
 			CookieStateProvider.class,
 			DefaultTextProvider.class,
-			ActionAssist.class,
-			ActionConsts.class,
 	
 			// processor
 			AdaptProcessor.class,

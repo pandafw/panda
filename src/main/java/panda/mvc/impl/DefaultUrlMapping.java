@@ -37,7 +37,7 @@ public class DefaultUrlMapping implements UrlMapping {
 		for (int i = 0; i < paths.length; i++) {
 			String path = paths[i];
 			if (Strings.isBlank(path)) {
-				throw new IllegalArgumentException(String.format("Can not support blank @At in %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
+				throw new IllegalArgumentException(String.format("Failed to add blank @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
 			}
 			
 			if (path.charAt(0) != '/') {
