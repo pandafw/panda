@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.io.Settings;
+import panda.ioc.Ioc;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
 import panda.mvc.aware.ActionAware;
@@ -33,6 +34,13 @@ public class ActionSupport {
 		return context;
 	}
 
+	/**
+	 * @return the ioc
+	 */
+	public Ioc getIoc() {
+		return context.getIoc();
+	}
+	
 	/**
 	 * @return the settings
 	 */
