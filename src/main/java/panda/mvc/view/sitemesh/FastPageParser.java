@@ -79,16 +79,12 @@ public final class FastPageParser {
 		CharArray _body = new CharArray(4096);
 		CharArray _head = new CharArray(512);
 		CharArray _title = new CharArray(128);
-		Map<String, String> _htmlProperties = null;
 		Map<String, String> _metaProperties = new HashMap<String, String>(6);
 		Map<String, String> _sitemeshProperties = new HashMap<String, String>(6);
-		Map<String, String> _bodyProperties = null;
 
 		CharArray _currentTaggedContent = new CharArray(1024);
 		String _contentTagId = null;
 		boolean tagged = false;
-
-		boolean _frameSet = false;
 
 		int _state = STATE_TEXT;
 		int _tokenType = TOKEN_NONE;
@@ -160,13 +156,12 @@ public final class FastPageParser {
 						boolean doDefault = false;
 						switch (tagHash) {
 						case HTML_HASH:
-							if (!_buffer.compareLowerSubstr("html")) { // skip any accidental hash
-																		// collisions
+							if (!_buffer.compareLowerSubstr("html")) { 
+								// skip any accidental hash collisions
 								doDefault = true;
 								break;
 							}
 							state = TAG_STATE_HTML;
-							_htmlProperties = parseProperties(tagObject, _buffer).properties;
 							break;
 						case HEAD_HASH:
 							if (!_buffer.compareLowerSubstr("head")) { // skip any accidental hash
@@ -278,7 +273,6 @@ public final class FastPageParser {
 								doDefault = true;
 								break;
 							}
-							_frameSet = true;
 							break;
 						case FRAMESET_HASH:
 							if (!_buffer.compareLowerSubstr("frameset")) { // skip any accidental
@@ -286,7 +280,6 @@ public final class FastPageParser {
 								doDefault = true;
 								break;
 							}
-							_frameSet = true;
 							break;
 						case BODY_HASH:
 							if (!_buffer.compareLowerSubstr("body")) { // skip any accidental hash
@@ -297,7 +290,6 @@ public final class FastPageParser {
 							if (_tokenType == TOKEN_EMPTYTAG) {
 								state = TAG_STATE_BODY;
 							}
-							_bodyProperties = parseProperties(tagObject, _buffer).properties;
 							break;
 						case CONTENT_HASH:
 							if (!_buffer.compareLowerSubstr("content")) { // skip any accidental

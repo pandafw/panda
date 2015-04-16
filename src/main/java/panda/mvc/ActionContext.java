@@ -2,6 +2,7 @@ package panda.mvc;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,11 +46,12 @@ public class ActionContext {
 	private ActionAssist assist;
 	private ActionConsts consts;
 
+	private Locale locale;
 	private Object action;
+	private Object result;
+
 	private Object[] args;
 	private Object params;
-	private Object result;
-	private Locale locale;
 
 	private Throwable error;
 	
@@ -364,6 +366,22 @@ public class ActionContext {
 		return actionAware;
 	}
 	
+	public Collection<String> getActionErrors() {
+		return getActionAware().getErrors();
+	}
+	
+	public Collection<String> getActionWarnings() {
+		return getActionAware().getWarnings();
+	}
+	
+	public Collection<String> getActionConfirms() {
+		return getActionAware().getConfirms();
+	}
+	
+	public Collection<String> getActionMessages() {
+		return getActionAware().getMessages();
+	}
+	
 	/**
 	 * @return parameter aware
 	 */
@@ -375,6 +393,13 @@ public class ActionContext {
 	}
 	
 	/**
+	 * @return parameter errors
+	 */
+	public Map<String, List<String>> getParamErrors() {
+		return getParamAware().getErrors();
+	}
+
+	/**
 	 * @return session aware
 	 */
 	public SessionAware getSessionAware() {
@@ -382,6 +407,22 @@ public class ActionContext {
 			sessionAware = ioc.get(SessionAware.class);
 		}
 		return sessionAware;
+	}
+	
+	public Collection<String> getSessionErrors() {
+		return getSessionAware().getErrors();
+	}
+	
+	public Collection<String> getSessionWarnings() {
+		return getSessionAware().getWarnings();
+	}
+	
+	public Collection<String> getSessionConfirms() {
+		return getSessionAware().getConfirms();
+	}
+	
+	public Collection<String> getSessionMessages() {
+		return getSessionAware().getMessages();
 	}
 	
 	/**
@@ -392,6 +433,22 @@ public class ActionContext {
 			applicationAware = ioc.get(ApplicationAware.class);
 		}
 		return applicationAware;
+	}
+	
+	public Collection<String> getApplicationErrors() {
+		return getApplicationAware().getErrors();
+	}
+	
+	public Collection<String> getApplicationWarnings() {
+		return getApplicationAware().getWarnings();
+	}
+	
+	public Collection<String> getApplicationConfirms() {
+		return getApplicationAware().getConfirms();
+	}
+	
+	public Collection<String> getApplicationMessages() {
+		return getApplicationAware().getMessages();
 	}
 
 	/**

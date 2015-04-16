@@ -14,7 +14,7 @@ import panda.mvc.impl.DefaultViewMaker;
 public class ViewProcessor extends AbstractProcessor {
 	private static final Log log = Logs.getLog(ViewProcessor.class);
 
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		if (log.isWarnEnabled()) {
 			// 需要特别提醒一下使用jsonView,但方法的返回值是String的!!
 			if (View.JSON.equals(ac.getInfo().getOkView()) 

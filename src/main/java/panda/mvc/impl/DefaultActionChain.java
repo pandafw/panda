@@ -55,13 +55,7 @@ public class DefaultActionChain implements ActionChain {
 		
 		String name = procs.get(current);
 		Processor processor = initProcessor(name, ac);
-		try {
-			processor.process(ac);
-		}
-		catch (Throwable e) {
-			ac.setError(e);
-			throw Exceptions.wrapThrow(e);
-		}
+		processor.process(ac);
 	}
 
 	protected Processor initProcessor(String name, ActionContext ac) {

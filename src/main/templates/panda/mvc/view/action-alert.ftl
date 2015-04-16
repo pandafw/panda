@@ -2,9 +2,9 @@
 	|| actionWarnings?has_content
 	|| actionConfirms?has_content
 	|| actionMessages?has_content
-	|| fieldErrors?has_content>
+	|| paramErrors?has_content>
 <div class="alert alert-dismissable<#rt/>
-<#if actionErrors?has_content || fieldErrors?has_content>
+<#if actionErrors?has_content || paramErrors?has_content>
  alert-danger<#rt/>
 <#elseif actionWarnings?has_content>
  alert-warning<#rt/>
@@ -16,7 +16,7 @@
 ">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 <@p.actionerror/>
-<#if fieldErrors?has_content>
+<#if paramErrors?has_content>
 	<#if !(actionErrors?has_content)>
 	<ul class="p-action-errors fa-ul">
 		<li><i class="fa-li fa fa-exclamation-circle"></i>

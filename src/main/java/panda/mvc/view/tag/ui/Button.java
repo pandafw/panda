@@ -29,6 +29,12 @@ public class Button extends UIBean {
 	protected String btype;
 	protected String icon;
 	protected String sicon;
+	protected String text;
+
+	@Override
+	public boolean usesBody() {
+		return true;
+	}
 
 	/**
 	 * @return the btype
@@ -71,4 +77,19 @@ public class Button extends UIBean {
 	public void setSicon(String sicon) {
 		this.sicon = sicon;
 	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+	
 }

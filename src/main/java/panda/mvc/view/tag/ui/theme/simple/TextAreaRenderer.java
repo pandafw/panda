@@ -33,8 +33,8 @@ public class TextAreaRenderer extends AbstractEndRenderer<TextArea> {
 			.events(tag)
 			.dynamics(tag);
 
-		stag("tag", attrs);
+		stag("textarea", attrs);
 		write(formatValue(tag));
-		etag("tag");
+		etag("textarea");
 	}
 }

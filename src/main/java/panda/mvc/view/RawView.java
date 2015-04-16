@@ -3,6 +3,7 @@ package panda.mvc.view;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -80,7 +81,16 @@ public class RawView implements View {
 		this.contentType = Strings.defaultString(contentTypeMap.get(contentType.toLowerCase()), contentType);
 	}
 
-	public void render(ActionContext ac) throws Throwable {
+	public void render(ActionContext ac) {
+		try {
+			_render(ac);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+	
+	protected void _render(ActionContext ac) throws IOException {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
 		Object obj = ac.getResult();

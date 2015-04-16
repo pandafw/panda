@@ -10,7 +10,7 @@ public class VoidView implements View {
 	}
 
 	@Override
-	public void render(ActionContext ac) throws Throwable {
+	public void render(ActionContext ac) {
 	}
 	
 	@Override

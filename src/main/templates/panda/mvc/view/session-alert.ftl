@@ -1,48 +1,46 @@
-<#if Session??>
-<#if Session.errors?has_content
-	|| Session.warnings?has_content
-	|| Session.confirms?has_content
-	|| Session.messages?has_content>
+<#if SessionErrors?has_content
+	|| SessionWarnings?has_content
+	|| SessionConfirms?has_content
+	|| SessionMessages?has_content>
 <div class="alert alert-dismissable<#rt/>
-<#if Session.errors?has_content>
+<#if SessionErrors?has_content>
  alert-danger<#rt/>
-<#elseif Session.warnings?has_content>
+<#elseif SessionWarnings?has_content>
  alert-warning<#rt/>
-<#elseif Session.confirms?has_content>
+<#elseif SessionConfirms?has_content>
  alert-info<#rt/>
-<#elseif Session.messages?has_content>
+<#elseif SessionMessages?has_content>
  alert-success<#rt/>
 </#if>
 ">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-<#if Session.errors?has_content>
+<#if SessionErrors?has_content>
 	<ul class="fa-ul p-session-errors">
-	<#list Session.errors?keys as k>
-		<li class="p-session-error" msgId="${k}"><i class="fa-li fa fa-exclamation-circle"></i>${Session.errors[k]}</li>
+	<#list SessionErrors?keys as k>
+		<li class="p-session-error" msgId="${k}"><i class="fa-li fa fa-exclamation-circle"></i>${SessionErrors[k]}</li>
 	</#list>
 	</ul>
 </#if>
-<#if Session.warnings?has_content>
+<#if SessionWarnings?has_content>
 	<ul class="fa-ul p-session-warnings">
-	<#list Session.warnings?keys as k>
-		<li class="p-session-warning" msgId="${k}"><i class="fa-li fa fa-exclamation-triangle"></i>${Session.warnings[k]}</li>
+	<#list SessionWarnings?keys as k>
+		<li class="p-session-warning" msgId="${k}"><i class="fa-li fa fa-exclamation-triangle"></i>${SessionWarnings[k]}</li>
 	</#list>
 	</ul>
 </#if>
-<#if Session.confirms?has_content>
+<#if SessionConfirms?has_content>
 	<ul class="fa-ul p-session-confirms">
-	<#list Session.confirms?keys as k>
-		<li class="p-session-confirm" msgId="${k}"><i class="fa-li fa fa-question-circle"></i>${Session.confirms[k]}</li>
+	<#list SessionConfirms?keys as k>
+		<li class="p-session-confirm" msgId="${k}"><i class="fa-li fa fa-question-circle"></i>${SessionConfirms[k]}</li>
 	</#list>
 	</ul>
 </#if>
-<#if Session.messages?has_content>
+<#if SessionMessages?has_content>
 	<ul class="fa-ul p-session-messages">
-	<#list Session.messages?keys as k>
-		<li class="p-session-message" msgId="${k}"><i class="fa-li fa fa-info-circle"></i>${Session.messages[k]}</li>
+	<#list SessionMessages?keys as k>
+		<li class="p-session-message" msgId="${k}"><i class="fa-li fa fa-info-circle"></i>${SessionMessages[k]}</li>
 	</#list>
 	</ul>
 </#if>
 </div>
-</#if>
 </#if>

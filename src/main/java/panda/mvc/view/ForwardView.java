@@ -35,7 +35,7 @@ public class ForwardView extends AbstractPathView {
 		super(dest == null ? null : dest.replace('\\', '/'));
 	}
 
-	public void render(ActionContext ac) throws Exception {
+	public void render(ActionContext ac) {
 		HttpServletRequest req = ac.getRequest();
 
 		String path = evalPath(ac);
@@ -72,7 +72,7 @@ public class ForwardView extends AbstractPathView {
 		forward(ac, path, args);
 	}
 
-	protected void forward(ActionContext ac, String path, String args) throws Exception {
+	protected void forward(ActionContext ac, String path, String args) {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
 
@@ -87,7 +87,12 @@ public class ForwardView extends AbstractPathView {
 		}
 		
 		// Do rendering
-		rd.forward(req, res);
+		try {
+			rd.forward(req, res);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 	
 	/**

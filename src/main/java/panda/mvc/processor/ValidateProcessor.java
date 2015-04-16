@@ -11,7 +11,7 @@ import panda.mvc.validation.Validators;
 @IocBean
 public class ValidateProcessor extends ViewProcessor {
 	@Override
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		View view = evalView(ac.getIoc(), ac.getInfo().getErrorView());
 
 		Validators validators = ac.getIoc().getIfExists(Validators.class);

@@ -62,7 +62,7 @@ public class LocaleProcessor extends AbstractProcessor {
 	public LocaleProcessor() {
 	}
 
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		HttpSession session = ac.getRequest().getSession(false);
 
 		Locale locale = null;

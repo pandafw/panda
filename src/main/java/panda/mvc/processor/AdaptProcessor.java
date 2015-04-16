@@ -9,7 +9,7 @@ import panda.mvc.adaptor.DefaultParamAdaptor;
 @IocBean
 public class AdaptProcessor extends AbstractProcessor {
 	@Override
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		ParamAdaptor adaptor = null;
 		
 		if (ac.getAdaptorType() != null) {

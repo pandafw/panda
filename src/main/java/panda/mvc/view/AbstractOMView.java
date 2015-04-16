@@ -211,25 +211,29 @@ public abstract class AbstractOMView extends AbstractView {
 	 * write result
 	 * @param ac action context
 	 * @param result result object
-	 * @throws IOException
 	 */
-	protected void writeResult(ActionContext ac, Object result) throws IOException {
-		HttpServletRequest request = ac.getRequest();
-		HttpServletResponse response = ac.getResponse();
-
-		HttpServletSupport hss = new HttpServletSupport(request, response);
-		hss.setExpiry(expiry);
-		hss.setCharset(encoding);
-		hss.setContentType(contentType);
-		hss.setBom(true);
-		hss.writeResponseHeader();
-
-		PrintWriter writer = response.getWriter();
-		writeResult(writer, result);
-		writer.flush();
+	protected void writeResult(ActionContext ac, Object result) {
+		try {
+			HttpServletRequest request = ac.getRequest();
+			HttpServletResponse response = ac.getResponse();
+	
+			HttpServletSupport hss = new HttpServletSupport(request, response);
+			hss.setExpiry(expiry);
+			hss.setCharset(encoding);
+			hss.setContentType(contentType);
+			hss.setBom(true);
+			hss.writeResponseHeader();
+	
+			PrintWriter writer = response.getWriter();
+			writeResult(writer, result);
+			writer.flush();
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 
-	public void render(ActionContext ac) throws IOException {
+	public void render(ActionContext ac) {
 		Object o = ac.getError();
 		if (o == null || !(o instanceof Throwable)) {
 			o = ac.getRequest().getAttribute("exception");

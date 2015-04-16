@@ -11,7 +11,7 @@ import panda.servlet.HttpServlets;
 public class FatalProcessor extends ViewProcessor {
 	private static final Log log = Logs.getLog(FatalProcessor.class);
 
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		View view = evalView(ac.getIoc(), ac.getInfo().getFatalView());
 		
 		try {

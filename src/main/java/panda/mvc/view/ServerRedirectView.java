@@ -23,7 +23,7 @@ public class ServerRedirectView extends AbstractPathView {
 		super(dest);
 	}
 
-	public void render(ActionContext ac) throws Exception {
+	public void render(ActionContext ac) {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
 

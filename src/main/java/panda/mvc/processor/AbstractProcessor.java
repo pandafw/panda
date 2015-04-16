@@ -13,9 +13,8 @@ public abstract class AbstractProcessor implements Processor {
 	 * <b>一般情形下都不应该覆盖这个方法<b>
 	 * 
 	 * @param ac 执行方法的上下文
-	 * @throws Throwable
 	 */
-	protected void doNext(ActionContext ac) throws Throwable {
+	protected void doNext(ActionContext ac) {
 		ac.getChain().doNext(ac);
 	}
 }

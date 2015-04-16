@@ -123,7 +123,7 @@ public class LayoutProcessor extends AbstractProcessor {
 		this.saveToCookie = saveToCookie;
 	}
 
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		HttpSession session = ac.getRequest().getSession(false);
 
 		String layout = null;

@@ -53,16 +53,23 @@ public class ServletUrlBuilder implements UrlBuilder {
 		String uri;
 		if (Strings.isNotEmpty(action)) {
 			uri = action;
+			char c = action.charAt(0);
 			
-			// Check if context path needs to be added
-			if (action.charAt(0) != '/') {
+			if (c == '~') {
+				// resolve URL
+				String base = HttpServlets.getRequestURI(request);
+				String path = Strings.stripStart(action.substring(1), '/');
+				uri = URLHelper.resolveURL(base, path);
+			}
+			else if (c == '+') {
+				// append path
+				String base = HttpServlets.getRequestURI(request);
+				uri = URLHelper.appendPath(base, action.substring(1));
+			}
+			else if (c == '/') {
 				if (includeContext) {
 					uri = request.getContextPath() + action;
 				}
-			}
-			else {
-				String base = HttpServlets.getRequestURI(request);
-				uri = URLHelper.concatURL(base, action);
 			}
 		}
 		else {

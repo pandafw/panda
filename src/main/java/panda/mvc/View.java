@@ -18,5 +18,5 @@ public interface View {
 	public static final String RAW = "raw";
 	public static final String VOID = "void";
 
-	void render(ActionContext ac) throws Throwable;
+	void render(ActionContext ac);
 }
