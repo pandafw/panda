@@ -34,40 +34,48 @@ public class URLHelperTest {
 
 	@Test
 	public void testGetURLRoot() throws Exception {
-		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com"));
-		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com/"));
-		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com/app"));
-		assertEquals(null, URLHelper.getURLRoot(null));
-		assertEquals(null, URLHelper.getURLRoot(""));
-		assertEquals(null, URLHelper.getURLRoot("/app"));
-		assertEquals(null, URLHelper.getURLRoot("app"));
+		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com"));
+		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com/"));
+		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com/app"));
+		assertEquals(null, URLHelper.getURLDomain(null));
+		assertEquals(null, URLHelper.getURLDomain(""));
+		assertEquals(null, URLHelper.getURLDomain("/app"));
+		assertEquals(null, URLHelper.getURLDomain("app"));
 	}
 
 	@Test
-	public void testConcatURL() throws Exception {
-		assertEquals(null, URLHelper.concatURL(null, "*"));
-		assertEquals(null, URLHelper.concatURL("", "*"));
-		assertEquals("http://a.b.c", URLHelper.concatURL("http://a.b.c", null));
-		assertEquals("http://a.b.c", URLHelper.concatURL("http://a.b.c", ""));
-		assertEquals("http://x.y.z", URLHelper.concatURL("http://a.b.c", "http://x.y.z"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c", "/x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/", "/x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d", "/x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d/e", "/x"));
-		assertEquals(null, URLHelper.concatURL("http://a.b.c", "../x"));
-		assertEquals(null, URLHelper.concatURL("http://a.b.c/", "../x"));
-		assertEquals(null, URLHelper.concatURL("http://a.b.c/d", "../x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d/", "../x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d/e", "../x"));
-		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e/", "../x"));
-		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e/f", "../x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c", "x"));
-		assertEquals("http://a.b.c/x?a=1", URLHelper.concatURL("http://a.b.c", "x?a=1"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/", "x"));
-		assertEquals("http://a.b.c/x", URLHelper.concatURL("http://a.b.c/d", "x"));
-		assertEquals("http://a.b.c/x?b=1", URLHelper.concatURL("http://a.b.c/d?a=1", "x?b=1"));
-		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/", "x"));
-		assertEquals("http://a.b.c/d/x", URLHelper.concatURL("http://a.b.c/d/e", "x"));
+	public void testNormalize() throws Exception {
+		assertEquals("http://a.b.c/a/b", URLHelper.normalize("http://a.b.c//a///b"));
+	}
+	
+	@Test
+	public void testResolveURL() throws Exception {
+		assertEquals("*", URLHelper.resolveURL(null, "*"));
+		assertEquals("*", URLHelper.resolveURL("", "*"));
+		assertEquals("http://a.b.c", URLHelper.resolveURL("http://a.b.c", null));
+		assertEquals("http://a.b.c", URLHelper.resolveURL("http://a.b.c", ""));
+		assertEquals("http://x.y.z", URLHelper.resolveURL("http://a.b.c", "http://x.y.z"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c", "/x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/", "/x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/d", "/x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/d/e", "/x"));
+		assertEquals(null, URLHelper.resolveURL("http://a.b.c", "../x"));
+		assertEquals(null, URLHelper.resolveURL("http://a.b.c/", "../x"));
+		assertEquals(null, URLHelper.resolveURL("http://a.b.c/d", "../x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/d/", "../x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/d/e", "../x"));
+		assertEquals("http://a.b.c/d/x", URLHelper.resolveURL("http://a.b.c/d/e/", "../x"));
+		assertEquals("http://a.b.c/d/x", URLHelper.resolveURL("http://a.b.c/d/e/f", "../x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c", "x"));
+		assertEquals("http://a.b.c/x?a=1", URLHelper.resolveURL("http://a.b.c", "x?a=1"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/", "x"));
+		assertEquals("http://a.b.c/x", URLHelper.resolveURL("http://a.b.c/d", "x"));
+		assertEquals("http://a.b.c/x?b=1", URLHelper.resolveURL("http://a.b.c/d?a=1", "x?b=1"));
+		assertEquals("http://a.b.c/d/x", URLHelper.resolveURL("http://a.b.c/d/", "x"));
+		assertEquals("http://a.b.c/d/x", URLHelper.resolveURL("http://a.b.c/d/e", "x"));
+
+		assertEquals("/d/x", URLHelper.resolveURL("/d/e", "x"));
+		assertEquals("/x", URLHelper.resolveURL("/d/e", "../x"));
 	}
 
 	@Test

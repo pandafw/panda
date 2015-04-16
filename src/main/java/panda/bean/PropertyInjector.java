@@ -1,5 +1,7 @@
 package panda.bean;
 
+import java.lang.reflect.Type;
+
 import panda.lang.Injector;
 
 /**
@@ -21,6 +23,11 @@ public class PropertyInjector implements Injector {
 		this.handler = handler;
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public Type type(Object obj) {
+		return handler.getPropertyType(obj, field);
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

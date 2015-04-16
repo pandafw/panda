@@ -177,7 +177,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		for (Entry<String, IocValue> en : iobj.getFields().entrySet()) {
 			try {
 				ValueProxy vp = ing.makeValueProxy(en.getValue());
-				fields[i++] = IocFieldInjector.create(mirror, en.getKey(), vp);
+				fields[i++] = IocFieldInjector.create(mirror, en.getKey(), en.getValue(), vp);
 			}
 			catch (Exception e) {
 				throw Exceptions.wrapThrow(e, "Failed to eval Injector for field: '%s'", en.getKey());

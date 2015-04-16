@@ -22,6 +22,8 @@ import panda.ioc.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
+import panda.lang.reflect.Fields;
+import panda.lang.reflect.Methods;
 import panda.lang.reflect.Types;
 
 /**
@@ -330,10 +332,7 @@ public class Beans {
 	private static void setField(Map<String, PropertyAccessor> accessors, Field field) {
 		String name = field.getName();
 
-		Type type = field.getGenericType();
-		if (type == null) {
-			type = field.getType();
-		}
+		Type type = Fields.getFieldType(field);
 
 		if (!field.isAccessible()) {
 			field.setAccessible(true);
@@ -375,10 +374,7 @@ public class Beans {
 	}
 	
 	private static void setSetter(Map<String, PropertyAccessor> accessors, String name, Method setter) {
-		Type type = setter.getGenericParameterTypes()[0];
-		if (type == null) {
-			type = setter.getParameterTypes()[0];
-		}
+		Type type = Methods.getParameterType(setter, 0);
 		
 		PropertyAccessor pa = accessors.get(name);
 		if (pa == null) {

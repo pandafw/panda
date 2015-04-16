@@ -3,6 +3,7 @@ package panda.lang.reflect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -21,6 +22,18 @@ import panda.lang.Strings;
  * fields to be changed that shouldn't be. This facility should be used with care.
  */
 public abstract class Fields {
+	/**
+	 * @param field field
+	 * @return generic type or class
+	 */
+	public static Type getFieldType(Field field) {
+		Type type = field.getGenericType();
+		if (type == null) {
+			type = field.getType();
+		}
+		return type;
+	}
+	
 	/**
 	 * Gets an accessible {@link Field} by name respecting scope. Superclasses/interfaces will be
 	 * considered.
@@ -154,23 +167,25 @@ public abstract class Fields {
 	}
 
 	/**
-	 * 获取一组声明了特殊注解的字段
+	 * get all annotation fields of the class and it's super class
+	 * Discard duplicate field of parents.
 	 * 
-	 * @param ann 注解类型
-	 * @return 字段数组
+	 * @param ann annotation
+	 * @return fields
 	 */
-	public static <A extends Annotation> Collection<Field> getAnnotationFields(Class<?> cls, Class<A> ann) {
+	public static <A extends Annotation> List<Field> getAnnotationFields(Class<?> cls, Class<A> ann) {
 		List<Field> fields = new ArrayList<Field>();
 		for (Field f : getDeclaredFields(cls)) {
-			if (f.isAnnotationPresent(ann))
+			if (f.isAnnotationPresent(ann)) {
 				fields.add(f);
+			}
 		}
 		return fields;
 	}
 
 	/**
 	 * Return all fields of the class and it's super class (exclude the Object class). <br>
-	 * 如果子类的属性如果与父类重名，将会将其覆盖
+	 * Discard duplicate field of parents.
 	 * 
 	 * @return field list
 	 */
@@ -179,10 +194,11 @@ public abstract class Fields {
 	}
 
 	/**
-	 * 获得所有的静态变量属性
+	 * Return all static fields of the class and it's super class (exclude the Object class). <br>
+	 * Discard duplicate field of parents.
 	 * 
-	 * @param noFinal 是否包括 final 修饰符的字段
-	 * @return 字段列表
+	 * @param noFinal include final fields
+	 * @return field list
 	 */
 	public static Collection<Field> getStaticFields(Class<?> cls, boolean noFinal) {
 		return _getFields(cls, false, true, noFinal, true);
@@ -194,16 +210,22 @@ public abstract class Fields {
 			Field[] fs = cc.getDeclaredFields();
 			for (Field f : fs) {
 				int m = f.getModifiers();
-				if (noStatic && Modifier.isStatic(m))
+				if (noStatic && Modifier.isStatic(m)) {
 					continue;
-				if (noFinal && Modifier.isFinal(m))
+				}
+				if (noFinal && Modifier.isFinal(m)) {
 					continue;
-				if (noInner && f.isSynthetic())
+				}
+				if (noInner && f.isSynthetic()) {
 					continue;
-				if (noMember && !Modifier.isStatic(m))
+				}
+				if (noMember && !Modifier.isStatic(m)) {
 					continue;
-				if (map.containsKey(f.getName()))
+				}
+
+				if (map.containsKey(f.getName())) {
 					continue;
+				}
 
 				map.put(f.getName(), f);
 			}

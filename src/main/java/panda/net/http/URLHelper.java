@@ -107,7 +107,7 @@ public class URLHelper {
 		if (i < 0) {
 			return url.length();
 		}
-
+		
 		return i;
 	}
 	
@@ -147,10 +147,10 @@ public class URLHelper {
 	}
 	
 	/**
-	 * concat url to base
+	 * resolve url to base
 	 * <pre>
-	 *   null                    + *             = null
-	 *   ""                      + *             = null
+	 *   null                    + *             = *
+	 *   ""                      + *             = *
 	 *   http://a.b.c            + null          = http://a.b.c
 	 *   http://a.b.c            + ""            = http://a.b.c
 	 *   http://a.b.c            + http://x.y.z  = http://x.y.z
@@ -170,14 +170,19 @@ public class URLHelper {
 	 *   http://a.b.c/d          + x             = http://a.b.c/x
 	 *   http://a.b.c/d/         + x             = http://a.b.c/d/x
 	 *   http://a.b.c/d/e        + x             = http://a.b.c/d/x
+	 *   /d/e                    + x             = /d/x
+	 *   /d/e                    + ../x          = /x
 	 * </pre>
 	 * @param base base url
 	 * @param add append url
 	 * @return url url
 	 */
-	public static String concatURL(String base, String add) {
+	public static String resolveURL(String base, String add) {
 		if (Strings.isEmpty(add)) {
 			return base;
+		}
+		if (Strings.isEmpty(base)) {
+			return add;
 		}
 		
 		if (getURLRootLength(add) >= 0) {
@@ -186,7 +191,7 @@ public class URLHelper {
 
 		int prefix = getURLRootLength(base);
 		if (prefix < 0) {
-			return null;
+			prefix = 0;
 		}
 
 		String root = base.substring(0, prefix);
@@ -197,20 +202,18 @@ public class URLHelper {
 			uri = normalize(add);
 		}
 		else {
-			int len = path.length();
-			if (len > 0 && path.charAt(len - 1) == SEPARATOR) {
-				uri = normalize(path + add);
-			}
-			else {
-				uri = normalize(path + SEPARATOR + add);
-			}
-		}
-
-		if (uri == null) {
-			return null;
+			uri = normalize(path + SEPARATOR + add);
 		}
 		
+		if (uri == null) {
+			return uri;
+		}
+
 		return root + uri;
+	}
+	
+	public static String appendPath(String base, String add) {
+		return normalize(base + SEPARATOR + add);
 	}
 	
 	public static String normalize(String url) {

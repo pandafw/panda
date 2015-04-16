@@ -1,12 +1,18 @@
 package panda.lang;
 
+import java.lang.reflect.Type;
+
 public interface Injector {
 
 	/**
-	 * 通过反射，向对象某一字段设置一个值
-	 * 
-	 * @param obj 被设值的对象
-	 * @param value 值
+	 * @param obj object
+	 * @return the field type
+	 */
+	Type type(Object obj);
+	
+	/**
+	 * @param obj object
+	 * @param value value
 	 */
 	void inject(Object obj, Object value);
 }

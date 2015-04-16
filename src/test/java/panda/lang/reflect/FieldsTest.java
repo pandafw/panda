@@ -11,15 +11,16 @@ import static org.junit.Assume.assumeNotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import panda.lang.Arrays;
-import panda.lang.reflect.Fields;
 import panda.lang.reflect.testbed.Ambig;
 import panda.lang.reflect.testbed.Foo;
+import panda.lang.reflect.testbed.Horse;
 import panda.lang.reflect.testbed.PrivatelyShadowedChild;
 import panda.lang.reflect.testbed.PublicChild;
 import panda.lang.reflect.testbed.PubliclyShadowedChild;
@@ -50,6 +51,13 @@ public class FieldsTest {
 		privatelyShadowedChild = new PrivatelyShadowedChild();
 	}
 
+	@Test
+	public void testGetDeclaredFields() {
+		Collection<Field> fs = Fields.getDeclaredFields(Horse.BlackHorse.class);
+		assertEquals(1, fs.size());
+		assertEquals(Horse.BlackHorse.class, fs.iterator().next().getDeclaringClass());
+	}
+	
 	@Test
 	public void testGetField() {
 		assertEquals(Foo.class, Fields.getField(PublicChild.class, "VALUE").getDeclaringClass());

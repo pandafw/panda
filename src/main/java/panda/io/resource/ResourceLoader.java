@@ -69,7 +69,7 @@ public class ResourceLoader {
 					}
 					bundle = makeResource(parent, base, locale, classLoader);
 					if (bundle == null) {
-						bundle = Resource.EMPTY;
+						bundle = parent == null ? Resource.EMPTY : parent;
 					}
 					resources.put(key, bundle);
 				}

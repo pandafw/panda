@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 
+import panda.io.Streams;
 import panda.ioc.IocException;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -15,7 +16,10 @@ import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
+import panda.lang.reflect.MethodInjector;
+import panda.lang.reflect.Methods;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -148,6 +152,39 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			eventSet.setFetch(iocBean.fetch().trim().intern());
 		}
 	}
+
+	protected void checkInject(Class<?> clazz) {
+		// check @IocInject without @IocBean
+		try {
+			if (log.isWarnEnabled()) {
+				StringBuilder sb = new StringBuilder();
+
+				Collection<Field> fields = Fields.getAnnotationFields(clazz, IocInject.class);
+				for (Field f : fields) {
+					sb.append(Streams.LINE_SEPARATOR)
+					  .append(f.getName())
+					  .append(" of ")
+					  .append(f.getDeclaringClass());
+				}
+
+				Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
+				for (Method m : methods) {
+					sb.append(Streams.LINE_SEPARATOR)
+					  .append(m.getName())
+					  .append("() of ")
+					  .append(m.getDeclaringClass());
+				}
+				
+				if (sb.length() > 0) {
+					sb.insert(0, String.format("class(%s) don't has @IocBean, but some fields/methods has @IocInject! Miss @IocBean ??", clazz.getName()));
+					log.warn(sb.toString());
+				}
+			}
+		}
+		catch (Throwable e) {
+			// skip.
+		}
+	}
 	
 	protected void setIocInjects(IocObject iocObject, Class<?> clazz) {
 		Collection<Field> fields = Fields.getAnnotationFields(clazz, IocInject.class);
@@ -163,34 +200,20 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				iocValue = convert(inject.value());
 			}
 			iocValue.setRequired(inject.required());
+			iocValue.setInjector(new FieldInjector(field));
 			
 			iocObject.addField(field.getName(), iocValue);
 		}
 
-		// 处理字段(以@Inject方式,位于set方法)
-		Method[] methods;
-		try {
-			methods = clazz.getMethods();
-		}
-		catch (Exception e) {
-			// 如果获取失败,就忽略之
-			log.infof("Fail to call getMethods() in Class=%s, miss class or Security Limit, ignore it", clazz, e);
-			methods = new Method[0];
-		}
-		catch (NoClassDefFoundError e) {
-			log.infof("Fail to call getMethods() in Class=%s, miss class or Security Limit, ignore it", clazz, e);
-			methods = new Method[0];
-		}
-		
+		Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
 		for (Method method : methods) {
 			IocInject inject = method.getAnnotation(IocInject.class);
 			if (inject == null) {
 				continue;
 			}
 			
-			// 过滤特殊方法
 			int m = method.getModifiers();
-			if (Modifier.isAbstract(m) || (!Modifier.isPublic(m)) || Modifier.isStatic(m)) {
+			if (Modifier.isAbstract(m) || Modifier.isStatic(m)) {
 				continue;
 			}
 			
@@ -211,6 +234,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 					iocValue = convert(inject.value());
 				}
 				iocValue.setRequired(inject.required());
+				iocValue.setInjector(new MethodInjector(method));
 
 				iocObject.addField(name, iocValue);
 			}
@@ -236,25 +260,6 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 					iocObject.addField(fieldInfo, iocValue);
 				}
 			}
-		}
-	}
-
-	protected void checkInject(Class<?> clazz) {
-		// check @IocInject without @IocBean
-		try {
-			if (log.isWarnEnabled()) {
-				Field[] fields = clazz.getDeclaredFields();
-				for (Field field : fields) {
-					if (field.getAnnotation(IocInject.class) != null) {
-						log.warnf("class(%s) don't has @IocBean, but field(%s) has @IocInject! Miss @IocBean ??",
-							clazz.getName(), field.getName());
-						break;
-					}
-				}
-			}
-		}
-		catch (Throwable e) {
-			// skip.
 		}
 	}
 	

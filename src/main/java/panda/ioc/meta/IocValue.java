@@ -1,5 +1,6 @@
 package panda.ioc.meta;
 
+import panda.lang.Injector;
 import panda.lang.Objects;
 
 /**
@@ -34,6 +35,7 @@ public class IocValue {
 
 	private char type;
 	private Object value;
+	private Injector injector;
 	private boolean required = true;
 
 	public IocValue(char type) {
@@ -66,6 +68,20 @@ public class IocValue {
 	}
 
 	/**
+	 * @return the injector
+	 */
+	public Injector getInjector() {
+		return injector;
+	}
+
+	/**
+	 * @param injector the injector to set
+	 */
+	public void setInjector(Injector injector) {
+		this.injector = injector;
+	}
+
+	/**
 	 * @return the required
 	 */
 	public boolean isRequired() {
@@ -85,6 +101,7 @@ public class IocValue {
 				.append("type", type)
 				.append("value", value)
 				.append("required", required)
+				.append("injector", injector)
 				.toString();
 	}
 

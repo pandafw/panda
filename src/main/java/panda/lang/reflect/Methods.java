@@ -1,8 +1,10 @@
 package panda.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +22,19 @@ import panda.lang.collection.MultiKey;
  */
 @SuppressWarnings("unchecked")
 public class Methods {
+	/**
+	 * @param method method
+	 * @param index parameter index
+	 * @return generic parameter type or class
+	 */
+	public static Type getParameterType(Method method, int index) {
+		Type type = method.getGenericParameterTypes()[index];
+		if (type == null) {
+			type = method.getParameterTypes()[index];
+		}
+		return type;
+	}
+	
 	/**
 	 * Gets all methods of the given class and its parents (if any).
 	 */
@@ -79,6 +94,20 @@ public class Methods {
 			cls = cls.getSuperclass();
 		}
 		return map.values().toArray(new Method[map.size()]);
+	}
+
+	/**
+	 * @param ann annotation
+	 * @return methods
+	 */
+	public static <A extends Annotation> List<Method> getAnnotationMethods(Class<?> cls, Class<A> ann) {
+		List<Method> methods = new ArrayList<Method>();
+		for (Method m : getDeclaredMethods(cls)) {
+			if (m.isAnnotationPresent(ann)) {
+				methods.add(m);
+			}
+		}
+		return methods;
 	}
 
 	/**

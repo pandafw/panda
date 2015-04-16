@@ -239,7 +239,7 @@ public class HttpClient {
 		
 		while (true) {
 			String location = res.getHeader().getString(HttpHeader.LOCATION);
-			url = URLHelper.concatURL(url, location);
+			url = URLHelper.resolveURL(url, location);
 			if (Strings.isEmpty(url)) {
 				return res;
 			}
