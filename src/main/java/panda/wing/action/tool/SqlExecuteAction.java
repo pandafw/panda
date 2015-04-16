@@ -16,17 +16,18 @@ import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.Sqls;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Ok;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
 
-/**
- */
 @At("/admin/sql")
 @Auth(AUTH.SYSADMIN)
+@Ok(View.FREEMARKER)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected String commenter = "--";
@@ -216,7 +217,7 @@ public class SqlExecuteAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	public Object execute(@Param("*") Option o) throws Exception {
+	public Object execute(@Param Option o) throws Exception {
 		String sql = removeComment(o.sql, o.commenter);
 		
 		if (Strings.isEmpty(sql)) {

@@ -11,7 +11,7 @@
 	</div>
 	<#include "/panda/mvc/view/action-alert.ftl"/>
 
-	<@p.form id="eleval" method="get" theme="simple" action="${path}/xml" onsubmit="return elevaluate();">
+	<@p.form id="eleval" method="get" theme="simple" action="+/xml" onsubmit="return elEvaluate();">
 	<table width="100%">
 		<tr><td>Expression: (Ctrl+Enter to evaluate)</td></tr>
 		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%"/></td></tr>

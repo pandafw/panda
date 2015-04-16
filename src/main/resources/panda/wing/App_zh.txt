@@ -23,7 +23,7 @@ navi-user-logout=登出
 navi-user-signin=登入
 navi-user-signout=登出
 
-navi-user-account=姓名・邮件地址変更
+navi-user-account=用户信息变更
 navi-user-passwordchange=密码变更
 navi-user-profile=用户信息变更
 
@@ -42,7 +42,7 @@ navi-admin-system-loadtask=应用缓存
 navi-admin-system-property=配置
 navi-admin-system-resource=资源
 navi-admin-system-template=模板
-navi-admin-system-cronjobs=Cron任务
+navi-admin-system-crons=Cron任务
 navi-admin-system-dataimp=数据汇入
 navi-admin-system-html2pdf=HTML⇒PDF打印
 navi-admin-system-ndfsfile=NDFS工具

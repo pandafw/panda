@@ -6,9 +6,5 @@ label-description=Description
 label-schedule=Schedule
 label-result=Result
 
-button-start=Start
-button-stop=Stop
-button-start-all=Start All
-button-stop-all=Stop All
 
 

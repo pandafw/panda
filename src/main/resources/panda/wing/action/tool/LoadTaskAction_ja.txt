@@ -1,4 +1,4 @@
-title=メモリキャッシュ管理
+title=キャッシュ
 
 resource=リソース
 template=テンプレート

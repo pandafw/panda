@@ -1,14 +1,19 @@
 package panda.wing.auth;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
+import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
 import panda.wing.action.ActionRC;
 
@@ -19,6 +24,12 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 	
 	@IocInject(value=AppConstants.PANDA_AUTH_UNSECURE_VIEW, required=false)
 	private String unsecureView;
+	
+	@IocInject(value=AppConstants.PANDA_AUTH_UNLOGIN_URL, required=false)
+	private String unloginUrl;
+	
+	@IocInject(value=AppConstants.PANDA_AUTH_UNSECURE_URL, required=false)
+	private String unsecureUrl;
 	
 	/**
 	 * add error to action
@@ -32,14 +43,14 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 	}
 	
 
-	protected void doView(ActionContext ac, String type) throws Throwable {
+	protected void doView(ActionContext ac, String type) {
 		View view = evalView(ac.getIoc(), type);
 		if (view != null) {
 			view.render(ac);
 		}
 	}
 
-	public void process(ActionContext ac) throws Throwable {
+	public void process(ActionContext ac) {
 		UserAuthenticator aa = ac.getIoc().get(UserAuthenticator.class);
 		int r = aa.authenticate(ac);
 		if (r == UserAuthenticator.OK) {
@@ -52,6 +63,11 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 				doView(ac, unloginView);
 				return;
 			}
+			if (Strings.isNotEmpty(unloginUrl)) {
+				String url = Mvcs.translate(unloginUrl, ac);
+				HttpServlets.sendRedirect(ac.getResponse(), url);
+				return;
+			}
 		}
 		if (r == UserAuthenticator.UNSECURE) {
 			addActionError(ac, ActionRC.ERROR_UNSECURE);
@@ -59,8 +75,18 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 				doView(ac, unsecureView);
 				return;
 			}
+			if (Strings.isNotEmpty(unsecureUrl)) {
+				String url = Mvcs.translate(unsecureUrl, ac);
+				HttpServlets.sendRedirect(ac.getResponse(), url);
+				return;
+			}
 		}
 
-		ac.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+		try {
+			ac.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 }

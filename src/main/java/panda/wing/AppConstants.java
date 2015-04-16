@@ -9,8 +9,8 @@ public interface AppConstants extends MvcConstants {
 	/** The cache */
 	public static final String PANDA_CACHE = "panda.cache";
 
-	/** The cache keys */
-	public static final String PANDA_CACHE_KEYS = "panda.cache.keys";
+	/** The load task keys */
+	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
 
 	/** The lucene */
 	public static final String PANDA_LUCENE = "panda.lucene";
@@ -21,4 +21,8 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_AUTH_UNLOGIN_VIEW = "panda.auth.unlogin.view";
 	
 	public static final String PANDA_AUTH_UNSECURE_VIEW = "panda.auth.unsecure.view";
+	
+	public static final String PANDA_AUTH_UNLOGIN_URL = "panda.auth.unlogin.url";
+	
+	public static final String PANDA_AUTH_UNSECURE_URL = "panda.auth.unsecure.url";
 }

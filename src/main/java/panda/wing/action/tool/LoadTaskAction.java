@@ -24,8 +24,8 @@ public class LoadTaskAction extends AbstractAction {
 	
 	protected final static String CKEY_TEMPLATE = "template";
 	
-	@IocInject(value=AppConstants.PANDA_CACHE_KEYS, required=false)
-	protected List<String> cacheKeys;
+	@IocInject(value=AppConstants.PANDA_TASK_LOAD_KEYS, required=false)
+	protected List<String> tasks;
 	
 	@IocInject
 	protected AppResourceBundleLoader arbLoader;
@@ -34,7 +34,7 @@ public class LoadTaskAction extends AbstractAction {
 	protected AppFreemarkerTemplateLoader aftLoader;
 
 	/**
-	 * @return cache key list
+	 * @return key list
 	 */
 	@At("")
 	public List<String> input() {
@@ -48,8 +48,8 @@ public class LoadTaskAction extends AbstractAction {
 			ckl.add(CKEY_TEMPLATE);
 		}
 		
-		if (Collections.isNotEmpty(cacheKeys)) {
-			ckl.addAll(cacheKeys);
+		if (Collections.isNotEmpty(tasks)) {
+			ckl.addAll(tasks);
 		}
 		return ckl;
 	}

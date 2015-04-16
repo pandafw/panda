@@ -24,7 +24,7 @@
 	<div class="p-header">
 		<h3><@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<table class="table mc-table">
 	<thead>
@@ -37,6 +37,7 @@
 		</tr>
 	</thead>
 	<tbody>
+<#if result?has_content>
 	<#list result as c>
 		<tr>
 			<td class="mc-td-no">${c_index + 1}.</td>
@@ -50,6 +51,7 @@
 			<td colspan="4" class="mc-td-result"></td>
 		</tr>
 	</#list>
+</#if>
 	</tbody>
 	</table>
 

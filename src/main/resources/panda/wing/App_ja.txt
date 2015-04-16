@@ -23,9 +23,9 @@ navi-user-logout=ログアウト
 navi-user-signin=サインイン
 navi-user-signout=サインアウト
 
-navi-user-account=名前・メールアドレス変更
+navi-user-account=アカウント変更
 navi-user-passwordchange=パスワード変更
-navi-user-profile=プロフィール作成・編集
+navi-user-profile=プロフィール変更
 
 navi-admin=管理センター
 navi-admin-account=アカウント
@@ -37,11 +37,11 @@ navi-admin-site-category=カテゴリ
 navi-admin-site-index=検索インデックス
 
 navi-admin-system=システム管理
-navi-admin-system-loadtask=メモリキャッシュ
+navi-admin-system-loadtask=キャッシュ
 navi-admin-system-property=プロパティ
 navi-admin-system-resource=リソース
 navi-admin-system-template=テンプレート
-navi-admin-system-cronjobs=Cronジョブ
+navi-admin-system-crons=Cronジョブ
 navi-admin-system-dataimp=データインポート
 navi-admin-system-html2pdf=HTML⇒PDF出力
 navi-admin-system-ndfsfile=NDFSツール

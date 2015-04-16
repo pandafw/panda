@@ -14,19 +14,19 @@
 	<table class="sqlexec-tb" style="width: 100%">
 		<tr><td>SQL: (Ctrl+Enter to execute)</td>
 			<td align="right">
-				<@p.checkbox name="autoCommit" clabel="Auto Commit" fieldValue="true"/>
-				<@p.checkbox name="ignoreError" clabel="Ignore Error" fieldValue="true"/>
+				<@p.checkbox name="autoCommit" fieldLabel="Auto Commit" fieldValue="true"/>
+				<@p.checkbox name="ignoreError" fieldLabel="Ignore Error" fieldValue="true"/>
 			</td>
 		</tr>
 		<tr><td colspan="2"><@p.textarea name="sql" rows="15" cssStyle="width:100%"/></td></tr>
-		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" value="#(button-execute)"/></td></tr>
+		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" label="#(button-exec)"/></td></tr>
 	</table>
 	</@p.form>
 	
 	<hr/>
 
-<#if results??>
-<#list results as r>
+<#if result??>
+<#list result as r>
 	<div class="panel panel-success">
 		<div class="panel-heading">${(r_index + 1)?c}. <@p.property value=r.sql format="phtml"/></div>
 		<div class="panel-body">

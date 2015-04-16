@@ -6,11 +6,6 @@ label-description=说明
 label-schedule=执行计划
 label-result=执行结果
 
-button-exec=执行
-button-start=开始
-button-stop=停止
-button-start-all=全开始
-button-stop-all=全停止
 
 
 

@@ -101,6 +101,9 @@ public class UserAuthenticator {
 		}
 		
 		Object su = getSessionUser(ac);
+		if (su == null) {
+			return UNLOGIN;
+		}
 		
 		Collection<String> uperms = getUserPermits(su);
 

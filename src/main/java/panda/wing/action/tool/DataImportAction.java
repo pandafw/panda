@@ -32,14 +32,12 @@ import panda.dao.Dao;
 import panda.filepool.FileItem;
 import panda.io.FileNames;
 import panda.io.stream.CsvReader;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Logs;
-import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
@@ -47,14 +45,14 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.AbstractAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.util.AppActionAssist;
 
-//@At("/admin")
-//@Auth("sysadmin")
+@At("/admin/import")
+@Auth(AUTH.SYSADMIN)
+@Ok(View.FREEMARKER)
 public class DataImportAction extends AbstractAction {
-	@IocInject
-	protected ActionContext ac;
-	
 	protected static class DataType {
 		String type;
 		String format;
@@ -108,8 +106,7 @@ public class DataImportAction extends AbstractAction {
 	 * @return INPUT
 	 * @throws Exception if an error occurs
 	 */
-	@At("import")
-	@Ok(View.FREEMARKER)
+	@At("")
 	public Object execute(@Param @Validates Arg arg) throws Exception {
 		this.arg = arg;
 		if (arg.file == null) {
@@ -258,10 +255,10 @@ public class DataImportAction extends AbstractAction {
 		Logs.getLog(getClass()).warn(method, e);
 		if (getAssist().isDebugEnabled()) {
 			String s = Exceptions.getStackTrace(e);
-			ac.getActionAware().addError(e.getMessage() + "\n" + s);
+			getActionAware().addError(e.getMessage() + "\n" + s);
 		}
 		else {
-			ac.getActionAware().addError(e.getMessage());
+			getActionAware().addError(e.getMessage());
 		}
 	}
 

@@ -12,11 +12,9 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.task.CronEntry;
 
-/**
- */
 @At("/admin/crons")
 @Auth(AUTH.SYSADMIN)
-public class CronJobsAction extends AbstractAction {
+public class CronsAction extends AbstractAction {
 	@IocInject(value=AppConstants.CRONS, required=false)
 	private List<CronEntry> crons;
 	

@@ -21,8 +21,9 @@
 	<#include "/panda/mvc/view/action-alert.ftl"/>
 	
 	<div>
-		<@p.submit icon="fa-cog" btype="primary" id="btnExec" onclick="doExecute()" value="#(button-execute)"/>
-		<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="doStop()" value="#(button-stop)"/>
+		<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="doStart()" label="#(button-start)"/>
+
+		<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="doStop()" label="#(button-stop)"/>
 	</div>
 	
 	<hr/>
@@ -35,7 +36,7 @@
 
 		function doStop() {
 			$.ajaf({
-				url: "<@p.url action='${path}/stop'/>",
+				url: "<@p.url action='+/stop'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					print_status(o.time, o.level, o.status, o.count, o.total);
@@ -50,18 +51,18 @@
 		}
 		
 		function workOnStart() {
-			$('#btnExec').disable(true).removeClass("btn-primary").addClass("btn-warning")
+			$('#btnStart').disable(true).removeClass("btn-primary").addClass("btn-warning")
 				.find('i').addClass('fa-spin');
 		}
 		function workOnStop() {
-			$('#btnExec').disable(false).removeClass("btn-warning").addClass("btn-primary")
+			$('#btnStart').disable(false).removeClass("btn-warning").addClass("btn-primary")
 				.find('i').removeClass('fa-spin');
 		}
 
 		function doStatus() {
 			workOnStart();
 			$.ajaf({
-				url: "<@p.url action='${path}/status'/>",
+				url: "<@p.url action='+/status'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					print_status(o.time, o.level, o.status, o.count, o.total);
@@ -80,7 +81,7 @@
 		}
 		
 		function doExecute() {
-			doWork("<@p.url action='${path}/execute'/>");
+			doWork("<@p.url action='+/start'/>");
 			return false;
 		}
 

@@ -25,7 +25,7 @@ navi-user-logout=Logout
 navi-user-signin=Sign in
 navi-user-signout=Sign out
 
-navi-user-account=Account change
+navi-user-account=Account
 navi-user-passwordchange=Password change
 navi-user-profile=Profile
 
@@ -40,7 +40,7 @@ navi-admin-site-category=Category
 navi-admin-site-index=Search Index
 
 navi-admin-system=System
-navi-admin-system-loadtask=Load Task
+navi-admin-system-loadtask=Cache
 navi-admin-system-property=Property
 navi-admin-system-resource=Resource
 navi-admin-system-template=Template

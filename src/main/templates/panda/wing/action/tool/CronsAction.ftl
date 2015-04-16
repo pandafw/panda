@@ -36,10 +36,10 @@
 		<h3><i class="fa fa-clock-o"></i> <@p.text name="title"/></h3>
 	</div>
 
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
-	<#if cronEntries??>
-	<#list cronEntries as ce>
+<#if result?has_content>
+	<#list result as ce>
 	<div class="cron-div">
 	<table class="cron-tb">
 		<tr><th class="cron-th-no" rowspan="4">${ce_index + 1}.</th>
@@ -59,14 +59,14 @@
 			</td>
 		</tr>
 		<tr><th class="cron-th-result">
-				<@p.b btype="primary" icon="icon-execute" onclick="return cronJobExec(this);"><@p.text name="button-exec"/></@p.b>
+				<@p.b btype="primary" icon="icon-execute" onclick="return cronJobExec(this);" text="#(button-exec)"/>
 			</th>
 			<td class="cron-td-result"></td>
 		</tr>
 	</table>
 	</div>
 	<hr/>
-	</#list></#if>
+	</#list>
 
 	<script type="text/javascript">
 		function cronJobExec(el) {
@@ -103,6 +103,7 @@
 			return false;
 		}
 	</script>
+</#if>
 </div>
 
 </body>
