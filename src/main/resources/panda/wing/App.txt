@@ -31,7 +31,7 @@ navi-user-profile=Profile
 
 
 navi-admin=Administration
-navi-admin-account=Account
+navi-admin-account=User Manage
 navi-admin-account-user=User
 navi-admin-account-usergroup=User Group
 

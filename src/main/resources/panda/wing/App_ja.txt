@@ -28,7 +28,7 @@ navi-user-passwordchange=パスワード変更
 navi-user-profile=プロフィール変更
 
 navi-admin=管理センター
-navi-admin-account=アカウント
+navi-admin-account=アカウント管理
 navi-admin-account-user=ユーザー
 navi-admin-account-usergroup=グループ
 

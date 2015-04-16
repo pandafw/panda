@@ -29,7 +29,7 @@ navi-user-profile=用户信息变更
 
 
 navi-admin=管理中心
-navi-admin-account=账户
+navi-admin-account=用户管理
 navi-admin-account-user=用户
 navi-admin-account-usergroup=用户组
 
