@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -21,8 +20,7 @@ import panda.wing.AppConstants;
 import panda.wing.constant.AUTH;
 import panda.wing.constant.REQ;
 
-@IocBean
-public class UserAuthenticator {
+public abstract class UserAuthenticator {
 	//--------------------------------------------------------
 	// result code
 	//--------------------------------------------------------
@@ -40,6 +38,13 @@ public class UserAuthenticator {
 
 	@IocInject
 	protected UrlMapping urlmapping;
+	
+	//----------------------------------------------------
+	// abstract methods
+	//
+	protected abstract List<String> getUserPermits(Object su);
+
+	protected abstract boolean isSecureSessionUser(Object su);
 	
 
 	//----------------------------------------------------
@@ -73,15 +78,7 @@ public class UserAuthenticator {
 		return u;
 	}
 	
-	protected List<String> getUserPermits(Object su) {
-		return null;
-	}
-
-	protected boolean isSecureSessionUser(Object su) {
-		return false;
-	}
 	//----------------------------------------------------
-
 	protected int authenticate(ActionContext ac, String path, boolean special) {
 		Method method = ac.getMethod();
 		if (Strings.isNotEmpty(path)) {

@@ -31,6 +31,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 
+import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Strings;
@@ -43,6 +44,7 @@ import panda.net.http.URLHelper;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.wing.AppConstants;
 
+@IocBean(type=Html2Pdf.class)
 public class FlyingSaucerHtml2Pdf implements Html2Pdf {
 	private static final Log log = Logs.getLog(FlyingSaucerHtml2Pdf.class);
 	

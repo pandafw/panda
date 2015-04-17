@@ -20,7 +20,9 @@
 			onchange="onFileChange(this)"
 		/>
 		<@p.checkbox name="deleteAll" fieldLabel="#(deleteAll)" fieldValue="true"/>
-		<@p.submit icon="fa fa-inbox"><@p.text name="button-import"/></@p.submit>
+		<@p.div cssClass="p-buttons">
+			<@p.submit icon="fa fa-inbox"><@p.text name="button-import"/></@p.submit>
+		</@p.div>
 	</@p.form>
 	
 	<script type="text/javascript">

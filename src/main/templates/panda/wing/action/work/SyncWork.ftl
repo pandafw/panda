@@ -80,7 +80,7 @@
 			});
 		}
 		
-		function doExecute() {
+		function doStart() {
 			doWork("<@p.url action='+/start'/>");
 			return false;
 		}

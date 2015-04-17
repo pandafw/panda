@@ -43,6 +43,7 @@ public class LuceneProvider {
 		if ("0".equals(path.getName())) {
 			try {
 				luceneWrapper.close();
+				
 				long lv = getLatestLuceneRevision() + 1;
 				File npath = new File(getLuceneLocation(), String.valueOf(lv));
 				Files.moveDir(path, npath);

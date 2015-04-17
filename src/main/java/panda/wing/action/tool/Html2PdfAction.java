@@ -15,9 +15,12 @@ import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.servlet.HttpServletSupport;
 import panda.wing.action.AbstractAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.util.pdf.Html2Pdf;
 
 @At("/admin/html2pdf")
+@Auth(AUTH.SYSADMIN)
 public class Html2PdfAction extends AbstractAction {
 	private static final Log log = Logs.getLog(Html2PdfAction.class);
 	
@@ -85,34 +88,34 @@ public class Html2PdfAction extends AbstractAction {
 	public Object execute(@Param Arg arg) throws Exception {
 		if (Strings.isEmpty(arg.url)) {
 			arg.url = getText("url-default");
+			return FreemarkerView.DEFAULT;
 		}
-		else {
-			try {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				
-				HttpServletRequest request = getRequest();
-				HttpServletResponse response = getResponse();
 
-				html2pdf.process(baos, request, arg.url, arg.charset);
-				
-				byte[] pdf = baos.toByteArray();
-	
-				HttpServletSupport hss = new HttpServletSupport(request, response);
-				hss.setContentLength(Integer.valueOf(pdf.length));
-				hss.setContentType("application/pdf");
-				hss.setFileName(getFileNameFromUrl(arg.url) + ".pdf");
-				hss.setExpiry(0);
-	
-				hss.writeResponseHeader();
-				hss.writeResponseData(pdf);
-	
-				return VoidView.INSTANCE;
-			}
-			catch (Throwable e) {
-				log.warn("html2pdf execute error", e);
-				addActionError(Exceptions.getStackTrace(e));
-			}
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			
+			HttpServletRequest request = getRequest();
+			HttpServletResponse response = getResponse();
+
+			html2pdf.process(baos, request, arg.url, arg.charset);
+			
+			byte[] pdf = baos.toByteArray();
+
+			HttpServletSupport hss = new HttpServletSupport(request, response);
+			hss.setContentLength(Integer.valueOf(pdf.length));
+			hss.setContentType("application/pdf");
+			hss.setFileName(getFileNameFromUrl(arg.url) + ".pdf");
+			hss.setExpiry(0);
+
+			hss.writeResponseHeader();
+			hss.writeResponseData(pdf);
+
+			return VoidView.INSTANCE;
 		}
-		return FreemarkerView.DEFAULT;
+		catch (Throwable e) {
+			log.warn("html2pdf execute error", e);
+			addActionError(Exceptions.getStackTrace(e));
+			return FreemarkerView.DEFAULT;
+		}
 	}
 }
