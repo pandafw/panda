@@ -80,6 +80,9 @@ public abstract class UserAuthenticator {
 	
 	//----------------------------------------------------
 	protected int authenticate(ActionContext ac, String path, boolean special) {
+		// get user for later use
+		Object su = getSessionUser(ac);
+
 		Method method = ac.getMethod();
 		if (Strings.isNotEmpty(path)) {
 			// find action info
@@ -97,7 +100,6 @@ public abstract class UserAuthenticator {
 			return OK;
 		}
 		
-		Object su = getSessionUser(ac);
 		if (su == null) {
 			return UNLOGIN;
 		}
