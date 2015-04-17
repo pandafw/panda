@@ -84,10 +84,13 @@ public class FastBeans extends Beans {
 
 	@SuppressWarnings("unchecked")
 	private synchronized BeanHandler createFastBeanHandler(Class type) throws Exception {
-		String packageName = "panda.bean.fast." + type.getPackage().getName();
-		String simpleName = type.getSimpleName() + "BeanHandler";
-		String className = packageName + "." + simpleName;
 		String typeName = type.getName().replace(Classes.INNER_CLASS_SEPARATOR_CHAR, '.');
+
+		String orgPkgName = Classes.getPackageName(typeName);
+
+		String packageName = "panda.bean.fast" + (orgPkgName.isEmpty() ? "" : ('.' + orgPkgName));
+		String simpleName = Classes.getSimpleClassName(typeName);
+		String className = packageName + "." + simpleName;
 
 		try {
 			Class clazz = dynamicClassLoader.loadClass(className);
