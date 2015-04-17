@@ -1,13 +1,13 @@
 package panda.mvc.ioc.provider;
 
-import panda.ioc.Ioc;
+import panda.ioc.IocLoader;
 import panda.mvc.MvcConfig;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 
-public class ComboIocProvider extends AbstractIocProvider {
+public class ComboIocProvider extends DefaultIocProvider {
 
-	public Ioc create(MvcConfig config, String ... args) {
-		return create(new MvcComboIocLoader(config, args));
+	@Override
+	protected IocLoader getIocLoader(MvcConfig config, String ... args) {
+		return new MvcComboIocLoader(config, args);
 	}
-
 }

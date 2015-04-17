@@ -4,15 +4,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
-import javax.servlet.ServletContext;
-
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.ioc.Ioc;
-import panda.ioc.IocContext;
-import panda.ioc.ObjectProxy;
-import panda.ioc.Scope;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
@@ -237,12 +232,6 @@ public class DefaultMvcLoading implements Loading {
 		}
 		
 		Ioc ioc = Classes.born(ip).create(config, args);
-		IocContext ictx = ioc.getContext();
-		
-		// save default beans
-		ictx.save(Scope.APP, MvcConfig.class.getName(), new ObjectProxy(config));
-		ictx.save(Scope.APP, ServletContext.class.getName(), new ObjectProxy(config.getServletContext()));
-		ictx.save(Scope.APP, "$servlet", new ObjectProxy(config.getServletContext()));
 
 		config.setIoc(ioc);
 	}
