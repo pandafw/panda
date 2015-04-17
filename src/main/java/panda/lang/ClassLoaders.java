@@ -1,5 +1,6 @@
 package panda.lang;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -18,7 +19,14 @@ public class ClassLoaders {
 		Set<URL> urls = new HashSet<URL>();
 		for (ClassLoader cl : ClassLoaders.getClassLoaders()) {
 			if (cl instanceof URLClassLoader) {
-				urls.addAll(Arrays.asList(((URLClassLoader)cl).getURLs()));
+				for (URL url : ((URLClassLoader)cl).getURLs()) {
+					File f = new File(url.getFile());
+					if (f.isDirectory() && f.getParent() == null) {
+						// skip root directory
+						continue;
+					}
+					urls.add(url);
+				}
 			}
 		}
 		return urls;
