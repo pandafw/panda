@@ -109,7 +109,7 @@ public class HttpServlets {
 	}
 
 	public static String getRemoteAddr(HttpServletRequest request) {
-		String ip = request.getHeader("X-Real-IP");
+		String ip = request.getHeader(HttpHeader.X_REAL_IP);
 		if (Strings.isEmpty(ip)) {
 			ip = request.getRemoteAddr();
 		}
@@ -298,11 +298,24 @@ public class HttpServlets {
 		return sb.toString();
 	}
 
-	public static void dumpRequestTrace(HttpServletRequest request, Appendable writer) {
+	public static void dumpRequestPath(HttpServletRequest request, Appendable writer) {
 		try {
 			writer.append(request.getRemoteAddr());
+			String ip = request.getHeader(HttpHeader.X_REAL_IP);
+			if (Strings.isNotEmpty(ip)) {
+				writer.append('(').append(ip).append(')');
+			}
 			writer.append(" -> ");
 			writer.append(request.getRequestURL());
+		}
+		catch (IOException e) {
+			Exceptions.wrapThrow(e);
+		}
+	}
+
+	public static void dumpRequestTrace(HttpServletRequest request, Appendable writer) {
+		try {
+			dumpRequestPath(request, writer);
 
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
@@ -335,9 +348,7 @@ public class HttpServlets {
 
 	public static void dumpRequestDebug(HttpServletRequest request, Appendable writer) {
 		try {
-			writer.append(request.getRemoteAddr());
-			writer.append(" -> ");
-			writer.append(request.getRequestURL());
+			dumpRequestPath(request, writer);
 
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
