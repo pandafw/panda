@@ -56,7 +56,10 @@ public class AppSettings extends Settings {
 
 	public String getPropertyAsPath(String name, String defv) {
 		String dir = getProperty(name, defv);
-		if (dir != null && dir.startsWith("web://") && servlet != null) {
+		if (dir != null && dir.startsWith("web://")) {
+			if (servlet == null) {
+				throw new IllegalStateException("Null servlet!");
+			}
 			dir = servlet.getRealPath(dir.substring(6));
 		}
 		return dir;

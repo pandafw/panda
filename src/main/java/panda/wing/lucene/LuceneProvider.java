@@ -12,13 +12,14 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
+import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.constant.SC;
 import panda.wing.util.AppSettings;
 
 
-@IocBean
+@IocBean(create="initialize", depose="destroy")
 public class LuceneProvider {
 	private static final Log log = Logs.getLog(LuceneProvider.class);
 	
@@ -27,6 +28,19 @@ public class LuceneProvider {
 	protected AppSettings settings;
 	
 	protected LuceneWrapper luceneWrapper;
+
+	/**
+	 * initialize
+	 * @throws IOException
+	 */
+	public void initialize() throws IOException {
+		if (Systems.IS_OS_APPENGINE) {
+			
+		}
+		else {
+			initLocalLucene();
+		}
+	}
 	
 	/**
 	 * @return the lucene wrapper
@@ -34,7 +48,7 @@ public class LuceneProvider {
 	public LuceneWrapper getLuceneWrapper() {
 		return luceneWrapper;
 	}
-
+	
 	/**
 	 * @param luceneWrapper the lucene wrapper to set
 	 */
@@ -56,19 +70,23 @@ public class LuceneProvider {
 			}
 		}
 		
-		LuceneWrapper lw = new LuceneWrapper(this.luceneWrapper);
-
 		log.info("set lucene: " + luceneWrapper);
-		this.luceneWrapper.copy(luceneWrapper);
-		
-		// clear old lucene
-		if (lw != null) {
-			try {
-				lw.close();
-				lw.clean();
-			}
-			catch (IOException e) {
-				log.warn("Failed to close lucene: " + lw, e);
+		if (this.luceneWrapper == null) {
+			this.luceneWrapper = luceneWrapper;
+		}
+		else {
+			LuceneWrapper lw = new LuceneWrapper(this.luceneWrapper);
+			this.luceneWrapper.copy(luceneWrapper);
+			
+			// clear old lucene
+			if (lw != null) {
+				try {
+					lw.close();
+					lw.clean();
+				}
+				catch (IOException e) {
+					log.warn("Failed to close lucene: " + lw, e);
+				}
 			}
 		}
 	}

@@ -12,9 +12,6 @@ public interface AppConstants extends MvcConstants {
 	/** The load task keys */
 	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
 
-	/** The lucene */
-	public static final String PANDA_LUCENE = "panda.lucene";
-
 	/** The authenticate */
 	public static final String PANDA_AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
 	
