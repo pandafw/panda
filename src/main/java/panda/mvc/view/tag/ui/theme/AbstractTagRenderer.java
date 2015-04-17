@@ -353,7 +353,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected void write(String s) throws IOException {
-		if (s != null) {
+		if (Strings.isNotEmpty(s)) {
 			writer.write(s);
 		}
 	}

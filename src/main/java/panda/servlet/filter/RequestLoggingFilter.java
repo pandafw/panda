@@ -151,7 +151,12 @@ public class RequestLoggingFilter implements Filter {
 		}
 		catch (Throwable e) {
 			HttpServlets.logException(request, e);
-			frw.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			if (frw != null) {
+				frw.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			}
+			else {
+				((HttpServletResponse)res).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			}
 		}
 		finally {
 			if (accessLog != null) {

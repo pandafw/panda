@@ -127,9 +127,7 @@ public class Component {
 		List<Object> cs = context.getTops();
 		int p = cs.indexOf(this);
 		if (p >= 0) {
-			int start = cs.size() - p - 1;
-
-			for (int i = start; i >= 0; i--) {
+			for (int i = p - 1; i >= 0; i--) {
 				Component c = (Component)cs.get(i);
 				if (clazz.isAssignableFrom(c.getClass()) && c != this) {
 					return c;
