@@ -70,7 +70,7 @@ public class ActionConsts extends ActionSupport {
 			return (Map)v;
 		}
 
-		v = getTextAsMap(key, def);
+		v = super.getTextAsMap(key, def);
 		if (v == null) {
 			v = Objects.NULL;
 		}

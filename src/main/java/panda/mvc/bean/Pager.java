@@ -61,7 +61,7 @@ public class Pager implements Cloneable, Serializable {
 				}
 				else {
 					long p = total / limit;
-					if (total % limit == 0) {
+					if (total % limit != 0) {
 						p++;
 					}
 					if (page > p) {
