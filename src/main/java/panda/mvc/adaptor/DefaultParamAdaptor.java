@@ -352,17 +352,37 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	}
 
 	protected Object adaptByParamAnno(ActionContext ac, String name, Type type, Param param) {
+		Object o;
 		String pm = param.value();
 
 		// FORM
 		if (Strings.isEmpty(pm)) {
-			return ejectByAll(ac, type, param.format());
+			o = ejectByAll(ac, type, param.format());
 		}
-		if (pm.endsWith(".*")) {
-			return ejectByPrefix(ac, type, pm.substring(0, pm.length() - 1), param.format());
+		else if (pm.endsWith(".*")) {
+			o = ejectByPrefix(ac, type, pm.substring(0, pm.length() - 1), param.format());
+		}
+		else {
+			o = ejectByNamedParam(ac, type, pm, param.format());
 		}
 		
-		return ejectByNamedParam(ac, type, pm, param.format());
+		if (o instanceof String) {
+			switch (param.strip()) {
+			case STRIP_TO_NULL:
+				o = Strings.stripToNull((String)o);
+				break;
+			case STRIP_TO_EMPTY:
+				o = Strings.stripToEmpty((String)o);
+				break;
+			case TRIM_TO_NULL:
+				o = Strings.trimToNull((String)o);
+				break;
+			case TRIM_TO_EMPTY:
+				o = Strings.trimToEmpty((String)o);
+				break;
+			}
+		}
+		return o;
 	}
 	
 	protected Object ejectByNamedParam(ActionContext ac, Type type, String name, String format) {

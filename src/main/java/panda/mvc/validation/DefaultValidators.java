@@ -117,11 +117,6 @@ public class DefaultValidators implements Validators {
 		}
 
 		Annotation[][] pass = method.getParameterAnnotations();
-		if (pass.length == 1 && !DefaultParamAdaptor.hasParam(pass[0])) {
-			// TODO
-			return;
-		}
-
 		for (int i = 0; i < pass.length; i++) {
 			Param param = null;
 			Validates vs = null;

@@ -18,6 +18,12 @@ package panda.mvc;
  * !!! ThreadSafe !!!
  */
 public interface ParamAdaptor {
+	public static final char ORIGINAL = 'o';
+	public static final char STRIP_TO_NULL = 'N';
+	public static final char STRIP_TO_EMPTY = 'E';
+	public static final char TRIM_TO_NULL = 'n';
+	public static final char TRIM_TO_EMPTY = 'e';
+
 	/**
 	 * 你的适配器需要根据传入的 request 生成函数的调用参数
 	 * 

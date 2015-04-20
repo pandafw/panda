@@ -51,7 +51,13 @@ public interface Validators {
 	public static final String MSGID_REQUIRED = "validation-required";
 	public static final String MSGID_STRING_LENTH = "validation-string-length";
 	public static final String MSGID_EMAIL = "validation-email";
+	
+	// -------------------------------------------------------
+	// extend validation message id
+	//
 	public static final String MSGID_PASSWORD = "validation-password";
+	public static final String MSGID_PASSWORD_NOT_SAME = "validation-password-notsame";
+	public static final String MSGID_PASSWORD_INCORRECT = "validation-password-incorrect";
 	
 	/**
 	 * @param ac action context

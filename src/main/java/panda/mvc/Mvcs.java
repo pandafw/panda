@@ -139,7 +139,8 @@ public abstract class Mvcs {
 					val = JsonArray.fromJson(s.substring(1));
 				}
 				else if (c0 == Marks.SHARP && c1 == Marks.PARENTHESES_LEFT && cx == Marks.PARENTHESES_RIGHT) {
-					val = ac.text(s.substring(2, s.length() - 1));
+					String k = s.substring(2, s.length() - 1);
+					val = ac.text(k, k, arg);
 				}
 			}
 		}

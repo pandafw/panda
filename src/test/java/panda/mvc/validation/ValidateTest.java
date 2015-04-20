@@ -121,6 +121,24 @@ public class ValidateTest extends AbstractMvcTestCase {
 	}
 
 	@Test
+	public void testVisitEl2Ok() throws Throwable {
+		request.setPathInfo("/visitOne");
+		request.addParameter("one.el", "ok");
+		request.addParameter("one.el2", "ok");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitEl2Err() throws Throwable {
+		request.setPathInfo("/visitOne");
+		request.addParameter("one.el", "ok");
+		request.addParameter("one.el2", "ng");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"param\":{\"errors\":{\"one.el2\":[\"'ng', 'top.value == top.parent.value.el'\"]}}}", response.getContentAsString());
+	}
+
+	@Test
 	public void testVisitEmailOk() throws Throwable {
 		request.setPathInfo("/visitOne");
 		request.addParameter("one.email", "a@a.ca");

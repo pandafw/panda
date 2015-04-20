@@ -23,6 +23,9 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.EL, params="{el: 'top.value == \"ok\"'}", message="'${top.value}', '${top.el}'"))
 	public String el;
 	
+	@Validates(@Validate(value=Validators.EL, params="{el: 'top.value == top.parent.value.el'}", message="'${top.value}', '${top.el}'"))
+	public String el2;
+	
 	@Validates(@Validate(value=Validators.EMAIL, message="'${top.value}' is not a email."))
 	public String email;
 
