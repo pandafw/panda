@@ -98,9 +98,17 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			log.debug("Found a @IocBean of " + clazz);
 		}
 		
-		IocObject iocObject = createIocObject(clazz);
-		if (iocObject != null) {
-			beans.put(beanName, iocObject);
+		try {
+			IocObject iocObject = createIocObject(clazz);
+			if (iocObject != null) {
+				beans.put(beanName, iocObject);
+			}
+		}
+		catch (SecurityException e) {
+			log.warn("Failed to createIocObject(" + clazz + "): " + e.getMessage());
+		}
+		catch (NoClassDefFoundError e) {
+			log.warn("Failed to createIocObject(" + clazz + "): " + e.getMessage());
 		}
 	}
 	
