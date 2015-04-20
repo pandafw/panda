@@ -68,37 +68,34 @@ servlet-error-request-url=请求网页: <span class="request-url">{0}</span>
 servlet-error-exception=例外信息:
 
 
-#invalid.fieldvalue.xxx=
-xwork.default.invalid.fieldvalue=该项目内容不正确。
 
 #validation error message
 validation-incorrect=该项目内容不正确。
 validation-empty=该项目必须为空。
 validation-required=请输入该项目内容。
-validation-requiredcollection=请输入该项目内容。
-validation-requiredstring=请输入该项目内容。
 validation-requiredfile=请指定上传文件。
 validation-requiredimage=请指定上传图像文件。
-validation-binarylength=输入文字字数(${top.binSize})不正确。请输入\
+validation-binary-length=输入文字字数(${top.binSize})不正确。请输入\
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 的文字。
-validation-daterange=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
+validation-date-to=请输入開始日期之后的日期。
+validation-date-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
 (top.min != null ? (top.min + "之后") : \
 (top.max != null ? (top.max + "之前") : ""))}\
 的日期。
-validation-numberrange=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+validation-number-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\
 的数字。
-validation-filelength=文件大小${top.fileSize}不正确。请指定\
+validation-file-length=文件大小${top.fileSize}不正确。请指定\
 ${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
 (top.minLength != null ? (top.minFileSize + "以上") : \
 (top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 的文件。
 validation-image=图像文件格式不正确。
-validation-imagesize=图像大小${top.width}x${top.height}不正确。请指定\
+validation-image-size=图像大小${top.width}x${top.height}不正确。请指定\
 ${(top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "~" + top.maxWidth + "以内") : \
 (top.minWidth != null ? ("宽" + top.minWidth + "以上") : \
 (top.maxWidth != null ? ("宽" + top.maxWidth + "以下") : ""))}\
@@ -107,7 +104,13 @@ ${(top.minHeight != null && top.maxHeight != null) ? ("高" + top.minHeight + "~
 (top.minHeight != null ? ("高" + top.minHeight + "以上") : \
 (top.maxHeight != null ? ("高" + top.maxHeight + "以下") : ""))}\
 的图像文件。
-validation-stringlength=输入文字数：${top.length}。请输入\
+validation-number-range=The number must be \
+${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
+(top.min != null ? (">= " + top.min) : \
+(top.max != null ? ("<= " + top.max) : ""))}\
+.
+validation-number-to=The number must be larger than start number.
+validation-string-length=输入文字数：${top.length}。请输入\
 ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "个字符以内") : \
 (top.minLength != null ? (top.minLength + "个字符以上") : \
 (top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
