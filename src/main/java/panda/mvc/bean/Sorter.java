@@ -104,6 +104,11 @@ public class Sorter implements Cloneable, Serializable {
 		setDirection(direction);
 	}
 
+	public void clear() {
+		column = null;
+		direction = null;
+	}
+	
 	/**
 	 * @return a string representation of the object.
 	 */
