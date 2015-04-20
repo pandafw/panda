@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.bind.json.JsonObject;
 import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
@@ -1404,23 +1405,14 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractAction {
 	 */
 	protected void addOrder(GenericQuery q) {
 		if (Strings.isEmpty(sorter.getColumn())) {
-			String tx = context.getMethodName() + ActionRC.SORTER_COLUMN_SUFFIX;
+			String tx = context.getMethodName() + ActionRC.SORTER_SUFFIX;
 			String sc = getText(tx, (String)null);
-			if (sc == null && !ActionRC.LIST_SORTER_COLUMN.equals(tx)) {
-				sc = getText(ActionRC.LIST_SORTER_COLUMN, (String)null);
+			if (sc == null && !ActionRC.LIST_SORTER.equals(tx)) {
+				sc = getText(ActionRC.LIST_SORTER, (String)null);
 			}
 			if (Strings.isNotEmpty(sc)) {
-				sorter.setColumn(sc);
-			}
-		}
-		if (Strings.isEmpty(sorter.getDirection())) {
-			String tx = context.getMethodName() + ActionRC.SORTER_DIRECTION_SUFFIX;
-			String sd = getText(tx, (String)null);
-			if (sd == null && !ActionRC.LIST_SORTER_DIRECTION.equals(tx)) {
-				sd = getText(ActionRC.LIST_SORTER_DIRECTION, (String)null);
-			}
-			if (Strings.isNotEmpty(sd)) {
-				sorter.setDirection(sd);
+				JsonObject jo = JsonObject.fromJson(sc);
+				Castors.scastTo(jo, sorter);
 			}
 		}
 		if (!Strings.isEmpty(sorter.getColumn())) {

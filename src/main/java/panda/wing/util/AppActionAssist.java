@@ -1,7 +1,12 @@
 package panda.wing.util;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import panda.bind.json.JsonObject;
+import panda.bind.json.JsonSerializer;
+import panda.cast.Castors;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -11,6 +16,7 @@ import panda.lang.Systems;
 import panda.lang.time.DateTimes;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
+import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.util.StateProvider;
@@ -143,40 +149,39 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * load sorter parameters from stateProvider
 	 * @param sorter sorter
 	 */
-	public void loadSorterParams(Sorter sorter) {
+	public void loadSorterParams(Sorter sorter, Map<String, String> orders) {
 		StateProvider sp = getState();
 		if (sp == null) {
 			return;
 		}
-				
-		if (Strings.isEmpty(sorter.getColumn())) {
-			String sc = (String)sp.loadState("list.sc");
-			if (Strings.isEmpty(sc)) {
-				String tx = getMethodName() + ActionRC.SORTER_COLUMN_SUFFIX;
-				sc = getText(tx, (String)null);
-				if (sc == null && !ActionRC.LIST_SORTER_COLUMN.equals(tx)) {
-					sc = getText(ActionRC.LIST_SORTER_COLUMN, (String)null);
-				}
-			}
-			if (Strings.isNotEmpty(sc)) {
-				sorter.setColumn(sc);
+		
+		// first check
+		if (Strings.isNotEmpty(sorter.getColumn()) && orders.containsKey(sorter.getColumn())) {
+			return;
+		}
+		
+		String sc = (String)sp.loadState("sorter");
+		if (Strings.isEmpty(sc)) {
+			String tx = getMethodName() + ActionRC.SORTER_SUFFIX;
+			sc = getText(tx, null);
+			if (sc == null && !ActionRC.LIST_SORTER.equals(tx)) {
+				sc = getText(ActionRC.LIST_SORTER, null);
 			}
 		}
-		if (Strings.isNotEmpty(sorter.getColumn())) {
-			if (Strings.isEmpty(sorter.getDirection())) {
-				String sd = (String)sp.loadState("list.sd");
-				if (Strings.isEmpty(sd)) {
-					String tx = getMethodName() + ActionRC.SORTER_DIRECTION_SUFFIX;
-					sd = getText(tx, (String)null);
-					if (sd == null && !ActionRC.LIST_SORTER_DIRECTION.equals(tx)) {
-						sd = getText(ActionRC.LIST_SORTER_DIRECTION, (String)null);
-					}
-					if (sd == null) {
-						sd = Sorter.ASC;
-					}
-				}
-				sorter.setDirection(sd);
-			}
+		if (Strings.isNotEmpty(sc)) {
+			JsonObject jo = JsonObject.fromJson(sc);
+			Castors.scastTo(jo, sorter);
+		}
+
+		// second check
+		if (Strings.isNotEmpty(sorter.getColumn()) && orders.containsKey(sorter.getColumn())) {
+			return;
+		}
+		
+		for (Entry<String, String> en : orders.entrySet()) {
+			sorter.setColumn(en.getKey());
+			sorter.setDirection(en.getValue());
+			return;
 		}
 	}
 	
@@ -186,7 +191,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 */
 	public void loadLimitParams(Pager pager) {
 		if (pager.getLimit() == null || pager.getLimit() < 1) {
-			pager.setLimit(Numbers.toLong((String)getState().loadState("list.pl"), 0L));
+			pager.setLimit(Numbers.toLong((String)getState().loadState("pager"), 0L));
 		}
 		if (pager.getLimit() == null || pager.getLimit() < 1) {
 			String tx = getMethodName() + ActionRC.PAGER_LIMIT_SUFFIX;
@@ -207,8 +212,11 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * @param sorter sorter
 	 */
 	public void saveSorterParams(Sorter sorter) {
-		getState().saveState("list.sc", sorter.getColumn());
-		getState().saveState("list.sd", sorter.getDirection());
+		JsonSerializer js = new JsonSerializer();
+		js.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(true));
+		String ss = js.serialize(sorter);
+
+		getState().saveState("sorter", ss);
 	}
 	
 	/**

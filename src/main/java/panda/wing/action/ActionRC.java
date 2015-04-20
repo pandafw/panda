@@ -25,25 +25,15 @@ public interface ActionRC {
 	public final static String PAGER_MAX_LIMIT = "pager-max-limit";
 
 	/**
-	 * SORTER_COLUMN_SUFFIX = "-sorter-column";
+	 * SORTER_SUFFIX = "-sorter";
 	 */
-	public final static String SORTER_COLUMN_SUFFIX = "-sorter-column";
+	public final static String SORTER_SUFFIX = "-sorter";
 	
 	/**
-	 * LIST_SORTER_COLUMN = "list-sorter-column";
+	 * LIST_SORTER = "list-sorter";
 	 */
-	public final static String LIST_SORTER_COLUMN = "list-sorter-column";
+	public final static String LIST_SORTER = "list-sorter";
 	
-	/**
-	 * SORTER_DIRECTION_SUFFIX = "-sorter-direction";
-	 */
-	public final static String SORTER_DIRECTION_SUFFIX = "-sorter-direction";
-	
-	/**
-	 * LIST_SORTER_DIRECTION = "list-sorter-direction";
-	 */
-	public final static String LIST_SORTER_DIRECTION = "list-sorter-direction";
-
 	/**
 	 * PAGER_LIMIT_SUFFIX = "-pager-limit";
 	 */
