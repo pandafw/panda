@@ -16,7 +16,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean {
 
-	private static final long serialVersionUID = 1053741083L;
+	private static final long serialVersionUID = 1341528743L;
 
 	/**
 	 * Constructor
@@ -51,53 +51,30 @@ public class Property extends SUBean {
 	 *----------------------------------------------------------------------*/
 	@Id(start=1001)
 	@Comment("id")
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
 	protected Long id;
 
 	@Column(size=100, notNull=true)
 	@Comment("class name")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
-	})
 	protected String clazz;
 
 	@Column(size=2, notNull=true)
 	@Comment("language code")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
-	})
 	protected String language;
 
 	@Column(size=2, notNull=true)
 	@Comment("country code")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", message="validation-stringlength"), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant"), 
-	})
 	protected String country;
 
 	@Column(size=50, notNull=true)
 	@Comment("property name")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength"), 
-	})
 	protected String name;
 
 	@Column(size=5000)
 	@Comment("property value")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength"), 
-	})
 	protected String value;
 
 	@Column(size=1000)
 	@Comment("memo")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", message="validation-stringlength")
-	})
 	protected String memo;
 
 
@@ -107,6 +84,9 @@ public class Property extends SUBean {
 	/**
 	 * @return the id
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
+	})
 	public Long getId() {
 		return id;
 	}
@@ -121,6 +101,9 @@ public class Property extends SUBean {
 	/**
 	 * @return the clazz
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
+	})
 	public String getClazz() {
 		return clazz;
 	}
@@ -135,6 +118,10 @@ public class Property extends SUBean {
 	/**
 	 * @return the language
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+	})
 	public String getLanguage() {
 		return language;
 	}
@@ -149,6 +136,10 @@ public class Property extends SUBean {
 	/**
 	 * @return the country
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", message="validation-stringlength"), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant"), 
+	})
 	public String getCountry() {
 		return country;
 	}
@@ -163,6 +154,9 @@ public class Property extends SUBean {
 	/**
 	 * @return the name
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength"), 
+	})
 	public String getName() {
 		return name;
 	}
@@ -177,6 +171,9 @@ public class Property extends SUBean {
 	/**
 	 * @return the value
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength"), 
+	})
 	public String getValue() {
 		return value;
 	}
@@ -191,6 +188,9 @@ public class Property extends SUBean {
 	/**
 	 * @return the memo
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", message="validation-stringlength")
+	})
 	public String getMemo() {
 		return memo;
 	}

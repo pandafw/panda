@@ -17,7 +17,7 @@ import panda.wing.entity.SUBean;
 })
 public class Template extends SUBean {
 
-	private static final long serialVersionUID = 1844881784L;
+	private static final long serialVersionUID = 1559167014L;
 
 	/**
 	 * Constructor
@@ -48,39 +48,22 @@ public class Template extends SUBean {
 	 *----------------------------------------------------------------------*/
 	@Id(start=1001)
 	@Comment("id")
-	@Validates({
-		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
-	})
 	protected Long id;
 
 	@Column(size=100, notNull=true)
 	@Comment("file name")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
-	})
 	protected String name;
 
 	@Column(notNull=true)
 	@Comment("language code")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
-	})
 	protected String language;
 
 	@Column(size=2, notNull=true)
 	@Comment("country code")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
-	})
 	protected String country;
 
 	@Column(type=DaoTypes.CLOB, size=50000)
 	@Comment("template source")
-	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50000 }", msgId=Validators.MSGID_STRING_LENTH)
-	})
 	protected String source;
 
 
@@ -90,6 +73,9 @@ public class Template extends SUBean {
 	/**
 	 * @return the id
 	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_NUMBER)
+	})
 	public Long getId() {
 		return id;
 	}
@@ -104,6 +90,9 @@ public class Template extends SUBean {
 	/**
 	 * @return the name
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
+	})
 	public String getName() {
 		return name;
 	}
@@ -118,6 +107,10 @@ public class Template extends SUBean {
 	/**
 	 * @return the language
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+	})
 	public String getLanguage() {
 		return language;
 	}
@@ -132,6 +125,10 @@ public class Template extends SUBean {
 	/**
 	 * @return the country
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
+	})
 	public String getCountry() {
 		return country;
 	}
@@ -146,6 +143,9 @@ public class Template extends SUBean {
 	/**
 	 * @return the source
 	 */
+	@Validates({
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50000 }", msgId=Validators.MSGID_STRING_LENTH)
+	})
 	public String getSource() {
 		return source;
 	}
