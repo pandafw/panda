@@ -81,6 +81,17 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 <#if p.comment?has_content>
 	@Comment("${p.comment}")
 </#if>
+	${p.modifier} ${p.simpleJavaType} ${p.name}<#if p.initValue?has_content> = ${p.initValue}</#if>;
+
+</#list>
+
+	/*----------------------------------------------------------------------*
+	 * Getter & Setter
+	 *----------------------------------------------------------------------*/
+<#list entity.propertyList as p>
+	/**
+	 * @return the ${p.name}
+	 */
 <#-- validation -->
 	<#assign type = p.simpleJavaType/>
 	<#if type?ends_with('[]')>
@@ -99,17 +110,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	</#if>
 	})
 	</#if>
-	${p.modifier} ${p.simpleJavaType} ${p.name}<#if p.initValue?has_content> = ${p.initValue}</#if>;
-
-</#list>
-
-	/*----------------------------------------------------------------------*
-	 * Getter & Setter
-	 *----------------------------------------------------------------------*/
-<#list entity.propertyList as p>
-	/**
-	 * @return the ${p.name}
-	 */
+<#-- validation -->
 	public ${p.simpleJavaType} <#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}() {
 	<#assign getterTrim = "" />
 	<#if p.getterTrim??>
