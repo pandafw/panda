@@ -287,6 +287,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		vtmap.put("decimal", "Validators.DECIMAL");
 
 		vtmap.put("file", "Validators.FILE");
+		vtmap.put("filelength", "Validators.FILE");
 		vtmap.put("image", "Validators.IMAGE");
 
 		vtmap.put("constant", "Validators.CONSTANT");
@@ -328,8 +329,10 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		vmmap.put("cast-Date", "Validators.MSGID_CAST_DATE");
 		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
+		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
 
 		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
+		vmmap.put("filelength", "Validators.MSGID_FILE_LENTH");
 		vmmap.put("constant", "Validators.MSGID_CONSTANT");
 		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
 
