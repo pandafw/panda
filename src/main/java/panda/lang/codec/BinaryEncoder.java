@@ -3,7 +3,7 @@ package panda.lang.codec;
 /**
  * Defines common encoding methods for byte array encoders.
  */
-public interface BinaryEncoder {
+public interface BinaryEncoder extends Encoder {
 	/**
 	 * Encodes a byte array and return the encoded data as a byte array.
 	 * 

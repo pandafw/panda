@@ -1093,17 +1093,17 @@ public class Base64Test {
         final byte[][] ids = new byte[4][];
 
         // ids[0] was chosen so that it encodes with at least one +.
-        ids[0] = Hex.decodeHex(Strings.getBytesUtf8("94ed8d0319e4493399560fb67404d370"));
+        ids[0] = Hex.decodeHex(("94ed8d0319e4493399560fb67404d370"));
 
         // ids[1] was chosen so that it encodes with both / and +.
-        ids[1] = Hex.decodeHex(Strings.getBytesUtf8("2bf7cc2701fe4397b49ebeed5acc7090"));
+        ids[1] = Hex.decodeHex(("2bf7cc2701fe4397b49ebeed5acc7090"));
 
         // ids[2] was chosen so that it encodes with at least one /.
-        ids[2] = Hex.decodeHex(Strings.getBytesUtf8("64be154b6ffa40258d1a01288e7c31ca"));
+        ids[2] = Hex.decodeHex(("64be154b6ffa40258d1a01288e7c31ca"));
 
         // ids[3] was chosen so that it encodes with both / and +, with /
         // right at the beginning.
-        ids[3] = Hex.decodeHex(Strings.getBytesUtf8("ff7f8fc01cdb471a8c8b5a9306183fe8"));
+        ids[3] = Hex.decodeHex(("ff7f8fc01cdb471a8c8b5a9306183fe8"));
 
         final byte[][] standard = new byte[4][];
         standard[0] = Strings.getBytesUtf8("lO2NAxnkSTOZVg+2dATTcA==");
@@ -1181,7 +1181,7 @@ public class Base64Test {
         final byte[] b1 = Strings.getBytesUtf8("Hello World");
         final byte[] b2 = new byte[0];
         final byte[] b3 = null;
-        final byte[] b4 = Hex.decodeHex(Strings.getBytesUtf8("2bf7cc2701fe4397b49ebeed5acc7090"));  // for url-safe tests
+        final byte[] b4 = Hex.decodeHex(("2bf7cc2701fe4397b49ebeed5acc7090"));  // for url-safe tests
 
         assertEquals("byteToString Hello World", "SGVsbG8gV29ybGQ=", base64.encodeToString(b1));
         assertEquals("byteToString static Hello World", "SGVsbG8gV29ybGQ=", Base64.encodeBase64String(b1));
@@ -1202,7 +1202,7 @@ public class Base64Test {
         final String s3 = null;
         final String s4a = "K/fMJwH+Q5e0nr7tWsxwkA==\r\n";
         final String s4b = "K_fMJwH-Q5e0nr7tWsxwkA";
-        final byte[] b4 = Hex.decodeHex(Strings.getBytesUtf8("2bf7cc2701fe4397b49ebeed5acc7090"));  // for url-safe tests
+        final byte[] b4 = Hex.decodeHex(("2bf7cc2701fe4397b49ebeed5acc7090"));  // for url-safe tests
 
         assertEquals("StringToByte Hello World", "Hello World", Strings.newStringUtf8(base64.decode(s1)));
         assertEquals("StringToByte Hello World", "Hello World", Strings.newStringUtf8((byte[])base64.decode((Object)s1)));

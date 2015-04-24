@@ -12,7 +12,6 @@ import panda.cast.CastContext;
 import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
 import panda.io.Streams;
-import panda.lang.Charsets;
 
 
 /**
@@ -29,7 +28,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		this.dateCastor = dateCastor;
 	}
 
-	protected boolean write(Object value, Appendable a, CastContext context) {
+	protected boolean write(Object value, Appendable a, CastContext cc) {
 		try {
 			if (value instanceof Class) {
 				a.append(((Class)value).getName().toString());
@@ -51,10 +50,10 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			}
 			else if (value instanceof byte[]) {
 				InputStream bis = new ByteArrayInputStream((byte[])value);
-				Streams.copy(bis, a, Charsets.UTF_8);
+				Streams.copy(bis, a, cc.getEncoding());
 			}
 			else if (value instanceof InputStream) {
-				Streams.copy((InputStream)value, a, Charsets.UTF_8);
+				Streams.copy((InputStream)value, a, cc.getEncoding());
 			}
 			else if (value instanceof Number || value instanceof Boolean) {
 				a.append(value.toString());
@@ -63,7 +62,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				a.append((Character)value);
 			}
 			else {
-				castError(value, context);
+				castError(value, cc);
 				return false;
 			}
 			return true;
@@ -72,7 +71,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			throw e;
 		}
 		catch (Exception e) {
-			castError(value, context, e);
+			castError(value, cc, e);
 			return false;
 		}
 	}

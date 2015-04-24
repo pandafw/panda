@@ -131,7 +131,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 */
 	protected static final byte PAD_DEFAULT = '='; // Allow static access to default
 
-	protected final byte PAD = PAD_DEFAULT; // instance variable just in case it needs to vary later
+	protected final byte pad; // instance variable just in case it needs to vary later
 
 	/** Number of bytes in each full block of unencoded data, e.g. 4 for Base64 and 5 for Base32 */
 	private final int unencodedBlockSize;
@@ -162,11 +162,28 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 */
 	protected BaseNCodec(final int unencodedBlockSize, final int encodedBlockSize, final int lineLength,
 			final int chunkSeparatorLength) {
+		this(unencodedBlockSize, encodedBlockSize, lineLength, chunkSeparatorLength, PAD_DEFAULT);
+	}
+
+	/**
+	 * Note <code>lineLength</code> is rounded down to the nearest multiple of
+	 * {@link #encodedBlockSize} If <code>chunkSeparatorLength</code> is zero, then chunking is
+	 * disabled.
+	 * 
+	 * @param unencodedBlockSize the size of an unencoded block (e.g. Base64 = 3)
+	 * @param encodedBlockSize the size of an encoded block (e.g. Base64 = 4)
+	 * @param lineLength if &gt; 0, use chunking with a length <code>lineLength</code>
+	 * @param chunkSeparatorLength the chunk separator length, if relevant
+	 * @param pad byte used as padding byte.
+	 */
+	protected BaseNCodec(final int unencodedBlockSize, final int encodedBlockSize, final int lineLength,
+			final int chunkSeparatorLength, final byte pad) {
 		this.unencodedBlockSize = unencodedBlockSize;
 		this.encodedBlockSize = encodedBlockSize;
 		final boolean useChunking = lineLength > 0 && chunkSeparatorLength > 0;
 		this.lineLength = useChunking ? (lineLength / encodedBlockSize) * encodedBlockSize : 0;
 		this.chunkSeparatorLength = chunkSeparatorLength;
+		this.pad = pad;
 	}
 
 	/**
@@ -285,6 +302,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 *         the byte[] supplied.
 	 * @throws EncoderException if the parameter supplied is not of type byte[]
 	 */
+	@Override
 	public Object encode(final Object obj) throws EncoderException {
 		if (!(obj instanceof byte[])) {
 			throw new EncoderException("Parameter supplied to Base-N encode is not a byte[]");
@@ -324,6 +342,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 *         or String supplied.
 	 * @throws DecoderException if the parameter supplied is not of type byte[]
 	 */
+	@Override
 	public Object decode(final Object obj) throws DecoderException {
 		if (obj instanceof byte[]) {
 			return decode((byte[])obj);
@@ -352,6 +371,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 * @param pArray A byte array containing Base-N character data
 	 * @return a byte array containing binary data
 	 */
+	@Override
 	public byte[] decode(final byte[] pArray) {
 		if (pArray == null || pArray.length == 0) {
 			return pArray;
@@ -370,6 +390,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 * @param pArray a byte array containing binary data
 	 * @return A byte array containing only the basen alphabetic character data
 	 */
+	@Override
 	public byte[] encode(final byte[] pArray) {
 		if (pArray == null || pArray.length == 0) {
 			return pArray;
@@ -408,7 +429,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 	 */
 	public boolean isInAlphabet(final byte[] arrayOctet, final boolean allowWSPad) {
 		for (int i = 0; i < arrayOctet.length; i++) {
-			if (!isInAlphabet(arrayOctet[i]) && (!allowWSPad || (arrayOctet[i] != PAD) && !isWhiteSpace(arrayOctet[i]))) {
+			if (!isInAlphabet(arrayOctet[i]) && (!allowWSPad || (arrayOctet[i] != pad) && !isWhiteSpace(arrayOctet[i]))) {
 				return false;
 			}
 		}
@@ -441,7 +462,7 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 			return false;
 		}
 		for (final byte element : arrayOctet) {
-			if (PAD == element || isInAlphabet(element)) {
+            if (pad == element || isInAlphabet(element)) {
 				return true;
 			}
 		}

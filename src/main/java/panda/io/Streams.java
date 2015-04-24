@@ -45,6 +45,7 @@ import panda.io.stream.ClosedInputStream;
 import panda.io.stream.ClosedOutputStream;
 import panda.io.stream.NullOutputStream;
 import panda.io.stream.StringBuilderWriter;
+import panda.io.stream.WriterOutputStream;
 import panda.lang.Arrays;
 import panda.lang.CharSequences;
 import panda.lang.Charsets;
@@ -1638,6 +1639,21 @@ public class Streams {
 		return copyLarge(input, output, new byte[bufferSize]);
 	}
 
+	public static long copyUntil(final InputStream input, final OutputStream output, final int end)
+			throws IOException {
+		int ch;
+		int count = 0;
+		while (EOF != (ch = input.read())) {
+			if (end == ch) {
+				output.flush();
+				return count;
+			}
+			output.write(ch);
+			count++;
+		}
+		throw new IOException("Unexpected EOF: " + (char)end + " is expected!");
+	}
+
 	/**
 	 * Copies bytes from a large (over 2GB) <code>InputStream</code> to an <code>OutputStream</code>
 	 * .
@@ -1761,8 +1777,8 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final InputStream input, final Appendable output) throws IOException {
-		copy(input, output, Charset.defaultCharset());
+	public static int copy(final InputStream input, final Appendable output) throws IOException {
+		return copy(input, output, Charset.defaultCharset());
 	}
 
 	/**
@@ -1783,10 +1799,16 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final InputStream input, final Appendable output, final Charset encoding)
+	public static int copy(final InputStream input, final Appendable output, final Charset encoding)
 			throws IOException {
 		final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(encoding));
-		copy(in, output);
+		return copy(in, output);
+	}
+
+	public static long copyUntil(final InputStream input, final Appendable output, final int ch, final Charset encoding)
+			throws IOException {
+		final WriterOutputStream ou = new WriterOutputStream(output, Charsets.toCharset(encoding));
+		return copyUntil(input, ou, ch);
 	}
 
 	/**
@@ -1807,9 +1829,19 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final InputStream input, final Appendable output, final String encoding)
+	public static int copy(final InputStream input, final Appendable output, final String encoding)
 			throws IOException {
-		copy(input, output, Charsets.toCharset(encoding));
+		return copy(input, output, Charsets.toCharset(encoding));
+	}
+
+	public static long copyUntil(final InputStream input, final Appendable output, int end, final String encoding)
+			throws IOException {
+		return copyUntil(input, output, end, Charsets.toCharset(encoding));
+	}
+
+	public static long copyUntil(final InputStream input, final Appendable output, final int end)
+			throws IOException {
+		return copyUntil(input, output, end, Charsets.CS_UTF_8);
 	}
 
 	// copy from Reader
@@ -1962,12 +1994,15 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final Reader input, final OutputStream output) throws IOException {
+	public static int copy(final Reader input, final OutputStream output) throws IOException {
 		OutputStreamWriter out = new OutputStreamWriter(output);
-		copy(input, out);
+		
+		int cnt = copy(input, out);
 		// XXX Unless anyone is planning on rewriting OutputStreamWriter, we
 		// have to flush here.
 		out.flush();
+		
+		return cnt;
 	}
 
 	/**
@@ -1990,13 +2025,17 @@ public class Streams {
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void copy(final Reader input, final OutputStream output, final Charset encoding)
+	public static int copy(final Reader input, final OutputStream output, final Charset encoding)
 			throws IOException {
 		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(encoding));
-		copy(input, out);
+		
+		int cnt = copy(input, out);
+
 		// XXX Unless anyone is planning on rewriting OutputStreamWriter,
 		// we have to flush here.
 		out.flush();
+		
+		return cnt;
 	}
 
 	/**
@@ -2018,12 +2057,10 @@ public class Streams {
 	 * @param encoding the encoding to use for the OutputStream, null means platform default
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
-	 * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
-	 *             version 2.2 if the encoding is not supported.
 	 */
-	public static void copy(final Reader input, final OutputStream output, final String encoding)
+	public static int copy(final Reader input, final OutputStream output, final String encoding)
 			throws IOException {
-		copy(input, output, Charsets.toCharset(encoding));
+		return copy(input, output, Charsets.toCharset(encoding));
 	}
 
 	// content equals
