@@ -150,6 +150,7 @@ validation-cast-char=请输入字符。
 validation-cast-date=请输入"yyyy/MM/dd"格式的日期。
 validation-cast-decimal=请输入数字。
 validation-cast-number=请输入整数字。
+validation-cast-file=请选择文件。
 
 
 #custom validation error message

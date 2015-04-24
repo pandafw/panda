@@ -204,8 +204,8 @@ validation-cast-char=Please input a character.
 validation-cast-date=Please input "yyyy-MM-dd" date string.
 validation-cast-decimal=Please input a decimal number.
 validation-cast-number=Please input a number.
+validation-cast-file=Please select a file.
 
-#validation-vistior=
 
 #error messages
 error-input=There is some error in the input field.

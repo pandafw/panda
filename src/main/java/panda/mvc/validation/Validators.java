@@ -42,6 +42,7 @@ public interface Validators {
 	public static final String MSGID_CAST_DATE = "validation-cast-date";
 	public static final String MSGID_CAST_DECIMAL = "validation-cast-decimal";
 	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
+	public static final String MSGID_CAST_FILE = "validation-cast-file";
 	public static final String MSGID_CONSTANT = "validation-constant";
 	public static final String MSGID_PROHIBITED = "validation-prohibited";
 	public static final String MSGID_DATE_TO = "validation-date-to";
@@ -50,6 +51,7 @@ public interface Validators {
 	public static final String MSGID_NUMBER_RANGE = "validation-number-range";
 	public static final String MSGID_REQUIRED = "validation-required";
 	public static final String MSGID_STRING_LENTH = "validation-string-length";
+	public static final String MSGID_FILE_LENTH = "validation-file-length";
 	public static final String MSGID_EMAIL = "validation-email";
 	
 	// -------------------------------------------------------
