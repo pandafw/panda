@@ -6,7 +6,7 @@ import ${i};
 </#list>
 
 <#if entity.comment?has_content>
-@Comment("${entity.comment}")
+@${gen.annoComment(entity)}("${entity.comment}")
 </#if>
 <#if entity.table?has_content>
 @Table("${entity.table}")
@@ -79,7 +79,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	@JoinColumn(name="${p.joinName}", field="${p.joinField}")
 </#if>
 <#if p.comment?has_content>
-	@Comment("${p.comment}")
+	@${gen.annoComment(entity)}("${p.comment}")
 </#if>
 	${p.modifier} ${p.simpleJavaType} ${p.name}<#if p.initValue?has_content> = ${p.initValue}</#if>;
 

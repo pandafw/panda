@@ -175,7 +175,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 
 		if (Strings.isNotEmpty(entity.getComment())) {
-			imports.add(Comment.class.getName());
+			if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+				imports.add(Comment.class.getName());
+			}
 		}
 		if (Strings.isNotEmpty(entity.getTable())) {
 			imports.add(Table.class.getName());
@@ -204,7 +206,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			imports.add(Column.class.getName());
 			for (EntityProperty p : entity.getColumnList()) {
 				if (Strings.isNotEmpty(p.getComment())) {
-					imports.add(Comment.class.getName());
+					if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+						imports.add(Comment.class.getName());
+					}
 				}
 				if (Strings.isNotEmpty(p.getJdbcType())) {
 					imports.add(DaoTypes.class.getName());
@@ -301,6 +305,12 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			throw new IllegalArgumentException("Illegal validator type: " + alias);
 		}
 		return vt;
+	}
+	public String annoComment(Entity entity) {
+		if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+			return Comment.class.getSimpleName();
+		}
+		return Comment.class.getName();
 	}
 
 	private static Map<String, String> vmmap = new HashMap<String, String>();
