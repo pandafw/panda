@@ -139,6 +139,11 @@ public class MapCastor<T extends Map<?,?>> extends AnyJsonCastor<T> {
 		else {
 			BeanHandler bh = castors.getBeanHandler(value.getClass());
 			for (String key : bh.getReadPropertyNames()) {
+				if ("class".equals(key)) {
+					// skip class property
+					continue;
+				}
+				
 				Object val = bh.getPropertyValue(value, key);
 				Map.Entry kv = castChild(context, keyCastor, valCastor, key, key, val);
 				if (kv != null) {

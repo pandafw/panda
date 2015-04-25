@@ -10,9 +10,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
 import panda.io.FileNames;
 import panda.lang.Charsets;
-import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.lang.Strings;
@@ -253,7 +254,7 @@ public class URLHelper {
 	 * @param params parameters
 	 * @return URL
 	 */
-	public static String buildURL(String uri, Map params) {
+	public static String buildURL(String uri, Object params) {
 		return buildURL(uri, params, false);
 	}
 
@@ -265,7 +266,7 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(String uri, Map params, boolean escapeAmp) {
+	public static String buildURL(String uri, Object params, boolean escapeAmp) {
 		return buildURL(uri, params, escapeAmp, Charsets.UTF_8);
 	}
 	
@@ -278,8 +279,21 @@ public class URLHelper {
 	 * @param encoding url encoding
 	 * @return URL
 	 */
-	public static String buildURL(String uri, Map params, boolean escapeAmp, String encoding) {
-		return buildURL(null, null, 0, uri, null, params, escapeAmp, encoding);
+	public static String buildURL(String uri, Object params, boolean escapeAmp, String encoding) {
+		return buildURL(null, null, 0, uri, null, params, escapeAmp, false, encoding);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param uri request uri
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String uri, Object params, boolean escapeAmp, boolean addNull, String encoding) {
+		return buildURL(null, null, 0, uri, null, params, escapeAmp, addNull, encoding);
 	}
 	
 	/**
@@ -292,8 +306,8 @@ public class URLHelper {
 	 * @param params parameters
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, String uri, Map params) {
-		return buildURL(scheme, host, port, uri, null, params, false, Charsets.UTF_8);
+	public static String buildURL(String scheme, String host, int port, String uri, Object params) {
+		return buildURL(scheme, host, port, uri, null, params, false, false, Charsets.UTF_8);
 	}
 	
 	/**
@@ -307,7 +321,7 @@ public class URLHelper {
 	 * @return URL
 	 */
 	public static String buildURL(String scheme, String host, int port, String uri, String query) {
-		return buildURL(scheme, host, port, uri, query, null, false, Charsets.UTF_8);
+		return buildURL(scheme, host, port, uri, query, null, false, false, Charsets.UTF_8);
 	}
 	
 	/**
@@ -321,8 +335,8 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, String uri, Map params, boolean escapeAmp) {
-		return buildURL(scheme, host, port, uri, null, params, escapeAmp, Charsets.UTF_8);
+	public static String buildURL(String scheme, String host, int port, String uri, Object params, boolean escapeAmp) {
+		return buildURL(scheme, host, port, uri, null, params, escapeAmp, false, Charsets.UTF_8);
 	}
 	
 	/**
@@ -334,12 +348,10 @@ public class URLHelper {
 	 * @param uri request uri
 	 * @param params parameters
 	 * @param escapeAmp escape &
-	 * @param encoding url encoding
 	 * @return URL
 	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, Map params, boolean escapeAmp, String encoding) {
-		return buildURL(scheme, host, port, uri, null, params, escapeAmp, encoding);
+	public static String buildURL(String scheme, String host, int port, String uri, Object params, boolean escapeAmp, boolean addNull) {
+		return buildURL(scheme, host, port, uri, null, params, escapeAmp, addNull, Charsets.UTF_8);
 	}
 	
 	/**
@@ -349,47 +361,84 @@ public class URLHelper {
 	 * @param host host
 	 * @param port port
 	 * @param uri request uri
-	 * @param query query string
-	 * @param params parameters
-	 * @return URL
-	 */
-	public static String buildURL(String scheme, String host, int port, String uri, String query, Map params) {
-		return buildURL(scheme, host, port, uri, query, params, false, Charsets.UTF_8);
-	}
-	
-	/**
-	 * build the request URL, append parameters as query string
-	 * 
-	 * @param scheme scheme
-	 * @param host host
-	 * @param port port
-	 * @param uri request uri
-	 * @param query query string
-	 * @param params parameters
-	 * @param escapeAmp escape &
-	 * @return URL
-	 */
-	public static String buildURL(String scheme, String host, int port, 
-			String uri, String query, Map params, boolean escapeAmp) {
-		return buildURL(scheme, host, port, uri, query, params, escapeAmp, Charsets.UTF_8);
-	}
-	
-	/**
-	 * build the request URL, append parameters as query string
-	 * 
-	 * @param scheme scheme
-	 * @param host host
-	 * @param port port
-	 * @param uri request uri
-	 * @param query query string
 	 * @param params parameters
 	 * @param escapeAmp escape &
 	 * @param encoding url encoding
 	 * @return URL
 	 */
 	public static String buildURL(String scheme, String host, int port, 
-			String uri, String query, Map params, 
-			boolean escapeAmp, String encoding) {
+			String uri, Object params, boolean escapeAmp, String encoding) {
+		return buildURL(scheme, host, port, uri, null, params, escapeAmp, false, encoding);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, String uri, String query, Object params) {
+		return buildURL(scheme, host, port, uri, query, params, false, false, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Object params, boolean escapeAmp) {
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, false);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param addNull append null param
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Object params, 
+			boolean escapeAmp, boolean addNull) {
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, addNull, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param scheme scheme
+	 * @param host host
+	 * @param port port
+	 * @param uri request uri
+	 * @param query query string
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @param addNull append null param
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(String scheme, String host, int port, 
+			String uri, String query, Object params, 
+			boolean escapeAmp, boolean addNull, String encoding) {
 		StringBuilder url = new StringBuilder();
 
 		if (Strings.isNotEmpty(host)) {
@@ -409,9 +458,9 @@ public class URLHelper {
 			appendQueryString(url, qs, escapeAmp, encoding);
 		}
 		
-		if (Collections.isNotEmpty(params)) {
+		if (params != null) {
 			appendQuerySeparator(url, escapeAmp);
-			appendQueryString(url, params, escapeAmp, encoding);
+			appendQueryString(url, params, escapeAmp, addNull, encoding);
 		}
 
 		return url.toString();
@@ -442,7 +491,7 @@ public class URLHelper {
 	/**
 	 * @param params parameter map
 	 */
-	public static String buildQueryString(Map params) {
+	public static String buildQueryString(Object params) {
 		return buildQueryString(params, Charsets.UTF_8);
 	}
 
@@ -450,7 +499,7 @@ public class URLHelper {
 	 * @param link link
 	 * @param params parameter map
 	 */
-	public static void appendQueryString(Appendable link, Map params) {
+	public static void appendQueryString(Appendable link, Object params) {
 		appendQueryString(link, params, Charsets.UTF_8);
 	}
 
@@ -458,7 +507,7 @@ public class URLHelper {
 	 * @param params parameter map
 	 * @param encoding encoding
 	 */
-	public static String buildQueryString(Map params, String encoding) {
+	public static String buildQueryString(Object params, String encoding) {
 		return buildQueryString(params, false, encoding);
 	}
 	
@@ -467,7 +516,7 @@ public class URLHelper {
 	 * @param params parameter map
 	 * @param encoding encoding
 	 */
-	public static void appendQueryString(Appendable link, Map params, String encoding) {
+	public static void appendQueryString(Appendable link, Object params, String encoding) {
 		appendQueryString(link, params, false, encoding);
 	}
 	
@@ -476,7 +525,7 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @param encoding encoding
 	 */
-	public static String buildQueryString(Map params, boolean escapeAmp, String encoding) {
+	public static String buildQueryString(Object params, boolean escapeAmp, String encoding) {
 		return buildQueryString(params, escapeAmp ? EAMP : AMP, encoding);
 	}
 
@@ -486,7 +535,7 @@ public class URLHelper {
 	 * @param escapeAmp escape &
 	 * @param encoding encoding
 	 */
-	public static void appendQueryString(Appendable link, Map params, boolean escapeAmp, String encoding) {
+	public static void appendQueryString(Appendable link, Object params, boolean escapeAmp, String encoding) {
 		appendQueryString(link, params, escapeAmp ? EAMP : AMP, encoding);
 	}
 
@@ -495,9 +544,28 @@ public class URLHelper {
 	 * @param encoding encoding
 	 * @param paramSeparator parameter separator
 	 */
-	public static String buildQueryString(Map params, String paramSeparator, String encoding) {
+	public static String buildQueryString(Object params, String paramSeparator, String encoding) {
+		return buildQueryString(params, paramSeparator, false, encoding);
+	}
+
+	/**
+	 * @param link link
+	 * @param params parameter map
+	 * @param escapeAmp escape &
+	 * @param encoding encoding
+	 */
+	public static void appendQueryString(Appendable link, Object params, boolean escapeAmp, boolean addNull, String encoding) {
+		appendQueryString(link, params, escapeAmp ? EAMP : AMP, addNull, encoding);
+	}
+
+	/**
+	 * @param params parameter map
+	 * @param encoding encoding
+	 * @param paramSeparator parameter separator
+	 */
+	public static String buildQueryString(Object params, String paramSeparator, boolean addNull, String encoding) {
 		StringBuilder link = new StringBuilder();
-		appendQueryString(link, params, paramSeparator, encoding);
+		appendQueryString(link, params, paramSeparator, addNull, encoding);
 		return link.toString();
 	}
 	
@@ -507,17 +575,39 @@ public class URLHelper {
 	 * @param paramSeparator parameter separator
 	 * @param encoding encoding
 	 */
-	public static void appendQueryString(Appendable link, Map params, String paramSeparator, String encoding) {
-		if (Collections.isEmpty(params)) {
+	public static void appendQueryString(Appendable link, Object params, String paramSeparator, String encoding) {
+		appendQueryString(link, params, paramSeparator, false, encoding);
+	}
+	
+	/**
+	 * @param link link
+	 * @param params parameter map
+	 * @param paramSeparator parameter separator
+	 * @param encoding encoding
+	 */
+	public static void appendQueryString(Appendable link, Object params, String paramSeparator, boolean addNull, String encoding) {
+		if (params == null) {
 			return;
 		}
 
 		try {
-			Iterator iter = params.entrySet().iterator();
+			boolean noClass = !(params instanceof Map);
+
+			BeanHandler bh = Beans.i().getBeanHandler(params.getClass());
+			String[] pns = bh.getReadPropertyNames();
+			
+			Iterator iter = Iterators.asIterator(pns);
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String name = (String) entry.getKey();
-				Object value = entry.getValue();
+				String name = (String) iter.next();
+				if (noClass && "class".equals(name)) {
+					continue;
+				}
+
+				@SuppressWarnings("unchecked")
+				Object value = bh.getPropertyValue(params, name);
+				if (value == null && !addNull) {
+					continue;
+				}
 
 				if (Iterators.isIterable(value)) {
 					for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
