@@ -1,4 +1,4 @@
-package panda.util;
+package panda.net.p2p;
 
 import panda.lang.Objects;
 import panda.net.http.URLHelper;
@@ -156,6 +156,10 @@ public class Magnet {
 		this.tr = tr;
 	}
 
+	public void setBtih(String btih) {
+		this.setXt("urn:btih:" + btih);
+	}
+	
 	public String toURL() {
 		return URLHelper.buildURL("magnet:", this);
 	}
