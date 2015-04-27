@@ -53,7 +53,7 @@ public class XmlRpcClient {
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
 		HttpRequest hreq = HttpRequest.post(url);
-		hreq.getHeader().setDefault();
+		hreq.getHeader().setDefaultAgentPC();
 		hreq.getHeader().add(HttpHeader.CONTENT_TYPE, HttpContentType.TEXT_XML);
 		hreq.setBody(xbody);
 		

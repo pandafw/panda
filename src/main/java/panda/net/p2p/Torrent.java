@@ -22,15 +22,27 @@ public class Torrent {
 		public String path;
 	}
 
+	public static String getBtih(byte[] bs) throws IOException {
+		return new Torrent(bs).getBtih();
+	}
+	
+	public static String getBtih(InputStream is) throws IOException {
+		return new Torrent(is).getBtih();
+	}
+	
 	private String encoding = Charsets.UTF_8;
 	private String name;
 	private String btih;
 	private List<Item> files;
-	private long size;
+	private long length;
 
 	private Map<String, Object> root;
 	
 	public Torrent() {
+	}
+	
+	public Torrent(InputStream is) throws IOException {
+		parse(is);
 	}
 	
 	public Torrent(byte[] bs) throws IOException {
@@ -75,6 +87,20 @@ public class Torrent {
 	}
 
 	/**
+	 * @return the length
+	 */
+	public long getLength() {
+		return length;
+	}
+
+	/**
+	 * @param length the length to set
+	 */
+	public void setLength(long length) {
+		this.length = length;
+	}
+
+	/**
 	 * @return the files
 	 */
 	public List<Item> getFiles() {
@@ -89,17 +115,17 @@ public class Torrent {
 	}
 
 	/**
+	 * @return single file or not
+	 */
+	public boolean isSingle() {
+		return files == null;
+	}
+
+	/**
 	 * @return the root
 	 */
 	public Map<String, Object> root() {
 		return root;
-	}
-
-	/**
-	 * @return the size
-	 */
-	public long size() {
-		return size;
 	}
 	
 	private String getPropertyAsString(Map<String, Object> map, String key) {
@@ -114,10 +140,13 @@ public class Torrent {
 		return v == null ? def : v.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void parse(byte[] bs) throws IOException {
 		InputStream is = new ByteArrayInputStream(bs);
-		
+		parse(is);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void parse(InputStream is) throws IOException {
 		root = (Map<String, Object>)Bencode.parse(is);
 		
 		Map info = (Map)(root.get("info"));
@@ -127,17 +156,20 @@ public class Torrent {
 
 		encoding = getPropertyAsString(info, "encoding", encoding);
 		name = getPropertyAsString(info, "name");
-
-		List files = (List)(info.get("files"));
-		if (Collections.isEmpty(files)) {
-			throw new IOException("Invalid torrent file: missing <info.files>");
+		if (info.containsKey("length")) {
+			length = (Long)info.get("length");
 		}
-		
-		this.files = Castors.scast(files, Types.paramTypeOf(List.class, Item.class));
+		else {
+			List files = (List)(info.get("files"));
+			if (Collections.isEmpty(files)) {
+				throw new IOException("Invalid torrent file: missing <length> or <info.files>");
+			}
+			this.files = Castors.scast(files, Types.paramTypeOf(List.class, Item.class));
 
-		size = 0;
-		for (Item i : this.files) {
-			size += i.length;
+			length = 0;
+			for (Item i : this.files) {
+				length += i.length;
+			}
 		}
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

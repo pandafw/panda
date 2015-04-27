@@ -80,7 +80,7 @@ public class HttpClient {
 	
 	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
-		hr.getHeader().setDefault();
+		hr.getHeader().setDefaultAgentPC();
 		hr.setBody(body);
 		
 		HttpClient hc = new HttpClient(hr);

@@ -104,13 +104,24 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 	}
 
 	public HttpHeader setDefault() {
+		setDefaultHeaders();
 		put(USER_AGENT, HttpClient.DEFAULT_USERAGENT);
+		return this;
+	}
+
+	public HttpHeader setDefaultAgentPC() {
+		setDefaultHeaders();
+		put(USER_AGENT, HttpClient.DEFAULT_USERAGENT);
+		return this;
+	}
+	
+	protected HttpHeader setDefaultHeaders() {
 		put(ACCEPT_ENCODING, "gzip,deflate");
 		put(ACCEPT, "text/xml,application/xml,application/xhtml+xml,text/html;"
 				+ "q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
 		put(ACCEPT_LANGUAGE, "en-US,en,ja,zh,zh-CN,zh-TW");
 		put(ACCEPT_CHARSET, "ISO-8859-1,*,utf-8");
-		put(CONNECTION, "keep-alive");
+		setKeepAlive(true);
 		return this;
 	}
 
@@ -118,6 +129,10 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 		return set(USER_AGENT, agent);
 	}
 
+	public HttpHeader setKeepAlive(boolean keep) {
+		return set(CONNECTION, keep ? "keep-alive" : "close");
+	}
+	
 	//-------------------------------------------------
 	public int getInt(String key) {
 		String str = getString(key);
