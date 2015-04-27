@@ -1,6 +1,7 @@
 package panda.mvc.processor;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
 import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -45,8 +47,11 @@ public class LocaleProcessor extends AbstractProcessor {
 	protected String cookiePath;
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 
-	@IocInject(value=MvcConstants.LOCALE_VALID, required=false)
-	protected String[] validLocales;
+	@IocInject(value=MvcConstants.LOCALE_DOMAINS, required=false)
+	protected Map<String, String> domainLocales;
+	
+	@IocInject(value=MvcConstants.LOCALE_ALLOWED, required=false)
+	protected String[] allowedLocales;
 	
 	@IocInject(value=MvcConstants.LOCALE_DEFAULT, required=false)
 	protected Locale defaultLocale = Locale.getDefault();
@@ -63,17 +68,28 @@ public class LocaleProcessor extends AbstractProcessor {
 	}
 
 	public void process(ActionContext ac) {
+		Locale locale = null;
 		HttpSession session = ac.getRequest().getSession(false);
 
-		Locale locale = null;
-
-		locale = getLocaleFromParameter(ac, parameterName);
-		if (locale == null) {
-			locale = (Locale)ac.getRequest().getAttribute(requestName);
-			if (locale != null) {
-				saveToSession = false;
+		if (Collections.isNotEmpty(domainLocales)) {
+			String sn = ac.getRequest().getServerName();
+			String ln = domainLocales.get(sn);
+			if (ln != null) {
+				locale = Locales.toLocale(ln);
 				saveToCookie = false;
 			}
+		}
+		
+		if (locale == null) {
+			locale = getLocaleFromParameter(ac, parameterName);
+			if (locale == null) {
+				locale = (Locale)ac.getRequest().getAttribute(requestName);
+				if (locale != null) {
+					saveToSession = false;
+					saveToCookie = false;
+				}
+			}
+
 		}
 
 		if (locale == null && session != null) {
@@ -102,7 +118,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		
 		// save locale
 		if (locale != null) {
-			saveLocale(ac, locale);
+			ac.setLocale(locale);
 
 			if (saveToSession && session != null) {
 				session.setAttribute(sessionName, locale);
@@ -122,7 +138,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		if (Strings.isNotEmpty(cv)) {
 			locale = Locales.toLocale(cv, null);
 		}
-		return isValidLocale(locale) ? locale : null;
+		return isAllowedLocale(locale) ? locale : null;
 	}
 
 	protected Locale getLocaleFromParameter(ActionContext ac, String parameterName) {
@@ -134,7 +150,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		if (locale != null && !(locale instanceof Locale)) {
 			locale = Locales.toLocale(locale.toString(), null);
 		}
-		return isValidLocale((Locale)locale) ? (Locale)locale : null;
+		return isAllowedLocale((Locale)locale) ? (Locale)locale : null;
 	}
 
 	protected Locale getLocaleFromAcceptLanguage(ActionContext ac) {
@@ -144,7 +160,7 @@ public class LocaleProcessor extends AbstractProcessor {
 			for (String str : als) {
 				try {
 					Locale locale = Locales.toLocale(str);
-					if (isValidLocale(locale)) {
+					if (isAllowedLocale(locale)) {
 						return locale;
 					}
 				}
@@ -174,23 +190,13 @@ public class LocaleProcessor extends AbstractProcessor {
 		ac.getResponse().addCookie(c);
 	}
 
-	/**
-	 * Save the given locale to the ActionInvocation.
-	 * 
-	 * @param ac The ActionContext.
-	 * @param locale The locale to save.
-	 */
-	protected void saveLocale(ActionContext ac, Locale locale) {
-		ac.setLocale(locale);
-	}
-
-	protected boolean isValidLocale(Locale locale) {
+	protected boolean isAllowedLocale(Locale locale) {
 		if (locale != null) {
-			if (validLocales == null) {
+			if (allowedLocales == null) {
 				return true;
 			}
 			String l = locale.toString();
-			for (String p : validLocales) {
+			for (String p : allowedLocales) {
 				if (l.startsWith(p)) {
 					return true;
 				}

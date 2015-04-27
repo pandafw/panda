@@ -53,8 +53,11 @@ public interface MvcConstants extends IocConstants {
 	/** The custom themes */
 	public static final String UI_CUSTOM_THEMES = "panda.ui.themes";
 
-	/** The valid locale */
-	public static final String LOCALE_VALID = "panda.locale.valid";
+	/** The locale domains */
+	public static final String LOCALE_DOMAINS = "panda.locale.domains";
+
+	/** The allowed locale */
+	public static final String LOCALE_ALLOWED = "panda.locale.allowed";
 
 	/** The default locale */
 	public static final String LOCALE_DEFAULT = "panda.locale.default";
