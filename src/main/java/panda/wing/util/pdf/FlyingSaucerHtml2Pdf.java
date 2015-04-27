@@ -284,7 +284,7 @@ public class FlyingSaucerHtml2Pdf implements Html2Pdf {
 
 		HttpHeader hh = new HttpHeader();
 		if (request == null) {
-			hh.setDefault();
+			hh.setDefaultAgentPC();
 		}
 		else {
 			String domain = URLHelper.getURLDomain(url);
@@ -292,12 +292,12 @@ public class FlyingSaucerHtml2Pdf implements Html2Pdf {
 	
 			if (domain.equalsIgnoreCase(server)) {
 				hh.putAll(new ServletRequestHeaderMap(request));
+				hh.set("X-Html2Pdf", this.getClass().getName());
 	 		}
 			else {
-				hh.setDefault();
+				hh.setDefaultAgentPC();
 			}
 		}
-		hh.set("panda-html2pdf", this.getClass().getName());
 
 		agent.getRequest().setHeader(hh);
 	}

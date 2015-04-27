@@ -5,6 +5,9 @@
 
 <body>
 <style>
+	#syncw_log {
+		font-size: 80%;
+	}
 	#syncw_log pre {
 		border: none 0;
 		margin: 0;

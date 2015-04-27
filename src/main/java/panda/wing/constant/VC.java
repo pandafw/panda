@@ -14,7 +14,7 @@ public interface VC {
 	public final static char STATUS_0 = '0';
 
 	/**
-	 * STATUS_X = 'D';
+	 * STATUS_X = 'X';
 	 */
 	public final static char STATUS_X = 'X';
 
