@@ -29,6 +29,7 @@ import panda.mvc.util.TextProvider;
 import panda.servlet.HttpSessionMap;
 import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
+import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletRequestParamMap;
 
 public class ActionContext {
@@ -494,10 +495,17 @@ public class ActionContext {
 	}
 
 	/**
-	 * @return the request parameters map
+	 * @return the request parameter map
 	 */
 	public Map<String, Object> getReqp() {
 		return new ServletRequestParamMap(request);
+	}
+
+	/**
+	 * @return the request header map
+	 */
+	public Map<String, Object> getReqh() {
+		return new ServletRequestHeaderMap(request);
 	}
 	
 	/**
