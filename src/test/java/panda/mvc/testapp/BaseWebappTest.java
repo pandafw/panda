@@ -94,7 +94,7 @@ public abstract class BaseWebappTest {
 	public HttpResponse post(String path, String data, String contentType) {
 		try {
 			HttpRequest hr = HttpRequest.create(getBaseURL() + path, HttpMethod.POST);
-			hr.getHeader().setDefault();
+			hr.getHeader().setDefaultAgentPC();
 			hr.setBody(data);
 			if (contentType != null) {
 				hr.getHeader().add(HttpHeader.CONTENT_TYPE, contentType);

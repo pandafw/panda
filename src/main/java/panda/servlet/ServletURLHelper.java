@@ -1,7 +1,5 @@
 package panda.servlet;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import panda.lang.Charsets;
@@ -31,7 +29,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @param params parameters
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, Map params) {
+	public static String buildURL(HttpServletRequest request, Object params) {
 		return buildURL(request, params, false);
 	}
 
@@ -54,7 +52,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, Map params, boolean escapeAmp) {
+	public static String buildURL(HttpServletRequest request, Object params, boolean escapeAmp) {
 		return buildURL(request, params, false, escapeAmp);
 	}
 
@@ -79,7 +77,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, Map params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+	public static String buildURL(HttpServletRequest request, Object params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
 		return buildURL(request, null, 0, null, null, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
 	}
 
@@ -107,7 +105,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, String query, Map params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
+	public static String buildURL(HttpServletRequest request, String query, Object params, boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
 		return buildURL(request, null, 0, null, query, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
 	}
 
@@ -122,7 +120,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @param escapeAmp escape &
 	 * @return URL
 	 */
-	public static String buildURL(HttpServletRequest request, String scheme, int port, Map params,
+	public static String buildURL(HttpServletRequest request, String scheme, int port, Object params,
 			boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
 		return buildURL(request, scheme, port, null, null, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
 	}
@@ -141,7 +139,7 @@ public class ServletURLHelper extends URLHelper {
 	 * @return URL
 	 */
 	public static String buildURL(HttpServletRequest request, 
-			String scheme, int port, String uri, String query, Map params,
+			String scheme, int port, String uri, String query, Object params,
 			boolean forceAddSchemeHostAndPort, boolean escapeAmp) {
 		return buildURL(request, scheme, port, uri, query, params, forceAddSchemeHostAndPort, escapeAmp, Charsets.UTF_8);
 	}
@@ -160,8 +158,27 @@ public class ServletURLHelper extends URLHelper {
 	 * @return URL
 	 */
 	public static String buildURL(HttpServletRequest request, 
-			String scheme, int port, String uri, String query, Map params,
+			String scheme, int port, String uri, String query, Object params,
 			boolean forceAddSchemeHostAndPort, boolean escapeAmp, String encoding) {
+		return buildURL(request, scheme, port, uri, query, params, forceAddSchemeHostAndPort, escapeAmp, false, Charsets.UTF_8);
+	}
+	
+	/**
+	 * build the request URL, append parameters as query string
+	 * 
+	 * @param request http request
+	 * @param uri request uri
+	 * @param params parameters
+	 * @param scheme scheme
+	 * @param port port
+	 * @param forceAddSchemeHostAndPort add schema and port
+	 * @param escapeAmp escape &
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildURL(HttpServletRequest request, 
+			String scheme, int port, String uri, String query, Object params,
+			boolean forceAddSchemeHostAndPort, boolean escapeAmp, boolean addNull, String encoding) {
 
 		String host = null;
 		
@@ -188,6 +205,6 @@ public class ServletURLHelper extends URLHelper {
 			uri = HttpServlets.getRequestURI(request);
 		}
 
-		return buildURL(scheme, host, port, uri, query, params, escapeAmp, encoding);
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, addNull, encoding);
 	}
 }
