@@ -54,10 +54,10 @@ regex-zipcode='\\d{3}-\\d{4}'
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/${top.total}
 pager-label-infoz=${top.begin}~${top.end}
-pager-label-prev=&nbsp;&lt;&nbsp;
-pager-label-next=&nbsp;&gt;&nbsp;
-pager-label-first=&nbsp;≪&nbsp;
-pager-label-last=&nbsp;≫&nbsp;
+pager-label-prev=&lt;
+pager-label-next=&gt;
+pager-label-first=≪
+pager-label-last=≫
 pager-label-empty=-- NOTHING --
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300

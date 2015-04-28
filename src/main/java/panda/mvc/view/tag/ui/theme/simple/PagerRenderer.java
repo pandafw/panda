@@ -158,14 +158,14 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	
 	private void writePagerLinkFirst() throws IOException {
 		boolean hasFirst = (page > 1);
-		write("<li");
+		write("<li class=\"p-pager-first");
 		if ((!hasFirst && hiddenStyle) || !Strings.contains(linkStyle, 'f')) {
-			write(" class=\"hidden\"");
+			write(" hidden");
 		}
 		else if (!hasFirst) {
-			write(" class=\"disabled\"");
+			write(" disabled");
 		}
-		write("><a href=\"");
+		write("\"><a href=\"");
 		write(getLinkHref(1));
 		write('"');
 		write(" data-pageno=\"1");
@@ -184,14 +184,14 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	
 	private void writePagerLinkPrev(boolean force) throws IOException {
 		boolean hasPrev = (page > 1);
-		write("<li");
+		write("<li class=\"p-pager-prev");
 		if ((!hasPrev && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'p'))) {
-			write(" class=\"hidden\"");
+			write(" hidden");
 		}
 		else if (!hasPrev) {
-			write(" class=\"disabled\"");
+			write(" disabled");
 		}
-		write("><a href=\"");
+		write("\"><a href=\"");
 		write(getLinkHref(page - 1));
 		write("\" data-pageno=\"");
 		write(String.valueOf(page - 1));
@@ -210,14 +210,14 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 
 	private void writePagerLinkNext(boolean force) throws IOException {
 		boolean hasNext = (limit == null || (count >= limit && total < 1) || page < pages);
-		write("<li");
+		write("<li class=\"p-pager-next");
 		if ((!hasNext && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'n'))) {
-			write(" class=\"hidden\"");
+			write(" hidden");
 		}
 		else if (!hasNext) {
-			write(" class=\"disabled\"");
+			write(" disabled");
 		}
-		write("><a href=\"");
+		write("\"><a href=\"");
 		write(getLinkHref(page + 1));
 		write("\" data-pageno=\"");
 		write(String.valueOf(page + 1));
@@ -236,14 +236,14 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 
 	private void writePagerLinkLast() throws IOException {
 		boolean hasLast = (page < pages);
-		write("<li");
+		write("<li class=\"p-pager-last");
 		if ((!hasLast && hiddenStyle) || !Strings.contains(linkStyle, 'l')) {
-			write(" class=\"hidden\"");
+			write(" hidden");
 		}
 		else if (!hasLast) {
-			write(" class=\"disabled\"");
+			write(" disabled");
 		}
-		write("><a href=\"");
+		write("\"><a href=\"");
 		write(getLinkHref(pages));
 		write("\" data-pageno=\"");
 		write(pages.toString());
