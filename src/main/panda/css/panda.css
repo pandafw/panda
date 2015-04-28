@@ -514,13 +514,51 @@ tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
 /*---------------------------------------------*/
 .pagination.p-pager > li > a,
 .pagination.p-pager > li > span {
+	background-color: #fff;
+	border: 0 none;
+	border-bottom: 3px solid #ddd;
+	color: #888;
+	font-family: Arial, sans-serif;
 	margin-left: 3px;
+	padding: 5px 11px;
 }
+.pagination.p-pager > li > a:hover,
+.pagination.p-pager > li > span:hover {
+	background-color: #eee;
+	border: 0 none;
+	border-bottom: 3px solid #337ab7;
+}
+
 .pagination.p-pager > li.p-pager-ellipsis > span {
 	border: 0 none;
+	border-bottom: 3px solid transparent;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.pagination.p-pager > li.p-pager-first > a,
+.pagination.p-pager > li.p-pager-first > span {
+}
+.pagination.p-pager > li.p-pager-prev > a,
+.pagination.p-pager > li.p-pager-prev > span {
+}
+.pagination.p-pager > li.p-pager-next > a,
+.pagination.p-pager > li.p-pager-next > span {
+}
+.pagination.p-pager > li.p-pager-last > a,
+.pagination.p-pager > li.p-pager-last > span {
+}
+
+.pagination.p-pager > .active > a,
+.pagination.p-pager > .active > span,
+.pagination.p-pager > .active > a:hover,
+.pagination.p-pager > .active > span:hover,
+.pagination.p-pager > .active > a:focus,
+.pagination.p-pager > .active > span:focus {
+	background-color: #fff;
+	border: 0 none;
+	border-bottom: 3px solid #337ab7;
+	color: #000;
 	font-weight: bold;
-	padding-left: 10px;
-	padding-right: 10px;
 }
 /* PANEL */
 .p-panel-hscroll .panel-body {
