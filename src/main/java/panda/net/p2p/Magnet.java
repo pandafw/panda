@@ -164,6 +164,13 @@ public class Magnet {
 		return URLHelper.buildURL("magnet:", this);
 	}
 	
+	public static String toURL(String title, String btih) {
+		Magnet m = new Magnet();
+		m.setDn(title);
+		m.setBtih(btih);
+		return m.toURL();
+	}
+	
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append("dn", dn)
