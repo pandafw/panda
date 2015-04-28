@@ -40,8 +40,14 @@
 				url: "<@p.url action='+/stop'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
-					print_status(o.time, o.level, o.status, o.count, o.total);
-					if (!o.running) {
+					if (!o.success) {
+						work_error(data);
+						return;
+					}
+					
+					var r = o.result;
+					print_status(r.date, r.level, r.status, r.count, r.total);
+					if (!r.running) {
 						workOnStop();
 					}
 				},
@@ -66,8 +72,15 @@
 				url: "<@p.url action='+/status'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
-					print_status(o.time, o.level, o.status, o.count, o.total);
-					if (o.running) {
+					if (!o.success) {
+						work_error(data);
+						setTimeout(doStatus, 1000);
+						return;
+					}
+
+					var r = o.result;
+					print_status(r.date, r.level, r.status, r.count, r.total);
+					if (r.running) {
 						setTimeout(doStatus, 1000);
 					}
 					else {
