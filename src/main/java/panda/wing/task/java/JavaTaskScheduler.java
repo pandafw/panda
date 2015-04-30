@@ -23,6 +23,8 @@ import panda.wing.task.CronEntry;
 public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	private static final Log log = Logs.getLog(JavaTaskScheduler.class);
 
+	private static final int DEFAULT_ERROR_LIMIT = 3;
+	
 	@IocInject(required=false)
 	protected ServletContext servlet;
 	
@@ -53,21 +55,23 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 			ActionTask at = newActionTask(ce.getUrl());
 
 			if (Strings.isNotEmpty(ce.getCron())) {
-				CronTrigger ct = new CronTrigger(ce.getCron());
-
 				log.info("Add cron task (" + ce.getCron() + "): " + at.getUrl());
+				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
+				CronTrigger ct = new CronTrigger(ce.getCron());
 				schedule(at, ct);
 				continue;
 			}
 
 			if (ce.getFixedDelay() > 0) {
 				log.info("Add fixedDelay task (" + ce.getInitialDelay() + ", " + ce.getFixedDelay() + "): " + at.getUrl());
+				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
 				scheduleWithFixedDelay(at, ce.getInitialDelay(), ce.getFixedDelay());
 				continue;
 			}
 
 			if (ce.getFixedRate() > 0) {
 				log.info("Add fixedRate task (" + ce.getInitialDelay() + ", " + ce.getFixedRate() + "): " + at.getUrl());
+				at.setErrorLimit(ce.getErrorLimit() > 0 ? ce.getErrorLimit() : DEFAULT_ERROR_LIMIT);
 				scheduleAtFixedRate(at, ce.getInitialDelay(), ce.getFixedRate());
 				continue;
 			}

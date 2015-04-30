@@ -20,11 +20,30 @@ public class ActionTask implements Runnable {
 	private HttpMethod method = HttpMethod.GET;
 	private Map<String, String> headers;
 	private Map<String, String> params;
-	
+	private int errorLimit = 3;
+
+	private int errors;
 	
 	public ActionTask(String url) {
 		this.url = url;
 	}
+
+	
+	/**
+	 * @return the errorLimit
+	 */
+	public int getErrorLimit() {
+		return errorLimit;
+	}
+
+
+	/**
+	 * @param errorLimit the errorLimit to set
+	 */
+	public void setErrorLimit(int errorLimit) {
+		this.errorLimit = errorLimit;
+	}
+
 
 	/**
 	 * @return the url
@@ -129,13 +148,21 @@ public class ActionTask implements Runnable {
 				else {
 					hres.drain();
 				}
+				errors = 0;
 			}
 			else {
-				log.warn("Failed to GET " + url + " : " + hres.getStatusLine() 
-					+ Streams.LINE_SEPARATOR
-					+ hres.getHeader().toString()
-					+ Streams.LINE_SEPARATOR
-					+ hres.getContentText());
+				errors++;
+				String msg = "Failed to GET " + url + " : " + hres.getStatusLine() 
+						+ Streams.LINE_SEPARATOR
+						+ hres.getHeader().toString()
+						+ Streams.LINE_SEPARATOR
+						+ hres.getContentText();
+				if (errors < errorLimit) {
+					log.warn(msg);
+				}
+				else {
+					log.error(msg);
+				}
 			}
 		}
 		catch (IOException e) {

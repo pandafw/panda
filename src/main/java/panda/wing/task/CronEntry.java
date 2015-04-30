@@ -10,6 +10,7 @@ public class CronEntry {
 	private long fixedDelay;
 	private long fixedRate;
 	private String cron;
+	private int errorLimit;
 
 	/**
 	 * @return the url
@@ -109,6 +110,20 @@ public class CronEntry {
 		this.cron = cron;
 	}
 
+	/**
+	 * @return the errorLimit
+	 */
+	public int getErrorLimit() {
+		return errorLimit;
+	}
+
+	/**
+	 * @param errorLimit the errorLimit to set
+	 */
+	public void setErrorLimit(int errorLimit) {
+		this.errorLimit = errorLimit;
+	}
+
 	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
@@ -118,6 +133,7 @@ public class CronEntry {
 				.append("initialDelay", initialDelay)
 				.append("fixedDelay", fixedDelay)
 				.append("cron", cron)
+				.append("errorLimit", errorLimit)
 				.toString();
 	}
 }
