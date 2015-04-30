@@ -17,7 +17,7 @@ import panda.wing.entity.SUBean;
 })
 public class Resource extends SUBean {
 
-	private static final long serialVersionUID = -280602134L;
+	private static final long serialVersionUID = -1597704370L;
 
 	/**
 	 * Constructor
@@ -91,7 +91,7 @@ public class Resource extends SUBean {
 	 * @return the clazz
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getClazz() {
 		return clazz;
@@ -109,7 +109,7 @@ public class Resource extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getLanguage() {
 		return language;
@@ -127,7 +127,7 @@ public class Resource extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getCountry() {
 		return country;

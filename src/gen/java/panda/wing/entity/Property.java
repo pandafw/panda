@@ -16,7 +16,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean {
 
-	private static final long serialVersionUID = 1341528743L;
+	private static final long serialVersionUID = 111819075L;
 
 	/**
 	 * Constructor
@@ -102,7 +102,7 @@ public class Property extends SUBean {
 	 * @return the clazz
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 100 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getClazz() {
 		return clazz;
@@ -120,7 +120,7 @@ public class Property extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getLanguage() {
 		return language;
@@ -138,7 +138,7 @@ public class Property extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", message="validation-stringlength"), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant"), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant")
 	})
 	public String getCountry() {
 		return country;
@@ -155,7 +155,7 @@ public class Property extends SUBean {
 	 * @return the name
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength"), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength")
 	})
 	public String getName() {
 		return name;
@@ -172,7 +172,7 @@ public class Property extends SUBean {
 	 * @return the value
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength"), 
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength")
 	})
 	public String getValue() {
 		return value;
