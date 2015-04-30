@@ -16,7 +16,7 @@ public class FreemarkerAction extends AbstractAction {
 	
 	@Ok("ftl:${result}")
 	public Object execute() throws Exception {
-		String location = HttpServlets.getRelativeURI(getRequest());
+		String location = HttpServlets.getServletURI(getRequest());
 		if (!freemarker.hasTemplate(location)) {
 			getResponse().sendError(HttpServletResponse.SC_NOT_FOUND, location);
 			return VoidView.INSTANCE;
