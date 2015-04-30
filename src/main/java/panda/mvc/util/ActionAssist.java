@@ -82,10 +82,10 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
-	 * @return relativeURI
+	 * @return servletURI
 	 */
-	public String getRelativeURI() {
-		return HttpServlets.getRelativeURI(getRequest());
+	public String getServletURI() {
+		return HttpServlets.getServletURI(getRequest());
 	}
 
 	/**

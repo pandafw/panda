@@ -3,6 +3,7 @@ package panda.mvc;
 import javax.servlet.http.HttpServletRequest;
 
 import panda.lang.Strings;
+import panda.servlet.HttpServlets;
 
 public class RequestPath {
 
@@ -57,9 +58,7 @@ public class RequestPath {
 	 * @param req HTTP 请求对象
 	 */
 	public static RequestPath getRequestPathObject(HttpServletRequest req) {
-		String url = req.getPathInfo();
-		if (null == url)
-			url = req.getServletPath();
+		String url = HttpServlets.getServletURI(req);
 		return getRequestPathObject(url);
 	}
 

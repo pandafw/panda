@@ -243,7 +243,7 @@ public class HttpServlets {
 	 * @param request request
 	 * @return relative URI
 	 */
-	public static String getRelativeURI(HttpServletRequest request) {
+	public static String getServletURI(HttpServletRequest request) {
 		if (request == null) {
 			return null;
 		}
