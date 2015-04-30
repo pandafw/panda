@@ -120,8 +120,10 @@ public abstract class AbstractValidator implements Validator {
 		StringBuilder sb = new StringBuilder(name);
 		Validator p = parent;
 		while (p != null) {
-			sb.insert(0, '.');
-			sb.insert(0, p.getName());
+			if (Strings.isNotEmpty(p.getName())) {
+				sb.insert(0, '.');
+				sb.insert(0, p.getName());
+			}
 			p = p.getParent();
 		}
 		return sb.toString();

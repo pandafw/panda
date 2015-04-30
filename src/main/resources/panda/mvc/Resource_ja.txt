@@ -111,11 +111,11 @@ ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
 validation-number-to=The number must be larger than start number.
-validation-string-length=入力文字数(${top.length})が\
-${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "文字以内") : \
-(top.minLength != null ? (top.minLength + "文字以上") : \
-(top.maxLength != null ? (top.maxLength + "文字以下") : ""))}\
-で入力してください。
+validation-string-length=文字数(${top.length})が正しくありません。\
+${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "以内") : \
+(top.minLength != null ? (top.minLength + "以上") : \
+(top.maxLength != null ? (top.maxLength + "以下") : ""))}\
+の文字数を入力してください。
 validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
 validation-constant=${top.constants}中の値を選んでください。
 validation-prohibited=${top.constants}中の値が入力不可です。
