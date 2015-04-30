@@ -341,6 +341,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
 		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
 
+		vmmap.put("required", "Validators.MSGID_REQUIRED");
 		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
 		vmmap.put("filelength", "Validators.MSGID_FILE_LENTH");
 		vmmap.put("constant", "Validators.MSGID_CONSTANT");
