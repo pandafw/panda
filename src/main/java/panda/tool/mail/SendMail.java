@@ -1,9 +1,13 @@
 package panda.tool.mail;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
 
+import panda.io.Files;
+import panda.lang.Charsets;
 import panda.util.tool.AbstractCommandTool;
 
 /**
@@ -39,6 +43,8 @@ public class SendMail {
 			addCommandLineOption("s", "subject", "Mail subject");
 			
 			addCommandLineOption("m", "message", "Mail message");
+			
+			addCommandLineOption("i", "input", "Mail message file");
 		}
 
 		@Override
@@ -59,6 +65,12 @@ public class SendMail {
 
 			if (cl.hasOption("m")) {
 				setParameter("message", cl.getOptionValue("m").trim());
+			}
+
+			if (cl.hasOption("i")) {
+				String f = cl.getOptionValue("i").trim();
+				String m = Files.readFileToString(new File(f), Charsets.CS_UTF_8);
+				setParameter("message", m);
 			}
 		}
 	}
