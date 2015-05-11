@@ -585,6 +585,7 @@ public class URLHelper {
 	 * @param paramSeparator parameter separator
 	 * @param encoding encoding
 	 */
+	@SuppressWarnings("unchecked")
 	public static void appendQueryString(Appendable link, Object params, String paramSeparator, boolean addNull, String encoding) {
 		if (params == null) {
 			return;
@@ -594,7 +595,7 @@ public class URLHelper {
 			boolean noClass = !(params instanceof Map);
 
 			BeanHandler bh = Beans.i().getBeanHandler(params.getClass());
-			String[] pns = bh.getReadPropertyNames();
+			String[] pns = bh.getReadPropertyNames(params);
 			
 			Iterator iter = Iterators.asIterator(pns);
 			while (iter.hasNext()) {
@@ -603,7 +604,6 @@ public class URLHelper {
 					continue;
 				}
 
-				@SuppressWarnings("unchecked")
 				Object value = bh.getPropertyValue(params, name);
 				if (value == null && !addNull) {
 					continue;
