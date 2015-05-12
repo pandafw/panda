@@ -190,10 +190,13 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * @param pager pager
 	 */
 	public void loadLimitParams(Pager pager) {
-		if (pager.getLimit() == null || pager.getLimit() < 1) {
-			pager.setLimit(Numbers.toLong((String)getState().loadState("pager"), 0L));
+		if (!pager.hasLimit()) {
+			StateProvider sp = getState();
+			if (sp != null) {
+				pager.setLimit(Numbers.toLong((String)sp.loadState("pager"), 0L));
+			}
 		}
-		if (pager.getLimit() == null || pager.getLimit() < 1) {
+		if (!pager.hasLimit()) {
 			String tx = getMethodName() + ActionRC.PAGER_LIMIT_SUFFIX;
 			Long l = getTextAsLong(tx);
 			if (l == null && !ActionRC.LIST_PAGER_LIMIT.equals(tx)) {
