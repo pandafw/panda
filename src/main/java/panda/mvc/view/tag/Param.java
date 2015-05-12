@@ -26,7 +26,7 @@ public class Param extends Component {
 
 	protected String name;
 	protected Object value;
-	protected boolean suppressEmptyParameters;
+	protected boolean suppressEmpty;
 
 	public boolean usesBody() {
 		return true;
@@ -47,7 +47,7 @@ public class Param extends Component {
 			}
 		}
 		else {
-			if (!suppressEmptyParameters || Strings.isNotEmpty(body)) {
+			if (!suppressEmpty || Strings.isNotEmpty(body)) {
 				if (component instanceof UnnamedParametric) {
 					((UnnamedParametric)component).addParameter(body);
 				}
@@ -68,8 +68,8 @@ public class Param extends Component {
 		this.value = value;
 	}
 
-	public void setSuppressEmptyParameters(boolean suppressEmptyParameters) {
-		this.suppressEmptyParameters = suppressEmptyParameters;
+	public void setSuppressEmpty(boolean suppressEmpty) {
+		this.suppressEmpty = suppressEmpty;
 	}
 
 }

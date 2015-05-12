@@ -4,5 +4,5 @@
 		linkStyle="hp1.#n" 
 		linkHref=_index_pager_link_ 
 		onLinkClick="s_loadmask()" 
-		onLimitChange="sl_limit('index', this)"/>
+		onLimitChange="sl_limit('', this)"/>
 </div>

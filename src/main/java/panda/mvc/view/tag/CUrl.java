@@ -87,6 +87,10 @@ public class CUrl extends ContextBean {
 		urlbuilder.setEscapeAmp(escapeAmp);
 	}
 
+	public void setSuppressParam(String suppress) {
+		urlbuilder.setSuppressParam(suppress);
+	}
+
 	public void setForceAddSchemeHostAndPort(boolean forceAddSchemeHostAndPort) {
 		urlbuilder.setForceAddSchemeHostAndPort(forceAddSchemeHostAndPort);
 	}

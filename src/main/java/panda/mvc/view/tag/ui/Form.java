@@ -256,6 +256,10 @@ public class Form extends UIBean {
 		urlbuilder.setEscapeAmp(escapeAmp);
 	}
 
+	public void setSuppressParam(String suppress) {
+		urlbuilder.setSuppressParam(suppress);
+	}
+
 	public void setForceAddSchemeHostAndPort(boolean forceAddSchemeHostAndPort) {
 		urlbuilder.setForceAddSchemeHostAndPort(forceAddSchemeHostAndPort);
 	}

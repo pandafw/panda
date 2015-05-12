@@ -160,7 +160,7 @@ public class ServletURLHelper extends URLHelper {
 	public static String buildURL(HttpServletRequest request, 
 			String scheme, int port, String uri, String query, Object params,
 			boolean forceAddSchemeHostAndPort, boolean escapeAmp, String encoding) {
-		return buildURL(request, scheme, port, uri, query, params, forceAddSchemeHostAndPort, escapeAmp, false, Charsets.UTF_8);
+		return buildURL(request, scheme, port, uri, query, params, forceAddSchemeHostAndPort, escapeAmp, SUPPRESS_NULL, Charsets.UTF_8);
 	}
 	
 	/**
@@ -178,7 +178,7 @@ public class ServletURLHelper extends URLHelper {
 	 */
 	public static String buildURL(HttpServletRequest request, 
 			String scheme, int port, String uri, String query, Object params,
-			boolean forceAddSchemeHostAndPort, boolean escapeAmp, boolean addNull, String encoding) {
+			boolean forceAddSchemeHostAndPort, boolean escapeAmp, int suppress, String encoding) {
 
 		String host = null;
 		
@@ -205,6 +205,6 @@ public class ServletURLHelper extends URLHelper {
 			uri = HttpServlets.getRequestURI(request);
 		}
 
-		return buildURL(scheme, host, port, uri, query, params, escapeAmp, addNull, encoding);
+		return buildURL(scheme, host, port, uri, query, params, escapeAmp, suppress, encoding);
 	}
 }

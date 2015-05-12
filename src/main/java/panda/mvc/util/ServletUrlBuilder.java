@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.MvcConstants;
 import panda.net.http.URLHelper;
@@ -20,6 +21,10 @@ import panda.servlet.ServletURLHelper;
  */
 @IocBean(type = UrlBuilder.class, singleton = false)
 public class ServletUrlBuilder implements UrlBuilder {
+	public static final String SUPPRESS_NONE = "none";
+	public static final String SUPPRESS_EMPTY = "empty";
+	public static final String SUPPRESS_NULL = "null";
+	
 	@IocInject
 	protected HttpServletRequest request;
 
@@ -42,6 +47,8 @@ public class ServletUrlBuilder implements UrlBuilder {
 
 	protected boolean escapeAmp;
 
+	protected String suppressParam;
+	
 	@IocInject(value = MvcConstants.UI_URL_ENCODE, required = false)
 	protected String encoding = Charsets.UTF_8;
 
@@ -77,17 +84,25 @@ public class ServletUrlBuilder implements UrlBuilder {
 			uri = HttpServlets.getRequestURI(request);
 		}
 
-		String qs = query;
 		Map ps = params;
-		if (GET.equals(includeParams)) {
-			if (qs == null) {
-				qs = HttpServlets.getRequestQueryString(request);
-			}
-			else {
-				qs += '&' + HttpServlets.getRequestQueryString(request);
+		if (GET.equalsIgnoreCase(includeParams)) {
+			String qs = HttpServlets.getRequestQueryString(request);
+			Map<String, Object> qsm = URLHelper.parseQueryString(qs);
+			if (Collections.isNotEmpty(qsm)) {
+				if (ps == null) {
+					ps = new LinkedHashMap();
+				}
+				else {
+					ps = new LinkedHashMap(ps);
+				}
+				for (Entry<String, Object> en : qsm.entrySet()) {
+					if (!ps.containsKey(en.getKey())) {
+						ps.put(en.getKey(), en.getValue());
+					}
+				}
 			}
 		}
-		else if (ALL.equals(includeParams)) {
+		else if (ALL.equalsIgnoreCase(includeParams)) {
 			if (ps == null) {
 				ps = request.getParameterMap();
 			}
@@ -103,8 +118,8 @@ public class ServletUrlBuilder implements UrlBuilder {
 		}
 
 		StringBuilder link = new StringBuilder();
-		link.append(ServletURLHelper.buildURL(request, scheme, port, uri, qs, ps, forceAddSchemeHostAndPort,
-			escapeAmp, encoding));
+		link.append(ServletURLHelper.buildURL(request, scheme, port, uri, query, ps, forceAddSchemeHostAndPort,
+			escapeAmp, getSuppressOption(), encoding));
 
 		if (Strings.isNotEmpty(anchor)) {
 			link.append('#').append(anchor);
@@ -230,6 +245,30 @@ public class ServletUrlBuilder implements UrlBuilder {
 	 */
 	public boolean isEscapeAmp() {
 		return escapeAmp;
+	}
+
+	private int getSuppressOption() {
+		if (SUPPRESS_EMPTY.equalsIgnoreCase(suppressParam)) {
+			return URLHelper.SUPPRESS_EMPTY;
+		}
+		if (SUPPRESS_NONE.equalsIgnoreCase(suppressParam)) {
+			return URLHelper.SUPPRESS_NONE;
+		}
+		return URLHelper.SUPPRESS_NULL;
+	}
+	
+	/**
+	 * @return the suppress
+	 */
+	public String getSuppressParam() {
+		return suppressParam;
+	}
+
+	/**
+	 * @param suppress the suppress to set
+	 */
+	public void setSuppressParam(String suppress) {
+		this.suppressParam = suppress;
 	}
 
 	/**

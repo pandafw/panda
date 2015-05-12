@@ -230,6 +230,10 @@ public class Pager implements Cloneable, Serializable {
 		}
 	}
 
+	public boolean hasLimit() {
+		return limit != null && limit > 0;
+	}
+
 	/**
 	 * @return the limit
 	 */

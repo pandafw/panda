@@ -121,6 +121,15 @@ public interface UrlBuilder {
 	 */
 	public void setEscapeAmp(boolean escapeAmp);
 
+	/**
+	 * @return the suppress
+	 */
+	public String getSuppressParam();
+
+	/**
+	 * @param suppress the suppress to set
+	 */
+	public void setSuppressParam(String suppress);
 
 	/**
 	 * @return the encoding
