@@ -324,8 +324,8 @@ if (typeof String.prototype.decodeBase64 != "function") {
 	};
 }
 
-if (typeof String.prototype.queryParams != "function") {
-	String.prototype.queryParams = function(f) {
+if (typeof String.prototype.queryArrays != "function") {
+	String.prototype.queryArrays = function(f) {
 		var qs = [], s = this, i = s.indexOf('?');
 		if (i >= 0) {
 			s = s.substring(i + 1);
@@ -334,12 +334,28 @@ if (typeof String.prototype.queryParams != "function") {
 		for (i = 0; i < ss.length; i++) {
 			var pv = ss[i].split('=');
 			var n = decodeURIComponent(pv[0]);
-			if (f != n) {
+			if (f == null || f == n) {
 				qs.push({
 					name: n,
 					value: pv.length > 1 ? decodeURIComponent(pv[1]) : ''
 				});
 			}
+		}
+		return qs;
+	};
+}
+
+if (typeof String.prototype.queryParams != "function") {
+	String.prototype.queryParams = function() {
+		var qs = {}, s = this, i = s.indexOf('?');
+		if (i >= 0) {
+			s = s.substring(i + 1);
+		}
+		var ss = s.split('&');
+		for (i = 0; i < ss.length; i++) {
+			var pv = ss[i].split('=');
+			var n = decodeURIComponent(pv[0]);
+			qs[n] = pv.length > 1 ? decodeURIComponent(pv[1]) : '';
 		}
 		return qs;
 	};
