@@ -1,6 +1,7 @@
 package panda.io;
 
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -18,6 +20,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
@@ -57,6 +61,57 @@ public class Files {
 	 */
 	private static final long FILE_COPY_BUFFER_SIZE = Numbers.MB * 30;
 
+	public static class FileLocker implements Closeable {
+		RandomAccessFile file;
+		FileLock lock;
+
+		public FileLocker(RandomAccessFile file, FileLock lock) {
+			this.file = file;
+			this.lock = lock;
+		}
+
+		@Override
+		public void close() throws IOException {
+			if (lock != null) {
+				lock.release();
+			}
+			file.close();
+		}
+	}
+
+	public static FileLocker lock(File file) throws IOException {
+		RandomAccessFile raf = new RandomAccessFile(file, "rw");
+		
+		// Get a file channel for the file
+		FileChannel channel = raf.getChannel();
+
+		// Use the file channel to create a lock on the file.
+		// This method blocks until it can retrieve the lock.
+		FileLock lock = channel.lock();
+
+		return new FileLocker(raf, lock);
+	}
+	
+	public static FileLocker tryLock(File file) throws IOException {
+		RandomAccessFile raf = new RandomAccessFile(file, "rw");
+
+		// Get a file channel for the file
+		FileChannel channel = raf.getChannel();
+
+		// Try acquiring the lock without blocking. This method returns
+		// null or throws an exception if the file is already locked.
+		try {
+			FileLock lock = channel.tryLock();
+
+			return new FileLocker(raf, lock);
+		}
+		catch (OverlappingFileLockException e) {
+			// File is already locked in this thread or virtual machine
+			raf.close();
+			return null;
+		}
+	}
+	
 	/**
 	 * copy file or directory
 	 * 
