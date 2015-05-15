@@ -625,7 +625,7 @@ public class URLHelper {
 							link.append(paramSeparator);
 						}
 						else {
-							next = false;
+							next = true;
 						}
 						buildQuerySubstring(name, pv, encoding, link);
 					}
@@ -641,7 +641,7 @@ public class URLHelper {
 						link.append(paramSeparator);
 					}
 					else {
-						next = false;
+						next = true;
 					}
 					buildQuerySubstring(name, value, encoding, link);
 				}

@@ -17,6 +17,7 @@ public class URLHelperTest {
 	
 	static {
 		params.put("a", "s");
+		params.put("b", null);
 		params.put("n", 100);
 	}
 
@@ -33,14 +34,25 @@ public class URLHelperTest {
 
 
 	@Test
-	public void testGetURLRoot() throws Exception {
-		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com"));
-		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com/"));
-		assertEquals("http://www.test.com", URLHelper.getURLDomain("http://www.test.com/app"));
+	public void testGetURLDomain() throws Exception {
+		assertEquals("www.test.com", URLHelper.getURLDomain("http://www.test.com"));
+		assertEquals("www.test.com", URLHelper.getURLDomain("http://www.test.com/"));
+		assertEquals("www.test.com", URLHelper.getURLDomain("http://www.test.com/app"));
 		assertEquals(null, URLHelper.getURLDomain(null));
-		assertEquals(null, URLHelper.getURLDomain(""));
-		assertEquals(null, URLHelper.getURLDomain("/app"));
-		assertEquals(null, URLHelper.getURLDomain("app"));
+		assertEquals("", URLHelper.getURLDomain(""));
+		assertEquals("", URLHelper.getURLDomain("/app"));
+		assertEquals("app", URLHelper.getURLDomain("app"));
+	}
+
+	@Test
+	public void testGetURLRoot() throws Exception {
+		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com"));
+		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com/"));
+		assertEquals("http://www.test.com", URLHelper.getURLRoot("http://www.test.com/app"));
+		assertEquals(null, URLHelper.getURLDomain(null));
+		assertEquals("", URLHelper.getURLDomain(""));
+		assertEquals("", URLHelper.getURLDomain("/app"));
+		assertEquals("app", URLHelper.getURLDomain("app"));
 	}
 
 	@Test
