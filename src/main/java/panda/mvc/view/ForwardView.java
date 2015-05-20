@@ -10,7 +10,6 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.RequestPath;
 
 /**
  * 内部重定向视图
@@ -36,8 +35,6 @@ public class ForwardView extends AbstractPathView {
 	}
 
 	public void render(ActionContext ac) {
-		HttpServletRequest req = ac.getRequest();
-
 		String path = evalPath(ac);
 		String args = "";
 		if (path != null) {
@@ -52,7 +49,7 @@ public class ForwardView extends AbstractPathView {
 		
 		// 空路径，采用默认规则
 		if (Strings.isBlank(path)) {
-			path = RequestPath.getRequestPath(req);
+			path = ac.getPath();
 			path = "/WEB-INF" + (path.startsWith("/") ? "" : "/") + FileNames.removeExtension(path) +  ext;
 		}
 		// 绝对路径 : 以 '/' 开头的路径不增加 '/WEB-INF'

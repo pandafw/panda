@@ -155,17 +155,17 @@ public class HttpServlets {
 		return uri;
 	}
 	
-	public static Throwable getServletException(HttpServletRequest request) {
-		// support for JSP exception pages, exposing the servlet or JSP exception
-		Throwable ex = (Throwable)request.getAttribute(ERROR_EXCEPTION_ATTRIBUTE);
-
-		if (ex == null) {
-			ex = (Throwable)request.getAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE);
+	/**
+	 * @param request request
+	 * @return relative URI
+	 */
+	public static String getServletURI(HttpServletRequest request) {
+		if (request == null) {
+			return null;
 		}
-		
-		return ex;
+		return getRequestURI(request).substring(request.getContextPath().length());
 	}
-
+	
 	/**
 	 * Retrieves the current request servlet path. Deals with differences between servlet specs (2.2
 	 * vs 2.3+)
@@ -207,6 +207,17 @@ public class HttpServlets {
 		return URLHelper.decodeURL(requestUri);
 	}
 
+	public static Throwable getServletException(HttpServletRequest request) {
+		// support for JSP exception pages, exposing the servlet or JSP exception
+		Throwable ex = (Throwable)request.getAttribute(ERROR_EXCEPTION_ATTRIBUTE);
+
+		if (ex == null) {
+			ex = (Throwable)request.getAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE);
+		}
+		
+		return ex;
+	}
+
 	/**
 	 * @param request request
 	 * @return request query string
@@ -237,17 +248,6 @@ public class HttpServlets {
 		String q = getRequestQuery(request);
 		String s = Strings.substringAfter(q, '#');
 		return s;
-	}
-	
-	/**
-	 * @param request request
-	 * @return relative URI
-	 */
-	public static String getServletURI(HttpServletRequest request) {
-		if (request == null) {
-			return null;
-		}
-		return getRequestURI(request).substring(request.getContextPath().length());
 	}
 
 	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {

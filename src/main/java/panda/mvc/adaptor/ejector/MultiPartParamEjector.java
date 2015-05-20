@@ -13,7 +13,6 @@ import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.RequestPath;
 import panda.mvc.adaptor.multipart.FileItemIterator;
 import panda.mvc.adaptor.multipart.FileItemStream;
 import panda.mvc.adaptor.multipart.FileUploadException;
@@ -36,7 +35,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 			try {
 				HttpServletRequest req = ac.getRequest();
 				if (log.isDebugEnabled()) {
-					log.debug("parse: " + RequestPath.getRequestPath(req));
+					log.debug("parse: " + ac.getPath());
 				}
 
 				String qs = req.getQueryString();

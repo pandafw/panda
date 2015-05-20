@@ -15,20 +15,20 @@ public class IocBaseTest extends AbstractMvcTestCase {
 
 	@Test
 	public void testAppValue() throws Throwable {
-		request.setPathInfo("/ioc/getAppValue.do");
+		request.setRequestURI("/ioc/getAppValue");
 		servlet.service(request, response);
 		String resp = response.getContentAsString();
 		Assert.assertEquals("null", resp);
 
 		newreq();
-		request.setPathInfo("/ioc/setAppValue.do");
+		request.setRequestURI("/ioc/setAppValue");
 		request.addParameter("v", "test");
 		servlet.service(request, response);
 		resp = response.getContentAsString();
 		Assert.assertEquals("test", resp);
 
 		newreq();
-		request.setPathInfo("/ioc/getAppValue.do");
+		request.setRequestURI("/ioc/getAppValue");
 		servlet.service(request, response);
 		resp = response.getContentAsString();
 		Assert.assertEquals("null", resp);

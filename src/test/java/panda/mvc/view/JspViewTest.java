@@ -20,7 +20,7 @@ public class JspViewTest {
 	@Test
 	public void test_req_path() throws Exception {
 		MockActionContext ac = Mock.actionContext();
-		ac.getMockRequest().setPathInfo("/abc/bcd.do");
+		ac.setPath("/abc/bcd");
 		JspView fv = new JspView(null);
 		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
@@ -29,7 +29,7 @@ public class JspViewTest {
 	@Test
 	public void test_req_path2() throws Exception {
 		MockActionContext ac = Mock.actionContext();
-		ac.getMockRequest().setPathInfo("/abc/bcd.do");
+		ac.setPath("/abc/bcd.do");
 		JspView fv = new JspView("");
 		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());
@@ -38,7 +38,7 @@ public class JspViewTest {
 	@Test
 	public void test_req_path3() throws Exception {
 		MockActionContext ac = Mock.actionContext();
-		ac.getMockRequest().setPathInfo("/abc/bcd.do");
+		ac.setPath("/abc/bcd");
 		JspView fv = new JspView("  \r\n\t  ");
 		fv.render(ac);
 		assertEquals("/WEB-INF/abc/bcd.jsp", ac.getMockResponse().getForwardedUrl());

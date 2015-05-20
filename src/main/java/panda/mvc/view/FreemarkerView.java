@@ -6,7 +6,6 @@ import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.RequestPath;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.sitemesh.Sitemesher;
 import panda.net.http.HttpContentType;
@@ -75,7 +74,7 @@ public class FreemarkerView extends AbstractPathView {
 
 		// not defined
 		if (Strings.isEmpty(path)) {
-			path = RequestPath.getRequestPath(ac.getRequest());
+			path = ac.getPath();
 			path = FileNames.removeExtension(path) + EXT;
 			if (!fh.hasTemplate(path)) {
 				String base = ac.getAction().getClass().getName().replace('.', '/');
@@ -88,7 +87,7 @@ public class FreemarkerView extends AbstractPathView {
 		else if (path.charAt(0) == '~') {
 			String method = path.substring(1);
 
-			path = RequestPath.getRequestPath(ac.getRequest());
+			path = ac.getPath();
 			path = FileNames.removeExtension(path) + '~' + method + EXT;
 			if (!fh.hasTemplate(path)) {
 				String base = ac.getAction().getClass().getName().replace('.', '/');

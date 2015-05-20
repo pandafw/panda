@@ -15,9 +15,9 @@ import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
-import panda.mvc.RequestPath;
 import panda.mvc.UrlMapping;
 import panda.net.http.HttpMethod;
+import panda.servlet.HttpServlets;
 
 @IocBean(type=UrlMapping.class)
 public class DefaultUrlMapping implements UrlMapping {
@@ -73,7 +73,7 @@ public class DefaultUrlMapping implements UrlMapping {
 	}
 
 	public ActionInvoker getActionInvoker(ActionContext ac) {
-		String path = RequestPath.getRequestPath(ac.getRequest());
+		String path = HttpServlets.getServletURI(ac.getRequest());
 
 		ac.setPath(path);
 		ac.setPathArgs(new ArrayList<String>());

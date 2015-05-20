@@ -18,6 +18,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.config.FilterMvcConfig;
+import panda.servlet.HttpServlets;
 
 /**
  * 同 JSP/Serlvet 容器的挂接点
@@ -131,10 +132,9 @@ public class MvcFilter implements Filter {
 			ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		RequestPath path = RequestPath.getRequestPathObject(request);
-		String matchUrl = path.getUrl();
 
-		if (!isExclusion(matchUrl)) {
+		String url = HttpServlets.getServletURI(request);
+		if (!isExclusion(url)) {
 			if (handler.handle(request, response)) {
 				return;
 			}
