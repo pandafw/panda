@@ -76,11 +76,11 @@ validation-empty=項目の値は空ではありません。
 validation-required=必須項目です。
 validation-requiredfile=ファイルを指定してください。
 validation-requiredimage=画像ファイルを指定してください。
-validation-binary-length=入力バイト数(${top.binSize})が\
+validation-binary-length=バイト: ${top.binSize}。 \
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
-で入力してください。
+のバイトを入力してください。
 validation-date-to=開始日付より大きい日付を入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
@@ -90,13 +90,13 @@ validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" 
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\
 の数字を入力してください。
-validation-file-length=ファイルサイズ(${top.fileSize})が\
+validation-file-length=ファイルサイズ：${top.fileSize}。\
 ${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
 (top.minLength != null ? (top.minFileSize + "以上") : \
 (top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 のファイルを指定してください。
 validation-image=画像ファイルのフォーマットが正しくありません。
-validation-image-size=画像サイズが(${top.width}x${top.height})が\
+validation-image-size=画像サイズ: ${top.width}x${top.height}。\
 ${(top.minWidth != null && top.maxWidth != null) ? ("幅" + top.minWidth + "~" + top.maxWidth + "以内") : \
 (top.minWidth != null ? ("幅" + top.minWidth + "以上") : \
 (top.maxWidth != null ? ("幅" + top.maxWidth + "以下") : ""))}\
@@ -111,11 +111,11 @@ ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
 validation-number-to=The number must be larger than start number.
-validation-string-length=文字数(${top.length})が正しくありません。\
-${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "以内") : \
-(top.minLength != null ? (top.minLength + "以上") : \
-(top.maxLength != null ? (top.maxLength + "以下") : ""))}\
-の文字数を入力してください。
+validation-string-length=文字数: ${top.length}。\
+${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "桁以内") : \
+(top.minLength != null ? (top.minLength + "桁以上") : \
+(top.maxLength != null ? (top.maxLength + "桁以下") : ""))}\
+の文字を入力してください。
 validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
 validation-constant=${top.constants}中の値を選んでください。
 validation-prohibited=${top.constants}中の値が入力不可です。
