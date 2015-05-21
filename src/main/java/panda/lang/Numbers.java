@@ -2,6 +2,7 @@ package panda.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 /**
  * Utility class for Number.
@@ -90,6 +91,28 @@ public class Numbers {
 	/** Reusable Float constant for minus one. */
 	public static final Float FLOAT_MINUS_ONE = Float.valueOf(-1.0f);
 
+	public static DecimalFormat COMMA_FORMAT = new DecimalFormat("#,###");
+	
+	//----------------------------------------------------------------
+	public static String toCommaString(Number n) {
+		if (n == null) {
+			return null;
+		}
+		return COMMA_FORMAT.format(n);
+	}
+
+	public static String toCommaString(short n) {
+		return COMMA_FORMAT.format(n);
+	}
+
+	public static String toCommaString(int n) {
+		return COMMA_FORMAT.format(n);
+	}
+	
+	public static String toCommaString(long n) {
+		return COMMA_FORMAT.format(n);
+	}
+	
 	//----------------------------------------------------------------
 	public static byte defaultByte(Number n) {
 		return n == null ? 0 : n.byteValue();

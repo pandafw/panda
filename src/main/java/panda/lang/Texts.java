@@ -765,7 +765,7 @@ public abstract class Texts {
 	 * @return string list
 	 */
 	public static List<String> parseCsv(String str, char separator) {
-		return parseCsv(str, CsvReader.COMMA_SEPARATOR, CsvReader.DEFAULT_QUOTE_CHARACTER);
+		return parseCsv(str, CsvReader.COMMA_SEPARATOR, CsvReader.DEFAULT_QUOTE_CHAR);
 	}
 
 	/**

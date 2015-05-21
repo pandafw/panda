@@ -28,7 +28,7 @@ public class CsvReader implements Closeable {
 	 * The default quote character to use if none is supplied to the
 	 * constructor.
 	 */
-	public static final char DEFAULT_QUOTE_CHARACTER = '"';
+	public static final char DEFAULT_QUOTE_CHAR = '"';
 	
 	/**
 	 * Constructs CSVReader using a comma for the separator.
@@ -46,7 +46,7 @@ public class CsvReader implements Closeable {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public CsvReader(Reader reader, char separator) {
-		this(reader, separator, DEFAULT_QUOTE_CHARACTER);
+		this(reader, separator, DEFAULT_QUOTE_CHAR);
 	}
 	
 	
@@ -71,15 +71,15 @@ public class CsvReader implements Closeable {
 	 * @throws IOException if bad things happen during the read
 	 */
 	public List<List<String>> readAll() throws IOException {
-		List<List<String>> allElements = new ArrayList<List<String>>();
+		List<List<String>> all = new ArrayList<List<String>>();
 		while (true) {
-			List<String> nextLineAsTokens = readNext();
-			if (nextLineAsTokens == null) {
+			List<String> items = readNext();
+			if (items == null) {
 				break;
 			}
-			allElements.add(nextLineAsTokens);
+			all.add(items);
 		}
-		return allElements;
+		return all;
 
 	}
 
@@ -91,9 +91,9 @@ public class CsvReader implements Closeable {
 	 * @throws IOException if bad things happen during the read
 	 */
 	public List<String> readNext() throws IOException {
-		String nextLine = getNextLine();
-		if (nextLine != null) {
-			return parseLine(nextLine);
+		String line = getNextLine();
+		if (line != null) {
+			return parseLine(line);
 		}
 		return null;
 	}
@@ -137,50 +137,52 @@ public class CsvReader implements Closeable {
 	/**
 	 * Parses an incoming String and returns an array of elements.
 	 * 
-	 * @param nextLine the string to parse
+	 * @param line the string to parse
 	 * @return the comma-tokenized list of elements, or null if nextLine is null
 	 * @throws IOException if bad things happen during the read
 	 */
-	private List<String> parseLine(String nextLine) throws IOException {
-		List<String> tokensOnThisLine = new ArrayList<String>();
+	private List<String> parseLine(String line) throws IOException {
+		List<String> items = new ArrayList<String>();
 		StringBuilder sb = new StringBuilder();
 		boolean inQuotes = false;
 		do {
 			if (inQuotes) {
 				// continuing a quoted section, reappend newline
 				sb.append("\n");
-				nextLine = getNextLine();
-				if (nextLine == null)
+				line = getNextLine();
+				if (line == null) {
 					break;
+				}
 			}
-			for (int i = 0; i < nextLine.length(); i++) {
-				char c = nextLine.charAt(i);
+			
+			for (int i = 0; i < line.length(); i++) {
+				char c = line.charAt(i);
 				if (c == quotechar) {
 					// this gets complex... the quote may end a quoted block, or escape another quote.
 					// do a 1-char lookahead:
 					if( inQuotes  // we are in quotes, therefore there can be escaped quotes in here.
-						&& nextLine.length() > (i+1)  // there is indeed another character to check.
-						&& nextLine.charAt(i+1) == quotechar ){ // ..and that char. is a quote also.
+						&& line.length() > (i+1)  // there is indeed another character to check.
+						&& line.charAt(i+1) == quotechar ){ // ..and that char. is a quote also.
 						// we have two quote chars in a row == one quote char, so consume them both and
 						// put one on the token. we do *not* exit the quoted text.
-						sb.append(nextLine.charAt(i+1));
+						sb.append(line.charAt(i+1));
 						i++;
 					}
 					else {
 						inQuotes = !inQuotes;
 						// the tricky case of an embedded quote in the middle: a,bc"d"ef,g
 						if (i > 2 //not on the begining of the line
-								&& nextLine.charAt(i - 1) != separator //not at the begining of an escape sequence 
-								&& nextLine.length() > (i + 1) 
-								&& nextLine.charAt(i + 1) != separator //not at the	end of an escape sequence 
+								&& line.charAt(i - 1) != separator //not at the begining of an escape sequence 
+								&& line.length() > (i + 1) 
+								&& line.charAt(i + 1) != separator //not at the	end of an escape sequence 
 							) {
 							sb.append(c);
 						}
 					}
 				}
 				else if (c == separator && !inQuotes) {
-					tokensOnThisLine.add(sb.toString());
-					sb = new StringBuilder(); // start work on next token
+					items.add(sb.toString());
+					sb.setLength(0); // start work on next token
 				}
 				else {
 					sb.append(c);
@@ -188,8 +190,8 @@ public class CsvReader implements Closeable {
 			}
 		} while (inQuotes);
 
-		tokensOnThisLine.add(sb.toString());
-		return tokensOnThisLine;
+		items.add(sb.toString());
+		return items;
 	}
 
 	/**

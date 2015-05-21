@@ -33,10 +33,8 @@ import panda.lang.Numbers;
 /**
  * This is used to test Files for correctness.
  * 
- * @version $Id: FilesTestCase.java 1501735 2013-07-10 11:48:37Z sebb $
  * @see Files
  */
-// unit tests include tests of many deprecated methods
 @SuppressWarnings("serial")
 public class FilesTest extends FileBasedTestCase {
 
