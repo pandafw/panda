@@ -3,7 +3,7 @@ package panda.mvc.processor;
 import java.lang.reflect.Method;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Exceptions;
+import panda.lang.Arrays;
 import panda.mvc.ActionContext;
 
 @IocBean
@@ -18,7 +18,8 @@ public class InvokeProcessor extends AbstractProcessor {
 			doNext(ac);
 		}
 		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+			String msg = "Failed to invoke " + method + ": " + Arrays.toString(args);
+			throw new RuntimeException(msg, e);
 		}
 	}
 }

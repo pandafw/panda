@@ -25,6 +25,7 @@ import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -134,6 +135,13 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	public void adapt(ActionContext ac) {
 		Method method = ac.getMethod();
 		Annotation[][] pass = method.getParameterAnnotations();
+		if (pass.length == 0) {
+			// no parameters
+			ac.setParams(new LinkedHashMap<String, Object>());
+			ac.setArgs(Arrays.EMPTY_OBJECT_ARRAY);
+			return;
+		}
+		
 		Class<?>[] clazs = method.getParameterTypes();
 		Type[] types = method.getGenericParameterTypes();
 
