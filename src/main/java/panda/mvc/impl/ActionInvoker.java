@@ -60,7 +60,7 @@ public class ActionInvoker {
 		ActionChain chain = getActionChain(ac);
 		if (chain == null) {
 			if (log.isDebugEnabled()) {
-				log.debugf("Not chain for req (path=%s, method=%s)", ac.getPath(), ac.getRequest().getMethod());
+				log.debugf("No chain for request (path=%s, method=%s)", ac.getPath(), ac.getRequest().getMethod());
 			}
 			return false;
 		}

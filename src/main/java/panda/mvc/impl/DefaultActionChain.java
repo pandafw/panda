@@ -16,12 +16,63 @@ public class DefaultActionChain implements ActionChain {
 	
 	public static final String IOC_PREFIX = "#";
 	
-	private ActionInfo info;
+	private ActionInfo ainfo;
 	private List<String> procs;
-	private int current;
+	
+	public static class ProxyActionChain implements ActionChain {
+		private ActionInfo ainfo;
+		private List<String> procs;
+		private int current = -1;
 
-	public DefaultActionChain(ActionInfo ai, List<String> procs) {
-		info = ai;
+		public ProxyActionChain(ActionInfo ainfo, List<String> procs) {
+			this.ainfo = ainfo;
+			this.procs = procs;
+		}
+
+		@Override
+		public ActionInfo getInfo() {
+			return ainfo;
+		}
+
+		@Override
+		public void doChain(ActionContext ac) {
+			throw new IllegalStateException("Illegal call for ProxyActionChain.doChain()");
+		}
+
+		@Override
+		public void doNext(ActionContext ac) {
+			current++;
+			if (current >= procs.size()) {
+				return;
+			}
+			
+			String name = procs.get(current);
+			Processor processor = initProcessor(name, ac);
+			processor.process(ac);
+		}
+
+		protected Processor initProcessor(String name, ActionContext ac) {
+			try {
+				Processor p;
+				if (name.startsWith(IOC_PREFIX)) {
+					p = ac.getIoc().get(Processor.class, name.substring(1));
+				}
+				else {
+					p = (Processor)Classes.born(name);
+				}
+				return p;
+			}
+			catch (Throwable e) {
+				if (log.isDebugEnabled()) {
+					log.debugf("Failed to init processor(%s) for action chain %s/%s", name, ainfo.getChainName(), ainfo.getMethod());
+				}
+				throw Exceptions.wrapThrow(e);
+			}
+		}
+	}
+
+	public DefaultActionChain(ActionInfo ainfo, List<String> procs) {
+		this.ainfo = ainfo;
 		this.procs = procs;
 	}
 
@@ -29,51 +80,16 @@ public class DefaultActionChain implements ActionChain {
 	 * @return the info
 	 */
 	public ActionInfo getInfo() {
-		return info;
-	}
-
-	/**
-	 * @param info the info to set
-	 */
-	public void setInfo(ActionInfo info) {
-		this.info = info;
+		return ainfo;
 	}
 
 	public void doChain(ActionContext ac) {
-		ac.setChain(this);
-		ac.setInfo(info);
-		ac.setAction(ac.getIoc().get(ac.getInfo().getActionType()));
-		current = -1;
-		doNext(ac);
+		ac.setAction(ac.getIoc().get(ainfo.getActionType()));
+		ac.setChain(new ProxyActionChain(ainfo, procs));
+		ac.getChain().doNext(ac);
 	}
 
 	public void doNext(ActionContext ac) {
-		current++;
-		if (current >= procs.size()) {
-			return;
-		}
-		
-		String name = procs.get(current);
-		Processor processor = initProcessor(name, ac);
-		processor.process(ac);
-	}
-
-	protected Processor initProcessor(String name, ActionContext ac) {
-		try {
-			Processor p;
-			if (name.startsWith(IOC_PREFIX)) {
-				p = ac.getIoc().get(Processor.class, name.substring(1));
-			}
-			else {
-				p = (Processor)Classes.born(name);
-			}
-			return p;
-		}
-		catch (Throwable e) {
-			if (log.isDebugEnabled()) {
-				log.debugf("Failed to init processor(%s) for action chain %s/%s", name, info.getChainName(), info.getMethod());
-			}
-			throw Exceptions.wrapThrow(e);
-		}
+		throw new IllegalStateException("Illegal call for DefaultActionChain.doNext()");
 	}
 }
