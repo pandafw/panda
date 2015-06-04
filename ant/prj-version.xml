@@ -25,7 +25,7 @@
 			else {
 				prjs += ";.";
 			}
-			prjs = prjs.split(';');
+			prjs = prjs.toString().split(';');
 
 			function run(cmd) {
 				var is = null;
@@ -87,7 +87,7 @@
 			ver = project.getProperty("prj.version") + "." + rev;
 			project.setProperty("REVISION", rev);
 			project.setProperty("VERSION", ver);
-			project.setProperty("GVERSION", ver.replace(/\./g, '-'));
+			project.setProperty("GVERSION", ver.toString().replaceAll("\.", "-"));
 		}
 	</script>
 </project>
