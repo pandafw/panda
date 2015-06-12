@@ -1,6 +1,7 @@
 package panda.cast;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import panda.lang.Charsets;
@@ -12,6 +13,7 @@ import panda.lang.Strings;
 public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	private String encoding = Charsets.UTF_8;
 	private String format;
+	private Locale locale;
 	
 	private String prefix;
 	private boolean skipCastError = false;
@@ -56,6 +58,19 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 		this.format = format;
 	}
 
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 	/**
 	 * @return the prefix
