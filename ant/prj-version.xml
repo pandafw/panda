@@ -84,10 +84,13 @@
 			if (rev == "") {
 				rev = "0";
 			}
-			ver = project.getProperty("prj.version") + "." + rev;
 			project.setProperty("REVISION", rev);
+			
+			ver = project.getProperty("prj.version") + "." + rev;
 			project.setProperty("VERSION", ver);
-			project.setProperty("GVERSION", ver.toString().replaceAll("\.", "-"));
+
+			gver = java.util.regex.Pattern.compile("\\.").matcher(ver.toString()).replaceAll("-");
+			project.setProperty("GVERSION", gver);
 		}
 	</script>
 </project>
