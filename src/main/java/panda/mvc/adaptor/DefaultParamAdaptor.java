@@ -465,6 +465,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		cc.setPrefix(name);
 		cc.set(FileItemCastor.KEY, ac.getFilePool());
 		cc.setFormat(format);
+		cc.setLocale(ac.getLocale());
 		
 		T o = cs.cast(value, type, cc);
 		if (Collections.isNotEmpty(cc.getErrors())) {
