@@ -19,9 +19,11 @@ public class ResourceLoadAction extends BaseLoadAction {
 	}
 	
 	@Override
-	protected void doLoad() throws Exception {
+	protected boolean doLoad() throws Exception {
 		((DefaultTextProvider)getText()).clearResourceBundlesCache();
 
 		arbLoader.reload();
+		
+		return true;
 	}
 }

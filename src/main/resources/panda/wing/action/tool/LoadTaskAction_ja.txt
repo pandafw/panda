@@ -1,4 +1,4 @@
 title=キャッシュ
 
-resource=リソース
-template=テンプレート
+task-resource=リソース
+task-template=テンプレート

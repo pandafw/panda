@@ -23,7 +23,8 @@ public class TemplateLoadAction extends BaseLoadAction {
 	}
 	
 	@Override
-	protected void doLoad() {
+	protected boolean doLoad() {
 		aftLoader.reload();
+		return true;
 	}
 }

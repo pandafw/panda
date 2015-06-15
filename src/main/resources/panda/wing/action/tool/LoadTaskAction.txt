@@ -1,4 +1,4 @@
 title=Cache
 
-resource=Resource
-template=Template
+task-resource=Resource
+task-template=Template

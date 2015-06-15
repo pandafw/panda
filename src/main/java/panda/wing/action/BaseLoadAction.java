@@ -25,13 +25,13 @@ public abstract class BaseLoadAction extends BaseTaskAction {
 	}
 
 	protected void doExecute() throws Exception {
-		doLoad();
+		boolean r = doLoad();
 		
 		addActionMessage(getText(msgKey));
-		if (Strings.isNotEmpty(appKey)) {
+		if (r && Strings.isNotEmpty(appKey)) {
 			getApp().put(appKey, DateTimes.getDate());
 		}
 	}
 
-	protected abstract void doLoad() throws Exception;
+	protected abstract boolean doLoad() throws Exception;
 }
