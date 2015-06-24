@@ -218,7 +218,7 @@ public class Attributes {
 		String cssStyle = tag.getCssStyle();
 		String cssErrorStyle = tag.getCssErrorStyle();
 		
-		Map<String, List<String>> errors = tr.context.getParamAware().getErrors();
+		Map<String, List<String>> errors = tr.context.getParamAlert().getErrors();
 		
 		boolean hasFieldErrors = (name != null && errors != null && errors.get(name) != null);
 		

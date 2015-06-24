@@ -1,4 +1,4 @@
-package panda.mvc.aware;
+package panda.mvc.alert;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,23 +9,20 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
 
-/**
- * Provides a default implementation of ParamValidationAware.
- */
-@IocBean(type=ParamAware.class, scope=Scope.REQUEST)
-public class ParamAwareSupport implements ParamAware {
+@IocBean(type=ParamAlert.class, scope=Scope.REQUEST)
+public class ParamAlertSupport implements ParamAlert {
 
 	private Map<String, List<String>> errors;
 
 	/**
-	 * @see panda.mvc.aware.ParamAware#setErrors(java.util.Map)
+	 * @see panda.mvc.alert.ParamAlert#setErrors(java.util.Map)
 	 */
 	public void setErrors(Map<String, List<String>> errors) {
 		this.errors = errors;
 	}
 
 	/**
-	 * @see panda.mvc.aware.ParamAware#getErrors()
+	 * @see panda.mvc.alert.ParamAlert#getErrors()
 	 */
 	public Map<String, List<String>> getErrors() {
 		if (errors == null) {
@@ -35,7 +32,7 @@ public class ParamAwareSupport implements ParamAware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.ParamAware#addError(java.lang.String,
+	 * @see panda.mvc.alert.ParamAlert#addError(java.lang.String,
 	 *      java.lang.String)
 	 */
 	public void addError(String name, String error) {
@@ -51,7 +48,7 @@ public class ParamAwareSupport implements ParamAware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.ParamAware#hasErrors()
+	 * @see panda.mvc.alert.ParamAlert#hasErrors()
 	 */
 	public boolean hasErrors() {
 		return Collections.isNotEmpty(errors);

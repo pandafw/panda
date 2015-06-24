@@ -28,13 +28,13 @@ public class ValidateProcessor extends ViewProcessor {
 			StringBuilder sb = new StringBuilder();
 			
 			sb.append("Validation error occurs for " + ac.getPath() + ": \n");
-			if (ac.getActionAware().hasErrors()) {
+			if (ac.getActionAlert().hasErrors()) {
 				sb.append("ActionErrors: ");
-				Jsons.toJson(ac.getActionAware().getErrors(), sb, true);
+				Jsons.toJson(ac.getActionAlert().getErrors(), sb, true);
 			}
-			if (ac.getParamAware().hasErrors()) {
+			if (ac.getParamAlert().hasErrors()) {
 				sb.append("ParamErrors: ");
-				Jsons.toJson(ac.getParamAware().getErrors(), sb, true);
+				Jsons.toJson(ac.getParamAlert().getErrors(), sb, true);
 			}
 			throw new ValidateException(sb.toString());
 		}

@@ -1,44 +1,44 @@
-<#if ApplicationErrors?has_content
-	|| ApplicationWarnings?has_content
-	|| ApplicationConfirms?has_content
-	|| ApplicationMessages?has_content>
+<#if applicationErrors?has_content
+	|| applicationWarnings?has_content
+	|| applicationConfirms?has_content
+	|| applicationMessages?has_content>
 <div class="alert alert-dismissable<#rt/>
-<#if ApplicationErrors?has_content>
+<#if applicationErrors?has_content>
  alert-danger<#rt/>
-<#elseif ApplicationWarnings?has_content>
+<#elseif applicationWarnings?has_content>
  alert-warning<#rt/>
-<#elseif ApplicationConfirms?has_content>
+<#elseif applicationConfirms?has_content>
  alert-info<#rt/>
-<#elseif ApplicationMessages?has_content>
+<#elseif applicationMessages?has_content>
  alert-success<#rt/>
 </#if>
 ">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-<#if ApplicationErrors?has_content>
+<#if applicationErrors?has_content>
 	<ul class="fa-ul p-application-errors">
-	<#list ApplicationErrors?keys as k>
-		<li class="p-application-error" msgId="${k}"><i class="fa-li fa fa-exclamation-circle"></i>${ApplicationErrors[k]}</li>
+	<#list applicationErrors as k>
+		<li class="p-application-error" msgId="${k}"><i class="fa-li fa fa-exclamation-circle"></i><@p.text name=k/></li>
 	</#list>
 	</ul>
 </#if>
-<#if ApplicationWarnings?has_content>
+<#if applicationWarnings?has_content>
 	<ul class="fa-ul p-application-warnings">
-	<#list ApplicationWarnings?keys as k>
-		<li class="p-application-warning" msgId="${k}"><i class="fa-li fa fa-exclamation-triangle"></i>${ApplicationWarnings[k]}</li>
+	<#list applicationWarnings as k>
+		<li class="p-application-warning" msgId="${k}"><i class="fa-li fa fa-exclamation-triangle"></i><@p.text name=k/></li>
 	</#list>
 	</ul>
 </#if>
-<#if ApplicationConfirms?has_content>
+<#if applicationConfirms?has_content>
 	<ul class="fa-ul p-application-confirms">
-	<#list ApplicationConfirms?keys as k>
-		<li class="p-application-confirm" msgId="${k}"><i class="fa-li fa fa-question-circle"></i>${ApplicationConfirms[k]}</li>
+	<#list applicationConfirms as k>
+		<li class="p-application-confirm" msgId="${k}"><i class="fa-li fa fa-question-circle"></i><@p.text name=k/></li>
 	</#list>
 	</ul>
 </#if>
-<#if ApplicationMessages?has_content>
+<#if applicationMessages?has_content>
 	<ul class="fa-ul p-application-messages">
-	<#list ApplicationMessages?keys as k>
-		<li class="p-application-message" msgId="${k}"><i class="fa-li fa fa-info-circle"></i>${ApplicationMessages[k]}</li>
+	<#list applicationMessages as k>
+		<li class="p-application-message" msgId="${k}"><i class="fa-li fa fa-info-circle"></i><@p.text name=k/></li>
 	</#list>
 	</ul>
 </#if>

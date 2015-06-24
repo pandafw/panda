@@ -102,7 +102,7 @@ public class DefaultValidators implements Validators {
 
 	public boolean validate(ActionContext ac) {
 		validateParams(ac);
-		return !(ac.getActionAware().hasErrors() || ac.getParamAware().hasErrors());
+		return !(ac.getActionAlert().hasErrors() || ac.getParamAlert().hasErrors());
 	}
 	
 	protected void validateParams(ActionContext ac) {

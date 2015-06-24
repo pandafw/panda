@@ -51,7 +51,7 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 	protected void renderHeader() throws Exception {
 		String name = tag.getName();
 
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 
 		boolean hasFieldErrors = (name != null
 			&& Collections.isNotEmpty(fieldErrors)
@@ -99,7 +99,7 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 			writeRequired();
 		}
 		
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		if (Collections.isNotEmpty(fieldErrors)) {
 			for (String fn : getGroupTags()) {
 				List<String> fes = fieldErrors.get(fn);

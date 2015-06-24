@@ -19,7 +19,7 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 
 	@Override
 	protected void render() throws IOException {
-		Map<String, List<String>> errors = context.getParamAware().getErrors();
+		Map<String, List<String>> errors = context.getParamAlert().getErrors();
 		Collection<String> fieldErrorFieldNames = tag.getFieldNames();
 
 		if (Collections.isEmpty(fieldErrorFieldNames)) {

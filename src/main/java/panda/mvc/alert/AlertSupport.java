@@ -1,15 +1,11 @@
-package panda.mvc.aware;
+package panda.mvc.alert;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import panda.lang.Collections;
 
-/**
- * Provides a default implementation of ValidationAware. Returns new collections for errors
- * and messages.
- */
-public class AwareSupport implements Aware {
+public class AlertSupport implements Alert {
 
 	private Collection<String> errors;
 	private Collection<String> warnings;
@@ -17,7 +13,7 @@ public class AwareSupport implements Aware {
 	private Collection<String> messages;
 
 	/**
-	 * @see panda.mvc.aware.Aware#getErrors()
+	 * @see panda.mvc.alert.Alert#getErrors()
 	 */
 	public Collection<String> getErrors() {
 		return errors;
@@ -31,21 +27,21 @@ public class AwareSupport implements Aware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#setErrors(java.util.Collection)
+	 * @see panda.mvc.alert.Alert#setErrors(java.util.Collection)
 	 */
 	public void setErrors(Collection<String> errors) {
 		this.errors = errors;
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#addError(java.lang.String)
+	 * @see panda.mvc.alert.Alert#addError(java.lang.String)
 	 */
 	public void addError(String error) {
 		_getErrors().add(error);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#getWarnings()
+	 * @see panda.mvc.alert.Alert#getWarnings()
 	 */
 	public Collection<String> getWarnings() {
 		return warnings;
@@ -59,21 +55,21 @@ public class AwareSupport implements Aware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#setWarnings(java.util.Collection)
+	 * @see panda.mvc.alert.Alert#setWarnings(java.util.Collection)
 	 */
 	public void setWarnings(Collection<String> warnings) {
 		this.warnings = warnings;
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#addWarning(java.lang.String)
+	 * @see panda.mvc.alert.Alert#addWarning(java.lang.String)
 	 */
 	public void addWarning(String warning) {
 		_getWarnings().add(warning);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#getConfirms()
+	 * @see panda.mvc.alert.Alert#getConfirms()
 	 */
 	public Collection<String> getConfirms() {
 		return confirms;
@@ -87,21 +83,21 @@ public class AwareSupport implements Aware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#setConfirms(java.util.Collection)
+	 * @see panda.mvc.alert.Alert#setConfirms(java.util.Collection)
 	 */
 	public void setConfirms(Collection<String> confirms) {
 		this.confirms = confirms;
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#addConfirm(java.lang.String)
+	 * @see panda.mvc.alert.Alert#addConfirm(java.lang.String)
 	 */
 	public void addConfirm(String confirm) {
 		_getConfirms().add(confirm);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#getMessages()
+	 * @see panda.mvc.alert.Alert#getMessages()
 	 */
 	public Collection<String> getMessages() {
 		return messages;
@@ -115,49 +111,49 @@ public class AwareSupport implements Aware {
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#setMessages(java.util.Collection)
+	 * @see panda.mvc.alert.Alert#setMessages(java.util.Collection)
 	 */
 	public void setMessages(Collection<String> messages) {
 		this.messages = messages;
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#addMessage(java.lang.String)
+	 * @see panda.mvc.alert.Alert#addMessage(java.lang.String)
 	 */
 	public void addMessage(String message) {
 		_getMessages().add(message);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#hasErrors()
+	 * @see panda.mvc.alert.Alert#hasErrors()
 	 */
 	public boolean hasErrors() {
 		return Collections.isNotEmpty(errors);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#hasWarnings()
+	 * @see panda.mvc.alert.Alert#hasWarnings()
 	 */
 	public boolean hasWarnings() {
 		return Collections.isNotEmpty(warnings);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#hasConfirms()
+	 * @see panda.mvc.alert.Alert#hasConfirms()
 	 */
 	public boolean hasConfirms() {
 		return Collections.isNotEmpty(confirms);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#hasMessages()
+	 * @see panda.mvc.alert.Alert#hasMessages()
 	 */
 	public boolean hasMessages() {
 		return Collections.isNotEmpty(messages);
 	}
 
 	/**
-	 * @see panda.mvc.aware.Aware#isEmpty()
+	 * @see panda.mvc.alert.Alert#isEmpty()
 	 */
 	public boolean isEmpty() {
 		return Collections.isEmpty(errors) 

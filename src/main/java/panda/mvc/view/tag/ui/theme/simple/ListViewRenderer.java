@@ -350,7 +350,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		String _fs = tag.getQuery() + ".fs.";
 
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		Map<String, Filter> qfs = query.getFilters();
 		
 		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
@@ -611,7 +611,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 	private void writeListViewFilters() throws IOException {
 		Map<String, ListColumn.Filter> fm = new LinkedHashMap<String, ListColumn.Filter>();
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		Map<String, Filter> qfs = query.getFilters();
 		
 		String _fs = tag.getQuery() + ".fs";

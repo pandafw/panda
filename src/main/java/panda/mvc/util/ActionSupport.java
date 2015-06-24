@@ -12,10 +12,10 @@ import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
-import panda.mvc.aware.ActionAware;
-import panda.mvc.aware.ApplicationAware;
-import panda.mvc.aware.ParamAware;
-import panda.mvc.aware.SessionAware;
+import panda.mvc.alert.ActionAlert;
+import panda.mvc.alert.ApplicationAlert;
+import panda.mvc.alert.ParamAlert;
+import panda.mvc.alert.SessionAlert;
 
 /**
  * ActionSupport
@@ -142,29 +142,29 @@ public class ActionSupport {
 	/**
 	 * @return the actionAware
 	 */
-	public ActionAware getActionAware() {
-		return context.getActionAware();
+	public ActionAlert getActionAware() {
+		return context.getActionAlert();
 	}
 
 	/**
 	 * @return the param Aware
 	 */
-	public ParamAware getParamAware() {
-		return context.getParamAware();
+	public ParamAlert getParamAware() {
+		return context.getParamAlert();
 	}
 
 	/**
 	 * @return the application Aware
 	 */
-	public ApplicationAware getApplicationAware() {
-		return context.getApplicationAware();
+	public ApplicationAlert getApplicationAware() {
+		return context.getApplicationAlert();
 	}
 
 	/**
 	 * @return the session Aware
 	 */
-	public SessionAware getSessionAware() {
-		return context.getSessionAware();
+	public SessionAlert getSessionAware() {
+		return context.getSessionAlert();
 	}
 
 	/**

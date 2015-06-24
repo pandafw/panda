@@ -7,11 +7,11 @@ import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceLoader;
 import panda.lang.Arrays;
 import panda.mvc.MvcConfig;
+import panda.mvc.alert.ActionAlertSupport;
+import panda.mvc.alert.ApplicationAlertSupport;
+import panda.mvc.alert.ParamAlertSupport;
+import panda.mvc.alert.SessionAlertSupport;
 import panda.mvc.annotation.Modules;
-import panda.mvc.aware.ActionAwareSupport;
-import panda.mvc.aware.ApplicationAwareSupport;
-import panda.mvc.aware.ParamAwareSupport;
-import panda.mvc.aware.SessionAwareSupport;
 import panda.mvc.impl.DefaultActionChainMaker;
 import panda.mvc.impl.DefaultUrlMapping;
 import panda.mvc.processor.AdaptProcessor;
@@ -145,10 +145,10 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			ViewProcessor.class,
 			
 			// validation
-			ActionAwareSupport.class,
-			ParamAwareSupport.class,
-			SessionAwareSupport.class,
-			ApplicationAwareSupport.class,
+			ActionAlertSupport.class,
+			ParamAlertSupport.class,
+			SessionAlertSupport.class,
+			ApplicationAlertSupport.class,
 			
 			// validator
 			DefaultValidators.class,

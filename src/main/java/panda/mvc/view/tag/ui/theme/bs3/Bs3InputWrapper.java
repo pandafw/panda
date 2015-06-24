@@ -59,7 +59,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 	protected void renderHeader() throws Exception {
 		String name = tag.getName();
 
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		boolean required = tag.isRequired();
 		String requiredposition = tag.getRequiredPosition();
 
@@ -103,7 +103,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 	}
 
 	protected void renderFooter() throws Exception {
-		Map<String, List<String>> fieldErrors = context.getParamAware().getErrors();
+		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		if (Collections.isNotEmpty(fieldErrors)) {
 			for (String fn : getGroupTags()) {
 				List<String> fes = fieldErrors.get(fn);

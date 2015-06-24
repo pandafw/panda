@@ -160,7 +160,7 @@ public abstract class AbstractValidator implements Validator {
 	protected void addFieldError(ActionContext ac) {
 		String fn = getFullFieldName(name);
 		String msg = evalMessage(ac);
-		ac.getParamAware().addError(fn, msg);
+		ac.getParamAlert().addError(fn, msg);
 	}
 
 	@Override

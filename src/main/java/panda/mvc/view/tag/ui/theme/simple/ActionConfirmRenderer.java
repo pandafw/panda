@@ -11,7 +11,7 @@ public class ActionConfirmRenderer extends AbstractMessageListRenderer {
 
 	@Override
 	protected Collection<String> getMessages() {
-		return context.getActionAware().getConfirms();
+		return context.getActionAlert().getConfirms();
 	}
 
 	@Override

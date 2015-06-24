@@ -1,12 +1,9 @@
-package panda.mvc.aware;
+package panda.mvc.alert;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * ParamValidationAware
- */
-public interface ParamAware {
+public interface ParamAlert {
 
 	/**
 	 * Get the field specific errors associated with this action. Error messages should not be added

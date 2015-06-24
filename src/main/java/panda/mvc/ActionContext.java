@@ -18,10 +18,10 @@ import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.mvc.aware.ActionAware;
-import panda.mvc.aware.ApplicationAware;
-import panda.mvc.aware.ParamAware;
-import panda.mvc.aware.SessionAware;
+import panda.mvc.alert.ActionAlert;
+import panda.mvc.alert.ApplicationAlert;
+import panda.mvc.alert.ParamAlert;
+import panda.mvc.alert.SessionAlert;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.StateProvider;
@@ -68,10 +68,10 @@ public class ActionContext {
 	private TextProvider text;
 	private StateProvider state;
 
-	private ActionAware actionAware;
-	private ParamAware paramAware;
-	private ApplicationAware applicationAware;
-	private SessionAware sessionAware;
+	private ActionAlert actionAlert;
+	private ParamAlert paramAlert;
+	private ApplicationAlert applicationAlert;
+	private SessionAlert sessionAlert;
 	
 
 	/**
@@ -350,98 +350,98 @@ public class ActionContext {
 	}
 	
 	/**
-	 * @return action aware
+	 * @return action alert
 	 */
-	public ActionAware getActionAware() {
-		if (actionAware == null) {
-			actionAware = ioc.get(ActionAware.class);
+	public ActionAlert getActionAlert() {
+		if (actionAlert == null) {
+			actionAlert = ioc.get(ActionAlert.class);
 		}
-		return actionAware;
+		return actionAlert;
 	}
 	
 	public Collection<String> getActionErrors() {
-		return getActionAware().getErrors();
+		return getActionAlert().getErrors();
 	}
 	
 	public Collection<String> getActionWarnings() {
-		return getActionAware().getWarnings();
+		return getActionAlert().getWarnings();
 	}
 	
 	public Collection<String> getActionConfirms() {
-		return getActionAware().getConfirms();
+		return getActionAlert().getConfirms();
 	}
 	
 	public Collection<String> getActionMessages() {
-		return getActionAware().getMessages();
+		return getActionAlert().getMessages();
 	}
 	
 	/**
-	 * @return parameter aware
+	 * @return parameter alert
 	 */
-	public ParamAware getParamAware() {
-		if (paramAware == null) {
-			paramAware = ioc.get(ParamAware.class);
+	public ParamAlert getParamAlert() {
+		if (paramAlert == null) {
+			paramAlert = ioc.get(ParamAlert.class);
 		}
-		return paramAware;
+		return paramAlert;
 	}
 	
 	/**
 	 * @return parameter errors
 	 */
 	public Map<String, List<String>> getParamErrors() {
-		return getParamAware().getErrors();
+		return getParamAlert().getErrors();
 	}
 
 	/**
-	 * @return session aware
+	 * @return session alert
 	 */
-	public SessionAware getSessionAware() {
-		if (sessionAware == null) {
-			sessionAware = ioc.get(SessionAware.class);
+	public SessionAlert getSessionAlert() {
+		if (sessionAlert == null) {
+			sessionAlert = ioc.get(SessionAlert.class);
 		}
-		return sessionAware;
+		return sessionAlert;
 	}
 	
 	public Collection<String> getSessionErrors() {
-		return getSessionAware().getErrors();
+		return getSessionAlert().getErrors();
 	}
 	
 	public Collection<String> getSessionWarnings() {
-		return getSessionAware().getWarnings();
+		return getSessionAlert().getWarnings();
 	}
 	
 	public Collection<String> getSessionConfirms() {
-		return getSessionAware().getConfirms();
+		return getSessionAlert().getConfirms();
 	}
 	
 	public Collection<String> getSessionMessages() {
-		return getSessionAware().getMessages();
+		return getSessionAlert().getMessages();
 	}
 	
 	/**
-	 * @return application aware
+	 * @return application alert
 	 */
-	public ApplicationAware getApplicationAware() {
-		if (applicationAware == null) {
-			applicationAware = ioc.get(ApplicationAware.class);
+	public ApplicationAlert getApplicationAlert() {
+		if (applicationAlert == null) {
+			applicationAlert = ioc.get(ApplicationAlert.class);
 		}
-		return applicationAware;
+		return applicationAlert;
 	}
 	
 	public Collection<String> getApplicationErrors() {
-		return getApplicationAware().getErrors();
+		return getApplicationAlert().getErrors();
 	}
 	
 	public Collection<String> getApplicationWarnings() {
-		return getApplicationAware().getWarnings();
+		return getApplicationAlert().getWarnings();
 	}
 	
 	public Collection<String> getApplicationConfirms() {
-		return getApplicationAware().getConfirms();
+		return getApplicationAlert().getConfirms();
 	}
 	
 	public Collection<String> getApplicationMessages() {
-		return getApplicationAware().getMessages();
+		return getApplicationAlert().getMessages();
 	}
 
 	/**

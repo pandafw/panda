@@ -21,8 +21,8 @@ import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.aware.ActionAware;
-import panda.mvc.aware.ParamAware;
+import panda.mvc.alert.ActionAlert;
+import panda.mvc.alert.ParamAlert;
 import panda.mvc.bean.CompositeQuery;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
@@ -255,25 +255,28 @@ public abstract class AbstractOMView extends AbstractView {
 			return;
 		}
 
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
-
 		Boolean success = true;
-		
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Map<String, Object> alerts = new LinkedHashMap<String, Object>();
+
 		// put success to first position
 		result.put("success", success);
 		
-		ParamAware pva = ac.getParamAware();
+		ParamAlert pva = ac.getParamAlert();
 		if (pva != null && pva.hasErrors()) {
 			success = false;
-			result.put("param", pva);
+			alerts.put("params", pva);
 		}
 		
-		ActionAware ava = ac.getActionAware();
+		ActionAlert ava = ac.getActionAlert();
 		if (ava != null && !ava.isEmpty()) {
 			if (ava.hasErrors()) {
 				success = false;
 			}
-			result.put("action", ava);
+			alerts.put("action", ava);
+		}
+		if (!alerts.isEmpty()) {
+			result.put("alerts", alerts);
 		}
 		
 		result.put("success", success);

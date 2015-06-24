@@ -11,7 +11,7 @@ public class ActionErrorRenderer extends AbstractMessageListRenderer {
 
 	@Override
 	protected Collection<String> getMessages() {
-		return context.getActionAware().getErrors();
+		return context.getActionAlert().getErrors();
 	}
 
 	@Override

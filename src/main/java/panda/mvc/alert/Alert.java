@@ -1,8 +1,8 @@
-package panda.mvc.aware;
+package panda.mvc.alert;
 
 import java.util.Collection;
 
-public interface Aware {
+public interface Alert {
 
 	/**
 	 * Get the Collection of error messages for this action. Error messages should not
