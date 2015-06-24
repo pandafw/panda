@@ -49,7 +49,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.util.AppActionAssist;
 
-@At("/admin/import")
+@At("/admin/dataimp")
 @Auth(AUTH.SYSADMIN)
 @Ok(View.FREEMARKER)
 public class DataImportAction extends AbstractAction {

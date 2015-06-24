@@ -39,7 +39,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 	protected void addActionError(ActionContext ac, String id) {
 		TextProvider tp = ac.getText();
 		String msg = tp.getText(id);
-		ac.getActionAware().addError(msg);
+		ac.getActionAlert().addError(msg);
 	}
 	
 
