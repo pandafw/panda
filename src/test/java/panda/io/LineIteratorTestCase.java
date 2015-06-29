@@ -34,7 +34,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			assertFalse("No more expected", iterator.hasNext());
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -152,7 +152,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			// ignore, expected result
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -176,7 +176,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			assertEquals(3, count);
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -199,7 +199,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			// ignore, expected result
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -262,7 +262,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			assertEquals("No more expected", false, iterator.hasNext());
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -338,7 +338,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			}
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -388,7 +388,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			}
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 
@@ -467,7 +467,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 			}
 		}
 		finally {
-			LineIterator.safeClose(iterator);
+			Streams.safeClose(iterator);
 		}
 	}
 

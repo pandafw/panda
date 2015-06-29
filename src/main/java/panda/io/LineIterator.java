@@ -1,6 +1,7 @@
 package panda.io;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
@@ -13,8 +14,7 @@ import panda.lang.Exceptions;
  * <p>
  * <code>LineIterator</code> holds a reference to an open <code>Reader</code>. When you have
  * finished with the iterator you should close the reader to free internal resources. This can be
- * done by closing the reader directly, or by calling the {@link #close()} or
- * {@link #safeClose(LineIterator)} method on the iterator.
+ * done by closing the reader directly, or by calling the {@link #close()} method on the iterator.
  * <p>
  * The recommended usage pattern is:
  * 
@@ -33,7 +33,7 @@ import panda.lang.Exceptions;
  * 
  * @author yf.frank.wang@gmail.com
  */
-public class LineIterator implements Iterator<String> {
+public class LineIterator implements Iterator<String>, Closeable {
 
 	/** The reader that is being read. */
 	private final BufferedReader bufferedReader;
@@ -151,17 +151,4 @@ public class LineIterator implements Iterator<String> {
 	public void remove() {
 		throw Exceptions.unsupported("Remove unsupported on LineIterator");
 	}
-
-	// -----------------------------------------------------------------------
-	/**
-	 * Closes the iterator, handling null and ignoring exceptions.
-	 * 
-	 * @param iterator the iterator to close
-	 */
-	public static void safeClose(LineIterator iterator) {
-		if (iterator != null) {
-			iterator.close();
-		}
-	}
-
 }

@@ -1988,7 +1988,7 @@ public class Files {
 	 * <p>
 	 * This method opens an <code>InputStream</code> for the file. When you have finished with the
 	 * iterator you should close the stream to free internal resources. This can be done by calling
-	 * the {@link LineIterator#close()} or {@link LineIterator#safeClose(LineIterator)} method.
+	 * the {@link LineIterator#close()} method.
 	 * <p>
 	 * The recommended usage pattern is:
 	 * 
