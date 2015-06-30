@@ -4,6 +4,7 @@ package panda.log.impl;
 import panda.lang.Arrays;
 import panda.log.Log;
 import panda.log.LogLevel;
+import panda.log.Logs;
 
 
 public abstract class AbstractLog implements Log {
@@ -28,7 +29,11 @@ public abstract class AbstractLog implements Log {
 	}
 
 	protected LogLevel level;
-	
+
+	protected AbstractLog(String name) {
+		level = Logs.getLogLevel(name);
+	}
+
 	protected void safeLog(LogLevel level, LogInfo info) {
 		safeLog(level, info.msg, info.ex);
 	}

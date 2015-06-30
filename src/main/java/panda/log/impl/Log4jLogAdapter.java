@@ -14,9 +14,11 @@ import panda.log.LogLevel;
  * 
  */
 public class Log4jLogAdapter implements LogAdapter {
+	@Override
 	public void init(Properties props) {
 	}
 	
+	@Override
 	public Log getLogger(String name) {
 		return new Log4JLogger(name);
 	}
@@ -27,6 +29,8 @@ public class Log4jLogAdapter implements LogAdapter {
 		private Logger logger;
 
 		Log4JLogger(String className) {
+			super(className);
+			
 			logger = Logger.getLogger(className);
 			
 			if (logger.isEnabledFor(Level.TRACE)) {

@@ -48,7 +48,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	protected RollingCalendar rc;
 	
 	public Log getLogger(String name) {
-		return new FileLog(name);
+		return new FileLog(this, name);
 	}
 
 	@Override
@@ -171,6 +171,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 			writer.write(msg);
 			if (bufferSize == -1) {
 				writer.flush();
+				
 			}
 		}
 		catch (Throwable e) {
@@ -181,24 +182,27 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	/**
 	 * File log
 	 */
-	private class FileLog extends AbstractLog {
-		private String name;
+	protected static class FileLog extends AbstractLog {
+		protected FileLogAdapter adapter;
+		protected String name;
 		
-		FileLog(String name) {
+		protected FileLog(FileLogAdapter adapter, String name) {
+			super(name);
+			this.adapter = adapter;
 			this.name = name;
-			level = getLogLevel(name);
 		}
 
 		@Override
 		protected void safeLog(LogLevel level, String msg, Throwable t) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(DateTimes.datetimeFormat().format(DateTimes.getDate()))
-				.append(' ') 
+			sb.append(DateTimes.timestampFormat().format(DateTimes.getDate()))
+				.append(' ')
 				.append(level.toString())
-				.append(' ')
-				.append(Strings.rightPad(Thread.currentThread().getName(), 10))
-				.append(' ')
-				.append(Strings.rightPad(name, 30))
+				.append(" [")
+				.append(Thread.currentThread().getName())
+				.append("] ")
+				.append(name)
+				.append(" - ")
 				.append(msg)
 				.append('\n');
 
@@ -206,7 +210,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 				sb.append(Exceptions.getStackTrace(t)).append('\n');
 			}
 
-			FileLogAdapter.this.print(sb.toString());
+			adapter.print(sb.toString());
 		}
 	}
 }

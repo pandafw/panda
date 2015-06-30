@@ -16,8 +16,8 @@ public interface Log {
 	void tracef(String fmt, Object... args);
 
 	void debug(Object message);
-	void debugf(String fmt, Object... args);
 	void debug(Object message, Throwable t);
+	void debugf(String fmt, Object... args);
 
 	void info(Object message);
 	void info(Object message, Throwable t);

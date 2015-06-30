@@ -16,9 +16,9 @@ public class ConsoleLogAdapter extends AbstractLogAdapter {
 	/**
 	 * Console log to System.out and System.err
 	 */
-	private class ConsoleLog extends AbstractLog {
+	private static class ConsoleLog extends AbstractLog {
 		ConsoleLog(String name) {
-			level = getLogLevel(name);
+			super(name);
 		}
 
 		@Override
