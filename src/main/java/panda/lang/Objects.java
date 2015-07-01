@@ -711,18 +711,6 @@ public abstract class Objects {
 	}
 
 	/**
-	 * sleep, does not throw exception
-	 * @param ms milliseconds
-	 */
-	public static void safeSleep(long ms) {
-		try {
-			Thread.sleep(ms);
-		}
-		catch (InterruptedException e) {
-		}
-	}
-
-	/**
 	 * create a ToStringBuilder instance
 	 * @return ToStringBuilder instance
 	 */

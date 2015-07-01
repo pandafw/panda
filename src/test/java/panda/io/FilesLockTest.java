@@ -5,7 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 
 import panda.io.Files.FileLocker;
-import panda.lang.Objects;
+import panda.lang.Threads;
 
 /**
  * This is used to test Files.lock() method.
@@ -53,7 +53,7 @@ public class FilesLockTest extends FileBasedTestCase {
 				File f = new File(getTestDirectory(), name);
 				fl = wait ? Files.lock(f) : Files.tryLock(f);
 				if (time > 0) {
-					Objects.safeSleep(time);
+					Threads.safeSleep(time);
 				}
 				return fl != null;
 			}
@@ -81,11 +81,11 @@ public class FilesLockTest extends FileBasedTestCase {
 		Rlock l1 = new Rlock(name, true);
 		l1.alock(1000);
 		
-		Objects.safeSleep(100);
+		Threads.safeSleep(100);
 		Rlock l2 = new Rlock(name, false);
 		Assert.assertFalse(l2.lock(0));
 		
-		Objects.safeSleep(1500);
+		Threads.safeSleep(1500);
 		Assert.assertTrue(l2.lock(0));
 	}
 
