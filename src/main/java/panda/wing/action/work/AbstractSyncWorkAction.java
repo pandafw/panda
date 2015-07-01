@@ -2,7 +2,7 @@ package panda.wing.action.work;
 
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
-import panda.lang.Objects;
+import panda.lang.Threads;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
@@ -97,7 +97,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 		// wait for stop (max: 60s)
 		int count = 0;
 		while (getStatus().running && count < 600) {
-			Objects.safeSleep(100);
+			Threads.safeSleep(100);
 			count++;
 		}
 	}
