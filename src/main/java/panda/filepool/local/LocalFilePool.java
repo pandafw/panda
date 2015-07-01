@@ -15,7 +15,7 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Numbers;
-import panda.lang.Objects;
+import panda.lang.Threads;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.log.Log;
@@ -50,7 +50,7 @@ public class LocalFilePool implements FilePool {
 	
 			File dir = new File(path, fdf.format(id));
 			if (dir.exists()) {
-				Objects.safeSleep(1);
+				Threads.safeSleep(1);
 				continue;
 			}
 
