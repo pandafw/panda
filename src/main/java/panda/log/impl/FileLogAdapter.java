@@ -197,7 +197,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 			StringBuilder sb = new StringBuilder();
 			sb.append(DateTimes.timestampFormat().format(DateTimes.getDate()))
 				.append(' ')
-				.append(level.toString())
+				.append(Strings.rightPad(level.toString(), 5))
 				.append(" [")
 				.append(Thread.currentThread().getName())
 				.append("] ")
