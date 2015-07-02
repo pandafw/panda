@@ -214,6 +214,21 @@ public class DateTimes {
 	 */
 	public static final FastDateFormat TIMESTAMP_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HHmmss.SSS");
 
+	/**
+	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 */
+	public static final FastDateFormat DATETIME_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HHmmss");
+
+	/**
+	 * Date format for log. The format used is <tt>yyyyMMdd</tt>. 
+	 */
+	public static final FastDateFormat DATE_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd");
+
+	/**
+	 * Time format for log. The format used is <tt>HHmmss</tt>. 
+	 */
+	public static final FastDateFormat TIME_LOG_FORMAT = FastDateFormat.getInstance("HHmmss");
+
 	// -----------------------------------------------------------------------
 	/**
 	 * @return current Date
@@ -1896,6 +1911,27 @@ public class DateTimes {
 	public static FastDateFormat timestampLogFormat() {
 		return TIMESTAMP_LOG_FORMAT;
 	}
+
+	/**
+	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 */
+	public static FastDateFormat datetimeLogFormat() {
+		return DATETIME_LOG_FORMAT;
+	}
+
+	/**
+	 * Date format for log. The format used is <tt>yyyyMMdd</tt>. 
+	 */
+	public static FastDateFormat dateLogFormat() {
+		return DATE_LOG_FORMAT;
+	}
+
+	/**
+	 * Time format for log. The format used is <tt>HHmmss</tt>. 
+	 */
+	public static final FastDateFormat timeLogFormat() {
+		return TIME_LOG_FORMAT;
+	}
 	
 	/**
 	 * <p>
@@ -2209,5 +2245,34 @@ public class DateTimes {
 		catch (ParseException e) {
 			return null;
 		}
+	}
+	
+	//----------------------------------------------------------
+	public static long subSeconds(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_SECOND;
+	}
+
+	public static long subMinutes(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_MINUTE;
+	}
+
+	public static long subHours(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_HOUR;
+	}
+
+	public static long subDays(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_DAY;
+	}
+
+	public static long subWeeks(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_WEEK;
+	}
+
+	public static long subMonths(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_MONTH;
+	}
+
+	public static long subYears(Date to, Date from) {
+		return (to.getTime() - from.getTime()) / MS_YEAR;
 	}
 }
