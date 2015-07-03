@@ -1,6 +1,7 @@
 package panda.wing.util;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
@@ -64,7 +65,7 @@ public class AppDaoClientProvider {
 		if (MONGO.equalsIgnoreCase(dstype)) {
 			String url = settings.getProperty(SC.DATA_MONGO_URL);
 
-			log.info("mongo - " +  url);
+			log.info("MONGO - " +  url);
 			MongoDaoClient daoClient = new MongoDaoClient(url);
 			
 			return daoClient;
@@ -74,26 +75,21 @@ public class AppDaoClientProvider {
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 
 			String jndi = settings.getProperty(SC.DATA_JNDI_RESOURCE);
-			log.info("jndi.resource - " + jndi);
+			log.info("JNDI - " + jndi);
 			try {
 				DataSource ds = Sqls.lookupJndiDataSource(jndi);
 				sqlDaoClient.setDataSource(ds);
 			}
 			catch (Exception e) {
 				log.warn("Failed to use jndi resource - " + jndi + " : " + e.getMessage());
-				log.warn("Try to use SimpleDataSource - " + settings.getProperty(SC.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SC.DATA_JDBC_URL));
-
-				Map<String, String> dps = Collections.subMap(settings, SC.DATA_PREFIX);
-				DataSource ds = new SimpleDataSource(dps);
+				DataSource ds = createSimpleDataSource();
 				sqlDaoClient.setDataSource(ds);
 			}
 			return sqlDaoClient;
 		}
 
 		if (JDBC.equalsIgnoreCase(dstype)) {
-			log.info("jdbc - " + settings.getProperty("jdbc.driver") + ":" + settings.getProperty("jdbc.url"));
-
-			DataSource ds = new SimpleDataSource(settings);
+			DataSource ds = createSimpleDataSource();
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 			sqlDaoClient.setDataSource(ds);
 			return sqlDaoClient;
@@ -102,4 +98,21 @@ public class AppDaoClientProvider {
 		throw new IllegalArgumentException("The data source type [" + dstype + "] is invalid.");
 	}
 
+	private DataSource createSimpleDataSource() {
+		log.info("JDBC - " + settings.getProperty(SC.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SC.DATA_JDBC_URL));
+
+		Map<String, String> dps = Collections.subMap(settings, SC.DATA_PREFIX);
+		if (servlet != null) {
+			String web = servlet.getRealPath("/");
+			for (Entry<String, String> en : dps.entrySet()) {
+				if (en.getValue().contains("${web}")) {
+					String v = en.getValue().replace("${web}", web);
+					en.setValue(v);
+				}
+			}
+		}
+		DataSource ds = new SimpleDataSource(dps);
+		
+		return ds;
+	}
 }
