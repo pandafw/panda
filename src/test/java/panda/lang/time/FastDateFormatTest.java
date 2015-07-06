@@ -263,8 +263,7 @@ public class FastDateFormatTest {
 		final FastDateFormat formatter = FastDateFormat.getInstance(pattern);
 
 		final long sdfTime = measureTime(formatter, new SimpleDateFormat(pattern) {
-			private static final long serialVersionUID = 1L; // because SimpleDateFormat is
-																// serializable
+			private static final long serialVersionUID = 1L; 
 
 			@Override
 			public Object parseObject(final String formattedDate) throws ParseException {

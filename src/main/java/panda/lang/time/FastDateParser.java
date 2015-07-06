@@ -268,7 +268,7 @@ public class FastDateParser implements DateParser, Serializable {
 	 * @see DateParser#parseObject(java.lang.String)
 	 */
 	@Override
-	public Object parseObject(final String source) throws ParseException {
+	public Object parseObject(final CharSequence source) throws ParseException {
 		return parse(source);
 	}
 
@@ -277,7 +277,7 @@ public class FastDateParser implements DateParser, Serializable {
 	 * @see DateParser#parse(java.lang.String)
 	 */
 	@Override
-	public Date parse(final String source) throws ParseException {
+	public Date parse(final CharSequence source) throws ParseException {
 		final Date date = parse(source, new ParsePosition(0));
 		if (date == null) {
 			// Add a note re supported date range
@@ -296,7 +296,7 @@ public class FastDateParser implements DateParser, Serializable {
 	 * java.text.ParsePosition)
 	 */
 	@Override
-	public Object parseObject(final String source, final ParsePosition pos) {
+	public Object parseObject(final CharSequence source, final ParsePosition pos) {
 		return parse(source, pos);
 	}
 
@@ -306,9 +306,9 @@ public class FastDateParser implements DateParser, Serializable {
 	 * java.text.ParsePosition)
 	 */
 	@Override
-	public Date parse(final String source, final ParsePosition pos) {
+	public Date parse(final CharSequence source, final ParsePosition pos) {
 		final int offset = pos.getIndex();
-		final Matcher matcher = parsePattern.matcher(source.substring(offset));
+		final Matcher matcher = parsePattern.matcher(source.subSequence(offset, source.length()));
 		if (!matcher.lookingAt()) {
 			return null;
 		}

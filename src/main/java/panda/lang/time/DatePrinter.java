@@ -45,18 +45,18 @@ public interface DatePrinter {
 
 	/**
 	 * <p>
-	 * Formats a milliseond {@code long} value into the supplied {@code StringBuffer}.
+	 * Formats a milliseond {@code long} value into the supplied {@code StringBuilder}.
 	 * </p>
 	 * 
 	 * @param millis the millisecond value to format
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	StringBuffer format(long millis, StringBuffer buf);
+	Appendable format(long millis, Appendable buf);
 
 	/**
 	 * <p>
-	 * Formats a {@code Date} object into the supplied {@code StringBuffer} using a
+	 * Formats a {@code Date} object into the supplied {@code StringBuilder} using a
 	 * {@code GregorianCalendar}.
 	 * </p>
 	 * 
@@ -64,18 +64,18 @@ public interface DatePrinter {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	StringBuffer format(Date date, StringBuffer buf);
+	Appendable format(Date date, Appendable buf);
 
 	/**
 	 * <p>
-	 * Formats a {@code Calendar} object into the supplied {@code StringBuffer}.
+	 * Formats a {@code Calendar} object into the supplied {@code StringBuilder}.
 	 * </p>
 	 * 
 	 * @param calendar the calendar to format
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	StringBuffer format(Calendar calendar, StringBuffer buf);
+	Appendable format(Calendar calendar, Appendable buf);
 
 	// Accessors
 	// -----------------------------------------------------------------------
@@ -113,12 +113,11 @@ public interface DatePrinter {
 	 * <p>
 	 * Formats a {@code Date}, {@code Calendar} or {@code Long} (milliseconds) object.
 	 * </p>
-	 * See {@link java.text.DateFormat#format(Object, StringBuffer, FieldPosition)}
 	 * 
 	 * @param obj the object to format
 	 * @param toAppendTo the buffer to append to
 	 * @param pos the position - ignored
 	 * @return the buffer passed in
 	 */
-	StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos);
+	Appendable format(Object obj, Appendable toAppendTo, FieldPosition pos);
 }

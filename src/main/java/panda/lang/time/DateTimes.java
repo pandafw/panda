@@ -231,6 +231,13 @@ public class DateTimes {
 
 	// -----------------------------------------------------------------------
 	/**
+	 * @return current Calendar
+	 */
+	public static Calendar getCalendar() {
+		return Calendar.getInstance();
+	}
+
+	/**
 	 * @return current Date
 	 */
 	public static Date getDate() {

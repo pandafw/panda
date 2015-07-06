@@ -320,10 +320,10 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return a localized standard date/time formatter
 	 * @throws IllegalArgumentException if the Locale has no date/time pattern defined
 	 */
-    public static FastDateFormat getDateTimeInstance(
-            final int dateStyle, final int timeStyle, final TimeZone timeZone, final Locale locale) {
-        return cache.getDateTimeInstance(dateStyle, timeStyle, timeZone, locale);
-    }
+	public static FastDateFormat getDateTimeInstance(final int dateStyle, final int timeStyle, final TimeZone timeZone,
+			final Locale locale) {
+		return cache.getDateTimeInstance(dateStyle, timeStyle, timeZone, locale);
+	}
 
 	// Constructor
 	// -----------------------------------------------------------------------
@@ -338,24 +338,27 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @throws NullPointerException if pattern, timeZone, or locale is null.
 	 */
 	protected FastDateFormat(final String pattern, final TimeZone timeZone, final Locale locale) {
-        this(pattern, timeZone, locale, null);
-    }
+		this(pattern, timeZone, locale, null);
+	}
 
-    // Constructor
-    //-----------------------------------------------------------------------
-    /**
-     * <p>Constructs a new FastDateFormat.</p>
-     *
-     * @param pattern  {@link java.text.SimpleDateFormat} compatible pattern
-     * @param timeZone  non-null time zone to use
-     * @param locale  non-null locale to use
-     * @param centuryStart The start of the 100 year period to use as the "default century" for 2 digit year parsing.  If centuryStart is null, defaults to now - 80 years
-     * @throws NullPointerException if pattern, timeZone, or locale is null.
-     */
-    protected FastDateFormat(final String pattern, final TimeZone timeZone, final Locale locale, final Date centuryStart) {
-        printer= new FastDatePrinter(pattern, timeZone, locale);
-        parser= new FastDateParser(pattern, timeZone, locale, centuryStart);
-    }
+	// Constructor
+	// -----------------------------------------------------------------------
+	/**
+	 * <p>
+	 * Constructs a new FastDateFormat.
+	 * </p>
+	 * 
+	 * @param pattern {@link java.text.SimpleDateFormat} compatible pattern
+	 * @param timeZone non-null time zone to use
+	 * @param locale non-null locale to use
+	 * @param centuryStart The start of the 100 year period to use as the "default century" for 2
+	 *            digit year parsing. If centuryStart is null, defaults to now - 80 years
+	 * @throws NullPointerException if pattern, timeZone, or locale is null.
+	 */
+	protected FastDateFormat(final String pattern, final TimeZone timeZone, final Locale locale, final Date centuryStart) {
+		printer = new FastDatePrinter(pattern, timeZone, locale);
+		parser = new FastDateParser(pattern, timeZone, locale, centuryStart);
+	}
 
 	// Format methods
 	// -----------------------------------------------------------------------
@@ -370,8 +373,14 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return the buffer passed in
 	 */
 	@Override
-	public StringBuffer format(final Object obj, final StringBuffer toAppendTo, final FieldPosition pos) {
+	public Appendable format(final Object obj, final Appendable toAppendTo, final FieldPosition pos) {
 		return printer.format(obj, toAppendTo, pos);
+	}
+
+	@Override
+	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+		printer.format(obj, toAppendTo, pos);
+		return toAppendTo;
 	}
 
 	/**
@@ -415,7 +424,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 
 	/**
 	 * <p>
-	 * Formats a millisecond {@code long} value into the supplied {@code StringBuffer}.
+	 * Formats a millisecond {@code long} value into the supplied {@code StringBuilder}.
 	 * </p>
 	 * 
 	 * @param millis the millisecond value to format
@@ -423,13 +432,13 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return the specified string buffer
 	 */
 	@Override
-	public StringBuffer format(final long millis, final StringBuffer buf) {
+	public Appendable format(final long millis, final Appendable buf) {
 		return printer.format(millis, buf);
 	}
 
 	/**
 	 * <p>
-	 * Formats a {@code Date} object into the supplied {@code StringBuffer} using a
+	 * Formats a {@code Date} object into the supplied {@code StringBuilder} using a
 	 * {@code GregorianCalendar}.
 	 * </p>
 	 * 
@@ -438,13 +447,13 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return the specified string buffer
 	 */
 	@Override
-	public StringBuffer format(final Date date, final StringBuffer buf) {
+	public Appendable format(final Date date, final Appendable buf) {
 		return printer.format(date, buf);
 	}
 
 	/**
 	 * <p>
-	 * Formats a {@code Calendar} object into the supplied {@code StringBuffer}.
+	 * Formats a {@code Calendar} object into the supplied {@code StringBuilder}.
 	 * </p>
 	 * 
 	 * @param calendar the calendar to format
@@ -452,7 +461,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return the specified string buffer
 	 */
 	@Override
-	public StringBuffer format(final Calendar calendar, final StringBuffer buf) {
+	public Appendable format(final Calendar calendar, final Appendable buf) {
 		return printer.format(calendar, buf);
 	}
 
@@ -464,7 +473,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @see DateParser#parse(java.lang.String)
 	 */
 	@Override
-	public Date parse(final String source) throws ParseException {
+	public Date parse(final CharSequence source) throws ParseException {
 		return parser.parse(source);
 	}
 
@@ -473,8 +482,18 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @see DateParser#parse(java.lang.String, java.text.ParsePosition)
 	 */
 	@Override
-	public Date parse(final String source, final ParsePosition pos) {
+	public Date parse(final CharSequence source, final ParsePosition pos) {
 		return parser.parse(source, pos);
+	}
+
+	@Override
+	public Object parseObject(CharSequence source) throws ParseException {
+		ParsePosition pos = new ParsePosition(0);
+		Object result = parseObject(source, pos);
+		if (pos.getIndex() == 0) {
+			throw new ParseException("Format.parseObject(String) failed", pos.getErrorIndex());
+		}
+		return result;
 	}
 
 	/*
@@ -482,7 +501,12 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
 	 */
 	@Override
-	public Object parseObject(final String source, final ParsePosition pos) {
+	public Object parseObject(String source, ParsePosition pos) {
+		return parser.parseObject(source, pos);
+	}
+
+	@Override
+	public Object parseObject(final CharSequence source, final ParsePosition pos) {
 		return parser.parseObject(source, pos);
 	}
 
@@ -582,7 +606,8 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 */
 	@Override
 	public String toString() {
-        return "FastDateFormat[" + printer.getPattern() + "," + printer.getLocale() + "," + printer.getTimeZone().getID() + "]";
+		return "FastDateFormat[" + printer.getPattern() + "," + printer.getLocale() + ","
+				+ printer.getTimeZone().getID() + "]";
 	}
 
 	/**
@@ -594,7 +619,7 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	protected StringBuffer applyRules(final Calendar calendar, final StringBuffer buf) {
+	protected Appendable applyRules(final Calendar calendar, final Appendable buf) {
 		return printer.applyRules(calendar, buf);
 	}
 

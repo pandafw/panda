@@ -50,13 +50,13 @@ import panda.lang.Asserts;
  */
 public class FastDatePrinter implements DatePrinter, Serializable {
 	// A lot of the speed in this class comes from caching, but some comes
-	// from the special int to StringBuffer conversion.
+	// from the special int to Appendable conversion.
 	//
 	// The following produces a padded 2 digit number:
 	// buffer.append((char)(value / 10 + '0'));
 	// buffer.append((char)(value % 10 + '0'));
 	//
-	// Note that the fastest append to StringBuffer is a single char (used here).
+	// Note that the fastest append to Appendable is a single char (used here).
 	// Note that Integer.toString() is not called, the conversion is simply
 	// taking the value and adding (mathematically) the ASCII value for '0'.
 	// So, don't change this code! It works and is very fast.
@@ -381,7 +381,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 	 * @return the buffer passed in
 	 */
 	@Override
-	public StringBuffer format(final Object obj, final StringBuffer toAppendTo, final FieldPosition pos) {
+	public Appendable format(final Object obj, final Appendable toAppendTo, final FieldPosition pos) {
 		if (obj instanceof Date) {
 			return format((Date)obj, toAppendTo);
 		}
@@ -415,7 +415,9 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 	 * @return a String representation of the given Calendar.
 	 */
 	private String applyRulesToString(final Calendar c) {
-		return applyRules(c, new StringBuffer(mMaxLengthEstimate)).toString();
+		StringBuilder sb = new StringBuilder(mMaxLengthEstimate);
+		applyRules(c, sb);
+		return sb.toString();
 	}
 
 	/**
@@ -445,24 +447,24 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 	 */
 	@Override
 	public String format(final Calendar calendar) {
-		return format(calendar, new StringBuffer(mMaxLengthEstimate)).toString();
+		return format(calendar, new StringBuilder(mMaxLengthEstimate)).toString();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see DatePrinter#format(long, java.lang.StringBuffer)
+	 * @see DatePrinter#format(long, java.lang.Appendable)
 	 */
 	@Override
-	public StringBuffer format(final long millis, final StringBuffer buf) {
+	public Appendable format(final long millis, final Appendable buf) {
 		return format(new Date(millis), buf);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see DatePrinter#format(java.util.Date, java.lang.StringBuffer)
+	 * @see DatePrinter#format(java.util.Date, java.lang.Appendable)
 	 */
 	@Override
-	public StringBuffer format(final Date date, final StringBuffer buf) {
+	public Appendable format(final Date date, final Appendable buf) {
 		final Calendar c = newCalendar(); // hard code GregorianCalendar
 		c.setTime(date);
 		return applyRules(c, buf);
@@ -471,10 +473,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * @see DatePrinter#format(java.util.Calendar,
-	 * java.lang.StringBuffer)
+	 * java.lang.Appendable)
 	 */
 	@Override
-	public StringBuffer format(final Calendar calendar, final StringBuffer buf) {
+	public Appendable format(final Calendar calendar, final Appendable buf) {
 		return applyRules(calendar, buf);
 	}
 
@@ -487,11 +489,16 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	protected StringBuffer applyRules(final Calendar calendar, final StringBuffer buf) {
-		for (final Rule rule : mRules) {
-			rule.appendTo(buf, calendar);
+	protected Appendable applyRules(final Calendar calendar, final Appendable buf) {
+		try {
+			for (final Rule rule : mRules) {
+				rule.appendTo(buf, calendar);
+			}
+			return buf;
 		}
-		return buf;
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	// Accessors
@@ -617,7 +624,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * @param buffer the output buffer
 		 * @param calendar calendar to be appended
 		 */
-		void appendTo(StringBuffer buffer, Calendar calendar);
+		void appendTo(Appendable buffer, Calendar calendar) throws IOException;
 	}
 
 	/**
@@ -632,7 +639,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * @param buffer the output buffer
 		 * @param value the value to be appended
 		 */
-		void appendTo(StringBuffer buffer, int value);
+		void appendTo(Appendable buffer, int value) throws IOException;
 	}
 
 	/**
@@ -664,7 +671,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			buffer.append(mValue);
 		}
 	}
@@ -698,7 +705,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			buffer.append(mValue);
 		}
 	}
@@ -742,7 +749,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			buffer.append(mValues[calendar.get(mField)]);
 		}
 	}
@@ -776,7 +783,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(mField));
 		}
 
@@ -784,7 +791,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			if (value < 10) {
 				buffer.append((char)(value + '0'));
 			}
@@ -825,7 +832,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(Calendar.MONTH) + 1);
 		}
 
@@ -833,7 +840,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			if (value < 10) {
 				buffer.append((char)(value + '0'));
 			}
@@ -880,7 +887,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(mField));
 		}
 
@@ -888,7 +895,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			if (value < 100) {
 				for (int i = mSize; --i >= 2;) {
 					buffer.append('0');
@@ -942,7 +949,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(mField));
 		}
 
@@ -950,7 +957,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			if (value < 100) {
 				buffer.append((char)(value / 10 + '0'));
 				buffer.append((char)(value % 10 + '0'));
@@ -988,7 +995,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(Calendar.YEAR) % 100);
 		}
 
@@ -996,7 +1003,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			buffer.append((char)(value / 10 + '0'));
 			buffer.append((char)(value % 10 + '0'));
 		}
@@ -1029,7 +1036,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			appendTo(buffer, calendar.get(Calendar.MONTH) + 1);
 		}
 
@@ -1037,7 +1044,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public final void appendTo(final StringBuffer buffer, final int value) {
+		public final void appendTo(final Appendable buffer, final int value) throws IOException {
 			buffer.append((char)(value / 10 + '0'));
 			buffer.append((char)(value % 10 + '0'));
 		}
@@ -1072,7 +1079,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			int value = calendar.get(Calendar.HOUR);
 			if (value == 0) {
 				value = calendar.getLeastMaximum(Calendar.HOUR) + 1;
@@ -1084,7 +1091,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final int value) {
+		public void appendTo(final Appendable buffer, final int value) throws IOException {
 			mRule.appendTo(buffer, value);
 		}
 	}
@@ -1119,7 +1126,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			int value = calendar.get(Calendar.HOUR_OF_DAY);
 			if (value == 0) {
 				value = calendar.getMaximum(Calendar.HOUR_OF_DAY) + 1;
@@ -1131,7 +1138,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final int value) {
+		public void appendTo(final Appendable buffer, final int value) throws IOException {
 			mRule.appendTo(buffer, value);
 		}
 	}
@@ -1206,7 +1213,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			final TimeZone zone = calendar.getTimeZone();
 			if (zone.useDaylightTime() && calendar.get(Calendar.DST_OFFSET) != 0) {
 				buffer.append(getTimeZoneDisplay(zone, true, mStyle, mLocale));
@@ -1249,7 +1256,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void appendTo(final StringBuffer buffer, final Calendar calendar) {
+		public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
 			int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
 
 			if (offset < 0) {
