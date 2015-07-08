@@ -39,7 +39,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	 * -1: immediate flush
 	 *  0: no buffer
 	 */
-	protected int bufferSize = 0;
+	protected int bufferSize = -1;
 	
 	protected int maxFiles = 0;
 	
