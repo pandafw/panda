@@ -50,7 +50,7 @@ public class JsonIocLoader extends MapIocLoader {
 	private void loadFromPath(String path) throws IOException {
 		File p = new File(path);
 		if (Files.isDirectory(p)) {
-			Collection<File> fs = Files.listFiles(p, new String[] { "js", "json" }, true);
+			Collection<File> fs = Files.listFiles(p, true, "js", "json");
 			for (File f : fs) {
 				InputStream is = new FileInputStream(f);
 				loadFromStream(is);

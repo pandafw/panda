@@ -78,7 +78,7 @@ public class XmlIocLoader extends AbstractIocLoader {
 	private void loadFromPath(DocumentBuilder builder, String path) throws IOException {
 		File p = new File(path);
 		if (Files.isDirectory(p)) {
-			Collection<File> fs = Files.listFiles(p, new String[] { "xml" }, true);
+			Collection<File> fs = Files.listFiles(p, true, "xml");
 			for (File f : fs) {
 				InputStream is = new FileInputStream(f);
 				loadFromStream(builder, is);

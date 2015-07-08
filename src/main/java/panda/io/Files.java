@@ -40,6 +40,7 @@ import panda.io.filter.IOFileFilter;
 import panda.io.filter.SuffixFileFilter;
 import panda.io.filter.TrueFileFilter;
 import panda.io.stream.BOMInputStream;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Numbers;
 import panda.lang.Strings;
@@ -872,6 +873,19 @@ public class Files {
 	}
 
 	/**
+	 * Finds files within a given directory (no subdirectories) which match an array
+	 * of extensions.
+	 * 
+	 * @param directory the directory to search in
+	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
+	 *            {@code null}, all files are returned.
+	 * @return an collection of java.io.File with the matching files
+	 */
+	public static Collection<File> listFiles(final File directory, final String... extensions) {
+		return listFiles(directory, false, extensions);
+	}
+
+	/**
 	 * Finds files within a given directory (and optionally its subdirectories) which match an array
 	 * of extensions.
 	 * 
@@ -881,9 +895,9 @@ public class Files {
 	 * @param recursive if true all subdirectories are searched as well
 	 * @return an collection of java.io.File with the matching files
 	 */
-	public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
+	public static Collection<File> listFiles(final File directory, final boolean recursive, final String... extensions) {
 		IOFileFilter filter;
-		if (extensions == null) {
+		if (Arrays.isEmpty(extensions)) {
 			filter = TrueFileFilter.INSTANCE;
 		}
 		else {
@@ -896,7 +910,7 @@ public class Files {
 	/**
 	 * Allows iteration over the files in a given directory (and optionally its subdirectories)
 	 * which match an array of extensions. This method is based on
-	 * {@link #listFiles(File, String[], boolean)}, which supports Iterable ('foreach' loop).
+	 * {@link #listFiles(File, boolean, String...)}, which supports Iterable ('foreach' loop).
 	 * 
 	 * @param directory the directory to search in
 	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
@@ -904,8 +918,22 @@ public class Files {
 	 * @param recursive if true all subdirectories are searched as well
 	 * @return an iterator of java.io.File with the matching files
 	 */
-	public static Iterator<File> iterateFiles(final File directory, final String[] extensions, final boolean recursive) {
-		return listFiles(directory, extensions, recursive).iterator();
+	public static Iterator<File> iterateFiles(final File directory, final boolean recursive, final String... extensions) {
+		return listFiles(directory, recursive, extensions).iterator();
+	}
+
+	/**
+	 * Allows iteration over the files in a given directory (no recursive)
+	 * which match an array of extensions. This method is based on
+	 * {@link #listFiles(File, boolean, String...)}, which supports Iterable ('foreach' loop).
+	 * 
+	 * @param directory the directory to search in
+	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
+	 *            {@code null}, all files are returned.
+	 * @return an iterator of java.io.File with the matching files
+	 */
+	public static Iterator<File> iterateFiles(final File directory, final String... extensions) {
+		return iterateFiles(directory, false, extensions);
 	}
 
 	// -----------------------------------------------------------------------

@@ -2449,7 +2449,7 @@ public abstract class Classes {
 			else {
 				File dir = new File(url.getFile());
 				if (dir.exists()) {
-					Collection<File> files = Files.listFiles(dir, new String[] { CLASS_FILE_SUFFIX }, true);
+					Collection<File> files = Files.listFiles(dir, true, CLASS_FILE_SUFFIX);
 					for (File file : files) {
 						if (file.getName().equals(PACKAGE_INFO_CLASS)) {
 							continue;
