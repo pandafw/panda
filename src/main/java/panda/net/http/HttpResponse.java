@@ -141,6 +141,15 @@ public class HttpResponse implements Closeable {
 	}
 	
 	/**
+	 * get content type from HTTP headers
+	 * @return content type
+	 */
+	public String getContentType() {
+		String contentType = header.getString(HttpHeader.CONTENT_TYPE);
+		return Strings.substringBefore(contentType, ';');
+	}
+	
+	/**
 	 * get charset from HTTP headers
 	 * @return charset name
 	 */

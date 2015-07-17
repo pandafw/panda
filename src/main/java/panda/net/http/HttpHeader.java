@@ -111,7 +111,7 @@ public class HttpHeader implements Map<String, Object>, Cloneable, Serializable 
 
 	public HttpHeader setDefaultAgentPC() {
 		setDefaultHeaders();
-		put(USER_AGENT, HttpClient.DEFAULT_USERAGENT);
+		put(USER_AGENT, HttpClient.DEFAULT_USERAGENT_PC);
 		return this;
 	}
 	

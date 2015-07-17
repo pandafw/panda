@@ -40,6 +40,8 @@ public class HttpClient {
 	
 	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
 
+	public static final String DEFAULT_USERAGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36";
+
 	/**
 	 * DEFAULT_CONN_TIMEOUT = 30 seconds
 	 */
