@@ -120,9 +120,9 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 			if (val != null) {
 				return val.getClass();
 			}
-			return super.getBeanType(map, beanName);
 		}
-		return elementType;
+		Type t = super.getBeanType(map, beanName);
+		return t == null ? elementType : t;
 	}
 
 	/**
