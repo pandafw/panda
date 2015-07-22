@@ -1,10 +1,8 @@
 <#include "common.ftl"/>
-<@header/>
+<@sheader/>
 
 <div class="p-section">
-	<div class="p-header">
-		<h3>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></h3>
-	</div>
+	<@sheader/>
 	<#include "success-toolbar.ftl"/>
 
 	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>

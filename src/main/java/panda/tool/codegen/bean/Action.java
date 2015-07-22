@@ -36,6 +36,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;actionClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;title&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;context&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -71,6 +72,8 @@ public class Action {
 	private String extend;
 	@XmlAttribute
 	private String title;
+	@XmlAttribute
+	private String context;
 	@XmlAttribute(required = true)
 	private String name;
 
@@ -95,6 +98,7 @@ public class Action {
 		this.actionClass = action.actionClass;
 		this.extend = action.extend;
 		this.title = action.title;
+		this.context = action.context;
 		this.name = action.name;
 
 		propertyList = new LinkedList<ActionProperty>();
@@ -222,6 +226,9 @@ public class Action {
 		}
 		if (src.title != null) {
 			me.title = src.title;
+		}
+		if (src.context != null) {
+			me.context = src.context;
 		}
 		if (src.name != null) {
 			me.name = src.name;
@@ -450,6 +457,20 @@ public class Action {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @return the context
+	 */
+	public String getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public void setContext(String context) {
+		this.context = context;
 	}
 
 	/**

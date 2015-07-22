@@ -4,12 +4,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -111,7 +113,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 				
 				checkLicense(module, pkg);
 				
-				processTpl(pkg, action.getName() + ".ftl", wrapper, findTpl(""));
+				//processTpl(pkg, action.getName() + ".ftl", wrapper, findTpl(""));
 				
 				for (ListUI lui : action.getListUIList()) {
 					if (Boolean.TRUE.equals(lui.getGenerate())) {
@@ -121,7 +123,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 						
 						wrapper.put("ui", lui);
 						
-						String uin = action.getName() + "_" + lui.getName();
+						String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" + lui.getName();
 
 						for (String t : lui.getTemplates()) {
 							if ("bdelete".equals(t) || "bupdate".equals(t)) {

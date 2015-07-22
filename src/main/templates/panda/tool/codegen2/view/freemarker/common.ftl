@@ -50,12 +50,17 @@
 	<#macro header>
 <html>
 <head>
-	<title>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></title>
+	<title>${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></title>
 </head>
 <body>
 <#if ui.header?has_content>
 	${ui.header}
 </#if>
+	</#macro>
+	<#macro sheader>
+	<div class="p-header">
+		<h3>${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
+	</div>
 	</#macro>
 	<#macro footer>
 <#if ui.footer?has_content>

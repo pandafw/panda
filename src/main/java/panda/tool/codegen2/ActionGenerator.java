@@ -11,6 +11,13 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import panda.lang.Strings;
+import panda.mvc.View;
+import panda.mvc.annotation.At;
+import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Err;
+import panda.mvc.annotation.view.Ok;
+import panda.mvc.bean.Queryer;
+import panda.mvc.validation.annotation.Validate;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
@@ -39,13 +46,13 @@ public class ActionGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private Template tplAction;
+	private Template tplListAction;
 
 	private int cntAction = 0;
 	
 	@Override
 	protected void loadTemplates(Configuration cfg) throws Exception {
-		tplAction = cfg.getTemplate("action/Action.java.ftl");
+		tplListAction = cfg.getTemplate("action/ListAction.java.ftl");
 	}
 
 	@Override
@@ -102,14 +109,20 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		Map<String, Object> wrapper = getWrapper(module, action, entity);
 
 		Set<String> imports = new TreeSet<String>();
-		prepareImportList(action.getPropertyList(), imports);
+		setImports(wrapper, imports);
 
-		imports.add(List.class.getName());
+		prepareImportList(action.getPropertyList(), imports);
 		imports.add(entity.getName());
 		imports.add(action.getActionBaseClass());
+		imports.add(Queryer.class.getName());
+		imports.add(At.class.getName());
+		imports.add(Ok.class.getName());
+		imports.add(Err.class.getName());
+		imports.add(Param.class.getName());
+		imports.add(Validate.class.getName());
+		imports.add(View.class.getName());
 		
-		setImports(wrapper, imports);
-		processTpl(pkg, cls + ".java", wrapper, tplAction, true);
+		processTpl(pkg, cls + ".java", wrapper, tplListAction, true);
 	}
 
 	private Map<String, Object> getWrapper(Module module, Action action, Entity entity) {
