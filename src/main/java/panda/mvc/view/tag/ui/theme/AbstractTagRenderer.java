@@ -78,7 +78,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	protected String button(String text, String icon, String sicon, Map<String, String> attrs) {
 		String cssClass = null;
 		if (attrs != null) {
-			cssClass = attrs.remove("cssClass");
+			cssClass = attrs.remove("class");
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -246,7 +246,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected void writeSelect(String cssClass, String name, String id, Object list, String value) throws IOException {
-		writeSelect(cssClass, name, id, list, value, null);
+		writeSelect(cssClass, name, id, list, value, false);
 	}
 
 	protected void writeSelect(String cssClass,
@@ -352,6 +352,10 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		dp.end(writer, "");
 	}
 
+	protected void writeln() throws IOException {
+		writer.write('\n');
+	}
+	
 	protected void write(String s) throws IOException {
 		if (Strings.isNotEmpty(s)) {
 			writer.write(s);

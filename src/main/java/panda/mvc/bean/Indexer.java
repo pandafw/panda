@@ -1,5 +1,7 @@
 package panda.mvc.bean;
 
+import panda.lang.Objects;
+
 public class Indexer {
 	protected Pager pager = new Pager();
 	protected Sorter sorter = new Sorter();
@@ -142,4 +144,66 @@ public class Indexer {
 	public void setT(String t) {
 		this.tag = t;
 	}
+
+
+	/**
+	 * @return a string representation of the object.
+	 */
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("pager", pager)
+				.append("sorter", sorter)
+				.append("key", key)
+				.append("cat", cat)
+				.append("tag", tag)
+				.toString();
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCodes(pager, sorter, key, cat, tag);
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Indexer rhs = (Indexer) obj;
+		return Objects.equalsBuilder()
+				.append(pager, rhs.pager)
+				.append(sorter, rhs.sorter)
+				.append(key, rhs.key)
+				.append(cat, rhs.cat)
+				.append(tag, rhs.tag)
+				.isEquals();
+	}
+
+	/**
+	 * Clone
+	 * @return Clone Object
+	 */
+	public Indexer clone() {
+		Indexer clone = new Indexer();
+		
+		clone.pager = this.pager == null ? null : this.pager.clone();
+		clone.sorter = this.sorter == null ? null : this.sorter.clone();
+		clone.key = this.key;
+		clone.cat = this.cat;
+		clone.tag = this.tag;
+
+		return clone;
+	}
+
 }

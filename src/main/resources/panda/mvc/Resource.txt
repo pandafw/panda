@@ -447,30 +447,30 @@ icon-bupdate-confirm=fa-arrow-circle-right
 icon-bupdate-execute=fa-save
 
 #title
-title-list={0} - List
-title-list_csv={0} - List - ${assist.csvFileTime}
-title-list_popup={0} - List
-title-list_print={0} - List
-title-view={0} - View
-title-print={0} - View
-title-copy={0} - Insert
-title-copy_confirm={0} - Insert ≫　Confirm
-title-copy_success={0} - Insert ≫　Complete
-title-delete={0} - Delete
-title-delete_success={0} - Delete ≫ Complete
-title-insert={0} - Insert
-title-insert_confirm={0} - Insert ≫ Confirm
-title-insert_success={0} - Insert ≫ Complete
-title-update={0} - Update
-title-update_confirm={0} - Update ≫ Confirm
-title-update_success={0} - Update ≫ Complete
+title-list=${top.title} - List
+title-list_csv=${top.title} - List - ${assist.csvFileTime}
+title-list_popup=${top.title} - List
+title-list_print=${top.title} - List
+title-view=${top.title} - View
+title-print=${top.title} - View
+title-copy=${top.title} - Insert
+title-copy_confirm=${top.title} - Insert ≫　Confirm
+title-copy_success=${top.title} - Insert ≫　Complete
+title-delete=${top.title} - Delete
+title-delete_success=${top.title} - Delete ≫ Complete
+title-insert=${top.title} - Insert
+title-insert_confirm=${top.title} - Insert ≫ Confirm
+title-insert_success=${top.title} - Insert ≫ Complete
+title-update=${top.title} - Update
+title-update_confirm=${top.title} - Update ≫ Confirm
+title-update_success=${top.title} - Update ≫ Complete
 
-title-bdelete={0} - Bulk Delete 
-title-bdelete_confirm={0} - Bulk Delete ≫ Confirm
-title-bdelete_success={0} - Bulk Delete ≫ Complete
-title-bupdate={0} - Bulk Update 
-title-bupdate_confirm={0} - Bulk Update ≫ Confirm
-title-bupdate_success={0} - Bulk Update ≫ Complete
+title-bdelete=${top.title} - Bulk Delete 
+title-bdelete_confirm=${top.title} - Bulk Delete ≫ Confirm
+title-bdelete_success=${top.title} - Bulk Delete ≫ Complete
+title-bupdate=${top.title} - Bulk Update 
+title-bupdate_confirm=${top.title} - Bulk Update ≫ Confirm
+title-bupdate_success=${top.title} - Bulk Update ≫ Complete
 
 #step
 step-arrow-e=&gt;

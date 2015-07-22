@@ -40,7 +40,7 @@ public abstract class ListUIBean extends InputUIBean {
 			listSize = Array.getLength(list);
 		}
 		else {
-			throw new IllegalArgumentException("The list value is not a Collection/Map/Array object.");
+			throw new IllegalArgumentException("The list value is not a Collection/Map/Array object: " + (list instanceof String ? list : list.getClass()));
 		}
 	}
 

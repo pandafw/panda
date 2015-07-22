@@ -360,7 +360,7 @@ public class DefaultTextProvider implements TextProvider {
 				try {
 					Class cls = null;
 					if (obj != null) {
-						cls = obj.getClass();
+						cls = obj instanceof Class ? (Class)obj : obj.getClass();
 					}
 
 					if (cls != null) {

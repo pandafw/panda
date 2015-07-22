@@ -17,7 +17,7 @@ import panda.bean.Beans;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
-import panda.mvc.bean.CompositeQuery;
+import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Sorter;
 import panda.mvc.util.PermissionProvider;
@@ -35,14 +35,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 	private String id;
 
-	private panda.mvc.bean.Pager pager;
-	private Sorter sorter;
-	private CompositeQuery query;
+	private String prefix = "";
+	private Queryer queryer;
 
 	private List<ListColumn> columns;
 	private String[] cssColumns;
 	private Collection list;
-	private String listn;
 	private int listz;
 	
 	private Set<String> _fsdl = new HashSet<String>();
@@ -61,20 +59,15 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		id = tag.getId();
 
-		if (Strings.isNotEmpty(tag.getPager())) {
-			pager = (panda.mvc.bean.Pager)context.getParameter(tag.getPager());
+		if (Strings.isEmpty(tag.getQueryer())) {
+			queryer = (Queryer)context.getParams();
 		}
-
-		if (Strings.isNotEmpty(tag.getSorter())) {
-			sorter = (Sorter)context.getParameter(tag.getSorter());
-		}
-		
-		if (Strings.isNotEmpty(tag.getQuery())) {
-			query = (CompositeQuery)context.getParameter(tag.getQuery());
+		else {
+			queryer = (Queryer)context.getParameter(tag.getQueryer());
+			prefix = tag.getQueryer() + '.';
 		}
 		
-		listn = tag.getList();
-		Object v = context.getParameter(listn);
+		Object v = tag.getList();
 		if (v != null) {
 			if (v instanceof Collection) {
 				list = (Collection)v;
@@ -82,7 +75,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			else if (v.getClass().isArray()) {
 				list = Arrays.asList((Object[])v);
 			}
-			throw new IllegalArgumentException("Invalid list parameter: " + listn + " - " + v.getClass());
+			else {
+				throw new IllegalArgumentException("Invalid list " + v.getClass() + " of " + tag.getClass() + ", should be Collection/Array");
+			}
 		}
 
 		if (list != null) {
@@ -100,15 +95,22 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		
 		a.add("id", id)
 		 .cssClass(tag, "p-lv")
-		 .data("singleSelect", tag.getSingleSelect())
-		 .data("toggleSelect", tag.getToggleSelect())
 		 .data("onrowclick", tag.getOnrowclick())
 		 .cssStyle(tag);
+		if (tag.isSingleSelect()) {
+			a.data("singleSelect", "true");
+		}
+		if (tag.isUntoggleSelect()) {
+			a.data("untoggleSelect", "true");
+		}
+		if (tag.isAutosize()) {
+			a.data("autosize", "true");
+		}
 		stag("div", a);
 		
 		writeListViewForm();
 
-		writeListViewTools();
+		writeListViewQueryer();
 		
 		writeListViewHeader();
 		
@@ -119,10 +121,6 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		etag("div");
 	}
 
-	protected String uiClass(String cls) {
-		return cls;
-	}
-	
 	protected void writeJsc(String js) throws IOException {
 		if (tag.isScript()) {
 			super.writeJsc(js);
@@ -130,14 +128,14 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void writeListViewHiddens() throws IOException {
-		if (pager != null) {
-			writeHidden(id + "_start", tag.getPager() + ".s", pager.getStart());
-			writeHidden(id + "_limit", tag.getPager() + ".l", pager.getLimit());
-			writeHidden(id + "_total", tag.getPager() + ".t", pager.getTotal());
+		if (queryer.getPager() != null) {
+			writeHidden(id + "_start", prefix + "p.s", queryer.getPager().getStart());
+			writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
+			writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal());
 		}
-		if (sorter != null) {
-			writeHidden(id + "_sort", tag.getSorter() + ".c", sorter.getColumn());
-			writeHidden(id + "_dir", tag.getSorter() + ".d", sorter.getDirection());
+		if (queryer.getSorter() != null) {
+			writeHidden(id + "_sort", prefix + "s.c", queryer.getSorter().getColumn());
+			writeHidden(id + "_dir", prefix + "s.d", queryer.getSorter().getDirection());
 		}
 	}
 
@@ -156,21 +154,22 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		writeListViewHiddens();
 		
-		if (query != null) {
-			String _fs = tag.getQuery() + ".fs.";
-			Map<String, Filter> _fsm = query.getFilters();
+		if (queryer != null) {
+			Map<String, Filter> _fsm = queryer.getFilters();
 			if (Collections.isNotEmpty(_fsm)) {
+				String p = prefix + "f.";
 				for (Entry<String, Filter> en : _fsm.entrySet()) {
 					String k = en.getKey();
 					Filter f = en.getValue();
 					
-					writeHidden(id + "_fs_" + k + "_c", _fs + k + ".c", f.getComparator());
+					writeHidden(id + "_f_" + k + "_c", p + k + ".c", f.getComparator());
+
 					String t = defs(f.getType(), "s");
 					List vs = f.getValues();
 					if (vs != null) {
 						int i = 0;
-						String d = id + "_fs_" + k + "_v_" + i;
-						String n = _fs + k + "." + t + "vs";
+						String d = id + "_f_" + k + "_v_" + i;
+						String n = p + k + "." + t + "vs";
 						for (Object v : vs) {
 							writeHidden(d, n, escapeValue(v));
 						}
@@ -180,8 +179,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 		
 		Attributes a = new Attributes();
-		a.type("submit")
-		 .id(id + "_submit");
+		a.type("submit").id(id + "_submit");
 		xtag("input", a);
 		
 		form.end(writer, "");
@@ -206,7 +204,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void writePager(String pos) throws IOException {
-		if (pager == null) {
+		if (queryer.getPager() == null) {
 			return;
 		}
 		
@@ -214,10 +212,8 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		pg.setId(id + "_pager_" + pos);
 		pg.setCssClass("p-lv-pager");
-		pg.setStart(pager.getStart());
+		pg.setPager(queryer.getPager());
 		pg.setCount((long)listz);
-		pg.setLimit(pager.getLimit());
-		pg.setTotal(pager.getTotal());
 		pg.setOnLinkClick("_plv_goto('" + id + "', #)");
 		pg.setOnLimitChange("_plv_limit('" + id + "', this.value)");
 		
@@ -225,10 +221,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		pg.end(writer, "");
 	}
 	
-	private void writeListViewTools() throws IOException {
+	private void writeListViewQueryer() throws IOException {
 		write("<div id=\"");
 		write(id);
-		write("_tools\" class=\"p-lv-tools\">");
+		write("_queryer\" class=\"p-lv-queryer\">");
 		
 		writeListViewFilters();
 		
@@ -247,49 +243,49 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write("<div id=\"");
 		write(id);
 		write("_header\" class=\"p-lv-header\">");
-		
-		if (p) {
-			write("<div class=\"p-lv-pager-header\">");
-			writePager("header");
-			write("</div>");
-		}
 
+		write("<div class=\"p-lv-toolbar\">");
+		if (p) {
+			writePager("header");
+		}
 		if (t) {
-			write("<div class=\"p-lv-tools-header\">");
+			write("<div class=\"p-lv-tools\">");
 			writeCheckAllButton();
 			write(tag.getTools());
 			write("</div>");
 		}
-
 		if (a) {
-			write("<div class=\"p-lv-addon-header\">");
+			write("<div class=\"p-lv-addon\">");
 			write(tag.getAddon());
 			write("</div>");
 		}
+		write("</div>");
 
 		write("</div>");
 	}
 	
 	private void writeCheckAllButton() throws IOException {
-		if (Attributes.isTrue(tag.getShowCheckAll(), true)) {
-			for (ListColumn c : columns) {
-				if ("check".equals(c.type)) {
-					String textSelectAll =  getText("button-select-all");
-					String textSelectNone =  getText("button-select-none");
-					String iconSelectAll =  getText("icon-select-all");
-					String iconSelectNone =  getText("icon-select-none");
+		if (tag.isHideCheckAll()) {
+			return;
+		}
 
-					Attributes as = new Attributes();
-					as.cssClass("p-lv-cab");
-					as.data("textSelectAll", textSelectAll);
-					as.data("textSelectNone", textSelectNone);
-					as.data("iconSelectAll", iconSelectAll);
-					as.data("iconSelectNone", iconSelectNone);
-					as.add("onclick", "return _nlv_onAllClick(this);");
-					
-					write(button(textSelectAll, ticon(iconSelectAll), null, as.attrs()));
-					break;
-				}
+		for (ListColumn c : columns) {
+			if ("check".equals(c.type)) {
+				String textSelectAll =  getText("button-select-all");
+				String textSelectNone =  getText("button-select-none");
+				String iconSelectAll =  getText("icon-select-all");
+				String iconSelectNone =  getText("icon-select-none");
+
+				Attributes as = new Attributes();
+				as.cssClass("p-lv-cab");
+				as.data("textSelectAll", textSelectAll);
+				as.data("textSelectNone", textSelectNone);
+				as.data("iconSelectAll", iconSelectAll);
+				as.data("iconSelectNone", iconSelectNone);
+				as.add("onclick", "return _plv_onAllClick(this);");
+				
+				write(button(textSelectAll, ticon(iconSelectAll), null, as.attrs()));
+				break;
 			}
 		}
 	}
@@ -307,35 +303,21 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write(id);
 		write("_footer\" class=\"p-lv-footer\">");
 		
-		write("<div class=\"p-lv-toolbar" + uiClass("ui-widget-header") + "\">");
-		write("<table class=\"p-lv-toolbar-tb\">");
-		write("<tr>");
-		
-		if (p) {
-			write("<td class=\"p-lv-td-pager\">");
-			writePager("footer");
-			write("</td>");
-		}
-
+		write("<div class=\"p-lv-toolbar\">");
 		if (t) {
-			write("<td class=\"p-lv-td-tools\">");
 			write("<div class=\"p-lv-tools\">");
 			writeCheckAllButton();
 			write(tag.getTools());
 			write("</div>");
-			write("</td>");
 		}
-
 		if (a) {
-			write("<td class=\"p-lv-td-addon\">");
 			write("<div class=\"p-lv-addon\">");
 			write(tag.getAddon());
 			write("</div>");
-			write("</td>");
 		}
-
-		write("</tr>");
-		write("</table>");
+		if (p) {
+			writePager("footer");
+		}
 		write("</div>");
 
 		write("</div>");
@@ -348,18 +330,18 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		Map<String, String> numberFilterMap = tag.getNumberFilterMap();
 		Map<String, String> dateFilterMap = tag.getDateFilterMap();
 
-		String _fs = tag.getQuery() + ".fs.";
+		String _pf = prefix + "f.";
 
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = query.getFilters();
+		Map<String, Filter> qfs = queryer.getFilters();
 		
 		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
 			ListColumn.Filter _f = en.getValue();
 			String _name = en.getKey();
 			
-			Filter qf = qfs.get(_name);
+			Filter qf = qfs == null ? null : qfs.get(_name);
 			
-			String _fn = _fs + _name;
+			String _fn = _pf + _name;
 			String _ifn = id + "_fsf_" + _name;
 			boolean _fd = _fsvl.contains(_name);
 
@@ -566,13 +548,13 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write("<table class=\"p-lv-fs-tb-options\"><tbody><tr>");
 		if (Collections.isNotEmpty(filterMethodMap)) {
 			write("<td>");
-			writeRadio("p-lv-f-method", tag.getQuery() + ".m", id + "_fsform_filterm", filterMethodMap, null);
+			writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, null);
 			write("</td>");
 		}
 		if (Collections.isNotEmpty(fm2)) {
 			write("<td>");
 			write("<select id=\"" + id + "_fsform_fsadd" + "\"");
-			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\" onchange=\"_nlv_onAddFilter(this)\">");
+			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\" onchange=\"_plv_onAddFilter(this)\">");
 			write("<option value=\"\">-- ");
 			write(getText("listview-filters-label-add"));
 			write(" --</option>");
@@ -605,16 +587,16 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write("<td class=\"p-lv-submit\" colspan=\"2\">");
 		write(button(getText("listview-filters-button-query"), "icon-search"));
 		write(' ');
-		write(button(getText("listview-filters-button-clear"), "icon-clear", null, "return _nlv_onClearFilters(this);"));
+		write(button(getText("listview-filters-button-clear"), "icon-clear", null, "return _plv_onClearFilters(this);"));
 		write("</td></tr>");
 	}
 
 	private void writeListViewFilters() throws IOException {
 		Map<String, ListColumn.Filter> fm = new LinkedHashMap<String, ListColumn.Filter>();
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = query.getFilters();
+		Map<String, Filter> qfs = queryer.getFilters();
 		
-		String _fs = tag.getQuery() + ".fs";
+		String _pf = prefix + "f.";
 		for (ListColumn c : columns) {
 			if (!c.filterable) {
 				continue;
@@ -631,7 +613,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					of.tooltip = c.tooltip;
 				}
 				
-				String _fn = _fs + '.' + c.name;
+				String _fn = _pf + c.name;
 
 				boolean _hfe = false;
 				if (fieldErrors != null) {
@@ -643,7 +625,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					}
 				}
 
-				Filter qf = qfs.get(c.name);
+				Filter qf = qfs == null ? null : qfs.get(c.name);
 				if (of.fixed || _hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
 					_fsvl.add(c.name);
 				}
@@ -706,12 +688,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		form.start(writer);
 
-		if (pager != null) {
-			writeHidden(id + "_fsform_limit", tag.getPager() + ".l", pager.getLimit());
+		if (queryer.getPager() != null) {
+			writeHidden(id + "_fsform_limit", prefix + "p.l", queryer.getPager().getLimit());
 		}
-		if (sorter != null) {
-			writeHidden(id + "_fsform_sort", tag.getSorter() + ".c", sorter.getColumn());
-			writeHidden(id + "_fsform_dir", tag.getSorter() + ".d", sorter.getDirection());
+		if (queryer.getSorter() != null) {
+			writeHidden(id + "_fsform_sort", prefix + "s.c", queryer.getSorter().getColumn());
+			writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
 		}
 
 		write("<table class=\"p-lv-filters-t\" cellspacing=\"0\"><tbody>");
@@ -741,8 +723,8 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			tha.add("column", c.name)
 				.cssClass("p-lv-" + ctype 
 					+ ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
-					+ (tag.getSortable() && c.sortable ? " p-lv-sortable" + uiClass("p-sortable") : "")
-					+ ((sorter != null && c.name.equals(sorter.getColumn())) ? " p-sorted p-lv-sort-" + sorter.getDirection() : "")
+					+ (tag.getSortable() && c.sortable ? " p-lv-sortable p-sortable" : "")
+					+ ((queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
 					+ (_fsdl.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
 				.title(tag);
@@ -774,10 +756,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write(c.header);
 			}
 			
-			if (sorter != null && c.name.equals(sorter.getColumn())) {
+			if (queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) {
 				write("<span class=\"ui-icon ui-icon-triangle-1-" 
-						+ (Sorter.ASC.equals(sorter.getDirection()) ? 'n' : 's')
-						+ " p-lv-sort-" + sorter.getDirection()
+						+ (Sorter.ASC.equals(queryer.getSorter().getDirection()) ? 'n' : 's')
+						+ " p-lv-sort-" + queryer.getSorter().getDirection()
 						+ "\"></span>");
 			}
 			else if (tag.getSortable() && c.sortable) {
@@ -790,7 +772,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private String getCssColumnClass(Object d) {
-		StringBuilder ccc = new StringBuilder();//(StringUtils.isEmpty(_cc) ? "" : " p-lv-cc-" + _cc);
+		StringBuilder ccc = new StringBuilder();
 		for (String c : cssColumns) {
 			Object v = getBeanProperty(d, c);
 			if (v != null) {
@@ -832,7 +814,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			
 			for (Object d : list) {
 				String oe = (inx % 2 == 0 ? "odd" : "even");
-				write("<tr class=\"p-lv-tr p-lv-tr-" + oe + uiClass("p-tr-" + oe)
+				write("<tr class=\"p-lv-tr p-lv-tr-" + oe + " p-tr-" + oe
 						+ getCssColumnClass(d)
 						+ "\">");
 
@@ -861,7 +843,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						write(String.valueOf(inx + 1));
 					}
 					else if ("number".equals(ctype)) {
-						write(String.valueOf(pager == null ? 0 : pager.getStart() + inx + 1));
+						write(String.valueOf(queryer.getPager() == null ? 0 : queryer.getPager().getStart() + inx + 1));
 					}
 					else if ("check".equals(ctype)) {
 						write("<input type=\"checkbox\" class=\"checkbox p-lv-cb\" value=\"" + inx + "\"/>");
@@ -885,7 +867,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							Attributes ha = new Attributes();
 							ha.add("type", "hidden")
 							  .add("class", "p-lv-cv" + (c.pkey ? " p-lv-ck" : ""))
-							  .add("name", listn + "[" + inx + "]." + c.name)
+							  .add("name", "ds[" + inx + "]." + c.name)
 							  .addIfTrue("disabled", !c.enabled)
 							  .add("value", escapeValue(getBeanProperty(d, c.name)), false);
 							xtag("input", ha);
@@ -934,6 +916,14 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 									}
 								}
 							}
+							else {
+								Object v = getBeanProperty(d, c.name);
+								if (v != null) {
+									Property p = newTag(Property.class);
+									p.setValue(v);
+									write(p.formatValue());
+								}
+							}
 
 							if (wa) {
 								write("</a>");
@@ -954,11 +944,6 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 		
 		write("</table>");
-
-		writeJsc("$(function() {"
-				+ "_plv_init_table('" + jsstr(id) + "', {"
-				+ "autosize: " + tag.isAutosize()
-				+ "}); });");
 
 		form.end(writer, "");
 		

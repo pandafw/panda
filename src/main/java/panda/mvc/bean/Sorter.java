@@ -152,7 +152,7 @@ public class Sorter implements Cloneable, Serializable {
 	 * Clone
 	 * @return Clone Object
 	 */
-	public Object clone() {
+	public Sorter clone() {
 		Sorter clone = new Sorter();
 		
 		clone.column = this.column;

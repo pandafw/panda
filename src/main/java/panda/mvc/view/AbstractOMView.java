@@ -23,7 +23,7 @@ import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.alert.ActionAlert;
 import panda.mvc.alert.ParamAlert;
-import panda.mvc.bean.CompositeQuery;
+import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
@@ -337,7 +337,7 @@ public abstract class AbstractOMView extends AbstractView {
 
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
-		as.registerPropertyFilter(CompositeQuery.class, new CompositeQueryPropertyFilter(shortName));
+		as.registerPropertyFilter(Queryer.class, new CompositeQueryPropertyFilter(shortName));
 		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(shortName));
 		
 		as.setPrettyPrint(prettyPrint);

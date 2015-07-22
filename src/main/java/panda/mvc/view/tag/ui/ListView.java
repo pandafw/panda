@@ -22,12 +22,10 @@ public class ListView extends UIBean {
 	public static final int THRESHOLD = 10;
 	
 	// attributes
-	protected String list;
+	protected Object list;
 	protected List<ListColumn> columns;
 
-	protected String pager;
-	protected String sorter;
-	protected String query;
+	protected String queryer;
 
 	protected Boolean sortable;
 	protected String cssColumn;
@@ -57,11 +55,10 @@ public class ListView extends UIBean {
 
 	protected ItemLink link;
 
-	protected String singleSelect;
-	protected String toggleSelect;
+	protected Boolean hideCheckAll;
+	protected boolean singleSelect;
+	protected boolean untoggleSelect;
 	protected String onrowclick;
-
-	protected Boolean showCheckAll;
 	
 	protected String hiddens;
 	
@@ -169,8 +166,8 @@ public class ListView extends UIBean {
 			sortable = getTextAsBoolean("listview-sortable", true);
 		}
 
-		if (showCheckAll == null) {
-			showCheckAll = getTextAsBoolean("listview-showCheckAll", true);
+		if (hideCheckAll == null) {
+			hideCheckAll = getTextAsBoolean("listview-hideCheckAll", false);
 		}
 	}
 
@@ -224,7 +221,7 @@ public class ListView extends UIBean {
 	/**
 	 * @return the list
 	 */
-	public String getList() {
+	public Object getList() {
 		return list;
 	}
 
@@ -236,31 +233,10 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @return the pager
+	 * @return the queryer
 	 */
-	public String getPager() {
-		return pager;
-	}
-
-	/**
-	 * @return the sorter
-	 */
-	public String getSorter() {
-		return sorter;
-	}
-
-	/**
-	 * @return the filters
-	 */
-	public String getQuery() {
-		return query;
-	}
-
-	/**
-	 * @return the sortable
-	 */
-	public Boolean getSortable() {
-		return sortable;
+	public String getQueryer() {
+		return queryer;
 	}
 
 	/**
@@ -348,17 +324,24 @@ public class ListView extends UIBean {
 	}
 
 	/**
+	 * @return the sortable
+	 */
+	public Boolean getSortable() {
+		return sortable;
+	}
+
+	/**
 	 * @return the singleSelect
 	 */
-	public String getSingleSelect() {
+	public boolean isSingleSelect() {
 		return singleSelect;
 	}
 
 	/**
-	 * @return the toggleSelect
+	 * @return the untoggleSelect
 	 */
-	public String getToggleSelect() {
-		return toggleSelect;
+	public boolean isUntoggleSelect() {
+		return untoggleSelect;
 	}
 
 	/**
@@ -371,8 +354,8 @@ public class ListView extends UIBean {
 	/**
 	 * @return the showCheckAll
 	 */
-	public Boolean getShowCheckAll() {
-		return showCheckAll;
+	public boolean isHideCheckAll() {
+		return hideCheckAll;
 	}
 
 	/**
@@ -413,7 +396,7 @@ public class ListView extends UIBean {
 	/**
 	 * @param list the list to set
 	 */
-	public void setList(String list) {
+	public void setList(Object list) {
 		this.list = list;
 	}
 
@@ -425,24 +408,10 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @param pager the pager to set
+	 * @param queryer the queryer to set
 	 */
-	public void setPager(String pager) {
-		this.pager = pager;
-	}
-
-	/**
-	 * @param sorter the sorter to set
-	 */
-	public void setSorter(String sorter) {
-		this.sorter = sorter;
-	}
-
-	/**
-	 * @param query the query to set
-	 */
-	public void setQuery(String query) {
-		this.query = query;
+	public void setQueryer(String queryer) {
+		this.queryer = queryer;
 	}
 
 	/**
@@ -483,6 +452,7 @@ public class ListView extends UIBean {
 	/**
 	 * @param action the action to set
 	 */
+
 	public void setAction(String action) {
 		this.action = action;
 	}
@@ -525,15 +495,15 @@ public class ListView extends UIBean {
 	/**
 	 * @param singleSelect the singleSelect to set
 	 */
-	public void setSingleSelect(String singleSelect) {
+	public void setSingleSelect(boolean singleSelect) {
 		this.singleSelect = singleSelect;
 	}
 
 	/**
-	 * @param toggleSelect the toggleSelect to set
+	 * @param untoggleSelect the untoggleSelect to set
 	 */
-	public void setToggleSelect(String toggleSelect) {
-		this.toggleSelect = toggleSelect;
+	public void setUntoggleSelect(boolean untoggleSelect) {
+		this.untoggleSelect = untoggleSelect;
 	}
 
 	/**
@@ -544,10 +514,10 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @param showCheckAll the showCheckAll to set
+	 * @param hideCheckAll the hideCheckAll to set
 	 */
-	public void setShowCheckAll(Boolean showCheckAll) {
-		this.showCheckAll = showCheckAll;
+	public void setHideCheckAll(boolean hideCheckAll) {
+		this.hideCheckAll = hideCheckAll;
 	}
 
 	/**

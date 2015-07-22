@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.cast.CastException;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -66,9 +67,14 @@ public class Component {
 
 		if (bean.canWriteBean(name)) {
 			Type pt = bean.getBeanType(name);
-			Object cv = Mvcs.getCastors().cast(value, pt);
-			bean.setBeanValue(this, name, cv);
-			return;
+			try {
+				Object cv = Mvcs.getCastors().cast(value, pt);
+				bean.setBeanValue(this, name, cv);
+				return;
+			}
+			catch (CastException e) {
+				throw new IllegalArgumentException("Failed to set parameter(" + name + ") to " + this.getClass(), e);
+			}
 		}
 
 		addParameter(name, value);
