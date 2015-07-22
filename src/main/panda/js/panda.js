@@ -1774,24 +1774,24 @@ function nlv_submitCheckedKeys(id, an, ps) {
 
 function nlv_enableCheckedValues(id, ns) {
 	var count = 0;
-	$("#" + id + " .n-lv-tbody input.n-lv-cb")
+	$("#" + id + " .p-lv-tbody input.p-lv-cb")
 		.each(function() {
 			if (this.checked) {
 				count++;
 				if (ns) {
-					$(this).closest("tr").find("input.n-lv-cv").each(function() {
-						var n = _nlv_getPropertyName(this.name);
+					$(this).closest("tr").find("input.p-lv-cv").each(function() {
+						var n = _plv_getPropertyName(this.name);
 						if (ns == n || ns.contains(n)) {
 							this.disabled = false;
 						}
 					});
 				}
 				else {
-					$(this).closest("tr").find("input.n-lv-cv").prop("disabled", false);
+					$(this).closest("tr").find("input.p-lv-cv").prop("disabled", false);
 				}
 			}
 			else {
-				$(this).closest("tr").find("input.n-lv-cv").prop("disabled", true);
+				$(this).closest("tr").find("input.p-lv-cv").prop("disabled", true);
 			}
 		});
 	return count;
@@ -1799,26 +1799,26 @@ function nlv_enableCheckedValues(id, ns) {
 
 function nlv_enableCheckedKeys(id) {
 	var count = 0;
-	$("#" + id + " .n-lv-tbody input.n-lv-cb")
+	$("#" + id + " .p-lv-tbody input.p-lv-cb")
 		.each(function() {
 			if (this.checked) {
 				count++;
 			}
-			$(this).closest("tr").find("input.n-lv-ck").prop("disabled", !this.checked);
+			$(this).closest("tr").find("input.p-lv-ck").prop("disabled", !this.checked);
 		});
 	return count;
 }
 
 function nlv_getRowData(tr) {
 	var d = {};
-	$(tr).find("input.n-lv-cv").each(function () {
-		var n = _nlv_getPropertyName(this.name);
+	$(tr).find("input.p-lv-cv").each(function () {
+		var n = _plv_getPropertyName(this.name);
 		d[n] = this.value;
 	});
 	return d;
 }
 
-function _nlv_getPropertyName(n) {
+function _plv_getPropertyName(n) {
 	var i = n.lastIndexOf('.');
 	if (i >= 0) {
 		n = n.substring(i + 1);
@@ -1827,7 +1827,7 @@ function _nlv_getPropertyName(n) {
 }
 
 function nlv_getTBodyRows(id) {
-	return $("#" + id + " .n-lv-tbody > tr");
+	return $("#" + id + " .p-lv-tbody > tr");
 }
 
 function nlv_checkAll(id, check) {
@@ -1837,7 +1837,7 @@ function nlv_checkAll(id, check) {
 
 	var $lv = $("#" + id);
 
-	_nlv_setCheckAll($lv, check, true);
+	_plv_setCheckAll($lv, check, true);
 }
 
 function nlv_checkRow(id, row, check) {
@@ -1845,12 +1845,12 @@ function nlv_checkRow(id, row, check) {
 		check = true;
 	}
 
-	var trs = $("#" + id + " .n-lv-tbody > tr");
-	_nlv_selectRow(trs.eq(row), check);
+	var trs = $("#" + id + " .p-lv-tbody > tr");
+	_plv_selectRow(trs.eq(row), check);
 }
 
-function _nlv_init_filters(id) {
-	$("#" + id).find(".p-lv-filters")
+function _plv_init_filters($lv) {
+	$lv.find(".p-lv-filters")
 		.find('tr.p-lv-input')
 			.each(function() {
 				if ($(this).hasClass('p-hidden')) {
@@ -1858,7 +1858,7 @@ function _nlv_init_filters(id) {
 				}
 			}).end()
 		.find('.p-lv-f-number-c, .p-lv-f-date-c, .p-lv-f-datetime-c, .p-lv-f-time-c')
-			.on('change', _nlv_onBetweenChange)
+			.on('change', _plv_onBetweenChange)
 			.end()
 		.find('form')
 			.submit(function() {
@@ -1867,30 +1867,28 @@ function _nlv_init_filters(id) {
 		);
 }
 
-function _nlv_init_table(id, cfg) {
-	var $lv = $("#" + id);
+function _plv_init_table($lv) {
+	if ($lv.data("autosize") == 'true') {
+		$lv.addClass("p-lv-autosize");
+		var $lvb = $lv.children(".p-lv-body").autosize();
 
-	if (cfg.autosize) {
-		$lv.addClass("n-lv-autosize");
-		var $lvb = $lv.children(".n-lv-body").autosize();
-
-//		var $sth = $lv.find(".n-lv-thead");
+//		var $sth = $lv.find(".p-lv-thead");
 //		var $cth = $sth.clone();
 //		
-//		$cth.find('tr').append('<th><div class="n-lv-cell-last"></div></th>');
+//		$cth.find('tr').append('<th><div class="p-lv-cell-last"></div></th>');
 //		
-//		var $bht = $('<table class="n-table"></table>').css('visibility', 'hidden').append($cth);
+//		var $bht = $('<table class="p-table"></table>').css('visibility', 'hidden').append($cth);
 //		
-//		$sth.removeClass('n-lv-thead').addClass('n-lv-thead-shadow');
+//		$sth.removeClass('p-lv-thead').addClass('p-lv-thead-shadow');
 //		$sth.parent().css('margin-top', -1 - $sth.outerHeight() + "px");
 //		
-//		$('<div class="n-lv-body-head n-table-wrapper"></div>')
+//		$('<div class="p-lv-body-head p-table-wrapper"></div>')
 //			.append($bht)
 //			.insertBefore($lvb).autosize({ 
 //				overflow: 'hidden',
 //				callback: function() {
-//					var $cths = $cth.find('.n-lv-cell');
-//					var $sths = $sth.find('.n-lv-cell');
+//					var $cths = $cth.find('.p-lv-cell');
+//					var $sths = $sth.find('.p-lv-cell');
 //					$cths.each(function(i) {
 //						var $sc = $sths.eq(i);
 //						if (!$sc.parent().is(':hidden')) {
@@ -1907,25 +1905,25 @@ function _nlv_init_table(id, cfg) {
 //		});
 	}
 
-	$lv.find(".n-lv-thead > tr > th").each(function() {
+	$lv.find(".p-lv-thead > tr > th").each(function() {
 		var $th = $(this);
-		if ($th.hasClass("n-lv-sortable")) {
+		if ($th.hasClass("p-lv-sortable")) {
 			$th.click(function() {
-				_nlv_onThClick.call(this, id);
+				_plv_onThClick.call(this, id);
 			  });
 			if ($.browser.msie && $.browser.majorVersion < 7) {
-				$th.mouseenter(_nlv_onThMouseEnter).mouseleave(_nlv_onThMouseLeave);
+				$th.mouseenter(_plv_onThMouseEnter).mouseleave(_plv_onThMouseLeave);
 			}
 		}
 	});
 
 	var icd = 0;
 	var inc = 0;
-	var $tb = $lv.find(".n-lv-tbody");
-	$tb.click(_nlv_onTBodyClick)
-		.find("input.n-lv-cb")
+	var $tb = $lv.find(".p-lv-tbody");
+	$tb.click(_plv_onTBodyClick)
+		.find("input.p-lv-cb")
 			.each(function() {
-				_nlv_selectRow($(this).closest("tr"), this.checked);
+				_plv_selectRow($(this).closest("tr"), this.checked);
 				if (this.checked) {
 					icd++;
 				}
@@ -1934,16 +1932,21 @@ function _nlv_init_table(id, cfg) {
 				}
 			});
 	if ($.browser.msie && $.browser.majorVersion < 7) {
-		$tb.mouseover(_nlv_onTBodyMouseOver)
-			.mouseout(_nlv_onTBodyMouseOut);
+		$tb.mouseover(_plv_onTBodyMouseOver)
+			.mouseout(_plv_onTBodyMouseOut);
 	}
 	
-	$lv.find(".n-lv-thead input.n-lv-ca")
-		.click(_nlv_onAllCheck)
+	$lv.find(".p-lv-thead input.p-lv-ca")
+		.click(_plv_onAllCheck)
 		.prop("checked", (icd > 0 && inc == 0));
 }
 
-function _nlv_sort(id, cn) {
+function _plv_init($lv) {
+	_plv_init_table($lv);
+	_plv_init_filters($lv);
+}
+
+function _plv_sort(id, cn) {
 	$('#' + id).loadmask();
 
 	var es = document.getElementById(id + "_sort");
@@ -1959,7 +1962,7 @@ function _nlv_sort(id, cn) {
 	document.getElementById(id + "_submit").click();
 }
 
-function _nlv_goto(id, p) {
+function _plv_goto(id, p) {
 	$('#' + id).loadmask();
 
 	document.getElementById(id + "_form").reset();
@@ -1967,14 +1970,14 @@ function _nlv_goto(id, p) {
 	document.getElementById(id + "_submit").click();
 }
 
-function _nlv_limit(id, l) {
+function _plv_limit(id, l) {
 	$('#' + id).loadmask();
 
 	document.getElementById(id + "_limit").value = l;
 	document.getElementById(id + "_submit").click();
 }
 
-function _nlv_clearFieldValue() {
+function _plv_clearFieldValue() {
 	switch (this.tagName) {
 	case "INPUT":
 		switch (this.type) {
@@ -1998,51 +2001,51 @@ function _nlv_clearFieldValue() {
 	}
 }
 
-function _nlv_selectRow(tr, c) {
+function _plv_selectRow(tr, c) {
 	if (c) {
-		tr.addClass("n-selected n-lv-selected")
-		  .find("input.n-lv-cb").prop("checked", c);
+		tr.addClass("p-selected p-lv-selected")
+		  .find("input.p-lv-cb").prop("checked", c);
 	}
 	else {
-		tr.removeClass("n-selected n-lv-selected")
-		  .find("input.n-lv-cb").prop("checked", c);
+		tr.removeClass("p-selected p-lv-selected")
+		  .find("input.p-lv-cb").prop("checked", c);
 	}
 }
 
-function _nlv_toggleRow($tr, ts) {
-	var $lv = $tr.closest("div.n-lv");
-	if ($lv.get(0).singleSelect || $lv.attr("singleSelect") == "true") {
-		if ($tr.hasClass("n-lv-selected")) {
-			if (ts || !($lv.get(0).toggleSelect === false || $lv.attr("toggleSelect") === "false")) {
-				_nlv_selectRow($tr, false);
+function _plv_toggleRow($tr, ts) {
+	var $lv = $tr.closest("div.p-lv");
+	if ($lv.data('singleSelect') == "true") {
+		if ($tr.hasClass("p-lv-selected")) {
+			if (ts || !($lv.data("untoggleSelect") == "true")) {
+				_plv_selectRow($tr, false);
 			}
 		}
 		else {
-			_nlv_selectRow($lv.find("tr.n-lv-selected"), false);
-			_nlv_selectRow($tr, true);
+			_plv_selectRow($lv.find("tr.p-lv-selected"), false);
+			_plv_selectRow($tr, true);
 		}
 	}
 	else {
-		if ($tr.hasClass("n-lv-selected")) {
-			_nlv_selectRow($tr, false);
+		if ($tr.hasClass("p-lv-selected")) {
+			_plv_selectRow($tr, false);
 		}
 		else {
-			_nlv_selectRow($tr, true);
+			_plv_selectRow($tr, true);
 		}
 	}
 
 	var all = true;
-	$lv.find(".n-lv-tbody input.n-lv-cb")
+	$lv.find(".p-lv-tbody input.p-lv-cb")
 		.each(function() {
 			if (!this.checked) {
 				all = false;
 				return false;
 			}
 		});
-	_nlv_setCheckAll($lv, all);
+	_plv_setCheckAll($lv, all);
 }
 
-function _nlv_onBetweenChange() {
+function _plv_onBetweenChange() {
 	var $t = $(this),
 		d = $t.val() != 'bt',
 		v = d ? 'hidden' : 'visible';
@@ -2052,11 +2055,11 @@ function _nlv_onBetweenChange() {
 	$t.nextAll().css('visibility', v);
 }
 
-function _nlv_onAddFilter(e) {
+function _plv_onAddFilter(e) {
 	if (e.selectedIndex > 0) {
-		$(e).closest(".n-lv-filters")
-			.find('.n-lv-fsi-' + e.value)
-				.removeClass('n-hidden')
+		$(e).closest(".p-lv-filters")
+			.find('.p-lv-fsi-' + e.value)
+				.removeClass('p-hidden')
 				.find("input,select,textarea").prop('disabled', false).end()
 				.end()
 			.fieldset('expand');
@@ -2066,92 +2069,90 @@ function _nlv_onAddFilter(e) {
 	return false;
 }
 
-function _nlv_onDelFilter(e, n) {
-	$(e).closest(".n-lv-filters")
-		.find('.n-lv-fsi-' + n)
-			.addClass('n-hidden')
+function _plv_onDelFilter(e, n) {
+	$(e).closest(".p-lv-filters")
+		.find('.p-lv-fsi-' + n)
+			.addClass('p-hidden')
 			.find("input,select,textarea")
 				.prop('disabled', true)
-				.each(_nlv_clearFieldValue)
+				.each(_plv_clearFieldValue)
 				.end()
-			.find(".n-label-error")
-				.removeClass('n-label-error')
+			.find(".p-label-error")
+				.removeClass('p-label-error')
 				.end()
-			.find(".n-field-errors")
+			.find(".p-field-errors")
 				.remove()
 				.end()
 			.end()
-		.find('.n-lv-fs-select>option[value=' + n + ']')
+		.find('.p-lv-fs-select>option[value=' + n + ']')
 			.prop('disabled', false);
 }
 
-function _nlv_onClearFilters(e) {
-	$(e).closest(".n-lv-filters-t")
-		.find(".n-field-errors")
+function _plv_onClearFilters(e) {
+	$(e).closest(".p-lv-filters-t")
+		.find(".p-field-errors")
 			.remove()
 			.end()
-		.find(".n-label-error")
-			.removeClass('n-label-error')
+		.find(".p-label-error")
+			.removeClass('p-label-error')
 			.end()
 		.find("input,select,textarea")
-			.each(_nlv_clearFieldValue);
+			.each(_plv_clearFieldValue);
 	return false;
 }
 
-function _nlv_onThClick(id) {
+function _plv_onThClick(id) {
 	var cn = $(this).attr("column");
-	_nlv_sort(id, cn);
+	_plv_sort(id, cn);
 }
 
-function _nlv_setCheckAll($lv, check, crows) {
-	$lv.find(".n-lv-thead input.n-lv-ca").each(function() {
+function _plv_setCheckAll($lv, check, crows) {
+	$lv.find(".p-lv-thead input.p-lv-ca").each(function() {
 		this.checked = check;
-		this.title = $(this).attr(check ? 'selectNone' : 'selectAll');
+		this.title = $(this).data(check ? 'selectNone' : 'selectAll');
 	});
-	$lv.find(".n-lv-cab").each(function() {
+	$lv.find(".p-lv-cab").each(function() {
 		var $b = $(this);
 		$b.prop('checked', check)
-		  .find(".n-button-icon")
-		  	.removeClass($b.attr(check ? "iconSelectAll" : "iconSelectNone"))
-		  	.addClass($b.attr(check ? "iconSelectNone" : "iconSelectAll"))
-		  .end()
-		  .find(".n-button-text")
-		  	.text($b.attr(check ? 'textSelectNone' : 'textSelectAll'));
+		  .find("i")
+		  	.removeClass($b.data(check ? "iconSelectAll" : "iconSelectNone"))
+		  	.addClass($b.data(check ? "iconSelectNone" : "iconSelectAll"))
+		  	.get(0).nextSibling.data = $b.data(' ' + (check ? 'textSelectNone' : 'textSelectAll'));
 	});
 	if (crows) {
-		$lv.find(".n-lv-tbody > tr").each(function() {
-			_nlv_selectRow($(this), check);
+		$lv.find(".p-lv-tbody > tr").each(function() {
+			_plv_selectRow($(this), check);
 		});
 	}
 }
 
-function _nlv_onAllCheck() {
+function _plv_onAllCheck() {
 	var c = this.checked;
-	var $lv = $(this).closest(".n-lv");
+	var $lv = $(this).closest(".p-lv");
 
-	_nlv_setCheckAll($lv, c, true);
+	_plv_setCheckAll($lv, c, true);
 }
 
-function _nlv_onAllClick(el) {
+function _plv_onAllClick(el) {
 	var c = !($(el).prop('checked') || false);
-	var $lv = $(el).closest(".n-lv");
-	_nlv_setCheckAll($lv, c, true);
+	var $lv = $(el).closest(".p-lv");
+	_plv_setCheckAll($lv, c, true);
 }
 
-function _nlv_onTBodyClick(evt) {
+function _plv_onTBodyClick(evt) {
 	var $t = $(evt.target);
 	
 	var $tr = $t.closest('tr');
-	if ($t.hasClass('n-lv-cb')) {
+	if ($t.hasClass('p-lv-cb')) {
 		evt.stopPropagation();
-		_nlv_toggleRow($tr, true);
+		_plv_toggleRow($tr, true);
 		return;
 	}
 
 	if ($tr.size() > 0) {
-		_nlv_toggleRow($tr);
+		_plv_toggleRow($tr);
 		
-		var $lv = $tr.closest("div.n-lv");
+		var $lv = $tr.closest("div.p-lv");
 		var handler = $lv.get(0).onrowclick || $lv.attr("onrowclick");
 		switch (typeof(handler)) {
 		case "function":
@@ -2165,23 +2166,32 @@ function _nlv_onTBodyClick(evt) {
 	}
 }
 
-function _nlv_onThMouseEnter() {
-	$(this).addClass("ui-state-hover n-lv-hover");
+function _plv_onThMouseEnter() {
+	$(this).addClass("ui-state-hover p-lv-hover");
 	return false;
 }
-function _nlv_onThMouseLeave() {
-	$(this).removeClass("ui-state-hover n-lv-hover");
+function _plv_onThMouseLeave() {
+	$(this).removeClass("ui-state-hover p-lv-hover");
 	return false;
 }
 
-function _nlv_onTBodyMouseOver(evt) {
-	$(evt.target).closest("tr.n-lv-tr").addClass("ui-state-hover n-lv-hover");
+function _plv_onTBodyMouseOver(evt) {
+	$(evt.target).closest("tr.p-lv-tr").addClass("ui-state-hover p-lv-hover");
 	return false;
 }
-function _nlv_onTBodyMouseOut(evt) {
-	$(evt.target).closest("tr.n-lv-tr").removeClass("ui-state-hover n-lv-hover");
+function _plv_onTBodyMouseOut(evt) {
+	$(evt.target).closest("tr.p-lv-tr").removeClass("ui-state-hover p-lv-hover");
 	return false;
 }
+
+(function($) {
+	$(window).on('load', function() {
+		$('div.p-lv').each(function() {
+			_plv_init($(this));
+		});
+	});
+})(jQuery);
+
 (function() {
 	function _click(evt) {
 		var $el = $(this);

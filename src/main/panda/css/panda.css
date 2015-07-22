@@ -215,32 +215,15 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	font-weight: normal !important;
 	padding: 0 8px;
 }
-.p-lv-toolbar .p-lv-toolbar-tb {
-	width: 100%;
-}
-.p-lv-toolbar .p-lv-td-tools {
-	padding: 0 8px;
-	text-align: left;
+.p-lv-toolbar .p-lv-tools {
+	margin: 8px 0;
 	white-space: nowrap;
 }
-.p-lv-toolbar .p-lv-td-pager {
-	text-align: left;
-	white-space: nowrap;
-	width: 1%;
-}
-.p-lv-toolbar .p-lv-td-addon {
-	text-align: left;
-	white-space: nowrap;
-}
-
-/* pager */
-.p-lv-pager {
+.p-lv-toolbar .p-lv-pager {
 	margin: 2px 0;
 }
-
-/* addon */
-.p-lv-addon {
-	margin: 0;
+.p-lv-toolbar .p-lv-addon {
+	white-space: nowrap;
 }
 
 /* action link */
