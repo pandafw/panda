@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.codec.binary.Base64;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -183,8 +185,25 @@ public class HttpRequest {
 		return this;
 	}
 
-	public HttpRequest addParam(String name, Object value) {
+	public HttpRequest setParam(String name, Object value) {
 		getParams().put(name, value);
+		return this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public HttpRequest addParam(String name, Object value) {
+		Object o = getParams().get(name);
+		if (o == null) {
+			getParams().put(name, value);
+		}
+		else if (o instanceof Collection) {
+			((Collection)o).add(o);
+		}
+		else {
+			List<Object> os = new ArrayList<Object>();
+			os.add(o);
+			os.add(value);
+		}
 		return this;
 	}
 
@@ -227,6 +246,19 @@ public class HttpRequest {
 		return this;
 	}
 
+	public HttpRequest setBasicAuthentication(String username, String password) {
+		try {
+			byte[] b = (username + ':' + password).getBytes(encoding);
+			String v = "Basic " + Base64.encodeBase64String(b);
+			getHeader().set(HttpHeader.AUTHORIZATION, v);
+			return this;
+		}
+		catch (UnsupportedEncodingException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	//------------------------------------------------------------
 	private boolean isFile(Object v) {
 		return (v instanceof File);
 	}
