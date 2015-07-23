@@ -9,12 +9,12 @@
 		<h3><@p.text name="title-${actionResult}"><@s.param><@p.text name="title"/></@s.param></@p.text></h3>
 	</div>
 
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": action.getText("_number_", ""),
+		"header": text.getText("_number_", ""),
 		"nowrap": true,
 		"fixed": true
 	}] />
@@ -24,39 +24,39 @@
 	<#if action.hasPermission("filepool_insert")>
 		<@p.url var='_u_' action='filepool_insert'/>
 		<@p.text var='_icon_' name='icon-insert'/>
-		<#assign _ash_ = '<a class="n-lv-ia" href="' + _u_ + '" title="' + action.getText("tooltip-insert", "")?html + '">'/>
+		<#assign _ash_ = '<a class="n-lv-ia" href="' + _u_ + '" title="' + text.getText("tooltip-insert", "")?html + '">'/>
 		<#if _icon_?has_content>
 			<#assign _ash_ = _ash_ + '<i class="fa ' + _icon_ + '"></i>'/>
 		</#if>
-		<#assign _ash_ = _ash_ + action.getText("label-insert", "") + '</a>'/>
+		<#assign _ash_ = _ash_ + text.getText("label-insert", "") + '</a>'/>
 	</#if>
 	<#if action.hasPermission("filepool_copy")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "filepool_copy",
-			"icon": action.getText("icon-copy"),
-			"label": action.getText("label-copy", ""),
-			"tooltip": action.getText("tooltip-copy", "")
+			"icon": text.getText("icon-copy"),
+			"label": text.getText("label-copy", ""),
+			"tooltip": text.getText("tooltip-copy", "")
 		}] />
 	</#if>
 	<#if action.hasPermission("filepool_update")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "filepool_update",
-			"icon": action.getText("icon-update"),
-			"label": action.getText("label-update", ""),
-			"tooltip": action.getText("tooltip-update", "")
+			"icon": text.getText("icon-update"),
+			"label": text.getText("label-update", ""),
+			"tooltip": text.getText("tooltip-update", "")
 		}] />
 	</#if>
 	<#if action.hasPermission("filepool_delete")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "filepool_delete",
-			"icon": action.getText("icon-delete"),
-			"label": action.getText("label-delete", ""),
-			"tooltip": action.getText("tooltip-delete", "")
+			"icon": text.getText("icon-delete"),
+			"label": text.getText("label-delete", ""),
+			"tooltip": text.getText("tooltip-delete", "")
 		}] />
 	</#if>
 	<#if _actions_?has_content || _ash_?has_content>
 		<#if !(_ash_?has_content)>
-			<#assign _ash_ = action.getText("_actions_", "")/>
+			<#assign _ash_ = text.getText("_actions_", "")/>
 		</#if>
 		<#assign _actionc_ = [{
 			"name": "_actions_",
@@ -67,7 +67,7 @@
 			"fixed": true
 		}] />
 	</#if>
-	<#if action.getText("listview-actions-align", "left") == "left">
+	<#if text.getText("listview-actions-align", "left") == "left">
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
@@ -83,24 +83,24 @@
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
-			"header": action.getText("d.id"),
+			"header": text.getText("d.id"),
 			"filter": {
 				"type": "number"
 			},
 			"link": true,
 			"sortable": true,
-			"tooltip": action.getText("d.id-tip", "")
+			"tooltip": text.getText("d.id-tip", "")
 		}, {
 			"name" : "name",
-			"header": action.getText("d.name"),
+			"header": text.getText("d.name"),
 			"filter": {
 				"type": "string"
 			},
 			"sortable": true,
-			"tooltip": action.getText("d.name-tip", "")
+			"tooltip": text.getText("d.name-tip", "")
 		}, {
 			"name" : "size",
-			"header": action.getText("d.size"),
+			"header": text.getText("d.size"),
 			"format": {
 				"type": "integer"
 			},
@@ -108,10 +108,10 @@
 				"type": "number"
 			},
 			"sortable": true,
-			"tooltip": action.getText("d.size-tip", "")
+			"tooltip": text.getText("d.size-tip", "")
 		}, {
 			"name" : "date",
-			"header": action.getText("d.date"),
+			"header": text.getText("d.date"),
 			"format": {
 				"type": "timestamp"
 			},
@@ -119,10 +119,10 @@
 				"type": "datetime"
 			},
 			"sortable": true,
-			"tooltip": action.getText("d.date-tip", "")
+			"tooltip": text.getText("d.date-tip", "")
 		}, {
 			"name" : "flag",
-			"header": action.getText("d.flag"),
+			"header": text.getText("d.flag"),
 			"format": {
 				"type": "integer"
 			},
@@ -130,17 +130,16 @@
 				"type": "number"
 			},
 			"sortable": true,
-			"tooltip": action.getText("d.flag-tip", "")
+			"tooltip": text.getText("d.flag-tip", "")
 		}
 	] />
 
-	<#if action.getText("listview-actions-align", "") == "right">
+	<#if text.getText("listview-actions-align", "") == "right">
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
 	<@p.listview id="filepool_list" action="filepool_list" 
-		list="ds" columns=_columns_
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d" filters="qf" filterm="qm" pager="true"
+		list=result columns=_columns_ pager="true"
 		link={ "action": "filepool_view", "params": { "d.id": "id" } }
 	>
 		<@s.param name="tools">

@@ -7,7 +7,7 @@ import panda.wing.entity.IUpdate;
 /**
  * @param <T> data type
  */
-public class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
+public abstract class BaseEntityDaoAction<T> extends AbstractEntityDaoAction<T> {
 	/**
 	 * Constructor
 	 */

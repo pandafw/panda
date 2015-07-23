@@ -30,7 +30,7 @@ import panda.lang.Strings;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.bean.CompositeQuery;
+import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
@@ -111,18 +111,10 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractAction {
 	private String[] viewScenarios = { "view", "print", "delete" };
 
 	//------------------------------------------------------------
-	// parameters
-	//------------------------------------------------------------
-	private Pager pager = new Pager();
-	private Sorter sorter = new Sorter();
-	private CompositeQuery query = new CompositeQuery(CompositeQuery.AND);
-
-	private Boolean _load;
-	private Boolean _save;
-
-	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
+	private Boolean _load;
+	private Boolean _save;
 	private String dataFieldName = DEFAULT_DATA_FIELD_NAME;
 	private String dataListFieldName = DEFAULT_DATA_LIST_FIELD_NAME;
 	private boolean checkAbortOnError = false;
@@ -183,152 +175,9 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractAction {
 		return getEntityDao().getDao().getEntityDao(type);
 	}
 	
-	//--------------------------------------------------------
-	// public parameters setter & getter shortcuts
-	//--------------------------------------------------------
-	/**
-	 * @return pager
-	 */
-	public Pager getPg() {
-		return getPager();
-	}
-
-	/**
-	 * @param pager the pager to set
-	 */
-	public void setPg(Pager pager) {
-		setPager(pager);
-	}
-
-	/**
-	 * @return sorter
-	 */
-	public Sorter getSo() {
-		return getSorter();
-	}
-
-	/**
-	 * @param sorter the sorter to set
-	 */
-	public void setSo(Sorter sorter) {
-		setSorter(sorter);
-	}
-
-	/**
-	 * @return the query
-	 */
-	public CompositeQuery getQu() {
-		return getQuery();
-	}
-
-	/**
-	 * @param query the query to set
-	 */
-	public void setQu(CompositeQuery query) {
-		setQuery(query);
-	}
-
-	/**
-	 * @return query.filters
-	 */
-	public Map<String, Filter> getQf() {
-		return getQueryFilters();
-	}
-
-	/**
-	 * @param filters the query.filters to set
-	 */
-	public void setQf(Map<String, Filter> filters) {
-		setQueryFilters(filters);
-	}
-
-	/**
-	 * @return query.method
-	 */
-	public String getQm() {
-		return getQueryMethod();
-	}
-
-	/**
-	 * @param method the method to set
-	 */
-	public void setQm(String method) {
-		setQueryMethod(method);
-	}
-
 	//------------------------------------------------------------
 	// public parameter setter & getter
 	//------------------------------------------------------------
-	/**
-	 * @return the pager
-	 */
-	public Pager getPager() {
-		return pager;
-	}
-
-	/**
-	 * @param pager the pager to set
-	 */
-	public void setPager(Pager pager) {
-		this.pager = pager;
-	}
-
-	/**
-	 * @return the sorter
-	 */
-	public Sorter getSorter() {
-		return sorter;
-	}
-
-	/**
-	 * @param sorter the sorter to set
-	 */
-	public void setSorter(Sorter sorter) {
-		this.sorter = sorter;
-	}
-
-	/**
-	 * @return the query
-	 */
-	public CompositeQuery getQuery() {
-		return query;
-	}
-
-	/**
-	 * @param query the query to set
-	 */
-	public void setQuery(CompositeQuery query) {
-		this.query = query;
-	}
-
-	/**
-	 * @return the query.filters
-	 */
-	public Map<String, Filter> getQueryFilters() {
-		return query.getFilters();
-	}
-
-	/**
-	 * @param filters the filters to set
-	 */
-	public void setQueryFilters(Map<String, Filter> filters) {
-		query.setFilters(filters);
-	}
-
-	/**
-	 * @return the query.method
-	 */
-	public String getQueryMethod() {
-		return query.getMethod();
-	}
-
-	/**
-	 * @param method the query method to set
-	 */
-	public void setQueryMethod(String method) {
-		query.setMethod(method);
-	}
-
 	/**
 	 * @return the load
 	 */
@@ -740,7 +589,7 @@ public abstract class AbstractEntityDaoAction<T> extends AbstractAction {
 			if (pm != null) {
 				pager = (Pager)pm.get("pager");
 				sorter = (Sorter)pm.get("sorter");
-				query = (CompositeQuery)pm.get("query");
+				query = (Queryer)pm.get("query");
 			}
 		}
 		else if (sp instanceof CookieStateProvider) {

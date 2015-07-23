@@ -1,6 +1,12 @@
 package panda.wing.action.template;
 
 import java.util.List;
+import panda.mvc.View;
+import panda.mvc.annotation.At;
+import panda.mvc.annotation.param.Param;
+import panda.mvc.annotation.view.Err;
+import panda.mvc.annotation.view.Ok;
+import panda.mvc.validation.annotation.Validate;
 import panda.wing.action.BaseEntityDaoAction;
 import panda.wing.entity.Template;
 
@@ -13,37 +19,6 @@ public class TemplateAction extends BaseEntityDaoAction<Template> {
 		setType(Template.class);
 	}
 
-	/*----------------------------------------------------------------------*
-	 * Getter & Setter
-	 *----------------------------------------------------------------------*/
-	/**
-	 * @return the template
-	 */
-	public Template getD() {
-		return super.getData();
-	}
-
-	/**
-	 * @param template the template to set
-	 */
-	public void setD(Template template) {
-		super.setData(template);
-	}
-
-	/**
-	 * @return the template list
-	 */
-	public List<Template> getDs() {
-		return super.getDataList();
-	}
-
-	/**
-	 * @param templateList the templateList to set
-	 */
-	public void setDs(List<Template> templateList) {
-		super.setDataList(templateList);
-	}
-
 
 	/*----------------------------------------------------------------------*
 	 * Actions
@@ -51,162 +26,32 @@ public class TemplateAction extends BaseEntityDaoAction<Template> {
 	/**
 	 * list
 	 */
-	public Object list() {
+	@At
+	@Ok(View.FREEMARKER)
+	@Err(View.FREEMARKER)
+	public Object list(@Param @Validate Queryer qr) {
 		return super.list();
 	}
 	
 	/**
 	 * list_csv
 	 */
-	public Object list_csv() {
+	@At
+	@Ok(View.FREEMARKER)
+	@Err(View.FREEMARKER)
+	public Object list_csv(@Param @Validate Queryer qr) {
 		return super.list_csv();
 	}
 	
 	/**
 	 * list_print
 	 */
-	public Object list_print() {
+	@At
+	@Ok(View.FREEMARKER)
+	@Err(View.FREEMARKER)
+	public Object list_print(@Param @Validate Queryer qr) {
 		return super.list_print();
 	}
 	
-	/**
-	 * bdelete
-	 */
-	public Object bdelete() {
-		return super.bdelete();
-	}
-
-	/**
-	 * bdelete_execute
-	 */
-	public Object bdelete_execute() {
-		return super.bdelete_execute();
-	}
-	
-	/**
-	 * view
-	 */
-	public Object view() {
-		return super.view();
-	}
-
-	/**
-	 * view_input
-	 */
-	public Object view_input() {
-		return super.view_input();
-	}
-
-	/**
-	 * print
-	 */
-	public Object print() {
-		return super.print();
-	}
-
-	/**
-	 * print_input
-	 */
-	public Object print_input() {
-		return super.print_input();
-	}
-
-	/**
-	 * copy
-	 */
-	public Object copy() {
-		return super.copy();
-	}
-
-	/**
-	 * copy_input
-	 */
-	public Object copy_input() {
-		return super.copy_input();
-	}
-
-	/**
-	 * copy_confirm
-	 */
-	public Object copy_confirm() {
-		return super.copy_confirm();
-	}
-
-	/**
-	 * copy_execute
-	 */
-	public Object copy_execute() {
-		return super.copy_execute();
-	}
-
-	/**
-	 * insert
-	 */
-	public Object insert() {
-		return super.insert();
-	}
-
-	/**
-	 * insert_input
-	 */
-	public Object insert_input() {
-		return super.insert_input();
-	}
-
-	/**
-	 * insert_confirm
-	 */
-	public Object insert_confirm() {
-		return super.insert_confirm();
-	}
-
-	/**
-	 * insert_execute
-	 */
-	public Object insert_execute() {
-		return super.insert_execute();
-	}
-
-	/**
-	 * update
-	 */
-	public Object update() {
-		return super.update();
-	}
-
-	/**
-	 * update_input
-	 */
-	public Object update_input() {
-		return super.update_input();
-	}
-
-	/**
-	 * update_confirm
-	 */
-	public Object update_confirm() {
-		return super.update_confirm();
-	}
-
-	/**
-	 * update_execute
-	 */
-	public Object update_execute() {
-		return super.update_execute();
-	}
-
-	/**
-	 * delete
-	 */
-	public Object delete() {
-		return super.delete();
-	}
-
-	/**
-	 * delete_execute
-	 */
-	public Object delete_execute() {
-		return super.delete_execute();
-	}
-
 }
+

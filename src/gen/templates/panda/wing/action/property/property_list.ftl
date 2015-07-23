@@ -13,12 +13,12 @@
 		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)"><@p.text name='button-refresh'/></@p.a></li>
 	</ul>
 
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": action.getText("_number_", ""),
+		"header": text.getText("_number_", ""),
 		"nowrap": true,
 		"fixed": true
 	}] />
@@ -28,39 +28,39 @@
 	<#if action.hasPermission("property_insert")>
 		<@p.url var='_u_' action='property_insert'/>
 		<@p.text var='_icon_' name='icon-insert'/>
-		<#assign _ash_ = '<a class="n-lv-ia" href="' + _u_ + '" title="' + action.getText("tooltip-insert", "")?html + '">'/>
+		<#assign _ash_ = '<a class="n-lv-ia" href="' + _u_ + '" title="' + text.getText("tooltip-insert", "")?html + '">'/>
 		<#if _icon_?has_content>
 			<#assign _ash_ = _ash_ + '<i class="fa ' + _icon_ + '"></i>'/>
 		</#if>
-		<#assign _ash_ = _ash_ + action.getText("label-insert", "") + '</a>'/>
+		<#assign _ash_ = _ash_ + text.getText("label-insert", "") + '</a>'/>
 	</#if>
 	<#if action.hasPermission("property_copy")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "property_copy",
-			"icon": action.getText("icon-copy"),
-			"label": action.getText("label-copy", ""),
-			"tooltip": action.getText("tooltip-copy", "")
+			"icon": text.getText("icon-copy"),
+			"label": text.getText("label-copy", ""),
+			"tooltip": text.getText("tooltip-copy", "")
 		}] />
 	</#if>
 	<#if action.hasPermission("property_update")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "property_update",
-			"icon": action.getText("icon-update"),
-			"label": action.getText("label-update", ""),
-			"tooltip": action.getText("tooltip-update", "")
+			"icon": text.getText("icon-update"),
+			"label": text.getText("label-update", ""),
+			"tooltip": text.getText("tooltip-update", "")
 		}] />
 	</#if>
 	<#if action.hasPermission("property_delete")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "property_delete",
-			"icon": action.getText("icon-delete"),
-			"label": action.getText("label-delete", ""),
-			"tooltip": action.getText("tooltip-delete", "")
+			"icon": text.getText("icon-delete"),
+			"label": text.getText("label-delete", ""),
+			"tooltip": text.getText("tooltip-delete", "")
 		}] />
 	</#if>
 	<#if _actions_?has_content || _ash_?has_content>
 		<#if !(_ash_?has_content)>
-			<#assign _ash_ = action.getText("_actions_", "")/>
+			<#assign _ash_ = text.getText("_actions_", "")/>
 		</#if>
 		<#assign _actionc_ = [{
 			"name": "_actions_",
@@ -71,7 +71,7 @@
 			"fixed": true
 		}] />
 	</#if>
-	<#if action.getText("listview-actions-align", "left") == "left">
+	<#if text.getText("listview-actions-align", "left") == "left">
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
@@ -87,27 +87,27 @@
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
-			"header": action.getText("d.id"),
+			"header": text.getText("d.id"),
 			"filter": {
 				"type": "number"
 			},
 			"hidden": false,
 			"link": true,
 			"sortable": true,
-			"tooltip": action.getText("d.id-tip", "")
+			"tooltip": text.getText("d.id-tip", "")
 		}, {
 			"name" : "clazz",
-			"header": action.getText("d.clazz"),
+			"header": text.getText("d.clazz"),
 			"filter": {
 				"type": "string"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.clazz-tip", "")
+			"tooltip": text.getText("d.clazz-tip", "")
 		}, {
 			"name" : "language",
-			"header": action.getText("d.language"),
+			"header": text.getText("d.language"),
 			"format": {
 				"codemap": "consts.localeLanguageMap",
 				"type": "code"
@@ -119,10 +119,10 @@
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.language-tip", "")
+			"tooltip": text.getText("d.language-tip", "")
 		}, {
 			"name" : "country",
-			"header": action.getText("d.country"),
+			"header": text.getText("d.country"),
 			"format": {
 				"codemap": "consts.localeCountryMap",
 				"type": "code"
@@ -134,40 +134,40 @@
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.country-tip", "")
+			"tooltip": text.getText("d.country-tip", "")
 		}, {
 			"name" : "name",
-			"header": action.getText("d.name"),
+			"header": text.getText("d.name"),
 			"filter": {
 				"type": "string"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.name-tip", "")
+			"tooltip": text.getText("d.name-tip", "")
 		}, {
 			"name" : "value",
-			"header": action.getText("d.value"),
+			"header": text.getText("d.value"),
 			"filter": {
 				"type": "string"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.value-tip", "")
+			"tooltip": text.getText("d.value-tip", "")
 		}, {
 			"name" : "memo",
-			"header": action.getText("d.memo"),
+			"header": text.getText("d.memo"),
 			"filter": {
 				"type": "string"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.memo-tip", "")
+			"tooltip": text.getText("d.memo-tip", "")
 		}, {
 			"name" : "status",
-			"header": action.getText("d.status"),
+			"header": text.getText("d.status"),
 			"format": {
 				"codemap": "consts.dataStatusMap",
 				"type": "code"
@@ -179,20 +179,20 @@
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.status-tip", "")
+			"tooltip": text.getText("d.status-tip", "")
 		}, {
 			"name" : "uusid",
-			"header": action.getText("d.uusid"),
+			"header": text.getText("d.uusid"),
 			"filter": {
 				"type": "number"
 			},
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.uusid-tip", "")
+			"tooltip": text.getText("d.uusid-tip", "")
 		}, {
 			"name" : "utime",
-			"header": action.getText("d.utime"),
+			"header": text.getText("d.utime"),
 			"format": {
 				"type": "datetime"
 			},
@@ -202,17 +202,16 @@
 			"hidden": false,
 			"link": false,
 			"sortable": true,
-			"tooltip": action.getText("d.utime-tip", "")
+			"tooltip": text.getText("d.utime-tip", "")
 		}
 	] />
 
-	<#if action.getText("listview-actions-align", "") == "right">
+	<#if text.getText("listview-actions-align", "") == "right">
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
 	<@p.listview id="property_list" action="property_list" 
-		list="ds" columns=_columns_ cssColumn="status"
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d" filters="qf" filterm="qm" pager="true"
+		list=result columns=_columns_ cssColumn="status" pager="true"
 		link={ "action": "property_view", "params": { "d.id": "id" } }
 	>
 		<@s.param name="tools">

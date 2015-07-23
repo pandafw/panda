@@ -6,8 +6,8 @@ deleteAll=删除原有数据
 
 button-import=汇入
 
-success-import=${count}件数据成功汇入表[${target}]中。
+success-import=${top.count}件数据成功汇入表[${target}]中。
 
-error-value=[${target}]数据错误(${row}, ${col}): ${value} - ${error}
+error-value=[${top.target}]数据错误(${top.row}, ${top.col}): ${top.value} - ${top.error}
 
 error-file-format=请指定CSV或者XLS文件。
