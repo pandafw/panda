@@ -31,7 +31,6 @@ import panda.net.http.ssl.ValidHostnameVerifier;
 /**
  * @author yf.frank.wang@gmail.com
  */
-//TODO: local cache
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);
 
@@ -123,6 +122,13 @@ public class HttpClient {
 	/**
 	 * @return the request
 	 */
+	public HttpRequest getReq() {
+		return request;
+	}
+
+	/**
+	 * @return the request
+	 */
 	public HttpRequest getRequest() {
 		return request;
 	}
@@ -133,6 +139,13 @@ public class HttpClient {
 	public void setRequest(HttpRequest request) {
 		Asserts.notNull(request, "the request object is null");
 		this.request = request;
+	}
+
+	/**
+	 * @return the response
+	 */
+	public HttpResponse getRes() {
+		return response;
 	}
 
 	/**
