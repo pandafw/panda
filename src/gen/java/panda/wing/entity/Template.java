@@ -17,7 +17,7 @@ import panda.wing.entity.SUBean;
 })
 public class Template extends SUBean {
 
-	private static final long serialVersionUID = 122408074L;
+	private static final long serialVersionUID = -1116380320L;
 
 	/**
 	 * Constructor
@@ -54,7 +54,7 @@ public class Template extends SUBean {
 	@Comment("file name")
 	protected String name;
 
-	@Column(notNull=true)
+	@Column(size=2, notNull=true)
 	@Comment("language code")
 	protected String language;
 
@@ -109,7 +109,7 @@ public class Template extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getLanguage() {
 		return language;
@@ -127,7 +127,7 @@ public class Template extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getCountry() {
 		return country;

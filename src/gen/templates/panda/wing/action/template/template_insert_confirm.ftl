@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-${actionResult}"><@s.param><@p.text name="title"/></@s.param></@p.text></title>
+	<title><@p.text name="title-insert"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 

@@ -13,11 +13,11 @@ import panda.mvc.validation.annotation.Validates;
 import panda.wing.entity.SUBean;
 
 @Indexes({
-	@Index(name="NLC", fields={ "clazz", "language", "country" }, unique=true)
+	@Index(name="CLC", fields={ "clazz", "language", "country" }, unique=true)
 })
 public class Resource extends SUBean {
 
-	private static final long serialVersionUID = -1597704370L;
+	private static final long serialVersionUID = -1277015197L;
 
 	/**
 	 * Constructor
@@ -54,7 +54,7 @@ public class Resource extends SUBean {
 	@Comment("class name")
 	protected String clazz;
 
-	@Column(notNull=true)
+	@Column(size=2, notNull=true)
 	@Comment("language code")
 	protected String language;
 
@@ -109,7 +109,7 @@ public class Resource extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getLanguage() {
 		return language;
@@ -127,7 +127,7 @@ public class Resource extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getCountry() {
 		return country;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="panda.tool.codegen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.github.com/foolite/panda-repo/master/com/foolite/panda-tool/1.0.0/panda-codegen-module.xsd">
-	<include>codegen.properties</include>
+	<include>codegen.xml</include>
 
 	<!-- entity -->
 	<entity name="panda.filepool.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
@@ -16,8 +16,8 @@
 	</entity>
 
 	<!-- action -->
-	<action name="action.FilePool" entity="panda.filepool.dao.DaoFileItem" trimString="${action.trimString}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
-		<list name="basicList">
+	<action name="action.FilePool" entity="panda.filepool.dao.DaoFileItem" extend="baseAction">
+		<list name="basicList" extend="baseList">
 			<column name="id" sortable="true" link="true">
 				<filter type="number"/>
 			</column>
@@ -36,12 +36,8 @@
 				<format type="integer"/>
 				<filter type="number"/>
 			</column>
-
-			<param name="actions" value="@insert copy update delete"/>
-			<param name="options" value="bdelete ^print:list_print ^csv:list_csv"/>
-			<param name="buttons" value="*list"/>
 		</list>
-		<input name="basicInput" theme="${ui.input.theme}">
+		<input name="basicInput" extend="baseInput">
 			<field name="id">
 				<editTag name="n.viewfield"/>
 			</field>
@@ -74,12 +70,14 @@
 			<param name="actions" value="%update %copy insert %delete *list"/>
 		</input>
 	</action>
-	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+	<action name="filepool" path="${action.context}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="list_popup" extend="basicList" template="${template.list_popup}" generate="true"/>
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="@refresh %^print list"/>
 		</input>
@@ -102,7 +100,7 @@
 			<property name="date" label="Date"/>
 			<property name="flag" label="Flag"/>
 		</entity>
-		<action actionClass="${action.package}.filepool.FilePoolAction" title="File Pool"/>
+		<action name="filepool" title="File Pool"/>
 	</resource>
 	<resource locale="ja">
 		<entity name="panda.filepool.dao.DaoFileItem">

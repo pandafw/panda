@@ -5,25 +5,25 @@
 	<!-- entity -->
 	<entity name="${entity.package}.Resource" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${entity.trimString}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
-		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="NLC" comment="class name">
+		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="CLC" comment="class name">
 			<validator type="stringlength">
 				<param name="maxLength" value="100"/>
 			</validator>
 		</property>
-		<property name="language" type="String" notNull="true" uniqueKey="NLC" comment="language code">
+		<property name="language" type="String" size="2" notNull="true" uniqueKey="CLC" comment="language code">
 			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
 			<validator type="constant">
-				<param name="list" value="'${consts.localeLanguageMap}'"/>
+				<param name="list" value="'%{consts.localeLanguageMap}'"/>
 			</validator>
 		</property>
-		<property name="country" type="String" size="2" notNull="true" uniqueKey="NLC" comment="country code">
+		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLC" comment="country code">
 			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
 			<validator type="constant">
-				<param name="list" value="'${consts.localeCountryMap}'"/>
+				<param name="list" value="'%{consts.localeCountryMap}'"/>
 			</validator>
 		</property>
 		<property name="source" type="String" size="50000" jdbcType="CLOB" setterTrim="" comment="resource source">
@@ -83,8 +83,8 @@
 					<param name="emptyOption" value="false"/>
 					<param name="list" value="consts.localeCountryMap"/>
 				</editTag>
-				<validator type="fieldexpression" message="validation-locale-invalid">
-					<param name="expression" value="isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
+				<validator type="el" message="validation-locale-invalid">
+					<param name="el" value="a.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
 				</validator>
 			</field>
 			<field name="source">
@@ -96,11 +96,13 @@
 			</field>
 		</input>
 	</action>
-	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+	<action name="resource" path="${action.context}" extend="action.Resource" actionClass="${action.package}.resource.ResourceListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="@refresh %^print @^${pdf.action}:print list"/>
 		</input>
@@ -122,7 +124,7 @@
 			<property name="country" label="Country"/>
 			<property name="source" label="Source"/>
 		</entity>
-		<action actionClass="${action.package}.resource.ResourceAction" title="Resource"/>
+		<action name="resource" title="Resource"/>
 	</resource>
 	<resource locale="ja">
 		<entity name="${entity.package}.Resource">
@@ -131,7 +133,7 @@
 			<property name="country" label="国・地域"/>
 			<property name="source" label="内容"/>
 		</entity>
-		<action actionClass="${action.package}.resource.ResourceAction" title="リソース"/>
+		<action name="resource" title="リソース"/>
 	</resource>
 	<resource locale="zh">
 		<entity name="${entity.package}.Resource">
@@ -140,6 +142,6 @@
 			<property name="country" label="国家・地区"/>
 			<property name="source" label="内容"/>
 		</entity>
-		<action actionClass="${action.package}.resource.ResourceAction" title="资源"/>
+		<action name="resource" title="资源"/>
 	</resource>
 </module>

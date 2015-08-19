@@ -16,7 +16,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean {
 
-	private static final long serialVersionUID = 111819075L;
+	private static final long serialVersionUID = 1034751664L;
 
 	/**
 	 * Constructor
@@ -120,7 +120,7 @@ public class Property extends SUBean {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '${consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getLanguage() {
 		return language;
@@ -137,8 +137,8 @@ public class Property extends SUBean {
 	 * @return the country
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", message="validation-stringlength"), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': consts.localeCountryMap }", message="validation-constant")
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
 	})
 	public String getCountry() {
 		return country;
@@ -155,7 +155,7 @@ public class Property extends SUBean {
 	 * @return the name
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", message="validation-stringlength")
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 50 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getName() {
 		return name;
@@ -172,7 +172,7 @@ public class Property extends SUBean {
 	 * @return the value
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", message="validation-stringlength")
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 5000 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getValue() {
 		return value;
@@ -189,7 +189,7 @@ public class Property extends SUBean {
 	 * @return the memo
 	 */
 	@Validates({
-		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", message="validation-stringlength")
+		@Validate(value=Validators.STRING, params="{ 'maxLength': 1000 }", msgId=Validators.MSGID_STRING_LENTH)
 	})
 	public String getMemo() {
 		return memo;

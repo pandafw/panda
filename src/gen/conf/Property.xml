@@ -15,29 +15,29 @@
 				<param name="maxLength" value="2"/>
 			</validator>
 			<validator type="constant">
-				<param name="list" value="'${consts.localeLanguageMap}'"/>
+				<param name="list" value="'%{consts.localeLanguageMap}'"/>
 			</validator>
 		</property>
 		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="country code">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="2"/>
 			</validator>
-			<validator type="constant" message="validation-constant">
-				<param name="list" value="consts.localeCountryMap"/>
+			<validator type="constant">
+				<param name="list" value="'%{consts.localeCountryMap}'"/>
 			</validator>
 		</property>
 		<property name="name" type="String" size="50" notNull="true" uniqueKey="CLCN" comment="property name">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="50"/>
 			</validator>
 		</property>
 		<property name="value" type="String" size="5000" setterTrim="" comment="property value">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="5000"/>
 			</validator>
 		</property>
 		<property name="memo" type="String" size="1000" comment="memo">
-			<validator type="stringlength" message="validation-stringlength">
+			<validator type="stringlength">
 				<param name="maxLength" value="1000"/>
 			</validator>
 		</property>
@@ -125,11 +125,13 @@
 			</field>
 		</input>
 	</action>
-	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyAction" actionBaseClass="${action.entityDaoActionClass}" generate="true">
+	<action name="property" path="${action.context}" extend="action.Property" actionClass="${action.package}.property.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+	</action>
+	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="@refresh %^print @^${pdf.action}:print list"/>
 		</input>
@@ -153,7 +155,7 @@
 			<property name="value" label="Value"/>
 			<property name="memo" label="Memo"/>
 		</entity>
-		<action actionClass="${action.package}.property.PropertyAction" title="Property"/>
+		<action name="property" title="Property"/>
 	</resource>
 	<resource locale="ja">
 		<entity name="${entity.package}.Property">
@@ -164,7 +166,7 @@
 			<property name="value" label="内容"/>
 			<property name="memo" label="備考"/>
 		</entity>
-		<action actionClass="${action.package}.property.PropertyAction" title="プロパティ"/>
+		<action name="property" title="プロパティ"/>
 	</resource>
 	<resource locale="zh">
 		<entity name="${entity.package}.Property">
@@ -175,6 +177,6 @@
 			<property name="value" label="内容"/>
 			<property name="memo" label="备注"/>
 		</entity>
-		<action actionClass="${action.package}.property.PropertyAction" title="配置"/>
+		<action name="property" title="配置"/>
 	</resource>
 </module>
