@@ -414,15 +414,13 @@ public abstract class GenericListAction<T> extends AbstractAction {
 					gq.setStart(qr.getPager().getStart());
 					gq.setLimit(qr.getPager().getLimit());
 					dataList = daoSelect(gq);
+					trimDataList(dataList);
 				}
 			}
 		});
 	}
 
 	protected void trimDataList(List<T> ds) {
-	}
-	
-	protected void trimData(T d) {
 	}
 	
 	/**
