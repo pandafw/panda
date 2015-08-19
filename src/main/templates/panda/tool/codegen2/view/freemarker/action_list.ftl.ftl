@@ -66,9 +66,9 @@
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
-<#assign _pos = [] />
+<#assign _ops = [] />
 <#if ui.params.options?has_content>
-	<#assign _pos = (ui.params.options!"")?split(' ') />
+	<#assign _ops = (ui.params.options!"")?split(' ') />
 </#if>
 
 <#if "true" == ui.params.check!"">
@@ -79,10 +79,12 @@
 		"fixed": true
 	}] />
 <#else>
-	<#assign _pose = false/>
-	<#list _pos as a><#if !gen.startsWithMark(a)><#assign _pose = true/></#if></#list>
-	<#if _pose>
-	${s}#if <#list _pos as a><#if !gen.startsWithMark(a)><#if _pose><#assign _pose = false/><#else> || </#if>action.hasPermission("${action.name}_${a}")</#if></#list>>
+	<#assign _opse = false/>
+	<#list _ops as _op><#if !gen.startsWithMark(_op)><#assign _opse = true/></#if></#list>
+	<#if _opse>
+	${s}#if <#list _ops as _op><#assign a = gen.stripStartMark(_op)?split(':')
+/><#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _op + "] of action [" + action.name + "]")}
+</#if><#if !gen.startsWithMark(_op)><#if _opse><#assign _opse = false/><#else> || </#if>action.hasPermission("${a[1]}")</#if></#list>>
 		${s}#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
@@ -178,19 +180,19 @@
 	</#if>
 	>
 		${s}@p.param name="tools">
-		<#list _pos as _po>
-			<#assign a = gen.stripStartMark(_po)?split(':')/>
-			<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _po + "] of action [" + action.name + "]")}</#if><#t/>
-			<#if _po?starts_with('@') || _po?starts_with('%')>
+		<#list _ops as _op>
+			<#assign a = gen.stripStartMark(_op)?split(':')/>
+			<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
+			<#if _op?starts_with('@') || _op?starts_with('%')>
 				<#if a[0]?has_content>
 					<#assign an = gen.getActionName(a[0])/>
 			${s}#if action.hasPermission("${a[1]}")>
-				${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+				${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
 			${s}/#if>
 				</#if>
 			<#else>
 			${s}#if action.hasPermission("${a[1]}")>
-				<#if _po?contains('^')>
+				<#if _op?contains('^')>
 				${s}@p.submit icon="icon-${a[0]}" onclick="return ${action.name}_${ui.name}_${a[0]}();" theme="simple">${s}@p.text name="button-${a[0]}"/>${s}/@p.submit>
 				<#else>
 				${s}@p.submit icon="icon-${a[0]}" action="${action.name}_${a[0]}" onclick="return ${action.name}_${ui.name}_${a[0]}();" theme="simple">${s}@p.text name="button-${a[0]}"/>${s}/@p.submit>
@@ -205,26 +207,26 @@
 	${s}/@p.listview>
 
 	<script type="text/javascript"><!--
-	<#list _pos as _po>
-		<#assign a = gen.stripStartMark(_po)?split(':')/>
-		<#if _po?starts_with('@')>
+	<#list _ops as _op>
+		<#assign a = gen.stripStartMark(_op)?split(':')/>
+		<#if _op?starts_with('@')>
 			<#assign an = gen.getActionName(a[0])/>
 			<#assign ap = gen.getActionParam(a[0])/>
 		function ${action.name}_${ui.name}_${an}() {
-			<#if _po?contains('^')>
+			<#if _op?contains('^')>
 			window.open("${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search));
 			<#else>
 			location.href = "${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search);
 			</#if>
 			return false;
 		}
-		<#elseif _po?starts_with('%')>
+		<#elseif _op?starts_with('%')>
 			<#assign an = gen.getActionName(a[0])/>
 			<#assign ap = gen.getActionParam(a[0])/>
 		function ${action.name}_${ui.name}_${an}}() {
 			if (nlv_enableCheckedKeys('${action.name}_${ui.name}') > 0) {
 				var qs = $(nlv_getBForm('${action.name}_${ui.name}')).serialize();
-				<#if _po?contains('^')>
+				<#if _op?contains('^')>
 				window.open("${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>?" + qs));
 				<#else>
 				location.href = "${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>?" + qs);
@@ -234,7 +236,7 @@
 		}
 		<#else>
 		function ${action.name}_${ui.name}_${a[0]}() {
-			<#if _po?contains('^')>
+			<#if _op?contains('^')>
 			window.open("${s}@p.url action='${a[1]}' includeParams='all' escapeAmp='false'/>");
 			return false;
 			<#else>

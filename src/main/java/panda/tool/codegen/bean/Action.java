@@ -36,7 +36,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;actionClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;title&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;context&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;path&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -73,7 +73,7 @@ public class Action {
 	@XmlAttribute
 	private String title;
 	@XmlAttribute
-	private String context;
+	private String path;
 	@XmlAttribute(required = true)
 	private String name;
 
@@ -98,7 +98,7 @@ public class Action {
 		this.actionClass = action.actionClass;
 		this.extend = action.extend;
 		this.title = action.title;
-		this.context = action.context;
+		this.path = action.path;
 		this.name = action.name;
 
 		propertyList = new LinkedList<ActionProperty>();
@@ -227,8 +227,8 @@ public class Action {
 		if (src.title != null) {
 			me.title = src.title;
 		}
-		if (src.context != null) {
-			me.context = src.context;
+		if (src.path != null) {
+			me.path = src.path;
 		}
 		if (src.name != null) {
 			me.name = src.name;
@@ -460,17 +460,17 @@ public class Action {
 	}
 
 	/**
-	 * @return the context
+	 * @return the path
 	 */
-	public String getContext() {
-		return context;
+	public String getPath() {
+		return path;
 	}
 
 	/**
-	 * @param context the context to set
+	 * @param path the path to set
 	 */
-	public void setContext(String context) {
-		this.context = context;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	/**

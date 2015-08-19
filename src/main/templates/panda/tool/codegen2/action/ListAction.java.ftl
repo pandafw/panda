@@ -5,8 +5,10 @@ package ${actionPackage};
 import ${i};
 </#list>
 
-@At("${action.context}")
-public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
+<#if action.path??>
+@At("${action.path}/${action.name}")
+</#if>
+public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 <#if action.propertyList?has_content>
 	/*----------------------------------------------------------------------*
 	 * Properties

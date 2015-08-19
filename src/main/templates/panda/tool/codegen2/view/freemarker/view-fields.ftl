@@ -27,7 +27,6 @@
 				cssClass="${tag.cssClass}"
 			</#if>
 				key="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
-				disabled="${d}{successMethodResult?string}"
 				readonly="true"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"

@@ -249,20 +249,23 @@ public class TextGenerator extends AbstractCodeGenerator {
 				throw new IllegalArgumentException("Missing name or actionClass: " + resource.getLocale()); 
 			}
 			
-			if (Strings.isEmpty(action.getActionClass())) {
-				for (Action a : module.getActionList()) {
-					if (action.getName().equals(a.getName())) {
-						action.setActionClass(a.getActionClass());
-						break;
-					}
+			if (Strings.isNotEmpty(action.getActionClass())) {
+				processLocaleAction(action, locale);
+				continue;
+			}
+
+			boolean gened = false;
+			for (Action a : module.getActionList()) {
+				if (action.getName().equals(a.getName())) {
+					action.setActionClass(a.getActionClass());
+					processLocaleAction(action, locale);
+					gened = true;
 				}
 			}
 
-			if (Strings.isEmpty(action.getActionClass())) {
+			if (!gened) {
 				throw new IllegalArgumentException("Missing actionClass: " + action.getName() + "/" + resource.getLocale()); 
 			}
-			print2("Processing text of action - " + action.getActionClass() + locale);
-			processLocaleAction(action, locale);
 		}
 	}
 
@@ -307,6 +310,8 @@ public class TextGenerator extends AbstractCodeGenerator {
 	}	
 	
 	protected void processLocaleAction(Action action, String locale) throws Exception {
+		print2("Processing text of action - " + action.getActionClass() + locale);
+
 		PrintWriter pwabp = null;
 		try {
 			File foutdir = new File(out, action.getActionPackage().replace('.', '/'));

@@ -63,7 +63,7 @@
 		<attribute name="extend" type="string"></attribute>
 		<attribute name="title" type="string"></attribute>
 		<attribute name="entity" type="string"></attribute>
-		<attribute name="context" type="string"></attribute>
+		<attribute name="path" type="string"></attribute>
 		<attribute name="name" type="string"></attribute>
 	</complexType>
 
