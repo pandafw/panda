@@ -3,13 +3,18 @@ package panda.mvc.impl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.ioc.Ioc;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Systems;
 import panda.lang.time.StopWatch;
@@ -21,14 +26,21 @@ import panda.mvc.ActionInfo;
 import panda.mvc.IocProvider;
 import panda.mvc.Loading;
 import panda.mvc.MvcConfig;
+import panda.mvc.Mvcs;
 import panda.mvc.Setup;
 import panda.mvc.UrlMapping;
 import panda.mvc.ViewMaker;
+import panda.mvc.annotation.Adapt;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.Chain;
 import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.Modules;
+import panda.mvc.annotation.view.Err;
+import panda.mvc.annotation.view.Fatal;
+import panda.mvc.annotation.view.Ok;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.ioc.provider.DefaultIocProvider;
+import panda.net.http.HttpMethod;
 
 public class DefaultMvcLoading implements Loading {
 
@@ -119,10 +131,10 @@ public class DefaultMvcLoading implements Loading {
 		ActionChainMaker chainMaker = createChainMaker(config);
 
 		// 创建主模块的配置信息
-		ActionInfo mainInfo = Loadings.createInfo(mainModule);
+		ActionInfo mainInfo = createActionInfo(config.getIoc(), mainModule);
 
 		// 准备要加载的模块列表
-		Collection<Class<?>> actions = Loadings.scanModules(mainModule);
+		Collection<Class<?>> actions = scanModules(mainModule);
 
 		if (actions.isEmpty()) {
 			if (log.isWarnEnabled()) {
@@ -135,12 +147,12 @@ public class DefaultMvcLoading implements Loading {
 
 		// 分析所有的子模块
 		for (Class<?> action : actions) {
-			ActionInfo actionInfo = Loadings.createInfo(action).mergeWith(mainInfo);
+			ActionInfo actionInfo = createActionInfo(config.getIoc(), action).mergeWith(mainInfo);
 			for (Method method : action.getMethods()) {
 				// public 并且声明了 @At 的函数，才是入口函数
 				if (Modifier.isPublic(method.getModifiers())  && method.isAnnotationPresent(At.class)) {
 					// 增加到映射中
-					ActionInfo info = Loadings.createInfo(method).mergeWith(actionInfo);
+					ActionInfo info = createActionInfo(config.getIoc(), method).mergeWith(actionInfo);
 					mapping.add(chainMaker, info, config);
 					atMethods++;
 				}
@@ -260,5 +272,155 @@ public class DefaultMvcLoading implements Loading {
 		if (log.isInfoEnabled()) {
 			log.infof("Panda.Mvc [%s] is down in %s", config.getAppName(), sw.toString());
 		}
+	}
+	
+	//----------------------------------------------------------------
+	protected Set<Class<?>> scanModules(Class<?> mainModule) {
+		Set<Class<?>> actions = new HashSet<Class<?>>();
+
+		Modules ann = mainModule.getAnnotation(Modules.class);
+		if (ann == null) {
+			addAction(actions, mainModule, true);
+			return actions;
+		}
+
+		for (Class<?> action : ann.value()) {
+			addAction(actions, action, true);
+		}
+
+		// scan packages
+		Set<String> packages = new HashSet<String>();
+
+		if (ann.scan()) {
+			// add default main package
+			packages.add(mainModule.getPackage().getName());
+		}
+
+		if (Arrays.isNotEmpty(ann.packages())) {
+			packages.addAll(Arrays.asList(ann.packages()));
+		}
+
+		if (Collections.isNotEmpty(packages)) {
+			if (log.isDebugEnabled()) {
+				log.debug(" > scan " + Arrays.toString(packages));
+			}
+			
+			List<Class<?>> subs = Classes.scan(packages);
+			for (Class<?> sub : subs) {
+				addAction(actions, sub, false);
+			}
+		}
+
+		return actions;
+	}
+
+	private void addAction(Set<Class<?>> actions, Class<?> action, boolean warn) {
+		if (isAction(action)) {
+			if (log.isDebugEnabled()) {
+				log.debug(" > add " + action.getName());
+			}
+			actions.add(action);
+		}
+		else if (warn) {
+			log.warn(" > ignore " +  action.getName());
+		}
+	}
+	
+	protected ActionInfo createActionInfo(Ioc ioc, Class<?> type) {
+		ActionInfo ai = new ActionInfo();
+		evalHttpAdaptor(ai, type.getAnnotation(Adapt.class));
+		evalOkView(ai, type.getAnnotation(Ok.class));
+		evalErrorView(ai, type.getAnnotation(Err.class));
+		evalFatalView(ai, type.getAnnotation(Fatal.class));
+		evalAt(ioc, ai, type.getAnnotation(At.class), null);
+		evalActionChainMaker(ai, type.getAnnotation(Chain.class));
+		evalAction(ai, type);
+		return ai;
+	}
+
+	protected ActionInfo createActionInfo(Ioc ioc, Method method) {
+		ActionInfo ai = new ActionInfo();
+		evalHttpAdaptor(ai, method.getAnnotation(Adapt.class));
+		evalOkView(ai, method.getAnnotation(Ok.class));
+		evalErrorView(ai, method.getAnnotation(Err.class));
+		evalFatalView(ai, method.getAnnotation(Fatal.class));
+		evalAt(ioc, ai, method.getAnnotation(At.class), method.getName());
+		evalActionChainMaker(ai, method.getAnnotation(Chain.class));
+		ai.setMethod(method);
+		return ai;
+	}
+
+	protected void evalActionChainMaker(ActionInfo ai, Chain cb) {
+		if (null != cb) {
+			ai.setChainName(cb.value());
+		}
+	}
+
+	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
+		if (null != at) {
+			if (at.value() != null && at.value().length > 0) {
+				String[] ps = new String[at.value().length];
+				for (int i = 0; i < ps.length; i++) {
+					ps[i] = Mvcs.translate(at.value()[i], ioc);
+				}
+				ai.setPaths(ps);
+			}
+			else if (def != null) {
+				ai.setPaths(Arrays.toArray(def.toLowerCase()));
+			}
+
+			if (at.method() != null && at.method().length > 0) {
+				for (HttpMethod m : at.method()) {
+					ai.getHttpMethods().add(m);
+				}
+			}
+		}
+	}
+
+	protected void evalFatalView(ActionInfo ai, Fatal fatal) {
+		if (null != fatal) {
+			ai.setFatalView(fatal.value());
+		}
+	}
+
+	protected void evalErrorView(ActionInfo ai, Err error) {
+		if (null != error) {
+			ai.setErrorView(error.value());
+		}
+	}
+
+	protected void evalOkView(ActionInfo ai, Ok ok) {
+		if (null != ok) {
+			ai.setOkView(ok.value());
+		}
+	}
+
+	protected void evalAction(ActionInfo ai, Class<?> type) {
+		ai.setActionType(type);
+	}
+
+	protected void evalHttpAdaptor(ActionInfo ai, Adapt ab) {
+		if (null != ab) {
+			ai.setAdaptor(ab.type());
+		}
+	}
+
+	protected boolean isAction(Class<?> cls) {
+		try {
+			int cm = cls.getModifiers();
+			if (!Modifier.isPublic(cm) || Modifier.isAbstract(cm) || Modifier.isInterface(cm)) {
+				return false;
+			}
+			
+			for (Method m : cls.getMethods()) {
+				if (m.isAnnotationPresent(At.class)) {
+					return true;
+				}
+			}
+		}
+		catch (Throwable e) {
+			// skip
+		}
+		return false;
 	}
 }
