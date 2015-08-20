@@ -10,12 +10,14 @@ import java.util.Set;
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.io.Files;
+import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
@@ -358,10 +360,12 @@ public class DefaultMvcLoading implements Loading {
 
 	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
 		if (null != at) {
+			Settings ss = ioc.getIfExists(Settings.class);
 			if (at.value() != null && at.value().length > 0) {
 				String[] ps = new String[at.value().length];
 				for (int i = 0; i < ps.length; i++) {
-					ps[i] = Mvcs.translate(at.value()[i], ioc);
+					String a = at.value()[i];
+					ps[i] = Strings.isEmpty(a) ? a : Mvcs.translate(a, ss);
 				}
 				ai.setPaths(ps);
 			}
