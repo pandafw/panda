@@ -1,5 +1,5 @@
 <#include "common.ftl"/>
-${s}#if action.hasErrors()>
+${s}#if actionErrors?has_content>
 <@header/>
 
 <div class="p-section">

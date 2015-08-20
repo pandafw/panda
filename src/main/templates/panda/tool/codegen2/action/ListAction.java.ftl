@@ -77,8 +77,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list(qr);
 	}
@@ -88,8 +88,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list_popup(qr);
 	}
@@ -99,8 +99,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.FTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list_csv(qr);
 	}
@@ -110,8 +110,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list_print(qr);
 	}
