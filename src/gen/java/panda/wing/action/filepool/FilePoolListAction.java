@@ -64,5 +64,25 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 		return super.list_popup(qr);
 	}
 	
+	/**
+	 * list_json
+	 */
+	@At
+	@Ok(View.FREEMARKER)
+	@Err(View.FREEMARKER)
+	public Object list_json(@Param @Validate Queryer qr) {
+		return super.list_json(qr);
+	}
+	
+	/**
+	 * list_xml
+	 */
+	@At
+	@Ok(View.FREEMARKER)
+	@Err(View.FREEMARKER)
+	public Object list_xml(@Param @Validate Queryer qr) {
+		return super.list_xml(qr);
+	}
+	
 }
 

@@ -129,6 +129,8 @@
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
+		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="property" extend="action.Property" actionClass="${action.package}.property.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
