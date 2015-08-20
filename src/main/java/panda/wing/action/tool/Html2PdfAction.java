@@ -11,7 +11,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.view.FreemarkerView;
+import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.servlet.HttpServletSupport;
 import panda.wing.action.AbstractAction;
@@ -88,7 +88,7 @@ public class Html2PdfAction extends AbstractAction {
 	public Object execute(@Param Arg arg) throws Exception {
 		if (Strings.isEmpty(arg.url)) {
 			arg.url = getText("url-default");
-			return FreemarkerView.DEFAULT;
+			return SitemeshFreemarkerView.DEFAULT;
 		}
 
 		try {
@@ -115,7 +115,7 @@ public class Html2PdfAction extends AbstractAction {
 		catch (Throwable e) {
 			log.warn("html2pdf execute error", e);
 			addActionError(Exceptions.getStackTrace(e));
-			return FreemarkerView.DEFAULT;
+			return SitemeshFreemarkerView.DEFAULT;
 		}
 	}
 }

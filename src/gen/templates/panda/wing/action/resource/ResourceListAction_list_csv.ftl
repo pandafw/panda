@@ -1,4 +1,4 @@
-<#if action.hasErrors()>
+<#if actionErrors?has_content>
 <html>
 <head>
 	<title><@p.text name="title-list_csv"><@p.param name="title" value="#(title)"/></@p.text></title>

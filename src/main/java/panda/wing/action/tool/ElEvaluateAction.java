@@ -15,7 +15,7 @@ import panda.wing.constant.AUTH;
 public class ElEvaluateAction extends AbstractAction {
 
 	@At("")
-	@Ok(View.FREEMARKER)
+	@Ok(View.SFTL)
 	public void input() {
 	}
 

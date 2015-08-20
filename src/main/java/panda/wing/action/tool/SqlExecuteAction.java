@@ -27,7 +27,7 @@ import panda.wing.constant.AUTH;
 
 @At("/admin/sql")
 @Auth(AUTH.SYSADMIN)
-@Ok(View.FREEMARKER)
+@Ok(View.SFTL)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected String commenter = "--";

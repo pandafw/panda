@@ -28,8 +28,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object list(@Param @Validate Queryer qr) {
 		return super.list(qr);
 	}
@@ -38,8 +38,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list_csv
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.FTL)
+	@Err(View.SFTL)
 	public Object list_csv(@Param @Validate Queryer qr) {
 		return super.list_csv(qr);
 	}
@@ -48,8 +48,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list_print
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object list_print(@Param @Validate Queryer qr) {
 		return super.list_print(qr);
 	}
@@ -58,8 +58,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list_popup
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object list_popup(@Param @Validate Queryer qr) {
 		return super.list_popup(qr);
 	}
@@ -68,8 +68,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list_json
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.JSON)
 	public Object list_json(@Param @Validate Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -78,8 +77,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 * list_xml
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.XML)
 	public Object list_xml(@Param @Validate Queryer qr) {
 		return super.list_xml(qr);
 	}

@@ -25,7 +25,7 @@ public class CronsAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	@Ok(View.FREEMARKER)
+	@Ok(View.SFTL)
 	public List<CronEntry> execute() throws Exception {
 		return crons;
 	}

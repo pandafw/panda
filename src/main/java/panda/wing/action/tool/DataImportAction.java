@@ -51,7 +51,7 @@ import panda.wing.util.AppActionAssist;
 
 @At("/admin/dataimp")
 @Auth(AUTH.SYSADMIN)
-@Ok(View.FREEMARKER)
+@Ok(View.SFTL)
 public class DataImportAction extends AbstractAction {
 	protected static class DataType {
 		String type;
