@@ -17,8 +17,8 @@ import panda.bean.Beans;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
-import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Filter;
+import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.view.tag.CUrl;
@@ -26,6 +26,7 @@ import panda.mvc.view.tag.ListColumn;
 import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.ListView;
+import panda.mvc.view.tag.ui.ListView.ItemLink;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -850,7 +851,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					}
 					else if ("actions".equals(ctype)) {
 						if (Collections.isNotEmpty(c.actions)) {
-							for (ListColumn.Action a : c.actions) {
+							for (ItemLink a : c.actions) {
 								if (writeAlink("p-lv-ia", d, a)) {
 									if (Strings.isNotEmpty(a.label)) {
 										write("<span class=\"p-lv-t\">");
@@ -881,8 +882,8 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							if (c.link instanceof Boolean && ((Boolean)c.link).booleanValue()) {
 								c.link = tag.getLink();
 							}
-							if (c.link instanceof ListColumn.Action) {
-								wa = writeAlink("p-lv-a", d, (ListColumn.Action)c.link);
+							if (c.link instanceof ItemLink) {
+								wa = writeAlink("p-lv-a", d, (ItemLink)c.link);
 							}
 
 							if (c.format != null) {
@@ -950,16 +951,17 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write("</div>");
 	}
 	
-	private void writeLinkUrl(ListColumn.Action link, Object d) throws IOException {
+	private void writeLinkUrl(ItemLink link, Object d) throws IOException {
 		CUrl url = newTag(CUrl.class);
 
+		url.setAction(link.action);
 		url.copyParams(link.params, d);
 
 		url.start(writer);
 		url.end(writer, "");
 	}
 	
-	private boolean writeAlink(String cls, Object d, ListColumn.Action link) throws IOException {
+	private boolean writeAlink(String cls, Object d, ItemLink link) throws IOException {
 		if (_permit != null) {
 			if (Strings.isNotEmpty(link.action)) {
 				if (!_permit.hasDataPermission(d, link.action)) {

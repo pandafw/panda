@@ -15,7 +15,13 @@ import panda.mvc.view.tag.ListColumn;
 @IocBean(singleton=false)
 public class ListView extends UIBean {
 	public static class ItemLink {
+		public String href;
 		public String action;
+		public String icon;
+		public String label;
+		public String tooltip;
+		public String target;
+		public String onclick;
 		public Map<String, Object> params;
 	}
 	

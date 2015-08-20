@@ -1,7 +1,8 @@
 package panda.mvc.view.tag;
 
 import java.util.List;
-import java.util.Map;
+
+import panda.mvc.view.tag.ui.ListView.ItemLink;
 
 
 public class ListColumn {
@@ -19,17 +20,6 @@ public class ListColumn {
 		public String tooltip;
 		public boolean display = true;
 		public Object list;
-	}
-
-	public static class Action {
-		public String href;
-		public String action;
-		public String icon;
-		public String label;
-		public String tooltip;
-		public String target;
-		public String onclick;
-		public Map<String, Object> params;
 	}
 
 	public String name;
@@ -51,7 +41,7 @@ public class ListColumn {
 	public Filter filter;
 	
 	public Object link;
-	public List<Action> actions;
+	public List<ItemLink> actions;
 	
 	public boolean sortable = false;
 	public boolean filterable = true;
