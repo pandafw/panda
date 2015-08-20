@@ -5,6 +5,7 @@
 	<!-- action -->
 	<action name="baseAction" trimString="${action.trimString}" dataFieldName="${action.dataFieldName}" dataListFieldName="${action.dataListFieldName}">
 		<list name="baseList" cssColumn="status">
+			<param name="actionView" value="~/view"/>
 			<param name="toolbar" value="@refresh"/>
 			<param name="actions" value="@insert:~/insert copy:~/copy update:~/update delete:~/delete"/>
 			<param name="options" value="bdelete:~/bdelete ^print:~/list_print ^csv:~/list_csv @^${pdf.action}:~/list_print"/>

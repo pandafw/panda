@@ -9,7 +9,7 @@
 		<h3><@p.text name="title-list_print"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
 
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<#assign _columns_ = [{
 		"name": "_number_",
@@ -18,80 +18,79 @@
 		"fixed": true
 	}, {
 		"name": "id",
-		"header": action.getText("d.id", ""), 
+		"header": text.getText("a.t.id"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.id-tip", ""),
+		"tooltip": text.getText("a.t.id-tip", ""),
 		"value": false			
 	}, {
 		"name": "clazz",
-		"header": action.getText("d.clazz", ""), 
+		"header": text.getText("a.t.clazz"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.clazz-tip", ""),
+		"tooltip": text.getText("a.t.clazz-tip", ""),
 		"value": false			
 	}, {
 		"name": "language",
-		"header": action.getText("d.language", ""), 
+		"header": text.getText("a.t.language"),
 		"format": {
-			"codemap": "consts.localeLanguageMap",
+			"codemap": consts.localeLanguageMap,
 			"type": "code"
 		},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.language-tip", ""),
+		"tooltip": text.getText("a.t.language-tip", ""),
 		"value": false			
 	}, {
 		"name": "country",
-		"header": action.getText("d.country", ""), 
+		"header": text.getText("a.t.country"),
 		"format": {
-			"codemap": "consts.localeCountryMap",
+			"codemap": consts.localeCountryMap,
 			"type": "code"
 		},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.country-tip", ""),
+		"tooltip": text.getText("a.t.country-tip", ""),
 		"value": false			
 	}, {
 		"name": "source",
-		"header": action.getText("d.source", ""), 
+		"header": text.getText("a.t.source"),
 		"hidden": true,
 		"sortable": false,
-		"tooltip": action.getText("d.source-tip", ""),
+		"tooltip": text.getText("a.t.source-tip", ""),
 		"value": false			
 	}, {
 		"name": "status",
-		"header": action.getText("d.status", ""), 
+		"header": text.getText("a.t.status"),
 		"format": {
-			"codemap": "consts.dataStatusMap",
+			"codemap": consts.dataStatusMap,
 			"type": "code"
 		},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.status-tip", ""),
+		"tooltip": text.getText("a.t.status-tip", ""),
 		"value": false			
 	}, {
 		"name": "uusid",
-		"header": action.getText("d.uusid", ""), 
+		"header": text.getText("a.t.uusid"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.uusid-tip", ""),
+		"tooltip": text.getText("a.t.uusid-tip", ""),
 		"value": false			
 	}, {
 		"name": "utime",
-		"header": action.getText("d.utime", ""), 
+		"header": text.getText("a.t.utime"),
 		"format": {
 			"type": "datetime"
 		},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("d.utime-tip", ""),
+		"tooltip": text.getText("a.t.utime-tip", ""),
 		"value": false			
 	}] />
 
-	<@p.listview id="resource_list_print" action="resource_list_print" 
-		list="ds" columns=_columns_ cssColumn="status"
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d"
+	<@p.listview id="resource_list_print" action="~/list_print" 
+		list=result columns=_columns_ cssColumn="status"
 		autosize="false" script="false"
 	/>
 </div>

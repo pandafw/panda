@@ -9,7 +9,7 @@
 		<h3><@p.text name="title-list_print"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
 
-	<#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "/panda/mvc/view/action-alert.ftl"/>
 
 	<#assign _columns_ = [{
 		"name": "_number_",
@@ -18,48 +18,47 @@
 		"fixed": true
 	}, {
 		"name": "id",
-		"header": action.getText("d.id", ""), 
+		"header": text.getText("a.t.id"),
 		"sortable": false,
-		"tooltip": action.getText("d.id-tip", ""),
+		"tooltip": text.getText("a.t.id-tip", ""),
 		"value": false			
 	}, {
 		"name": "name",
-		"header": action.getText("d.name", ""), 
+		"header": text.getText("a.t.name"),
 		"sortable": false,
-		"tooltip": action.getText("d.name-tip", ""),
+		"tooltip": text.getText("a.t.name-tip", ""),
 		"value": false			
 	}, {
 		"name": "size",
-		"header": action.getText("d.size", ""), 
+		"header": text.getText("a.t.size"),
 		"format": {
 			"type": "integer"
 		},
 		"sortable": false,
-		"tooltip": action.getText("d.size-tip", ""),
+		"tooltip": text.getText("a.t.size-tip", ""),
 		"value": false			
 	}, {
 		"name": "date",
-		"header": action.getText("d.date", ""), 
+		"header": text.getText("a.t.date"),
 		"format": {
 			"type": "timestamp"
 		},
 		"sortable": false,
-		"tooltip": action.getText("d.date-tip", ""),
+		"tooltip": text.getText("a.t.date-tip", ""),
 		"value": false			
 	}, {
 		"name": "flag",
-		"header": action.getText("d.flag", ""), 
+		"header": text.getText("a.t.flag"),
 		"format": {
 			"type": "integer"
 		},
 		"sortable": false,
-		"tooltip": action.getText("d.flag-tip", ""),
+		"tooltip": text.getText("a.t.flag-tip", ""),
 		"value": false			
 	}] />
 
-	<@p.listview id="filepool_list_print" action="filepool_list_print" 
-		list="ds" columns=_columns_ cssColumn="status"
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d"
+	<@p.listview id="filepool_list_print" action="~/list_print" 
+		list=result columns=_columns_ cssColumn="status"
 		autosize="false" script="false"
 	/>
 </div>
