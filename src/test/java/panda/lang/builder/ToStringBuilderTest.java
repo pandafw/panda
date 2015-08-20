@@ -490,8 +490,8 @@ public class ToStringBuilderTest {
 		a.obj = b;
 		b.obj = a;
 
-		final String expected = toBaseString(a) + "{" + toBaseString(b) + "{" + toBaseString(a)
-				+ "}}";
+		final String expected = toBaseString(a) + "{{" + toBaseString(b) + "{" + toBaseString(a)
+				+ "}}}";
 		assertEquals(expected, a.toString());
 	}
 

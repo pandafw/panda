@@ -1,5 +1,6 @@
 package panda.lang.builder;
 
+
 /**
  * <p>Works with {@link ToStringBuilder} to create a <code>toString</code>.</p>
  *
