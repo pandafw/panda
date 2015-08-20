@@ -7,11 +7,11 @@ import panda.bind.filter.IncludePropertyFilter;
  * @author yf.frank.wang@gmail.com
  *
  */
-public class CompositeQueryPropertyFilter extends IncludePropertyFilter {
+public class QueryerPropertyFilter extends IncludePropertyFilter {
 	/**
 	 * Constructor
 	 */
-	public CompositeQueryPropertyFilter() {
+	public QueryerPropertyFilter() {
 		this(false);
 	}
 
@@ -19,15 +19,19 @@ public class CompositeQueryPropertyFilter extends IncludePropertyFilter {
 	 * Constructor
 	 * @param shortName shortName
 	 */
-	public CompositeQueryPropertyFilter(boolean shortName) {
+	public QueryerPropertyFilter(boolean shortName) {
 		if (shortName) {
 			includes.add("n");
 			includes.add("m");
+			includes.add("p");
+			includes.add("s");
 			includes.add("fs");
 		}
 		else {
 			includes.add("name");
 			includes.add("method");
+			includes.add("pager");
+			includes.add("sorter");
 			includes.add("filters");
 		}
 	}

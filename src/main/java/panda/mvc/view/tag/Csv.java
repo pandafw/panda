@@ -104,7 +104,7 @@ public class Csv extends Component {
 						}
 
 						String value = null;
-						if ("code".equals(c.format.type)) {
+						if (c.format != null && "code".equals(c.format.type)) {
 							Object v = getBeanProperty(d, c.name);
 							Iterator iv = Iterators.asIterator(v);
 							if (iv != null) {
@@ -118,7 +118,7 @@ public class Csv extends Component {
 								value = sb.toString();
 							}
 						}
-						else if ("expression".equals(c.format.type)) {
+						else if (c.format != null && "expression".equals(c.format.type)) {
 							Asserts.notEmpty(c.format.expression, "The expression of [" + c.name + "] is empty");
 							Object v = El.eval(c.format.expression, d);
 							if (v != null) {

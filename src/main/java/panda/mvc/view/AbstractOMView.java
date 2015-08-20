@@ -13,21 +13,22 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.bean.BeanHandler;
 import panda.bind.AbstractSerializer;
 import panda.bind.adapter.DateAdapter;
-import panda.ioc.Ioc;
 import panda.lang.Charsets;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 import panda.mvc.alert.ActionAlert;
 import panda.mvc.alert.ParamAlert;
-import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
+import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
-import panda.mvc.bind.filter.CompositeQueryPropertyFilter;
+import panda.mvc.bind.filter.QueryerPropertyFilter;
 import panda.mvc.bind.filter.FilterPropertyFilter;
 import panda.mvc.bind.filter.PagerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
@@ -233,6 +234,7 @@ public abstract class AbstractOMView extends AbstractView {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void render(ActionContext ac) {
 		Object o = ac.getError();
 		if (o == null || !(o instanceof Throwable)) {
@@ -280,17 +282,17 @@ public abstract class AbstractOMView extends AbstractView {
 		}
 		
 		result.put("success", success);
+		result.put("params", ac.getParams());
 		result.put("result", ac.getResult());
 
-		if (location != null) {
-			Ioc ioc = ac.getIoc();
-			if (ioc != null) {
-				List<String> pnl = toList(location);
-				for (String pn : pnl) {
-					Object value = ioc.get(null, pn);
-					if (value != null) {
-						result.put(pn, value);
-					}
+		if (Strings.isNotEmpty(location)) {
+			BeanHandler acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
+
+			List<String> pnl = toList(location);
+			for (String pn : pnl) {
+				Object value = acb.getBeanValue(ac, pn);
+				if (value != null) {
+					result.put(pn, value);
 				}
 			}
 		}
@@ -337,7 +339,7 @@ public abstract class AbstractOMView extends AbstractView {
 
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
-		as.registerPropertyFilter(Queryer.class, new CompositeQueryPropertyFilter(shortName));
+		as.registerPropertyFilter(Queryer.class, new QueryerPropertyFilter(shortName));
 		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(shortName));
 		
 		as.setPrettyPrint(prettyPrint);

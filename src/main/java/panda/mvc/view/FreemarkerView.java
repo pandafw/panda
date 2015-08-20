@@ -1,13 +1,11 @@
 package panda.mvc.view;
 
 import panda.io.FileNames;
-import panda.io.stream.StringBuilderWriter;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
-import panda.mvc.view.sitemesh.Sitemesher;
 import panda.net.http.HttpContentType;
 
 /**
@@ -68,7 +66,6 @@ public class FreemarkerView extends AbstractPathView {
 	@Override
 	public void render(ActionContext ac) {
 		FreemarkerHelper fh = ac.getIoc().get(FreemarkerHelper.class);
-		Sitemesher sm = ac.getIoc().get(Sitemesher.class);
 
 		String path = evalPath(ac);
 
@@ -106,16 +103,12 @@ public class FreemarkerView extends AbstractPathView {
 		ac.getResponse().setCharacterEncoding(encoding);
 		ac.getResponse().setContentType(contentType + "; charset=" + encoding);
 		
+		render(ac, path, fh);
+	}
+	
+	protected void render(ActionContext ac, String path, FreemarkerHelper fh) {
 		try {
-			if (sm.needMesh()) {
-				StringBuilderWriter sbw = new StringBuilderWriter();
-				fh.execTemplate(sbw, path, ac.getResult());
-				
-				sm.meshup(ac.getResponse().getWriter(), sbw.toString());
-			}
-			else {
-				fh.execTemplate(ac.getResponse().getWriter(), path, ac.getResult());
-			}
+			fh.execTemplate(ac.getResponse().getWriter(), path, ac.getResult());
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

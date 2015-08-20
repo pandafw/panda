@@ -15,6 +15,7 @@ import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
 import panda.mvc.view.RawView;
 import panda.mvc.view.ServerRedirectView;
+import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XmlView;
 
@@ -45,8 +46,12 @@ public class DefaultViewMaker implements ViewMaker {
 			return new XmlView(value);
 		}
 		
-		if (View.FREEMARKER.equals(type)) {
+		if (View.FTL.equals(type)) {
 			return new FreemarkerView(value);
+		}
+		
+		if (View.SFTL.equals(type)) {
+			return new SitemeshFreemarkerView(value);
 		}
 		
 		if (View.REDIRECT.equals(type) || View.REDIRECT2.equals(type)) {
