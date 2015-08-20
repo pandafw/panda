@@ -136,11 +136,10 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_bedit_success"));
 							}
 							else if (t.startsWith("list")) {
-								Template tpl = findTpl("_" + t);
-								if (tpl == null) {
-									throw new IllegalArgumentException("Illegal template: " + t);
+								if (!("list_json".equals(t) || "list_xml".equals(t))) {
+									Template tpl = findTpl("_" + t);
+									processTpl(pkg, uin + ".ftl", wrapper, tpl);
 								}
-								processTpl(pkg, uin + ".ftl", wrapper, tpl);
 							}
 						}
 					}

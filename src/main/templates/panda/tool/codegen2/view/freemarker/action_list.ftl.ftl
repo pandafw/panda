@@ -168,7 +168,7 @@
 </#if>
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
-		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if> pager="true"
+		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 	<#if ui.params.method?has_content>
 		method="${ui.params.method}"
 	</#if>
