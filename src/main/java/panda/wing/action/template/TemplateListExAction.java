@@ -6,7 +6,7 @@ import panda.mvc.bean.Queryer;
 import panda.wing.entity.Template;
 import panda.wing.entity.query.TemplateQuery;
 
-@At("${settings['admin.context']}/template")
+@At("${admin_context}/template")
 public class TemplateListExAction extends TemplateListAction {
 	/**
 	 * Constructor

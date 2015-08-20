@@ -10,7 +10,7 @@ import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Property;
 
-@At("${settings['admin.context']}/property")
+@At("${admin_context}/property")
 public class PropertyEditExAction extends PropertyEditAction {
 
 	/**

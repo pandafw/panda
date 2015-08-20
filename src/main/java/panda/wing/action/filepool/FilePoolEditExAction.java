@@ -8,7 +8,7 @@ import panda.filepool.dao.DaoFileItem;
 import panda.filepool.dao.FileDataQuery;
 import panda.mvc.annotation.At;
 
-@At("${settings['admin.context']}/filepool")
+@At("${admin_context}/filepool")
 public class FilePoolEditExAction extends FilePoolEditAction {
 	/**
 	 * Constructor

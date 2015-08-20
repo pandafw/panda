@@ -10,7 +10,7 @@ import panda.wing.constant.AC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Template;
 
-@At("${settings['admin.context']}/template")
+@At("${admin_context}/template")
 public class TemplateEditExAction extends TemplateEditAction {
 	/**
 	 * Constructor

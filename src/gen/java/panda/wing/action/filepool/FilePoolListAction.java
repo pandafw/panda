@@ -10,7 +10,7 @@ import panda.mvc.bean.Queryer;
 import panda.mvc.validation.annotation.Validate;
 import panda.wing.action.GenericListAction;
 
-@At("${settings['admin.context']}/filepool")
+@At("${admin_context}/filepool")
 public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 
 	/**

@@ -10,7 +10,7 @@ import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Resource;
 
-@At("${settings['admin.context']}/resource")
+@At("${admin_context}/resource")
 public class ResourceEditExAction extends ResourceEditAction {
 
 	/**

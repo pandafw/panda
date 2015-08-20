@@ -10,7 +10,7 @@ import panda.mvc.validation.annotation.Validate;
 import panda.wing.action.GenericListAction;
 import panda.wing.entity.Property;
 
-@At("${settings['admin.context']}/property")
+@At("${admin_context}/property")
 public class PropertyListAction extends GenericListAction<Property> {
 
 	/**
