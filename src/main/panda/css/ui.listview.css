@@ -42,6 +42,9 @@
 .p-lv-toolbar .p-lv-addon {
 	white-space: nowrap;
 }
+.p-lv-tools > button {
+	margin-right: 5px;
+}
 
 /* action link */
 .p-lv a.p-lv-ia {

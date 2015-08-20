@@ -394,7 +394,7 @@ function _plv_setCheckAll($lv, check, crows) {
 		  .find("i")
 		  	.removeClass($b.data(check ? "iconSelectAll" : "iconSelectNone"))
 		  	.addClass($b.data(check ? "iconSelectNone" : "iconSelectAll"))
-		  	.get(0).nextSibling.data = $b.data(' ' + (check ? 'textSelectNone' : 'textSelectAll'));
+		  	.get(0).nextSibling.data = ' ' + $b.data(check ? 'textSelectNone' : 'textSelectAll');
 	});
 	if (crows) {
 		$lv.find(".p-lv-tbody > tr").each(function() {
