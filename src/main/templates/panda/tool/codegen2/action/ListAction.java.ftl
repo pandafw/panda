@@ -121,8 +121,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.JSON)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -132,8 +131,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}
 	 */
 	@At
-	@Ok(View.FREEMARKER)
-	@Err(View.FREEMARKER)
+	@Ok(View.XML)
 	public Object ${ui.name}(@Param @Validate Queryer qr) {
 		return super.list_xml(qr);
 	}
