@@ -4,7 +4,7 @@
 <div class="p-section">
 	<@sheader/>
 
-	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	${s}#include "/panda/mvc/view/action-alert.ftl"/>
 
 	${s}#assign _columns_ = [{
 		"name": "_number_",
@@ -15,11 +15,11 @@
 <#list ui.orderedColumnList as c>
 {
 		"name": "${c.name}",
-		"header": action.getText("${actionDataFieldName}.${c.name}", ""), 
+		"header": text.getText("a.t.${c.name}"),
 	<#if c.format??>
 		"format": {
 		<#list c.format.paramList as fp>
-			"${fp.name}": "${fp.value?replace('#', '\\x23')}",
+			"${fp.name}": ${fp.value},
 		</#list>
 			"type": "${c.format.type?replace('#', '\\x23')}"
 		},
@@ -40,15 +40,14 @@
 	<#if c.width?has_content>
 		"width": "${c.width}",
 	</#if>
-		"tooltip": action.getText("${actionDataFieldName}.${c.name}-tip", ""),
+		"tooltip": text.getText("a.t.${c.name}-tip", ""),
 		"value": false			
 	}<#if c_has_next>, </#if><#rt/>
 </#list>
 ] />
 
-	${s}@p.listview id="${action.name}_${ui.name}" action="${action.name}_${ui.name}" 
-		list="${actionDataListFieldName}" columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d"
+	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
+		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		autosize="false" script="false"
 	/>
 </div>

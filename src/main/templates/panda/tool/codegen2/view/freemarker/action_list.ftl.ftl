@@ -175,8 +175,8 @@
 	<#if ui.params.target?has_content>
 		target="${ui.params.target}"
 	</#if>
-	<#if ui.params.linkAction?has_content || actionViewName?has_content>
-		link={ "action": "${action.name}_${ui.params.linkAction!(actionViewName)}", "params": { <#list entity.primaryKeyList as p>"${actionDataFieldName}.${p.name}": "${p.name}"<#if p_has_next>, </#if></#list> } }
+	<#if actionView?has_content>
+		link={ "action": "${actionView}", "params": { <#list entity.primaryKeyList as p>"${actionDataFieldName}.${p.name}": "${p.name}"<#if p_has_next>, </#if></#list> } }
 	</#if>
 	>
 		${s}@p.param name="tools">

@@ -4,16 +4,16 @@
 <#assign actionDataFieldName = action.dataFieldName!'d'/>
 <#assign actionDataListFieldName = action.dataListFieldName!'ds'/>
 <#if ui??>
-	<#if ui.params.actionListName??><#assign actionListName = ui.params.actionListName/></#if>
-	<#if ui.params.actionCopyName??><#assign actionCopyName = ui.params.actionCopyName/></#if>
-	<#if ui.params.actionViewName??><#assign actionViewName = ui.params.actionViewName/></#if>
-	<#if ui.params.actionPrintName??><#assign actionPrintName = ui.params.actionPrintName/></#if>
-	<#if ui.params.actionInsertName??><#assign actionInsertName = ui.params.actionInsertName/></#if>
-	<#if ui.params.actionUpdateName??><#assign actionUpdateName = ui.params.actionUpdateName/></#if>
-	<#if ui.params.actionDeleteName??><#assign actionDeleteName = ui.params.actionDeleteName/></#if>
+	<#if ui.params.actionList??><#assign actionList = ui.params.actionList/></#if>
+	<#if ui.params.actionCopy??><#assign actionCopy = ui.params.actionCopy/></#if>
+	<#if ui.params.actionView??><#assign actionView = ui.params.actionView/></#if>
+	<#if ui.params.actionPrint??><#assign actionPrint = ui.params.actionPrint/></#if>
+	<#if ui.params.actionInsert??><#assign actionInsert = ui.params.actionInsert/></#if>
+	<#if ui.params.actionUpdate??><#assign actionUpdate = ui.params.actionUpdate/></#if>
+	<#if ui.params.actionDelete??><#assign actionDelete = ui.params.actionDelete/></#if>
 	<#list action.listUIList as ui><#if ui.template?? && ui.generate!false>
 		<#if ui.templates?seq_contains("list")>
-			<#assign actionListName = ui.name/>
+			<#assign actionList = ui.name/>
 		<#elseif ui.templates?seq_contains("bdelete") 
 			|| ui.templates?seq_contains("bupdate")
 			|| ui.templates?seq_contains("bedit")>
@@ -22,28 +22,28 @@
 	</#if></#list>
 	<#list action.inputUIList as ui><#if ui.template?? && ui.generate!false>
 		<#if ui.templates?seq_contains("view")>
-			<#if !(actionViewName??)>
-				<#assign actionViewName = ui.name/>
+			<#if !(actionView??)>
+				<#assign actionView = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("print")>
-			<#if !(actionPrintName??)>
-				<#assign actionPrintName = ui.name/>
+			<#if !(actionPrint??)>
+				<#assign actionPrint = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("insert")>
-			<#if !(actionInsertName??)>
-				<#assign actionInsertName = ui.name/>
+			<#if !(actionInsert??)>
+				<#assign actionInsert = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("copy")>
-			<#if !(actionCopyName??)>
-				<#assign actionCopyName = ui.name/>
+			<#if !(actionCopy??)>
+				<#assign actionCopy = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("update")>
-			<#if !(actionUpdateName??)>
-				<#assign actionUpdateName = ui.name/>
+			<#if !(actionUpdate??)>
+				<#assign actionUpdate = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("delete")>
-			<#if !(actionDeleteName??)>
-				<#assign actionDeleteName = ui.name/>
+			<#if !(actionDelete??)>
+				<#assign actionDelete = '~/' + ui.name/>
 			</#if>
 		</#if>
 	</#if></#list>
