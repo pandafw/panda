@@ -132,7 +132,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		if (queryer.getPager() != null) {
 			writeHidden(id + "_start", prefix + "p.s", queryer.getPager().getStart());
 			writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
-			writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal());
+			writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal(), true);
 		}
 		if (queryer.getSorter() != null) {
 			writeHidden(id + "_sort", prefix + "s.c", queryer.getSorter().getColumn());
@@ -187,11 +187,16 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void writeHidden(String id, String name, Object value) throws IOException {
+		writeHidden(id, name, value, false);
+	}
+	
+	private void writeHidden(String id, String name, Object value, boolean disabled) throws IOException {
 		Attributes ha = new Attributes();
 		ha.add("type", "hidden")
 		  .add("id", id)
 		  .add("name", name)
-		  .add("value", value, false);
+		  .add("value", value, false)
+		  .disabled(disabled);
 		xtag("input", ha);
 	}
 	
