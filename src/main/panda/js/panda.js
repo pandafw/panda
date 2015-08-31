@@ -1723,24 +1723,24 @@ if (typeof String.formatSize != "function") {
 })(jQuery);
 if (typeof(panda) == "undefined") { panda = {}; }
 
-function nlv_options(id, options) {
+function plv_options(id, options) {
 	var lv = document.getElementById(id);
 	for (var p in options) {
 		lv[p] = options[p];
 	}
 }
 
-function nlv_getForm(id) {
+function plv_getForm(id) {
 	return document.getElementById(id + "_form");
 }
 
-function nlv_getBForm(id) {
+function plv_getBForm(id) {
 	return document.getElementById(id + "_bform");
 }
 
-function nlv_submitBForm(id, an, ps) {
+function plv_submitBForm(id, an, ps) {
 	$('#' + id).loadmask();
-	var bf = nlv_getBForm(id);
+	var bf = plv_getBForm(id);
 	if (an) {
 		if (typeof(an) == 'string') {
 			bf.action = an;
@@ -1758,21 +1758,21 @@ function nlv_submitBForm(id, an, ps) {
 	return false;
 }
 
-function nlv_submitCheckedRows(id, an, ps) {
-	if (nlv_enableCheckedValues(id) > 0) {
-		nlv_submitBForm(id, an, ps);
+function plv_submitCheckedRows(id, an, ps) {
+	if (plv_enableCheckedValues(id) > 0) {
+		plv_submitBForm(id, an, ps);
 	}
 	return false;
 }
 
-function nlv_submitCheckedKeys(id, an, ps) {
-	if (nlv_enableCheckedKeys(id) > 0) {
-		nlv_submitBForm(id, an, ps);
+function plv_submitCheckedKeys(id, an, ps) {
+	if (plv_enableCheckedKeys(id) > 0) {
+		plv_submitBForm(id, an, ps);
 	}
 	return false;
 }
 
-function nlv_enableCheckedValues(id, ns) {
+function plv_enableCheckedValues(id, ns) {
 	var count = 0;
 	$("#" + id + " .p-lv-tbody input.p-lv-cb")
 		.each(function() {
@@ -1797,7 +1797,7 @@ function nlv_enableCheckedValues(id, ns) {
 	return count;
 }
 
-function nlv_enableCheckedKeys(id) {
+function plv_enableCheckedKeys(id) {
 	var count = 0;
 	$("#" + id + " .p-lv-tbody input.p-lv-cb")
 		.each(function() {
@@ -1809,7 +1809,7 @@ function nlv_enableCheckedKeys(id) {
 	return count;
 }
 
-function nlv_getRowData(tr) {
+function plv_getRowData(tr) {
 	var d = {};
 	$(tr).find("input.p-lv-cv").each(function () {
 		var n = _plv_getPropertyName(this.name);
@@ -1826,11 +1826,11 @@ function _plv_getPropertyName(n) {
 	return n;
 }
 
-function nlv_getTBodyRows(id) {
+function plv_getTBodyRows(id) {
 	return $("#" + id + " .p-lv-tbody > tr");
 }
 
-function nlv_checkAll(id, check) {
+function plv_checkAll(id, check) {
 	if (typeof(check) == 'undefined') {
 		check = true;
 	}
@@ -1840,7 +1840,7 @@ function nlv_checkAll(id, check) {
 	_plv_setCheckAll($lv, check, true);
 }
 
-function nlv_checkRow(id, row, check) {
+function plv_checkRow(id, row, check) {
 	if (typeof(check) == 'undefined') {
 		check = true;
 	}
@@ -1909,10 +1909,16 @@ function _plv_init_table($lv) {
 		var $th = $(this);
 		if ($th.hasClass("p-lv-sortable")) {
 			$th.click(function() {
-				_plv_onThClick.call(this, id);
-			  });
+				_plv_sort($lv.attr("id"), $(this).attr("column"));
+			});
 			if ($.browser.msie && $.browser.majorVersion < 7) {
-				$th.mouseenter(_plv_onThMouseEnter).mouseleave(_plv_onThMouseLeave);
+				$th.mouseenter(function() {
+					$(this).addClass("p-lv-hover");
+					return false;
+				}).mouseleave(function() {
+					$(this).removeClass("p-lv-hover");
+					return false;
+				});
 			}
 		}
 	});
@@ -1947,19 +1953,20 @@ function _plv_init($lv) {
 }
 
 function _plv_sort(id, cn) {
-	$('#' + id).loadmask();
-
 	var es = document.getElementById(id + "_sort");
-	var ed = document.getElementById(id + "_dir");
-	if (cn == es.value) {
-		ed.value = (ed.value.toLowerCase() == "asc" ? "desc" : "asc");
-	}
-	else {
-		es.value = cn;
-		ed.value = "asc";
-	}
+	if (es) {
+		$('#' + id).loadmask();
 
-	document.getElementById(id + "_submit").click();
+		var ed = document.getElementById(id + "_dir");
+		if (cn == es.value) {
+			ed.value = (ed.value.toLowerCase() == "asc" ? "desc" : "asc");
+		}
+		else {
+			es.value = cn;
+			ed.value = "asc";
+		}
+		document.getElementById(id + "_submit").click();
+	}
 }
 
 function _plv_goto(id, p) {
@@ -1967,6 +1974,14 @@ function _plv_goto(id, p) {
 
 	document.getElementById(id + "_form").reset();
 	document.getElementById(id + "_start").value = p;
+	var es = document.getElementById(id + "_sort");
+	if (es && es.value == "") {
+		es.disabled = true;
+	}
+	var ed = document.getElementById(id + "_dir");
+	if (ed && ed.value == "") {
+		ed.disabled = true;
+	}
 	document.getElementById(id + "_submit").click();
 }
 
@@ -2101,11 +2116,6 @@ function _plv_onClearFilters(e) {
 	return false;
 }
 
-function _plv_onThClick(id) {
-	var cn = $(this).attr("column");
-	_plv_sort(id, cn);
-}
-
 function _plv_setCheckAll($lv, check, crows) {
 	$lv.find(".p-lv-thead input.p-lv-ca").each(function() {
 		this.checked = check;
@@ -2166,14 +2176,6 @@ function _plv_onTBodyClick(evt) {
 	}
 }
 
-function _plv_onThMouseEnter() {
-	$(this).addClass("ui-state-hover p-lv-hover");
-	return false;
-}
-function _plv_onThMouseLeave() {
-	$(this).removeClass("ui-state-hover p-lv-hover");
-	return false;
-}
 
 function _plv_onTBodyMouseOver(evt) {
 	$(evt.target).closest("tr.p-lv-tr").addClass("ui-state-hover p-lv-hover");
