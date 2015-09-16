@@ -51,9 +51,18 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 	
 
 	public Log getLogger(String name) {
-		List<Log> logs = new ArrayList<Log>();
+		List<Log> logs = new ArrayList<Log>(adapters.size());
 		for (LogAdapter a : adapters) {
-			logs.add(a.getLogger(name));
+			try {
+				logs.add(a.getLogger(name));
+			}
+			catch (Throwable e) {
+				LogHelper.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
+			}
+		}
+
+		if (logs.isEmpty()) {
+			return new ConsoleLog(name);
 		}
 		return new ComboLog(logs.toArray(new Log[logs.size()]));
 	}

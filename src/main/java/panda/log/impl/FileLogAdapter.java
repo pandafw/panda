@@ -55,16 +55,12 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	public void init(Properties props) {
 		super.init(props);
 		
-		if (Strings.isEmpty(path)) {
-			throw new IllegalArgumentException(getClass().getName() + ".file is invalid!");
-		}
+		validatePath();
 
 		rc = new RollingCalendar();
 		rc.setRollingPattern(datePattern);
 
 		sdf = FastDateFormat.getInstance(datePattern);
-		
-		rollOver();
 	}
 
 	@Override
@@ -106,6 +102,16 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		this.bufferSize = bufferSize;
 	}
 
+	protected void validatePath() {
+		if (Strings.isEmpty(path)) {
+			throw new IllegalArgumentException(getClass().getName() + ".path is invalid!");
+		}
+	}
+
+	protected String getAbsolutePath() {
+		return new File(path).getAbsolutePath();
+	}
+	
 	protected void rollOver() {
 		long now = System.currentTimeMillis();
 		if (writer != null && now < next) {
@@ -117,7 +123,8 @@ public class FileLogAdapter extends AbstractLogAdapter {
 			writer = null;
 		}
 		
-		String dir = FileNames.getParent(new File(path).getAbsolutePath());
+		String path = getAbsolutePath();
+		String dir = FileNames.getParent(path);
 		String date = sdf.format(now);
 		final String base = FileNames.getBaseName(path);
 		final String ext = FileNames.getExtension(path);

@@ -13,6 +13,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
+import panda.log.impl.LogHelper;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -69,9 +70,9 @@ public final class Logs {
 				}
 			}
 		}
-		return adapter.getLogger(sts[2].getClassName());
+		return LogHelper.getLogger(adapter, sts[2].getClassName());
 	}
-
+	
 	private static void init() {
 		Properties props = new Properties();
 
