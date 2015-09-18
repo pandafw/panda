@@ -25,10 +25,11 @@ public class Encrypts {
 	public static final String RSA = "RSA";
 	
 	//------------------------------------------------------------------------------
-	private static final String DEFAULT_TRANSFORM = Encrypts.Blowfish;
+	public static final String DEFAULT_TRANSFORM = Encrypts.Blowfish;
+	public static final String DEFAULT_KEY = "== Panda Java ==";
+	public static final byte[] DEFAULT_KEY_BYTES = DEFAULT_KEY.getBytes();
 
-	private static final byte[] DEFAULT_KEY_BYTES = "== Panda Java ==".getBytes();
-
+	//------------------------------------------------------------------------------
 	public static String encrypt(String text) {
 		return encrypt(text, null, DEFAULT_TRANSFORM);
 	}
