@@ -1,61 +1,95 @@
 package panda.tool.crypto;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
+
+import panda.lang.Arrays;
 import panda.lang.Encrypts;
+import panda.util.tool.AbstractCommandTool;
 
 
 /**
  */
 public class Decrypt {
 	/**
-	 * @param args arguments
+	 * Main & Ant entry class fir JSMinify
 	 */
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			System.out.println("Decrypt <string>");
+	public static class Main extends AbstractCommandTool {
+		@Override
+		protected void addCommandLineOptions() throws Exception {
+			super.addCommandLineOptions();
+			
+			addCommandLineOption("k", "key", "Encrypt key");
+			addCommandLineOption("t", "transform", "Encrypt transform");
 		}
-		
-		Decrypt c = new Decrypt();
-		for (String a : args) {
-			c.setText(a);
-			try {
-				c.execute();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
-	/**
-	 * Constructor
-	 */
-	public Decrypt() {
+		@Override
+		protected void getCommandLineOptions(CommandLine cl) throws Exception {
+			super.getCommandLineOptions(cl);
+			
+			if (cl.hasOption("k")) {
+				setParameter("key", cl.getOptionValue("k").trim());
+			}
+			
+			if (cl.hasOption("t")) {
+				setParameter("transform", cl.getOptionValue("t").trim());
+			}
+
+			if (Arrays.isEmpty(cl.getArgs())) {
+				throw new ParseException("Decrypt arguments is required.");
+			}
+			setParameter("args", cl.getArgs());
+		}
+
+		/**
+		 * main
+		 * @param args arugments
+		 */
+		public static void main(String args[]) {
+			Main m = new Main();
+			Decrypt e = new Decrypt();
+			m.execute(e, args);
+		}
 	}
 
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String text;
-
+	private String key = Encrypts.DEFAULT_KEY;
+	private String transform = Encrypts.DEFAULT_TRANSFORM;
+	private String[] args;
+	
 	/**
-	 * @return the text
+	 * @param key the key to set
 	 */
-	public String getText() {
-		return text;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param transform the transform to set
 	 */
-	public void setText(String text) {
-		this.text = text;
+	public void setTransform(String transform) {
+		this.transform = transform;
+	}
+
+	/**
+	 * @param args the args to set
+	 */
+	public void setArgs(String[] args) {
+		this.args = args;
 	}
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
 	public void execute() throws Exception {
-		System.out.println(Encrypts.decrypt(text));
+		if (Arrays.isEmpty(args)) {
+			throw new IllegalArgumentException("Decrypt arguments is required.");
+		}
+
+		for (String s : args) {
+			System.out.println(s + " -> " + Encrypts.decrypt(s, key, transform));
+		}
 	}
 }
