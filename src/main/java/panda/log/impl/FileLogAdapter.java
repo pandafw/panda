@@ -200,7 +200,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		}
 
 		@Override
-		protected void safeLog(LogLevel level, String msg, Throwable t) {
+		public void log(LogLevel level, String msg, Throwable t) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(DateTimes.timestampFormat().format(DateTimes.getDate()))
 				.append(' ')

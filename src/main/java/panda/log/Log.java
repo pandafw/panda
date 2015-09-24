@@ -11,6 +11,8 @@ public interface Log {
 	boolean isErrorEnabled();
 	boolean isFatalEnabled();
 
+	void log(LogLevel level, String msg, Throwable tx);
+
 	void trace(Object message);
 	void trace(Object message, Throwable t);
 	void tracef(String fmt, Object... args);

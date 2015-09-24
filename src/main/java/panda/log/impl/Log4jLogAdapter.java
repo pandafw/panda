@@ -76,7 +76,7 @@ public class Log4jLogAdapter implements LogAdapter {
 		}
 		
 		@Override
-		protected void safeLog(LogLevel level, String msg, Throwable tx) {
+		public void log(LogLevel level, String msg, Throwable tx) {
 			Level lvl = toLog4jLevel(level);
 			logger.log(SUPER_FQCN, lvl, msg, tx);
 		}

@@ -11,7 +11,7 @@ public class ConsoleLog extends AbstractLog {
 	}
 
 	@Override
-	protected void safeLog(LogLevel level, String msg, Throwable t) {
+	public void log(LogLevel level, String msg, Throwable t) {
 		PrintStream out = (level.ordinal() >= LogLevel.WARN.ordinal() ? System.err : System.out);
 		output(out, level.toString(), msg, t);
 	}

@@ -8,6 +8,7 @@ import panda.lang.ClassLoaders;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogLevel;
 
 
 public class ComboLogAdapter extends AbstractLogAdapter {
@@ -64,174 +65,25 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 		if (logs.isEmpty()) {
 			return new ConsoleLog(name);
 		}
-		return new ComboLog(logs.toArray(new Log[logs.size()]));
+		return new ComboLog(name, logs.toArray(new Log[logs.size()]));
 	}
 
 	/**
 	 * Console log to System.out and System.err
 	 */
-	private static class ComboLog implements Log {
+	private static class ComboLog extends AbstractLog {
 		private Log[] logs;
 		
-		ComboLog(Log[] logs) {
+		ComboLog(String name, Log[] logs) {
+			super(name);
 			this.logs = logs;
 		}
 
 		@Override
-		public boolean isTraceEnabled() {
-			return logs[0].isTraceEnabled();
-		}
-
-		@Override
-		public boolean isInfoEnabled() {
-			return logs[0].isInfoEnabled();
-		}
-
-		@Override
-		public boolean isDebugEnabled() {
-			return logs[0].isDebugEnabled();
-		}
-
-		@Override
-		public boolean isWarnEnabled() {
-			return logs[0].isWarnEnabled();
-		}
-
-		@Override
-		public boolean isErrorEnabled() {
-			return logs[0].isErrorEnabled();
-		}
-
-		@Override
-		public boolean isFatalEnabled() {
-			return logs[0].isFatalEnabled();
-		}
-
-		@Override
-		public void trace(Object message) {
+		public void log(LogLevel level, String msg, Throwable tx) {
 			for (Log g : logs) {
-				g.trace(message);
+				g.log(level, msg, tx);
 			}
 		}
-
-		@Override
-		public void trace(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.trace(message, t);
-			}
-		}
-
-		@Override
-		public void tracef(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.tracef(fmt, args);
-			}
-		}
-
-		@Override
-		public void debug(Object message) {
-			for (Log g : logs) {
-				g.debug(message);
-			}
-		}
-
-		@Override
-		public void debug(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.debug(message, t);
-			}
-		}
-
-		@Override
-		public void debugf(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.debugf(fmt, args);
-			}
-		}
-
-		@Override
-		public void info(Object message) {
-			for (Log g : logs) {
-				g.info(message);
-			}
-		}
-
-		@Override
-		public void info(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.info(message, t);
-			}
-		}
-
-		@Override
-		public void infof(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.infof(fmt, args);
-			}
-		}
-
-		@Override
-		public void warn(Object message) {
-			for (Log g : logs) {
-				g.warn(message);
-			}
-		}
-
-		@Override
-		public void warn(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.warn(message, t);
-			}
-		}
-
-		@Override
-		public void warnf(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.warnf(fmt, args);
-			}
-		}
-
-		@Override
-		public void error(Object message) {
-			for (Log g : logs) {
-				g.error(message);
-			}
-		}
-
-		@Override
-		public void error(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.error(message, t);
-			}
-		}
-
-		@Override
-		public void errorf(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.errorf(fmt, args);
-			}
-		}
-
-		@Override
-		public void fatal(Object message) {
-			for (Log g : logs) {
-				g.fatal(message);
-			}
-		}
-
-		@Override
-		public void fatal(Object message, Throwable t) {
-			for (Log g : logs) {
-				g.fatal(message, t);
-			}
-		}
-
-		@Override
-		public void fatalf(String fmt, Object... args) {
-			for (Log g : logs) {
-				g.fatalf(fmt, args);
-			}
-		}
-
 	}
 }
