@@ -13,6 +13,18 @@ public class Threads {
 	}
 	
 	/**
+	 * start a runnable and return the thread object
+	 * @param r a runnable object
+	 * @param name thread name
+	 * @return thread object
+	 */
+	public static Thread start(Runnable r, String name) {
+		Thread t = new Thread(r, name);
+		t.start();
+		return t;
+	}
+	
+	/**
 	 * sleep, does not throw exception
 	 * @param ms milliseconds
 	 */

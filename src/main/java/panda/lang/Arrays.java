@@ -2824,13 +2824,39 @@ public abstract class Arrays {
 	 *         found or {@code null} array input
 	 */
 	public static int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
+		return indexOf(array, valueToFind, startIndex, -1);
+	}
+
+	/**
+	 * <p>
+	 * Finds the index of the given value in the array starting at the given index.
+	 * </p>
+	 * <p>
+	 * This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
+	 * </p>
+	 * <p>
+	 * A negative startIndex is treated as zero. A startIndex larger than the array length will
+	 * return {@link #INDEX_NOT_FOUND} ({@code -1}).
+	 * </p>
+	 * 
+	 * @param array the array to search through for the object, may be {@code null}
+	 * @param valueToFind the value to find
+	 * @param startIndex the index to start searching at
+	 * @param endIndex the index to end searching at
+	 * @return the index of the value within the array, {@link #INDEX_NOT_FOUND} ({@code -1}) if not
+	 *         found or {@code null} array input
+	 */
+	public static int indexOf(final byte[] array, final byte valueToFind, int startIndex, int endIndex) {
 		if (array == null) {
 			return INDEX_NOT_FOUND;
 		}
 		if (startIndex < 0) {
 			startIndex = 0;
 		}
-		for (int i = startIndex; i < array.length; i++) {
+		if (endIndex < 0) {
+			endIndex = array.length;
+		}
+		for (int i = startIndex; i < endIndex; i++) {
 			if (valueToFind == array[i]) {
 				return i;
 			}

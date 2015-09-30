@@ -9457,6 +9457,38 @@ public class Strings {
 	}
 
 	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the given
+	 * charset.
+	 * <p>
+	 * This method catches {@link UnsupportedEncodingException} and re-throws it as
+	 * {@link IllegalStateException}, which should never happen for a required charset name. Use
+	 * this method when the encoding is required to be in the JRE.
+	 * </p>
+	 * 
+	 * @param bytes The bytes to be decoded into characters
+	 * @param offset The index of the first byte to decode
+	 * @param length The number of bytes to decode
+	 * @param charsetName The name of a required {@link java.nio.charset.Charset}
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the given
+	 *         charset.
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught,
+	 *             which should never happen for a required charset name.
+	 * @see Charsets
+	 * @see String#String(byte[], String)
+	 */
+	public static String newString(byte[] bytes, int offset, int length, String charsetName) {
+		if (bytes == null) {
+			return null;
+		}
+		try {
+			return new String(bytes, offset, length, charsetName);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw newIllegalStateException(charsetName, e);
+		}
+	}
+
+	/**
 	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the
 	 * ISO-8859-1 charset.
 	 * 
