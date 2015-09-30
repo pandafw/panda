@@ -17,7 +17,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
-import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
@@ -119,7 +119,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(Ok.class.getName());
 		imports.add(Err.class.getName());
 		imports.add(Param.class.getName());
-		imports.add(Validate.class.getName());
+		imports.add(Validates.class.getName());
 		imports.add(View.class.getName());
 		
 		processTpl(pkg, cls + ".java", wrapper, tplListAction, true);

@@ -79,7 +79,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list(qr);
 	}
 	
@@ -90,7 +90,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_popup(qr);
 	}
 	
@@ -101,7 +101,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.FTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_csv(qr);
 	}
 	
@@ -112,7 +112,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_print(qr);
 	}
 	
@@ -122,7 +122,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At
 	@Ok(View.JSON)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
 	
@@ -132,7 +132,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At
 	@Ok(View.XML)
-	public Object ${ui.name}(@Param @Validate Queryer qr) {
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}
 	
