@@ -203,7 +203,6 @@ public class MapIocLoader extends AbstractIocLoader {
 			}
 		}
 		else {
-			iobj.setType(map.getClass());
 			for (Entry<String, Object> en : map.entrySet()) {
 				iobj.addField(en.getKey(), object2value(en.getValue()));
 			}

@@ -165,7 +165,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 				op = context.fetch(name);
 
 				// 如果未发现对象
-				if (null == op) {
+				if (op == null) {
 					try {
 						if (log.isDebugEnabled()) {
 							log.debug("\t >> Load definition");
@@ -190,18 +190,19 @@ public class DefaultIoc implements Ioc, Cloneable {
 						}
 
 						// 修正对象类型
-						if (null == iobj.getType()) {
-							if (null == type) {
+						if (iobj.getType() == null) {
+							if (type == null || type.equals(Object.class)) {
 								throw new IocException(String.format("NULL TYPE object '%s'", name));
 							}
 							iobj = iobj.clone();
 							iobj.setType(type);
 						}
 
-						// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
 						if (log.isDebugEnabled()) {
-							log.debugf("\t >> Make...'%s'<%s>", name, type);
+							log.debugf("\t >> Make...'%s'<%s>: <%s>", name, type, iobj.getType());
 						}
+
+						// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
 						op = objMaker.make(imk, iobj);
 					}
 					// 处理异常

@@ -16,6 +16,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.bind.json.JsonObject;
 import panda.ioc.Ioc;
 import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
@@ -115,6 +116,25 @@ public class SimpleJsonIocTest {
 	}
 
 	@Test
+	public void test_cast() {
+		Ioc ioc = I(J("fox", "name:'Fox'"), J("foxs", "singleton:false, fields: {name:'Foxs'}"));
+
+		Object o = null;
+		
+		o = ioc.get(JsonObject.class, "fox");
+		assertEquals(JsonObject.class, o.getClass());
+
+		o = ioc.get(Animal.class, "fox");
+		assertEquals(JsonObject.class, o.getClass());
+
+		o = ioc.get(JsonObject.class, "foxs");
+		assertEquals(JsonObject.class, o.getClass());
+
+		o = ioc.get(Animal.class, "foxs");
+		assertEquals(JsonObject.class, o.getClass());
+	}
+
+	@Test
 	public void test_array_and_refer() {
 		Ioc ioc = I(J("fox", "name:'Fox'"),
 			J("rabit", "name:'Rabit',enemies:['#fox:" + Animal.class.getName() + "',null]"));
@@ -198,7 +218,7 @@ public class SimpleJsonIocTest {
 			Assert.fail();
 		}
 		catch (IllegalArgumentException e) {
-			assertEquals("Cycled parent (id: f3, parent: f3)", e.getMessage());
+			assertEquals("Cycled parent (id: f2, parent: f2)", e.getMessage());
 		}
 	}
 
@@ -210,7 +230,7 @@ public class SimpleJsonIocTest {
 			Assert.fail();
 		}
 		catch (IllegalArgumentException e) {
-			assertEquals("Cycled parent (id: f3, parent: y)", e.getMessage());
+			assertEquals("Cycled parent (id: f2, parent: x)", e.getMessage());
 		}
 	}
 

@@ -47,7 +47,7 @@ public class HttpClientTest {
 		Map<String, Object> parms = new LinkedHashMap<String, Object>();
 		parms.put("class", new Object[] { HttpClientTest.class.getName() });
 		parms.put("version", new Object[] { Panda.VERSION });
-		String response = HttpClient.post("http://nutsfw.appspot.com/debug_json", parms).getContentText();
+		String response = HttpClient.post("http://pdemo.foolite.com/pdemo/debug/json", parms).getContentText();
 		
 		assertNotNull(response);
 		assertTrue(response.length() > 0);
