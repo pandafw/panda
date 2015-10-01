@@ -74,10 +74,6 @@ public class DateTypeCastor {
 			}
 			if (value instanceof CharSequence) {
 				String sv = value.toString();
-				if (Strings.isNumeric(sv)) {
-					long nv = Numbers.toLong(sv, 0L);
-					return new Date(nv);
-				}
 	
 				ParseException ex = null;
 				if (Strings.isNotEmpty(cc.getFormat())) {
@@ -88,6 +84,11 @@ public class DateTypeCastor {
 						ex = e;
 					}
 					return castError(value, cc, ex);
+				}
+
+				if (Strings.isNumeric(sv)) {
+					long nv = Numbers.toLong(sv, 0L);
+					return new Date(nv);
 				}
 				
 				if (cc.getLocale() != null) {
