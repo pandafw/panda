@@ -158,6 +158,10 @@ public abstract class AbstractValidator implements Validator {
 	}
 	
 	protected void addFieldError(ActionContext ac) {
+		addFieldError(ac, name);
+	}
+
+	protected void addFieldError(ActionContext ac, String name) {
 		String fn = getFullFieldName(name);
 		String msg = evalMessage(ac);
 		ac.getParamAlert().addError(fn, msg);

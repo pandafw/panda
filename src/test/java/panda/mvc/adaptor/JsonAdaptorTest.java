@@ -62,7 +62,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		String json = "{pet : {name:'测试'}}";
 		initreq(path, json);
 		servlet.service(request, response);
-		assertEquals("{\"success\":true,\"result\":\"!!测试!!\"}", response.getContentAsString());
+		assertEquals("{\"success\":true,\"params\":{\"pet\":{\"name\":\"测试\"}},\"result\":\"!!测试!!\"}", response.getContentAsString());
 	}
 
 	@Test

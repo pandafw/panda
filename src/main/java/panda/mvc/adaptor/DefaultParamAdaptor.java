@@ -425,13 +425,16 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		}
 
 		BeanHandler bh = Beans.i().getBeanHandler(type);
-		Object target = Types.born(Types.getDefaultImplType(type));
+		Object target = null;
 		
 		ParamEjector pe = getParamEjector(ac);
 		for (String key : pe.keys()) {
 			if (key.startsWith(prefix)) {
 				Object val = pe.eject(key);
 				String bn = prefix == null ? key : key.substring(prefix.length());
+				if (target == null) {
+					target = Types.born(Types.getDefaultImplType(type));
+				}
 				Type pt = bh.getBeanType(target, bn);
 				if (pt == null) {
 					log.warn("Failed to set form value (" + key + "=" + val + ") to " + type + ", no property of " + bn);
