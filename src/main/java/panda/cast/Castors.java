@@ -176,7 +176,7 @@ public class Castors {
 		castors.clear();
 	}
 	
-	public CastContext getCastContext() {
+	public CastContext newCastContext() {
 		return new CastContext(this);
 	}
 	
@@ -298,7 +298,7 @@ public class Castors {
 
 	public <T> T cast(Object value, Type toType) {
 		Asserts.notNull(toType);
-		return cast(value, toType, getCastContext());
+		return cast(value, toType, newCastContext());
 	}
 
 	public <T> T cast(Object value, Type toType, CastContext context) {
@@ -309,7 +309,7 @@ public class Castors {
 
 	public <T> T castTo(Object value, T target) {
 		Asserts.notNull(target);
-		return castTo(value, target, null, getCastContext());
+		return castTo(value, target, null, newCastContext());
 	}
 
 	public <T> T castTo(Object value, T target, CastContext context) {
@@ -319,7 +319,7 @@ public class Castors {
 
 	public <T> T castTo(Object value, T target, Type toType) {
 		Asserts.notNull(target);
-		return castTo(value, target, toType, getCastContext());
+		return castTo(value, target, toType, newCastContext());
 	}
 
 	public <T> T castTo(Object value, T target, Type toType, CastContext context) {

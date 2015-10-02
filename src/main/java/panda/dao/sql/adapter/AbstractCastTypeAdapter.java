@@ -26,10 +26,10 @@ public abstract class AbstractCastTypeAdapter<T, P> implements TypeAdapter<T> {
 	}
 
 	protected T castToJava(P value) {
-		return javaCastor.cast(value, castors.getCastContext());
+		return javaCastor.cast(value, castors.newCastContext());
 	}
 	
 	protected P castToJdbc(T value) {
-		return jdbcCastor.cast(value, castors.getCastContext());
+		return jdbcCastor.cast(value, castors.newCastContext());
 	}
 }
