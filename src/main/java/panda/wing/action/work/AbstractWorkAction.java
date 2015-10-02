@@ -114,7 +114,9 @@ public abstract class AbstractWorkAction extends AbstractAction {
 	}
 	
 	protected void init(Events es) {
-		events = es;
+		if (es != null) {
+			events = es;
+		}
 		if (!silent) {
 			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
 			hss.setExpiry(0);
