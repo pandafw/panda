@@ -195,7 +195,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 					writeStaticJs("/bootstrap3/js/bootstrap-plugins-i18n");
 				}
 			}
-			else {
+			else if (!"en".equals(la)) {
 				if (tag.isCdn()) {
 					writePandaCdnJs("/bootstrap3/js/locales/bootstrap-datetimepicker." + jsstr(la), false);
 				}
