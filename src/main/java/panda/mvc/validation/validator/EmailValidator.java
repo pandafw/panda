@@ -1,6 +1,7 @@
 package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
+import panda.mvc.validation.Validators;
 
 
 @IocBean(singleton=false)
@@ -11,5 +12,6 @@ public class EmailValidator extends RegexValidator {
 	public EmailValidator() {
 		setRegex(EMAIL_ADDRESS_PATTERN);
 		setCaseSensitive(false);
+		setMsgId(Validators.MSGID_EMAIL);
 	}
 }

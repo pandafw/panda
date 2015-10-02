@@ -5,10 +5,18 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Iterators;
 import panda.mvc.ActionContext;
+import panda.mvc.validation.Validators;
 
 
 @IocBean(singleton=false)
 public class ProhibitedValidator extends ConstantValidator {
+
+	/**
+	 * 
+	 */
+	public ProhibitedValidator() {
+		setMsgId(Validators.MSGID_PROHIBITED);
+	}
 
 	@Override
 	protected boolean validate(ActionContext ac, Object value, Object consts) {

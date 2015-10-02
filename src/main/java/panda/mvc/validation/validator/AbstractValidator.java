@@ -153,7 +153,7 @@ public abstract class AbstractValidator implements Validator {
 			return tp.getText(msgId, msgId, this);
 		}
 		
-		log.error("Missing 'message' or 'msgId' of " + this.getClass() + "('" + getName() + "')");
+		log.warn("Missing 'message' or 'msgId' of " + this.getClass() + "('" + getName() + "')");
 		return "";
 	}
 	

@@ -8,6 +8,7 @@ import panda.lang.Iterators;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.validation.Validators;
 
 
 @IocBean(singleton=false)
@@ -15,6 +16,13 @@ public class ConstantValidator extends AbstractValidator {
 
 	protected Boolean ignoreCase = false;
 	protected Object list;
+
+	/**
+	 * 
+	 */
+	public ConstantValidator() {
+		setMsgId(Validators.MSGID_CONSTANT);
+	}
 
 	/**
 	 * @return the ignoreCase

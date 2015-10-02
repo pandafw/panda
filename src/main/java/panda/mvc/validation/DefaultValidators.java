@@ -179,8 +179,12 @@ public class DefaultValidators implements Validators {
 	public Validator createValidator(ActionContext ac, Validate v) {
 		Validator fv = createValidator(ac, v.type(), v.value());
 
-		fv.setMessage(v.message());
-		fv.setMsgId(v.msgId());
+		if (Strings.isNotEmpty(v.message())) {
+			fv.setMessage(v.message());
+		}
+		if (Strings.isNotEmpty(v.msgId())) {
+			fv.setMsgId(v.msgId());
+		}
 		fv.setShortCircuit(v.shortCircuit());
 		
 		if (Strings.isNotEmpty(v.params())) {

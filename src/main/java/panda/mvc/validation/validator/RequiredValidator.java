@@ -6,12 +6,20 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.validation.Validators;
 
 @IocBean(singleton=false)
 public class RequiredValidator extends AbstractValidator {
 
 	private String[] fields;
 	
+	/**
+	 * 
+	 */
+	public RequiredValidator() {
+		setMsgId(Validators.MSGID_REQUIRED);
+	}
+
 	/**
 	 * @return the fields
 	 */
@@ -47,7 +55,14 @@ public class RequiredValidator extends AbstractValidator {
 			return true;
 		}
 		
-		addFieldError(ac);
+		if (Arrays.isEmpty(fields)) {
+			addFieldError(ac);
+		}
+		else {
+			for (String pn : fields) {
+				addFieldError(ac, Strings.isEmpty(getName()) ? pn : getName() + "." + pn);
+			}
+		}
 		return false;
 	}
 }
