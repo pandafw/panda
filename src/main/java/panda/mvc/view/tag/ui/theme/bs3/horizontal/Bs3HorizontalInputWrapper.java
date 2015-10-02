@@ -9,8 +9,8 @@ import panda.mvc.view.tag.ui.theme.RenderingContext;
 import panda.mvc.view.tag.ui.theme.bs3.Bs3InputWrapper;
 
 public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends Bs3InputWrapper<T> {
-	protected String cssColLabel = "col-sm-2";
-	protected String cssColInput = "col-sm-10";
+	protected String cssColLabel = "col-sm-3";
+	protected String cssColInput = "col-sm-9";
 	
 	/**
 	 * @param context context

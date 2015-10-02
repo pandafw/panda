@@ -1,6 +1,8 @@
 package panda.mvc.view.tag.ui;
 
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
+import panda.mvc.util.UrlBuilder;
 
 /**
  * FormButton.
@@ -10,8 +12,6 @@ public abstract class FormButton extends InputUIBean {
 	static final String BUTTONTYPE_BUTTON = "button";
 	static final String BUTTONTYPE_IMAGE = "image";
 
-	protected String action;
-
 	protected String align;
 	protected String type;
 
@@ -19,6 +19,9 @@ public abstract class FormButton extends InputUIBean {
 	protected String icon;
 	protected String sicon;
 	protected String btype;
+
+	protected String action;
+	protected UrlBuilder urlbuilder;
 
 	protected abstract String getDefaultValue();
 
@@ -53,15 +56,20 @@ public abstract class FormButton extends InputUIBean {
 			label = value.toString();
 		}
 
-		if (action != null) {
-			name = "action:" + action;
-		}
-
 		super.evaluateParams();
 	}
 
 	protected boolean supportsImageType() {
 		return true;
+	}
+
+	/**
+	 * @param urlbuilder the urlbuilder to set
+	 */
+	@IocInject
+	protected void setUrlbuilder(UrlBuilder urlbuilder) {
+		this.urlbuilder = urlbuilder;
+		urlbuilder.setEscapeAmp(true);
 	}
 
 	/**
@@ -114,7 +122,11 @@ public abstract class FormButton extends InputUIBean {
 	}
 
 	public void setAction(String action) {
-		this.action = Strings.stripToNull(action);
+		action = Strings.stripToNull(action);
+		if (Strings.isNotEmpty(action)) {
+			urlbuilder.setAction(action);
+			this.action = urlbuilder.build();
+		}
 	}
 
 	public void setAlign(String align) {

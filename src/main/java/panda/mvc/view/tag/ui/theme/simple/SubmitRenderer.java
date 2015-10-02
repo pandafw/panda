@@ -26,8 +26,12 @@ public class SubmitRenderer<T extends FormButton> extends AbstractEndRenderer<T>
 		
 		boolean isButton = Strings.isNotEmpty(icon) || Strings.isNotEmpty(sicon) || "button".equals(type);
 
+		if (Strings.isNotEmpty(tag.getAction())) {
+			attrs.data("action", tag.getAction());
+		}
+
 		if (isButton) {
-			attrs.add("type", button)
+			attrs.type(button)
 				.id(tag)
 				.name(tag)
 				.cssClass(tag, "btn btn-" + btype)
@@ -47,13 +51,23 @@ public class SubmitRenderer<T extends FormButton> extends AbstractEndRenderer<T>
 			}
 		}
 		else if ("image".equals(type)) {
-			attrs.add("type", "image")
+			attrs.type("image")
 				.src(tag)
-				.addIfExists("alt", tag.getLabel());
+				.addIfExists("alt", tag.getLabel())
+				.id(tag)
+				.name(tag)
+				.value(tag)
+				.disabled(tag)
+				.tabindex(tag)
+				.title(tag)
+				.cssStyle(tag)
+				.commons(tag)
+				.events(tag)
+				.dynamics(tag);
 			xtag("input", attrs);
 		}
 		else {
-			attrs.add("type", button)
+			attrs.type(button)
 				.id(tag)
 				.name(tag)
 				.cssClass(tag, "btn btn-" + btype)
