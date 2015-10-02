@@ -295,6 +295,6 @@ public class ValidateTest extends AbstractMvcTestCase {
 	public void testRequiredOneErr() throws Throwable {
 		request.setRequestURI("/reqirOne");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"\"]}}},\"params\":{}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one\":[\"required\"]}}},\"params\":{}}", response.getContentAsString());
 	}
 }

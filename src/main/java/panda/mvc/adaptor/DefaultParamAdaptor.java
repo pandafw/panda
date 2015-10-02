@@ -228,6 +228,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				continue;
 			}
 			
+			// if argument type is primitive, we should cast null to default primitive value
 			o = cast(ac, name, null, types[i], null);
 			addArg(args, name, o);
 		}
@@ -462,7 +463,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	
 	protected <T> T cast(ActionContext ac, String name, Object value, Type type, String format) {
 		Castors cs = Mvcs.getCastors();
-		CastContext cc = cs.getCastContext();
+		CastContext cc = cs.newCastContext();
 		
 		cc.setSkipCastError(true);
 		cc.setPrefix(name);

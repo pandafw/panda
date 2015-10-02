@@ -63,7 +63,7 @@ public class ValidateModule {
 	@At
 	public Object reqirOne(
 			@Param("one.*")
-			@Validates(@Validate(value=Validators.REQUIRED))
+			@Validates(@Validate(value=Validators.REQUIRED, message="required"))
 			ValidateObject one) {
 
 		return 1;
