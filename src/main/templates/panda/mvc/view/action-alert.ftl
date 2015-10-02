@@ -18,10 +18,10 @@
 <@p.actionerror/>
 <#if paramErrors?has_content>
 	<#if !(actionErrors?has_content)>
-	<ul class="p-action-errors fa-ul">
+	<ul class="p-field-errors-alert fa-ul">
 		<li><i class="fa-li fa fa-exclamation-circle"></i>
 			<@p.text name="error-input"/>
-			<@p.a cssClass="p-action-errors-caret" sicon="caret-down" href="#" onclick="return $.palert.toggleFieldErrors(this);"><@p.text name="error-input-detail"/></@p.a>
+			<@p.a cssClass="p-field-errors-caret" sicon="caret-down" href="#" onclick="return $.palert.toggleFieldErrors(this);"><@p.text name="error-input-detail"/></@p.a>
 		</li>
 	</ul>
 	</#if>
