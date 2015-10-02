@@ -1707,7 +1707,8 @@ if (typeof String.formatSize != "function") {
 	};
 })(jQuery);
 (function($) {
-	function focusForm($i) {
+	function focusForm() {
+		$i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
 		$i = $i.find('input,select,textarea,button');
 		$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
 		if ($i.length > 0) {
@@ -1716,9 +1717,17 @@ if (typeof String.formatSize != "function") {
 		}
 	}
 
+	function actionForm() {
+		$('input[data-action], button[data-action]').click(function() {
+			$i = $(this);
+			$i.closest('form').attr('action', $i.data('action'));
+			alert($i.closest('form').attr('action'));
+		});
+	}
+	
 	$(window).on('load', function() {
-		var $i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
-		focusForm($i);
+		focusForm();
+		actionForm();
 	});
 })(jQuery);
 if (typeof(panda) == "undefined") { panda = {}; }
