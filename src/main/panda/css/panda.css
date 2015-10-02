@@ -33,6 +33,10 @@
 	color: #b94a48;
 }
 */
+
+.p-field-errors-caret {
+	font-size: 80%;
+}
 .p-required {
 	color: #FF0000;
 }

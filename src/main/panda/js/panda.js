@@ -1692,7 +1692,7 @@ if (typeof String.formatSize != "function") {
 	};
 	
 	$.palert.toggleFieldErrors = function(el) {
-		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
+		var $fes = $(el).closest('.p-field-errors-alert').next('.p-field-errors');
 		var id = $.palert.icons.down;
 		var iu = $.palert.icons.up;
 		if ($fes.is(':hidden')) {
@@ -1721,7 +1721,6 @@ if (typeof String.formatSize != "function") {
 		$('input[data-action], button[data-action]').click(function() {
 			$i = $(this);
 			$i.closest('form').attr('action', $i.data('action'));
-			alert($i.closest('form').attr('action'));
 		});
 	}
 	

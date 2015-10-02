@@ -135,7 +135,7 @@
 	};
 	
 	$.palert.toggleFieldErrors = function(el) {
-		var $fes = $(el).closest('.p-action-errors').next('.p-field-errors');
+		var $fes = $(el).closest('.p-field-errors-alert').next('.p-field-errors');
 		var id = $.palert.icons.down;
 		var iu = $.palert.icons.up;
 		if ($fes.is(':hidden')) {
