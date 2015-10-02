@@ -19,6 +19,7 @@ import panda.ioc.val.MapValue;
 import panda.ioc.val.ReferValue;
 import panda.ioc.val.StaticValue;
 import panda.lang.Strings;
+import panda.lang.reflect.Types;
 
 public class DefaultValueProxyMaker implements ValueProxyMaker {
 
@@ -76,22 +77,26 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 				throw new IocException("Empty ref ioc value");
 			}
 
-			String ls = s.toLowerCase();
 			// $ioc
-			if (IocConstants.IOC_SELF.equals(ls) || Ioc.class.getName().equals(s)) {
+			if (IocConstants.IOC_SELF.equalsIgnoreCase(s) || Ioc.class.getName().equals(s)) {
 				return ReferValue.IOC_SELF;
 			}
 			
 			// ioc context
-			if (IocConstants.IOC_CONTEXT.equals(ls) || IocContext.class.getName().equals(s)) {
+			if (IocConstants.IOC_CONTEXT.equalsIgnoreCase(s) || IocContext.class.getName().equals(s)) {
 				return ReferValue.IOC_CONTEXT;
 			}
 
 			// ioc bean name
-			if (IocConstants.IOC_BEAN_NAME.equals(ls)) {
+			if (IocConstants.IOC_BEAN_NAME.equalsIgnoreCase(s)) {
 				return ReferValue.IOC_BEAN_NAME;
 			}
-			return new ReferValue(s, iv.isRequired());
+			
+			Class t = null;
+			if (iv.getInjector() != null) {
+				t = Types.getRawType(Types.getDefaultImplType(iv.getInjector().type(null)));
+			}
+			return new ReferValue(s, t, iv.isRequired());
 		}
 
 		// EL

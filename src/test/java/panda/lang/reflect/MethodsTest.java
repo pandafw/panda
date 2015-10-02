@@ -119,6 +119,11 @@ public class MethodsTest {
 	}
 
 	@Test
+	public void testGetDeclaredMethods() throws Exception {
+		Methods.getDeclaredMethodsWithoutTop(Map.class);
+	}
+	
+	@Test
 	public void testInvokeMethod() throws Exception {
 		assertEquals("foo()", Methods.invokeMethod(testBean, "foo", (Object[])Arrays.EMPTY_CLASS_ARRAY));
 		assertEquals("foo()", Methods.invokeMethod(testBean, "foo", (Object[])null));

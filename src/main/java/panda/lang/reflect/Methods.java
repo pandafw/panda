@@ -79,7 +79,7 @@ public class Methods {
 	public static Method[] getDeclaredMethods(Class<?> cls, Class<?> top) {
 		Map<MultiKey, Method> map = new LinkedHashMap<MultiKey, Method>();
 		List<Object> mi = new ArrayList<Object>();
-		while (cls != top) {
+		while (cls != top && cls != null) {
 			Method[] ms = cls.getDeclaredMethods();
 			for (Method m : ms) {
 				mi.clear();

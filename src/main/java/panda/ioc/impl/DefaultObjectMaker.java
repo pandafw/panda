@@ -124,10 +124,10 @@ public class DefaultObjectMaker implements ObjectMaker {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> mirror, IocMaking ing, IocObject iobj) {
+	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> cls, IocMaking ing, IocObject iobj) {
 		// 为编织器设置事件触发器：创建时
 		if (null != iobj.getEvents()) {
-			dw.setOnCreate(createTrigger(mirror, iobj.getEvents().getCreate()));
+			dw.setOnCreate(createTrigger(cls, iobj.getEvents().getCreate()));
 		}
 
 		// 构造函数参数
@@ -147,20 +147,20 @@ public class DefaultObjectMaker implements ObjectMaker {
 		if (iobj.getFactory() != null) {
 			// factory这属性, 格式应该是 类名@方法名
 			String[] tmp = iobj.getFactory().split("@", 2);
-			Method m = Methods.getMatchingAccessibleMethod(mirror, tmp[0], args);
+			Method m = Methods.getMatchingAccessibleMethod(cls, tmp[0], args);
 			if (m == null) {
-				m = Methods.getMatchingAccessibleMethod(mirror, tmp[0], args.length);
+				m = Methods.getMatchingAccessibleMethod(cls, tmp[0], args.length);
 				if (m == null) {
-					throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + Arrays.toString(args));
+					throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + cls + " / " + Arrays.toString(args));
 				}
 			}
 			dw.setArgTypes(m.getGenericParameterTypes());
 			dw.setCreator(new MethodCreator<Object>(m));
 		}
 		else {
-			Constructor c = Constructors.getConstructor(mirror, args);
+			Constructor c = Constructors.getConstructor(cls, args);
 			if (c == null) {
-				c = Constructors.getConstructor(mirror, args.length);
+				c = Constructors.getConstructor(cls, args.length);
 				if (c == null) {
 					throw new IocException("Failed to find constructor of '" + ing.getName() + "': " + Arrays.toString(args));
 				}

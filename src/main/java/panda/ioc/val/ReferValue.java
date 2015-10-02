@@ -30,7 +30,7 @@ public class ReferValue implements ValueProxy {
 	private Class<?> type;
 	private boolean required = true;
 
-	public static Pair<Class<?>> parseName(String name) {
+	public static Pair<Class<?>> parse(String name) {
 		String _name = null;
 		Class<?> type = null;
 		int pos = name.indexOf(':');
@@ -45,8 +45,8 @@ public class ReferValue implements ValueProxy {
 		return new Pair<Class<?>>(_name, type);
 	}
 
-	public ReferValue(String name, boolean required) {
-		Pair<Class<?>> p = parseName(name);
+	public ReferValue(String expr, boolean required) {
+		Pair<Class<?>> p = parse(expr);
 		this.name = p.getName();
 		this.type = p.getValue();
 		this.required = required;
@@ -54,6 +54,13 @@ public class ReferValue implements ValueProxy {
 
 	public ReferValue(Class<?> type, boolean required) {
 		this.type = type;
+		this.required = required;
+	}
+
+	public ReferValue(String expr, Class<?> type, boolean required) {
+		Pair<Class<?>> p = parse(expr);
+		this.name = p.getName();
+		this.type = p.getValue() == null ? type : p.getValue();
 		this.required = required;
 	}
 
