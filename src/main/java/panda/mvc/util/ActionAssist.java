@@ -20,6 +20,7 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 import panda.mvc.processor.LayoutProcessor;
 import panda.net.Inets;
 import panda.net.http.HttpStatus;
@@ -311,5 +312,19 @@ public class ActionAssist extends ActionSupport {
 	 */
 	public String decodeURL(String url) {
 		return URLHelper.decodeURL(url);
+	}
+
+	/**
+	 * find value in context
+	 */
+	public Object findValue(String expr) {
+		return Mvcs.findValue(expr, getContext());
+	}
+	
+	/**
+	 * find value in context with argument
+	 */
+	public Object findValue(String expr, Object arg) {
+		return Mvcs.findValue(expr, getContext(), arg);
 	}
 }

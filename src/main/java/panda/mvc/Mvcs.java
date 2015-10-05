@@ -140,7 +140,7 @@ public abstract class Mvcs {
 				}
 				else if (c0 == Marks.SHARP && c1 == Marks.PARENTHESES_LEFT && cx == Marks.PARENTHESES_RIGHT) {
 					String k = s.substring(2, s.length() - 1);
-					val = ac.text(k, "", arg);
+					val = ac.getText().getText(k, "", arg);
 				}
 			}
 		}

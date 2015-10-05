@@ -128,7 +128,7 @@ public class Property extends ContextBean {
 			if (av == null) {
 			}
 			else if ("password".equalsIgnoreCase(format)) {
-				ev = context.text(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
+				ev = context.getText().getText(PASSWORD_FORMAT, DEFAULT_PASSWORD_FORMAT);
 			}
 			else if ("link".equalsIgnoreCase(format)) {
 				String s = StringEscapes.escapeHtml(av.toString());

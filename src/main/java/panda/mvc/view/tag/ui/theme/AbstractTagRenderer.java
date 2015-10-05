@@ -422,11 +422,11 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected String getText(String key) {
-		return context.text(key);
+		return context.getText().getText(key);
 	}
 	
 	protected String getText(String key, String defaultValue) {
-		return context.text(key, defaultValue);
+		return context.getText().getText(key, defaultValue);
 	}
 	
 	protected void putInContext(String key, Object value) {

@@ -24,9 +24,9 @@ public abstract class InputUIBean extends UIBean {
 		if (key != null) {
 			if (tooltip == null) {
 				// lookup the tooltip from a TextProvider (default value is the key)
-				tooltip = context.text("p." + key + "-tip", null);
+				tooltip = context.getText().getText("p." + key + "-tip", null);
 				if (tooltip == null) {
-					tooltip = context.text(key + "-tip", null);
+					tooltip = context.getText().getText(key + "-tip", null);
 				}
 			}
 
@@ -36,9 +36,9 @@ public abstract class InputUIBean extends UIBean {
 
 			if (label == null) {
 				// lookup the label from a TextProvider (default value is the key)
-				label = context.text("p." + key, null);
+				label = context.getText().getText("p." + key, null);
 				if (label == null) {
-					label = context.text(key, key);
+					label = context.getText().getText(key, key);
 				}
 			}
 		}

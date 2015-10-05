@@ -36,7 +36,7 @@ public abstract class FormButton extends InputUIBean {
 		}
 
 		if (((key != null)) && (value == null)) {
-			value = context.text(key, key);
+			value = context.getText().getText(key, key);
 		}
 
 		if (align == null) {

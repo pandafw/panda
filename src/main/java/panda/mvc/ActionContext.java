@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import panda.bean.Beans;
 import panda.filepool.FilePool;
@@ -80,6 +81,20 @@ public class ActionContext {
 	public ActionContext() {
 	}
 
+	/**
+	 * @return self
+	 */
+	public ActionContext getContext() {
+		return this;
+	}
+	
+	/**
+	 * @return self
+	 */
+	public ActionContext getCxt() {
+		return this;
+	}
+	
 	/**
 	 * @return the ioc
 	 */
@@ -155,6 +170,13 @@ public class ActionContext {
 	 */
 	public void setResponse(HttpServletResponse response) {
 		this.response = response;
+	}
+
+	/**
+	 * @return the session
+	 */
+	public HttpSession getSession() {
+		return request.getSession(false);
 	}
 
 	/**
@@ -543,22 +565,6 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
-	// text functions
-	//
-	public String text(String key) {
-		return getText().getText(key);
-	}
-
-	public String text(String key, String def) {
-		return getText().getText(key, def);
-	}
-
-	public String text(String key, String def, Object arg) {
-		return getText().getText(key, def, arg);
-	}
-
-
-	//----------------------------------------------------
 	/**
 	 * @return the castErrors
 	 */
@@ -574,14 +580,48 @@ public class ActionContext {
 	}
 
 	//----------------------------------------------------
+	// text functions
+	//
+	public String text(String key) {
+		return getText().getText(key);
+	}
+
+	public String text(String key, String def) {
+		return getText().getText(key, def);
+	}
+
+	public String text(String key, String def, Object arg) {
+		return getText().getText(key, def, arg);
+	}
+
+	//----------------------------------------------------
+	// eval functions
+	//
+	public Object eval(String expr) {
+		return Mvcs.findValue(expr, this);
+	}
+
+	public Object eval(String expr, Object arg) {
+		return Mvcs.findValue(expr, this, arg);
+	}
+
+	//----------------------------------------------------
 	// shortcut alias
 	//
+	/**
+	 * @return self
+	 * @see #getContext
+	 */
+	public ActionContext getC() {
+		return this;
+	}
+	
 	/**
 	 * @return the action object
 	 * @see #getAction()
 	 */
 	public Object getA() {
-		return getAction();
+		return action;
 	}
 
 	/**
@@ -589,7 +629,7 @@ public class ActionContext {
 	 * @see #getParams()
 	 */
 	public Object getP() {
-		return getParams();
+		return params;
 	}
 
 	/**
