@@ -16,8 +16,8 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 
-public class SocketRelay implements Runnable {
-	private final static Log log = Logs.getLog(SocketRelay.class);
+public class SocketForward implements Runnable {
+	private final static Log log = Logs.getLog(SocketForward.class);
 
 	protected int bufferSize = 10240;
 	protected int timeout;
@@ -28,14 +28,14 @@ public class SocketRelay implements Runnable {
 	/**
 	 * 
 	 */
-	public SocketRelay() {
+	public SocketForward() {
 		super();
 	}
 
 	/**
 	 * @param remoteAddr
 	 */
-	public SocketRelay(InetSocketAddress remoteAddr) {
+	public SocketForward(InetSocketAddress remoteAddr) {
 		this(new InetSocketAddress((InetAddress)null, remoteAddr.getPort()), remoteAddr);
 	}
 
@@ -43,7 +43,7 @@ public class SocketRelay implements Runnable {
 	 * @param localAddr
 	 * @param remoteAddr
 	 */
-	public SocketRelay(InetSocketAddress localAddr, InetSocketAddress remoteAddr) {
+	public SocketForward(InetSocketAddress localAddr, InetSocketAddress remoteAddr) {
 		super();
 		this.localAddr = localAddr;
 		this.remoteAddr = remoteAddr;
