@@ -23,9 +23,20 @@ public class Threads {
 		t.start();
 		return t;
 	}
+
+	/**
+	 * join, do not throw exception
+	 */
+	public static void safeJoin(Thread t) {
+		try {
+			t.join();
+		}
+		catch (InterruptedException e) {
+		}
+	}
 	
 	/**
-	 * sleep, does not throw exception
+	 * sleep, do not throw exception
 	 * @param ms milliseconds
 	 */
 	public static void safeSleep(long ms) {
