@@ -162,18 +162,44 @@ public class ByteArrayOutputStream extends OutputStream {
 	 * @throws IOException if an I/O error occurs while reading the input stream
 	 */
 	public synchronized int write(final InputStream in) throws IOException {
+		return write(in, -1);
+	}
+
+	/**
+	 * Writes the entire contents of the specified input stream to this byte stream. Bytes from the
+	 * input stream are read directly into the internal buffers of this streams.
+	 * 
+	 * @param in the input stream to read from
+	 * @param len the maximum number of bytes to read
+	 * @return total number of bytes read from the input stream (and written to this stream)
+	 * @throws IOException if an I/O error occurs while reading the input stream
+	 */
+	public synchronized int write(final InputStream in, final int len) throws IOException {
 		int readCount = 0;
 		int inBufferPos = count - filledBufferSum;
-		int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+		int limit = currentBuffer.length - inBufferPos;
+		if (len >= 0 && limit > len) {
+			limit = len;
+		}
+		int n = in.read(currentBuffer, inBufferPos, limit);
 		while (n != -1) {
 			readCount += n;
+			if (len >= 0 && readCount >= len) {
+				break;
+			}
+
 			inBufferPos += n;
 			count += n;
 			if (inBufferPos == currentBuffer.length) {
 				needNewBuffer(currentBuffer.length);
 				inBufferPos = 0;
 			}
-			n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+
+			limit = currentBuffer.length - inBufferPos;
+			if (len >= 0 && limit > len - readCount) {
+				limit = len - readCount;
+			}
+			n = in.read(currentBuffer, inBufferPos, limit);
 		}
 		return readCount;
 	}
