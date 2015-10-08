@@ -11,8 +11,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Strings;
+import panda.lang.Threads;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -81,19 +83,19 @@ public class SocketForward implements Runnable {
 		relaying = false;
 	}
 	
-	protected Relay createRelay(Socket socket) {
-		return new Relay(socket);
+	protected Forward createRelay(Socket socket) {
+		return new Forward(socket);
 	}
 	
 	public void run() {
-		List<Relay> relays = new ArrayList<Relay>();
+		List<Forward> relays = new ArrayList<Forward>();
 		ServerSocket listener = null;
 		try {
 			log.debug("Listening on " + localAddr);
 			listener = new ServerSocket();
 			listener.bind(localAddr, 50);
 			while (relaying) {
-				Relay r = createRelay(listener.accept());
+				Forward r = createRelay(listener.accept());
 				relays.add(r);
 				r.start();
 			}
@@ -102,27 +104,25 @@ public class SocketForward implements Runnable {
 			log.error(e);
 		}
 		finally {
-			for (Relay r : relays) {
+			for (Forward r : relays) {
 				r.quit();
 			}
-			while (!relays.isEmpty()) {
-				for (Relay r : relays) {
-					if (!r.isAlive()) {
-						relays.remove(r);
-						break;
-					}
+
+			for (Forward r : relays) {
+				if (!r.isAlive()) {
+					Threads.safeJoin(r);
 				}
 			}
 			Sockets.safeClose(listener);
 		}
 	}
 
-	protected class Relay extends Thread {
+	protected class Forward extends Thread {
 		protected Socket client;
 		protected Socket server;
 		protected boolean relaying;
 
-		public Relay(Socket client) {
+		public Forward(Socket client) {
 			this.client = client;
 		}
 
@@ -139,10 +139,10 @@ public class SocketForward implements Runnable {
 				server = new Socket();
 				
 				if (log.isDebugEnabled()) {
-					log.debug("Relay " + client + " <-> " + remoteAddr);
-//					log.debug("Bind to " + localAddr.getHostName() + ":" + client.getPort());
+					log.debug("Forward " + client + " <-> " + remoteAddr);
 				}
 
+//				log.debug("Bind to " + localAddr.getHostName() + ":" + client.getPort());
 //				server.bind(new InetSocketAddress(localAddr.getAddress(), client.getPort()));
 
 				log.debug("Connect to " + remoteAddr);
@@ -157,8 +157,8 @@ public class SocketForward implements Runnable {
 				OutputStream sos = server.getOutputStream();
 				
 				while (relaying) {
-					relay(true, cis, sos, buffer);
-					relay(false, sis, cos, buffer);
+					forward(true, cis, sos, buffer);
+					forward(false, sis, cos, buffer);
 				}
 			}
 			catch (EOFException e) {
@@ -179,14 +179,16 @@ public class SocketForward implements Runnable {
 			}
 		}
 		
-		protected int relay(boolean toup, InputStream is, OutputStream os, byte[] buf) throws IOException {
-			int t = 0;
-			int n = 0;
+		protected int forward(boolean toup, InputStream is, OutputStream os, byte[] buf) throws IOException {
 			int a = is.available();
-			if (a > 0) {
-				if (log.isTraceEnabled()) {
-					log.trace(client + (toup ? " -> " : " <- ") + server);
-				}
+			if (a <= 0) {
+				return a;
+			}
+
+			int t = 0;
+			if (log.isTraceEnabled()) {
+				log.trace(client + (toup ? " -> " : " <- ") + server);
+				int n = 0;
 				while (t < a) {
 					n = is.read(buf);
 					os.write(buf, 0, n);
@@ -195,10 +197,14 @@ public class SocketForward implements Runnable {
 						log.trace(Strings.newString(buf, 0, n, Charsets.UTF_8));
 					}
 				}
-				os.flush();
-				if (log.isDebugEnabled()) {
-					log.debug(client + (toup ? " -> " : " <- ") + server + " [" + t + "]");
-				}
+			}
+			else {
+				t = (int)Streams.copyLarge(is, os, 0, a, buf);
+			}
+
+			os.flush();
+			if (log.isDebugEnabled()) {
+				log.debug(client + (toup ? " -> " : " <- ") + server + " [" + t + "]");
 			}
 			return t;
 		}
