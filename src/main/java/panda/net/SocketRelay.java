@@ -117,6 +117,7 @@ public class SocketRelay implements Runnable {
 		
 		public void run() {
 			try {
+				log.debug("Accept client " + client);
 				InputStream is = client.getInputStream();
 				OutputStream os = client.getOutputStream();
 				
@@ -179,7 +180,7 @@ public class SocketRelay implements Runnable {
 			log.debug("Add client " + client);
 			synchronized (clients) {
 				clients.add(client);
-				if (clients.size() > 1) {
+				if (clients.size() > 1 && !this.isAlive()) {
 					start();
 				}
 			}
