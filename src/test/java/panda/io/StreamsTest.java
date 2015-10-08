@@ -1141,7 +1141,7 @@ public class StreamsTest extends FileBasedTestCase {
 	public void testToString_InputStream() throws Exception {
 		final FileInputStream fin = new FileInputStream(m_testFile);
 		try {
-			final String out = Streams.toString(fin);
+			final String out = Streams.toStringBom(fin);
 			assertNotNull(out);
 			assertEquals("Not all bytes were read", 0, fin.available());
 			assertEquals("Wrong output size", FILE_SIZE, out.length());

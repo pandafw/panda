@@ -728,7 +728,7 @@ public class Streams {
 	 * @throws NullPointerException if the input is null
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static String toString(InputStream input) throws IOException {
+	public static String toStringBom(InputStream input) throws IOException {
 		BOMInputStream bis = toBOMInputStream(input);
 		Charset cs = bis.hasBOM() ? bis.getBOMCharset() : Charset.defaultCharset();
 		return toString(bis, cs);
@@ -744,6 +744,23 @@ public class Streams {
 			return ((BOMInputStream)input);
 		}
 		return new BOMInputStream(input);
+	}
+
+	/**
+	 * Get the contents of an <code>InputStream</code> as a String using the default character
+	 * encoding.
+	 * This method buffers the input internally, so there is no need to use a
+	 * <code>BufferedInputStream</code>.
+	 * 
+	 * @param input the <code>InputStream</code> to read from
+	 * @return the requested String
+	 * @throws NullPointerException if the input is null
+	 * @throws IOException if an I/O error occurs
+	 */
+	public static String toString(final InputStream input) throws IOException {
+		final StringBuilderWriter sw = new StringBuilderWriter();
+		copy(input, sw, Charset.defaultCharset());
+		return sw.toString();
 	}
 
 	/**

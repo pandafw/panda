@@ -26,7 +26,7 @@ public class DynamicClassLoaderTest {
 	}
 	
 	private Class loadClass(DynamicClassLoader loader, String className, String sourceName) throws Exception {
-		String source = Streams.toString(this.getClass().getResourceAsStream(sourceName));
+		String source = Streams.toStringBom(this.getClass().getResourceAsStream(sourceName));
 		
 		className = this.getClass().getPackage().getName() + "." + className;
 		loader.defineClass(className, source);
