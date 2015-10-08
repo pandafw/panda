@@ -105,6 +105,10 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
 		written = baout.write(new ByteArrayInputStream(ref.toByteArray()), 100);
 		assertEquals(100, written);
 
+		baout.reset();
+		written = baout.write(new ByteArrayInputStream(ref.toByteArray()), 155);
+		assertEquals(155, written);
+
 		// Test the write(InputStream) method
 		baout.reset();
 		written = baout.write(new ByteArrayInputStream(ref.toByteArray()));

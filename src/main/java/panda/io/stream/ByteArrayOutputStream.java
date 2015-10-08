@@ -184,15 +184,14 @@ public class ByteArrayOutputStream extends OutputStream {
 		int n = in.read(currentBuffer, inBufferPos, limit);
 		while (n != -1) {
 			readCount += n;
-			if (len >= 0 && readCount >= len) {
-				break;
-			}
-
 			inBufferPos += n;
 			count += n;
 			if (inBufferPos == currentBuffer.length) {
 				needNewBuffer(currentBuffer.length);
 				inBufferPos = 0;
+			}
+			if (len >= 0 && readCount >= len) {
+				break;
 			}
 
 			limit = currentBuffer.length - inBufferPos;
