@@ -30,27 +30,19 @@ public class Relay {
 		protected void addCommandLineOptions() throws Exception {
 			super.addCommandLineOptions();
 			
-			addCommandLineOption("lh", "localhost", "Local Host", false);
-			addCommandLineOption("lp", "localport", "Local Port", false);
-			addCommandLineOption("rh", "remotehost", "Remote Host", true);
-			addCommandLineOption("rp", "remoteport", "Remote Port", false);
+			addCommandLineOption("h", "host", "Listen Host (default: localhost)", false);
+			addCommandLineOption("p", "port", "Listen Port (default: 8888)", false);
 		}
 
 		@Override
 		protected void getCommandLineOptions(CommandLine cl) throws Exception {
 			super.getCommandLineOptions(cl);
 			
-			if (cl.hasOption("lh")) {
-				setParameter("localhost", cl.getOptionValue("lh").trim());
+			if (cl.hasOption("h")) {
+				setParameter("host", cl.getOptionValue("h").trim());
 			}
-			if (cl.hasOption("lp")) {
-				setParameter("localport", Numbers.toInt(cl.getOptionValue("lp").trim()));
-			}
-			if (cl.hasOption("rh")) {
-				setParameter("remotehost", cl.getOptionValue("rh").trim());
-			}
-			if (cl.hasOption("rp")) {
-				setParameter("remoteport", Numbers.toInt(cl.getOptionValue("rp").trim()));
+			if (cl.hasOption("p")) {
+				setParameter("port", Numbers.toInt(cl.getOptionValue("p").trim()));
 			}
 		}
 	}
@@ -64,86 +56,43 @@ public class Relay {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String localhost = "localhost";
-	protected int localport;
-	protected String remotehost;
-	protected int remoteport = 80;
-
+	protected String host = "localhost";
+	protected int port = 8888;
 
 	/**
-	 * @return the localhost
+	 * @return the host
 	 */
-	public String getLocalhost() {
-		return localhost;
+	public String getHost() {
+		return host;
 	}
-
 
 	/**
-	 * @param localhost the localhost to set
+	 * @param host the host to set
 	 */
-	public void setLocalhost(String localhost) {
-		this.localhost = localhost;
+	public void setHost(String host) {
+		this.host = host;
 	}
-
 
 	/**
-	 * @return the localport
+	 * @return the port
 	 */
-	public int getLocalport() {
-		return localport;
+	public int getPort() {
+		return port;
 	}
-
 
 	/**
-	 * @param localport the localport to set
+	 * @param port the port to set
 	 */
-	public void setLocalport(int localport) {
-		this.localport = localport;
+	public void setPort(int port) {
+		this.port = port;
 	}
-
-
-	/**
-	 * @return the remotehost
-	 */
-	public String getRemotehost() {
-		return remotehost;
-	}
-
-
-	/**
-	 * @param remotehost the remotehost to set
-	 */
-	public void setRemotehost(String remotehost) {
-		this.remotehost = remotehost;
-	}
-
-
-	/**
-	 * @return the remoteport
-	 */
-	public int getRemoteport() {
-		return remoteport;
-	}
-
-
-	/**
-	 * @param remoteport the remoteport to set
-	 */
-	public void setRemoteport(int remoteport) {
-		this.remoteport = remoteport;
-	}
-
 
 	/**
 	 * execute
 	 * @throws Exception if an error occurs
 	 */
 	public void execute() throws Exception {
-		if (localport == 0) {
-			localport = remoteport;
-		}
-		
-		SocketRelay sr = new SocketRelay(new InetSocketAddress(localhost, localport), new InetSocketAddress(remotehost, remoteport));
+		SocketRelay sr = new SocketRelay(new InetSocketAddress(host, port));
 		sr.run();
 	}
 }
