@@ -1431,7 +1431,7 @@ public class ArraysTest {
 	@Test
 	public void testIndexOf() {
 		final Object[] array = new Object[] { "0", "1", "2", "3", null, "0" };
-		assertEquals(-1, Arrays.indexOf(null, null));
+		assertEquals(-1, Arrays.indexOf((Object[])null, null));
 		assertEquals(-1, Arrays.indexOf(null, "0"));
 		assertEquals(-1, Arrays.indexOf(new Object[0], "0"));
 		assertEquals(0, Arrays.indexOf(array, "0"));
@@ -1445,7 +1445,7 @@ public class ArraysTest {
 	@Test
 	public void testIndexOfWithStartIndex() {
 		final Object[] array = new Object[] { "0", "1", "2", "3", null, "0" };
-		assertEquals(-1, Arrays.indexOf(null, null, 2));
+		assertEquals(-1, Arrays.indexOf((Object[])null, null, 2));
 		assertEquals(-1, Arrays.indexOf(new Object[0], "0", 0));
 		assertEquals(-1, Arrays.indexOf(null, "0", 2));
 		assertEquals(5, Arrays.indexOf(array, "0", 2));
@@ -1460,6 +1460,17 @@ public class ArraysTest {
 		assertEquals(-1, Arrays.indexOf(array, "0", 8));
 	}
 
+	@Test
+	public void testIndexOfByteArray() {
+		byte[] outer = { 1, 2, 3, 4 };
+		assertEquals(0, Arrays.indexOf(outer, new byte[] { 1, 2 }));
+		assertEquals(1, Arrays.indexOf(outer, new byte[] { 2, 3 }));
+		assertEquals(2, Arrays.indexOf(outer, new byte[] { 3, 4 }));
+		assertEquals(-1, Arrays.indexOf(outer, new byte[] { 4, 4 }));
+		assertEquals(-1, Arrays.indexOf(outer, new byte[] { 4, 5 }));
+		assertEquals(-1, Arrays.indexOf(outer, new byte[] { 4, 5, 6, 7, 8 }));
+	}
+	
 	@Test
 	public void testLastIndexOf() {
 		final Object[] array = new Object[] { "0", "1", "2", "3", null, "0" };
