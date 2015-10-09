@@ -298,16 +298,55 @@ public class ByteArrayOutputStream extends OutputStream {
 	 * @see #reset()
 	 */
 	public synchronized InputStream toInputStream() {
-		int remaining = count;
-		if (remaining == 0) {
+		return toInputStream(0, -1);
+	}
+
+	/**
+	 * Gets the current contents of this byte stream as a Input Stream. The returned stream is
+	 * backed by buffers of <code>this</code> stream, avoiding memory allocation and copy, thus
+	 * saving space and time.<br>
+	 * 
+	 * @param offset the offset of the byte array
+	 * @return the current contents of this output stream.
+	 */
+	public synchronized InputStream toInputStream(int offset) {
+		return toInputStream(offset, -1);
+	}
+	
+	/**
+	 * Gets the current contents of this byte stream as a Input Stream. The returned stream is
+	 * backed by buffers of <code>this</code> stream, avoiding memory allocation and copy, thus
+	 * saving space and time.<br>
+	 * 
+	 * @param offset the offset of the byte array
+	 * @param length max length of the byte array
+	 * @return the current contents of this output stream.
+	 */
+	public synchronized InputStream toInputStream(int offset, int length) {
+		if (offset < 0) {
+			offset = 0;
+		}
+		if (offset >= count) {
+			return Streams.closedInputStream();
+		}
+
+		if (length < 0 || length > count - offset) {
+			length = count - offset;
+		}
+		if (length == 0) {
 			return Streams.closedInputStream();
 		}
 		final List<ByteArrayInputStream> list = new ArrayList<ByteArrayInputStream>(buffers.size());
 		for (final byte[] buf : buffers) {
-			final int c = Math.min(buf.length, remaining);
-			list.add(new ByteArrayInputStream(buf, 0, c));
-			remaining -= c;
-			if (remaining == 0) {
+			if (offset >= buf.length) {
+				offset -= buf.length;
+				continue;
+			}
+			final int c = Math.min(buf.length - offset, length);
+			list.add(new ByteArrayInputStream(buf, offset, c));
+			offset = 0;
+			length -= c;
+			if (length == 0) {
 				break;
 			}
 		}
@@ -323,18 +362,54 @@ public class ByteArrayOutputStream extends OutputStream {
 	 * @see java.io.ByteArrayOutputStream#toByteArray()
 	 */
 	public synchronized byte[] toByteArray() {
-		int remaining = count;
-		if (remaining == 0) {
+		return toByteArray(0, -1);
+	}
+
+	/**
+	 * Gets the current contents of this byte stream as a byte array. The result is independent of
+	 * this stream.
+	 * 
+	 * @param offset the offset of the byte array
+	 * @return the current contents of this output stream, as a byte array
+	 */
+	public synchronized byte[] toByteArray(int offset) {
+		return toByteArray(offset, -1);
+	}
+	
+	/**
+	 * Gets the current contents of this byte stream as a byte array. The result is independent of
+	 * this stream.
+	 * 
+	 * @param offset the offset of the byte array
+	 * @param length max length of the byte array
+	 * @return the current contents of this output stream, as a byte array
+	 */
+	public synchronized byte[] toByteArray(int offset, int length) {
+		if (offset < 0) {
+			offset = 0;
+		}
+		if (offset >= count) {
 			return EMPTY_BYTE_ARRAY;
 		}
-		final byte newbuf[] = new byte[remaining];
+		if (length < 0 || length > count) {
+			length = count;
+		}
+		if (length == 0) {
+			return EMPTY_BYTE_ARRAY;
+		}
+		final byte newbuf[] = new byte[length];
 		int pos = 0;
 		for (final byte[] buf : buffers) {
-			final int c = Math.min(buf.length, remaining);
-			System.arraycopy(buf, 0, newbuf, pos, c);
+			if (offset >= buf.length) {
+				offset -= buf.length;
+				continue;
+			}
+			final int c = Math.min(buf.length - offset, length);
+			System.arraycopy(buf, offset, newbuf, pos, c);
+			offset = 0;
 			pos += c;
-			remaining -= c;
-			if (remaining == 0) {
+			length -= c;
+			if (length == 0) {
 				break;
 			}
 		}

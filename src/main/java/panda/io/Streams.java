@@ -2401,6 +2401,19 @@ public class Streams {
 		}
 	}
 
+	public static long skipTo(InputStream input, int value) throws IOException {
+		long i = 0;
+		int v = input.read();
+		while (v != EOF) {
+			i++;
+			if (v == value) {
+				return i;
+			}
+			v = input.read();
+		}
+		return -1L;
+	}
+	
 	/**
 	 * Read characters from an input character stream. This implementation guarantees that it will
 	 * read as many characters as possible before giving up; this may not always be the case for

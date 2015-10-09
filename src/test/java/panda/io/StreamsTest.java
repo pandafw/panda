@@ -851,6 +851,19 @@ public class StreamsTest extends FileBasedTestCase {
 		Streams.safeClose(input);
 	}
 
+	// testing skipTo
+	public void testSkipTo() throws Exception {
+		String a = "123456789";
+		
+		for (int i = 0; i < a.length(); i++) {
+			ByteArrayInputStream bais = new ByteArrayInputStream(a.getBytes());
+			assertEquals(Integer.parseInt(a.substring(i, i+1)), Streams.skipTo(bais, a.charAt(i)));
+		}
+
+		ByteArrayInputStream bais = new ByteArrayInputStream(a.getBytes());
+		assertEquals(-1, Streams.skipTo(bais, '0'));
+	}
+	
 	// testing deprecated method
 	public void testStringToOutputStream() throws Exception {
 		final File destination = newFile("copy5.txt");

@@ -131,5 +131,12 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
 		// Make sure that empty ByteArrayOutputStreams really don't create garbage
 		// on toByteArray()
 		assertSame(new ByteArrayOutputStream().toByteArray(), new ByteArrayOutputStream().toByteArray());
+		
+		// Testing toByteArray(int, int)
+		baout1.reset();
+		baout1.write("This is a test.".getBytes("ASCII"));
+		assertEquals("This is a test.", new String(baout1.toByteArray()));
+		assertEquals("This", new String(baout1.toByteArray(0, 4)));
+		assertEquals("is", new String(baout1.toByteArray(5, 2)));
 	}
 }
