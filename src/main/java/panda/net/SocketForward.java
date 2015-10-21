@@ -92,6 +92,8 @@ public class SocketForward implements Runnable {
 		ServerSocket listener = null;
 		try {
 			log.debug("Listening on " + localAddr);
+			log.debug("Forwarding to " + remoteAddr);
+
 			listener = new ServerSocket();
 			listener.bind(localAddr, 50);
 			while (relaying) {
