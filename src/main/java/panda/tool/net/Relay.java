@@ -30,7 +30,7 @@ public class Relay {
 		protected void addCommandLineOptions() throws Exception {
 			super.addCommandLineOptions();
 			
-			addCommandLineOption("h", "host", "Listen Host (default: localhost)", false);
+			addCommandLineOption("h", "host", "Listen Host (default: 0.0.0.0)", false);
 			addCommandLineOption("p", "port", "Listen Port (default: 8888)", false);
 		}
 
@@ -56,7 +56,7 @@ public class Relay {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String host = "localhost";
+	protected String host = "0.0.0.0";
 	protected int port = 8888;
 
 	/**

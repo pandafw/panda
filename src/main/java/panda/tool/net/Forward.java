@@ -64,7 +64,7 @@ public class Forward {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String localhost = "localhost";
+	protected String localhost = "0.0.0.0";
 	protected int localport;
 	protected String remotehost;
 	protected int remoteport = 80;
