@@ -142,21 +142,18 @@ public final class Logs {
 	}
 
 	public static LogLevel getLogLevel(String name) {
+		LogLevel lvl = rootLvl;
 		if (Collections.isNotEmpty(levels) && Strings.isNotEmpty(name)) {
 			String key = "";
-			for (String k : levels.keySet()) {
-				if (name.startsWith(k)) {
-					if (k.length() > key.length()) {
-						key = k;
+			for (Entry<String, LogLevel> en : levels.entrySet()) {
+				if (name.startsWith(en.getKey())) {
+					if (en.getKey().length() > key.length()) {
+						key = en.getKey();
+						lvl = en.getValue();
 					}
 				}
 			}
-
-			LogLevel lvl = levels.get(key);
-			if (lvl != null) {
-				return lvl;
-			}
 		}
-		return rootLvl;
+		return lvl;
 	}
 }
