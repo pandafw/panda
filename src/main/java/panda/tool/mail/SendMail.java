@@ -199,11 +199,12 @@ public class SendMail {
 //		email.setSmtpPort(465);
 //		email.setSSL(true);
 //		email.setAuthentication("", "");
+		email.setDebug(true);
+		email.setCharset(Charsets.UTF_8);
 		email.setFrom(from);
 		email.addTo(to);
 		email.setSubject(subject);
 		email.setMsg(message);
-		email.setDebug(true);
 
 //		email.send();
 		panda.net.SendMail.send(email);
