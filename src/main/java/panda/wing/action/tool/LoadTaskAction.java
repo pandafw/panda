@@ -16,8 +16,8 @@ import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 
 
-@At("/admin/loadtask")
-@Auth(AUTH.SYSADMIN)
+@At("${super_context}/loadtask")
+@Auth(AUTH.SUPER)
 @Ok(View.SFTL)
 public class LoadTaskAction extends AbstractAction {
 	protected final static String CKEY_RESOURCE = "resource";

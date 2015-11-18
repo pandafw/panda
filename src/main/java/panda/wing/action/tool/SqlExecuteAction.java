@@ -25,8 +25,8 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
 
-@At("/admin/sql")
-@Auth(AUTH.SYSADMIN)
+@At("${super_context}/sql")
+@Auth(AUTH.SUPER)
 @Ok(View.SFTL)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {

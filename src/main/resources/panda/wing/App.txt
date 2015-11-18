@@ -39,17 +39,17 @@ navi-admin-site=Site
 navi-admin-site-category=Category
 navi-admin-site-index=Search Index
 
-navi-admin-system=System
-navi-admin-system-loadtask=Cache
-navi-admin-system-property=Property
-navi-admin-system-resource=Resource
-navi-admin-system-template=Template
-navi-admin-system-crons=Crons
-navi-admin-system-dataimp=Data Import
-navi-admin-system-html2pdf=HTML->PDF
-navi-admin-system-ndfsfile=NDFS Tool
-navi-admin-system-eleval=EL Tool
-navi-admin-system-sqlexec=SQL Tool
+navi-super=System
+navi-super-loadtask=Cache
+navi-super-property=Property
+navi-super-resource=Resource
+navi-super-template=Template
+navi-super-crons=Crons
+navi-super-dataimp=Data Import
+navi-super-html2pdf=HTML->PDF
+navi-super-filepool=File Pool
+navi-super-eleval=EL Tool
+navi-super-sqlexec=SQL Tool
 
 
 #reload

@@ -6,11 +6,14 @@ import java.util.Locale;
 import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Resource;
 
-@At("${admin_context}/resource")
+@At("${super_context}/resource")
+@Auth(AUTH.SUPER)
 public class ResourceEditExAction extends ResourceEditAction {
 
 	/**

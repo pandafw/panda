@@ -13,7 +13,7 @@ import panda.wing.constant.AUTH;
  * delete upload temporary files
  */
 @At("/task/filecleanup")
-@Auth({ AUTH.LOCAL, AUTH.SYSADMIN })
+@Auth({ AUTH.LOCAL, AUTH.SUPER })
 public class FilePoolCleanupAction extends AbstractSyncWorkAction {
 	@IocInject
 	protected FilePool filePool;

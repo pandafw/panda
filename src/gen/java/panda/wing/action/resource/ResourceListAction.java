@@ -8,9 +8,12 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.GenericListAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.entity.Resource;
 
-@At("${admin_context}/resource")
+@At("${super_context}/resource")
+@Auth(AUTH.SUPER)
 public class ResourceListAction extends GenericListAction<Resource> {
 
 	/**

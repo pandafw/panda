@@ -37,17 +37,17 @@ navi-admin-site=网站管理
 navi-admin-site-category=类别
 navi-admin-site-index=检索索引
 
-navi-admin-system=系统管理
-navi-admin-system-loadtask=应用缓存
-navi-admin-system-property=配置
-navi-admin-system-resource=资源
-navi-admin-system-template=模板
-navi-admin-system-crons=Cron任务
-navi-admin-system-dataimp=数据汇入
-navi-admin-system-html2pdf=HTML⇒PDF打印
-navi-admin-system-ndfsfile=NDFS工具
-navi-admin-system-eleval=EL工具
-navi-admin-system-sqlexec=SQL工具
+navi-super=系统管理
+navi-super-loadtask=应用缓存
+navi-super-property=配置
+navi-super-resource=资源
+navi-super-template=模板
+navi-super-crons=Cron任务
+navi-super-dataimp=数据汇入
+navi-super-html2pdf=HTML⇒PDF打印
+navi-super-filepool=文件池
+navi-super-eleval=EL工具
+navi-super-sqlexec=SQL工具
 
 
 #reload

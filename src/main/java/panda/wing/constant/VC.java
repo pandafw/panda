@@ -40,9 +40,9 @@ public interface VC {
 	public final static Long GUESTS_ID = 999L;
 
 	/**
-	 * ADMIN_LEVEL = 0;
+	 * SUPER_LEVEL = 0;
 	 */
-	public final static Integer ADMIN_LEVEL = 0;
+	public final static Integer SUPER_LEVEL = 0;
 
 	/**
 	 * GUEST_LEVEL = 999;

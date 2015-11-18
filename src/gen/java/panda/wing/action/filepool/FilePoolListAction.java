@@ -9,8 +9,11 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.GenericListAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 
-@At("${admin_context}/filepool")
+@At("${super_context}/filepool")
+@Auth(AUTH.SUPER)
 public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 
 	/**

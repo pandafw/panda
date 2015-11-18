@@ -3,10 +3,13 @@ package panda.wing.action.task;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.wing.action.BaseLoadAction;
+import panda.wing.auth.Auth;
 import panda.wing.constant.AC;
+import panda.wing.constant.AUTH;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 
 @At("/task/template/load")
+@Auth({ AUTH.LOCAL, AUTH.SUPER })
 public class TemplateLoadAction extends BaseLoadAction {
 	@IocInject
 	protected AppFreemarkerTemplateLoader aftLoader;

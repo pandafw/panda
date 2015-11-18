@@ -49,8 +49,8 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.util.AppActionAssist;
 
-@At("/admin/dataimp")
-@Auth(AUTH.SYSADMIN)
+@At("${super_context}/dataimp")
+@Auth(AUTH.SUPER)
 @Ok(View.SFTL)
 public class DataImportAction extends AbstractAction {
 	protected static class DataType {

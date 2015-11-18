@@ -36,17 +36,17 @@ navi-admin-site=サイト管理
 navi-admin-site-category=カテゴリ
 navi-admin-site-index=検索インデックス
 
-navi-admin-system=システム管理
-navi-admin-system-loadtask=キャッシュ
-navi-admin-system-property=プロパティ
-navi-admin-system-resource=リソース
-navi-admin-system-template=テンプレート
-navi-admin-system-crons=Cronジョブ
-navi-admin-system-dataimp=データインポート
-navi-admin-system-html2pdf=HTML⇒PDF出力
-navi-admin-system-ndfsfile=NDFSツール
-navi-admin-system-eleval=ELツール
-navi-admin-system-sqlexec=SQLツール
+navi-super=システム管理
+navi-super-loadtask=キャッシュ
+navi-super-property=プロパティ
+navi-super-resource=リソース
+navi-super-template=テンプレート
+navi-super-crons=Cronジョブ
+navi-super-dataimp=データインポート
+navi-super-html2pdf=HTML⇒PDF出力
+navi-super-filepool=ファイルプール
+navi-super-eleval=ELツール
+navi-super-sqlexec=SQLツール
 
 
 #reload

@@ -7,8 +7,11 @@ import panda.filepool.FileItem;
 import panda.filepool.dao.DaoFileItem;
 import panda.filepool.dao.FileDataQuery;
 import panda.mvc.annotation.At;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 
-@At("${admin_context}/filepool")
+@At("${super_context}/filepool")
+@Auth(AUTH.SUPER)
 public class FilePoolEditExAction extends FilePoolEditAction {
 	/**
 	 * Constructor

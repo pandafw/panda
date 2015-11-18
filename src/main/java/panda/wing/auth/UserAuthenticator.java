@@ -84,6 +84,7 @@ public abstract class UserAuthenticator {
 		Object su = getSessionUser(ac);
 
 		Method method = ac.getMethod();
+		Class<?> clazz = ac.getAction().getClass();
 		if (Strings.isNotEmpty(path)) {
 			// find action info
 			ActionInfo ai = urlmapping.getActionInfo(path);
@@ -91,9 +92,10 @@ public abstract class UserAuthenticator {
 				return allowUnknownUri ? OK : UNKNOWN;
 			}
 			method = ai.getMethod();
+			clazz = ai.getActionType();
 		}
 		
-		String[] defines = getMethodPermission(method);
+		String[] defines = getMethodPermission(clazz, method);
 
 		// no permission defined for this path
 		if (Arrays.isEmpty(defines)) {
@@ -162,10 +164,10 @@ public abstract class UserAuthenticator {
 		return UNKNOWN;
 	}
 
-	protected String[] getMethodPermission(Method method) {
+	protected String[] getMethodPermission(Class<?> clazz, Method method) {
 		Auth mp = method.getAnnotation(Auth.class);
 		if (mp == null) {
-			mp = method.getDeclaringClass().getAnnotation(Auth.class);
+			mp = clazz.getAnnotation(Auth.class);
 		}
 		if (mp != null) {
 			return mp.value();

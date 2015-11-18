@@ -6,11 +6,14 @@ import java.util.Locale;
 import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 import panda.wing.entity.Property;
 
-@At("${admin_context}/property")
+@At("${super_context}/property")
+@Auth(AUTH.SUPER)
 public class PropertyEditExAction extends PropertyEditAction {
 
 	/**
