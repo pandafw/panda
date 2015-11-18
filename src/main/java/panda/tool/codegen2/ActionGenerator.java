@@ -121,6 +121,10 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(Param.class.getName());
 		imports.add(Validates.class.getName());
 		imports.add(View.class.getName());
+		if (Strings.isNotEmpty(action.getAuth())) {
+			imports.add("panda.wing.auth.Auth");
+			imports.add("panda.wing.constant.AUTH");
+		}
 		
 		processTpl(pkg, cls + ".java", wrapper, tplListAction, true);
 	}

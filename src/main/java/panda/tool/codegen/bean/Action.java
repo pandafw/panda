@@ -37,6 +37,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;title&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;path&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;auth&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -74,6 +75,8 @@ public class Action {
 	private String title;
 	@XmlAttribute
 	private String path;
+	@XmlAttribute
+	private String auth;
 	@XmlAttribute(required = true)
 	private String name;
 
@@ -99,6 +102,7 @@ public class Action {
 		this.extend = action.extend;
 		this.title = action.title;
 		this.path = action.path;
+		this.auth = action.auth;
 		this.name = action.name;
 
 		propertyList = new LinkedList<ActionProperty>();
@@ -229,6 +233,9 @@ public class Action {
 		}
 		if (src.path != null) {
 			me.path = src.path;
+		}
+		if (src.auth != null) {
+			me.auth = src.auth;
 		}
 		if (src.name != null) {
 			me.name = src.name;
@@ -471,6 +478,20 @@ public class Action {
 	 */
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	/**
+	 * @return the auth
+	 */
+	public String getAuth() {
+		return auth;
+	}
+
+	/**
+	 * @param auth the auth to set
+	 */
+	public void setAuth(String auth) {
+		this.auth = auth;
 	}
 
 	/**

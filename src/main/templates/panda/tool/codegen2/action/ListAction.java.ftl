@@ -8,6 +8,9 @@ import ${i};
 <#if action.path??>
 @At("${action.path}/${action.name}")
 </#if>
+<#if action.auth?has_content>
+@Auth(${action.auth})
+</#if>
 public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 <#if action.propertyList?has_content>
 	/*----------------------------------------------------------------------*

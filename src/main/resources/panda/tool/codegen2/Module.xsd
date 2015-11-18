@@ -64,6 +64,7 @@
 		<attribute name="title" type="string"></attribute>
 		<attribute name="entity" type="string"></attribute>
 		<attribute name="path" type="string"></attribute>
+		<attribute name="auth" type="string"></attribute>
 		<attribute name="name" type="string"></attribute>
 	</complexType>
 
