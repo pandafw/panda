@@ -6,7 +6,7 @@ import java.util.Map;
 import panda.lang.Strings;
 
 
-public abstract class AbstractMultiWorkAction extends AbstractSyncWorkAction {
+public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 	protected String key;
 
 	/**
@@ -37,14 +37,14 @@ public abstract class AbstractMultiWorkAction extends AbstractSyncWorkAction {
 	 * @return instance
 	 */
 	@Override
-	protected AbstractSyncWorkAction getSelf() {
+	protected GenericSyncWorkAction getSelf() {
 		synchronized (lock) {
 			Map m = getActionMap(false);
 			if (m == null) {
 				return null;
 			}
 		
-			return (AbstractSyncWorkAction)m.get(key);
+			return (GenericSyncWorkAction)m.get(key);
 		}
 	}
 
@@ -54,7 +54,7 @@ public abstract class AbstractMultiWorkAction extends AbstractSyncWorkAction {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void setSelf(AbstractSyncWorkAction instance) {
+	protected void setSelf(GenericSyncWorkAction instance) {
 		synchronized (lock) {
 			if (instance == null) {
 				Map m = getActionMap(false);

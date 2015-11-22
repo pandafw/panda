@@ -16,8 +16,8 @@ import panda.servlet.HttpServletSupport;
 import panda.wing.action.AbstractAction;
 
 
-public abstract class AbstractWorkAction extends AbstractAction {
-	private static final Log log = Logs.getLog(AbstractWorkAction.class);
+public abstract class GenericWorkAction extends AbstractAction {
+	private static final Log log = Logs.getLog(GenericWorkAction.class);
 
 	protected static final char PREFIX = '%';
 	protected static final char L_INFO = 'i';
@@ -83,7 +83,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 	/**
 	 * 
 	 */
-	public AbstractWorkAction() {
+	public GenericWorkAction() {
 		events = new Events();
 		status = newStatus();
 	}
@@ -138,7 +138,7 @@ public abstract class AbstractWorkAction extends AbstractAction {
 		status.status = msg;
 	}
 	
-	protected void referStatus(AbstractWorkAction awa) {
+	protected void referStatus(GenericWorkAction awa) {
 		if (awa == this || awa == null) {
 			return;
 		}

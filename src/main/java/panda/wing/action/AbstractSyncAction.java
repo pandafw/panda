@@ -1,6 +1,5 @@
-package panda.wing.action.work;
+package panda.wing.action;
 
-import panda.wing.action.AbstractAction;
 
 
 public abstract class AbstractSyncAction extends AbstractAction {

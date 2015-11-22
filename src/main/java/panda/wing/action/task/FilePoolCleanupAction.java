@@ -4,7 +4,7 @@ import panda.filepool.FilePool;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.mvc.annotation.At;
-import panda.wing.action.work.AbstractSyncWorkAction;
+import panda.wing.action.work.GenericSyncWorkAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
@@ -14,7 +14,7 @@ import panda.wing.constant.AUTH;
  */
 @At("/task/filecleanup")
 @Auth({ AUTH.LOCAL, AUTH.SUPER })
-public class FilePoolCleanupAction extends AbstractSyncWorkAction {
+public class FilePoolCleanupAction extends GenericSyncWorkAction {
 	@IocInject
 	protected FilePool filePool;
 	

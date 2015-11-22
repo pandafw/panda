@@ -1,12 +1,12 @@
 package panda.wing.action;
 
-import panda.wing.action.work.AbstractSyncWorkAction;
+import panda.wing.action.work.GenericSyncWorkAction;
 import panda.wing.constant.RC;
 
 
 
 
-public abstract class BaseTaskAction extends AbstractSyncWorkAction {
+public abstract class BaseTaskAction extends GenericSyncWorkAction {
 
 	@Override
 	protected void doRunning() {

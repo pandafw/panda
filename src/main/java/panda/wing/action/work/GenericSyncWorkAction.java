@@ -12,8 +12,8 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Ok;
 
 
-public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
-	private static final Log log = Logs.getLog(AbstractSyncWorkAction.class);
+public abstract class GenericSyncWorkAction extends GenericWorkAction {
+	private static final Log log = Logs.getLog(GenericSyncWorkAction.class);
 	
 	protected static final Object lock = new Object();
 	
@@ -53,9 +53,9 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	 * get singleton instance
 	 * @return instance
 	 */
-	protected AbstractSyncWorkAction getSelf() {
+	protected GenericSyncWorkAction getSelf() {
 		synchronized (lock) {
-			return (AbstractSyncWorkAction)getApp().get(getActionKey());
+			return (GenericSyncWorkAction)getApp().get(getActionKey());
 		}
 	}
 
@@ -63,7 +63,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	 * set singleton instance
 	 * @param instance instance
 	 */
-	protected void setSelf(AbstractSyncWorkAction instance) {
+	protected void setSelf(GenericSyncWorkAction instance) {
 		synchronized (lock) {
 			if (instance == null) {
 				getApp().remove(getActionKey());
@@ -75,7 +75,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	}
 	
 	@At("")
-	@Ok("ftl:/panda/wing/action/work/SyncWork.ftl")
+	@Ok(View.SFTL)
 	public void input() {
 	}
 
@@ -83,7 +83,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	@Ok(View.JSON)
 	@Override
 	public Object stop() {
-		AbstractSyncWorkAction aswa = getSelf();
+		GenericSyncWorkAction aswa = getSelf();
 		if (aswa != null) {
 			referStatus(aswa);
 			aswa.doStop();
@@ -106,7 +106,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	@Ok(View.JSON)
 	@Override
 	public Object status() {
-		AbstractSyncWorkAction aswa = getSelf();
+		GenericSyncWorkAction aswa = getSelf();
 		if (aswa != null) {
 			referStatus(aswa);
 		}
@@ -118,7 +118,7 @@ public abstract class AbstractSyncWorkAction extends AbstractWorkAction {
 	public Object start(@Param("e.*") Events es) {
 		init(es);
 
-		AbstractSyncWorkAction aswa = getSelf();
+		GenericSyncWorkAction aswa = getSelf();
 		if (aswa == null) {
 			setSelf(this);
 			StopWatch sw = new StopWatch();
