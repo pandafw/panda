@@ -102,20 +102,20 @@ public abstract class UserAuthenticator {
 			return OK;
 		}
 		
-		if (su == null) {
-			return UNLOGIN;
-		}
-		
-		Collection<String> uperms = getUserPermits(su);
+		int r = UNLOGIN;
+		if (su != null) {
+			Collection<String> uperms = getUserPermits(su);
 
-		// user has 'deny all' permits
-		if (Collections.contains(uperms, AUTH.NONE)) {
-			return DENIED;
-		}
+			// user has 'deny all' permits
+			if (Collections.contains(uperms, AUTH.NONE)) {
+				return DENIED;
+			}
 
-		int r = OK;
-		// user does not has 'allow all' permits
-		if (!Collections.contains(uperms, AUTH.ALL)) {
+			// user does not has 'allow all' permits
+			if (Collections.contains(uperms, AUTH.ALL)) {
+				return OK;
+			}
+			
 			for (String d : defines) {
 				if (Strings.isEmpty(d)) {
 					continue;
@@ -128,11 +128,11 @@ public abstract class UserAuthenticator {
 					}
 				}
 			}
+			if (r == OK) {
+				return r;
+			}
 		}
-		if (r == OK) {
-			return r;
-		}
-
+		
 		if (special) {
 			for (String d : defines) {
 				if (Strings.isEmpty(d)) {
