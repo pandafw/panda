@@ -2006,6 +2006,25 @@ public class StringsTest {
 	}
 
 	@Test
+	public void testRemove_chars() {
+		// Strings.removeChars(null, *) = null
+		assertEquals(null, Strings.removeChars(null, "ab"));
+		assertEquals(null, Strings.removeChars(null, "ab"));
+		assertEquals(null, Strings.removeChars(null, "ab"));
+
+		// Strings.removeChars("", *) = ""
+		assertEquals("", Strings.removeChars("", "ab"));
+		assertEquals("", Strings.removeChars("", "ab"));
+		assertEquals("", Strings.removeChars("", "ab"));
+
+		// Strings.removeChars("queued", 'ud') = "qee"
+		assertEquals("qee", Strings.removeChars("queued", "ud"));
+
+		// Strings.removeChars("queued", "z") = "queued"
+		assertEquals("queued", Strings.removeChars("queued", "z"));
+	}
+
+	@Test
 	public void testDifferenceAt_StringArray() {
 		assertEquals(-1, Strings.indexOfDifference((String[])null));
 		assertEquals(-1, Strings.indexOfDifference(new String[] {}));

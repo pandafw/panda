@@ -4587,7 +4587,7 @@ public class Strings {
 		final char[] chars = str.toCharArray();
 		int pos = 0;
 		for (int i = 0; i < chars.length; i++) {
-			if (remove.indexOf(chars[i]) != INDEX_NOT_FOUND) {
+			if (remove.indexOf(chars[i]) == INDEX_NOT_FOUND) {
 				chars[pos++] = chars[i];
 			}
 		}
