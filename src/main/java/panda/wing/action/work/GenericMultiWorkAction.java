@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import panda.lang.Strings;
+import panda.mvc.View;
+import panda.mvc.annotation.At;
+import panda.mvc.annotation.view.Ok;
 
 
 public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
@@ -23,6 +26,15 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 		this.key = Strings.stripToNull(key);
 	}
 
+	/**
+	 * find key from request parameter
+	 */
+	protected void findKey() {
+		if (key == null) {
+			key = Strings.stripToEmpty((String)getReqp().get("k"));
+		}
+	}
+	
 	protected Map getActionMap(boolean create) {
 		Map m = (Map)getApp().get(getActionKey());
 		if (m == null && create) {
@@ -38,6 +50,7 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 	 */
 	@Override
 	protected GenericSyncWorkAction getSelf() {
+		findKey();
 		synchronized (lock) {
 			Map m = getActionMap(false);
 			if (m == null) {
@@ -68,4 +81,18 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 			}
 		}
 	}
+
+	@At("")
+	@Ok(View.SFTL)
+	public void input() {
+		findKey();
+		findKey();
+		if (Strings.isEmpty(key)) {
+			addActionError(getText("error-nokey", "Please input KEY"));
+		}
+		else {
+			addActionMessage(getText("text-info", "KEY: " + key, key));
+		}
+	}
 }
+

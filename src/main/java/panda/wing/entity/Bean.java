@@ -1,12 +1,8 @@
 package panda.wing.entity;
 
-import java.io.Serializable;
-
 import panda.wing.constant.VC;
 
-public abstract class Bean implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public abstract class Bean {
 	/**
 	 * copy properties from the specified object.
 	 */

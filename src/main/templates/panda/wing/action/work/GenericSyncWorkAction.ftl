@@ -37,7 +37,7 @@
 
 		function doStop() {
 			$.ajaf({
-				url: "<@p.url action='+/stop'/>",
+				url: "<@p.url action='+/stop' includeParams='get'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					if (!o.success) {
@@ -69,7 +69,7 @@
 		function doStatus() {
 			workOnStart();
 			$.ajaf({
-				url: "<@p.url action='+/status'/>",
+				url: "<@p.url action='+/status' includeParams='get'/>",
 				success: function(data) {
 					var o = JSON.parse(data);
 					if (!o.success) {
@@ -95,7 +95,7 @@
 		}
 		
 		function doStart() {
-			doWork("<@p.url action='+/start'/>");
+			doWork("<@p.url action='+/start' includeParams='get'/>");
 			return false;
 		}
 

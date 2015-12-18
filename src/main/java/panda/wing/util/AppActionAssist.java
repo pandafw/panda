@@ -87,7 +87,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	}
 
 	public long getLoginUserId() {
-		return VC.UNKNOWN_USID;
+		return VC.SYSTEM_UID;
 	}
 
 	/**

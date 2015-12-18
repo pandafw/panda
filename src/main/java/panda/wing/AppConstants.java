@@ -22,4 +22,8 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_AUTH_UNLOGIN_URL = "panda.auth.unlogin.url";
 	
 	public static final String PANDA_AUTH_UNSECURE_URL = "panda.auth.unsecure.url";
+	
+	public static final String PANDA_AUTH_SECURE_USER_AGE = "panda.auth.secure.session.age";
+	
+	public static final String PANDA_AUTH_USER_TYPE = "panda.auth.user.type";
 }

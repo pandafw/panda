@@ -153,7 +153,7 @@ public abstract class UserAuthenticator {
 		if (AUTH.SECURE.equals(define)) {
 			return isSecureSessionUser(su) ? OK : UNSECURE;
 		}
-		return uperms.contains(define) ? OK : DENIED;
+		return Collections.contains(uperms, define) ? OK : DENIED;
 	}
 
 	protected int authenticateSpecial(ActionContext ac, Object su, String define) {

@@ -110,9 +110,6 @@ public abstract class GenericWorkAction extends AbstractAction {
 		return status;
 	}
 	
-	protected void init() {
-	}
-	
 	protected void init(Events es) {
 		if (es != null) {
 			events = es;
@@ -129,7 +126,6 @@ public abstract class GenericWorkAction extends AbstractAction {
 				throw Exceptions.wrapThrow(e);
 			}
 		}
-		init();
 	}
 
 	protected void updateStatus(char level, String msg) {

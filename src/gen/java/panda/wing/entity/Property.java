@@ -1,5 +1,6 @@
 package panda.wing.entity;
 
+import java.io.Serializable;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.Id;
@@ -14,9 +15,9 @@ import panda.wing.entity.SUBean;
 @Indexes({
 	@Index(name="CLCN", fields={ "clazz", "language", "country", "name" }, unique=true)
 })
-public class Property extends SUBean {
+public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = 1034751664L;
+	private static final long serialVersionUID = -113987456L;
 
 	/**
 	 * Constructor
