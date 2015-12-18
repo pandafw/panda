@@ -11,7 +11,7 @@ import panda.mvc.annotation.view.Ok;
 @Ok("raw")
 public class UploadTestModule {
 
-	@At("/upload/*")
+	@At("/upload/(.*)")
 	public String test_upload(@Param("file") FileItem file) {
 		return FileNames.getExtension(file.getName()) + "&" + file.getSize();
 	}

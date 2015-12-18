@@ -42,14 +42,14 @@ public class MvcBaseTest extends AbstractMvcTestCase {
 	public void test_PathMeOne() throws Throwable {
 		request.setRequestURI("/two/pathme/123");
 		servlet.service(request, response);
-		assertEquals("123+0", response.getContentAsString());
+		assertEquals("123", response.getContentAsString());
 	}
 
 	@Test
 	public void test_PathMeTwo() throws Throwable {
 		request.setRequestURI("/two/pathme/123/456");
 		servlet.service(request, response);
-		assertEquals("123+456", response.getContentAsString());
+		assertEquals("123/456", response.getContentAsString());
 	}
 
 	@Test

@@ -16,37 +16,37 @@ import panda.mvc.testapp.classes.bean.UserT;
 public class CommonTest extends BaseWebappTest {
 
 	// 最最基本的测试
-	@At("pathArgs/*")
+	@At("pathArgs/(.*)$")
 	public String test_base_pathargs(String name) {
 		return name;
 	}
 
 	// 基本测试1
-	@At("pathArgs2/*")
+	@At("pathArgs2/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)/(.*)$")
 	public String test_base_pathargs2(String name, int id, long pid, short fid, double xid, float yid, boolean z, char p) {
 		return name + id + pid + fid + (int)xid + (int)yid + z + p;
 	}
 
 	// 含?和*
-	@At("pathArgs3/?/blog/*")
+	@At("pathArgs3/(.+?)/blog/(.*)$")
 	public String test_base_pathargs3(String type, long id) {
 		return type + "&" + id;
 	}
 
 	// 含? 与方法test_base_pathargs3比对,
-	@At("pathArgs3/?")
+	@At("pathArgs32/(.*)$")
 	public String test_base_pathargs3_2(String type) {
 		return type + "&Z";
 	}
 
 	// 与Parms混用
-	@At("pathArgs4/*")
+	@At("pathArgs4/(.*)$")
 	public String test_base_pathargs4(String key, @Param UserT userT) {
 		return key + "&" + userT.getName();
 	}
 
 	// 与Parms混用
-	@At("pathArgs5/*")
+	@At("pathArgs5/(.*)$")
 	public String test_base_pathargs5(String key, @Param("user.*") UserT user1, @Param("user2.*") UserT user2) {
 		return key + "&" + user1.getName() + "&" + user2.getName();
 	}

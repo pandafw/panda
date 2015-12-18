@@ -23,13 +23,13 @@ public class NemberTwoModule {
 		return !(userName == null || password == null || authCode == null);
 	}
 
-	@At("pathme/*")
+	@At("pathme/(.*)$")
 	@Ok("raw")
-	public String pathme(int abc, long xyz) {
-		return abc + "+" + xyz;
+	public String pathme(String abc) {
+		return abc;
 	}
 
-	@At("pathtwo/?/?")
+	@At("pathtwo/(.+?)/(.*)$")
 	@Ok("raw")
 	public String pathtwo(int abc, long xyz) {
 		return abc + "+" + xyz;

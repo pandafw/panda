@@ -3,10 +3,10 @@ package panda.mvc.impl;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import panda.ioc.annotation.IocBean;
-import panda.lang.Exceptions;
+import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -19,25 +19,26 @@ import panda.mvc.UrlMapping;
 import panda.net.http.HttpMethod;
 import panda.servlet.HttpServlets;
 
-@IocBean(type=UrlMapping.class)
-public class DefaultUrlMapping implements UrlMapping {
-	private static final Log log = Logs.getLog(DefaultUrlMapping.class);
+public abstract class AbstractUrlMapping implements UrlMapping {
+	private static final Log log = Logs.getLog(AbstractUrlMapping.class);
 
-	private MappingNode<ActionInvoker> root;
-	private Map<String, ActionInvoker> map;
+	protected abstract void addInvoker(String path, ActionInvoker invoker);
 	
-	public DefaultUrlMapping() {
-		root = new MappingNode<ActionInvoker>();
-		map = new HashMap<String, ActionInvoker>();
-	}
+	protected abstract ActionInvoker getInvoker(String path, List<String> args);
 
+	private Map<String, ActionInvoker> map = new HashMap<String, ActionInvoker>();
+	
 	public void add(ActionChainMaker maker, ActionInfo ai, MvcConfig config) {
-		// 检查所有的path
+		// check path
 		String[] paths = ai.getPaths();
+		if (Arrays.isEmpty(paths)) {
+			throw new IllegalArgumentException(String.format("Empty @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
+		}
+
 		for (int i = 0; i < paths.length; i++) {
 			String path = paths[i];
-			if (Strings.isBlank(path)) {
-				throw new IllegalArgumentException(String.format("Failed to add blank @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
+			if (Strings.isEmpty(path)) {
+				throw new IllegalArgumentException(String.format("Failed to add empty @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
 			}
 			
 			if (path.charAt(0) != '/') {
@@ -46,27 +47,29 @@ public class DefaultUrlMapping implements UrlMapping {
 		}
 
 		ActionChain chain = maker.eval(config, ai);
-		for (String path : ai.getPaths()) {
-			// 尝试获取，看看有没有创建过这个 URL 调用者
-			ActionInvoker invoker = map.get(path);
 
-			// 如果没有增加过这个 URL 的调用者，为其创建备忘记录，并加入索引
+		// mapping path
+		for (String path : paths) {
+			ActionInvoker invoker = map.get(path);
 			if (invoker == null) {
 				invoker = new ActionInvoker();
 				map.put(path, invoker);
-				root.add(path, invoker);
 			}
-
-			// 将动作链，根据特殊的 HTTP 方法，保存到调用者内部
 			if (ai.hasHttpMethod()) {
 				for (HttpMethod httpMethod : ai.getHttpMethods()) {
+					if (invoker.hasChain(httpMethod)) {
+						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped.", ai.getActionType().getName(), ai.getMethod().getName(), path, httpMethod.toString()));
+					}
 					invoker.addChain(httpMethod, chain);
 				}
 			}
-			// 否则，将其设置为默认动作链
 			else {
+				if (invoker.getDefaultChain() != null) {
+					throw new IllegalArgumentException(String.format("%s.%s @At(%s) is already mapped.", ai.getActionType().getName(), ai.getMethod().getName(), path));
+				}
 				invoker.setDefaultChain(chain);
 			}
+			addInvoker(path, invoker);
 		}
 
 		printActionMapping(ai);
@@ -78,7 +81,7 @@ public class DefaultUrlMapping implements UrlMapping {
 		ac.setPath(path);
 		ac.setPathArgs(new ArrayList<String>());
 
-		ActionInvoker invoker = root.get(path, ac.getPathArgs());
+		ActionInvoker invoker = getInvoker(path, ac.getPathArgs());
 		if (invoker != null) {
 			ActionChain chain = invoker.getActionChain(ac);
 			if (chain != null) {
@@ -95,7 +98,7 @@ public class DefaultUrlMapping implements UrlMapping {
 	}
 
 	public ActionInfo getActionInfo(String path) {
-		ActionInvoker invoker = root.get(path, null);
+		ActionInvoker invoker = getInvoker(path, null);
 		if (invoker != null) {
 			ActionChain chain = invoker.getDefaultChain();
 			if (chain != null) {
@@ -109,35 +112,17 @@ public class DefaultUrlMapping implements UrlMapping {
 	}
 
 	protected void printActionMapping(ActionInfo ai) {
-		/*
-		 * 打印基本调试信息
-		 */
 		if (log.isDebugEnabled()) {
-			// 打印路径
+			// print path
 			String[] paths = ai.getPaths();
-			StringBuilder sb = new StringBuilder();
-			if (null != paths && paths.length > 0) {
-				sb.append("   '").append(paths[0]).append("'");
-				for (String p : paths) {
-					sb.append(", '").append(p).append("'");
-				}
-			}
-			else {
-				throw Exceptions.impossible();
-			}
+			String sb = Strings.join(paths, ", ");
 
-			// 打印方法名
+			// print method
 			Method method = ai.getMethod();
-			String str;
-			if (null != method) {
-				str = String.format("%-30s : %-10s", method.toString(), method.getReturnType().getSimpleName());
-			}
-			else {
-				throw Exceptions.impossible();
-			}
+			String sm = String.format("%-30s : %-10s", method.toString(), method.getReturnType().getSimpleName());
 
 			log.debugf("%s >> %s | @Ok(%-5s) @Err(%-5s) @Fail(%-5s)",
-				Strings.rightPad(sb, 30), str, ai.getOkView(), ai.getErrorView(), ai.getFatalView());
+				Strings.rightPad(sb, 30), sm, ai.getOkView(), ai.getErrorView(), ai.getFatalView());
 		}
 	}
 }

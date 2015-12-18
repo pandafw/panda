@@ -176,7 +176,7 @@ public class DefaultMvcLoading implements Loading {
 	protected UrlMapping createUrlMapping(MvcConfig config) throws Exception {
 		UrlMapping  um = config.getIoc().getIfExists(UrlMapping.class);
 		if (um == null) {
-			um = new DefaultUrlMapping();
+			um = new RegexUrlMapping();
 		}
 
 		if (log.isDebugEnabled()) {
@@ -359,7 +359,7 @@ public class DefaultMvcLoading implements Loading {
 	}
 
 	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
-		if (null != at) {
+		if (at != null) {
 			if (at.value() != null && at.value().length > 0) {
 				IocProxy ip = new IocProxy(ioc);
 				String[] ps = new String[at.value().length];
@@ -370,7 +370,7 @@ public class DefaultMvcLoading implements Loading {
 				ai.setPaths(ps);
 			}
 			else if (def != null) {
-				ai.setPaths(Arrays.toArray(def.toLowerCase()));
+				ai.setPaths(Arrays.toArray(def));
 			}
 
 			if (at.method() != null && at.method().length > 0) {
