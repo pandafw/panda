@@ -258,7 +258,7 @@ public class HttpServlets {
 		// for compatibility
 		request.setAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE, e);
 
-		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
 	
 	public static void logException(HttpServletRequest request, Throwable e) {
