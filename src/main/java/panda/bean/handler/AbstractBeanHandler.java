@@ -71,13 +71,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	public Type getBeanType(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
-		if (hasProperty(beanObject, beanName)) {
-			return getPropertyType(beanObject, beanName);
-		}
-
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return null;
+			return getPropertyType(beanObject, beanName);
 		} 
 
 		String itemName = beanName.substring(0, dot);
@@ -115,13 +111,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	public boolean canReadBean(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
-		if (hasProperty(beanObject, beanName)) {
-			return canReadProperty(beanObject, beanName);
-		}
-
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return false;
+			return canReadProperty(beanObject, beanName);
 		} 
 
 		String itemName = beanName.substring(0, dot);
@@ -159,13 +151,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	public boolean canWriteBean(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
-		if (hasProperty(beanObject, beanName)) {
-			return canWriteProperty(beanObject, beanName);
-		}
-
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return false;
+			return canWriteProperty(beanObject, beanName);
 		}
 
 		String itemName = beanName.substring(0, dot);
@@ -194,13 +182,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	public Object getBeanValue(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
-		if (hasProperty(beanObject, beanName)) {
-			return getPropertyValue(beanObject, beanName);
-		}
-
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return null;
+			return getPropertyValue(beanObject, beanName);
 		}
 
 		String itemName = beanName.substring(0, dot);
@@ -224,13 +208,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	public boolean setBeanValue(T beanObject, String beanName, Object value) {
 		beanName = normalizeBeanName(beanName);
 		
-		if (hasProperty(beanObject, beanName)) {
-			return setPropertyValue(beanObject, beanName, value);
-		}
-
 		int index = beanName.indexOf(".");
 		if (index < 0) {
-			return false;
+			return setPropertyValue(beanObject, beanName, value);
 		} 
 
 		String itemName = beanName.substring(0, index);

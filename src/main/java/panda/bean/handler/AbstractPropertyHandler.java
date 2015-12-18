@@ -37,14 +37,6 @@ public abstract class AbstractPropertyHandler<T> implements PropertyHandler<T> {
 	}
 
 	/**
-	 * @param propertyName property name
-	 * @return true if has property
-	 */
-	public boolean hasProperty(String propertyName) {
-		return hasProperty(null, propertyName);
-	}
-
-	/**
 	 * is the property readable
 	 * @param propertyName property name
 	 * @return property type

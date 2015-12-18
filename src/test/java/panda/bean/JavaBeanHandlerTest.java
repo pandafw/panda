@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import panda.bean.TestA.TestB;
@@ -26,9 +28,25 @@ public class JavaBeanHandlerTest {
 	private static Log log = Logs.getLog(JavaBeanHandlerTest.class);
 
 	private static Beans bhf = new Beans();
+	private Beans bak;
+	
+	@Before
+	public void before() {
+		bak = Beans.i();
+		Beans.setInstance(bak);
+	}
+
+	@After
+	public void after() {
+		Beans.setInstance(bak);
+	}
+
+	protected Beans getBeans() {
+		return bhf;
+	}
 	
 	protected BeanHandler getBeanHandler(Class type) {
-		return bhf.getBeanHandler(type);
+		return getBeans().getBeanHandler(type);
 	}
 	
 	protected void testGetType(Object beanObject, String propertyName, Type expected) {

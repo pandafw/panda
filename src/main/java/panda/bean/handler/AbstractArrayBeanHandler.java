@@ -53,15 +53,6 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 	}
 
 	/**
-	 * @param array bean object (can be null)
-	 * @param propertyName property name
-	 * @return true if has property
-	 */
-	public boolean hasProperty(T array, String propertyName) {
-		return canReadProperty(array, propertyName);
-	}
-
-	/**
 	 * is the property readable
 	 * @param array bean object (can be null)
 	 * @param propertyName property name
@@ -73,7 +64,7 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 		}
 		
 		int index = toIndex(propertyName);
-		return index < getSize(array);
+		return isValidGetIndex(array, index);
 	}
 
 	/**
@@ -83,7 +74,11 @@ public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandle
 	 * @return property writable
 	 */
 	public boolean canWriteProperty(T array, String propertyName) {
-		return canReadProperty(array, propertyName);
+		if (array == null) {
+			return false;
+		}
+		int index = toIndex(propertyName);
+		return isValidSetIndex(array, index);
 	}
 	
 	protected int toIndex(String index) {

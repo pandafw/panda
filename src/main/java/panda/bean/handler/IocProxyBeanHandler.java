@@ -41,15 +41,6 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	}
 
 	/**
-	 * @param ioc bean object (can be null)
-	 * @param propertyName property name
-	 * @return true if has property
-	 */
-	public boolean hasProperty(T ioc, String propertyName) {
-		return canReadProperty(ioc, propertyName);
-	}
-
-	/**
 	 * is the property readable
 	 * @param ioc bean object (can be null)
 	 * @param propertyName property name
@@ -112,7 +103,49 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 		return ioc.get(Object.class, propertyName);
 	}
 	
-	public boolean setPropertyValue(T map, String propertyName, Object propertyValue) {
+	public boolean setPropertyValue(T ioc, String propertyName, Object propertyValue) {
 		throw Exceptions.unsupported("Ioc does not support set()");
+	}
+	
+	/**
+	 * get bean type
+	 * @param ioc bean object (can be null)
+	 * @param beanName bean name
+	 * @return bean type
+	 */
+	@Override
+	public Type getBeanType(T ioc, String beanName) {
+		if (ioc != null) {
+			Object val = getBeanValue(ioc, beanName);
+			if (val != null) {
+				return val.getClass();
+			}
+		}
+		return super.getBeanType(ioc, beanName);
+	}
+
+	/**
+	 * get bean value 
+	 * @param ioc bean object
+	 * @param beanName bean name
+	 * @return bean value
+	 */
+	@Override
+	public Object getBeanValue(T ioc, String beanName) {
+		if (canReadProperty(ioc, beanName)) {
+			return getPropertyValue(ioc, beanName);
+		}
+		return super.getBeanValue(ioc, beanName);
+	}
+
+	/**
+	 * set property value 
+	 * @param ioc bean object
+	 * @param beanName bean name
+	 * @param value value
+	 */
+	@Override
+	public boolean setBeanValue(T ioc, String beanName, Object value) {
+		return false;
 	}
 }

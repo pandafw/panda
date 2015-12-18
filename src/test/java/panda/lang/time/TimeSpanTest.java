@@ -3,6 +3,8 @@ package panda.lang.time;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.lang.Strings;
+
 /**
  */
 public class TimeSpanTest {
@@ -27,7 +29,7 @@ public class TimeSpanTest {
 		Assert.assertEquals("1.1574074074074074E-8", String.valueOf(ts.totalDays()));
 		Assert.assertEquals("2.7777777777777776E-7", String.valueOf(ts.totalHours()));
 		Assert.assertEquals("1.6666666666666667E-5", String.valueOf(ts.totalMinutes()));
-		Assert.assertEquals("0.0010", String.valueOf(ts.totalSeconds()));
+		Assert.assertEquals("0.001", Strings.stripEnd(String.valueOf(ts.totalSeconds()), '0'));
 		Assert.assertEquals(1L, ts.totalMilliseconds());
 	}
 

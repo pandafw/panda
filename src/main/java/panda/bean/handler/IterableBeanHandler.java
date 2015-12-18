@@ -37,6 +37,16 @@ public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHa
 		return Strings.EMPTY_ARRAY;
 	}
 
+	/**
+	 * is the property writable
+	 * @param array bean object (can be null)
+	 * @param propertyName property name
+	 * @return property writable
+	 */
+	public boolean canWriteProperty(T array, String propertyName) {
+		return false;
+	}
+
 	@Override
 	protected Type getElementType() {
 		return elementType;

@@ -53,15 +53,6 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	}
 
 	/**
-	 * @param map bean object (can be null)
-	 * @param propertyName property name
-	 * @return true if has property
-	 */
-	public boolean hasProperty(T map, String propertyName) {
-		return canReadProperty(map, propertyName);
-	}
-
-	/**
 	 * is the property readable
 	 * @param map bean object (can be null)
 	 * @param propertyName property name
@@ -114,5 +105,53 @@ public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	public boolean setPropertyValue(T map, String propertyName, Object propertyValue) {
 		map.put(propertyName, propertyValue);
 		return true;
+	}
+	
+	/**
+	 * get bean type
+	 * @param map bean object (can be null)
+	 * @param beanName bean name
+	 * @return bean type
+	 */
+	@Override
+	public Type getBeanType(T map, String beanName) {
+		if (map != null) {
+			Object val = getBeanValue(map, beanName);
+			if (val != null) {
+				return val.getClass();
+			}
+		}
+		Type t = super.getBeanType(map, beanName);
+		return t == null ? elementType : t;
+	}
+
+	/**
+	 * get bean value 
+	 * @param map bean object
+	 * @param beanName bean name
+	 * @return bean value
+	 */
+	@Override
+	public Object getBeanValue(T map, String beanName) {
+		if (map.containsKey(beanName)) {
+			return map.get(beanName);
+		}
+		return super.getBeanValue(map, beanName);
+	}
+
+	/**
+	 * set property value 
+	 * @param map bean object
+	 * @param beanName bean name
+	 * @param value value
+	 */
+	@Override
+	public boolean setBeanValue(T map, String beanName, Object value) {
+		if (map.containsKey(beanName)) {
+			map.put(beanName, value);
+			return true;
+		}
+
+		return super.setBeanValue(map, beanName, value);
 	}
 }
