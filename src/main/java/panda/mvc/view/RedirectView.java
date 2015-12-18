@@ -17,9 +17,9 @@ import panda.servlet.HttpServlets;
  * new ServerRedirectView("/pet/list.nut");
  * 
  */
-public class ServerRedirectView extends AbstractPathView {
+public class RedirectView extends AbstractPathView {
 
-	public ServerRedirectView(String dest) {
+	public RedirectView(String dest) {
 		super(dest);
 	}
 

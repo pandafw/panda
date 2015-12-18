@@ -14,7 +14,7 @@ import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.JsonView;
 import panda.mvc.view.JspView;
 import panda.mvc.view.RawView;
-import panda.mvc.view.ServerRedirectView;
+import panda.mvc.view.RedirectView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XmlView;
@@ -55,7 +55,7 @@ public class DefaultViewMaker implements ViewMaker {
 		}
 		
 		if (View.REDIRECT.equals(type) || View.REDIRECT2.equals(type)) {
-			return new ServerRedirectView(value);
+			return new RedirectView(value);
 		}
 		
 		if (View.FORWARD.equals(type) || View.FORWARD2.equals(type)) {
@@ -74,7 +74,7 @@ public class DefaultViewMaker implements ViewMaker {
 			return new RawView(value);
 		}
 		
-		if (View.VOID.equals(type)) {
+		if (View.VOID.equals(type) || View.NONE.equals(type) || View.NULL.equals(type)) {
 			return VoidView.INSTANCE;
 		}
 		

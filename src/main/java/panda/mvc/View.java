@@ -20,6 +20,8 @@ public interface View {
 	public static final String FORWARD2 = "->";
 	public static final String RAW = "raw";
 	public static final String VOID = "void";
+	public static final String NONE = "none";
+	public static final String NULL = "null";
 
 	void render(ActionContext ac);
 }
