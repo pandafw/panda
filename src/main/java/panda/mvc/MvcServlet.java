@@ -8,30 +8,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.config.ServletMvcConfig;
 import panda.net.http.HttpStatus;
 
-/**
- * 挂接到 JSP/Servlet 容器的入口
- * 
- */
 public class MvcServlet extends HttpServlet {
+	private static final Log log = Logs.getLog(MvcServlet.class);
+
 	private static final long serialVersionUID = 1L;
 
 	protected ActionHandler handler;
 
-	protected void initActionHandler(ServletConfig conf) {
+	@Override
+	public void init(ServletConfig conf) throws ServletException {
+		log.infof("MvcServlet[%s] starting ...", conf.getServletName());
+
 		handler = (ActionHandler)conf.getServletContext().getAttribute(ActionHandler.class.getName());
 		if (handler == null) {
 			ServletMvcConfig config = new ServletMvcConfig(conf);
 			handler = new ActionHandler(config);
 			conf.getServletContext().setAttribute(ActionHandler.class.getName(), handler);
 		}
-	}
-
-	@Override
-	public void init(ServletConfig servletConfig) throws ServletException {
-		initActionHandler(servletConfig);
 	}
 
 	public void destroy() {
