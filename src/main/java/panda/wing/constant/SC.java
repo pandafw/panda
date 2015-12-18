@@ -55,6 +55,9 @@ public interface SC {
 
 	public static final String DATABASE_PROPERTY = "database.property";
 
+	public static final String SUPER_USERNAME = "super.username";
+	public static final String SUPER_PASSWORD = "super.password";
+
 	//--------------------------------------------------------
 	// mail properties
 	//--------------------------------------------------------
