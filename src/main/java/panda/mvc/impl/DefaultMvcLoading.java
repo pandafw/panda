@@ -10,8 +10,8 @@ import java.util.Set;
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.io.Files;
-import panda.io.Settings;
 import panda.ioc.Ioc;
+import panda.ioc.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
@@ -360,12 +360,12 @@ public class DefaultMvcLoading implements Loading {
 
 	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
 		if (null != at) {
-			Settings ss = ioc.getIfExists(Settings.class);
 			if (at.value() != null && at.value().length > 0) {
+				IocProxy ip = new IocProxy(ioc);
 				String[] ps = new String[at.value().length];
 				for (int i = 0; i < ps.length; i++) {
 					String a = at.value()[i];
-					ps[i] = Strings.isEmpty(a) ? a : Mvcs.translate(a, ss);
+					ps[i] = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
 				}
 				ai.setPaths(ps);
 			}
