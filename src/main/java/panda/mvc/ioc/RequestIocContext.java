@@ -6,8 +6,6 @@ import panda.ioc.Scope;
 import panda.ioc.impl.ScopeIocContext;
 
 public class RequestIocContext extends ScopeIocContext {
-	private static final long serialVersionUID = 1L;
-
 	private RequestIocContext() {
 		super(Scope.REQUEST);
 	}
