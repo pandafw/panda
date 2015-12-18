@@ -13,7 +13,7 @@ import panda.lang.Strings;
  * @param <T> class type
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
+public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> implements BeanHandler<T> {
 	protected Beans beans;
 	protected Type type;
 
@@ -43,31 +43,6 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	}
 	
 	/**
-	 * get read property names
-	 * @return property names
-	 */
-	public String[] getReadPropertyNames() {
-		return getReadPropertyNames(null);
-	}
-
-	/**
-	 * get write property names
-	 * @return property names
-	 */
-	public String[] getWritePropertyNames() {
-		return getWritePropertyNames(null);
-	}
-
-	/**
-	 * get property type
-	 * @param propertyName property name
-	 * @return property type
-	 */
-	public Type getPropertyType(String propertyName) {
-		return getPropertyType(null, propertyName);
-	}
-
-	/**
 	 * x[1].y -> x.1.y
 	 * x(1).y -> x.1.y
 	 * 
@@ -96,9 +71,13 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	public Type getBeanType(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
+		if (hasProperty(beanObject, beanName)) {
+			return getPropertyType(beanObject, beanName);
+		}
+
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return getPropertyType(beanObject, beanName);
+			return null;
 		} 
 
 		String itemName = beanName.substring(0, dot);
@@ -120,15 +99,6 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 
 	/**
 	 * is the property readable
-	 * @param propertyName property name
-	 * @return property type
-	 */
-	public boolean canReadProperty(String propertyName) {
-		return canReadProperty(null, propertyName);
-	}
-
-	/**
-	 * is the property readable
 	 * @param beanName bean name
 	 * @return bean type
 	 */
@@ -145,9 +115,13 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	public boolean canReadBean(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
+		if (hasProperty(beanObject, beanName)) {
+			return canReadProperty(beanObject, beanName);
+		}
+
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return canReadProperty(beanObject, beanName);
+			return false;
 		} 
 
 		String itemName = beanName.substring(0, dot);
@@ -168,15 +142,6 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	}
 	
 	/**
-	 * is the property writable
-	 * @param propertyName property name
-	 * @return property writable
-	 */
-	public boolean canWriteProperty(String propertyName) {
-		return canWriteProperty(null, propertyName);
-	}
-	
-	/**
 	 * is the bean writable
 	 * @param beanName property name
 	 * @return bean writable
@@ -194,9 +159,13 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	public boolean canWriteBean(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
+		if (hasProperty(beanObject, beanName)) {
+			return canWriteProperty(beanObject, beanName);
+		}
+
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return canWriteProperty(beanObject, beanName);
+			return false;
 		}
 
 		String itemName = beanName.substring(0, dot);
@@ -225,9 +194,13 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	public Object getBeanValue(T beanObject, String beanName) {
 		beanName = normalizeBeanName(beanName);
 		
+		if (hasProperty(beanObject, beanName)) {
+			return getPropertyValue(beanObject, beanName);
+		}
+
 		int dot = beanName.indexOf(".");
 		if (dot < 0) {
-			return getPropertyValue(beanObject, beanName);
+			return null;
 		}
 
 		String itemName = beanName.substring(0, dot);
@@ -251,9 +224,13 @@ public abstract class AbstractBeanHandler<T> implements BeanHandler<T> {
 	public boolean setBeanValue(T beanObject, String beanName, Object value) {
 		beanName = normalizeBeanName(beanName);
 		
+		if (hasProperty(beanObject, beanName)) {
+			return setPropertyValue(beanObject, beanName, value);
+		}
+
 		int index = beanName.indexOf(".");
 		if (index < 0) {
-			return setPropertyValue(beanObject, beanName, value);
+			return false;
 		} 
 
 		String itemName = beanName.substring(0, index);

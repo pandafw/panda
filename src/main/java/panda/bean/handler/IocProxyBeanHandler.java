@@ -41,6 +41,15 @@ public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHan
 	}
 
 	/**
+	 * @param ioc bean object (can be null)
+	 * @param propertyName property name
+	 * @return true if has property
+	 */
+	public boolean hasProperty(T ioc, String propertyName) {
+		return canReadProperty(ioc, propertyName);
+	}
+
+	/**
 	 * is the property readable
 	 * @param ioc bean object (can be null)
 	 * @param propertyName property name

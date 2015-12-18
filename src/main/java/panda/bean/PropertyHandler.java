@@ -39,7 +39,20 @@ public interface PropertyHandler<T> {
 	 * @return property names
 	 */
 	String[] getWritePropertyNames(T beanObject);
-	
+
+	/**
+	 * @param propertyName property name
+	 * @return true if has property
+	 */
+	boolean hasProperty(String propertyName);
+
+	/**
+	 * @param beanObject bean object (can be null)
+	 * @param propertyName property name
+	 * @return true if has property
+	 */
+	boolean hasProperty(T beanObject, String propertyName);
+
 	/**
 	 * get property type
 	 * @param propertyName property name
