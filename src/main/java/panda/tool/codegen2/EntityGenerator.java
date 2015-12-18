@@ -167,11 +167,16 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		prepareImportList(entity.getPropertyList(), imports);
 
+		imports.add(Serializable.class.getName());
 		if (Strings.isEmpty(entity.getBaseBeanClass())) {
 			imports.add(Serializable.class.getName());
 		}
 		else {
 			imports.add(entity.getBaseBeanClass());
+		}
+
+		if (Strings.isNotEmpty(entity.getBaseImplClass())) {
+			imports.add(entity.getBaseImplClass());
 		}
 
 		if (Strings.isNotEmpty(entity.getComment())) {

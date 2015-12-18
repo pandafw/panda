@@ -34,6 +34,7 @@
 		<attribute name="table" type="string"></attribute>
 		<attribute name="trimString" type="string"></attribute>
 		<attribute name="baseBeanClass" type="string"></attribute>
+		<attribute name="baseImplClass" type="string"></attribute>
 		<attribute name="baseQueryClass" type="string"></attribute>
 		<attribute name="generate" type="boolean" default="true"></attribute>
 		<attribute name="comment" type="string"></attribute>

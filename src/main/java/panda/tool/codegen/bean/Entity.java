@@ -37,6 +37,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;table&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseBeanClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;baseImplClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseQueryClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;comment&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -69,6 +70,8 @@ public class Entity {
 	private String trimString;
 	@XmlAttribute
 	private String baseBeanClass;
+	@XmlAttribute
+	private String baseImplClass;
 	@XmlAttribute
 	private String baseQueryClass;
 	@XmlAttribute
@@ -104,6 +107,7 @@ public class Entity {
 		this.table = model.table;
 		this.trimString = model.trimString;
 		this.baseBeanClass = model.baseBeanClass;
+		this.baseImplClass = model.baseImplClass;
 		this.baseQueryClass = model.baseQueryClass;
 		this.generate = model.generate;
 		this.comment = model.comment;
@@ -304,6 +308,20 @@ public class Entity {
 	 */
 	public void setBaseBeanClass(String baseBeanClass) {
 		this.baseBeanClass = baseBeanClass;
+	}
+
+	/**
+	 * @return the baseImplClass
+	 */
+	public String getBaseImplClass() {
+		return baseImplClass;
+	}
+
+	/**
+	 * @param baseImplClass the baseImplClass to set
+	 */
+	public void setBaseImplClass(String baseImplClass) {
+		this.baseImplClass = baseImplClass;
 	}
 
 	/**
