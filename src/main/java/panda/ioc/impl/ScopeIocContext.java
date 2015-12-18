@@ -1,6 +1,5 @@
 package panda.ioc.impl;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,9 +13,7 @@ import panda.log.Logs;
 /**
  * 自定义级别上下文对象
  */
-public class ScopeIocContext implements IocContext, Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class ScopeIocContext implements IocContext {
 	private static final Log log = Logs.getLog(ScopeIocContext.class);
 
 	private String scope;
