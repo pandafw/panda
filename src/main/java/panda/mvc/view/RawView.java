@@ -27,6 +27,7 @@ import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.net.http.HttpContentType;
+import panda.net.http.HttpStatus;
 
 /**
  * 将数据对象直接写入 HTTP 响应
@@ -111,11 +112,12 @@ public class RawView implements View {
 		if (obj instanceof File) {
 			File file = (File)obj;
 			long fileSz = file.length();
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
 				log.debug("File downloading ... " + file.getAbsolutePath());
+			}
 			if (!file.exists() || file.isDirectory()) {
 				log.debug("File downloading ... Not Exist : " + file.getAbsolutePath());
-				res.sendError(404);
+				res.sendError(HttpStatus.SC_NOT_FOUND);
 				return;
 			}
 			if (!res.containsHeader("Content-Disposition")) {

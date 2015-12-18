@@ -65,7 +65,7 @@ servlet-error-message-500=サーバー内部処理エラーが発生している
 F5キーで画面リフレッシュをして、同じエラーが表示される場合、サイト管理者に連絡してください。
 servlet-error-message-503=サーバー過負荷のため、該当ページが表示できません。\n\
 しばらくお待ちしてから、再度アクセスしてください。
-servlet-error-request-url=リクエスト: <span class="request-url">{0}</span>
+servlet-error-request-url=リクエスト: <span class="request-url">${top}</span>
 servlet-error-exception=例外情報:
 
 

@@ -121,7 +121,7 @@ servlet-error-message-404=The server has not found anything matching the Request
 servlet-error-message-403=The Request-URI is not allowed to access.
 servlet-error-message-500=The server encountered an unexpected condition which prevented it from fulfilling the request.
 servlet-error-message-503=The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.
-servlet-error-request-url=Request: <span class="request-url">{0}</span>
+servlet-error-request-url=Request: <span class="request-url">${top}</span>
 servlet-error-exception=Exception:
 
 

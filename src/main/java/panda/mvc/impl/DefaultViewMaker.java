@@ -18,6 +18,7 @@ import panda.mvc.view.RedirectView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XmlView;
+import panda.net.http.HttpStatus;
 
 /**
  * 默认的的视图工厂类
@@ -67,7 +68,7 @@ public class DefaultViewMaker implements ViewMaker {
 		}
 		
 		if (View.HTTP.equals(type)) {
-			return new HttpStatusView(Numbers.toInt(value, 500));
+			return new HttpStatusView(Numbers.toInt(value, HttpStatus.SC_INTERNAL_SERVER_ERROR));
 		}
 
 		if (View.RAW.equals(type)) {

@@ -5,8 +5,12 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.mvc.View;
+import panda.mvc.processor.ViewProcessor;
+import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
 
 /**
@@ -23,35 +27,6 @@ public class HttpStatusView implements View {
 	public static final View SERVER_ERROR = new HttpStatusView(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	public static final View BAD_GATEWAY = new HttpStatusView(HttpStatus.SC_BAD_GATEWAY);
 
-	/**
-	 * 这个异常用于，在某个入口函数,如果你声明了 `@Fail("http:500")` 但是你真正的返回值想根据运行时决定。 <br>
-	 * 那么，你就直接抛这个异常好了
-	 */
-	public static class HttpStatusException extends RuntimeException {
-
-		private static final long serialVersionUID = 4035188583429445028L;
-
-		private int status;
-
-		public int getStatus() {
-			return status;
-		}
-
-		public void setStatus(int status) {
-			this.status = status;
-		}
-
-		public HttpStatusException(int status) {
-			this.status = status;
-		}
-
-		public HttpStatusException(int status, String fmt, Object... args) {
-			super(String.format(fmt, args));
-			this.status = status;
-		}
-
-	}
-
 	private int statusCode;
 
 	public HttpStatusView(int statusCode) {
@@ -59,12 +34,27 @@ public class HttpStatusView implements View {
 	}
 
 	public void render(ActionContext ac) {
-		Object obj = ac.getResult();
 		HttpServletResponse res = ac.getResponse();
 
 		int code = this.statusCode;
-		if (obj != null && obj instanceof HttpStatusException) {
-			code = ((HttpStatusException)obj).getStatus();
+		Object obj = ac.getResult();
+		if (obj instanceof HttpException) {
+			code = ((HttpException)obj).getStatus();
+		}
+
+		Object err = ac.getError();
+		if (err instanceof HttpException) {
+			code = ((HttpException)err).getStatus();
+		}
+
+		String customView = ac.getIoc().getIfExists(String.class, MvcConstants.HTTP_STATUS_CUSTOM_VIEW);
+		if (Strings.isNotEmpty(customView)) {
+			View view = ViewProcessor.evalView(ac.getIoc(), customView);
+			if (view != null) {
+				res.setStatus(code);
+				view.render(ac);
+				return;
+			}
 		}
 
 		if (code >= 400) {

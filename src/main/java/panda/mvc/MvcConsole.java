@@ -149,7 +149,7 @@ public class MvcConsole {
 		}
 		
 		if (!handler.handle(request, response)) {
-			response.sendError(404);
+			response.sendError(HttpStatus.SC_NOT_FOUND);
 		}
 		
 		Throwable ex = HttpServlets.getServletException(request);

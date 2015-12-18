@@ -36,7 +36,7 @@ public class ViewProcessor extends AbstractProcessor {
 		doNext(ac);
 	}
 
-	protected ViewMaker getViewMaker(Ioc ioc) {
+	public static ViewMaker getViewMaker(Ioc ioc) {
 		ViewMaker maker = ioc.getIfExists(ViewMaker.class);
 		if (maker == null) {
 			maker = new DefaultViewMaker();
@@ -44,7 +44,7 @@ public class ViewProcessor extends AbstractProcessor {
 		return maker;
 	}
 	
-	protected View evalView(Ioc ioc, String viewType) {
+	public static View evalView(Ioc ioc, String viewType) {
 		if (Strings.isEmpty(viewType)) {
 			return null;
 		}

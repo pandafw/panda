@@ -64,7 +64,7 @@ servlet-error-message-500=服务器内部错误，无法显示指定的网页。
 servlet-error-message-503=服务器超负荷，无法显示指定的网页。\n\
 请稍稍等待片刻之后重新访问网站。
 servlet-error-status-code=HTTP状态码 {0}
-servlet-error-request-url=请求网页: <span class="request-url">{0}</span>
+servlet-error-request-url=请求网页: <span class="request-url">${top}</span>
 servlet-error-exception=例外信息:
 
 

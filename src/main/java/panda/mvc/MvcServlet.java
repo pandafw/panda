@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.mvc.config.ServletMvcConfig;
+import panda.net.http.HttpStatus;
 
 /**
  * 挂接到 JSP/Servlet 容器的入口
@@ -19,10 +20,18 @@ public class MvcServlet extends HttpServlet {
 
 	protected ActionHandler handler;
 
+	protected void initActionHandler(ServletConfig conf) {
+		handler = (ActionHandler)conf.getServletContext().getAttribute(ActionHandler.class.getName());
+		if (handler == null) {
+			ServletMvcConfig config = new ServletMvcConfig(conf);
+			handler = new ActionHandler(config);
+			conf.getServletContext().setAttribute(ActionHandler.class.getName(), handler);
+		}
+	}
+
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
-		ServletMvcConfig config = new ServletMvcConfig(servletConfig);
-		handler = new ActionHandler(config);
+		initActionHandler(servletConfig);
 	}
 
 	public void destroy() {
@@ -34,7 +43,7 @@ public class MvcServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (!handler.handle(req, resp)) {
-			resp.sendError(404);
+			resp.sendError(HttpStatus.SC_NOT_FOUND);
 		}
 	}
 

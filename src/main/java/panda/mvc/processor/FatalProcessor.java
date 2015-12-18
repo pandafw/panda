@@ -1,12 +1,11 @@
 package panda.mvc.processor;
 
-import javax.servlet.http.HttpServletResponse;
-
 import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.mvc.view.HttpStatusView;
 import panda.servlet.HttpServlets;
 
 @IocBean
@@ -25,7 +24,6 @@ public class FatalProcessor extends ViewProcessor {
 			View view = evalView(ac.getIoc(), ac.getInfo().getFatalView());
 			if (view != null) {
 				try {
-					ac.getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 					view.render(ac);
 					return;
 				}
@@ -33,9 +31,10 @@ public class FatalProcessor extends ViewProcessor {
 					log.error("Failed to render fatal view: " + view, e2);
 				}
 			}
-			
+
 			try {
-				HttpServlets.sendException(ac.getRequest(), ac.getResponse(), e);
+				HttpServlets.saveException(ac.getRequest(), e);
+				HttpStatusView.SERVER_ERROR.render(ac);
 			}
 			catch (Throwable e3) {
 				log.error("Failed to send exception", e3);

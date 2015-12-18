@@ -163,7 +163,9 @@ public class HttpServlets {
 		if (request == null) {
 			return null;
 		}
-		return getRequestURI(request).substring(request.getContextPath().length());
+		String uri = request.getRequestURI();
+		uri = URLHelper.decodeURL(uri);
+		return uri.substring(request.getContextPath().length());
 	}
 	
 	/**
@@ -250,13 +252,17 @@ public class HttpServlets {
 		return s;
 	}
 
-	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
-		// send a http error response to use the servlet defined error handler
-		// make the exception availible to the web.xml defined error page
+	public static void saveException(HttpServletRequest request, Throwable e) {
 		request.setAttribute(ERROR_EXCEPTION_ATTRIBUTE, e);
 
 		// for compatibility
 		request.setAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE, e);
+	}
+
+	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
+		// send a http error response to use the servlet defined error handler
+		// make the exception availible to the web.xml defined error page
+		saveException(request, e);
 
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}

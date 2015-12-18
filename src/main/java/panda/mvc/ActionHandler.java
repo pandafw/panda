@@ -21,6 +21,8 @@ import panda.mvc.ioc.SessionIocContext;
 
 public class ActionHandler {
 
+	private boolean deposed;
+	
 	private Loading loading;
 
 	private UrlMapping mapping;
@@ -101,7 +103,10 @@ public class ActionHandler {
 	}
 
 	public void depose() {
-		loading.depose(config);
+		if (!deposed) {
+			loading.depose(config);
+			deposed = true;
+		}
 	}
 
 }

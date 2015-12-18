@@ -46,17 +46,25 @@ public class MvcFilter implements Filter {
 	 */
 	protected Set<String> exclusionPaths;
 
+	protected void initActionHandler(FilterConfig conf) {
+		handler = (ActionHandler)conf.getServletContext().getAttribute(ActionHandler.class.getName());
+		if (handler == null) {
+			FilterMvcConfig config = new FilterMvcConfig(conf);
+			handler = new ActionHandler(config);
+			conf.getServletContext().setAttribute(ActionHandler.class.getName(), handler);
+		}
+	}
+
 	public void init(FilterConfig conf) throws ServletException {
 		log.infof("MvcFilter[%s] starting ...", conf.getFilterName());
 
-		FilterMvcConfig config = new FilterMvcConfig(conf);
-		
-		handler = new ActionHandler(config);
-		String regx = Strings.defaultString(config.getInitParameter("ignore"), IGNORE);
+		initActionHandler(conf);
+
+		String regx = Strings.defaultString(conf.getInitParameter("ignore"), IGNORE);
 		if (!"null".equalsIgnoreCase(regx)) {
 			ignorePtn = Pattern.compile(regx, Pattern.CASE_INSENSITIVE);
 		}
-		String exclusions = config.getInitParameter("exclusions");
+		String exclusions = conf.getInitParameter("exclusions");
 		if (exclusions != null) {
 			String[] tmps = Strings.split(exclusions);
 			Set<String> prefix = new HashSet<String>();
