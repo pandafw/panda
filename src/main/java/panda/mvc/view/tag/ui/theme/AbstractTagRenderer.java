@@ -113,10 +113,20 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 	
 	protected String ticon(String i) {
-		if (i.startsWith("icon-")) {
+		if (i.startsWith("fa ")) {
+			return i;
+		}
+		else if (i.startsWith("fa-")) {
+			i = "fa " + i;
+		}
+		else {
 			String[] ss = Strings.split(i);
-	
-			i = getText(ss[0], ss[0].substring(5));
+			
+			if (ss[0].startsWith("icon-")) {
+				ss[0] = ss[0].substring(5);
+			}
+
+			i = getText("icon-" + ss[0], ss[0]);
 			if (i.startsWith("fa ")) {
 				ss[0] = i;
 			}
@@ -128,15 +138,6 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 			}
 			
 			i = Strings.join(ss, " ");
-		}
-		else if (i.startsWith("fa ")) {
-			return i;
-		}
-		else if (i.startsWith("fa-")) {
-			i = "fa " + i;
-		}
-		else {
-			i = "fa fa-" + i;
 		}
 		return i;
 	}
