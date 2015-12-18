@@ -364,11 +364,12 @@ public class Beans {
 			accessors.put(name, pa);
 		}
 		else if (pa.getter == null) {
-			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+			if (Types.isAssignable(type, pa.type)) {
 				if (!getter.isAccessible()) {
 					getter.setAccessible(true);
 				}
 				pa.getter = getter;
+				pa.type = type;
 			}
 		}
 	}
@@ -387,12 +388,13 @@ public class Beans {
 			accessors.put(name, pa);
 		}
 		else if (pa.setter == null) {
-			if (Types.getRawType(type) == Types.getRawType(pa.type)) {
+			if (Types.isAssignable(type, pa.type)) {
 				if (!setter.isAccessible()) {
 					setter.setAccessible(true);
 				}
 				setter.setAccessible(true);
 				pa.setter = setter;
+				pa.type = type;
 			}
 		}
 	}
