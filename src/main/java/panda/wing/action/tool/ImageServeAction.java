@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
  * Image download/upload for temporary image
  */
 @At("/image")
-public class ImageServeAction extends FileServeAction {
+public class ImageServeAction extends DataServeAction {
 	private static final Log log = Logs.getLog(ImageServeAction.class);
 	
 	private int width = 0;

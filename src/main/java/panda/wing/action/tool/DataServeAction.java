@@ -1,16 +1,23 @@
 package panda.wing.action.tool;
 
+import java.io.InputStream;
+
 import panda.filepool.FileItem;
 import panda.filepool.FilePool;
+import panda.io.Streams;
 import panda.ioc.annotation.IocInject;
+import panda.lang.time.DateTimes;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
+import panda.mvc.view.HttpStatusView;
+import panda.mvc.view.VoidView;
+import panda.servlet.HttpServletSupport;
+import panda.wing.action.AbstractAction;
 
 /**
- * File download/upload Action
+ * Common download/upload Action
  */
-@At("/file")
-public class FileServeAction extends DataServeAction {
+public class DataServeAction extends AbstractAction {
 	@IocInject
 	protected FilePool filePool;
 	
@@ -61,14 +68,33 @@ public class FileServeAction extends DataServeAction {
 	}
 
 	/**
-	 * upload
+	 * download
 	 * 
-	 * @return file
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	public FileItem upload(@Param("file") FileItem file) throws Exception {
-		return file;
+	public Object download(@Param("id") Long id) throws Exception {
+		FileItem file = filePool.findFile(id);
+		if (file == null) {
+			return HttpStatusView.NOT_FOUND;
+		}
+
+		String filename = file.getName();
+		InputStream fis = file.getInputStream();
+		
+		try {
+			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
+			hss.setContentLength(file.getSize());
+			hss.setFileName(filename);
+			hss.setExpiry(cache ? DateTimes.SEC_WEEK : 0);
+	
+			hss.writeResponseHeader();
+			hss.writeResponseData(fis, bufferSize);
+		}
+		finally {
+			Streams.safeClose(fis);
+		}
+		return VoidView.INSTANCE;
 	}
 
 }
