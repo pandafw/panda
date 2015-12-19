@@ -47,6 +47,16 @@ public class ActionInvoker {
 	}
 
 	/**
+	 * get ActionChain
+	 * 
+	 * @param method HTTP 的请求方法 (GET|POST|PUT|DELETE),如果为空，则会抛错
+	 * @return chain
+	 */
+	public ActionChain getChain(HttpMethod method) {
+		return chainMap.get(method);
+	}
+
+	/**
 	 * @return the defaultChain
 	 */
 	public ActionChain getDefaultChain() {

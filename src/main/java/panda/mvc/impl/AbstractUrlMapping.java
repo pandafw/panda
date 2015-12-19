@@ -56,16 +56,20 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 				map.put(path, invoker);
 			}
 			if (ai.hasHttpMethod()) {
-				for (HttpMethod httpMethod : ai.getHttpMethods()) {
-					if (invoker.hasChain(httpMethod)) {
-						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped.", ai.getActionType().getName(), ai.getMethod().getName(), path, httpMethod.toString()));
+				for (HttpMethod hm : ai.getHttpMethods()) {
+					if (invoker.hasChain(hm)) {
+						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped for %s.%s().", 
+							ai.getActionType().getName(), ai.getMethod().getName(), path, hm.toString(), 
+							invoker.getChain(hm).getInfo().getActionType().getName(), invoker.getChain(hm).getInfo().getMethod().getName()));
 					}
-					invoker.addChain(httpMethod, chain);
+					invoker.addChain(hm, chain);
 				}
 			}
 			else {
 				if (invoker.getDefaultChain() != null) {
-					throw new IllegalArgumentException(String.format("%s.%s @At(%s) is already mapped.", ai.getActionType().getName(), ai.getMethod().getName(), path));
+					throw new IllegalArgumentException(String.format("%s.%s @At(%s) is already mapped for %s.%s().", 
+						ai.getActionType().getName(), ai.getMethod().getName(), path, 
+						invoker.getDefaultChain().getInfo().getActionType().getName(), invoker.getDefaultChain().getInfo().getMethod().getName()));
 				}
 				invoker.setDefaultChain(chain);
 			}
