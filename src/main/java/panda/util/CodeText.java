@@ -101,7 +101,7 @@ public class CodeText implements Cloneable, Serializable {
 	 * Clone
 	 * @return Clone Object
 	 */
-	public Object clone() {
+	public CodeText clone() {
 		CodeText clone = new CodeText();
 
 		clone.code = this.code;

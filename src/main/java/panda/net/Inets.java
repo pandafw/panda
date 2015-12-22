@@ -1,16 +1,26 @@
 package panda.net;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import panda.io.Files;
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * @author yf.frank.wang@gmail.com
  */
 public class Inets {
+	public static boolean isIpV6(InetAddress ia) {
+		return ia instanceof Inet6Address;
+	}
+	
+	public static boolean isIpV4(InetAddress ia) {
+		return ia instanceof Inet4Address;
+	}
+	
 	public static boolean isIntranetAddr(String ipAddr) {
 		if (Strings.isEmpty(ipAddr)) {
 			return false;
