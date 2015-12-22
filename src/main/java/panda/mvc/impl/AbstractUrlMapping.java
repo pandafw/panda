@@ -116,7 +116,7 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 	}
 
 	protected void printActionMapping(ActionInfo ai) {
-		if (log.isDebugEnabled()) {
+		if (log.isInfoEnabled()) {
 			// print path
 			String[] paths = ai.getPaths();
 			String sb = Strings.join(paths, ", ");
@@ -125,7 +125,7 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 			Method method = ai.getMethod();
 			String sm = String.format("%-30s : %-10s", method.toString(), method.getReturnType().getSimpleName());
 
-			log.debugf("%s >> %s | @Ok(%-5s) @Err(%-5s) @Fail(%-5s)",
+			log.infof("%s >> %s | @Ok(%-5s) @Err(%-5s) @Fail(%-5s)",
 				Strings.rightPad(sb, 30), sm, ai.getOkView(), ai.getErrorView(), ai.getFatalView());
 		}
 	}

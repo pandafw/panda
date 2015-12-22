@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.net.http.HttpMethod;
 
@@ -32,20 +33,23 @@ public class ActionInfo {
 	}
 
 	public ActionInfo mergeWith(ActionInfo parent) {
-		// 组合路径 - 与父路径做一个笛卡尔积
-		if (null != paths && null != parent.paths && parent.paths.length > 0) {
+		if (paths != null && Arrays.isNotEmpty(parent.paths)) {
 			Set<String> myPaths = new HashSet<String>(paths.length * parent.paths.length);
 			for (String p : paths) {
+				// absolute path
 				if (p.length() > 0 && p.charAt(0) == '/') {
 					myPaths.add(p);
 					continue;
 				}
+				
+				// relative path
 				for (String pp : parent.paths) {
 					if (Strings.isEmpty(pp)) {
-						myPaths.add(p);
+						myPaths.add('/' + p);
 					}
-					else if (pp.charAt(pp.length() - 1) == '/') {
-						myPaths.add(pp + p);
+					else if (Strings.isEmpty(p)) {
+						myPaths.add(pp);
+						myPaths.add(pp + '/');
 					}
 					else {
 						myPaths.add(pp + '/' + p);
@@ -55,7 +59,7 @@ public class ActionInfo {
 			paths = myPaths.toArray(new String[myPaths.size()]);
 		}
 
-		// 填充默认值
+		// set defaults
 		adaptor = null == adaptor ? parent.adaptor : adaptor;
 		okView = null == okView ? parent.okView : okView;
 		errorView = null == errorView ? parent.errorView : errorView;

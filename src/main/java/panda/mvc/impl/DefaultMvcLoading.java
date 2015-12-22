@@ -360,12 +360,13 @@ public class DefaultMvcLoading implements Loading {
 
 	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
 		if (at != null) {
-			if (at.value() != null && at.value().length > 0) {
+			if (Arrays.isNotEmpty(at.value())) {
 				IocProxy ip = new IocProxy(ioc);
 				String[] ps = new String[at.value().length];
 				for (int i = 0; i < ps.length; i++) {
 					String a = at.value()[i];
-					ps[i] = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
+					a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
+					ps[i] = Strings.removeEnd(a, '/');
 				}
 				ai.setPaths(ps);
 			}
@@ -373,7 +374,7 @@ public class DefaultMvcLoading implements Loading {
 				ai.setPaths(Arrays.toArray(def));
 			}
 
-			if (at.method() != null && at.method().length > 0) {
+			if (Arrays.isNotEmpty(at.method())) {
 				for (HttpMethod m : at.method()) {
 					ai.getHttpMethods().add(m);
 				}
