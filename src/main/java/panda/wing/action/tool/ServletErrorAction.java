@@ -13,7 +13,7 @@ public class ServletErrorAction extends AbstractAction {
 
 	private static final String TPL = "/panda/mvc/view/servlet-error.ftl";
 	
-	@At("*")
+	@At("(.*)$")
 	public Object execute(String error) {
 		Object sc = getRequest().getAttribute(HttpServlets.ERROR_STATUS_CODE_ATTRIBUTE);
 		if (sc == null) {
