@@ -366,7 +366,7 @@ public class DefaultMvcLoading implements Loading {
 				for (int i = 0; i < ps.length; i++) {
 					String a = at.value()[i];
 					a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
-					ps[i] = Strings.removeEnd(a, '/');
+					ps[i] = a.length() > 1 ? Strings.removeEnd(a, '/') : a;
 				}
 				ai.setPaths(ps);
 			}
@@ -413,10 +413,12 @@ public class DefaultMvcLoading implements Loading {
 	protected boolean isAction(Class<?> cls) {
 		try {
 			int cm = cls.getModifiers();
-			if (!Modifier.isPublic(cm) || Modifier.isAbstract(cm) || Modifier.isInterface(cm)) {
+			if (Modifier.isAbstract(cm) || Modifier.isInterface(cm)
+					|| !Modifier.isPublic(cm)
+					|| !cls.isAnnotationPresent(At.class)) {
 				return false;
 			}
-			
+
 			for (Method m : cls.getMethods()) {
 				if (m.isAnnotationPresent(At.class)) {
 					return true;

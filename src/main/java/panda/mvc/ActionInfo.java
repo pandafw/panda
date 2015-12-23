@@ -47,12 +47,16 @@ public class ActionInfo {
 					if (Strings.isEmpty(pp)) {
 						myPaths.add('/' + p);
 					}
-					else if (Strings.isEmpty(p)) {
-						myPaths.add(pp);
-						myPaths.add(pp + '/');
-					}
 					else {
-						myPaths.add(pp + '/' + p);
+						if (Strings.endsWithChar(pp, '/')) {
+							myPaths.add(pp + p);
+						}
+						else {
+							myPaths.add(pp + '/' + p);
+						}
+						if (Strings.isEmpty(p)) {
+							myPaths.add(pp);
+						}
 					}
 				}
 			}

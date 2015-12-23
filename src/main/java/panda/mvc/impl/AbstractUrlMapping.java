@@ -38,10 +38,9 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 		for (int i = 0; i < paths.length; i++) {
 			String path = paths[i];
 			if (Strings.isEmpty(path)) {
-				throw new IllegalArgumentException(String.format("Failed to add empty @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
+				paths[i] = "/";
 			}
-			
-			if (path.charAt(0) != '/') {
+			else if (path.charAt(0) != '/') {
 				paths[i] = '/' + path;
 			}
 		}
