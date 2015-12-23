@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.TreeSet;
 
 import panda.io.Streams;
 import panda.ioc.IocException;
@@ -60,7 +61,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		if (beans.size() > 0) {
 			if (log.isInfoEnabled()) {
 				log.info("Successfully scan/add " + args.size() + " args:\n" + Strings.join(args, '\n'));
-				log.info("Found " + beans.size() + " bean classes:\n" + Strings.join(beans.keySet(), '\n'));
+				log.info("Found " + beans.size() + " bean classes:\n" + Strings.join(new TreeSet<String>(beans.keySet()), '\n'));
 			}
 		}
 		else {
@@ -170,6 +171,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				Collection<Field> fields = Fields.getAnnotationFields(clazz, IocInject.class);
 				for (Field f : fields) {
 					sb.append(Streams.LINE_SEPARATOR)
+					  .append(" - ")
 					  .append(f.getName())
 					  .append(" of ")
 					  .append(f.getDeclaringClass());
@@ -178,6 +180,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 				Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
 				for (Method m : methods) {
 					sb.append(Streams.LINE_SEPARATOR)
+					  .append(" - ")
 					  .append(m.getName())
 					  .append("() of ")
 					  .append(m.getDeclaringClass());
