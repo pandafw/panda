@@ -8016,12 +8016,23 @@ public class Strings {
 	 * @return <code>true</code> if the String starts with any of the chars
 	 */
 	public static boolean startsWithChars(CharSequence string, String chars) {
-		return startsWithChars(string, chars, false);
+		if (isEmpty(string) || isEmpty(chars)) {
+			return false;
+		}
+
+		char s = string.charAt(0);
+		for (int i = 0; i < chars.length(); i++) {
+			char c = chars.charAt(i);
+			if (s == c) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * <p>
-	 * Check if a String starts with any char of the specified chars.
+	 * Check if a String starts with any char of the specified chars (case insensitive).
 	 * </p>
 	 * 
 	 * <pre>
@@ -8034,25 +8045,19 @@ public class Strings {
 	 * 
 	 * @param string the String to check, may be null
 	 * @param chars the chars to find, may be null or empty
-	 * @param ignoreCase inidicates whether the compare should ignore case (case insensitive) or
-	 *            not.
 	 * @return <code>true</code> if the String starts with any of the the prefixes
 	 */
-	public static boolean startsWithChars(CharSequence string, String chars, boolean ignoreCase) {
+	public static boolean startsWithCharsIgnoreCase(CharSequence string, String chars) {
 		if (isEmpty(string) || isEmpty(chars)) {
 			return false;
 		}
 
 		char s = string.charAt(0);
-		if (ignoreCase) {
-			s = Character.toLowerCase(s);
-		}
+		s = Character.toLowerCase(s);
 		for (int i = 0; i < chars.length(); i++) {
-			char ch = chars.charAt(i);
-			if (ignoreCase) {
-				ch = Character.toLowerCase(ch);
-			}
-			if (s == ch) {
+			char c = chars.charAt(i);
+			c = Character.toLowerCase(c);
+			if (s == c) {
 				return true;
 			}
 		}
@@ -8074,12 +8079,16 @@ public class Strings {
 	 * @return <code>true</code> if the String starts with the char
 	 */
 	public static boolean startsWithChar(CharSequence string, char find) {
-		return startsWithChar(string, find, false);
+		if (isEmpty(string)) {
+			return false;
+		}
+
+		return find == string.charAt(0);
 	}
 
 	/**
 	 * <p>
-	 * Check if a String starts with any char of the specified chars.
+	 * Check if a String starts with any char of the specified chars (case insensitive).
 	 * </p>
 	 * 
 	 * <pre>
@@ -8089,23 +8098,17 @@ public class Strings {
 	 * 
 	 * @param string the String to check, may be null
 	 * @param find the char to find, may be null
-	 * @param ignoreCase inidicates whether the compare should ignore case (case insensitive) or
-	 *            not.
 	 * @return <code>true</code> if the String starts with the char
 	 */
-	public static boolean startsWithChar(CharSequence string, char find, boolean ignoreCase) {
+	public static boolean startsWithCharIgnoreCase(CharSequence string, char find) {
 		if (isEmpty(string)) {
 			return false;
 		}
 
-		char s = string.charAt(0);
-		if (ignoreCase) {
-			s = Character.toLowerCase(s);
-		}
-		if (ignoreCase) {
-			find = Character.toLowerCase(find);
-		}
-		return s == find;
+		char c = string.charAt(0);
+		c = Character.toLowerCase(c);
+		find = Character.toLowerCase(find);
+		return c == find;
 	}
 
 	/**
@@ -8126,12 +8129,23 @@ public class Strings {
 	 * @return <code>true</code> if the String ends with any of the chars
 	 */
 	public static boolean endsWithChars(String string, String chars) {
-		return endsWithChars(string, chars, false);
+		if (isEmpty(string) || isEmpty(chars)) {
+			return false;
+		}
+
+		char e = string.charAt(string.length() - 1);
+		for (int i = 0; i < chars.length(); i++) {
+			char c = chars.charAt(i);
+			if (e == c) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * <p>
-	 * Check if a String starts with any char of the specified chars.
+	 * Check if a String starts with any char of the specified chars (case insensitive).
 	 * </p>
 	 * 
 	 * <pre>
@@ -8144,25 +8158,19 @@ public class Strings {
 	 * 
 	 * @param string the String to check, may be null
 	 * @param chars the chars to find, may be null or empty
-	 * @param ignoreCase inidicates whether the compare should ignore case (case insensitive) or
-	 *            not.
 	 * @return <code>true</code> if the String ends with any of the the prefixes
 	 */
-	public static boolean endsWithChars(String string, String chars, boolean ignoreCase) {
+	public static boolean endsWithCharsIgnoreCase(String string, String chars) {
 		if (isEmpty(string) || isEmpty(chars)) {
 			return false;
 		}
 
 		char e = string.charAt(string.length() - 1);
-		if (ignoreCase) {
-			e = Character.toLowerCase(e);
-		}
+		e = Character.toLowerCase(e);
 		for (int i = 0; i < chars.length(); i++) {
-			char ch = chars.charAt(i);
-			if (ignoreCase) {
-				ch = Character.toLowerCase(ch);
-			}
-			if (e == ch) {
+			char c = chars.charAt(i);
+			c = Character.toLowerCase(c);
+			if (e == c) {
 				return true;
 			}
 		}
@@ -8184,12 +8192,16 @@ public class Strings {
 	 * @return <code>true</code> if the String starts with the char
 	 */
 	public static boolean endsWithChar(String string, char find) {
-		return startsWithChar(string, find, false);
+		if (isEmpty(string)) {
+			return false;
+		}
+
+		return find == string.charAt(string.length() - 1);
 	}
 
 	/**
 	 * <p>
-	 * Check if a String ends with any char of the specified chars.
+	 * Check if a String ends with any char of the specified chars (case insensitive).
 	 * </p>
 	 * 
 	 * <pre>
@@ -8199,23 +8211,17 @@ public class Strings {
 	 * 
 	 * @param string the String to check, may be null
 	 * @param find the char to find, may be null
-	 * @param ignoreCase inidicates whether the compare should ignore case (case insensitive) or
-	 *            not.
 	 * @return <code>true</code> if the String ends with the char
 	 */
-	public static boolean endsWithChar(String string, char find, boolean ignoreCase) {
+	public static boolean endsWithCharIgnoreCase(String string, char find) {
 		if (isEmpty(string)) {
 			return false;
 		}
 
-		char ch = string.charAt(string.length() - 1);
-		if (ignoreCase) {
-			ch = Character.toLowerCase(ch);
-		}
-		if (ignoreCase) {
-			find = Character.toLowerCase(find);
-		}
-		return ch == find;
+		char c = string.charAt(string.length() - 1);
+		c = Character.toLowerCase(c);
+		find = Character.toLowerCase(find);
+		return c == find;
 	}
 
 	/**
