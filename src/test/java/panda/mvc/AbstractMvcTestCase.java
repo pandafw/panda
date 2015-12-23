@@ -1,5 +1,7 @@
 package panda.mvc;
 
+import javax.servlet.ServletException;
+
 import org.junit.After;
 import org.junit.Before;
 
@@ -28,14 +30,20 @@ public abstract class AbstractMvcTestCase {
 	protected IocRequestListener iocRequestListener;
 
 	@Before
-	public void init() throws Throwable {
+	public void init() {
 		servletContext = Mock.servletContext();
 		servletConfig = Mock.servletConfig(servletContext, "test");
 		iocRequestListener = new IocRequestListener();
 		
 		initServletConfig();
 		servlet = new MvcServlet();
-		servlet.init(servletConfig);
+		try {
+			servlet.init(servletConfig);
+		}
+		catch (ServletException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
 		session = Mock.servletSession(servletContext);
 		newreq();
