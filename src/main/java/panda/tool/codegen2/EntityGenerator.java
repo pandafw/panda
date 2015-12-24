@@ -365,7 +365,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	}
 
 	public String validatorMsgId(String alias) {
-		if (alias.startsWith("#")) {
+		if (Strings.startsWithChar(alias, '"')) {
 			return alias;
 		}
 		
