@@ -73,7 +73,7 @@ public class TicketAuthenticator extends UserAuthenticator {
 	@SuppressWarnings("unchecked")
 	protected List<String> getUserPermits(Object su) {
 		if (su instanceof IUser) {
-			return ((IUser)su).getGroupPermits();
+			return ((IUser)su).getPermits();
 		}
 		return Collections.EMPTY_LIST;
 	}

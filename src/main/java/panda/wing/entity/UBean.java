@@ -7,8 +7,6 @@ import panda.lang.Objects;
 
 public class UBean extends Bean implements IUpdate {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Column(notNull=true)
 	protected Long uusid;
 	protected String uusnm;

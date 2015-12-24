@@ -7,8 +7,6 @@ import panda.lang.Objects;
 
 public abstract class CBean extends Bean implements ICreate {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Column(notNull=true)
 	protected Long cusid;
 	protected String cusnm;

@@ -11,13 +11,7 @@ public interface IUser {
 
 	public String getPassword();
 
-	public Long getGid();
-
-	public String getGroupName();
-
-	public Integer getGroupLevel();
-
-	public List<String> getGroupPermits();
+	public List<String> getPermits();
 	
 	public Long getLoginTime();
 }

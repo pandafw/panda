@@ -8,8 +8,6 @@ import panda.wing.constant.VC;
 
 public class SUBean extends Bean implements IStatus, IUpdate {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Column(notNull=true)
 	protected Character status = VC.STATUS_0;
 	

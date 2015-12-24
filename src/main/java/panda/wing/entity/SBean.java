@@ -6,8 +6,6 @@ import panda.wing.constant.VC;
 
 public class SBean extends Bean implements IStatus {
 	
-	private static final long serialVersionUID = 1L;
-
 	@Column(notNull=true)
 	protected Character status = VC.STATUS_0;
 	

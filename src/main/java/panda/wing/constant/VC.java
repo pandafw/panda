@@ -34,24 +34,4 @@ public interface VC {
 	 */
 	public final static Long SYSTEM_UID = 0L;
 
-	/**
-	 * GUESTS_GID = 999L;
-	 */
-	public final static Long GUESTS_GID = 999L;
-
-	/**
-	 * SUPER_LEVEL = 0;
-	 */
-	public final static int SUPER_LEVEL = 0;
-
-	/**
-	 * ADMIN_LEVEL = 1;
-	 */
-	public final static int ADMIN_LEVEL = 1;
-
-	/**
-	 * GUEST_LEVEL = 999;
-	 */
-	public final static int GUEST_LEVEL = 999;
-
 }

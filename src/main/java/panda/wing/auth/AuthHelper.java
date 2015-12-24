@@ -2,8 +2,9 @@ package panda.wing.auth;
 
 import panda.io.Settings;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Collections;
+import panda.wing.constant.AUTH;
 import panda.wing.constant.SC;
-import panda.wing.constant.VC;
 
 public class AuthHelper {
 	@IocInject
@@ -14,15 +15,7 @@ public class AuthHelper {
 	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
-		return u != null && VC.SUPER_LEVEL == u.getGroupLevel();
-	}
-
-	/**
-	 * @param u user
-	 * @return true - if the user is admin
-	 */
-	public boolean isAdminUser(IUser u) {
-		return u != null && VC.ADMIN_LEVEL >= u.getGroupLevel();
+		return u != null && Collections.contains(u.getPermits(), AUTH.ALL);
 	}
 
 	/**
