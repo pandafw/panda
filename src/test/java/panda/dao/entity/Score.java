@@ -109,6 +109,7 @@ public class Score {
 				.append(klass, rhs.klass)
 				.append(key, rhs.key)
 				.append(score, rhs.score)
+				.append(studentName, rhs.studentName)
 				.isEquals();
 	}
 
