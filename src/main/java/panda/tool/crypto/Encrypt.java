@@ -61,7 +61,7 @@ public class Encrypt {
 	// properties
 	//---------------------------------------------------------------------------------------
 	private String key = Encrypts.DEFAULT_KEY;
-	private String transform = Encrypts.DEFAULT_TRANSFORM;
+	private String transform = Encrypts.DEFAULT_CIPHER;
 	private boolean decrypt = false;
 	private String[] args;
 	
