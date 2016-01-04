@@ -21,6 +21,9 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.util.StateProvider;
 import panda.wing.action.ActionRC;
+import panda.wing.auth.AuthHelper;
+import panda.wing.auth.IUser;
+import panda.wing.constant.SC;
 import panda.wing.constant.VC;
 import panda.wing.entity.ICreate;
 import panda.wing.entity.IStatus;
@@ -38,6 +41,10 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	@IocInject
 	protected AppResourceBundleLoader resBundleLoader;
 
+	@IocInject
+	protected AuthHelper authHelper;
+	
+	//--------------------------------------------------------------------------	
 	/**
 	 * @return app version
 	 */
@@ -66,14 +73,89 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 		return Systems.IS_OS_APPENGINE;
 	}
 
+	//--------------------------------------------------------------------------	
+	/**
+	 * @return true if remote host is local network host
+	 */
+	@Override
+	public boolean isDebugEnabled() {
+		return isIntranetHost() || isSuperUser();
+	}
+
+	/**
+	 * @return true - if the login user is administrators
+	 */
+	public boolean isSuperUser() {
+		return isSuperUser(getLoginUser());
+	}
+
+	/**
+	 * @param u user
+	 * @return true - if the user is administrators
+	 */
+	public boolean isSuperUser(IUser u) {
+		return authHelper.isSuperUser(u);
+	}
+
+	/**
+	* @param username username
+	* @param password password
+	* @return true if username & password equals properties setting
+	*/
+	public boolean isSuperUser(String username, String password) {
+		return authHelper.isSuperUser(username, password);
+	}
+
+	/**
+	 * @return the super user name
+	 */
+	public String getSuperUsername() {
+		return settings.getProperty(SC.SUPER_USERNAME);
+	}
+
+	/**
+	 * @return the user user password
+	 */
+	public String getSuperPassword() {
+		return settings.getProperty(SC.SUPER_PASSWORD);
+	}
+
+	//--------------------------------------------------------------------------
+	public long getLoginUserId() {
+		return authHelper.getLoginUserId(context);
+	}
+
+	/**
+	 * getLoginUser
+	 * @return user
+	 */
+	public IUser getLoginUser() {
+		return authHelper.getLoginUser(context);
+	}
+
+	/**
+	 * setLoginUser
+	 * @param user user
+	 */
+	public void setLoginUser(IUser user) {
+		authHelper.setLoginUser(context, user);
+	}
+
+	/**
+	 * removeLoginUser
+	 */
+	public void removeLoginUser() {
+		authHelper.removeLoginUser(context);
+	}
+
 	/**
 	 * hasPermission
-	 * @param path path
+	 * @param action action
 	 * @return true if action has access permit
 	 */
 	@Override
-	public boolean hasPermission(String path) {
-		return true;
+	public boolean hasPermission(String action) {
+		return authHelper.hasPermission(context, action);
 	}
 
 	/**
@@ -86,10 +168,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 		return true;
 	}
 
-	public long getLoginUserId() {
-		return VC.SYSTEM_UID;
-	}
-
+	//-------------------------------------------------------------
 	/**
 	 * initialize common fields of data
 	 * @param data data

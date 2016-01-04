@@ -8,5 +8,9 @@ public interface IUser {
 	public List<String> getPermits();
 	
 	public Long getLoginTime();
+	
+	public void setLoginTime(Long time);
+	
+	public Boolean getAutoLogin();
 }
 
