@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.bind.json.JsonException;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
@@ -189,7 +190,13 @@ public class DefaultValidators implements Validators {
 		
 		if (Strings.isNotEmpty(v.params())) {
 			BeanHandler bh = beans.getBeanHandler(fv.getClass());
-			JsonObject jo = JsonObject.fromJson(v.params());
+			JsonObject jo = null;
+			try {
+				jo = JsonObject.fromJson(v.params());
+			}
+			catch (JsonException e) {
+				throw new IllegalArgumentException("Failed to set params of Validator " + fv.getClass() + ", params: " + v.params());
+			}
 			
 			// translate ${..} expression
 			for (Entry<String, Object> en : jo.entrySet()) {

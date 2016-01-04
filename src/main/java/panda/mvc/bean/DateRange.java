@@ -71,7 +71,7 @@ public class DateRange implements Cloneable, Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE),
-		@Validate(value=Validators.EL, params="top.value > top.parent.value.f", msgId=Validators.MSGID_DATE_TO)
+		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.f' }", msgId=Validators.MSGID_DATE_TO)
 	})
 	public Date getT() {
 		return to;

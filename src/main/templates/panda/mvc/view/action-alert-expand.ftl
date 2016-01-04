@@ -21,9 +21,11 @@
 	<ul class="p-field-errors-alert fa-ul">
 		<li><i class="fa-li fa fa-exclamation-circle"></i>
 			<@p.text name="error-input"/>
+			<@p.a cssClass="p-field-errors-caret" sicon="caret-down" href="#" onclick="return $.palert.toggleFieldErrors(this);"><@p.text name="error-input-detail"/></@p.a>
 		</li>
 	</ul>
 	</#if>
+	<@p.fielderror cssStyle="display:none" label="true"/>
 </#if>
 <@p.actionwarning/>
 <@p.actionmessage/>
