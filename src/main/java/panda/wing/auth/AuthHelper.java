@@ -103,7 +103,7 @@ public class AuthHelper {
 	public void setLoginUser(ActionContext context, IUser user) {
 		user.setLoginTime(System.currentTimeMillis());
 
-		String ticket = Encrypts.encrypt(Jsons.toJson(user));
+		String ticket = Encrypts.encrypt(Jsons.toJson(user), encKey, encCipher);
 		String cookiePath = context.getServlet().getContextPath() + "/";
 		
 		Cookie c = new Cookie(COOKIE.AUTH_TICKET, ticket);

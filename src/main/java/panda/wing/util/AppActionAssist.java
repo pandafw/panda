@@ -41,7 +41,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	@IocInject
 	protected AppResourceBundleLoader resBundleLoader;
 
-	@IocInject
+	@IocInject(required=false)
 	protected AuthHelper authHelper;
 	
 	//--------------------------------------------------------------------------	
