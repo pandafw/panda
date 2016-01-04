@@ -26,7 +26,16 @@ public class NumberTypeCastor {
 				return ((Calendar)value).getTimeInMillis();
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.createNumber(value.toString());
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
+				try {
+					return Numbers.createByte(s);
+				}
+				catch (NumberFormatException e) {
+					return castError(value, context, e);
+				}
 			}
 			return castError(value, context);
 		}
@@ -44,7 +53,16 @@ public class NumberTypeCastor {
 				return BigDecimal.valueOf(num.longValue());
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.createBigDecimal(value.toString());
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
+				try {
+					return Numbers.createBigDecimal(s);
+				}
+				catch (NumberFormatException e) {
+					return castError(value, context, e);
+				}
 			}
 			return castError(value, context);
 		}
@@ -62,7 +80,16 @@ public class NumberTypeCastor {
 				return BigInteger.valueOf(num.longValue());
 			}
 			if (value instanceof CharSequence) {
-				return Numbers.createBigInteger(value.toString());
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
+				try {
+					return Numbers.createBigInteger(s);
+				}
+				catch (NumberFormatException e) {
+					return castError(value, context, e);
+				}
 			}
 			return castError(value, context);
 		}

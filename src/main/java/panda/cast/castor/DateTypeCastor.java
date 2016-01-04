@@ -74,6 +74,9 @@ public class DateTypeCastor {
 			}
 			if (value instanceof CharSequence) {
 				String sv = value.toString();
+				if (sv.length() < 1) {
+					return defaultValue();
+				}
 	
 				ParseException ex = null;
 				if (Strings.isNotEmpty(cc.getFormat())) {

@@ -14,8 +14,13 @@ public class ClassCastor extends AnySingleCastor<Class> {
 	@Override
 	protected Class castValue(Object value, CastContext context) {
 		if (value instanceof CharSequence) {
+			String s = value.toString();
+			if (s.length() < 1) {
+				return defaultValue();
+			}
+
 			try {
-				return Classes.getClass(value.toString());
+				return Classes.getClass(s);
 			}
 			catch (ClassNotFoundException e) {
 				return castError(value, context, e);

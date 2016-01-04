@@ -106,8 +106,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Boolean)value).booleanValue() ? (byte)1 : (byte)0;
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createByte(value.toString());
+					return Numbers.createByte(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
@@ -144,9 +148,10 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 			}
 			if (value instanceof CharSequence) {
 				String s = value.toString();
-				if (s.length() > 0) {
-					return s.charAt(0);
+				if (s.length() < 1) {
+					return defaultValue();
 				}
+				return s.charAt(0);
 			}
 			if (value instanceof Number) {
 				return (char)((Number)value).intValue();
@@ -175,8 +180,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Boolean)value).booleanValue() ? 1D : 0D;
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createDouble(value.toString());
+					return Numbers.createDouble(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
@@ -209,8 +218,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Boolean)value).booleanValue() ? 1F : 0F;
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createFloat(value.toString());
+					return Numbers.createFloat(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
@@ -243,8 +256,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Boolean)value).booleanValue() ? 1 : 0;
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createInteger(value.toString());
+					return Numbers.createInteger(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
@@ -279,8 +296,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Calendar)value).getTimeInMillis();
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createLong(value.toString());
+					return Numbers.createLong(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
@@ -324,8 +345,12 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 				return ((Boolean)value).booleanValue() ? (short)1 : (short)0;
 			}
 			if (value instanceof CharSequence) {
+				String s = value.toString();
+				if (s.length() < 1) {
+					return defaultValue();
+				}
 				try {
-					return Numbers.createShort(value.toString());
+					return Numbers.createShort(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
