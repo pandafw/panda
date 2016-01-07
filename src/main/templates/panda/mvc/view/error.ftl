@@ -11,8 +11,8 @@
 			<i class="fa fa-exclamation-circle"></i> &lt;&lt;<@p.text name="title-error"/>&gt;&gt;
 		</h3>
 	</div>
-	<#include "/panda/exts/struts2/views/session-alert.ftl" />
-	<#include "/panda/exts/struts2/views/action-alert-all.ftl" />
+	<#include "/panda/mvc/view/session-alert.ftl" />
+	<#include "/panda/mvc/view/action-alert-all.ftl" />
 </div>
 
 </body>

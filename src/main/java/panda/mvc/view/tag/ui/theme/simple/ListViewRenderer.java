@@ -873,7 +873,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							Attributes ha = new Attributes();
 							ha.add("type", "hidden")
 							  .add("class", "p-lv-cv" + (c.pkey ? " p-lv-ck" : ""))
-							  .add("name", "ds[" + inx + "]." + c.name)
+							  .add("name", c.name)
 							  .addIfTrue("disabled", !c.enabled)
 							  .add("value", escapeValue(getBeanProperty(d, c.name)), false);
 							xtag("input", ha);
@@ -960,7 +960,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		CUrl url = newTag(CUrl.class);
 
 		url.setAction(link.action);
-		url.copyParams(link.params, d);
+		url.addParameters(link.params, d);
 
 		url.start(writer);
 		url.end(writer, "");
@@ -997,7 +997,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write(">");
 		
 		if (Strings.isNotEmpty(link.icon)) {
-			write(xicon(link.icon + " p-lv-i"));
+			write(xicon(link.icon));
 		}
 		
 		return true;

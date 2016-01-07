@@ -67,6 +67,9 @@ pager-tooltip-first=≪ First Page
 pager-tooltip-last=Last Page ≫
 
 
+#listview
+listview-th-number=#
+
 #listview - sortable
 listview-sortable=true
 
@@ -170,8 +173,8 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))}\
 .
 validation-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
-validation-constant=Please input one of the ${top.constants}.
-validation-prohibited=The value of ${top.constants} is not allowed.
+validation-constant=Please input one of the ${top.consts}.
+validation-prohibited=The value of ${top.consts} is not allowed.
 validation-alphastring=Please input alphabet.
 validation-numericstring=Please input number.
 validation-alphanumericstring=Please input alphabet or number.
@@ -211,12 +214,20 @@ validation-cast-file=Please select a file.
 error-input=There is some error in the input field.
 error-input-detail=detail
 error-data-notfound=The data is not found.
-error-data-duplicate=The data already exists.\n{0}
+error-data-duplicate=The data is already registered.\n${top}
 error-fieldvalue-notnull=This field should be empty.
 error-fieldvalue-required=This field is required.
 error-fieldvalue-incorrect=The field value is incorect.
-error-fieldvalue-duplicate=The field value is duplicated.
-error-file-notfound=The file "{0}" is not found.
+error-fieldvalue-duplicate=The field value is already registered.
+error-file-notfound=The file "${top}" is not found.
+
+#customer error messages
+error-unlogin=Please login.
+error-unsecure=Please login again for security reasion.
+error-nopermit=You have no permission.
+error-email-is-used=The email address is already registered.
+error-sendmail=Failed to send email to <${top}>.\nPlease confirm the email address is corrent.
+error-file-upload=Failed to upload file.
 
 #info messages
 message-cart-empty=There is no items in the cart。
@@ -227,40 +238,42 @@ message-processed=Process completed.
 #confirm messages
 confirm-data-overwrite=Are you sure to overwrite this data?
 
+#warn messages
+warn-data-updated=The data is updated by other user at ${top}.\nAre you sure to overwrite the data with yours?
 
 #action messages
 action-confirm-cancel=Are you sure to cancel this data?
-action-failed-cancel=Failed to cancel this data.<pre>{0}</pre>
+action-failed-cancel=Failed to cancel this data.\n${top}
 action-success-cancel=The data is successfully canceled.
 
 action-confirm-copy=Are you sure to insert this data?
-action-failed-copy=Failed to insert this data.<pre>{0}</pre>
+action-failed-copy=Failed to insert this data.\n${top}
 action-success-copy=The data is successfully inserted.
 
 action-confirm-delete=Are you sure to delete this data?
-action-failed-delete=Failed to delete this data.<pre>{0}</pre>
+action-failed-delete=Failed to delete this data.\n${top}
 action-success-delete=The data is successfully deleted.
 
 action-confirm-insert=Are you sure to insert this data?
-action-failed-insert=Failed to insert this data.<pre>{0}</pre>
+action-failed-insert=Failed to insert this data.\n${top}
 action-success-insert=The data is successfully inserted.
 
 action-confirm-update=Are you sure to update this data?
-action-failed-update=Failed to update this data.<pre>{0}</pre>
+action-failed-update=Failed to update this data.\n${top}
 action-success-update=The data is successfully updated.
 
 
-action-confirm-bcancel=Are you sure to cancel these {0} items?
-action-failed-bcancel=Failed to cancel these data.<pre>{0}</pre>
-action-success-bcancel={0} items have been successfully canceled.
+action-confirm-bcancel=Are you sure to cancel these ${top} items?
+action-failed-bcancel=Failed to cancel these data.\n${top}
+action-success-bcancel=${top} items have been successfully canceled.
 
-action-confirm-bdelete=Are you sure to delete these {0} items?
-action-failed-bdelete=Failed to delete these data.<pre>{0}</pre>
-action-success-bdelete={0} items have been successfully deleted.
+action-confirm-bdelete=Are you sure to delete these ${top} items?
+action-failed-bdelete=Failed to delete these data.\n${top}
+action-success-bdelete=${top} items have been successfully deleted.
 
-action-confirm-bupdate=Are you sure to update these {0} items?
-action-failed-bupdate=Failed to update these data.<pre>{0}</pre>
-action-success-bupdate={0} items have been successfully updaated.
+action-confirm-bupdate=Are you sure to update these ${top} items?
+action-failed-bupdate=Failed to update these data.\n${top}
+action-success-bupdate=${top} items have been successfully updaated.
 
 
 #tooltip
@@ -358,95 +371,100 @@ button-bupdate-execute=Submit
 
 
 #icon
-icon-home=fa-home
-icon-login=fa-sign-in
-icon-logout=fa-sign-out
-icon-signin=fa-sign-in
-icon-signout=fa-sign-out
-icon-signup=fa-upload
+icon=fa fa-gear
+icon-home=fa fa-home
+icon-login=fa fa-sign-in
+icon-logout=fa fa-sign-out
+icon-signin=fa fa-sign-in
+icon-signout=fa fa-sign-out
+icon-signup=fa fa-upload
 
-icon-email=fa-envelopo-o
-icon-asc=fa-sort-up
-icon-desc=fa-sort-down
+icon-email=fa fa-envelopo-o
+icon-asc=fa fa-sort-up
+icon-desc=fa fa-sort-down
 
-icon-caret-up=fa-caret-up
-icon-caret-down=fa-caret-down
-icon-caret-left=fa-caret-left
-icon-caret-right=fa-caret-right
+icon-caret-up=fa fa-caret-up
+icon-caret-down=fa fa-caret-down
+icon-caret-left=fa fa-caret-left
+icon-caret-right=fa fa-caret-right
 
-icon-download=fa-download
-icon-upload=fa-upload
-icon-cloud-dn=fa-cloud-download
-icon-cloud-up=fa-cloud-upload
-icon-comment=fa-comment-o
+icon-download=fa fa-download
+icon-upload=fa fa-upload
+icon-cloud-dn=fa fa-cloud-download
+icon-cloud-up=fa fa-cloud-upload
+icon-comment=fa fa-comment-o
 
-icon-change=fa-check
-icon-delete=fa-minus-circle
-icon-add=fa-plus-circle
-icon-insert=fa-plus-circle
-icon-edit=fa-edit
-icon-update=fa-edit
-icon-copy=fa-copy
-icon-view=fa-file-o
-icon-import=fa-cloud-upload
+icon-change=fa fa-check
+icon-delete=fa fa-minus-circle
+icon-add=fa fa-plus-circle
+icon-insert=fa fa-plus-circle
+icon-edit=fa fa-edit
+icon-update=fa fa-edit
+icon-copy=fa fa-copy
+icon-view=fa fa-file-o
+icon-import=fa fa-cloud-upload
 
-icon-refresh=fa-refresh
-icon-reload=fa-repeat
-icon-reset=fa-undo
-icon-clear=fa-eraser
-icon-select-all=fa-check-square-o
-icon-select-none=fa-square-o
+icon-refresh=fa fa-refresh
+icon-reload=fa fa-repeat
+icon-reset=fa fa-undo
+icon-clear=fa fa-eraser
+icon-select-all=fa fa-check-square-o
+icon-select-none=fa fa-square-o
 
-icon-back=fa-arrow-circle-o-left
-icon-next=fa-arrow-circle-o-right
-icon-confirm=fa-arrow-circle-right
-icon-execute=fa-play
-icon-save=fa-save
-icon-submit=fa-upload
+icon-back=fa fa-arrow-circle-o-left
+icon-next=fa fa-arrow-circle-o-right
+icon-confirm=fa fa-arrow-circle-right
+icon-execute=fa fa-play
+icon-save=fa fa-save
+icon-submit=fa fa-upload
 
-icon-check=fa-check
-icon-ok=fa-check
-icon-deny=fa-times
-icon-error=fa-exclamation-circle
+icon-check=fa fa-check
+icon-ok=fa fa-check
+icon-deny=fa fa-times
+icon-error=fa fa-exclamation-circle
 
-icon-search=fa-search
-icon-print=fa-print
-icon-list=fa-list
+icon-search=fa fa-search
+icon-print=fa fa-print
+icon-list=fa fa-list
 
-icon-attach=fa-paperclip
-icon-img=fa-picture-o
-icon-sql=fa-strikethrough
-icon-csv=fa-file-text-o
-icon-json=fa-strikethrough
-icon-xml=fa-code
-icon-pdf=fa-file-text
-icon-pdf-print=fa-file-text
-icon-pdf-list_print=fa-file-text
+icon-attach=fa fa-paperclip
+icon-img=fa fa-picture-o
+icon-sql=fa fa-strikethrough
+icon-csv=fa fa-file-text-o
+icon-json=fa fa-strikethrough
+icon-xml=fa fa-code
+icon-pdf=fa fa-file-text
+icon-pdf-print=fa fa-file-text
+icon-pdf-list_print=fa fa-file-text
 
 
-icon-play=fa-play-circle
-icon-stop=fa-stop
+icon-play=fa fa-play-circle
+icon-stop=fa fa-stop
 
-icon-test=fa-bug
+icon-test=fa fa-bug
 
-icon-copy-confirm=fa-arrow-circle-right
-icon-copy-execute=fa-save
+icon-copy-confirm=fa fa-arrow-circle-right
+icon-copy-execute=fa fa-save
 
-icon-delete-confirm=fa-arrow-circle-right
-icon-delete-execute=fa-minus-circle
-icon-insert-confirm=fa-arrow-circle-right
-icon-insert-execute=fa-save
-icon-update-confirm=fa-arrow-circle-right
-icon-update-execute=fa-save
+icon-delete-confirm=fa fa-arrow-circle-right
+icon-delete-execute=fa fa-minus-circle
+icon-insert-confirm=fa fa-arrow-circle-right
+icon-insert-execute=fa fa-save
+icon-update-confirm=fa fa-arrow-circle-right
+icon-update-execute=fa fa-save
 
-icon-bdelete=fa-minus-circle
-icon-bdelete-confirm=fa-arrow-circle-right
-icon-bdelete-execute=fa-minus-circle
-icon-bupdate=fa-edit
-icon-bupdate-confirm=fa-arrow-circle-right
-icon-bupdate-execute=fa-save
+icon-bdelete=fa fa-minus-circle
+icon-bdelete-confirm=fa fa-arrow-circle-right
+icon-bdelete-execute=fa fa-minus-circle
+icon-bupdate=fa fa-edit
+icon-bupdate-confirm=fa fa-arrow-circle-right
+icon-bupdate-execute=fa fa-save
 
 #title
+title-error=ERROR
+title-reload=${top} - Reload
+title-reloadex=${top} - Reload complete
+
 title-list=${top.title} - List
 title-list_csv=${top.title} - List - ${assist.csvFileTime}
 title-list_popup=${top.title} - List
@@ -475,16 +493,20 @@ title-bupdate_success=${top.title} - Bulk Update ≫ Complete
 #step
 step-arrow-e=&gt;
 
-step-copy_input=Input
-step-copy_confirm=Confirm
-step-copy_success=Complete
-step-delete_input=Input
-step-delete_confirm=Confirm
-step-delete_success=Complete
-step-insert_input=Input
-step-insert_confirm=Confirm
-step-insert_success=Complete
-step-update_input=Input
-step-update_confirm=Confirm
-step-update_success=Complete
+step-list=List
+step-cancel=Cancel
+step-cancel-confirm=Confirm
+step-cancel-success=Complete
+step-copy=Input
+step-copy-confirm=Confirm
+step-copy-success=Complete
+step-delete=Delete
+step-delete-confirm=Confirm
+step-delete-success=Complete
+step-insert=Insert
+step-insert-confirm=Confirm
+step-insert-success=Complete
+step-update=Update
+step-update-confirm=Confirm
+step-update-success=Complete
 

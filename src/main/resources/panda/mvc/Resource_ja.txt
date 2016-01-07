@@ -117,8 +117,8 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))}\
 の文字を入力してください。
 validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
-validation-constant=${top.constants}中の値を選んでください。
-validation-prohibited=${top.constants}中の値が入力不可です。
+validation-constant=${top.consts}中の値を選んでください。
+validation-prohibited=${top.consts}中の値が入力不可です。
 validation-alphastring=英文字を入力してください。
 validation-numericstring=数字を入力してください。
 validation-alphanumericstring=英数字を入力してください。
@@ -164,22 +164,21 @@ validation-locale-invalid=言語と国・地域の組合せは正しくありま
 #error messages
 error-input=入力した内容に誤りがあります。
 error-input-detail=エラー詳細
-error-data-notfound=データが見つかりません。
+error-data-notfound=対象データが見つかりません。
 error-data-list-empty=対象データがありません。
-error-data-duplicate=該当データが既に登録されています。\n{0}
+error-data-duplicate=該当データが既に登録されています。\n${top}
 error-fieldvalue-notnull=項目の値は空ではありません。
 error-fieldvalue-required=必須項目です。
-error-fieldvalue-incorrect=項目の値が不正です。
-error-fieldvalue-duplicate=項目の値が重複です。
-error-file-notfound=ファイル"{0}"が見つかりません。
+error-fieldvalue-incorrect=項目の値が正しくありません。
+error-fieldvalue-duplicate=既に登録されています。
+error-file-notfound=ファイル"${top}"が見つかりません。
 
 #customer error messages
 error-unlogin=ログインしていません!
 error-unsecure=安全性を確保するため、ログインしてください。
 error-nopermit=権限ありません!
 error-email-is-used=入力したメールアドレスは既に登録されています。
-error-data-is-updated=該当データが {0,date,yyyy/MM/dd HH:mm:ss} [{1}]に更新されました。
-error-sendmail=<{0}>にメール送信が失敗しました。\nメールアドレスが正しいかどうかを確認してください。
+error-sendmail=<${top}>にメール送信が失敗しました。\nメールアドレスが正しいかどうかを確認してください。
 error-file-upload=ファイル転送失敗しました。
 
 #info messages
@@ -189,40 +188,43 @@ message-processing=処理中...
 message-processed=処理完了。
 
 #confirm messages
-confirm-data-overwrite=データを上書きして宜しいでしょうか？
+confirm-data-overwrite=該当データを上書きして宜しいでしょうか？
+
+#warn messages
+warn-data-updated=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
 
 #action messages
-action-confirm-cancel=データを取消して宜しいでしょうか？
-action-failed-cancel=該当データを取消できませんでした。\n{0}
-action-success-cancel=データを取消しました。
+action-confirm-cancel=該当データを取消して宜しいでしょうか？
+action-failed-cancel=該当データを取消できませんでした。\n${top}
+action-success-cancel=該当データを取消しました。
 
-action-confirm-copy=データを登録して宜しいでしょうか？
-action-failed-copy=該当データを新規できませんでした。\n{0}
-action-success-copy=データを登録しました。
+action-confirm-copy=該当データを登録して宜しいでしょうか？
+action-failed-copy=該当データを複写できませんでした。\n${top}
+action-success-copy=該当データを登録しました。
 
-action-confirm-delete=データを削除して宜しいでしょうか？
-action-failed-delete=該当データを削除できませんでした。\n{0}
-action-success-delete=データを削除しました。
+action-confirm-delete=該当データを削除して宜しいでしょうか？
+action-failed-delete=該当データを削除できませんでした。\n${top}
+action-success-delete=該当データを削除しました。
 
-action-confirm-insert=データを登録して宜しいでしょうか？
-action-failed-insert=該当データを新規できませんでした。\n{0}
-action-success-insert=データを登録しました。
+action-confirm-insert=該当データを登録して宜しいでしょうか？
+action-failed-insert=該当データを新規できませんでした。\n${top}
+action-success-insert=該当データを登録しました。
 
-action-confirm-update=データを変更して宜しいでしょうか？
-action-failed-update=該当データを変更できませんでした。\n{0}
-action-success-update=データを変更しました。
+action-confirm-update=該当データを変更して宜しいでしょうか？
+action-failed-update=該当データを変更できませんでした。\n${top}
+action-success-update=該当データを変更しました。
 
-action-confirm-bcancel=これらの{0}件のデータを取消して宜しいでしょうか？
-action-failed-bcancel=これらのデータを取消できませんでした。\n{0}
-action-success-bcancel={0}件のデータを取消しました。
+action-confirm-bcancel=該当${top}件のデータを取消して宜しいでしょうか？
+action-failed-bcancel=該当データを取消できませんでした。\n${top}
+action-success-bcancel=${top}件のデータを取消しました。
 
-action-confirm-bdelete=これらの{0}件のデータを削除して宜しいでしょうか？
-action-failed-bdelete=これらのデータを削除できませんでした。\n{0}
-action-success-bdelete={0}件のデータを削除しました。
+action-confirm-bdelete=該当${top}件のデータを削除して宜しいでしょうか？
+action-failed-bdelete=該当データを削除できませんでした。\n${top}
+action-success-bdelete=${top}件のデータを削除しました。
 
-action-confirm-bupdate=これらの{0}件のデータを変更して宜しいでしょうか？
-action-failed-bupdate=これらのデータを変更できませんでした。\n{0}
-action-success-bupdate={0}件のデータを変更しました。
+action-confirm-bupdate=該当${top}件のデータを更新して宜しいでしょうか？
+action-failed-bupdate=該当データを更新できませんでした。\n${top}
+action-success-bupdate=${top}件のデータを更新しました。
 
 
 
@@ -277,7 +279,7 @@ button-pdf-print=PDF出力
 button-pdf-list_print=PDF出力
 
 button-edit=編集
-button-list=一覧へ
+button-list=一覧
 button-print=印刷画面
 button-refresh=最新情報に更新
 button-reload=リロード
@@ -311,9 +313,9 @@ button-insert-execute=登録
 button-import=インポート
 button-import-confirm=確認画面へ
 button-import-execute=インポート
-button-update=変更
+button-update=編集
 button-update-confirm=確認画面へ
-button-update-execute=登録
+button-update-execute=更新
 
 button-bcancel=取消
 button-bcancel-confirm=確認画面へ
@@ -321,18 +323,18 @@ button-bcancel-execute=取消
 button-bdelete=削除
 button-bdelete-confirm=確認画面へ
 button-bdelete-execute=削除
-button-bupdate=変更
+button-bupdate=編集
 button-bupdate-confirm=確認画面へ
-button-bupdate-execute=変更
+button-bupdate-execute=更新
 
 
 #title
 title-error=エラー
-title-reload={0}「リロード確認」
-title-reloadex={0}「リロード結果」
+title-reload=${top}「リロード確認」
+title-reloadex=${top}「リロード結果」
 
 title-list=${top.title} - 一覧
-title-list_csv=${top.title} - 一覧_${assist.csvFileTime}
+title-list_csv=${top.title}_${assist.csvFileTime}
 title-list_popup=${top.title} - 一覧
 title-list_print=${top.title} - 一覧
 title-view=${top.title} - 照会
@@ -348,9 +350,9 @@ title-delete_success=${top.title} - 削除 ⇒ 完了
 title-insert=${top.title} - 新規
 title-insert_confirm=${top.title} - 新規 ⇒ 確認
 title-insert_success=${top.title} - 新規 ⇒ 完了
-title-update=${top.title} - 変更
-title-update_confirm=${top.title} - 変更 ⇒ 確認
-title-update_success=${top.title} - 変更 ⇒ 完了
+title-update=${top.title} - 編集
+title-update_confirm=${top.title} - 編集 ⇒ 確認
+title-update_success=${top.title} - 編集 ⇒ 完了
 
 title-bcancel=${top.title} - 取消
 title-bcancel_confirm=${top.title} - 取消 ⇒ 確認
@@ -358,23 +360,24 @@ title-bcancel_success=${top.title} - 取消 ⇒ 完了
 title-bdelete=${top.title} - 削除
 title-bdelete_confirm=${top.title} - 削除 ⇒ 確認
 title-bdelete_success=${top.title} - 削除 ⇒ 完了
-title-bupdate=${top.title} - 変更
-title-bupdate_confirm=${top.title} - 変更 ⇒ 確認
-title-bupdate_success=${top.title} - 変更 ⇒ 完了
+title-bupdate=${top.title} - 編集
+title-bupdate_confirm=${top.title} - 編集 ⇒ 確認
+title-bupdate_success=${top.title} - 編集 ⇒ 完了
 
 #step
-step-cancel_input=入力
-step-cancel_confirm=取消確認
-step-cancel_success=取消完了
-step-copy_input=入力
-step-copy_confirm=確認
-step-copy_success=完了
-step-delete_input=入力
-step-delete_confirm=削除確認
-step-delete_success=削除完了
-step-insert_input=入力
-step-insert_confirm=確認
-step-insert_success=完了
-step-update_input=入力
-step-update_confirm=確認
-step-update_success=完了
+step-list=一覧
+step-cancel=取消
+step-cancel-confirm=確認
+step-cancel-success=完了
+step-copy=複写
+step-copy-confirm=確認
+step-copy-success=完了
+step-delete=削除
+step-delete-confirm=確認
+step-delete-success=完了
+step-insert=新規
+step-insert-confirm=確認
+step-insert-success=完了
+step-update=編集
+step-update-confirm=確認
+step-update-success=完了

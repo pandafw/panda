@@ -63,7 +63,6 @@ servlet-error-message-500=服务器内部错误，无法显示指定的网页。
 请按F5键刷新画面，如果持续发生错误，请向网站管理人员汇报错误。
 servlet-error-message-503=服务器超负荷，无法显示指定的网页。\n\
 请稍稍等待片刻之后重新访问网站。
-servlet-error-status-code=HTTP状态码 {0}
 servlet-error-request-url=请求网页: <span class="request-url">${top}</span>
 servlet-error-exception=例外信息:
 
@@ -116,8 +115,8 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
 的文字。
 validation-precision=请按"整数${top.precision - top.scale}.小数${top.scale}"的格式输入。
-validation-constant=请选择${top.constants}中的内容。
-validation-prohibited=${top.constants}中的内容不可以输入。
+validation-constant=请选择${top.consts}中的内容。
+validation-prohibited=${top.consts}中的内容不可以输入。
 validation-alphastring=请输入英文。
 validation-numericstring=请输入数字。
 validation-alphanumericstring=请输入英数字。
@@ -166,12 +165,12 @@ error-input=输入内容有错误。
 error-input-detail=错误信息
 error-data-notfound=该数据不存在。
 error-data-list-empty=対象数据不存在。
-error-data-duplicate=该数据已经被登录。\n{0}
+error-data-duplicate=该数据已经被登录。\n${top}
 error-fieldvalue-notnull=该项目必须为空。
 error-fieldvalue-required=该项目不能为空。
 error-fieldvalue-incorrect=该项目输入内容不正确。
-error-fieldvalue-duplicate=该项目输入内容重复。
-error-file-notfound=该文件"{0}"不存在。
+error-fieldvalue-duplicate=该数据已经被登录。
+error-file-notfound=该文件"${top}"不存在。
 
 
 #customer error messages
@@ -179,8 +178,7 @@ error-unlogin=用户未登录!
 error-unsecure=为了确保用户资料安全，请登陆。
 error-nopermit=用户没有权限!
 error-email-is-used=电子邮件地址已经被使用。
-error-data-is-updated=该数据 已经在{0,date,yyyy/MM/dd HH:mm:ss}被[{1}]更新过。
-error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址[{0}]是否正确。
+error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址[${top}]是否正确。
 error-file-upload=文件上传失敗。
 
 #info messages
@@ -192,40 +190,42 @@ message-processed=处理成功。
 #confirm messages
 confirm-data-overwrite=您确定覆写该数据吗？
 
+#warn messages
+warn-data-updated=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
 
 #action messages
 action-confirm-cancel=您确定取消该数据吗？
-action-failed-cancel=该数据取消失败。\n{0}
+action-failed-cancel=该数据取消失败。\n${top}
 action-success-cancel=该数据被成功取消。
 
 action-confirm-copy=您确定登录该数据吗？
-action-failed-copy=该数据登录失败。\n{0}
+action-failed-copy=该数据登录失败。\n${top}
 action-success-copy=该数据被成功登录。
 
 action-confirm-delete=您确定删除该数据吗？
-action-failed-delete=该数据删除失败。\n{0}
+action-failed-delete=该数据删除失败。\n${top}
 action-success-delete=该数据被成功删除。
 
 action-confirm-insert=您确定登录该数据吗？
-action-failed-insert=该数据登录失败。\n{0}
+action-failed-insert=该数据登录失败。\n${top}
 action-success-insert=该数据被成功登录。
 
 action-confirm-update=您确定变更该数据吗？
-action-failed-update=该数据变更失败。\n{0}
+action-failed-update=该数据变更失败。\n${top}
 action-success-update=该数据被成功变更。
 
 
-action-confirm-bcancel=您确定取消这{0}件数据吗？
-action-failed-bcancel=数据取消失败。\n{0}
-action-success-bcancel={0}件数据被成功取消。
+action-confirm-bcancel=您确定取消这${top}件数据吗？
+action-failed-bcancel=数据取消失败。\n${top}
+action-success-bcancel=${top}件数据被成功取消。
 
-action-confirm-bdelete=您确定删除这{0}件数据吗？
-action-failed-bdelete=数据删除失败。\n{0}
-action-success-bdelete={0}件数据被成功删除。
+action-confirm-bdelete=您确定删除这${top}件数据吗？
+action-failed-bdelete=数据删除失败。\n${top}
+action-success-bdelete=${top}件数据被成功删除。
 
-action-confirm-bupdate=您确定变更这{0}件数据吗？
-action-failed-bupdate=数据变更失败。\n{0}
-action-success-bupdate={0}件数据被成功变更。
+action-confirm-bupdate=您确定变更这${top}件数据吗？
+action-failed-bupdate=数据变更失败。\n${top}
+action-success-bupdate=${top}件数据被成功变更。
 
 
 #tooltip
@@ -259,24 +259,29 @@ button-shopping=继续购物
 button-layoutPC=PC版显示
 button-layoutMB=手机版显示
 
-button-change=变更
-button-add=追加
-button-approve=批准
 button-back=返回
+button-next=下一步
+
+button-add=追加
+button-change=变更
 button-clear=清除
 button-close=关闭
+
+button-approve=批准
+button-deny=否决
+
+button-disable=无效
 button-confirm=确认
+button-execute=实行
+
 button-json=JSON汇出
 button-csv=CSV汇出
-button-deny=否决
-button-execute=实行
 button-pdf=PDF打印
 button-pdf-print=PDF打印
 button-pdf-list_print=PDF打印
-button-disable=无效
+
 button-edit=编辑
 button-list=浏览
-button-next=下一步
 button-print=印刷画面
 button-refresh=刷新
 button-reload=重新加载
@@ -327,8 +332,8 @@ button-bupdate-execute=提交
 
 #title
 title-error=错误
-title-reload={0}「重新加载确认」
-title-reloaded={0}「重新加载结果」
+title-reload=${top}「重新加载确认」
+title-reloaded=${top}「重新加载结果」
 
 title-list=${top.title} - 浏览
 title-list_csv=${top.title} - 列表_${assist.csvFileTime}
@@ -344,7 +349,6 @@ title-copy=${top.title} - 登录
 title-copy_confirm=${top.title} - 登录 ⇒ 确认
 title-copy_success=${top.title} - 登录 ⇒ 完成
 title-delete=${top.title} - 删除
-title-delete_confirm=${top.title} - 删除 ⇒ 确认
 title-delete_success=${top.title} - 删除 ⇒ 完成
 title-insert=${top.title} - 登录
 title-insert_confirm=${top.title} - 登录 ⇒ 确认
@@ -364,19 +368,20 @@ title-bupdate_confirm=${top.title} - 变更 ⇒ 确认
 title-bupdate_success=${top.title} - 变更 ⇒ 完成
 
 #step
-step-cancel_input=输入
-step-cancel_confirm=取消确认
-step-cancel_success=取消完成
-step-copy_input=输入
-step-copy_confirm=确认
-step-copy_success=完成
-step-delete_input=输入
-step-delete_confirm=删除确认
-step-delete_success=删除完成
-step-insert_input=输入
-step-insert_confirm=确认
-step-insert_success=完成
-step-update_input=输入
-step-update_confirm=确认
-step-update_success=完成
+step-list=列表
+step-cancel=输入
+step-cancel-confirm=取消确认
+step-cancel-success=取消完成
+step-copy-input=输入
+step-copy-confirm=确认
+step-copy-success=完成
+step-delete-input=输入
+step-delete-confirm=删除确认
+step-delete-success=删除完成
+step-insert-input=输入
+step-insert-confirm=确认
+step-insert-success=完成
+step-update-input=输入
+step-update-confirm=确认
+step-update-success=完成
 

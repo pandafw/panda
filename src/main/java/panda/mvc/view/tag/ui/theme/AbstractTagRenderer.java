@@ -121,12 +121,17 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		}
 		else {
 			String[] ss = Strings.split(i);
-			
-			if (ss[0].startsWith("icon-")) {
-				ss[0] = ss[0].substring(5);
-			}
 
-			i = getText("icon-" + ss[0], ss[0]);
+			if ("icon".equals(ss[0])) {
+				i = getText(ss[0], ss[0]);
+			}
+			else {
+				if (ss[0].startsWith("icon-")) {
+					ss[0] = ss[0].substring(5);
+				}
+				i = getText("icon-" + ss[0], ss[0]);
+			}
+			
 			if (i.startsWith("fa ")) {
 				ss[0] = i;
 			}
@@ -438,14 +443,12 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return context.getVars().get(key);
 	}
 
-	public String formatValue(TextField tf) {
-		return formatValue(tf, null);
+	public String formatValue(Object v, String format) {
+		return formatValue(v, format, null);
 	}
 	
-	public String formatValue(TextField tf, String escape) {
-		Object value = tf.getValue();
+	public String formatValue(Object value, String format, String escape) {
 		if (value != null) {
-			String format = tf.getFormat();
 			Property p = newTag(Property.class);
 			p.setValue(value);
 			p.setFormat(format);
@@ -455,6 +458,14 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 			return p.formatValue();
 		}
 		return "";
+	}
+	
+	public String formatValue(TextField tf) {
+		return formatValue(tf, null);
+	}
+	
+	public String formatValue(TextField tf, String escape) {
+		return formatValue(tf.getValue(), tf.getFormat(), escape);
 	}
 	
 	public String formatValue(ViewField tf) {
@@ -462,18 +473,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 	
 	public String formatValue(ViewField tf, String escape) {
-		Object value = tf.getValue();
-		if (value != null) {
-			String format = tf.getFormat();
-			Property p = newTag(Property.class);
-			p.setValue(value);
-			p.setFormat(format);
-			if (escape != null) {
-				p.setEscape(escape);
-			}
-			return p.formatValue();
-		}
-		return "";
+		return formatValue(tf.getValue(), tf.getFormat(), escape);
 	}
 
 	public String escapeValue(Object value) {

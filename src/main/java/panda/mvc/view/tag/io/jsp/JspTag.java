@@ -13,6 +13,7 @@ import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
 import panda.mvc.view.tag.CNumber;
+import panda.mvc.view.tag.CSet;
 import panda.mvc.view.tag.Component;
 import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.Head;
@@ -34,6 +35,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.Pager;
@@ -99,7 +101,7 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 		if (Strings.isNotEmpty(getId())) {
 			parameters.put("id", getId());
 		}
-		component.copyParams(parameters);
+		component.setParameters(parameters);
 	}
 
 	@Override
@@ -151,6 +153,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 	public static class PropertyTag extends JspTag {
 		protected Component getBean(ActionContext ac) {
 			return getBean(ac, Property.class);
+		}
+	}
+
+	public static class SetTag extends JspTag {
+		protected Component getBean(ActionContext ac) {
+			return getBean(ac, CSet.class);
 		}
 	}
 
@@ -258,6 +266,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 	public static class HiddenTag extends JspTag {
 		protected Component getBean(ActionContext ac) {
 			return getBean(ac, Hidden.class);
+		}
+	}
+
+	public static class IconTag extends JspTag {
+		protected Component getBean(ActionContext ac) {
+			return getBean(ac, Icon.class);
 		}
 	}
 

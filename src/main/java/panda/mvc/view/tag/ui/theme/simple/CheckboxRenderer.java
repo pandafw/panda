@@ -36,6 +36,6 @@ public class CheckboxRenderer extends AbstractEndRenderer<Checkbox> {
 		if (Strings.isNotEmpty(tag.getFieldLabel())) {
 			body(tag.getFieldLabel());
 		}
-		write("</label>");
+		write("&nbsp;</label>");
 	}
 }

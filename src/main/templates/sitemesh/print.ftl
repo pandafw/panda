@@ -6,7 +6,7 @@
 	${head}
 </head>
 
-<body class="${assist.browser} lang-${assist.locale}}">
+<body class="print ${assist.browser} lang-${assist.locale}}">
 	<div id="print">
 		${body}
 	</div>

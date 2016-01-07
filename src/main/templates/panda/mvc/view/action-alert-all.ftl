@@ -3,7 +3,7 @@
 	|| actionConfirms?has_content
 	|| actionMessages?has_content
 	|| paramErrors?has_content>
-<div class="alert alert-dismissable<#rt/>
+<div class="p-alert alert alert-dismissable<#rt/>
 <#if actionErrors?has_content || paramErrors?has_content>
  alert-danger<#rt/>
 <#elseif actionWarnings?has_content>

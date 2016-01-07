@@ -1,7 +1,6 @@
 package panda.mvc.view;
 
 import panda.io.stream.StringBuilderWriter;
-import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.sitemesh.Sitemesher;
@@ -43,7 +42,7 @@ public class SitemeshFreemarkerView extends FreemarkerView {
 			}
 		}
 		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
+			throw new RuntimeException("Failed to render template " + path, e);
 		}
 	}
 }

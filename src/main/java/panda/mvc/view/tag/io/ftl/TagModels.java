@@ -5,6 +5,7 @@ import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
 import panda.mvc.view.tag.CNumber;
+import panda.mvc.view.tag.CSet;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.Head;
@@ -26,6 +27,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.Pager;
@@ -66,6 +68,7 @@ public class TagModels {
 	protected TagModel form;
 	protected TagModel head;
 	protected TagModel hidden;
+	protected TagModel i;
 	protected TagModel label;
 	protected TagModel link;
 	protected TagModel listview;
@@ -78,6 +81,7 @@ public class TagModels {
 	protected TagModel radio;
 	protected TagModel reset;
 	protected TagModel select;
+	protected TagModel set;
 	protected TagModel submit;
 	protected TagModel text;
 	protected TagModel textarea;
@@ -288,6 +292,16 @@ public class TagModels {
 	}
 
 	/**
+	 * @return IconModel
+	 */
+	public TagModel getI() {
+		if (i == null) {
+			i = new TagModel(context, Icon.class);
+		}
+		return i;
+	}
+
+	/**
 	 * @return LabelModel
 	 */
 	public TagModel getLabel() {
@@ -406,6 +420,16 @@ public class TagModels {
 			select = new TagModel(context, Select.class);
 		}
 		return select;
+	}
+
+	/**
+	 * @return SetModel
+	 */
+	public TagModel getSet() {
+		if (set == null) {
+			set = new TagModel(context, CSet.class);
+		}
+		return set;
 	}
 
 	/**

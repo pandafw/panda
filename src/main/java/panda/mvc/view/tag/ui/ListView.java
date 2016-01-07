@@ -195,7 +195,7 @@ public class ListView extends UIBean {
 
 	private boolean isShowFootPart(int part, int count) {
 		if (Strings.isEmpty(footer)) {
-			return count > THRESHOLD;
+			return true;
 		}
 		return Strings.contains(footer, part);
 	}

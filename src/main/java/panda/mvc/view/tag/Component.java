@@ -13,6 +13,7 @@ import panda.bean.Beans;
 import panda.cast.CastException;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
+import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcException;
@@ -38,7 +39,7 @@ public class Component {
 	public Component() {
 	}
 	
-	private void addParameter(String name, Object value) {
+	protected void addParameter(String name, Object value) {
 		if (params == null) {
 			params = new LinkedHashMap<String, Object>();
 		}
@@ -153,19 +154,11 @@ public class Component {
 		return false;
 	}
 
-	public void copyParams(Map<String, Object> params) {
-		if (Collections.isEmpty(params)) {
-			return;
-		}
-		
-		for (Entry<String, Object> en : params.entrySet()) {
-			String p = en.getKey();
-			Object v = Mvcs.evaluate(en.getValue(), context);
-			setParameter(p, v);
-		}
+	public void setParameters(Map<String, Object> params) {
+		setParameters(params, Objects.NULL);
 	}
-	
-	public void copyParams(Map<String, Object> params, Object arg) {
+
+	public void setParameters(Map<String, Object> params, Object arg) {
 		if (Collections.isEmpty(params)) {
 			return;
 		}
@@ -174,6 +167,22 @@ public class Component {
 			String p = en.getKey();
 			Object v = Mvcs.evaluate(en.getValue(), context, arg);
 			setParameter(p, v);
+		}
+	}
+	
+	public void addParameters(Map<String, Object> params) {
+		addParameters(params, Objects.NULL);
+	}
+	
+	public void addParameters(Map<String, Object> params, Object arg) {
+		if (Collections.isEmpty(params)) {
+			return;
+		}
+		
+		for (Entry<String, Object> en : params.entrySet()) {
+			String p = en.getKey();
+			Object v = Mvcs.evaluate(en.getValue(), context, arg);
+			addParameter(p, v);
 		}
 	}
 	

@@ -27,7 +27,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 				 .id(tag)
 				 .name(tag)
 				 .disabled(tag)
-				 .add("value", String.valueOf(item == null ? "" : item), true);
+				 .add("value", formatValue(item, tag.getFormat()), true);
 				xtag("input", a);
 			}
 		}
@@ -37,7 +37,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			 .id(tag)
 			 .name(tag)
 			 .disabled(tag)
-			 .value(tag);
+			 .value(formatValue(tag));
 			xtag("input", a);
 		}
 		

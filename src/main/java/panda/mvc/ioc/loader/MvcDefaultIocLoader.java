@@ -52,6 +52,7 @@ import panda.mvc.view.tag.CBoolean;
 import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
 import panda.mvc.view.tag.CNumber;
+import panda.mvc.view.tag.CSet;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.Head;
@@ -73,6 +74,7 @@ import panda.mvc.view.tag.ui.FieldError;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Hidden;
+import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.OptGroup;
@@ -187,6 +189,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			CDate.class,
 			CLog.class,
 			CNumber.class,
+			CSet.class,
 			Csv.class,
 			CUrl.class,
 			Head.class,
@@ -210,6 +213,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			File.class,
 			Form.class,
 			Hidden.class,
+			Icon.class,
 			Link.class,
 			ListView.class,
 			OptGroup.class,

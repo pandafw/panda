@@ -1,17 +1,18 @@
 package panda.mvc.view.ftl;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 import panda.io.stream.StringBuilderWriter;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 @IocBean(scope=Scope.REQUEST)
 public class FreemarkerHelper {
@@ -40,8 +41,11 @@ public class FreemarkerHelper {
 			getTemplate(name);
 			return true;
 		}
-		catch (IOException e) {
+		catch (FileNotFoundException e) {
 			return false;
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
 		}
 	}
 

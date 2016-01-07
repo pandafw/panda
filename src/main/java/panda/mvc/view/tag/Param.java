@@ -43,7 +43,7 @@ public class Param extends Component {
 					throw new MvcException("No name found for following expression: " + this.name);
 				}
 
-				component.setParameter(name, value);
+				component.addParameter(name, value);
 			}
 		}
 		else {
@@ -52,7 +52,7 @@ public class Param extends Component {
 					((UnnamedParametric)component).addParameter(body);
 				}
 				else {
-					component.setParameter(name, body);
+					component.addParameter(name, body);
 				}
 			}
 		}

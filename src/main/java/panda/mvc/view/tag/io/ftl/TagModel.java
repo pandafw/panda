@@ -31,7 +31,7 @@ public class TagModel implements TemplateTransformModel {
 		Component bean = getBean();
 
 		Map<String, Object> ups = unwrapParameters(params);
-		bean.copyParams(ups);
+		bean.setParameters(ups);
 		return new CallbackWriter(bean, writer);
 	}
 
