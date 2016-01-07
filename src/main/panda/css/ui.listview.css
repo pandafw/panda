@@ -223,35 +223,35 @@ fieldset.p-lv-filters legend {
 /* table - thead */
 thead.p-lv-chead tr {
 }
-thead.p-lv-chead th {
+thead.p-lv-chead > tr > th {
 	font-weight: normal;
 	padding: 4px 4px;
 	text-align: left;
 	vertical-align: middle;
 }
-thead.p-lv-chead th.p-lv-rownum,
-thead.p-lv-chead th.p-lv-number,
-thead.p-lv-chead th.p-lv-check,
-thead.p-lv-chead th.p-lv-actions {
+thead.p-lv-chead > tr > th.p-lv-rownum,
+thead.p-lv-chead > tr > th.p-lv-number,
+thead.p-lv-chead > tr > th.p-lv-check,
+thead.p-lv-chead > tr > th.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
-thead.p-lv-chead th.p-lv-hover {
+thead.p-lv-chead > tr > th.p-lv-hover {
 	font-weight: normal;
 }
-thead.p-lv-chead th.p-lv-filtered, thead.p-lv-chead th.p-lv-filtered:hover {
+thead.p-lv-chead > tr > th.p-lv-filtered, thead.p-lv-chead > tr > th.p-lv-filtered:hover {
 	font-style: italic;
 	font-weight: bold;
 }
-thead.p-lv-chead th.p-lv-sort-asc,
-thead.p-lv-chead th.p-lv-sort-desc,
-thead.p-lv-chead th.p-lv-sortable {
+thead.p-lv-chead > tr > th.p-lv-sort-asc,
+thead.p-lv-chead > tr > th.p-lv-sort-desc,
+thead.p-lv-chead > tr > th.p-lv-sortable {
 	cursor: pointer;
 }
-thead.p-lv-chead th .p-lv-sort-asc,
-thead.p-lv-chead th .p-lv-sort-desc,
-thead.p-lv-chead th .p-lv-sort-off {
+thead.p-lv-chead > tr > th .p-lv-sort-asc,
+thead.p-lv-chead > tr > th .p-lv-sort-desc,
+thead.p-lv-chead > tr > th .p-lv-sort-off {
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -259,42 +259,42 @@ thead.p-lv-chead th .p-lv-sort-off {
 /* table - tbody */
 tbody.p-lv-tbody {
 }
-tbody.p-lv-tbody tr.p-lv-odd {
+tbody.p-lv-tbody > tr > tr.p-lv-odd {
 }
-tbody.p-lv-tbody tr.p-lv-even {
+tbody.p-lv-tbody > tr > tr.p-lv-even {
 }
-tbody.p-lv-tbody tr.p-lv-selected {
+tbody.p-lv-tbody > tr > tr.p-lv-selected {
 }
-tbody.p-lv-tbody tr.p-lv-hover {
+tbody.p-lv-tbody > tr > tr.p-lv-hover {
 }
-tbody.p-lv-tbody th {
+tbody.p-lv-tbody > tr > th {
 	font-weight: normal;
 }
-tbody.p-lv-tbody th, tbody.p-lv-tbody td {
+tbody.p-lv-tbody > tr > th, tbody.p-lv-tbody > tr > td {
 	padding: 2px 4px;
 	vertical-align: middle;
 }
-tbody.p-lv-tbody th.p-lv-check, tbody.p-lv-tbody td.p-lv-check,
-tbody.p-lv-tbody th.p-lv-number, tbody.p-lv-tbody td.p-lv-number,
-tbody.p-lv-tbody th.p-lv-rownum, tbody.p-lv-tbody td.p-lv-rownum,
-tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions {
+tbody.p-lv-tbody > tr > th.p-lv-check, tbody.p-lv-tbody > tr > td.p-lv-check,
+tbody.p-lv-tbody > tr > th.p-lv-number, tbody.p-lv-tbody > tr > td.p-lv-number,
+tbody.p-lv-tbody > tr > th.p-lv-rownum, tbody.p-lv-tbody > tr > td.p-lv-rownum,
+tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
 
-thead.p-lv-chead th, thead.p-lv-chead th .p-lv-cell,
-thead.p-lv-chead th.p-lv-actions, thead.p-lv-chead th.p-lv-actions .p-lv-cell,
-thead.p-lv-chead th.p-lv-number,  thead.p-lv-chead th.p-lv-number .p-lv-cell,
-thead.p-lv-chead th.p-lv-check,   thead.p-lv-chead th.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody th.p-lv-number,  tbody.p-lv-tbody th.p-lv-number .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-rownum,  tbody.p-lv-tbody th.p-lv-rownum .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-check,   tbody.p-lv-tbody th.p-lv-check .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody th.p-lv-actions .p-lv-cell, 
-tbody.p-lv-tbody td.p-lv-number,  tbody.p-lv-tbody td.p-lv-number .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-rownum,  tbody.p-lv-tbody td.p-lv-rownum .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-check,   tbody.p-lv-tbody td.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions .p-lv-cell {
+thead.p-lv-chead > tr > th, thead.p-lv-chead > tr > th .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-actions, thead.p-lv-chead > tr > th.p-lv-actions .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-number,  thead.p-lv-chead > tr > th.p-lv-number .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-check,   thead.p-lv-chead > tr > th.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody > tr > th.p-lv-number,  tbody.p-lv-tbody > tr > th.p-lv-number .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-rownum,  tbody.p-lv-tbody > tr > th.p-lv-rownum .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-check,   tbody.p-lv-tbody > tr > th.p-lv-check .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > th.p-lv-actions .p-lv-cell, 
+tbody.p-lv-tbody > tr > td.p-lv-number,  tbody.p-lv-tbody > tr > td.p-lv-number .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-rownum,  tbody.p-lv-tbody > tr > td.p-lv-rownum .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-check,   tbody.p-lv-tbody > tr > td.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions .p-lv-cell {
 	white-space: nowrap;
 }
 

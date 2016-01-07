@@ -63,6 +63,7 @@
 	padding: 4px 10px;
 }
 .p-form input.form-control[size], .p-form select.form-control,
+.p-form .p-radiomap input.form-control, .p-form .p-checkboxlist input.form-control, .p-form input.p-checkbox,
 .p-form .input-group-addon, .p-form .input-group-btn {
 	width: auto;
 }
@@ -132,15 +133,22 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 .p-section {
 }
 .p-header {
-	padding-bottom: 5px;
-	margin: 10px 0 20px;
-	border-bottom: 1px solid #eee;
+	margin: 0 0 20px 0;
+	border-bottom: 4px double #ccc;
 }
-.p-header > h3 {
-	margin-bottom: 5px;
-	margin-top: 0px;
+.p-header > h3, .p-header > .breadcrumb {
+/*	background-color: #f5f5f5;
+	border: solid 1px #e5e5e5;
+	border-radius: 4px;
+	*/
+	background-color: transparent;
+	font-size: 125%;
+	margin: 0;
+	padding: 8px 10px 4px 10px;
 }
-.p-header > h3 > i, .p-header > i {
+.p-header > .breadcrumb {
+}
+.p-header i {
 	color: #2f6f9f;
 	font-size: 150%;
 	vertical-align: middle;
@@ -151,29 +159,40 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 
 
 /*
+ * p-toolbar (ul)
  * p-navih (ul, ol)
  * --------------------------------------------------
  */
-.p-navih {
-	display: block;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+.p-toolbar-wrap {
+	text-align: right;
 }
-.p-navih li {
+.p-toolbar-wrap > .p-toolbar {
+	float: right;
+}
+.p-toolbar {
+	background-color: #f5f5f5;
+	border-radius: 4px;
+}
+.p-toolbar, .p-navih {
+	display: block;
+	list-style-type: none;
+	margin: 0 0 10px 0;
+	padding: 0.5em 1.5em;
+}
+.p-toolbar li, .p-navih li {
 	display: inline;
 	margin: 0;
 	padding: 0 1em;
-	border-left: 1px solid #FFF;
+	border-left: 1px solid #fff;
 	border-right: 1px solid #c6bcaa;
-	font-size: 0.88em;
 }
-.p-navih li:first-child {
+.p-toolbar li:first-child, .p-navih li:first-child {
 	border-left: none;
 	padding-left: 0;
 }
-.p-navih li:last-child {
+.p-toolbar li:last-child, .p-navih li:last-child {
 	border-right: none;
+	padding-right: 0;
 }
 
 /*
@@ -410,35 +429,35 @@ fieldset.p-lv-filters legend {
 /* table - thead */
 thead.p-lv-chead tr {
 }
-thead.p-lv-chead th {
+thead.p-lv-chead > tr > th {
 	font-weight: normal;
 	padding: 4px 4px;
 	text-align: left;
 	vertical-align: middle;
 }
-thead.p-lv-chead th.p-lv-rownum,
-thead.p-lv-chead th.p-lv-number,
-thead.p-lv-chead th.p-lv-check,
-thead.p-lv-chead th.p-lv-actions {
+thead.p-lv-chead > tr > th.p-lv-rownum,
+thead.p-lv-chead > tr > th.p-lv-number,
+thead.p-lv-chead > tr > th.p-lv-check,
+thead.p-lv-chead > tr > th.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
-thead.p-lv-chead th.p-lv-hover {
+thead.p-lv-chead > tr > th.p-lv-hover {
 	font-weight: normal;
 }
-thead.p-lv-chead th.p-lv-filtered, thead.p-lv-chead th.p-lv-filtered:hover {
+thead.p-lv-chead > tr > th.p-lv-filtered, thead.p-lv-chead > tr > th.p-lv-filtered:hover {
 	font-style: italic;
 	font-weight: bold;
 }
-thead.p-lv-chead th.p-lv-sort-asc,
-thead.p-lv-chead th.p-lv-sort-desc,
-thead.p-lv-chead th.p-lv-sortable {
+thead.p-lv-chead > tr > th.p-lv-sort-asc,
+thead.p-lv-chead > tr > th.p-lv-sort-desc,
+thead.p-lv-chead > tr > th.p-lv-sortable {
 	cursor: pointer;
 }
-thead.p-lv-chead th .p-lv-sort-asc,
-thead.p-lv-chead th .p-lv-sort-desc,
-thead.p-lv-chead th .p-lv-sort-off {
+thead.p-lv-chead > tr > th .p-lv-sort-asc,
+thead.p-lv-chead > tr > th .p-lv-sort-desc,
+thead.p-lv-chead > tr > th .p-lv-sort-off {
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -446,42 +465,42 @@ thead.p-lv-chead th .p-lv-sort-off {
 /* table - tbody */
 tbody.p-lv-tbody {
 }
-tbody.p-lv-tbody tr.p-lv-odd {
+tbody.p-lv-tbody > tr > tr.p-lv-odd {
 }
-tbody.p-lv-tbody tr.p-lv-even {
+tbody.p-lv-tbody > tr > tr.p-lv-even {
 }
-tbody.p-lv-tbody tr.p-lv-selected {
+tbody.p-lv-tbody > tr > tr.p-lv-selected {
 }
-tbody.p-lv-tbody tr.p-lv-hover {
+tbody.p-lv-tbody > tr > tr.p-lv-hover {
 }
-tbody.p-lv-tbody th {
+tbody.p-lv-tbody > tr > th {
 	font-weight: normal;
 }
-tbody.p-lv-tbody th, tbody.p-lv-tbody td {
+tbody.p-lv-tbody > tr > th, tbody.p-lv-tbody > tr > td {
 	padding: 2px 4px;
 	vertical-align: middle;
 }
-tbody.p-lv-tbody th.p-lv-check, tbody.p-lv-tbody td.p-lv-check,
-tbody.p-lv-tbody th.p-lv-number, tbody.p-lv-tbody td.p-lv-number,
-tbody.p-lv-tbody th.p-lv-rownum, tbody.p-lv-tbody td.p-lv-rownum,
-tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions {
+tbody.p-lv-tbody > tr > th.p-lv-check, tbody.p-lv-tbody > tr > td.p-lv-check,
+tbody.p-lv-tbody > tr > th.p-lv-number, tbody.p-lv-tbody > tr > td.p-lv-number,
+tbody.p-lv-tbody > tr > th.p-lv-rownum, tbody.p-lv-tbody > tr > td.p-lv-rownum,
+tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions {
 	text-align: center;
 	padding: 2px 4px;
 	width: 22px;
 }
 
-thead.p-lv-chead th, thead.p-lv-chead th .p-lv-cell,
-thead.p-lv-chead th.p-lv-actions, thead.p-lv-chead th.p-lv-actions .p-lv-cell,
-thead.p-lv-chead th.p-lv-number,  thead.p-lv-chead th.p-lv-number .p-lv-cell,
-thead.p-lv-chead th.p-lv-check,   thead.p-lv-chead th.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody th.p-lv-number,  tbody.p-lv-tbody th.p-lv-number .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-rownum,  tbody.p-lv-tbody th.p-lv-rownum .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-check,   tbody.p-lv-tbody th.p-lv-check .p-lv-cell, 
-tbody.p-lv-tbody th.p-lv-actions, tbody.p-lv-tbody th.p-lv-actions .p-lv-cell, 
-tbody.p-lv-tbody td.p-lv-number,  tbody.p-lv-tbody td.p-lv-number .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-rownum,  tbody.p-lv-tbody td.p-lv-rownum .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-check,   tbody.p-lv-tbody td.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody td.p-lv-actions, tbody.p-lv-tbody td.p-lv-actions .p-lv-cell {
+thead.p-lv-chead > tr > th, thead.p-lv-chead > tr > th .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-actions, thead.p-lv-chead > tr > th.p-lv-actions .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-number,  thead.p-lv-chead > tr > th.p-lv-number .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-check,   thead.p-lv-chead > tr > th.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody > tr > th.p-lv-number,  tbody.p-lv-tbody > tr > th.p-lv-number .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-rownum,  tbody.p-lv-tbody > tr > th.p-lv-rownum .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-check,   tbody.p-lv-tbody > tr > th.p-lv-check .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > th.p-lv-actions .p-lv-cell, 
+tbody.p-lv-tbody > tr > td.p-lv-number,  tbody.p-lv-tbody > tr > td.p-lv-number .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-rownum,  tbody.p-lv-tbody > tr > td.p-lv-rownum .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-check,   tbody.p-lv-tbody > tr > td.p-lv-check .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions .p-lv-cell {
 	white-space: nowrap;
 }
 
