@@ -3,12 +3,12 @@
 	<#list ui.params.toolbar?split(' ') as t><#if t?starts_with('*')>
 	<#if !_tb>
 
-	<ul class="p-toolbar">
+	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<#assign _tb = true/>
 	</#if>
 		<#include "toolbar-item.ftl"/>
 	</#if></#list>
 	<#if _tb>
-	</ul>
+	</ul><div class="clearfix"></div></div>
 	</#if>
 </#if>

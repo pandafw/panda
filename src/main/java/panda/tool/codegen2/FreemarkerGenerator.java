@@ -7,11 +7,10 @@ import java.util.Map;
 import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
+import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListUI;
-import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
-
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -151,9 +150,11 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 							throw new IllegalArgumentException("template of InputUI[" + iui.getName() + "] can not be empty!");
 						}
 
+//						System.out.println("INPUT: " + Jsons.toJson(iui, true));
+
 						wrapper.put("ui", iui);
 
-						String uin = action.getName() + "_" + iui.getName();
+						String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" +iui.getName();
 
 						for (String t : iui.getTemplates()) {
 							if ("view".equals(t) || "print".equals(t)) {
@@ -161,17 +162,17 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 							}
 							else if ("delete".equals(t)) {
 								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
-								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_delete_success"));
+								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
 							}
 							else if ("insert".equals(t) || "copy".equals(t)) {
 								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_insert"));
 								processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_insert_confirm"));
-								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_insert_success"));
+								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_insert_success"));
 							}
 							else if ("update".equals(t)) {
 								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_update"));
 								processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_update_confirm"));
-								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_update_success"));
+								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_update_success"));
 							}
 						}
 					}
@@ -208,38 +209,15 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		return Strings.stripStart(str, strip);
 	}
 	
-	public String getActionParam(String uri) {
-		int i = uri.lastIndexOf('?');
-		if (i >= 0) {
-			return uri.substring(i + 1);
-		}
-		return "";
+	public String getActionQuery(String uri) {
+		return Strings.substringAfter(uri, '?');
+	}
+	
+	public String getActionPath(String uri) {
+		return Strings.substringBefore(uri, '?');
 	}
 	
 	public String getActionName(String uri) {
-		int i = uri.lastIndexOf('/');
-		if (i >= 0) {
-			int j = uri.indexOf('?', i);
-			if (j > 0) {
-				return uri.substring(i + 1, j);
-			}
-			else {
-				return uri.substring(i + 1);
-			}
-		}
-		return uri;
-	}
-	
-	public String getActionContext(String uri) {
-		int i = uri.lastIndexOf('/');
-		if (i == 0) {
-			return "/";
-		}
-		else if (i > 0) {
-			return uri.substring(0, i);
-		}
-		else { 
-			return "";
-		}
+		return Strings.substringAfter(Strings.substringBefore(uri, '?'), '/');
 	}
 }

@@ -4,8 +4,18 @@ package ${actionPackage};
 <#list imports as i>
 import ${i};
 </#list>
+<#macro validates><#if entity.notNullList?has_content>@Validates({
+			@Validate(value=${gen.validatorType('required')}, params="fields: ${entity.requiredFields}", msgId=${gen.validatorMsgId('required')}),
+			@Validate(value=${gen.validatorType('visit')})
+			})<#else>@Validates</#if></#macro>
 
-public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
+<#if action.path??>
+@At("${action.path}/${action.name}")
+</#if>
+<#if action.auth?has_content>
+@Auth(${action.auth})
+</#if>
+public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 <#if action.propertyList?has_content>
 	/*----------------------------------------------------------------------*
 	 * Properties
@@ -20,37 +30,6 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	 */
 	public ${actionClass}() {
 		setType(${entityBeanClass}.class);
-	}
-
-	/*----------------------------------------------------------------------*
-	 * Getter & Setter
-	 *----------------------------------------------------------------------*/
-	/**
-	 * @return the ${entityBeanClass?uncap_first}
-	 */
-	public ${entityBeanClass} get${actionDataFieldName?cap_first}() {
-		return super.getData();
-	}
-
-	/**
-	 * @param ${entityBeanClass?uncap_first} the ${entityBeanClass?uncap_first} to set
-	 */
-	public void set${actionDataFieldName?cap_first}(${entityBeanClass} ${entityBeanClass?uncap_first}) {
-		super.setData(${entityBeanClass?uncap_first});
-	}
-
-	/**
-	 * @return the ${entityBeanClass?uncap_first} list
-	 */
-	public List<${entityBeanClass}> get${actionDataListFieldName?cap_first}() {
-		return super.getDataList();
-	}
-
-	/**
-	 * @param ${entityBeanClass?uncap_first}List the ${entityBeanClass?uncap_first}List to set
-	 */
-	public void set${actionDataListFieldName?cap_first}(List<${entityBeanClass}> ${entityBeanClass?uncap_first}List) {
-		super.setDataList(${entityBeanClass?uncap_first}List);
 	}
 
 <#list action.propertyList as p>
@@ -104,38 +83,73 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.list();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list(qr);
 	}
 	
 <#elseif ui.templates?seq_contains("list_popup")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.list_popup();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_popup(qr);
 	}
 	
 <#elseif ui.templates?seq_contains("list_csv")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.list_csv();
+	@At
+	@Ok(View.FTL)
+	@Err(View.FTL)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_csv(qr);
 	}
 	
 <#elseif ui.templates?seq_contains("list_print")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.list_print();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_print(qr);
+	}
+	
+<#elseif ui.templates?seq_contains("list_json")>
+	/**
+	 * ${ui.name}
+	 */
+	@At
+	@Ok(View.JSON)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_json(qr);
+	}
+	
+<#elseif ui.templates?seq_contains("list_xml")>
+	/**
+	 * ${ui.name}
+	 */
+	@At
+	@Ok(View.XML)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_xml(qr);
 	}
 	
 <#elseif ui.templates?seq_contains("bdelete")>
 	/**
 	 * ${ui.name}
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}() {
 		return super.bdelete();
 	}
@@ -143,6 +157,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_execute
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}_execute() {
 		return super.bdelete_execute();
 	}
@@ -151,6 +168,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}() {
 		return super.bupdate();
 	}
@@ -158,6 +178,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_execute
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}_execute() {
 		return super.bupdate_execute();
 	}
@@ -166,6 +189,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}() {
 		return super.bedit();
 	}
@@ -173,6 +199,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_input
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}_input() {
 		return super.bedit_input();
 	}
@@ -180,6 +209,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_confirm
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}_confirm() {
 		return super.bedit_confirm();
 	}
@@ -187,6 +219,9 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_execute
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}_execute() {
 		return super.bedit_execute();
 	}
@@ -198,36 +233,51 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.view();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+		return super.view(key);
 	}
 
 	/**
 	 * ${ui.name}_input
 	 */
-	public Object ${ui.name}_input() {
-		return super.view_input();
+	@At
+	@Ok("sftl:~${ui.name}")
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		return super.view_input(data);
 	}
 
 <#elseif ui.templates?seq_contains("print")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.print();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+		return super.print(key);
 	}
 
 	/**
 	 * ${ui.name}_input
 	 */
-	public Object ${ui.name}_input() {
-		return super.print_input();
+	@At
+	@Ok("sftl:~${ui.name}")
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		return super.print_input(data);
 	}
 
 <#elseif ui.templates?seq_contains("insert")>
 	/**
 	 * ${ui.name}
 	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
 	public Object ${ui.name}() {
 		return super.insert();
 	}
@@ -235,97 +285,137 @@ public class ${actionClass} extends ${actionBaseClass}<${entityBeanClass}> {
 	/**
 	 * ${ui.name}_input
 	 */
-	public Object ${ui.name}_input() {
-		return super.insert_input();
+	@At
+	@Ok("sftl:~${ui.name}")
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		return super.insert_input(data);
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 */
-	public Object ${ui.name}_confirm() {
-		return super.insert_confirm();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+		return super.insert_confirm(data);
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 */
-	public Object ${ui.name}_execute() {
-		return super.insert_execute();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+		return super.insert_execute(data);
 	}
 
 <#elseif ui.templates?seq_contains("copy")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.copy();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+		return super.copy(key);
 	}
 
 	/**
 	 * ${ui.name}_input
 	 */
-	public Object ${ui.name}_input() {
-		return super.copy_input();
+	@At
+	@Ok("sftl:~${ui.name}")
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		return super.copy_input(data);
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 */
-	public Object ${ui.name}_confirm() {
-		return super.copy_confirm();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+		return super.copy_confirm(data);
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 */
-	public Object ${ui.name}_execute() {
-		return super.copy_execute();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+		return super.copy_execute(data);
 	}
 
 <#elseif ui.templates?seq_contains("update")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.update();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+		return super.update(key);
 	}
 
 	/**
 	 * ${ui.name}_input
 	 */
-	public Object ${ui.name}_input() {
-		return super.update_input();
+	@At
+	@Ok("sftl:~${ui.name}")
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
+		return super.update_input(data);
 	}
 
 	/**
 	 * ${ui.name}_confirm
 	 */
-	public Object ${ui.name}_confirm() {
-		return super.update_confirm();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+		return super.update_confirm(data);
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 */
-	public Object ${ui.name}_execute() {
-		return super.update_execute();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+		return super.update_execute(data);
 	}
 
 <#elseif ui.templates?seq_contains("delete")>
 	/**
 	 * ${ui.name}
 	 */
-	public Object ${ui.name}() {
-		return super.delete();
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+		return super.delete(key);
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 */
-	public Object ${ui.name}_execute() {
-		return super.delete_execute();
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:${ui.name}")
+	public Object ${ui.name}_execute(@Param ${entityBeanClass} key) {
+		return super.delete_execute(key);
 	}
 
 </#if>
 </#if></#list></#if>
 }
+

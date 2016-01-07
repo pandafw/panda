@@ -57,9 +57,25 @@
 	${ui.header}
 </#if>
 	</#macro>
-	<#macro sheader>
+	<#macro sheader steps=[]>
+		<#if steps?has_content>
 	<div class="p-header">
-		<h3>${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
+		<ol class="breadcrumb">
+			<li>${s}@p.i icon="icon"/> ${s}@p.text name="title"/></li>
+		<#list steps as st>
+			<li<#if !st_has_next> class="active"</#if>>${s}@p.text name="step-${st}"/></li>
+		</#list>
+		</ol>
+	</div>
+		<#else>
+	<div class="p-header">
+		<h3>${s}@p.i icon="icon"/> ${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
+	</div>
+		</#if>
+	</#macro>
+	<#macro sback>
+	<div class="p-tcenter">
+		${s}@p.a btype="default" icon="back" href="#" onclick="window.history.back();return false;">${s}@p.text name="button-back"/>${s}/@p.a>
 	</div>
 	</#macro>
 	<#macro footer>
@@ -76,14 +92,11 @@
 				<#if au.action??>
  action='${au.action}'<#rt/>
 				</#if>
-				<#if au.namespace??>
- namespace='${au.namespace}'<#rt/>
-				</#if>
  escapeAmp='false'><#rt/>
 				<#if au.params?has_content>
 					<#list au.params?keys as pn>
 						<#assign _dpv = au.params[pn]?string/>
-${s}@s.param name="${pn}" value="<#if _dpv?starts_with('.')>${actionDataFieldName}</#if>${_dpv}"/><#rt/>
+${s}@p.param name="${pn}" value="<#if _dpv?starts_with('.')>${actionDataFieldName}</#if>${_dpv}"/><#rt/>
 					</#list>
 				</#if>
 ${s}/@p.url><#rt/>

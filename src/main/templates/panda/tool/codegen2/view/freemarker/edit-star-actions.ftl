@@ -3,9 +3,9 @@
 	<#if _uas?has_content>
 		<#list _uas as _ua><#if _ua?starts_with('*')>
 			<#assign _a = _ua?substring(1)/>
-			<#include "input-actions-item.ftl"/>
+			<#include "edit-actions-item.ftl"/>
 		</#if></#list>
-			${s}#include "/panda/exts/struts2/views/form-buttons.ftl"/>
+			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
 			${s}@form_buttons buttons=_buttons_/>
 	</#if>
 </#if>

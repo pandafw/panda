@@ -2,15 +2,15 @@
 <@header/>
 
 <div class="p-section">
-	<@sheader/>
-	<#include "success-toolbar.ftl"/>
+	<@sheader steps=[ ui.name ]/>
+	<#include "list-toolbar.ftl"/>
 
-	${s}#include "/panda/mvc/view/action-alert.ftl"/>
+	${s}#include "/action-alert.ftl"/>
 
 	${s}#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": text.getText("_number_", ""),
+		"header": text.getText("listview-th-number", ""),
 		"nowrap": true,
 		"fixed": true
 	}] />
@@ -18,40 +18,35 @@
 <#if ui.params.actions?has_content>
 	${s}#assign _actions_ = [] />
 	${s}#assign _ash_ = "" />
-	<#assign _uas = ui.params.actions?split(' ')/>
-	<#list _uas as _a>
-		<#assign _aa = _a?split(':')/>
-		<#assign _a0 = _aa[0]/>
-		<#assign _a1 = _aa[1]!_a0/>
-		<#if _a0?starts_with('@')>
-			<#assign _a0 = _a0?substring(1)/>
-			<#if _a0?has_content>
-				<#assign _a1 = _aa[1]!_a0/>
-	${s}#if action.hasPermission("${_a1}")>
-		${s}@p.url var='_u_' action='${_a1}'/>
-		${s}@p.text var='_icon_' name='icon-${_a0}'/>
-		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText("tooltip-${_a0}", "")?html + '">'/>
-		${s}#if _icon_?has_content>
-			${s}#assign _ash_ = _ash_ + '<i class="fa ' + _icon_ + '"></i>'/>
-		${s}/#if>
-		${s}#assign _ash_ = _ash_ + text.getText("label-${_a0}", "") + '</a>'/>
+	<#assign uas = ui.params.actions?split(' ')/>
+	<#list uas as a>
+		<#assign t = gen.stripStartMark(a)/>
+		<#assign aa = t?split(':')/>
+		<#if aa[0] == '' || (aa[1]!'') == ''>${action.error("Invalid list action item [" + a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
+		<#assign an = aa[0]/>
+		<#assign ap = gen.getActionPath(aa[1])/>
+		<#if a?starts_with('@')>
+	${s}#if action.hasPermission("${ap}")>
+		${s}@p.url var='_u_' action='${ap}'/>
+		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-${an}', '')?html + '"><i class="' + text.getText('icon-${an}', '') + '"></i>' + text.getText('label-${an}', '') + '</a>'/>
 	${s}/#if>
-			</#if>
 		<#else>
-			<#if _a0 == "">${action.error("Invalid ui action [" + _a + "] of action [" + action.name + "]")}</#if><#t/>
-	${s}#if action.hasPermission("${_a1}")>
+	${s}#if action.hasPermission("${ap}")>
 		${s}#assign _actions_ = _actions_ + [{
-			"action": "${_a1}",
-			"icon": text.getText("icon-${_a0}"),
-			"label": text.getText("label-${_a0}", ""),
-			"tooltip": text.getText("tooltip-${_a0}", "")
+			"action": "${ap}",
+		<#if a?contains('%') && entity.primaryKeyList?has_content>
+			"params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> },
+		</#if>
+			"icon": text.getText("icon-${an}"),
+			"label": text.getText("label-${an}", ""),
+			"tooltip": text.getText("tooltip-${an}", "")
 		}] />
 	${s}/#if>
 		</#if>
 	</#list>
 	${s}#if _actions_?has_content || _ash_?has_content>
 		${s}#if !(_ash_?has_content)>
-			${s}#assign _ash_ = text.getText("_actions_", "")/>
+			${s}#assign _ash_ = text.getText("listview-th-actions", "")/>
 		${s}/#if>
 		${s}#assign _actionc_ = [{
 			"name": "_actions_",
@@ -166,6 +161,27 @@
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
+<#if _ops?has_content>
+	${s}@p.set var="lvtools">
+	<#list _ops as _op>
+		<#assign a = gen.stripStartMark(_op)?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview options [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
+		<#assign an = a[0]/>
+		<#assign ap = gen.getActionPath(a[1])/>
+		${s}#if action.hasPermission("${ap}")>
+		<#if _op?starts_with('@') || _op?starts_with('%')>
+			${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+		<#else>
+			<#if _op?contains('^')>
+			${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+			<#else>
+			${s}@p.submit icon="icon-${an}" action="${action.name}_${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+			</#if>
+		</#if>
+		${s}/#if>
+	</#list>
+	${s}/@p.set>
+</#if>
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
@@ -176,71 +192,41 @@
 		target="${ui.params.target}"
 	</#if>
 	<#if actionView?has_content>
-		link={ "action": "${actionView}", "params": { <#list entity.primaryKeyList as p>"${actionDataFieldName}.${p.name}": "${p.name}"<#if p_has_next>, </#if></#list> } }
+		link={ "action": "${actionView}", "params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> } }
 	</#if>
-	>
-		${s}@p.param name="tools">
-		<#list _ops as _op>
-			<#assign a = gen.stripStartMark(_op)?split(':')/>
-			<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
-			<#if _op?starts_with('@') || _op?starts_with('%')>
-				<#if a[0]?has_content>
-					<#assign an = gen.getActionName(a[0])/>
-			${s}#if action.hasPermission("${a[1]}")>
-				${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
-			${s}/#if>
-				</#if>
-			<#else>
-			${s}#if action.hasPermission("${a[1]}")>
-				<#if _op?contains('^')>
-				${s}@p.submit icon="icon-${a[0]}" onclick="return ${action.name}_${ui.name}_${a[0]}();" theme="simple">${s}@p.text name="button-${a[0]}"/>${s}/@p.submit>
-				<#else>
-				${s}@p.submit icon="icon-${a[0]}" action="${action.name}_${a[0]}" onclick="return ${action.name}_${ui.name}_${a[0]}();" theme="simple">${s}@p.text name="button-${a[0]}"/>${s}/@p.submit>
-				</#if>
-			${s}/#if>
-		</#if>
-		</#list>
-		${s}/@p.param>
-		<#if ui.params.addon?has_content>
-		${s}@p.param name="addon">${ui.params.addon}${s}/@p.param>
-		</#if>
-	${s}/@p.listview>
+	<#if ui.params.addon?has_content>
+		addon="${ui.params.addon}"
+	</#if>
+		tools="%{vars.lvtools}"
+	/>
 
 	<script type="text/javascript"><!--
 	<#list _ops as _op>
 		<#assign a = gen.stripStartMark(_op)?split(':')/>
+		<#assign an = a[0]/>
+		<#assign ap = gen.getActionPath(a[1])/>
+		<#assign aq = gen.getActionQuery(a[1])/>
 		<#if _op?starts_with('@')>
-			<#assign an = gen.getActionName(a[0])/>
-			<#assign ap = gen.getActionParam(a[0])/>
+			<#if (a[2]!'') == ''>${action.error("Invalid listview options [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
 		function ${action.name}_${ui.name}_${an}() {
-			<#if _op?contains('^')>
-			window.open("${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search));
-			<#else>
-			location.href = "${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search);
-			</#if>
+			<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' escapeAmp='false'/>?${aq!}=" + encodeURIComponent("${s}@p.url action='${a[2]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search));
 			return false;
 		}
 		<#elseif _op?starts_with('%')>
-			<#assign an = gen.getActionName(a[0])/>
-			<#assign ap = gen.getActionParam(a[0])/>
 		function ${action.name}_${ui.name}_${an}}() {
-			if (nlv_enableCheckedKeys('${action.name}_${ui.name}') > 0) {
-				var qs = $(nlv_getBForm('${action.name}_${ui.name}')).serialize();
-				<#if _op?contains('^')>
-				window.open("${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>?" + qs));
-				<#else>
-				location.href = "${s}@p.url action='${an}' escapeAmp='false'/>?<#if ap?has_content>${ap}=</#if>" + encodeURIComponent("${s}@p.url action='${a[1]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>?" + qs);
-				</#if>
+			if (plv_enableCheckedKeys('${action.name}_${ui.name}') > 0) {
+				var qs = $(plv_getBForm('${action.name}_${ui.name}')).serialize();
+				<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' escapeAmp='false'/>?" + qs);
 			}
 			return false;
 		}
 		<#else>
-		function ${action.name}_${ui.name}_${a[0]}() {
+		function ${action.name}_${ui.name}_${an}() {
 			<#if _op?contains('^')>
-			window.open("${s}@p.url action='${a[1]}' includeParams='all' escapeAmp='false'/>");
+			window.open("${s}@p.url action='${ap}' includeParams='all' escapeAmp='false'/>");
 			return false;
 			<#else>
-			return nlv_submitCheckedKeys('${action.name}_${ui.name}', '${s}@p.url action="${a[1]}"/>');
+			return plv_submitCheckedKeys('${action.name}_${ui.name}', '${s}@p.url action="${ap}"/>');
 			</#if>
 		}
 		</#if>

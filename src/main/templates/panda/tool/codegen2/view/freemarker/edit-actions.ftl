@@ -8,9 +8,9 @@
 			<#else>
 				<#assign _a = _ua/>
 			</#if>
-			<#include "input-actions-item.ftl"/>
+			<#include "edit-actions-item.ftl"/>
 		</#list>
-			${s}#include "/panda/exts/struts2/views/form-buttons.ftl"/>
+			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
 			${s}@form_buttons buttons=_buttons_/>
 	</#if>
 </#if>

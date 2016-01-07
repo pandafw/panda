@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -29,10 +32,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-
 import panda.io.FileNames;
 import panda.io.Settings;
 import panda.io.Streams;
@@ -47,6 +46,9 @@ import panda.tool.IllegalLicenseException;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import panda.util.tool.AbstractCommandTool;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
 
 /**
  * Base class for code generator.
@@ -219,17 +221,17 @@ public abstract class AbstractCodeGenerator {
 		Streams.safeClose(is);
 	}
 
-	protected void validateDom(File file, Node node) throws Exception {
+	protected void validateDom(String file, Node node) throws Exception {
 		try {
 			// validate the DOM tree
 			validator.validate(new DOMSource(node));
 		}
 		catch (SAXParseException e) {
-			throw new RuntimeException(file.getPath() + ": " + e.getMessage(), e);
+			throw new RuntimeException(file + ": " + e.getMessage(), e);
 		}
 	}
 
-	protected void includeDom(File file, Document doc, Settings properties) throws Exception {
+	protected void includeDom(String base, Document doc, Settings properties) throws Exception {
 		List<Node> incList = new ArrayList<Node>();
 		
 		Element el = doc.getDocumentElement();
@@ -250,15 +252,30 @@ public abstract class AbstractCodeGenerator {
 				inc = translateValue(inc, properties);
 			}
 
-			File fi = new File(file.getParent(), inc);
-			if (inc.endsWith(".properties")) {
-				properties.load(fi);
+			if (inc.startsWith("*")) {
+				inc = inc.substring(1);
+				if (inc.endsWith(".properties")) {
+					properties.load(getClass().getResourceAsStream(inc));
+				}
+				else if (inc.endsWith(".xml")) {
+					Document idoc = loadDocument(inc, properties);
+					Node iec = doc.importNode(idoc.getDocumentElement(), true);
+					for (Node fc = iec.getFirstChild(); fc != null; fc = iec.getFirstChild()) {
+						el.appendChild(iec.removeChild(fc));
+					}
+				}
 			}
-			else if (inc.endsWith(".xml")) {
-				Document idoc = loadDocument(fi, properties);
-				Node iec = doc.importNode(idoc.getDocumentElement(), true);
-				for (Node fc = iec.getFirstChild(); fc != null; fc = iec.getFirstChild()) {
-					el.appendChild(iec.removeChild(fc));
+			else {
+				File fi = new File(FileNames.concat(base, inc));
+				if (inc.endsWith(".properties")) {
+					properties.load(fi);
+				}
+				else if (inc.endsWith(".xml")) {
+					Document idoc = loadDocument(fi, properties);
+					Node iec = doc.importNode(idoc.getDocumentElement(), true);
+					for (Node fc = iec.getFirstChild(); fc != null; fc = iec.getFirstChild()) {
+						el.appendChild(iec.removeChild(fc));
+					}
 				}
 			}
 			incList.add(in);
@@ -275,9 +292,22 @@ public abstract class AbstractCodeGenerator {
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(file);
 		
-		includeDom(file, doc, properties);
+		includeDom(file.getParent(), doc, properties);
 		translateDom(doc, properties);
-		validateDom(file, doc);
+		validateDom(file.getPath(), doc);
+		
+		return doc;
+	}
+
+	protected Document loadDocument(String resource, Settings properties) throws Exception {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse(getClass().getResourceAsStream(resource));
+		
+		includeDom(resource, doc, properties);
+		translateDom(doc, properties);
+		validateDom(resource, doc);
 		
 		return doc;
 	}
@@ -425,6 +455,11 @@ public abstract class AbstractCodeGenerator {
 		print0(cntModule + " modules processed, " + cntFile + " files generated successfully.");
 	}
 
+	public String println(String s) {
+		System.out.println(s);
+		return "";
+	}
+
 	protected void print0(String s) {
 		if (verbose >= 0) {
 			System.out.println(s);
@@ -485,6 +520,15 @@ public abstract class AbstractCodeGenerator {
 			pw.flush();
 
 			cntFile++;
+		}
+		catch (Exception e) {
+			System.err.println("========== PROPS ============");
+			Map props = (Map)context.get("props");
+			TreeMap tm = new TreeMap(props);
+			for (Object en : tm.entrySet()) {
+				System.err.println(((Entry)en).getKey() + ": " + ((Entry)en).getValue());
+			}
+			throw e;
 		}
 		finally {
 			Streams.safeClose(pw);
@@ -565,5 +609,106 @@ public abstract class AbstractCodeGenerator {
 				imports.add(type);
 			}
 		}
+	}
+	
+	//---------------------------------------------------------------
+	private static Map<String, String> vtmap = new HashMap<String, String>();
+	static {
+		vtmap.put("cast", "Validators.CAST");
+		vtmap.put("required", "Validators.REQUIRED");
+		vtmap.put("empty", "Validators.EMPTY");
+
+		vtmap.put("el", "Validators.EL");
+		vtmap.put("regex", "Validators.REGEX");
+		vtmap.put("email", "Validators.EMAIL");
+		vtmap.put("filename", "Validators.FILENAME");
+		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
+
+		vtmap.put("binary", "Validators.BINARY");
+		vtmap.put("date", "Validators.DATE");
+		vtmap.put("byte", "Validators.NUMBER");
+		vtmap.put("short", "Validators.NUMBER");
+		vtmap.put("int", "Validators.NUMBER");
+		vtmap.put("long", "Validators.NUMBER");
+		vtmap.put("number", "Validators.NUMBER");
+
+		vtmap.put("stringlength", "Validators.STRING");
+		vtmap.put("stringrequired", "Validators.STRING");
+
+		vtmap.put("decimal", "Validators.DECIMAL");
+
+		vtmap.put("file", "Validators.FILE");
+		vtmap.put("filelength", "Validators.FILE");
+		vtmap.put("image", "Validators.IMAGE");
+
+		vtmap.put("constant", "Validators.CONSTANT");
+		vtmap.put("prohibited", "Validators.PROHIBITED");
+
+		vtmap.put("visit", "Validators.VISIT");
+	}
+	public String validatorType(String alias) {
+		String vt = vtmap.get(alias);
+		if (vt == null) {
+			throw new IllegalArgumentException("Illegal validator type: " + alias);
+		}
+		return vt;
+	}
+
+	private static Map<String, String> vmmap = new HashMap<String, String>();
+	static {
+		vmmap.put("cast-boolean", "Validators.MSGID_CAST_BOOLEAN");
+		vmmap.put("cast-Boolean", "Validators.MSGID_CAST_BOOLEAN");
+
+		vmmap.put("cast-char", "Validators.MSGID_CAST_CHAR");
+		vmmap.put("cast-Character", "Validators.MSGID_CAST_CHAR");
+
+		vmmap.put("cast-byte", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Byte", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-short", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Short", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-int", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Integer", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-long", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-Long", "Validators.MSGID_CAST_NUMBER");
+		vmmap.put("cast-BigInteger", "Validators.MSGID_CAST_NUMBER");
+
+		vmmap.put("cast-float", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-Float", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-double", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-Double", "Validators.MSGID_CAST_DECIMAL");
+		vmmap.put("cast-BigDecimal", "Validators.MSGID_CAST_DECIMAL");
+
+		vmmap.put("cast-Date", "Validators.MSGID_CAST_DATE");
+		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
+		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
+
+		vmmap.put("required", "Validators.MSGID_REQUIRED");
+		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
+		vmmap.put("filelength", "Validators.MSGID_FILE_LENTH");
+		vmmap.put("constant", "Validators.MSGID_CONSTANT");
+		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
+
+		vmmap.put("email", "Validators.MSGID_EMAIL");
+		vmmap.put("password", "Validators.MSGID_PASSWORD");
+		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("short", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("int", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("long", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("float", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("double", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("decimal", "Validators.MSGID_NUMBER_RANGE");
+		vmmap.put("number", "Validators.MSGID_NUMBER_RANGE");
+	}
+
+	public String validatorMsgId(String alias) {
+		if (Strings.startsWithChar(alias, '"')) {
+			return alias;
+		}
+		
+		String vm = vmmap.get(alias);
+		if (vm == null) {
+			throw new IllegalArgumentException("Illegal validator msg: " + alias);
+		}
+		return vm;
 	}
 }

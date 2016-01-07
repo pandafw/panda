@@ -16,7 +16,8 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
+				name="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
 			</#if></#list>
@@ -26,7 +27,8 @@
 			<#if tag.cssClass??>
 				cssClass="${tag.cssClass}"
 			</#if>
-				key="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
+				key="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 				readonly="true"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
@@ -39,18 +41,18 @@
 					|| ui.templates?seq_contains("print")>
 					<#assign tab = "\t"/>
 					<#if f.actionField>
-				${s}#if ${f.name}?? && ${f.name}.exist>
+				${s}#if a.${f.name}?? && a.${f.name}.exist>
 					<#else>
-				${s}#if ${actionDataFieldName}?? && ${actionDataFieldName}.${f.name}?? && ${actionDataFieldName}.${f.name}.exist>
+				${s}#if r?? && r.${f.name}?? && r.${f.name}.exist>
 					</#if>
 				</#if>
 				<#list f.editTag.paramList as tp>
 					<#if (ui.templates?seq_contains("insert") || ui.templates?seq_contains("copy")) 
 						&& (tp.name == '+defaultLink' || tp.name == '_defaultText')>
 					<#elseif tp.name?starts_with('+')>
-				${tab}${s}@s.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@s.param>
+				${tab}${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
 					<#elseif tp.name?starts_with('_')>
-				${tab}${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
+				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
 				<#if tab?has_content>
@@ -65,7 +67,8 @@
 			<#if tag.cssClass??>
 				cssClass="${tag.cssClass}"
 			</#if>
-				key="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
+				key="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
@@ -73,7 +76,7 @@
 			>
 				<#list tag.paramList as tp>
 					<#if tp.name?starts_with('_')>
-				${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
+				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
 			${s}/@${tag.name}>
@@ -88,7 +91,8 @@
 				</#if>
 			</#list>
 			${s}@p.viewfield
-				key="<#if !f.actionField>${actionDataFieldName}.</#if>${f.name}"
+				key="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#if _format?has_content>
 				format="${_format}"
 			<#elseif tag.name?ends_with(".checkbox")>
@@ -109,7 +113,7 @@
 			>
 				<#list tag.paramList as tp>
 					<#if tp.name?starts_with('_')>
-				${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
+				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
 			${s}/@p.viewfield>

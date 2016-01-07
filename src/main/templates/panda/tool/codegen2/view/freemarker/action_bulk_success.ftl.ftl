@@ -3,9 +3,9 @@
 
 <div class="p-section">
 	<@sheader/>
-	<#include "success-toolbar.ftl"/>
+	<#include "list-toolbar.ftl"/>
 
-	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	${s}#include "/action-alert.ftl"/>
 	<br/>
 	
 	${s}#assign _columns_ = [{

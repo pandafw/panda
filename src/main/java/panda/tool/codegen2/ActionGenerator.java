@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
@@ -17,11 +15,15 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 /**
  * action source generator
@@ -46,13 +48,13 @@ public class ActionGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private Template tplListAction;
+	private Template tplAction;
 
 	private int cntAction = 0;
 	
 	@Override
 	protected void loadTemplates(Configuration cfg) throws Exception {
-		tplListAction = cfg.getTemplate("action/ListAction.java.ftl");
+		tplAction = cfg.getTemplate("action/Action.java.ftl");
 	}
 
 	@Override
@@ -114,19 +116,25 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		prepareImportList(action.getPropertyList(), imports);
 		imports.add(entity.getName());
 		imports.add(action.getActionBaseClass());
-		imports.add(Queryer.class.getName());
+		if (Collections.isNotEmpty(action.getSortedListUIList())) {
+			imports.add(Queryer.class.getName());
+		}
 		imports.add(At.class.getName());
 		imports.add(Ok.class.getName());
 		imports.add(Err.class.getName());
 		imports.add(Param.class.getName());
 		imports.add(Validates.class.getName());
+		if (Collections.isNotEmpty(action.getInputUIList()) && Collections.isNotEmpty(entity.getNotNullList())) {
+			imports.add(Validate.class.getName());
+			imports.add(Validators.class.getName());
+		}
 		imports.add(View.class.getName());
 		if (Strings.isNotEmpty(action.getAuth())) {
 			imports.add("panda.wing.auth.Auth");
 			imports.add("panda.wing.constant.AUTH");
 		}
 		
-		processTpl(pkg, cls + ".java", wrapper, tplListAction, true);
+		processTpl(pkg, cls + ".java", wrapper, tplAction, true);
 	}
 
 	private Map<String, Object> getWrapper(Module module, Action action, Entity entity) {

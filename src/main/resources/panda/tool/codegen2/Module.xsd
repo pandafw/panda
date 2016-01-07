@@ -33,6 +33,7 @@
 		<attribute name="identity" type="string"></attribute>
 		<attribute name="table" type="string"></attribute>
 		<attribute name="trimString" type="string"></attribute>
+		<attribute name="trimList" type="string"></attribute>
 		<attribute name="baseBeanClass" type="string"></attribute>
 		<attribute name="baseImplClass" type="string"></attribute>
 		<attribute name="baseQueryClass" type="string"></attribute>
@@ -57,6 +58,7 @@
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
 		<attribute name="trimString" type="string"></attribute>
+		<attribute name="trimList" type="string"></attribute>
 		<attribute name="dataListFieldName" type="string"></attribute>
 		<attribute name="dataFieldName" type="string"></attribute>
 		<attribute name="actionBaseClass" type="string"></attribute>

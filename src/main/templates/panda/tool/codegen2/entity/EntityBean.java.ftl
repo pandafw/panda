@@ -138,6 +138,8 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 		</#if>
 	<#elseif entity.trimString?has_content && p.simpleJavaType == "String">
 		<#assign setterTrim = entity.trimString />
+	<#elseif entity.trimList?has_content && p.simpleJavaType == "List<String>">
+		<#assign setterTrim = entity.trimList />
 	</#if>
 	<#if p.setterCode?has_content>
 		${p.setterCode}

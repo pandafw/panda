@@ -36,6 +36,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;identity&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;table&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;trimList&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseBeanClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseImplClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseQueryClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -69,6 +70,8 @@ public class Entity {
 	@XmlAttribute
 	private String trimString;
 	@XmlAttribute
+	private String trimList;
+	@XmlAttribute
 	private String baseBeanClass;
 	@XmlAttribute
 	private String baseImplClass;
@@ -86,6 +89,7 @@ public class Entity {
 	private List<EntityProperty> columnList;
 	private List<EntityProperty> joinList;
 	private List<EntityProperty> fieldList;
+	private List<EntityProperty> notNullList;
 	private Map<String, List<EntityProperty>> joinMap;
 
 	/**
@@ -106,6 +110,7 @@ public class Entity {
 		this.identity = model.identity;
 		this.table = model.table;
 		this.trimString = model.trimString;
+		this.trimList = model.trimList;
 		this.baseBeanClass = model.baseBeanClass;
 		this.baseImplClass = model.baseImplClass;
 		this.baseQueryClass = model.baseQueryClass;
@@ -153,6 +158,7 @@ public class Entity {
 		prepareColumnList();
 		prepareJoinList();
 		prepareFieldList();
+		prepareNotNullList();
 		prepareJoinMap();
 	}
 
@@ -296,6 +302,14 @@ public class Entity {
 		this.trimString = trimString;
 	}
 
+	public String getTrimList() {
+		return trimList;
+	}
+
+	public void setTrimList(String trimList) {
+		this.trimList = trimList;
+	}
+
 	/**
 	 * @return the baseBeanClass
 	 */
@@ -363,7 +377,7 @@ public class Entity {
 	private void prepareIdentityProperty() {
 		if (!Strings.isBlank(getIdentity())) {
 			for (EntityProperty p : getPropertyList()) {
-				if (getIdentity().equals(p.getName())) {
+				if (p.getName().equals(getIdentity())) {
 					identityProperty = p;
 					return;
 				}
@@ -543,6 +557,15 @@ public class Entity {
 		}
 	}
 
+	private void prepareNotNullList() {
+		notNullList = new ArrayList<EntityProperty>();
+		for (EntityProperty p : getPropertyList()) {
+			if (Boolean.TRUE.equals(p.getNotNull()) && !p.getName().equals(getIdentity())) {
+				notNullList.add(p);
+			}
+		}
+	}
+
 	private void prepareColumnList() {
 		columnList = new ArrayList<EntityProperty>();
 		for (EntityProperty p : getPropertyList()) {
@@ -617,6 +640,13 @@ public class Entity {
 	}
 
 	/**
+	 * @return the notNullList
+	 */
+	public List<EntityProperty> getNotNullList() {
+		return notNullList;
+	}
+
+	/**
 	 * @return the columnList
 	 */
 	public List<EntityProperty> getColumnList() {
@@ -642,5 +672,16 @@ public class Entity {
 	 */
 	public Map<String, List<EntityProperty>> getJoinMap() {
 		return joinMap;
+	}
+	
+	public String getRequiredFields() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		for (EntityProperty ep : getNotNullList()) {
+			sb.append('\'').append(ep.getName()).append("', ");
+		}
+		sb.setLength(sb.length() - 2);
+		sb.append(" ]");
+		return sb.toString();
 	}
 }

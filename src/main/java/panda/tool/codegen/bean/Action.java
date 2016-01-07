@@ -29,6 +29,7 @@ import panda.lang.Strings;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;trimList&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;dataListFieldName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;dataFieldName&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;entity&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -59,6 +60,8 @@ public class Action {
 	private Boolean generate;
 	@XmlAttribute
 	private String trimString;
+	@XmlAttribute
+	private String trimList;
 	@XmlAttribute
 	private String dataListFieldName;
 	@XmlAttribute
@@ -94,6 +97,7 @@ public class Action {
 	public Action(Action action) {
 		this.generate = action.generate;
 		this.trimString = action.trimString;
+		this.trimList = action.trimList;
 		this.dataListFieldName = action.dataListFieldName;
 		this.dataFieldName = action.dataFieldName;
 		this.entity = action.entity;
@@ -213,6 +217,9 @@ public class Action {
 		if (src.trimString != null) {
 			me.trimString = src.trimString;
 		}
+		if (src.trimList != null) {
+			me.trimList = src.trimList;
+		}
 		if (src.dataListFieldName != null) {
 			me.dataListFieldName = src.dataListFieldName;
 		}
@@ -304,11 +311,11 @@ public class Action {
 	}
 
 	/**
-	 * @return the inputUIList
+	 * @return the sortedListUIList
 	 */
-	public List<InputUI> getSortedInputUIList() {
-		List<InputUI> list = new LinkedList<InputUI>();
-		for (InputUI iui : getInputUIList()) {
+	public List<ListUI> getSortedListUIList() {
+		List<ListUI> list = new LinkedList<ListUI>();
+		for (ListUI iui : getListUIList()) {
 			if (Boolean.TRUE.equals(iui.getGenerate())) {
 				list.add(iui);
 			}
@@ -324,6 +331,19 @@ public class Action {
 			inputUIList = new LinkedList<InputUI>();
 		}
 		return this.inputUIList;
+	}
+
+	/**
+	 * @return the inputUIList
+	 */
+	public List<InputUI> getSortedInputUIList() {
+		List<InputUI> list = new LinkedList<InputUI>();
+		for (InputUI iui : getInputUIList()) {
+			if (Boolean.TRUE.equals(iui.getGenerate())) {
+				list.add(iui);
+			}
+		}
+		return list;
 	}
 
 	/**
@@ -352,6 +372,20 @@ public class Action {
 	 */
 	public void setTrimString(String trimString) {
 		this.trimString = trimString;
+	}
+
+	/**
+	 * @return the trimList
+	 */
+	public String getTrimList() {
+		return trimList;
+	}
+
+	/**
+	 * @param trimList the trimList to set
+	 */
+	public void setTrimList(String trimList) {
+		this.trimList = trimList;
 	}
 
 	/**

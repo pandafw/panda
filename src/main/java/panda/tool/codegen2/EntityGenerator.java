@@ -270,47 +270,6 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		wrapper.put("imports", imports);
 	}
 
-	private static Map<String, String> vtmap = new HashMap<String, String>();
-	static {
-		vtmap.put("cast", "Validators.CAST");
-		vtmap.put("required", "Validators.REQUIRED");
-		vtmap.put("empty", "Validators.EMPTY");
-
-		vtmap.put("el", "Validators.EL");
-		vtmap.put("regex", "Validators.REGEX");
-		vtmap.put("email", "Validators.EMAIL");
-		vtmap.put("filename", "Validators.FILENAME");
-		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
-
-		vtmap.put("binary", "Validators.BINARY");
-		vtmap.put("date", "Validators.DATE");
-		vtmap.put("byte", "Validators.NUMBER");
-		vtmap.put("short", "Validators.NUMBER");
-		vtmap.put("int", "Validators.NUMBER");
-		vtmap.put("long", "Validators.NUMBER");
-		vtmap.put("number", "Validators.NUMBER");
-
-		vtmap.put("stringlength", "Validators.STRING");
-		vtmap.put("stringrequired", "Validators.STRING");
-
-		vtmap.put("decimal", "Validators.DECIMAL");
-
-		vtmap.put("file", "Validators.FILE");
-		vtmap.put("filelength", "Validators.FILE");
-		vtmap.put("image", "Validators.IMAGE");
-
-		vtmap.put("constant", "Validators.CONSTANT");
-		vtmap.put("prohibited", "Validators.PROHIBITED");
-
-		vtmap.put("visit", "Validators.VISIT");
-	}
-	public String validatorType(String alias) {
-		String vt = vtmap.get(alias);
-		if (vt == null) {
-			throw new IllegalArgumentException("Illegal validator type: " + alias);
-		}
-		return vt;
-	}
 	public String annoComment(Entity entity) {
 		if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
 			return Comment.class.getSimpleName();
@@ -318,61 +277,4 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		return Comment.class.getName();
 	}
 
-	private static Map<String, String> vmmap = new HashMap<String, String>();
-	static {
-		vmmap.put("cast-boolean", "Validators.MSGID_CAST_BOOLEAN");
-		vmmap.put("cast-Boolean", "Validators.MSGID_CAST_BOOLEAN");
-
-		vmmap.put("cast-char", "Validators.MSGID_CAST_CHAR");
-		vmmap.put("cast-Character", "Validators.MSGID_CAST_CHAR");
-
-		vmmap.put("cast-byte", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Byte", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-short", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Short", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-int", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Integer", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-long", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-Long", "Validators.MSGID_CAST_NUMBER");
-		vmmap.put("cast-BigInteger", "Validators.MSGID_CAST_NUMBER");
-
-		vmmap.put("cast-float", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-Float", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-double", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-Double", "Validators.MSGID_CAST_DECIMAL");
-		vmmap.put("cast-BigDecimal", "Validators.MSGID_CAST_DECIMAL");
-
-		vmmap.put("cast-Date", "Validators.MSGID_CAST_DATE");
-		vmmap.put("cast-Calendar", "Validators.MSGID_CAST_DATE");
-		vmmap.put("cast-FileItem", "Validators.MSGID_CAST_FILE");
-
-		vmmap.put("required", "Validators.MSGID_REQUIRED");
-		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
-		vmmap.put("filelength", "Validators.MSGID_FILE_LENTH");
-		vmmap.put("constant", "Validators.MSGID_CONSTANT");
-		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
-
-		vmmap.put("email", "Validators.MSGID_EMAIL");
-		vmmap.put("password", "Validators.MSGID_PASSWORD");
-		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("short", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("int", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("long", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("float", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("double", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("decimal", "Validators.MSGID_NUMBER_RANGE");
-		vmmap.put("number", "Validators.MSGID_NUMBER_RANGE");
-	}
-
-	public String validatorMsgId(String alias) {
-		if (Strings.startsWithChar(alias, '"')) {
-			return alias;
-		}
-		
-		String vm = vmmap.get(alias);
-		if (vm == null) {
-			throw new IllegalArgumentException("Illegal validator msg: " + alias);
-		}
-		return vm;
-	}
 }

@@ -114,6 +114,7 @@ public class InputUI implements Comparable<InputUI> {
 	 * @return inputui
 	 */
 	public static InputUI extend(InputUI src, InputUI parent) {
+//		System.out.println("extend input " + src.getName() + " from " + parent.getName());
 		InputUI me = new InputUI(parent);
 
 		if (src.generate != null) {
