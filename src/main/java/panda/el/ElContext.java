@@ -4,6 +4,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 
 public class ElContext {
+	private boolean raiseNullCall;
 	private Object context;
 	private BeanHandler handler;
 
@@ -57,5 +58,12 @@ public class ElContext {
 	 */
 	public Object context() {
 		return context;
+	}
+	
+	/**
+	 * @return raise null call
+	 */
+	public boolean raiseNullCall() {
+		return raiseNullCall;
 	}
 }

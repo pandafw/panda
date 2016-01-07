@@ -28,10 +28,12 @@ public class AccessOpt extends TwoTernary implements RunMethod {
 	}
 
 	public Object calculate(ElContext ec) {
-		// 如果直接调用计算方法,那基本上就是直接调用属性了吧...我也不知道^^
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
-			throw new ElException("obj is NULL, can't call obj." + right);
+			if (ec.raiseNullCall()) {
+				throw new ElException("obj is NULL, can't call obj." + right);
+			}
+			return null;
 		}
 		return Beans.getProperty(obj, right.toString());
 	}
