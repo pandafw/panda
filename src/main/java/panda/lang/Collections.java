@@ -2267,4 +2267,38 @@ public abstract class Collections {
 		}
 		return nm;
 	}
+
+	/**
+	 * strip empty list to null
+	 */
+	public static <T> Collection<T> stripToNull(Collection<T> list) {
+		if (isEmpty(list)) {
+			return null;
+		}
+
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return isEmpty(list) ? null : list;
+	}
+
+	/**
+	 * strip empty list to null
+	 */
+	public static <T> List<T> stripToNull(List<T> list) {
+		if (isEmpty(list)) {
+			return null;
+		}
+
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return isEmpty(list) ? null : list;
+	}
 }
