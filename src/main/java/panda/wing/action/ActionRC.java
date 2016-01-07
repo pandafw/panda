@@ -63,6 +63,14 @@ public interface ActionRC {
 	public final static String CONFIRM_DATA_OVERWRITE = "confirm-data-overwrite";
 	
 	//------------------------------------------------------------
+	// WARN MESSAGES
+	//------------------------------------------------------------
+	/**
+	 * WARN_DATA_UPDATED = "warn-data-updated";
+	 */
+	public final static String WARN_DATA_UPDATED = "warn-data-updated";
+
+	//------------------------------------------------------------
 	// ERROR MESSAGES
 	//------------------------------------------------------------
 	/**
@@ -119,11 +127,6 @@ public interface ActionRC {
 	 * ERROR_NOPERMIT = "error-nopermit";
 	 */
 	public final static String ERROR_NOPERMIT = "error-nopermit";
-
-	/**
-	 * ERROR_DATA_IS_UPDATED = "error-data-is-updated";
-	 */
-	public final static String ERROR_DATA_IS_UPDATED = "error-data-is-updated";
 
 	/**
 	 * ERROR_DATA_IS_INVALID = "error-data-is-invalid";

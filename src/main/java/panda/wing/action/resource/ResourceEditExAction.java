@@ -1,6 +1,5 @@
 package panda.wing.action.resource;
 
-import java.util.List;
 import java.util.Locale;
 
 import panda.lang.Locales;
@@ -75,23 +74,5 @@ public class ResourceEditExAction extends ResourceEditAction {
 //			addReloadMessage();
 //		}
 		addReloadMessage();
-	}
-
-	@Override
-	protected int deleteDataList(List<Resource> dataList) {
-		int cnt = super.deleteDataList(dataList);
-
-		if (cnt > 0) {
-	//		for (Resource data : dataList) {
-	//			if (!Application.getDatabaseResourceLoader().putResource(data.getClazz(),
-	//				data.getLanguage(), data.getCountry(), null, data.getName(), data.getValue())) {
-	//				addReloadMessage();
-	//				break;
-	//			}
-	//		}
-			addReloadMessage();
-		}
-		
-		return cnt;
 	}
 }

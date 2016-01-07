@@ -6,7 +6,7 @@
 
 <div class="p-section">
 	<div class="p-header">
-		<h3><@p.text name="title-list_print"><@p.param name="title" value="#(title)"/></@p.text></h3>
+		<h3><@p.i icon="icon"/> <@p.text name="title-list_print"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
 
 	<#include "/panda/mvc/view/action-alert.ftl"/>

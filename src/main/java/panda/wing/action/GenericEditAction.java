@@ -1,6 +1,5 @@
 package panda.wing.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,9 +17,10 @@ import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.lang.mutable.MutableInt;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.tag.Property;
 import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
@@ -32,21 +32,6 @@ import panda.wing.entity.IUpdate;
  */
 public abstract class GenericEditAction<T> extends AbstractAction {
 	private static final Log log = Logs.getLog(GenericEditAction.class);
-	
-	/**
-	 * DEFAULT_DATA_NAME = "d";
-	 */
-	public final static String DEFAULT_DATA_FIELD_NAME = "d";
-
-	/**
-	 * DEFAULT_DATA_LIST_NAME = "d";
-	 */
-	public final static String DEFAULT_DATA_LIST_FIELD_NAME = "ds";
-
-	/**
-	 * RESULT_DEFAULT = "";
-	 */
-	public final static String RESULT_DEFAULT = "";
 	
 	/**
 	 * RESULT_CONFIRM = "confirm";
@@ -84,19 +69,15 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// scenario & result
 	//------------------------------------------------------------
+	private Object result;
 	private String actionScenario;
 	private String[] viewScenarios = { "view", "print", "delete" };
 
 	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
-	private String dataFieldName = DEFAULT_DATA_FIELD_NAME;
-	private String dataListFieldName = DEFAULT_DATA_LIST_FIELD_NAME;
 	private boolean checkAbortOnError = false;
 	private boolean updateSelective = false;
-	private boolean clearPrimarys = true;
-	private boolean clearIdentity = true;
-	private Boolean listCountable;
 
 	//------------------------------------------------------------
 	// entity properties
@@ -104,9 +85,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	private Class<T> type;
 	private Entity<T> entity;
 	private EntityDao<T> entityDao;
-	private T sourceData;
-	private T data;
-	private List<T> dataList;
 
 	/**
 	 * Constructor 
@@ -167,76 +145,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	// protected getter & setter
 	//------------------------------------------------------------
 	/**
-	 * @return the sourceData
-	 */
-	protected T getSourceData() {
-		return sourceData;
-	}
-
-	/**
-	 * @param sourceData the sourceData to set
-	 */
-	protected void setSourceData(T sourceData) {
-		this.sourceData = sourceData;
-	}
-
-	/**
-	 * @return the data
-	 */
-	public T getData() {
-		return data;
-	}
-
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(T data) {
-		this.data = data;
-	}
-
-	/**
-	 * @return the dataList
-	 */
-	public List<T> getDataList() {
-		return dataList;
-	}
-
-	/**
-	 * @param dataList the dataList to set
-	 */
-	public void setDataList(List<T> dataList) {
-		this.dataList = dataList;
-	}
-
-	/**
-	 * @return dataName
-	 */
-	public String getDataFieldName() {
-		return dataFieldName;
-	}
-
-	/**
-	 * @param dataName the dataName to set
-	 */
-	protected void setDataFieldName(String dataName) {
-		this.dataFieldName = dataName;
-	}
-
-	/**
-	 * @return the dataListFieldName
-	 */
-	protected String getDataListFieldName() {
-		return dataListFieldName;
-	}
-
-	/**
-	 * @param dataListFieldName the dataListFieldName to set
-	 */
-	protected void setDataListFieldName(String dataListFieldName) {
-		this.dataListFieldName = dataListFieldName;
-	}
-
-	/**
 	 * @return the updateSelective
 	 */
 	protected boolean isUpdateSelective() {
@@ -251,34 +159,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	}
 
 	/**
-	 * @return the clearPrimarys
-	 */
-	public boolean isClearPrimarys() {
-		return clearPrimarys;
-	}
-
-	/**
-	 * @param clearPrimarys the clearPrimarys to set
-	 */
-	public void setClearPrimarys(boolean clearPrimarys) {
-		this.clearPrimarys = clearPrimarys;
-	}
-
-	/**
-	 * @return the clearIdentity
-	 */
-	protected boolean isClearIdentity() {
-		return clearIdentity;
-	}
-
-	/**
-	 * @param clearIdentity the clearIdentity to set
-	 */
-	protected void setClearIdentity(boolean clearIdentity) {
-		this.clearIdentity = clearIdentity;
-	}
-
-	/**
 	 * @return the checkAbortOnError
 	 */
 	protected boolean isCheckAbortOnError() {
@@ -290,17 +170,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 */
 	protected void setCheckAbortOnError(boolean checkAbortOnError) {
 		this.checkAbortOnError = checkAbortOnError;
-	}
-
-	/**
-	 * @return the listCountable
-	 */
-	protected Boolean getListCountable() {
-		return listCountable;
-	}
-
-	protected void setListCountable(Boolean listCountable) {
-		this.listCountable = listCountable;
 	}
 
 	/**
@@ -322,6 +191,23 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 */
 	protected void setActionScenario(String actionScenario) {
 		this.actionScenario = actionScenario;
+	}
+
+	protected void setScenarioResult() {
+		result = new SitemeshFreemarkerView("~" + getActionScenario());
+	}
+
+	protected void setScenarioResult(String step) {
+		result = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
+	}
+
+	protected void setResultOnExecCheckError() {
+		if (hasActionErrors() || hasFieldErrors() || !isInputConfirm()) {
+			setScenarioResult();
+		}
+		else {
+			setScenarioResult(RESULT_CONFIRM);
+		}
 	}
 
 	//------------------------------------------------------------
@@ -443,551 +329,360 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	//--------------------------------------------------------------------------
 	/**
-	 * bdelete
-	 */
-	protected Object bdelete() {
-		doBulkDeleteSelect();
-		return null;
-	}
-
-	/**
-	 * bdelete_execute
-	 */
-	protected Object bdelete_execute() {
-		doBulkDeleteExecute();
-		return null;
-	}
-
-	/**
-	 * bupdate
-	 */
-	protected Object bupdate() {
-		doBulkUpdateSelect();
-		return null;
-	}
-
-	/**
-	 * bupdate_execute
-	 */
-	protected Object bupdate_execute() {
-		doBulkUpdateExecute();
-		return null;
-	}
-	
-//	/**
-//	 * bedit
-//	 * @return SUCCESS
-//	 */
-//	protected String bedit() {
-//		return doBulkEditInput();
-//	}
-//
-//	/**
-//	 * bedit_input
-//	 * @return SUCCESS
-//	 */
-//	protected String bedit_input() {
-//		return doBulkEditInput();
-//	}
-//
-//	/**
-//	 * bedit_confirm
-//	 * @return SUCCESS
-//	 */
-//	protected String bedit_confirm() {
-//		return doBulkEditConfirm();
-//	}
-//
-//	/**
-//	 * bedit_execute
-//	 * @return SUCCESS
-//	 */
-//	protected String bedit_execute() {
-//		return doBulkEditExecute();
-//	}
-
-	//--------------------------------------------------------------------------
-	/**
 	 * view
 	 */
-	protected Object view() {
-		doViewSelect();
-		return null;
+	protected Object view(T key) {
+		return doResult(doViewSelect(key));
 	}
 	
 	/**
 	 * view_input
 	 */
-	protected Object view_input() {
-		doViewInput();
-		return null;
+	protected Object view_input(T data) {
+		return doResult(doViewInput(data));
 	}
 
 	/**
 	 * print
 	 */
-	protected Object print() {
-		doViewSelect();
-		return null;
+	protected Object print(T key) {
+		return doResult(doViewSelect(key));
 	}
 
 	/**
 	 * print_input
 	 */
-	protected Object print_input() {
-		doViewInput();
-		return null;
+	protected Object print_input(T data) {
+		return doResult(doViewInput(data));
 	}
 
 	/**
 	 * copy
 	 */
-	protected Object copy() {
-		doInsertSelect();
-		return null;
+	protected Object copy(T key) {
+		return doResult(doCopySelect(key));
 	}
 
 	/**
 	 * copy_input
 	 */
-	protected Object copy_input() {
-		doInsertInput();
-		return null;
+	protected Object copy_input(T data) {
+		return doResult(doCopyInput(data));
 	}
 
 	/**
 	 * copy_confirm
 	 */
-	protected Object copy_confirm() {
-		doInsertConfirm();
-		return null;
+	protected Object copy_confirm(T data) {
+		return doResult(doInsertConfirm(data));
 	}
 
 	/**
 	 * copy_execute
 	 */
-	public Object copy_execute() {
-		doInsertExecute();
-		return null;
+	public Object copy_execute(T data) {
+		return doResult(doInsertExecute(data));
 	}
 
 	/**
 	 * insert
 	 */
 	protected Object insert() {
-		doInsertClear();
-		return null;
+		return doResult(doInsertInit());
 	}
 
 	/**
 	 * insert_input
 	 */
-	protected Object insert_input() {
-		doInsertInput();
-		return null;
+	protected Object insert_input(T data) {
+		return doResult(doInsertInput(data));
 	}
 
 	/**
 	 * insert_confirm
 	 */
-	protected Object insert_confirm() {
-		doInsertConfirm();
-		return null;
+	protected Object insert_confirm(T data) {
+		return doResult(doInsertConfirm(data));
 	}
 
 	/**
 	 * insert_execute
 	 */
-	protected Object insert_execute() {
-		doInsertExecute();
-		return null;
+	protected Object insert_execute(T data) {
+		return doResult(doInsertExecute(data));
 	}
 
 	/**
 	 * update
 	 */
-	protected Object update() {
-		doUpdateSelect();
-		return null;
+	protected Object update(T key) {
+		return doResult(doUpdateSelect(key));
 	}
 
 	/**
 	 * update_input
 	 */
-	protected Object update_input() {
-		doUpdateInput();
-		return null;
+	protected Object update_input(T data) {
+		return doResult(doUpdateInput(data));
 	}
 
 	/**
 	 * update_confirm
 	 */
-	public Object update_confirm() {
-		doUpdateConfirm();
-		return null;
+	public Object update_confirm(T data) {
+		return doResult(doUpdateConfirm(data));
 	}
 
 	/**
 	 * update_execute
 	 */
-	protected Object update_execute() {
-		doUpdateExecute();
-		return null;
+	protected Object update_execute(T data) {
+		return doResult(doUpdateExecute(data));
 	}
 
 	/**
 	 * delete
 	 */
-	protected Object delete() {
-		doDeleteSelect();
-		return null;
+	protected Object delete(T key) {
+		return doResult(doDeleteSelect(key));
 	}
 
 	/**
 	 * delete_execute
 	 */
-	protected Object delete_execute() {
-		doDeleteExecute();
-		return null;
+	protected Object delete_execute(T key) {
+		return doResult(doDeleteExecute(key));
 	}
 
 	//------------------------------------------------------------
 	// do method
 	//------------------------------------------------------------
+	protected Object doResult(Object r) {
+		if (result == null) {
+			return r;
+		}
+		getContext().setResult(r);
+		return result;
+	}
+
 	/**
 	 * doViewInput 
 	 */
-	protected void doViewInput() {
-//		setMethodResult(RESULT_DEFAULT);
+	protected Object doViewInput(T data) {
+		return data;
 	}
 
 	/**
 	 * doViewSelect
 	 */
-	protected void doViewSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		T d = selectData(data);
-		if (d != null) {
-			data = d;
-		}
+	protected Object doViewSelect(T key) {
+		return selectData(key);
 	}
 
 	/**
-	 * doInsertClear
+	 * doCopySelect
 	 */
-	protected void doInsertClear() {
-//		setMethodResult(RESULT_DEFAULT);
-		data = prepareDefaultData(null);
+	protected Object doCopySelect(T key) {
+		T sd = selectData(key);
+		if (sd != null) {
+			clearOnCopy(sd);
+			clearOnCopy(key);
+		}
+		return sd;
 	}
 
 	/**
-	 * doInsertSelect
+	 * doCopyInput
 	 */
-	protected void doInsertSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		T d = selectData(data);
-		if (d != null) {
-			data = d;
-			clearOnCopy(d);
-		}
+	protected Object doCopyInput(T data) {
+		return prepareDefaultData(data);
+	}
+
+	/**
+	 * doInsertInit
+	 */
+	protected Object doInsertInit() {
+		T data = prepareDefaultData(null);
+		getContext().setParams(data);
+		return data;
 	}
 
 	/**
 	 * doInsertInput
 	 */
-	protected void doInsertInput() {
-//		setMethodResult(RESULT_DEFAULT);
-		clearOnCopy(data);
-		data = prepareDefaultData(data);
+	protected Object doInsertInput(T data) {
+		return prepareDefaultData(data);
 	}
 
 	/**
 	 * doInsertConfirm
 	 */
-	protected void doInsertConfirm() {
-//		setMethodResult(RESULT_DEFAULT);
+	protected Object doInsertConfirm(T data) {
 		data = prepareDefaultData(data);
 		if (checkOnInsert(data)) {
 			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
-//			setMethodResult(RESULT_CONFIRM);
 		}
 		else {
-			if (!hasActionErrors() && !hasFieldErrors()) {
-//				setMethodResult(RESULT_DEFAULT);
-//				setMethodResult(RESULT_CONFIRM);
+			if (hasActionErrors() || hasFieldErrors()) {
+				setScenarioResult();
 			}
 		}
+		return data;
 	}
 
 	/**
 	 * doInsertExecute
 	 */
-	protected void doInsertExecute() {
-//		setMethodResult(RESULT_DEFAULT);
-
+	protected Object doInsertExecute(T data) {
 		data = prepareDefaultData(data);
-		if (checkOnInsert(data)) {
-			try {
-				startInsert(data);
-				getEntityDao().exec(new Runnable() {
-					public void run() {
-						insertData(data);
-					}
-				});
-			}
-			catch (Throwable e) {
-				log.error(e.getMessage(), e);
-				addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), 
-					new String[] { e.getMessage() }));
-				return;
-			}
-			finally {
-				finalInsert(data);
-			}
+		if (!checkOnInsert(data)) {
+			setResultOnExecCheckError();
+			return data;
+		}
 
-			addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
-//			setMethodResult(RESULT_SUCCESS);
+		try {
+			startInsert(data);
+			final T d = data;
+			getEntityDao().exec(new Runnable() {
+				public void run() {
+					insertData(d);
+				}
+			});
 		}
-		else {
-			if (!hasActionErrors() && !hasFieldErrors() 
-					&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
-//				setMethodResult(RESULT_CONFIRM);
-			}
+		catch (Throwable e) {
+			log.error(e.getMessage(), e);
+			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			setScenarioResult();
+			return data;
 		}
+		finally {
+			finalInsert(data);
+		}
+
+		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		return data;
 	}
 
 	/**
 	 * doUpdateInput
 	 */
-	protected void doUpdateInput() {
-//		setMethodResult(RESULT_DEFAULT);
+	protected Object doUpdateInput(T data) {
+		return data;
 	}
 
 	/**
 	 * doUpdateSelect
 	 */
-	protected void doUpdateSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		T d = selectData(data);
-		if (d != null) {
-			data = d;
-		}
+	protected Object doUpdateSelect(T key) {
+		return selectData(key);
 	}
 
 	/**
 	 * doUpdateConfirm
 	 */
-	protected void doUpdateConfirm() {
-//		setMethodResult(RESULT_DEFAULT);
-
-		sourceData = selectData(data);
-		if (sourceData != null) {
-			if (checkOnUpdate(data, sourceData)) {
+	protected Object doUpdateConfirm(T data) {
+		T sd = selectData(data);
+		if (sd != null) {
+			if (checkOnUpdate(data, sd)) {
 				addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
-//				setMethodResult(RESULT_CONFIRM);
 			}
 			else {
-				if (!hasActionErrors() && !hasFieldErrors()) {
-//					setMethodResult(RESULT_CONFIRM);
+				if (hasActionErrors() || hasFieldErrors()) {
+					setScenarioResult();
 				}
 			}
 		}
+		return sd;
 	}
 
+	public boolean isInputConfirm() {
+		return getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false);
+	}
+	
 	/**
 	 * doUpdateExecute
 	 */
-	protected void doUpdateExecute() {
-//		setMethodResult(RESULT_DEFAULT);
-
-		sourceData = selectData(data);
-		if (sourceData != null) {
-			if (checkOnUpdate(data, sourceData)) {
-				try {
-					startUpdate(data, sourceData);
-					getEntityDao().exec(new Runnable() {
-						public void run() {
-							updateData(data, sourceData);
-						}
-					});
-				}
-				catch (Throwable e) {
-					log.error(e.getMessage(), e);
-					addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), 
-						new String[] { e.getMessage() }));
-					return;
-				}
-				finally {
-					finalUpdate(data, sourceData);
-				}
-
-				addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
-//				setMethodResult(RESULT_SUCCESS);
-			}
-			else {
-				if (!hasActionErrors() && !hasFieldErrors()
-						&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
-//					setMethodResult(RESULT_CONFIRM);
-				}
-			}
+	protected Object doUpdateExecute(final T data) {
+		final T sd = selectData(data);
+		if (sd == null) {
+			return null;
 		}
+
+		if (!checkOnUpdate(data, sd)) {
+			setResultOnExecCheckError();
+			return data;
+		}
+
+		try {
+			startUpdate(data, sd);
+			getEntityDao().exec(new Runnable() {
+				public void run() {
+					updateData(data, sd);
+				}
+			});
+		}
+		catch (Throwable e) {
+			log.error(e.getMessage(), e);
+			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			setScenarioResult();
+			return data;
+		}
+		finally {
+			finalUpdate(data, sd);
+		}
+
+		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		return data;
 	}
 
 	/**
 	 * doDeleteSelect
 	 */
-	protected void doDeleteSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		sourceData = selectData(data);
-		if (sourceData != null) {
-			if (checkOnDelete(data, sourceData)) {
-				addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
-			}
-			data = sourceData;
+	protected Object doDeleteSelect(T key) {
+		T sd = selectData(key);
+		if (sd == null) {
+			return null;
 		}
+		
+		if (checkOnDelete(key, sd)) {
+			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+		}
+		return sd;
 	}
 
 	/**
 	 * doDeleteExecute
 	 */
-	protected void doDeleteExecute() {
-//		setMethodResult(RESULT_DEFAULT);
+	protected Object doDeleteExecute(final T key) {
+		final T sd = selectData(key);
+		if (sd == null) {
+			return null;
+		}
 
-		sourceData = selectData(data);
-		if (sourceData != null) {
-			if (checkOnDelete(data, sourceData)) {
-				data = sourceData;
-				try {
-					startDelete(data);
-					getEntityDao().exec(new Runnable() {
-						public void run() {
-							deleteData(data);
-						}
-					});
+		if (!checkOnDelete(key, sd)) {
+			return sd;
+		}
+		
+		try {
+			startDelete(sd);
+			getEntityDao().exec(new Runnable() {
+				public void run() {
+					deleteData(sd);
 				}
-				catch (Throwable e) {
-					log.error(e.getMessage(), e);
-					addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), 
-						new String[] { e.getMessage() }));
-					return;
-				}
-				finally {
-					finalDelete(data);
-				}
-				
-				addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
-//				setMethodResult(RESULT_SUCCESS);
-			}
-			else {
-				data = sourceData;
-			}
+			});
 		}
-	}
-
-	/**
-	 * doBulkUpdateSelect
-	 */
-	protected void doBulkUpdateSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		dataList = selectDataList(dataList);
-		if (Collections.isNotEmpty(dataList)) {
-			if (checkOnBulkUpdate(dataList)) {
-				addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario(), 
-						new String[] { String.valueOf(dataList.size()) }));
-			}
+		catch (Throwable e) {
+			log.error(e.getMessage(), e);
+			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			setScenarioResult();
+			return sd;
 		}
-	}
-
-	/**
-	 * doBulkUpdateExecute
-	 */
-	protected void doBulkUpdateExecute() {
-//		setMethodResult(RESULT_DEFAULT);
-
-		dataList = selectDataList(dataList);
-		if (Collections.isNotEmpty(dataList) && checkOnBulkUpdate(dataList)) {
-			final MutableInt count = new MutableInt(0);
-			try {
-				startBulkUpdate(dataList);
-				getEntityDao().exec(new Runnable() {
-					public void run() {
-						count.setValue(updateDataList(dataList));
-					}
-				});
-			}
-			catch (Throwable e) {
-				log.error(e.getMessage(), e);
-				addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), 
-					new String[] { e.getMessage() }));
-				return;
-			}
-			finally {
-				finalBulkUpdate(dataList);
-			}
-
-			if (count.getValue() == dataList.size()) {
-				addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario(), 
-						new String[] { count.toString() }));
-			}
-			else {
-				addActionWarning(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario(), 
-						new String[] { count.toString() }));
-			}
-//			setMethodResult(RESULT_SUCCESS);
+		finally {
+			finalDelete(sd);
 		}
-	}
-
-	/**
-	 * doBulkDeleteSelect
-	 */
-	protected void doBulkDeleteSelect() {
-//		setMethodResult(RESULT_DEFAULT);
-		dataList = selectDataList(dataList);
-		if (Collections.isNotEmpty(dataList)) {
-			if (checkOnBulkDelete(dataList)) {
-				addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario(), 
-					new String[] { String.valueOf(dataList.size()) }));
-			}
-		}
-	}
-
-	/**
-	 * doBulkDeleteExecute
-	 */
-	protected void doBulkDeleteExecute() {
-//		setMethodResult(RESULT_DEFAULT);
-
-		dataList = selectDataList(dataList);
-		if (Collections.isNotEmpty(dataList) && checkOnBulkDelete(dataList)) {
-			final MutableInt count = new MutableInt(0);
-			try {
-				startBulkDelete(dataList);
-				getEntityDao().exec(new Runnable() {
-					public void run() {
-						count.setValue(deleteDataList(dataList));
-					}
-				});
-			}
-			catch (Exception e) {
-				log.error(e.getMessage(), e);
-				addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), 
-					new String[] { e.getMessage() }));
-				return;
-			}
-			finally {
-				finalBulkDelete(dataList);
-			}
-			
-			if (count.getValue() == dataList.size()) {
-				addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario(), 
-						new String[] { count.toString() }));
-			}
-			else {
-				addActionWarning(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario(), 
-						new String[] { count.toString() }));
-			}
-//			setMethodResult(RESULT_SUCCESS);
-		}
+		
+		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		return sd;
 	}
 
 	//------------------------------------------------------------
@@ -1008,13 +703,10 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 * @param params parameters
 	 * @return message string
 	 */
-	protected String getMessage(String msg, String[] params) {
-		return getText(msg, msg, params);
+	protected String getMessage(String msg, String param) {
+		return getText(msg, msg, param);
 	}
 
-	protected void trimDataList(List<T> ds) {
-	}
-	
 	protected void trimData(T d) {
 	}
 	
@@ -1023,14 +715,21 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	/**
 	 * selectData
-	 * @param data data
+	 * @param key key
 	 * @return data data found
 	 */
-	protected T selectData(T data) {
-		T d = daoFetch(data);
+	protected T selectData(T key) {
+		if (!hasPrimaryKeyValues(key)) {
+			addActionError(getMessage(ActionRC.ERROR_DATA_NOTFOUND));
+			return null;
+		}
+		
+		T d = daoFetch(key);
 		if (d == null) {
 			addActionError(getMessage(ActionRC.ERROR_DATA_NOTFOUND));
+			return null;
 		}
+
 		trimData(d);
 		return d;
 	}
@@ -1260,204 +959,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	}
 
 	//------------------------------------------------------------
-	// bulk methods
-	//------------------------------------------------------------
-	/**
-	 * @param gq query
-	 * @param dataList data list
-	 * @return count
-	 */
-	protected int addKeyListToQuery(GenericQuery<T> gq, List<T> dataList, boolean raiseError) {
-		Entity<T> entity = getEntity();
-		List<EntityField> keys = entity.getPrimaryKeys();
-
-		if (keys.size() == 1) {
-			EntityField pk = keys.get(0);
-			List<Object> vs = new ArrayList<Object>();
-			for (int n = 0; n < dataList.size(); n++) {
-				T d = dataList.get(n);
-				Object v = pk.getValue(d);
-				if (v != null) {
-					vs.add(v);
-				}
-				else {
-					if (raiseError) {
-						throw new RuntimeException("The item[" + n + "] has empty primary key value. (" + d + ")");
-					}
-				}
-			}
-
-			gq.in(pk.getName(), vs);
-			return vs.size();
-		}
-		else if (keys.size() > 1) {
-			int count = 0;
-
-			gq.or();
-			Object[] vs = new Object[keys.size()]; 
-			for (int n = 0; n < dataList.size(); n++) {
-				T d = dataList.get(n);
-				for (int i = 0; i < keys.size(); i++) {
-					EntityField ef = keys.get(i);
-
-					Object v = ef.getValue(d);
-					if (v != null) {
-						vs[i] = v;
-					}
-					else {
-						if (raiseError) {
-							throw new RuntimeException("The item[" + n + "] has empty primary key value. (" + d + ")");
-						}
-						vs[0] = null;
-						break;
-					}
-				}
-				if (vs[0] != null) {
-					gq.and();
-					for (int i = 0; i < keys.size(); i++) {
-						gq.equalTo(keys.get(i).getName(), vs[i]);
-					}
-					gq.end();
-					count++;
-				}
-			}
-			gq.end();
-			return count;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	/**
-	 * selectDataList
-	 * @param dataList dataList
-	 * @return dataList
-	 */
-	protected List<T> selectDataList(List<T> dataList) {
-		Collections.removeNull(dataList);
-		if (dataList != null && dataList.size() > 0) {
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
-
-			int count = addKeyListToQuery(q, dataList, false);
-			if (count > 0) {
-				dataList = daoSelect(q);
-			}
-			else {
-				dataList = null;
-			}
-		}
-		if (dataList == null || dataList.size() < 1) {
-			addActionError(getMessage(ActionRC.ERROR_DATA_LIST_EMPTY));
-		}
-		return dataList;
-	}
-	
-	//------------------------------------------------------------
-	// bulk update methods
-	//------------------------------------------------------------
-	/**
-	 * checkOnBulkUpdate
-	 * @param dataList data list
-	 * @return true to continue update
-	 */
-	protected boolean checkOnBulkUpdate(List<T> dataList) {
-		return true;
-	}
-
-	/**
-	 * startBulkUpdate
-	 * @param dataList data list
-	 */
-	protected void startBulkUpdate(List<T> dataList) {
-	}
-	
-	/**
-	 * getBulkUpdateSample
-	 * @param dataList data list
-	 * @return sample data
-	 */
-	protected T getBulkUpdateSample(List<T> dataList) {
-		return null;
-	}
-	
-	/**
-	 * update data list
-	 * @param dataList data list
-	 * @return updated count
-	 */
-	protected int updateDataList(List<T> dataList) {
-		T sample = getBulkUpdateSample(dataList);
-
-		int cnt = 0;
-		if (sample != null && Collections.isNotEmpty(dataList)) {
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
-
-			addKeyListToQuery(q, dataList, true);
-			cnt = daoUpdatesIgnoreNull(sample, q);
-//			if (cnt != dataList.size()) {
-//				throw new RuntimeException("The updated data count (" + cnt + ") does not equals dataList.size(" + dataList.size() + ").");
-//			}
-
-			dataList = selectDataList(dataList);
-		}
-		return cnt;
-	}
-
-
-	/**
-	 * finalBulkUpdate
-	 * @param dataList data list
-	 */
-	protected void finalBulkUpdate(List<T> dataList) {
-	}
-
-	//------------------------------------------------------------
-	// bulk delete methods
-	//------------------------------------------------------------
-	/**
-	 * checkOnBulkDelete
-	 * @param dataList data list
-	 * @return true to continue delete
-	 */
-	protected boolean checkOnBulkDelete(List<T> dataList) {
-		return true;
-	}
-	
-	/**
-	 * startBulkDelete
-	 * @param dataList data list
-	 */
-	protected void startBulkDelete(List<T> dataList) {
-	}
-	
-	/**
-	 * delete data list
-	 * @param dataList data list
-	 * @return deleted count
-	 */
-	protected int deleteDataList(List<T> dataList) {
-		int cnt = 0;
-		if (dataList != null && dataList.size() > 0) {
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
-
-			addKeyListToQuery(q, dataList, true);
-			cnt = daoDeletes(q);
-//			if (cnt != dataList.size()) {
-//				throw new RuntimeException("The deleted data count (" + cnt + ") does not equals dataList.size(" + dataList.size() + ").");
-//			}
-		}
-		return cnt;
-	}
-
-	/**
-	 * finalBulkDelete
-	 * @param dataList data list
-	 */
-	protected void finalBulkDelete(List<T> dataList) {
-	}
-	
-	//------------------------------------------------------------
 	// check methods
 	//------------------------------------------------------------
 	protected void addDataDuplateError(T data, Collection<EntityField> efs) {
@@ -1475,9 +976,11 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 			ptag.setEscape(null);
 			sb.append(ptag.formatValue());
 			sb.append(Streams.LINE_SEPARATOR);
+
+			addFieldError(ef.getName(), getMessage(ActionRC.ERROR_FIELDVALUE_DUPLICATE));
 		}
 
-		addActionError(getMessage(ActionRC.ERROR_DATA_DUPLICATE, new String[] { sb.toString() }));
+		addActionError(getMessage(ActionRC.ERROR_DATA_DUPLICATE, sb.toString()));
 	}
 
 	/**
@@ -1527,16 +1030,24 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeyOnUpdate(T data, T srcData) {
-		boolean hasNull = false;
+		if (hasPrimaryKeyValues(data)) {
+			return true;
+		}
+
+		addActionError(getMessage(ActionRC.ERROR_DATA_NOTFOUND));
+		return false;
+	}
+
+	/**
+	 * @param data data
+	 * @return true if check successfully
+	 */
+	protected boolean hasPrimaryKeyValues(T data) {
 		for (EntityField ef : getEntity().getPrimaryKeys()) {
 			Object dv = ef.getValue(data);
 			if (dv == null) {
-				hasNull = true;
-				addFieldError(getFullDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_REQUIRED));
+				return false;
 			}
-		}
-		if (hasNull) {
-			return false;
 		}
 
 		return true;
@@ -1693,6 +1204,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	protected boolean checkUpdatedOnDelete(T data, T srcData) {
 		if (!checkUpdated(data, srcData)) {
 			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+			setScenarioResult();
 			return false;
 		}
 		return true;
@@ -1711,7 +1223,8 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 			if (Bean.isUpdated(cb, sb)) {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());
-				addActionWarning(getText(RC.ERROR_DATA_IS_UPDATED, RC.ERROR_DATA_IS_UPDATED, sb));
+				
+				addActionWarning(getMessage(RC.WARN_DATA_UPDATED, DateTimes.datetimeFormat().format(sb.getUtime())));
 				return false;
 			}
 		}
@@ -1727,10 +1240,11 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 */
 	protected void clearOnCopy(T data) {
 		if (data != null) {
-			if (clearPrimarys) {
+			EntityField eid = entity.getIdentity(); 
+			if (eid == null) {
 				clearPrimaryKeyValues(data);
 			}
-			else if (clearIdentity) {
+			else {
 				clearIdentityValue(data);
 			}
 		}
@@ -1767,20 +1281,10 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	}
 
 	/**
-	 * @param propertyName property name
+	 * @param pn property name
 	 * @return dataName + "." + propertyName
 	 */
-	protected String getFullDataFieldName(String propertyName) {
-		return dataFieldName + "." + propertyName;
+	protected String getFullDataFieldName(String pn) {
+		return "p." + pn;
 	}
-
-	/**
-	 * @param propertyName property name
-	 * @param index index
-	 * @return dataListName + "[index]." + propertyName
-	 */
-	protected String getDataListFieldName(String propertyName, int index) {
-		return dataListFieldName + '[' + index + "]." + propertyName;
-	}
-	
 }

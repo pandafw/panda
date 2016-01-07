@@ -66,8 +66,6 @@
 			<field name="writeable">
 				<editTag name="${tag.checkbox}"/>
 			</field>
-			<param name="toolbar" value="%^print *list"/>
-			<param name="actions" value="%update %copy insert %delete *list"/>
 		</input>
 	</action>
 	<action name="filepool" auth="${action.auth}" path="${action.context}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
@@ -77,19 +75,18 @@
 		<list name="list_popup" extend="basicList" template="${template.list_popup}" generate="true"/>
 		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+	</action>
+	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
-			<param name="toolbar" value="@refresh %^print list"/>
+			<param name="toolbar" value="${view.toolbar}"/>
 		</input>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
-		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
-		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
-		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
 		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
-			<param name="toolbar" value="list"/>
-			<param name="actions" value="*list"/>
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
 		</input>
 	</action>
 

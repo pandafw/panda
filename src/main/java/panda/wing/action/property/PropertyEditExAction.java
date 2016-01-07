@@ -1,6 +1,5 @@
 package panda.wing.action.property;
 
-import java.util.List;
 import java.util.Locale;
 
 import panda.lang.Locales;
@@ -75,23 +74,5 @@ public class PropertyEditExAction extends PropertyEditAction {
 //			addReloadMessage();
 //		}
 		addReloadMessage();
-	}
-
-	@Override
-	protected int deleteDataList(List<Property> dataList) {
-		int cnt = super.deleteDataList(dataList);
-
-		if (cnt > 0) {
-	//		for (Resource data : dataList) {
-	//			if (!Application.getDatabaseResourceLoader().putResource(data.getClazz(),
-	//				data.getLanguage(), data.getCountry(), null, data.getName(), data.getValue())) {
-	//				addReloadMessage();
-	//				break;
-	//			}
-	//		}
-			addReloadMessage();
-		}
-		
-		return cnt;
 	}
 }

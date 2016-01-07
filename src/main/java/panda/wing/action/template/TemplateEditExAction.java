@@ -1,6 +1,5 @@
 package panda.wing.action.template;
 
-import java.util.List;
 import java.util.Locale;
 
 import panda.lang.Locales;
@@ -70,19 +69,5 @@ public class TemplateEditExAction extends TemplateEditAction {
 //		Application.getDatabaseTemplateLoader().putTemplate(data.getName(), data.getLanguage(),
 //			data.getCountry(), null, null);
 		addReloadMessage();
-	}
-
-	@Override
-	protected int deleteDataList(List<Template> dataList) {
-		int cnt = super.deleteDataList(dataList);
-
-		if (cnt > 0) {
-	//		for (Template data : dataList) {
-	//			Application.getDatabaseTemplateLoader().putTemplate(data.getName(), data.getLanguage(),
-	//				data.getCountry(), null, null);
-	//		}
-			addReloadMessage();
-		}
-		return cnt;
 	}
 }

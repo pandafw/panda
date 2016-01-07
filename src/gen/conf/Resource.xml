@@ -102,19 +102,21 @@
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+	</action>
+	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
-			<param name="toolbar" value="@refresh %^print @^${pdf.action}:print list"/>
+			<param name="toolbar" value="${view.toolbar}"/>
 		</input>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
 		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
 		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
 		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
 		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
-			<param name="toolbar" value="list"/>
-			<param name="actions" value="*list"/>
+			<param name="toolbar" value="${delete.toolbar}"/>
+			<param name="actions" value="${delete.actions}"/>
 		</input>
 	</action>
 
