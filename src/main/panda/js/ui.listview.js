@@ -440,7 +440,7 @@ function _plv_onTBodyClick(evt) {
 		_plv_toggleRow($tr);
 		
 		var $lv = $tr.closest("div.p-lv");
-		var handler = $lv.get(0).onrowclick || $lv.attr("onrowclick");
+		var handler = $lv.get(0).onrowclick || $lv.data("onrowclick");
 		switch (typeof(handler)) {
 		case "function":
 			handler.call($tr.get(0));

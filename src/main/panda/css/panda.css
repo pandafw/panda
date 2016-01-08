@@ -126,10 +126,9 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	background-image: url("../img/magnifier-32.png");
 }
 
-/*
+/*--------------------------------------------------
  * section
- * --------------------------------------------------
- */
+--------------------------------------------------*/
 .p-section {
 }
 .p-header {
@@ -158,11 +157,10 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 
 
-/*
+/*--------------------------------------------------
  * p-toolbar (ul)
  * p-navih (ul, ol)
- * --------------------------------------------------
- */
+--------------------------------------------------*/
 .p-toolbar-wrap {
 	text-align: right;
 }
@@ -195,10 +193,17 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	padding-right: 0;
 }
 
-/*
+/*--------------------------------------------------
+ * Popup
+--------------------------------------------------*/
+.p-popup {
+	padding: 10px;
+	min-width: 400px;
+}
+
+/*--------------------------------------------------
  * Adblock
- * --------------------------------------------------
- */
+--------------------------------------------------*/
 .p-adblock {
 	font-size: 150%;
 	color: #666;
@@ -411,6 +416,9 @@ fieldset.p-lv-filters legend {
 }
 
 /* table */
+.p-lv-table-wrap {
+	border: solid 1px #ddd;
+}
 .p-lv-table {
 	font-size: 90%;
 	margin: 0;
@@ -465,6 +473,10 @@ thead.p-lv-chead > tr > th .p-lv-sort-off {
 /* table - tbody */
 tbody.p-lv-tbody {
 }
+.p-lv-clickable tbody.p-lv-tbody > tr {
+	cursor: pointer;
+}
+
 tbody.p-lv-tbody > tr > tr.p-lv-odd {
 }
 tbody.p-lv-tbody > tr > tr.p-lv-even {

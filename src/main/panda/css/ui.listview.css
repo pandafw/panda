@@ -205,6 +205,9 @@ fieldset.p-lv-filters legend {
 }
 
 /* table */
+.p-lv-table-wrap {
+	border: solid 1px #ddd;
+}
 .p-lv-table {
 	font-size: 90%;
 	margin: 0;
@@ -259,6 +262,10 @@ thead.p-lv-chead > tr > th .p-lv-sort-off {
 /* table - tbody */
 tbody.p-lv-tbody {
 }
+.p-lv-clickable tbody.p-lv-tbody > tr {
+	cursor: pointer;
+}
+
 tbody.p-lv-tbody > tr > tr.p-lv-odd {
 }
 tbody.p-lv-tbody > tr > tr.p-lv-even {
