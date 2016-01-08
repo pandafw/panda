@@ -5,9 +5,17 @@ ui-input-confirm=false
 ui-list-countable=true
 
 #pager - limit
-popup-pager-limit=10
-list-pager-limit=20
-pager-max-limit=300
+list-items-default=20
+list_csv-items-default=20
+list_xml-items-default=20
+list_json-items-default=20
+list_popup-items-default=10
+
+list-items-maximum=300
+list_csv-items-maximum=300
+list_xml-items-maximum=300
+list_json-items-maximum=300
+list_popup-items-maximum=300
 
 
 #cookie-state-domain=

@@ -35,7 +35,7 @@ public class ListColumn {
 	public boolean group;
 	public boolean pkey;
 	public boolean enabled;
-	public boolean value = true;
+	public boolean value;
 
 	public Format format;
 	public Filter filter;

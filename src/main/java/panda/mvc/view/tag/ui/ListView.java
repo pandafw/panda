@@ -35,6 +35,7 @@ public class ListView extends UIBean {
 
 	protected Boolean sortable;
 	protected String cssColumn;
+	protected String cssTable;
 
 	// form attributes
 	protected String action;
@@ -253,6 +254,13 @@ public class ListView extends UIBean {
 	}
 
 	/**
+	 * @return the cssTablle
+	 */
+	public String getCssTable() {
+		return cssTable;
+	}
+
+	/**
 	 * @return the action
 	 */
 	public String getAction() {
@@ -453,6 +461,13 @@ public class ListView extends UIBean {
 	 */
 	public void setCssColumn(String cssColumn) {
 		this.cssColumn = cssColumn;
+	}
+
+	/**
+	 * @param cssTable the cssTable to set
+	 */
+	public void setCssTable(String cssTable) {
+		this.cssTable = cssTable;
 	}
 
 	/**

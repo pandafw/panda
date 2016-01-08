@@ -809,7 +809,17 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		write(tag.getHiddens());
 		
-		write("<table id=\"" + id + "_table\" class=\"p-lv-table table\">");
+		write("<div class=\"p-lv-table-wrap");
+		if (tag.isAutosize()) {
+			write(" table-responsive");
+		}
+		write("\">");
+		write("<table id=\"" + id + "_table\" class=\"p-lv-table table");
+		if (Strings.isNotEmpty(tag.getCssTable())) {
+			write(' ');
+			write(tag.getCssTable());
+		}
+		write("\">");
 		writeListViewTableHeader();
 		
 		if (listz > 0) {
@@ -950,6 +960,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 		
 		write("</table>");
+		write("</div>");
 
 		form.end(writer, "");
 		
