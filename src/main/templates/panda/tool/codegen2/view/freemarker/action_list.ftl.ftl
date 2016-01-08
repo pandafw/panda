@@ -96,6 +96,9 @@
 			"name" : "${c.name}",
 		<#if entity.isPrimaryKey(c.name)>
 			"pkey" : true,
+			"value": true,
+		<#elseif c.value??>
+			"value": ${c.value?string},
 		</#if>
 			"header": text.getText("a.t.${c.name}"),
 		<#if c.format??>
@@ -185,6 +188,7 @@
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
+		cssTable="table-hover table-striped"
 	<#if ui.params.method?has_content>
 		method="${ui.params.method}"
 	</#if>

@@ -183,6 +183,7 @@
 		<attribute name="filterable" type="boolean"></attribute>
 		<attribute name="sortable" type="boolean"></attribute>
 		<attribute name="hidden" type="boolean"></attribute>
+		<attribute name="value" type="boolean"></attribute>
 		<attribute name="order" type="int"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>

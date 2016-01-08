@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name=&quot;filterable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;sortable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;hidden&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;value&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;order&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
@@ -68,6 +69,8 @@ public class ListColumn implements Comparable<ListColumn> {
 	@XmlAttribute
 	private Boolean hidden;
 	@XmlAttribute
+	private Boolean value;
+	@XmlAttribute
 	private Integer order;
 	@XmlAttribute(required = true)
 	private String name;
@@ -93,6 +96,7 @@ public class ListColumn implements Comparable<ListColumn> {
 		this.sortable = lc.sortable;
 		this.filterable = lc.filterable;
 		this.hidden = lc.hidden;
+		this.value = lc.value;
 		this.order = lc.order;
 		this.label = lc.label;
 		this.name = lc.name;
@@ -142,6 +146,9 @@ public class ListColumn implements Comparable<ListColumn> {
 		}
 		if (src.hidden != null) {
 			me.hidden = src.hidden;
+		}
+		if (src.value != null) {
+			me.value = src.value;
 		}
 		if (src.order != null) {
 			me.order = src.order;
@@ -330,6 +337,20 @@ public class ListColumn implements Comparable<ListColumn> {
 	 */
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public Boolean getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(Boolean value) {
+		this.value = value;
 	}
 
 	/**

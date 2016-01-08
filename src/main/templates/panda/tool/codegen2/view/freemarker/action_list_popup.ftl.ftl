@@ -4,17 +4,19 @@
 <div class="p-section">
 	<@sheader/>
 
-	${s}#include "/panda/mvc/view/action-alert.ftl"/>
+	${s}#include "/action-alert.ftl"/>
 
 	${s}#assign _columns_ = [{
 			"name": "_number_",
 			"type": "number",
+			"header": text.getText("listview-th-number", ""),
 			"nowrap": true,
 			"fixed": true
 		}, <#rt/>
 <#list ui.orderedColumnList as c>
 {
 			"name": "${c.name}",
+			"value": ${(c.value!true)?string},
 			"header": text.getText("a.t.${c.name}"),
 		<#if c.format??>
 			"format": {
@@ -39,11 +41,11 @@
 				"fixed": ${c.filter.fixed?string},
 			</#if>
 			<#list c.filter.paramList as fp>
-				"${fp.name}": "${fp.value?replace('#', '\\x23')}",
+				"${fp.name}": ${fp.value},
 			</#list>
 				"type": "${c.filter.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.display??>
 			"display": ${c.display?string},
 		</#if>
@@ -65,16 +67,17 @@
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": text.getText("a.t.${c.name}-tip", ""),
+			"tooltip": text.getText("a.t.${c.name}-tip", "")
 		}<#if c_has_next>, </#if><#rt/>
 </#list>
 
-		] />
+	] />
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		headPager="true" singleSelect="true" toggleSelect="false" autosize="false"
-		onrowclick="%{'$.popup().callback(plv_getRowData(this));'}"
+		cssClass="p-lv-clickable" cssTable="table-hover table-striped"
+		onrowclick="$.popup().callback(plv_getRowData(this));"
 	/>
 </div>
 
