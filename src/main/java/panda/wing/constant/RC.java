@@ -1,12 +1,32 @@
 package panda.wing.constant;
 
-import panda.wing.action.ActionRC;
 
 
 /**
  * ResourceConstants
  */
-public interface RC extends ActionRC {
+public interface RC {
+	//------------------------------------------------------------
+	// CONSTS
+	//------------------------------------------------------------
+	/**
+	 * DATA_STATUS_MAP = "data-statusMap"
+	 */
+	public final static String DATA_STATUS_MAP = "data-statusMap";
+
+	/**
+	 * LOCALE_LANGUAGES = "locale-languages";
+	 */
+	public final static String LOCALE_LANGUAGES = "locale-languages";
+
+	/**
+	 * LOCALE_COUNTRIES = "locale-countries";
+	 */
+	public final static String LOCALE_COUNTRIES = "locale-countries";
+
+	//------------------------------------------------------------
+	// SETTINGS
+	//------------------------------------------------------------
 	/**
 	 * MAIL_EXCEPTION = "mail-exception";
 	 */
@@ -23,20 +43,138 @@ public interface RC extends ActionRC {
 	 */
 	public final static String PERMISSIONS = "permissions";
 
-	/**
-	 * DATA_STATUS_MAP = "data-statusMap"
-	 */
-	public final static String DATA_STATUS_MAP = "data-statusMap";
+	//------------------------------------------------------------
+	// UI SETTINGS
+	//------------------------------------------------------------
+	/** The input confirm */
+	public static final String UI_INPUT_CONFIRM = "ui-input-confirm";
+
+	/** The input step */
+	public static final String UI_INPUT_STEP = "ui-input-step";
+
+	/** The list countable */
+	public static final String UI_LIST_COUNTABLE = "ui-list-countable";
+
+	//------------------------------------------------------------
+	// LIST SETTINGS
+	//------------------------------------------------------------
 
 	/**
-	 * LOCALE_LANGUAGES = "locale-languages";
+	 * SORTER_SUFFIX = "-sorter";
 	 */
-	public final static String LOCALE_LANGUAGES = "locale-languages";
+	public final static String SORTER_SUFFIX = "-sorter";
+	
+	/**
+	 * PAGER_LIMIT_SUFFIX = "-pager-limit";
+	 */
+	public final static String PAGE_ITEMS_DEFAULT_SUFFIX = "-items-default";
+	
+	/**
+	 * PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
+	 */
+	public final static String PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
+	
+	//------------------------------------------------------------
+	// CONFIRM MESSAGES
+	//------------------------------------------------------------
+	/**
+	 * CONFIRM_DATA_OVERWRITE = "confirm-data-overwrite";
+	 */
+	public final static String CONFIRM_DATA_OVERWRITE = "confirm-data-overwrite";
+	
+	//------------------------------------------------------------
+	// WARN MESSAGES
+	//------------------------------------------------------------
+	/**
+	 * WARN_DATA_UPDATED = "warn-data-updated";
+	 */
+	public final static String WARN_DATA_UPDATED = "warn-data-updated";
+
+	//------------------------------------------------------------
+	// ERROR MESSAGES
+	//------------------------------------------------------------
+	/**
+	 * ERROR_DATA_NOTFOUND = "error-data-notfound";
+	 */
+	public final static String ERROR_DATA_NOTFOUND = "error-data-notfound";
+	
+	/**
+	 * ERROR_DATA_LIST_EMPTY = "error-data-list-empty";
+	 */
+	public final static String ERROR_DATA_LIST_EMPTY = "error-data-list-empty";
+	
+	/**
+	 * ERROR_DATA_DUPLICATE = "error-data-duplicate";
+	 */
+	public final static String ERROR_DATA_DUPLICATE = "error-data-duplicate";
+	
+	/**
+	 * ERROR_FIELDVALUE_NOTNULL = "error-fieldvalue-notnull";
+	 */
+	public final static String ERROR_FIELDVALUE_NOTNULL = "error-fieldvalue-notnull";
+	
+	/**
+	 * ERROR_FIELDVALUE_REQUIRED = "error-fieldvalue-required";
+	 */
+	public final static String ERROR_FIELDVALUE_REQUIRED = "error-fieldvalue-required";
+	
+	/**
+	 * ERROR_FIELDVALUE_INCORRECT = "error-fieldvalue-incorrect";
+	 */
+	public final static String ERROR_FIELDVALUE_INCORRECT = "error-fieldvalue-incorrect";
+	
+	/**
+	 * ERROR_FIELDVALUE_DUPLICATE = "error-fieldvalue-duplicate";
+	 */
+	public final static String ERROR_FIELDVALUE_DUPLICATE = "error-fieldvalue-duplicate";
+	
+	/**
+	 * ERROR_FILE_NOTFOUND = "error-file-notfound";
+	 */
+	public final static String ERROR_FILE_NOTFOUND = "error-file-notfound";
 
 	/**
-	 * LOCALE_COUNTRIES = "locale-countries";
+	 * ERROR_UNLOGIN = "error-unlogin";
 	 */
-	public final static String LOCALE_COUNTRIES = "locale-countries";
+	public final static String ERROR_UNLOGIN = "error-unlogin";
+
+	/**
+	 * ERROR_UNSECURE = "error-unsecure";
+	 */
+	public final static String ERROR_UNSECURE = "error-unsecure";
+
+	/**
+	 * ERROR_NOPERMIT = "error-nopermit";
+	 */
+	public final static String ERROR_NOPERMIT = "error-nopermit";
+
+	/**
+	 * ERROR_DATA_IS_INVALID = "error-data-is-invalid";
+	 */
+	public final static String ERROR_DATA_IS_INVALID = "error-data-is-invalid";
+
+	/**
+	 * ERROR_SENDMAIL = "error-sendmail";
+	 */
+	public final static String ERROR_SENDMAIL = "error-sendmail";
+
+	//------------------------------------------------------------
+	// MESSAGES
+	//------------------------------------------------------------
+	/**
+	 * MESSAGE_UPLOADING = "message-uploading";
+	 */
+	public final static String MESSAGE_UPLOADING = "message-uploading";
+	
+	/**
+	 * MESSAGE_PROCESSING = "message-processing";
+	 */
+	public final static String MESSAGE_PROCESSING = "message-processing";
+
+	/**
+	 * MESSAGE_PROCESSED = "message-processed";
+	 */
+	public final static String MESSAGE_PROCESSED = "message-processed";
 
 	/**
 	 * MESSAGE_SUCCESS = "message-success";

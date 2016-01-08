@@ -27,11 +27,29 @@ public interface VC {
 	public final static String LOCALE_ALL = "*";
 
 	//----------------------------------------------------
-	// USER CONSTANTS
+	// USER
 	//----------------------------------------------------
 	/**
 	 * SYSTEM_UID = 0L;
 	 */
 	public final static Long SYSTEM_UID = 0L;
 
+	
+	//----------------------------------------------------
+	// LIST
+	//----------------------------------------------------
+	/**
+	 * DEFAULT_LIST_PAGE_ITEMS = 20;
+	 */
+	public final static long DEFAULT_LIST_PAGE_ITEMS = 20;
+	
+	/**
+	 * DEFAULT_POPUP_PAGE_ITEMS = 10;
+	 */
+	public final static long DEFAULT_POPUP_PAGE_ITEMS = 10;
+
+	/**
+	 * DEFAULT_MAX_PAGE_ITEMS = 300;
+	 */
+	public final static long DEFAULT_MAX_PAGE_ITEMS = 300;
 }

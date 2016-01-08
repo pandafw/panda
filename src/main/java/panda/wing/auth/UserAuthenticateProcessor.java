@@ -15,7 +15,7 @@ import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
-import panda.wing.action.ActionRC;
+import panda.wing.constant.RC;
 
 @IocBean
 public class UserAuthenticateProcessor extends ViewProcessor {
@@ -58,7 +58,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 			return;
 		}
 		if (r == UserAuthenticator.UNLOGIN) {
-			addActionError(ac, ActionRC.ERROR_UNLOGIN);
+			addActionError(ac, RC.ERROR_UNLOGIN);
 			if (Strings.isNotEmpty(unloginView)) {
 				doView(ac, unloginView);
 				return;
@@ -70,7 +70,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 			}
 		}
 		if (r == UserAuthenticator.UNSECURE) {
-			addActionError(ac, ActionRC.ERROR_UNSECURE);
+			addActionError(ac, RC.ERROR_UNSECURE);
 			if (Strings.isNotEmpty(unsecureView)) {
 				doView(ac, unsecureView);
 				return;

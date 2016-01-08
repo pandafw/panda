@@ -20,9 +20,9 @@ import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.util.StateProvider;
-import panda.wing.action.ActionRC;
 import panda.wing.auth.AuthHelper;
 import panda.wing.auth.IUser;
+import panda.wing.constant.RC;
 import panda.wing.constant.SC;
 import panda.wing.constant.VC;
 import panda.wing.entity.ICreate;
@@ -241,54 +241,37 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 		
 		String sc = (String)sp.loadState("sorter");
 		if (Strings.isEmpty(sc)) {
-			String tx = getMethodName() + ActionRC.SORTER_SUFFIX;
-			sc = getText(tx, null);
-			if (sc == null && !ActionRC.LIST_SORTER.equals(tx)) {
-				sc = getText(ActionRC.LIST_SORTER, null);
-			}
+			sc = getText(getMethodName() + RC.SORTER_SUFFIX, null);
 		}
-		if (Strings.isNotEmpty(sc)) {
-			JsonObject jo = JsonObject.fromJson(sc);
-			Castors.scastTo(jo, sorter);
-		}
+		castToSorter(sorter, sc);
 
 		// second check
 		if (Strings.isNotEmpty(sorter.getColumn()) && orders.containsKey(sorter.getColumn())) {
 			return;
 		}
-		
+
+		// set default
 		for (Entry<String, String> en : orders.entrySet()) {
 			sorter.setColumn(en.getKey());
 			sorter.setDirection(en.getValue());
 			return;
 		}
 	}
-	
-	/**
-	 * load pager limit parameters from stateProvider
-	 * @param pager pager
-	 */
-	public void loadLimitParams(Pager pager) {
-		if (!pager.hasLimit()) {
-			StateProvider sp = getState();
-			if (sp != null) {
-				pager.setLimit(Numbers.toLong((String)sp.loadState("pager"), 0L));
-			}
+
+	public void castToSorter(Sorter sorter, String sc) {
+		if (Strings.isEmpty(sc)) {
+			return;
 		}
-		if (!pager.hasLimit()) {
-			String tx = getMethodName() + ActionRC.PAGER_LIMIT_SUFFIX;
-			Long l = getTextAsLong(tx);
-			if (l == null && !ActionRC.LIST_PAGER_LIMIT.equals(tx)) {
-				l = getTextAsLong(ActionRC.LIST_PAGER_LIMIT);
-			}
-			if (l == null) {
-				l = ActionRC.DEFAULT_LIST_PAGER_LIMIT;
-			}
-			pager.setLimit(l);
+		
+		try {
+			JsonObject jo = JsonObject.fromJson(sc);
+			Castors.scastTo(jo, sorter);
 		}
-		limitPage(pager);
+		catch (Exception e) {
+			getLog().debug("Invalid JSON sorter: " + sc, e);
+		}
 	}
-	
+
 	/**
 	 * save sorter parameters to stateProvider
 	 * @param sorter sorter
@@ -302,24 +285,51 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	}
 	
 	/**
-	 * save pager limit parameters to stateProvider
+	 * load pager limit parameters from stateProvider
 	 * @param pager pager
 	 */
-	public void saveLimitParams(Pager pager) {
-		getState().saveState("list.pl", pager.getLimit());
+	public void loadLimitParams(Pager pager) {
+		if (!pager.hasLimit()) {
+			StateProvider sp = getState();
+			if (sp != null) {
+				pager.setLimit(Numbers.toLong((String)sp.loadState("limit"), 0L));
+			}
+		}
+		setLimitToPager(pager);
+	}
+
+	/**
+	 * if pager.limit > maxLimit then set pager.limit = maxLimit
+	 * @param pager pager
+	 */
+	public void setLimitToPager(Pager pager) {
+		setLimitToPager(pager, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
 	}
 	
 	/**
 	 * if pager.limit > maxLimit then set pager.limit = maxLimit
 	 * @param pager pager
+	 * @param def default limit
+	 * @param max maximum limit
 	 */
-	public void limitPage(Pager pager) {
-		long maxLimit = getTextAsLong(ActionRC.PAGER_MAX_LIMIT, 100L);
-		if (pager.getLimit() == null 
-				|| pager.getLimit() < 1 
-				|| pager.getLimit() > maxLimit) {
-			pager.setLimit(maxLimit);
+	public void setLimitToPager(Pager pager, long def, long max) {
+		if (!pager.hasLimit()) {
+			long l = getTextAsLong(getMethodName() + RC.PAGE_ITEMS_DEFAULT_SUFFIX, def);
+			pager.setLimit(l);
 		}
+
+		long m = getTextAsLong(getMethodName() + RC.PAGE_ITEMS_MAXIMUM_SUFFIX, max);
+		if (m > 0 && (!pager.hasLimit() || pager.getLimit() > m)) {
+			pager.setLimit(m);
+		}
+	}
+	
+	/**
+	 * save pager limit parameters to stateProvider
+	 * @param pager pager
+	 */
+	public void saveLimitParams(Pager pager) {
+		getState().saveState("limit", pager.getLimit());
 	}
 	
 }

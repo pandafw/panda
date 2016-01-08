@@ -10,8 +10,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.bind.json.JsonObject;
-import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
@@ -30,6 +28,8 @@ import panda.mvc.view.VoidView;
 import panda.net.http.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
+import panda.wing.constant.RC;
+import panda.wing.constant.VC;
 
 
 /**
@@ -119,7 +119,7 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_POPUP_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
 	}
 
 	//------------------------------------------------------------
@@ -365,6 +365,10 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	}
 
 	protected Object doList(Queryer qr) {
+		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
+	}
+	
+	protected Object doList(Queryer qr, long defLimit, long maxLimit) {
 		if (isNeedLoadListParameters(qr)) {
 			qr = loadListParameters();
 			if (qr == null) {
@@ -372,7 +376,7 @@ public abstract class GenericListAction<T> extends AbstractAction {
 			}
 		}
 
-		queryList(qr);
+		queryList(qr, defLimit, maxLimit);
 		
 		if (Boolean.TRUE.equals(_save)) {
 			saveListParameters(qr);
@@ -383,19 +387,18 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	/**
 	 * queryList
 	 */
-	protected void queryList(final Queryer qr) {
+	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
 		final GenericQuery<T> gq = new GenericQuery<T>(getEntity());
 
 		addQueryFilter(gq, qr);
 		addQueryOrder(gq, qr.getSorter());
-
-		addLimitToPager(qr.getPager(), ActionRC.DEFAULT_LIST_PAGER_LIMIT);
+		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
 		final EntityDao<T> dao = getEntityDao();
 		dao.exec(new Runnable() {
 			public void run() {
 				if (listCountable == null) {
-					listCountable = getTextAsBoolean(ActionRC.UI_LIST_COUNTABLE, true);
+					listCountable = getTextAsBoolean(RC.UI_LIST_COUNTABLE, true);
 				}
 				if (listCountable) {
 					qr.getPager().setTotal(daoCount(gq));
@@ -423,30 +426,6 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	protected void trimDataList(List<T> ds) {
 	}
 	
-	/**
-	 * @param def default limit
-	 */
-	protected void addLimitToPager(Pager pager, long def) {
-		if (pager.getLimit() == null || pager.getLimit() < 1) {
-			String tx = context.getMethodName() + ActionRC.PAGER_LIMIT_SUFFIX;
-			Long l = getTextAsLong(tx);
-			if (l == null && !ActionRC.LIST_PAGER_LIMIT.equals(tx)) {
-				l = getTextAsLong(ActionRC.LIST_PAGER_LIMIT);
-			}
-			if (l == null) {
-				l = def;
-			}
-			pager.setLimit(l);
-		}
-
-		long maxLimit = getTextAsLong(ActionRC.PAGER_MAX_LIMIT, 100L);
-		if (pager.getLimit() == null 
-				|| pager.getLimit() < 1 
-				|| pager.getLimit() > maxLimit) {
-			pager.setLimit(maxLimit);
-		}
-	}
-
 	/**
 	 * @param gq query
 	 */
@@ -563,21 +542,19 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	 */
 	protected void addQueryOrder(GenericQuery q, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
-			String tx = context.getMethodName() + ActionRC.SORTER_SUFFIX;
-			String sc = getText(tx, (String)null);
-			if (sc == null && !ActionRC.LIST_SORTER.equals(tx)) {
-				sc = getText(ActionRC.LIST_SORTER, (String)null);
-			}
-			if (Strings.isNotEmpty(sc)) {
-				JsonObject jo = JsonObject.fromJson(sc);
-				Castors.scastTo(jo, sorter);
-			}
+			String sc = getText(getMethodName() + RC.SORTER_SUFFIX, (String)null);
+			assist().castToSorter(sorter, sc);
 		}
-		if (!Strings.isEmpty(sorter.getColumn())) {
+		if (Strings.isNotEmpty(sorter.getColumn())) {
 			if (Strings.isEmpty(sorter.getDirection())) {
 				sorter.setDirection(Sorter.ASC);
 			}
 			q.orderBy(sorter.getColumn(), sorter.getDirection());
 		}
 	}
+
+	protected void addLimitToPager(Pager pager, long def, long max) {
+		assist().setLimitToPager(pager, def, max);
+	}
+
 }

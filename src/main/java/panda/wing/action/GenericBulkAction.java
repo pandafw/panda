@@ -750,7 +750,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 		}
 		else {
 			if (!hasActionErrors() && !hasFieldErrors() 
-					&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
+					&& getTextAsBoolean(RC.UI_INPUT_CONFIRM, false)) {
 //				setMethodResult(RESULT_CONFIRM);
 			}
 		}
@@ -826,7 +826,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 			}
 			else {
 				if (!hasActionErrors() && !hasFieldErrors()
-						&& getTextAsBoolean(ActionRC.UI_INPUT_CONFIRM, false)) {
+						&& getTextAsBoolean(RC.UI_INPUT_CONFIRM, false)) {
 //					setMethodResult(RESULT_CONFIRM);
 				}
 			}
@@ -1026,7 +1026,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 	protected T selectData(T data) {
 		T d = daoFetch(data);
 		if (d == null) {
-			addActionError(getMessage(ActionRC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
 		}
 		else {
 			trimData(d);
@@ -1347,7 +1347,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 			}
 		}
 		if (dataList == null || dataList.size() < 1) {
-			addActionError(getMessage(ActionRC.ERROR_DATA_LIST_EMPTY));
+			addActionError(getMessage(RC.ERROR_DATA_LIST_EMPTY));
 		}
 		return dataList;
 	}
@@ -1476,7 +1476,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 			sb.append(Streams.LINE_SEPARATOR);
 		}
 
-		addActionError(getMessage(ActionRC.ERROR_DATA_DUPLICATE, new String[] { sb.toString() }));
+		addActionError(getMessage(RC.ERROR_DATA_DUPLICATE, new String[] { sb.toString() }));
 	}
 
 	/**
@@ -1531,7 +1531,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 			Object dv = ef.getValue(data);
 			if (dv == null) {
 				hasNull = true;
-				addFieldError(getFullDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_REQUIRED));
+				addFieldError(getFullDataFieldName(ef.getName()), getMessage(RC.ERROR_FIELDVALUE_REQUIRED));
 			}
 		}
 		if (hasNull) {
@@ -1660,7 +1660,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 				q.setLimit(1);
 				if (daoCount(q) < 1) {
 					for (EntityField ef : efk.getFields()) {
-						addFieldError(getFullDataFieldName(ef.getName()), getMessage(ActionRC.ERROR_FIELDVALUE_INCORRECT));
+						addFieldError(getFullDataFieldName(ef.getName()), getMessage(RC.ERROR_FIELDVALUE_INCORRECT));
 					}
 					return false;
 				}
@@ -1677,7 +1677,7 @@ public abstract class GenericBulkAction<T> extends AbstractAction {
 	 */
 	protected boolean checkUpdatedOnUpdate(T data, T srcData) {
 		if (!checkUpdated(data, srcData)) {
-			addActionConfirm(getMessage(ActionRC.CONFIRM_DATA_OVERWRITE));
+			addActionConfirm(getMessage(RC.CONFIRM_DATA_OVERWRITE));
 			return false;
 		}
 		return true;
