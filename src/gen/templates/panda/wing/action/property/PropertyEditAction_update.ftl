@@ -113,7 +113,10 @@
 	</@p.form>
 
 		<script type="text/javascript"><!--
-				--></script>
+				
+			function onPageLoad() {
+			}
+		--></script>
 <#else>
 	<div class="p-tcenter">
 		<@p.a btype="default" icon="back" href="#" onclick="window.history.back();return false;"><@p.text name="button-back"/></@p.a>
