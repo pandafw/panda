@@ -126,18 +126,15 @@ public class DefaultMvcLoading implements Loading {
 
 		Class<?> mainModule = config.getMainModule();
 		
-		// 创建视图工厂
 		createViewMaker(config);
 
-		// 创建动作链工厂
 		ActionChainMaker chainMaker = createChainMaker(config);
 
-		// 创建主模块的配置信息
+		// create action info for mail module
 		ActionInfo mainInfo = createActionInfo(config.getIoc(), mainModule);
 
-		// 准备要加载的模块列表
+		// scan classes
 		Collection<Class<?>> actions = scanModules(mainModule);
-
 		if (actions.isEmpty()) {
 			if (log.isWarnEnabled()) {
 				log.warn("No action class found!!!");
@@ -146,14 +143,15 @@ public class DefaultMvcLoading implements Loading {
 		}
 
 		int atMethods = 0;
-
-		// 分析所有的子模块
 		for (Class<?> action : actions) {
 			ActionInfo actionInfo = createActionInfo(config.getIoc(), action).mergeWith(mainInfo);
 			for (Method method : action.getMethods()) {
-				// public 并且声明了 @At 的函数，才是入口函数
-				if (Modifier.isPublic(method.getModifiers())  && method.isAnnotationPresent(At.class)) {
-					// 增加到映射中
+				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
+				if (Modifier.isPublic(method.getModifiers()) 
+						&& !method.isSynthetic() 
+						&& !method.isBridge()
+						&& method.isAnnotationPresent(At.class)) {
+					// add to mapping
 					ActionInfo info = createActionInfo(config.getIoc(), method).mergeWith(actionInfo);
 					mapping.add(chainMaker, info, config);
 					atMethods++;
