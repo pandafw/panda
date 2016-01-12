@@ -3,9 +3,12 @@
    <site url="http://aws.amazon.com/eclipse/" selected="true" name="AWS Toolkit"/>
    <site url="http://dl.google.com/eclipse/plugin/4.4" selected="true" name="Google Plugin"/>
    <site url="http://ermaster.sourceforge.net/update-site/" selected="true" name="ERMaster"/>
-   <site url="http://feeling.sourceforge.net/update" selected="true" name="JadClipse"/>
    <site url="http://propedit.sourceforge.jp/eclipse/updates/" selected="true" name="Property Editor"/>
    <site url="http://update.eclemma.org" selected="true" name="EclEmma"/>
+   <site url="http://download.aptana.com/studio3/plugin/install" selected="true" name="Aptana Studio"/>
+<!--
+   <site url="http://feeling.sourceforge.net/update" selected="true" name="JadClipse"/>
    <site url="http://www.apache.org/dist/ant/ivyde/updatesite" selected="true" name="IvyDE"/>
    <site url="http://subclipse.tigris.org/update_1.10.x" selected="true" name="SubEclipse 1.8"/>
+-->
 </bookmarks>
