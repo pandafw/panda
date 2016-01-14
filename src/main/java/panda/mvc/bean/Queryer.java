@@ -51,6 +51,17 @@ public class Queryer implements Cloneable, Serializable {
 	}
 
 	/**
+	 * copy properties from the specified Queryer
+	 */
+	public void copy(Queryer qr) {
+		name = qr.name;
+		pager = qr.pager;
+		sorter = qr.sorter;
+		method = qr.method;
+		filters = qr.filters;
+	}
+	
+	/**
 	 * @return the name
 	 */
 	public String getName() {
