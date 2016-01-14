@@ -270,7 +270,26 @@ public abstract class GenericListAction<T> extends AbstractAction {
 
 	/**
 	 * load list parameters
-	 * @return false - send redirect url
+	 * @return null - send redirect url
+	 */
+	protected Queryer loadListParameters(Queryer qr) {
+		Queryer q = loadListParameters();
+		if (q == null) {
+			return q;
+		}
+		if (qr == null) {
+			qr = q;
+			getContext().setParams(qr);
+		}
+		else {
+			qr.copy(q);
+		}
+		return qr;
+	}
+	
+	/**
+	 * load list parameters
+	 * @return null - send redirect url
 	 */
 	protected Queryer loadListParameters() {
 		StateProvider sp = getState();
@@ -370,7 +389,7 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	
 	protected Object doList(Queryer qr, long defLimit, long maxLimit) {
 		if (isNeedLoadListParameters(qr)) {
-			qr = loadListParameters();
+			qr = loadListParameters(qr);
 			if (qr == null) {
 				return VoidView.INSTANCE;
 			}
