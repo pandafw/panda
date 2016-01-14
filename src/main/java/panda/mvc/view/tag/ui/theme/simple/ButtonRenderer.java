@@ -42,8 +42,8 @@ public class ButtonRenderer extends AbstractEndRenderer<Button> {
 		if (Strings.isNotEmpty(body)) {
 			body(body, false);
 		}
-		else if (Strings.isNotEmpty(tag.getText())) {
-			body(tag.getText(), true);
+		else if (Strings.isNotEmpty(tag.getLabel())) {
+			body(tag.getLabel(), true);
 		}
 
 		if (Strings.isNotEmpty(sicon)) {

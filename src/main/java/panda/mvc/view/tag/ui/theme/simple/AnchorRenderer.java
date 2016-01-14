@@ -47,6 +47,9 @@ public class AnchorRenderer extends AbstractEndRenderer<Anchor> {
 		if (Strings.isNotEmpty(body)) {
 			body(body, false);
 		}
+		else if (Strings.isNotEmpty(tag.getLabel())) {
+			body(tag.getLabel(), true);
+		}
 
 		if (Strings.isNotEmpty(sicon)) {
 			write(Strings.SPACE);

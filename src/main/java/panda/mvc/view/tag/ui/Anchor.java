@@ -36,6 +36,7 @@ public class Anchor extends UIBean {
 	protected String sicon;
 	protected String href;
 	protected String target;
+	protected String label;
 	
 	protected UrlBuilder urlbuilder;
 
@@ -108,6 +109,13 @@ public class Anchor extends UIBean {
 	}
 
 	/**
+	 * @return the label
+	 */
+	public String getLabel() {
+		return label;
+	}
+
+	/**
 	 * @param btype the icon to set
 	 */
 	public void setBtype(String btype) {
@@ -134,6 +142,13 @@ public class Anchor extends UIBean {
 
 	public void setHref(String href) {
 		this.href = Strings.stripToNull(href);
+	}
+
+	/**
+	 * @param label the label to set
+	 */
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	//----------------------------------------------------------

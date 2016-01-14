@@ -29,7 +29,7 @@ public class Button extends UIBean {
 	protected String btype;
 	protected String icon;
 	protected String sicon;
-	protected String text;
+	protected String label;
 
 	@Override
 	public boolean usesBody() {
@@ -79,17 +79,17 @@ public class Button extends UIBean {
 	}
 
 	/**
-	 * @return the text
+	 * @return the label
 	 */
-	public String getText() {
-		return text;
+	public String getLabel() {
+		return label;
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param label the label to set
 	 */
-	public void setText(String text) {
-		this.text = text;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 }
