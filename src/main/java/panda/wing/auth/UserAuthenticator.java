@@ -95,65 +95,75 @@ public abstract class UserAuthenticator {
 			clazz = ai.getActionType();
 		}
 		
-		String[] defines = getMethodPermission(clazz, method);
+
+		Collection<String> defines = getMethodPermission(clazz, method);
 
 		// no permission defined for this path
-		if (Arrays.isEmpty(defines)) {
+		if (Collections.isEmpty(defines)) {
 			return OK;
 		}
 		
-		int r = UNLOGIN;
-		if (su != null) {
-			Collection<String> uperms = getUserPermits(su);
-
-			// user has 'deny all' permits
-			if (Collections.contains(uperms, AUTH.NONE)) {
-				return DENIED;
-			}
-
-			// user does not has 'allow all' permits
-			if (Collections.contains(uperms, AUTH.ALL)) {
-				return OK;
-			}
-			
-			for (String d : defines) {
-				if (Strings.isEmpty(d)) {
-					continue;
-				}
-				if (d.charAt(0) != AUTH.SPECIAL) {
-					int a = authenticatePermission(su, uperms, d);
-					if (a != OK) {
-						r = a;
-						break;
-					}
+		if (su == null) {
+			// check special
+			if (special) {
+				int a = authenticateSpecial(ac, defines, su);
+				if (a == OK) {
+					return a;
 				}
 			}
-			if (r == OK) {
-				return r;
-			}
+			return UNLOGIN;
 		}
-		
+
+		Collection<String> uperms = getUserPermits(su);
+
+		// user has 'deny all' permits
+		if (Collections.contains(uperms, AUTH.NONE)) {
+			return DENIED;
+		}
+
+		// user has 'allow all' permits
+		if (Collections.contains(uperms, AUTH.ALL)) {
+			return OK;
+		}
+
+		// check special
 		if (special) {
-			for (String d : defines) {
-				if (Strings.isEmpty(d)) {
-					continue;
-				}
-				if (d.charAt(0) == AUTH.SPECIAL) {
-					int a = authenticateSpecial(ac, su, d);
-					if (a == OK) {
-						return a;
-					}
+			int a = authenticateSpecial(ac, defines, su);
+			if (a == OK) {
+				return a;
+			}
+		}
+
+		// check @Auth(...)
+		for (String d : defines) {
+			// @Auth("") means login check only
+			if (Strings.isEmpty(d)) {
+				continue;
+			}
+			if (d.charAt(0) != AUTH.SPECIAL) {
+				int a = authenticatePermission(ac, su, uperms, d);
+				if (a != OK) {
+					return a;
 				}
 			}
 		}
-		return r;
+
+		return OK;
 	}
 
-	protected int authenticatePermission(Object su, Collection<String> uperms, String define) {
-		if (AUTH.SECURE.equals(define)) {
-			return isSecureSessionUser(su) ? OK : UNSECURE;
+	protected int authenticateSpecial(ActionContext ac, Collection<String> defines, Object su) {
+		for (String d : defines) {
+			if (Strings.isEmpty(d)) {
+				continue;
+			}
+			if (d.charAt(0) == AUTH.SPECIAL) {
+				int a = authenticateSpecial(ac, su, d);
+				if (a == OK) {
+					return a;
+				}
+			}
 		}
-		return Collections.contains(uperms, define) ? OK : DENIED;
+		return UNKNOWN;
 	}
 
 	protected int authenticateSpecial(ActionContext ac, Object su, String define) {
@@ -164,13 +174,24 @@ public abstract class UserAuthenticator {
 		return UNKNOWN;
 	}
 
-	protected String[] getMethodPermission(Class<?> clazz, Method method) {
+	protected int authenticatePermission(ActionContext ac, Object su, Collection<String> uperms, String define) {
+		if (AUTH.PLOCAL.equals(define)) {
+			HttpServletRequest req = ac.getRequest();
+			return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
+		}
+		if (AUTH.SECURE.equals(define)) {
+			return isSecureSessionUser(su) ? OK : UNSECURE;
+		}
+		return Collections.contains(uperms, define) ? OK : DENIED;
+	}
+
+	protected Collection<String> getMethodPermission(Class<?> clazz, Method method) {
 		Auth mp = method.getAnnotation(Auth.class);
 		if (mp == null) {
 			mp = clazz.getAnnotation(Auth.class);
 		}
 		if (mp != null) {
-			return mp.value();
+			return Arrays.asList(mp.value());
 		}
 		return null;
 	}
