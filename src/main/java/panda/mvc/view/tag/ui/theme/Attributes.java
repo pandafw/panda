@@ -20,7 +20,7 @@ import panda.mvc.view.tag.ui.TextArea;
 import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.UIBean;
 import panda.mvc.view.tag.ui.Uploader;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 /**
  * Map of tag attributes, used for rendering the tags

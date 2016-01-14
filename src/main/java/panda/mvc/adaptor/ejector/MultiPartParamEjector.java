@@ -17,7 +17,7 @@ import panda.mvc.adaptor.multipart.FileItemIterator;
 import panda.mvc.adaptor.multipart.FileItemStream;
 import panda.mvc.adaptor.multipart.FileUploadException;
 import panda.mvc.adaptor.multipart.FileUploader;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 
 public class MultiPartParamEjector extends AbstractParamEjector {

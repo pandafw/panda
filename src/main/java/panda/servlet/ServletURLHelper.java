@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.lang.Charsets;
 import panda.lang.Strings;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 
 /**

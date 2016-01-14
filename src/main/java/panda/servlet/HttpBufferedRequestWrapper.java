@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 public class HttpBufferedRequestWrapper extends HttpServletRequestWrapper {
 	private ByteArrayOutputStream body;

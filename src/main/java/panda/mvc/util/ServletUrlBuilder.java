@@ -12,7 +12,7 @@ import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.MvcConstants;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
 
