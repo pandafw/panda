@@ -3,7 +3,7 @@ package panda.tool;
 import java.io.File;
 
 import panda.io.Files;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 public class UrlDecode {
 
