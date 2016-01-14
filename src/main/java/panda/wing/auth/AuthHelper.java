@@ -52,6 +52,12 @@ public class AuthHelper {
 	protected String encCipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
+	 * ticket cookie age
+	 */
+	@IocInject(value=AppConstants.PANDA_AUTH_TICKET_COOKIE_AGE, required=false)
+	protected int cookieAge = COOKIE.AUTH_TICKET_AGE;
+
+	/**
 	 * @param u user
 	 * @return true - if the user is super
 	 */
@@ -101,6 +107,14 @@ public class AuthHelper {
 	 * @param user user
 	 */
 	public void setLoginUser(ActionContext context, IUser user) {
+		setLoginUser(context, user, cookieAge);
+	}
+
+	/**
+	 * setLoginUser
+	 * @param user user
+	 */
+	public void setLoginUser(ActionContext context, IUser user, int cookieAge) {
 		user.setLoginTime(System.currentTimeMillis());
 
 		String ticket = Encrypts.encrypt(Jsons.toJson(user), encKey, encCipher);
@@ -108,7 +122,7 @@ public class AuthHelper {
 		
 		Cookie c = new Cookie(COOKIE.AUTH_TICKET, ticket);
 		if (Boolean.TRUE.equals(user.getAutoLogin())) {
-			c.setMaxAge(COOKIE.AUTH_TICKET_AGE);
+			c.setMaxAge(cookieAge);
 		}
 		c.setPath(cookiePath);
 

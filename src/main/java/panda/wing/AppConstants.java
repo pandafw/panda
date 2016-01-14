@@ -30,4 +30,6 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_AUTH_TICKET_ENC_KEY = "panda.auth.ticket.encode.key";
 	
 	public static final String PANDA_AUTH_TICKET_ENC_CIPHER = "panda.auth.ticket.encode.cipher";
+	
+	public static final String PANDA_AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";
 }

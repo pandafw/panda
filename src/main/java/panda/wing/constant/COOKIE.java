@@ -10,7 +10,7 @@ public interface COOKIE {
 	public final static String AUTH_TICKET = "WW_TICKET";
 
 	/**
-	 * AUTH_TICKET_AGE = 60 * 60 * 24 * 30; //30DAY
+	 * AUTH_TICKET_AGE(s) = 60 * 60 * 24 * 30; //30DAY
 	 */
 	public final static int AUTH_TICKET_AGE = 60 * 60 * 24 * 30;
 }
