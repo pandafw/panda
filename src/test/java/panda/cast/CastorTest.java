@@ -198,7 +198,7 @@ public class CastorTest extends TestCase {
 		assertTrue(Arrays.equals(ii, iii));
 	}
 	
-	public void testAtoB() throws Exception {
+	public void testA2B() throws Exception {
 		A a = new A();
 		
 		a.setAry(new A[] { new A(), new A() });
@@ -218,7 +218,7 @@ public class CastorTest extends TestCase {
 	}
 
 	
-	public void testMapToA() throws Exception {
+	public void testMap2A() throws Exception {
 		Map<String, Object> m = new HashMap<String, Object>();;
 		
 		m.put("bol", true);
@@ -233,7 +233,26 @@ public class CastorTest extends TestCase {
 		assertTrue(a.obj.bol);
 	}
 
-	public void testStringToA() throws Exception {
+	public void testA2Map() throws Exception {
+		Map<String, Object> e = new HashMap<String, Object>();;
+		
+		e.put("ary", null);
+		e.put("bol", false);
+		e.put("lst", null);
+		e.put("map", null);
+		e.put("num", 1);
+		e.put("obj", null);
+		e.put("str", "A");
+		
+		A a = new A();
+		
+		Map<String, Object> m = Castors.scast(a, Map.class);
+
+		assertNotNull(m);
+		assertEquals(e, m);
+	}
+
+	public void testString2A() throws Exception {
 		Map<String, Object> m = new HashMap<String, Object>();;
 		
 		m.put("bol", true);

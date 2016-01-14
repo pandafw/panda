@@ -5,7 +5,7 @@
    <site url="http://ermaster.sourceforge.net/update-site/" selected="true" name="ERMaster"/>
    <site url="http://propedit.sourceforge.jp/eclipse/updates/" selected="true" name="Property Editor"/>
    <site url="http://update.eclemma.org" selected="true" name="EclEmma"/>
-   <site url="http://download.aptana.com/studio3/plugin/install" selected="true" name="Aptana Studio"/>
+   <site url="http://pydev.org/updates" selected="true" name="PyDev"/>
 <!--
    <site url="http://feeling.sourceforge.net/update" selected="true" name="JadClipse"/>
    <site url="http://www.apache.org/dist/ant/ivyde/updatesite" selected="true" name="IvyDE"/>

@@ -611,16 +611,16 @@ public class URLHelper {
 				}
 
 				Object value = bh.getPropertyValue(params, name);
-
 				if (Iterators.isIterable(value)) {
 					for (Iterator it = Iterators.asIterator(value); it.hasNext();) {
 						Object pv = it.next();
-						if (suppress == SUPPRESS_NULL && pv == null) {
+						if (pv == null && (suppress & SUPPRESS_NULL) != 0) {
 							continue;
 						}
-						else if (suppress == SUPPRESS_EMPTY && Objects.isEmpty(pv)) {
+						if (Objects.isEmpty(pv) && (suppress & SUPPRESS_EMPTY) != 0) {
 							continue;
 						}
+
 						if (next) {
 							link.append(paramSeparator);
 						}
@@ -631,12 +631,13 @@ public class URLHelper {
 					}
 				}
 				else {
-					if (suppress == SUPPRESS_NULL && value == null) {
+					if (value == null && (suppress & SUPPRESS_NULL) != 0) {
 						continue;
 					}
-					else if (suppress == SUPPRESS_EMPTY && Objects.isEmpty(value)) {
+					if (Objects.isEmpty(value) && (suppress & SUPPRESS_EMPTY) != 0) {
 						continue;
 					}
+
 					if (next) {
 						link.append(paramSeparator);
 					}

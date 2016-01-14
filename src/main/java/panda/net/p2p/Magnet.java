@@ -3,7 +3,14 @@ package panda.net.p2p;
 import panda.lang.Objects;
 import panda.net.http.URLHelper;
 
-public class Magnet {
+import java.io.Serializable;
+
+public class Magnet implements Cloneable, Serializable {
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * dn (Display Name) – Filename
 	 */
@@ -12,7 +19,7 @@ public class Magnet {
 	/**
 	 * xl (eXact Length) – Size in bytes
 	 */
-	private String xl;
+	private Long xl;
 	
 	/**
 	 * xt (eXact Topic) – URN containing file hash
@@ -61,14 +68,14 @@ public class Magnet {
 	/**
 	 * @return the xl
 	 */
-	public String getXl() {
+	public Long getXl() {
 		return xl;
 	}
 
 	/**
 	 * @param xl the xl to set
 	 */
-	public void setXl(String xl) {
+	public void setXl(Long xl) {
 		this.xl = xl;
 	}
 
@@ -156,21 +163,47 @@ public class Magnet {
 		this.tr = tr;
 	}
 
+	public Magnet() {
+	}
+
+	public Magnet(Magnet m) {
+		dn = m.dn;
+		xl = m.xl;
+		xt = m.xt;
+		as = m.as;
+		xs = m.xs;
+		kt = m.kt;
+		mt = m.mt;
+		tr = m.tr;
+	}
+
 	public void setBtih(String btih) {
-		this.setXt("urn:btih:" + btih);
+		setXt("urn:btih:" + btih);
 	}
 	
 	public String toURL() {
-		return URLHelper.buildURL("magnet:", this);
+		Magnet m = new Magnet(this);
+		m.setDn(URLHelper.encodeURL(m.getDn()));
+		return _toURL(m);
+	}
+	
+	private static String _toURL(Magnet m) {
+		return URLHelper.buildURL("magnet:", m, false, null);
 	}
 	
 	public static String toURL(String title, String btih) {
 		Magnet m = new Magnet();
-		m.setDn(title);
+		m.setDn(URLHelper.encodeURL(title));
 		m.setBtih(btih);
-		return m.toURL();
+		return _toURL(m);
 	}
-	
+
+	@Override
+	public Magnet clone() {
+		return new Magnet(this);
+	}
+
+	@Override
 	public String toString() {
 		return Objects.toStringBuilder()
 				.append("dn", dn)
