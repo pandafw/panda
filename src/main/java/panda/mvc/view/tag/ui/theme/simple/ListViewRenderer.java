@@ -61,7 +61,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		id = tag.getId();
 
 		if (Strings.isEmpty(tag.getQueryer())) {
-			queryer = (Queryer)context.getParams();
+			if (context.getParams() instanceof Queryer) {
+				queryer = (Queryer)context.getParams();
+			}
 		}
 		else {
 			queryer = (Queryer)context.getParameter(tag.getQueryer());
@@ -129,14 +131,16 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void writeListViewHiddens() throws IOException {
-		if (queryer.getPager() != null) {
-			writeHidden(id + "_start", prefix + "p.s", queryer.getPager().getStart());
-			writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
-			writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal(), true);
-		}
-		if (queryer.getSorter() != null) {
-			writeHidden(id + "_sort", prefix + "s.c", queryer.getSorter().getColumn());
-			writeHidden(id + "_dir", prefix + "s.d", queryer.getSorter().getDirection());
+		if (queryer != null) {
+			if (queryer.getPager() != null) {
+				writeHidden(id + "_start", prefix + "p.s", queryer.getPager().getStart());
+				writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
+				writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal(), true);
+			}
+			if (queryer.getSorter() != null) {
+				writeHidden(id + "_sort", prefix + "s.c", queryer.getSorter().getColumn());
+				writeHidden(id + "_dir", prefix + "s.d", queryer.getSorter().getDirection());
+			}
 		}
 	}
 
@@ -210,7 +214,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void writePager(String pos) throws IOException {
-		if (queryer.getPager() == null) {
+		if (queryer == null || queryer.getPager() == null) {
 			return;
 		}
 		
@@ -339,7 +343,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		String _pf = prefix + "f.";
 
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = queryer.getFilters();
+		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
 		
 		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
 			ListColumn.Filter _f = en.getValue();
@@ -600,7 +604,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	private void writeListViewFilters() throws IOException {
 		Map<String, ListColumn.Filter> fm = new LinkedHashMap<String, ListColumn.Filter>();
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = queryer.getFilters();
+		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
 		
 		String _pf = prefix + "f.";
 		for (ListColumn c : columns) {
@@ -694,10 +698,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		form.start(writer);
 
-		if (queryer.getPager() != null) {
+		if (queryer != null && queryer.getPager() != null) {
 			writeHidden(id + "_fsform_limit", prefix + "p.l", queryer.getPager().getLimit());
 		}
-		if (queryer.getSorter() != null) {
+		if (queryer != null && queryer.getSorter() != null) {
 			writeHidden(id + "_fsform_sort", prefix + "s.c", queryer.getSorter().getColumn());
 			writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
 		}
@@ -730,7 +734,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				.cssClass("p-lv-" + ctype 
 					+ ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
 					+ (tag.getSortable() && c.sortable ? " p-lv-sortable p-sortable" : "")
-					+ ((queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
+					+ ((queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
 					+ (_fsdl.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
 				.title(tag);
@@ -762,7 +766,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write(c.header);
 			}
 			
-			if (queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) {
+			if (queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) {
 				write("<span class=\"ui-icon ui-icon-triangle-1-" 
 						+ (Sorter.ASC.equals(queryer.getSorter().getDirection()) ? 'n' : 's')
 						+ " p-lv-sort-" + queryer.getSorter().getDirection()
@@ -859,7 +863,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						write(String.valueOf(inx + 1));
 					}
 					else if ("number".equals(ctype)) {
-						write(String.valueOf(queryer.getPager() == null ? 0 : queryer.getPager().getStart() + inx + 1));
+						write(String.valueOf((queryer != null || queryer.getPager() == null) ? 0 : queryer.getPager().getStart() + inx + 1));
 					}
 					else if ("check".equals(ctype)) {
 						write("<input type=\"checkbox\" class=\"checkbox p-lv-cb\" value=\"" + inx + "\"/>");
