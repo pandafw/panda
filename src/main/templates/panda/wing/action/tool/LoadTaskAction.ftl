@@ -24,7 +24,7 @@
 	<div class="p-header">
 		<h3><@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 	<table class="table mc-table">
 	<thead>

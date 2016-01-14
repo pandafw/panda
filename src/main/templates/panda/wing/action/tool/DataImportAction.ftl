@@ -9,7 +9,7 @@
 	<div class="p-header">
 		<h3><i class="fa fa-cloud-upload"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 	<@p.form id="dataimp" method="post" enctype="multipart/form-data" theme="bs3h">
 		<@p.select key="target" list="%{action.targetSet}"/>

@@ -9,7 +9,7 @@
 	<div class="p-header">
 		<h3><i class="fa fa-keyboard-o"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 	<@p.form id="eleval" method="get" theme="simple" action="+/xml" onsubmit="return elEvaluate();">
 	<table width="100%">

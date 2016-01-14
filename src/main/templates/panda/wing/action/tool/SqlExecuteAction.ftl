@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<h3><i class="fa fa-strikethrough"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 	<@p.form id="sqlexec" method="post" theme="simple">
 	<table class="sqlexec-tb" style="width: 100%">

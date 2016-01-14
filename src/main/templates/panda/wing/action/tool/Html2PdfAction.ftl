@@ -19,7 +19,7 @@
 		</@p.div>
 	</@p.form>
 	
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 	<script type="text/javascript">
 		function onPageLoad() {

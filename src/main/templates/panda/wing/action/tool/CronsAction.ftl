@@ -36,7 +36,7 @@
 		<h3><i class="fa fa-clock-o"></i> <@p.text name="title"/></h3>
 	</div>
 
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 
 <#if result?has_content>
 	<#list result as ce>

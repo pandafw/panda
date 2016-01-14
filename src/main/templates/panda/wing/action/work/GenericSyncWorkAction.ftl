@@ -19,7 +19,7 @@
 	<div class="p-header">
 		<h3><i class="fa fa-cog"></i> <@p.text name="title"/></h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert.ftl"/>
+	<#include "/action-alert.ftl"/>
 	
 	<div>
 		<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="doStart()" label="#(button-start)"/>
