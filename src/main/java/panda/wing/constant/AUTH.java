@@ -4,6 +4,8 @@ package panda.wing.constant;
  * Auth Constants
  */
 public interface AUTH {
+	public static final String TICKET = "";
+
 	public static final String LOCAL = "~local";
 	
 	public static final String SECURE = "+secure";
