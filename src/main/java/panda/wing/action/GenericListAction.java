@@ -25,7 +25,7 @@ import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.SessionStateProvider;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.VoidView;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
 import panda.wing.constant.RC;

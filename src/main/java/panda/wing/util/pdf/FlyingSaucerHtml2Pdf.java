@@ -38,9 +38,9 @@ import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.URLHelper;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpHeader;
-import panda.net.http.URLHelper;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.wing.AppConstants;
 
