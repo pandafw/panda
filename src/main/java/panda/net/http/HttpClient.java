@@ -25,6 +25,7 @@ import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.URLHelper;
 import panda.net.http.ssl.ValidCertTrustManage;
 import panda.net.http.ssl.ValidHostnameVerifier;
 

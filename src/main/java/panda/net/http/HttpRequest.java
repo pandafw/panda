@@ -24,6 +24,7 @@ import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
+import panda.net.URLHelper;
 
 /**
  * @author yf.frank.wang@gmail.com

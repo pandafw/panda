@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import org.junit.Test;
 
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 @SuppressWarnings("unchecked")
 public class URLHelperTest {

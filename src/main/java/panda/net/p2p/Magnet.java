@@ -1,7 +1,7 @@
 package panda.net.p2p;
 
 import panda.lang.Objects;
-import panda.net.http.URLHelper;
+import panda.net.URLHelper;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package panda.net.http;
+package panda.net;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -679,7 +679,7 @@ public class URLHelper {
 	 * @return the encoded string
 	 */
 	public static String encodeURL(String url, String encoding) {
-		if (Strings.isEmpty(url)) {
+		if (Strings.isEmpty(url) || Strings.isEmpty(encoding)) {
 			return url;
 		}
 		
