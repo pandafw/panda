@@ -11,8 +11,8 @@
 
 	<!-- build -->
 	<import file="prj-build.xml"/>
-	<target name="build" depends="clean, cp-res, n2a, javac" description="Build the project"/>
-	<target name="dist" depends="javadoc, javasrc, jar" description="Distribute project as a jar file"/>
+	<target name="build" depends="clean, cp-res, n2a, javac, javadoc" description="Build the project"/>
+	<target name="dist" depends="jardoc, jarsrc, jar" description="Distribute project to jar files"/>
 
 	<!-- test -->
 	<import file="prj-test.xml"/>

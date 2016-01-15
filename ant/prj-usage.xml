@@ -11,12 +11,14 @@ Available targets are:
 build             --> Build the project (clean, cp-res, javac)
 clean             --> Delete everything in the output directory
 cp-res            --> Copy resource files to the classes directory
-dist              --> Distribute project as a jar file (javadoc, jar)
+dist              --> Distribute project to jar files (javadoc, sources, jar)
 ${usage-codegen}
 ivy-resolve       --> Retreive dependencies
 ivy-report        --> Generates a report of dependencies
 ivy-clean         --> Clean the cache
-jar               --> Make the project as a jar file
+jar               --> Compress compiled output files to a jar file
+jardoc            --> Compress java documents to a jar file
+jarsrc            --> Compress source files to a jar file
 javac             --> Compile java source files
 javadoc           --> Generate java documents
 release           --> Release the project

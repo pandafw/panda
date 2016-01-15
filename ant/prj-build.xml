@@ -109,12 +109,10 @@
 		</javac>
 	</target>
 
-	<!-- dist -->
 	<target name="javadoc" description="Generate java documents">
 		<delete includeemptydirs="true">
 			<fileset dir="${out.dir}">
 				<include name="javadoc/**"/>
-				<include name="*-javadoc.jar"/>
 			</fileset>
 		</delete>
 		<javadoc 
@@ -129,6 +127,15 @@
 			<fileset dir="${src.dir}/gen/java" erroronmissingdir="false"/>
 			<classpath refid="main.cp"/>
 		</javadoc>
+	</target>
+	
+	<!-- dist -->
+	<target name="jardoc" description="Compress java documents to a jar file">
+		<delete>
+			<fileset dir="${out.dir}">
+				<include name="*-javadoc.jar"/>
+			</fileset>
+		</delete>
 		<jar destfile="${out.dir}/${prj.name}-${VERSION}-javadoc.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.org}"/>
@@ -142,7 +149,7 @@
 		</jar>
 	</target>
 
-	<target name="javasrc" description="Make project source as a jar file">
+	<target name="jarsrc" description="Compress source files to a jar file">
 		<delete>
 			<fileset dir="${out.dir}">
 				<include name="*-sources.jar"/>
@@ -163,11 +170,11 @@
 			<fileset dir="${src.dir}/gen/java" erroronmissingdir="false"/>
 			<fileset dir="${src.dir}/gen/resources" erroronmissingdir="false"/>
 			<fileset dir="${src.dir}/gen/templates" erroronmissingdir="false"/>
-			<fileset dir="${out.dir}/classes" includes="META-INF/LICENSE"/>
+			<fileset dir="${out.dir}/classes" includes="META-INF/LICENSE" erroronmissingdir="false"/>
 		</jar>
 	</target>
 
-	<target name="jar" description="Make project as a jar file">
+	<target name="jar" description="Compress compiled output files to a jar file">
 		<delete>
 			<fileset dir="${out.dir}">
 				<include name="*.jar"/>
