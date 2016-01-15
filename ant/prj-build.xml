@@ -142,25 +142,12 @@
 		</jar>
 	</target>
 
-	<target name="jar" description="Make project as a jar file">
+	<target name="javasrc" description="Make project source as a jar file">
 		<delete>
 			<fileset dir="${out.dir}">
-				<include name="*.jar"/>
-				<exclude name="*-javadoc.jar"/>
+				<include name="*-sources.jar"/>
 			</fileset>
 		</delete>
-		<copy file="LICENSE" todir="${out.dir}/classes/META-INF" overwrite="true" force="true"/>
-		<jar destfile="${out.dir}/${prj.name}-${VERSION}.jar">
-			<manifest>
-				<attribute name="Created-By" value="${prj.org}"/>
-				<attribute name="Built-By" value="${prj.org}"/>
-				<attribute name="Built-Date" value="${TODAY}"/>
-				<attribute name="Implementation-Title" value="${prj.title}"/>
-				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.url}"/>
-			</manifest>
-			<fileset dir="${out.dir}/classes"/>
-		</jar>
 		<jar destfile="${out.dir}/${prj.name}-${VERSION}-sources.jar">
 			<manifest>
 				<attribute name="Created-By" value="${prj.org}"/>
@@ -180,4 +167,26 @@
 		</jar>
 	</target>
 
+	<target name="jar" description="Make project as a jar file">
+		<delete>
+			<fileset dir="${out.dir}">
+				<include name="*.jar"/>
+				<exclude name="*-javadoc.jar"/>
+				<exclude name="*-sources.jar"/>
+			</fileset>
+		</delete>
+		<copy file="LICENSE" todir="${out.dir}/classes/META-INF" overwrite="true" force="true"/>
+		<jar destfile="${out.dir}/${prj.name}-${VERSION}.jar">
+			<manifest>
+				<attribute name="Created-By" value="${prj.org}"/>
+				<attribute name="Built-By" value="${prj.org}"/>
+				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Title" value="${prj.title}"/>
+				<attribute name="Implementation-Version" value="${VERSION}"/> 
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
+			</manifest>
+			<fileset dir="${out.dir}/classes"/>
+		</jar>
+	</target>
+	
 </project>

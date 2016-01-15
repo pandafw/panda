@@ -11,7 +11,7 @@ Available targets are:
 build             --> Build the project (clean, cp-res, javac)
 clean             --> Delete everything in the output directory
 cp-res            --> Copy resource files to the classes directory
-dist              --> Distribute project as a jar file (build, jar)
+dist              --> Distribute project as a jar file (javadoc, jar)
 ${usage-codegen}
 ivy-resolve       --> Retreive dependencies
 ivy-report        --> Generates a report of dependencies

@@ -12,7 +12,7 @@
 		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
-	<target name="ivy-report" depends="ivy-resolve" description="ivy --> generates a report of dependencies">
+	<target name="ivy-report" description="ivy --> generates a report of dependencies">
 		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,tool"/>
 	</target>
 
