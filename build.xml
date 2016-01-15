@@ -15,7 +15,7 @@ Available targets are:
 build             --> Build the project (minjs, mincss)
 min-css           --> Merge & minify css files
 min-js            --> Merge & minify javascript files
-dist              --> Distribute project as a jar file (build, jar)
+dist              --> Distribute project as a jar file (jar)
 jar               --> Make the project as a jar file
 release           --> Release the project
 mvn-pom           --> Generate pom.xml
@@ -304,7 +304,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</copy>
 	</target>
 
-	<target name="dist" depends="build, jar" description="Distribute project as a jar file"/>
+	<target name="dist" depends="jar" description="Distribute project as a jar file"/>
 
 	<!-- maven -->
 	<import file="../panda-java/ant/prj-maven.xml"/>
@@ -312,6 +312,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	<!-- release -->
 	<target name="release" description="Release the project">
 		<antcall target="ivy-resolve"/>
+		<antcall target="build"/>
 		<antcall target="dist"/>
 		<antcall target="mvn-panda-deploy"/>
 		<antcall target="ghp"/>
