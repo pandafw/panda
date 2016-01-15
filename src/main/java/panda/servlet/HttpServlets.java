@@ -159,56 +159,17 @@ public class HttpServlets {
 	 * @param request request
 	 * @return relative URI
 	 */
-	public static String getServletURI(HttpServletRequest request) {
+	public static String getServletPath(HttpServletRequest request) {
 		if (request == null) {
 			return null;
 		}
 		String uri = request.getRequestURI();
+		uri = uri.substring(request.getContextPath().length());
+		uri = Strings.substringBefore(uri, ";jsessionid=");
 		uri = URLHelper.decodeURL(uri);
-		return uri.substring(request.getContextPath().length());
+		return uri;
 	}
 	
-	/**
-	 * Retrieves the current request servlet path. Deals with differences between servlet specs (2.2
-	 * vs 2.3+)
-	 * 
-	 * @param request the request
-	 * @return the servlet path
-	 */
-	public static String getServletPath(HttpServletRequest request) {
-		String servletPath = (String)request.getAttribute(INCLUDE_SERVLET_PATH_ATTRIBUTE);
-		if (Strings.isEmpty(servletPath)) {
-			servletPath = request.getServletPath();
-		}
-
-		String requestUri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
-		if (Strings.isEmpty(requestUri)) {
-			requestUri = request.getRequestURI();
-		}
-		
-		// Detecting other characters that the servlet container cut off (like anything after ';')
-		if (requestUri != null && servletPath != null && !requestUri.endsWith(servletPath)) {
-			int pos = requestUri.indexOf(servletPath);
-			if (pos > -1) {
-				servletPath = requestUri.substring(requestUri.indexOf(servletPath));
-			}
-		}
-
-		if (null != servletPath && !"".equals(servletPath)) {
-			return servletPath;
-		}
-
-		int startIndex = request.getContextPath().equals("") ? 0 : request.getContextPath().length();
-		int endIndex = request.getPathInfo() == null ? requestUri.length() : requestUri.lastIndexOf(request.getPathInfo());
-
-		if (startIndex > endIndex) { // this should not happen
-			endIndex = startIndex;
-		}
-
-		requestUri = requestUri.substring(startIndex, endIndex);
-		return URLHelper.decodeURL(requestUri);
-	}
-
 	public static Throwable getServletException(HttpServletRequest request) {
 		// support for JSP exception pages, exposing the servlet or JSP exception
 		Throwable ex = (Throwable)request.getAttribute(ERROR_EXCEPTION_ATTRIBUTE);
@@ -764,7 +725,7 @@ public class HttpServlets {
 	 */
 	public static void sendRedirect(HttpServletResponse res, String url, boolean permanently) {
 		res.setStatus(permanently ? HttpServletResponse.SC_MOVED_PERMANENTLY : HttpServletResponse.SC_MOVED_TEMPORARILY);
-		res.setHeader(HttpHeader.LOCATION, res.encodeRedirectURL(url));
+		res.setHeader(HttpHeader.LOCATION, url);
 	}
 
 	/**

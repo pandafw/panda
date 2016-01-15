@@ -155,7 +155,7 @@ public class ActionHandler {
 	}
 
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
-		String url = HttpServlets.getServletURI(req);
+		String url = HttpServlets.getServletPath(req);
 		if (isExclusion(url)) {
 			return false;
 		}

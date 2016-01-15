@@ -79,7 +79,7 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 	}
 
 	public ActionInvoker getActionInvoker(ActionContext ac) {
-		String path = HttpServlets.getServletURI(ac.getRequest());
+		String path = HttpServlets.getServletPath(ac.getRequest());
 
 		ac.setPath(path);
 		ac.setPathArgs(new ArrayList<String>());

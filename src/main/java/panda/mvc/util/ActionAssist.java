@@ -83,10 +83,10 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
-	 * @return servletURI
+	 * @return servletPath
 	 */
-	public String getServletURI() {
-		return HttpServlets.getServletURI(getRequest());
+	public String getServletPath() {
+		return HttpServlets.getServletPath(getRequest());
 	}
 
 	/**
