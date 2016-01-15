@@ -2401,6 +2401,9 @@ public abstract class Classes {
 						clss.add(Classes.getClass(cn, false));
 						break;
 					}
+					catch (NoClassDefFoundError e) {
+						log.warn("Failed to load class " + cn);
+					}
 					catch (ClassNotFoundException e) {
 						log.warn("Failed to load class " + cn);
 					}
