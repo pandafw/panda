@@ -9,12 +9,5 @@
 
 	<!-- build -->
 	<import file="../panda-java/ant/panda-build.xml"/>
-	
-	<!-- release -->
-	<target name="release" description="Release the project">
-		<antcall target="ivy-report"/>
-		<antcall target="dist"/>
-		<antcall target="mvn-panda-deploy"/>
-	</target>
 
 </project>
