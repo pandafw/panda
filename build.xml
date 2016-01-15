@@ -20,8 +20,9 @@
 	
 	<!-- release -->
 	<target name="release" description="Release the project">
-		<antcall target="ivy-report"/>
+		<antcall target="ivy-resolve"/>
 		<antcall target="gen-all"/>
+		<antcall target="build"/>
 		<antcall target="dist"/>
 		<antcall target="mvn-panda-deploy"/>
 	</target>
