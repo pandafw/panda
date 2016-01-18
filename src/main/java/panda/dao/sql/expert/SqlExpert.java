@@ -212,8 +212,8 @@ public abstract class SqlExpert {
 		join(sql, query, alias);
 		where(sql, query, alias);
 		group(sql, query, alias);
-		order(sql, query);
-		_limit(sql, query);
+		order(sql, query, alias);
+		_limit(sql, query, alias);
 
 		return sql;
 	}
@@ -287,9 +287,9 @@ public abstract class SqlExpert {
 		return sql;
 	}
 	
-	protected EntityField getEntityField(Entity<?> entity, String field, String name) {
+	protected EntityField getColumnField(Entity<?> entity, String field, String name) {
 		EntityField ef = entity.getField(field);
-		if (ef == null) {
+		if (ef == null || Strings.isEmpty(ef.getColumn())) {
 			throw new IllegalArgumentException("invalid " + name + " field '" + field + "' of entity " + entity.getType());
 		}
 		return ef;
@@ -435,19 +435,19 @@ public abstract class SqlExpert {
 			Filter exp = it.next();
 			if (exp instanceof Filter.ValueFilter) {
 				Filter.ValueFilter evc = (Filter.ValueFilter)exp;
-				EntityField ef = getEntityField(entity, evc.getField(), "where");
+				EntityField ef = getColumnField(entity, evc.getField(), "where");
 				whereValueFilter(sql, alias, ef.getColumn(), evc);
 			}
 			else if (exp instanceof Filter.ReferFilter) {
 				Filter.ReferFilter efc = (Filter.ReferFilter)exp;
-				EntityField ef = getEntityField(entity, efc.getField(), "where");
-				EntityField ef2 = getEntityField(entity, efc.getRefer(), "compare");
+				EntityField ef = getColumnField(entity, efc.getField(), "where");
+				EntityField ef2 = getColumnField(entity, efc.getRefer(), "compare");
 				sql.append(escapeColumn(alias, ef.getColumn()))
 					.append(efc.getOperator()).append(escapeColumn(alias, ef2.getColumn()));
 			}
 			else if (exp instanceof Filter.SimpleFilter) {
 				Filter.SimpleFilter es = (Filter.SimpleFilter)exp;
-				EntityField ef = getEntityField(entity, es.getField(), "simple");
+				EntityField ef = getColumnField(entity, es.getField(), "simple");
 				sql.append(escapeColumn(alias, ef.getColumn())).append(' ').append(es.getOperator());
 			}
 			else if (exp instanceof Filter.ComboFilter) {
@@ -550,11 +550,11 @@ public abstract class SqlExpert {
 		}
 	}
 	
-	protected void order(Sql sql, Query<?> query) {
-		order(sql.getSqlBuilder(), query);
+	protected void order(Sql sql, Query<?> query, String alias) {
+		order(sql.getSqlBuilder(), query, alias);
 	}
 	
-	protected void order(StringBuilder sql, Query<?> query) {
+	protected void order(StringBuilder sql, Query<?> query, String alias) {
 		if (!query.hasOrders()) {
 			return;
 		}
@@ -564,8 +564,20 @@ public abstract class SqlExpert {
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
 			for (Entry<String, Order> en : query.getOrders().entrySet()) {
-				EntityField ef = getEntityField(entity, en.getKey(), "order");
-				sql.append(' ').append(escapeColumn(ef.getColumn())).append(' ').append(en.getValue()).append(',');
+				EntityField ef = entity.getField(en.getKey());
+				if (ef == null) {
+					// alias or something else
+					sql.append(' ').append(escapeColumn(en.getKey()));
+				}
+				else if (Strings.isEmpty(ef.getColumn())) {
+					// join column
+					sql.append(' ').append(escapeColumn(DaoNamings.javaName2ColumnLabel(ef.getName())));
+				}
+				else {
+					// normal column
+					sql.append(' ').append(escapeColumn(alias, ef.getColumn()));
+				}
+				sql.append(' ').append(en.getValue()).append(',');
 			}
 		}
 		else {
@@ -586,8 +598,20 @@ public abstract class SqlExpert {
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
 			for (String k : query.getGroups()) {
-				EntityField ef = getEntityField(entity, k, "order");
-				sql.append(' ').append(escapeColumn(alias, ef.getColumn())).append(' ');
+				EntityField ef = entity.getField(k);
+				if (ef == null) {
+					// alias or something else
+					sql.append(' ').append(escapeColumn(k));
+				}
+				else if (Strings.isEmpty(ef.getColumn())) {
+					// join column
+					sql.append(' ').append(escapeColumn(DaoNamings.javaName2ColumnLabel(ef.getName())));
+				}
+				else {
+					// normal column
+					sql.append(' ').append(escapeColumn(alias, ef.getColumn()));
+				}
+				sql.append(',');
 			}
 		}
 		else {
@@ -599,13 +623,13 @@ public abstract class SqlExpert {
 	}
 	
 	//-----------------------------------------------------------------------
-	private void _limit(Sql sql, Query query) {
+	private void _limit(Sql sql, Query query, String alias) {
 		if (query != null && query.needsPaginate() && isSupportPaginate()) {
-			limit(sql, query);
+			limit(sql, query, alias);
 		}
 	}
 	
-	protected abstract void limit(Sql sql, Query query);
+	protected abstract void limit(Sql sql, Query query, String alias);
 
 	//-----------------------------------------------------------------------
 	protected String evalFieldType(String type, int size, int scale) {

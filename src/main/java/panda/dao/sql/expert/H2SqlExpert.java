@@ -102,7 +102,7 @@ public class H2SqlExpert extends SqlExpert {
 	 * @see <a href="http://www.h2database.com/html/grammar.html">http://www.h2database.com/html/grammar.html</a>
 	 */
 	@Override
-	protected void limit(Sql sql, Query query) {
+	protected void limit(Sql sql, Query query, String alias) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 			

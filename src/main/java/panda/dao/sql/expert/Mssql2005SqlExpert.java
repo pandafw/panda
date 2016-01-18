@@ -113,7 +113,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(Sql sql, Query query) {
+	protected void limit(Sql sql, Query query, String alias) {
 		// very rough, but works
 		if (query.getStart() > 0) {
 			if (query.hasOrders()) {
@@ -122,7 +122,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 				StringBuilder rn = new StringBuilder(); 
 				rn.append(" TOP ").append(top);
 				rn.append(" ROW_NUMBER() OVER(");
-				order(rn, query);
+				order(rn, query, alias);
 				rn.append(") __rn__,");
 				
 				sql.insert(6, rn);

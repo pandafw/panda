@@ -78,7 +78,7 @@ public class HsqldbSqlExpert extends SqlExpert {
 	 * @see <a href="http://hsqldb.org/doc/guide/ch09.html#select-section">http://hsqldb.org/doc/guide/ch09.html#select-section</a>
 	 */
 	@Override
-	protected void limit(Sql sql, Query query) {
+	protected void limit(Sql sql, Query query, String alias) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 			

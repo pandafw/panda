@@ -90,7 +90,7 @@ public class Db2SqlExpert extends SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(Sql sql, Query query) {
+	protected void limit(Sql sql, Query query, String alias) {
 		// TODO: DB2 jdbc PreparedStatement does not support ROW_NUMBER
 		if (query.getStart() > 0) {
 			sql.insert(0, "SELECT * FROM (SELECT ROW_NUMBER() OVER() AS RN_, T.* FROM (");
