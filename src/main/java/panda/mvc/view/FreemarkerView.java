@@ -133,7 +133,7 @@ public class FreemarkerView extends AbstractPathView {
 	
 	protected void render(ActionContext ac, String path, FreemarkerHelper fh) {
 		try {
-			fh.execTemplate(ac.getResponse().getWriter(), path, ac.getResult());
+			fh.execTemplate(ac.getResponse().getWriter(), path);
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
