@@ -1,31 +1,32 @@
 <#include "common.ftl"/>
-<@sheader/>
+<@header/>
 
 <div class="p-section">
-	<@sheader/>
-	<#include "list-toolbar.ftl"/>
+	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
+	<#include "list-star-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 	<br/>
-	
+
+${s}#if result?has_content>
 	${s}#assign _columns_ = [{
-		"name": "_number_",
-		"type": "number",
-		"nowrap": true,
+		"name": "_rownum_",
+		"type": "rownum",
+		"header": text.getText("listview-th-rownum", ""),
 		"fixed": true
 	}, <#rt/>
 <#list ui.orderedColumnList as c>
 {
 		"name": "${c.name}",
-		"header": action.getText("${ui.name}-column-${c.name}", ""), 
+		"header": text.getText("a.t.${c.name}"),
 	<#if c.format??>
 		"format": {
-			"type": "${c.format.type?replace('#', '\\x23')}"<#if c.format.paramList?has_content>,</#if>
 		<#list c.format.paramList as fp>
-			"${fp.name}": "${fp.value?replace('#', '\\x23')}"<#if fp_has_next>,</#if>
+			"${fp.name}": ${fp.value},
 		</#list>
-		},
-		</#if>
+			"type": "${c.format.type?replace('#', '\\x23')}"
+			},
+	</#if>
 	<#if c.display??>
 		"display": ${c.display?string},
 	</#if>
@@ -36,24 +37,26 @@
 		"group": ${c.group?string},
 	</#if>
 		"sortable": false,
-		"tooltip": action.getText("${ui.name}-column-${c.name}-tip", ""),
-		"value": false		
+		"tooltip": text.getText("a.t.${c.name}-tip", "")
 	}<#if c_has_next>, </#if><#rt/>
 </#list>
 ] />
 
 	${s}@p.listview id="${action.name}_${ui.name}"
-		list="${actionDataListFieldName}" columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-	>
-		<#if ui.params.addon?has_content>
-		${s}@s.param name="addon">${ui.params.addon}${s}/@s.param>
-		</#if>
-	${s}/@p.listview>
+		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
+		cssTable="table-hover table-striped"
+	<#if ui.params.addon?has_content>
+		addon="${ui.params.addon}"
+	</#if>
+	/>
 	
 	<br/>
 	<div class="p-tcenter">
-		<#include "bulk-success-buttons.ftl"/>
+		<#include "bulk-buttons.ftl"/>
 	</div>
+${s}#else>
+	<@sback/>
+${s}/#if>
 </div>
 
 <@footer/>

@@ -10,7 +10,6 @@
 			"name": "_number_",
 			"type": "number",
 			"header": text.getText("listview-th-number", ""),
-			"nowrap": true,
 			"fixed": true
 		}, <#rt/>
 <#list ui.orderedColumnList as c>
@@ -25,7 +24,7 @@
 			</#list>
 				"type": "${c.format.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.filter??>
 			"filter": {
 			<#if c.filter.display??>

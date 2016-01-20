@@ -150,8 +150,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}() {
-		return super.bdelete();
+	public Object ${ui.name}(@Param Map<String, String[]> args) {
+		return super.bdelete(args);
 	}
 
 	/**
@@ -159,9 +159,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At
 	@Ok(View.SFTL)
-	@Err(View.SFTL)
-	public Object ${ui.name}_execute() {
-		return super.bdelete_execute();
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
+		return super.bdelete_execute(args);
 	}
 	
 <#elseif ui.templates?seq_contains("bupdate")>
@@ -171,8 +171,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}() {
-		return super.bupdate();
+	public Object ${ui.name}(@Param Map<String, String[]> args) {
+		return super.bupdate(args);
 	}
 
 	/**
@@ -180,9 +180,9 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	@At
 	@Ok(View.SFTL)
-	@Err(View.SFTL)
-	public Object ${ui.name}_execute() {
-		return super.bupdate_execute();
+	@Err("sftl:~${ui.name}")
+	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
+		return super.bupdate_execute(args);
 	}
 	
 <#elseif ui.templates?seq_contains("bedit")>

@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
@@ -21,9 +24,9 @@ import panda.mvc.validation.annotation.Validates;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.InputUI;
+import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 /**
  * action source generator
@@ -117,16 +120,45 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(entity.getName());
 		imports.add(action.getActionBaseClass());
 		if (Collections.isNotEmpty(action.getSortedListUIList())) {
-			imports.add(Queryer.class.getName());
+			for (ListUI lui : action.getSortedListUIList()) {
+				if (Collections.contains(lui.getTemplates(), "bdelete") 
+						|| Collections.contains(lui.getTemplates(), "bupdate")
+						|| Collections.contains(lui.getTemplates(), "bedit")) {
+					imports.add(Map.class.getName());
+				}
+				for (String s : lui.getTemplates()) {
+					if (Strings.startsWith(s, "list")) {
+						imports.add(Queryer.class.getName());
+						imports.add(Validates.class.getName());
+						break;
+					}
+				}
+			}
 		}
+
 		imports.add(At.class.getName());
 		imports.add(Ok.class.getName());
 		imports.add(Err.class.getName());
 		imports.add(Param.class.getName());
-		imports.add(Validates.class.getName());
-		if (Collections.isNotEmpty(action.getInputUIList()) && Collections.isNotEmpty(entity.getNotNullList())) {
-			imports.add(Validate.class.getName());
-			imports.add(Validators.class.getName());
+		if (Collections.isNotEmpty(action.getSortedInputUIList())) {
+			for (InputUI iui : action.getSortedInputUIList()) {
+				if (Collections.contains(iui.getTemplates(), "copy") 
+						|| Collections.contains(iui.getTemplates(), "update")
+						|| Collections.contains(iui.getTemplates(), "insert")) {
+					imports.add(Validates.class.getName());
+				}
+			}
+		}
+		if (Collections.isNotEmpty(entity.getNotNullList()) && Collections.isNotEmpty(action.getSortedInputUIList())) {
+			for (InputUI iui : action.getSortedInputUIList()) {
+				if (Collections.contains(iui.getTemplates(), "copy") 
+						|| Collections.contains(iui.getTemplates(), "update")
+						|| Collections.contains(iui.getTemplates(), "insert")) {
+					imports.add(Validates.class.getName());
+					imports.add(Validate.class.getName());
+					imports.add(Validators.class.getName());
+				}
+			}
 		}
 		imports.add(View.class.getName());
 		if (Strings.isNotEmpty(action.getAuth())) {

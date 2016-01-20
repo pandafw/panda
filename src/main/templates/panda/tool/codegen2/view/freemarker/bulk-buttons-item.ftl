@@ -1,31 +1,29 @@
-		<#assign a0 = gen.stripStart(t, "%*^")/>
-		<#if a0?starts_with('@')>
-			<#assign a = a0?substring(1)/>
-			<#assign j = a?index_of(':')/>
-			<#if j &gt; 0>
-				<#assign a2 = action.name + '_' + a?substring(j + 1)/>
-				<#assign a = a?substring(0, j)/>
-			<#else>
-				<#assign a2 = action.name + '_' + a/>
-			</#if>
-		${s}#if action.hasPermission("${a2}")>
-			${s}@p.submit icon="icon-${a}" action="${a2}" theme="simple">${s}@p.text name='button-${a}'/>${s}/@p.submit>
-		${s}/#if>
+	<#assign a = gen.stripStartMark(t)/>
+	<#if t == '@refresh'>
+		${s}@p.a btn="default" icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
+	<#elseif t?starts_with('@')>
+		<#assign a = a?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid buttons item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if>
+		<#assign an = a[0]/>
+		<#assign ap = gen.getActionPath(a[1])/>
+		<#assign aq = gen.getActionQuery(a[1])/>
+		<#if aq?has_content>
+	${s}#if r?has_content>
+		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
+				<#lt/>${s}@p.param name="${aq}"><#rt/>
+					<#lt/>${s}@p.url action="${a[2]}" forceAddSchemeHostAndPort="true" escapeAmp="false" includeParams="all"/><#rt/>
+				<#lt/>${s}/@p.param><#rt/>
+			<#lt/>${s}@p.text name='button-${an}'/>${s}/@p.a>
+	${s}/#if>
 		<#else>
-			<#assign a = a0/>
-			<#assign j = a?index_of(':')/>
-			<#if j &gt; 0>
-				<#assign a2 = action.name + '_' + a?substring(j + 1)/>
-				<#assign a = a?substring(0, j)/>
-			<#else>
-				<#assign a2 = action.name + '_' + a/>
-			</#if>
-		${s}#if action.hasPermission("${a2}")>
-			${s}@p.url var="_u_" action='${a2}'/>
-		<#if t?contains('^')>
-			${s}@p.submit icon="icon-${a}" onclick="window.open('${d}{_u_}');return false;" theme="simple">${s}@p.text name='button-${a}'/>${s}/@p.submit>
-		<#else>
-			${s}@p.submit icon="icon-${a}" onclick="location.href='${d}{_u_}';return false;" theme="simple">${s}@p.text name='button-${a}'/>${s}/@p.submit>
+		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})'/>
 		</#if>
-		${s}/#if>
-		</#if>
+	<#else>
+		<#assign a = a?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid buttons item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if>
+		<#assign an = a[0]/>
+		<#assign ap = gen.getActionPath(a[1])/>
+	${s}#if action.hasPermission("${ap}")>
+		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
+	${s}/#if>
+	</#if>

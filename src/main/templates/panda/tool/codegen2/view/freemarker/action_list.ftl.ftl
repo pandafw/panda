@@ -11,7 +11,6 @@
 		"name": "_number_",
 		"type": "number",
 		"header": text.getText("listview-th-number", ""),
-		"nowrap": true,
 		"fixed": true
 	}] />
 
@@ -53,7 +52,6 @@
 			"type": "actions",
 			"header": _ash_,
 			"actions": _actions_,
-			"nowrap": true,
 			"fixed": true
 		}] />
 	${s}/#if>
@@ -70,7 +68,6 @@
 	${s}#assign _columns_ = _columns_ + [{
 		"name": "_check_",
 		"type": "check",
-		"nowrap": true,
 		"fixed": true
 	}] />
 <#else>
@@ -83,7 +80,6 @@
 		${s}#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
-			"nowrap": true,
 			"fixed": true
 		}] />
 	${s}/#if>
@@ -108,7 +104,7 @@
 			</#list>
 				"type": "${c.format.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.filter??>
 			"filter": {
 			<#if c.filter.display??>
@@ -128,7 +124,7 @@
 			</#list>
 				"type": "${c.filter.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.display??>
 			"display": ${c.display?string},
 		</#if>
@@ -173,12 +169,12 @@
 		<#assign ap = gen.getActionPath(a[1])/>
 		${s}#if action.hasPermission("${ap}")>
 		<#if _op?starts_with('@') || _op?starts_with('%')>
-			${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
 		<#else>
 			<#if _op?contains('^')>
-			${s}@p.submit icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
 			<#else>
-			${s}@p.submit icon="icon-${an}" action="${action.name}_${an}" onclick="return ${action.name}_${ui.name}_${an}();" theme="simple">${s}@p.text name="button-${an}"/>${s}/@p.submit>
+			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
 			</#if>
 		</#if>
 		${s}/#if>

@@ -1,6 +1,6 @@
 	<#assign a = gen.stripStartMark(t)/>
 	<#if t == '@refresh'>
-		<li>${s}@p.a icon="icon-refresh" href="javascript:location.reload(true)">${s}@p.text name='button-refresh'/>${s}/@p.a>
+		<li>${s}@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
 </li><#rt/>
 	<#elseif t?starts_with('@')>
 		<#assign a = a?split(':')/>
@@ -12,7 +12,7 @@
 	<#lt/>${s}#if r??><#rt/>
 		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
 				<#lt/>${s}@p.param name="${aq}"><#rt/>
-					<#lt/>${s}@p.url action='${action.name}_${an}' forceAddSchemeHostAndPort='true' escapeAmp='false'><#rt/>
+					<#lt/>${s}@p.url action="${a[2]}" forceAddSchemeHostAndPort='true' escapeAmp='false'><#rt/>
 				<#list entity.primaryKeyList as p>
 					<#lt/>${s}@p.param name="${p.name}" value="%{r.${p.name}}"/><#rt/>
 				</#list>
@@ -21,7 +21,7 @@
 			<#lt/>${s}@p.text name='button-${an}'/>${s}/@p.a>
 </li>${s}/#if><#rt/>
 		<#else>
-	<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}">${s}@p.text name='button-${an}'/>${s}/@p.a>
+	<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})'/>
 </li><#rt/>
 		</#if>
 	<#else>
@@ -38,7 +38,7 @@ ${s}@p.param name="${p.name}" value="%{r.${p.name}}"/><#rt/>
 </li>${s}/#if><#rt/>
 		<#else>
 ${s}#if action.hasPermission("${ap}")><#rt/>
-		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}">${s}@p.text name='button-${an}'/>${s}/@p.a>
+		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
 </li>${s}/#if><#rt/>
 		</#if>
 	</#if>

@@ -46,6 +46,7 @@ import panda.tool.IllegalLicenseException;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import panda.util.tool.AbstractCommandTool;
+
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -524,6 +525,7 @@ public abstract class AbstractCodeGenerator {
 		catch (Exception e) {
 			System.err.println("========== PROPS ============");
 			Map props = (Map)context.get("props");
+			@SuppressWarnings("unchecked")
 			TreeMap tm = new TreeMap(props);
 			for (Object en : tm.entrySet()) {
 				System.err.println(((Entry)en).getKey() + ": " + ((Entry)en).getValue());

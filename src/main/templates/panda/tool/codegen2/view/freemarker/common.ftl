@@ -75,7 +75,7 @@
 	</#macro>
 	<#macro sback>
 	<div class="p-tcenter">
-		${s}@p.a btype="default" icon="back" href="#" onclick="window.history.back();return false;">${s}@p.text name="button-back"/>${s}/@p.a>
+		${s}@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
 	</div>
 	</#macro>
 	<#macro footer>

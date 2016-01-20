@@ -114,66 +114,62 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 				
 				//processTpl(pkg, action.getName() + ".ftl", wrapper, findTpl(""));
 				
-				for (ListUI lui : action.getListUIList()) {
-					if (Boolean.TRUE.equals(lui.getGenerate())) {
-						if (Strings.isEmpty(lui.getTemplate())) {
-							throw new IllegalArgumentException("template of ListUI[" + lui.getName() + "] can not be empty!");
-						}
-						
-						wrapper.put("ui", lui);
-						
-						String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" + lui.getName();
+				for (ListUI lui : action.getSortedListUIList()) {
+					if (Strings.isEmpty(lui.getTemplate())) {
+						throw new IllegalArgumentException("template of ListUI[" + lui.getName() + "] can not be empty!");
+					}
+					
+					wrapper.put("ui", lui);
+					
+					String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" + lui.getName();
 
-						for (String t : lui.getTemplates()) {
-							if ("bdelete".equals(t) || "bupdate".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bulk"));
-								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_bulk_success"));
-							}
-							else if ("bedit".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bedit"));
-								processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_bedit_confirm"));
-								processTpl(pkg, uin + "_success.ftl", wrapper, findTpl("_bedit_success"));
-							}
-							else if (t.startsWith("list")) {
-								if (!("list_json".equals(t) || "list_xml".equals(t))) {
-									Template tpl = findTpl("_" + t);
-									processTpl(pkg, uin + ".ftl", wrapper, tpl);
-								}
+					for (String t : lui.getTemplates()) {
+						if ("bdelete".equals(t) || "bupdate".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bulk"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bulk_success"));
+						}
+						else if ("bedit".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bedit"));
+							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_bedit_confirm"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bedit_success"));
+						}
+						else if (t.startsWith("list")) {
+							if (!("list_json".equals(t) || "list_xml".equals(t))) {
+								Template tpl = findTpl("_" + t);
+								processTpl(pkg, uin + ".ftl", wrapper, tpl);
 							}
 						}
 					}
 				}
 
-				for (InputUI iui : action.getInputUIList()) {
-					if (Boolean.TRUE.equals(iui.getGenerate())) {
-						if (Strings.isEmpty(iui.getTemplate())) {
-							throw new IllegalArgumentException("template of InputUI[" + iui.getName() + "] can not be empty!");
+				for (InputUI iui : action.getSortedInputUIList()) {
+					if (Strings.isEmpty(iui.getTemplate())) {
+						throw new IllegalArgumentException("template of InputUI[" + iui.getName() + "] can not be empty!");
+					}
+
+//					System.out.println("INPUT: " + Jsons.toJson(iui, true));
+
+					wrapper.put("ui", iui);
+
+					String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" +iui.getName();
+
+					for (String t : iui.getTemplates()) {
+						if ("view".equals(t) || "print".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_" + t));
 						}
-
-//						System.out.println("INPUT: " + Jsons.toJson(iui, true));
-
-						wrapper.put("ui", iui);
-
-						String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" +iui.getName();
-
-						for (String t : iui.getTemplates()) {
-							if ("view".equals(t) || "print".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_" + t));
-							}
-							else if ("delete".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
-								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
-							}
-							else if ("insert".equals(t) || "copy".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_insert"));
-								processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_insert_confirm"));
-								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_insert_success"));
-							}
-							else if ("update".equals(t)) {
-								processTpl(pkg, uin + ".ftl", wrapper, findTpl("_update"));
-								processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_update_confirm"));
-								processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_update_success"));
-							}
+						else if ("delete".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
+						}
+						else if ("insert".equals(t) || "copy".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_insert"));
+							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_insert_confirm"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_insert_success"));
+						}
+						else if ("update".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_update"));
+							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_update_confirm"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_update_success"));
 						}
 					}
 				}

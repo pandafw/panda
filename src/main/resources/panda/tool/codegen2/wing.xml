@@ -7,7 +7,7 @@
 			<param name="toolbar" value="${list.toolbar}"/>
 			<param name="actions" value="${list.actions}"/>
 			<param name="options" value="${list.options}"/>
-			<param name="buttons" value="${list.butons}"/>
+			<param name="buttons" value="${list.buttons}"/>
 		</list>
 		<list name="uList" extend="baseList">
 			<column name="uusid" hidden="false" sortable="true" link="false" order="100400">

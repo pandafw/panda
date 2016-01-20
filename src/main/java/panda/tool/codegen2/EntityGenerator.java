@@ -123,6 +123,16 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 	}
 
+	private boolean isObjectField(EntityProperty p) {
+		if ("boolean".equals(p.getFieldKind())
+				|| "date".equals(p.getFieldKind())
+				|| "number".equals(p.getFieldKind())
+				|| "string".equals(p.getFieldKind())) {
+			return false;
+		}
+		return true;
+	}
+	
 	protected Set<String> setJavaEntityQueryImportList(Map<String, Object> wrapper, Entity entity) {
 		Set<String> imports = new TreeSet<String>();
 
@@ -142,12 +152,14 @@ public class EntityGenerator extends AbstractCodeGenerator {
 //			addFieldCondition(imports, p);
 //		}
 		for (EntityProperty p : ps) {
-			String type = p.getFullJavaType();
-			if (type.endsWith("[]")) {
-				type = type.substring(0, type.length() - 2);
-			}
-			if (!Strings.contains(type, '<')) {
-				addImportType(imports, type);
+			if ((p.isDbColumn() || p.isJoinColumn()) && !isObjectField(p)) {
+				String type = p.getFullJavaType();
+				if (type.endsWith("[]")) {
+					type = type.substring(0, type.length() - 2);
+				}
+				if (!Strings.contains(type, '<')) {
+					addImportType(imports, type);
+				}
 			}
 		}
 
