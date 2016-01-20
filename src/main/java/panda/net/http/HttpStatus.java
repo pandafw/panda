@@ -401,4 +401,11 @@ public class HttpStatus {
 	public String getReason() {
 		return reason;
 	}
+	
+	/**
+	 * @return status string
+	 */
+	public String toString() {
+		return status + ": " + reason;
+	}
 }
