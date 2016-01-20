@@ -99,11 +99,6 @@ public interface RC {
 	public final static String ERROR_DATA_NOTFOUND = "error-data-notfound";
 	
 	/**
-	 * ERROR_DATA_LIST_EMPTY = "error-data-list-empty";
-	 */
-	public final static String ERROR_DATA_LIST_EMPTY = "error-data-list-empty";
-	
-	/**
 	 * ERROR_DATA_DUPLICATE = "error-data-duplicate";
 	 */
 	public final static String ERROR_DATA_DUPLICATE = "error-data-duplicate";
@@ -195,4 +190,22 @@ public interface RC {
 	 * MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
 	 */
 	public final static String MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
+
+	//------------------------------------------------------------
+	// ACTION MESSAGE PREFIX
+	//------------------------------------------------------------
+	/**
+	 * ACTION_SUCCESS_PREFIX = "action-success-";
+	 */
+	public final static String ACTION_SUCCESS_PREFIX = "action-success-";
+	
+	/**
+	 * ACTION_CONFIRM_PREFIX = "action-confirm-";
+	 */
+	public final static String ACTION_CONFIRM_PREFIX = "action-confirm-";
+	
+	/**
+	 * ACTION_FAILED_PREFIX = "action-failed-";
+	 */
+	public final static String ACTION_FAILED_PREFIX = "action-failed-";
 }

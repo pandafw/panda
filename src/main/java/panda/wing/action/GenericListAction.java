@@ -10,8 +10,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import panda.dao.Dao;
-import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.query.GenericQuery;
 import panda.lang.Collections;
@@ -35,7 +33,7 @@ import panda.wing.constant.VC;
 /**
  * @param <T> data type
  */
-public abstract class GenericListAction<T> extends AbstractAction {
+public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * STATE_LIST = "list";
 	 */
@@ -47,13 +45,6 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	private Boolean _load;
 	private Boolean _save;
 	private Boolean listCountable;
-
-	//------------------------------------------------------------
-	// entity properties
-	//------------------------------------------------------------
-	private Class<T> type;
-	private Entity<T> entity;
-	private EntityDao<T> entityDao;
 
 	//------------------------------------------------------------
 	// result properties
@@ -123,54 +114,8 @@ public abstract class GenericListAction<T> extends AbstractAction {
 	}
 
 	//------------------------------------------------------------
-	// public getter
-	//------------------------------------------------------------
-	/**
-	 * @return the type
-	 */
-	public Class<T> getT() {
-		return type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public Class<T> getType() {
-		return type;
-	}
-
-	//------------------------------------------------------------
 	// option properties
 	//------------------------------------------------------------
-	/**
-	 * @param type the type to set
-	 */
-	protected void setType(Class<T> type) {
-		this.type = type;
-	}
-
-	protected Entity<T> getEntity() {
-		if (entity == null) {
-			entity = getDaoClient().getEntity(type);
-		}
-		return entity;
-	}
-	
-	protected EntityDao<T> getEntityDao() {
-		if (entityDao == null) {
-			entityDao = getDaoClient().getEntityDao(type);
-		}
-		return entityDao;
-	}
-	
-	protected Dao getDao() {
-		return getEntityDao().getDao();
-	}
-	
-	protected <X> EntityDao<X> getEntityDao(Class<X> type) {
-		return getEntityDao().getDao().getEntityDao(type);
-	}
-	
 	/**
 	 * @return the load
 	 */
@@ -413,12 +358,13 @@ public abstract class GenericListAction<T> extends AbstractAction {
 		addQueryOrder(gq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
+		if (listCountable == null) {
+			listCountable = getTextAsBoolean(RC.UI_LIST_COUNTABLE, true);
+		}
+
 		final EntityDao<T> dao = getEntityDao();
 		dao.exec(new Runnable() {
 			public void run() {
-				if (listCountable == null) {
-					listCountable = getTextAsBoolean(RC.UI_LIST_COUNTABLE, true);
-				}
 				if (listCountable) {
 					qr.getPager().setTotal(daoCount(gq));
 					qr.getPager().normalize();

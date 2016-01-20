@@ -6,120 +6,133 @@
 
 <div class="p-section">
 	<div class="p-header">
-		<h3><@p.i icon="icon"/> <@p.text name="title-bdelete"><@p.param name="title" value="#(title)"/></@p.text></h3>
+		<ol class="breadcrumb">
+			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
+			<li class="active"><@p.text name="step-bdelete"/></li>
+		</ol>
 	</div>
 
 	<#include "/action-alert.ftl"/>
 	<br/>
 
+<#if result?has_content>
 	<#assign _columns_ = [{
-		"name": "_number_",
-		"type": "number",
-		"nowrap": true,
+		"name": "_rownum_",
+		"type": "rownum",
+		"header": text.getText("listview-th-rownum", ""),
 		"fixed": true
 	}, {
 		"name": "_check_",
 		"type": "check",
-		"nowrap": true,
 		"fixed": true
 	}{
 		"name": "id",
 		"pkey" : true,
-		"header": action.getText("bdelete-column-id", ""), 
+		"value": true,
+		"header": text.getText("a.t.id"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-id-tip", "")			
+		"tooltip": text.getText("a.t.id-tip", "")
 	}, {
 		"name": "clazz",
-		"header": action.getText("bdelete-column-clazz", ""), 
+		"header": text.getText("a.t.clazz"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-clazz-tip", "")			
+		"tooltip": text.getText("a.t.clazz-tip", "")
 	}, {
 		"name": "language",
-		"header": action.getText("bdelete-column-language", ""), 
+		"header": text.getText("a.t.language"),
 		"format": {
-			"type": "code",
-			"codemap": "consts.localeLanguageMap"
-		},
+			"codemap": consts.localeLanguageMap,
+			"type": "code"
+			},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-language-tip", "")			
+		"tooltip": text.getText("a.t.language-tip", "")
 	}, {
 		"name": "country",
-		"header": action.getText("bdelete-column-country", ""), 
+		"header": text.getText("a.t.country"),
 		"format": {
-			"type": "code",
-			"codemap": "consts.localeCountryMap"
-		},
+			"codemap": consts.localeCountryMap,
+			"type": "code"
+			},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-country-tip", "")			
+		"tooltip": text.getText("a.t.country-tip", "")
 	}, {
 		"name": "name",
-		"header": action.getText("bdelete-column-name", ""), 
+		"header": text.getText("a.t.name"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-name-tip", "")			
+		"tooltip": text.getText("a.t.name-tip", "")
 	}, {
 		"name": "value",
-		"header": action.getText("bdelete-column-value", ""), 
+		"header": text.getText("a.t.value"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-value-tip", "")			
+		"tooltip": text.getText("a.t.value-tip", "")
 	}, {
 		"name": "memo",
-		"header": action.getText("bdelete-column-memo", ""), 
+		"header": text.getText("a.t.memo"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-memo-tip", "")			
+		"tooltip": text.getText("a.t.memo-tip", "")
 	}, {
 		"name": "status",
-		"header": action.getText("bdelete-column-status", ""), 
+		"header": text.getText("a.t.status"),
 		"format": {
-			"type": "code",
-			"codemap": "consts.dataStatusMap"
-		},
+			"codemap": consts.dataStatusMap,
+			"type": "code"
+			},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-status-tip", "")			
+		"tooltip": text.getText("a.t.status-tip", "")
 	}, {
 		"name": "uusid",
-		"header": action.getText("bdelete-column-uusid", ""), 
+		"header": text.getText("a.t.uusid"),
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-uusid-tip", "")			
+		"tooltip": text.getText("a.t.uusid-tip", "")
 	}, {
 		"name": "utime",
-		"header": action.getText("bdelete-column-utime", ""), 
+		"header": text.getText("a.t.utime"),
 		"format": {
 			"type": "datetime"
-		},
+			},
 		"hidden": false,
 		"sortable": false,
-		"tooltip": action.getText("bdelete-column-utime-tip", "")			
+		"tooltip": text.getText("a.t.utime-tip", "")
 	}] />
 
 	<@p.listview id="property_bdelete"
-		action="property_bdelete_execute" method="post"
-		list="ds" columns=_columns_ cssColumn="status"
-	>
-	</@p.listview>
+		action="~/bdelete_execute" method="post"
+		list=result columns=_columns_ cssColumn="status"
+		cssTable="table-hover table-striped"
+	/>
 	
 	<br/>
 	<div class="p-tcenter">
 		<@p.submit icon="icon-bdelete-execute" onclick="return property_bdelete_submit();" theme="simple"><@p.text name="button-bdelete-execute"/></@p.submit>
+		
+	<#if action.hasPermission("~/list")>
+		<@p.a btn="default" icon="icon-list" action="~/list" label="#(button-list)"/>
+	</#if>
 
 		<script type="text/javascript"><!--
 			function property_bdelete_submit() {
-				return nlv_submitCheckedKeys('property_bdelete');
+				return plv_submitCheckedKeys('property_bdelete');
 			}
 			
-			$(function() {
-				nlv_checkAll('property_bdelete');
-			});
+			function onPageLoad() {
+				plv_checkAll('property_bdelete');
+			}
 		--></script>
 	</div>
+<#else>
+	<div class="p-tcenter">
+		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
+	</div>
+</#if>
 </div>
 
 </body>

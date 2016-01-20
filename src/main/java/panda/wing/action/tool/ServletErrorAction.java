@@ -15,11 +15,11 @@ public class ServletErrorAction extends AbstractAction {
 	
 	@At("(.*)$")
 	public Object execute(String error) {
-		Object sc = getRequest().getAttribute(HttpServlets.ERROR_STATUS_CODE_ATTRIBUTE);
+		Object sc = getRequest().getAttribute(HttpServlets.SERVLET_ERROR_STATUS_CODE);
 		if (sc == null) {
 			sc = Numbers.toInt(FileNames.getBaseName(error));
 			if (sc != null) {
-				getRequest().setAttribute(HttpServlets.ERROR_STATUS_CODE_ATTRIBUTE, sc);
+				getRequest().setAttribute(HttpServlets.SERVLET_ERROR_STATUS_CODE, sc);
 			}
 		}
 

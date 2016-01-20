@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import panda.cast.Castors;
-import panda.dao.Dao;
 import panda.dao.entity.Entity;
-import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
@@ -20,7 +18,6 @@ import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.tag.Property;
 import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
@@ -30,115 +27,19 @@ import panda.wing.entity.IUpdate;
 /**
  * @param <T> data type
  */
-public abstract class GenericEditAction<T> extends AbstractAction {
+public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	private static final Log log = Logs.getLog(GenericEditAction.class);
 	
-	/**
-	 * RESULT_CONFIRM = "confirm";
-	 */
-	public final static String RESULT_CONFIRM = "confirm";
-	
-	/**
-	 * RESULT_SUCCESS = "success";
-	 */
-	public final static String RESULT_SUCCESS = "success";
-
-	/**
-	 * METHOD_SEPARATOR = "_";
-	 */
-	public final static String METHOD_SEPARATOR = "_";
-
-	//------------------------------------------------------------
-	// ACTION MESSAGE PREFIX
-	//------------------------------------------------------------
-	/**
-	 * ACTION_SUCCESS_PREFIX = "action-success-";
-	 */
-	public final static String ACTION_SUCCESS_PREFIX = "action-success-";
-	
-	/**
-	 * ACTION_CONFIRM_PREFIX = "action-confirm-";
-	 */
-	public final static String ACTION_CONFIRM_PREFIX = "action-confirm-";
-	
-	/**
-	 * ACTION_FAILED_PREFIX = "action-failed-";
-	 */
-	public final static String ACTION_FAILED_PREFIX = "action-failed-";
-	
-	//------------------------------------------------------------
-	// scenario & result
-	//------------------------------------------------------------
-	private Object result;
-	private String actionScenario;
-	private String[] viewScenarios = { "view", "print", "delete" };
-
 	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
 	private boolean checkAbortOnError = false;
 	private boolean updateSelective = false;
 
-	//------------------------------------------------------------
-	// entity properties
-	//------------------------------------------------------------
-	private Class<T> type;
-	private Entity<T> entity;
-	private EntityDao<T> entityDao;
-
 	/**
 	 * Constructor 
 	 */
 	public GenericEditAction() {
-	}
-
-	/**
-	 * @return the type
-	 */
-	protected Class<T> getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	protected void setType(Class<T> type) {
-		this.type = type;
-	}
-
-	protected Entity<T> getEntity() {
-		if (entity == null) {
-			entity = getDaoClient().getEntity(type);
-		}
-		return entity;
-	}
-	
-	protected EntityDao<T> getEntityDao() {
-		if (entityDao == null) {
-			entityDao = getDaoClient().getEntityDao(type);
-		}
-		return entityDao;
-	}
-	
-	protected Dao getDao() {
-		return getEntityDao().getDao();
-	}
-	
-	protected <X> EntityDao<X> getEntityDao(Class<X> type) {
-		return getEntityDao().getDao().getEntityDao(type);
-	}
-	
-	//------------------------------------------------------------
-	// public properties getter
-	//------------------------------------------------------------
-	/**
-	 * @return the actionScenario
-	 */
-	public String getActionScenario() {
-		if (actionScenario == null) {
-			actionScenario = Strings.substringBefore(context.getMethodName(), METHOD_SEPARATOR);
-		}
-		return actionScenario;
 	}
 
 	//------------------------------------------------------------
@@ -173,34 +74,8 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	}
 
 	/**
-	 * @return the viewScenarios
+	 * set result on ?_execute check error occurs  
 	 */
-	protected String[] getViewScenarios() {
-		return viewScenarios;
-	}
-
-	/**
-	 * @param viewScenarios the viewScenarios to set
-	 */
-	protected void setViewScenarios(String[] viewScenarios) {
-		this.viewScenarios = viewScenarios;
-	}
-
-	/**
-	 * @param actionScenario the actionScenario to set
-	 */
-	protected void setActionScenario(String actionScenario) {
-		this.actionScenario = actionScenario;
-	}
-
-	protected void setScenarioResult() {
-		result = new SitemeshFreemarkerView("~" + getActionScenario());
-	}
-
-	protected void setScenarioResult(String step) {
-		result = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
-	}
-
 	protected void setResultOnExecCheckError() {
 		if (hasActionErrors() || hasFieldErrors() || !isInputConfirm()) {
 			setScenarioResult();
@@ -457,14 +332,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// do method
 	//------------------------------------------------------------
-	protected Object doResult(Object r) {
-		if (result == null) {
-			return r;
-		}
-		getContext().setResult(r);
-		return result;
-	}
-
 	/**
 	 * doViewInput 
 	 */
@@ -520,7 +387,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	protected Object doInsertConfirm(T data) {
 		data = prepareDefaultData(data);
 		if (checkOnInsert(data)) {
-			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
 		else {
 			if (hasActionErrors() || hasFieldErrors()) {
@@ -551,7 +418,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
-			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return data;
 		}
@@ -559,7 +426,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 			finalInsert(data);
 		}
 
-		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
 		return data;
 	}
 
@@ -584,7 +451,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 		T sd = selectData(data);
 		if (sd != null) {
 			if (checkOnUpdate(data, sd)) {
-				addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+				addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 			}
 			else {
 				if (hasActionErrors() || hasFieldErrors()) {
@@ -623,7 +490,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
-			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return data;
 		}
@@ -631,7 +498,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 			finalUpdate(data, sd);
 		}
 
-		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
 		return data;
 	}
 
@@ -645,7 +512,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 		}
 		
 		if (checkOnDelete(key, sd)) {
-			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
 		return sd;
 	}
@@ -673,7 +540,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
-			addActionError(getMessage(ACTION_FAILED_PREFIX + getActionScenario(), e.getMessage()));
+			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return sd;
 		}
@@ -681,35 +548,32 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 			finalDelete(sd);
 		}
 		
-		addActionMessage(getMessage(ACTION_SUCCESS_PREFIX + getActionScenario()));
+		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
 		return sd;
 	}
 
 	//------------------------------------------------------------
-	// overridable methods
+	// data methods
 	//------------------------------------------------------------
 	/**
-	 * getMessage
-	 * @param msg msg id
-	 * @return message string
+	 * trim data
+	 * @param d data object
 	 */
-	protected String getMessage(String msg) {
-		return getText(msg);
-	}
-	
-	/**
-	 * getMessage
-	 * @param msg msg id
-	 * @param params parameters
-	 * @return message string
-	 */
-	protected String getMessage(String msg, String param) {
-		return getText(msg, msg, param);
-	}
-
 	protected void trimData(T d) {
 	}
 	
+	/**
+	 * prepareDefaultData
+	 * @param data data
+	 * @return data
+	 */
+	protected T prepareDefaultData(T data) {
+		if (data == null) {
+			data = Classes.born(type);
+		}
+		return data;
+	}
+
 	//------------------------------------------------------------
 	// select methods
 	//------------------------------------------------------------
@@ -748,18 +612,6 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// insert methods
 	//------------------------------------------------------------
-	/**
-	 * prepareDefaultData
-	 * @param data data
-	 * @return data
-	 */
-	protected T prepareDefaultData(T data) {
-		if (data == null) {
-			data = Classes.born(type);
-		}
-		return data;
-	}
-
 	/**
 	 * checkOnInsert
 	 * @param data data
@@ -1203,7 +1055,7 @@ public abstract class GenericEditAction<T> extends AbstractAction {
 	 */
 	protected boolean checkUpdatedOnDelete(T data, T srcData) {
 		if (!checkUpdated(data, srcData)) {
-			addActionConfirm(getMessage(ACTION_CONFIRM_PREFIX + getActionScenario()));
+			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 			setScenarioResult();
 			return false;
 		}

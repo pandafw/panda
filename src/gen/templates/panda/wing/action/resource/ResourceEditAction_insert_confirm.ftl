@@ -14,7 +14,7 @@
 	</div>
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list"><@p.text name='button-list'/></@p.a>
+<#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -68,7 +68,7 @@
 	</@p.form>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btype="default" icon="back" href="#" onclick="window.history.back();return false;"><@p.text name="button-back"/></@p.a>
+		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
 	</div>
 </#if>
 </div>

@@ -6,9 +6,6 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
-import panda.mvc.validation.Validators;
-import panda.mvc.validation.annotation.Validate;
-import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.GenericEditAction;
 
 public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> {

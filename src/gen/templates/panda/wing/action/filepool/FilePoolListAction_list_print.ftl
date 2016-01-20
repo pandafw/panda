@@ -15,7 +15,6 @@
 			"name": "_number_",
 			"type": "number",
 			"header": text.getText("listview-th-number", ""),
-			"nowrap": true,
 			"fixed": true
 		}, {
 			"name": "id",

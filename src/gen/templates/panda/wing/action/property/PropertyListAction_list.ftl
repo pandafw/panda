@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)"><@p.text name='button-refresh'/></@p.a>
+		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
 </li>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -22,7 +22,6 @@
 		"name": "_number_",
 		"type": "number",
 		"header": text.getText("listview-th-number", ""),
-		"nowrap": true,
 		"fixed": true
 	}] />
 
@@ -68,7 +67,6 @@
 			"type": "actions",
 			"header": _ash_,
 			"actions": _actions_,
-			"nowrap": true,
 			"fixed": true
 		}] />
 	</#if>
@@ -80,7 +78,6 @@
 		<#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
-			"nowrap": true,
 			"fixed": true
 		}] />
 	</#if>
@@ -213,22 +210,19 @@
 	</#if>
 	<@p.set var="lvtools">
 		<#if action.hasPermission("~/bdelete")>
-			<@p.submit icon="icon-bdelete" action="property_bdelete" onclick="return property_list_bdelete();" theme="simple"><@p.text name="button-bdelete"/></@p.submit>
+			<@p.b icon="icon-bdelete" onclick="return property_list_bdelete();" label="#(button-bdelete)"/>
 		</#if>
 		<#if action.hasPermission("~/list_print")>
-			<@p.submit icon="icon-print" onclick="return property_list_print();" theme="simple"><@p.text name="button-print"/></@p.submit>
+			<@p.b icon="icon-print" onclick="return property_list_print();" label="#(button-print)"/>
 		</#if>
 		<#if action.hasPermission("~/list_csv")>
-			<@p.submit icon="icon-csv" onclick="return property_list_csv();" theme="simple"><@p.text name="button-csv"/></@p.submit>
+			<@p.b icon="icon-csv" onclick="return property_list_csv();" label="#(button-csv)"/>
 		</#if>
 		<#if action.hasPermission("~/list_json")>
-			<@p.submit icon="icon-json" onclick="return property_list_json();" theme="simple"><@p.text name="button-json"/></@p.submit>
+			<@p.b icon="icon-json" onclick="return property_list_json();" label="#(button-json)"/>
 		</#if>
 		<#if action.hasPermission("~/list_xml")>
-			<@p.submit icon="icon-xml" onclick="return property_list_xml();" theme="simple"><@p.text name="button-xml"/></@p.submit>
-		</#if>
-		<#if action.hasPermission("/pdf")>
-			<@p.submit icon="icon-pdf" onclick="return property_list_pdf();" theme="simple"><@p.text name="button-pdf"/></@p.submit>
+			<@p.b icon="icon-xml" onclick="return property_list_xml();" label="#(button-xml)"/>
 		</#if>
 	</@p.set>
 
@@ -257,10 +251,6 @@
 		}
 		function property_list_xml() {
 			window.open("<@p.url action='~/list_xml' includeParams='all' escapeAmp='false'/>");
-			return false;
-		}
-		function property_list_pdf() {
-			window.open("<@p.url action='/pdf' escapeAmp='false'/>?url=" + encodeURIComponent("<@p.url action='~/list_print' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search));
 			return false;
 		}
 	--></script>
