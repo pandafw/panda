@@ -503,16 +503,17 @@ tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions
 
 thead.p-lv-chead > tr > th, thead.p-lv-chead > tr > th .p-lv-cell,
 thead.p-lv-chead > tr > th.p-lv-actions, thead.p-lv-chead > tr > th.p-lv-actions .p-lv-cell,
-thead.p-lv-chead > tr > th.p-lv-number,  thead.p-lv-chead > tr > th.p-lv-number .p-lv-cell,
 thead.p-lv-chead > tr > th.p-lv-check,   thead.p-lv-chead > tr > th.p-lv-check .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-number,  thead.p-lv-chead > tr > th.p-lv-number .p-lv-cell,
+thead.p-lv-chead > tr > th.p-lv-rownum,  thead.p-lv-chead > tr > th.p-lv-rownum .p-lv-cell,
+tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > th.p-lv-actions .p-lv-cell, 
+tbody.p-lv-tbody > tr > th.p-lv-check,   tbody.p-lv-tbody > tr > th.p-lv-check .p-lv-cell, 
 tbody.p-lv-tbody > tr > th.p-lv-number,  tbody.p-lv-tbody > tr > th.p-lv-number .p-lv-cell, 
 tbody.p-lv-tbody > tr > th.p-lv-rownum,  tbody.p-lv-tbody > tr > th.p-lv-rownum .p-lv-cell, 
-tbody.p-lv-tbody > tr > th.p-lv-check,   tbody.p-lv-tbody > tr > th.p-lv-check .p-lv-cell, 
-tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > th.p-lv-actions .p-lv-cell, 
-tbody.p-lv-tbody > tr > td.p-lv-number,  tbody.p-lv-tbody > tr > td.p-lv-number .p-lv-cell,
-tbody.p-lv-tbody > tr > td.p-lv-rownum,  tbody.p-lv-tbody > tr > td.p-lv-rownum .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions .p-lv-cell,
 tbody.p-lv-tbody > tr > td.p-lv-check,   tbody.p-lv-tbody > tr > td.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody > tr > td.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions .p-lv-cell {
+tbody.p-lv-tbody > tr > td.p-lv-number,  tbody.p-lv-tbody > tr > td.p-lv-number .p-lv-cell,
+tbody.p-lv-tbody > tr > td.p-lv-rownum,  tbody.p-lv-tbody > tr > td.p-lv-rownum .p-lv-cell {
 	white-space: nowrap;
 }
 
