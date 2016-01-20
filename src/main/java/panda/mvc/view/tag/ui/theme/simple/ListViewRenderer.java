@@ -863,7 +863,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						write(String.valueOf(inx + 1));
 					}
 					else if ("number".equals(ctype)) {
-						write(String.valueOf((queryer != null || queryer.getPager() == null) ? 0 : queryer.getPager().getStart() + inx + 1));
+						write(String.valueOf((queryer == null || queryer.getPager() == null) ? 0 : queryer.getPager().getStart() + inx + 1));
 					}
 					else if ("check".equals(ctype)) {
 						write("<input type=\"checkbox\" class=\"checkbox p-lv-cb\" value=\"" + inx + "\"/>");
