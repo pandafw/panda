@@ -31,7 +31,7 @@ import panda.mvc.util.UrlBuilder;
  */
 @IocBean(singleton=false)
 public class Anchor extends UIBean {
-	protected String btype;
+	protected String btn;
 	protected String icon;
 	protected String sicon;
 	protected String href;
@@ -74,10 +74,10 @@ public class Anchor extends UIBean {
 
 	//---------------------------------------------------------
 	/**
-	 * @return the btype
+	 * @return the btn
 	 */
-	public String getBtype() {
-		return btype;
+	public String getBtn() {
+		return btn;
 	}
 
 	/**
@@ -116,10 +116,10 @@ public class Anchor extends UIBean {
 	}
 
 	/**
-	 * @param btype the icon to set
+	 * @param btn the button to set
 	 */
-	public void setBtype(String btype) {
-		this.btype = btype;
+	public void setBtn(String btn) {
+		this.btn = btn;
 	}
 
 	/**

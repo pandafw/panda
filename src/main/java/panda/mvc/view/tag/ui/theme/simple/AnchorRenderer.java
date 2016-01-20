@@ -21,15 +21,15 @@ public class AnchorRenderer extends AbstractEndRenderer<Anchor> {
 		String icon = tag.getIcon();
 		String body = tag.getBody();
 		String sicon = tag.getSicon();
-		String btype = tag.getBtype();
-		if (Strings.isNotEmpty(btype)) {
-			btype = "btn btn-" + btype;
+		String btn = tag.getBtn();
+		if (Strings.isNotEmpty(btn)) {
+			btn = "btn btn-" + btn;
 		}
 		
 		attr.id(tag)
 			.href(tag)
 			.target(tag)
-			.cssClass(tag, btype)
+			.cssClass(tag, btn)
 			.disabled(tag)
 			.tabindex(tag)
 			.title(tag)
