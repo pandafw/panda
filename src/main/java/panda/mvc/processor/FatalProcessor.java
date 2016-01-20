@@ -24,6 +24,7 @@ public class FatalProcessor extends ViewProcessor {
 			View view = evalView(ac.getIoc(), ac.getInfo().getFatalView());
 			if (view != null) {
 				try {
+					HttpServlets.safeReset(ac.getResponse());
 					view.render(ac);
 					return;
 				}
@@ -33,8 +34,10 @@ public class FatalProcessor extends ViewProcessor {
 			}
 
 			try {
-				HttpServlets.saveException(ac.getRequest(), e);
+				HttpServlets.saveServletException(ac.getRequest(), e);
+				HttpServlets.safeReset(ac.getResponse());
 				HttpStatusView.SERVER_ERROR.render(ac);
+				HttpServlets.clearServletException(ac.getRequest(), e);
 			}
 			catch (Throwable e3) {
 				log.error("Failed to send exception", e3);

@@ -64,6 +64,14 @@ public class ActionAssist extends ActionSupport {
 		return HttpServlets.getServletException(getRequest());
 	}
 	
+	public Integer getServletErrorCode() {
+		return HttpServlets.getServletErrorCode(getRequest());
+	}
+	
+	public String getServletErrorMessage() {
+		return HttpServlets.getServletErrorMessage(getRequest());
+	}
+	
 	/**
 	 * @return servlet exception stack trace
 	 */

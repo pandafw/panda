@@ -1,10 +1,10 @@
-<#assign status_code = (req["javax.servlet.error.status_code"]!500) />
+<#assign status_code = (assist.servletErrorCode!500) />
 <#assign title = action.getText("servlet-error-title-" + status_code, "")/>
 <#if !(title?has_content)><#assign title = assist.getServletErrorReason(status_code)/></#if>
 <#assign title = status_code + " " + title/>
 <#assign message = action.getText("servlet-error-message-" + status_code, "")/>
 <#if !(message?has_content)><#assign message = action.getText("servlet-error-message", "", [status_code])/></#if>
-<#if !(message?has_content)><#assign message = req["javax.servlet-error-message"]!''/></#if>
+<#if !(message?has_content)><#assign message = assist.servletErrorMessage!''/></#if>
 <html>
 <head>
 <title>${title}</title>
@@ -23,7 +23,7 @@
 			</li>
 		</ul>
 	</div>
-<#if req['javax.servlet.error.exception']??>
+<#if assist.servletException??>
 	<#if assist.debugEnabled>
 	<div class="alert alert-warning p-exception">
 		<h5>${action.getText('servlet-error-exception')}</h5>

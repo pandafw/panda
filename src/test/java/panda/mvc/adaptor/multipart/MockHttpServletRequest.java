@@ -493,11 +493,13 @@ class MockHttpServletRequest implements HttpServletRequest {
 			return in.read(b, off, len);
 		}
 
+		@SuppressWarnings("unused")
 		public boolean isFinished() {
 			// TODO Auto-generated method stub
 			return false;
 		}
 
+		@SuppressWarnings("unused")
 		public boolean isReady() {
 			// TODO Auto-generated method stub
 			return false;

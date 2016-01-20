@@ -7,11 +7,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,26 +46,32 @@ import panda.net.http.UserAgent;
 public class HttpServlets {
 
 	/**
+	 * Standard Servlet spec context attribute that specifies a temporary
+	 * directory for the current web application, of type <code>java.io.File</code>.
+	 */
+	public static final String SERVLET_TEMP_DIR_CONTEXT = "javax.servlet.context.tempdir";
+
+	/**
 	 * Standard Servlet 2.3+ spec request attributes for include URI and paths.
 	 * <p>If included via a RequestDispatcher, the current resource will see the
 	 * originating request. Its own URI and paths are exposed as request attributes.
 	 */
-	public static final String INCLUDE_REQUEST_URI_ATTRIBUTE = "javax.servlet.include.request_uri";
-	public static final String INCLUDE_CONTEXT_PATH_ATTRIBUTE = "javax.servlet.include.context_path";
-	public static final String INCLUDE_SERVLET_PATH_ATTRIBUTE = "javax.servlet.include.servlet_path";
-	public static final String INCLUDE_PATH_INFO_ATTRIBUTE = "javax.servlet.include.path_info";
-	public static final String INCLUDE_QUERY_STRING_ATTRIBUTE = "javax.servlet.include.query_string";
+	public static final String SERVLET_INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+	public static final String SERVLET_INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
+	public static final String SERVLET_INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
+	public static final String SERVLET_INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
+	public static final String SERVLET_INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
 
 	/**
 	 * Standard Servlet 2.4+ spec request attributes for forward URI and paths.
 	 * <p>If forwarded to via a RequestDispatcher, the current resource will see its
 	 * own URI and paths. The originating URI and paths are exposed as request attributes.
 	 */
-	public static final String FORWARD_REQUEST_URI_ATTRIBUTE = "javax.servlet.forward.request_uri";
-	public static final String FORWARD_CONTEXT_PATH_ATTRIBUTE = "javax.servlet.forward.context_path";
-	public static final String FORWARD_SERVLET_PATH_ATTRIBUTE = "javax.servlet.forward.servlet_path";
-	public static final String FORWARD_PATH_INFO_ATTRIBUTE = "javax.servlet.forward.path_info";
-	public static final String FORWARD_QUERY_STRING_ATTRIBUTE = "javax.servlet.forward.query_string";
+	public static final String SERVLET_FORWARD_REQUEST_URI = "javax.servlet.forward.request_uri";
+	public static final String SERVLET_FORWARD_CONTEXT_PATH = "javax.servlet.forward.context_path";
+	public static final String SERVLET_FORWARD_SERVLET_PATH = "javax.servlet.forward.servlet_path";
+	public static final String SERVLET_FORWARD_PATH_INFO = "javax.servlet.forward.path_info";
+	public static final String SERVLET_FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
 
 	/**
 	 * Standard Servlet 2.3+ spec request attributes for error pages.
@@ -71,13 +79,13 @@ public class HttpServlets {
 	 * to them directly rather than through the servlet container's error page
 	 * resolution mechanism.
 	 */
-	public static final String ERROR_STATUS_CODE_ATTRIBUTE = "javax.servlet.error.status_code";
-	public static final String ERROR_EXCEPTION_TYPE_ATTRIBUTE = "javax.servlet.error.exception_type";
-	public static final String ERROR_MESSAGE_ATTRIBUTE = "javax.servlet.error.message";
-	public static final String ERROR_EXCEPTION_ATTRIBUTE = "javax.servlet.error.exception";
-	public static final String ERROR_JSP_EXCEPTION_ATTRIBUTE = "javax.servlet.error.JspException";
-	public static final String ERROR_REQUEST_URI_ATTRIBUTE = "javax.servlet.error.request_uri";
-	public static final String ERROR_SERVLET_NAME_ATTRIBUTE = "javax.servlet.error.servlet_name";
+	public static final String SERVLET_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
+	public static final String SERVLET_ERROR_EXCEPTION_TYPE = "javax.servlet.error.exception_type";
+	public static final String SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
+	public static final String SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
+	public static final String SERVLET_ERROR_JSP_EXCEPTION = "javax.servlet.error.JspException";
+	public static final String SERVLET_ERROR_REQUEST_URI = "javax.servlet.error.request_uri";
+	public static final String SERVLET_ERROR_SERVLET_NAME = "javax.servlet.error.servlet_name";
 
 	public static final String CONTENT_TYPE_BOUNDARY = "boundary";
 	
@@ -91,12 +99,6 @@ public class HttpServlets {
 	 * returns <code>null</code>, according to the Servlet spec.
 	 */
 	public static final String DEFAULT_CHARACTER_ENCODING = Charsets.ISO_8859_1;
-
-	/**
-	 * Standard Servlet spec context attribute that specifies a temporary
-	 * directory for the current web application, of type <code>java.io.File</code>.
-	 */
-	public static final String TEMP_DIR_CONTEXT_ATTRIBUTE = "javax.servlet.context.tempdir";
 
 	public static boolean isFormUrlEncoded(HttpServletRequest request) {
 		String ct = request.getContentType();
@@ -120,7 +122,7 @@ public class HttpServlets {
 	 * @return requestURL + QueryString
 	 */
 	public static String getRequestLink(HttpServletRequest request) {
-		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
+		String uri = (String)request.getAttribute(SERVLET_FORWARD_REQUEST_URI);
 		String query = null;
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
@@ -128,7 +130,7 @@ public class HttpServlets {
 		}
 		else {
 			uri = URLHelper.decodeURL(uri);
-			query = (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
+			query = (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
 		}
 
 		return URLHelper.buildURL(request.getScheme(), request.getServerName(), request.getServerPort(), uri, query);
@@ -147,7 +149,7 @@ public class HttpServlets {
 	 * @return requestURI
 	 */
 	public static String getRequestURI(HttpServletRequest request) {
-		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
+		String uri = (String)request.getAttribute(SERVLET_FORWARD_REQUEST_URI);
 		if (Strings.isEmpty(uri)) {
 			uri = request.getRequestURI();
 		}
@@ -163,22 +165,14 @@ public class HttpServlets {
 		if (request == null) {
 			return null;
 		}
-		String uri = request.getRequestURI();
+		String uri = (String)request.getAttribute(SERVLET_INCLUDE_REQUEST_URI);
+		if (Strings.isEmpty(uri)) {
+			uri = request.getRequestURI();
+		}
 		uri = uri.substring(request.getContextPath().length());
 		uri = Strings.substringBefore(uri, ";jsessionid=");
 		uri = URLHelper.decodeURL(uri);
 		return uri;
-	}
-	
-	public static Throwable getServletException(HttpServletRequest request) {
-		// support for JSP exception pages, exposing the servlet or JSP exception
-		Throwable ex = (Throwable)request.getAttribute(ERROR_EXCEPTION_ATTRIBUTE);
-
-		if (ex == null) {
-			ex = (Throwable)request.getAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE);
-		}
-		
-		return ex;
 	}
 
 	/**
@@ -186,11 +180,11 @@ public class HttpServlets {
 	 * @return request query string
 	 */
 	public static String getRequestQuery(HttpServletRequest request) {
-		String uri = (String)request.getAttribute(FORWARD_REQUEST_URI_ATTRIBUTE);
+		String uri = (String)request.getAttribute(SERVLET_FORWARD_REQUEST_URI);
 		if (Strings.isEmpty(uri)) {
 			return request.getQueryString();
 		}
-		return (String)request.getAttribute(FORWARD_QUERY_STRING_ATTRIBUTE);
+		return (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
 	}
 
 	/**
@@ -213,17 +207,51 @@ public class HttpServlets {
 		return s;
 	}
 
-	public static void saveException(HttpServletRequest request, Throwable e) {
-		request.setAttribute(ERROR_EXCEPTION_ATTRIBUTE, e);
+	public static void safeReset(ServletResponse response) {
+		try {
+			response.reset();
+		}
+		catch (Exception e) {
+		}
+	}
+	
+	public static Integer getServletErrorCode(ServletRequest request) {
+		return (Integer)request.getAttribute(SERVLET_ERROR_STATUS_CODE);
+	}
+	
+	public static String getServletErrorMessage(ServletRequest request) {
+		return (String)request.getAttribute(SERVLET_ERROR_MESSAGE);
+	}
+	
+	public static Throwable getServletException(ServletRequest request) {
+		// support for JSP exception pages, exposing the servlet or JSP exception
+		Throwable ex = (Throwable)request.getAttribute(SERVLET_ERROR_EXCEPTION);
+
+		if (ex == null) {
+			ex = (Throwable)request.getAttribute(SERVLET_ERROR_JSP_EXCEPTION);
+		}
+		
+		return ex;
+	}
+	
+	public static void saveServletException(ServletRequest request, Throwable e) {
+		request.setAttribute(SERVLET_ERROR_EXCEPTION, e);
 
 		// for compatibility
-		request.setAttribute(ERROR_JSP_EXCEPTION_ATTRIBUTE, e);
+		request.setAttribute(SERVLET_ERROR_JSP_EXCEPTION, e);
+	}
+	
+	public static void clearServletException(ServletRequest request, Throwable e) {
+		request.removeAttribute(SERVLET_ERROR_EXCEPTION);
+
+		// for compatibility
+		request.removeAttribute(SERVLET_ERROR_JSP_EXCEPTION);
 	}
 
 	public static void sendException(HttpServletRequest request, HttpServletResponse response, Throwable e) throws IOException {
 		// send a http error response to use the servlet defined error handler
 		// make the exception availible to the web.xml defined error page
-		saveException(request, e);
+		saveServletException(request, e);
 
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
@@ -368,6 +396,45 @@ public class HttpServlets {
 		sb.append(" -> ");
 		sb.append(request.getRequestURL());
 		return sb.toString();
+	}
+
+	/**
+	 * dump request properties
+	 * @param request request
+	 * @return properties dump string
+	 */
+	public static String dumpRequestProperties(HttpServletRequest request) {
+		StringBuilder sb = new StringBuilder();
+		dumpRequestProperties(request, sb);
+		return sb.toString();
+	}
+
+	public static void dumpRequestProperties(HttpServletRequest request, Appendable writer) {
+		if (request == null)
+			return;
+
+		Map<String, Object> m = new LinkedHashMap<String, Object>();
+		m.put("characterEncoding", request.getCharacterEncoding());
+		m.put("contentLength", String.valueOf(request.getContentLength()));
+		m.put("contentType", request.getContentType());
+		m.put("local", '[' + request.getLocalAddr() + "]:" + request.getLocalPort());
+		m.put("protocol", request.getProtocol());
+		m.put("remote", '[' + request.getRemoteAddr() + "]:" + request.getRemotePort());
+		m.put("requestURI", request.getRequestURI());
+		m.put("requestURL", request.getRequestURL().toString());
+		m.put("scheme", request.getScheme());
+		m.put("server", request.getServerName() + ':' + request.getServerPort());
+		m.put("servlet", request.getServletPath() + ':' + request.getMethod());
+		m.put("pathInfo", request.getPathInfo());
+
+		Enumeration<String> em = request.getAttributeNames();
+		while (em.hasMoreElements()) {
+			String n = em.nextElement();
+			if (n.startsWith("javax.")) {
+				m.put(n, String.valueOf(request.getAttribute(n)));
+			}
+		}
+		Jsons.toJson(m, writer, 2);
 	}
 
 	/**

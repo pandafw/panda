@@ -25,6 +25,7 @@ import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
 import panda.mvc.ioc.SessionIocContext;
+import panda.servlet.HttpDelegateResponseWrapper;
 import panda.servlet.HttpServlets;
 
 public class ActionHandler {
@@ -155,6 +156,9 @@ public class ActionHandler {
 	}
 
 	public boolean handle(HttpServletRequest req, HttpServletResponse res) {
+		if (log.isTraceEnabled()) {
+			log.trace(config.getAppName() + " handle:\n" + HttpServlets.dumpRequestProperties(req));
+		}
 		String url = HttpServlets.getServletPath(req);
 		if (isExclusion(url)) {
 			return false;
@@ -196,7 +200,7 @@ public class ActionHandler {
 		ac.setIoc(ioc);
 		ac.setServlet(config.getServletContext());
 		ac.setRequest(req);
-		ac.setResponse(res);
+		ac.setResponse(new HttpDelegateResponseWrapper(res));
 
 		try {
 			ActionInvoker invoker = mapping.getActionInvoker(ac);
