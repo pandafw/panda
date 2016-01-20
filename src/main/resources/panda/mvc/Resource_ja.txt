@@ -165,7 +165,6 @@ validation-locale-invalid=言語と国・地域の組合せは正しくありま
 error-input=入力した内容に誤りがあります。
 error-input-detail=エラー詳細
 error-data-notfound=対象データが見つかりません。
-error-data-list-empty=対象データがありません。
 error-data-duplicate=該当データが既に登録されています。\n${top}
 error-fieldvalue-notnull=項目の値は空ではありません。
 error-fieldvalue-required=必須項目です。
@@ -381,3 +380,8 @@ step-insert-success=完了
 step-update=編集
 step-update-confirm=確認
 step-update-success=完了
+
+step-bdelete=削除
+step-bdelete-success=完了
+step-bupdate=更新
+step-bupdate-success=完了

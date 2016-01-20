@@ -77,6 +77,7 @@ pager-tooltip-last=Last Page ≫
 
 #listview
 listview-th-number=#
+listview-th-rownum=#
 
 #listview - sortable
 listview-sortable=true
@@ -518,3 +519,7 @@ step-update=Update
 step-update-confirm=Confirm
 step-update-success=Complete
 
+step-bdelete=Delete
+step-bdelete-success=Complete
+step-bupdate=Update
+step-bupdate-success=Complete

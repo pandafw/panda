@@ -164,7 +164,6 @@ validation-locale-invalid=语言和国家・地区的组合不正确。
 error-input=输入内容有错误。
 error-input-detail=错误信息
 error-data-notfound=该数据不存在。
-error-data-list-empty=対象数据不存在。
 error-data-duplicate=该数据已经被登录。\n${top}
 error-fieldvalue-notnull=该项目必须为空。
 error-fieldvalue-required=该项目不能为空。
@@ -369,19 +368,24 @@ title-bupdate_success=${top.title} - 变更 ⇒ 完成
 
 #step
 step-list=列表
-step-cancel=输入
-step-cancel-confirm=取消确认
-step-cancel-success=取消完成
-step-copy-input=输入
+step-cancel=取消
+step-cancel-confirm=确认
+step-cancel-success=完成
+step-copy-input=编辑
 step-copy-confirm=确认
 step-copy-success=完成
-step-delete-input=输入
-step-delete-confirm=删除确认
-step-delete-success=删除完成
-step-insert-input=输入
+step-delete-input=删除
+step-delete-confirm=确认
+step-delete-success=完成
+step-insert-input=编辑
 step-insert-confirm=确认
 step-insert-success=完成
-step-update-input=输入
+step-update-input=编辑
 step-update-confirm=确认
 step-update-success=完成
+
+step-bdelete=删除
+step-bdelete-success=完成
+step-bupdate=更新
+step-bupdate-success=完成
 
