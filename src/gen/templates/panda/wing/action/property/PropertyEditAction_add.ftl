@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-update"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-add"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li class="active"><@p.text name="step-update"/></li>
+			<li class="active"><@p.text name="step-add"/></li>
 		</ol>
 	</div>
 
@@ -18,12 +18,10 @@
 
 	<#include "/action-alert.ftl"/>
 
-<#if r??>
-	<@p.form cssClass="n-eform" id="property" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-eform" id="property" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
-				required="true"
 			/>
 			<@p.textfield
 				key="clazz"
@@ -87,17 +85,17 @@
 				format="datetime"
 			/>
 		<#assign _buttons_ = [] />
-	<#if action.inputConfirm>
+	<#if action.getTextAsBoolean('ui-input-confirm', false)>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-update-confirm",
-			"action": "~/update_confirm",
-			"text": "button-update-confirm"
+			"icon": "icon-add-confirm",
+			"action": "~/add_confirm",
+			"text": "button-add-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-update-execute",
-			"action": "~/update_execute",
-			"text": "button-update-execute"
+			"icon": "icon-add-execute",
+			"action": "~/add_execute",
+			"text": "button-add-execute"
 		}]/>
 	</#if>
 			<#if action.hasPermission('~/list')>
@@ -117,11 +115,6 @@
 			function onPageLoad() {
 			}
 		--></script>
-<#else>
-	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
-	</div>
-</#if>
 </div>
 
 </body>

@@ -27,9 +27,9 @@
 
 	<#assign _actions_ = [] />
 	<#assign _ash_ = "" />
-	<#if action.hasPermission("~/insert")>
-		<@p.url var='_u_' action='~/insert'/>
-		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-insert', '')?html + '"><i class="' + text.getText('icon-insert', '') + '"></i>' + text.getText('label-insert', '') + '</a>'/>
+	<#if action.hasPermission("~/add")>
+		<@p.url var='_u_' action='~/add'/>
+		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-add', '')?html + '"><i class="' + text.getText('icon-add', '') + '"></i>' + text.getText('label-add', '') + '</a>'/>
 	</#if>
 	<#if action.hasPermission("~/copy")>
 		<#assign _actions_ = _actions_ + [{
@@ -40,13 +40,13 @@
 			"tooltip": text.getText("tooltip-copy", "")
 		}] />
 	</#if>
-	<#if action.hasPermission("~/update")>
+	<#if action.hasPermission("~/edit")>
 		<#assign _actions_ = _actions_ + [{
-			"action": "~/update",
+			"action": "~/edit",
 			"params": { "id": "%{top.id}" },
-			"icon": text.getText("icon-update"),
-			"label": text.getText("label-update", ""),
-			"tooltip": text.getText("tooltip-update", "")
+			"icon": text.getText("icon-edit"),
+			"label": text.getText("label-edit", ""),
+			"tooltip": text.getText("tooltip-edit", "")
 		}] />
 	</#if>
 	<#if action.hasPermission("~/delete")>

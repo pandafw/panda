@@ -260,58 +260,58 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * insert
+	 * add
 	 */
-	protected Object insert() {
+	protected Object add() {
 		return doResult(doInsertInit());
 	}
 
 	/**
-	 * insert_input
+	 * add_input
 	 */
-	protected Object insert_input(T data) {
+	protected Object add_input(T data) {
 		return doResult(doInsertInput(data));
 	}
 
 	/**
-	 * insert_confirm
+	 * add_confirm
 	 */
-	protected Object insert_confirm(T data) {
+	protected Object add_confirm(T data) {
 		return doResult(doInsertConfirm(data));
 	}
 
 	/**
-	 * insert_execute
+	 * add_execute
 	 */
-	protected Object insert_execute(T data) {
+	protected Object add_execute(T data) {
 		return doResult(doInsertExecute(data));
 	}
 
 	/**
-	 * update
+	 * edit
 	 */
-	protected Object update(T key) {
+	protected Object edit(T key) {
 		return doResult(doUpdateSelect(key));
 	}
 
 	/**
-	 * update_input
+	 * edit_input
 	 */
-	protected Object update_input(T data) {
+	protected Object edit_input(T data) {
 		return doResult(doUpdateInput(data));
 	}
 
 	/**
-	 * update_confirm
+	 * edit_confirm
 	 */
-	public Object update_confirm(T data) {
+	public Object edit_confirm(T data) {
 		return doResult(doUpdateConfirm(data));
 	}
 
 	/**
-	 * update_execute
+	 * edit_execute
 	 */
-	protected Object update_execute(T data) {
+	protected Object edit_execute(T data) {
 		return doResult(doUpdateExecute(data));
 	}
 

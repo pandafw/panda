@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-insert"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-edit"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li class="active"><@p.text name="step-insert"/></li>
+			<li class="active"><@p.text name="step-edit"/></li>
 		</ol>
 	</div>
 
@@ -18,10 +18,12 @@
 
 	<#include "/action-alert.ftl"/>
 
-	<@p.form cssClass="p-eform" id="property" initfocus="true" method="post" theme="bs3h">
+<#if r??>
+	<@p.form cssClass="n-eform" id="resource" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
+				required="true"
 			/>
 			<@p.textfield
 				key="clazz"
@@ -44,26 +46,12 @@
 				emptyOption="false"
 				list="consts.localeCountryMap"
 			/>
-			<@p.textfield
-				key="name"
-				value="%{r.name}"
-				required="true"
-				maxlength="50"
-				size="60"
-			/>
 			<@p.textarea
-				key="value"
-				value="%{r.value}"
-				maxlength="5000"
+				key="source"
+				value="%{r.source}"
+				maxlength="50000"
 				cols="60"
-				rows="8"
-			/>
-			<@p.textarea
-				key="memo"
-				value="%{r.memo}"
-				maxlength="1000"
-				cols="60"
-				rows="5"
+				rows="20"
 			/>
 			<@p.radio
 				key="status"
@@ -85,17 +73,17 @@
 				format="datetime"
 			/>
 		<#assign _buttons_ = [] />
-	<#if action.getTextAsBoolean('ui-input-confirm', false)>
+	<#if action.inputConfirm>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-insert-confirm",
-			"action": "~/insert_confirm",
-			"text": "button-insert-confirm"
+			"icon": "icon-edit-confirm",
+			"action": "~/edit_confirm",
+			"text": "button-edit-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-insert-execute",
-			"action": "~/insert_execute",
-			"text": "button-insert-execute"
+			"icon": "icon-edit-execute",
+			"action": "~/edit_execute",
+			"text": "button-edit-execute"
 		}]/>
 	</#if>
 			<#if action.hasPermission('~/list')>
@@ -115,6 +103,11 @@
 			function onPageLoad() {
 			}
 		--></script>
+<#else>
+	<div class="p-tcenter">
+		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
+	</div>
+</#if>
 </div>
 
 </body>

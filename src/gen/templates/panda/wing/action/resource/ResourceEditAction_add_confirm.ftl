@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-update"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-add"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,8 +8,8 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li><@p.text name="step-update"/></li>
-			<li class="active"><@p.text name="step-update-confirm"/></li>
+			<li><@p.text name="step-add"/></li>
+			<li class="active"><@p.text name="step-add-confirm"/></li>
 		</ol>
 	</div>
 
@@ -62,8 +62,8 @@
 				format="datetime"
 			/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-update-execute" action="~/update_execute"><@p.text name="button-update-execute"/></@p.submit>
-			<@p.submit icon="icon-back" action="~/update_input"><@p.text name="button-back"/></@p.submit>
+			<@p.submit icon="icon-add-execute" action="~/add_execute"><@p.text name="button-add-execute"/></@p.submit>
+			<@p.submit icon="icon-back" action="~/add_input"><@p.text name="button-back"/></@p.submit>
 		</@p.div>
 	</@p.form>
 <#else>

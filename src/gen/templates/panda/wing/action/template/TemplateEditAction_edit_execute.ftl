@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-insert"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-edit"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,8 +8,8 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li><@p.text name="step-insert"/></li>
-			<li class="active"><@p.text name="step-insert-success"/></li>
+			<li><@p.text name="step-edit"/></li>
+			<li class="active"><@p.text name="step-edit-success"/></li>
 		</ol>
 	</div>
 
@@ -21,14 +21,14 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-sform" id="property" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-sform" id="template" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
 			<@p.viewfield
-				key="clazz"
-				value="%{r.clazz}"
+				key="name"
+				value="%{r.name}"
 			/>
 			<@p.viewfield
 				key="language"
@@ -41,16 +41,8 @@
 				list="consts.localeCountryMap"
 			/>
 			<@p.viewfield
-				key="name"
-				value="%{r.name}"
-			/>
-			<@p.viewfield
-				key="value"
-				value="%{r.value}"
-			/>
-			<@p.viewfield
-				key="memo"
-				value="%{r.memo}"
+				key="source"
+				value="%{r.source}"
 			/>
 			<@p.viewfield
 				key="status"
@@ -71,14 +63,14 @@
 				format="datetime"
 			/>
 			<#assign _buttons_ = [] />
-			<#if action.hasDataPermission(params!, '~/update')>
-				<@p.url var="_u_" action="~/update" escapeAmp="false">
+			<#if action.hasDataPermission(params!, '~/edit')>
+				<@p.url var="_u_" action="~/edit" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
 				<#assign _buttons_ = _buttons_ + [{
-					"icon": "icon-update",
+					"icon": "icon-edit",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-update"
+					"text": "button-edit"
 				}]/>
 			</#if>
 			<#if action.hasDataPermission(params!, '~/copy')>
@@ -91,12 +83,12 @@
 					"text": "button-copy"
 				}]/>
 			</#if>
-			<#if action.hasPermission('~/insert')>
-				<@p.url var="_u_" action="~/insert"/>
+			<#if action.hasPermission('~/add')>
+				<@p.url var="_u_" action="~/add"/>
 				<#assign _buttons_ = _buttons_ + [{
-					"icon": "icon-insert",
+					"icon": "icon-add",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-insert"
+					"text": "button-add"
 				}]/>
 			</#if>
 			<#if action.hasDataPermission(params!, '~/delete')>

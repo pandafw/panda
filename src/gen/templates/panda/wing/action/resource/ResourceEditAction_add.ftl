@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-insert"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-add"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li class="active"><@p.text name="step-insert"/></li>
+			<li class="active"><@p.text name="step-add"/></li>
 		</ol>
 	</div>
 
@@ -18,14 +18,14 @@
 
 	<#include "/action-alert.ftl"/>
 
-	<@p.form cssClass="p-eform" id="template" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-eform" id="resource" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
 			<@p.textfield
-				key="name"
-				value="%{r.name}"
+				key="clazz"
+				value="%{r.clazz}"
 				required="true"
 				maxlength="100"
 				size="60"
@@ -73,15 +73,15 @@
 		<#assign _buttons_ = [] />
 	<#if action.getTextAsBoolean('ui-input-confirm', false)>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-insert-confirm",
-			"action": "~/insert_confirm",
-			"text": "button-insert-confirm"
+			"icon": "icon-add-confirm",
+			"action": "~/add_confirm",
+			"text": "button-add-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-insert-execute",
-			"action": "~/insert_execute",
-			"text": "button-insert-execute"
+			"icon": "icon-add-execute",
+			"action": "~/add_execute",
+			"text": "button-add-execute"
 		}]/>
 	</#if>
 			<#if action.hasPermission('~/list')>

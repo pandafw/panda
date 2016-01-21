@@ -140,9 +140,9 @@
 			<param name="toolbar" value="${view.toolbar}"/>
 		</input>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
+		<input name="add" extend="basicInput" template="${template.add}" generate="true"/>
 		<input name="copy" extend="basicInput" template="${template.copy}" generate="true"/>
-		<input name="insert" extend="basicInput" template="${template.insert}" generate="true"/>
-		<input name="update" extend="basicInput" template="${template.update}" generate="true"/>
+		<input name="edit" extend="basicInput" template="${template.edit}" generate="true"/>
 		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
 			<param name="toolbar" value="${delete.toolbar}"/>
 			<param name="actions" value="${delete.actions}"/>

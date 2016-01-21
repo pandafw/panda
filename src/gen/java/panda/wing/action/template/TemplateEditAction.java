@@ -65,6 +65,52 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	}
 
 	/**
+	 * add
+	 */
+	@At
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object add() {
+		return super.add();
+	}
+
+	/**
+	 * add_input
+	 */
+	@At
+	@Ok("sftl:~add")
+	@Err("sftl:~add")
+	public Object add_input(@Param Template data) {
+		return super.add_input(data);
+	}
+
+	/**
+	 * add_confirm
+	 */
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~add")
+	public Object add_confirm(@Param @Validates({
+			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.VISIT)
+			}) Template data) {
+		return super.add_confirm(data);
+	}
+
+	/**
+	 * add_execute
+	 */
+	@At
+	@Ok(View.SFTL)
+	@Err("sftl:~add")
+	public Object add_execute(@Param @Validates({
+			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.VISIT)
+			}) Template data) {
+		return super.add_execute(data);
+	}
+
+	/**
 	 * copy
 	 */
 	@At
@@ -111,95 +157,49 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	}
 
 	/**
-	 * insert
+	 * edit
 	 */
 	@At
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object insert() {
-		return super.insert();
+	public Object edit(@Param Template key) {
+		return super.edit(key);
 	}
 
 	/**
-	 * insert_input
+	 * edit_input
 	 */
 	@At
-	@Ok("sftl:~insert")
-	@Err("sftl:~insert")
-	public Object insert_input(@Param Template data) {
-		return super.insert_input(data);
+	@Ok("sftl:~edit")
+	@Err("sftl:~edit")
+	public Object edit_input(@Param Template data) {
+		return super.edit_input(data);
 	}
 
 	/**
-	 * insert_confirm
+	 * edit_confirm
 	 */
 	@At
 	@Ok(View.SFTL)
-	@Err("sftl:~insert")
-	public Object insert_confirm(@Param @Validates({
+	@Err("sftl:~edit")
+	public Object edit_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
-		return super.insert_confirm(data);
+		return super.edit_confirm(data);
 	}
 
 	/**
-	 * insert_execute
+	 * edit_execute
 	 */
 	@At
 	@Ok(View.SFTL)
-	@Err("sftl:~insert")
-	public Object insert_execute(@Param @Validates({
+	@Err("sftl:~edit")
+	public Object edit_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Template data) {
-		return super.insert_execute(data);
-	}
-
-	/**
-	 * update
-	 */
-	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
-	public Object update(@Param Template key) {
-		return super.update(key);
-	}
-
-	/**
-	 * update_input
-	 */
-	@At
-	@Ok("sftl:~update")
-	@Err("sftl:~update")
-	public Object update_input(@Param Template data) {
-		return super.update_input(data);
-	}
-
-	/**
-	 * update_confirm
-	 */
-	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~update")
-	public Object update_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
-		return super.update_confirm(data);
-	}
-
-	/**
-	 * update_execute
-	 */
-	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~update")
-	public Object update_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'name', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
-			@Validate(value=Validators.VISIT)
-			}) Template data) {
-		return super.update_execute(data);
+		return super.edit_execute(data);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-update"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-edit"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,8 +8,8 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li><@p.text name="step-update"/></li>
-			<li class="active"><@p.text name="step-update-confirm"/></li>
+			<li><@p.text name="step-edit"/></li>
+			<li class="active"><@p.text name="step-edit-confirm"/></li>
 		</ol>
 	</div>
 
@@ -20,14 +20,14 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-cform" id="template" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-cform" id="property" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
 			<@p.viewfield
-				key="name"
-				value="%{r.name}"
+				key="clazz"
+				value="%{r.clazz}"
 			/>
 			<@p.viewfield
 				key="language"
@@ -40,8 +40,16 @@
 				list="consts.localeCountryMap"
 			/>
 			<@p.viewfield
-				key="source"
-				value="%{r.source}"
+				key="name"
+				value="%{r.name}"
+			/>
+			<@p.viewfield
+				key="value"
+				value="%{r.value}"
+			/>
+			<@p.viewfield
+				key="memo"
+				value="%{r.memo}"
 			/>
 			<@p.viewfield
 				key="status"
@@ -62,8 +70,8 @@
 				format="datetime"
 			/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-update-execute" action="~/update_execute"><@p.text name="button-update-execute"/></@p.submit>
-			<@p.submit icon="icon-back" action="~/update_input"><@p.text name="button-back"/></@p.submit>
+			<@p.submit icon="icon-edit-execute" action="~/edit_execute"><@p.text name="button-edit-execute"/></@p.submit>
+			<@p.submit icon="icon-back" action="~/edit_input"><@p.text name="button-back"/></@p.submit>
 		</@p.div>
 	</@p.form>
 <#else>

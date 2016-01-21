@@ -8,7 +8,8 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li class="active"><@p.text name="step-bdelete"/></li>
+			<li><@p.text name="step-bdelete"/></li>
+			<li class="active"><@p.text name="step-bdelete-confirm"/></li>
 		</ol>
 	</div>
 

@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title><@p.text name="title-update"><@p.param name="title" value="#(title)"/></@p.text></title>
+	<title><@p.text name="title-edit"><@p.param name="title" value="#(title)"/></@p.text></title>
 </head>
 <body>
 
@@ -8,7 +8,7 @@
 	<div class="p-header">
 		<ol class="breadcrumb">
 			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
-			<li class="active"><@p.text name="step-update"/></li>
+			<li class="active"><@p.text name="step-edit"/></li>
 		</ol>
 	</div>
 
@@ -19,15 +19,15 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="n-eform" id="template" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="n-eform" id="property" initfocus="true" method="post" theme="bs3h">
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 				required="true"
 			/>
 			<@p.textfield
-				key="name"
-				value="%{r.name}"
+				key="clazz"
+				value="%{r.clazz}"
 				required="true"
 				maxlength="100"
 				size="60"
@@ -46,12 +46,26 @@
 				emptyOption="false"
 				list="consts.localeCountryMap"
 			/>
+			<@p.textfield
+				key="name"
+				value="%{r.name}"
+				required="true"
+				maxlength="50"
+				size="60"
+			/>
 			<@p.textarea
-				key="source"
-				value="%{r.source}"
-				maxlength="50000"
+				key="value"
+				value="%{r.value}"
+				maxlength="5000"
 				cols="60"
-				rows="20"
+				rows="8"
+			/>
+			<@p.textarea
+				key="memo"
+				value="%{r.memo}"
+				maxlength="1000"
+				cols="60"
+				rows="5"
 			/>
 			<@p.radio
 				key="status"
@@ -75,15 +89,15 @@
 		<#assign _buttons_ = [] />
 	<#if action.inputConfirm>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-update-confirm",
-			"action": "~/update_confirm",
-			"text": "button-update-confirm"
+			"icon": "icon-edit-confirm",
+			"action": "~/edit_confirm",
+			"text": "button-edit-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
-			"icon": "icon-update-execute",
-			"action": "~/update_execute",
-			"text": "button-update-execute"
+			"icon": "icon-edit-execute",
+			"action": "~/edit_execute",
+			"text": "button-edit-execute"
 		}]/>
 	</#if>
 			<#if action.hasPermission('~/list')>

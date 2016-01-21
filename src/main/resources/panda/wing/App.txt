@@ -101,3 +101,152 @@ const-genders=\
 	"F": "Female", \
 	"M": "Male"
 
+#--------------------------------------------
+# Generic Action
+#--------------------------------------------
+button-pdf-print=PDF Print
+button-pdf-list_print=PDF Print
+
+button-cancel-confirm=Confirm
+button-cancel-execute=Submit
+button-copy-confirm=Confirm
+button-copy-execute=Submit
+button-delete-confirm=Confirm
+button-delete-execute=Delete
+button-import-confirm=Confirm
+button-import-execute=Import
+button-insert-confirm=Confirm
+button-insert-execute=Submit
+button-update-confirm=Confirm
+button-update-execute=Submit
+
+button-bcancel=Cancel
+button-bcancel-execute=Submit
+button-bdelete=Delete
+button-bdelete-execute=Delete
+button-brecover=Recover
+button-brecover-execute=Recover
+button-bupdate=Update
+button-bupdate-execute=Submit
+
+
+icon-pdf-print=fa fa-file-text
+icon-pdf-list_print=fa fa-file-text
+
+icon-copy-confirm=fa fa-arrow-circle-right
+icon-copy-execute=fa fa-save
+
+icon-delete-confirm=fa fa-arrow-circle-right
+icon-delete-execute=fa fa-minus-circle
+icon-insert-confirm=fa fa-arrow-circle-right
+icon-insert-execute=fa fa-save
+icon-update-confirm=fa fa-arrow-circle-right
+icon-update-execute=fa fa-save
+
+icon-bdelete=fa fa-minus-circle
+icon-bdelete-execute=fa fa-minus-circle
+icon-brecover=fa fa-reply
+icon-brecover-execute=fa fa-reply
+icon-bupdate=fa fa-edit
+icon-bupdate-execute=fa fa-save
+
+title-list=${top.title} - List
+title-list_csv=${top.title} - List - ${assist.csvFileTime}
+title-list_popup=${top.title} - List
+title-list_print=${top.title} - List
+title-view=${top.title} - View
+title-print=${top.title} - View
+title-copy=${top.title} - Insert
+title-copy_confirm=${top.title} - Insert ≫　Confirm
+title-copy_success=${top.title} - Insert ≫　Complete
+title-delete=${top.title} - Delete
+title-delete_success=${top.title} - Delete ≫ Complete
+title-insert=${top.title} - Insert
+title-insert_confirm=${top.title} - Insert ≫ Confirm
+title-insert_success=${top.title} - Insert ≫ Complete
+title-update=${top.title} - Update
+title-update_confirm=${top.title} - Update ≫ Confirm
+title-update_success=${top.title} - Update ≫ Complete
+
+title-bdelete=${top.title} - Bulk Delete 
+title-bdelete_confirm=${top.title} - Bulk Delete ≫ Confirm
+title-bdelete_success=${top.title} - Bulk Delete ≫ Complete
+title-bupdate=${top.title} - Bulk Update 
+title-bupdate_confirm=${top.title} - Bulk Update ≫ Confirm
+title-bupdate_success=${top.title} - Bulk Update ≫ Complete
+
+#step
+step-arrow-e=&gt;
+
+step-list=List
+step-cancel=Cancel
+step-cancel-confirm=Confirm
+step-cancel-success=Complete
+step-copy=Input
+step-copy-confirm=Confirm
+step-copy-success=Complete
+step-delete=Delete
+step-delete-confirm=Confirm
+step-delete-success=Complete
+step-recover=Recover
+step-recover-confirm=Confirm
+step-recover-success=Complete
+step-insert=Insert
+step-insert-confirm=Confirm
+step-insert-success=Complete
+step-update=Update
+step-update-confirm=Confirm
+step-update-success=Complete
+
+step-bdelete=Delete
+step-bdelete-confirm=Confirm
+step-bdelete-success=Complete
+step-brecover=Recover
+step-brecover-confirm=Confirm
+step-brecover-success=Complete
+step-bupdate=Update
+step-bupdate-confirm=Confirm
+step-bupdate-success=Complete
+
+#action messages
+action-confirm-cancel=Are you sure to cancel this data?
+action-failed-cancel=Failed to cancel this data.\n${top}
+action-success-cancel=The data is successfully canceled.
+
+action-confirm-copy=Are you sure to insert this data?
+action-failed-copy=Failed to insert this data.\n${top}
+action-success-copy=The data is successfully inserted.
+
+action-confirm-delete=Are you sure to delete this data?
+action-failed-delete=Failed to delete this data.\n${top}
+action-success-delete=The data is successfully deleted.
+
+action-confirm-recover=Are you sure to recover this data?
+action-failed-recover=Failed to recover this data.\n${top}
+action-success-recover=The data is successfully recoverd.
+
+action-confirm-insert=Are you sure to insert this data?
+action-failed-insert=Failed to insert this data.\n${top}
+action-success-insert=The data is successfully inserted.
+
+action-confirm-update=Are you sure to update this data?
+action-failed-update=Failed to update this data.\n${top}
+action-success-update=The data is successfully updated.
+
+
+action-confirm-bcancel=Are you sure to cancel these ${top} items?
+action-failed-bcancel=Failed to cancel these data.\n${top}
+action-success-bcancel=${top} items have been successfully canceled.
+
+action-confirm-bdelete=Are you sure to delete these ${top} items?
+action-failed-bdelete=Failed to delete these data.\n${top}
+action-success-bdelete=${top} items have been successfully deleted.
+
+action-confirm-brecover=Are you sure to recover these ${top} items?
+action-failed-brecover=Failed to recover these data.\n${top}
+action-success-brecover=${top} items have been successfully recoverd.
+
+action-confirm-bupdate=Are you sure to update these ${top} items?
+action-failed-bupdate=Failed to update these data.\n${top}
+action-success-bupdate=${top} items have been successfully updaated.
+
