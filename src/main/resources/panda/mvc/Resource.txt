@@ -55,9 +55,9 @@ password-format=******
 #regex
 regex-numeric=\\d+
 regex-password=\\w+
-regex-phonenumber='\\d{1,3}?-\\d{1,4}?-\\d{1,4}'
-regex-faxnumber='\\d{1,3}?-\\d{1,4}?-\\d{1,4}'
-regex-zipcode='\\d{3}-\\d{4}'
+regex-telnumber='\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}'
+regex-faxnumber='\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}'
+regex-zipcode='\\d{3}-*\\d{4}'
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/${top.total}
@@ -195,9 +195,9 @@ validation-zenkakukatakanastring=Please input full katakana character.
 validation-email=The format email address of must be "user@domain.com".
 validation-filename=The filename can't contain these \/:*?"<>| characters. 
 validation-url=The format of URL must be "http://www.domain.com".
-validation-zipcode=The format of zipcode must be "123-4567".
-validation-phonenumber=The format of phone number must be "1234-5678-9999".
-validation-faxnumber=The format of FAX number must be "1234-5678-9999".
+validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
+validation-telnumber=The phone number format is incorrect (ex: "12-3456-7890").
+validation-faxnumber=The FAX number format is incorrect (ex: "12-3456-7890").
 validation-futuredate=The future date is not allowed.
 validation-passeddate=The past date is not allowed.
 validation-regex=The value dos not match the regular expression "${top.regex}".
