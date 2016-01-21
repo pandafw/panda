@@ -376,9 +376,10 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	/**
 	 * getBulkUpdateSample
 	 * @param dataList data list
+	 * @param gq generic query
 	 * @return sample data
 	 */
-	protected T getBulkUpdateSample(List<T> dataList) {
+	protected T getBulkUpdateSample(List<T> dataList, GenericQuery<T> gq) {
 		return null;
 	}
 	
@@ -388,16 +389,24 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @return updated count
 	 */
 	protected int updateDataList(List<T> dataList) {
-		T sample = getBulkUpdateSample(dataList);
-
-		int cnt = 0;
-		if (sample != null && Collections.isNotEmpty(dataList)) {
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
-
-			addKeyListToQuery(q, dataList, true);
-			cnt = daoUpdatesIgnoreNull(sample, q);
-			dataList = selectDataList(dataList);
+		if (Collections.isEmpty(dataList)) {
+			return 0;
 		}
+
+		GenericQuery<T> q = new GenericQuery<T>(getEntity());
+		addKeyListToQuery(q, dataList, true);
+
+		T sample = getBulkUpdateSample(dataList, q);
+		if (sample == null) {
+			return 0;
+		}
+
+		int cnt = daoUpdates(sample, q);
+		List<T> newList = selectDataList(dataList);
+
+		dataList.clear();
+		dataList.addAll(newList);
+		
 		return cnt;
 	}
 

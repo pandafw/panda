@@ -109,10 +109,12 @@ button-delete-confirm=確認
 button-delete-execute=删除
 button-edit-confirm=确认
 button-edit-execute=提交
-button-insert-confirm=确认
-button-insert-execute=提交
 button-import-confirm=確認
 button-import-execute=汇入执行
+button-insert-confirm=确认
+button-insert-execute=提交
+button-trash-confirm=確認
+button-trash-execute=删除
 button-update-confirm=确认
 button-update-execute=提交
 
@@ -120,11 +122,18 @@ button-bcancel=取消
 button-bcancel-execute=提交
 button-bdelete=删除
 button-bdelete-execute=删除
+button-bdisable=禁用
+button-bdisable-execute=禁用
+button-benable=激活
+button-benable-execute=激活
 button-brecover=恢复
 button-brecover-execute=恢复
+button-btrash=删除
+button-btrash-execute=删除
 button-bupdate=修改
 button-bupdate-confirm=确认
 button-bupdate-execute=提交
+
 
 title-list=${top.title} - 浏览
 title-list_csv=${top.title} - 列表_${assist.csvFileTime}
@@ -133,23 +142,23 @@ title-list_print=${top.title} - 浏览
 title-view=${top.title} - 显示
 title-print=${top.title} - 显示
 
-title-cancel=${top.title} - 取消
 title-add=${top.title} - 登录
+title-cancel=${top.title} - 取消
 title-copy=${top.title} - 登录
 title-delete=${top.title} - 删除
 title-edit=${top.title} - 编辑
 title-insert=${top.title} - 登录
+title-recover=${top.title} - 恢复
+title-trash=${top.title} - 删除
 title-update=${top.title} - 更新
 
 title-bcancel=${top.title} - 取消
-title-bcancel_confirm=${top.title} - 取消 ⇒ 确认
-title-bcancel_success=${top.title} - 取消 ⇒ 完成
 title-bdelete=${top.title} - 删除
-title-bdelete_confirm=${top.title} - 删除 ⇒ 确认
-title-bdelete_success=${top.title} - 删除 ⇒ 完成
+title-bdisable=${top.title} - 禁用
+title-benable=${top.title} - 激活
+title-brecover=${top.title} - 恢复
+title-btrash=${top.title} - 删除
 title-bupdate=${top.title} - 变更
-title-bupdate_confirm=${top.title} - 变更 ⇒ 确认
-title-bupdate_success=${top.title} - 变更 ⇒ 完成
 
 #step
 step-list=列表
@@ -168,12 +177,15 @@ step-delete-success=完成
 step-edit=编辑
 step-edit-confirm=确认
 step-edit-success=完成
-step-recover=恢复
-step-recover-confirm=确认
-step-recover-success=完成
 step-insert=登录
 step-insert-confirm=确认
 step-insert-success=完成
+step-recover=恢复
+step-recover-confirm=确认
+step-recover-success=完成
+step-trash=删除
+step-trash-confirm=确认
+step-trash-success=完成
 step-update=更新
 step-update-confirm=确认
 step-update-success=完成
@@ -181,9 +193,18 @@ step-update-success=完成
 step-bdelete=删除
 step-bdelete-confirm=确认
 step-bdelete-success=完成
+step-bdisable=禁用
+step-bdisable-confirm=确认
+step-bdisable-success=完成
+step-benable=激活
+step-benable-confirm=确认
+step-benable-success=完成
 step-brecover=恢复
 step-brecover-confirm=确认
 step-brecover-success=完成
+step-btrash=删除
+step-btrash-confirm=确认
+step-btrash-success=完成
 step-bupdate=更新
 step-bupdate-confirm=确认
 step-bupdate-success=完成
@@ -210,13 +231,17 @@ action-confirm-edit=您确定变更该数据吗？
 action-failed-edit=该数据变更失败。\n${top}
 action-success-edit=该数据被成功变更了。
 
+action-confirm-insert=您确定登录该数据吗？
+action-failed-insert=该数据登录失败。\n${top}
+action-success-insert=该数据被成功登录了。
+
 action-confirm-recover=您确定恢复该数据吗？
 action-failed-recover=该数据恢复失败。\n${top}
 action-success-recover=该数据被成功恢复了。
 
-action-confirm-insert=您确定登录该数据吗？
-action-failed-insert=该数据登录失败。\n${top}
-action-success-insert=该数据被成功登录了。
+action-confirm-trash=您确定删除该数据吗？
+action-failed-trash=该数据删除失败。\n${top}
+action-success-trash=该数据被成功删除了。
 
 action-confirm-update=您确定更新该数据吗？
 action-failed-update=该数据更新失败。\n${top}
@@ -231,12 +256,32 @@ action-confirm-bdelete=您确定删除这${top}件数据吗？
 action-failed-bdelete=数据删除失败。\n${top}
 action-success-bdelete=${top}件数据被成功删除。
 
+action-confirm-bdisable=您确定禁用这${top}件数据吗？
+action-failed-bdisable=数据禁用失败。\n${top}
+action-success-bdisable=${top}件数据被成功禁用。
+
+action-confirm-benable=您确定激活这${top}件数据吗？
+action-failed-benable=数据激活失败。\n${top}
+action-success-benable=${top}件数据被成功激活。
+
 action-confirm-brecover=您确定恢复这${top}件数据吗？
 action-failed-brecover=数据恢复失败。\n${top}
 action-success-brecover=${top}件数据被成功恢复。
 
+action-confirm-btrash=您确定删除这${top}件数据吗？
+action-failed-btrash=数据删除失败。\n${top}
+action-success-btrash=${top}件数据被成功删除。
+
 action-confirm-bupdate=您确定变更这${top}件数据吗？
 action-failed-bupdate=数据变更失败。\n${top}
 action-success-bupdate=${top}件数据被成功变更。
+
+#confirm messages
+confirm-data-overwrite=您确定覆写该数据吗？
+
+#warn messages
+warn-data-changed-on-update=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
+warn-data-changed-on-delete=该数据已经在${top}被其他用户更新过了。您确定删除该数据吗？
+warn-data-changed-on-trash=该数据已经在${top}被其他用户更新过了。您确定删除该数据吗？
 
 

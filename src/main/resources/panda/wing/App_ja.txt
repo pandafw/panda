@@ -100,6 +100,8 @@ button-pdf-list_print=PDF出力
 
 button-add-confirm=確認画面へ
 button-add-execute=登録
+button-cancel-confirm=確認画面へ
+button-cancel-execute=取消
 button-copy-confirm=確認画面へ
 button-copy-execute=登録
 button-delete-confirm=確認画面へ
@@ -110,20 +112,29 @@ button-insert-confirm=確認画面へ
 button-insert-execute=登録
 button-import-confirm=確認画面へ
 button-import-execute=インポート
+button-trash-confirm=確認画面へ
+button-trash-execute=削除
+button-recover-confirm=確認画面へ
+button-recover-execute=復元
 button-update-confirm=確認画面へ
 button-update-execute=更新
 
-button-cancel-confirm=確認画面へ
-button-cancel-execute=取消
 
 button-bcancel=取消
 button-bcancel-execute=取消
 button-bdelete=削除
 button-bdelete-execute=削除
+button-bdisable=無効
+button-bdisable-execute=無効
+button-benable=有効
+button-benable-execute=有効
 button-brecover=復元
 button-brecover-execute=復元
+button-btrash=削除
+button-btrash-execute=削除
 button-bupdate=編集
 button-bupdate-execute=更新
+
 
 title-list=${top.title} - 一覧
 title-list_csv=${top.title}_${assist.csvFileTime}
@@ -138,17 +149,15 @@ title-delete=${top.title} - 削除
 title-edit=${top.title} - 編集
 title-insert=${top.title} - 新規
 title-recover=${top.title} - 復元
+title-trash=${top.title} - 削除
 title-update=${top.title} - 更新
 
 title-bcancel=${top.title} - 取消
-title-bcancel_confirm=${top.title} - 取消 ⇒ 確認
-title-bcancel_success=${top.title} - 取消 ⇒ 完了
 title-bdelete=${top.title} - 削除
-title-bdelete_confirm=${top.title} - 削除 ⇒ 確認
-title-bdelete_success=${top.title} - 削除 ⇒ 完了
+title-bdisable=${top.title} - 無効
+title-benable=${top.title} - 有効
+title-btrash=${top.title} - 削除
 title-bupdate=${top.title} - 編集
-title-bupdate_confirm=${top.title} - 編集 ⇒ 確認
-title-bupdate_success=${top.title} - 編集 ⇒ 完了
 
 #step
 step-list=一覧
@@ -167,12 +176,15 @@ step-delete-success=完了
 step-edit=編集
 step-edit-confirm=確認
 step-edit-success=完了
-step-recover=復元
-step-recover-confirm=確認
-step-recover-success=完了
 step-insert=新規
 step-insert-confirm=確認
 step-insert-success=完了
+step-recover=復元
+step-recover-confirm=確認
+step-recover-success=完了
+step-trash=削除
+step-trash-confirm=確認
+step-trash-success=完了
 step-update=更新
 step-update-confirm=確認
 step-update-success=完了
@@ -180,21 +192,30 @@ step-update-success=完了
 step-bdelete=削除
 step-bdelete-confirm=確認
 step-bdelete-success=完了
+step-bdisable=無効
+step-bdisable-confirm=確認
+step-bdisable-success=完了
+step-benable=有効
+step-benable-confirm=確認
+step-benable-success=完了
 step-brecover=復元
 step-brecover-confirm=確認
 step-brecover-success=完了
+step-btrash=削除
+step-btrash-confirm=確認
+step-btrash-success=完了
 step-bupdate=更新
 step-bupdate-confirm=確認
 step-bupdate-success=完了
 
 #action messages
-action-confirm-cancel=該当データを取消して宜しいでしょうか？
-action-failed-cancel=該当データを取消できませんでした。\n${top}
-action-success-cancel=該当データを取消しました。
-
 action-confirm-add=該当データを登録して宜しいでしょうか？
 action-failed-add=該当データを登録できませんでした。\n${top}
 action-success-add=該当データを登録しました。
+
+action-confirm-cancel=該当データを取消して宜しいでしょうか？
+action-failed-cancel=該当データを取消できませんでした。\n${top}
+action-success-cancel=該当データを取消しました。
 
 action-confirm-copy=該当データを登録して宜しいでしょうか？
 action-failed-copy=該当データを登録できませんでした。\n${top}
@@ -208,13 +229,17 @@ action-confirm-edit=該当データを更新して宜しいでしょうか？
 action-failed-edit=該当データを更新できませんでした。\n${top}
 action-success-edit=該当データを更新しました。
 
+action-confirm-insert=該当データを登録して宜しいでしょうか？
+action-failed-insert=該当データを新規できませんでした。\n${top}
+action-success-insert=該当データを登録しました。
+
 action-confirm-recover=該当データを復元して宜しいでしょうか？
 action-failed-recover=該当データを復元できませんでした。\n${top}
 action-success-recover=該当データを復元しました。
 
-action-confirm-insert=該当データを登録して宜しいでしょうか？
-action-failed-insert=該当データを新規できませんでした。\n${top}
-action-success-insert=該当データを登録しました。
+action-confirm-trash=該当データを削除して宜しいでしょうか？
+action-failed-trash=該当データを削除できませんでした。\n${top}
+action-success-trash=該当データを削除しました。
 
 action-confirm-update=該当データを更新して宜しいでしょうか？
 action-failed-update=該当データを更新できませんでした。\n${top}
@@ -228,13 +253,33 @@ action-confirm-bdelete=該当${top}件のデータを削除して宜しいでし
 action-failed-bdelete=該当データを削除できませんでした。\n${top}
 action-success-bdelete=${top}件のデータを削除しました。
 
+action-confirm-bdisable=該当${top}件のデータを無効にして宜しいでしょうか？
+action-failed-bdisable=該当データを無効にすることができませんでした。\n${top}
+action-success-bdisable=${top}件のデータを無効にしました。
+
+action-confirm-benable=該当${top}件のデータを有効にして宜しいでしょうか？
+action-failed-benable=該当データを有効にすることができませんでした。\n${top}
+action-success-benable=${top}件のデータを有効にしました。
+
 action-confirm-brecover=該当${top}件のデータを復元して宜しいでしょうか？
 action-failed-brecover=該当データを復元できませんでした。\n${top}
 action-success-brecover=${top}件のデータを復元しました。
 
+action-confirm-btrash=該当${top}件のデータを削除して宜しいでしょうか？
+action-failed-btrash=該当データを削除できませんでした。\n${top}
+action-success-btrash=${top}件のデータを削除しました。
+
 action-confirm-bupdate=該当${top}件のデータを更新して宜しいでしょうか？
 action-failed-bupdate=該当データを更新できませんでした。\n${top}
 action-success-bupdate=${top}件のデータを更新しました。
+
+#confirm messages
+confirm-data-overwrite=該当データを上書きして宜しいでしょうか？
+
+#warn messages
+warn-data-changed-on-update=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
+warn-data-changed-on-delete=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
+warn-data-changed-on-trash=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
 
 
 

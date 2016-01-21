@@ -82,13 +82,6 @@ public interface RC {
 	 */
 	public final static String CONFIRM_DATA_OVERWRITE = "confirm-data-overwrite";
 	
-	//------------------------------------------------------------
-	// WARN MESSAGES
-	//------------------------------------------------------------
-	/**
-	 * WARN_DATA_UPDATED = "warn-data-updated";
-	 */
-	public final static String WARN_DATA_UPDATED = "warn-data-updated";
 
 	//------------------------------------------------------------
 	// ERROR MESSAGES
@@ -192,7 +185,7 @@ public interface RC {
 	public final static String MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
 
 	//------------------------------------------------------------
-	// ACTION MESSAGE PREFIX
+	// SCENARIO MESSAGE PREFIX
 	//------------------------------------------------------------
 	/**
 	 * ACTION_SUCCESS_PREFIX = "action-success-";
@@ -208,4 +201,9 @@ public interface RC {
 	 * ACTION_FAILED_PREFIX = "action-failed-";
 	 */
 	public final static String ACTION_FAILED_PREFIX = "action-failed-";
+
+	/**
+	 * ACTION_WARN_DATA_CHANGED_PREFIX = "warn-data-changed-on-";
+	 */
+	public final static String WARN_DATA_CHANGED_PREFIX = "warn-data-changed-on-";
 }

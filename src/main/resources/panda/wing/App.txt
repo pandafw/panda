@@ -109,28 +109,38 @@ button-pdf-list_print=PDF Print
 
 button-add-confirm=Confirm
 button-add-execute=Submit
+button-cancel-confirm=Confirm
+button-cancel-execute=Submit
 button-copy-confirm=Confirm
 button-copy-execute=Submit
 button-delete-confirm=Confirm
 button-delete-execute=Delete
 button-edit-confirm=Confirm
 button-edit-execute=Submit
+button-import-confirm=Confirm
+button-import-execute=Import
 button-insert-confirm=Confirm
 button-insert-execute=Submit
+button-recover-confirm=Confirm
+button-recover-execute=Recover
+button-trash-confirm=Confirm
+button-trash-execute=Delete
 button-update-confirm=Confirm
 button-update-execute=Submit
 
-button-cancel-confirm=Confirm
-button-cancel-execute=Submit
-button-import-confirm=Confirm
-button-import-execute=Import
 
 button-bcancel=Cancel
 button-bcancel-execute=Submit
 button-bdelete=Delete
 button-bdelete-execute=Delete
+button-bdisable=Disable
+button-bdisable-execute=Disable
+button-benable=Enable
+button-benable-execute=Enable
 button-brecover=Recover
 button-brecover-execute=Recover
+button-btrash=Delete
+button-btrash-execute=Delete
 button-bupdate=Update
 button-bupdate-execute=Submit
 
@@ -150,13 +160,21 @@ icon-insert-confirm=fa fa-arrow-circle-right
 icon-insert-execute=fa fa-save
 icon-recover=fa fa-reply
 icon-recover-execute=fa fa-reply
+icon-trash-confirm=fa fa-arrow-circle-right
+icon-trash-execute=fa fa-trash-o
 icon-update-confirm=fa fa-arrow-circle-right
 icon-update-execute=fa fa-save
 
 icon-bdelete=fa fa-minus-circle
 icon-bdelete-execute=fa fa-minus-circle
+icon-bdisable=fa fa-minus-circle
+icon-bdisable-execute=fa fa-minus-circle
+icon-benable=fa fa-minus-circle
+icon-benable-execute=fa fa-minus-circle
 icon-brecover=fa fa-reply
 icon-brecover-execute=fa fa-reply
+icon-btrash=fa fa-trash-o
+icon-btrash-execute=fa fa-trash-o
 icon-bupdate=fa fa-edit
 icon-bupdate-execute=fa fa-save
 
@@ -172,11 +190,15 @@ title-delete=${top.title} - Delete
 title-edit=${top.title} - Edit
 title-insert=${top.title} - Insert
 title-recover=${top.title} - Recover
+title-trash=${top.title} - Delete
 title-update=${top.title} - Update
 
-title-bdelete=${top.title} - Delete 
-title-bupdate=${top.title} - Update 
-title-brecover=${top.title} - Recover 
+title-bdelete=${top.title} - Delete
+title-bdisable=${top.title} - Disable
+title-benable=${top.title} - Enable
+title-btrash=${top.title} - Delete
+title-brecover=${top.title} - Recover
+title-bupdate=${top.title} - Update
 
 #step
 step-list=List
@@ -199,6 +221,9 @@ step-insert-success=Complete
 step-recover=Recover
 step-recover-confirm=Confirm
 step-recover-success=Complete
+step-trash=Delete
+step-trash-confirm=Confirm
+step-trash-success=Complete
 step-update=Update
 step-update-confirm=Confirm
 step-update-success=Complete
@@ -210,9 +235,18 @@ step-cancel-success=Complete
 step-bdelete=Delete
 step-bdelete-confirm=Confirm
 step-bdelete-success=Complete
+step-bdisable=Delete
+step-bdisable-confirm=Confirm
+step-bdisable-success=Complete
+step-benable=Delete
+step-benable-confirm=Confirm
+step-benable-success=Complete
 step-brecover=Recover
 step-brecover-confirm=Confirm
 step-brecover-success=Complete
+step-btrash=Delete
+step-btrash-confirm=Confirm
+step-btrash-success=Complete
 step-bupdate=Update
 step-bupdate-confirm=Confirm
 step-bupdate-success=Complete
@@ -238,6 +272,10 @@ action-confirm-recover=Are you sure to recover this data?
 action-failed-recover=Failed to recover this data.\n${top}
 action-success-recover=The data is successfully recoverd.
 
+action-confirm-trash=Are you sure to delete this data?
+action-failed-trash=Failed to delete this data.\n${top}
+action-success-trash=The data is successfully deleted.
+
 action-confirm-update=Are you sure to update this data?
 action-failed-update=Failed to update this data.\n${top}
 action-success-update=The data is successfully updated.
@@ -255,11 +293,31 @@ action-confirm-bdelete=Are you sure to delete these ${top} items?
 action-failed-bdelete=Failed to delete these data.\n${top}
 action-success-bdelete=${top} items have been successfully deleted.
 
+action-confirm-bdisable=Are you sure to disable these ${top} items?
+action-failed-bdisable=Failed to disable these data.\n${top}
+action-success-bdisable=${top} items have been successfully disabled.
+
+action-confirm-benable=Are you sure to enable these ${top} items?
+action-failed-benable=Failed to enable these data.\n${top}
+action-success-benable=${top} items have been successfully enabled.
+
 action-confirm-brecover=Are you sure to recover these ${top} items?
 action-failed-brecover=Failed to recover these data.\n${top}
 action-success-brecover=${top} items have been successfully recoverd.
 
+action-confirm-btrash=Are you sure to delete these ${top} items?
+action-failed-btrash=Failed to delete these data.\n${top}
+action-success-btrash=${top} items have been successfully deleted.
+
 action-confirm-bupdate=Are you sure to update these ${top} items?
 action-failed-bupdate=Failed to update these data.\n${top}
 action-success-bupdate=${top} items have been successfully updaated.
+
+#confirm messages
+confirm-data-overwrite=Are you sure to overwrite this data?
+
+#warn messages
+warn-data-changed-on-update=The data is updated by other user at ${top}.\nAre you sure to overwrite the data?
+warn-data-changed-on-delete=The data is updated by other user at ${top}.\nAre you sure to delete the data?
+warn-data-changed-on-trash=The data is updated by other user at ${top}.\nAre you sure to delete the data?
 

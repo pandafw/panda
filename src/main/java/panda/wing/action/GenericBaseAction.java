@@ -20,11 +20,6 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	protected final static String RESULT_CONFIRM = "confirm";
 	
 	/**
-	 * RESULT_SUCCESS = "success";
-	 */
-	protected final static String RESULT_SUCCESS = "success";
-
-	/**
 	 * METHOD_SEPARATOR = "_";
 	 */
 	protected final static String METHOD_SEPARATOR = "_";

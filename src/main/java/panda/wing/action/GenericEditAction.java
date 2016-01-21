@@ -1042,11 +1042,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkUpdatedOnUpdate(T data, T srcData) {
-		if (!checkUpdated(data, srcData)) {
-			addActionConfirm(getMessage(RC.CONFIRM_DATA_OVERWRITE));
-			return false;
-		}
-		return true;
+		return checkUpdated(data, srcData, RC.WARN_DATA_CHANGED_PREFIX);
 	}
 
 	/**
@@ -1056,21 +1052,22 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkUpdatedOnDelete(T data, T srcData) {
-		if (!checkUpdated(data, srcData)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
-			setScenarioResult();
-			return false;
+		if (checkUpdated(data, srcData, RC.WARN_DATA_CHANGED_PREFIX)) {
+			return true;
 		}
-		return true;
+
+		setScenarioResult();
+		return false;
 	}
 
 	/**
 	 * checkUpdated
 	 * @param data data
-	 * @param srcData srcData
+	 * @param srcData source data
+	 * @param msg warn message id
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdated(T data, T srcData) {
+	protected boolean checkUpdated(T data, T srcData, String msg) {
 		if (data instanceof IUpdate) {
 			IUpdate cb = (IUpdate)data;
 			IUpdate sb = (IUpdate)srcData;
@@ -1078,7 +1075,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());
 				
-				addActionWarning(getMessage(RC.WARN_DATA_UPDATED, DateTimes.datetimeFormat().format(sb.getUtime())));
+				addActionWarning(getScenarioMessage(msg, DateTimes.datetimeFormat().format(sb.getUtime())));
 				return false;
 			}
 		}
