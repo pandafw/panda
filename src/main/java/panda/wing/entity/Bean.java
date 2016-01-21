@@ -10,19 +10,27 @@ public abstract class Bean {
 	}
 
 	/**
-	 * is this data valid
+	 * is this data active
 	 * @return true if bean is valid
 	 */
-	public static boolean isValid(IStatus bean) {
-		return bean.getStatus() == null || VC.STATUS_X != bean.getStatus();
+	protected static boolean isActive(IStatus bean) {
+		return bean.getStatus() != null && VC.STATUS_ACTIVE == bean.getStatus();
 	}
 	
 	/**
-	 * is this data invalid
-	 * @return true if bean is invalid
+	 * is this data disabled
+	 * @return true if bean is disabled
 	 */
-	public static boolean isInvalid(IStatus bean) {
-		return bean.getStatus() != null && VC.STATUS_X == bean.getStatus();
+	protected static boolean isDisabled(IStatus bean) {
+		return bean.getStatus() != null && VC.STATUS_DISABLED == bean.getStatus();
+	}
+	
+	/**
+	 * is this data recycled
+	 * @return true if bean is recycled
+	 */
+	protected static boolean isRecycled(IStatus bean) {
+		return bean.getStatus() != null && VC.STATUS_RECYCLED == bean.getStatus();
 	}
 
 	/**

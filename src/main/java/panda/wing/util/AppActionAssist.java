@@ -176,7 +176,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	public void initCommonFields(Object data) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
-				((IStatus)data).setStatus(VC.STATUS_0);
+				((IStatus)data).setStatus(VC.STATUS_ACTIVE);
 			}
 		}
 		
@@ -203,7 +203,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	public void initUpdateFields(Object data, Object srcData) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
-				((IStatus)data).setStatus(VC.STATUS_0);
+				((IStatus)data).setStatus(VC.STATUS_ACTIVE);
 			}
 		}
 		

@@ -16,15 +16,21 @@ public interface IStatus {
 
 	//----------------------------------------------------------------------
 	/**
-	 * is this data valid
-	 * @return true if this data is valid
+	 * is this data active
+	 * @return true if this data is active
 	 */
-	public boolean isValid();
+	public boolean isActive();
 
 	/**
-	 * is this data invalid
-	 * @return true if this data is invalid
+	 * is this data disabled
+	 * @return true if this data is disabled
 	 */
-	public boolean isInvalid();
+	public boolean isDisabled();
+
+	/**
+	 * is this data recycled
+	 * @return true if this data is recycled
+	 */
+	public boolean isRecycled();
 }
 

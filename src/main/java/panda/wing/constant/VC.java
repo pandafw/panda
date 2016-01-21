@@ -9,14 +9,19 @@ public interface VC {
 	// status
 	//--------------------------------------------------------
 	/**
-	 * STATUS_0 = '0';
+	 * STATUS_ACTIVE = 'A';
 	 */
-	public final static char STATUS_0 = '0';
+	public final static char STATUS_ACTIVE = 'A';
 
 	/**
-	 * STATUS_X = 'X';
+	 * STATUS_DISABLED = 'D';
 	 */
-	public final static char STATUS_X = 'X';
+	public final static char STATUS_DISABLED = 'D';
+
+	/**
+	 * STATUS_RECYCLED = 'R';
+	 */
+	public final static char STATUS_RECYCLED = 'R';
 
 	//--------------------------------------------------------
 	// locale

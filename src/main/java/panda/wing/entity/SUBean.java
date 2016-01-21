@@ -9,7 +9,7 @@ import panda.wing.constant.VC;
 public class SUBean extends Bean implements IStatus, IUpdate {
 	
 	@Column(notNull=true)
-	protected Character status = VC.STATUS_0;
+	protected Character status = VC.STATUS_ACTIVE;
 	
 	@Column(notNull=true)
 	protected Long uusid;
@@ -85,21 +85,27 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 
 	//----------------------------------------------------------------------
 	/**
-	 * is this data enabled
-	 * @return true if this data is enabled
+	 * is this data active
+	 * @return true if bean is valid
 	 */
-	@Override
-	public boolean isValid() {
-		return isValid(this);
+	public boolean isActive() {
+		return isActive(this);
 	}
-
+	
 	/**
 	 * is this data disabled
-	 * @return true if this data is disabled
+	 * @return true if bean is disabled
 	 */
-	@Override
-	public boolean isInvalid() {
-		return isInvalid(this);
+	public boolean isDisabled() {
+		return isDisabled(this);
+	}
+	
+	/**
+	 * is this data recycled
+	 * @return true if bean is recycled
+	 */
+	public boolean isRecycled() {
+		return isRecycled(this);
 	}
 
 	//----------------------------------------------------------------------
