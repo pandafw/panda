@@ -68,8 +68,8 @@ tip-bookmark=ブックマーク
 
 #d.statusMap
 data-statusMap=\
-	"0": "有効", \
-	"X": "無効"
+	"A": "有効", \
+	"D": "無効"
 
 #locale
 locale-languages=\

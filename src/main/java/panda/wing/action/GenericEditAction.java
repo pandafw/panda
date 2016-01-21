@@ -449,17 +449,19 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Object doUpdateConfirm(T data) {
 		T sd = selectData(data);
-		if (sd != null) {
-			if (checkOnUpdate(data, sd)) {
-				addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
-			}
-			else {
-				if (hasActionErrors() || hasFieldErrors()) {
-					setScenarioResult();
-				}
+		if (sd == null) {
+			return null;
+		}
+		
+		if (checkOnUpdate(data, sd)) {
+			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
+		}
+		else {
+			if (hasActionErrors() || hasFieldErrors()) {
+				setScenarioResult();
 			}
 		}
-		return sd;
+		return data;
 	}
 
 	public boolean isInputConfirm() {

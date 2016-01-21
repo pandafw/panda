@@ -6,7 +6,3 @@ ctime=作成时间
 uusid=更新者ID
 uusnm=更新者名
 utime=更新时间
-
-statusMap=\
-	"0": "有効", \
-	"X": "无効"

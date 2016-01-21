@@ -73,8 +73,8 @@ tip-bookmark=Bookmark
 
 #d.statusMap
 data-statusMap=\
-	"0": "Enbaled", \
-	"X": "Disabled"
+	"A": "Enbaled", \
+	"D": "Disabled"
 
 
 #locale

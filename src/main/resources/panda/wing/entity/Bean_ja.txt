@@ -7,6 +7,3 @@ uusid=更新者ID
 uusnm=更新者名
 utime=更新時間
 
-statusMap=\
-	"0": "有効", \
-	"X": "無効"
