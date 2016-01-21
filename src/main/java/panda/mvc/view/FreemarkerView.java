@@ -63,6 +63,30 @@ public class FreemarkerView extends AbstractPathView {
 		this.contentType = contentType;
 	}
 
+	protected String findTemplate(FreemarkerHelper fh, String path, Class<?> action, String method) {
+		StringBuilder sb = new StringBuilder();
+		while (true) {
+			if (action == null) {
+				throw new RuntimeException("Template \"" + path + "\" not found." + sb);
+			}
+
+			String base = Strings.replaceChars(action.getName(), '.', '/');
+			String tpl = '/' + base + '_' + method + EXT;
+			if (fh.hasTemplate(tpl)) {
+				return tpl;
+			}
+			sb.append('\n').append(tpl);
+
+			tpl = '/' + base + EXT;
+			if (fh.hasTemplate(tpl)) {
+				return tpl;
+			}
+			sb.append('\n').append(tpl);
+
+			action = action.getSuperclass();
+		}
+	}
+
 	@Override
 	public void render(ActionContext ac) {
 		FreemarkerHelper fh = ac.getIoc().get(FreemarkerHelper.class);
@@ -75,48 +99,17 @@ public class FreemarkerView extends AbstractPathView {
 			path = FileNames.removeExtension(path) + EXT;
 			if (!fh.hasTemplate(path)) {
 				Class<?> action = ac.getAction().getClass();
-				StringBuilder sb = new StringBuilder();
-				while (true) {
-					if (action == null) {
-						throw new RuntimeException("Template \"" + ac.getPath() + "\" not found." + sb);
-					}
-	
-					String base = Strings.replaceChars(action.getName(), '.', '/');
-					path = '/' + base + '_' + ac.getMethodName() + EXT;
-					if (fh.hasTemplate(path)) {
-						break;
-					}
-					sb.append('\n').append(path);
-
-					path = '/' + base + EXT;
-					if (fh.hasTemplate(path)) {
-						break;
-					}
-					sb.append('\n').append(path);
-
-					action = action.getSuperclass();
-				}
+				path = findTemplate(fh, path, action, ac.getMethodName());
 			}
 		}
 		else if (path.charAt(0) == '~') {
-			StringBuilder sb = new StringBuilder();
 			String method = path.substring(1);
 
 			path = ac.getPath();
 			path = FileNames.removeExtension(path) + '~' + method + EXT;
 			if (!fh.hasTemplate(path)) {
-				sb.append('\n').append(path);
-
-				String base = ac.getAction().getClass().getName().replace('.', '/');
-				path = '/' + base + '_' + method + EXT;
-				if (!fh.hasTemplate(path)) {
-					sb.append('\n').append(path);
-
-					path = '/' + base + EXT;
-					if (!fh.hasTemplate(path)) {
-						throw new RuntimeException("Template \"" + ac.getPath() + "\" not found." + sb);
-					}
-				}
+				Class<?> action = ac.getAction().getClass();
+				path = findTemplate(fh, path, action, method);
 			}
 		}
 		else {
