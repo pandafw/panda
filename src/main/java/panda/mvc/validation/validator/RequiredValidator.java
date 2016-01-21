@@ -1,9 +1,11 @@
 package panda.mvc.validation.validator;
 
+import java.util.Collection;
+
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.ioc.annotation.IocBean;
-import panda.lang.Arrays;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.validation.Validators;
@@ -11,7 +13,7 @@ import panda.mvc.validation.Validators;
 @IocBean(singleton=false)
 public class RequiredValidator extends AbstractValidator {
 
-	private String[] fields;
+	private Collection<String> fields;
 	
 	/**
 	 * 
@@ -23,22 +25,22 @@ public class RequiredValidator extends AbstractValidator {
 	/**
 	 * @return the fields
 	 */
-	public String getFields() {
-		return Strings.join(fields, ' ');
+	public Collection<String> getFields() {
+		return fields;
 	}
 
 	/**
 	 * @param fields the fields to set
 	 */
-	public void setFields(String fields) {
-		this.fields = Strings.split(fields);
+	public void setFields(Collection<String> fields) {
+		this.fields = fields;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	protected boolean validateValue(ActionContext ac, Object value) {
 		if (value != null) {
-			if (Arrays.isNotEmpty(fields)) {
+			if (Collections.isNotEmpty(fields)) {
 				boolean errs = false;
 				BeanHandler bh = Beans.i().getBeanHandler(value.getClass());
 				for (String pn : fields) {
@@ -55,7 +57,7 @@ public class RequiredValidator extends AbstractValidator {
 			return true;
 		}
 		
-		if (Arrays.isEmpty(fields)) {
+		if (Collections.isEmpty(fields)) {
 			addFieldError(ac);
 		}
 		else {

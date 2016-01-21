@@ -13,6 +13,7 @@ import panda.bean.Beans;
 import panda.bind.json.JsonException;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
+import panda.cast.CastException;
 import panda.cast.Castors;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
@@ -207,10 +208,15 @@ public class DefaultValidators implements Validators {
 				if (pt == null) {
 					throw new IllegalArgumentException("Failed to find property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
 				}
-				
-				Object cv = castors.cast(pv, pt);
-				if (!bh.setPropertyValue(fv, pn, cv)) {
-					throw new IllegalArgumentException("Failed to set property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
+
+				try {
+					Object cv = castors.cast(pv, pt);
+					if (!bh.setPropertyValue(fv, pn, cv)) {
+						throw new IllegalArgumentException("Failed to set property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params());
+					}
+				}
+				catch (CastException e) {
+					throw new IllegalArgumentException("Failed to cast property('" + pn + "') of Validator " + fv.getClass() + ", params: " + v.params(), e);
 				}
 			}
 		}
