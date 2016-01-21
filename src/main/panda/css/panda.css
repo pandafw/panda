@@ -531,6 +531,20 @@ tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
 	border-right: dotted 1px #ccc;
 }
 */
+
+/* ----------------------------------------------------
+ * Default cssColumn Style
+ * -------------------------------------------------- */
+.p-lv-cc-status-A {
+}
+.p-lv-cc-status-D {
+	text-decoration: line-through;
+}
+.p-lv-cc-status-R {
+	font-style: italic;
+	text-decoration: line-through;
+}
+
 /*---------------------------------------------*/
 /* pager.css                                   */
 /*---------------------------------------------*/
