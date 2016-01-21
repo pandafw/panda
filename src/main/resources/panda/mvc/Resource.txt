@@ -239,10 +239,10 @@ error-sendmail=Failed to send email to <${top}>.\nPlease confirm the email addre
 error-file-upload=Failed to upload file.
 
 #info messages
-message-cart-empty=There is no items in the cart。
 message-file-uploading=File uploading...
 message-processing=Processing...
 message-processed=Process completed.
+message-cart-empty=There is no items in the cart。
 
 #confirm messages
 confirm-data-overwrite=Are you sure to overwrite this data?
@@ -250,46 +250,13 @@ confirm-data-overwrite=Are you sure to overwrite this data?
 #warn messages
 warn-data-updated=The data is updated by other user at ${top}.\nAre you sure to overwrite the data with yours?
 
-#action messages
-action-confirm-cancel=Are you sure to cancel this data?
-action-failed-cancel=Failed to cancel this data.\n${top}
-action-success-cancel=The data is successfully canceled.
-
-action-confirm-copy=Are you sure to insert this data?
-action-failed-copy=Failed to insert this data.\n${top}
-action-success-copy=The data is successfully inserted.
-
-action-confirm-delete=Are you sure to delete this data?
-action-failed-delete=Failed to delete this data.\n${top}
-action-success-delete=The data is successfully deleted.
-
-action-confirm-insert=Are you sure to insert this data?
-action-failed-insert=Failed to insert this data.\n${top}
-action-success-insert=The data is successfully inserted.
-
-action-confirm-update=Are you sure to update this data?
-action-failed-update=Failed to update this data.\n${top}
-action-success-update=The data is successfully updated.
-
-
-action-confirm-bcancel=Are you sure to cancel these ${top} items?
-action-failed-bcancel=Failed to cancel these data.\n${top}
-action-success-bcancel=${top} items have been successfully canceled.
-
-action-confirm-bdelete=Are you sure to delete these ${top} items?
-action-failed-bdelete=Failed to delete these data.\n${top}
-action-success-bdelete=${top} items have been successfully deleted.
-
-action-confirm-bupdate=Are you sure to update these ${top} items?
-action-failed-bupdate=Failed to update these data.\n${top}
-action-success-bupdate=${top} items have been successfully updaated.
-
 
 #tooltip
 tooltip-add=Add
 tooltip-cancel=Cancel
 tooltip-copy=Copy
 tooltip-delete=Delete
+tooltip-recover=Recover
 tooltip-edit=Edit
 tooltip-insert=Insert
 tooltip-select-all=Select all
@@ -326,8 +293,6 @@ button-deny=Deny
 button-execute=Execute
 button-json=JSON Export
 button-pdf=PDF Print
-button-pdf-print=PDF Print
-button-pdf-list_print=PDF Print
 button-edit=Edit
 button-list=List
 button-next=Next
@@ -350,33 +315,12 @@ button-view=View
 button-xml=XML Export
 
 button-cancel=Cancel
-button-cancel-confirm=Confirm
-button-cancel-execute=Submit
 button-copy=Copy
-button-copy-confirm=Confirm
-button-copy-execute=Submit
 button-delete=Delete
-button-delete-confirm=Confirm
-button-delete-execute=Delete
+button-recover=Recover
 button-import=Import
-button-import-confirm=Confirm
-button-import-execute=Import
-button-insert=Add
-button-insert-confirm=Confirm
-button-insert-execute=Submit
-button-update=Edit
-button-update-confirm=Confirm
-button-update-execute=Submit
-
-button-bcancel=Cancel
-button-bcancel-confirm=Confirm
-button-bcancel-execute=Submit
-button-bdelete=Delete
-button-bdelete-confirm=Confirm
-button-bdelete-execute=Delete
-button-bupdate=Update
-button-bupdate-confirm=Confirm
-button-bupdate-execute=Submit
+button-insert=Insert
+button-update=Update
 
 
 #icon
@@ -405,6 +349,7 @@ icon-comment=fa fa-comment-o
 
 icon-change=fa fa-check
 icon-delete=fa fa-minus-circle
+icon-recover=fa fa-reply
 icon-add=fa fa-plus-circle
 icon-insert=fa fa-plus-circle
 icon-edit=fa fa-edit
@@ -443,83 +388,14 @@ icon-csv=fa fa-file-text-o
 icon-json=fa fa-strikethrough
 icon-xml=fa fa-code
 icon-pdf=fa fa-file-text
-icon-pdf-print=fa fa-file-text
-icon-pdf-list_print=fa fa-file-text
-
 
 icon-play=fa fa-play-circle
 icon-stop=fa fa-stop
 
 icon-test=fa fa-bug
 
-icon-copy-confirm=fa fa-arrow-circle-right
-icon-copy-execute=fa fa-save
-
-icon-delete-confirm=fa fa-arrow-circle-right
-icon-delete-execute=fa fa-minus-circle
-icon-insert-confirm=fa fa-arrow-circle-right
-icon-insert-execute=fa fa-save
-icon-update-confirm=fa fa-arrow-circle-right
-icon-update-execute=fa fa-save
-
-icon-bdelete=fa fa-minus-circle
-icon-bdelete-confirm=fa fa-arrow-circle-right
-icon-bdelete-execute=fa fa-minus-circle
-icon-bupdate=fa fa-edit
-icon-bupdate-confirm=fa fa-arrow-circle-right
-icon-bupdate-execute=fa fa-save
-
 #title
 title-error=ERROR
 title-reload=${top} - Reload
 title-reloadex=${top} - Reload complete
 
-title-list=${top.title} - List
-title-list_csv=${top.title} - List - ${assist.csvFileTime}
-title-list_popup=${top.title} - List
-title-list_print=${top.title} - List
-title-view=${top.title} - View
-title-print=${top.title} - View
-title-copy=${top.title} - Insert
-title-copy_confirm=${top.title} - Insert ≫　Confirm
-title-copy_success=${top.title} - Insert ≫　Complete
-title-delete=${top.title} - Delete
-title-delete_success=${top.title} - Delete ≫ Complete
-title-insert=${top.title} - Insert
-title-insert_confirm=${top.title} - Insert ≫ Confirm
-title-insert_success=${top.title} - Insert ≫ Complete
-title-update=${top.title} - Update
-title-update_confirm=${top.title} - Update ≫ Confirm
-title-update_success=${top.title} - Update ≫ Complete
-
-title-bdelete=${top.title} - Bulk Delete 
-title-bdelete_confirm=${top.title} - Bulk Delete ≫ Confirm
-title-bdelete_success=${top.title} - Bulk Delete ≫ Complete
-title-bupdate=${top.title} - Bulk Update 
-title-bupdate_confirm=${top.title} - Bulk Update ≫ Confirm
-title-bupdate_success=${top.title} - Bulk Update ≫ Complete
-
-#step
-step-arrow-e=&gt;
-
-step-list=List
-step-cancel=Cancel
-step-cancel-confirm=Confirm
-step-cancel-success=Complete
-step-copy=Input
-step-copy-confirm=Confirm
-step-copy-success=Complete
-step-delete=Delete
-step-delete-confirm=Confirm
-step-delete-success=Complete
-step-insert=Insert
-step-insert-confirm=Confirm
-step-insert-success=Complete
-step-update=Update
-step-update-confirm=Confirm
-step-update-success=Complete
-
-step-bdelete=Delete
-step-bdelete-success=Complete
-step-bupdate=Update
-step-bupdate-success=Complete

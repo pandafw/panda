@@ -192,46 +192,12 @@ confirm-data-overwrite=您确定覆写该数据吗？
 #warn messages
 warn-data-updated=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
 
-#action messages
-action-confirm-cancel=您确定取消该数据吗？
-action-failed-cancel=该数据取消失败。\n${top}
-action-success-cancel=该数据被成功取消。
-
-action-confirm-copy=您确定登录该数据吗？
-action-failed-copy=该数据登录失败。\n${top}
-action-success-copy=该数据被成功登录。
-
-action-confirm-delete=您确定删除该数据吗？
-action-failed-delete=该数据删除失败。\n${top}
-action-success-delete=该数据被成功删除。
-
-action-confirm-insert=您确定登录该数据吗？
-action-failed-insert=该数据登录失败。\n${top}
-action-success-insert=该数据被成功登录。
-
-action-confirm-update=您确定变更该数据吗？
-action-failed-update=该数据变更失败。\n${top}
-action-success-update=该数据被成功变更。
-
-
-action-confirm-bcancel=您确定取消这${top}件数据吗？
-action-failed-bcancel=数据取消失败。\n${top}
-action-success-bcancel=${top}件数据被成功取消。
-
-action-confirm-bdelete=您确定删除这${top}件数据吗？
-action-failed-bdelete=数据删除失败。\n${top}
-action-success-bdelete=${top}件数据被成功删除。
-
-action-confirm-bupdate=您确定变更这${top}件数据吗？
-action-failed-bupdate=数据变更失败。\n${top}
-action-success-bupdate=${top}件数据被成功变更。
-
-
 #tooltip
 tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=复写
 tooltip-delete=删除
+tooltip-recover=恢复
 tooltip-edit=编辑
 tooltip-insert=登录
 tooltip-selectAll=全部选择
@@ -276,8 +242,6 @@ button-execute=实行
 button-json=JSON汇出
 button-csv=CSV汇出
 button-pdf=PDF打印
-button-pdf-print=PDF打印
-button-pdf-list_print=PDF打印
 
 button-edit=编辑
 button-list=浏览
@@ -300,92 +264,16 @@ button-view=显示
 button-xml=XML汇出
 
 button-cancel=取消
-button-cancel-confirm=确认
-button-cancel-execute=提交
 button-copy=复写
-button-copy-confirm=确认
-button-copy-execute=提交
 button-delete=删除
-button-delete-confirm=確認
-button-delete-execute=删除
+button-recover=恢复
 button-insert=追加
-button-insert-confirm=确认
-button-insert-execute=提交
 button-import=汇入
-button-import-confirm=確認
-button-import-execute=汇入执行
 button-update=修改
-button-update-confirm=确认
-button-update-execute=提交
-
-button-bcancel=取消
-button-bcancel-confirm=確認
-button-bcancel-execute=提交
-button-bdelete=删除
-button-bdelete-confirm=確認
-button-bdelete-execute=删除
-button-bupdate=修改
-button-bupdate-confirm=确认
-button-bupdate-execute=提交
 
 
 #title
 title-error=错误
 title-reload=${top}「重新加载确认」
 title-reloaded=${top}「重新加载结果」
-
-title-list=${top.title} - 浏览
-title-list_csv=${top.title} - 列表_${assist.csvFileTime}
-title-list_popup=${top.title} - 浏览
-title-list_print=${top.title} - 浏览
-title-view=${top.title} - 显示
-title-print=${top.title} - 显示
-
-title-cancel=${top.title} - 取消
-title-cancel_confirm=${top.title} - 取消 ⇒ 确认
-title-cancel_success=${top.title} - 取消 ⇒ 完成
-title-copy=${top.title} - 登录
-title-copy_confirm=${top.title} - 登录 ⇒ 确认
-title-copy_success=${top.title} - 登录 ⇒ 完成
-title-delete=${top.title} - 删除
-title-delete_success=${top.title} - 删除 ⇒ 完成
-title-insert=${top.title} - 登录
-title-insert_confirm=${top.title} - 登录 ⇒ 确认
-title-insert_success=${top.title} - 登录 ⇒ 完成
-title-update=${top.title} - 变更
-title-update_confirm=${top.title} - 变更 ⇒ 确认
-title-update_success=${top.title} - 变更 ⇒ 完成
-
-title-bcancel=${top.title} - 取消
-title-bcancel_confirm=${top.title} - 取消 ⇒ 确认
-title-bcancel_success=${top.title} - 取消 ⇒ 完成
-title-bdelete=${top.title} - 删除
-title-bdelete_confirm=${top.title} - 删除 ⇒ 确认
-title-bdelete_success=${top.title} - 删除 ⇒ 完成
-title-bupdate=${top.title} - 变更
-title-bupdate_confirm=${top.title} - 变更 ⇒ 确认
-title-bupdate_success=${top.title} - 变更 ⇒ 完成
-
-#step
-step-list=列表
-step-cancel=取消
-step-cancel-confirm=确认
-step-cancel-success=完成
-step-copy-input=编辑
-step-copy-confirm=确认
-step-copy-success=完成
-step-delete-input=删除
-step-delete-confirm=确认
-step-delete-success=完成
-step-insert-input=编辑
-step-insert-confirm=确认
-step-insert-success=完成
-step-update-input=编辑
-step-update-confirm=确认
-step-update-success=完成
-
-step-bdelete=删除
-step-bdelete-success=完成
-step-bupdate=更新
-step-bupdate-success=完成
 
