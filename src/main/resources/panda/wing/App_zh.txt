@@ -99,12 +99,16 @@ const-genders=\
 button-pdf-print=PDF打印
 button-pdf-list_print=PDF打印
 
+button-add-confirm=确认
+button-add-execute=提交
 button-cancel-confirm=确认
 button-cancel-execute=提交
 button-copy-confirm=确认
 button-copy-execute=提交
 button-delete-confirm=確認
 button-delete-execute=删除
+button-edit-confirm=确认
+button-edit-execute=提交
 button-insert-confirm=确认
 button-insert-execute=提交
 button-import-confirm=確認
@@ -130,19 +134,12 @@ title-view=${top.title} - 显示
 title-print=${top.title} - 显示
 
 title-cancel=${top.title} - 取消
-title-cancel_confirm=${top.title} - 取消 ⇒ 确认
-title-cancel_success=${top.title} - 取消 ⇒ 完成
+title-add=${top.title} - 登录
 title-copy=${top.title} - 登录
-title-copy_confirm=${top.title} - 登录 ⇒ 确认
-title-copy_success=${top.title} - 登录 ⇒ 完成
 title-delete=${top.title} - 删除
-title-delete_success=${top.title} - 删除 ⇒ 完成
+title-edit=${top.title} - 编辑
 title-insert=${top.title} - 登录
-title-insert_confirm=${top.title} - 登录 ⇒ 确认
-title-insert_success=${top.title} - 登录 ⇒ 完成
-title-update=${top.title} - 变更
-title-update_confirm=${top.title} - 变更 ⇒ 确认
-title-update_success=${top.title} - 变更 ⇒ 完成
+title-update=${top.title} - 更新
 
 title-bcancel=${top.title} - 取消
 title-bcancel_confirm=${top.title} - 取消 ⇒ 确认
@@ -159,19 +156,25 @@ step-list=列表
 step-cancel=取消
 step-cancel-confirm=确认
 step-cancel-success=完成
+step-add=登录
+step-add-confirm=确认
+step-add-success=完成
 step-copy=编辑
 step-copy-confirm=确认
 step-copy-success=完成
 step-delete=删除
 step-delete-confirm=确认
 step-delete-success=完成
+step-edit=编辑
+step-edit-confirm=确认
+step-edit-success=完成
 step-recover=恢复
 step-recover-confirm=确认
 step-recover-success=完成
-step-insert-input=编辑
+step-insert=登录
 step-insert-confirm=确认
 step-insert-success=完成
-step-update-input=编辑
+step-update=更新
 step-update-confirm=确认
 step-update-success=完成
 
@@ -187,29 +190,37 @@ step-bupdate-success=完成
 
 
 #action messages
+action-confirm-add=您确定登录该数据吗？
+action-failed-add=该数据登录失败。\n${top}
+action-success-add=该数据被成功登录了。
+
 action-confirm-cancel=您确定取消该数据吗？
 action-failed-cancel=该数据取消失败。\n${top}
-action-success-cancel=该数据被成功取消。
+action-success-cancel=该数据被成功取消了。
 
 action-confirm-copy=您确定登录该数据吗？
 action-failed-copy=该数据登录失败。\n${top}
-action-success-copy=该数据被成功登录。
+action-success-copy=该数据被成功登录了。
 
 action-confirm-delete=您确定删除该数据吗？
 action-failed-delete=该数据删除失败。\n${top}
-action-success-delete=该数据被成功删除。
+action-success-delete=该数据被成功删除了。
+
+action-confirm-edit=您确定变更该数据吗？
+action-failed-edit=该数据变更失败。\n${top}
+action-success-edit=该数据被成功变更了。
 
 action-confirm-recover=您确定恢复该数据吗？
 action-failed-recover=该数据恢复失败。\n${top}
-action-success-recover=该数据被成功恢复。
+action-success-recover=该数据被成功恢复了。
 
 action-confirm-insert=您确定登录该数据吗？
 action-failed-insert=该数据登录失败。\n${top}
-action-success-insert=该数据被成功登录。
+action-success-insert=该数据被成功登录了。
 
-action-confirm-update=您确定变更该数据吗？
-action-failed-update=该数据变更失败。\n${top}
-action-success-update=该数据被成功变更。
+action-confirm-update=您确定更新该数据吗？
+action-failed-update=该数据更新失败。\n${top}
+action-success-update=该数据被成功更新了。
 
 
 action-confirm-bcancel=您确定取消这${top}件数据吗？
@@ -227,6 +238,5 @@ action-success-brecover=${top}件数据被成功恢复。
 action-confirm-bupdate=您确定变更这${top}件数据吗？
 action-failed-bupdate=数据变更失败。\n${top}
 action-success-bupdate=${top}件数据被成功变更。
-
 
 

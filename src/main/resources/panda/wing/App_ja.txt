@@ -98,17 +98,23 @@ const-genders=\
 button-pdf-print=PDF出力
 button-pdf-list_print=PDF出力
 
-button-cancel-execute=取消
+button-add-confirm=確認画面へ
+button-add-execute=登録
 button-copy-confirm=確認画面へ
 button-copy-execute=登録
 button-delete-confirm=確認画面へ
 button-delete-execute=削除
+button-edit-confirm=確認画面へ
+button-edit-execute=更新
 button-insert-confirm=確認画面へ
 button-insert-execute=登録
 button-import-confirm=確認画面へ
 button-import-execute=インポート
 button-update-confirm=確認画面へ
 button-update-execute=更新
+
+button-cancel-confirm=確認画面へ
+button-cancel-execute=取消
 
 button-bcancel=取消
 button-bcancel-execute=取消
@@ -126,19 +132,13 @@ title-list_print=${top.title} - 一覧
 title-view=${top.title} - 照会
 title-print=${top.title} - 照会
 title-cancel=${top.title} - 取消
-title-cancel_confirm=${top.title} - 取消 ⇒ 確認
-title-cancel_success=${top.title} - 取消 ⇒ 完了
+title-add=${top.title} - 新規
 title-copy=${top.title} - 新規
-title-copy_confirm=${top.title} - 新規 ⇒ 確認
-title-copy_success=${top.title} - 新規 ⇒ 完了
 title-delete=${top.title} - 削除
-title-delete_success=${top.title} - 削除 ⇒ 完了
+title-edit=${top.title} - 編集
 title-insert=${top.title} - 新規
-title-insert_confirm=${top.title} - 新規 ⇒ 確認
-title-insert_success=${top.title} - 新規 ⇒ 完了
-title-update=${top.title} - 編集
-title-update_confirm=${top.title} - 編集 ⇒ 確認
-title-update_success=${top.title} - 編集 ⇒ 完了
+title-recover=${top.title} - 復元
+title-update=${top.title} - 更新
 
 title-bcancel=${top.title} - 取消
 title-bcancel_confirm=${top.title} - 取消 ⇒ 確認
@@ -155,19 +155,25 @@ step-list=一覧
 step-cancel=取消
 step-cancel-confirm=確認
 step-cancel-success=完了
+step-add=新規
+step-add-confirm=確認
+step-add-success=完了
 step-copy=複写
 step-copy-confirm=確認
 step-copy-success=完了
 step-delete=削除
 step-delete-confirm=確認
 step-delete-success=完了
+step-edit=編集
+step-edit-confirm=確認
+step-edit-success=完了
 step-recover=復元
 step-recover-confirm=確認
 step-recover-success=完了
 step-insert=新規
 step-insert-confirm=確認
 step-insert-success=完了
-step-update=編集
+step-update=更新
 step-update-confirm=確認
 step-update-success=完了
 
@@ -186,13 +192,21 @@ action-confirm-cancel=該当データを取消して宜しいでしょうか？
 action-failed-cancel=該当データを取消できませんでした。\n${top}
 action-success-cancel=該当データを取消しました。
 
+action-confirm-add=該当データを登録して宜しいでしょうか？
+action-failed-add=該当データを登録できませんでした。\n${top}
+action-success-add=該当データを登録しました。
+
 action-confirm-copy=該当データを登録して宜しいでしょうか？
-action-failed-copy=該当データを複写できませんでした。\n${top}
+action-failed-copy=該当データを登録できませんでした。\n${top}
 action-success-copy=該当データを登録しました。
 
 action-confirm-delete=該当データを削除して宜しいでしょうか？
 action-failed-delete=該当データを削除できませんでした。\n${top}
 action-success-delete=該当データを削除しました。
+
+action-confirm-edit=該当データを更新して宜しいでしょうか？
+action-failed-edit=該当データを更新できませんでした。\n${top}
+action-success-edit=該当データを更新しました。
 
 action-confirm-recover=該当データを復元して宜しいでしょうか？
 action-failed-recover=該当データを復元できませんでした。\n${top}
@@ -202,9 +216,9 @@ action-confirm-insert=該当データを登録して宜しいでしょうか？
 action-failed-insert=該当データを新規できませんでした。\n${top}
 action-success-insert=該当データを登録しました。
 
-action-confirm-update=該当データを変更して宜しいでしょうか？
-action-failed-update=該当データを変更できませんでした。\n${top}
-action-success-update=該当データを変更しました。
+action-confirm-update=該当データを更新して宜しいでしょうか？
+action-failed-update=該当データを更新できませんでした。\n${top}
+action-success-update=該当データを更新しました。
 
 action-confirm-bcancel=該当${top}件のデータを取消して宜しいでしょうか？
 action-failed-bcancel=該当データを取消できませんでした。\n${top}
