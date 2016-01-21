@@ -2,7 +2,7 @@
 <@header/>
 
 <div class="p-section">
-	<@sheader steps=[ ui.name ]/>
+	<@sheader steps=[ ui.name, ui.name + "-confirm" ]/>
 	<#include "list-star-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>

@@ -45,12 +45,12 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		"_list_print",
 		"_delete",
 		"_delete_success",
-		"_insert",
-		"_insert_confirm",
-		"_insert_success",
-		"_update",
-		"_update_confirm",
-		"_update_success",
+		"_add",
+		"_add_confirm",
+		"_add_success",
+		"_edit",
+		"_edit_confirm",
+		"_edit_success",
 		"_view",
 		"_print",
 		""
@@ -161,15 +161,15 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
 							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
 						}
-						else if ("insert".equals(t) || "copy".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_insert"));
-							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_insert_confirm"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_insert_success"));
+						else if ("add".equals(t) || "copy".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_add"));
+							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_add_confirm"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_add_success"));
 						}
-						else if ("update".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_update"));
-							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_update_confirm"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_update_success"));
+						else if ("edit".equals(t)) {
+							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_edit"));
+							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_edit_confirm"));
+							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_edit_success"));
 						}
 					}
 				}

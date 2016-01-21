@@ -143,8 +143,8 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		if (Collections.isNotEmpty(action.getSortedInputUIList())) {
 			for (InputUI iui : action.getSortedInputUIList()) {
 				if (Collections.contains(iui.getTemplates(), "copy") 
-						|| Collections.contains(iui.getTemplates(), "update")
-						|| Collections.contains(iui.getTemplates(), "insert")) {
+						|| Collections.contains(iui.getTemplates(), "edit")
+						|| Collections.contains(iui.getTemplates(), "add")) {
 					imports.add(Validates.class.getName());
 				}
 			}
@@ -152,8 +152,8 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		if (Collections.isNotEmpty(entity.getNotNullList()) && Collections.isNotEmpty(action.getSortedInputUIList())) {
 			for (InputUI iui : action.getSortedInputUIList()) {
 				if (Collections.contains(iui.getTemplates(), "copy") 
-						|| Collections.contains(iui.getTemplates(), "update")
-						|| Collections.contains(iui.getTemplates(), "insert")) {
+						|| Collections.contains(iui.getTemplates(), "edit")
+						|| Collections.contains(iui.getTemplates(), "add")) {
 					imports.add(Validates.class.getName());
 					imports.add(Validate.class.getName());
 					imports.add(Validators.class.getName());

@@ -271,7 +271,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.print_input(data);
 	}
 
-<#elseif ui.templates?seq_contains("insert")>
+<#elseif ui.templates?seq_contains("add")>
 	/**
 	 * ${ui.name}
 	 */
@@ -279,7 +279,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
 	public Object ${ui.name}() {
-		return super.insert();
+		return super.add();
 	}
 
 	/**
@@ -289,7 +289,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok("sftl:~${ui.name}")
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
-		return super.insert_input(data);
+		return super.add_input(data);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
-		return super.insert_confirm(data);
+		return super.add_confirm(data);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
-		return super.insert_execute(data);
+		return super.add_execute(data);
 	}
 
 <#elseif ui.templates?seq_contains("copy")>
@@ -353,7 +353,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.copy_execute(data);
 	}
 
-<#elseif ui.templates?seq_contains("update")>
+<#elseif ui.templates?seq_contains("edit")>
 	/**
 	 * ${ui.name}
 	 */
@@ -361,7 +361,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
 	public Object ${ui.name}(@Param ${entityBeanClass} key) {
-		return super.update(key);
+		return super.edit(key);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok("sftl:~${ui.name}")
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
-		return super.update_input(data);
+		return super.edit_input(data);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
-		return super.update_confirm(data);
+		return super.edit_confirm(data);
 	}
 
 	/**
@@ -391,7 +391,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
-		return super.update_execute(data);
+		return super.edit_execute(data);
 	}
 
 <#elseif ui.templates?seq_contains("delete")>

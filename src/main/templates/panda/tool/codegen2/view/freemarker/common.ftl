@@ -1,8 +1,6 @@
 <#assign s = "<"/>
 <#assign e = ">"/>
 <#assign d = "$"/>
-<#assign actionDataFieldName = action.dataFieldName!'d'/>
-<#assign actionDataListFieldName = action.dataListFieldName!'ds'/>
 <#if ui??>
 	<#if ui.params.actionList??><#assign actionList = ui.params.actionList/></#if>
 	<#if ui.params.actionCopy??><#assign actionCopy = ui.params.actionCopy/></#if>
@@ -96,7 +94,7 @@
 				<#if au.params?has_content>
 					<#list au.params?keys as pn>
 						<#assign _dpv = au.params[pn]?string/>
-${s}@p.param name="${pn}" value="<#if _dpv?starts_with('.')>${actionDataFieldName}</#if>${_dpv}"/><#rt/>
+${s}@p.param name="${pn}" value="%{<#if _dpv?starts_with('.')>r</#if>${_dpv}}"/><#rt/>
 					</#list>
 				</#if>
 ${s}/@p.url><#rt/>

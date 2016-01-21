@@ -12,7 +12,8 @@
 		</#if>
 		<#if f.editTag?? && (f.editTag.name?ends_with(".hidden") || f.editTag.name?ends_with(".viewfield"))>
 			${s}@p.textfield
-				name="${actionDataFieldName}.${f.name}"
+				name="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 				required="true"
 				label="%{getText('${ui.name}-${f.name}', '')}"
 				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
@@ -32,7 +33,8 @@
 			<#if f.editTag.cssClass??>
 				cssClass="${f.editTag.cssClass}"
 			</#if>
-				name="${actionDataFieldName}.${f.name}"
+				name="<#if f.actionField>a.</#if>${f.name}"
+				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
