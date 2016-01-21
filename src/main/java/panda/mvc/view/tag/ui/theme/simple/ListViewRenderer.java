@@ -1,7 +1,6 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import panda.bean.Beans;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
@@ -782,6 +782,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private String getCssColumnClass(Object d) {
+		if (Arrays.isEmpty(cssColumns)) {
+			return Strings.EMPTY;
+		}
+		
 		StringBuilder ccc = new StringBuilder();
 		for (String c : cssColumns) {
 			Object v = getBeanProperty(d, c);
@@ -834,7 +838,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			
 			for (Object d : list) {
 				String oe = (inx % 2 == 0 ? "odd" : "even");
-				write("<tr class=\"p-lv-tr p-lv-tr-" + oe + " p-tr-" + oe
+				write("<tr class=\"p-lv-tr p-lv-tr-" + oe
 						+ getCssColumnClass(d)
 						+ "\">");
 

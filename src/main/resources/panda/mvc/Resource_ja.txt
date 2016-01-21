@@ -186,18 +186,13 @@ message-file-uploading=ファイル転送中...
 message-processing=処理中...
 message-processed=処理完了。
 
-#confirm messages
-confirm-data-overwrite=該当データを上書きして宜しいでしょうか？
-
-#warn messages
-warn-data-updated=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
-
 
 #tooltip
 tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=複写
 tooltip-delete=削除
+tooltip-trash=削除
 tooltip-recover=復元
 tooltip-edit=編集
 tooltip-insert=新規
@@ -265,6 +260,7 @@ button-xml=XML出力
 button-cancel=取消
 button-copy=複写
 button-delete=削除
+button-trash=削除
 button-insert=新規
 button-import=インポート
 button-update=編集

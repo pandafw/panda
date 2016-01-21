@@ -186,17 +186,12 @@ message-file-uploading=文件上传中...
 message-processing=处理中...
 message-processed=处理成功。
 
-#confirm messages
-confirm-data-overwrite=您确定覆写该数据吗？
-
-#warn messages
-warn-data-updated=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
-
 #tooltip
 tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=复写
 tooltip-delete=删除
+tooltip-trash=删除
 tooltip-recover=恢复
 tooltip-edit=编辑
 tooltip-insert=登录
@@ -266,6 +261,7 @@ button-xml=XML汇出
 button-cancel=取消
 button-copy=复写
 button-delete=删除
+button-trash=删除
 button-recover=恢复
 button-insert=追加
 button-import=汇入

@@ -244,17 +244,12 @@ message-processing=Processing...
 message-processed=Process completed.
 message-cart-empty=There is no items in the cart。
 
-#confirm messages
-confirm-data-overwrite=Are you sure to overwrite this data?
-
-#warn messages
-warn-data-updated=The data is updated by other user at ${top}.\nAre you sure to overwrite the data with yours?
-
 
 #tooltip
 tooltip-add=Add
 tooltip-cancel=Cancel
 tooltip-copy=Copy
+tooltip-trash=Delete
 tooltip-delete=Delete
 tooltip-recover=Recover
 tooltip-edit=Edit
@@ -281,19 +276,23 @@ button-shopping=Shopping
 button-layoutPC=PC layout
 button-layoutMB=Mobile layout
 
-button-change=Change
 button-add=Add
 button-approve=Approve
 button-back=Back
+button-cancel=Cancel
+button-change=Change
 button-clear=Clear
 button-close=Close
 button-confirm=Confirm
+button-copy=Copy
 button-csv=CSV Export
+button-delete=Delete
 button-deny=Deny
 button-execute=Execute
 button-json=JSON Export
 button-pdf=PDF Print
 button-edit=Edit
+button-exec=Execute
 button-list=List
 button-next=Next
 button-print=Print
@@ -305,7 +304,6 @@ button-search=Search
 button-select-all=Select all
 button-select-none=Select none
 button-status=Status
-button-exec=Execute
 button-start=Start
 button-stop=Stop
 button-start-all=Start All
@@ -314,9 +312,7 @@ button-submit=Submit
 button-view=View
 button-xml=XML Export
 
-button-cancel=Cancel
-button-copy=Copy
-button-delete=Delete
+button-trash=Delete
 button-recover=Recover
 button-import=Import
 button-insert=Insert
@@ -349,6 +345,7 @@ icon-comment=fa fa-comment-o
 
 icon-change=fa fa-check
 icon-delete=fa fa-minus-circle
+icon-trash=fa fa-trash-o
 icon-recover=fa fa-reply
 icon-add=fa fa-plus-circle
 icon-insert=fa fa-plus-circle
