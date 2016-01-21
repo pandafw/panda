@@ -509,6 +509,24 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
+	public void testUpdatesByQuery() {
+		List<Teacher> expect = Teacher.creates(2, 3);
+		expect.get(0).setMemo("u");
+		expect.get(1).setMemo("u");
+
+		Teacher t = new Teacher();
+		t.setMemo("u");
+
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
+		q.in("name","T2", "T3").excludeAll().include("memo");
+		
+		Assert.assertEquals(expect.size(), dao.updates(t, q));
+		
+		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
+		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
+	}
+
+	@Test
 	public void testExecDelete() {
 		final Score expect = Score.create(2, 2, 2);
 		dao.exec(new Runnable() {

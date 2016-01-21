@@ -92,11 +92,27 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
+	 * @return this
+	 */
+	public Q includeAll() {
+		query.includeAll();
+		return (Q)this;
+	}
+	
+	/**
 	 * @param names include name
 	 * @return this
 	 */
 	public Q include(String... names) {
 		query.include(names);
+		return (Q)this;
+	}
+
+	/**
+	 * @return this
+	 */
+	public Q excludeAll() {
+		query.excludeAll();
 		return (Q)this;
 	}
 

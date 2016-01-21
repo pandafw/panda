@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import panda.dao.entity.Entity;
+import panda.dao.entity.EntityField;
 import panda.dao.query.Filter.ComboFilter;
 import panda.lang.Asserts;
 import panda.lang.Collections;
@@ -208,11 +209,13 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			flags = 0;
 			if (columns != null && !columns.isEmpty()) {
 				Collection<String> vs = columns.values();
-				if (Collections.contains(vs, "")) {
-					flags |= HAS_INCLUDES;
-				}
-				if (Collections.contains(vs, null)) {
-					flags |= HAS_EXCLUDES;
+				for (String v : vs) {
+					if ("".equals(v)) {
+						flags |= HAS_INCLUDES;
+					}
+					if (v == null) {
+						flags |= HAS_EXCLUDES;
+					}
 				}
 			}
 		}
@@ -256,6 +259,18 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * @return this
+	 */
+	public GenericQuery includeAll() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getFields()) {
+			setColumn(ef.getName(), "");
+		}
+		flags = null;
+		return this;
+	}
+
+	/**
 	 * @param names include name
 	 * @return this
 	 */
@@ -264,6 +279,18 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		for (String name : names) {
 			Asserts.notEmpty(name);
 			setColumn(name, "");
+		}
+		flags = null;
+		return this;
+	}
+
+	/**
+	 * @return this
+	 */
+	public GenericQuery excludeAll() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getFields()) {
+			setColumn(ef.getName(), null);
 		}
 		flags = null;
 		return this;
@@ -315,13 +342,6 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			columns.clear();
 		}
 		return this;
-	}
-
-	/**
-	 * @param columns the columns to set
-	 */
-	protected void setColumns(Map<String, String> columns) {
-		this.columns = columns;
 	}
 
 	/**
