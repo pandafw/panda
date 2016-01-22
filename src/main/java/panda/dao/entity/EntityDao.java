@@ -457,23 +457,14 @@ public class EntityDao<T> {
 	
 	//-------------------------------------------------------------------------
 	/**
-	 * update a record by the supplied object. 
+	 * update a record by the supplied object and fields. 
 	 * 
 	 * @param obj sample object
+	 * @param fields the fields to update
 	 * @return updated count
 	 */
-	public int update(T obj) {
-		return dao.update(obj);
-	}
-
-	/**
-	 * update records by the supplied object collection. 
-	 * 
-	 * @param col record collection
-	 * @return updated count
-	 */
-	public int updates(Collection<T> col) {
-		return dao.updates(col);
+	public int update(T obj, String... fields) {
+		return dao.update(obj, fields);
 	}
 
 	/**
@@ -495,6 +486,17 @@ public class EntityDao<T> {
 	 */
 	public int updatesIgnoreNull(Collection<T> col) {
 		return dao.updatesIgnoreNull(col);
+	}
+
+	/**
+	 * update records by the supplied object collection and fields. 
+	 * 
+	 * @param col record collection
+	 * @param fields the fields to update
+	 * @return updated count
+	 */
+	public int updates(Collection<T> col, String... fields) {
+		return dao.updates(col, fields);
 	}
 
 	/**

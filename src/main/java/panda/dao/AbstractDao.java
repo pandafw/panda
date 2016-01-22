@@ -12,6 +12,7 @@ import panda.dao.handler.MapDataHandler;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.Join;
 import panda.dao.query.Query;
+import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Objects;
 
@@ -1200,13 +1201,14 @@ public abstract class AbstractDao implements Dao {
 
 	//-------------------------------------------------------------------------
 	/**
-	 * update a record by the supplied object. 
+	 * update a record by the supplied object and fields. 
 	 * 
 	 * @param obj sample object
+	 * @param fields the fields to update
 	 * @return updated count
 	 */
 	@Override
-	public int update(Object obj) {
+	public int update(Object obj, String... fields) {
 		assertObject(obj);
 
 		Entity<?> entity = getEntity(obj.getClass());
@@ -1214,6 +1216,9 @@ public abstract class AbstractDao implements Dao {
 		
 		GenericQuery query = createQuery(entity);
 		queryPrimaryKey(query, obj);
+		if (Arrays.isNotEmpty(fields)) {
+			query.excludeAll().include(fields);
+		}
 
 		return updatesByQuery(obj, query, 1);
 	}
@@ -1240,13 +1245,14 @@ public abstract class AbstractDao implements Dao {
 	}
 
 	/**
-	 * update records by the supplied object collection. 
+	 * update records by the supplied object collection and fields. 
 	 * 
 	 * @param col record collection
+	 * @param fields the fields to update
 	 * @return updated count
 	 */
 	@Override
-	public int updates(Collection<?> col) {
+	public int updates(Collection<?> col, String... fields) {
 		assertCollection(col);
 
 		autoStart();
@@ -1256,7 +1262,7 @@ public abstract class AbstractDao implements Dao {
 				if (obj == null) {
 					continue;
 				}
-				cnt += update(obj);
+				cnt += update(obj, fields);
 			}
 
 			autoCommit();
