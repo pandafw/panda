@@ -17,7 +17,6 @@
 	border-bottom: 0;
 }
 .p-form .form-control {
-	height: auto;
 }
 .p-form .form-control, .p-form input.form-control, .p-form select.form-control,
 .p-form .input-group-addon, .p-form .input-group-btn {
@@ -42,18 +41,16 @@
 }
 .p-checkboxlist label.checkbox-inline,
 .p-radiomap label.radio-inline {
-	padding-right: 10px;
+	padding-right: 20px;
 }
 .p-checkboxlist .checkbox-inline+.checkbox-inline,
 .p-radiomap .radio-inline+.radio-inline {
 	margin-left: 0;
 }
 
-
 /** datetimepicker */
-/* .p-datepicker, .p-timepicker, .p-datetimepicker {
+.p-datepicker, .p-timepicker, .p-datetimepicker {
 }
-*/
 i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	cursor: pointer;
 }

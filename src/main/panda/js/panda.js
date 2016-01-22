@@ -1859,12 +1859,15 @@ function plv_checkRow(id, row, check) {
 
 function _plv_init_filters($lv) {
 	$lv.find(".p-lv-filters")
-		.find('tr.p-lv-input')
+		.find('.form-group')
 			.each(function() {
 				if ($(this).hasClass('p-hidden')) {
 					$(this).find("input,select,textarea").prop('disabled', true);
 				}
 			}).end()
+		.find('.p-lv-fs-remove').click(_plv_onDelFilter).end()
+		.find('.p-lv-fs-clear').click(_plv_onClearFilters).end()
+		.find('.p-lv-fs-select').change(_plv_onAddFilter).end()
 		.find('.p-lv-f-number-c, .p-lv-f-date-c, .p-lv-f-datetime-c, .p-lv-f-time-c')
 			.on('change', _plv_onBetweenChange)
 			.end()
@@ -2069,16 +2072,17 @@ function _plv_toggleRow($tr, ts) {
 }
 
 function _plv_onBetweenChange() {
-	var $t = $(this),
-		d = $t.val() != 'bt',
-		v = d ? 'hidden' : 'visible';
-	if (d) {
-		$t.nextAll('INPUT').val('');
+	var $t = $(this);
+	if ($t.val() == 'bt') {
+		$t.nextAll().removeClass('p-hidden').find('INPUT').prop('disabled', false);
 	}
-	$t.nextAll().css('visibility', v);
+	else {
+		$t.nextAll().addClass('p-hidden').find('INPUT').prop('disabled', true);
+	}
 }
 
-function _plv_onAddFilter(e) {
+function _plv_onAddFilter() {
+	var e = this;
 	if (e.selectedIndex > 0) {
 		$(e).closest(".p-lv-filters")
 			.find('.p-lv-fsi-' + e.value)
@@ -2092,27 +2096,27 @@ function _plv_onAddFilter(e) {
 	return false;
 }
 
-function _plv_onDelFilter(e, n) {
-	$(e).closest(".p-lv-filters")
-		.find('.p-lv-fsi-' + n)
-			.addClass('p-hidden')
-			.find("input,select,textarea")
-				.prop('disabled', true)
-				.each(_plv_clearFieldValue)
-				.end()
-			.find(".p-label-error")
-				.removeClass('p-label-error')
-				.end()
-			.find(".p-field-errors")
-				.remove()
-				.end()
+function _plv_onDelFilter() {
+	$(this).closest(".form-group")
+		.addClass('p-hidden')
+		.find("input,select,textarea")
+			.prop('disabled', true)
+			.each(_plv_clearFieldValue)
 			.end()
-		.find('.p-lv-fs-select>option[value=' + n + ']')
-			.prop('disabled', false);
+		.find(".p-label-error")
+			.removeClass('p-label-error')
+			.end()
+		.find(".p-field-errors")
+			.remove()
+			.end()
+		.end()
+		.closest(".p-lv-filters")
+			.find('.p-lv-fs-select>option[value=' + n + ']')
+				.prop('disabled', false);
 }
 
-function _plv_onClearFilters(e) {
-	$(e).closest(".p-lv-filters-t")
+function _plv_onClearFilters() {
+	$(this).closest(".p-lv-fsform")
 		.find(".p-field-errors")
 			.remove()
 			.end()

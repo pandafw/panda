@@ -56,7 +56,6 @@
 	border-bottom: 0;
 }
 .p-form .form-control {
-	height: auto;
 }
 .p-form .form-control, .p-form input.form-control, .p-form select.form-control,
 .p-form .input-group-addon, .p-form .input-group-btn {
@@ -81,18 +80,16 @@
 }
 .p-checkboxlist label.checkbox-inline,
 .p-radiomap label.radio-inline {
-	padding-right: 10px;
+	padding-right: 20px;
 }
 .p-checkboxlist .checkbox-inline+.checkbox-inline,
 .p-radiomap .radio-inline+.radio-inline {
 	margin-left: 0;
 }
 
-
 /** datetimepicker */
-/* .p-datepicker, .p-timepicker, .p-datetimepicker {
+.p-datepicker, .p-timepicker, .p-datetimepicker {
 }
-*/
 i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 	cursor: pointer;
 }
@@ -300,105 +297,43 @@ fieldset.p-lv-filters legend {
 	background-color: #f9f9f9;
 	padding: 10px;
 }
-.p-lv-filters-t {
-	width: 100%;
+.p-lv-fsform.form-horizontal .form-group {
+	border-bottom: none;
 }
-.p-lv-filters-t > tbody > tr > td {
-	padding: 2px;
+.p-lv-fsform .p-lv-fs-remove {
+	color: #999;
+	margin-top: 8px;
+	position: absolute;
+	cursor: pointer;
+	z-index: 1;
 }
-.p-lv-filters-t .form-control,
-.p-form .p-lv-filters-t .form-control {
-	display: inline;
-}
-.p-lv-filters-t .form-control, 
-.p-form .p-lv-filters-t .form-control {
-	padding: 3px 6px;
-}
-.p-lv-filters-t .input-group-addon, 
-.p-form .p-lv-filters-t .input-group-addon {
-	padding: 5px 6px;
-}
-.p-lv-filters-t td.p-lv-submit td {
-	white-space: nowrap;
-}
-.p-lv-filters-t td.p-lv-label {
-	padding-right: 6px;
-	width: 80px;
-	min-width: 80px;
-	text-align: right;
-}
-.p-lv-filters-t td.p-lv-label * {
-}
-.p-lv-filters-t td.p-lv-input {
-	min-width: 390px;
-	white-space: nowrap;
-}
-.p-lv-filters-t td.p-lv-input .p-checkboxlist,
-.p-lv-filters-t td.p-lv-input .p-radiomap {
-	white-space: normal;
-}
-.p-lv-filters-t td.p-lv-remove {
-	width: auto;
-}
-.p-lv-filters-t .p-lv-f-string-v {
-	width: 280px;
-}
-.p-lv-filters-t .p-lv-f-string-c {
-	width: auto;
-}
-.p-lv-filters-t .p-datepicker,
-.p-lv-filters-t .p-timepicker,
-.p-lv-filters-t .p-datetimepicker {
-	display: inline-block;
-}
-.p-lv-filters-t .p-datepicker-icon,
-.p-lv-filters-t .p-timepicker-icon,
-.p-lv-filters-t .p-datetimepicker-icon {
-	display: inline;
-}
-.p-lv-filters-t .p-lv-f-date-v, .p-lv-filters-t .p-lv-f-date-v2,
-.p-lv-filters-t .p-lv-f-time-v, .p-lv-filters-t .p-lv-f-time-v2,
-.p-lv-filters-t .p-lv-f-datetime-v, .p-lv-filters-t .p-lv-f-datetime-v2 {
-	width: 150px;
-}
-.p-lv-filters-t .p-lv-f-date-c,
-.p-lv-filters-t .p-lv-f-datetime-c,
-.p-lv-filters-t .p-lv-f-time-c {
-	width: auto;
-}
-.p-lv-filters-t .p-lv-f-number-v, .p-lv-filters-t .p-lv-f-number-v2 {
-	width: 160px;
-}
-.p-lv-filters-t .p-lv-f-number-c {
-	width: auto;
-}
-.p-lv-filters-t .p-lv-f-boolean-true {
-}
-.p-lv-filters-t .p-lv-f-boolean-false {
-}
-.p-lv-filters-t .p-checkboxlist {
-}
-.p-lv-filters-t .p-lv-filters-sep td {
-	padding: 10px 0;
-}
-.p-lv-filters-t .p-lv-filters-sep div {
+.p-lv-fsform .p-lv-filters-sep {
 	border-top: 1px dashed #ccc;
 	width: 100%;
 }
-.p-lv-filters-t tr.p-lv-submit {
+.p-lv-fs-inputgroup .p-lv-f-number-v.form-control,
+.p-lv-fs-inputgroup .p-lv-f-number-v2.form-control,
+.p-lv-fs-inputgroup .p-lv-f-string-v.form-control {
+	display: inline;
+	width: 170px;;
 }
-.p-lv-filters-t tr.p-lv-submit td.p-lv-submit {
-	padding: 12px 2px 2px 2px;
+.p-lv-fs-inputgroup .p-lv-f-g1, .p-lv-fs-inputgroup .p-lv-f-g2 {
+	display: inline-block;
+	vertical-align: top;
 }
-.p-lv-fs-tb-options {
-	margin: 0;
+.p-lv-fs-inputgroup .p-lv-f-date-c.form-control,
+.p-lv-fs-inputgroup .p-lv-f-datetime-c.form-control,
+.p-lv-fs-inputgroup .p-lv-f-time-c.form-control,
+.p-lv-fs-inputgroup .p-lv-f-number-c.form-control,
+.p-lv-fs-inputgroup .p-lv-f-string-c.form-control {
+	display: inline;
+	width: auto;
 }
-.p-lv-fs-tb-options td {
-	white-space: nowrap;
+.p-lv-fsform .p-lv-fs-select {
+	display: inline;
+	margin-left: 40px;
 }
-.p-lv-filters-t .p-lv-fs-select {
-	margin-left: 14px;
-}
+
 
 /* body */
 .p-lv-body {
@@ -540,7 +475,7 @@ tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
 .p-lv-cc-status-D {
 	text-decoration: line-through;
 }
-.p-lv-cc-status-R {
+.p-lv-cc-status-T {
 	font-style: italic;
 	text-decoration: line-through;
 }
