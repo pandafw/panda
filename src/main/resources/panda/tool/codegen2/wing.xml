@@ -23,7 +23,7 @@
 				<format type="code">
 					<param name="codemap" value="consts.dataStatusMap"/>
 				</format>
-				<filter type="radio">
+				<filter type="checklist">
 					<param name="list" value="consts.dataStatusMap"/>
 				</filter>
 			</column>
