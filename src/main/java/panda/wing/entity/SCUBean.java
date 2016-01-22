@@ -156,11 +156,11 @@ public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
 	}
 	
 	/**
-	 * is this data recycled
-	 * @return true if bean is recycled
+	 * is this data trashed
+	 * @return true if bean is trashed
 	 */
-	public boolean isRecycled() {
-		return isRecycled(this);
+	public boolean isTrashed() {
+		return isTrashed(this);
 	}
 
 	//----------------------------------------------------------------------

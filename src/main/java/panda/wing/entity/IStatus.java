@@ -28,9 +28,9 @@ public interface IStatus {
 	public boolean isDisabled();
 
 	/**
-	 * is this data recycled
-	 * @return true if this data is recycled
+	 * is this data trashed
+	 * @return true if this data is trashed
 	 */
-	public boolean isRecycled();
+	public boolean isTrashed();
 }
 

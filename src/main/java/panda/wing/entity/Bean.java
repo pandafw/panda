@@ -26,11 +26,11 @@ public abstract class Bean {
 	}
 	
 	/**
-	 * is this data recycled
-	 * @return true if bean is recycled
+	 * is this data trashed
+	 * @return true if bean is trashed
 	 */
-	protected static boolean isRecycled(IStatus bean) {
-		return bean.getStatus() != null && VC.STATUS_RECYCLED == bean.getStatus();
+	protected static boolean isTrashed(IStatus bean) {
+		return bean.getStatus() != null && VC.STATUS_TRASHED == bean.getStatus();
 	}
 
 	/**

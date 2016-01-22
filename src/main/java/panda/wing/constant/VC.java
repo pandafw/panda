@@ -19,9 +19,9 @@ public interface VC {
 	public final static char STATUS_DISABLED = 'D';
 
 	/**
-	 * STATUS_RECYCLED = 'R';
+	 * STATUS_TRASHED = 'T';
 	 */
-	public final static char STATUS_RECYCLED = 'R';
+	public final static char STATUS_TRASHED = 'T';
 
 	//--------------------------------------------------------
 	// locale

@@ -101,11 +101,11 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	}
 	
 	/**
-	 * is this data recycled
-	 * @return true if bean is recycled
+	 * is this data trashed
+	 * @return true if bean is trashed
 	 */
-	public boolean isRecycled() {
-		return isRecycled(this);
+	public boolean isTrashed() {
+		return isTrashed(this);
 	}
 
 	//----------------------------------------------------------------------
