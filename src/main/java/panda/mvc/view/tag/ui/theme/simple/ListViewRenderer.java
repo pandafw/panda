@@ -44,10 +44,19 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	private Collection list;
 	private int listz;
 	
-	private Set<String> _fsdl = new HashSet<String>();
-	private Set<String> _fsvl = new HashSet<String>();
+	// filters define list
+	private Set<String> fsdefines = new HashSet<String>();
 	
-	private PermissionProvider _permit;
+	// filters input/fixed list
+	private Set<String> fsinputs = new HashSet<String>();
+	
+	// has input filter
+	private boolean fsinput = false;
+	
+	// has fixed filter
+	private boolean fsfixed = false;
+	
+	private PermissionProvider permit;
 	
 	private Map<String, Map> codemaps = new HashMap<String, Map>();
 
@@ -56,7 +65,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 
 	private void initVars() {
-		_permit = context.getAction() instanceof PermissionProvider ? (PermissionProvider)context.getAction() : null;
+		permit = context.getAction() instanceof PermissionProvider ? (PermissionProvider)context.getAction() : null;
 
 		id = tag.getId();
 
@@ -353,7 +362,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			
 			String _fn = _pf + _name;
 			String _ifn = id + "_fsf_" + _name;
-			boolean _fd = _fsvl.contains(_name);
+			boolean _fd = fsinputs.contains(_name);
 
 			write("<tr class=\"p-lv-input p-lv-fsi-" 
 					+ html(_name) 
@@ -573,7 +582,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				String _name = en.getKey();
 				ListColumn.Filter _f = en.getValue();
 	
-				boolean _fd = _fsvl.contains(_name);
+				boolean _fd = fsinputs.contains(_name);
 	
 				write("<option value=\"" + html(_name) + "\"");
 				if (_fd) {
@@ -636,8 +645,13 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				}
 
 				Filter qf = qfs == null ? null : qfs.get(c.name);
-				if (of.fixed || _hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
-					_fsvl.add(c.name);
+				if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
+					fsinputs.add(c.name);
+					fsinput = true;
+				}
+				else if (of.fixed) {
+					fsinputs.add(c.name);
+					fsfixed = true;
 				}
 
 				if (qf == null) {
@@ -666,7 +680,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				}
 				
 				if (_fd) {
-					_fsdl.add(c.name);
+					fsdefines.add(c.name);
 				}
 			}
 		}
@@ -676,7 +690,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 		
 		write("<fieldset class=\"p-lv-filters ui-collapsible");
-		if (_fsvl.isEmpty()) {
+		if (tag.isFsExpandNone()
+				|| (tag.isFsExpandDefault() && !fsinput)
+				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
 			write(" ui-collapsed");
 		}
 		write("\" data-spy=\"fieldset\"><legend>");
@@ -692,7 +708,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		form.setOnsubmit(tag.getOnsubmit());
 		form.setOnreset(tag.getOnreset());
 		form.setLoadmask(false);
-		if (_fsvl.isEmpty()) {
+		if (tag.isFsExpandNone()
+				|| (tag.isFsExpandDefault() && !fsinput)
+				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
 			form.setCssStyle("display: none");
 		}
 
@@ -735,7 +753,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					+ ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
 					+ (tag.getSortable() && c.sortable ? " p-lv-sortable p-sortable" : "")
 					+ ((queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
-					+ (_fsdl.contains(c.name) ? " p-lv-filtered" : "")
+					+ (fsdefines.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
 				.title(tag);
 			stag("th", tha);
@@ -986,9 +1004,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	}
 	
 	private boolean writeAlink(String cls, Object d, ItemLink link) throws IOException {
-		if (_permit != null) {
+		if (permit != null) {
 			if (Strings.isNotEmpty(link.action)) {
-				if (!_permit.hasDataPermission(d, link.action)) {
+				if (!permit.hasDataPermission(d, link.action)) {
 					return false;
 				}
 			}

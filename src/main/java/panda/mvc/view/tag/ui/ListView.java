@@ -44,9 +44,25 @@ public class ListView extends UIBean {
 	protected String onsubmit;
 	protected String onreset;
 
-	//
+	// auto size table (deprecated)
 	protected boolean autosize = true;
+	
+	// write java script
 	protected boolean script = true;
+
+	/**
+	 * expand query filters:
+	 * default
+	 *  - show: has input filter
+	 *  - hide: no input filter
+	 * fixed
+	 *  - show: has input filter | has fixed filter
+	 * always
+	 *  - show always
+	 * none
+	 *  - hide always
+	 */
+	protected char fsexpand = 'd';
 
 	//--------------------------------------------
 	// style option
@@ -582,6 +598,30 @@ public class ListView extends UIBean {
 	public void setFooter(String footer) {
 		this.footer = footer;
 	}
+
+	/**
+	 * @param fsexpand the fsexpand to set
+	 */
+	public void setFsexpand(String fsexpand) {
+		if (Strings.isEmpty(fsexpand)) {
+			return;
+		}
+		this.fsexpand = Character.toLowerCase(fsexpand.charAt(0));
+	}
 	
+	public boolean isFsExpandAlways() {
+		return fsexpand == 'a';
+	}
 	
+	public boolean isFsExpandDefault() {
+		return fsexpand == 'd';
+	}
+	
+	public boolean isFsExpandFixed() {
+		return fsexpand == 'f';
+	}
+	
+	public boolean isFsExpandNone() {
+		return fsexpand == 'n';
+	}
 }
