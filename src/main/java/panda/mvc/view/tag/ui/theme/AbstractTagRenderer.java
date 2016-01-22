@@ -63,16 +63,15 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 //	}
 
 	protected String button(String text, String icon) {
-		return button(text, icon, null, (Map<String, String>)null);
+		return button(text, icon, null, null);
 	}
 
-	protected String button(String text, String icon, String sicon, String onclick) {
-		Map<String, String> attrs = null;
-		if (onclick != null) {
-			attrs = new HashMap<String, String>();
-			attrs.put("onclick", onclick);
+	protected String button(String text, String icon, String cssClass) {
+		Map<String, String> attrs = new HashMap<String, String>();
+		if (cssClass != null) {
+			attrs.put("class", cssClass);
 		}
-		return button(text, icon, sicon, attrs);
+		return button(text, icon, null, attrs);
 	}
 	
 	protected String button(String text, String icon, String sicon, Map<String, String> attrs) {
@@ -239,13 +238,14 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return context.getIoc().get(type);
 	}
 
-	protected void writeTextField(String cssClass, String name, String id, Object value) throws IOException {
+	protected void writeTextField(String cssClass, String name, String id, Object value, Boolean disabled) throws IOException {
 		TextField tf = newTag(TextField.class);
 
 		tf.setCssClass(cssClass);
 		tf.setName(name);
 		tf.setId(id);
 		tf.setValue(value);
+		tf.setDisabled(disabled);
 		
 		tf.start(writer);
 		tf.end(writer, "");
@@ -306,14 +306,9 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		r.end(writer, "");
 	}
 	
-	protected void writeDatePicker(String cssClass, String name, String id, String format, Date value)
-			throws IOException {
-		writeDatePicker(cssClass, name, id, format, value, null);
-	}
-	
 	protected void writeDatePicker(String cssClass,
 			String name, String id, String format,
-			Date value, String options) throws IOException {
+			Date value, Boolean disabled) throws IOException {
 
 		DatePicker dp = newTag(DatePicker.class);
 
@@ -322,13 +317,13 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		dp.setId(id);
 		dp.setFormat(format);
 		dp.setValue(value);
-		dp.setOptions(options);
+		dp.setDisabled(disabled);
 		
 		dp.start(writer);
 		dp.end(writer, "");
 	}
 	
-	protected void writeDateTimePicker(String cssClass, String name, String id, String format, Date value)
+	protected void writeDateTimePicker(String cssClass, String name, String id, String format, Date value, Boolean disabled)
 			throws IOException {
 
 		DateTimePicker dp = newTag(DateTimePicker.class);
@@ -338,12 +333,13 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		dp.setId(id);
 		dp.setFormat(format);
 		dp.setValue(value);
+		dp.setDisabled(disabled);
 		
 		dp.start(writer);
 		dp.end(writer, "");
 	}
 	
-	protected void writeTimePicker(String cssClass, String name, String id, String format, Date value)
+	protected void writeTimePicker(String cssClass, String name, String id, String format, Date value, Boolean disabled)
 			throws IOException {
 		
 		TimePicker dp = newTag(TimePicker.class);
@@ -353,6 +349,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		dp.setId(id);
 		dp.setFormat(format);
 		dp.setValue(value);
+		dp.setDisabled(disabled);
 		
 		dp.start(writer);
 		dp.end(writer, "");

@@ -49,13 +49,13 @@ public class Bs3InlineTheme extends WrapTheme {
 
 		addWrapper(Div.class, new RendererWrapperFactory(Bs3InlineInputWrapper.GroupWrapper.class, DivRenderer.class));
 
-		addWrapper(Checkbox.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, CheckboxRenderer.class));
-		addWrapper(CheckboxList.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, CheckboxListRenderer.class));
+		addWrapper(Checkbox.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, CheckboxRenderer.class));
+		addWrapper(CheckboxList.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, CheckboxListRenderer.class));
 		addWrapper(DatePicker.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, DatePickerRenderer.class));
 		addWrapper(DateTimePicker.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, DateTimePickerRenderer.class));
 		addWrapper(File.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, FileRenderer.class));
 		addWrapper(Password.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, PasswordRenderer.class));
-		addWrapper(Radio.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, RadioRenderer.class));
+		addWrapper(Radio.class, new RendererWrapperFactory(Bs3InlineInputWrapper.NormalWrapper.class, RadioRenderer.class));
 		addWrapper(Select.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, SelectRenderer.class));
 		addWrapper(TextField.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, TextFieldRenderer.class));
 		addWrapper(TextArea.class, new RendererWrapperFactory(Bs3InlineInputWrapper.ControlWrapper.class, TextAreaRenderer.class));

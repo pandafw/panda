@@ -364,10 +364,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			String _ifn = id + "_fsf_" + _name;
 			boolean _fd = fsinputs.contains(_name);
 
-			write("<tr class=\"p-lv-input p-lv-fsi-" 
+			write("<div class=\"p-lv-fsi-" 
 					+ html(_name) 
 					+ (_fd ? "" : " p-hidden")
-					+ "\">");
+					+ " form-group\">");
 
 			boolean _hfe = false;
 			if (fieldErrors != null) {
@@ -379,15 +379,18 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				}
 			}
 
-			write("<td class=\"p-lv-label\">");
-			write("<label for=\"" + _ifn + "_v\" class=\"" + (_hfe ? "p-error" : "") + "\">");
+			if (!_f.fixed) {
+				write(icon("p-lv-fs-remove fa fa-minus-circle"));
+			}
+
+			write("<label for=\"" + _ifn + "_v\" class=\"col-sm-3 control-label " + (_hfe ? "p-error" : "") + "\">");
 			if (Strings.isNotEmpty(_f.label)) {
 				write(html(_f.label));
 				write(":");
 			}
-			write("</label></td>");
+			write("</label>");
 
-			write("<td class=\"p-lv-input\"");
+			write("<div class=\"col-sm-9 p-lv-fs-inputgroup\"");
 			if (Strings.isNotEmpty(_f.tooltip)) {
 				write("title=\"");
 				write(html(_f.tooltip));
@@ -400,7 +403,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				_fv = _fn + ".sv";
 				
 				String _fvv = qf == null ? null : qf.getSv();
-				writeTextField("form-control p-lv-f-string-v", _fv, _ifn + "_v", _fvv);
+				writeTextField("form-control p-lv-f-string-v", _fv, _ifn + "_v", _fvv, null);
 				
 				_fvv = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-string-c", _fn + ".c", _ifn + "_c", stringFilterMap, _fvv);
@@ -411,33 +414,31 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("<div class=\"p-checkboxlist\">");
 
 				Boolean _fvv = qf == null ? null : qf.getBv();
-				write("<span class=\"p-checkbox-item\">");
+				write("<label class=\"checkbox-inline\">");
 				Attributes ia = new Attributes();
 				ia.add("type", "checkbox")
-				  .add("class", "checkbox p-lv-f-boolean-true")
+				  .add("class", "p-lv-f-boolean-true")
 				  .add("name", _fv)
 				  .add("id", _ifn + "_v")
 				  .add("value", "true")
 				  .addIfTrue("checked", _fvv);
 				xtag("input", ia);
-				write("<label class=\"p-checkbox-label\" for=\"" + _ifn + "_v\">");
 				write(boolFilterMap.get("true"));
-				write("</label></span>");
+				write("</label>");
 				
 				_fv = _fn + ".bv2";
 				_fvv = qf == null ? null : qf.getBv2();
-				write("<span class=\"p-checkbox-item\">");
+				write("<label class=\"checkbox-inline\">");
 				ia = new Attributes();
 				ia.add("type", "checkbox")
-				  .add("class", "checkbox p-lv-f-boolean-false")
+				  .add("class", "p-lv-f-boolean-false")
 				  .add("name", _fv)
 				  .add("id", _ifn + "_v2")
 				  .add("value", "false")
 				  .addIfTrue("checked", Boolean.FALSE.equals(_fvv));
 				xtag("input", ia);
-				write("<label class=\"p-checkbox-label\" for=\"" + _ifn + "_v2\">");
 				write(boolFilterMap.get("false"));
-				write("</label></span>");
+				write("</label>");
 				
 				write("</div>");
 			}
@@ -445,53 +446,89 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				_fv = _fn + ".nv";
 				Number _fvv = qf == null ? null : qf.getNv();
 
-				writeTextField("form-control p-lv-f-number-v", _fv, _ifn + "_v", _fvv);
+				write("<div class=\"p-lv-f-g1\">");
+				writeTextField("form-control p-lv-f-number-v", _fv, _ifn + "_v", _fvv, false);
+				write("</div>");
 				
 				String _fvc = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-number-c", _fn + ".c", _ifn + "_c", numberFilterMap, _fvc);
 				
 				_fv = _fn + ".nv2";
 				_fvv = qf == null ? null : qf.getNv2();
-				writeTextField("form-control p-lv-f-number-v2", _fv, _ifn + "_v2", _fvv);
+				boolean d = !Filter.BETWEEN.equals(_fvc);
+				write("<div class=\"p-lv-f-g2");
+				if (d) {
+					write(" p-hidden");
+				}
+				write("\">");
+				writeTextField("form-control p-lv-f-number-v2", _fv, _ifn + "_v2", _fvv, d);
+				write("</div>");
 			}
 			else if ("date".equals(_f.type)) {
 				_fv = _fn + ".dv";
 				Date _fvv = qf == null ? null : qf.getDv();
 
-				writeDatePicker("form-control p-lv-f-date-v", _fv, _ifn + "_v", "date", _fvv);
+				write("<div class=\"p-lv-f-g1\">");
+				writeDatePicker("form-control p-lv-f-date-v", _fv, _ifn + "_v", "date", _fvv, false);
+				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-date-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
 				_fvv = qf == null ? null : qf.getDv2();
-				writeDatePicker("form-control p-lv-f-date-v2", _fv, _ifn + "_v2", "date", _fvv);
+				boolean d = !Filter.BETWEEN.equals(_fvc);
+				write("<div class=\"p-lv-f-g2");
+				if (d) {
+					write(" p-hidden");
+				}
+				write("\">");
+				writeDatePicker("form-control p-lv-f-date-v2", _fv, _ifn + "_v2", "date", _fvv, d);
+				write("</div>");
 			}
 			else if ("datetime".equals(_f.type)) {
 				_fv = _fn + ".dv";
 				Date _fvv = qf == null ? null : qf.getDv();
 
-				writeDateTimePicker("form-control p-lv-f-datetime-v", _fv, _ifn + "_v", "datetime", _fvv);
+				write("<div class=\"p-lv-f-g1\">");
+				writeDateTimePicker("form-control p-lv-f-datetime-v", _fv, _ifn + "_v", "datetime", _fvv, false);
+				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-datetime-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
 				_fvv = qf == null ? null : qf.getDv2();
-				writeDateTimePicker("form-control p-lv-f-datetime-v2", _fv, _ifn + "_v2", "datetime", _fvv);
+				boolean d = !Filter.BETWEEN.equals(_fvc);
+				write("<div class=\"p-lv-f-g2");
+				if (d) {
+					write(" p-hidden");
+				}
+				write("\">");
+				writeDateTimePicker("form-control p-lv-f-datetime-v2", _fv, _ifn + "_v2", "datetime", _fvv, d);
+				write("</div>");
 			}
 			else if ("time".equals(_f.type)) {
 				_fv = _fn + ".dv";
 				Date _fvv = qf == null ? null : qf.getDv();
 
-				writeTimePicker("form-control p-lv-f-time-v", _fv, _ifn + "_v", "time", _fvv);
+				write("<div class=\"p-lv-f-g1\">");
+				writeTimePicker("form-control p-lv-f-time-v", _fv, _ifn + "_v", "time", _fvv, false);
+				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-time-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
 				_fvv = qf == null ? null : qf.getDv2();
-				writeTimePicker("form-control p-lv-f-time-v2", _fv, _ifn + "_v2", "time", _fvv);
+				boolean d = !Filter.BETWEEN.equals(_fvc);
+				write("<div class=\"p-lv-f-g2");
+				if (d) {
+					write(" p-hidden");
+				}
+				write("\">");
+				writeTimePicker("form-control p-lv-f-time-v2", _fv, _ifn + "_v2", "time", _fvv, d);
+				write("</div>");
 			}
 			else if ("checklist".equals(_f.type)) {
 				write("<input type=\"hidden\" name=\"" + _fn + ".c\" value=\"in\"/>");
@@ -529,18 +566,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					}
 				}
 			}
-			write("</td>");
-			write("<td class=\"p-lv-remove\">");
-			if (!_f.fixed) {
-				write(icon("fa fa-minus-circle"));
-			}
-			write("</td>");
-			write("</tr>");
+			write("</div>");
+			write("</div>");
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void writeListViewFiltersOptions(Map<String, ListColumn.Filter> fm) throws IOException {
+	private Map<String, ListColumn.Filter> getEditableFilters(Map<String, ListColumn.Filter> fm) {
 		// get editable filters
 		Map<String, ListColumn.Filter> fm2 = new LinkedHashMap<String, ListColumn.Filter>();
 		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
@@ -550,30 +581,41 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				fm2.put(_name, _f);
 			}
 		}
+		return fm2;
+	}
 
+	@SuppressWarnings("unchecked")
+	private void writeListViewFiltersOptions() throws IOException {
 		Map<String, String> filterMethodMap = (Map<String, String>)tag.getFilterMethodMap();
-		if (Collections.isEmpty(fm2) && Collections.isEmpty(filterMethodMap)) {
+		if (Collections.isEmpty(filterMethodMap)) {
 			return;
 		}
 
-		write("<tr class=\"p-lv-filters-sep\"><td colspan=\"3\"><div></div></td></tr>");
-
-		write("<tr class=\"p-lv-submit\">");
-		write("<td class=\"p-lv-label\">");
+		write("<div class=\"form-group p-lv-submit\">");
+		write("<label class=\"col-sm-3 control-label\">");
 		write(getText("listview-filters-label-method"));
-		write(":</td>");
-		write("<td class=\"p-lv-input\" colspan=\"2\">");
-		
-		write("<table class=\"p-lv-fs-tb-options\"><tbody><tr>");
-		if (Collections.isNotEmpty(filterMethodMap)) {
-			write("<td>");
-			writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, null);
-			write("</td>");
-		}
+		write(":</label>");
+		write("<div class=\"col-sm-9\">");
+		writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, null);
+		write("</div></div>");
+	}
+	
+	private void writeListViewFiltersButtons(Map<String, ListColumn.Filter> fm) throws IOException {
+		write("<div class=\"form-group p-lv-submit\">");
+		write("<label class=\"col-sm-3 control-label\"></label>");
+
+		write("<div class=\"col-sm-9\">");
+		// buttons
+		write(button(getText("listview-filters-button-query"), "icon-search"));
+		write(' ');
+		write(button(getText("listview-filters-button-clear"), "icon-clear", "p-lv-fs-clear"));
+		write(' ');
+
+		// select
+		Map<String, ListColumn.Filter> fm2 = getEditableFilters(fm);
 		if (Collections.isNotEmpty(fm2)) {
-			write("<td>");
 			write("<select id=\"" + id + "_fsform_fsadd" + "\"");
-			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\" onchange=\"_plv_onAddFilter(this)\">");
+			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\">");
 			write("<option value=\"\">-- ");
 			write(getText("listview-filters-label-add"));
 			write(" --</option>");
@@ -593,21 +635,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("</option>");
 			}
 			write("</select>");
-			write("</td>");
 		}
-		write("</tr></table>");
-
-		write("</td></tr>");
-	}
-	
-	private void writeListViewFiltersButtons() throws IOException {
-		write("<tr class=\"p-lv-submit\">");
-		write("<td class=\"p-lv-label\"></td>");
-		write("<td class=\"p-lv-submit\" colspan=\"2\">");
-		write(button(getText("listview-filters-button-query"), "icon-search"));
-		write(' ');
-		write(button(getText("listview-filters-button-clear"), "icon-clear", null, "return _plv_onClearFilters(this);"));
-		write("</td></tr>");
+		
+		write("</div></div>");
 	}
 
 	private void writeListViewFilters() throws IOException {
@@ -702,7 +732,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		Form form = context.getIoc().get(Form.class);
 
 		form.setId(id + "_fsform");
-		form.setCssClass("p-lv-fsform");
+		form.setCssClass("p-lv-fsform form-horizontal");
 		form.setAction(tag.getAction());
 		form.setMethod(defs(tag.getMethod(), "get"));
 		form.setOnsubmit(tag.getOnsubmit());
@@ -724,12 +754,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
 		}
 
-		write("<table class=\"p-lv-filters-t\" cellspacing=\"0\"><tbody>");
 		writeListViewFiltersItems(fm);
-		writeListViewFiltersOptions(fm);
-		writeListViewFiltersButtons();
+		
+		write("<div class=\"p-lv-filters-sep\"></div>");
 
-		write("</tbody></table>");
+		writeListViewFiltersOptions();
+		writeListViewFiltersButtons(fm);
 		
 		form.end(writer, "");
 		

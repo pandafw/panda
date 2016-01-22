@@ -100,4 +100,13 @@ public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends B
 			super(context);
 		}
 	}
+
+	public static class NormalWrapper extends Bs3HorizontalInputWrapper {
+		/**
+		 * @param context context
+		 */
+		public NormalWrapper(RenderingContext context) {
+			super(context);
+		}
+	}
 }
