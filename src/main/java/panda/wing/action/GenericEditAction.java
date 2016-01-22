@@ -34,7 +34,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	// config properties
 	//------------------------------------------------------------
 	private boolean checkAbortOnError = false;
-	private boolean updateSelective = false;
 
 	/**
 	 * Constructor 
@@ -45,20 +44,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// protected getter & setter
 	//------------------------------------------------------------
-	/**
-	 * @return the updateSelective
-	 */
-	protected boolean isUpdateSelective() {
-		return updateSelective;
-	}
-
-	/**
-	 * @param updateSelective the updateSelective to set
-	 */
-	protected void setUpdateSelective(boolean updateSelective) {
-		this.updateSelective = updateSelective;
-	}
-
 	/**
 	 * @return the checkAbortOnError
 	 */
@@ -73,6 +58,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		this.checkAbortOnError = checkAbortOnError;
 	}
 
+	//------------------------------------------------------------
+	// result
+	//------------------------------------------------------------
 	/**
 	 * set result on ?_execute check error occurs  
 	 */
@@ -85,6 +73,25 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	//------------------------------------------------------------
+	// update fields
+	//------------------------------------------------------------
+	/**
+	 * @return fields to be update
+	 */
+	protected String[] getUpdateFields() {
+		return null;
+	}
+
+	/**
+	 * used by view
+	 * @param field field name
+	 * @return true if the field should be display
+	 */
+	public boolean displayField(String field) {
+		return true;
+	}
+	
 	//------------------------------------------------------------
 	// dao methods
 	//------------------------------------------------------------
@@ -158,23 +165,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * update data (ignore null properties)
+	 * update data
 	 * 
 	 * @param data data
+	 * @param fields fields to update
 	 * @return count of updated records
 	 */ 
-	protected int daoUpdate(T data) {
-		return getEntityDao().update(data);
-	}
-
-	/**
-	 * update data (ignore null properties)
-	 * 
-	 * @param data data
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdateIgnoreNull(T data) {
-		return getEntityDao().updateIgnoreNull(data);
+	protected int daoUpdate(T data, String... fields) {
+		return getEntityDao().update(data, fields);
 	}
 
 	/**
@@ -186,17 +184,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */ 
 	protected int daoUpdates(T sample, GenericQuery<T> q) {
 		return getEntityDao().updates(sample, q);
-	}
-
-	/**
-	 * use sample data to update record by query (ignore null properties)
-	 * 
-	 * @param sample sample data
-	 * @param q query
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdatesIgnoreNull(T sample, GenericQuery<T> q) {
-		return getEntityDao().updatesIgnoreNull(sample, q);
 	}
 
 	//------------------------------------------------------------
@@ -683,13 +670,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return update count
 	 */
 	protected int updateData(T data, T srcData) {
-		int cnt;
-		if (updateSelective) {
-			cnt = daoUpdateIgnoreNull(data);
-		}
-		else {
-			cnt = daoUpdate(data);
-		}
+		int cnt = daoUpdate(data, getUpdateFields());
 		if (cnt != 1) {
 			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
 		}
