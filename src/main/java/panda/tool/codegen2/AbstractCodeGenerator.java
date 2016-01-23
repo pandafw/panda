@@ -46,7 +46,6 @@ import panda.tool.IllegalLicenseException;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
 import panda.util.tool.AbstractCommandTool;
-
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -179,6 +178,26 @@ public abstract class AbstractCodeGenerator {
 		return Texts.translate(val, properties);
 	}
 
+	protected void translateProps(Settings props) throws Exception {
+		return;
+//		boolean t = true;
+//		while (t) {
+//			t = false;
+//			for (String key : props.keySet()) {
+//				String val = props.get(key);
+//				if (needTranslate(val)) {
+//					System.out.println(">>> translate: " + val);
+//					String nv = translateValue(val, props);
+//					if (val.equals(nv)) {
+//						throw new RuntimeException(nv);
+//					}
+//					props.put(key, nv);
+//					t = true;
+//				}
+//			}
+//		}
+	}
+
 	protected void translateDom(Node node, Settings properties) throws Exception {
 		NamedNodeMap nnm = node.getAttributes();
 		for (int i = 0; nnm != null && i < nnm.getLength(); i++) {
@@ -294,7 +313,6 @@ public abstract class AbstractCodeGenerator {
 		Document doc = db.parse(file);
 		
 		includeDom(file.getParent(), doc, properties);
-		translateDom(doc, properties);
 		validateDom(file.getPath(), doc);
 		
 		return doc;
@@ -307,7 +325,6 @@ public abstract class AbstractCodeGenerator {
 		Document doc = db.parse(getClass().getResourceAsStream(resource));
 		
 		includeDom(resource, doc, properties);
-		translateDom(doc, properties);
 		validateDom(resource, doc);
 		
 		return doc;
@@ -319,6 +336,8 @@ public abstract class AbstractCodeGenerator {
 		properties.load(getClass().getResourceAsStream("default.properties"));
 
 		Document doc = loadDocument(f, properties);
+		translateProps(properties);
+		translateDom(doc, properties);
 		
 		JAXBContext context = JAXBContext.newInstance(Classes.getPackageName(Entity.class), 
 			getClass().getClassLoader());
