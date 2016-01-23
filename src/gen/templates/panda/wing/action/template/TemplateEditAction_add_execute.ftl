@@ -15,6 +15,7 @@
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if r?? && action.hasDataPermission(r, "~/print")><li><@p.a icon="icon-print" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/><@p.text name='button-print'/></@p.a>
+</li></#if><#if action.hasPermission("~/add")><li><@p.a icon="icon-add" action="~/add" label="#(button-add)"/>
 </li></#if><#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
@@ -101,14 +102,6 @@
 					"text": "button-copy"
 				}]/>
 			</#if>
-			<#if action.hasPermission('~/add')>
-				<@p.url var="_u_" action="~/add"/>
-				<#assign _buttons_ = _buttons_ + [{
-					"icon": "icon-add",
-					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-add"
-				}]/>
-			</#if>
 			<#if action.hasDataPermission(params!, '~/delete')>
 				<@p.url var="_u_" action="~/delete" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
@@ -117,14 +110,6 @@
 					"icon": "icon-delete",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
 					"text": "button-delete"
-				}]/>
-			</#if>
-			<#if action.hasPermission('~/list')>
-				<@p.url var="_u_" action="~/list"/>
-				<#assign _buttons_ = _buttons_ + [{
-					"icon": "icon-list",
-					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-list"
 				}]/>
 			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>

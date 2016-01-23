@@ -82,6 +82,7 @@
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
+			<param name="actions" value="${view.actions}"/>
 		</input>
 		<input name="print" extend="basicInput" template="${template.print}" generate="true"/>
 		<input name="delete" extend="basicInput" template="${template.delete}" generate="true">
