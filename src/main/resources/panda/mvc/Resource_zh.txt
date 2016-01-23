@@ -69,30 +69,48 @@ servlet-error-exception=例外信息:
 
 
 #validation error message
-validation-incorrect=该项目内容不正确。
-validation-empty=该项目必须为空。
-validation-required=请输入该项目内容。
-validation-requiredfile=请指定上传文件。
-validation-requiredimage=请指定上传图像文件。
+validation-alphanumericstring=请输入英数字。
+validation-alphastring=请输入英文。
 validation-binary-length=输入文字字数(${top.binSize})不正确。请输入\
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 的文字。
+validation-cast=输入内容不正确。
+validation-cast-boolean=请输入true或者false。
+validation-cast-char=请输入字符。
+validation-cast-date=请输入"yyyy/MM/dd"格式的日期。
+validation-cast-decimal=请输入数字。
+validation-cast-number=请输入整数字。
+validation-cast-file=请选择文件。
+validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+项目「${top.target}」。
+validation-compare-daterange-to=「终了日期」必须大于「开始日期」。
+validation-compare-numberrange-to=数字范围的设定不正确。
+validation-constant=请选择${top.consts}中的内容。
+validation-creditcardnumber=请按"XXXX-XXXX-XXXX-XXXX"的格式输入正确的信用卡号码。
 validation-date-to=请输入開始日期之后的日期。
 validation-date-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
 (top.min != null ? (top.min + "之后") : \
 (top.max != null ? (top.max + "之前") : ""))}\
 的日期。
-validation-number-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
-(top.min != null ? (top.min + "以上") : \
-(top.max != null ? (top.max + "以下") : ""))}\
-的数字。
+validation-email=请按"user@domain.com"的格式输入电子邮件地址。
+validation-email-notsame=电子邮件和确认电子邮件不一致。
+validation-empty=该项目必须为空。
+validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
+validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
 validation-file-length=文件大小${top.fileSize}不正确。请指定\
 ${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
 (top.minLength != null ? (top.minFileSize + "以上") : \
 (top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 的文件。
+validation-futuredate=不允许输入未来的日期。
+validation-hankakukatakanastring=请输入半角片假名。
+validation-hankakustring=请输入半角文字。
 validation-image=图像文件格式不正确。
 validation-image-size=图像大小${top.width}x${top.height}不正确。请指定\
 ${(top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "~" + top.maxWidth + "以内") : \
@@ -103,61 +121,35 @@ ${(top.minHeight != null && top.maxHeight != null) ? ("高" + top.minHeight + "~
 (top.minHeight != null ? ("高" + top.minHeight + "以上") : \
 (top.maxHeight != null ? ("高" + top.maxHeight + "以下") : ""))}\
 的图像文件。
-validation-number-range=The number must be \
-${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
-(top.min != null ? (">= " + top.min) : \
-(top.max != null ? ("<= " + top.max) : ""))}\
-.
+validation-incorrect=该项目内容不正确。
+validation-locale-invalid=语言和国家・地区的组合不正确。
+validation-number-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以上") : \
+(top.max != null ? (top.max + "以下") : ""))}\
+的数字。
 validation-number-to=The number must be larger than start number.
+validation-numericstring=请输入数字。
+validation-password=密码必须输入英数字。
+validation-password-notsame=输入密码和确认密码不一致。
+validation-password-incorrect=密码错误。
+validation-passeddate=不允许输入过去的日期。
+validation-precision=请按"整数${top.precision - top.scale}.小数${top.scale}"的格式输入。
+validation-prohibited=${top.consts}中的内容不可以输入。
+validation-regex=该项目输入内容不符合正规表达式"${top.regex}"。
+validation-required=请输入该项目内容。
+validation-requiredfile=请指定上传文件。
+validation-requiredimage=请指定上传图像文件。
 validation-string-length=输入文字数：${top.length}。请输入\
 ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "个字符以内") : \
 (top.minLength != null ? (top.minLength + "个字符以上") : \
 (top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
 的文字。
-validation-precision=请按"整数${top.precision - top.scale}.小数${top.scale}"的格式输入。
-validation-constant=请选择${top.consts}中的内容。
-validation-prohibited=${top.consts}中的内容不可以输入。
-validation-alphastring=请输入英文。
-validation-numericstring=请输入数字。
-validation-alphanumericstring=请输入英数字。
-validation-creditcardnumber=请按"XXXX-XXXX-XXXX-XXXX"的格式输入正确的信用卡号码。
-validation-hankakustring=请输入半角文字。
-validation-hankakukatakanastring=请输入半角片假名。
+validation-telnumber=请按"1234-5678-9999"的格式输入电话号码。
+validation-url=请按"http://www.domain.com"的格式输入URL。
 validation-zenkakustring=请输入全角文字。
 validation-zenkakukatakanastring=请输入全角片假名。
-validation-email=请按"user@domain.com"的格式输入电子邮件地址。
-validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
-validation-url=请按"http://www.domain.com"的格式输入URL。
 validation-zipcode=请按"123-4567"的格式输入邮政编码。
-validation-telnumber=请按"1234-5678-9999"的格式输入电话号码。
-validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
-validation-futuredate=不允许输入未来的日期。
-validation-passeddate=不允许输入过去的日期。
-validation-regex=该项目输入内容不符合正规表达式"${top.regex}"。
-validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \
-(top.comparator == "le" ? "<" : \
-(top.comparator == "lt" ? "<=" : \
-(top.comparator == "ge" ? ">" : \
-(top.comparator == "gt" ? "<" : "")))))}\
-项目「${top.target}」。
-validation-compare-daterange-to=「终了日期」必须大于「开始日期」。
-validation-compare-numberrange-to=数字范围的设定不正确。
 
-validation-cast=输入内容不正确。
-validation-cast-boolean=请输入true或者false。
-validation-cast-char=请输入字符。
-validation-cast-date=请输入"yyyy/MM/dd"格式的日期。
-validation-cast-decimal=请输入数字。
-validation-cast-number=请输入整数字。
-validation-cast-file=请选择文件。
-
-
-#custom validation error message
-validation-email-notsame=电子邮件和确认电子邮件不一致。
-validation-password=密码必须输入英数字。
-validation-password-notsame=输入密码和确认密码不一致。
-validation-password-incorrect=密码错误。
-validation-locale-invalid=语言和国家・地区的组合不正确。
 
 
 #error messages
@@ -191,12 +183,12 @@ tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=复写
 tooltip-delete=删除
-tooltip-trash=删除
-tooltip-recover=恢复
 tooltip-edit=编辑
 tooltip-insert=登录
+tooltip-recover=恢复
 tooltip-selectAll=全部选择
 tooltip-selectNone=不选择任何项目
+tooltip-trash=删除
 tooltip-update=变更
 
 
@@ -208,39 +200,35 @@ text-copy-to-clipboard=拷贝至剪贴板
 
 
 #button
-button-home=主页
-button-toHome=返回主页
-button-login=登录
-button-toLogin=登录画面
-button-signin=登录
-button-toSignin=登录画面
-
-button-shopping=继续购物
-button-layoutPC=PC版显示
-button-layoutMB=手机版显示
-
-button-back=返回
-button-next=下一步
-
 button-add=追加
+button-approve=批准
+button-back=返回
+button-cancel=取消
 button-change=变更
 button-clear=清除
 button-close=关闭
-
-button-approve=批准
-button-deny=否决
-
-button-disable=无效
 button-confirm=确认
-button-execute=实行
-
-button-json=JSON汇出
+button-copy=复写
 button-csv=CSV汇出
-button-pdf=PDF打印
-
+button-delete=删除
+button-deny=否决
+button-disable=无效
 button-edit=编辑
+button-enable=有効
+button-exec=执行
+button-execute=实行
+button-home=主页
+button-import=汇入
+button-insert=追加
+button-json=JSON汇出
+button-layoutPC=PC版显示
+button-layoutMB=手机版显示
 button-list=浏览
+button-login=登录
+button-next=下一步
+button-pdf=PDF打印
 button-print=印刷画面
+button-recover=恢复
 button-refresh=刷新
 button-reload=重新加载
 button-reset=重置
@@ -248,24 +236,22 @@ button-save=保存
 button-search=检索
 button-selectAll=全部选择
 button-selectNone=取消选择
+button-shopping=继续购物
+button-signin=登录
 button-status=状态
-button-exec=执行
 button-start=开始
-button-stop=停止
 button-start-all=全开始
+button-status=状态
+button-stop=停止
 button-stop-all=全停止
 button-submit=提交
+button-toHome=返回主页
+button-toLogin=登录画面
+button-toSignin=登录画面
+button-trash=删除
+button-update=修改
 button-view=显示
 button-xml=XML汇出
-
-button-cancel=取消
-button-copy=复写
-button-delete=删除
-button-trash=删除
-button-recover=恢复
-button-insert=追加
-button-import=汇入
-button-update=修改
 
 
 #title

@@ -71,30 +71,48 @@ servlet-error-exception=例外情報:
 
 
 #validation error message
-validation-incorrect=項目の値が正しくありません。
-validation-empty=項目の値は空ではありません。
-validation-required=必須項目です。
-validation-requiredfile=ファイルを指定してください。
-validation-requiredimage=画像ファイルを指定してください。
+validation-alphastring=英文字を入力してください。
+validation-alphanumericstring=英数字を入力してください。
 validation-binary-length=バイト: ${top.binSize}。 \
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
 のバイトを入力してください。
+validation-cast=項目の値が正しくありません。
+validation-cast-boolean=trueまたはfalseを入力してください。
+validation-cast-char=文字を入力してください。
+validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
+validation-cast-decimal=数字を入力してください。
+validation-cast-number=整数を入力してください。
+validation-cast-file=フィアルを選択してください。
+validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+項目「${top.target}」になっていません。
+validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
+validation-compare-numberrange-to=数字範囲の設定が正しくありません。
+validation-constant=${top.consts}中の値を選んでください。
+validation-creditcardnumber=正しいクレジットカード番号を"XXXX-XXXX-XXXX-XXXX"の形で入力してください。
 validation-date-to=開始日付より大きい日付を入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
-validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
-(top.min != null ? (top.min + "以上") : \
-(top.max != null ? (top.max + "以下") : ""))}\
-の数字を入力してください。
+validation-email=メールアドレスを"user@domain.com"の形式で入力してください。
+validation-email-notsame=メールアドレスが一致していません。
+validation-empty=項目の値は空ではありません。
+validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
+validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
 validation-file-length=ファイルサイズ：${top.fileSize}。\
 ${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
 (top.minLength != null ? (top.minFileSize + "以上") : \
 (top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
 のファイルを指定してください。
+validation-futuredate=未来の日付を入力できません。
+validation-hankakustring=半角文字を入力してください。
+validation-hankakukatakanastring=半角カナを入力してください。
 validation-image=画像ファイルのフォーマットが正しくありません。
 validation-image-size=画像サイズ: ${top.width}x${top.height}。\
 ${(top.minWidth != null && top.maxWidth != null) ? ("幅" + top.minWidth + "~" + top.maxWidth + "以内") : \
@@ -105,60 +123,34 @@ ${(top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight +
 (top.minHeight != null ? ("高さ" + top.minHeight + "以上") : \
 (top.maxHeight != null ? ("高さ" + top.maxHeight + "以下") : ""))}\
 の画像ファイルを指定してください。
-validation-number-range=The number must be \
-${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
-(top.min != null ? (">= " + top.min) : \
-(top.max != null ? ("<= " + top.max) : ""))}\
-.
+validation-incorrect=項目の値が正しくありません。
+validation-locale-invalid=言語と国・地域の組合せは正しくありません。
+validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以上") : \
+(top.max != null ? (top.max + "以下") : ""))}\
+の数字を入力してください。
 validation-number-to=The number must be larger than start number.
+validation-numericstring=数字を入力してください。
+validation-password=パスワードが英数字で入力してください。
+validation-password-notsame=パスワードが一致していません。
+validation-password-incorrect=パスワードが正しくありません。
+validation-passeddate=過去の日付を入力できません。
+validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
+validation-prohibited=${top.consts}中の値が入力不可です。
+validation-regex=項目の値が正規表現式"${top.regex}"にマーチできません。
+validation-required=必須項目です。
+validation-requiredfile=ファイルを指定してください。
+validation-requiredimage=画像ファイルを指定してください。
 validation-string-length=文字数: ${top.length}。\
 ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "桁以内") : \
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))}\
 の文字を入力してください。
-validation-precision="整数${top.precision - top.scale}.小数${top.scale}"の形式で入力してください。
-validation-constant=${top.consts}中の値を選んでください。
-validation-prohibited=${top.consts}中の値が入力不可です。
-validation-alphastring=英文字を入力してください。
-validation-numericstring=数字を入力してください。
-validation-alphanumericstring=英数字を入力してください。
-validation-creditcardnumber=正しいクレジットカード番号を"XXXX-XXXX-XXXX-XXXX"の形で入力してください。
-validation-hankakustring=半角文字を入力してください。
-validation-hankakukatakanastring=半角カナを入力してください。
+validation-telnumber=電話番号を"1234-5678-9999"の形式で入力してください。
+validation-url=URLを"http://www.domain.com"の形式で入力してください。
 validation-zenkakustring=全角文字を入力してください。
 validation-zenkakukatakanastring=全角カタカナを入力してください。
-validation-email=メールアドレスを"user@domain.com"の形式で入力してください。
-validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
-validation-url=URLを"http://www.domain.com"の形式で入力してください。
 validation-zipcode=郵便番号を"123-4567"の形式で入力してください。
-validation-telnumber=電話番号を"1234-5678-9999"の形式で入力してください。
-validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
-validation-futuredate=未来の日付を入力できません。
-validation-passeddate=過去の日付を入力できません。
-validation-regex=項目の値が正規表現式"${top.regex}"にマーチできません。
-validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
-(top.comparator == "le" ? "<" : \
-(top.comparator == "lt" ? "<=" : \
-(top.comparator == "ge" ? ">" : \
-(top.comparator == "gt" ? "<" : "")))))}\
-項目「${top.target}」になっていません。
-validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
-validation-compare-numberrange-to=数字範囲の設定が正しくありません。
-
-validation-cast=項目の値が正しくありません。
-validation-cast-boolean=trueまたはfalseを入力してください。
-validation-cast-char=文字を入力してください。
-validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
-validation-cast-decimal=数字を入力してください。
-validation-cast-number=整数を入力してください。
-validation-cast-file=フィアルを選択してください。
-
-#custom validation error message
-validation-email-notsame=メールアドレスが一致していません。
-validation-password=パスワードが英数字で入力してください。
-validation-password-notsame=パスワードが一致していません。
-validation-password-incorrect=パスワードが正しくありません。
-validation-locale-invalid=言語と国・地域の組合せは正しくありません。
 
 
 #error messages
@@ -192,12 +184,12 @@ tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=複写
 tooltip-delete=削除
-tooltip-trash=削除
-tooltip-recover=復元
 tooltip-edit=編集
 tooltip-insert=新規
+tooltip-recover=復元
 tooltip-selectAll=すべて選択
 tooltip-selectNone=未選択の状態にします
+tooltip-trash=削除
 tooltip-update=変更
 
 #placeholder
@@ -207,39 +199,35 @@ placeholder-search=検索...
 text-copy-to-clipboard=コピー
 
 #button
-button-home=ホーム
-button-toHome=ホームへ
-button-login=ログイン
-button-toLogin=ログイン画面へ
-button-signin=サインイン
-button-toSignin=サインイン画面へ
-
-button-shopping=ショッピングを続ける
-button-layoutPC=PCサイトに切り替える
-button-layoutMB=モバイルサイトに切り替える
-
-button-back=戻る
-button-next=次へ
-
 button-add=追加
+button-approve=承認
+button-back=戻る
+button-cancel=取消
 button-change=変更
 button-clear=クリア
 button-close=閉じる
-
-button-approve=承認
-button-deny=否認
-
-button-disable=無効
 button-confirm=確認
-button-execute=実行
-
+button-copy=複写
 button-csv=CSV出力
-button-json=JSON出力
-button-pdf=PDF出力
-
+button-delete=削除
+button-deny=否認
+button-disable=無効
 button-edit=編集
+button-enable=有効
+button-exec=実行
+button-execute=実行
+button-home=ホーム
+button-import=インポート
+button-insert=新規
+button-json=JSON出力
+button-layoutPC=PCサイトに切り替える
+button-layoutMB=モバイルサイトに切り替える
 button-list=一覧
+button-login=ログイン
+button-next=次へ
+button-pdf=PDF出力
 button-print=印刷画面
+button-recover=復元
 button-refresh=最新情報に更新
 button-reload=リロード
 button-reset=リセット
@@ -247,23 +235,22 @@ button-save=保存
 button-search=検索
 button-select-all=全選択
 button-select-none=全解除
+button-shopping=ショッピングを続ける
+button-signin=サインイン
 button-status=ステータス
-button-exec=実行
 button-start=開始
-button-stop=停止
 button-start-all=全開始
+button-status=ステータス
+button-stop=停止
 button-stop-all=全停止
 button-submit=送信
+button-toHome=ホームへ
+button-toLogin=ログイン画面へ
+button-toSignin=サインイン画面へ
+button-trash=削除
+button-update=編集
 button-view=照会
 button-xml=XML出力
-
-button-cancel=取消
-button-copy=複写
-button-delete=削除
-button-trash=削除
-button-insert=新規
-button-import=インポート
-button-update=編集
 
 
 #title

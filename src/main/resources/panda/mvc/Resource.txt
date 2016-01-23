@@ -139,27 +139,49 @@ servlet-error-exception=Exception:
 
 
 #validation error message
-validation-incorrect=Incorrect value.
-validation-empty=This field should be empty.
-validation-required=This field is required.
-validation-requiredfile=Please specified the upload file.
-validation-requiredimage=Please specified the upload image file.
+validation-alphanumericstring=Please input alphabet or number.
+validation-alphastring=Please input alphabet.
 validation-binary-length=The binary size (${top.binSize}) must be \
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize) : \
 (top.minLength != null ? (">= " + top.minBinSize) : \
 (top.maxLength != null ? ("<= " + top.maxBinSize) : ""))}\
 .
-validation-date-to=The date must be larger than start date.
+validation-cast=Invalid value.
+validation-cast-boolean=Please input "true" or "false".
+validation-cast-char=Please input a character.
+validation-cast-date=Please input "yyyy-MM-dd" date string.
+validation-cast-decimal=Please input a decimal number.
+validation-cast-number=Please input a number.
+validation-cast-file=Please select a file.
+validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
+(top.comparator == "le" ? "<" : \
+(top.comparator == "lt" ? "<=" : \
+(top.comparator == "ge" ? ">" : \
+(top.comparator == "gt" ? "<" : "")))))}\
+「${top.target}」.
+validation-compare-daterange-to=The end date must be after than start date.
+validation-compare-numberrange-to=The number range is incorrect.
+validation-constant=Please input one of the ${top.consts}.
+validation-creditcardnumber=The format of credit card no must be "XXXX-XXXX-XXXX-XXXX".
 validation-date-range=The date must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
+validation-date-to=The date must be larger than start date.
+validation-email=The format email address of must be "user@domain.com".
+validation-email-notsame=The confirm email is not same as you input.
+validation-empty=This field should be empty.
+validation-faxnumber=The FAX number format is incorrect (ex: "12-3456-7890").
+validation-filename=The filename can't contain these \/:*?"<>| characters. 
 validation-file-length=The file size (${top.fieSize}) must be \
 ${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
 (top.minLength != null ? (">= " + top.minFileSize) : \
 (top.maxLength != null ? ("<= " + top.maxFileSize) : ""))}\
 .
+validation-futuredate=The future date is not allowed.
+validation-hankakustring=Please input half character.
+validation-hankakukatakanastring=Please input half kana character.
 validation-image=The image format is not correct.
 validation-image-size=The image size (${top.width}x${top.height}) must be \
 ${(top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "~" + top.maxWidth + ")") : \
@@ -170,53 +192,32 @@ ${(top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "
 (top.minHeight != null ? ("H:(>=" + top.minHeight + ")") : \
 (top.maxHeight != null ? ("H:(<=" + top.maxHeight + ")") : ""))}\
 .
+validation-incorrect=Incorrect value.
 validation-number-range=The number must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 (top.min != null ? (">= " + top.min) : \
 (top.max != null ? ("<= " + top.max) : ""))}\
 .
 validation-number-to=The number must be larger than start number.
+validation-numericstring=Please input number.
+validation-passeddate=The past date is not allowed.
+validation-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
+validation-prohibited=The value of ${top.consts} is not allowed.
+validation-regex=The value dos not match the regular expression "${top.regex}".
+validation-required=This field is required.
+validation-requiredfile=Please specified the upload file.
+validation-requiredimage=Please specified the upload image file.
 validation-string-length=The string length (${top.length}) must be \
 ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength) : \
 (top.minLength != null ? (">= " + top.minLength) : \
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))}\
 .
-validation-precision=Please input with this format "Integer${top.precision - top.scale}.Decimal${top.scale}".
-validation-constant=Please input one of the ${top.consts}.
-validation-prohibited=The value of ${top.consts} is not allowed.
-validation-alphastring=Please input alphabet.
-validation-numericstring=Please input number.
-validation-alphanumericstring=Please input alphabet or number.
-validation-creditcardnumber=The format of credit card no must be "XXXX-XXXX-XXXX-XXXX".
-validation-hankakustring=Please input half character.
-validation-hankakukatakanastring=Please input half kana character.
-validation-zenkakustring=Please input full character.
-validation-zenkakukatakanastring=Please input full katakana character.
-validation-email=The format email address of must be "user@domain.com".
-validation-filename=The filename can't contain these \/:*?"<>| characters. 
-validation-url=The format of URL must be "http://www.domain.com".
-validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
 validation-telnumber=The phone number format is incorrect (ex: "12-3456-7890").
-validation-faxnumber=The FAX number format is incorrect (ex: "12-3456-7890").
-validation-futuredate=The future date is not allowed.
-validation-passeddate=The past date is not allowed.
-validation-regex=The value dos not match the regular expression "${top.regex}".
-validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
-(top.comparator == "le" ? "<" : \
-(top.comparator == "lt" ? "<=" : \
-(top.comparator == "ge" ? ">" : \
-(top.comparator == "gt" ? "<" : "")))))}\
-「${top.target}」.
-validation-compare-daterange-to=The end date must be after than start date.
-validation-compare-numberrange-to=The number range is incorrect.
+validation-url=The format of URL must be "http://www.domain.com".
+validation-zenkakukatakanastring=Please input full katakana character.
+validation-zenkakustring=Please input full character.
+validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
 
-validation-cast=Invalid value.
-validation-cast-boolean=Please input "true" or "false".
-validation-cast-char=Please input a character.
-validation-cast-date=Please input "yyyy-MM-dd" date string.
-validation-cast-decimal=Please input a decimal number.
-validation-cast-number=Please input a number.
-validation-cast-file=Please select a file.
 
 
 #error messages
@@ -249,13 +250,13 @@ message-cart-empty=There is no items in the cart。
 tooltip-add=Add
 tooltip-cancel=Cancel
 tooltip-copy=Copy
-tooltip-trash=Delete
 tooltip-delete=Delete
-tooltip-recover=Recover
 tooltip-edit=Edit
 tooltip-insert=Insert
+tooltip-recover=Recover
 tooltip-select-all=Select all
 tooltip-select-none=Select none
+tooltip-trash=Delete
 tooltip-update=Update
 
 #placeholder
@@ -265,17 +266,6 @@ placeholder-search=Search...
 text-copy-to-clipboard=Copy to clipboard
 
 #button
-button-home=Home
-button-toHome=Go to Home
-button-login=Login
-button-toLogin=Go to Login
-button-signin=Sign in
-button-toSignin=Go to sign in
-
-button-shopping=Shopping
-button-layoutPC=PC layout
-button-layoutMB=Mobile layout
-
 button-add=Add
 button-approve=Approve
 button-back=Back
@@ -288,14 +278,23 @@ button-copy=Copy
 button-csv=CSV Export
 button-delete=Delete
 button-deny=Deny
-button-execute=Execute
-button-json=JSON Export
-button-pdf=PDF Print
+button-disable=Disable
 button-edit=Edit
+button-enable=Enable
 button-exec=Execute
+button-execute=Execute
+button-home=Home
+button-import=Import
+button-insert=Insert
+button-json=JSON Export
+button-layoutPC=PC layout
+button-layoutMB=Mobile layout
 button-list=List
+button-login=Login
 button-next=Next
+button-pdf=PDF Print
 button-print=Print
+button-recover=Recover
 button-refresh=Refresh
 button-reload=Reload
 button-reset=Reset
@@ -303,93 +302,87 @@ button-save=Save
 button-search=Search
 button-select-all=Select all
 button-select-none=Select none
-button-status=Status
+button-shopping=Shopping
+button-signin=Sign in
 button-start=Start
-button-stop=Stop
 button-start-all=Start All
+button-status=Status
+button-stop=Stop
 button-stop-all=Stop All
 button-submit=Submit
+button-toHome=Go to Home
+button-toLogin=Go to Login
+button-toSignin=Go to sign in
+button-trash=Delete
+button-update=Update
 button-view=View
 button-xml=XML Export
-
-button-trash=Delete
-button-recover=Recover
-button-import=Import
-button-insert=Insert
-button-update=Update
 
 
 #icon
 icon=fa fa-gear
-icon-home=fa fa-home
-icon-login=fa fa-sign-in
-icon-logout=fa fa-sign-out
-icon-signin=fa fa-sign-in
-icon-signout=fa fa-sign-out
-icon-signup=fa fa-upload
-
-icon-email=fa fa-envelopo-o
+icon-add=fa fa-plus-circle
 icon-asc=fa fa-sort-up
-icon-desc=fa fa-sort-down
-
+icon-attach=fa fa-paperclip
+icon-back=fa fa-arrow-circle-o-left
 icon-caret-up=fa fa-caret-up
 icon-caret-down=fa fa-caret-down
 icon-caret-left=fa fa-caret-left
 icon-caret-right=fa fa-caret-right
-
-icon-download=fa fa-download
-icon-upload=fa fa-upload
+icon-change=fa fa-check
+icon-check=fa fa-check
+icon-clear=fa fa-eraser
 icon-cloud-dn=fa fa-cloud-download
 icon-cloud-up=fa fa-cloud-upload
 icon-comment=fa fa-comment-o
-
-icon-change=fa fa-check
-icon-delete=fa fa-minus-circle
-icon-trash=fa fa-trash-o
-icon-recover=fa fa-reply
-icon-add=fa fa-plus-circle
-icon-insert=fa fa-plus-circle
-icon-edit=fa fa-edit
-icon-update=fa fa-edit
+icon-confirm=fa fa-arrow-circle-right
 icon-copy=fa fa-copy
-icon-view=fa fa-file-o
+icon-csv=fa fa-file-text-o
+icon-delete=fa fa-minus-circle
+icon-deny=fa fa-times
+icon-desc=fa fa-sort-down
+icon-disable=fa fa-toggle-off
+icon-download=fa fa-download
+icon-enable=fa fa-toggle-on
+icon-edit=fa fa-edit
+icon-email=fa fa-envelopo-o
+icon-error=fa fa-exclamation-circle
+icon-exec=fa fa-play
+icon-execute=fa fa-play
+icon-home=fa fa-home
+icon-img=fa fa-picture-o
 icon-import=fa fa-cloud-upload
-
+icon-insert=fa fa-plus-circle
+icon-json=fa fa-strikethrough
+icon-list=fa fa-list
+icon-login=fa fa-sign-in
+icon-logout=fa fa-sign-out
+icon-next=fa fa-arrow-circle-o-right
+icon-ok=fa fa-check
+icon-pdf=fa fa-file-text
+icon-play=fa fa-play-circle
+icon-print=fa fa-print
+icon-recover=fa fa-reply
 icon-refresh=fa fa-refresh
 icon-reload=fa fa-repeat
 icon-reset=fa fa-undo
-icon-clear=fa fa-eraser
+icon-save=fa fa-save
+icon-search=fa fa-search
 icon-select-all=fa fa-check-square-o
 icon-select-none=fa fa-square-o
-
-icon-back=fa fa-arrow-circle-o-left
-icon-next=fa fa-arrow-circle-o-right
-icon-confirm=fa fa-arrow-circle-right
-icon-execute=fa fa-play
-icon-save=fa fa-save
-icon-submit=fa fa-upload
-
-icon-check=fa fa-check
-icon-ok=fa fa-check
-icon-deny=fa fa-times
-icon-error=fa fa-exclamation-circle
-
-icon-search=fa fa-search
-icon-print=fa fa-print
-icon-list=fa fa-list
-
-icon-attach=fa fa-paperclip
-icon-img=fa fa-picture-o
+icon-signin=fa fa-sign-in
+icon-signout=fa fa-sign-out
+icon-signup=fa fa-upload
 icon-sql=fa fa-strikethrough
-icon-csv=fa fa-file-text-o
-icon-json=fa fa-strikethrough
-icon-xml=fa fa-code
-icon-pdf=fa fa-file-text
-
-icon-play=fa fa-play-circle
 icon-stop=fa fa-stop
-
+icon-submit=fa fa-upload
 icon-test=fa fa-bug
+icon-trash=fa fa-trash-o
+icon-update=fa fa-edit
+icon-upload=fa fa-upload
+icon-view=fa fa-file-o
+icon-xml=fa fa-code
+
 
 #title
 title-error=ERROR
