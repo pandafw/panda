@@ -21,38 +21,52 @@
 
 <#if r??>
 	<@p.form cssClass="p-sform" id="filepool" initfocus="true" method="post" theme="bs3h">
+	<#if a.displayField("id")>
 			<@n.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
+	</#if>
+	<#if a.displayField("name")>
 			<@p.viewfield
 				key="name"
 				value="%{r.name}"
 			/>
+	</#if>
+	<#if a.displayField("size")>
 			<@p.viewfield
 				key="size"
 				value="%{r.size}"
 			/>
+	</#if>
+	<#if a.displayField("date")>
 			<@p.viewfield
 				key="date"
 				value="%{r.date}"
 				format="timestamp"
 			/>
+	</#if>
+	<#if a.displayField("flag")>
 			<@p.viewfield
 				key="flag"
 				value="%{r.flag}"
 				format="check"
 			/>
+	</#if>
+	<#if a.displayField("readable")>
 			<@p.viewfield
 				key="readable"
 				value="%{r.readable}"
 				format="check"
 			/>
+	</#if>
+	<#if a.displayField("writeable")>
 			<@p.viewfield
 				key="writeable"
 				value="%{r.writeable}"
 				format="check"
 			/>
+	</#if>
 			<#assign _buttons_ = [] />
 			<#if action.hasPermission('~/list')>
 				<@p.url var="_u_" action="~/list"/>

@@ -167,10 +167,10 @@ icon-update-execute=fa fa-save
 
 icon-bdelete=fa fa-minus-circle
 icon-bdelete-execute=fa fa-minus-circle
-icon-bdisable=fa fa-minus-circle
-icon-bdisable-execute=fa fa-minus-circle
-icon-benable=fa fa-minus-circle
-icon-benable-execute=fa fa-minus-circle
+icon-bdisable=fa fa-toggle-off
+icon-bdisable-execute=fa fa-toggle-off
+icon-benable=fa fa-toggle-on
+icon-benable-execute=fa fa-toggle-on
 icon-brecover=fa fa-reply
 icon-brecover-execute=fa fa-reply
 icon-btrash=fa fa-trash-o
