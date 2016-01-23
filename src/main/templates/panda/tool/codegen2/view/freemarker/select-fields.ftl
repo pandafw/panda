@@ -6,6 +6,7 @@
 			<#break/>
 		</#if>
 	</#list>
+	${s}#if a.displayField("${f.name}")>
 	<#if p?has_content>
 		<#if f.before?has_content>
 			${f.before}
@@ -58,4 +59,5 @@
 			${f.after}
 		</#if>
 	</#if>
+	${s}/#if>
 </#if></#list>

@@ -1,4 +1,5 @@
 <#list ui.displayFieldList as f>
+	${s}#if a.displayField("${f.name}")>
 	<#if f.before?has_content>
 			${f.before}
 	</#if>
@@ -125,4 +126,5 @@
 	<#if f.after?has_content>
 			${f.after}
 	</#if>
+	${s}/#if>
 </#list>
