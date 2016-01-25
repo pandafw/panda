@@ -19,7 +19,6 @@ import panda.lang.Iterators;
 import panda.lang.Strings;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Queryer;
-import panda.mvc.bean.Sorter;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.ListColumn;
@@ -799,13 +798,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					+ (fsdefines.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
 				.title(tag);
-			stag("th", tha);
-			
-			write("<div class=\"p-lv-cell\"");
 			if (c.width > 0) {
-				write(" style=\"width:" + c.width + ";\"");
+				tha.cssStyle("width:" + c.width);
 			}
-			write(">");
+			stag("th", tha);
 
 			if ("check".equals(ctype)) {
 				if (c.header != null) {
@@ -828,15 +824,13 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			}
 			
 			if (queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) {
-				write("<span class=\"ui-icon ui-icon-triangle-1-" 
-						+ (Sorter.ASC.equals(queryer.getSorter().getDirection()) ? 'n' : 's')
-						+ " p-lv-sort-" + queryer.getSorter().getDirection()
-						+ "\"></span>");
+				write(' ');
+				write(xicon("icon-" + queryer.getSorter().getDirection() + " p-lv-sort-" + queryer.getSorter().getDirection()));
 			}
 			else if (tag.getSortable() && c.sortable) {
-				write("<span class=\"ui-icon ui-icon-triangle-2-n-s p-lv-sort-off\"></span>");
+				write(' ');
+				write(xicon("icon-sort p-lv-sort"));
 			}
-			write("</div>");
 			etag("th");
 		}
 		write("</tr></thead>");
@@ -915,14 +909,11 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							   + ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
 							   + (c.hidden ? " p-lv-hidden" : "")
 							   + (c.nowrap ? " p-lv-nowrap" : ""));
+					if (c.width > 0) {
+						tda.cssStyle("width:" + c.width);
+					}
 					stag(c.fixed ? "th" : "td", tda);
 					
-					write("<div class=\"p-lv-cell" + (c.nowrap ? " p-lv-nowrap\"" : "\""));
-					
-					if (c.width > 0) {
-						write(" style=\"width:" + c.width + ";\"");
-					}
-					write(">");
 
 					if ("rownum".equals(ctype)) {
 						write(String.valueOf(inx + 1));
@@ -1016,7 +1007,6 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						}
 					}
 					
-					write("</div>");
 					etag(c.fixed ? "th" : "td");
 				}
 				
