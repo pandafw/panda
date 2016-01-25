@@ -38,6 +38,7 @@
 }
 .p-toolbar-wrap > .p-toolbar {
 	float: right;
+	font-size: 90%;
 }
 .p-toolbar {
 	background-color: #f5f5f5;

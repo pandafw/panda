@@ -138,9 +138,6 @@ fieldset.p-lv-filters legend {
 .p-lv-body-head {
 	margin: 0 0 -2px 0;
 }
-.p-lv-cell-last {
-	width: 100px;
-}
 
 /* table */
 .p-lv-table-wrap {
@@ -160,13 +157,12 @@ fieldset.p-lv-filters legend {
 .p-lv-column {
 }
 
-
 /* table - thead */
 thead.p-lv-chead tr {
 }
 thead.p-lv-chead > tr > th {
 	font-weight: normal;
-	padding: 4px 4px;
+	padding: 8px;
 	text-align: left;
 	vertical-align: middle;
 }
@@ -175,7 +171,6 @@ thead.p-lv-chead > tr > th.p-lv-number,
 thead.p-lv-chead > tr > th.p-lv-check,
 thead.p-lv-chead > tr > th.p-lv-actions {
 	text-align: center;
-	padding: 2px 4px;
 	width: 22px;
 }
 thead.p-lv-chead > tr > th.p-lv-hover {
@@ -190,11 +185,8 @@ thead.p-lv-chead > tr > th.p-lv-sort-desc,
 thead.p-lv-chead > tr > th.p-lv-sortable {
 	cursor: pointer;
 }
-thead.p-lv-chead > tr > th .p-lv-sort-asc,
-thead.p-lv-chead > tr > th .p-lv-sort-desc,
-thead.p-lv-chead > tr > th .p-lv-sort-off {
-	display: inline-block;
-	vertical-align: middle;
+.p-lv-sort {
+	color: #999;
 }
 
 /* table - tbody */
@@ -216,7 +208,7 @@ tbody.p-lv-tbody > tr > th {
 	font-weight: normal;
 }
 tbody.p-lv-tbody > tr > th, tbody.p-lv-tbody > tr > td {
-	padding: 2px 4px;
+	padding: 8px;
 	vertical-align: middle;
 }
 tbody.p-lv-tbody > tr > th.p-lv-check, tbody.p-lv-tbody > tr > td.p-lv-check,
@@ -224,38 +216,47 @@ tbody.p-lv-tbody > tr > th.p-lv-number, tbody.p-lv-tbody > tr > td.p-lv-number,
 tbody.p-lv-tbody > tr > th.p-lv-rownum, tbody.p-lv-tbody > tr > td.p-lv-rownum,
 tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions {
 	text-align: center;
-	padding: 2px 4px;
 	width: 22px;
 }
 
-thead.p-lv-chead > tr > th, thead.p-lv-chead > tr > th .p-lv-cell,
-thead.p-lv-chead > tr > th.p-lv-actions, thead.p-lv-chead > tr > th.p-lv-actions .p-lv-cell,
-thead.p-lv-chead > tr > th.p-lv-check,   thead.p-lv-chead > tr > th.p-lv-check .p-lv-cell,
-thead.p-lv-chead > tr > th.p-lv-number,  thead.p-lv-chead > tr > th.p-lv-number .p-lv-cell,
-thead.p-lv-chead > tr > th.p-lv-rownum,  thead.p-lv-chead > tr > th.p-lv-rownum .p-lv-cell,
-tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > th.p-lv-actions .p-lv-cell, 
-tbody.p-lv-tbody > tr > th.p-lv-check,   tbody.p-lv-tbody > tr > th.p-lv-check .p-lv-cell, 
-tbody.p-lv-tbody > tr > th.p-lv-number,  tbody.p-lv-tbody > tr > th.p-lv-number .p-lv-cell, 
-tbody.p-lv-tbody > tr > th.p-lv-rownum,  tbody.p-lv-tbody > tr > th.p-lv-rownum .p-lv-cell, 
-tbody.p-lv-tbody > tr > td.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions .p-lv-cell,
-tbody.p-lv-tbody > tr > td.p-lv-check,   tbody.p-lv-tbody > tr > td.p-lv-check .p-lv-cell,
-tbody.p-lv-tbody > tr > td.p-lv-number,  tbody.p-lv-tbody > tr > td.p-lv-number .p-lv-cell,
-tbody.p-lv-tbody > tr > td.p-lv-rownum,  tbody.p-lv-tbody > tr > td.p-lv-rownum .p-lv-cell {
+thead.p-lv-chead > tr > th,
+thead.p-lv-chead > tr > th.p-lv-actions,
+thead.p-lv-chead > tr > th.p-lv-check,
+thead.p-lv-chead > tr > th.p-lv-number,
+thead.p-lv-chead > tr > th.p-lv-rownum,
+tbody.p-lv-tbody > tr > th.p-lv-actions,
+tbody.p-lv-tbody > tr > th.p-lv-check,
+tbody.p-lv-tbody > tr > th.p-lv-number,
+tbody.p-lv-tbody > tr > th.p-lv-rownum,
+tbody.p-lv-tbody > tr > td.p-lv-actions,
+tbody.p-lv-tbody > tr > td.p-lv-check,
+tbody.p-lv-tbody > tr > td.p-lv-number,
+tbody.p-lv-tbody > tr > td.p-lv-rownum {
 	white-space: nowrap;
 }
 
-/* theme */
-/*
-thead.p-lv-chead th.p-lv-column {
-	border-left-style: dotted;
-	border-right-style: dotted;
+/* hover & select */
+thead.p-lv-chead > tr > th.p-lv-sortable:hover {
+	background-color: #F5FFFA;
 }
-tbody.p-lv-tbody td.p-lv-column,
-tbody.p-lv-tbody tr.p-lv-selected td.p-lv-column,
-tbody.p-lv-tbody tr:hover td.p-lv-column,
-tbody.p-lv-tbody tr.p-lv-hover td.p-lv-column {
+tbody.p-lv-tbody > tr.p-lv-selected {
+	background-color: #FFFFF0;
+}
+tbody.p-lv-tbody > tr:hover > td,
+tbody.p-lv-tbody > tr.p-lv-hover > td {
+}
+
+/* grid style */
+/*
+thead.p-lv-chead > tr > th,
+tbody.p-lv-tbody > tr > th,
+tbody.p-lv-tbody > tr > td {
 	border-left: dotted 1px #ccc;
-	border-right: dotted 1px #ccc;
+}
+thead.p-lv-chead > tr > th:first-child,
+tbody.p-lv-tbody > tr > th:first-child,
+tbody.p-lv-tbody > tr > td:first-child {
+	border-left: none;
 }
 */
 
