@@ -36,6 +36,13 @@ public class ListView extends UIBean {
 	protected Boolean sortable;
 	protected String cssColumn;
 	protected String cssTable;
+	protected String cssFiltersLabel;
+	protected String cssFiltersInput;
+	protected String labelFiltersCaption;
+	protected String labelFiltersAddFilter;
+	protected String labelFiltersMethod;
+	protected String labelFiltersBtnClear;
+	protected String labelFiltersBtnQuery;
 
 	// form attributes
 	protected String action;
@@ -100,16 +107,6 @@ public class ListView extends UIBean {
 	 */
 	private Map getTextAsMap(String name) {
 		return context.getText().getTextAsMap(name, Collections.EMPTY_MAP);
-	}
-
-	/**
-	 * getTextAsBoolean
-	 * @param name resource name
-	 * @param defv default value
-	 * @return boolean value
-	 */
-	private Boolean getTextAsBoolean(String name, Boolean defv) {
-		return context.getText().getTextAsBoolean(name, defv);
 	}
 
 	/**
@@ -186,12 +183,41 @@ public class ListView extends UIBean {
 		populateComponentHtmlId();
 		
 		if (sortable == null) {
-			sortable = getTextAsBoolean("listview-sortable", true);
+			sortable = context.getText().getTextAsBoolean("listview-sortable", true);
 		}
 
 		if (hideCheckAll == null) {
-			hideCheckAll = getTextAsBoolean("listview-hideCheckAll", false);
+			hideCheckAll = context.getText().getTextAsBoolean("listview-hideCheckAll", false);
 		}
+		
+		if (cssFiltersLabel == null) {
+			cssFiltersLabel = context.getText().getText("listview-filters-css-label", "col-sm-2");
+		}
+		
+		if (cssFiltersInput == null) {
+			cssFiltersInput = context.getText().getText("listview-filters-css-input", "col-sm-9");
+		}
+		
+		if (labelFiltersCaption == null) {
+			labelFiltersCaption = context.getText().getText("listview-filters-caption", "Filters");
+		}
+		
+		if (labelFiltersAddFilter == null) {
+			labelFiltersAddFilter = context.getText().getText("listview-filters-label-addFilter", "Add filter");
+		}
+		
+		if (labelFiltersMethod == null) {
+			labelFiltersMethod = context.getText().getText("listview-filters-label-method", "Query method");
+		}
+		
+		if (labelFiltersBtnClear == null) {
+			labelFiltersBtnClear = context.getText().getText("listview-filters-button-clear", "Clear");
+		}
+		
+		if (labelFiltersBtnQuery == null) {
+			labelFiltersBtnQuery = context.getText().getText("listview-filters-button-query", "Search");
+		}
+		
 	}
 
 	/**
@@ -624,4 +650,104 @@ public class ListView extends UIBean {
 	public boolean isFsExpandNone() {
 		return fsexpand == 'n';
 	}
+
+	/**
+	 * @return the cssFiltersLabel
+	 */
+	public String getCssFiltersLabel() {
+		return cssFiltersLabel;
+	}
+
+	/**
+	 * @param cssFiltersLabel the cssFiltersLabel to set
+	 */
+	public void setCssFiltersLabel(String cssFiltersLabel) {
+		this.cssFiltersLabel = cssFiltersLabel;
+	}
+
+	/**
+	 * @return the cssFiltersInput
+	 */
+	public String getCssFiltersInput() {
+		return cssFiltersInput;
+	}
+
+	/**
+	 * @param cssFiltersInput the cssFiltersInput to set
+	 */
+	public void setCssFiltersInput(String cssFiltersInput) {
+		this.cssFiltersInput = cssFiltersInput;
+	}
+
+	/**
+	 * @return the labelFiltersCaption
+	 */
+	public String getLabelFiltersCaption() {
+		return labelFiltersCaption;
+	}
+
+	/**
+	 * @param labelFiltersCaption the labelFiltersCaption to set
+	 */
+	public void setLabelFiltersCaption(String labelFiltersCaption) {
+		this.labelFiltersCaption = labelFiltersCaption;
+	}
+
+	/**
+	 * @return the labelFiltersAddFilter
+	 */
+	public String getLabelFiltersAddFilter() {
+		return labelFiltersAddFilter;
+	}
+
+	/**
+	 * @param labelFiltersAddFilter the labelFiltersAddFilter to set
+	 */
+	public void setLabelFiltersAddFilter(String labelFiltersAddFilter) {
+		this.labelFiltersAddFilter = labelFiltersAddFilter;
+	}
+
+	/**
+	 * @return the labelFiltersMethod
+	 */
+	public String getLabelFiltersMethod() {
+		return labelFiltersMethod;
+	}
+
+	/**
+	 * @param labelFiltersMethod the labelFiltersMethod to set
+	 */
+	public void setLabelFiltersMethod(String labelFiltersMethod) {
+		this.labelFiltersMethod = labelFiltersMethod;
+	}
+
+	/**
+	 * @return the labelFiltersBtnClear
+	 */
+	public String getLabelFiltersBtnClear() {
+		return labelFiltersBtnClear;
+	}
+
+	/**
+	 * @param labelFiltersBtnClear the labelFiltersBtnClear to set
+	 */
+	public void setLabelFiltersBtnClear(String labelFiltersBtnClear) {
+		this.labelFiltersBtnClear = labelFiltersBtnClear;
+	}
+
+	/**
+	 * @return the labelFiltersBtnQuery
+	 */
+	public String getLabelFiltersBtnQuery() {
+		return labelFiltersBtnQuery;
+	}
+
+	/**
+	 * @param labelFiltersBtnQuery the labelFiltersBtnQuery to set
+	 */
+	public void setLabelFiltersBtnQuery(String labelFiltersBtnQuery) {
+		this.labelFiltersBtnQuery = labelFiltersBtnQuery;
+	}
+
+
 }

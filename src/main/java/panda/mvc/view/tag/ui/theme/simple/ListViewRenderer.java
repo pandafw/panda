@@ -383,14 +383,18 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write(icon("p-lv-fs-remove fa fa-minus-circle"));
 			}
 
-			write("<label for=\"" + _ifn + "_v\" class=\"col-sm-3 control-label " + (_hfe ? "p-error" : "") + "\">");
+			write("<label for=\"" + _ifn + "_v\" class=\"");
+			write(tag.getCssFiltersLabel());
+			write(" control-label " + (_hfe ? "p-error" : "") + "\">");
 			if (Strings.isNotEmpty(_f.label)) {
 				write(html(_f.label));
 				write(":");
 			}
 			write("</label>");
 
-			write("<div class=\"col-sm-9 p-lv-fs-inputgroup\"");
+			write("<div class=\"");
+			write(tag.getCssFiltersInput());
+			write(" p-lv-fs-inputgroup\"");
 			if (Strings.isNotEmpty(_f.tooltip)) {
 				write("title=\"");
 				write(html(_f.tooltip));
@@ -592,23 +596,32 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 
 		write("<div class=\"form-group p-lv-submit\">");
-		write("<label class=\"col-sm-3 control-label\">");
-		write(getText("listview-filters-label-method"));
+		write("<label class=\"");
+		write(tag.getCssFiltersLabel());
+		write(" control-label\">");
+		write(tag.getLabelFiltersMethod());
 		write(":</label>");
-		write("<div class=\"col-sm-9\">");
+		write("<div class=\"");
+		write(tag.getCssFiltersInput());
+		write("\">");
 		writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, null);
 		write("</div></div>");
 	}
 	
 	private void writeListViewFiltersButtons(Map<String, ListColumn.Filter> fm) throws IOException {
 		write("<div class=\"form-group p-lv-submit\">");
-		write("<label class=\"col-sm-3 control-label\"></label>");
+		write("<label class=\"");
+		write(tag.getCssFiltersLabel());
+		write(" control-label\"></label>");
 
-		write("<div class=\"col-sm-9\">");
+		write("<div class=\"");
+		write(tag.getCssFiltersInput());
+		write("\">");
+
 		// buttons
-		write(button(getText("listview-filters-button-query"), "icon-search"));
+		write(button(tag.getLabelFiltersBtnQuery(), "icon-search"));
 		write(' ');
-		write(button(getText("listview-filters-button-clear"), "icon-clear", "p-lv-fs-clear"));
+		write(button(tag.getLabelFiltersBtnClear(), "icon-clear", "p-lv-fs-clear"));
 		write(' ');
 
 		// select
@@ -617,7 +630,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			write("<select id=\"" + id + "_fsform_fsadd" + "\"");
 			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\">");
 			write("<option value=\"\">-- ");
-			write(getText("listview-filters-label-add"));
+			write(tag.getLabelFiltersAddFilter());
 			write(" --</option>");
 	
 			for (Entry<String, ListColumn.Filter> en : fm2.entrySet()) {
@@ -726,7 +739,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			write(" ui-collapsed");
 		}
 		write("\" data-spy=\"fieldset\"><legend>");
-		write(getText("listview-filters-caption"));
+		write(tag.getLabelFiltersCaption());
 		write("</legend>");
 
 		Form form = context.getIoc().get(Form.class);

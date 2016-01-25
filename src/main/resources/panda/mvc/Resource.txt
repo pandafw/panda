@@ -87,10 +87,12 @@ listview-actions-align=left
 
 #listview - filters
 listview-filters-caption=Filters
-listview-filters-label-add=Add filter
-listview-filters-button-query=Search
-listview-filters-button-clear=Clear
+listview-filters-label-addFilter=Add filter
 listview-filters-label-method=Query method
+listview-filters-button-clear=Clear
+listview-filters-button-query=Search
+listview-filters-css-label=col-sm-2
+listview-filters-css-input=col-sm-9
 
 listview-filter-methods=\
 	"and": "AND", \
