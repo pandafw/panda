@@ -14,7 +14,11 @@
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
-</li>	</ul><div class="clearfix"></div></div>
+</li><#if action.hasPermission("~/list_print")><li><@p.a icon="icon-print" target="_blank" action="~/list_print" label="#(button-print)"/>
+</li></#if><#if action.hasPermission("~/list_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/list_csv" label="#(button-csv)"/>
+</li></#if><#if action.hasPermission("~/list_json")><li><@p.a icon="icon-json" target="_blank" action="~/list_json" label="#(button-json)"/>
+</li></#if><#if action.hasPermission("~/list_xml")><li><@p.a icon="icon-xml" target="_blank" action="~/list_xml" label="#(button-xml)"/>
+</li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
 
@@ -212,18 +216,6 @@
 		<#if action.hasPermission("~/bdelete")>
 			<@p.b icon="icon-bdelete" onclick="return property_list_bdelete();" label="#(button-bdelete)"/>
 		</#if>
-		<#if action.hasPermission("~/list_print")>
-			<@p.b icon="icon-print" onclick="return property_list_print();" label="#(button-print)"/>
-		</#if>
-		<#if action.hasPermission("~/list_csv")>
-			<@p.b icon="icon-csv" onclick="return property_list_csv();" label="#(button-csv)"/>
-		</#if>
-		<#if action.hasPermission("~/list_json")>
-			<@p.b icon="icon-json" onclick="return property_list_json();" label="#(button-json)"/>
-		</#if>
-		<#if action.hasPermission("~/list_xml")>
-			<@p.b icon="icon-xml" onclick="return property_list_xml();" label="#(button-xml)"/>
-		</#if>
 	</@p.set>
 
 	<@p.listview id="property_list" action="~/list" 
@@ -236,22 +228,6 @@
 	<script type="text/javascript"><!--
 		function property_list_bdelete() {
 			return plv_submitCheckedKeys('property_list', '<@p.url action="~/bdelete"/>');
-		}
-		function property_list_print() {
-			window.open("<@p.url action='~/list_print' includeParams='all' escapeAmp='false'/>");
-			return false;
-		}
-		function property_list_csv() {
-			window.open("<@p.url action='~/list_csv' includeParams='all' escapeAmp='false'/>");
-			return false;
-		}
-		function property_list_json() {
-			window.open("<@p.url action='~/list_json' includeParams='all' escapeAmp='false'/>");
-			return false;
-		}
-		function property_list_xml() {
-			window.open("<@p.url action='~/list_xml' includeParams='all' escapeAmp='false'/>");
-			return false;
 		}
 	--></script>
 </div>
