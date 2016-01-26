@@ -9,6 +9,9 @@ import java.util.Map;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Filter.ComboFilter;
+import panda.dao.query.Filter.ReferFilter;
+import panda.dao.query.Filter.SimpleFilter;
+import panda.dao.query.Filter.ValueFilter;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
@@ -620,33 +623,51 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		return filters != null && !filters.isEmpty();
 	}
 	
+	/**
+	 * @param name property/field/column name
+	 * @return true if the property has some filter
+	 */
+	public boolean hasFilter(String name) {
+		if (!hasFilters()) {
+			return false;
+		}
+		for (Filter f : filters.getFilters()) {
+			if (f instanceof SimpleFilter) {
+				if (((SimpleFilter)f).getField().equals(name)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	private GenericQuery addSimpleExpression(String field, Operator operator) {
-		cfilter().add(new Filter.SimpleFilter(field, operator));
+		cfilter().add(new SimpleFilter(field, operator));
 		return this;
 	}
 
 	private GenericQuery addCompareValueExpression(String field, Operator operator, Object compareValue) {
-		cfilter().add(new Filter.ValueFilter(field, operator, compareValue));
+		cfilter().add(new ValueFilter(field, operator, compareValue));
 		return this;
 	}
 
 	private GenericQuery addCompareFieldExpression(String field, Operator operator, String compareField) {
-		cfilter().add(new Filter.ReferFilter(field, operator, compareField));
+		cfilter().add(new ReferFilter(field, operator, compareField));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Object[] values) {
-		cfilter().add(new Filter.ValueFilter(field, operator, values));
+		cfilter().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
-		cfilter().add(new Filter.ValueFilter(field, operator, values));
+		cfilter().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
-		cfilter().add(new Filter.ValueFilter(field, operator, new Object[] { minValue, maxValue }));
+		cfilter().add(new ValueFilter(field, operator, new Object[] { minValue, maxValue }));
 		return this;
 	}
 

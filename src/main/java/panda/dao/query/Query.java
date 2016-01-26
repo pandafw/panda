@@ -139,4 +139,10 @@ public interface Query<T> {
 	 * @return true if has filters
 	 */
 	public boolean hasFilters();
+	
+	/**
+	 * @param name property/field/column name
+	 * @return true if the property has some filter
+	 */
+	public boolean hasFilter(String name);
 }

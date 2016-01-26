@@ -179,7 +179,12 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	public boolean hasFilters() {
 		return query.hasFilters();
 	}
-
+	
+	@Override
+	public boolean hasFilter(String name) {
+		return query.hasFilter(name);
+	}
+	
 	//----------------------------------------------------------------------
 	public Q clear() {
 		query.clear();

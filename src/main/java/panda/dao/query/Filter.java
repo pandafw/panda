@@ -12,7 +12,7 @@ import panda.lang.Objects;
  * @author yf.frank.wang@gmail.com
  */
 public class Filter {
-	public static class OperatorFilter extends Filter {
+	protected static class OperatorFilter extends Filter {
 		protected Operator operator;
 		
 		/**
@@ -82,8 +82,7 @@ public class Filter {
 		}
 	}
 
-	public static class ValueFilter extends OperatorFilter {
-		protected String field;
+	public static class ValueFilter extends SimpleFilter {
 		protected Object value;
 		
 		/**
@@ -93,24 +92,8 @@ public class Filter {
 		 * @param value value
 		 */
 		public ValueFilter(String field, Operator operator, Object value) {
-			super(operator);
-			setField(field);
+			super(field, operator);
 			setValue(value);
-		}
-
-		/**
-		 * @return the field
-		 */
-		public String getField() {
-			return field;
-		}
-
-		/**
-		 * @param field the field to set
-		 */
-		protected void setField(String field) {
-			Asserts.notEmpty(field, "The field is empty.");
-			this.field = field;
 		}
 
 		/**
@@ -144,8 +127,7 @@ public class Filter {
 		}
 	}
 
-	public static class ReferFilter extends OperatorFilter {
-		protected String field;
+	public static class ReferFilter extends SimpleFilter {
 		protected String refer;
 		
 		/**
@@ -155,24 +137,8 @@ public class Filter {
 		 * @param refer refer
 		 */
 		public ReferFilter(String field, Operator operator, String refer) {
-			super(operator);
-			setField(field);
+			super(field, operator);
 			setRefer(refer);
-		}
-
-		/**
-		 * @return the field
-		 */
-		public String getField() {
-			return field;
-		}
-
-		/**
-		 * @param field the field to set
-		 */
-		protected void setField(String field) {
-			Asserts.notEmpty(field, "The field is empty.");
-			this.field = field;
 		}
 
 		/**
