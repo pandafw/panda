@@ -74,7 +74,7 @@ public abstract class InputUIBean extends UIBean {
 	}
 
 	public Form findForm() {
-		if (form != null) {
+		if (form == null) {
 			form = (Form)findAncestor(Form.class);
 		}
 		return form;
