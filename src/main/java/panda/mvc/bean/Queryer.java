@@ -120,7 +120,20 @@ public class Queryer implements Cloneable, Serializable {
 	 * @param method the method to set
 	 */
 	public void setMethod(String method) {
-		method = Strings.lowerCase(Strings.stripToNull(method));
+		if (Strings.isEmpty(method)) {
+			return;
+		}
+		
+		switch (method.charAt(0)) {
+		case 'a':
+		case 'A':
+			this.method = AND;
+			break;
+		case 'o':
+		case 'O':
+			this.method = OR;
+			break;
+		}
 	}
 
 	/**
