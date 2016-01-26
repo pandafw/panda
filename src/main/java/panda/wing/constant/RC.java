@@ -49,9 +49,9 @@ public interface RC {
 	/** The input confirm */
 	public static final String UI_INPUT_CONFIRM = "ui-input-confirm";
 
-	/** The input step */
+	/** The input step (deprecated)
 	public static final String UI_INPUT_STEP = "ui-input-step";
-
+*/
 	/** The list countable */
 	public static final String UI_LIST_COUNTABLE = "ui-list-countable";
 
