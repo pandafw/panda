@@ -190,7 +190,7 @@ public class Property extends ContextBean {
 			av = value.toString();
 		}
 		else {
-			av = findString(name);
+			av = Strings.defaultString(findString(name));
 		}
 		return av;
 	}
