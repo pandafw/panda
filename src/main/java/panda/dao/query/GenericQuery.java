@@ -32,8 +32,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	protected ComboFilter filters;
 	
-	/** current filter */
-	protected List<ComboFilter> cfilter;
+	/** filter stack */
+	protected List<ComboFilter> stack;
 
 	protected Map<String, Order> orders;
 	protected List<String> groups;
@@ -631,62 +631,57 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (!hasFilters()) {
 			return false;
 		}
-		for (Filter f : filters.getFilters()) {
-			if (f instanceof SimpleFilter) {
-				if (((SimpleFilter)f).getField().equals(name)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return filters.hasFilter(name);
 	}
 	
 	private GenericQuery addSimpleExpression(String field, Operator operator) {
-		cfilter().add(new SimpleFilter(field, operator));
+		getCurrent().add(new SimpleFilter(field, operator));
 		return this;
 	}
 
 	private GenericQuery addCompareValueExpression(String field, Operator operator, Object compareValue) {
-		cfilter().add(new ValueFilter(field, operator, compareValue));
+		getCurrent().add(new ValueFilter(field, operator, compareValue));
 		return this;
 	}
 
 	private GenericQuery addCompareFieldExpression(String field, Operator operator, String compareField) {
-		cfilter().add(new ReferFilter(field, operator, compareField));
+		getCurrent().add(new ReferFilter(field, operator, compareField));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Object[] values) {
-		cfilter().add(new ValueFilter(field, operator, values));
+		getCurrent().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
-		cfilter().add(new ValueFilter(field, operator, values));
+		getCurrent().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
 	private GenericQuery addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
-		cfilter().add(new ValueFilter(field, operator, new Object[] { minValue, maxValue }));
+		getCurrent().add(new ValueFilter(field, operator, new Object[] { minValue, maxValue }));
 		return this;
 	}
 
-	private ComboFilter cfilter() {
-		if (Collections.isNotEmpty(cfilter)) {
-			return cfilter.get(cfilter.size() - 1);
+	private ComboFilter getCurrent() {
+		if (Collections.isNotEmpty(stack)) {
+			return stack.get(stack.size() - 1);
 		}
 		
-		if (filters == null) {
-			filters = new ComboFilter(Logical.AND);
+		if (filters != null) {
+			return filters;
 		}
+		
+		filters = new ComboFilter(Logical.AND);
 		return filters;
 	}
 	
-	private void setCurrentFilter(ComboFilter cf) {
-		if (cfilter == null) {
-			cfilter = new ArrayList<ComboFilter>();
+	private void setCurrent(ComboFilter cf) {
+		if (stack == null) {
+			stack = new ArrayList<ComboFilter>();
 		}
-		cfilter.add(cf);
+		stack.add(cf);
 	}
 	
 	/**
@@ -695,8 +690,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	public GenericQuery and() {
 		ComboFilter cf = new ComboFilter(Logical.AND);
-		cfilter().add(cf);
-		setCurrentFilter(cf);
+		getCurrent().add(cf);
+		setCurrent(cf);
 		return this;
 	}
 	
@@ -706,8 +701,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	public GenericQuery or() {
 		ComboFilter cf = new ComboFilter(Logical.OR);
-		cfilter().add(cf);
-		setCurrentFilter(cf);
+		getCurrent().add(cf);
+		setCurrent(cf);
 		return this;
 	}
 	
@@ -716,17 +711,13 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery end() {
-		ComboFilter cf = cfilter();
-		
+		ComboFilter cf = getCurrent();
 		if (cf.isEmpty()) {
-			throw new IllegalArgumentException("Empty " + cf.getLogical());
+			throw new IllegalStateException("Empty " + cf.getLogical());
 		}
 
-		if (Collections.isNotEmpty(cfilter)) {
-			cfilter.remove(cfilter.size() - 1);
-			if (cf.getFilters().size() == 1 && cf != filters) {
-				cfilter().add(cf.last());
-			}
+		if (Collections.isNotEmpty(stack)) {
+			stack.remove(stack.size() - 1);
 		}
 		return this;
 	}

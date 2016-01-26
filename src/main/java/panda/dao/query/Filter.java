@@ -30,13 +30,6 @@ public class Filter {
 		}
 	
 		/**
-		 * @param operator the operator to set
-		 */
-		protected void setOperator(Operator operator) {
-			this.operator = operator;
-		}
-	
-		/**
 		 * @return a string representation of the object.
 		 */
 		@Override
@@ -55,7 +48,9 @@ public class Filter {
 		 */
 		public SimpleFilter(String field, Operator operator) {
 			super(operator);
-			setField(field);
+
+			Asserts.notEmpty(field, "The field is empty.");
+			this.field = field;
 		}
 
 		/**
@@ -63,14 +58,6 @@ public class Filter {
 		 */
 		public String getField() {
 			return field;
-		}
-
-		/**
-		 * @param field the field to set
-		 */
-		protected void setField(String field) {
-			Asserts.notEmpty(field, "The field is empty.");
-			this.field = field;
 		}
 
 		/**
@@ -93,7 +80,9 @@ public class Filter {
 		 */
 		public ValueFilter(String field, Operator operator, Object value) {
 			super(field, operator);
-			setValue(value);
+
+			Asserts.notNull(value, "The value is null.");
+			this.value = value;
 		}
 
 		/**
@@ -108,14 +97,6 @@ public class Filter {
 		 */
 		public Object getValue(int index) {
 			return Array.get(value, index);
-		}
-
-		/**
-		 * @param value the value to set
-		 */
-		protected void setValue(Object value) {
-			Asserts.notNull(value, "The value is null.");
-			this.value = value;
 		}
 
 		/**
@@ -138,7 +119,9 @@ public class Filter {
 		 */
 		public ReferFilter(String field, Operator operator, String refer) {
 			super(field, operator);
-			setRefer(refer);
+
+			Asserts.notEmpty(refer, "The refer is empty.");
+			this.refer = refer;
 		}
 
 		/**
@@ -146,14 +129,6 @@ public class Filter {
 		 */
 		public String getRefer() {
 			return refer;
-		}
-
-		/**
-		 * @param refer the refer to set
-		 */
-		protected void setRefer(String refer) {
-			Asserts.notEmpty(refer, "The refer is empty.");
-			this.refer = refer;
 		}
 
 		/**
@@ -229,7 +204,23 @@ public class Filter {
 		public boolean isEmpty() {
 			return filters.isEmpty();
 		}
-		
+
+		public boolean hasFilter(String name) {
+			for (Filter f : filters) {
+				if (f instanceof SimpleFilter) {
+					if (((SimpleFilter)f).getField().equals(name)) {
+						return true;
+					}
+				}
+				else if (f instanceof ComboFilter) {
+					if (((ComboFilter)f).hasFilter(name)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		public ComboFilter clone() {
 			ComboFilter copy = new ComboFilter(this.logical);
 			copy.filters.addAll(this.filters);
