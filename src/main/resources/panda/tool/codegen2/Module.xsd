@@ -145,6 +145,7 @@
 			<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
+		<attribute name="safeInclude" type="string"></attribute>
 		<attribute name="cssColumn" type="string"></attribute>
 		<attribute name="template" type="string"></attribute>
 		<attribute name="extend" type="string"></attribute>
@@ -159,6 +160,7 @@
 			<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
+		<attribute name="safeInclude" type="string"></attribute>
 		<attribute name="focus" type="boolean"></attribute>
 		<attribute name="theme" type="string"></attribute>
 		<attribute name="formId" type="string"></attribute>

@@ -13,6 +13,9 @@ ${s}#if r??>
 		<#include "edit-actions.ftl"/>
 	${s}/@p.form>
 ${s}/#if>
+<#if ui.safeInclude??>
+	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}_execute-custom.ftl</#if>"/>
+</#if>
 </div>
 
 <@footer/>

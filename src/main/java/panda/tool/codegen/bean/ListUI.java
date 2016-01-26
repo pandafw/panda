@@ -34,6 +34,7 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;footer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; maxOccurs=&quot;1&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;safeInclude&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;cssColumn&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;template&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;extend&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -61,6 +62,8 @@ public class ListUI implements Comparable<ListUI> {
 	@XmlAttribute
 	private Boolean generate;
 	@XmlAttribute
+	private String safeInclude;
+	@XmlAttribute
 	private String cssColumn;
 	@XmlAttribute
 	private String template;
@@ -81,6 +84,7 @@ public class ListUI implements Comparable<ListUI> {
 	 * @param lui source list ui
 	 */
 	public ListUI(ListUI lui) {
+		this.safeInclude = lui.safeInclude;
 		this.cssColumn = lui.cssColumn;
 		this.template = lui.template;
 		this.extend = lui.extend;
@@ -116,6 +120,9 @@ public class ListUI implements Comparable<ListUI> {
 	public static ListUI extend(ListUI src, ListUI parent) {
 		ListUI me = new ListUI(parent);
 
+		if (src.safeInclude != null) {
+			me.safeInclude = src.safeInclude;
+		}
 		if (src.cssColumn != null) {
 			me.cssColumn = src.cssColumn;
 		}
@@ -303,6 +310,20 @@ public class ListUI implements Comparable<ListUI> {
 	 */
 	public void setCssColumn(String value) {
 		this.cssColumn = value;
+	}
+
+	/**
+	 * @return the safeInclude
+	 */
+	public String getSafeInclude() {
+		return safeInclude;
+	}
+
+	/**
+	 * @param safeInclude the safeInclude to set
+	 */
+	public void setSafeInclude(String safeInclude) {
+		this.safeInclude = safeInclude;
 	}
 
 	/**

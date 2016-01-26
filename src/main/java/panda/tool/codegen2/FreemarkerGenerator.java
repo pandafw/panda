@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import panda.lang.Classes;
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.Entity;
@@ -52,8 +51,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		"_edit_confirm",
 		"_edit_success",
 		"_view",
-		"_print",
-		""
+		"_print"
 	};
 	
 	private Map<String, Template> tplMap;
@@ -121,7 +119,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 					
 					wrapper.put("ui", lui);
 					
-					String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" + lui.getName();
+					String uin = action.getSimpleActionClass() + "_" + lui.getName();
 
 					for (String t : lui.getTemplates()) {
 						if ("bdelete".equals(t) || "bupdate".equals(t)) {
@@ -151,7 +149,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 
 					wrapper.put("ui", iui);
 
-					String uin = Classes.getSimpleClassName(action.getActionClass()) + "_" +iui.getName();
+					String uin = action.getSimpleActionClass() + "_" +iui.getName();
 
 					for (String t : iui.getTemplates()) {
 						if ("view".equals(t) || "print".equals(t)) {

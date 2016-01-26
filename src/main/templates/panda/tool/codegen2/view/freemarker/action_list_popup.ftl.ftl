@@ -78,6 +78,9 @@
 		cssClass="p-lv-clickable" cssTable="table-hover table-striped"
 		onrowclick="$.popup().callback(plv_getRowData(this));"
 	/>
+<#if ui.safeInclude??>
+	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}_popup-custom.ftl</#if>"/>
+</#if>
 </div>
 
 <@footer/>

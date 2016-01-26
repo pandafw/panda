@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import panda.bind.json.JsonException;
-import panda.bind.json.JsonObject;
+import panda.bind.json.Jsons;
 
 /**
  * <p>
@@ -58,7 +58,7 @@ public class Param {
 	public Object getValues() {
 		if (value != null) {
 			try {
-				return JsonObject.fromJson(value);
+				return Jsons.fromJson(value);
 			}
 			catch (JsonException e) {
 				System.err.println("the value of <Param name='" + this.name

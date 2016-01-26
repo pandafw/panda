@@ -1,14 +1,20 @@
+<#macro initpc f>
+	<#assign _popup = {}/>
+	<#assign _clear = []/>
+	<#if f.editTag??>
+		<#list f.editTag.paramList as p>
+			<#if p.name == "~popup">
+				<#assign _popup = p.values/>
+			</#if>
+			<#if p.name == "~clear">
+				<#assign _clear = p.values/>
+			</#if>
+		</#list>
+	</#if>
+</#macro>
 		<script type="text/javascript"><!--
 		<#list ui.displayFieldList as f>
-			<#assign _popup = {}/>
-			<#if f.editTag??>
-				<#list f.editTag.paramList as p>
-					<#if p.name == "~popup">
-						<#assign _popup = p.values/>
-						<#break/>
-					</#if>
-				</#list>
-			</#if>
+			<@initpc f=f/>
 			<#if _popup?has_content>
 			function ${action.name}_${f.name}_onPopupCallback(sd) {
 				<#if _popup.fields?has_content>
@@ -27,19 +33,26 @@
 			}
 
 			</#if>
+			<#if _clear?has_content>
+			function ${action.name}_${f.name}_onClearClick() {
+				<#list _clear as fk>
+					<#list ui.fieldList as f2><#if f2.name == fk>
+						<#if f2.editTag?? && f2.editTag.name?ends_with(".viewfield")>
+				panda.viewfield("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val('');
+						<#else>
+				$("#${action.name}<#if f2.actionField>_a</#if>_${fk}").val('');
+						</#if>
+						<#break/>
+					</#if></#list>
+				</#list>
+			}
+
+			</#if>
 		</#list>
 		
 			function onPageLoad() {
 		<#list ui.displayFieldList as f>
-			<#assign _popup = {}/>
-			<#if f.editTag??>
-				<#list f.editTag.paramList as p>
-					<#if p.name == "~popup">
-						<#assign _popup = p.values/>
-						<#break/>
-					</#if>
-				</#list>
-			</#if>
+			<@initpc f=f/>
 			<#if _popup?has_content>
 			<#assign pid = ""/>
 			<#if _popup.ref?has_content>
@@ -64,6 +77,10 @@ ${s}/@p.url>"
 					target: "#${action.name}<#if f.actionField>_a</#if>_${f.name}",
 					callback: ${action.name}_${f.name}_onPopupCallback
 				});
+			
+			</#if>
+			<#if _clear?has_content>
+				$('#${action.name}<#if f.actionField>_a</#if>_${f.name}').prev().click(${action.name}_${f.name}_onClearClick);
 			
 			</#if>
 		</#list>
