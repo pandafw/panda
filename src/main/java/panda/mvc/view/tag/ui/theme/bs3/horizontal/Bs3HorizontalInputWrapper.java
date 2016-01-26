@@ -9,9 +9,6 @@ import panda.mvc.view.tag.ui.theme.RenderingContext;
 import panda.mvc.view.tag.ui.theme.bs3.Bs3InputWrapper;
 
 public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends Bs3InputWrapper<T> {
-	protected String cssColLabel = "col-sm-3";
-	protected String cssColInput = "col-sm-9";
-	
 	/**
 	 * @param context context
 	 */
@@ -21,15 +18,15 @@ public abstract class Bs3HorizontalInputWrapper<T extends InputUIBean> extends B
 
 	@Override
 	protected String getLabelClass() {
-		return join(cssColLabel, "control-label");
+		return join(tag.getLabelClass(), "control-label");
 	}
 
 	@Override
 	protected void renderInputDivBegin() throws IOException {
 		write("<div");
-		if (Strings.isNotEmpty(cssColInput)) {
+		if (Strings.isNotEmpty(tag.getInputClass())) {
 			write(" class=\"");
-			write(cssColInput);
+			write(tag.getInputClass());
 			write('\"');
 		}
 		write('>');

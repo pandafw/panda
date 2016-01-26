@@ -4,12 +4,19 @@ import panda.lang.Strings;
 
 
 public abstract class InputUIBean extends UIBean {
+	// parent form
+	protected Form form;
+	
 	// shortcut, sets label, name, and value
 	protected String key;
 
 	protected String label;
 	protected String labelPosition;
 	protected String labelSeparator = ":";
+	
+	protected String labelClass;
+	protected String inputClass;
+	
 	protected boolean required;
 	protected Boolean readonly;
 	protected String requiredString;
@@ -46,12 +53,31 @@ public abstract class InputUIBean extends UIBean {
 		// see if the value was specified as a parameter already
 		evaluateNameValue();
 
+		Form form = findForm();
+
 		if (id == null) {
-			final Form form = (Form)findAncestor(Form.class);
-	
 			// create HTML id element
 			populateComponentHtmlId(form);
 		}
+		
+		if (labelClass == null) {
+			if (form != null) {
+				labelClass = form.getLabelClass();
+			}
+		}
+		
+		if (inputClass == null) {
+			if (form != null) {
+				inputClass = form.getInputClass();
+			}
+		}
+	}
+
+	public Form findForm() {
+		if (form != null) {
+			form = (Form)findAncestor(Form.class);
+		}
+		return form;
 	}
 
 	protected void evaluateNameValue() {
@@ -229,6 +255,34 @@ public abstract class InputUIBean extends UIBean {
 	 */
 	public void setReadonly(Boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	/**
+	 * @return the labelClass
+	 */
+	public String getLabelClass() {
+		return labelClass;
+	}
+
+	/**
+	 * @param labelClass the labelClass to set
+	 */
+	public void setLabelClass(String labelClass) {
+		this.labelClass = labelClass;
+	}
+
+	/**
+	 * @return the inputClass
+	 */
+	public String getInputClass() {
+		return inputClass;
+	}
+
+	/**
+	 * @param inputClass the inputClass to set
+	 */
+	public void setInputClass(String inputClass) {
+		this.inputClass = inputClass;
 	}
 	
 	

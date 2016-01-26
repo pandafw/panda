@@ -5,7 +5,6 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.mvc.MvcConstants;
 import panda.mvc.util.UrlBuilder;
 
 /**
@@ -64,6 +63,9 @@ public class Form extends UIBean {
 	
 	protected UrlBuilder urlbuilder;
 
+	protected String labelClass;
+	protected String inputClass;
+	
 	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
@@ -76,6 +78,17 @@ public class Form extends UIBean {
 		}
 		if (Strings.isNotEmpty(action)) {
 			action = urlbuilder.build();
+		}
+		
+		if (loadmask == null) {
+			loadmask = context.getText().getTextAsBoolean("form-load-mask", false);
+		}
+		
+		if (labelClass == null) {
+			labelClass = context.getText().getText("form-label-class", "col-sm-3");
+		}
+		if (inputClass == null) {
+			inputClass = context.getText().getText("form-input-class", "col-sm-9");
 		}
 	}
 
@@ -213,9 +226,36 @@ public class Form extends UIBean {
 	/**
 	 * @param loadmask the loadmask to set
 	 */
-	@IocInject(value = MvcConstants.UI_FORM_LOADMASK, required = false)
 	public void setLoadmask(Boolean loadmask) {
 		this.loadmask = loadmask;
+	}
+
+	/**
+	 * @return the labelClass
+	 */
+	public String getLabelClass() {
+		return labelClass;
+	}
+
+	/**
+	 * @param labelClass the labelClass to set
+	 */
+	public void setLabelClass(String labelClass) {
+		this.labelClass = labelClass;
+	}
+
+	/**
+	 * @return the inputClass
+	 */
+	public String getInputClass() {
+		return inputClass;
+	}
+
+	/**
+	 * @param inputClass the inputClass to set
+	 */
+	public void setInputClass(String inputClass) {
+		this.inputClass = inputClass;
 	}
 
 	//----------------------------------------------------------

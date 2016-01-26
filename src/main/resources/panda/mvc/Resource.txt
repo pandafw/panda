@@ -1,8 +1,8 @@
 #########################################################################
-#ui
-ui-input-step=false
-ui-input-confirm=false
-ui-list-countable=true
+#form
+form-label-class=col-sm-3
+form-input-class=col-sm-9
+form-load-mask=false
 
 #pager - limit
 list-items-default=20

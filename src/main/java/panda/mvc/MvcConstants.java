@@ -26,9 +26,6 @@ public interface MvcConstants extends IocConstants {
 	/** Input encoding */
 	public static final String IO_INPUT_ENCODING = "panda.io.input.encoding";
 
-	/** The default loadmask option of form */
-	public static final String UI_FORM_LOADMASK = "panda.ui.form.loadmask";
-
 	/** The default encode method to generate Struts URLs */
 	public static final String UI_URL_ENCODE = "panda.ui.url.encode";
 
