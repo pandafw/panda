@@ -92,6 +92,7 @@ public class FreemarkerManager {
 		}
 		model.put(KEY_STATIC, staticBase);
 
+		model.put(SafeInclude.MACRO_NAME, new SafeInclude());
 		return model;
 	}
 
