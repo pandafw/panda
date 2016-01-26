@@ -801,17 +801,21 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		for (EntityField ef :efs) {
 			String fn = getFullDataFieldName(ef.getName());
 			
-			addFieldError(fn, Strings.EMPTY);
-
-			sb.append(getText(fn));
-			sb.append(": ");
-			
-			Property ptag = context.getIoc().get(Property.class);
-			ptag.setValue(ef.getValue(data));
-			ptag.setEscape(null);
-			sb.append(ptag.formatValue());
-			sb.append(Streams.LINE_SEPARATOR);
-
+			if (displayField(fn)) {
+				addFieldError(fn, Strings.EMPTY);
+	
+				sb.append(getText(fn));
+				sb.append(": ");
+				
+				Object fv = ef.getValue(data);
+				if (fv != null) {
+					Property ptag = context.getIoc().get(Property.class);
+					ptag.setValue(fv);
+					ptag.setEscape(null);
+					sb.append(ptag.formatValue());
+				}
+				sb.append(Streams.LINE_SEPARATOR);
+			}
 			addFieldError(ef.getName(), getMessage(RC.ERROR_FIELDVALUE_DUPLICATE));
 		}
 
