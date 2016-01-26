@@ -1,6 +1,7 @@
 package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 
 
 /**
@@ -27,21 +28,92 @@ import panda.ioc.annotation.IocBean;
  */
 @IocBean(singleton=false)
 public class TriggerField extends TextField {
-	protected String ontrigger;
-
+	protected String ltext;
+	protected String licon;
+	protected String onlclick;
+	protected String rtext;
+	protected String ricon = "icon-caret-down";
+	protected String onrclick;
 
 	/**
-	 * @return the ontrigger
+	 * @return the ltext
 	 */
-	public String getOntrigger() {
-		return ontrigger;
+	public String getLtext() {
+		return ltext;
 	}
-
-
 	/**
-	 * @param ontrigger the ontrigger to set
+	 * @param ltext the ltext to set
 	 */
-	public void setOntrigger(String ontrigger) {
-		this.ontrigger = ontrigger;
+	public void setLtext(String ltext) {
+		this.ltext = ltext;
+	}
+	/**
+	 * @return the licon
+	 */
+	public String getLicon() {
+		return licon;
+	}
+	/**
+	 * @param licon the licon to set
+	 */
+	public void setLicon(String licon) {
+		this.licon = licon;
+	}
+	/**
+	 * @return the onlclick
+	 */
+	public String getOnlclick() {
+		return onlclick;
+	}
+	/**
+	 * @param onlclick the onlclick to set
+	 */
+	public void setOnlclick(String onlclick) {
+		this.onlclick = onlclick;
+	}
+	/**
+	 * @return the rtext
+	 */
+	public String getRtext() {
+		return rtext;
+	}
+	/**
+	 * @param rtext the rtext to set
+	 */
+	public void setRtext(String rtext) {
+		this.rtext = rtext;
+	}
+	/**
+	 * @return the ricon
+	 */
+	public String getRicon() {
+		return ricon;
+	}
+	/**
+	 * @param ricon the ricon to set
+	 */
+	public void setRicon(String ricon) {
+		this.ricon = ricon;
+	}
+	/**
+	 * @return the onrclick
+	 */
+	public String getOnrclick() {
+		return onrclick;
+	}
+	/**
+	 * @param onrclick the onrclick to set
+	 */
+	public void setOnrclick(String onrclick) {
+		this.onrclick = onrclick;
+	}
+	
+	
+	public boolean hasLeftTrigger() {
+		return Strings.isNotEmpty(licon) || Strings.isNotEmpty(ltext) || Strings.isNotEmpty(onlclick);
+	}
+	
+	public boolean hasRightTrigger() {
+		return Strings.isNotEmpty(ricon) || Strings.isNotEmpty(rtext) || Strings.isNotEmpty(onrclick);
 	}
 }

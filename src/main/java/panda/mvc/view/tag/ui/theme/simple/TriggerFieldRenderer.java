@@ -2,6 +2,7 @@ package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
 
+import panda.lang.Strings;
 import panda.mvc.view.tag.ui.TriggerField;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -17,7 +18,20 @@ public class TriggerFieldRenderer extends AbstractEndRenderer<TriggerField> {
 		write("<div class=\"input-group p-triggerfield\">");
 		
 		Attributes attr = new Attributes();
-		attr.add("type", "text")
+		if (tag.hasLeftTrigger()) {
+			attr.clear()
+				.add("class", "input-group-addon p-triggerfield-licon")
+				.addIfExists("onclick", tag.getOnlclick());
+			stag("div", attr);
+			write(tag.getLtext());
+			if (Strings.isNotEmpty(tag.getLicon())) {
+				write(xicon(tag.getLicon()));
+			}
+			etag("div");
+		}
+
+		attr.clear()
+			.add("type", "text")
 			.id(tag)
 			.name(tag)
 			.css(this)
@@ -35,14 +49,19 @@ public class TriggerFieldRenderer extends AbstractEndRenderer<TriggerField> {
 			.dynamics(tag);
 		xtag("input", attr);
 		
-		attr = new Attributes();
-		attr.clear()
-			.add("class", "input-group-addon p-triggerfield-icon")
-			.addIfExists("onclick", tag.getOntrigger());
-		stag("span", attr);
-		write("<i class=\"fa fa-caret-down\"></i>");
+		if (tag.hasRightTrigger()) {
+			attr = new Attributes();
+			attr.clear()
+				.add("class", "input-group-addon p-triggerfield-ricon")
+				.addIfExists("onclick", tag.getOnrclick());
+			stag("div", attr);
+			write(tag.getRtext());
+			if (Strings.isNotEmpty(tag.getRicon())) {
+				write(xicon(tag.getRicon()));
+			}
+			etag("div");
+		}
 
-		etag("span");
 		write("</div>");
 	}
 }
