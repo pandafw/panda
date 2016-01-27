@@ -83,7 +83,22 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	}
 
 	/**
-	 * @return true - if the login user is administrators
+	 * @return true - if the login user is administrator
+	 */
+	public boolean isAdminUser() {
+		return isAdminUser(getLoginUser());
+	}
+
+	/**
+	 * @param u user
+	 * @return true - if the user is administrator
+	 */
+	public boolean isAdminUser(IUser u) {
+		return authHelper.isAdminUser(u);
+	}
+
+	/**
+	 * @return true - if the login user is super
 	 */
 	public boolean isSuperUser() {
 		return isSuperUser(getLoginUser());
@@ -91,7 +106,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 
 	/**
 	 * @param u user
-	 * @return true - if the user is administrators
+	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
 		return authHelper.isSuperUser(u);

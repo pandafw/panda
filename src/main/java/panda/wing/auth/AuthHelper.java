@@ -59,6 +59,14 @@ public class AuthHelper {
 
 	/**
 	 * @param u user
+	 * @return true - if the user is admin
+	 */
+	public boolean isAdminUser(IUser u) {
+		return u != null && Collections.contains(u.getPermits(), AUTH.ADMIN);
+	}
+
+	/**
+	 * @param u user
 	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
