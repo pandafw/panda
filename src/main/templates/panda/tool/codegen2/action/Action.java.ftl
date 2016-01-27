@@ -4,8 +4,8 @@ package ${actionPackage};
 <#list imports as i>
 import ${i};
 </#list>
-<#macro validates><#if entity.notNullList?has_content>@Validates({
-			@Validate(value=${gen.validatorType('required')}, params="fields: ${entity.requiredFields}", msgId=${gen.validatorMsgId('required')}),
+<#macro validates ui><#if ui.requiredFieldList?has_content>@Validates({
+			@Validate(value=${gen.validatorType('required')}, params="fields: ${ui.requiredFields}", msgId=${gen.validatorMsgId('required')}),
 			@Validate(value=${gen.validatorType('visit')})
 			})<#else>@Validates</#if></#macro>
 
@@ -298,7 +298,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_confirm(data);
 	}
 
@@ -308,7 +308,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_execute(data);
 	}
 
@@ -339,7 +339,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_confirm(data);
 	}
 
@@ -349,7 +349,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_execute(data);
 	}
 
@@ -380,7 +380,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_confirm(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_confirm(data);
 	}
 
@@ -390,7 +390,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
-	public Object ${ui.name}_execute(@Param <@validates/> ${entityBeanClass} data) {
+	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_execute(data);
 	}
 

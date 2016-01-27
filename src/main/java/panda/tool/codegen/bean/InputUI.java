@@ -207,6 +207,27 @@ public class InputUI implements Comparable<InputUI> {
 		return set;
 	}
 
+	public List<InputField> getRequiredFieldList() {
+		List<InputField> set = new ArrayList<InputField>();
+		for (InputField f : getDisplayFieldList()) {
+			if (Boolean.TRUE.equals(f.getRequired())) {
+				set.add(f);
+			}
+		}
+		return set;
+	}
+	
+	public String getRequiredFields() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		for (InputField f : getRequiredFieldList()) {
+			sb.append('\'').append(f.getName()).append("', ");
+		}
+		sb.setLength(sb.length() - 2);
+		sb.append(" ]");
+		return sb.toString();
+	}
+
 	public InputField getFieldByName(String name) {
 		for (InputField f : getFieldList()) {
 			if (f.getName().equals(name)) {
