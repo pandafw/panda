@@ -798,7 +798,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected String getFieldValueErrorText(T data, EntityField ef) {
 		StringBuilder sb = new StringBuilder();
 
-		String fn = getFullDataFieldName(ef.getName());
+		String fn = getTextDataFieldName(ef.getName());
 		sb.append(getText(fn));
 		sb.append(": ");
 		
@@ -1135,7 +1135,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param pn property name
 	 * @return dataName + "." + propertyName
 	 */
-	protected String getFullDataFieldName(String pn) {
-		return "p." + pn;
+	protected String getTextDataFieldName(String pn) {
+		return "t." + pn;
 	}
 }
