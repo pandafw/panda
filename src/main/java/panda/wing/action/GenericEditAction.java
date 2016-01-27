@@ -14,7 +14,6 @@ import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
-import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -794,34 +793,52 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	//------------------------------------------------------------
-	// check methods
+	// error message methods
 	//------------------------------------------------------------
-	protected void addDataDuplateError(T data, Collection<EntityField> efs) {
+	protected String getFieldValueErrorText(T data, EntityField ef) {
+		StringBuilder sb = new StringBuilder();
+
+		String fn = getFullDataFieldName(ef.getName());
+		sb.append(getText(fn));
+		sb.append(": ");
+		
+		Object fv = ef.getValue(data);
+		if (fv != null) {
+			Property ptag = context.getIoc().get(Property.class);
+			ptag.setValue(fv);
+			ptag.setEscape(null);
+			sb.append(ptag.formatValue());
+		}
+		
+		return sb.toString();
+	}
+	
+	protected void addDataFieldErrors(T data, Collection<EntityField> efs, String fieldErrMsg, String dataErrMsg) {
 		StringBuilder sb = new StringBuilder();
 		for (EntityField ef :efs) {
-			String fn = getFullDataFieldName(ef.getName());
-			
-			if (displayField(fn)) {
-				addFieldError(fn, Strings.EMPTY);
-	
-				sb.append(getText(fn));
-				sb.append(": ");
-				
-				Object fv = ef.getValue(data);
-				if (fv != null) {
-					Property ptag = context.getIoc().get(Property.class);
-					ptag.setValue(fv);
-					ptag.setEscape(null);
-					sb.append(ptag.formatValue());
-				}
-				sb.append(Streams.LINE_SEPARATOR);
+			if (!displayField(ef.getName())) {
+				continue;
 			}
-			addFieldError(ef.getName(), getMessage(RC.ERROR_FIELDVALUE_DUPLICATE));
+			
+			sb.append(getFieldValueErrorText(data, ef));
+			sb.append(Streams.LINE_SEPARATOR);
+			addFieldError(ef.getName(), getMessage(fieldErrMsg));
 		}
 
-		addActionError(getMessage(RC.ERROR_DATA_DUPLICATE, sb.toString()));
+		addActionError(getMessage(dataErrMsg, sb.toString()));
+	}
+	
+	protected void addDataDuplicateError(T data, Collection<EntityField> efs) {
+		addDataFieldErrors(data, efs, RC.ERROR_FIELDVALUE_DUPLICATE, RC.ERROR_DATA_DUPLICATE);
 	}
 
+	protected void addDataIncorrectError(T data, Collection<EntityField> efs) {
+		addDataFieldErrors(data, efs, RC.ERROR_FIELDVALUE_INCORRECT, RC.ERROR_DATA_INCORRECT);
+	}
+	
+	//------------------------------------------------------------
+	// check methods
+	//------------------------------------------------------------
 	/**
 	 * checkPrimaryKeyOnInsert
 	 * @param data data
@@ -848,7 +865,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 			if (!hasNull) {
 				if (daoExists(data)) {
-					addDataDuplateError(data, pks);
+					addDataDuplicateError(data, pks);
 					return false;
 				}
 			}
@@ -856,7 +873,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		else {
 			Object id = eid.getValue(data);
 			if (getEntityDao().isValidIdentity(id) && daoExists(data)) {
-				addDataDuplateError(data, entity.getPrimaryKeys());
+				addDataDuplicateError(data, entity.getPrimaryKeys());
 				return false;
 			}
 		}
@@ -909,7 +926,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 		if (!allNull) {
 			if (daoCount(q) > 0) {
-				addDataDuplateError(data, ei.getFields());
+				addDataDuplicateError(data, ei.getFields());
 				return false;
 			}
 		}
@@ -1010,9 +1027,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			if (!allNull) {
 				q.setLimit(1);
 				if (daoCount(q) < 1) {
-					for (EntityField ef : efk.getFields()) {
-						addFieldError(getFullDataFieldName(ef.getName()), getMessage(RC.ERROR_FIELDVALUE_INCORRECT));
-					}
+					addDataIncorrectError(data, efk.getFields());
 					return false;
 				}
 			}

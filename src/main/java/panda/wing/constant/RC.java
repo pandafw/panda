@@ -90,6 +90,11 @@ public interface RC {
 	 * ERROR_DATA_NOTFOUND = "error-data-notfound";
 	 */
 	public final static String ERROR_DATA_NOTFOUND = "error-data-notfound";
+
+	/**
+	 * ERROR_DATA_INCORRECT = "error-data-incorrect";
+	 */
+	public final static String ERROR_DATA_INCORRECT = "error-data-incorrect";
 	
 	/**
 	 * ERROR_DATA_DUPLICATE = "error-data-duplicate";
@@ -135,11 +140,6 @@ public interface RC {
 	 * ERROR_NOPERMIT = "error-nopermit";
 	 */
 	public final static String ERROR_NOPERMIT = "error-nopermit";
-
-	/**
-	 * ERROR_DATA_IS_INVALID = "error-data-is-invalid";
-	 */
-	public final static String ERROR_DATA_IS_INVALID = "error-data-is-invalid";
 
 	/**
 	 * ERROR_SENDMAIL = "error-sendmail";
