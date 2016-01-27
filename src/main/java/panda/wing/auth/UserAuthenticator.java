@@ -54,14 +54,7 @@ public abstract class UserAuthenticator {
 	 * @return true if user has permit to access the method
 	 */
 	public int authenticate(ActionContext ac) {
-		return authenticate(ac, null, true);
-	}
-	
-	/**
-	 * @return true if user has permit to access the action
-	 */
-	public int authenticate(ActionContext ac, String path) {
-		return authenticate(ac, path, false);
+		return authenticate(ac, null);
 	}
 	
 	//----------------------------------------------------
@@ -78,8 +71,10 @@ public abstract class UserAuthenticator {
 		return u;
 	}
 	
-	//----------------------------------------------------
-	protected int authenticate(ActionContext ac, String path, boolean special) {
+	/**
+	 * @return true if user has permit to access the action
+	 */
+	public int authenticate(ActionContext ac, String path) {
 		// get user for later use
 		Object su = getSessionUser(ac);
 
@@ -103,17 +98,6 @@ public abstract class UserAuthenticator {
 			return OK;
 		}
 		
-		if (su == null) {
-			// check special
-			if (special) {
-				int a = authenticateSpecial(ac, defines, su);
-				if (a == OK) {
-					return a;
-				}
-			}
-			return UNLOGIN;
-		}
-
 		Collection<String> uperms = getUserPermits(su);
 
 		// user has 'deny all' permits
@@ -126,56 +110,40 @@ public abstract class UserAuthenticator {
 			return OK;
 		}
 
-		// check special
-		if (special) {
-			int a = authenticateSpecial(ac, defines, su);
-			if (a == OK) {
-				return a;
-			}
-		}
-
-		// check @Auth(...)
+		// check AND @Auth(...)
 		for (String d : defines) {
-			// @Auth("") means login check only
-			if (Strings.isEmpty(d)) {
-				continue;
-			}
-			if (d.charAt(0) != AUTH.SPECIAL) {
-				int a = authenticatePermission(ac, su, uperms, d);
+			char s = d.charAt(0);
+			if (s == AUTH.AND) {
+				int a = authenticatePermission(ac, su, uperms, d.substring(1));
 				if (a != OK) {
 					return a;
 				}
 			}
 		}
 
-		return OK;
-	}
-
-	protected int authenticateSpecial(ActionContext ac, Collection<String> defines, Object su) {
+		// check  @Auth(...)
+		int r = UNKNOWN;
 		for (String d : defines) {
-			if (Strings.isEmpty(d)) {
-				continue;
-			}
-			if (d.charAt(0) == AUTH.SPECIAL) {
-				int a = authenticateSpecial(ac, su, d);
+			char s = d.charAt(0);
+			if (s != AUTH.AND) {
+				int a = authenticatePermission(ac, su, uperms, d);
 				if (a == OK) {
 					return a;
 				}
+				r = a;
 			}
 		}
-		return UNKNOWN;
-	}
 
-	protected int authenticateSpecial(ActionContext ac, Object su, String define) {
-		if (AUTH.LOCAL.equals(define)) {
-			HttpServletRequest req = ac.getRequest();
-			return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
-		}
-		return UNKNOWN;
+		return r;
 	}
 
 	protected int authenticatePermission(ActionContext ac, Object su, Collection<String> uperms, String define) {
-		if (AUTH.PLOCAL.equals(define)) {
+		// @Auth("") means login check only
+		if (Strings.isEmpty(define)) {
+			return su == null ? UNLOGIN : OK;
+		}
+
+		if (AUTH.LOCAL.equals(define)) {
 			HttpServletRequest req = ac.getRequest();
 			return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}

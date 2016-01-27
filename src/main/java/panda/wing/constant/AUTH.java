@@ -6,11 +6,9 @@ package panda.wing.constant;
 public interface AUTH {
 	public static final String TICKET = "";
 
-	public static final String LOCAL = "~local";
+	public static final String LOCAL = "_local_";
 	
-	public static final String SECURE = "+secure";
-	
-	public static final String PLOCAL = "+local";
+	public static final String SECURE = "_secure_";
 	
 	public static final String SUPER = "super";
 	
@@ -18,7 +16,11 @@ public interface AUTH {
 
 	public static final String USER = "user";
 
-	public static final char SPECIAL = '~';
+	public static final String PLOCAL = "+_local_";
+	public static final String PSECURE = "+_secure_";
+	
+	
+	public static final char AND = '+';
 
 	/**
 	 * ALL = "*";
