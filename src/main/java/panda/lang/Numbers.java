@@ -2193,16 +2193,17 @@ public class Numbers {
 		double dp = d * p;
 		long f = (long)(dp);
 
+		if (f <= 0) {
+			return String.valueOf(i);
+		}
+
 		StringBuilder sb = new StringBuilder();
 		if (minus) {
 			sb.append('-');
 		};
-		sb.append(i);
-		
-		String fs = Strings.stripEnd(String.valueOf(f), '0');
-		if (!fs.isEmpty()) {
-			sb.append('.').append(fs);
-		}
+		sb.append(i)
+		  .append('.')
+		  .append(Strings.stripEnd(Strings.leftPad(String.valueOf(f), frac, '0'), '0'));
 		
 		return sb.toString();
 	}

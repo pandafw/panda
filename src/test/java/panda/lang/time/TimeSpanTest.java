@@ -1,5 +1,7 @@
 package panda.lang.time;
 
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -137,10 +139,14 @@ public class TimeSpanTest {
 	}
 	
 	@Test
-	public void testToDisplayString() {
+	public void testToDisplayString() throws Exception {
 		Assert.assertEquals("100 ms", TimeSpan.toDisplayString(100));
 		Assert.assertEquals("1 seconds", TimeSpan.toDisplayString(1000));
 		Assert.assertEquals("1 seconds", TimeSpan.toDisplayString(1001));
 		Assert.assertEquals("1.1 seconds", TimeSpan.toDisplayString(1100));
+		
+		Date s = DateTimes.datetimeFormat().parse("2016-01-25 23:14:03");
+		Date e = DateTimes.datetimeFormat().parse("2016-01-26 03:17:27");
+		System.out.println(new TimeSpan(e.getTime() - s.getTime()).toString());
 	}
 }
