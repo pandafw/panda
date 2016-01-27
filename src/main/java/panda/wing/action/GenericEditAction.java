@@ -1136,6 +1136,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return dataName + "." + propertyName
 	 */
 	protected String getTextDataFieldName(String pn) {
-		return "t." + pn;
+		return "a.t." + pn;
 	}
 }
