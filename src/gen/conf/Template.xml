@@ -75,13 +75,13 @@
 			<field name="language" required="true">
 				<editTag name="${tag.select}">
 					<param name="emptyOption" value="false"/>
-					<param name="list" value="consts.localeLanguageMap"/>
+					<param name="list" value="%{consts.localeLanguageMap}"/>
 				</editTag>
 			</field>
 			<field name="country" required="true">
 				<editTag name="${tag.select}">
 					<param name="emptyOption" value="false"/>
-					<param name="list" value="consts.localeCountryMap"/>
+					<param name="list" value="%{consts.localeCountryMap}"/>
 				</editTag>
 				<validator type="el" message="validation-locale-invalid">
 					<param name="el" value="a.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>

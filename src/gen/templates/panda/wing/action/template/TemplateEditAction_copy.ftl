@@ -35,14 +35,14 @@
 				value="%{r.language}"
 				required="true"
 				emptyOption="false"
-				list="consts.localeLanguageMap"
+				list="%{consts.localeLanguageMap}"
 			/>
 			<@p.select
 				key="country"
 				value="%{r.country}"
 				required="true"
 				emptyOption="false"
-				list="consts.localeCountryMap"
+				list="%{consts.localeCountryMap}"
 			/>
 			<@p.textarea
 				key="source"
@@ -89,7 +89,7 @@
 	</@p.form>
 
 		<script type="text/javascript"><!--
-				
+		
 			function onPageLoad() {
 			}
 		--></script>

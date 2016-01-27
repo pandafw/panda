@@ -42,7 +42,7 @@
 				value="%{r.language}"
 				required="true"
 				emptyOption="false"
-				list="consts.localeLanguageMap"
+				list="%{consts.localeLanguageMap}"
 			/>
 	</#if>
 	<#if a.displayField("country")>
@@ -51,7 +51,7 @@
 				value="%{r.country}"
 				required="true"
 				emptyOption="false"
-				list="consts.localeCountryMap"
+				list="%{consts.localeCountryMap}"
 			/>
 	</#if>
 	<#if a.displayField("source")>
@@ -109,7 +109,7 @@
 	</@p.form>
 
 		<script type="text/javascript"><!--
-				
+		
 			function onPageLoad() {
 			}
 		--></script>

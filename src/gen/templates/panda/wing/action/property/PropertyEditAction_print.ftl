@@ -29,14 +29,14 @@
 			<@p.viewfield
 				key="language"
 				value="%{r.language}"
-				list="consts.localeLanguageMap"
+				list="%{consts.localeLanguageMap}"
 			/>
 	</#if>
 	<#if a.displayField("country")>
 			<@p.viewfield
 				key="country"
 				value="%{r.country}"
-				list="consts.localeCountryMap"
+				list="%{consts.localeCountryMap}"
 			/>
 	</#if>
 	<#if a.displayField("name")>
