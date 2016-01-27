@@ -12,6 +12,7 @@ import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
+import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
@@ -278,12 +279,13 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery include(String... names) {
-		Asserts.notNull(names);
-		for (String name : names) {
-			Asserts.notEmpty(name);
-			setColumn(name, "");
+		if (Arrays.isNotEmpty(names)) {
+			for (String name : names) {
+				Asserts.notEmpty(name);
+				setColumn(name, "");
+			}
+			flags = null;
 		}
-		flags = null;
 		return this;
 	}
 
@@ -304,12 +306,13 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery exclude(String... names) {
-		Asserts.notNull(names);
-		for (String name : names) {
-			Asserts.notEmpty(name);
-			setColumn(name, null);
+		if (Arrays.isNotEmpty(names)) {
+			for (String name : names) {
+				Asserts.notEmpty(name);
+				setColumn(name, null);
+			}
+			flags = null;
 		}
-		flags = null;
 		return this;
 	}
 
