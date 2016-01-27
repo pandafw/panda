@@ -223,10 +223,11 @@ validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
 
 
 #error messages
-error-input=There is some error in the input field.
+error-input=The input data is incorrect.
 error-input-detail=detail
 error-data-notfound=The data is not found.
 error-data-duplicate=The data is already registered.\n${top}
+error-data-incorrect=The data is incorrect.\n${top}
 error-fieldvalue-notnull=This field should be empty.
 error-fieldvalue-required=This field is required.
 error-fieldvalue-incorrect=The field value is incorect.

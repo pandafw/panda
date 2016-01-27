@@ -153,10 +153,11 @@ validation-zipcode=请按"123-4567"的格式输入邮政编码。
 
 
 #error messages
-error-input=输入内容有错误。
+error-input=输入内容不正确。
 error-input-detail=错误信息
 error-data-notfound=该数据不存在。
 error-data-duplicate=该数据已经被登录。\n${top}
+error-data-incorrect=该数据内容不正确。\n${top}
 error-fieldvalue-notnull=该项目必须为空。
 error-fieldvalue-required=该项目不能为空。
 error-fieldvalue-incorrect=该项目输入内容不正确。

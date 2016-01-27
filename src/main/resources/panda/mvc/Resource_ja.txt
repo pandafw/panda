@@ -154,10 +154,11 @@ validation-zipcode=郵便番号を"123-4567"の形式で入力してください
 
 
 #error messages
-error-input=入力した内容に誤りがあります。
+error-input=入力した内容が正しくありません。
 error-input-detail=エラー詳細
 error-data-notfound=対象データが見つかりません。
 error-data-duplicate=該当データが既に登録されています。\n${top}
+error-data-incorrect=該当データが正しくありません。\n${top}
 error-fieldvalue-notnull=項目の値は空ではありません。
 error-fieldvalue-required=必須項目です。
 error-fieldvalue-incorrect=項目の値が正しくありません。
