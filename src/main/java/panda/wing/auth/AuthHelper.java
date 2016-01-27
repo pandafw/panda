@@ -59,10 +59,19 @@ public class AuthHelper {
 
 	/**
 	 * @param u user
+	 * @param p permission
+	 * @return true if user has specified permission
+	 */
+	public boolean hasPermission(IUser u, String p) {
+		return u != null && Collections.contains(u.getPermits(), p);
+	}
+	
+	/**
+	 * @param u user
 	 * @return true - if the user is admin
 	 */
 	public boolean isAdminUser(IUser u) {
-		return u != null && Collections.contains(u.getPermits(), AUTH.ADMIN);
+		return hasPermission(u, AUTH.ADMIN);
 	}
 
 	/**
@@ -70,7 +79,7 @@ public class AuthHelper {
 	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
-		return u != null && Collections.contains(u.getPermits(), AUTH.ALL);
+		return hasPermission(u, AUTH.ALL);
 	}
 
 	/**
