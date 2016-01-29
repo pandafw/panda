@@ -42,21 +42,6 @@
 			<@p.viewfield
 				key="flag"
 				value="%{r.flag}"
-				format="check"
-			/>
-	</#if>
-	<#if a.displayField("readable")>
-			<@p.viewfield
-				key="readable"
-				value="%{r.readable}"
-				format="check"
-			/>
-	</#if>
-	<#if a.displayField("writeable")>
-			<@p.viewfield
-				key="writeable"
-				value="%{r.writeable}"
-				format="check"
 			/>
 	</#if>
 	</@p.form>

@@ -58,13 +58,10 @@
 				</editTag>
 			</field>
 			<field name="flag">
-				<editTag name="${tag.checkbox}"/>
-			</field>
-			<field name="readable">
-				<editTag name="${tag.checkbox}"/>
-			</field>
-			<field name="writeable">
-				<editTag name="${tag.checkbox}"/>
+				<editTag name="${tag.textfield}">
+					<param name="maxlength" value="1"/>
+					<param name="size" value="4"/>
+				</editTag>
 			</field>
 		</input>
 	</action>
@@ -72,7 +69,6 @@
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
-		<list name="list_popup" extend="basicList" template="${template.list_popup}" generate="true"/>
 		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>

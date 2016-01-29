@@ -1,17 +1,8 @@
 package panda.wing.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import panda.dao.entity.EntityDao;
+import panda.dao.Dao;
 import panda.dao.query.GenericQuery;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -29,6 +20,17 @@ import panda.servlet.ServletURLHelper;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * @param <T> data type
@@ -45,6 +47,11 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	private Boolean _load;
 	private Boolean _save;
 	private Boolean listCountable;
+
+	//------------------------------------------------------------
+	// display columns
+	//------------------------------------------------------------
+	private List<String> columns;
 
 	//------------------------------------------------------------
 	// result properties
@@ -158,6 +165,21 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		this.listCountable = listCountable;
 	}
 
+	protected List<String> getDisplayColumns() {
+		return columns;
+	}
+
+	protected void setDisplayColumns(List<String> columns) {
+		this.columns = columns;
+	}
+
+	protected void addDisplayColumns(String... columns) {
+		if (this.columns == null) {
+			this.columns = new ArrayList<String>();
+		}
+		this.columns.addAll(Arrays.asList(columns));
+	}
+
 	//------------------------------------------------------------
 	// dao methods
 	//------------------------------------------------------------
@@ -178,7 +200,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * @return data list
 	 */ 
 	protected List<T> daoSelect(GenericQuery<T> q) {
-		return getEntityDao().select(q);
+		return getDao().select(q);
 	}
 
 	//------------------------------------------------------------
@@ -354,6 +376,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
 		final GenericQuery<T> gq = new GenericQuery<T>(getEntity());
 
+		addQueryColumn(gq);
 		addQueryFilter(gq, qr);
 		addQueryOrder(gq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
@@ -362,7 +385,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			listCountable = getTextAsBoolean(RC.UI_LIST_COUNTABLE, true);
 		}
 
-		final EntityDao<T> dao = getEntityDao();
+		final Dao dao = getDao();
 		dao.exec(new Runnable() {
 			public void run() {
 				if (listCountable) {
@@ -388,9 +411,51 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		});
 	}
 
-	protected void trimDataList(List<T> ds) {
+	//-------------------------------------------------------------
+	// call by view
+	//-------------------------------------------------------------
+	public boolean isActionsAlignLeft() {
+		String a = getText("listview-actions-align");
+		if (Strings.isEmpty(a)) {
+			return true;
+		}
+		return a.charAt(0) == 'l';
 	}
 	
+	public boolean isActionsAlignRight() {
+		String a = getText("listview-actions-align");
+		if (Strings.isEmpty(a)) {
+			return false;
+		}
+		return a.charAt(0) == 'r';
+	}
+
+	public boolean displayColumn(String name) {
+		Collection<String> cs = getDisplayColumns();
+		if (Collections.isEmpty(cs)) {
+			return true;
+		}
+		return Collections.contains(cs, name);
+	}
+
+	//-------------------------------------------------------------
+	// trims
+	//-------------------------------------------------------------
+	protected void trimDataList(List<T> ds) {
+	}
+
+	/**
+	 * @param gq query
+	 */
+	protected void addQueryColumn(GenericQuery<T> gq) {
+		List<String> fs = getDisplayColumns();
+		if (Collections.isNotEmpty(fs)) {
+			gq.excludeAll();
+			gq.includePrimayKeys();
+			gq.include(fs);
+		}
+	}
+
 	/**
 	 * @param gq query
 	 */

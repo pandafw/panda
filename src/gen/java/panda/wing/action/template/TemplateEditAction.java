@@ -18,6 +18,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 */
 	public TemplateEditAction() {
 		setType(Template.class);
+		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.SOURCE, Template.STATUS, Template.UUSID, Template.UUSNM, Template.UTIME);
 	}
 
 

@@ -16,6 +16,7 @@ public abstract class PropertyBulkAction extends GenericBulkAction<Property> {
 	 */
 	public PropertyBulkAction() {
 		setType(Property.class);
+		addDisplayColumns(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UUSID, Property.UTIME);
 	}
 
 

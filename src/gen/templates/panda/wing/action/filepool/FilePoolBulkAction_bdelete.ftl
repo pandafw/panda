@@ -18,51 +18,66 @@
 
 <#if result?has_content>
 	<#assign _columns_ = [{
-		"name": "_rownum_",
-		"type": "rownum",
-		"header": text.getText("listview-th-rownum", ""),
-		"fixed": true
-	}, {
-		"name": "_check_",
-		"type": "check",
-		"fixed": true
-	}{
-		"name": "id",
-		"pkey" : true,
-		"value": true,
-		"header": text.getText("a.t.id"),
-		"sortable": false,
-		"tooltip": text.getText("a.t.id-tip", "")
-	}, {
-		"name": "name",
-		"header": text.getText("a.t.name"),
-		"sortable": false,
-		"tooltip": text.getText("a.t.name-tip", "")
-	}, {
-		"name": "size",
-		"header": text.getText("a.t.size"),
-		"format": {
-			"type": "integer"
-			},
-		"sortable": false,
-		"tooltip": text.getText("a.t.size-tip", "")
-	}, {
-		"name": "date",
-		"header": text.getText("a.t.date"),
-		"format": {
-			"type": "timestamp"
-			},
-		"sortable": false,
-		"tooltip": text.getText("a.t.date-tip", "")
-	}, {
-		"name": "flag",
-		"header": text.getText("a.t.flag"),
-		"format": {
-			"type": "integer"
-			},
-		"sortable": false,
-		"tooltip": text.getText("a.t.flag-tip", "")
-	}] />
+			"name": "_rownum_",
+			"type": "rownum",
+			"header": text.getText("listview-th-rownum", ""),
+			"fixed": true
+		}, {
+			"name": "_check_",
+			"type": "check",
+			"fixed": true
+		}] />
+<#if a.displayColumn("id")>
+	<#assign _columns_ = _columns_ + [{
+			"name": "id",
+			"pkey" : true,
+			"value": true,
+			"header": text.getText("a.t.id"),
+			"sortable": false,
+			"tooltip": text.getText("a.t.id-tip", "")
+		}] />
+</#if>
+<#if a.displayColumn("name")>
+	<#assign _columns_ = _columns_ + [{
+			"name": "name",
+			"header": text.getText("a.t.name"),
+			"sortable": false,
+			"tooltip": text.getText("a.t.name-tip", "")
+		}] />
+</#if>
+<#if a.displayColumn("size")>
+	<#assign _columns_ = _columns_ + [{
+			"name": "size",
+			"header": text.getText("a.t.size"),
+			"format": {
+				"type": "integer"
+				},
+			"sortable": false,
+			"tooltip": text.getText("a.t.size-tip", "")
+		}] />
+</#if>
+<#if a.displayColumn("date")>
+	<#assign _columns_ = _columns_ + [{
+			"name": "date",
+			"header": text.getText("a.t.date"),
+			"format": {
+				"type": "timestamp"
+				},
+			"sortable": false,
+			"tooltip": text.getText("a.t.date-tip", "")
+		}] />
+</#if>
+<#if a.displayColumn("flag")>
+	<#assign _columns_ = _columns_ + [{
+			"name": "flag",
+			"header": text.getText("a.t.flag"),
+			"format": {
+				"type": "integer"
+				},
+			"sortable": false,
+			"tooltip": text.getText("a.t.flag-tip", "")
+		}] />
+</#if>
 
 	<@p.listview id="filepool_bdelete"
 		action="~/bdelete_execute" method="post"

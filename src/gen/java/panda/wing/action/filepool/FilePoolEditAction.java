@@ -15,6 +15,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 */
 	public FilePoolEditAction() {
 		setType(DaoFileItem.class);
+		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
 	}
 
 

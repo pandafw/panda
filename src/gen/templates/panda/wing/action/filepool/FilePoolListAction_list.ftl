@@ -74,7 +74,7 @@
 			"fixed": true
 		}] />
 	</#if>
-	<#if text.getText("listview-actions-align", "left") == "left">
+	<#if a.actionsAlighLeft>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
@@ -86,6 +86,7 @@
 		}] />
 	</#if>
 
+<#if a.displayColumn("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
@@ -97,7 +98,10 @@
 			"link": true,
 			"sortable": true,
 			"tooltip": text.getText("a.t.id-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("name")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "name",
 			"header": text.getText("a.t.name"),
 			"filter": {
@@ -105,7 +109,10 @@
 			},
 			"sortable": true,
 			"tooltip": text.getText("a.t.name-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("size")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "size",
 			"header": text.getText("a.t.size"),
 			"format": {
@@ -116,7 +123,10 @@
 			},
 			"sortable": true,
 			"tooltip": text.getText("a.t.size-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("date")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "date",
 			"header": text.getText("a.t.date"),
 			"format": {
@@ -127,7 +137,10 @@
 			},
 			"sortable": true,
 			"tooltip": text.getText("a.t.date-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("flag")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "flag",
 			"header": text.getText("a.t.flag"),
 			"format": {
@@ -138,10 +151,10 @@
 			},
 			"sortable": true,
 			"tooltip": text.getText("a.t.flag-tip", "")
-		}
-	] />
+		}] />
+</#if>
 
-	<#if text.getText("listview-actions-align", "") == "right">
+	<#if a.actionsAlighRight>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 	<@p.set var="lvtools">

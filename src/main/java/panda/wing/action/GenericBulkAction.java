@@ -1,20 +1,22 @@
 package panda.wing.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.GenericQuery;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.constant.RC;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -23,10 +25,88 @@ import panda.wing.constant.RC;
 public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	private static final Log log = Logs.getLog(GenericBulkAction.class);
 	
+	//------------------------------------------------------------
+	// display columns
+	//------------------------------------------------------------
+	private List<String> columns;
+
 	/**
 	 * Constructor 
 	 */
 	public GenericBulkAction() {
+	}
+
+	//------------------------------------------------------------
+	// display columns
+	//------------------------------------------------------------
+	protected List<String> getDisplayColumns() {
+		return columns;
+	}
+
+	protected void setDisplayColumns(List<String> columns) {
+		this.columns = columns;
+	}
+
+	protected void addDisplayColumns(String... columns) {
+		if (this.columns == null) {
+			this.columns = new ArrayList<String>();
+		}
+		this.columns.addAll(Arrays.asList(columns));
+	}
+
+	/**
+	 * call by view
+	 */
+	public boolean displayColumn(String name) {
+		Collection<String> cs = getDisplayColumns();
+		if (Collections.isEmpty(cs)) {
+			return true;
+		}
+		return Collections.contains(cs, name);
+	}
+
+	//------------------------------------------------------------
+	// dao methods
+	//------------------------------------------------------------
+	/**
+	 * select by query
+	 * 
+	 * @param q query
+	 * @return data list
+	 */ 
+	protected List<T> daoSelect(GenericQuery<T> q) {
+		return getDao().select(q);
+	}
+
+	/**
+	 * delete record
+	 * 
+	 * @param key key
+	 * @return count of deleted records
+	 */ 
+	protected int daoDelete(T key) {
+		return getDao().delete(key);
+	}
+
+	/**
+	 * update data (ignore null properties)
+	 * 
+	 * @param data data
+	 * @return count of updated records
+	 */ 
+	protected int daoUpdate(T data) {
+		return getDao().update(data);
+	}
+
+	/**
+	 * use sample data to update record by query
+	 * 
+	 * @param sample sample data
+	 * @param q query
+	 * @return count of updated records
+	 */ 
+	protected int daoUpdates(T sample, GenericQuery<T> q) {
+		return getDao().updates(sample, q);
 	}
 
 	//------------------------------------------------------------
@@ -99,7 +179,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final MutableInt count = new MutableInt(0);
 		try {
 			startBulkDelete(dataList);
-			getEntityDao().exec(new Runnable() {
+			getDao().exec(new Runnable() {
 				public void run() {
 					count.setValue(deleteDataList(dataList));
 				}
@@ -208,7 +288,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final MutableInt count = new MutableInt(0);
 		try {
 			startBulkUpdate(dataList);
-			getEntityDao().exec(new Runnable() {
+			getDao().exec(new Runnable() {
 				public void run() {
 					count.setValue(updateDataList(dataList));
 				}
@@ -333,6 +413,15 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		return ds;
 	}
 	
+	protected void addQueryColumn(GenericQuery<T> gq) {
+		List<String> cs = getDisplayColumns();
+		if (Collections.isNotEmpty(cs)) {
+			gq.excludeAll();
+			gq.includePrimayKeys();
+			gq.include(cs);
+		}
+	}
+
 	/**
 	 * selectDataList
 	 * @param dataList dataList
@@ -345,7 +434,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 			int count = addKeyListToQuery(q, dataList, false);
 			if (count > 0) {
+				addQueryColumn(q);
 				dataList = daoSelect(q);
+				trimDataList(dataList);
 			}
 			else {
 				dataList = null;
@@ -353,7 +444,10 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 		return dataList;
 	}
-	
+
+	protected void trimDataList(List<T> ds) {
+	}
+
 	//------------------------------------------------------------
 	// bulk update methods
 	//------------------------------------------------------------

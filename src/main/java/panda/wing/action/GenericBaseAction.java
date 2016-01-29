@@ -1,11 +1,7 @@
 package panda.wing.action;
 
-import java.util.List;
-
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
-import panda.dao.entity.EntityDao;
-import panda.dao.query.GenericQuery;
 import panda.lang.Strings;
 import panda.mvc.view.SitemeshFreemarkerView;
 
@@ -35,8 +31,8 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	protected Class<T> type;
 	protected Entity<T> entity;
-	protected EntityDao<T> entityDao;
-
+	protected Dao dao;
+	
 	/**
 	 * Constructor 
 	 */
@@ -76,19 +72,11 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		return entity;
 	}
 	
-	protected EntityDao<T> getEntityDao() {
-		if (entityDao == null) {
-			entityDao = getDaoClient().getEntityDao(type);
-		}
-		return entityDao;
-	}
-	
 	protected Dao getDao() {
-		return getEntityDao().getDao();
-	}
-	
-	protected <X> EntityDao<X> getEntityDao(Class<X> type) {
-		return getEntityDao().getDao().getEntityDao(type);
+		if (dao == null) {
+			dao = getDaoClient().getDao();
+		}
+		return dao;
 	}
 	
 	//------------------------------------------------------------
@@ -124,120 +112,6 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 */
 	protected void setScenarioResult(String step) {
 		result = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
-	}
-
-	//------------------------------------------------------------
-	// dao methods
-	//------------------------------------------------------------
-	/**
-	 * Count records by query
-	 * 
-	 * @param q query
-	 * @return count
-	 */ 
-	protected long daoCount(GenericQuery<?> q) {
-		return getDao().count(q);
-	}
-
-	/**
-	 * daoExists
-	 * 
-	 * @param key T
-	 * @return T
-	 */ 
-	protected boolean daoExists(T key) {
-		return getEntityDao().exists(key);
-	}
-
-	/**
-	 * fetch data by primary key
-	 * 
-	 * @param key primary key
-	 * @return data
-	 */ 
-	protected T daoFetch(T key) {
-		return getEntityDao().fetch(key);
-	}
-
-	/**
-	 * select by query
-	 * 
-	 * @param q query
-	 * @return data list
-	 */ 
-	protected List<T> daoSelect(GenericQuery<T> q) {
-		return getEntityDao().select(q);
-	}
-
-	/**
-	 * daoInsert
-	 * 
-	 * @param data data
-	 */ 
-	protected void daoInsert(T data) {
-		getEntityDao().insert(data);
-	}
-
-	/**
-	 * delete record
-	 * 
-	 * @param key key
-	 * @return count of deleted records
-	 */ 
-	protected int daoDelete(T key) {
-		return getEntityDao().delete(key);
-	}
-
-	/**
-	 * delete records by query
-	 * 
-	 * @param q query
-	 * @return count of deleted records
-	 */ 
-	protected int daoDeletes(GenericQuery<T> q) {
-		return getEntityDao().deletes(q);
-	}
-
-	/**
-	 * update data (ignore null properties)
-	 * 
-	 * @param data data
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdate(T data) {
-		return getEntityDao().update(data);
-	}
-
-	/**
-	 * update data (ignore null properties)
-	 * 
-	 * @param data data
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdateIgnoreNull(T data) {
-		return getEntityDao().updateIgnoreNull(data);
-	}
-
-	/**
-	 * use sample data to update record by query
-	 * 
-	 * @param sample sample data
-	 * @param q query
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdates(T sample, GenericQuery<T> q) {
-		return getEntityDao().updates(sample, q);
-	}
-
-	/**
-	 * use sample data to update record by query (ignore null properties)
-	 * 
-	 * @param sample sample data
-	 * @param q query
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdatesIgnoreNull(T sample, GenericQuery<T> q) {
-		return getEntityDao().updatesIgnoreNull(sample, q);
 	}
 
 	//------------------------------------------------------------

@@ -21,6 +21,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	public ResourceListAction() {
 		setType(Resource.class);
+		addDisplayColumns(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UUSID, Resource.UTIME);
 	}
 
 

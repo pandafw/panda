@@ -1,8 +1,5 @@
 package panda.wing.action;
 
-import java.util.Collection;
-import java.util.List;
-
 import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
@@ -10,6 +7,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
 import panda.dao.query.GenericQuery;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -21,6 +19,10 @@ import panda.mvc.view.tag.Property;
 import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
 import panda.wing.entity.IUpdate;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -34,6 +36,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	private boolean checkAbortOnError = false;
 
+	//------------------------------------------------------------
+	// fields (display & update)
+	//------------------------------------------------------------
+	private List<String> fields;
+	
 	/**
 	 * Constructor 
 	 */
@@ -58,6 +65,39 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	//------------------------------------------------------------
+	// fields (display & update)
+	//------------------------------------------------------------
+	/**
+	 * @return the fields
+	 */
+	protected List<String> getDisplayFields() {
+		return fields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	protected void setDisplayFields(List<String> fields) {
+		this.fields = fields;
+	}
+
+	protected void addDisplayFields(String... fields) {
+		if (this.fields == null) {
+			this.fields = new ArrayList<String>();
+		}
+		this.fields.addAll(Arrays.asList(fields));
+	}
+
+	/**
+	 * used by view
+	 * @param field field name
+	 * @return true if the field should be display
+	 */
+	public boolean displayField(String field) {
+		return true;
+	}
+
+	//------------------------------------------------------------
 	// result
 	//------------------------------------------------------------
 	/**
@@ -72,25 +112,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	//------------------------------------------------------------
-	// update fields
-	//------------------------------------------------------------
-	/**
-	 * @return fields to be update
-	 */
-	protected String[] getUpdateFields() {
-		return null;
-	}
-
-	/**
-	 * used by view
-	 * @param field field name
-	 * @return true if the field should be display
-	 */
-	public boolean displayField(String field) {
-		return true;
-	}
-	
 	//------------------------------------------------------------
 	// dao methods
 	//------------------------------------------------------------
@@ -111,27 +132,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return T
 	 */ 
 	protected boolean daoExists(T key) {
-		return getEntityDao().exists(key);
+		return getDao().exists(entity, key);
 	}
 
 	/**
-	 * fetch data by primary key
+	 * fetch data by query
 	 * 
-	 * @param key primary key
+	 * @param query query
 	 * @return data
 	 */ 
-	protected T daoFetch(T key) {
-		return getEntityDao().fetch(key);
-	}
-
-	/**
-	 * select by query
-	 * 
-	 * @param q query
-	 * @return data list
-	 */ 
-	protected List<T> daoSelect(GenericQuery<T> q) {
-		return getEntityDao().select(q);
+	protected T daoFetch(GenericQuery<T> query) {
+		return getDao().fetch(query);
 	}
 
 	/**
@@ -140,7 +151,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */ 
 	protected void daoInsert(T data) {
-		getEntityDao().insert(data);
+		getDao().insert(data);
 	}
 
 	/**
@@ -150,17 +161,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return count of deleted records
 	 */ 
 	protected int daoDelete(T key) {
-		return getEntityDao().delete(key);
-	}
-
-	/**
-	 * delete records by query
-	 * 
-	 * @param q query
-	 * @return count of deleted records
-	 */ 
-	protected int daoDeletes(GenericQuery<T> q) {
-		return getEntityDao().deletes(q);
+		return getDao().delete(key);
 	}
 
 	/**
@@ -170,19 +171,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param fields fields to update
 	 * @return count of updated records
 	 */ 
-	protected int daoUpdate(T data, String... fields) {
-		return getEntityDao().update(data, fields);
-	}
-
-	/**
-	 * use sample data to update record by query
-	 * 
-	 * @param sample sample data
-	 * @param q query
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdates(T sample, GenericQuery<T> q) {
-		return getEntityDao().updates(sample, q);
+	protected int daoUpdate(T data, Collection<String> fields) {
+		return getDao().update(data, fields);
 	}
 
 	//------------------------------------------------------------
@@ -396,7 +386,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		try {
 			startInsert(data);
 			final T d = data;
-			getEntityDao().exec(new Runnable() {
+			getDao().exec(new Runnable() {
 				public void run() {
 					insertData(d);
 				}
@@ -470,7 +460,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 		try {
 			startUpdate(data, sd);
-			getEntityDao().exec(new Runnable() {
+			getDao().exec(new Runnable() {
 				public void run() {
 					updateData(data, sd);
 				}
@@ -520,7 +510,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		
 		try {
 			startDelete(sd);
-			getEntityDao().exec(new Runnable() {
+			getDao().exec(new Runnable() {
 				public void run() {
 					deleteData(sd);
 				}
@@ -576,7 +566,16 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
-		T d = daoFetch(key);
+		GenericQuery<T> gq = new GenericQuery<T>(entity);
+		gq.equalToPrimaryKeys(key);
+		
+		Collection<String> ufs = getDisplayFields();
+		if (Collections.isNotEmpty(ufs)) {
+			gq.includeNotPrimaryKeys();
+			gq.include(ufs);
+		}
+
+		T d = daoFetch(gq);
 		if (d == null) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
 			return null;
@@ -669,7 +668,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return update count
 	 */
 	protected int updateData(T data, T srcData) {
-		int cnt = daoUpdate(data, getUpdateFields());
+		int cnt = daoUpdate(data, getDisplayFields());
 		if (cnt != 1) {
 			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
 		}
@@ -872,7 +871,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		else {
 			Object id = eid.getValue(data);
-			if (getEntityDao().isValidIdentity(id) && daoExists(data)) {
+			if (getDao().isValidIdentity(id) && daoExists(data)) {
 				addDataDuplicateError(data, entity.getPrimaryKeys());
 				return false;
 			}

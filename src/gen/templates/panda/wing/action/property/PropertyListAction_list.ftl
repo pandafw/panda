@@ -74,7 +74,7 @@
 			"fixed": true
 		}] />
 	</#if>
-	<#if text.getText("listview-actions-align", "left") == "left">
+	<#if a.actionsAlighLeft>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
@@ -86,6 +86,7 @@
 		}] />
 	</#if>
 
+<#if a.displayColumn("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
@@ -98,7 +99,10 @@
 			"link": true,
 			"sortable": true,
 			"tooltip": text.getText("a.t.id-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("clazz")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "clazz",
 			"header": text.getText("a.t.clazz"),
 			"filter": {
@@ -108,7 +112,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.clazz-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("language")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "language",
 			"header": text.getText("a.t.language"),
 			"format": {
@@ -123,7 +130,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.language-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("country")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "country",
 			"header": text.getText("a.t.country"),
 			"format": {
@@ -138,7 +148,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.country-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("name")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "name",
 			"header": text.getText("a.t.name"),
 			"filter": {
@@ -148,7 +161,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.name-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("value")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "value",
 			"header": text.getText("a.t.value"),
 			"filter": {
@@ -158,7 +174,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.value-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("memo")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "memo",
 			"header": text.getText("a.t.memo"),
 			"filter": {
@@ -168,7 +187,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.memo-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("status")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "status",
 			"header": text.getText("a.t.status"),
 			"format": {
@@ -183,7 +205,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.status-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("uusid")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "uusid",
 			"header": text.getText("a.t.uusid"),
 			"filter": {
@@ -193,7 +218,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.uusid-tip", "")
-		}, {
+		}] />
+</#if>
+<#if a.displayColumn("utime")>
+	<#assign _columns_ = _columns_ + [{
 			"name" : "utime",
 			"header": text.getText("a.t.utime"),
 			"format": {
@@ -206,10 +234,10 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": text.getText("a.t.utime-tip", "")
-		}
-	] />
+		}] />
+</#if>
 
-	<#if text.getText("listview-actions-align", "") == "right">
+	<#if a.actionsAlighRight>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 	<@p.set var="lvtools">

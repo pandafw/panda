@@ -16,6 +16,7 @@ public abstract class TemplateBulkAction extends GenericBulkAction<Template> {
 	 */
 	public TemplateBulkAction() {
 		setType(Template.class);
+		addDisplayColumns(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.SOURCE, Template.STATUS, Template.UUSID, Template.UTIME);
 	}
 
 
