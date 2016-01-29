@@ -82,6 +82,9 @@ public abstract class DaoTestCase {
 		Assert.assertTrue(dao.exists(Student.class));
 		Assert.assertTrue(dao.exists(Klass.class));
 		Assert.assertTrue(dao.exists(Score.class));
+
+		Assert.assertTrue(dao.exists(Teacher.class, Teacher.create(1)));
+		
 	}
 	
 	@Test

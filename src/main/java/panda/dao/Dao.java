@@ -633,6 +633,15 @@ public interface Dao {
 	int update(Object obj, String... fields);
 
 	/**
+	 * update a record by the supplied object and fields. 
+	 * 
+	 * @param obj sample object
+	 * @param fields the fields to update
+	 * @return updated count
+	 */
+	int update(Object obj, Collection<String> fields);
+
+	/**
 	 * update a record by the supplied object. 
 	 * the null properties will be ignored.
 	 * 
@@ -649,6 +658,15 @@ public interface Dao {
 	 * @return updated count
 	 */
 	int updates(Collection<?> col, String... fields);
+
+	/**
+	 * update records by the supplied object collection and fields. 
+	 * 
+	 * @param col record collection
+	 * @param fields the fields to update
+	 * @return updated count
+	 */
+	int updates(Collection<?> col, Collection<String> fields);
 
 	/**
 	 * update records by the supplied object collection. 

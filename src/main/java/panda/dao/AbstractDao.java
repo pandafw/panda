@@ -14,6 +14,7 @@ import panda.dao.query.Join;
 import panda.dao.query.Query;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
+import panda.lang.Collections;
 import panda.lang.Objects;
 
 import java.util.ArrayList;
@@ -1209,14 +1210,27 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int update(Object obj, String... fields) {
+		return update(obj, Arrays.asList(fields));
+	}
+	
+	/**
+	 * update a record by the supplied object and fields. 
+	 * 
+	 * @param obj sample object
+	 * @param fields the fields to update
+	 * @return updated count
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public int update(Object obj, Collection<String> fields) {
 		assertObject(obj);
 
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery query = createQuery(entity);
+		GenericQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
-		if (Arrays.isNotEmpty(fields)) {
+		if (Collections.isNotEmpty(fields)) {
 			query.excludeAll().include(fields);
 		}
 
@@ -1253,6 +1267,18 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int updates(Collection<?> col, String... fields) {
+		return updates(col, Arrays.asList(fields));
+	}
+	
+	/**
+	 * update records by the supplied object collection and fields. 
+	 * 
+	 * @param col record collection
+	 * @param fields the fields to update
+	 * @return updated count
+	 */
+	@Override
+	public int updates(Collection<?> col, Collection<String> fields) {
 		assertCollection(col);
 
 		autoStart();
@@ -1443,33 +1469,7 @@ public abstract class AbstractDao implements Dao {
 	
 	//--------------------------------------------------------------------
 	protected void queryPrimaryKey(GenericQuery<?> query, Object ... keys) {
-		Entity<?> entity = query.getEntity();
-		
-		if (keys == null || keys.length == 0) {
-			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
-		}
-		
-		if (keys.length == 1 && entity.getType().isInstance(keys[0])) {
-			for (EntityField ef : entity.getPrimaryKeys()) {
-				Object k = ef.getValue(keys[0]);
-				if (k == null) {
-					throw new IllegalArgumentException("Null primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
-				}
-				query.equalTo(ef.getName(), k);
-			}
-		}
-		else {
-			if (keys.length != entity.getPrimaryKeys().size()) {
-				throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
-			}
-			
-			int i = 0;
-			for (EntityField ef : entity.getFields()) {
-				if (ef.isPrimaryKey()) {
-					query.equalTo(ef.getName(), keys[i++]);
-				}
-			}
-		}
+		query.equalToPrimaryKeys(keys);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1494,32 +1494,17 @@ public abstract class AbstractDao implements Dao {
 	}
 
 	protected void excludePrimaryKeys(GenericQuery<?> query) {
-		Entity<?> entity = query.getEntity();
 		if (query.hasColumns()) {
-			for (EntityField ef : entity.getFields()) {
-				if (ef.isPrimaryKey()) {
-					query.exclude(ef.getName());
-				}
-			}
+			query.excludePrimaryKeys();
 		}
 		else {
-			for (EntityField ef : entity.getFields()) {
-				if (!ef.isPrimaryKey()) {
-					query.include(ef.getName());
-				}
-			}
+			query.includeNotPrimaryKeys();
 		}
 	}
 
 	protected void selectPrimaryKeys(GenericQuery<?> query) {
 		query.clearColumns();
-		
-		Entity<?> entity = query.getEntity();
-		for (EntityField ef : entity.getFields()) {
-			if (ef.isPrimaryKey()) {
-				query.include(ef.getName());
-			}
-		}
+		query.includePrimayKeys();
 	}
 	
 	protected <T> boolean callback(DataHandler<T> callback, T data, long index) {

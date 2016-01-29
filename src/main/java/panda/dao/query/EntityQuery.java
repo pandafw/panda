@@ -1,11 +1,12 @@
 package panda.dao.query;
 
-import java.util.List;
-import java.util.Map;
-
 import panda.dao.entity.Entity;
 import panda.dao.query.Filter.ComboFilter;
 import panda.lang.Objects;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings("unchecked")
@@ -92,6 +93,24 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
+	 * include primary keys
+	 * @return this
+	 */
+	public Q includePrimayKeys() {
+		query.includePrimayKeys();
+		return (Q)this;
+	}
+
+	/**
+	 * include not primary keys
+	 * @return this
+	 */
+	public Q includeNotPrimaryKeys() {
+		query.includeNotPrimaryKeys();
+		return (Q)this;
+	}
+	
+	/**
 	 * @return this
 	 */
 	public Q includeAll() {
@@ -107,7 +126,25 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		query.include(names);
 		return (Q)this;
 	}
-
+	
+	/**
+	 * @param names include name
+	 * @return this
+	 */
+	public Q include(Collection<String> names) {
+		query.include(names);
+		return (Q)this;
+	}
+	
+	/**
+	 * exclude primary keys
+	 * @return this
+	 */
+	public Q excludePrimaryKeys() {
+		query.excludePrimaryKeys();
+		return (Q)this;
+	}
+	
 	/**
 	 * @return this
 	 */
@@ -121,6 +158,15 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	 * @return this
 	 */
 	public Q exclude(String... names) {
+		query.exclude(names);
+		return (Q)this;
+	}
+
+	/**
+	 * @param names the field name to exclude
+	 * @return this
+	 */
+	public Q exclude(Collection<String> names) {
 		query.exclude(names);
 		return (Q)this;
 	}
@@ -429,6 +475,16 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		return (Q)this;
 	}
 
+	/**
+	 * equal to primary keys, Entity must be set
+	 * @param keys
+	 * @return this
+	 */
+	public Q equalToPrimaryKeys(Object ... keys) {
+		query.equalToPrimaryKeys(keys);
+		return (Q)this;
+	}
+	
 	//-------------------------------------------------------------------------------------------
 	/**
 	 * @see java.lang.Object#hashCode()

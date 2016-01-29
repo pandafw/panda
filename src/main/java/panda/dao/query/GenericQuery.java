@@ -263,12 +263,70 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * @param name the field name to include
+	 * @param value the column value
+	 * @return this
+	 */
+	private GenericQuery setColumn(String name, String value) {
+		Asserts.notEmpty(name);
+		if (columns == null) {
+			columns = new LinkedHashMap<String, String>();
+		}
+		columns.put(name, value);
+		return this;
+	}
+
+	/**
+	 * include column
+	 * @param name column name
+	 */
+	private void incColumn(String name) {
+		setColumn(name, "");
+	}
+
+	/**
+	 * exclude column
+	 * @param name column name
+	 */
+	private void excColumn(String name) {
+		setColumn(name, null);
+	}
+	
+	/**
+	 * include primary keys
+	 * @return this
+	 */
+	public GenericQuery includePrimayKeys() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getPrimaryKeys()) {
+			incColumn(ef.getName());
+		}
+		flags = null;
+		return this;
+	}
+
+	/**
+	 * include not primary keys
+	 * @return this
+	 */
+	public GenericQuery includeNotPrimaryKeys() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getFields()) {
+			if (!ef.isPrimaryKey()) {
+				incColumn(ef.getName());
+			}
+		}
+		flags = null;
+		return this;
+	}
+
+	/**
 	 * @return this
 	 */
 	public GenericQuery includeAll() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
-			setColumn(ef.getName(), "");
+			incColumn(ef.getName());
 		}
 		flags = null;
 		return this;
@@ -279,13 +337,35 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery include(String... names) {
-		if (Arrays.isNotEmpty(names)) {
+		return include(Arrays.asList(names));
+	}
+
+	/**
+	 * @param names include name
+	 * @return this
+	 */
+	public GenericQuery include(Collection<String> names) {
+		if (Collections.isNotEmpty(names)) {
 			for (String name : names) {
-				Asserts.notEmpty(name);
-				setColumn(name, "");
+				incColumn(name);
 			}
 			flags = null;
 		}
+		return this;
+	}
+	
+	/**
+	 * exclude primary keys
+	 * @return this
+	 */
+	public GenericQuery excludePrimaryKeys() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getFields()) {
+			if (ef.isPrimaryKey()) {
+				excColumn(ef.getName());
+			}
+		}
+		flags = null;
 		return this;
 	}
 
@@ -295,7 +375,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	public GenericQuery excludeAll() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
-			setColumn(ef.getName(), null);
+			excColumn(ef.getName());
 		}
 		flags = null;
 		return this;
@@ -306,10 +386,17 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery exclude(String... names) {
-		if (Arrays.isNotEmpty(names)) {
+		return exclude(Arrays.asList(names));
+	}
+
+	/**
+	 * @param names the field names to exclude
+	 * @return this
+	 */
+	public GenericQuery exclude(Collection<String> names) {
+		if (Collections.isNotEmpty(names)) {
 			for (String name : names) {
-				Asserts.notEmpty(name);
-				setColumn(name, null);
+				excColumn(name);
 			}
 			flags = null;
 		}
@@ -346,20 +433,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	public GenericQuery clearColumns() {
 		if (columns != null) {
 			columns.clear();
+			flags = null;
 		}
-		return this;
-	}
-
-	/**
-	 * @param name the field name to include
-	 * @param value the column value
-	 * @return this
-	 */
-	protected GenericQuery setColumn(String name, String value) {
-		if (columns == null) {
-			columns = new LinkedHashMap<String, String>();
-		}
-		columns.put(name, value);
 		return this;
 	}
 
@@ -1005,6 +1080,46 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		return addCompareRanageExpression(field, Operator.NOT_BETWEEN, value1, value2);
 	}
 
+	/**
+	 * equal to primary keys, Entity must be set
+	 * @param keys
+	 * @return this
+	 */
+	public GenericQuery equalToPrimaryKeys(Object ... keys) {
+		Entity<?> entity = getEntity();
+		
+		if (keys == null || keys.length == 0) {
+			throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
+		}
+		
+		if (keys.length == 1 && entity.getType().isInstance(keys[0])) {
+			for (EntityField ef : entity.getPrimaryKeys()) {
+				Object k = ef.getValue(keys[0]);
+				if (k == null) {
+					throw new IllegalArgumentException("Null primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
+				}
+				equalTo(ef.getName(), k);
+			}
+		}
+		else {
+			if (keys.length != entity.getPrimaryKeys().size()) {
+				throw new IllegalArgumentException("Illegal primary keys for Entity [" + entity.getType() + "]: " + Objects.toString(keys));
+			}
+			
+			int i = 0;
+			for (EntityField ef : entity.getFields()) {
+				if (ef.isPrimaryKey()) {
+					equalTo(ef.getName(), keys[i++]);
+				}
+			}
+		}
+		
+		return this;
+	}
+
+	/**
+	 * @see java.lang.Object#clone()
+	 */
 	@Override
 	public GenericQuery<T> clone() {
 		return new GenericQuery<T>(this);
