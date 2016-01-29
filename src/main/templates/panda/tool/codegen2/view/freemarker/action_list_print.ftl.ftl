@@ -11,9 +11,10 @@
 			"type": "number",
 			"header": text.getText("listview-th-number", ""),
 			"fixed": true
-		}, <#rt/>
+		}] />
 <#list ui.orderedColumnList as c>
-{
+${s}#if a.displayColumn("${c.name}")>
+	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
 			"value": false,
 			"header": text.getText("a.t.${c.name}"),
@@ -42,10 +43,10 @@
 			"width": "${c.width}",
 		</#if>
 			"tooltip": text.getText("a.t.${c.name}-tip", "")
-		}<#if c_has_next>, </#if><#rt/>
+		}] />
+${s}/#if>
 </#list>
 
-	] />
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>

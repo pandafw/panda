@@ -55,7 +55,7 @@
 			"fixed": true
 		}] />
 	${s}/#if>
-	${s}#if text.getText("listview-actions-align", "left") == "left">
+	${s}#if a.actionsAlighLeft>
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
@@ -86,9 +86,9 @@
 	</#if>
 </#if>
 
-	${s}#assign _columns_ = _columns_ + [<#rt/>
 <#list ui.orderedColumnList as c>
-{
+${s}#if a.displayColumn("${c.name}")>
+	${s}#assign _columns_ = _columns_ + [{
 			"name" : "${c.name}",
 		<#if entity.isPrimaryKey(c.name)>
 			"pkey" : true,
@@ -150,13 +150,12 @@
 			"width": "${c.width}",
 		</#if>
 			"tooltip": text.getText("a.t.${c.name}-tip", "")
-		}<#if c_has_next>, </#if><#rt/>
+		}] />
+${s}/#if>
 </#list>
 
-	] />
-
 <#if ui.params.actions?has_content>
-	${s}#if text.getText("listview-actions-align", "") == "right">
+	${s}#if a.actionsAlighRight>
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
