@@ -897,6 +897,10 @@ public class EntityProperty implements Comparable<EntityProperty> {
 	 * @return possible object is {@link String }
 	 */
 	public String getUname() {
+		return upname(name);
+	}
+	
+	public static String upname(String name) {
 		if (name == null) {
 			return null;
 		}

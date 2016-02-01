@@ -336,6 +336,15 @@ public class InputField implements Comparable<InputField> {
 	}
 
 	/**
+	 * Gets the value of the uname property.
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getUname() {
+		return EntityProperty.upname(name);
+	}
+
+	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {

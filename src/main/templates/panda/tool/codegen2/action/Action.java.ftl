@@ -30,6 +30,32 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	public ${actionClass}() {
 		setType(${entityBeanClass}.class);
+<#if action.listUIList?has_content><#list action.listUIList as ui><#if ui.generate!false>
+<#if ui.templates?seq_contains("list")
+	|| ui.templates?seq_contains("list_print")
+	|| ui.templates?seq_contains("list_popup")
+	|| ui.templates?seq_contains("list_csv")
+	|| ui.templates?seq_contains("list_json")
+	|| ui.templates?seq_contains("list_xml")
+	|| ui.templates?seq_contains("bdelete")
+	|| ui.templates?seq_contains("bupdate")
+>
+		addDisplayColumns(<#list ui.orderedColumnList as c>${entity.simpleName}.${c.uname}<#if c_has_next>, </#if></#list>);
+	<#break/>
+</#if></#if>
+</#list></#if>
+<#if action.inputUIList?has_content><#list action.inputUIList as ui><#if ui.generate!false>
+<#if ui.templates?seq_contains("view")
+	|| ui.templates?seq_contains("print")
+	|| ui.templates?seq_contains("add")
+	|| ui.templates?seq_contains("copy")
+	|| ui.templates?seq_contains("edit")
+	|| ui.templates?seq_contains("delete")
+>
+		addDisplayFields(<#list ui.displayFieldList as f><#if f.actionField>"${f.name}"<#else>${entity.simpleName}.${f.uname}</#if><#if f_has_next>, </#if></#list>);
+	<#break/>
+</#if></#if>
+</#list></#if>
 	}
 
 <#list action.propertyList as p>
@@ -101,17 +127,6 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_popup(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_csv")>
-	/**
-	 * ${ui.name}
-	 */
-	@At
-	@Ok(View.FTL)
-	@Err(View.FTL)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
-		return super.list_csv(qr);
-	}
-	
 <#elseif ui.templates?seq_contains("list_print")>
 	/**
 	 * ${ui.name}
@@ -121,6 +136,17 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Err(View.SFTL)
 	public Object ${ui.name}(@Param @Validates Queryer qr) {
 		return super.list_print(qr);
+	}
+	
+<#elseif ui.templates?seq_contains("list_csv")>
+	/**
+	 * ${ui.name}
+	 */
+	@At
+	@Ok(View.FTL)
+	@Err(View.FTL)
+	public Object ${ui.name}(@Param @Validates Queryer qr) {
+		return super.list_csv(qr);
 	}
 	
 <#elseif ui.templates?seq_contains("list_json")>
