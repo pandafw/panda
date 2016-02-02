@@ -370,6 +370,21 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * exclude not primary keys
+	 * @return this
+	 */
+	public GenericQuery excludeNotPrimaryKeys() {
+		Entity<?> entity = getEntity();
+		for (EntityField ef : entity.getFields()) {
+			if (!ef.isPrimaryKey()) {
+				excColumn(ef.getName());
+			}
+		}
+		flags = null;
+		return this;
+	}
+
+	/**
 	 * @return this
 	 */
 	public GenericQuery excludeAll() {

@@ -144,6 +144,15 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		query.excludePrimaryKeys();
 		return (Q)this;
 	}
+
+	/**
+	 * exclude not primary keys
+	 * @return this
+	 */
+	public Q excludeNotPrimaryKeys() {
+		query.excludeNotPrimaryKeys();
+		return (Q)this;
+	}
 	
 	/**
 	 * @return this
