@@ -88,6 +88,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		this.fields.addAll(Arrays.asList(fields));
 	}
 
+	protected void removeDisplayFields(String... fields) {
+		if (Collections.isEmpty(this.fields)) {
+			return;
+		}
+		this.fields.removeAll(Arrays.asList(fields));
+	}
+
 	/**
 	 * used by view
 	 * @param field field name
@@ -537,7 +544,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * trim data
 	 * @param d data object
 	 */
-	protected void trimData(T d) {
+	protected T trimData(T d) {
+		return d;
 	}
 	
 	/**
@@ -571,7 +579,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		
 		Collection<String> ufs = getDisplayFields();
 		if (Collections.isNotEmpty(ufs)) {
-			gq.includeNotPrimaryKeys();
+			gq.excludeAll();
+			gq.includePrimayKeys();
 			gq.include(ufs);
 		}
 
@@ -581,7 +590,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 
-		trimData(d);
+		d = trimData(d);
+		if (d == null) {
+			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			return null;
+		}
 		return d;
 	}
 

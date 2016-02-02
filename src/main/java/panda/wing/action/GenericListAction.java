@@ -180,6 +180,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		this.columns.addAll(Arrays.asList(columns));
 	}
 
+	protected void removeDisplayColumns(String... columns) {
+		if (Collections.isEmpty(this.columns)) {
+			return;
+		}
+		this.columns.removeAll(Arrays.asList(columns));
+	}
+
 	//------------------------------------------------------------
 	// dao methods
 	//------------------------------------------------------------
@@ -395,7 +402,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 						gq.setStart(qr.getPager().getStart());
 						gq.setLimit(qr.getPager().getLimit());
 						dataList = daoSelect(gq);
-						trimDataList(dataList);
+						dataList = trimDataList(dataList);
 					}
 					else {
 						dataList = new ArrayList<T>();
@@ -405,7 +412,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					gq.setStart(qr.getPager().getStart());
 					gq.setLimit(qr.getPager().getLimit());
 					dataList = daoSelect(gq);
-					trimDataList(dataList);
+					dataList = trimDataList(dataList);
 				}
 			}
 		});
@@ -441,7 +448,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	//-------------------------------------------------------------
 	// trims
 	//-------------------------------------------------------------
-	protected void trimDataList(List<T> ds) {
+	protected List<T> trimDataList(List<T> ds) {
+		return ds;
 	}
 
 	/**

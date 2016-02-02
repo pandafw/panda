@@ -112,8 +112,11 @@ public abstract class UserAuthenticator {
 
 		// check AND @Auth(...)
 		for (String d : defines) {
-			char s = d.charAt(0);
-			if (s == AUTH.AND) {
+			if (Strings.isEmpty(d)) {
+				continue;
+			}
+			
+			if (d.charAt(0) == AUTH.AND) {
 				int a = authenticatePermission(ac, su, uperms, d.substring(1));
 				if (a != OK) {
 					return a;
@@ -124,8 +127,7 @@ public abstract class UserAuthenticator {
 		// check  @Auth(...)
 		int r = UNKNOWN;
 		for (String d : defines) {
-			char s = d.charAt(0);
-			if (s != AUTH.AND) {
+			if (Strings.isEmpty(d) || d.charAt(0) != AUTH.AND) {
 				int a = authenticatePermission(ac, su, uperms, d);
 				if (a == OK) {
 					return a;

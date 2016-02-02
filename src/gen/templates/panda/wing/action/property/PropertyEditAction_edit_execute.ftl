@@ -94,7 +94,7 @@
 			/>
 	</#if>
 			<#assign _buttons_ = [] />
-			<#if action.hasDataPermission(params!, '~/edit')>
+			<#if r?? && action.hasDataPermission(r, '~/edit')>
 				<@p.url var="_u_" action="~/edit" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
@@ -104,7 +104,7 @@
 					"text": "button-edit"
 				}]/>
 			</#if>
-			<#if action.hasDataPermission(params!, '~/copy')>
+			<#if r?? && action.hasDataPermission(r, '~/copy')>
 				<@p.url var="_u_" action="~/copy" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>
@@ -114,7 +114,7 @@
 					"text": "button-copy"
 				}]/>
 			</#if>
-			<#if action.hasDataPermission(params!, '~/delete')>
+			<#if r?? && action.hasDataPermission(r, '~/delete')>
 				<@p.url var="_u_" action="~/delete" escapeAmp="false">
 					<@p.param name="id" value="%{r.id}"/>
 				</@p.url>

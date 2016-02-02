@@ -74,7 +74,7 @@
 			"fixed": true
 		}] />
 	</#if>
-	<#if a.actionsAlighLeft>
+	<#if a.actionsAlignLeft>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
@@ -211,7 +211,7 @@
 		}] />
 </#if>
 
-	<#if a.actionsAlighRight>
+	<#if a.actionsAlignRight>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 	<@p.set var="lvtools">

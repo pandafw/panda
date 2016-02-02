@@ -3,6 +3,7 @@ package panda.wing.action;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
 import panda.lang.Strings;
+import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
 
 
@@ -23,7 +24,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// scenario & result
 	//------------------------------------------------------------
-	protected Object result;
+	protected View resultView;
 	protected String actionScenario;
 
 	//------------------------------------------------------------
@@ -99,11 +100,15 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		this.actionScenario = actionScenario;
 	}
 
+	protected void setResultView(View result) {
+		this.resultView = result;
+	}
+
 	/**
 	 * set result by action scenario
 	 */
 	protected void setScenarioResult() {
-		result = new SitemeshFreemarkerView("~" + getActionScenario());
+		resultView = new SitemeshFreemarkerView("~" + getActionScenario());
 	}
 
 	/**
@@ -111,18 +116,18 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @param step scenario step
 	 */
 	protected void setScenarioResult(String step) {
-		result = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
+		resultView = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
 	}
 
 	//------------------------------------------------------------
 	// result
 	//------------------------------------------------------------
 	protected Object doResult(Object r) {
-		if (result == null) {
+		if (resultView == null) {
 			return r;
 		}
 		getContext().setResult(r);
-		return result;
+		return resultView;
 	}
 
 	//------------------------------------------------------------
