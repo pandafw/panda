@@ -1,24 +1,5 @@
 package panda.servlet;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.mail.internet.MimeUtility;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
@@ -37,6 +18,25 @@ import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
 import panda.net.http.ParameterParser;
 import panda.net.http.UserAgent;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.mail.internet.MimeUtility;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -825,4 +825,17 @@ public class HttpServlets {
 		pw.write("\"></head><body></body></html>");
 		pw.flush();
 	}
+
+	/**
+	 * @param res response 
+	 */
+	public static void sendError(HttpServletResponse res, int sc) {
+		try {
+			res.sendError(sc);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
