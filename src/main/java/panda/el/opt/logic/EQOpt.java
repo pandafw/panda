@@ -22,6 +22,12 @@ public class EQOpt extends TwoTernary {
 			return false;
 		}
 		
+		if (lval instanceof Character) {
+			lval = lval.toString();
+		}
+		if (rval instanceof Character) {
+			rval = rval.toString();
+		}
 		return lval.equals(rval);
 	}
 

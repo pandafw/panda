@@ -14,9 +14,8 @@ public class StringParse implements Parse {
 		case '"':
 			StringBuilder sb = new StringBuilder();
 			char end = exp.poll();
-			// while(!exp.isEmpty() && !exp.peek().equals(end)){
 			while (!exp.isEmpty() && exp.peek() != end) {
-				if (exp.peek() == '\\') {// 转义字符?
+				if (exp.peek() == '\\') {
 					parseSp(exp, sb);
 				}
 				else {
