@@ -23,7 +23,7 @@
 		<#assign an = _as[0]/>
 		<#assign ap = gen.getActionPath(_as[1])/>
 		<#if _a?contains('%')>
-			${s}#if action.hasDataPermission(params!, '${ap}')>
+			${s}#if r?? && action.hasDataPermission(r, '${ap}')>
 				${s}@p.url var="_u_" action="${ap}" escapeAmp="false">
 <#list entity.primaryKeyList as p>
 					${s}@p.param name="${p.name}" value="%{r.${p.name}}"/>

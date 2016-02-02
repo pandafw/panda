@@ -150,5 +150,74 @@
 				</editTag>
 			</field>
 		</input>
+
+		<input name="uhInput" extend="baseInput">
+			<field name="uusid" order="100500">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="uusnm" order="100600">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="utime" order="100700">
+				<editTag name="${tag.hidden}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="shInput" extend="baseInput">
+			<field name="status" order="100100">
+				<editTag name="${tag.hidden}"/>
+			</field>
+		</input>
+		<input name="schInput" extend="shInput">
+			<field name="cusid" order="100200">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="cusnm" order="100300">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="ctime" order="100400">
+				<editTag name="${tag.hidden}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="suhInput" extend="shInput">
+			<field name="uusid" order="100500">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="uusnm" order="100600">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="utime" order="100700">
+				<editTag name="${tag.hidden}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
+		<input name="scuhInput" extend="shInput">
+			<field name="cusid" order="100200">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="cusnm" order="100300">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="ctime" order="100400">
+				<editTag name="${tag.hidden}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+			<field name="uusid" order="100500">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="uusnm" order="100600">
+				<editTag name="${tag.hidden}"/>
+			</field>
+			<field name="utime" order="100700">
+				<editTag name="${tag.hidden}">
+					<param name="format" value="datetime"/>
+				</editTag>
+			</field>
+		</input>
 	</action>
 </module>

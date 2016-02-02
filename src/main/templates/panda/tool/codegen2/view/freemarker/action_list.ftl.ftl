@@ -55,7 +55,7 @@
 			"fixed": true
 		}] />
 	${s}/#if>
-	${s}#if a.actionsAlighLeft>
+	${s}#if a.actionsAlignLeft>
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
@@ -155,7 +155,7 @@ ${s}/#if>
 </#list>
 
 <#if ui.params.actions?has_content>
-	${s}#if a.actionsAlighRight>
+	${s}#if a.actionsAlignRight>
 		${s}#assign _columns_ = _columns_ + _actionc_![]/>
 	${s}/#if>
 </#if>
