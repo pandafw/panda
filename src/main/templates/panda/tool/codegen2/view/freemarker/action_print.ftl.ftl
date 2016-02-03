@@ -8,7 +8,7 @@
 
 ${s}#if r??>
 	${s}@p.form cssClass="p-vform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
-		<#include "view-fields.ftl"/>
+		<#include "edit-view-fields.ftl"/>
 	${s}/@p.form>
 ${s}/#if>
 <#if ui.safeInclude??>

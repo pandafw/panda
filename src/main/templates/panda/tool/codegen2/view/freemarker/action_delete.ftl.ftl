@@ -9,7 +9,7 @@
 
 ${s}#if r??>
 	${s}@p.form cssClass="p-cform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" initfocus="${ui.focus?c}" method="post"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
-		<#include "view-fields.ftl"/>
+		<#include "edit-view-fields.ftl"/>
 		${s}#assign _buttons_ = [{
 			"icon": "icon-${ui.name}-execute",
 			"action": "~/${ui.name}_execute",
