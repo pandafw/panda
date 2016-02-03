@@ -2,7 +2,6 @@
 # application resource
 #########################################################################
 #ui
-#(deprecated) ui-input-step=false
 ui-input-confirm=false
 ui-list-countable=true
 
