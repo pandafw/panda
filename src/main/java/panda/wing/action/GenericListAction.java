@@ -23,6 +23,7 @@ import panda.wing.constant.VC;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,7 +52,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// display columns
 	//------------------------------------------------------------
-	private List<String> columns;
+	private Set<String> columns;
 
 	//------------------------------------------------------------
 	// result properties
@@ -165,17 +166,20 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		this.listCountable = listCountable;
 	}
 
-	protected List<String> getDisplayColumns() {
+	//------------------------------------------------------------
+	// display columns
+	//------------------------------------------------------------
+	protected Set<String> getDisplayColumns() {
 		return columns;
 	}
 
-	protected void setDisplayColumns(List<String> columns) {
+	protected void setDisplayColumns(Set<String> columns) {
 		this.columns = columns;
 	}
 
 	protected void addDisplayColumns(String... columns) {
 		if (this.columns == null) {
-			this.columns = new ArrayList<String>();
+			this.columns = new HashSet<String>();
 		}
 		this.columns.addAll(Arrays.asList(columns));
 	}
@@ -185,6 +189,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			return;
 		}
 		this.columns.removeAll(Arrays.asList(columns));
+	}
+
+	public boolean displayColumn(String name) {
+		Collection<String> cs = getDisplayColumns();
+		if (Collections.isEmpty(cs)) {
+			return true;
+		}
+		return Collections.contains(cs, name);
 	}
 
 	//------------------------------------------------------------
@@ -383,8 +395,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
 		final GenericQuery<T> gq = new GenericQuery<T>(getEntity());
 
-		addQueryColumn(gq);
-		addQueryFilter(gq, qr);
+		addQueryColumns(gq);
+		addQueryFilters(gq, qr);
 		addQueryOrder(gq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
@@ -437,14 +449,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return a.charAt(0) == 'r';
 	}
 
-	public boolean displayColumn(String name) {
-		Collection<String> cs = getDisplayColumns();
-		if (Collections.isEmpty(cs)) {
-			return true;
-		}
-		return Collections.contains(cs, name);
-	}
-
 	//-------------------------------------------------------------
 	// trims
 	//-------------------------------------------------------------
@@ -455,8 +459,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
-	protected void addQueryColumn(GenericQuery<T> gq) {
-		List<String> fs = getDisplayColumns();
+	protected void addQueryColumns(GenericQuery<T> gq) {
+		Set<String> fs = getDisplayColumns();
 		if (Collections.isNotEmpty(fs)) {
 			gq.excludeAll();
 			gq.includePrimayKeys();
@@ -467,7 +471,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
-	protected void addQueryFilter(GenericQuery<T> gq, Queryer qr) {
+	protected void addQueryFilters(GenericQuery<T> gq, Queryer qr) {
 		qr.normalize();
 		if (Collections.isEmpty(qr.getFilters())) {
 			return;

@@ -20,9 +20,10 @@ import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
 import panda.wing.entity.IUpdate;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -39,7 +40,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// fields (display & update)
 	//------------------------------------------------------------
-	private List<String> fields;
+	private Set<String> fields;
 	
 	/**
 	 * Constructor 
@@ -70,20 +71,20 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @return the fields
 	 */
-	protected List<String> getDisplayFields() {
+	protected Set<String> getDisplayFields() {
 		return fields;
 	}
 
 	/**
 	 * @param fields the fields to set
 	 */
-	protected void setDisplayFields(List<String> fields) {
+	protected void setDisplayFields(Set<String> fields) {
 		this.fields = fields;
 	}
 
 	protected void addDisplayFields(String... fields) {
 		if (this.fields == null) {
-			this.fields = new ArrayList<String>();
+			this.fields = new HashSet<String>();
 		}
 		this.fields.addAll(Arrays.asList(fields));
 	}
@@ -101,7 +102,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if the field should be display
 	 */
 	public boolean displayField(String field) {
-		return true;
+		Collection<String> fs = getDisplayFields();
+		if (Collections.isEmpty(fs)) {
+			return true;
+		}
+		return Collections.contains(fs, field);
 	}
 
 	//------------------------------------------------------------
@@ -575,15 +580,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		
 		GenericQuery<T> gq = new GenericQuery<T>(entity);
-		gq.equalToPrimaryKeys(key);
+		addQueryFields(gq);
+		addQueryFilters(gq, key);
 		
-		Collection<String> ufs = getDisplayFields();
-		if (Collections.isNotEmpty(ufs)) {
-			gq.excludeAll();
-			gq.includePrimayKeys();
-			gq.include(ufs);
-		}
-
 		T d = daoFetch(gq);
 		if (d == null) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
@@ -596,6 +595,19 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		return d;
+	}
+
+	protected void addQueryFields(GenericQuery<T> gq) {
+		Collection<String> ufs = getDisplayFields();
+		if (Collections.isNotEmpty(ufs)) {
+			gq.excludeAll();
+			gq.includePrimayKeys();
+			gq.include(ufs);
+		}
+	}
+	
+	protected void addQueryFilters(GenericQuery<T> gq, T key) {
+		gq.equalToPrimaryKeys(key);
 	}
 
 	/**

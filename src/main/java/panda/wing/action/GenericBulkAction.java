@@ -14,6 +14,7 @@ import panda.wing.constant.RC;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +29,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// display columns
 	//------------------------------------------------------------
-	private List<String> columns;
+	private Set<String> columns;
 
 	/**
 	 * Constructor 
@@ -39,19 +40,26 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// display columns
 	//------------------------------------------------------------
-	protected List<String> getDisplayColumns() {
+	protected Set<String> getDisplayColumns() {
 		return columns;
 	}
 
-	protected void setDisplayColumns(List<String> columns) {
+	protected void setDisplayColumns(Set<String> columns) {
 		this.columns = columns;
 	}
 
 	protected void addDisplayColumns(String... columns) {
 		if (this.columns == null) {
-			this.columns = new ArrayList<String>();
+			this.columns = new HashSet<String>();
 		}
 		this.columns.addAll(Arrays.asList(columns));
+	}
+
+	protected void removeDisplayColumns(String... columns) {
+		if (Collections.isEmpty(this.columns)) {
+			return;
+		}
+		this.columns.removeAll(Arrays.asList(columns));
 	}
 
 	/**
@@ -413,8 +421,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		return ds;
 	}
 	
-	protected void addQueryColumn(GenericQuery<T> gq) {
-		List<String> cs = getDisplayColumns();
+	protected void addQueryColumns(GenericQuery<T> gq) {
+		Set<String> cs = getDisplayColumns();
 		if (Collections.isNotEmpty(cs)) {
 			gq.excludeAll();
 			gq.includePrimayKeys();
@@ -422,7 +430,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 	}
 	
-	protected void addQueryFilter(GenericQuery<T> gq) {
+	protected void addQueryFilters(GenericQuery<T> gq) {
 	}
 
 	/**
@@ -437,9 +445,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 			int count = addKeyListToQuery(q, dataList, false);
 			if (count > 0) {
-				addQueryColumn(q);
+				addQueryColumns(q);
 				if (filter) {
-					addQueryFilter(q);
+					addQueryFilters(q);
 				}
 				dataList = daoSelect(q);
 				dataList = trimDataList(dataList);
@@ -496,7 +504,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 		GenericQuery<T> q = new GenericQuery<T>(getEntity());
 		addKeyListToQuery(q, dataList, true);
-		addQueryFilter(q);
+		addQueryFilters(q);
 
 		T sample = getBulkUpdateSample(dataList, q);
 		if (sample == null) {

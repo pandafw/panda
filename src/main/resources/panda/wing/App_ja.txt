@@ -16,7 +16,7 @@ navi-help-termsofuse=利用規約
 navi-help-payment=支払い方法
 navi-help-ship=配送について
 
-navi-user=アカウント
+navi-user=マイアカウント
 navi-user-register=登録
 navi-user-login=ログイン
 navi-user-logout=ログアウト

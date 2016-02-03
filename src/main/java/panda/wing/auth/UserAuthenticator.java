@@ -152,7 +152,7 @@ public abstract class UserAuthenticator {
 		if (AUTH.SECURE.equals(define)) {
 			return isSecureSessionUser(su) ? OK : UNSECURE;
 		}
-		return Collections.contains(uperms, define) ? OK : DENIED;
+		return Collections.contains(uperms, define) ? OK : (su == null ? UNLOGIN : DENIED);
 	}
 
 	protected Collection<String> getMethodPermission(Class<?> clazz, Method method) {
