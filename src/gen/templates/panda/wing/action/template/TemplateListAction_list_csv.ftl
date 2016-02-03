@@ -43,10 +43,6 @@
 		},
 		"hidden": false
 	}, {
-		"name": "source",
-		"header": text.getText("a.t.source"),
-		"hidden": true
-	}, {
 		"name": "status",
 		"header": text.getText("a.t.status"),
 		"format": {

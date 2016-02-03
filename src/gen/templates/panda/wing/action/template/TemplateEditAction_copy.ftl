@@ -19,10 +19,13 @@
 	<#include "/action-alert.ftl"/>
 
 	<@p.form cssClass="p-eform" id="template" initfocus="true" method="post" theme="bs3h">
+	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"
 				value="%{r.id}"
 			/>
+	</#if>
+	<#if a.displayField("name")>
 			<@p.textfield
 				key="name"
 				value="%{r.name}"
@@ -30,6 +33,8 @@
 				maxlength="100"
 				size="60"
 			/>
+	</#if>
+	<#if a.displayField("language")>
 			<@p.select
 				key="language"
 				value="%{r.language}"
@@ -37,6 +42,8 @@
 				emptyOption="false"
 				list="%{consts.localeLanguageMap}"
 			/>
+	</#if>
+	<#if a.displayField("country")>
 			<@p.select
 				key="country"
 				value="%{r.country}"
@@ -44,6 +51,8 @@
 				emptyOption="false"
 				list="%{consts.localeCountryMap}"
 			/>
+	</#if>
+	<#if a.displayField("source")>
 			<@p.textarea
 				key="source"
 				value="%{r.source}"
@@ -51,25 +60,34 @@
 				cols="60"
 				rows="20"
 			/>
+	</#if>
+	<#if a.displayField("status")>
 			<@p.radio
 				key="status"
 				value="%{r.status}"
 				emptyOption="true"
 				list="%{consts.dataStatusMap}"
 			/>
+	</#if>
+	<#if a.displayField("uusid")>
 			<@p.viewfield
 				key="uusid"
 				value="%{r.uusid}"
 			/>
+	</#if>
+	<#if a.displayField("uusnm")>
 			<@p.viewfield
 				key="uusnm"
 				value="%{r.uusnm}"
 			/>
+	</#if>
+	<#if a.displayField("utime")>
 			<@p.viewfield
 				key="utime"
 				value="%{r.utime}"
 				format="datetime"
 			/>
+	</#if>
 		<#assign _buttons_ = [] />
 	<#if action.getTextAsBoolean('ui-input-confirm', false)>
 		<#assign _buttons_ = _buttons_ + [{

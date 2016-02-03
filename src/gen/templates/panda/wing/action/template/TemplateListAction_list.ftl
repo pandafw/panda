@@ -150,19 +150,6 @@
 			"tooltip": text.getText("a.t.country-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("source")>
-	<#assign _columns_ = _columns_ + [{
-			"name" : "source",
-			"header": text.getText("a.t.source"),
-			"filter": {
-				"type": "string"
-			},
-			"hidden": true,
-			"link": false,
-			"sortable": true,
-			"tooltip": text.getText("a.t.source-tip", "")
-		}] />
-</#if>
 <#if a.displayColumn("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "status",

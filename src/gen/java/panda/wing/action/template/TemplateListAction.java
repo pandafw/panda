@@ -8,16 +8,20 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.GenericListAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.entity.Template;
 
-public abstract class TemplateListAction extends GenericListAction<Template> {
+@At("${super_context}/template")
+@Auth(AUTH.SUPER)
+public class TemplateListAction extends GenericListAction<Template> {
 
 	/**
 	 * Constructor
 	 */
 	public TemplateListAction() {
 		setType(Template.class);
-		addDisplayColumns(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.SOURCE, Template.STATUS, Template.UUSID, Template.UTIME);
+		addDisplayColumns(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UUSID, Template.UTIME);
 	}
 
 
