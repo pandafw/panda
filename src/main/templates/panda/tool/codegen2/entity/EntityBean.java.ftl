@@ -50,14 +50,14 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	public static final String ${p.uname} = "${p.name}";
 </#list>
 
-	public static final String[] COLUMNS = new String[] {
+	public static final String[] _COLUMNS_ = new String[] {
 <#list entity.columnList as p>
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
 		};
 
 <#if entity.joinList?has_content>
-	public static final String[] JOINS = new String[] {
+	public static final String[] _JOINS_ = new String[] {
 <#list entity.joinList as p>
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
