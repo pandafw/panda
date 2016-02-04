@@ -1,8 +1,5 @@
 package panda.mvc.ioc.loader;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceLoader;
 import panda.lang.Arrays;
@@ -19,6 +16,7 @@ import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
+import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.CookieStateProvider;
@@ -93,6 +91,9 @@ import panda.mvc.view.tag.ui.ViewField;
 import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	protected Set<Object> getModules(MvcConfig config) {
 		Set<Object> pkgs = new HashSet<Object>();
@@ -143,6 +144,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			LayoutProcessor.class,
 			LocaleProcessor.class,
 			InvokeProcessor.class,
+			PrepareProcessor.class,
 			ValidateProcessor.class,
 			ViewProcessor.class,
 			
