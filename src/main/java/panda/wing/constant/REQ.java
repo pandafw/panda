@@ -3,6 +3,7 @@ package panda.wing.constant;
 
 
 /**
+ * Request container constants
  */
 public interface REQ {
 	/**

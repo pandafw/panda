@@ -4,7 +4,7 @@ import java.util.List;
 
 import panda.mvc.annotation.At;
 import panda.wing.auth.Auth;
-import panda.wing.constant.AC;
+import panda.wing.constant.APP;
 import panda.wing.constant.AUTH;
 import panda.wing.entity.Template;
 
@@ -18,7 +18,7 @@ public class TemplateBulkExAction extends TemplateBulkAction {
 	}
 
 	private void addReloadMessage() {
-		addApplicationMessage(AC.TEMPLATE_LOAD_DATE);
+		addApplicationMessage(APP.TEMPLATE_LOAD_DATE);
 	}
 
 	@Override

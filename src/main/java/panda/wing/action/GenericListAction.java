@@ -450,8 +450,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	//-------------------------------------------------------------
-	// trims
+	// protected methods (can be override by sub class)
 	//-------------------------------------------------------------
+	/**
+	 * trim data list
+	 * @param ds data list
+	 * @return data list
+	 */
 	protected List<T> trimDataList(List<T> ds) {
 		return ds;
 	}

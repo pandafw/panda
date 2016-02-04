@@ -1,12 +1,5 @@
 package panda.wing.auth;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -19,6 +12,14 @@ import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
 import panda.wing.constant.AUTH;
 import panda.wing.constant.REQ;
+import panda.wing.constant.SES;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public abstract class UserAuthenticator {
 	//--------------------------------------------------------
@@ -65,7 +66,10 @@ public abstract class UserAuthenticator {
 		if (u == null) {
 			HttpSession session = ac.getRequest().getSession(false);
 			if (session != null) {
-				u = session.getAttribute(REQ.USER);
+				u = session.getAttribute(SES.USER);
+				if (u != null) {
+					ac.getRequest().setAttribute(REQ.USER, u);
+				}
 			}
 		}
 		return u;

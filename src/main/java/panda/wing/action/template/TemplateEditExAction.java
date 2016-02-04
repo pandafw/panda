@@ -6,7 +6,7 @@ import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.annotation.At;
 import panda.wing.auth.Auth;
-import panda.wing.constant.AC;
+import panda.wing.constant.APP;
 import panda.wing.constant.AUTH;
 import panda.wing.constant.VC;
 import panda.wing.entity.Template;
@@ -36,7 +36,7 @@ public class TemplateEditExAction extends TemplateEditAction {
 	}
 	
 	private void addReloadMessage() {
-		addApplicationMessage(AC.TEMPLATE_LOAD_DATE);
+		addApplicationMessage(APP.TEMPLATE_LOAD_DATE);
 	}
 
 	@Override

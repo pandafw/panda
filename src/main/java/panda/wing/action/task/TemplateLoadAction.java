@@ -4,7 +4,7 @@ import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.wing.action.BaseLoadAction;
 import panda.wing.auth.Auth;
-import panda.wing.constant.AC;
+import panda.wing.constant.APP;
 import panda.wing.constant.AUTH;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 
@@ -15,7 +15,7 @@ public class TemplateLoadAction extends BaseLoadAction {
 	protected AppFreemarkerTemplateLoader aftLoader;
 	
 	public TemplateLoadAction() {
-		super(AC.TEMPLATE_LOAD_DATE);
+		super(APP.TEMPLATE_LOAD_DATE);
 	}
 	
 	@Override

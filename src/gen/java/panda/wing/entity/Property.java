@@ -17,7 +17,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -113987456L;
+	private static final long serialVersionUID = -1882290148L;
 
 	/**
 	 * Constructor
@@ -37,7 +37,7 @@ public class Property extends SUBean implements Serializable {
 	public static final String VALUE = "value";
 	public static final String MEMO = "memo";
 
-	public static final String[] COLUMNS = new String[] {
+	public static final String[] _COLUMNS_ = new String[] {
 			ID,
 			CLAZZ,
 			LANGUAGE,

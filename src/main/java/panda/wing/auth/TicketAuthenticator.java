@@ -17,7 +17,10 @@ public class TicketAuthenticator extends UserAuthenticator {
 		if (u != null) {
 			return u;
 		}
-		return authHelper.getTicketUser(ac);
+
+		u = authHelper.getTicketUser(ac);
+		authHelper.saveUserToSession(ac, u);
+		return u;
 	}
 	
 	@Override

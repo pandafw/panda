@@ -3,7 +3,7 @@ package panda.wing.constant;
 /**
  * Application Container Constants
  */
-public interface AC {
+public interface APP {
 	
 	/**
 	 * PROPERTY_LOAD_DATE = "property.load.date";
