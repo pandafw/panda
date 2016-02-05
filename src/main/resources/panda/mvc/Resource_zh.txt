@@ -59,8 +59,7 @@ servlet-error-title-500=服务器内部错误发生,网页无法显示。
 servlet-error-title-503=服务器超负荷,网页无法显示。
 servlet-error-message-404=指定的网页不存在。
 servlet-error-message-403=没有权限访问指定的网页。
-servlet-error-message-500=服务器内部错误，无法显示指定的网页。\n\
-请按F5键刷新画面，如果持续发生错误，请向网站管理人员汇报错误。
+servlet-error-message-500=服务器内部错误，无法显示指定的网页。
 servlet-error-message-503=服务器超负荷，无法显示指定的网页。\n\
 请稍稍等待片刻之后重新访问网站。
 servlet-error-request-url=请求网页: <span class="request-url">${top}</span>

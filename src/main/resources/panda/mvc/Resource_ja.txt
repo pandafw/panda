@@ -61,8 +61,7 @@ servlet-error-title-500=サーバー内部処理エラー
 servlet-error-title-503=サーバー過負荷
 servlet-error-message-404=該当ページが存在していません。
 servlet-error-message-403=該当ページにアクセスする権限がありません。
-servlet-error-message-500=サーバー内部処理エラーが発生しているため、該当ページが表示できません。\n\
-F5キーで画面リフレッシュをして、同じエラーが表示される場合、サイト管理者に連絡してください。
+servlet-error-message-500=サーバー内部処理エラーが発生しているため、該当ページが表示できません。
 servlet-error-message-503=サーバー過負荷のため、該当ページが表示できません。\n\
 しばらくお待ちしてから、再度アクセスしてください。
 servlet-error-request-url=リクエスト: <span class="request-url">${top}</span>
