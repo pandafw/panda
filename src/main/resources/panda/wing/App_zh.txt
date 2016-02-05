@@ -16,26 +16,31 @@ navi-help-termsofuse=使用条款
 navi-help-payment=付款方式
 navi-help-ship=关于送货
 
-navi-user=我的账户
+navi-user=会员中心
 navi-user-register=会员注册
 navi-user-login=登入
 navi-user-logout=登出
 navi-user-signin=登入
 navi-user-signout=登出
 
-navi-user-account=用户信息变更
-navi-user-passwordchange=密码变更
-navi-user-profile=用户信息变更
+navi-user-account=我的账户
+navi-user-password-change=密码变更
+navi-user-password-reset=密码重置
+navi-user-profile=用户信息
+navi-user-profile-edit=用户信息变更
+navi-user-usagelog=使用记录
 
 
 navi-admin=管理中心
-navi-admin-account=用户管理
-navi-admin-account-user=用户
-navi-admin-account-usergroup=用户组
+navi-admin-account=账户管理
+navi-admin-account-user=用户管理
+navi-admin-account-usergroup=用户组管理
+navi-admin-account-company=公司管理
 
 navi-admin-site=网站管理
-navi-admin-site-category=类别
-navi-admin-site-index=检索索引
+navi-admin-site-category=类别管理
+navi-admin-site-contents=内容管理
+navi-admin-site-index=检索索引管理
 
 navi-super=系统管理
 navi-super-loadtask=应用缓存

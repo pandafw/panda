@@ -29,19 +29,24 @@ navi-user-logout=Logout
 navi-user-signin=Sign in
 navi-user-signout=Sign out
 
-navi-user-account=Account
-navi-user-passwordchange=Password change
+navi-user-account=My Account
+navi-user-password-change=Password Change
+navi-user-password-reset=Password Reset
 navi-user-profile=Profile
+navi-user-profile-edit=Profile Edit
+navi-user-usagelog=Usage Log
 
 
 navi-admin=Administration
-navi-admin-account=User Manage
+navi-admin-account=Account
 navi-admin-account-user=User
 navi-admin-account-usergroup=User Group
+navi-admin-account-company=Company
 
 navi-admin-site=Site
 navi-admin-site-category=Category
-navi-admin-site-index=Search Index
+navi-admin-site-contents=Contents
+navi-admin-site-index=Index
 
 navi-super=System
 navi-super-loadtask=Cache
