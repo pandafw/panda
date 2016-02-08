@@ -80,7 +80,7 @@ public class CDate extends ContextBean {
 	public static final String DATE_TIMEZONE = "date-timezone";
 	
 	/**
-	 * DATE_FORMAT_DEFAULT = "boolean-format";
+	 * DATE_FORMAT_DEFAULT = "date-format";
 	 */
 	public static final String DATE_FORMAT_DEFAULT = "date-format";
 

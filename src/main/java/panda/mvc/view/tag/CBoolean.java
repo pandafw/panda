@@ -68,17 +68,17 @@ public class CBoolean extends ContextBean {
 	 */
 	public boolean end(Writer writer, String body) {
 		if (value != null) {
-			if (pattern != null) {
+			if (pattern == null) {
 				TextProvider tp = context.getText();
 	
 				if (Strings.isNotEmpty(format)) {
-					pattern = tp.getText(BOOLEAN_FORMAT_PREFIX + format, (String) null);
+					pattern = tp.getText(BOOLEAN_FORMAT_PREFIX + format, (String)null);
 					if (pattern == null) {
 						pattern = format;
 					}
 				}
 				else {
-					pattern = tp.getText(BOOLEAN_FORMAT_DEFAULT, (String) null);
+					pattern = tp.getText(BOOLEAN_FORMAT_DEFAULT, (String)null);
 				}
 			}
 			

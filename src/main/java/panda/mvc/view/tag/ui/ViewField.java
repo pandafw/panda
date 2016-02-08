@@ -5,6 +5,7 @@ import panda.ioc.annotation.IocBean;
 
 @IocBean(singleton=false)
 public class ViewField extends ListUIBean {
+	protected String fieldValue;
 	protected String format;
 	protected String icon;
 
@@ -34,5 +35,19 @@ public class ViewField extends ListUIBean {
 	 */
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	/**
+	 * @return the fieldValue
+	 */
+	public String getFieldValue() {
+		return fieldValue;
+	}
+
+	/**
+	 * The actual HTML value attribute of the checkbox
+	 */
+	public void setFieldValue(String fieldValue) {
+		this.fieldValue = fieldValue;
 	}
 }

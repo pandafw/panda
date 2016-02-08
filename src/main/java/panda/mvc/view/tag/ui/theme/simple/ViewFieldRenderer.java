@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import panda.lang.Iterators;
 import panda.lang.Objects;
+import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
 import panda.mvc.view.tag.ui.ViewField;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
@@ -37,7 +38,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			 .id(tag)
 			 .name(tag)
 			 .disabled(tag)
-			 .value(formatValue(tag));
+			 .value(hiddenValue(tag));
 			xtag("input", a);
 		}
 		
@@ -77,5 +78,13 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			write("&nbsp;");
 		}
 		etag("p");
+	}
+	
+	private String hiddenValue(ViewField tag) {
+		if (Strings.isNotEmpty(tag.getFieldValue())) {
+			return tag.getFieldValue();
+		}
+
+		return formatValue(tag);
 	}
 }

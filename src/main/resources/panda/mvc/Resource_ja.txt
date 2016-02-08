@@ -1,6 +1,6 @@
 #########################################################################
 #boolean
-boolean-format=0#×|1#○
+boolean-format=top ? "○" : "×"
 
 #date
 date-format=yyyy/MM/dd HH:mm:ss.SSS
@@ -153,7 +153,7 @@ validation-zipcode=郵便番号を"123-4567"の形式で入力してください
 
 
 #error messages
-error-input=入力した内容が正しくありません。
+error-input=正しく入力されていない項目、または未入力の項目があります。
 error-input-detail=エラー詳細
 error-data-notfound=対象データが見つかりません。
 error-data-duplicate=該当データが既に登録されています。\n${top}
@@ -173,7 +173,6 @@ error-sendmail=<${top}>にメール送信が失敗しました。\nメールア�
 error-file-upload=ファイル転送失敗しました。
 
 #info messages
-message-cart-empty=ショッピングカートの中に商品がありません。
 message-file-uploading=ファイル転送中...
 message-processing=処理中...
 message-processed=処理完了。

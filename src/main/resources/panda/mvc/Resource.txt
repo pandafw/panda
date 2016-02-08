@@ -25,14 +25,13 @@ list_popup-items-maximum=300
 #1M
 cookie-state-expire=2592000
 
-#boolean - ChoiceFormat
-boolean-format=0#NO|1#YES
-#boolean-format-check=0#□|1#✔
-boolean-format-check=0#''<i class="fa fa-square-o"></i>''|1#''<i class="fa fa-check-square-o"></i>''
+#boolean
+boolean-format=top ? "TRUE" : "FALSE"
+boolean-format-yesno=top : "YES" : "NO"
+boolean-format-check=top ? '<i class="fa fa-check-square-o"></i>' : '<i class="fa fa-square-o"></i>'
+#boolean-format-check=top ? "✔" : "□"
+#boolean-format-check=top ? '<input type="checkbox" class="checkbox" checked disabled>' : '<input type="checkbox" class="checkbox" disabled>'
 
-#boolean - OGNL expression
-#boolean-format=top ? "TRUE" : "FALSE"
-#boolean-format-check=top ? ''<input type="checkbox" class="checkbox" checked disabled>'' : ''<input type="checkbox" class="checkbox" disabled>''
 
 #date
 date-format=yyyy-MM-dd HH:mm:ss.SSS
@@ -55,9 +54,9 @@ password-format=******
 #regex
 regex-numeric=\\d+
 regex-password=\\w+
-regex-telnumber='\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}'
-regex-faxnumber='\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}'
-regex-zipcode='\\d{3}-*\\d{4}'
+regex-telnumber=\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}
+regex-faxnumber=\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}
+regex-zipcode=\\d{3}-*\\d{4}
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/${top.total}
@@ -246,7 +245,6 @@ error-file-upload=Failed to upload file.
 message-file-uploading=File uploading...
 message-processing=Processing...
 message-processed=Process completed.
-message-cart-empty=There is no items in the cart。
 
 
 #tooltip

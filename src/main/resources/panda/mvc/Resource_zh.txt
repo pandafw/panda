@@ -1,6 +1,6 @@
 #########################################################################
 #boolean
-boolean-format=0#否|1#是
+boolean-format-yesno=top ? "是" : "否"
 
 #date
 date-format=yyyy-MM-dd HH:mm:ss.SSS
@@ -173,7 +173,6 @@ error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址[${top}]�
 error-file-upload=文件上传失敗。
 
 #info messages
-message-cart-empty=购物篮里面没有商品。
 message-file-uploading=文件上传中...
 message-processing=处理中...
 message-processed=处理成功。
