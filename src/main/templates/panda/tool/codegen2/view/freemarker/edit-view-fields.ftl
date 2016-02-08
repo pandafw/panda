@@ -106,7 +106,7 @@
 				format="datetime"
 			</#if>
 			<#list tag.paramList as tp>
-				<#if tp.name == "list" || tp.name == "listKey" || tp.name == "listValue">
+				<#if tp.name == "list" || tp.name == "listKey" || tp.name == "listValue" || tp.name == "fieldValue">
 				${tp.name}="${tp.value}"
 				</#if>
 			</#list>
