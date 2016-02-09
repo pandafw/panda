@@ -2,18 +2,15 @@ package panda.tpl.ftl;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import freemarker.cache.StatefulTemplateLoader;
 import freemarker.cache.TemplateLoader;
 
 public class MultiTemplateLoader implements StatefulTemplateLoader {
-	private final List<TemplateLoader> loaders = new ArrayList<TemplateLoader>();
-	private final Map<String, TemplateLoader> cache = new HashMap<String, TemplateLoader>();
+	private final List<TemplateLoader> loaders = new CopyOnWriteArrayList<TemplateLoader>();
 
 	/**
 	 * Creates a new multi template Loader that will use the specified loaders.
@@ -34,39 +31,10 @@ public class MultiTemplateLoader implements StatefulTemplateLoader {
 	}
 	
 	public Object findTemplateSource(String name) throws IOException {
-		// Use soft affinity - give the loader that last found this
-		// resource a chance to find it again first.
-		TemplateLoader lastLoader = cache.get(name);
-		if (lastLoader == null) {
-			synchronized(cache) {
-				lastLoader = cache.get(name);
-				if (lastLoader == null) {
-					return findSource(name);
-				}
-			}
-		}
-
-		Object source = lastLoader.findTemplateSource(name);
-		if (source != null) {
-			return new MultiSource(source, lastLoader);
-		}
-
-		// Resource not found
-		return null;
-	}
-
-	private MultiSource findSource(String name) throws IOException {
-		// If there is no affine loader, or it could not find the resource
-		// again, try all loaders in order of appearance. If any manages
-		// to find the resource, then associate it as the new affine loader
-		// for this resource.
-		synchronized (loaders) {
-			for (TemplateLoader loader : loaders) {
-				Object source = loader.findTemplateSource(name);
-				if (source != null) {
-					cache.put(name, loader);
-					return new MultiSource(source, loader);
-				}
+		for (TemplateLoader loader : loaders) {
+			Object source = loader.findTemplateSource(name);
+			if (source != null) {
+				return new MultiSource(source, loader);
 			}
 		}
 		
@@ -86,15 +54,9 @@ public class MultiTemplateLoader implements StatefulTemplateLoader {
 	}
 
 	public void resetState() {
-		synchronized (cache) {
-			cache.clear();
-		}
-
-		synchronized (loaders) {
-			for (TemplateLoader loader : loaders) {
-				if (loader instanceof StatefulTemplateLoader) {
-					((StatefulTemplateLoader)loader).resetState();
-				}
+		for (TemplateLoader loader : loaders) {
+			if (loader instanceof StatefulTemplateLoader) {
+				((StatefulTemplateLoader)loader).resetState();
 			}
 		}
 	}
