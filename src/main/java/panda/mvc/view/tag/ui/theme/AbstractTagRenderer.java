@@ -1,13 +1,5 @@
 package panda.mvc.view.tag.ui.theme;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -20,7 +12,14 @@ import panda.mvc.view.tag.ui.Select;
 import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.TimePicker;
 import panda.mvc.view.tag.ui.UIBean;
-import panda.mvc.view.tag.ui.ViewField;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public abstract class AbstractTagRenderer<T extends UIBean> implements TagRenderer {
 	protected ActionContext context;
@@ -440,47 +439,28 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return context.getVars().get(key);
 	}
 
+	/**
+	 * format and escape value
+	 */
+	public String formatValue(Object v) {
+		return formatValue(v, null, null);
+	}
+
+	/**
+	 * format and escape value
+	 */
 	public String formatValue(Object v, String format) {
 		return formatValue(v, format, null);
 	}
 	
+	/**
+	 * format and escape value
+	 */
 	public String formatValue(Object value, String format, String escape) {
 		if (value != null) {
 			Property p = newTag(Property.class);
 			p.setValue(value);
 			p.setFormat(format);
-			if (escape != null) {
-				p.setEscape(escape);
-			}
-			return p.formatValue();
-		}
-		return "";
-	}
-	
-	public String formatValue(TextField tf) {
-		return formatValue(tf, null);
-	}
-	
-	public String formatValue(TextField tf, String escape) {
-		return formatValue(tf.getValue(), tf.getFormat(), escape);
-	}
-	
-	public String formatValue(ViewField tf) {
-		return formatValue(tf, null);
-	}
-	
-	public String formatValue(ViewField tf, String escape) {
-		return formatValue(tf.getValue(), tf.getFormat(), escape);
-	}
-
-	public String escapeValue(Object value) {
-		return escapeValue(value, null);
-	}
-	
-	public String escapeValue(Object value, String escape) {
-		if (value != null) {
-			Property p = newTag(Property.class);
-			p.setValue(value);
 			if (escape != null) {
 				p.setEscape(escape);
 			}

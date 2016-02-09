@@ -24,17 +24,17 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 		if (Iterators.isIterable(value)) {
 			for (Object item : Iterators.asIterable(value)) {
 				a = new Attributes();
-				a.add("type", "hidden")
+				a.type("hidden")
 				 .id(tag)
 				 .name(tag)
 				 .disabled(tag)
-				 .add("value", formatValue(item, tag.getFormat()), true);
+				 .value(tag.castString(item, tag.getFormat()));
 				xtag("input", a);
 			}
 		}
 		else {
 			a = new Attributes();
-			a.add("type", "hidden")
+			a.type("hidden")
 			 .id(tag)
 			 .name(tag)
 			 .disabled(tag)
@@ -67,7 +67,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 				}
 			}
 			else {
-				body.append(formatValue(tag));
+				body.append(formatValue(tag.getValue(), tag.getFormat(), tag.getEscape()));
 			}
 		}
 		
@@ -85,6 +85,6 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			return tag.getFieldValue();
 		}
 
-		return formatValue(tag);
+		return tag.castString(tag.getValue(), tag.getFormat());
 	}
 }

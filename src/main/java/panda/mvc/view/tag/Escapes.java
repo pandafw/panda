@@ -1,8 +1,14 @@
 package panda.mvc.view.tag;
 
 import panda.lang.StringEscapes;
+import panda.lang.Strings;
 
 public class Escapes {
+	/**
+	 * ESCAPE_NONE = "";
+	 */
+	public static final String ESCAPE_NONE = "";
+
 	/**
 	 * ESCAPE_HTML = "html";
 	 */
@@ -29,24 +35,23 @@ public class Escapes {
 	public static final String ESCAPE_XML = "xml";
 	
 	public static String escape(String value, String escape) {
-		String result = value;
-		if (value != null) {
-			if (ESCAPE_HTML.equals(escape)) {
-				result = StringEscapes.escapeHtml(result);
-			}
-			else if (ESCAPE_PHTML.equals(escape)) {
-				result = StringEscapes.escapePhtml(result);
-			}
-			else if (ESCAPE_JAVASCRIPT.equals(escape)) {
-				result = StringEscapes.escapeJavaScript(result);
-			}
-			else if (ESCAPE_CSV.equals(escape)) {
-				result = StringEscapes.escapeCsv(result);
-			}
-			else if (ESCAPE_XML.equals(escape)) {
-				result = StringEscapes.escapeXml(result);
-			}
+		if (Strings.isEmpty(value) || Strings.isEmpty(escape)) {
+			return value;
 		}
-		return result;
+
+		switch (escape.charAt(0)) {
+		case 'h':
+			return StringEscapes.escapeHtml(value);
+		case 'p':
+			return StringEscapes.escapePhtml(value);
+		case 'j':
+			return StringEscapes.escapeJavaScript(value);
+		case 'c':
+			return StringEscapes.escapeCsv(value);
+		case 'x':
+			return StringEscapes.escapeXml(value);
+		default:
+			return value;
+		}
 	}
 }

@@ -28,13 +28,13 @@ public class TextAreaRenderer extends AbstractEndRenderer<TextArea> {
 			.maxlength(tag)
 			.title(tag)
 			.placeholder(tag)
-			.addIfExists("layout", tag.getLayout())
+			.data("layout", tag.getLayout())
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);
 
 		stag("textarea", attrs);
-		write(formatValue(tag));
+		write(formatValue(tag.getValue(), tag.getFormat()));
 		etag("textarea");
 	}
 }

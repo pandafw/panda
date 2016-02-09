@@ -5,9 +5,24 @@ import panda.ioc.annotation.IocBean;
 
 @IocBean(singleton=false)
 public class ViewField extends ListUIBean {
+	protected String escape;
 	protected String fieldValue;
 	protected String format;
 	protected String icon;
+
+	/**
+	 * @return the escape
+	 */
+	public String getEscape() {
+		return escape;
+	}
+
+	/**
+	 * @param escape the escape to set
+	 */
+	public void setEscape(String escape) {
+		this.escape = escape;
+	}
 
 	/**
 	 * @return the format

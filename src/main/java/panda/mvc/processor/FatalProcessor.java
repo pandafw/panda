@@ -5,7 +5,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
-import panda.mvc.view.HttpStatusView;
 import panda.servlet.HttpServlets;
 
 @IocBean
@@ -33,11 +32,9 @@ public class FatalProcessor extends ViewProcessor {
 				}
 			}
 
+			HttpServlets.safeReset(ac.getResponse());
 			try {
-				HttpServlets.saveServletException(ac.getRequest(), e);
-				HttpServlets.safeReset(ac.getResponse());
-				HttpStatusView.SERVER_ERROR.render(ac);
-				HttpServlets.clearServletException(ac.getRequest(), e);
+				HttpServlets.sendException(ac.getRequest(), ac.getResponse(), e);
 			}
 			catch (Throwable e3) {
 				log.error("Failed to send exception", e3);

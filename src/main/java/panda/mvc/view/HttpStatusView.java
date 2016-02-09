@@ -1,17 +1,14 @@
 package panda.mvc.view;
 
+import panda.lang.Exceptions;
+import panda.mvc.ActionContext;
+import panda.mvc.View;
+import panda.net.http.HttpException;
+import panda.net.http.HttpStatus;
+
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
-
-import panda.lang.Exceptions;
-import panda.lang.Strings;
-import panda.mvc.ActionContext;
-import panda.mvc.MvcConstants;
-import panda.mvc.View;
-import panda.mvc.processor.ViewProcessor;
-import panda.net.http.HttpException;
-import panda.net.http.HttpStatus;
 
 /**
  * 返回特定的响应码
@@ -45,16 +42,6 @@ public class HttpStatusView implements View {
 		Object err = ac.getError();
 		if (err instanceof HttpException) {
 			code = ((HttpException)err).getStatus();
-		}
-
-		String customView = ac.getIoc().getIfExists(String.class, MvcConstants.HTTP_STATUS_CUSTOM_VIEW);
-		if (Strings.isNotEmpty(customView)) {
-			View view = ViewProcessor.evalView(ac.getIoc(), customView);
-			if (view != null) {
-				res.setStatus(code);
-				view.render(ac);
-				return;
-			}
 		}
 
 		if (code >= 400) {

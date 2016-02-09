@@ -122,19 +122,19 @@ public class Csv extends Component {
 							Asserts.notEmpty(c.format.expression, "The expression of [" + c.name + "] is empty");
 							Object v = El.eval(c.format.expression, d);
 							if (v != null) {
-								Property p = context.getIoc().get(Property.class);
-								p.setValue(v);
-								p.setEscape(null);
-								value = p.formatValue();
+								value = castString(v);
+							}
+						}
+						else if (c.format != null) {
+							Object v = getBeanProperty(d, c.name);
+							if (v != null) {
+								value = castString(v, c.format.type);
 							}
 						}
 						else {
-							Object v = El.eval(c.name, d);
+							Object v = getBeanProperty(d, c.name);
 							if (v != null) {
-								Property p = context.getIoc().get(Property.class);
-								p.setValue(v);
-								p.setEscape(null);
-								value = p.formatValue();
+								value = castString(v);
 							}
 						}
 						line.add(value);

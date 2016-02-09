@@ -182,17 +182,11 @@ public class Property extends ContextBean {
 	}
 	
 	private String getStringValue() {
-		String av;
-		// exception: don't call findString(), since we don't want the
-		// expression parsed in this one case. it really
-		// doesn't make sense, in fact.
 		if (value != null) {
-			av = value.toString();
+			return castString(value);
 		}
-		else {
-			av = Strings.defaultString(findString(name));
-		}
-		return av;
+
+		return Strings.defaultString(findString(name));
 	}
 
 	private void write(Writer writer, String value) throws IOException {

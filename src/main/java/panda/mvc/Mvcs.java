@@ -3,15 +3,19 @@ package panda.mvc;
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
+import panda.cast.CastContext;
 import panda.cast.Castors;
 import panda.el.El;
 import panda.el.ElTemplate;
 import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
+
+import java.lang.reflect.Type;
 
 /**
  * Mvc 相关帮助函数
@@ -102,6 +106,47 @@ public abstract class Mvcs {
 		finally {
 			ac.pop();
 		}
+	}
+
+	/**
+	 * cast to string
+	 */
+	public static String castString(ActionContext ac, Object value) {
+		return castValue(ac, null, value, String.class, null);
+	}
+
+	/**
+	 * cast to string
+	 */
+	public static String castString(ActionContext ac, Object value, String format) {
+		return castValue(ac, null, value, String.class, format);
+	}
+
+	/**
+	 * cast value
+	 */
+	public static <T> T castValue(ActionContext ac, Object value, Type type, String format) {
+		return castValue(ac, null, value, type, format);
+	}
+
+	/**
+	 * cast value
+	 */
+	public static <T> T castValue(ActionContext ac, String name, Object value, Type type, String format) {
+		Castors cs = getCastors();
+		CastContext cc = cs.newCastContext();
+		
+		cc.setSkipCastError(true);
+		cc.setPrefix(name);
+		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.setFormat(format);
+		cc.setLocale(ac.getLocale());
+		
+		T o = cs.cast(value, type, cc);
+		if (Collections.isNotEmpty(cc.getErrors())) {
+			ac.addCastErrors(cc.getErrors());
+		}
+		return o;
 	}
 
 	/**

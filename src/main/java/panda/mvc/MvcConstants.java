@@ -50,8 +50,8 @@ public interface MvcConstants extends IocConstants {
 	/** The custom themes */
 	public static final String UI_CUSTOM_THEMES = "panda.ui.themes";
 
-	/** Customer Http Status View */
-	public static final String HTTP_STATUS_CUSTOM_VIEW = "panda.view.http.status";
+	/** Custom Servlet Error View */
+	public static final String SERVLET_ERROR_VIEW = "panda.view.servlet.error";
 
 	/** The locale domains */
 	public static final String LOCALE_DOMAINS = "panda.locale.domains";

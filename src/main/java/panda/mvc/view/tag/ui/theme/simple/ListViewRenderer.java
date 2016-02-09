@@ -1,5 +1,24 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
+import panda.bean.Beans;
+import panda.lang.Arrays;
+import panda.lang.Collections;
+import panda.lang.Iterators;
+import panda.lang.Strings;
+import panda.mvc.bean.Filter;
+import panda.mvc.bean.Queryer;
+import panda.mvc.util.PermissionProvider;
+import panda.mvc.view.tag.CUrl;
+import panda.mvc.view.tag.Escapes;
+import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.tag.ui.Form;
+import panda.mvc.view.tag.ui.ListView;
+import panda.mvc.view.tag.ui.ListView.ItemLink;
+import panda.mvc.view.tag.ui.Pager;
+import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
+import panda.mvc.view.tag.ui.theme.Attributes;
+import panda.mvc.view.tag.ui.theme.RenderingContext;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
@@ -11,25 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import panda.bean.Beans;
-import panda.lang.Arrays;
-import panda.lang.Collections;
-import panda.lang.Iterators;
-import panda.lang.Strings;
-import panda.mvc.bean.Filter;
-import panda.mvc.bean.Queryer;
-import panda.mvc.util.PermissionProvider;
-import panda.mvc.view.tag.CUrl;
-import panda.mvc.view.tag.ListColumn;
-import panda.mvc.view.tag.Property;
-import panda.mvc.view.tag.ui.Form;
-import panda.mvc.view.tag.ui.ListView;
-import panda.mvc.view.tag.ui.ListView.ItemLink;
-import panda.mvc.view.tag.ui.Pager;
-import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
-import panda.mvc.view.tag.ui.theme.Attributes;
-import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
@@ -184,7 +184,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						String d = id + "_f_" + k + "_v_" + i;
 						String n = p + k + "." + t + "vs";
 						for (Object v : vs) {
-							writeHidden(d, n, escapeValue(v));
+							writeHidden(d, n, v);
 						}
 					}
 				}
@@ -204,10 +204,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 	
 	private void writeHidden(String id, String name, Object value, boolean disabled) throws IOException {
 		Attributes ha = new Attributes();
-		ha.add("type", "hidden")
-		  .add("id", id)
-		  .add("name", name)
-		  .add("value", value, false)
+		ha.type("hidden")
+		  .id(id)
+		  .name(name)
+		  .value(value)
 		  .disabled(disabled);
 		xtag("input", ha);
 	}
@@ -941,11 +941,11 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					else {
 						if (c.value) {
 							Attributes ha = new Attributes();
-							ha.add("type", "hidden")
-							  .add("class", "p-lv-cv" + (c.pkey ? " p-lv-ck" : ""))
-							  .add("name", c.name)
-							  .addIfTrue("disabled", !c.enabled)
-							  .add("value", escapeValue(getBeanProperty(d, c.name)), false);
+							ha.type("hidden")
+							  .cssClass("p-lv-cv" + (c.pkey ? " p-lv-ck" : ""))
+							  .name(c.name)
+							  .disabled(!c.enabled)
+							  .value(tag.castString(getBeanProperty(d, c.name)));
 							xtag("input", ha);
 						}
 						
@@ -976,28 +976,22 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 									}
 								}
 								else if ("expression".equals(c.format.type)) {
-									Object v = tag.findValue(c.format.expression, d);
+									String v = tag.findString(c.format.expression, d);
 									if (v != null) {
-										String escape = c.format.escape;
-										write(escapeValue(v, escape));
+										write(Escapes.escape(v, c.format.escape));
 									}
 								}
 								else {
 									Object v = getBeanProperty(d, c.name);
 									if (v != null) {
-										Property p = newTag(Property.class);
-										p.setValue(v);
-										p.setFormat(c.format.type);
-										write(p.formatValue());
+										write(formatValue(v, c.format.type));
 									}
 								}
 							}
 							else {
 								Object v = getBeanProperty(d, c.name);
 								if (v != null) {
-									Property p = newTag(Property.class);
-									p.setValue(v);
-									write(p.formatValue());
+									write(formatValue(v));
 								}
 							}
 

@@ -1,13 +1,5 @@
 package panda.mvc.view.tag;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.cast.CastException;
@@ -18,6 +10,14 @@ import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Base class to extend for UI components.
@@ -194,14 +194,28 @@ public class Component {
 		return Mvcs.findValue(expr, context, arg);
 	}
 
+	public String castString(Object o) {
+		if (o == null) {
+			return null;
+		}
+		return Mvcs.castString(context, o);
+	}
+
+	public String castString(Object o, String format) {
+		if (o == null) {
+			return null;
+		}
+		return Mvcs.castString(context, o, format);
+	}
+
 	public String findString(String expr) {
 		Object o = findValue(expr);
-		return o == null ? null : o.toString();
+		return castString(o);
 	}
 	
 	public String findString(String expr, Object arg) {
 		Object o = findValue(expr, arg);
-		return o == null ? null : o.toString();
+		return castString(o);
 	}
 	
 	public <T> T newComponent(Class<T> cls) {

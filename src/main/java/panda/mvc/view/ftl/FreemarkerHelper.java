@@ -1,16 +1,17 @@
 package panda.mvc.view.ftl;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.Writer;
-
 import panda.io.stream.StringBuilderWriter;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.Writer;
+
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -157,7 +158,7 @@ public class FreemarkerHelper {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void evalTemplate(Writer writer, String string, Object model) throws TemplateException, IOException {
-		Template template = new Template("string", new StringReader(string), fm.getConfiguration());
+		Template template = initTemplate(string);
 		execTemplate(writer, template, model);
 	}
 	
@@ -184,5 +185,16 @@ public class FreemarkerHelper {
 		StringBuilderWriter sw = new StringBuilderWriter();
 		evalTemplate(sw, string, model);
 		return sw.toString();
+	}
+
+	/**
+	 * initialize template
+	 * @param string
+	 * @return Template
+	 * @throws TemplateException if a template error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	public Template initTemplate(String string) throws TemplateException, IOException {
+		return new Template("string", new StringReader(string), fm.getConfiguration());
 	}
 }

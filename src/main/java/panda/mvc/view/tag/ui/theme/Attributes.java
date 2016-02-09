@@ -334,7 +334,7 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes value(String value) {
+	public Attributes value(Object value) {
 		addIfExists("value", value);
 		return this;
 	}
@@ -345,7 +345,7 @@ public class Attributes {
 	}
 
 	public Attributes formatValue(AbstractTagRenderer tr, TextField tf) {
-		add("value", tr.formatValue(tf), false);
+		add("value", tr.formatValue(tf.getValue(), tf.getFormat()), false);
 		return this;
 	}
 
