@@ -12,6 +12,11 @@ public interface AppConstants extends MvcConstants {
 	/** The load task keys */
 	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
 
+	/** The secret */
+	public static final String PANDA_SECRET_ENCRYPT_KEY = "panda.secret.encrypt.key";
+	
+	public static final String PANDA_SECRET_ENCRYPT_CIPHER = "panda.secret.encrypt.cipher";
+	
 	/** The authenticate */
 	public static final String PANDA_AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
 	
@@ -26,10 +31,6 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_AUTH_SECURE_USER_AGE = "panda.auth.secure.session.age";
 	
 	public static final String PANDA_AUTH_USER_TYPE = "panda.auth.user.type";
-	
-	public static final String PANDA_AUTH_TICKET_ENC_KEY = "panda.auth.ticket.encode.key";
-	
-	public static final String PANDA_AUTH_TICKET_ENC_CIPHER = "panda.auth.ticket.encode.cipher";
 	
 	public static final String PANDA_AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";
 }

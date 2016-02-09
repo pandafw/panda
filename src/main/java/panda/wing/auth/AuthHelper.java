@@ -41,15 +41,15 @@ public class AuthHelper {
 	protected Class userType;
 
 	/**
-	 * ticket encode key
+	 * encrypt key
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_TICKET_ENC_KEY, required=false)
+	@IocInject(value=AppConstants.PANDA_SECRET_ENCRYPT_KEY, required=false)
 	protected String encKey = Encrypts.DEFAULT_KEY;
 	
 	/**
-	 * ticket encode cipher
+	 * encrypt cipher
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_TICKET_ENC_CIPHER, required=false)
+	@IocInject(value=AppConstants.PANDA_SECRET_ENCRYPT_CIPHER, required=false)
 	protected String encCipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
