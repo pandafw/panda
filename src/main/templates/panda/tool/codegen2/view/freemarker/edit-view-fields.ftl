@@ -34,7 +34,7 @@
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
 			</#if></#list>
-			<#if f.editTag.hasParamStartsWithAny("+_")>
+			<#if f.editTag.hasParamStartsWithAny("%+")>
 			>
 				<#assign tab = ""/>
 				<#if ui.templates?seq_contains("update") 
@@ -50,9 +50,9 @@
 				<#list f.editTag.paramList as tp>
 					<#if (ui.templates?seq_contains("insert") || ui.templates?seq_contains("copy")) 
 						&& (tp.name == '+defaultLink' || tp.name == '_defaultText')>
-					<#elseif tp.name?starts_with('+')>
+					<#elseif tp.name?starts_with('%')>
 				${tab}${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
-					<#elseif tp.name?starts_with('_')>
+					<#elseif tp.name?starts_with('+')>
 				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
@@ -74,16 +74,13 @@
 				${tp.name}="${tp.value}"
 			</#if></#list>
 			<#if tag.hasParamStartsWith("_")>
-			>
 				<#list tag.paramList as tp>
 					<#if tp.name?starts_with('_')>
-				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
+				${tp.name?substring(1)}="${tp.value}"
 					</#if>
 				</#list>
-			${s}/@${tag.name}>
-			<#else>
-			/>
 			</#if>
+			/>
 		<#else>
 			<#assign _format = ""/>
 			<#list tag.paramList as tp>
@@ -111,16 +108,13 @@
 				</#if>
 			</#list>
 			<#if tag.hasParamStartsWith("_")>
-			>
 				<#list tag.paramList as tp>
 					<#if tp.name?starts_with('_')>
-				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
+				${tp.name?substring(1)}="${tp.value}"
 					</#if>
 				</#list>
-			${s}/@p.viewfield>
-			<#else>
-			/>
 			</#if>
+			/>
 		</#if>
 	</#if>
 	<#if f.after?has_content>

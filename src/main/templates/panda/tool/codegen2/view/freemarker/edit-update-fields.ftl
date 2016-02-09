@@ -55,11 +55,11 @@
 			<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
-			<#if f.editTag.hasParamStartsWithAny("+_")>
+			<#if f.editTag.hasParamStartsWithAny("%+")>
 			>
 				<#list f.editTag.paramList as tp>
 					<#assign tab = ""/>
-					<#if f.editTag.name?ends_with(".uploader") && tp.name == '+defaultLink'>
+					<#if f.editTag.name?ends_with(".uploader") && tp.name == '%defaultLink'>
 						<#assign tab = "\t"/>
 						<#if f.actionField>
 				${s}#if a.${f.name}?? && a.${f.name}.exist>
@@ -67,9 +67,9 @@
 				${s}#if r?? && r.${f.name}?? && r.${f.name}.exist>
 						</#if>
 					</#if>
-					<#if tp.name?starts_with('+')>
+					<#if tp.name?starts_with('%')>
 				${tab}${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
-					<#elseif tp.name?starts_with('_')>
+					<#elseif tp.name?starts_with('+')>
 				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 					<#if tab?has_content>

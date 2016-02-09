@@ -19,16 +19,13 @@
 				label="%{getText('${ui.name}-${f.name}', '')}"
 				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
 			<#if f.editTag.hasParamStartsWith("_")>
-			>
 			<#list f.editTag.paramList as tp>
 				<#if tp.name?starts_with('_')>
-					${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
+				${tp.name?substring(1)}="${tp.value}"
 				</#if>
 			</#list>
-			${s}/@p.textfield>
-			<#else>
-			/>
 			</#if>
+			/>
 		<#elseif f.editTag??>
 			${s}@${f.editTag.name}
 			<#if f.editTag.cssClass??>
@@ -43,17 +40,7 @@
 <#if !(f.editTag.name?ends_with(".viewfield"))>
 				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
 </#if>
-			<#if f.editTag.hasParamStartsWith("_")>
-			>
-			<#list f.editTag.paramList as tp>
-				<#if tp.name?starts_with('_')>
-					${s}@s.param name="${tp.name?substring(1)}">${tp.value}${s}/@s.param>
-				</#if>
-			</#list>
-			${s}/@${f.editTag.name}>
-			<#else>
 			/>
-			</#if>
 		</#if>
 		<#if f.after?has_content>
 			${f.after}
