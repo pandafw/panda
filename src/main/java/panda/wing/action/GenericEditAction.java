@@ -621,6 +621,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		return true;
 	}
 
+	/**
+	 * checkOnInput (Insert & Update)
+	 * @param data data
+	 * @param srcData source data (null on insert)
+	 * @return true if do something success
+	 */
+	protected boolean checkOnInput(T data, T srcData) {
+		Asserts.notNull(data, "data is null");
+		return true;
+	}
+
 	//------------------------------------------------------------
 	// insert methods
 	//------------------------------------------------------------
@@ -633,6 +644,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		boolean c = true;
 
 		if (!checkCommon(data, null)) {
+			c = false;
+			if (checkAbortOnError) {
+				return false;
+			}
+		}
+		
+		if (!checkOnInput(data, null)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -710,6 +728,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		boolean c = true;
 
 		if (!checkCommon(data, srcData)) {
+			c = false;
+			if (checkAbortOnError) {
+				return false;
+			}
+		}
+		
+		if (!checkOnInput(data, null)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;

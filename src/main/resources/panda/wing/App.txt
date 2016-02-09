@@ -61,11 +61,6 @@ navi-super-eleval=EL Tool
 navi-super-sqlexec=SQL Tool
 
 
-#reload
-message-property-updated=The property has been updated.\nPlease <a href="${base}/admin/loadtask">reload property</a> to apply the changes.
-message-resource-updated=The resource has been updated.\nPlease <a href="${base}/admin/loadtask">reload resource</a> to apply the changes.
-message-template-updated=The template has been updated.\nPlease <a href="${base}/admin/loadtask">reload template</a> to apply the changes.
-
 #label
 label-page-size=Page Size:
 label-sort=Sort:

@@ -84,7 +84,7 @@
 					<param name="list" value="%{consts.localeCountryMap}"/>
 				</editTag>
 				<validator type="el" message="validation-locale-invalid">
-					<param name="el" value="a.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
+					<param name="el" value="assist.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
 				</validator>
 			</field>
 			<field name="source">
@@ -92,6 +92,7 @@
 					<param name="maxlength" value="50000"/>
 					<param name="cols" value="${tag.textarea.cols}"/>
 					<param name="rows" value="20"/>
+					<param name="_escape" value="phtml"/>
 				</editTag>
 			</field>
 		</input>
@@ -103,10 +104,10 @@
 		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="resource" auth="${action.auth}" path="${action.context}" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
 	</action>
-	<action name="resource" extend="action.Resource" actionClass="${action.package}.resource.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="resource" auth="${action.auth}" path="${action.context}" extend="action.Resource" actionClass="${action.package}.resource.ResourceEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>

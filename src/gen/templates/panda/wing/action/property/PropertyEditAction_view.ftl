@@ -56,6 +56,7 @@
 			<@p.viewfield
 				key="value"
 				value="%{r.value}"
+				escape="phtml"
 			/>
 	</#if>
 	<#if a.displayField("memo")>

@@ -50,6 +50,7 @@
 			<@p.viewfield
 				key="source"
 				value="%{r.source}"
+				escape="phtml"
 			/>
 	</#if>
 	<#if a.displayField("status")>

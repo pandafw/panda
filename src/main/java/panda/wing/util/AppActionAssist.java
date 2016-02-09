@@ -1,6 +1,7 @@
 package panda.wing.util;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,6 +11,7 @@ import panda.cast.Castors;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Locales;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
@@ -71,6 +73,22 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 */
 	public boolean isGaeSupport() {
 		return Systems.IS_OS_APPENGINE;
+	}
+
+	//--------------------------------------------------------------------------	
+	/**
+	 * isValidLocale (used by Property, Template, Resource Action)
+	 * @param language language
+	 * @param country country
+	 * @return true - if locale is valid
+	 */
+	public boolean isValidLocale(String language, String country) {
+		if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country)) {
+			if (!VC.LOCALE_ALL.equals(country)) {
+				return Locales.isAvailableLocale(new Locale(language, country));
+			}
+		}
+		return true;
 	}
 
 	//--------------------------------------------------------------------------	

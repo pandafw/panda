@@ -55,11 +55,6 @@ navi-super-eleval=EL工具
 navi-super-sqlexec=SQL工具
 
 
-#reload
-message-property-updated=「配置」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「配置」。
-message-resource-updated=「资源」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「资源」。
-message-template-updated=「模板」表里面的数据已经被变更。\n若要使变更有效、请<a href="${base}/admin/loadtask">重新加载</a>「模板」。
-
 #label
 label-page-size=显示件数：
 label-sort=排序：

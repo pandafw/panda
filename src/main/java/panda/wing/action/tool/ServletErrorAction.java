@@ -4,6 +4,7 @@ import panda.io.FileNames;
 import panda.lang.Numbers;
 import panda.mvc.annotation.At;
 import panda.mvc.view.FreemarkerView;
+import panda.mvc.view.ServletErrorView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.servlet.HttpServlets;
 import panda.wing.action.AbstractAction;
@@ -11,7 +12,7 @@ import panda.wing.action.AbstractAction;
 @At("/servlet-error")
 public class ServletErrorAction extends AbstractAction {
 
-	private static final String TPL = "/panda/mvc/view/servlet-error.ftl";
+	private static final String TPL = ServletErrorView.TPL;
 	
 	@At("(.*)$")
 	public Object execute(String error) {

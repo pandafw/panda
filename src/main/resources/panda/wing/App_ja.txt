@@ -55,11 +55,6 @@ navi-super-eleval=ELツール
 navi-super-sqlexec=SQLツール
 
 
-#reload
-message-property-updated=「プロパティ」のデータが変更されました。\n変更を有効するには、プロパティを<a href="${base}/admin/loadtask">リロード</a>してください。
-message-resource-updated=「リソース」のデータが変更されました。\n変更を有効するには、リソースを<a href="${base}/admin/loadtask">リロード</a>してください。
-message-template-updated=「テンプレート」のデータが変更されました。\n変更を有効するには、テンプレートを<a href="${base}/admin/loadtask">リロード</a>してください。
-
 #label
 label-page-size=表示件数：
 label-sort=並び順：

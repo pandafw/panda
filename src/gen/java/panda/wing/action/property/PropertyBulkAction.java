@@ -7,9 +7,13 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
 import panda.wing.action.GenericBulkAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.entity.Property;
 
-public abstract class PropertyBulkAction extends GenericBulkAction<Property> {
+@At("${super_context}/property")
+@Auth(AUTH.SUPER)
+public class PropertyBulkAction extends GenericBulkAction<Property> {
 
 	/**
 	 * Constructor

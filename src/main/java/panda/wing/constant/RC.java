@@ -166,21 +166,6 @@ public interface RC {
 	 */
 	public final static String MESSAGE_SUCCESS = "message-success";
 
-	/**
-	 * MESSAGE_PROPERTY_UPDATED = "message-property-updated";
-	 */
-	public final static String MESSAGE_PROPERTY_UPDATED = "message-property-updated";
-
-	/**
-	 * MESSAGE_RESOURCE_UPDATED = "message-resource-updated";
-	 */
-	public final static String MESSAGE_RESOURCE_UPDATED = "message-resource-updated";
-
-	/**
-	 * MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
-	 */
-	public final static String MESSAGE_TEMPLATE_UPDATED = "message-template-updated";
-
 	//------------------------------------------------------------
 	// SCENARIO MESSAGE PREFIX
 	//------------------------------------------------------------

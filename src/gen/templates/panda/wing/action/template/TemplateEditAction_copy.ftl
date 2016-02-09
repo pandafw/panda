@@ -59,7 +59,9 @@
 				maxlength="50000"
 				cols="60"
 				rows="20"
-			/>
+			>
+				<@p.param name="escape">phtml</@p.param>
+			</@p.textarea>
 	</#if>
 	<#if a.displayField("status")>
 			<@p.radio

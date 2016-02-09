@@ -9,9 +9,13 @@ import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.GenericEditAction;
+import panda.wing.auth.Auth;
+import panda.wing.constant.AUTH;
 import panda.wing.entity.Property;
 
-public abstract class PropertyEditAction extends GenericEditAction<Property> {
+@At("${super_context}/property")
+@Auth(AUTH.SUPER)
+public class PropertyEditAction extends GenericEditAction<Property> {
 
 	/**
 	 * Constructor
