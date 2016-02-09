@@ -235,6 +235,7 @@ button-save=保存
 button-search=检索
 button-selectAll=全部选择
 button-selectNone=取消选择
+button-send=送信
 button-shopping=继续购物
 button-signin=登录
 button-status=状态

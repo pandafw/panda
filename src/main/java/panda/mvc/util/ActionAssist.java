@@ -1,13 +1,5 @@
 package panda.mvc.util;
 
-import java.text.Format;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import panda.dao.query.Order;
 import panda.io.Files;
 import panda.ioc.Scope;
@@ -28,6 +20,13 @@ import panda.net.http.HttpStatus;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 import panda.servlet.filter.RequestLoggingFilter;
+
+import java.text.Format;
+import java.util.Calendar;
+import java.util.UUID;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 
 @IocBean(scope=Scope.REQUEST)
@@ -163,8 +162,22 @@ public class ActionAssist extends ActionSupport {
 	/**
 	 * @return system date
 	 */
-	public Date getSystemDate() {
-		return DateTimes.getDate();
+	public String getSystemDateTime() {
+		return DateTimes.datetimeFormat().format(DateTimes.getDate());
+	}
+
+	/**
+	 * @return system date
+	 */
+	public String getSystemDate() {
+		return DateTimes.dateFormat().format(DateTimes.getDate());
+	}
+
+	/**
+	 * @return system time
+	 */
+	public String getSystemTime() {
+		return DateTimes.timeFormat().format(DateTimes.getDate());
 	}
 
 	/**

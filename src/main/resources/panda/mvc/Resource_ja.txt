@@ -234,6 +234,7 @@ button-save=保存
 button-search=検索
 button-select-all=全選択
 button-select-none=全解除
+button-send=送信
 button-shopping=ショッピングを続ける
 button-signin=サインイン
 button-status=ステータス
