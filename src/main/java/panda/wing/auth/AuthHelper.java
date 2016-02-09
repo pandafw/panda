@@ -120,6 +120,15 @@ public class AuthHelper {
 		return (IUser)context.getRequest().getAttribute(REQ.USER);
 	}
 
+	//------------------------------------------------------
+	public String encrypt(String value) {
+		return Encrypts.encrypt(value, encKey, encCipher);
+	}
+	
+	public String decrypt(String value) {
+		return Encrypts.decrypt(value, encKey, encCipher);
+	}
+	
 	protected int getCookieAge(ActionContext ac, IUser user) {
 		return cookieAge;
 	}
@@ -157,7 +166,7 @@ public class AuthHelper {
 	 */
 	protected void saveUserToCookie(ActionContext context, Object user, int cookieAge) {
 		String ticket = Jsons.toJson(user);
-		String eticket = Encrypts.encrypt(ticket, encKey, encCipher);
+		String eticket = encrypt(ticket);
 		String cookiePath = context.getServlet().getContextPath() + "/";
 		
 		Cookie c = new Cookie(COOKIE.AUTH_TICKET, eticket);
@@ -227,7 +236,7 @@ public class AuthHelper {
 		
 		String ticket = c.getValue();
 		try {
-			ticket = Encrypts.decrypt(ticket, encKey, encCipher);
+			ticket = decrypt(ticket);
 			JsonDeserializer jd = new JsonDeserializer();
 			jd.setIgnoreMissingProperty(true);
 			jd.setIgnoreReadonlyProperty(true);

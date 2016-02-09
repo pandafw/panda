@@ -92,6 +92,15 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	}
 
 	//--------------------------------------------------------------------------	
+	public String encrypt(String value) {
+		return authHelper.encrypt(value);
+	}
+	
+	public String decrypt(String value) {
+		return authHelper.decrypt(value);
+	}
+	
+	//--------------------------------------------------------------------------	
 	/**
 	 * @return true if remote host is local network host
 	 */
