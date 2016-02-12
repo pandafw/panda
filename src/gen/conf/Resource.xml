@@ -131,7 +131,7 @@
 			<property name="source" label="Source"/>
 		</entity>
 		<action name="resource" title="Resource">
-			<property name="icon" label="fa fa-text-o"/>
+			<property name="icon" label="fa fa-file-text-o"/>
 		</action>
 	</resource>
 	<resource locale="ja">

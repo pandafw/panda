@@ -128,7 +128,7 @@
 			<property name="source" label="Source"/>
 		</entity>
 		<action name="template" title="Template">
-			<property name="icon" label="fa fa-code-o"/>
+			<property name="icon" label="fa fa-file-code-o"/>
 		</action>
 	</resource>
 	<resource locale="ja">

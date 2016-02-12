@@ -1,5 +1,5 @@
 title=Resource
 
-icon=fa fa-text-o
+icon=fa fa-file-text-o
 
 

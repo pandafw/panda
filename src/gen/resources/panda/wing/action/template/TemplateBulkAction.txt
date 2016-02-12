@@ -1,5 +1,5 @@
 title=Template
 
-icon=fa fa-code-o
+icon=fa fa-file-code-o
 
 
