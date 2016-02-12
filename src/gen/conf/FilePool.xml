@@ -96,7 +96,9 @@
 			<property name="date" label="Date"/>
 			<property name="flag" label="Flag"/>
 		</entity>
-		<action name="filepool" title="File Pool"/>
+		<action name="filepool" title="File Pool">
+			<property name="icon" label="fa fa-file-o"/>
+		</action>
 	</resource>
 	<resource locale="ja">
 		<entity name="panda.filepool.dao.DaoFileItem">

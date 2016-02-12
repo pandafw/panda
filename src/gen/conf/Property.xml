@@ -161,7 +161,9 @@
 			<property name="value" label="Value"/>
 			<property name="memo" label="Memo"/>
 		</entity>
-		<action name="property" title="Property"/>
+		<action name="property" title="Property">
+			<property name="icon" label="fa fa-text-o"/>
+		</action>
 	</resource>
 	<resource locale="ja">
 		<entity name="${entity.package}.Property">
