@@ -12,12 +12,20 @@
 			<li class="active"><@p.text name="step-edit-success"/></li>
 		</ol>
 	</div>
+<#if text.getText("well-edit", "")?has_content>
+	<div class="p-well"><@p.text name="well-edit"/></div>
+</#if>
+
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if r?? && action.hasDataPermission(r, "~/print")><li><@p.a icon="icon-print" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/><@p.text name='button-print'/></@p.a>
 </li></#if><#if action.hasPermission("~/add")><li><@p.a icon="icon-add" action="~/add" label="#(button-add)"/>
 </li></#if><#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
+
+<#if text.getText("well-edit", "")?has_content>
+	<div class="p-well"><@p.text name="well-edit"/></div>
+</#if>
 
 	<#include "/action-alert.ftl"/>
 

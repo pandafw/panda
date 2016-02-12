@@ -8,6 +8,9 @@
 	<div class="p-header">
 		<h3><@p.i icon="icon"/> <@p.text name="title-print"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
+<#if text.getText("well-print", "")?has_content>
+	<div class="p-well"><@p.text name="well-print"/></div>
+</#if>
 
 	<#include "/action-alert.ftl"/>
 

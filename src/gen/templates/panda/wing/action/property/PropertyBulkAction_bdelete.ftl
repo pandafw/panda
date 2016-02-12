@@ -12,6 +12,10 @@
 			<li class="active"><@p.text name="step-bdelete-confirm"/></li>
 		</ol>
 	</div>
+<#if text.getText("well-bdelete", "")?has_content>
+	<div class="p-well"><@p.text name="well-bdelete"/></div>
+</#if>
+
 
 	<#include "/action-alert.ftl"/>
 	<br/>

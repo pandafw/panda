@@ -8,6 +8,10 @@
 	<div class="p-header">
 		<h3><@p.i icon="icon"/> <@p.text name="title-view"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
+<#if text.getText("well-view", "")?has_content>
+	<div class="p-well"><@p.text name="well-view"/></div>
+</#if>
+
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>

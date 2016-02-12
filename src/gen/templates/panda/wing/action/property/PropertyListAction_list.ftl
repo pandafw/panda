@@ -11,6 +11,10 @@
 			<li class="active"><@p.text name="step-list"/></li>
 		</ol>
 	</div>
+<#if text.getText("well-list", "")?has_content>
+	<div class="p-well"><@p.text name="well-list"/></div>
+</#if>
+
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>

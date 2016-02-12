@@ -11,6 +11,10 @@
 			<li class="active"><@p.text name="step-edit"/></li>
 		</ol>
 	</div>
+<#if text.getText("well-edit", "")?has_content>
+	<div class="p-well"><@p.text name="well-edit"/></div>
+</#if>
+
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>

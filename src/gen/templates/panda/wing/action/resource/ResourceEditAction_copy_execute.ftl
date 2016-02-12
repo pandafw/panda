@@ -12,6 +12,10 @@
 			<li class="active"><@p.text name="step-copy-success"/></li>
 		</ol>
 	</div>
+<#if text.getText("well-copy", "")?has_content>
+	<div class="p-well"><@p.text name="well-copy"/></div>
+</#if>
+
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if r?? && action.hasDataPermission(r, "~/print")><li><@p.a icon="icon-print" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/><@p.text name='button-print'/></@p.a>
