@@ -211,7 +211,7 @@ public class AuthHelper {
 
 			UserAuthenticator aa = context.getIoc().get(UserAuthenticator.class);
 			int r= aa.authenticate(context, action);
-			return r == UserAuthenticator.OK || r == UserAuthenticator.UNSECURE;
+			return r <= UserAuthenticator.OK || r == UserAuthenticator.UNSECURE;
 		}
 		catch (Exception ex) {
 			return false;

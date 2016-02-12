@@ -8,6 +8,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
+import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
@@ -46,6 +47,14 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 		}
 	}
 
+	protected String getRedirectURL(ActionContext ac) {
+		String uri = ac.getBase() + ac.getPath();
+		String query = HttpServlets.getRequestQueryString(ac.getRequest());
+		String url = URLHelper.buildURL(null, null, 0, uri, query, null);
+		String red = URLHelper.encodeURL(url);
+		return red;
+	}
+	
 	public void process(ActionContext ac) {
 		UserAuthenticator aa = ac.getIoc().get(UserAuthenticator.class);
 		int r = aa.authenticate(ac);
@@ -61,7 +70,8 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 				return;
 			}
 			if (Strings.isNotEmpty(unloginUrl)) {
-				String url = Mvcs.translate(unloginUrl, ac);
+				String red = getRedirectURL(ac);
+				String url = Mvcs.translate(unloginUrl, ac, red);
 				HttpServlets.sendRedirect(ac.getResponse(), url);
 				return;
 			}
@@ -73,7 +83,8 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 				return;
 			}
 			if (Strings.isNotEmpty(unsecureUrl)) {
-				String url = Mvcs.translate(unsecureUrl, ac);
+				String red = getRedirectURL(ac);
+				String url = Mvcs.translate(unsecureUrl, ac, red);
 				HttpServlets.sendRedirect(ac.getResponse(), url);
 				return;
 			}
