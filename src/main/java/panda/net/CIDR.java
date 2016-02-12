@@ -89,6 +89,11 @@ public class CIDR implements Cloneable, Serializable {
 		return ia;
 	}
 
+
+	public boolean include(String cidr) {
+		return include(new CIDR(cidr));
+	}
+
 	// does this CIDR subnet include the supplied address/subnet
 	public boolean include(CIDR cidr) {
 		return include(cidr.addr);
