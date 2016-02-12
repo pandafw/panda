@@ -25,8 +25,10 @@ public abstract class UserAuthenticator {
 	//--------------------------------------------------------
 	// result code
 	//--------------------------------------------------------
-	public static final int UNKNOWN = -1;
+	public static final int OK_NO_DEFINES = -2;
+	public static final int OK_NO_MAPPING = -1;
 	public static final int OK = 0;
+	public static final int UNKNOWN = 1;
 	public static final int UNLOGIN = 2;
 	public static final int UNSECURE = 3;
 	public static final int DENIED = 4;
@@ -88,7 +90,7 @@ public abstract class UserAuthenticator {
 			// find action info
 			ActionInfo ai = urlmapping.getActionInfo(path);
 			if (ai == null) {
-				return allowUnknownUri ? OK : UNKNOWN;
+				return allowUnknownUri ? OK_NO_MAPPING : UNKNOWN;
 			}
 			method = ai.getMethod();
 			clazz = ai.getActionType();
@@ -99,7 +101,7 @@ public abstract class UserAuthenticator {
 
 		// no permission defined for this path
 		if (Collections.isEmpty(defines)) {
-			return OK;
+			return OK_NO_DEFINES;
 		}
 		
 		Collection<String> uperms = getUserPermits(su);
@@ -122,7 +124,7 @@ public abstract class UserAuthenticator {
 			
 			if (d.charAt(0) == AUTH.AND) {
 				int a = authenticatePermission(ac, su, uperms, d.substring(1));
-				if (a != OK) {
+				if (a > OK) {
 					return a;
 				}
 			}
@@ -133,7 +135,7 @@ public abstract class UserAuthenticator {
 		for (String d : defines) {
 			if (Strings.isEmpty(d) || d.charAt(0) != AUTH.AND) {
 				int a = authenticatePermission(ac, su, uperms, d);
-				if (a == OK) {
+				if (a <= OK) {
 					return a;
 				}
 				r = a;

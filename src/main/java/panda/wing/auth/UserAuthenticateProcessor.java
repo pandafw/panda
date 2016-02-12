@@ -1,18 +1,14 @@
 package panda.wing.auth;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.processor.ViewProcessor;
 import panda.mvc.util.TextProvider;
+import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
 import panda.wing.constant.RC;
@@ -53,10 +49,11 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 	public void process(ActionContext ac) {
 		UserAuthenticator aa = ac.getIoc().get(UserAuthenticator.class);
 		int r = aa.authenticate(ac);
-		if (r == UserAuthenticator.OK) {
+		if (r <= UserAuthenticator.OK) {
 			doNext(ac);
 			return;
 		}
+
 		if (r == UserAuthenticator.UNLOGIN) {
 			addActionError(ac, RC.ERROR_UNLOGIN);
 			if (Strings.isNotEmpty(unloginView)) {
@@ -82,11 +79,6 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 			}
 		}
 
-		try {
-			ac.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
-		}
-		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		HttpServlets.sendError(ac.getResponse(), HttpStatus.SC_FORBIDDEN);
 	}
 }
