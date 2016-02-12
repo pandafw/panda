@@ -71,6 +71,11 @@
 	</div>
 		</#if>
 	</#macro>
+	<#macro swell>
+${s}#if text.getText("well-${ui.name}", "")?has_content>
+	<div class="p-well">${s}@p.text name="well-${ui.name}"/></div>
+${s}/#if>
+	</#macro>
 	<#macro sback>
 	<div class="p-tcenter">
 		${s}@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>

@@ -3,6 +3,8 @@
 
 <div class="p-section">
 	<@sheader steps=[ ui.name ]/>
+	<@swell/>
+
 	<#include "edit-star-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>

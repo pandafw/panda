@@ -3,6 +3,7 @@
 
 <div class="p-section">
 	<@sheader/>
+	<@swell/>
 
 	${s}#include "/action-alert.ftl"/>
 

@@ -4,6 +4,7 @@ ${s}#if actionErrors?has_content>
 
 <div class="p-section">
 	<@sheader/>
+	<@swell/>
 
 	${s}#include "/action-alert.ftl"/>
 </div>

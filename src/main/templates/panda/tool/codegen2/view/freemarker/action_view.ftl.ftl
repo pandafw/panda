@@ -3,6 +3,8 @@
 
 <div class="p-section">
 	<@sheader/>
+	<@swell/>
+
 	<#include "edit-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>

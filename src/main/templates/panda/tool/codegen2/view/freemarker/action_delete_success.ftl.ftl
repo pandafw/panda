@@ -3,6 +3,8 @@
 
 <div class="p-section">
 	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
+	<@swell/>
+
 	<#include "edit-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
