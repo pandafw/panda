@@ -83,6 +83,8 @@ public class ListView extends UIBean {
 	protected String tools;
 	protected String addon;
 
+	protected String pagerStyle;
+	
 	protected ItemLink link;
 
 	protected Boolean hideCheckAll;
@@ -747,6 +749,20 @@ public class ListView extends UIBean {
 	 */
 	public void setLabelFiltersBtnQuery(String labelFiltersBtnQuery) {
 		this.labelFiltersBtnQuery = labelFiltersBtnQuery;
+	}
+
+	/**
+	 * @return the pagerStyle
+	 */
+	public String getPagerStyle() {
+		return pagerStyle;
+	}
+
+	/**
+	 * @param pagerStyle the pagerStyle to set
+	 */
+	public void setPagerStyle(String pagerStyle) {
+		this.pagerStyle = pagerStyle;
 	}
 
 

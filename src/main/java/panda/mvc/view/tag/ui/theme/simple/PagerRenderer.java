@@ -32,7 +32,6 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private Map<String, Object> linkBean;
 	
 	private boolean hiddenStyle;
-	private String linkStyle;
 	private int linkSize;
 
 	public PagerRenderer(RenderingContext context) {
@@ -50,9 +49,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		pages = defi(tag.getPages());
 
 		linkHref = Strings.replaceChars(defs(tag.getLinkHref(), "#"), '!', '$');
-		linkStyle = defs(tag.getLinkStyle());
 		linkSize = defi(tag.getLinkSize());
-		hiddenStyle = Strings.contains(linkStyle, 'h');
 		
 		Attributes attr = new Attributes();
 		attr.add("id", id)
@@ -101,19 +98,19 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	}
 
 	private void writePagerEmptyInfo() throws IOException {
-		if (Strings.contains(linkStyle, 'i')) {
+		if (tag.isRenderInfo()) {
 			writePagerInfo(tag.getEmptyText());
 		}
 	}
 	
 	private void writePagerTextInfo() throws IOException {
-		if (Strings.contains(linkStyle, 'i')) {
+		if (tag.isRenderInfo()) {
 			writePagerInfo(tag.getInfoText());
 		}
 	}
 
 	private void writePagerLimit() throws IOException {
-		if (limit == null || limit < 1 || !Strings.contains(linkStyle, 's')) {
+		if (limit == null || limit < 1 || !tag.isLimitSelective()) {
 			return;
 		}
 
@@ -159,7 +156,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private void writePagerLinkFirst() throws IOException {
 		boolean hasFirst = (page > 1);
 		write("<li class=\"p-pager-first");
-		if ((!hasFirst && hiddenStyle) || !Strings.contains(linkStyle, 'f')) {
+		if ((!hasFirst && hiddenStyle) || !tag.isRenderFirst()) {
 			write(" hidden");
 		}
 		else if (!hasFirst) {
@@ -185,7 +182,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private void writePagerLinkPrev(boolean force) throws IOException {
 		boolean hasPrev = (page > 1);
 		write("<li class=\"p-pager-prev");
-		if ((!hasPrev && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'p'))) {
+		if ((!hasPrev && hiddenStyle) || (!force && !tag.isRenderPrev())) {
 			write(" hidden");
 		}
 		else if (!hasPrev) {
@@ -211,7 +208,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private void writePagerLinkNext(boolean force) throws IOException {
 		boolean hasNext = (limit == null || (count >= limit && total < 1) || page < pages);
 		write("<li class=\"p-pager-next");
-		if ((!hasNext && hiddenStyle) || (!force && !Strings.contains(linkStyle, 'n'))) {
+		if ((!hasNext && hiddenStyle) || (!force && !tag.isRenderNext())) {
 			write(" hidden");
 		}
 		else if (!hasNext) {
@@ -237,7 +234,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private void writePagerLinkLast() throws IOException {
 		boolean hasLast = (page < pages);
 		write("<li class=\"p-pager-last");
-		if ((!hasLast && hiddenStyle) || !Strings.contains(linkStyle, 'l')) {
+		if ((!hasLast && hiddenStyle) || !tag.isRenderLast()) {
 			write(" hidden");
 		}
 		else if (!hasLast) {
@@ -261,7 +258,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	}
 
 	private void writePagerLinkPages() throws IOException {
-		if (!Strings.contains(linkStyle, '#')) {
+		if (!tag.isRenderPageNo()) {
 			return;
 		}
 		
@@ -276,9 +273,9 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 			p = 1;
 		}
 
-		boolean ep = Strings.contains(linkStyle, '.');
-		boolean p1 = Strings.contains(linkStyle, '1');
-		boolean px = Strings.contains(linkStyle, 'x');
+		boolean ep = tag.isRenderPageEllipsis();
+		boolean p1 = tag.isRenderPage1();
+		boolean px = tag.isRenderPageX();
 
 		if (p > 1 && p1) {
 			linkp(1);

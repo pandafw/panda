@@ -33,7 +33,7 @@ public class Queryer implements Cloneable, Serializable {
 	protected String name;
 	protected Pager pager = new Pager();
 	protected Sorter sorter = new Sorter();
-	protected String method = AND;
+	protected String method;
 	protected Map<String, Filter> filters;
 
 	/**

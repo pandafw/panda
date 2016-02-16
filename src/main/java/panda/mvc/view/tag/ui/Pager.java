@@ -1,6 +1,7 @@
 package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.mvc.util.TextProvider;
 
@@ -509,4 +510,47 @@ public class Pager extends UIBean {
 		pager.setTotal(total);
 	}
 
+	public boolean isHiddenStyle() {
+		return Strings.contains(linkStyle, 'h');
+	}
+
+	public boolean isRenderInfo() {
+		return Strings.contains(linkStyle, 'i');
+	}
+
+	public boolean isRenderFirst() {
+		return Strings.contains(linkStyle, 'f');
+	}
+
+	public boolean isRenderLast() {
+		return Strings.contains(linkStyle, 'l');
+	}
+
+	public boolean isRenderPrev() {
+		return Strings.contains(linkStyle, 'p');
+	}
+
+	public boolean isRenderNext() {
+		return Strings.contains(linkStyle, 'n');
+	}
+
+	public boolean isRenderPage1() {
+		return Strings.contains(linkStyle, '1');
+	}
+
+	public boolean isRenderPageNo() {
+		return Strings.contains(linkStyle, '#');
+	}
+
+	public boolean isRenderPageX() {
+		return Strings.contains(linkStyle, 'x');
+	}
+
+	public boolean isRenderPageEllipsis() {
+		return Strings.contains(linkStyle, '.');
+	}
+
+	public boolean isLimitSelective() {
+		return Strings.contains(linkStyle, 's');
+	}
 }

@@ -142,7 +142,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		if (queryer != null) {
 			if (queryer.getPager() != null) {
 				writeHidden(id + "_start", prefix + "p.s", queryer.getPager().getStart());
-				writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
+				if (isPagerLimitSelective()) {
+					writeHidden(id + "_limit", prefix + "p.l", queryer.getPager().getLimit());
+				}
 				writeHidden(id + "_total", prefix + "p.t", queryer.getPager().getTotal(), true);
 			}
 			if (queryer.getSorter() != null) {
@@ -221,20 +223,33 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 	}
 
-	private void writePager(String pos) throws IOException {
-		if (queryer == null || queryer.getPager() == null) {
-			return;
-		}
-		
+	private boolean isPagerLimitSelective() {
+		Pager pg = createPager("");
+		pg.evaluateParams();
+
+		return pg.isLimitSelective();
+	}
+
+	private Pager createPager(String pos) {
 		Pager pg = newTag(Pager.class);
 
 		pg.setId(id + "_pager_" + pos);
 		pg.setCssClass("p-lv-pager");
 		pg.setPager(queryer.getPager());
+		pg.setLinkStyle(tag.getPagerStyle());
 		pg.setCount((long)listz);
 		pg.setOnLinkClick("_plv_goto('" + id + "', #)");
 		pg.setOnLimitChange("_plv_limit('" + id + "', this.value)");
 		
+		return pg;
+	}
+	
+	private void writePager(String pos) throws IOException {
+		if (queryer == null || queryer.getPager() == null) {
+			return;
+		}
+		
+		Pager pg = createPager(pos);
 		pg.start(writer);
 		pg.end(writer, "");
 	}
@@ -454,6 +469,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("</div>");
 				
 				String _fvc = qf == null ? null : qf.getC();
+				if (_fvc == null) {
+					_fvc = Collections.firstKey(numberFilterMap);
+				}
 				writeSelect("form-control p-lv-f-number-c", _fn + ".c", _ifn + "_c", numberFilterMap, _fvc);
 				
 				_fv = _fn + ".nv2";
@@ -476,6 +494,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
+				if (_fvc == null) {
+					_fvc = Collections.firstKey(numberFilterMap);
+				}
 				writeSelect("form-control p-lv-f-date-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
@@ -498,6 +519,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
+				if (_fvc == null) {
+					_fvc = Collections.firstKey(numberFilterMap);
+				}
 				writeSelect("form-control p-lv-f-datetime-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
@@ -520,6 +544,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				write("</div>");
 
 				String _fvc = qf == null ? null : qf.getC();
+				if (_fvc == null) {
+					_fvc = Collections.firstKey(numberFilterMap);
+				}
 				writeSelect("form-control p-lv-f-time-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
 				_fv = _fn + ".dv2";
@@ -603,7 +630,10 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		write("<div class=\"");
 		write(tag.getCssFiltersInput());
 		write("\">");
-		writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, null);
+
+		String mv = (queryer != null && queryer.getMethod() != null ? queryer.getMethod() : Queryer.AND);
+		writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, mv);
+		
 		write("</div></div>");
 	}
 	
@@ -758,12 +788,14 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 
 		form.start(writer);
 
-		if (queryer != null && queryer.getPager() != null) {
-			writeHidden(id + "_fsform_limit", prefix + "p.l", queryer.getPager().getLimit());
-		}
-		if (queryer != null && queryer.getSorter() != null) {
-			writeHidden(id + "_fsform_sort", prefix + "s.c", queryer.getSorter().getColumn());
-			writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
+		if (queryer != null) {
+			if (queryer.getPager() != null && isPagerLimitSelective()) {
+				writeHidden(id + "_fsform_limit", prefix + "p.l", queryer.getPager().getLimit());
+			}
+			if (queryer.getSorter() != null) {
+				writeHidden(id + "_fsform_sort", prefix + "s.c", queryer.getSorter().getColumn());
+				writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
+			}
 		}
 
 		writeListViewFiltersItems(fm);
