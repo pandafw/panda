@@ -1746,7 +1746,7 @@ function plv_getBForm(id) {
 	return document.getElementById(id + "_bform");
 }
 
-function plv_submitBForm(id, an, ps) {
+function plv_submitBForm(id, an, ps, t) {
 	$('#' + id).loadmask();
 	var bf = plv_getBForm(id);
 	if (an) {
@@ -1762,20 +1762,21 @@ function plv_submitBForm(id, an, ps) {
 			$('<input type="hidden" name="' + n + '"/>').val(ps[n]).appendTo(bf);
 		}
 	}
+	bf.target = t ? t : "";
 	bf.submit();
 	return false;
 }
 
-function plv_submitCheckedRows(id, an, ps) {
+function plv_submitCheckedRows(id, an, ps, t) {
 	if (plv_enableCheckedValues(id) > 0) {
-		plv_submitBForm(id, an, ps);
+		plv_submitBForm(id, an, ps, t);
 	}
 	return false;
 }
 
-function plv_submitCheckedKeys(id, an, ps) {
+function plv_submitCheckedKeys(id, an, ps, t) {
 	if (plv_enableCheckedKeys(id) > 0) {
-		plv_submitBForm(id, an, ps);
+		plv_submitBForm(id, an, ps, t);
 	}
 	return false;
 }
