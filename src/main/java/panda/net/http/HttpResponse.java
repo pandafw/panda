@@ -194,8 +194,14 @@ public class HttpResponse implements Closeable {
 		return rawStream;
 	}
 
-	public void drain() throws IOException {
+	public HttpResponse safeDrain() {
+		Streams.safeDrain(rawStream);
+		return this;
+	}
+
+	public HttpResponse drain() throws IOException {
 		Streams.drain(rawStream);
+		return this;
 	}
 	
 	public InputStream getStream() throws IOException {
@@ -275,7 +281,7 @@ public class HttpResponse implements Closeable {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		Streams.safeClose(stream);
 		Streams.safeClose(rawStream);
 	}

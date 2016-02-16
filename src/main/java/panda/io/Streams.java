@@ -211,7 +211,7 @@ public class Streams {
 	 * 	// error handling
 	 * }
 	 * finally {
-	 * 	IOUtils.closeQuietly(closeable);
+	 * 	Streams.closeQuietly(closeable);
 	 * }
 	 * </pre>
 	 * 
@@ -247,7 +247,7 @@ public class Streams {
 	 * 	// error handling
 	 * }
 	 * finally {
-	 * 	IOUtils.closeQuietly(selector);
+	 * 	Streams.closeQuietly(selector);
 	 * }
 	 * </pre>
 	 * 
@@ -1048,14 +1048,14 @@ public class Streams {
 	 * 
 	 * <pre>
 	 * try {
-	 * 	LineIterator it = IOUtils.lineIterator(reader);
+	 * 	LineIterator it = Streams.lineIterator(reader);
 	 * 	while (it.hasNext()) {
 	 * 		String line = it.nextLine();
 	 * 		// / do something with line
 	 * 	}
 	 * }
 	 * finally {
-	 * 	IOUtils.closeQuietly(reader);
+	 * 	Streams.closeQuietly(reader);
 	 * }
 	 * </pre>
 	 * 
@@ -1080,14 +1080,14 @@ public class Streams {
 	 * 
 	 * <pre>
 	 * try {
-	 * 	LineIterator it = IOUtils.lineIterator(stream, &quot;UTF-8&quot;);
+	 * 	LineIterator it = Streams.lineIterator(stream, &quot;UTF-8&quot;);
 	 * 	while (it.hasNext()) {
 	 * 		String line = it.nextLine();
 	 * 		// / do something with line
 	 * 	}
 	 * }
 	 * finally {
-	 * 	IOUtils.closeQuietly(stream);
+	 * 	Streams.closeQuietly(stream);
 	 * }
 	 * </pre>
 	 * 
@@ -1114,14 +1114,14 @@ public class Streams {
 	 * 
 	 * <pre>
 	 * try {
-	 * 	LineIterator it = IOUtils.lineIterator(stream, &quot;UTF-8&quot;);
+	 * 	LineIterator it = Streams.lineIterator(stream, &quot;UTF-8&quot;);
 	 * 	while (it.hasNext()) {
 	 * 		String line = it.nextLine();
 	 * 		// / do something with line
 	 * 	}
 	 * }
 	 * finally {
-	 * 	IOUtils.closeQuietly(stream);
+	 * 	Streams.closeQuietly(stream);
 	 * }
 	 * </pre>
 	 * 
@@ -2197,6 +2197,24 @@ public class Streams {
 		return -1;
 	}
 
+	
+	/**
+	 * Drain an <code>InputStream</code>.
+	 * 
+	 * @param input the input stream to drain
+	 * @return the number of bytes read
+	 * @throws IOException in case of I/O errors
+	 */
+	public static void safeDrain(InputStream input) {
+		try {
+			if (input != null) {
+				drain(input);
+			}
+		}
+		catch (IOException ioe) {
+			// ignore
+		}
+	}
 	
 	/**
 	 * Drain an <code>InputStream</code>.
