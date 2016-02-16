@@ -345,7 +345,7 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * @param pager pager
 	 */
 	public void setLimitToPager(Pager pager) {
-		setLimitToPager(pager, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
+		setLimitToPager(pager, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**

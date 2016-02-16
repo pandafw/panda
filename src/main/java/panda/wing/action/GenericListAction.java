@@ -73,7 +73,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Object list(Queryer qr) {
 		set_save(true);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_json(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_JSON_PAGE_ITEMS, VC.DEFAULT_JSON_MAX_ITEMS);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_xml(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_XML_PAGE_ITEMS, VC.DEFAULT_XML_MAX_ITEMS);
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_csv(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_CSV_PAGE_ITEMS, VC.DEFAULT_CSV_MAX_ITEMS);
 	}
 	
 	/**
@@ -109,7 +109,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_print(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr);
+		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_POPUP_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
+		return doList(qr, VC.DEFAULT_POPUP_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
 	}
 
 	//------------------------------------------------------------
@@ -336,10 +336,10 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Map<String, Object> getListParameters(Queryer qr) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		if (qr.getPager().getStart() != null) {
+		if (qr.getPager().getStart() > 0) {
 			params.put("p.s", qr.getPager().getStart());
 		}
-		if (qr.getPager().getLimit() != null) {
+		if (qr.getPager().hasLimit()) {
 			params.put("p.l", qr.getPager().getLimit());
 		}
 		
@@ -369,10 +369,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return params;
 	}
 
-	protected Object doList(Queryer qr) {
-		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_MAX_PAGE_ITEMS);
-	}
-	
 	protected Object doList(Queryer qr, long defLimit, long maxLimit) {
 		if (isNeedLoadListParameters(qr)) {
 			qr = loadListParameters(qr);
@@ -381,11 +377,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			}
 		}
 
-		queryList(qr, defLimit, maxLimit);
-		
 		if (Boolean.TRUE.equals(_save)) {
 			saveListParameters(qr);
 		}
+
+		queryList(qr, defLimit, maxLimit);
+		
 		return dataList;
 	}
 
