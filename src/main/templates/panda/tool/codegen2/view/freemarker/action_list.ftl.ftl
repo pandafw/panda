@@ -169,15 +169,7 @@ ${s}/#if>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
 		${s}#if action.hasPermission("${ap}")>
-		<#if _op?starts_with('@') || _op?starts_with('%')>
 			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
-		<#else>
-			<#if _op?contains('^')>
-			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
-			<#else>
-			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
-			</#if>
-		</#if>
 		${s}/#if>
 	</#list>
 	${s}/@p.set>
@@ -214,21 +206,18 @@ ${s}/#if>
 			return false;
 		}
 		<#elseif _op?starts_with('%')>
-		function ${action.name}_${ui.name}_${an}}() {
-			if (plv_enableCheckedKeys('${action.name}_${ui.name}') > 0) {
-				var qs = $(plv_getBForm('${action.name}_${ui.name}')).serialize();
-				<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' escapeAmp='false'/>?" + qs);
-			}
+		function ${action.name}_${ui.name}_${an}() {
+			return plv_submitCheckedKeys('${action.name}_${ui.name}', '${s}@p.url action="${ap}"/>', null, "<#if _op?contains('^')>_blank</#if>");
+		}
+		<#elseif _op?starts_with('&')>
+		function ${action.name}_${ui.name}_${an}() {
+			<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' includeParams='all' escapeAmp='false'/>");
 			return false;
 		}
 		<#else>
 		function ${action.name}_${ui.name}_${an}() {
-			<#if _op?contains('^')>
-			window.open("${s}@p.url action='${ap}' includeParams='all' escapeAmp='false'/>");
+			<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' includeParams='none' escapeAmp='false'/>");
 			return false;
-			<#else>
-			return plv_submitCheckedKeys('${action.name}_${ui.name}', '${s}@p.url action="${ap}"/>');
-			</#if>
 		}
 		</#if>
 	</#list>

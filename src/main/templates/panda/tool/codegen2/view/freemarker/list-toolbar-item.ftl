@@ -17,9 +17,17 @@
 			<#lt/>${s}@p.text name='button-${an}'/>${s}/@p.a>
 </li>${s}/#if><#rt/>
 		<#else>
-	<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})'/>
+	<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
 </li><#rt/>
 		</#if>
+	<#elseif t?starts_with('&')>
+		<#assign a = a?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid toolbar item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
+		<#assign an = a[0]/>
+		<#assign ap = gen.getActionPath(a[1])/>
+${s}#if action.hasPermission("${ap}")><#rt/>
+		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" includeParams="all" label="#(button-${an})"/>
+</li>${s}/#if><#rt/>
 	<#else>
 		<#assign a = a?split(':')/>
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid toolbar item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
