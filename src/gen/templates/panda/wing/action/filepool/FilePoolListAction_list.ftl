@@ -82,6 +82,13 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
+	<#if action.hasPermission("~/bdelete")>
+		<#assign _columns_ = _columns_ + [{
+			"name": "_check_",
+			"type": "check",
+			"fixed": true
+		}] />
+	</#if>
 
 <#if a.displayColumn("id")>
 	<#assign _columns_ = _columns_ + [{
