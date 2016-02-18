@@ -39,6 +39,7 @@ navi-admin-account-usergroup=用户组管理
 navi-admin-account-company=公司管理
 
 navi-admin-site=网站管理
+navi-admin-service=服务管理
 navi-admin-site-category=类别管理
 navi-admin-site-contents=内容管理
 navi-admin-site-index=检索索引管理

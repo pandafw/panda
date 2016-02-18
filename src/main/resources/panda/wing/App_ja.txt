@@ -39,6 +39,7 @@ navi-admin-account-usergroup=グループ管理
 navi-admin-account-company=会社管理
 
 navi-admin-site=サイト管理
+navi-admin-service=サービス管理
 navi-admin-site-category=カテゴリ管理
 navi-admin-site-contents=コンテンツ管理
 navi-admin-site-index=インデックス管理
