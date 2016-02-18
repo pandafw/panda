@@ -39,6 +39,13 @@ public class KeyValue<K, V> implements Entry<K, V> {
 	}
 
 	/**
+	 * @param key the key to set
+	 */
+	public void setKey(K key) {
+		this.key = key;
+	}
+
+	/**
 	 * Gets the value from the pair.
 	 * 
 	 * @return the value

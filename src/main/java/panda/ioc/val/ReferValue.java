@@ -5,7 +5,7 @@ import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.lang.Classes;
 import panda.lang.Strings;
-import panda.util.Pair;
+import panda.lang.collection.KeyValue;
 
 public class ReferValue implements ValueProxy {
 	public static ValueProxy IOC_SELF = new ValueProxy() {
@@ -30,7 +30,7 @@ public class ReferValue implements ValueProxy {
 	private Class<?> type;
 	private boolean required = true;
 
-	public static Pair<Class<?>> parse(String name) {
+	public static KeyValue<String, Class<?>> parse(String name) {
 		String _name = null;
 		Class<?> type = null;
 		int pos = name.indexOf(':');
@@ -42,12 +42,12 @@ public class ReferValue implements ValueProxy {
 			String typeName = Strings.trim(name.substring(pos + 1));
 			type = Classes.load(typeName, false);
 		}
-		return new Pair<Class<?>>(_name, type);
+		return new KeyValue<String, Class<?>>(_name, type);
 	}
 
 	public ReferValue(String expr, boolean required) {
-		Pair<Class<?>> p = parse(expr);
-		this.name = p.getName();
+		KeyValue<String, Class<?>> p = parse(expr);
+		this.name = p.getKey();
 		this.type = p.getValue();
 		this.required = required;
 	}
@@ -58,8 +58,8 @@ public class ReferValue implements ValueProxy {
 	}
 
 	public ReferValue(String expr, Class<?> type, boolean required) {
-		Pair<Class<?>> p = parse(expr);
-		this.name = p.getName();
+		KeyValue<String, Class<?>> p = parse(expr);
+		this.name = p.getKey();
 		this.type = p.getValue() == null ? type : p.getValue();
 		this.required = required;
 	}
