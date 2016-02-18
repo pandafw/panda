@@ -74,11 +74,12 @@
 	}] />
 <#else>
 	<#assign _opse = false/>
-	<#list _ops as _op><#if !gen.startsWithMark(_op)><#assign _opse = true/></#if></#list>
+	<#list _ops as _op><#if _op?starts_with('%')><#assign _opse = true/></#if></#list>
 	<#if _opse>
 	${s}#if <#list _ops as _op><#assign a = gen.stripStartMark(_op)?split(':')
 /><#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _op + "] of action [" + action.name + "]")}
-</#if><#if !gen.startsWithMark(_op)><#if _opse><#assign _opse = false/><#else> || </#if>action.hasPermission("${a[1]}")</#if></#list>>
+</#if><#assign ap = gen.getActionPath(a[1])
+/><#if _op?starts_with('%')><#if _opse><#assign _opse = false/><#else> || </#if>action.hasPermission("${ap}")</#if></#list>>
 		${s}#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
