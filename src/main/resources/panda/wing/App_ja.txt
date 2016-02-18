@@ -10,6 +10,7 @@ navi-theme=テーマ
 navi-language=言語
 
 navi-help=ヘルプ
+navi-help-company=会社情報
 navi-help-contact=問い合わせ
 navi-help-privacy=プライバシー規約
 navi-help-termsofuse=利用規約

@@ -10,6 +10,7 @@ navi-theme=主题
 navi-language=语言
 
 navi-help=帮助
+navi-help-company=公司简介
 navi-help-contact=联系我们
 navi-help-privacy=个人隐私规约
 navi-help-termsofuse=使用条款

@@ -15,6 +15,7 @@ navi-theme=Theme
 navi-language=Languages
 
 navi-help=Help
+navi-help-company=Company
 navi-help-contact=Contact
 navi-help-privacy=Privacy
 navi-help-termsofuse=Terms of use
