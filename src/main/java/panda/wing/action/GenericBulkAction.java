@@ -430,6 +430,9 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 	}
 	
+	protected void addQueryJoins(GenericQuery<T> gq) {
+	}
+	
 	protected void addQueryFilters(GenericQuery<T> gq) {
 	}
 
@@ -446,6 +449,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			int count = addKeyListToQuery(q, dataList, false);
 			if (count > 0) {
 				addQueryColumns(q);
+				addQueryJoins(q);
 				if (filter) {
 					addQueryFilters(q);
 				}
