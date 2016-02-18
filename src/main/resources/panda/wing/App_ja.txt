@@ -55,6 +55,7 @@ navi-super-html2pdf=HTML⇒PDF出力
 navi-super-filepool=ファイルプール
 navi-super-eleval=ELツール
 navi-super-sqlexec=SQLツール
+navi-super-pwdhash=パスワードハッシュ
 
 
 #label

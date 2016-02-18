@@ -61,6 +61,7 @@ navi-super-html2pdf=HTML->PDF
 navi-super-filepool=File Pool
 navi-super-eleval=EL Tool
 navi-super-sqlexec=SQL Tool
+navi-super-pwdhash=Password Hash
 
 
 #label
