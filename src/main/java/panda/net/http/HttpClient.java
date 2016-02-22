@@ -2,6 +2,9 @@ package panda.net.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -103,6 +106,12 @@ public class HttpClient {
 	protected boolean autoRedirect = false;
 	protected boolean validateSslCert = true;
 	
+	static {
+		// fix error: java.net.ProtocolException: Server redirected too many times
+		// see http://stackoverflow.com/questions/11022934/getting-java-net-protocolexception-server-redirected-too-many-times-error
+		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+	}
+
 	public HttpClient() {
 		this(new HttpRequest());
 	}
