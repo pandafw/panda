@@ -3,6 +3,7 @@ package panda.mvc.view.tag.ui;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.MvcConstants;
+import panda.mvc.Mvcs;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -54,7 +55,7 @@ public class DateTimePicker extends DatePicker {
 	@Override
 	public String getPattern() {
 		if (pattern == null) {
-			pattern = DEFAULT_DATETIME_PATTERN;
+			pattern = Mvcs.getDatePattern(context, getFormat(), DEFAULT_DATETIME_PATTERN);
 		}
 		return pattern;
 	}

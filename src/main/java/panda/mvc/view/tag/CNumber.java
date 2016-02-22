@@ -7,10 +7,9 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.util.TextProvider;
+import panda.mvc.Mvcs;
 
 
 /**
@@ -55,16 +54,6 @@ public class CNumber extends ContextBean {
 
 	private static final Log log = Logs.getLog(CNumber.class);
 
-	/**
-	 * NUMBER_FORMAT_DEFAULT = "number-format";
-	 */
-	public static final String NUMBER_FORMAT_DEFAULT = "number-format";
-
-	/**
-	 * NUMBER_FORMAT_PREFIX = "number-format-";
-	 */
-	public static final String NUMBER_FORMAT_PREFIX = "number-format-";
-
 	private Number value;
 
 	private String format;
@@ -77,20 +66,7 @@ public class CNumber extends ContextBean {
 	 * @return number pattern
 	 */
 	private String getNumberPattern(String format) {
-		TextProvider tp = context.getText();
-		String pattern = null;
-
-		if (Strings.isNotEmpty(format)) {
-			pattern = tp.getText(NUMBER_FORMAT_PREFIX + format, (String)null);
-			if (pattern == null) {
-				pattern = format;
-			}
-		}
-		else {
-			pattern = tp.getText(NUMBER_FORMAT_DEFAULT, (String)null);
-		}
-
-		return pattern;
+		return Mvcs.getNumberPattern(context, format);
 	}
 	
 	/**

@@ -6,11 +6,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.util.TextProvider;
+import panda.mvc.Mvcs;
 
 
 /**
@@ -74,21 +73,6 @@ public class CDate extends ContextBean {
 
 	private static final Log log = Logs.getLog(CDate.class);
 
-	/**
-	 * DATE_TIMEZONE = "date-timezone";
-	 */
-	public static final String DATE_TIMEZONE = "date-timezone";
-	
-	/**
-	 * DATE_FORMAT_DEFAULT = "date-format";
-	 */
-	public static final String DATE_FORMAT_DEFAULT = "date-format";
-
-	/**
-	 * DATE_FORMAT_PREFIX = "date-format-";
-	 */
-	public static final String DATE_FORMAT_PREFIX = "date-format-";
-
 	private Date value;
 
 	private String format;
@@ -136,20 +120,7 @@ public class CDate extends ContextBean {
 	 * @return date pattern
 	 */
 	private String getDatePattern(String format) {
-		TextProvider tp = context.getText();
-		String pattern = null;
-
-		if (Strings.isNotEmpty(format)) {
-			pattern = tp.getText(DATE_FORMAT_PREFIX + format, (String)null);
-			if (pattern == null) {
-				pattern = format;
-			}
-		}
-		else {
-			pattern = tp.getText(DATE_FORMAT_DEFAULT, (String)null);
-		}
-
-		return pattern;
+		return Mvcs.getDatePattern(context, format);
 	}
 	
 	/**
@@ -157,15 +128,7 @@ public class CDate extends ContextBean {
 	 * @return date timezone
 	 */
 	private TimeZone getDateTimeZone() {
-		TextProvider tp = context.getText();
-		String tz = null;
-
-		tz = tp.getText(DATE_TIMEZONE, (String)null);
-		if (tz != null) {
-			return TimeZone.getTimeZone(tz);
-		}
-
-		return null;
+		return Mvcs.getDateTimeZone(context);
 	}
 
 	/**

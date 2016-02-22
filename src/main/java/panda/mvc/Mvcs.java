@@ -14,11 +14,13 @@ import panda.lang.Collections;
 import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.util.TextProvider;
 
 import java.lang.reflect.Type;
+import java.util.TimeZone;
 
 /**
- * Mvc 相关帮助函数
+ * Mvc helper methods
  */
 public abstract class Mvcs {
 	private static Beans beans = Beans.i();
@@ -28,6 +30,31 @@ public abstract class Mvcs {
 		castors.register(new FileItemCastor());
 	}
 	
+	/**
+	 * DATE_TIMEZONE = "date-timezone";
+	 */
+	public static final String DATE_TIMEZONE = "date-timezone";
+	
+	/**
+	 * DATE_FORMAT_DEFAULT = "date-format";
+	 */
+	public static final String DATE_FORMAT_DEFAULT = "date-format";
+
+	/**
+	 * DATE_FORMAT_PREFIX = "date-format-";
+	 */
+	public static final String DATE_FORMAT_PREFIX = "date-format-";
+
+	/**
+	 * NUMBER_FORMAT_DEFAULT = "number-format";
+	 */
+	public static final String NUMBER_FORMAT_DEFAULT = "number-format";
+
+	/**
+	 * NUMBER_FORMAT_PREFIX = "number-format-";
+	 */
+	public static final String NUMBER_FORMAT_PREFIX = "number-format-";
+
 	/**
 	 * @return the beans
 	 */
@@ -229,6 +256,76 @@ public abstract class Mvcs {
 	 */
 	public static String translate(String expr, Object arg) {
 		return ElTemplate.evaluate(expr, arg);
+	}
+
+	//----------------------------------------------
+	/**
+	 * get date pattern from text
+	 * @param format date format
+	 * @return date pattern
+	 */
+	public static String getDatePattern(ActionContext context, String format) {
+		return getDatePattern(context, format, null);
+	}
+	
+	/**
+	 * get date pattern from text
+	 * @param format date format
+	 * @return date pattern
+	 */
+	public static String getDatePattern(ActionContext context, String format, String defv) {
+		TextProvider tp = context.getText();
+		String pattern = null;
+
+		if (Strings.isNotEmpty(format)) {
+			pattern = tp.getText(DATE_FORMAT_PREFIX + format, (String)null);
+			if (pattern == null) {
+				pattern = format;
+			}
+		}
+		else {
+			pattern = tp.getText(DATE_FORMAT_DEFAULT, defv);
+		}
+
+		return pattern;
+	}
+
+	/**
+	 * get date timezone from text
+	 * @return date timezone
+	 */
+	public static TimeZone getDateTimeZone(ActionContext context) {
+		TextProvider tp = context.getText();
+		String tz = null;
+
+		tz = tp.getText(DATE_TIMEZONE, (String)null);
+		if (tz != null) {
+			return TimeZone.getTimeZone(tz);
+		}
+
+		return null;
+	}
+
+	/**
+	 * get number pattern from text
+	 * @param format number format
+	 * @return number pattern
+	 */
+	public static String getNumberPattern(ActionContext context, String format) {
+		TextProvider tp = context.getText();
+		String pattern = null;
+
+		if (Strings.isNotEmpty(format)) {
+			pattern = tp.getText(NUMBER_FORMAT_PREFIX + format, (String)null);
+			if (pattern == null) {
+				pattern = format;
+			}
+		}
+		else {
+			pattern = tp.getText(NUMBER_FORMAT_DEFAULT, (String)null);
+		}
+
+		return pattern;
 	}
 }
 

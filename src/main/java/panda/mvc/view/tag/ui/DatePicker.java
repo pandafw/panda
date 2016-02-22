@@ -3,6 +3,7 @@ package panda.mvc.view.tag.ui;
 import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -83,8 +84,8 @@ public class DatePicker extends TextField {
 	 */
 	public String getPattern() {
 		if (pattern == null) {
-			pattern = DEFAULT_DATE_PATTERN;
-		}		
+			pattern = Mvcs.getDatePattern(context, getFormat(), DEFAULT_DATE_PATTERN);
+		}
 		return pattern;
 	}
 
