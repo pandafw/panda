@@ -125,6 +125,13 @@ public abstract class Mvcs {
 	/**
 	 * cast value
 	 */
+	public static <T> T castValue(ActionContext ac, Object value, Type type) {
+		return castValue(ac, null, value, type, null);
+	}
+
+	/**
+	 * cast value
+	 */
 	public static <T> T castValue(ActionContext ac, Object value, Type type, String format) {
 		return castValue(ac, null, value, type, format);
 	}
