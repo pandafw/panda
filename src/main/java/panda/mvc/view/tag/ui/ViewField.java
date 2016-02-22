@@ -1,11 +1,12 @@
 package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocBean;
+import panda.mvc.view.tag.Escapes;
 
 
 @IocBean(singleton=false)
 public class ViewField extends ListUIBean {
-	protected String escape;
+	protected String escape = Escapes.ESCAPE_PHTML;
 	protected String fieldValue;
 	protected String format;
 	protected String icon;

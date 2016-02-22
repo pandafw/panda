@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import panda.lang.Iterators;
 import panda.lang.Objects;
+import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
 import panda.mvc.view.tag.ui.ViewField;
@@ -61,7 +62,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 					boolean selected = tag.contains(value, kv.getKey());
 
 					if (selected && kv.getValue() != null) {
-						body.append(kv.getValue().toString());
+						body.append(StringEscapes.escapeHtml(kv.getValue().toString()));
 						body.append(' ');
 					}
 				}
