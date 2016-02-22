@@ -66,18 +66,29 @@
 				.val(v)
 				.appendTo($form);
 		}
-		
+
+		function addParams(n, v) {
+			if ($.isArray(v)) {
+				for (var i = 0; i < v.length; i++) {
+					addParam(n, v[i]);
+				}
+			}
+			else {
+				addParam(n, v);
+			}
+		}
+
 		if (s.data) {
-			for (var n in s.data) {
-				var v = s.data[n];
-				if (v) {
-					if ($.isArray(v)) {
-						for (var i = 0; i < v.length; i++) {
-							addParam(n, v[i]);
-						}
-					}
-					else {
-						addParam(n, v);
+			if ($.isArray(s.data)) {
+				for (var i = 0; i < s.data.length; i++) {
+					addParams(s.data[i].name, s.data[i].value);
+				}
+			}
+			else {
+				for (var n in s.data) {
+					var v = s.data[n];
+					if (v) {
+						addParams(n, v)
 					}
 				}
 			}
