@@ -142,11 +142,11 @@ public class ActionTask implements Runnable {
 					log.debug("Task> " + url + " : " + hres.getStatusLine() + " (" + sw + ")");
 				}
 				else if (log.isInfoEnabled()) {
-					hres.drain();
+					hres.safeDrain();
 					log.info("Task> " + url + " : " + hres.getStatusLine() + " (" + sw + ")");
 				}
 				else {
-					hres.drain();
+					hres.safeDrain();
 				}
 				errors = 0;
 			}
