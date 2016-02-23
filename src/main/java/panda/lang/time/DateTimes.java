@@ -868,7 +868,7 @@ public class DateTimes {
 	 * </p>
 	 * <p>
 	 * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if you passed with HOUR, it
-	 * would return 28 Mar 2002 13:00:00.000. If this was passed with MONTH, it would return 1 Mar
+	 * would return 28 Mar 2002 14:00:00.000. If this was passed with MONTH, it would return 1 Mar
 	 * 2002 0:00:00.000.
 	 * </p>
 	 * 
@@ -893,7 +893,7 @@ public class DateTimes {
 	 * </p>
 	 * <p>
 	 * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if you passed with HOUR, it
-	 * would return 28 Mar 2002 13:00:00.000. If this was passed with MONTH, it would return 1 Mar
+	 * would return 28 Mar 2002 14:00:00.000. If this was passed with MONTH, it would return 1 Mar
 	 * 2002 0:00:00.000.
 	 * </p>
 	 * 
