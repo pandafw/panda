@@ -839,8 +839,6 @@
     formatDate: function(d) {
       return this.format.replace(formatReplacer, function(match) {
         var methodName, property, rv, len = match.length;
-        if (match === 'ms')
-          len = 1;
         property = dateFormatComponents[match].property
         if (property === 'Hours12') {
           rv = d.getUTCHours();
@@ -1119,11 +1117,11 @@
     MM: {property: 'UTCMonth', getPattern: function() {return '(0?[1-9]|1[0-2])\\b';}},
     yy: {property: 'UTCYear', getPattern: function() {return '(\\d{2})\\b'}},
     yyyy: {property: 'UTCFullYear', getPattern: function() {return '(\\d{4})\\b';}},
-    hh: {property: 'UTCHours', getPattern: function() {return '(0?[0-9]|1[0-9]|2[0-3])\\b';}},
+    HH: {property: 'UTCHours', getPattern: function() {return '(0?[0-9]|1[0-9]|2[0-3])\\b';}},
     mm: {property: 'UTCMinutes', getPattern: function() {return '(0?[0-9]|[1-5][0-9])\\b';}},
     ss: {property: 'UTCSeconds', getPattern: function() {return '(0?[0-9]|[1-5][0-9])\\b';}},
-    ms: {property: 'UTCMilliseconds', getPattern: function() {return '([0-9]{1,3})\\b';}},
-    HH: {property: 'Hours12', getPattern: function() {return '(0?[1-9]|1[0-2])\\b';}},
+    SSS: {property: 'UTCMilliseconds', getPattern: function() {return '([0-9]{1,3})\\b';}},
+    hh: {property: 'Hours12', getPattern: function() {return '(0?[1-9]|1[0-2])\\b';}},
     PP: {property: 'Period12', getPattern: function() {return '(AM|PM|am|pm|Am|aM|Pm|pM)\\b';}}
   };
 
@@ -1252,12 +1250,12 @@
         (is12Hours ? ' data-hour-format="12"' : '') +
         '>' +
         '<tr>' +
-          '<td><a href="#" class="btn btn-default" data-action="incrementHours"><i class="fa fa-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn btn-default" data-action="decrementHours"><i class="fa fa-chevron-up"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn btn-default" data-action="incrementMinutes"><i class="fa fa-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn btn-default" data-action="decrementMinutes"><i class="fa fa-chevron-up"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn btn-default" data-action="incrementSeconds"><i class="fa fa-chevron-up"></i></a></td>': '')+
+          '<td><a href="#" class="btn btn-default" data-action="decrementSeconds"><i class="fa fa-chevron-up"></i></a></td>': '')+
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
         '<tr>' +
@@ -1274,12 +1272,12 @@
           '</td>' : '') +
         '</tr>' +
         '<tr>' +
-          '<td><a href="#" class="btn btn-default" data-action="decrementHours"><i class="fa fa-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn btn-default" data-action="incrementHours"><i class="fa fa-chevron-down"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn btn-default" data-action="decrementMinutes"><i class="fa fa-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn btn-default" data-action="incrementMinutes"><i class="fa fa-chevron-down"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn btn-default" data-action="decrementSeconds"><i class="fa fa-chevron-down"></i></a></td>': '') +
+          '<td><a href="#" class="btn btn-default" data-action="incrementSeconds"><i class="fa fa-chevron-down"></i></a></td>': '') +
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
       '</table>' +
