@@ -21,11 +21,13 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 	
-	<div>
-		<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="doStart()" label="#(button-start)"/>
-
-		<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="doStop()" label="#(button-stop)"/>
-	</div>
+	<@p.form cssClass="p-eform" id="syncw" initfocus="true" method="get" theme="bs3h">
+		<@safeinclude path=('/' + a.class.name?replace('.', '/') + "-inputs.ftl") />
+		<@p.div cssClass="p-buttons">
+			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="syncw_start()" label="#(button-start)"/>
+			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="syncw_stop()" label="#(button-stop)"/>
+		</@p.div>
+	</@p.form>
 	
 	<hr/>
 
@@ -33,9 +35,9 @@
 	<br/>
 
 	<script type="text/javascript">
-		var pms = [];
+		var work_pms = [];
 
-		function doStop() {
+		function syncw_stop() {
 			$.ajaf({
 				url: "<@p.url action='+/stop' includeParams='get'/>",
 				success: function(data) {
@@ -46,9 +48,9 @@
 					}
 					
 					var r = o.result;
-					print_status(r.date, r.level, r.status, r.count, r.total);
+					work_print_status(r.date, r.level, r.status, r.count, r.total);
 					if (!r.running) {
-						workOnStop();
+						work_on_stop();
 					}
 				},
 				error: function(xhr, status, e) {
@@ -57,17 +59,17 @@
 			});
 		}
 		
-		function workOnStart() {
+		function work_on_start() {
 			$('#btnStart').disable(true).removeClass("btn-primary").addClass("btn-warning")
 				.find('i').addClass('fa-spin');
 		}
-		function workOnStop() {
+		function work_on_stop() {
 			$('#btnStart').disable(false).removeClass("btn-warning").addClass("btn-primary")
 				.find('i').removeClass('fa-spin');
 		}
 
-		function doStatus() {
-			workOnStart();
+		function syncw_status() {
+			work_on_start();
 			$.ajaf({
 				url: "<@p.url action='+/status' includeParams='get'/>",
 				success: function(data) {
@@ -79,12 +81,12 @@
 					}
 
 					var r = o.result;
-					print_status(r.date, r.level, r.status, r.count, r.total);
+					work_print_status(r.date, r.level, r.status, r.count, r.total);
 					if (r.running) {
 						setTimeout(doStatus, 1000);
 					}
 					else {
-						workOnStop();
+						work_on_stop();
 					}
 				},
 				error: function(xhr, status, e) {
@@ -94,40 +96,40 @@
 			});
 		}
 		
-		function doStart() {
-			doWork("<@p.url action='+/start' includeParams='get'/>");
-			return false;
-		}
+		function syncw_start() {
+			work_on_start();
 
-		function doWork(url) {
-			workOnStart();
+			work_pms = [];
 			$('#syncw_log').empty();
 			
-			pms = [];
-			var data = {
-				'e.onStart': 'parent.work_start("%{msg}");',
-				'e.onStatus': 'parent.work_status("%{level}", "%{msg}", "%{count}", "%{total}");',
-				'e.onFinish': 'parent.work_finish("%{msg}");'
-			};
+			var url = "<@p.url action='+/start' includeParams='get'/>";
+			var data = [
+				{ 'name': 'e.onStart', 'value': 'parent.work_start("%{msg}");' },
+				{ 'name': 'e.onStatus', 'value': 'parent.work_status("%{level}", "%{msg}", "%{count}", "%{total}");' },
+				{ 'name': 'e.onFinish', 'value': 'parent.work_finish("%{msg}");' }
+			];
+			$.merge(data, $('#syncw').serializeArray());
 			
 			$.ajaf({
 				url: url,
 				data: data,
 				success: function(d) {
-					workOnStop();
+					work_on_stop();
 				},
 				error: function(xhr, status, e) {
 					work_error(xhr.responseText);
-					workOnStop();
+					work_on_stop();
 				}
 			});
+
+			return false;
 		}
 
 		function work_start(msg) {
 			work_info(msg);
 		}
 		function work_status(level, msg, count, total) { 
-			print_status((new Date()).format('yyyy-MM-dd HH:mm:ss.SSS'), level, msg, count, total); 
+			work_print_status((new Date()).format('yyyy-MM-dd HH:mm:ss.SSS'), level, msg, count, total); 
 		}
 		function work_info(m) { 
 			work_status('i', m);
@@ -142,7 +144,7 @@
 			work_success(msg);
 		}
 		
-		function statusMsg(time, level, msg, count, total) {
+		function work_status_msg(time, level, msg, count, total) {
 			if (count === undefined || count == 0) {
 				return '> ' + time + ' [' + level + '] - ' + msg;
 			}
@@ -154,24 +156,24 @@
 			return "> " + time + " [" + level + "] " + count + '/' + total + " - " + msg;
 		}
 		
-		var status_cls = { 'i': 'alert-info', 'w': 'alert-warning', 'e': 'alert-danger', 's': 'alert-success' };
-		function statusCls(cls) {
-			return status_cls[cls || 'i'] || '';
+		function work_status_cls(cls) {
+			var mcls = { 'i': 'alert-info', 'w': 'alert-warning', 'e': 'alert-danger', 's': 'alert-success' };
+			return mcls[cls || 'i'] || '';
 		}
-		function print_status(time, level, msg, count, total) {
+		function work_print_status(time, level, msg, count, total) {
 			if (msg) {
-				var $m = $('<pre class="' + statusCls(level) + '">' + String.escapeHtml(statusMsg(time, level, msg, count, total)) + '</pre>');
+				var $m = $('<pre class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</pre>');
 
 				$('#syncw_log').append($m);
 
-				pms.push($m);
-				while (pms.length > 20) {
-					pms.shift().remove();
+				work_pms.push($m);
+				while (work_pms.length > 20) {
+					work_pms.shift().remove();
 				}
 			}
 		}
 		
-		function onPageLoad() { doStatus(); }
+		function onPageLoad() { syncw_status(); }
 	</script>
 </div>
 
