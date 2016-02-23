@@ -344,7 +344,12 @@ public class HttpRequest {
 		dos.flush();
 	}
 
-	public void toString(Appendable writer) throws IOException {
+	/**
+	 * @param writer writer
+	 * @param bodyLimit body size limit
+	 * @throws IOException
+	 */
+	public void toString(Appendable writer, int bodyLimit) throws IOException {
 		writer.append(String.valueOf(method)).append(' ').append(getURL().toString());
 		if (header != null) {
 			writer.append(Streams.LINE_SEPARATOR);
@@ -354,7 +359,7 @@ public class HttpRequest {
 			writer.append(Streams.LINE_SEPARATOR);
 			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
 			if (body != null) {
-				if (body.available() > 1024 || !body.markSupported()) {
+				if (body.available() > bodyLimit || !body.markSupported()) {
 					writer.append("<<stream: " + body + " - " + body.available() + ">>");
 				}
 				else {
@@ -374,9 +379,17 @@ public class HttpRequest {
 	 */
 	@Override
 	public String toString() {
+		return toString(1024);
+	}
+
+	/**
+	 * @param bodyLimit body size limit
+	 * @return request string
+	 */
+	public String toString(int bodyLimit) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			toString(sb);
+			toString(sb, bodyLimit);
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);

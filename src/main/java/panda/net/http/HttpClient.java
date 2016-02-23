@@ -285,10 +285,11 @@ public class HttpClient {
 	}
 	
 	protected HttpResponse doSend() throws IOException {
-		final String CRLF = Streams.LINE_SEPARATOR;
-
-		if (log.isTraceEnabled()) {
-			log.trace(request.toString());
+		if (log.isDebugEnabled()) {
+			log.debug(request.toString(512));
+		}
+		else if (log.isTraceEnabled()) {
+			log.trace(request.toString(10240));
 		}
 		
 		HttpResponse response;
@@ -325,16 +326,15 @@ public class HttpClient {
 				msg.append(Files.toDisplaySize(response.getContentLength())).append(" / ");
 			}
 			msg.append(sw).append(')');
+			if (response.getHeader() != null) {
+				msg.append(Streams.LINE_SEPARATOR); 
+				response.getHeader().toString(msg);
+			}
 
 			if (log.isTraceEnabled()) {
-				if (response.getHeader() != null) {
-					msg.append(CRLF); 
-					response.getHeader().toString(msg);
-				}
-
 				String text = response.getContentText();
 				if (Strings.isNotEmpty(text)) {
-					msg.append(CRLF).append(text);
+					msg.append(Streams.LINE_SEPARATOR).append(text);
 				}
 				log.trace(msg);
 			}
