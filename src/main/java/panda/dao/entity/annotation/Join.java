@@ -41,8 +41,7 @@ public @interface Join {
 
 	/**
 	 * the related keys of the target class.
-	 * if not supplied, the primary keys of the target class will be used.
 	 */
-	String[] refs() default {};
+	String[] refs();
 
 }

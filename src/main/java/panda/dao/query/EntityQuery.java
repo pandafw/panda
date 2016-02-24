@@ -1,12 +1,12 @@
 package panda.dao.query;
 
-import panda.dao.entity.Entity;
-import panda.dao.query.Filter.ComboFilter;
-import panda.lang.Objects;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import panda.dao.entity.Entity;
+import panda.dao.query.Filter.ComboFilter;
+import panda.lang.Objects;
 
 
 @SuppressWarnings("unchecked")
@@ -19,6 +19,14 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	 */
 	public EntityQuery(Class<T> table) {
 		this.query = new GenericQuery<T>(table);
+	}
+
+	/**
+	 * constructor
+	 * @param entity query entity
+	 */
+	public EntityQuery(Entity<T> entity) {
+		this.query = new GenericQuery<T>(entity);
 	}
 
 	/**
@@ -484,6 +492,61 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		return (Q)this;
 	}
 
+	//---------------------------------------------------------------
+	// auto joins
+	//
+	/**
+	 * auto add left join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public Q autoLeftJoin(String join) {
+		query.autoLeftJoin(join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add right join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public Q autoRightJoin(String join) {
+		query.autoRightJoin(join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add inner join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public Q autoInnerJoin(String join) {
+		query.autoInnerJoin(join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public Q autoJoin(String join) {
+		query.autoInnerJoin(join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add join from @Join
+	 * @param type join type
+	 * @param join join name
+	 * @return this
+	 */
+	public Q autoJoin(String type, String join) {
+		query.autoJoin(type, join);
+		return (Q)this;
+	}
+
+	//-------------------------------------------------------------------------------------------
 	/**
 	 * equal to primary keys, Entity must be set
 	 * @param keys
@@ -494,7 +557,6 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 		return (Q)this;
 	}
 	
-	//-------------------------------------------------------------------------------------------
 	/**
 	 * @see java.lang.Object#hashCode()
 	 */

@@ -176,7 +176,7 @@ public class MongoDao extends AbstractDao {
 	 */
 	@Override
 	public void drop(Entity<?> entity) {
-		drop(entity.getTable());
+		drop(getTableName(entity));
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class MongoDao extends AbstractDao {
 	@Override
 	public void create(Entity<?> entity) {
 		if (log.isDebugEnabled()) {
-			log.debug("create: " + entity.getTable());
+			log.debug("create: " + getTableName(entity));
 		}
 		
 		autoStart();
@@ -210,12 +210,12 @@ public class MongoDao extends AbstractDao {
 					dbo.put(en.getKey(), en.getValue());
 				}
 			}
-			db.createCollection(entity.getTable(), dbo);
+			db.createCollection(getTableName(entity), dbo);
 			
 			// create indexes
 			Collection<EntityIndex> indexs = entity.getIndexes();
 			if (Collections.isNotEmpty(indexs)) {
-				DBCollection dbc = db.getCollection(entity.getTable());
+				DBCollection dbc = db.getCollection(getTableName(entity));
 				for (EntityIndex index : indexs) {
 					if (!index.isReal()) {
 						continue;
@@ -238,7 +238,7 @@ public class MongoDao extends AbstractDao {
 			}
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to create index for table " + entity.getTable(), e);
+			throw new DaoException("Failed to create index for table " + getTableName(entity), e);
 		}
 		finally {
 			autoClose();
@@ -270,7 +270,7 @@ public class MongoDao extends AbstractDao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return existsByTable(entity.getTable());
+			return existsByTable(getTableName(entity));
 		}
 
 		GenericQuery<?> query = createQuery(entity);
@@ -290,14 +290,14 @@ public class MongoDao extends AbstractDao {
 	@Override
 	protected boolean existsByQuery(GenericQuery<?> query) {
 		if (!query.hasFilters()) {
-			return existsByTable(query.getTable());
+			return existsByTable(getTableName(query));
 		}
 
 		if (log.isDebugEnabled()) {
 			log.debug("existsByQuery: " + query);
 		}
 		
-		DBCollection dbc = db.getCollection(query.getTable());
+		DBCollection dbc = db.getCollection(getTableName(query));
 		DBObject dbq = where(query);
 		DBObject dbo = dbc.findOne(dbq, new BasicDBObject().append(ID, 1));
 		return dbo != null;
@@ -330,7 +330,7 @@ public class MongoDao extends AbstractDao {
 			return null;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			Streams.safeClose(cursor);
@@ -354,12 +354,12 @@ public class MongoDao extends AbstractDao {
 		autoStart();
 		try {
 			DBObject dbq = where(query);
-			DBCollection dbc = db.getCollection(query.getTable());
+			DBCollection dbc = db.getCollection(getTableName(query));
 			long cnt = dbc.count(dbq);
 			return cnt;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to count entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to count entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -394,7 +394,7 @@ public class MongoDao extends AbstractDao {
 			return list;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			Streams.safeClose(cursor);
@@ -432,7 +432,7 @@ public class MongoDao extends AbstractDao {
 			return count;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			Streams.safeClose(cursor);
@@ -457,14 +457,14 @@ public class MongoDao extends AbstractDao {
 		try {
 			DBObject dbq = where(query);
 			
-			DBCollection dbc = db.getCollection(query.getTable());
+			DBCollection dbc = db.getCollection(getTableName(query));
 			WriteResult wr = dbc.remove(dbq);
 			autoCommit();
 			return wr.getN();
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to delete entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to delete entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -488,7 +488,7 @@ public class MongoDao extends AbstractDao {
 			return obj;
 		}
 
-		DBCollection dbc = db.getCollection(entity.getTable());
+		DBCollection dbc = db.getCollection(getTableName(entity));
 		DBObject dbo = convertDataToBson(entity, obj);
 
 		for (int i = 0; i < 100; i++) {
@@ -548,7 +548,7 @@ public class MongoDao extends AbstractDao {
 		
 		autoStart();
 		try {
-			DBCollection dbc = db.getCollection(query.getTable());
+			DBCollection dbc = db.getCollection(getTableName(query));
 			WriteResult wr = dbc.updateMulti(dbq, dbs);
 			int cnt = wr.getN();
 			if (cnt > limit) {
@@ -559,7 +559,7 @@ public class MongoDao extends AbstractDao {
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to update entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to update entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -617,7 +617,7 @@ public class MongoDao extends AbstractDao {
 	}
 	
 	private DBCursor createCursor(GenericQuery<?> query) {
-		DBCollection dbc = db.getCollection(query.getTable());
+		DBCollection dbc = db.getCollection(getTableName(query));
 		
 		DBObject dbq = where(query);
 		DBObject dbf = field(query);
@@ -868,7 +868,7 @@ public class MongoDao extends AbstractDao {
 	//--------------------------------------------------------------------
 	private WriteResult insertData(Entity<?> entity, Object obj) {
 		DBObject dbo = convertDataToBson(entity, obj);
-		DBCollection dbc = db.getCollection(entity.getTable());
+		DBCollection dbc = db.getCollection(getTableName(entity));
 		return dbc.insert(dbo);
 	}
 
@@ -957,8 +957,8 @@ public class MongoDao extends AbstractDao {
 					ef = eid;
 				}
 				else {
-					ef = en.getColumn(fn);
-					if (ef == null || query.shouldExclude(ef.getName())) {
+					ef = en.getField(fn);
+					if (ef == null || ef.isNotPersistent() || query.shouldExclude(ef.getName())) {
 						continue;
 					}
 				}

@@ -157,6 +157,33 @@ public abstract class AbstractDao implements Dao {
 		return new EntityDao<T>(this, type, param);
 	}
 
+	/**
+	 * @param query query
+	 * @return the table name of query
+	 */
+	@Override
+	public String getTableName(Query query) {
+		return getDaoClient().getTableName(query);
+	}
+
+	/**
+	 * @param entity entity
+	 * @return the table name of entity
+	 */
+	@Override
+	public String getTableName(Entity<?> entity) {
+		return getDaoClient().getTableName(entity);
+	}
+
+	/**
+	 * @param entity entity
+	 * @return the view name of entity
+	 */
+	@Override
+	public String getViewName(Entity<?> entity) {
+		return getDaoClient().getViewName(entity);
+	}
+
 	//---------------------------------------------------------------------------------
 	/**
 	 * drop a table if exists

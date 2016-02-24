@@ -193,7 +193,7 @@ public class SqlDao extends AbstractDao {
 		assertTable(entity);
 
 		if (!getSqlExpert().isSupportDropIfExists()) {
-			if (!existsByTable(entity.getTable())) {
+			if (!existsByTable(getTableName(entity))) {
 				return;
 			}
 		}
@@ -315,7 +315,7 @@ public class SqlDao extends AbstractDao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return existsByTable(entity.getTable());
+			return existsByTable(getTableName(entity));
 		}
 
 		GenericQuery query = createQuery(entity);
@@ -336,7 +336,7 @@ public class SqlDao extends AbstractDao {
 	@Override
 	protected boolean existsByQuery(GenericQuery<?> query) {
 		if (!query.hasFilters()) {
-			return existsByTable(query.getTable());
+			return existsByTable(getTableName(query));
 		}
 
 		selectPrimaryKeys(query);
@@ -361,7 +361,7 @@ public class SqlDao extends AbstractDao {
 				return executor.fetch(sql.getSql(), sql.getParams(), query.getType());
 			}
 			catch (SQLException e) {
-				throw new DaoException("Failed to fetch query " + query.getTable() + ": " + sql.getSql(), e);
+				throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + sql.getSql(), e);
 			}
 		}
 		finally {
@@ -386,7 +386,7 @@ public class SqlDao extends AbstractDao {
 			return i;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to count query " + query.getTable() + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to count query " + getTableName(query) + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -420,7 +420,7 @@ public class SqlDao extends AbstractDao {
 			return executor.selectList(sql.getSql(), sql.getParams(), query.getType());
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select query " + query.getTable() + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -471,7 +471,7 @@ public class SqlDao extends AbstractDao {
 			return count;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select query " + query.getTable() + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql(), e);
 		}
 		finally {
 			Sqls.safeClose(srs);
@@ -498,7 +498,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to delete query " + query.getTable() + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to delete query " + getTableName(query) + ": " + sql.getSql(), e);
 		}
 		finally {
 			autoClose();
@@ -563,8 +563,8 @@ public class SqlDao extends AbstractDao {
 		}
 		
 		Map<String, String> m = new HashMap<String, String>();
-		m.put("view", entity.getView());
-		m.put("table", entity.getTable());
+		m.put("view", getViewName(entity));
+		m.put("table", getTableName(entity));
 		m.put("field", eid.getName());
 		
 		String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());
@@ -643,7 +643,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to update query " + query.getTable() + ": " + sql, e);
+			throw new DaoException("Failed to update query " + getTableName(query) + ": " + sql, e);
 		}
 		finally {
 			autoClose();

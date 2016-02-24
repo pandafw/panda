@@ -8,6 +8,7 @@ import java.util.Map;
 
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.entity.EntityJoin;
 import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
@@ -528,6 +529,80 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			joins = new LinkedHashMap<String, Join>();
 		}
 		joins.put(alias, new Join(type, query, conditions));
+		return this;
+	}
+
+	//---------------------------------------------------------------
+	// auto joins
+	//
+	/**
+	 * auto add left join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public GenericQuery autoLeftJoin(String join) {
+		return autoJoin(Join.LEFT, join);
+	}
+
+	/**
+	 * auto add right join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public GenericQuery autoRightJoin(String join) {
+		return autoJoin(Join.RIGHT, join);
+	}
+
+	/**
+	 * auto add inner join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public GenericQuery autoInnerJoin(String join) {
+		return autoJoin(Join.INNER, join);
+	}
+
+	/**
+	 * auto add join from @Join
+	 * @param join join name
+	 * @return this
+	 */
+	public GenericQuery autoJoin(String join) {
+		return autoJoin(null, join);
+	}
+
+	/**
+	 * auto add join from @Join
+	 * @param type join type
+	 * @param join join name
+	 * @return this
+	 */
+	public GenericQuery autoJoin(String type, String join) {
+		Asserts.notEmpty(join, "The parameter join is empty");
+		Entity<?> entity = getEntity();
+
+		Asserts.notNull(entity, "The entity is null");
+		Asserts.notEmpty(entity.getJoins(), "The entity joins is null");
+
+		EntityJoin ej = entity.getJoin(join);
+		if (ej == null) {
+			throw new IllegalArgumentException("The entity join [" + join + "] is not found");
+		}
+
+		@SuppressWarnings("unchecked")
+		GenericQuery jq = new GenericQuery(ej.getTarget());
+		
+		String[] cs = new String[ej.getKeys().size()];
+		for (int i = 0; i < cs.length; i++) {
+			cs[i] = ej.getKeys().get(i).getName() + '=' + ej.getRefs().get(i).getName();
+		}
+		
+		join(type, jq, join, cs);
+		for (EntityField ef : entity.getFields()) {
+			if (join.equals(ef.getJoinName())) {
+				column(ef.getName(), join + '.' + ef.getJoinField());
+			}
+		}
 		return this;
 	}
 

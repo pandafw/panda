@@ -150,7 +150,7 @@ public abstract class SqlExpert {
 
 	public List<String> drop(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>(1);
-		sqls.add(dropTable(entity.getTable()));
+		sqls.add(dropTable(client.getTableName(entity)));
 		return sqls;
 	}
 
@@ -192,7 +192,7 @@ public abstract class SqlExpert {
 	
 	protected Sql count(Query<?> query, String alias) {
 		Sql sql = new Sql();
-		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(query.getTable()));
+		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(client.getTableName(query)));
 		if (Strings.isNotEmpty(alias)) {
 			sql.append(' ').append(alias);
 		}
@@ -220,7 +220,7 @@ public abstract class SqlExpert {
 
 	public Sql delete(Query<?> query) {
 		Sql sql = new Sql();
-		sql.append("DELETE FROM ").append(escapeTable(query.getTable()));
+		sql.append("DELETE FROM ").append(escapeTable(client.getTableName(query)));
 		where(sql, query, null);
 		return sql;
 	}
@@ -235,7 +235,7 @@ public abstract class SqlExpert {
 		}
 		
 		Sql sql = new Sql();
-		sql.append("INSERT INTO ").append(escapeTable(entity.getTable()));
+		sql.append("INSERT INTO ").append(escapeTable(client.getTableName(entity)));
 		sql.append('(');
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly() || (ef.isAutoIncrement() && autoId)) {
@@ -265,7 +265,7 @@ public abstract class SqlExpert {
 	public Sql update(Object data, Query<?> query) {
 		Sql sql = new Sql();
 
-		sql.append("UPDATE ").append(escapeTable(query.getTable()));
+		sql.append("UPDATE ").append(escapeTable(client.getTableName(query)));
 		sql.append(" SET");
 		
 		Entity<?> entity = query.getEntity();
@@ -333,7 +333,7 @@ public abstract class SqlExpert {
 				throw new IllegalArgumentException("Nothing to SELECT!");
 			}
 			sql.setCharAt(sql.length() - 1, ' ');
-			sql.append("FROM ").append(escapeTable(entity.getView()));
+			sql.append("FROM ").append(escapeTable(client.getViewName(entity)));
 			if (Strings.isNotEmpty(alias)) {
 				sql.append(' ').append(alias);
 			}
@@ -372,7 +372,7 @@ public abstract class SqlExpert {
 				}
 				sql.append("* ");
 			}
-			sql.append("FROM ").append(escapeTable(query.getTable())).append(' ').append(alias);
+			sql.append("FROM ").append(escapeTable(client.getTableName(query))).append(' ').append(alias);
 		}
 	}
 	
@@ -394,7 +394,7 @@ public abstract class SqlExpert {
 				sql.append(')');
 			}
 			else {
-				sql.append(escapeTable(jq.getTable()));
+				sql.append(escapeTable(client.getTableName(jq)));
 			}
 			sql.append(' ').append(jalias);
 			sql.append(" ON (");
@@ -668,7 +668,7 @@ public abstract class SqlExpert {
 		List<EntityField> pks = entity.getPrimaryKeys();
 		if (!pks.isEmpty()) {
 			sql.append('\n');
-			sql.append("CONSTRAINT ").append(entity.getTable()).append("_PK PRIMARY KEY (");
+			sql.append("CONSTRAINT ").append(client.getTableName(entity)).append("_PK PRIMARY KEY (");
 			for (EntityField pk : pks) {
 				sql.append(pk.getColumn()).append(',');
 			}
@@ -685,9 +685,9 @@ public abstract class SqlExpert {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("ALTER TABLE ")
-			.append(escapeTable(entity.getTable()))
+			.append(escapeTable(client.getTableName(entity)))
 			.append(" ADD CONSTRAINT ")
-			.append(entity.getTable())
+			.append(client.getTableName(entity))
 			.append("_PK PRIMARY KEY (");
 		for (EntityField pk : pks) {
 			sb.append(pk.getColumn()).append(',');
@@ -699,7 +699,7 @@ public abstract class SqlExpert {
 	protected void addComments(List<String> sqls, Entity<?> entity) {
 		if (Strings.isNotEmpty(entity.getComment())) {
 			String sql = "COMMENT ON TABLE " 
-					+ escapeTable(entity.getTable()) 
+					+ escapeTable(client.getTableName(entity)) 
 					+ " IS '" 
 					+ Sqls.escapeString(entity.getComment())
 					+ '\'';
@@ -709,7 +709,7 @@ public abstract class SqlExpert {
 		for (EntityField ef : entity.getFields()) {
 			if (Strings.isNotEmpty(ef.getComment())) {
 				String sql = "COMMENT ON COLUMN " 
-						+ entity.getTable() + '.' + ef.getColumn() 
+						+ client.getTableName(entity) + '.' + ef.getColumn() 
 						+ " IS '"
 						+ Sqls.escapeString(ef.getComment()) 
 						+ '\'';
@@ -736,12 +736,12 @@ public abstract class SqlExpert {
 				sb.append(" UNIQUE");
 			}
 			sb.append(" Index ");
-			sb.append(entity.getTable())
+			sb.append(client.getTableName(entity))
 				.append("_")
 				.append(index.isUnique() ? "UX" : "IX")
 				.append('_')
 				.append(index.getName());
-			sb.append(" ON ").append(escapeTable(entity.getTable())).append(" (");
+			sb.append(" ON ").append(escapeTable(client.getTableName(entity))).append(" (");
 			for (EntityField ef : index.getFields()) {
 				sb.append(escapeColumn(ef.getColumn())).append(',');
 			}
@@ -759,7 +759,7 @@ public abstract class SqlExpert {
 		for (EntityFKey fk: fks) {
 			sql.append('\n');
 			sql.append("CONSTRAINT ")
-				.append(entity.getTable())
+				.append(client.getTableName(entity))
 				.append("_FK_")
 				.append(fk.getName())
 				.append(" FOREIGN KEY (");
@@ -769,7 +769,7 @@ public abstract class SqlExpert {
 			sql.setCharAt(sql.length() - 1, ')');
 
 			Entity<?> ref = fk.getReference();
-			sql.append(" REFERENCES ").append(escapeTable(ref.getTable())).append(" (");
+			sql.append(" REFERENCES ").append(escapeTable(client.getTableName(ref))).append(" (");
 			for (EntityField ef : ref.getPrimaryKeys()) {
 				sql.append(escapeColumn(ef.getColumn())).append(',');
 			}
@@ -787,9 +787,9 @@ public abstract class SqlExpert {
 		for (EntityFKey fk: fks) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("ALTER TABLE ")
-			.append(escapeTable(entity.getTable()))
+			.append(escapeTable(client.getTableName(entity)))
 			.append(" ADD CONSTRAINT ")
-			.append(entity.getTable())
+			.append(client.getTableName(entity))
 			.append("_FK_")
 			.append(fk.getName())
 			.append(" FOREIGN KEY (");
@@ -799,7 +799,7 @@ public abstract class SqlExpert {
 			sb.setCharAt(sb.length() - 1, ')');
 
 			Entity<?> ref = fk.getReference();
-			sb.append(" REFERENCES ").append(escapeTable(ref.getTable())).append(" (");
+			sb.append(" REFERENCES ").append(escapeTable(client.getTableName(ref))).append(" (");
 			for (EntityField ef : ref.getPrimaryKeys()) {
 				sb.append(escapeColumn(ef.getColumn())).append(',');
 			}

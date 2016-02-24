@@ -1,15 +1,14 @@
 package panda.dao;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.Beans;
 import panda.cast.Castors;
-import panda.dao.entity.AnnotationEntityMaker;
+import panda.dao.entity.Entities;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
-import panda.dao.entity.EntityMaker;
-import panda.lang.Collections;
+import panda.dao.query.Query;
+import panda.lang.Strings;
 
 
 /**
@@ -17,17 +16,16 @@ import panda.lang.Collections;
  * @author yf.frank.wang@gmail.com
  */
 public abstract class DaoClient {
+	protected Entities entities;
 	protected String name;
-	protected Map<Class<?>, Entity> entities;
+	protected String prefix;
 	protected Beans beans;
 	protected Castors castors;
-	protected EntityMaker entityMaker;
 
 	public DaoClient() {
-		entities = new ConcurrentHashMap<Class<?>, Entity>();
+		entities = Entities.i();
 		castors = Castors.i();
 		beans = castors.getBeans();
-		entityMaker = new AnnotationEntityMaker(this);
 	}
 
 	/**
@@ -38,19 +36,19 @@ public abstract class DaoClient {
 	}
 
 	/**
-	 * @return the entityMaker
+	 * @return the prefix
 	 */
-	public EntityMaker getEntityMaker() {
-		return entityMaker;
+	public String getPrefix() {
+		return prefix;
 	}
 
 	/**
-	 * @param entityMaker the entityMaker to set
+	 * @param prefix the prefix to set
 	 */
-	public void setEntityMaker(EntityMaker entityMaker) {
-		this.entityMaker = entityMaker;
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
-	
+
 	/**
 	 * @return the beans
 	 */
@@ -83,26 +81,15 @@ public abstract class DaoClient {
 	 * @return the entities
 	 */
 	public Map<Class<?>, Entity> getEntities() {
-		return Collections.unmodifiableMap(entities);
+		return entities.getEntities();
 	}
 
 	/**
 	 * @param type record type
 	 * @return the entity
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> Entity<T> getEntity(Class<T> type) {
-		Entity<T> entity = entities.get(type);
-		if (entity == null) {
-			synchronized(this) {
-				entity = entities.get(type);
-				if (entity == null) {
-					entity = entityMaker.make(type);
-					entities.put(type, entity);
-				}
-			}
-		}
-		return entity;
+		return entities.getEntity(type);
 	}
 
 	/**
@@ -131,4 +118,38 @@ public abstract class DaoClient {
 	 * @return a Dao instance.
 	 */
 	public abstract Dao getDao();
+
+
+	/**
+	 * @param query query
+	 * @return the table name of query
+	 */
+	public String getTableName(Query query) {
+		if (Strings.isEmpty(prefix)) {
+			return query.getTable();
+		}
+		return prefix + query.getTable();
+	}
+
+	/**
+	 * @param entity entity
+	 * @return the table name of entity
+	 */
+	public String getTableName(Entity<?> entity) {
+		if (Strings.isEmpty(prefix)) {
+			return entity.getTable();
+		}
+		return prefix + entity.getTable();
+	}
+
+	/**
+	 * @param entity entity
+	 * @return the view name of entity
+	 */
+	public String getViewName(Entity<?> entity) {
+		if (Strings.isEmpty(prefix)) {
+			return entity.getView();
+		}
+		return prefix + entity.getView();
+	}
 }

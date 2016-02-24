@@ -32,7 +32,6 @@ public class Entity<T> {
 	protected EntityField identity;
 	
 	protected Map<String, EntityField> fields;
-	protected Map<String, EntityField> columns;
 	
 	/** primary keys */
 	protected List<EntityField> pkeys;
@@ -66,7 +65,6 @@ public class Entity<T> {
 		this.comment = entity.comment;
 		this.identity = entity.identity;
 		this.fields = entity.fields;
-		this.columns = entity.columns;
 		this.pkeys = entity.pkeys;
 		this.indexes = entity.indexes;
 		this.fkeys = entity.fkeys;
@@ -163,23 +161,12 @@ public class Entity<T> {
 	 * @param field the field to add
 	 */
 	protected void addField(EntityField field) {
+		field.setEntity(this);
+
 		if (fields == null) {
 			fields = new LinkedHashMap<String, EntityField>();
 		}
-		if (columns == null) {
-			columns = new LinkedHashMap<String, EntityField>();
-		}
-
-		field.setEntity(this);
 		fields.put(field.getName(), field);
-		columns.put(field.getColumn(), field);
-	}
-
-	/**
-	 * @return the columns
-	 */
-	public Collection<EntityField> getColumns() {
-		return columns.values();
 	}
 
 	/**
@@ -293,16 +280,6 @@ public class Entity<T> {
 	 */
 	public EntityField getField(String name) {
 		return fields.get(name);
-	}
-
-	/**
-	 * get a entity field by column name
-	 * 
-	 * @param name column name
-	 * @return entity field
-	 */
-	public EntityField getColumn(String name) {
-		return columns.get(name);
 	}
 
 	/**

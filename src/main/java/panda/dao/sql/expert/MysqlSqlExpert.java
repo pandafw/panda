@@ -46,7 +46,7 @@ public class MysqlSqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + entity.getTable() + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + client.getTableName(entity) + "(");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
@@ -117,7 +117,7 @@ public class MysqlSqlExpert extends SqlExpert {
 
 		// sometimes mysql needs alter table sql to change the identity start value
 		if (eid != null && eid.isAutoIncrement() && eid.getIdStartWith() > 1) {
-			String sql = "ALTER TABLE " + entity.getTable() + " AUTO_INCREMENT=" + eid.getIdStartWith();
+			String sql = "ALTER TABLE " + client.getTableName(entity) + " AUTO_INCREMENT=" + eid.getIdStartWith();
 			sqls.add(sql);
 		}
 

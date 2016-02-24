@@ -43,6 +43,24 @@ public interface Dao {
 	 */
 	<T> EntityDao<T> getEntityDao(Class<T> type, Object param);
 
+	/**
+	 * @param query query
+	 * @return the table name of query
+	 */
+	String getTableName(Query query);
+
+	/**
+	 * @param entity entity
+	 * @return the table name of entity
+	 */
+	String getTableName(Entity<?> entity);
+
+	/**
+	 * @param entity entity
+	 * @return the view name of entity
+	 */
+	String getViewName(Entity<?> entity);
+	
 	//--------------------------------------------------------------------
 	/**
 	 * drop a table if exists

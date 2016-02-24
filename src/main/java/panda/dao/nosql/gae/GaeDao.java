@@ -227,7 +227,7 @@ public class GaeDao extends AbstractDao {
 	}	
 	
 	private Key createKey(Entity<?> entity, Object id) {
-		return createKey(entity.getTable(), id);
+		return createKey(getTableName(entity), id);
 	}
 
 	private Object getDataIdentity(Entity<?> en, Object data) {
@@ -333,8 +333,8 @@ public class GaeDao extends AbstractDao {
 			Map<String, Object> eps = ge.getProperties();
 			for (Entry<String, Object> e : eps.entrySet()) {
 				String fn = e.getKey();
-				EntityField ef = entity.getColumn(fn);
-				if (ef == null || query.shouldExclude(ef.getName())) {
+				EntityField ef = entity.getField(fn);
+				if (ef == null || ef.isNotPersistent() || query.shouldExclude(ef.getName())) {
 					continue;
 				}
 	
@@ -566,7 +566,7 @@ public class GaeDao extends AbstractDao {
 	}
 
 	private PreparedQuery prepareQuery(Query<?> query, boolean keyOnly) {
-		com.google.appengine.api.datastore.Query gq = new com.google.appengine.api.datastore.Query(query.getTable());
+		com.google.appengine.api.datastore.Query gq = new com.google.appengine.api.datastore.Query(getTableName(query));
 
 		if (keyOnly) {
 			gq.setKeysOnly();
@@ -711,7 +711,7 @@ public class GaeDao extends AbstractDao {
 		assertEntity(entity);
 
 		if (keys == null || keys.length == 0) {
-			return existsByTable(entity.getTable());
+			return existsByTable(getTableName(entity));
 		}
 
 		GenericQuery<?> query = createQuery(entity);
@@ -732,7 +732,7 @@ public class GaeDao extends AbstractDao {
 	@Override
 	protected boolean existsByQuery(GenericQuery<?> query) {
 		if (!query.hasFilters()) {
-			return existsByTable(query.getTable());
+			return existsByTable(getTableName(query));
 		}
 
 		autoStart();
@@ -754,7 +754,7 @@ public class GaeDao extends AbstractDao {
 			return (ge != null);
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to fetch query " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -795,7 +795,7 @@ public class GaeDao extends AbstractDao {
 			return null;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to fetch entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to fetch entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -819,7 +819,7 @@ public class GaeDao extends AbstractDao {
 			return cnt;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to count entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to count entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -859,7 +859,7 @@ public class GaeDao extends AbstractDao {
 			return list;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -901,7 +901,7 @@ public class GaeDao extends AbstractDao {
 			return count;
 		}
 		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -933,7 +933,7 @@ public class GaeDao extends AbstractDao {
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to delete entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to delete entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();
@@ -949,7 +949,7 @@ public class GaeDao extends AbstractDao {
 			ge = new com.google.appengine.api.datastore.Entity(key); 
 		}
 		else {
-			ge = new com.google.appengine.api.datastore.Entity(entity.getTable(), getRootKey());
+			ge = new com.google.appengine.api.datastore.Entity(getTableName(entity), getRootKey());
 			saveEntity(ge);
 			setDataIdentity(entity, data, ge.getKey());
 		}
@@ -1008,7 +1008,7 @@ public class GaeDao extends AbstractDao {
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to update entity " + query.getTable() + ": " + query, e);
+			throw new DaoException("Failed to update entity " + getTableName(query) + ": " + query, e);
 		}
 		finally {
 			autoClose();

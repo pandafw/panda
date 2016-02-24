@@ -14,7 +14,6 @@ import java.util.List;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonObject;
-import panda.dao.DaoClient;
 import panda.dao.DaoNamings;
 import panda.dao.DaoTypes;
 import panda.dao.entity.annotation.Column;
@@ -54,31 +53,10 @@ import panda.log.Logs;
 public class AnnotationEntityMaker implements EntityMaker {
 	private static final Log log = Logs.getLog(AnnotationEntityMaker.class);
 
-	private DaoClient client;
-	private String prefix;
+	private Entities entities;
 	
-	public AnnotationEntityMaker(DaoClient client) {
-		this(client, "");
-	}
-
-	public AnnotationEntityMaker(DaoClient client, String prefix) {
-		this.client = client; 
-		this.prefix = prefix;
-	}
-
-	/**
-	 * @return the prefix
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
-	/**
-	 * @param prefix the prefix to set
-	 */
-	@Override
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public AnnotationEntityMaker(Entities client) {
+		this.entities = client; 
 	}
 
 	@Override
@@ -159,7 +137,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private <T> Entity<T> createEntity(Class<T> type) {
 		Entity<T> en = new Entity<T>(type);
 
-		BeanHandler<T> bh = client.getBeans().getBeanHandler(type);
+		BeanHandler<T> bh = entities.getBeans().getBeanHandler(type);
 		if (bh == null) {
 			throw new RuntimeException("Failed to get BeanHander for " + type);
 		}
@@ -193,16 +171,6 @@ public class AnnotationEntityMaker implements EntityMaker {
 		// check table or view
 		if (Strings.isEmpty(en.getTable()) && Strings.isEmpty(en.getView())) {
 			throw new IllegalArgumentException("@Table or @View of [" + type + "] is not defined");
-		}
-		
-		// add prefix
-		if (Strings.isNotEmpty(prefix)) {
-			if (Strings.isNotEmpty(en.getTable())) {
-				en.setTable(prefix + en.getTable());
-			}
-			if (Strings.isNotEmpty(en.getView())) {
-				en.setView(prefix + en.getView());
-			}
 		}
 		
 		// table comment
@@ -511,7 +479,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 		if (en.getType().equals(target)) {
 			return en;
 		}
-		return client.getEntity(target);
+		return entities.getEntity(target);
 	}
 
 	private void evalEntityFKey(Entity<?> en, String name, Class<?> target, String[] fields) {

@@ -100,6 +100,20 @@ public class EntityField {
 	}
 
 	/**
+	 * @return true if field is persistent
+	 */
+	public boolean isPersistent() {
+		return column != null;
+	}
+
+	/**
+	 * @return true if field is not persistent
+	 */
+	public boolean isNotPersistent() {
+		return column == null;
+	}
+	
+	/**
 	 * @return the comment
 	 */
 	public String getComment() {
