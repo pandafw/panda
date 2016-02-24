@@ -13,6 +13,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import panda.dao.DaoTypes;
+import panda.dao.entity.Entities;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
@@ -165,6 +166,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		imports.add(entity.getName());
 		imports.add(GenericQuery.class.getName());
+		imports.add(Entities.class.getName());
 		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
 			imports.add(entity.getBaseQueryClass());
 		}

@@ -62,8 +62,14 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
 		};
-
 </#if>
+
+<#if entity.joinMap?has_content>
+<#list entity.joinMap?keys as k>
+	public static final String _JOIN_${k?upper_case}_ = "${k}";
+</#list>
+</#if>
+
 	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
