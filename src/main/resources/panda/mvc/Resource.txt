@@ -85,7 +85,7 @@ listview-sortable=true
 listview-actions-align=left
 
 #listview - filters
-listview-filters-caption=Filters
+listview-filters-caption=Filter
 listview-filters-label-addFilter=Add filter
 listview-filters-label-method=Query method
 listview-filters-button-clear=Clear

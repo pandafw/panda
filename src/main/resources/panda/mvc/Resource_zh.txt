@@ -28,7 +28,7 @@ pager-tooltip-first=≪ 最前页
 pager-tooltip-last=最后页 ≫
 
 #listview - filters
-listview-filters-caption=检索条件
+listview-filters-caption=检索
 listview-filters-label-addFilter=检索条件追加
 listview-filters-button-query=检索
 listview-filters-button-clear=清除

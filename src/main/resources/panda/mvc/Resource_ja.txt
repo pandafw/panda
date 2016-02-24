@@ -29,7 +29,7 @@ pager-tooltip-last=最後のページ ≫
 
 
 #listview - filters
-listview-filters-caption=検索条件
+listview-filters-caption=検索
 listview-filters-label-addFilter=検索条件の追加
 listview-filters-button-query=検索
 listview-filters-button-clear=クリア
