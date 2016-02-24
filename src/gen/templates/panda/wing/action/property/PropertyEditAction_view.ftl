@@ -6,7 +6,10 @@
 
 <div class="p-section">
 	<div class="p-header">
-		<h3><@p.i icon="icon"/> <@p.text name="title-view"><@p.param name="title" value="#(title)"/></@p.text></h3>
+		<ol class="breadcrumb">
+			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
+			<li class="active"><@p.text name="step-view"/></li>
+		</ol>
 	</div>
 <#if text.getText("well-view", "")?has_content>
 	<div class="p-well"><@p.text name="well-view"/></div>

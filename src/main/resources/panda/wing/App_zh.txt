@@ -164,7 +164,11 @@ title-btrash=${top.title} - 删除
 title-bupdate=${top.title} - 变更
 
 #step
-step-list=列表
+step-list=浏览
+step-list_print=浏览
+step-list_popup=浏览
+step-view=详细
+step-print=详细
 step-cancel=取消
 step-cancel-confirm=确认
 step-cancel-success=完成

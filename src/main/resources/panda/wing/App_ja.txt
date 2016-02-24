@@ -165,6 +165,10 @@ title-bupdate=${top.title} - 編集
 
 #step
 step-list=一覧
+step-list_print=一覧
+step-list_popup=一覧
+step-view=照会
+step-print=照会
 step-cancel=取消
 step-cancel-confirm=確認
 step-cancel-success=完了

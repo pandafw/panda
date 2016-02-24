@@ -6,7 +6,10 @@
 
 <div class="p-section">
 	<div class="p-header">
-		<h3><@p.i icon="icon"/> <@p.text name="title-list_print"><@p.param name="title" value="#(title)"/></@p.text></h3>
+		<ol class="breadcrumb">
+			<li><@p.i icon="icon"/> <@p.text name="title"/></li>
+			<li class="active"><@p.text name="step-list_print"/></li>
+		</ol>
 	</div>
 <#if text.getText("well-list_print", "")?has_content>
 	<div class="p-well"><@p.text name="well-list_print"/></div>

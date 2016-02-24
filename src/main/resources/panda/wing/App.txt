@@ -209,7 +209,13 @@ title-bupdate=${top.title} - Update
 
 #step
 step-list=List
-
+step-list_print=List
+step-list_popup=List
+step-view=View
+step-print=View
+step-cancel=Cancel
+step-cancel-confirm=Confirm
+step-cancel-success=Complete
 step-add=Add
 step-add-confirm=Confirm
 step-add-success=Complete
@@ -234,10 +240,6 @@ step-trash-success=Complete
 step-update=Update
 step-update-confirm=Confirm
 step-update-success=Complete
-
-step-cancel=Cancel
-step-cancel-confirm=Confirm
-step-cancel-success=Complete
 
 step-bdelete=Delete
 step-bdelete-confirm=Confirm
