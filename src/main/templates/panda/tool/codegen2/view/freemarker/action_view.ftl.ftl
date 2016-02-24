@@ -2,7 +2,7 @@
 <@header/>
 
 <div class="p-section">
-	<@sheader/>
+	<@sheader steps=[ ui.name ]/>
 	<@swell/>
 
 	<#include "edit-toolbar.ftl"/>
