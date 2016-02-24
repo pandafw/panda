@@ -1,5 +1,6 @@
 package panda.wing.entity.query;
 
+import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.StringCondition;
@@ -11,7 +12,7 @@ public class ResourceQuery extends SUQuery<Resource, ResourceQuery> {
 	 * Constructor
 	 */
 	public ResourceQuery() {
-		super(Resource.class);
+		super(Entities.i().getEntity(Resource.class));
 	}
 
 	/**
@@ -59,6 +60,7 @@ public class ResourceQuery extends SUQuery<Resource, ResourceQuery> {
 	public StringCondition<ResourceQuery> source() {
 		return new StringCondition<ResourceQuery>(this, Resource.SOURCE);
 	}
+
 
 }
 

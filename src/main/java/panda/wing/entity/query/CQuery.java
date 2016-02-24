@@ -2,6 +2,7 @@ package panda.wing.entity.query;
 
 import java.util.Date;
 
+import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
 import panda.dao.query.GenericQuery;
@@ -15,6 +16,14 @@ public class CQuery<T extends CBean, Q extends CQuery> extends EntityQuery<T, Q>
 	 */
 	public CQuery(Class<T> type) {
 		super(type);
+	}
+
+	/**
+	 * constructor
+	 * @param entity query entity
+	 */
+	public CQuery(Entity<T> entity) {
+		super(entity);
 	}
 
 	/**

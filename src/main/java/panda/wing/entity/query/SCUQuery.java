@@ -2,6 +2,7 @@ package panda.wing.entity.query;
 
 import java.util.Date;
 
+import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
 import panda.dao.query.GenericQuery;
@@ -15,6 +16,14 @@ public class SCUQuery<T extends SCUBean, Q extends SCUQuery> extends EntityQuery
 	 */
 	public SCUQuery(Class<T> type) {
 		super(type);
+	}
+
+	/**
+	 * constructor
+	 * @param entity query entity
+	 */
+	public SCUQuery(Entity<T> entity) {
+		super(entity);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package panda.wing.entity.query;
 
+import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
 import panda.dao.query.GenericQuery;
@@ -13,6 +14,14 @@ public class SQuery<T extends SBean, Q extends SQuery> extends EntityQuery<T, Q>
 	 */
 	public SQuery(Class<T> type) {
 		super(type);
+	}
+
+	/**
+	 * constructor
+	 * @param entity query entity
+	 */
+	public SQuery(Entity<T> entity) {
+		super(entity);
 	}
 
 	/**

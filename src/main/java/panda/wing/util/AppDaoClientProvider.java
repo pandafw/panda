@@ -51,7 +51,7 @@ public class AppDaoClientProvider {
 		
 		String prefix = settings.getProperty(SC.DATA_PREFIX);
 		if (Strings.isNotEmpty(prefix)) {
-			daoClient.getEntityMaker().setPrefix(prefix);
+			daoClient.setPrefix(prefix);
 		}
 	}
 	

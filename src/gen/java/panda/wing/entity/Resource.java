@@ -18,7 +18,7 @@ import panda.wing.entity.SUBean;
 })
 public class Resource extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -400120649L;
+	private static final long serialVersionUID = -301773385L;
 
 	/**
 	 * Constructor
@@ -43,6 +43,8 @@ public class Resource extends SUBean implements Serializable {
 			COUNTRY,
 			SOURCE
 		};
+
+
 
 	/*----------------------------------------------------------------------*
 	 * Properties

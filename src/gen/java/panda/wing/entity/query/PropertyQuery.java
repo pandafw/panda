@@ -1,5 +1,6 @@
 package panda.wing.entity.query;
 
+import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.StringCondition;
@@ -11,7 +12,7 @@ public class PropertyQuery extends SUQuery<Property, PropertyQuery> {
 	 * Constructor
 	 */
 	public PropertyQuery() {
-		super(Property.class);
+		super(Entities.i().getEntity(Property.class));
 	}
 
 	/**
@@ -73,6 +74,7 @@ public class PropertyQuery extends SUQuery<Property, PropertyQuery> {
 	public StringCondition<PropertyQuery> memo() {
 		return new StringCondition<PropertyQuery>(this, Property.MEMO);
 	}
+
 
 }
 
