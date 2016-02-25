@@ -27,12 +27,12 @@
 		<#assign an = aa[0]/>
 		<#assign ap = gen.getActionPath(aa[1])/>
 		<#if a?starts_with('@')>
-	${s}#if action.hasPermission("${ap}")>
+	${s}#if a.hasPermission("${ap}")>
 		${s}@p.url var='_u_' action='${ap}'/>
 		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-${an}', '')?html + '"><i class="' + text.getText('icon-${an}', '') + '"></i>' + text.getText('label-${an}', '') + '</a>'/>
 	${s}/#if>
 		<#else>
-	${s}#if action.hasPermission("${ap}")>
+	${s}#if a.hasPermission("${ap}")>
 		${s}#assign _actions_ = _actions_ + [{
 			"action": "${ap}",
 		<#if a?contains('%') && entity.primaryKeyList?has_content>
@@ -169,7 +169,7 @@ ${s}/#if>
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview options [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
-		${s}#if action.hasPermission("${ap}")>
+		${s}#if a.hasPermission("${ap}")>
 			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
 		${s}/#if>
 	</#list>

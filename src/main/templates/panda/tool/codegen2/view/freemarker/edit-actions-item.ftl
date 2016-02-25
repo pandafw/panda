@@ -10,7 +10,7 @@
 		<#if _as[0] == '' || (_as[1]!'') == ''>${action.error("Invalid toolbar item [" + _a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
 		<#assign an = _as[0]/>
 		<#assign ap = gen.getActionPath(_as[1])/>
-			${s}#if action.hasPermission('${ap}')>
+			${s}#if a.hasPermission('${ap}')>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-${an}",
 					"action": "${ap}",
@@ -23,14 +23,14 @@
 		<#assign an = _as[0]/>
 		<#assign ap = gen.getActionPath(_as[1])/>
 		<#if _a?contains('%')>
-			${s}#if r?? && action.hasDataPermission(r, '${ap}')>
+			${s}#if r?? && a.hasDataPermission(r, '${ap}')>
 				${s}@p.url var="_u_" action="${ap}" escapeAmp="false">
 <#list entity.primaryKeyList as p>
 					${s}@p.param name="${p.name}" value="%{r.${p.name}}"/>
 </#list>
 				${s}/@p.url>
 		<#else>
-			${s}#if action.hasPermission('${ap}')>
+			${s}#if a.hasPermission('${ap}')>
 				${s}@p.url var="_u_" action="${ap}"/>
 		</#if>
 				${s}#assign _buttons_ = _buttons_ + [{

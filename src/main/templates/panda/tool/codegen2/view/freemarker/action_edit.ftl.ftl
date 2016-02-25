@@ -19,7 +19,7 @@ ${s}#if r??>
 		<#include "edit-update-fields.ftl" />
 		${s}#assign _buttons_ = [] />
 <#if "true" == props['ui.input.confirm']!>
-	${s}#if action.inputConfirm>
+	${s}#if a.inputConfirm>
 		${s}#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-${ui.name}-confirm",
 			"action": "~/${ui.name}_confirm",
