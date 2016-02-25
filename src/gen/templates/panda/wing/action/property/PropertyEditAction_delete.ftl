@@ -97,7 +97,7 @@
 			"action": "~/delete_execute",
 			"text": "button-delete-execute"
 		}]/>
-			<#if action.hasPermission('~/list')>
+			<#if a.hasPermission('~/list')>
 				<@p.url var="_u_" action="~/list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",

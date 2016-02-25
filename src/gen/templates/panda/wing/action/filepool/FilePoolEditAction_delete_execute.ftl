@@ -18,7 +18,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
+<#if a.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -57,7 +57,7 @@
 			/>
 	</#if>
 			<#assign _buttons_ = [] />
-			<#if action.hasPermission('~/list')>
+			<#if a.hasPermission('~/list')>
 				<@p.url var="_u_" action="~/list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",

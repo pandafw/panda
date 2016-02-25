@@ -124,7 +124,7 @@
 	<br/>
 	<div class="p-tcenter">
 		
-	<#if action.hasPermission("~/list")>
+	<#if a.hasPermission("~/list")>
 		<@p.a btn="default" icon="icon-list" action="~/list" label="#(button-list)"/>
 	</#if>
 	</div>
