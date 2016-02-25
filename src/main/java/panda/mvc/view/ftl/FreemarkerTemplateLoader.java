@@ -21,6 +21,11 @@ import panda.tpl.ftl.MultiTemplateLoader;
 public class FreemarkerTemplateLoader extends MultiTemplateLoader {
 	private static final Log log = Logs.getLog(FreemarkerTemplateLoader.class);
 
+	public static final String DEFAULT_WEB_PATH = "/WEB-INF/templates/";
+	
+	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATES_WEB_PATH, required=false)
+	private String webpath = DEFAULT_WEB_PATH;
+
 	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATES, required=false)
 	private String templates;
 	
@@ -60,7 +65,7 @@ public class FreemarkerTemplateLoader extends MultiTemplateLoader {
 		else {
 			// presume that most apps will require the class and webapp template loader
 			// if people wish to
-			addTemplateLoader(new WebappTemplateLoader(servlet));
+			addTemplateLoader(new WebappTemplateLoader(servlet, webpath));
 			addTemplateLoader(new ClassTemplateLoader());
 		}
 	}

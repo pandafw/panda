@@ -16,6 +16,7 @@ public interface MvcConstants extends IocConstants {
 	public static final String FILEPOOL_DAO_BLOCK_SIZE = "panda.filepool.dao.block.size";
 
 	public static final String FREEMARKER_TEMPLATES = "panda.freemarker.templates";
+	public static final String FREEMARKER_TEMPLATES_WEB_PATH = "panda.freemarker.templates.web.path";
 	public static final String FREEMARKER_SETTINGS = "panda.freemarker.settings";
 
 	public static final String FREEMARKER_WRAPPER_ALT_MAP = "panda.freemarker.wrapper.altMap";

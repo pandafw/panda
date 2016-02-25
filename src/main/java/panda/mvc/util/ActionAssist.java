@@ -1,5 +1,12 @@
 package panda.mvc.util;
 
+import java.text.Format;
+import java.util.Calendar;
+import java.util.UUID;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import panda.dao.query.Order;
 import panda.io.Files;
 import panda.ioc.Scope;
@@ -20,13 +27,6 @@ import panda.net.http.HttpStatus;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 import panda.servlet.filter.RequestLoggingFilter;
-
-import java.text.Format;
-import java.util.Calendar;
-import java.util.UUID;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 
 @IocBean(scope=Scope.REQUEST)

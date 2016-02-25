@@ -9,15 +9,9 @@ import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.http.HttpContentType;
 
 /**
- * <p/>
- * 根据传入的视图名，决定视图的路径：
  * <ul>
- * <li>如果视图名以 '/' 开头， 则被认为是一个 全路径
- * <li>否则，将视图名中的 '.' 转换成 '/'，并加入前缀 "/WEB-INF/"
- * </ul>
- * 通过注解映射的例子：
- * <ul>
- * <li>'@Ok("ftl:abc.cbc")' => /WEB-INF/abc/cbc.ftl
+ * <li>'@Ok("ftl")' => /x/y/class_method.ftl -> /x/y/class.ftl -> /x/y/super_class_method.ftl -> /x/y/super_class.ftl
+ * <li>'@Ok("ftl:~input")' => find template for input() method
  * <li>'@Ok("ftl:/abc/cbc")' => /abc/cbc.ftl
  * <li>'@Ok("ftl:/abc/cbc.ftl")' => /abc/cbc.ftl
  * </ul>
