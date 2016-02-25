@@ -53,24 +53,7 @@ public class Pager implements Cloneable, Serializable {
 		}
 		// total is known
 		else {
-			if (page != null) {
-				// fix page & calculate start
-				if (limit == null || limit < 1) {
-					page = 1L;
-					start = 0L;
-				}
-				else {
-					long p = total / limit;
-					if (total % limit != 0) {
-						p++;
-					}
-					if (page > p) {
-						page = p;
-					}
-					start = (page - 1) * limit;
-				}
-			}
-			else if (start != null) {
+			if (start != null) {
 				// fix start & calculate page
 				if (start >= total) {
 					if (limit == null || limit < 1) {
@@ -90,6 +73,23 @@ public class Pager implements Cloneable, Serializable {
 				}
 				else {
 					page = calcPage();
+				}
+			}
+			else if (page != null) {
+				// fix page & calculate start
+				if (limit == null || limit < 1) {
+					page = 1L;
+					start = 0L;
+				}
+				else {
+					long p = total / limit;
+					if (total % limit != 0) {
+						p++;
+					}
+					if (page > p) {
+						page = p;
+					}
+					start = (page - 1) * limit;
 				}
 			}
 			else {
