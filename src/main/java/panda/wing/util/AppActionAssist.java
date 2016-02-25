@@ -22,6 +22,7 @@ import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
 import panda.mvc.util.StateProvider;
+import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.wing.auth.AuthHelper;
 import panda.wing.auth.IUser;
 import panda.wing.constant.RC;
@@ -38,6 +39,9 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	protected AppSettings settings;
 
 	@IocInject
+	protected FreemarkerHelper freemarker;
+	
+	@IocInject
 	protected AppFreemarkerTemplateLoader ftlTemplateLoader;
 
 	@IocInject
@@ -45,6 +49,16 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 
 	@IocInject(required=false)
 	protected AuthHelper authHelper;
+	
+	//--------------------------------------------------------------------------	
+	/**
+	 * hasTemplate
+	 * @param name template name
+	 * @return true if template exists
+	 */
+	public boolean hasTemplate(String name) {
+		return freemarker.hasTemplate(name);
+	}
 	
 	//--------------------------------------------------------------------------	
 	/**
