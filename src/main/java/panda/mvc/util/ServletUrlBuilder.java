@@ -11,6 +11,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
@@ -26,7 +27,7 @@ public class ServletUrlBuilder implements UrlBuilder {
 	public static final String SUPPRESS_NULL = "null";
 	
 	@IocInject
-	protected HttpServletRequest request;
+	protected ActionContext context;
 
 	protected String scheme;
 
@@ -54,36 +55,54 @@ public class ServletUrlBuilder implements UrlBuilder {
 
 	protected boolean forceAddSchemeHostAndPort;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public String build() {
+	public static String build(ActionContext context, String action, boolean includeContext) {
 		String uri;
+
 		if (Strings.isNotEmpty(action)) {
 			uri = action;
 			char c = action.charAt(0);
 			
 			if (c == '~') {
 				// resolve URL
-				String base = HttpServlets.getRequestURI(request);
+				String self = context.getPath();
 				String path = Strings.stripStart(action.substring(1), '/');
-				uri = URLHelper.resolveURL(base, path);
+				uri = URLHelper.resolveURL(self, path);
+				if (includeContext) {
+					uri = context.getBase() + uri;
+				}
 			}
 			else if (c == '+') {
 				// append path
-				String base = HttpServlets.getRequestURI(request);
-				uri = URLHelper.appendPath(base, action.substring(1));
+				String self = context.getPath();
+				uri = URLHelper.appendPath(self, action.substring(1));
+				if (includeContext) {
+					uri = context.getBase() + uri;
+				}
 			}
 			else if (c == '/') {
 				if (includeContext) {
-					uri = request.getContextPath() + action;
+					uri = context.getBase() + uri;
 				}
 			}
 		}
 		else {
 			// Go to "same page"
-			uri = HttpServlets.getRequestURI(request);
+			uri = context.getPath();
+			if (includeContext) {
+				uri = context.getBase() + uri;
+			}
 		}
+		
+		return uri;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public String build() {
+		String uri = build(context, action, includeContext);
 
+		HttpServletRequest request = context.getRequest();
+		
 		Map ps = params;
 		if (GET.equalsIgnoreCase(includeParams)) {
 			String qs = HttpServlets.getRequestQueryString(request);
