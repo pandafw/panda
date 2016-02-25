@@ -71,7 +71,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 			}
 			if (Strings.isNotEmpty(unloginUrl)) {
 				String red = getRedirectURL(ac);
-				String url = Mvcs.translate(unloginUrl, ac, red);
+				String url = Mvcs.translate(ac, unloginUrl, red);
 				HttpServlets.sendRedirect(ac.getResponse(), url);
 				return;
 			}
@@ -84,7 +84,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 			}
 			if (Strings.isNotEmpty(unsecureUrl)) {
 				String red = getRedirectURL(ac);
-				String url = Mvcs.translate(unsecureUrl, ac, red);
+				String url = Mvcs.translate(ac, unsecureUrl, red);
 				HttpServlets.sendRedirect(ac.getResponse(), url);
 				return;
 			}

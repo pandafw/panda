@@ -19,7 +19,7 @@
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
 </li><#if r?? && action.hasDataPermission(r, "~/print")><li><@p.a icon="icon-print" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/><@p.text name='button-print'/></@p.a>
-</li></#if><#if action.hasPermission("~/add")><li><@p.a icon="icon-add" action="~/add" label="#(button-add)"/>
+</li></#if><#if action.hasPermission("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(button-new)"/>
 </li></#if><#if action.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
