@@ -15,7 +15,7 @@ public abstract class AbstractPathView extends AbstractView {
 			return null;
 		}
 
-		return Mvcs.translate(location, ac);
+		return Mvcs.translate(ac, location);
 	}
 }
 

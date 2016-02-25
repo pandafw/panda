@@ -190,8 +190,11 @@ public abstract class Mvcs {
 	 * ![...] : json array
 	 * #(...) : text
 	 */
-	public static Object evaluate(Object val, ActionContext ac) {
-		return evaluate(val, ac, Objects.NULL);
+	public static Object evaluate(ActionContext ac, Object expr) {
+		if (expr instanceof String) {
+			return evaluate(ac, (String)expr);
+		}
+		return expr;
 	}
 	
 	/**
@@ -201,26 +204,49 @@ public abstract class Mvcs {
 	 * ![...] : json array
 	 * #(...) : text
 	 */
-	public static Object evaluate(Object val, ActionContext ac, Object arg) {
-		if (val instanceof String) {
-			String s = (String)val;
-			if (s.length() > 3) {
-				char c0 = s.charAt(0);
-				char c1 = s.charAt(1);
-				char cx = s.charAt(s.length() - 1);
-				if ((c0 == Marks.DOLLAR || c0 == Marks.PERCENT) && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
-					val = findValue(s.substring(2, s.length() - 1), ac, arg);
-				}
-				else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
-					val = JsonObject.fromJson(s.substring(1));
-				}
-				else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACKETS_LEFT && cx == Marks.BRACKETS_RIGHT) {
-					val = JsonArray.fromJson(s.substring(1));
-				}
-				else if (c0 == Marks.SHARP && c1 == Marks.PARENTHESES_LEFT && cx == Marks.PARENTHESES_RIGHT) {
-					String k = s.substring(2, s.length() - 1);
-					val = ac.getText().getText(k, "", arg);
-				}
+	public static Object evaluate(ActionContext ac, Object expr, Object arg) {
+		if (expr instanceof String) {
+			return evaluate(ac, (String)expr, arg);
+		}
+		return expr;
+	}
+
+	/**
+	 * evaluate string value
+	 * ${...}, %{...} : el eval
+	 * !{...} : json object
+	 * ![...] : json array
+	 * #(...) : text
+	 */
+	public static Object evaluate(ActionContext ac, String expr) {
+		return evaluate(ac, expr, Objects.NULL);
+	}
+	
+	/**
+	 * evaluate string value
+	 * ${...}, %{...} : el eval
+	 * !{...} : json object
+	 * ![...] : json array
+	 * #(...) : text
+	 */
+	public static Object evaluate(ActionContext ac, String expr, Object arg) {
+		Object val = expr;
+		if (expr.length() > 3) {
+			char c0 = expr.charAt(0);
+			char c1 = expr.charAt(1);
+			char cx = expr.charAt(expr.length() - 1);
+			if ((c0 == Marks.DOLLAR || c0 == Marks.PERCENT) && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
+				val = findValue(expr.substring(2, expr.length() - 1), ac, arg);
+			}
+			else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
+				val = JsonObject.fromJson(expr.substring(1));
+			}
+			else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACKETS_LEFT && cx == Marks.BRACKETS_RIGHT) {
+				val = JsonArray.fromJson(expr.substring(1));
+			}
+			else if (c0 == Marks.SHARP && c1 == Marks.PARENTHESES_LEFT && cx == Marks.PARENTHESES_RIGHT) {
+				String k = expr.substring(2, expr.length() - 1);
+				val = ac.getText().getText(k, "", arg);
 			}
 		}
 		
@@ -231,14 +257,14 @@ public abstract class Mvcs {
 	/**
 	 * translate expression
 	 */
-	public static String translate(String expr, ActionContext ac) {
-		return translate(expr, ac, Objects.NULL);
+	public static String translate(ActionContext ac, String expr) {
+		return translate(ac, expr, Objects.NULL);
 	}
 	
 	/**
 	 * translate expression
 	 */
-	public static String translate(String expr, ActionContext ac, Object arg) {
+	public static String translate(ActionContext ac, String expr, Object arg) {
 		if (arg != Objects.NULL) {
 			try {
 				ac.push(arg);

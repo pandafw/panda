@@ -273,7 +273,7 @@ public class DefaultTextProvider implements TextProvider {
 	}
 
 	private String evalMessage(String text, Object arg) {
-		return Mvcs.translate(text, context, arg);
+		return Mvcs.translate(context, text, arg);
 	}
 
 	/**

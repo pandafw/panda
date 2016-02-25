@@ -165,7 +165,7 @@ public class Component {
 		
 		for (Entry<String, Object> en : params.entrySet()) {
 			String p = en.getKey();
-			Object v = Mvcs.evaluate(en.getValue(), context, arg);
+			Object v = Mvcs.evaluate(context, en.getValue(), arg);
 			setParameter(p, v);
 		}
 	}
@@ -181,7 +181,7 @@ public class Component {
 		
 		for (Entry<String, Object> en : params.entrySet()) {
 			String p = en.getKey();
-			Object v = Mvcs.evaluate(en.getValue(), context, arg);
+			Object v = Mvcs.evaluate(context, en.getValue(), arg);
 			addParameter(p, v);
 		}
 	}

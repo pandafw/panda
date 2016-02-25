@@ -141,7 +141,7 @@ public abstract class AbstractValidator implements Validator {
 	
 	protected String evalMessage(ActionContext ac) {
 		if (Strings.isNotEmpty(message)) {
-			return Mvcs.translate(message, ac, this);
+			return Mvcs.translate(ac, message, this);
 		}
 		
 		if (Strings.isNotEmpty(msgId)) {

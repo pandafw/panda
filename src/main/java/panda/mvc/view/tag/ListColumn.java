@@ -8,7 +8,7 @@ import panda.mvc.view.tag.ui.ListView.ItemLink;
 public class ListColumn {
 	public static class Format {
 		public String type;
-		public String expression;
+		public String expr;
 		public Object codemap;
 		public String escape;
 	}

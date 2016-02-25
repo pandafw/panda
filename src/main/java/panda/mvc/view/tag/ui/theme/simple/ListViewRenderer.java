@@ -2,9 +2,11 @@ package panda.mvc.view.tag.ui.theme.simple;
 
 import panda.bean.Beans;
 import panda.lang.Arrays;
+import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Iterators;
 import panda.lang.Strings;
+import panda.mvc.Mvcs;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Queryer;
 import panda.mvc.util.PermissionProvider;
@@ -1007,8 +1009,24 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 										}
 									}
 								}
-								else if ("expression".equals(c.format.type)) {
-									String v = tag.findString(c.format.expression, d);
+								else if ("eval".equals(c.format.type)) {
+									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									Object v = Mvcs.evaluate(context, c.format.expr);
+									if (v != null) {
+										v = tag.castString(v);
+										write(Escapes.escape((String)v, c.format.escape));
+									}
+								}
+								else if ("expr".equals(c.format.type)) {
+									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									String v = tag.findString(c.format.expr, d);
+									if (v != null) {
+										write(Escapes.escape(v, c.format.escape));
+									}
+								}
+								else if ("tran".equals(c.format.type)) {
+									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+									String v = Mvcs.translate(context, c.format.expr);
 									if (v != null) {
 										write(Escapes.escape(v, c.format.escape));
 									}

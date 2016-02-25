@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.bean.Beans;
-import panda.el.El;
 import panda.io.stream.CsvWriter;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Asserts;
@@ -17,6 +16,7 @@ import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 
 /**
  * Render CSV.
@@ -104,31 +104,41 @@ public class Csv extends Component {
 						}
 
 						String value = null;
-						if (c.format != null && "code".equals(c.format.type)) {
-							Object v = getBeanProperty(d, c.name);
-							Iterator iv = Iterators.asIterator(v);
-							if (iv != null) {
-								StringBuilder sb = new StringBuilder();
-								while (iv.hasNext()) {
-									sb.append(getCodeText(c.format.codemap, iv.next()));
-									if (iv.hasNext()) {
-										sb.append(' ');
+						if (c.format != null) {
+							if ("code".equals(c.format.type)) {
+								Object v = getBeanProperty(d, c.name);
+								Iterator iv = Iterators.asIterator(v);
+								if (iv != null) {
+									StringBuilder sb = new StringBuilder();
+									while (iv.hasNext()) {
+										sb.append(getCodeText(c.format.codemap, iv.next()));
+										if (iv.hasNext()) {
+											sb.append(' ');
+										}
 									}
+									value = sb.toString();
 								}
-								value = sb.toString();
 							}
-						}
-						else if (c.format != null && "expression".equals(c.format.type)) {
-							Asserts.notEmpty(c.format.expression, "The expression of [" + c.name + "] is empty");
-							Object v = El.eval(c.format.expression, d);
-							if (v != null) {
-								value = castString(v);
+							else if ("eval".equals(c.format.type)) {
+								Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+								Object v = Mvcs.evaluate(context, c.format.expr);
+								if (v != null) {
+									value = castString(v);
+								}
 							}
-						}
-						else if (c.format != null) {
-							Object v = getBeanProperty(d, c.name);
-							if (v != null) {
-								value = castString(v, c.format.type);
+							else if ("expr".equals(c.format.type)) {
+								Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+								value = findString(c.format.expr, d);
+							}
+							else if ("tran".equals(c.format.type)) {
+								Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
+								value = Mvcs.translate(context, c.format.expr);
+							}
+							else {
+								Object v = getBeanProperty(d, c.name);
+								if (v != null) {
+									value = castString(v, c.format.type);
+								}
 							}
 						}
 						else {
