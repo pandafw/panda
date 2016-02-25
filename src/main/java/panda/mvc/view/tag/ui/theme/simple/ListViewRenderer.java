@@ -821,12 +821,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 				continue;
 			}
 
-			String ctype = defs(c.type, "column");
+			String ctype = defs(c.type, "cm");
 			
 			Attributes tha = new Attributes();
 			tha.add("column", c.name)
 				.cssClass("p-lv-" + ctype 
-					+ ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
+					+ ("cm".equals(ctype) ? " p-lv-cm-" + c.name : "")
 					+ (tag.getSortable() && c.sortable ? " p-lv-sortable p-sortable" : "")
 					+ ((queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
 					+ (fsdefines.contains(c.name) ? " p-lv-filtered" : "")
@@ -936,11 +936,11 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						continue;
 					}
 
-					String ctype = defs(c.type, "column");
+					String ctype = defs(c.type, "cm");
 					
 					Attributes tda = new Attributes();
 					tda.add("class", "p-lv-" + ctype 
-							   + ("column".equals(ctype) ? " p-lv-cm-" + c.name : "")
+							   + ("cm".equals(ctype) ? " p-lv-cm-" + c.name : "")
 							   + (c.hidden ? " p-lv-hidden" : "")
 							   + (c.nowrap ? " p-lv-nowrap" : ""));
 					if (c.width > 0) {
@@ -985,6 +985,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 						
 						if (!(c.group && prev_d != null 
 								&& defs(getBeanProperty(prev_d, c.name)).equals(defs(getBeanProperty(d, c.name))))) {
+							
+							// for css width
+							write("<div>");
 							
 							boolean wa = false;
 							
@@ -1048,6 +1051,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							if (wa) {
 								write("</a>");
 							}
+							write("</div>");
 						}
 					}
 					
