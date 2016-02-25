@@ -21,6 +21,7 @@ import panda.mvc.bean.Sorter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.PermissionProvider;
+import panda.mvc.util.ServletUrlBuilder;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.wing.auth.AuthHelper;
@@ -211,7 +212,8 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 */
 	@Override
 	public boolean hasPermission(String action) {
-		return authHelper.hasPermission(context, action);
+		String uri = ServletUrlBuilder.build(context, action, false);
+		return authHelper.hasPermission(context, uri);
 	}
 
 	/**
