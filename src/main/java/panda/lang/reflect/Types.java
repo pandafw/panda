@@ -252,6 +252,28 @@ public abstract class Types {
 		Class clazz = getRawType(type);
 		return Classes.isImmutable(clazz);
 	}
+
+	/**
+	 * Determines if the specified {@code Class} object represents a
+	 * primitive type.
+	 *
+	 * <p> There are nine predefined {@code Class} objects to represent
+	 * the eight primitive types and void.  These are created by the Java
+	 * Virtual Machine, and have the same names as the primitive types that
+	 * they represent, namely {@code boolean}, {@code byte},
+	 * {@code char}, {@code short}, {@code int},
+	 * {@code long}, {@code float}, and {@code double}.
+	 *
+	 * <p> These objects may only be accessed via the following public static
+	 * final variables, and are the only {@code Class} objects for which
+	 * this method returns {@code true}.
+	 *
+	 * @return true if and only if this class represents a primitive type
+	 */
+	public static boolean isPrimitiveType(Type type) {
+		Class clazz = getRawType(type);
+		return Classes.isPrimitiveType(clazz);
+	}
 	
 	/**
 	 * Get the array component type of <code>type</code>.
