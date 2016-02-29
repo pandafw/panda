@@ -155,7 +155,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * clear
 	 */
-	public void clear() {
+	public GenericQuery clear() {
 		start = 0;
 		limit = 0;
 		if (columns != null) {
@@ -174,6 +174,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (groups != null) {
 			groups.clear();
 		};
+		
+		return this;
 	}
 
 	//---------------------------------------------------------------
@@ -938,13 +940,18 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	public GenericQuery end() {
 		ComboFilter cf = getCurrent();
-		if (cf.isEmpty()) {
-			throw new IllegalStateException("Empty " + cf.getLogical());
-		}
 
+		// remove current from stack
 		if (Collections.isNotEmpty(stack)) {
 			stack.remove(stack.size() - 1);
 		}
+		
+		if (cf.isEmpty()) {
+			// remove empty ComboFilter for and().end()
+			ComboFilter pf = getCurrent();
+			pf.getFilters().remove(cf);
+		}
+
 		return this;
 	}
 	

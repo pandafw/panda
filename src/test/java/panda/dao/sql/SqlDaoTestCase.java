@@ -41,6 +41,29 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 
 	
 	@Test
+	public void testSelectEmptyAndEnd() {
+		List<Teacher> expect = Teacher.creates(1, 5);
+		
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+
+		q.and().end();
+		List<Teacher> actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+
+		expect.remove(4);
+		expect.remove(3);
+		expect.remove(1);
+
+		q.clear().in("name", "T1", "T3").and().end();
+		actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+
+		q.clear().and().in("name", "T1", "T3").and().end().end();
+		actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+	}
+	
+	@Test
 	public void testSelectColumn() {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);
