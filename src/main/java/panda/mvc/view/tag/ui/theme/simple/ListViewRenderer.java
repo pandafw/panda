@@ -98,6 +98,12 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		}
 		
 		columns = tag.getColumns();
+		for (ListColumn c : columns) {
+			if (c.link instanceof Map) {
+				c.link = Mvcs.castValue(context, c.link, ItemLink.class);
+			}
+		}
+		
 		cssColumns = Strings.split(defs(tag.getCssColumn()));
 	}
 
