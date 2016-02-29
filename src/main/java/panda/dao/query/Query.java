@@ -86,6 +86,12 @@ public interface Query<T> {
 	// orders
 	//
 	/**
+	 * @param name property/field/column name
+	 * @return true if the property has some order
+	 */
+	public boolean hasOrder(String name);
+	
+	/**
 	 * @return true if has orders
 	 */
 	public boolean hasOrders();

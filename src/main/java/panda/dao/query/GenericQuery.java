@@ -669,6 +669,18 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	//---------------------------------------------------------------
 	// orders
 	//
+	
+	/**
+	 * @param name property/field/column name
+	 * @return true if the property has some order
+	 */
+	public boolean hasOrder(String name) {
+		if (hasOrders()) {
+			return orders.containsKey(name);
+		}
+		return false;
+	}
+	
 	/**
 	 * @return true if has orders
 	 */
@@ -856,10 +868,10 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return true if the property has some filter
 	 */
 	public boolean hasFilter(String name) {
-		if (!hasFilters()) {
-			return false;
+		if (hasFilters()) {
+			return filters.hasFilter(name);
 		}
-		return filters.hasFilter(name);
+		return false;
 	}
 	
 	private GenericQuery addSimpleExpression(String field, Operator operator) {
