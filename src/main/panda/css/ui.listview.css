@@ -273,9 +273,11 @@ tbody.p-lv-tbody > tr > td:first-child {
 }
 .p-lv-cc-status-D {
 	text-decoration: line-through;
+	background-image: linear-gradient(to bottom, transparent, transparent 49%, #666 50%, transparent 51%, transparent);
 }
 .p-lv-cc-status-T {
 	font-style: italic;
 	text-decoration: line-through;
+	background-image: linear-gradient(to bottom, transparent, transparent 45%, #666 46%, transparent 47%, transparent 50%, #666 51%, transparent 52%, transparent);
 }
 
