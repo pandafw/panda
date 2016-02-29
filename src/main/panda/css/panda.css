@@ -302,6 +302,12 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 }
 
 /* filters */
+.p-lv-queryer {
+	font-size: 90%;
+}
+.p-lv-queryer .form-control {
+	height: 28px;
+}
 fieldset.p-lv-filters {
 	padding: 5px;
 }
