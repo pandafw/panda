@@ -3,6 +3,7 @@ package panda.wing.entity.query;
 import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
+import panda.dao.query.Query;
 import panda.dao.query.StringCondition;
 import panda.wing.entity.Property;
 import panda.wing.entity.query.SUQuery;
