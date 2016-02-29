@@ -51,7 +51,7 @@ ${s}/#if>
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		cssTable="table-striped table-striped" autosize="false" script="false"
+		cssTable="table-striped" autosize="false" script="false"
 	/>
 <#if ui.safeInclude??>
 	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}_print-custom.ftl</#if>"/>
