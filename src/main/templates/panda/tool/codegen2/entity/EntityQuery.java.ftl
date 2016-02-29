@@ -66,10 +66,28 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	}
 
 	/**
+	 * auto left join ${k}
+	 * @param jq join table query
+	 */
+	public ${name} autoLeftJoin${k}(Query<?> jq) {
+		autoLeftJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
+		return this;
+	}
+
+	/**
 	 * auto right join ${k}
 	 */
 	public ${name} autoRightJoin${k}() {
 		autoRightJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
+		return this;
+	}
+
+	/**
+	 * auto right join ${k}
+	 * @param jq join table query
+	 */
+	public ${name} autoRightJoin${k}(Query<?> jq) {
+		autoRightJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
 		return this;
 	}
 
@@ -82,10 +100,28 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	}
 
 	/**
+	 * auto inner join ${k}
+	 * @param jq join table query
+	 */
+	public ${name} autoInnerJoin${k?upper_case}(Query<?> jq) {
+		autoInnerJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
+		return this;
+	}
+
+	/**
 	 * auto join ${k}
 	 */
 	public ${name} autoJoin${k}() {
 		autoJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
+		return this;
+	}
+
+	/**
+	 * auto join ${k}
+	 * @param jq join table query
+	 */
+	public ${name} autoJoin${k}(Query<?> jq) {
+		autoJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
 		return this;
 	}
 
