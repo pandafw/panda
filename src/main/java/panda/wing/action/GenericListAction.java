@@ -1,11 +1,28 @@
 package panda.wing.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import panda.dao.Dao;
+import panda.dao.entity.EntityField;
 import panda.dao.query.GenericQuery;
+import panda.dao.query.Join;
+import panda.dao.query.Query;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
@@ -20,23 +37,13 @@ import panda.servlet.ServletURLHelper;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 /**
  * @param <T> data type
  */
 public abstract class GenericListAction<T> extends GenericBaseAction<T> {
+	private final static Log log = Logs.getLog(GenericListAction.class);
+	
 	/**
 	 * STATE_LIST = "list";
 	 */
@@ -393,6 +400,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		final GenericQuery<T> gq = new GenericQuery<T>(getEntity());
 
 		addQueryColumns(gq);
+		addQueryJoins(gq);
 		addQueryFilters(gq, qr);
 		addQueryOrder(gq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
@@ -473,13 +481,26 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
+	protected void addQueryJoins(GenericQuery<T> gq) {
+	}
+	
+	/**
+	 * @param gq query
+	 */
+	@SuppressWarnings("unchecked")
 	protected void addQueryFilters(GenericQuery<T> gq, Queryer qr) {
 		qr.normalize();
 		if (Collections.isEmpty(qr.getFilters())) {
 			return;
 		}
 		
-		int cnt = 0;
+		if (qr.isOr()) {
+			gq.or();
+		}
+		else {
+			gq.and();
+		}
+		
 		for (Entry<String, Filter> e : qr.getFilters().entrySet()) {
 			Filter f = e.getValue();
 			if (f == null) {
@@ -498,88 +519,117 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				continue;
 			}
 
-			if (cnt == 0) {
-				if (qr.isOr()) {
-					gq.or();
-				}
-				else {
-					gq.and();
-				}
-			}
-
 			String name = Strings.isEmpty(f.getName()) ? e.getKey() : f.getName();
-			if (Filter.EQUAL.equals(f.getComparator())) {
-				gq.equalTo(name, value);
+			EntityField ef = entity.getField(name);
+			if (ef == null) {
+				log.warn("Invalid filter field [" + name + "] of entity " + entity);
+				continue;
 			}
-			else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
-				gq.notEqualTo(name, value);
-			}
-			else if (Filter.GREATER_THAN.equals(f.getComparator())) {
-				gq.greaterThan(name, value);
-			}
-			else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
-				gq.greaterThanOrEqualTo(name, value);
-			}
-			else if (Filter.LESS_THAN.equals(f.getComparator())) {
-				gq.lessThan(name, value);
-			}
-			else if (Filter.LESS_EQUAL.equals(f.getComparator())) {
-				gq.lessThanOrEqualTo(name, value);
-			}
-			else if (Filter.LIKE.equals(f.getComparator())) {
-				gq.like(name, value.toString());
-			}
-			else if (Filter.NOT_LIKE.equals(f.getComparator())) {
-				gq.notLike(name, value.toString());
-			}
-			else if (Filter.MATCH.equals(f.getComparator())) {
-				gq.match(name, value.toString());
-			}
-			else if (Filter.NOT_MATCH.equals(f.getComparator())) {
-				gq.notMatch(name, value.toString());
-			}
-			else if (Filter.LEFT_MATCH.equals(f.getComparator())) {
-				gq.leftMatch(name, value.toString());
-			}
-			else if (Filter.NOT_LEFT_MATCH.equals(f.getComparator())) {
-				gq.notLeftMatch(name, value.toString());
-			}
-			else if (Filter.RIGHT_MATCH.equals(f.getComparator())) {
-				gq.rightMatch(name, value.toString());
-			}
-			else if (Filter.NOT_RIGHT_MATCH.equals(f.getComparator())) {
-				gq.notRightMatch(name, value.toString());
-			}
-			else if (Filter.IN.equals(f.getComparator())) {
-				gq.in(name, values);
-			}
-			else if (Filter.NOT_IN.equals(f.getComparator())) {
-				gq.notIn(name, values);
-			}
-			else if (Filter.BETWEEN.equals(f.getComparator())) {
-				Object v1 = values.get(0);
-				Object v2 = values.size() > 1 ? values.get(1) : null;
+			if (!ef.isPersistent()) {
+				if (qr.isOr()) {
+					log.debug("SKIP filter(OR) of non persistent field [" + name + "] of entity " + entity);
+					continue;
+				}
+				
+				if (ef.isJoinField()) {
+					Join join = gq.getJoins().get(ef.getJoinName());
+					if (join == null) {
+						log.debug("SKIP filter of join field [" + name + "] of entity " + entity);
+						continue;
+					}
+					
+					join.setType(Join.INNER);
+					Query<?> jq = join.getQuery();
+					GenericQuery jgq;
+					if (jq instanceof GenericQuery) {
+						jgq = (GenericQuery)jq;
+					}
+					else {
+						jgq = new GenericQuery(jq);
+						join.setQuery(jgq);
+					}
 
-				if (v1 == null && v2 == null) {
+					addQueryFilter(jgq, f, ef.getJoinField(), value, values);
+					continue;
 				}
-				else if (v1 == null) {
-					gq.lessThanOrEqualTo(name, v2);
-				}
-				else if (v2 == null) {
-					gq.greaterThanOrEqualTo(name, v1);
-				}
-				else {
-					gq.between(name, v1, v2);
-				}
+
+				log.debug("SKIP filter of non persistent field [" + name + "] of entity " + entity);
+				continue;
 			}
 			
-			cnt++;
+			addQueryFilter(gq, f, name, value, values);
 		}
 
-		if (cnt > 0) {
-			gq.end();
+		gq.end();
+	}
+
+	protected void addQueryFilter(GenericQuery<T> gq, Filter f, String name, Object value, List<?> values) {
+		if (Filter.EQUAL.equals(f.getComparator())) {
+			gq.equalTo(name, value);
+		}
+		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
+			gq.notEqualTo(name, value);
+		}
+		else if (Filter.GREATER_THAN.equals(f.getComparator())) {
+			gq.greaterThan(name, value);
+		}
+		else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
+			gq.greaterThanOrEqualTo(name, value);
+		}
+		else if (Filter.LESS_THAN.equals(f.getComparator())) {
+			gq.lessThan(name, value);
+		}
+		else if (Filter.LESS_EQUAL.equals(f.getComparator())) {
+			gq.lessThanOrEqualTo(name, value);
+		}
+		else if (Filter.LIKE.equals(f.getComparator())) {
+			gq.like(name, value.toString());
+		}
+		else if (Filter.NOT_LIKE.equals(f.getComparator())) {
+			gq.notLike(name, value.toString());
+		}
+		else if (Filter.MATCH.equals(f.getComparator())) {
+			gq.match(name, value.toString());
+		}
+		else if (Filter.NOT_MATCH.equals(f.getComparator())) {
+			gq.notMatch(name, value.toString());
+		}
+		else if (Filter.LEFT_MATCH.equals(f.getComparator())) {
+			gq.leftMatch(name, value.toString());
+		}
+		else if (Filter.NOT_LEFT_MATCH.equals(f.getComparator())) {
+			gq.notLeftMatch(name, value.toString());
+		}
+		else if (Filter.RIGHT_MATCH.equals(f.getComparator())) {
+			gq.rightMatch(name, value.toString());
+		}
+		else if (Filter.NOT_RIGHT_MATCH.equals(f.getComparator())) {
+			gq.notRightMatch(name, value.toString());
+		}
+		else if (Filter.IN.equals(f.getComparator())) {
+			gq.in(name, values);
+		}
+		else if (Filter.NOT_IN.equals(f.getComparator())) {
+			gq.notIn(name, values);
+		}
+		else if (Filter.BETWEEN.equals(f.getComparator())) {
+			Object v1 = values.get(0);
+			Object v2 = values.size() > 1 ? values.get(1) : null;
+
+			if (v1 == null && v2 == null) {
+			}
+			else if (v1 == null) {
+				gq.lessThanOrEqualTo(name, v2);
+			}
+			else if (v2 == null) {
+				gq.greaterThanOrEqualTo(name, v1);
+			}
+			else {
+				gq.between(name, v1, v2);
+			}
 		}
 	}
+
 
 	/**
 	 * @param q query

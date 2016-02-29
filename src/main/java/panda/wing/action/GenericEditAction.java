@@ -581,6 +581,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		
 		GenericQuery<T> gq = new GenericQuery<T>(entity);
 		addQueryFields(gq);
+		addQueryJoins(gq);
 		addQueryFilters(gq, key);
 		
 		T d = daoFetch(gq);
@@ -604,6 +605,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			gq.includePrimayKeys();
 			gq.include(ufs);
 		}
+	}
+
+	protected void addQueryJoins(GenericQuery<T> gq) {
 	}
 	
 	protected void addQueryFilters(GenericQuery<T> gq, T key) {
