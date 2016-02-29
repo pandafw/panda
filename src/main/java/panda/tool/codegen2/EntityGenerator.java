@@ -166,7 +166,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 
 		imports.add(entity.getName());
-		imports.add(Query.class.getName());
+		if (Collections.isNotEmpty(entity.getJoinMap())) {
+			imports.add(Query.class.getName());
+		}
 		imports.add(GenericQuery.class.getName());
 		imports.add(Entities.class.getName());
 		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
