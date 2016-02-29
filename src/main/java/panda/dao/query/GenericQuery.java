@@ -545,6 +545,16 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * auto add left join from @Join
+	 * @param join join name
+	 * @param query join table query
+	 * @return this
+	 */
+	public GenericQuery autoLeftJoin(String join, Query<?> query) {
+		return autoJoin(Join.LEFT, join);
+	}
+
+	/**
 	 * auto add right join from @Join
 	 * @param join join name
 	 * @return this
@@ -554,12 +564,32 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * auto add right join from @Join
+	 * @param join join name
+	 * @param query join table query
+	 * @return this
+	 */
+	public GenericQuery autoRightJoin(String join, Query<?> query) {
+		return autoJoin(Join.RIGHT, join, query);
+	}
+
+	/**
 	 * auto add inner join from @Join
 	 * @param join join name
 	 * @return this
 	 */
 	public GenericQuery autoInnerJoin(String join) {
 		return autoJoin(Join.INNER, join);
+	}
+
+	/**
+	 * auto add inner join from @Join
+	 * @param join join name
+	 * @param query join table query
+	 * @return this
+	 */
+	public GenericQuery autoInnerJoin(String join, Query<?> query) {
+		return autoJoin(Join.INNER, join, query);
 	}
 
 	/**
@@ -573,11 +603,33 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * auto add join from @Join
+	 * @param join join name
+	 * @param query join table query
+	 * @return this
+	 */
+	public GenericQuery autoJoin(String join, Query<?> query) {
+		return autoJoin(null, join, query);
+	}
+
+	/**
+	 * auto add join from @Join
 	 * @param type join type
 	 * @param join join name
 	 * @return this
 	 */
 	public GenericQuery autoJoin(String type, String join) {
+		return autoJoin(type, join, null);
+	}
+	
+	/**
+	 * auto add join from @Join
+	 * @param type join type
+	 * @param join join name
+	 * @param query join table query
+	 * @return this
+	 */
+	@SuppressWarnings("unchecked")
+	public GenericQuery autoJoin(String type, String join, Query<?> query) {
 		Asserts.notEmpty(join, "The parameter join is empty");
 		Entity<?> entity = getEntity();
 
@@ -589,15 +641,21 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			throw new IllegalArgumentException("The entity join [" + join + "] is not found");
 		}
 
-		@SuppressWarnings("unchecked")
-		GenericQuery jq = new GenericQuery(ej.getTarget());
+		if (query == null) {
+			query = new GenericQuery(ej.getTarget());
+		}
+		else {
+			if (query.getEntity() != ej.getTarget()) {
+				throw new IllegalArgumentException("The join query [" + query.getEntity().getType() + "] is compatible to " + ej.getTarget().getType());
+			}
+		}
 		
 		String[] cs = new String[ej.getKeys().size()];
 		for (int i = 0; i < cs.length; i++) {
 			cs[i] = ej.getKeys().get(i).getName() + '=' + ej.getRefs().get(i).getName();
 		}
 		
-		join(type, jq, join, cs);
+		join(type, query, join, cs);
 		for (EntityField ef : entity.getFields()) {
 			if (join.equals(ef.getJoinName())) {
 				column(ef.getName(), join + '.' + ef.getJoinField());

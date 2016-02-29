@@ -506,6 +506,17 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
+	 * auto add left join from @Join
+	 * @param join join name
+	 * @param jq join table query
+	 * @return this
+	 */
+	public Q autoLeftJoin(String join, Query<?> jq) {
+		query.autoLeftJoin(join, jq);
+		return (Q)this;
+	}
+
+	/**
 	 * auto add right join from @Join
 	 * @param join join name
 	 * @return this
@@ -516,12 +527,34 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	/**
+	 * auto add right join from @Join
+	 * @param join join name
+	 * @param jq join table query
+	 * @return this
+	 */
+	public Q autoRightJoin(String join, Query<?> jq) {
+		query.autoRightJoin(join, jq);
+		return (Q)this;
+	}
+
+	/**
 	 * auto add inner join from @Join
 	 * @param join join name
 	 * @return this
 	 */
 	public Q autoInnerJoin(String join) {
 		query.autoInnerJoin(join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add inner join from @Join
+	 * @param join join name
+	 * @param jq join table query
+	 * @return this
+	 */
+	public Q autoInnerJoin(String join, Query<?> jq) {
+		query.autoInnerJoin(join, jq);
 		return (Q)this;
 	}
 
@@ -537,12 +570,35 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 
 	/**
 	 * auto add join from @Join
+	 * @param join join name
+	 * @param jq join table query
+	 * @return this
+	 */
+	public Q autoJoin(String join, Query<?> jq) {
+		query.autoJoin(join, jq);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add join from @Join
 	 * @param type join type
 	 * @param join join name
 	 * @return this
 	 */
 	public Q autoJoin(String type, String join) {
 		query.autoJoin(type, join);
+		return (Q)this;
+	}
+
+	/**
+	 * auto add join from @Join
+	 * @param type join type
+	 * @param join join name
+	 * @param jq join table query
+	 * @return this
+	 */
+	public Q autoJoin(String type, String join, Query<?> jq) {
+		query.autoJoin(type, join, jq);
 		return (Q)this;
 	}
 
