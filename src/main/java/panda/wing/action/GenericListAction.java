@@ -402,7 +402,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		addQueryColumns(gq);
 		addQueryJoins(gq);
 		addQueryFilters(gq, qr);
-		addQueryOrder(gq, qr.getSorter());
+		addQueryOrders(gq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
 		if (listCountable == null) {
@@ -632,9 +632,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 
 	/**
-	 * @param q query
+	 * @param gq query
 	 */
-	protected void addQueryOrder(GenericQuery q, Sorter sorter) {
+	protected void addQueryOrders(GenericQuery<T> gq, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
 			String sc = getText(getMethodName() + RC.SORTER_SUFFIX, (String)null);
 			assist().castToSorter(sorter, sc);
@@ -643,7 +643,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			if (Strings.isEmpty(sorter.getDirection())) {
 				sorter.setDirection(Sorter.ASC);
 			}
-			q.orderBy(sorter.getColumn(), sorter.getDirection());
+			gq.orderBy(sorter.getColumn(), sorter.getDirection());
 		}
 	}
 
