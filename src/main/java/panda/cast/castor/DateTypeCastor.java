@@ -5,9 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import panda.cast.CastContext;
 import panda.lang.Numbers;
@@ -21,25 +21,24 @@ import panda.lang.time.FastDateFormat;
  *
  */
 public class DateTypeCastor {
-	public final static FastDateFormat[] DATE_FORMATS = {
-		DateTimes.isoDatetimeFormat(),
-		DateTimes.isoAltDatetimeFormat(),
-		DateTimes.timestampFormat(),
-		DateTimes.datetimeFormat(),
-		DateTimes.dateFormat(),
-		DateTimes.timeFormat(),
-	};
+	public final static Map<String, FastDateFormat> DATE_FORMATS = new LinkedHashMap<String, FastDateFormat>();
+	public final static Map<String, FastDateFormat> JP_DATE_FORMATS = new LinkedHashMap<String, FastDateFormat>();
 
-	public final static Map<Locale, FastDateFormat[]> LOCALE_DATE_FORMATS = new HashMap<Locale, FastDateFormat[]>();
+	public final static Map<Locale, Map<String, FastDateFormat>> LOCALE_DATE_FORMATS = new HashMap<Locale, Map<String, FastDateFormat>>();
 	static {
-		FastDateFormat[] jps = new FastDateFormat[] {
-			FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"),
-			FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"),
-			FastDateFormat.getInstance("yyyy/MM/dd"),
-		};
+		DATE_FORMATS.put("timestamp", DateTimes.timestampFormat());
+		DATE_FORMATS.put("datetime", DateTimes.datetimeFormat());
+		DATE_FORMATS.put("isodate", DateTimes.isoDatetimeFormat());
+		DATE_FORMATS.put("isodate2", DateTimes.isoAltDatetimeFormat());
+		DATE_FORMATS.put("date", DateTimes.dateFormat());
+		DATE_FORMATS.put("time", DateTimes.timeFormat());
+
+		JP_DATE_FORMATS.put("timestamp", FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"));
+		JP_DATE_FORMATS.put("datetime", FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"));
+		JP_DATE_FORMATS.put("date", FastDateFormat.getInstance("yyyy/MM/dd"));
 		
-		LOCALE_DATE_FORMATS.put(Locale.JAPAN, jps);
-		LOCALE_DATE_FORMATS.put(Locale.JAPANESE, jps);
+		LOCALE_DATE_FORMATS.put(Locale.JAPAN, JP_DATE_FORMATS);
+		LOCALE_DATE_FORMATS.put(Locale.JAPANESE, JP_DATE_FORMATS);
 	}
 
 	public static class DateCastor extends AnySingleCastor<Date> {
@@ -52,6 +51,44 @@ public class DateTypeCastor {
 		public DateCastor(FastDateFormat[] formats) {
 			super(Date.class);
 			this.formats = formats;
+		}
+		
+		/**
+		 * getDateFormat
+		 *
+		 * @param format format
+		 * @param locale locale
+		 * @return DateFormat object
+		 */
+		public FastDateFormat getDateFormat(String format, Locale locale) {
+			if (format == null) {
+				format = "timestamp";
+			}
+
+			FastDateFormat fdf = null;
+			if (locale != null) {
+				Map<String, FastDateFormat> formats = LOCALE_DATE_FORMATS.get(locale);
+				if (formats != null) {
+					fdf = formats.get(format);
+					if (fdf != null) {
+						return fdf;
+					}
+				}
+			}
+			
+			fdf = DATE_FORMATS.get(format);
+			if (fdf != null) {
+				return fdf;
+			}
+
+			try {
+				return FastDateFormat.getInstance(format, locale);
+			}
+			catch (Exception e) {
+				//skip
+			}
+
+			return DateTimes.timestampFormat();
 		}
 		
 		@Override
@@ -78,10 +115,27 @@ public class DateTypeCastor {
 					return defaultValue();
 				}
 	
+				if (Strings.isNumeric(sv)) {
+					long nv = Numbers.toLong(sv, 0L);
+					return new Date(nv);
+				}
+				
 				ParseException ex = null;
+				if (formats != null) {
+					for (FastDateFormat df : formats) {
+						try {
+							return df.parse(sv);
+						}
+						catch (ParseException e) {
+							ex = e;
+						}
+					}
+					return castError(value, cc, ex);
+				}
+				
 				if (Strings.isNotEmpty(cc.getFormat())) {
 					try {
-						return DateTimes.parse(sv, cc.getFormat(), cc.getLocale());
+						return getDateFormat(cc.getFormat(), cc.getLocale()).parse(sv);
 					}
 					catch (ParseException e) {
 						ex = e;
@@ -89,15 +143,10 @@ public class DateTypeCastor {
 					return castError(value, cc, ex);
 				}
 
-				if (Strings.isNumeric(sv)) {
-					long nv = Numbers.toLong(sv, 0L);
-					return new Date(nv);
-				}
-				
 				if (cc.getLocale() != null) {
-					FastDateFormat[] fs = LOCALE_DATE_FORMATS.get(cc.getLocale());
+					Map<String, FastDateFormat> fs = LOCALE_DATE_FORMATS.get(cc.getLocale());
 					if (fs != null) {
-						for (FastDateFormat df : fs) {
+						for (FastDateFormat df : fs.values()) {
 							try {
 								return df.parse(sv);
 							}
@@ -108,18 +157,7 @@ public class DateTypeCastor {
 					}
 				}
 				
-				if (formats != null) {
-					for (FastDateFormat df : formats) {
-						try {
-							return df.parse(sv);
-						}
-						catch (ParseException e) {
-							ex = e;
-						}
-					}
-				}
-				
-				for (FastDateFormat df : DATE_FORMATS) {
+				for (FastDateFormat df : DATE_FORMATS.values()) {
 					try {
 						return df.parse(sv);
 					}
@@ -138,25 +176,6 @@ public class DateTypeCastor {
 			Date v = castValue(value, context);
 			target.setTime(v.getTime());
 			return target;
-		}
-		
-		/**
-		 * @return default date format
-		 */
-		public FastDateFormat getDefaultDateFormat() {
-			return DateTimes.timestampFormat();
-		}
-	
-		/**
-		 * getDateFormat
-		 *
-		 * @param pattern pattern
-		 * @param locale locale
-		 * @param timezone time zone
-		 * @return DateFormat object
-		 */
-		public FastDateFormat getDateFormat(String pattern, Locale locale, TimeZone timezone) {
-			return FastDateFormat.getInstance(pattern, timezone, locale);
 		}
 	}
 

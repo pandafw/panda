@@ -34,10 +34,10 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				a.append(((Class)value).getName().toString());
 			}
 			else if (value instanceof Date) {
-				a.append(dateCastor.getDefaultDateFormat().format((Date)value));
+				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format((Date)value));
 			}
 			else if (value instanceof Calendar) {
-				a.append(dateCastor.getDefaultDateFormat().format(((Calendar)value).getTime()));
+				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format(((Calendar)value).getTime()));
 			}
 			else if (value instanceof char[]) {
 				a.append(new String((char[])value));
