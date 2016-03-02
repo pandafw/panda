@@ -156,12 +156,12 @@ validation-zipcode=郵便番号を"123-4567"の形式で入力してください
 error-input=正しく入力されていない項目、または未入力の項目があります。
 error-input-detail=エラー詳細
 error-data-notfound=対象データが見つかりません。
-error-data-duplicate=該当データが既に登録されています。\n${top}
-error-data-incorrect=該当データが正しくありません。\n${top}
-error-fieldvalue-notnull=項目の値は空ではありません。
-error-fieldvalue-required=必須項目です。
-error-fieldvalue-incorrect=項目の値が正しくありません。
-error-fieldvalue-duplicate=既に登録されています。
+error-data-duplicate=該当データが既に登録されています。${top}
+error-data-incorrect=該当データが正しくありません。${top}
+error-item-notnull=項目の値は空ではありません。
+error-item-required=必須項目です。
+error-item-incorrect=項目の値が正しくありません。
+error-item-duplicate=既に登録されています。
 error-file-notfound=ファイル"${top}"が見つかりません。
 
 #customer error messages

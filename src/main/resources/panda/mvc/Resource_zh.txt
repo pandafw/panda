@@ -155,12 +155,12 @@ validation-zipcode=请按"123-4567"的格式输入邮政编码。
 error-input=输入内容不正确。
 error-input-detail=错误信息
 error-data-notfound=该数据不存在。
-error-data-duplicate=该数据已经被登录。\n${top}
-error-data-incorrect=该数据内容不正确。\n${top}
-error-fieldvalue-notnull=该项目必须为空。
-error-fieldvalue-required=该项目不能为空。
-error-fieldvalue-incorrect=该项目输入内容不正确。
-error-fieldvalue-duplicate=该数据已经被登录。
+error-data-duplicate=该数据已经被登录。${top}
+error-data-incorrect=该数据内容不正确。${top}
+error-item-notnull=该项目必须为空。
+error-item-required=该项目不能为空。
+error-item-incorrect=该项目输入内容不正确。
+error-item-duplicate=该数据已经被登录。
 error-file-notfound=该文件"${top}"不存在。
 
 
@@ -169,7 +169,7 @@ error-unlogin=用户未登录!
 error-unsecure=为了确保用户资料安全，请登陆。
 error-nopermit=用户没有权限!
 error-email-is-used=电子邮件地址已经被使用。
-error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址[${top}]是否正确。
+error-sendmail=电子邮件送信失敗。\n请确认电子邮件地址${top}是否正确。
 error-file-upload=文件上传失敗。
 
 #info messages
@@ -209,7 +209,7 @@ button-clear=清除
 button-close=关闭
 button-confirm=确认
 button-copy=复写
-button-csv=CSV汇出
+button-csv=CSV导出
 button-delete=删除
 button-deny=否决
 button-disable=无效
@@ -217,10 +217,11 @@ button-edit=编辑
 button-enable=有効
 button-exec=执行
 button-execute=实行
+button-export=导出
 button-home=主页
-button-import=汇入
+button-import=数据导入
 button-insert=追加
-button-json=JSON汇出
+button-json=JSON导出
 button-layoutPC=PC版显示
 button-layoutMB=手机版显示
 button-list=浏览
@@ -253,7 +254,7 @@ button-toSignin=登录画面
 button-trash=删除
 button-update=修改
 button-view=显示
-button-xml=XML汇出
+button-xml=XML导出
 
 
 #title

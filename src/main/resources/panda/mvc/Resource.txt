@@ -225,20 +225,21 @@ validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
 error-input=The input data is incorrect.
 error-input-detail=detail
 error-data-notfound=The data is not found.
-error-data-duplicate=The data is already registered.\n${top}
-error-data-incorrect=The data is incorrect.\n${top}
-error-fieldvalue-notnull=This field should be empty.
-error-fieldvalue-required=This field is required.
-error-fieldvalue-incorrect=The field value is incorect.
-error-fieldvalue-duplicate=The field value is already registered.
+error-data-duplicate=The data is already registered.${top}
+error-data-incorrect=The data is incorrect.${top}
+error-item-notnull=This field should be empty.
+error-item-required=This field is required.
+error-item-incorrect=The field value is incorect.
+error-item-duplicate=The field value is already registered.
 error-file-notfound=The file "${top}" is not found.
+
 
 #customer error messages
 error-unlogin=Please login.
 error-unsecure=Please login again for security reasion.
 error-nopermit=You have no permission.
 error-email-is-used=The email address is already registered.
-error-sendmail=Failed to send email to <${top}>.\nPlease confirm the email address is corrent.
+error-sendmail=Failed to send email.\nPlease confirm the email address ${top} is correct.
 error-file-upload=Failed to upload file.
 
 #info messages
