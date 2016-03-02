@@ -1,5 +1,17 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import panda.bean.Beans;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
@@ -17,23 +29,11 @@ import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.ListView.ItemLink;
 import panda.mvc.view.tag.ui.Pager;
-import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
+import panda.mvc.view.tag.ui.theme.AbstractEndExRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-public class ListViewRenderer extends AbstractEndRenderer<ListView> {
+public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 
 	private String id;
 
@@ -1014,7 +1014,8 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 									if (iv != null) {
 										Map codemap = getCodeMap(c.format.codemap);
 										while (iv.hasNext()) {
-											writeCodeText(codemap, iv.next());
+											String s = getCodeText(codemap, iv.next());
+											write(Escapes.escape(s, c.format.escape));
 											if (iv.hasNext()) {
 												write(" ");
 											}
@@ -1150,11 +1151,11 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 		throw new IllegalArgumentException("Invalid codemap: " + cm.getClass());
 	}
 
-	private void writeCodeText(Map cm, Object k) throws IOException {
+	private String getCodeText(Map cm, Object k) throws IOException {
 		Object v = cm.get(k);
-		if (v == null && k != null) {
+		if (v == null && k != null && !(k instanceof String)) {
 			v = cm.get(k.toString());
 		}
-		write(v == null ? null : v.toString());
+		return (v == null ? null : v.toString());
 	}
 }

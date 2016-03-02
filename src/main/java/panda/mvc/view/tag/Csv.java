@@ -41,6 +41,8 @@ public class Csv extends Component {
 	protected Character quotechar;
 	protected Character escapechar;
 
+	private Property property;
+	
 	private Object getBeanProperty(Object bean, String name) {
 		try {
 			return Beans.getBean(bean, name);
@@ -137,7 +139,12 @@ public class Csv extends Component {
 							else {
 								Object v = getBeanProperty(d, c.name);
 								if (v != null) {
-									value = castString(v, c.format.type);
+									if (property == null) {
+										property = newComponent(Property.class);
+									}
+									property.setValue(v);
+									property.setFormat(c.format.type);
+									value =  property.formatValue();
 								}
 							}
 						}

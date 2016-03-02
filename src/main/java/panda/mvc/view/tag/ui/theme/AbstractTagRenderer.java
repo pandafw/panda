@@ -1,30 +1,24 @@
 package panda.mvc.view.tag.ui.theme;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.view.tag.Escapes;
 import panda.mvc.view.tag.Property;
-import panda.mvc.view.tag.ui.CheckboxList;
-import panda.mvc.view.tag.ui.DatePicker;
-import panda.mvc.view.tag.ui.DateTimePicker;
-import panda.mvc.view.tag.ui.Radio;
-import panda.mvc.view.tag.ui.Select;
-import panda.mvc.view.tag.ui.TextField;
-import panda.mvc.view.tag.ui.TimePicker;
 import panda.mvc.view.tag.ui.UIBean;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public abstract class AbstractTagRenderer<T extends UIBean> implements TagRenderer {
 	protected ActionContext context;
 	protected T tag;
 	protected Writer writer;
+
+	private Property property;
 
 	@SuppressWarnings("unchecked")
 	public AbstractTagRenderer(RenderingContext rc) {
@@ -233,127 +227,6 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		write("\" rel=\"stylesheet\" type=\"text/css\"/>\n");
 	}
 
-	protected <N> N newTag(Class<N> type) {
-		return context.getIoc().get(type);
-	}
-
-	protected void writeTextField(String cssClass, String name, String id, Object value, Boolean disabled) throws IOException {
-		TextField tf = newTag(TextField.class);
-
-		tf.setCssClass(cssClass);
-		tf.setName(name);
-		tf.setId(id);
-		tf.setValue(value);
-		tf.setDisabled(disabled);
-		
-		tf.start(writer);
-		tf.end(writer, "");
-	}
-
-	protected void writeSelect(String cssClass, String name, String id, Object list, String value) throws IOException {
-		writeSelect(cssClass, name, id, list, value, false);
-	}
-
-	protected void writeSelect(String cssClass,
-			String name, String id, Object list, String value,
-			Boolean emptyOption) throws IOException {
-		writeSelect(cssClass, name, id, list, value, emptyOption, null);
-	}
-	
-	protected void writeSelect(String cssClass,
-			String name, String id, Object list, String value,
-			boolean emptyOption, String onchange) throws IOException {
-		
-		Select select = newTag(Select.class);
-
-		select.setCssClass(cssClass);
-		select.setName(name);
-		select.setId(id);
-		select.setList(list);
-		select.setValue(value);
-		select.setEmptyOption(emptyOption);
-		select.setOnchange(onchange);
-
-		select.start(writer);
-		select.end(writer, "");
-	}
-	
-	protected void writeCheckboxList(String cssClass, String name, String id, Object list, List<String> value)
-			throws IOException {
-		CheckboxList cl = newTag(CheckboxList.class);
-
-		cl.setCssClass(cssClass);
-		cl.setName(name);
-		cl.setId(id);
-		cl.setList(list);
-		cl.setValue(value);
-
-		cl.start(writer);
-		cl.end(writer, "");
-	}
-	
-	protected void writeRadio(String cssClass, String name, String id, Object list, String value) throws IOException {
-		Radio r = newTag(Radio.class);
-
-		r.setCssClass(cssClass);
-		r.setName(name);
-		r.setId(id);
-		r.setList(list);
-		r.setValue(value);
-
-		r.start(writer);
-		r.end(writer, "");
-	}
-	
-	protected void writeDatePicker(String cssClass,
-			String name, String id, String format,
-			Date value, Boolean disabled) throws IOException {
-
-		DatePicker dp = newTag(DatePicker.class);
-
-		dp.setCssClass(cssClass);
-		dp.setName(name);
-		dp.setId(id);
-		dp.setFormat(format);
-		dp.setValue(value);
-		dp.setDisabled(disabled);
-		
-		dp.start(writer);
-		dp.end(writer, "");
-	}
-	
-	protected void writeDateTimePicker(String cssClass, String name, String id, String format, Date value, Boolean disabled)
-			throws IOException {
-
-		DateTimePicker dp = newTag(DateTimePicker.class);
-
-		dp.setCssClass(cssClass);
-		dp.setName(name);
-		dp.setId(id);
-		dp.setFormat(format);
-		dp.setValue(value);
-		dp.setDisabled(disabled);
-		
-		dp.start(writer);
-		dp.end(writer, "");
-	}
-	
-	protected void writeTimePicker(String cssClass, String name, String id, String format, Date value, Boolean disabled)
-			throws IOException {
-		
-		TimePicker dp = newTag(TimePicker.class);
-
-		dp.setCssClass(cssClass);
-		dp.setName(name);
-		dp.setId(id);
-		dp.setFormat(format);
-		dp.setValue(value);
-		dp.setDisabled(disabled);
-		
-		dp.start(writer);
-		dp.end(writer, "");
-	}
-
 	protected void writeln() throws IOException {
 		writer.write('\n');
 	}
@@ -439,6 +312,10 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		return context.getVars().get(key);
 	}
 
+	protected <N> N newTag(Class<N> type) {
+		return context.getIoc().get(type);
+	}
+
 	/**
 	 * format and escape value
 	 */
@@ -458,13 +335,13 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	 */
 	public String formatValue(Object value, String format, String escape) {
 		if (value != null) {
-			Property p = newTag(Property.class);
-			p.setValue(value);
-			p.setFormat(format);
-			if (escape != null) {
-				p.setEscape(escape);
+			if (property == null) {
+				property = newTag(Property.class);
 			}
-			return p.formatValue();
+			property.setValue(value);
+			property.setFormat(format);
+			property.setEscape(Strings.defaultString(escape, Escapes.ESCAPE_HTML));
+			return property.formatValue();
 		}
 		return "";
 	}

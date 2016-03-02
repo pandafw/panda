@@ -87,6 +87,10 @@ public class Property extends ContextBean {
 	private String format;
 	private Object value;
 	private String escape = Escapes.ESCAPE_HTML;
+	
+	private CBoolean cbool;
+	private CDate cdate;
+	private CNumber cnumber;
 
 	/**
 	 * @see panda.mvc.view.tag.Component#start(java.io.Writer)
@@ -145,29 +149,35 @@ public class Property extends ContextBean {
 			else {
 				if (av instanceof Boolean) {
 					StringBuilderWriter sw = new StringBuilderWriter();
-					CBoolean b = newComponent(CBoolean.class);
-					b.setValue((Boolean)av);
-					b.setFormat(format);
-					b.start(sw);
-					b.end(sw, "");
+					if (cbool == null) {
+						cbool = newComponent(CBoolean.class);
+					}
+					cbool.setValue((Boolean)av);
+					cbool.setFormat(format);
+					cbool.start(sw);
+					cbool.end(sw, "");
 					ev = sw.toString();
 				}
 				else if (av instanceof Date || av instanceof Calendar) {
 					StringBuilderWriter sw = new StringBuilderWriter();
-					CDate d = newComponent(CDate.class);
-					d.setValue(av instanceof Calendar ? ((Calendar)av).getTime() : (Date)av);
-					d.setFormat(format);
-					d.start(sw);
-					d.end(sw, "");
+					if (cdate == null) {
+						cdate = newComponent(CDate.class);
+					}
+					cdate.setValue(av instanceof Calendar ? ((Calendar)av).getTime() : (Date)av);
+					cdate.setFormat(format);
+					cdate.start(sw);
+					cdate.end(sw, "");
 					ev = sw.toString();
 				}
 				else if (av instanceof Number) {
 					StringBuilderWriter sw = new StringBuilderWriter();
-					CNumber n = newComponent(CNumber.class);
-					n.setValue((Number)av);
-					n.setFormat(format);
-					n.start(sw);
-					n.end(sw, "");
+					if (cnumber == null) {
+						cnumber = newComponent(CNumber.class);
+					}
+					cnumber.setValue((Number)av);
+					cnumber.setFormat(format);
+					cnumber.start(sw);
+					cnumber.end(sw, "");
 					ev = sw.toString();
 				}
 				else if (av instanceof String) {
