@@ -1,8 +1,5 @@
 package panda.lang;
 
-import panda.lang.collection.CaseInsensitiveMap;
-import panda.lang.collection.SafeMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -25,6 +22,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
+
+import panda.lang.collection.CaseInsensitiveMap;
+import panda.lang.collection.SafeMap;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -1013,6 +1013,25 @@ public abstract class Collections {
 	 */
 	public static void swap(List<?> list, int i, int j) {
 		java.util.Collections.swap(list, i, j);
+	}
+
+	/**
+	 * Swaps the key and value of the map.
+	 * Map<K, V> -> Map<V,K>
+	 * 
+	 * @param map the map
+	 */
+	public static void swap(Map<?, ?> map) {
+		if (isEmpty(map)) {
+			return;
+		}
+
+		Map nm = new HashMap();
+		for (Entry en : map.entrySet()) {
+			nm.put(en.getValue(), en.getKey());
+		}
+		map.clear();
+		map.putAll(nm);
 	}
 
 	/**
