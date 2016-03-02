@@ -1155,7 +1155,7 @@ public abstract class AbstractDao implements Dao {
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to insert entity " + entity.getType(), e);
+			throw new DaoException("Failed to insert entity " + entity.getType() + ": " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
@@ -1539,7 +1539,7 @@ public abstract class AbstractDao implements Dao {
 			return callback.handle(data);
 		}
 		catch (Exception ex) {
-			throw new DaoException("Data Handle Error [" + index + "]: " + data, ex);
+			throw new DaoException("Data Handle Error [" + index + "]: " + ex.getMessage() + " - " + data, ex);
 		}
 	}
 }

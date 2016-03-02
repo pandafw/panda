@@ -85,7 +85,7 @@ public class SqlDao extends AbstractDao {
 				}
 				catch (SQLException e) {
 					Sqls.safeClose(connection);
-					throw new DaoException("Failed to open connection", e);
+					throw new DaoException("Failed to open connection: " + e.getMessage(), e);
 				}
 			}
 			if (executor == null) {
@@ -131,7 +131,7 @@ public class SqlDao extends AbstractDao {
 				connection.commit();
 			}
 			catch (SQLException e) {
-				throw new DaoException("Failed to commit transaction", e);
+				throw new DaoException("Failed to commit transaction: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -146,7 +146,7 @@ public class SqlDao extends AbstractDao {
 				connection.rollback();
 			}
 			catch (SQLException e) {
-				throw new DaoException("Failed to rollback transaction", e);
+				throw new DaoException("Failed to rollback transaction: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -361,7 +361,7 @@ public class SqlDao extends AbstractDao {
 				return executor.fetch(sql.getSql(), sql.getParams(), query.getType());
 			}
 			catch (SQLException e) {
-				throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + sql.getSql(), e);
+				throw new DaoException("Failed to fetch query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 			}
 		}
 		finally {
@@ -386,7 +386,7 @@ public class SqlDao extends AbstractDao {
 			return i;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to count query " + getTableName(query) + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to count query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
@@ -420,7 +420,7 @@ public class SqlDao extends AbstractDao {
 			return executor.selectList(sql.getSql(), sql.getParams(), query.getType());
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
@@ -471,7 +471,7 @@ public class SqlDao extends AbstractDao {
 			return count;
 		}
 		catch (SQLException e) {
-			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
 		finally {
 			Sqls.safeClose(srs);
@@ -498,7 +498,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to delete query " + getTableName(query) + ": " + sql.getSql(), e);
+			throw new DaoException("Failed to delete query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
@@ -643,7 +643,7 @@ public class SqlDao extends AbstractDao {
 		}
 		catch (SQLException e) {
 			rollback();
-			throw new DaoException("Failed to update query " + getTableName(query) + ": " + sql, e);
+			throw new DaoException("Failed to update query " + getTableName(query) + ": " + sql + " - " + e.getMessage(), e);
 		}
 		finally {
 			autoClose();
