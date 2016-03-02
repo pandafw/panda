@@ -37,10 +37,11 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	|| ui.templates?seq_contains("list_csv")
 	|| ui.templates?seq_contains("list_json")
 	|| ui.templates?seq_contains("list_xml")
+	|| ui.templates?seq_contains("import")
 	|| ui.templates?seq_contains("bdelete")
 	|| ui.templates?seq_contains("bupdate")
 >
-		addDisplayColumns(<#list ui.orderedColumnList as c>${entity.simpleName}.${c.uname}<#if c_has_next>, </#if></#list>);
+		addDisplayFields(<#list ui.orderedColumnList as c>${entity.simpleName}.${c.uname}<#if c_has_next>, </#if></#list>);
 	<#break/>
 </#if></#if>
 </#list></#if>
@@ -109,10 +110,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list(qr);
 	}
 	
@@ -120,10 +121,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list_popup(qr);
 	}
 	
@@ -131,10 +132,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list_print(qr);
 	}
 	
@@ -142,10 +143,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.FTL)
 	@Err(View.FTL)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list_csv(qr);
 	}
 	
@@ -153,9 +154,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.JSON)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	@Err(View.JSON)
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
 	
@@ -163,27 +165,39 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.XML)
-	public Object ${ui.name}(@Param @Validates Queryer qr) {
+	@Err(View.XML)
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
+	}
+	
+<#elseif ui.templates?seq_contains("import")>
+	/**
+	 * ${ui.name}
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${gen.trimMethodName(ui.name)}(@Param Arg arg) {
+		return super.import_(arg);
 	}
 	
 <#elseif ui.templates?seq_contains("bdelete")>
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param Map<String, String[]> args) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param Map<String, String[]> args) {
 		return super.bdelete(args);
 	}
 
 	/**
 	 * ${ui.name}_execute
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err("sftl:~${ui.name}")
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
@@ -194,10 +208,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param Map<String, String[]> args) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param Map<String, String[]> args) {
 		return super.bupdate(args);
 	}
 
@@ -215,10 +229,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}() {
+	public Object ${gen.trimMethodName(ui.name)}() {
 		return super.bedit();
 	}
 
@@ -259,10 +273,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
 		return super.view(key);
 	}
 
@@ -280,10 +294,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
 		return super.print(key);
 	}
 
@@ -301,10 +315,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}() {
+	public Object ${gen.trimMethodName(ui.name)}() {
 		return super.add();
 	}
 
@@ -342,10 +356,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
 		return super.copy(key);
 	}
 
@@ -383,10 +397,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
 		return super.edit(key);
 	}
 
@@ -424,10 +438,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/**
 	 * ${ui.name}
 	 */
-	@At
+	@At${gen.trimAtName(ui.name)}
 	@Ok(View.SFTL)
 	@Err(View.SFTL)
-	public Object ${ui.name}(@Param ${entityBeanClass} key) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param ${entityBeanClass} key) {
 		return super.delete(key);
 	}
 

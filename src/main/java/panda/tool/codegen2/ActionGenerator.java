@@ -189,4 +189,18 @@ public class ActionGenerator extends AbstractCodeGenerator {
 	}
 
 
+	public String trimAtName(String nm) {
+		if ("import".equals(nm)) {
+			return "(\"import\")";
+		}
+		return "";
+	}
+
+	public String trimMethodName(String nm) {
+		if ("import".equals(nm)) {
+			return "import_";
+		}
+		return nm;
+	}
+
 }

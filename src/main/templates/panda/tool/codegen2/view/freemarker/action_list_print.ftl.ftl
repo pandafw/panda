@@ -14,7 +14,7 @@
 			"fixed": true
 		}] />
 <#list ui.orderedColumnList as c>
-${s}#if a.displayColumn("${c.name}")>
+${s}#if a.displayField("${c.name}")>
 	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
 			"value": false,

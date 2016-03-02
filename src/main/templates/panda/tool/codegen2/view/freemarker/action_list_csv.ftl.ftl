@@ -15,7 +15,7 @@ ${s}@p.text var="_fn_" name="title-${ui.name}">${s}@p.param name="title" value="
 ${s}@p.head expiry="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
 ${s}#assign _columns_ = [] />
 <#list ui.displayColumnList as c>
-${s}#if a.displayColumn("${c.name}")>
+${s}#if a.displayField("${c.name}")>
 	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
 			"header": text.getText("a.t.${c.name}"),
