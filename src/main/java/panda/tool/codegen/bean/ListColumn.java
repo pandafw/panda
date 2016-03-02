@@ -161,11 +161,11 @@ public class ListColumn implements Comparable<ListColumn> {
 		}
 
 		if (src.format != null) {
-			me.format = new Format(src.format);
+			me.format = "none".equalsIgnoreCase(src.format.getType()) ? null : new Format(src.format);
 		}
 
 		if (src.filter != null) {
-			me.filter = new Filter(src.filter);
+			me.filter = "none".equalsIgnoreCase(src.filter.getType()) ? null : new Filter(src.filter);
 		}
 
 		return me;
