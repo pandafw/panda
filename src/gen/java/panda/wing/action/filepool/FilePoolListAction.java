@@ -21,7 +21,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 */
 	public FilePoolListAction() {
 		setType(DaoFileItem.class);
-		addDisplayColumns(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
+		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
 	}
 
 
@@ -63,6 +63,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 */
 	@At
 	@Ok(View.JSON)
+	@Err(View.JSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -72,6 +73,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 */
 	@At
 	@Ok(View.XML)
+	@Err(View.XML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}

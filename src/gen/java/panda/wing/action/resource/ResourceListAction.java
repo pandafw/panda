@@ -21,7 +21,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	public ResourceListAction() {
 		setType(Resource.class);
-		addDisplayColumns(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UUSID, Resource.UTIME);
+		addDisplayFields(Resource.ID, Resource.CLAZZ, Resource.LANGUAGE, Resource.COUNTRY, Resource.SOURCE, Resource.STATUS, Resource.UUSID, Resource.UTIME);
 	}
 
 
@@ -63,6 +63,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@Ok(View.JSON)
+	@Err(View.JSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -72,6 +73,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 */
 	@At
 	@Ok(View.XML)
+	@Err(View.XML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}

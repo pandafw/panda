@@ -23,7 +23,7 @@
 			"header": text.getText("listview-th-number", ""),
 			"fixed": true
 		}] />
-<#if a.displayColumn("id")>
+<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
 			"value": false,
@@ -33,7 +33,7 @@
 			"tooltip": text.getText("a.t.id-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("name")>
+<#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
 			"value": false,
@@ -43,7 +43,7 @@
 			"tooltip": text.getText("a.t.name-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("language")>
+<#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
 			"value": false,
@@ -57,7 +57,7 @@
 			"tooltip": text.getText("a.t.language-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("country")>
+<#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
 			"value": false,
@@ -71,7 +71,7 @@
 			"tooltip": text.getText("a.t.country-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("status")>
+<#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
 			"value": false,
@@ -85,7 +85,7 @@
 			"tooltip": text.getText("a.t.status-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("uusid")>
+<#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
 			"value": false,
@@ -95,7 +95,7 @@
 			"tooltip": text.getText("a.t.uusid-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("utime")>
+<#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
 			"value": false,

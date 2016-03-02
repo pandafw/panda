@@ -31,7 +31,7 @@
 			"type": "check",
 			"fixed": true
 		}] />
-<#if a.displayColumn("id")>
+<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
 			"pkey" : true,
@@ -42,7 +42,7 @@
 			"tooltip": text.getText("a.t.id-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("clazz")>
+<#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "clazz",
 			"header": text.getText("a.t.clazz"),
@@ -51,7 +51,7 @@
 			"tooltip": text.getText("a.t.clazz-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("language")>
+<#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
 			"header": text.getText("a.t.language"),
@@ -64,7 +64,7 @@
 			"tooltip": text.getText("a.t.language-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("country")>
+<#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
 			"header": text.getText("a.t.country"),
@@ -77,7 +77,7 @@
 			"tooltip": text.getText("a.t.country-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("name")>
+<#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
 			"header": text.getText("a.t.name"),
@@ -86,7 +86,7 @@
 			"tooltip": text.getText("a.t.name-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("value")>
+<#if a.displayField("value")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "value",
 			"header": text.getText("a.t.value"),
@@ -95,7 +95,7 @@
 			"tooltip": text.getText("a.t.value-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("memo")>
+<#if a.displayField("memo")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "memo",
 			"header": text.getText("a.t.memo"),
@@ -104,7 +104,7 @@
 			"tooltip": text.getText("a.t.memo-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("status")>
+<#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
 			"header": text.getText("a.t.status"),
@@ -117,7 +117,7 @@
 			"tooltip": text.getText("a.t.status-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("uusid")>
+<#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
 			"header": text.getText("a.t.uusid"),
@@ -126,7 +126,7 @@
 			"tooltip": text.getText("a.t.uusid-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("utime")>
+<#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
 			"header": text.getText("a.t.utime"),

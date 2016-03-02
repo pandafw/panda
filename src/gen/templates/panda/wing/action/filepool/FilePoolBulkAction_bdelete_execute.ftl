@@ -27,7 +27,7 @@
 			"header": text.getText("listview-th-rownum", ""),
 			"fixed": true
 		}] />
-<#if a.displayColumn("id")>
+<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
 			"header": text.getText("a.t.id"),
@@ -35,7 +35,7 @@
 			"tooltip": text.getText("a.t.id-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("name")>
+<#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
 			"header": text.getText("a.t.name"),
@@ -43,7 +43,7 @@
 			"tooltip": text.getText("a.t.name-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("size")>
+<#if a.displayField("size")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "size",
 			"header": text.getText("a.t.size"),
@@ -54,7 +54,7 @@
 			"tooltip": text.getText("a.t.size-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("date")>
+<#if a.displayField("date")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "date",
 			"header": text.getText("a.t.date"),
@@ -65,7 +65,7 @@
 			"tooltip": text.getText("a.t.date-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("flag")>
+<#if a.displayField("flag")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "flag",
 			"header": text.getText("a.t.flag"),

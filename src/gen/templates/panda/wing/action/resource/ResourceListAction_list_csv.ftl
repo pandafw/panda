@@ -22,21 +22,21 @@
 <@p.text var="_fn_" name="title-list_csv"><@p.param name="title" value="#(title)"/></@p.text>
 <@p.head expiry="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
 <#assign _columns_ = [] />
-<#if a.displayColumn("id")>
+<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
 			"header": text.getText("a.t.id"),
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("clazz")>
+<#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "clazz",
 			"header": text.getText("a.t.clazz"),
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("language")>
+<#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
 			"header": text.getText("a.t.language"),
@@ -47,7 +47,7 @@
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("country")>
+<#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
 			"header": text.getText("a.t.country"),
@@ -58,14 +58,14 @@
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("source")>
+<#if a.displayField("source")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "source",
 			"header": text.getText("a.t.source"),
 			"hidden": true
 		}] />
 </#if>
-<#if a.displayColumn("status")>
+<#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
 			"header": text.getText("a.t.status"),
@@ -76,14 +76,14 @@
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("uusid")>
+<#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
 			"header": text.getText("a.t.uusid"),
 			"hidden": false
 		}] />
 </#if>
-<#if a.displayColumn("utime")>
+<#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
 			"header": text.getText("a.t.utime"),

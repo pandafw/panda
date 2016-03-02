@@ -16,7 +16,7 @@ public abstract class FilePoolBulkAction extends GenericBulkAction<DaoFileItem> 
 	 */
 	public FilePoolBulkAction() {
 		setType(DaoFileItem.class);
-		addDisplayColumns(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
+		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
 	}
 
 

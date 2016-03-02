@@ -21,7 +21,7 @@ public class TemplateListAction extends GenericListAction<Template> {
 	 */
 	public TemplateListAction() {
 		setType(Template.class);
-		addDisplayColumns(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UUSID, Template.UTIME);
+		addDisplayFields(Template.ID, Template.NAME, Template.LANGUAGE, Template.COUNTRY, Template.STATUS, Template.UUSID, Template.UTIME);
 	}
 
 
@@ -63,6 +63,7 @@ public class TemplateListAction extends GenericListAction<Template> {
 	 */
 	@At
 	@Ok(View.JSON)
+	@Err(View.JSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -72,6 +73,7 @@ public class TemplateListAction extends GenericListAction<Template> {
 	 */
 	@At
 	@Ok(View.XML)
+	@Err(View.XML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}

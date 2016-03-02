@@ -90,7 +90,7 @@
 		}] />
 	</#if>
 
-<#if a.displayColumn("id")>
+<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
@@ -105,7 +105,7 @@
 			"tooltip": text.getText("a.t.id-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("clazz")>
+<#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "clazz",
 			"header": text.getText("a.t.clazz"),
@@ -118,7 +118,7 @@
 			"tooltip": text.getText("a.t.clazz-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("language")>
+<#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "language",
 			"header": text.getText("a.t.language"),
@@ -136,7 +136,7 @@
 			"tooltip": text.getText("a.t.language-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("country")>
+<#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "country",
 			"header": text.getText("a.t.country"),
@@ -154,7 +154,7 @@
 			"tooltip": text.getText("a.t.country-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("source")>
+<#if a.displayField("source")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "source",
 			"header": text.getText("a.t.source"),
@@ -167,7 +167,7 @@
 			"tooltip": text.getText("a.t.source-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("status")>
+<#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "status",
 			"header": text.getText("a.t.status"),
@@ -185,7 +185,7 @@
 			"tooltip": text.getText("a.t.status-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("uusid")>
+<#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "uusid",
 			"header": text.getText("a.t.uusid"),
@@ -198,7 +198,7 @@
 			"tooltip": text.getText("a.t.uusid-tip", "")
 		}] />
 </#if>
-<#if a.displayColumn("utime")>
+<#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "utime",
 			"header": text.getText("a.t.utime"),

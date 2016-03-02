@@ -21,7 +21,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 */
 	public PropertyListAction() {
 		setType(Property.class);
-		addDisplayColumns(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UUSID, Property.UTIME);
+		addDisplayFields(Property.ID, Property.CLAZZ, Property.LANGUAGE, Property.COUNTRY, Property.NAME, Property.VALUE, Property.MEMO, Property.STATUS, Property.UUSID, Property.UTIME);
 	}
 
 
@@ -63,6 +63,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 */
 	@At
 	@Ok(View.JSON)
+	@Err(View.JSON)
 	public Object list_json(@Param @Validates Queryer qr) {
 		return super.list_json(qr);
 	}
@@ -72,6 +73,7 @@ public class PropertyListAction extends GenericListAction<Property> {
 	 */
 	@At
 	@Ok(View.XML)
+	@Err(View.XML)
 	public Object list_xml(@Param @Validates Queryer qr) {
 		return super.list_xml(qr);
 	}
