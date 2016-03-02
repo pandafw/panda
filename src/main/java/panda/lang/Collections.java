@@ -336,6 +336,18 @@ public abstract class Collections {
 		}
 	}
 
+	public static void insert(List list, int index, Object value) {
+		if (index < 0 || index >= list.size()) {
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + list.size());
+		}
+
+		list.add(null);
+		for (int i = list.size() - 1; i > index; i--) {
+			list.set(i, list.get(i - 1));
+		}
+		list.set(index, value);
+	}
+	
 	/**
 	 * return first key of map
 	 * @param map
