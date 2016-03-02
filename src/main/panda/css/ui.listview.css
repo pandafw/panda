@@ -154,11 +154,17 @@ fieldset.p-lv-filters legend {
 	margin: 0;
 	width: 100%;
 }
+.p-lv-table th, .p-lv-table td {
+	white-space: nowrap;
+}
 .p-lv-hidden {
 	display: none;
 }
 .p-lv-nowrap {
 	white-space: nowrap;
+}
+.p-lv-wswrap {
+	white-space: normal;
 }
 .p-lv-cm {
 }
@@ -225,6 +231,7 @@ tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions
 	width: 22px;
 }
 
+/** default is nowrap
 thead.p-lv-chead > tr > th,
 thead.p-lv-chead > tr > th.p-lv-actions,
 thead.p-lv-chead > tr > th.p-lv-check,
@@ -240,6 +247,7 @@ tbody.p-lv-tbody > tr > td.p-lv-number,
 tbody.p-lv-tbody > tr > td.p-lv-rownum {
 	white-space: nowrap;
 }
+*/
 
 /* hover & select */
 thead.p-lv-chead > tr > th.p-lv-sortable:hover {

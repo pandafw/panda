@@ -376,11 +376,17 @@ fieldset.p-lv-filters legend {
 	margin: 0;
 	width: 100%;
 }
+.p-lv-table th, .p-lv-table td {
+	white-space: nowrap;
+}
 .p-lv-hidden {
 	display: none;
 }
 .p-lv-nowrap {
 	white-space: nowrap;
+}
+.p-lv-wswrap {
+	white-space: normal;
 }
 .p-lv-cm {
 }
@@ -596,8 +602,14 @@ tbody.p-lv-tbody > tr > td:first-child {
 
 .p-noborder		{ border: 0 none; }
 
+.p-fz70p 		{ font-size: 70%; }
+.p-fz75p 		{ font-size: 75%; }
 .p-fz80p 		{ font-size: 80%; }
+.p-fz85p 		{ font-size: 85%; }
 .p-fz90p 		{ font-size: 90%; }
+
+.p-th-nowrap th { white-space: nowrap; }
+.p-td-nowrap td { white-space: nowrap; }
 .p-uploader-text {
 	display: inline-block;
 	margin-bottom: 0;

@@ -32,5 +32,11 @@
 
 .p-noborder		{ border: 0 none; }
 
+.p-fz70p 		{ font-size: 70%; }
+.p-fz75p 		{ font-size: 75%; }
 .p-fz80p 		{ font-size: 80%; }
+.p-fz85p 		{ font-size: 85%; }
 .p-fz90p 		{ font-size: 90%; }
+
+.p-th-nowrap th { white-space: nowrap; }
+.p-td-nowrap td { white-space: nowrap; }
