@@ -31,7 +31,7 @@ public class ListColumn {
 	public boolean display = true;
 
 	public boolean fixed;
-	public boolean nowrap;
+	public boolean wswrap;
 	public boolean group;
 	public boolean pkey;
 	public boolean enabled;

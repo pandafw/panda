@@ -102,6 +102,9 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 			if (c.link instanceof Map) {
 				c.link = Mvcs.castValue(context, c.link, ItemLink.class);
 			}
+			if (c.format != null && Strings.isEmpty(c.format.escape)) {
+				c.format.escape = Escapes.ESCAPE_PHTML;
+			}
 		}
 		
 		cssColumns = Strings.split(defs(tag.getCssColumn()));
@@ -948,7 +951,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 					tda.add("class", "p-lv-" + ctype 
 							   + ("cm".equals(ctype) ? " p-lv-cm-" + c.name : "")
 							   + (c.hidden ? " p-lv-hidden" : "")
-							   + (c.nowrap ? " p-lv-nowrap" : ""));
+							   + (c.wswrap ? " p-lv-wswrap" : ""));
 					if (c.width > 0) {
 						tda.cssStyle("width:" + c.width);
 					}
@@ -1050,7 +1053,7 @@ public class ListViewRenderer extends AbstractEndRenderer<ListView> {
 							else {
 								Object v = getBeanProperty(d, c.name);
 								if (v != null) {
-									write(formatValue(v));
+									write(formatValue(v, null, Escapes.ESCAPE_PHTML));
 								}
 							}
 
