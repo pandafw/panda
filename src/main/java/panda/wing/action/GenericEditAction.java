@@ -625,7 +625,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		
-		if (!checkOnInput(data, null)) {
+		if (!checkOnInput(data, srcData)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
