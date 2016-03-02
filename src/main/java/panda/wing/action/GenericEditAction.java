@@ -1,29 +1,23 @@
 package panda.wing.action;
 
-import panda.cast.Castors;
-import panda.dao.entity.Entity;
+import java.util.Collection;
+
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
+import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
 import panda.dao.query.GenericQuery;
 import panda.io.Streams;
-import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Objects;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.view.tag.Property;
+import panda.mvc.Mvcs;
 import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
 import panda.wing.entity.IUpdate;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -32,16 +26,16 @@ import java.util.Set;
 public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	private static final Log log = Logs.getLog(GenericEditAction.class);
 	
+	/**
+	 * RESULT_CONFIRM = "confirm";
+	 */
+	protected final static String RESULT_CONFIRM = "confirm";
+	
 	//------------------------------------------------------------
 	// config properties
 	//------------------------------------------------------------
 	private boolean checkAbortOnError = false;
 
-	//------------------------------------------------------------
-	// fields (display & update)
-	//------------------------------------------------------------
-	private Set<String> fields;
-	
 	/**
 	 * Constructor 
 	 */
@@ -66,50 +60,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	//------------------------------------------------------------
-	// fields (display & update)
-	//------------------------------------------------------------
-	/**
-	 * @return the fields
-	 */
-	protected Set<String> getDisplayFields() {
-		return fields;
-	}
-
-	/**
-	 * @param fields the fields to set
-	 */
-	protected void setDisplayFields(Set<String> fields) {
-		this.fields = fields;
-	}
-
-	protected void addDisplayFields(String... fields) {
-		if (this.fields == null) {
-			this.fields = new HashSet<String>();
-		}
-		this.fields.addAll(Arrays.asList(fields));
-	}
-
-	protected void removeDisplayFields(String... fields) {
-		if (Collections.isEmpty(this.fields)) {
-			return;
-		}
-		this.fields.removeAll(Arrays.asList(fields));
-	}
-
-	/**
-	 * used by view
-	 * @param field field name
-	 * @return true if the field should be display
-	 */
-	public boolean displayField(String field) {
-		Collection<String> fs = getDisplayFields();
-		if (Collections.isEmpty(fs)) {
-			return true;
-		}
-		return Collections.contains(fs, field);
-	}
-
-	//------------------------------------------------------------
 	// result
 	//------------------------------------------------------------
 	/**
@@ -122,69 +72,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		else {
 			setScenarioResult(RESULT_CONFIRM);
 		}
-	}
-
-	//------------------------------------------------------------
-	// dao methods
-	//------------------------------------------------------------
-	/**
-	 * Count records by query
-	 * 
-	 * @param q query
-	 * @return count
-	 */ 
-	protected long daoCount(GenericQuery<?> q) {
-		return getDao().count(q);
-	}
-
-	/**
-	 * daoExists
-	 * 
-	 * @param key T
-	 * @return T
-	 */ 
-	protected boolean daoExists(T key) {
-		return getDao().exists(entity, key);
-	}
-
-	/**
-	 * fetch data by query
-	 * 
-	 * @param query query
-	 * @return data
-	 */ 
-	protected T daoFetch(GenericQuery<T> query) {
-		return getDao().fetch(query);
-	}
-
-	/**
-	 * daoInsert
-	 * 
-	 * @param data data
-	 */ 
-	protected void daoInsert(T data) {
-		getDao().insert(data);
-	}
-
-	/**
-	 * delete record
-	 * 
-	 * @param key key
-	 * @return count of deleted records
-	 */ 
-	protected int daoDelete(T key) {
-		return getDao().delete(key);
-	}
-
-	/**
-	 * update data
-	 * 
-	 * @param data data
-	 * @param fields fields to update
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdate(T data, Collection<String> fields) {
-		return getDao().update(data, fields);
 	}
 
 	//------------------------------------------------------------
@@ -574,17 +461,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return data data found
 	 */
 	protected T selectData(T key) {
-		if (!hasPrimaryKeyValues(key)) {
+		if (!EntityHelper.hasPrimaryKeyValues(getEntity(), key)) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
 			return null;
 		}
 		
-		GenericQuery<T> gq = new GenericQuery<T>(entity);
+		GenericQuery<T> gq = new GenericQuery<T>(getEntity());
 		addQueryFields(gq);
 		addQueryJoins(gq);
 		addQueryFilters(gq, key);
 		
-		T d = daoFetch(gq);
+		T d = getDao().fetch(gq);
 		if (d == null) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
 			return null;
@@ -661,19 +548,19 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		
-		if (!checkPrimaryKeyOnInsert(data)) {
+		if (!checkPrimaryKeysOnInsert(data)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkUniqueKeyOnInsert(data)) {
+		if (!checkUniqueKeysOnInsert(data)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkForeignKey(data)) {
+		if (!checkForeignKeys(data)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -695,7 +582,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */
 	protected void insertData(T data) {
-		daoInsert(data);
+		getDao().insert(data);
 	}
 
 	/**
@@ -715,7 +602,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return update count
 	 */
 	protected int updateData(T data, T srcData) {
-		int cnt = daoUpdate(data, getDisplayFields());
+		int cnt = getDao().update(data, getDisplayFields());
 		if (cnt != 1) {
 			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
 		}
@@ -752,19 +639,19 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		// primary key can not be modified or null
-		if (!checkPrimaryKeyOnUpdate(data, srcData)) {
+		if (!checkPrimaryKeysOnUpdate(data, srcData)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkUniqueKeyOnUpdate(data, srcData)) {
+		if (!checkUniqueKeysOnUpdate(data, srcData)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkForeignKey(data)) {
+		if (!checkForeignKeys(data)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -831,7 +718,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */
 	protected void deleteData(T data) {
-		int cnt = daoDelete(data);
+		int cnt = getDao().delete(data);
 		if (cnt != 1) {
 			throw new RuntimeException("The deleted data count (" + cnt + ") does not equals 1.");
 		}
@@ -848,45 +735,38 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// error message methods
 	//------------------------------------------------------------
-	protected String getFieldValueErrorText(T data, EntityField ef) {
+	protected void addDataFieldErrors(T data, Collection<EntityField> efs, String itemErrMsg, String dataErrMsg) {
 		StringBuilder sb = new StringBuilder();
-
-		String fn = getTextDataFieldName(ef.getName());
-		sb.append(getText(fn));
-		sb.append(": ");
-		
-		Object fv = ef.getValue(data);
-		if (fv != null) {
-			Property ptag = context.getIoc().get(Property.class);
-			ptag.setValue(fv);
-			ptag.setEscape(null);
-			sb.append(ptag.formatValue());
-		}
-		
-		return sb.toString();
-	}
-	
-	protected void addDataFieldErrors(T data, Collection<EntityField> efs, String fieldErrMsg, String dataErrMsg) {
-		StringBuilder sb = new StringBuilder();
-		for (EntityField ef :efs) {
+		for (EntityField ef : efs) {
 			if (!displayField(ef.getName())) {
 				continue;
 			}
 			
-			sb.append(getFieldValueErrorText(data, ef));
+			EntityField eff = mappedEntityField(ef);
+
+			addFieldError(eff.getName(), getMessage(itemErrMsg));
+
 			sb.append(Streams.LINE_SEPARATOR);
-			addFieldError(ef.getName(), getMessage(fieldErrMsg));
+
+			String label = getFieldLabel(eff.getName());
+			sb.append(label);
+			sb.append(": ");
+			
+			Object fv = eff.getValue(data);
+			if (fv != null) {
+				sb.append(Mvcs.castString(context, fv));
+			}
 		}
 
 		addActionError(getMessage(dataErrMsg, sb.toString()));
 	}
 	
 	protected void addDataDuplicateError(T data, Collection<EntityField> efs) {
-		addDataFieldErrors(data, efs, RC.ERROR_FIELDVALUE_DUPLICATE, RC.ERROR_DATA_DUPLICATE);
+		addDataFieldErrors(data, efs, RC.ERROR_ITEM_DUPLICATE, RC.ERROR_DATA_DUPLICATE);
 	}
 
 	protected void addDataIncorrectError(T data, Collection<EntityField> efs) {
-		addDataFieldErrors(data, efs, RC.ERROR_FIELDVALUE_INCORRECT, RC.ERROR_DATA_INCORRECT);
+		addDataFieldErrors(data, efs, RC.ERROR_ITEM_INCORRECT, RC.ERROR_DATA_INCORRECT);
 	}
 	
 	//------------------------------------------------------------
@@ -897,40 +777,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 * @return true if check successfully
 	 */
-	protected boolean checkPrimaryKeyOnInsert(T data) {
-		Entity<T> entity = getEntity();
-		EntityField eid = entity.getIdentity(); 
-		if (eid == null) {
-			List<EntityField> pks = entity.getPrimaryKeys();
-
-			boolean hasNull = false;
-
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
-			for (EntityField pk : pks) {
-				Object dv = pk.getValue(data);
-				if (dv == null) {
-					hasNull = true;
-				}
-				else {
-					q.equalTo(pk.getName(), dv);
-				}
-			}
-
-			if (!hasNull) {
-				if (daoExists(data)) {
-					addDataDuplicateError(data, pks);
-					return false;
-				}
-			}
+	protected boolean checkPrimaryKeysOnInsert(T data) {
+		if (EntityHelper.checkPrimaryKeys(getDao(), getEntity(), data)) {
+			return true;
 		}
-		else {
-			Object id = eid.getValue(data);
-			if (getDao().isValidIdentity(id) && daoExists(data)) {
-				addDataDuplicateError(data, entity.getPrimaryKeys());
-				return false;
-			}
-		}
-		return true;
+
+		addDataDuplicateError(data, getEntity().getPrimaryKeys());
+		return false;
 	}
 
 	/**
@@ -938,8 +791,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param srcData srcData
 	 * @return true if check successfully
 	 */
-	protected boolean checkPrimaryKeyOnUpdate(T data, T srcData) {
-		if (hasPrimaryKeyValues(data)) {
+	protected boolean checkPrimaryKeysOnUpdate(T data, T srcData) {
+		if (EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
 			return true;
 		}
 
@@ -947,62 +800,26 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		return false;
 	}
 
-	/**
-	 * @param data data
-	 * @return true if check successfully
-	 */
-	protected boolean hasPrimaryKeyValues(T data) {
-		for (EntityField ef : getEntity().getPrimaryKeys()) {
-			Object dv = ef.getValue(data);
-			if (dv == null) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	protected boolean checkUniqueIndex(T data, EntityIndex ei) {
-		boolean allNull = true;
-
-		GenericQuery<T> q = new GenericQuery<T>(getEntity());
-		for (EntityField ef : ei.getFields()) {
-			Object dv = ef.getValue(data);
-			if (dv == null) {
-				q.isNull(ef.getName());
-			}
-			else {
-				allNull = false;
-				q.equalTo(ef.getName(), dv);
-			}
+		if (EntityHelper.checkUniqueIndex(getDao(), getEntity(), data, ei)) {
+			return true;
 		}
 
-		if (!allNull) {
-			if (daoCount(q) > 0) {
-				addDataDuplicateError(data, ei.getFields());
-				return false;
-			}
-		}
-		
-		return true;
+		addDataDuplicateError(data, ei.getFields());
+		return false;
 	}
 
 	/**
-	 * checkUniqueKeyOnInsert
-	 * @param data data
+	 * checkUniqueKeysOnInsert
 	 * @return true if check successfully
 	 */
-	protected boolean checkUniqueKeyOnInsert(T data) {
+	protected boolean checkUniqueKeysOnInsert(T data) {
 		Collection<EntityIndex> eis = getEntity().getIndexes();
 		if (Collections.isEmpty(eis)) {
 			return true;
 		}
 		
 		for (EntityIndex ei : eis) {
-			if (!ei.isUnique()) {
-				continue;
-			}
-			
 			if (!checkUniqueIndex(data, ei)) {
 				return false;
 			}
@@ -1011,12 +828,12 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * checkUniqueKeyOnUpdate
+	 * checkUniqueKeysOnUpdate
 	 * @param data data
 	 * @param srcData srcData
 	 * @return true if check successfully
 	 */
-	protected boolean checkUniqueKeyOnUpdate(T data, T srcData) {
+	protected boolean checkUniqueKeysOnUpdate(T data, T srcData) {
 		Collection<EntityIndex> eis = getEntity().getIndexes();
 		if (Collections.isEmpty(eis)) {
 			return true;
@@ -1027,17 +844,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				continue;
 			}
 
-			boolean dirty = false;
-			for (EntityField ef : ei.getFields()) {
-				Object ov = ef.getValue(srcData);
-				Object dv = ef.getValue(data);
-				if (!Objects.equals(ov, dv)) {
-					dirty = true;
-					break;
-				}
-			}
-
-			if (dirty) {
+			if (EntityHelper.isDifferent(ei.getFields(), data, srcData)) {
 				if (!checkUniqueIndex(data, ei)) {
 					return false;
 				}
@@ -1047,42 +854,20 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * checkForeignKey
+	 * checkForeignKeys
 	 * @param data
 	 * @return true if check successfully
 	 */
-	protected boolean checkForeignKey(T data) {
+	protected boolean checkForeignKeys(T data) {
 		Collection<EntityFKey> efks = getEntity().getForeignKeys();
 		if (Collections.isEmpty(efks)) {
 			return true;
 		}
 		
 		for (EntityFKey efk : efks) {
-			boolean allNull = true;
-			
-			@SuppressWarnings("unchecked")
-			GenericQuery q = new GenericQuery(efk.getReference());
-
-			int i = 0;
-			for (EntityField rf : efk.getReference().getPrimaryKeys()) {
-				EntityField ef = efk.getFields().get(i);
-				Object dv = ef.getValue(data);
-				if (dv == null) {
-					q.isNull(rf.getName());
-				}
-				else {
-					allNull = false;
-					q.equalTo(rf.getName(), dv);
-				}
-				i++;
-			}
-
-			if (!allNull) {
-				q.setLimit(1);
-				if (daoCount(q) < 1) {
-					addDataIncorrectError(data, efk.getFields());
-					return false;
-				}
+			if (!EntityHelper.checkForeignKey(getDao(), getEntity(), data, efk)) {
+				addDataIncorrectError(data, efk.getFields());
+				return false;
 			}
 		}
 		return true;
@@ -1144,51 +929,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected void clearOnCopy(T data) {
 		if (data != null) {
-			EntityField eid = entity.getIdentity(); 
+			EntityField eid = getEntity().getIdentity(); 
 			if (eid == null) {
-				clearPrimaryKeyValues(data);
+				EntityHelper.clearPrimaryKeyValues(getEntity(), data);
 			}
 			else {
-				clearIdentityValue(data);
+				EntityHelper.clearIdentityValue(getEntity(), data);
 			}
 		}
-	}
-	
-	/**
-	 * clear primary key value of data
-	 * @param data data
-	 */
-	protected void clearPrimaryKeyValues(T data) {
-		if (data != null) {
-			Castors c = getDaoClient().getCastors();
-			List<EntityField> pks = getEntity().getPrimaryKeys();
-			for (EntityField pk : pks) {
-				Object value = c.cast(null, pk.getType());
-				pk.setValue(data, value);
-			}
-		}
-	}
-
-	/**
-	 * clear identity value of data
-	 * @param data data
-	 */
-	protected void clearIdentityValue(T data) {
-		if (data != null) {
-			EntityField eid = getEntity().getIdentity();
-			if (eid != null) {
-				Castors c = getDaoClient().getCastors();
-				Object value = c.cast(null, eid.getType());
-				eid.setValue(data, value);
-			}
-		}
-	}
-
-	/**
-	 * @param pn property name
-	 * @return dataName + "." + propertyName
-	 */
-	protected String getTextDataFieldName(String pn) {
-		return "a.t." + pn;
 	}
 }

@@ -1,0 +1,16 @@
+p.file=File
+p.loose=Continue on error
+
+info-imported=${top} items successfully imported.
+warn-skipped=${top} incorrect items skipped.
+
+error-header=Incorrect header - col [${top.col}]: ${top.value}
+error-data=Incorrect data - ${top.error}\nrow [${top.row}]: ${top.value}
+error-value=Incorrect value - ${top.error}\nrow [${top.row], col [${top.col}]: ${top.value}
+error-file=Please select a CSV, TSV, XLS or XLSX file.
+
+result-success=Imported data: ${top.count} items
+result-warning=Discard data: ${top.count} items
+
+head-error=#ERROR#
+

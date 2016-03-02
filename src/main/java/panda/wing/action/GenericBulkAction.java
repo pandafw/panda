@@ -1,23 +1,20 @@
 package panda.wing.action;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.GenericQuery;
-import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.constant.RC;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -26,95 +23,10 @@ import java.util.Set;
 public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	private static final Log log = Logs.getLog(GenericBulkAction.class);
 	
-	//------------------------------------------------------------
-	// display columns
-	//------------------------------------------------------------
-	private Set<String> columns;
-
 	/**
 	 * Constructor 
 	 */
 	public GenericBulkAction() {
-	}
-
-	//------------------------------------------------------------
-	// display columns
-	//------------------------------------------------------------
-	protected Set<String> getDisplayColumns() {
-		return columns;
-	}
-
-	protected void setDisplayColumns(Set<String> columns) {
-		this.columns = columns;
-	}
-
-	protected void addDisplayColumns(String... columns) {
-		if (this.columns == null) {
-			this.columns = new HashSet<String>();
-		}
-		this.columns.addAll(Arrays.asList(columns));
-	}
-
-	protected void removeDisplayColumns(String... columns) {
-		if (Collections.isEmpty(this.columns)) {
-			return;
-		}
-		this.columns.removeAll(Arrays.asList(columns));
-	}
-
-	/**
-	 * call by view
-	 */
-	public boolean displayColumn(String name) {
-		Collection<String> cs = getDisplayColumns();
-		if (Collections.isEmpty(cs)) {
-			return true;
-		}
-		return Collections.contains(cs, name);
-	}
-
-	//------------------------------------------------------------
-	// dao methods
-	//------------------------------------------------------------
-	/**
-	 * select by query
-	 * 
-	 * @param q query
-	 * @return data list
-	 */ 
-	protected List<T> daoSelect(GenericQuery<T> q) {
-		return getDao().select(q);
-	}
-
-	/**
-	 * delete record
-	 * 
-	 * @param key key
-	 * @return count of deleted records
-	 */ 
-	protected int daoDelete(T key) {
-		return getDao().delete(key);
-	}
-
-	/**
-	 * update data (ignore null properties)
-	 * 
-	 * @param data data
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdate(T data) {
-		return getDao().update(data);
-	}
-
-	/**
-	 * use sample data to update record by query
-	 * 
-	 * @param sample sample data
-	 * @param q query
-	 * @return count of updated records
-	 */ 
-	protected int daoUpdates(T sample, GenericQuery<T> q) {
-		return getDao().updates(sample, q);
 	}
 
 	//------------------------------------------------------------
@@ -241,7 +153,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 		int cnt = 0;
 		for (int i = dataList.size() - 1; i >= 0; i--) {
-			int c = daoDelete(dataList.get(i));
+			int c = getDao().delete(dataList.get(i));
 			if (c <= 0) {
 				dataList.remove(i);
 			}
@@ -422,7 +334,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	}
 	
 	protected void addQueryColumns(GenericQuery<T> gq) {
-		Set<String> cs = getDisplayColumns();
+		Set<String> cs = getDisplayFields();
 		if (Collections.isNotEmpty(cs)) {
 			gq.excludeAll();
 			gq.includePrimayKeys();
@@ -453,7 +365,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				if (filter) {
 					addQueryFilters(q);
 				}
-				dataList = daoSelect(q);
+				dataList = getDao().select(q);
 				dataList = trimDataList(dataList);
 			}
 			else {
@@ -515,7 +427,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return 0;
 		}
 
-		int cnt = daoUpdates(sample, q);
+		int cnt = getDao().updates(sample, q);
 		List<T> newList = selectDataList(dataList, false);
 
 		dataList.clear();

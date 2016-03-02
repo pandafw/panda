@@ -9,9 +9,9 @@ public interface AUTH {
 	public static final char AND = '+';
 
 	/**
-	 * ALL = "*";
+	 * SUPER = "*";
 	 */
-	public static final String ALL = "*";
+	public static final String SUPER = "*";
 	
 	/**
 	 * NONE = "-";
@@ -23,8 +23,6 @@ public interface AUTH {
 	public static final String LOCAL = "_local_";
 	
 	public static final String SECURE = "_secure_";
-	
-	public static final String SUPER = ALL;
 	
 	public static final String ADMIN = "admin";
 

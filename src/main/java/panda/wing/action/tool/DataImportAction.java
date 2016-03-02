@@ -31,6 +31,7 @@ import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.filepool.FileItem;
 import panda.io.FileNames;
+import panda.io.Streams;
 import panda.io.stream.CsvReader;
 import panda.lang.Charsets;
 import panda.lang.Classes;
@@ -47,7 +48,6 @@ import panda.mvc.validation.annotation.Validates;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
-import panda.wing.util.AppActionAssist;
 
 @At("${super_context}/dataimp")
 @Auth(AUTH.SUPER)
@@ -150,7 +150,7 @@ public class DataImportAction extends AbstractAction {
 					}
 				}
 			}
-			else if (Strings.isNotEmpty(arg.file.getName())) {
+			else {
 				addFieldError("file", getText("error-file-format"));
 			}
 		}
@@ -253,12 +253,12 @@ public class DataImportAction extends AbstractAction {
 
 	protected void logException(String method, Throwable e) {
 		Logs.getLog(getClass()).warn(method, e);
-		if (getAssist().isDebugEnabled()) {
+		if (assist().isDebugEnabled()) {
 			String s = Exceptions.getStackTrace(e);
-			getActionAware().addError(e.getMessage() + "\n" + s);
+			addActionError(e.getMessage() + "\n" + s);
 		}
 		else {
-			getActionAware().addError(e.getMessage());
+			addActionError(e.getMessage());
 		}
 	}
 
@@ -324,7 +324,6 @@ public class DataImportAction extends AbstractAction {
 
 		String[] line = new String[columns.size()];
 		
-		boolean empty = true;
 		Map<String, Object> values = new HashMap<String, Object>(columns.size());
 		for (int c = 0; c < columns.size(); c++) {
 			Cell cell = row.getCell(c);
@@ -357,12 +356,7 @@ public class DataImportAction extends AbstractAction {
 				line[c] = v;
 
 				Object cv;
-				if (Strings.isBlank(v)) {
-					cv = null;
-				}
-				else {
-					empty = false;
-
+				if (Strings.isNotBlank(v)) {
 					String type = types.get(c).type;
 					if ("date".equalsIgnoreCase(type)) {
 						try {
@@ -375,8 +369,8 @@ public class DataImportAction extends AbstractAction {
 					else {
 						cv = getCellValue(v, c, types);
 					}
+					values.put(columns.get(c), cv);
 				}
-				values.put(columns.get(c), cv);
 			}
 			catch (Exception e) {
 				String msg = getError(sheet.getSheetName(), r + 1, c + 1, v, e);
@@ -384,13 +378,10 @@ public class DataImportAction extends AbstractAction {
 			}
 		}
 
-		if (empty) {
-			return null;
-		}
-		else {
+		if (!values.isEmpty()) {
 			uploadData.add(line);
-			return values;
 		}
+		return values;
 	}
 
 	protected Class<?> resolveTargetType(String target) {
@@ -460,6 +451,9 @@ public class DataImportAction extends AbstractAction {
 					if (values == null) {
 						break;
 					}
+					if (values.isEmpty()) {
+						continue;
+					}
 
 					saveRow(dao, targetType, values);
 
@@ -472,9 +466,10 @@ public class DataImportAction extends AbstractAction {
 					dao.commit();
 				}
 				arg.count = cnt;
-				addActionMessage(getText("success-import", "success-import", arg));
 			}
 		});
+
+		addActionMessage(getText("success-import", "success-import", arg));
 
 		tableList.add(table);
 	}
@@ -527,6 +522,9 @@ public class DataImportAction extends AbstractAction {
 						if (values == null) {
 							break;
 						}
+						if (values.isEmpty()) {
+							continue;
+						}
 
 						saveRow(dao, targetType, values);
 
@@ -541,10 +539,10 @@ public class DataImportAction extends AbstractAction {
 					}
 
 					arg.count = cnt;
-					addActionMessage(getText("success-import", "success-import", arg));
 				}
 			});
 
+			addActionMessage(getText("success-import", "success-import", arg));
 			tableList.add(table);
 		}
 		catch (Throwable e) {
@@ -560,31 +558,31 @@ public class DataImportAction extends AbstractAction {
 			if (row == null) {
 				return null;
 			}
-			uploadData.add(row);
 	
-			boolean empty = true;
-			
 			Map<String, Object> values = new HashMap<String, Object>(columns.size());
 			for (int c = 0; c < columns.size(); c++) {
 				String v = null;
 				if (c < row.size()) {
-					v = row.get(c);
+					v = Strings.stripToNull(row.get(c));
 				}
 				
-				try {
-					Object cv = getCellValue(v, c, types);
-	
-					empty = (cv == null);
-	
-					values.put(columns.get(c), cv);
+				if (v != null) {
+					try {
+						Object cv = getCellValue(v, c, types);
+						values.put(columns.get(c), cv);
+					}
+					catch (Exception e) {
+						String msg = getError(arg.target, r, c, v, e);
+						throw new Exception(msg);
+					}
 				}
-				catch (Exception e) {
-					String msg = getError(arg.target, r, c, v, e);
-					throw new Exception(msg);
-				}
+				
 			}
 			
-			return empty ? null : values;
+			if (!values.isEmpty()) {
+				uploadData.add(row);
+			}
+			return values;
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
@@ -602,23 +600,15 @@ public class DataImportAction extends AbstractAction {
 
 		return getText("error-value", e.getMessage(), m);
 	}
+
 	protected CsvReader getCsvReader(byte[] data, char separator) throws Exception {
-		int offset = 0;
-		int length = data.length;
-		
-		if (length > 3 && Charsets.UTF_8.equalsIgnoreCase(arg.encoding)) {
-			if (data[0] == -17 && data[1] == -69 && data[2] == -65) {
-				offset = 3;
-				length -= 3;
-			}
-		}
-		return new CsvReader(new InputStreamReader(
-				new ByteArrayInputStream(data, offset, length), arg.encoding),
-				separator);
+		return new CsvReader(
+			new InputStreamReader(Streams.toBOMInputStream(new ByteArrayInputStream(data)), arg.encoding),
+			separator);
 	}
 
 	protected void prepareData(Object data) {
-		((AppActionAssist)getAssist()).initCommonFields(data);
+		assist().initCommonFields(data);
 	}
 
 	protected void saveRow(Dao dao, Class targetType, Object row) {

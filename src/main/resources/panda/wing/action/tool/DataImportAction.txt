@@ -4,10 +4,8 @@ p.target=Target
 p.file=File
 deleteAll=Delete data before import
 
-button-import=Import
-
 success-import=The data (${top.count} items) is successfully imported to [${top.target}].
 
 error-value=[${top.target}] Incorrect data(${top.row}, ${top.col}): ${top.value} - ${top.error}
 
-error-file-format=The data file must be CSV or XLS file.
+error-file-format=Please select a CSV, TSV, XLS or XLSX file.

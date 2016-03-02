@@ -1,0 +1,14 @@
+p.file=数据文件
+p.loose=忽略错误数据
+
+info-imported=${top}件数据成功导入。
+warn-skipped=${top}件错误数据被丢弃了。
+
+error-header=列名错误(列: ${top.col}): ${top.value}
+error-data=数据错误 - ${top.error}\n行[${top.row}]: ${top.value}
+error-value=数据错误 - ${top.error}\n行[{top.row}], 列[${top.col}]: ${top.value}
+error-file=请指定CSV, TSV, XLS或者XLSX文件。
+
+result-success=导入数据: ${top.count}件
+result-warning=错误数据: ${top.count}件
+

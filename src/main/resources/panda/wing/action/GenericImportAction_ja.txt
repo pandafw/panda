@@ -1,0 +1,14 @@
+p.file=ファイル
+p.loose=不正データーを無視する
+
+info-imported=${top}件のデータをインポートしました。
+warn-skipped=${top}件の不正なデータを廃棄しました。
+
+error-header=ヘッダーが正しくありません。列[${top.col}]: ${top.value}
+error-data=データが正しくありません - ${top.error}\n行[${top.row}]: ${top.value}
+error-value=データが正しくありません - ${top.error}\n行[${top.row}], 列[${top.col}]: ${top.value}
+error-file=CSV, TSV, XLSまたはXLSXファイルを指定してください。
+
+result-success=インポートしたデーター: ${top.count}件
+result-warning=不正なデーター: ${top.count}件
+

@@ -1,7 +1,16 @@
 package panda.wing.action;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
+import panda.dao.entity.EntityField;
+import panda.lang.Arrays;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
@@ -11,11 +20,6 @@ import panda.mvc.view.SitemeshFreemarkerView;
  * @param <T> data type
  */
 public abstract class GenericBaseAction<T> extends AbstractAction {
-	/**
-	 * RESULT_CONFIRM = "confirm";
-	 */
-	protected final static String RESULT_CONFIRM = "confirm";
-	
 	/**
 	 * METHOD_SEPARATOR = "_";
 	 */
@@ -34,10 +38,143 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	protected Entity<T> entity;
 	protected Dao dao;
 	
+	//------------------------------------------------------------
+	// display fields (display & update)
+	//------------------------------------------------------------
+	protected Set<String> displayFields;
+	protected Map<String, String> mappingFields;
+	
 	/**
 	 * Constructor 
 	 */
 	public GenericBaseAction() {
+	}
+
+	//------------------------------------------------------------
+	// display fields
+	//------------------------------------------------------------
+	/**
+	 * @return the fields
+	 */
+	protected Set<String> getDisplayFields() {
+		return displayFields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	protected void setDisplayFields(Set<String> fields) {
+		displayFields = fields;
+	}
+
+	protected void addDisplayFields(String... fields) {
+		if (Arrays.isEmpty(fields)) {
+			return;
+		}
+		if (displayFields == null) {
+			displayFields = new HashSet<String>();
+		}
+		displayFields.addAll(Arrays.asList(fields));
+	}
+
+	protected void removeDisplayFields(String... fields) {
+		if (Arrays.isEmpty(fields)) {
+			return;
+		}
+		if (Collections.isEmpty(displayFields)) {
+			return;
+		}
+		displayFields.removeAll(Arrays.asList(fields));
+	}
+
+	/**
+	 * used by view
+	 * @param field field name
+	 * @return true if the field should be display
+	 */
+	public boolean displayField(String field) {
+		Collection<String> fs = getDisplayFields();
+		if (Collections.isEmpty(fs)) {
+			return true;
+		}
+		return Collections.contains(fs, field);
+	}
+
+	//------------------------------------------------------------
+	// mapping fields
+	//------------------------------------------------------------
+	/**
+	 * @return the fields
+	 */
+	protected Map<String, String> getMappingFields() {
+		return mappingFields;
+	}
+
+	/**
+	 * @param fields the fields to set
+	 */
+	protected void setMappingFields(Map<String, String> fields) {
+		mappingFields = fields;
+	}
+
+	protected void addMappingFields(String... fields) {
+		if (Arrays.isEmpty(fields)) {
+			return;
+		}
+		if (fields.length % 2 != 0) {
+			throw new IllegalArgumentException("The mapping fields is incorrect: " + Strings.join(fields, ','));
+		}
+		if (mappingFields == null) {
+			mappingFields = new HashMap<String, String>();
+		}
+		
+		for (int i = 0; i < fields.length; i = i + 2) {
+			mappingFields.put(fields[i], fields[i + 1]);
+		}
+	}
+
+	protected void removeMappingFields(String... fields) {
+		if (Arrays.isEmpty(fields)) {
+			return;
+		}
+		if (Collections.isEmpty(mappingFields)) {
+			return;
+		}
+		
+		for (String f : fields) {
+			mappingFields.remove(f);
+		}
+	}
+
+	/**
+	 * @param field field name
+	 * @return the mapped field
+	 */
+	protected String mappedField(String field) {
+		Map<String, String> fmap = getMappingFields();
+		if (Collections.isEmpty(fmap)) {
+			return field;
+		}
+		String mf = fmap.get(field);
+		return mf == null ? field : mf;
+	}
+
+	/**
+	 * @param field field name
+	 * @return the mapped field
+	 */
+	protected EntityField mappedEntityField(EntityField field) {
+		Map<String, String> fmap = getMappingFields();
+		if (Collections.isEmpty(fmap)) {
+			return field;
+		}
+		String fn = field.getName();
+		String mf = fmap.get(fn);
+		if (mf == null || mf.equals(fn)) {
+			return field;
+		}
+		
+		return getEntity().getField(mf);
 	}
 
 	//------------------------------------------------------------
@@ -148,7 +285,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @param param parameters
 	 * @return message string
 	 */
-	protected String getMessage(String msg, String param) {
+	protected String getMessage(String msg, Object param) {
 		return getText(msg, msg, param);
 	}
 
@@ -171,5 +308,13 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	protected String getScenarioMessage(String prefix, String param) {
 		String msg = prefix + getActionScenario();
 		return getText(msg, msg, param);
+	}
+	
+	/**
+	 * @param pn property name
+	 * @return getText("a.t," + pn)
+	 */
+	protected String getFieldLabel(String pn) {
+		return getText("a.t." + pn);
 	}
 }

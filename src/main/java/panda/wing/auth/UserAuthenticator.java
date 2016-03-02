@@ -112,7 +112,7 @@ public abstract class UserAuthenticator {
 		}
 
 		// user has 'allow all' permits
-		if (Collections.contains(uperms, AUTH.ALL)) {
+		if (Collections.contains(uperms, AUTH.SUPER)) {
 			return OK;
 		}
 

@@ -80,7 +80,7 @@ public class AuthHelper {
 	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
-		return hasPermission(u, AUTH.ALL);
+		return hasPermission(u, AUTH.SUPER);
 	}
 
 	/**

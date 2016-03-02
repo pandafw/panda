@@ -99,24 +99,24 @@ public interface RC {
 	public final static String ERROR_DATA_DUPLICATE = "error-data-duplicate";
 	
 	/**
-	 * ERROR_FIELDVALUE_NOTNULL = "error-fieldvalue-notnull";
+	 * ERROR_ITEM_NOTNULL = "error-item-notnull";
 	 */
-	public final static String ERROR_FIELDVALUE_NOTNULL = "error-fieldvalue-notnull";
+	public final static String ERROR_ITEM_NOTNULL = "error-item-notnull";
 	
 	/**
-	 * ERROR_FIELDVALUE_REQUIRED = "error-fieldvalue-required";
+	 * ERROR_ITEM_REQUIRED = "error-item-required";
 	 */
-	public final static String ERROR_FIELDVALUE_REQUIRED = "error-fieldvalue-required";
+	public final static String ERROR_ITEM_REQUIRED = "error-item-required";
 	
 	/**
-	 * ERROR_FIELDVALUE_INCORRECT = "error-fieldvalue-incorrect";
+	 * ERROR_ITEM_INCORRECT = "error-item-incorrect";
 	 */
-	public final static String ERROR_FIELDVALUE_INCORRECT = "error-fieldvalue-incorrect";
+	public final static String ERROR_ITEM_INCORRECT = "error-item-incorrect";
 	
 	/**
-	 * ERROR_FIELDVALUE_DUPLICATE = "error-fieldvalue-duplicate";
+	 * ERROR_ITEM_DUPLICATE = "error-item-duplicate";
 	 */
-	public final static String ERROR_FIELDVALUE_DUPLICATE = "error-fieldvalue-duplicate";
+	public final static String ERROR_ITEM_DUPLICATE = "error-item-duplicate";
 	
 	/**
 	 * ERROR_FILE_NOTFOUND = "error-file-notfound";

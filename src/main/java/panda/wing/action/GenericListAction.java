@@ -1,9 +1,7 @@
 package panda.wing.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,11 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.dao.Dao;
+import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.Join;
 import panda.dao.query.Query;
-import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -55,11 +53,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	private Boolean _load;
 	private Boolean _save;
 	private Boolean listCountable;
-
-	//------------------------------------------------------------
-	// display columns
-	//------------------------------------------------------------
-	private Set<String> columns;
 
 	//------------------------------------------------------------
 	// result properties
@@ -171,62 +164,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	protected void setListCountable(Boolean listCountable) {
 		this.listCountable = listCountable;
-	}
-
-	//------------------------------------------------------------
-	// display columns
-	//------------------------------------------------------------
-	protected Set<String> getDisplayColumns() {
-		return columns;
-	}
-
-	protected void setDisplayColumns(Set<String> columns) {
-		this.columns = columns;
-	}
-
-	protected void addDisplayColumns(String... columns) {
-		if (this.columns == null) {
-			this.columns = new HashSet<String>();
-		}
-		this.columns.addAll(Arrays.asList(columns));
-	}
-
-	protected void removeDisplayColumns(String... columns) {
-		if (Collections.isEmpty(this.columns)) {
-			return;
-		}
-		this.columns.removeAll(Arrays.asList(columns));
-	}
-
-	public boolean displayColumn(String name) {
-		Collection<String> cs = getDisplayColumns();
-		if (Collections.isEmpty(cs)) {
-			return true;
-		}
-		return Collections.contains(cs, name);
-	}
-
-	//------------------------------------------------------------
-	// dao methods
-	//------------------------------------------------------------
-	/**
-	 * Count records by query
-	 * 
-	 * @param q query
-	 * @return count
-	 */ 
-	protected long daoCount(GenericQuery<?> q) {
-		return getDao().count(q);
-	}
-
-	/**
-	 * select by query
-	 * 
-	 * @param q query
-	 * @return data list
-	 */ 
-	protected List<T> daoSelect(GenericQuery<T> q) {
-		return getDao().select(q);
 	}
 
 	//------------------------------------------------------------
@@ -413,12 +350,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		dao.exec(new Runnable() {
 			public void run() {
 				if (listCountable) {
-					qr.getPager().setTotal(daoCount(gq));
+					qr.getPager().setTotal(getDao().count(gq));
 					qr.getPager().normalize();
 					if (qr.getPager().getTotal() > 0) {
 						gq.setStart(qr.getPager().getStart());
 						gq.setLimit(qr.getPager().getLimit());
-						dataList = daoSelect(gq);
+						dataList = getDao().select(gq);
 						dataList = trimDataList(dataList);
 					}
 					else {
@@ -428,7 +365,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				else {
 					gq.setStart(qr.getPager().getStart());
 					gq.setLimit(qr.getPager().getLimit());
-					dataList = daoSelect(gq);
+					dataList = getDao().select(gq);
 					dataList = trimDataList(dataList);
 				}
 			}
@@ -470,7 +407,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * @param gq query
 	 */
 	protected void addQueryColumns(GenericQuery<T> gq) {
-		Set<String> fs = getDisplayColumns();
+		Set<String> fs = getDisplayFields();
 		if (Collections.isNotEmpty(fs)) {
 			gq.excludeAll();
 			gq.includePrimayKeys();
@@ -519,6 +456,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				continue;
 			}
 
+			Entity<T> entity = getEntity();
 			String name = Strings.isEmpty(f.getName()) ? e.getKey() : f.getName();
 			EntityField ef = entity.getField(name);
 			if (ef == null) {
