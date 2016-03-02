@@ -91,7 +91,8 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 
 		Object array = createArray(target, 1);
 		Castor conv = getCastor(context, value.getClass(), toComponentType);
-		Array.set(array, 0, castChild(context, conv, 0, value));
+		Object cv = conv.cast(value, context);
+		Array.set(array, 0, cv);
 		return (T)array;
 	}
 }

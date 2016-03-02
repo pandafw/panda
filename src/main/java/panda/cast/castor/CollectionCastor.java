@@ -95,7 +95,7 @@ public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Ob
 		}
 		else {
 			Castor castor = getCastor(context, value.getClass(), toElementType);
-			value = castChild(context, castor, 0, value);
+			value = castor.cast(value, context);
 			coll.add(value);
 		}
 		return (T)coll; 
