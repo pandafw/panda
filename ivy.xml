@@ -36,6 +36,11 @@
 		<dependency org="org.xerial" name="sqlite-jdbc4" rev="3.8.2-SNAPSHOT" conf="jdbc->master,sources" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="jdbc->master,sources" />
 
+		<!-- POI -->
+		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.13" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.13" conf="run->master,sources" />
+
 		<!-- GAE -->
 		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.8.3" conf="gae->master,sources" />
 		<dependency org="com.google.appengine" name="appengine-api-labs" rev="1.8.3" conf="gae->master,sources" />

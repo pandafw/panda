@@ -9,9 +9,8 @@ import java.util.List;
 
 /**
  * CSV reader.
- * @author yf.frank.wang@gmail.com
  */
-public class CsvReader implements Closeable {
+public class CsvReader implements ListReader, Closeable {
 	private BufferedReader br;
 
 	private char separator;
@@ -80,7 +79,18 @@ public class CsvReader implements Closeable {
 			all.add(items);
 		}
 		return all;
+	}
 
+	/**
+	 * Reads the next line from the buffer and converts to a string array.
+	 * 
+	 * @return a string array with each comma-separated element as a separate entry.
+	 * 
+	 * @throws IOException if bad things happen during the read
+	 */
+	@Override
+	public List<String> readList() throws IOException {
+		return readNext();
 	}
 
 	/**
@@ -199,7 +209,7 @@ public class CsvReader implements Closeable {
 	 * 
 	 * @throws IOException if the close fails
 	 */
-	public void close() throws IOException{
+	public void close() throws IOException {
 		br.close();
 	}
 
