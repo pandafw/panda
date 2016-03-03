@@ -1,6 +1,7 @@
 package panda.wing.action;
 
 import java.util.Collection;
+import java.util.Set;
 
 import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
@@ -283,13 +284,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 
 		try {
-			startInsert(data);
-			final T d = data;
+			final T id = startInsert(data);
 			getDao().exec(new Runnable() {
 				public void run() {
-					insertData(d);
+					insertData(id);
 				}
 			});
+			EntityHelper.copyIdentityValue(getEntity(), data, id);
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
@@ -358,10 +359,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 
 		try {
-			startUpdate(data, sd);
+			final T ud = startUpdate(data, sd);
 			getDao().exec(new Runnable() {
 				public void run() {
-					updateData(data, sd);
+					updateData(ud, sd);
 				}
 			});
 		}
@@ -434,10 +435,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * trim data
-	 * @param d data object
+	 * @param data data object
 	 */
-	protected T trimData(T d) {
-		return d;
+	protected T trimData(T data) {
+		return data;
 	}
 	
 	/**
@@ -573,8 +574,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * startInsert
 	 * @param data data
 	 */
-	protected void startInsert(T data) {
+	protected T startInsert(T data) {
 		assist().initCommonFields(data);
+		return data;
 	}
 
 	/**
@@ -596,6 +598,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	// update methods
 	//------------------------------------------------------------
 	/**
+	 * @return the fields
+	 */
+	protected Set<String> getUpdateFields(T data, T srcData) {
+		return getDisplayFields();
+	}
+
+	/**
 	 * update data
 	 * @param data data
 	 * @param srcData source data
@@ -612,7 +621,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkOnUpdate
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check success
 	 */
 	protected boolean checkOnUpdate(T data, T srcData) {
@@ -663,16 +672,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * startUpdate
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 */
-	protected void startUpdate(T data, T srcData) {
+	protected T startUpdate(T data, T srcData) {
 		assist().initUpdateFields(data, srcData);
+		return data;
 	}
 
 	/**
 	 * finalUpdate
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 */
 	protected void finalUpdate(T data, T srcData) {
 	}
@@ -683,7 +693,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkOnDelete
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check success
 	 */
 	protected boolean checkOnDelete(T data, T srcData) {
@@ -788,7 +798,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeysOnUpdate(T data, T srcData) {
@@ -830,7 +840,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUniqueKeysOnUpdate
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkUniqueKeysOnUpdate(T data, T srcData) {
@@ -876,7 +886,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUpdatedOnUpdate
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkUpdatedOnUpdate(T data, T srcData) {
@@ -886,7 +896,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUpdatedOnDelete
 	 * @param data data
-	 * @param srcData srcData
+	 * @param sd source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkUpdatedOnDelete(T data, T srcData) {
