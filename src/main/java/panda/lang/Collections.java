@@ -2180,4 +2180,22 @@ public abstract class Collections {
 		
 		return isEmpty(list) ? null : list;
 	}
+
+	/**
+	 * @param col collection
+	 * @return true if all items is empty
+	 */
+	public static boolean isItemsEmpty(Collection<?> col) {
+		if (isEmpty(col)) {
+			return true;
+		}
+
+		for (Object o : col) {
+			if (Objects.isNotEmpty(o)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
