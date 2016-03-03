@@ -72,11 +72,11 @@ servlet-error-exception=例外情報:
 #validation error message
 validation-alphastring=英文字を入力してください。
 validation-alphanumericstring=英数字を入力してください。
-validation-binary-length=バイト: ${top.binSize}。 \
+validation-binary-length=\
 ${(top.minLength != null && top.maxLength != null) ? (top.minBinSize + "~" + top.maxBinSize + "以内") : \
 (top.minLength != null ? (top.minBinSize + "以上") : \
 (top.maxLength != null ? (top.maxBinSize + "以下") : ""))}\
-のバイトを入力してください。
+のバイトを入力してください。（入力バイト数: ${top.binSize}。）
 validation-cast=項目の値が正しくありません。
 validation-cast-boolean=trueまたはfalseを入力してください。
 validation-cast-char=文字を入力してください。
@@ -99,7 +99,7 @@ validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + 
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
-validation-email=メールアドレスを"user@domain.com"の形式で入力してください。
+validation-email=正しいメールアドレスを入力してください。（例：user@domain.com）
 validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。
 validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
@@ -113,7 +113,7 @@ validation-futuredate=未来の日付を入力できません。
 validation-hankakustring=半角文字を入力してください。
 validation-hankakukatakanastring=半角カナを入力してください。
 validation-image=画像ファイルのフォーマットが正しくありません。
-validation-image-size=画像サイズ: ${top.width}x${top.height}。\
+validation-image-size=\
 ${(top.minWidth != null && top.maxWidth != null) ? ("幅" + top.minWidth + "~" + top.maxWidth + "以内") : \
 (top.minWidth != null ? ("幅" + top.minWidth + "以上") : \
 (top.maxWidth != null ? ("幅" + top.maxWidth + "以下") : ""))}\
@@ -121,7 +121,7 @@ ${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || t
 ${(top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "~" + top.maxHeight + "以内") : \
 (top.minHeight != null ? ("高さ" + top.minHeight + "以上") : \
 (top.maxHeight != null ? ("高さ" + top.maxHeight + "以下") : ""))}\
-の画像ファイルを指定してください。
+の画像ファイルを指定してください。（入力画像サイズ: ${top.width}x${top.height}。）
 validation-incorrect=項目の値が正しくありません。
 validation-locale-invalid=言語と国・地域の組合せは正しくありません。
 validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
@@ -140,11 +140,11 @@ validation-regex=項目の値が正規表現式"${top.regex}"にマーチでき�
 validation-required=必須項目です。
 validation-requiredfile=ファイルを指定してください。
 validation-requiredimage=画像ファイルを指定してください。
-validation-string-length=文字数: ${top.length}。\
+validation-string-length=\
 ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "桁以内") : \
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))}\
-の文字を入力してください。
+の文字を入力してください。（入力文字数: ${top.length}。）
 validation-telnumber=電話番号を"1234-5678-9999"の形式で入力してください。
 validation-url=URLを"http://www.domain.com"の形式で入力してください。
 validation-zenkakustring=全角文字を入力してください。
