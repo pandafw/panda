@@ -1,7 +1,8 @@
 package panda.wing.action;
 
-import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,8 +17,12 @@ import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
 import panda.filepool.FileItem;
 import panda.io.FileNames;
+import panda.io.FileTypes;
 import panda.io.Streams;
 import panda.io.stream.CsvReader;
+import panda.io.stream.ListReader;
+import panda.io.stream.XlsReader;
+import panda.io.stream.XlsxReader;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -74,7 +79,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			this.headers = headers;
 		}
 	}
-
+	
 	/**
 	 * @return result
 	 * @throws Exception if an error occurs
@@ -83,27 +88,35 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (arg.file == null) {
 			return null;
 		}
-		
+
+		ListReader reader = null;
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
-//			if ("xls".equalsIgnoreCase(fext)) {
-//				return impXls(arg, false);
-//			}
-//			if ("xlsx".equalsIgnoreCase(fext)) {
-//				return impXls(arg, true);
-//			}
-			if ("csv".equalsIgnoreCase(fext)) {
-				return impCsv(arg, CsvReader.COMMA_SEPARATOR);
+			if (FileTypes.XLS.equalsIgnoreCase(fext)) {
+				reader = getXlsReader(arg.file, false);
 			}
-			if ("tsv".equalsIgnoreCase(fext) 
-					|| "txt".equalsIgnoreCase(fext)) {
-				return impCsv(arg, CsvReader.TAB_SEPARATOR);
+			else if (FileTypes.XLSX.equalsIgnoreCase(fext)) {
+				reader = getXlsReader(arg.file, true);
 			}
-
-			addFieldError("file", getText("error-file"));
+			else if (FileTypes.CSV.equalsIgnoreCase(fext)) {
+				reader = getCsvReader(arg.file, CsvReader.COMMA_SEPARATOR);
+			}
+			else if (FileTypes.TSV.equalsIgnoreCase(fext) 
+					|| FileTypes.TXT.equalsIgnoreCase(fext)) {
+				reader = getCsvReader(arg.file, CsvReader.TAB_SEPARATOR);
+			}
+			else {
+				addFieldError("file", getText("error-file"));
+				return null;
+			}
+			return impFile(reader, !arg.loose);
+		}
+		catch (Throwable e) {
+			logException("import", e);
 			return null;
 		}
 		finally {
+			Streams.safeClose((Closeable)reader);
 			try {
 				arg.file.delete();
 			}
@@ -111,6 +124,29 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				log.error("Failed to delete file " + arg.file.getName(), e);
 			}
 		}
+	}
+
+	protected XlsReader getXlsReader(FileItem file, boolean ooxml) throws Exception {
+		InputStream input = file.getInputStream();
+		if (input == null) {
+			return null;
+		}
+		
+		if (ooxml) {
+			return new XlsxReader(input);
+		}
+		return new XlsReader(input);
+	}
+
+	protected CsvReader getCsvReader(FileItem file, char separator) throws Exception {
+		InputStream input = file.getInputStream();
+		if (input == null) {
+			return null;
+		}
+		
+		return new CsvReader(
+			new InputStreamReader(Streams.toBOMInputStream(input), Charsets.UTF_8),
+			separator);
 	}
 
 	protected String[] mapColumns(List<String> headers) {
@@ -132,30 +168,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		return columns;
 	}
-	
-	/**
-	 * import csv
-	 * @param data data
-	 * @param separator separator
-	 */
-	protected Object impCsv(final Arg arg, char separator) {
-		try {
-			byte[] data = arg.file.getData();
-			if (data == null) {
-				return null;
-			}
-			
-			final CsvReader csv = getCsvReader(data, separator);
-			return impData(csv, !arg.loose);
-		}
-		catch (Throwable e) {
-			logException("impCsv", e);
+
+	protected Object impFile(final ListReader csv, final boolean strict) throws Exception {
+		if (csv == null) {
 			return null;
 		}
-	}
-
-	protected Object impData(final CsvReader csv, final boolean strict) throws Exception {
-		final List<String> headers = csv.readNext();
+		
+		final List<String> headers = csv.readList();
 		if (headers == null || headers.isEmpty()) {
 			return null;
 		}
@@ -194,13 +213,18 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return ret;
 	}
 	
-	protected void impData(Ret ret, CsvReader csv, String[] columns, boolean strict) throws Exception {
+	protected void impData(Ret ret, ListReader csv, String[] columns, boolean strict) throws Exception {
 		for (int i = 1; ; i++) {
-			List<String> row = csv.readNext();
+			List<String> row = csv.readList();
 			if (row == null) {
 				break;
 			}
 
+			row = Collections.stripToNull(row);
+			if (row == null) {
+				continue;
+			}
+			
 			Map<String, Object> values = rowToMap(columns, row);
 			if (values.isEmpty()) {
 				continue;
@@ -286,12 +310,6 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		m.put("error", e.getMessage());
 
 		return getMessage("error-value", m);
-	}
-
-	protected CsvReader getCsvReader(byte[] data, char separator) throws Exception {
-		return new CsvReader(
-			new InputStreamReader(Streams.toBOMInputStream(new ByteArrayInputStream(data)), Charsets.UTF_8),
-			separator);
 	}
 
 	protected void prepareData(T data) {
