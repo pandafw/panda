@@ -17,7 +17,7 @@ import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
 import panda.filepool.FileItem;
 import panda.io.FileNames;
-import panda.io.FileTypes;
+import panda.io.FileType;
 import panda.io.Streams;
 import panda.io.stream.CsvReader;
 import panda.io.stream.ListReader;
@@ -92,17 +92,17 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		ListReader reader = null;
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
-			if (FileTypes.XLS.equalsIgnoreCase(fext)) {
+			if (FileType.XLS.equalsIgnoreCase(fext)) {
 				reader = getXlsReader(arg.file, false);
 			}
-			else if (FileTypes.XLSX.equalsIgnoreCase(fext)) {
+			else if (FileType.XLSX.equalsIgnoreCase(fext)) {
 				reader = getXlsReader(arg.file, true);
 			}
-			else if (FileTypes.CSV.equalsIgnoreCase(fext)) {
+			else if (FileType.CSV.equalsIgnoreCase(fext)) {
 				reader = getCsvReader(arg.file, CsvReader.COMMA_SEPARATOR);
 			}
-			else if (FileTypes.TSV.equalsIgnoreCase(fext) 
-					|| FileTypes.TXT.equalsIgnoreCase(fext)) {
+			else if (FileType.TSV.equalsIgnoreCase(fext) 
+					|| FileType.TXT.equalsIgnoreCase(fext)) {
 				reader = getCsvReader(arg.file, CsvReader.TAB_SEPARATOR);
 			}
 			else {
