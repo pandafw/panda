@@ -220,8 +220,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				break;
 			}
 
-			row = Collections.stripToNull(row);
-			if (row == null) {
+			if (Collections.isItemsEmpty(row)) {
 				continue;
 			}
 			
