@@ -2,6 +2,7 @@ package panda.mvc.adaptor;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.io.MimeType;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -26,7 +27,6 @@ import panda.mvc.annotation.param.Attr;
 import panda.mvc.annotation.param.Header;
 import panda.mvc.annotation.param.IocObj;
 import panda.mvc.annotation.param.Param;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpMethod;
 import panda.servlet.ServletRequestHeaderMap;
 
@@ -68,18 +68,18 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		HttpServletRequest req = ac.getRequest();
 		if (HttpMethod.POST == HttpMethod.parse(req.getMethod())) {
 			String contentType = Strings.lowerCase(req.getContentType());
-			if (contentType.startsWith(HttpContentType.MULTIPART_PREFIX)) {
+			if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
 				ejector = new MultiPartParamEjector(ac);
 			}
-			else if (contentType.startsWith(HttpContentType.APP_STREAM)) {
+			else if (contentType.startsWith(MimeType.APP_STREAM)) {
 				ejector = new MultiPartParamEjector(ac);
 			}
-			else if (contentType.startsWith(HttpContentType.TEXT_XML)) {
+			else if (contentType.startsWith(MimeType.TEXT_XML)) {
 				ejector = new XmlParamEjector(ac);
 			}
-			else if (contentType.startsWith(HttpContentType.APP_JSON) 
-					|| contentType.startsWith(HttpContentType.TEXT_JAVASCRIPT)
-					|| contentType.startsWith(HttpContentType.TEXT_JSON)) {
+			else if (contentType.startsWith(MimeType.APP_JSON) 
+					|| contentType.startsWith(MimeType.TEXT_JAVASCRIPT)
+					|| contentType.startsWith(MimeType.TEXT_JSON)) {
 				ejector = new JsonParamEjector(ac);
 			}
 		}

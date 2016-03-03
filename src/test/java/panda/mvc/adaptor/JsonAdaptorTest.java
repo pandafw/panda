@@ -8,11 +8,11 @@ import javax.servlet.ServletException;
 
 import org.junit.Test;
 
+import panda.io.MimeType;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.adaptor.meta.BaseModule;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpMethod;
 
 public class JsonAdaptorTest extends AbstractMvcTestCase {
@@ -26,7 +26,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		request.setRequestURI(path);
 		request.setMethod(HttpMethod.POST.toString());
 		request.setContent(Strings.getBytes(json, Charsets.UTF_8));
-		request.setContentType(HttpContentType.APP_JSON);
+		request.setContentType(MimeType.APP_JSON);
 	}
 
 	@Test

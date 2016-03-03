@@ -1,12 +1,12 @@
 package panda.mvc.view;
 
 import panda.io.FileNames;
+import panda.io.MimeType;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.view.ftl.FreemarkerHelper;
-import panda.net.http.HttpContentType;
 
 /**
  * <ul>
@@ -23,7 +23,7 @@ public class FreemarkerView extends AbstractPathView {
 	private static final String EXT = ".ftl";
 	
 	protected String encoding = Charsets.UTF_8;
-	protected String contentType = HttpContentType.TEXT_HTML;
+	protected String contentType = MimeType.TEXT_HTML;
 
 	public FreemarkerView(String location) {
 		super(location);

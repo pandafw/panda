@@ -2,7 +2,7 @@ package panda.mvc.adaptor.multipart;
 
 import javax.servlet.http.HttpServletRequest;
 
-import panda.net.http.HttpContentType;
+import panda.io.MimeType;
 
 final class HttpServletRequestFactory {
 
@@ -23,12 +23,12 @@ final class HttpServletRequestFactory {
 		byte[] requestData = null;
 		requestData = sbRequestData.toString().getBytes();
 
-		return new MockHttpServletRequest(requestData, HttpContentType.MULTIPART_FORM_DATA);
+		return new MockHttpServletRequest(requestData, MimeType.MULTIPART_FORM_DATA);
 	}
 
 	static public HttpServletRequest createInvalidHttpServletRequest() {
 		byte[] requestData = "foobar".getBytes();
-		return new MockHttpServletRequest(requestData, HttpContentType.MULTIPART_FORM_DATA);
+		return new MockHttpServletRequest(requestData, MimeType.MULTIPART_FORM_DATA);
 	}
 
 }

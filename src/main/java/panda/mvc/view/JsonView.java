@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import panda.bind.json.JsonSerializer;
+import panda.io.MimeType;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.net.http.HttpContentType;
 
 /**
  * 将数据采用json方式输出的试图实现
@@ -18,7 +18,7 @@ public class JsonView extends AbstractOMView {
 	
 	public JsonView(String location) {
 		super(location);
-		setContentType(HttpContentType.TEXT_JAVASCRIPT);
+		setContentType(MimeType.TEXT_JAVASCRIPT);
 	}
 
 	/**

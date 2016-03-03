@@ -1,9 +1,9 @@
 package panda.mvc.view.tag.ui;
 
+import panda.io.MimeType;
 import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpMethod;
 
 
@@ -35,7 +35,7 @@ public class File extends InputUIBean {
 		Form form = (Form)findAncestor(Form.class);
 		if (form != null) {
 			String encType = form.getEnctype();
-			if (!HttpContentType.MULTIPART_FORM_DATA.equals(encType)) {
+			if (!MimeType.MULTIPART_FORM_DATA.equals(encType)) {
 				// uh oh, this isn't good! Let's warn the developer
 				LOG.warn("A file upload UI tag (r.file) being used without a form set to enctype 'multipart/form-data'. This is probably an error!");
 			}

@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import panda.bind.xml.XmlSerializer;
+import panda.io.MimeType;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.net.http.HttpContentType;
 
 
 public class XmlView extends AbstractOMView {
@@ -22,7 +22,7 @@ public class XmlView extends AbstractOMView {
 	 */
 	public XmlView(String location) {
 		super(location);
-		setContentType(HttpContentType.TEXT_XML);
+		setContentType(MimeType.TEXT_XML);
 	}
 
 	/**

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.io.Files;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -26,7 +27,6 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpStatus;
 
 /**
@@ -77,7 +77,7 @@ public class RawView implements View {
 
 	public RawView(String contentType) {
 		if (Strings.isBlank(contentType)) {
-			contentType = HttpContentType.TEXT_PLAIN;
+			contentType = MimeType.TEXT_PLAIN;
 		}
 		this.contentType = Strings.defaultString(contentTypeMap.get(contentType.toLowerCase()), contentType);
 	}
@@ -98,7 +98,7 @@ public class RawView implements View {
 
 		// 如果用户自行设置了,那就不要再设置了!
 		if (res.getContentType() == null) {
-			if (obj != null && obj instanceof BufferedImage && HttpContentType.TEXT_PLAIN.equals(contentType)) {
+			if (obj != null && obj instanceof BufferedImage && MimeType.TEXT_PLAIN.equals(contentType)) {
 				contentType = contentTypeMap.get("png");
 			}
 			res.setContentType(contentType);

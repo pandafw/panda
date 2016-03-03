@@ -3,6 +3,7 @@ package panda.servlet;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
@@ -12,7 +13,6 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.URLHelper;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
@@ -104,7 +104,7 @@ public class HttpServlets {
 		String ct = request.getContentType();
 		if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod()) 
 				&& ct != null
-				&& ct.startsWith(HttpContentType.X_WWW_FORM_URLECODED)) {
+				&& ct.startsWith(MimeType.X_WWW_FORM_URLECODED)) {
 			return true;
 		}
 		return false;

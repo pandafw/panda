@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.bean.BeanHandler;
 import panda.bind.AbstractSerializer;
 import panda.bind.adapter.DateAdapter;
+import panda.io.MimeType;
 import panda.lang.Charsets;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
@@ -32,7 +33,6 @@ import panda.mvc.bind.filter.QueryerPropertyFilter;
 import panda.mvc.bind.filter.FilterPropertyFilter;
 import panda.mvc.bind.filter.PagerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
-import panda.net.http.HttpContentType;
 import panda.servlet.HttpServletSupport;
 
 
@@ -51,7 +51,7 @@ public abstract class AbstractOMView extends AbstractView {
 
 	protected int expiry = 0;
 
-	protected String contentType = HttpContentType.TEXT_PLAIN;
+	protected String contentType = MimeType.TEXT_PLAIN;
 
 	protected String encoding = Charsets.UTF_8;
 
