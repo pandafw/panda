@@ -161,6 +161,7 @@ title-bcancel=${top.title} - 取消
 title-bdelete=${top.title} - 削除
 title-bdisable=${top.title} - 無効
 title-benable=${top.title} - 有効
+title-brecover=${top.title} - 復元
 title-btrash=${top.title} - 削除
 title-bupdate=${top.title} - 編集
 

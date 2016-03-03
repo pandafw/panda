@@ -204,8 +204,8 @@ title-update=${top.title} - Update
 title-bdelete=${top.title} - Delete
 title-bdisable=${top.title} - Disable
 title-benable=${top.title} - Enable
-title-btrash=${top.title} - Delete
 title-brecover=${top.title} - Recover
+title-btrash=${top.title} - Delete
 title-bupdate=${top.title} - Update
 
 #step
