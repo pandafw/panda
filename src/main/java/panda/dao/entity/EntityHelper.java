@@ -43,6 +43,23 @@ public abstract class EntityHelper {
 	}
 
 	/**
+	 * copy identity value from source data to destination data
+	 * @param entity entity
+	 * @param des destination data
+	 * @param src source data
+	 */
+	public static <T> void copyIdentityValue(Entity<T> entity, T des, T src) {
+		if (src == null || des == null) {
+			return;
+		}
+
+		EntityField eid = entity.getIdentity();
+		if (eid != null) {
+			eid.setValue(des, eid.getValue(src));
+		}
+	}
+
+	/**
 	 * @return true if lhs is different with rhs
 	 */
 	public static boolean isDifferent(Collection<EntityField> efs, Object lhs, Object rhs) {
