@@ -21,6 +21,7 @@ import javax.net.ssl.TrustManager;
 
 import panda.Panda;
 import panda.io.Files;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Exceptions;
@@ -407,10 +408,10 @@ public class HttpClient {
 		}
 		
 		if (request.isPostFile()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpContentType.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
 		}
 		else if (request.isPostForm()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, HttpContentType.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
 		}
 	}
 }

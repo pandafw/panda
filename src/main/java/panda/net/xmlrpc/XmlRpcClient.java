@@ -7,13 +7,13 @@ import java.util.List;
 import panda.bind.xmlrpc.XmlRpcDocument;
 import panda.bind.xmlrpc.XmlRpcs;
 import panda.cast.Castors;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpClient;
-import panda.net.http.HttpContentType;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
@@ -54,7 +54,7 @@ public class XmlRpcClient {
 
 		HttpRequest hreq = HttpRequest.post(url);
 		hreq.getHeader().setDefaultAgentPC();
-		hreq.getHeader().add(HttpHeader.CONTENT_TYPE, HttpContentType.TEXT_XML);
+		hreq.getHeader().add(HttpHeader.CONTENT_TYPE, MimeType.TEXT_XML);
 		hreq.setBody(xbody);
 		
 		http.setRequest(hreq);

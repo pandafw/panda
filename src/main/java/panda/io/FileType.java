@@ -1,6 +1,6 @@
 package panda.io;
 
-public class FileTypes {
+public class FileType {
 	public static final String CSV = "csv";
 	public static final String TSV = "tsv";
 	public static final String TXT = "txt";

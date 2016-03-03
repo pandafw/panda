@@ -1,8 +1,8 @@
-package panda.net.http;
+package panda.io;
 
 
 
-public class HttpContentType {
+public class MimeType {
 	public static final String MULTIPART_PREFIX = "multipart/";
 	
 	/**
