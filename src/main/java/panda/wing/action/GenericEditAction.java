@@ -212,14 +212,16 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doViewInput 
 	 */
 	protected Object doViewInput(T data) {
-		return data;
+		return prepareData(data);
 	}
 
 	/**
 	 * doViewSelect
 	 */
 	protected Object doViewSelect(T key) {
-		return selectData(key);
+		T data = selectData(key);
+		data = prepareData(data);
+		return data;
 	}
 
 	/**
@@ -230,6 +232,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		if (sd != null) {
 			clearOnCopy(sd);
 			clearOnCopy(key);
+			sd = prepareData(sd);
 		}
 		return sd;
 	}
@@ -310,7 +313,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doUpdateInput
 	 */
 	protected Object doUpdateInput(T data) {
-		return data;
+		return prepareData(data);
 	}
 
 	/**
@@ -324,6 +327,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doUpdateConfirm
 	 */
 	protected Object doUpdateConfirm(T data) {
+		data = prepareData(data);
 		T sd = selectData(data);
 		if (sd == null) {
 			return null;
@@ -347,7 +351,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doUpdateExecute
 	 */
-	protected Object doUpdateExecute(final T data) {
+	protected Object doUpdateExecute(T data) {
+		data = prepareData(data);
 		final T sd = selectData(data);
 		if (sd == null) {
 			return null;
@@ -505,10 +510,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkCommon
 	 * @param data data
-	 * @param srcData source data (null on insert)
+	 * @param sd source data (null on insert)
 	 * @return true if do something success
 	 */
-	protected boolean checkCommon(T data, T srcData) {
+	protected boolean checkCommon(T data, T sd) {
 		Asserts.notNull(data, "data is null");
 		return true;
 	}
@@ -516,10 +521,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkOnInput (Insert & Update)
 	 * @param data data
-	 * @param srcData source data (null on insert)
+	 * @param sd source data (null on insert)
 	 * @return true if do something success
 	 */
-	protected boolean checkOnInput(T data, T srcData) {
+	protected boolean checkOnInput(T data, T sd) {
 		Asserts.notNull(data, "data is null");
 		return true;
 	}
@@ -535,6 +540,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected boolean checkOnInsert(T data) {
 		boolean c = true;
 
+		// !IMPORTANT: do not change check order
 		if (!checkCommon(data, null)) {
 			c = false;
 			if (checkAbortOnError) {
@@ -600,18 +606,18 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @return the fields
 	 */
-	protected Set<String> getUpdateFields(T data, T srcData) {
+	protected Set<String> getUpdateFields(T data, T sd) {
 		return getDisplayFields();
 	}
 
 	/**
 	 * update data
 	 * @param data data
-	 * @param srcData source data
+	 * @param sd source data
 	 * @return update count
 	 */
-	protected int updateData(T data, T srcData) {
-		int cnt = getDao().update(data, getDisplayFields());
+	protected int updateData(T data, T sd) {
+		int cnt = getDao().update(data, getUpdateFields(data, sd));
 		if (cnt != 1) {
 			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
 		}
@@ -624,37 +630,38 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check success
 	 */
-	protected boolean checkOnUpdate(T data, T srcData) {
+	protected boolean checkOnUpdate(T data, T sd) {
 		boolean c = true;
 
-		if (!checkCommon(data, srcData)) {
+		// !IMPORTANT: do not change check order
+		if (!checkCommon(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkOnInput(data, srcData)) {
+		if (!checkOnInput(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkUpdatedOnUpdate(data, srcData)) {
+		if (!checkUpdatedOnUpdate(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		// primary key can not be modified or null
-		if (!checkPrimaryKeysOnUpdate(data, srcData)) {
+		if (!checkPrimaryKeysOnUpdate(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkUniqueKeysOnUpdate(data, srcData)) {
+		if (!checkUniqueKeysOnUpdate(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -674,8 +681,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 * @param sd source data
 	 */
-	protected T startUpdate(T data, T srcData) {
-		assist().initUpdateFields(data, srcData);
+	protected T startUpdate(T data, T sd) {
+		assist().initUpdateFields(data, sd);
 		return data;
 	}
 
@@ -684,7 +691,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 * @param sd source data
 	 */
-	protected void finalUpdate(T data, T srcData) {
+	protected void finalUpdate(T data, T sd) {
 	}
 
 	//------------------------------------------------------------
@@ -696,17 +703,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check success
 	 */
-	protected boolean checkOnDelete(T data, T srcData) {
+	protected boolean checkOnDelete(T data, T sd) {
 		boolean c = true;
 		
-		if (!checkCommon(data, srcData)) {
+		if (!checkCommon(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkUpdatedOnDelete(data, srcData)) {
+		if (!checkUpdatedOnDelete(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -801,7 +808,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkPrimaryKeysOnUpdate(T data, T srcData) {
+	protected boolean checkPrimaryKeysOnUpdate(T data, T sd) {
 		if (EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
 			return true;
 		}
@@ -843,7 +850,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUniqueKeysOnUpdate(T data, T srcData) {
+	protected boolean checkUniqueKeysOnUpdate(T data, T sd) {
 		Collection<EntityIndex> eis = getEntity().getIndexes();
 		if (Collections.isEmpty(eis)) {
 			return true;
@@ -854,7 +861,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				continue;
 			}
 
-			if (EntityHelper.isDifferent(ei.getFields(), data, srcData)) {
+			if (EntityHelper.isDifferent(ei.getFields(), data, sd)) {
 				if (!checkUniqueIndex(data, ei)) {
 					return false;
 				}
@@ -889,8 +896,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdatedOnUpdate(T data, T srcData) {
-		return checkUpdated(data, srcData, RC.WARN_DATA_CHANGED_PREFIX);
+	protected boolean checkUpdatedOnUpdate(T data, T sd) {
+		return checkUpdated(data, sd, RC.WARN_DATA_CHANGED_PREFIX);
 	}
 
 	/**
@@ -899,8 +906,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdatedOnDelete(T data, T srcData) {
-		if (checkUpdated(data, srcData, RC.WARN_DATA_CHANGED_PREFIX)) {
+	protected boolean checkUpdatedOnDelete(T data, T sd) {
+		if (checkUpdated(data, sd, RC.WARN_DATA_CHANGED_PREFIX)) {
 			return true;
 		}
 
@@ -911,14 +918,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUpdated
 	 * @param data data
-	 * @param srcData source data
+	 * @param sd source data
 	 * @param msg warn message id
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdated(T data, T srcData, String msg) {
+	protected boolean checkUpdated(T data, T sd, String msg) {
 		if (data instanceof IUpdate) {
 			IUpdate cb = (IUpdate)data;
-			IUpdate sb = (IUpdate)srcData;
+			IUpdate sb = (IUpdate)sd;
 			if (Bean.isUpdated(cb, sb)) {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());
