@@ -10,7 +10,7 @@
 		<#assign aq = gen.getActionQuery(a[1])/>
 		<#if aq?has_content>
 	<#lt/>${s}#if r??><#rt/>
-		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
+		<#lt/><li>${s}@p.a icon="icon-${an}" label="#(button-${an})"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
 				<#lt/>${s}@p.param name="${aq}"><#rt/>
 					<#lt/>${s}@p.url action="${a[2]}" forceAddSchemeHostAndPort='true' escapeAmp='false'><#rt/>
 				<#list entity.primaryKeyList as p>
@@ -18,7 +18,7 @@
 				</#list>
 					<#lt/>${s}/@p.url><#rt/>
 				<#lt/>${s}/@p.param><#rt/>
-			<#lt/>${s}@p.text name='button-${an}'/>${s}/@p.a>
+			<#lt/>${s}/@p.a>
 </li>${s}/#if><#rt/>
 		<#else>
 	<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})'/>
@@ -31,10 +31,10 @@
 		<#assign ap = gen.getActionPath(a[1])/>
 		<#if t?contains('%')>
 ${s}#if r?? && a.hasDataPermission(r, "${ap}")><#rt/>
-		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
+		<#lt/><li>${s}@p.a icon="icon-${an}" label="#(button-${an})"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
 	<#list entity.primaryKeyList as p>
 ${s}@p.param name="${p.name}" value="%{r.${p.name}}"/><#rt/>
-</#list>${s}@p.text name='button-${an}'/>${s}/@p.a>
+</#list>${s}/@p.a>
 </li>${s}/#if><#rt/>
 		<#else>
 ${s}#if a.hasPermission("${ap}")><#rt/>

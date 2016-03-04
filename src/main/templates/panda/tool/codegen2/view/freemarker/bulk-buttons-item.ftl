@@ -9,11 +9,11 @@
 		<#assign aq = gen.getActionQuery(a[1])/>
 		<#if aq?has_content>
 	${s}#if r?has_content>
-		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
+		${s}@p.a btn="default" icon="icon-${an}" label="#(button-${an})"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
 				<#lt/>${s}@p.param name="${aq}"><#rt/>
 					<#lt/>${s}@p.url action="${a[2]}" forceAddSchemeHostAndPort="true" escapeAmp="false" includeParams="all"/><#rt/>
 				<#lt/>${s}/@p.param><#rt/>
-			<#lt/>${s}@p.text name='button-${an}'/>${s}/@p.a>
+			<#lt/>${s}/@p.a>
 	${s}/#if>
 		<#else>
 		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})'/>
