@@ -578,10 +578,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			assist().castToSorter(sorter, sc);
 		}
 		if (Strings.isNotEmpty(sorter.getColumn())) {
-			if (Strings.isEmpty(sorter.getDirection())) {
-				sorter.setDirection(Sorter.ASC);
+			if (Collections.isEmpty(getDisplayFields()) || Collections.contains(getDisplayFields(), sorter.getColumn())) {
+				if (Strings.isEmpty(sorter.getDirection())) {
+					sorter.setDirection(Sorter.ASC);
+				}
+				gq.orderBy(sorter.getColumn(), sorter.getDirection());
 			}
-			gq.orderBy(sorter.getColumn(), sorter.getDirection());
 		}
 	}
 
