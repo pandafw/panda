@@ -238,14 +238,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doCopyInput
 	 */
 	protected Object doCopyInput(T data) {
-		return prepareDefaultData(data);
+		return prepareData(data);
 	}
 
 	/**
 	 * doInsertInit
 	 */
 	protected Object doInsertInit() {
-		T data = prepareDefaultData(null);
+		T data = prepareData(null);
 		getContext().setParams(data);
 		return data;
 	}
@@ -254,14 +254,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertInput
 	 */
 	protected Object doInsertInput(T data) {
-		return prepareDefaultData(data);
+		return prepareData(data);
 	}
 
 	/**
 	 * doInsertConfirm
 	 */
 	protected Object doInsertConfirm(T data) {
-		data = prepareDefaultData(data);
+		data = prepareData(data);
 		if (checkOnInsert(data)) {
 			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
@@ -277,7 +277,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertExecute
 	 */
 	protected Object doInsertExecute(T data) {
-		data = prepareDefaultData(data);
+		data = prepareData(data);
 		if (!checkOnInsert(data)) {
 			setResultOnExecCheckError();
 			return data;
@@ -446,7 +446,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 * @return data
 	 */
-	protected T prepareDefaultData(T data) {
+	protected T prepareData(T data) {
 		if (data == null) {
 			data = Classes.born(type);
 		}
