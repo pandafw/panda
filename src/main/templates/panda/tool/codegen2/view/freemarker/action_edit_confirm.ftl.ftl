@@ -13,7 +13,7 @@ ${s}#if r??>
 	${s}@p.form cssClass="p-cform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" initfocus="${ui.focus?c}" method="post"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
 		<#include "edit-view-fields.ftl"/>
 		${s}@p.div cssClass="p-buttons">
-			${s}@p.submit icon="icon-${ui.name}-execute" action="~/${ui.name}_execute" label="#(button-${ui.name}-execute"/>
+			${s}@p.submit icon="icon-${ui.name}-execute" action="~/${ui.name}_execute" label="#(button-${ui.name}-execute)"/>
 			${s}@p.submit icon="icon-back" action="~/${ui.name}_input" label="#(button-back)"/>
 		${s}/@p.div>
 	${s}/@p.form>

@@ -17,8 +17,10 @@
 
 	<complexType name="Resource">
 		<sequence>
-			<element name="entity" type="tns:Entity" minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="action" type="tns:Action" minOccurs="0" maxOccurs="unbounded"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="entity" type="tns:Entity" minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="action" type="tns:Action" minOccurs="0" maxOccurs="unbounded"></element>
+			</choice>
 		</sequence>
 		<attribute name="locale" type="string"></attribute>
 	</complexType>
@@ -138,11 +140,13 @@
 
 	<complexType name="ListUI">
 		<sequence>
-			<element name="column" type="tns:ListColumn" minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="query" type="tns:ListQuery" minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="header" type="string" minOccurs="0" maxOccurs="1"></element>
-			<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="column" type="tns:ListColumn" minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="query" type="tns:ListQuery" minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="header" type="string" minOccurs="0" maxOccurs="1"></element>
+				<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
+			</choice>
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
 		<attribute name="safeInclude" type="string"></attribute>
@@ -154,10 +158,12 @@
 
 	<complexType name="InputUI">
 		<sequence>
-			<element name="field" type="tns:InputField"	minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
-			<element name="header" type="string" minOccurs="0" maxOccurs="1"></element>
-			<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="field" type="tns:InputField"	minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
+				<element name="header" type="string" minOccurs="0" maxOccurs="1"></element>
+				<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
+			</choice>
 		</sequence>
 		<attribute name="generate" type="boolean"></attribute>
 		<attribute name="safeInclude" type="string"></attribute>
@@ -171,8 +177,10 @@
 
 	<complexType name="ListColumn">
 		<sequence>
-			<element name="format" type="tns:Format" minOccurs="0" maxOccurs="1"></element>
-			<element name="filter" type="tns:Filter" minOccurs="0" maxOccurs="1"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="format" type="tns:Format" minOccurs="0" maxOccurs="1"></element>
+				<element name="filter" type="tns:Filter" minOccurs="0" maxOccurs="1"></element>
+			</choice>
 		</sequence>
 		<attribute name="display" type="boolean" default="true"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
@@ -201,12 +209,14 @@
 
 	<complexType name="InputField">
 		<sequence>
-			<element name="before" type="string" minOccurs="0" maxOccurs="1"></element>
-			<element name="content" type="string" minOccurs="0" maxOccurs="1"></element>
-			<element name="editTag" type="tns:Tag" minOccurs="0" maxOccurs="1"></element>
-			<element name="viewTag" type="tns:Tag" minOccurs="0" maxOccurs="1"></element>
-			<element name="after" type="string" minOccurs="0" maxOccurs="1"></element>
-			<element name="validator" type="tns:Validator" minOccurs="0" maxOccurs="unbounded"></element>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<element name="before" type="string" minOccurs="0" maxOccurs="1"></element>
+				<element name="content" type="string" minOccurs="0" maxOccurs="1"></element>
+				<element name="editTag" type="tns:Tag" minOccurs="0" maxOccurs="1"></element>
+				<element name="viewTag" type="tns:Tag" minOccurs="0" maxOccurs="1"></element>
+				<element name="after" type="string" minOccurs="0" maxOccurs="1"></element>
+				<element name="validator" type="tns:Validator" minOccurs="0" maxOccurs="unbounded"></element>
+			</choice>
 		</sequence>
 		<attribute name="display" type="boolean" default="true"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
