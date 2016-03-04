@@ -85,7 +85,7 @@
 			/>
 	</#if>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-edit-execute" action="~/edit_execute" label="#(button-edit-execute"/>
+			<@p.submit icon="icon-edit-execute" action="~/edit_execute" label="#(button-edit-execute)"/>
 			<@p.submit icon="icon-back" action="~/edit_input" label="#(button-back)"/>
 		</@p.div>
 	</@p.form>
