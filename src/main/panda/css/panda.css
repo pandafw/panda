@@ -160,6 +160,7 @@ i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
 --------------------------------------------------*/
 .p-toolbar-wrap {
 	text-align: right;
+	margin-bottom: 10px;
 }
 .p-toolbar-wrap > .p-toolbar {
 	float: right;
