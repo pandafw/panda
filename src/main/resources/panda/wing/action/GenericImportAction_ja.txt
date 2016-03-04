@@ -1,5 +1,8 @@
 p.file=ファイル
-p.loose=不正データーを無視する
+p.loose=不正なデータを無視する
+
+well-import=CSV(カンマ区切り)、TSV/TXT(タブ区切り)、XLS(Excel 2003)、XLSX(Excel 2007~)\
+のデータファイルを指定して、インポートできます。\n不正なデータまたは重複なのデータは登録しません。
 
 info-imported=${top}件のデータをインポートしました。
 warn-skipped=${top}件の不正なデータを廃棄しました。
@@ -9,6 +12,6 @@ error-data=データが正しくありません - ${top.error}\n行[${top.row}]:
 error-value=データが正しくありません - ${top.error}\n行[${top.row}], 列[${top.col}]: ${top.value}
 error-file=CSV, TSV, XLSまたはXLSXファイルを指定してください。
 
-result-success=インポートしたデーター: ${top.count}件
-result-warning=不正なデーター: ${top.count}件
+result-success=インポートしたデータ: ${top.count}件
+result-warning=不正なデータ: ${top.count}件
 

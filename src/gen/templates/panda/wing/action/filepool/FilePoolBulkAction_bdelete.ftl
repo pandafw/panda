@@ -91,7 +91,7 @@
 	
 	<br/>
 	<div class="p-tcenter">
-		<@p.submit icon="icon-bdelete-execute" onclick="return filepool_bdelete_submit();" theme="simple"><@p.text name="button-bdelete-execute"/></@p.submit>
+		<@p.submit icon="icon-bdelete-execute" onclick="return filepool_bdelete_submit();" label="#(button-bdelete-execute)"/>
 		
 	<#if a.hasPermission("~/list")>
 		<@p.a btn="default" icon="icon-list" action="~/list" label="#(button-list)"/>

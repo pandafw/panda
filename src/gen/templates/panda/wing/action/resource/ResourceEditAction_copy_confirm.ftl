@@ -85,8 +85,8 @@
 			/>
 	</#if>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-copy-execute" action="~/copy_execute"><@p.text name="button-copy-execute"/></@p.submit>
-			<@p.submit icon="icon-back" action="~/copy_input"><@p.text name="button-back"/></@p.submit>
+			<@p.submit icon="icon-copy-execute" action="~/copy_execute" label="#(button-copy-execute)"/>
+			<@p.submit icon="icon-back" action="~/copy_input" label="#(button-back)"/>
 		</@p.div>
 	</@p.form>
 <#else>

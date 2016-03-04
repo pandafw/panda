@@ -1,6 +1,9 @@
 p.file=数据文件
 p.loose=忽略错误数据
 
+well-import=请指定CSV(逗号分隔), TSV/TXT(逗号分隔), XLS(Excel 2003), XLSX(Excel 2007~)\
+格式的数据文件。\n错误数据以及重复数据不会被导入。
+
 info-imported=${top}件数据成功导入。
 warn-skipped=${top}件错误数据被丢弃了。
 

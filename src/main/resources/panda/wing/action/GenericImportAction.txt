@@ -1,6 +1,9 @@
 p.file=File
 p.loose=Continue on error
 
+well-import=Please select CSV(comma-separated), TSV/TXT(tab-separated), XLS(Excel 2003) or XLSX(Excel 2007~) \
+formatted data file.\nThe incorrect data or duplicated data will not be imported.
+
 info-imported=${top} items successfully imported.
 warn-skipped=${top} incorrect items skipped.
 
