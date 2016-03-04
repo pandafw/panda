@@ -32,7 +32,7 @@ public class Text extends ContextBean {
 	private static final Log LOG = Logs.getLog(Text.class);
 
 	protected String name;
-	protected String escape;
+	protected String escape = Escapes.ESCAPE_PHTML;
 
 	/**
 	 * @param name the name to set
