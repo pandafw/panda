@@ -1,8 +1,6 @@
 package panda.mvc.validation;
 
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +24,7 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
-import panda.mvc.adaptor.DefaultParamAdaptor;
-import panda.mvc.annotation.param.Param;
 import panda.mvc.validation.annotation.Validate;
-import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.validator.BinaryValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
 import panda.mvc.validation.validator.ConstantValidator;
@@ -102,62 +97,26 @@ public class DefaultValidators implements Validators {
 		}
 	}
 
-	public boolean validate(ActionContext ac) {
-		validateParams(ac);
-		return !(ac.getActionAlert().hasErrors() || ac.getParamAlert().hasErrors());
-	}
-	
-	protected void validateParams(ActionContext ac) {
-		if (Arrays.isEmpty(ac.getArgs())) {
-			return;
-		}
-
-		Method method = ac.getMethod();
-		Validates ma = method.getAnnotation(Validates.class);
-		if (ma != null) {
-			// TODO: plain method validate
-		}
-
-		Annotation[][] pass = method.getParameterAnnotations();
-		for (int i = 0; i < pass.length; i++) {
-			Param param = null;
-			Validates vs = null;
-
-			Annotation[] pas = pass[i];
-			for (Annotation pa : pas) {
-				if (pa instanceof Param) {
-					param = (Param)pa;
-				}
-				if (pa instanceof Validates) {
-					vs = (Validates)pa;
-				}
-			}
-
-			if (vs == null) {
-				continue;
-			}
-
-			Object obj = ac.getArgs()[i];
-			String name = DefaultParamAdaptor.indexedName(i, param);
-
-			if (!validate(ac, null, name, obj, vs)) {
-				if (vs.shortCircuit()) {
-					break;
-				}
-			}
-		}
+	@Override
+	public boolean validate(ActionContext ac, String name, Object value) {
+		return validate(ac, null, name, value);
 	}
 
 	@Override
-	public boolean validate(ActionContext ac, Validator parent, String name, Object value, Validates vs) {
-		if (Arrays.isEmpty(vs.value())) {
+	public boolean validate(ActionContext ac, Validator parent, String name, Object value) {
+		return validate(ac, parent, name, value, null);
+	}
+	
+	@Override
+	public boolean validate(ActionContext ac, Validator parent, String name, Object value, Validate[] vs) {
+		if (Arrays.isEmpty(vs)) {
 			Validator fv = createValidator(ac, VisitValidator.class, Validators.VISIT);
 			fv.setName(name);
 			return fv.validate(ac, value);
 		}
 
 		boolean r = true;
-		for (Validate v : vs.value()) {
+		for (Validate v : vs) {
 			Validator fv = createValidator(ac, v);
 			fv.setName(name);
 			fv.setParent(parent);

@@ -2,7 +2,6 @@ package panda.mvc.validation;
 
 import panda.mvc.ActionContext;
 import panda.mvc.validation.annotation.Validate;
-import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.validator.Validator;
 
 
@@ -62,12 +61,6 @@ public interface Validators {
 	public static final String MSGID_PASSWORD_INCORRECT = "validation-password-incorrect";
 	
 	/**
-	 * @param ac action context
-	 * @return true if no validation errors
-	 */
-	boolean validate(ActionContext ac) throws ValidateException;
-
-	/**
 	 * create validator
 	 * @param ac action context
 	 * @param v validator annotation
@@ -78,6 +71,16 @@ public interface Validators {
 	/**
 	 * validate value
 	 */
-	boolean validate(ActionContext ac, Validator parent, String name, Object value, Validates vs);
+	boolean validate(ActionContext ac, String name, Object value);
+
+	/**
+	 * validate value
+	 */
+	boolean validate(ActionContext ac, Validator parent, String name, Object value);
+
+	/**
+	 * validate value
+	 */
+	boolean validate(ActionContext ac, Validator parent, String name, Object value, Validate[] vs);
 	
 }

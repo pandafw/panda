@@ -198,7 +198,7 @@ public class VisitValidator extends AbstractValidator {
 			}
 			
 			Object val = en.getValue().getValue(obj);
-			if (!validators.validate(ac, this, fn, val, vs)) {
+			if (!validators.validate(ac, this, fn, val, vs.value())) {
 				if (vs.shortCircuit()) {
 					return false;
 				}

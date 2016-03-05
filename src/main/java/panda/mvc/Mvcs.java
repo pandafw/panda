@@ -15,6 +15,8 @@ import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.util.TextProvider;
+import panda.mvc.validation.DefaultValidators;
+import panda.mvc.validation.Validators;
 
 import java.lang.reflect.Type;
 import java.util.TimeZone;
@@ -352,6 +354,41 @@ public abstract class Mvcs {
 		}
 
 		return pattern;
+	}
+
+	/**
+	 * create validators
+	 * @param context action context
+	 * @return validators instance
+	 */
+	public static Validators getValidators(ActionContext context) {
+		Validators validators = context.getIoc().getIfExists(Validators.class);
+		if (validators == null) {
+			validators = new DefaultValidators();
+		}
+		return validators;
+	}
+
+	/**
+	 * Use validators to validate object
+	 * @param context action context
+	 * @param value validate value
+	 * @return true if no validation error
+	 */
+	public static boolean validate(ActionContext context, Object value) {
+		return validate(context, value, "");
+	}
+
+	/**
+	 * Use validators to validate object
+	 * @param context action context
+	 * @param value validate value
+	 * @param name object name
+	 * @return true if no validation error
+	 */
+	public static boolean validate(ActionContext context, Object value, String name) {
+		Validators vs = getValidators(context);
+		return vs.validate(context, name, value);
 	}
 }
 

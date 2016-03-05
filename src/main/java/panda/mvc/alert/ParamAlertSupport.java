@@ -37,14 +37,14 @@ public class ParamAlertSupport implements ParamAlert {
 	 */
 	public void addError(String name, String error) {
 		final Map<String, List<String>> errors = getErrors();
-		List<String> thisErrors = errors.get(name);
+		List<String> perrors = errors.get(name);
 
-		if (thisErrors == null) {
-			thisErrors = new ArrayList<String>();
-			errors.put(name, thisErrors);
+		if (perrors == null) {
+			perrors = new ArrayList<String>();
+			errors.put(name, perrors);
 		}
 
-		thisErrors.add(error);
+		perrors.add(error);
 	}
 
 	/**
