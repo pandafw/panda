@@ -230,7 +230,7 @@ public class Charsets {
 		if (defCharset == null) {
 			defCharset = Charset.defaultCharset();
 		}
-		if (charset != null) {
+		if (Strings.isNotEmpty(charset)) {
 			try {
 				return Charset.forName(charset);
 			}
