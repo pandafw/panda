@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import panda.filepool.FileItem;
 import panda.io.FileNames;
 import panda.io.FileType;
 import panda.io.Streams;
+import panda.io.stream.BOMInputStream;
 import panda.io.stream.CsvReader;
 import panda.lang.Charsets;
 import panda.lang.Classes;
@@ -73,10 +75,16 @@ public class DataImportAction extends AbstractAction {
 	public static class Arg {
 		public boolean deleteAll = false;
 		public String target;
-		public String encoding = Charsets.UTF_8;
+		private String encoding;
 		public FileItem file;
 		public int commitSize = 1000;
 		public int count;
+		public String getEncoding() {
+			return encoding;
+		}
+		public void setEncoding(String encoding) {
+			this.encoding = Strings.stripToNull(encoding);
+		}
 	}
 
 	protected Arg arg;
@@ -603,9 +611,12 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	protected CsvReader getCsvReader(byte[] data, char separator) throws Exception {
-		return new CsvReader(
-			new InputStreamReader(Streams.toBOMInputStream(new ByteArrayInputStream(data)), arg.encoding),
-			separator);
+		BOMInputStream bis = Streams.toBOMInputStream(new ByteArrayInputStream(data));
+		Charset cs = bis.getBOMCharset();
+		if (cs == null) {
+			cs = Charsets.toCharset(arg.encoding, Charsets.CS_UTF_8);
+		}
+		return new CsvReader(new InputStreamReader(bis, cs), separator);
 	}
 
 	protected void prepareData(Object data) {

@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import panda.filepool.FileItem;
 import panda.io.FileNames;
 import panda.io.FileType;
 import panda.io.Streams;
+import panda.io.stream.BOMInputStream;
 import panda.io.stream.CsvReader;
 import panda.io.stream.ListReader;
 import panda.io.stream.XlsReader;
@@ -146,8 +148,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
+		BOMInputStream bis = Streams.toBOMInputStream(input);
+		Charset cs = bis.getBOMCharset();
 		return new CsvReader(
-			new InputStreamReader(Streams.toBOMInputStream(input), Charsets.UTF_8),
+			new InputStreamReader(bis, cs == null ? Charsets.CS_UTF_8 : cs),
 			separator);
 	}
 

@@ -1,8 +1,8 @@
 p.file=ファイル
 p.loose=不正なデータを無視する
 
-well-import=CSV(カンマ区切り)、TSV/TXT(タブ区切り)、XLS(Excel 2003)、XLSX(Excel 2007~)\
-のデータファイルを指定して、インポートできます。\n不正なデータまたは重複のデータは登録しません。
+well-import=UNICODE(BOM付き)のCSV(カンマ区切り)、TSV/TXT(タブ区切り)またはXLS(Excel 2003)、XLSX(Excel 2007~)\
+のファイルを指定して、インポートできます。\n不正なデータまたは重複のデータは登録しません。
 
 info-imported=${top}件のデータをインポートしました。
 warn-skipped=${top}件の不正なデータを廃棄しました。
