@@ -52,11 +52,14 @@
 	padding: 0.5em 1.5em;
 }
 .p-toolbar li, .p-navih li {
+	border-left: 1px solid #fff;
+	border-right: 1px solid #c6bcaa;
 	display: inline;
 	margin: 0;
 	padding: 0 1em;
-	border-left: 1px solid #fff;
-	border-right: 1px solid #c6bcaa;
+}
+.p-toolbar li > a, .p-navih li > a {
+	white-space: nowrap;
 }
 .p-toolbar li:first-child, .p-navih li:first-child {
 	border-left: none;
