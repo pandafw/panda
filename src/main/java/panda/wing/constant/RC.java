@@ -84,6 +84,11 @@ public interface RC {
 	// ERROR MESSAGES
 	//------------------------------------------------------------
 	/**
+	 * ERROR_INPUT = "error-input";
+	 */
+	public final static String ERROR_INPUT = "error-input";
+
+	/**
 	 * ERROR_DATA_NOTFOUND = "error-data-notfound";
 	 */
 	public final static String ERROR_DATA_NOTFOUND = "error-data-notfound";

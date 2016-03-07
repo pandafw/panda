@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
@@ -23,6 +24,7 @@ import panda.io.stream.CsvReader;
 import panda.io.stream.ListReader;
 import panda.io.stream.XlsReader;
 import panda.io.stream.XlsxReader;
+import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -231,6 +233,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			
 			try {
 				T data = Mvcs.castValue(context, values, type);
+				prepareData(data);
+				
+				checkData(data);
+				
 				saveData(data);
 				ret.success.add(row);
 			}
@@ -261,14 +267,6 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return values;
 	}
 	
-	protected void saveData(T data) {
-		prepareData(data);
-		
-		checkData(data);
-		
-		getDao().insert(data);
-	}
-
 	protected void logException(String method, Throwable e) {
 		log.warn(method, e);
 
@@ -316,11 +314,16 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		assist().initCommonFields(data);
 	}
 
+	protected void saveData(T data) {
+		getDao().insert(data);
+	}
+
 	//------------------------------------------------------------
 	// check methods
 	//------------------------------------------------------------
 	protected void checkData(T data) {
 		checkNotNulls(data);
+		validateData(data);
 		checkPrimaryKeys(data);
 		checkUniqueKeys(data);
 		checkForeignKeys(data);
@@ -335,6 +338,28 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (Collections.isNotEmpty(efs)) {
 			throw new IllegalArgumentException(dataIncorrectError(data, efs));
 		}
+	}
+
+	/**
+	 * validate data
+	 * @param data data
+	 */
+	protected void validateData(T data) {
+		if (Mvcs.validate(getContext(), data)) {
+			return;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(getMessage(RC.ERROR_INPUT));
+		for (Entry<String, List<String>> en : getParamAware().getErrors().entrySet()) {
+			String label = getFieldLabel(en.getKey()) + ": ";
+			for (String s : en.getValue()) {
+				sb.append(Chars.LF).append(label).append(s);
+			}
+		}
+		getParamAware().clearErrors();
+
+		throw new IllegalArgumentException(sb.toString());
 	}
 
 	/**
