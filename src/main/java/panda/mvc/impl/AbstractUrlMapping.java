@@ -1,11 +1,13 @@
 package panda.mvc.impl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.log.Log;
@@ -75,7 +77,9 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 			addInvoker(path, invoker);
 		}
 
-		printActionMapping(ai);
+		if (log.isDebugEnabled()) {
+			log.debug("Add: " + ai.toString());
+		}
 	}
 
 	public ActionInvoker getActionInvoker(ActionContext ac) {
@@ -114,18 +118,14 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 		return null;
 	}
 
-	protected void printActionMapping(ActionInfo ai) {
-		if (log.isInfoEnabled()) {
-			// print path
-			String[] paths = ai.getPaths();
-			String sb = Strings.join(paths, ", ");
-
-			// print method
-			Method method = ai.getMethod();
-			String sm = String.format("%-30s : %-10s", method.toString(), method.getReturnType().getSimpleName());
-
-			log.infof("%s >> %s | @Ok(%-5s) @Err(%-5s) @Fail(%-5s)",
-				Strings.rightPad(sb, 30), sm, ai.getOkView(), ai.getErrorView(), ai.getFatalView());
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getClass());
+		for (Entry<String, ActionInvoker> en : (new TreeMap<String, ActionInvoker>(map)).entrySet()) {
+			sb.append(Streams.LINE_SEPARATOR).append(" - ").append(en.getValue().toString());
 		}
+		return sb.toString();
 	}
+	
 }

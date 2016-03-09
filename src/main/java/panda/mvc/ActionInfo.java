@@ -159,4 +159,20 @@ public class ActionInfo {
 		this.method = method;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(Strings.rightPad(Strings.join(paths, ", "), 50));
+		sb.append(" >> ");
+		sb.append(method.toString());
+		sb.append(": ");
+		sb.append(method.getReturnType().getSimpleName());
+		sb.append(" |");
+		sb.append(" @Ok(").append(okView).append(")");
+		sb.append(" @Err(").append(errorView).append(")");
+		sb.append(" @Fatal(").append(fatalView).append(")");
+		return sb.toString();
+	}
+
 }

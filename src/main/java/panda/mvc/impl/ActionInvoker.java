@@ -2,9 +2,12 @@ package panda.mvc.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import panda.io.Streams;
+import panda.lang.Collections;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
@@ -15,7 +18,6 @@ import panda.net.http.HttpMethod;
  * 根据 HTTP 请求的方法 (GET|POST|PUT|DELETE) 来调用响应的动作链
  */
 public class ActionInvoker {
-
 	private static final Log log = Logs.getLog(ActionInvoker.class);
 
 	private ActionChain defaultChain;
@@ -23,7 +25,6 @@ public class ActionInvoker {
 	private Map<HttpMethod, ActionChain> chainMap;
 
 	public ActionInvoker() {
-		chainMap = new HashMap<HttpMethod, ActionChain>();
 	}
 
 	/**
@@ -33,6 +34,9 @@ public class ActionInvoker {
 	 * @param chain 动作链
 	 */
 	public void addChain(HttpMethod method, ActionChain chain) {
+		if (chainMap == null) {
+			chainMap = new HashMap<HttpMethod, ActionChain>();
+		}
 		chainMap.put(method, chain);
 	}
 
@@ -43,6 +47,9 @@ public class ActionInvoker {
 	 * @return true if has the specified method chain
 	 */
 	public boolean hasChain(HttpMethod method) {
+		if (chainMap == null) {
+			return false;
+		}
 		return chainMap.containsKey(method);
 	}
 
@@ -53,6 +60,9 @@ public class ActionInvoker {
 	 * @return chain
 	 */
 	public ActionChain getChain(HttpMethod method) {
+		if (chainMap == null) {
+			return null;
+		}
 		return chainMap.get(method);
 	}
 
@@ -91,12 +101,29 @@ public class ActionInvoker {
 	public ActionChain getActionChain(ActionContext ac) {
 		HttpServletRequest req = ac.getRequest();
 		HttpMethod hm = HttpMethod.parse(req.getMethod());
-		ActionChain chain = chainMap.get(hm);
-		if (null != chain) {
+		ActionChain chain = getChain(hm);
+		if (chain != null) {
 			return chain;
 		}
 		
 		return defaultChain;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (defaultChain != null) {
+			sb.append(defaultChain.getInfo());
+		}
+		if (Collections.isNotEmpty(chainMap)) {
+			for (Entry<HttpMethod, ActionChain> en : chainMap.entrySet()) {
+				if (sb.length() > 0) {
+					sb.append(Streams.LINE_SEPARATOR).append("   - ");
+				}
+				sb.append(en.getKey()).append(": ").append(en.getValue().getInfo());
+			}
+		}
+		return sb.toString();
 	}
 
 }

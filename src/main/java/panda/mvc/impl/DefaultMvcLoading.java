@@ -10,6 +10,7 @@ import java.util.Set;
 import panda.Panda;
 import panda.bind.json.Jsons;
 import panda.io.Files;
+import panda.io.Streams;
 import panda.ioc.Ioc;
 import panda.ioc.IocProxy;
 import panda.lang.Arrays;
@@ -50,27 +51,27 @@ public class DefaultMvcLoading implements Loading {
 
 	public UrlMapping load(AbstractMvcConfig config) {
 		if (log.isInfoEnabled()) {
-			log.infof("Panda Version : %s ", Panda.VERSION);
-			log.infof("Panda.Mvc [%s] is initializing ...", config.getAppName());
-		}
-
-		if (log.isDebugEnabled()) {
-			log.debug("Web Container Information:");
-			log.debugf(" - OS              : %s %s", Systems.OS_NAME, Systems.OS_ARCH);
-			log.debugf(" - Java            : %s", Systems.JAVA_VERSION);
-			log.debugf(" - Charset         : %s", Charsets.defaultEncoding());
-			log.debugf(" - Timezone        : %s", Systems.USER_TIMEZONE);
-			log.debugf(" - User Directory  : %s", Systems.getUserDir());
-			log.debugf(" - Temp Directory  : %s", Files.getTempDirectoryPath());
-			log.debugf(" - File Separator  : %s", Systems.FILE_SEPARATOR);
-			log.debugf(" - Server Info     : %s", config.getServletContext().getServerInfo());
-			log.debugf(" - Servlet API     : %d.%d", 
-				config.getServletContext().getMajorVersion(), config.getServletContext().getMinorVersion());
+			StringBuilder sb = new StringBuilder();
+			sb.append(String.format("Panda.Mvc [%s] is initializing ...", config.getAppName())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Panda Version   : %s ", Panda.VERSION)).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - OS              : %s %s", Systems.OS_NAME, Systems.OS_ARCH)).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Java            : %s", Systems.JAVA_VERSION)).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Charset         : %s", Charsets.defaultEncoding())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Timezone        : %s", Systems.USER_TIMEZONE)).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - User Directory  : %s", Systems.getUserDir())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Temp Directory  : %s", Files.getTempDirectoryPath())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - File Separator  : %s", Systems.FILE_SEPARATOR)).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Server Info     : %s", config.getServletContext().getServerInfo())).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Servlet API     : %d.%d", 
+				config.getServletContext().getMajorVersion(), 
+				config.getServletContext().getMinorVersion()))
+				.append(Streams.LINE_SEPARATOR);
 
 			if (config.getServletContext().getMajorVersion() > 2 || config.getServletContext().getMinorVersion() > 4) {
-				log.debugf(" - ContextPath     : %s", config.getServletContext().getContextPath());
+				sb.append(String.format(" - ContextPath     : %s", config.getServletContext().getContextPath())).append(Streams.LINE_SEPARATOR);
 			}
-			log.debugf(" - Web Directory  : %s", config.getServletContext().getRealPath("/"));
+			sb.append(String.format(" - Web Directory  : %s", config.getServletContext().getRealPath("/"))).append(Streams.LINE_SEPARATOR);
+			log.info(sb.toString());
 		}
 
 		/*
@@ -165,14 +166,17 @@ public class DefaultMvcLoading implements Loading {
 			}
 		}
 		else {
-			log.infof("Found %d module methods", atMethods);
+			if (log.isInfoEnabled()) {
+				log.infof("Found %d module methods", atMethods);
+				log.infof("URLMapping: %s", mapping.toString());
+			}
 		}
 
 		return mapping;
 	}
 
 	protected UrlMapping createUrlMapping(MvcConfig config) throws Exception {
-		UrlMapping  um = config.getIoc().getIfExists(UrlMapping.class);
+		UrlMapping um = config.getIoc().getIfExists(UrlMapping.class);
 		if (um == null) {
 			um = new RegexUrlMapping();
 		}
