@@ -12,8 +12,8 @@
 			<li class="active"><@p.text name="step-copy-success"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-copy", "")?has_content>
-	<div class="p-well"><@p.text name="well-copy"/></div>
+<#if text.getText("well-copy-success", "")?has_content>
+	<div class="p-well"><@p.text name="well-copy-success"/></div>
 </#if>
 
 

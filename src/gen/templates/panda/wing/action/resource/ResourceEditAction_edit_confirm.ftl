@@ -12,8 +12,8 @@
 			<li class="active"><@p.text name="step-edit-confirm"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-edit", "")?has_content>
-	<div class="p-well"><@p.text name="well-edit"/></div>
+<#if text.getText("well-edit-confirm", "")?has_content>
+	<div class="p-well"><@p.text name="well-edit-confirm"/></div>
 </#if>
 
 
