@@ -9,7 +9,6 @@
 
 	${s}#include "/action-alert.ftl"/>
 
-${s}#if r??>
 	<#list ui.displayFieldList as f>
 		<#if f.editTag?? && f.editTag.name?ends_with(".file")>
 			<#assign _formenctype = "multipart/form-data" />
@@ -46,9 +45,6 @@ ${s}#if r??>
 	${s}/@p.form>
 
 	<#include "edit-script.ftl" />
-${s}#else>
-	<@sback/>
-${s}/#if>
 <#if ui.safeInclude??>
 	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}-custom.ftl</#if>"/>
 </#if>
