@@ -37,6 +37,13 @@
 .p-fz80p 		{ font-size: 80%; }
 .p-fz85p 		{ font-size: 85%; }
 .p-fz90p 		{ font-size: 90%; }
+.p-fz100p 		{ font-size: 100%; }
+.p-fz110p 		{ font-size: 110%; }
+.p-fz120p 		{ font-size: 120%; }
+.p-fz130p 		{ font-size: 130%; }
+.p-fz140p 		{ font-size: 140%; }
+.p-fz150p 		{ font-size: 150%; }
+.p-fz200p 		{ font-size: 200%; }
 
 .p-th-nowrap th { white-space: nowrap; }
 .p-td-nowrap td { white-space: nowrap; }
