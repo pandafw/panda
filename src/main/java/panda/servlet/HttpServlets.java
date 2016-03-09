@@ -110,13 +110,23 @@ public class HttpServlets {
 		return false;
 	}
 
+	/**
+	 * get remote ip from X_REAL_IP, X_FORWARD_FOR, request.getRemoteAddr
+	 * @param request request
+	 * @return remote ip
+	 */
 	public static String getRemoteAddr(HttpServletRequest request) {
 		String ip = request.getHeader(HttpHeader.X_REAL_IP);
 		if (Strings.isEmpty(ip)) {
-			ip = request.getRemoteAddr();
+			ip = request.getHeader(HttpHeader.X_FORWARD_FOR);
+			ip = Strings.substringAfterLast(ip, ", ");
+			if (Strings.isEmpty(ip)) {
+				ip = request.getRemoteAddr();
+			}
 		}
 		return ip;
 	}
+	
 	/**
 	 * @param request request
 	 * @return requestURL + QueryString
