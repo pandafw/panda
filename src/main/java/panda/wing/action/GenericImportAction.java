@@ -417,12 +417,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" (");
 		for (EntityField ef :efs) {
-			if (!displayField(ef.getName())) {
+			EntityField eff = mappedEntityField(ef);
+			if (!displayField(eff.getName())) {
 				continue;
 			}
 			
-			EntityField eff = mappedEntityField(ef);
-
 			String label = getFieldLabel(eff.getName());
 			sb.append(label);
 			sb.append(": ");

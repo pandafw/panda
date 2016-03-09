@@ -755,11 +755,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected void addDataFieldErrors(T data, Collection<EntityField> efs, String itemErrMsg, String dataErrMsg) {
 		StringBuilder sb = new StringBuilder();
 		for (EntityField ef : efs) {
-			if (!displayField(ef.getName())) {
+			EntityField eff = mappedEntityField(ef);
+			if (!displayField(eff.getName())) {
 				continue;
 			}
-			
-			EntityField eff = mappedEntityField(ef);
 
 			addFieldError(eff.getName(), getMessage(itemErrMsg));
 
