@@ -3,7 +3,7 @@
 
 <div class="p-section">
 	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
-	<@swell/>
+	<@swell step="-success"/>
 
 	<#include "list-star-toolbar.ftl"/>
 

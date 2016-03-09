@@ -71,9 +71,9 @@
 	</div>
 		</#if>
 	</#macro>
-	<#macro swell>
-${s}#if text.getText("well-${ui.name}", "")?has_content>
-	<div class="p-well">${s}@p.text name="well-${ui.name}"/></div>
+	<#macro swell step="">
+${s}#if text.getText("well-${ui.name}${step}", "")?has_content>
+	<div class="p-well">${s}@p.text name="well-${ui.name}${step}"/></div>
 ${s}/#if>
 	</#macro>
 	<#macro sback>
