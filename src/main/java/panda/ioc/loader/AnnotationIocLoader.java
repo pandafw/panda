@@ -15,6 +15,7 @@ import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.FieldInjector;
@@ -47,25 +48,40 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 	}
 	
 	protected void init(Collection<Object> args) {
-		for (Object a : args) {
-			if (a instanceof Class) {
-				addClass((Class<?>)a);
-			}
-			else {
-				for (Class<?> cls : Classes.scan(a.toString())) {
-					addClass(cls);
+		if (Collections.isNotEmpty(args)) {
+			for (Object a : args) {
+				if (a instanceof Class) {
+					addClass((Class<?>)a);
 				}
+				else {
+					for (Class<?> cls : Classes.scan(a.toString())) {
+						addClass(cls);
+					}
+				}
+			}
+
+			if (log.isInfoEnabled()) {
+				TreeSet<String> as = new TreeSet<String>();
+				for (Object a : args) {
+					as.add(String.valueOf(a));
+				}
+				log.info("Successfully scan/add " + args.size() + " args:" 
+						+ Streams.LINE_SEPARATOR + " - "
+						+ Strings.join(as, Streams.LINE_SEPARATOR + " - "));
 			}
 		}
 		
 		if (beans.size() > 0) {
 			if (log.isInfoEnabled()) {
-				log.info("Successfully scan/add " + args.size() + " args:\n" + Strings.join(args, '\n'));
-				log.info("Found " + beans.size() + " bean classes:\n" + Strings.join(new TreeSet<String>(beans.keySet()), '\n'));
+				log.info("Found " + beans.size() + " bean classes:" 
+						+ Streams.LINE_SEPARATOR + " - "
+						+ Strings.join(new TreeSet<String>(beans.keySet()), Streams.LINE_SEPARATOR + " - "));
 			}
 		}
 		else {
-			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:\n" + Strings.join(args, '\n'));
+			log.warn("NONE Annotation-Class found!\nCheck your configure for packages:" 
+					+ Streams.LINE_SEPARATOR + " - "
+					+ Strings.join(args, Streams.LINE_SEPARATOR + " - "));
 		}
 	}
 	
