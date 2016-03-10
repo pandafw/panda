@@ -557,4 +557,28 @@ public abstract class DaoTestCase {
 		Score actual = dao.fetch(Score.class, expect);
 		Assert.assertNull(actual);
 	}
+
+	@Test
+	public void testExecDelete2() {
+		final Score expect1 = Score.create(2, 2, 2);
+		final Score expect2 = Score.create(3, 3, 3);
+		dao.exec(new Runnable() {
+			@Override
+			public void run() {
+				dao.delete(expect1);
+				dao.exec(new Runnable() {
+					@Override
+					public void run() {
+						dao.delete(expect2);
+					}
+				});
+			}
+		});
+
+		Score actual1 = dao.fetch(Score.class, expect1);
+		Assert.assertNull(actual1);
+
+		Score actual2 = dao.fetch(Score.class, expect2);
+		Assert.assertNull(actual2);
+	}
 }
