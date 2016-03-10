@@ -1,6 +1,7 @@
 package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.AsiaChars;
 import panda.lang.AsiaStrings;
 import panda.lang.Strings;
 
@@ -15,6 +16,9 @@ public class StringValidator extends AbstractStringValidator {
 	public static final char ZENKAKU_KATAKANA = 'z';
 	
 	private char type = ANY;
+
+	private int zenSize = 0;
+	
 	private Integer maxLength = null;
 	private Integer minLength = null;
 	
@@ -35,6 +39,20 @@ public class StringValidator extends AbstractStringValidator {
 	 */
 	public void setType(char type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the zenSize
+	 */
+	public int getZenSize() {
+		return zenSize;
+	}
+
+	/**
+	 * @param zenSize the zenSize to set
+	 */
+	public void setZenSize(int zenSize) {
+		this.zenSize = zenSize;
 	}
 
 	/**
@@ -82,6 +100,21 @@ public class StringValidator extends AbstractStringValidator {
 	@Override
 	protected boolean validateString(String value) {
 		length = value.length();
+
+		// change length for zen/han
+		if (zenSize > 0) {
+			int zlen = 0;
+			for (int i = 0; i < length; i++) {
+				char c = value.charAt(i);
+				if (AsiaChars.isZenkakuChar(c)) {
+					zlen += zenSize;
+				}
+				else {
+					zlen++;
+				}
+			}
+			length = zlen;
+		}
 		
 		// only check for a minimum value if the min parameter is set
 		if (minLength != null && length < minLength) {
