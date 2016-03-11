@@ -29,15 +29,15 @@ public class ElValidator extends AbstractValidator {
 		
 		Object result = evalExpression(ac, el);
 
-		Boolean answer = false;
+		boolean answer = false;
 		if ((result != null) && (result instanceof Boolean)) {
-			answer = (Boolean)result;
+			answer = ((Boolean)result).booleanValue();
 		}
 		else {
 			log.warn("Got result of '" + result + "' when trying to get Boolean of '" + el + "'.");
 		}
 
-		if (answer.booleanValue()) {
+		if (answer) {
 			return true;
 		}
 		

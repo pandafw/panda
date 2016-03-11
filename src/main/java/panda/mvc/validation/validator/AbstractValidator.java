@@ -1,6 +1,5 @@
 package panda.mvc.validation.validator;
 
-import panda.el.El;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -130,13 +129,7 @@ public abstract class AbstractValidator implements Validator {
 	}
 	
 	protected Object evalExpression(ActionContext ac, String expression) {
-		try {
-			ac.push(this);
-			return El.eval(expression, ac);
-		}
-		finally {
-			ac.pop();
-		}
+		return Mvcs.findValue(ac, expression);
 	}
 	
 	protected String evalMessage(ActionContext ac) {

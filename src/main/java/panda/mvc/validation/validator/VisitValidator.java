@@ -101,11 +101,11 @@ public class VisitValidator extends AbstractValidator {
 			return true;
 		}
 		
-		Boolean answer = Boolean.FALSE;
+		boolean answer = false;
 		Object obj = evalExpression(ac, condition);
 
 		if ((obj != null) && (obj instanceof Boolean)) {
-			answer = (Boolean)obj;
+			answer = ((Boolean)obj).booleanValue();
 		}
 		else {
 			log.warn("Got result of " + obj + " when trying to get Boolean.");

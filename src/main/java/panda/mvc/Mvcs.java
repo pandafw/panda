@@ -114,30 +114,6 @@ public abstract class Mvcs {
 	}
 
 	/**
-	 * find value in context
-	 */
-	public static Object findValue(String expr, ActionContext context) {
-		return findValue(expr, context, Objects.NULL);
-	}
-	
-	/**
-	 * find value in context with argument
-	 */
-	public static Object findValue(String expr, ActionContext ac, Object arg) {
-		if (Objects.NULL == arg) {
-			return El.eval(expr, ac);
-		}
-
-		try {
-			ac.push(arg);
-			return El.eval(expr, ac);
-		}
-		finally {
-			ac.pop();
-		}
-	}
-
-	/**
 	 * cast to string
 	 */
 	public static String castString(ActionContext ac, Object value) {
@@ -183,6 +159,30 @@ public abstract class Mvcs {
 			ac.addCastErrors(cc.getErrors());
 		}
 		return o;
+	}
+
+	/**
+	 * find value in context
+	 */
+	public static Object findValue(ActionContext context, String expr) {
+		return findValue(context, expr, Objects.NULL);
+	}
+	
+	/**
+	 * find value in context with argument
+	 */
+	public static Object findValue(ActionContext ac, String expr, Object arg) {
+		if (Objects.NULL == arg) {
+			return El.eval(expr, ac);
+		}
+
+		try {
+			ac.push(arg);
+			return El.eval(expr, ac);
+		}
+		finally {
+			ac.pop();
+		}
 	}
 
 	/**
@@ -238,7 +238,7 @@ public abstract class Mvcs {
 			char c1 = expr.charAt(1);
 			char cx = expr.charAt(expr.length() - 1);
 			if ((c0 == Marks.DOLLAR || c0 == Marks.PERCENT) && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
-				val = findValue(expr.substring(2, expr.length() - 1), ac, arg);
+				val = findValue(ac, expr.substring(2, expr.length() - 1), arg);
 			}
 			else if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
 				val = JsonObject.fromJson(expr.substring(1));

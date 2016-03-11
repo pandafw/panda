@@ -339,13 +339,13 @@ public class ActionAssist extends ActionSupport {
 	 * find value in context
 	 */
 	public Object findValue(String expr) {
-		return Mvcs.findValue(expr, getContext());
+		return Mvcs.findValue(getContext(), expr);
 	}
 	
 	/**
 	 * find value in context with argument
 	 */
 	public Object findValue(String expr, Object arg) {
-		return Mvcs.findValue(expr, getContext(), arg);
+		return Mvcs.findValue(getContext(), expr, arg);
 	}
 }

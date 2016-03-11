@@ -598,11 +598,11 @@ public class ActionContext {
 	// eval functions
 	//
 	public Object eval(String expr) {
-		return Mvcs.findValue(expr, this);
+		return Mvcs.findValue(this, expr);
 	}
 
 	public Object eval(String expr, Object arg) {
-		return Mvcs.findValue(expr, this, arg);
+		return Mvcs.findValue(this, expr, arg);
 	}
 
 	//----------------------------------------------------

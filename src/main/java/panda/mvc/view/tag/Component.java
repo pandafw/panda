@@ -187,11 +187,11 @@ public class Component {
 	}
 	
 	public Object findValue(String expr) {
-		return Mvcs.findValue(expr, context);
+		return Mvcs.findValue(context, expr);
 	}
 	
 	public Object findValue(String expr, Object arg) {
-		return Mvcs.findValue(expr, context, arg);
+		return Mvcs.findValue(context, expr, arg);
 	}
 
 	public String castString(Object o) {
