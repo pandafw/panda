@@ -10,6 +10,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
+import panda.io.Streams;
 import panda.lang.Strings;
 
 public class Db2SqlExpert extends SqlExpert {
@@ -28,8 +29,8 @@ public class Db2SqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append('\n').append(escapeColumn(ef.getColumn()));
-			sb.append(' ').append(evalFieldType(ef));
+			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 			if (ef.isNotNull()) {
 				sb.append(" NOT NULL");
 			}

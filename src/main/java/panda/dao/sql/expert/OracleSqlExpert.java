@@ -10,6 +10,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
+import panda.io.Streams;
 import panda.lang.Strings;
 
 public class OracleSqlExpert extends SqlExpert {
@@ -40,8 +41,8 @@ public class OracleSqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append('\n').append(ef.getColumn());
-			sb.append(' ').append(evalFieldType(ef));
+			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 
 			if (ef.isPrimaryKey() && entity.getPrimaryKeys().size() == 1) {
 				sb.append(" PRIMARY KEY ");
@@ -53,7 +54,7 @@ public class OracleSqlExpert extends SqlExpert {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
 			if (ef.isUnsigned()) {
-				sb.append(" Check (").append(ef.getColumn()).append(" >= 0)");
+				sb.append(" Check (").append(escapeColumn(ef.getColumn())).append(" >= 0)");
 			}
 			sb.append(',');
 		}

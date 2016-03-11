@@ -11,6 +11,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 import panda.dao.sql.Sqls;
+import panda.io.Streams;
 import panda.lang.Classes;
 import panda.lang.Strings;
 
@@ -18,16 +19,6 @@ public class DerbySqlExpert extends SqlExpert {
 	@Override
 	public DB getDatabaseType() {
 		return DB.DERBY;
-	}
-
-	@Override
-	protected String escapeTable(String table) {
-		return '"' + table + '"'; 
-	}
-	
-	@Override
-	protected String escapeColumn(String column) {
-		return '"' + column + '"'; 
 	}
 
 	@Override
@@ -40,8 +31,8 @@ public class DerbySqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append('\n').append(escapeColumn(ef.getColumn()));
-			sb.append(' ').append(evalFieldType(ef));
+			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 			
 			// unsupported
 //			if (ef.isUnsigned()) {

@@ -8,6 +8,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
+import panda.io.Streams;
 
 /**
  */
@@ -37,8 +38,8 @@ public class HsqldbSqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append('\n').append(ef.getColumn());
-			sb.append(' ').append(evalFieldType(ef));
+			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(escapeColumn(ef.getColumn())).append(' ').append(evalFieldType(ef));
 			
 			// unsupported
 //			if (ef.isUnsigned()) {

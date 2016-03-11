@@ -10,6 +10,7 @@ import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
+import panda.io.Streams;
 import panda.lang.Strings;
 
 public class SQLiteSqlExpert extends SqlExpert {
@@ -38,7 +39,9 @@ public class SQLiteSqlExpert extends SqlExpert {
 				continue;
 			}
 
-			sb.append('\n').append(escapeColumn(ef.getColumn()));
+			sb.append(Streams.LINE_SEPARATOR);
+			sb.append(escapeColumn(ef.getColumn()));
+
 			if (ef.isAutoIncrement()) {
 				sb.append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
 				continue;

@@ -180,10 +180,7 @@ public abstract class SqlExpert {
 		if (column.charAt(0) == '(') {
 			return column;
 		}
-		if (Strings.isEmpty(table)) {
-			return escapeColumn(column);
-		}
-		return table + '.' + escapeColumn(column);
+		return escapeColumn(table, column);
 	}
 	
 	public Sql count(Query<?> query) {
@@ -808,19 +805,18 @@ public abstract class SqlExpert {
 		}
 	}
 
-	protected String escapeTable(String table) {
-		return table;
-	}
-
 	protected String escapeColumn(String table, String column) {
 		if (Strings.isEmpty(table)) {
 			return escapeColumn(column);
 		}
-		return table + '.' + escapeColumn(column);
+		return escapeTable(table) + '.' + escapeColumn(column);
 	}
 
-	protected String escapeColumn(String column) {
-		return column;
+	protected String escapeTable(String table) {
+		return table; 
 	}
 	
+	protected String escapeColumn(String column) {
+		return column; 
+	}
 }
