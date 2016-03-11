@@ -244,6 +244,17 @@ public class MongoDao extends AbstractDao {
 			autoClose();
 		}
 	}
+	
+	/**
+	 * create table ddl
+	 * 
+	 * @param entity entity
+	 */
+	@Override
+	public String ddl(Entity<?> entity) {
+		log.info("ddl(entity) method is unsupported for Mongo database.");
+		return Strings.EMPTY;
+	}
 
 	//--------------------------------------------------------------------
 	/**

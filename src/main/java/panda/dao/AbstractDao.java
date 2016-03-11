@@ -232,6 +232,25 @@ public abstract class AbstractDao implements Dao {
 
 	//-------------------------------------------------------------------------
 	/**
+	 * create table ddl
+	 * 
+	 * @param type record type
+	 */
+	@Override
+	public String ddl(Class<?> type) {
+		return ddl(getEntity(type));
+	}
+
+	/**
+	 * create table ddl
+	 * 
+	 * @param entity entity
+	 */
+	@Override
+	public abstract String ddl(Entity<?> entity);
+
+	//-------------------------------------------------------------------------
+	/**
 	 * check a table exists in the data store.
 	 * 
 	 * @param table table name

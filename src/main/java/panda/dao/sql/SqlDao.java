@@ -10,6 +10,7 @@ import panda.dao.query.GenericQuery;
 import panda.dao.query.Query;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.expert.SqlExpert;
+import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Randoms;
 import panda.lang.Strings;
@@ -272,6 +273,24 @@ public class SqlDao extends AbstractDao {
 		finally {
 			autoClose();
 		}
+	}
+
+	/**
+	 * create table ddl
+	 * 
+	 * @param entity entity
+	 */
+	@Override
+	public String ddl(Entity<?> entity) {
+		assertTable(entity);
+
+		List<String> sqls = getSqlExpert().create(entity);
+		
+		StringBuilder sb = new StringBuilder();
+		for (String s : sqls) {
+			sb.append(s).append(';').append(Streams.LINE_SEPARATOR);
+		}
+		return sb.toString();
 	}
 
 	//-------------------------------------------------------------------------

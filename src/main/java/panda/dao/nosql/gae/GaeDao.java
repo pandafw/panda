@@ -40,6 +40,7 @@ import panda.dao.query.Operator;
 import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
@@ -684,6 +685,18 @@ public class GaeDao extends AbstractDao {
 	@Override
 	public void create(Entity<?> entity) {
 		// not need
+	}
+	
+	//--------------------------------------------------------------------
+	/**
+	 * create table ddl
+	 * 
+	 * @param entity entity
+	 */
+	@Override
+	public String ddl(Entity<?> entity) {
+		log.info("ddl(entity) method is unsupported for GAE datastore.");
+		return Strings.EMPTY;
 	}
 
 	//--------------------------------------------------------------------

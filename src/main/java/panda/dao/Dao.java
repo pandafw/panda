@@ -100,6 +100,21 @@ public interface Dao {
 
 	//--------------------------------------------------------------------
 	/**
+	 * create table ddl
+	 * 
+	 * @param type record type
+	 */
+	String ddl(Class<?> type);
+
+	/**
+	 * create table ddl
+	 * 
+	 * @param entity entity
+	 */
+	String ddl(Entity<?> entity);
+
+	//--------------------------------------------------------------------
+	/**
 	 * check a table exists in the data store.
 	 * 
 	 * @param table table name
