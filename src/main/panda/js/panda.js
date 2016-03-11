@@ -1643,12 +1643,12 @@ if (typeof String.formatSize != "function") {
 			},
 			add: function(m, t) {
 				t = t || 'info';
-				var $p = $c.children('.alert');
+				var $p = $c.children('.p-alert');
 				var a = false;
 				if ($p.size() < 1) {
-					$p = $('<div></div>').addClass('alert alert-dismissable').css('display', 'none');
+					$p = $('<div></div>').addClass('p-alert alert alert-dismissable fade in').css('display', 'none');
 					$c.prepend($p);
-					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>");
+					$p.append("<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
 					a = true;
 				}
 				
