@@ -17,6 +17,9 @@
 			<validator type="constant">
 				<param name="list" value="'%{consts.localeLanguageMap}'"/>
 			</validator>
+			<validator type="el" msgId="&quot;validation-locale-invalid&quot;">
+				<param name="el" value="'assist.isValidLocale(top.parent.value.language, top.parent.value.country)'"/>
+			</validator>
 		</property>
 		<property name="country" type="String" size="2" notNull="true" uniqueKey="CLCN" comment="country code">
 			<validator type="stringlength">
@@ -24,6 +27,9 @@
 			</validator>
 			<validator type="constant">
 				<param name="list" value="'%{consts.localeCountryMap}'"/>
+			</validator>
+			<validator type="el" msgId="&quot;validation-locale-invalid&quot;">
+				<param name="el" value="'assist.isValidLocale(top.parent.value.language, top.parent.value.country)'"/>
 			</validator>
 		</property>
 		<property name="name" type="String" size="50" notNull="true" uniqueKey="CLCN" comment="property name">
@@ -99,9 +105,6 @@
 					<param name="emptyOption" value="false"/>
 					<param name="list" value="%{consts.localeCountryMap}"/>
 				</editTag>
-				<validator type="el" message="validation-locale-invalid">
-					<param name="el" value="assist.isValidLocale(${action.dataFieldName}.language, ${action.dataFieldName}.country)"/>
-				</validator>
 			</field>
 			<field name="name" required="true">
 				<editTag name="${tag.textfield}">

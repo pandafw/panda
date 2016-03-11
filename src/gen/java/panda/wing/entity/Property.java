@@ -17,7 +17,7 @@ import panda.wing.entity.SUBean;
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = 806753628L;
+	private static final long serialVersionUID = -2080856124L;
 
 	/**
 	 * Constructor
@@ -123,7 +123,8 @@ public class Property extends SUBean implements Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeLanguageMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
 	})
 	public String getLanguage() {
 		return language;
@@ -141,7 +142,8 @@ public class Property extends SUBean implements Serializable {
 	 */
 	@Validates({
 		@Validate(value=Validators.STRING, params="{ 'maxLength': 2 }", msgId=Validators.MSGID_STRING_LENTH), 
-		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT)
+		@Validate(value=Validators.CONSTANT, params="{ 'list': '%{consts.localeCountryMap}' }", msgId=Validators.MSGID_CONSTANT), 
+		@Validate(value=Validators.EL, params="{ 'el': 'assist.isValidLocale(top.parent.value.language, top.parent.value.country)' }", msgId="validation-locale-invalid")
 	})
 	public String getCountry() {
 		return country;
