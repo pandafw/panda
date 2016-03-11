@@ -2,7 +2,7 @@
 	|| applicationWarnings?has_content
 	|| applicationConfirms?has_content
 	|| applicationMessages?has_content>
-<div class="alert alert-dismissable<#rt/>
+<div class="alert alert-dismissable fade in<#rt/>
 <#if applicationErrors?has_content>
  alert-danger<#rt/>
 <#elseif applicationWarnings?has_content>
@@ -13,7 +13,7 @@
  alert-success<#rt/>
 </#if>
 ">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
 <#if applicationErrors?has_content>
 	<ul class="fa-ul p-application-errors">
 	<#list applicationErrors as k>

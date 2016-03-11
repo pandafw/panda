@@ -2,7 +2,7 @@
 	|| sessionWarnings?has_content
 	|| sessionConfirms?has_content
 	|| sessionMessages?has_content>
-<div class="alert alert-dismissable<#rt/>
+<div class="alert alert-dismissable fade in<#rt/>
 <#if sessionErrors?has_content>
  alert-danger<#rt/>
 <#elseif sessionWarnings?has_content>
@@ -13,7 +13,7 @@
  alert-success<#rt/>
 </#if>
 ">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
 <#if sessionErrors?has_content>
 	<ul class="fa-ul p-session-errors">
 	<#list sessionErrors as k>
