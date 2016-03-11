@@ -16,6 +16,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 
@@ -102,7 +103,7 @@ public class VisitValidator extends AbstractValidator {
 		}
 		
 		boolean answer = false;
-		Object obj = evalExpression(ac, condition);
+		Object obj = Mvcs.findValue(ac, condition, this);
 
 		if ((obj != null) && (obj instanceof Boolean)) {
 			answer = ((Boolean)obj).booleanValue();

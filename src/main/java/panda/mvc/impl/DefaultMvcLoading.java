@@ -70,7 +70,7 @@ public class DefaultMvcLoading implements Loading {
 			if (config.getServletContext().getMajorVersion() > 2 || config.getServletContext().getMinorVersion() > 4) {
 				sb.append(String.format(" - ContextPath     : %s", config.getServletContext().getContextPath())).append(Streams.LINE_SEPARATOR);
 			}
-			sb.append(String.format(" - Web Directory  : %s", config.getServletContext().getRealPath("/"))).append(Streams.LINE_SEPARATOR);
+			sb.append(String.format(" - Web Directory   : %s", config.getServletContext().getRealPath("/"))).append(Streams.LINE_SEPARATOR);
 			log.info(sb.toString());
 		}
 

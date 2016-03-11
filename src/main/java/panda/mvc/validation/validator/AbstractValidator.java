@@ -128,10 +128,6 @@ public abstract class AbstractValidator implements Validator {
 		return sb.toString();
 	}
 	
-	protected Object evalExpression(ActionContext ac, String expression) {
-		return Mvcs.findValue(ac, expression);
-	}
-	
 	protected String evalMessage(ActionContext ac) {
 		if (Strings.isNotEmpty(message)) {
 			return Mvcs.translate(ac, message, this);

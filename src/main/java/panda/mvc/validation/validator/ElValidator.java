@@ -4,6 +4,7 @@ import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.mvc.Mvcs;
 
 @IocBean(singleton=false)
 public class ElValidator extends AbstractValidator {
@@ -27,7 +28,7 @@ public class ElValidator extends AbstractValidator {
 			return true;
 		}
 		
-		Object result = evalExpression(ac, el);
+		Object result = Mvcs.findValue(ac, el, this);
 
 		boolean answer = false;
 		if ((result != null) && (result instanceof Boolean)) {
