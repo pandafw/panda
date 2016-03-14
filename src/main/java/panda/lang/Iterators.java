@@ -3,6 +3,10 @@ package panda.lang;
 import java.lang.reflect.Array;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import panda.lang.collection.KeyValue;
 
 /**
  * utility class for Iterator. 
@@ -150,5 +154,56 @@ public abstract class Iterators {
 		}
 
 		return Arrays.asList(value);
+	}
+	
+	//----------------------------------------------------------
+	public static class KeyValueIterator implements Iterator<KeyValue>, Iterable<KeyValue> {
+		Iterator it;
+
+		public KeyValueIterator(Object list) {
+			if (list instanceof Map) {
+				it = ((Map)list).entrySet().iterator();
+			}
+			else {
+				it = Iterators.asIterator(list);
+			}
+		}
+
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		@SuppressWarnings("unchecked")
+		public KeyValue next() {
+			Object o = it.next();
+			if (o instanceof Entry) {
+				return new KeyValue(((Entry)o).getKey(), ((Entry)o).getValue());
+			}
+			return new KeyValue(o, o);
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException("Remove is not supported.");
+		}
+
+		public Iterator<KeyValue> iterator() {
+			return this;
+		}
+	}
+
+	public static Iterator<KeyValue> asKeyValueIterator(Object value) {
+		if (!Iterators.isIterable(value)) {
+			return null;
+		}
+		
+		return new KeyValueIterator(value);
+	}
+
+	public static Iterable<KeyValue> asKeyValueIterable(Object value) {
+		if (value == null) {
+			return null;
+		}
+		
+		return new KeyValueIterator(value);
 	}
 }
