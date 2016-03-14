@@ -97,6 +97,13 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @return remoteAddr
+	 */
+	public String getRemoteAddr() {
+		return HttpServlets.getRemoteAddr(getRequest());
+	}
+	
+	/**
 	 * @return requestURI
 	 */
 	public String getRequestURI() {

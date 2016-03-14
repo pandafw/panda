@@ -119,7 +119,10 @@ public class HttpServlets {
 		String ip = request.getHeader(HttpHeader.X_REAL_IP);
 		if (Strings.isEmpty(ip)) {
 			ip = request.getHeader(HttpHeader.X_FORWARD_FOR);
-			ip = Strings.substringAfterLast(ip, ',');
+			int i = Strings.indexOf(ip, ',');
+			if (i >= 0) {
+				ip = ip.substring(i + 1);
+			}
 			ip = Strings.strip(ip);
 			if (Strings.isEmpty(ip)) {
 				ip = request.getRemoteAddr();
