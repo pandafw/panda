@@ -19,20 +19,26 @@ public class RadioRenderer extends AbstractEndRenderer<Radio> {
 		String name = tag.getName();
 		Object value = tag.getValue();
 
-		write("<div id=\"" + html(id) + "\" class=\"p-radiomap\">");
-
+		String cssc = "p-radiomap";
+		if (tag.isListBreak()) {
+			cssc += " break";
+		}
 		Attributes attrs = new Attributes();
-		attrs.add("type", "radio")
-			.name(tag)
-			.cssClass(tag)
-			.disabled(tag)
-			.readonly(tag)
-			.tabindex(tag)
+		attrs.id(id)
 			.title(tag)
+			.cssClass(tag, cssc)
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);
+		stag("div", attrs);
+
+		attrs.clear();
+		attrs.add("type", "radio")
+			.name(tag)
+			.disabled(tag)
+			.readonly(tag)
+			.tabindex(tag);
 
 		// header
 		String headerKey = tag.getHeaderKey();

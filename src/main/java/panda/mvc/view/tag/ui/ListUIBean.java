@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import panda.lang.Iterators;
 import panda.lang.Objects;
@@ -21,6 +20,10 @@ import panda.lang.collection.KeyValue;
 public abstract class ListUIBean extends InputUIBean {
 	protected Object list;
 	protected int listSize = 0;
+
+	// list style
+	protected boolean listBreak;
+	protected boolean listOrder;
 
 	@Override
 	public void evaluateParams() {
@@ -55,7 +58,7 @@ public abstract class ListUIBean extends InputUIBean {
 	public boolean isNotEmptyList() {
 		return listSize > 0;
 	}
-	
+
 	/**
 	 * @return the listSize
 	 */
@@ -86,52 +89,38 @@ public abstract class ListUIBean extends InputUIBean {
 	}
 
 	public Iterator<KeyValue> asIterator() {
-		if (!Iterators.isIterable(list)) {
-			return null;
-		}
-		
-		return new KeyValueIterator(list);
+		return Iterators.asKeyValueIterator(list);
 	}
 
 	public Iterable<KeyValue> asIterable() {
-		if (list == null) {
-			return null;
-		}
-		
-		return new KeyValueIterator(list);
+		return Iterators.asKeyValueIterable(list);
 	}
 
-	public static class KeyValueIterator implements Iterator<KeyValue>, Iterable<KeyValue> {
-		Iterator it;
+	/**
+	 * @return the listBreak
+	 */
+	public boolean isListBreak() {
+		return listBreak;
+	}
 
-		public KeyValueIterator(Object list) {
-			if (list instanceof Map) {
-				it = ((Map)list).entrySet().iterator();
-			}
-			else {
-				it = Iterators.asIterator(list);
-			}
-		}
+	/**
+	 * @param listBreak the listBreak to set
+	 */
+	public void setListBreak(boolean listBreak) {
+		this.listBreak = listBreak;
+	}
 
-		public boolean hasNext() {
-			return it.hasNext();
-		}
+	/**
+	 * @return the listOrder
+	 */
+	public boolean isListOrder() {
+		return listOrder;
+	}
 
-		@SuppressWarnings("unchecked")
-		public KeyValue next() {
-			Object o = it.next();
-			if (o instanceof Entry) {
-				return new KeyValue(((Entry)o).getKey(), ((Entry)o).getValue());
-			}
-			return new KeyValue(o, o);
-		}
-
-		public void remove() {
-			throw new UnsupportedOperationException("Remove is not supported.");
-		}
-
-		public Iterator<KeyValue> iterator() {
-			return this;
-		}
+	/**
+	 * @param listOrder the listOrder to set
+	 */
+	public void setListOrder(boolean listOrder) {
+		this.listOrder = listOrder;
 	}
 }

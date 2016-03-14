@@ -1,6 +1,7 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
+import java.util.Map;
 
 import panda.lang.Iterators;
 import panda.lang.Objects;
@@ -58,12 +59,42 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 			}
 
 			if (tag.isNotEmptyList()) {
-				for (KeyValue kv : tag.asIterable()) {
-					boolean selected = tag.contains(value, kv.getKey());
+				String sp = tag.isListBreak() ? "<br>" : " ";
+				if (tag.isListOrder()) {
+					if (tag.getList() instanceof Map) {
+						Map m = (Map)tag.getList();
+						for (Object v : Iterators.asIterable(value)) {
+							Object label = m.get(v);
+							if (label == null && !(v instanceof String)) {
+								label = m.get(v.toString());
+							}
 
-					if (selected && kv.getValue() != null) {
-						body.append(StringEscapes.escapeHtml(kv.getValue().toString()));
-						body.append(' ');
+							if (label != null) {
+								String sl = label.toString();
+								if (Strings.isNotEmpty(sl)) {
+									body.append(StringEscapes.escapeHtml(sl)).append(sp);
+								}
+							}
+						}
+					}
+					else {
+						for (Object v : Iterators.asIterable(value)) {
+							if (v != null) {
+								String sl = v.toString();
+								if (Strings.isNotEmpty(sl)) {
+									body.append(StringEscapes.escapeHtml(sl)).append(sp);
+								}
+							}
+						}
+					}
+				}
+				else {
+					for (KeyValue kv : tag.asIterable()) {
+						boolean selected = tag.contains(value, kv.getKey());
+	
+						if (selected && kv.getValue() != null) {
+							body.append(StringEscapes.escapeHtml(kv.getValue().toString())).append(sp);
+						}
 					}
 				}
 			}
