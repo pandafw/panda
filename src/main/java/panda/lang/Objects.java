@@ -773,14 +773,14 @@ public abstract class Objects {
 		}
 
 		if (obj1 instanceof Map) {
-			if (((Map)obj1).containsKey(obj2) || ((Map)obj1).containsKey(obj2.toString())) {
+			if (((Map)obj1).containsKey(obj2) || (!(obj2 instanceof String) && ((Map)obj1).containsKey(obj2.toString()))) {
 				// log.debug("obj1 is a map and contains obj2");
 				return true;
 			}
 		}
 		if (obj1 instanceof Iterable) {
 			for (Object value : ((Iterable)obj1)) {
-				if (obj2.equals(value) || obj2.toString().equals(value)) {
+				if (obj2.equals(value) || (!(obj2 instanceof String) && obj2.toString().equals(value))) {
 					return true;
 				}
 			}
@@ -789,7 +789,7 @@ public abstract class Objects {
 			for (int i = 0; i < Array.getLength(obj1); i++) {
 				Object value = Array.get(obj1, i);
 
-				if (obj2.equals(value) || obj2.toString().equals(value)) {
+				if (obj2.equals(value) || (!(obj2 instanceof String) && obj2.toString().equals(value))) {
 					// log.debug("obj1 is an array and contains obj2");
 					return true;
 				}
@@ -799,7 +799,7 @@ public abstract class Objects {
 			// log.debug("obj1 is an object and equals obj2");
 			return true;
 		}
-		else if (obj1.toString().equals(obj2.toString())) {
+		else if ((!(obj2 instanceof String) && obj1.toString().equals(obj2.toString()))) {
 			// log.debug("obj1 is an object and it's String representation equals obj2's String representation.");
 			return true;
 		}
