@@ -103,7 +103,7 @@
 				format="datetime"
 			</#if>
 			<#list tag.paramList as tp>
-				<#if tp.name == "list" || tp.name == "listKey" || tp.name == "listValue" || tp.name == "fieldValue">
+				<#if [ "fieldValue", "list", "listKey", "listValue", "listBreak", "listOrder" ]?seq_contains(tp.name)>
 				${tp.name}="${tp.value}"
 				</#if>
 			</#list>
