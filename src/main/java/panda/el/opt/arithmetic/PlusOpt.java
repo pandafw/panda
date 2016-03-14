@@ -19,23 +19,35 @@ public class PlusOpt extends TwoTernary {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
 
-		if (lval instanceof String || rval instanceof String) {
-			return lval.toString() + rval.toString();
+		if (lval == null && rval == null) {
+			return null;
 		}
 
-		Number nlval = (Number)lval;
-		Number nrval = (Number)rval;
+		if (lval == null) {
+			return rval;
+		}
 
-		if (nrval instanceof Double || nlval instanceof Double) {
-			return nlval.doubleValue() + nrval.doubleValue();
+		if (rval == null) {
+			return rval;
 		}
-		if (nrval instanceof Float || nlval instanceof Float) {
-			return nlval.floatValue() + nrval.floatValue();
+
+		if (lval instanceof Number && rval instanceof Number) {
+			Number nlval = (Number)lval;
+			Number nrval = (Number)rval;
+	
+			if (nrval instanceof Double || nlval instanceof Double) {
+				return nlval.doubleValue() + nrval.doubleValue();
+			}
+			if (nrval instanceof Float || nlval instanceof Float) {
+				return nlval.floatValue() + nrval.floatValue();
+			}
+			if (nrval instanceof Long || nlval instanceof Long) {
+				return nlval.longValue() + nrval.longValue();
+			}
+			return nlval.intValue() + nrval.intValue();
 		}
-		if (nrval instanceof Long || nlval instanceof Long) {
-			return nlval.longValue() + nrval.longValue();
-		}
-		return nlval.intValue() + nrval.intValue();
+
+		return String.valueOf(lval) + String.valueOf(rval);
 	}
 
 }
