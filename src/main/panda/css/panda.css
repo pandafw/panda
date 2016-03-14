@@ -78,6 +78,10 @@
 .p-form label {
 	font-weight: normal;
 }
+.p-checkboxlist.break label.checkbox-inline,
+.p-radiomap.break label.radio-inline {
+	display: block;
+}
 .p-checkboxlist label.checkbox-inline,
 .p-radiomap label.radio-inline {
 	padding-right: 20px;
@@ -85,6 +89,11 @@
 .p-checkboxlist .checkbox-inline+.checkbox-inline,
 .p-radiomap .radio-inline+.radio-inline {
 	margin-left: 0;
+}
+.p-checkboxlist hr {
+	margin: 5px 0;
+	border-color: #ccc;
+	border-style: dashed;
 }
 
 /** datetimepicker */
