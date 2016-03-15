@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import panda.el.ElTemplate;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -118,7 +119,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
 			hss.setExpiry(0);
 			hss.setCharset(Charsets.UTF_8);
-			hss.setContentType("text/html");
+			hss.setContentType(MimeType.TEXT_HTML);
 			try {
 				hss.writeResponseHeader();
 			}
