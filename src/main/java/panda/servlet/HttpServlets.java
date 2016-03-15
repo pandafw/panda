@@ -826,7 +826,7 @@ public class HttpServlets {
 	public static void writeRedirect(HttpServletResponse res, String url, boolean encode) throws IOException {
 		HttpServletSupport hss = new HttpServletSupport(res);
 		hss.setCharset(Charsets.UTF_8);
-		hss.setContentType("text/html");
+		hss.setContentType(MimeType.TEXT_HTML);
 		hss.setExpiry(0);
 		hss.writeResponseHeader();
 		

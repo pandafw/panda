@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.io.MimeType;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -201,14 +202,18 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	}
 
 	protected void writeJsc(String jsc) throws IOException {
-		write("<script type=\"text/javascript\">");
+		write("<script type=\"");
+		write(MimeType.TEXT_JAVASCRIPT);
+		write("\">");
 		write(jsc);
 		write("</script>\n");
 	}
 	protected void writeJs(String js) throws IOException {
 		write("<script src=\"");
 		write(js);
-		write("\" type=\"text/javascript\"></script>\n");
+		write("\" type=\"");
+		write(MimeType.TEXT_JAVASCRIPT);
+		write("\"></script>\n");
 	}
 
 	protected void writeCss(String css) throws IOException {
