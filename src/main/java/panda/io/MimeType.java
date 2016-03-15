@@ -22,6 +22,7 @@ public class MimeType {
 
 	public static final String X_WWW_FORM_URLECODED = "application/x-www-form-urlencoded";
 
+	public static final String APP_JAVASCRIPT = "application/javascript";
 	public static final String APP_JSON = "application/json";
 	public static final String APP_STREAM = "application/octet-stream";
 
