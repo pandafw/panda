@@ -35,6 +35,10 @@ public class TriggerField extends TextField {
 	protected String ricon = "icon-caret-down";
 	protected String onrclick;
 
+	public TriggerField() {
+		ricon = "icon-caret-down";
+	}
+	
 	/**
 	 * @return the ltext
 	 */

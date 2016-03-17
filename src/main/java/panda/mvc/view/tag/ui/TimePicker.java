@@ -38,6 +38,10 @@ public class TimePicker extends DatePicker {
 
 	protected static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
 
+	
+	public TimePicker() {
+		ricon = "icon-clock";
+	}
 
 	/**
 	 * get time format from text

@@ -29,7 +29,7 @@ import panda.mvc.Mvcs;
  * 
  */
 @IocBean(singleton=false)
-public class DatePicker extends TextField {
+public class DatePicker extends TriggerField {
 	protected static final Log log = Logs.getLog(DatePicker.class);
 
 	protected static final String DEFAULT_DATE_FORMAT = "date";
@@ -43,6 +43,11 @@ public class DatePicker extends TextField {
 	protected String inline;
 	protected String defaults;
 	
+	public DatePicker() {
+		licon = "icon-clear";
+		ricon = "icon-calendar";
+	}
+
 	/**
 	 * @return the inline
 	 */

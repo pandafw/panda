@@ -137,6 +137,15 @@ public class Attributes {
 		return this;
 	}
 	
+	public Attributes datas(Map<String, String> vs) {
+		if (Collections.isNotEmpty(vs)) {
+			for (Entry<String, String> en : vs.entrySet()) {
+				data(en.getKey(), en.getValue());
+			}
+		}
+		return this;
+	}
+	
 	public Attributes dynamic(String key, Object value) {
 		if (value != null) {
 			String val = value.toString();
@@ -371,6 +380,11 @@ public class Attributes {
 
 	public Attributes disabled(UIBean tag) {
 		addIfTrue("disabled", tag.getDisabled());
+		return this;
+	}
+
+	public Attributes onclick(String onclick) {
+		addIfExists("onclick", onclick);
 		return this;
 	}
 
