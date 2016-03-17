@@ -189,55 +189,20 @@ public class ArraysTest {
 	// -----------------------------------------------------------------------
 	@Test
 	public void testToMap() {
-		Map<?, ?> map = Arrays.toMap(new String[][] { { "foo", "bar" }, { "hello", "world" } });
+		Map<?, ?> map = Arrays.toMap("foo", "bar", "hello", "world");
 
 		assertEquals("bar", map.get("foo"));
 		assertEquals("world", map.get("hello"));
 
 		assertEquals(null, Arrays.toMap(null));
 		try {
-			Arrays.toMap(new String[][] { { "foo", "bar" }, { "short" } });
+			Arrays.toMap("foo", "bar", "short");
 			fail("exception expected");
 		}
 		catch (final ArrayIndexOutOfBoundsException ex) {
 		}
 		catch (final IllegalArgumentException ex) {
 		}
-		try {
-			Arrays.toMap(new Object[] { new Object[] { "foo", "bar" }, "illegal type" });
-			fail("exception expected");
-		}
-		catch (final IllegalArgumentException ex) {
-		}
-		try {
-			Arrays.toMap(new Object[] { new Object[] { "foo", "bar" }, null });
-			fail("exception expected");
-		}
-		catch (final IllegalArgumentException ex) {
-		}
-
-		map = Arrays.toMap(new Object[] { new Map.Entry<Object, Object>() {
-			public Object getKey() {
-				return "foo";
-			}
-
-			public Object getValue() {
-				return "bar";
-			}
-
-			public Object setValue(final Object value) {
-				throw new UnsupportedOperationException();
-			}
-
-			public boolean equals(final Object o) {
-				throw new UnsupportedOperationException();
-			}
-
-			public int hashCode() {
-				throw new UnsupportedOperationException();
-			}
-		} });
-		assertEquals("bar", map.get("foo"));
 	}
 
 	// -----------------------------------------------------------------------
