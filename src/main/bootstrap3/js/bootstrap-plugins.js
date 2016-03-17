@@ -44,7 +44,6 @@
     constructor: DateTimePicker,
 
     init: function(element, options) {
-      var icon;
       if (!(options.pickTime || options.pickDate))
         throw new Error('Must choose at least one picker');
       this.options = options;
@@ -52,30 +51,31 @@
       this.language = options.language in dates ? options.language : 'en'
       this.pickDate = options.pickDate;
       this.pickTime = options.pickTime;
-      this.isInput = this.$element.is('input');
-      this.component = false;
-      if (this.$element.find('.input-group'))
-          this.component = this.$element.find('.input-group-addon');
+      this.timeIcon = options.timeIcon || 'fa fa-clock-o';
+      this.dateIcon = options.dateIcon || 'fa fa-calendar';
+      this.$input = this.$element.is('input') ? this.$element : this.$element.find('input');
+      this.$trigger = false;
+      this.$clear = false;
+      var $igas = this.$element.find('.input-group-addon');
+      if ($igas.length > 0) {
+        if ($igas.length > 1) {
+          this.$clear = $igas.eq(0);
+          this.$trigger = $igas.eq(1);
+        }
+        else {
+          this.$trigger = $igas.eq(0);
+        }
+      }
       this.format = options.format;
       if (!this.format) {
-        if (this.isInput) this.format = this.$element.data('format');
-        else this.format = this.$element.find('input').data('format');
-        if (!this.format) this.format = 'yyyy-MM-dd';
+        this.format = this.$element.data('format') || this.$input.data('format') || 'yyyy-MM-dd';
       }
       this._compileFormat();
-      if (this.component) {
-        icon = this.component.find('i');
-      }
-      if (this.pickTime) {
-        if (icon && icon.length) this.timeIcon = icon.data('time-icon');
-        if (!this.timeIcon) this.timeIcon = 'fa fa-clock-o';
-        icon.addClass(this.timeIcon);
-      }
-      if (this.pickDate) {
-        if (icon && icon.length) this.dateIcon = icon.data('date-icon');
-        if (!this.dateIcon) this.dateIcon = 'fa fa-calendar';
-        icon.removeClass(this.timeIcon);
-        icon.addClass(this.dateIcon);
+      if (this.$trigger) {
+        var icon = this.$trigger.find('i');
+        if (icon && icon.length && !icon.hasClass("fa")) {
+            icon.addClass((this.pickTime && !this.pickDate) ? this.timeIcon : this.dateIcon);
+        }
       }
       this.widget = $(getTemplate(this.timeIcon, options.pickDate, options.pickTime, options.pick12HourFormat, options.pickSeconds, options.collapse)).appendTo('body');
       this.minViewMode = options.minViewMode||this.$element.data('date-minviewmode')||0;
@@ -123,7 +123,7 @@
 
     show: function(e) {
       this.widget.show();
-      this.height = this.component ? this.component.outerHeight() : this.$element.outerHeight();
+      this.height = this.$trigger ? this.$trigger.outerHeight() : this.$element.outerHeight();
       this.place();
       this.$element.trigger({
         type: 'show',
@@ -156,7 +156,6 @@
       this.widget.hide();
       this.viewMode = this.startViewMode;
       this.showMode();
-      this.set();
       this.$element.trigger({
         type: 'hide',
         date: this._date
@@ -164,20 +163,16 @@
       this._detachDatePickerGlobalEvents();
     },
 
+    clear: function() {
+      this.$element.find('input').val('');
+    },
+    
     set: function() {
       var formatted = '';
       if (!this._unset) formatted = this.formatDate(this._date);
-      if (!this.isInput) {
-        if (this.component){
-          var input = this.$element.find('input');
-          input.val(formatted);
-          this._resetMaskPos(input);
-        }
-        this.$element.data('date', formatted);
-      } else {
-        this.$element.val(formatted);
-        this._resetMaskPos(this.$element);
-      }
+      this.$input.val(formatted);
+      this._resetMaskPos(this.$input);
+      this.$element.data('date', formatted);
     },
 
     setValue: function(newDate) {
@@ -261,8 +256,8 @@
 
     place: function(){
       var position = 'absolute';
-      var offset = this.component ? this.component.offset() : this.$element.offset();
-      this.width = this.component ? this.component.outerWidth() : this.$element.outerWidth();
+      var offset = this.$input.offset();
+      this.width = this.$input.outerWidth();
       offset.top = offset.top + this.height;
 
       var $window = $(window);
@@ -310,11 +305,7 @@
     update: function(newDate){
       var dateStr = newDate;
       if (!dateStr) {
-        if (this.isInput) {
-          dateStr = this.$element.val();
-        } else {
-          dateStr = this.$element.find('input').val();
-        }
+        dateStr = this.$input.val();
         if (dateStr) {
           this._date = this.parseDate(dateStr);
         }
@@ -833,7 +824,7 @@
       this._detachDatePickerGlobalEvents();
       this.widget.remove();
       this.$element.removeData('datetimepicker');
-      this.component.removeData('datetimepicker');
+      this.$trigger.removeData('datetimepicker');
     },
 
     formatDate: function(d) {
@@ -974,42 +965,28 @@
           }
         });
       }
-      if (this.isInput) {
-        this.$element.on({
+      this.$input.on({
           'focus': $.proxy(this.show, this),
+          'blur': $.proxy(this.hide, this),
           'change': $.proxy(this.change, this)
-        });
-        if (this.options.maskInput) {
-          this.$element.on({
+      });
+      if (this.options.maskInput) {
+          this.$input.on({
             'keydown': $.proxy(this.keydown, this),
             'keypress': $.proxy(this.keypress, this)
           });
-        }
-      } else {
-        this.$element.on({
-          'change': $.proxy(this.change, this)
-        }, 'input');
-        if (this.options.maskInput) {
-          this.$element.on({
-            'keydown': $.proxy(this.keydown, this),
-            'keypress': $.proxy(this.keypress, this)
-          }, 'input');
-        }
-        if (this.component){
-          this.component.on('click', $.proxy(this.show, this));
-        } else {
-          this.$element.on('click', $.proxy(this.show, this));
-        }
+      }
+      if (this.$trigger) {
+          this.$trigger.on('click', $.proxy(this.show, this));
+      }
+      if (this.$clear) {
+          this.$clear.on('click', $.proxy(this.clear, this));
       }
     },
 
     _attachDatePickerGlobalEvents: function() {
-      $(window).on(
-        'resize.datetimepicker' + this.id, $.proxy(this.place, this));
-      if (!this.isInput) {
-        $(document).on(
-          'mousedown.datetimepicker' + this.id, $.proxy(this.hide, this));
-      }
+      $(window).on('resize.datetimepicker' + this.id, $.proxy(this.place, this));
+      $(document).on('mousedown.datetimepicker' + this.id, $.proxy(this.hide, this));
     },
 
     _detachDatePickerEvents: function() {
@@ -1019,40 +996,25 @@
       if (this.pickDate && this.pickTime) {
         this.widget.off('click.togglePicker');
       }
-      if (this.isInput) {
-        this.$element.off({
+        this.$input.off({
           'focus': this.show,
+          'blur': this.hide,
           'change': this.change
         });
         if (this.options.maskInput) {
-          this.$element.off({
+          this.$input.off({
             'keydown': this.keydown,
             'keypress': this.keypress
           });
         }
-      } else {
-        this.$element.off({
-          'change': this.change
-        }, 'input');
-        if (this.options.maskInput) {
-          this.$element.off({
-            'keydown': this.keydown,
-            'keypress': this.keypress
-          }, 'input');
+        if (this.$trigger){
+          this.$trigger.off('click', this.show);
         }
-        if (this.component){
-          this.component.off('click', this.show);
-        } else {
-          this.$element.off('click', this.show);
-        }
-      }
     },
 
     _detachDatePickerGlobalEvents: function () {
       $(window).off('resize.datetimepicker' + this.id);
-      if (!this.isInput) {
-        $(document).off('mousedown.datetimepicker' + this.id);
-      }
+      $(document).off('mousedown.datetimepicker' + this.id);
     },
 
     _isInFixed: function() {

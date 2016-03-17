@@ -57,9 +57,16 @@
 	border-style: dashed;
 }
 
-/** datetimepicker */
-.p-datepicker, .p-timepicker, .p-datetimepicker {
+/** trigger, datetimepicker */
+.p-triggerfield, .p-datepicker, .p-timepicker, .p-datetimepicker {
 }
-i.p-datepicker-icon, i.p-timepicker-icon, i.p-datetimepicker-icon {
+.p-triggerfield > .input-group-addon, 
+.p-datepicker > .input-group-addon, 
+.p-timepicker > .input-group-addon, 
+.p-datetimepicker > .input-group-addon {
+	color: #666;
 	cursor: pointer;
+	background-color: #f9f9f9;
+}
+.p-triggerfield i, .p-datepicker i, .p-timepicker i, .p-datetimepicker i {
 }
