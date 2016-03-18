@@ -43,6 +43,14 @@ public class AppActionConsts extends ActionConsts {
 	}
 	
 	/**
+	 * getRoleMap
+	 * @return map
+	 */
+	public Map<String, String> getRoleMap() {
+		return getTextAsMap(RC.ROLES);
+	}
+	
+	/**
 	 * getDataStatusMap
 	 * @return map
 	 */

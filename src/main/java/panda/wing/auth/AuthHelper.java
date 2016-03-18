@@ -10,6 +10,7 @@ import panda.io.Settings;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Encrypts;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -64,7 +65,17 @@ public class AuthHelper {
 	 * @return true if user has specified permission
 	 */
 	public boolean hasPermission(IUser u, String p) {
-		return u != null && Collections.contains(u.getPermits(), p);
+		if (u == null) {
+			return false;
+		}
+		if (u instanceof IPermits) {
+			return Collections.contains(((IPermits)u).getPermits(), p);
+		}
+		if (u instanceof IRole) {
+			return Strings.equals(((IRole)u).getRole(), p);
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -129,7 +140,7 @@ public class AuthHelper {
 		return Encrypts.decrypt(value, encKey, encCipher);
 	}
 	
-	protected int getCookieAge(ActionContext ac, IUser user) {
+	protected int getCookieAge(ActionContext ac, Object user) {
 		return cookieAge;
 	}
 	
@@ -137,7 +148,7 @@ public class AuthHelper {
 	 * setLoginUser
 	 * @param user user
 	 */
-	public void setLoginUser(ActionContext context, IUser user) {
+	public void setLoginUser(ActionContext context, Object user) {
 		int ca = getCookieAge(context, user);
 		setLoginUser(context, user, ca);
 	}
@@ -146,10 +157,13 @@ public class AuthHelper {
 	 * setLoginUser
 	 * @param user user
 	 */
-	protected void setLoginUser(ActionContext context, IUser user, int cookieAge) {
-		user.setLoginTime(System.currentTimeMillis());
-		if (!Boolean.TRUE.equals(user.getAutoLogin())) {
-			cookieAge = -1;
+	protected void setLoginUser(ActionContext context, Object user, int cookieAge) {
+		if (user instanceof ILogin) {
+			ILogin iu = (ILogin)user;
+			iu.setLoginTime(System.currentTimeMillis());
+			if (!Boolean.TRUE.equals(iu.getAutoLogin())) {
+				cookieAge = -1;
+			}
 		}
 
 		saveUserToCookie(context, user, cookieAge);
@@ -251,8 +265,8 @@ public class AuthHelper {
 	}
 	
 	public boolean isSecureSessionUser(Object su) {
-		if (su instanceof IUser) {
-			Long lt = ((IUser)su).getLoginTime();
+		if (su instanceof ILogin) {
+			Long lt = ((ILogin)su).getLoginTime();
 			if (lt != null) {
 				return System.currentTimeMillis() - lt < secureUserAge * 1000;
 			}

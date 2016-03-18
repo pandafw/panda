@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.mvc.ActionContext;
 
 public class TicketAuthenticator extends UserAuthenticator {
@@ -31,8 +32,14 @@ public class TicketAuthenticator extends UserAuthenticator {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected List<String> getUserPermits(Object su) {
-		if (su instanceof IUser) {
-			return ((IUser)su).getPermits();
+		if (su == null) {
+			return Collections.EMPTY_LIST;
+		}
+		if (su instanceof IPermits) {
+			return ((IPermits)su).getPermits();
+		}
+		if (su instanceof IRole) {
+			return Arrays.asList(((IRole)su).getRole());
 		}
 		return Collections.EMPTY_LIST;
 	}

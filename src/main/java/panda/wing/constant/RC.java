@@ -43,6 +43,11 @@ public interface RC {
 	 */
 	public final static String PERMISSIONS = "permissions";
 
+	/**
+	 * ROLES = "roles";
+	 */
+	public final static String ROLES = "roles";
+
 	//------------------------------------------------------------
 	// UI SETTINGS
 	//------------------------------------------------------------
