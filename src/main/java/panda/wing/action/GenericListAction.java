@@ -508,17 +508,17 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
 			gq.notEqualTo(name, value);
 		}
-		else if (Filter.GREATER_THAN.equals(f.getComparator())) {
-			gq.greaterThan(name, value);
-		}
-		else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
-			gq.greaterThanOrEqualTo(name, value);
-		}
 		else if (Filter.LESS_THAN.equals(f.getComparator())) {
 			gq.lessThan(name, value);
 		}
 		else if (Filter.LESS_EQUAL.equals(f.getComparator())) {
 			gq.lessThanOrEqualTo(name, value);
+		}
+		else if (Filter.GREATER_THAN.equals(f.getComparator())) {
+			gq.greaterThan(name, value);
+		}
+		else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
+			gq.greaterThanOrEqualTo(name, value);
 		}
 		else if (Filter.LIKE.equals(f.getComparator())) {
 			gq.like(name, value.toString());
