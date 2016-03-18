@@ -28,6 +28,16 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
+	 * EQUAL = "eq";
+	 */
+	public final static String EQUAL = "eq";
+
+	/**
+	 * NOT_EQUAL = "ne";
+	 */
+	public final static String NOT_EQUAL = "ne";
+
+	/**
 	 * LESS_THAN = "lt";
 	 */
 	public final static String LESS_THAN = "lt";
@@ -46,21 +56,6 @@ public class Filter implements Cloneable, Serializable {
 	 * GREATER_EQUAL = "ge";
 	 */
 	public final static String GREATER_EQUAL = "ge";
-
-	/**
-	 * BETWEEN = "bt";
-	 */
-	public final static String BETWEEN = "bt";
-
-	/**
-	 * EQUAL = "eq";
-	 */
-	public final static String EQUAL = "eq";
-
-	/**
-	 * NOT_EQUAL = "ne";
-	 */
-	public final static String NOT_EQUAL = "ne";
 
 	/**
 	 * LIKE = "lk";
@@ -112,6 +107,16 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	public final static String NOT_IN = "nn";
 
+	/**
+	 * BETWEEN = "bt";
+	 */
+	public final static String BETWEEN = "bt";
+
+	/**
+	 * COMPARATORS
+	 */
+	public final static String COMPARATORS = "{list: [ 'eq', 'ne', 'lt', 'le', 'gt', 'ge', 'lk', 'nk', 'mt', 'nmt', 'lm', 'nlm', 'rm', 'nrm', 'in', 'nn', 'bt' ]}";
+	
 	/**
 	 * VT_BOOLEAN = "b";
 	 */
@@ -471,7 +476,7 @@ public class Filter implements Cloneable, Serializable {
 	/**
 	 * @return the comparison
 	 */
-	@Validates(@Validate(value=Validators.CONSTANT, params="{list: [ 'lt', 'le', 'gt', 'ge', 'eq', 'bt', 'lk', 'mt', 'lm', 'rm', 'in' ]}", msgId=Validators.MSGID_CONSTANT))
+	@Validates(@Validate(value=Validators.CONSTANT, params=COMPARATORS, msgId=Validators.MSGID_CONSTANT))
 	public String getC() {
 		return getComparator();
 	}
