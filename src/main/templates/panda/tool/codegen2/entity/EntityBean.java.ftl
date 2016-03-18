@@ -32,7 +32,7 @@ import ${i};
 </#list>
 })
 </#if>
-public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)}</#if> implements Serializable<#if entity.baseImplClass?has_content>, ${class_name(entity.baseImplClass)}</#if> {
+public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)}</#if> implements Serializable<#if entity.baseInterfaces?has_content><#list entity.baseInterfaces as i>, ${class_name(i)}</#list></#if> {
 
 	private static final long serialVersionUID = ${svuid?c}L;
 

@@ -38,7 +38,7 @@ import panda.lang.Strings;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;trimList&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseBeanClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;baseImplClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;baseInterface&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;baseQueryClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;comment&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -74,7 +74,7 @@ public class Entity {
 	@XmlAttribute
 	private String baseBeanClass;
 	@XmlAttribute
-	private String baseImplClass;
+	private String baseInterface;
 	@XmlAttribute
 	private String baseQueryClass;
 	@XmlAttribute
@@ -112,7 +112,7 @@ public class Entity {
 		this.trimString = model.trimString;
 		this.trimList = model.trimList;
 		this.baseBeanClass = model.baseBeanClass;
-		this.baseImplClass = model.baseImplClass;
+		this.baseInterface = model.baseInterface;
 		this.baseQueryClass = model.baseQueryClass;
 		this.generate = model.generate;
 		this.comment = model.comment;
@@ -325,19 +325,23 @@ public class Entity {
 	}
 
 	/**
-	 * @return the baseImplClass
+	 * @return the baseInterface
 	 */
-	public String getBaseImplClass() {
-		return baseImplClass;
+	public String getBaseInterface() {
+		return baseInterface;
 	}
 
 	/**
-	 * @param baseImplClass the baseImplClass to set
+	 * @param baseInterface the baseInterface to set
 	 */
-	public void setBaseImplClass(String baseImplClass) {
-		this.baseImplClass = baseImplClass;
+	public void setBaseInterface(String baseInterface) {
+		this.baseInterface = baseInterface;
 	}
 
+	public String[] getBaseInterfaces() {
+		return Strings.split(baseInterface, " ,");
+	}
+	
 	/**
 	 * @return the baseQueryClass
 	 */

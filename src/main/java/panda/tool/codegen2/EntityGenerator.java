@@ -32,6 +32,7 @@ import panda.dao.query.GenericQuery;
 import panda.dao.query.ObjectCondition;
 import panda.dao.query.Query;
 import panda.dao.query.StringCondition;
+import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Objects;
@@ -193,8 +194,8 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			imports.add(entity.getBaseBeanClass());
 		}
 
-		if (Strings.isNotEmpty(entity.getBaseImplClass())) {
-			imports.add(entity.getBaseImplClass());
+		if (Arrays.isNotEmpty(entity.getBaseInterfaces())) {
+			imports.addAll(Arrays.asList(entity.getBaseInterfaces()));
 		}
 
 		if (Strings.isNotEmpty(entity.getComment())) {
