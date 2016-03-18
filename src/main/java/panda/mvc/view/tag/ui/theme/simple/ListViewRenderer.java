@@ -596,10 +596,14 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			if (Collections.isNotEmpty(fieldErrors)) {
 				for (Entry<String, List<String>> fen : fieldErrors.entrySet()) {
 					if (fen.getKey().startsWith(_fn + ".")) {
-						write("<ul errorFor=\"" + html(_ifn) + "\" class=\"p-field-errors\">");
+						write("<ul errorFor=\"" + html(_ifn) + "\" class=\"");
+						write(FieldErrorRenderer.UL_CLASS);
+						write("\">");
 						for (String m : fen.getValue()) {
-							write("<li class=\"p-field-error\">");
-							write(icon("p-icon p-icon-error p-field-error"));
+							write("<li class=\"");
+							write(FieldErrorRenderer.LI_CLASS);
+							write("\">");
+							write(icon(FieldErrorRenderer.ICON_CLASS));
 							write(html(m));
 							write("</li>");
 						}

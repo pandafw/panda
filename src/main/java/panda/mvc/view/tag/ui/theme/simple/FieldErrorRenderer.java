@@ -13,6 +13,10 @@ import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
+	public static final String UL_CLASS = "fa-ul p-field-errors";
+	public static final String LI_CLASS = "text-danger";
+	public static final String ICON_CLASS = "fa-li fa fa-exclamation-circle";
+	
 	public FieldErrorRenderer(RenderingContext context) {
 		super(context);
 	}
@@ -38,7 +42,7 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 		
 		Attributes ula = new Attributes();
 		Attributes lia = new Attributes();
-		lia.cssClass("text-danger");
+		lia.cssClass(LI_CLASS);
 
 		// iterate over field error names
 		for (String fieldErrorFieldName : fieldErrorFieldNames) {
@@ -62,14 +66,14 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 						// wrapping ul
 						ula.clear()
 							.add("errorFor", fieldErrorFieldName)
-							.cssClass(tag, "fa-ul p-field-errors")
+							.cssClass(tag, UL_CLASS)
 							.cssStyle(tag);
 						stag("ul", ula);
 						ul = true;
 					}
 					
 					stag("li", lia);
-					write("<i class=\"fa-li fa fa-exclamation-circle\"></i>");
+					write(icon(ICON_CLASS));
 					write(label);
 					if (escape) {
 						write(phtml(fieldError));
