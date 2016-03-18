@@ -50,7 +50,6 @@ public abstract class UIBean extends Component {
 
 	// javascript tooltip attribute
 	protected String tooltip;
-	protected String tooltipConfig;
 
 	@IocInject(value=MvcConstants.UI_THEME, required=false)
 	protected String defaultUITheme = "simple";
@@ -354,13 +353,6 @@ public abstract class UIBean extends Component {
 	}
 
 	/**
-	 * @return the tooltipConfig
-	 */
-	public String getTooltipConfig() {
-		return tooltipConfig;
-	}
-
-	/**
 	 * HTML id attribute
 	 */
 	public void setId(String id) {
@@ -490,10 +482,5 @@ public abstract class UIBean extends Component {
 	/** Set the tooltip of this particular component */
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
-	}
-
-	/** Deprecated. Use individual tooltip configuration attributes instead */
-	public void setTooltipConfig(String tooltipConfig) {
-		this.tooltipConfig = tooltipConfig;
 	}
 }
