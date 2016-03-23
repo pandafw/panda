@@ -155,8 +155,10 @@ public class ActionGenerator extends AbstractCodeGenerator {
 						|| Collections.contains(iui.getTemplates(), "edit")
 						|| Collections.contains(iui.getTemplates(), "add")) {
 					imports.add(Validates.class.getName());
-					imports.add(Validate.class.getName());
-					imports.add(Validators.class.getName());
+					if (Collections.isNotEmpty(iui.getRequiredValidateFieldList())) {
+						imports.add(Validate.class.getName());
+						imports.add(Validators.class.getName());
+					}
 				}
 			}
 		}
