@@ -11,8 +11,9 @@
 			<li class="active"><@p.text name="step-add"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-add", "")?has_content>
-	<div class="p-well"><@p.text name="well-add"/></div>
+<#assign _well = a.getText("well-add", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 

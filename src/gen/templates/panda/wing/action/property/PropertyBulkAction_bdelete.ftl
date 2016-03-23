@@ -12,8 +12,9 @@
 			<li class="active"><@p.text name="step-bdelete-confirm"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-bdelete", "")?has_content>
-	<div class="p-well"><@p.text name="well-bdelete"/></div>
+<#assign _well = a.getText("well-bdelete", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 
@@ -24,7 +25,7 @@
 	<#assign _columns_ = [{
 			"name": "_rownum_",
 			"type": "rownum",
-			"header": text.getText("listview-th-rownum", ""),
+			"header": a.getText("listview-th-rownum", ""),
 			"fixed": true
 		}, {
 			"name": "_check_",
@@ -36,106 +37,106 @@
 			"name": "id",
 			"pkey" : true,
 			"value": true,
-			"header": text.getText("a.t.id"),
+			"header": a.getText("a.t.id"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.id-tip", "")
+			"tooltip": a.getText("a.t.id-tip", "")
 		}] />
 </#if>
 <#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "clazz",
-			"header": text.getText("a.t.clazz"),
+			"header": a.getText("a.t.clazz"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.clazz-tip", "")
+			"tooltip": a.getText("a.t.clazz-tip", "")
 		}] />
 </#if>
 <#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
-			"header": text.getText("a.t.language"),
+			"header": a.getText("a.t.language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.language-tip", "")
+			"tooltip": a.getText("a.t.language-tip", "")
 		}] />
 </#if>
 <#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
-			"header": text.getText("a.t.country"),
+			"header": a.getText("a.t.country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.country-tip", "")
+			"tooltip": a.getText("a.t.country-tip", "")
 		}] />
 </#if>
 <#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
-			"header": text.getText("a.t.name"),
+			"header": a.getText("a.t.name"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.name-tip", "")
+			"tooltip": a.getText("a.t.name-tip", "")
 		}] />
 </#if>
 <#if a.displayField("value")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "value",
-			"header": text.getText("a.t.value"),
+			"header": a.getText("a.t.value"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.value-tip", "")
+			"tooltip": a.getText("a.t.value-tip", "")
 		}] />
 </#if>
 <#if a.displayField("memo")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "memo",
-			"header": text.getText("a.t.memo"),
+			"header": a.getText("a.t.memo"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.memo-tip", "")
+			"tooltip": a.getText("a.t.memo-tip", "")
 		}] />
 </#if>
 <#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
-			"header": text.getText("a.t.status"),
+			"header": a.getText("a.t.status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.status-tip", "")
+			"tooltip": a.getText("a.t.status-tip", "")
 		}] />
 </#if>
 <#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
-			"header": text.getText("a.t.uusid"),
+			"header": a.getText("a.t.uusid"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.uusid-tip", "")
+			"tooltip": a.getText("a.t.uusid-tip", "")
 		}] />
 </#if>
 <#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
-			"header": text.getText("a.t.utime"),
+			"header": a.getText("a.t.utime"),
 			"format": {
 				"type": "datetime"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": text.getText("a.t.utime-tip", "")
+			"tooltip": a.getText("a.t.utime-tip", "")
 		}] />
 </#if>
 

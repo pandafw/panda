@@ -12,8 +12,9 @@
 			<li class="active"><@p.text name="step-edit-success"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-edit-success", "")?has_content>
-	<div class="p-well"><@p.text name="well-edit-success"/></div>
+<#assign _well = a.getText("well-edit-success", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 
@@ -23,8 +24,9 @@
 </li></#if><#if a.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
-<#if text.getText("well-edit", "")?has_content>
-	<div class="p-well"><@p.text name="well-edit"/></div>
+<#assign _well = a.getText("well-edit", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 	<#include "/action-alert.ftl"/>

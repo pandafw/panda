@@ -9,8 +9,9 @@
 	<div class="p-header">
 		<h3><@p.i icon="icon"/> <@p.text name="title-list_csv"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
-<#if text.getText("well-list_csv", "")?has_content>
-	<div class="p-well"><@p.text name="well-list_csv"/></div>
+<#assign _well = a.getText("well-list_csv", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 	<#include "/action-alert.ftl"/>
@@ -25,21 +26,21 @@
 <#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
-			"header": text.getText("a.t.id"),
+			"header": a.getText("a.t.id"),
 			"hidden": false
 		}] />
 </#if>
 <#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
-			"header": text.getText("a.t.name"),
+			"header": a.getText("a.t.name"),
 			"hidden": false
 		}] />
 </#if>
 <#if a.displayField("size")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "size",
-			"header": text.getText("a.t.size"),
+			"header": a.getText("a.t.size"),
 			"format": {
 				"type": "integer"
 			},
@@ -49,7 +50,7 @@
 <#if a.displayField("date")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "date",
-			"header": text.getText("a.t.date"),
+			"header": a.getText("a.t.date"),
 			"format": {
 				"type": "timestamp"
 			},
@@ -59,7 +60,7 @@
 <#if a.displayField("flag")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "flag",
-			"header": text.getText("a.t.flag"),
+			"header": a.getText("a.t.flag"),
 			"format": {
 				"type": "integer"
 			},

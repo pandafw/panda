@@ -11,8 +11,9 @@
 			<li class="active"><@p.text name="step-print"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-print", "")?has_content>
-	<div class="p-well"><@p.text name="well-print"/></div>
+<#assign _well = a.getText("well-print", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 	<#include "/action-alert.ftl"/>

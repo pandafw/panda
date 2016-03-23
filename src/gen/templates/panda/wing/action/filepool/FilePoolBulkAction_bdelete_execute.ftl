@@ -12,8 +12,9 @@
 			<li class="active"><@p.text name="step-bdelete-success"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-bdelete-success", "")?has_content>
-	<div class="p-well"><@p.text name="well-bdelete-success"/></div>
+<#assign _well = a.getText("well-bdelete-success", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 
@@ -24,56 +25,56 @@
 	<#assign _columns_ = [{
 			"name": "_rownum_",
 			"type": "rownum",
-			"header": text.getText("listview-th-rownum", ""),
+			"header": a.getText("listview-th-rownum", ""),
 			"fixed": true
 		}] />
 <#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
-			"header": text.getText("a.t.id"),
+			"header": a.getText("a.t.id"),
 			"sortable": false,
-			"tooltip": text.getText("a.t.id-tip", "")
+			"tooltip": a.getText("a.t.id-tip", "")
 		}] />
 </#if>
 <#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
-			"header": text.getText("a.t.name"),
+			"header": a.getText("a.t.name"),
 			"sortable": false,
-			"tooltip": text.getText("a.t.name-tip", "")
+			"tooltip": a.getText("a.t.name-tip", "")
 		}] />
 </#if>
 <#if a.displayField("size")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "size",
-			"header": text.getText("a.t.size"),
+			"header": a.getText("a.t.size"),
 			"format": {
 				"type": "integer"
 				},
 			"sortable": false,
-			"tooltip": text.getText("a.t.size-tip", "")
+			"tooltip": a.getText("a.t.size-tip", "")
 		}] />
 </#if>
 <#if a.displayField("date")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "date",
-			"header": text.getText("a.t.date"),
+			"header": a.getText("a.t.date"),
 			"format": {
 				"type": "timestamp"
 				},
 			"sortable": false,
-			"tooltip": text.getText("a.t.date-tip", "")
+			"tooltip": a.getText("a.t.date-tip", "")
 		}] />
 </#if>
 <#if a.displayField("flag")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "flag",
-			"header": text.getText("a.t.flag"),
+			"header": a.getText("a.t.flag"),
 			"format": {
 				"type": "integer"
 				},
 			"sortable": false,
-			"tooltip": text.getText("a.t.flag-tip", "")
+			"tooltip": a.getText("a.t.flag-tip", "")
 		}] />
 </#if>
 

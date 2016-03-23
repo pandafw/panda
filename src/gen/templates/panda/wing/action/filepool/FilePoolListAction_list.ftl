@@ -11,8 +11,9 @@
 			<li class="active"><@p.text name="step-list"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-list", "")?has_content>
-	<div class="p-well"><@p.text name="well-list"/></div>
+<#assign _well = a.getText("well-list", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 
@@ -29,7 +30,7 @@
 	<#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": text.getText("listview-th-number", ""),
+		"header": a.getText("listview-th-number", ""),
 		"fixed": true
 	}] />
 
@@ -37,38 +38,38 @@
 	<#assign _ash_ = "" />
 	<#if a.hasPermission("~/add")>
 		<@p.url var='_u_' action='~/add'/>
-		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-new', '')?html + '"><i class="' + text.getText('icon-new', '') + '"></i>' + text.getText('label-new', '') + '</a>'/>
+		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
 	</#if>
 	<#if a.hasPermission("~/copy")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/copy",
 			"params": { "id": "%{top.id}" },
-			"icon": text.getText("icon-copy"),
-			"label": text.getText("label-copy", ""),
-			"tooltip": text.getText("tooltip-copy", "")
+			"icon": a.getText("icon-copy"),
+			"label": a.getText("label-copy", ""),
+			"tooltip": a.getText("tooltip-copy", "")
 		}] />
 	</#if>
 	<#if a.hasPermission("~/edit")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/edit",
 			"params": { "id": "%{top.id}" },
-			"icon": text.getText("icon-edit"),
-			"label": text.getText("label-edit", ""),
-			"tooltip": text.getText("tooltip-edit", "")
+			"icon": a.getText("icon-edit"),
+			"label": a.getText("label-edit", ""),
+			"tooltip": a.getText("tooltip-edit", "")
 		}] />
 	</#if>
 	<#if a.hasPermission("~/delete")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/delete",
 			"params": { "id": "%{top.id}" },
-			"icon": text.getText("icon-delete"),
-			"label": text.getText("label-delete", ""),
-			"tooltip": text.getText("tooltip-delete", "")
+			"icon": a.getText("icon-delete"),
+			"label": a.getText("label-delete", ""),
+			"tooltip": a.getText("tooltip-delete", "")
 		}] />
 	</#if>
 	<#if _actions_?has_content || _ash_?has_content>
 		<#if !(_ash_?has_content)>
-			<#assign _ash_ = text.getText("listview-th-actions", "")/>
+			<#assign _ash_ = a.getText("listview-th-actions", "")/>
 		</#if>
 		<#assign _actionc_ = [{
 			"name": "_actions_",
@@ -95,30 +96,30 @@
 			"name" : "id",
 			"pkey" : true,
 			"value": true,
-			"header": text.getText("a.t.id"),
+			"header": a.getText("a.t.id"),
 			"filter": {
 				"type": "number"
 			},
 			"link": true,
 			"sortable": true,
-			"tooltip": text.getText("a.t.id-tip", "")
+			"tooltip": a.getText("a.t.id-tip", "")
 		}] />
 </#if>
 <#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "name",
-			"header": text.getText("a.t.name"),
+			"header": a.getText("a.t.name"),
 			"filter": {
 				"type": "string"
 			},
 			"sortable": true,
-			"tooltip": text.getText("a.t.name-tip", "")
+			"tooltip": a.getText("a.t.name-tip", "")
 		}] />
 </#if>
 <#if a.displayField("size")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "size",
-			"header": text.getText("a.t.size"),
+			"header": a.getText("a.t.size"),
 			"format": {
 				"type": "integer"
 			},
@@ -126,13 +127,13 @@
 				"type": "number"
 			},
 			"sortable": true,
-			"tooltip": text.getText("a.t.size-tip", "")
+			"tooltip": a.getText("a.t.size-tip", "")
 		}] />
 </#if>
 <#if a.displayField("date")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "date",
-			"header": text.getText("a.t.date"),
+			"header": a.getText("a.t.date"),
 			"format": {
 				"type": "timestamp"
 			},
@@ -140,13 +141,13 @@
 				"type": "datetime"
 			},
 			"sortable": true,
-			"tooltip": text.getText("a.t.date-tip", "")
+			"tooltip": a.getText("a.t.date-tip", "")
 		}] />
 </#if>
 <#if a.displayField("flag")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "flag",
-			"header": text.getText("a.t.flag"),
+			"header": a.getText("a.t.flag"),
 			"format": {
 				"type": "integer"
 			},
@@ -154,7 +155,7 @@
 				"type": "number"
 			},
 			"sortable": true,
-			"tooltip": text.getText("a.t.flag-tip", "")
+			"tooltip": a.getText("a.t.flag-tip", "")
 		}] />
 </#if>
 

@@ -9,8 +9,9 @@
 	<div class="p-header">
 		<h3><@p.i icon="icon"/> <@p.text name="title-list_csv"><@p.param name="title" value="#(title)"/></@p.text></h3>
 	</div>
-<#if text.getText("well-list_csv", "")?has_content>
-	<div class="p-well"><@p.text name="well-list_csv"/></div>
+<#assign _well = a.getText("well-list_csv", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 	<#include "/action-alert.ftl"/>
@@ -25,21 +26,21 @@
 <#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
-			"header": text.getText("a.t.id"),
+			"header": a.getText("a.t.id"),
 			"hidden": false
 		}] />
 </#if>
 <#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "clazz",
-			"header": text.getText("a.t.clazz"),
+			"header": a.getText("a.t.clazz"),
 			"hidden": false
 		}] />
 </#if>
 <#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
-			"header": text.getText("a.t.language"),
+			"header": a.getText("a.t.language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
@@ -50,7 +51,7 @@
 <#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
-			"header": text.getText("a.t.country"),
+			"header": a.getText("a.t.country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
@@ -61,14 +62,14 @@
 <#if a.displayField("source")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "source",
-			"header": text.getText("a.t.source"),
+			"header": a.getText("a.t.source"),
 			"hidden": true
 		}] />
 </#if>
 <#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
-			"header": text.getText("a.t.status"),
+			"header": a.getText("a.t.status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
@@ -79,14 +80,14 @@
 <#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
-			"header": text.getText("a.t.uusid"),
+			"header": a.getText("a.t.uusid"),
 			"hidden": false
 		}] />
 </#if>
 <#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
-			"header": text.getText("a.t.utime"),
+			"header": a.getText("a.t.utime"),
 			"format": {
 				"type": "datetime"
 			},

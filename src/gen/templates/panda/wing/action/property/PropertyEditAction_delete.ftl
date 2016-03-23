@@ -12,8 +12,9 @@
 			<li class="active"><@p.text name="step-delete-confirm"/></li>
 		</ol>
 	</div>
-<#if text.getText("well-delete-confirm", "")?has_content>
-	<div class="p-well"><@p.text name="well-delete-confirm"/></div>
+<#assign _well = a.getText("well-delete-confirm", "")/>
+<#if _well?has_content>
+	<div class="p-well">${_well}</div>
 </#if>
 
 
