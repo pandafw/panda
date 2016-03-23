@@ -419,6 +419,18 @@ DateFormat.prototype = {
 	}
 };
 
+function panda_call(f, p) {
+	switch (typeof(f)) {
+	case "function":
+		f.call(p);
+		break;
+	case "string":
+		f = new Function(f);
+		f.call(p);
+		break;
+	}
+}
+
 if (typeof Function.prototype.createCallback != "function") {
 	/**
 	 * Creates a callback that passes arguments[0], arguments[1], arguments[2], ...
@@ -2195,15 +2207,7 @@ function _plv_onTBodyClick(evt) {
 		
 		var $lv = $tr.closest("div.p-lv");
 		var handler = $lv.get(0).onrowclick || $lv.data("onrowclick");
-		switch (typeof(handler)) {
-		case "function":
-			handler.call($tr.get(0));
-			break;
-		case "string":
-			handler = new Function(handler);
-			handler.call($tr.get(0));
-			break;
-		}
+		panda_call(handler, $tr.get(0));
 	}
 }
 
@@ -2624,6 +2628,36 @@ s_setbase({
 	cookie: { expires: 180 }
 });
 
+(function() {
+	$.fn.ptrigger = function(option) {
+		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
+		return this.each(function() {
+			var $t = $(this);
+			var f = option.onclick || $t.data('trigger');
+			if (f == 'false') {
+				return;
+			}
+
+			var $i = $('<i class="p-trigger ' + option.icon + '"></i>');
+			$i.insertAfter($t);
+
+			if (f && f != "true") {
+				panda_call(f, $t.get(0));
+			}
+			else {
+				$i.click(function() {
+					$t.val('');
+				});
+			}
+		});
+	};
+	
+	// DATA-API
+	// ==================
+	$(window).on('load', function () {
+		$('[data-trigger]').ptrigger();
+	});
+})();
 (function($) {
 	var puploader = function($u) {
 		var pua = $u.data('uploadAction');
@@ -2801,7 +2835,7 @@ panda.viewfield = function(o) {
 				return this.el.val();
 			}
 			else {
-				this.el.val(v).next().text(v);
+				this.el.val(v).next().text(v == '' ? '\u3000' : v);
 				return this;
 			}
 		}

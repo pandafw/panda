@@ -8,7 +8,7 @@ panda.viewfield = function(o) {
 				return this.el.val();
 			}
 			else {
-				this.el.val(v).next().text(v);
+				this.el.val(v).next().text(v == '' ? '\u3000' : v);
 				return this;
 			}
 		}

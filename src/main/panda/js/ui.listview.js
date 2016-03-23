@@ -446,15 +446,7 @@ function _plv_onTBodyClick(evt) {
 		
 		var $lv = $tr.closest("div.p-lv");
 		var handler = $lv.get(0).onrowclick || $lv.data("onrowclick");
-		switch (typeof(handler)) {
-		case "function":
-			handler.call($tr.get(0));
-			break;
-		case "string":
-			handler = new Function(handler);
-			handler.call($tr.get(0));
-			break;
-		}
+		panda_call(handler, $tr.get(0));
 	}
 }
 

@@ -639,6 +639,13 @@ tbody.p-lv-tbody > tr > td:first-child {
 
 .p-th-nowrap th { white-space: nowrap; }
 .p-td-nowrap td { white-space: nowrap; }
+.p-trigger {
+	position: absolute;
+	color: #999;
+	margin: 10px 0 0 -20px;
+	z-index: 2;
+	cursor: pointer;
+}
 .p-uploader-text {
 	display: inline-block;
 	margin-bottom: 0;
