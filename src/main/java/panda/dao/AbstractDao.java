@@ -606,7 +606,7 @@ public abstract class AbstractDao implements Dao {
 	
 	@SuppressWarnings("unchecked")
 	protected Collection<?> collByQuery(Collection<?> coll, GenericQuery<?> query, String prop) {
-		query.clearColumns().include(prop);
+		query.includeOnly(prop);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
@@ -868,7 +868,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Map<?, ?> mapByQuery(GenericQuery<?> query, String keyProp, String valProp) {
-		query.clearColumns().include(keyProp).include(valProp);
+		query.includeOnly(keyProp, valProp);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
@@ -1009,7 +1009,7 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<?, List<?>> groupByQuery(GenericQuery<?> query, String keyProp, String valProp) {
-		query.clearColumns().include(keyProp).include(valProp);
+		query.includeOnly(keyProp, valProp);
 		
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 

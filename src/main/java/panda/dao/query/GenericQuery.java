@@ -2,9 +2,11 @@ package panda.dao.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
@@ -17,6 +19,7 @@ import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
+import panda.lang.Strings;
 
 /**
  * 
@@ -284,7 +287,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name column name
 	 */
 	private void incColumn(String name) {
-		setColumn(name, "");
+		String c = getColumn(name);
+		setColumn(name, Strings.defaultString(c, ""));
 	}
 
 	/**
@@ -354,6 +358,39 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 			}
 			flags = null;
 		}
+		return this;
+	}
+
+	/**
+	 * @param names include name
+	 * @return this
+	 */
+	public GenericQuery includeOnly(String... names) {
+		return includeOnly(Arrays.asList(names));
+	}
+
+	/**
+	 * @param names include name
+	 * @return this
+	 */
+	public GenericQuery includeOnly(Collection<String> names) {
+		if (Collections.isEmpty(names)) {
+			clearColumns();
+			return this;
+		}
+		
+		for (String name : names) {
+			incColumn(name);
+		}
+
+		Iterator<Entry<String, String>> it = columns.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, String> en = it.next();
+			if (!names.contains(en.getKey())) {
+				it.remove();
+			}
+		}
+		flags = null;
 		return this;
 	}
 	
