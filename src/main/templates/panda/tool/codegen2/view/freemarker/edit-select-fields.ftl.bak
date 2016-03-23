@@ -16,8 +16,8 @@
 				name="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 				required="true"
-				label="%{getText('${ui.name}-${f.name}', '')}"
-				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
+				label="#('${ui.name}-${f.name}')"
+				tooltip="#('${ui.name}-${f.name}-tip')"
 			<#if f.editTag.hasParamStartsWith("_")>
 			<#list f.editTag.paramList as tp>
 				<#if tp.name?starts_with('_')>
@@ -36,9 +36,9 @@
 			<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
-				label="%{getText('${ui.name}-${f.name}', '')}"
+				label="#('${ui.name}-${f.name}')"
 <#if !(f.editTag.name?ends_with(".viewfield"))>
-				tooltip="%{getText('${ui.name}-${f.name}-tip', '')}"
+				tooltip="#('${ui.name}-${f.name}-tip')"
 </#if>
 			/>
 		</#if>

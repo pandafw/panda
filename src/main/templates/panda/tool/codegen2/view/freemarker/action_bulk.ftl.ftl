@@ -14,7 +14,7 @@ ${s}#if result?has_content>
 	${s}#assign _columns_ = [{
 			"name": "_rownum_",
 			"type": "rownum",
-			"header": text.getText("listview-th-rownum", ""),
+			"header": a.getText("listview-th-rownum", ""),
 			"fixed": true
 		}, {
 			"name": "_check_",
@@ -31,7 +31,7 @@ ${s}#if a.displayField("${c.name}")>
 		<#elseif c.value??>
 			"value": ${c.value?string},
 		</#if>
-			"header": text.getText("a.t.${c.name}"),
+			"header": a.getText("a.t.${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -50,7 +50,7 @@ ${s}#if a.displayField("${c.name}")>
 			"group": ${c.group?string},
 		</#if>
 			"sortable": false,
-			"tooltip": text.getText("a.t.${c.name}-tip", "")
+			"tooltip": a.getText("a.t.${c.name}-tip", "")
 		}] />
 ${s}/#if>
 </#list>

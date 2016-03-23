@@ -12,7 +12,7 @@
 	${s}#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": text.getText("listview-th-number", ""),
+		"header": a.getText("listview-th-number", ""),
 		"fixed": true
 	}] />
 
@@ -29,7 +29,7 @@
 		<#if a?starts_with('@')>
 	${s}#if a.hasPermission("${ap}")>
 		${s}@p.url var='_u_' action='${ap}'/>
-		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + text.getText('tooltip-${an}', '')?html + '"><i class="' + text.getText('icon-${an}', '') + '"></i>' + text.getText('label-${an}', '') + '</a>'/>
+		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('label-${an}', '') + '</a>'/>
 	${s}/#if>
 		<#else>
 	${s}#if a.hasPermission("${ap}")>
@@ -38,16 +38,16 @@
 		<#if a?contains('%') && entity.primaryKeyList?has_content>
 			"params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> },
 		</#if>
-			"icon": text.getText("icon-${an}"),
-			"label": text.getText("label-${an}", ""),
-			"tooltip": text.getText("tooltip-${an}", "")
+			"icon": a.getText("icon-${an}"),
+			"label": a.getText("label-${an}", ""),
+			"tooltip": a.getText("tooltip-${an}", "")
 		}] />
 	${s}/#if>
 		</#if>
 	</#list>
 	${s}#if _actions_?has_content || _ash_?has_content>
 		${s}#if !(_ash_?has_content)>
-			${s}#assign _ash_ = text.getText("listview-th-actions", "")/>
+			${s}#assign _ash_ = a.getText("listview-th-actions", "")/>
 		${s}/#if>
 		${s}#assign _actionc_ = [{
 			"name": "_actions_",
@@ -99,7 +99,7 @@ ${s}#if a.displayField("${c.name}")>
 		<#elseif c.value??>
 			"value": ${c.value?string},
 		</#if>
-			"header": text.getText("a.t.${c.name}"),
+			"header": a.getText("a.t.${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -152,7 +152,7 @@ ${s}#if a.displayField("${c.name}")>
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": text.getText("a.t.${c.name}-tip", "")
+			"tooltip": a.getText("a.t.${c.name}-tip", "")
 		}] />
 ${s}/#if>
 </#list>

@@ -18,7 +18,7 @@ ${s}#assign _columns_ = [] />
 ${s}#if a.displayField("${c.name}")>
 	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
-			"header": text.getText("a.t.${c.name}"),
+			"header": a.getText("a.t.${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
