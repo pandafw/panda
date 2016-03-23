@@ -80,7 +80,7 @@ ${s}/@p.url>"
 			
 			</#if>
 			<#if _clear?has_content>
-				$('#${action.name}<#if f.actionField>_a</#if>_${f.name}').prev().click(${action.name}_${f.name}_onClearClick);
+				$('#${action.name}<#if f.actionField>_a</#if>_${f.name}').ptrigger({ 'onclick': ${action.name}_${f.name}_onClearClick});
 			
 			</#if>
 		</#list>
