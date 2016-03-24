@@ -113,7 +113,18 @@ fieldset.p-lv-filters legend {
 .p-lv-fs-inputgroup .p-lv-f-number-v2.form-control,
 .p-lv-fs-inputgroup .p-lv-f-string-v.form-control {
 	display: inline;
-	width: 170px;;
+	width: 170px;
+}
+.p-lv-fs-inputgroup .p-lv-f-datetime-v.form-control,
+.p-lv-fs-inputgroup .p-lv-f-datetime-v2.form-control {
+	width: 170px;
+}
+.p-lv-fs-inputgroup .p-lv-f-date-v.form-control,
+.p-lv-fs-inputgroup .p-lv-f-date-v2.form-control,
+.p-lv-fs-inputgroup .p-lv-f-time-v.form-control,
+.p-lv-fs-inputgroup .p-lv-f-time-v2.form-control {
+	width: 100px;
+	
 }
 .p-lv-fs-inputgroup .p-lv-f-g1, .p-lv-fs-inputgroup .p-lv-f-g2 {
 	display: inline-block;

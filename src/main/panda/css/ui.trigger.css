@@ -1,7 +1,13 @@
 .p-trigger {
 	position: absolute;
 	color: #999;
-	margin: 10px 0 0 -20px;
+	margin: 10px 0 0 -18px;
 	z-index: 2;
 	cursor: pointer;
+}
+.p-has-trigger, 
+.p-form .form-control.p-has-trigger, 
+.p-form input.form-control.p-has-trigger, 
+.p-form select.form-control.p-has-trigger {
+	padding-right: 20px;
 }
