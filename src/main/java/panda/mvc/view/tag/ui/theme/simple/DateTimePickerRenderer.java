@@ -7,7 +7,7 @@ import panda.lang.Arrays;
 import panda.mvc.view.tag.ui.DateTimePicker;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public class DateTimePickerRenderer extends AbstractTriggerFieldRenderer<DateTimePicker> {
+public class DateTimePickerRenderer extends AbstractTextFieldRenderer<DateTimePicker> {
 	public DateTimePickerRenderer(RenderingContext context) {
 		super(context);
 	}

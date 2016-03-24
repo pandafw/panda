@@ -7,7 +7,7 @@ import panda.lang.Arrays;
 import panda.mvc.view.tag.ui.DatePicker;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public class DatePickerRenderer extends AbstractTriggerFieldRenderer<DatePicker> {
+public class DatePickerRenderer extends AbstractTextFieldRenderer<DatePicker> {
 	public DatePickerRenderer(RenderingContext context) {
 		super(context);
 	}

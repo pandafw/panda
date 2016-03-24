@@ -7,7 +7,7 @@ import panda.lang.Arrays;
 import panda.mvc.view.tag.ui.TimePicker;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public class TimePickerRenderer extends AbstractTriggerFieldRenderer<TimePicker> {
+public class TimePickerRenderer extends AbstractTextFieldRenderer<TimePicker> {
 	public TimePickerRenderer(RenderingContext context) {
 		super(context);
 	}

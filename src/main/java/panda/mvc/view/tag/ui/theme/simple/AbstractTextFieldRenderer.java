@@ -4,31 +4,34 @@ import java.io.IOException;
 import java.util.Map;
 
 import panda.lang.Strings;
-import panda.mvc.view.tag.ui.TriggerField;
+import panda.mvc.view.tag.ui.TextField;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public abstract class AbstractTriggerFieldRenderer<T extends TriggerField> extends AbstractEndRenderer<T> {
-	public AbstractTriggerFieldRenderer(RenderingContext context) {
+public abstract class AbstractTextFieldRenderer<T extends TextField> extends AbstractEndRenderer<T> {
+	public AbstractTextFieldRenderer(RenderingContext context) {
 		super(context);
 	}
 
-	protected String getName() {
-		return "triggerfield";
-	}
+	protected abstract String getName();
 
 	@Override
 	protected void render() throws IOException {
-		renderHeader();
-		
-		renderLeftTrigger();
-
-		renderInput();
-		
-		renderRightTrigger();
-		
-		renderFooter();
+		if (tag.hasTrigger()) {
+			renderHeader();
+			
+			renderLeftTrigger();
+	
+			renderInput();
+			
+			renderRightTrigger();
+			
+			renderFooter();
+		}
+		else {
+			renderInput();
+		}
 	}
 
 	protected void renderHeader() throws IOException {
@@ -41,10 +44,11 @@ public abstract class AbstractTriggerFieldRenderer<T extends TriggerField> exten
 	
 	protected void renderInput() throws IOException {
 		Attributes attr = new Attributes();
+		
 		attr.type("text")
 			.id(tag)
 			.name(tag)
-			.css(this)
+			.css(this, "p-" + getName())
 			.size(tag)
 			.maxlength(tag)
 			.disabled(tag)
@@ -54,9 +58,9 @@ public abstract class AbstractTriggerFieldRenderer<T extends TriggerField> exten
 			.title(tag)
 			.placeholder(tag)
 			.mask(tag)
-			.datas(getDatas())
 			.commons(tag)
 			.events(tag)
+			.datas(getDatas())
 			.dynamics(tag);
 		xtag("input", attr);
 	}
