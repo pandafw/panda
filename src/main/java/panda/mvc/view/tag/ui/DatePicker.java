@@ -45,7 +45,7 @@ public class DatePicker extends TriggerField {
 	
 	public DatePicker() {
 		ricon = "icon-calendar";
-		addParameter("dataTrigger", "true");
+		addParameter("dataPtrigger", "true");
 	}
 
 	/**

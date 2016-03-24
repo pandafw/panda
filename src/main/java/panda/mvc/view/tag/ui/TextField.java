@@ -40,7 +40,7 @@ public class TextField extends InputUIBean {
 	protected String licon;
 	protected String onlclick;
 	protected String rtext;
-	protected String ricon = "icon-caret-down";
+	protected String ricon;
 	protected String onrclick;
 
 	/**

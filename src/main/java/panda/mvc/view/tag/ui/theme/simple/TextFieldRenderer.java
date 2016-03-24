@@ -10,6 +10,6 @@ public class TextFieldRenderer extends AbstractTextFieldRenderer<TextField> {
 
 	@Override
 	protected String getName() {
-		return "p-textfield";
+		return "textfield";
 	}
 }

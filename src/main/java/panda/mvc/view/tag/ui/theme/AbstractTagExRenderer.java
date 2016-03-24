@@ -116,6 +116,7 @@ public abstract class AbstractTagExRenderer<T extends UIBean> extends AbstractTa
 		datepicker.setFormat(format);
 		datepicker.setValue(value);
 		datepicker.setDisabled(disabled);
+		datepicker.setMaxlength(10);
 		
 		datepicker.start(writer);
 		datepicker.end(writer, "");
@@ -134,6 +135,7 @@ public abstract class AbstractTagExRenderer<T extends UIBean> extends AbstractTa
 		datetimepicker.setFormat(format);
 		datetimepicker.setValue(value);
 		datetimepicker.setDisabled(disabled);
+		datetimepicker.setMaxlength(20);
 		
 		datetimepicker.start(writer);
 		datetimepicker.end(writer, "");
@@ -151,6 +153,7 @@ public abstract class AbstractTagExRenderer<T extends UIBean> extends AbstractTa
 		timepicker.setFormat(format);
 		timepicker.setValue(value);
 		timepicker.setDisabled(disabled);
+		timepicker.setMaxlength(8);
 		
 		timepicker.start(writer);
 		timepicker.end(writer, "");
