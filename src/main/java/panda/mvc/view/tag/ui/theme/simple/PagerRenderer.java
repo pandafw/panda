@@ -32,7 +32,6 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	private Map<String, Object> linkBean;
 	
 	private boolean hiddenStyle;
-	private int linkSize;
 
 	public PagerRenderer(RenderingContext context) {
 		super(context);
@@ -49,7 +48,7 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		pages = defi(tag.getPages());
 
 		linkHref = Strings.replaceChars(defs(tag.getLinkHref(), "#"), '!', '$');
-		linkSize = defi(tag.getLinkSize());
+		hiddenStyle = tag.isHiddenStyle();
 		
 		Attributes attr = new Attributes();
 		attr.add("id", id)
@@ -261,6 +260,32 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 		if (!tag.isRenderPageNo()) {
 			return;
 		}
+
+		boolean ep = tag.isRenderPageEllipsis();
+		boolean p1 = tag.isRenderPage1();
+		boolean px = tag.isRenderPageX();
+
+		int linkSize = defi(tag.getLinkSize());
+		int linkMax = linkSize;
+		if (p1) {
+			linkMax += 2;
+		}
+		else if (ep) {
+			linkMax++;
+		}
+		if (px) {
+			linkMax += 2;
+		}
+		else if (ep) {
+			linkMax++;
+		}
+
+		if (linkMax >= pages) {
+			for (int p = 1; p <= pages; p++) {
+				linkp(p);
+			}
+			return;
+		}
 		
 		int p = 1;
 		if (page > linkSize / 2) {
@@ -273,15 +298,20 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 			p = 1;
 		}
 
-		boolean ep = tag.isRenderPageEllipsis();
-		boolean p1 = tag.isRenderPage1();
-		boolean px = tag.isRenderPageX();
 
 		if (p > 1 && p1) {
 			linkp(1);
 		}
 		
-		if (p > 2 && (p1 || ep)) {
+		if (p1) {
+			if (p == 3) {
+				linkp(2);
+			}
+			else if (p > 3) {
+				ellipsis();
+			}
+		}
+		else if (ep && p > 2) {
 			ellipsis();
 		}
 

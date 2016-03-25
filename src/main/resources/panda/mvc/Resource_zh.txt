@@ -22,10 +22,11 @@ pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=-- 没有数据 --
 pager-label-limit=显示件数：
-pager-tooltip-prev=&lt; 上一页
-pager-tooltip-next=下一页 &gt;
-pager-tooltip-first=≪ 最前页
-pager-tooltip-last=最后页 ≫
+pager-tooltip-prev=« 上一页
+pager-tooltip-next=下一页 »
+pager-tooltip-first=⋘ 最前页
+pager-tooltip-last=最后页 ⋙
+
 
 #listview - filters
 listview-filters-caption=检索

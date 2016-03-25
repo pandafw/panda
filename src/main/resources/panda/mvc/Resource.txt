@@ -7,9 +7,9 @@ form-load-mask=false
 #pager - limit
 list-items-default=20
 list_popup-items-default=10
-list_csv-items-default=1000
-list_xml-items-default=1000
-list_json-items-default=1000
+list_csv-items-default=5000
+list_xml-items-default=5000
+list_json-items-default=5000
 
 list-items-maximum=300
 list_popup-items-maximum=300
@@ -61,17 +61,17 @@ regex-zipcode=\\d{3}-*\\d{4}
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/${top.total}
 pager-label-infoz=${top.begin}~${top.end}
-pager-label-prev=&lt;
-pager-label-next=&gt;
-pager-label-first=≪
-pager-label-last=≫
+pager-label-prev=«
+pager-label-next=»
+pager-label-first=⋘
+pager-label-last=⋙
 pager-label-empty=-- NOTHING --
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300
-pager-tooltip-prev=&lt; Previous ${top.limit}
-pager-tooltip-next=Next ${top.limit} &gt;
-pager-tooltip-first=≪ First Page
-pager-tooltip-last=Last Page ≫
+pager-tooltip-prev=« Previous ${top.limit}
+pager-tooltip-next=Next ${top.limit} »
+pager-tooltip-first=⋘ First Page
+pager-tooltip-last=Last Page ⋙
 
 
 #listview
