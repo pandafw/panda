@@ -20,7 +20,7 @@ password-format=●●●●●●
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
-pager-label-empty=-- データありません --
+pager-label-empty=
 pager-label-limit=表示件数：
 pager-tooltip-prev=« 前の${top.limit}件
 pager-tooltip-next=次の${top.limit}件 »
