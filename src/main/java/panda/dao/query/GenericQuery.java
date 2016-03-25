@@ -108,6 +108,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the target
 	 */
+	@Override
 	public Object getTarget() {
 		return target;
 	}
@@ -115,6 +116,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the entity
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Entity<T> getEntity() {
 		return target instanceof Entity ? (Entity<T>)target : null;
@@ -130,6 +132,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the type
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public Class<T> getType() {
 		if (target instanceof Entity) {
@@ -144,6 +147,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the table
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public String getTable() {
 		if (target instanceof Entity) {
@@ -186,6 +190,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the distinct
 	 */
+	@Override
 	public boolean isDistinct() {
 		return distinct;
 	}
@@ -201,17 +206,31 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	// columns
 	//
 	/**
+	 * @return true if the columns is not empty
+	 */
+	@Override
+	public boolean hasColumns() {
+		return columns != null && !columns.isEmpty();
+	}
+
+	/**
 	 * @return the columns
 	 */
+	@Override
 	public Map<String, String> getColumns() {
 		return columns;
 	}
 
 	/**
-	 * @return true if the columns is not empty
+	 * @param name column name
+	 * @return column value
 	 */
-	public boolean hasColumns() {
-		return columns != null && !columns.isEmpty();
+	@Override
+	public String getColumn(String name) {
+		if (columns == null) {
+			return null;
+		}
+		return columns.get(name);
 	}
 
 	protected int flags() {
@@ -244,17 +263,6 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 */
 	protected boolean hasExcludes() {
 		return (flags() & HAS_EXCLUDES) != 0;
-	}
-
-	/**
-	 * @param name column name
-	 * @return column value
-	 */
-	public String getColumn(String name) {
-		if (columns == null) {
-			return null;
-		}
-		return columns.get(name);
 	}
 
 	/**
@@ -462,6 +470,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name field name
 	 * @return true if the name should include
 	 */
+	@Override
 	public boolean shouldInclude(String name) {
 		return !hasIncludes() || columns.get(name) != null;
 	}
@@ -470,6 +479,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name field name
 	 * @return true if the name should exclude
 	 */
+	@Override
 	public boolean shouldExclude(String name) {
 		if (hasIncludes()) {
 			return columns.get(name) == null;
@@ -499,6 +509,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return true if has orders
 	 */
+	@Override
 	public boolean hasJoins() {
 		return joins != null && !joins.isEmpty();
 	}
@@ -506,8 +517,20 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return joins
 	 */
+	@Override
 	public Map<String, Join> getJoins() {
 		return joins;
+	}
+
+	/**
+	 * @return join
+	 */
+	@Override
+	public Join getJoin(String join) {
+		if (Collections.isEmpty(joins)) {
+			return null;
+		}
+		return joins.get(join);
 	}
 
 	/**
@@ -706,11 +729,11 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	//---------------------------------------------------------------
 	// orders
 	//
-	
 	/**
 	 * @param name property/field/column name
 	 * @return true if the property has some order
 	 */
+	@Override
 	public boolean hasOrder(String name) {
 		if (hasOrders()) {
 			return orders.containsKey(name);
@@ -721,6 +744,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return true if has orders
 	 */
+	@Override
 	public boolean hasOrders() {
 		return orders != null && !orders.isEmpty();
 	}
@@ -728,6 +752,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return orders
 	 */
+	@Override
 	public Map<String, Order> getOrders() {
 		return orders;
 	}
@@ -800,6 +825,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return true if has groups
 	 */
+	@Override
 	public boolean hasGroups() {
 		return groups != null && !groups.isEmpty();
 	}
@@ -807,6 +833,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return groups
 	 */
+	@Override
 	public List<String> getGroups() {
 		return groups;
 	}
@@ -832,6 +859,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the start
 	 */
+	@Override
 	public long getStart() {
 		return start;
 	}
@@ -847,6 +875,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return the limit
 	 */
+	@Override
 	public long getLimit() {
 		return limit;
 	}
@@ -879,6 +908,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * is this query needs paginate
 	 * @return true if start or limit > 0
 	 */
+	@Override
 	public boolean needsPaginate() {
 		return start > 0 || limit > 0;
 	}
@@ -889,6 +919,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return filters
 	 */
+	@Override
 	public ComboFilter getFilters() {
 		return filters;
 	}
@@ -896,6 +927,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return true if has conditions
 	 */
+	@Override
 	public boolean hasFilters() {
 		return filters != null && !filters.isEmpty();
 	}
@@ -904,6 +936,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name property/field/column name
 	 * @return true if the property has some filter
 	 */
+	@Override
 	public boolean hasFilter(String name) {
 		if (hasFilters()) {
 			return filters.hasFilter(name);

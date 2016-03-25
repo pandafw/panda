@@ -82,6 +82,11 @@ public interface Query<T> {
 	 */
 	public Map<String, Join> getJoins();
 
+	/**
+	 * @return join
+	 */
+	public Join getJoin(String join);
+
 	//---------------------------------------------------------------
 	// orders
 	//

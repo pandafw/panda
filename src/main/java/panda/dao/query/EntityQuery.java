@@ -209,6 +209,11 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	}
 
 	@Override
+	public Join getJoin(String join) {
+		return query.getJoin(join);
+	}
+
+	@Override
 	public boolean hasOrder(String name) {
 		return query.hasOrder(name);
 	}
