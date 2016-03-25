@@ -460,19 +460,25 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			String name = Strings.isEmpty(f.getName()) ? e.getKey() : f.getName();
 			EntityField ef = entity.getField(name);
 			if (ef == null) {
-				log.warn("Invalid filter field [" + name + "] of entity " + entity);
+				if (log.isWarnEnabled()) {
+					log.warn("Invalid filter field [" + name + "] of entity " + entity);
+				}
 				continue;
 			}
 			if (!ef.isPersistent()) {
 				if (qr.isOr()) {
-					log.debug("SKIP filter(OR) of non persistent field [" + name + "] of entity " + entity);
+					if (log.isDebugEnabled()) {
+						log.debug("SKIP filter(OR) of non persistent field [" + name + "] of entity " + entity);
+					}
 					continue;
 				}
 				
 				if (ef.isJoinField()) {
-					Join join = gq.getJoins().get(ef.getJoinName());
+					Join join = gq.getJoin(ef.getJoinName());
 					if (join == null) {
-						log.debug("SKIP filter of join field [" + name + "] of entity " + entity);
+						if (log.isDebugEnabled()) {
+							log.debug("SKIP filter of join field [" + name + "] of entity " + entity);
+						}
 						continue;
 					}
 					
@@ -491,7 +497,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					continue;
 				}
 
-				log.debug("SKIP filter of non persistent field [" + name + "] of entity " + entity);
+				if (log.isDebugEnabled()) {
+					log.debug("SKIP filter of non persistent field [" + name + "] of entity " + entity);
+				}
 				continue;
 			}
 			
