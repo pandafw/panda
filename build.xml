@@ -295,9 +295,9 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 	
 	<target name="ghp" description="Copy panda sources to panda-web gh-pages branch">
-		<delete dir="../panda-web-ghp/${prj.version}"/>
-		<mkdir dir="../panda-web-ghp/${prj.version}"/>
-		<copy todir="../panda-web-ghp/${prj.version}" preservelastmodified="true">
+		<delete dir="../panda-web.ghp/${prj.version}"/>
+		<mkdir dir="../panda-web.ghp/${prj.version}"/>
+		<copy todir="../panda-web.ghp/${prj.version}" preservelastmodified="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>
