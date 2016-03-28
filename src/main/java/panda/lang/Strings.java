@@ -138,9 +138,9 @@ public class Strings {
 	public static final String UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	/**
-	 * A String for symbols "!"#$%&'()-=^~|¥@`[]{};:+*,./<>?_"
+	 * A String for symbols "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 	 */
-	public static final String SYMBOLS = "!\"#$%&'()-=^~|\\@`[]{};:+*,./<>?_";
+	public static final String SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 	/**
 	 * Represents a failed index search.
@@ -4594,6 +4594,15 @@ public class Strings {
 		return new String(chars, 0, pos);
 	}
 
+	/**
+	 * remove symbols `~!@#$%^&*()-_=+[]{}\|;:'",<.>/?
+	 * @param str the string
+	 * @return string
+	 */
+	public static String removeSymbols(final String str) {
+		return removeChars(str, SYMBOLS);
+	}
+
 	// Replacing
 	// -----------------------------------------------------------------------
 	/**
@@ -5145,6 +5154,16 @@ public class Strings {
 			return buf.toString();
 		}
 		return str;
+	}
+
+	/**
+	 * replace symbols `~!@#$%^&*()-_=+[]{}\|;:'",<.>/? with the specified char
+	 * @param str the string
+	 * @param ch replacement char
+	 * @return string
+	 */
+	public static String replaceSymbols(final String str, final char ch) {
+		return replaceChars(str, SYMBOLS, ch);
 	}
 
 	// Overlay
