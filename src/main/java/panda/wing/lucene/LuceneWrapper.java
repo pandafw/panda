@@ -182,7 +182,7 @@ public class LuceneWrapper implements Closeable {
 	 * @return query
 	 */
 	public Query parseSimpleQuery(String field, String text) {
-		text = Strings.replaceChars(text, "+-&|!(){}[]^\"~*?:\\/", ' ');
+		text = Strings.replaceSymbols(text, ' ');
 		if (Strings.isBlank(text)) {
 			return null;
 		}
