@@ -537,10 +537,9 @@ public class FileUploader {
 		 * @throws FileUploadException An error occurred while parsing the request.
 		 * @throws IOException An I/O error occurred.
 		 */
-		FileItemIteratorImpl(HttpServletRequest req) throws FileUploadException, IOException {
+		FileItemIteratorImpl(final HttpServletRequest req) throws FileUploadException, IOException {
 			InputStream input = req.getInputStream();
 
-			final String contentType = req.getContentType();
 			final long requestSize = HttpServlets.getContentLength(req);
 
 			if (sizeMax >= 0) {
@@ -564,7 +563,7 @@ public class FileUploader {
 				charEncoding = HttpServlets.getEncoding(req);
 			}
 
-			boundary = getBoundary(contentType);
+			boundary = getBoundary(req.getContentType());
 			if (boundary == null) {
 				throw new InvalidContentTypeException("the request was rejected because no multipart boundary was found");
 			}

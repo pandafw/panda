@@ -68,6 +68,9 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		HttpServletRequest req = ac.getRequest();
 		if (HttpMethod.POST == HttpMethod.parse(req.getMethod())) {
 			String contentType = Strings.lowerCase(req.getContentType());
+			if (Strings.isEmpty(contentType)) {
+				//skip
+			}
 			if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
 				ejector = new MultiPartParamEjector(ac);
 			}
@@ -88,7 +91,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			ejector = new FormParamEjector(ac);
 		}
 		
-		ac.getRequest().setAttribute(ATTR_EJECTOR, ejector);
+		req.setAttribute(ATTR_EJECTOR, ejector);
 		
 		return ejector;
 	}
