@@ -35,7 +35,7 @@ navi-user-usagelog=使用记录
 navi-admin=管理中心
 navi-admin-account=账户管理
 navi-admin-account-user=用户管理
-navi-admin-account-usergroup=用户组管理
+navi-admin-account-group=用户组管理
 navi-admin-account-company=公司管理
 
 navi-admin-site=网站管理

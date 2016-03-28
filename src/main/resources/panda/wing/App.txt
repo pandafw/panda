@@ -39,16 +39,16 @@ navi-user-usagelog=Usage Log
 
 
 navi-admin=Administration
-navi-admin-account=Account
-navi-admin-account-user=User
-navi-admin-account-usergroup=User Group
-navi-admin-account-company=Company
+navi-admin-account=Account Management
+navi-admin-account-user=User Management
+navi-admin-account-group=Group Management
+navi-admin-account-company=Company Management
 
 navi-admin-site=Site
-navi-admin-service=Service
-navi-admin-site-category=Category
-navi-admin-site-contents=Contents
-navi-admin-site-index=Index
+navi-admin-service=Service Management
+navi-admin-site-category=Category Management
+navi-admin-site-contents=Contents Management
+navi-admin-site-index=Index Management
 
 navi-super=System
 navi-super-loadtask=Cache
