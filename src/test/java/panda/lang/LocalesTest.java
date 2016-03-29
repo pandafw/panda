@@ -42,7 +42,7 @@ public class LocalesTest extends TestCase {
 	private void assertValidParseLocale(final String language) {
 		final Locale locale = Locales.parseLocale(language);
 		assertNotNull("valid locale", locale);
-		assertEquals(language, locale.getLanguage());
+		assertEquals(language.toLowerCase(), locale.getLanguage());
 		// country and variant are empty
 		assertTrue(locale.getCountry() == null || locale.getCountry().isEmpty());
 		assertTrue(locale.getVariant() == null || locale.getVariant().isEmpty());
@@ -90,36 +90,12 @@ public class LocalesTest extends TestCase {
 		assertEquals(null, Locales.parseLocale((String)null));
 
 		assertValidParseLocale("us");
+		assertValidParseLocale("Us");
 		assertValidParseLocale("fr");
 		assertValidParseLocale("de");
 		assertValidParseLocale("zh");
 		// Valid format but lang doesnt exist, should make instance anyway
 		assertValidParseLocale("qq");
-
-		try {
-			Locales.parseLocale("Us");
-			fail("Should fail if not lowercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("US");
-			fail("Should fail if not lowercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("uS");
-			fail("Should fail if not lowercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("u#");
-			fail("Should fail if not lowercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
 
 		try {
 			Locales.parseLocale("u");
@@ -149,45 +125,9 @@ public class LocalesTest extends TestCase {
 	@Test
 	public void testParseLocale_2Part() {
 		assertValidParseLocale("us_EN", "us", "EN");
+		assertValidParseLocale("us_En", "us", "EN");
 		// valid though doesnt exist
 		assertValidParseLocale("us_ZH", "us", "ZH");
-
-		try {
-			Locales.parseLocale("us-EN");
-			fail("Should fail as not underscore");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("us_En");
-			fail("Should fail second part not uppercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("us_en");
-			fail("Should fail second part not uppercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("us_eN");
-			fail("Should fail second part not uppercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("uS_EN");
-			fail("Should fail first part not lowercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("us_E3");
-			fail("Should fail second part not uppercase");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
 	}
 
 	/**
@@ -445,30 +385,6 @@ public class LocalesTest extends TestCase {
 		try {
 			Locales.parseLocale("_G");
 			fail("Must be at least 3 chars if starts with underscore");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("_Gb");
-			fail("Must be uppercase if starts with underscore");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("_gB");
-			fail("Must be uppercase if starts with underscore");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("_1B");
-			fail("Must be letter if starts with underscore");
-		}
-		catch (final IllegalArgumentException iae) {
-		}
-		try {
-			Locales.parseLocale("_G1");
-			fail("Must be letter if starts with underscore");
 		}
 		catch (final IllegalArgumentException iae) {
 		}

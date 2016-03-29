@@ -194,7 +194,7 @@ public class ArraysTest {
 		assertEquals("bar", map.get("foo"));
 		assertEquals("world", map.get("hello"));
 
-		assertEquals(null, Arrays.toMap(null));
+		assertEquals(null, Arrays.toMap((String[])null));
 		try {
 			Arrays.toMap("foo", "bar", "short");
 			fail("exception expected");
