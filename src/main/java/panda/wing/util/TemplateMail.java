@@ -8,6 +8,7 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
+import panda.cast.Castors;
 import panda.io.Settings;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -28,7 +29,7 @@ public class TemplateMail {
 	private static final Log log = Logs.getLog(TemplateMail.class);
 	
 	@IocInject
-	private Settings settings;
+	protected Settings settings;
 	
 	@IocInject
 	protected FreemarkerHelper freemarker;
@@ -107,42 +108,42 @@ public class TemplateMail {
 	 */
 	public void sendMail(Email email) throws EmailException {
 		try {
-			if (settings.getPropertyAsBoolean(SC.MAIL_DEBUG, false)) {
+			if (getMailSettingAsBoolean(SC.MAIL_DEBUG, false)) {
 				email.setDebug(true);
 			}
 
-			String charset = settings.getProperty(SC.MAIL_CHARSET, Charsets.UTF_8);
+			String charset = getMailSetting(SC.MAIL_CHARSET, Charsets.UTF_8);
 			if (Strings.isNotEmpty(charset)) {
 				email.setCharset(charset);
 			}
 
-			email.setFrom(settings.getProperty(SC.MAIL_FROM_MAIL), settings.getProperty(SC.MAIL_FROM_NAME));
+			email.setFrom(getMailSetting(SC.MAIL_FROM_MAIL, null), getMailSetting(SC.MAIL_FROM_NAME, null));
 
-			String host = settings.getProperty(SC.MAIL_SMTP_HOST, "");
+			String host = getMailSetting(SC.MAIL_SMTP_HOST, null);
 			if (Strings.isNotEmpty(host)) {
 				email.setHostName(host);
 			}
 			
-			int port = settings.getPropertyAsInt(SC.MAIL_SMTP_PORT, 0);
+			int port = getMailSettingAsInt(SC.MAIL_SMTP_PORT, 0);
 			if (port > 0) {
 				email.setSmtpPort(port);
 			}
 
-			if (settings.getPropertyAsBoolean(SC.MAIL_SMTP_SSL, false)) {
+			if (getMailSettingAsBoolean(SC.MAIL_SMTP_SSL, false)) {
 				email.setSSL(true);
 				if (port > 0) {
 					email.setSslSmtpPort(String.valueOf(port));
 				}
 			}
 			
-			email.setTLS(settings.getPropertyAsBoolean(SC.MAIL_SMTP_TLS, false));
+			email.setTLS(getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, false));
 			
-			String username = settings.getProperty(SC.MAIL_SMTP_USER, "");
+			String username = getMailSetting(SC.MAIL_SMTP_USER, null);
 			if (Strings.isNotEmpty(username)) {
-				email.setAuthentication(username, settings.getProperty(SC.MAIL_SMTP_PASSWORD, ""));
+				email.setAuthentication(username, getMailSetting(SC.MAIL_SMTP_PASSWORD, ""));
 			}
 			
-			String bounce = settings.getProperty(SC.MAIL_SMTP_BOUNCE, "");
+			String bounce = getMailSetting(SC.MAIL_SMTP_BOUNCE, null);
 			if (Strings.isNotEmpty(bounce)) {
 				email.setBounceAddress(bounce);
 			}
@@ -153,6 +154,26 @@ public class TemplateMail {
 			log.warn("send mail failed!", e);
 			throw e;
 		}
+	}
+	
+	protected String getMailSetting(String key, String def) {
+		return settings.getProperty(key, def);
+	}
+	
+	protected boolean getMailSettingAsBoolean(String key, boolean def) {
+		String v = Strings.stripToNull(getMailSetting(key, null));
+		if (Strings.isEmpty(v)) {
+			return def;
+		}
+		return (Boolean)Castors.scast(v, boolean.class);
+	}
+	
+	protected int getMailSettingAsInt(String key, int def) {
+		String v = Strings.stripToNull(getMailSetting(key, null));
+		if (Strings.isEmpty(v)) {
+			return def;
+		}
+		return (Integer)Castors.scast(v, int.class);
 	}
 }
 

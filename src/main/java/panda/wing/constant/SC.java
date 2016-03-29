@@ -62,58 +62,58 @@ public interface SC {
 	// mail properties
 	//--------------------------------------------------------
 	/**
-	 * MAIL_DEBUG = "mail.debug";
+	 * MAIL_DEBUG = "mail-debug";
 	 */
-	public static final String MAIL_DEBUG = "mail.debug";
+	public static final String MAIL_DEBUG = "mail-debug";
 
 	/**
-	 * MAIL_SMTP_HOST = "mail.smtp.host";
+	 * MAIL_SMTP_HOST = "mail-smtp-host";
 	 */
-	public static final String MAIL_SMTP_HOST = "mail.smtp.host";
+	public static final String MAIL_SMTP_HOST = "mail-smtp-host";
 	
 	/**
-	 * MAIL_SMTP_HOST_PORT = "mail.smtp.port";
+	 * MAIL_SMTP_HOST_PORT = "mail-smtp-port";
 	 */
-	public static final String MAIL_SMTP_PORT = "mail.smtp.port";
+	public static final String MAIL_SMTP_PORT = "mail-smtp-port";
 	
 	/**
-	 * MAIL_SMTP_SSL = "mail.smtp.ssl";
+	 * MAIL_SMTP_SSL = "mail-smtp-ssl";
 	 */
-	public static final String MAIL_SMTP_SSL = "mail.smtp.ssl";
+	public static final String MAIL_SMTP_SSL = "mail-smtp-ssl";
 	
 	/**
-	 * MAIL_SMTP_TLS = "mail.smtp.tls";
+	 * MAIL_SMTP_TLS = "mail-smtp-tls";
 	 */
-	public static final String MAIL_SMTP_TLS = "mail.smtp.tls";
+	public static final String MAIL_SMTP_TLS = "mail-smtp-tls";
 	
 	/**
-	 * MAIL_SMTP_USER = "mail.smtp.user";
+	 * MAIL_SMTP_USER = "mail-smtp-user";
 	 */
-	public static final String MAIL_SMTP_USER = "mail.smtp.user";
+	public static final String MAIL_SMTP_USER = "mail-smtp-user";
 	
 	/**
-	 * MAIL_SMTP_PASSWORD = "mail.smtp.password";
+	 * MAIL_SMTP_PASSWORD = "mail-smtp-password";
 	 */
-	public static final String MAIL_SMTP_PASSWORD = "mail.smtp.password";
+	public static final String MAIL_SMTP_PASSWORD = "mail-smtp-password";
 	
 	/**
-	 * MAIL_FROM_MAIL = "mail.from.mail";
+	 * MAIL_FROM_MAIL = "mail-from-mail";
 	 */
-	public static final String MAIL_FROM_MAIL = "mail.from.mail";
+	public static final String MAIL_FROM_MAIL = "mail-from-mail";
 	
 	/**
-	 * MAIL_FROM_NAME = "mail.from.name";
+	 * MAIL_FROM_NAME = "mail-from-name";
 	 */
-	public static final String MAIL_FROM_NAME = "mail.from.name";
+	public static final String MAIL_FROM_NAME = "mail-from-name";
 	
 	/**
-	 * MAIL_BOUNCE = "mail.smtp.bounce";
+	 * MAIL_BOUNCE = "mail-smtp-bounce";
 	 */
-	public static final String MAIL_SMTP_BOUNCE = "mail.smtp.bounce";
+	public static final String MAIL_SMTP_BOUNCE = "mail-smtp-bounce";
 	
 	/**
-	 * MAIL_CHARSET = "mail.charset";
+	 * MAIL_CHARSET = "mail-charset";
 	 */
-	public static final String MAIL_CHARSET = "mail.charset";
+	public static final String MAIL_CHARSET = "mail-charset";
 
 }
