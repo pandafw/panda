@@ -159,10 +159,10 @@ public class Settings implements Map<String, String> {
 		return put(key, value);
 	}
 	
-	public String getProperty(String key, String defv) {
+	public String getProperty(String key, String def) {
 		String v = get(key);
 		if (Strings.isEmpty(v)) {
-			v = defv;
+			v = def;
 		}
 		return v;
 	}
@@ -181,12 +181,13 @@ public class Settings implements Map<String, String> {
 
 	/**
 	 * @param key key
+	 * @param def default value
 	 * @return the property
 	 */
-	public boolean getPropertyAsBoolean(String key, boolean defv) {
+	public boolean getPropertyAsBoolean(String key, boolean def) {
 		String v = Strings.stripToNull(getProperty(key));
 		if (Strings.isEmpty(v)) {
-			return defv;
+			return def;
 		}
 		return (Boolean)Castors.scast(v, boolean.class);
 	}
@@ -201,15 +202,15 @@ public class Settings implements Map<String, String> {
 
 	/**
 	 * @param key key
+	 * @param def default value
 	 * @return the property
 	 */
-	public int getPropertyAsInt(String key, int defaultVar) {
-		try {
-			return Integer.parseInt(getProperty(key));
+	public int getPropertyAsInt(String key, int def) {
+		String v = Strings.stripToNull(getProperty(key));
+		if (Strings.isEmpty(v)) {
+			return def;
 		}
-		catch (NumberFormatException e) {
-			return defaultVar;
-		}
+		return (Integer)Castors.scast(v, int.class);
 	}
 
 	/**
@@ -222,15 +223,15 @@ public class Settings implements Map<String, String> {
 
 	/**
 	 * @param key key
+	 * @param def default value
 	 * @return the property
 	 */
-	public Long getPropertyAsLong(String key, long defaultVar) {
-		try {
-			return Long.parseLong(getProperty(key));
+	public Long getPropertyAsLong(String key, long def) {
+		String v = Strings.stripToNull(getProperty(key));
+		if (Strings.isEmpty(v)) {
+			return def;
 		}
-		catch (NumberFormatException e) {
-			return defaultVar;
-		}
+		return (Long)Castors.scast(v, long.class);
 	}
 
 	/**
@@ -253,7 +254,7 @@ public class Settings implements Map<String, String> {
 
 		String expr = Strings.stripToNull(get(name));
 		if (Strings.isNotEmpty(expr)) {
-			if (!expr.startsWith("[") && !expr.endsWith("]")) {
+			if (!Strings.startsWithChar(expr, '[') && !Strings.endsWithChar(expr, ']')) {
 				expr = "[" + expr + "]";
 			}
 
@@ -281,7 +282,7 @@ public class Settings implements Map<String, String> {
 
 		String expr = Strings.stripToNull(get(name));
 		if (Strings.isNotEmpty(expr)) {
-			if (!expr.startsWith("{") && !expr.endsWith("}")) {
+			if (!Strings.startsWithChar(expr, '{') && !Strings.endsWithChar(expr, '}')) {
 				expr = "{" + expr + "}";
 			}
 
