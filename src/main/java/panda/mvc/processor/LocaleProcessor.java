@@ -14,6 +14,7 @@ import panda.lang.Locales;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
+import panda.net.http.HttpHeader;
 import panda.servlet.HttpServlets;
 
 @IocBean
@@ -132,13 +133,9 @@ public class LocaleProcessor extends AbstractProcessor {
 	}
 
 	protected Locale getLocaleFromCookie(ActionContext ac) {
-		Locale locale = null;
 		HttpServletRequest request = ac.getRequest();
 		String cv = HttpServlets.getCookieValue(request, cookieName);
-		if (Strings.isNotEmpty(cv)) {
-			locale = Locales.toLocale(cv, null);
-		}
-		return isAllowedLocale(locale) ? locale : null;
+		return parseLocale(cv);
 	}
 
 	protected Locale getLocaleFromParameter(ActionContext ac, String parameterName) {
@@ -154,18 +151,13 @@ public class LocaleProcessor extends AbstractProcessor {
 	}
 
 	protected Locale getLocaleFromAcceptLanguage(ActionContext ac) {
-		String al = ac.getRequest().getHeader("Accept-Language");
+		String al = ac.getRequest().getHeader(HttpHeader.ACCEPT_LANGUAGE);
 		if (Strings.isNotEmpty(al)) {
-			String[] als = Strings.split(Strings.replaceChars(al, '-', '_'), ",;");
+			String[] als = Strings.split(Strings.replaceChars(al, '-', '_'), ",; ");
 			for (String str : als) {
-				try {
-					Locale locale = Locales.toLocale(str);
-					if (isAllowedLocale(locale)) {
-						return locale;
-					}
-				}
-				catch (Exception e) {
-					
+				Locale locale = parseLocale(str);
+				if (locale != null) {
+					return locale;
 				}
 			}
 		}
@@ -203,5 +195,27 @@ public class LocaleProcessor extends AbstractProcessor {
 			}
 		}
 		return false;
+	}
+	
+	protected Locale parseLocale(String str) {
+		if (Strings.isEmpty(str)) {
+			return null;
+		}
+		
+		Locale locale = Locales.toLocale(str);
+		if (isAllowedLocale(locale)) {
+			return locale;
+		}
+		
+		int i = str.indexOf('_');
+		if (i > 0) {
+			String s2 = str.substring(0, i);
+			locale = Locales.toLocale(s2);
+			if (isAllowedLocale(locale)) {
+				return locale;
+			}
+		}
+		
+		return null;
 	}
 }
