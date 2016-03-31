@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.crud;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -17,7 +17,6 @@ import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
-import panda.filepool.FileItem;
 import panda.io.FileNames;
 import panda.io.FileType;
 import panda.io.Streams;
@@ -34,6 +33,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
+import panda.vfs.FileItem;
 import panda.wing.constant.RC;
 
 

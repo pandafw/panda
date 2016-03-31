@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.base;
 
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;

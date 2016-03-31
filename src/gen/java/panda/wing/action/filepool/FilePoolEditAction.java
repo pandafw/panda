@@ -1,12 +1,12 @@
 package panda.wing.action.filepool;
 
-import panda.filepool.dao.DaoFileItem;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
-import panda.wing.action.GenericEditAction;
+import panda.vfs.dao.DaoFileItem;
+import panda.wing.action.crud.GenericEditAction;
 
 public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> {
 

@@ -1,4 +1,4 @@
-package panda.wing.action.tool;
+package panda.wing.action.base;
 
 import javax.servlet.http.HttpServletResponse;
 

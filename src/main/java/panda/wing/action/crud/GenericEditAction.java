@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.crud;
 
 import java.util.Collection;
 import java.util.Set;
@@ -293,6 +293,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 					insertData(id);
 				}
 			});
+			afterInsert(data);
 			EntityHelper.copyIdentityValue(getEntity(), data, id);
 		}
 		catch (Throwable e) {
@@ -370,6 +371,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 					updateData(ud, sd);
 				}
 			});
+			afterUpdate(data, sd);
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
@@ -420,6 +422,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 					deleteData(sd);
 				}
 			});
+			afterDelete(sd);
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
@@ -594,6 +597,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
+	 * afterInsert
+	 * @param data data
+	 */
+	protected void afterInsert(T data) {
+	}
+
+	/**
 	 * finalInsert
 	 * @param data data
 	 */
@@ -608,20 +618,6 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Set<String> getUpdateFields(T data, T sd) {
 		return getDisplayFields();
-	}
-
-	/**
-	 * update data
-	 * @param data data
-	 * @param sd source data
-	 * @return update count
-	 */
-	protected int updateData(T data, T sd) {
-		int cnt = getDao().update(data, getUpdateFields(data, sd));
-		if (cnt != 1) {
-			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
-		}
-		return cnt;
 	}
 
 	/**
@@ -678,12 +674,34 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * startUpdate
-	 * @param data data
+	 * @param data input data
 	 * @param sd source data
 	 */
 	protected T startUpdate(T data, T sd) {
 		assist().initUpdateFields(data, sd);
 		return data;
+	}
+
+	/**
+	 * update data
+	 * @param ud update data
+	 * @param sd source data
+	 * @return update count
+	 */
+	protected int updateData(T ud, T sd) {
+		int cnt = getDao().update(ud, getUpdateFields(ud, sd));
+		if (cnt != 1) {
+			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
+		}
+		return cnt;
+	}
+
+	/**
+	 * afterUpdate
+	 * @param data data
+	 * @param sd source data
+	 */
+	protected void afterUpdate(T data, T sd) {
 	}
 
 	/**
@@ -742,11 +760,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
+	 * afterDelete
+	 * @param data data
+	 */
+	protected void afterDelete(T data) {
+	}
+
+	/**
 	 * finalDelete
 	 * @param data data
 	 */
 	protected void finalDelete(T data) {
-		
 	}
 
 	//------------------------------------------------------------

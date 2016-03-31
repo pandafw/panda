@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.crud;
 
 import java.util.ArrayList;
 import java.util.HashMap;

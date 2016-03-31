@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.base;
 
 import panda.wing.action.work.GenericSyncWorkAction;
 import panda.wing.constant.RC;

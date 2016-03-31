@@ -1,8 +1,8 @@
 package panda.wing.action.filepool;
 
-import panda.filepool.dao.DaoFileItem;
-import panda.filepool.dao.FileDataQuery;
 import panda.mvc.annotation.At;
+import panda.vfs.dao.DaoFileItem;
+import panda.vfs.dao.FileDataQuery;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 

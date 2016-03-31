@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
-import panda.filepool.dao.DaoFileData;
-import panda.filepool.dao.DaoFileItem;
 import panda.io.Streams;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.vfs.dao.DaoFileData;
+import panda.vfs.dao.DaoFileItem;
 import panda.wing.entity.Resource;
 import panda.wing.entity.Template;
 

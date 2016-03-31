@@ -3,7 +3,7 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="panda.filepool.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
+	<entity name="panda.vfs.dao.DaoFileItem" identity="id" identityStart="1001" baseQueryClass="${entity.baseQueryClass}" generate="false">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="file id"/>
 		<property name="name" type="String" size="250" notNull="true" comment="file name">
 			<validator type="stringlength">
@@ -16,7 +16,7 @@
 	</entity>
 
 	<!-- action -->
-	<action name="action.FilePool" entity="panda.filepool.dao.DaoFileItem" extend="baseAction">
+	<action name="action.FilePool" entity="panda.vfs.dao.DaoFileItem" extend="baseAction">
 		<list name="basicList" extend="baseList">
 			<column name="id" sortable="true" link="true">
 				<filter type="number"/>
@@ -89,7 +89,7 @@
 
 	<!-- resource -->
 	<resource>
-		<entity name="panda.filepool.dao.DaoFileItem">
+		<entity name="panda.vfs.dao.DaoFileItem">
 			<property name="id" label="ID"/>
 			<property name="name" label="Name"/>
 			<property name="size" label="Size"/>
@@ -101,7 +101,7 @@
 		</action>
 	</resource>
 	<resource locale="ja">
-		<entity name="panda.filepool.dao.DaoFileItem">
+		<entity name="panda.vfs.dao.DaoFileItem">
 			<property name="id" label="ファイルID"/>
 			<property name="name" label="ファイル名"/>
 			<property name="size" label="サイズ"/>
@@ -110,7 +110,7 @@
 		</entity>
 	</resource>
 	<resource locale="zh">
-		<entity name="panda.filepool.dao.DaoFileItem">
+		<entity name="panda.vfs.dao.DaoFileItem">
 			<property name="id" label="文件ID"/>
 			<property name="name" label="文件名"/>
 			<property name="size" label="大小"/>

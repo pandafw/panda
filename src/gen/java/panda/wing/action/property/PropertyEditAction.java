@@ -8,7 +8,7 @@ import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.wing.action.GenericEditAction;
+import panda.wing.action.crud.GenericEditAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.entity.Property;

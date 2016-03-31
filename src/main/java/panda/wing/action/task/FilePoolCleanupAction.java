@@ -1,9 +1,9 @@
 package panda.wing.action.task;
 
-import panda.filepool.FilePool;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.mvc.annotation.At;
+import panda.vfs.FilePool;
 import panda.wing.action.work.GenericSyncWorkAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;

@@ -3,7 +3,7 @@ package panda.wing.action.task;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
 import panda.mvc.util.DefaultTextProvider;
-import panda.wing.action.BaseLoadAction;
+import panda.wing.action.base.BaseLoadAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.util.AppResourceBundleLoader;

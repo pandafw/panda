@@ -1,4 +1,4 @@
-package panda.wing.action;
+package panda.wing.action.crud;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +14,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.wing.action.AbstractAction;
 
 
 /**

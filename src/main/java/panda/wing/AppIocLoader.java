@@ -2,11 +2,11 @@ package panda.wing;
 
 import java.util.Set;
 
-import panda.filepool.dao.DaoFilePool;
-import panda.filepool.local.LocalFilePool;
 import panda.io.resource.ResourceLoader;
 import panda.lang.Systems;
 import panda.mvc.MvcConfig;
+import panda.mvc.filepool.MvcDaoFilePool;
+import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
@@ -31,8 +31,8 @@ public class AppIocLoader extends MvcComboIocLoader {
 		protected Set<Object> getDefaults() {
 			Set<Object> clss = super.getDefaults();
 			
-			clss.remove(LocalFilePool.class);
-			clss.add(DaoFilePool.class);
+			clss.remove(MvcLocalFilePool.class);
+			clss.add(MvcDaoFilePool.class);
 
 			clss.remove(ResourceLoader.class);
 			clss.add(AppResourceBundleLoader.class);
