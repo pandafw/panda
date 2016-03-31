@@ -1,11 +1,11 @@
 package panda.mvc.testapp.classes;
 
 import panda.dao.DaoClient;
-import panda.filepool.dao.DaoFileData;
-import panda.filepool.dao.DaoFileItem;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.Setup;
+import panda.vfs.dao.DaoFileData;
+import panda.vfs.dao.DaoFileItem;
 
 @IocBean(type=Setup.class)
 public class TestSetup implements Setup {

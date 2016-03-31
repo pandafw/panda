@@ -92,35 +92,35 @@ public class Pager extends UIBean {
 		}
 
 		if (firstText == null) {
-			firstText = txt.getText(LABEL_FIRST, "&nbsp;≪&nbsp;", this);
+			firstText = txt.getText(LABEL_FIRST, "⋘", this);
 		}
 		
 		if (lastText == null) {
-			lastText = txt.getText(LABEL_LAST, "&nbsp;≫&nbsp;", this);
+			lastText = txt.getText(LABEL_LAST, "⋙", this);
 		}
 		
 		if (prevText == null) {
-			prevText = txt.getText(LABEL_PREV, "&nbsp;&lt;&nbsp;", this);
+			prevText = txt.getText(LABEL_PREV, "«", this);
 		}
 		
 		if (nextText == null) {
-			nextText = txt.getText(LABEL_NEXT, "&nbsp;&gt;&nbsp;", this);
+			nextText = txt.getText(LABEL_NEXT, "»", this);
 		}
 
 		if (firstTooltip == null) {
-			firstTooltip = txt.getText(TOOLTIP_FIRST, "≪ First Page", this);
+			firstTooltip = txt.getText(TOOLTIP_FIRST, "⋘ First Page", this);
 		}
 		
 		if (lastTooltip == null) {
-			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page ≫", this);
+			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page ⋙", this);
 		}
 		
 		if (prevTooltip == null) {
-			prevTooltip = txt.getText(TOOLTIP_PREV, "&lt; Previous ${top.limit}", this);
+			prevTooltip = txt.getText(TOOLTIP_PREV, "« Previous ${top.limit}", this);
 		}
 		
 		if (nextTooltip == null) {
-			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} &gt;", this);
+			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} »", this);
 		}
 
 		if (linkSize == null) {

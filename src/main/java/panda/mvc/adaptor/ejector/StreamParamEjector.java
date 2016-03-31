@@ -4,10 +4,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import panda.filepool.FileItem;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.net.URLHelper;
+import panda.vfs.FileItem;
 
 public class StreamParamEjector extends AbstractParamEjector {
 	private Map<String, Object> params;

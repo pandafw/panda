@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import panda.bean.Beans;
-import panda.filepool.FilePool;
 import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
@@ -32,6 +31,7 @@ import panda.servlet.ServletContextMap;
 import panda.servlet.ServletRequestAttrMap;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.servlet.ServletRequestParamMap;
+import panda.vfs.FilePool;
 
 public class ActionContext {
 	private Ioc ioc;

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import panda.lang.Arrays;
 import panda.lang.Strings;
+import panda.lang.reflect.Methods;
 import panda.net.http.HttpMethod;
 
 public class ActionInfo {
@@ -165,14 +166,11 @@ public class ActionInfo {
 		
 		sb.append(Strings.rightPad(Strings.join(paths, ", "), 50));
 		sb.append(" >> ");
-		sb.append(method.toString());
-		sb.append(": ");
-		sb.append(method.getReturnType().getSimpleName());
-		sb.append(" |");
+		sb.append(Methods.toSimpleString(method));
+		sb.append(":");
 		sb.append(" @Ok(").append(okView).append(")");
 		sb.append(" @Err(").append(errorView).append(")");
 		sb.append(" @Fatal(").append(fatalView).append(")");
 		return sb.toString();
 	}
-
 }

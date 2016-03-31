@@ -5,9 +5,9 @@ import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
 import panda.cast.CastContext;
 import panda.cast.Castors;
+import panda.cast.castor.FileItemCastor;
 import panda.el.El;
 import panda.el.ElTemplate;
-import panda.filepool.FileItemCastor;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -27,10 +27,6 @@ import java.util.TimeZone;
 public abstract class Mvcs {
 	private static Beans beans = Beans.i();
 	private static Castors castors = Castors.i();
-	
-	static {
-		castors.register(new FileItemCastor());
-	}
 	
 	/**
 	 * DATE_TIMEZONE = "date-timezone";

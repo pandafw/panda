@@ -2,10 +2,10 @@ package panda.mvc.validation.validator;
 
 import java.io.File;
 
-import panda.filepool.FileItem;
 import panda.io.Files;
 import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
+import panda.vfs.FileItem;
 
 /**
  * FileLengthFieldValidator

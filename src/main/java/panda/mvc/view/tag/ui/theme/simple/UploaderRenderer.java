@@ -1,7 +1,11 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import panda.bind.json.JsonObject;
+import panda.doc.html.HTMLEntities;
 import panda.io.Files;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Anchor;
@@ -9,6 +13,7 @@ import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.net.URLHelper;
 
 public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	public UploaderRenderer(RenderingContext context) {
@@ -24,17 +29,28 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		
 		String pul = tag.getUploadLink();
 		String pun = tag.getUploadName();
+		String pud = tag.getUploadData();
 		String pdl = tag.getDnloadLink();
+		String pdn = tag.getDnloadName();
+		String pdd = tag.getDnloadData();
+		String pel = tag.getDefaultLink();
+		String pet = tag.getDefaultText();
 
 		attr.id(tag)
-			.data("uploadLink", pul)
-			.data("uploadName", pun)
-			.data("dnloadLink", pdl)
 			.cssClass("p-uploader")
 			.title(tag)
 			.commons(tag)
 			.events(tag)
-			.dynamics(tag);
+			.dynamics(tag)
+			.data("uploadLink", pul)
+			.data("uploadName", pun)
+			.data("uploadData", pud)
+			.data("dnloadLink", pdl)
+			.data("dnloadName", pdn)
+			.data("dnloadData", pdd)
+			.data("defaultLink", pel)
+			.data("defaultText", pet)
+			;
 		
 		if (!(readonly || disabled)) {
 			attr.data("spy", "puploader");
@@ -42,7 +58,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		stag("div", attr);
 
 		Attributes a = new Attributes();
-		a.add("type", "file");
+		a.type("file");
 		if (readonly) {
 			a.css(this, "p-uploader-file p-hidden");
 		}
@@ -61,24 +77,33 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		String uct = defs(tag.getFileContentType());
 		Integer ufs = tag.getFileSize();
 		
-		boolean isImg = uct.startsWith("image");
+		boolean isImg = uct.startsWith("image/") || Strings.startsWith(tag.getAccept(), "image/");
 		
 		a = new Attributes();
 		a.type("hidden")
 		 .cssClass("p-uploader-fid")
 		 .disabled(disabled);
 		if (name != null) {
-			a.addIfExists("name", name);
-			a.addIfExists("value", tag.getFileId());
+			a.name(name);
+			a.value(tag.getFileId());
 		}
 		xtag("input", a);
 
+		String durl = null;
+		
 		write("<span class=\"p-uploader-text\">");
 		if (tag.isFileExits()) {
 			if (Strings.isNotEmpty(pdl)) {
+				Map<String, Object> ps = JsonObject.fromJson(pdd);
+				if (ps == null) {
+					ps = new HashMap<String, Object>();
+				}
+				ps.put(pdn, tag.getFileId());
+				durl = URLHelper.buildURL(pdl, ps, true);
+				
 				Anchor at = newTag(Anchor.class);
-				at.setCssClass("p-uploader-icon"); 
-				at.setHref(Strings.replace(pdl, "#", tag.getFileId().toString()));
+				at.setCssClass("p-uploader-icon");
+				at.setHref(durl);
 				at.setIcon("icon-check");
 				at.start(writer);
 				at.end(writer, html(tag.getFileName()) + " " + filesize(ufs));
@@ -92,12 +117,25 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 				write("</span>");
 			}
 		}
+		else if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
+			write("<a href=\"" + pel + "\">");
+			write(xicon((isImg ? "icon-image" : "icon-attachment") + " p-uploader-icon"));
+			write(" ");
+			write(pet);
+			write("</a>");
+		}
+		else {
+			write(HTMLEntities.NBSP);
+		}
 		write("</span>");
 
 		write("<div class=\"p-uploader-image\">");
-		if (isImg && tag.isFileExits()) {
-			if (Strings.isNotEmpty(pdl)) {
-				write("<img class=\"img-thumbnail\" src=\"" + Strings.replace(pdl, "#", tag.getFileId().toString()) + "\"/>");
+		if (isImg) {
+			if (Strings.isNotEmpty(durl)) {
+				write("<img class=\"img-thumbnail\" src=\"" + durl + "\"/>");
+			}
+			else if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
+				write("<img class=\"img-thumbnail\" src=\"" + pel + "\"/>");
 			}
 		}
 		write("</div>");

@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
-import panda.filepool.FileItem;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.image.JavaImageWrapper;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
+import panda.vfs.FileItem;
 
 @IocBean(singleton=false)
 public class ImageValidator extends AbstractValidator {

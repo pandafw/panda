@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import panda.filepool.FileItem;
+import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.log.Log;
@@ -19,6 +19,8 @@ import panda.mvc.adaptor.multipart.FileUploadException;
 import panda.mvc.adaptor.multipart.FileUploader;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
+import panda.vfs.FileItem;
+import panda.vfs.FilePool;
 
 public class MultiPartParamEjector extends AbstractParamEjector {
 	private static final Log log = Logs.getLog(MultiPartParamEjector.class);
@@ -77,7 +79,9 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	}
 
 	protected FileItem saveUploadFile(FileItemStream item) throws IOException {
-		return this.getActionContext().getFilePool().saveFile(item, true);
+		FilePool fp = getActionContext().getFilePool();
+		String name = FileNames.getName(item.getName());
+		return fp.saveFile(name, item.openStream(), true);
 	}
 
 	@SuppressWarnings("unchecked")

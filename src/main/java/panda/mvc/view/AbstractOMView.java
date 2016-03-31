@@ -29,11 +29,15 @@ import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
-import panda.mvc.bind.filter.QueryerPropertyFilter;
+import panda.mvc.bind.filter.FileItemPropertyFilter;
 import panda.mvc.bind.filter.FilterPropertyFilter;
 import panda.mvc.bind.filter.PagerPropertyFilter;
+import panda.mvc.bind.filter.QueryerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.servlet.HttpServletSupport;
+import panda.vfs.FileItem;
+import panda.vfs.dao.DaoFileItem;
+import panda.vfs.local.LocalFileItem;
 
 
 public abstract class AbstractOMView extends AbstractView {
@@ -341,6 +345,11 @@ public abstract class AbstractOMView extends AbstractView {
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
 		as.registerPropertyFilter(Queryer.class, new QueryerPropertyFilter(shortName));
 		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(shortName));
+
+		FileItemPropertyFilter fipf = new FileItemPropertyFilter();
+		as.registerPropertyFilter(FileItem.class, fipf);
+		as.registerPropertyFilter(LocalFileItem.class, fipf);
+		as.registerPropertyFilter(DaoFileItem.class, fipf);
 		
 		as.setPrettyPrint(prettyPrint);
 	}
