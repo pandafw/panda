@@ -40,9 +40,9 @@
 					<#if (ui.templates?seq_contains("insert") || ui.templates?seq_contains("copy")) 
 						&& (tp.name == '+defaultLink' || tp.name == '_defaultText')>
 					<#elseif tp.name?starts_with('%')>
-				${tab}${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
+				${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
 					<#elseif tp.name?starts_with('+')>
-				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
+				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
 			${s}/@${f.editTag.name}>

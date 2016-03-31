@@ -59,9 +59,9 @@
 			>
 				<#list f.editTag.paramList as tp>
 					<#if tp.name?starts_with('%')>
-				${tab}${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
+				${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
 					<#elseif tp.name?starts_with('+')>
-				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
+				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
 			${s}/@${f.editTag.name}>
