@@ -127,6 +127,24 @@ public abstract class Objects {
 		return object1.equals(object2);
 	}
 
+	public static boolean stringEquals(final Object object1, final Object object2) {
+		if (object1 == object2) {
+			return true;
+		}
+		if (object1 == null || object2 == null) {
+			return false;
+		}
+		if (object1.equals(object2)) {
+			return true;
+		}
+
+		if ((object1 instanceof String) && (object2 instanceof String)) {
+			return false;
+		}
+
+		return object1.toString().equals(object2.toString());
+	}
+
 	/**
 	 * <p>
 	 * Compares two objects for inequality, where either one or both objects may be {@code null}.
@@ -767,44 +785,43 @@ public abstract class Objects {
 	 * @return true if obj1 contains obj2
 	 */
 	public static boolean contains(Object obj1, Object obj2) {
-		if ((obj1 == null) || (obj2 == null)) {
-			// log.debug("obj1 or obj2 are null.");
+		if (obj1 == null || obj2 == null) {
 			return false;
 		}
 
+		String s2 = null;
+		if (!(obj2 instanceof String)) {
+			s2 = obj2.toString();
+		}
+
 		if (obj1 instanceof Map) {
-			if (((Map)obj1).containsKey(obj2) || (!(obj2 instanceof String) && ((Map)obj1).containsKey(obj2.toString()))) {
-				// log.debug("obj1 is a map and contains obj2");
+			if (((Map)obj1).containsKey(obj2) || (s2 != null && ((Map)obj1).containsKey(s2))) {
 				return true;
 			}
+			return false;
 		}
+		
 		if (obj1 instanceof Iterable) {
 			for (Object value : ((Iterable)obj1)) {
-				if (obj2.equals(value) || (!(obj2 instanceof String) && obj2.toString().equals(value))) {
+				if (obj2.equals(value) || stringEquals(s2, value)) {
 					return true;
 				}
 			}
+			return false;
 		}
-		else if (obj1.getClass().isArray()) {
-			for (int i = 0; i < Array.getLength(obj1); i++) {
+		
+		if (obj1.getClass().isArray()) {
+			int len = Array.getLength(obj1);
+			for (int i = 0; i < len; i++) {
 				Object value = Array.get(obj1, i);
 
-				if (obj2.equals(value) || (!(obj2 instanceof String) && obj2.toString().equals(value))) {
-					// log.debug("obj1 is an array and contains obj2");
+				if (obj2.equals(value) || stringEquals(s2, value)) {
 					return true;
 				}
 			}
-		}
-		else if (obj1.equals(obj2)) {
-			// log.debug("obj1 is an object and equals obj2");
-			return true;
-		}
-		else if ((!(obj2 instanceof String) && obj1.toString().equals(obj2.toString()))) {
-			// log.debug("obj1 is an object and it's String representation equals obj2's String representation.");
-			return true;
+			return false;
 		}
 
-		// log.debug("obj1 does not contain obj2: " + obj1 + ", " + obj2);
-		return false;
+		return stringEquals(obj1, obj2);
 	}
 }
