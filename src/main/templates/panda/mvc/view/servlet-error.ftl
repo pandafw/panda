@@ -1,24 +1,24 @@
-<#assign status_code = (assist.servletErrorCode!500) />
-<#assign title = action.getText("servlet-error-title-" + status_code, "")/>
-<#if !(title?has_content)><#assign title = assist.getServletErrorReason(status_code)/></#if>
-<#assign title = status_code + " " + title/>
-<#assign message = action.getText("servlet-error-message-" + status_code, "")/>
-<#if !(message?has_content)><#assign message = action.getText("servlet-error-message", "", [status_code])/></#if>
-<#if !(message?has_content)><#assign message = assist.servletErrorMessage!''/></#if>
+<#assign _sc = (assist.servletErrorCode!500) />
+<#assign _tt = action.getText("servlet-error-title-" + _sc, "")/>
+<#if !(_tt?has_content)><#assign _tt = assist.getServletErrorReason(_sc)/></#if>
+<#assign _tt = _sc + " " + _tt/>
+<#assign _msg = action.getText("servlet-error-message-" + _sc, "")/>
+<#if !(_msg?has_content)><#assign _msg = action.getText("servlet-error-message", "", [_sc])/></#if>
+<#if !(_msg?has_content)><#assign _msg = assist.servletErrorMessage!''/></#if>
 <html>
 <head>
-<title>${title}</title>
+<title>${_tt}</title>
 </head>
 <body>
 <div class="p-section">
 	<div class="p-header">
 		<h3 class="p-error"><i class="fa fa-exclamation-circle"></i>
-			${title}
+			${_tt}
 		</h3>
 	</div>
 	<div class="alert alert-danger">
 		<ul class="fa-ul p-servlet-errors">
-			<li class="p-servlet-error"><i class="fa-li fa fa-exclamation-circle"></i> ${message}<br/>
+			<li class="p-servlet-error"><i class="fa-li fa fa-exclamation-circle"></i> ${_msg}<br/>
 					${action.getText('servlet-error-request-url', assist.requestLink, assist.requestLink )} 
 			</li>
 		</ul>
