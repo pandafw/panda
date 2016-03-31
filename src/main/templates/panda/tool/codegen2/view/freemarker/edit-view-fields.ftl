@@ -31,22 +31,11 @@
 				key="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 				readonly="true"
-			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
+			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && (tp.name != "readonly")>
 				${tp.name}="${tp.value}"
 			</#if></#list>
 			<#if f.editTag.hasParamStartsWithAny("%+")>
 			>
-				<#assign tab = ""/>
-				<#if ui.templates?seq_contains("update") 
-					|| ui.templates?seq_contains("view")
-					|| ui.templates?seq_contains("print")>
-					<#assign tab = "\t"/>
-					<#if f.actionField>
-				${s}#if a.${f.name}?? && a.${f.name}.exist>
-					<#else>
-				${s}#if r?? && r.${f.name}?? && r.${f.name}.exist>
-					</#if>
-				</#if>
 				<#list f.editTag.paramList as tp>
 					<#if (ui.templates?seq_contains("insert") || ui.templates?seq_contains("copy")) 
 						&& (tp.name == '+defaultLink' || tp.name == '_defaultText')>
@@ -56,9 +45,6 @@
 				${tab}${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
-				<#if tab?has_content>
-				${s}/#if>
-				</#if>
 			${s}/@${f.editTag.name}>
 			<#else>
 			/>

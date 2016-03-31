@@ -14,6 +14,7 @@ import java.util.Set;
 
 import panda.lang.Classes;
 import panda.lang.Strings;
+import panda.vfs.FileItem;
 
 /**
  * Utilities of Java Type
@@ -79,6 +80,7 @@ public class TypeUtils {
 	 * @return full java type
 	 */
 	public static String getFullJavaType(String value, String name) {
+		checkJavaType(value, name);
 		String type = getFullJavaType(value);
 		checkJavaType(type, name);
 		return type;
@@ -312,8 +314,8 @@ public class TypeUtils {
 		ALIAS_MAP.put("file", File.class.getName());
 		ALIAS_MAP.put("File", File.class.getName());
 
-		ALIAS_MAP.put("fileitem", "panda.filepool.FileItem");
-		ALIAS_MAP.put("FileItem", "panda.filepool.FileItem");
+		ALIAS_MAP.put("fileitem", FileItem.class.getName());
+		ALIAS_MAP.put("FileItem", FileItem.class.getName());
 
 		ALIAS_MAP.put("uploadfile", "panda.exts.fileupload.UploadFile");
 		ALIAS_MAP.put("UploadFile", "panda.exts.fileupload.UploadFile");
