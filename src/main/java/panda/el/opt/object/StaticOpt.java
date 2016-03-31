@@ -5,7 +5,7 @@ import java.util.List;
 import panda.el.ElContext;
 import panda.el.ElException;
 import panda.el.opt.RunMethod;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -15,7 +15,7 @@ import panda.lang.reflect.Methods;
 /**
  * operator: '@'
  */
-public class StaticOpt extends TwoTernary implements RunMethod {
+public class StaticOpt extends TwoOpt implements RunMethod {
 	public int getPriority() {
 		return 1;
 	}

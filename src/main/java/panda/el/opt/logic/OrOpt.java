@@ -1,32 +1,26 @@
 package panda.el.opt.logic;
 
+import panda.el.El;
 import panda.el.ElContext;
-import panda.el.ElException;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
  * or(||)
  */
-public class OrOpt extends TwoTernary {
+public class OrOpt extends TwoOpt {
 
 	public int getPriority() {
 		return 12;
 	}
 
 	public Object calculate(ElContext ec) {
-		Object lval = getLeft(ec);
-		if (!(lval instanceof Boolean)) {
-			throw new ElException("Invalid left bool object for '||': " + lval);
-		}
-		if ((Boolean)lval) {
+		boolean lval = El.isTrue(getLeft(ec));
+		if (lval) {
 			return true;
 		}
 
-		Object rval = getRight(ec);
-		if (!(rval instanceof Boolean)) {
-			throw new ElException("Invalid right bool object for '||': " + rval);
-		}
-		if ((Boolean)rval) {
+		boolean rval = El.isTrue(getRight(ec));
+		if (rval) {
 			return true;
 		}
 

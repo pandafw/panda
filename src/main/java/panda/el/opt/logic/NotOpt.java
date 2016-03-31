@@ -3,8 +3,8 @@ package panda.el.opt.logic;
 import java.util.Queue;
 
 import panda.el.ElContext;
-import panda.el.ElException;
 import panda.el.opt.AbstractOpt;
+import panda.lang.Objects;
 
 /**
  * Not(!)
@@ -22,10 +22,13 @@ public class NotOpt extends AbstractOpt {
 
 	public Object calculate(ElContext ec) {
 		Object rval = calculateItem(ec, right);
+		if (rval == null) {
+			return true;
+		}
 		if (rval instanceof Boolean) {
 			return !(Boolean)rval;
 		}
-		throw new ElException("Invalid bool object for '!': " + rval);
+		return Objects.isEmpty(rval);
 	}
 
 	public String operator() {

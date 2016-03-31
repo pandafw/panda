@@ -1,23 +1,26 @@
 package panda.el.opt.bit;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
- * 异或
+ * Unsigned Right Shift: >>>
  */
-public class BitXro extends TwoTernary {
+public class UnsignedRightShift extends TwoOpt {
 	public int getPriority() {
-		return 9;
+		return 5;
 	}
 
 	public Object calculate(ElContext ec) {
 		Integer lval = (Integer)getLeft(ec);
 		Integer rval = (Integer)getRight(ec);
-		return lval ^ rval;
+		if (isReturnNull(ec, lval, rval)) {
+			return null;
+		}
+		return lval >>> rval;
 	}
 
 	public String operator() {
-		return "^";
+		return ">>>";
 	}
 }

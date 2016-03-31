@@ -6,14 +6,14 @@ import panda.bean.Beans;
 import panda.el.ElContext;
 import panda.el.ElException;
 import panda.el.opt.RunMethod;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 import panda.lang.Exceptions;
 import panda.lang.reflect.Methods;
 
 /**
  * 访问符:'.'
  */
-public class AccessOpt extends TwoTernary implements RunMethod {
+public class AccessOpt extends TwoOpt implements RunMethod {
 	
 	public AccessOpt() {
 	}
@@ -30,7 +30,7 @@ public class AccessOpt extends TwoTernary implements RunMethod {
 	public Object calculate(ElContext ec) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
-			if (ec.raiseNullCall()) {
+			if (ec.isStrict()) {
 				throw new ElException("obj is NULL, can't call obj." + right);
 			}
 			return null;

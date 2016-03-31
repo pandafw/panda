@@ -1,12 +1,12 @@
 package panda.el.opt.logic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
  * 等于
  */
-public class EQOpt extends TwoTernary {
+public class EQOpt extends TwoOpt {
 	public int getPriority() {
 		return 7;
 	}
@@ -14,14 +14,13 @@ public class EQOpt extends TwoTernary {
 	public Object calculate(ElContext ec) {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
+
 		if (lval == rval) {
 			return true;
 		}
-
 		if (lval == null || rval == null) {
 			return false;
 		}
-		
 		if (lval instanceof Character) {
 			lval = lval.toString();
 		}

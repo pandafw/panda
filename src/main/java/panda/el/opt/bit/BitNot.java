@@ -1,26 +1,21 @@
 package panda.el.opt.bit;
 
-import java.util.Queue;
-
 import panda.el.ElContext;
-import panda.el.opt.AbstractOpt;
+import panda.el.opt.SingleOpt;
 
 /**
- * 非
+ * Bit Not: ~
  */
-public class BitNot extends AbstractOpt {
-	private Object right;
-
+public class BitNot extends SingleOpt {
 	public int getPriority() {
 		return 2;
 	}
 
-	public void wrap(Queue<Object> operand) {
-		right = operand.poll();
-	}
-
 	public Object calculate(ElContext ec) {
 		Integer rval = (Integer)this.calculateItem(ec, right);
+		if (isReturnNull(ec, rval)) {
+			return null;
+		}
 		return ~rval;
 	}
 

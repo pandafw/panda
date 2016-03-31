@@ -3,13 +3,14 @@ package panda.el.opt;
 import java.util.Queue;
 
 import panda.el.ElContext;
+import panda.el.ElException;
 import panda.el.Operator;
 import panda.el.obj.ElObj;
 
 /**
  * 二元运算,只是提取了公共部分
  */
-public abstract class TwoTernary extends AbstractOpt {
+public abstract class TwoOpt extends AbstractOpt {
 	protected Object right;
 	protected Object left;
 
@@ -41,5 +42,22 @@ public abstract class TwoTernary extends AbstractOpt {
 			return ((ElObj)left).getObj(ec);
 		}
 		return left;
+	}
+	
+	protected boolean isReturnNull(ElContext ec, Object lval, Object rval) {
+		if (lval == null) {
+			if (ec.isStrict()) {
+				throw new ElException(getClass().getSimpleName() + " left object is NULL: " + left);
+			}
+			return true;
+		}
+		if (rval == null) {
+			if (ec.isStrict()) {
+				throw new ElException("right object is NULL: " + right);
+			}
+			return true;
+		}
+		
+		return false;
 	}
 }

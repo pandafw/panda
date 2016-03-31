@@ -1,13 +1,13 @@
 package panda.el.opt.logic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 import panda.lang.Classes;
 
 /**
  * 小于
  */
-public class LTOpt extends TwoTernary {
+public class LTOpt extends TwoOpt {
 
 	public int getPriority() {
 		return 6;
@@ -22,6 +22,9 @@ public class LTOpt extends TwoTernary {
 		Comparable lval = (Comparable)getLeft(ec);
 		Comparable rval = (Comparable)getRight(ec);
 
+		if (lval == null || rval == null) {
+			return false;
+		}
 		if (Classes.isFloatLike(lval.getClass()) || Classes.isFloatLike(rval.getClass())) {
 			return ((Number)lval).doubleValue() < ((Number)rval).doubleValue();
 		}

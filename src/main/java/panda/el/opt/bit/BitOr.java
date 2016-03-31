@@ -1,12 +1,12 @@
 package panda.el.opt.bit;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
- * 或
+ * bit or: |
  */
-public class BitOr extends TwoTernary {
+public class BitOr extends TwoOpt {
 	public int getPriority() {
 		return 10;
 	}
@@ -14,6 +14,9 @@ public class BitOr extends TwoTernary {
 	public Object calculate(ElContext ec) {
 		Integer lval = (Integer)getLeft(ec);
 		Integer rval = (Integer)getRight(ec);
+		if (isReturnNull(ec, lval, rval)) {
+			return null;
+		}
 		return lval | rval;
 	}
 

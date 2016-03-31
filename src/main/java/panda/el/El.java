@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import panda.el.arithmetic.RPN;
 import panda.el.arithmetic.ShuntingYard;
+import panda.lang.Objects;
 import panda.lang.collection.LRUMap;
 
 public class El {
@@ -85,11 +86,35 @@ public class El {
 		}
 	}
 
+	public static boolean isTrue(Object o) {
+		if (o == null) {
+			return false;
+		}
+		if (o instanceof Boolean) {
+			return ((Boolean)o).booleanValue();
+		}
+		if (o instanceof Number) {
+			return ((Number)o).intValue() != 0;
+		}
+		return Objects.isNotEmpty(o);
+	}
+
+	public static boolean isFalse(Object o) {
+		if (o == null) {
+			return true;
+		}
+		if (o instanceof Boolean) {
+			return ((Boolean)o).booleanValue();
+		}
+		if (o instanceof Number) {
+			return ((Number)o).intValue() == 0;
+		}
+		return Objects.isEmpty(o);
+	}
+
 	/**
 	 * 说明: 1. 操作符优先级参考<Java运算符优先级参考图表>, 但不完全遵守,比如"()" 2. 使用Queue 的原因是,调用peek()方法不会读取串中的数据.
 	 * 因为我希望达到的效果是,我只读取我需要的,我不需要的数据我不读出来.
 	 */
-
-	// @ JKTODO 删除原来的EL包,并修改当前为EL
 	// @ JKTODO 自己实现一个QUEUE接口, 主要是实现队列,头部检测,头部第几个元素检测
 }

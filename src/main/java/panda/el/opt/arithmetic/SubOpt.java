@@ -1,12 +1,12 @@
 package panda.el.opt.arithmetic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
  * "-"
  */
-public class SubOpt extends TwoTernary {
+public class SubOpt extends TwoOpt {
 
 	public String operator() {
 		return "-";
@@ -19,6 +19,11 @@ public class SubOpt extends TwoTernary {
 	public Object calculate(ElContext ec) {
 		Number lval = (Number)getLeft(ec);
 		Number rval = (Number)getRight(ec);
+
+		if (isReturnNull(ec, lval, rval)) {
+			return null;
+		}
+
 		if (rval instanceof Double || lval instanceof Double) {
 			return lval.doubleValue() - rval.doubleValue();
 		}

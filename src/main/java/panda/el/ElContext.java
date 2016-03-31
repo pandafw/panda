@@ -4,7 +4,7 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 
 public class ElContext {
-	private boolean raiseNullCall;
+	private boolean strict;
 	private Object context;
 	private BeanHandler handler;
 
@@ -61,9 +61,16 @@ public class ElContext {
 	}
 	
 	/**
-	 * @return raise null call
+	 * @return the strict
 	 */
-	public boolean raiseNullCall() {
-		return raiseNullCall;
+	public boolean isStrict() {
+		return strict;
+	}
+
+	/**
+	 * @param strict the strict to set
+	 */
+	public void setStrict(boolean strict) {
+		this.strict = strict;
 	}
 }

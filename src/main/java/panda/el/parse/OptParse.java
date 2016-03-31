@@ -14,10 +14,10 @@ import panda.el.opt.arithmetic.SubOpt;
 import panda.el.opt.bit.BitAnd;
 import panda.el.opt.bit.BitNot;
 import panda.el.opt.bit.BitOr;
-import panda.el.opt.bit.BitXro;
+import panda.el.opt.bit.BitXor;
 import panda.el.opt.bit.LeftShift;
 import panda.el.opt.bit.RightShift;
-import panda.el.opt.bit.UnsignedLeftShift;
+import panda.el.opt.bit.UnsignedRightShift;
 import panda.el.opt.logic.AndOpt;
 import panda.el.opt.logic.EQOpt;
 import panda.el.opt.logic.GTEOpt;
@@ -79,7 +79,7 @@ public class OptParse implements Parse {
 				exp.poll();
 				if (exp.peek() == '>') {
 					exp.poll();
-					return new UnsignedLeftShift();
+					return new UnsignedRightShift();
 				}
 				return new RightShift();
 			}
@@ -132,7 +132,7 @@ public class OptParse implements Parse {
 			return new BitNot();
 		case '^':
 			exp.poll();
-			return new BitXro();
+			return new BitXor();
 		case '?':
 			exp.poll();
 			return new QuestionOpt();

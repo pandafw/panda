@@ -12,7 +12,11 @@ import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
 import panda.el.opt.RArrayOpt;
 import panda.el.opt.RBracketOpt;
-import panda.el.opt.arithmetic.NegativeOpt;
+import panda.el.opt.arithmetic.DivOpt;
+import panda.el.opt.arithmetic.ModOpt;
+import panda.el.opt.arithmetic.MulOpt;
+import panda.el.opt.arithmetic.NegateOpt;
+import panda.el.opt.arithmetic.PlusOpt;
 import panda.el.opt.arithmetic.SubOpt;
 import panda.el.opt.object.CommaOpt;
 import panda.el.opt.object.InvokeMethodOpt;
@@ -199,11 +203,39 @@ public class Converter {
 		}
 		
 		// 转换负号'-'
-		if (item instanceof SubOpt && NegativeOpt.isNegetive(prev)) {
-			item = new NegativeOpt();
+		if (item instanceof SubOpt && isNegative(prev)) {
+			item = new NegateOpt();
 		}
 		prev = item;
 		return item;
+	}
+
+	public static boolean isNegative(Object prev) {
+		if (prev == null) {
+			return true;
+		}
+		if (prev instanceof LBracketOpt) {
+			return true;
+		}
+		if (prev instanceof LArrayOpt) {
+			return true;
+		}
+		if (prev instanceof PlusOpt) {
+			return true;
+		}
+		if (prev instanceof MulOpt) {
+			return true;
+		}
+		if (prev instanceof DivOpt) {
+			return true;
+		}
+		if (prev instanceof ModOpt) {
+			return true;
+		}
+		if (prev instanceof SubOpt) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

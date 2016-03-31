@@ -1,12 +1,12 @@
 package panda.el.opt.arithmetic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
  * "+"
  */
-public class PlusOpt extends TwoTernary {
+public class PlusOpt extends TwoOpt {
 	public int getPriority() {
 		return 4;
 	}
@@ -22,11 +22,9 @@ public class PlusOpt extends TwoTernary {
 		if (lval == null && rval == null) {
 			return null;
 		}
-
 		if (lval == null) {
 			return rval;
 		}
-
 		if (rval == null) {
 			return rval;
 		}

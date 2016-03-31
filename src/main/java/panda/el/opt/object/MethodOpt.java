@@ -9,12 +9,12 @@ import panda.el.ElException;
 import panda.el.Operator;
 import panda.el.obj.ElObj;
 import panda.el.opt.RunMethod;
-import panda.el.opt.TwoTernary;
+import panda.el.opt.TwoOpt;
 
 /**
  * 方法体封装. 主要是把方法的左括号做为边界
  */
-public class MethodOpt extends TwoTernary {
+public class MethodOpt extends TwoOpt {
 
 	private int size = 0;
 
