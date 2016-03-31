@@ -1,5 +1,6 @@
 package panda.dao.sql.adapter;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,10 +13,17 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import panda.cast.Castors;
 import panda.dao.DaoTypes;
 import panda.lang.collection.MultiKey;
+import panda.vfs.FileItem;
+import panda.vfs.NullFileItem;
+import panda.vfs.ProxyFileItem;
+import panda.vfs.dao.DaoFileItem;
+import panda.vfs.local.LocalFileItem;
 
 /**
  * a factory class for TypeAdapter objects.
@@ -144,11 +152,28 @@ public class TypeAdapters {
 		//----------------------------------------------------
 		// binary
 		//
-		register(byte[].class, new ByteArrayTypeAdapter<byte[]>(this, byte[].class));
+		adapter = new ByteArrayTypeAdapter<byte[]>(this, byte[].class);
+		register(byte[].class, adapter);
 
 		adapter = new BlobTypeAdapter<byte[]>(this, byte[].class);
 		register(byte[].class, DaoTypes.BLOB, adapter);
 		register(byte[].class, DaoTypes.LONGVARBINARY, adapter);
+
+		//----------------------------------------------------
+		// stream
+		//
+		adapter = new BlobTypeAdapter<InputStream>(this, InputStream.class);
+		register(InputStream.class, adapter);
+
+		//----------------------------------------------------
+		// file
+		//
+		adapter = new ByteArrayTypeAdapter<FileItem>(this, FileItem.class);
+		register(FileItem.class, adapter);
+		register(NullFileItem.class, adapter);
+		register(ProxyFileItem.class, adapter);
+		register(DaoFileItem.class, adapter);
+		register(LocalFileItem.class, adapter);
 
 		//----------------------------------------------------
 		// date time
@@ -193,7 +218,7 @@ public class TypeAdapters {
 		register(DaoTypes.TIMESTAMP, adapter);
 
 		//----------------------------------------------------
-		// binary
+		// object
 		//
 		adapter = new ObjectTypeAdapter<Object>(this, Object.class);
 		register(Object.class, adapter);
@@ -215,7 +240,9 @@ public class TypeAdapters {
 		register(LinkedHashSet.class, adapter);
 		
 		register(HashMap.class, new CollectionTypeAdapter(HashMap.class));
+		register(TreeMap.class, new CollectionTypeAdapter(TreeMap.class));
 		register(HashSet.class, new CollectionTypeAdapter(HashSet.class));
+		register(TreeSet.class, new CollectionTypeAdapter(TreeSet.class));
 	}
 
 	/**

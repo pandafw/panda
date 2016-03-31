@@ -6,6 +6,7 @@ import java.util.Date;
 
 import panda.cast.CastContext;
 import panda.lang.Numbers;
+import panda.vfs.FileItem;
 
 
 /**
@@ -321,6 +322,10 @@ public abstract class PrimitiveTypeCastor<T> extends AnySingleCastor<T> {
 			}
 			if (value instanceof Number) {
 				return ((Number)value).longValue();
+			}
+			if (value instanceof FileItem) {
+				FileItem fi = (FileItem)value;
+				return fi.getId() == null ? defaultValue() : fi.getId().longValue();
 			}
 			return castError(value, context);
 		}

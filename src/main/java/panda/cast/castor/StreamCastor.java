@@ -1,6 +1,7 @@
 package panda.cast.castor;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -11,6 +12,8 @@ import panda.cast.CastContext;
 import panda.io.Streams;
 import panda.io.stream.ReaderInputStream;
 import panda.lang.Charsets;
+import panda.lang.Exceptions;
+import panda.vfs.FileItem;
 
 /**
  * 
@@ -29,19 +32,28 @@ public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 		
 		@Override
 		protected InputStream castValue(Object value, CastContext context) {
-			if (value instanceof byte[]) {
-				ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
-				return bais;
+			try {
+				if (value instanceof byte[]) {
+					ByteArrayInputStream bais = new ByteArrayInputStream((byte[])value);
+					return bais;
+				}
+				if (value instanceof char[]) {
+					return Streams.toInputStream(new String((char[])value), Charsets.UTF_8);
+				}
+				
+				if (value instanceof Reader) {
+					return new ReaderInputStream((Reader)value, Charsets.CS_UTF_8);
+				}
+				if (value instanceof CharSequence) {
+					return Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
+				}
+				if (value instanceof FileItem) {
+					FileItem fi = (FileItem)value;
+					return fi.isExists() ? fi.getInputStream() : null;
+				}
 			}
-			if (value instanceof char[]) {
-				return Streams.toInputStream(new String((char[])value), Charsets.UTF_8);
-			}
-			
-			if (value instanceof Reader) {
-				return new ReaderInputStream((Reader)value, Charsets.CS_UTF_8);
-			}
-			if (value instanceof CharSequence) {
-				return Streams.toInputStream((CharSequence)value, Charsets.UTF_8);
+			catch (IOException e) {
+				throw Exceptions.wrapThrow(e);
 			}
 
 			return castError(value, context);

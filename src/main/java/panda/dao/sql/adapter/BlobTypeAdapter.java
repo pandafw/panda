@@ -136,21 +136,27 @@ public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> 
 			rs.updateNull(column);
 		}
 		else {
-			InputStream is = castToJdbc(value);
+			InputStream is = null;
 			try {
-				// use jdbc 4.0 api
-				rs.updateBinaryStream(column, is);
-				return;
+				castToJdbc(value);
+				try {
+					// use jdbc 4.0 api
+					rs.updateBinaryStream(column, is);
+					return;
+				}
+				catch (Throwable e) {
+				}
+	
+				try {
+					int len = (int)Streams.available(is);
+					rs.updateBinaryStream(column, is, len);
+				}
+				catch (IOException e) {
+					throw new SQLException(e);
+				}
 			}
-			catch (Throwable e) {
-			}
-
-			try {
-				int len = (int)Streams.available(is);
-				rs.updateBinaryStream(column, is, len);
-			}
-			catch (IOException e) {
-				throw new SQLException(e);
+			finally {
+				Streams.safeClose(is);
 			}
 		}
 	}

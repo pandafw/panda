@@ -1864,18 +1864,6 @@ public abstract class Classes {
 	}
 
 	/**
-	 * Return the qualified name of the given method, consisting of
-	 * fully qualified interface/class name + "." + method name.
-	 * @param method the method
-	 * @return the qualified name of the method
-	 */
-	public static String getQualifiedMethodName(Method method) {
-		Asserts.notNull(method, "Method must not be null");
-		return method.getDeclaringClass().getName() + "." + method.getName();
-	}
-
-
-	/**
 	 * Determine whether the given class has a constructor with the given signature.
 	 * <p>Essentially translates <code>NoSuchMethodException</code> to "false".
 	 * @param cls	the class to analyze

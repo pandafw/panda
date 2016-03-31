@@ -10,6 +10,7 @@ import panda.cast.CastContext;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.codec.binary.Base64;
+import panda.vfs.FileItem;
 
 
 /**
@@ -38,6 +39,10 @@ public class ByteArrayCastor extends AnySingleCastor<byte[]> {
 			}
 			if (value instanceof char[]) {
 				return Base64.decodeBase64(new String((char[])value));
+			}
+			if (value instanceof FileItem) {
+				FileItem fi = (FileItem)value;
+				return fi.isExists() ? fi.getData() : null;
 			}
 			return castError(value, context);
 		}

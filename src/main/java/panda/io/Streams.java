@@ -1199,6 +1199,16 @@ public class Streams {
 
 	// -----------------------------------------------------------------------
 	/**
+	 * Convert the specified data to an input stream.
+	 * 
+	 * @param input the data to convert
+	 * @return an input stream
+	 */
+	public static InputStream toInputStream(final byte[] input) {
+		return new ByteArrayInputStream(input);
+	}
+
+	/**
 	 * Convert the specified string to an input stream, encoded as bytes using the default character
 	 * encoding of the platform.
 	 * 

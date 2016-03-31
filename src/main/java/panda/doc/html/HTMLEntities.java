@@ -10,15 +10,21 @@ import panda.lang.Collections;
  * HTML entities
  */
 public class HTMLEntities {
-
+	public static final String NBSP = "&nbsp;";
+	public static final String APOS = "&apos;";
+	public static final String QUOT = "&quot;";
+	public static final String AMP = "&amp;";
+	public static final String LT = "&lt;";
+	public static final String RT = "&gt;";
+	
 	/**
 	 * Mapping to escape the basic XML and HTML character entities. Namely: {@code " & < >}
 	 */
 	public static final Map<String, String> BASIC_ESCAPE = Arrays.toMap(
-			"\"", "&quot;",	// " - double-quote
-			"&", "&amp;",	// & - ampersand
-			"<", "&lt;",	// < - less-than
-			">", "&gt;"	// > - greater-than
+			"\"", QUOT,	// " - double-quote
+			"&", AMP,	// & - ampersand
+			"<", LT,	// < - less-than
+			">", RT	// > - greater-than
 		);
 
 	/**
@@ -29,7 +35,7 @@ public class HTMLEntities {
 	/**
 	 * Mapping to escape the apostrophe character to its XML character entity.
 	 */
-	public static final Map<String, String> APOS_ESCAPE = Arrays.toMap("'", "&apos;");
+	public static final Map<String, String> APOS_ESCAPE = Arrays.toMap("'", APOS);
 
 	/**
 	 * Reverse of {@link #APOS_ESCAPE} for unescaping purposes.
@@ -53,7 +59,7 @@ public class HTMLEntities {
 	 * characters to their named HTML 3.x equivalents.
 	 */
 	public static final Map<String, String> ISO8859_1_ESCAPE = Arrays.toMap(
-			"\u00A0", "&nbsp;", // non-breaking space
+			"\u00A0", NBSP, // non-breaking space
 			"\u00A1", "&iexcl;", // inverted exclamation mark
 			"\u00A2", "&cent;", // cent sign
 			"\u00A3", "&pound;", // pound sign

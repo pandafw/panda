@@ -18,6 +18,7 @@ import panda.cast.castor.CollectionCastor;
 import panda.cast.castor.DateTypeCastor;
 import panda.cast.castor.DirectCastor;
 import panda.cast.castor.EnumCastor;
+import panda.cast.castor.FileItemCastor;
 import panda.cast.castor.IterableCastor;
 import panda.cast.castor.IteratorCastor;
 import panda.cast.castor.JavaBeanCastor;
@@ -131,6 +132,8 @@ public class Castors {
 
 		register(new LocaleCastor());
 		register(new TimeZoneCastor());
+		
+		register(new FileItemCastor());
 	}
 	
 	public Beans getBeans() {

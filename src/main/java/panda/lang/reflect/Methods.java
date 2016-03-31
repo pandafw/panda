@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import panda.lang.Arrays;
+import panda.lang.Asserts;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.collection.MultiKey;
@@ -911,5 +912,36 @@ public class Methods {
 			Members.setAccessibleWorkaround(match);
 		}
 		return match;
+	}
+
+	/**
+	 * Return the qualified name of the given method, consisting of
+	 * fully qualified interface/class name + "." + method name.
+	 * @param method the method
+	 * @return the qualified name of the method
+	 */
+	public static String getQualifiedName(Method method) {
+		Asserts.notNull(method, "Method must not be null");
+		return method.getDeclaringClass().getName() + "." + method.getName();
+	}
+	
+	public static String toSimpleString(Method method) {
+		try {
+			StringBuilder sb = new StringBuilder();
+			sb.append(Classes.getSimpleClassName(method.getReturnType()) + " ");
+			sb.append(getQualifiedName(method));
+			sb.append("(");
+			Class[] params = method.getParameterTypes();
+			for (int j = 0; j < params.length; j++) {
+				sb.append(Classes.getSimpleClassName(params[j]));
+				if (j < (params.length - 1))
+					sb.append(",");
+			}
+			sb.append(")");
+			return sb.toString();
+		}
+		catch (Exception e) {
+			return "<" + e + ">";
+		}
 	}
 }

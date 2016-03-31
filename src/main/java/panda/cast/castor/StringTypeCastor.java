@@ -12,6 +12,7 @@ import panda.cast.CastContext;
 import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
 import panda.io.Streams;
+import panda.vfs.FileItem;
 
 
 /**
@@ -60,6 +61,15 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			}
 			else if (value instanceof Character) {
 				a.append((Character)value);
+			}
+			else if (value instanceof FileItem) {
+				FileItem fi = (FileItem)value;
+				if (fi.getId() != null) {
+					a.append(fi.getId().toString());
+				}
+				else if (fi.getName() != null) {
+					a.append(fi.getName());
+				}
 			}
 			else {
 				castError(value, cc);
