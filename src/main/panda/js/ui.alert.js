@@ -48,13 +48,13 @@
 			'info': 'text-success',
 			'help':'text-warning',
 			'warn': 'text-warning',
-			'error': 'text-dander'
+			'error': 'text-danger'
 		},
 		types: {
 			'info': 'alert-success',
 			'help':'alert-info',
 			'warn': 'alert-warning',
-			'error': 'alert-dander'
+			'error': 'alert-danger'
 		}
 	};
 	

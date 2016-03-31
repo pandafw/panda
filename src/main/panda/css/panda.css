@@ -3,6 +3,9 @@
 	/*color: #8a6d3b;*/
 	color: #ffa500;
 }
+.p-alert {
+	margin: 5px 0 15px 0;
+}
 
 /** alternative for bootstrap text-* */
 .p-error {
@@ -692,4 +695,12 @@ tbody.p-lv-tbody > tr > td:first-child {
 	display: inline-block;
 	margin-bottom: 0;
 	padding-top: 7px;
+}
+.p-uploader-remove {
+	color: #999;
+	cursor: pointer;
+	margin-left: 20px;
+}
+.p-uploader-image img {
+	margin: 5px 0;
 }

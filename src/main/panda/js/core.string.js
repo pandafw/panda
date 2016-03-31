@@ -390,8 +390,18 @@ if (typeof String.leftPad != "function") {
 	};
 }
 if (typeof String.rightPad != "function") {
-	String.rightPad = function(val, ch, size) {
+	String.rightPad = function(s, ch, size) {
 		return s != null ? String(s).rightPad(ch, size) : "".rightPad(ch, size);
+	};
+}
+if (typeof String.startsWith != "function") {
+	String.startsWith = function(s, w) {
+		return s != null ? String(s).startsWith(w) : false;
+	};
+}
+if (typeof String.endsWith != "function") {
+	String.endsWith = function(s, w) {
+		return s != null ? String(s).endsWith(w) : false;
 	};
 }
 if (typeof String.ellipsis != "function") {

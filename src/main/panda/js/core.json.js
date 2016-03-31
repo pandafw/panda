@@ -111,7 +111,7 @@
 				}
 				return eval('('+v+')');
 			}
-		};		
+		};
 
 		JSON.parse.safe = false;
 	}
@@ -122,5 +122,14 @@
 		if (f) return f(v, r, 0, w, 1);
 		return JSON.stringify(v, null, w);
 	};
+	
+	JSON.sparse = function(v, r) {
+		try {
+			return JSON.parse(v, r);
+		}
+		catch (e) {
+			return null;
+		}
+	}
 })();
 

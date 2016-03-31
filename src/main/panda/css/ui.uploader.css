@@ -3,3 +3,11 @@
 	margin-bottom: 0;
 	padding-top: 7px;
 }
+.p-uploader-remove {
+	color: #999;
+	cursor: pointer;
+	margin-left: 20px;
+}
+.p-uploader-image img {
+	margin: 5px 0;
+}
