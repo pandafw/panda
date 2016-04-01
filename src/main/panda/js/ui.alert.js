@@ -109,11 +109,15 @@
 					}
 				}
 				else if (m) {
-					addMsgs($p, s, m.actionErrors, "error");
-					addMsgs($p, s, m.fieldErrors, "error");
-					addMsgs($p, s, m.actionWarnings, "warn");
-					addMsgs($p, s, m.actionConfirms, "help");
-					addMsgs($p, s, m.actionMessages, "info");
+					if (m.params) {
+						addMsgs($p, s, m.params.errors, "error");
+					}
+					if (m.action) {
+						addMsgs($p, s, m.action.errors, "error");
+						addMsgs($p, s, m.action.warnings, "warn");
+						addMsgs($p, s, m.action.confirms, "help");
+						addMsgs($p, s, m.action.messages, "info");
+					}
 				}
 				
 				if (a) { 

@@ -1,5 +1,7 @@
 (function($) {
 	var puploader = function($u) {
+		var loading = false;
+		
 		var pul = $u.data('uploadLink');
 		var pun = $u.data('uploadName');
 		var pud = JSON.sparse($u.data('uploadData'));
@@ -74,14 +76,7 @@
 				}
 			}
 		}
-		
-		function _error(uid, ufn, ufs, uct) {
-			$ut.html('<span><i class="fa fa-times-circle p-uploader-icon"></i>'
-				+ ((ufn || $uf.val()) + ' ' + _filesize(ufs))
-				+ '</span>')
-				.show();
-		}
-		
+
 		function _progress(v) {
 			$up.children('.progress-bar').css({width: v + '%'});
 		}
@@ -95,6 +90,11 @@
 		}
 		
 		function _upload() {
+			if (loading || $uf.val() == "") {
+				return;
+			}
+			loading = true;
+
 			$uid.val('');
 			$uf.hide();
 			$ui.hide().empty();
@@ -125,6 +125,7 @@
 				_progress(100);
 				$up.hide();
 				$uf.val("").show();
+				loading = false;
 			}
 
 			var file = {}; file[pun] = $uf; 
@@ -135,13 +136,18 @@
 				dataType: 'json',
 				success: function(d) {
 					_endUpload();
-					var r = d.result;
 					if (d.success) {
+						var r = d.result;
 						_info(r.id, r.name, r.size, r.contentType);
 					}
 					else {
-						_error(r.id, r.name, r.size, r.contentType);
-						$ue.palert('add', d);
+						if (d.alerts) {
+							$ue.palert('add', d.alerts);
+						}
+						if (d.exception) {
+							var e = d.exception;
+							$ue.palert('error', (e.message + (e.stackTrace ? ("\n\n\n" + e.stackTrace) : "")).escapePhtml());
+						}
 						$ue.slideDown();
 					}
 				},
