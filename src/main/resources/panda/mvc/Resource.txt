@@ -189,13 +189,13 @@ validation-hankakustring=Please input half character.
 validation-hankakukatakanastring=Please input half kana character.
 validation-image=The image format is not correct.
 validation-image-size=The image size (${top.width}x${top.height}) must be \
-${(top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "~" + top.maxWidth + ")") : \
-(top.minWidth != null ? ("W:(>=" + top.minWidth + ")") : \
-(top.maxWidth != null ? ("W:(<=" + top.maxWidth + ")") : ""))}\
+${(top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "px ~ " + top.maxWidth + "px)") : \
+(top.minWidth != null ? ("W:(>=" + top.minWidth + "px)") : \
+(top.maxWidth != null ? ("W:(<=" + top.maxWidth + "px)") : ""))}\
 ${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : ""}\
-${(top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "~" + top.maxHeight + ")") : \
-(top.minHeight != null ? ("H:(>=" + top.minHeight + ")") : \
-(top.maxHeight != null ? ("H:(<=" + top.maxHeight + ")") : ""))}\
+${(top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "px ~ " + top.maxHeight + "px)") : \
+(top.minHeight != null ? ("H:(>=" + top.minHeight + "px)") : \
+(top.maxHeight != null ? ("H:(<=" + top.maxHeight + "px)") : ""))}\
 .
 validation-incorrect=Incorrect value.
 validation-number-range=The number must be \
