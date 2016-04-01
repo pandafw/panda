@@ -9,26 +9,43 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.io.FileNames;
 import panda.io.Streams;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.mvc.adaptor.multipart.FileItemIterator;
 import panda.mvc.adaptor.multipart.FileItemStream;
-import panda.mvc.adaptor.multipart.FileUploadException;
 import panda.mvc.adaptor.multipart.FileUploader;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.vfs.FileItem;
 import panda.vfs.FilePool;
 
+@IocBean(singleton=false)
 public class MultiPartParamEjector extends AbstractParamEjector {
 	private static final Log log = Logs.getLog(MultiPartParamEjector.class);
 
 	private Map<String, Object> params;
 
-	public MultiPartParamEjector(ActionContext ac) {
-		super(ac);
+	/**
+	 * The maximum size permitted for the complete request, as opposed to {@link #fileSizeMax}. A
+	 * value of -1 indicates no maximum.
+	 * default: 2M
+	 */
+	@IocInject(value=MvcConstants.MULTIPART_BODY_SIZE_MAX, required=false)
+	private long bodySizeMax = 2097152;
+
+	/**
+	 * The maximum size permitted for a single uploaded file, as opposed to {@link #bodySizeMax}. A
+	 * value of -1 indicates no maximum.
+	 * default: 2M
+	 */
+	@IocInject(value=MvcConstants.MULTIPART_FILE_SIZE_MAX, required=false)
+	private long fileSizeMax = 2097152;
+
+	public MultiPartParamEjector() {
 	}
 
 	@Override
@@ -55,26 +72,20 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	protected void parse(HttpServletRequest req) throws IOException {
 		String encoding = HttpServlets.getEncoding(req);
 		
-		try {
-			FileUploader fu = new FileUploader();
-			FileItemIterator iter = fu.getItemIterator(req);
-			while (iter.hasNext()) {
-				final FileItemStream item = iter.next();
-				Object val = null;
-				if (item.isFormField()) {
-					val = Streams.toString(item.openStream(), encoding);
-				}
-				else {
-					val = saveUploadFile(item);
-				}
-				addParam(item.getFieldName(), val);
+		FileUploader fu = new FileUploader();
+		fu.setBodySizeMax(bodySizeMax);
+		fu.setFileSizeMax(fileSizeMax);
+		FileItemIterator iter = fu.getItemIterator(req);
+		while (iter.hasNext()) {
+			final FileItemStream item = iter.next();
+			Object val = null;
+			if (item.isFormField()) {
+				val = Streams.toString(item.openStream(), encoding);
 			}
-		}
-		catch (FileUploadException e) {
-			throw e;
-		}
-		catch (IOException e) {
-			throw new FileUploadException(e.getMessage(), e);
+			else {
+				val = saveUploadFile(item);
+			}
+			addParam(item.getFieldName(), val);
 		}
 	}
 

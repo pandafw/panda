@@ -14,12 +14,13 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.validation.ValidateException;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
+import panda.mvc.view.Views;
 
 @IocBean
-public class ValidateProcessor extends ViewProcessor {
+public class ValidateProcessor extends AbstractProcessor {
 	@Override
 	public void process(ActionContext ac) {
-		View view = evalView(ac.getIoc(), ac.getInfo().getErrorView());
+		View view = Views.evalView(ac.getIoc(), ac.getInfo().getErrorView());
 
 		Validators validators = Mvcs.getValidators(ac);
 

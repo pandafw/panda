@@ -33,13 +33,22 @@ public abstract class BaseWebappTest {
 	public void startServer() throws Throwable {
 		try {
 			if (server == null) {
+				// Set JSP to use Standard JavaC always
+				System.setProperty("org.apache.jasper.compiler.disablejsr199", "false");
+
 				String xml = "WEB-INF/web.xml";
 				URL url = BaseWebappTest.class.getResource(xml);
 				String path = url.toExternalForm();
 				System.err.println(url);
+
 				server = new Server(9999);
-				String warUrlString = path.substring(0, path.length() - xml.length());
-				server.setHandler(new WebAppContext(warUrlString, getContextPath()));
+				
+				String war = path.substring(0, path.length() - xml.length());
+				WebAppContext wac = new WebAppContext(war, getContextPath());
+
+				//wac.setAttribute("javax.servlet.context.tempdir", war + "WEB-INF/tmp");
+
+				server.setHandler(wac);
 				server.start();
 			}
 		}

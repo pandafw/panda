@@ -3,14 +3,15 @@ package panda.mvc.adaptor.ejector;
 import java.util.Map;
 import java.util.Set;
 
+import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
 import panda.mvc.adaptor.ParamEjector;
 
 public abstract class AbstractParamEjector implements ParamEjector {
+	@IocInject
 	protected ActionContext ac;
 
-	public AbstractParamEjector(ActionContext ac) {
-		this.ac = ac;
+	public AbstractParamEjector() {
 	}
 
 	protected ActionContext getActionContext() {

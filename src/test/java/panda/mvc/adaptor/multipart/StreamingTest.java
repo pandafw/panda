@@ -23,7 +23,7 @@ public class StreamingTest extends FileUploadTestCase {
 	 * Tests a file upload with varying file sizes.
 	 */
 	@Test
-	public void testFileUpload() throws IOException, FileUploadException {
+	public void testFileUpload() throws IOException {
 		byte[] request = newRequest();
 		List<TestFileItem> fileItems = parseUpload(request);
 		Iterator<TestFileItem> fileIter = fileItems.iterator();
@@ -104,7 +104,7 @@ public class StreamingTest extends FileUploadTestCase {
 	 * Test for FILEUPLOAD-135
 	 */
 	@Test
-	public void testFILEUPLOAD135() throws IOException, FileUploadException {
+	public void testFILEUPLOAD135() throws IOException {
 		byte[] request = newShortRequest();
 		final ByteArrayInputStream bais = new ByteArrayInputStream(request);
 		List<TestFileItem> fileItems = parseUpload(new InputStream() {

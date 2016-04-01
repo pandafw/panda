@@ -68,6 +68,10 @@ servlet-error-request-url=リクエスト: <span class="request-url">${top}</spa
 servlet-error-exception=例外情報:
 
 
+#multipart error message
+multipart-body-size-exceeded=リクエストのサイズ(${top.displayActualSize})が最大サイズ(${top.displayLimitedSize})を超えたため、アップロードできません。
+multipart-file-size-exceeded=ファイル(${top.fileName})のサイズ(${top.displayActualSize})が最大サイズ(${top.displayLimitedSize})を超えたため、アップロードできません。.
+
 
 #validation error message
 validation-alphastring=英文字を入力してください。

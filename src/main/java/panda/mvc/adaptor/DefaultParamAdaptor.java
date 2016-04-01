@@ -50,7 +50,7 @@ import javax.servlet.http.HttpSession;
 /**
  * 将整个 HTTP 请求作为名值对来处理
  */
-@IocBean
+@IocBean(type=ParamAdaptor.class)
 public class DefaultParamAdaptor implements ParamAdaptor {
 	private static Log log = Logs.getLog(DefaultParamAdaptor.class);
 
@@ -72,23 +72,23 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 				//skip
 			}
 			if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
-				ejector = new MultiPartParamEjector(ac);
+				ejector = ac.getIoc().get(MultiPartParamEjector.class);
 			}
 			else if (contentType.startsWith(MimeType.APP_STREAM)) {
-				ejector = new MultiPartParamEjector(ac);
+				ejector = ac.getIoc().get(MultiPartParamEjector.class);
 			}
 			else if (contentType.startsWith(MimeType.TEXT_XML)) {
-				ejector = new XmlParamEjector(ac);
+				ejector = ac.getIoc().get(XmlParamEjector.class);
 			}
 			else if (contentType.startsWith(MimeType.APP_JSON) 
 					|| contentType.startsWith(MimeType.TEXT_JAVASCRIPT)
 					|| contentType.startsWith(MimeType.TEXT_JSON)) {
-				ejector = new JsonParamEjector(ac);
+				ejector = ac.getIoc().get(JsonParamEjector.class);
 			}
 		}
 
 		if (ejector == null) {
-			ejector = new FormParamEjector(ac);
+			ejector = ac.getIoc().get(FormParamEjector.class);
 		}
 		
 		req.setAttribute(ATTR_EJECTOR, ejector);

@@ -6,6 +6,12 @@ import java.util.Set;
 import panda.io.resource.ResourceLoader;
 import panda.lang.Arrays;
 import panda.mvc.MvcConfig;
+import panda.mvc.adaptor.DefaultParamAdaptor;
+import panda.mvc.adaptor.ejector.FormParamEjector;
+import panda.mvc.adaptor.ejector.JsonParamEjector;
+import panda.mvc.adaptor.ejector.MultiPartParamEjector;
+import panda.mvc.adaptor.ejector.StreamParamEjector;
+import panda.mvc.adaptor.ejector.XmlParamEjector;
 import panda.mvc.alert.ActionAlertSupport;
 import panda.mvc.alert.ApplicationAlertSupport;
 import panda.mvc.alert.ParamAlertSupport;
@@ -147,6 +153,16 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			PrepareProcessor.class,
 			ValidateProcessor.class,
 			ViewProcessor.class,
+
+			// adaptor
+			DefaultParamAdaptor.class,
+			
+			// ejectors
+			FormParamEjector.class,
+			JsonParamEjector.class,
+			MultiPartParamEjector.class,
+			StreamParamEjector.class,
+			XmlParamEjector.class,
 			
 			// validation
 			ActionAlertSupport.class,

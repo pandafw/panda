@@ -67,6 +67,10 @@ servlet-error-request-url=请求网页: <span class="request-url">${top}</span>
 servlet-error-exception=例外信息:
 
 
+#multipart error message
+multipart-body-size-exceeded=上传失败：提交数据量(${top.displayActualSize})超过${top.displayLimitedSize}。
+multipart-file-size-exceeded=上传失败：文件(${top.fileName})的大小(${top.displayActualSize})超过${top.displayLimitedSize}。
+
 
 #validation error message
 validation-alphanumericstring=请输入英数字。

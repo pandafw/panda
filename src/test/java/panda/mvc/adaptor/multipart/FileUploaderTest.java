@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
-import panda.mvc.adaptor.multipart.FileUploader.InvalidContentTypeException;
-
 public class FileUploaderTest extends FileUploadTestCase {
 
 	@Test
@@ -26,7 +24,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 			parseUpload(req);
 			fail("testWithInvalidRequest: expected exception was not thrown");
 		}
-		catch (FileUploadException expected) {
+		catch (InvalidContentTypeException expected) {
 			// this exception is expected
 		}
 	}
@@ -45,7 +43,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 	}
 
 	@Test
-	public void testFileUpload() throws IOException, FileUploadException {
+	public void testFileUpload() throws IOException {
 		List<TestFileItem> fileItems = parseUpload("-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "\r\n" + "This is the content of the file\n" + "\r\n"
@@ -79,7 +77,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 	}
 
 	@Test
-	public void testFilenameCaseSensitivity() throws IOException, FileUploadException {
+	public void testFilenameCaseSensitivity() throws IOException {
 		List<TestFileItem> fileItems = parseUpload("-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"FiLe\"; filename=\"FOO.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "\r\n" + "This is the content of the file\n" + "\r\n"
@@ -186,7 +184,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 	 * Test for <a href="http://issues.apache.org/jira/browse/FILEUPLOAD-111">FILEUPLOAD-111</a>
 	 */
 	@Test
-	public void testFoldedHeaders() throws IOException, FileUploadException {
+	public void testFoldedHeaders() throws IOException {
 		List<TestFileItem> fileItems = parseUpload("-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "\r\n" + "This is the content of the file\n" + "\r\n"

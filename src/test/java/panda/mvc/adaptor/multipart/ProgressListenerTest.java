@@ -81,7 +81,7 @@ public class ProgressListenerTest extends FileUploadTestCase {
 	}
 
 	private void runTest(final int NUM_ITEMS, long pContentLength, MockHttpServletRequest request)
-			throws FileUploadException, IOException {
+			throws IOException {
 		FileUploader upload = new FileUploader();
 		ProgressListenerImpl listener = new ProgressListenerImpl(pContentLength, NUM_ITEMS);
 		upload.setProgressListener(listener);

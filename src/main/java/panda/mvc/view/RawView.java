@@ -145,12 +145,14 @@ public class RawView implements View {
 					String.format("bytes %d-%d/%d", rangeRange.start, rangeRange.end - 1, fileSz));
 				writeFileRange(file, out, rangeRange);
 			}
+			out.flush();
 		}
 		// 字节数组
 		else if (obj instanceof byte[]) {
 			res.setHeader("Content-Length", "" + ((byte[])obj).length);
 			OutputStream out = res.getOutputStream();
 			Streams.write((byte[])obj, out);
+			out.flush();
 		}
 		// 字符数组
 		else if (obj instanceof char[]) {
@@ -160,12 +162,15 @@ public class RawView implements View {
 		}
 		// 文本流
 		else if (obj instanceof Reader) {
-			Streams.copy((Reader)obj, res.getWriter());
+			Writer writer = res.getWriter();
+			Streams.copy((Reader)obj, writer);
+			writer.flush();
 		}
 		// 二进制流
 		else if (obj instanceof InputStream) {
 			OutputStream out = res.getOutputStream();
 			Streams.copy((InputStream)obj, out);
+			out.flush();
 		}
 		// 普通对象
 		else {
@@ -173,6 +178,7 @@ public class RawView implements View {
 			res.setHeader("Content-Length", "" + data.length);
 			OutputStream out = res.getOutputStream();
 			Streams.write(data, out);
+			out.flush();
 		}
 	}
 

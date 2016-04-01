@@ -4,14 +4,14 @@ import java.io.InputStream;
 
 import panda.bind.json.JsonObject;
 import panda.bind.xml.Xmls;
-import panda.mvc.ActionContext;
+import panda.ioc.annotation.IocBean;
 
 /**
- * XML提取器
+ * XML Ejector
  */
+@IocBean(singleton=false)
 public class XmlParamEjector extends JsonParamEjector {
-	public XmlParamEjector(ActionContext ac) {
-		super(ac);
+	public XmlParamEjector() {
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class SizesTest extends FileUploadTestCase {
 	 * Runs a test with varying file sizes.
 	 */
 	@Test
-	public void testFileUpload() throws IOException, FileUploadException {
+	public void testFileUpload() throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int add = 16;
 		int num = 0;
@@ -68,7 +68,7 @@ public class SizesTest extends FileUploadTestCase {
 	 * Checks, whether limiting the file size works.
 	 */
 	@Test
-	public void testFileSizeLimit() throws IOException, FileUploadException {
+	public void testFileSizeLimit() throws IOException {
 		final String request = "-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "\r\n" + "This is the content of the file\n" + "\r\n"
@@ -98,8 +98,8 @@ public class SizesTest extends FileUploadTestCase {
 			parseUpload(upload, req);
 			fail("Expected exception.");
 		}
-		catch (FileUploader.FileSizeLimitExceededException e) {
-			assertEquals(30, e.getPermittedSize());
+		catch (FileSizeLimitExceededException e) {
+			assertEquals(30, e.getLimitedSize());
 		}
 	}
 
@@ -107,7 +107,7 @@ public class SizesTest extends FileUploadTestCase {
 	 * Checks, whether a faked Content-Length header is detected.
 	 */
 	@Test
-	public void testFileSizeLimitWithFakedContentLength() throws IOException, FileUploadException {
+	public void testFileSizeLimitWithFakedContentLength() throws IOException {
 		final String request = "-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "Content-Length: 10\r\n" + "\r\n"
@@ -137,8 +137,8 @@ public class SizesTest extends FileUploadTestCase {
 			parseUpload(upload, req);
 			fail("Expected exception.");
 		}
-		catch (FileUploader.FileSizeLimitExceededException e) {
-			assertEquals(5, e.getPermittedSize());
+		catch (FileSizeLimitExceededException e) {
+			assertEquals(5, e.getLimitedSize());
 		}
 
 		// provided Content-Length is wrong, actual content is larger -> handled by
@@ -150,8 +150,8 @@ public class SizesTest extends FileUploadTestCase {
 			parseUpload(upload, req);
 			fail("Expected exception.");
 		}
-		catch (FileUploader.FileSizeLimitExceededException e) {
-			assertEquals(15, e.getPermittedSize());
+		catch (FileSizeLimitExceededException e) {
+			assertEquals(15, e.getLimitedSize());
 		}
 	}
 
@@ -159,7 +159,7 @@ public class SizesTest extends FileUploadTestCase {
 	 * Checks, whether the maxSize works.
 	 */
 	@Test
-	public void testMaxSizeLimit() throws IOException, FileUploadException {
+	public void testMaxSizeLimit() throws IOException {
 		final String request = "-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file1\"; filename=\"foo1.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "Content-Length: 10\r\n" + "\r\n"
@@ -170,7 +170,7 @@ public class SizesTest extends FileUploadTestCase {
 
 		FileUploader upload = new FileUploader();
 		upload.setFileSizeMax(-1);
-		upload.setSizeMax(200);
+		upload.setBodySizeMax(200);
 
 		MockHttpServletRequest req = new MockHttpServletRequest(request.getBytes("US-ASCII"), CONTENT_TYPE);
 		try {
@@ -178,13 +178,13 @@ public class SizesTest extends FileUploadTestCase {
 			fail("Expected exception.");
 		}
 		catch (SizeLimitExceededException e) {
-			assertEquals(200, e.getPermittedSize());
+			assertEquals(200, e.getLimitedSize());
 		}
 
 	}
 
 	@Test
-	public void testMaxSizeLimitUnknownContentLength() throws IOException, FileUploadException {
+	public void testMaxSizeLimitUnknownContentLength() throws IOException {
 		final String request = "-----1234\r\n"
 				+ "Content-Disposition: form-data; name=\"file1\"; filename=\"foo1.tab\"\r\n"
 				+ "Content-Type: text/whatever\r\n" + "Content-Length: 10\r\n" + "\r\n"
@@ -195,7 +195,7 @@ public class SizesTest extends FileUploadTestCase {
 
 		FileUploader upload = new FileUploader();
 		upload.setFileSizeMax(-1);
-		upload.setSizeMax(300);
+		upload.setBodySizeMax(300);
 
 		// the first item should be within the max size limit
 		// set the read limit to 10 to simulate a "real" stream

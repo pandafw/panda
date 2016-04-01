@@ -55,16 +55,16 @@
 		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>
 		<dependency org="emma" name="emma_ant" rev="2.1.5320" conf="tool->*"/>
 		<dependency org="junit" name="junit" rev="4.11" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-continuation" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-http" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-io" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-security" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-server" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-util" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-xml" rev="8.1.16.v20140903" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.16.v20140903" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-continuation" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-http" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-io" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-security" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-server" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-util" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-xml" rev="8.1.19.v20160209" conf="tool->*"/>
+		<dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.19.v20160209" conf="tool->*"/>
 		<dependency org="org.eclipse.jetty.orbit" name="org.apache.jasper.glassfish" rev="2.2.2.v201112011158" conf="tool->*"/>
 		<dependency org="org.eclipse.jetty.orbit" name="org.apache.taglibs.standard.glassfish" rev="1.2.0.v201112081803" conf="tool->*"/>
 		<dependency org="org.eclipse.jetty.orbit" name="org.eclipse.jdt.core" rev="3.7.1" conf="tool->*"/>

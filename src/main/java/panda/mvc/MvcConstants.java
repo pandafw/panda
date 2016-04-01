@@ -15,6 +15,9 @@ public interface MvcConstants extends IocConstants {
 	public static final String FILEPOOL_LOCAL_PATH = "panda.filepool.local.path";
 	public static final String FILEPOOL_DAO_BLOCK_SIZE = "panda.filepool.dao.block.size";
 
+	public static final String MULTIPART_BODY_SIZE_MAX = "panda.multipart.body.size.max";
+	public static final String MULTIPART_FILE_SIZE_MAX = "panda.multipart.file.size.max";
+	
 	public static final String FREEMARKER_TEMPLATES = "panda.freemarker.templates";
 	public static final String FREEMARKER_TEMPLATES_WEB_PATH = "panda.freemarker.templates.web.path";
 	public static final String FREEMARKER_SETTINGS = "panda.freemarker.settings";

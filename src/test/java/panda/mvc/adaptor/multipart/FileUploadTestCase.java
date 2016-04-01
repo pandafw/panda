@@ -15,7 +15,7 @@ public abstract class FileUploadTestCase {
 
 	protected static final String CONTENT_TYPE = "multipart/form-data; boundary=---1234";
 
-	protected FileItemIterator parseUpload(int pLength, InputStream pStream) throws FileUploadException, IOException {
+	protected FileItemIterator parseUpload(int pLength, InputStream pStream) throws IOException {
 		String contentType = "multipart/form-data; boundary=---1234";
 
 		FileUploader upload = new FileUploader();

@@ -41,7 +41,7 @@
 	<classpathentry kind="lib" path="lib/tool/jetty-webapp.jar" sourcepath="lib/tool/jetty-webapp-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-util.jar" sourcepath="lib/tool/jetty-util-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/jetty-xml.jar" sourcepath="lib/tool/jetty-xml-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/org.apache.jasper.glassfish.jar"/>
+	<classpathentry kind="lib" path="lib/tool/org.apache.jasper.glassfish.jar" sourcepath="lib/tool/org.apache.jasper.glassfish-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/org.apache.taglibs.standard.glassfish.jar"/>
 	<classpathentry kind="lib" path="lib/tool/org.eclipse.jdt.core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/javax.el.jar"/>

@@ -253,8 +253,10 @@ public abstract class AbstractOMView extends AbstractView {
 
 			Map<String, Object> em = new HashMap<String, Object>();
 			em.put("message", e.getMessage());
-			em.put("stackTrace", Exceptions.getStackTrace(e));
-
+			if (ac.getAssist().isDebugEnabled()) {
+				em.put("stackTrace", Exceptions.getStackTrace(e));
+			}
+			
 			result.put("exception", em);
 
 			writeResult(ac, result);

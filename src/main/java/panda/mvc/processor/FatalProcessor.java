@@ -5,10 +5,11 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
+import panda.mvc.view.Views;
 import panda.servlet.HttpServlets;
 
 @IocBean
-public class FatalProcessor extends ViewProcessor {
+public class FatalProcessor extends AbstractProcessor {
 	private static final Log log = Logs.getLog(FatalProcessor.class);
 
 	public void process(ActionContext ac) {
@@ -20,7 +21,7 @@ public class FatalProcessor extends ViewProcessor {
 
 			HttpServlets.logException(ac.getRequest(), e);
 
-			View view = evalView(ac.getIoc(), ac.getInfo().getFatalView());
+			View view = Views.evalView(ac.getIoc(), ac.getInfo().getFatalView());
 			if (view != null) {
 				try {
 					HttpServlets.safeReset(ac.getResponse());

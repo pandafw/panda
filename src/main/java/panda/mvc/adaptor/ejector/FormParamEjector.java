@@ -4,17 +4,19 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import panda.mvc.ActionContext;
+import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.mvc.adaptor.ParamEjector;
 
 /**
  * Form parameter ejector (Default)
  */
+@IocBean(singleton=false)
 public class FormParamEjector implements ParamEjector {
+	@IocInject
 	private HttpServletRequest req;
 
-	public FormParamEjector(ActionContext ac) {
-		this.req = ac.getRequest();
+	public FormParamEjector() {
 	}
 
 	public Object eject() {

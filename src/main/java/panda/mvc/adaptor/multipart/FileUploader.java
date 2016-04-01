@@ -62,19 +62,24 @@ public class FileUploader {
 	 */
 	public static final String ATTACHMENT = "attachment";
 
+	/**
+	 * unlimited size: -1
+	 */
+	public static final long UNLIMITED_SIZE = -1;
+
 	// ----------------------------------------------------------- Data members
 
 	/**
 	 * The maximum size permitted for the complete request, as opposed to {@link #fileSizeMax}. A
 	 * value of -1 indicates no maximum.
 	 */
-	private long sizeMax = -1;
+	private long bodySizeMax = UNLIMITED_SIZE;
 
 	/**
-	 * The maximum size permitted for a single uploaded file, as opposed to {@link #sizeMax}. A
+	 * The maximum size permitted for a single uploaded file, as opposed to {@link #bodySizeMax}. A
 	 * value of -1 indicates no maximum.
 	 */
-	private long fileSizeMax = -1;
+	private long fileSizeMax = UNLIMITED_SIZE;
 
 	/**
 	 * The content encoding to use when reading part headers.
@@ -92,10 +97,10 @@ public class FileUploader {
 	 * 
 	 * @return The maximum allowed size, in bytes. The default value of -1 indicates, that there is
 	 *         no limit.
-	 * @see #setSizeMax(long)
+	 * @see #setBodySizeMax(long)
 	 */
-	public long getSizeMax() {
-		return sizeMax;
+	public long getBodySizeMax() {
+		return bodySizeMax;
 	}
 
 	/**
@@ -104,15 +109,15 @@ public class FileUploader {
 	 * 
 	 * @param sizeMax The maximum allowed size, in bytes. The default value of -1 indicates, that
 	 *            there is no limit.
-	 * @see #getSizeMax()
+	 * @see #getBodySizeMax()
 	 */
-	public void setSizeMax(long sizeMax) {
-		this.sizeMax = sizeMax;
+	public void setBodySizeMax(long sizeMax) {
+		this.bodySizeMax = sizeMax;
 	}
 
 	/**
 	 * Returns the maximum allowed size of a single uploaded file, as opposed to
-	 * {@link #getSizeMax()}.
+	 * {@link #getBodySizeMax()}.
 	 * 
 	 * @see #setFileSizeMax(long)
 	 * @return Maximum size of a single uploaded file.
@@ -122,7 +127,7 @@ public class FileUploader {
 	}
 
 	/**
-	 * Sets the maximum allowed size of a single uploaded file, as opposed to {@link #getSizeMax()}.
+	 * Sets the maximum allowed size of a single uploaded file, as opposed to {@link #getBodySizeMax()}.
 	 * 
 	 * @see #getFileSizeMax()
 	 * @param fileSizeMax Maximum size of a single uploaded file.
@@ -167,7 +172,7 @@ public class FileUploader {
 	 * @throws IOException An I/O error occurred. This may be a network error while communicating
 	 *             with the client or a problem while storing the uploaded content.
 	 */
-	public FileItemIterator getItemIterator(HttpServletRequest req) throws FileUploadException, IOException {
+	public FileItemIterator getItemIterator(HttpServletRequest req) throws IOException {
 		return new FileItemIteratorImpl(req);
 	}
 
@@ -392,29 +397,28 @@ public class FileUploader {
 				InputStream istream = itemStream;
 				if (fileSizeMax != -1) {
 					if (pContentLength != -1 && pContentLength > fileSizeMax) {
-						FileSizeLimitExceededException e = new FileSizeLimitExceededException(format(
-							"The field %s exceeds its maximum permitted size of %s bytes.", fieldName,
-							Long.valueOf(fileSizeMax)), pContentLength, fileSizeMax);
-						e.setFileName(pName);
-						e.setFieldName(pFieldName);
-						throw e;
+						sizeExceeded(fileSizeMax, pContentLength);
 					}
 					istream = new LimitedInputStream(istream, fileSizeMax) {
 						@Override
 						protected void raiseError(long pSizeMax, long pCount) throws IOException {
 							itemStream.close(true);
-							FileSizeLimitExceededException e = new FileSizeLimitExceededException(format(
-								"The field %s exceeds its maximum permitted size of %s bytes.", fieldName,
-								Long.valueOf(pSizeMax)), pCount, pSizeMax);
-							e.setFieldName(fieldName);
-							e.setFileName(name);
-							throw e;
+							sizeExceeded(pSizeMax, pCount);
 						}
 					};
 				}
 				stream = istream;
 			}
 
+			protected void sizeExceeded(long pSizeMax, long pCount) throws IOException {
+				FileSizeLimitExceededException e = new FileSizeLimitExceededException(format(
+					"The field %s exceeds it's maximum permitted size of %s bytes.", fieldName,
+					Long.valueOf(pSizeMax)), pCount, pSizeMax);
+				e.setFieldName(fieldName);
+				e.setFileName(name);
+				throw e;
+			}
+			
 			/**
 			 * Returns the items content type, or null.
 			 * 
@@ -537,23 +541,19 @@ public class FileUploader {
 		 * @throws FileUploadException An error occurred while parsing the request.
 		 * @throws IOException An I/O error occurred.
 		 */
-		FileItemIteratorImpl(final HttpServletRequest req) throws FileUploadException, IOException {
+		FileItemIteratorImpl(final HttpServletRequest req) throws IOException {
 			InputStream input = req.getInputStream();
 
 			final long requestSize = HttpServlets.getContentLength(req);
 
-			if (sizeMax >= 0) {
-				if (requestSize != -1 && requestSize > sizeMax) {
-					throw new SizeLimitExceededException(format(
-						"the request was rejected because its size (%s) exceeds the configured maximum (%s)",
-						Long.valueOf(requestSize), Long.valueOf(sizeMax)), requestSize, sizeMax);
+			if (bodySizeMax >= 0) {
+				if (requestSize != -1 && requestSize > bodySizeMax) {
+					sizeExceeded(bodySizeMax, requestSize);
 				}
-				input = new LimitedInputStream(input, sizeMax) {
+				input = new LimitedInputStream(input, bodySizeMax) {
 					@Override
 					protected void raiseError(long pSizeMax, long pCount) throws IOException {
-						throw new SizeLimitExceededException(format(
-							"the request was rejected because its size (%s) exceeds the configured maximum (%s)",
-							Long.valueOf(pCount), Long.valueOf(pSizeMax)), pCount, pSizeMax);
+						sizeExceeded(pSizeMax, pCount);
 					}
 				};
 			}
@@ -580,6 +580,12 @@ public class FileUploader {
 
 			skipPreamble = true;
 			findNextItem();
+		}
+
+		private void sizeExceeded(long pSizeMax, long pCount) throws IOException {
+			throw new SizeLimitExceededException(format(
+				"the request was rejected because its size (%s) exceeds the configured maximum (%s)",
+				Long.valueOf(pCount), Long.valueOf(pSizeMax)), pCount, pSizeMax);
 		}
 
 		/**
@@ -670,7 +676,7 @@ public class FileUploader {
 		 * @throws IOException Reading the file item failed.
 		 * @return True, if one or more additional file items are available, otherwise false.
 		 */
-		public boolean hasNext() throws FileUploadException, IOException {
+		public boolean hasNext() throws IOException {
 			if (eof) {
 				return false;
 			}
@@ -689,123 +695,13 @@ public class FileUploader {
 		 * @throws IOException Reading the file item failed.
 		 * @return FileItemStream instance, which provides access to the next file item.
 		 */
-		public FileItemStream next() throws FileUploadException, IOException {
+		public FileItemStream next() throws IOException {
 			if (eof || (!itemValid && !hasNext())) {
 				throw new NoSuchElementException();
 			}
 			itemValid = false;
 			return currentItem;
 		}
-
-	}
-
-	/**
-	 * Thrown to indicate that the request is not a multipart request.
-	 */
-	public static class InvalidContentTypeException extends FileUploadException {
-
-		/**
-		 * The exceptions UID, for serializing an instance.
-		 */
-		private static final long serialVersionUID = -9073026332015646668L;
-
-		/**
-		 * Constructs a <code>InvalidContentTypeException</code> with no detail message.
-		 */
-		public InvalidContentTypeException() {
-			super();
-		}
-
-		/**
-		 * Constructs an <code>InvalidContentTypeException</code> with the specified detail message.
-		 * 
-		 * @param message The detail message.
-		 */
-		public InvalidContentTypeException(String message) {
-			super(message);
-		}
-
-		/**
-		 * Constructs an <code>InvalidContentTypeException</code> with the specified detail message
-		 * and cause.
-		 * 
-		 * @param msg The detail message.
-		 * @param cause the original cause
-		 * @since 1.3.1
-		 */
-		public InvalidContentTypeException(String msg, Throwable cause) {
-			super(msg, cause);
-		}
-	}
-
-	/**
-	 * Thrown to indicate that A files size exceeds the configured maximum.
-	 */
-	public static class FileSizeLimitExceededException extends SizeLimitExceededException {
-
-		/**
-		 * The exceptions UID, for serializing an instance.
-		 */
-		private static final long serialVersionUID = 1L;
-
-		/**
-		 * File name of the item, which caused the exception.
-		 */
-		private String fileName;
-
-		/**
-		 * Field name of the item, which caused the exception.
-		 */
-		private String fieldName;
-
-		/**
-		 * Constructs a <code>SizeExceededException</code> with the specified detail message, and
-		 * actual and permitted sizes.
-		 * 
-		 * @param message The detail message.
-		 * @param actual The actual request size.
-		 * @param permitted The maximum permitted request size.
-		 */
-		public FileSizeLimitExceededException(String message, long actual, long permitted) {
-			super(message, actual, permitted);
-		}
-
-		/**
-		 * Returns the file name of the item, which caused the exception.
-		 * 
-		 * @return File name, if known, or null.
-		 */
-		public String getFileName() {
-			return fileName;
-		}
-
-		/**
-		 * Sets the file name of the item, which caused the exception.
-		 * 
-		 * @param pFileName the file name of the item, which caused the exception.
-		 */
-		public void setFileName(String pFileName) {
-			fileName = pFileName;
-		}
-
-		/**
-		 * Returns the field name of the item, which caused the exception.
-		 * 
-		 * @return Field name, if known, or null.
-		 */
-		public String getFieldName() {
-			return fieldName;
-		}
-
-		/**
-		 * Sets the field name of the item, which caused the exception.
-		 * 
-		 * @param pFieldName the field name of the item, which caused the exception.
-		 */
-		public void setFieldName(String pFieldName) {
-			fieldName = pFieldName;
-		}
-
 	}
 
 	/**

@@ -4,16 +4,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
-import panda.mvc.ActionContext;
 import panda.net.URLHelper;
 import panda.vfs.FileItem;
 
+@IocBean(singleton=false)
 public class StreamParamEjector extends AbstractParamEjector {
 	private Map<String, Object> params;
 
-	public StreamParamEjector(ActionContext ac) {
-		super(ac);
+	public StreamParamEjector() {
 	}
 
 	@Override

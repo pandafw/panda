@@ -1,16 +1,15 @@
 package panda.mvc.view;
 
+import javax.servlet.http.HttpServletResponse;
+
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
 import panda.mvc.View;
-import panda.mvc.processor.ViewProcessor;
 import panda.net.http.HttpException;
 import panda.net.http.HttpStatus;
-
-import javax.servlet.http.HttpServletResponse;
 
 public class ServletErrorView implements View {
 	private static final Log log = Logs.getLog(ServletErrorView.class);
@@ -50,7 +49,7 @@ public class ServletErrorView implements View {
 		
 		res.setStatus(code);
 
-		View view = ViewProcessor.evalView(ac.getIoc(), customView);
+		View view = Views.evalView(ac.getIoc(), customView);
 		if (view == null) {
 			log.error("Failed to create view: " + customView);
 		}

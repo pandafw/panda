@@ -138,6 +138,10 @@ servlet-error-request-url=Request: <span class="request-url">${top}</span>
 servlet-error-exception=Exception:
 
 
+#multipart error message
+multipart-body-size-exceeded=The request was rejected because it's size (${top.displayActualSize}) exceeds the maximum permitted size (${top.displayLimitedSize}).
+multipart-file-size-exceeded=The request was rejected because the size (${top.displayActualSize}) of file (${top.fileName}) exceeds it's maximum permitted size (${top.displayLimitedSize}).
+
 
 #validation error message
 validation-alphanumericstring=Please input alphabet or number.
@@ -357,8 +361,8 @@ icon-error=fa fa-exclamation-circle
 icon-exec=fa fa-play
 icon-execute=fa fa-play
 icon-home=fa fa-home
-icon-img=fa fa-picture-o
-icon-image=fa fa-picture-o
+icon-img=fa fa-image
+icon-image=fa fa-image
 icon-import=fa fa-cloud-upload
 icon-insert=fa fa-plus-circle
 icon-json=fa fa-strikethrough

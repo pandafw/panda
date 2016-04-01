@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
+import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
-import panda.mvc.ActionContext;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 
 /**
  * JSON Parameter Ejector
  */
+@IocBean(singleton=false)
 public class JsonParamEjector extends AbstractParamEjector {
 	private JsonObject json;
 
-	public JsonParamEjector(ActionContext ac) {
-		super(ac);
+	public JsonParamEjector() {
 	}
 
 	@Override

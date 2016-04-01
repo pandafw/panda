@@ -1,14 +1,11 @@
 package panda.mvc.processor;
 
-import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
-import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
-import panda.mvc.ViewMaker;
-import panda.mvc.impl.DefaultViewMaker;
+import panda.mvc.view.Views;
 
 @IocBean
 public class ViewProcessor extends AbstractProcessor {
@@ -24,7 +21,7 @@ public class ViewProcessor extends AbstractProcessor {
 			}
 		}
 		
-		View view = evalView(ac.getIoc(), ac.getInfo().getOkView());
+		View view = Views.evalView(ac.getIoc(), ac.getInfo().getOkView());
 
 		Object re = ac.getResult();
 		if (re instanceof View) {
@@ -34,39 +31,5 @@ public class ViewProcessor extends AbstractProcessor {
 			view.render(ac);
 		}
 		doNext(ac);
-	}
-
-	public static ViewMaker getViewMaker(Ioc ioc) {
-		ViewMaker maker = ioc.getIfExists(ViewMaker.class);
-		if (maker == null) {
-			maker = new DefaultViewMaker();
-		}
-		return maker;
-	}
-	
-	public static View evalView(Ioc ioc, String viewType) {
-		if (Strings.isEmpty(viewType)) {
-			return null;
-		}
-
-		String str = viewType;
-		int pos = str.indexOf(':');
-		
-		String type, value;
-		if (pos > 0) {
-			type = Strings.trim(str.substring(0, pos).toLowerCase());
-			value = Strings.trim(pos >= (str.length() - 1) ? null : str.substring(pos + 1));
-		}
-		else {
-			type = str;
-			value = null;
-		}
-
-		View view = getViewMaker(ioc).make(ioc, type, value);
-		if (view != null) {
-			return view;
-		}
-
-		throw new IllegalArgumentException("Can not create view '" + viewType + "'");
 	}
 }
