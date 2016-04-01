@@ -6,8 +6,9 @@ import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 import panda.mvc.View;
-import panda.mvc.processor.ViewProcessor;
+import panda.mvc.processor.AbstractProcessor;
 import panda.mvc.util.TextProvider;
+import panda.mvc.view.Views;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
@@ -15,7 +16,7 @@ import panda.wing.AppConstants;
 import panda.wing.constant.RC;
 
 @IocBean
-public class UserAuthenticateProcessor extends ViewProcessor {
+public class UserAuthenticateProcessor extends AbstractProcessor {
 	@IocInject(value=AppConstants.PANDA_AUTH_UNLOGIN_VIEW, required=false)
 	private String unloginView;
 	
@@ -41,7 +42,7 @@ public class UserAuthenticateProcessor extends ViewProcessor {
 	
 
 	protected void doView(ActionContext ac, String type) {
-		View view = evalView(ac.getIoc(), type);
+		View view = Views.evalView(ac.getIoc(), type);
 		if (view != null) {
 			view.render(ac);
 		}
