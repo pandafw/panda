@@ -32,7 +32,7 @@ public class NumberTypeCastor {
 					return defaultValue();
 				}
 				try {
-					return Numbers.createByte(s);
+					return Numbers.createNumber(s);
 				}
 				catch (NumberFormatException e) {
 					return castError(value, context, e);
