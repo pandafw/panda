@@ -3,9 +3,22 @@ package panda.bean;
 import java.util.List;
 
 public class TestG<T> {
+	T ori;
 	T obj;
 	List<T> lst;
 	
+	/**
+	 * @return the ori
+	 */
+	public T getOri() {
+		return ori;
+	}
+	/**
+	 * @param ori the ori to set
+	 */
+	public void setOri(T ori) {
+		this.ori = ori;
+	}
 	/**
 	 * @return the obj
 	 */

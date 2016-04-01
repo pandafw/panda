@@ -437,7 +437,9 @@ public class Beans {
 
 		// is
 		for (Method m : methods) {
-			if (Modifier.isStatic(m.getModifiers())) {
+			if (Modifier.isStatic(m.getModifiers())
+					|| m.isSynthetic() 
+					|| m.isBridge()) {
 				continue;
 			}
 			
@@ -465,7 +467,9 @@ public class Beans {
 		
 		// getter
 		for (Method m : methods) {
-			if (Modifier.isStatic(m.getModifiers())) {
+			if (Modifier.isStatic(m.getModifiers())
+					|| m.isSynthetic() 
+					|| m.isBridge()) {
 				continue;
 			}
 			
@@ -489,7 +493,9 @@ public class Beans {
 		
 		// setter
 		for (Method m : methods) {
-			if (Modifier.isStatic(m.getModifiers())) {
+			if (Modifier.isStatic(m.getModifiers())
+					|| m.isSynthetic() 
+					|| m.isBridge()) {
 				continue;
 			}
 			

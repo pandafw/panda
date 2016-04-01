@@ -936,6 +936,28 @@ public class Systems {
 	 */
 	public static final boolean IS_JAVA_1_7 = getJavaVersionMatches("1.7");
 
+	/**
+	 * <p>
+	 * Is {@code true} if this is Java version 1.8 (also 1.8.x versions).
+	 * </p>
+	 * <p>
+	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
+	 * </p>
+	 * 
+	 */
+	public static final boolean IS_JAVA_1_8 = getJavaVersionMatches("1.8");
+
+	/**
+	 * <p>
+	 * Is {@code true} if this is Java version 1.9 (also 1.9.x versions).
+	 * </p>
+	 * <p>
+	 * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
+	 * </p>
+	 * 
+	 */
+	public static final boolean IS_JAVA_1_9 = getJavaVersionMatches("1.9");
+
 	// Operating system checks
 	// -----------------------------------------------------------------------
 	// These MUST be declared after those above as they depend on the

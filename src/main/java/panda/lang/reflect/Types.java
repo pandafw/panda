@@ -1297,28 +1297,26 @@ public abstract class Types {
 		if (type instanceof Class) {
 			Class<?> c = (Class<?>)type;
 			return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
-
 		}
-		else if (type instanceof ParameterizedType) {
+		
+		if (type instanceof ParameterizedType) {
 			ParameterizedType p = (ParameterizedType)type;
 			return new ParameterizedTypeImpl(p.getOwnerType(), p.getRawType(),
 				p.getActualTypeArguments());
-
 		}
-		else if (type instanceof GenericArrayType) {
+		
+		if (type instanceof GenericArrayType) {
 			GenericArrayType g = (GenericArrayType)type;
 			return new GenericArrayTypeImpl(g.getGenericComponentType());
-
 		}
-		else if (type instanceof WildcardType) {
+		
+		if (type instanceof WildcardType) {
 			WildcardType w = (WildcardType)type;
 			return new WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
+		}
 
-		}
-		else {
-			// type is either serializable as-is or unsupported
-			return type;
-		}
+		// type is either serializable as-is or unsupported
+		return type;
 	}
 
 	public static Class<?> getRawType(Type type) {

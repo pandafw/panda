@@ -8,10 +8,12 @@ package panda.bean;
  */
 public class FastBeanHandlerTest extends JavaBeanHandlerTest {
 
-	private static Beans bhf = new FastBeans();
+	private static Beans beans = new FastBeans();
 	
-	protected Beans getBeans() {
-		return bhf;
+	@Override
+	@SuppressWarnings("unchecked")
+	protected BeanHandler getBeanHandler(Class type) {
+		return beans.getBeanHandler(type);
 	}
 	
 }

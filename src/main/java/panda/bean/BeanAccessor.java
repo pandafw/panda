@@ -12,9 +12,9 @@ public class BeanAccessor {
 	/**
 	 * @param bean
 	 */
-	public BeanAccessor(Object bean) {
+	public BeanAccessor(BeanHandler handler, Object bean) {
 		this.bean = bean;
-		this.handler = bean == null ? null : Beans.i().getBeanHandler(bean.getClass());
+		this.handler = handler;
 	}
 
 	/**
