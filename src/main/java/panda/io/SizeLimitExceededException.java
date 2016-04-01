@@ -12,22 +12,22 @@ public class SizeLimitExceededException extends IOException {
 	private final long actual;
 
 	/**
-	 * The maximum permitted size of the request.
+	 * The maximum limited size of the request.
 	 */
-	private final long permitted;
+	private final long limited;
 
 	/**
 	 * Constructs a <code>SizeExceededException</code> with the specified detail message, and
-	 * actual and permitted sizes.
+	 * actual and limited sizes.
 	 * 
 	 * @param message The detail message.
 	 * @param actual The actual request size.
-	 * @param permitted The maximum permitted request size.
+	 * @param limited The maximum limited request size.
 	 */
-	public SizeLimitExceededException(String message, long actual, long permitted) {
+	public SizeLimitExceededException(String message, long actual, long limited) {
 		super(message);
 		this.actual = actual;
-		this.permitted = permitted;
+		this.limited = limited;
 	}
 
 	/**
@@ -40,11 +40,29 @@ public class SizeLimitExceededException extends IOException {
 	}
 
 	/**
-	 * Retrieves the permitted size of the request.
+	 * Retrieves the limited size of the request.
 	 * 
-	 * @return The permitted size of the request.
+	 * @return The limited size of the request.
 	 */
-	public long getPermittedSize() {
-		return permitted;
+	public long getLimitedSize() {
+		return limited;
+	}
+
+	/**
+	 * Retrieves the actual size of the request.
+	 * 
+	 * @return The actual size of the request.
+	 */
+	public String getDisplayActualSize() {
+		return Files.toDisplaySize(actual);
+	}
+
+	/**
+	 * Retrieves the limited size of the request.
+	 * 
+	 * @return The limited size of the request.
+	 */
+	public String getDisplayLimitedSize() {
+		return Files.toDisplaySize(limited);
 	}
 }

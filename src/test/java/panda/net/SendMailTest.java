@@ -21,8 +21,8 @@ public class SendMailTest {
 		email.setCharset("UTF-8");
 		email.setFrom("test@gmail.com");
 		email.setSubject("test subject");
-//			email.addTo("fireswan@hotmail.com", "frank.wang"); // banned by microsoft
-		email.addTo("squirrels.gallery@gmail.com", "frank.wang");
+//			email.addTo("fireswan@hotmail.com", "fire"); // banned by microsoft
+		email.addTo("squirrels.gallery@gmail.com", "oh test");
 		email.setMsg("this is a test email");
 
 //			email.buildMimeMessage();

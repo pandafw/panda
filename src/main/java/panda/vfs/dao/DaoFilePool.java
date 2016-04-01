@@ -91,7 +91,7 @@ public class DaoFilePool implements FilePool {
 			});
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to save file " + fi.getName());
+			throw new IOException("Failed to save file " + fi.getName(), e);
 		}
 		return fi;
 	}
@@ -127,7 +127,7 @@ public class DaoFilePool implements FilePool {
 			});
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to save file " + name);
+			throw new IOException("Failed to save file " + name, e);
 		}
 		return fi;
 	}
@@ -190,7 +190,7 @@ public class DaoFilePool implements FilePool {
 			return buf;
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to read file: " + fi.getId());
+			throw new IOException("Failed to read file: " + fi.getId(), e);
 		}
 	}
 
@@ -221,7 +221,7 @@ public class DaoFilePool implements FilePool {
 			file.setData(null);
 		}
 		catch (DaoException e) {
-			throw new IOException("Failed to delete file: " + file.getId());
+			throw new IOException("Failed to delete file: " + file.getId(), e);
 		}
 	}
 	
@@ -243,7 +243,7 @@ public class DaoFilePool implements FilePool {
 				dao.exec(new DeleteFile(dao, fi));
 			}
 			catch (DaoException e) {
-				throw new IOException("Failed to delete file: " + fi.getId());
+				throw new IOException("Failed to delete file: " + fi.getId(), e);
 			}
 		}
 	}

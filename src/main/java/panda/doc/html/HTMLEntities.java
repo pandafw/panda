@@ -15,7 +15,7 @@ public class HTMLEntities {
 	public static final String QUOT = "&quot;";
 	public static final String AMP = "&amp;";
 	public static final String LT = "&lt;";
-	public static final String RT = "&gt;";
+	public static final String GT = "&gt;";
 	
 	/**
 	 * Mapping to escape the basic XML and HTML character entities. Namely: {@code " & < >}
@@ -24,7 +24,7 @@ public class HTMLEntities {
 			"\"", QUOT,	// " - double-quote
 			"&", AMP,	// & - ampersand
 			"<", LT,	// < - less-than
-			">", RT	// > - greater-than
+			">", GT		// > - greater-than
 		);
 
 	/**
