@@ -147,7 +147,13 @@
 		}
 
 		// Wait for a response to come back
-		var callback = function(timeout) {			
+		var callback = function(timeout) {
+			if (done) {
+				return;
+			}
+			done = true;
+
+			var status = timeout == "timeout" ? "error" : "success";
 			try {
 				var ioe = $if.get(0);
 				var	doc = ioe.contentWindow.document || ioe.contentDocument || window.frames[ioe.id].document;
@@ -176,79 +182,73 @@
 				}
 			}
 			catch(e) {
-				handleError(s, xhr, null, e);
+				status = "error";
+				handleError(s, xhr, status, e);
 			}
 
-			if (xhr || timeout == "timeout") {				
-				// Revert files
-				for (var i = 0; i < $form.files.length; i++) {
-					var f = $form.files[i];
-					f.real.attr({
-						id: f.clon.attr('id'),
-						name: f.clon.attr('name')
-					}).insertAfter(f.clon);
-					f.clon.remove();
-				}
-				$form.remove();	
+			// Revert files
+			for (var i = 0; i < $form.files.length; i++) {
+				var f = $form.files[i];
+				f.real.attr({
+					id: f.clon.attr('id'),
+					name: f.clon.attr('name')
+				}).insertAfter(f.clon);
+				f.clon.remove();
+			}
+			$form.remove();	
 
-				done = true;
-
-				var status;
+			if (status == "timeout") {
+				handleError(s, xhr, status);
+			}
+			else if (status == "success") {
+				// Make sure that the request was successful or not modified
 				try {
-					status = timeout == "timeout" ? "error" : "success";
+					// process the data (runs the xhr through httpData regardless of callback)
+					var data = httpData(xhr, s.dataType);	   
 
-					// Make sure that the request was successful or notmodified
-					if (status == "success") {
-						// process the data (runs the xhr through httpData regardless of callback)
-						var data = httpData(xhr, s.dataType);	   
-
-						// If a local callback was specified, fire it and pass it the data
-						if (s.success) {
-							s.success(data, status);
-						}
-	
-						// Fire the global callback
-						if (s.global) {
-							$.event.trigger("ajaxSuccess", [xhr, s]);
-						}
-					} 
-					else {
-						handleError(s, xhr, status);
+					// If a local callback was specified, fire it and pass it the data
+					if (s.success) {
+						s.success(data, status);
 					}
-				}
-				catch(e) {
-					handleError(s, xhr, status, e);
-				}
 
-				try {
-					// Process result
-					if (s.complete) {
-						s.complete(xhr, status);
-					}
-	
-					// The request was completed
+					// Fire the global callback
 					if (s.global) {
-						$.event.trigger("ajaxComplete", [xhr, s]);
+						$.event.trigger("ajaxSuccess", [xhr, s]);
 					}
-	
-					// Handle the global AJAX counter
-					if (s.global && ! --$.active) {
-						$.event.trigger("ajaxStop");
+				} 
+				catch(e) {
+					handleError(s, xhr, null, e);
+				}
+			}
+
+			try {
+				// Process result
+				if (s.complete) {
+					s.complete(xhr, status);
+				}
+
+				// The request was completed
+				if (s.global) {
+					$.event.trigger("ajaxComplete", [xhr, s]);
+				}
+
+				// Handle the global AJAX counter
+				if (s.global && ! --$.active) {
+					$.event.trigger("ajaxStop");
+				}
+			}
+			finally {
+				//clear up the created iframe after file uploaded.
+				$if.unbind();
+				setTimeout(function() {
+					try {
+						$if.remove();
 					}
-				}
-				finally {
-					//clear up the created iframe after file uploaded.
-					$if.unbind();
-					setTimeout(function() {
-						try {
-							$if.remove();
-						}
-						catch(e) {
-							handleError(s, xhr, null, e);
-						}									
-					}, 100);
-					xhr = null;
-				}
+					catch(e) {
+						handleError(s, xhr, null, e);
+					}
+				}, 100);
+				xhr = null;
 			}
 		};
 		
