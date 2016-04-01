@@ -115,11 +115,6 @@ public class DateTypeCastor {
 					return defaultValue();
 				}
 	
-				if (Strings.isNumeric(sv)) {
-					long nv = Numbers.toLong(sv, 0L);
-					return new Date(nv);
-				}
-				
 				ParseException ex = null;
 				if (formats != null) {
 					for (FastDateFormat df : formats) {
@@ -143,6 +138,11 @@ public class DateTypeCastor {
 					return castError(value, cc, ex);
 				}
 
+				if (Strings.isNumeric(sv)) {
+					long nv = Numbers.toLong(sv, 0L);
+					return new Date(nv);
+				}
+				
 				if (cc.getLocale() != null) {
 					Map<String, FastDateFormat> fs = LOCALE_DATE_FORMATS.get(cc.getLocale());
 					if (fs != null) {
