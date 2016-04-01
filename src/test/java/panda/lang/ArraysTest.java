@@ -189,10 +189,12 @@ public class ArraysTest {
 	// -----------------------------------------------------------------------
 	@Test
 	public void testToMap() {
-		Map<?, ?> map = Arrays.toMap("foo", "bar", "hello", "world");
+		Map<?, ?> map = Arrays.toMap("foo", "bar", "hello", "world", "a", "b", "c", "d");
 
 		assertEquals("bar", map.get("foo"));
 		assertEquals("world", map.get("hello"));
+		assertEquals("b", map.get("a"));
+		assertEquals("d", map.get("c"));
 
 		assertEquals(null, Arrays.toMap((String[])null));
 		try {

@@ -8671,10 +8671,9 @@ public abstract class Arrays {
 		if (a.length % 2 != 0) {
 			throw new IllegalArgumentException("The length is incorrect: " + a.length);
 		}
-		int sz = a.length / 2;
-		
-		Map<T, T> map = new HashMap<T, T>(sz);
-		for (int i = 0; i <= sz; i += 2) {
+
+		Map<T, T> map = new HashMap<T, T>(a.length / 2);
+		for (int i = 0; i < a.length; i += 2) {
 			map.put(a[i], a[i + 1]);
 		}
 		return map;
