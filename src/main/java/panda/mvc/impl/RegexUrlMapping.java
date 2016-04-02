@@ -1,9 +1,9 @@
 package panda.mvc.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,45 +19,48 @@ import panda.mvc.UrlMapping;
  */
 @IocBean(type=UrlMapping.class)
 public class RegexUrlMapping extends AbstractUrlMapping implements UrlMapping {
-	private Map<String, ActionInvoker> plains;
-	private Map<Pattern, ActionInvoker> regexs;
+	private Map<String, ActionInvoker> urlmap;
+	private List<Pattern> patterns;
+	private List<ActionInvoker> actionis;
 
 	public RegexUrlMapping() {
-		plains = new HashMap<String, ActionInvoker>();
-		regexs = new HashMap<Pattern, ActionInvoker>();
+		urlmap = new HashMap<String, ActionInvoker>();
+		patterns = new ArrayList<Pattern>();
+		actionis = new ArrayList<ActionInvoker>();
 	}
 
 	@Override
 	protected void addInvoker(String path, ActionInvoker invoker) {
 		if (Strings.endsWithChar(path, '$')) {
-			Pattern regx = Pattern.compile(path);
-			regexs.put(regx, invoker);
+			Pattern pattern = Pattern.compile(path);
+			patterns.add(pattern);
+			actionis.add(invoker);
 		}
 		else {
-			plains.put(path, invoker);
+			urlmap.put(path, invoker);
 		}
 	}
 	
 	@Override
 	protected ActionInvoker getInvoker(String path, List<String> args) {
-		ActionInvoker ai = plains.get(path);
+		ActionInvoker ai = urlmap.get(path);
 		if (ai != null) {
 			return ai;
 		}
 		
-		for (Entry<Pattern, ActionInvoker> en : regexs.entrySet()) {
-			Pattern p = en.getKey();
+		for (int i = 0; i < patterns.size(); i++) {
+			Pattern p = patterns.get(i);
 			Matcher m = p.matcher(path);
 			if (m.matches()) {
 				if (args != null) {
 					m.reset();
 					while (m.find()) {
-						for (int i = 1; i <= m.groupCount(); i++) {
-							args.add(m.group(i));
+						for (int a = 1; a <= m.groupCount(); a++) {
+							args.add(m.group(a));
 						}
 					}
 				}
-				return en.getValue();
+				return actionis.get(i);
 			}
 		}
 
