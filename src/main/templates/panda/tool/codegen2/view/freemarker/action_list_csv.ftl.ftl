@@ -12,7 +12,7 @@ ${s}#if actionErrors?has_content>
 <@footer/>
 ${s}#else>
 ${s}@p.text var="_fn_" name="title-${ui.name}" escape="none">${s}@p.param name="title" value="#(title)"/>${s}/@p.text>
-${s}@p.head expiry="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
+${s}@p.head maxAge="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
 ${s}#assign _columns_ = [] />
 <#list ui.displayColumnList as c>
 ${s}#if a.displayField("${c.name}")>
