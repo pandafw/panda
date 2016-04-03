@@ -13,11 +13,11 @@ import panda.lang.collection.SafeMap;
 public class GaeHelper {
 
 	@SuppressWarnings("unchecked")
-	public static Map buildCache(int expires) throws Exception {
+	public static Map buildCache(int maxAge) throws Exception {
 		CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
 		Map props = new HashMap();
-		if (expires > 0) {
-			props.put(GCacheFactory.EXPIRATION_DELTA, expires);
+		if (maxAge > 0) {
+			props.put(GCacheFactory.EXPIRATION_DELTA, maxAge);
 		}
 		return new SafeMap(cacheFactory.createCache(props));
 	}

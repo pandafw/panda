@@ -100,7 +100,7 @@ public class EHCacheHelper {
 		
 	}
 	
-	public static Map buildCache(InputStream is, String cacheName, int cacheExpire) throws Exception {
+	public static Map buildCache(InputStream is, String cacheName, int maxAge) throws Exception {
 		Configuration conf = null;
 		
 		conf = ConfigurationFactory.parseConfiguration(is);
@@ -121,8 +121,8 @@ public class EHCacheHelper {
 			cc = conf.getCacheConfigurations().get(cacheName);
 		}
 
-		if (cacheExpire > 0) {
-			cc.setTimeToLiveSeconds(cacheExpire);
+		if (maxAge > 0) {
+			cc.setTimeToLiveSeconds(maxAge);
 		}
 		
 		CacheManager manager = new CacheManager(conf);

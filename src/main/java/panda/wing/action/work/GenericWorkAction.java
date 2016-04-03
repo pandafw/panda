@@ -117,7 +117,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 		}
 		if (!silent) {
 			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
-			hss.setExpiry(0);
+			hss.setMaxAge(0);
 			hss.setCharset(Charsets.UTF_8);
 			hss.setContentType(MimeType.TEXT_HTML);
 			try {

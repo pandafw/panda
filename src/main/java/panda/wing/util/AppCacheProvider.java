@@ -36,9 +36,9 @@ public class AppCacheProvider {
 	protected String name;
 	
 	/**
-	 * cache expire seconds
+	 * cache max-age seconds
 	 */
-	protected int expires;
+	protected int maxAge;
 
 	/**
 	 * cache instance
@@ -60,14 +60,14 @@ public class AppCacheProvider {
 	public void initialize() throws Exception {
 		provider = settings.getProperty(SC.CACHE_PROVIDER);
 		name = settings.getProperty(SC.CACHE_NAME);
-		expires = settings.getPropertyAsInt(SC.CACHE_EXPIRES, 0);
+		maxAge = settings.getPropertyAsInt(SC.CACHE_MAXAGE, 0);
 		cache = buildCache();
 	}
 	
 	protected Map buildCache() throws Exception {
 		if (GAE.equalsIgnoreCase(provider)) {
 			log.info("Build Gae Cache");
-			return GaeHelper.buildCache(expires);
+			return GaeHelper.buildCache(maxAge);
 		}
 		
 		if (EHCACHE.equalsIgnoreCase(provider)) {
@@ -77,13 +77,13 @@ public class AppCacheProvider {
 			if (is == null) {
 				throw new IllegalArgumentException("Failed to config ehcache, missing " + EHCACHE_CONFIG);
 			}
-			return EHCacheHelper.buildCache(is, name, expires);
+			return EHCacheHelper.buildCache(is, name, maxAge);
 		}
 		
 		log.info("Build Internal Java Cache");
-		if (expires > 0) {
+		if (maxAge > 0) {
 			return Collections.synchronizedMap(new ExpireMap<String, String>(
-					new WeakHashMap<String, String>(), expires * 1000));
+					new WeakHashMap<String, String>(), maxAge));
 		}
 
 		return Collections.synchronizedMap(new WeakHashMap<String, String>());

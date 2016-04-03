@@ -35,7 +35,7 @@ public interface SC {
 
 	public static final String CACHE_NAME = "cache.name";
 
-	public static final String CACHE_EXPIRES = "cache.expires";
+	public static final String CACHE_MAXAGE = "cache.maxage";
 
 	public static final String DATA_PREFIX = "data.";
 

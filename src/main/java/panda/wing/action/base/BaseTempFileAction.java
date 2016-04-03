@@ -97,7 +97,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 			hss.setContentLength(file.getSize());
 			hss.setContentType(file.getContentType());
 			hss.setFileName(filename);
-			hss.setExpiry(cache ? DateTimes.SEC_WEEK : 0);
+			hss.setMaxAge(cache ? DateTimes.SEC_WEEK : 0);
 	
 			hss.writeResponseHeader();
 			hss.writeResponseData(fis, bufferSize);

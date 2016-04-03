@@ -105,7 +105,7 @@ public class Html2PdfAction extends AbstractAction {
 			hss.setContentLength(Integer.valueOf(pdf.length));
 			hss.setContentType("application/pdf");
 			hss.setFileName(getFileNameFromUrl(arg.url) + ".pdf");
-			hss.setExpiry(0);
+			hss.setMaxAge(0);
 
 			hss.writeResponseHeader();
 			hss.writeResponseData(pdf);

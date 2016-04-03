@@ -21,7 +21,7 @@
 </html>
 <#else>
 <@p.text var="_fn_" name="title-list_csv" escape="none"><@p.param name="title" value="#(title)"/></@p.text>
-<@p.head expiry="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
+<@p.head maxAge="0" charset="UTF-8" bom="true" filename="%{vars._fn_ + '.csv'}" attachment="true" contentType="text/comma-separated-values"/>
 <#assign _columns_ = [] />
 <#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
