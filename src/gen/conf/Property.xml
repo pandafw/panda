@@ -3,7 +3,7 @@
 	<include>codegen.xml</include>
 
 	<!-- entity -->
-	<entity name="${entity.package}.Property" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${entity.trimString}" trimList="${entity.trimList}" identity="id" identityStart="1001">
+	<entity name="${entity.package}.Property" baseBeanClass="${entity.suBeanClass}" baseQueryClass="${entity.suQueryClass}" trimString="${trim.stringNull}" trimList="${trim.listNull}" identity="id" identityStart="1001">
 		<property name="id" type="Long" notNull="true" primaryKey="true" comment="id"/>
 		<property name="clazz" type="String" size="100" notNull="true" uniqueKey="CLCN" comment="class name">
 			<validator type="stringlength">
