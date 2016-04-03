@@ -143,6 +143,11 @@ public class Strings {
 	public static final String SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 	/**
+	 * A String for symbols and digits "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~0123456789"
+	 */
+	public static final String SYMBOL_DIGITS = SYMBOLS + DIGITS;
+
+	/**
 	 * Represents a failed index search.
 	 */
 	public static final int INDEX_NOT_FOUND = -1;
@@ -432,10 +437,39 @@ public class Strings {
 	 * @return the stripped String, {@code null} if whitespace, empty or null String input
 	 */
 	public static String stripToNull(CharSequence str) {
+		return stripToNull(str, null);
+	}
+
+	/**
+	 * <p>
+	 * Strips whitespace from the start and end of a String returning {@code null} if the String is
+	 * empty ("") after the strip.
+	 * </p>
+	 * <p>
+	 * This is similar to {@link #trimToNull(CharSequence)} but removes whitespace. Whitespace is defined
+	 * by {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripToNull(null)     = null
+	 * Strings.stripToNull("")       = null
+	 * Strings.stripToNull("   ")    = null
+	 * Strings.stripToNull("abc")    = "abc"
+	 * Strings.stripToNull("  abc")  = "abc"
+	 * Strings.stripToNull("abc  ")  = "abc"
+	 * Strings.stripToNull(" abc ")  = "abc"
+	 * Strings.stripToNull(" ab c ") = "ab c"
+	 * </pre>
+	 * 
+	 * @param str the String to be stripped, may be null
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return the stripped String, {@code null} if whitespace, empty or null String input
+	 */
+	public static String stripToNull(CharSequence str, String stripChars) {
 		if (str == null) {
 			return null;
 		}
-		String s = strip(str, null);
+		String s = strip(str, stripChars);
 		return (s == null || s.length() == 0) ? null : s;
 	}
 
@@ -444,7 +478,7 @@ public class Strings {
 	 * @return upperCase(stripToNull(str));
 	 */
 	public static String stripToUpperNull(final String str) {
-		return upperCase(stripToNull(str));
+		return stripToUpperNull(str, null);
 	}
 
 	/**
@@ -452,7 +486,25 @@ public class Strings {
 	 * @return lowerrCase(stripToNull(str));
 	 */
 	public static String stripToLowerNull(final String str) {
-		return lowerCase(stripToNull(str));
+		return stripToLowerNull(str, null);
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return upperCase(stripToNull(str));
+	 */
+	public static String stripToUpperNull(final String str, final String stripChars) {
+		return upperCase(stripToNull(str, stripChars));
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return lowerrCase(stripToNull(str));
+	 */
+	public static String stripToLowerNull(final String str, final String stripChars) {
+		return lowerCase(stripToNull(str, stripChars));
 	}
 
 	/**
@@ -480,7 +532,36 @@ public class Strings {
 	 * @return the trimmed String, or an empty String if {@code null} input
 	 */
 	public static String stripToEmpty(final CharSequence str) {
-		return str == null ? EMPTY : strip(str, null);
+		return stripToEmpty(str, null);
+	}
+
+	/**
+	 * <p>
+	 * Strips whitespace from the start and end of a String returning an empty String if
+	 * {@code null} input.
+	 * </p>
+	 * <p>
+	 * This is similar to {@link #trimToEmpty(CharSequence)} but removes whitespace. Whitespace is defined
+	 * by {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.stripToEmpty(null)     = ""
+	 * Strings.stripToEmpty("")       = ""
+	 * Strings.stripToEmpty("   ")    = ""
+	 * Strings.stripToEmpty("abc")    = "abc"
+	 * Strings.stripToEmpty("  abc")  = "abc"
+	 * Strings.stripToEmpty("abc  ")  = "abc"
+	 * Strings.stripToEmpty(" abc ")  = "abc"
+	 * Strings.stripToEmpty(" ab c ") = "ab c"
+	 * </pre>
+	 * 
+	 * @param str the String to be stripped, may be null
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return the trimmed String, or an empty String if {@code null} input
+	 */
+	public static String stripToEmpty(final CharSequence str, String stripChars) {
+		return str == null ? EMPTY : strip(str, stripChars);
 	}
 
 	/**
@@ -488,15 +569,33 @@ public class Strings {
 	 * @return upperCase(stripToEmpty(str));
 	 */
 	public static String stripToUpperEmpty(final String str) {
-		return upperCase(stripToEmpty(str));
+		return stripToUpperEmpty(str, null);
 	}
 
 	/**
 	 * @param str the string to strip
-	 * @return lowerrCase(stripToEmpty(str));
+	 * @return lowerCase(stripToEmpty(str));
 	 */
 	public static String stripToLowerEmpty(final String str) {
-		return lowerCase(stripToEmpty(str));
+		return stripToLowerEmpty(str, null);
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return upperCase(stripToEmpty(str));
+	 */
+	public static String stripToUpperEmpty(final String str, final String stripChars) {
+		return upperCase(stripToEmpty(str, stripChars));
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return lowerrCase(stripToEmpty(str));
+	 */
+	public static String stripToLowerEmpty(final String str, final String stripChars) {
+		return lowerCase(stripToEmpty(str,stripChars));
 	}
 
 	/**
