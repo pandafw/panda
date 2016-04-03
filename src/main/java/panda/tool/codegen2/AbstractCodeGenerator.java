@@ -659,9 +659,7 @@ public abstract class AbstractCodeGenerator {
 		vtmap.put("decimal", "Validators.DECIMAL");
 
 		vtmap.put("file", "Validators.FILE");
-		vtmap.put("filelength", "Validators.FILE");
 		vtmap.put("image", "Validators.IMAGE");
-		vtmap.put("imagesize", "Validators.IMAGE");
 
 		vtmap.put("constant", "Validators.CONSTANT");
 		vtmap.put("prohibited", "Validators.PROHIBITED");
@@ -706,9 +704,8 @@ public abstract class AbstractCodeGenerator {
 
 		vmmap.put("required", "Validators.MSGID_REQUIRED");
 		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
-		vmmap.put("filelength", "Validators.MSGID_FILE_LENTH");
+		vmmap.put("file", "Validators.MSGID_FILE");
 		vmmap.put("image", "Validators.MSGID_IMAGE");
-		vmmap.put("imagesize", "Validators.MSGID_IMAGE_SIZE");
 		vmmap.put("constant", "Validators.MSGID_CONSTANT");
 		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
 
