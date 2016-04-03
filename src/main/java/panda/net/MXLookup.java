@@ -14,6 +14,7 @@ import javax.naming.directory.InitialDirContext;
 import panda.lang.Collections;
 import panda.lang.collection.ExpireMap;
 import panda.lang.collection.LRUMap;
+import panda.lang.time.DateTimes;
 
 /**
  * A utility class for mx records lookup.
@@ -21,12 +22,12 @@ import panda.lang.collection.LRUMap;
  */
 public class MXLookup {
 	/**
-	 * default expire time 1h
+	 * default expire time: 1h
 	 */
-	public static final long DEFAULT_CACHE_EXPIRE = 3600;
+	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.SEC_HOUR;
 	
 	/**
-	 * default expire time 1h
+	 * default cache limit: 100
 	 */
 	public static final int DEFAULT_CACHE_LIMIT = 100;
 	
@@ -35,10 +36,10 @@ public class MXLookup {
 	/**
 	 * init cache
 	 * @param limit limit count
-	 * @param expire expire time (ms)
+	 * @param maxAge max age (sec)
 	 */
-	public static synchronized void initCache(int limit, long expire) {
-		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new LRUMap<String, List<String>>(limit), expire);
+	public static synchronized void initCache(int limit, int maxAge) {
+		ExpireMap<String, List<String>> em = new ExpireMap<String, List<String>>(new LRUMap<String, List<String>>(limit), maxAge);
 		cache = Collections.synchronizedMap(em);
 	}
 
@@ -48,7 +49,7 @@ public class MXLookup {
 
 	private static synchronized void putHostsToCache(String hostname, List<String> hosts) {
 		if (cache == null) {
-			initCache(DEFAULT_CACHE_LIMIT, DEFAULT_CACHE_EXPIRE);
+			initCache(DEFAULT_CACHE_LIMIT, DEFAULT_CACHE_MAXAGE);
 		}
 		cache.put(hostname, hosts);
 	}

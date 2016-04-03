@@ -17,14 +17,14 @@ import panda.vfs.FilePool;
 import panda.vfs.NullFileItem;
 
 public class DaoFilePool implements FilePool {
-	protected DaoClient daoClient;
+	private DaoClient daoClient;
 
-	protected int blockSize = Integer.MAX_VALUE;
+	private int blockSize = Integer.MAX_VALUE;
 
 	/**
 	 * milliseconds since last modified. (default: 1h) 
 	 */
-	protected long expires = 60 * 60 * 1000;
+	private long expires = DateTimes.MS_HOUR;
 
 	/**
 	 * @return the daoClient
@@ -55,17 +55,17 @@ public class DaoFilePool implements FilePool {
 	}
 
 	/**
-	 * @return the expires
+	 * @return the maxAge
 	 */
-	public long getExpires() {
-		return expires;
+	public int getMaxAge() {
+		return (int)(expires / 1000);
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param maxage the maxage to set
 	 */
-	public void setExpires(long expires) {
-		this.expires = expires;
+	public void setMaxAge(int maxage) {
+		this.expires = maxage * 1000;
 	}
 
 	protected FileItem saveFile(FileItem file, final InputStream body) throws IOException {

@@ -23,12 +23,12 @@ public class LocalFilePool implements FilePool {
 	
 	protected final static FastDateFormat fdf = FastDateFormat.getInstance("yyyy/MM/dd/HH/mm/ss/SSS");
 
-	protected String path = Files.getTempDirectoryPath();
+	private String path = Files.getTempDirectoryPath();
 
 	/**
 	 * milliseconds since last modified. (default: 1h) 
 	 */
-	protected long expires = 60 * 60 * 1000;
+	private long expires = DateTimes.MS_HOUR;
 
 	public LocalFilePool() {
 	}
@@ -48,17 +48,17 @@ public class LocalFilePool implements FilePool {
 	}
 
 	/**
-	 * @return the expires
+	 * @return the maxAge
 	 */
-	public long getExpires() {
-		return expires;
+	public int getMaxAge() {
+		return (int)(expires / 1000);
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param maxAge the maxAge to set
 	 */
-	public void setExpires(long expires) {
-		this.expires = expires;
+	public void setMaxAge(int maxAge) {
+		this.expires = maxAge * 1000;
 	}
 
 	protected LocalFileItem randFile(String name, boolean temporary) {
