@@ -1,6 +1,5 @@
 package panda.mvc.filepool;
 
-import panda.dao.DaoClient;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.MvcConstants;
@@ -10,26 +9,20 @@ import panda.vfs.dao.DaoFilePool;
 @IocBean(type=FilePool.class)
 public class MvcDaoFilePool extends DaoFilePool {
 	/**
-	 * @param daoClient the daoClient to set
-	 */
-	@IocInject
-	public void setDaoClient(DaoClient daoClient) {
-		this.daoClient = daoClient;
-	}
-
-	/**
 	 * @param blockSize the blockSize to set
 	 */
+	@Override
 	@IocInject(value=MvcConstants.FILEPOOL_DAO_BLOCK_SIZE, required=false)
 	public void setBlockSize(int blockSize) {
-		this.blockSize = blockSize;
+		super.setBlockSize(blockSize);
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param maxAge the maxAge to set
 	 */
-	@IocInject(value=MvcConstants.FILEPOOL_EXPIRES, required=false)
-	public void setExpires(long expires) {
-		this.expires = expires;
+	@Override
+	@IocInject(value=MvcConstants.FILEPOOL_MAXAGE, required=false)
+	public void setMaxAge(int maxAge) {
+		super.setMaxAge(maxAge);
 	}
 }

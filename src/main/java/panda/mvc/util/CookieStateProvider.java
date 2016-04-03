@@ -18,7 +18,7 @@ import panda.servlet.HttpServlets;
 public class CookieStateProvider implements StateProvider {
 	private final static String DOMAIN = "cookie-state-domain";
 	private final static String PATH = "cookie-state-path";
-	private final static String EXPIRE = "cookie-state-expire";
+	private final static String MAXAGE = "cookie-state-maxage";
 	private final static String SECURE = "cookie-state-secure";
 	
 	private ActionContext context;
@@ -26,7 +26,7 @@ public class CookieStateProvider implements StateProvider {
 	private String prefix;
 	private String domain;
 	private String path;
-	private Integer expire;
+	private Integer maxAge;
 	private Boolean secure;
 	
 	/**
@@ -58,7 +58,7 @@ public class CookieStateProvider implements StateProvider {
 	public void setTextProvider(TextProvider textProvider) {
 		domain = textProvider.getText(DOMAIN, (String)null);
 		path = textProvider.getText(PATH, (String)null);
-		expire = textProvider.getTextAsInt(EXPIRE, 0);
+		maxAge = textProvider.getTextAsInt(MAXAGE, 0);
 		secure = textProvider.getTextAsBoolean(SECURE);
 	}
 	
@@ -77,17 +77,17 @@ public class CookieStateProvider implements StateProvider {
 	}
 
 	/**
-	 * @return the expire
+	 * @return the maxAge
 	 */
-	public int getExpire() {
-		return expire;
+	public int getMaxAge() {
+		return maxAge;
 	}
 
 	/**
-	 * @param expire the expire to set
+	 * @param maxAge the maxAge to set
 	 */
-	public void setExpire(int expire) {
-		this.expire = expire;
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
 	}
 
 	/**
@@ -182,8 +182,8 @@ public class CookieStateProvider implements StateProvider {
 		if (value == null) {
 			c.setMaxAge(0);
 		}
-		else if (expire != null) {
-			c.setMaxAge(expire);
+		else if (maxAge != null) {
+			c.setMaxAge(maxAge);
 		}
 		
 		context.getResponse().addCookie(c);

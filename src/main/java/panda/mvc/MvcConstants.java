@@ -11,7 +11,7 @@ public interface MvcConstants extends IocConstants {
 	
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
 	
-	public static final String FILEPOOL_EXPIRES = "panda.filepool.expires";
+	public static final String FILEPOOL_MAXAGE = "panda.filepool.maxage";
 	public static final String FILEPOOL_LOCAL_PATH = "panda.filepool.local.path";
 	public static final String FILEPOOL_DAO_BLOCK_SIZE = "panda.filepool.dao.block.size";
 

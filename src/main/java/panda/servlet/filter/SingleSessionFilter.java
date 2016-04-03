@@ -86,7 +86,7 @@ public class SingleSessionFilter implements Filter {
 					response.addCookie(c);
 	
 					if (log.isDebugEnabled()) {
-						log.debug("Set cookie - [" + JSESSIONID + "=" + c.getValue() + "; path=" + c.getPath() + "; expires=" + c.getMaxAge() + ";]");
+						log.debug("Set cookie - [" + JSESSIONID + "=" + c.getValue() + "; path=" + c.getPath() + "; max-age=" + c.getMaxAge() + ";]");
 					}
 				}
 			}

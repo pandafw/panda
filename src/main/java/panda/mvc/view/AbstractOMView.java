@@ -53,7 +53,7 @@ public abstract class AbstractOMView extends AbstractView {
 	
 	protected String dateFormat = DATE_FORMAT_LONG;
 
-	protected int expiry = 0;
+	protected int maxAge = 0;
 
 	protected String contentType = MimeType.TEXT_PLAIN;
 
@@ -131,17 +131,17 @@ public abstract class AbstractOMView extends AbstractView {
 	}
 
 	/**
-	 * @return the expiry
+	 * @return the maxAge
 	 */
-	public int getExpiry() {
-		return expiry;
+	public int getMaxAge() {
+		return maxAge;
 	}
 
 	/**
-	 * @param expiry the expiry to set
+	 * @param maxAge the maxAge to set
 	 */
-	public void setExpiry(int expiry) {
-		this.expiry = expiry;
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
 	}
 
 	/**
@@ -223,7 +223,7 @@ public abstract class AbstractOMView extends AbstractView {
 			HttpServletResponse response = ac.getResponse();
 	
 			HttpServletSupport hss = new HttpServletSupport(request, response);
-			hss.setExpiry(expiry);
+			hss.setMaxAge(maxAge);
 			hss.setCharset(encoding);
 			hss.setContentType(contentType);
 			hss.setBom(true);

@@ -23,7 +23,7 @@ import panda.servlet.ServletURLHelper;
  * SessionRecoverFilter
  * 
  * <pre>
- * Set cookie [CSESSIONID=JSESSIONID; path=request.getContextPath(); expires=session.getMaxInactiveInterval()].
+ * Set cookie [CSESSIONID=JSESSIONID; path=request.getContextPath(); max-age=session.getMaxInactiveInterval()].
  * if request.getSession(false) is null and cookie.JSESSION is null and cookie.CSESSIONID exists,
  * set response cookie [JSESSIONID=CSESSION], 
  * and redirect to the request URL with query string build by request.parameters. 
@@ -111,7 +111,7 @@ public class SessionRecoveryFilter implements Filter {
 				c.setMaxAge(session.getMaxInactiveInterval());
 
 				if (log.isDebugEnabled()) {
-					log.debug("Set cookie - [" + CSESSIONID + "=" + c.getValue() + "; path=" + c.getPath() + "; expires=" + c.getMaxAge() + ";]");
+					log.debug("Set cookie - [" + CSESSIONID + "=" + c.getValue() + "; path=" + c.getPath() + "; max-age=" + c.getMaxAge() + ";]");
 				}
 				response.addCookie(c);
 			}

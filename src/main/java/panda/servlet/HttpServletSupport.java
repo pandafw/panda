@@ -32,7 +32,7 @@ public class HttpServletSupport {
 	private String contentType;
 	private Boolean attachment;
 	private Boolean bom;
-	private int expiry = -1;
+	private int maxAge = -1;
 	private String cacheControl;
 	private Date lastModified;
 	
@@ -164,17 +164,17 @@ public class HttpServletSupport {
 	}
 
 	/**
-	 * @return the expiry (seconds)
+	 * @return the maxAge (seconds)
 	 */
-	public int getExpiry() {
-		return expiry;
+	public int getMaxAge() {
+		return maxAge;
 	}
 
 	/**
-	 * @param expiry the expiry (seconds) to set
+	 * @param maxAge the maxAge (seconds) to set
 	 */
-	public void setExpiry(int expiry) {
-		this.expiry = expiry;
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
 	}
 
 	/**
@@ -274,19 +274,19 @@ public class HttpServletSupport {
 			}
 		}
 
-		if (expiry > 0) {
-			String cc = "max-age=" + expiry;
+		if (maxAge > 0) {
+			String cc = "max-age=" + maxAge;
 			if (Strings.isNotEmpty(cacheControl)) {
 				cc += ", " + cacheControl;
 			}
 			response.setHeader(HttpHeader.CACHE_CONTROL, cc);
 
 			Date dexp = lastModified != null ? lastModified : Calendar.getInstance().getTime();
-			dexp.setTime(dexp.getTime() + (expiry * 1000));
+			dexp.setTime(dexp.getTime() + (maxAge * 1000));
 			String sexp = HttpDates.format(dexp);
 			response.setHeader(HttpHeader.EXPIRES, sexp);
 		}
-		else if (expiry == 0 && noFileCache) {
+		else if (maxAge == 0 && noFileCache) {
 			HttpServlets.setResponseNoCache(response);
 		}
 

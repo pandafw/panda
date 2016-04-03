@@ -8,24 +8,22 @@ import panda.vfs.local.LocalFilePool;
 
 @IocBean(type=FilePool.class)
 public class MvcLocalFilePool extends LocalFilePool {
-	public MvcLocalFilePool() {
-	}
-
 	/**
 	 * @param path the path to set
 	 */
+	@Override
 	@IocInject(value=MvcConstants.FILEPOOL_LOCAL_PATH, required=false)
 	public void setPath(String path) {
-		this.path = path;
+		super.setPath(path);
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param maxAge the maxAge to set
 	 */
-	@IocInject(value=MvcConstants.FILEPOOL_EXPIRES, required=false)
-	public void setExpires(long expires) {
-		this.expires = expires;
+	@Override
+	@IocInject(value=MvcConstants.FILEPOOL_MAXAGE, required=false)
+	public void setMaxAge(int maxAge) {
+		super.setMaxAge(maxAge);
 	}
-	
 	
 }

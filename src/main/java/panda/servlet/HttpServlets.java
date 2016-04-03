@@ -827,7 +827,7 @@ public class HttpServlets {
 		HttpServletSupport hss = new HttpServletSupport(res);
 		hss.setCharset(Charsets.UTF_8);
 		hss.setContentType(MimeType.TEXT_HTML);
-		hss.setExpiry(0);
+		hss.setMaxAge(0);
 		hss.writeResponseHeader();
 		
 		PrintWriter pw = res.getWriter();

@@ -21,7 +21,7 @@ import panda.servlet.HttpServletSupport;
  *    <li>bom</li>
  *    <li>attachment</li>
  *    <li>fileName</li>
- *    <li>expiry</li>
+ *    <li>maxAge</li>
  * </ul>
  *
  * <p/>
@@ -31,7 +31,7 @@ import panda.servlet.HttpServletSupport;
  * <p/> <b>Examples</b>
  * <pre>
  *  <!-- START SNIPPET: example -->
- *  &lt;r:head expiry="0" /&gt;
+ *  &lt;r:head maxAge="0" /&gt;
  *  <!-- END SNIPPET: example -->
  * </pre>
  *
@@ -64,10 +64,17 @@ public class Head extends Component {
 	}
 
 	/**
-	 * @param expiry the expiry to set
+	 * @param maxAge the maxAge to set
 	 */
-	public void setExpiry(int expiry) {
-		this.hss.setExpiry(expiry);
+	public void setMaxage(int maxAge) {
+		hss.setMaxAge(maxAge);
+	}
+
+	/**
+	 * @param maxAge the maxAge to set
+	 */
+	public void setMaxAge(int maxAge) {
+		hss.setMaxAge(maxAge);
 	}
 
 	/**

@@ -23,7 +23,8 @@ list_json-items-maximum=10000
 #cookie-state-secure=
 
 #1M
-cookie-state-expire=2592000
+cookie-state-maxage=2592000
+
 
 #boolean
 boolean-format=top ? "TRUE" : "FALSE"
