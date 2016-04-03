@@ -107,24 +107,25 @@ validation-email-notsame=电子邮件和确认电子邮件不一致。
 validation-empty=该项目必须为空。
 validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
 validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
-validation-file-length=请指定\
-${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
-(top.minLength != null ? (top.minFileSize + "以上") : \
-(top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
-的文件。（文件大小：${top.fileSize}）
+validation-file=${exists ? ("请指定" + \
+((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
+ (top.minLength != null ? (top.minFileSize + "以上") : \
+ (top.maxLength != null ? (top.maxFileSize + "以下") : ""))) + \
+"的文件。（文件大小：" + top.fileSize + "）") \
+ : "请选择文件。"}
 validation-futuredate=不允许输入未来的日期。
 validation-hankakukatakanastring=请输入半角片假名。
 validation-hankakustring=请输入半角文字。
-validation-image=图像文件格式不正确。
-validation-image-size=请指定\
-${(top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
-(top.minWidth != null ? ("宽" + top.minWidth + "px以上") : \
-(top.maxWidth != null ? ("宽" + top.maxWidth + "px以下") : ""))}\
-${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : ""}\
-${(top.minHeight != null && top.maxHeight != null) ? ("高" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
-(top.minHeight != null ? ("高" + top.minHeight + "px以上") : \
-(top.maxHeight != null ? ("高" + top.maxHeight + "px以下") : ""))}\
-的图像文件。（图像大小：${top.width}x${top.height}）
+validation-image==${image ? ("请指定" + \
+((top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
+ (top.minWidth != null ? ("宽" + top.minWidth + "px以上") : \
+ (top.maxWidth != null ? ("宽" + top.maxWidth + "px以下") : ""))) + \
+(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : "") + \
+((top.minHeight != null && top.maxHeight != null) ? ("高" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
+ (top.minHeight != null ? ("高" + top.minHeight + "px以上") : \
+ (top.maxHeight != null ? ("高" + top.maxHeight + "px以下") : ""))) + \
+("的图像文件。（图像大小：" + top.width + "x" + top.height + "）")) \
+ : "图像文件格式不正确。"}
 validation-incorrect=该项目内容不正确。
 validation-locale-invalid=语言和国家・地区的组合不正确。
 validation-number-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \

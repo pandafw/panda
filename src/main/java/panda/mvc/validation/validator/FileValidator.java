@@ -19,7 +19,7 @@ public class FileValidator extends AbstractValidator {
 	/**
 	 * file exists
 	 */
-	private Boolean exists = null;
+	private boolean exists;
 
 	/**
 	 * file length
@@ -64,7 +64,7 @@ public class FileValidator extends AbstractValidator {
 	/**
 	 * @return the exists
 	 */
-	public Boolean getExists() {
+	public boolean isExists() {
 		return exists;
 	}
 
@@ -107,8 +107,8 @@ public class FileValidator extends AbstractValidator {
 		if (value instanceof File) {
 			File f = (File)value;
 
-			exists = f.exists();
-			if (!exists || !f.isFile()) {
+			exists = f.exists() && f.isFile();
+			if (!exists) {
 				return false;
 			}
 			length = f.length();

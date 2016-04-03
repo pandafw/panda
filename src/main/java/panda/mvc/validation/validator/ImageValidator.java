@@ -16,11 +16,18 @@ import panda.vfs.FileItem;
 @IocBean(singleton=false)
 public class ImageValidator extends AbstractValidator {
 
+	// options
 	private Integer minWidth;
 	private Integer minHeight;
 	private Integer maxWidth;
 	private Integer maxHeight;
 
+	// properties
+	/**
+	 * is image
+	 */
+	private boolean image;
+	
 	/**
 	 * image width
 	 */
@@ -43,6 +50,13 @@ public class ImageValidator extends AbstractValidator {
 	 */
 	public Integer getHeight() {
 		return height;
+	}
+
+	/**
+	 * @return the image
+	 */
+	public boolean isImage() {
+		return image;
 	}
 
 	/**
@@ -164,6 +178,7 @@ public class ImageValidator extends AbstractValidator {
 			return false;
 		}
 
+		image = true;
 		width = img.getWidth();
 		height = img.getHeight();
 		

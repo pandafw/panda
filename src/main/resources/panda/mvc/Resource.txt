@@ -178,25 +178,24 @@ validation-email=The format email address of must be "user@domain.com".
 validation-email-notsame=The confirm email is not same as you input.
 validation-empty=This field should be empty.
 validation-faxnumber=The FAX number format is incorrect (ex: "12-3456-7890").
-validation-filename=The filename can't contain these \/:*?"<>| characters. 
-validation-file-length=The file size (${top.fieSize}) must be \
-${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
-(top.minLength != null ? (">= " + top.minFileSize) : \
-(top.maxLength != null ? ("<= " + top.maxFileSize) : ""))}\
-.
+validation-filename=The file name can't contain these \/:*?"<>| characters. 
+validation-file=${exists ? ("The file size (" + top.fieSize + " must be " + \
+((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
+ (top.minLength != null ? (">= " + top.minFileSize) : \
+ (top.maxLength != null ? ("<= " + top.maxFileSize) : ""))))\
+ : "Please select a file"}.
 validation-futuredate=The future date is not allowed.
 validation-hankakustring=Please input half character.
 validation-hankakukatakanastring=Please input half kana character.
-validation-image=The image format is not correct.
-validation-image-size=The image size (${top.width}x${top.height}) must be \
-${(top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "px ~ " + top.maxWidth + "px)") : \
-(top.minWidth != null ? ("W:(>=" + top.minWidth + "px)") : \
-(top.maxWidth != null ? ("W:(<=" + top.maxWidth + "px)") : ""))}\
-${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : ""}\
-${(top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "px ~ " + top.maxHeight + "px)") : \
-(top.minHeight != null ? ("H:(>=" + top.minHeight + "px)") : \
-(top.maxHeight != null ? ("H:(<=" + top.maxHeight + "px)") : ""))}\
-.
+validation-image=${top.image ? ("The image size " + top.width + "x" + top.height + " must be " + \
+((top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "px ~ " + top.maxWidth + "px)") : \
+ (top.minWidth != null ? ("W:(>=" + top.minWidth + "px)") : \
+ (top.maxWidth != null ? ("W:(<=" + top.maxWidth + "px)") : ""))) + \
+(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? ", " : "") + \
+((top.minHeight != null && top.maxHeight != null) ? ("H: (" + top.minHeight + "px ~ " + top.maxHeight + "px)") : \
+ (top.minHeight != null ? ("H:(>=" + top.minHeight + "px)") : \
+ (top.maxHeight != null ? ("H:(<=" + top.maxHeight + "px)") : ""))))\
+ : "The image format is not correct"}.
 validation-incorrect=Incorrect value.
 validation-number-range=The number must be \
 ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \

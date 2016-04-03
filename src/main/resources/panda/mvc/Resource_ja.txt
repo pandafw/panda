@@ -108,24 +108,26 @@ validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。
 validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
 validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
-validation-file-length=\
-${(top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
-(top.minLength != null ? (top.minFileSize + "以上") : \
-(top.maxLength != null ? (top.maxFileSize + "以下") : ""))}\
-のファイルを指定してください。(ファイルサイズ：${top.fileSize})
+validation-file=${exists ? \
+(((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
+ (top.minLength != null ? (top.minFileSize + "以上") : \
+ (top.maxLength != null ? (top.maxFileSize + "以下") : ""))) + \
+("のファイルを指定してください。(ファイルサイズ：" + top.fileSize + ")")) \
+ : "ファイルを選択してください。"}
 validation-futuredate=未来の日付を入力できません。
 validation-hankakustring=半角文字を入力してください。
 validation-hankakukatakanastring=半角カナを入力してください。
-validation-image=画像ファイルのフォーマットが正しくありません。
-validation-image-size=\
-${(top.minWidth != null && top.maxWidth != null) ? ("幅" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
-(top.minWidth != null ? ("幅" + top.minWidth + "px以上") : \
-(top.maxWidth != null ? ("幅" + top.maxWidth + "px以下") : ""))}\
-${((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? "、" : ""}\
-${(top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
-(top.minHeight != null ? ("高さ" + top.minHeight + "px以上") : \
-(top.maxHeight != null ? ("高さ" + top.maxHeight + "px以下") : ""))}\
-の画像ファイルを指定してください。（画像サイズ: ${top.width}x${top.height}）
+validation-image=${top.image ? \
+(((top.minWidth != null && top.maxWidth != null) ? \
+ ("幅" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
+ (top.minWidth != null ? ("幅" + top.minWidth + "px以上") : \
+ (top.maxWidth != null ? ("幅" + top.maxWidth + "px以下") : ""))) + \
+(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? "、" : ""} + \
+((top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
+ (top.minHeight != null ? ("高さ" + top.minHeight + "px以上") : \
+ (top.maxHeight != null ? ("高さ" + top.maxHeight + "px以下") : ""))) + \
+"の画像ファイルを指定してください。（画像サイズ: ${top.width}x${top.height}）")\
+ : "画像ファイルのフォーマットが正しくありません。"}
 validation-incorrect=項目の値が正しくありません。
 validation-locale-invalid=言語と国・地域の組合せは正しくありません。
 validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
