@@ -2212,8 +2212,6 @@ public class Streams {
 	 * Drain an <code>InputStream</code>.
 	 * 
 	 * @param input the input stream to drain
-	 * @return the number of bytes read
-	 * @throws IOException in case of I/O errors
 	 */
 	public static void safeDrain(InputStream input) {
 		try {

@@ -265,4 +265,40 @@ public class StringsTrimEmptyTest  {
         assertArrayEquals(foo, Strings.stripAll(fooSpace, null));
         assertArrayEquals(foo, Strings.stripAll(fooDots, "."));
     }
+    
+    @Test
+    public void testStripToUpperNull() {
+        assertEquals(null, Strings.stripToUpperNull(null));
+        assertEquals(null, Strings.stripToUpperNull(""));
+        assertEquals(null, Strings.stripToUpperNull("        "));
+        assertEquals(null, Strings.stripToUpperNull(StringsTest.WHITESPACE));
+        assertEquals("AB C", Strings.stripToUpperNull("  ab c  "));
+    }
+    
+    @Test
+    public void testStripToUpperEmpty() {
+        assertEquals("", Strings.stripToUpperEmpty(null));
+        assertEquals("", Strings.stripToUpperEmpty(""));
+        assertEquals("", Strings.stripToUpperEmpty("        "));
+        assertEquals("", Strings.stripToUpperEmpty(StringsTest.WHITESPACE));
+        assertEquals("AB C", Strings.stripToUpperEmpty("  ab c  "));
+    }
+    
+    @Test
+    public void testStripToLowerNull() {
+        assertEquals(null, Strings.stripToLowerNull(null));
+        assertEquals(null, Strings.stripToLowerNull(""));
+        assertEquals(null, Strings.stripToLowerNull("        "));
+        assertEquals(null, Strings.stripToLowerNull(StringsTest.WHITESPACE));
+        assertEquals("ab c", Strings.stripToLowerNull("  AB c  "));
+    }
+    
+    @Test
+    public void testStripToLowerEmpty() {
+        assertEquals("", Strings.stripToLowerEmpty(null));
+        assertEquals("", Strings.stripToLowerEmpty(""));
+        assertEquals("", Strings.stripToLowerEmpty("        "));
+        assertEquals("", Strings.stripToLowerEmpty(StringsTest.WHITESPACE));
+        assertEquals("ab c", Strings.stripToLowerEmpty("  AB c  "));
+    }
 }

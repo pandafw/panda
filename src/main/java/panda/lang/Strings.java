@@ -413,6 +413,22 @@ public class Strings {
 	}
 
 	/**
+	 * @param str the string to strip
+	 * @return upperCase(strip(str));
+	 */
+	public static String stripToUpper(final String str) {
+		return stripToUpper(str, null);
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @return lowerrCase(strip(str));
+	 */
+	public static String stripToLower(final String str) {
+		return stripToLower(str, null);
+	}
+
+	/**
 	 * <p>
 	 * Strips whitespace from the start and end of a String returning {@code null} if the String is
 	 * empty ("") after the strip.
@@ -637,6 +653,24 @@ public class Strings {
 		return stripEnd(str, stripChars);
 	}
 
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return upperCase(strip(str, stripChars));
+	 */
+	public static String stripToUpper(final String str, final String stripChars) {
+		return upperCase(strip(str, stripChars));
+	}
+
+	/**
+	 * @param str the string to strip
+	 * @param stripChars the characters to remove, null treated as whitespace
+	 * @return lowerrCase(strip(str, stripChars));
+	 */
+	public static String stripToLower(final String str, final String stripChars) {
+		return lowerCase(strip(str, stripChars));
+	}
 
 	/**
 	 * <p>
