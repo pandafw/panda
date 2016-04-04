@@ -17,6 +17,7 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MULTIPART_BODY_SIZE_MAX = "panda.multipart.body.size.max";
 	public static final String MULTIPART_FILE_SIZE_MAX = "panda.multipart.file.size.max";
+	public static final String MULTIPART_DRAIN_TIMEOUT = "panda.multipart.drain.timeout";
 	
 	public static final String FREEMARKER_TEMPLATES = "panda.freemarker.templates";
 	public static final String FREEMARKER_TEMPLATES_WEB_PATH = "panda.freemarker.templates.web.path";

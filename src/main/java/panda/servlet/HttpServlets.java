@@ -852,4 +852,30 @@ public class HttpServlets {
 		}
 	}
 
+	/**
+	 * safe drain request stream
+	 * @param req http servlet request
+	 */
+	public static void safeDrain(HttpServletRequest req) {
+		try {
+			Streams.drain(req.getInputStream());
+		}
+		catch (IOException e) {
+			//
+		}
+	}
+
+	/**
+	 * safe drain request stream
+	 * @param req http servlet request
+	 * @param timeout the timeout to stop drain (milliseconds)
+	 */
+	public static void safeDrain(HttpServletRequest req, long timeout) {
+		try {
+			Streams.drain(req.getInputStream(), timeout);
+		}
+		catch (IOException e) {
+			//
+		}
+	}
 }

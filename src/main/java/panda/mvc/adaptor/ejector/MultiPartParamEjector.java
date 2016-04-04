@@ -8,10 +8,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import panda.io.FileNames;
+import panda.io.SizeLimitExceededException;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
@@ -45,14 +47,21 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 	@IocInject(value=MvcConstants.MULTIPART_FILE_SIZE_MAX, required=false)
 	private long fileSizeMax = 2097152;
 
+	/**
+	 * The timeout of drain a request.
+	 * default: 60s
+	 */
+	@IocInject(value=MvcConstants.MULTIPART_DRAIN_TIMEOUT, required=false)
+	private long drainTimeout = DateTimes.MS_MINUTE;
+
 	public MultiPartParamEjector() {
 	}
 
 	@Override
 	protected Map<String, Object> getParams() {
 		if (params == null) {
+			HttpServletRequest req = ac.getRequest();
 			try {
-				HttpServletRequest req = ac.getRequest();
 				if (log.isDebugEnabled()) {
 					log.debug("parse: " + ac.getPath());
 				}
@@ -61,6 +70,10 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 				params = URLHelper.parseQueryString(qs);
 
 				parse(req);
+			}
+			catch (SizeLimitExceededException e) {
+				HttpServlets.safeDrain(req, drainTimeout);
+				throw Exceptions.wrapThrow(e);
 			}
 			catch (Exception e) {
 				throw Exceptions.wrapThrow(e);
