@@ -1,6 +1,5 @@
 package panda.wing.task;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,7 +164,7 @@ public class ActionTask implements Runnable {
 				}
 			}
 		}
-		catch (IOException e) {
+		catch (Throwable e) {
 			log.error("Failed to GET " + getUrl(), e);
 		}
 		finally {
