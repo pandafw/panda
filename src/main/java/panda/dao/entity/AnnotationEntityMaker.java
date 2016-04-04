@@ -60,80 +60,18 @@ public class AnnotationEntityMaker implements EntityMaker {
 	}
 
 	@Override
-	public <T> Entity<T> make(Class<T> type) {
+	public <T> Entity<T> create(Class<T> type) {
 		Entity<T> en = createEntity(type);
-
-		Collection<Field> fields = Fields.getDeclaredFields(type);
-
-		// Is @Column declared
-		boolean shouldUseColumn = false;
-		for (Field field : fields) {
-			if (null != field.getAnnotation(Column.class)) {
-				shouldUseColumn = true;
-				break;
-			}
-		}
-
-		// loop for fields
-		for (Field field : fields) {
-			addEntityField(en, field, shouldUseColumn);
-		}
-
-		// loop for methods
-		for (Method method : Methods.getAllMethodsList(en.getType())) {
-			addEntityField(en, method);
-		}
-
-		// check empty
-		if (Collections.isEmpty(en.getFields())) {
-			throw new IllegalArgumentException(type + " has no Mapping Fields !");
-		}
-
-		// find identity field & check primary key
-		for (EntityField ef : en.getFields()) {
-			if (ef.isIdentity()) {
-				if (en.getIdentity() != null) {
-					throw new IllegalArgumentException("Allows only a single @Id of " + type);
-				}
-				en.setIdentity(ef);
-			}
-			if (ef.isPrimaryKey()) {
-				en.addPrimaryKey(ef);
-			}
-		}
-
-		// check primary keys
-		if (Collections.isEmpty(en.getPrimaryKeys())) {
-			throw new IllegalArgumentException(type + " has no Primary Key !");
-		}
-
-		// fix not null property of primary key
-		for (EntityField ef : en.getPrimaryKeys()) {
-			ef.setNotNull(true);
-		}
-
-		// evaluate indexes
-		Indexes annIndexes = Classes.getAnnotation(type, Indexes.class);
-		if (annIndexes != null) {
-			evalEntityIndexes(en, annIndexes);
-		}
-
-		// evaluate foreign keys
-		ForeignKeys annFKeys = Classes.getAnnotation(type, ForeignKeys.class);
-		if (annFKeys != null) {
-			evalEntityFKeys(en, annFKeys);
-		}
-
-		// evaluate joins
-		Joins annJoins = Classes.getAnnotation(type, Joins.class);
-		if (annJoins != null) {
-			evalEntityJoins(en, annJoins);
-		}
-
-		// done
+		initFields(en);
+		initIndexes(en);
 		return en;
 	}
-
+	
+	@Override
+	public void initialize(Entity<?> en) {
+		initRelations(en);
+	}
+	
 	private <T> Entity<T> createEntity(Class<T> type) {
 		Entity<T> en = new Entity<T>(type);
 
@@ -178,7 +116,86 @@ public class AnnotationEntityMaker implements EntityMaker {
 		if (annComment != null) {
 			en.setComment(annComment.value());
 		}
+
 		return en;
+	}
+
+	private void initFields(Entity<?> en) {
+		Class<?> type = en.getType();
+		Collection<Field> fields = Fields.getDeclaredFields(type);
+
+		// Is @Column declared
+		boolean shouldUseColumn = false;
+		for (Field field : fields) {
+			if (null != field.getAnnotation(Column.class)) {
+				shouldUseColumn = true;
+				break;
+			}
+		}
+
+		// loop for fields
+		for (Field field : fields) {
+			addEntityField(en, field, shouldUseColumn);
+		}
+
+		// loop for methods
+		for (Method method : Methods.getAllMethodsList(en.getType())) {
+			addEntityField(en, method);
+		}
+
+		// check empty
+		if (Collections.isEmpty(en.getFields())) {
+			throw new IllegalArgumentException(type + " has no Mapping Fields !");
+		}
+
+		// find identity field & check primary key
+		for (EntityField ef : en.getFields()) {
+			if (ef.isIdentity()) {
+				if (en.getIdentity() != null) {
+					throw new IllegalArgumentException("Allows only a single @Id of " + type);
+				}
+				en.setIdentity(ef);
+			}
+			if (ef.isPrimaryKey()) {
+				en.addPrimaryKey(ef);
+			}
+		}
+	}
+	
+	private void initIndexes(Entity<?> en) {
+		Class<?> type = en.getType();
+
+		// check primary keys
+		if (Collections.isEmpty(en.getPrimaryKeys())) {
+			throw new IllegalArgumentException(type + " has no Primary Key !");
+		}
+
+		// fix not null property of primary key
+		for (EntityField ef : en.getPrimaryKeys()) {
+			ef.setNotNull(true);
+		}
+
+		// evaluate indexes
+		Indexes annIndexes = Classes.getAnnotation(type, Indexes.class);
+		if (annIndexes != null) {
+			evalEntityIndexes(en, annIndexes);
+		}
+	}
+	
+	private void initRelations(Entity<?> en) {
+		Class<?> type = en.getType();
+
+		// evaluate foreign keys
+		ForeignKeys annFKeys = Classes.getAnnotation(type, ForeignKeys.class);
+		if (annFKeys != null) {
+			evalEntityFKeys(en, annFKeys);
+		}
+
+		// evaluate joins
+		Joins annJoins = Classes.getAnnotation(type, Joins.class);
+		if (annJoins != null) {
+			evalEntityJoins(en, annJoins);
+		}
 	}
 
 	/**
@@ -569,11 +586,15 @@ public class AnnotationEntityMaker implements EntityMaker {
 			
 			EntityField ef = en.getField(kn);
 			if (ef == null) {
-				throw Exceptions.makeThrow("Failed to find key field '%s' in '%s' for @Join(%s: %s)", 
-					kn, en.getType(), ej.getName(), Strings.join(keys, '|'));
+				throw new IllegalArgumentException(String.format("Failed to find key field '%s' in '%s' for @Join(%s: %s = %s)", 
+					kn, en.getType(), ej.getName(), Strings.join(keys, '|'), Strings.join(refs, '|')));
 			}
 			
 			EntityField rf = ref.getField(rn);
+			if (rf == null) {
+				throw new IllegalArgumentException(String.format("Failed to find ref field '%s' in '%s' for @Join(%s: %s = %s)", 
+					rn, ref.getType(), ej.getName(), Strings.join(keys, '|'), Strings.join(refs, '|')));
+			}
 			
 			if (!Types.equals(ef.getType(), rf.getType())) {
 				throw Exceptions.makeThrow(

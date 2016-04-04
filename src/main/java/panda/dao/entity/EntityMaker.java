@@ -7,10 +7,17 @@ package panda.dao.entity;
 public interface EntityMaker {
 
 	/**
-	 * 根据一个配置信息，生成一个新的 Entity 的实例
+	 * Create a Entity instance
 	 * 
-	 * @param type Entity 的配置信息
-	 * @return Entity 实例
+	 * @param type Entity class
+	 * @return Entity instance
 	 */
-	<T> Entity<T> make(Class<T> type);
+	<T> Entity<T> create(Class<T> type);
+
+	/**
+	 * Initialize the Entity instance
+	 * 
+	 * @param entity Entity instance
+	 */
+	void initialize(Entity<?> entity);
 }

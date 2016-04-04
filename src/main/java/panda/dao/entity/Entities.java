@@ -74,8 +74,9 @@ public class Entities {
 			synchronized(this) {
 				entity = entities.get(type);
 				if (entity == null) {
-					entity = entityMaker.make(type);
+					entity = entityMaker.create(type);
 					entities.put(type, entity);
+					entityMaker.initialize(entity);
 				}
 			}
 		}
