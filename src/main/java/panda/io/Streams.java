@@ -52,6 +52,7 @@ import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.Threads;
 
 /**
  * I/O Utilities class.
@@ -2207,7 +2208,6 @@ public class Streams {
 		return -1;
 	}
 
-	
 	/**
 	 * Drain an <code>InputStream</code>.
 	 * 
@@ -2217,6 +2217,23 @@ public class Streams {
 		try {
 			if (input != null) {
 				drain(input);
+			}
+		}
+		catch (IOException ioe) {
+			// ignore
+		}
+	}
+	
+	/**
+	 * Drain an <code>InputStream</code>.
+	 * 
+	 * @param input the input stream to drain
+	 * @param timeout the timeout to stop drain (milliseconds)
+	 */
+	public static void safeDrain(InputStream input, long timeout) {
+		try {
+			if (input != null) {
+				drain(input, timeout);
 			}
 		}
 		catch (IOException ioe) {
@@ -2243,6 +2260,47 @@ public class Streams {
 		}
 		long read = 0;
 		while (true) {
+			final long n = input.read(SKIP_BYTE_BUFFER, 0, SKIP_BUFFER_SIZE);
+			if (n < 0) { // EOF
+				break;
+			}
+			read += n;
+		}
+		return read;
+	}
+	
+	/**
+	 * Drain an <code>InputStream</code>.
+	 * 
+	 * @param input the input stream to drain
+	 * @param timeout the timeout to stop drain (milliseconds)
+	 * @return the number of bytes read
+	 * @throws IOException in case of I/O errors
+	 */
+	public static long drain(InputStream input, long timeout) throws IOException {
+		if (timeout <= 0) {
+			return drain(input);
+		}
+
+		/*
+		 * N.B. no need to synchronize this because: - we don't care if the buffer is created
+		 * multiple times (the data is ignored) - we always use the same size buffer, so if it it is
+		 * recreated it will still be OK (if the buffer size were variable, we would need to synch.
+		 * to ensure some other thread did not create a smaller one)
+		 */
+		if (SKIP_BYTE_BUFFER == null) {
+			SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
+		}
+
+		long start = System.currentTimeMillis();
+		long read = 0;
+		while (true) {
+			if (input.available() <= 0) {
+				Threads.safeSleep(10);
+			}
+			if (System.currentTimeMillis() - start > timeout) {
+				break;
+			}
 			final long n = input.read(SKIP_BYTE_BUFFER, 0, SKIP_BUFFER_SIZE);
 			if (n < 0) { // EOF
 				break;
