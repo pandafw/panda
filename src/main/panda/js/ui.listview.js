@@ -229,6 +229,10 @@ function _plv_init_table($lv) {
 }
 
 function _plv_init($lv) {
+	if ($lv.data("plistview")) {
+		return;
+	}
+	$lv.data("plistview", true);
 	_plv_init_table($lv);
 	_plv_init_filters($lv);
 }

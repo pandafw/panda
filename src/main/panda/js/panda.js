@@ -1743,37 +1743,48 @@ if (typeof String.formatSize != "function") {
 })(jQuery);
 (function($) {
 	$(window).on('load', function() {
-		$(".p-checkboxlist.order :checkbox").click(function() {
-			var $t = $(this);
-			var $l = $t.closest('label');
-			var $h = $t.closest('.p-checkboxlist').find('hr');
-			$l.fadeOut(function() {
-				if ($t.is(':checked')) {
-					$l.insertBefore($h);
-				}
-				else {
-					$l.insertAfter($h);
-				}
-				$l.fadeIn();
+		$(".p-checkboxlist.order")
+			.removeClass("order")
+			.addClass("ordered")
+			.find(":checkbox").click(function() {
+				var $t = $(this);
+				var $l = $t.closest('label');
+				var $h = $t.closest('.p-checkboxlist').find('hr');
+				$l.fadeOut(function() {
+					if ($t.is(':checked')) {
+						$l.insertBefore($h);
+					}
+					else {
+						$l.insertAfter($h);
+					}
+					$l.fadeIn();
+				});
 			});
-		});
 	});
 })(jQuery);
 (function($) {
 	function focusForm() {
-		$i = $('form[initfocus="true"]').eq(0).attr('initfocus', 'focus');
-		$i = $i.find('input,select,textarea,button');
-		$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
+		var $i = $('form[initfocus="true"]').eq(0);
 		if ($i.length > 0) {
+			$i.attr('initfocus', 'focus');
+			$i = $i.find('input,select,textarea,button');
+			$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
 			$i.focus();
 			$('body').scrollTop(0).scrollLeft(0);
 		}
 	}
 
 	function actionForm() {
-		$('input[data-action], button[data-action]').click(function() {
-			$i = $(this);
-			$i.closest('form').attr('action', $i.data('action'));
+		$('form').each(function() {
+			var $t = $(this);
+			if ($t.data("actionHooked")) {
+				return;
+			}
+			$t.data('actionHooded', true)
+				.find('input[data-action], button[data-action]').click(function() {
+					$i = $(this);
+					$i.closest('form').attr('action', $i.data('action'));
+				});
 		});
 	}
 	
@@ -2013,6 +2024,10 @@ function _plv_init_table($lv) {
 }
 
 function _plv_init($lv) {
+	if ($lv.data("plistview")) {
+		return;
+	}
+	$lv.data("plistview", true);
 	_plv_init_table($lv);
 	_plv_init_filters($lv);
 }
@@ -2291,14 +2306,22 @@ function _plv_onTBodyMouseOut(evt) {
 	});
 })();
 (function() {
+	function panel_wheel(e, delta) {
+		var o = this.scrollLeft;
+		this.scrollLeft -= (delta * 40);
+		if (o != this.scrollLeft) {
+			e.preventDefault();
+		}
+	}
+
 	// ==================
-	$(window).on('load', function () {
-		$('.p-panel-hscroll .panel-body').mousewheel(function(e, delta) {
-			var o = this.scrollLeft;
-			this.scrollLeft -= (delta * 40);
-			if (o != this.scrollLeft) {
-				e.preventDefault();
+	$(window).on('load', function() {
+		$('.p-panel-hscroll .panel-body').each(function() {
+			var $t = $(this);
+			if ($t.data('pwheelpanel')) {
+				return;
 			}
+			$t.data('pwheelpanel', true).mousewheel(panel_wheel);
 		});
 	});
 })();
@@ -2581,33 +2604,6 @@ function s_copyToClipboard(s) {
 }
 
 //------------------------------------------------------
-function s_detect_adblock(el, block) {
-	var $e = $(el);
-	if ($e.length > 0 && $e.height() < 10) {
-		var msg = {
-				en: "You are using Adblock. <br/>Please disable Adblock for this site.",
-				ja: "Adblockをお使いのお客様はご利用が出来ません。<br/>本サイトのAdblock設定を無効にしてください。",
-				zh: "尊敬的用户，请不要使用Adblock浏览我们的网站。"
-			};
-		var l = $('html').attr('lang');
-		var m = msg.en;
-		if (l.startsWith('ja')) {
-			m = msg.ja;
-		}
-		else if (l.startsWith('zh')) {
-			m = msg.zh;
-		}
-		
-		$('<div class="modal fade p-adblock" tabindex="-1">'
-				+ '<div class="modal-dialog">'
-				+ '<div class="modal-content"><div class="modal-body"></div></div>'
-				+ '</div></div>')
-				.find('.modal-body').html(m).end()
-				.appendTo('body').modal(block ? { backdrop: 'static', keyboard: false } : {});
-	}
-}
-
-//------------------------------------------------------
 function s_decorate(selector) {
 	$(selector).each(function() {
 		var $w = $(this);
@@ -2656,6 +2652,10 @@ s_setbase({
 		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
 		return this.each(function() {
 			var $t = $(this);
+			if ($t.data('ptriggerHooked')) {
+				return;
+			}
+			$t.data('ptriggerHooked', true);
 			var f = option.onclick || $t.data('ptrigger');
 			if (!f || f == 'false') {
 				return;
@@ -2672,7 +2672,7 @@ s_setbase({
 					else {
 						$t.val('');
 					}
-			  });
+			});
 		});
 	};
 	
@@ -2684,6 +2684,11 @@ s_setbase({
 })();
 (function($) {
 	var puploader = function($u) {
+		if ($u.data('puploader')) {
+			return;
+		}
+		$u.data('puploader', true);
+		
 		var loading = false;
 		
 		var pul = $u.data('uploadLink');

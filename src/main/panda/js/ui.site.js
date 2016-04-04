@@ -277,33 +277,6 @@ function s_copyToClipboard(s) {
 }
 
 //------------------------------------------------------
-function s_detect_adblock(el, block) {
-	var $e = $(el);
-	if ($e.length > 0 && $e.height() < 10) {
-		var msg = {
-				en: "You are using Adblock. <br/>Please disable Adblock for this site.",
-				ja: "Adblockをお使いのお客様はご利用が出来ません。<br/>本サイトのAdblock設定を無効にしてください。",
-				zh: "尊敬的用户，请不要使用Adblock浏览我们的网站。"
-			};
-		var l = $('html').attr('lang');
-		var m = msg.en;
-		if (l.startsWith('ja')) {
-			m = msg.ja;
-		}
-		else if (l.startsWith('zh')) {
-			m = msg.zh;
-		}
-		
-		$('<div class="modal fade p-adblock" tabindex="-1">'
-				+ '<div class="modal-dialog">'
-				+ '<div class="modal-content"><div class="modal-body"></div></div>'
-				+ '</div></div>')
-				.find('.modal-body').html(m).end()
-				.appendTo('body').modal(block ? { backdrop: 'static', keyboard: false } : {});
-	}
-}
-
-//------------------------------------------------------
 function s_decorate(selector) {
 	$(selector).each(function() {
 		var $w = $(this);

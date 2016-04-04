@@ -3,6 +3,10 @@
 		option = $.extend({ 'icon' : 'fa fa-remove' }, option);
 		return this.each(function() {
 			var $t = $(this);
+			if ($t.data('ptriggerHooked')) {
+				return;
+			}
+			$t.data('ptriggerHooked', true);
 			var f = option.onclick || $t.data('ptrigger');
 			if (!f || f == 'false') {
 				return;
@@ -19,7 +23,7 @@
 					else {
 						$t.val('');
 					}
-			  });
+			});
 		});
 	};
 	

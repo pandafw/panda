@@ -1,5 +1,10 @@
 (function($) {
 	var puploader = function($u) {
+		if ($u.data('puploader')) {
+			return;
+		}
+		$u.data('puploader', true);
+		
 		var loading = false;
 		
 		var pul = $u.data('uploadLink');
