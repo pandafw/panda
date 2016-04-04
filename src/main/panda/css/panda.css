@@ -113,6 +113,11 @@ div.p-datetimepicker > .input-group-addon {
 }
 div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i, div.p-datetimepicker i {
 }
+
+/** disable bootstrap not-allowed cursor */
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+	cursor: auto;
+}
 /* LOADER */
 .p-loader-squares-circle {
 	background: url("../img/loader/squares-circle.gif") center center no-repeat;

@@ -146,7 +146,7 @@
 						}
 						if (d.exception) {
 							var e = d.exception;
-							$ue.palert('error', (e.message + (e.stackTrace ? ("\n\n\n" + e.stackTrace) : "")).escapePhtml());
+							$ue.palert('error', (e.message + (e.stackTrace ? ("\n" + e.stackTrace) : "")).escapePhtml());
 						}
 						$ue.slideDown();
 					}
