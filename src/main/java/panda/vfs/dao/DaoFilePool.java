@@ -140,11 +140,17 @@ public class DaoFilePool implements FilePool {
 			fd.setBno(i);
 			int bs = blockSize;
 			if (i + bs > len) {
-				bs = len- i;
+				bs = len - i;
 			}
 
-			byte[] buf = new byte[bs];
-			System.arraycopy(data, i, buf, 0, bs);
+			byte[] buf;
+			if (i == 0 && bs == len) {
+				buf = data;
+			}
+			else {
+				buf = new byte[bs];
+				System.arraycopy(data, i, buf, 0, bs);
+			}
 
 			fd.setSize(bs);
 			fd.setData(buf);
