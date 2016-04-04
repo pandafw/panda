@@ -1,5 +1,6 @@
 package panda.mvc.filepool;
 
+import panda.dao.DaoClient;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.MvcConstants;
@@ -8,6 +9,13 @@ import panda.vfs.dao.DaoFilePool;
 
 @IocBean(type=FilePool.class)
 public class MvcDaoFilePool extends DaoFilePool {
+	
+	@IocInject
+	@Override
+	public void setDaoClient(DaoClient daoClient) {
+		super.setDaoClient(daoClient);
+	}
+
 	/**
 	 * @param blockSize the blockSize to set
 	 */
