@@ -1,24 +1,5 @@
 package panda.servlet;
 
-import panda.bind.json.JsonObject;
-import panda.bind.json.Jsons;
-import panda.cast.Castors;
-import panda.io.MimeType;
-import panda.io.Streams;
-import panda.lang.Arrays;
-import panda.lang.Charsets;
-import panda.lang.Exceptions;
-import panda.lang.Strings;
-import panda.lang.time.DateTimes;
-import panda.log.Log;
-import panda.log.Logs;
-import panda.net.URLHelper;
-import panda.net.http.HttpDates;
-import panda.net.http.HttpHeader;
-import panda.net.http.HttpMethod;
-import panda.net.http.ParameterParser;
-import panda.net.http.UserAgent;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -37,6 +18,24 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import panda.bind.json.JsonObject;
+import panda.bind.json.Jsons;
+import panda.cast.Castors;
+import panda.io.MimeType;
+import panda.io.Streams;
+import panda.lang.Arrays;
+import panda.lang.Charsets;
+import panda.lang.Exceptions;
+import panda.lang.Strings;
+import panda.log.Log;
+import panda.log.Logs;
+import panda.net.URLHelper;
+import panda.net.http.HttpDates;
+import panda.net.http.HttpHeader;
+import panda.net.http.HttpMethod;
+import panda.net.http.ParameterParser;
+import panda.net.http.UserAgent;
 
 
 /**
@@ -782,14 +781,51 @@ public class HttpServlets {
 	}
 
 	/**
+	 * Set cache control to response header
+	 * @param response HttpServletResponse
+	 */
+	public static void setResponseCache(HttpServletResponse response, int maxAge) {
+		setResponseCache(response, maxAge, HttpHeader.CACHE_CONTROL_PUBLIC);
+	}
+	
+	/**
+	 * Set cache control to response header
+	 * @param response HttpServletResponse
+	 */
+	public static void setResponseCache(HttpServletResponse response, int maxAge, String cacheControl) {
+		String cc = "max-age=" + maxAge;
+		if (Strings.isNotEmpty(cacheControl)) {
+			cc += ", " + cacheControl;
+		}
+		response.setHeader(HttpHeader.CACHE_CONTROL, cc);
+
+		String now = HttpDates.format(System.currentTimeMillis());
+		response.setHeader(HttpHeader.DATE, now);
+		
+		String expires = HttpDates.format(System.currentTimeMillis() + (maxAge * 1000));
+		response.setHeader(HttpHeader.EXPIRES, expires);
+		response.setHeader(HttpHeader.RETRY_AFTER, expires);
+	}
+
+	/**
 	 * Set no cache to response header
 	 * @param response HttpServletResponse
 	 */
 	public static void setResponseNoCache(HttpServletResponse response) {
 		response.setHeader(HttpHeader.CACHE_CONTROL, HttpHeader.CACHE_CONTROL_NOCACHE);
 		response.setHeader(HttpHeader.PRAGMA, HttpHeader.CACHE_CONTROL_NOCACHE);
-		String expires = HttpDates.format(DateTimes.getDate());
-		response.setHeader(HttpHeader.EXPIRES, expires);
+		response.setHeader(HttpHeader.EXPIRES, "-1");
+	}
+
+	public static boolean isModifiedSince(HttpServletRequest request, long lastModifiedMillis) {
+		// check for if-modified-since, prior to any other headers
+		long ifModifiedSince = 0;
+		try {
+			ifModifiedSince = request.getDateHeader(HttpHeader.IF_MODIFIED_SINCE);
+		} catch (Exception e) {
+		}
+		
+		return (ifModifiedSince > 0 && ifModifiedSince <= lastModifiedMillis);
 	}
 
 	/**

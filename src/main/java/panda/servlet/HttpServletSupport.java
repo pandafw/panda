@@ -3,7 +3,6 @@ package panda.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +32,7 @@ public class HttpServletSupport {
 	private Boolean attachment;
 	private Boolean bom;
 	private int maxAge = -1;
-	private String cacheControl;
+	private String cacheControl = HttpHeader.CACHE_CONTROL_PUBLIC;
 	private Date lastModified;
 	
 	private byte[] data;
@@ -275,16 +274,7 @@ public class HttpServletSupport {
 		}
 
 		if (maxAge > 0) {
-			String cc = "max-age=" + maxAge;
-			if (Strings.isNotEmpty(cacheControl)) {
-				cc += ", " + cacheControl;
-			}
-			response.setHeader(HttpHeader.CACHE_CONTROL, cc);
-
-			Date dexp = lastModified != null ? lastModified : Calendar.getInstance().getTime();
-			dexp.setTime(dexp.getTime() + (maxAge * 1000));
-			String sexp = HttpDates.format(dexp);
-			response.setHeader(HttpHeader.EXPIRES, sexp);
+			HttpServlets.setResponseCache(response, maxAge, cacheControl);
 		}
 		else if (maxAge == 0 && noFileCache) {
 			HttpServlets.setResponseNoCache(response);
