@@ -613,7 +613,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	public GenericQuery autoLeftJoin(String join, Query<?> query) {
-		return autoJoin(Join.LEFT, join);
+		return autoJoin(Join.LEFT, join, query);
 	}
 
 	/**
