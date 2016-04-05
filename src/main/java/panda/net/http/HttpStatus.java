@@ -302,8 +302,8 @@ public class HttpStatus {
 		setStatusReason(SC_ACCEPTED, "Accepted");
 		setStatusReason(SC_NO_CONTENT, "No Content");
 		setStatusReason(SC_MOVED_PERMANENTLY, "Moved Permanently");
-		setStatusReason(SC_MOVED_TEMPORARILY, "Moved Temporarily");
-//		setStatusReason(SC_FOUND, "Found");
+//		setStatusReason(SC_MOVED_TEMPORARILY, "Moved Temporarily");
+		setStatusReason(SC_FOUND, "Found");
 		setStatusReason(SC_NOT_MODIFIED, "Not Modified");
 		setStatusReason(SC_BAD_REQUEST, "Bad Request");
 		setStatusReason(SC_UNAUTHORIZED, "Unauthorized");

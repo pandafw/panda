@@ -133,6 +133,17 @@ public class HttpDates {
 	}
 
 	/**
+	 * Formats the given date according to the RFC 1123 pattern.
+	 * 
+	 * @param date The date to format.
+	 * @return An RFC 1123 formatted date string.
+	 * @see #PATTERN_RFC1123
+	 */
+	public static String format(long date) {
+		return format(date, PATTERN_RFC1123);
+	}
+
+	/**
 	 * Formats the given date according to the specified pattern. The pattern must conform to that
 	 * used by the {@link FastDateFormat date format} class.
 	 * 
@@ -145,6 +156,22 @@ public class HttpDates {
 		if (date == null) {
 			return null;
 		}
+		if (pattern == null) {
+			throw new IllegalArgumentException("pattern is null");
+		}
+		return DateTimes.format(date, pattern, TimeZones.GMT, Locale.US);
+	}
+
+	/**
+	 * Formats the given date according to the specified pattern. The pattern must conform to that
+	 * used by the {@link FastDateFormat date format} class.
+	 * 
+	 * @param date The date to format.
+	 * @param pattern The pattern to use for formatting the date.
+	 * @return A formatted date string.
+	 * @throws IllegalArgumentException If the given date pattern is invalid.
+	 */
+	public static String format(long date, String pattern) {
 		if (pattern == null) {
 			throw new IllegalArgumentException("pattern is null");
 		}
