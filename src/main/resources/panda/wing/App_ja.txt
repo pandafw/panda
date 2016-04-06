@@ -288,8 +288,8 @@ action-success-bupdate=${top}件のデータを更新しました。
 confirm-data-overwrite=該当データを上書きして宜しいでしょうか？
 
 #warn messages
-warn-data-changed-on-update=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
 warn-data-changed-on-delete=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
+warn-data-changed-on-edit=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
 warn-data-changed-on-trash=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
 
 

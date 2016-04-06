@@ -328,7 +328,7 @@ action-success-bupdate=${top} items have been successfully updaated.
 confirm-data-overwrite=Are you sure to overwrite this data?
 
 #warn messages
-warn-data-changed-on-update=The data is updated by other user at ${top}.\nAre you sure to overwrite the data?
 warn-data-changed-on-delete=The data is updated by other user at ${top}.\nAre you sure to delete the data?
+warn-data-changed-on-edit=The data is updated by other user at ${top}.\nAre you sure to overwrite the data?
 warn-data-changed-on-trash=The data is updated by other user at ${top}.\nAre you sure to delete the data?
 

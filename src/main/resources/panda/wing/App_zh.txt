@@ -288,8 +288,8 @@ action-success-bupdate=${top}件数据被成功变更。
 confirm-data-overwrite=您确定覆写该数据吗？
 
 #warn messages
-warn-data-changed-on-update=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
 warn-data-changed-on-delete=该数据已经在${top}被其他用户更新过了。您确定删除该数据吗？
+warn-data-changed-on-edit=该数据已经在${top}被其他用户更新过了。您确定覆写该数据吗？
 warn-data-changed-on-trash=该数据已经在${top}被其他用户更新过了。您确定删除该数据吗？
 
 
