@@ -30,6 +30,8 @@ import panda.net.URLHelper;
  * @author yf.frank.wang@gmail.com
  */
 public class HttpRequest {
+	private static final int TOSTRING_BODY_LIMIT = 1024;
+	
 	public static HttpRequest get(String url) {
 		return new HttpRequest().setUrl(url).setMethod(HttpMethod.GET);
 	}
@@ -350,6 +352,14 @@ public class HttpRequest {
 
 	/**
 	 * @param writer writer
+	 * @throws IOException
+	 */
+	public void toString(Appendable writer) throws IOException {
+		toString(writer, TOSTRING_BODY_LIMIT);
+	}
+	
+	/**
+	 * @param writer writer
 	 * @param bodyLimit body size limit
 	 * @throws IOException
 	 */
@@ -383,7 +393,7 @@ public class HttpRequest {
 	 */
 	@Override
 	public String toString() {
-		return toString(1024);
+		return toString(TOSTRING_BODY_LIMIT);
 	}
 
 	/**
