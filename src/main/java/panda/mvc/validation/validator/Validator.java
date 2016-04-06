@@ -12,6 +12,10 @@ public interface Validator {
 	
 	void setName(String name);
 	
+	String getRefer();
+	
+	void setRefer(String refer);
+	
 	String getMessage();
 	
 	void setMessage(String message);

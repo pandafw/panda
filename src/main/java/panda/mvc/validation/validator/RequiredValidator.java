@@ -1,6 +1,7 @@
 package panda.mvc.validation.validator;
 
-import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
@@ -13,7 +14,7 @@ import panda.mvc.validation.Validators;
 @IocBean(singleton=false)
 public class RequiredValidator extends AbstractValidator {
 
-	private Collection<String> fields;
+	private Map<String, String> fields;
 	
 	/**
 	 * 
@@ -25,14 +26,14 @@ public class RequiredValidator extends AbstractValidator {
 	/**
 	 * @return the fields
 	 */
-	public Collection<String> getFields() {
+	public Map<String, String> getFields() {
 		return fields;
 	}
 
 	/**
 	 * @param fields the fields to set
 	 */
-	public void setFields(Collection<String> fields) {
+	public void setFields(Map<String, String> fields) {
 		this.fields = fields;
 	}
 
@@ -43,10 +44,10 @@ public class RequiredValidator extends AbstractValidator {
 			if (Collections.isNotEmpty(fields)) {
 				boolean errs = false;
 				BeanHandler bh = Beans.i().getBeanHandler(value.getClass());
-				for (String pn : fields) {
-					Object v = bh.getBeanValue(value, pn);
+				for (Entry<String, String> en : fields.entrySet()) {
+					Object v = bh.getBeanValue(value, en.getKey());
 					if (v == null) {
-						addFieldError(ac, Strings.isEmpty(getName()) ? pn : getName() + "." + pn);
+						addChildFieldError(ac, en.getKey(), en.getValue());
 						errs = true;
 					}
 				}
@@ -61,10 +62,15 @@ public class RequiredValidator extends AbstractValidator {
 			addFieldError(ac);
 		}
 		else {
-			for (String pn : fields) {
-				addFieldError(ac, Strings.isEmpty(getName()) ? pn : getName() + "." + pn);
+			for (Entry<String, String> en : fields.entrySet()) {
+				addChildFieldError(ac, en.getKey(), en.getValue());
 			}
 		}
 		return false;
+	}
+	
+	private void addChildFieldError(ActionContext ac, String field, String refer) {
+		String pn = Strings.isEmpty(refer) ? field : refer;
+		addFieldError(ac, Strings.isEmpty(getName()) ? pn : getName() + "." + pn);
 	}
 }

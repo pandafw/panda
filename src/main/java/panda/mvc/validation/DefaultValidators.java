@@ -140,6 +140,9 @@ public class DefaultValidators implements Validators {
 	public Validator createValidator(ActionContext ac, Validate v) {
 		Validator fv = createValidator(ac, v.type(), v.value());
 
+		if (Strings.isNotEmpty(v.refer())) {
+			fv.setRefer(v.refer());
+		}
 		if (Strings.isNotEmpty(v.message())) {
 			fv.setMessage(v.message());
 		}

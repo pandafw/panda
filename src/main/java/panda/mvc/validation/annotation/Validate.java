@@ -15,6 +15,11 @@ public @interface Validate {
 	 * The validator type
 	 */
 	Class<? extends Validator> type() default Validator.class;
+	
+	/**
+	 * The referred field name to show error message.
+	 */
+	String refer() default "";
 
 	/**
 	 * The default error message for this validator. NOTE: It is required to set a message, if you

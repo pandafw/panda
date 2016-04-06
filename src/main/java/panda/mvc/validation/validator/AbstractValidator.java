@@ -15,20 +15,38 @@ public abstract class AbstractValidator implements Validator {
 	private static final Log log = Logs.getLog(AbstractValidator.class);
 	
 	private Validator parent;
-	
+
+	/**
+	 * field name
+	 */
 	private String name;
 	
+	/**
+	 * referred field name (for display error message to the referred field)
+	 */
+	private String refer;
+
+	/**
+	 * message (preferred)
+	 */
 	private String message;
 	
+	/**
+	 * message id
+	 */
 	private String msgId;
 
 	private boolean shortCircuit;
 
+	/**
+	 * field value
+	 */
 	private Object value;
 	
 	/**
 	 * @return the parent
 	 */
+	@Override
 	public Validator getParent() {
 		return parent;
 	}
@@ -36,6 +54,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @param parent the parent to set
 	 */
+	@Override
 	public void setParent(Validator parent) {
 		this.parent = parent;
 	}
@@ -43,6 +62,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -50,13 +70,31 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @param name the name to set
 	 */
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
+	 * @return the refer
+	 */
+	@Override
+	public String getRefer() {
+		return refer;
+	}
+
+	/**
+	 * @param refer the refer to set
+	 */
+	@Override
+	public void setRefer(String refer) {
+		this.refer = refer;
+	}
+
+	/**
 	 * @return the message
 	 */
+	@Override
 	public String getMessage() {
 		return message;
 	}
@@ -64,6 +102,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @param message the message to set
 	 */
+	@Override
 	public void setMessage(String message) {
 		this.message = message;
 	}
@@ -71,6 +110,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @return the msgId
 	 */
+	@Override
 	public String getMsgId() {
 		return msgId;
 	}
@@ -78,6 +118,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @param msgId the msgId to set
 	 */
+	@Override
 	public void setMsgId(String msgId) {
 		this.msgId = msgId;
 	}
@@ -85,6 +126,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @return the shortCircuit
 	 */
+	@Override
 	public boolean isShortCircuit() {
 		return shortCircuit;
 	}
@@ -92,6 +134,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * @param shortCircuit the shortCircuit to set
 	 */
+	@Override
 	public void setShortCircuit(boolean shortCircuit) {
 		this.shortCircuit = shortCircuit;
 	}
@@ -147,7 +190,7 @@ public abstract class AbstractValidator implements Validator {
 	}
 	
 	protected void addFieldError(ActionContext ac) {
-		addFieldError(ac, name);
+		addFieldError(ac, Strings.isEmpty(refer) ? name : refer);
 	}
 
 	protected void addFieldError(ActionContext ac, String name) {

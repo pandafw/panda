@@ -280,7 +280,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	public void testRequiredAnyErr() throws Throwable {
 		request.setRequestURI("/reqirAny");
 		servlet.service(request, response);
-		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el2\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
 	}
 
 	@Test
