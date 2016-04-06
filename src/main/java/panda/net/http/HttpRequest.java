@@ -117,24 +117,28 @@ public class HttpRequest {
 	/**
 	 * @param encoding the encoding to set
 	 */
-	public void setEncoding(String encoding) {
+	public HttpRequest setEncoding(String encoding) {
 		this.encoding = encoding;
+		return this;
 	}
 
 	public InputStream getBody() {
 		return body;
 	}
 
-	public void setBody(InputStream body) {
+	public HttpRequest setBody(InputStream body) {
 		this.body = body;
+		return this;
 	}
 
-	public void setBody(byte[] body) {
+	public HttpRequest setBody(byte[] body) {
 		this.body = (body == null ? null : new ByteArrayInputStream(body));
+		return this;
 	}
 
-	public void setBody(String body) {
+	public HttpRequest setBody(String body) {
 		this.body = (body == null ? null : new ByteArrayInputStream(Strings.getBytes(body, encoding)));
+		return this;
 	}
 
 	/**
