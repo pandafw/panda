@@ -129,6 +129,7 @@
 			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="type" type="string" use="required"></attribute>
+		<attribute name="refer" type="string"></attribute>
 		<attribute name="message" type="string"></attribute>
 		<attribute name="msgId" type="string"></attribute>
 	</complexType>
@@ -223,6 +224,7 @@
 		<attribute name="label" type="string"></attribute>
 		<attribute name="actionField" type="boolean" default="false"></attribute>
 		<attribute name="required" type="boolean"></attribute>
+		<attribute name="requiredrefer" type="string"></attribute>
 		<attribute name="requiredvalidate" type="boolean"></attribute>
 		<attribute name="order" type="int"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>

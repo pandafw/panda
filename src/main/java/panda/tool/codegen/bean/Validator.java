@@ -24,8 +24,10 @@ import panda.lang.Collections;
  *       &lt;sequence&gt;
  *         &lt;element name=&quot;param&quot; type=&quot;{panda.tool.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name=&quot;message&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;type&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;refer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;msgId&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;message&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -40,6 +42,9 @@ public class Validator {
 
 	@XmlAttribute(required = true)
 	private String type;
+
+	@XmlAttribute
+	private String refer;
 
 	@XmlAttribute
 	private String message;
@@ -60,6 +65,7 @@ public class Validator {
 	 */
 	public Validator(Validator validator) {
 		this.type = validator.type;
+		this.refer = validator.refer;
 		this.message = validator.message;
 		this.msgId = validator.msgId;
 
@@ -99,6 +105,20 @@ public class Validator {
 		}
 		sb.append(" }");
 		return sb.toString();
+	}
+
+	/**
+	 * @return the refer
+	 */
+	public String getRefer() {
+		return refer;
+	}
+
+	/**
+	 * @param refer the refer to set
+	 */
+	public void setRefer(String refer) {
+		this.refer = refer;
 	}
 
 	/**

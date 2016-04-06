@@ -219,12 +219,12 @@ public class InputUI implements Comparable<InputUI> {
 	
 	public String getRequiredValidateFields() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
+		sb.append("{ ");
 		for (InputField f : getRequiredValidateFieldList()) {
-			sb.append('\'').append(f.getName()).append("', ");
+			sb.append('\'').append(f.getName()).append("': '").append(Strings.defaultString(f.getRequiredrefer())).append("', ");
 		}
 		sb.setLength(sb.length() - 2);
-		sb.append(" ]");
+		sb.append(" }");
 		return sb.toString();
 	}
 

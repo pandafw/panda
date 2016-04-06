@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;actionField&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;requiredrefer&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;requiredvalidate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;order&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -68,6 +69,8 @@ public class InputField implements Comparable<InputField> {
 	@XmlAttribute
 	private Boolean required;
 	@XmlAttribute
+	private String requiredrefer;
+	@XmlAttribute
 	private Boolean requiredvalidate = true;
 	@XmlAttribute
 	private Integer order;
@@ -94,6 +97,7 @@ public class InputField implements Comparable<InputField> {
 		this.label = ifd.label;
 		this.actionField = ifd.actionField;
 		this.required = ifd.required;
+		this.requiredrefer = ifd.requiredrefer;
 		this.requiredvalidate = ifd.requiredvalidate;
 		this.order = ifd.order;
 		this.name = ifd.name;
@@ -145,6 +149,9 @@ public class InputField implements Comparable<InputField> {
 		}
 		if (src.required != null) {
 			me.required = src.required;
+		}
+		if (src.requiredrefer != null) {
+			me.requiredrefer = src.requiredrefer;
 		}
 		if (src.requiredvalidate != null) {
 			me.requiredvalidate = src.requiredvalidate;
@@ -319,6 +326,20 @@ public class InputField implements Comparable<InputField> {
 	 */
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	/**
+	 * @return the requiredrefer
+	 */
+	public String getRequiredrefer() {
+		return requiredrefer;
+	}
+
+	/**
+	 * @param requiredrefer the requiredrefer to set
+	 */
+	public void setRequiredrefer(String requiredrefer) {
+		this.requiredrefer = requiredrefer;
 	}
 
 	/**
