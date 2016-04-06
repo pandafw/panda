@@ -614,7 +614,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	// update methods
 	//------------------------------------------------------------
 	/**
-	 * @return the fields
+	 * @return the update fields
 	 */
 	protected Set<String> getUpdateFields(T data, T sd) {
 		return getDisplayFields();

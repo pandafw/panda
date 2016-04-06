@@ -96,7 +96,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~add")
 	public Object add_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.add_confirm(data);
@@ -109,7 +109,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~add")
 	public Object add_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.add_execute(data);
@@ -142,7 +142,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.copy_confirm(data);
@@ -155,7 +155,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~copy")
 	public Object copy_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.copy_execute(data);
@@ -188,7 +188,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~edit")
 	public Object edit_confirm(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.edit_confirm(data);
@@ -201,7 +201,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	@Ok(View.SFTL)
 	@Err("sftl:~edit")
 	public Object edit_execute(@Param @Validates({
-			@Validate(value=Validators.REQUIRED, params="fields: [ 'clazz', 'language', 'country' ]", msgId=Validators.MSGID_REQUIRED),
+			@Validate(value=Validators.REQUIRED, params="{ fields: { 'clazz': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
 			}) Resource data) {
 		return super.edit_execute(data);
