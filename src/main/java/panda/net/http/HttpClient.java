@@ -7,31 +7,20 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URL;
-import java.security.SecureRandom;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
 import panda.Panda;
 import panda.io.Files;
 import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Asserts;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.URLHelper;
-import panda.net.http.ssl.ValidCertTrustManage;
-import panda.net.http.ssl.ValidHostnameVerifier;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -39,22 +28,9 @@ import panda.net.http.ssl.ValidHostnameVerifier;
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);
 
-	private static final TrustManager[] validSslCertTrusts = { new ValidCertTrustManage() }; 
-	private static final ValidHostnameVerifier validHostnameVerifier = new ValidHostnameVerifier();
-	
 	public static final String DEFAULT_USERAGENT = HttpClient.class.getName() + '/' + Panda.VERSION;
 
 	public static final String DEFAULT_USERAGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36";
-
-	/**
-	 * DEFAULT_CONN_TIMEOUT = 30 seconds
-	 */
-	public static int DEFAULT_CONN_TIMEOUT = 30 * 1000;
-
-	/**
-	 * DEFAULT_READ_TIMEOUT = 10 minutes
-	 */
-	public static int DEFAULT_READ_TIMEOUT = 10 * 60 * 1000;
 
 	public static HttpResponse get(String url) throws IOException {
 		return send(url, HttpMethod.GET, null);
@@ -101,8 +77,15 @@ public class HttpClient {
 	protected Proxy proxy;
 	protected HttpURLConnection conn;
 
-	protected int connTimeout;
-	protected int readTimeout;
+	/**
+	 * connection timeout (default: 30s)
+	 */
+	protected int connTimeout = 30000;
+	
+	/**
+	 * read timeout (default: 300s)
+	 */
+	protected int readTimeout = 300000;
 
 	protected boolean autoRedirect = false;
 	protected boolean validateSslCert = true;
@@ -205,7 +188,9 @@ public class HttpClient {
 	 * @param connTimeout the connTimeout to set
 	 */
 	public void setConnTimeout(int connTimeout) {
-		this.connTimeout = connTimeout;
+		if (connTimeout > 0) {
+			this.connTimeout = connTimeout;
+		}
 	}
 
 	/**
@@ -219,7 +204,9 @@ public class HttpClient {
 	 * @param readTimeout the readTimeout to set
 	 */
 	public void setReadTimeout(int readTimeout) {
-		this.readTimeout = readTimeout;
+		if (readTimeout > 0) {
+			this.readTimeout = readTimeout;
+		}
 	}
 
 	/**
@@ -364,48 +351,15 @@ public class HttpClient {
 			conn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
-		if (!validateSslCert && conn instanceof HttpsURLConnection) {
-			ignoreValidateCertification((HttpsURLConnection)conn);
+		if (!validateSslCert) {
+			Https.ignoreValidateCertification(conn);
 		}
-		conn.setConnectTimeout(connTimeout > 0 ? connTimeout : DEFAULT_CONN_TIMEOUT);
-		conn.setReadTimeout(readTimeout > 0 ? readTimeout : DEFAULT_READ_TIMEOUT);
-	}
-
-	protected void ignoreValidateCertification(HttpsURLConnection sconn) {
-		try {
-			SSLContext sslcontext = SSLContext.getInstance("SSL");
-			sslcontext.init(null, validSslCertTrusts, new SecureRandom());
-			sconn.setSSLSocketFactory(sslcontext.getSocketFactory());
-			sconn.setHostnameVerifier(validHostnameVerifier);
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		conn.setConnectTimeout(connTimeout);
+		conn.setReadTimeout(readTimeout);
 	}
 
 	protected void setupRequestHeader() {
-		URL url = request.getURL();
-		String host = url.getHost();
-		if (url.getPort() > 0 && url.getPort() != 80) {
-			host += ":" + url.getPort();
-		}
-		conn.setRequestProperty(HttpHeader.HOST, host);
-		
-		HttpHeader header = request.getHeader();
-		if (null != header) {
-			for (Entry<String, Object> en : header.entrySet()) {
-				String key = en.getKey();
-				Object val = en.getValue();
-				if (val instanceof List) {
-					for (Object v : (List)val) {
-						conn.addRequestProperty(key, v.toString());
-					}
-				}
-				else {
-					conn.addRequestProperty(key, val.toString());
-				}
-			}
-		}
+		Https.setupRequestHeader(conn, request.getURL(), request.getHeader());
 		
 		if (request.isPostFile()) {
 			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());

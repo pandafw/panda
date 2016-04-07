@@ -29,23 +29,16 @@ import javax.mail.internet.MimeUtility;
 import javax.naming.NamingException;
 
 import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.helpers.CyclicBuffer;
 import org.apache.log4j.helpers.LogLog;
-import org.apache.log4j.helpers.OptionConverter;
 import org.apache.log4j.spi.ErrorCode;
 import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.OptionHandler;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
-import org.apache.log4j.xml.UnrecognizedElementHandler;
-import org.w3c.dom.Element;
 
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.net.MXLookup;
 
-public class SmtpLogAppender extends AbstractAppender implements UnrecognizedElementHandler {
+public class SmtpLogAppender extends AbstractAppender {
 	/** subject layout */
 	protected Layout subjectLayout;
 
@@ -71,43 +64,17 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	private String smtpProtocol;
 	private int smtpPort = -1;
 	private boolean smtpDebug = false;
-	private int bufferSize = 512;
-	private boolean locationInfo = false;
-	private boolean sendOnClose = false;
 
-	protected CyclicBuffer cb = new CyclicBuffer(bufferSize);
 	protected Message msg;
 
 	protected String prefix;
 	protected Properties props;
 	protected Map<InternetAddress, String> hosts = new HashMap<InternetAddress, String>();
 
-	protected TriggeringEventEvaluator evaluator;
-
-	static class DefaultEvaluator implements TriggeringEventEvaluator {
-		/**
-		 * Is this <code>event</code> the e-mail triggering event?
-		 * <p>
-		 * This method returns <code>true</code>, if the event level has ERROR level or higher.
-		 * Otherwise it returns <code>false</code>.
-		 */
-		public boolean isTriggeringEvent(LoggingEvent event) {
-			return event.getLevel().isGreaterOrEqual(Level.ERROR);
-		}
-	}
-
 	/**
 	 * Construct
 	 */
 	public SmtpLogAppender() {
-		this(new DefaultEvaluator());
-	}
-
-	/**
-	 * Construct
-	 */
-	public SmtpLogAppender(TriggeringEventEvaluator evaluator) {
-		this.evaluator = evaluator;
 	}
 
 	protected void resolveHosts() {
@@ -158,10 +125,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 		}
 		catch (MessagingException e) {
 			LogLog.error("Could not activate SMTPAppender options.", e);
-		}
-
-		if (evaluator instanceof OptionHandler) {
-			((OptionHandler)evaluator).activateOptions();
 		}
 	}
 
@@ -248,18 +211,7 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	 * and checking if the event triggers an e-mail to be sent.
 	 */
 	protected void subAppend(LoggingEvent event) {
-		event.getThreadName();
-		event.getNDC();
-		event.getMDCCopy();
-		if (locationInfo) {
-			event.getLocationInformation();
-		}
-		event.getRenderedMessage();
-		event.getThrowableStrRep();
-		cb.add(event);
-		if (evaluator.isTriggeringEvent(event)) {
-			sendBuffer();
-		}
+		sendMail(event);
 	}
 
 	/**
@@ -274,19 +226,7 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 			return false;
 		}
 
-		if (this.evaluator == null) {
-			errorHandler.error("No TriggeringEventEvaluator is set for appender [" + name + "].");
-			return false;
-		}
-
 		return super.checkEntryConditions();
-	}
-
-	synchronized public void close() {
-		if (sendOnClose && cb.length() > 0) {
-			sendBuffer();
-		}
-		this.closed = true;
 	}
 
 	InternetAddress getAddress(String addressStr) {
@@ -333,7 +273,7 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	/**
 	 * Layout body of email message.
 	 */
-	protected String formatBody() {
+	protected String formatBody(LoggingEvent event) {
 		// Note: this code already owns the monitor for this
 		// appender. This frees us from needing to synchronize on 'cb'.
 
@@ -343,12 +283,8 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 			sb.append(t);
 		}
 		
-		int len = cb.length();
-		for (int i = 0; i < len; i++) {
-			LoggingEvent event = cb.get();
-			outputLogEvent(sb, event);
-			sb.append(Layout.LINE_SEP);
-		}
+		outputLogEvent(sb, event);
+		sb.append(Layout.LINE_SEP);
 		
 		t = layout.getFooter();
 		if (t != null) {
@@ -361,23 +297,19 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	/**
 	 * Send the contents of the cyclic buffer as an e-mail message.
 	 */
-	protected void sendBuffer() {
+	protected void sendMail(LoggingEvent event) {
 		try {
 			if (subjectLayout != null) {
-				if (cb.length() > 0) {
-					StringBuilder sb = new StringBuilder();
-					LoggingEvent event = cb.get(cb.length() - 1);
-					sb.append(subjectLayout.format(event));
-					if (!setMsgSubject(sb.toString())) {
-						setMsgSubject(getSubject());
-					}
-				}
-				else {
+				String s = subjectLayout.format(event);
+				if (!setMsgSubject(s)) {
 					setMsgSubject(getSubject());
 				}
 			}
+			else {
+				setMsgSubject(getSubject());
+			}
 
-			String s = formatBody();
+			String s = formatBody(event);
 			boolean allAscii = true;
 			for (int i = 0; i < s.length() && allAscii; i++) {
 				allAscii = s.charAt(i) <= 0x7F;
@@ -400,7 +332,7 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 					part = new MimeBodyPart(headers, os.toByteArray());
 				}
 				catch (Exception ex) {
-					StringBuffer sbuf = new StringBuffer(s);
+					StringBuilder sbuf = new StringBuilder(s);
 					for (int i = 0; i < sbuf.length(); i++) {
 						if (sbuf.charAt(i) >= 0x80) {
 							sbuf.setCharAt(i, '?');
@@ -434,13 +366,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 		catch (RuntimeException e) {
 			LogLog.error("Error occured while sending e-mail notification.", e);
 		}
-	}
-
-	/**
-	 * Returns value of the <b>EvaluatorClass</b> option.
-	 */
-	public String getEvaluatorClass() {
-		return evaluator == null ? null : evaluator.getClass().getName();
 	}
 
 	/**
@@ -491,17 +416,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	}
 
 	/**
-	 * The <b>BufferSize</b> option takes a positive integer representing the maximum number of
-	 * logging events to collect in a cyclic buffer. When the <code>BufferSize</code> is reached,
-	 * oldest events are deleted as new events are added to the buffer. By default the size of the
-	 * cyclic buffer is 512 events.
-	 */
-	public void setBufferSize(int bufferSize) {
-		this.bufferSize = bufferSize;
-		cb.resize(bufferSize);
-	}
-
-	/**
 	 * The <b>SMTPHost</b> option takes a string value which should be a the host name of the SMTP
 	 * server that will send the e-mail message.
 	 */
@@ -522,43 +436,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	 */
 	public void setTo(String to) {
 		this.to = to;
-	}
-
-	/**
-	 * Returns value of the <b>BufferSize</b> option.
-	 */
-	public int getBufferSize() {
-		return bufferSize;
-	}
-
-	/**
-	 * The <b>EvaluatorClass</b> option takes a string value representing the name of the class
-	 * implementing the {@link TriggeringEventEvaluator} interface. A corresponding object will be
-	 * instantiated and assigned as the triggering event evaluator for the SMTPAppender.
-	 */
-	public void setEvaluatorClass(String value) {
-		evaluator = (TriggeringEventEvaluator)OptionConverter.instantiateByClassName(value,
-			TriggeringEventEvaluator.class, evaluator);
-	}
-
-	/**
-	 * The <b>LocationInfo</b> option takes a boolean value. By default, it is set to false which
-	 * means there will be no effort to extract the location information related to the event. As a
-	 * result, the layout that formats the events as they are sent out in an e-mail is likely to
-	 * place the wrong location information (if present in the format).
-	 * <p>
-	 * Location information extraction is comparatively very slow and should be avoided unless
-	 * performance is not a concern.
-	 */
-	public void setLocationInfo(boolean locationInfo) {
-		this.locationInfo = locationInfo;
-	}
-
-	/**
-	 * Returns value of the <b>LocationInfo</b> option.
-	 */
-	public boolean getLocationInfo() {
-		return locationInfo;
 	}
 
 	/**
@@ -656,44 +533,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	}
 
 	/**
-	 * Sets triggering evaluator.
-	 * 
-	 * @param trigger triggering event evaluator.
-	 */
-	public final void setEvaluator(final TriggeringEventEvaluator trigger) {
-		if (trigger == null) {
-			throw new NullPointerException("trigger");
-		}
-		this.evaluator = trigger;
-	}
-
-	/**
-	 * Get triggering evaluator.
-	 * 
-	 * @return triggering event evaluator.
-	 */
-	public final TriggeringEventEvaluator getEvaluator() {
-		return evaluator;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 */
-	public boolean parseUnrecognizedElement(final Element element, final Properties props) throws Exception {
-		if ("triggeringPolicy".equals(element.getNodeName())) {
-			Object triggerPolicy = org.apache.log4j.xml.DOMConfigurator.parseElement(element, props,
-				TriggeringEventEvaluator.class);
-			if (triggerPolicy instanceof TriggeringEventEvaluator) {
-				setEvaluator((TriggeringEventEvaluator)triggerPolicy);
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Get transport protocol. Typically null or "smtps".
 	 * 
 	 * @return transport protocol, may be null.
@@ -727,24 +566,6 @@ public class SmtpLogAppender extends AbstractAppender implements UnrecognizedEle
 	 */
 	public final void setSMTPPort(final int val) {
 		smtpPort = val;
-	}
-
-	/**
-	 * Get sendOnClose.
-	 * 
-	 * @return if true all buffered logging events will be sent when the appender is closed.
-	 */
-	public final boolean getSendOnClose() {
-		return sendOnClose;
-	}
-
-	/**
-	 * Set sendOnClose.
-	 * 
-	 * @param val if true all buffered logging events will be sent when appender is closed.
-	 */
-	public final void setSendOnClose(final boolean val) {
-		sendOnClose = val;
 	}
 
 	protected boolean setMsgSubject(String subject) {
