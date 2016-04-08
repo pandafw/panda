@@ -198,8 +198,8 @@ public class AuthHelper {
 	 * removeLoginUser
 	 */
 	public void removeLoginUser(ActionContext context) {
-		context.getRequest().removeAttribute(REQ.USER);
-		context.getSession().removeAttribute(SES.USER);
+		context.getReq().remove(REQ.USER);
+		context.getSes().remove(SES.USER);
 
 		HttpServletResponse res = context.getResponse();
 		String cookiePath = context.getBase() + "/";

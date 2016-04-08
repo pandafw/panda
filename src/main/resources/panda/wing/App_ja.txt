@@ -45,6 +45,7 @@ navi-admin-site-contents=コンテンツ管理
 navi-admin-site-index=インデックス管理
 
 navi-super=システム管理
+navi-super-sysdump=システムダンプ
 navi-super-loadtask=キャッシュ
 navi-super-property=プロパティ
 navi-super-resource=リソース

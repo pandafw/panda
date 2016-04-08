@@ -51,6 +51,7 @@ navi-admin-site-contents=Contents Management
 navi-admin-site-index=Index Management
 
 navi-super=System
+navi-super-sysdump=System Dump
 navi-super-loadtask=Cache
 navi-super-property=Property
 navi-super-resource=Resource

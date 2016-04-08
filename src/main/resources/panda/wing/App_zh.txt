@@ -45,6 +45,7 @@ navi-admin-site-contents=内容管理
 navi-admin-site-index=检索索引管理
 
 navi-super=系统管理
+navi-super-sysdump=系统信息
 navi-super-loadtask=应用缓存
 navi-super-property=配置
 navi-super-resource=资源
