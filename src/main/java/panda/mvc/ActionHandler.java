@@ -186,7 +186,7 @@ public class ActionHandler {
 				}
 				
 				if (IocSessionListener.isSessionScopeEnable) {
-					SessionIocContext sic = SessionIocContext.get(req.getSession());
+					SessionIocContext sic = SessionIocContext.get(req);
 					ctx.addContext(sic);
 				}
 				

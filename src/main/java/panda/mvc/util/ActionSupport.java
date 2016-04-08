@@ -13,9 +13,7 @@ import panda.ioc.Ioc;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
 import panda.mvc.alert.ActionAlert;
-import panda.mvc.alert.ApplicationAlert;
 import panda.mvc.alert.ParamAlert;
-import panda.mvc.alert.SessionAlert;
 
 /**
  * ActionSupport
@@ -151,20 +149,6 @@ public class ActionSupport {
 	 */
 	public ParamAlert getParamAware() {
 		return context.getParamAlert();
-	}
-
-	/**
-	 * @return the application Aware
-	 */
-	public ApplicationAlert getApplicationAware() {
-		return context.getApplicationAlert();
-	}
-
-	/**
-	 * @return the session Aware
-	 */
-	public SessionAlert getSessionAware() {
-		return context.getSessionAlert();
 	}
 
 	/**
@@ -354,37 +338,4 @@ public class ActionSupport {
 	public void addActionMessage(String msg) {
 		getActionAware().addMessage(msg);
 	}
-
-	public void addApplicationError(String msg) {
-		getApplicationAware().addError(msg);
-	}
-
-	public void addApplicationWarning(String msg) {
-		getApplicationAware().addWarning(msg);
-	}
-
-	public void addApplicationConfirm(String msg) {
-		getApplicationAware().addConfirm(msg);
-	}
-
-	public void addApplicationMessage(String msg) {
-		getApplicationAware().addMessage(msg);
-	}
-
-	public void addSessionError(String msg) {
-		getSessionAware().addError(msg);
-	}
-
-	public void addSessionWarning(String msg) {
-		getSessionAware().addWarning(msg);
-	}
-
-	public void addSessionConfirm(String msg) {
-		getSessionAware().addConfirm(msg);
-	}
-
-	public void addSessionMessage(String msg) {
-		getSessionAware().addMessage(msg);
-	}
-
 }

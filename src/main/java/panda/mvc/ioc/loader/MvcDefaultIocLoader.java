@@ -13,9 +13,7 @@ import panda.mvc.adaptor.ejector.MultiPartParamEjector;
 import panda.mvc.adaptor.ejector.StreamParamEjector;
 import panda.mvc.adaptor.ejector.XmlParamEjector;
 import panda.mvc.alert.ActionAlertSupport;
-import panda.mvc.alert.ApplicationAlertSupport;
 import panda.mvc.alert.ParamAlertSupport;
-import panda.mvc.alert.SessionAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.impl.DefaultActionChainMaker;
@@ -164,11 +162,9 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			StreamParamEjector.class,
 			XmlParamEjector.class,
 			
-			// validation
+			// alerts
 			ActionAlertSupport.class,
 			ParamAlertSupport.class,
-			SessionAlertSupport.class,
-			ApplicationAlertSupport.class,
 			
 			// validator
 			DefaultValidators.class,

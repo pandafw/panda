@@ -19,9 +19,7 @@ import panda.ioc.Ioc;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.mvc.alert.ActionAlert;
-import panda.mvc.alert.ApplicationAlert;
 import panda.mvc.alert.ParamAlert;
-import panda.mvc.alert.SessionAlert;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.StateProvider;
@@ -69,10 +67,8 @@ public class ActionContext {
 	private TextProvider text;
 	private StateProvider state;
 
-	private ActionAlert actionAlert;
 	private ParamAlert paramAlert;
-	private ApplicationAlert applicationAlert;
-	private SessionAlert sessionAlert;
+	private ActionAlert actionAlert;
 	
 
 	/**
@@ -412,58 +408,6 @@ public class ActionContext {
 	 */
 	public Map<String, List<String>> getParamErrors() {
 		return getParamAlert().getErrors();
-	}
-
-	/**
-	 * @return session alert
-	 */
-	public SessionAlert getSessionAlert() {
-		if (sessionAlert == null) {
-			sessionAlert = ioc.get(SessionAlert.class);
-		}
-		return sessionAlert;
-	}
-	
-	public Collection<String> getSessionErrors() {
-		return getSessionAlert().getErrors();
-	}
-	
-	public Collection<String> getSessionWarnings() {
-		return getSessionAlert().getWarnings();
-	}
-	
-	public Collection<String> getSessionConfirms() {
-		return getSessionAlert().getConfirms();
-	}
-	
-	public Collection<String> getSessionMessages() {
-		return getSessionAlert().getMessages();
-	}
-	
-	/**
-	 * @return application alert
-	 */
-	public ApplicationAlert getApplicationAlert() {
-		if (applicationAlert == null) {
-			applicationAlert = ioc.get(ApplicationAlert.class);
-		}
-		return applicationAlert;
-	}
-	
-	public Collection<String> getApplicationErrors() {
-		return getApplicationAlert().getErrors();
-	}
-	
-	public Collection<String> getApplicationWarnings() {
-		return getApplicationAlert().getWarnings();
-	}
-	
-	public Collection<String> getApplicationConfirms() {
-		return getApplicationAlert().getConfirms();
-	}
-	
-	public Collection<String> getApplicationMessages() {
-		return getApplicationAlert().getMessages();
 	}
 
 	/**
