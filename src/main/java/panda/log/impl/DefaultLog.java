@@ -5,14 +5,14 @@ import java.io.PrintStream;
 import panda.lang.time.DateTimes;
 import panda.log.LogLevel;
 
-public class ConsoleLog extends AbstractLog {
-	public ConsoleLog(String name) {
+public class DefaultLog extends AbstractLog {
+	public DefaultLog(String name) {
 		super(name);
 	}
 
 	@Override
 	public void log(LogLevel level, String msg, Throwable t) {
-		PrintStream out = (level.ordinal() >= LogLevel.WARN.ordinal() ? System.err : System.out);
+		PrintStream out = (level.isGreaterOrEqual(LogLevel.WARN) ? System.err : System.out);
 		output(out, level.toString(), msg, t);
 	}
 

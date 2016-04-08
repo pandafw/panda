@@ -9,9 +9,10 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogAdapter;
 import panda.log.LogLevel;
+import panda.log.LogLog;
 
 
-public class ComboLogAdapter extends AbstractLogAdapter {
+public class ComboLogAdapter extends BaseLogAdapter {
 	private List<LogAdapter> adapters = new ArrayList<LogAdapter>();
 
 	@Override
@@ -48,6 +49,9 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 				}
 			}
 		}
+		else {
+			super.setProperty(name, value);
+		}
 	}
 	
 
@@ -58,24 +62,24 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 				logs.add(a.getLogger(name));
 			}
 			catch (Throwable e) {
-				LogHelper.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
+				LogLog.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
 			}
 		}
 
 		if (logs.isEmpty()) {
-			return new ConsoleLog(name);
+			return new DefaultLog(name);
 		}
-		return new ComboLog(name, logs.toArray(new Log[logs.size()]));
+		return new ComboLog(this, name, logs.toArray(new Log[logs.size()]));
 	}
 
 	/**
 	 * Console log to System.out and System.err
 	 */
-	private static class ComboLog extends AbstractLog {
+	private static class ComboLog extends BaseLog {
 		private Log[] logs;
 		
-		ComboLog(String name, Log[] logs) {
-			super(name);
+		ComboLog(ComboLogAdapter adapter, String name, Log[] logs) {
+			super(adapter, name);
 			this.logs = logs;
 		}
 

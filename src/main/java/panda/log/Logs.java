@@ -7,13 +7,14 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import panda.Panda;
+import panda.io.Streams;
 import panda.lang.ClassLoaders;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
-import panda.log.impl.LogHelper;
+import panda.log.impl.DefaultLog;
 
 /**
  * @author yf.frank.wang@gmail.com
@@ -55,7 +56,7 @@ public final class Logs {
 	 * @return Log
 	 */
 	public static Log getLog(String className) {
-		return adapter.getLogger(className);
+		return getLogger(adapter, className);
 	}
 
 	/**
@@ -70,7 +71,19 @@ public final class Logs {
 				}
 			}
 		}
-		return LogHelper.getLogger(adapter, sts[2].getClassName());
+		return getLogger(adapter, sts[2].getClassName());
+	}
+
+	private static Log getLogger(LogAdapter adapter, String name) {
+		Log log;
+		try {
+			log = adapter.getLogger(name);
+		}
+		catch (Throwable e) {
+			LogLog.error("Failed to getLogger(" + adapter.getClass() + ", " + name + ")");
+			log =  new DefaultLog(name);
+		}
+		return log;
 	}
 	
 	private static void init() {
@@ -103,15 +116,11 @@ public final class Logs {
 				}
 			}
 			catch (Throwable e) {
-				e.printStackTrace();
+				LogLog.error("Failed to initialize log", e);
 				adapter = null;
 			}
 			finally {
-				try {
-					is.close();
-				}
-				catch (Throwable e) {
-				}
+				Streams.safeClose(is);
 			}
 		}
 

@@ -81,32 +81,32 @@ public abstract class AbstractLog implements Log {
 
 	@Override
 	public boolean isFatalEnabled() {
-		return level.ordinal() <= LogLevel.FATAL.ordinal();
+		return level.isLessOrEqual(LogLevel.FATAL);
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
-		return level.ordinal() <= LogLevel.ERROR.ordinal();
+		return level.isLessOrEqual(LogLevel.ERROR);
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
-		return level.ordinal() <= LogLevel.WARN.ordinal();
+		return level.isLessOrEqual(LogLevel.WARN);
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
-		return level.ordinal() <= LogLevel.INFO.ordinal();
+		return level.isLessOrEqual(LogLevel.INFO);
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
-		return level.ordinal() <= LogLevel.DEBUG.ordinal();
+		return level.isLessOrEqual(LogLevel.DEBUG);
 	}
 
 	@Override
 	public boolean isTraceEnabled() {
-		return level.ordinal() <= LogLevel.TRACE.ordinal();
+		return level.isLessOrEqual(LogLevel.TRACE);
 	}
 	
 	@Override
