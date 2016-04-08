@@ -53,7 +53,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		}
 
 		if (iobj.getValue() != null) {
-			op.setObj(iobj.getValue());
+			op.setObject(iobj.getValue());
 		}
 		else {
 			try {
@@ -102,7 +102,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 		// set obj to proxy
 		// 这一步非常重要，它解除了字段互相引用的问题
-		op.setObj(obj);
+		op.setObject(obj);
 		
 		ow.fill(ing, obj);
 		

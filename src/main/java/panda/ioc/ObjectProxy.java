@@ -20,7 +20,7 @@ public class ObjectProxy {
 	/**
 	 * 存储静态对象
 	 */
-	private Object obj;
+	private Object object;
 
 	/**
 	 * 获取时触发器
@@ -36,7 +36,7 @@ public class ObjectProxy {
 	}
 
 	public ObjectProxy(Object obj) {
-		this.obj = obj;
+		this.object = obj;
 	}
 
 	public ObjectProxy setWeaver(ObjectWeaver weaver) {
@@ -44,8 +44,8 @@ public class ObjectProxy {
 		return this;
 	}
 
-	public ObjectProxy setObj(Object obj) {
-		this.obj = obj;
+	public ObjectProxy setObject(Object object) {
+		this.object = object;
 		return this;
 	}
 
@@ -62,8 +62,8 @@ public class ObjectProxy {
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> classOfT, IocMaking ing) {
 		Object re;
-		if (obj != null) {
-			re = obj;
+		if (object != null) {
+			re = object;
 		}
 		else if (weaver != null) {
 			re = weaver.onCreate(weaver.fill(ing, weaver.born(ing)));
@@ -80,8 +80,8 @@ public class ObjectProxy {
 	}
 
 	public void depose() {
-		if (null != obj && null != depose) {
-			depose.trigger(obj);
+		if (null != object && null != depose) {
+			depose.trigger(object);
 		}
 	}
 

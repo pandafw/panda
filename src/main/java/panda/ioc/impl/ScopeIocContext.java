@@ -10,28 +10,25 @@ import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
-/**
- * 自定义级别上下文对象
- */
 public class ScopeIocContext implements IocContext {
 	private static final Log log = Logs.getLog(ScopeIocContext.class);
 
 	private String scope;
-	private Map<String, ObjectProxy> objs;
+	private Map<String, ObjectProxy> proxys;
 
 	public ScopeIocContext(String scope) {
 		this.scope = scope;
-		objs = new ConcurrentHashMap<String, ObjectProxy>();
+		proxys = new ConcurrentHashMap<String, ObjectProxy>();
 	}
 
 	private void checkBuffer() {
-		if (null == objs) {
+		if (null == proxys) {
 			throw Exceptions.makeThrow("Context '%s' had been deposed!", scope);
 		}
 	}
 
-	public Map<String, ObjectProxy> getObjs() {
-		return objs;
+	public Map<String, ObjectProxy> getProxys() {
+		return proxys;
 	}
 
 	public String getScope() {
@@ -44,7 +41,7 @@ public class ScopeIocContext implements IocContext {
 
 	public ObjectProxy fetch(String name) {
 		checkBuffer();
-		return objs.get(name);
+		return proxys.get(name);
 	}
 
 	public boolean save(String scope, String name, ObjectProxy obj) {
@@ -53,7 +50,7 @@ public class ScopeIocContext implements IocContext {
 			if (log.isDebugEnabled()) {
 				log.debugf("Save object '%s' to [%s] ", name, scope);
 			}
-			objs.put(name, obj);
+			proxys.put(name, obj);
 			return true;
 		}
 		return false;
@@ -67,7 +64,7 @@ public class ScopeIocContext implements IocContext {
 		if (accept(scope)) {
 			checkBuffer();
 
-			ObjectProxy op = objs.remove(name);
+			ObjectProxy op = proxys.remove(name);
 			if (op != null) {
 				if (log.isDebugEnabled()) {
 					log.debugf("Depose object '%s' ...", name);
@@ -79,19 +76,19 @@ public class ScopeIocContext implements IocContext {
 		return false;
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		checkBuffer();
-		for (Entry<String, ObjectProxy> en : objs.entrySet()) {
+		for (Entry<String, ObjectProxy> en : proxys.entrySet()) {
 			if (log.isDebugEnabled()) {
 				log.debugf("Depose object '%s' ...", en.getKey());
 			}
 			en.getValue().depose();
 		}
-		objs.clear();
+		proxys.clear();
 	}
 
 	public void depose() {
-		if (objs == null) {
+		if (proxys == null) {
 			if (log.isWarnEnabled()) {
 				log.warnf("%s IocContext already deposed", scope);
 			}
@@ -99,7 +96,12 @@ public class ScopeIocContext implements IocContext {
 		}
 		
 		clear();
-		objs = null;
+		proxys = null;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + ": " + scope + '[' + proxys.size() + "]: " + proxys;
 	}
 
 }

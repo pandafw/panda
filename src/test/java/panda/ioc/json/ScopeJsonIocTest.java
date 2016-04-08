@@ -26,7 +26,7 @@ public class ScopeJsonIocTest {
 		assertEquals("F1", f1.getName());
 
 		ScopeIocContext ic = (ScopeIocContext)ioc.getContext();
-		Map<String, ObjectProxy> map = ic.getObjs();
+		Map<String, ObjectProxy> map = ic.getProxys();
 		assertEquals(1, map.size());
 	}
 
