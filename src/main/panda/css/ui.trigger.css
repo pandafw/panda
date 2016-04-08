@@ -1,9 +1,12 @@
 .p-trigger {
 	position: absolute;
-	color: #999;
+	color: #ccc;
 	margin: 10px 0 0 -18px;
 	z-index: 2;
 	cursor: pointer;
+}
+.p-trigger:hover {
+	color: #999;
 }
 .p-has-trigger, 
 .p-form .form-control.p-has-trigger, 
