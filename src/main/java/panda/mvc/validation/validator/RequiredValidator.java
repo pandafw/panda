@@ -1,5 +1,6 @@
 package panda.mvc.validation.validator;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,6 +11,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.validation.Validators;
+import panda.vfs.FileItem;
 
 @IocBean(singleton=false)
 public class RequiredValidator extends AbstractValidator {
@@ -46,16 +48,14 @@ public class RequiredValidator extends AbstractValidator {
 				BeanHandler bh = Beans.i().getBeanHandler(value.getClass());
 				for (Entry<String, String> en : fields.entrySet()) {
 					Object v = bh.getBeanValue(value, en.getKey());
-					if (v == null) {
+					if (!exists(v)) {
 						addChildFieldError(ac, en.getKey(), en.getValue());
 						errs = true;
 					}
 				}
-				if (errs) {
-					return false;
-				}
+				return !errs;
 			}
-			return true;
+			return exists(value);
 		}
 		
 		if (Collections.isEmpty(fields)) {
@@ -69,6 +69,24 @@ public class RequiredValidator extends AbstractValidator {
 		return false;
 	}
 	
+	private boolean exists(Object v) {
+		if (v == null) {
+			return false;
+		}
+		
+		if (v instanceof File) {
+			File f = (File)v;
+			return f.exists();
+		}
+		
+		if (v instanceof FileItem) {
+			FileItem f = (FileItem)v;
+			return f.isExists();
+		}
+		
+		return true;
+	}
+
 	private void addChildFieldError(ActionContext ac, String field, String refer) {
 		String pn = Strings.isEmpty(refer) ? field : refer;
 		addFieldError(ac, Strings.isEmpty(getName()) ? pn : getName() + "." + pn);
