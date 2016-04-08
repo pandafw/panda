@@ -56,9 +56,6 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof InputStream) {
 				Streams.copy((InputStream)value, a, cc.getEncoding());
 			}
-			else if (value instanceof Number || value instanceof Boolean) {
-				a.append(value.toString());
-			}
 			else if (value instanceof Character) {
 				a.append((Character)value);
 			}
@@ -72,8 +69,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				}
 			}
 			else {
-				castError(value, cc);
-				return false;
+				a.append(value.toString());
 			}
 			return true;
 		}
