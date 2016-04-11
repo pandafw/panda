@@ -290,7 +290,10 @@ public class GaeDao extends AbstractDao {
 			return gc.convert(value);
 		}
 		
-		if (value instanceof CharSequence) {
+		if (value instanceof Character) {
+			value = String.valueOf(value);
+		}
+		else if (value instanceof CharSequence) {
 			String s = value.toString();
 			if (s.length() > MAX_SL) {
 				value = new Text(s);
