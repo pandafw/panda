@@ -24,11 +24,6 @@
 </li></#if><#if a.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
-<#assign _well = a.getText("well-edit", "")/>
-<#if _well?has_content>
-	<div class="p-well">${_well}</div>
-</#if>
-
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
