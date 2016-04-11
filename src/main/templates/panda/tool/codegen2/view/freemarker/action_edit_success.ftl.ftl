@@ -7,8 +7,6 @@
 
 	<#include "edit-toolbar.ftl"/>
 
-	<@swell/>
-
 	${s}#include "/action-alert.ftl"/>
 
 ${s}#if r??>
