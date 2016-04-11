@@ -34,6 +34,12 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			if (value instanceof Class) {
 				a.append(((Class)value).getName().toString());
 			}
+			else if (value instanceof Character) {
+				a.append((Character)value);
+			}
+			else if (value instanceof Number || value instanceof Boolean) {
+				a.append(value.toString());
+			}
 			else if (value instanceof Date) {
 				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format((Date)value));
 			}
@@ -56,9 +62,6 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof InputStream) {
 				Streams.copy((InputStream)value, a, cc.getEncoding());
 			}
-			else if (value instanceof Character) {
-				a.append((Character)value);
-			}
 			else if (value instanceof FileItem) {
 				FileItem fi = (FileItem)value;
 				if (fi.getId() != null) {
@@ -69,7 +72,9 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				}
 			}
 			else {
-				a.append(value.toString());
+				// set error for unknown types
+				castError(value, cc);
+				return false;
 			}
 			return true;
 		}
