@@ -34,12 +34,12 @@ public abstract class Bean {
 	}
 
 	/**
-	 * is this data updated
+	 * is this data changed
 	 * @param lhs left bean
 	 * @param rhs right bean
 	 * @return true if lhs.utime != rhs.utime
 	 */
-	public static boolean isUpdated(IUpdate lhs, IUpdate rhs) {
+	public static boolean isChanged(IUpdate lhs, IUpdate rhs) {
 		if (lhs.getUusid() == null 
 				|| lhs.getUtime() == null 
 				|| rhs.getUusid() == null 
@@ -51,7 +51,7 @@ public abstract class Bean {
 			return true;
 		}
 
-		return lhs.getUtime().getTime() != rhs.getUtime().getTime();
+		return (lhs.getUtime().getTime() / 1000) != (rhs.getUtime().getTime() / 1000);
 	}
 }
 

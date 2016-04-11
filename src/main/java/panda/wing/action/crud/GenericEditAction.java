@@ -644,7 +644,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		
-		if (!checkUpdatedOnUpdate(data, sd)) {
+		if (!checkDataChangedOnUpdate(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -731,7 +731,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		
-		if (!checkUpdatedOnDelete(data, sd)) {
+		if (!checkDataChangedOnDelete(data, sd)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -914,23 +914,23 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * checkUpdatedOnUpdate
+	 * check data is changed on update
 	 * @param data data
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdatedOnUpdate(T data, T sd) {
-		return checkUpdated(data, sd, RC.WARN_DATA_CHANGED_PREFIX);
+	protected boolean checkDataChangedOnUpdate(T data, T sd) {
+		return checkDataChanged(data, sd, RC.WARN_DATA_CHANGED_PREFIX);
 	}
 
 	/**
-	 * checkUpdatedOnDelete
+	 * check data changed on delete
 	 * @param data data
 	 * @param sd source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdatedOnDelete(T data, T sd) {
-		if (checkUpdated(data, sd, RC.WARN_DATA_CHANGED_PREFIX)) {
+	protected boolean checkDataChangedOnDelete(T data, T sd) {
+		if (checkDataChanged(data, sd, RC.WARN_DATA_CHANGED_PREFIX)) {
 			return true;
 		}
 
@@ -939,17 +939,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * checkUpdated
+	 * check data is changed or not
 	 * @param data data
 	 * @param sd source data
 	 * @param msg warn message id
 	 * @return true if check successfully
 	 */
-	protected boolean checkUpdated(T data, T sd, String msg) {
+	protected boolean checkDataChanged(T data, T sd, String msg) {
 		if (data instanceof IUpdate) {
 			IUpdate cb = (IUpdate)data;
 			IUpdate sb = (IUpdate)sd;
-			if (Bean.isUpdated(cb, sb)) {
+			if (Bean.isChanged(cb, sb)) {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());
 				
