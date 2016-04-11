@@ -153,7 +153,7 @@
 <#list req?keys as k>
 			<tr><td>${k?html}</td>
 				<td><#if req[k]??>${req[k].class.name?html}<br/>
-					<@p.property value=(req[k]) escape="phtml"/>
+					${assist.escapePhtml(req[k].toString())}
 				</#if></td>
 			</tr>
 </#list>
@@ -175,7 +175,7 @@
 <#list ses?keys as k>
 			<tr><td>${k?html}</td>
 				<td><#if ses[k]??>${ses[k].class.name?html}<br/>
-					<@p.property value=ses[k] escape="phtml"/>
+					${assist.escapePhtml(ses[k].toString())}
 				</#if></td>
 			</tr>
 </#list>
@@ -203,7 +203,7 @@
 <#list app?keys as k>
 			<tr><td>${k?html}</td>
 				<td><#if app[k]??>${app[k].class.name?html}<br/></#if>
-					<@p.property value="%{app['${k}']}" escape="phtml"/>
+					${assist.escapePhtml(app[k].toString())}
 				</td>
 			</tr>
 </#list>
