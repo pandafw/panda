@@ -114,7 +114,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 	
 	private String hiddenValue(ViewField tag) {
 		if (Strings.isNotEmpty(tag.getFieldValue())) {
-			return tag.getFieldValue();
+			return Boolean.TRUE.equals(tag.getValue()) ? tag.getFieldValue() : "";
 		}
 
 		return tag.castString(tag.getValue(), tag.getFormat());
