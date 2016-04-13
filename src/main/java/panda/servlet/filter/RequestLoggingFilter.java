@@ -167,13 +167,15 @@ public class RequestLoggingFilter implements Filter {
 
 	private void logRequest(HttpServletRequest request) {
 		try {
-			if (log.isTraceEnabled()) {
-				log.trace(HttpServlets.dumpRequestTrace(request));
-			}
-			else if (log.isDebugEnabled()) {
-				log.debug(HttpServlets.dumpRequestDebug(request));
-			}
-			else if (log.isInfoEnabled()) {
+			if (log.isInfoEnabled()) {
+				if (log.isDebugEnabled()) {
+					if (log.isTraceEnabled()) {
+						log.trace(HttpServlets.dumpRequestTrace(request));
+						return;
+					}
+					log.debug(HttpServlets.dumpRequestDebug(request));
+					return;
+				}
 				log.info(HttpServlets.dumpRequestInfo(request));
 			}
 		}
