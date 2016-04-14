@@ -21,7 +21,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.processor.LayoutProcessor;
-import panda.net.Inets;
+import panda.net.IPs;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.net.http.UserAgent;
@@ -52,7 +52,7 @@ public class ActionAssist extends ActionSupport {
 	 * @return true if remote host is local network host
 	 */
 	public boolean isIntranetHost() {
-		return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(getRequest()));
+		return IPs.isIntranetAddr(HttpServlets.getRemoteAddr(getRequest()));
 	}
 
 	public String getServletErrorReason(int sc) {
