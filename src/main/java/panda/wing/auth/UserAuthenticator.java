@@ -1,5 +1,12 @@
 package panda.wing.auth;
 
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -7,19 +14,12 @@ import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.UrlMapping;
-import panda.net.Inets;
+import panda.net.IPs;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
 import panda.wing.constant.AUTH;
 import panda.wing.constant.REQ;
 import panda.wing.constant.SES;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 public abstract class UserAuthenticator {
 	//--------------------------------------------------------
@@ -153,7 +153,7 @@ public abstract class UserAuthenticator {
 
 		if (AUTH.LOCAL.equals(define)) {
 			HttpServletRequest req = ac.getRequest();
-			return Inets.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
+			return IPs.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}
 		if (AUTH.SECURE.equals(define)) {
 			return isSecureSessionUser(su) ? OK : UNSECURE;
