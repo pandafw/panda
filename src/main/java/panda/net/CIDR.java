@@ -66,7 +66,7 @@ public class CIDR implements Cloneable, Serializable {
 		addr = null;
 	}
 
-	private InetAddress MaskAddress(InetAddress ia, int mask) {
+	private InetAddress maskAddress(InetAddress ia, int mask) {
 		byte[] bs = ia.getAddress();
 
 		int i = mask / 8;
@@ -108,7 +108,7 @@ public class CIDR implements Cloneable, Serializable {
 		}
 		
 
-		InetAddress ma = MaskAddress(ia, mask);
+		InetAddress ma = maskAddress(ia, mask);
 
 		return addr.equals(ma);
 	}
@@ -149,31 +149,56 @@ public class CIDR implements Cloneable, Serializable {
 			}
 		}
 
+		byte[] bs = IPs.toNetAddress(addr);
+		if (bs == null) {
+			throw new IllegalArgumentException("Illegal CIDR: " + cidr);
+		}
+
 		InetAddress ia;
 		try {
-			ia = InetAddress.getByName(addr);
+			ia = InetAddress.getByAddress(bs);
 		}
 		catch (UnknownHostException e) {
 			throw new IllegalArgumentException("Illegal CIDR: " + cidr, e);
 		}
 
-		if (Inets.isIpV6(ia)) {
+		if (IPs.isIPv6(ia)) {
+			mask = MASK_IPV6;
+			if (sep >= 0) {
+				try {
+					mask = Integer.parseInt(cidr.substring(sep + 1));
+				}
+				catch (NumberFormatException e) {
+					throw new IllegalArgumentException("Illegal CIDR: " + cidr, e);
+				}
+			}
+
 			if (mask < 0 || mask > MASK_IPV6) {
-				mask = MASK_IPV6;
+				throw new IllegalArgumentException("Illegal CIDR: " + cidr);
 			}
 
 			this.mask = mask;
-			this.addr = MaskAddress(ia, mask);
+			this.addr = maskAddress(ia, mask);
 			return;
 		}
 
-		if (Inets.isIpV4(ia)) {
+		if (IPs.isIPv4(ia)) {
+			mask = MASK_IPV4;
+			if (sep >= 0) {
+				try {
+					mask = Integer.parseInt(cidr.substring(sep + 1));
+				}
+				catch (NumberFormatException e) {
+					throw new IllegalArgumentException("Illegal CIDR: " + cidr, e);
+				}
+			}
+
 			if (mask < 0 || mask > MASK_IPV4) {
-				mask = MASK_IPV4;
+				throw new IllegalArgumentException("Illegal CIDR: " + cidr);
 			}
 
 			this.mask = mask;
-			this.addr = MaskAddress(ia, mask);
+			this.addr = maskAddress(ia, mask);
 			return;
 		}
 	}
