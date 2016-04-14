@@ -9,12 +9,16 @@ import panda.mvc.filepool.MvcDaoFilePool;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
+import panda.mvc.util.ActionAssist;
+import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.wing.lucene.LuceneProvider;
 import panda.wing.task.gae.GaeTaskExecutor;
 import panda.wing.task.gae.GaeTaskScheduler;
 import panda.wing.task.java.JavaTaskExecutor;
 import panda.wing.task.java.JavaTaskScheduler;
+import panda.wing.util.AppActionAssist;
+import panda.wing.util.AppActionConsts;
 import panda.wing.util.AppCacheProvider;
 import panda.wing.util.AppDaoClientProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
@@ -34,6 +38,12 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.remove(MvcLocalFilePool.class);
 			clss.add(MvcDaoFilePool.class);
 
+			clss.remove(ActionAssist.class);
+			clss.add(AppActionAssist.class);
+			
+			clss.remove(ActionConsts.class);
+			clss.add(AppActionConsts.class);
+			
 			clss.remove(ResourceLoader.class);
 			clss.add(AppResourceBundleLoader.class);
 			
