@@ -55,9 +55,8 @@ password-format=******
 #regex
 regex-numeric=\\d+
 regex-password=\\w+
-regex-telnumber=\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}
-regex-faxnumber=\\d{1,3}?-*\\d{1,4}?-*\\d{1,4}
-regex-zipcode=\\d{3}-*\\d{4}
+regex-telnumber=(\\+?\\d{1,4} |\\(\\+?\\d{1,4}\\) )?\\d{1,3}-?\\d{1,4}-?\\d{1,4}( \\(\\d{1,4}\\))?
+regex-zipcode=\\d{3}-?\\d{4}
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
 pager-label-info=${top.begin}~${top.end}/${top.total}
@@ -159,6 +158,7 @@ validation-cast-date=Please input "yyyy-MM-dd" date string.
 validation-cast-decimal=Please input a decimal number.
 validation-cast-number=Please input a number.
 validation-cast-file=Please select a file.
+validation-cast-url=Please input a correct URL (ex: "http://www.domain.com").
 validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
 (top.comparator == "lt" ? "<=" : \
@@ -178,7 +178,6 @@ validation-date-to=The date must be larger than start date.
 validation-email=The format email address of must be "user@domain.com".
 validation-email-notsame=The confirm email is not same as you input.
 validation-empty=This field should be empty.
-validation-faxnumber=The FAX number format is incorrect (ex: "12-3456-7890").
 validation-filename=The file name can't contain these \/:*?"<>| characters. 
 validation-file=${exists ? ("The file size (" + top.fieSize + " must be " + \
 ((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize) : \
@@ -217,12 +216,11 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.minLength != null ? (">= " + top.minLength) : \
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))}\
 .
-validation-telnumber=The phone number format is incorrect (ex: "12-3456-7890").
-validation-url=The format of URL must be "http://www.domain.com".
+validation-telnumber=Please input a correct telephone number (ex: "12-3456-7890").
+validation-url=Please input a correct URL (ex: "http://www.domain.com").
 validation-zenkakukatakanastring=Please input full katakana character.
 validation-zenkakustring=Please input full character.
-validation-zipcode=The zipcode format is incorrent (ex: "123-4567").
-
+validation-zipcode=Please input a corrent zipcode (ex: "123-4567").
 
 
 #error messages

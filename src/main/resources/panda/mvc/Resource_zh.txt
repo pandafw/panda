@@ -96,16 +96,15 @@ validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \
 validation-compare-daterange-to=「终了日期」必须大于「开始日期」。
 validation-compare-numberrange-to=数字范围的设定不正确。
 validation-constant=请选择${top.consts}中的内容。
-validation-creditcardnumber=请按"XXXX-XXXX-XXXX-XXXX"的格式输入正确的信用卡号码。
+validation-creditcardnumber=请输入正确的信用卡号码。（例: XXXX-XXXX-XXXX-XXXX）
 validation-date-to=请输入開始日期之后的日期。
 validation-date-range=请输入${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "之内") : \
 (top.min != null ? (top.min + "之后") : \
 (top.max != null ? (top.max + "之前") : ""))}\
 的日期。
-validation-email=请按"user@domain.com"的格式输入电子邮件地址。
+validation-email=请输入电子邮件地址。（例: user@domain.com）
 validation-email-notsame=电子邮件和确认电子邮件不一致。
 validation-empty=该项目必须为空。
-validation-faxnumber=请按"1234-5678-9999"的格式输入传真号码。
 validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。
 validation-file=${exists ? ("请指定" + \
 ((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
@@ -149,11 +148,11 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.minLength != null ? (top.minLength + "个字符以上") : \
 (top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
 的文字。（输入文字字数：${top.length}）
-validation-telnumber=请按"1234-5678-9999"的格式输入电话号码。
-validation-url=请按"http://www.domain.com"的格式输入URL。
+validation-telnumber=请输入正确的电话号码。（例: 012-3456-7890）
+validation-url=请输入正确的URL。（例: http://www.domain.com）
 validation-zenkakustring=请输入全角文字。
 validation-zenkakukatakanastring=请输入全角片假名。
-validation-zipcode=请按"123-4567"的格式输入邮政编码。
+validation-zipcode=请输入正确的邮政编码。（例: 123-4567）
 
 
 

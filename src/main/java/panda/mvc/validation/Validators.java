@@ -31,6 +31,7 @@ public interface Validators {
 	public static final String CONSTANT = "constant";
 	public static final String PROHIBITED = "prohibited";
 
+	public static final String URL = "url";
 	public static final String VISIT = "visit";
 
 	// -------------------------------------------------------
@@ -53,6 +54,7 @@ public interface Validators {
 	public static final String MSGID_FILE = "validation-file";
 	public static final String MSGID_IMAGE = "validation-image";
 	public static final String MSGID_EMAIL = "validation-email";
+	public static final String MSGID_URL = "validation-url";
 	
 	// -------------------------------------------------------
 	// extend validation message id

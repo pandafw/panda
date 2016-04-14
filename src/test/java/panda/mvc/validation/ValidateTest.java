@@ -141,7 +141,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	@Test
 	public void testVisitEmailOk() throws Throwable {
 		request.setRequestURI("/visitOne");
-		request.addParameter("one.email", "a@a.ca");
+		request.addParameter("one.email", "a@ab.com");
 		servlet.service(request, response);
 		assertEquals("1", response.getContentAsString());
 	}
@@ -152,6 +152,22 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.addParameter("one.email", "err");
 		servlet.service(request, response);
 		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.email\":[\"'err' is not a email.\"]}}},\"params\":{\"one\":{\"email\":\"err\",\"number\":0}}}", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitURLOk() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.url", "http://a.com/xxx");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+	
+	@Test
+	public void testVisitURLErr() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.url", "http://err!xx");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.url\":[\"'http:\\/\\/err!xx' is not a url.\"]}}},\"params\":{\"one\":{\"number\":0,\"url\":\"http:\\/\\/err!xx\"}}}", response.getContentAsString());
 	}
 
 	@Test
@@ -216,6 +232,78 @@ public class ValidateTest extends AbstractMvcTestCase {
 		request.addParameter("one.regex", "err");
 		servlet.service(request, response);
 		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.regex\":[\"'err', 'ok'\"]}}},\"params\":{\"one\":{\"number\":0,\"regex\":\"err\"}}}", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoOk() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "090-1234-5678");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+	
+	@Test
+	public void testVisitTelnoOk1() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.setParameter("one.telno", "09012345678");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoOk2() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "090-1234-5678 (1111)");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoOk3() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "(+81) 090-1234-5678 (1111)");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoOk4() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "81 090-1234-5678 (1111)");
+		servlet.service(request, response);
+		assertEquals("1", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoErr() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "err");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"err\"}}}", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoErr2() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "111111 09012345678");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"111111 09012345678\"}}}", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoErr3() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "+-87 09012345678");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"+-87 09012345678\"}}}", response.getContentAsString());
+	}
+
+	@Test
+	public void testVisitTelnoErr4() throws Throwable {
+		request.setRequestURI("/visitOne");
+		request.addParameter("one.telno", "0312345678 123");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.telno\":[\"not a telephone number.\"]}}},\"params\":{\"one\":{\"number\":0,\"telno\":\"0312345678 123\"}}}", response.getContentAsString());
 	}
 
 	@Test

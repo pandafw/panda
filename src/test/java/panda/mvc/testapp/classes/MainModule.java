@@ -6,12 +6,11 @@ import panda.mvc.annotation.view.Fatal;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.ioc.provider.ComboIocProvider;
 
-@Modules(scan=true)
 @Ok("json")
 @Fatal("json")
 @IocBy(type=ComboIocProvider.class,
-        args={"*default", "*panda.ioc.loader.JsonIocLoader","panda/mvc/testapp/classes/ioc/test.js",
-              "*panda.mvc.ioc.loader.MvcAnnotationIocLoader","panda.mvc.testapp.classes", "panda.dao.sql"})
+        args={"*default", "*json","panda/mvc/testapp/classes/ioc/test.js"})
+@Modules(packages={ "panda.dao.sql" }, scan = true)
 public class MainModule {
 
 }

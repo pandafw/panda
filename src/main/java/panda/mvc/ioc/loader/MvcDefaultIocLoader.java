@@ -26,6 +26,8 @@ import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.PrepareProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
+import panda.mvc.util.ActionAssist;
+import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.util.ServletUrlBuilder;
@@ -47,6 +49,7 @@ import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
+import panda.mvc.validation.validator.URLValidator;
 import panda.mvc.validation.validator.VisitValidator;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.mvc.view.ftl.FreemarkerManager;
@@ -138,9 +141,12 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			MvcLocalFilePool.class,
 			
 			// utility
+			ActionAssist.class,
+			ActionConsts.class,
 			ResourceLoader.class,
 			CookieStateProvider.class,
 			DefaultTextProvider.class,
+			ServletUrlBuilder.class,
 	
 			// processor
 			AdaptProcessor.class,
@@ -187,10 +193,8 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			RegexValidator.class,
 			RequiredValidator.class,
 			StringValidator.class,
+			URLValidator.class,
 			VisitValidator.class,
-			
-			// util
-			ServletUrlBuilder.class,
 			
 			// View
 			ThemeRenderEngine.class,

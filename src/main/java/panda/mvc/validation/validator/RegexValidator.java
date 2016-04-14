@@ -43,8 +43,7 @@ public class RegexValidator extends AbstractStringValidator {
 		this.regex = regex;
 	}
 
-	@Override
-	protected boolean validateString(String value) {
+	protected Pattern getPattern() {
 		if (Strings.isEmpty(regex)) {
 			throw new IllegalArgumentException("Empty regex expression of field '" + getName() + "': " + regex);
 		}
@@ -63,6 +62,12 @@ public class RegexValidator extends AbstractStringValidator {
 			throw new IllegalArgumentException("Invalid regex expression of field '" + getName() + "': " + regex, e);
 		}
 		
+		return pattern;
+	}
+	
+	@Override
+	protected boolean validateString(String value) {
+		Pattern pattern = getPattern();
 		Matcher matcher = pattern.matcher(value);
 		return matcher.matches();
 	}

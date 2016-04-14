@@ -97,16 +97,15 @@ validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 validation-compare-daterange-to=「終了日付」が「開始日付」より以後の日付を設定してください。
 validation-compare-numberrange-to=数字範囲の設定が正しくありません。
 validation-constant=${top.consts}中の値を選んでください。
-validation-creditcardnumber=正しいクレジットカード番号を"XXXX-XXXX-XXXX-XXXX"の形で入力してください。
+validation-creditcardnumber=正しいクレジットカード番号を入力してください。（例: XXXX-XXXX-XXXX-XXXX）
 validation-date-to=開始日付より大きい日付を入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
-validation-email=正しいメールアドレスを入力してください。（例：user@domain.com）
+validation-email=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。
-validation-faxnumber=FAX番号を"1234-5678-9999"の形式で入力してください。
 validation-filename=ファイル名には次の文字　\/:*?"<>|　は使えません。
 validation-file=${exists ? \
 (((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
@@ -151,11 +150,11 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))}\
 の文字を入力してください。（入力文字数: ${top.length}）
-validation-telnumber=電話番号を"1234-5678-9999"の形式で入力してください。
-validation-url=URLを"http://www.domain.com"の形式で入力してください。
+validation-telnumber=正しい電話番号を入力してください。（例: 03-1234-5678）
+validation-url=正しいURLを入力してください。（例: http://www.domain.com）
 validation-zenkakustring=全角文字を入力してください。
 validation-zenkakukatakanastring=全角カタカナを入力してください。
-validation-zipcode=郵便番号を"123-4567"の形式で入力してください。
+validation-zipcode=正しい郵便番号を入力してください。（例: 123-4567）
 
 
 #error messages

@@ -42,6 +42,7 @@ import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
 import panda.mvc.validation.validator.RequiredValidator;
 import panda.mvc.validation.validator.StringValidator;
+import panda.mvc.validation.validator.URLValidator;
 import panda.mvc.validation.validator.Validator;
 import panda.mvc.validation.validator.VisitValidator;
 
@@ -76,6 +77,7 @@ public class DefaultValidators implements Validators {
 		map.put(IMAGE, ImageValidator.class);
 		map.put(CONSTANT, ConstantValidator.class);
 		map.put(PROHIBITED, ProhibitedValidator.class);
+		map.put(URL, URLValidator.class);
 		map.put(VISIT, VisitValidator.class);
 		
 		InputStream is = null;

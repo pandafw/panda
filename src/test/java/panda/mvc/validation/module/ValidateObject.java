@@ -29,6 +29,9 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.EMAIL, message="'${top.value}' is not a email."))
 	public String email;
 
+	@Validates(@Validate(value=Validators.URL, params="{ regex: '#(regex-url)' }", message="'${top.value}' is not a url."))
+	public String url;
+
 	@Validates(@Validate(value=Validators.FILENAME, message="'${top.value}' is not a filename."))
 	public String filename;
 	
@@ -40,6 +43,9 @@ public class ValidateObject {
 	
 	@Validates(@Validate(value=Validators.REGEX, params="{regex: 'ok'}", message="'${top.value}', '${top.regex}'"))
 	public String regex;
+
+	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telnumber)' }", message="not a telephone number."))
+	public String telno;
 
 	@Validates(@Validate(type=StringValidator.class, params="{type:'A'}", message="'${top.value}' is not A."))
 	public String string;
