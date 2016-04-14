@@ -88,6 +88,7 @@ validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
 validation-cast-decimal=数字を入力してください。
 validation-cast-number=整数を入力してください。
 validation-cast-file=フィアルを選択してください。
+validation-cidr=正しいIPまたはCIDRを入力してください。（例: 192.168.1.1/32）
 validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
 (top.comparator == "lt" ? "<=" : \
