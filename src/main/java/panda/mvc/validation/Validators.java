@@ -43,6 +43,7 @@ public interface Validators {
 	public static final String MSGID_CAST_DECIMAL = "validation-cast-decimal";
 	public static final String MSGID_CAST_NUMBER = "validation-cast-number";
 	public static final String MSGID_CAST_FILE = "validation-cast-file";
+	public static final String MSGID_CAST_URL = "validation-cast-url";
 	public static final String MSGID_CONSTANT = "validation-constant";
 	public static final String MSGID_PROHIBITED = "validation-prohibited";
 	public static final String MSGID_DATE_TO = "validation-date-to";
