@@ -32,6 +32,25 @@ public class JavaBeanHandlerTest {
 		return beans.getBeanHandler(type);
 	}
 	
+	protected void testGetTypeStr(Object beanObject, String propertyName, Type expected) {
+		log.debug("testGetTypeStr: " + beanObject.getClass().getName() + " - " + propertyName + " [ "
+				+ expected + " ]");
+
+		Type actual;
+		try {
+			BeanHandler bh = getBeanHandler(beanObject.getClass());
+			actual = bh.getBeanType(beanObject, propertyName);
+		}
+		catch (RuntimeException e) {
+			log.error("exception", e);
+			throw e;
+		}
+		log.debug("expect: " + Types.getCastableClassName(expected));
+		log.debug("actual: " + Types.getCastableClassName(actual));
+		Assert.assertEquals(Types.getCastableClassName(expected), Types.getCastableClassName(actual));
+	}
+
+	
 	protected void testGetType(Object beanObject, String propertyName, Type expected) {
 		log.debug("testGetType: " + beanObject.getClass().getName() + " - " + propertyName + " [ "
 				+ expected + " ]");
@@ -184,10 +203,10 @@ public class JavaBeanHandlerTest {
 		}
 		else if (Systems.IS_JAVA_1_7) {
 			//FIXME
-//			testGetType(a, "intArrayMap", 
-//				Types.paramTypeOf(Map.class, 
-//					Types.subTypeOf(Object.class), 
-//					int[].class));
+			testGetTypeStr(a, "intArrayMap", 
+				Types.paramTypeOf(Map.class, 
+					Types.subTypeOf(Object.class), 
+					Types.arrayTypeOf(int.class)));
 		}
 
 		testGetType(a, "testB", TestB.class);

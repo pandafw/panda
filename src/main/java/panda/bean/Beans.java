@@ -37,16 +37,7 @@ public class Beans {
 	/**
 	 * instance
 	 */
-	private static Beans i;
-
-	static {
-		try {
-			i = (Beans)Classes.newInstance(Beans.class.getPackage().getName() + ".FastBeans");
-		}
-		catch (Throwable e) {
-			i = new Beans();
-		}
-	}
+	private static Beans i = new Beans();
 
 	/**
 	 * @return singleton instance

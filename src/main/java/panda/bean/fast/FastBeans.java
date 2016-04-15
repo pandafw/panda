@@ -1,4 +1,4 @@
-package panda.bean;
+package panda.bean.fast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -11,7 +11,9 @@ import java.lang.reflect.WildcardType;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import panda.bean.handler.AbstractFastBeanHandler;
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
+import panda.bean.PropertyAccessor;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Classes;
@@ -89,7 +91,7 @@ public class FastBeans extends Beans {
 		String orgPkgName = Classes.getPackageName(typeName);
 
 		String packageName = "panda.bean.fast" + (orgPkgName.isEmpty() ? "" : ('.' + orgPkgName));
-		String simpleName = Classes.getSimpleClassName(typeName);
+		String simpleName = Classes.getShortClassName(typeName) + "Handler";
 		String className = packageName + "." + simpleName;
 
 		try {
@@ -259,7 +261,7 @@ public class FastBeans extends Beans {
 
 	private void addPropertyType(StringBuilder propType, Type type) {
 		if (type instanceof Class) {
-			propType.append(Classes.getQualifiedClassName((Class)type)).append(".class");
+			propType.append(Classes.getCastableClassName((Class)type)).append(".class");
 		}
 		else if (type instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)type;

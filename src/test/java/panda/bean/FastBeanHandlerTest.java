@@ -1,5 +1,7 @@
 package panda.bean;
 
+import panda.bean.fast.FastBeans;
+
 
 
 
