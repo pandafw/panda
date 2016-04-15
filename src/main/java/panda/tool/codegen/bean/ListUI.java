@@ -214,21 +214,21 @@ public class ListUI implements Comparable<ListUI> {
 		return set;
 	}
 
-	/**
-	 * @return the ordered column list 
-	 */
-	public Set<ListColumn> getOrderedColumnList() {
-		Set<ListColumn> set = new TreeSet<ListColumn>();
-		List<ListColumn> list = getColumnList();
-		for (int i = 0; i < list.size(); i++) {
-			ListColumn lc = list.get(i);
-			if (lc.getOrder() == null) {
-				lc.setOrder((i + 1) * 100);
-			}
-			set.add(lc);
-		}
-		return set;
-	}
+//	/**
+//	 * @return the ordered column list 
+//	 */
+//	public Set<ListColumn> getOrderedColumnList() {
+//		Set<ListColumn> set = new TreeSet<ListColumn>();
+//		List<ListColumn> list = getColumnList();
+//		for (int i = 0; i < list.size(); i++) {
+//			ListColumn lc = list.get(i);
+//			if (lc.getOrder() == null) {
+//				lc.setOrder((i + 1) * 100);
+//			}
+//			set.add(lc);
+//		}
+//		return set;
+//	}
 
 	/**
 	 * @return the columnList

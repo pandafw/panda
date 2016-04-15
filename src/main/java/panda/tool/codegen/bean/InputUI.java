@@ -206,6 +206,21 @@ public class InputUI implements Comparable<InputUI> {
 		}
 		return set;
 	}
+//
+//	public Set<InputField> getOrderedFieldList() {
+//		Set<InputField> set = new TreeSet<InputField>();
+//		List<InputField> list = getFieldList();
+//		for (int i = 0; i < list.size(); i++) {
+//			InputField f = list.get(i);
+//
+//			if (f.getOrder() == null) {
+//				f.setOrder((i + 1) * 100);
+//			}
+//
+//			set.add(f);
+//		}
+//		return set;
+//	}
 
 	public List<InputField> getRequiredValidateFieldList() {
 		List<InputField> set = new ArrayList<InputField>();

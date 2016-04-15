@@ -17,7 +17,7 @@ ${s}#if result?has_content>
 			"header": a.getText("listview-th-rownum", ""),
 			"fixed": true
 		}] />
-<#list ui.orderedColumnList as c>
+<#list ui.displayColumnList as c>
 ${s}#if a.displayField("${c.name}")>
 	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",

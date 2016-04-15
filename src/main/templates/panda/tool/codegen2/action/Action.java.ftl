@@ -30,33 +30,14 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 */
 	public ${actionClass}() {
 		setType(${entityBeanClass}.class);
-<#if action.listUIList?has_content><#list action.listUIList as ui><#if ui.generate!false>
-<#if ui.templates?seq_contains("list")
-	|| ui.templates?seq_contains("list_print")
-	|| ui.templates?seq_contains("list_popup")
-	|| ui.templates?seq_contains("list_csv")
-	|| ui.templates?seq_contains("list_json")
-	|| ui.templates?seq_contains("list_xml")
-	|| ui.templates?seq_contains("import")
-	|| ui.templates?seq_contains("bdelete")
-	|| ui.templates?seq_contains("bupdate")
->
-		addDisplayFields(<#list ui.orderedColumnList as c>${entity.simpleName}.${c.uname}<#if c_has_next>, </#if></#list>);
-	<#break/>
-</#if></#if>
-</#list></#if>
-<#if action.inputUIList?has_content><#list action.inputUIList as ui><#if ui.generate!false>
-<#if ui.templates?seq_contains("view")
-	|| ui.templates?seq_contains("print")
-	|| ui.templates?seq_contains("add")
-	|| ui.templates?seq_contains("copy")
-	|| ui.templates?seq_contains("edit")
-	|| ui.templates?seq_contains("delete")
->
-		addDisplayFields(<#list ui.displayFieldList as f><#if f.actionField>"${f.name}"<#else>${entity.simpleName}.${f.uname}</#if><#if f_has_next>, </#if></#list>);
-	<#break/>
-</#if></#if>
-</#list></#if>
+<#assign lcs = action.listUIColumns/>
+<#if lcs?has_content>
+		addDisplayFields(<#list lcs as c>${entity.simpleName}.${c}<#if c_has_next>, </#if></#list>);
+</#if>
+<#assign ifs = action.inputUIFields/>
+<#if ifs?has_content>
+		addDisplayFields(<#list ifs as f><#if f?starts_with('.')>"${f?substring(1)}"<#else>${entity.simpleName}.${f}</#if><#if f_has_next>, </#if></#list>);
+</#if>
 	}
 
 <#list action.propertyList as p>

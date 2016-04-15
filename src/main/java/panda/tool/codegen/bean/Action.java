@@ -1,7 +1,9 @@
 package panda.tool.codegen.bean;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -322,7 +324,17 @@ public class Action {
 		}
 		return list;
 	}
-	
+
+	public Set<String> getListUIColumns() {
+		Set<String> cs = new LinkedHashSet<String>();
+		for (ListUI lui : getSortedListUIList()) {
+			for (ListColumn lc : lui.getDisplayColumnList()) {
+				cs.add(lc.getUname());
+			}
+		}
+		return cs;
+	}
+
 	/**
 	 * @return the inputUIList
 	 */
@@ -344,6 +356,21 @@ public class Action {
 			}
 		}
 		return list;
+	}
+
+	public Set<String> getInputUIFields() {
+		Set<String> cs = new LinkedHashSet<String>();
+		for (InputUI iui : getSortedInputUIList()) {
+			for (InputField inf : iui.getDisplayFieldList()) {
+				if (inf.getActionField().booleanValue()) {
+					cs.add("." + inf.getName());
+				}
+				else {
+					cs.add(inf.getUname());
+				}
+			}
+		}
+		return cs;
 	}
 
 	/**
