@@ -45,9 +45,30 @@ public abstract class Types {
 		if (type instanceof Class) {
 			return Classes.getCastableClassName((Class)type);
 		}
-		else {
-			return Classes.getCastableClassName(type.toString());
+		
+		if (type instanceof ParameterizedType) {
+			ParameterizedType parameterizedType = (ParameterizedType)type;
+
+			// I'm not exactly sure why getRawType() returns Type instead of Class.
+			// Neal isn't either but suspects some pathological case related
+			// to nested classes exists.
+			Type rawType = parameterizedType.getRawType();
+			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+			StringBuilder sb = new StringBuilder(30 * (typeArguments.length + 1));
+			sb.append(getCastableClassName(rawType));
+
+			if (typeArguments.length == 0) {
+				return sb.toString();
+			}
+
+			sb.append("<").append(getCastableClassName(typeArguments[0]));
+			for (int i = 1; i < typeArguments.length; i++) {
+				sb.append(", ").append(getCastableClassName(typeArguments[i]));
+			}
+			return sb.append(">").toString();
 		}
+
+		return Classes.getCanonicalClassName(type.toString());
 	}
 
 	public static Type getDefaultImplType(Type type) {
@@ -72,24 +93,6 @@ public abstract class Types {
 		return type;
 	}
 	
-	/**
-	 * Return the qualified name of the given class: usually simply
-	 * the class name, but component type class name + "[]" for arrays.
-	 * @param type the class
-	 * @return the qualified name of the class
-	 */
-	public static String getQualifiedTypeName(Type type) {
-		if (type == null) {
-			return "null";
-		}
-		else if (type instanceof Class) {
-			return Classes.getQualifiedClassName((Class)type);
-		}
-		else {
-			return type.toString();
-		}
-	}
-
 	/**
 	 * get declared field type
 	 * @param owner owner type
@@ -1426,7 +1429,7 @@ public abstract class Types {
 		return o != null ? o.hashCode() : 0;
 	}
 
-	public static String typeToString(Type type) {
+	public static String toString(Type type) {
 		return type instanceof Class ? ((Class<?>)type).getName() : type.toString();
 	}
 
@@ -1738,18 +1741,18 @@ public abstract class Types {
 
 		@Override
 		public String toString() {
-			StringBuilder stringBuilder = new StringBuilder(30 * (typeArguments.length + 1));
-			stringBuilder.append(typeToString(rawType));
+			StringBuilder sb = new StringBuilder(30 * (typeArguments.length + 1));
+			sb.append(Types.toString(rawType));
 
 			if (typeArguments.length == 0) {
-				return stringBuilder.toString();
+				return sb.toString();
 			}
 
-			stringBuilder.append("<").append(typeToString(typeArguments[0]));
+			sb.append("<").append(Types.toString(typeArguments[0]));
 			for (int i = 1; i < typeArguments.length; i++) {
-				stringBuilder.append(", ").append(typeToString(typeArguments[i]));
+				sb.append(", ").append(Types.toString(typeArguments[i]));
 			}
-			return stringBuilder.append(">").toString();
+			return sb.append(">").toString();
 		}
 
 		private static final long serialVersionUID = 0;
@@ -1778,7 +1781,7 @@ public abstract class Types {
 
 		@Override
 		public String toString() {
-			return typeToString(componentType) + "[]";
+			return Types.toString(componentType) + "[]";
 		}
 
 		private static final long serialVersionUID = 0;
@@ -1836,13 +1839,13 @@ public abstract class Types {
 		@Override
 		public String toString() {
 			if (lowerBound != null) {
-				return "? super " + typeToString(lowerBound);
+				return "? super " + Types.toString(lowerBound);
 			}
 			else if (upperBound == Object.class) {
 				return "?";
 			}
 			else {
-				return "? extends " + typeToString(upperBound);
+				return "? extends " + Types.toString(upperBound);
 			}
 		}
 

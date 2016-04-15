@@ -68,7 +68,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 				tokener.back();
 				return parseJsonArray(type);
 			}
-			throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
+			throw syntaxError("A json array can not be serialized to the " + Types.toString(type));
 		}
 		else if (c == '{') {
 			if (Object.class.equals(type)) {
@@ -78,7 +78,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 				tokener.back();
 				return parseJsonObject(type);
 			}
-			throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
+			throw syntaxError("A json object can not be serialized to the " + Types.toString(type));
 		}
 		else {
 			if (isImmutableType(type)) {
@@ -218,7 +218,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 			throw syntaxError("A json object text must begin with '{'");
 		}
 		if (type != null && isArrayType(type)) {
-			throw syntaxError("A json object can not be serialized to the " + Types.typeToString(type));
+			throw syntaxError("A json object can not be serialized to the " + Types.toString(type));
 		}
 		
 		T obj = null;
@@ -335,7 +335,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 			throw syntaxError("A json array text must start with '['");
 		}
 		if (type != null && !isArrayType(type)) {
-			throw syntaxError("A json array can not be serialized to the " + Types.typeToString(type));
+			throw syntaxError("A json array can not be serialized to the " + Types.toString(type));
 		}
 
 		List list = null;

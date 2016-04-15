@@ -928,12 +928,12 @@ public class Methods {
 	public static String toSimpleString(Method method) {
 		try {
 			StringBuilder sb = new StringBuilder();
-			sb.append(Classes.getSimpleClassName(method.getReturnType()) + " ");
+			sb.append(Classes.getShortClassName(method.getReturnType()) + " ");
 			sb.append(getQualifiedName(method));
 			sb.append("(");
 			Class[] params = method.getParameterTypes();
 			for (int j = 0; j < params.length; j++) {
-				sb.append(Classes.getSimpleClassName(params[j]));
+				sb.append(Classes.getShortClassName(params[j]));
 				if (j < (params.length - 1))
 					sb.append(",");
 			}

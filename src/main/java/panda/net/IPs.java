@@ -198,7 +198,7 @@ public class IPs {
 	/**
 	 * Convert IPv4-Mapped address to IPv4 address. Both input and returned value are in network
 	 * order binary form.
-	 * @param src a String representing an IPv4-Mapped address in textual format
+	 * @param addr a byte array representing an IPv4-Mapped address
 	 * @return a byte array representing the IPv4 numeric address
 	 */
 	public static byte[] convertFromIPv4MappedAddress(byte[] addr) {
@@ -289,9 +289,9 @@ public class IPs {
 			return false;
 		}
 		
-		// Class A: 10.0.0.0 ~ 10.255.255.255 （10.0.0.0/8）
-		// Class B: 172.16.0.0 ~ 172.31.255.255 （172.16.0.0/12）
-		// Class C: 192.168.0.0 ~ 192.168.255.255 （192.168.0.0/16）
+		// Class A: 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8)
+		// Class B: 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12)
+		// Class C: 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16)
 		try {
 			InetAddress ia = InetAddress.getByName(ipAddr);
 			return ia.isLoopbackAddress() || ia.isAnyLocalAddress() || ia.isSiteLocalAddress();

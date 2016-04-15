@@ -261,7 +261,7 @@ public class FastBeans extends Beans {
 
 	private void addPropertyType(StringBuilder propType, Type type) {
 		if (type instanceof Class) {
-			propType.append(Classes.getCastableClassName((Class)type)).append(".class");
+			propType.append(((Class)type).getCanonicalName()).append(".class");
 		}
 		else if (type instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)type;

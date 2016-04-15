@@ -62,28 +62,11 @@ public class ClassesTest {
 
 	// -------------------------------------------------------------------------
 	@Test
-	public void test_getShortClassName_Object() {
-		assertEquals("ClassesTest", Classes.getShortClassName(new ClassesTest(), "<null>"));
-		assertEquals("ClassesTest.Inner", Classes.getShortClassName(new Inner(), "<null>"));
-		assertEquals("String", Classes.getShortClassName("hello", "<null>"));
-		assertEquals("<null>", Classes.getShortClassName(null, "<null>"));
-
-		// Inner types
-		class Named extends Object {
-		}
-		assertEquals("ClassesTest.1", Classes.getShortClassName(new Object() {
-		}, "<null>"));
-		assertEquals("ClassesTest.1Named", Classes.getShortClassName(new Named(), "<null>"));
-		assertEquals("ClassesTest.Inner", Classes.getShortClassName(new Inner(), "<null>"));
-	}
-
-	@Test
 	public void test_getShortClassName_Class() {
 		assertEquals("Classes", Classes.getShortClassName(Classes.class));
 		assertEquals("Map.Entry", Classes.getShortClassName(Map.Entry.class));
-		assertEquals("", Classes.getShortClassName((Class<?>)null));
+		assertEquals(null, Classes.getShortClassName((Class<?>)null));
 
-		// LANG-535
 		assertEquals("String[]", Classes.getShortClassName(String[].class));
 		assertEquals("Map.Entry[]", Classes.getShortClassName(Map.Entry[].class));
 
@@ -115,9 +98,9 @@ public class ClassesTest {
 		// Inner types
 		class Named extends Object {
 		}
-		assertEquals("ClassesTest.2", Classes.getShortClassName(new Object() {
+		assertEquals("ClassesTest.1", Classes.getShortClassName(new Object() {
 		}.getClass()));
-		assertEquals("ClassesTest.2Named", Classes.getShortClassName(Named.class));
+		assertEquals("ClassesTest.1Named", Classes.getShortClassName(Named.class));
 		assertEquals("ClassesTest.Inner", Classes.getShortClassName(Inner.class));
 	}
 
@@ -125,59 +108,50 @@ public class ClassesTest {
 	public void test_getShortClassName_String() {
 		assertEquals("Classes", Classes.getShortClassName(Classes.class.getName()));
 		assertEquals("Map.Entry", Classes.getShortClassName(Map.Entry.class.getName()));
-		assertEquals("", Classes.getShortClassName((String)null));
+		assertEquals(null, Classes.getShortClassName((String)null));
 		assertEquals("", Classes.getShortClassName(""));
 	}
 
 	@Test
-	public void test_getSimpleName_Class() {
-		assertEquals("Classes", Classes.getSimpleName(Classes.class));
-		assertEquals("Entry", Classes.getSimpleName(Map.Entry.class));
-		assertEquals("", Classes.getSimpleName((Class<?>)null));
+	public void test_getSimpleClassName_Class() {
+		assertEquals("Classes", Classes.getSimpleClassName(Classes.class));
+		assertEquals("Entry", Classes.getSimpleClassName(Map.Entry.class));
+		assertEquals(null, Classes.getSimpleClassName((Class<?>)null));
 
-		// LANG-535
-		assertEquals("String[]", Classes.getSimpleName(String[].class));
-		assertEquals("Entry[]", Classes.getSimpleName(Map.Entry[].class));
+		assertEquals("String[]", Classes.getSimpleClassName(String[].class));
+		assertEquals("Entry[]", Classes.getSimpleClassName(Map.Entry[].class));
 
 		// Primitives
-		assertEquals("boolean", Classes.getSimpleName(boolean.class));
-		assertEquals("byte", Classes.getSimpleName(byte.class));
-		assertEquals("char", Classes.getSimpleName(char.class));
-		assertEquals("short", Classes.getSimpleName(short.class));
-		assertEquals("int", Classes.getSimpleName(int.class));
-		assertEquals("long", Classes.getSimpleName(long.class));
-		assertEquals("float", Classes.getSimpleName(float.class));
-		assertEquals("double", Classes.getSimpleName(double.class));
+		assertEquals("boolean", Classes.getSimpleClassName(boolean.class));
+		assertEquals("byte", Classes.getSimpleClassName(byte.class));
+		assertEquals("char", Classes.getSimpleClassName(char.class));
+		assertEquals("short", Classes.getSimpleClassName(short.class));
+		assertEquals("int", Classes.getSimpleClassName(int.class));
+		assertEquals("long", Classes.getSimpleClassName(long.class));
+		assertEquals("float", Classes.getSimpleClassName(float.class));
+		assertEquals("double", Classes.getSimpleClassName(double.class));
 
 		// Primitive Arrays
-		assertEquals("boolean[]", Classes.getSimpleName(boolean[].class));
-		assertEquals("byte[]", Classes.getSimpleName(byte[].class));
-		assertEquals("char[]", Classes.getSimpleName(char[].class));
-		assertEquals("short[]", Classes.getSimpleName(short[].class));
-		assertEquals("int[]", Classes.getSimpleName(int[].class));
-		assertEquals("long[]", Classes.getSimpleName(long[].class));
-		assertEquals("float[]", Classes.getSimpleName(float[].class));
-		assertEquals("double[]", Classes.getSimpleName(double[].class));
+		assertEquals("boolean[]", Classes.getSimpleClassName(boolean[].class));
+		assertEquals("byte[]", Classes.getSimpleClassName(byte[].class));
+		assertEquals("char[]", Classes.getSimpleClassName(char[].class));
+		assertEquals("short[]", Classes.getSimpleClassName(short[].class));
+		assertEquals("int[]", Classes.getSimpleClassName(int[].class));
+		assertEquals("long[]", Classes.getSimpleClassName(long[].class));
+		assertEquals("float[]", Classes.getSimpleClassName(float[].class));
+		assertEquals("double[]", Classes.getSimpleClassName(double[].class));
 
 		// Arrays of arrays of ...
-		assertEquals("String[][]", Classes.getSimpleName(String[][].class));
-		assertEquals("String[][][]", Classes.getSimpleName(String[][][].class));
-		assertEquals("String[][][][]", Classes.getSimpleName(String[][][][].class));
+		assertEquals("String[][]", Classes.getSimpleClassName(String[][].class));
+		assertEquals("String[][][]", Classes.getSimpleClassName(String[][][].class));
+		assertEquals("String[][][][]", Classes.getSimpleClassName(String[][][][].class));
 
 		// On-the-fly types
 		class Named extends Object {
 		}
-		assertEquals("", Classes.getSimpleName(new Object() {
+		assertEquals("", Classes.getSimpleClassName(new Object() {
 		}.getClass()));
-		assertEquals("Named", Classes.getSimpleName(Named.class));
-	}
-
-	@Test
-	public void test_getSimpleName_Object() {
-		assertEquals("ClassesTest", Classes.getSimpleName(new ClassesTest(), "<null>"));
-		assertEquals("Inner", Classes.getSimpleName(new Inner(), "<null>"));
-		assertEquals("String", Classes.getSimpleName("hello", "<null>"));
-		assertEquals("<null>", Classes.getSimpleName(null, "<null>"));
+		assertEquals("Named", Classes.getSimpleClassName(Named.class));
 	}
 
 	// -------------------------------------------------------------------------
@@ -1120,61 +1094,6 @@ public class ClassesTest {
 
 		assertTrue(Arrays.equals(new Class[] { String.class, null, Double.class },
 			Classes.toClass(new Object[] { "Test", null, Double.valueOf(99d) })));
-	}
-
-	@Test
-	public void test_getShortCanonicalName_Object() {
-		assertEquals("<null>", Classes.getShortCanonicalName(null, "<null>"));
-		assertEquals("ClassesTest", Classes.getShortCanonicalName(new ClassesTest(), "<null>"));
-		assertEquals("ClassesTest[]", Classes.getShortCanonicalName(new ClassesTest[0], "<null>"));
-		assertEquals("ClassesTest[][]", Classes.getShortCanonicalName(new ClassesTest[0][0], "<null>"));
-		assertEquals("int[]", Classes.getShortCanonicalName(new int[0], "<null>"));
-		assertEquals("int[][]", Classes.getShortCanonicalName(new int[0][0], "<null>"));
-
-		// Inner types
-		class Named extends Object {
-		}
-		assertEquals("ClassesTest.6", Classes.getShortCanonicalName(new Object() {
-		}, "<null>"));
-		assertEquals("ClassesTest.5Named", Classes.getShortCanonicalName(new Named(), "<null>"));
-		assertEquals("ClassesTest.Inner", Classes.getShortCanonicalName(new Inner(), "<null>"));
-	}
-
-	@Test
-	public void test_getShortCanonicalName_Class() {
-		assertEquals("Classes", Classes.getShortCanonicalName(Classes.class));
-		assertEquals("ClassesTest[]", Classes.getShortCanonicalName(ClassesTest[].class));
-		assertEquals("ClassesTest[][]", Classes.getShortCanonicalName(ClassesTest[][].class));
-		assertEquals("int[]", Classes.getShortCanonicalName(int[].class));
-		assertEquals("int[][]", Classes.getShortCanonicalName(int[][].class));
-
-		// Inner types
-		class Named extends Object {
-		}
-		assertEquals("ClassesTest.7", Classes.getShortCanonicalName(new Object() {
-		}.getClass()));
-		assertEquals("ClassesTest.6Named", Classes.getShortCanonicalName(Named.class));
-		assertEquals("ClassesTest.Inner", Classes.getShortCanonicalName(Inner.class));
-	}
-
-	@Test
-	public void test_getShortCanonicalName_String() {
-		assertEquals("Classes", Classes.getShortCanonicalName(Classes.class.getName()));
-		assertEquals("ClassesTest[]", Classes.getShortCanonicalName("[L" + ClassesTest.class.getName() + ";"));
-		assertEquals("ClassesTest[][]", Classes.getShortCanonicalName("[[L" + ClassesTest.class.getName() + ";"));
-		assertEquals("ClassesTest[]", Classes.getShortCanonicalName(ClassesTest.class.getName() + "[]"));
-		assertEquals("ClassesTest[][]", Classes.getShortCanonicalName(ClassesTest.class.getName() + "[][]"));
-		assertEquals("int[]", Classes.getShortCanonicalName("[I"));
-		assertEquals("int[][]", Classes.getShortCanonicalName("[[I"));
-		assertEquals("int[]", Classes.getShortCanonicalName("int[]"));
-		assertEquals("int[][]", Classes.getShortCanonicalName("int[][]"));
-
-		// Inner types
-		assertEquals("ClassesTest.6", Classes.getShortCanonicalName(ClassesTest.class.getName() + "$6"));
-		assertEquals("ClassesTest.5Named",
-			Classes.getShortCanonicalName(ClassesTest.class.getName() + "$5Named"));
-		assertEquals("ClassesTest.Inner",
-			Classes.getShortCanonicalName(ClassesTest.class.getName() + "$Inner"));
 	}
 
 	@Test

@@ -71,15 +71,15 @@ public abstract class Classes {
 	 */
 	public static final String INNER_CLASS_SEPARATOR = String.valueOf(INNER_CLASS_SEPARATOR_CHAR);
 
-	/** Suffix for array class names: "[]" */
-	public final static String ARRAY_SUFFIX = "[]";
-
 	/** The CGLIB class separator character "$$" */
 	public final static String CGLIB_CLASS_SEPARATOR = "$$";
 
 	/** The ".class" file suffix */
 	public final static String CLASS_FILE_SUFFIX = ".class";
 
+	/** The array suffix [] */
+	public final static String ARRAY_SUFFIX = "[]";
+	
 	/**
 	 * Map with primitive wrapper type as key and corresponding primitive type as value, for
 	 * example: Integer.class -> int.class.
@@ -161,24 +161,129 @@ public abstract class Classes {
 		Number.class
 	};
 	
-	// Short class name
+
+	// internal methods
 	// ----------------------------------------------------------------------
 	/**
 	 * <p>
-	 * Gets the class name minus the package name for an {@code Object}.
+	 * Converts a given name of class into canonical format. If name of class is not a name of array
+	 * class it returns unchanged name.
+	 * </p>
+	 * <p>
+	 * Example:
+	 * <ul>
+	 * <li>{@code getCanonicalName("[I") = "int[]"}</li>
+	 * <li>{@code getCanonicalName("[Ljava.lang.String;") = "java.lang.String[]"}</li>
+	 * <li>{@code getCanonicalName("java.lang.String") = "java.lang.String"}</li>
+	 * </ul>
 	 * </p>
 	 * 
-	 * @param object the class to get the short name for, may be null
-	 * @param valueIfNull the value to return if null
-	 * @return the class name of the object without the package name, or the null value
+	 * @param cn the name of class
+	 * @return canonical form of class name
 	 */
-	public static String getShortClassName(Object object, String valueIfNull) {
-		if (object == null) {
-			return valueIfNull;
+	private static String toCanonicalName(String cn) {
+		if (Strings.isEmpty(cn)) {
+			return cn;
 		}
-		return getShortClassName(object.getClass());
+
+		int dim = 0;
+		for ( ; cn.charAt(dim) == '['; dim++) {
+		}
+		if (dim < 1) {
+			return cn;
+		}
+
+		cn = cn.substring(dim);
+		if (cn.charAt(0) == 'L') {
+			cn = cn.substring(1, cn.endsWith(";") ? cn.length() - 1 : cn.length());
+		}
+		else {
+			if (cn.length() > 0) {
+				cn = reverseAbbreviationMap.get(cn.substring(0, 1));
+			}
+		}
+
+		StringBuilder ccn = new StringBuilder(cn);
+		for (int i = 0; i < dim; i++) {
+			ccn.append(ARRAY_SUFFIX);
+		}
+		return ccn.toString();
 	}
 
+	/**
+	 * Converts a class name to a JLS style class name.
+	 * 
+	 * @param cn the class name
+	 * @return the converted name
+	 */
+	private static String toJavaStyleName(String cn) {
+		cn = Strings.deleteWhitespace(cn);
+		if (cn == null) {
+			throw new NullPointerException("className must not be null.");
+		}
+		
+		if (cn.endsWith(ARRAY_SUFFIX)) {
+			StringBuilder jscn = new StringBuilder();
+			while (cn.endsWith(ARRAY_SUFFIX)) {
+				cn = cn.substring(0, cn.length() - 2);
+				jscn.append("[");
+			}
+			String abbreviation = abbreviationMap.get(cn);
+			if (abbreviation != null) {
+				jscn.append(abbreviation);
+			}
+			else {
+				jscn.append("L").append(cn).append(";");
+			}
+			cn = jscn.toString();
+		}
+		return cn;
+	}
+
+	// Castable name
+	// ----------------------------------------------------------------------
+	/**
+	 * Return the castable class name of the given class, usually wrap
+	 * the class name: "int" -> "Integer".
+	 * @param cls the class
+	 * @return the castable class name
+	 */
+	public static String getCastableClassName(Class<?> cls) {
+		if (cls.isArray()) {
+			StringBuilder sb = new StringBuilder();
+			while (cls.isArray()) {
+				cls = cls.getComponentType();
+				sb.append(ARRAY_SUFFIX);
+			}
+			sb.insert(0, cls.getCanonicalName());
+			return sb.toString();
+		}
+		
+		if (cls.isPrimitive()) {
+			return primitive2Wrapper(cls).getName();
+		}
+
+		return cls.getCanonicalName();
+	}
+
+	// Canonical name
+	// ----------------------------------------------------------------------
+	/**
+	 * Return the qualified name of the given class: usually simply
+	 * the class name, but component type class name + "[]" for arrays.
+	 * @param cls the class
+	 * @return the qualified name of the class
+	 */
+	public static String getCanonicalClassName(String cn) {
+		if (Strings.isEmpty(cn)) {
+			return cn;
+		}
+		cn = toCanonicalName(cn);
+		return cn.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
+	}
+
+	// Short class name
+	// ----------------------------------------------------------------------
 	/**
 	 * <p>
 	 * Gets the class name minus the package name from a {@code Class}.
@@ -194,7 +299,7 @@ public abstract class Classes {
 	 */
 	public static String getShortClassName(Class<?> cls) {
 		if (cls == null) {
-			return Strings.EMPTY;
+			return null;
 		}
 		return getShortClassName(cls.getName());
 	}
@@ -212,43 +317,24 @@ public abstract class Classes {
 	 * {@code "Entry"}.
 	 * </p>
 	 * 
-	 * @param className the className to get the short name for
+	 * @param cn the className to get the short name for
 	 * @return the class name of the class without the package name or an empty string
 	 */
-	public static String getShortClassName(String className) {
-		if (className == null) {
-			return Strings.EMPTY;
-		}
-		if (className.length() == 0) {
-			return Strings.EMPTY;
+	public static String getShortClassName(String cn) {
+		if (Strings.isEmpty(cn)) {
+			return cn;
 		}
 
-		StringBuilder arrayPrefix = new StringBuilder();
-
-		// Handle array encoding
-		if (className.startsWith("[")) {
-			while (className.charAt(0) == '[') {
-				className = className.substring(1);
-				arrayPrefix.append("[]");
-			}
-			// Strip Object type encoding
-			if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
-				className = className.substring(1, className.length() - 1);
-			}
-		}
-
-		if (reverseAbbreviationMap.containsKey(className)) {
-			className = reverseAbbreviationMap.get(className);
-		}
-
-		int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
-		int innerIdx = className.indexOf(INNER_CLASS_SEPARATOR_CHAR,
+		cn = toCanonicalName(cn);
+		
+		int lastDotIdx = cn.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+		int innerIdx = cn.indexOf(INNER_CLASS_SEPARATOR_CHAR,
 			lastDotIdx == -1 ? 0 : lastDotIdx + 1);
-		String out = className.substring(lastDotIdx + 1);
+		String out = cn.substring(lastDotIdx + 1);
 		if (innerIdx != -1) {
 			out = out.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
 		}
-		return out + arrayPrefix;
+		return out;
 	}
 
 	/**
@@ -260,28 +346,11 @@ public abstract class Classes {
 	 * @return the simple class name.
 	 * @see Class#getSimpleName()
 	 */
-	public static String getSimpleName(Class<?> cls) {
+	public static String getSimpleClassName(Class<?> cls) {
 		if (cls == null) {
-			return Strings.EMPTY;
+			return null;
 		}
 		return cls.getSimpleName();
-	}
-
-	/**
-	 * <p>
-	 * Null-safe version of <code>aClass.getSimpleName()</code>
-	 * </p>
-	 * 
-	 * @param object the object for which to get the simple class name.
-	 * @param valueIfNull the value to return if <code>object</code> is <code>null</code>
-	 * @return the simple class name.
-	 * @see Class#getSimpleName()
-	 */
-	public static String getSimpleName(Object object, String valueIfNull) {
-		if (object == null) {
-			return valueIfNull;
-		}
-		return getSimpleName(object.getClass());
 	}
 
 	// Package name
@@ -1009,7 +1078,7 @@ public abstract class Classes {
 				cls = Class.forName(clsName, initialize, classLoader).getComponentType();
 			}
 			else {
-				cls = Class.forName(toCanonicalName(className), initialize, classLoader);
+				cls = Class.forName(toJavaStyleName(className), initialize, classLoader);
 			}
 			return cls;
 		}
@@ -1136,35 +1205,6 @@ public abstract class Classes {
 
 	// ----------------------------------------------------------------------
 	/**
-	 * Converts a class name to a JLS style class name.
-	 * 
-	 * @param className the class name
-	 * @return the converted name
-	 */
-	private static String toCanonicalName(String className) {
-		className = Strings.deleteWhitespace(className);
-		if (className == null) {
-			throw new NullPointerException("className must not be null.");
-		}
-		else if (className.endsWith("[]")) {
-			StringBuilder classNameBuffer = new StringBuilder();
-			while (className.endsWith("[]")) {
-				className = className.substring(0, className.length() - 2);
-				classNameBuffer.append("[");
-			}
-			String abbreviation = abbreviationMap.get(className);
-			if (abbreviation != null) {
-				classNameBuffer.append(abbreviation);
-			}
-			else {
-				classNameBuffer.append("L").append(className).append(";");
-			}
-			className = classNameBuffer.toString();
-		}
-		return className;
-	}
-
-	/**
 	 * <p>
 	 * Converts an array of {@code Object} in to an array of {@code Class} objects. If any of these
 	 * objects is null, a null element will be inserted into the array.
@@ -1189,55 +1229,6 @@ public abstract class Classes {
 		}
 		return classes;
 	}
-
-	// Short canonical name
-	// ----------------------------------------------------------------------
-	/**
-	 * <p>
-	 * Gets the canonical name minus the package name for an {@code Object}.
-	 * </p>
-	 * 
-	 * @param object the class to get the short name for, may be null
-	 * @param valueIfNull the value to return if null
-	 * @return the canonical name of the object without the package name, or the null value
-	 */
-	public static String getShortCanonicalName(Object object, String valueIfNull) {
-		if (object == null) {
-			return valueIfNull;
-		}
-		return getShortCanonicalName(object.getClass().getName());
-	}
-
-	/**
-	 * <p>
-	 * Gets the canonical name minus the package name from a {@code Class}.
-	 * </p>
-	 * 
-	 * @param cls the class to get the short name for.
-	 * @return the canonical name without the package name or an empty string
-	 */
-	public static String getShortCanonicalName(Class<?> cls) {
-		if (cls == null) {
-			return Strings.EMPTY;
-		}
-		return getShortCanonicalName(cls.getName());
-	}
-
-	/**
-	 * <p>
-	 * Gets the canonical name minus the package name from a String.
-	 * </p>
-	 * <p>
-	 * The string passed in is assumed to be a canonical name - it is not checked.
-	 * </p>
-	 * 
-	 * @param canonicalName the class name to get the short name for
-	 * @return the canonical name of the class without the package name or an empty string
-	 */
-	public static String getShortCanonicalName(String canonicalName) {
-		return Classes.getShortClassName(getCanonicalName(canonicalName));
-	}
-
 	// Package name
 	// ----------------------------------------------------------------------
 	/**
@@ -1286,57 +1277,7 @@ public abstract class Classes {
 	 * @return the package name or an empty string
 	 */
 	public static String getPackageCanonicalName(String canonicalName) {
-		return Classes.getPackageName(getCanonicalName(canonicalName));
-	}
-
-	/**
-	 * <p>
-	 * Converts a given name of class into canonical format. If name of class is not a name of array
-	 * class it returns unchanged name.
-	 * </p>
-	 * <p>
-	 * Example:
-	 * <ul>
-	 * <li>{@code getCanonicalName("[I") = "int[]"}</li>
-	 * <li>{@code getCanonicalName("[Ljava.lang.String;") = "java.lang.String[]"}</li>
-	 * <li>{@code getCanonicalName("java.lang.String") = "java.lang.String"}</li>
-	 * </ul>
-	 * </p>
-	 * 
-	 * @param className the name of class
-	 * @return canonical form of class name
-	 */
-	private static String getCanonicalName(String className) {
-		className = Strings.deleteWhitespace(className);
-		if (className == null) {
-			return null;
-		}
-		else {
-			int dim = 0;
-			while (className.startsWith("[")) {
-				dim++;
-				className = className.substring(1);
-			}
-			if (dim < 1) {
-				return className;
-			}
-			else {
-				if (className.startsWith("L")) {
-					className = className.substring(1,
-						className.endsWith(";") ? className.length() - 1 : className.length());
-				}
-				else {
-					if (className.length() > 0) {
-						className = reverseAbbreviationMap.get(className.substring(0, 1));
-					}
-				}
-				StringBuilder canonicalClassNameBuffer = new StringBuilder(className);
-				for (int i = 0; i < dim; i++) {
-					canonicalClassNameBuffer.append("[]");
-				}
-				return canonicalClassNameBuffer.toString();
-			}
-		}
+		return getPackageName(toCanonicalName(canonicalName));
 	}
 
 	/**
@@ -1760,41 +1701,6 @@ public abstract class Classes {
 
 	// ----------------------------------------------------------------------
 	/**
-	 * <p>
-	 * Gets the class name minus the package name for an <code>Object</code>.
-	 * </p>
-	 * 
-	 * @param object the class to get the short name for, may be null
-	 * @param valueIfNull the value to return if null
-	 * @return the class name of the object without the package name, or the null value
-	 */
-	public static String getSimpleClassName(Object object, String valueIfNull) {
-		if (object == null) {
-			return valueIfNull;
-		}
-		return getSimpleClassName(object.getClass().getName());
-	}
-
-	/**
-	 * Get the class name without the qualified package name.
-	 * @param className the className to get the short name for
-	 * @return the class name of the class without the package name
-	 * @throws IllegalArgumentException if the className is empty
-	 */
-	public static String getSimpleClassName(String className) {
-		return getShortClassName(className);
-	}
-
-	/**
-	 * Get the class name without the qualified package name.
-	 * @param cls the class to get the short name for
-	 * @return the class name of the class without the package name
-	 */
-	public static String getSimpleClassName(Class<?> cls) {
-		return getSimpleClassName(getQualifiedClassName(cls));
-	}
-
-	/**
 	 * Determine the name of the class file, relative to the containing
 	 * package: e.g. "String.class"
 	 * @param cls the class
@@ -1805,62 +1711,6 @@ public abstract class Classes {
 		String className = cls.getName();
 		int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
 		return className.substring(lastDotIndex + 1) + CLASS_FILE_SUFFIX;
-	}
-
-	/**
-	 * Return the qualified name of the given class: usually simply
-	 * the class name, but component type class name + "[]" for arrays.
-	 * @param cls the class
-	 * @return the qualified name of the class
-	 */
-	public static String getCastableClassName(String cls) {
-		return cls.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
-	}
-	
-	/**
-	 * Return the qualified name of the given class: usually simply
-	 * the class name, but component type class name + "[]" for arrays.
-	 * @param cls the class
-	 * @return the qualified name of the class
-	 */
-	public static String getQualifiedClassName(Class<?> cls) {
-		Asserts.notNull(cls, "Class must not be null");
-		if (cls.isArray()) {
-			StringBuilder sb = new StringBuilder();
-			while (cls.isArray()) {
-				cls = cls.getComponentType();
-				sb.append(Classes.ARRAY_SUFFIX);
-			}
-			sb.insert(0, getQualifiedClassName(cls));
-			return sb.toString();
-		}
-		else {
-			return getCastableClassName(cls.getName());
-		}
-	}
-
-	/**
-	 * Return the castable class name of the given class, usually wrap
-	 * the class name: "int" -> "Integer".
-	 * @param cls the class
-	 * @return the castable class name
-	 */
-	public static String getCastableClassName(Class<?> cls) {
-		if (cls.isArray()) {
-			StringBuilder sb = new StringBuilder();
-			while (cls.isArray()) {
-				cls = cls.getComponentType();
-				sb.append("[]");
-			}
-			sb.insert(0, getQualifiedClassName(cls));
-			return sb.toString();
-		}
-		else if (cls.isPrimitive()) {
-			return primitive2Wrapper(cls).getName();
-		}
-		else {
-			return getCastableClassName(cls.getName());
-		}
 	}
 
 	/**
@@ -2024,7 +1874,7 @@ public abstract class Classes {
 	 */
 	public static String classNamesToString(Collection classes) {
 		if (Collections.isEmpty(classes)) {
-			return "[]";
+			return ARRAY_SUFFIX;
 		}
 		StringBuilder sb = new StringBuilder("[");
 		for (Iterator it = classes.iterator(); it.hasNext(); ) {

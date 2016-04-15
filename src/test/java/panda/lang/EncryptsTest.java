@@ -32,7 +32,7 @@ public class EncryptsTest extends TestCase {
 	
 	private void speedTest(List<String> samples, String trans) {
 		final int CNT = samples.size();
-		final int MAX = 5;
+		final int MAX = 1;
 		StopWatch sw = new StopWatch();
 		for (int j = 0; j < MAX; j++) {
 			for (int i = 0; i < CNT; i++) {
@@ -43,7 +43,7 @@ public class EncryptsTest extends TestCase {
 	}
 
 	public void testSpeed() {
-		final int CNT = 1000;
+		final int CNT = 100;
 
 		List<String> samples = new ArrayList<String>();
 		for (int i = 0; i < CNT; i++) {

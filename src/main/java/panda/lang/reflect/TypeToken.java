@@ -88,7 +88,7 @@ public class TypeToken<T> {
 
 	@Override
 	public final String toString() {
-		return Types.typeToString(type);
+		return Types.toString(type);
 	}
 
 	/**

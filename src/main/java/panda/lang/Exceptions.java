@@ -255,8 +255,8 @@ public abstract class Exceptions {
 		if (th == null) {
 			return "";
 		}
-		String clsName = Classes.getShortClassName(th, null);
+		String cln = th.getClass().getSimpleName();
 		String msg = th.getMessage();
-		return clsName + ": " + Strings.defaultString(msg);
+		return cln + ": " + Strings.defaultString(msg);
 	}
 }
