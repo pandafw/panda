@@ -310,11 +310,17 @@ public class HttpServlets {
 		try {
 			writer.append(request.getRemoteAddr());
 			String ip = request.getHeader(HttpHeader.X_REAL_IP);
+			if (Strings.isEmpty(ip)) {
+				ip = request.getHeader(HttpHeader.X_FORWARD_FOR);
+			}
 			if (Strings.isNotEmpty(ip)) {
 				writer.append('(').append(ip).append(')');
 			}
 			writer.append(" -> ");
 			writer.append(request.getRequestURL());
+			if (Strings.isNotEmpty(request.getQueryString())) {
+				writer.append('?').append(request.getQueryString());
+			}
 		}
 		catch (IOException e) {
 			Exceptions.wrapThrow(e);
@@ -405,9 +411,7 @@ public class HttpServlets {
 	 */
 	public static String dumpRequestInfo(HttpServletRequest request) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(request.getRemoteAddr());
-		sb.append(" -> ");
-		sb.append(request.getRequestURL());
+		dumpRequestPath(request, sb);
 		return sb.toString();
 	}
 
