@@ -619,13 +619,13 @@ public class DataImportAction extends AbstractAction {
 		return new CsvReader(new InputStreamReader(bis, cs), separator);
 	}
 
-	protected void prepareData(Object data) {
+	protected void trimData(Object data) {
 		assist().initCommonFields(data);
 	}
 
 	protected void saveRow(Dao dao, Class targetType, Object row) {
 		Object data = Castors.scast(row, targetType);
-		prepareData(data);
+		trimData(data);
 		if (arg.deleteAll) {
 			dao.insert(data);
 		}

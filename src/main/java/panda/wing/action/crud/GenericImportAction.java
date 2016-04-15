@@ -237,7 +237,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			
 			try {
 				T data = Mvcs.castValue(context, values, type);
-				prepareData(data);
+				trimData(data);
 				
 				checkData(data);
 				
@@ -313,7 +313,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-value", m);
 	}
 
-	protected void prepareData(T data) {
+	protected void trimData(T data) {
 		EntityHelper.clearIdentityValue(getEntity(), data);
 		assist().initCommonFields(data);
 	}
