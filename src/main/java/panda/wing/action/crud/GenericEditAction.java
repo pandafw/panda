@@ -61,6 +61,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	//------------------------------------------------------------
+	// setting
+	//------------------------------------------------------------
+	public boolean isInputConfirm() {
+		return getTextAsBoolean(RC.UI_INPUT_CONFIRM, false);
+	}
+	
+	//------------------------------------------------------------
 	// result
 	//------------------------------------------------------------
 	/**
@@ -76,9 +83,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	//------------------------------------------------------------
-	// endpoint methods
+	// end point methods
 	//------------------------------------------------------------
-	//--------------------------------------------------------------------------
 	/**
 	 * view
 	 */
@@ -219,20 +225,20 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doViewSelect
 	 */
 	protected Object doViewSelect(T key) {
-		T data = selectData(key);
-		data = prepareData(data);
-		return data;
+		T pk = prepareKey(key);
+		T sd = selectData(pk);
+		return sd;
 	}
 
 	/**
 	 * doCopySelect
 	 */
 	protected Object doCopySelect(T key) {
-		T sd = selectData(key);
+		T pk = prepareKey(key);
+		T sd = selectData(pk);
 		if (sd != null) {
 			clearOnCopy(sd);
 			clearOnCopy(key);
-			sd = prepareData(sd);
 		}
 		return sd;
 	}
@@ -248,9 +254,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertInit
 	 */
 	protected Object doInsertInit() {
-		T data = prepareData(null);
-		getContext().setParams(data);
-		return data;
+		T pd = prepareData(null);
+		getContext().setParams(pd);
+		return pd;
 	}
 
 	/**
@@ -264,8 +270,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertConfirm
 	 */
 	protected Object doInsertConfirm(T data) {
-		data = prepareData(data);
-		if (checkOnInsert(data)) {
+		T pd = prepareData(data);
+		if (checkOnInsert(pd)) {
 			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
 		else {
@@ -273,28 +279,28 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				setScenarioResult();
 			}
 		}
-		return data;
+		return pd;
 	}
 
 	/**
 	 * doInsertExecute
 	 */
 	protected Object doInsertExecute(T data) {
-		data = prepareData(data);
-		if (!checkOnInsert(data)) {
+		T pd = prepareData(data);
+		if (!checkOnInsert(pd)) {
 			setResultOnExecCheckError();
-			return data;
+			return pd;
 		}
 
 		try {
-			final T id = startInsert(data);
+			final T id = startInsert(pd);
 			getDao().exec(new Runnable() {
 				public void run() {
 					insertData(id);
 				}
 			});
-			afterInsert(data);
-			EntityHelper.copyIdentityValue(getEntity(), data, id);
+			afterInsert(pd);
+			EntityHelper.copyIdentityValue(getEntity(), pd, id);
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
@@ -303,11 +309,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return data;
 		}
 		finally {
-			finalInsert(data);
+			finalInsert(pd);
 		}
 
 		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
-		return data;
+		return pd;
 	}
 
 	/**
@@ -321,20 +327,21 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doUpdateSelect
 	 */
 	protected Object doUpdateSelect(T key) {
-		return selectData(key);
+		T pk = prepareKey(key);
+		return selectData(pk);
 	}
 
 	/**
 	 * doUpdateConfirm
 	 */
 	protected Object doUpdateConfirm(T data) {
-		data = prepareData(data);
-		T sd = selectData(data);
+		T pd = prepareData(data);
+		T sd = selectData(pd);
 		if (sd == null) {
 			return null;
 		}
 		
-		if (checkOnUpdate(data, sd)) {
+		if (checkOnUpdate(pd, sd)) {
 			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
 		else {
@@ -342,61 +349,58 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				setScenarioResult();
 			}
 		}
-		return data;
-	}
-
-	public boolean isInputConfirm() {
-		return getTextAsBoolean(RC.UI_INPUT_CONFIRM, false);
+		return pd;
 	}
 	
 	/**
 	 * doUpdateExecute
 	 */
 	protected Object doUpdateExecute(T data) {
-		data = prepareData(data);
-		final T sd = selectData(data);
+		final T pd = prepareData(data);
+		final T sd = selectData(pd);
 		if (sd == null) {
 			return null;
 		}
 
-		if (!checkOnUpdate(data, sd)) {
+		if (!checkOnUpdate(pd, sd)) {
 			setResultOnExecCheckError();
 			return data;
 		}
 
 		try {
-			final T ud = startUpdate(data, sd);
+			final T ud = startUpdate(pd, sd);
 			getDao().exec(new Runnable() {
 				public void run() {
 					updateData(ud, sd);
 				}
 			});
-			afterUpdate(data, sd);
+			afterUpdate(pd, sd);
 		}
 		catch (Throwable e) {
 			log.error(e.getMessage(), e);
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
-			return data;
+			return pd;
 		}
 		finally {
-			finalUpdate(data, sd);
+			finalUpdate(pd, sd);
 		}
 
 		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
-		return data;
+		return pd;
 	}
 
 	/**
 	 * doDeleteSelect
 	 */
 	protected Object doDeleteSelect(T key) {
-		T sd = selectData(key);
+		final T pk = prepareKey(key);
+		final T sd = selectData(pk);
 		if (sd == null) {
 			return null;
 		}
 		
-		if (checkOnDelete(key, sd)) {
+		if (checkOnDelete(pk, sd)) {
 			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
 		}
 		return sd;
@@ -406,12 +410,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doDeleteExecute
 	 */
 	protected Object doDeleteExecute(final T key) {
-		final T sd = selectData(key);
+		final T pk = prepareKey(key);
+		final T sd = selectData(pk);
 		if (sd == null) {
 			return null;
 		}
 
-		if (!checkOnDelete(key, sd)) {
+		if (!checkOnDelete(pk, sd)) {
 			return sd;
 		}
 		
@@ -450,7 +455,16 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
-	 * prepareDefaultData
+	 * prepare key for select data from store
+	 * @param key key
+	 * @return key
+	 */
+	protected T prepareKey(T key) {
+		return key;
+	}
+	
+	/**
+	 * prepare default data
 	 * @param data data
 	 * @return data
 	 */
