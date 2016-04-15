@@ -241,12 +241,12 @@ public class TypeUtils {
 			// }
 
 			if (simpleType != null) {
-				simpleType = Classes.getSimpleClassName(simpleType);
+				simpleType = Classes.getShortClassName(simpleType);
 			}
 		}
 
 		if (simpleType == null) {
-			simpleType = Classes.getSimpleClassName(type);
+			simpleType = Classes.getShortClassName(type);
 		}
 
 		if (ctl != null) {

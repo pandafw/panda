@@ -367,7 +367,7 @@ public class Entity {
 	 * @return the package of entity
 	 */
 	public String getSimpleName() {
-		return Classes.getSimpleClassName(name);
+		return Classes.getShortClassName(name);
 	}
 
 	/**
@@ -474,7 +474,7 @@ public class Entity {
 		
 		sb.append("target=");
 		String pkg = Classes.getPackageName(target);
-		String cls = Classes.getSimpleClassName(target);
+		String cls = Classes.getShortClassName(target);
 		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, getPackage())) {
 			sb.append(pkg).append('.');
 		}
@@ -531,7 +531,7 @@ public class Entity {
 		
 		sb.append("target=");
 		String pkg = Classes.getPackageName(target);
-		String cls = Classes.getSimpleClassName(target);
+		String cls = Classes.getShortClassName(target);
 		if (Strings.isNotEmpty(pkg) && !Strings.equals(pkg, getPackage())) {
 			sb.append(pkg).append('.');
 		}

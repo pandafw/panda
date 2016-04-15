@@ -489,7 +489,7 @@ public class Action {
 	 * @return the simple name of actionClass
 	 */
 	public String getSimpleActionClass() {
-		return Classes.getSimpleClassName(actionClass);
+		return Classes.getShortClassName(actionClass);
 	}
 
 	/**
