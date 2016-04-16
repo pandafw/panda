@@ -271,7 +271,7 @@ public abstract class Classes {
 	/**
 	 * Return the qualified name of the given class: usually simply
 	 * the class name, but component type class name + "[]" for arrays.
-	 * @param cls the class
+	 * @param cn the class
 	 * @return the qualified name of the class
 	 */
 	public static String getCanonicalClassName(String cn) {
