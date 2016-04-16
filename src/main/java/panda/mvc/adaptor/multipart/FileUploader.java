@@ -167,8 +167,6 @@ public class FileUploader {
 	 * @param req The context for the request to be parsed.
 	 * @return An iterator to instances of <code>FileItemStream</code> parsed from the request, in
 	 *         the order that they were transmitted.
-	 * @throws FileUploadException if there are problems reading/parsing the request or storing
-	 *             files.
 	 * @throws IOException An I/O error occurred. This may be a network error while communicating
 	 *             with the client or a problem while storing the uploaded content.
 	 */
@@ -672,7 +670,6 @@ public class FileUploader {
 		/**
 		 * Returns, whether another instance of {@link FileItemStream} is available.
 		 * 
-		 * @throws FileUploadException Parsing or processing the file item failed.
 		 * @throws IOException Reading the file item failed.
 		 * @return True, if one or more additional file items are available, otherwise false.
 		 */
@@ -691,7 +688,6 @@ public class FileUploader {
 		 * 
 		 * @throws java.util.NoSuchElementException No more items are available. Use
 		 *             {@link #hasNext()} to prevent this exception.
-		 * @throws FileUploadException Parsing or processing the file item failed.
 		 * @throws IOException Reading the file item failed.
 		 * @return FileItemStream instance, which provides access to the next file item.
 		 */
