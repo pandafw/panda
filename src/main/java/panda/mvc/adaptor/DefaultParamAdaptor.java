@@ -66,7 +66,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 		}
 		
 		HttpServletRequest req = ac.getRequest();
-		if (HttpMethod.POST == HttpMethod.parse(req.getMethod())) {
+		if (HttpMethod.POST.toString().equalsIgnoreCase(req.getMethod())) {
 			String contentType = Strings.lowerCase(req.getContentType());
 			if (Strings.isEmpty(contentType)) {
 				//skip
