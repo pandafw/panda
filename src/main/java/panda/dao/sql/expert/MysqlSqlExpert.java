@@ -24,13 +24,8 @@ public class MysqlSqlExpert extends SqlExpert {
 	}
 
 	@Override
-	protected String escapeTable(String table) {
-		return '`' + table + '`'; 
-	}
-	
-	@Override
-	protected String escapeColumn(String column) {
-		return '`' + column + '`'; 
+	public String escape(String s) {
+		return '`' + s + '`'; 
 	}
 	
 	@Override

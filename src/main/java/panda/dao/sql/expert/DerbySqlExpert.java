@@ -22,6 +22,18 @@ public class DerbySqlExpert extends SqlExpert {
 	}
 
 	@Override
+	public String escape(String s) {
+		return '"' + Strings.upperCase(s) + '"'; 
+	}
+	
+	@Override
+	protected void asTableAlias(Sql sql, String alias) {
+		if (Strings.isNotEmpty(alias)) {
+			sql.append(" AS ").append(Strings.upperCase(alias));
+		}
+	}
+
+	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 		

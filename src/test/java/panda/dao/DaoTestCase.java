@@ -209,10 +209,6 @@ public abstract class DaoTestCase {
 		Assert.assertEquals(expect, actual);
 	}
 	
-	protected String escapeColumn(String column) {
-		return column;
-	}
-
 	@Test
 	public void testSelectOr() {
 		List<Teacher> expect = Teacher.creates(1, 3);

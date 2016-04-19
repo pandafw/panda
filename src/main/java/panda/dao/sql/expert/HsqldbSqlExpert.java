@@ -9,6 +9,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 import panda.io.Streams;
+import panda.lang.Strings;
 
 /**
  */
@@ -16,6 +17,11 @@ public class HsqldbSqlExpert extends SqlExpert {
 	@Override
 	public DB getDatabaseType() {
 		return DB.HSQLDB;
+	}
+
+	@Override
+	public String escape(String s) {
+		return '"' + Strings.upperCase(s) + '"'; 
 	}
 
 	@Override
@@ -29,10 +35,15 @@ public class HsqldbSqlExpert extends SqlExpert {
 	}
 
 	@Override
+	protected void asTableAlias(Sql sql, String alias) {
+		super.asTableAlias(sql, Strings.upperCase(alias));
+	}
+
+	@Override
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 		
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + client.getTableName(entity) + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(client.getTableName(entity)) + "(");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;

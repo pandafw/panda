@@ -183,6 +183,20 @@ public abstract class SqlExpert {
 		return escapeColumn(table, column);
 	}
 	
+	protected void asTableAlias(Sql sql, String alias) {
+		if (Strings.isNotEmpty(alias)) {
+			sql.append(' ').append(alias);
+		}
+	}
+
+	protected void asTableColumn(Sql sql, String talias, String col, String cname) {
+		sql.append(' ')
+			.append(normalizeColumn(talias, col))
+			.append(" AS ")
+			.append(escapeColumn(DaoNamings.javaName2ColumnLabel(cname)))
+			.append(',');
+	}
+
 	public Sql count(Query<?> query) {
 		return count(query, "c_");
 	}
@@ -190,9 +204,9 @@ public abstract class SqlExpert {
 	protected Sql count(Query<?> query, String alias) {
 		Sql sql = new Sql();
 		sql.append("SELECT COUNT(*) FROM ").append(escapeTable(client.getTableName(query)));
-		if (Strings.isNotEmpty(alias)) {
-			sql.append(' ').append(alias);
-		}
+		
+		asTableAlias(sql, alias);
+
 		join(sql, query, alias);
 		where(sql, query, alias);
 		return sql;
@@ -316,14 +330,10 @@ public abstract class SqlExpert {
 					}
 				}
 				else {
-					col = '(' + col + ')';
+					col = capsuleColumn(col);
 				}
 				
-				sql.append(' ')
-					.append(normalizeColumn(alias, col))
-					.append(" AS ")
-					.append(escapeColumn(DaoNamings.javaName2ColumnLabel(ef.getName())))
-					.append(',');
+				asTableColumn(sql, alias, col, ef.getName());
 				sel = true;
 			}
 			if (!sel) {
@@ -331,9 +341,7 @@ public abstract class SqlExpert {
 			}
 			sql.setCharAt(sql.length() - 1, ' ');
 			sql.append("FROM ").append(escapeTable(client.getViewName(entity)));
-			if (Strings.isNotEmpty(alias)) {
-				sql.append(' ').append(alias);
-			}
+			asTableAlias(sql, alias);
 		}
 		else {
 			boolean sel = false;
@@ -348,14 +356,11 @@ public abstract class SqlExpert {
 						col = en.getKey();
 					}
 					else {
-						col = '(' + col + ')';
+						col = capsuleColumn(col);
 					}
 
-					sql.append(' ')
-						.append(normalizeColumn(alias, col))
-						.append(" AS ")
-						.append(escapeColumn(DaoNamings.javaName2ColumnLabel(en.getKey())))
-						.append(',');
+					
+					asTableColumn(sql, alias, col, en.getKey());
 					sel = true;
 				}
 				if (sel) {
@@ -393,7 +398,7 @@ public abstract class SqlExpert {
 			else {
 				sql.append(escapeTable(client.getTableName(jq)));
 			}
-			sql.append(' ').append(jalias);
+			asTableAlias(sql, jalias);
 			sql.append(" ON (");
 			for (String s : join.getConditions()) {
 				
@@ -696,7 +701,7 @@ public abstract class SqlExpert {
 	protected void addComments(List<String> sqls, Entity<?> entity) {
 		if (Strings.isNotEmpty(entity.getComment())) {
 			String sql = "COMMENT ON TABLE " 
-					+ escapeTable(client.getTableName(entity)) 
+					+ escapeTable(client.getTableName(entity))
 					+ " IS '" 
 					+ Sqls.escapeString(entity.getComment())
 					+ '\'';
@@ -706,7 +711,7 @@ public abstract class SqlExpert {
 		for (EntityField ef : entity.getFields()) {
 			if (Strings.isNotEmpty(ef.getComment())) {
 				String sql = "COMMENT ON COLUMN " 
-						+ client.getTableName(entity) + '.' + ef.getColumn() 
+						+ escapeColumn(client.getTableName(entity), ef.getColumn())
 						+ " IS '"
 						+ Sqls.escapeString(ef.getComment()) 
 						+ '\'';
@@ -805,18 +810,26 @@ public abstract class SqlExpert {
 		}
 	}
 
-	protected String escapeColumn(String table, String column) {
+	public String escape(String s) {
+		return s;
+	}
+	
+	public String escapeColumn(String table, String column) {
 		if (Strings.isEmpty(table)) {
 			return escapeColumn(column);
 		}
 		return escapeTable(table) + '.' + escapeColumn(column);
 	}
 
-	protected String escapeTable(String table) {
-		return table; 
+	public String escapeTable(String table) {
+		return escape(table);
 	}
 	
-	protected String escapeColumn(String column) {
-		return column; 
+	public String escapeColumn(String column) {
+		return escape(column); 
+	}
+	
+	protected String capsuleColumn(String col) {
+		return '(' + col + ')';
 	}
 }

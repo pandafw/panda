@@ -16,6 +16,10 @@ public class Teacher {
 	@Comment("TEACHER_MEMO")
 	String memo;
 
+	String all;
+	
+	String key;
+	
 	byte[] data;
 
 	public String getName() {
@@ -34,6 +38,22 @@ public class Teacher {
 		this.memo = memo;
 	}
 	
+	public String getAll() {
+		return all;
+	}
+
+	public void setAll(String all) {
+		this.all = all;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
 	public byte[] getData() {
 		return data;
 	}
@@ -47,13 +67,15 @@ public class Teacher {
 		return Objects.toStringBuilder()
 				.append("name", name)
 				.append("memo", memo)
+				.append("all", all)
+				.append("key", key)
 				.append("data", Strings.newStringUtf8(data))
 				.toString();
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hashCodes(name, memo, data);
+		return Objects.hashCodes(name, memo, all, key, data);
 	}
 
 	@Override
@@ -69,6 +91,8 @@ public class Teacher {
 		return Objects.equalsBuilder()
 				.append(name, rhs.name)
 				.append(memo, rhs.memo)
+				.append(all, rhs.all)
+				.append(key, rhs.key)
 				.append(data, rhs.data)
 				.isEquals();
 	}

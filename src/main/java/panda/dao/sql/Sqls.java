@@ -18,8 +18,6 @@ import panda.util.JndiLookup;
 
 /**
  * utility class for sql
- * 
- * @author yf.frank.wang@gmail.coms
  */
 public class Sqls {
 	private static final Log log = Logs.getLog(Sqls.class);
@@ -267,6 +265,14 @@ public class Sqls {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 0-9a-zA-Z_
+	 * @param c character
+	 */
+	public static boolean isValidColumnChar(int c) {
+		return c == '_' || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 	}
 
 	/**

@@ -23,6 +23,10 @@ import panda.mock.sql.MockDataSource;
 public abstract class SqlDaoTestCase extends DaoTestCase {
 	private static Log log = Logs.getLog(SqlDaoTestCase.class);
 
+	protected SqlDaoClient getSqlDaoClient() {
+		return (SqlDaoClient)getDaoClient();
+	}
+	
 	protected static SqlDaoClient createSqlDaoClient(String db) {
 		DataSource ds = TestHelper.getDataSource(db);
 		if (!(ds instanceof MockDataSource)) {
@@ -85,7 +89,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		
 		GenericQuery<Score> q = new GenericQuery<Score>(Score.class);
 
-		q.in("student", 1, 2).include("student").column("score", "sum(" + escapeColumn("score") + ")").groupBy("student");
+		q.in("student", 1, 2).include("student").column("score", "sum(" + getSqlDaoClient().getSqlExpert().escapeColumn("score") + ")").groupBy("student");
 		List<Score> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);
 	}
@@ -102,8 +106,8 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		GenericQuery<Student> j = new GenericQuery<Student>(Student.class);
 
 		q.in("student", 1, 2)
-			.leftJoin(j, "s", "student = id")
-			.column("studentName", "s.name")
+			.leftJoin(j, "st", "student = id")
+			.column("studentName", getSqlDaoClient().getSqlExpert().escapeColumn("st", "NAME"))
 			.orderBy("score");
 		List<Score> actual = dao.select(q);
 		Assert.assertEquals(expect, actual);

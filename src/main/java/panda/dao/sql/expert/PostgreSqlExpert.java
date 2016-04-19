@@ -20,6 +20,11 @@ public class PostgreSqlExpert extends SqlExpert {
 	}
 
 	@Override
+	public String escape(String s) {
+		return '"' + s + '"'; 
+	}
+	
+	@Override
 	public boolean isSupportDropIfExists() {
 		return true;
 	}
