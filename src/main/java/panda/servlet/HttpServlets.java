@@ -323,7 +323,6 @@ public class HttpServlets {
 			}
 		}
 		catch (IOException e) {
-			Exceptions.wrapThrow(e);
 		}
 	}
 
@@ -333,19 +332,19 @@ public class HttpServlets {
 
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
-
-			if (!request.getParameterMap().isEmpty()) {
-				writer.append(Streams.LINE_SEPARATOR);
-				dumpRequestParameters(request, writer);
-			}
 			
 			if (!Arrays.isEmpty(request.getCookies())) {
 				writer.append(Streams.LINE_SEPARATOR);
 				dumpRequestCookies(request, writer);
 			}
+
+			if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod())
+					&& !request.getParameterMap().isEmpty()) {
+				writer.append(Streams.LINE_SEPARATOR);
+				dumpRequestParameters(request, writer);
+			}
 		}
 		catch (IOException e) {
-			Exceptions.wrapThrow(e);
 		}
 	}
 
@@ -367,13 +366,13 @@ public class HttpServlets {
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
 
-			if (!request.getParameterMap().isEmpty()) {
+			if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod())
+					&& !request.getParameterMap().isEmpty()) {
 				writer.append(Streams.LINE_SEPARATOR);
 				dumpRequestParameters(request, writer);
 			}
 		}
 		catch (IOException e) {
-			Exceptions.wrapThrow(e);
 		}
 	}
 
