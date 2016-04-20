@@ -112,7 +112,7 @@ validation-file=${exists ? \
 (((top.minLength != null && top.maxLength != null) ? (top.minFileSize + "~" + top.maxFileSize + "以内") : \
  (top.minLength != null ? (top.minFileSize + "以上") : \
  (top.maxLength != null ? (top.maxFileSize + "以下") : ""))) + \
-("のファイルを指定してください。(ファイルサイズ：" + top.fileSize + ")")) \
+("のファイルを指定してください。(該当ファイルサイズ：" + top.fileSize + ")")) \
  : "ファイルを選択してください。"}
 validation-futuredate=未来の日付を入力できません。
 validation-hankakustring=半角文字を入力してください。
@@ -126,7 +126,7 @@ validation-image=${top.image ? \
 ((top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
  (top.minHeight != null ? ("高さ" + top.minHeight + "px以上") : \
  (top.maxHeight != null ? ("高さ" + top.maxHeight + "px以下") : ""))) + \
-("の画像ファイルを指定してください。（画像サイズ: " + top.width + "x" + top.height + "）"))\
+("の画像ファイルを指定してください。（該当画像サイズ: " + top.width + "x" + top.height + "）"))\
  : "画像ファイルのフォーマットが正しくありません。"}
 validation-incorrect=項目の値が正しくありません。
 validation-locale-invalid=言語と国・地域の組合せは正しくありません。
