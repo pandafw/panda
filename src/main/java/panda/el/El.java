@@ -42,6 +42,10 @@ public class El {
 		return rpn.calculate(ec);
 	}
 
+	public Object eval(ElContext ec) {
+		return rpn.calculate(ec);
+	}
+
 	public String toString() {
 		return expr.toString();
 	}

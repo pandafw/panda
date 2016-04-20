@@ -19,7 +19,15 @@ public class ElContext {
 	 * @param context
 	 */
 	public ElContext(Object context) {
+		this(context, false);
+	}
+
+	/**
+	 * @param context
+	 */
+	public ElContext(Object context, boolean strict) {
 		this.context = context;
+		this.strict = strict;
 		this.handler = context == null ? null : Beans.i().getBeanHandler(context.getClass());
 	}
 
@@ -63,14 +71,7 @@ public class ElContext {
 	/**
 	 * @return the strict
 	 */
-	public boolean isStrict() {
+	public boolean strict() {
 		return strict;
-	}
-
-	/**
-	 * @param strict the strict to set
-	 */
-	public void setStrict(boolean strict) {
-		this.strict = strict;
 	}
 }

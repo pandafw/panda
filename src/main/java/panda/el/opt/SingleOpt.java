@@ -17,7 +17,7 @@ public abstract class SingleOpt extends AbstractOpt {
 
 	protected boolean isReturnNull(ElContext ec, Object rval) {
 		if (rval == null) {
-			if (ec.isStrict()) {
+			if (ec.strict()) {
 				throw new ElException("right object is NULL: " + right);
 			}
 			return true;

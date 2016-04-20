@@ -46,13 +46,13 @@ public abstract class TwoOpt extends AbstractOpt {
 	
 	protected boolean isReturnNull(ElContext ec, Object lval, Object rval) {
 		if (lval == null) {
-			if (ec.isStrict()) {
+			if (ec.strict()) {
 				throw new ElException(getClass().getSimpleName() + " left object is NULL: " + left);
 			}
 			return true;
 		}
 		if (rval == null) {
-			if (ec.isStrict()) {
+			if (ec.strict()) {
 				throw new ElException("right object is NULL: " + right);
 			}
 			return true;

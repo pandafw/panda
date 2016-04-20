@@ -30,7 +30,7 @@ public class AccessOpt extends TwoOpt implements RunMethod {
 	public Object calculate(ElContext ec) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
-			if (ec.isStrict()) {
+			if (ec.strict()) {
 				throw new ElException("obj is NULL, can't call obj." + right);
 			}
 			return null;

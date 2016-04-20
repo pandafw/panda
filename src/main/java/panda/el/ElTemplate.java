@@ -64,11 +64,11 @@ public class ElTemplate extends AbstractTemplate {
 		}
 	}
 
-	public void evaluate(Appendable out, Object context) throws TemplateException {
+	public void evaluate(Appendable out, Object context, boolean strict) throws TemplateException {
 		try {
 			for (Object o : segments) {
 				if (o instanceof El) {
-					Object r = ((El)o).eval(context);
+					Object r = ((El)o).eval(new ElContext(context, strict));
 					if (r != null) {
 						out.append(r.toString());
 					}
@@ -81,6 +81,17 @@ public class ElTemplate extends AbstractTemplate {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public String evaluate(Object context, boolean strict) throws TemplateException {
+		StringBuilder sb = new StringBuilder();
+		evaluate(sb, context, strict);
+		return sb.toString();
+	}
+	
+	@Override
+	public void evaluate(Appendable out, Object context) throws TemplateException {
+		evaluate(out, context, false);
 	}
 	
 	//-----------------------------------------------------------------------
@@ -108,7 +119,7 @@ public class ElTemplate extends AbstractTemplate {
 			return get(expression).evaluate();
 		}
 		catch (Exception e) {
-			throw new TemplateException("Failed to evaluate(" + expression + ")");
+			throw new TemplateException("Failed to evaluate(" + expression + ")", e);
 		}
 	}
 	
@@ -117,7 +128,16 @@ public class ElTemplate extends AbstractTemplate {
 			return get(expression).evaluate(context);
 		}
 		catch (Exception e) {
-			throw new TemplateException("Failed to evaluate(" + expression + ")");
+			throw new TemplateException("Failed to evaluate(" + expression + ")", e);
+		}
+	}
+	
+	public static String evaluate(String expression, Object context, boolean strict) throws TemplateException {
+		try {
+			return get(expression).evaluate(context, strict);
+		}
+		catch (Exception e) {
+			throw new TemplateException("Failed to evaluate(" + expression + ")", e);
 		}
 	}
 
@@ -126,7 +146,7 @@ public class ElTemplate extends AbstractTemplate {
 			get(expression).evaluate(out);
 		}
 		catch (Exception e) {
-			throw new TemplateException("Failed to evaluate(" + expression + ")");
+			throw new TemplateException("Failed to evaluate(" + expression + ")", e);
 		}
 	}
 
@@ -135,7 +155,7 @@ public class ElTemplate extends AbstractTemplate {
 			get(expression).evaluate(out, context);
 		}
 		catch (Exception e) {
-			throw new TemplateException("Failed to evaluate(" + expression + ")");
+			throw new TemplateException("Failed to evaluate(" + expression + ")", e);
 		}
 	}
 }
