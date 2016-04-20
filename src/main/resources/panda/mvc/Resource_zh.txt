@@ -116,7 +116,7 @@ validation-file=${exists ? ("请指定" + \
 validation-futuredate=不允许输入未来的日期。
 validation-hankakukatakanastring=请输入半角片假名。
 validation-hankakustring=请输入半角文字。
-validation-image==${image ? ("请指定" + \
+validation-image=${top.image ? ("请指定" + \
 ((top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
  (top.minWidth != null ? ("宽" + top.minWidth + "px以上") : \
  (top.maxWidth != null ? ("宽" + top.maxWidth + "px以下") : ""))) + \

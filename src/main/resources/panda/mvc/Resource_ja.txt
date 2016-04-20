@@ -122,11 +122,11 @@ validation-image=${top.image ? \
  ("幅" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
  (top.minWidth != null ? ("幅" + top.minWidth + "px以上") : \
  (top.maxWidth != null ? ("幅" + top.maxWidth + "px以下") : ""))) + \
-(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? "、" : ""} + \
+(((top.minWidth != null || top.maxWidth != null) && (top.minHeight != null || top.maxHeight != null)) ? "、" : "") + \
 ((top.minHeight != null && top.maxHeight != null) ? ("高さ" + top.minHeight + "px ~ " + top.maxHeight + "px以内") : \
  (top.minHeight != null ? ("高さ" + top.minHeight + "px以上") : \
  (top.maxHeight != null ? ("高さ" + top.maxHeight + "px以下") : ""))) + \
-"の画像ファイルを指定してください。（画像サイズ: ${top.width}x${top.height}）")\
+("の画像ファイルを指定してください。（画像サイズ: " + top.width + "x" + top.height + "）"))\
  : "画像ファイルのフォーマットが正しくありません。"}
 validation-incorrect=項目の値が正しくありません。
 validation-locale-invalid=言語と国・地域の組合せは正しくありません。
