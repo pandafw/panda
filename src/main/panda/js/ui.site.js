@@ -1,4 +1,10 @@
 //------------------------------------------------------
+function s_totop() {
+	$('.p-totop').click(function() {
+		$('html,body').animate({ scrollTop: 0 }, 'slow');
+	});
+}
+
 function s_preload() {
 	$('body').append(
 		'<div id="preload" class="p-vhidden">'
@@ -304,6 +310,8 @@ function s_init(c) {
 	// document - onload
 	$(function() {
 		s_preload();
+		
+		s_totop();
 		
 		var $w = $(c.body);
 		s_hook_forms($w);

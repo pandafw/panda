@@ -675,14 +675,39 @@ tbody.p-lv-tbody > tr > td:first-child {
 .p-td-nowrap td { white-space: nowrap; }
 
 .p-noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* IE/Edge */
-  user-select: none;           /* non-prefixed version, currently
-                                  not supported by any browser */
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-khtml-user-select: none;    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* IE/Edge */
+	user-select: none;           /* non-prefixed version, currently
+	                                not supported by any browser */
 }
+
+.p-totop {
+	background-color: #d5d5d5;
+	color: #aaa;
+	cursor: pointer;
+	position: fixed;
+	text-align: center;
+	opacity: 0.5;
+	filter: Alpha(Opacity=0.5);
+}
+.p-totop:hover {
+	opacity: 1;
+	filter: Alpha(Opacity=1);
+}
+.p-totop > * {
+	font-size: 22px;
+	padding: 8px 14px;
+}
+.p-totop-rb {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	right: 10px;
+	bottom: 0;
+}
+
 .p-trigger {
 	position: absolute;
 	color: #ccc;
