@@ -486,4 +486,11 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 		}
 		return len;
 	}
+
+	/**
+	 * @return the line length
+	 */
+	public int getLineLength() {
+		return lineLength;
+	}
 }

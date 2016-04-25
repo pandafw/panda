@@ -13,8 +13,6 @@ import java.io.Serializable;
  * <p>
  * Wherever possible, you should use the <code>check</code> methods in this class to compare
  * filenames.
- * 
- * @version $Id: IOCase.java 1307459 2012-03-30 15:11:44Z ggregory $
  */
 public final class IOCase implements Serializable {
 

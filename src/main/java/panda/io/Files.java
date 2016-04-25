@@ -1088,7 +1088,7 @@ public class Files {
 		String decoded = url;
 		if (url != null && url.indexOf('%') >= 0) {
 			final int n = url.length();
-			final StringBuffer buffer = new StringBuffer();
+			final StringBuilder buffer = new StringBuilder();
 			final ByteBuffer bytes = ByteBuffer.allocate(n);
 			for (int i = 0; i < n;) {
 				if (url.charAt(i) == '%') {

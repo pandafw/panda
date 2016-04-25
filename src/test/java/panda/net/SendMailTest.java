@@ -4,6 +4,8 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
 import org.junit.Test;
 
+import panda.net.SendMail;
+
 
 /**
  * a test class for SendMail
@@ -23,7 +25,7 @@ public class SendMailTest {
 		email.setSubject("test subject");
 //			email.addTo("fireswan@hotmail.com", "fire"); // banned by microsoft
 		email.addTo("squirrels.gallery@gmail.com", "oh test");
-		email.setMsg("this is a test email");
+		email.setMsg(".\nthis is a test email.");
 
 //			email.buildMimeMessage();
 //			email.getMimeMessage();

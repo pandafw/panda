@@ -284,6 +284,13 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
+	 * @return the line separator
+	 */
+	public byte[] getLineSeparator() {
+		return this.lineSeparator;
+	}
+
+	/**
 	 * <p>
 	 * Encodes all of the provided data, starting at inPos, for inAvail bytes. Must be called at
 	 * least twice: once with the data to encode, and once with inAvail set to "-1" to alert encoder

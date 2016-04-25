@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.net.IPs;
+
 /**
  */
 public class IPsTest {

@@ -6,19 +6,14 @@ import java.util.Locale;
 
 import panda.lang.TimeZones;
 import panda.lang.time.DateTimes;
-import panda.lang.time.FastDateFormat;
+import panda.net.InetDates;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers. This
  * class handles dates as defined by RFC 2616 section 3.3.1 as well as some other common
  * non-standard formats.
  */
-public class HttpDates {
-	/**
-	 * Date format pattern used to parse HTTP date headers in RFC 1123 format.
-	 */
-	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
-
+public class HttpDates extends InetDates {
 	/**
 	 * Date format pattern used to parse HTTP date headers in RFC 1036 format.
 	 */
@@ -119,62 +114,5 @@ public class HttpDates {
 		
 		// we were unable to parse the date
 		throw new ParseException("Unable to parse the date " + dateValue, -1);
-	}
-
-	/**
-	 * Formats the given date according to the RFC 1123 pattern.
-	 * 
-	 * @param date The date to format.
-	 * @return An RFC 1123 formatted date string.
-	 * @see #PATTERN_RFC1123
-	 */
-	public static String format(Date date) {
-		return format(date, PATTERN_RFC1123);
-	}
-
-	/**
-	 * Formats the given date according to the RFC 1123 pattern.
-	 * 
-	 * @param date The date to format.
-	 * @return An RFC 1123 formatted date string.
-	 * @see #PATTERN_RFC1123
-	 */
-	public static String format(long date) {
-		return format(date, PATTERN_RFC1123);
-	}
-
-	/**
-	 * Formats the given date according to the specified pattern. The pattern must conform to that
-	 * used by the {@link FastDateFormat date format} class.
-	 * 
-	 * @param date The date to format.
-	 * @param pattern The pattern to use for formatting the date.
-	 * @return A formatted date string.
-	 * @throws IllegalArgumentException If the given date pattern is invalid.
-	 */
-	public static String format(Date date, String pattern) {
-		if (date == null) {
-			return null;
-		}
-		if (pattern == null) {
-			throw new IllegalArgumentException("pattern is null");
-		}
-		return DateTimes.format(date, pattern, TimeZones.GMT, Locale.US);
-	}
-
-	/**
-	 * Formats the given date according to the specified pattern. The pattern must conform to that
-	 * used by the {@link FastDateFormat date format} class.
-	 * 
-	 * @param date The date to format.
-	 * @param pattern The pattern to use for formatting the date.
-	 * @return A formatted date string.
-	 * @throws IllegalArgumentException If the given date pattern is invalid.
-	 */
-	public static String format(long date, String pattern) {
-		if (pattern == null) {
-			throw new IllegalArgumentException("pattern is null");
-		}
-		return DateTimes.format(date, pattern, TimeZones.GMT, Locale.US);
 	}
 }
