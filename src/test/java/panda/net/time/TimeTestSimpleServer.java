@@ -1,0 +1,124 @@
+package panda.net.time;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * The TimetSimpleServer class is a simple TCP implementation of a server for the Time Protocol
+ * described in RFC 868.
+ * <p>
+ * Listens for TCP socket connections on the time protocol port and writes the local time to socket
+ * outputStream as 32-bit integer of seconds since midnight on 1 January 1900 GMT. See <A
+ * HREF="ftp://ftp.rfc-editor.org/in-notes/rfc868.txt"> the spec </A> for details.
+ * <p>
+ * Note this is for <B>debugging purposes only</B> and not meant to be run as a realiable time
+ * service.
+ * 
+ * @version $Revision: 1697295 $
+ */
+public class TimeTestSimpleServer implements Runnable {
+
+	/**
+	 * baseline time 1900-01-01T00:00:00 UTC
+	 */
+	public static final long SECONDS_1900_TO_1970 = 2208988800L;
+
+	/*** The default time port. It is set to 37 according to RFC 868. ***/
+	public static final int DEFAULT_PORT = 37;
+
+	private ServerSocket server;
+	private final int port;
+	private boolean running = false;
+
+	public TimeTestSimpleServer() {
+		port = DEFAULT_PORT;
+	}
+
+	public TimeTestSimpleServer(int port) {
+		this.port = port;
+	}
+
+	public void connect() throws IOException {
+		if (server == null) {
+			server = new ServerSocket(port);
+		}
+	}
+
+	public int getPort() {
+		return server == null ? port : server.getLocalPort();
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	/*
+	 * Start time service and provide time to client connections.
+	 */
+	public void start() throws IOException {
+		if (server == null) {
+			connect();
+		}
+		if (!running) {
+			running = true;
+			new Thread(this).start();
+		}
+	}
+
+	// @Override
+	public void run() {
+		Socket socket = null;
+		while (running) {
+			try {
+				socket = server.accept();
+				DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+				// add 500 ms to round off to nearest second
+				int time = (int)((System.currentTimeMillis() + 500) / 1000 + SECONDS_1900_TO_1970);
+				os.writeInt(time);
+				os.flush();
+			}
+			catch (IOException e) {
+				// ignored
+			}
+			finally {
+				if (socket != null) {
+					try {
+						socket.close(); // force closing of the socket
+					}
+					catch (IOException e) {
+						System.err.println("close socket error: " + e);
+					}
+				}
+			}
+		}
+	}
+
+	/*
+	 * Close server socket.
+	 */
+	public void stop() {
+		running = false;
+		if (server != null) {
+			try {
+				server.close(); // force closing of the socket
+			}
+			catch (IOException e) {
+				System.err.println("close socket error: " + e);
+			}
+			server = null;
+		}
+	}
+
+	public static void main(String[] args) {
+		TimeTestSimpleServer server = new TimeTestSimpleServer();
+		try {
+			server.start();
+		}
+		catch (IOException e) {
+			// ignored
+		}
+	}
+
+}
