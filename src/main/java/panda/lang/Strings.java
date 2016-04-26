@@ -143,9 +143,20 @@ public class Strings {
 	public static final String SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 	/**
+	 * A String for digits and letters
+	 */
+	public static final String DIGIT_LETTERS = DIGITS + LOWER_LETTERS + UPPER_LETTERS;
+
+	/**
 	 * A String for symbols and digits "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~0123456789"
 	 */
 	public static final String SYMBOL_DIGITS = SYMBOLS + DIGITS;
+
+	/**
+	 * A String for symbols, digits and letters
+	 */
+	public static final String SYMBOL_DIGIT_LETTERS = SYMBOLS + DIGIT_LETTERS;
+
 
 	/**
 	 * Represents a failed index search.

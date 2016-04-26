@@ -1,4 +1,4 @@
-package panda.net.http;
+package panda.net;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import panda.net.http.Mimes;
+import panda.net.Mimes;
 
 public final class QuotedPrintableDecoderTestCase {
 

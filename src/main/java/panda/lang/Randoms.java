@@ -5,15 +5,15 @@ import java.util.UUID;
 
 /**
  * Utility class for Random.
- * @author yf.frank.wang@gmail.com
  */
-public class Randoms {
+public abstract class Randoms {
 	public static final int UUID_LENGTH = 36;
 	public static final int UUID32_LENGTH = 32;
 	
 	private static final Random rand = new Random();
-	private static final char[] CHARS = (Strings.DIGITS + Strings.LOWER_LETTERS + Strings.UPPER_LETTERS + Strings.SYMBOLS).toCharArray();
-	
+	private static final char[] DIGIT_LETTERS = Strings.DIGIT_LETTERS.toCharArray();
+	private static final char[] SYMDIT_LETTERS = Strings.SYMBOL_DIGIT_LETTERS.toCharArray();
+
 	public static int randInt() {
 		return rand.nextInt();
 	}
@@ -64,11 +64,19 @@ public class Randoms {
 				Strings.leftPad(Long.toHexString(uuid.getLeastSignificantBits()), 16, '0');
 	}
 	
+	public static String randDigitLetters(int len) {
+		return randString(len, DIGIT_LETTERS);
+	}
+	
 	public static String randString(int len) {
+		return randString(len, SYMDIT_LETTERS);
+	}
+	
+	public static String randString(int len, char[] chars) {
 		char buf[] = new char[len];
 		
 		for (int i = 0; i < buf.length; i++) {
-			buf[i] = CHARS[rand.nextInt(CHARS.length)];
+			buf[i] = chars[rand.nextInt(chars.length)];
 		}
 		
 		return new String(buf);

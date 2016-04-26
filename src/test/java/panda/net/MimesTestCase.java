@@ -1,4 +1,4 @@
-package panda.net.http;
+package panda.net;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import panda.net.http.Mimes;
+import panda.net.Mimes;
 
 /**
  * Use the online <a href="http://dogmamix.com/MimeHeadersDecoder/">MimeHeadersDecoder</a> to

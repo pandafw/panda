@@ -30,6 +30,9 @@ import panda.lang.codec.StringEncoder;
  *      Part Two: Message Header Extensions for Non-ASCII Text</a>
  */
 public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder {
+	private static String WORD_SPECIALS = "=_?\"#$%&'(),.:;<>@[\\]^`{|}~";
+	private static String TEXT_SPECIALS = "=_?";
+
 	/**
 	 * The default charset used for string decoding and encoding.
 	 */
@@ -135,70 +138,7 @@ public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 
 	@Override
 	protected byte[] doEncoding(final byte[] bytes) {
-		if (bytes == null) {
-			return null;
-		}
-		final byte[] data = QuotedPrintableCodec.encodeQuotedPrintable(PRINTABLE_CHARS, bytes);
-		if (this.encodeBlanks) {
-			for (int i = 0; i < data.length; i++) {
-				if (data[i] == BLANK) {
-					data[i] = UNDERSCORE;
-				}
-			}
-		}
-		return data;
-	}
-
-	/**
-	 * Decodes an array quoted-printable characters into an array of original bytes. Escaped
-	 * characters are converted back to their original representation.
-	 * <p>
-	 * This function fully implements the quoted-printable encoding specification (rule #1 through
-	 * rule #5) as defined in RFC 1521.
-	 * 
-	 * @param bytes array of quoted-printable characters
-	 * @return array of original bytes
-	 * @throws DecoderException Thrown if quoted-printable decoding is unsuccessful
-	 */
-	public static final byte[] decodeQuotedPrintable(final byte[] bytes) throws DecoderException {
-		if (bytes == null) {
-			return null;
-		}
-		
-		@SuppressWarnings("resource")
-		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		int len = bytes.length;
-		for (int i = 0; i < len; i++) {
-			final int b = bytes[i];
-			if (b == UNDERSCORE) {
-				buffer.write(BLANK);
-			}
-			else			if (b == ESCAPE_CHAR) {
-				if (i + 2 >= len) {
-					throw new DecoderException("Invalid quoted printable encoding; truncated escape sequence");
-				}
-
-				byte b1 = bytes[++i];
-				byte b2 = bytes[++i];
-
-				// we've found an encoded carriage return. The next char needs to be a newline
-				if (b1 == CR) {
-					if (b2 != LF) {
-						throw new DecoderException("Invalid quoted printable encoding; CR must be followed by LF");
-					}
-					// this was a soft linebreak inserted by the encoding. We just toss this away on decode.
-					continue;
-				}
-
-				final int u = Utils.digit16(b1);
-				final int l = Utils.digit16(b2);
-				buffer.write((char)((u << 4) + l));
-			}
-			else {
-				buffer.write(b);
-			}
-		}
-		return buffer.toByteArray();
+		return encodeBytes(bytes, encodeBlanks);
 	}
 
 	@Override
@@ -366,5 +306,108 @@ public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 	 */
 	public void setEncodeBlanks(final boolean b) {
 		this.encodeBlanks = b;
+	}
+
+	//-------------------------------------------------------------
+	/**
+	 * Returns the length of the encoded version of this byte array.
+	 */
+	public static int encodedLength(byte[] b, boolean encodingWord) {
+		int len = 0;
+		String specials = encodingWord ? WORD_SPECIALS : TEXT_SPECIALS;
+		for (int i = 0; i < b.length; i++) {
+			int c = b[i] & 0xff; // Mask off MSB
+			if (c < 040 || c >= 0177 || specials.indexOf(c) >= 0)
+				// needs encoding
+				len += 3; // Q-encoding is 1 -> 3 conversion
+			else
+				len++;
+		}
+		return len;
+	}
+
+	/**
+	 * Decodes an array quoted-printable characters into an array of original bytes. Escaped
+	 * characters are converted back to their original representation.
+	 * <p>
+	 * This function fully implements the quoted-printable encoding specification (rule #1 through
+	 * rule #5) as defined in RFC 1521.
+	 * 
+	 * @param bytes array of quoted-printable characters
+	 * @return array of original bytes
+	 * @throws DecoderException Thrown if quoted-printable decoding is unsuccessful
+	 */
+	public static final byte[] decodeQuotedPrintable(final byte[] bytes) throws DecoderException {
+		if (bytes == null) {
+			return null;
+		}
+		
+		@SuppressWarnings("resource")
+		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int len = bytes.length;
+		for (int i = 0; i < len; i++) {
+			final int b = bytes[i];
+			if (b == UNDERSCORE) {
+				buffer.write(BLANK);
+			}
+			else			if (b == ESCAPE_CHAR) {
+				if (i + 2 >= len) {
+					throw new DecoderException("Invalid quoted printable encoding; truncated escape sequence");
+				}
+
+				byte b1 = bytes[++i];
+				byte b2 = bytes[++i];
+
+				// we've found an encoded carriage return. The next char needs to be a newline
+				if (b1 == CR) {
+					if (b2 != LF) {
+						throw new DecoderException("Invalid quoted printable encoding; CR must be followed by LF");
+					}
+					// this was a soft linebreak inserted by the encoding. We just toss this away on decode.
+					continue;
+				}
+
+				final int u = Utils.digit16(b1);
+				final int l = Utils.digit16(b2);
+				buffer.write((char)((u << 4) + l));
+			}
+			else {
+				buffer.write(b);
+			}
+		}
+		return buffer.toByteArray();
+	}
+
+	/**
+	 * Encodes an array of bytes using the defined encoding scheme.
+	 * 
+	 * @param bytes Data to be encoded
+	 * @return A byte array containing the encoded data
+	 */
+	public static byte[] encodeBytes(byte[] bytes, boolean encodeBlanks) {
+		if (bytes == null) {
+			return null;
+		}
+		final byte[] data = QuotedPrintableCodec.encodeQuotedPrintable(PRINTABLE_CHARS, bytes);
+		if (encodeBlanks) {
+			for (int i = 0; i < data.length; i++) {
+				if (data[i] == BLANK) {
+					data[i] = UNDERSCORE;
+				}
+			}
+		}
+		return data;
+	}
+
+	/**
+	 * Decodes an array of bytes using the defined encoding scheme.
+	 * 
+	 * @param bytes Data to be decoded
+	 * @return a byte array that contains decoded data
+	 * @throws DecoderException A decoder exception is thrown if a Decoder encounters a failure
+	 *             condition during the decode process.
+	 */
+	public static byte[] decodeBytes(byte[] bytes) {
+		return decodeQuotedPrintable(bytes);
 	}
 }

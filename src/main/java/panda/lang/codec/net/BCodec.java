@@ -68,18 +68,12 @@ public class BCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 
 	@Override
 	protected byte[] doEncoding(final byte[] bytes) {
-		if (bytes == null) {
-			return null;
-		}
-		return Base64.encodeBase64(bytes);
+		return encodeBytes(bytes);
 	}
 
 	@Override
 	protected byte[] doDecoding(final byte[] bytes) {
-		if (bytes == null) {
-			return null;
-		}
-		return Base64.decodeBase64(bytes);
+		return decodeBytes(bytes);
 	}
 
 	/**
@@ -222,5 +216,41 @@ public class BCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 	 */
 	public String getDefaultCharset() {
 		return this.charset.name();
+	}
+
+	//-------------------------------------------------------------
+	/**
+	 * Returns the length of the encoded version of this byte array.
+	 */
+	public static int encodedLength(byte[] b) {
+		return ((b.length + 2) / 3) * 4;
+	}
+
+	/**
+	 * Encodes an array of bytes using the defined encoding scheme.
+	 * 
+	 * @param bytes Data to be encoded
+	 * @return A byte array containing the encoded data
+	 */
+	public static byte[] encodeBytes(byte[] bytes) {
+		if (bytes == null) {
+			return null;
+		}
+		return Base64.encodeBase64(bytes);
+	}
+
+	/**
+	 * Decodes an array of bytes using the defined encoding scheme.
+	 * 
+	 * @param bytes Data to be decoded
+	 * @return a byte array that contains decoded data
+	 * @throws DecoderException A decoder exception is thrown if a Decoder encounters a failure
+	 *             condition during the decode process.
+	 */
+	public static byte[] decodeBytes(byte[] bytes) {
+		if (bytes == null) {
+			return null;
+		}
+		return Base64.decodeBase64(bytes);
 	}
 }

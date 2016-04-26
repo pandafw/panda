@@ -55,8 +55,8 @@ public abstract class Chars {
 
 	/**
 	 * <p>
-	 * {@code CharUtils} instances should NOT be constructed in standard programming. Instead, the
-	 * class should be used as {@code CharUtils.toString('c');}.
+	 * {@code Chars} instances should NOT be constructed in standard programming. Instead, the
+	 * class should be used as {@code Chars.toString('c');}.
 	 * </p>
 	 * <p>
 	 * This constructor is public to permit tools that require a JavaBean instance to operate.
@@ -78,10 +78,10 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toCharacterObject(null) = null
-	 *   CharUtils.toCharacterObject("")   = null
-	 *   CharUtils.toCharacterObject("A")  = 'A'
-	 *   CharUtils.toCharacterObject("BA") = 'B'
+	 *   Chars.toCharacterObject(null) = null
+	 *   Chars.toCharacterObject("")   = null
+	 *   Chars.toCharacterObject("A")  = 'A'
+	 *   Chars.toCharacterObject("BA") = 'B'
 	 * </pre>
 	 * 
 	 * @param str the character to convert
@@ -101,9 +101,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toChar(' ')  = ' '
-	 *   CharUtils.toChar('A')  = 'A'
-	 *   CharUtils.toChar(null) throws IllegalArgumentException
+	 *   Chars.toChar(' ')  = ' '
+	 *   Chars.toChar('A')  = 'A'
+	 *   Chars.toChar(null) throws IllegalArgumentException
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -123,9 +123,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toChar(null, 'X') = 'X'
-	 *   CharUtils.toChar(' ', 'X')  = ' '
-	 *   CharUtils.toChar('A', 'X')  = 'A'
+	 *   Chars.toChar(null, 'X') = 'X'
+	 *   Chars.toChar(' ', 'X')  = ' '
+	 *   Chars.toChar('A', 'X')  = 'A'
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -147,10 +147,10 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toChar("A")  = 'A'
-	 *   CharUtils.toChar("BA") = 'B'
-	 *   CharUtils.toChar(null) throws IllegalArgumentException
-	 *   CharUtils.toChar("")   throws IllegalArgumentException
+	 *   Chars.toChar("A")  = 'A'
+	 *   Chars.toChar("BA") = 'B'
+	 *   Chars.toChar(null) throws IllegalArgumentException
+	 *   Chars.toChar("")   throws IllegalArgumentException
 	 * </pre>
 	 * 
 	 * @param str the character to convert
@@ -171,10 +171,10 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toChar(null, 'X') = 'X'
-	 *   CharUtils.toChar("", 'X')   = 'X'
-	 *   CharUtils.toChar("A", 'X')  = 'A'
-	 *   CharUtils.toChar("BA", 'X') = 'B'
+	 *   Chars.toChar(null, 'X') = 'X'
+	 *   Chars.toChar("", 'X')   = 'X'
+	 *   Chars.toChar("A", 'X')  = 'A'
+	 *   Chars.toChar("BA", 'X') = 'B'
 	 * </pre>
 	 * 
 	 * @param str the character to convert
@@ -199,8 +199,8 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toIntValue('3')  = 3
-	 *   CharUtils.toIntValue('A')  throws IllegalArgumentException
+	 *   Chars.toIntValue('3')  = 3
+	 *   Chars.toIntValue('A')  throws IllegalArgumentException
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -225,8 +225,8 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toIntValue('3', -1)  = 3
-	 *   CharUtils.toIntValue('A', -1)  = -1
+	 *   Chars.toIntValue('3', -1)  = 3
+	 *   Chars.toIntValue('A', -1)  = -1
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -250,9 +250,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toIntValue('3')  = 3
-	 *   CharUtils.toIntValue(null) throws IllegalArgumentException
-	 *   CharUtils.toIntValue('A')  throws IllegalArgumentException
+	 *   Chars.toIntValue('3')  = 3
+	 *   Chars.toIntValue(null) throws IllegalArgumentException
+	 *   Chars.toIntValue('A')  throws IllegalArgumentException
 	 * </pre>
 	 * 
 	 * @param ch the character to convert, not null
@@ -276,9 +276,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toIntValue(null, -1) = -1
-	 *   CharUtils.toIntValue('3', -1)  = 3
-	 *   CharUtils.toIntValue('A', -1)  = -1
+	 *   Chars.toIntValue(null, -1) = -1
+	 *   Chars.toIntValue('3', -1)  = 3
+	 *   Chars.toIntValue('A', -1)  = -1
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -303,8 +303,8 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toString(' ')  = " "
-	 *   CharUtils.toString('A')  = "A"
+	 *   Chars.toString(' ')  = " "
+	 *   Chars.toString('A')  = "A"
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -330,9 +330,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.toString(null) = null
-	 *   CharUtils.toString(' ')  = " "
-	 *   CharUtils.toString('A')  = "A"
+	 *   Chars.toString(null) = null
+	 *   Chars.toString(' ')  = " "
+	 *   Chars.toString('A')  = "A"
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -355,8 +355,8 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.unicodeEscaped(' ') = "\u0020"
-	 *   CharUtils.unicodeEscaped('A') = "\u0041"
+	 *   Chars.unicodeEscaped(' ') = "\u0020"
+	 *   Chars.unicodeEscaped('A') = "\u0041"
 	 * </pre>
 	 * 
 	 * @param ch the character to convert
@@ -387,9 +387,9 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.unicodeEscaped(null) = null
-	 *   CharUtils.unicodeEscaped(' ')  = "\u0020"
-	 *   CharUtils.unicodeEscaped('A')  = "\u0041"
+	 *   Chars.unicodeEscaped(null) = null
+	 *   Chars.unicodeEscaped(' ')  = "\u0020"
+	 *   Chars.unicodeEscaped('A')  = "\u0041"
 	 * </pre>
 	 * 
 	 * @param ch the character to convert, may be null
@@ -409,12 +409,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAscii('a')  = true
-	 *   CharUtils.isAscii('A')  = true
-	 *   CharUtils.isAscii('3')  = true
-	 *   CharUtils.isAscii('-')  = true
-	 *   CharUtils.isAscii('\n') = true
-	 *   CharUtils.isAscii('&copy;') = false
+	 *   Chars.isAscii('a')  = true
+	 *   Chars.isAscii('A')  = true
+	 *   Chars.isAscii('3')  = true
+	 *   Chars.isAscii('-')  = true
+	 *   Chars.isAscii('\n') = true
+	 *   Chars.isAscii('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -430,12 +430,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiPrintable('a')  = true
-	 *   CharUtils.isAsciiPrintable('A')  = true
-	 *   CharUtils.isAsciiPrintable('3')  = true
-	 *   CharUtils.isAsciiPrintable('-')  = true
-	 *   CharUtils.isAsciiPrintable('\n') = false
-	 *   CharUtils.isAsciiPrintable('&copy;') = false
+	 *   Chars.isAsciiPrintable('a')  = true
+	 *   Chars.isAsciiPrintable('A')  = true
+	 *   Chars.isAsciiPrintable('3')  = true
+	 *   Chars.isAsciiPrintable('-')  = true
+	 *   Chars.isAsciiPrintable('\n') = false
+	 *   Chars.isAsciiPrintable('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -451,12 +451,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiControl('a')  = false
-	 *   CharUtils.isAsciiControl('A')  = false
-	 *   CharUtils.isAsciiControl('3')  = false
-	 *   CharUtils.isAsciiControl('-')  = false
-	 *   CharUtils.isAsciiControl('\n') = true
-	 *   CharUtils.isAsciiControl('&copy;') = false
+	 *   Chars.isAsciiControl('a')  = false
+	 *   Chars.isAsciiControl('A')  = false
+	 *   Chars.isAsciiControl('3')  = false
+	 *   Chars.isAsciiControl('-')  = false
+	 *   Chars.isAsciiControl('\n') = true
+	 *   Chars.isAsciiControl('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -472,12 +472,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiAlpha('a')  = true
-	 *   CharUtils.isAsciiAlpha('A')  = true
-	 *   CharUtils.isAsciiAlpha('3')  = false
-	 *   CharUtils.isAsciiAlpha('-')  = false
-	 *   CharUtils.isAsciiAlpha('\n') = false
-	 *   CharUtils.isAsciiAlpha('&copy;') = false
+	 *   Chars.isAsciiAlpha('a')  = true
+	 *   Chars.isAsciiAlpha('A')  = true
+	 *   Chars.isAsciiAlpha('3')  = false
+	 *   Chars.isAsciiAlpha('-')  = false
+	 *   Chars.isAsciiAlpha('\n') = false
+	 *   Chars.isAsciiAlpha('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -493,12 +493,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiAlphaUpper('a')  = false
-	 *   CharUtils.isAsciiAlphaUpper('A')  = true
-	 *   CharUtils.isAsciiAlphaUpper('3')  = false
-	 *   CharUtils.isAsciiAlphaUpper('-')  = false
-	 *   CharUtils.isAsciiAlphaUpper('\n') = false
-	 *   CharUtils.isAsciiAlphaUpper('&copy;') = false
+	 *   Chars.isAsciiAlphaUpper('a')  = false
+	 *   Chars.isAsciiAlphaUpper('A')  = true
+	 *   Chars.isAsciiAlphaUpper('3')  = false
+	 *   Chars.isAsciiAlphaUpper('-')  = false
+	 *   Chars.isAsciiAlphaUpper('\n') = false
+	 *   Chars.isAsciiAlphaUpper('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -514,12 +514,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiAlphaLower('a')  = true
-	 *   CharUtils.isAsciiAlphaLower('A')  = false
-	 *   CharUtils.isAsciiAlphaLower('3')  = false
-	 *   CharUtils.isAsciiAlphaLower('-')  = false
-	 *   CharUtils.isAsciiAlphaLower('\n') = false
-	 *   CharUtils.isAsciiAlphaLower('&copy;') = false
+	 *   Chars.isAsciiAlphaLower('a')  = true
+	 *   Chars.isAsciiAlphaLower('A')  = false
+	 *   Chars.isAsciiAlphaLower('3')  = false
+	 *   Chars.isAsciiAlphaLower('-')  = false
+	 *   Chars.isAsciiAlphaLower('\n') = false
+	 *   Chars.isAsciiAlphaLower('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -535,12 +535,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiNumeric('a')  = false
-	 *   CharUtils.isAsciiNumeric('A')  = false
-	 *   CharUtils.isAsciiNumeric('3')  = true
-	 *   CharUtils.isAsciiNumeric('-')  = false
-	 *   CharUtils.isAsciiNumeric('\n') = false
-	 *   CharUtils.isAsciiNumeric('&copy;') = false
+	 *   Chars.isAsciiNumeric('a')  = false
+	 *   Chars.isAsciiNumeric('A')  = false
+	 *   Chars.isAsciiNumeric('3')  = true
+	 *   Chars.isAsciiNumeric('-')  = false
+	 *   Chars.isAsciiNumeric('\n') = false
+	 *   Chars.isAsciiNumeric('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check
@@ -556,12 +556,12 @@ public abstract class Chars {
 	 * </p>
 	 * 
 	 * <pre>
-	 *   CharUtils.isAsciiAlphanumeric('a')  = true
-	 *   CharUtils.isAsciiAlphanumeric('A')  = true
-	 *   CharUtils.isAsciiAlphanumeric('3')  = true
-	 *   CharUtils.isAsciiAlphanumeric('-')  = false
-	 *   CharUtils.isAsciiAlphanumeric('\n') = false
-	 *   CharUtils.isAsciiAlphanumeric('&copy;') = false
+	 *   Chars.isAsciiAlphanumeric('a')  = true
+	 *   Chars.isAsciiAlphanumeric('A')  = true
+	 *   Chars.isAsciiAlphanumeric('3')  = true
+	 *   Chars.isAsciiAlphanumeric('-')  = false
+	 *   Chars.isAsciiAlphanumeric('\n') = false
+	 *   Chars.isAsciiAlphanumeric('&copy;') = false
 	 * </pre>
 	 * 
 	 * @param ch the character to check

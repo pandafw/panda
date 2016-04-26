@@ -22,16 +22,15 @@ import panda.io.stream.WriterOutputStream;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
+import panda.net.Mimes;
 import panda.net.URLHelper;
 
-/**
- * @author yf.frank.wang@gmail.com
- */
 public class HttpRequest {
 	private static final int TOSTRING_BODY_LIMIT = 1024;
-	
+
 	public static HttpRequest get(String url) {
 		return new HttpRequest().setUrl(url).setMethod(HttpMethod.GET);
 	}
@@ -66,6 +65,7 @@ public class HttpRequest {
 	private Map<String, Object> params;
 	private InputStream body;
 	private String encoding = Charsets.UTF_8;
+	private String boundary;
 
 	public HttpRequest() {
 	}
@@ -271,7 +271,10 @@ public class HttpRequest {
 	}
 
 	public String getMultipartBoundary() {
-		return "---------------------------[Panda]7d91571440efc";
+		if (boundary == null) {
+			boundary = Randoms.randDigitLetters(30);
+		}
+		return boundary;
 	}
 
 	public boolean isPostForm() {
@@ -320,7 +323,11 @@ public class HttpRequest {
 					f = (File)val;
 				}
 				if (f != null && f.exists()) {
-					dos.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\";    filename=\"" + f.getPath() + "\"");
+					dos.writeBytes("Content-Disposition:    form-data;    name=\"");
+					dos.writeBytes(Mimes.encodeText(key, encoding));
+					dos.writeBytes("\";    filename=\"");
+					dos.writeBytes(Mimes.encodeText(f.getPath(), encoding));
+					dos.writeBytes("\"");
 					dos.writeBytes(Strings.CRLF);
 					dos.writeBytes("Content-Type:   application/octet-stream");
 					dos.writeBytes(Strings.CRLF);

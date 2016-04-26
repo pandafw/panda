@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import panda.lang.Strings;
+import panda.net.Mimes;
 
 /**
  * A simple parser intended to parse sequences of name/value pairs. Parameter values are expected to
