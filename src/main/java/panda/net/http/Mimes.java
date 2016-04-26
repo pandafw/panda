@@ -1,6 +1,5 @@
 package panda.net.http;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -8,18 +7,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import panda.lang.codec.DecoderException;
 import panda.lang.codec.binary.Base64;
+import panda.lang.codec.net.QCodec;
 
 /**
  * Utility class to decode MIME texts.
  */
 public final class Mimes {
-
-	/**
-	 * The shift value required to create the upper nibble from the first of 2 byte values converted
-	 * from ascii hex.
-	 */
-	private static final int UPPER_NIBBLE_SHIFT = Byte.SIZE / 2;
 
 	/**
 	 * The {@code US-ASCII} charset identifier constant.
@@ -270,7 +265,6 @@ public final class Mimes {
 		return mappedCharset;
 	}
 
-
 	/**
 	 * Decode the encoded byte data writing it to the given output stream.
 	 * 
@@ -279,67 +273,11 @@ public final class Mimes {
 	 * @exception IOException
 	 */
 	public static byte[] decodeQuoted(byte[] data) throws IOException {
-		// the decoder writes directly to an output stream.
-		ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
-
-		int off = 0;
-		int length = data.length;
-		int endOffset = off + length;
-
-		while (off < endOffset) {
-			byte ch = data[off++];
-
-			// space characters were translated to '_' on encode, so we need to translate them back.
-			if (ch == '_') {
-				out.write(' ');
-			}
-			else if (ch == '=') {
-				// we found an encoded character. Reduce the 3 char sequence to one.
-				// but first, make sure we have two characters to work with.
-				if (off + 1 >= endOffset) {
-					throw new IOException("Invalid quoted printable encoding; truncated escape sequence");
-				}
-
-				byte b1 = data[off++];
-				byte b2 = data[off++];
-
-				// we've found an encoded carriage return. The next char needs to be a newline
-				if (b1 == '\r') {
-					if (b2 != '\n') {
-						throw new IOException("Invalid quoted printable encoding; CR must be followed by LF");
-					}
-					// this was a soft linebreak inserted by the encoding. We just toss this away
-					// on decode.
-				}
-				else {
-					// this is a hex pair we need to convert back to a single byte.
-					int c1 = hexToBinary(b1);
-					int c2 = hexToBinary(b2);
-					out.write((c1 << UPPER_NIBBLE_SHIFT) | c2);
-				}
-			}
-			else {
-				// simple character, just write it out.
-				out.write(ch);
-			}
+		try {
+			return QCodec.decodeQuotedPrintable(data);
 		}
-
-		return out.toByteArray();
-	}
-
-	/**
-	 * Convert a hex digit to the binary value it represents.
-	 * 
-	 * @param b the ascii hex byte to convert (0-0, A-F, a-f)
-	 * @return the int value of the hex byte, 0-15
-	 * @throws IOException if the byte is not a valid hex digit.
-	 */
-	private static int hexToBinary(final byte b) throws IOException {
-		// CHECKSTYLE IGNORE MagicNumber FOR NEXT 1 LINE
-		final int i = Character.digit((char)b, 16);
-		if (i == -1) {
-			throw new IOException("Invalid quoted printable encoding: not a valid hex digit: " + b);
+		catch (DecoderException e) {
+			throw new IOException(e.getMessage(), e);
 		}
-		return i;
 	}
 }

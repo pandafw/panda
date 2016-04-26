@@ -34,7 +34,7 @@ public final class QuotedPrintableDecoderTestCase {
 
 	@Test
 	public void invalidQuotedPrintableEncoding() throws Exception {
-		assertIOException("truncated escape sequence", "YWJjMTIzXy0uKn4hQCMkJV4mKCkre31cIlxcOzpgLC9bXQ==");
+		assertIOException("Invalid quoted printable encoding; truncated escape sequence", "YWJjMTIzXy0uKn4hQCMkJV4mKCkre31cIlxcOzpgLC9bXQ==");
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public final class QuotedPrintableDecoderTestCase {
 
 	@Test
 	public void truncatedEscape() throws Exception {
-		assertIOException("truncated", "=1");
+		assertIOException("Invalid quoted printable encoding; truncated escape sequence", "=1");
 	}
 
 	private static void assertEncoded(String clearText, String encoded) throws Exception {
