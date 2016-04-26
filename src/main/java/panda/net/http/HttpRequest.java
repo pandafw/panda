@@ -322,10 +322,11 @@ public class HttpRequest {
 				if (isFile(val)) {
 					f = (File)val;
 				}
+				dos.writeBytes("Content-Disposition:    form-data;    name=\"");
+				dos.writeBytes(Mimes.encodeText(key, encoding));
+				dos.writeBytes("\"");
 				if (f != null && f.exists()) {
-					dos.writeBytes("Content-Disposition:    form-data;    name=\"");
-					dos.writeBytes(Mimes.encodeText(key, encoding));
-					dos.writeBytes("\";    filename=\"");
+					dos.writeBytes(";    filename=\"");
 					dos.writeBytes(Mimes.encodeText(f.getPath(), encoding));
 					dos.writeBytes("\"");
 					dos.writeBytes(Strings.CRLF);
@@ -338,10 +339,10 @@ public class HttpRequest {
 					}
 				}
 				else {
-					dos.writeBytes("Content-Disposition:    form-data;    name=\"" + key + "\"");
 					dos.writeBytes(Strings.CRLF);
 					dos.writeBytes(Strings.CRLF);
-					dos.writeBytes(val.toString());
+					byte[] bs = val.toString().getBytes(encoding);
+					dos.write(bs);
 					dos.writeBytes(Strings.CRLF);
 				}
 			}
