@@ -14,8 +14,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import panda.net.io.CRLFLineReader;
-import panda.net.util.SSLContextUtils;
-import panda.net.util.SSLSocketUtils;
+import panda.net.ssl.SSLContexts;
+import panda.net.ssl.SSLSockets;
 
 /**
  * SMTP over SSL processing. Copied from FTPSClient.java and modified to suit SMTP. If implicit mode
@@ -155,7 +155,7 @@ public class SMTPSClient extends SMTPClient {
 	 */
 	private void initSSLContext() throws IOException {
 		if (context == null) {
-			context = SSLContextUtils.createSSLContext(protocol, getKeyManager(), getTrustManager());
+			context = SSLContexts.createSSLContext(protocol, getKeyManager(), getTrustManager());
 		}
 	}
 
@@ -176,7 +176,7 @@ public class SMTPSClient extends SMTPClient {
 		socket.setUseClientMode(true);
 
 		if (tlsEndpointChecking) {
-			SSLSocketUtils.enableEndpointNameVerification(socket);
+			SSLSockets.enableEndpointNameVerification(socket);
 		}
 		if (protocols != null) {
 			socket.setEnabledProtocols(protocols);
@@ -211,7 +211,7 @@ public class SMTPSClient extends SMTPClient {
 	 * Set a {@link KeyManager} to use.
 	 * 
 	 * @param newKeyManager The KeyManager implementation to set.
-	 * @see panda.net.util.KeyManagerUtils
+	 * @see panda.net.ssl.KeyManagers
 	 */
 	public void setKeyManager(KeyManager newKeyManager) {
 		keyManager = newKeyManager;
@@ -296,7 +296,7 @@ public class SMTPSClient extends SMTPClient {
 	 * Override the default {@link TrustManager} to use.
 	 * 
 	 * @param newTrustManager The TrustManager implementation to set.
-	 * @see panda.net.util.TrustManagerUtils
+	 * @see panda.net.ssl.TrustManagers
 	 */
 	public void setTrustManager(TrustManager newTrustManager) {
 		trustManager = newTrustManager;

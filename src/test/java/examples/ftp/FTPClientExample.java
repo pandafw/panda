@@ -21,7 +21,7 @@ import panda.net.ftp.FTPReply;
 import panda.net.ftp.FTPSClient;
 import panda.net.io.CopyStreamEvent;
 import panda.net.io.CopyStreamListener;
-import panda.net.util.TrustManagerUtils;
+import panda.net.ssl.TrustManagers;
 
 /**
  * This is an example program demonstrating how to use the FTPClient class. This program connects to
@@ -260,10 +260,10 @@ public final class FTPClientExample {
 			}
 			ftp = ftps;
 			if ("all".equals(trustmgr)) {
-				ftps.setTrustManager(TrustManagerUtils.getAcceptAllTrustManager());
+				ftps.setTrustManager(TrustManagers.getAcceptAllTrustManager());
 			}
 			else if ("valid".equals(trustmgr)) {
-				ftps.setTrustManager(TrustManagerUtils.getValidateServerCertificateTrustManager());
+				ftps.setTrustManager(TrustManagers.getValidateServerCertificateTrustManager());
 			}
 			else if ("none".equals(trustmgr)) {
 				ftps.setTrustManager(null);

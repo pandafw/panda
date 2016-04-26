@@ -1,4 +1,4 @@
-package panda.net.util;
+package panda.net.ssl;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -9,9 +9,9 @@ import javax.net.ssl.TrustManager;
 /**
  * General utilities for SSLContext.
  */
-public class SSLContextUtils {
+public class SSLContexts {
 
-	private SSLContextUtils() {
+	private SSLContexts() {
 		// Not instantiable
 	}
 

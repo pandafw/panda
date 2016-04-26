@@ -2,7 +2,6 @@ package panda.net.http;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -10,8 +9,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 import panda.lang.Exceptions;
-import panda.net.http.ssl.ValidCertTrustManage;
-import panda.net.http.ssl.ValidHostnameVerifier;
+import panda.net.ssl.HostnameVerifiers;
+import panda.net.ssl.SSLContexts;
+import panda.net.ssl.TrustManagers;
 
 /**
  * panda.log use this class, so do not use log
@@ -22,10 +22,9 @@ public class Https {
 			if (conn instanceof HttpsURLConnection) {
 				HttpsURLConnection sconn = (HttpsURLConnection)conn;
 
-				SSLContext sslcontext = SSLContext.getInstance("SSL");
-				sslcontext.init(null, ValidCertTrustManage.SSL_CERT_TRUSTS, new SecureRandom());
+				SSLContext sslcontext = SSLContexts.createSSLContext("SSL", null, TrustManagers.getAcceptAllTrustManager());
 				sconn.setSSLSocketFactory(sslcontext.getSocketFactory());
-				sconn.setHostnameVerifier(ValidHostnameVerifier.INSTANCE);
+				sconn.setHostnameVerifier(HostnameVerifiers.trustHostnameVerifier());
 			}
 		}
 		catch (Exception e) {

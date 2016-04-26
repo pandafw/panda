@@ -17,9 +17,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import panda.lang.codec.binary.Base64;
-import panda.net.util.SSLContextUtils;
-import panda.net.util.SSLSocketUtils;
-import panda.net.util.TrustManagerUtils;
+import panda.net.ssl.SSLContexts;
+import panda.net.ssl.SSLSockets;
+import panda.net.ssl.TrustManagers;
 
 /**
  * FTP over SSL processing. If desired, the JVM property -Djavax.net.debug=all can be used to see
@@ -92,9 +92,9 @@ public class FTPSClient extends FTPClient {
 
 	/**
 	 * The FTPS {@link TrustManager} implementation, default validate only
-	 * {@link TrustManagerUtils#getValidateServerCertificateTrustManager()}.
+	 * {@link TrustManagers#getValidateServerCertificateTrustManager()}.
 	 */
-	private TrustManager trustManager = TrustManagerUtils.getValidateServerCertificateTrustManager();
+	private TrustManager trustManager = TrustManagers.getValidateServerCertificateTrustManager();
 
 	/** The {@link KeyManager}, default null (i.e. use system default). */
 	private KeyManager keyManager = null;
@@ -135,7 +135,7 @@ public class FTPSClient extends FTPClient {
 	/**
 	 * Constructor for FTPSClient allowing specification of protocol and security mode. If
 	 * isImplicit is true, the port is set to {@link #DEFAULT_FTPS_PORT} i.e. 990. The default
-	 * TrustManager is set from {@link TrustManagerUtils#getValidateServerCertificateTrustManager()}
+	 * TrustManager is set from {@link TrustManagers#getValidateServerCertificateTrustManager()}
 	 * 
 	 * @param protocol the protocol
 	 * @param isImplicit The security mode(Implicit/Explicit).
@@ -151,7 +151,7 @@ public class FTPSClient extends FTPClient {
 
 	/**
 	 * Constructor for FTPSClient, using {@link #DEFAULT_PROTOCOL} - i.e. TLS The default
-	 * TrustManager is set from {@link TrustManagerUtils#getValidateServerCertificateTrustManager()}
+	 * TrustManager is set from {@link TrustManagers#getValidateServerCertificateTrustManager()}
 	 * 
 	 * @param isImplicit The security mode(Implicit/Explicit).
 	 * @param context A pre-configured SSL Context
@@ -235,7 +235,7 @@ public class FTPSClient extends FTPClient {
 	 */
 	private void initSslContext() throws IOException {
 		if (context == null) {
-			context = SSLContextUtils.createSSLContext(protocol, getKeyManager(), getTrustManager());
+			context = SSLContexts.createSSLContext(protocol, getKeyManager(), getTrustManager());
 		}
 	}
 
@@ -259,7 +259,7 @@ public class FTPSClient extends FTPClient {
 		// client mode
 		if (isClientMode) {
 			if (tlsEndpointChecking) {
-				SSLSocketUtils.enableEndpointNameVerification(socket);
+				SSLSockets.enableEndpointNameVerification(socket);
 			}
 		}
 		else { // server mode
@@ -300,7 +300,7 @@ public class FTPSClient extends FTPClient {
 	 * Set a {@link KeyManager} to use
 	 * 
 	 * @param keyManager The KeyManager implementation to set.
-	 * @see panda.net.util.KeyManagerUtils
+	 * @see panda.net.ssl.KeyManagers
 	 */
 	public void setKeyManager(KeyManager keyManager) {
 		this.keyManager = keyManager;
@@ -637,7 +637,7 @@ public class FTPSClient extends FTPClient {
 	 * TrustManager from the JVM will be used.
 	 * 
 	 * @param trustManager The TrustManager implementation to set, may be {@code null}
-	 * @see panda.net.util.TrustManagerUtils
+	 * @see panda.net.ssl.TrustManagers
 	 */
 	public void setTrustManager(TrustManager trustManager) {
 		this.trustManager = trustManager;

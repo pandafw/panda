@@ -6,6 +6,7 @@ import java.io.Writer;
 import panda.lang.Randoms;
 import panda.net.MXLookup;
 import panda.net.PrintCommandListener;
+import panda.net.ssl.TrustManagers;
 
 public class SMTPClientTest {
 	public static void main(String[] args) throws Exception {
@@ -40,11 +41,13 @@ public class SMTPClientTest {
 
 			// you say ehlo and you specify the host you are connecting from, could be anything
 			client.ehlo("127.0.0.1");
+
 			// if your host accepts STARTTLS, we're good everything will be encrypted, otherwise
 			// we're done here
-//			if (!client.execTLS()) {
-//				System.out.println("STARTTLS was not accepted " + client.getReply() + client.getReplyString());
-//			}
+			client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
+			if (!client.execTLS()) {
+				System.out.println("STARTTLS was not accepted " + client.getReply() + client.getReplyString());
+			}
 			
 			//client.auth(AuthenticatingSMTPClient.AUTH_METHOD.LOGIN, login, password);
 			//checkReply(client);

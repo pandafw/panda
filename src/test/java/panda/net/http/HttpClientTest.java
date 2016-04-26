@@ -13,8 +13,6 @@ import org.junit.Test;
 import panda.Panda;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
-import panda.net.http.HttpClient;
-import panda.net.http.HttpResponse;
 
 public class HttpClientTest {
 
@@ -80,6 +78,19 @@ public class HttpClientTest {
 	@Test
 	public void testGetHttps() throws Exception {
 		HttpResponse response = HttpClient.get("https://github.com");
+		assertTrue(response.getStatusCode() == 200);
+		assertTrue(response.getContentText().indexOf("github.com") >= 0);
+	}
+
+	@Test
+	public void testGetHttpsTrust() throws Exception {
+		HttpRequest hr = HttpRequest.get("https://github.com");
+		hr.getHeader().setDefaultAgentPC();
+		
+		HttpClient hc = new HttpClient(hr);
+		hc.setValidateSslCert(false);
+		HttpResponse response = hc.send();
+
 		assertTrue(response.getStatusCode() == 200);
 		assertTrue(response.getContentText().indexOf("github.com") >= 0);
 	}

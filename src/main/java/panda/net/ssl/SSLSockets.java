@@ -1,4 +1,4 @@
-package panda.net.util;
+package panda.net.ssl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,8 +8,8 @@ import javax.net.ssl.SSLSocket;
 /**
  * General utilities for SSLSocket.
  */
-public class SSLSocketUtils {
-	private SSLSocketUtils() {
+public class SSLSockets {
+	private SSLSockets() {
 		// Not instantiable
 	}
 

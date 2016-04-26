@@ -15,8 +15,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import panda.net.io.CRLFLineReader;
-import panda.net.util.SSLContextUtils;
-import panda.net.util.SSLSocketUtils;
+import panda.net.ssl.SSLContexts;
+import panda.net.ssl.SSLSockets;
 
 /**
  * The IMAPSClient class provides SSL/TLS connection encryption to IMAPClient. Copied from
@@ -157,7 +157,7 @@ public class IMAPSClient extends IMAPClient {
 	 */
 	private void initSSLContext() throws IOException {
 		if (context == null) {
-			context = SSLContextUtils.createSSLContext(protocol, getKeyManager(), getTrustManager());
+			context = SSLContexts.createSSLContext(protocol, getKeyManager(), getTrustManager());
 		}
 	}
 
@@ -178,7 +178,7 @@ public class IMAPSClient extends IMAPClient {
 		socket.setUseClientMode(true);
 
 		if (tlsEndpointChecking) {
-			SSLSocketUtils.enableEndpointNameVerification(socket);
+			SSLSockets.enableEndpointNameVerification(socket);
 		}
 
 		if (protocols != null) {
@@ -214,7 +214,7 @@ public class IMAPSClient extends IMAPClient {
 	 * Set a {@link KeyManager} to use.
 	 * 
 	 * @param newKeyManager The KeyManager implementation to set.
-	 * @see panda.net.util.KeyManagerUtils
+	 * @see panda.net.ssl.KeyManagers
 	 */
 	public void setKeyManager(KeyManager newKeyManager) {
 		keyManager = newKeyManager;
@@ -300,7 +300,7 @@ public class IMAPSClient extends IMAPClient {
 	 * Override the default {@link TrustManager} to use.
 	 * 
 	 * @param newTrustManager The TrustManager implementation to set.
-	 * @see panda.net.util.TrustManagerUtils
+	 * @see panda.net.ssl.TrustManagers
 	 */
 	public void setTrustManager(TrustManager newTrustManager) {
 		trustManager = newTrustManager;

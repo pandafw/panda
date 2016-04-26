@@ -15,8 +15,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import panda.net.io.CRLFLineReader;
-import panda.net.util.SSLContextUtils;
-import panda.net.util.SSLSocketUtils;
+import panda.net.ssl.SSLContexts;
+import panda.net.ssl.SSLSockets;
 
 /**
  * POP3 over SSL processing. Copied from FTPSClient.java and modified to suit POP3. If implicit mode
@@ -168,7 +168,7 @@ public class POP3SClient extends POP3Client {
 	 */
 	private void initSSLContext() throws IOException {
 		if (context == null) {
-			context = SSLContextUtils.createSSLContext(protocol, getKeyManager(), getTrustManager());
+			context = SSLContexts.createSSLContext(protocol, getKeyManager(), getTrustManager());
 		}
 	}
 
@@ -189,7 +189,7 @@ public class POP3SClient extends POP3Client {
 		socket.setUseClientMode(true);
 
 		if (tlsEndpointChecking) {
-			SSLSocketUtils.enableEndpointNameVerification(socket);
+			SSLSockets.enableEndpointNameVerification(socket);
 		}
 
 		if (protocols != null) {
@@ -225,7 +225,7 @@ public class POP3SClient extends POP3Client {
 	 * Set a {@link KeyManager} to use.
 	 * 
 	 * @param newKeyManager The KeyManager implementation to set.
-	 * @see panda.net.util.KeyManagerUtils
+	 * @see panda.net.ssl.KeyManagers
 	 */
 	public void setKeyManager(KeyManager newKeyManager) {
 		keyManager = newKeyManager;
@@ -311,7 +311,7 @@ public class POP3SClient extends POP3Client {
 	 * Override the default {@link TrustManager} to use.
 	 * 
 	 * @param newTrustManager The TrustManager implementation to set.
-	 * @see panda.net.util.TrustManagerUtils
+	 * @see panda.net.ssl.TrustManagers
 	 */
 	public void setTrustManager(TrustManager newTrustManager) {
 		trustManager = newTrustManager;

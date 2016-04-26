@@ -1,4 +1,4 @@
-package panda.net.util;
+package panda.net.ssl;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -11,7 +11,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * TrustManager utilities for generating TrustManagers.
  */
-public final class TrustManagerUtils {
+public final class TrustManagers {
 	private static final X509Certificate[] EMPTY_X509CERTIFICATE_ARRAY = new X509Certificate[] {};
 
 	private static class TrustManager implements X509TrustManager {
@@ -25,12 +25,12 @@ public final class TrustManagerUtils {
 		/**
 		 * Never generates a CertificateException.
 		 */
-		// @Override
+		@Override
 		public void checkClientTrusted(X509Certificate[] certificates, String authType) {
 			return;
 		}
 
-		// @Override
+		@Override
 		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
 			if (checkServerValidity) {
 				for (X509Certificate certificate : certificates) {
@@ -42,7 +42,7 @@ public final class TrustManagerUtils {
 		/**
 		 * @return an empty array of certificates
 		 */
-		// @Override
+		@Override
 		public X509Certificate[] getAcceptedIssuers() {
 			return EMPTY_X509CERTIFICATE_ARRAY;
 		}

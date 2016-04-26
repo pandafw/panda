@@ -1,4 +1,4 @@
-package panda.net.util;
+package panda.net.ssl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,11 +45,11 @@ import panda.net.io.Util;
  * cl.connect(...);
  * </pre>
  */
-public final class KeyManagerUtils {
+public final class KeyManagers {
 
 	private static final String DEFAULT_STORE_TYPE = KeyStore.getDefaultType();
 
-	private KeyManagerUtils() {
+	private KeyManagers() {
 		// Not instantiable
 	}
 
