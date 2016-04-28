@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -30,6 +29,7 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.Mimes;
 import panda.net.URLHelper;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
@@ -732,15 +732,15 @@ public class HttpServlets {
 	 * @return encoded file name
 	 * @throws UnsupportedEncodingException  if an error occurs
 	 */
-	public static String EncodeFileName(HttpServletRequest request, String filename) throws UnsupportedEncodingException {
-		final String enc = Charsets.UTF_8;
+	public static String EncodeFileName(HttpServletRequest request, String charset, String filename) throws UnsupportedEncodingException {
+		final String enc = Strings.isEmpty(charset) ? Charsets.UTF_8 : charset;
 		if (request == null) {
 			return URLEncoder.encode(filename, enc);
 		}
 		
 		UserAgent ua = getUserAgent(request);
 		if (ua.isChrome() || ua.isFirefox()) {
-			return MimeUtility.encodeWord(filename, enc, "B");
+			return Mimes.encodeWord(filename, enc, "B");
 		}
 		else if (ua.isMsie()) {
 			return URLEncoder.encode(filename, enc);
@@ -749,7 +749,7 @@ public class HttpServlets {
 			return filename;
 		}
 		else {
-			return MimeUtility.encodeWord(filename, enc, "B");
+			return Mimes.encodeWord(filename, enc, "B");
 		}
 	}
 

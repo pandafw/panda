@@ -263,7 +263,7 @@ public class HttpServletSupport {
 		
 		boolean noFileCache = true;
 		if (Strings.isNotEmpty(fileName)) {
-			String fn = HttpServlets.EncodeFileName(request, fileName);
+			String fn = HttpServlets.EncodeFileName(request, charset, fileName);
 			response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
 					(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; filename=\"" + fn + "\"");
 			
