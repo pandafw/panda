@@ -18,10 +18,7 @@
 		<!-- RUN -->
 		<dependency org="com.amazonaws" name="aws-java-sdk" rev="1.5.5" conf="run->master,sources" />
 		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="run->master,sources" />
-		<dependency org="javax.activation" name="activation" rev="1.1.1" conf="run->master,sources" />
-		<dependency org="javax.mail" name="mail" rev="1.4.7" conf="run->master,sources" />
 		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
-		<dependency org="org.apache.commons" name="commons-email" rev="1.2" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
 
 		<!-- JDBC -->

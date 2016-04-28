@@ -6404,7 +6404,20 @@ public class Strings {
 		}
 		final int sz = cs.length();
 		for (int i = 0; i < sz; i++) {
-			if (Chars.isAsciiPrintable(cs.charAt(i)) == false) {
+			if (!Chars.isAsciiPrintable(cs.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean isAscii(final CharSequence cs) {
+		if (cs == null) {
+			return false;
+		}
+		final int sz = cs.length();
+		for (int i = 0; i < sz; i++) {
+			if (!Chars.isAscii(cs.charAt(i))) {
 				return false;
 			}
 		}

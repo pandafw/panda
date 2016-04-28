@@ -315,9 +315,7 @@ public abstract class SocketClient {
 	 * Make various checks on the socket to test if it is available for use. Note that the only sure
 	 * test is to use it, but these checks may help in some cases.
 	 * 
-	 * @see <a href="https://issues.apache.org/jira/browse/NET-350">NET-350</a>
 	 * @return {@code true} if the socket appears to be available for use
-	 * @since 3.0
 	 */
 	public boolean isAvailable() {
 		if (isConnected()) {
@@ -424,7 +422,6 @@ public abstract class SocketClient {
 	 * 
 	 * @param size The size of the buffer in bytes.
 	 * @throws SocketException never thrown, but subclasses might want to do so
-	 * @since 2.0
 	 */
 	public void setSendBufferSize(int size) throws SocketException {
 		sendBufferSize = size;
@@ -434,7 +431,6 @@ public abstract class SocketClient {
 	 * Get the current sendBuffer size
 	 * 
 	 * @return the size, or -1 if not initialised
-	 * @since 3.0
 	 */
 	protected int getSendBufferSize() {
 		return sendBufferSize;
@@ -446,7 +442,6 @@ public abstract class SocketClient {
 	 * 
 	 * @param size The size of the buffer in bytes.
 	 * @throws SocketException never (but subclasses may wish to do so)
-	 * @since 2.0
 	 */
 	public void setReceiveBufferSize(int size) throws SocketException {
 		receiveBufferSize = size;
@@ -456,7 +451,6 @@ public abstract class SocketClient {
 	 * Get the current receivedBuffer size
 	 * 
 	 * @return the size, or -1 if not initialised
-	 * @since 3.0
 	 */
 	protected int getReceiveBufferSize() {
 		return receiveBufferSize;
@@ -507,7 +501,6 @@ public abstract class SocketClient {
 	 * @param keepAlive If true, keepAlive is turned on
 	 * @throws SocketException if there is a problem with the socket
 	 * @throws NullPointerException if the socket is not currently open
-	 * @since 2.2
 	 */
 	public void setKeepAlive(boolean keepAlive) throws SocketException {
 		_socket_.setKeepAlive(keepAlive);
@@ -520,7 +513,6 @@ public abstract class SocketClient {
 	 * @return True if SO_KEEPALIVE is enabled.
 	 * @throws SocketException if there is a problem with the socket
 	 * @throws NullPointerException if the socket is not currently open
-	 * @since 2.2
 	 */
 	public boolean getKeepAlive() throws SocketException {
 		return _socket_.getKeepAlive();
@@ -643,7 +635,6 @@ public abstract class SocketClient {
 	 * <p>
 	 * 
 	 * @param factory The new ServerSocketFactory the SocketClient should use.
-	 * @since 2.0
 	 */
 	public void setServerSocketFactory(ServerSocketFactory factory) {
 		if (factory == null) {
@@ -659,7 +650,6 @@ public abstract class SocketClient {
 	 * object's connect() method.
 	 * 
 	 * @param connectTimeout The connection timeout to use (in ms)
-	 * @since 2.0
 	 */
 	public void setConnectTimeout(int connectTimeout) {
 		this.connectTimeout = connectTimeout;
@@ -669,7 +659,6 @@ public abstract class SocketClient {
 	 * Get the underlying socket connection timeout.
 	 * 
 	 * @return timeout (in ms)
-	 * @since 2.0
 	 */
 	public int getConnectTimeout() {
 		return connectTimeout;
@@ -679,7 +668,6 @@ public abstract class SocketClient {
 	 * Get the underlying {@link ServerSocketFactory}
 	 * 
 	 * @return The server socket factory
-	 * @since 2.2
 	 */
 	public ServerSocketFactory getServerSocketFactory() {
 		return _serverSocketFactory_;
@@ -689,7 +677,6 @@ public abstract class SocketClient {
 	 * Adds a ProtocolCommandListener.
 	 * 
 	 * @param listener The ProtocolCommandListener to add.
-	 * @since 3.0
 	 */
 	public void addProtocolCommandListener(ProtocolCommandListener listener) {
 		getCommandSupport().addProtocolCommandListener(listener);
@@ -699,7 +686,6 @@ public abstract class SocketClient {
 	 * Removes a ProtocolCommandListener.
 	 * 
 	 * @param listener The ProtocolCommandListener to remove.
-	 * @since 3.0
 	 */
 	public void removeProtocolCommandListener(ProtocolCommandListener listener) {
 		getCommandSupport().removeProtocolCommandListener(listener);
@@ -710,7 +696,6 @@ public abstract class SocketClient {
 	 * 
 	 * @param replyCode the code extracted from the reply
 	 * @param reply the full reply text
-	 * @since 3.0
 	 */
 	protected void fireReplyReceived(int replyCode, String reply) {
 		if (getCommandSupport().getListenerCount() > 0) {
@@ -723,7 +708,6 @@ public abstract class SocketClient {
 	 * 
 	 * @param command the command name
 	 * @param message the complete message, including command name
-	 * @since 3.0
 	 */
 	protected void fireCommandSent(String command, String message) {
 		if (getCommandSupport().getListenerCount() > 0) {
@@ -743,7 +727,6 @@ public abstract class SocketClient {
 	 * compatibilty.
 	 * 
 	 * @return the CommandSupport instance, may be {@code null}
-	 * @since 3.0
 	 */
 	protected ProtocolCommandSupport getCommandSupport() {
 		return __commandSupport;
@@ -754,7 +737,6 @@ public abstract class SocketClient {
 	 * established after the call to this method.
 	 * 
 	 * @param proxy the new proxy for connections.
-	 * @since 3.2
 	 */
 	public void setProxy(Proxy proxy) {
 		setSocketFactory(new DefaultSocketFactory(proxy));
@@ -774,7 +756,6 @@ public abstract class SocketClient {
 	 * Gets the charset name.
 	 * 
 	 * @return the charset.
-	 * @since 3.3 TODO Will be deprecated once the code requires Java 1.6 as a mininmum
 	 */
 	public String getCharsetName() {
 		return charset.name();
@@ -784,7 +765,6 @@ public abstract class SocketClient {
 	 * Gets the charset.
 	 * 
 	 * @return the charset.
-	 * @since 3.3
 	 */
 	public Charset getCharset() {
 		return charset;
@@ -794,7 +774,6 @@ public abstract class SocketClient {
 	 * Sets the charset.
 	 * 
 	 * @param charset the charset.
-	 * @since 3.3
 	 */
 	public void setCharset(Charset charset) {
 		this.charset = charset;

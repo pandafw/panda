@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import panda.net.MalformedServerReplyException;
 import panda.net.ProtocolCommandSupport;
@@ -353,8 +355,8 @@ public class SMTP extends SocketClient {
 	 * 
 	 * @return The lines of text from the last SMTP response as an array.
 	 ***/
-	public String[] getReplyStrings() {
-		return _replyLines.toArray(new String[_replyLines.size()]);
+	public List<String> getReplyStrings() {
+		return Collections.unmodifiableList(_replyLines);
 	}
 
 	/***

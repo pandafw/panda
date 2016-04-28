@@ -12,15 +12,19 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
 import panda.lang.Collections;
+import panda.lang.Strings;
 import panda.lang.collection.ExpireMap;
 import panda.lang.collection.LRUMap;
 import panda.lang.time.DateTimes;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * A utility class for mx records lookup.
- * @author yf.frank.wang@gmail.com
  */
 public class MXLookup {
+	private static final Log log = Logs.getLog(MXLookup.class);
+	
 	/**
 	 * default expire time: 1h
 	 */
@@ -66,6 +70,10 @@ public class MXLookup {
 			return hosts;
 		}
 		
+		if (log.isDebugEnabled()) {
+			log.debug("MX Lookup for " + hostname);
+		}
+
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
 
@@ -83,9 +91,9 @@ public class MXLookup {
 			}
 		}
 
-		hosts = new ArrayList<String>();
+		hosts = new ArrayList<String>(attr.size());
 		for (int i = 0; i < attr.size(); i++) {
-			String[] ss = ((String)attr.get(i)).split(" ");
+			String[] ss = Strings.split((String)attr.get(i), ' ');
 			if (ss.length == 1) {
 				hosts.add(ss[0]);
 			}

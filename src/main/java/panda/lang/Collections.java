@@ -1322,6 +1322,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified collection.
 	 */
 	public static <T> Collection<T> unmodifiableCollection(Collection<? extends T> c) {
+		if (c == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableCollection(c);
 	}
 
@@ -1337,6 +1340,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified set.
 	 */
 	public static <T> Set<T> unmodifiableSet(Set<? extends T> s) {
+		if (s == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableSet(s);
 	}
 
@@ -1354,6 +1360,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified sorted set.
 	 */
 	public static <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> s) {
+		if (s == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableSortedSet(s);
 	}
 
@@ -1370,6 +1379,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified list.
 	 */
 	public static <T> List<T> unmodifiableList(List<? extends T> list) {
+		if (list == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableList(list);
 	}
 
@@ -1385,6 +1397,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified map.
 	 */
 	public static <K, V> Map<K, V> unmodifiableMap(Map<? extends K, ? extends V> m) {
+		if (m == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableMap(m);
 	}
 
@@ -1402,6 +1417,9 @@ public abstract class Collections {
 	 * @return an unmodifiable view of the specified sorted map.
 	 */
 	public static <K, V> SortedMap<K, V> unmodifiableSortedMap(SortedMap<K, ? extends V> m) {
+		if (m == null) {
+			return null;
+		}
 		return java.util.Collections.unmodifiableSortedMap(m);
 	}
 
@@ -1436,6 +1454,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified collection.
 	 */
 	public static <T> Collection<T> synchronizedCollection(Collection<T> c) {
+		if (c == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedCollection(c);
 	}
 
@@ -1465,6 +1486,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified set.
 	 */
 	public static <T> Set<T> synchronizedSet(Set<T> s) {
+		if (s == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedSet(s);
 	}
 
@@ -1507,6 +1531,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified sorted set.
 	 */
 	public static <T> SortedSet<T> synchronizedSortedSet(SortedSet<T> s) {
+		if (s == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedSortedSet(s);
 	}
 
@@ -1536,6 +1563,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified list.
 	 */
 	public static <T> List<T> synchronizedList(List<T> list) {
+		if (list == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedList(list);
 	}
 
@@ -1567,6 +1597,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified map.
 	 */
 	public static <K, V> Map<K, V> synchronizedMap(Map<K, V> m) {
+		if (m == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedMap(m);
 	}
 
@@ -1614,6 +1647,9 @@ public abstract class Collections {
 	 * @return a synchronized view of the specified sorted map.
 	 */
 	public static <K, V> SortedMap<K, V> synchronizedSortedMap(SortedMap<K, V> m) {
+		if (m == null) {
+			return null;
+		}
 		return java.util.Collections.synchronizedSortedMap(m);
 	}
 

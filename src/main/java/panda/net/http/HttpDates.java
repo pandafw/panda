@@ -6,14 +6,24 @@ import java.util.Locale;
 
 import panda.lang.TimeZones;
 import panda.lang.time.DateTimes;
-import panda.net.InetDates;
+import panda.lang.time.FastDateFormat;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers. This
  * class handles dates as defined by RFC 2616 section 3.3.1 as well as some other common
  * non-standard formats.
  */
-public class HttpDates extends InetDates {
+public class HttpDates {
+	/**
+	 * Date format pattern used to parse date headers in RFC 1123 format.
+	 */
+	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+	/**
+	 * Date format used to format date headers in RFC 1123 format.
+	 */
+	public static final FastDateFormat FDF_RFC1123 = FastDateFormat.getInstance(PATTERN_RFC1123, TimeZones.GMT, Locale.US);
+
 	/**
 	 * Date format pattern used to parse HTTP date headers in RFC 1036 format.
 	 */
@@ -25,6 +35,28 @@ public class HttpDates extends InetDates {
 	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
 
 	private static final String[] DEFAULT_PATTERNS = new String[] { PATTERN_RFC1036, PATTERN_RFC1123, PATTERN_ASCTIME };
+	
+	/**
+	 * Formats the given date according to the RFC 1123 pattern.
+	 * 
+	 * @param date The date to format.
+	 * @return An RFC 1123 formatted date string.
+	 * @see #PATTERN_RFC1123
+	 */
+	public static String format(Date date) {
+		return FDF_RFC1123.format(date);
+	}
+
+	/**
+	 * Formats the given date according to the RFC 1123 pattern.
+	 * 
+	 * @param date The date to format.
+	 * @return An RFC 1123 formatted date string.
+	 * @see #PATTERN_RFC1123
+	 */
+	public static String format(long date) {
+		return FDF_RFC1123.format(date);
+	}
 
 	/**
 	 * Parses a date value. The formats used for parsing the date value are retrieved from the

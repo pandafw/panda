@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import panda.lang.Charsets;
+import panda.lang.Strings;
 import panda.lang.codec.DecoderException;
 import panda.lang.codec.EncoderException;
 import panda.lang.codec.binary.Base64;
@@ -202,6 +203,18 @@ public final class Mimes {
 		return b >= 0177 || (b < 040 && b != '\r' && b != '\n' && b != '\t');
 	}
 
+	public static String detectEncoding(String string) {
+		int ascii = checkAscii(string);
+		if (ascii == ALL_ASCII) {
+			return "";
+		}
+
+		if (ascii != MOSTLY_NONASCII) {
+			return "Quoted-Printable";
+		}
+		return "Base64";
+	}
+	
 	//------------------------------------------------------------
 	/**
 	 * Decode a string of text obtained from a mail header into its proper form. The text generally
@@ -498,6 +511,26 @@ public final class Mimes {
 	 * <p>
 	 * The given Unicode string is examined for non US-ASCII characters. If the string contains only
 	 * US-ASCII characters, it is returned as-is. If the string contains non US-ASCII characters, it
+	 * is first character-encoded using the platform's default charset, then transfer-encoded using
+	 * either the B or Q encoding. The resulting bytes are then returned as a Unicode string
+	 * containing only ASCII characters.
+	 * <p>
+	 * This method is meant to be used when creating RFC 822 "phrases". The InternetAddress class,
+	 * for example, uses this to encode it's 'phrase' component.
+	 * 
+	 * @param word Unicode string
+	 * @return Array of Unicode strings containing only US-ASCII characters.
+	 * @exception UnsupportedEncodingException if the encoding fails
+	 */
+	public static String encodeWord(String word, String charset) throws UnsupportedEncodingException {
+		return encodeWord(word, charset, null);
+	}
+
+	/**
+	 * Encode a RFC 822 "word" token into mail-safe form as per RFC 2047.
+	 * <p>
+	 * The given Unicode string is examined for non US-ASCII characters. If the string contains only
+	 * US-ASCII characters, it is returned as-is. If the string contains non US-ASCII characters, it
 	 * is first character-encoded using the specified charset, then transfer-encoded using either
 	 * the B or Q encoding. The resulting bytes are then returned as a Unicode string containing
 	 * only ASCII characters.
@@ -521,14 +554,29 @@ public final class Mimes {
 	 * the "Q" encoding defined in RFC 2047 has more restrictions when encoding "word" tokens.
 	 * (Sigh)
 	 */
-	private static String encodeWord(String string, String charset, String encoding, boolean encodingWord)
-			throws UnsupportedEncodingException {
+	private static String encodeWord(String string, String charset, String encoding, boolean encodingWord) throws UnsupportedEncodingException {
+		// If no transfer-encoding is specified, figure one out.
+		if (Strings.isEmpty(encoding)) {
+			encoding = detectEncoding(string);
+			if (Strings.isEmpty(encoding)) {
+				// the 'string' does not need encoding, just return it.
+				return string;
+			}
+		}
 
-		// If 'string' contains only US-ASCII characters, just
-		// return it.
-		int ascii = checkAscii(string);
-		if (ascii == ALL_ASCII)
+		encoding = encoding.substring(0, 1);
+
+		boolean b64;
+		if (encoding.equalsIgnoreCase("B")) {
+			b64 = true;
+		}
+		else if (encoding.equalsIgnoreCase("Q")) {
+			b64 = false;
+		}
+		else {
+			// the 'string' does not need encoding, just return it.
 			return string;
+		}
 
 		// Else, apply the specified charset conversion.
 		String jcharset;
@@ -540,23 +588,8 @@ public final class Mimes {
 			// MIME charset -> java charset
 			jcharset = javaCharset(charset);
 		}
+
 		
-		// If no transfer-encoding is specified, figure one out.
-		if (encoding == null) {
-			if (ascii != MOSTLY_NONASCII)
-				encoding = "Q";
-			else
-				encoding = "B";
-		}
-
-		boolean b64;
-		if (encoding.equalsIgnoreCase("B"))
-			b64 = true;
-		else if (encoding.equalsIgnoreCase("Q"))
-			b64 = false;
-		else
-			throw new UnsupportedEncodingException("Unknown transfer encoding: " + encoding);
-
 		StringBuilder outb = new StringBuilder(); // the output buffer
 		doEncode(string, b64, jcharset,
 		// As per RFC 2047, size of an encoded string should not
