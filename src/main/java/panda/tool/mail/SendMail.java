@@ -3,11 +3,11 @@ package panda.tool.mail;
 import java.io.File;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.SimpleEmail;
 
 import panda.io.Files;
 import panda.lang.Charsets;
+import panda.net.mail.Email;
+import panda.net.mail.MailClient;
 import panda.util.tool.AbstractCommandTool;
 
 /**
@@ -193,20 +193,16 @@ public class SendMail {
 	 * @throws Exception if an error occurs
 	 */
 	public void execute() throws Exception {
-		Email email = new SimpleEmail();
+		Email email = new Email();
 		
-//		email.setHostName("smtp.gmail.com");
-//		email.setSmtpPort(465);
-//		email.setSSL(true);
-//		email.setAuthentication("", "");
-		email.setDebug(true);
 		email.setCharset(Charsets.UTF_8);
 		email.setFrom(from);
 		email.addTo(to);
 		email.setSubject(subject);
-		email.setMsg(message);
+		email.setTextMsg(message);
 
-//		email.send();
-		panda.net.SendMail.send(email);
+
+		MailClient client = new MailClient();
+		client.send(email);
 	}
 }
