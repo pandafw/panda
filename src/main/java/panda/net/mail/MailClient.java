@@ -13,25 +13,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.naming.NamingException;
-
-import com.google.appengine.repackaged.com.google.common.base.Charsets;
-
 import panda.io.FileNames;
 import panda.io.MimeType;
 import panda.io.Streams;
 import panda.io.stream.MultiWriter;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
+import panda.lang.Charsets;
+import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 import panda.lang.codec.binary.Base64OutputStream;
+import panda.lang.reflect.Methods;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.net.MXLookup;
 import panda.net.Mimes;
 import panda.net.PrintCommandListener;
 import panda.net.smtp.AuthenticatingSMTPClient;
@@ -186,12 +184,14 @@ public class MailClient {
 	 * @param email email
 	 * @throws EmailException if an error occurs
 	 */
+	@SuppressWarnings("unchecked")
 	private void send(String domain, Collection<EmailAddress> rcpts, Email email) throws EmailException {
 		List<String> hosts;
 		try {
-			hosts = MXLookup.lookup(domain);
+			Class mxlookup = Classes.getClass("panda.net.MXLookup");
+			hosts = (List<String>)Methods.invokeStaticMethod(mxlookup, "lookup", domain);
 		}
-		catch (NamingException e) {
+		catch (Throwable e) {
 			throw new EmailException(e);
 		}
 		
