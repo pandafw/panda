@@ -71,7 +71,7 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			if (Strings.isEmpty(contentType)) {
 				//skip
 			}
-			if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
+			else if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
 				ejector = ac.getIoc().get(MultiPartParamEjector.class);
 			}
 			else if (contentType.startsWith(MimeType.APP_STREAM)) {
