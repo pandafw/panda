@@ -52,15 +52,15 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list request.cookies as c>
+<#list request.cookies as _c>
 			<tr>
-				<td>${c.name?default("")?html}</td>
-				<td>${c.value?default("")?html}</td>
-				<td>${c.domain?default("")?html}</td>
-				<td>${c.path?default("")?html}</td>
-				<td>${c.maxAge?default("")?html}</td>
-				<td>${c.secure?string?html}</td>
-				<td>${c.version?default("")?html}</td>
+				<td>${_c.name?default("")?html}</td>
+				<td>${_c.value?default("")?html}</td>
+				<td>${_c.domain?default("")?html}</td>
+				<td>${_c.path?default("")?html}</td>
+				<td>${_c.maxAge?default("")?html}</td>
+				<td>${_c.secure?string?html}</td>
+				<td>${_c.version?default("")?html}</td>
 			</tr>
 </#list>
 		</tbody>

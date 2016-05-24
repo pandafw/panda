@@ -36,10 +36,10 @@
 			<table class="table">
 				<#list r.resultSet as row>
 					<#if row_index == 0>
-						<thead><tr><#list row as c><th>${(c!)?html}</th></#list></tr></thead>
+						<thead><tr><#list row as _h><th>${assist.escapePhtml(_h!"")}</th></#list></tr></thead>
 					<#else>
 						<#if row_index == 1><tbody></#if>
-						<tr><#list row as c><td>${(c!)?html}</td></#list></tr>
+						<tr><#list row as _v><td>${assist.escapePhtml(_v!"")}</td></#list></tr>
 						<#if !row_has_next></tbody></#if>
 					</#if>
 				</#list>

@@ -38,13 +38,13 @@
 	</thead>
 	<tbody>
 <#if result?has_content>
-	<#list result as c>
+	<#list result as _c>
 		<tr>
-			<td class="mc-td-no">${c_index + 1}.</td>
-			<td class="mc-td-name"><@p.text name=('task-' + c)/></td>
-			<td class="mc-td-key">${c}</td>
-			<td class="mc-td-time"><@p.property value=(app[c + '.load.date']!) format="datetime"/></td>
-			<td class="mc-td-reload"><@p.a icon="icon-reload" action="/task/${c}/load/start" onclick="return mc_reload(this);" label="#(button-reload)"/></td>
+			<td class="mc-td-no">${_c_index + 1}.</td>
+			<td class="mc-td-name"><@p.text name=('task-' + _c)/></td>
+			<td class="mc-td-key">${_c}</td>
+			<td class="mc-td-time"><@p.property value=(app[_c + '.load.date']!) format="datetime"/></td>
+			<td class="mc-td-reload"><@p.a icon="icon-reload" action="/task/${_c}/load/start" onclick="return mc_reload(this);" label="#(button-reload)"/></td>
 		</tr>
 		<tr style="display:none">
 			<td>&nbsp;</td>

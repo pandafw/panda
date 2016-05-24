@@ -49,11 +49,11 @@
 					<#if row_index == 0>
 					<#elseif row_index < 3>
 						<#if row_index == 1><thead></#if>
-						<tr><th>##</th><#list row as c><th>${assist.escapePhtml(c!"")}</th></#list></tr>
+						<tr><th>##</th><#list row as _h><th>${assist.escapePhtml(_h!"")}</th></#list></tr>
 						<#if row_index == 2></thead></#if>
 					<#else>
 						<#if row_index == 3><tbody></#if>
-						<tr><th>${(row_index - 2)?c}</th><#list row as c><td>${assist.escapePhtml(c!"")}</td></#list></tr>
+						<tr><th>${(row_index - 2)?c}</th><#list row as _v><td>${assist.escapePhtml(_v!"")}</td></#list></tr>
 						<#if !row_has_next></tbody></#if>
 					</#if>
 				</#list>
