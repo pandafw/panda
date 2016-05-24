@@ -41,20 +41,28 @@
 		<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
 		<thead>
 			<tr><th>##</th>
+<#assign headz = head?size/>
 <#if err>
 				<th><@p.text name="head-error"/></th>
+<#else>
+	<#assign headz = headz - 1/>
 </#if>
-<#list head as c>
-				<th>${assist.escapePhtml(c!"")}</th>
+<#list head as _h>
+				<th>${assist.escapePhtml(_h!"")}</th>
 </#list>
 			</tr>
 		</thead>
 		<tbody>
 <#list data as row>
 			<tr><td>${(row_index + 1)?c}</td>
-	<#list row as c>
-				<td>${assist.escapePhtml(c!"")}</td>
+	<#list row as _v>
+				<td>${assist.escapePhtml(_v!"")}</td>
 	</#list>
+	<#if row?size <= headz>
+		<#list (row?size)..headz as x>
+				<td></td>
+		</#list>
+	</#if>
 			</tr>
 </#list>
 		</tbody>
