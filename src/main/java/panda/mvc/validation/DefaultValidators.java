@@ -160,7 +160,7 @@ public class DefaultValidators implements Validators {
 				jo = JsonObject.fromJson(v.params());
 			}
 			catch (JsonException e) {
-				throw new IllegalArgumentException("Failed to set params of Validator " + fv.getClass() + ", params: " + v.params());
+				throw new IllegalArgumentException("Failed to set params of Validator " + fv.getClass() + ", params: " + v.params(), e);
 			}
 			
 			// translate ${..} expression
