@@ -223,12 +223,12 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 
 	/**
 	 * hasDataPermission
-	 * @param path path
+	 * @param action action
 	 * @return true if action has access permit
 	 */
 	@Override
-	public boolean hasDataPermission(Object data, String path) {
-		return true;
+	public boolean hasDataPermission(Object data, String action) {
+		return hasPermission(action);
 	}
 
 	//-------------------------------------------------------------
