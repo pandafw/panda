@@ -5,7 +5,7 @@
 			<#assign _a = _ua?substring(1)/>
 			<#include "edit-actions-item.ftl"/>
 		</#if></#list>
-			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
-			${s}@form_buttons buttons=_buttons_/>
 	</#if>
 </#if>
+			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
+			${s}@form_buttons buttons=_buttons_/>
