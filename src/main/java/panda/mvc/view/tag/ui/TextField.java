@@ -43,6 +43,21 @@ public class TextField extends InputUIBean {
 	protected String ricon;
 	protected String onrclick;
 
+	@Override
+	protected void evaluateParams() {
+		super.evaluateParams();
+
+		if (key != null) {
+			if (placeholder == null) {
+				// lookup the placeholder from a TextProvider (default value is the key)
+				placeholder = context.getText().getText("p." + key + "-pip", null);
+				if (placeholder == null) {
+					placeholder = context.getText().getText(key + "-pip", null);
+				}
+			}
+		}
+	}
+
 	/**
 	 * @return the maxlength
 	 */

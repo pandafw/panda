@@ -25,6 +25,7 @@ public abstract class InputUIBean extends UIBean {
 	
 	protected Object value;
 
+	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
 
