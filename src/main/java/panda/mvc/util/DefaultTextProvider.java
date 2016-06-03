@@ -328,7 +328,7 @@ public class DefaultTextProvider implements TextProvider {
 		}
 
 		// nothing still? Aright, search the package hierarchy now
-		for (Class cls = clazz.getClass(); (cls != null) && !cls.equals(Object.class); cls = cls.getSuperclass()) {
+		for (Class cls = clazz; (cls != null) && !cls.equals(Object.class); cls = cls.getSuperclass()) {
 			String pkg = cls.getName();
 			while (true) {
 				int dot = pkg.lastIndexOf('.');
