@@ -65,7 +65,7 @@ public class MysqlSqlExpert extends SqlExpert {
 			if (ef.isAutoIncrement()) {
 				sb.append(" AUTO_INCREMENT");
 			}
-			else {
+/*			else {
 				if (DaoTypes.TIMESTAMP.equals(ef.getJdbcType())) {
 					if (ef.hasDefaultValue()) {
 						sb.append(' ').append(ef.getDefaultValue());
@@ -82,6 +82,9 @@ public class MysqlSqlExpert extends SqlExpert {
 				else if (ef.hasDefaultValue()) {
 					sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 				}
+			}*/
+			else if (ef.hasDefaultValue()) {
+				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
 			}
 			
 			if (Strings.isNotEmpty(ef.getComment())) {
