@@ -56,11 +56,11 @@ public class HttpClient {
 		return send(url, HttpMethod.POST, null, body, 0);
 	}
 	
-	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> params) throws IOException {
+	public static HttpResponse send(String url, String method, Map<String, Object> params) throws IOException {
 		return send(url, method, params, null, 0);
 	}
 	
-	public static HttpResponse send(String url, HttpMethod method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
+	public static HttpResponse send(String url, String method, Map<String, Object> params, byte[] body, int timeout) throws IOException {
 		HttpRequest hr = HttpRequest.create(url, method, params);
 		hr.getHeader().setDefaultAgentPC();
 		hr.setBody(body);

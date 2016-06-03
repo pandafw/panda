@@ -143,7 +143,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 
 			conn.setConnectTimeout(connTimeout);
 			conn.setReadTimeout(readTimeout);
-			conn.setRequestMethod(HttpMethod.POST.toString());
+			conn.setRequestMethod(HttpMethod.POST);
 			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.APP_JAVASCRIPT);
 			conn.setDoInput(true);
 			conn.setDoOutput(true);

@@ -47,20 +47,20 @@ public class HttpRequest {
 		return new HttpRequest().setUrl(url).setMethod(HttpMethod.POST).setHeader(header);
 	}
 
-	public static HttpRequest create(String url, HttpMethod method) {
+	public static HttpRequest create(String url, String method) {
 		return new HttpRequest().setUrl(url).setMethod(method);
 	}
 
-	public static HttpRequest create(String url, HttpMethod method, Map<String, Object> params) {
+	public static HttpRequest create(String url, String method, Map<String, Object> params) {
 		return new HttpRequest().setUrl(url).setMethod(method).setParams(params);
 	}
 
-	public static HttpRequest create(String url, HttpMethod method, Map<String, Object> params, HttpHeader header) {
+	public static HttpRequest create(String url, String method, Map<String, Object> params, HttpHeader header) {
 		return new HttpRequest().setUrl(url).setMethod(method).setParams(params).setHeader(header);
 	}
 
 	private String url;
-	private HttpMethod method;
+	private String method;
 	private HttpHeader header;
 	private Map<String, Object> params;
 	private InputStream body;
@@ -70,20 +70,20 @@ public class HttpRequest {
 	public HttpRequest() {
 	}
 
-	public HttpMethod getMethod() {
+	public String getMethod() {
 		return method;
 	}
 
 	public boolean isGet() {
-		return HttpMethod.GET == method;
+		return HttpMethod.GET.equalsIgnoreCase(method);
 	}
 
 	public boolean isPost() {
-		return HttpMethod.POST == method;
+		return HttpMethod.POST.equalsIgnoreCase(method);
 	}
 
-	public HttpRequest setMethod(HttpMethod method) {
-		this.method = method;
+	public HttpRequest setMethod(String method) {
+		this.method = Strings.upperCase(method);
 		return this;
 	}
 
@@ -278,11 +278,11 @@ public class HttpRequest {
 	}
 
 	public boolean isPostForm() {
-		return (HttpMethod.POST.equals(method) && body == null && Collections.isNotEmpty(params));
+		return (HttpMethod.POST.equalsIgnoreCase(method) && body == null && Collections.isNotEmpty(params));
 	}
 
 	public boolean isPostFile() {
-		if (HttpMethod.POST.equals(method) && body == null && Collections.isNotEmpty(params)) {
+		if (HttpMethod.POST.equalsIgnoreCase(method) && body == null && Collections.isNotEmpty(params)) {
 			for (Entry<String, ?> en : params.entrySet()) {
 				if (isFile(en.getValue())) {
 					return true;
@@ -372,7 +372,7 @@ public class HttpRequest {
 	 * @throws IOException
 	 */
 	public void toString(Appendable writer, int bodyLimit) throws IOException {
-		writer.append(String.valueOf(method)).append(' ').append(getURL().toString());
+		writer.append(method).append(' ').append(getURL().toString());
 		if (header != null) {
 			writer.append(Streams.LINE_SEPARATOR);
 			header.toString(writer);
