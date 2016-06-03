@@ -18,7 +18,6 @@ import panda.mvc.ActionContext;
 import panda.mvc.ActionInfo;
 import panda.mvc.MvcConfig;
 import panda.mvc.UrlMapping;
-import panda.net.http.HttpMethod;
 import panda.servlet.HttpServlets;
 
 public abstract class AbstractUrlMapping implements UrlMapping {
@@ -57,10 +56,10 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 				map.put(path, invoker);
 			}
 			if (ai.hasHttpMethod()) {
-				for (HttpMethod hm : ai.getHttpMethods()) {
+				for (String hm : ai.getHttpMethods()) {
 					if (invoker.hasChain(hm)) {
 						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped for %s.%s().", 
-							ai.getActionType().getName(), ai.getMethod().getName(), path, hm.toString(), 
+							ai.getActionType().getName(), ai.getMethod().getName(), path, hm, 
 							invoker.getChain(hm).getInfo().getActionType().getName(), invoker.getChain(hm).getInfo().getMethod().getName()));
 					}
 					invoker.addChain(hm, chain);

@@ -24,7 +24,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 
 	private void initreq(String path, String json) {
 		request.setRequestURI(path);
-		request.setMethod(HttpMethod.POST.toString());
+		request.setMethod(HttpMethod.POST);
 		request.setContent(Strings.getBytes(json, Charsets.UTF_8));
 		request.setContentType(MimeType.APP_JSON);
 	}

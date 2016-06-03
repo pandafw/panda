@@ -81,19 +81,19 @@ public class MvcConsole {
 	}
 	
 	public MockHttpServletResponse doGet(String uri) throws Exception {
-		return doRequest(uri, HttpMethod.GET.toString(), null);
+		return doRequest(uri, HttpMethod.GET, null);
 	}
 
 	public MockHttpServletResponse doGet(String uri, Map<String, Object> params) throws Exception {
-		return doRequest(uri, HttpMethod.GET.toString(), params);
+		return doRequest(uri, HttpMethod.GET, params);
 	}
 
 	public MockHttpServletResponse doPost(String uri) throws Exception {
-		return doRequest(uri, HttpMethod.POST.toString(), null);
+		return doRequest(uri, HttpMethod.POST, null);
 	}
 
 	public MockHttpServletResponse doPost(String uri, Map<String, Object> params) throws Exception {
-		return doRequest(uri, HttpMethod.GET.toString(), params);
+		return doRequest(uri, HttpMethod.GET, params);
 	}
 	
 	public MockHttpServletResponse doRequest(String uri) throws Exception {
@@ -101,7 +101,7 @@ public class MvcConsole {
 	}
 
 	public MockHttpServletResponse doRequest(String uri, Map<String, Object> params) throws Exception {
-		return doRequest(uri, HttpMethod.GET.toString(), params);
+		return doRequest(uri, HttpMethod.GET, params);
 	}
 	
 	public MockHttpServletRequest initRequest(String uri, String method, Map<String, Object> params) {

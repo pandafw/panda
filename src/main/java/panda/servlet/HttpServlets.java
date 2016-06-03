@@ -101,7 +101,7 @@ public class HttpServlets {
 
 	public static boolean isFormUrlEncoded(HttpServletRequest request) {
 		String ct = request.getContentType();
-		if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod()) 
+		if (HttpMethod.POST.equalsIgnoreCase(request.getMethod()) 
 				&& ct != null
 				&& ct.startsWith(MimeType.X_WWW_FORM_URLECODED)) {
 			return true;
@@ -338,7 +338,7 @@ public class HttpServlets {
 				dumpRequestCookies(request, writer);
 			}
 
-			if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod())
+			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
 					&& !request.getParameterMap().isEmpty()) {
 				writer.append(Streams.LINE_SEPARATOR);
 				dumpRequestParameters(request, writer);
@@ -366,7 +366,7 @@ public class HttpServlets {
 			writer.append(Streams.LINE_SEPARATOR);
 			dumpRequestHeaders(request, writer);
 
-			if (HttpMethod.POST.toString().equalsIgnoreCase(request.getMethod())
+			if (HttpMethod.POST.equalsIgnoreCase(request.getMethod())
 					&& !request.getParameterMap().isEmpty()) {
 				writer.append(Streams.LINE_SEPARATOR);
 				dumpRequestParameters(request, writer);

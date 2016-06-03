@@ -9,7 +9,6 @@ import java.util.Set;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.lang.reflect.Methods;
-import panda.net.http.HttpMethod;
 
 public class ActionInfo {
 
@@ -23,14 +22,14 @@ public class ActionInfo {
 	private String errorView;
 	private String fatalView;
 
-	private List<HttpMethod> httpMethods;
+	private List<String> httpMethods;
 
 	private Class<?> actionType;
 
 	private Method method;
 
 	public ActionInfo() {
-		httpMethods = new ArrayList<HttpMethod>(4);
+		httpMethods = new ArrayList<String>(4);
 	}
 
 	public ActionInfo mergeWith(ActionInfo parent) {
@@ -92,7 +91,7 @@ public class ActionInfo {
 	 * 
 	 * @return 特殊的 HTTP 方法列表
 	 */
-	public List<HttpMethod> getHttpMethods() {
+	public List<String> getHttpMethods() {
 		return httpMethods;
 	}
 

@@ -6,8 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.net.http.HttpMethod;
-
 /**
  * 声明了一组URL。
  * <p>
@@ -77,5 +75,5 @@ public @interface At {
 
 	String[] value() default {};
 
-	HttpMethod[] method() default {};
+	String[] method() default {};
 }

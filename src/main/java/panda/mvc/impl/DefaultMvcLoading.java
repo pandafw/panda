@@ -43,7 +43,6 @@ import panda.mvc.annotation.view.Fatal;
 import panda.mvc.annotation.view.Ok;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.ioc.provider.DefaultIocProvider;
-import panda.net.http.HttpMethod;
 
 public class DefaultMvcLoading implements Loading {
 
@@ -377,7 +376,7 @@ public class DefaultMvcLoading implements Loading {
 			}
 
 			if (Arrays.isNotEmpty(at.method())) {
-				for (HttpMethod m : at.method()) {
+				for (String m : at.method()) {
 					ai.getHttpMethods().add(m);
 				}
 			}

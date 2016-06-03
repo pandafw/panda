@@ -41,7 +41,7 @@ public class File extends InputUIBean {
 			}
 
 			String method = form.getMethod();
-			if (!HttpMethod.POST.toString().equalsIgnoreCase(method)) {
+			if (!HttpMethod.POST.equalsIgnoreCase(method)) {
 				// uh oh, this isn't good! Let's warn the developer
 				LOG.warn("A file upload UI tag (r.file) being used without a form set to method 'POST'. This is probably an error!");
 			}

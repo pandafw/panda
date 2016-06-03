@@ -8,34 +8,31 @@ import javax.servlet.http.HttpServletRequest;
 
 import panda.io.Streams;
 import panda.lang.Collections;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionContext;
-import panda.net.http.HttpMethod;
 
-/**
- * 根据 HTTP 请求的方法 (GET|POST|PUT|DELETE) 来调用响应的动作链
- */
 public class ActionInvoker {
 	private static final Log log = Logs.getLog(ActionInvoker.class);
 
 	private ActionChain defaultChain;
 
-	private Map<HttpMethod, ActionChain> chainMap;
+	private Map<String, ActionChain> chainMap;
 
 	public ActionInvoker() {
 	}
 
 	/**
-	 * 增加 ActionChain
+	 * add a ActionChain
 	 * 
-	 * @param method HTTP 的请求方法 (GET|POST|PUT|DELETE),如果为空，则会抛错
-	 * @param chain 动作链
+	 * @param method HTTP method
+	 * @param chain action chain
 	 */
-	public void addChain(HttpMethod method, ActionChain chain) {
+	public void addChain(String method, ActionChain chain) {
 		if (chainMap == null) {
-			chainMap = new HashMap<HttpMethod, ActionChain>();
+			chainMap = new HashMap<String, ActionChain>();
 		}
 		chainMap.put(method, chain);
 	}
@@ -43,10 +40,10 @@ public class ActionInvoker {
 	/**
 	 * has ActionChain
 	 * 
-	 * @param method HTTP 的请求方法 (GET|POST|PUT|DELETE),如果为空，则会抛错
+	 * @param method HTTP method
 	 * @return true if has the specified method chain
 	 */
-	public boolean hasChain(HttpMethod method) {
+	public boolean hasChain(String method) {
 		if (chainMap == null) {
 			return false;
 		}
@@ -56,10 +53,10 @@ public class ActionInvoker {
 	/**
 	 * get ActionChain
 	 * 
-	 * @param method HTTP 的请求方法 (GET|POST|PUT|DELETE),如果为空，则会抛错
+	 * @param method HTTP method
 	 * @return chain
 	 */
-	public ActionChain getChain(HttpMethod method) {
+	public ActionChain getChain(String method) {
 		if (chainMap == null) {
 			return null;
 		}
@@ -81,10 +78,10 @@ public class ActionInvoker {
 	}
 
 	/**
-	 * 根据动作链上下文对象，调用一个相应的动作链
+	 * invoke action
 	 * 
-	 * @param ac 动作链上下文
-	 * @return true- 成功的找到一个动作链并执行。 false- 没有找到动作链
+	 * @param ac action context
+	 * @return true if a action is found and execute successfully
 	 */
 	public boolean invoke(ActionContext ac) {
 		ActionChain chain = getActionChain(ac);
@@ -100,8 +97,8 @@ public class ActionInvoker {
 
 	public ActionChain getActionChain(ActionContext ac) {
 		HttpServletRequest req = ac.getRequest();
-		HttpMethod hm = HttpMethod.parse(req.getMethod());
-		ActionChain chain = getChain(hm);
+		String method = Strings.upperCase(req.getMethod());
+		ActionChain chain = getChain(method);
 		if (chain != null) {
 			return chain;
 		}
@@ -116,7 +113,7 @@ public class ActionInvoker {
 			sb.append(defaultChain.getInfo());
 		}
 		if (Collections.isNotEmpty(chainMap)) {
-			for (Entry<HttpMethod, ActionChain> en : chainMap.entrySet()) {
+			for (Entry<String, ActionChain> en : chainMap.entrySet()) {
 				if (sb.length() > 0) {
 					sb.append(Streams.LINE_SEPARATOR).append("   - ");
 				}
