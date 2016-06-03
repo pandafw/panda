@@ -146,11 +146,11 @@ public abstract class JapanChars {
 	}
 
 	/**
-	 * isZenkakuHirakana
+	 * isZenkakuHiragana
 	 * @param c char
-	 * @return true if the char is Zenkaku Hirakana
+	 * @return true if the char is Zenkaku Hiragana
 	 */
-	public static boolean isZenkakuHirakana(char c) {
+	public static boolean isZenkakuHiragana(char c) {
 		return c >= '\u3041' && c <= '\u309F';
 	}
 

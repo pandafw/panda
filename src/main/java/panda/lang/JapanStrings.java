@@ -116,17 +116,17 @@ public abstract class JapanStrings {
 	}
 
 	/**
-	 * isZenkakuHirakanaString
+	 * isZenkakuHiraganaString
 	 * @param value string
-	 * @return true if the value is ZenkakuHirakana string
+	 * @return true if the value is ZenkakuHiragana string
 	 */
-	public static boolean isZenkakuHirakana(String value) {
+	public static boolean isZenkakuHiragana(String value) {
 		if (Strings.isEmpty(value)) {
 			return false;
 		}
 
 		for (int i = 0; i < value.length(); i++) {
-			if (!JapanChars.isZenkakuHirakana(value.charAt(i))) {
+			if (!JapanChars.isZenkakuHiragana(value.charAt(i))) {
 				return false;
 			}
 		}
@@ -134,18 +134,18 @@ public abstract class JapanStrings {
 	}
 
 	/**
-	 * isZenkakuHirakanaSpace
+	 * isZenkakuHiraganaSpace
 	 * @param value string
-	 * @return true if the value is Zenkaku Hirakana or SPACE string
+	 * @return true if the value is Zenkaku Hiragana or SPACE string
 	 */
-	public static boolean isZenkakuHirakanaSpace(String value) {
+	public static boolean isZenkakuHiraganaSpace(String value) {
 		if (Strings.isEmpty(value)) {
 			return false;
 		}
 
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
-			if (c != '　' && !JapanChars.isZenkakuHirakana(c)) {
+			if (c != '　' && !JapanChars.isZenkakuHiragana(c)) {
 				return false;
 			}
 		}
