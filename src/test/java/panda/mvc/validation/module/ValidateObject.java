@@ -29,7 +29,7 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.EMAIL, message="'${top.value}' is not a email."))
 	public String email;
 
-	@Validates(@Validate(value=Validators.URL, params="{ regex: '#(regex-url)' }", message="'${top.value}' is not a url."))
+	@Validates(@Validate(value=Validators.URL, message="'${top.value}' is not a url."))
 	public String url;
 
 	@Validates(@Validate(value=Validators.FILENAME, message="'${top.value}' is not a filename."))

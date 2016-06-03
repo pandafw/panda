@@ -148,7 +148,7 @@ validation-requiredfile=ファイルを指定してください。
 validation-requiredimage=画像ファイルを指定してください。
 validation-string-length=${\
 (top.minLength != null && top.maxLength != null) ? \
-(top.minLength == top.maxLength ? (top.minLength + "桁") : (top.minLength + "~" + top.maxLength + "桁以内") : \
+(top.minLength == top.maxLength ? (top.minLength + "桁") : (top.minLength + "~" + top.maxLength + "桁以内")) : \
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))\
 }の文字を入力してください。（入力文字数: ${top.length}）

@@ -214,7 +214,7 @@ validation-requiredfile=Please specified the upload file.
 validation-requiredimage=Please specified the upload image file.
 validation-string-length=The string length (${top.length}) must be ${\
 (top.minLength != null && top.maxLength != null) ? \
-(top.minLength == top.maxLength ? top.minLength : (top.minLength + "~" + top.maxLength) : \
+(top.minLength == top.maxLength ? top.minLength : (top.minLength + "~" + top.maxLength)) : \
 (top.minLength != null ? (">= " + top.minLength) : \
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))\
 } characters.
