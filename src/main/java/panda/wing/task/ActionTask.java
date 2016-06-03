@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import panda.io.Streams;
+import panda.lang.Strings;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
@@ -16,7 +17,7 @@ public class ActionTask implements Runnable {
 	private static Log log = Logs.getLog(ActionTask.class);
 	
 	private String url;
-	private HttpMethod method = HttpMethod.GET;
+	private String method = HttpMethod.GET;
 	private Map<String, String> headers;
 	private Map<String, String> params;
 	private int errorLimit = 3;
@@ -61,15 +62,15 @@ public class ActionTask implements Runnable {
 	/**
 	 * @return the method
 	 */
-	public HttpMethod getMethod() {
+	public String getMethod() {
 		return method;
 	}
 
 	/**
 	 * @param method the method to set
 	 */
-	public void setMethod(HttpMethod method) {
-		this.method = method;
+	public void setMethod(String method) {
+		this.method = Strings.upperCase(method);
 	}
 
 	/**
