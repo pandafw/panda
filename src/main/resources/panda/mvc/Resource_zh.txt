@@ -144,11 +144,12 @@ validation-regex=该项目输入内容不符合正规表达式"${top.regex}"。
 validation-required=请输入该项目内容。
 validation-requiredfile=请指定上传文件。
 validation-requiredimage=请指定上传图像文件。
-validation-string-length=请输入\
-${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength + "个字符以内") : \
-(top.minLength != null ? (top.minLength + "个字符以上") : \
-(top.maxLength != null ? (top.maxLength + "个字符以下") : ""))}\
-的文字。（输入文字字数：${top.length}）
+validation-string-length=请输入${\
+(top.minLength != null && top.maxLength != null) ? \
+(top.minLength == top.maxLength ? (top.minLength + "位字符") : (top.minLength + "~" + top.maxLength + "位字符以内")) : \
+(top.minLength != null ? (top.minLength + "位字符以上") : \
+(top.maxLength != null ? (top.maxLength + "位字符以下") : ""))\
+}的文字。（输入文字字数：${top.length}）
 validation-telnumber=请输入正确的电话号码。（例: 012-3456-7890）
 validation-url=请输入正确的URL。（例: http://www.domain.com）
 validation-zenkakustring=请输入全角文字。

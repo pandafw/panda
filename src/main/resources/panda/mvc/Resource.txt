@@ -212,11 +212,12 @@ validation-regex=The value dos not match the regular expression "${top.regex}".
 validation-required=This field is required.
 validation-requiredfile=Please specified the upload file.
 validation-requiredimage=Please specified the upload image file.
-validation-string-length=The string length (${top.length}) must be \
-${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.maxLength) : \
+validation-string-length=The string length (${top.length}) must be ${\
+(top.minLength != null && top.maxLength != null) ? \
+(top.minLength == top.maxLength ? top.minLength : (top.minLength + "~" + top.maxLength) : \
 (top.minLength != null ? (">= " + top.minLength) : \
-(top.maxLength != null ? ("<= " + top.maxLength) : ""))}\
-.
+(top.maxLength != null ? ("<= " + top.maxLength) : ""))\
+} characters.
 validation-telnumber=Please input a correct telephone number (ex: "12-3456-7890").
 validation-url=Please input a correct URL (ex: "http://www.domain.com").
 validation-zenkakustring=Please input full character.
