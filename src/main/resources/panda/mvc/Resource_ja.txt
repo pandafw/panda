@@ -155,6 +155,7 @@ validation-telnumber=正しい電話番号を入力してください。（例: 
 validation-url=正しいURLを入力してください。（例: http://www.domain.com）
 validation-zenkakustring=全角文字を入力してください。
 validation-zenkakukatakanastring=全角カタカナを入力してください。
+validation-zenkakuhiraganastring=全角ひらかなを入力してください。
 validation-zipcode=正しい郵便番号を入力してください。（例: 123-4567）
 
 

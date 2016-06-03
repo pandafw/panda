@@ -1,8 +1,8 @@
 package panda.mvc.validation.validator;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.AsiaChars;
-import panda.lang.AsiaStrings;
+import panda.lang.JapanChars;
+import panda.lang.JapanStrings;
 import panda.lang.Strings;
 
 @IocBean(singleton=false)
@@ -11,9 +11,10 @@ public class StringValidator extends AbstractStringValidator {
 	public static final char ANY = '*';
 	public static final char ALPHA_NUMBER = 'A';
 	public static final char HANKAKU = 'H';
-	public static final char HANKAKU_KATAKANA = 'h';
+	public static final char HANKAKU_KATAKANA = 'k';
 	public static final char ZENKAKU = 'Z';
-	public static final char ZENKAKU_KATAKANA = 'z';
+	public static final char ZENKAKU_KATAKANA = 'K';
+	public static final char ZENKAKU_HIRAGANA = 'G';
 	
 	private char type = ANY;
 
@@ -106,7 +107,7 @@ public class StringValidator extends AbstractStringValidator {
 			int zlen = 0;
 			for (int i = 0; i < length; i++) {
 				char c = value.charAt(i);
-				if (AsiaChars.isZenkakuChar(c)) {
+				if (JapanChars.isZenkaku(c)) {
 					zlen += zenSize;
 				}
 				else {
@@ -130,13 +131,15 @@ public class StringValidator extends AbstractStringValidator {
 		case ALPHA_NUMBER:
 			return Strings.isAlphanumeric(value);
 		case HANKAKU: 
-			return AsiaStrings.isHankakuString(value);
+			return JapanStrings.isHankaku(value);
 		case HANKAKU_KATAKANA:
-			return AsiaStrings.isHankakuKatakanaString(value);
+			return JapanStrings.isHankakuKatakanaSpace(value);
 		case ZENKAKU:
-			return AsiaStrings.isZenkakuString(value);
+			return JapanStrings.isZenkaku(value);
 		case  ZENKAKU_KATAKANA:
-			return AsiaStrings.isZenkakuKatakanaString(value);
+			return JapanStrings.isZenkakuKatakanaSpace(value);
+		case  ZENKAKU_HIRAGANA:
+			return JapanStrings.isZenkakuHiraganaSpace(value);
 		}
 		
 		return true;

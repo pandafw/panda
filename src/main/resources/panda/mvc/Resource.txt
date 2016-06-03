@@ -186,8 +186,8 @@ validation-file=${exists ? ("The file size (" + top.fieSize + " must be " + \
  (top.maxLength != null ? ("<= " + top.maxFileSize) : ""))))\
  : "Please select a file"}.
 validation-futuredate=The future date is not allowed.
-validation-hankakustring=Please input half character.
-validation-hankakukatakanastring=Please input half kana character.
+validation-hankakustring=Please input half character string.
+validation-hankakukatakanastring=Please input half katakana character string.
 validation-image=${top.image ? ("The image size " + top.width + "x" + top.height + " must be " + \
 ((top.minWidth != null && top.maxWidth != null) ? ("W:(" + top.minWidth + "px ~ " + top.maxWidth + "px)") : \
  (top.minWidth != null ? ("W:(>=" + top.minWidth + "px)") : \
@@ -219,8 +219,9 @@ ${(top.minLength != null && top.maxLength != null) ? (top.minLength + "~" + top.
 .
 validation-telnumber=Please input a correct telephone number (ex: "12-3456-7890").
 validation-url=Please input a correct URL (ex: "http://www.domain.com").
-validation-zenkakukatakanastring=Please input full katakana character.
 validation-zenkakustring=Please input full character.
+validation-zenkakukatakanastring=Please input full katakana character.
+validation-zenkakuhiraganastring=Please input full hiragana character.
 validation-zipcode=Please input a corrent zipcode (ex: "123-4567").
 
 

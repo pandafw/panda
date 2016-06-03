@@ -114,8 +114,8 @@ validation-file=${exists ? ("请指定" + \
 "的文件。（文件大小：" + top.fileSize + "）") \
  : "请选择文件。"}
 validation-futuredate=不允许输入未来的日期。
-validation-hankakukatakanastring=请输入半角片假名。
 validation-hankakustring=请输入半角文字。
+validation-hankakukatakanastring=请输入半角片假名。
 validation-image=${top.image ? ("请指定" + \
 ((top.minWidth != null && top.maxWidth != null) ? ("宽" + top.minWidth + "px ~ " + top.maxWidth + "px以内") : \
  (top.minWidth != null ? ("宽" + top.minWidth + "px以上") : \
@@ -153,6 +153,7 @@ validation-telnumber=请输入正确的电话号码。（例: 012-3456-7890）
 validation-url=请输入正确的URL。（例: http://www.domain.com）
 validation-zenkakustring=请输入全角文字。
 validation-zenkakukatakanastring=请输入全角片假名。
+validation-zenkakuhiraganastring=请输入全角平假名。
 validation-zipcode=请输入正确的邮政编码。（例: 123-4567）
 
 
