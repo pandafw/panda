@@ -654,8 +654,10 @@ public abstract class AbstractCodeGenerator {
 		vtmap.put("long", "Validators.NUMBER");
 		vtmap.put("number", "Validators.NUMBER");
 
+		vtmap.put("string", "Validators.STRING");
 		vtmap.put("stringlength", "Validators.STRING");
 		vtmap.put("stringrequired", "Validators.STRING");
+		vtmap.put("stringtype", "Validators.STRING");
 
 		vtmap.put("decimal", "Validators.DECIMAL");
 
@@ -705,7 +707,9 @@ public abstract class AbstractCodeGenerator {
 		vmmap.put("cast-URL", "Validators.MSGID_CAST_URL");
 
 		vmmap.put("required", "Validators.MSGID_REQUIRED");
+		vmmap.put("stringrequired", "Validators.MSGID_REQUIRED");
 		vmmap.put("stringlength", "Validators.MSGID_STRING_LENTH");
+		vmmap.put("stringtype", "Validators.MSGID_STRING_TYPE");
 		vmmap.put("file", "Validators.MSGID_FILE");
 		vmmap.put("image", "Validators.MSGID_IMAGE");
 		vmmap.put("constant", "Validators.MSGID_CONSTANT");
