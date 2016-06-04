@@ -45,10 +45,10 @@ public abstract class EntityHelper {
 	/**
 	 * copy identity value from source data to destination data
 	 * @param entity entity
-	 * @param des destination data
 	 * @param src source data
+	 * @param des destination data
 	 */
-	public static <T> void copyIdentityValue(Entity<T> entity, T des, T src) {
+	public static <T> void copyIdentityValue(Entity<T> entity, T src, T des) {
 		if (src == null || des == null) {
 			return;
 		}
