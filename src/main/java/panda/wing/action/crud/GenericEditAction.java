@@ -16,6 +16,7 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
+import panda.wing.BusinessRuntimeException;
 import panda.wing.constant.RC;
 import panda.wing.entity.Bean;
 import panda.wing.entity.IUpdate;
@@ -286,7 +287,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertExecute
 	 */
 	protected Object doInsertExecute(T data) {
-		T pd = prepareData(data);
+		final T pd = prepareData(data);
 		if (!checkOnInsert(pd)) {
 			setResultOnExecCheckError();
 			return pd;
@@ -297,13 +298,18 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			getDao().exec(new Runnable() {
 				public void run() {
 					insertData(id);
+					EntityHelper.copyIdentityValue(getEntity(), id, pd);
 				}
 			});
 			afterInsert(pd);
-			EntityHelper.copyIdentityValue(getEntity(), pd, id);
 		}
 		catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			if (e instanceof BusinessRuntimeException) {
+				log.warn(e.getMessage(), e);
+			}
+			else {
+				log.error(e.getMessage(), e);
+			}
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return data;
@@ -377,7 +383,12 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			afterUpdate(pd, sd);
 		}
 		catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			if (e instanceof BusinessRuntimeException) {
+				log.warn(e.getMessage(), e);
+			}
+			else {
+				log.error(e.getMessage(), e);
+			}
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return pd;
@@ -430,7 +441,12 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			afterDelete(sd);
 		}
 		catch (Throwable e) {
-			log.error(e.getMessage(), e);
+			if (e instanceof BusinessRuntimeException) {
+				log.warn(e.getMessage(), e);
+			}
+			else {
+				log.error(e.getMessage(), e);
+			}
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return sd;

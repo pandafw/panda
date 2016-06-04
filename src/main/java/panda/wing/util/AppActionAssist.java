@@ -448,12 +448,14 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * @throws EmailException if an email error occurs
 	 */
 	public void sendMail(Email email) throws EmailException {
+		if (email.getFrom() == null) {
+			email.setFrom(getMailSetting(SC.MAIL_FROM_MAIL, null), getMailSetting(SC.MAIL_FROM_NAME, null));
+		}
+
 		String charset = getMailSetting(SC.MAIL_CHARSET, Charsets.UTF_8);
 		if (Strings.isNotEmpty(charset)) {
 			email.setCharset(charset);
 		}
-
-		email.setFrom(getMailSetting(SC.MAIL_FROM_MAIL, null), getMailSetting(SC.MAIL_FROM_NAME, null));
 
 		MailClient client = new MailClient();
 		String host = getMailSetting(SC.MAIL_SMTP_HOST, null);

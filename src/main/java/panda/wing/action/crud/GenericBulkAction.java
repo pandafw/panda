@@ -14,6 +14,7 @@ import panda.lang.Collections;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.BusinessRuntimeException;
 import panda.wing.constant.RC;
 
 
@@ -106,7 +107,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			});
 		}
 		catch (Exception e) {
-			log.error(e.getMessage(), e);
+			if (e instanceof BusinessRuntimeException) {
+				log.warn(e.getMessage(), e);
+			}
+			else {
+				log.error(e.getMessage(), e);
+			}
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return dataList;
@@ -215,7 +221,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			});
 		}
 		catch (Exception e) {
-			log.error(e.getMessage(), e);
+			if (e instanceof BusinessRuntimeException) {
+				log.warn(e.getMessage(), e);
+			}
+			else {
+				log.error(e.getMessage(), e);
+			}
 			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
 			setScenarioResult();
 			return dataList;
