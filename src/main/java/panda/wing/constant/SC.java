@@ -67,6 +67,11 @@ public interface SC {
 	public static final String MAIL_DEBUG = "mail-debug";
 
 	/**
+	 * MAIL_SMTP_HELO = "mail-smtp-helo";
+	 */
+	public static final String MAIL_SMTP_HELO = "mail-smtp-helo";
+
+	/**
 	 * MAIL_SMTP_HOST = "mail-smtp-host";
 	 */
 	public static final String MAIL_SMTP_HOST = "mail-smtp-host";

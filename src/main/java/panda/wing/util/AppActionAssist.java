@@ -458,6 +458,11 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 		}
 
 		MailClient client = new MailClient();
+		String helo = getMailSetting(SC.MAIL_SMTP_HELO, null);
+		if (Strings.isNotEmpty(helo)) {
+			client.setHelo(helo);
+		}
+		
 		String host = getMailSetting(SC.MAIL_SMTP_HOST, null);
 		if (Strings.isNotEmpty(host)) {
 			client.setHost(host);
