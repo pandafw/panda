@@ -403,13 +403,13 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	 * @param email email
 	 * @param name template name
 	 * @param html html message
-	 * @param context context
+	 * @param model data
 	 */
-	public void sendTemplateMail(Email email, String name, boolean html, Object context) throws EmailException {
+	public void sendTemplateMail(Email email, String name, boolean html, Object model) throws EmailException {
 		String subject = "";
 		String content;
 		try {
-			content = freemarker.execTemplate(name, context);
+			content = freemarker.execTemplate(name, model);
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
