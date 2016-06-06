@@ -65,6 +65,10 @@
 				</filter>
 			</column>
 		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
 		<input name="basicInput" extend="suInput">
 			<field name="id">
 				<editTag name="${tag.viewfield}"/>
@@ -105,7 +109,7 @@
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
 	<action name="template" auth="${action.auth}" path="${action.context}" extend="action.Template" actionClass="${action.package}.template.TemplateBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
-		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="template" extend="action.Template" actionClass="${action.package}.template.TemplateEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">

@@ -37,6 +37,10 @@
 				<filter type="number"/>
 			</column>
 		</list>
+		<list name="basicBulk" extend="basicList">
+			<param name="toolbar" value="${bulk.toolbar}"/>
+			<param name="buttons" value="${bulk.buttons}"/>
+		</list>
 		<input name="basicInput" extend="baseInput">
 			<field name="id">
 				<editTag name="n.viewfield"/>
@@ -73,7 +77,7 @@
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
-		<list name="bdelete" extend="basicList" template="${template.bdelete}" generate="true"/>
+		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">

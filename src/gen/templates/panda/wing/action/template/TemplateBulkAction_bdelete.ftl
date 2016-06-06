@@ -18,6 +18,10 @@
 </#if>
 
 
+	<div class="p-toolbar-wrap"><ul class="p-toolbar">
+<#if a.hasPermission("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
+</li></#if>	</ul><div class="clearfix"></div></div>
+
 	<#include "/action-alert.ftl"/>
 	<br/>
 
@@ -122,10 +126,7 @@
 	<br/>
 	<div class="p-tcenter">
 		<@p.submit icon="icon-bdelete-execute" onclick="return template_bdelete_submit();" label="#(button-bdelete-execute)"/>
-		
-	<#if a.hasPermission("~/list")>
-		<@p.a btn="default" icon="icon-list" action="~/list" label="#(button-list)"/>
-	</#if>
+		<@p.a btn="default" icon="icon-back" href="javascript:window.history.back()" label="#(button-back)"/>
 
 		<script type="text/javascript"><!--
 			function template_bdelete_submit() {
