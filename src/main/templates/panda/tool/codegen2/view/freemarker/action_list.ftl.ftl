@@ -188,6 +188,9 @@ ${s}/#if>
 	<#if actionView?has_content>
 		link={ "action": "${actionView}", "params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> } }
 	</#if>
+	<#if ui.params.fsexpand?has_content>
+		fsexpand="${ui.params.fsexpand}"
+	</#if>
 	<#if ui.params.addon?has_content>
 		addon="${ui.params.addon}"
 	</#if>
