@@ -1,16 +1,11 @@
 <#if ui.params.actions?has_content>
 	<#assign _uas = ui.params.actions?split(' ')/>
 	<#if _uas?has_content>
-			${s}#assign _buttons_ = [] />
-		<#list _uas as _ua>
-			<#if _ua?starts_with('*')>
-				<#assign _a = _ua?substring(1)/>
-			<#else>
-				<#assign _a = _ua/>
-			</#if>
+		<#list _uas as _ua><#if _ua?starts_with('*') || _ua?starts_with('-')>
+			<#assign _a = _ua?substring(1)/>
 			<#include "edit-actions-item.ftl"/>
-		</#list>
-			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
-			${s}@form_buttons buttons=_buttons_/>
+		</#if></#list>
 	</#if>
 </#if>
+			${s}#include "/panda/mvc/view/form-buttons.ftl"/>
+			${s}@form_buttons buttons=_buttons_/>

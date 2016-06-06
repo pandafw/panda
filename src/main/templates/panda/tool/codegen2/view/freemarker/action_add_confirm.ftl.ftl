@@ -5,7 +5,7 @@
 	<@sheader steps=[ ui.name, ui.name + "-confirm" ]/>
 	<@swell step="-confirm"/>
 
-	<#include "edit-star-toolbar.ftl"/>
+	<#include "edit-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 

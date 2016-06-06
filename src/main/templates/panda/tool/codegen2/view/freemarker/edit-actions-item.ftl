@@ -1,10 +1,31 @@
 	<#assign _a2 = gen.stripStartMark(_a)/>
-	<#if _a == '@refresh'>
+	<#if _a == '!back'>
+				${s}#assign _buttons_ = _buttons_ + [{
+					"icon": "icon-back",
+					"onclick": "window.history.back(); return false;",
+					"text": "button-back"
+				}]/>
+	<#elseif _a == '!refresh'>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-refresh",
 					"onclick": "location.reload(true); return false;",
 					"text": "button-refresh"
 				}]/>
+	<#elseif _a == '!reset'>
+				${s}#assign _buttons_ = _buttons_ + [{
+					"type": "reset",
+					"icon": "icon-reset",
+					"text": "button-reset"
+				}]/>
+	<#elseif _a?starts_with('!')>
+		<#assign _as = _a2?split(':')/>
+		<#if _as[0] == '' || (_as[1]!'') == ''>${action.error("Invalid toolbar item [" + _a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
+		<#assign an = _as[0]/>
+			${s}#assign _buttons_ = _buttons_ + [{
+				"icon": "icon-${an}",
+				"onclick": "_as[1]",
+				"text": "button-${an}"
+			}]/>
 	<#elseif _a?starts_with('@')>
 		<#assign _as = _a2?split(':')/>
 		<#if _as[0] == '' || (_as[1]!'') == ''>${action.error("Invalid toolbar item [" + _a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>

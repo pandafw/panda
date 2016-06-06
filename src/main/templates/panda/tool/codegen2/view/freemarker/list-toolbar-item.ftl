@@ -1,6 +1,14 @@
 	<#assign a = gen.stripStartMark(t)/>
-	<#if t == '@refresh'>
+	<#if t == '!back'>
+		<li>${s}@p.a icon="icon-back" href="javascript:window.history.back()" label="#(button-back)"/>
+</li><#rt/>
+	<#elseif t == '!refresh'>
 		<li>${s}@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
+</li><#rt/>
+	<#elseif t?starts_with('!')>
+		<#assign a = a?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid toolbar item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
+		<li>${s}@p.a icon="icon-a[0]" href="javascript:a[1]" label="#(button-a[0])"/>
 </li><#rt/>
 	<#elseif t?starts_with('@')>
 		<#assign a = a?split(':')/>

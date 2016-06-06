@@ -5,7 +5,7 @@
 	<@sheader steps=[ ui.name, ui.name + "-confirm" ]/>
 	<@swell/>
 
-	<#include "list-star-toolbar.ftl"/>
+	<#include "bulk-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 	<br/>
@@ -67,7 +67,7 @@ ${s}/#if>
 	<br/>
 	<div class="p-tcenter">
 		${s}@p.submit icon="icon-${ui.name}-execute" onclick="return ${action.name}_${ui.name}_submit();" label="#(button-${ui.name}-execute)"/>
-		<#include "bulk-star-buttons.ftl"/>
+		<#include "bulk-buttons.ftl"/>
 
 		<script type="text/javascript"><!--
 			function ${action.name}_${ui.name}_submit() {

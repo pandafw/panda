@@ -1,6 +1,12 @@
 	<#assign a = gen.stripStartMark(t)/>
-	<#if t == '@refresh'>
+	<#if t == '!back'>
+		${s}@p.a btn="default" icon="icon-back" href="javascript:window.history.back()" label="#(button-back)"/>
+	<#elseif t == '@refresh'>
 		${s}@p.a btn="default" icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
+	<#elseif t?starts_with('!')>
+		<#assign a = a?split(':')/>
+		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid buttons item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if>
+		${s}@p.a btn="default" icon="icon-${a[0]}" href="javascript:${a[1]}" label="#(button-${a[0]})"/>
 	<#elseif t?starts_with('@')>
 		<#assign a = a?split(':')/>
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid buttons item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if>

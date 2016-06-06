@@ -5,7 +5,7 @@
 	<@sheader steps=[ ui.name, ui.name + "-confirm" ]/>
 	<@swell step="-confirm"/>
 
-	<#include "edit-star-toolbar.ftl"/>
+	<#include "edit-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 
@@ -17,7 +17,7 @@ ${s}#if r??>
 			"action": "~/${ui.name}_execute",
 			"text": "button-${ui.name}-execute"
 		}]/>
-		<#include "edit-star-actions.ftl"/>
+		<#include "edit-actions.ftl"/>
 	${s}/@p.form>
 ${s}#else>
 	<@sback/>

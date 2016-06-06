@@ -1,6 +1,11 @@
 <#if ui.params.toolbar?has_content>
 	<#assign _tb = false/>
-	<#list ui.params.toolbar?split(' ') as t><#if t?starts_with('*')>
+	<#list ui.params.toolbar?split(' ') as _t><#if !(_t?starts_with('-'))>
+		<#if _t?starts_with('*')>
+			<#assign t = _t?substring(1)/>
+		<#else>
+			<#assign t = _t/>
+		</#if>
 	<#if !_tb>
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">

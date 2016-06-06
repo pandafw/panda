@@ -5,7 +5,7 @@
 	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
 	<@swell step="-success"/>
 
-	<#include "list-star-toolbar.ftl"/>
+	<#include "bulk-success-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 	<br/>
@@ -56,7 +56,7 @@ ${s}/#if>
 	
 	<br/>
 	<div class="p-tcenter">
-		<#include "bulk-buttons.ftl"/>
+		<#include "bulk-success-buttons.ftl"/>
 	</div>
 ${s}#else>
 	<@sback/>

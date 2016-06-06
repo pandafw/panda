@@ -5,7 +5,7 @@
 	<@sheader steps=[ ui.name ]/>
 	<@swell/>
 
-	<#include "edit-star-toolbar.ftl"/>
+	<#include "edit-toolbar.ftl"/>
 
 	${s}#include "/action-alert.ftl"/>
 
@@ -41,7 +41,7 @@
 			"text": "button-reset"
 		}]/>
 </#if>
-		<#include "edit-star-actions.ftl"/>
+		<#include "edit-actions.ftl"/>
 	${s}/@p.form>
 
 	<#include "edit-script.ftl"/>

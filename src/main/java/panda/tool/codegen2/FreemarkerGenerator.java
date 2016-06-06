@@ -190,6 +190,9 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 	}
 	
 	public String stripStartMark(String str) {
+		if (str == null) {
+			return "";
+		}
 		for (int i = 0; i < str.length(); i++) {
 			char ch = str.charAt(i);
 			if (ch == ':' || ch == '/' || Character.isLetter(ch)) {

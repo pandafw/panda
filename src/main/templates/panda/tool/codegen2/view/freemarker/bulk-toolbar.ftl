@@ -7,7 +7,7 @@
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 		<#assign _tb = true/>
 	</#if>
-		<#include "edit-toolbar-item.ftl"/>
+		<#include "list-toolbar-item.ftl"/>
 	</#if></#list>
 	<#if _tb>
 	</ul><div class="clearfix"></div></div>
