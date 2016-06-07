@@ -211,28 +211,6 @@ public class AuthHelper {
 	}
 
 	/**
-	 * hasPermission
-	 * @param context action context
-	 * @param action action path
-	 * @return true if action has access permit
-	 */
-	public boolean hasPermission(ActionContext context, String action) {
-		try {
-			Object user = getLoginUser(context);
-			if (user == null) {
-				return false;
-			}
-
-			UserAuthenticator aa = context.getIoc().get(UserAuthenticator.class);
-			int r= aa.authenticate(context, action);
-			return r <= UserAuthenticator.OK || r == UserAuthenticator.UNSECURE;
-		}
-		catch (Exception ex) {
-			return false;
-		}
-	}
-
-	/**
 	 * get user object from cookie
 	 * @param ac action context
 	 * @return user object

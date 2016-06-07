@@ -2,12 +2,12 @@ package panda.wing.action;
 
 import panda.dao.DaoClient;
 import panda.ioc.annotation.IocInject;
+import panda.mvc.util.AccessControler;
 import panda.mvc.util.ActionSupport;
-import panda.mvc.util.PermissionProvider;
 import panda.wing.util.AppActionAssist;
 import panda.wing.util.AppActionConsts;
 
-public class AbstractAction extends ActionSupport implements PermissionProvider {
+public class AbstractAction extends ActionSupport implements AccessControler {
 	/*------------------------------------------------------------
 	 * bean
 	 *------------------------------------------------------------*/
@@ -39,22 +39,23 @@ public class AbstractAction extends ActionSupport implements PermissionProvider 
 	 * PermissionProvider
 	 *------------------------------------------------------------*/
 	/**
-	 * hasPermission
-	 * @param path path
-	 * @return true if action has access permit
+	 * can access
+	 * @param action action
+	 * @return true if action can access
 	 */
 	@Override
-	public boolean hasPermission(String path) {
-		return assist().hasPermission(path);
+	public boolean canAccess(String action) {
+		return assist().canAccess(action);
 	}
 
 	/**
-	 * hasPermission
-	 * @param path path
-	 * @return true if action has access permit
+	 * canAccessData
+	 * @param action action
+	 * @param data data
+	 * @return true if action can access the data
 	 */
 	@Override
-	public boolean hasDataPermission(Object data, String path) {
-		return assist().hasDataPermission(data, path);
+	public boolean canAccessData(String action, Object data) {
+		return assist().canAccessData(action, data);
 	}
 }

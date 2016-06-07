@@ -18,11 +18,11 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.hasPermission("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(button-new)"/>
-</li></#if><#if a.hasPermission("~/list_print")><li><@p.a icon="icon-print" target="_blank" action="~/list_print" includeParams="all" label="#(button-print)"/>
-</li></#if><#if a.hasPermission("~/list_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/list_csv" includeParams="all" label="#(button-csv)"/>
-</li></#if><#if a.hasPermission("~/list_json")><li><@p.a icon="icon-json" target="_blank" action="~/list_json" includeParams="all" label="#(button-json)"/>
-</li></#if><#if a.hasPermission("~/list_xml")><li><@p.a icon="icon-xml" target="_blank" action="~/list_xml" includeParams="all" label="#(button-xml)"/>
+<#if a.canAccess("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(button-new)"/>
+</li></#if><#if a.canAccess("~/list_print")><li><@p.a icon="icon-print" target="_blank" action="~/list_print" includeParams="all" label="#(button-print)"/>
+</li></#if><#if a.canAccess("~/list_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/list_csv" includeParams="all" label="#(button-csv)"/>
+</li></#if><#if a.canAccess("~/list_json")><li><@p.a icon="icon-json" target="_blank" action="~/list_json" includeParams="all" label="#(button-json)"/>
+</li></#if><#if a.canAccess("~/list_xml")><li><@p.a icon="icon-xml" target="_blank" action="~/list_xml" includeParams="all" label="#(button-xml)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -36,11 +36,11 @@
 
 	<#assign _actions_ = [] />
 	<#assign _ash_ = "" />
-	<#if a.hasPermission("~/add")>
+	<#if a.canAccess("~/add")>
 		<@p.url var='_u_' action='~/add'/>
 		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
 	</#if>
-	<#if a.hasPermission("~/copy")>
+	<#if a.canAccess("~/copy")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/copy",
 			"params": { "id": "%{top.id}" },
@@ -49,7 +49,7 @@
 			"tooltip": a.getText("tooltip-copy", "")
 		}] />
 	</#if>
-	<#if a.hasPermission("~/edit")>
+	<#if a.canAccess("~/edit")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/edit",
 			"params": { "id": "%{top.id}" },
@@ -58,7 +58,7 @@
 			"tooltip": a.getText("tooltip-edit", "")
 		}] />
 	</#if>
-	<#if a.hasPermission("~/delete")>
+	<#if a.canAccess("~/delete")>
 		<#assign _actions_ = _actions_ + [{
 			"action": "~/delete",
 			"params": { "id": "%{top.id}" },
@@ -83,7 +83,7 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 
-	<#if action.hasPermission("~/bdelete")>
+	<#if action.canAccess("~/bdelete")>
 		<#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
@@ -163,7 +163,7 @@
 		<#assign _columns_ = _columns_ + _actionc_![]/>
 	</#if>
 	<@p.set var="lvtools">
-		<#if a.hasPermission("~/bdelete")>
+		<#if a.canAccess("~/bdelete")>
 			<@p.b icon="icon-bdelete" onclick="return filepool_list_bdelete();" label="#(button-bdelete)"/>
 		</#if>
 	</@p.set>

@@ -22,7 +22,7 @@ import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
 import panda.mvc.util.ActionAssist;
-import panda.mvc.util.PermissionProvider;
+import panda.mvc.util.AccessControler;
 import panda.mvc.util.ServletUrlBuilder;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.ftl.FreemarkerHelper;
@@ -31,6 +31,7 @@ import panda.net.mail.EmailException;
 import panda.net.mail.MailClient;
 import panda.wing.auth.AuthHelper;
 import panda.wing.auth.IUser;
+import panda.wing.auth.UserAuthenticator;
 import panda.wing.constant.RC;
 import panda.wing.constant.SC;
 import panda.wing.constant.VC;
@@ -40,7 +41,7 @@ import panda.wing.entity.IUpdate;
 
 
 @IocBean(type=ActionAssist.class, scope=Scope.REQUEST)
-public class AppActionAssist extends ActionAssist implements PermissionProvider {
+public class AppActionAssist extends ActionAssist implements AccessControler {
 	@IocInject
 	protected AppSettings settings;
 
@@ -56,6 +57,9 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	@IocInject(required=false)
 	protected AuthHelper authHelper;
 	
+	@IocInject(required=false)
+	protected UserAuthenticator authenticator;
+
 	//--------------------------------------------------------------------------	
 	/**
 	 * hasTemplate
@@ -211,24 +215,29 @@ public class AppActionAssist extends ActionAssist implements PermissionProvider 
 	}
 
 	/**
-	 * hasPermission
+	 * can access
 	 * @param action action
-	 * @return true if action has access permit
+	 * @return true if action can access
 	 */
 	@Override
-	public boolean hasPermission(String action) {
+	public boolean canAccess(String action) {
+		if (authenticator == null) {
+			return true;
+		}
+
 		String uri = ServletUrlBuilder.build(context, action, false);
-		return authHelper.hasPermission(context, uri);
+		return authenticator.hasPermission(context, uri);
 	}
 
 	/**
-	 * hasDataPermission
+	 * canAccessData
 	 * @param action action
-	 * @return true if action has access permit
+	 * @param data data
+	 * @return true if action can access the data
 	 */
 	@Override
-	public boolean hasDataPermission(Object data, String action) {
-		return hasPermission(action);
+	public boolean canAccessData(String action, Object data) {
+		return canAccess(action);
 	}
 
 	//-------------------------------------------------------------

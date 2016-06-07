@@ -76,7 +76,18 @@ public abstract class UserAuthenticator {
 		}
 		return u;
 	}
-	
+
+	/**
+	 * hasPermission
+	 * @param context action context
+	 * @param action action path
+	 * @return true if action has access permit
+	 */
+	public boolean hasPermission(ActionContext context, String action) {
+		int r= authenticate(context, action);
+		return r <= UserAuthenticator.OK || r == UserAuthenticator.UNSECURE;
+	}
+
 	/**
 	 * @return true if user has permit to access the action
 	 */
