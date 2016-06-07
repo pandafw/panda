@@ -170,6 +170,18 @@ public class StringsTrimEmptyTest  {
 
     }
     
+    private String sbRemoveStart(String str) {
+    	StringBuilder sb = new StringBuilder(str);
+    	Strings.removeStart(sb);
+    	return sb.toString();
+    }
+
+    @Test
+    public void testRemoveStart_StringString() {
+        assertEquals("", sbRemoveStart(""));
+        assertEquals("abc  ", sbRemoveStart("  abc  "));
+    }
+    
     @Test
     public void testStripStart_StringString() {
         // null stripStart

@@ -4610,34 +4610,6 @@ public class Strings {
 		return str;
 	}
 
-	public static String removeStart(final String str, final char remove) {
-		if (isEmpty(str)) {
-			return str;
-		}
-		
-		for (int i = 0; i < str.length(); i++) {
-			if (remove != str.charAt(i)) {
-				return str.substring(i);
-			}
-		}
-
-		return str;
-	}
-
-	public static String removeEnd(final String str, final char remove) {
-		if (isEmpty(str)) {
-			return str;
-		}
-		
-		for (int i = str.length() - 1; i >= 0; i--) {
-			if (remove != str.charAt(i)) {
-				return str.substring(0, i + 1);
-			}
-		}
-
-		return str;
-	}
-
 	/**
 	 * <p>
 	 * Removes all occurrences of a substring from within the source string.
@@ -4746,6 +4718,68 @@ public class Strings {
 	public static String removeSymbols(final String str) {
 		return removeChars(str, SYMBOLS);
 	}
+
+	// StringBuilder
+	// -----------------------------------------------------------------------
+	public static void removeStart(final StringBuilder sb) {
+		removeStart(sb, '\0');
+	}
+
+	public static void removeStart(final StringBuilder sb, final char chr) {
+		if (sb == null) {
+			return;
+		}
+		
+		int strLen = sb.length();
+		if (strLen == 0) {
+			return;
+		}
+
+		int start = 0;
+		if (chr == 0) {
+			while (start != strLen && Character.isWhitespace(sb.charAt(start))) {
+				start++;
+			}
+		}
+		else {
+			while (start != strLen && chr == sb.charAt(start)) {
+				start++;
+			}
+		}
+
+		sb.delete(0, start);
+		return;
+	}
+
+	public static void removeEnd(final StringBuilder sb) {
+		removeEnd(sb, '\0');
+	}
+
+	public static void removeEnd(final StringBuilder sb, final char chr) {
+		if (sb == null) {
+			return;
+		}
+		
+		int end = sb.length();
+		if (end == 0) {
+			return;
+		}
+
+		if (chr == 0) {
+			while (end != 0 && Character.isWhitespace(sb.charAt(end - 1))) {
+				end--;
+			}
+		}
+		else {
+			while (end != 0 && chr == sb.charAt(end - 1)) {
+				end--;
+			}
+		}
+		
+		sb.setLength(end);
+		return;
+	}
+
 
 	// Replacing
 	// -----------------------------------------------------------------------
