@@ -29,7 +29,7 @@
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid buttons item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
-	${s}#if a.hasPermission("${ap}")>
+	${s}#if a.canAccess("${ap}")>
 		${s}@p.a btn="default" icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
 	${s}/#if>
 	</#if>

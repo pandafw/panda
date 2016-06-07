@@ -33,7 +33,7 @@
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid toolbar item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
-${s}#if a.hasPermission("${ap}")><#rt/>
+${s}#if a.canAccess("${ap}")><#rt/>
 		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" includeParams="all" label="#(button-${an})"/>
 </li>${s}/#if><#rt/>
 	<#else>
@@ -41,7 +41,7 @@ ${s}#if a.hasPermission("${ap}")><#rt/>
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid toolbar item [" + t + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
-${s}#if a.hasPermission("${ap}")><#rt/>
+${s}#if a.canAccess("${ap}")><#rt/>
 		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
 </li>${s}/#if><#rt/>
 	</#if>

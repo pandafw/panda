@@ -27,12 +27,12 @@
 		<#assign an = aa[0]/>
 		<#assign ap = gen.getActionPath(aa[1])/>
 		<#if a?starts_with('@')>
-	${s}#if a.hasPermission("${ap}")>
+	${s}#if a.canAccess("${ap}")>
 		${s}@p.url var='_u_' action='${ap}'/>
 		${s}#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('label-${an}', '') + '</a>'/>
 	${s}/#if>
 		<#else>
-	${s}#if a.hasPermission("${ap}")>
+	${s}#if a.canAccess("${ap}")>
 		${s}#assign _actions_ = _actions_ + [{
 			"action": "${ap}",
 		<#if a?contains('%') && entity.primaryKeyList?has_content>
@@ -79,7 +79,7 @@
 	${s}#if <#list _ops as _op><#assign a = gen.stripStartMark(_op)?split(':')
 /><#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview tool action name [" + _op + "] of action [" + action.name + "]")}
 </#if><#assign ap = gen.getActionPath(a[1])
-/><#if _op?starts_with('%')><#if _opse><#assign _opse = false/><#else> || </#if>action.hasPermission("${ap}")</#if></#list>>
+/><#if _op?starts_with('%')><#if _opse><#assign _opse = false/><#else> || </#if>action.canAccess("${ap}")</#if></#list>>
 		${s}#assign _columns_ = _columns_ + [{
 			"name": "_check_",
 			"type": "check",
@@ -169,7 +169,7 @@ ${s}/#if>
 		<#if a[0] == '' || (a[1]!'') == ''>${action.error("Invalid listview options [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
-		${s}#if a.hasPermission("${ap}")>
+		${s}#if a.canAccess("${ap}")>
 			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
 		${s}/#if>
 	</#list>

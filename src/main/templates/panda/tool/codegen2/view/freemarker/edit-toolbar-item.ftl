@@ -38,14 +38,14 @@
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
 		<#if t?contains('%')>
-${s}#if r?? && a.hasDataPermission(r, "${ap}")><#rt/>
+${s}#if r?? && a.canAccessData("${ap}", r)><#rt/>
 		<#lt/><li>${s}@p.a icon="icon-${an}" label="#(button-${an})"<#if t?contains('^')> target="_blank"</#if> action="${ap}"><#rt/>
 	<#list entity.primaryKeyList as p>
 ${s}@p.param name="${p.name}" value="%{r.${p.name}}"/><#rt/>
 </#list>${s}/@p.a>
 </li>${s}/#if><#rt/>
 		<#else>
-${s}#if a.hasPermission("${ap}")><#rt/>
+${s}#if a.canAccess("${ap}")><#rt/>
 		<#lt/><li>${s}@p.a icon="icon-${an}"<#if t?contains('^')> target="_blank"</#if> action="${ap}" label="#(button-${an})"/>
 </li>${s}/#if><#rt/>
 		</#if>
