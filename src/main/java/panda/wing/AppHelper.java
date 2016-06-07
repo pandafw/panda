@@ -1,10 +1,21 @@
 package panda.wing;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import panda.dao.Dao;
+import panda.dao.DaoClient;
 import panda.dao.entity.Entity;
+import panda.dao.sql.SqlDaoClient;
+import panda.dao.sql.SqlIterator;
+import panda.dao.sql.Sqls;
+import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.io.Streams;
+import panda.lang.Charsets;
+import panda.lang.ClassLoaders;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.vfs.dao.DaoFileData;
@@ -69,5 +80,28 @@ public abstract class AppHelper {
 			DaoFileData.class,
 			DaoFileItem.class
 			);
+	}
+	
+	public static void execSql(DaoClient dc, String file) throws SQLException {
+		if (dc instanceof SqlDaoClient) {
+			JdbcSqlExecutor se = ((SqlDaoClient)dc).getJdbcSqlExecutor();
+			Connection connection = ((SqlDaoClient)dc).getDataSource().getConnection();
+			se.setConnection(connection);
+			try {
+				connection.setAutoCommit(true);
+				InputStream is = ClassLoaders.getResourceAsStream(file);
+				Reader r = Streams.toReader(is, Charsets.UTF_8);
+				SqlIterator si = new SqlIterator(r);
+				while (si.hasNext()) {
+					String sql = si.next();
+					log.info("EXEC SQL: " + sql);
+					se.execute(sql);
+				}
+				si.close();
+			}
+			finally {
+				Sqls.safeClose(connection);
+			}
+		}
 	}
 }
