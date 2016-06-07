@@ -40,6 +40,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 			writeRequired();
 		}
 
+		writeDescrip();
 		writeAfter();
 
 		if (!isInGroup()) {
@@ -54,6 +55,14 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 		write("<span class=\"p-required\">");
 		write(defs(tag.getRequiredString(), "*"));
 		write("</span>");
+	}
+
+	protected void writeDescrip() throws IOException {
+		if (Strings.isNotEmpty(tag.getDescription())) {
+			write("<span class=\"p-descrip\">");
+			write(tag.getDescription());
+			write("</span>");
+		}
 	}
 
 	protected void renderHeader() throws Exception {

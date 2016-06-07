@@ -23,6 +23,8 @@ public abstract class InputUIBean extends UIBean {
 	protected String requiredPosition;
 	protected String errorPosition;
 	
+	protected String description;
+
 	protected Object value;
 
 	@Override
@@ -47,6 +49,13 @@ public abstract class InputUIBean extends UIBean {
 				label = context.getText().getText("p." + key, null);
 				if (label == null) {
 					label = context.getText().getText(key, key);
+				}
+			}
+			if (description == null) {
+				// lookup the placeholder from a TextProvider (default value is the key)
+				description = context.getText().getText("p." + key + "-dip", null);
+				if (description == null) {
+					description = context.getText().getText(key + "-dip", null);
 				}
 			}
 		}
@@ -287,4 +296,17 @@ public abstract class InputUIBean extends UIBean {
 	}
 	
 	
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

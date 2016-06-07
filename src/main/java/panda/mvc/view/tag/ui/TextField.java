@@ -135,7 +135,6 @@ public class TextField extends InputUIBean {
 		this.placeholder = placeholder;
 	}
 
-	
 	/**
 	 * @return the ltext
 	 */
