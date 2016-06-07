@@ -367,7 +367,7 @@ public class DefaultMvcLoading implements Loading {
 				for (int i = 0; i < ps.length; i++) {
 					String a = at.value()[i];
 					a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
-					ps[i] = a.length() > 1 ? Strings.removeEnd(a, '/') : a;
+					ps[i] = a.length() > 1 ? Strings.stripEnd(a, '/') : a;
 				}
 				ai.setPaths(ps);
 			}
