@@ -21,7 +21,7 @@ import panda.lang.Strings;
 import panda.mvc.Mvcs;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Queryer;
-import panda.mvc.util.PermissionProvider;
+import panda.mvc.util.AccessControler;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Escapes;
 import panda.mvc.view.tag.ListColumn;
@@ -57,7 +57,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	// has fixed filter
 	private boolean fsfixed = false;
 	
-	private PermissionProvider permit;
+	private AccessControler controler;
 	
 	private Map<String, Map> codemaps = new HashMap<String, Map>();
 
@@ -66,7 +66,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 
 	private void initVars() {
-		permit = context.getAction() instanceof PermissionProvider ? (PermissionProvider)context.getAction() : null;
+		controler = context.getAction() instanceof AccessControler ? (AccessControler)context.getAction() : null;
 
 		id = tag.getId();
 
@@ -1099,9 +1099,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 	
 	private boolean writeAlink(String cls, Object d, ItemLink link) throws IOException {
-		if (permit != null) {
+		if (controler != null) {
 			if (Strings.isNotEmpty(link.action)) {
-				if (!permit.hasDataPermission(d, link.action)) {
+				if (!controler.canAccessData(link.action, d)) {
 					return false;
 				}
 			}
