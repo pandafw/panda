@@ -1,6 +1,12 @@
 .p-required {
 	color: #FF0000;
 }
+.p-descrip {
+	display: block;
+	padding: 3px;
+	font-size: 90%;
+	color: #666;
+}
 
 /** form layout */
 .p-form.form-horizontal {
