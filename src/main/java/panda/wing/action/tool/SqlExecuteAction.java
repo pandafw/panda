@@ -1,7 +1,5 @@
 package panda.wing.action.tool;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -13,7 +11,9 @@ import javax.sql.DataSource;
 
 import panda.dao.DaoClient;
 import panda.dao.sql.SqlDaoClient;
+import panda.dao.sql.SqlIterator;
 import panda.dao.sql.Sqls;
+import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.View;
@@ -30,40 +30,10 @@ import panda.wing.constant.AUTH;
 @Ok(View.SFTL)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
-		protected String commenter = "--";
-		protected String delimiter = ";";
 		protected boolean autoCommit = true;
 		protected boolean ignoreError = false;
 		protected String sql;
 		protected int fetchLimit = 100;
-
-		/**
-		 * @return the commenter
-		 */
-		public String getCommenter() {
-			return commenter;
-		}
-
-		/**
-		 * @param commenter the commenter to set
-		 */
-		public void setCommenter(String commenter) {
-			this.commenter = Strings.stripToNull(commenter);
-		}
-
-		/**
-		 * @return the delimiter
-		 */
-		public String getDelimiter() {
-			return delimiter;
-		}
-
-		/**
-		 * @param delimiter the delimiter to set
-		 */
-		public void setDelimiter(String delimiter) {
-			this.delimiter = Strings.stripToNull(delimiter);
-		}
 
 		/**
 		 * @return the ignoreError
@@ -218,22 +188,25 @@ public class SqlExecuteAction extends AbstractAction {
 	 */
 	@At("")
 	public Object execute(@Param Option o) throws Exception {
-		String sql = removeComment(o.sql, o.commenter);
+		if (Strings.isEmpty(o.sql)) {
+			return null;
+		}
 		
-		if (Strings.isEmpty(sql)) {
+		@SuppressWarnings("resource")
+		SqlIterator si = new SqlIterator(o.sql);
+		if (!si.hasNext()) {
 			return null;
 		}
 		
 		Connection con = getDataSource().getConnection();
-		
 		try {
 			con.setAutoCommit(o.autoCommit);
 			
 			List<Result> results = new ArrayList<Result>();
-			String[] ss = sql.split(o.delimiter);
-			for (String s : ss) {
-				s = s.trim();
+			while (si.hasNext()) {
+				String s = si.next();
 				if ("exit".equalsIgnoreCase(s)) {
+					break;
 				}
 				else if ("commit".equalsIgnoreCase(s)) {
 					Result r = new Result(s);
@@ -267,27 +240,9 @@ public class SqlExecuteAction extends AbstractAction {
 		}
 	}
 
-	private String removeComment(String sql, String commenter) throws Exception {
-		if (Strings.isNotEmpty(sql)) {
-			BufferedReader br = new BufferedReader(new StringReader(sql));
-	
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = br.readLine()) != null) {
-				String lt = line.trim();
-				if (lt.length() > 0 && !lt.startsWith(commenter)) {
-					sb.append(line).append("\r\n");
-				}
-			}
-			sql = sb.toString();
-		}
-		return sql;
-	}
-
-	private Result execSql(Connection con, String sql, int fetchLimit) throws Exception {
+	private Result execSql(Connection con, String sql, int fetchLimit) {
 		Result r = new Result(sql);
 
-		sql = Strings.replaceChars(sql, "\r\n\t", " ");
 		Statement st = null;
 		try {
 			st = con.createStatement();
@@ -331,10 +286,10 @@ public class SqlExecuteAction extends AbstractAction {
 			}
 		}
 		catch (Exception e) {
-			r.setError(e.getClass().getName() 
-				+ ": " + e.getMessage() + "\r\n"
-				+ Exceptions.getStackTrace(e));
-			return null;
+			StringBuilder sb = new StringBuilder();
+			sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
+			sb.append(Streams.LINE_SEPARATOR).append(Exceptions.getStackTrace(e));
+			r.setError(sb.toString());
 		}
 		finally {
 			Sqls.safeClose(st);

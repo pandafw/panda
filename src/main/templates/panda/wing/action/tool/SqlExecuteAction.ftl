@@ -33,7 +33,7 @@
 			<#if r.updateCount &gt; 0>${r.updateCount} rows updated.<br/></#if>
 			<#if r.resultSet?has_content>
 			<div class="table-responsive">
-			<table class="table">
+			<table class="table table-striped table-bordered p-fz80p p-th-nowrap p-td-nowrap">
 				<#list r.resultSet as row>
 					<#if row_index == 0>
 						<thead><tr><#list row as _h><th>${assist.escapePhtml(_h!"")}</th></#list></tr></thead>
