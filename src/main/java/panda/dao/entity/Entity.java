@@ -53,6 +53,7 @@ public class Entity<T> {
 	 */
 	protected Entity(Class<T> type) {
 		this.type = type;
+		this.fields = new LinkedHashMap<String, EntityField>();
 	}
 
 	/**
@@ -162,10 +163,6 @@ public class Entity<T> {
 	 */
 	protected void addField(EntityField field) {
 		field.setEntity(this);
-
-		if (fields == null) {
-			fields = new LinkedHashMap<String, EntityField>();
-		}
 		fields.put(field.getName(), field);
 	}
 
