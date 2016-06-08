@@ -2,6 +2,7 @@ package panda.net.ssl;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -10,6 +11,7 @@ import javax.net.ssl.TrustManager;
  * General utilities for SSLContext.
  */
 public class SSLContexts {
+	public static final String PROTO_TLS = "TLS";
 
 	private SSLContexts() {
 		// Not instantiable

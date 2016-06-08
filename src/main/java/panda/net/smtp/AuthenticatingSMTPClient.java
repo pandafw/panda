@@ -26,6 +26,15 @@ public class AuthenticatingSMTPClient extends SMTPSClient {
 	}
 
 	/**
+	 * Constructor for AuthenticatingSMTPClient, using {@link #DEFAULT_PROTOCOL} i.e. TLS
+	 * 
+	 * @param implicit The security mode, {@code true} for implicit, {@code false} for explicit
+	 */
+	public AuthenticatingSMTPClient(boolean implicit) {
+		super(implicit);
+	}
+
+	/**
 	 * Overloaded constructor that takes a protocol specification
 	 * 
 	 * @param protocol The protocol to use

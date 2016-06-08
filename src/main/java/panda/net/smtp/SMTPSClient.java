@@ -30,7 +30,7 @@ import panda.net.ssl.SSLSockets;
  */
 public class SMTPSClient extends SMTPClient {
 	/** Default secure socket protocol name, like TLS */
-	private static final String DEFAULT_PROTOCOL = "TLS";
+	public static final String DEFAULT_PROTOCOL = SSLContexts.PROTO_TLS;
 
 	/** The security mode. True - Implicit Mode / False - Explicit Mode. */
 	private final boolean isImplicit;

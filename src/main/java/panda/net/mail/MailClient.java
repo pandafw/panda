@@ -48,6 +48,7 @@ public class MailClient {
 	private String helo = "localhost";
 	private String host;
 	private int port = SMTPClient.DEFAULT_PORT;
+	private boolean ssl;
 	private String username;
 	private String password;
 	
@@ -94,6 +95,20 @@ public class MailClient {
 	 */
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	/**
+	 * @return the ssl
+	 */
+	public boolean isSsl() {
+		return ssl;
+	}
+
+	/**
+	 * @param ssl the ssl to set
+	 */
+	public void setSsl(boolean ssl) {
+		this.ssl = ssl;
 	}
 
 	/**
@@ -223,7 +238,7 @@ public class MailClient {
 		// debug writer
 		StringBuilderWriter dbg = null;
 
-		AuthenticatingSMTPClient client = new AuthenticatingSMTPClient();
+		AuthenticatingSMTPClient client = new AuthenticatingSMTPClient(ssl);
 		try {
 			if (log.isDebugEnabled()) {
 				dbg = new StringBuilderWriter();
