@@ -7,6 +7,7 @@ import java.util.Map;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Div;
+import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.InputUIBean;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RendererWrapper;
@@ -59,9 +60,12 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 
 	protected void writeDescrip() throws IOException {
 		if (Strings.isNotEmpty(tag.getDescription())) {
-			write("<span class=\"p-descrip\">");
-			write(tag.getDescription());
-			write("</span>");
+			Form form = tag.findForm();
+			if (form != null && Boolean.TRUE.equals(form.getShowDescrip())) {
+				write("<span class=\"p-descrip\">");
+				write(tag.getDescription());
+				write("</span>");
+			}
 		}
 	}
 

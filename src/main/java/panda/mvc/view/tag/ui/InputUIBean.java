@@ -65,19 +65,17 @@ public abstract class InputUIBean extends UIBean {
 
 		Form form = findForm();
 
-		if (id == null) {
-			// create HTML id element
-			populateComponentHtmlId(form);
-		}
-		
-		if (labelClass == null) {
-			if (form != null) {
+		if (form != null) {
+			if (id == null) {
+				// create HTML id element
+				populateComponentHtmlId(form);
+			}
+			
+			if (labelClass == null) {
 				labelClass = form.getLabelClass();
 			}
-		}
 		
-		if (inputClass == null) {
-			if (form != null) {
+			if (inputClass == null) {
 				inputClass = form.getInputClass();
 			}
 		}

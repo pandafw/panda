@@ -65,7 +65,8 @@ public class Form extends UIBean {
 
 	protected String labelClass;
 	protected String inputClass;
-	
+	protected Boolean showDescrip;
+
 	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
@@ -256,6 +257,20 @@ public class Form extends UIBean {
 	 */
 	public void setInputClass(String inputClass) {
 		this.inputClass = inputClass;
+	}
+
+	/**
+	 * @return the showDescrip
+	 */
+	public Boolean getShowDescrip() {
+		return showDescrip;
+	}
+
+	/**
+	 * @param showDescrip the showDescrip to set
+	 */
+	public void setShowDescrip(Boolean showDescrip) {
+		this.showDescrip = showDescrip;
 	}
 
 	//----------------------------------------------------------
