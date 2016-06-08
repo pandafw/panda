@@ -483,10 +483,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 		}
 
 		if (getMailSettingAsBoolean(SC.MAIL_SMTP_SSL, false)) {
-//			client.setSSL(true);
-//			if (port > 0) {
-//				email.setSslSmtpPort(String.valueOf(port));
-//			}
+			client.setSsl(true);
 		}
 		
 //		client.setTLS(getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, false));
