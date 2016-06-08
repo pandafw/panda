@@ -38,7 +38,7 @@
 	<#assign _ash_ = "" />
 	<#if a.canAccess("~/add")>
 		<@p.url var='_u_' action='~/add'/>
-		<#assign _ash_ = '<a class="n-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
+		<#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
 	</#if>
 	<#if a.canAccess("~/copy")>
 		<#assign _actions_ = _actions_ + [{
