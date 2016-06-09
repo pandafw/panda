@@ -63,6 +63,7 @@
 }
 .p-form.form-horizontal .p-buttons.form-group {
 	border-bottom: 0;
+	margin: 10px 0;
 }
 .p-form .form-control {
 	color: #333;
