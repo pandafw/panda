@@ -1,4 +1,23 @@
 //------------------------------------------------------
+function s_onpageload() {
+	//invoke onPageLoad function
+	if (window.onPageLoad) {
+		window.onPageLoad();
+		window.onPageLoad = null;
+	}
+
+	for (var i = 1; ; i++) {
+		var f = 'onPageLoad' + i;
+		if (window[f]) {
+			window[f]();
+			window[f] = null;
+		}
+		else {
+			break;
+		}
+	}
+}
+
 function s_totop() {
 	$('.p-totop').click(function() {
 		$('html,body').animate({ scrollTop: 0 }, 'slow');
@@ -309,6 +328,8 @@ function s_init(c) {
 
 	// document - onload
 	$(function() {
+		s_onpageload();
+		
 		s_preload();
 		
 		s_totop();
