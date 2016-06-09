@@ -20,9 +20,7 @@ ${s}#if r??>
 ${s}#else>
 	<@sback/>
 ${s}/#if>
-<#if ui.safeInclude??>
-	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}_confirm-custom.ftl</#if>"/>
-</#if>
+	<@safeinc step="_confirm"/>
 </div>
 
 <@footer/>
