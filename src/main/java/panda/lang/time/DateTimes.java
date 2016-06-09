@@ -2255,31 +2255,31 @@ public class DateTimes {
 	}
 	
 	//----------------------------------------------------------
-	public static long subSeconds(Date to, Date from) {
+	public static long diffSeconds(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_SECOND;
 	}
 
-	public static long subMinutes(Date to, Date from) {
+	public static long diffMinutes(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_MINUTE;
 	}
 
-	public static long subHours(Date to, Date from) {
+	public static long diffHours(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_HOUR;
 	}
 
-	public static long subDays(Date to, Date from) {
+	public static long diffDays(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_DAY;
 	}
 
-	public static long subWeeks(Date to, Date from) {
+	public static long diffWeeks(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_WEEK;
 	}
 
-	public static long subMonths(Date to, Date from) {
+	public static long diffMonths(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_MONTH;
 	}
 
-	public static long subYears(Date to, Date from) {
+	public static long diffYears(Date to, Date from) {
 		return (to.getTime() - from.getTime()) / MS_YEAR;
 	}
 }
