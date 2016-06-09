@@ -23,6 +23,7 @@
 	border-bottom: 0;
 }
 .p-form .form-control {
+	color: #333;
 }
 .p-form .form-control, .p-form input.form-control, .p-form select.form-control,
 .p-form .input-group-addon, .p-form .input-group-btn {
