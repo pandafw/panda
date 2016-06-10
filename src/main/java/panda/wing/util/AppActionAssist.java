@@ -28,7 +28,7 @@ import panda.mvc.util.StateProvider;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.mail.Email;
 import panda.net.mail.EmailException;
-import panda.net.mail.MailClient;
+import panda.net.mail.EmailClient;
 import panda.wing.auth.AuthHelper;
 import panda.wing.auth.IUser;
 import panda.wing.auth.UserAuthenticator;
@@ -466,7 +466,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 			email.setCharset(charset);
 		}
 
-		MailClient client = new MailClient();
+		EmailClient client = new EmailClient();
 		String helo = getMailSetting(SC.MAIL_SMTP_HELO, null);
 		if (Strings.isNotEmpty(helo)) {
 			client.setHelo(helo);
