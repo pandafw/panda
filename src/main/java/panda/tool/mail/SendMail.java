@@ -7,7 +7,7 @@ import org.apache.commons.cli.CommandLine;
 import panda.io.Files;
 import panda.lang.Charsets;
 import panda.net.mail.Email;
-import panda.net.mail.MailClient;
+import panda.net.mail.EmailClient;
 import panda.util.tool.AbstractCommandTool;
 
 /**
@@ -202,7 +202,7 @@ public class SendMail {
 		email.setTextMsg(message);
 
 
-		MailClient client = new MailClient();
+		EmailClient client = new EmailClient();
 		client.send(email);
 	}
 }
