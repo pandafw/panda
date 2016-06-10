@@ -29,7 +29,6 @@ import panda.lang.codec.binary.Base64OutputStream;
 import panda.lang.reflect.Methods;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
-import panda.log.Logs;
 import panda.net.Mimes;
 import panda.net.PrintCommandListener;
 import panda.net.smtp.AuthenticatingSMTPClient;
@@ -43,7 +42,7 @@ import panda.vfs.FileItem;
  * a class for send mail
  */
 public class MailClient {
-	private static Log log = Logs.getLog(MailClient.class);
+	private Log log;
 
 	private String helo = "localhost";
 	private String host;
@@ -54,6 +53,20 @@ public class MailClient {
 	
 	private int connectTimeout = 5000;
 	private int defaultTimeout = 10000;
+
+	/**
+	 * @return the log
+	 */
+	public Log getLog() {
+		return log;
+	}
+
+	/**
+	 * @param log the log to set
+	 */
+	public void setLog(Log log) {
+		this.log = log;
+	}
 
 	/**
 	 * @return the helo
@@ -171,7 +184,11 @@ public class MailClient {
 	 * @param email email
 	 */
 	public void send(Email email) throws EmailException {
-		if (log.isDebugEnabled()) {
+		if (Strings.isEmpty(email.getMsgId())) {
+			email.setMsgId(generateMsgId());
+		}
+
+		if (log != null && log.isDebugEnabled()) {
 			log.debug(Streams.LINE_SEPARATOR
 					+ "============SEND EMAIL================================" 
 					+ Streams.LINE_SEPARATOR
@@ -240,7 +257,7 @@ public class MailClient {
 
 		AuthenticatingSMTPClient client = new AuthenticatingSMTPClient(ssl);
 		try {
-			if (log.isDebugEnabled()) {
+			if (log != null && log.isDebugEnabled()) {
 				dbg = new StringBuilderWriter();
 				dbg.append("\n===================== SMTP DEBUG ====================\n");
 				client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));
@@ -251,7 +268,7 @@ public class MailClient {
 			client.setDefaultTimeout(defaultTimeout);
 
 			// connect to the SMTP server
-			if (log.isDebugEnabled()) {
+			if (log != null && log.isDebugEnabled()) {
 				log.debug("Connect to SMTP server " + host + ":" + port);
 			}
 			client.connect(host, port);
@@ -267,7 +284,9 @@ public class MailClient {
 			if (isSupportStartTLS(client.getReplyStrings())) {
 				client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
 				if (!client.execTLS()) {
-					log.debug("STARTTLS was not accepted: " + client.getReplyString());
+					if (log != null && log.isDebugEnabled()) {
+						log.debug("STARTTLS was not accepted: " + client.getReplyString());
+					}
 				}
 			}
 			
@@ -290,7 +309,7 @@ public class MailClient {
 				
 				SMTPHeader header = new SMTPHeader();
 				header.setDate(SMTPHeader.DATE, DateTimes.getDate());
-				header.set(SMTPHeader.MESSAGE_ID, generateMsgId());
+				header.set(SMTPHeader.MESSAGE_ID, email.getMsgId());
 				header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
 				if (email.isHtml() || email.hasAttachments()) {
 					boundary = Randoms.randDigitLetters(28);
@@ -313,6 +332,12 @@ public class MailClient {
 				header.set(SMTPHeader.TO, email.getEncodedTos());
 				if (Collections.isNotEmpty(email.getCcs())) {
 					header.set(SMTPHeader.CC, email.getEncodedCcs());
+				}
+				if (Collections.isNotEmpty(email.getBccs())) {
+					header.set(SMTPHeader.BCC, email.getEncodedBccs());
+				}
+				if (Collections.isNotEmpty(email.getReplyTos())) {
+					header.set(SMTPHeader.REPLY_TO, email.getEncodedReplyTos());
 				}
 				header.set(SMTPHeader.SUBJECT, email.getEncodedSubject());
 

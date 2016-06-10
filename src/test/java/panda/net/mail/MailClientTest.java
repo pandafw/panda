@@ -5,7 +5,7 @@ import org.junit.Test;
 import panda.lang.Randoms;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAttachment;
-import panda.net.mail.MailClient;
+import panda.net.mail.EmailClient;
 
 
 public class MailClientTest {
@@ -19,7 +19,7 @@ public class MailClientTest {
 		email.addTo("squirrels.gallery@gmail.com", "oh おう");
 		email.setSubject("test subject あいうえお " + Randoms.randInt());
 
-		MailClient client = new MailClient();
+		EmailClient client = new EmailClient();
 //		client.setHost("localhost");
 //		client.setPort(25);
 //		client.setUsername("");

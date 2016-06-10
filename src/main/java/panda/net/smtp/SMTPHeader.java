@@ -41,6 +41,8 @@ public class SMTPHeader extends InternetHeader implements Cloneable, Serializabl
 	public static final String FROM                      = "From";
 	public static final String TO                        = "To";
 	public static final String CC                        = "Cc";
+	public static final String BCC                       = "Bcc";
+	public static final String REPLY_TO                  = "Reply-To";
 	public static final String SUBJECT                   = "Subject";
 
 	public static final String MIME_VERSION_10           = "1.0";

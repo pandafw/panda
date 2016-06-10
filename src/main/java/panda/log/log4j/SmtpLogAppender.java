@@ -1,48 +1,28 @@
 package panda.log.log4j;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import javax.mail.Address;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.InternetHeaders;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
-import javax.naming.NamingException;
 
 import org.apache.log4j.Layout;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.ErrorCode;
 import org.apache.log4j.spi.LoggingEvent;
 
-import panda.lang.Charsets;
-import panda.lang.Collections;
-import panda.lang.Strings;
-import panda.net.MXLookup;
+import panda.log.LogLevel;
+import panda.log.impl.DefaultLog;
+import panda.net.mail.Email;
+import panda.net.mail.EmailAddress;
+import panda.net.mail.EmailException;
+import panda.net.mail.MailClient;
 
 public class SmtpLogAppender extends AbstractAppender {
 	/** subject layout */
 	protected Layout subjectLayout;
 
-	/** to */
+	private String from;
+
+	/**
+	 * Comma separated list of to recipients.
+	 */
 	private String to;
 	/**
 	 * Comma separated list of cc recipients.
@@ -52,60 +32,27 @@ public class SmtpLogAppender extends AbstractAppender {
 	 * Comma separated list of bcc recipients.
 	 */
 	private String bcc;
-	private String from;
 	/**
 	 * Comma separated list of replyTo addresses.
 	 */
 	private String replyTo;
+
 	private String subject;
+
 	private String smtpHost;
+	private int smtpPort;
 	private String smtpUsername;
 	private String smtpPassword;
-	private String smtpProtocol;
-	private int smtpPort = -1;
+	private boolean smtpSsl;
 	private boolean smtpDebug = false;
 
-	protected Message msg;
-
-	protected String prefix;
-	protected Properties props;
-	protected Map<InternetAddress, String> hosts = new HashMap<InternetAddress, String>();
+	private MailClient client;
+	private Email email;
 
 	/**
 	 * Construct
 	 */
 	public SmtpLogAppender() {
-	}
-
-	protected void resolveHosts() {
-		if (Strings.isNotEmpty(smtpHost)) {
-			return;
-		}
-		
-		try {
-			hosts.clear();
-			for (Address a : msg.getAllRecipients()) {
-				String[] ss = ((InternetAddress)a).getAddress().split("@");
-				if (ss.length != 2) {
-					LogLog.error("Invalid internet address: " + a);
-				}
-				else {
-					List<String> hs = MXLookup.lookup(ss[1]);
-					if (Collections.isEmpty(hs)) {
-						LogLog.error("Could not lookup MX record for " + ss[1]);
-					}
-					else {
-						hosts.put((InternetAddress)a, hs.get(0));
-					}
-				}
-			}
-		}
-		catch (NamingException e) {
-			LogLog.error("Could not lookup MX records.", e);
-		}
-		catch (MessagingException e) {
-			LogLog.error("Could not getAllRecipients.", e);
-		}
 	}
 
 	/**
@@ -114,96 +61,72 @@ public class SmtpLogAppender extends AbstractAppender {
 	public void activateOptions() {
 		super.activateOptions();
 		
-		Session session = createSession();
-		msg = new MimeMessage(session);
-
+		email = new Email();
 		try {
-			addressMessage(msg);
+			addressMessage(email);
 			if (subject != null) {
-				setMsgSubject(subject);
+				email.setSubject(subject);
 			}
 		}
-		catch (MessagingException e) {
+		catch (EmailException e) {
 			LogLog.error("Could not activate SMTPAppender options.", e);
 		}
+		
+		client = createClient();
 	}
 
 	/**
 	 * Address message.
 	 * 
 	 * @param msg message, may not be null.
-	 * @throws MessagingException thrown if error addressing message.
+	 * @throws EmailException thrown if error addressing message.
 	 */
-	protected void addressMessage(final Message msg) throws MessagingException {
+	protected void addressMessage(final Email msg) throws EmailException {
 		if (from != null) {
 			msg.setFrom(getAddress(from));
-		}
-		else {
-			msg.setFrom();
 		}
 
 		// Add ReplyTo addresses if defined.
 		if (replyTo != null && replyTo.length() > 0) {
-			msg.setReplyTo(parseAddress(replyTo));
+			msg.setReplyTos(parseAddress(replyTo));
 		}
 
 		if (to != null && to.length() > 0) {
-			msg.setRecipients(Message.RecipientType.TO, parseAddress(to));
+			msg.setTos(parseAddress(to));
 		}
 
 		// Add CC receipients if defined.
 		if (cc != null && cc.length() > 0) {
-			msg.setRecipients(Message.RecipientType.CC, parseAddress(cc));
+			msg.setCcs(parseAddress(cc));
 		}
 
 		// Add BCC receipients if defined.
 		if (bcc != null && bcc.length() > 0) {
-			msg.setRecipients(Message.RecipientType.BCC, parseAddress(bcc));
+			msg.setBccs(parseAddress(bcc));
 		}
 	}
 
 	/**
-	 * Create mail session.
+	 * Create mail client.
 	 * 
-	 * @return mail session, may not be null.
+	 * @return mail client, may not be null.
 	 */
-	protected Session createSession() {
-		try {
-			props = new Properties(System.getProperties());
-		}
-		catch (SecurityException ex) {
-			props = new Properties();
-		}
-
-		prefix = "mail.smtp";
-		if (smtpProtocol != null) {
-			props.put("mail.transport.protocol", smtpProtocol);
-			prefix = "mail." + smtpProtocol;
-		}
-		if (smtpHost != null) {
-			props.put(prefix + ".host", smtpHost);
-		}
+	protected MailClient createClient() {
+		MailClient mc = new MailClient();
+		
+		mc.setHost(smtpHost);
 		if (smtpPort > 0) {
-			props.put(prefix + ".port", String.valueOf(smtpPort));
+			mc.setPort(smtpPort);
 		}
-
-		Authenticator auth = null;
-		if (smtpPassword != null && smtpUsername != null) {
-			props.put(prefix + ".auth", "true");
-			auth = new Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(smtpUsername, smtpPassword);
-				}
-			};
-		}
-		Session session = Session.getInstance(props, auth);
-		if (smtpProtocol != null) {
-			session.setProtocolForAddress("rfc822", smtpProtocol);
-		}
+		mc.setUsername(smtpUsername);
+		mc.setPassword(smtpPassword);
+		mc.setSsl(smtpSsl);
 		if (smtpDebug) {
-			session.setDebug(smtpDebug);
+			DefaultLog log = new DefaultLog(getClass().getName());
+			log.setLogLevel(LogLevel.DEBUG);
+			mc.setLog(log);
 		}
-		return session;
+		return mc;
 	}
 
 	/**
@@ -221,7 +144,7 @@ public class SmtpLogAppender extends AbstractAppender {
 	 * checks fail, then the boolean value <code>false</code> is returned.
 	 */
 	protected boolean checkEntryConditions() {
-		if (this.msg == null) {
+		if (this.email == null) {
 			errorHandler.error("Message object not configured.");
 			return false;
 		}
@@ -229,21 +152,21 @@ public class SmtpLogAppender extends AbstractAppender {
 		return super.checkEntryConditions();
 	}
 
-	InternetAddress getAddress(String addressStr) {
+	EmailAddress getAddress(String addressStr) {
 		try {
-			return new InternetAddress(addressStr);
+			return EmailAddress.parse(addressStr);
 		}
-		catch (AddressException e) {
+		catch (EmailException e) {
 			errorHandler.error("Could not parse address [" + addressStr + "].", e, ErrorCode.ADDRESS_PARSE_FAILURE);
 			return null;
 		}
 	}
 
-	InternetAddress[] parseAddress(String addressStr) {
+	List<EmailAddress> parseAddress(String addressStr) {
 		try {
-			return InternetAddress.parse(addressStr, true);
+			return EmailAddress.parseList(addressStr);
 		}
-		catch (AddressException e) {
+		catch (EmailException e) {
 			errorHandler.error("Could not parse address [" + addressStr + "].", e, ErrorCode.ADDRESS_PARSE_FAILURE);
 			return null;
 		}
@@ -274,23 +197,8 @@ public class SmtpLogAppender extends AbstractAppender {
 	 * Layout body of email message.
 	 */
 	protected String formatBody(LoggingEvent event) {
-		// Note: this code already owns the monitor for this
-		// appender. This frees us from needing to synchronize on 'cb'.
-
 		StringBuilder sb = new StringBuilder();
-		String t = layout.getHeader();
-		if (t != null) {
-			sb.append(t);
-		}
-		
 		outputLogEvent(sb, event);
-		sb.append(Layout.LINE_SEP);
-		
-		t = layout.getFooter();
-		if (t != null) {
-			sb.append(t);
-		}
-
 		return sb.toString();
 	}
 
@@ -299,68 +207,20 @@ public class SmtpLogAppender extends AbstractAppender {
 	 */
 	protected void sendMail(LoggingEvent event) {
 		try {
+			email.setMsgId(null);
 			if (subjectLayout != null) {
 				String s = subjectLayout.format(event);
-				if (!setMsgSubject(s)) {
-					setMsgSubject(getSubject());
-				}
+				email.setSubject(s);
 			}
 			else {
-				setMsgSubject(getSubject());
+				email.setSubject(subject);
 			}
 
-			String s = formatBody(event);
-			boolean allAscii = true;
-			for (int i = 0; i < s.length() && allAscii; i++) {
-				allAscii = s.charAt(i) <= 0x7F;
-			}
-			
-			MimeBodyPart part;
-			if (allAscii) {
-				part = new MimeBodyPart();
-				part.setContent(s, layout.getContentType());
-			}
-			else {
-				try {
-					ByteArrayOutputStream os = new ByteArrayOutputStream();
-					Writer writer = new OutputStreamWriter(MimeUtility.encode(os, "quoted-printable"), "UTF-8");
-					writer.write(s);
-					writer.close();
-					InternetHeaders headers = new InternetHeaders();
-					headers.setHeader("Content-Type", layout.getContentType() + "; charset=UTF-8");
-					headers.setHeader("Content-Transfer-Encoding", "quoted-printable");
-					part = new MimeBodyPart(headers, os.toByteArray());
-				}
-				catch (Exception ex) {
-					StringBuilder sbuf = new StringBuilder(s);
-					for (int i = 0; i < sbuf.length(); i++) {
-						if (sbuf.charAt(i) >= 0x80) {
-							sbuf.setCharAt(i, '?');
-						}
-					}
-					part = new MimeBodyPart();
-					part.setContent(sbuf.toString(), layout.getContentType());
-				}
-			}
-
-			Multipart mp = new MimeMultipart();
-			mp.addBodyPart(part);
-			msg.setContent(mp);
-
-			msg.setSentDate(new Date());
-			
-			if (Strings.isEmpty(smtpHost)) {
-				resolveHosts();
-				for (Entry<InternetAddress, String> en : hosts.entrySet()) {
-					props.put(prefix + ".host", en.getValue());
-					Transport.send(msg, new InternetAddress[] { en.getKey() });
-				}
-			}
-			else {
-				Transport.send(msg);
-			}
+			String body = formatBody(event);
+			email.setTextMsg(body);
+			client.send(email);
 		}
-		catch (MessagingException e) {
+		catch (EmailException e) {
 			LogLog.error("Error occured while sending e-mail notification.", e);
 		}
 		catch (RuntimeException e) {
@@ -506,6 +366,13 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
+	 * @param ssl ssl flag.
+	 */
+	public void setSMTPSsl(final boolean ssl) {
+		this.smtpSsl = ssl;
+	}
+
+	/**
 	 * Get SMTP password.
 	 * 
 	 * @return SMTP password, may be null.
@@ -533,21 +400,12 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Get transport protocol. Typically null or "smtps".
+	 * Get SMTP ssl.
 	 * 
-	 * @return transport protocol, may be null.
+	 * @return SMTP ssl flag.
 	 */
-	public final String getSMTPProtocol() {
-		return smtpProtocol;
-	}
-
-	/**
-	 * Set transport protocol. Typically null or "smtps".
-	 * 
-	 * @param val transport protocol, may be null.
-	 */
-	public final void setSMTPProtocol(final String val) {
-		smtpProtocol = val;
+	public boolean getSMTPSsl() {
+		return smtpSsl;
 	}
 
 	/**
@@ -566,21 +424,5 @@ public class SmtpLogAppender extends AbstractAppender {
 	 */
 	public final void setSMTPPort(final int val) {
 		smtpPort = val;
-	}
-
-	protected boolean setMsgSubject(String subject) {
-		try {
-			msg.setSubject("");
-			msg.setSubject(MimeUtility.encodeText(subject, Charsets.UTF_8, null));
-			return true;
-		}
-		catch (UnsupportedEncodingException ex) {
-			LogLog.error("Unable to encode SMTP subject", ex);
-			return false;
-		}
-		catch (MessagingException ex) {
-			LogLog.error("Unable to set SMTP subject", ex);
-			return false;
-		}
 	}
 }

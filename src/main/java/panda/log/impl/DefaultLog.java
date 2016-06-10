@@ -10,6 +10,14 @@ public class DefaultLog extends AbstractLog {
 		super(name);
 	}
 
+	/**
+	 * set log level
+	 * @param level log level
+	 */
+	public void setLogLevel(LogLevel level) {
+		this.level = level;
+	}
+	
 	@Override
 	public void log(LogLevel level, String msg, Throwable t) {
 		PrintStream out = (level.isGreaterOrEqual(LogLevel.WARN) ? System.err : System.out);

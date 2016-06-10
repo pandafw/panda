@@ -1,6 +1,10 @@
 package panda.net.mail;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import panda.lang.Objects;
+import panda.lang.Regexs;
 import panda.lang.Strings;
 
 public class EmailAddress {
@@ -13,14 +17,24 @@ public class EmailAddress {
 	private String address;
 	private String personal;
 
-	public EmailAddress(String address) {
-		super();
-		this.address = address;
+	public EmailAddress(String address) throws EmailException {
+		this(address, null);
 	}
 
-	public EmailAddress(String address, String personal) {
-		super();
-		this.address = address;
+	public EmailAddress(String address, String personal) throws EmailException {
+		if (Strings.isEmpty(address)) {
+			throw new EmailException("Empty email address");
+		}
+		
+		if (!Regexs.isEmail(address)) {
+			throw new EmailException("Invalid email address: " + address);
+		}
+
+		if (Strings.containsAny(personal, "\"<>")) {
+			throw new EmailException("Invalid email personal: " + personal);
+		}
+		
+		this.address = Strings.lowerCase(address);
 		this.personal = personal;
 	}
 
@@ -50,6 +64,13 @@ public class EmailAddress {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	/**
+	 * @return the address's domain
+	 */
+	public String getDomain() {
+		return Strings.substringAfter(address, '@');
 	}
 
 	@Override
@@ -85,6 +106,35 @@ public class EmailAddress {
 		return Strings.defaultString(quote(personal)) + "<" + address + ">";
 	}
 
+	//-----------------------------------------------------
+	public static List<EmailAddress> parseList(String rcpts) throws EmailException {
+		String[] ss = Strings.split(rcpts, ",;");
+		List<EmailAddress> eas = new ArrayList<EmailAddress>(ss.length);
+		for (String s : ss) {
+			eas.add(parse(s));
+		}
+		return eas;
+	}
+	
+	public static EmailAddress parse(String rcpt) throws EmailException {
+		String address = null;
+		String personal = null;
+		
+		int a = rcpt.indexOf('<');
+		if (a >= 0) {
+			int b = rcpt.indexOf('>', a);
+			if (b < 0) {
+				throw new EmailException("Invalid email address: " + rcpt);
+			}
+			address = Strings.strip(rcpt.substring(a + 1, b));
+			personal = Strings.strip(unquote(rcpt.substring(0, a)));
+		}
+		else {
+			address = Strings.strip(rcpt);
+		}
+		return new EmailAddress(address, personal);
+	}
+	
 	public static String quote(String s) {
 		if (Strings.isEmpty(s)) {
 			return s;
