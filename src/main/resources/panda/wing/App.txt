@@ -5,6 +5,20 @@
 ui-input-confirm=false
 ui-list-countable=true
 
+#pager - limit
+list-items-default=20
+list_popup-items-default=10
+list_csv-items-default=5000
+list_xml-items-default=5000
+list_json-items-default=5000
+
+list-items-maximum=300
+list_popup-items-maximum=300
+list_csv-items-maximum=10000
+list_xml-items-maximum=10000
+list_json-items-maximum=10000
+
+
 #navigation
 navi-top=TOP
 navi-home=Home
@@ -19,8 +33,6 @@ navi-help-company=Company
 navi-help-contact=Contact
 navi-help-privacy=Privacy
 navi-help-termsofuse=Terms of use
-navi-help-payment=Payment
-navi-help-ship=Ship
 
 
 navi-user=My Account
@@ -70,13 +82,6 @@ label-page-size=Page Size:
 label-sort=Sort:
 label-attachment=Attachment
 label-search-result=Search result of "${top.key}"
-
-
-#tip
-tip-access=Access Count
-tip-voteup=Good
-tip-votedn=Bad
-tip-bookmark=Bookmark
 
 
 #d.statusMap

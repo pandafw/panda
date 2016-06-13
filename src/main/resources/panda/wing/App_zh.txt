@@ -14,8 +14,6 @@ navi-help-company=公司简介
 navi-help-contact=联系我们
 navi-help-privacy=个人隐私规约
 navi-help-termsofuse=使用条款
-navi-help-payment=付款方式
-navi-help-ship=关于送货
 
 navi-user=会员中心
 navi-user-register=会员注册
@@ -65,11 +63,6 @@ label-sort=排序：
 label-attachment=附件
 label-search-result="${top.key}"的检索结果
 
-#tip
-tip-access=围观
-tip-voteup=顶↑
-tip-votedn=踩↓
-tip-bookmark=书签
 
 #d.statusMap
 data-statusMap=\

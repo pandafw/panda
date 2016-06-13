@@ -14,8 +14,6 @@ navi-help-company=会社情報
 navi-help-contact=問い合わせ
 navi-help-privacy=プライバシー規約
 navi-help-termsofuse=利用規約
-navi-help-payment=支払い方法
-navi-help-ship=配送について
 
 navi-user=会員センター
 navi-user-register=登録
@@ -65,11 +63,6 @@ label-sort=並び順：
 label-attachment=添付ファイル
 label-search-result="${top.key}"の検索結果
 
-#tip
-tip-access=表示回数
-tip-voteup=いいね！
-tip-votedn=悪いよ！
-tip-bookmark=ブックマーク
 
 #d.statusMap
 data-statusMap=\
