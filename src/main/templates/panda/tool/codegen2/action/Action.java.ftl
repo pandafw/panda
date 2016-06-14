@@ -128,7 +128,54 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@Ok(View.FTL)
 	@Err(View.FTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
-		return super.list_csv(qr);
+		List<ListColumn> columns = new ArrayList<ListColumn>();
+<#list ui.displayColumnList as c>
+		if (displayField("${c.name}")) {
+			ListColumn lc = new ListColumn();
+			lc.name = "${c.name}";
+			lc.header = getFieldLabel("${c.name}");
+			lc.hidden = ${(c.hidden!false)?string};
+	<#if c.format??>
+			ListColumn.Format lcf = new ListColumn.Format();
+			lcf.type = "${c.format.type}";
+		<#list c.format.paramList as fp>
+			lcf.${fp.name} = ${gen.translateToJava(fp.value)};
+		</#list>
+			lc.format = lcf;
+	</#if>
+			columns.add(lc);
+		}
+</#list>
+		return super.list_csv(qr, columns);
+	}
+	
+<#elseif ui.templates?seq_contains("list_tsv")>
+	/**
+	 * ${ui.name}
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@Ok(View.FTL)
+	@Err(View.FTL)
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+		List<ListColumn> columns = new ArrayList<ListColumn>();
+<#list ui.displayColumnList as c>
+		if (displayField("${c.name}")) {
+			ListColumn lc = new ListColumn();
+			lc.name = "${c.name}";
+			lc.header = getFieldLabel("${c.name}");
+			lc.hidden = ${(c.hidden!false)?string};
+	<#if c.format??>
+			ListColumn.Format lcf = new ListColumn.Format();
+			lcf.type = "${c.format.type}";
+		<#list c.format.paramList as fp>
+			lcf.${fp.name} = ${gen.translateToJava(fp.value)};
+		</#list>
+			lc.format = lcf;
+	</#if>
+			columns.add(lc);
+		}
+</#list>
+		return super.list_tsv(qr, columns);
 	}
 	
 <#elseif ui.templates?seq_contains("list_json")>

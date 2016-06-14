@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import panda.bind.json.JsonException;
 import panda.bind.json.Jsons;
+import panda.lang.Strings;
 
 /**
  * <p>
@@ -105,4 +106,12 @@ public class Param {
 		this.name = value;
 	}
 
+	/**
+	 * Gets the value of the capitalized name property.
+	 * 
+	 * @return possible object is {@link String }
+	 */
+	public String getCname() {
+		return Strings.capitalize(name);
+	}
 }

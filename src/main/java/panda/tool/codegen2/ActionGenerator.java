@@ -1,5 +1,6 @@
 package panda.tool.codegen2;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import panda.mvc.bean.Queryer;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
+import panda.mvc.view.tag.ListColumn;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
@@ -130,6 +132,12 @@ public class ActionGenerator extends AbstractCodeGenerator {
 					if (Strings.startsWith(s, "list")) {
 						imports.add(Queryer.class.getName());
 						imports.add(Validates.class.getName());
+						if (Strings.endsWith(s, "csv")) {
+//							imports.add(Mvcs.class.getName());
+							imports.add(List.class.getName());
+							imports.add(ArrayList.class.getName());
+							imports.add(ListColumn.class.getName());
+						}
 						break;
 					}
 				}
@@ -205,4 +213,16 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		return nm;
 	}
 
+	public String translateToJava(String sv) {
+		if (Strings.startsWithChar(sv, '"') && Strings.endsWithChar(sv, '"')) {
+			return sv;
+		}
+		if (Strings.startsWith(sv, "assist.")) {
+			return "assist().get" + Strings.capitalize(Strings.substringAfter(sv, "assist.")) + "()";
+		}
+		if (Strings.startsWith(sv, "consts.")) {
+			return "consts().get" + Strings.capitalize(Strings.substringAfter(sv, "consts.")) + "()";
+		}
+		return "panda.mvc.Mvcs.findValue(\"" + sv + "\")";
+	}
 }

@@ -147,7 +147,7 @@ public class CsvDataExportor extends AbstractDataExportor {
 	}
 
 	private void readExportInfo(CsvReader csv) throws Exception {
-		List<String> tns = csv.readNext();
+		List<String> tns = csv.readList();
 		if (tns == null || tns.isEmpty()) {
 			throw new Exception("[" + currentFile.getName() + "] - the table name is empty!");
 		}
@@ -155,12 +155,12 @@ public class CsvDataExportor extends AbstractDataExportor {
 		tableName = tns.get(0);
 		selectSql = tns.size() > 1 ? tns.get(1) : null;
 		
-		List<String> row1 = csv.readNext();
+		List<String> row1 = csv.readList();
 		if (row1 == null || row1.isEmpty()) {
 			throw new Exception("[" + tableName + "] - the table column is empty!");
 		}
 		
-		List<String> row2 = csv.readNext();
+		List<String> row2 = csv.readList();
 		if (row2 == null || row2.size() != row1.size()) {
 			throw new Exception("[" + tableName + "] - the column types is incorrect!");
 		}
@@ -188,19 +188,19 @@ public class CsvDataExportor extends AbstractDataExportor {
 	}
 
 	private void exportHead(CsvWriter csv) throws Exception {
-		csv.writeNext(new String[] { tableName, selectSql });
+		csv.writeArray(new String[] { tableName, selectSql });
 		
 		String[] ns = new String[columns.size()];
 		for (int i = 0; i < columns.size(); i++) {
 			ns[i] = columns.get(i).name;
 		}
-		csv.writeNext(ns);
+		csv.writeArray(ns);
 
 		String[] ts = new String[columns.size()];
 		for (int i = 0; i < columns.size(); i++) {
 			ts[i] = columns.get(i).getTypeString();
 		}
-		csv.writeNext(ts);
+		csv.writeArray(ts);
 		
 		csv.flush();
 	}
@@ -217,7 +217,7 @@ public class CsvDataExportor extends AbstractDataExportor {
 			while (srs.next()) {
 				Object data = srs.getResult();
 				List<String> row = getRowValues(data, beanh);
-				csv.writeNext(row);
+				csv.writeList(row);
 				cnt++;
 				cntRecord++;
 				if (cnt % 1000 == 0) {

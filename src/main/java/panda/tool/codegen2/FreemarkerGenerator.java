@@ -40,6 +40,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		"_bulk_success",
 		"_list",
 		"_list_csv",
+		"_list_tsv",
 		"_list_popup",
 		"_list_print",
 		"_delete",

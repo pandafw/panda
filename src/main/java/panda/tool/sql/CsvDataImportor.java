@@ -91,19 +91,19 @@ public class CsvDataImportor extends AbstractDataImportor {
 	}
 	
 	private void impCsvData(CsvReader csv) throws Exception {
-		List<String> tns = csv.readNext();
+		List<String> tns = csv.readList();
 		if (tns == null || tns.isEmpty()) {
 			throw new Exception("[" + currentFile.getName() + "] - the table name is empty!");
 		}
 		
 		String tableName = tns.get(0);
 		
-		List<String> columns = csv.readNext();
+		List<String> columns = csv.readList();
 		if (columns == null || columns.isEmpty()) {
 			throw new Exception("[" + tableName + "] - the table column is empty!");
 		}
 		
-		List<String> row2 = csv.readNext();
+		List<String> row2 = csv.readList();
 		if (row2 == null || row2.size() != columns.size()) {
 			throw new Exception("[" + tableName + "] - the column types is incorrect!");
 		}
@@ -146,7 +146,7 @@ public class CsvDataImportor extends AbstractDataImportor {
 	}	
 
 	private Map<String, Object> getRowValues(CsvReader csv, int r, List<String> columns, List<DataType> types) throws Exception {
-		List<String> row = csv.readNext();
+		List<String> row = csv.readList();
 		if (row == null) {
 			return null;
 		}
