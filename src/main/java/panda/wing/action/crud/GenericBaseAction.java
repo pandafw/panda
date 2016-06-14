@@ -315,7 +315,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @param pn property name
 	 * @return getText("a.t." + pn)
 	 */
-	protected String getFieldLabel(String pn) {
+	public String getFieldLabel(String pn) {
 		return getText("a.t." + pn, pn);
 	}
 	
@@ -323,7 +323,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @param pn property name
 	 * @return getText("a.t." + pn + "-tip")
 	 */
-	protected String getFieldTooltip(String pn) {
+	public String getFieldTooltip(String pn) {
 		return getText("a.t." + pn + "-tip", "");
 	}
 }
