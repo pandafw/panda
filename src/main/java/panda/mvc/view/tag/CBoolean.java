@@ -5,8 +5,7 @@ import java.io.Writer;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.mvc.MvcException;
 import panda.mvc.util.TextProvider;
 
 
@@ -41,11 +40,6 @@ import panda.mvc.util.TextProvider;
  */
 @IocBean(singleton=false)
 public class CBoolean extends ContextBean {
-
-	/**
-	 * log
-	 */
-	private static final Log log = Logs.getLog(CBoolean.class);
 
 	/**
 	 * BOOLEAN_FORMAT_DEFAULT = "boolean-format";
@@ -100,7 +94,7 @@ public class CBoolean extends ContextBean {
 				}
 			}
 			catch (IOException e) {
-				log.warn("Could not write out Boolean tag", e);
+				throw new MvcException("Failed to write out Boolean tag", e);
 			}
 		}
 		return super.end(writer, "");

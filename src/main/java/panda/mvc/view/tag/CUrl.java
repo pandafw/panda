@@ -7,14 +7,11 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.mvc.MvcException;
 import panda.mvc.util.UrlBuilder;
 
 @IocBean(singleton=false)
 public class CUrl extends ContextBean {
-	private static final Log log = Logs.getLog(CUrl.class);
-	
 	@IocInject
 	protected UrlBuilder urlbuilder;
 	
@@ -43,7 +40,7 @@ public class CUrl extends ContextBean {
 				}
 			}
 			catch (IOException e) {
-				log.warn("Could not write out URL tag", e);
+				throw new MvcException("Failed to write out URL tag", e);
 			}
 		}
 

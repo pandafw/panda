@@ -1,5 +1,6 @@
 package panda.mvc.view.tag;
 
+import java.io.IOException;
 import java.io.Writer;
 
 import panda.ioc.annotation.IocBean;
@@ -57,8 +58,8 @@ public class Head extends Component {
 			hss.setResponse(context.getResponse());
 			hss.writeResponseHeader();
 		}
-		catch (Exception e) {
-			throw new MvcException(e);
+		catch (IOException e) {
+			throw new MvcException("Failed to write out Head tag", e);
 		}
 		return false;
 	}

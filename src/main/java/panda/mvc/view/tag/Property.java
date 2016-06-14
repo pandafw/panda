@@ -9,8 +9,7 @@ import panda.io.stream.StringBuilderWriter;
 import panda.ioc.annotation.IocBean;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.mvc.MvcException;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -70,8 +69,6 @@ import panda.log.Logs;
  */
 @IocBean(singleton=false)
 public class Property extends ContextBean {
-	private static final Log log = Logs.getLog(Property.class);
-
 	/**
 	 * PASSWORD_FORMAT = "password-format";
 	 */
@@ -110,7 +107,7 @@ public class Property extends ContextBean {
 			}
 		}
 		catch (IOException e) {
-			log.warn("Could not print out value '" + av + "'", e);
+			throw new MvcException("Failed to print out value '" + av + "'", e);
 		}
 
 		return result;

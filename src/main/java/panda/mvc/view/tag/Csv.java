@@ -12,10 +12,10 @@ import panda.bean.Beans;
 import panda.io.stream.CsvWriter;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Asserts;
-import panda.lang.Exceptions;
+import panda.lang.Collections;
 import panda.lang.Iterators;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.lang.Strings;
+import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
 
 /**
@@ -31,8 +31,6 @@ import panda.mvc.Mvcs;
  */
 @IocBean(singleton=false)
 public class Csv extends Component {
-
-	private static final Log log = Logs.getLog(Csv.class);
 
 	protected Iterable list;
 	protected List<ListColumn> columns;
@@ -66,16 +64,20 @@ public class Csv extends Component {
 
 		if (cm instanceof Map) {
 			v = ((Map)cm).get(v);
-			return v == null ? null : v.toString(); 
+			return v == null ? Strings.EMPTY: v.toString(); 
 		}
 		
-		return null;
+		return Strings.EMPTY;
 	}
 
 	/**
 	 * @see panda.mvc.view.tag.Component#end(java.io.Writer, java.lang.String)
 	 */
 	public boolean end(Writer writer, String body) {
+		if (Collections.isEmpty(columns)) {
+			throw new IllegalArgumentException("columns of Csv tag is not defined");
+		}
+		
 		@SuppressWarnings("resource")
 		CsvWriter cw = new CsvWriter(writer);
 		if (separator != null) {
@@ -95,7 +97,7 @@ public class Csv extends Component {
 					line.add(c.header == null ? c.name : c.header);
 				}
 			}
-			cw.writeNext(line);
+			cw.writeList(line);
 
 			if (list != null) {
 				for (Object d : list) {
@@ -156,20 +158,13 @@ public class Csv extends Component {
 						}
 						line.add(value);
 					}
-					cw.writeNext(line);
+					cw.writeList(line);
 				}
 			}
 			cw.flush();
 		}
-		catch (Exception e) {
-			log.error("csv", e);
-			try {
-				writer.write(Exceptions.getStackTrace(e));
-			}
-			catch (IOException e2) {
-			}
-		}
-		finally {
+		catch (IOException e) {
+			throw new MvcException("Failed to write out Csv tag", e);
 		}
 
 		return super.end(writer, "");

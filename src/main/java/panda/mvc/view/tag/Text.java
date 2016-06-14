@@ -5,8 +5,7 @@ import java.io.Writer;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.mvc.MvcException;
 
 /**
  * <!-- START SNIPPET: javadoc --> Render a I18n text message.
@@ -29,8 +28,6 @@ import panda.log.Logs;
  */
 @IocBean(singleton=false)
 public class Text extends ContextBean {
-	private static final Log LOG = Logs.getLog(Text.class);
-
 	protected String name;
 	protected String escape = Escapes.ESCAPE_PHTML;
 
@@ -85,7 +82,7 @@ public class Text extends ContextBean {
 				}
 			}
 			catch (IOException e) {
-				LOG.error("Could not write out Text tag", e);
+				throw new MvcException("Failed to write out Text tag", e);
 			}
 		}
 

@@ -7,8 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 
 import panda.ioc.annotation.IocBean;
-import panda.log.Log;
-import panda.log.Logs;
+import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
 
 
@@ -51,8 +50,6 @@ import panda.mvc.Mvcs;
  */
 @IocBean(singleton=false)
 public class CNumber extends ContextBean {
-
-	private static final Log log = Logs.getLog(CNumber.class);
 
 	private Number value;
 
@@ -97,7 +94,7 @@ public class CNumber extends ContextBean {
 					}
 				}
 				catch (IOException e) {
-					log.warn("Could not write out Number tag", e);
+					throw new MvcException("Failed to write out Number tag", e);
 				}
 			}
 		}
