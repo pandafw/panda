@@ -86,6 +86,9 @@
 .p-lv-queryer .form-control {
 	height: 28px;
 }
+.p-lv-queryer input[type=radio], .p-lv-queryer input[type=checkbox] {
+	margin-top: 1px;
+}
 fieldset.p-lv-filters {
 	padding: 5px;
 }
