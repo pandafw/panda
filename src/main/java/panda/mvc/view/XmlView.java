@@ -8,8 +8,10 @@ import panda.io.MimeType;
 import panda.log.Log;
 import panda.log.Logs;
 
-
-public class XmlView extends AbstractOMView {
+/**
+ * serialize XML object to output
+ */
+public class XmlView extends AbstractBindView {
 
 	protected static final Log log = Logs.getLog(XmlView.class);
 

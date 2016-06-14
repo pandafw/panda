@@ -2,12 +2,17 @@ package panda.mvc;
 
 
 /**
- * 视图接口
+ * View
  */
 public interface View {
-	public static final String JSP = "jsp";
+	public static final String CSV = "csv";
+	public static final String TSV = "tsv";
+	public static final String XLS = "xls";
+	public static final String XlSX = "xlsx";
 	public static final String JSON = "json";
 	public static final String XML = "xml";
+	
+	public static final String JSP = "jsp";
 	public static final String REDIRECT = "redirect";
 	public static final String REDIRECT2 = ">>";
 	public static final String IOC = "ioc";

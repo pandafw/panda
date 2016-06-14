@@ -12,6 +12,7 @@ import panda.mvc.view.tag.Head;
 import panda.mvc.view.tag.Param;
 import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.Text;
+import panda.mvc.view.tag.Tsv;
 import panda.mvc.view.tag.ui.ActionConfirm;
 import panda.mvc.view.tag.ui.ActionError;
 import panda.mvc.view.tag.ui.ActionMessage;
@@ -59,6 +60,7 @@ public class TagModels {
 	protected TagModel checkbox;
 	protected TagModel checkboxList;
 	protected TagModel csv;
+	protected TagModel tsv;
 	protected TagModel date;
 	protected TagModel datepicker;
 	protected TagModel datetimepicker;
@@ -199,6 +201,16 @@ public class TagModels {
 			csv = new TagModel(context, Csv.class);
 		}
 		return csv;
+	}
+
+	/**
+	 * @return TsvModel
+	 */
+	public TagModel getTsv() {
+		if (tsv == null) {
+			tsv = new TagModel(context, Tsv.class);
+		}
+		return tsv;
 	}
 
 	/**

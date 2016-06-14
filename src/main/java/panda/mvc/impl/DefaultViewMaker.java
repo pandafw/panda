@@ -8,6 +8,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.View;
 import panda.mvc.ViewMaker;
+import panda.mvc.view.CsvView;
 import panda.mvc.view.ForwardView;
 import panda.mvc.view.FreemarkerView;
 import panda.mvc.view.HttpStatusView;
@@ -16,6 +17,7 @@ import panda.mvc.view.JspView;
 import panda.mvc.view.RawView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XmlView;
 import panda.net.http.HttpStatus;
@@ -33,6 +35,14 @@ public class DefaultViewMaker implements ViewMaker {
 			return new JspView(value);
 		}
 		
+		if (View.FTL.equals(type)) {
+			return new FreemarkerView(value);
+		}
+		
+		if (View.SFTL.equals(type)) {
+			return new SitemeshFreemarkerView(value);
+		}
+		
 		if (View.JSON.equals(type)) {
 			if (Strings.isBlank(value)) {
 				return JsonView.DEFAULT;
@@ -47,12 +57,18 @@ public class DefaultViewMaker implements ViewMaker {
 			return new XmlView(value);
 		}
 		
-		if (View.FTL.equals(type)) {
-			return new FreemarkerView(value);
+		if (View.CSV.equals(type)) {
+			if (Strings.isBlank(value)) {
+				return CsvView.DEFAULT;
+			}
+			return new CsvView(value);
 		}
 		
-		if (View.SFTL.equals(type)) {
-			return new SitemeshFreemarkerView(value);
+		if (View.TSV.equals(type)) {
+			if (Strings.isBlank(value)) {
+				return TsvView.DEFAULT;
+			}
+			return new TsvView(value);
 		}
 		
 		if (View.REDIRECT.equals(type) || View.REDIRECT2.equals(type)) {

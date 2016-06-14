@@ -9,9 +9,9 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
- * 将数据采用json方式输出的试图实现
+ * serialize json object to output
  */
-public class JsonView extends AbstractOMView {
+public class JsonView extends AbstractBindView {
 	private static final Log log = Logs.getLog(JsonView.class);
 
 	public static final JsonView DEFAULT = new JsonView("");

@@ -67,6 +67,7 @@ import panda.mvc.view.tag.Head;
 import panda.mvc.view.tag.Param;
 import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.Text;
+import panda.mvc.view.tag.Tsv;
 import panda.mvc.view.tag.ui.ActionConfirm;
 import panda.mvc.view.tag.ui.ActionError;
 import panda.mvc.view.tag.ui.ActionMessage;
@@ -209,6 +210,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			CNumber.class,
 			CSet.class,
 			Csv.class,
+			Tsv.class,
 			CUrl.class,
 			Head.class,
 			Param.class,

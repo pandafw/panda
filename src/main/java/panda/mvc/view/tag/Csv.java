@@ -24,7 +24,7 @@ import panda.mvc.Mvcs;
  * Example:
  * 
  * <pre>
- * &lt;s:csv list=&quot;list&quot; columns=&quot;columns&quot; columnKeys=&quot;columnKyes&quot; seperator=&quot;,&quot; quotechar='&quot;' escapechar='&quot;'/&gt;
+ * &lt;s:csv list=&quot;list&quot; columns=&quot;columns&quot; seperator=&quot;,&quot; quotechar='&quot;' escapechar='&quot;'/&gt;
  * 
  * </pre>
  * 

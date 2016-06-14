@@ -1,7 +1,5 @@
 package panda.mvc.view;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,14 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import panda.bean.BeanHandler;
 import panda.bind.AbstractSerializer;
 import panda.bind.adapter.DateAdapter;
-import panda.io.MimeType;
-import panda.lang.Charsets;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -34,13 +27,12 @@ import panda.mvc.bind.filter.FilterPropertyFilter;
 import panda.mvc.bind.filter.PagerPropertyFilter;
 import panda.mvc.bind.filter.QueryerPropertyFilter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
-import panda.servlet.HttpServletSupport;
 import panda.vfs.FileItem;
 import panda.vfs.dao.DaoFileItem;
 import panda.vfs.local.LocalFileItem;
 
 
-public abstract class AbstractOMView extends AbstractView {
+public abstract class AbstractBindView extends AbstractDataView {
 	protected static final String SEPERATOR = ", ";
 
 	protected static final String DATE_FORMAT_LONG = "long";
@@ -53,12 +45,6 @@ public abstract class AbstractOMView extends AbstractView {
 	
 	protected String dateFormat = DATE_FORMAT_LONG;
 
-	protected int maxAge = 0;
-
-	protected String contentType = MimeType.TEXT_PLAIN;
-
-	protected String encoding = Charsets.UTF_8;
-
 	protected String cycleDetect = CYCLE_DETECT_NOPROP;
 
 	protected Boolean shortName = false;
@@ -70,7 +56,7 @@ public abstract class AbstractOMView extends AbstractView {
 	/**
 	 * Constructor.
 	 */
-	public AbstractOMView(String location) {
+	public AbstractBindView(String location) {
 		super(location);
 	}
 
@@ -117,48 +103,6 @@ public abstract class AbstractOMView extends AbstractView {
 	}
 
 	/**
-	 * @return the contentType
-	 */
-	public String getContentType() {
-		return contentType;
-	}
-
-	/**
-	 * @param contentType the contentType to set
-	 */
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	/**
-	 * @return the maxAge
-	 */
-	public int getMaxAge() {
-		return maxAge;
-	}
-
-	/**
-	 * @param maxAge the maxAge to set
-	 */
-	public void setMaxAge(int maxAge) {
-		this.maxAge = maxAge;
-	}
-
-	/**
-	 * @return the encoding
-	 */
-	public String getEncoding() {
-		return encoding;
-	}
-
-	/**
-	 * @param encoding the encoding to set
-	 */
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
-
-	/**
 	 * @return the shortName
 	 */
 	public Boolean getShortName() {
@@ -198,44 +142,6 @@ public abstract class AbstractOMView extends AbstractView {
 	 */
 	public void setProperties(String properties) {
 		setLocation(properties);
-	}
-
-	/**
-	 * write result
-	 * @param writer response writer
-	 * @param result result object
-	 * @throws IOException
-	 */
-	protected void writeResult(PrintWriter writer, Object result) throws IOException {
-		if (result != null) {
-			writer.write(result.toString());
-		}
-	}
-	
-	/**
-	 * write result
-	 * @param ac action context
-	 * @param result result object
-	 */
-	protected void writeResult(ActionContext ac, Object result) {
-		try {
-			HttpServletRequest request = ac.getRequest();
-			HttpServletResponse response = ac.getResponse();
-	
-			HttpServletSupport hss = new HttpServletSupport(request, response);
-			hss.setMaxAge(maxAge);
-			hss.setCharset(encoding);
-			hss.setContentType(contentType);
-			hss.setBom(true);
-			hss.writeResponseHeader();
-	
-			PrintWriter writer = response.getWriter();
-			writeResult(writer, result);
-			writer.flush();
-		}
-		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

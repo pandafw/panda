@@ -20,6 +20,7 @@ import panda.mvc.view.tag.Head;
 import panda.mvc.view.tag.Param;
 import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.Text;
+import panda.mvc.view.tag.Tsv;
 import panda.mvc.view.tag.ui.ActionConfirm;
 import panda.mvc.view.tag.ui.ActionError;
 import panda.mvc.view.tag.ui.ActionMessage;
@@ -123,6 +124,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 	public static class CsvTag extends JspTag {
 		protected Component getBean(ActionContext ac) {
 			return getBean(ac, Csv.class);
+		}
+	}
+	
+	public static class TsvTag extends JspTag {
+		protected Component getBean(ActionContext ac) {
+			return getBean(ac, Tsv.class);
 		}
 	}
 
