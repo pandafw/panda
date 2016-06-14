@@ -60,7 +60,6 @@ public interface RC {
 	//------------------------------------------------------------
 	// LIST SETTINGS
 	//------------------------------------------------------------
-
 	/**
 	 * SORTER_SUFFIX = "-sorter";
 	 */
@@ -75,6 +74,14 @@ public interface RC {
 	 * PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
 	 */
 	public final static String PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
+	
+	//------------------------------------------------------------
+	// TEXTS
+	//------------------------------------------------------------
+	/**
+	 * TITLE = "title";
+	 */
+	public final static String TITLE = "title";
 	
 	//------------------------------------------------------------
 	// CONFIRM MESSAGES

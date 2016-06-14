@@ -135,7 +135,6 @@ button-bupdate-execute=更新
 
 
 title-list=${top.title} - 一覧
-title-list_csv=${top.title}_${assist.csvFileTime}
 title-list_popup=${top.title} - 一覧
 title-list_print=${top.title} - 一覧
 title-import=インポート

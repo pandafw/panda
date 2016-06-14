@@ -313,9 +313,17 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	
 	/**
 	 * @param pn property name
-	 * @return getText("a.t," + pn)
+	 * @return getText("a.t." + pn)
 	 */
 	protected String getFieldLabel(String pn) {
 		return getText("a.t." + pn);
+	}
+	
+	/**
+	 * @param pn property name
+	 * @return getText("a.t." + pn + "-tip")
+	 */
+	protected String getFieldTooltip(String pn) {
+		return getText("a.t." + pn + "-tip");
 	}
 }

@@ -21,6 +21,7 @@ import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.View;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
@@ -28,7 +29,11 @@ import panda.mvc.bean.Sorter;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.SessionStateProvider;
 import panda.mvc.util.StateProvider;
+import panda.mvc.view.CsvView;
+import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
+import panda.mvc.view.tag.Csv;
+import panda.mvc.view.tag.ListColumn;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLHelper;
@@ -97,10 +102,50 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_csv
 	 */
-	protected Object list_csv(Queryer qr) {
+	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_CSV_PAGE_ITEMS, VC.DEFAULT_CSV_MAX_ITEMS);
+
+		Object rv = doList(qr, VC.DEFAULT_CSV_PAGE_ITEMS, VC.DEFAULT_CSV_MAX_ITEMS);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		Csv csv = getContext().getIoc().get(Csv.class);
+		csv.setList((List)rv);
+		csv.setColumns(columns);
+		
+		CsvView cv = new CsvView();
+		cv.setCsv(csv);
+		cv.setFilename(getText(RC.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
+		cv.setAttachment(true);
+		
+		return cv;
+	}
+	
+	/**
+	 * list_tsv
+	 */
+	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
+		set_load(false);
+		set_save(false);
+
+		Object rv = doList(qr, VC.DEFAULT_TSV_PAGE_ITEMS, VC.DEFAULT_TSV_MAX_ITEMS);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		Csv csv = getContext().getIoc().get(Csv.class);
+		csv.setSeparator('\t');
+		csv.setList((List)rv);
+		csv.setColumns(columns);
+		
+		TsvView tv = new TsvView();
+		tv.setCsv(csv);
+		tv.setFilename(getText(RC.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
+		tv.setAttachment(true);
+		
+		return tv;
 	}
 	
 	/**

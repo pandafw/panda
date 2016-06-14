@@ -133,7 +133,6 @@ button-bupdate-execute=提交
 
 
 title-list=${top.title} - 浏览
-title-list_csv=${top.title} - 列表_${assist.csvFileTime}
 title-list_popup=${top.title} - 浏览
 title-list_print=${top.title} - 浏览
 title-import=数据导入

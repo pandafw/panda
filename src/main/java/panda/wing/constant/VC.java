@@ -74,6 +74,16 @@ public interface VC {
 	public final static long DEFAULT_CSV_MAX_ITEMS = 10000;
 	
 	/**
+	 * DEFAULT_TSV_PAGE_ITEMS = 1000;
+	 */
+	public final static long DEFAULT_TSV_PAGE_ITEMS = 1000;
+	
+	/**
+	 * DEFAULT_TSV_MAX_ITEMS = 10000;
+	 */
+	public final static long DEFAULT_TSV_MAX_ITEMS = 10000;
+	
+	/**
 	 * DEFAULT_JSON_PAGE_ITEMS = 1000;
 	 */
 	public final static long DEFAULT_JSON_PAGE_ITEMS = 1000;

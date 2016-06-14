@@ -498,7 +498,7 @@ public class DataImportAction extends AbstractAction {
 
 			final CsvReader csv = getCsvReader(data, separator);
 
-			final List<String> columns = csv.readNext();
+			final List<String> columns = csv.readList();
 			if (columns == null || columns.isEmpty()) {
 				throw new Exception("[" + arg.file.getName() + "] - the table column is empty!");
 			}
@@ -506,7 +506,7 @@ public class DataImportAction extends AbstractAction {
 
 			checkColumns(targetType, columns);
 			
-			List<String> row2 = csv.readNext();
+			List<String> row2 = csv.readList();
 			if (row2 == null || row2.size() != columns.size()) {
 				throw new Exception("[" + arg.file.getName() + "] - the column types is incorrect!");
 			}
@@ -563,7 +563,7 @@ public class DataImportAction extends AbstractAction {
 	protected Map<String, Object> getRowValues(CsvReader csv, int r,
 			List<String> columns, List<DataType> types, List uploadData) {
 		try {
-			List<String> row = csv.readNext();
+			List<String> row = csv.readList();
 			if (row == null) {
 				return null;
 			}
