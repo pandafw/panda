@@ -35,88 +35,88 @@
 <#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
-			"header": a.getText("a.t.id"),
+			"header": a.getFieldLabel("id"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.id-tip", "")
+			"tooltip": a.getFieldTooltip("id")
 		}] />
 </#if>
 <#if a.displayField("clazz")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "clazz",
-			"header": a.getText("a.t.clazz"),
+			"header": a.getFieldLabel("clazz"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.clazz-tip", "")
+			"tooltip": a.getFieldTooltip("clazz")
 		}] />
 </#if>
 <#if a.displayField("language")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "language",
-			"header": a.getText("a.t.language"),
+			"header": a.getFieldLabel("language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.language-tip", "")
+			"tooltip": a.getFieldTooltip("language")
 		}] />
 </#if>
 <#if a.displayField("country")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "country",
-			"header": a.getText("a.t.country"),
+			"header": a.getFieldLabel("country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.country-tip", "")
+			"tooltip": a.getFieldTooltip("country")
 		}] />
 </#if>
 <#if a.displayField("source")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "source",
-			"header": a.getText("a.t.source"),
+			"header": a.getFieldLabel("source"),
 			"hidden": true,
 			"sortable": false,
-			"tooltip": a.getText("a.t.source-tip", "")
+			"tooltip": a.getFieldTooltip("source")
 		}] />
 </#if>
 <#if a.displayField("status")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "status",
-			"header": a.getText("a.t.status"),
+			"header": a.getFieldLabel("status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.status-tip", "")
+			"tooltip": a.getFieldTooltip("status")
 		}] />
 </#if>
 <#if a.displayField("uusid")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "uusid",
-			"header": a.getText("a.t.uusid"),
+			"header": a.getFieldLabel("uusid"),
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.uusid-tip", "")
+			"tooltip": a.getFieldTooltip("uusid")
 		}] />
 </#if>
 <#if a.displayField("utime")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "utime",
-			"header": a.getText("a.t.utime"),
+			"header": a.getFieldLabel("utime"),
 			"format": {
 				"type": "datetime"
 				},
 			"hidden": false,
 			"sortable": false,
-			"tooltip": a.getText("a.t.utime-tip", "")
+			"tooltip": a.getFieldTooltip("utime")
 		}] />
 </#if>
 

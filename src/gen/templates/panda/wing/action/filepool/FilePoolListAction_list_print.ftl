@@ -28,54 +28,54 @@
 	<#assign _columns_ = _columns_ + [{
 			"name": "id",
 			"value": false,
-			"header": a.getText("a.t.id"),
+			"header": a.getFieldLabel("id"),
 			"sortable": false,
-			"tooltip": a.getText("a.t.id-tip", "")
+			"tooltip": a.getFieldTooltip("id")
 		}] />
 </#if>
 <#if a.displayField("name")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "name",
 			"value": false,
-			"header": a.getText("a.t.name"),
+			"header": a.getFieldLabel("name"),
 			"sortable": false,
-			"tooltip": a.getText("a.t.name-tip", "")
+			"tooltip": a.getFieldTooltip("name")
 		}] />
 </#if>
 <#if a.displayField("size")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "size",
 			"value": false,
-			"header": a.getText("a.t.size"),
+			"header": a.getFieldLabel("size"),
 			"format": {
 				"type": "integer"
 			},
 			"sortable": false,
-			"tooltip": a.getText("a.t.size-tip", "")
+			"tooltip": a.getFieldTooltip("size")
 		}] />
 </#if>
 <#if a.displayField("date")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "date",
 			"value": false,
-			"header": a.getText("a.t.date"),
+			"header": a.getFieldLabel("date"),
 			"format": {
 				"type": "timestamp"
 			},
 			"sortable": false,
-			"tooltip": a.getText("a.t.date-tip", "")
+			"tooltip": a.getFieldTooltip("date")
 		}] />
 </#if>
 <#if a.displayField("flag")>
 	<#assign _columns_ = _columns_ + [{
 			"name": "flag",
 			"value": false,
-			"header": a.getText("a.t.flag"),
+			"header": a.getFieldLabel("flag"),
 			"format": {
 				"type": "integer"
 			},
 			"sortable": false,
-			"tooltip": a.getText("a.t.flag-tip", "")
+			"tooltip": a.getFieldTooltip("flag")
 		}] />
 </#if>
 
