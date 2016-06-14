@@ -72,7 +72,7 @@ public class CsvReader implements ListReader, Closeable {
 	public List<List<String>> readAll() throws IOException {
 		List<List<String>> all = new ArrayList<List<String>>();
 		while (true) {
-			List<String> items = readNext();
+			List<String> items = readList();
 			if (items == null) {
 				break;
 			}
@@ -90,17 +90,6 @@ public class CsvReader implements ListReader, Closeable {
 	 */
 	@Override
 	public List<String> readList() throws IOException {
-		return readNext();
-	}
-
-	/**
-	 * Reads the next line from the buffer and converts to a string array.
-	 * 
-	 * @return a string array with each comma-separated element as a separate entry.
-	 * 
-	 * @throws IOException if bad things happen during the read
-	 */
-	public List<String> readNext() throws IOException {
 		String line = getNextLine();
 		if (line != null) {
 			return parseLine(line);

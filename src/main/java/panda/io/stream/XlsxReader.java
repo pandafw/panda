@@ -15,12 +15,13 @@ public class XlsxReader extends XlsReader {
 	}
 
 	/**
-	 * initialize workbook
+	 * load workbook
 	 * @param is input stream
 	 * @return workbook
 	 * @throws IOException
 	 */
-	protected Workbook init(InputStream is) throws IOException {
+	@Override
+	protected Workbook load(InputStream is) throws IOException {
 		return new XSSFWorkbook(is);
 	}
 }

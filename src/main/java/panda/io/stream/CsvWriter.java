@@ -12,9 +12,8 @@ import panda.lang.Systems;
 
 /**
  * CSV writer
- * @author yf.frank.wang@gmail.com
  */
-public class CsvWriter implements Closeable, Flushable {
+public class CsvWriter implements ListWriter, Closeable, Flushable {
 
 	private Appendable writer;
 
@@ -123,17 +122,17 @@ public class CsvWriter implements Closeable, Flushable {
 	 *
 	 * @param allLines a List of String[], with each String[] representing a line of the file.
 	 */
-	public void writeAll(List allLines) throws IOException {
+	public void writeAll(List<?> allLines) throws IOException {
 		for (Iterator iter = allLines.iterator(); iter.hasNext();) {
 			Object nextLine = iter.next();
 			if (nextLine == null){
-				writeNext(Collections.EMPTY_LIST);
+				writeList(Collections.EMPTY_LIST);
 			}
 			else if (nextLine instanceof Collection) {
-				writeNext((Collection)nextLine);
+				writeList((Collection)nextLine);
 			}
-			else if (nextLine instanceof String[]) {
-				writeNext((String[])nextLine);
+			else if (nextLine instanceof Object[]) {
+				writeArray((Object[])nextLine);
 			}
 			else {
 				throw new IllegalArgumentException("the element of list is not a instance of Collection or String[].");
@@ -146,14 +145,14 @@ public class CsvWriter implements Closeable, Flushable {
 	 * Writes the next element to the string buffer.
 	 *
 	 * @param sb string buffer to write to
-	 * @param nextElement a string to be write to string buffer
+	 * @param str a string to be write to string buffer
 	 */
-	private void writeNextElement(StringBuilder sb, String nextElement) {
+	private void writeItem(StringBuilder sb, String str) {
 		if (quotechar !=  NO_QUOTE_CHARACTER) {
 			sb.append(quotechar);
 		}
-		for (int j = 0; j < nextElement.length(); j++) {
-			char nextChar = nextElement.charAt(j);
+		for (int j = 0; j < str.length(); j++) {
+			char nextChar = str.charAt(j);
 			if (escapechar != NO_ESCAPE_CHARACTER && nextChar == quotechar) {
 				sb.append(escapechar).append(nextChar);
 			}
@@ -170,21 +169,22 @@ public class CsvWriter implements Closeable, Flushable {
 	}
 
 	/**
-	 * Writes the next line to the file.
+	 * Writes the list to the file.
 	 *
-	 * @param nextLine a collection with each comma-separated element as a separate entry.
+	 * @param list a collection with each comma-separated element as a separate entry.
 	 */
-	public void writeNext(Collection nextLine) throws IOException {
+	@Override
+	public void writeList(Collection<?> list) throws IOException {
 		StringBuilder sb = new StringBuilder();
 
 		int i = 0;
-		for (Iterator it = nextLine.iterator(); it.hasNext();) {
+		for (Iterator it = list.iterator(); it.hasNext();) {
 			if (i != 0) {
 				sb.append(separator);
 			}
 
-			Object nextElement = it.next();
-			writeNextElement(sb, nextElement == null ? "" : nextElement.toString());
+			Object e = it.next();
+			writeItem(sb, e == null ? "" : e.toString());
 
 			i++;
 		}
@@ -196,17 +196,17 @@ public class CsvWriter implements Closeable, Flushable {
 	/**
 	 * Writes the next line to the file.
 	 *
-	 * @param nextLine a string array with each comma-separated element as a separate entry.
+	 * @param array a string array with each comma-separated element as a separate entry.
 	 */
-	public void writeNext(String[] nextLine) throws IOException {
+	public void writeArray(Object[] array) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < nextLine.length; i++) {
+		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				sb.append(separator);
 			}
 
-			String nextElement = nextLine[i];
-			writeNextElement(sb, nextElement == null ? "" : nextElement);
+			Object a = array[i];
+			writeItem(sb, a == null ? "" : a.toString());
 		}
 
 		sb.append(lineEnd);

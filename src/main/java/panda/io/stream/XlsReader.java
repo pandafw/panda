@@ -23,18 +23,26 @@ public class XlsReader implements ListReader, Closeable {
 	private int rowidx;
 	
 	public XlsReader(InputStream is) throws IOException {
-		workbook = init(is);
-		setSheet(0);
+		workbook = load(is);
+		init();
 	}
 
 	/**
-	 * initialize workbook
+	 * load workbook
 	 * @param is input stream
 	 * @return workbook
 	 * @throws IOException
 	 */
-	protected Workbook init(InputStream is) throws IOException {
+	protected Workbook load(InputStream is) throws IOException {
 		return new HSSFWorkbook(is);
+	}
+
+	/**
+	 * initialize workbook
+	 * @throws IOException
+	 */
+	protected void init() throws IOException {
+		setSheet(0);
 	}
 	
 	/**
@@ -167,6 +175,7 @@ public class XlsReader implements ListReader, Closeable {
 	 * 
 	 * @throws IOException if bad things happen during the read
 	 */
+	@Override
 	public List<String> readList() throws IOException {
 		if (rowidx >= getRowCount()) {
 			return null;

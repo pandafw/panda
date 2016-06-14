@@ -783,7 +783,7 @@ public abstract class Texts {
 
 		CsvReader cr = new CsvReader(new CharSequenceReader(str), separator, quotechar);
 		try {
-			return cr.readNext();
+			return cr.readList();
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
