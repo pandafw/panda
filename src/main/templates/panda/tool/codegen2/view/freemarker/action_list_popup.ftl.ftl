@@ -18,7 +18,7 @@ ${s}#if a.displayField("${c.name}")>
 	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
 			"value": ${(c.value!true)?string},
-			"header": a.getText("a.t.${c.name}"),
+			"header": a.getFieldLabel("${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -68,7 +68,7 @@ ${s}#if a.displayField("${c.name}")>
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": a.getText("a.t.${c.name}-tip", "")
+			"tooltip": a.getFieldTooltip("${c.name}")
 		}] />
 ${s}/#if>
 </#list>
