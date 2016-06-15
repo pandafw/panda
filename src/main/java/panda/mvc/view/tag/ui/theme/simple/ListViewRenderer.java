@@ -382,7 +382,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
 			ListColumn.Filter _f = en.getValue();
 			String _name = en.getKey();
-			
+			String _hname = html(_name);
 			Filter qf = qfs == null ? null : qfs.get(_name);
 			
 			String _fn = _pf + _name;
@@ -390,9 +390,11 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			boolean _fd = fsinputs.contains(_name);
 
 			write("<div class=\"p-lv-fsi-" 
-					+ html(_name) 
+					+ _hname
 					+ (_fd ? "" : " p-hidden")
-					+ " form-group\">");
+					+ " form-group\" data-item=\""
+					+ _hname
+					+ "\">");
 
 			boolean _hfe = false;
 			if (fieldErrors != null) {
@@ -1018,7 +1020,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 									if (iv != null) {
 										Map codemap = getCodeMap(c.format.codemap);
 										while (iv.hasNext()) {
-											String s = getCodeText(codemap, iv.next());
+											String s = Mvcs.getCodeText(codemap, iv.next());
 											write(Escapes.escape(s, c.format.escape));
 											if (iv.hasNext()) {
 												write(" ");
@@ -1153,13 +1155,5 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		}
 
 		throw new IllegalArgumentException("Invalid codemap: " + cm.getClass());
-	}
-
-	private String getCodeText(Map cm, Object k) throws IOException {
-		Object v = cm.get(k);
-		if (v == null && k != null && !(k instanceof String)) {
-			v = cm.get(k.toString());
-		}
-		return (v == null ? null : v.toString());
 	}
 }
