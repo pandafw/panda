@@ -287,12 +287,11 @@ public class MailClient {
 					dbg = new StringBuilderWriter();
 					dbg.append("\n===================== SMTP DEBUG ====================\n");
 					client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));
+
+					log.debug("Connect to SMTP server " + host + ":" + port);
 				}
 
 				try {
-					if (log != null && log.isDebugEnabled()) {
-						log.debug("Connect to SMTP server " + host + ":" + port);
-					}
 					client.connect(host, port);
 				}
 				catch (IOException e) {
@@ -326,15 +325,15 @@ public class MailClient {
 			
 			if (username != null) {
 				client.auth(AuthenticatingSMTPClient.AUTH_METHOD.LOGIN, username, password);
-				checkReply(client);
+				checkReply(host, port, client);
 			}
 
 			client.setSender(email.getSender());
-			checkReply(client);
+			checkReply(host, port, client);
 
 			for (EmailAddress ea : rcpts) {
 				client.addRecipient(ea.getAddress());
-				checkReply(client);
+				checkReply(host, port, client);
 			}
 
 			Writer out = client.sendMessageData();
@@ -516,12 +515,13 @@ public class MailClient {
 		}
 	}
 
-	private void checkReply(SMTPClient sc) throws EmailException {
+	private void checkReply(String host, int port, SMTPClient sc) throws EmailException {
 		if (SMTPReply.isNegativeTransient(sc.getReplyCode())) {
-			throw new EmailException("Transient SMTP error: " + sc.getReplyString());
+			throw new EmailException(errmsg(host, port, sc.getReplyString()));
 		}
-		else if (SMTPReply.isNegativePermanent(sc.getReplyCode())) {
-			throw new EmailException("Permanent SMTP error: " + sc.getReplyString());
+		
+		if (SMTPReply.isNegativePermanent(sc.getReplyCode())) {
+			throw new EmailException(errmsg(host, port, sc.getReplyString()));
 		}
 	}
 }
