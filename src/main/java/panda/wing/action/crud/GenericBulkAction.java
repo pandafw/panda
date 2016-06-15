@@ -113,7 +113,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
+			addSystemError(RC.ACTION_FAILED_PREFIX, e);
 			setScenarioResult();
 			return dataList;
 		}
@@ -227,7 +227,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
+			addSystemError(RC.ACTION_FAILED_PREFIX, e);
 			setScenarioResult();
 			return dataList;
 		}

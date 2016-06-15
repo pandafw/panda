@@ -273,64 +273,64 @@ step-bupdate-success=Complete
 
 #action messages
 action-confirm-add=Are you sure to add this data?
-action-failed-add=Failed to add this data.\n${top}
+action-failed-add=System error occurred. Failed to add this data.${top}
 action-success-add=The data is successfully added.
 
 action-confirm-copy=Are you sure to insert this data?
-action-failed-copy=Failed to insert this data.\n${top}
+action-failed-copy=System error occurred. Failed to insert this data.${top}
 action-success-copy=The data is successfully inserted.
 
 action-confirm-delete=Are you sure to delete this data?
-action-failed-delete=Failed to delete this data.\n${top}
+action-failed-delete=System error occurred. Failed to delete this data.${top}
 action-success-delete=The data is successfully deleted.
 
 action-confirm-edit=Are you sure to update this data?
-action-failed-edit=Failed to update this data.\n${top}
+action-failed-edit=System error occurred. Failed to update this data.${top}
 action-success-edit=The data is successfully updated.
 
 action-confirm-recover=Are you sure to recover this data?
-action-failed-recover=Failed to recover this data.\n${top}
+action-failed-recover=System error occurred. Failed to recover this data.${top}
 action-success-recover=The data is successfully recoverd.
 
 action-confirm-trash=Are you sure to delete this data?
-action-failed-trash=Failed to delete this data.\n${top}
+action-failed-trash=System error occurred. Failed to delete this data.${top}
 action-success-trash=The data is successfully deleted.
 
 action-confirm-update=Are you sure to update this data?
-action-failed-update=Failed to update this data.\n${top}
+action-failed-update=System error occurred. Failed to update this data.${top}
 action-success-update=The data is successfully updated.
 
 action-confirm-cancel=Are you sure to cancel this data?
-action-failed-cancel=Failed to cancel this data.\n${top}
+action-failed-cancel=System error occurred. Failed to cancel this data.${top}
 action-success-cancel=The data is successfully canceled.
 
 
 action-confirm-bcancel=Are you sure to cancel these ${top} items?
-action-failed-bcancel=Failed to cancel these data.\n${top}
+action-failed-bcancel=System error occurred. Failed to cancel these data.${top}
 action-success-bcancel=${top} items have been successfully canceled.
 
 action-confirm-bdelete=Are you sure to delete these ${top} items?
-action-failed-bdelete=Failed to delete these data.\n${top}
+action-failed-bdelete=System error occurred. Failed to delete these data.${top}
 action-success-bdelete=${top} items have been successfully deleted.
 
 action-confirm-bdisable=Are you sure to disable these ${top} items?
-action-failed-bdisable=Failed to disable these data.\n${top}
+action-failed-bdisable=System error occurred. Failed to disable these data.${top}
 action-success-bdisable=${top} items have been successfully disabled.
 
 action-confirm-benable=Are you sure to enable these ${top} items?
-action-failed-benable=Failed to enable these data.\n${top}
+action-failed-benable=System error occurred. Failed to enable these data.${top}
 action-success-benable=${top} items have been successfully enabled.
 
 action-confirm-brecover=Are you sure to recover these ${top} items?
-action-failed-brecover=Failed to recover these data.\n${top}
+action-failed-brecover=System error occurred. Failed to recover these data.${top}
 action-success-brecover=${top} items have been successfully recoverd.
 
 action-confirm-btrash=Are you sure to delete these ${top} items?
-action-failed-btrash=Failed to delete these data.\n${top}
+action-failed-btrash=System error occurred. Failed to delete these data.${top}
 action-success-btrash=${top} items have been successfully deleted.
 
 action-confirm-bupdate=Are you sure to update these ${top} items?
-action-failed-bupdate=Failed to update these data.\n${top}
+action-failed-bupdate=System error occurred. Failed to update these data.${top}
 action-success-bupdate=${top} items have been successfully updaated.
 
 #confirm messages

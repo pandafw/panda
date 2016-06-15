@@ -213,68 +213,68 @@ step-bupdate-success=完成
 
 #action messages
 action-confirm-add=您确定登录该数据吗？
-action-failed-add=该数据登录失败。\n${top}
+action-failed-add=系统错误发生，该数据登录失败。${top}
 action-success-add=该数据被成功登录了。
 
 action-confirm-cancel=您确定取消该数据吗？
-action-failed-cancel=该数据取消失败。\n${top}
+action-failed-cancel=系统错误发生，该数据取消失败。${top}
 action-success-cancel=该数据被成功取消了。
 
 action-confirm-copy=您确定登录该数据吗？
-action-failed-copy=该数据登录失败。\n${top}
+action-failed-copy=系统错误发生，该数据登录失败。${top}
 action-success-copy=该数据被成功登录了。
 
 action-confirm-delete=您确定删除该数据吗？
-action-failed-delete=该数据删除失败。\n${top}
+action-failed-delete=系统错误发生，该数据删除失败。${top}
 action-success-delete=该数据被成功删除了。
 
 action-confirm-edit=您确定变更该数据吗？
-action-failed-edit=该数据变更失败。\n${top}
+action-failed-edit=系统错误发生，该数据变更失败。${top}
 action-success-edit=该数据被成功变更了。
 
 action-confirm-insert=您确定登录该数据吗？
-action-failed-insert=该数据登录失败。\n${top}
+action-failed-insert=系统错误发生，该数据登录失败。${top}
 action-success-insert=该数据被成功登录了。
 
 action-confirm-recover=您确定恢复该数据吗？
-action-failed-recover=该数据恢复失败。\n${top}
+action-failed-recover=系统错误发生，该数据恢复失败。${top}
 action-success-recover=该数据被成功恢复了。
 
 action-confirm-trash=您确定删除该数据吗？
-action-failed-trash=该数据删除失败。\n${top}
+action-failed-trash=系统错误发生，该数据删除失败。${top}
 action-success-trash=该数据被成功删除了。
 
 action-confirm-update=您确定更新该数据吗？
-action-failed-update=该数据更新失败。\n${top}
+action-failed-update=系统错误发生，该数据更新失败。${top}
 action-success-update=该数据被成功更新了。
 
 
 action-confirm-bcancel=您确定取消这${top}件数据吗？
-action-failed-bcancel=数据取消失败。\n${top}
+action-failed-bcancel=系统错误发生，数据取消失败。${top}
 action-success-bcancel=${top}件数据被成功取消。
 
 action-confirm-bdelete=您确定删除这${top}件数据吗？
-action-failed-bdelete=数据删除失败。\n${top}
+action-failed-bdelete=系统错误发生，数据删除失败。${top}
 action-success-bdelete=${top}件数据被成功删除。
 
 action-confirm-bdisable=您确定禁用这${top}件数据吗？
-action-failed-bdisable=数据禁用失败。\n${top}
+action-failed-bdisable=系统错误发生，数据禁用失败。${top}
 action-success-bdisable=${top}件数据被成功禁用。
 
 action-confirm-benable=您确定激活这${top}件数据吗？
-action-failed-benable=数据激活失败。\n${top}
+action-failed-benable=系统错误发生，数据激活失败。${top}
 action-success-benable=${top}件数据被成功激活。
 
 action-confirm-brecover=您确定恢复这${top}件数据吗？
-action-failed-brecover=数据恢复失败。\n${top}
+action-failed-brecover=系统错误发生，数据恢复失败。${top}
 action-success-brecover=${top}件数据被成功恢复。
 
 action-confirm-btrash=您确定删除这${top}件数据吗？
-action-failed-btrash=数据删除失败。\n${top}
+action-failed-btrash=系统错误发生，数据删除失败。${top}
 action-success-btrash=${top}件数据被成功删除。
 
 action-confirm-bupdate=您确定变更这${top}件数据吗？
-action-failed-bupdate=数据变更失败。\n${top}
+action-failed-bupdate=系统错误发生，数据变更失败。${top}
 action-success-bupdate=${top}件数据被成功变更。
 
 #confirm messages

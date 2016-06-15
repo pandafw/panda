@@ -214,67 +214,67 @@ step-bupdate-success=完了
 
 #action messages
 action-confirm-add=該当データを登録して宜しいでしょうか？
-action-failed-add=該当データを登録できませんでした。\n${top}
+action-failed-add=システムエラーが発生したため、該当データを登録できませんでした。${top}
 action-success-add=該当データを登録しました。
 
 action-confirm-cancel=該当データを取消して宜しいでしょうか？
-action-failed-cancel=該当データを取消できませんでした。\n${top}
+action-failed-cancel=システムエラーが発生したため、該当データを取消できませんでした。${top}
 action-success-cancel=該当データを取消しました。
 
 action-confirm-copy=該当データを登録して宜しいでしょうか？
-action-failed-copy=該当データを登録できませんでした。\n${top}
+action-failed-copy=システムエラーが発生したため、該当データを登録できませんでした。${top}
 action-success-copy=該当データを登録しました。
 
 action-confirm-delete=該当データを削除して宜しいでしょうか？
-action-failed-delete=該当データを削除できませんでした。\n${top}
+action-failed-delete=システムエラーが発生したため、該当データを削除できませんでした。${top}
 action-success-delete=該当データを削除しました。
 
 action-confirm-edit=該当データを更新して宜しいでしょうか？
-action-failed-edit=該当データを更新できませんでした。\n${top}
+action-failed-edit=システムエラーが発生したため、該当データを更新できませんでした。${top}
 action-success-edit=該当データを更新しました。
 
 action-confirm-insert=該当データを登録して宜しいでしょうか？
-action-failed-insert=該当データを新規できませんでした。\n${top}
+action-failed-insert=システムエラーが発生したため、該当データを新規できませんでした。${top}
 action-success-insert=該当データを登録しました。
 
 action-confirm-recover=該当データを復元して宜しいでしょうか？
-action-failed-recover=該当データを復元できませんでした。\n${top}
+action-failed-recover=システムエラーが発生したため、該当データを復元できませんでした。${top}
 action-success-recover=該当データを復元しました。
 
 action-confirm-trash=該当データを削除して宜しいでしょうか？
-action-failed-trash=該当データを削除できませんでした。\n${top}
+action-failed-trash=システムエラーが発生したため、該当データを削除できませんでした。${top}
 action-success-trash=該当データを削除しました。
 
 action-confirm-update=該当データを更新して宜しいでしょうか？
-action-failed-update=該当データを更新できませんでした。\n${top}
+action-failed-update=システムエラーが発生したため、該当データを更新できませんでした。${top}
 action-success-update=該当データを更新しました。
 
 action-confirm-bcancel=該当${top}件のデータを取消して宜しいでしょうか？
-action-failed-bcancel=該当データを取消できませんでした。\n${top}
+action-failed-bcancel=システムエラーが発生したため、該当データを取消できませんでした。${top}
 action-success-bcancel=${top}件のデータを取消しました。
 
 action-confirm-bdelete=該当${top}件のデータを削除して宜しいでしょうか？
-action-failed-bdelete=該当データを削除できませんでした。\n${top}
+action-failed-bdelete=システムエラーが発生したため、該当データを削除できませんでした。${top}
 action-success-bdelete=${top}件のデータを削除しました。
 
 action-confirm-bdisable=該当${top}件のデータを無効にして宜しいでしょうか？
-action-failed-bdisable=該当データを無効にすることができませんでした。\n${top}
+action-failed-bdisable=システムエラーが発生したため、該当データを無効にすることができませんでした。${top}
 action-success-bdisable=${top}件のデータを無効にしました。
 
 action-confirm-benable=該当${top}件のデータを有効にして宜しいでしょうか？
-action-failed-benable=該当データを有効にすることができませんでした。\n${top}
+action-failed-benable=システムエラーが発生したため、該当データを有効にすることができませんでした。${top}
 action-success-benable=${top}件のデータを有効にしました。
 
 action-confirm-brecover=該当${top}件のデータを復元して宜しいでしょうか？
-action-failed-brecover=該当データを復元できませんでした。\n${top}
+action-failed-brecover=システムエラーが発生したため、該当データを復元できませんでした。${top}
 action-success-brecover=${top}件のデータを復元しました。
 
 action-confirm-btrash=該当${top}件のデータを削除して宜しいでしょうか？
-action-failed-btrash=該当データを削除できませんでした。\n${top}
+action-failed-btrash=システムエラーが発生したため、該当データを削除できませんでした。${top}
 action-success-btrash=${top}件のデータを削除しました。
 
 action-confirm-bupdate=該当${top}件のデータを更新して宜しいでしょうか？
-action-failed-bupdate=該当データを更新できませんでした。\n${top}
+action-failed-bupdate=システムエラーが発生したため、該当データを更新できませんでした。${top}
 action-success-bupdate=${top}件のデータを更新しました。
 
 #confirm messages
@@ -284,6 +284,4 @@ confirm-data-overwrite=該当データを上書きして宜しいでしょうか
 warn-data-changed-on-delete=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
 warn-data-changed-on-edit=該当データが${top} 他のユーザーに更新されました。\n上書きして宜しいでしょうか？
 warn-data-changed-on-trash=該当データが${top} 他のユーザーに更新されました。\n削除しても宜しいでしょうか？
-
-
 

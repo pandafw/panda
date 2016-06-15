@@ -12,6 +12,7 @@ import panda.dao.entity.EntityField;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.wing.action.AbstractAction;
@@ -309,6 +310,16 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	protected String getScenarioMessage(String prefix, String param) {
 		String msg = prefix + getActionScenario();
 		return getText(msg, msg, param);
+	}
+
+	/**
+	 * add a system error to action
+	 * @param prefix
+	 * @param e
+	 */
+	protected void addSystemError(String prefix, Throwable e) {
+		addActionError(getScenarioMessage(prefix, 
+			assist().isSuperUser() ? Systems.LINE_SEPARATOR + e.getMessage() : Strings.EMPTY));
 	}
 	
 	/**

@@ -310,7 +310,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
+			addSystemError(RC.ACTION_FAILED_PREFIX, e);
 			setScenarioResult();
 			return data;
 		}
@@ -321,7 +321,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
 		return pd;
 	}
-
+	
 	/**
 	 * doUpdateInput
 	 */
@@ -389,7 +389,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
+			addSystemError(RC.ACTION_FAILED_PREFIX, e);
 			setScenarioResult();
 			return pd;
 		}
@@ -447,7 +447,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addActionError(getScenarioMessage(RC.ACTION_FAILED_PREFIX, e.getMessage()));
+			addSystemError(RC.ACTION_FAILED_PREFIX, e);
 			setScenarioResult();
 			return sd;
 		}
