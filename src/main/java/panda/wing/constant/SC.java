@@ -87,9 +87,14 @@ public interface SC {
 	public static final String MAIL_SMTP_SSL = "mail-smtp-ssl";
 	
 	/**
-	 * MAIL_SMTP_TLS = "mail-smtp-tls";
+	 * MAIL_SMTP_CONN_TIMEOUT = "mail-smtp-conn-timeout";
 	 */
-	public static final String MAIL_SMTP_TLS = "mail-smtp-tls";
+	public static final String MAIL_SMTP_CONN_TIMEOUT = "mail-smtp-conn-timeout";
+	
+	/**
+	 * MAIL_SMTP_SEND_TIMEOUT = "mail-smtp-send-timeout";
+	 */
+	public static final String MAIL_SMTP_SEND_TIMEOUT = "mail-smtp-send-timeout";
 	
 	/**
 	 * MAIL_SMTP_USER = "mail-smtp-user";
