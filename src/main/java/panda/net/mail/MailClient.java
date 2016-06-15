@@ -52,7 +52,7 @@ public class MailClient {
 	private String password;
 	
 	private int connectTimeout = 5000;
-	private int defaultTimeout = 10000;
+	private int defaultTimeout = 15000;
 
 	/**
 	 * @return the log
@@ -359,11 +359,11 @@ public class MailClient {
 				
 				writer.close();
 				if (!client.completePendingCommand()) {
-					throw new EmailException("Failure to send the email: " + client.getReplyString());
+					throw new EmailException(client.getReplyString());
 				}
 			}
 			else {
-				throw new EmailException("Failure to send the email: " + client.getReplyString());
+				throw new EmailException(client.getReplyString());
 			}
 		}
 		catch (IOException e) {
