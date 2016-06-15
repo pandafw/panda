@@ -118,24 +118,48 @@ public class Numbers {
 		return n == null ? 0 : n.byteValue();
 	}
 	
+	public static byte defaultByte(Number n, byte d) {
+		return n == null ? d : n.byteValue();
+	}
+	
 	public static short defaultShort(Number n) {
 		return n == null ? 0 : n.shortValue();
+	}
+	
+	public static short defaultShort(Number n, short d) {
+		return n == null ? d : n.shortValue();
 	}
 	
 	public static int defaultInt(Number n) {
 		return n == null ? 0 : n.intValue();
 	}
 	
+	public static int defaultInt(Number n, int d) {
+		return n == null ? d : n.intValue();
+	}
+	
 	public static long defaultLong(Number n) {
 		return n == null ? 0 : n.longValue();
+	}
+	
+	public static long defaultLong(Number n, long d) {
+		return n == null ? d : n.longValue();
 	}
 	
 	public static float defaultFloat(Number n) {
 		return n == null ? 0 : n.floatValue();
 	}
 	
+	public static float defaultFloat(Number n, float f) {
+		return n == null ? f : n.floatValue();
+	}
+	
 	public static double defaultDouble(Number n) {
 		return n == null ? 0 : n.doubleValue();
+	}
+	
+	public static double defaultDouble(Number n, double d) {
+		return n == null ? d : n.doubleValue();
 	}
 	
 	//----------------------------------------------------------------
