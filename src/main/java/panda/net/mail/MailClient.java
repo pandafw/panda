@@ -297,7 +297,7 @@ public class MailClient {
 				}
 				catch (IOException e) {
 					if (i >= hosts.size() - 1) {
-						throw e;
+						throw new EmailException(errmsg(host, port, e.getMessage()));
 					}
 					close(client);
 				}
