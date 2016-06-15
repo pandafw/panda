@@ -103,11 +103,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				reader = getXlsReader(arg.file, true);
 			}
 			else if (FileType.CSV.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(arg.file, CsvReader.COMMA_SEPARATOR);
+				reader = getCsvReader(arg.file, Chars.COMMA);
 			}
 			else if (FileType.TSV.equalsIgnoreCase(fext) 
 					|| FileType.TXT.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(arg.file, CsvReader.TAB_SEPARATOR);
+				reader = getCsvReader(arg.file, Chars.TAB);
 			}
 			else {
 				addFieldError("file", getText("error-file"));
