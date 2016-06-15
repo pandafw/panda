@@ -2166,8 +2166,8 @@ function _plv_onAddFilter() {
 }
 
 function _plv_onDelFilter() {
-	$(this).closest(".form-group")
-		.addClass('p-hidden')
+	var $g = $(this).closest(".form-group");
+	$g.addClass('p-hidden')
 		.find("input,select,textarea")
 			.prop('disabled', true)
 			.each(_plv_clearFieldValue)
@@ -2178,9 +2178,8 @@ function _plv_onDelFilter() {
 		.find(".p-field-errors")
 			.remove()
 			.end()
-		.end()
 		.closest(".p-lv-filters")
-			.find('.p-lv-fs-select>option[value=' + n + ']')
+			.find('.p-lv-fs-select>option[value=' + $g.data('item') + ']')
 				.prop('disabled', false);
 }
 
