@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -52,12 +51,11 @@ import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.lang.Threads;
 
 /**
  * I/O Utilities class.
- * 
- * @author yf.frank.wang@gmail.com
  */
 public class Streams {
 	/**
@@ -78,16 +76,7 @@ public class Streams {
 	/**
 	 * The system line separator string.
 	 */
-	public static final String LINE_SEPARATOR;
-
-	static {
-		// avoid security issues
-		StringBuilderWriter buf = new StringBuilderWriter(4);
-		PrintWriter out = new PrintWriter(buf);
-		out.println();
-		LINE_SEPARATOR = buf.toString();
-		out.close();
-	}
+	public static final String LINE_SEPARATOR = Systems.LINE_SEPARATOR;
 
 	/**
 	 * The default buffer size ({@value} ) to use for {@link #copyLarge(InputStream, OutputStream)}

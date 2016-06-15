@@ -7,8 +7,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import panda.lang.Arrays;
+import panda.lang.Chars;
 import panda.lang.Collections;
-import panda.lang.Systems;
+import panda.lang.Strings;
 
 /**
  * CSV writer
@@ -25,34 +27,15 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 
 	private String lineEnd;
 
-	/** The character used for escaping quotes. */
-	public static final char DEFAULT_ESCAPE_CHARACTER = '"';
-
-	/** The default separator to use if none is supplied to the constructor. */
-	public static final char DEFAULT_SEPARATOR = ',';
-
-	/**
-	 * The default quote character to use if none is supplied to the
-	 * constructor.
-	 */
-	public static final char DEFAULT_QUOTE_CHARACTER = '"';
-
-	/** The quote constant to use when you wish to suppress all quoting. */
-	public static final char NO_QUOTE_CHARACTER = '\u0000';
-
-	/** The escape constant to use when you wish to suppress all escaping. */
-	public static final char NO_ESCAPE_CHARACTER = '\u0000';
-
-	/** Default line terminator uses platform encoding. */
-	public static final String DEFAULT_LINE_END = Systems.LINE_SEPARATOR;
-
+	private boolean forceQuote;
+	
 	/**
 	 * Constructs CSVWriter using a comma for the separator.
 	 *
 	 * @param writer the writer to an underlying CSV source.
 	 */
 	public CsvWriter(Appendable writer) {
-		this(writer, DEFAULT_SEPARATOR);
+		this(writer, Chars.COMMA);
 	}
 
 	/**
@@ -62,7 +45,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public CsvWriter(Appendable writer, char separator) {
-		this(writer, separator, DEFAULT_QUOTE_CHARACTER);
+		this(writer, separator, Chars.DOUBLE_QUOTE);
 	}
 
 	/**
@@ -73,7 +56,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @param quotechar the character to use for quoted elements
 	 */
 	public CsvWriter(Appendable writer, char separator, char quotechar) {
-		this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER);
+		this(writer, separator, quotechar, quotechar);
 	}
 
 	/**
@@ -85,7 +68,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @param escapechar the character to use for escaping quotechars or escapechars
 	 */
 	public CsvWriter(Appendable writer, char separator, char quotechar, char escapechar) {
-		this(writer, separator, quotechar, escapechar, DEFAULT_LINE_END);
+		this(writer, separator, quotechar, escapechar, Strings.CRLF);
 	}
 
 	/**
@@ -97,7 +80,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @param lineEnd the line feed terminator to use
 	 */
 	public CsvWriter(Appendable writer, char separator, char quotechar, String lineEnd) {
-		this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER, lineEnd);
+		this(writer, separator, quotechar, quotechar, lineEnd);
 	}
 
 	/**
@@ -138,7 +121,6 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 				throw new IllegalArgumentException("the element of list is not a instance of Collection or String[].");
 			}
 		}
-
 	}
 
 	/**
@@ -146,25 +128,54 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 *
 	 * @param sb string buffer to write to
 	 * @param str a string to be write to string buffer
+	 * @throws IOException 
 	 */
-	private void writeItem(StringBuilder sb, String str) {
-		if (quotechar !=  NO_QUOTE_CHARACTER) {
-			sb.append(quotechar);
-		}
-		for (int j = 0; j < str.length(); j++) {
-			char nextChar = str.charAt(j);
-			if (escapechar != NO_ESCAPE_CHARACTER && nextChar == quotechar) {
-				sb.append(escapechar).append(nextChar);
+	private void writeItem(String str) throws IOException {
+		if (forceQuote) {
+			writer.append(quotechar);
+			for (int i = 0; i < str.length(); i++) {
+				char c = str.charAt(i);
+				if (c == quotechar || c == escapechar) {
+					writer.append(escapechar).append(c);
+				}
+				else {
+					writer.append(c);
+				}
 			}
-			else if (escapechar != NO_ESCAPE_CHARACTER && nextChar == escapechar) {
-				sb.append(escapechar).append(nextChar);
+			writer.append(quotechar);
+		}
+		else {
+			boolean quoted = false;
+			for (int i = 0; i < str.length(); i++) {
+				char c = str.charAt(i);
+				if (c == quotechar || c == escapechar) {
+					if (!quoted) {
+						quoted = true;
+						writer.append(quotechar);
+						writer.append(str, 0, i);
+					}
+					writer.append(escapechar).append(c);
+				}
+				else if (c == Chars.CR || c == Chars.LF) {
+					if (!quoted) {
+						quoted = true;
+						writer.append(quotechar);
+						writer.append(str, 0, i);
+					}
+					writer.append(c);
+				}
+				else {
+					if (quoted) {
+						writer.append(c);
+					}
+				}
+			}
+			if (quoted) {
+				writer.append(quotechar);
 			}
 			else {
-				sb.append(nextChar);
+				writer.append(str);
 			}
-		}
-		if (quotechar != NO_QUOTE_CHARACTER) {
-			sb.append(quotechar);
 		}
 	}
 
@@ -175,22 +186,19 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 */
 	@Override
 	public void writeList(Collection<?> list) throws IOException {
-		StringBuilder sb = new StringBuilder();
-
 		int i = 0;
 		for (Iterator it = list.iterator(); it.hasNext();) {
 			if (i != 0) {
-				sb.append(separator);
+				writer.append(separator);
 			}
 
 			Object e = it.next();
-			writeItem(sb, e == null ? "" : e.toString());
+			writeItem(e == null ? "" : e.toString());
 
 			i++;
 		}
 
-		sb.append(lineEnd);
-		writer.append(sb);
+		writer.append(lineEnd);
 	}
 
 	/**
@@ -199,18 +207,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @param array a string array with each comma-separated element as a separate entry.
 	 */
 	public void writeArray(Object[] array) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < array.length; i++) {
-			if (i != 0) {
-				sb.append(separator);
-			}
-
-			Object a = array[i];
-			writeItem(sb, a == null ? "" : a.toString());
-		}
-
-		sb.append(lineEnd);
-		writer.append(sb);
+		writeList(Arrays.asList(array));
 	}
 
 	/**
@@ -290,6 +287,20 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 */
 	public void setLineEnd(String lineEnd) {
 		this.lineEnd = lineEnd;
+	}
+
+	/**
+	 * @return the forceQuote
+	 */
+	public boolean isForceQuote() {
+		return forceQuote;
+	}
+
+	/**
+	 * @param forceQuote the forceQuote to set
+	 */
+	public void setForceQuote(boolean forceQuote) {
+		this.forceQuote = forceQuote;
 	}
 
 }

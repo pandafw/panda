@@ -1,6 +1,9 @@
 package panda.lang;
 
 import java.io.File;
+import java.io.PrintWriter;
+
+import panda.io.stream.StringBuilderWriter;
 
 /**
  * <p>
@@ -666,7 +669,21 @@ public class Systems {
 	 * 
 	 * @since Java 1.1
 	 */
-	public static final String LINE_SEPARATOR = getSystemProperty("line.separator");
+	public static final String LINE_SEPARATOR = getSystemLineSeparator();
+
+	private static String getSystemLineSeparator() {
+		String ls = getSystemProperty("line.separator");
+		if (ls == null) {
+			// avoid security issues
+			StringBuilderWriter buf = new StringBuilderWriter(4);
+			PrintWriter out = new PrintWriter(buf);
+			out.println();
+			ls = buf.toString();
+			out.close();
+		}
+		return ls;
+	}
+
 
 	/**
 	 * <p>
@@ -1336,14 +1353,14 @@ public class Systems {
 	 * @param property the system property name
 	 * @return the system property value or {@code null} if a security problem occurs
 	 */
-	private static String getSystemProperty(String property) {
+	public static String getSystemProperty(String property) {
 		try {
 			return System.getProperty(property);
 		}
 		catch (SecurityException ex) {
 			// we are not allowed to look at this property
 			System.err.println("Caught a SecurityException reading the system property '"
-					+ property + "'; the SystemUtils property value will default to null.");
+					+ property + "'; the System property value will default to null.");
 			return null;
 		}
 	}

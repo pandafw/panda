@@ -7,6 +7,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import panda.lang.Chars;
+
 /**
  * CSV reader.
  */
@@ -17,25 +19,13 @@ public class CsvReader implements ListReader, Closeable {
 
 	private char quotechar;
 	
-	/** comma separator */
-	public static final char COMMA_SEPARATOR = ',';
-
-	/** tab separator */
-	public static final char TAB_SEPARATOR = '\t';
-
-	/**
-	 * The default quote character to use if none is supplied to the
-	 * constructor.
-	 */
-	public static final char DEFAULT_QUOTE_CHAR = '"';
-	
 	/**
 	 * Constructs CSVReader using a comma for the separator.
 	 * 
 	 * @param reader the reader to an underlying CSV source.
 	 */
 	public CsvReader(Reader reader) {
-		this(reader, COMMA_SEPARATOR);
+		this(reader, Chars.COMMA);
 	}
 
 	/**
@@ -45,7 +35,7 @@ public class CsvReader implements ListReader, Closeable {
 	 * @param separator the delimiter to use for separating entries.
 	 */
 	public CsvReader(Reader reader, char separator) {
-		this(reader, separator, DEFAULT_QUOTE_CHAR);
+		this(reader, separator, Chars.DOUBLE_QUOTE);
 	}
 	
 	

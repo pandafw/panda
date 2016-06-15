@@ -16,6 +16,11 @@ package panda.lang;
  */
 public abstract class Chars {
 	/**
+	 * zero (\u0000)
+	 */
+	public static final char ZERO = '\u0000';
+
+	/**
 	 * BOM character
 	 */
 	public static final char BOM = '\uFEFF';
@@ -24,12 +29,7 @@ public abstract class Chars {
 	 * TAB (\u0009)
 	 */
 	public static final char TAB = '\t';
-	
-	/**
-	 * SPACE (\u0020)
-	 */
-	public static final char SPACE = ' ';
-	
+
 	/**
 	 * line-feed LF ('\n') {@code '\u000a'}.
 	 * 
@@ -46,6 +46,19 @@ public abstract class Chars {
 	 */
 	public static final char CR = '\r';
 
+	/**
+	 * SPACE (\u0020)
+	 */
+	public static final char SPACE = ' ';
+
+	/** comma */
+	public static final char COMMA = ',';
+
+	/**
+	 * double quote
+	 */
+	public static final char DOUBLE_QUOTE = '"';
+	
 	private static final String[] CHAR_STRING_ARRAY = new String[128];
 	static {
 		for (char c = 0; c < CHAR_STRING_ARRAY.length; c++) {
