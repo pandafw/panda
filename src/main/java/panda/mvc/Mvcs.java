@@ -1,5 +1,9 @@
 package panda.mvc;
 
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.TimeZone;
+
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
@@ -17,9 +21,6 @@ import panda.lang.Strings;
 import panda.mvc.util.TextProvider;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.Validators;
-
-import java.lang.reflect.Type;
-import java.util.TimeZone;
 
 /**
  * Mvc helper methods
@@ -385,6 +386,20 @@ public abstract class Mvcs {
 	public static boolean validate(ActionContext context, Object value, String name) {
 		Validators vs = getValidators(context);
 		return vs.validate(context, name, value);
+	}
+
+	/**
+	 * get text from code map
+	 * @param cm code map
+	 * @param k key
+	 * @return text
+	 */
+	public static String getCodeText(Map cm, Object k) {
+		Object v = cm.get(k);
+		if (v == null && k != null && !(k instanceof String)) {
+			v = cm.get(k.toString());
+		}
+		return (v == null ? Strings.EMPTY : v.toString());
 	}
 }
 

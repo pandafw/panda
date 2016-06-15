@@ -52,7 +52,11 @@ public class Csv extends Component {
 
 	private Map<String, Map> codemaps = new HashMap<String, Map>();
 	
-	private String getCodeText(Object cm, Object v) {
+	private String getCodeText(Object cm, Object k) {
+		if (k == null) {
+			return Strings.EMPTY;
+		}
+		
 		if (cm instanceof String) {
 			Map m = codemaps.get(cm);
 			if (m == null) {
@@ -63,8 +67,7 @@ public class Csv extends Component {
 		}
 
 		if (cm instanceof Map) {
-			v = ((Map)cm).get(v);
-			return v == null ? Strings.EMPTY: v.toString(); 
+			return Mvcs.getCodeText((Map)cm, k);
 		}
 		
 		return Strings.EMPTY;
