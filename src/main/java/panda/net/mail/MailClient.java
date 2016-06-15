@@ -250,6 +250,10 @@ public class MailClient {
 	private String generateMsgId() {
 		return '<' + Randoms.randDigits(24) + ".SMTPMail@" + helo + '>';
 	}
+
+	private String errmsg(String host, int port, String msg) {
+		return host + ':' + port + "> " + msg;
+	}
 	
 	private void send(String host, int port, String username, String password, Collection<EmailAddress> rcpts, Email email) throws EmailException {
 		// debug writer
@@ -273,7 +277,7 @@ public class MailClient {
 			}
 			client.connect(host, port);
 			if (!SMTPReply.isPositiveCompletion(client.getReplyCode())) {
-				throw new EmailException("SMTP server refused connection.");
+				throw new EmailException(errmsg(host, port, client.getReplyString()));
 			}
 
 			// you say ehlo and you specify the host you are connecting from, could be anything
@@ -359,24 +363,24 @@ public class MailClient {
 				
 				writer.close();
 				if (!client.completePendingCommand()) {
-					throw new EmailException(client.getReplyString());
+					throw new EmailException(errmsg(host, port, client.getReplyString()));
 				}
 			}
 			else {
-				throw new EmailException(client.getReplyString());
+				throw new EmailException(errmsg(host, port, client.getReplyString()));
 			}
 		}
 		catch (IOException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new EmailException(errmsg(host, port, e.getMessage()), e);
 		}
 		catch (InvalidKeyException e) {
-			throw new EmailException(e.getMessage(), e);
-		}
-		catch (NoSuchAlgorithmException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new EmailException(errmsg(host, port, e.getMessage()), e);
 		}
 		catch (InvalidKeySpecException e) {
-			throw new EmailException(e.getMessage(), e);
+			throw new EmailException(errmsg(host, port, e.getMessage()), e);
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new EmailException(errmsg(host, port, e.getMessage()), e);
 		}
 		finally {
 			try {
