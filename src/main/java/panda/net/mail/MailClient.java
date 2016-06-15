@@ -19,6 +19,7 @@ import panda.io.Streams;
 import panda.io.stream.MultiWriter;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -205,7 +206,7 @@ public class MailClient {
 			}
 		}
 		else {
-			send(host, port, username, password, email.getRcpts(), email);
+			send(Arrays.asList(host), port, username, password, email.getRcpts(), email);
 		}
 	}
 
@@ -231,11 +232,7 @@ public class MailClient {
 			throw new EmailException("Failed to find MX records for domain " + domain);
 		}
 		
-		relay(hosts.get(0), rcpts, email);
-	}
-
-	private void relay(String host, Collection<EmailAddress> rcpts, Email email) throws EmailException {
-		send(host, SMTPClient.DEFAULT_PORT, null, null, rcpts, email);
+		send(hosts, SMTPClient.DEFAULT_PORT, null, null, rcpts, email);
 	}
 
 	private boolean isSupportStartTLS(List<String> replys) {
@@ -254,32 +251,65 @@ public class MailClient {
 	private String errmsg(String host, int port, String msg) {
 		return host + ':' + port + "> " + msg;
 	}
+
+	private void close(AuthenticatingSMTPClient client) {
+		if (client == null) {
+			return;
+		}
+		try {
+			client.logout();
+		}
+		catch (Exception e) {
+		}
+		try {
+			client.disconnect();
+		}
+		catch (Exception e) {
+		}
+	}
 	
-	private void send(String host, int port, String username, String password, Collection<EmailAddress> rcpts, Email email) throws EmailException {
+	private void send(List<String> hosts, int port, String username, String password, Collection<EmailAddress> rcpts, Email email) throws EmailException {
+		String host = null;
+		
 		// debug writer
 		StringBuilderWriter dbg = null;
 
-		AuthenticatingSMTPClient client = new AuthenticatingSMTPClient(ssl);
+		AuthenticatingSMTPClient client = null;
 		try {
-			if (log != null && log.isDebugEnabled()) {
-				dbg = new StringBuilderWriter();
-				dbg.append("\n===================== SMTP DEBUG ====================\n");
-				client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));
-			}
-
-			// optionally set a timeout to have a faster feedback on errors
-			client.setConnectTimeout(connectTimeout);
-			client.setDefaultTimeout(defaultTimeout);
-
 			// connect to the SMTP server
-			if (log != null && log.isDebugEnabled()) {
-				log.debug("Connect to SMTP server " + host + ":" + port);
+			for (int i = 0; i < hosts.size(); i++) {
+				host = hosts.get(i);
+
+				client = new AuthenticatingSMTPClient(ssl);
+				client.setConnectTimeout(connectTimeout);
+				client.setDefaultTimeout(defaultTimeout);
+				if (log != null && log.isDebugEnabled()) {
+					dbg = new StringBuilderWriter();
+					dbg.append("\n===================== SMTP DEBUG ====================\n");
+					client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));
+				}
+
+				try {
+					if (log != null && log.isDebugEnabled()) {
+						log.debug("Connect to SMTP server " + host + ":" + port);
+					}
+					client.connect(host, port);
+				}
+				catch (IOException e) {
+					if (i >= hosts.size() - 1) {
+						throw e;
+					}
+					close(client);
+				}
 			}
-			client.connect(host, port);
 			if (!SMTPReply.isPositiveCompletion(client.getReplyCode())) {
 				throw new EmailException(errmsg(host, port, client.getReplyString()));
 			}
 
+			if (log != null && log.isDebugEnabled()) {
+				log.debug("Send EHLO " + helo + " to SMTP Server " + host + ':' + port);
+			}
+			
 			// you say ehlo and you specify the host you are connecting from, could be anything
 			client.ehlo(helo);
 			
@@ -383,16 +413,7 @@ public class MailClient {
 			throw new EmailException(errmsg(host, port, e.getMessage()), e);
 		}
 		finally {
-			try {
-				client.logout();
-			}
-			catch (Exception e) {
-			}
-			try {
-				client.disconnect();
-			}
-			catch (Exception e) {
-			}
+			close(client);
 			if (dbg != null) {
 				dbg.append("\r\n====================================================");
 				log.debug(dbg.toString());

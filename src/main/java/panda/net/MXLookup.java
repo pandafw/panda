@@ -26,9 +26,9 @@ public class MXLookup {
 	private static final Log log = Logs.getLog(MXLookup.class);
 	
 	/**
-	 * default expire time: 1h
+	 * default expire time: 30m
 	 */
-	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.SEC_HOUR;
+	public static final int DEFAULT_CACHE_MAXAGE = DateTimes.MS_MINUTE * 30;
 	
 	/**
 	 * default cache limit: 100
