@@ -659,11 +659,14 @@ public final class Mimes {
 	 * <p>
 	 * This method is typically used during the generation of RFC 822 and MIME header fields.
 	 * 
+	 * <p>
+	 * see javax.mail.internet.HeaderTokenizer#MIME
+	 * <p>
+	 * see javax.mail.internet.HeaderTokenizer#RFC822
+	 * 
 	 * @param word word to be quoted
 	 * @param specials the set of special characters
 	 * @return the possibly quoted word
-	 * @see javax.mail.internet.HeaderTokenizer#MIME
-	 * @see javax.mail.internet.HeaderTokenizer#RFC822
 	 */
 	public static String quote(String word, String specials) {
 		int len = word.length();

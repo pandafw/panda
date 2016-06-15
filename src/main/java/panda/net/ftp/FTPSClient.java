@@ -581,7 +581,7 @@ public class FTPSClient extends FTPClient {
 	 *         error is reported at any point during the establishment and initialization of the
 	 *         connection.
 	 * @throws IOException If there is any problem with the connection.
-	 * @see FTPClient#_openDataConnection_(int, String)
+	 * @see FTPClient#_openDataConnection_(String, String)
 	 * @since 3.2
 	 */
 	@Override
@@ -613,7 +613,7 @@ public class FTPSClient extends FTPClient {
 
 	/**
 	 * Performs any custom initialization for a newly created SSLSocket (before the SSL handshake
-	 * happens). Called by {@link #_openDataConnection_(int, String)} immediately after creating the
+	 * happens). Called by {@link #_openDataConnection_(String, String)} immediately after creating the
 	 * socket. The default implementation is a no-op
 	 * 
 	 * @param socket the socket to set up
