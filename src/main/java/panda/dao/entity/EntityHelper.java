@@ -218,4 +218,20 @@ public abstract class EntityHelper {
 		}
 		return nulls.isEmpty() ? null : nulls;
 	}
+	
+	/**
+	 * check not null fields
+	 * @param data
+	 * @return null fields
+	 */
+	public static <T> List<EntityField> checkNotNulls(List<EntityField> efs, T data) {
+		List<EntityField> nulls = new ArrayList<EntityField>();
+		for (EntityField ef : efs) {
+			Object o = ef.getValue(data);
+			if (o == null) {
+				nulls.add(ef);
+			}
+		}
+		return nulls.isEmpty() ? null : nulls;
+	}
 }
