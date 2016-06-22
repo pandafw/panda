@@ -739,18 +739,18 @@ public class HttpServlets {
 		}
 		
 		UserAgent ua = getUserAgent(request);
-		if (ua.isChrome() || ua.isFirefox()) {
-			return Mimes.encodeWord(filename, enc, "B");
-		}
-		else if (ua.isMsie()) {
+		if (ua.isMsie() || ua.isEdge()) {
 			return URLEncoder.encode(filename, enc);
 		}
-		else if (ua.isSafari()) {
-			return filename;
+		
+		if (ua.isSafari()) {
+			int v = ua.getMajorVersion(UserAgent.SAFARI);
+			if (v < 6) {
+				return filename;
+			}
 		}
-		else {
-			return Mimes.encodeWord(filename, enc, "B");
-		}
+
+		return Mimes.encodeText(filename, enc);
 	}
 
 	/**
