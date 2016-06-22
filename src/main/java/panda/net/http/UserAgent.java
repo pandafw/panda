@@ -1,5 +1,6 @@
 package panda.net.http;
 
+import panda.lang.Numbers;
 import panda.lang.Strings;
 
 import java.util.HashMap;
@@ -12,12 +13,27 @@ import java.util.Map.Entry;
  */
 public class UserAgent {
 
+	public static class Version {
+		public String version;
+		public int major;
+		public int minor;
+		public Version(String version, int major, int minor) {
+			this.version = version;
+			this.major = major;
+			this.minor = minor;
+		}
+	}
+	
+	private static final Version DUMMY = new Version("", 0, 0);
+
 	private String userAgent;
-	private Map<String, String> browsers;
+	private Map<String, Version> browsers;
 
 	public static final String CHROME = "Chrome";
 	public static final String FIREFOX = "Firefox";
+	public static final String EDGE = "Edge";
 	public static final String MSIE = "MSIE";
+	public static final String MSIE11 = "Trident";
 	public static final String NETSCAPE = "Netscape";
 	public static final String OPERA = "Opera";
 	public static final String WEBKIT = "WebKit";
@@ -49,6 +65,13 @@ public class UserAgent {
 	 */
 	public boolean isChrome() {
 		return browsers.containsKey(CHROME);
+	}
+
+	/**
+	 * @return true if user agent is EDGE
+	 */
+	public boolean isEdge() {
+		return browsers.containsKey(EDGE);
 	}
 
 	/**
@@ -136,7 +159,7 @@ public class UserAgent {
 	}
 
 	private void init() {
-		browsers = new HashMap<String, String>();
+		browsers = new HashMap<String, Version>();
 		
 		if (Strings.isEmpty(userAgent)) {
 			return;
@@ -144,7 +167,9 @@ public class UserAgent {
 		
 		parse(CHROME);
 		parse(FIREFOX);
+		parse(EDGE);
 		parse(MSIE);
+		parse(MSIE11, MSIE, 11);
 		parse(NETSCAPE);
 		parse(OPERA);
 		parse(WEBKIT);
@@ -155,15 +180,19 @@ public class UserAgent {
 		parse(ANDROID);
 		
 		if (checkRobot()) {
-			browsers.put(ROBOT, "");
+			browsers.put(ROBOT, DUMMY);
 		}
 		
 		if (isAndroid() || isIphone() || isIpad() || isIpod()) {
-			browsers.put(MOBILE, "");
+			browsers.put(MOBILE, DUMMY);
 		}
 	}
-	
+
 	private void parse(String client) {
+		parse(client, client, 0);
+	}
+	
+	private void parse(String client, String alias, int major) {
 		int i = userAgent.indexOf(client);
 		if (i >= 0) {
 			for (i += client.length(); i < userAgent.length(); i++) {
@@ -185,8 +214,11 @@ public class UserAgent {
 			if (i < userAgent.length()) {
 				ver = userAgent.substring(i, j);
 			}
-			
-			browsers.put(client, ver);
+
+			if (major == 0) {
+				major = this.parseMajorVersion(ver);
+			}
+			browsers.put(alias, new Version(ver, major, 0));
 		}
 	}
 	
@@ -199,23 +231,23 @@ public class UserAgent {
 		return false;
 	}
 	
-	private Integer parseMajorVersion(String ver) {
+	private int parseMajorVersion(String ver) {
 		if (ver != null) {
 			int i = ver.indexOf('.');
 			if (i > 0) {
-				int v = Integer.parseInt(ver.substring(0, i));
-				return v;
+				return Numbers.toInt(ver.substring(0, i), 0);
 			}
 		}
-		return null;
+		return 0;
 	}
 
 	/**
 	 * @param client client 
 	 * @return major version of the client
 	 */
-	public Integer getMajorVersion(String client) {
-		return parseMajorVersion(browsers.get(client));
+	public int getMajorVersion(String client) {
+		Version v = browsers.get(client);
+		return (v == null ? 0 : v.major);
 	}
 
 	/**
@@ -223,11 +255,11 @@ public class UserAgent {
 	 */
 	public String toSimpleString() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry<String, String> en : browsers.entrySet()) {
+		for (Entry<String, Version> en : browsers.entrySet()) {
 			String b = en.getKey().toLowerCase();
 			sb.append(b).append(' ');
-			Integer v = parseMajorVersion(en.getValue());
-			if (v != null) {
+			Version v = en.getValue();
+			if (v.major > 0) {
 				sb.append(b).append(v).append(' ');
 			}
 		}
