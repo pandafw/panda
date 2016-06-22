@@ -725,6 +725,14 @@ public class HttpServlets {
 		response.addCookie(c);
 	}
 
+	private static String quoteFileName(String filename) {
+		return "filename=\"" + filename + '"';
+	}
+
+	private static String rfc2231FileName(String filename, String charset) throws UnsupportedEncodingException {
+		return "filename*=" + charset + "''" + URLEncoder.encode(filename, charset);
+	}
+
 	/**
 	 * encode file name by User-Agent
 	 * @param request request
@@ -733,24 +741,28 @@ public class HttpServlets {
 	 * @throws UnsupportedEncodingException  if an error occurs
 	 */
 	public static String EncodeFileName(HttpServletRequest request, String charset, String filename) throws UnsupportedEncodingException {
-		final String enc = Strings.isEmpty(charset) ? Charsets.UTF_8 : charset;
+		if (Strings.isEmpty(charset)) {
+			charset = Charsets.UTF_8;
+		}
+
 		if (request == null) {
-			return URLEncoder.encode(filename, enc);
+			return quoteFileName(URLEncoder.encode(filename, charset));
 		}
 		
 		UserAgent ua = getUserAgent(request);
 		if (ua.isMsie() || ua.isEdge()) {
-			return URLEncoder.encode(filename, enc);
+			return quoteFileName(URLEncoder.encode(filename, charset));
 		}
 		
 		if (ua.isSafari()) {
 			int v = ua.getMajorVersion(UserAgent.SAFARI);
 			if (v < 6) {
-				return filename;
+				return quoteFileName(filename);
 			}
+			return rfc2231FileName(filename, charset);
 		}
 
-		return Mimes.encodeText(filename, enc);
+		return quoteFileName(Mimes.encodeText(filename, charset));
 	}
 
 	/**

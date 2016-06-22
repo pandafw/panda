@@ -265,7 +265,7 @@ public class HttpServletSupport {
 		if (Strings.isNotEmpty(fileName)) {
 			String fn = HttpServlets.EncodeFileName(request, charset, fileName);
 			response.setHeader(HttpHeader.CONTENT_DISPOSITION, 
-					(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; filename=\"" + fn + "\"");
+					(Boolean.TRUE.equals(attachment) ? "attachment" : "inline") + "; " + fn);
 			
 			if (request != null) {
 				UserAgent b = HttpServlets.getUserAgent(request);
