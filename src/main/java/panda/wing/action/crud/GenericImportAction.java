@@ -414,6 +414,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	// error message methods
 	//------------------------------------------------------------
 	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg) {
+		return dataFieldErrors(data, efs, dataErrMsg, null);
+	}
+
+	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg, String format) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" (");
 		for (EntityField ef :efs) {
@@ -428,7 +432,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 			Object fv = eff.getValue(data);
 			if (fv != null) {
-				sb.append(Mvcs.castString(context, fv));
+				sb.append(Mvcs.castString(context, fv, format));
 			}
 			sb.append(", ");
 		}
