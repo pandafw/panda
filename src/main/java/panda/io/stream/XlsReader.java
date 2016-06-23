@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -143,10 +144,15 @@ public class XlsReader implements ListReader, Closeable {
 				v = c.getBooleanCellValue() ? "true" : "false";
 				break;
 			case Cell.CELL_TYPE_NUMERIC:
-				v = String.valueOf(c.getNumericCellValue());
-				if (Strings.contains(v, '.')) {
-					v = Strings.stripEnd(v, "0");
-					v = Strings.stripEnd(v, ".");
+				if (DateUtil.isCellDateFormatted(c)) {
+					v = String.valueOf(c.getDateCellValue().getTime());
+				}
+				else {
+					v = String.valueOf(c.getNumericCellValue());
+					if (Strings.contains(v, '.')) {
+						v = Strings.stripEnd(v, "0");
+						v = Strings.stripEnd(v, ".");
+					}
 				}
 				break;
 			case Cell.CELL_TYPE_FORMULA:
