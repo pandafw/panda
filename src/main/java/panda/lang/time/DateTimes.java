@@ -1885,7 +1885,7 @@ public class DateTimes {
 	 * ISO8601 formatter for date-time without time zone and separator '-' char. The format used is
 	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
 	 */
-	public static FastDateFormat isoAltDatetimeFormat() {
+	public static FastDateFormat isoDatetimeNohFormat() {
 		return ISO_DATETIME_NO_H_FORMAT;
 	}
 	

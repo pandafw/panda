@@ -21,21 +21,28 @@ import panda.lang.time.FastDateFormat;
  *
  */
 public class DateTypeCastor {
+	public final static String FORMAT_ISODATE = "isodate";
+	public final static String FORMAT_ISODATE_NOH = "isodatenoh";
+	public final static String FORMAT_TIMESTAMP = "timestamp";
+	public final static String FORMAT_DATETIME = "datetime";
+	public final static String FORMAT_DATE = "date";
+	public final static String FORMAT_TIME = "time";
+	
 	public final static Map<String, FastDateFormat> DATE_FORMATS = new LinkedHashMap<String, FastDateFormat>();
 	public final static Map<String, FastDateFormat> JP_DATE_FORMATS = new LinkedHashMap<String, FastDateFormat>();
 
 	public final static Map<Locale, Map<String, FastDateFormat>> LOCALE_DATE_FORMATS = new HashMap<Locale, Map<String, FastDateFormat>>();
 	static {
-		DATE_FORMATS.put("timestamp", DateTimes.timestampFormat());
-		DATE_FORMATS.put("datetime", DateTimes.datetimeFormat());
-		DATE_FORMATS.put("isodate", DateTimes.isoDatetimeFormat());
-		DATE_FORMATS.put("isodate2", DateTimes.isoAltDatetimeFormat());
-		DATE_FORMATS.put("date", DateTimes.dateFormat());
-		DATE_FORMATS.put("time", DateTimes.timeFormat());
+		DATE_FORMATS.put(FORMAT_ISODATE, DateTimes.isoDatetimeFormat());
+		DATE_FORMATS.put(FORMAT_ISODATE_NOH, DateTimes.isoDatetimeNohFormat());
+		DATE_FORMATS.put(FORMAT_TIMESTAMP, DateTimes.timestampFormat());
+		DATE_FORMATS.put(FORMAT_DATETIME, DateTimes.datetimeFormat());
+		DATE_FORMATS.put(FORMAT_DATE, DateTimes.dateFormat());
+		DATE_FORMATS.put(FORMAT_TIME, DateTimes.timeFormat());
 
-		JP_DATE_FORMATS.put("timestamp", FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"));
-		JP_DATE_FORMATS.put("datetime", FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"));
-		JP_DATE_FORMATS.put("date", FastDateFormat.getInstance("yyyy/MM/dd"));
+		JP_DATE_FORMATS.put(FORMAT_TIMESTAMP, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"));
+		JP_DATE_FORMATS.put(FORMAT_DATETIME, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"));
+		JP_DATE_FORMATS.put(FORMAT_DATE, FastDateFormat.getInstance("yyyy/MM/dd"));
 		
 		LOCALE_DATE_FORMATS.put(Locale.JAPAN, JP_DATE_FORMATS);
 		LOCALE_DATE_FORMATS.put(Locale.JAPANESE, JP_DATE_FORMATS);

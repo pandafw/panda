@@ -243,7 +243,7 @@ public class XmlRpcDeserializer extends AbstractDeserializer {
 		private static class XmlRpcElem {
 			public static FastDateFormat[] DATE_FORMATS = {
 				DateTimes.isoDatetimeFormat(),
-				DateTimes.isoAltDatetimeFormat()
+				DateTimes.isoDatetimeNohFormat()
 			};
 
 			/** type of value: string, int, boolean, double, datetime, base64, name */

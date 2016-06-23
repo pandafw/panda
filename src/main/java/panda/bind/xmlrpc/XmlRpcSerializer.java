@@ -256,7 +256,7 @@ public class XmlRpcSerializer extends AbstractSerializer {
 	@Override
 	protected void writeDate(Date date) {
 		writeBeginTag(XmlRpcTags.T_DATE);
-		write(DateTimes.isoAltDatetimeFormat().format(date));
+		write(DateTimes.isoDatetimeNohFormat().format(date));
 		writeEndTag();
 	}
 	
