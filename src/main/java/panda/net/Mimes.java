@@ -20,6 +20,10 @@ import panda.lang.codec.net.QCodec;
  */
 public final class Mimes {
 
+	public static final String BIT7 = "7bit";
+	public static final String BASE64 = "Base64";
+	public static final String QUOTED_PRINTABLE = "Quoted-Printable";
+	
 	/**
 	 * The {@code US-ASCII} charset identifier constant.
 	 */
@@ -33,7 +37,7 @@ public final class Mimes {
 	/**
 	 * The marker to indicate text is encoded with QuotedPrintable algorithm.
 	 */
-	private static final String QUOTEDPRINTABLE_ENCODING_MARKER = "Q";
+	private static final String QUOTED_PRINTABLE_ENCODING_MARKER = "Q";
 
 	/**
 	 * If the text contains any encoded tokens, those tokens will be marked with "=?".
@@ -210,9 +214,9 @@ public final class Mimes {
 		}
 
 		if (ascii != MOSTLY_NONASCII) {
-			return "Quoted-Printable";
+			return QUOTED_PRINTABLE;
 		}
-		return "Base64";
+		return BASE64;
 	}
 	
 	//------------------------------------------------------------
@@ -376,7 +380,7 @@ public final class Mimes {
 			if (encoding.equals(BASE64_ENCODING_MARKER)) {
 				decodedData = Base64.decodeBase64(encodedData);
 			}
-			else if (encoding.equals(QUOTEDPRINTABLE_ENCODING_MARKER)) { // maybe quoted printable.
+			else if (encoding.equals(QUOTED_PRINTABLE_ENCODING_MARKER)) { // maybe quoted printable.
 				decodedData = decodeQuoted(encodedData);
 			}
 			else {

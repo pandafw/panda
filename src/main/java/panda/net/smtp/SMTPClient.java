@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.InetAddress;
 
+import panda.io.stream.MultiWriter;
 import panda.net.io.DotTerminatedMessageWriter;
 
 /***
@@ -293,10 +294,16 @@ public class SMTPClient extends SMTP {
 	 * @see #sendShortMessageData(String)
 	 ***/
 	public Writer sendMessageData() throws IOException {
+		return sendMessageData(null);
+	}
+
+	public Writer sendMessageData(Writer dbg) throws IOException {
 		if (!SMTPReply.isPositiveIntermediate(data())) {
 			return null;
 		}
-
+		if (dbg != null) {
+			return new DotTerminatedMessageWriter(new MultiWriter(dbg, _writer));
+		}
 		return new DotTerminatedMessageWriter(_writer);
 	}
 

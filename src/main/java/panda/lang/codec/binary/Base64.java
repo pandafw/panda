@@ -171,7 +171,7 @@ public class Base64 extends BaseNCodec {
 	 *            to {@code false}.
 	 */
 	public Base64(final boolean urlSafe) {
-		this(MIME_CHUNK_SIZE, CHUNK_SEPARATOR, urlSafe);
+		this(0, null, urlSafe);
 	}
 
 	/**
@@ -570,6 +570,16 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
+	 * Encodes binary data using the base64 algorithm but does not chunk the output.
+	 * 
+	 * @param binaryData binary data to encode
+	 * @return String containing Base64 characters.
+	 */
+	public static String encodeBase64ChunkedString(final byte[] binaryData) {
+		return Strings.newStringUtf8(encodeBase64(binaryData, true));
+	}
+
+	/**
 	 * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the
 	 * output. The url-safe variation emits - and _ instead of + and / characters. <b>Note: no
 	 * padding is added.</b>
@@ -660,7 +670,7 @@ public class Base64 extends BaseNCodec {
 
 		// Create this so can use the super-class method
 		// Also ensures that the same roundings are performed by the ctor and the code
-		final Base64 b64 = isChunked ? new Base64(urlSafe) : new Base64(0, CHUNK_SEPARATOR, urlSafe);
+		final Base64 b64 = new Base64(isChunked ? MIME_CHUNK_SIZE : 0, CHUNK_SEPARATOR, urlSafe);
 		final long len = b64.getEncodedLength(binaryData);
 		if (len > maxResultSize) {
 			throw new IllegalArgumentException("Input array too big, the output array would be bigger (" + len

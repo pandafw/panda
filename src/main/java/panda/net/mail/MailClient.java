@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 import panda.io.FileNames;
 import panda.io.MimeType;
 import panda.io.Streams;
-import panda.io.stream.MultiWriter;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
 import panda.lang.Arrays;
@@ -293,10 +292,14 @@ public class MailClient {
 
 				try {
 					client.connect(host, port);
+					break;
 				}
 				catch (IOException e) {
 					if (i >= hosts.size() - 1) {
 						throw new EmailException(errmsg(host, port, e.getMessage()));
+					}
+					if (log != null && log.isDebugEnabled()) {
+						log.debug("Failed to connect SMTP server " + host + ":" + port, e);
 					}
 					close(client);
 				}
@@ -336,31 +339,12 @@ public class MailClient {
 				checkReply(host, port, client);
 			}
 
-			Writer out = client.sendMessageData();
+			Writer out = client.sendMessageData(dbg);
 			if (out != null) {
 				String boundary = null;
 				
 				SMTPHeader header = new SMTPHeader();
 				header.setDate(SMTPHeader.DATE, DateTimes.getDate());
-				header.set(SMTPHeader.MESSAGE_ID, email.getMsgId());
-				header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
-				if (email.isHtml() || email.hasAttachments()) {
-					boundary = Randoms.randDigitLetters(28);
-					header.set(SMTPHeader.CONTENT_TYPE, "multipart/mixed; boundary=" + boundary);
-				}
-				else {
-					header.set(SMTPHeader.CONTENT_TYPE, "text/plain; charset=" + email.getCharset());
-				}
-
-				String encoding = "7bit";
-				String body = email.getMessage();
-
-				if (!Strings.isAscii(body)) {
-					encoding = "Base64";
-					body = Base64.encodeBase64String(body.getBytes(email.getCharset()));
-				}
-
-				header.set(SMTPHeader.CONTENT_TRANSFER_ENCODING, encoding);
 				header.set(SMTPHeader.FROM, email.getEncodedFrom());
 				header.set(SMTPHeader.TO, email.getEncodedTos());
 				if (Collections.isNotEmpty(email.getCcs())) {
@@ -372,25 +356,46 @@ public class MailClient {
 				if (Collections.isNotEmpty(email.getReplyTos())) {
 					header.set(SMTPHeader.REPLY_TO, email.getEncodedReplyTos());
 				}
-				header.set(SMTPHeader.SUBJECT, email.getEncodedSubject());
 
-				Writer writer = (dbg == null) ? out : new MultiWriter(out, dbg);
-				writer.write(header.toString());
+				header.set(SMTPHeader.MESSAGE_ID, email.getMsgId());
+				header.set(SMTPHeader.SUBJECT, email.getEncodedSubject());
+				header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
+
+				if (email.isHtml() || email.hasAttachments()) {
+					boundary = Randoms.randDigitLetters(28);
+					header.set(SMTPHeader.CONTENT_TYPE, "multipart/mixed; boundary=" + boundary);
+				}
+				else {
+					header.set(SMTPHeader.CONTENT_TYPE, "text/plain; charset=" + email.getCharset());
+				}
+
+				String encoding = Mimes.BIT7;
+				String body = email.getMessage();
+
+				if (!Strings.isAscii(body)) {
+					encoding = Mimes.BASE64;
+					body = Base64.encodeBase64ChunkedString(body.getBytes(email.getCharset()));
+				}
+				header.set(SMTPHeader.CONTENT_TRANSFER_ENCODING, encoding);
+	
+				out.write(header.toString());
+				out.write("\n");
 
 				if (email.isHtml() || email.hasAttachments()) {
 					// Write the main text message
-					appendMsgPart(writer, boundary, encoding, body, email);
+					appendMsgPart(out, boundary, encoding, body, email);
 					
 					// Append attachments
-					appendAttachments(writer, boundary, email);
+					appendAttachments(out, boundary, email);
 					
-					writer.write("--" + boundary + "--\n\n");
+					out.write("--" + boundary + "--\n\n");
 				}
 				else {
-					writer.write(body);
+					out.write(body);
 				}
 				
-				writer.close();
+				out.flush();
+				out.close();
 				if (!client.completePendingCommand()) {
 					throw new EmailException(errmsg(host, port, client.getReplyString()));
 				}
@@ -420,28 +425,28 @@ public class MailClient {
 		}
 	}
 
-	private void appendMsgPart(Writer writer, String boundary, String encoding, String body, Email email) throws IOException {
+	private void appendMsgPart(Writer out, String boundary, String encoding, String body, Email email) throws IOException {
 		// Write the main text message
-		writer.write("--" + boundary + "\n");
-		writer.write(SMTPHeader.CONTENT_TYPE);
-		writer.write(": ");
-		writer.write(email.isHtml() ? MimeType.TEXT_HTML : MimeType.TEXT_PLAIN);
-		writer.write("; charset=");
-		writer.write(email.getCharset());
-		writer.write("\n");
+		out.write("--" + boundary + "\n");
+		out.write(SMTPHeader.CONTENT_TYPE);
+		out.write(": ");
+		out.write(email.isHtml() ? MimeType.TEXT_HTML : MimeType.TEXT_PLAIN);
+		out.write("; charset=");
+		out.write(email.getCharset());
+		out.write("\n");
 
-		writer.write(SMTPHeader.CONTENT_DISPOSITION);
-		writer.write(": ");
-		writer.write(SMTPHeader.CONTENT_DISPOSITION_INLIE);
-		writer.write("\n");
+		out.write(SMTPHeader.CONTENT_DISPOSITION);
+		out.write(": ");
+		out.write(SMTPHeader.CONTENT_DISPOSITION_INLIE);
+		out.write("\n");
 
-		writer.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
-		writer.write(": ");
-		writer.write(encoding);
-		writer.write("\n\n");
+		out.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
+		out.write(": ");
+		out.write(encoding);
+		out.write("\n\n");
 
-		writer.write(body);
-		writer.write("\n");
+		out.write(body);
+		out.write("\n");
 	}
 
 	/**
@@ -449,8 +454,7 @@ public class MailClient {
 	 * 
 	 * @param boundary separates each file attachment
 	 */
-	private void appendAttachments(Writer writer, String boundary, Email email)
-			throws IOException {
+	private void appendAttachments(Writer out, String boundary, Email email) throws IOException {
 		if (Collections.isEmpty(email.getAttachments())) {
 			return;
 		}
@@ -458,36 +462,38 @@ public class MailClient {
 		for (EmailAttachment ea : email.getAttachments()) {
 			final String mimeType = FileNames.getContentTypeFor(ea.getName());
 			
-			writer.write("--");
-			writer.write(boundary);
-			writer.write("\n");
+			out.write("--");
+			out.write(boundary);
+			out.write("\n");
 			
-			writer.write(SMTPHeader.CONTENT_TYPE);
-			writer.write(": ");
-			writer.write(Mimes.encodeWord(mimeType, email.getCharset()));
+			out.write(SMTPHeader.CONTENT_TYPE);
+			out.write(": ");
+			out.write(Mimes.encodeWord(mimeType, email.getCharset()));
 			//writer.write("application/" + FileNames.getExtension(ea.getName()));
-			writer.write("; name=\"");
-			writer.write(Mimes.encodeWord(ea.getName(), email.getCharset()));
-			writer.write("\"\n");
+			out.write("; name=\"");
+			out.write(Mimes.encodeWord(ea.getName(), email.getCharset()));
+			out.write("\"\n");
 			
-			writer.write(SMTPHeader.CONTENT_DISPOSITION);
-			writer.write(": ");
-			writer.write(ea.isInline() ? SMTPHeader.CONTENT_DISPOSITION_INLIE : SMTPHeader.CONTENT_DISPOSITION_ATTACHMENT);
-			writer.write("; filename=\"");
-			writer.write(Mimes.encodeWord(ea.getName(), email.getCharset()));
-			writer.write("\"\n");
+			out.write(SMTPHeader.CONTENT_DISPOSITION);
+			out.write(": ");
+			out.write(ea.isInline() ? SMTPHeader.CONTENT_DISPOSITION_INLIE : SMTPHeader.CONTENT_DISPOSITION_ATTACHMENT);
+			out.write("; filename=\"");
+			out.write(Mimes.encodeWord(ea.getName(), email.getCharset()));
+			out.write("\"\n");
 
 			if (ea.isInline()) {
-				writer.write(SMTPHeader.CONTENT_ID);
-				writer.write(": ");
-				writer.write(ea.getCid());
-				writer.write("\n");
+				out.write(SMTPHeader.CONTENT_ID);
+				out.write(": ");
+				out.write(ea.getCid());
+				out.write("\n");
 			}
-			writer.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
-			writer.write(": Base64\n\n");
+			out.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
+			out.write(": ");
+			out.write(Mimes.BASE64);
+			out.write("\n\n");
 			
-			WriterOutputStream wos = new WriterOutputStream(writer, Charsets.UTF_8);
-			Base64OutputStream bos = new Base64OutputStream(wos);
+			WriterOutputStream wos = new WriterOutputStream(out, Charsets.UTF_8);
+			Base64OutputStream bos = new Base64OutputStream(wos, true, Base64.MIME_CHUNK_SIZE);
 			Object data = ea.getData();
 			if (data instanceof File) {
 				Streams.copy((File)data, bos);
@@ -511,7 +517,7 @@ public class MailClient {
 				Streams.write((CharSequence)data, bos, email.getCharset());
 			}
 			bos.flush();
-			writer.write("\n");
+			out.write("\n");
 		}
 	}
 
