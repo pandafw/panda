@@ -9,13 +9,20 @@ import panda.lang.Strings;
 public class StringValidator extends AbstractStringValidator {
 
 	public static final char ANY = '*';
+	public static final char ALPHA = 'a';
+	public static final char NUMBER = 'n';
 	public static final char ALPHA_NUMBER = 'A';
 	public static final char HANKAKU = 'H';
-	public static final char HANKAKU_KATAKANA = 'k';
 	public static final char ZENKAKU = 'Z';
+	public static final char HANKAKU_KATAKANA = 'k';
+	public static final char HANKAKU_KATAKANA_SPACE = 'ｶ';
 	public static final char ZENKAKU_KATAKANA = 'K';
+	public static final char ZENKAKU_KATAKANA_SPACE = 'カ';
+	public static final char ZENKAKU_KATAKANA_SPACES = 'ガ';
 	public static final char ZENKAKU_HIRAGANA = 'G';
-	
+	public static final char ZENKAKU_HIRAGANA_SPACE = 'か';
+	public static final char ZENKAKU_HIRAGANA_SPACES = 'が';
+
 	private char type = ANY;
 
 	private int zenSize = 0;
@@ -128,18 +135,30 @@ public class StringValidator extends AbstractStringValidator {
 		}
 
 		switch (type) {
+		case ALPHA:
+			return Strings.isAlpha(value);
+		case NUMBER:
+			return Strings.isNumeric(value);
 		case ALPHA_NUMBER:
 			return Strings.isAlphanumeric(value);
 		case HANKAKU: 
 			return JapanStrings.isHankaku(value);
-		case HANKAKU_KATAKANA:
-			return JapanStrings.isHankakuKatakanaSpace(value);
 		case ZENKAKU:
 			return JapanStrings.isZenkaku(value);
-		case  ZENKAKU_KATAKANA:
+		case HANKAKU_KATAKANA:
+			return JapanStrings.isHankakuKatakanaSpace(value);
+		case ZENKAKU_KATAKANA:
+			return JapanStrings.isZenkakuKatakana(value);
+		case ZENKAKU_KATAKANA_SPACE:
 			return JapanStrings.isZenkakuKatakanaSpace(value);
-		case  ZENKAKU_HIRAGANA:
+		case ZENKAKU_KATAKANA_SPACES:
+			return JapanStrings.isZenkakuKatakanaSpaces(value);
+		case ZENKAKU_HIRAGANA:
+			return JapanStrings.isZenkakuHiragana(value);
+		case ZENKAKU_HIRAGANA_SPACE:
 			return JapanStrings.isZenkakuHiraganaSpace(value);
+		case ZENKAKU_HIRAGANA_SPACES:
+			return JapanStrings.isZenkakuHiraganaSpaces(value);
 		}
 		
 		return true;
