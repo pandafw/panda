@@ -150,6 +150,7 @@ public class Property extends ContextBean {
 						cbool = newComponent(CBoolean.class);
 					}
 					cbool.setValue((Boolean)av);
+					cbool.setPattern(null);
 					cbool.setFormat(format);
 					cbool.start(sw);
 					cbool.end(sw, "");
@@ -161,6 +162,7 @@ public class Property extends ContextBean {
 						cdate = newComponent(CDate.class);
 					}
 					cdate.setValue(av instanceof Calendar ? ((Calendar)av).getTime() : (Date)av);
+					cdate.setPattern(null);
 					cdate.setFormat(format);
 					cdate.start(sw);
 					cdate.end(sw, "");
@@ -172,6 +174,7 @@ public class Property extends ContextBean {
 						cnumber = newComponent(CNumber.class);
 					}
 					cnumber.setValue((Number)av);
+					cnumber.setPattern(null);
 					cnumber.setFormat(format);
 					cnumber.start(sw);
 					cnumber.end(sw, "");
