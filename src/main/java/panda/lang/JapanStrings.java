@@ -99,7 +99,7 @@ public abstract class JapanStrings {
 	/**
 	 * isZenkakuKatakanaSpace
 	 * @param value string
-	 * @return true if the value is Zenkaku Katakana or SPACE string
+	 * @return true if the value is Zenkaku Katakana or Space string
 	 */
 	public static boolean isZenkakuKatakanaSpace(String value) {
 		if (Strings.isEmpty(value)) {
@@ -109,6 +109,25 @@ public abstract class JapanStrings {
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
 			if (c != '　' && !JapanChars.isZenkakuKatakana(c)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * isZenkakuKatakanaSpaces
+	 * @param value string
+	 * @return true if the value is Zenkaku Katakana or Space (Zenkaku or Hankaku) string
+	 */
+	public static boolean isZenkakuKatakanaSpaces(String value) {
+		if (Strings.isEmpty(value)) {
+			return false;
+		}
+
+		for (int i = 0; i < value.length(); i++) {
+			char c = value.charAt(i);
+			if (c != ' ' && c != '　' && !JapanChars.isZenkakuKatakana(c)) {
 				return false;
 			}
 		}
@@ -136,7 +155,7 @@ public abstract class JapanStrings {
 	/**
 	 * isZenkakuHiraganaSpace
 	 * @param value string
-	 * @return true if the value is Zenkaku Hiragana or SPACE string
+	 * @return true if the value is Zenkaku Hiragana or Space string
 	 */
 	public static boolean isZenkakuHiraganaSpace(String value) {
 		if (Strings.isEmpty(value)) {
@@ -146,6 +165,25 @@ public abstract class JapanStrings {
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
 			if (c != '　' && !JapanChars.isZenkakuHiragana(c)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * isZenkakuHiraganaSpaces
+	 * @param value string
+	 * @return true if the value is Zenkaku Hiragana or Space(Zenkaku or Hankaku) string
+	 */
+	public static boolean isZenkakuHiraganaSpaces(String value) {
+		if (Strings.isEmpty(value)) {
+			return false;
+		}
+
+		for (int i = 0; i < value.length(); i++) {
+			char c = value.charAt(i);
+			if (c != ' ' && c != '　' && !JapanChars.isZenkakuHiragana(c)) {
 				return false;
 			}
 		}
