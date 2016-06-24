@@ -18,7 +18,7 @@ import panda.lang.Strings;
 /**
  * Excel reader.
  */
-public class XlsReader implements ListReader, Closeable {
+public class XlsReader implements ListReader<Object>, Closeable {
 	private Workbook workbook;
 	private Sheet sheet;
 	private int rowidx;
@@ -103,14 +103,41 @@ public class XlsReader implements ListReader, Closeable {
 	 * 
 	 * @throws IOException if bad things happen during the read
 	 */
-	public List<List<String>> readAll() throws IOException {
-		List<List<String>> all = new ArrayList<List<String>>();
+	public List<List<Object>> readAll() throws IOException {
+		List<List<Object>> all = new ArrayList<List<Object>>();
 		int n = getRowCount();
 		for (int i = 0; i < n; i++) {
-			List<String> row = readRow(i);
+			List<Object> row = readRow(i);
 			all.add(row);
 		}
 		return all;
+	}
+
+	protected Object readCell(Cell c, int type) {
+		Object v = Strings.EMPTY;
+		switch (type) {
+		case Cell.CELL_TYPE_BLANK:
+			break;
+		case Cell.CELL_TYPE_BOOLEAN:
+			v = c.getBooleanCellValue();
+			break;
+		case Cell.CELL_TYPE_NUMERIC:
+			if (DateUtil.isCellDateFormatted(c)) {
+				v = c.getDateCellValue();
+			}
+			else {
+				v = c.getNumericCellValue();
+			}
+			break;
+		case Cell.CELL_TYPE_FORMULA:
+			v = readCell(c, c.getCachedFormulaResultType());
+			break;
+		default: 
+			v = c.getStringCellValue();
+			break;
+		}
+
+		return v;
 	}
 
 	/**
@@ -120,13 +147,13 @@ public class XlsReader implements ListReader, Closeable {
 	 * 
 	 * @throws IOException if bad things happen during the read
 	 */
-	public List<String> readRow(int r) throws IOException {
+	public List<Object> readRow(int r) throws IOException {
 		Row row = sheet.getRow(r);
 		if (row == null) {
 			return null;
 		}
 		
-		List<String> vs = new ArrayList<String>();
+		List<Object> vs = new ArrayList<Object>();
 		
 		int n = row.getLastCellNum();
 		for (int i = 0; i < n; i++) {
@@ -136,38 +163,7 @@ public class XlsReader implements ListReader, Closeable {
 				continue;
 			}
 
-			String v = null;
-			switch (c.getCellType()) {
-			case Cell.CELL_TYPE_BLANK:
-				break;
-			case Cell.CELL_TYPE_BOOLEAN:
-				v = c.getBooleanCellValue() ? "true" : "false";
-				break;
-			case Cell.CELL_TYPE_NUMERIC:
-				if (DateUtil.isCellDateFormatted(c)) {
-					v = String.valueOf(c.getDateCellValue().getTime());
-				}
-				else {
-					v = String.valueOf(c.getNumericCellValue());
-					if (Strings.contains(v, '.')) {
-						v = Strings.stripEnd(v, "0");
-						v = Strings.stripEnd(v, ".");
-					}
-				}
-				break;
-			case Cell.CELL_TYPE_FORMULA:
-				try {
-					v = String.valueOf(c.getNumericCellValue());
-				}
-				catch (Exception e) {
-					v = c.getStringCellValue();
-				}
-				break;
-			default: 
-				v = c.getStringCellValue();
-				break;
-			}
-			
+			Object v = readCell(c, c.getCellType());
 			vs.add(v);
 		}
 		return vs;
@@ -182,13 +178,14 @@ public class XlsReader implements ListReader, Closeable {
 	 * @throws IOException if bad things happen during the read
 	 */
 	@Override
-	public List<String> readList() throws IOException {
+	public List<Object> readList() throws IOException {
 		if (rowidx >= getRowCount()) {
 			return null;
 		}
-		List<String> row = readRow(rowidx++);
+		
+		List<Object> row = readRow(rowidx++);
 		if (row == null) {
-			return new ArrayList<String>();
+			return new ArrayList<Object>();
 		}
 		return row;
 	}

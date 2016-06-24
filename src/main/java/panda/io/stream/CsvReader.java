@@ -12,7 +12,7 @@ import panda.lang.Chars;
 /**
  * CSV reader.
  */
-public class CsvReader implements ListReader, Closeable {
+public class CsvReader implements ListReader<String>, Closeable {
 	private BufferedReader br;
 
 	private char separator;
