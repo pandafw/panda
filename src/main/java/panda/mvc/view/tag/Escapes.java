@@ -34,9 +34,9 @@ public class Escapes {
 	 */
 	public static final String ESCAPE_XML = "xml";
 	
-	public static String escape(String value, String escape) {
+	public static String escape(CharSequence value, String escape) {
 		if (Strings.isEmpty(value) || Strings.isEmpty(escape)) {
-			return value;
+			return Strings.EMPTY;
 		}
 
 		switch (escape.charAt(0)) {
@@ -51,7 +51,7 @@ public class Escapes {
 		case 'x':
 			return StringEscapes.escapeXml(value);
 		default:
-			return value;
+			return value.toString();
 		}
 	}
 }
