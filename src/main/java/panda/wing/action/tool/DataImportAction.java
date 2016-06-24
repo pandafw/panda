@@ -4,13 +4,8 @@ package panda.wing.action.tool;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -19,29 +14,29 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.Jsons;
-import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.io.FileNames;
 import panda.io.FileType;
 import panda.io.Streams;
 import panda.io.stream.BOMInputStream;
 import panda.io.stream.CsvReader;
+import panda.io.stream.ListReader;
+import panda.io.stream.XlsReader;
+import panda.io.stream.XlsxReader;
 import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
-import panda.lang.time.DateTimes;
 import panda.log.Logs;
+import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
@@ -172,91 +167,24 @@ public class DataImportAction extends AbstractAction {
 		return tableList;
 	}
 
-	protected Date parseDate(String str, String format) throws Exception {
-		if ("now".equalsIgnoreCase(str)) {
-			return DateTimes.getDate();
+	protected Object getCellValue(Object v, int c, List<DataType> types) throws Exception {
+		if (v == null) {
+			return v;
 		}
-		
-		if (Strings.isNotBlank(format)) {
-			return DateTimes.parse(str, format);
-		}
-		try {
-			return DateTimes.timestampFormat().parse(str);
-		}
-		catch (ParseException e) {
-			try {
-				return DateTimes.datetimeFormat().parse(str);
-			}
-			catch (ParseException e2) {
-				return DateTimes.timeFormat().parse(str);
-			}
-		}
-	}
 
-	protected Object getCellValue(String v, int c, List<DataType> types) throws Exception {
 		Object cv = null;
-		if (Strings.isNotBlank(v)) {
-			String type = types.get(c).type;
-			String format = types.get(c).format;
-			if ("boolean".equalsIgnoreCase(type)) {
-				if ("true".equalsIgnoreCase(v) || "1".equals(v) || "yes".equalsIgnoreCase(v)) {
-					cv = true;
-				}
-				else if ("false".equalsIgnoreCase(v) || "0".equals(v) || "no".equalsIgnoreCase(v)) {
-					cv = false;
-				}
-			}
-			else if ("char".equalsIgnoreCase(type) 
-					|| "character".equalsIgnoreCase(type)) {
-				cv = v.length() > 0 ? v.charAt(0) : '\0';
-			}
-			else if ("number".equalsIgnoreCase(type) 
-					|| "numeric".equalsIgnoreCase(type)
-					|| "decimal".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v);
-			}
-			else if ("byte".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).byteValue();
-			}
-			else if ("short".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).shortValue();
-			}
-			else if ("int".equalsIgnoreCase(type)
-					|| "integer".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).intValue();
-			}
-			else if ("long".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).longValue();
-			}
-			else if ("float".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).floatValue();
-			}
-			else if ("double".equalsIgnoreCase(type)) {
-				cv = NumberFormat.getInstance().parse(v).doubleValue();
-			}
-			else if ("bigint".equalsIgnoreCase(type)
-					|| "BigInteger".equalsIgnoreCase(type)) {
-				cv = new BigInteger(v);
-			}
-			else if ("bigdec".equalsIgnoreCase(type)
-					|| "BigDecimal".equalsIgnoreCase(type)) {
-				cv = new BigDecimal(v);
-			}
-			else if ("date".equalsIgnoreCase(type)) {
-				cv = parseDate(v, format);
-			}
-			else if ("list".equalsIgnoreCase(type)) {
-				cv = Jsons.fromJson(v, ArrayList.class);
-			}
-			else if ("set".equalsIgnoreCase(type)) {
-				cv = Jsons.fromJson(v, LinkedHashSet.class);
-			}
-			else if ("map".equalsIgnoreCase(type)) {
-				cv = Jsons.fromJson(v, LinkedHashMap.class);
-			}
-			else {
-				cv = v;
-			}
+		String type = types.get(c).type;
+		if ("list".equalsIgnoreCase(type)) {
+			cv = Jsons.fromJson(v.toString(), ArrayList.class);
+		}
+		else if ("set".equalsIgnoreCase(type)) {
+			cv = Jsons.fromJson(v.toString(), LinkedHashSet.class);
+		}
+		else if ("map".equalsIgnoreCase(type)) {
+			cv = Jsons.fromJson(v.toString(), LinkedHashMap.class);
+		}
+		else {
+			cv = v;
 		}
 		return cv;
 	}
@@ -271,6 +199,21 @@ public class DataImportAction extends AbstractAction {
 			addActionError(e.getMessage());
 		}
 	}
+	
+	/**
+	 * CsvImport
+	 * @param data data
+	 * @param separator separator
+	 */
+	protected void impCsv(byte[] data, char separator) {
+		try {
+			final CsvReader csv = getCsvReader(data, separator);
+			impSheet(csv);
+		}
+		catch (Throwable e) {
+			logException("CsvImport", e);
+		}
+	}
 
 	/**
 	 * XlsImport
@@ -279,17 +222,11 @@ public class DataImportAction extends AbstractAction {
 	protected void impXls(byte[] data, boolean ooxml) {
 		try {
 			InputStream is = new ByteArrayInputStream(data);
-			Workbook wb = null;
-			if (ooxml) {
-				wb = (Workbook)Classes.newInstance(
-						"org.apache.poi.xssf.usermodel.XSSFWorkbook", is, InputStream.class);
-			}
-			else {
-				wb = new HSSFWorkbook(is);
-			}
-			for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-				Sheet sheet = wb.getSheetAt(i);
-				impXlsSheetData(sheet);
+			XlsReader xls = ooxml ? new XlsxReader(is) : new XlsReader(is);
+			for (int i = 0; i < xls.getSheetCount(); i++) {
+				xls.setSheet(i);
+				arg.target = xls.getSheetName();
+				impSheet(xls);
 			}
 		}
 		catch (Throwable e) {
@@ -324,76 +261,6 @@ public class DataImportAction extends AbstractAction {
 		return values;
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected Map<String, Object> getRowValues(Sheet sheet, int r,
-			List<String> columns, List<DataType> types, List uploadData) {
-		Row row = sheet.getRow(r);
-		if (row == null) {
-			return null;
-		}
-
-		String[] line = new String[columns.size()];
-		
-		Map<String, Object> values = new HashMap<String, Object>(columns.size());
-		for (int c = 0; c < columns.size(); c++) {
-			Cell cell = row.getCell(c);
-			if (cell == null) {
-				continue;
-			}
-
-			String v = null;
-			try {
-				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_NUMERIC:
-					v = String.valueOf(cell.getNumericCellValue());
-					if (Strings.contains(v, '.')) {
-						v = Strings.stripEnd(v, "0");
-						v = Strings.stripEnd(v, ".");
-					}
-					break;
-				case Cell.CELL_TYPE_FORMULA:
-					try {
-						v = String.valueOf(cell.getNumericCellValue());
-					}
-					catch (Exception e) {
-						v = cell.getStringCellValue();
-					}
-					break;
-				default: 
-					v = cell.getStringCellValue();
-					break;
-				}
-				line[c] = v;
-
-				Object cv;
-				if (Strings.isNotBlank(v)) {
-					String type = types.get(c).type;
-					if ("date".equalsIgnoreCase(type)) {
-						try {
-							cv = cell.getDateCellValue();
-						}
-						catch (Exception e) {
-							cv = getCellValue(v, c, types);
-						}
-					}
-					else {
-						cv = getCellValue(v, c, types);
-					}
-					values.put(columns.get(c), cv);
-				}
-			}
-			catch (Exception e) {
-				String msg = getError(sheet.getSheetName(), r + 1, c + 1, v, e);
-				throw new RuntimeException(msg);
-			}
-		}
-
-		if (!values.isEmpty()) {
-			uploadData.add(line);
-		}
-		return values;
-	}
-
 	protected Class<?> resolveTargetType(String target) {
 		Class<?> cls = Classes.findClass(target);
 		if (cls == null) {
@@ -410,43 +277,48 @@ public class DataImportAction extends AbstractAction {
 		return cls;
 	}
 	
-	protected void checkColumns(Class<?> type, List<String> columns) {
+	protected void checkColumns(Class<?> type, List<?> columns) {
 		BeanHandler bh = Beans.i().getBeanHandler(type);
-		for (String c : columns) {
+		for (Object o : columns) {
+			String c = o == null ? "" : o.toString();
 			if (!bh.canWriteProperty(c)) {
 				throw new RuntimeException("[" + arg.file.getName() + "!" + arg.target + "] - the table column(" + c + ") is incorrect!");
 			}
 		}
 	}
 
+	/**
+	 * CsvImport
+	 * @param data data
+	 * @param separator separator
+	 */
 	@SuppressWarnings("unchecked")
-	protected void impXlsSheetData(final Sheet sheet) throws Exception {
+	protected void impSheet(final ListReader<?> sheet) throws Exception {
 		final List table = new ArrayList();
 		
-		arg.target = sheet.getSheetName();
+		table.add(arg.target);
 		final Class<?> targetType = resolveTargetType(arg.target);
 
-		table.add(arg.target);
-
-		final List<String> columns = getHeadValues(sheet, 0);
-		if (columns.isEmpty()) {
-			throw new Exception("[" + arg.file.getName() + "!" + arg.target + "] - the table column is empty!");
+		final List<?> columns = sheet.readList();
+		if (columns == null || columns.isEmpty()) {
+			throw new Exception("[" + arg.file.getName() + "] - the table column is empty!");
 		}
 		table.add(columns);
 
 		checkColumns(targetType, columns);
 		
-		List<String> row2 = getHeadValues(sheet, 1);
-		if (row2.size() != columns.size()) {
-			throw new Exception("[" + arg.file.getName() + "!" + arg.target + "] - the column types is incorrect!");
+		List<?> row2 = sheet.readList();
+		if (row2 == null || row2.size() != columns.size()) {
+			throw new Exception("[" + arg.file.getName() + "] - the column types is incorrect!");
 		}
 		table.add(row2);
 		
 		final List<DataType> types = new ArrayList<DataType>();
-		for (String v : row2) {
-			types.add(new DataType(v));
+		for (Object v : row2) {
+			String c = v == null ? "" : v.toString();
+			types.add(new DataType(c));
 		}
-		
+
 		final Dao dao = getDaoClient().getDao();
 		if (arg.deleteAll) {
 			dao.deletes(targetType);
@@ -456,7 +328,7 @@ public class DataImportAction extends AbstractAction {
 			@Override
 			public void run() {
 				int cnt = 0;
-				for (int i = 2; ; i++) {
+				for (int i = 3; ; i++) {
 					Map<String, Object> values = getRowValues(sheet, i, columns, types, table);
 					if (values == null) {
 						break;
@@ -472,121 +344,47 @@ public class DataImportAction extends AbstractAction {
 						dao.commit();
 					}
 				}
+
 				if (cnt > 0 && cnt % arg.commitSize != 0) {
 					dao.commit();
 				}
+
 				arg.count = cnt;
 			}
 		});
 
 		addActionMessage(getText("success-import", "success-import", arg));
-
 		tableList.add(table);
 	}
-	
-	/**
-	 * CsvImport
-	 * @param data data
-	 * @param separator separator
-	 */
-	@SuppressWarnings("unchecked")
-	protected void impCsv(byte[] data, char separator) {
-		try {
-			final List table = new ArrayList();
-			
-			table.add(arg.target);
-			final Class<?> targetType = resolveTargetType(arg.target);
-
-			final CsvReader csv = getCsvReader(data, separator);
-
-			final List<String> columns = csv.readList();
-			if (columns == null || columns.isEmpty()) {
-				throw new Exception("[" + arg.file.getName() + "] - the table column is empty!");
-			}
-			table.add(columns);
-
-			checkColumns(targetType, columns);
-			
-			List<String> row2 = csv.readList();
-			if (row2 == null || row2.size() != columns.size()) {
-				throw new Exception("[" + arg.file.getName() + "] - the column types is incorrect!");
-			}
-			table.add(row2);
-			
-			final List<DataType> types = new ArrayList<DataType>();
-			for (String v : row2) {
-				types.add(new DataType(v));
-			}
-
-			final Dao dao = getDaoClient().getDao();
-			if (arg.deleteAll) {
-				dao.deletes(targetType);
-			}
-
-			dao.exec(new Runnable() {
-				@Override
-				public void run() {
-					int cnt = 0;
-					for (int i = 3; ; i++) {
-						Map<String, Object> values = getRowValues(csv, i, columns, types, table);
-						if (values == null) {
-							break;
-						}
-						if (values.isEmpty()) {
-							continue;
-						}
-
-						saveRow(dao, targetType, values);
-
-						cnt++;
-						if (cnt % arg.commitSize == 0) {
-							dao.commit();
-						}
-					}
-
-					if (cnt > 0 && cnt % arg.commitSize != 0) {
-						dao.commit();
-					}
-
-					arg.count = cnt;
-				}
-			});
-
-			addActionMessage(getText("success-import", "success-import", arg));
-			tableList.add(table);
-		}
-		catch (Throwable e) {
-			logException("CsvImport", e);
-		}
-	}
 
 	@SuppressWarnings("unchecked")
-	protected Map<String, Object> getRowValues(CsvReader csv, int r,
-			List<String> columns, List<DataType> types, List uploadData) {
+	protected Map<String, Object> getRowValues(ListReader<?> sheet, int r,
+			List<?> columns, List<DataType> types, List uploadData) {
 		try {
-			List<String> row = csv.readList();
+			List<?> row = sheet.readList();
 			if (row == null) {
 				return null;
 			}
 	
 			Map<String, Object> values = new HashMap<String, Object>(columns.size());
-			for (int c = 0; c < columns.size(); c++) {
-				String v = null;
-				if (c < row.size()) {
-					v = Strings.stripToNull(row.get(c));
+			for (int c = 0; c < columns.size() && c < row.size(); c++) {
+				Object v = row.get(c);
+
+				if (v instanceof CharSequence) {
+					v = Strings.stripToNull((CharSequence)v);
 				}
-				
 				if (v != null) {
 					try {
 						Object cv = getCellValue(v, c, types);
-						values.put(columns.get(c), cv);
+						Object ch = columns.get(c);
+						String sh = ch == null ? null : ch.toString();
+						values.put(sh, cv);
 					}
 					catch (Exception e) {
-						String msg = getError(arg.target, r, c, v, e);
-						throw new Exception(msg);
+						String msg = getError(arg.target, r, c + 1, v, e);
+						throw new RuntimeException(msg);
 					}
 				}
-				
 			}
 			
 			if (!values.isEmpty()) {
@@ -625,7 +423,7 @@ public class DataImportAction extends AbstractAction {
 	}
 
 	protected void saveRow(Dao dao, Class targetType, Object row) {
-		Object data = Castors.scast(row, targetType);
+		Object data = Mvcs.castValue(context, row, targetType);
 		trimData(data);
 		if (arg.deleteAll) {
 			dao.insert(data);
