@@ -2235,6 +2235,10 @@ public class Numbers {
 
 	// -----------------------------------------------------------------------
 	public static String trimZeroFraction(String v) {
+		if (Strings.isEmpty(v)) {
+			return v;
+		}
+		
 		if (Strings.contains(v, '.')) {
 			v = Strings.stripEnd(v, "0");
 			v = Strings.stripEnd(v, ".");
