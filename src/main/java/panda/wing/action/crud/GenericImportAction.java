@@ -33,6 +33,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
+import panda.mvc.view.tag.Escapes;
 import panda.vfs.FileItem;
 import panda.wing.constant.RC;
 
@@ -62,18 +63,18 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	public static class Ret {
 		private Object headers;
-		private List<List<String>> warning = new ArrayList<List<String>>();
-		private List<List<String>> success = new ArrayList<List<String>>();
-		public List<List<String>> getWarning() {
+		private List<List<?>> warning = new ArrayList<List<?>>();
+		private List<List<?>> success = new ArrayList<List<?>>();
+		public List<List<?>> getWarning() {
 			return warning;
 		}
-		public void setWarning(List<List<String>> warning) {
+		public void setWarning(List<List<?>> warning) {
 			this.warning = warning;
 		}
-		public List<List<String>> getSuccess() {
+		public List<List<?>> getSuccess() {
 			return success;
 		}
-		public void setSuccess(List<List<String>> success) {
+		public void setSuccess(List<List<?>> success) {
 			this.success = success;
 		}
 		public Object getHeaders() {
@@ -155,7 +156,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			separator);
 	}
 
-	protected String[] mapColumns(List<String> headers) {
+	protected String[] mapColumns(List<?> headers) {
 		String[] columns = new String[headers.size()];
 		Entity<T> en = getEntity();
 		for (EntityField ef : en.getFields()) {
@@ -180,7 +181,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
-		final List<String> headers = csv.readList();
+		final List<?> headers = csv.readList();
 		if (headers == null || headers.isEmpty()) {
 			return null;
 		}
@@ -221,7 +222,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	
 	protected void impData(Ret ret, ListReader csv, String[] columns, boolean strict) throws Exception {
 		for (int i = 1; ; i++) {
-			List<String> row = csv.readList();
+			List<?> row = csv.readList();
 			if (row == null) {
 				break;
 			}
@@ -236,7 +237,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			}
 			
 			try {
-				T data = Mvcs.castValue(context, values, type);
+				T data = castData(values);
 				trimData(data);
 				
 				checkData(data);
@@ -256,14 +257,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	protected Map<String, Object> rowToMap(String[] columns, List<String> row) {
+	protected Map<String, Object> rowToMap(String[] columns, List<?> row) {
 		Map<String, Object> values = new HashMap<String, Object>(columns.length);
-		for (int c = 0; c < columns.length; c++) {
-			String v = null;
-			if (c < row.size()) {
-				v = Strings.stripToNull(row.get(c));
-			}
+		for (int c = 0; c < columns.length && c < row.size(); c++) {
+			Object v = row.get(c);
 
+			if (v instanceof CharSequence) {
+				v = Strings.stripToNull((CharSequence)v);
+			}
 			if (v != null) {
 				values.put(columns[c], v);
 			}
@@ -313,6 +314,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-value", m);
 	}
 
+	protected T castData(Map<String, Object> values) {
+		return Mvcs.castValue(context, values, type);
+	}
+	
 	protected void trimData(T data) {
 		EntityHelper.clearIdentityValue(getEntity(), data);
 		assist().initCommonFields(data);
@@ -450,5 +455,27 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	protected String dataIncorrectError(T data, Collection<EntityField> efs) {
 		return dataFieldErrors(data, efs, RC.ERROR_DATA_INCORRECT);
+	}
+
+	//------------------------------------------------------------
+	// html escape methods
+	//
+	public String escapeValue(Object v) {
+		return escapeValue(v, null);
+	}
+	
+	protected String escapeValue(Object v, String format) {
+		if (v == null) {
+			return Strings.EMPTY;
+		}
+
+		CharSequence s = null;
+		if (v instanceof CharSequence) {
+			s = (CharSequence)v;
+		}
+		else {
+			s = Mvcs.castString(getContext(), v, format);
+		}
+		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
 }

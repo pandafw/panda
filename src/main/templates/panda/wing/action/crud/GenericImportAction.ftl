@@ -48,7 +48,7 @@
 	<#assign headz = headz - 1/>
 </#if>
 <#list head as _h>
-				<th>${assist.escapePhtml(_h!"")}</th>
+				<th>${a.escapeValue(_h!"")}</th>
 </#list>
 			</tr>
 		</thead>
@@ -56,7 +56,7 @@
 <#list data as row>
 			<tr><td>${(row_index + 1)?c}</td>
 	<#list row as _v>
-				<td>${assist.escapePhtml(_v!"")}</td>
+				<td>${a.escapeValue(_v!"")}</td>
 	</#list>
 	<#if row?size <= headz>
 		<#list (row?size)..headz as x>
