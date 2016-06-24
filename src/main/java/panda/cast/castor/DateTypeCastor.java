@@ -21,6 +21,7 @@ import panda.lang.time.FastDateFormat;
  *
  */
 public class DateTypeCastor {
+	public final static String NOW = "now";
 	public final static String FORMAT_ISODATE = "isodate";
 	public final static String FORMAT_ISODATE_NOH = "isodatenoh";
 	public final static String FORMAT_TIMESTAMP = "timestamp";
@@ -69,7 +70,7 @@ public class DateTypeCastor {
 		 */
 		public FastDateFormat getDateFormat(String format, Locale locale) {
 			if (format == null) {
-				format = "timestamp";
+				format = FORMAT_TIMESTAMP;
 			}
 
 			FastDateFormat fdf = null;
@@ -120,6 +121,10 @@ public class DateTypeCastor {
 				String sv = value.toString();
 				if (sv.length() < 1) {
 					return defaultValue();
+				}
+
+				if (NOW.equalsIgnoreCase(sv)) {
+					return DateTimes.getDate();
 				}
 	
 				ParseException ex = null;
