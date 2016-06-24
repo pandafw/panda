@@ -2231,4 +2231,14 @@ public class Numbers {
 		
 		return sb.toString();
 	}
+
+
+	// -----------------------------------------------------------------------
+	public static String trimZeroFraction(String v) {
+		if (Strings.contains(v, '.')) {
+			v = Strings.stripEnd(v, "0");
+			v = Strings.stripEnd(v, ".");
+		}
+		return v;
+	}
 }
