@@ -319,7 +319,11 @@ public class MailClient {
 			// we're done here
 			if (isSupportStartTLS(client.getReplyStrings())) {
 				client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
-				if (!client.execTLS()) {
+				if (client.execTLS()) {
+					// ehlo again for some mail service
+					//client.ehlo(helo);
+				}
+				else {
 					if (log != null && log.isDebugEnabled()) {
 						log.debug("STARTTLS was not accepted: " + client.getReplyString());
 					}
