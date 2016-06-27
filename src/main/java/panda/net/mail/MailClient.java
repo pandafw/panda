@@ -321,7 +321,7 @@ public class MailClient {
 				client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
 				if (client.execTLS()) {
 					// ehlo again for some mail service
-					//client.ehlo(helo);
+					client.ehlo(helo);
 				}
 				else {
 					if (log != null && log.isDebugEnabled()) {
