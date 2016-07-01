@@ -282,6 +282,7 @@ public class MailClient {
 				client = new AuthenticatingSMTPClient(ssl);
 				client.setConnectTimeout(connectTimeout);
 				client.setDefaultTimeout(defaultTimeout);
+
 				if (log != null && log.isDebugEnabled()) {
 					dbg = new StringBuilderWriter();
 					dbg.append("\n===================== SMTP DEBUG ====================\n");
@@ -318,15 +319,45 @@ public class MailClient {
 			// if your host accepts STARTTLS, we're good everything will be encrypted, otherwise
 			// we're done here
 			if (isSupportStartTLS(client.getReplyStrings())) {
-				client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
-				if (client.execTLS()) {
-					// ehlo again for some mail service
-					client.ehlo(helo);
-				}
-				else {
-					if (log != null && log.isDebugEnabled()) {
-						log.debug("STARTTLS was not accepted: " + client.getReplyString());
+				try {
+					client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
+					if (client.execTLS()) {
+						// ehlo again for some mail service
+						client.ehlo(helo);
 					}
+					else {
+						if (log != null && log.isDebugEnabled()) {
+							log.debug("STARTTLS was not accepted: " + client.getReplyString());
+						}
+					}
+				}
+				catch (IOException e) {
+					close(client);
+
+					// reconnect
+					client = new AuthenticatingSMTPClient(ssl);
+					client.setConnectTimeout(connectTimeout);
+					client.setDefaultTimeout(defaultTimeout);
+
+					if (log != null && log.isDebugEnabled()) {
+						dbg = new StringBuilderWriter();
+						dbg.append("\n===================== SMTP DEBUG ====================\n");
+						client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(dbg), true));
+
+						log.debug("Failed to STARTTLS", e);
+						log.debug("Reconnect to SMTP server " + host + ":" + port);
+					}
+
+					client.connect(host, port);
+					
+					if (!SMTPReply.isPositiveCompletion(client.getReplyCode())) {
+						throw new EmailException(errmsg(host, port, client.getReplyString()));
+					}
+
+					if (log != null && log.isDebugEnabled()) {
+						log.debug("Send EHLO " + helo + " to SMTP Server " + host + ':' + port);
+					}
+					client.ehlo(helo);
 				}
 			}
 			
