@@ -85,7 +85,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		 .disabled(disabled);
 		if (name != null) {
 			a.name(name);
-			a.value(tag.getFileId());
+			a.value(String.valueOf(tag.getFileId()));
 		}
 		xtag("input", a);
 

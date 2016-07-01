@@ -344,7 +344,7 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes value(Object value) {
+	public Attributes value(String value) {
 		addIfExists("value", value);
 		return this;
 	}
