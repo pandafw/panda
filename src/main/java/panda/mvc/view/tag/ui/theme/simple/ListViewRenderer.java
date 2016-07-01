@@ -220,7 +220,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		ha.type("hidden")
 		  .id(id)
 		  .name(name)
-		  .value(value)
+		  .value(tag.castString(value))
 		  .disabled(disabled);
 		xtag("input", ha);
 	}

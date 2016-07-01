@@ -28,10 +28,9 @@ import panda.lang.Strings;
 
  */
 @IocBean(singleton=false)
-public class TextField extends InputUIBean {
+public class TextField extends Hidden {
 	protected Integer maxlength;
 	protected Integer size;
-	protected String format;
 	protected String mask;
 	protected String placeholder;
 
@@ -73,13 +72,6 @@ public class TextField extends InputUIBean {
 	}
 
 	/**
-	 * @return the format
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
 	 * @return the mask
 	 */
 	public String getMask() {
@@ -112,13 +104,6 @@ public class TextField extends InputUIBean {
 	 */
 	public void setSize(Integer size) {
 		this.size = size;
-	}
-
-	/**
-	 * @param format the format to set
-	 */
-	public void setFormat(String format) {
-		this.format = format;
 	}
 
 	/**

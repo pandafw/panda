@@ -14,6 +14,7 @@ import panda.mvc.view.tag.ui.Anchor;
 import panda.mvc.view.tag.ui.File;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.FormButton;
+import panda.mvc.view.tag.ui.Hidden;
 import panda.mvc.view.tag.ui.InputUIBean;
 import panda.mvc.view.tag.ui.Select;
 import panda.mvc.view.tag.ui.TextArea;
@@ -353,7 +354,7 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes formatValue(AbstractTagRenderer tr, TextField tf) {
+	public Attributes formatValue(AbstractTagRenderer tr, Hidden tf) {
 		add("value", tr.formatValue(tf.getValue(), tf.getFormat()), false);
 		return this;
 	}

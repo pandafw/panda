@@ -20,7 +20,7 @@ public class HiddenRenderer extends AbstractEndRenderer<Hidden> {
 		 .id(tag)
 		 .name(tag)
 		 .cssClass(tag, "p-hidden")
-		 .value(tag)
+		 .formatValue(this, tag)
 		 .disabled(tag)
 		 .cssStyle(tag)
 		 .dynamics(tag);
