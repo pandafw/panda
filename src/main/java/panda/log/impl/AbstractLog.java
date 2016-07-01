@@ -66,8 +66,9 @@ public abstract class AbstractLog implements Log {
 			}
 			else {
 				info.msg = String.format(obj.toString(), args);
-				if (args[args.length - 1] instanceof Throwable)
+				if (args[args.length - 1] instanceof Throwable) {
 					info.ex = (Throwable)args[args.length - 1];
+				}
 			}
 			return info;
 		}
