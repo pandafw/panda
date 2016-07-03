@@ -27,7 +27,7 @@ import panda.mvc.util.TextProvider;
 public class Pager extends UIBean {
 	private final static String DEFAULT_LINK_HREF = "#";
 	private final static int DEFAULT_LINK_SIZE = 3;
-	private final static String DEFAULT_LINK_STYLE = "hp1.#n";
+	private final static String DEFAULT_LINK_STYLE = "ihfp#nl";
 	private final static String DEFAULT_LIMIT_LIST = "10,20,30,40,50,60,70,80,90,100";
 
 	private final static String LABEL_EMPTY = "pager-label-empty";
