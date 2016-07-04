@@ -127,7 +127,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@Ok(View.FTL)
 	@Err(View.FTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 <#list ui.displayColumnList as c>
 		if (displayField("${c.name}")) {
@@ -156,7 +156,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@Ok(View.FTL)
 	@Err(View.FTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 <#list ui.displayColumnList as c>
 		if (displayField("${c.name}")) {
@@ -185,7 +185,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@Ok(View.JSON)
 	@Err(View.JSON)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
 		return super.list_json(qr);
 	}
 	
@@ -196,7 +196,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	@At${gen.trimAtName(ui.name)}
 	@Ok(View.XML)
 	@Err(View.XML)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
 		return super.list_xml(qr);
 	}
 	

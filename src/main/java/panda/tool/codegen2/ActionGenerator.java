@@ -18,6 +18,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
+import panda.mvc.bean.QueryerOx;
 import panda.mvc.bean.Queryer;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
@@ -123,22 +124,25 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(action.getActionBaseClass());
 		if (Collections.isNotEmpty(action.getSortedListUIList())) {
 			for (ListUI lui : action.getSortedListUIList()) {
-				if (Collections.contains(lui.getTemplates(), "bdelete") 
-						|| Collections.contains(lui.getTemplates(), "bupdate")
-						|| Collections.contains(lui.getTemplates(), "bedit")) {
-					imports.add(Map.class.getName());
-				}
 				for (String s : lui.getTemplates()) {
-					if (Strings.startsWith(s, "list")) {
+					if ("bdelete".equals(s) 
+							|| "bupdate".equals(s)
+							|| "bedit".equals(s)) {
+						imports.add(Map.class.getName());
+					}
+					else if ("list".equals(s)
+							|| "list_popup".equals(s)
+							|| "list_print".equals(s)) {
 						imports.add(Queryer.class.getName());
 						imports.add(Validates.class.getName());
-						if (Strings.endsWith(s, "csv")) {
-//							imports.add(Mvcs.class.getName());
-							imports.add(List.class.getName());
-							imports.add(ArrayList.class.getName());
-							imports.add(ListColumn.class.getName());
-						}
-						break;
+					}
+					else if ("list_csv".equals(s)
+							|| "list_tsv".equals(s)) {
+						imports.add(Validates.class.getName());
+						imports.add(QueryerOx.class.getName());
+						imports.add(List.class.getName());
+						imports.add(ArrayList.class.getName());
+						imports.add(ListColumn.class.getName());
 					}
 				}
 			}
