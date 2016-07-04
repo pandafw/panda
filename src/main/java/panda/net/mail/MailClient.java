@@ -394,7 +394,7 @@ public class MailClient {
 				String boundary = null;
 				
 				SMTPHeader header = new SMTPHeader();
-				header.setDate(SMTPHeader.DATE, DateTimes.getDate());
+				header.setDate(SMTPHeader.DATE, email.getDate() == null ? DateTimes.getDate() : email.getDate());
 				header.set(SMTPHeader.FROM, email.getEncodedFrom());
 				header.set(SMTPHeader.TO, email.getEncodedTos());
 				if (Collections.isNotEmpty(email.getCcs())) {

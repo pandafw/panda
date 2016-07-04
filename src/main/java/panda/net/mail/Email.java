@@ -3,6 +3,7 @@ package panda.net.mail;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import panda.net.Mimes;
 
 public class Email {
 	private String msgId;
+	private Date date;
 	private String charset = Charsets.UTF_8;
 	private EmailAddress from;
 	private Set<EmailAddress> rcpts;
@@ -45,7 +47,21 @@ public class Email {
 	public void setMsgId(String msgId) {
 		this.msgId = msgId;
 	}
-	
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	/**
 	 * @return the charset
 	 */
@@ -416,6 +432,9 @@ public class Email {
 		if (Strings.isNotEmpty(msgId)) {
 			sb.append("MSGID  : ").append(Strings.defaultString(msgId)).append(Streams.LINE_SEPARATOR);
 		}
+		if (date != null) {
+			sb.append("DATE   : ").append(date).append(Streams.LINE_SEPARATOR);
+		}
 		if (from != null) {
 			sb.append("FROM   : ").append(from).append(Streams.LINE_SEPARATOR);
 		}
@@ -431,7 +450,9 @@ public class Email {
 		if (Collections.isNotEmpty(replyTos)) {
 			sb.append("REPLYTO: ").append(replyTos).append(Streams.LINE_SEPARATOR);
 		}
-		sb.append("HTML   : ").append(html).append(Streams.LINE_SEPARATOR);
+		if (html) {
+			sb.append("HTML   : ").append(html).append(Streams.LINE_SEPARATOR);
+		}
 		if (Strings.isNotEmpty(charset)) {
 			sb.append("CHARSET: ").append(charset).append(Streams.LINE_SEPARATOR);
 		}
