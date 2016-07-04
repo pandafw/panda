@@ -486,6 +486,10 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 			client.setSsl(true);
 		}
 
+		if (!getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, true)) {
+			client.setTls(false);
+		}
+
 		int timeout = getMailSettingAsInt(SC.MAIL_SMTP_CONN_TIMEOUT, 0);
 		if (timeout > 0) {
 			client.setConnectTimeout(timeout);
