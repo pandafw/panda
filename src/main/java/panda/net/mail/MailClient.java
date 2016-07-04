@@ -48,6 +48,7 @@ public class MailClient {
 	private String host;
 	private int port = SMTPClient.DEFAULT_PORT;
 	private boolean ssl;
+	private boolean tls = true;
 	private String username;
 	private String password;
 	
@@ -122,6 +123,20 @@ public class MailClient {
 	 */
 	public void setSsl(boolean ssl) {
 		this.ssl = ssl;
+	}
+
+	/**
+	 * @return the tls
+	 */
+	public boolean isTls() {
+		return tls;
+	}
+
+	/**
+	 * @param tls the tls to set
+	 */
+	public void setTls(boolean tls) {
+		this.tls = tls;
 	}
 
 	/**
@@ -318,7 +333,7 @@ public class MailClient {
 			
 			// if your host accepts STARTTLS, we're good everything will be encrypted, otherwise
 			// we're done here
-			if (isSupportStartTLS(client.getReplyStrings())) {
+			if (tls && isSupportStartTLS(client.getReplyStrings())) {
 				try {
 					client.setTrustManager(TrustManagers.getAcceptAllTrustManager());
 					if (client.execTLS()) {
