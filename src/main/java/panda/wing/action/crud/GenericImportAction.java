@@ -222,11 +222,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	
 	protected void impData(Ret ret, ListReader csv, String[] columns, boolean strict) throws Exception {
 		for (int i = 1; ; i++) {
-			List<?> row = csv.readList();
+			List row = csv.readList();
 			if (row == null) {
 				break;
 			}
 
+			trimRow(row);
+			
 			if (Collections.isItemsEmpty(row)) {
 				continue;
 			}
@@ -312,6 +314,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		m.put("error", e.getMessage());
 
 		return getMessage("error-value", m);
+	}
+	
+	protected void trimRow(List row) {
 	}
 
 	protected T castData(Map<String, Object> values) {
