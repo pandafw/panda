@@ -630,6 +630,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				gq.greaterThanOrEqualTo(name, v1);
 			}
 			else {
+				if (v1 instanceof Date && v2 instanceof Date) {
+					v2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)v2), -1);
+				}
 				gq.between(name, v1, v2);
 			}
 		}
