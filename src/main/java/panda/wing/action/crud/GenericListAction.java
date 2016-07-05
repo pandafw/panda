@@ -1,6 +1,7 @@
 package panda.wing.action.crud;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import panda.dao.query.Query;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.View;
@@ -556,10 +558,22 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	protected void addQueryFilter(GenericQuery<T> gq, Filter f, String name, Object value, List<?> values) {
 		if (Filter.EQUAL.equals(f.getComparator())) {
-			gq.equalTo(name, value);
+			if (value instanceof Date) {
+				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
+				gq.between(name, value, value2);
+			}
+			else {
+				gq.equalTo(name, value);
+			}
 		}
 		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
-			gq.notEqualTo(name, value);
+			if (value instanceof Date) {
+				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
+				gq.notBetween(name, value, value2);
+			}
+			else {
+				gq.notEqualTo(name, value);
+			}
 		}
 		else if (Filter.LESS_THAN.equals(f.getComparator())) {
 			gq.lessThan(name, value);
