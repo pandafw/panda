@@ -327,8 +327,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		for (int i = 0; i < row.size(); i++) {
 			Object v = row.get(i);
 			if (v instanceof Number) {
-				v = Numbers.trimZeroFraction(v.toString());
-				row.set(i, v);
+				String s = v.toString();
+				String s2 = Numbers.trimZeroFraction(s);
+				if (!s.equals(s2)) {
+					row.set(i, s2);
+				}
 			}
 		}
 	}
