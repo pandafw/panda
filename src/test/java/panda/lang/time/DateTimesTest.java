@@ -1285,6 +1285,34 @@ public class DateTimesTest {
 		assertEquals(0, cal.get(Calendar.HOUR));
 	}
 
+
+	/**
+	 * Tests various values with the ceiling method
+	 */
+	@Test
+	public void testZeroCeil() throws Exception {
+		assertEquals("ceiling date-1 failed", dateParser.parse("February 13, 2002"),
+			DateTimes.zeroCeiling(dateParser.parse("February 12, 2002")));
+		assertEquals("ceiling date-2 failed", dateParser.parse("December 1, 2001"),
+			DateTimes.zeroCeiling(dateParser.parse("November 30, 2001")));
+		assertEquals("ceiling hour-1 failed", dateTimeParser.parse("February 12, 2002 09:00:00.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 08:00:00.000")));
+		assertEquals("ceiling hour-2 failed", dateTimeParser.parse("February 12, 2002 13:00:00.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 12:00:00.000")));
+		assertEquals("ceiling minute-1 failed", dateTimeParser.parse("February 12, 2002 12:35:00.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 12:34:00.000")));
+		assertEquals("ceiling minute-2 failed", dateTimeParser.parse("November 18, 2001 2:00:00.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("November 18, 2001 1:59:00.000")));
+		assertEquals("ceiling second-1 failed", dateTimeParser.parse("February 12, 2002 12:34:57.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 12:34:56.000")));
+		assertEquals("ceiling second-2 failed", dateTimeParser.parse("November 18, 2001 1:23:00.000"),
+			DateTimes.zeroCeiling(dateTimeParser.parse("November 18, 2001 1:22:59.000")));
+		assertEquals("ceiling millisecond-1 failed", dateTimeParser.parse("February 12, 2002 12:34:57.111").getTime(),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 12:34:57.110")).getTime());
+		assertEquals("ceiling millisecond-1 failed", dateTimeParser.parse("February 12, 2002 12:34:57.000").getTime(),
+			DateTimes.zeroCeiling(dateTimeParser.parse("February 12, 2002 12:34:56.999")).getTime());
+	}
+
 	/**
 	 * Tests the iterator exceptions
 	 */

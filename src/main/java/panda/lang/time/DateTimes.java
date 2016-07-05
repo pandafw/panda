@@ -908,17 +908,63 @@ public class DateTimes {
 		if (date == null) {
 			throw new IllegalArgumentException("The date must not be null");
 		}
+		
 		if (date instanceof Date) {
 			return ceiling((Date)date, field);
 		}
-		else if (date instanceof Calendar) {
+		
+		if (date instanceof Calendar) {
 			return ceiling((Calendar)date, field).getTime();
 		}
-		else {
-			throw new ClassCastException("Could not find ceiling of for type: " + date.getClass());
-		}
+
+		throw new ClassCastException("Could not find ceiling of for type: " + date.getClass());
 	}
 
+	// -----------------------------------------------------------------------
+	public static Date zeroCeiling(final Object date) {
+		if (date == null) {
+			throw new IllegalArgumentException("The date must not be null");
+		}
+
+		if (date instanceof Date) {
+			int field = zeroField((Date)date);
+			return ceiling((Date)date, field);
+		}
+			
+		if (date instanceof Calendar) {
+			int field = zeroField((Calendar)date);
+			return ceiling((Calendar)date, field).getTime();
+		}
+
+		throw new ClassCastException("Could not find ceiling of for type: " + date.getClass());
+	}
+
+	public static int zeroField(final Calendar c) {
+		if (c.get(Calendar.MILLISECOND) != 0) {
+			return Calendar.MILLISECOND;
+		}
+		if (c.get(Calendar.SECOND) != 0) {
+			return Calendar.SECOND;
+		}
+		if (c.get(Calendar.MINUTE) != 0) {
+			return Calendar.MINUTE;
+		}
+		if (c.get(Calendar.HOUR_OF_DAY) != 0) {
+			return Calendar.HOUR_OF_DAY;
+		}
+		if (c.get(Calendar.DATE) != 0) {
+			return Calendar.DATE;
+		}
+		if (c.get(Calendar.MONTH) != 0) {
+			return Calendar.MONTH;
+		}
+		return Calendar.YEAR;
+	}
+	
+	public static int zeroField(final Date date) {
+		return zeroField(toCalendar(date));
+	}
+	
 	// -----------------------------------------------------------------------
 	/**
 	 * <p>
@@ -936,6 +982,9 @@ public class DateTimes {
 		}
 
 		if (field == Calendar.MILLISECOND) {
+			if (modType == MODIFY_CEILING) {
+				val.add(Calendar.MILLISECOND, 1);
+			}
 			return;
 		}
 
