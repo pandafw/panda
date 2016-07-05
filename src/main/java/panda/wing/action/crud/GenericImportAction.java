@@ -29,7 +29,6 @@ import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
-import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -85,7 +84,23 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			this.headers = headers;
 		}
 	}
+
+	private boolean numAsText;
 	
+	/**
+	 * @return the numAsText
+	 */
+	protected boolean isNumAsText() {
+		return numAsText;
+	}
+
+	/**
+	 * @param numAsText the numAsText to set
+	 */
+	protected void setNumAsText(boolean numAsText) {
+		this.numAsText = numAsText;
+	}
+
 	/**
 	 * @return result
 	 * @throws Exception if an error occurs
@@ -138,10 +153,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
-		if (ooxml) {
-			return new XlsxReader(input);
-		}
-		return new XlsReader(input);
+		XlsReader xr = ooxml ? new XlsxReader(input) : new XlsReader(input);
+		xr.setNumAsText(numAsText);
+		return xr;
 	}
 
 	protected CsvReader getCsvReader(FileItem file, char separator) throws Exception {
@@ -318,22 +332,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	}
 	
 
-	@SuppressWarnings("unchecked")
 	protected void trimRow(List row) {
-		if (Collections.isEmpty(row)) {
-			return;
-		}
-		
-		for (int i = 0; i < row.size(); i++) {
-			Object v = row.get(i);
-			if (v instanceof Number) {
-				String s = v.toString();
-				String s2 = Numbers.trimZeroFraction(s);
-				if (!s.equals(s2)) {
-					row.set(i, s2);
-				}
-			}
-		}
 	}
 
 	protected T castData(Map<String, Object> values) {
