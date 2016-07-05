@@ -29,6 +29,7 @@ import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -316,7 +317,20 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-value", m);
 	}
 	
+
+	@SuppressWarnings("unchecked")
 	protected void trimRow(List row) {
+		if (Collections.isEmpty(row)) {
+			return;
+		}
+		
+		for (int i = 0; i < row.size(); i++) {
+			Object v = row.get(i);
+			if (v instanceof Number) {
+				v = Numbers.trimZeroFraction(v.toString());
+				row.set(i, v);
+			}
+		}
 	}
 
 	protected T castData(Map<String, Object> values) {
