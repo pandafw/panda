@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.NumberToTextConverter;
 
 import panda.lang.Strings;
 
@@ -22,6 +23,7 @@ public class XlsReader implements ListReader<Object>, Closeable {
 	private Workbook workbook;
 	private Sheet sheet;
 	private int rowidx;
+	private boolean numAsText;
 	
 	public XlsReader(InputStream is) throws IOException {
 		workbook = load(is);
@@ -97,6 +99,20 @@ public class XlsReader implements ListReader<Object>, Closeable {
 	}
 
 	/**
+	 * @return the numAsText
+	 */
+	public boolean isNumAsText() {
+		return numAsText;
+	}
+
+	/**
+	 * @param numAsText the numAsText to set
+	 */
+	public void setNumAsText(boolean numAsText) {
+		this.numAsText = numAsText;
+	}
+
+	/**
 	 * Reads the entire sheet into a List with each element being a String[] of tokens.
 	 * 
 	 * @return a List of String[], with each String[] representing a row of the excel file.
@@ -126,7 +142,12 @@ public class XlsReader implements ListReader<Object>, Closeable {
 				v = c.getDateCellValue();
 			}
 			else {
-				v = c.getNumericCellValue();
+				if (numAsText) {
+					v = NumberToTextConverter.toText(c.getNumericCellValue());
+				}
+				else {
+					v = c.getNumericCellValue();
+				}
 			}
 			break;
 		case Cell.CELL_TYPE_FORMULA:
