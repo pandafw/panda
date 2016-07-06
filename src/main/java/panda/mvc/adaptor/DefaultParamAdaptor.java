@@ -1,10 +1,23 @@
 package panda.mvc.adaptor;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.cast.CastContext;
-import panda.cast.Castors;
-import panda.cast.castor.FileItemCastor;
 import panda.io.MimeType;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
@@ -13,7 +26,6 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
-import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
@@ -33,22 +45,6 @@ import panda.mvc.annotation.param.IocObj;
 import panda.mvc.annotation.param.Param;
 import panda.net.http.HttpMethod;
 import panda.servlet.ServletRequestHeaderMap;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -465,19 +461,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	}
 	
 	protected <T> T cast(ActionContext ac, String name, Object value, Type type, String format) {
-		Castors cs = Mvcs.getCastors();
-		CastContext cc = cs.newCastContext();
-		
-		cc.setSkipCastError(true);
-		cc.setPrefix(name);
-		cc.set(FileItemCastor.KEY, ac.getFilePool());
-		cc.setFormat(format);
-		cc.setLocale(ac.getLocale());
-		
-		T o = cs.cast(value, type, cc);
-		if (Collections.isNotEmpty(cc.getErrors())) {
-			ac.addCastErrors(cc.getErrors());
-		}
-		return o;
+		return Mvcs.castValueWithErrors(ac, name, value, type, format);
 	}
 }

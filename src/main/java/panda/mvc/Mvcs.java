@@ -14,6 +14,7 @@ import panda.el.El;
 import panda.el.ElTemplate;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -143,6 +144,27 @@ public abstract class Mvcs {
 		cc.setLocale(ac.getLocale());
 		
 		return cs.cast(value, type, cc);
+	}
+
+	public static <T> T castValueWithErrors(ActionContext ac, Object value, Type type, String format) {
+		return castValueWithErrors(ac, null, value, type, format);
+	}
+
+	public static <T> T castValueWithErrors(ActionContext ac, String name, Object value, Type type, String format) {
+		Castors cs = Mvcs.getCastors();
+		CastContext cc = cs.newCastContext();
+		
+		cc.setSkipCastError(true);
+		cc.setPrefix(name);
+		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.setFormat(format);
+		cc.setLocale(ac.getLocale());
+		
+		T o = cs.cast(value, type, cc);
+		if (Collections.isNotEmpty(cc.getErrors())) {
+			ac.addCastErrors(cc.getErrors());
+		}
+		return o;
 	}
 
 	/**

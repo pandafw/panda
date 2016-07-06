@@ -510,6 +510,15 @@ public class ActionContext {
 
 	//----------------------------------------------------
 	/**
+	 * clear cast errors
+	 */
+	public void clearCastErrors() {
+		if (castErrors != null) {
+			castErrors.clear();
+		}
+	}
+
+	/**
 	 * @return the castErrors
 	 */
 	public Map<String, Object> getCastErrors() {
