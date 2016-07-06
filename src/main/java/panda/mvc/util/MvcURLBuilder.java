@@ -259,4 +259,11 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		ub.setParams(params);
 		return ub.build();
 	}
+	
+	public static String buildQueryString(ActionContext context, Object params) {
+		MvcURLBuilder ub = context.getIoc().get(MvcURLBuilder.class);
+		ub.setPath("");
+		ub.setParams(params);
+		return ub.build();
+	}
 }
