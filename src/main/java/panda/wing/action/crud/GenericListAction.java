@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.dao.Dao;
@@ -39,7 +38,6 @@ import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.ListColumn;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
-import panda.servlet.ServletURLBuilder;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 
@@ -286,9 +284,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				Map params = URLHelper.parseQueryString(qs);
 				removeRedundantParams(params);
 				if (Collections.isNotEmpty(params)) {
-					HttpServletRequest request = getRequest();
 					HttpServletResponse response = getResponse();
-					String url = ServletURLBuilder.buildURL(request, params);
+					String url = MvcURLBuilder.buildURL(context, params);
 					HttpServlets.sendRedirect(response, url);
 					return null;
 				}

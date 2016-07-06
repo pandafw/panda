@@ -225,8 +225,8 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 			return true;
 		}
 
-		String uri = MvcURLBuilder.build(context, action, false);
-		return authenticator.hasPermission(context, uri);
+		String path = MvcURLBuilder.buildPath(context, action, false);
+		return authenticator.hasPermission(context, path);
 	}
 
 	/**
