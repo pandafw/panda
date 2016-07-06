@@ -401,4 +401,32 @@ public class URLBuilder {
 		ub.setEncoding(encoding);
 		return ub.build();
 	}
+
+	/**
+	 * build the query string
+	 * 
+	 * @param params parameters
+	 * @param escapeAmp escape &
+	 * @return URL
+	 */
+	public static String buildQueryString(Object params, boolean escapeAmp) {
+		URLBuilder ub = new URLBuilder();
+		ub.setParams(params);
+		ub.setEscapeAmp(escapeAmp);
+		return ub.build();
+	}
+
+	/**
+	 * build the query string
+	 * 
+	 * @param params parameters
+	 * @param encoding url encoding
+	 * @return URL
+	 */
+	public static String buildQueryString(Object params, String encoding) {
+		URLBuilder ub = new URLBuilder();
+		ub.setParams(params);
+		ub.setEncoding(encoding);
+		return ub.build();
+	}
 }

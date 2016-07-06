@@ -184,7 +184,7 @@ public class HttpRequest {
 	}
 
 	public String getURLEncodedParams() {
-		return URLBuilder.buildURL(null, params, encoding);
+		return URLBuilder.buildQueryString(params, encoding);
 	}
 
 	public HttpRequest setParams(Map<String, Object> params) {
