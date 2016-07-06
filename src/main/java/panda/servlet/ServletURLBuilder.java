@@ -95,6 +95,6 @@ public class ServletURLBuilder extends URLBuilder {
 		ServletURLBuilder ub = new ServletURLBuilder();
 		ub.setRequest(request);
 		ub.setParams(params);
-		return ub.toString();
+		return ub.build();
 	}
 }
