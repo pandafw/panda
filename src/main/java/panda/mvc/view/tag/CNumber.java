@@ -7,6 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.Numbers;
 import panda.mvc.MvcException;
 import panda.mvc.Mvcs;
 
@@ -77,7 +78,7 @@ public class CNumber extends ContextBean {
 
 			String msg = null;
 			if (pattern == null) {
-				msg = value.toString();
+				msg = Numbers.format(value);
 			}
 			else {
 				NumberFormat df = new DecimalFormat(pattern, new DecimalFormatSymbols(context.getLocale()));
