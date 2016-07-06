@@ -26,7 +26,7 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 import panda.net.Mimes;
-import panda.net.URLHelper;
+import panda.net.URLBuilder;
 
 public class HttpRequest {
 	private static final int TOSTRING_BODY_LIMIT = 1024;
@@ -163,16 +163,16 @@ public class HttpRequest {
 	 * @return the url with query string
 	 */
 	public URL getURL() {
-		StringBuilder sb = new StringBuilder(url);
+		String url = this.url;
+		if (isGet() && Collections.isNotEmpty(params)) {
+			url = URLBuilder.buildURL(url, params, encoding);
+		}
+
 		try {
-			if (isGet() && Collections.isNotEmpty(params)) {
-				URLHelper.appendQuerySeparator(sb, false);
-				URLHelper.appendQueryString(sb, params, false, encoding);
-			}
-			return new URL(sb.toString());
+			return new URL(url);
 		}
 		catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Invalid URL: " + sb, e);
+			throw new IllegalArgumentException("Invalid URL: " + url, e);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class HttpRequest {
 	}
 
 	public String getURLEncodedParams() {
-		return URLHelper.buildQueryString(params, encoding);
+		return URLBuilder.buildURL(null, params, encoding);
 	}
 
 	public HttpRequest setParams(Map<String, Object> params) {

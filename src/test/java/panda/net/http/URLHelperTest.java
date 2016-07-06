@@ -2,7 +2,6 @@ package panda.net.http;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -88,18 +87,5 @@ public class URLHelperTest {
 
 		assertEquals("/d/x", URLHelper.resolveURL("/d/e", "x"));
 		assertEquals("/x", URLHelper.resolveURL("/d/e", "../x"));
-	}
-
-	@Test
-	public void testBuildParametersString() throws Exception {
-		assertEquals("", URLHelper.buildQueryString(Collections.emptyMap()));
-		assertEquals("a=s&n=100", URLHelper.buildQueryString(params));
-	}
-	
-	@Test
-	public void testBuildURL() throws Exception {
-		assertEquals("test.com?a=s&n=100", URLHelper.buildURL("test.com", params));
-		assertEquals("test.com?a=s&n=100", URLHelper.buildURL("test.com?", params));
-		assertEquals("test.com?0&a=s&n=100", URLHelper.buildURL("test.com?0", params));
 	}
 }

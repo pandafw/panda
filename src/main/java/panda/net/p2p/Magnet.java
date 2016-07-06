@@ -1,6 +1,7 @@
 package panda.net.p2p;
 
 import panda.lang.Objects;
+import panda.net.URLBuilder;
 import panda.net.URLHelper;
 
 import java.io.Serializable;
@@ -188,7 +189,7 @@ public class Magnet implements Cloneable, Serializable {
 	}
 	
 	private static String _toURL(Magnet m) {
-		return URLHelper.buildURL("magnet:", m, false, null);
+		return URLBuilder.buildURL("magnet:", m);
 	}
 	
 	public static String toURL(String title, String btih) {
