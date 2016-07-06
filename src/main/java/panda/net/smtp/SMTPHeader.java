@@ -115,5 +115,6 @@ public class SMTPHeader extends InternetHeader implements Cloneable, Serializabl
 			}
 			writer.append(Streams.LINE_SEPARATOR_UNIX);
 		}
+		writer.append(Streams.LINE_SEPARATOR_UNIX);
 	}
 }

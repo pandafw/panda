@@ -429,7 +429,6 @@ public class MailClient {
 				header.set(SMTPHeader.CONTENT_TRANSFER_ENCODING, encoding);
 	
 				out.write(header.toString());
-				out.write("\n");
 
 				if (email.isHtml() || email.hasAttachments()) {
 					// Write the main text message
