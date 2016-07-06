@@ -283,8 +283,6 @@ public class URLBuilder {
 	/**
 	 * @param link link
 	 * @param params parameter map
-	 * @param paramSeparator parameter separator
-	 * @param encoding encoding
 	 */
 	@SuppressWarnings("unchecked")
 	protected void appendQueryParameters(StringBuilder link, Object params) {
