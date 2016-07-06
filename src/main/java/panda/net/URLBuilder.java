@@ -355,6 +355,11 @@ public class URLBuilder {
 		return castors.cast(value, String.class);
 	}
 	
+	@Override
+	public String toString() {
+		return build();
+	}
+
 	//------------------------------------------------------------------------
 	/**
 	 * build the request URL, append parameters as query string
