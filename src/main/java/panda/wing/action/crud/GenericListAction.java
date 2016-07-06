@@ -317,9 +317,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected String getListParametersString(Queryer qr) {
 		Map<String, Object> params = getListParameters(qr);
-		MvcURLBuilder ub = getIoc().get(MvcURLBuilder.class);
-		ub.setParams(params);
-		return ub.build();
+		return MvcURLBuilder.buildQueryString(context, params);
 	}
 	
 	/**
