@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.Mvcs;
-import panda.mvc.util.UrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 import panda.vfs.FileItem;
 
 
@@ -16,13 +16,13 @@ public class Uploader extends InputUIBean {
 	protected Integer size;
 	
 	@IocInject
-	protected UrlBuilder uploader;
+	protected MvcURLBuilder uploader;
 	
 	@IocInject
-	protected UrlBuilder dnloader;
+	protected MvcURLBuilder dnloader;
 	
 	@IocInject
-	protected UrlBuilder defaulter;
+	protected MvcURLBuilder defaulter;
 
 	protected String uploadLink;
 	protected String uploadName;

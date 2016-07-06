@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.servlet.HttpServlets;
-import panda.servlet.ServletURLHelper;
+import panda.servlet.ServletURLBuilder;
 
 
 /**
@@ -95,7 +95,8 @@ public class SessionRecoveryFilter implements Filter {
 				c.setPath("/");
 				response.addCookie(c);
 
-				String url = ServletURLHelper.buildURL(request);
+				String url = ServletURLBuilder.buildURL(request);
+
 				if (log.isDebugEnabled()) {
 					log.debug("[" + JSESSIONID + "=" + c.getValue() + "] redirect: " + url);
 				}

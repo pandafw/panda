@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.servlet.HttpServlets;
-import panda.servlet.ServletURLHelper;
+import panda.servlet.ServletURLBuilder;
 
 
 /**
@@ -35,7 +35,11 @@ public class HttpsRedirectFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		String schema = request.getScheme();
 		if (!"https".equals(schema)) {
-			String url = ServletURLHelper.buildURL(request, "https", 0, request.getParameterMap(), true, false);
+			ServletURLBuilder ub = new ServletURLBuilder();
+			ub.setScheme("https");
+			ub.setParams(request.getParameterMap());
+			ub.setForceAddSchemeHostAndPort(true);
+			String url = ub.toString();
 			
 			HttpServletResponse response = (HttpServletResponse)res;
 			HttpServlets.sendRedirect(response, url);

@@ -5,7 +5,7 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.mvc.util.UrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -61,7 +61,7 @@ public class Form extends UIBean {
 	protected Boolean hooked;
 	protected Boolean loadmask;
 	
-	protected UrlBuilder urlbuilder;
+	protected MvcURLBuilder urlbuilder;
 
 	protected String labelClass;
 	protected String inputClass;
@@ -97,7 +97,7 @@ public class Form extends UIBean {
 	 * @param urlbuilder the urlbuilder to set
 	 */
 	@IocInject
-	protected void setUrlbuilder(UrlBuilder urlbuilder) {
+	protected void setUrlbuilder(MvcURLBuilder urlbuilder) {
 		this.urlbuilder = urlbuilder;
 		urlbuilder.setEscapeAmp(true);
 	}

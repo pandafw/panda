@@ -6,7 +6,7 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.mvc.util.UrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -38,14 +38,13 @@ public class Anchor extends UIBean {
 	protected String target;
 	protected String label;
 	
-	protected UrlBuilder urlbuilder;
+	protected MvcURLBuilder urlbuilder;
 
 	public boolean usesBody() {
 		return true;
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void evaluateEndParams() {
 		super.evaluateEndParams();
 		
@@ -55,7 +54,7 @@ public class Anchor extends UIBean {
 					urlbuilder.setParams(params);
 				}
 				else {
-					urlbuilder.getParams().putAll(params);
+					urlbuilder.addParams(params);
 				}
 			}
 
@@ -67,7 +66,7 @@ public class Anchor extends UIBean {
 	 * @param urlbuilder the urlbuilder to set
 	 */
 	@IocInject
-	protected void setUrlbuilder(UrlBuilder urlbuilder) {
+	protected void setUrlbuilder(MvcURLBuilder urlbuilder) {
 		this.urlbuilder = urlbuilder;
 		urlbuilder.setEscapeAmp(true);
 	}

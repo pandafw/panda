@@ -2,7 +2,7 @@ package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.mvc.util.UrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 
 /**
  * FormButton.
@@ -21,7 +21,7 @@ public abstract class FormButton extends InputUIBean {
 	protected String btype;
 
 	protected String action;
-	protected UrlBuilder urlbuilder;
+	protected MvcURLBuilder urlbuilder;
 
 	protected abstract String getDefaultValue();
 
@@ -67,7 +67,7 @@ public abstract class FormButton extends InputUIBean {
 	 * @param urlbuilder the urlbuilder to set
 	 */
 	@IocInject
-	protected void setUrlbuilder(UrlBuilder urlbuilder) {
+	protected void setUrlbuilder(MvcURLBuilder urlbuilder) {
 		this.urlbuilder = urlbuilder;
 		urlbuilder.setEscapeAmp(true);
 	}

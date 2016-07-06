@@ -13,7 +13,7 @@ import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
-import panda.net.URLHelper;
+import panda.net.URLBuilder;
 
 public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	public UploaderRenderer(RenderingContext context) {
@@ -99,7 +99,8 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 					ps = new HashMap<String, Object>();
 				}
 				ps.put(pdn, tag.getFileId());
-				durl = URLHelper.buildURL(pdl, ps, true);
+				
+				durl = URLBuilder.buildURL(pdl, ps, true);
 				
 				Anchor at = newTag(Anchor.class);
 				at.setCssClass("p-uploader-icon");

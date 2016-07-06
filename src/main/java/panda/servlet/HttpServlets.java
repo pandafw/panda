@@ -30,6 +30,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.Mimes;
+import panda.net.URLBuilder;
 import panda.net.URLHelper;
 import panda.net.http.HttpDates;
 import panda.net.http.HttpHeader;
@@ -146,7 +147,13 @@ public class HttpServlets {
 			query = (String)request.getAttribute(SERVLET_FORWARD_QUERY_STRING);
 		}
 
-		return URLHelper.buildURL(request.getScheme(), request.getServerName(), request.getServerPort(), uri, query);
+		URLBuilder ub = new URLBuilder();
+		ub.setScheme(request.getScheme());
+		ub.setHost(request.getServerName());
+		ub.setPort(request.getServerPort());
+		ub.setPath(uri);
+		ub.setQuery(query);
+		return ub.build();
 	}
 
 	/**
@@ -154,7 +161,10 @@ public class HttpServlets {
 	 * @return requestURL without QueryString
 	 */
 	public static String getRequestURL(HttpServletRequest request) {
-		return ServletURLHelper.buildURL(request, null, null, true, false);
+		ServletURLBuilder ub = new ServletURLBuilder();
+		ub.setRequest(request);
+		ub.setForceAddSchemeHostAndPort(true);
+		return ub.build();
 	}
 	
 	/**

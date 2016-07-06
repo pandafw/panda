@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import panda.io.Streams;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
-import panda.net.URLHelper;
+import panda.net.URLBuilder;
 
 public class HttpBufferedRequestWrapper extends HttpServletRequestWrapper {
 	private ByteArrayOutputStream body;
@@ -30,8 +30,9 @@ public class HttpBufferedRequestWrapper extends HttpServletRequestWrapper {
 		}
 
 		if (HttpServlets.isFormUrlEncoded(this)) {
-			String ps = URLHelper.buildQueryString(getParameterMap());
 			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+			String ps = URLBuilder.buildQueryString(getParameterMap(), cs);
+			
 			return Streams.toInputStream(ps, cs);
 		}
 		else {

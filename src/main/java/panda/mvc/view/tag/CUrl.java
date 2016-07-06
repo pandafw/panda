@@ -8,24 +8,23 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.mvc.MvcException;
-import panda.mvc.util.UrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 
 @IocBean(singleton=false)
 public class CUrl extends ContextBean {
 	@IocInject
-	protected UrlBuilder urlbuilder;
+	protected MvcURLBuilder urlbuilder;
 	
 	/**
 	 * @see panda.mvc.view.tag.Component#end(java.io.Writer, java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean end(Writer writer, String body) {
 		if (Collections.isNotEmpty(params)) {
 			if (urlbuilder.getParams() == null) {
 				urlbuilder.setParams(params);
 			}
 			else {
-				urlbuilder.getParams().putAll(params);
+				urlbuilder.addParams(params);
 			}
 		}
 

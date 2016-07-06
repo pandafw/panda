@@ -30,7 +30,7 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
-import panda.mvc.util.ServletUrlBuilder;
+import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.validator.BinaryValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
@@ -147,7 +147,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			ResourceLoader.class,
 			CookieStateProvider.class,
 			DefaultTextProvider.class,
-			ServletUrlBuilder.class,
+			MvcURLBuilder.class,
 	
 			// processor
 			AdaptProcessor.class,
