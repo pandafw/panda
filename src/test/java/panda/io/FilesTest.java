@@ -337,7 +337,7 @@ public class FilesTest extends FileBasedTestCase {
 		assertEquals(Files.toDisplaySize(MB1.subtract(KB1)), "1023 KB");
 		assertEquals(Files.toDisplaySize(MB1), "1 MB");
 		assertEquals(Files.toDisplaySize(MB1.add(BigInteger.ONE)), "1 MB");
-		assertEquals(Files.toDisplaySize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.98 MB");
+		assertEquals(Files.toDisplaySize(GB1.subtract(KB1.multiply(BigInteger.valueOf(12)))), "1023.99 MB");
 		assertEquals(Files.toDisplaySize(GB1), "1 GB");
 		assertEquals(Files.toDisplaySize(GB1.add(BigInteger.ONE)), "1 GB");
 		assertEquals(Files.toDisplaySize(GB2), "2 GB");

@@ -1289,36 +1289,54 @@ public class NumbersTest {
 	}
 
 	@Test
-	public void testCurFormat() {
-		assertEquals("1", Numbers.cutFormat(1.0012345, 2));
-		assertEquals("1.1", Numbers.cutFormat(1.102345, 2));
-		assertEquals("1.01", Numbers.cutFormat(1.012345, 2));
-		assertEquals("1.23", Numbers.cutFormat(1.2345, 2));
-		assertEquals("1.234", Numbers.cutFormat(1.2345, 3));
+	public void testFormat() {
+		assertEquals("100", Numbers.format(100, 2));
+		assertEquals("1", Numbers.format(1.0012345, 2));
+		assertEquals("1.1", Numbers.format(1.102345, 2));
+		assertEquals("1.01", Numbers.format(1.012345, 2));
+		assertEquals("1.23", Numbers.format(1.2345, 2));
+		assertEquals("1.235", Numbers.format(1.2346, 3));
 	}
 	
-	@Test
-	public void testCurFormat2() {
-		assertEquals("1", cutFormat2(1.0012345, 2));
-		assertEquals("1.1", cutFormat2(1.102345, 2));
-		assertEquals("1.01", cutFormat2(1.012345, 2));
-		assertEquals("1.23", cutFormat2(1.2345, 2));
-		assertEquals("1.234", cutFormat2(1.2345, 3));
+	private static String cutFormat1(double n, int frac) {
+		boolean minus = false;
+		if (n < 0) {
+			minus = true;
+			n = -n;
+		}
+
+		long i = (long)n;
+		double d = n - i;
+		double p = Math.pow(10, frac);
+		double dp = d * p;
+		long f = (long)(dp);
+
+		if (f <= 0) {
+			return String.valueOf(i);
+		}
+
+		StringBuilder sb = new StringBuilder();
+		if (minus) {
+			sb.append('-');
+		};
+		sb.append(i)
+		  .append('.')
+		  .append(Strings.stripEnd(Strings.leftPad(String.valueOf(f), frac, '0'), '0'));
+		
+		return sb.toString();
 	}
-	
-	private static final DecimalFormat df2 = new DecimalFormat("#.##");
-	private static final DecimalFormat df3 = new DecimalFormat("#.###");
 
 	@Test
-	public void testCurFormat3() {
-		assertEquals("1", df2.format(1.0012345));
-		assertEquals("1.1", df2.format(1.102345));
-		assertEquals("1.01", df2.format(1.012345));
-		assertEquals("1.23", df2.format(1.2345));
-		assertEquals("1.234", df3.format(1.2345));
+	public void testCutFormat1() {
+		assertEquals("100", cutFormat1(100, 2));
+		assertEquals("1", cutFormat1(1.0012345, 2));
+		assertEquals("1.1", cutFormat1(1.102345, 2));
+		assertEquals("1.01", cutFormat1(1.012345, 2));
+		assertEquals("1.23", cutFormat1(1.2345, 2));
+		assertEquals("1.234", cutFormat1(1.2346, 3));
 	}
-	
-	public static String cutFormat2(double n, int frac) {
+
+	private static String cutFormat2(double n, int frac) {
 		String s = String.valueOf(n);
 		int dot = s.indexOf('.');
 		if (dot > 0) {
@@ -1339,23 +1357,52 @@ public class NumbersTest {
 	}
 
 	@Test
+	public void testCutFormat2() {
+		assertEquals("100.0", cutFormat2(100, 2));
+		assertEquals("1", cutFormat2(1.0012345, 2));
+		assertEquals("1.1", cutFormat2(1.102345, 2));
+		assertEquals("1.01", cutFormat2(1.012345, 2));
+		assertEquals("1.23", cutFormat2(1.2345, 2));
+		assertEquals("1.234", cutFormat2(1.2346, 3));
+	}
+	
+	private static final DecimalFormat df2 = new DecimalFormat("#.##");
+	private static final DecimalFormat df3 = new DecimalFormat("#.###");
+
+	@Test
+	public void testCutFormat3() {
+		assertEquals("100", df2.format(100));
+		assertEquals("1", df2.format(1.0012345));
+		assertEquals("1.1", df2.format(1.102345));
+		assertEquals("1.01", df2.format(1.012345));
+		assertEquals("1.23", df2.format(1.2345));
+		assertEquals("1.235", df3.format(1.2346));
+	}
+	
+	@Test
 	public void testSpeed() {
 		final int c = 100000;
 		StopWatch sw = new StopWatch();
 		for (int i = 0; i < c; i++) {
-			testCurFormat();
+			testFormat();
 		}
-		System.out.println("curFormat - " + sw);
+		System.out.println("Format - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
-			testCurFormat2();
+			testCutFormat1();
+		}
+		System.out.println("curFormat1 - " + sw);
+
+		sw.restart();
+		for (int i = 0; i < c; i++) {
+			testCutFormat2();
 		}
 		System.out.println("curFormat2 - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
-			testCurFormat3();
+			testCutFormat3();
 		}
 		System.out.println("DecimalFormat - " + sw);
 	}

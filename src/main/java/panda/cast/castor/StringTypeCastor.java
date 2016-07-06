@@ -12,6 +12,7 @@ import panda.cast.CastContext;
 import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
 import panda.io.Streams;
+import panda.lang.Numbers;
 import panda.vfs.FileItem;
 
 
@@ -37,8 +38,15 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof Character) {
 				a.append((Character)value);
 			}
-			else if (value instanceof Number || value instanceof Boolean) {
+			else if (value instanceof Boolean
+					|| value instanceof Byte 
+					|| value instanceof Short 
+					|| value instanceof Integer 
+					|| value instanceof Long) {
 				a.append(value.toString());
+			}
+			else if (value instanceof Number) {
+				a.append(Numbers.format((Number)value));
 			}
 			else if (value instanceof Date) {
 				a.append(dateCastor.getDateFormat(cc.getFormat(), cc.getLocale()).format((Date)value));

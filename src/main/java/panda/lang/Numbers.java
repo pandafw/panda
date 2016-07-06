@@ -3,6 +3,8 @@ package panda.lang;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  * Utility class for Number.
@@ -2204,45 +2206,40 @@ public class Numbers {
 	}
 
 	// -----------------------------------------------------------------------
-	public static String cutFormat(double n, int frac) {
-		boolean minus = false;
-		if (n < 0) {
-			minus = true;
-			n = -n;
+	private final static DecimalFormat DEFAULT_FORMAT = new DecimalFormat("#", new DecimalFormatSymbols(Locale.ENGLISH));
+	private final static DecimalFormat HUMAN_FORMATS[] = new DecimalFormat[10];
+	static {
+		DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.ENGLISH);
+		DEFAULT_FORMAT.setMaximumFractionDigits(340);
+		for (int i = 0; i < HUMAN_FORMATS.length; i++) {
+			DecimalFormat df = new DecimalFormat("#", dfs);
+			df.setMaximumFractionDigits(i);
+			HUMAN_FORMATS[i] = df;
 		}
-
-		long i = (long)n;
-		double d = n - i;
-		double p = Math.pow(10, frac);
-		double dp = d * p;
-		long f = (long)(dp);
-
-		if (f <= 0) {
-			return String.valueOf(i);
-		}
-
-		StringBuilder sb = new StringBuilder();
-		if (minus) {
-			sb.append('-');
-		};
-		sb.append(i)
-		  .append('.')
-		  .append(Strings.stripEnd(Strings.leftPad(String.valueOf(f), frac, '0'), '0'));
-		
-		return sb.toString();
 	}
 
+	/**
+	 * @param n the number to format
+	 * @return formatted number string
+	 */
+	public static String format(Number n) {
+		return DEFAULT_FORMAT.format(n);
+	}
 
-	// -----------------------------------------------------------------------
-	public static String trimZeroFraction(String v) {
-		if (Strings.isEmpty(v)) {
-			return v;
+	/**
+	 * @param n the number to format
+	 * @param frac maximum fraction digits
+	 * @return formatted number string
+	 */
+	public static String format(Number n, int frac) {
+		DecimalFormat df = null;
+		if (frac >= 0 && frac < HUMAN_FORMATS.length) {
+			df = HUMAN_FORMATS[frac];
 		}
-		
-		if (Strings.contains(v, '.')) {
-			v = Strings.stripEnd(v, "0");
-			v = Strings.stripEnd(v, ".");
+		else {
+			df = new DecimalFormat("#");
+			df.setMaximumFractionDigits(frac);
 		}
-		return v;
+		return df.format(n);
 	}
 }

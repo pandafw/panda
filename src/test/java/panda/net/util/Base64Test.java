@@ -25,7 +25,6 @@ public class Base64Test {
 	public void testBase64Boolean() {
 		Base64 b64 = new Base64(true);
 		assertTrue(b64.isUrlSafe());
-		assertTrue(Arrays.equals(new byte[] { '\r', '\n' }, b64.getLineSeparator()));
 	}
 
 	@Test

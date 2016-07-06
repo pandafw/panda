@@ -356,7 +356,7 @@ public class Files {
 
 	// -----------------------------------------------------------------------
 	private static String formatSize(final double size) {
-		return Numbers.cutFormat(size, 2);
+		return Numbers.format(size, 2);
 	}
 	
 	/**
