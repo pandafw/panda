@@ -34,17 +34,30 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	public static final String SUPPRESS_EMPTY = "empty";
 	public static final String SUPPRESS_NULL = "null";
 	
-	@IocInject
 	protected ActionContext context;
 
 	protected String action;
 
 	protected String includeParams;
 
-	@IocInject(value = MvcConstants.UI_URL_INCLUDE_CONTEXT, required = false)
 	protected boolean includeContext = true;
 
 	// --------------------
+	/**
+	 * @return the context
+	 */
+	public ActionContext getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	@IocInject
+	public void setContext(ActionContext context) {
+		this.context = context;
+	}
+	
 	/**
 	 * @return the action
 	 */
@@ -83,6 +96,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	/**
 	 * @param includeContext the includeContext to set
 	 */
+	@IocInject(value = MvcConstants.UI_URL_INCLUDE_CONTEXT, required = false)
 	public void setIncludeContext(boolean includeContext) {
 		this.includeContext = includeContext;
 	}
@@ -158,7 +172,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		setRequest(context.getRequest());
 		
 		if (path == null) {
-			path = build(context, action, includeContext);
+			path = buildPath(context, action, includeContext);
 		}
 
 		if (INCLUDE_GET.equalsIgnoreCase(includeParams)) {
@@ -193,8 +207,13 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		return super.build();
 	}
 
+	@Override
+	protected String castString(Object value) {
+		return Mvcs.castString(context, value);
+	}
+
 	//-------------------------------------------------------------------
-	public static String build(ActionContext context, String action, boolean includeContext) {
+	public static String buildPath(ActionContext context, String action, boolean includeContext) {
 		String uri;
 
 		if (Strings.isNotEmpty(action)) {
@@ -235,4 +254,9 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		return uri;
 	}
 	
+	public static String buildURL(ActionContext context, Object params) {
+		MvcURLBuilder ub = context.getIoc().get(MvcURLBuilder.class);
+		ub.setParams(params);
+		return ub.build();
+	}
 }

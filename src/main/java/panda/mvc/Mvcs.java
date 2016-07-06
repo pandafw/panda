@@ -14,7 +14,6 @@ import panda.el.El;
 import panda.el.ElTemplate;
 import panda.ioc.Ioc;
 import panda.lang.Classes;
-import panda.lang.Collections;
 import panda.lang.Marks;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -114,48 +113,36 @@ public abstract class Mvcs {
 	 * cast to string
 	 */
 	public static String castString(ActionContext ac, Object value) {
-		return castValue(ac, null, value, String.class, null);
+		return castValue(ac, value, String.class, null);
 	}
 
 	/**
 	 * cast to string
 	 */
 	public static String castString(ActionContext ac, Object value, String format) {
-		return castValue(ac, null, value, String.class, format);
+		return castValue(ac, value, String.class, format);
 	}
 
 	/**
 	 * cast value
 	 */
 	public static <T> T castValue(ActionContext ac, Object value, Type type) {
-		return castValue(ac, null, value, type, null);
+		return castValue(ac, value, type, null);
 	}
 
 	/**
 	 * cast value
 	 */
 	public static <T> T castValue(ActionContext ac, Object value, Type type, String format) {
-		return castValue(ac, null, value, type, format);
-	}
-
-	/**
-	 * cast value
-	 */
-	public static <T> T castValue(ActionContext ac, String name, Object value, Type type, String format) {
 		Castors cs = getCastors();
 		CastContext cc = cs.newCastContext();
 		
 		cc.setSkipCastError(true);
-		cc.setPrefix(name);
 		cc.set(FileItemCastor.KEY, ac.getFilePool());
 		cc.setFormat(format);
 		cc.setLocale(ac.getLocale());
 		
-		T o = cs.cast(value, type, cc);
-		if (Collections.isNotEmpty(cc.getErrors())) {
-			ac.addCastErrors(cc.getErrors());
-		}
-		return o;
+		return cs.cast(value, type, cc);
 	}
 
 	/**

@@ -2,6 +2,9 @@ package panda.mvc.adaptor;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.cast.CastContext;
+import panda.cast.Castors;
+import panda.cast.castor.FileItemCastor;
 import panda.io.MimeType;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
@@ -10,6 +13,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
@@ -461,6 +465,19 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 	}
 	
 	protected <T> T cast(ActionContext ac, String name, Object value, Type type, String format) {
-		return Mvcs.castValue(ac, name, value, type, format);
+		Castors cs = Mvcs.getCastors();
+		CastContext cc = cs.newCastContext();
+		
+		cc.setSkipCastError(true);
+		cc.setPrefix(name);
+		cc.set(FileItemCastor.KEY, ac.getFilePool());
+		cc.setFormat(format);
+		cc.setLocale(ac.getLocale());
+		
+		T o = cs.cast(value, type, cc);
+		if (Collections.isNotEmpty(cc.getErrors())) {
+			ac.addCastErrors(cc.getErrors());
+		}
+		return o;
 	}
 }
