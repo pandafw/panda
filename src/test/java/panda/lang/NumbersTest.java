@@ -1406,4 +1406,33 @@ public class NumbersTest {
 		}
 		System.out.println("DecimalFormat - " + sw);
 	}
+
+	
+	@Test
+	public void testSpeed2() {
+		final int c = 100000;
+
+		Numbers.format(c);
+		StopWatch sw = new StopWatch();
+		for (int i = 0; i < c; i++) {
+			Numbers.format(i);
+		}
+		System.out.println("Thread Format - " + sw);
+
+		DecimalFormat df = new DecimalFormat("#");
+		df.setMaximumFractionDigits(340);
+		sw.restart();
+		for (int i = 0; i < c; i++) {
+			df.format(i);
+		}
+		System.out.println("Static Format - " + sw);
+
+		df.setMaximumFractionDigits(340);
+		sw.restart();
+		for (int i = 0; i < c; i++) {
+			DecimalFormat df2 = new DecimalFormat("#");
+			df2.format(i);
+		}
+		System.out.println("Dynamic Format - " + sw);
+	}
 }

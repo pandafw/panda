@@ -1,5 +1,6 @@
 package panda.lang;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -1323,6 +1324,21 @@ public class Numbers {
 		return new BigDecimal(str);
 	}
 
+	/**
+	 * Checks if the specified array is neither null nor empty.
+	 *
+	 * @param array the array to check
+	 * @throws IllegalArgumentException if {@code array} is either {@code null} or empty
+	 */
+	private static void validateArray(final Object array) {
+		if (array == null) {
+			throw new IllegalArgumentException("The Array must not be null");
+		}
+		if (Array.getLength(array) == 0) {
+			throw new IllegalArgumentException("Array cannot be empty.");
+		}
+	}
+
 	// Min in array
 	// --------------------------------------------------------------------
 	/**
@@ -1335,14 +1351,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static long min(long[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static long min(final long... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		long min = array[0];
@@ -1365,14 +1375,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static int min(int[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static int min(final int... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		int min = array[0];
@@ -1395,14 +1399,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static short min(short[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static short min(final short... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		short min = array[0];
@@ -1425,14 +1423,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static byte min(byte[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static byte min(final byte ... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		byte min = array[0];
@@ -1455,14 +1447,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static double min(double[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static double min(final double... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		double min = array[0];
@@ -1488,14 +1474,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static float min(float[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static float min(final float... array) {
+		validateArray(array);
 
 		// Finds and returns min
 		float min = array[0];
@@ -1523,14 +1503,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static long max(long[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static long max(final long... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		long max = array[0];
@@ -1553,14 +1527,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static int max(int[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static int max(final int... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		int max = array[0];
@@ -1583,14 +1551,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static short max(short[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static short max(final short... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		short max = array[0];
@@ -1613,14 +1575,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static byte max(byte[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static byte max(final byte... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		byte max = array[0];
@@ -1643,14 +1599,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static double max(double[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static double max(final double... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		double max = array[0];
@@ -1676,14 +1626,8 @@ public class Numbers {
 	 * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>array</code> is empty
 	 */
-	public static float max(float[] array) {
-		// Validates input
-		if (array == null) {
-			throw new IllegalArgumentException("The Array must not be null");
-		}
-		else if (array.length == 0) {
-			throw new IllegalArgumentException("Array cannot be empty.");
-		}
+	public static float max(final float... array) {
+		validateArray(array);
 
 		// Finds and returns max
 		float max = array[0];
@@ -2206,24 +2150,21 @@ public class Numbers {
 	}
 
 	// -----------------------------------------------------------------------
-	private final static DecimalFormat DEFAULT_FORMAT = new DecimalFormat("#", new DecimalFormatSymbols(Locale.ENGLISH));
-	private final static DecimalFormat HUMAN_FORMATS[] = new DecimalFormat[10];
-	static {
-		DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.ENGLISH);
-		DEFAULT_FORMAT.setMaximumFractionDigits(340);
-		for (int i = 0; i < HUMAN_FORMATS.length; i++) {
-			DecimalFormat df = new DecimalFormat("#", dfs);
-			df.setMaximumFractionDigits(i);
-			HUMAN_FORMATS[i] = df;
+	private static final ThreadLocal<DecimalFormat> DEFAULT_FORMAT = new ThreadLocal<DecimalFormat>() {
+		@Override
+		protected DecimalFormat initialValue() {
+			DecimalFormat df = new DecimalFormat("#", new DecimalFormatSymbols(Locale.ENGLISH));
+			df.setMaximumFractionDigits(340);
+			return df;
 		}
-	}
+	};
 
 	/**
 	 * @param n the number to format
 	 * @return formatted number string
 	 */
 	public static String format(Number n) {
-		return DEFAULT_FORMAT.format(n);
+		return DEFAULT_FORMAT.get().format(n);
 	}
 
 	/**
@@ -2233,13 +2174,8 @@ public class Numbers {
 	 */
 	public static String format(Number n, int frac) {
 		DecimalFormat df = null;
-		if (frac >= 0 && frac < HUMAN_FORMATS.length) {
-			df = HUMAN_FORMATS[frac];
-		}
-		else {
-			df = new DecimalFormat("#");
-			df.setMaximumFractionDigits(frac);
-		}
+		df = new DecimalFormat("#", new DecimalFormatSymbols(Locale.ENGLISH));
+		df.setMaximumFractionDigits(frac);
 		return df.format(n);
 	}
 }
