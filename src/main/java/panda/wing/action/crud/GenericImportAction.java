@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -264,7 +265,8 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			}
 			catch (Exception e) {
 				if (strict) {
-					String msg = getDataError(i, Strings.join(row, ','), e);
+					String vs = rowToString(row);
+					String msg = getDataError(i, vs, e);
 					throw new RuntimeException(msg);
 				}
 				Collections.insert(row, 0, "[" + i + "]: " + e.getMessage());
@@ -439,6 +441,27 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// error message methods
 	//------------------------------------------------------------
+	protected String rowToString(final List row) {
+		Iterator iterator = row.iterator();
+		final Object first = iterator.next();
+
+		// two or more elements
+		final StringBuilder buf = new StringBuilder(256);
+		if (first != null) {
+			buf.append(formatValue(first));
+		}
+
+		while (iterator.hasNext()) {
+			buf.append(',');
+			final Object obj = iterator.next();
+			if (obj != null) {
+				buf.append(formatValue(obj));
+			}
+		}
+
+		return buf.toString();
+	}
+
 	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg) {
 		return dataFieldErrors(data, efs, dataErrMsg, null);
 	}
@@ -482,21 +505,31 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	// html escape methods
 	//
 	public String escapeValue(Object v) {
-		return escapeValue(v, null);
+		String s = formatValue(v);
+		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
 	
 	protected String escapeValue(Object v, String format) {
+		String s = formatValue(v, format);
+		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
+	}
+	
+	public String formatValue(Object v) {
+		return formatValue(v, null);
+	}
+	
+	protected String formatValue(Object v, String format) {
 		if (v == null) {
 			return Strings.EMPTY;
 		}
 
-		CharSequence s = null;
+		String s = null;
 		if (v instanceof CharSequence) {
-			s = (CharSequence)v;
+			s = ((CharSequence)v).toString();
 		}
 		else {
 			s = Mvcs.castString(getContext(), v, format);
 		}
-		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
+		return s;
 	}
 }
