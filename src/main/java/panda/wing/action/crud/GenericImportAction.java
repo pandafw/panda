@@ -338,7 +338,8 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	}
 
 	protected T castData(Map<String, Object> values) {
-		return Mvcs.castValue(context, values, type);
+		context.clearCastErrors();
+		return Mvcs.castValueWithErrors(context, values, type, null);
 	}
 	
 	protected void trimData(T data) {
