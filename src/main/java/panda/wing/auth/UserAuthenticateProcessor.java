@@ -9,6 +9,7 @@ import panda.mvc.View;
 import panda.mvc.processor.AbstractProcessor;
 import panda.mvc.util.TextProvider;
 import panda.mvc.view.Views;
+import panda.net.URLBuilder;
 import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
@@ -51,7 +52,12 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 	protected String getRedirectURL(ActionContext ac) {
 		String uri = ac.getBase() + ac.getPath();
 		String query = HttpServlets.getRequestQueryString(ac.getRequest());
-		String url = URLHelper.buildURL(null, null, 0, uri, query, null);
+		
+		URLBuilder ub = new URLBuilder();
+		ub.setPath(uri);
+		ub.setQuery(query);
+		String url = ub.build();
+
 		String red = URLHelper.encodeURL(url);
 		return red;
 	}

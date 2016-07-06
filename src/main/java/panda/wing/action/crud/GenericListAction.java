@@ -29,6 +29,7 @@ import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.Sorter;
 import panda.mvc.util.CookieStateProvider;
+import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.util.SessionStateProvider;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.CsvView;
@@ -38,7 +39,7 @@ import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.ListColumn;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
-import panda.servlet.ServletURLHelper;
+import panda.servlet.ServletURLBuilder;
 import panda.wing.constant.RC;
 import panda.wing.constant.VC;
 
@@ -282,12 +283,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		if (sp instanceof CookieStateProvider) {
 			String qs = (String)sp.loadState(STATE_LIST);
 			if (Strings.isNotBlank(qs)) {
-				Map params = ServletURLHelper.parseQueryString(qs);
+				Map params = URLHelper.parseQueryString(qs);
 				removeRedundantParams(params);
 				if (Collections.isNotEmpty(params)) {
 					HttpServletRequest request = getRequest();
 					HttpServletResponse response = getResponse();
-					String url = ServletURLHelper.buildURL(request, params);
+					String url = ServletURLBuilder.buildURL(request, params);
 					HttpServlets.sendRedirect(response, url);
 					return null;
 				}
@@ -319,7 +320,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected String getListParametersString(Queryer qr) {
 		Map<String, Object> params = getListParameters(qr);
-		return URLHelper.buildQueryString(params);
+		MvcURLBuilder ub = getIoc().get(MvcURLBuilder.class);
+		ub.setParams(params);
+		return ub.build();
 	}
 	
 	/**
