@@ -20,7 +20,7 @@
 		<h3><i class="fa fa-bug"></i> <@p.text name="title"/></h3>
 	</div>
 
-	<#include "/panda/mvc/view/action-alert-all.ftl"/>
+	<#include "/panda/mvc/view/action-alert-debug.ftl"/>
 
 	<div class="panel panel-success">
 		<div class="panel-heading">REQUEST HTTP HEADER:</div>
