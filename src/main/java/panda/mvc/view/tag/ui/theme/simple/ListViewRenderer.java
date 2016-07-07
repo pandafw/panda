@@ -724,9 +724,10 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				String _fn = _pf + c.name;
 
 				boolean _hfe = false;
-				if (fieldErrors != null) {
+				if (Collections.isNotEmpty(fieldErrors)) {
+					String _fn_d = _fn + '.';
 					for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-						if (en2.getKey().startsWith(_fn + '.')) {
+						if (en2.getKey().startsWith(_fn_d)) {
 							_hfe = true;
 							break;
 						}
