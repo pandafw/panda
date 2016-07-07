@@ -130,7 +130,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 */
 	@Override
 	public boolean isDebugEnabled() {
-		return isIntranetHost() || isSuperUser();
+		return isLoopbackIP() || isSuperUser();
 	}
 
 	/**

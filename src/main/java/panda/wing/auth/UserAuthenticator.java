@@ -164,7 +164,7 @@ public abstract class UserAuthenticator {
 
 		if (AUTH.LOCAL.equals(define)) {
 			HttpServletRequest req = ac.getRequest();
-			return IPs.isIntranetAddr(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
+			return IPs.isPrivateIP(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}
 		if (AUTH.SECURE.equals(define)) {
 			return isSecureSessionUser(su) ? OK : UNSECURE;
