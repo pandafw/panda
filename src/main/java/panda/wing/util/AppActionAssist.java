@@ -411,10 +411,10 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * send email
 	 * @param email email
 	 * @param name template name
-	 * @param html html message
 	 * @param model data
+	 * @param html html message
 	 */
-	public void sendTemplateMail(Email email, String name, boolean html, Object model) throws EmailException {
+	public void sendTemplateMail(Email email, String name, Object model, boolean html) throws EmailException {
 		String subject = "";
 		String content;
 		try {
@@ -448,7 +448,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @param html html message
 	 */
 	public void sendTemplateMail(Email email, String name, boolean html) throws EmailException {
-		sendTemplateMail(email, name, html, null);
+		sendTemplateMail(email, name, null, html);
 	}
 	
 	/**
