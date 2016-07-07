@@ -17,7 +17,7 @@
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<@p.actionerror/>
 	<#if paramErrors?has_content>
-		<@p.fielderror label="true"/>
+		<@p.fielderror showLabel="true" hideEmptyLabel="true"/>
 	</#if>
 	<@p.actionwarning/>
 	<@p.actionmessage/>

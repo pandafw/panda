@@ -15,20 +15,12 @@
 </#if>
 ">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
-<@p.actionerror/>
-<#if paramErrors?has_content>
-	<#if !(actionErrors?has_content)>
-	<ul class="p-field-errors-alert fa-ul">
-		<li><i class="fa-li fa fa-exclamation-circle"></i>
-			<@p.text name="error-input"/>
-			<@p.a cssClass="p-field-errors-caret" sicon="caret-down" href="#" onclick="return $.palert.toggleFieldErrors(this);" label="#(error-input-detail)"/>
-		</li>
-	</ul>
+	<@p.actionerror/>
+	<#if paramErrors?has_content>
+		<@p.fielderror showLabel="true" hideEmptyLabel="false"/>
 	</#if>
-	<@p.fielderror cssStyle="display:none" showLabel="true" hideEmptyLabel="true"/>
-</#if>
-<@p.actionwarning/>
-<@p.actionmessage/>
-<@p.actionconfirm/>
+	<@p.actionwarning/>
+	<@p.actionmessage/>
+	<@p.actionconfirm/>
 </div>
 </#if>

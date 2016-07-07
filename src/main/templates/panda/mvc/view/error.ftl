@@ -11,7 +11,7 @@
 			<i class="fa fa-exclamation-circle"></i> &lt;&lt;<@p.text name="title-error"/>&gt;&gt;
 		</h3>
 	</div>
-	<#include "/panda/mvc/view/action-alert-all.ftl" />
+	<#include "action-alert-all.ftl" />
 </div>
 
 </body>

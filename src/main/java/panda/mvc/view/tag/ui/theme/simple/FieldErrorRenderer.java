@@ -41,8 +41,6 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 		boolean escape = tag.isEscape();
 		
 		Attributes ula = new Attributes();
-		Attributes lia = new Attributes();
-		lia.cssClass(LI_CLASS);
 
 		// iterate over field error names
 		for (String fieldErrorFieldName : fieldErrorFieldNames) {
@@ -53,11 +51,18 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 			
 			boolean ul = false;
 
+			boolean hidden = false;
 			String label = null;
-			if (tag.isLabel()) {
-				label = getText("p." + fieldErrorFieldName)
-					+ tag.getLabelSeparator()
-					+ ' ';
+			if (tag.isShowLabel()) {
+				String key = "p." + fieldErrorFieldName;
+				label = getText(key, null);
+				if (Strings.isEmpty(label)) {
+					label = key;
+					if (tag.isHideEmptyLabel()) {
+						hidden = true;
+					}
+				}
+				label += tag.getLabelSeparator() + ' ';
 			}
 			
 			for (String fieldError : fieldErrors) {
@@ -72,7 +77,12 @@ public class FieldErrorRenderer extends AbstractEndRenderer<FieldError> {
 						ul = true;
 					}
 					
-					stag("li", lia);
+					write("<li class=\"");
+					write(LI_CLASS);
+					if (hidden) {
+						write(" p-hidden");
+					}
+					write("\">");
 					write(icon(ICON_CLASS));
 					write(label);
 					if (escape) {

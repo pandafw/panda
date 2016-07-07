@@ -47,22 +47,38 @@ import panda.ioc.annotation.IocBean;
 @IocBean(singleton=false)
 public class FieldError extends EscapeUIBean {
 
-	private boolean label;
+	private boolean showLabel;
+	private boolean hideEmptyLabel;
 	private String labelSeparator = ": ";
 	private List<String> fieldNames = new ArrayList<String>();
 
+
 	/**
-	 * @return the label
+	 * @return the showLabel
 	 */
-	public boolean isLabel() {
-		return label;
+	public boolean isShowLabel() {
+		return showLabel;
 	}
 
 	/**
-	 * @param label the label to set
+	 * @param showLabel the showLabel to set
 	 */
-	public void setLabel(boolean label) {
-		this.label = label;
+	public void setShowLabel(boolean showLabel) {
+		this.showLabel = showLabel;
+	}
+
+	/**
+	 * @return the hideEmptyLabel
+	 */
+	public boolean isHideEmptyLabel() {
+		return hideEmptyLabel;
+	}
+
+	/**
+	 * @param hideEmptyLabel the hideEmptyLabel to set
+	 */
+	public void setHideEmptyLabel(boolean hideEmptyLabel) {
+		this.hideEmptyLabel = hideEmptyLabel;
 	}
 
 	/**
