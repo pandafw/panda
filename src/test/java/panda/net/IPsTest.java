@@ -44,15 +44,15 @@ public class IPsTest {
 		// Class A: 10.0.0.0 ~ 10.255.255.255 （10.0.0.0/8）
 		// Class B: 172.16.0.0 ~ 172.31.255.255 （172.16.0.0/12）
 		// Class C: 192.168.0.0 ~ 192.168.255.255 （192.168.0.0/16）
-		Assert.assertTrue("10.0.0.0", IPs.isIntranetAddr("10.0.0.0"));
-		Assert.assertTrue("10.0.0.1", IPs.isIntranetAddr("10.0.0.1"));
-		Assert.assertTrue("172.16.0.0", IPs.isIntranetAddr("172.16.0.0"));
-		Assert.assertTrue("172.16.0.1", IPs.isIntranetAddr("172.16.0.1"));
-		Assert.assertTrue("192.168.0.0", IPs.isIntranetAddr("192.168.0.0"));
-		Assert.assertTrue("192.168.0.1", IPs.isIntranetAddr("192.168.0.1"));
-		Assert.assertTrue("127.0.0.0", IPs.isIntranetAddr("127.0.0.0"));
-		Assert.assertTrue("127.0.0.1", IPs.isIntranetAddr("127.0.0.1"));
-		Assert.assertTrue("0:0:0:0:0:0:0:0", IPs.isIntranetAddr("0:0:0:0:0:0:0:0"));
-		Assert.assertTrue("0:0:0:0:0:0:0:1", IPs.isIntranetAddr("0:0:0:0:0:0:0:1"));
+		Assert.assertTrue("10.0.0.0", IPs.isPrivateIP("10.0.0.0"));
+		Assert.assertTrue("10.0.0.1", IPs.isPrivateIP("10.0.0.1"));
+		Assert.assertTrue("172.16.0.0", IPs.isPrivateIP("172.16.0.0"));
+		Assert.assertTrue("172.16.0.1", IPs.isPrivateIP("172.16.0.1"));
+		Assert.assertTrue("192.168.0.0", IPs.isPrivateIP("192.168.0.0"));
+		Assert.assertTrue("192.168.0.1", IPs.isPrivateIP("192.168.0.1"));
+		Assert.assertTrue("127.0.0.0", IPs.isPrivateIP("127.0.0.0"));
+		Assert.assertTrue("127.0.0.1", IPs.isPrivateIP("127.0.0.1"));
+		Assert.assertTrue("fe80:0:0:0:0:0:0:0", IPs.isPrivateIP("fe80:0:0:0:0:0:0:0"));
+		Assert.assertTrue("0:0:0:0:0:0:0:1", IPs.isPrivateIP("0:0:0:0:0:0:0:1"));
 	}
 }

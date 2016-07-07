@@ -3,14 +3,28 @@ package panda.net;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import panda.lang.Strings;
 
-/**
- * @author yf.frank.wang@gmail.com
- */
 public class IPs {
+	public final static CIDR LOOPBACK_V4 = new CIDR("127.0.0.1/8");
+	public final static CIDR LOOPBACK_V6 = new CIDR("::1");
+
+	// Class A: 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8)
+	public final static CIDR CLASS_A_V4 = new CIDR("10.0.0.0/8");
+	
+	// Class B: 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12)
+	public final static CIDR CLASS_B_V4 = new CIDR("172.16.0.0/12");
+	
+	// Class C: 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16)
+	public final static CIDR CLASS_C_V4 = new CIDR("192.168.0.0/16");
+	
+	// Link Local IPv6 fe80::/10
+	public final static CIDR LINK_LOCAL_V6 = new CIDR("fe80::/10");
+	
+	// ULA(Unique Local Addresses) IPv6 fc00::/7
+	public final static CIDR ULA_V6 = new CIDR("fc00::/7");
+	
 	private final static int INADDR4SZ = 4;
 	private final static int INADDR16SZ = 16;
 	private final static int INT16SZ = 2;
@@ -284,19 +298,36 @@ public class IPs {
 		return ia instanceof Inet4Address;
 	}
 	
-	public static boolean isIntranetAddr(String ipAddr) {
-		if (Strings.isEmpty(ipAddr)) {
+	public static boolean isLoopbackIP(String ip) {
+		if (Strings.isEmpty(ip)) {
 			return false;
 		}
-		
-		// Class A: 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8)
-		// Class B: 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12)
-		// Class C: 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16)
+
 		try {
-			InetAddress ia = InetAddress.getByName(ipAddr);
-			return ia.isLoopbackAddress() || ia.isAnyLocalAddress() || ia.isSiteLocalAddress();
+			CIDR cidr = new CIDR(ip);
+			return LOOPBACK_V4.include(cidr) || LOOPBACK_V6.include(cidr);
 		}
-		catch (UnknownHostException e) {
+		catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+	
+	public static boolean isPrivateIP(String ip) {
+		if (Strings.isEmpty(ip)) {
+			return false;
+		}
+
+		try {
+			CIDR cidr = new CIDR(ip);
+			return LOOPBACK_V4.include(cidr)
+					|| CLASS_A_V4.include(cidr)
+					|| CLASS_B_V4.include(cidr)
+					|| CLASS_C_V4.include(cidr)
+					|| LOOPBACK_V6.include(cidr)
+					|| LINK_LOCAL_V6.include(cidr)
+					|| ULA_V6.include(cidr);
+		}
+		catch (IllegalArgumentException e) {
 			return false;
 		}
 	}
