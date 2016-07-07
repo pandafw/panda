@@ -7,17 +7,21 @@ ui-list-countable=true
 
 #pager - limit
 list-items-default=20
-list_popup-items-default=10
-list_csv-items-default=5000
-list_tsv-items-default=5000
-list_xml-items-default=5000
-list_json-items-default=5000
-
 list-items-maximum=300
+
+list_popup-items-default=10
 list_popup-items-maximum=300
+
+list_csv-items-default=5000
 list_csv-items-maximum=10000
+
+list_tsv-items-default=5000
 list_tsv-items-maximum=10000
+
+list_xml-items-default=5000
 list_xml-items-maximum=10000
+
+list_json-items-default=5000
 list_json-items-maximum=10000
 
 
