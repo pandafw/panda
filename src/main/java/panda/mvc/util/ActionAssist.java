@@ -44,15 +44,15 @@ public class ActionAssist extends ActionSupport {
 	 * @return true if remote host is local network host
 	 */
 	public boolean isDebugEnabled() {
-		return isIntranetHost();
+		return isLoopbackIP();
 	}
 
 	
 	/**
-	 * @return true if remote host is local network host
+	 * @return true if remote host is localhost
 	 */
-	public boolean isIntranetHost() {
-		return IPs.isIntranetAddr(HttpServlets.getRemoteAddr(getRequest()));
+	public boolean isLoopbackIP() {
+		return IPs.isLoopbackIP(HttpServlets.getRemoteAddr(getRequest()));
 	}
 
 	public String getServletErrorReason(int sc) {
