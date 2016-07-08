@@ -382,6 +382,8 @@ icon-test=fa fa-bug
 icon-trash=fa fa-trash-o
 icon-update=fa fa-edit
 icon-upload=fa fa-upload
+icon-user=fa fa-user
+icon-users=fa fa-users
 icon-view=fa fa-file-o
 icon-xml=fa fa-code
 
