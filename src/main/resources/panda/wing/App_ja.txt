@@ -15,6 +15,10 @@ navi-help-contact=問い合わせ
 navi-help-privacy=プライバシー規約
 navi-help-termsofuse=利用規約
 
+navi-settings=設定
+
+navi-company-info=会社情報
+
 navi-user=会員センター
 navi-user-register=登録
 navi-user-login=ログイン
@@ -23,6 +27,7 @@ navi-user-signin=サインイン
 navi-user-signout=サインアウト
 
 navi-user-account=マイアカウント
+navi-user-info=ユーザー情報
 navi-user-password-change=パスワード変更
 navi-user-password-reset=パスワードリセット
 navi-user-profile=プロフィール
@@ -32,15 +37,15 @@ navi-user-usagelog=利用履歴
 
 navi-admin=管理センター
 navi-admin-account=アカウント管理
-navi-admin-account-user=ユーザー管理
-navi-admin-account-group=グループ管理
-navi-admin-account-company=会社管理
+navi-admin-user=ユーザー管理
+navi-admin-group=グループ管理
+navi-admin-company=会社管理
 
 navi-admin-site=サイト管理
 navi-admin-service=サービス管理
-navi-admin-site-category=カテゴリ管理
-navi-admin-site-contents=コンテンツ管理
-navi-admin-site-index=インデックス管理
+navi-admin-category=カテゴリ管理
+navi-admin-contents=コンテンツ管理
+navi-admin-index=インデックス管理
 
 navi-super=システム管理
 navi-super-sysdump=システムダンプ
