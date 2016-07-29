@@ -57,6 +57,7 @@
 					work_error(xhr.responseText);
 				}
 			});
+			return false;
 		}
 		
 		function work_on_start() {
