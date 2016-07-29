@@ -9,7 +9,6 @@ import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.StringEscapes;
-import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -18,9 +17,8 @@ import panda.wing.action.AbstractAction;
 
 
 public abstract class GenericWorkAction extends AbstractAction {
-	private static final Log log = Logs.getLog(GenericWorkAction.class);
-
 	protected static final char PREFIX = '%';
+	protected static final char L_DEBUG = 'd';
 	protected static final char L_INFO = 'i';
 	protected static final char L_WARN = 'w';
 	protected static final char L_ERROR = 'e';
@@ -76,6 +74,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 		}
 	}
 	
+	protected Log log = Logs.getLog(getClass());
 	protected Events events = new Events();
 	protected Status status = new Status();
 	
@@ -154,41 +153,18 @@ public abstract class GenericWorkAction extends AbstractAction {
 		return ("> " + status.count + '/' + status.total + " [" + level + "] - " + msg);
 	}
 
-	protected void logStatus(String s) {
-		log.debug(s);
-	}
-	
-	protected boolean skipPrint(String s) {
-		return (this.silent || Strings.isEmpty(s));
-	}
-
-	protected void printStatus(char level, String msg) {
-		updateStatus(level, msg);
-
-		if (skipPrint(msg)) {
-			return;
-		}
-
-		String s = formatStatus(level, msg);
-		logStatus(s);
-		
-		if (events.onStatus == null) {
-			printLine(s);
-		}
-		else {
-			printScript(events.onStatus.evaluate(status));
-		}
-	}
-	
 	protected void printStart(String msg) {
 		updateStatus(L_INFO, msg);
 
-		if (skipPrint(msg)) {
+		String s = ">>> " + msg;
+		logStatus(L_INFO, s);
+		
+		if (silent) {
 			return;
 		}
-
+		
 		if (events.onStart == null) {
-			printLine(">>> " + msg);
+			printLine(s);
 		}
 		else {
 			printScript(events.onStart.evaluate(status));
@@ -198,16 +174,23 @@ public abstract class GenericWorkAction extends AbstractAction {
 	protected void printFinish(String msg) {
 		updateStatus(L_INFO, msg);
 
-		if (skipPrint(msg)) {
+		String s = "<<< " + msg;
+		logStatus(L_INFO, s);
+		
+		if (silent) {
 			return;
 		}
 
 		if (events.onFinish == null) {
-			printLine("<<< " + msg);
+			printLine(s);
 		}
 		else {
 			printScript(events.onFinish.evaluate(status));
 		}
+	}
+	
+	protected void printDebug(String msg) {
+		printStatus(L_DEBUG, msg);
 	}
 	
 	protected void printInfo(String msg) {
@@ -226,27 +209,54 @@ public abstract class GenericWorkAction extends AbstractAction {
 		printStatus(L_SUCCESS, msg);
 	}
 	
-	protected void printLine(String msg) {
-		if (skipPrint(msg)) {
-			return;
+	private void logStatus(char level, String s) {
+		switch (level) {
+		case L_INFO:
+		case L_SUCCESS:
+			log.info(s);
+			break;
+		case L_WARN:
+			log.warn(s);
+			break;
+		case L_ERROR:
+			log.error(s);
+			break;
+		case L_DEBUG:
+			log.debug(s);
+			break;
+		default:
+			log.trace(s);
+			break;
 		}
-
+	}
+	
+	private void printLine(String msg) {
 		flushPrint(msg + Streams.LINE_SEPARATOR);
 	}
 
-	protected void printScript(String script) {
-		if (skipPrint(script)) {
+	protected void printStatus(char level, String msg) {
+		updateStatus(level, msg);
+
+		String s = formatStatus(level, msg);
+		logStatus(level, s);
+
+		if (silent) {
 			return;
 		}
-
+		
+		if (events.onStatus == null) {
+			printLine(s);
+		}
+		else {
+			printScript(events.onStatus.evaluate(status));
+		}
+	}
+	
+	private void printScript(String script) {
 		flushPrint("<script>" + script + "</script>"); 
 	}
 	
-	protected void flushPrint(String msg) {
-		if (skipPrint(msg)) {
-			return;
-		}
-
+	private void flushPrint(String msg) {
 		try {
 			PrintWriter pw = getResponse().getWriter();
 			pw.write(msg);

@@ -4,8 +4,6 @@ import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Threads;
 import panda.lang.time.StopWatch;
-import panda.log.Log;
-import panda.log.Logs;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
@@ -13,8 +11,6 @@ import panda.mvc.annotation.view.Ok;
 
 
 public abstract class GenericSyncWorkAction extends GenericWorkAction {
-	private static final Log log = Logs.getLog(GenericSyncWorkAction.class);
-	
 	protected static final Object lock = new Object();
 	
 	public static class SyncStatus extends Status {
@@ -130,7 +126,6 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 				doExecute();
 			}
 			catch (Throwable e) {
-				log.error("execute", e);
 				printError(getStackTrace(e));
 			}
 			finally {
