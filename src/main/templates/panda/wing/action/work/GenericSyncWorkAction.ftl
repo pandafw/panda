@@ -24,8 +24,8 @@
 	<@p.form cssClass="p-eform" id="syncw" initfocus="true" method="get" theme="bs3h">
 		<@safeinclude path=('/' + a.class.name?replace('.', '/') + "-inputs.ftl") />
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="syncw_start()" label="#(button-start)"/>
-			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="syncw_stop()" label="#(button-stop)"/>
+			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="return syncw_start();" label="#(button-start)"/>
+			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="return syncw_stop();" label="#(button-stop)"/>
 		</@p.div>
 	</@p.form>
 	
@@ -36,38 +36,6 @@
 
 	<script type="text/javascript">
 		var work_pms = [];
-
-		function syncw_stop() {
-			$.ajaf({
-				url: "<@p.url action='+/stop' includeParams='get'/>",
-				success: function(data) {
-					var o = JSON.parse(data);
-					if (!o.success) {
-						work_error(data);
-						return;
-					}
-					
-					var r = o.result;
-					work_print_status(r.date, r.level, r.status, r.count, r.total);
-					if (!r.running) {
-						work_on_stop();
-					}
-				},
-				error: function(xhr, status, e) {
-					work_error(xhr.responseText);
-				}
-			});
-			return false;
-		}
-		
-		function work_on_start() {
-			$('#btnStart').disable(true).removeClass("btn-primary").addClass("btn-warning")
-				.find('i').addClass('fa-spin');
-		}
-		function work_on_stop() {
-			$('#btnStart').disable(false).removeClass("btn-warning").addClass("btn-primary")
-				.find('i').removeClass('fa-spin');
-		}
 
 		function syncw_status() {
 			work_on_start();
@@ -124,6 +92,38 @@
 			});
 
 			return false;
+		}
+		
+		function syncw_stop() {
+			$.ajaf({
+				url: "<@p.url action='+/stop' includeParams='get'/>",
+				success: function(data) {
+					var o = JSON.parse(data);
+					if (!o.success) {
+						work_error(data);
+						return;
+					}
+					
+					var r = o.result;
+					work_print_status(r.date, r.level, r.status, r.count, r.total);
+					if (!r.running) {
+						work_on_stop();
+					}
+				},
+				error: function(xhr, status, e) {
+					work_error(xhr.responseText);
+				}
+			});
+			return false;
+		}
+
+		function work_on_start() {
+			$('#btnStart').disable(true).removeClass("btn-primary").addClass("btn-warning")
+				.find('i').addClass('fa-spin');
+		}
+		function work_on_stop() {
+			$('#btnStart').disable(false).removeClass("btn-warning").addClass("btn-primary")
+				.find('i').removeClass('fa-spin');
 		}
 
 		function work_start(msg) {
