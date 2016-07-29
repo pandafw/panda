@@ -77,14 +77,14 @@
 					var o = JSON.parse(data);
 					if (!o.success) {
 						work_error(data);
-						setTimeout(doStatus, 1000);
+						setTimeout(syncw_status, 1000);
 						return;
 					}
 
 					var r = o.result;
 					work_print_status(r.date, r.level, r.status, r.count, r.total);
 					if (r.running) {
-						setTimeout(doStatus, 1000);
+						setTimeout(syncw_status, 1000);
 					}
 					else {
 						work_on_stop();
@@ -92,7 +92,7 @@
 				},
 				error: function(xhr, status, e) {
 					work_error(xhr.responseText);
-					setTimeout(doStatus, 1000);
+					setTimeout(syncw_status, 1000);
 				}
 			});
 		}
