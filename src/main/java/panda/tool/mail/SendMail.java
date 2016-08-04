@@ -4,10 +4,14 @@ import java.io.File;
 
 import org.apache.commons.cli.CommandLine;
 
+import panda.io.FileNames;
 import panda.io.Files;
 import panda.lang.Charsets;
+import panda.lang.Numbers;
 import panda.net.mail.Email;
+import panda.net.mail.EmailAttachment;
 import panda.net.mail.EmailClient;
+import panda.net.mail.EmailException;
 import panda.util.tool.AbstractCommandTool;
 
 /**
@@ -31,46 +35,55 @@ public class SendMail {
 		@Override
 		protected void addCommandLineOptions() throws Exception {
 			super.addCommandLineOptions();
-			
-			addCommandLineOption("f", "from", "FROM", true);
-			
-			addCommandLineOption("t", "to", "TO", true);
 
-			addCommandLineOption("c", "cc", "CC");
+			addCommandLineOption("host", "SMTP Host");
+			addCommandLineOption("port", "SMTP Port");
+			addCommandLineOption("user", "SMTP Username");
+			addCommandLineOption("pass", "SMTP Password");
+			addCommandLineOption("cotm", "SMTP Connection Timeout (ms)");
+			addCommandLineOption("dftm", "SMTP Default Timeout (ms)");
+			addCommandLineFlag("ssl", "Enable SMTP SSL");
 
-			addCommandLineOption("b", "bcc", "BCC");
-			
-			addCommandLineOption("s", "subject", "Mail subject");
-			
-			addCommandLineOption("m", "message", "Mail message");
-			
-			addCommandLineOption("i", "input", "Mail message file");
+			addCommandLineOption("from", "FROM", true);
+			addCommandLineOption("to", "TO", true);
+			addCommandLineOption("cc", "CC");
+			addCommandLineOption("bcc", "BCC");
+			addCommandLineOption("subject", "Mail subject");
+			addCommandLineOption("text", "Text message");
+			addCommandLineOption("textf", "Text message file");
+			addCommandLineOption("html", "HTML message");
+			addCommandLineOption("htmlf", "HTML message file");
+			addCommandLineOption("attach", "Attachment");
 		}
 
 		@Override
 		protected void getCommandLineOptions(CommandLine cl) throws Exception {
 			super.getCommandLineOptions(cl);
+
+			setOptionParam(cl, "host");
+			setOptionParam(cl, "port");
+			setOptionParam(cl, "user");
+			setOptionParam(cl, "pass");
+			setOptionFlag(cl, "ssl");
 			
-			if (cl.hasOption("f")) {
-				setParameter("from", cl.getOptionValue("f").trim());
-			}
-			
-			if (cl.hasOption("t")) {
-				setParameter("to", cl.getOptionValue("t").trim());
-			}
+			setOptionParam(cl, "from");
+			setOptionParams(cl, "to");
+			setOptionParams(cl, "cc");
+			setOptionParams(cl, "bcc");
+			setOptionParam(cl, "subject");
+			setOptionParam(cl, "text");
+			setOptionParam(cl, "html");
 
-			if (cl.hasOption("s")) {
-				setParameter("subject", cl.getOptionValue("s").trim());
-			}
-
-			if (cl.hasOption("m")) {
-				setParameter("message", cl.getOptionValue("m").trim());
-			}
-
-			if (cl.hasOption("i")) {
-				String f = cl.getOptionValue("i").trim();
+			if (cl.hasOption("textf")) {
+				String f = cl.getOptionValue("textf").trim();
 				String m = Files.readFileToString(new File(f), Charsets.CS_UTF_8);
-				setParameter("message", m);
+				setParameter("text", m);
+			}
+
+			if (cl.hasOption("htmlf")) {
+				String f = cl.getOptionValue("htmlf").trim();
+				String m = Files.readFileToString(new File(f), Charsets.CS_UTF_8);
+				setParameter("htmlf", m);
 			}
 		}
 	}
@@ -84,125 +97,132 @@ public class SendMail {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	protected String from;
-	protected String to;
-	protected String cc;
-	protected String bcc;
-	protected String subject = "";
-	protected String message = "";
-
+	protected EmailClient client = new EmailClient();
+	protected Email email = new Email();
 
 	/**
-	 * @return the from
+	 * @param host the host to set
 	 */
-	public String getFrom() {
-		return from;
+	public void setHost(String host) {
+		client.setHost(host);
 	}
 
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(String port) {
+		client.setPort(Numbers.toInt(port, 0));
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		client.setUsername(user);
+	}
+
+	/**
+	 * @param pass the pass to set
+	 */
+	public void setPass(String pass) {
+		client.setPassword(pass);
+	}
+
+	/**
+	 * @param ssl the ssl to set
+	 */
+	public void setSsl(boolean ssl) {
+		client.setSsl(ssl);
+	}
+
+	/**
+	 * @param cotm the connection timeout to set
+	 */
+	public void setCotm(String cotm) {
+		client.setConnectTimeout(Numbers.toInt(cotm, 0));
+	}
+
+	/**
+	 * @param dftm the default timeout to set
+	 */
+	public void setDftm(String dftm) {
+		client.setDefaultTimeout(Numbers.toInt(dftm, 0));
+	}
 
 	/**
 	 * @param from the from to set
+	 * @throws EmailException 
 	 */
-	public void setFrom(String from) {
-		this.from = from;
+	public void setFrom(String from) throws EmailException {
+		email.setFrom(from);
 	}
-
 
 	/**
-	 * @return the to
+	 * @param tos the tos to set
+	 * @throws EmailException 
 	 */
-	public String getTo() {
-		return to;
+	public void setTo(String[] tos) throws EmailException {
+		for (String s : tos) {
+			email.addTo(s);
+		}
 	}
-
 
 	/**
-	 * @param to the to to set
+	 * @param ccs the ccs to set
+	 * @throws EmailException 
 	 */
-	public void setTo(String to) {
-		this.to = to;
+	public void setCc(String[] ccs) throws EmailException {
+		for (String s : ccs) {
+			email.addCc(s);
+		}
 	}
-
 
 	/**
-	 * @return the cc
+	 * @param bccs the bccs to set
+	 * @throws EmailException 
 	 */
-	public String getCc() {
-		return cc;
+	public void setBcc(String[] bccs) throws EmailException {
+		for (String s : bccs) {
+			email.addBcc(s);
+		}
 	}
-
-
-	/**
-	 * @param cc the cc to set
-	 */
-	public void setCc(String cc) {
-		this.cc = cc;
-	}
-
-
-	/**
-	 * @return the bcc
-	 */
-	public String getBcc() {
-		return bcc;
-	}
-
-
-	/**
-	 * @param bcc the bcc to set
-	 */
-	public void setBcc(String bcc) {
-		this.bcc = bcc;
-	}
-
-
-	/**
-	 * @return the subject
-	 */
-	public String getSubject() {
-		return subject;
-	}
-
 
 	/**
 	 * @param subject the subject to set
 	 */
 	public void setSubject(String subject) {
-		this.subject = subject;
+		email.setSubject(subject);
 	}
-
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
 
 	/**
 	 * @param message the message to set
 	 */
-	public void setMessage(String message) {
-		this.message = message;
+	public void setText(String message) {
+		email.setTextMsg(message);
 	}
 
+	/**
+	 * @param message the html message to set
+	 */
+	public void setHtml(String message) {
+		email.setHtmlMsg(message);
+	}
+
+	/**
+	 * @param attachs attachment files
+	 */
+	public void setAttachments(String[] attachs) {
+		for (String a : attachs) {
+			EmailAttachment ea = new EmailAttachment(FileNames.getName(a), a);
+			email.addAttachment(ea);
+		}
+	}
 
 	/**
 	 * execute
 	 * @throws Exception if an error occurs
 	 */
 	public void execute() throws Exception {
-		Email email = new Email();
-		
-		email.setCharset(Charsets.UTF_8);
-		email.setFrom(from);
-		email.addTo(to);
-		email.setSubject(subject);
-		email.setTextMsg(message);
-
-
-		EmailClient client = new EmailClient();
 		client.send(email);
 	}
 }
