@@ -76,6 +76,24 @@ public abstract class AbstractCommandTool {
 		throw new ParseException(msg);
 	}
 
+	protected void setOptionFlag(CommandLine cl, String name) {
+		if (cl.hasOption(name)) {
+			setParameter(name, true);
+		}
+	}
+
+	protected void setOptionParam(CommandLine cl, String name) {
+		if (cl.hasOption(name)) {
+			setParameter(name, cl.getOptionValue(name).trim());
+		}
+	}
+
+	protected void setOptionParams(CommandLine cl, String name) {
+		if (cl.hasOption(name)) {
+			setParameter(name, cl.getOptionValues(name));
+		}
+	}
+
 	protected void setParameter(String name, Object value) {
 		Beans.setProperty(target, name, value);
 	}
@@ -84,12 +102,24 @@ public abstract class AbstractCommandTool {
 		return Beans.getProperty(target, name);
 	}
 	
+	protected Option addCommandLineFlag(String name, String description) {
+		return addCommandLineOption(name, name, description, false, false);
+	}
+	
 	protected Option addCommandLineFlag(String opt, String name, String description) {
 		return addCommandLineOption(opt, name, description, false, false);
 	}
 	
+	protected Option addCommandLineOption(String name, String description) {
+		return addCommandLineOption(name, name, description, true, false);
+	}
+	
 	protected Option addCommandLineOption(String opt, String name, String description) {
 		return addCommandLineOption(opt, name, description, true, false);
+	}
+	
+	protected Option addCommandLineOption(String name, String description, boolean required) {
+		return addCommandLineOption(name, name, description, true, required);
 	}
 	
 	protected Option addCommandLineOption(String opt, String name, String description, boolean required) {
