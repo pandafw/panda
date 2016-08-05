@@ -1,6 +1,7 @@
 package panda.tool.mail;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 
@@ -36,24 +37,24 @@ public class SendMail {
 		protected void addCommandLineOptions() throws Exception {
 			super.addCommandLineOptions();
 
-			addCommandLineOption("host", "SMTP Host");
-			addCommandLineOption("port", "SMTP Port");
-			addCommandLineOption("user", "SMTP Username");
-			addCommandLineOption("pass", "SMTP Password");
-			addCommandLineOption("cotm", "SMTP Connection Timeout (ms)");
-			addCommandLineOption("dftm", "SMTP Default Timeout (ms)");
+			addCommandLineOption("H", "host", "SMTP Host");
+			addCommandLineOption("P", "port", "SMTP Port");
+			addCommandLineOption("U", "user", "SMTP Username");
+			addCommandLineOption("W", "pass", "SMTP Password");
+			addCommandLineOption("CT", "coto", "SMTP Connection Timeout (ms)");
+			addCommandLineOption("DT", "dfto", "SMTP Default Timeout (ms)");
 			addCommandLineFlag("ssl", "Enable SMTP SSL");
 
-			addCommandLineOption("from", "FROM", true);
-			addCommandLineOption("to", "TO", true);
-			addCommandLineOption("cc", "CC");
-			addCommandLineOption("bcc", "BCC");
-			addCommandLineOption("subject", "Mail subject");
-			addCommandLineOption("text", "Text message");
-			addCommandLineOption("textf", "Text message file");
-			addCommandLineOption("html", "HTML message");
-			addCommandLineOption("htmlf", "HTML message file");
-			addCommandLineOption("attach", "Attachment");
+			addCommandLineOption("f", "from", "FROM", true);
+			addCommandLineOption("t", "to", "TO", true);
+			addCommandLineOption("c", "cc", "CC");
+			addCommandLineOption("b", "bcc", "BCC");
+			addCommandLineOption("s", "subject", "Mail subject");
+			addCommandLineOption("t", "text", "Text message");
+			addCommandLineOption("tf", "textfile", "Text message file");
+			addCommandLineOption("h", "html", "HTML message");
+			addCommandLineOption("hf", "htmlfile", "HTML message file");
+			addCommandLineOption("a", "attach", "Attachment");
 		}
 
 		@Override
@@ -64,6 +65,8 @@ public class SendMail {
 			setOptionParam(cl, "port");
 			setOptionParam(cl, "user");
 			setOptionParam(cl, "pass");
+			setOptionParam(cl, "coto");
+			setOptionParam(cl, "dfto");
 			setOptionFlag(cl, "ssl");
 			
 			setOptionParam(cl, "from");
@@ -72,19 +75,9 @@ public class SendMail {
 			setOptionParams(cl, "bcc");
 			setOptionParam(cl, "subject");
 			setOptionParam(cl, "text");
+			setOptionParam(cl, "textfile");
 			setOptionParam(cl, "html");
-
-			if (cl.hasOption("textf")) {
-				String f = cl.getOptionValue("textf").trim();
-				String m = Files.readFileToString(new File(f), Charsets.CS_UTF_8);
-				setParameter("text", m);
-			}
-
-			if (cl.hasOption("htmlf")) {
-				String f = cl.getOptionValue("htmlf").trim();
-				String m = Files.readFileToString(new File(f), Charsets.CS_UTF_8);
-				setParameter("htmlf", m);
-			}
+			setOptionParam(cl, "htmlfile");
 		}
 	}
 	
@@ -136,17 +129,17 @@ public class SendMail {
 	}
 
 	/**
-	 * @param cotm the connection timeout to set
+	 * @param coto the connection timeout to set
 	 */
-	public void setCotm(String cotm) {
-		client.setConnectTimeout(Numbers.toInt(cotm, 0));
+	public void setCoto(String coto) {
+		client.setConnectTimeout(Numbers.toInt(coto, 0));
 	}
 
 	/**
-	 * @param dftm the default timeout to set
+	 * @param dfto the default timeout to set
 	 */
-	public void setDftm(String dftm) {
-		client.setDefaultTimeout(Numbers.toInt(dftm, 0));
+	public void setDfto(String dfto) {
+		client.setDefaultTimeout(Numbers.toInt(dfto, 0));
 	}
 
 	/**
@@ -202,10 +195,26 @@ public class SendMail {
 	}
 
 	/**
+	 * @param file the text file to set
+	 */
+	public void setTextFile(String file) throws IOException {
+		String msg = Files.readFileToString(new File(file), Charsets.CS_UTF_8);
+		email.setTextMsg(msg);
+	}
+
+	/**
 	 * @param message the html message to set
 	 */
 	public void setHtml(String message) {
 		email.setHtmlMsg(message);
+	}
+
+	/**
+	 * @param file the html file to set
+	 */
+	public void setHtmlFile(String file) throws IOException {
+		String msg = Files.readFileToString(new File(file), Charsets.CS_UTF_8);
+		email.setHtmlMsg(msg);
 	}
 
 	/**
