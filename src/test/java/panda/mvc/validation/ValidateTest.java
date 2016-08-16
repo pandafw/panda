@@ -4,8 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.itextpdf.xmp.impl.Base64;
-
+import panda.lang.codec.binary.Base64;
 import panda.mvc.AbstractMvcTestCase;
 import panda.mvc.validation.module.ValidateModule;
 
@@ -43,7 +42,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	@Test
 	public void testVisitBinaryOk() throws Throwable {
 		request.setRequestURI("/visitOne");
-		request.addParameter("one.bin", Base64.encode("10000"));
+		request.addParameter("one.bin", Base64.encodeBase64String("10000".getBytes()));
 		servlet.service(request, response);
 		assertEquals("1", response.getContentAsString());
 	}
@@ -51,7 +50,7 @@ public class ValidateTest extends AbstractMvcTestCase {
 	@Test
 	public void testVisitBinaryErr() throws Throwable {
 		request.setRequestURI("/visitOne");
-		request.addParameter("one.bin", Base64.encode("1000"));
+		request.addParameter("one.bin", Base64.encodeBase64String("1000".getBytes()));
 		servlet.service(request, response);
 		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"one.bin\":[\"4, 5 ~ 100\"]}}},\"params\":{\"one\":{\"bin\":\"MTAwMA==\",\"number\":0}}}", response.getContentAsString());
 	}
