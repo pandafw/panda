@@ -20,6 +20,11 @@ public class OracleSqlExpert extends SqlExpert {
 	}
 
 	@Override
+	public String escape(String s) {
+		return '"' + s + '"'; 
+	}
+
+	@Override
 	public List<String> drop(Entity<?> entity) {
 		List<String> sqls = super.drop(entity);
 		
@@ -35,7 +40,7 @@ public class OracleSqlExpert extends SqlExpert {
 	public List<String> create(Entity<?> entity) {
 		List<String> sqls = new ArrayList<String>();
 
-		StringBuilder sb = new StringBuilder("CREATE TABLE " + client.getTableName(entity) + "(");
+		StringBuilder sb = new StringBuilder("CREATE TABLE " + escapeTable(client.getTableName(entity)) + "(");
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isReadonly()) {
 				continue;
@@ -47,11 +52,11 @@ public class OracleSqlExpert extends SqlExpert {
 			if (ef.isPrimaryKey() && entity.getPrimaryKeys().size() == 1) {
 				sb.append(" PRIMARY KEY ");
 			}
-			if (ef.isNotNull()) {
-				sb.append(" NOT NULL");
-			}
 			if (ef.hasDefaultValue()) {
 				sb.append(" DEFAULT '").append(ef.getDefaultValue()).append('\'');
+			}
+			if (ef.isNotNull()) {
+				sb.append(" NOT NULL");
 			}
 			if (ef.isUnsigned()) {
 				sb.append(" Check (").append(escapeColumn(ef.getColumn())).append(" >= 0)");

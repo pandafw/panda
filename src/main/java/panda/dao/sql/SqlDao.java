@@ -567,7 +567,7 @@ public class SqlDao extends AbstractDao {
 			return executor.insert(sql.getSql(), sql.getParams(), obj, eid.getName());
 		}
 
-		if (eid.isAutoGenerate()) {
+		if (eid.isAutoGenerate() && eid.isStringIdentity()) {
 			String aid = Randoms.randUUID32();
 			if (!eid.setValue(obj, aid)) {
 				throw new DaoException("Failed to set identity to entity: " + entity.getType());

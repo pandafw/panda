@@ -185,7 +185,7 @@ public abstract class SqlExpert {
 	
 	protected void asTableAlias(Sql sql, String alias) {
 		if (Strings.isNotEmpty(alias)) {
-			sql.append(' ').append(alias);
+			sql.append(' ').append(escapeTable(alias));
 		}
 	}
 
@@ -370,11 +370,11 @@ public abstract class SqlExpert {
 
 			if (!sel) {
 				if (Strings.isNotEmpty(alias)) {
-					sql.append(' ').append(alias).append('.');
+					sql.append(' ').append(escapeTable(alias)).append('.');
 				}
 				sql.append("* ");
 			}
-			sql.append("FROM ").append(escapeTable(client.getTableName(query))).append(' ').append(alias);
+			sql.append("FROM ").append(escapeTable(client.getTableName(query))).append(' ').append(escapeTable(alias));
 		}
 	}
 	
@@ -412,16 +412,12 @@ public abstract class SqlExpert {
 					throw new IllegalArgumentException("Invalid join condition: " + s);
 				}
 
-				// main table alias
-				sql.append(talias).append('.');
-				// main table column
-				sql.append(escapeColumn(Strings.trim(s.substring(0, d))));
+				// main table alias.column
+				sql.append(escapeColumn(talias, Strings.trim(s.substring(0, d))));
 				// operator
 				sql.append(s.substring(d, d + l));
-				// join table alias
-				sql.append(jalias).append('.');
-				// join table column
-				sql.append(escapeColumn(Strings.trim(s.substring(d + l))));
+				// join table alias.column
+				sql.append(escapeColumn(jalias, Strings.trim(s.substring(d + l))));
 				
 				sql.append(" AND ");
 			}
@@ -692,7 +688,7 @@ public abstract class SqlExpert {
 			.append(client.getTableName(entity))
 			.append("_PK PRIMARY KEY (");
 		for (EntityField pk : pks) {
-			sb.append(pk.getColumn()).append(',');
+			sb.append(escapeColumn(pk.getColumn())).append(',');
 		}
 		sb.setCharAt(sb.length() - 1, ')');
 		return sb.toString();

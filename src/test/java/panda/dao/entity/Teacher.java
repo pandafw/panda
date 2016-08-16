@@ -9,6 +9,7 @@ import panda.lang.Objects;
 import panda.lang.Strings;
 
 
+@Comment("先生")
 public class Teacher {
 	@PK
 	String name;

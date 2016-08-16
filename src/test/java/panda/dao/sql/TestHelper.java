@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +105,8 @@ public class TestHelper {
 
 		DataSource ds = sources.get(name);
 		if (ds == null) {
+			DriverManager.setLoginTimeout(5);
+
 			SimpleDataSource sds = new SimpleDataSource();
 			try {
 				sds.getJdbc().setDriver(properties.getProperty(name + ".driver"));
@@ -119,7 +122,7 @@ public class TestHelper {
 				ds = sds;
 			}
 			catch (Throwable e) {
-				log.warn("Failed to connect " + sds.getJdbc().getUrl() + " - " + sds.getJdbc().getUsername() + ": " + e);
+				log.warn("Failed to connect " + sds.getJdbc().getUrl() + " - " + sds.getJdbc().getUsername(), e);
 				ds = new MockDataSource();
 			}
 			sources.put(name, ds);
