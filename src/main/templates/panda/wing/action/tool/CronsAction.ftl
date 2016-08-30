@@ -31,7 +31,7 @@
 
 <body>
 
-<div class="n-sect a-cronjobs">
+<div class="p-section a_cronjobs">
 	<div class="p-header">
 		<h3><i class="fa fa-clock-o"></i> <@p.text name="title"/></h3>
 	</div>

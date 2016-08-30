@@ -125,6 +125,20 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	/**
 	 * upload
 	 * 
+	 * @return file
+	 * @throws Exception if an error occurs
+	 */
+	@At
+	@Ok(View.JSON)
+	@Err(View.JSON)
+	@Fatal(View.JSON)
+	public FileItem[] uploads(@Param("files") FileItem[] files) throws Exception {
+		return files;
+	}
+
+	/**
+	 * upload
+	 * 
 	 * @return uploaded file item
 	 * @throws Exception if an error occurs
 	 */
