@@ -121,6 +121,7 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 			List l = new ArrayList();
 			l.add(v);
 			l.add(value);
+			params.put(name, l);
 		}
 	}
 }
