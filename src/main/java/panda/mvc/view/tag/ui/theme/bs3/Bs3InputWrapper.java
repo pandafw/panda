@@ -34,7 +34,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 	public void renderEnd() throws Exception {
 		super.renderEnd();
 
-		boolean required = tag.isRequired();
+		boolean required = Attributes.isTrue(tag.getRequired());
 		String requiredposition = tag.getRequiredPosition();
 
 		if (required && "side".equals(requiredposition)) {
@@ -73,7 +73,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 		String name = tag.getName();
 
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		boolean required = tag.isRequired();
+		boolean required = Attributes.isTrue(tag.getRequired());
 		String requiredposition = tag.getRequiredPosition();
 
 		boolean hasFieldErrors = (name != null

@@ -64,35 +64,35 @@ public class Attributes {
 	 * Add a key/value pair to the attributes only if the value is not null.
 	 * Value is html encoded
 	 * 
-	 * @param attrName attribute name
-	 * @param paramValue value of attribute
+	 * @param name attribute name
+	 * @param value value of attribute
 	 * @return this
 	 */
-	public Attributes addIfExists(String attrName, Object paramValue) {
-		return addIfExists(attrName, paramValue, true);
+	public Attributes addIfExists(String name, Object value) {
+		return addIfExists(name, value, true);
 	}
 
 	/**
 	 * Add a key/value pair to the attributes only if the value is not null.
 	 * 
-	 * @param attrName attribute name
-	 * @param paramValue value of attribute
+	 * @param name attribute name
+	 * @param value value of attribute
 	 * @param encode html encode the value
 	 * @return this
 	 */
-	public Attributes addIfExists(String attrName, Object paramValue, boolean encode) {
-		if (paramValue != null) {
-			String val = paramValue.toString();
+	public Attributes addIfExists(String name, Object value, boolean encode) {
+		if (value != null) {
+			String val = value.toString();
 			if (Strings.isNotEmpty(val)) {
 				if (encode) {
 					val = StringEscapes.escapeHtml(val);
 				}
-				attributes.put(attrName, val);
+				attributes.put(name, val);
 				return this;
 			}
 		}
 		
-		attributes.remove(attrName);
+		attributes.remove(name);
 		return this;
 	}
 
@@ -100,28 +100,50 @@ public class Attributes {
 	 * Add a key/value pair to the attributes only if the value is not null and
 	 * is a boolean with a value of 'true'. Value is html encoded
 	 * 
-	 * @param attrName attribute name
-	 * @param paramValue value of attribute
+	 * @param name attribute name
+	 * @param value value of attribute
 	 * @return this
 	 */
-	public Attributes addIfTrue(String attrName, Object paramValue) {
-		if (isTrue(paramValue)) {
-			attributes.put(attrName, Boolean.TRUE.toString());
+	public Attributes addIfTrue(String name, Boolean value) {
+		if (value != null && value.booleanValue()) {
+			attributes.put(name, Boolean.TRUE.toString());
 		}
 		else {
-			attributes.remove(attrName);
+			attributes.remove(name);
 		}
 		return this;
 	}
 
-	public static boolean isTrue(Object paramValue) {
-		return isTrue(paramValue, false);
+	/**
+	 * Add a key/value pair to the attributes only if the value is not null and
+	 * is a boolean with a value of 'true'. Value is html encoded
+	 * 
+	 * @param name attribute name
+	 * @param value value of attribute
+	 * @return this
+	 */
+	public Attributes addIfTrue(String name, Object value) {
+		if (isTrue(value)) {
+			attributes.put(name, Boolean.TRUE.toString());
+		}
+		else {
+			attributes.remove(name);
+		}
+		return this;
 	}
 
-	public static boolean isTrue(Object paramValue, boolean def) {
-		if (paramValue != null) {
-			return ((paramValue instanceof Boolean && ((Boolean)paramValue).booleanValue())
-					|| (Boolean.valueOf(paramValue.toString()).booleanValue()));
+	public static boolean isTrue(Boolean value) {
+		return value != null && value.booleanValue();
+	}
+
+	public static boolean isTrue(Object value) {
+		return isTrue(value, false);
+	}
+
+	public static boolean isTrue(Object value, boolean def) {
+		if (value != null) {
+			return ((value instanceof Boolean && ((Boolean)value).booleanValue())
+					|| (Boolean.valueOf(value.toString()).booleanValue()));
 		}
 		return def;
 	}

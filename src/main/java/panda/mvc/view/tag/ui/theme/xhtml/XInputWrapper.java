@@ -57,7 +57,7 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 			&& Collections.isNotEmpty(fieldErrors)
 			&& fieldErrors.get(name) != null);
 
-		boolean required = tag.isRequired();
+		boolean required = Attributes.isTrue(tag.getRequired());
 		String requiredposition = tag.getRequiredPosition();
 
 		write("<tr class=\"p-tr-input\"><td class=\"p-td-label\">");
@@ -92,7 +92,7 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 	}
 	
 	protected void renderFooter() throws Exception {
-		boolean required = tag.isRequired();
+		boolean required = Attributes.isTrue(tag.getRequired());
 		String requiredposition = tag.getRequiredString();
 		
 		if (required && "side".equals(requiredposition)) {

@@ -17,7 +17,7 @@ public abstract class InputUIBean extends UIBean {
 	protected String labelClass;
 	protected String inputClass;
 	
-	protected boolean required;
+	protected Boolean required;
 	protected Boolean readonly;
 	protected String requiredString;
 	protected String requiredPosition;
@@ -233,7 +233,7 @@ public abstract class InputUIBean extends UIBean {
 	/**
 	 * @return the required
 	 */
-	public boolean isRequired() {
+	public Boolean getRequired() {
 		return required;
 	}
 

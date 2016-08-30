@@ -24,8 +24,8 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	protected void render() throws IOException {
 		Attributes attr = new Attributes();
 		
-		boolean readonly = Boolean.TRUE.equals(tag.getReadonly());
-		boolean disabled = Boolean.TRUE.equals(tag.getDisabled());
+		boolean readonly = Attributes.isTrue(tag.getReadonly());
+		boolean disabled = Attributes.isTrue(tag.getDisabled());
 		
 		String pul = tag.getUploadLink();
 		String pun = tag.getUploadName();

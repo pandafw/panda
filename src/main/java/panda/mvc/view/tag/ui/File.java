@@ -25,6 +25,7 @@ public class File extends InputUIBean {
 
 	protected String accept;
 	protected Integer size;
+	protected Boolean multiple;
 
 	/**
 	 * evaluate parameters
@@ -74,5 +75,19 @@ public class File extends InputUIBean {
 	 */
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+
+	/**
+	 * @return the multiple
+	 */
+	public Boolean getMultiple() {
+		return multiple;
+	}
+
+	/**
+	 * @param multiple the multiple to set
+	 */
+	public void setMultiple(Boolean multiple) {
+		this.multiple = multiple;
 	}
 }
