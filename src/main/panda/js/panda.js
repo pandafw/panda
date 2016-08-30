@@ -2751,21 +2751,20 @@ s_setbase({
 			$uid.val(uid || '');
 			
 			ufn = ufn || uid || $uf.val();
-
+			var durl = null;
+			if (pdl && uid) {
+				var ps = $.extend({}, pdd);
+				ps[pdn] = uid;
+				durl = pdl + '?' + $.param(ps);
+			}
+			
 			if (ufn) {
-				if (uid) {
-					var ps = $.extend({}, pdd);
-					ps[pdn] = uid;
-					var url = pdl + '?' + $.param(ps);
-					$ut.html('<a href="' + url + '">'
-							+ '<i class="fa fa-check p-uploader-icon"></i> '
-							+ ufn + ' ' + _filesize(ufs)
-							+ '</a>');
+				var s = '<i class="fa fa-check p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs)
+				if (durl) {
+					$ut.html('<a href="' + durl + '">' + s + '</a>');
 				}
 				else {
-					$ut.html('<span><i class="fa fa-check p-uploader-icon"></i>'
-							+ ufn + ' ' + _filesize(ufs)
-							+ '</span>');
+					$ut.html('<span>' + s + '</span>');
 				}
 				$ut.show();
 			}
@@ -2782,11 +2781,8 @@ s_setbase({
 			$('<i class="p-uploader-remove fa fa-remove"></i>').click(_clear).appendTo($ut);
 
 			if (String.startsWith(uct, 'image/')) {
-				if (pdl && uid) {
-					var ps = $.extend({}, pdd);
-					ps[pdn] = uid;
-					var url = pdl + '?' + $.param(ps);
-					$ui.html('<img class="img-thumbnail" src="' + url + '"></img>').fadeIn();
+				if (durl) {
+					$ui.html('<img class="img-thumbnail" src="' + durl + '"></img>').fadeIn();
 				}
 				else if (pel) {
 					$ui.html('<img class="img-thumbnail" src="' + pel + '"></img>').fadeIn();

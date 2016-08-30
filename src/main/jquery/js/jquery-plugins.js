@@ -53,6 +53,11 @@
 			if (typeof(s.file) == "string") {
 				addFile($(s.file));
 			}
+			else if ($.isArray(s.file)) {
+				for (var i = 0; i < s.file.length; i++) {
+					addFile($(s.file[i]));
+				}
+			}
 			else {
 				for (var n in s.file) {
 					addFile($(s.file[n]), n);
