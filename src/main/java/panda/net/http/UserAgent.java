@@ -22,6 +22,11 @@ public class UserAgent {
 			this.major = major;
 			this.minor = minor;
 		}
+
+		@Override
+		public String toString() {
+			return version;
+		}
 	}
 	
 	private static final Version DUMMY = new Version("", 0, 0);
@@ -260,7 +265,7 @@ public class UserAgent {
 			sb.append(b).append(' ');
 			Version v = en.getValue();
 			if (v.major > 0) {
-				sb.append(b).append(v).append(' ');
+				sb.append(b).append(v.major).append(' ');
 			}
 		}
 		return sb.toString();
