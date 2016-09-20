@@ -1,13 +1,9 @@
 package panda.wing.lucene;
 
-import panda.io.Files;
-import panda.lang.Classes;
-import panda.lang.Exceptions;
-import panda.lang.Strings;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -24,6 +20,11 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import panda.io.Files;
+import panda.lang.Classes;
+import panda.lang.Exceptions;
+import panda.lang.Strings;
+
 /**
  */
 public class LuceneWrapper implements Closeable {
@@ -35,7 +36,7 @@ public class LuceneWrapper implements Closeable {
 	protected IndexWriter indexWriter;
 
 	protected LuceneWrapper() {
-		this(null, Version.LUCENE_46);
+		this(null, Version.LATEST);
 	}
 
 	protected LuceneWrapper(LuceneWrapper lw) {
@@ -46,7 +47,7 @@ public class LuceneWrapper implements Closeable {
 	 * @param path lucene directory
 	 */
 	public LuceneWrapper(String path) {
-		this(path, Version.LUCENE_46);
+		this(path, Version.LATEST);
 	}
 	
 	/**
@@ -62,7 +63,7 @@ public class LuceneWrapper implements Closeable {
 	 * @param analyzer analyzer class
 	 */
 	public LuceneWrapper(String path, Class<? extends Analyzer> analyzer) {
-		this(path, analyzer, Version.LUCENE_46);
+		this(path, analyzer, Version.LATEST);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class LuceneWrapper implements Closeable {
 	}
 
 	public void init() throws IOException {
-		this.directory = FSDirectory.open(new File(path));
+		this.directory = FSDirectory.open(Paths.get(path));
 	}
 	
 	@Override
@@ -122,7 +123,7 @@ public class LuceneWrapper implements Closeable {
 	}
 	
 	public Analyzer getAnalyzer() {
-		return Classes.born(analyzer, version, version.getClass());
+		return Classes.born(analyzer);
 	}
 	
 	public IndexSearcher getIndexSearcher() {
@@ -130,7 +131,7 @@ public class LuceneWrapper implements Closeable {
 	}
 	
 	public QueryParser getQueryParser(String field) {
-		return new QueryParser(version, field, getAnalyzer());
+		return new QueryParser(field, getAnalyzer());
 	}
 	
 	/**
@@ -160,7 +161,7 @@ public class LuceneWrapper implements Closeable {
 	
 	private IndexWriter openIndexWriter(Directory directory) {
 		Analyzer analyzer = getAnalyzer();
-		IndexWriterConfig iwc = new IndexWriterConfig(version, analyzer);
+		IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 		iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
 
 		// Optional: for better indexing performance, if you
@@ -178,12 +179,18 @@ public class LuceneWrapper implements Closeable {
 		}
 	}
 
+	private static final String SPECIAL_CHARS = "+-&|!(){}[]^\"~*?:\\/";
+	
+	public String escapeText(String str) {
+		return Strings.escapeChars(str, SPECIAL_CHARS);
+	}
+
 	/**
 	 * @return query
 	 */
-	public Query parseSimpleQuery(String field, String text) {
-		text = Strings.replaceSymbols(text, ' ');
-		if (Strings.isBlank(text)) {
+	public Query parseQuery(String field, String text) {
+		text = Strings.strip(text);
+		if (Strings.isEmpty(text)) {
 			return null;
 		}
 		
