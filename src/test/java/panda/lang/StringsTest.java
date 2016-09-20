@@ -1163,6 +1163,34 @@ public class StringsTest {
 	}
 
 	@Test
+	public void testEscapeChars_StringStringChar() {
+		char z = (char)0;
+		assertEquals(null, Strings.escapeChars(null, null, z));
+		assertEquals(null, Strings.escapeChars(null, "", z));
+		assertEquals(null, Strings.escapeChars(null, "a", z));
+		assertEquals(null, Strings.escapeChars(null, null, 'x'));
+
+		assertEquals("", Strings.escapeChars("", null, z));
+		assertEquals("", Strings.escapeChars("", "", z));
+		assertEquals("", Strings.escapeChars("", "a", z));
+		assertEquals("", Strings.escapeChars("", null, 'x'));
+
+		assertEquals("abc", Strings.escapeChars("abc", null, z));
+		assertEquals("abc", Strings.escapeChars("abc", null, 'x'));
+
+		assertEquals("abc", Strings.escapeChars("abc", "", z));
+		assertEquals("abc", Strings.escapeChars("abc", "", 'x'));
+
+		assertEquals("abc", Strings.escapeChars("abc", "b", z));
+		assertEquals("axbc", Strings.escapeChars("abc", "b", 'x'));
+
+		assertEquals("aybycyba", Strings.escapeChars("abcba", "bc", 'y'));
+
+		assertEquals("abcba", Strings.escapeChars("abcba", "z", 'w'));
+		assertSame("abcba", Strings.escapeChars("abcba", "z", 'w'));
+	}
+
+	@Test
 	public void testReplaceChars_StringStringString() {
 		assertEquals(null, Strings.replaceChars(null, null, null));
 		assertEquals(null, Strings.replaceChars(null, "", null));
