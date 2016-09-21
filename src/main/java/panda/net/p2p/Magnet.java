@@ -1,10 +1,10 @@
 package panda.net.p2p;
 
+import java.io.Serializable;
+
 import panda.lang.Objects;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
-
-import java.io.Serializable;
 
 public class Magnet implements Cloneable, Serializable {
 	/**
@@ -183,20 +183,22 @@ public class Magnet implements Cloneable, Serializable {
 	}
 	
 	public String toURL() {
-		Magnet m = new Magnet(this);
-		m.setDn(URLHelper.encodeURL(m.getDn()));
-		return _toURL(m);
+		String xt_ = xt; 
+		try {
+			xt = null;
+			String url = URLBuilder.buildURL("magnet:?xt=" + xt_, this);
+			return url;
+		}
+		finally {
+			xt = xt_;
+		}
 	}
 	
-	private static String _toURL(Magnet m) {
-		return URLBuilder.buildURL("magnet:", m);
-	}
-	
-	public static String toURL(String title, String btih) {
+	public static String toURL(String name, String btih) {
 		Magnet m = new Magnet();
-		m.setDn(URLHelper.encodeURL(title));
+		m.setDn(URLHelper.encodeURL(name));
 		m.setBtih(btih);
-		return _toURL(m);
+		return m.toURL();
 	}
 
 	@Override
