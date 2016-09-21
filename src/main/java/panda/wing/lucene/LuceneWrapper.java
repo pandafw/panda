@@ -179,12 +179,6 @@ public class LuceneWrapper implements Closeable {
 		}
 	}
 
-	private static final String SPECIAL_CHARS = "+-&|!(){}[]^\"~*?:\\/";
-	
-	public String escapeText(String str) {
-		return Strings.escapeChars(str, SPECIAL_CHARS);
-	}
-
 	/**
 	 * @return query
 	 */

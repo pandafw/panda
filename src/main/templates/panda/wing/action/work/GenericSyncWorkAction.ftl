@@ -5,13 +5,14 @@
 
 <body>
 <style>
-	#syncw_log pre {
+	#syncw_log div {
 		border: none 0;
 		font-size: 80%;
 		margin: 0;
 		padding: 2px;
+		white-space: pre-wrap;
 	}
-	#syncw_log pre.error {
+	#syncw_log div.error {
 		color: #f00;
 	}
 </style>
@@ -161,9 +162,10 @@
 			var mcls = { 'i': 'alert-info', 'w': 'alert-warning', 'e': 'alert-danger', 's': 'alert-success' };
 			return mcls[cls || 'i'] || '';
 		}
+
 		function work_print_status(time, level, msg, count, total) {
 			if (msg) {
-				var $m = $('<pre class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</pre>');
+				var $m = $('<div class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</div>');
 
 				$('#syncw_log').append($m);
 
