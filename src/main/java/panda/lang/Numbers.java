@@ -2168,14 +2168,54 @@ public class Numbers {
 	}
 
 	/**
+	 * decFormat(1.235, 2) -> 1.23
+	 * decFormat(1.236, 2) -> 1.24
+	 * 
 	 * @param n the number to format
 	 * @param frac maximum fraction digits
 	 * @return formatted number string
 	 */
-	public static String format(Number n, int frac) {
+	public static String decFormat(Number n, int frac) {
 		DecimalFormat df = null;
 		df = new DecimalFormat("#", new DecimalFormatSymbols(Locale.ENGLISH));
 		df.setMaximumFractionDigits(frac);
 		return df.format(n);
 	}
+
+	/**
+	 * decFormat(1.235, 2) -> 1.23
+	 * decFormat(1.236, 2) -> 1.23
+	 * 
+	 * @param n the number to format
+	 * @param frac maximum fraction digits
+	 * @return formatted number string
+	 */
+	public static String cutFormat(double n, int frac) {
+		boolean minus = false;
+		if (n < 0) {
+			minus = true;
+			n = -n;
+		}
+
+		long i = (long)n;
+		double d = n - i;
+		double p = Math.pow(10, frac);
+		double dp = d * p;
+		long f = (long)(dp);
+
+		if (f <= 0) {
+			return String.valueOf(i);
+		}
+
+		StringBuilder sb = new StringBuilder();
+		if (minus) {
+			sb.append('-');
+		};
+		sb.append(i)
+		  .append('.')
+		  .append(Strings.stripEnd(Strings.leftPad(String.valueOf(f), frac, '0'), '0'));
+		
+		return sb.toString();
+	}
+
 }

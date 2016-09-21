@@ -234,7 +234,7 @@ public class TimeSpan implements Serializable {
 	}
 
 	private static String formatSpan(double span) {
-		return Numbers.format(span, 2);
+		return Numbers.cutFormat(span, 2);
 	}
 	
 	public static String toDisplayString(TimeSpan ts) {

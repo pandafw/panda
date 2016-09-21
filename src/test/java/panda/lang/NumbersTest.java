@@ -1289,51 +1289,23 @@ public class NumbersTest {
 	}
 
 	@Test
-	public void testFormat() {
-		assertEquals("100", Numbers.format(100, 2));
-		assertEquals("1", Numbers.format(1.0012345, 2));
-		assertEquals("1.1", Numbers.format(1.102345, 2));
-		assertEquals("1.01", Numbers.format(1.012345, 2));
-		assertEquals("1.23", Numbers.format(1.2345, 2));
-		assertEquals("1.235", Numbers.format(1.2346, 3));
+	public void testDecFormat() {
+		assertEquals("100", Numbers.decFormat(100, 2));
+		assertEquals("1", Numbers.decFormat(1.0012345, 2));
+		assertEquals("1.1", Numbers.decFormat(1.102345, 2));
+		assertEquals("1.01", Numbers.decFormat(1.012345, 2));
+		assertEquals("1.23", Numbers.decFormat(1.2345, 2));
+		assertEquals("1.235", Numbers.decFormat(1.2346, 3));
 	}
 	
-	private static String cutFormat1(double n, int frac) {
-		boolean minus = false;
-		if (n < 0) {
-			minus = true;
-			n = -n;
-		}
-
-		long i = (long)n;
-		double d = n - i;
-		double p = Math.pow(10, frac);
-		double dp = d * p;
-		long f = (long)(dp);
-
-		if (f <= 0) {
-			return String.valueOf(i);
-		}
-
-		StringBuilder sb = new StringBuilder();
-		if (minus) {
-			sb.append('-');
-		};
-		sb.append(i)
-		  .append('.')
-		  .append(Strings.stripEnd(Strings.leftPad(String.valueOf(f), frac, '0'), '0'));
-		
-		return sb.toString();
-	}
-
 	@Test
 	public void testCutFormat1() {
-		assertEquals("100", cutFormat1(100, 2));
-		assertEquals("1", cutFormat1(1.0012345, 2));
-		assertEquals("1.1", cutFormat1(1.102345, 2));
-		assertEquals("1.01", cutFormat1(1.012345, 2));
-		assertEquals("1.23", cutFormat1(1.2345, 2));
-		assertEquals("1.234", cutFormat1(1.2346, 3));
+		assertEquals("100", Numbers.cutFormat(100, 2));
+		assertEquals("1", Numbers.cutFormat(1.0012345, 2));
+		assertEquals("1.1", Numbers.cutFormat(1.102345, 2));
+		assertEquals("1.01", Numbers.cutFormat(1.012345, 2));
+		assertEquals("1.23", Numbers.cutFormat(1.2345, 2));
+		assertEquals("1.234", Numbers.cutFormat(1.2346, 3));
 	}
 
 	private static String cutFormat2(double n, int frac) {
@@ -1384,21 +1356,21 @@ public class NumbersTest {
 		final int c = 100000;
 		StopWatch sw = new StopWatch();
 		for (int i = 0; i < c; i++) {
-			testFormat();
+			testDecFormat();
 		}
-		System.out.println("Format - " + sw);
+		System.out.println("decFormat - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
 			testCutFormat1();
 		}
-		System.out.println("curFormat1 - " + sw);
+		System.out.println("cutFormat1 - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
 			testCutFormat2();
 		}
-		System.out.println("curFormat2 - " + sw);
+		System.out.println("cutFormat2 - " + sw);
 
 		sw.restart();
 		for (int i = 0; i < c; i++) {
