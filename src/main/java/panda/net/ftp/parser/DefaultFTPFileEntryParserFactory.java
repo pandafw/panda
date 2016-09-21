@@ -8,7 +8,7 @@ import panda.net.ftp.FTPFileEntryParser;
 
 /**
  * This is the default implementation of the FTPFileEntryParserFactory interface. This is the
- * implementation that will be used by org.apache.commons.net.ftp.FTPClient.listFiles() if no other
+ * implementation that will be used by panda.ftp.FTPClient.listFiles() if no other
  * implementation has been specified.
  * 
  * @see panda.net.ftp.FTPClient#listFiles
@@ -78,7 +78,7 @@ public class DefaultFTPFileEntryParserFactory implements FTPFileEntryParserFacto
 				}
 				catch (ClassCastException e) {
 					throw new ParserInitializationException(parserClass.getName()
-							+ " does not implement the interface " + "org.apache.commons.net.ftp.FTPFileEntryParser.",
+							+ " does not implement the interface " + "panda.net.ftp.FTPFileEntryParser.",
 						e);
 				}
 				catch (Exception e) {

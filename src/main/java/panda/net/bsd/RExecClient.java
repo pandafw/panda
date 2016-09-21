@@ -17,7 +17,7 @@ import panda.net.io.SocketInputStream;
  * However, rexec() can be very useful for performing administrative tasks
  * on a network behind a firewall.
  * <p>
- * As with virtually all of the client classes in org.apache.commons.net, this
+ * As with virtually all of the client classes in panda.net, this
  * class derives from SocketClient, inheriting its connection methods.
  * The way to use RExecClient is to first connect
  * to the server, call the {@link #rexec  rexec()} method, and then

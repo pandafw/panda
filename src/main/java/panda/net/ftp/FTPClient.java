@@ -160,7 +160,7 @@ import panda.net.io.Util;
  * </pre>
  * <p>
  * Paged access, using a parser not accessible by auto-detect. The class defined in the first
- * parameter of initateListParsing should be derived from org.apache.commons.net.FTPFileEntryParser:
+ * parameter of initateListParsing should be derived from panda.net.FTPFileEntryParser:
  * 
  * <pre>
  * FTPClient f = new FTPClient();
@@ -251,13 +251,13 @@ public class FTPClient extends FTP implements Configurable {
 	 * The system property ({@value} ) which can be used to override the system type.<br>
 	 * If defined, the value will be used to create any automatically created parsers.
 	 */
-	public static final String FTP_SYSTEM_TYPE = "org.apache.commons.net.ftp.systemType";
+	public static final String FTP_SYSTEM_TYPE = FTPClient.class.getPackage().getName() + ".systemType";
 
 	/**
 	 * The system property ({@value} ) which can be used as the default system type.<br>
 	 * If defined, the value will be used if the SYST command fails.
 	 */
-	public static final String FTP_SYSTEM_TYPE_DEFAULT = "org.apache.commons.net.ftp.systemType.default";
+	public static final String FTP_SYSTEM_TYPE_DEFAULT = FTPClient.class.getPackage().getName() + ".systemType.default";
 
 	/**
 	 * The name of an optional systemType properties file ({@value} ), which is loaded using
@@ -269,7 +269,7 @@ public class FTPClient extends FTP implements Configurable {
 	 * 
 	 * <pre>
 	 * Plan 9=Unix
-	 * OS410=org.apache.commons.net.ftp.parser.OS400FTPEntryParser
+	 * OS410=panda.ftp.parser.OS400FTPEntryParser
 	 * </pre>
 	 */
 	public static final String SYSTEM_TYPE_PROPERTIES = "/systemType.properties";
@@ -2554,7 +2554,7 @@ public class FTPClient extends FTP implements Configurable {
 	 *                parameter cannot be resolved by the selected parser factory. In the
 	 *                DefaultFTPEntryParserFactory, this will happen when parserKey is neither the
 	 *                fully qualified class name of a class implementing the interface
-	 *                org.apache.commons.net.ftp.FTPFileEntryParser nor a string containing one of
+	 *                panda.net.ftp.FTPFileEntryParser nor a string containing one of
 	 *                the recognized keys mapping to such a parser or if class loader security
 	 *                issues prevent its being loaded.
 	 * @see panda.net.ftp.parser.DefaultFTPFileEntryParserFactory
@@ -2595,7 +2595,7 @@ public class FTPClient extends FTP implements Configurable {
 	 *                parameter cannot be resolved by the selected parser factory. In the
 	 *                DefaultFTPEntryParserFactory, this will happen when parserKey is neither the
 	 *                fully qualified class name of a class implementing the interface
-	 *                org.apache.commons.net.ftp.FTPFileEntryParser nor a string containing one of
+	 *                panda.net.ftp.FTPFileEntryParser nor a string containing one of
 	 *                the recognized keys mapping to such a parser or if class loader security
 	 *                issues prevent its being loaded.
 	 * @see panda.net.ftp.parser.DefaultFTPFileEntryParserFactory
@@ -2645,7 +2645,7 @@ public class FTPClient extends FTP implements Configurable {
 	 *                parameter cannot be resolved by the selected parser factory. In the
 	 *                DefaultFTPEntryParserFactory, this will happen when parserKey is neither the
 	 *                fully qualified class name of a class implementing the interface
-	 *                org.apache.commons.net.ftp.FTPFileEntryParser nor a string containing one of
+	 *                panda.net.ftp.FTPFileEntryParser nor a string containing one of
 	 *                the recognized keys mapping to such a parser or if class loader security
 	 *                issues prevent its being loaded.
 	 * @see panda.net.ftp.parser.DefaultFTPFileEntryParserFactory
@@ -2681,7 +2681,7 @@ public class FTPClient extends FTP implements Configurable {
 	 *                parameter cannot be resolved by the selected parser factory. In the
 	 *                DefaultFTPEntryParserFactory, this will happen when parserKey is neither the
 	 *                fully qualified class name of a class implementing the interface
-	 *                org.apache.commons.net.ftp.FTPFileEntryParser nor a string containing one of
+	 *                panda.net.ftp.FTPFileEntryParser nor a string containing one of
 	 *                the recognized keys mapping to such a parser or if class loader security
 	 *                issues prevent its being loaded.
 	 * @see panda.net.ftp.parser.DefaultFTPFileEntryParserFactory
@@ -2803,7 +2803,7 @@ public class FTPClient extends FTP implements Configurable {
 	 *                parameter cannot be resolved by the selected parser factory. In the
 	 *                DefaultFTPEntryParserFactory, this will happen when parserKey is neither the
 	 *                fully qualified class name of a class implementing the interface
-	 *                org.apache.commons.net.ftp.FTPFileEntryParser nor a string containing one of
+	 *                panda.net.ftp.FTPFileEntryParser nor a string containing one of
 	 *                the recognized keys mapping to such a parser or if class loader security
 	 *                issues prevent its being loaded.
 	 * @see FTPListParseEngine

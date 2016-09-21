@@ -20,7 +20,7 @@ import panda.net.io.CRLFLineReader;
 
 /***
  * FTP provides the basic the functionality necessary to implement your own FTP client. It extends
- * org.apache.commons.net.SocketClient since extending TelnetClient was causing unwanted behavior
+ * panda.net.SocketClient since extending TelnetClient was causing unwanted behavior
  * (like connections that did not time out properly).
  * <p>
  * To derive the full benefits of the FTP class requires some knowledge of the FTP protocol defined

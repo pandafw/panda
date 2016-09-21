@@ -38,7 +38,7 @@ public abstract class CompositeFTPParseTestFramework extends FTPParseTestFramewo
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.FTPParseTestFramework#testGoodListing()
+	 * @see panda.net.ftp.parser.FTPParseTestFramework#testGoodListing()
 	 */
 	public void testConsistentListing() throws Exception {
 		String goodsamples[][] = getGoodListings();
@@ -56,7 +56,7 @@ public abstract class CompositeFTPParseTestFramework extends FTPParseTestFramewo
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.FTPParseTestFramework#testGoodListing()
+	 * @see panda.net.ftp.parser.FTPParseTestFramework#testGoodListing()
 	 */
 	@Override
 	public void testBadListing() throws Exception {

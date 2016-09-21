@@ -32,7 +32,7 @@ import java.util.List;
  * FTPClient f = FTPClient();
  * f.connect(server);
  * f.login(username, password);
- * FTPFile[] files = f.listFiles(&quot;org.apache.commons.net.ftp.parser.EnterpriseUnixFTPFileEntryParser&quot;, &quot;.&quot;);
+ * FTPFile[] files = f.listFiles(&quot;panda.net.ftp.parser.EnterpriseUnixFTPFileEntryParser&quot;, &quot;.&quot;);
  * </pre>
  * 
  * The third example uses the <code>FTPClient.listFiles()</code> API to pull a single file listing

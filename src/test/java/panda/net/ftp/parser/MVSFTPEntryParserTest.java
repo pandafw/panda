@@ -73,7 +73,7 @@ public class MVSFTPEntryParserTest extends FTPParseTestFramework {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.CompositeFTPParseTestFramework#getBadListings()
+	 * @see panda.net.ftp.parser.CompositeFTPParseTestFramework#getBadListings()
 	 */
 	@Override
 	protected String[] getBadListing() {
@@ -82,7 +82,7 @@ public class MVSFTPEntryParserTest extends FTPParseTestFramework {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.CompositeFTPParseTestFramework#getGoodListings()
+	 * @see panda.net.ftp.parser.CompositeFTPParseTestFramework#getGoodListings()
 	 */
 	@Override
 	protected String[] getGoodListing() {
@@ -110,7 +110,7 @@ public class MVSFTPEntryParserTest extends FTPParseTestFramework {
 	/*
 	 * note the testGoodListing has to be the first test invoked, because some FTPFile entries are
 	 * saved for the later tests (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.FTPParseTestFramework#testGoodListing()
+	 * @see panda.net.ftp.parser.FTPParseTestFramework#testGoodListing()
 	 */
 	@Override
 	public void testGoodListing() throws Exception {
@@ -180,7 +180,7 @@ public class MVSFTPEntryParserTest extends FTPParseTestFramework {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.apache.commons.net.ftp.parser.FTPParseTestFramework#testParseFieldsOnFile()
+	 * @see panda.net.ftp.parser.FTPParseTestFramework#testParseFieldsOnFile()
 	 */
 	@Override
 	public void testParseFieldsOnFile() throws Exception {

@@ -11,12 +11,10 @@ import panda.net.DatagramSocketClient;
  * described in RFC 1305 as well as the Simple Network Time Protocol (SNTP) in RFC-2030. To use the
  * class, merely open a local datagram socket with <a href="#open"> open </a> and call <a
  * href="#getTime"> getTime </a> to retrieve the time. Then call <a
- * href="org.apache.commons.net.DatagramSocketClient.html#close"> close </a> to close the connection
+ * href="panda.net.DatagramSocketClient.html#close"> close </a> to close the connection
  * properly. Successive calls to <a href="#getTime"> getTime </a> are permitted without
  * re-establishing a connection. That is because UDP is a connectionless protocol and the Network
  * Time Protocol is stateless.
- * 
- * @version $Revision: 1570303 $
  ***/
 
 public final class NTPUDPClient extends DatagramSocketClient {

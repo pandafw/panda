@@ -9,7 +9,7 @@ import java.io.IOException;
  * machine from a trusted host, sometimes without issuing a password. The trust relationship is the
  * same as described in the documentation for {@link panda.net.bsd.RCommandClient}.
  * <p>
- * As with virtually all of the client classes in org.apache.commons.net, this class derives from
+ * As with virtually all of the client classes in panda.net, this class derives from
  * SocketClient. But it relies on the connection methods defined in RcommandClient which ensure that
  * the local Socket will originate from an acceptable rshell port. The way to use RLoginClient is to
  * first connect to the server, call the {@link #rlogin rlogin() } method, and then fetch the

@@ -30,7 +30,7 @@ public class POP3ConstructorTest extends TestCase {
 
 	/*
 	 * This test will ensure that the constants are not inadvertently changed. If the constants are
-	 * changed in org.apache.commons.net.pop3 for some reason, this test will have to be updated.
+	 * changed in panda.net.pop3 for some reason, this test will have to be updated.
 	 */
 	public void testConstants() {
 		// From POP3

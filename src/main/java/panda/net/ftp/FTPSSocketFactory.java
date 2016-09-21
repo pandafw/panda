@@ -9,7 +9,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 
 /**
- * Implementation of org.apache.commons.net.SocketFactory
+ * Implementation of panda.net.SocketFactory
  */
 public class FTPSSocketFactory extends SocketFactory {
 

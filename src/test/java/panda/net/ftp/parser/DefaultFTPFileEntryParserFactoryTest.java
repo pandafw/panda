@@ -77,12 +77,12 @@ public class DefaultFTPFileEntryParserFactoryTest extends TestCase {
 			assertNull(pie.getCause());
 		}
 
-		parser = factory.createFileEntryParser("org.apache.commons.net.ftp.parser.OS2FTPEntryParser");
+		parser = factory.createFileEntryParser("panda.net.ftp.parser.OS2FTPEntryParser");
 		assertTrue(parser instanceof OS2FTPEntryParser);
 
 		try {
 			parser = factory
-				.createFileEntryParser("org.apache.commons.net.ftp.parser.DefaultFTPFileEntryParserFactory");
+				.createFileEntryParser("panda.net.ftp.parser.DefaultFTPFileEntryParserFactory");
 			fail("Exception should have been thrown. \"DefaultFTPFileEntryParserFactory\" does not implement FTPFileEntryParser");
 		}
 		catch (ParserInitializationException pie) {
@@ -92,7 +92,7 @@ public class DefaultFTPFileEntryParserFactoryTest extends TestCase {
 
 		try {
 			// Class exists, but is an interface
-			factory.createFileEntryParser("org.apache.commons.net.ftp.parser.FTPFileEntryParserFactory");
+			factory.createFileEntryParser("panda.net.ftp.parser.FTPFileEntryParserFactory");
 			fail("ParserInitializationException should have been thrown.");
 		}
 		catch (ParserInitializationException pie) {
@@ -101,7 +101,7 @@ public class DefaultFTPFileEntryParserFactoryTest extends TestCase {
 		}
 		try {
 			// Class exists, but is abstract
-			factory.createFileEntryParser("org.apache.commons.net.ftp.FTPFileEntryParserImpl");
+			factory.createFileEntryParser("panda.net.ftp.FTPFileEntryParserImpl");
 			fail("ParserInitializationException should have been thrown.");
 		}
 		catch (ParserInitializationException pie) {

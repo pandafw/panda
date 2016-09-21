@@ -27,7 +27,7 @@ import panda.net.io.SocketInputStream;
  * However, there is no such restriction on Windows95 and some other systems. The security risks are
  * obvious. However, when carefully used, rcmd() can be very useful when used behind a firewall.
  * <p>
- * As with virtually all of the client classes in org.apache.commons.net, this class derives from
+ * As with virtually all of the client classes in panda.net, this class derives from
  * SocketClient. But it overrides most of its connection methods so that the local Socket will
  * originate from an acceptable rshell port. The way to use RCommandClient is to first connect to
  * the server, call the {@link #rcommand rcommand() } method, and then fetch the connection's input,
