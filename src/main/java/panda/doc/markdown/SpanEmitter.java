@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * An interface for emitting span elements. Currently only used for special links.
- * 
- * @author René Jeschke (rene_jeschke@yahoo.de)
  */
 public interface SpanEmitter {
 	/**

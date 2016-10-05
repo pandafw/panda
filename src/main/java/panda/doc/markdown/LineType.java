@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * Line type enumeration.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 enum LineType {
 	/** Empty line. */
@@ -26,6 +24,8 @@ enum LineType {
 	FENCED_CODE,
 	/** Table */
 	TABLE,
+	/** Table another */
+	TABLEB,
 	/** plugin block */
 	PLUGIN
 }

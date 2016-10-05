@@ -4,8 +4,6 @@ import panda.doc.html.HTML;
 
 /**
  * Utilities.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 class Utils {
 	/** Random number generator value. */

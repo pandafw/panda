@@ -1,6 +1,5 @@
 package panda.doc.markdown;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,14 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import panda.doc.html.HTML;
-import panda.lang.Exceptions;
-import panda.lang.StringEscapes;
 import panda.lang.Strings;
 
 /**
  * Emitter class responsible for generating HTML output.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 class Emitter {
 	/** Link references. */
@@ -166,6 +161,9 @@ class Emitter {
 		case TABLE:
 			this.emitTableLines(out, block.lines, block.meta);
 			break;
+		case TABLEB:
+			this.emitTableBLines(out, block.lines, block.meta);
+			break;
 		case PLUGIN:
 			this.emitPluginLines(out, block.lines, block.meta);
 			break;
@@ -173,8 +171,6 @@ class Emitter {
 			this.emitRawLines(out, block.lines);
 			break;
 		case PARAGRAPH:
-			this.emitMarkedLines(out, block.lines);
-			break;
 		default:
 			this.emitMarkedLines(out, block.lines);
 			break;
@@ -301,7 +297,7 @@ class Emitter {
 				out.append("<abbr title=\"");
 				Utils.appendValue(out, comment);
 				out.append("\">");
-				this.recursiveEmitLine(out, name, 0, MarkToken.NONE);
+				this.recursiveEmitLine(out, name, 0, name.length(), MarkToken.NONE);
 				out.append("</abbr>");
 			}
 			else {
@@ -315,7 +311,7 @@ class Emitter {
 					out.append('"');
 				}
 				out.append('>');
-				this.recursiveEmitLine(out, name, 0, MarkToken.NONE);
+				this.recursiveEmitLine(out, name, 0, name.length(), MarkToken.NONE);
 				this.config.decorator.closeLink(out);
 			}
 		}
@@ -459,14 +455,15 @@ class Emitter {
 	 * @param out The StringBuilder to write to.
 	 * @param in Input String.
 	 * @param start Start position.
+	 * @param end End position.
 	 * @param token The matching Token (for e.g. '*')
 	 * @return The position of the matching Token or -1 if token was NONE or no Token could be
 	 *         found.
 	 */
-	private int recursiveEmitLine(final StringBuilder out, final String in, int start, MarkToken token) {
+	private int recursiveEmitLine(final StringBuilder out, final String in, final int start, final int end, MarkToken token) {
 		int pos = start, a, b;
 		final StringBuilder temp = new StringBuilder();
-		while (pos < in.length()) {
+		while (pos < end) {
 			final MarkToken mt = this.getToken(in, pos);
 			if (token != MarkToken.NONE
 					&& (mt == token || token == MarkToken.EM_STAR && mt == MarkToken.STRONG_STAR || token == MarkToken.EM_UNDERSCORE
@@ -489,7 +486,7 @@ class Emitter {
 			case EM_STAR:
 			case EM_UNDERSCORE:
 				temp.setLength(0);
-				b = this.recursiveEmitLine(temp, in, pos + 1, mt);
+				b = this.recursiveEmitLine(temp, in, pos + 1, end, mt);
 				if (b > 0) {
 					this.config.decorator.openEmphasis(out);
 					out.append(temp);
@@ -503,7 +500,7 @@ class Emitter {
 			case STRONG_STAR:
 			case STRONG_UNDERSCORE:
 				temp.setLength(0);
-				b = this.recursiveEmitLine(temp, in, pos + 2, mt);
+				b = this.recursiveEmitLine(temp, in, pos + 2, end, mt);
 				if (b > 0) {
 					this.config.decorator.openStrong(out);
 					out.append(temp);
@@ -516,7 +513,7 @@ class Emitter {
 				break;
 			case STRIKE:
 				temp.setLength(0);
-				b = this.recursiveEmitLine(temp, in, pos + 2, mt);
+				b = this.recursiveEmitLine(temp, in, pos + 2, end, mt);
 				if (b > 0) {
 					this.config.decorator.openStrike(out);
 					out.append(temp);
@@ -529,7 +526,7 @@ class Emitter {
 				break;
 			case SUPER:
 				temp.setLength(0);
-				b = this.recursiveEmitLine(temp, in, pos + 1, mt);
+				b = this.recursiveEmitLine(temp, in, pos + 1, end, mt);
 				if (b > 0) {
 					this.config.decorator.openSuper(out);
 					out.append(temp);
@@ -584,7 +581,7 @@ class Emitter {
 				break;
 			case X_LINK_OPEN:
 				temp.setLength(0);
-				b = this.recursiveEmitLine(temp, in, pos + 2, MarkToken.X_LINK_CLOSE);
+				b = this.recursiveEmitLine(temp, in, pos + 2, end, MarkToken.X_LINK_CLOSE);
 				if (b > 0 && this.config.specialLinkEmitter != null) {
 					this.config.specialLinkEmitter.emitSpan(out, temp.toString());
 					pos = b + 1;
@@ -793,7 +790,7 @@ class Emitter {
 			line = line.next;
 		}
 
-		this.recursiveEmitLine(out, in.toString(), 0, MarkToken.NONE);
+		this.recursiveEmitLine(out, in.toString(), 0, in.length(), MarkToken.NONE);
 	}
 
 	/**
@@ -895,6 +892,90 @@ class Emitter {
 	 * @param meta Meta information.
 	 */
 	protected void emitTableLines(final StringBuilder out, final Line lines, final String meta) {
+		if (lines == null || lines.next == null) {
+			return;
+		}
+		
+
+		String[] aligns = splitTableLine(lines.next);
+		int cols = aligns.length;
+		for (int i = 0; i < cols; i++) {
+			String v = Strings.strip(aligns[i]);
+			String a = null;
+			if (v.length() > 1) {
+				if (v.charAt(v.length() - 1) == ':') {
+					a =  (v.charAt(0) == ':' ? "center" : "right");
+				}
+			}
+			aligns[i] = a;
+		}
+		
+
+		out.append("<table>\n");
+		out.append("<thead>\n");
+		String[] tds = splitTableLine(lines);
+		renderTableLine(out, true, tds, aligns);
+		out.append("</thead>\n");
+
+		out.append("<tbody>\n");
+		for (Line line = lines.next.next; line != null; line = line.next) {
+			if (line.isEmpty) {
+				continue;
+			}
+			
+			tds = splitTableLine(line);
+			renderTableLine(out, false, tds, aligns);
+		}
+		out.append("</tbody>\n");
+
+		out.append("</table>\n");
+	}
+
+	private void renderTableLine(StringBuilder out, boolean th, String[] tds, String[] aligns) {
+		out.append("<tr>");
+		for (int i = 0; i < tds.length; i++) {
+			String v = Strings.strip(tds[i]);
+			String a = i < aligns.length ? aligns[i] : null;
+
+			out.append(th ? "<th" : "<td");
+			if (a != null) {
+				out.append(" align=\"").append(a).append("\"");
+			}
+			out.append(">");
+			this.recursiveEmitLine(out, v, 0, v.length(), MarkToken.NONE);
+			out.append(th ? "</th>" : "</td>");
+		}
+
+		int n = tds.length;
+		while (n < aligns.length) {
+			out.append(th ? "<th></th>" : "<td></td>");
+			n++;
+		}
+		out.append("</tr>\n");
+	}
+
+	private String[] splitTableLine(final Line line) {
+		int l = line.value.length();
+		int s = line.leading;
+		while (s < l && line.value.charAt(s) == '|') {
+			s++;
+		}
+		int e = l - line.trailing - 1;
+		while (e >= 0 && line.value.charAt(e) == '|') {
+			e--;
+		}
+
+		return Strings.split(line.value.substring(s, e + 1), '|');
+	}
+	
+	/**
+	 * interprets a table block into the StringBuilder.
+	 * 
+	 * @param out The StringBuilder to write to.
+	 * @param lines The line to write.
+	 * @param meta Meta information.
+	 */
+	protected void emitTableBLines(final StringBuilder out, final Line lines, final String meta) {
 		boolean thead = false;
 		boolean tfoot = false;
 		int cols = 0;
@@ -917,12 +998,7 @@ class Emitter {
 		}
 
 		out.append("<table>\n");
-		if (thead) {
-			out.append("<thead>\n");
-		}
-		else {
-			out.append("<tbody>\n");
-		}
+		out.append(thead ? "<thead>\n" : "<tbody>\n");
 
 		line = lines;
 		for (line = lines; line != null; line = line.next) {
@@ -941,43 +1017,33 @@ class Emitter {
 			}
 
 			out.append("<tr>");
-			try {
-				int n = 0;
-				int s = line.leading, e = line.value.length() - line.trailing;
-				while (s < e) {
-					out.append("<td>");
-					int d = line.value.indexOf("    ", s);
-					if (d > 0) {
-						StringEscapes.escapeHtml(line.value, s, d, out);
-						s = d;
-						while (s < e && line.value.charAt(s) == ' ') {
-							s++;
-						}
+			int n = 0;
+			int s = line.leading, e = line.value.length() - line.trailing;
+			while (s < e) {
+				out.append("<td>");
+				int d = line.value.indexOf("    ", s);
+				if (d > 0) {
+					this.recursiveEmitLine(out, line.value, s, d, MarkToken.NONE);
+					s = d;
+					while (s < e && line.value.charAt(s) == ' ') {
+						s++;
 					}
-					else {
-						StringEscapes.escapeHtml(line.value, s, e, out);
-						s = e;
-					}
-					out.append("</td>");
-					n++;
 				}
-				while (n < cols) {
-					out.append("<td></td>");
-					n++;
+				else {
+					this.recursiveEmitLine(out, line.value, s, e, MarkToken.NONE);
+					s = e;
 				}
-				out.append("</tr>\n");
+				out.append("</td>");
+				n++;
 			}
-			catch (IOException ex) {
-				throw Exceptions.wrapThrow(ex);
+			while (n < cols) {
+				out.append("<td></td>");
+				n++;
 			}
+			out.append("</tr>\n");
 		}
 
-		if (tfoot) {
-			out.append("</tfoot>\n");
-		}
-		else {
-			out.append("<tbody>\n");
-		}
+		out.append(tfoot ? "</tfoot>\n" : "<tbody>\n");
 		out.append("</table>\n");
 	}
 

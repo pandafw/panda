@@ -20,8 +20,6 @@ import panda.io.stream.CharSequenceReader;
  * <code>String result = Processor.process("This is ***TXTMARK***");
  * </code>
  * </pre>
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public class Processor {
 	/** The reader. */
@@ -628,8 +626,10 @@ public class Processor {
 					final LineType t = line.getLineType(this.useExtensions);
 					if ((listMode || this.useExtensions) && (t == LineType.OLIST || t == LineType.ULIST))
 						break;
-					if (this.useExtensions && (t == LineType.CODE || t == LineType.FENCED_CODE 
-							|| t == LineType.TABLE || t == LineType.PLUGIN))
+					if (this.useExtensions 
+							&& (t == LineType.CODE || t == LineType.FENCED_CODE 
+								|| t == LineType.TABLE || t == LineType.TABLEB 
+								|| t == LineType.PLUGIN))
 						break;
 					if (t == LineType.HEADLINE || t == LineType.HEADLINE1 || t == LineType.HEADLINE2
 							|| t == LineType.HR || t == LineType.BQUOTE || t == LineType.XML)
@@ -690,8 +690,17 @@ public class Processor {
 				root.removeLeadingEmptyLines();
 				line = root.lines;
 				break;
-			case FENCED_CODE:
 			case TABLE:
+				while (line != null && !line.isEmpty) {
+					line = line.next;
+				}
+				block = root.split(line != null ? line.previous : root.lineTail);
+				block.type = BlockType.TABLE;
+				block.removeSurroundingEmptyLines();
+				line = root.lines;
+				break;
+			case FENCED_CODE:
+			case TABLEB:
 			case PLUGIN:
 				line = line.next;
 				while (line != null) {
@@ -705,8 +714,8 @@ public class Processor {
 					line = line.next;
 				block = root.split(line != null ? line.previous : root.lineTail);
 				switch (type) {
-				case TABLE:
-					block.type = BlockType.TABLE;
+				case TABLEB:
+					block.type = BlockType.TABLEB;
 					break;
 				case PLUGIN:
 					block.type = BlockType.PLUGIN;

@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * Block type enum.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 enum BlockType {
 	/** Unspecified. Used for root block and list items without paragraphs. */
@@ -28,8 +26,10 @@ enum BlockType {
 	UNORDERED_LIST,
 	/** A XML block. */
 	XML,
-	/** A Table block. */
+	/** A Table block (https://michelf.ca/projects/php-markdown/extra/#table). */
 	TABLE,
+	/** A Table block. */
+	TABLEB,
 	/** A plugin block. */
 	PLUGIN
 }

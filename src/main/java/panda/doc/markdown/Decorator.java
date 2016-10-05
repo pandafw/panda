@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * Decorator interface.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public interface Decorator {
 	/**

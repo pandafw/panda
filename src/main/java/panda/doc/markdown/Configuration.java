@@ -7,8 +7,6 @@ import panda.doc.markdown.html.DefaultDecorator;
 
 /**
  * Txtmark configuration.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public class Configuration {
 	final boolean safeMode;

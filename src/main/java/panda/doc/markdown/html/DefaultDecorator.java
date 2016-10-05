@@ -19,8 +19,6 @@ import panda.doc.markdown.Decorator;
  * }
  * </code>
  * </pre>
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public class DefaultDecorator implements Decorator {
 	/** Constructor. */

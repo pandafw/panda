@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * This class represents a block of lines.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 class Block {
 	/** This block's type. */

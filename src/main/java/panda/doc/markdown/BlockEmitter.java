@@ -36,8 +36,6 @@ import java.util.List;
  * }
  * </code>
  * </pre>
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 public interface BlockEmitter {
 	/**

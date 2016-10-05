@@ -42,9 +42,17 @@ Ivy Settings
         <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml" />
     </ivysettings>
 
+
 Change Log
----------
+-----------
 
 ### 1.0.0 (Released: 2013-11-07)
  - Considered stable
+
+
+
+OSS
+-----------
+ - https://github.com/rjeschke/txtmark
+ - https://code.google.com/archive/p/markdown4j
 

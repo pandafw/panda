@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * A markdown link reference.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 class LinkRef {
 	/** The link. */

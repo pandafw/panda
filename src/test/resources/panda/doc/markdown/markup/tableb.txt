@@ -1,0 +1,101 @@
+# Test 1 (tbody)
+^^^
+11    12    13
+21    22    23
+31    32
+^^^
+
+# Result 1
+<table>
+<tbody>
+<tr><td>11</td><td>12</td><td>13</td></tr>
+<tr><td>21</td><td>22</td><td>23</td></tr>
+<tr><td>31</td><td>32</td></tr>
+<tbody>
+</table>
+
+
+# Test 2 (thead)
+^^^
+11    12    13
+----  --    --
+21    22    23
+31    32
+^^^
+
+# Result 2
+<table>
+<thead>
+<tr><td>11</td><td>12</td><td>13</td></tr>
+</thead>
+<tbody>
+<tr><td>21</td><td>22</td><td>23</td></tr>
+<tr><td>31</td><td>32</td><td></td></tr>
+<tbody>
+</table>
+
+# Test 3 (tfoot)
+^^^
+11    12    13
+21    22    23
+~~~~  ~~    ~~
+31    32
+^^^
+
+# Result 3
+<table>
+<tbody>
+<tr><td>11</td><td>12</td><td>13</td></tr>
+<tr><td>21</td><td>22</td><td>23</td></tr>
+</tbody>
+<tfoot>
+<tr><td>31</td><td>32</td><td></td></tr>
+</tfoot>
+</table>
+
+
+# Test 4 (tfull)
+^^^
+11    12    13
+----  --    --
+21    22    23
+~~~~  ~~    ~~
+31    32
+^^^
+
+# Result 4
+<table>
+<thead>
+<tr><td>11</td><td>12</td><td>13</td></tr>
+</thead>
+<tbody>
+<tr><td>21</td><td>22</td><td>23</td></tr>
+</tbody>
+<tfoot>
+<tr><td>31</td><td>32</td><td></td></tr>
+</tfoot>
+</table>
+
+
+# Test 5 (tmark)
+^^^
+11    12    13
+----  --    --
+*21*    **22**    23
+~~~~  ~~    ~~
+_31_    __32__
+^^^
+
+# Result 5
+<table>
+<thead>
+<tr><td>11</td><td>12</td><td>13</td></tr>
+</thead>
+<tbody>
+<tr><td><em>21</em></td><td><strong>22</strong></td><td>23</td></tr>
+</tbody>
+<tfoot>
+<tr><td><em>31</em></td><td><strong>32</strong></td><td></td></tr>
+</tfoot>
+</table>
+

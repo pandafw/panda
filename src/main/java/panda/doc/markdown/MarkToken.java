@@ -2,8 +2,6 @@ package panda.doc.markdown;
 
 /**
  * Markdown token enumeration.
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 enum MarkToken {
 	/** No token. */

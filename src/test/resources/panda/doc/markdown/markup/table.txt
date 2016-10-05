@@ -1,78 +1,90 @@
-# Test 1 (tbody)
-^^^
-11    12    13
-21    22    23
-31    32
-^^^
+# Test 1 (normal)
+11 | 12 | 13
+-- | -- | --
+21 | 22 | 23
+31 | 32 |
 
 # Result 1
 <table>
+<thead>
+<tr><th>11</th><th>12</th><th>13</th></tr>
+</thead>
 <tbody>
-<tr><td>11</td><td>12</td><td>13</td></tr>
 <tr><td>21</td><td>22</td><td>23</td></tr>
-<tr><td>31</td><td>32</td></tr>
-<tbody>
+<tr><td>31</td><td>32</td><td></td></tr>
+</tbody>
 </table>
 
 
-# Test 2 (thead)
-^^^
-11    12    13
-----  --    --
-21    22    23
-31    32
-^^^
+# Test 2 (right)
+11 | 12 | 13
+--: | -- | --
+21 | 22 | 23
+31 | 32 |
 
 # Result 2
 <table>
 <thead>
-<tr><td>11</td><td>12</td><td>13</td></tr>
+<tr><th align="right">11</th><th>12</th><th>13</th></tr>
 </thead>
 <tbody>
-<tr><td>21</td><td>22</td><td>23</td></tr>
-<tr><td>31</td><td>32</td><td></td></tr>
-<tbody>
+<tr><td align="right">21</td><td>22</td><td>23</td></tr>
+<tr><td align="right">31</td><td>32</td><td></td></tr>
+</tbody>
 </table>
 
-# Test 3 (tfoot)
-^^^
-11    12    13
-21    22    23
-~~~~  ~~    ~~
-31    32
-^^^
+# Test 3 (center)
+11 | 12 | 13
+:--: | -- | --
+21 | 22 | 23
+31 | 32 |
 
 # Result 3
 <table>
+<thead>
+<tr><th align="center">11</th><th>12</th><th>13</th></tr>
+</thead>
 <tbody>
-<tr><td>11</td><td>12</td><td>13</td></tr>
-<tr><td>21</td><td>22</td><td>23</td></tr>
+<tr><td align="center">21</td><td>22</td><td>23</td></tr>
+<tr><td align="center">31</td><td>32</td><td></td></tr>
 </tbody>
-<tfoot>
-<tr><td>31</td><td>32</td><td></td></tr>
-</tfoot>
 </table>
 
 
-# Test 4 (tfull)
-^^^
-11    12    13
-----  --    --
-21    22    23
-~~~~  ~~    ~~
-31    32
-^^^
+# Test 4 (tmark)
+11 | 12 | 13
+-- | -- | --
+*21* | **22** | 23
+_31_ | __32__ |
 
 # Result 4
 <table>
 <thead>
-<tr><td>11</td><td>12</td><td>13</td></tr>
+<tr><th>11</th><th>12</th><th>13</th></tr>
+</thead>
+<tbody>
+<tr><td><em>21</em></td><td><strong>22</strong></td><td>23</td></tr>
+<tr><td><em>31</em></td><td><strong>32</strong></td><td></td></tr>
+</tbody>
+</table>
+
+
+# Test 5 (full)
+| 11 | 12 | 13 | 
+| -- | -- | -- | 
+| 21 | 22 | 23 | 
+| 31 | 32 | 
+
+This a line.
+
+# Result 5
+<table>
+<thead>
+<tr><th>11</th><th>12</th><th>13</th></tr>
 </thead>
 <tbody>
 <tr><td>21</td><td>22</td><td>23</td></tr>
-</tbody>
-<tfoot>
 <tr><td>31</td><td>32</td><td></td></tr>
-</tfoot>
+</tbody>
 </table>
-
+<p>This a line.</p>

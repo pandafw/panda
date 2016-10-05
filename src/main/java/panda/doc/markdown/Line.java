@@ -9,8 +9,6 @@ import java.util.LinkedList;
  * <p>
  * It also provides methods for processing and analyzing a line.
  * </p>
- * 
- * @author René Jeschke <rene_jeschke@yahoo.de>
  */
 class Line {
 	/** Current cursor position. */
@@ -210,7 +208,7 @@ class Line {
 					return LineType.FENCED_CODE;
 
 				if (this.value.startsWith("^^^"))
-					return LineType.TABLE;
+					return LineType.TABLEB;
 
 				if (this.value.startsWith("%%%"))
 					return LineType.PLUGIN;
@@ -251,11 +249,52 @@ class Line {
 				return LineType.HEADLINE2;
 			if ((this.next.value.charAt(0) == '=') && this.next.isAllChars('=', 2))
 				return LineType.HEADLINE1;
+			if (extendedMode
+					&& this.next.next != null && !this.next.next.isEmpty
+					&& this.isTableLine(this, false)
+					&& this.isTableLine(this.next, true) 
+					&& this.isTableLine(this.next.next, false)) {
+				return LineType.TABLE;
+			}
 		}
 
 		return LineType.OTHER;
 	}
 
+	private boolean isTableLine(Line line, boolean sep) {
+		if (line.leading > 3) {
+			return false;
+		}
+		
+		int l = line.value.length();
+		int s = line.leading;
+		while (s < l && line.value.charAt(s) == '|') {
+			s++;
+		}
+		while (s < l && line.value.charAt(s) == ' ') {
+			s++;
+		}
+		
+		int e = l - line.trailing - 1;
+		while (e >= 0 && line.value.charAt(e) == '|') {
+			e--;
+		}
+		while (e >= 0 && line.value.charAt(e) == ' ') {
+			e--;
+		}
+
+		if (e - s < 3) {
+			return false;
+		}
+		
+		if (sep && line.value.charAt(s) != '-' && line.value.charAt(s) != ':') {
+			return false;
+		}
+		
+		int p = line.value.indexOf('|', s);
+		return (p > s && p < e);
+	}
+	
 	/**
 	 * Reads an XML comment. Sets <code>xmlEndLine</code>.
 	 * 
