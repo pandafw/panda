@@ -1,8 +1,3 @@
-/** bootstrap modify */
-.text-warning {
-	/*color: #8a6d3b;*/
-	color: #ffa500;
-}
 .p-alert {
 	margin: 5px 0 15px 0;
 }
@@ -40,7 +35,42 @@
 .p-field-errors-caret {
 	font-size: 80%;
 }
-.p-required {
+/** bootstrap modify */
+.text-warning {
+	/*color: #8a6d3b;*/
+	color: #ffa500;
+}
+
+/** bootstrap extension */
+
+/*-------------------------------------------*/
+/*      Carousel Fade Transition
+/*-------------------------------------------*/
+.carousel-fade .carousel-inner .item {
+  -webkit-transition-property: opacity;
+  transition-property: opacity;
+}
+.carousel-fade .carousel-inner .item,
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+  opacity: 0;
+}
+.carousel-fade .carousel-inner .active,
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right {
+  opacity: 1;
+}
+.carousel-fade .carousel-inner .next,
+.carousel-fade .carousel-inner .prev,
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+  left: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.carousel-fade .carousel-control {
+  z-index: 2;
+}.p-required {
 	color: #FF0000;
 }
 .p-descrip {
