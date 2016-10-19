@@ -1,13 +1,31 @@
 (function($) {
 	function focusForm() {
-		var $i = $('form[initfocus="true"]').eq(0);
-		if ($i.length > 0) {
-			$i.attr('initfocus', 'focus');
-			$i = $i.find('input,select,textarea,button');
-			$i = $i.not(':hidden,:disabled,[readonly]').eq(0);
-			$i.focus();
-			$('body').scrollTop(0).scrollLeft(0);
-		}
+		var f = false;
+		$('form[focusme]').each(function() {
+			var $i = $(this);
+			if (f) {
+				$i.removeAttr('focusme');
+				return;
+			}
+
+			var a = $i.attr('focusme');
+			$i.removeAttr('focusme');
+
+			var $a = null;
+			if (a == 'true') {
+				$a = $i.find('input,select,textarea,button').not(':hidden,:disabled,[readonly]').eq(0);
+			}
+			else if (a != '' && a != 'false') {
+				$a = $i.find(a).eq(0);
+			}
+			
+			if ($a && $a.length) {
+				f = true;
+				$a.focus();
+				$('body').scrollTop(0).scrollLeft(0);
+			}
+			
+		});
 	}
 
 	function actionForm() {
