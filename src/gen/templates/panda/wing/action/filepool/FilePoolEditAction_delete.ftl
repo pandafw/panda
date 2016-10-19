@@ -21,7 +21,7 @@
 	<#include "/action-alert.ftl"/>
 
 <#if r??>
-	<@p.form cssClass="p-cform" id="filepool" initfocus="true" method="post" theme="bs3h">
+	<@p.form cssClass="p-cform" id="filepool" focusme="true" method="post" theme="bs3h">
 	<#if a.displayField("id")>
 			<@n.viewfield
 				key="id"

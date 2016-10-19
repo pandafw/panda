@@ -87,7 +87,7 @@ public class Html2PdfAction extends AbstractAction {
 	@At("")
 	public Object execute(@Param Arg arg) throws Exception {
 		if (Strings.isEmpty(arg.url)) {
-			arg.url = getText("url-default");
+			arg.url = getText("url-default", "http://www.yahoo.com");
 			return SitemeshFreemarkerView.DEFAULT;
 		}
 

@@ -62,6 +62,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		return red;
 	}
 	
+	@Override
 	public void process(ActionContext ac) {
 		UserAuthenticator aa = ac.getIoc().get(UserAuthenticator.class);
 		int r = aa.authenticate(ac);

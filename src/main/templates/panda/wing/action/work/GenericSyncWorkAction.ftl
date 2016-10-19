@@ -22,7 +22,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 	
-	<@p.form cssClass="p-eform" id="syncw" initfocus="true" method="get" theme="bs3h">
+	<@p.form cssClass="p-eform" id="syncw" focusme="false" method="get" theme="bs3h">
 		<@safeinclude path=('/' + a.class.name?replace('.', '/') + "-inputs.ftl") />
 		<@p.div cssClass="p-buttons">
 			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="return syncw_start();" label="#(button-start)"/>

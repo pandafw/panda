@@ -3,3 +3,4 @@ title=HTML->PDF
 p.url=URL
 p.charset=Charset
 
+url-default=www.yahoo.com
