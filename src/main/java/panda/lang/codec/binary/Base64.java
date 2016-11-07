@@ -691,6 +691,16 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
+	 * Decodes a Base64 String into String
+	 * 
+	 * @param base64String String containing Base64 data
+	 * @return String containing decoded data.
+	 */
+	public static String decodeBase64String(final String base64String) {
+		return Strings.newStringUtf8(decodeBase64(base64String));
+	}
+
+	/**
 	 * Decodes Base64 data into octets
 	 * 
 	 * @param base64Data Byte array containing Base64 data
@@ -701,9 +711,19 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
-	 * Decodes Base64 data into octets
+	 * Decodes Base64 data into String
 	 * 
 	 * @param base64Data Byte array containing Base64 data
+	 * @return String containing decoded data.
+	 */
+	public static String decodeBase64String(final byte[] base64Data) {
+		return Strings.newStringUtf8(decodeBase64(base64Data));
+	}
+
+	/**
+	 * Decodes Base64 data into octets
+	 * 
+	 * @param base64Data InputStream containing Base64 data
 	 * @return Array containing decoded data.
 	 */
 	public static byte[] decodeBase64(final InputStream base64Data) {
@@ -719,9 +739,19 @@ public class Base64 extends BaseNCodec {
 	}
 
 	/**
+	 * Decodes Base64 data into String
+	 * 
+	 * @param base64Data InputStream containing Base64 data
+	 * @return String containing decoded data.
+	 */
+	public static String decodeBase64String(final InputStream base64Data) {
+		return Strings.newStringUtf8(decodeBase64(base64Data));
+	}
+
+	/**
 	 * Decodes Base64 data into octets
 	 * 
-	 * @param base64Data Byte array containing Base64 data
+	 * @param base64Data Reader containing Base64 data
 	 * @return Array containing decoded data.
 	 */
 	public static byte[] decodeBase64(final Reader base64Data) {
@@ -734,6 +764,16 @@ public class Base64 extends BaseNCodec {
 			throw Exceptions.wrapThrow(e);
 		}
 		return baos.toByteArray();
+	}
+
+	/**
+	 * Decodes Base64 data into String
+	 * 
+	 * @param base64Data Reader containing Base64 data
+	 * @return String containing decoded data.
+	 */
+	public static String decodeBase64String(final Reader base64Data) {
+		return Strings.newStringUtf8(decodeBase64(base64Data));
 	}
 
 	// Implementation of the Encoder Interface
