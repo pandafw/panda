@@ -98,9 +98,12 @@
 .p-form .form-control {
 	color: #333;
 }
-.p-form .form-control, .p-form input.form-control, .p-form select.form-control,
+.p-form .form-control, .p-form input.form-control, 
 .p-form .input-group-addon, .p-form .input-group-btn {
 	padding: 4px 10px;
+}
+.p-form select.form-control {
+	padding: 0 10px;
 }
 .p-form input.form-control[size], .p-form select.form-control,
 .p-form .p-radiomap input.form-control, .p-form .p-checkboxlist input.form-control, .p-form input.p-checkbox,
@@ -256,6 +259,32 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 .p-toolbar li:last-child, .p-navih li:last-child {
 	border-right: none;
 	padding-right: 0;
+}
+
+/*--------------------------------------------------
+ * p-menu
+--------------------------------------------------*/
+.p-menu {
+}
+.p-menu-item {
+	background-color: #eee;
+	display: block;
+	float: left;
+	width: 120px;
+	height: 110px;
+	padding: 10px;
+	margin: 10px;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	text-align: center;
+}
+.p-menu-item > div {
+	line-height: 1em;
+	padding: 10px 0 0 0;
+}
+.p-menu-item:hover {
+	background-color: #FFF8DC;
+	text-decoration: none;
 }
 
 /*--------------------------------------------------

@@ -26,9 +26,12 @@
 .p-form .form-control {
 	color: #333;
 }
-.p-form .form-control, .p-form input.form-control, .p-form select.form-control,
+.p-form .form-control, .p-form input.form-control, 
 .p-form .input-group-addon, .p-form .input-group-btn {
 	padding: 4px 10px;
+}
+.p-form select.form-control {
+	padding: 0 10px;
 }
 .p-form input.form-control[size], .p-form select.form-control,
 .p-form .p-radiomap input.form-control, .p-form .p-checkboxlist input.form-control, .p-form input.p-checkbox,
