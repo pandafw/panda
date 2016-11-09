@@ -556,7 +556,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	protected void addQueryFilter(GenericQuery<T> gq, Filter f, String name, Object value, List<?> values) {
 		if (Filter.EQUAL.equals(f.getComparator())) {
-			if (value instanceof Date) {
+			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
 				gq.between(name, value, value2);
 			}
@@ -565,7 +565,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			}
 		}
 		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
-			if (value instanceof Date) {
+			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
 				gq.notBetween(name, value, value2);
 			}
@@ -628,7 +628,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				gq.greaterThanOrEqualTo(name, v1);
 			}
 			else {
-				if (v1 instanceof Date && v2 instanceof Date) {
+				if (v1 instanceof Date && v2 instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 					v2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)v2), -1);
 				}
 				gq.between(name, v1, v2);
