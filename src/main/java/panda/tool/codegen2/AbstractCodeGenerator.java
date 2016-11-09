@@ -726,6 +726,10 @@ public abstract class AbstractCodeGenerator {
 		vmmap.put("double", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("decimal", "Validators.MSGID_NUMBER_RANGE");
 		vmmap.put("number", "Validators.MSGID_NUMBER_RANGE");
+
+		vmmap.put("date", "Validators.MSGID_CAST_DATE");
+		vmmap.put("time", "Validators.MSGID_CAST_TIME");
+		vmmap.put("datetime", "Validators.MSGID_CAST_DATETIME");
 	}
 
 	public String validatorMsgId(String alias) {
