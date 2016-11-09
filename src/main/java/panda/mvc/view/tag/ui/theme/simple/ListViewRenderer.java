@@ -498,6 +498,31 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				writeTextField("form-control p-lv-f-number-v2", _fv, _ifn + "_v2", _fvv, d);
 				write("</div>");
 			}
+			else if ("datetime".equals(_f.type)) {
+				_fv = _fn + ".ev";
+				Date _fvv = qf == null ? null : qf.getEv();
+
+				write("<div class=\"p-lv-f-g1\">");
+				writeDateTimePicker("form-control p-lv-f-datetime-v", _fv, _ifn + "_v", "datetime", _fvv, false);
+				write("</div>");
+
+				String _fvc = qf == null ? null : qf.getC();
+				if (_fvc == null) {
+					_fvc = Collections.firstKey(numberFilterMap);
+				}
+				writeSelect("form-control p-lv-f-datetime-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
+				
+				_fv = _fn + ".ev2";
+				_fvv = qf == null ? null : qf.getEv2();
+				boolean d = !Filter.BETWEEN.equals(_fvc);
+				write("<div class=\"p-lv-f-g2");
+				if (d) {
+					write(" p-hidden");
+				}
+				write("\">");
+				writeDateTimePicker("form-control p-lv-f-datetime-v2", _fv, _ifn + "_v2", "datetime", _fvv, d);
+				write("</div>");
+			}
 			else if ("date".equals(_f.type)) {
 				_fv = _fn + ".dv";
 				Date _fvv = qf == null ? null : qf.getDv();
@@ -523,34 +548,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				writeDatePicker("form-control p-lv-f-date-v2", _fv, _ifn + "_v2", "date", _fvv, d);
 				write("</div>");
 			}
-			else if ("datetime".equals(_f.type)) {
-				_fv = _fn + ".dv";
-				Date _fvv = qf == null ? null : qf.getDv();
-
-				write("<div class=\"p-lv-f-g1\">");
-				writeDateTimePicker("form-control p-lv-f-datetime-v", _fv, _ifn + "_v", "datetime", _fvv, false);
-				write("</div>");
-
-				String _fvc = qf == null ? null : qf.getC();
-				if (_fvc == null) {
-					_fvc = Collections.firstKey(numberFilterMap);
-				}
-				writeSelect("form-control p-lv-f-datetime-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
-				
-				_fv = _fn + ".dv2";
-				_fvv = qf == null ? null : qf.getDv2();
-				boolean d = !Filter.BETWEEN.equals(_fvc);
-				write("<div class=\"p-lv-f-g2");
-				if (d) {
-					write(" p-hidden");
-				}
-				write("\">");
-				writeDateTimePicker("form-control p-lv-f-datetime-v2", _fv, _ifn + "_v2", "datetime", _fvv, d);
-				write("</div>");
-			}
 			else if ("time".equals(_f.type)) {
-				_fv = _fn + ".dv";
-				Date _fvv = qf == null ? null : qf.getDv();
+				_fv = _fn + ".tv";
+				Date _fvv = qf == null ? null : qf.getTv();
 
 				write("<div class=\"p-lv-f-g1\">");
 				writeTimePicker("form-control p-lv-f-time-v", _fv, _ifn + "_v", "time", _fvv, false);
@@ -562,8 +562,8 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				}
 				writeSelect("form-control p-lv-f-time-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
 				
-				_fv = _fn + ".dv2";
-				_fvv = qf == null ? null : qf.getDv2();
+				_fv = _fn + ".tv2";
+				_fvv = qf == null ? null : qf.getTv2();
 				boolean d = !Filter.BETWEEN.equals(_fvc);
 				write("<div class=\"p-lv-f-g2");
 				if (d) {
@@ -759,8 +759,14 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				else if ("number".equals(of.type)) {
 					_fd = qf.getNv() != null || qf.getNv2() != null;
 				}
-				else if ("date".equals(of.type) || "datetime".equals(of.type) || "time".equals(of.type)) {
+				else if ("datetime".equals(of.type)) {
+					_fd = qf.getEv() != null || qf.getEv2() != null;
+				}
+				else if ("date".equals(of.type)) {
 					_fd = qf.getDv() != null || qf.getDv2() != null;
+				}
+				else if ("time".equals(of.type)) {
+					_fd = qf.getTv() != null || qf.getTv2() != null;
 				}
 				else if ("checklist".equals(of.type)) {
 					_fd = Collections.isNotEmpty(qf.getSvs());

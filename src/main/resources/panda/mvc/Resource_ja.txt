@@ -85,9 +85,12 @@ validation-cast=項目の値が正しくありません。
 validation-cast-boolean=trueまたはfalseを入力してください。
 validation-cast-char=文字を入力してください。
 validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
+validation-cast-datetime=日付形式"yyyy/MM/dd HH:mm:ss"で入力してください。
 validation-cast-decimal=数字を入力してください。
 validation-cast-number=整数を入力してください。
 validation-cast-file=フィアルを選択してください。
+validation-cast-time=時間形式"HH:mm:ss"で入力してください。
+validation-cast-url=正しいURLを入力してください。（例: http://www.domain.com）
 validation-cidr=正しいIPまたはCIDRを入力してください。（例: 192.168.1.1/32）
 validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
@@ -99,11 +102,21 @@ validation-compare-daterange-to=「終了日付」が「開始日付」より以
 validation-compare-numberrange-to=数字範囲の設定が正しくありません。
 validation-constant=${top.consts}中の値を選んでください。
 validation-creditcardnumber=正しいクレジットカード番号を入力してください。（例: XXXX-XXXX-XXXX-XXXX）
-validation-date-to=開始日付より大きい日付を入力してください。
+validation-datetime-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以後") : \
+(top.max != null ? (top.max + "以前") : ""))}\
+の日付を入力してください。
 validation-date-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
 (top.min != null ? (top.min + "以後") : \
 (top.max != null ? (top.max + "以前") : ""))}\
 の日付を入力してください。
+validation-time-range=${(top.min != null && top.max != null) ? (top.min + "~" + top.max + "以内") : \
+(top.min != null ? (top.min + "以後") : \
+(top.max != null ? (top.max + "以前") : ""))}\
+の時間を入力してください。
+validation-datetime-to=開始日付より大きい日付を入力してください。
+validation-date-to=開始日付より大きい日付を入力してください。
+validation-time-to=開始時間より大きい時間を入力してください。
 validation-email=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。

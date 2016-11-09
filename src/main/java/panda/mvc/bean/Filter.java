@@ -123,9 +123,19 @@ public class Filter implements Cloneable, Serializable {
 	public final static String VT_BOOLEAN = "b";
 	
 	/**
+	 * VT_DATETIME = "e";
+	 */
+	public final static String VT_DATETIME = "e";
+		
+	/**
 	 * VT_DATE = "d";
 	 */
 	public final static String VT_DATE = "d";
+	
+	/**
+	 * VT_TIME = "t";
+	 */
+	public final static String VT_TIME = "t";
 	
 	/**
 	 * VT_NUMBER = "n";
@@ -154,30 +164,37 @@ public class Filter implements Cloneable, Serializable {
 		}
 		return cls.isAssignableFrom(v.getClass()) ? (T)v : null;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	private void setObject(int idx, Object o) {
+		setObject(idx, o, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void setObject(int idx, Object o, String type) {
 		if (o == null) {
 			return;
 		}
 
-		if (o instanceof Boolean) {
-			type = VT_BOOLEAN;
-		}
-		else if (o instanceof Date) {
-			type = VT_DATE;
-		}
-		else if (o instanceof Number) {
-			type = VT_NUMBER;
-		}
-		else if (o instanceof String) {
-			o = Strings.stripToNull((String)o);
-			if (o == null) {
-				return;
+		if (type == null) {
+			if (o instanceof Boolean) {
+				type = VT_BOOLEAN;
 			}
-			type = VT_STRING;
+			else if (o instanceof Date) {
+				type = VT_DATE;
+			}
+			else if (o instanceof Number) {
+				type = VT_NUMBER;
+			}
+			else if (o instanceof String) {
+				o = Strings.stripToNull((String)o);
+				if (o == null) {
+					return;
+				}
+				type = VT_STRING;
+			}
 		}
 
+		this.type = type;
 		if (this.values == null) {
 			this.values = new ArrayList();
 		}
@@ -274,7 +291,7 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @return the booleanValues
+	 * @return the bvs
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Boolean> getBooleanValues() {
@@ -282,43 +299,87 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param booleanValues the booleanValues to set
+	 * @param bvs the bvs to set
 	 */
-	public void setBooleanValues(List<Boolean> booleanValues) {
+	public void setBooleanValues(List<Boolean> bvs) {
 		this.type = VT_BOOLEAN;
-		this.values = booleanValues;
+		this.values = bvs;
 	}
 
 	/**
-	 * @return the booleanValue
+	 * @return the bv
 	 */
 	public Boolean getBooleanValue() {
 		return getBoolean(0);
 	}
 
 	/**
-	 * @param booleanValue the booleanValue to set
+	 * @param bv the bv to set
 	 */
-	public void setBooleanValue(Boolean booleanValue) {
-		setObject(0, booleanValue);
+	public void setBooleanValue(Boolean bv) {
+		setObject(0, bv, VT_BOOLEAN);
 	}
 
 	/**
-	 * @return the booleanValue2
+	 * @return the bv2
 	 */
 	public Boolean getBooleanValue2() {
 		return getBoolean(1);
 	}
 
 	/**
-	 * @param booleanValue2 the booleanValue2 to set
+	 * @param bv2 the bv2 to set
 	 */
-	public void setBooleanValue2(Boolean booleanValue2) {
-		setObject(1, booleanValue2);
+	public void setBooleanValue2(Boolean bv2) {
+		setObject(1, bv2, VT_BOOLEAN);
 	}
 
 	/**
-	 * @return the dateValues
+	 * @return the dtvs
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Date> getDateTimeValues() {
+		return (List<Date>)values;
+	}
+
+	/**
+	 * @param dtvs the dtvs to set
+	 */
+	public void setDateTimeValues(List<Date> dtvs) {
+		this.type = VT_DATETIME;
+		this.values = dtvs;
+	}
+
+	/**
+	 * @return the dv
+	 */
+	public Date getDateTimeValue() {
+		return getDate(0);
+	}
+
+	/**
+	 * @param dtv the dtv to set
+	 */
+	public void setDateTimeValue(Date dtv) {
+		setObject(0, dtv, VT_DATETIME);
+	}
+
+	/**
+	 * @return the dtv2
+	 */
+	public Date getDateTimeValue2() {
+		return getDate(1);
+	}
+
+	/**
+	 * @param dtv2 the dtv2 to set
+	 */
+	public void setDateTimeValue2(Date dtv2) {
+		setObject(1, dtv2, VT_DATETIME);
+	}
+
+	/**
+	 * @return the dvs
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Date> getDateValues() {
@@ -326,39 +387,83 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param dateValues the dateValues to set
+	 * @param dvs the dvs to set
 	 */
-	public void setDateValues(List<Date> dateValues) {
+	public void setDateValues(List<Date> dvs) {
 		this.type = VT_DATE;
-		this.values = dateValues;
+		this.values = dvs;
 	}
 
 	/**
-	 * @return the dateValue
+	 * @return the dv
 	 */
 	public Date getDateValue() {
 		return getDate(0);
 	}
 
 	/**
-	 * @param dateValue the dateValue to set
+	 * @param dv the dv to set
 	 */
-	public void setDateValue(Date dateValue) {
-		setObject(0, dateValue);
+	public void setDateValue(Date dv) {
+		setObject(0, dv, VT_DATE);
 	}
 
 	/**
-	 * @return the dateValue2
+	 * @return the dv2
 	 */
 	public Date getDateValue2() {
 		return getDate(1);
 	}
 
 	/**
-	 * @param dateValue2 the dateValue to set
+	 * @param dv2 the dv2 to set
 	 */
-	public void setDateValue2(Date dateValue2) {
-		setObject(1, dateValue2);
+	public void setDateValue2(Date dv2) {
+		setObject(1, dv2, VT_DATE);
+	}
+
+	/**
+	 * @return the tvs
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Date> getTimeValues() {
+		return (List<Date>)values;
+	}
+
+	/**
+	 * @param tvs the tvs to set
+	 */
+	public void setTimeValues(List<Date> tvs) {
+		this.type = VT_TIME;
+		this.values = tvs;
+	}
+
+	/**
+	 * @return the tv
+	 */
+	public Date getTimeValue() {
+		return getDate(0);
+	}
+
+	/**
+	 * @param tv the tv to set
+	 */
+	public void setTimeValue(Date tv) {
+		setObject(0, tv, VT_TIME);
+	}
+
+	/**
+	 * @return the tv2
+	 */
+	public Date getTimeValue2() {
+		return getDate(1);
+	}
+
+	/**
+	 * @param tv2 the tv2 to set
+	 */
+	public void setTimeValue2(Date tv2) {
+		setObject(1, tv2, VT_TIME);
 	}
 
 	/**
@@ -388,7 +493,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @param numberValue the numberValue to set
 	 */
 	public void setNumberValue(Number numberValue) {
-		setObject(0, numberValue);
+		setObject(0, numberValue, VT_NUMBER);
 	}
 
 	/**
@@ -402,7 +507,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @param numberValue2 the numberValue2 to set
 	 */
 	public void setNumberValue2(Number numberValue2) {
-		setObject(1, numberValue2);
+		setObject(1, numberValue2, VT_NUMBER);
 	}
 
 	/**
@@ -432,7 +537,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @param stringValue the stringValue to set
 	 */
 	public void setStringValue(String stringValue) {
-		setObject(0, stringValue);
+		setObject(0, stringValue, VT_STRING);
 	}
 
 	/**
@@ -446,7 +551,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @param stringValue2 the stringValue2 to set
 	 */
 	public void setStringValue2(String stringValue2) {
-		setObject(1, stringValue2);
+		setObject(1, stringValue2, VT_STRING);
 	}
 
 	//////////////////////////////////////////////////////////
@@ -569,6 +674,54 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
+	 * @return the evs
+	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATETIME))
+	public List<Date> getEvs() {
+		return getDateTimeValues();
+	}
+
+	/**
+	 * @param evs the evs to set
+	 */
+	public void setEvs(List<Date> evs) {
+		setDateValues(evs);
+	}
+
+	/**
+	 * @return the ev
+	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATETIME))
+	public Date getEv() {
+		return getDateTimeValue();
+	}
+
+	/**
+	 * @param ev the ev to set
+	 */
+	public void setEv(Date ev) {
+		setDateTimeValue(ev);
+	}
+
+	/**
+	 * @return the ev2
+	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATETIME),
+		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.ev' }", msgId=Validators.MSGID_DATETIME_TO)
+	})
+	public Date getEv2() {
+		return getDateTimeValue2();
+	}
+
+	/**
+	 * @param ev2 the ev to set
+	 */
+	public void setEv2(Date ev2) {
+		setDateTimeValue2(ev2);
+	}
+
+	/**
 	 * @return the dvs
 	 */
 	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_DATE))
@@ -614,6 +767,54 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	public void setDv2(Date dv2) {
 		setDateValue2(dv2);
+	}
+
+	/**
+	 * @return the tvs
+	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_TIME))
+	public List<Date> getTvs() {
+		return getTimeValues();
+	}
+
+	/**
+	 * @param tvs the tvs to set
+	 */
+	public void setTvs(List<Date> tvs) {
+		setTimeValues(tvs);
+	}
+
+	/**
+	 * @return the tv
+	 */
+	@Validates(@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_TIME))
+	public Date getTv() {
+		return getTimeValue();
+	}
+
+	/**
+	 * @param tv the tv to set
+	 */
+	public void setTv(Date tv) {
+		setTimeValue(tv);
+	}
+
+	/**
+	 * @return the tv2
+	 */
+	@Validates({
+		@Validate(value=Validators.CAST, msgId=Validators.MSGID_CAST_TIME),
+		@Validate(value=Validators.EL, params="{ el: 'top.value > top.parent.value.tv' }", msgId=Validators.MSGID_TIME_TO)
+	})
+	public Date getTv2() {
+		return getTimeValue2();
+	}
+
+	/**
+	 * @param tv2 the tv to set
+	 */
+	public void setTv2(Date tv2) {
+		setTimeValue2(tv2);
 	}
 
 	/**
