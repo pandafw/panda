@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityFKey;
@@ -22,10 +24,12 @@ import panda.io.FileNames;
 import panda.io.FileType;
 import panda.io.Streams;
 import panda.io.stream.BOMInputStream;
+import panda.io.stream.ByteArrayOutputStream;
 import panda.io.stream.CsvReader;
 import panda.io.stream.ListReader;
 import panda.io.stream.XlsReader;
 import panda.io.stream.XlsxReader;
+import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Collections;
@@ -38,25 +42,28 @@ import panda.mvc.view.tag.Escapes;
 import panda.vfs.FileItem;
 import panda.wing.constant.RC;
 
-
 /**
  * @param <T> data type
  */
 public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	private final static Log log = Logs.getLog(GenericImportAction.class);
-	
+
 	public static class Arg {
 		private FileItem file;
 		private boolean loose = false;
+
 		public FileItem getFile() {
 			return file;
 		}
+
 		public void setFile(FileItem file) {
 			this.file = file;
 		}
+
 		public boolean isLoose() {
 			return loose;
 		}
+
 		public void setLoose(boolean loose) {
 			this.loose = loose;
 		}
@@ -66,28 +73,34 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		private Object headers;
 		private List<List<?>> warning = new ArrayList<List<?>>();
 		private List<List<?>> success = new ArrayList<List<?>>();
+
 		public List<List<?>> getWarning() {
 			return warning;
 		}
+
 		public void setWarning(List<List<?>> warning) {
 			this.warning = warning;
 		}
+
 		public List<List<?>> getSuccess() {
 			return success;
 		}
+
 		public void setSuccess(List<List<?>> success) {
 			this.success = success;
 		}
+
 		public Object getHeaders() {
 			return headers;
 		}
+
 		public void setHeaders(Object headers) {
 			this.headers = headers;
 		}
 	}
 
 	private boolean numAsText;
-	
+
 	/**
 	 * @return the numAsText
 	 */
@@ -102,6 +115,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		this.numAsText = numAsText;
 	}
 
+	protected static String[] FEXTS = { FileType.CSV, FileType.TSV, FileType.TXT, FileType.XLS, FileType.XLSX };
+
+	private static boolean isAllowedExt(String fext) {
+		return Arrays.contains(FEXTS, fext);
+	}
+	
 	/**
 	 * @return result
 	 * @throws Exception if an error occurs
@@ -113,19 +132,52 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 		ListReader reader = null;
 		try {
+			InputStream input = null;
 			String fext = FileNames.getExtension(arg.file.getName());
+			if (FileType.ZIP.equalsIgnoreCase(fext)) {
+				ZipInputStream zis = new ZipInputStream(arg.file.getInputStream(), Charsets.CS_UTF_8);
+				ZipEntry entry;
+				try {
+					while ((entry = zis.getNextEntry()) != null) {
+						fext = FileNames.getExtension(entry.getName());
+						if (isAllowedExt(fext)) {
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							Streams.copy(zis, baos);
+							input = baos.toInputStream();
+							break;
+						}
+						zis.closeEntry();
+					}
+				}
+				finally {
+					zis.close();
+				}
+				
+				if (input == null) {
+					addFieldError("file", getText("error-file"));
+					return null;
+				}
+			}
+
+			if (input == null) {
+				if (!isAllowedExt(fext)) {
+					addFieldError("file", getText("error-file"));
+					return null;
+				}
+				input = arg.file.getInputStream();
+			}
+
 			if (FileType.XLS.equalsIgnoreCase(fext)) {
-				reader = getXlsReader(arg.file, false);
+				reader = getXlsReader(input, false);
 			}
 			else if (FileType.XLSX.equalsIgnoreCase(fext)) {
-				reader = getXlsReader(arg.file, true);
+				reader = getXlsReader(input, true);
 			}
 			else if (FileType.CSV.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(arg.file, Chars.COMMA);
+				reader = getCsvReader(input, Chars.COMMA);
 			}
-			else if (FileType.TSV.equalsIgnoreCase(fext) 
-					|| FileType.TXT.equalsIgnoreCase(fext)) {
-				reader = getCsvReader(arg.file, Chars.TAB);
+			else if (FileType.TSV.equalsIgnoreCase(fext) || FileType.TXT.equalsIgnoreCase(fext)) {
+				reader = getCsvReader(input, Chars.TAB);
 			}
 			else {
 				addFieldError("file", getText("error-file"));
@@ -148,28 +200,24 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	protected XlsReader getXlsReader(FileItem file, boolean ooxml) throws Exception {
-		InputStream input = file.getInputStream();
+	protected XlsReader getXlsReader(InputStream input, boolean ooxml) throws Exception {
 		if (input == null) {
 			return null;
 		}
-		
+
 		XlsReader xr = ooxml ? new XlsxReader(input) : new XlsReader(input);
 		xr.setNumAsText(numAsText);
 		return xr;
 	}
 
-	protected CsvReader getCsvReader(FileItem file, char separator) throws Exception {
-		InputStream input = file.getInputStream();
+	protected CsvReader getCsvReader(InputStream input, char separator) throws Exception {
 		if (input == null) {
 			return null;
 		}
-		
+
 		BOMInputStream bis = Streams.toBOMInputStream(input);
 		Charset cs = bis.getBOMCharset();
-		return new CsvReader(
-			new InputStreamReader(bis, cs == null ? Charsets.CS_UTF_8 : cs),
-			separator);
+		return new CsvReader(new InputStreamReader(bis, cs == null ? Charsets.CS_UTF_8 : cs), separator);
 	}
 
 	protected String[] mapColumns(List<?> headers) {
@@ -182,7 +230,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				columns[i] = ef.getName();
 			}
 		}
-		
+
 		for (int i = 0; i < columns.length; i++) {
 			if (columns[i] == null) {
 				addActionError(getHeaderError(i + 1, headers.get(i)));
@@ -196,7 +244,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (csv == null) {
 			return null;
 		}
-		
+
 		final List<?> headers = csv.readList();
 		if (headers == null || headers.isEmpty()) {
 			return null;
@@ -206,7 +254,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (columns == null) {
 			return null;
 		}
-		
+
 		final Ret ret = new Ret();
 		ret.headers = headers;
 
@@ -235,31 +283,31 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		return ret;
 	}
-	
+
 	protected void impData(Ret ret, ListReader csv, String[] columns, boolean strict) throws Exception {
-		for (int i = 1; ; i++) {
+		for (int i = 1;; i++) {
 			List row = csv.readList();
 			if (row == null) {
 				break;
 			}
 
 			trimRow(row);
-			
+
 			if (Collections.isItemsEmpty(row)) {
 				continue;
 			}
-			
+
 			Map<String, Object> values = rowToMap(columns, row);
 			if (values.isEmpty()) {
 				continue;
 			}
-			
+
 			try {
 				T data = castData(values);
 				trimData(data);
-				
+
 				checkData(data);
-				
+
 				saveData(data);
 				ret.success.add(row);
 			}
@@ -290,7 +338,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		return values;
 	}
-	
+
 	protected void logException(String method, Throwable e) {
 		log.warn(method, e);
 
@@ -332,7 +380,6 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 		return getMessage("error-value", m);
 	}
-	
 
 	protected void trimRow(List row) {
 	}
@@ -341,7 +388,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		context.clearCastErrors();
 		return Mvcs.castValueWithErrors(context, values, type, null);
 	}
-	
+
 	protected void trimData(T data) {
 		EntityHelper.clearIdentityValue(getEntity(), data);
 		assist().initCommonFields(data);
@@ -351,9 +398,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		getDao().insert(data);
 	}
 
-	//------------------------------------------------------------
+	// ------------------------------------------------------------
 	// check methods
-	//------------------------------------------------------------
+	// ------------------------------------------------------------
 	protected void checkData(T data) {
 		checkNotNulls(data);
 		validateData(data);
@@ -364,6 +411,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkNotNulls
+	 * 
 	 * @param data data
 	 */
 	protected void checkNotNulls(T data) {
@@ -375,13 +423,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * validate data
+	 * 
 	 * @param data data
 	 */
 	protected void validateData(T data) {
 		if (Mvcs.validate(getContext(), data)) {
 			return;
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(getMessage(RC.ERROR_INPUT));
 		for (Entry<String, List<String>> en : getParamAware().getErrors().entrySet()) {
@@ -397,6 +446,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkPrimaryKeys
+	 * 
 	 * @param data data
 	 */
 	protected void checkPrimaryKeys(T data) {
@@ -407,6 +457,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkUniqueKeys
+	 * 
 	 * @param data data
 	 */
 	protected void checkUniqueKeys(T data) {
@@ -414,7 +465,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (Collections.isEmpty(eis)) {
 			return;
 		}
-		
+
 		for (EntityIndex ei : eis) {
 			if (!EntityHelper.checkUniqueIndex(getDao(), getEntity(), data, ei)) {
 				throw new IllegalArgumentException(dataDuplicateError(data, ei.getFields()));
@@ -424,6 +475,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkForeignKeys
+	 * 
 	 * @param data
 	 */
 	protected void checkForeignKeys(T data) {
@@ -431,7 +483,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		if (Collections.isEmpty(efks)) {
 			return;
 		}
-		
+
 		for (EntityFKey efk : efks) {
 			if (!EntityHelper.checkForeignKey(getDao(), getEntity(), data, efk)) {
 				throw new IllegalArgumentException(dataIncorrectError(data, efk.getFields()));
@@ -439,9 +491,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	//------------------------------------------------------------
+	// ------------------------------------------------------------
 	// error message methods
-	//------------------------------------------------------------
+	// ------------------------------------------------------------
 	protected String rowToString(final List row) {
 		Iterator iterator = row.iterator();
 		final Object first = iterator.next();
@@ -470,12 +522,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg, String format) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" (");
-		for (EntityField ef :efs) {
+		for (EntityField ef : efs) {
 			EntityField eff = mappedEntityField(ef);
 			if (!displayField(eff.getName())) {
 				continue;
 			}
-			
+
 			String label = getFieldLabel(eff.getName());
 			sb.append(label);
 			sb.append(": ");
@@ -486,14 +538,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			}
 			sb.append(", ");
 		}
-		
+
 		if (sb.charAt(sb.length() - 1) == ' ') {
 			sb.setLength(sb.length() - 2);
 		}
 		sb.append(')');
 		return getMessage(dataErrMsg, sb.toString());
 	}
-	
+
 	protected String dataDuplicateError(T data, Collection<EntityField> efs) {
 		return dataFieldErrors(data, efs, RC.ERROR_DATA_DUPLICATE);
 	}
@@ -502,23 +554,23 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return dataFieldErrors(data, efs, RC.ERROR_DATA_INCORRECT);
 	}
 
-	//------------------------------------------------------------
+	// ------------------------------------------------------------
 	// html escape methods
 	//
 	public String escapeValue(Object v) {
 		String s = formatValue(v);
 		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
-	
+
 	protected String escapeValue(Object v, String format) {
 		String s = formatValue(v, format);
 		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
-	
+
 	public String formatValue(Object v) {
 		return formatValue(v, null);
 	}
-	
+
 	protected String formatValue(Object v, String format) {
 		if (v == null) {
 			return Strings.EMPTY;
