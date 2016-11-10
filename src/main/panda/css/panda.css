@@ -41,36 +41,11 @@
 	color: #ffa500;
 }
 
-/** bootstrap extension */
-
-/*-------------------------------------------*/
-/*      Carousel Fade Transition
-/*-------------------------------------------*/
-.carousel-fade .carousel-inner .item {
-  -webkit-transition-property: opacity;
-  transition-property: opacity;
+/** disable bootstrap not-allowed cursor */
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+	cursor: auto;
 }
-.carousel-fade .carousel-inner .item,
-.carousel-fade .carousel-inner .active.left,
-.carousel-fade .carousel-inner .active.right {
-  opacity: 0;
-}
-.carousel-fade .carousel-inner .active,
-.carousel-fade .carousel-inner .next.left,
-.carousel-fade .carousel-inner .prev.right {
-  opacity: 1;
-}
-.carousel-fade .carousel-inner .next,
-.carousel-fade .carousel-inner .prev,
-.carousel-fade .carousel-inner .active.left,
-.carousel-fade .carousel-inner .active.right {
-  left: 0;
-  -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
-}
-.carousel-fade .carousel-control {
-  z-index: 2;
-}.p-required {
+.p-required {
 	color: #FF0000;
 }
 .p-descrip {
@@ -155,10 +130,6 @@ div.p-datetimepicker > .input-group-addon {
 div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i, div.p-datetimepicker i {
 }
 
-/** disable bootstrap not-allowed cursor */
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-	cursor: auto;
-}
 /* LOADER */
 .p-loader-squares-circle {
 	background: url("../img/loader/squares-circle.gif") center center no-repeat;
