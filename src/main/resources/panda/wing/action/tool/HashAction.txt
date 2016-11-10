@@ -1,0 +1,8 @@
+title=Hash
+
+button-hash=Hash
+
+p.s=String hash
+p.f=File hash
+p.s-dip=Press Ctrl+Enter to submit
+

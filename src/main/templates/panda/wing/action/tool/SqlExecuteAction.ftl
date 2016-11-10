@@ -10,7 +10,7 @@
 	</div>
 	<#include "/action-alert.ftl"/>
 
-	<@p.form id="sqlexec" method="post" theme="simple">
+	<@p.form id="sqlexec" method="post" theme="simple" focusme="#sqlexec_sql">
 	<table class="sqlexec-tb" style="width: 100%">
 		<tr><td>SQL: (Ctrl+Enter to execute)</td>
 			<td align="right">
@@ -18,7 +18,7 @@
 				<@p.checkbox name="ignoreError" fieldLabel="Ignore Error" fieldValue="true"/>
 			</td>
 		</tr>
-		<tr><td colspan="2"><@p.textarea name="sql" rows="8" cssStyle="width:100%"/></td></tr>
+		<tr><td colspan="2"><@p.textarea name="sql" rows="8" cssStyle="width:100%" enterfire="#sqlexec_submit"/></td></tr>
 		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" label="#(button-exec)"/></td></tr>
 	</table>
 	</@p.form>
@@ -53,15 +53,6 @@
 </#list>
 </#if>
 
-	<script type="text/javascript">
-		function onPageLoad() {
-			$('#sqlexec_sql').focus().keyup(function(evt) {
-				if (evt.ctrlKey && evt.which == 13) {
-					$('#sqlexec_submit').click();
-				}
-			});
-		}
-	</script>
 </div>
 
 </body>
