@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Provider.Service;
+import java.security.Security;
+import java.util.HashSet;
+import java.util.Set;
 
 import panda.lang.codec.binary.Hex;
 
@@ -20,6 +25,24 @@ public class Digests {
 	public static final String DIGEST_SHA512 = "sha-512";
 	
 	private static final int STREAM_BUFFER_LENGTH = 1024;
+
+	public static Set<String> getAvailableAlgorithms() {
+		Set<String> as = new HashSet<String>();
+		
+		Provider[] providers = Security.getProviders();
+		for (Provider prov : providers) {
+			String type = MessageDigest.class.getSimpleName();
+
+			Set<Service> services = prov.getServices();
+			for (Service service : services) {
+				if (service.getType().equalsIgnoreCase(type)) {
+					as.add(service.getAlgorithm());
+				}
+			}
+		}
+		
+		return as;
+	}
 
 	//----------------------------------------------------------------------
 	// Digest
@@ -65,7 +88,7 @@ public class Digests {
 	 * @return MD5 digest
 	 * @throws IOException On error reading from the stream
 	 */
-	private static byte[] digest(MessageDigest digest, InputStream data) throws IOException {
+	public static byte[] digest(MessageDigest digest, InputStream data) throws IOException {
 		return updateDigest(digest, data).digest();
 	}
 
@@ -173,7 +196,6 @@ public class Digests {
 	public static String md2Hex(String data) {
 		return Hex.encodeHexString(md2(data));
 	}
-
 
 	/**
 	 * Calculates the MD5 digest and returns the value as a 16 element <code>byte[]</code>.
