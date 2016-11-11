@@ -77,6 +77,10 @@
 }
 /* checkbox row */
 .p-lv-cb {
+}
+
+/* checkbox */
+.p-lv-check input[type=checkbox] {
 	margin: 0;
 }
 
