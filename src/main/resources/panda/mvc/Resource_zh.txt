@@ -203,6 +203,7 @@ tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=复写
 tooltip-delete=删除
+tooltip-download=下载
 tooltip-edit=编辑
 tooltip-insert=登录
 tooltip-new=新建

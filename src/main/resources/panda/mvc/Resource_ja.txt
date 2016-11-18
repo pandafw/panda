@@ -204,6 +204,7 @@ tooltip-add=追加
 tooltip-cancel=取消
 tooltip-copy=複写
 tooltip-delete=削除
+tooltip-download=ダウンロード
 tooltip-edit=編集
 tooltip-insert=新規
 tooltip-new=新規

@@ -258,6 +258,7 @@ tooltip-add=Add
 tooltip-cancel=Cancel
 tooltip-copy=Copy
 tooltip-delete=Delete
+tooltip-download=Download
 tooltip-edit=Edit
 tooltip-insert=Insert
 tooltip-new=New
