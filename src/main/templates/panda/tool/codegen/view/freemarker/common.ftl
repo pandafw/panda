@@ -1,19 +1,17 @@
 <#assign s = "<"/>
 <#assign e = ">"/>
 <#assign d = "$"/>
-<#assign actionDataFieldName = action.dataFieldName!'d'/>
-<#assign actionDataListFieldName = action.dataListFieldName!'ds'/>
 <#if ui??>
-	<#if ui.params.actionListName??><#assign actionListName = ui.params.actionListName/></#if>
-	<#if ui.params.actionCopyName??><#assign actionCopyName = ui.params.actionCopyName/></#if>
-	<#if ui.params.actionViewName??><#assign actionViewName = ui.params.actionViewName/></#if>
-	<#if ui.params.actionPrintName??><#assign actionPrintName = ui.params.actionPrintName/></#if>
-	<#if ui.params.actionInsertName??><#assign actionInsertName = ui.params.actionInsertName/></#if>
-	<#if ui.params.actionUpdateName??><#assign actionUpdateName = ui.params.actionUpdateName/></#if>
-	<#if ui.params.actionDeleteName??><#assign actionDeleteName = ui.params.actionDeleteName/></#if>
+	<#if ui.params.actionList??><#assign actionList = ui.params.actionList/></#if>
+	<#if ui.params.actionCopy??><#assign actionCopy = ui.params.actionCopy/></#if>
+	<#if ui.params.actionView??><#assign actionView = ui.params.actionView/></#if>
+	<#if ui.params.actionPrint??><#assign actionPrint = ui.params.actionPrint/></#if>
+	<#if ui.params.actionInsert??><#assign actionInsert = ui.params.actionInsert/></#if>
+	<#if ui.params.actionUpdate??><#assign actionUpdate = ui.params.actionUpdate/></#if>
+	<#if ui.params.actionDelete??><#assign actionDelete = ui.params.actionDelete/></#if>
 	<#list action.listUIList as ui><#if ui.template?? && ui.generate!false>
 		<#if ui.templates?seq_contains("list")>
-			<#assign actionListName = ui.name/>
+			<#assign actionList = ui.name/>
 		<#elseif ui.templates?seq_contains("bdelete") 
 			|| ui.templates?seq_contains("bupdate")
 			|| ui.templates?seq_contains("bedit")>
@@ -22,40 +20,67 @@
 	</#if></#list>
 	<#list action.inputUIList as ui><#if ui.template?? && ui.generate!false>
 		<#if ui.templates?seq_contains("view")>
-			<#if !(actionViewName??)>
-				<#assign actionViewName = ui.name/>
+			<#if !(actionView??)>
+				<#assign actionView = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("print")>
-			<#if !(actionPrintName??)>
-				<#assign actionPrintName = ui.name/>
+			<#if !(actionPrint??)>
+				<#assign actionPrint = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("insert")>
-			<#if !(actionInsertName??)>
-				<#assign actionInsertName = ui.name/>
+			<#if !(actionInsert??)>
+				<#assign actionInsert = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("copy")>
-			<#if !(actionCopyName??)>
-				<#assign actionCopyName = ui.name/>
+			<#if !(actionCopy??)>
+				<#assign actionCopy = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("update")>
-			<#if !(actionUpdateName??)>
-				<#assign actionUpdateName = ui.name/>
+			<#if !(actionUpdate??)>
+				<#assign actionUpdate = '~/' + ui.name/>
 			</#if>
 		<#elseif ui.templates?seq_contains("delete")>
-			<#if !(actionDeleteName??)>
-				<#assign actionDeleteName = ui.name/>
+			<#if !(actionDelete??)>
+				<#assign actionDelete = '~/' + ui.name/>
 			</#if>
 		</#if>
 	</#if></#list>
 	<#macro header>
 <html>
 <head>
-	<title>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></title>
+	<title>${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></title>
 </head>
 <body>
 <#if ui.header?has_content>
 	${ui.header}
 </#if>
+	</#macro>
+	<#macro sheader steps=[]>
+		<#if steps?has_content>
+	<div class="p-header">
+		<ol class="breadcrumb">
+			<li>${s}@p.i icon="icon"/> ${s}@p.text name="title"/></li>
+		<#list steps as st>
+			<li<#if !st_has_next> class="active"</#if>>${s}@p.text name="step-${st}"/></li>
+		</#list>
+		</ol>
+	</div>
+		<#else>
+	<div class="p-header">
+		<h3>${s}@p.i icon="icon"/> ${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
+	</div>
+		</#if>
+	</#macro>
+	<#macro swell step="">
+${s}#assign _well = a.getText("well-${ui.name}${step}", "")/>
+${s}#if _well?has_content>
+	<div class="p-well">${d}{_well}</div>
+${s}/#if>
+	</#macro>
+	<#macro sback>
+	<div class="p-tcenter">
+		${s}@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
+	</div>
 	</#macro>
 	<#macro footer>
 <#if ui.footer?has_content>
@@ -71,16 +96,18 @@
 				<#if au.action??>
  action='${au.action}'<#rt/>
 				</#if>
-				<#if au.namespace??>
- namespace='${au.namespace}'<#rt/>
-				</#if>
  escapeAmp='false'><#rt/>
 				<#if au.params?has_content>
 					<#list au.params?keys as pn>
 						<#assign _dpv = au.params[pn]?string/>
-${s}@s.param name="${pn}" value="<#if _dpv?starts_with('.')>${actionDataFieldName}</#if>${_dpv}"/><#rt/>
+${s}@p.param name="${pn}" value="%{<#if _dpv?starts_with('.')>r</#if>${_dpv}}"/><#rt/>
 					</#list>
 				</#if>
 ${s}/@p.url><#rt/>
+	</#macro>
+	<#macro safeinc step>
+<#if ui.safeInclude??>
+	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}${step}-custom.ftl</#if>"/>
+</#if>
 	</#macro>
 </#if>

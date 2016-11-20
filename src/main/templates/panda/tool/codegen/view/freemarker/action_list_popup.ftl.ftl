@@ -2,30 +2,31 @@
 <@header/>
 
 <div class="p-section">
-	<div class="p-header">
-		<h3>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></h3>
-	</div>
+	<@sheader steps=[ ui.name ]/>
+	<@swell/>
 
-	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	${s}#include "/action-alert.ftl"/>
 
 	${s}#assign _columns_ = [{
 			"name": "_number_",
 			"type": "number",
-			"nowrap": true,
+			"header": a.getText("listview-th-number", ""),
 			"fixed": true
-		}, <#rt/>
-<#list ui.orderedColumnList as c>
-{
+		}] />
+<#list ui.displayColumnList as c>
+${s}#if a.displayField("${c.name}")>
+	${s}#assign _columns_ = _columns_ + [{
 			"name": "${c.name}",
-			"header": action.getText("${actionDataFieldName}.${c.name}"),
+			"value": ${(c.value!true)?string},
+			"header": a.getFieldLabel("${c.name}"),
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
-				"${fp.name}": "${fp.value?replace('#', '\\x23')}",
+				"${fp.name}": ${fp.value},
 			</#list>
 				"type": "${c.format.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.filter??>
 			"filter": {
 			<#if c.filter.display??>
@@ -41,11 +42,11 @@
 				"fixed": ${c.filter.fixed?string},
 			</#if>
 			<#list c.filter.paramList as fp>
-				"${fp.name}": "${fp.value?replace('#', '\\x23')}",
+				"${fp.name}": ${fp.value},
 			</#list>
 				"type": "${c.filter.type?replace('#', '\\x23')}"
 			},
- 		</#if>
+		</#if>
 		<#if c.display??>
 			"display": ${c.display?string},
 		</#if>
@@ -67,18 +68,19 @@
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
-			"tooltip": action.getText("${actionDataFieldName}.${c.name}-tip", "")
-		}<#if c_has_next>, </#if><#rt/>
+			"tooltip": a.getFieldTooltip("${c.name}")
+		}] />
+${s}/#if>
 </#list>
 
-		] />
 
-	${s}@p.listview id="${action.name}_${ui.name}" action="${action.name}_${ui.name}"
-		list="${actionDataListFieldName}" columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		start="pg.s" limit="pg.l" total="pg.t" sort="so.c" dir="so.d" filters="qf" filterm="qm"
-		headPager="true" singleSelect="true" toggleSelect="false" autosize="false"
-		onrowclick="%{'$.popup().callback(nlv_getRowData(this));'}"
+	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
+		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
+		headPager="true" singleSelect="true" toggleSelect="false"
+		cssClass="p-lv-clickable" cssTable="table-hover table-striped"
+		onrowclick="$.popup().callback(plv_getRowData(this));"
 	/>
+	<@safeinc step="_popup"/>
 </div>
 
 <@footer/>

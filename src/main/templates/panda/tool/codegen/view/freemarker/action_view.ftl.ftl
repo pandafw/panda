@@ -2,17 +2,22 @@
 <@header/>
 
 <div class="p-section">
-	<div class="p-header">
-		<h3>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></h3>
-	</div>
-	<#include "success-toolbar.ftl"/>
+	<@sheader steps=[ ui.name ]/>
+	<@swell/>
 
-	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "edit-success-toolbar.ftl"/>
 
+	${s}#include "/action-alert.ftl"/>
+
+${s}#if r??>
 	${s}@p.form cssClass="p-vform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" focusme="${ui.focus?c}" method="post"<#if ui.theme?has_content> theme="${ui.theme}"</#if>>
-		<#include "view-fields.ftl"/>
-		<#include "input-success-actions.ftl"/>
+		<#include "edit-view-fields.ftl"/>
+		<#include "edit-success-actions.ftl"/>
 	${s}/@p.form>
+${s}#else>
+	<@sback/>
+${s}/#if>
+	<@safeinc step=""/>
 </div>
 
 <@footer/>

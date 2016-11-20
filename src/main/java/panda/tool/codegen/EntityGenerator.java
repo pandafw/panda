@@ -9,7 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
 import panda.dao.DaoTypes;
+import panda.dao.entity.Entities;
 import panda.dao.entity.annotation.Column;
 import panda.dao.entity.annotation.Comment;
 import panda.dao.entity.annotation.FK;
@@ -26,16 +30,19 @@ import panda.dao.query.BooleanCondition;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.GenericQuery;
 import panda.dao.query.ObjectCondition;
+import panda.dao.query.Query;
 import panda.dao.query.StringCondition;
+import panda.lang.Arrays;
 import panda.lang.Classes;
+import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
+import panda.mvc.validation.Validators;
+import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.EntityProperty;
 import panda.tool.codegen.bean.Module;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 /**
  * entity source generator
@@ -62,7 +69,6 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	//---------------------------------------------------------------------------------------
 	protected Template tplEntityBean;
 	protected Template tplEntityQuery;
-	protected Template tplEntityValidate;
 
 	protected int cntEntity = 0;
 
@@ -70,7 +76,6 @@ public class EntityGenerator extends AbstractCodeGenerator {
 	protected void loadTemplates(Configuration cfg) throws Exception {
 		tplEntityBean = cfg.getTemplate("entity/EntityBean.java.ftl");
 		tplEntityQuery = cfg.getTemplate("entity/EntityQuery.java.ftl");
-		tplEntityValidate = cfg.getTemplate("entity/Entity-validation.xml.ftl");
 	}
 	
 	@Override
@@ -121,6 +126,16 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 	}
 
+	private boolean isObjectField(EntityProperty p) {
+		if ("boolean".equals(p.getFieldKind())
+				|| "date".equals(p.getFieldKind())
+				|| "number".equals(p.getFieldKind())
+				|| "string".equals(p.getFieldKind())) {
+			return false;
+		}
+		return true;
+	}
+	
 	protected Set<String> setJavaEntityQueryImportList(Map<String, Object> wrapper, Entity entity) {
 		Set<String> imports = new TreeSet<String>();
 
@@ -140,17 +155,23 @@ public class EntityGenerator extends AbstractCodeGenerator {
 //			addFieldCondition(imports, p);
 //		}
 		for (EntityProperty p : ps) {
-			String type = p.getFullJavaType();
-			if (type.endsWith("[]")) {
-				type = type.substring(0, type.length() - 2);
-			}
-			if (!Strings.contains(type, '<')) {
-				addImportType(imports, type);
+			if ((p.isDbColumn() || p.isJoinColumn()) && !isObjectField(p)) {
+				String type = p.getFullJavaType();
+				if (type.endsWith("[]")) {
+					type = type.substring(0, type.length() - 2);
+				}
+				if (!Strings.contains(type, '<')) {
+					addImportType(imports, type);
+				}
 			}
 		}
 
 		imports.add(entity.getName());
+		if (Collections.isNotEmpty(entity.getJoinMap())) {
+			imports.add(Query.class.getName());
+		}
 		imports.add(GenericQuery.class.getName());
+		imports.add(Entities.class.getName());
 		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
 			imports.add(entity.getBaseQueryClass());
 		}
@@ -165,6 +186,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 
 		prepareImportList(entity.getPropertyList(), imports);
 
+		imports.add(Serializable.class.getName());
 		if (Strings.isEmpty(entity.getBaseBeanClass())) {
 			imports.add(Serializable.class.getName());
 		}
@@ -172,8 +194,14 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			imports.add(entity.getBaseBeanClass());
 		}
 
+		if (Arrays.isNotEmpty(entity.getBaseInterfaces())) {
+			imports.addAll(Arrays.asList(entity.getBaseInterfaces()));
+		}
+
 		if (Strings.isNotEmpty(entity.getComment())) {
-			imports.add(Comment.class.getName());
+			if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+				imports.add(Comment.class.getName());
+			}
 		}
 		if (Strings.isNotEmpty(entity.getTable())) {
 			imports.add(Table.class.getName());
@@ -202,7 +230,9 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			imports.add(Column.class.getName());
 			for (EntityProperty p : entity.getColumnList()) {
 				if (Strings.isNotEmpty(p.getComment())) {
-					imports.add(Comment.class.getName());
+					if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+						imports.add(Comment.class.getName());
+					}
 				}
 				if (Strings.isNotEmpty(p.getJdbcType())) {
 					imports.add(DaoTypes.class.getName());
@@ -211,6 +241,16 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		}
 
 		imports.add(Objects.class.getName());
+
+		for (EntityProperty p : entity.getPropertyList()) {
+			if (Collections.isNotEmpty(p.getValidatorList())
+					|| (p.isDbColumn() && !"String".equals(p.getType()))) {
+				imports.add(Validators.class.getName());
+				imports.add(Validates.class.getName());
+				imports.add(Validate.class.getName());
+				break;
+			}
+		}
 
 		setImports(wrapper, imports);
 	}
@@ -243,15 +283,17 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		setJavaEntityQueryImportList(wrapper, entity);
 		processTpl(entity.getPackage() + ".query", entity.getSimpleName() + "Query.java", 
 			wrapper, tplEntityQuery);
-
-		if (!entity.getPropertyList().isEmpty()) {
-			processTpl(entity.getPackage(), entity.getSimpleName() + "-validation.xml", 
-				wrapper, tplEntityValidate);
-		}
 	}
 
 	protected void setImports(Map<String, Object> wrapper, Object imports) {
 		wrapper.put("imports", imports);
+	}
+
+	public String annoComment(Entity entity) {
+		if (!Comment.class.getSimpleName().equals(entity.getSimpleName())) {
+			return Comment.class.getSimpleName();
+		}
+		return Comment.class.getName();
 	}
 
 }

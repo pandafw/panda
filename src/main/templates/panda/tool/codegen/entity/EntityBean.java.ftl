@@ -6,7 +6,7 @@ import ${i};
 </#list>
 
 <#if entity.comment?has_content>
-@Comment("${entity.comment}")
+@${gen.annoComment(entity)}("${entity.comment}")
 </#if>
 <#if entity.table?has_content>
 @Table("${entity.table}")
@@ -21,7 +21,7 @@ import ${i};
 <#if entity.uniqueKeyMap?has_content>
 @Indexes({
 <#list entity.uniqueKeyMap?keys as k>
-	@Index(name="${k}", fields={ <#list entity.uniqueKeyMap[k] as p>"${p.name}"<#if p_has_next>,</#if></#list> }, unique=true)<#if k_has_next>,</#if>
+	@Index(name="${k}", fields={ <#list entity.uniqueKeyMap[k] as p>"${p.name}"<#if p_has_next>, </#if></#list> }, unique=true)<#if k_has_next>,</#if>
 </#list>
 })
 </#if>
@@ -32,7 +32,7 @@ import ${i};
 </#list>
 })
 </#if>
-public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)}<#else>implements Serializable</#if> {
+public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(entity.baseBeanClass)}</#if> implements Serializable<#if entity.baseInterfaces?has_content><#list entity.baseInterfaces as i>, ${class_name(i)}</#list></#if> {
 
 	private static final long serialVersionUID = ${svuid?c}L;
 
@@ -50,20 +50,26 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	public static final String ${p.uname} = "${p.name}";
 </#list>
 
-	public static final String[] COLUMNS = new String[] {
+	public static final String[] _COLUMNS_ = new String[] {
 <#list entity.columnList as p>
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
 		};
 
 <#if entity.joinList?has_content>
-	public static final String[] JOINS = new String[] {
+	public static final String[] _JOINS_ = new String[] {
 <#list entity.joinList as p>
 			${p.uname}<#if p_has_next>,</#if>
 </#list>
 		};
-
 </#if>
+
+<#if entity.joinMap?has_content>
+<#list entity.joinMap?keys as k>
+	public static final String _JOIN_${k?upper_case}_ = "${k}";
+</#list>
+</#if>
+
 	/*----------------------------------------------------------------------*
 	 * Properties
 	 *----------------------------------------------------------------------*/
@@ -79,7 +85,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	@JoinColumn(name="${p.joinName}", field="${p.joinField}")
 </#if>
 <#if p.comment?has_content>
-	@Comment("${p.comment}")
+	@${gen.annoComment(entity)}("${p.comment}")
 </#if>
 	${p.modifier} ${p.simpleJavaType} ${p.name}<#if p.initValue?has_content> = ${p.initValue}</#if>;
 
@@ -92,6 +98,26 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 	/**
 	 * @return the ${p.name}
 	 */
+<#-- validation -->
+	<#assign stype = p.simpleJavaType/>
+	<#assign type = stype/>
+	<#if type?ends_with('[]')>
+		<#assign type = type?substring(0, type?length - 2)/>
+	<#elseif type?ends_with('>') && type?index_of('<') gt 0> 
+		<#assign ilt = type?index_of('<')/>
+		<#assign type = type?substring(ilt + 1, type?length - 1)/>
+	</#if>
+	<#if p.validatorList?has_content || (p.dbColumn && type != "String" && stype != "byte[]")>
+	@Validates({
+	<#list p.validatorList as v>
+		@Validate(value=${gen.validatorType(v.type)}, <#if v.refer?has_content>refer="${v.refer?j_string}", </#if><#if v.hasParams>params="${v.params}", </#if><#if v.message?has_content>message="${v.message?j_string}"<#else>msgId=${gen.validatorMsgId(v.msgId)}</#if>)<#if v_has_next || type != "String">, </#if>
+	</#list>
+	<#if type != "String">
+		@Validate(value=${gen.validatorType('cast')}, msgId=${gen.validatorMsgId('cast-' + type)})
+	</#if>
+	})
+	</#if>
+<#-- validation -->
 	public ${p.simpleJavaType} <#if p.simpleJavaType == 'boolean'>is<#else>get</#if>${p.name?cap_first}() {
 	<#assign getterTrim = "" />
 	<#if p.getterTrim??>
@@ -119,6 +145,8 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 		</#if>
 	<#elseif entity.trimString?has_content && p.simpleJavaType == "String">
 		<#assign setterTrim = entity.trimString />
+	<#elseif entity.trimList?has_content && p.simpleJavaType == "List<String>">
+		<#assign setterTrim = entity.trimList />
 	</#if>
 	<#if p.setterCode?has_content>
 		${p.setterCode}

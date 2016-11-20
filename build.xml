@@ -4,7 +4,6 @@
 	
 	<path id="dep.cp">
 		<pathelement path="../panda-gear/out/classes"/>
-		<pathelement path="../panda-exts/out/classes"/>
 		<pathelement path="../panda-java/out/classes"/>
 		<path refid="lib.cp"/>
 	</path>
@@ -12,4 +11,12 @@
 	<!-- build -->
 	<import file="../panda-java/ant/panda-build.xml"/>
 	
+	<!-- release -->
+	<target name="release" description="Release the project">
+		<antcall target="ivy-resolve"/>
+		<antcall target="build"/>
+		<antcall target="dist"/>
+		<antcall target="mvn-panda-deploy"/>
+		<copy file="${out.dir}/classes/panda/tool/codegen/Module.xsd" todir="${prj.repo}/com/foolite/${prj.name}/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
+	</target>
 </project>

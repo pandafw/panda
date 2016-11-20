@@ -2,60 +2,66 @@
 <@header/>
 
 <div class="p-section">
-	<div class="p-header">
-		<h3>${s}@p.text name="title-${d}{actionResult}">${s}@s.param>${s}@p.text name="title"/>${s}/@s.param>${s}/@p.text></h3>
-	</div>
-	<#include "success-toolbar.ftl"/>
+	<@sheader steps=[ ui.name, ui.name + "-success" ]/>
+	<@swell step="-success"/>
 
-	${s}#include "/panda/exts/struts2/views/action-alert.ftl"/>
+	<#include "bulk-success-toolbar.ftl"/>
+
+	${s}#include "/action-alert.ftl"/>
 	<br/>
-	
+
+${s}#if result?has_content>
 	${s}#assign _columns_ = [{
-		"name": "_number_",
-		"type": "number",
-		"nowrap": true,
-		"fixed": true
-	}, <#rt/>
-<#list ui.orderedColumnList as c>
-{
-		"name": "${c.name}",
-		"header": action.getText("${ui.name}-column-${c.name}", ""), 
-	<#if c.format??>
-		"format": {
-			"type": "${c.format.type?replace('#', '\\x23')}"<#if c.format.paramList?has_content>,</#if>
-		<#list c.format.paramList as fp>
-			"${fp.name}": "${fp.value?replace('#', '\\x23')}"<#if fp_has_next>,</#if>
-		</#list>
-		},
+			"name": "_rownum_",
+			"type": "rownum",
+			"header": a.getText("listview-th-rownum", ""),
+			"fixed": true
+		}] />
+<#list ui.displayColumnList as c>
+${s}#if a.displayField("${c.name}")>
+	${s}#assign _columns_ = _columns_ + [{
+			"name": "${c.name}",
+			"header": a.getFieldLabel("${c.name}"),
+		<#if c.format??>
+			"format": {
+			<#list c.format.paramList as fp>
+				"${fp.name}": ${fp.value},
+			</#list>
+				"type": "${c.format.type?replace('#', '\\x23')}"
+				},
 		</#if>
-	<#if c.display??>
-		"display": ${c.display?string},
-	</#if>
-	<#if c.hidden??>
-		"hidden": ${c.hidden?string},
-	</#if>
-	<#if c.group??>
-		"group": ${c.group?string},
-	</#if>
-		"sortable": false,
-		"tooltip": action.getText("${ui.name}-column-${c.name}-tip", ""),
-		"value": false		
-	}<#if c_has_next>, </#if><#rt/>
+		<#if c.display??>
+			"display": ${c.display?string},
+		</#if>
+		<#if c.hidden??>
+			"hidden": ${c.hidden?string},
+		</#if>
+		<#if c.group??>
+			"group": ${c.group?string},
+		</#if>
+			"sortable": false,
+			"tooltip": a.getFieldTooltip("${c.name}")
+		}] />
+${s}/#if>
 </#list>
-] />
+
 
 	${s}@p.listview id="${action.name}_${ui.name}"
-		list="${actionDataListFieldName}" columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-	>
-		<#if ui.params.addon?has_content>
-		${s}@s.param name="addon">${ui.params.addon}${s}/@s.param>
-		</#if>
-	${s}/@p.listview>
+		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
+		cssTable="table-hover table-striped"
+	<#if ui.params.addon?has_content>
+		addon="${ui.params.addon}"
+	</#if>
+	/>
 	
 	<br/>
 	<div class="p-tcenter">
 		<#include "bulk-success-buttons.ftl"/>
 	</div>
+${s}#else>
+	<@sback/>
+${s}/#if>
+	<@safeinc step="_execute"/>
 </div>
 
 <@footer/>
