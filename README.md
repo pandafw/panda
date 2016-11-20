@@ -1,4 +1,4 @@
-panda-web
-======
+panda-html
+===========
 
-Panda Web Framework
+Panda HTML Framework

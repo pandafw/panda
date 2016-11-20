@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="panda-web" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="panda-html" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 	<property file="build.properties" />
 	
 	<!-- version -->
@@ -294,10 +294,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</jar>
 	</target>
 	
-	<target name="ghp" description="Copy panda sources to panda-web gh-pages branch">
-		<delete dir="../panda-web.ghp/${prj.version}"/>
-		<mkdir dir="../panda-web.ghp/${prj.version}"/>
-		<copy todir="../panda-web.ghp/${prj.version}" preservelastmodified="true">
+	<target name="ghp" description="Copy panda sources to panda-html gh-pages branch">
+		<delete dir="../panda-html.ghp/${prj.version}"/>
+		<mkdir dir="../panda-html.ghp/${prj.version}"/>
+		<copy todir="../panda-html.ghp/${prj.version}" preservelastmodified="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>
