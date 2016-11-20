@@ -14,6 +14,5 @@ public class DefaultTagLibrary implements TagLibrary {
 	@Override
 	public List<Class> getDirectiveClasses() {
 		return null;
-//		return PandaDirectives.getVelocityDirectiveClasses();
 	}
 }

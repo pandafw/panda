@@ -17,7 +17,7 @@ public class TagLibraryManager {
 	
 	public void initialize() {
 		taglibs = new HashMap<String, TagLibrary>();
-		taglibs.put("p", new DefaultTagLibrary());
+		taglibs.put(taglibName, new DefaultTagLibrary());
 	}
 
 	/**

@@ -11,6 +11,7 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
+	private static final String PANDA_CDN = "http://foolite.github.io/panda-html/";
 	private static final String JQUERY_VERSION = "1.12.4";
 	private static final String BOOTSTRAP_VERSION = "3.3.7";
 	private static final String FONTAWESOME_VERSION = "4.7.0";
@@ -57,7 +58,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	protected void writePandaCdnJs(String path, boolean debug) throws IOException {
 		if (js) {
-			writeCdnJs("http://foolite.github.io/panda-web/" + Panda.VERSION + path + (debug ? debug() : "") + ".js");
+			writeCdnJs(PANDA_CDN + Panda.VERSION + path + (debug ? debug() : "") + ".js");
 		}
 	}
 	protected void writeCdnJs(String jsl) throws IOException {
@@ -77,7 +78,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 	
 	protected void writePandaCdnCss(String path) throws IOException {
-		writeCdnCss("http://foolite.github.io/panda-web/" + Panda.VERSION + path + debug() + ".css");
+		writeCdnCss(PANDA_CDN + Panda.VERSION + path + debug() + ".css");
 	}
 	protected void writeCdnCss(String cssl) throws IOException {
 		if (css) {
@@ -101,10 +102,17 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (sbase == null) {
 			sbase = Mvcs.getStaticBase(context, ((Link)tag).getStatics());
 		}
+		
+		StringBuilder s = new StringBuilder();
+		s.append(sbase)
+			.append('/')
+			.append(Panda.VERSION)
+			.append(uri);
 		if (Strings.isNotEmpty(version)) {
-			uri += "?v=" + version;
+			s.append("?v=").append(version);
 		}
-		return sbase + uri;
+
+		return s.toString();
 	}
 
 	private void writeJquery() throws IOException {
