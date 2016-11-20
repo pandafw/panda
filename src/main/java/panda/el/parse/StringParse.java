@@ -54,19 +54,14 @@ public class StringParse implements Parse {
 				hex[i] = exp.poll();
 			sb.append((char)Integer.valueOf(new String(hex), 16).intValue());
 			break;
-		case 'b': // 这个支持一下又何妨?
-			sb.append(' ');// 空格
+		case 'b':
+			sb.append(' ');
 			break;
 		case 'f':
-			sb.append('\f');// 这个支持一下又何妨?
+			sb.append('\f');
 			break;
 		default:
-			throw new ElException("Unexpected char"); // 1.b.37及之前的版本,会忽略非法的转义字符
+			throw new ElException("Unexpected char");
 		}
-	}
-
-	public static void main(String args[]) {
-		double x = .1 + 5;
-		System.out.println(x);
 	}
 }
