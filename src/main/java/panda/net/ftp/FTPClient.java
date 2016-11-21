@@ -248,13 +248,13 @@ import panda.net.io.Util;
  */
 public class FTPClient extends FTP implements Configurable {
 	/**
-	 * The system property ({@value} ) which can be used to override the system type.<br>
+	 * The system property which can be used to override the system type.<br>
 	 * If defined, the value will be used to create any automatically created parsers.
 	 */
 	public static final String FTP_SYSTEM_TYPE = FTPClient.class.getPackage().getName() + ".systemType";
 
 	/**
-	 * The system property ({@value} ) which can be used as the default system type.<br>
+	 * The system property which can be used as the default system type.<br>
 	 * If defined, the value will be used if the SYST command fails.
 	 */
 	public static final String FTP_SYSTEM_TYPE_DEFAULT = FTPClient.class.getPackage().getName() + ".systemType.default";
