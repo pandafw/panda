@@ -2,6 +2,7 @@
 .p-btrans 		{ background: transparent; }
 
 .p-cpointer 	{ cursor: pointer; }
+.p-code 		{ font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
 
 .p-fbold 		{ font-weight: bold; }
 .p-fitalic 		{ font-style: italic; }
