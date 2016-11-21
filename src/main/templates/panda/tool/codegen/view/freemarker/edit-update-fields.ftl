@@ -7,13 +7,12 @@
 			${f.content}
 	<#elseif f.editTag?? && f.editTag.name?ends_with(".hidden")>
 			${s}@${f.editTag.name}
-			<#if f.editTag.cssClass??>
-				cssClass="${f.editTag.cssClass}"
-			</#if>
 				name="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 		<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
+			<#elseif tp.name?starts_with('*')>
+				${tp.name?substring(1)}="${tp.value}"
 		</#if></#list>
 			/>
 	<#elseif f.editTag??>
@@ -22,15 +21,15 @@
 				key="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list f.editTag.paramList as tp>
-				<#if tp.name == "list" || tp.name == "listKey" || tp.name == "listValue">
+				<#if [ "fieldValue", "list", "listKey", "listValue", "listBreak", "listOrder" ]?seq_contains(tp.name)>
 				${tp.name}="${tp.value}"
 				</#if>
 			</#list>
 				required="true"
-			<#if f.editTag.hasParamStartsWith("_")>
+			<#if f.editTag.hasParamStartsWithAny("_*")>
 			>
 				<#list f.editTag.paramList as tp>
-					<#if tp.name?starts_with('_')>
+					<#if tp.name?starts_with('_') || tp.name?starts_with('*')>
 				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
@@ -40,9 +39,6 @@
 			</#if>
 		<#else>
 			${s}@${f.editTag.name}
-			<#if f.editTag.cssClass??>
-				cssClass="${f.editTag.cssClass}"
-			</#if>
 				key="<#if f.actionField>a.</#if>${f.name}"
 			<#if f.editTag.name?ends_with(".file")>
 				value=""
@@ -54,6 +50,8 @@
 			</#if>
 			<#list f.editTag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
+			<#elseif tp.name?starts_with('*')>
+				${tp.name?substring(1)}="${tp.value}"
 			</#if></#list>
 			<#if f.editTag.hasParamStartsWithAny("%+")>
 			>

@@ -14,25 +14,23 @@
 	<#elseif tag?has_content>
 		<#if tag.name?ends_with(".hidden")>
 			${s}@${tag.name}
-			<#if f.editTag.cssClass??>
-				cssClass="${f.editTag.cssClass}"
-			</#if>
 				name="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && !(tp.name != "readonly")>
 				${tp.name}="${tp.value}"
+			<#elseif tp.name?starts_with('*')>
+				${tp.name?substring(1)}="${tp.value}"
 			</#if></#list>
 			/>
 		<#elseif tag.name?ends_with(".uploader")>
 			${s}@${tag.name}
-			<#if tag.cssClass??>
-				cssClass="${tag.cssClass}"
-			</#if>
 				key="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 				readonly="true"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name) && (tp.name != "readonly")>
 				${tp.name}="${tp.value}"
+			<#elseif tp.name?starts_with('*')>
+				${tp.name?substring(1)}="${tp.value}"
 			</#if></#list>
 			<#if f.editTag.hasParamStartsWithAny("%+")>
 			>
@@ -41,7 +39,7 @@
 						&& (tp.name == '+defaultLink' || tp.name == '_defaultText')>
 					<#elseif tp.name?starts_with('%')>
 				${s}@p.param name="${tp.name?substring(1)}"><@aurl au=tp.values/>${s}/@p.param>
-					<#elseif tp.name?starts_with('+')>
+					<#elseif tp.name?starts_with('_')>
 				${s}@p.param name="${tp.name?substring(1)}">${tp.value}${s}/@p.param>
 					</#if>
 				</#list>
@@ -51,17 +49,14 @@
 			</#if>
 		<#elseif f.viewTag?? || tag.name?ends_with(".viewfield")>
 			${s}@${tag.name}
-			<#if tag.cssClass??>
-				cssClass="${tag.cssClass}"
-			</#if>
 				key="<#if f.actionField>a.</#if>${f.name}"
 				value="%{<#if f.actionField>a<#else>r</#if>.${f.name}}"
 			<#list tag.paramList as tp><#if gen.startsWithLetter(tp.name)>
 				${tp.name}="${tp.value}"
 			</#if></#list>
-			<#if tag.hasParamStartsWith("_")>
+			<#if tag.hasParamStartsWithAny("_*")>
 				<#list tag.paramList as tp>
-					<#if tp.name?starts_with('_')>
+					<#if tp.name?starts_with('_') || tp.name?starts_with('*')>
 				${tp.name?substring(1)}="${tp.value}"
 					</#if>
 				</#list>
@@ -93,9 +88,9 @@
 				${tp.name}="${tp.value}"
 				</#if>
 			</#list>
-			<#if tag.hasParamStartsWith("_")>
+			<#if tag.hasParamStartsWithAny("_*")>
 				<#list tag.paramList as tp>
-					<#if tp.name?starts_with('_')>
+					<#if tp.name?starts_with('_') || tp.name?starts_with('*')>
 				${tp.name?substring(1)}="${tp.value}"
 					</#if>
 				</#list>

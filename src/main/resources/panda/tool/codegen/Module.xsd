@@ -234,7 +234,6 @@
 		<sequence>
 			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="cssClass" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 

@@ -26,7 +26,6 @@ import panda.lang.Strings;
  *       &lt;sequence&gt;
  *         &lt;element name=&quot;param&quot; type=&quot;{panda.tool.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name=&quot;cssClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;name&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -40,7 +39,6 @@ public class Tag {
 	@XmlElement(name = "param")
 	private List<Param> paramList;
 
-	private String cssClass;
 	@XmlAttribute(required = true)
 	private String name;
 
@@ -56,7 +54,6 @@ public class Tag {
 	 * @param tag source tag
 	 */
 	public Tag(Tag tag) {
-		this.cssClass = tag.cssClass;
 		this.name = tag.name;
 
 		paramList = new LinkedList<Param>();
@@ -114,37 +111,6 @@ public class Tag {
 			}
 		}
 		return params;
-	}
-
-	/**
-	 * @return the cssClass
-	 */
-	public String getCssClass() {
-//		if (cssClass == null) {
-//			if (name != null) {
-//				int i = name.lastIndexOf('.');
-//				if (i >= 0) {
-//					cssClass = name.substring(i + 1);
-//				}
-//				else {
-//					cssClass = name;
-//				}
-//				if ("textarea".equals(cssClass)) {
-//					String layout = getParams().get("layout");
-//					if (StringUtils.isNotEmpty(layout)) {
-//						cssClass = StringUtils.replace(cssClass, "text", layout);
-//					}
-//				}
-//			}
-//		}
-		return cssClass;
-	}
-
-	/**
-	 * @param cssClass the cssClass to set
-	 */
-	public void setCssClass(String cssClass) {
-		this.cssClass = cssClass;
 	}
 
 	/**
