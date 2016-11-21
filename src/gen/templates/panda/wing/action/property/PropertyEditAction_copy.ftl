@@ -73,9 +73,7 @@
 				maxlength="5000"
 				cols="60"
 				rows="8"
-			>
-				<@p.param name="escape">phtml</@p.param>
-			</@p.textarea>
+			/>
 	</#if>
 	<#if a.displayField("memo")>
 			<@p.textarea

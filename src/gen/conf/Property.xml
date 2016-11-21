@@ -121,6 +121,7 @@
 					<param name="maxlength" value="5000"/>
 					<param name="cols" value="${tag.textarea.cols}"/>
 					<param name="rows" value="8"/>
+					<param name="*cssClass" value="p-code"/>
 					<param name="_escape" value="phtml"/>
 				</editTag>
 			</field>
