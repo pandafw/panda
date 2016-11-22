@@ -4,7 +4,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
 import panda.lang.Arrays;
-import panda.lang.Encrypts;
+import panda.lang.crypto.Encrypts;
 import panda.util.tool.AbstractCommandTool;
 
 
