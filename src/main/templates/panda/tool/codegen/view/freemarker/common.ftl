@@ -106,7 +106,7 @@ ${s}@p.param name="${pn}" value="%{<#if _dpv?starts_with('.')>r</#if>${_dpv}}"/>
 ${s}/@p.url><#rt/>
 	</#macro>
 	<#macro safeinc step>
-<#if ui.safeInclude??>
+<#if ui.safeInclude?? && ui.safeInclude?lower_case != 'false'>
 	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}${step}-custom.ftl</#if>"/>
 </#if>
 	</#macro>
