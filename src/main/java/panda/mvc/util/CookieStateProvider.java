@@ -5,8 +5,8 @@ import javax.servlet.http.Cookie;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.lang.Encrypts;
 import panda.lang.Strings;
+import panda.lang.crypto.Encrypts;
 import panda.mvc.ActionContext;
 import panda.servlet.HttpServlets;
 
