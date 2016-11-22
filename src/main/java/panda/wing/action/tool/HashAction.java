@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import panda.io.Streams;
-import panda.lang.Digests;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Hex;
+import panda.lang.crypto.Digests;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;

@@ -1,8 +1,8 @@
 package panda.wing.action.tool;
 
-import panda.lang.Digests;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
+import panda.lang.crypto.Digests;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
