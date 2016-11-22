@@ -1,4 +1,4 @@
-package panda.lang;
+package panda.lang.crypto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,19 +10,17 @@ import java.security.Security;
 import java.util.HashSet;
 import java.util.Set;
 
+import panda.lang.Strings;
 import panda.lang.codec.binary.Hex;
 
 
-/**
- * @author yf.frank.wang@gmail.com
- */
 public class Digests {
-	public static final String DIGEST_MD2 = "md2";
-	public static final String DIGEST_MD5 = "md5";
-	public static final String DIGEST_SHA1 = "sha-1";
-	public static final String DIGEST_SHA256 = "sha-256";
-	public static final String DIGEST_SHA384 = "sha-384";
-	public static final String DIGEST_SHA512 = "sha-512";
+	public static final String MD2 = "md2";
+	public static final String MD5 = "md5";
+	public static final String SHA1 = "sha-1";
+	public static final String SHA256 = "sha-256";
+	public static final String SHA384 = "sha-384";
+	public static final String SHA512 = "sha-512";
 	
 	private static final int STREAM_BUFFER_LENGTH = 1024;
 
@@ -57,27 +55,27 @@ public class Digests {
 	}
 
 	public static MessageDigest md2() {
-		return getDigest(DIGEST_MD2);
+		return getDigest(MD2);
 	}
 
 	public static MessageDigest md5() {
-		return getDigest(DIGEST_MD5);
+		return getDigest(MD5);
 	}
 
 	public static MessageDigest sha1() {
-		return getDigest(DIGEST_SHA1);
+		return getDigest(SHA1);
 	}
 	
 	public static MessageDigest sha256() {
-		return getDigest(DIGEST_SHA256);
+		return getDigest(SHA256);
 	}
 	
 	public static MessageDigest sha384() {
-		return getDigest(DIGEST_SHA384);
+		return getDigest(SHA384);
 	}
 	
 	public static MessageDigest sha512() {
-		return getDigest(DIGEST_SHA512);
+		return getDigest(SHA512);
 	}
 	
 	/**

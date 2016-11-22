@@ -1,10 +1,12 @@
-package panda.lang;
+package panda.lang.crypto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import panda.lang.Randoms;
+import panda.lang.crypto.Encrypts;
 import panda.lang.time.StopWatch;
 
 /**

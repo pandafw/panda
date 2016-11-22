@@ -1,15 +1,13 @@
-package panda.lang;
+package panda.lang.crypto;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 
 
-/**
- * @author yf.frank.wang@gmail.com
- */
 public class Encrypts {
 	public static final String AES = "AES";
 	public static final String AESWrap = "AESWrap";
@@ -54,17 +52,17 @@ public class Encrypts {
 		return decrypt(text, key, DEFAULT_CIPHER);
 	}
 	
-	public static String encrypt(String text, String key, String cipher) {
+	public static String encrypt(String text, String key, String algorithm) {
 		byte[] t = Strings.getBytesUtf8(text);
 		byte[] k = key == null ? DEFAULT_KEY_BYTES : keyBytes(key);
-		byte[] encrypted = encrypt(t, k, cipher);
+		byte[] encrypted = encrypt(t, k, algorithm);
 		return Strings.newStringUtf8(Base64.encodeBase64(encrypted, false, false));
 	}
 
-	public static String decrypt(String text, String key, String cipher) {
+	public static String decrypt(String text, String key, String algorithm) {
 		byte[] t = Base64.decodeBase64(text);
 		byte[] k = key == null ? DEFAULT_KEY_BYTES : keyBytes(key);
-		byte[] decrypted = decrypt(t, k, cipher);
+		byte[] decrypted = decrypt(t, k, algorithm);
 		return Strings.newStringUtf8(decrypted);
 	}
 
@@ -78,12 +76,12 @@ public class Encrypts {
 		return "PBEWith" + digest + "And" + encryption;
 	}
 	
-	public static byte[] encrypt(byte[] text, byte[] key, String cipher) {
+	public static byte[] encrypt(byte[] data, byte[] key, String algorithm) {
 		try {
-			SecretKeySpec sksSpec = new SecretKeySpec(key, cipher);
-			Cipher c = Cipher.getInstance(cipher);
-			c.init(Cipher.ENCRYPT_MODE, sksSpec);
-			byte[] encrypted = c.doFinal(text);
+			SecretKeySpec skey = new SecretKeySpec(key, algorithm);
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.ENCRYPT_MODE, skey);
+			byte[] encrypted = cipher.doFinal(data);
 			return encrypted;
 		}
 		catch (Exception e) {
@@ -91,36 +89,12 @@ public class Encrypts {
 		}
 	}
 
-	public static byte[] encrypt(byte[] text, SecretKey key, String cipher) {
+	public static byte[] decrypt(byte[] data, byte[] key, String algorithm) {
 		try {
-			Cipher c = Cipher.getInstance(cipher);
-			c.init(Cipher.ENCRYPT_MODE, key);
-			byte[] encrypted = c.doFinal(text);
-			return encrypted;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-	}
-
-	public static byte[] decrypt(byte[] data, byte[] key, String cipher) {
-		try {
-			SecretKeySpec sksSpec = new SecretKeySpec(key, cipher);
-			Cipher c = Cipher.getInstance(cipher);
-			c.init(Cipher.DECRYPT_MODE, sksSpec);
-			byte[] decrypted = c.doFinal(data);
-			return decrypted;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-	}
-
-	public static byte[] decrypt(byte[] data, SecretKey key, String cipher) {
-		try {
-			Cipher c = Cipher.getInstance(cipher);
-			c.init(Cipher.DECRYPT_MODE, key);
-			byte[] decrypted = c.doFinal(data);
+			SecretKeySpec skey = new SecretKeySpec(key, algorithm);
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.DECRYPT_MODE, skey);
+			byte[] decrypted = cipher.doFinal(data);
 			return decrypted;
 		}
 		catch (Exception e) {
