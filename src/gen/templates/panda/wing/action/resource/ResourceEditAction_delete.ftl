@@ -52,6 +52,7 @@
 			<@p.viewfield
 				key="source"
 				value="%{r.source}"
+				cssClass="p-code"
 				escape="phtml"
 			/>
 	</#if>

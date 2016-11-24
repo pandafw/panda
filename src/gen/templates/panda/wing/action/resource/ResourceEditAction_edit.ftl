@@ -65,6 +65,7 @@
 				maxlength="50000"
 				cols="60"
 				rows="20"
+				cssClass="p-code"
 			/>
 	</#if>
 	<#if a.displayField("status")>

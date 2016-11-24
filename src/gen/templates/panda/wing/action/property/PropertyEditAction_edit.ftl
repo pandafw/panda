@@ -74,6 +74,7 @@
 				maxlength="5000"
 				cols="60"
 				rows="8"
+				cssClass="p-code"
 			/>
 	</#if>
 	<#if a.displayField("memo")>
