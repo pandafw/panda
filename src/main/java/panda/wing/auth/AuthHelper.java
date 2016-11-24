@@ -44,14 +44,14 @@ public class AuthHelper {
 	/**
 	 * encrypt key
 	 */
-	@IocInject(value=AppConstants.PANDA_SECRET_ENCRYPT_KEY, required=false)
-	protected String encKey = Encrypts.DEFAULT_KEY;
+	@IocInject(value=AppConstants.PANDA_SECRET_AUTH_KEY, required=false)
+	protected String secret = Encrypts.DEFAULT_KEY;
 	
 	/**
 	 * encrypt cipher
 	 */
-	@IocInject(value=AppConstants.PANDA_SECRET_ENCRYPT_CIPHER, required=false)
-	protected String encCipher = Encrypts.DEFAULT_CIPHER;
+	@IocInject(value=AppConstants.PANDA_SECRET_AUTH_CIPHER, required=false)
+	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
 	 * ticket cookie age
@@ -133,11 +133,11 @@ public class AuthHelper {
 
 	//------------------------------------------------------
 	public String encrypt(String value) {
-		return Encrypts.encrypt(value, encKey, encCipher);
+		return Encrypts.encrypt(value, secret, cipher);
 	}
 	
 	public String decrypt(String value) {
-		return Encrypts.decrypt(value, encKey, encCipher);
+		return Encrypts.decrypt(value, secret, cipher);
 	}
 	
 	protected int getCookieAge(ActionContext ac, Object user) {

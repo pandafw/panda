@@ -13,9 +13,9 @@ public interface AppConstants extends MvcConstants {
 	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
 
 	/** The secret */
-	public static final String PANDA_SECRET_ENCRYPT_KEY = "panda.secret.encrypt.key";
+	public static final String PANDA_SECRET_AUTH_KEY = "panda.secret.auth.key";
 	
-	public static final String PANDA_SECRET_ENCRYPT_CIPHER = "panda.secret.encrypt.cipher";
+	public static final String PANDA_SECRET_AUTH_CIPHER = "panda.secret.auth.cipher";
 	
 	/** The authenticate */
 	public static final String PANDA_AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
