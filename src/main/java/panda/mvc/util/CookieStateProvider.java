@@ -8,6 +8,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.lang.crypto.Encrypts;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.servlet.HttpServlets;
 
 
@@ -21,7 +22,20 @@ public class CookieStateProvider implements StateProvider {
 	private final static String MAXAGE = "cookie-state-maxage";
 	private final static String SECURE = "cookie-state-secure";
 	
-	private ActionContext context;
+	@IocInject
+	protected ActionContext context;
+
+	/**
+	 * encrypt key
+	 */
+	@IocInject(value=MvcConstants.PANDA_SECRET_COOKIE_KEY, required=false)
+	protected String secret = Encrypts.DEFAULT_KEY;
+	
+	/**
+	 * encrypt cipher
+	 */
+	@IocInject(value=MvcConstants.PANDA_SECRET_COOKIE_CIPHER, required=false)
+	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	private String prefix;
 	private String domain;
@@ -43,14 +57,6 @@ public class CookieStateProvider implements StateProvider {
 		setPrefix(prefix);
 	}
 	
-	/**
-	 * @param context the context to set
-	 */
-	@IocInject
-	public void setContext(ActionContext context) {
-		this.context = context;
-	}
-
 	/**
 	 * @param textProvider text provider
 	 */
@@ -134,7 +140,7 @@ public class CookieStateProvider implements StateProvider {
 	 */
 	private String encodeValue(Object value) {
 		try {
-			return value == null ? Strings.EMPTY : Encrypts.encrypt(value.toString());
+			return value == null ? Strings.EMPTY : Encrypts.encrypt(value.toString(), secret, cipher);
 		}
 		catch (Exception e) {
 			return Strings.EMPTY;
@@ -148,7 +154,7 @@ public class CookieStateProvider implements StateProvider {
 	 */
 	private String decodeValue(Object value) {
 		try {
-			return value == null ? Strings.EMPTY : Encrypts.decrypt(value.toString());
+			return value == null ? Strings.EMPTY : Encrypts.decrypt(value.toString(), secret, cipher);
 		}
 		catch (Exception e) {
 			return Strings.EMPTY;

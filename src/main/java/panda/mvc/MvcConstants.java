@@ -11,6 +11,12 @@ public interface MvcConstants extends IocConstants {
 	
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
 	
+	/* The secret */
+	public static final String PANDA_SECRET_COOKIE_KEY = "panda.secret.cookie.key";
+	
+	public static final String PANDA_SECRET_COOKIE_CIPHER = "panda.secret.cookie.cipher";
+
+	/* File POOL */
 	public static final String FILEPOOL_MAXAGE = "panda.filepool.maxage";
 	public static final String FILEPOOL_LOCAL_PATH = "panda.filepool.local.path";
 	public static final String FILEPOOL_DAO_BLOCK_SIZE = "panda.filepool.dao.block.size";
@@ -19,6 +25,7 @@ public interface MvcConstants extends IocConstants {
 	public static final String MULTIPART_FILE_SIZE_MAX = "panda.multipart.file.size.max";
 	public static final String MULTIPART_DRAIN_TIMEOUT = "panda.multipart.drain.timeout";
 	
+	/* FREEMARKER */
 	public static final String FREEMARKER_TEMPLATES = "panda.freemarker.templates";
 	public static final String FREEMARKER_TEMPLATES_WEB_PATH = "panda.freemarker.templates.web.path";
 	public static final String FREEMARKER_SETTINGS = "panda.freemarker.settings";
