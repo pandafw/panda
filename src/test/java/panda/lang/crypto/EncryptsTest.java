@@ -1,12 +1,22 @@
 package panda.lang.crypto;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.net.ssl.SSLServerSocketFactory;
 
 import junit.framework.TestCase;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import panda.lang.Randoms;
-import panda.lang.crypto.Encrypts;
+import panda.lang.codec.binary.Hex;
 import panda.lang.time.StopWatch;
 
 /**
@@ -14,8 +24,8 @@ import panda.lang.time.StopWatch;
  */
 public class EncryptsTest extends TestCase {
 	private void encdec(String text, String trans) {
-		String enc = Encrypts.encrypt(text, trans);
-		String dec = Encrypts.decrypt(enc, trans);
+		String enc = Encrypts.encrypt(text, Encrypts.DEFAULT_KEY, trans);
+		String dec = Encrypts.decrypt(enc, Encrypts.DEFAULT_KEY, trans);
 
 		assertEquals(text, dec);
 	}
@@ -65,5 +75,53 @@ public class EncryptsTest extends TestCase {
 		speedTest(samples, Encrypts.RC4);
 		speedTest(samples, Encrypts.RC5);
 		speedTest(samples, Encrypts.RSA);
+	}
+
+	@Test
+	public void testGetAvailableCiphers() {
+		SSLServerSocketFactory ssf = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+
+		String[] defaultCiphers = ssf.getDefaultCipherSuites();
+		String[] availableCiphers = ssf.getSupportedCipherSuites();
+
+		TreeMap<String, Boolean> ciphers = new TreeMap<String, Boolean>();
+
+		for (int i = 0; i < availableCiphers.length; ++i)
+			ciphers.put(availableCiphers[i], Boolean.FALSE);
+
+		for (int i = 0; i < defaultCiphers.length; ++i)
+			ciphers.put(defaultCiphers[i], Boolean.TRUE);
+
+		System.out.println("Default\tCipher");
+		for (Iterator i = ciphers.entrySet().iterator(); i.hasNext();) {
+			Map.Entry cipher = (Map.Entry)i.next();
+
+			if (Boolean.TRUE.equals(cipher.getValue()))
+				System.out.print('*');
+			else
+				System.out.print(' ');
+
+			System.out.print('\t');
+			System.out.println(cipher.getKey());
+		}
+	}
+	
+	@Test
+	public void testPKI() throws Exception {
+		testPKI("RSA", "RSA");
+		testPKI("RSA", "RSA/ECB/PKCS1Padding");
+	}
+	
+	private void testPKI(String keya, String algorithm) throws Exception {
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keya);
+		keyPairGenerator.initialize(2048);
+		KeyPair pair = keyPairGenerator.genKeyPair();
+		String text = "this is a sample test.";
+		
+		byte[] ed = Encrypts.encrypt(text.getBytes(), pair.getPrivate(), algorithm);
+		byte[] dd = Encrypts.decrypt(ed, pair.getPublic(), algorithm);
+		
+		System.out.println("PKI " + algorithm + ": " + Hex.encodeHexString(ed));
+		Assert.assertEquals(new String(dd), text);
 	}
 }

@@ -15,12 +15,12 @@ import panda.lang.codec.binary.Hex;
 
 
 public class Digests {
-	public static final String MD2 = "md2";
-	public static final String MD5 = "md5";
-	public static final String SHA1 = "sha-1";
-	public static final String SHA256 = "sha-256";
-	public static final String SHA384 = "sha-384";
-	public static final String SHA512 = "sha-512";
+	public static final String MD2 = "MD2";
+	public static final String MD5 = "MD5";
+	public static final String SHA1 = "SHA-1";
+	public static final String SHA256 = "SHA-256";
+	public static final String SHA384 = "SHA-384";
+	public static final String SHA512 = "SHA-512";
 	
 	private static final int STREAM_BUFFER_LENGTH = 1024;
 
