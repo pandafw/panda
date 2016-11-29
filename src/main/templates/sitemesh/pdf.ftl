@@ -6,10 +6,8 @@
 	${head}
 </head>
 
-<body class="${assist.browser} lang-${assist.locale}">
+<body class="print ${assist.browser} lang-${assist.locale}">
 	<div id="print">
-		<div id="page_header">${title} | <@p.text name="site-name"/></div>
-		<div id="page_footer"><span id="page_number"/> / <span id="page_count"/></div>
 		${body}
 	</div>
 
