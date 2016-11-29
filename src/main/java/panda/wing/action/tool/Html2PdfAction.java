@@ -1,5 +1,8 @@
 package panda.wing.action.tool;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,11 +16,13 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
+import panda.net.URLHelper;
 import panda.servlet.HttpServletSupport;
+import panda.servlet.ServletRequestHeaderMap;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
-import panda.wing.util.pdf.Html2Pdf;
+import panda.wing.util.Html2Pdf;
 
 @At("${super_context}/html2pdf")
 @Auth(AUTH.SUPER)
@@ -97,7 +102,17 @@ public class Html2PdfAction extends AbstractAction {
 			HttpServletRequest request = getRequest();
 			HttpServletResponse response = getResponse();
 
-			html2pdf.process(baos, request, arg.url, arg.charset);
+			String domain = URLHelper.getURLDomain(arg.url);
+			String server = request.getServerName();
+
+			Map<String, Object> headers = null;
+			if (domain.equalsIgnoreCase(server)) {
+				headers = new HashMap<String, Object>();
+				headers.putAll(new ServletRequestHeaderMap(request));
+				headers.put("X-Html2Pdf", this.getClass().getName());
+	 		}
+
+			html2pdf.process(baos, arg.url, arg.charset, headers);
 			
 			byte[] pdf = baos.toByteArray();
 

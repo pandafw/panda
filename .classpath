@@ -19,12 +19,7 @@
 	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-logging.jar" sourcepath="lib/run/commons-logging-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/ehcache-core.jar" sourcepath="lib/run/ehcache-core-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/flying-saucer-core.jar" sourcepath="lib/run/flying-saucer-core-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/flying-saucer-pdf-itext5.jar" sourcepath="lib/run/flying-saucer-pdf-itext5-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/itextpdf.jar" sourcepath="lib/run/itextpdf-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/itext-asian.jar"/>
-	<classpathentry kind="lib" path="lib/run/jtidy.jar" sourcepath="lib/run/jtidy-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/lucene-core.jar" sourcepath="lib/run/lucene-core-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/lucene-queries.jar" sourcepath="lib/run/lucene-queries-sources.jar"/>
