@@ -53,7 +53,7 @@ ${s}/#if>
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		cssTable="table-striped" autosize="false" script="false"
 	/>
-	<@safeinc step="_print"/>
+	<@safeinc step=""/>
 </div>
 
 <@footer/>

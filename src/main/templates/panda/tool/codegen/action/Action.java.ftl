@@ -109,6 +109,17 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_popup(qr);
 	}
 	
+<#elseif ui.templates?seq_contains("list_pdf")>
+	/**
+	 * ${ui.name}
+	 */
+	@At${gen.trimAtName(ui.name)}
+	@Ok(View.SFTL)
+	@Err(View.SFTL)
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
+		return super.list_pdf(qr);
+	}
+	
 <#elseif ui.templates?seq_contains("list_print")>
 	/**
 	 * ${ui.name}
