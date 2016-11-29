@@ -14,7 +14,7 @@
 	<@p.form id="eleval" method="get" theme="simple" action="+/xml" onsubmit="return elEvaluate();">
 	<table width="100%">
 		<tr><td>Expression: (Ctrl+Enter to evaluate)</td></tr>
-		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%"/></td></tr>
+		<tr><td><@p.textarea name="expr" rows="8" cssStyle="width:100%" enterfire="#eleval_submit"/></td></tr>
 		<tr><td align="center"><@p.submit id="eleval_submit" icon="flash">Evaluate</@p.submit></td></tr>
 	</table>
 	</@p.form>
@@ -22,14 +22,6 @@
 	<div id="eleval_result"></div>
 
 	<script type="text/javascript">
-		function onPageLoad() {
-			$('#eleval_expr').focus().keyup(function(evt) {
-				if (evt.ctrlKey && evt.which == 13) {
-					$('#eleval_submit').click();
-				}
-			});
-		}
-		
 		function elSetResult(s) {
 			var $or = $('#eleval_result');
 			if (s) {
