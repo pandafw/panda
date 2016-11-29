@@ -2,6 +2,7 @@ package panda.lang.time;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -34,6 +35,21 @@ public interface DateParser {
 	 * @throws NullPointerException if text or pos is null.
 	 */
 	Date parse(CharSequence source, ParsePosition pos);
+
+    /**
+     * Parses a formatted date string according to the format.  Updates the Calendar with parsed fields.
+     * Upon success, the ParsePosition index is updated to indicate how much of the source text was consumed.
+     * Not all source text needs to be consumed.  Upon parse failure, ParsePosition error index is updated to
+     * the offset of the source text which does not match the supplied format.
+     *
+     * @param source The text to parse.
+     * @param pos On input, the position in the source to start parsing, on output, updated position.
+     * @param calendar The calendar into which to set parsed fields.
+     * @return true, if source has been parsed (pos parsePosition is updated); otherwise false (and pos errorIndex is updated)
+     * @throws IllegalArgumentException when Calendar has been set to be not lenient, and a parsed field is
+     * out of range.
+     */
+    boolean parse(CharSequence source, ParsePosition pos, Calendar calendar);
 
 	// Accessors
 	// -----------------------------------------------------------------------

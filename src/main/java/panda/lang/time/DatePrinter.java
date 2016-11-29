@@ -52,7 +52,7 @@ public interface DatePrinter {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	Appendable format(long millis, Appendable buf);
+	<B extends Appendable> B format(long millis, B buf);
 
 	/**
 	 * <p>
@@ -64,7 +64,7 @@ public interface DatePrinter {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	Appendable format(Date date, Appendable buf);
+	<B extends Appendable> B format(Date date, B buf);
 
 	/**
 	 * <p>
@@ -75,7 +75,7 @@ public interface DatePrinter {
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
-	Appendable format(Calendar calendar, Appendable buf);
+	<B extends Appendable> B format(Calendar calendar, B buf);
 
 	// Accessors
 	// -----------------------------------------------------------------------
@@ -119,5 +119,5 @@ public interface DatePrinter {
 	 * @param pos the position - ignored
 	 * @return the buffer passed in
 	 */
-	Appendable format(Object obj, Appendable toAppendTo, FieldPosition pos);
+	StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos);
 }

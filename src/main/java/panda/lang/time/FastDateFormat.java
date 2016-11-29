@@ -373,14 +373,8 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	 * @return the buffer passed in
 	 */
 	@Override
-	public Appendable format(final Object obj, final Appendable toAppendTo, final FieldPosition pos) {
-		return printer.format(obj, toAppendTo, pos);
-	}
-
-	@Override
 	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-		printer.format(obj, toAppendTo, pos);
-		return toAppendTo;
+        return toAppendTo.append(printer.format(obj));
 	}
 
 	/**
@@ -424,44 +418,44 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 
 	/**
 	 * <p>
-	 * Formats a millisecond {@code long} value into the supplied {@code StringBuilder}.
+	 * Formats a millisecond {@code long} value into the supplied {@code StringBuffer}.
 	 * </p>
-	 * 
+	 *
 	 * @param millis the millisecond value to format
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
 	@Override
-	public Appendable format(final long millis, final Appendable buf) {
+	public <B extends Appendable> B format(final long millis, final B buf) {
 		return printer.format(millis, buf);
 	}
 
 	/**
 	 * <p>
-	 * Formats a {@code Date} object into the supplied {@code StringBuilder} using a
+	 * Formats a {@code Date} object into the supplied {@code StringBuffer} using a
 	 * {@code GregorianCalendar}.
 	 * </p>
-	 * 
+	 *
 	 * @param date the date to format
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
 	@Override
-	public Appendable format(final Date date, final Appendable buf) {
+	public <B extends Appendable> B format(final Date date, final B buf) {
 		return printer.format(date, buf);
 	}
 
 	/**
 	 * <p>
-	 * Formats a {@code Calendar} object into the supplied {@code StringBuilder}.
+	 * Formats a {@code Calendar} object into the supplied {@code StringBuffer}.
 	 * </p>
-	 * 
+	 *
 	 * @param calendar the calendar to format
 	 * @param buf the buffer to format into
 	 * @return the specified string buffer
 	 */
 	@Override
-	public Appendable format(final Calendar calendar, final Appendable buf) {
+	public <B extends Appendable> B format(final Calendar calendar, final B buf) {
 		return printer.format(calendar, buf);
 	}
 
@@ -496,12 +490,17 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 		return result;
 	}
 
+	@Override
+	public boolean parse(final CharSequence source, final ParsePosition pos, final Calendar calendar) {
+		return parser.parse(source, pos, calendar);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
 	 */
 	@Override
-	public Object parseObject(String source, ParsePosition pos) {
+	public Object parseObject(final String source, final ParsePosition pos) {
 		return parser.parseObject(source, pos);
 	}
 
@@ -608,19 +607,6 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
 	public String toString() {
 		return "FastDateFormat[" + printer.getPattern() + "," + printer.getLocale() + ","
 				+ printer.getTimeZone().getID() + "]";
-	}
-
-	/**
-	 * <p>
-	 * Performs the formatting by applying the rules to the specified calendar.
-	 * </p>
-	 * 
-	 * @param calendar the calendar to format
-	 * @param buf the buffer to format into
-	 * @return the specified string buffer
-	 */
-	protected Appendable applyRules(final Calendar calendar, final Appendable buf) {
-		return printer.applyRules(calendar, buf);
 	}
 
 }

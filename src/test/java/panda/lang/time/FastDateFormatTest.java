@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -318,4 +319,29 @@ public class FastDateFormatTest {
 		assertEquals(0, failures.get());
 		return totalElapsed.get();
 	}
+    /**
+     * According to LANG-954 (https://issues.apache.org/jira/browse/LANG-954) this is broken in Android 2.1.
+     */
+    @Test
+    public void testLANG_954() {
+        final String pattern = "yyyy-MM-dd'T'";
+        FastDateFormat.getInstance(pattern);
+    }
+
+    @Test
+    public void testLANG_1152() {
+        final TimeZone utc = TimeZone.getTimeZone("UTC");
+        final Date date = new Date(Long.MAX_VALUE);
+
+        String dateAsString = FastDateFormat.getInstance("yyyy-MM-dd", utc, Locale.US).format(date);
+        Assert.assertEquals("292278994-08-17", dateAsString);
+
+        dateAsString = FastDateFormat.getInstance("dd/MM/yyyy", utc, Locale.US).format(date);
+        Assert.assertEquals("17/08/292278994", dateAsString);
+    }
+
+    @Test
+    public void testLANG_1267() throws Exception {
+        FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+    }
 }

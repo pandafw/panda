@@ -1620,15 +1620,11 @@ public class DateTimesTest {
 		assertEquals("2002-02-23T09:11:12", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_DATETIME_FORMAT.getPattern(), timeZone);
 		assertEquals("2002-02-23T09:11:12", text);
-		text = DateTimes.ISO_DATETIME_FORMAT.format(cal);
-		assertEquals("2002-02-23T09:11:12", text);
 
 		text = DateTimes.format(cal.getTime(), DateTimes.ISO_DATETIME_TIME_ZONE_FORMAT.getPattern(), timeZone);
 		assertEquals("2002-02-23T09:11:12-03:00", text);
 		text = DateTimes
 			.format(cal.getTime().getTime(), DateTimes.ISO_DATETIME_TIME_ZONE_FORMAT.getPattern(), timeZone);
-		assertEquals("2002-02-23T09:11:12-03:00", text);
-		text = DateTimes.ISO_DATETIME_TIME_ZONE_FORMAT.format(cal);
 		assertEquals("2002-02-23T09:11:12-03:00", text);
 	}
 
@@ -1641,14 +1637,10 @@ public class DateTimesTest {
 		assertEquals("2002-02-23", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_DATE_FORMAT.getPattern(), timeZone);
 		assertEquals("2002-02-23", text);
-		text = DateTimes.ISO_DATE_FORMAT.format(cal);
-		assertEquals("2002-02-23", text);
 
 		text = DateTimes.format(cal.getTime(), DateTimes.ISO_DATE_TIME_ZONE_FORMAT.getPattern(), timeZone);
 		assertEquals("2002-02-23-03:00", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_DATE_TIME_ZONE_FORMAT.getPattern(), timeZone);
-		assertEquals("2002-02-23-03:00", text);
-		text = DateTimes.ISO_DATE_TIME_ZONE_FORMAT.format(cal);
 		assertEquals("2002-02-23-03:00", text);
 	}
 
@@ -1661,14 +1653,10 @@ public class DateTimesTest {
 		assertEquals("T10:11:12", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_TIME_FORMAT.getPattern(), timeZone);
 		assertEquals("T10:11:12", text);
-		text = DateTimes.ISO_TIME_FORMAT.format(cal);
-		assertEquals("T10:11:12", text);
 
 		text = DateTimes.format(cal.getTime(), DateTimes.ISO_TIME_TIME_ZONE_FORMAT.getPattern(), timeZone);
 		assertEquals("T10:11:12-03:00", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_TIME_TIME_ZONE_FORMAT.getPattern(), timeZone);
-		assertEquals("T10:11:12-03:00", text);
-		text = DateTimes.ISO_TIME_TIME_ZONE_FORMAT.format(cal);
 		assertEquals("T10:11:12-03:00", text);
 	}
 
@@ -1681,15 +1669,11 @@ public class DateTimesTest {
 		assertEquals("10:11:12", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_TIME_NO_T_FORMAT.getPattern(), timeZone);
 		assertEquals("10:11:12", text);
-		text = DateTimes.ISO_TIME_NO_T_FORMAT.format(cal);
-		assertEquals("10:11:12", text);
 
 		text = DateTimes.format(cal.getTime(), DateTimes.ISO_TIME_NO_T_TIME_ZONE_FORMAT.getPattern(), timeZone);
 		assertEquals("10:11:12-03:00", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.ISO_TIME_NO_T_TIME_ZONE_FORMAT.getPattern(),
 			timeZone);
-		assertEquals("10:11:12-03:00", text);
-		text = DateTimes.ISO_TIME_NO_T_TIME_ZONE_FORMAT.format(cal);
 		assertEquals("10:11:12-03:00", text);
 	}
 
@@ -1703,8 +1687,6 @@ public class DateTimesTest {
 		assertEquals("Sun, 08 Jun 2003 10:11:12 -0300", text);
 		text = DateTimes.format(cal.getTime().getTime(), DateTimes.SMTP_DATETIME_FORMAT.getPattern(), timeZone,
 			DateTimes.SMTP_DATETIME_FORMAT.getLocale());
-		assertEquals("Sun, 08 Jun 2003 10:11:12 -0300", text);
-		text = DateTimes.SMTP_DATETIME_FORMAT.format(cal);
 		assertEquals("Sun, 08 Jun 2003 10:11:12 -0300", text);
 
 		// format UTC
