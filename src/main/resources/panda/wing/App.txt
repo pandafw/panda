@@ -18,6 +18,9 @@ list_csv-items-maximum=10000
 list_tsv-items-default=5000
 list_tsv-items-maximum=10000
 
+list_pdf-items-default=5000
+list_pdf-items-maximum=10000
+
 list_xml-items-default=5000
 list_xml-items-maximum=10000
 

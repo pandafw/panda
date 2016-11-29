@@ -150,6 +150,16 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
+	 * list_pdf
+	 */
+	protected Object list_pdf(Queryer qr, List<ListColumn> columns) {
+		set_load(false);
+		set_save(false);
+
+		return doList(qr, VC.DEFAULT_PDF_PAGE_ITEMS, VC.DEFAULT_PDF_MAX_ITEMS);
+	}
+	
+	/**
 	 * list_print
 	 */
 	protected Object list_print(Queryer qr) {
