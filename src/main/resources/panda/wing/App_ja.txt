@@ -141,6 +141,7 @@ button-bupdate-execute=更新
 
 
 title-list=${top.title} - 一覧
+title-list_pdf=${top.title} - 一覧
 title-list_popup=${top.title} - 一覧
 title-list_print=${top.title} - 一覧
 title-import=インポート
@@ -166,6 +167,7 @@ title-bupdate=${top.title} - 編集
 
 #step
 step-list=一覧
+step-list_pdf=一覧
 step-list_print=一覧
 step-list_popup=一覧
 step-import=インポート

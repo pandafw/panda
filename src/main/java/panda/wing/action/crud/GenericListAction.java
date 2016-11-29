@@ -152,7 +152,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_pdf
 	 */
-	protected Object list_pdf(Queryer qr, List<ListColumn> columns) {
+	protected Object list_pdf(Queryer qr) {
 		set_load(false);
 		set_save(false);
 

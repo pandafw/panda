@@ -139,6 +139,7 @@ button-bupdate-execute=提交
 
 
 title-list=${top.title} - 浏览
+title-list_pdf=${top.title} - 浏览
 title-list_popup=${top.title} - 浏览
 title-list_print=${top.title} - 浏览
 title-import=数据导入
@@ -164,8 +165,9 @@ title-bupdate=${top.title} - 变更
 
 #step
 step-list=浏览
-step-list_print=浏览
+step-list_pdf=浏览
 step-list_popup=浏览
+step-list_print=浏览
 step-import=数据导入
 step-view=详细
 step-print=详细

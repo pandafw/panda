@@ -207,6 +207,7 @@ icon-bupdate-execute=fa fa-save
 title-list=${top.title} - List
 title-list_csv=${top.title} - CSV
 title-list_tsv=${top.title} - TSV
+title-list_pdf=${top.title} - List
 title-list_popup=${top.title} - List
 title-list_print=${top.title} - List
 title-import=Import
@@ -231,6 +232,7 @@ title-bupdate=${top.title} - Update
 #step
 step-list=List
 step-list_print=List
+step-list_pdf=List
 step-list_popup=List
 step-import=Import
 step-view=View
