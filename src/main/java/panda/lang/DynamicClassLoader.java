@@ -225,11 +225,11 @@ public class DynamicClassLoader extends ClassLoader {
 			StringBuilder buf = new StringBuilder(1000);
 			
 			buf.append('.');
-			buf.append(Systems.PATH_SEPARATOR).append(getBinFolder().getCanonicalPath());
+			buf.append(File.pathSeparatorChar).append(getBinFolder().getCanonicalPath());
 
 			Set<URL> urls = ClassLoaders.getAllClassLoaderURLs();
 			for (URL url : urls) {
-				buf.append(Systems.PATH_SEPARATOR).append(url.getFile());
+				buf.append(File.pathSeparatorChar).append(url.getFile());
 			}
 			options.add("-classpath");
 			options.add(buf.toString());
