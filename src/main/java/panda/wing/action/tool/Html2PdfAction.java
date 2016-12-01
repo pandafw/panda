@@ -22,7 +22,7 @@ import panda.servlet.ServletRequestHeaderMap;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
-import panda.wing.util.Html2Pdf;
+import panda.wing.util.pdf.Html2Pdf;
 
 @At("${super_context}/html2pdf")
 @Auth(AUTH.SUPER)

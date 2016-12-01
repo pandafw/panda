@@ -6,6 +6,15 @@ public interface AppConstants extends MvcConstants {
 	/** The cache */
 	public static final String PANDA_CACHE = "panda.cache";
 
+	/** The wkhtmltopdf exe path */
+	public static final String PANDA_WKHTML2PDF_PATH = "panda.wkhtml2pdf.path";
+
+	/** The wkhtmltopdf processor wait timeout */
+	public static final String PANDA_WKHTML2PDF_TIMEOUT = "panda.wkhtml2pdf.timeout";
+
+	/** The fonts path used by flyingsaucer */
+	public static final String PANDA_FONTS_PATH = "panda.fonts.path";
+
 	/** The load task keys */
 	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
 

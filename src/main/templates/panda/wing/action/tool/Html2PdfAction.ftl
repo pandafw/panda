@@ -6,7 +6,7 @@
 
 <div class="p-section a-html2pdf">
 	<div class="p-header">
-		<h3><i class="fa fa-file-text"></i> <@p.text name="title"/></h3>
+		<h3><i class="fa fa-file-pdf-o"></i> <@p.text name="title"/></h3>
 	</div>
 
 	<@p.form id="html2pdf" method="get" target="_blank" theme="bs3h" loadmask="false">

@@ -1,4 +1,4 @@
-package panda.wing.util;
+package panda.wing.util.pdf;
 
 import java.io.OutputStream;
 import java.util.Map;
