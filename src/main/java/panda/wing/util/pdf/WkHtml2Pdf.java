@@ -101,7 +101,7 @@ public class WkHtml2Pdf extends Html2Pdf {
 		cmds.add(of.getAbsolutePath());
 
 		if (log.isDebugEnabled()) {
-			log.debug(Strings.join(cmds, ' '));
+			log.debug(Strings.join(cmds, " ", "\"", "\""));
 		}
 		
 		Process p = null;

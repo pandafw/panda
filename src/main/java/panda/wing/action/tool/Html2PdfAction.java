@@ -109,10 +109,10 @@ public class Html2PdfAction extends AbstractAction {
 			if (domain.equalsIgnoreCase(server)) {
 				headers = new HttpHeader();
 				headers.putAll(new ServletRequestHeaderMap(request));
+				headers.remove(HttpHeader.ACCEPT_ENCODING);
 				headers.remove(HttpHeader.CONNECTION);
 				headers.remove(HttpHeader.HOST);
-				headers.put("X-Html2Pdf", this.getClass().getName());
-	 		}
+			}
 
 			html2pdf.setCharset(arg.charset);
 			html2pdf.setHeaders(headers);
