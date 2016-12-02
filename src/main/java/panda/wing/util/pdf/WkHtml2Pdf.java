@@ -27,8 +27,8 @@ import panda.wing.AppConstants;
 public class WkHtml2Pdf extends Html2Pdf {
 	private static final Log log = Logs.getLog(WkHtml2Pdf.class);
 	
-	@IocInject(value=AppConstants.PANDA_WKHTML2PDF_PATH)
-	protected String path;
+	@IocInject(value=AppConstants.PANDA_WKHTML2PDF_PATH, required=false)
+	protected String path = "wkhtmltopdf";
 	
 	@IocInject(value=AppConstants.PANDA_WKHTML2PDF_TIMEOUT, required=false)
 	protected int timeout = 300;

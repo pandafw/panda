@@ -1,6 +1,5 @@
 package panda.wing.action.tool;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +16,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.VoidView;
 import panda.net.URLHelper;
+import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletSupport;
 import panda.servlet.ServletRequestHeaderMap;
 import panda.wing.action.AbstractAction;
@@ -92,7 +92,7 @@ public class Html2PdfAction extends AbstractAction {
 	@At("")
 	public Object execute(@Param Arg arg) throws Exception {
 		if (Strings.isEmpty(arg.url)) {
-			arg.url = getText("url-default", "http://www.yahoo.com");
+			arg.url = getText("url-default", "http://www.google.com");
 			return SitemeshFreemarkerView.DEFAULT;
 		}
 
@@ -107,8 +107,10 @@ public class Html2PdfAction extends AbstractAction {
 
 			Map<String, Object> headers = null;
 			if (domain.equalsIgnoreCase(server)) {
-				headers = new HashMap<String, Object>();
+				headers = new HttpHeader();
 				headers.putAll(new ServletRequestHeaderMap(request));
+				headers.remove(HttpHeader.CONNECTION);
+				headers.remove(HttpHeader.HOST);
 				headers.put("X-Html2Pdf", this.getClass().getName());
 	 		}
 
