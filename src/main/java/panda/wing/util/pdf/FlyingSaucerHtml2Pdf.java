@@ -40,7 +40,11 @@ import panda.log.Logs;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpHeader;
 
-public abstract class FlyingSaucerHtml2Pdf implements Html2Pdf {
+/**
+ * deprecated
+ * use WkHtml2Pdf
+ */
+public abstract class FlyingSaucerHtml2Pdf extends Html2Pdf {
 	private static final Log log = Logs.getLog(FlyingSaucerHtml2Pdf.class);
 	
 	protected HttpClient agent;
@@ -334,7 +338,8 @@ public abstract class FlyingSaucerHtml2Pdf implements Html2Pdf {
 		return doc;
 	}
 
-	public void process(OutputStream os, String url, String charset, Map<String, Object> headers) throws Exception {
+	@Override
+	public void process(OutputStream os) throws Exception {
 		createHttpClientAgent(url, headers);
 		createITextRenderer();
 		

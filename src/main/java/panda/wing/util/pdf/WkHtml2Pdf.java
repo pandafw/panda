@@ -1,13 +1,15 @@
 package panda.wing.util.pdf;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import panda.io.Files;
+import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
@@ -21,8 +23,8 @@ import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.wing.AppConstants;
 
-@IocBean(type=Html2Pdf.class)
-public class WkHtml2Pdf implements Html2Pdf {
+@IocBean(type=Html2Pdf.class, singleton=false)
+public class WkHtml2Pdf extends Html2Pdf {
 	private static final Log log = Logs.getLog(WkHtml2Pdf.class);
 	
 	@IocInject(value=AppConstants.PANDA_WKHTML2PDF_PATH)
@@ -30,8 +32,25 @@ public class WkHtml2Pdf implements Html2Pdf {
 	
 	@IocInject(value=AppConstants.PANDA_WKHTML2PDF_TIMEOUT, required=false)
 	protected int timeout = 300;
-	
-	public void process(OutputStream os, String url, String charset, Map<String, Object> headers) throws Exception {
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	@Override
+	public void process(OutputStream os) throws Exception {
 		if (!Files.isFile(path)) {
 			throw new RuntimeException("wkhtmltopdf not exists: " + path);
 		}
@@ -39,8 +58,31 @@ public class WkHtml2Pdf implements Html2Pdf {
 		int wait = timeout * 1000;
 
 		File of = File.createTempFile("wkhtmltopdf-", ".pdf");
+
 		List<String> cmds = new ArrayList<String>();
 		cmds.add(path);
+		cmds.add("-q"); // quiet
+		if (Strings.isNotEmpty(charset)) {
+			cmds.add("--encoding");
+			cmds.add(charset);
+		}
+		cmds.add("--print-media-type");
+		cmds.add("--margin-top");
+		cmds.add("10");
+		cmds.add("--margin-right");
+		cmds.add("10");
+		cmds.add("--margin-bottom");
+		cmds.add("10");
+		cmds.add("--margin-left");
+		cmds.add("10");
+		cmds.add("--footer-center");
+		cmds.add("[page] / [topage]");
+		cmds.add("--footer-spacing");
+		cmds.add("3");
+		cmds.add("--footer-font-name");
+		cmds.add("Courier New");
+		cmds.add("--footer-font-size");
+		cmds.add("7");
 		
 		if (Collections.isNotEmpty(headers)) {
 			HttpHeader hh = new HttpHeader();
@@ -66,7 +108,12 @@ public class WkHtml2Pdf implements Html2Pdf {
 		StopWatch watch = new StopWatch();
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmds);
+			pb.redirectErrorStream(true);
+			
 			p = pb.start();
+
+			StringBuilder sb = new StringBuilder();
+			InputStream stdout = p.getInputStream();
 
 			Waiter w = new Waiter(p);
 			w.start();
@@ -74,17 +121,30 @@ public class WkHtml2Pdf implements Html2Pdf {
 			while (w.isAlive()) {
 				w.join(100);
 
+				if (sb != null) {
+					Streams.copy(stdout, sb);
+				}
+
 				if (watch.getTime() > wait) {
 					throw new RuntimeException("Process [" + Processors.getPid(p) + "] of Command [ " + Strings.join(cmds, ' ') + " ] is timeout for " + timeout + " seconds.");
 				}
 			}
 
+			Streams.copy(stdout, sb);
+			if (log.isDebugEnabled() && Strings.isNotEmpty(sb)) {
+				log.debug(sb.toString());
+			}
+
+			if (w.exitValue() != 0) {
+				throw new IOException("Html2PDF failed with code (" + w.exitValue() + ")\n" + sb.toString());
+			}
 			Files.copyFile(of, os);
 		}
 		catch (Exception e) {
 			if (p != null) {
 				p.destroy();
 			}
+			throw e;
 		}
 		finally {
 			of.delete();

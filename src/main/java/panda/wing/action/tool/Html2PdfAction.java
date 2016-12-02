@@ -112,7 +112,10 @@ public class Html2PdfAction extends AbstractAction {
 				headers.put("X-Html2Pdf", this.getClass().getName());
 	 		}
 
-			html2pdf.process(baos, arg.url, arg.charset, headers);
+			html2pdf.setCharset(arg.charset);
+			html2pdf.setHeaders(headers);
+			html2pdf.setUrl(arg.url);
+			html2pdf.process(baos);
 			
 			byte[] pdf = baos.toByteArray();
 
