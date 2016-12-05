@@ -87,14 +87,6 @@ locale-countries=\
 	"JP": "日本", \
 	"CN": "中国"
 
-#const
-const-booleans=\
-	"true": "はい", \
-	"false": "いいえ"
-	
-const-genders=\
-	"F": "女", \
-	"M": "男"
 
 #--------------------------------------------
 # Generic Action

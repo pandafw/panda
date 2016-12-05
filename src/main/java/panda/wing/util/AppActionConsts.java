@@ -1,6 +1,5 @@
 package panda.wing.util;
 
-import java.util.List;
 import java.util.Map;
 
 import panda.ioc.Scope;
@@ -13,27 +12,6 @@ import panda.wing.constant.RC;
 @IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 public class AppActionConsts extends ActionConsts {
 
-	/**
-	 * @return map
-	 */
-	public Map<String, String> getBooleanMap() {
-		return getTextAsMap("const-booleans");
-	}
-
-	/**
-	 * @return list
-	 */
-	public List getBloodTypeList() {
-		return getTextAsList("const-bloodTypes");
-	}
-	
-	/**
-	 * @return map
-	 */
-	public Map<String, String> getGenderMap() {
-		return getTextAsMap("const-genders");
-	}
-	
 	/**
 	 * getPermissionMap
 	 * @return map
