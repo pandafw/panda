@@ -316,7 +316,7 @@ public class HttpClient {
 			msg.append(sw).append(')');
 			if (response.getHeader() != null) {
 				msg.append(Streams.LINE_SEPARATOR); 
-				response.getHeader().toString(msg);
+				response.getHeader().write(msg);
 			}
 
 			if (log.isTraceEnabled()) {

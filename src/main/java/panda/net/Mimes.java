@@ -19,6 +19,7 @@ import panda.lang.codec.net.QCodec;
  * Utility class to decode MIME texts.
  */
 public final class Mimes {
+	public static final int MAX_LINE_LENGTH = 76;
 
 	public static final String BIT7 = "7bit";
 	public static final String BASE64 = "Base64";
@@ -410,13 +411,6 @@ public final class Mimes {
 	}
 
 	//------------------------------------------------------------
-	/*
-	 * The following two properties allow disabling the fold() and unfold() methods and reverting to
-	 * the previous behavior. They should never need to be changed and are here only because of my
-	 * paranoid concern with compatibility.
-	 */
-	private static final boolean foldEncodedWords = false;
-
 	/**
 	 * Encode a RFC 822 "text" token into mail-safe form as per RFC 2047.
 	 * <p>
@@ -607,7 +601,7 @@ public final class Mimes {
 	}
 
 	private static void doEncode(String string, boolean b64, String jcharset, int avail, String prefix, boolean first,
-			boolean encodingWord, StringBuilder buf) throws UnsupportedEncodingException {
+			boolean encodingWord, StringBuilder buf) throws UnsupportedEncodingException, EncoderException {
 
 		// First find out what the length of the encoded version of
 		// 'string' would be.
@@ -629,27 +623,23 @@ public final class Mimes {
 		else {
 			byte[] encodedBytes = null; // the encoded stuff
 
-			try { // do the encoding
-				if (b64) // "B" encoding
-					encodedBytes = BCodec.encodeBytes(bytes);
-				else
-					// "Q" encoding
-					encodedBytes = QCodec.encodeBytes(bytes, true);
-			}
-			catch (EncoderException ex) {
-			}
+			// do the encoding
+			if (b64) // "B" encoding
+				encodedBytes = BCodec.encodeBytes(bytes);
+			else
+				// "Q" encoding
+				encodedBytes = QCodec.encodeBytes(bytes, true);
 
-			// Now write out the encoded (all ASCII) bytes into our
-			// StringBuilder
-			if (!first) // not the first line of this sequence
-				if (foldEncodedWords)
-					buf.append("\r\n "); // start a continuation line
-				else
-					buf.append(" "); // line will be folded later
+			// Now write out the encoded (all ASCII) bytes into our StringBuilder
+			if (!first) {
+				// not the first line of this sequence
+				buf.append(" "); // line will be folded later
+			}
 
 			buf.append(prefix);
-			for (int i = 0; i < encodedBytes.length; i++)
+			for (int i = 0; i < encodedBytes.length; i++) {
 				buf.append((char)encodedBytes[i]);
+			}
 			buf.append("?="); // terminate the current sequence
 		}
 	}
@@ -715,4 +705,30 @@ public final class Mimes {
 		else
 			return word;
 	}
+
+	// TODO
+	public static String foldLine(String s) {
+		StringBuilder sb = new StringBuilder();
+
+		int offset = 3;
+		int i = 0;
+		while (true) {
+			if (offset > 0 && s.substring(i).length() > MAX_LINE_LENGTH - offset) {
+				sb.append(s.substring(i, i + MAX_LINE_LENGTH - offset));
+				i += MAX_LINE_LENGTH - offset;
+				offset = 0;
+			}
+			else if (s.substring(i).length() > MAX_LINE_LENGTH) {
+				sb.append("\r\n\t").append(s.substring(i, i + MAX_LINE_LENGTH));
+				i += MAX_LINE_LENGTH;
+			}
+			else {
+				sb.append("\r\n\t").append(s.substring(i));
+				break;
+			}
+		}
+
+		return sb.toString();
+	}
+
 }

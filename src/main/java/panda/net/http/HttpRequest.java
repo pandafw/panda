@@ -375,7 +375,7 @@ public class HttpRequest {
 		writer.append(method).append(' ').append(getURL().toString());
 		if (header != null) {
 			writer.append(Streams.LINE_SEPARATOR);
-			header.toString(writer);
+			header.write(writer);
 		}
 		if (!isGet()) {
 			writer.append(Streams.LINE_SEPARATOR);

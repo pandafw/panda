@@ -1,15 +1,9 @@
 package panda.net.smtp;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
 
-import panda.io.Streams;
-import panda.lang.Exceptions;
-import panda.lang.Iterators;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.net.InternetHeader;
@@ -18,7 +12,7 @@ import panda.net.InternetHeader;
  * https://tools.ietf.org/html/rfc4021
  */
 public class SMTPHeader extends InternetHeader implements Cloneable, Serializable {
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 5L;
 	
 	/**
 	 * Date format pattern used to parse date headers in RFC 2822 format.
@@ -43,11 +37,31 @@ public class SMTPHeader extends InternetHeader implements Cloneable, Serializabl
 	public static final String CC                        = "Cc";
 	public static final String BCC                       = "Bcc";
 	public static final String REPLY_TO                  = "Reply-To";
+	public static final String IN_REPLY_TO               = "In-Reply-To";
 	public static final String SUBJECT                   = "Subject";
+	public static final String SENDER                    = "Sender";
 
 	public static final String MIME_VERSION_10           = "1.0";
 	public static final String CONTENT_DISPOSITION_INLIE = "inline";
 	public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment";
+
+	public static final String LIST_SUBSCRIBE            = "List-Subscribe";
+	public static final String LIST_POST                 = "List-Post";
+	public static final String LIST_OWNER                = "List-Owner";
+	public static final String LIST_ID                   = "List-Id";
+	public static final String LIST_ARCHIVE              = "List-Archive";
+	public static final String LIST_HELP                 = "List-Help";
+	public static final String LIST_UNSUBSCRIBE          = "List-Unsubscribe";
+
+	public static final String RESENT_FROM       = "Resent-From";
+	public static final String RESENT_TO         = "Resent-To";
+	public static final String RESENT_CC         = "Resent-Cc";
+	public static final String RESENT_DATE       = "Resent-Date";
+	public static final String RESENT_MESSAGE_ID = "Resent-Message-ID";
+	public static final String RESENT_SENDER     = "Resent-Sender";
+
+	public static final String REFERENCES        = "References";
+	public static final String DKIM_SIGNATUR     = "DKIM-Signature";
 
 	// -------------------------------------------------------------
 	public static SMTPHeader create() {
@@ -67,8 +81,6 @@ public class SMTPHeader extends InternetHeader implements Cloneable, Serializabl
 	}
 
 	//-------------------------------------------------
-	
-	//-------------------------------------------------
 	@Override
 	protected Date parseDate(String value) {
 		return DateTimes.safeParse(FDF_RFC2822, value);
@@ -80,41 +92,9 @@ public class SMTPHeader extends InternetHeader implements Cloneable, Serializabl
 	}
 
 	@Override
-	public Object clone() {
+	public SMTPHeader clone() {
 		SMTPHeader hh = new SMTPHeader();
-		hh.map.putAll(map);
+		hh.putAll(this);
 		return hh;
-	}
-	
-	@Override
-	public String toString() {
-		try {
-			StringBuilder sb = new StringBuilder();
-			toString(sb);
-			return sb.toString();
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-	}
-
-	public void toString(Appendable writer) throws IOException {
-		for (Map.Entry<String, Object> en : entrySet()) {
-			String key = en.getKey();
-			writer.append(key).append(": ");
-
-			Object val = en.getValue();
-			if (val != null) {
-				Iterator it = Iterators.asIterator(en.getValue());
-				while (it.hasNext()) {
-					writer.append(it.next().toString());
-					if (it.hasNext()) {
-						writer.append(',');
-					}
-				}
-			}
-			writer.append(Streams.LINE_SEPARATOR_UNIX);
-		}
-		writer.append(Streams.LINE_SEPARATOR_UNIX);
 	}
 }

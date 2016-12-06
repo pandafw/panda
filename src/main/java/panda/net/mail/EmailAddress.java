@@ -171,8 +171,8 @@ public class EmailAddress {
 			sb.append('"').append(s).append('"');
 			return sb.toString();
 		}
-		else
-			return s;
+
+		return s;
 	}
 
 	public static String unquote(String s) {

@@ -1,6 +1,8 @@
 package panda.lang.collection;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,79 +36,243 @@ import java.util.Set;
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
  * 
- * @author yf.frank.wang@gmail.com
  */
-public class CaseInsensitiveMap<K, V> implements Map<K, V> {
-	private Map<K, V> map;
+public class CaseInsensitiveMap<K, V> implements Map<K, V>, Cloneable {
+	private transient Map<K, K> keys;
+	private transient Map<K, V> cmap;
+	
+	public CaseInsensitiveMap() {
+		this.keys = new HashMap<K, K>();
+		this.cmap = init();
+	}
 	
 	public CaseInsensitiveMap(Map<K, V> map) {
-		this.map = map;
+		this();
+		putAll(map);
 	}
 
-	private Object toCompareKey(Object key) {
+	protected Map<K, V> init() {
+		return new HashMap<K, V>();
+	}
+	
+	protected Object toCompareKey(Object key) {
 		return key instanceof String ? ((String)key).toLowerCase() : key; 
 	}
 
+	@Override
 	public void clear() {
-		map.clear();
+		keys.clear();
+		cmap.clear();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
-		return map.containsKey(toCompareKey(key));
+		Object ck = toCompareKey(key);
+		if (keys.containsKey(ck)) {
+			K mk = keys.get(ck);
+			if (cmap.containsKey(mk)) {
+				return true;
+			}
+			keys.remove(ck);
+		}
+		return false;
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
-		return map.containsValue(value);
+		return cmap.containsValue(value);
 	}
 
+	@Override
 	public Set<Entry<K, V>> entrySet() {
-		return map.entrySet();
+		return cmap.entrySet();
 	}
 
+	@Override
 	public V get(Object key) {
-		return map.get(toCompareKey(key));
+		Object ck = toCompareKey(key);
+		if (keys.containsKey(ck)) {
+			K mk = keys.get(ck);
+			return cmap.get(mk);
+		}
+		return null;
 	}
 
+	@Override
 	public boolean isEmpty() {
-		return map.isEmpty();
+		return cmap.isEmpty();
 	}
 
+	@Override
 	public Set<K> keySet() {
-		return map.keySet();
+		return new Set<K>() {
+			Set<K> ks = cmap.keySet();
+			
+			@Override
+			public int size() {
+				return ks.size();
+			}
+
+			@Override
+			public boolean isEmpty() {
+				return ks.isEmpty();
+			}
+
+			@Override
+			public boolean contains(Object o) {
+				return containsKey(o);
+			}
+
+			@Override
+			public Iterator<K> iterator() {
+				return ks.iterator();
+			}
+
+			@Override
+			public Object[] toArray() {
+				return ks.toArray();
+			}
+
+			@Override
+			public <T> T[] toArray(T[] a) {
+				return ks.toArray(a);
+			}
+
+			@Override
+			public boolean add(K e) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public boolean remove(Object o) {
+				Object ck = toCompareKey(o);
+				if (keys.containsKey(ck)) {
+					K mk = keys.remove(ck);
+					cmap.remove(mk);
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public boolean containsAll(Collection<?> c) {
+				for (Object e : c) {
+					if (!containsKey(e)) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			@Override
+			public boolean addAll(Collection<? extends K> c) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public boolean retainAll(Collection<?> c) {
+				boolean modified = false;
+
+				Set<Object> s = new CaseInsensitiveSet<Object>(c);
+
+				Iterator<?> it = iterator();
+				while (it.hasNext()) {
+					if (!s.contains(it.next())) {
+						it.remove();
+						modified = true;
+					}
+				}
+				return modified;
+			}
+
+			@Override
+			public boolean removeAll(Collection<?> c) {
+				boolean modified = false;
+				
+				for (Object o : c) {
+					if (remove(o)) {
+						modified = true;
+					}
+				}
+				return modified;
+			}
+
+			@Override
+			public void clear() {
+				keys.clear();
+				cmap.clear();
+			}
+		};
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public V put(K key, V value) {
-		return map.put((K)toCompareKey(key), value);
+		Object ck = toCompareKey(key);
+		if (keys.containsKey(ck)) {
+			K mk = keys.get(ck);
+			return cmap.put(mk, value);
+		}
+
+		keys.put((K)ck, key);
+		return cmap.put(key, value);
 	}
 
+	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
 		for (Entry<? extends K, ? extends V> en : m.entrySet()) {
 			put(en.getKey(), en.getValue());
 		}
 	}
 
+	@Override
 	public V remove(Object key) {
-		return map.remove(toCompareKey(key));
+		Object ck = toCompareKey(key);
+		if (keys.containsKey(ck)) {
+			K mk = keys.remove(ck);
+			return cmap.remove(mk);
+		}
+
+		return null;
 	}
 
+	@Override
 	public int size() {
-		return map.size();
+		return cmap.size();
 	}
 
+	@Override
 	public Collection<V> values() {
-		return map.values();
+		return cmap.values();
 	}
 
+	@Override
 	public boolean equals(Object o) {
-		return map.equals(o);
+		if (o == this) {
+			return true;
+		}
+
+		if (!(o instanceof Map)) {
+			return false;
+		}
+		
+		return cmap.equals(o);
 	}
 
+	@Override
 	public int hashCode() {
-		return map.hashCode();
+		return cmap.hashCode();
 	}
 
+	@Override
 	public String toString() {
-		return map.toString();
+		return cmap.toString();
+	}
+
+	@Override
+	public CaseInsensitiveMap<K, V> clone() {
+		CaseInsensitiveMap<K, V> m = new CaseInsensitiveMap<K, V>();
+		m.putAll(this);
+		return m;
 	}
 }

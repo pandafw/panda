@@ -482,6 +482,18 @@ public class Base64 extends BaseNCodec {
 	//
 
 	/**
+	 * Calculates the amount of space needed to encode the supplied array.
+	 * 
+	 * @param b byte[] array which will later be encoded
+	 * @return amount of space needed to encoded the supplied array. Returns a long since a max-len
+	 *         array will require > Integer.MAX_VALUE
+	 */
+	public static int encodedLength(final byte[] b) {
+		// Calculate non-chunked size - rounded up to allow for padding
+		return ((b.length + BYTES_PER_UNENCODED_BLOCK - 1) / BYTES_PER_UNENCODED_BLOCK) * BYTES_PER_ENCODED_BLOCK;
+	}
+
+	/**
 	 * Returns whether or not the <code>octet</code> is in the base 64 alphabet.
 	 * 
 	 * @param octet The value to test

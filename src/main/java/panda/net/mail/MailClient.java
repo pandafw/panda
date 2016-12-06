@@ -31,6 +31,8 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.net.Mimes;
 import panda.net.PrintCommandListener;
+import panda.net.io.CRLFLineWriter;
+import panda.net.mail.dkim.DkimSigner;
 import panda.net.smtp.AuthenticatingSMTPClient;
 import panda.net.smtp.SMTPClient;
 import panda.net.smtp.SMTPHeader;
@@ -390,66 +392,78 @@ public class MailClient {
 			}
 
 			Writer out = client.sendMessageData(dbg);
-			if (out != null) {
-				String boundary = null;
+			if (out == null) {
+				throw new EmailException(errmsg(host, port, client.getReplyString()));
+			}
+			
+			String boundary = null;
 				
-				SMTPHeader header = new SMTPHeader();
-				header.setDate(SMTPHeader.DATE, email.getDate() == null ? DateTimes.getDate() : email.getDate());
-				header.set(SMTPHeader.FROM, email.getEncodedFrom());
-				header.set(SMTPHeader.TO, email.getEncodedTos());
-				if (Collections.isNotEmpty(email.getCcs())) {
-					header.set(SMTPHeader.CC, email.getEncodedCcs());
-				}
-				if (Collections.isNotEmpty(email.getBccs())) {
-					header.set(SMTPHeader.BCC, email.getEncodedBccs());
-				}
-				if (Collections.isNotEmpty(email.getReplyTos())) {
-					header.set(SMTPHeader.REPLY_TO, email.getEncodedReplyTos());
-				}
+			SMTPHeader header = new SMTPHeader();
+			header.setDate(SMTPHeader.DATE, email.getDate() == null ? DateTimes.getDate() : email.getDate());
+			header.set(SMTPHeader.FROM, email.getEncodedFrom());
+			header.set(SMTPHeader.TO, email.getEncodedTos());
+			if (Collections.isNotEmpty(email.getCcs())) {
+				header.set(SMTPHeader.CC, email.getEncodedCcs());
+			}
+			if (Collections.isNotEmpty(email.getBccs())) {
+				header.set(SMTPHeader.BCC, email.getEncodedBccs());
+			}
+			if (Collections.isNotEmpty(email.getReplyTos())) {
+				header.set(SMTPHeader.REPLY_TO, email.getEncodedReplyTos());
+			}
 
-				header.set(SMTPHeader.MESSAGE_ID, email.getMsgId());
-				header.set(SMTPHeader.SUBJECT, email.getEncodedSubject());
-				header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
+			header.set(SMTPHeader.MESSAGE_ID, email.getMsgId());
+			header.set(SMTPHeader.SUBJECT, email.getEncodedSubject());
+			header.set(SMTPHeader.MIME_VERSION, SMTPHeader.MIME_VERSION_10);
 
-				if (email.isHtml() || email.hasAttachments()) {
-					boundary = Randoms.randDigitLetters(28);
-					header.set(SMTPHeader.CONTENT_TYPE, "multipart/mixed; boundary=" + boundary);
-				}
-				else {
-					header.set(SMTPHeader.CONTENT_TYPE, "text/plain; charset=" + email.getCharset());
-				}
-
-				String encoding = Mimes.BIT7;
-				String body = email.getMessage();
-
-				if (!Strings.isAscii(body)) {
-					encoding = Mimes.BASE64;
-					body = Base64.encodeBase64ChunkedString(body.getBytes(email.getCharset()));
-				}
-				header.set(SMTPHeader.CONTENT_TRANSFER_ENCODING, encoding);
-	
-				out.write(header.toString());
-
-				if (email.isHtml() || email.hasAttachments()) {
-					// Write the main text message
-					appendMsgPart(out, boundary, encoding, body, email);
-					
-					// Append attachments
-					appendAttachments(out, boundary, email);
-					
-					out.write("--" + boundary + "--\n\n");
-				}
-				else {
-					out.write(body);
-				}
-				
-				out.flush();
-				out.close();
-				if (!client.completePendingCommand()) {
-					throw new EmailException(errmsg(host, port, client.getReplyString()));
-				}
+			if (email.isHtml() || email.hasAttachments()) {
+				boundary = Randoms.randDigitLetters(28);
+				header.set(SMTPHeader.CONTENT_TYPE, "multipart/mixed; boundary=" + boundary);
 			}
 			else {
+				header.set(SMTPHeader.CONTENT_TYPE, "text/plain; charset=" + email.getCharset());
+			}
+
+			String encoding = Mimes.BIT7;
+			String message = email.getMessage();
+
+			if (!Strings.isAscii(message)) {
+				encoding = Mimes.BASE64;
+				message = Base64.encodeBase64ChunkedString(message.getBytes(email.getCharset()));
+			}
+			header.set(SMTPHeader.CONTENT_TRANSFER_ENCODING, encoding);
+
+			if (email.isApplyDKIMSignature()) {
+				DkimSigner signer = new DkimSigner(email.getDkimDomain(), email.getDkimSelector(), email.getDkimPrivateKey());
+				
+				signer.setIdentity(email.getFrom().getAddress());
+				signer.setLengthParam(true);
+
+				// build body
+				String body = buildBody(email, encoding, message, boundary);
+				
+				String signature = signer.sign(header, body);
+				
+				// write header
+				header.write(out);
+				out.write(signature);
+				out.write("\n\n");
+
+				// write body
+				out.write(body);
+			}
+			else {
+				// write header
+				header.write(out);
+				out.write("\n");
+
+				// write body
+				writeBody(out, email, encoding, message, boundary);
+			}
+			
+			out.flush();
+			out.close();
+			if (!client.completePendingCommand()) {
 				throw new EmailException(errmsg(host, port, client.getReplyString()));
 			}
 		}
@@ -474,7 +488,32 @@ public class MailClient {
 		}
 	}
 
-	private void appendMsgPart(Writer out, String boundary, String encoding, String body, Email email) throws IOException {
+	private String buildBody(Email email, String encoding, String message, String boundary) throws IOException {
+		StringBuilderWriter sbw = new StringBuilderWriter();
+		CRLFLineWriter clw = new CRLFLineWriter(sbw);
+
+		writeBody(clw, email, encoding, message, boundary);
+		
+		clw.close();
+		return sbw.toString();
+	}
+	
+	private void writeBody(Writer out, Email email, String encoding, String message, String boundary) throws IOException {
+		if (email.isHtml() || email.hasAttachments()) {
+			// Write the main text message
+			writeMsgPart(out, email, encoding, message, boundary);
+			
+			// Append attachments
+			writeAttachments(out, email, boundary);
+			
+			out.write("--" + boundary + "--\n\n");
+		}
+		else {
+			out.write(message);
+		}
+	}
+
+	private void writeMsgPart(Writer out, Email email, String boundary, String encoding, String message) throws IOException {
 		// Write the main text message
 		out.write("--" + boundary + "\n");
 		out.write(SMTPHeader.CONTENT_TYPE);
@@ -494,7 +533,7 @@ public class MailClient {
 		out.write(encoding);
 		out.write("\n\n");
 
-		out.write(body);
+		out.write(message);
 		out.write("\n");
 	}
 
@@ -503,7 +542,7 @@ public class MailClient {
 	 * 
 	 * @param boundary separates each file attachment
 	 */
-	private void appendAttachments(Writer out, String boundary, Email email) throws IOException {
+	private void writeAttachments(Writer out, Email email, String boundary) throws IOException {
 		if (Collections.isEmpty(email.getAttachments())) {
 			return;
 		}

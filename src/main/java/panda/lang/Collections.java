@@ -24,6 +24,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 
 import panda.lang.collection.CaseInsensitiveMap;
+import panda.lang.collection.CaseInsensitiveSet;
 import panda.lang.collection.SafeMap;
 
 /**
@@ -492,6 +493,14 @@ public abstract class Collections {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * @param set the Set to wrap
+	 * @return a case insensitive set
+	 */
+	public static <E> Set<E> caseInsensitiveSet(Collection<? extends E> set) {
+		return new CaseInsensitiveSet<E>(set);
 	}
 
 	/**

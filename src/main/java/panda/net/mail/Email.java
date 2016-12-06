@@ -33,6 +33,9 @@ public class Email {
 	private boolean html;
 	private List<EmailAttachment> attachments;
 
+	private String dkimDomain;
+	private String dkimSelector;
+	private byte[] dkimPrivateKey;
 	
 	/**
 	 * @return the msgId
@@ -424,6 +427,72 @@ public class Email {
 			attachments = new ArrayList<EmailAttachment>();
 		}
 		attachments.add(ea);
+	}
+
+	/**
+	 * @return the dkimDomain
+	 */
+	public String getDkimDomain() {
+		return dkimDomain;
+	}
+
+	/**
+	 * @param dkimDomain the dkimDomain to set
+	 */
+	public void setDkimDomain(String dkimDomain) {
+		this.dkimDomain = dkimDomain;
+	}
+
+	/**
+	 * @return the dkimSelector
+	 */
+	public String getDkimSelector() {
+		return dkimSelector;
+	}
+
+	/**
+	 * @param dkimSelector the dkimSelector to set
+	 */
+	public void setDkimSelector(String dkimSelector) {
+		this.dkimSelector = dkimSelector;
+	}
+	/**
+	 * @return the dkimPrivateKey
+	 */
+	public byte[] getDkimPrivateKey() {
+		return dkimPrivateKey;
+	}
+
+	/**
+	 * @param dkimPrivateKey the dkimPrivateKey to set
+	 */
+	public void setDkimPrivateKey(byte[] dkimPrivateKey) {
+		this.dkimPrivateKey = dkimPrivateKey;
+	}
+
+	/**
+	 * Primes this email for signing with a DKIM domain key. Actual signing is done when sending using a <code>Mailer</code>.
+	 * <p/>
+	 * Also see:
+	 * <pre><ul>
+	 *     <li>https://postmarkapp.com/guides/dkim</li>
+	 *     <li>https://github.com/markenwerk/java-utils-mail-dkim</li>
+	 *     <li>http://www.gettingemaildelivered.com/dkim-explained-how-to-set-up-and-use-domainkeys-identified-mail-effectively</li>
+	 *     <li>https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail</li>
+	 * </ul></pre>
+	 *
+	 * @param privateKey                DKIM private key content used to sign for the sending party.
+	 * @param domain                    The domain being authorized to send.
+	 * @param selector                  Additional domain specifier.
+	 */
+	public void signWithDomainKey(final String domain, final String selector, final byte[] privateKey) {
+		this.dkimDomain = domain;
+		this.dkimSelector = selector;
+		this.dkimPrivateKey = privateKey;
+	}
+
+	public boolean isApplyDKIMSignature() {
+		return Strings.isNotEmpty(dkimDomain) && Strings.isNotEmpty(dkimSelector) && dkimPrivateKey != null;
 	}
 
 	@Override

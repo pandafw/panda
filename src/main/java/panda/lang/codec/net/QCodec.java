@@ -350,7 +350,7 @@ public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 			if (b == UNDERSCORE) {
 				buffer.write(BLANK);
 			}
-			else			if (b == ESCAPE_CHAR) {
+			else if (b == ESCAPE_CHAR) {
 				if (i + 2 >= len) {
 					throw new DecoderException("Invalid quoted printable encoding; truncated escape sequence");
 				}

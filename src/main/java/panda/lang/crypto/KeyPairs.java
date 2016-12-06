@@ -1,11 +1,18 @@
 package panda.lang.crypto;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
+import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
@@ -48,6 +55,36 @@ public class KeyPairs {
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);
 		}
+	}
+
+	public static PrivateKey getRSAPrivateKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		String encoded = Strings.strip(Strings.remove(Strings.remove(new String(data), BEGIN_PRIVATE_KEY), END_PRIVATE_KEY));
+		byte[] decoded = Base64.decodeBase64(encoded);
+
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
+		KeyFactory kf = KeyFactory.getInstance(RSA);
+		return kf.generatePrivate(spec);
+	}
+	
+	
+	public static PrivateKey getRSAPrivateKey(InputStream is) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+		byte[] data = Streams.toByteArray(is);
+		return getRSAPrivateKey(data);
+	}
+
+	public static PublicKey getRSAPublicKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		String encoded = Strings.strip(Strings.remove(Strings.remove(new String(data), BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));
+
+		byte[] decoded = Base64.decodeBase64(encoded);
+
+		X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+		KeyFactory kf = KeyFactory.getInstance(RSA);
+		return kf.generatePublic(spec);
+	}
+	
+	public static PublicKey getRSAPublicKey(InputStream is) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+		byte[] data = Streams.toByteArray(is);
+		return getRSAPublicKey(data);
 	}
 
 	public static void toPem(PrivateKey key, Appendable out) throws IOException {

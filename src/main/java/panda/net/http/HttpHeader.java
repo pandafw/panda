@@ -10,7 +10,7 @@ import panda.net.InternetHeader;
  * http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
  */
 public class HttpHeader extends InternetHeader implements Cloneable, Serializable {
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 	
 	public static final String ACCEPT                = "Accept";
 	public static final String ACCEPT_CHARSET        = "Accept-Charset";
@@ -125,16 +125,10 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 		return HttpDates.format(value);
 	}
 	
-	//-------------------------------------------------
 	@Override
-	protected Object toCompareKey(Object key) {
-		return key instanceof String ? ((String)key).toLowerCase() : key; 
-	}
-
-	@Override
-	public Object clone() {
+	public HttpHeader clone() {
 		HttpHeader hh = new HttpHeader();
-		hh.map.putAll(map);
+		hh.putAll(this);
 		return hh;
 	}
 }

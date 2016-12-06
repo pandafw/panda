@@ -133,10 +133,10 @@ public abstract class BaseNCodec implements BinaryEncoder, BinaryDecoder {
 
 	protected final byte pad; // instance variable just in case it needs to vary later
 
-	/** Number of bytes in each full block of unencoded data, e.g. 4 for Base64 and 5 for Base32 */
+	/** Number of bytes in each full block of unencoded data, e.g. 3 for Base64 and 5 for Base32 */
 	private final int unencodedBlockSize;
 
-	/** Number of bytes in each full block of encoded data, e.g. 3 for Base64 and 8 for Base32 */
+	/** Number of bytes in each full block of encoded data, e.g. 4 for Base64 and 8 for Base32 */
 	private final int encodedBlockSize;
 
 	/**

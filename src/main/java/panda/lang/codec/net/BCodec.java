@@ -223,7 +223,7 @@ public class BCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 	 * Returns the length of the encoded version of this byte array.
 	 */
 	public static int encodedLength(byte[] b) {
-		return ((b.length + 2) / 3) * 4;
+		return Base64.encodedLength(b);
 	}
 
 	/**

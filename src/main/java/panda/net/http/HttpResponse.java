@@ -291,7 +291,7 @@ public class HttpResponse implements Closeable {
 		
 		if (header != null) {
 			writer.append(Streams.LINE_SEPARATOR);
-			header.toString(writer);
+			header.write(writer);
 		}
 
 		String text = getContentText();

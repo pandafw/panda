@@ -3,23 +3,25 @@ package panda.net;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
-import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Iterators;
 import panda.lang.Numbers;
+import panda.lang.Strings;
+import panda.lang.collection.CaseInsensitiveMap;
 
 
-public abstract class InternetHeader implements Map<String, Object> {
-	protected Map<String, Object> map = new TreeMap<String, Object>();
+public abstract class InternetHeader extends CaseInsensitiveMap<String, Object> {
+	@Override
+	protected Map<String, Object> init() {
+		return new TreeMap<String, Object>();
+	}
 
 	//-------------------------------------------------
 	protected abstract Date parseDate(String value);
@@ -69,6 +71,18 @@ public abstract class InternetHeader implements Map<String, Object> {
 		return Arrays.toList(value.toString());
 	}
 
+	public String getValue(String name) {
+		Object val = get(name);
+		if (val instanceof String) {
+			return (String)val;
+		}
+		if (val instanceof List) {
+			List vs = (List)val;
+			return Strings.join(vs, ',');
+		}
+		return "";
+	}
+	
 	//-------------------------------------------------
 	public InternetHeader setInt(String key, int value) {
 		return set(key, value);
@@ -122,10 +136,9 @@ public abstract class InternetHeader implements Map<String, Object> {
 
 		value = convertValue(value);
 
-		key = (String)toCompareKey(key);
-		Object object = map.get(key);
+		Object object = get(key);
 		if (object == null) {
-			map.put(key, value);
+			put(key, value);
 			return this;
 		}
 		
@@ -136,7 +149,7 @@ public abstract class InternetHeader implements Map<String, Object> {
 		else {
 			vs = new ArrayList<String>();
 			vs.add(object);
-			map.put(key, vs);
+			put(key, vs);
 		}
 		
 		if (value instanceof List) {
@@ -157,10 +170,6 @@ public abstract class InternetHeader implements Map<String, Object> {
 	}
 
 	//-------------------------------------------------
-	protected Object toCompareKey(Object key) {
-		return key;
-	}
-
 	@SuppressWarnings("unchecked")
 	private Object convertValue(Object value) {
 		if (value == null) {
@@ -193,82 +202,25 @@ public abstract class InternetHeader implements Map<String, Object> {
 		return value.toString();
 	}
 
-	public void clear() {
-		map.clear();
-	}
-
-	public boolean containsKey(Object key) {
-		return map.containsKey(toCompareKey(key));
-	}
-
-	public boolean containsValue(Object value) {
-		return map.containsValue(value);
-	}
-
-	public Set<Entry<String, Object>> entrySet() {
-		return map.entrySet();
-	}
-
-	public Object get(Object key) {
-		return map.get(toCompareKey(key));
-	}
-
-	public boolean isEmpty() {
-		return map.isEmpty();
-	}
-
-	public Set<String> keySet() {
-		return map.keySet();
-	}
-
 	@Override
 	public Object put(String key, Object value) {
 		if (key == null) {
 			return null;
 		}
 		
-		key = (String)toCompareKey(key);
 		if (value == null) {
-			return map.remove(key);
+			return remove(key);
 		}
 
 		value = convertValue(value);
-		return map.put(key, value);
-	}
-
-	public void putAll(Map<? extends String, ? extends Object> m) {
-		for (Entry<? extends String, ? extends Object> en : m.entrySet()) {
-			put(en.getKey(), en.getValue());
-		}
-	}
-
-	public Object remove(Object key) {
-		return map.remove(toCompareKey(key));
-	}
-
-	public int size() {
-		return map.size();
-	}
-
-	public Collection<Object> values() {
-		return map.values();
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		return map.equals(o);
-	}
-
-	@Override
-	public int hashCode() {
-		return map.hashCode();
+		return super.put(key, value);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		try {
-			toString(sb);
+			write(sb);
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
@@ -276,19 +228,22 @@ public abstract class InternetHeader implements Map<String, Object> {
 		return sb.toString();
 	}
 
-	public void toString(Appendable writer) throws IOException {
+	public void write(Appendable writer) throws IOException {
 		for (Map.Entry<String, Object> en : entrySet()) {
 			String key = en.getKey();
-			writer.append(key).append(':').append(' ');
+			writer.append(key).append(": ");
 
-			Iterator it = Iterators.asIterator(en.getValue());
-			while (it.hasNext()) {
-				writer.append(it.next().toString());
-				if (it.hasNext()) {
-					writer.append(',');
+			Object val = en.getValue();
+			if (val != null) {
+				Iterator it = Iterators.asIterator(en.getValue());
+				while (it.hasNext()) {
+					writer.append(it.next().toString());
+					if (it.hasNext()) {
+						writer.append(',');
+					}
 				}
 			}
-			writer.append(Streams.LINE_SEPARATOR);
+			writer.append(Strings.LF);
 		}
 	}
 }
