@@ -193,7 +193,7 @@ public class ListView extends UIBean {
 		}
 		
 		if (cssFiltersLabel == null) {
-			cssFiltersLabel = context.getText().getText("listview-filters-css-label", "col-sm-2");
+			cssFiltersLabel = context.getText().getText("listview-filters-css-label", "col-sm-3");
 		}
 		
 		if (cssFiltersInput == null) {

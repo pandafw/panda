@@ -169,7 +169,7 @@ public class RequestDumpFilter implements Filter {
 			hh.add("#remote-addr", req.getRemoteAddr());
 			hh.add("#remote-user", req.getRemoteUser());
 			hh.putAll(new ServletRequestHeaderMap(req));
-			hh.toString(sb);
+			hh.write(sb);
 
 			fos.write(sb.toString().getBytes(Charsets.CS_UTF_8));
 			fos.write('\n');
@@ -205,7 +205,7 @@ public class RequestDumpFilter implements Filter {
 				.append(wrapper.getStatusCode()).append(' ')
 				.append(wrapper.getStatusMsg()).append('\n');
 			
-			wrapper.getHead().toString(sb);
+			wrapper.getHead().write(sb);
 
 			fos.write(sb.toString().getBytes(Charsets.CS_UTF_8));
 			fos.write('\n');

@@ -1,7 +1,7 @@
 #########################################################################
 #form
-form-label-class=col-sm-3
-form-input-class=col-sm-9
+#form-label-class=col-sm-3
+#form-input-class=col-sm-9
 form-load-mask=false
 
 #cookie
@@ -76,8 +76,8 @@ listview-filters-label-addFilter=Add filter
 listview-filters-label-method=Query method
 listview-filters-button-clear=Clear
 listview-filters-button-query=Search
-listview-filters-css-label=col-sm-2
-listview-filters-css-input=col-sm-9
+#listview-filters-css-label=col-sm-3
+#listview-filters-css-input=col-sm-9
 
 listview-filter-methods=\
 	"and": "AND", \

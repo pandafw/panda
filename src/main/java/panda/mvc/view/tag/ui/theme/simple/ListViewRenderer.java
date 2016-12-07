@@ -368,7 +368,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void writeListViewFiltersItems(Map<String, ListColumn.Filter> fm) throws IOException {
+	private void writeListViewFilterItems(Map<String, ListColumn.Filter> fm) throws IOException {
 		Map<String, String> stringFilterMap = tag.getStringFilterMap();
 		Map<String, String> boolFilterMap = tag.getBoolFilterMap(); 
 		Map<String, String> numberFilterMap = tag.getNumberFilterMap();
@@ -632,7 +632,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void writeListViewFiltersOptions() throws IOException {
+	private void writeListViewFilterOptions() throws IOException {
 		Map<String, String> filterMethodMap = (Map<String, String>)tag.getFilterMethodMap();
 		if (Collections.isEmpty(filterMethodMap)) {
 			return;
@@ -654,7 +654,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		write("</div></div>");
 	}
 	
-	private void writeListViewFiltersButtons(Map<String, ListColumn.Filter> fm) throws IOException {
+	private void writeListViewFilterButtons(Map<String, ListColumn.Filter> fm) throws IOException {
 		write("<div class=\"form-group p-lv-submit\">");
 		write("<label class=\"");
 		write(tag.getCssFiltersLabel());
@@ -670,6 +670,10 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		write(button(tag.getLabelFiltersBtnClear(), "icon-clear", "p-lv-fs-clear"));
 		write(' ');
 
+		write("</div></div>");
+	}
+	
+	private void writeListViewFilterSelect(Map<String, ListColumn.Filter> fm) throws IOException {
 		// select
 		Map<String, ListColumn.Filter> fm2 = getEditableFilters(fm);
 		if (Collections.isNotEmpty(fm2)) {
@@ -695,8 +699,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			}
 			write("</select>");
 		}
-		
-		write("</div></div>");
 	}
 
 	private void writeListViewFilters() throws IOException {
@@ -822,14 +824,16 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			}
 		}
 
-		writeListViewFiltersItems(fm);
+		writeListViewFilterItems(fm);
 		
 		write("<div class=\"p-lv-filters-sep\"></div>");
 
-		writeListViewFiltersOptions();
-		writeListViewFiltersButtons(fm);
+		writeListViewFilterOptions();
+		writeListViewFilterButtons(fm);
 		
 		form.end(writer, "");
+		
+		writeListViewFilterSelect(fm);
 		
 		write("</fieldset>");
 	}
