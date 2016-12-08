@@ -87,6 +87,7 @@
 /* filters */
 .p-lv-queryer {
 	font-size: 90%;
+	position: relative;
 }
 .p-lv-queryer .form-control {
 	height: 28px;
@@ -145,9 +146,14 @@ fieldset.p-lv-filters legend {
 	display: inline;
 	width: auto;
 }
-.p-lv-fsform .p-lv-fs-select {
-	display: inline;
-	margin-left: 40px;
+.p-lv-queryer .p-lv-fs-select {
+	font-size: 12px;
+	margin: 0 10px;
+	padding: 0 10px;
+	position: absolute;
+	top: -5px;
+	right: 0;
+	width: auto;
 }
 
 
