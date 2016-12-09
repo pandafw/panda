@@ -35,7 +35,7 @@ public class Email {
 
 	private String dkimDomain;
 	private String dkimSelector;
-	private byte[] dkimPrivateKey;
+	private String dkimPrivateKey;
 	
 	/**
 	 * @return the msgId
@@ -127,6 +127,23 @@ public class Email {
 
 	/**
 	 * add to
+	 * @param ea to email address
+	 */
+	public void addTo(EmailAddress ea) throws EmailException {
+		if (ea == null) {
+			return;
+		}
+
+		if (tos == null) {
+			tos = new ArrayList<EmailAddress>();
+		}
+		
+		tos.add(ea);
+		addRcpt(ea);
+	}
+
+	/**
+	 * add to
 	 * @param addr to address
 	 */
 	public void addTo(String addr) throws EmailException {
@@ -139,13 +156,7 @@ public class Email {
 	 * @param name name
 	 */
 	public void addTo(String addr, String name) throws EmailException {
-		EmailAddress ea = new EmailAddress(addr, name);
-		if (tos == null) {
-			tos = new ArrayList<EmailAddress>();
-		}
-		
-		tos.add(ea);
-		addRcpt(ea);
+		addTo(new EmailAddress(addr, name));
 	}
 
 	/**
@@ -171,6 +182,23 @@ public class Email {
 
 	/**
 	 * add cc
+	 * @param ea cc email address
+	 */
+	public void addCc(EmailAddress ea) {
+		if (ea == null) {
+			return;
+		}
+
+		if (ccs == null) {
+			ccs = new ArrayList<EmailAddress>();
+		}
+		
+		ccs.add(ea);
+		addRcpt(ea);
+	}
+
+	/**
+	 * add cc
 	 * @param addr cc address
 	 * @throws EmailException 
 	 */
@@ -185,13 +213,7 @@ public class Email {
 	 * @throws EmailException 
 	 */
 	public void addCc(String addr, String name) throws EmailException {
-		EmailAddress ea = new EmailAddress(addr, name);
-		if (ccs == null) {
-			ccs = new ArrayList<EmailAddress>();
-		}
-		
-		ccs.add(ea);
-		addRcpt(ea);
+		addCc(new EmailAddress(addr, name));
 	}
 
 	/**
@@ -217,6 +239,23 @@ public class Email {
 
 	/**
 	 * add bcc
+	 * @param ea bcc email address
+	 */
+	public void addBcc(EmailAddress ea) {
+		if (ea == null) {
+			return;
+		}
+
+		if (bccs == null) {
+			bccs = new ArrayList<EmailAddress>();
+		}
+		
+		bccs.add(ea);
+		addRcpt(ea);
+	}
+
+	/**
+	 * add bcc
 	 * @param addr bcc address
 	 * @throws EmailException 
 	 */
@@ -231,13 +270,7 @@ public class Email {
 	 * @throws EmailException 
 	 */
 	public void addBcc(String addr, String name) throws EmailException {
-		EmailAddress ea = new EmailAddress(addr, name);
-		if (bccs == null) {
-			bccs = new ArrayList<EmailAddress>();
-		}
-		
-		bccs.add(ea);
-		addRcpt(ea);
+		addBcc(new EmailAddress(addr, name));
 	}
 
 	/**
@@ -261,6 +294,22 @@ public class Email {
 		return Email.toEncodedAddress(bccs, charset);
 	}
 	
+	/**
+	 * add replyTo
+	 * @param ea replyTo email address
+	 */
+	public void addReplyTo(EmailAddress ea) throws EmailException {
+		if (ea == null) {
+			return;
+		}
+
+		if (replyTos == null) {
+			replyTos = new ArrayList<EmailAddress>();
+		}
+		
+		replyTos.add(ea);
+		addRcpt(ea);
+	}
 
 	/**
 	 * add replyTo
@@ -278,13 +327,7 @@ public class Email {
 	 * @throws EmailException 
 	 */
 	public void addReplyTo(String addr, String name) throws EmailException {
-		EmailAddress ea = new EmailAddress(addr, name);
-		if (replyTos == null) {
-			replyTos = new ArrayList<EmailAddress>();
-		}
-		
-		replyTos.add(ea);
-		addRcpt(ea);
+		addReplyTo(new EmailAddress(addr, name));
 	}
 
 	/**
@@ -440,7 +483,7 @@ public class Email {
 	 * @param dkimDomain the dkimDomain to set
 	 */
 	public void setDkimDomain(String dkimDomain) {
-		this.dkimDomain = dkimDomain;
+		this.dkimDomain = Strings.stripToNull(dkimDomain);
 	}
 
 	/**
@@ -454,20 +497,20 @@ public class Email {
 	 * @param dkimSelector the dkimSelector to set
 	 */
 	public void setDkimSelector(String dkimSelector) {
-		this.dkimSelector = dkimSelector;
+		this.dkimSelector = Strings.stripToNull(dkimSelector);
 	}
 	/**
 	 * @return the dkimPrivateKey
 	 */
-	public byte[] getDkimPrivateKey() {
+	public String getDkimPrivateKey() {
 		return dkimPrivateKey;
 	}
 
 	/**
 	 * @param dkimPrivateKey the dkimPrivateKey to set
 	 */
-	public void setDkimPrivateKey(byte[] dkimPrivateKey) {
-		this.dkimPrivateKey = dkimPrivateKey;
+	public void setDkimPrivateKey(String dkimPrivateKey) {
+		this.dkimPrivateKey = Strings.stripToNull(dkimPrivateKey);
 	}
 
 	/**
@@ -485,14 +528,14 @@ public class Email {
 	 * @param domain                    The domain being authorized to send.
 	 * @param selector                  Additional domain specifier.
 	 */
-	public void signWithDomainKey(final String domain, final String selector, final byte[] privateKey) {
-		this.dkimDomain = domain;
-		this.dkimSelector = selector;
-		this.dkimPrivateKey = privateKey;
+	public void signWithDomainKey(final String domain, final String selector, final String privateKey) {
+		setDkimDomain(domain);
+		setDkimSelector(selector);
+		setDkimPrivateKey(privateKey);
 	}
 
 	public boolean isApplyDKIMSignature() {
-		return Strings.isNotEmpty(dkimDomain) && Strings.isNotEmpty(dkimSelector) && dkimPrivateKey != null;
+		return Strings.isNotEmpty(dkimDomain) && Strings.isNotEmpty(dkimSelector) && Strings.isNotEmpty(dkimPrivateKey);
 	}
 
 	@Override

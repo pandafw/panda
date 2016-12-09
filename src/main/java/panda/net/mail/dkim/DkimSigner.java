@@ -125,6 +125,32 @@ public class DkimSigner {
 		initDkimSigner(domain, selector, privKey);
 	}
 
+	/**
+	 * Created a new {@code DkimSigner} for the given signing domain and
+	 * selector with the given DER encoded RSA private Key.
+	 * 
+	 * @param domain
+	 *            The signing domain to be used.
+	 * @param selector
+	 *            The selector to be used.
+	 * @param key
+	 *            A string that yields the PEM format DER encoded RSA private
+	 *            key to be used. 
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 *             If the RSA algorithm is not supported by the current JVM.
+	 * @throws InvalidKeySpecException
+	 *             If the content of the given {@link InputStream} couldn't be
+	 *             interpreted as an RSA private key.
+	 * @throws DkimException
+	 *             If the given signing domain is invalid.
+	 */
+	public DkimSigner(String domain, String selector, String key) throws 
+			NoSuchAlgorithmException, InvalidKeySpecException {
+		PrivateKey privKey = KeyPairs.getRSAPrivateKey(key);
+		initDkimSigner(domain, selector, privKey);
+	}
+
 	private void initDkimSigner(String domain, String selector, PrivateKey privkey) throws DkimException {
 		this.domain = domain;
 		this.selector = selector.trim();

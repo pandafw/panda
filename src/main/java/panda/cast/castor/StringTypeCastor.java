@@ -13,6 +13,7 @@ import panda.cast.CastException;
 import panda.cast.castor.DateTypeCastor.DateCastor;
 import panda.io.Streams;
 import panda.lang.Numbers;
+import panda.net.mail.EmailAddress;
 import panda.vfs.FileItem;
 
 
@@ -78,6 +79,9 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 				else if (fi.getName() != null) {
 					a.append(fi.getName());
 				}
+			}
+			else if (value instanceof EmailAddress) {
+				a.append(value.toString());
 			}
 			else {
 				// set error for unknown types

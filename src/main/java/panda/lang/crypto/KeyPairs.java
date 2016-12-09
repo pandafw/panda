@@ -1,7 +1,6 @@
 package panda.lang.crypto;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -12,7 +11,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
@@ -57,36 +55,62 @@ public class KeyPairs {
 		}
 	}
 
+	/**
+	 * get RSA Private Key from raw data
+	 *
+	 * @param data raw data
+	 * @return rsa private key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
 	public static PrivateKey getRSAPrivateKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		String encoded = Strings.strip(Strings.remove(Strings.remove(new String(data), BEGIN_PRIVATE_KEY), END_PRIVATE_KEY));
-		byte[] decoded = Base64.decodeBase64(encoded);
-
-		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(data);
 		KeyFactory kf = KeyFactory.getInstance(RSA);
 		return kf.generatePrivate(spec);
 	}
-	
-	
-	public static PrivateKey getRSAPrivateKey(InputStream is) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] data = Streams.toByteArray(is);
-		return getRSAPrivateKey(data);
+
+	/**
+	 * get RSA Private Key from base64 string
+	 *
+	 * @param data base64 string
+	 * @return rsa private key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
+	public static PrivateKey getRSAPrivateKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PRIVATE_KEY), END_PRIVATE_KEY));
+		byte[] decoded = Base64.decodeBase64(encoded);
+		return getRSAPrivateKey(decoded);
 	}
 
+	/**
+	 * get RSA Public Key from raw data
+	 *
+	 * @param data raw data
+	 * @return rsa public key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
 	public static PublicKey getRSAPublicKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		String encoded = Strings.strip(Strings.remove(Strings.remove(new String(data), BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));
-
-		byte[] decoded = Base64.decodeBase64(encoded);
-
-		X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
+		X509EncodedKeySpec spec = new X509EncodedKeySpec(data);
 		KeyFactory kf = KeyFactory.getInstance(RSA);
 		return kf.generatePublic(spec);
 	}
-	
-	public static PublicKey getRSAPublicKey(InputStream is) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] data = Streams.toByteArray(is);
-		return getRSAPublicKey(data);
-	}
 
+	/**
+	 * get RSA Private Key from base64 string
+	 *
+	 * @param data base64 string
+	 * @return rsa public key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
+	public static PublicKey getRSAPublicKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));
+		byte[] decoded = Base64.decodeBase64(encoded);
+		return getRSAPublicKey(decoded);
+	}
+	
 	public static void toPem(PrivateKey key, Appendable out) throws IOException {
 		out.append(BEGIN_PRIVATE_KEY);
 		out.append(Strings.CRLF);
