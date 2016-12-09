@@ -1,0 +1,18 @@
+title=Send Mail
+
+p.host=Host
+p.port=Port
+p.username=User name
+p.password=Password
+p.connTimeout=Connect Timeout (ms)
+p.readTimeout=Default Timeout (ms)
+p.dkimSelector=DKIM Selector
+p.dkimPrivateKey=DKIM Private Key
+p.from=From
+p.to=To
+p.cc=Cc
+p.subject=Subject
+p.message=Message
+p.html=HTML
+
+success-mail-sent=The email is successfully sent.

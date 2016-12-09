@@ -59,6 +59,7 @@ navi-super-html2pdf=HTML⇒PDF打印
 navi-super-filepool=文件池
 navi-super-eleval=EL工具
 navi-super-sqlexec=SQL工具
+navi-super-sendmail=电子邮件送信
 navi-super-cmdexec=CMD工具
 navi-super-pwdhash=密码哈希
 

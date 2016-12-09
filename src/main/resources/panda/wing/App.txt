@@ -86,6 +86,7 @@ navi-super-html2pdf=HTML->PDF
 navi-super-filepool=File Pool
 navi-super-eleval=EL Tool
 navi-super-sqlexec=SQL Tool
+navi-super-sendmail=Send Mail
 navi-super-cmdexec=CMD Tool
 navi-super-pwdhash=Password Hash
 

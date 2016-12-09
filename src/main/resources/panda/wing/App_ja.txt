@@ -58,6 +58,7 @@ navi-super-dataimp=データインポート
 navi-super-html2pdf=HTML⇒PDF出力
 navi-super-filepool=ファイルプール
 navi-super-eleval=ELツール
+navi-super-sendmail=メール送信
 navi-super-sqlexec=SQLツール
 navi-super-cmdexec=CMDツール
 navi-super-pwdhash=パスワードハッシュ
