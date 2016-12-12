@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import panda.io.stream.StringBuilderWriter;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
@@ -23,7 +22,6 @@ import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 import panda.lang.crypto.KeyPairs;
 import panda.net.Mimes;
-import panda.net.io.DotTerminatedMessageWriter;
 import panda.net.smtp.SMTPHeader;
 
 
@@ -76,7 +74,7 @@ public class DkimSigner {
 	private String domain;
 	private String selector;
 	private String identity;
-	private boolean lengthParam;
+	private int bodyLength;
 	private boolean zParam;
 	private Canonicalization headerCanonicalization = Canonicalization.RELAXED;
 	private Canonicalization bodyCanonicalization = Canonicalization.SIMPLE;
@@ -259,18 +257,18 @@ public class DkimSigner {
 	 * 
 	 * @return The configured length parameter.
 	 */
-	public boolean getLengthParam() {
-		return lengthParam;
+	public int getBodyLength() {
+		return bodyLength;
 	}
 
 	/**
 	 * Sets the length parameter to be used.
 	 * 
-	 * @param lengthParam
+	 * @param bodyLength
 	 *            The length parameter to be used.
 	 */
-	public void setLengthParam(boolean lengthParam) {
-		this.lengthParam = lengthParam;
+	public void setBodyLength(int bodyLength) {
+		this.bodyLength = bodyLength;
 	}
 
 	/**
@@ -392,20 +390,12 @@ public class DkimSigner {
 		}
 
 		// process body
-		StringBuilderWriter sbw = new StringBuilderWriter();
-		DotTerminatedMessageWriter dtmw = new DotTerminatedMessageWriter(sbw);
-		try {
-			dtmw.write(body);
-			dtmw.close();
+		if (bodyLength > 0 && bodyLength <= body.length()) {
+			dkimSignature.put("l", Integer.toString(bodyLength));
+			body = bodyCanonicalization.canonicalizeBody(body.substring(0, bodyLength));
 		}
-		catch (IOException e) {
-			throw new DkimException("The body conversion to MIME canonical CRLF line terminator failed", e);
-		}
-		body = dtmw.toString();
-		body = bodyCanonicalization.canonicalizeBody(body);
-
-		if (lengthParam) {
-			dkimSignature.put("l", Integer.toString(body.length()));
+		else {
+			body = bodyCanonicalization.canonicalizeBody(body);
 		}
 
 		// calculate and encode body hash

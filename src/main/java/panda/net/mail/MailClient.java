@@ -437,7 +437,6 @@ public class MailClient {
 				DkimSigner signer = new DkimSigner(email.getDkimDomain(), email.getDkimSelector(), email.getDkimPrivateKey());
 				
 				signer.setIdentity(email.getFrom().getAddress());
-				signer.setLengthParam(true);
 
 				// build body
 				String body = buildBody(email, encoding, message, boundary);
