@@ -499,8 +499,27 @@ public class MailClient {
 	
 	private void writeBody(Writer out, Email email, String encoding, String message, String boundary) throws IOException {
 		if (email.isHtml() || email.hasAttachments()) {
-			// Write the main text message
-			writeMsgPart(out, email, encoding, message, boundary);
+			// Write the message part
+			out.write("--" + boundary + "\n");
+			out.write(SMTPHeader.CONTENT_TYPE);
+			out.write(": ");
+			out.write(email.isHtml() ? MimeType.TEXT_HTML : MimeType.TEXT_PLAIN);
+			out.write("; charset=");
+			out.write(email.getCharset());
+			out.write("\n");
+
+			out.write(SMTPHeader.CONTENT_DISPOSITION);
+			out.write(": ");
+			out.write(SMTPHeader.CONTENT_DISPOSITION_INLIE);
+			out.write("\n");
+
+			out.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
+			out.write(": ");
+			out.write(encoding);
+			out.write("\n\n");
+
+			out.write(message);
+			out.write("\n");
 			
 			// Append attachments
 			writeAttachments(out, email, boundary);
@@ -510,30 +529,6 @@ public class MailClient {
 		else {
 			out.write(message);
 		}
-	}
-
-	private void writeMsgPart(Writer out, Email email, String boundary, String encoding, String message) throws IOException {
-		// Write the main text message
-		out.write("--" + boundary + "\n");
-		out.write(SMTPHeader.CONTENT_TYPE);
-		out.write(": ");
-		out.write(email.isHtml() ? MimeType.TEXT_HTML : MimeType.TEXT_PLAIN);
-		out.write("; charset=");
-		out.write(email.getCharset());
-		out.write("\n");
-
-		out.write(SMTPHeader.CONTENT_DISPOSITION);
-		out.write(": ");
-		out.write(SMTPHeader.CONTENT_DISPOSITION_INLIE);
-		out.write("\n");
-
-		out.write(SMTPHeader.CONTENT_TRANSFER_ENCODING);
-		out.write(": ");
-		out.write(encoding);
-		out.write("\n\n");
-
-		out.write(message);
-		out.write("\n");
 	}
 
 	/**
