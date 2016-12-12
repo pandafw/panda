@@ -267,11 +267,11 @@ public class SendMailAction extends AbstractAction {
 			email.addTo(a.getTo());
 			email.addCc(a.getCc());
 			email.setSubject(a.getSubject());
-			if (email.isHtml()) {
-				email.setTextMsg(a.getMessage());
+			if (a.isHtml()) {
+				email.setHtmlMsg(a.getMessage());
 			}
 			else {
-				email.setHtmlMsg(a.getMessage());
+				email.setTextMsg(a.getMessage());
 			}
 			email.signWithDomainKey(a.getFrom().getDomain(), a.getDkimSelector(), a.getDkimPrivateKey());
 			
