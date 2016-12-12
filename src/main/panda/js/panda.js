@@ -1975,9 +1975,8 @@ function _plv_init_filters($lv) {
 			.end()
 		.find('form')
 			.submit(function() {
-				$('#' + id).loadmask();
-			}
-		);
+				$lv.loadmask();
+			});
 }
 
 function _plv_init_table($lv) {
