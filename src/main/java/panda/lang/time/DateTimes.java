@@ -251,6 +251,13 @@ public class DateTimes {
 		return getDate().getTime();
 	}
 
+	/**
+	 * @return current Year
+	 */
+	public static int getYear() {
+		return Calendar.getInstance().get(Calendar.YEAR);
+	}
+
 	// -----------------------------------------------------------------------
 	/**
 	 * <p>
