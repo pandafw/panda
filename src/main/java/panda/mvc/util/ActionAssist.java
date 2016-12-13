@@ -2,6 +2,7 @@ package panda.mvc.util;
 
 import java.text.Format;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -123,7 +124,7 @@ public class ActionAssist extends ActionSupport {
 	public String getRequestURL() {
 		return HttpServlets.getRequestURL(getRequest());
 	}
-	
+
 	/**
 	 * @return requestElapsedTime
 	 */
@@ -136,13 +137,11 @@ public class ActionAssist extends ActionSupport {
 			if (elapse < 1000) {
 				return elapse + "ms";
 			}
-			else {
-				return (elapse / 1000) + "s";
-			}
+			return (elapse / 1000) + "s";
 		}
 		return "";
 	}
-	
+
 	/**
 	 * @return csv file time string
 	 */
@@ -161,37 +160,28 @@ public class ActionAssist extends ActionSupport {
 		if (ss.length > 2) {
 			return ss[ss.length - 2] + "." + ss[ss.length - 1];
 		}
-		else {
-			return sn;
-		}
-	}
-
-	/**
-	 * @return system date
-	 */
-	public String getSystemDateTime() {
-		return DateTimes.datetimeFormat().format(DateTimes.getDate());
-	}
-
-	/**
-	 * @return system date
-	 */
-	public String getSystemDate() {
-		return DateTimes.dateFormat().format(DateTimes.getDate());
-	}
-
-	/**
-	 * @return system time
-	 */
-	public String getSystemTime() {
-		return DateTimes.timeFormat().format(DateTimes.getDate());
+		return sn;
 	}
 
 	/**
 	 * @return system year
 	 */
-	public String getSystemYear() {
-		return String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+	public int getSystemYear() {
+		return DateTimes.getYear();
+	}
+
+	/**
+	 * @return system date
+	 */
+	public Date getSystemDate() {
+		return DateTimes.getDate();
+	}
+
+	/**
+	 * @return system calendar
+	 */
+	public Calendar getSystemCalendar() {
+		return DateTimes.getCalendar();
 	}
 
 	/**
@@ -230,7 +220,7 @@ public class ActionAssist extends ActionSupport {
 	public boolean isMobileLayout() {
 		return LayoutProcessor.MOBILE_LAYOUT.equals(getLayout());
 	}
-	
+
 	/**
 	 * @return reverse order
 	 */
@@ -245,28 +235,28 @@ public class ActionAssist extends ActionSupport {
 	public String escapeHtml(CharSequence str) {
 		return StringEscapes.escapeHtml(str);
 	}
-	
+
 	/**
 	 * @see StringEscapes#escapePhtml(CharSequence)
 	 */
 	public String escapePhtml(CharSequence str) {
 		return StringEscapes.escapePhtml(str);
 	}
-	
+
 	/**
 	 * @see StringEscapes#escapeJava(CharSequence)
 	 */
 	public String escapeJava(CharSequence str) {
 		return StringEscapes.escapeJava(str);
 	}
-	
+
 	/**
 	 * @see StringEscapes#escapeJavaScript(CharSequence)
 	 */
 	public String escapeJavaScript(CharSequence str) {
 		return StringEscapes.escapeJavaScript(str);
 	}
-	
+
 	/**
 	 * @see StringEscapes#escapeXml(CharSequence)
 	 */

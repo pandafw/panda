@@ -26,6 +26,7 @@ date-format-timestamp=yyyy-MM-dd HH:mm:ss.SSS
 date-format-datetime=yyyy-MM-dd HH:mm:ss
 date-format-date=yyyy-MM-dd
 date-format-time=HH:mm:ss
+date-format-year=yyyy
 date-format-cce=MM/yyyy
 date-format-file=_(yyyyMMdd-HHmmss)
 
