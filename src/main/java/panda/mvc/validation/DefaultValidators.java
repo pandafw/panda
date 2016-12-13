@@ -37,6 +37,7 @@ import panda.mvc.validation.validator.EmptyValidator;
 import panda.mvc.validation.validator.FileValidator;
 import panda.mvc.validation.validator.FilenameValidator;
 import panda.mvc.validation.validator.ImageValidator;
+import panda.mvc.validation.validator.ImailValidator;
 import panda.mvc.validation.validator.NumberValidator;
 import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
@@ -66,6 +67,7 @@ public class DefaultValidators implements Validators {
 		map.put(EL, ElValidator.class);
 		map.put(REGEX, RegexValidator.class);
 		map.put(EMAIL, EmailValidator.class);
+		map.put(IMAIL, ImailValidator.class);
 		map.put(FILENAME, FilenameValidator.class);
 		map.put(CREDITCARDNO, CreditCardNoValidator.class);
 		map.put(BINARY, BinaryValidator.class);

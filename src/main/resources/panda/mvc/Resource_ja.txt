@@ -117,6 +117,7 @@ validation-time-range=${(top.min != null && top.max != null) ? (top.min + "~" + 
 validation-datetime-to=開始日付より大きい日付を入力してください。
 validation-date-to=開始日付より大きい日付を入力してください。
 validation-time-to=開始時間より大きい時間を入力してください。
+validation-imail=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email=正しいメールアドレスを入力してください。（例: user@domain.com）
 validation-email-notsame=メールアドレスが一致していません。
 validation-empty=項目の値は空ではありません。

@@ -44,6 +44,7 @@ import panda.mvc.validation.validator.EmptyValidator;
 import panda.mvc.validation.validator.FileValidator;
 import panda.mvc.validation.validator.FilenameValidator;
 import panda.mvc.validation.validator.ImageValidator;
+import panda.mvc.validation.validator.ImailValidator;
 import panda.mvc.validation.validator.NumberValidator;
 import panda.mvc.validation.validator.ProhibitedValidator;
 import panda.mvc.validation.validator.RegexValidator;
@@ -189,6 +190,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			FilenameValidator.class,
 			FileValidator.class,
 			ImageValidator.class,
+			ImailValidator.class,
 			NumberValidator.class,
 			ProhibitedValidator.class,
 			RegexValidator.class,

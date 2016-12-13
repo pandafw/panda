@@ -16,6 +16,7 @@ public interface Validators {
 	public static final String EL = "el";
 	public static final String REGEX = "regex";
 	public static final String EMAIL = "email";
+	public static final String IMAIL = "imail";
 	public static final String FILENAME = "filename";
 	public static final String CREDITCARDNO = "creditcardno";
 
@@ -61,6 +62,7 @@ public interface Validators {
 	public static final String MSGID_FILE = "validation-file";
 	public static final String MSGID_IMAGE = "validation-image";
 	public static final String MSGID_EMAIL = "validation-email";
+	public static final String MSGID_IMAIL = "validation-imail";
 	public static final String MSGID_URL = "validation-url";
 	
 	// -------------------------------------------------------

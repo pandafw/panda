@@ -116,7 +116,8 @@ validation-time-range=请输入${(top.min != null && top.max != null) ? (top.min
 validation-datetime-to=请输入開始日期之后的日期。
 validation-date-to=请输入開始日期之后的日期。
 validation-time-to=请输入開始时间之后的时间。
-validation-email=请输入电子邮件地址。（例: user@domain.com）
+validation-imail=请输入正确的电子邮件地址。（例: user@domain.com）
+validation-email=请输入正确的电子邮件地址。（例: user@domain.com）
 validation-email-notsame=电子邮件和确认电子邮件不一致。
 validation-empty=该项目必须为空。
 validation-filename=文件名中无法使用以下　\/:*?"<>|　文字。

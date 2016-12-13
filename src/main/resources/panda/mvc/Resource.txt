@@ -177,7 +177,8 @@ ${(top.min != null && top.max != null) ? (top.min + "~" + top.max) : \
 validation-datetime-to=The date must be larger than start date.
 validation-date-to=The date must be larger than start date.
 validation-time-to=The time must be larger than start time.
-validation-email=The format email address of must be "user@domain.com".
+validation-imail=The format of email address must be "user@domain.com".
+validation-email=The format of email address must be "user@domain.com".
 validation-email-notsame=The confirm email is not same as you input.
 validation-empty=This field should be empty.
 validation-filename=The file name can't contain these \/:*?"<>| characters. 
