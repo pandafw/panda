@@ -642,6 +642,7 @@ public abstract class AbstractCodeGenerator {
 		vtmap.put("el", "Validators.EL");
 		vtmap.put("regex", "Validators.REGEX");
 		vtmap.put("email", "Validators.EMAIL");
+		vtmap.put("imail", "Validators.IMAIL");
 		vtmap.put("url", "Validators.URL");
 		vtmap.put("filename", "Validators.FILENAME");
 		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
@@ -716,6 +717,7 @@ public abstract class AbstractCodeGenerator {
 		vmmap.put("prohibited", "Validators.MSGID_PROHIBITED");
 
 		vmmap.put("email", "Validators.MSGID_EMAIL");
+		vmmap.put("imail", "Validators.MSGID_IMAIL");
 		vmmap.put("url", "Validators.MSGID_URL");
 		vmmap.put("password", "Validators.MSGID_PASSWORD");
 		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");
