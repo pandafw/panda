@@ -6,8 +6,8 @@ boolean-format=top ? "○" : "×"
 date-format=yyyy/MM/dd HH:mm:ss.SSS
 date-format-timestamp=yyyy/MM/dd HH:mm:ss.SSS
 date-format-datetime=yyyy/MM/dd HH:mm:ss
+date-format-datetm=yyyy/MM/dd HH:mm
 date-format-date=yyyy/MM/dd
-date-format-time=HH:mm:ss
 
 date-timezone=Asia/Tokyo
 
