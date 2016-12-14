@@ -5065,6 +5065,10 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
 			callback: null
 		}, c);
 
+		if (c.autoClear) {
+			c.loaded = null;
+		}
+		
 		if (c.loaded) {
 			__popup($pc, c);
 		}

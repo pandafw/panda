@@ -182,6 +182,10 @@
 			callback: null
 		}, c);
 
+		if (c.autoClear) {
+			c.loaded = null;
+		}
+		
 		if (c.loaded) {
 			__popup($pc, c);
 		}
