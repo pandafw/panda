@@ -176,13 +176,6 @@ public abstract class SqlExpert {
 	
 	public abstract List<String> create(Entity<?> entity);
 
-	private String normalizeColumn(String table, String column) {
-		if (column.charAt(0) == '(') {
-			return column;
-		}
-		return escapeColumn(table, column);
-	}
-	
 	protected void asTableAlias(Sql sql, String alias) {
 		if (Strings.isNotEmpty(alias)) {
 			sql.append(' ').append(escapeTable(alias));
@@ -191,7 +184,7 @@ public abstract class SqlExpert {
 
 	protected void asTableColumn(Sql sql, String talias, String col, String cname) {
 		sql.append(' ')
-			.append(normalizeColumn(talias, col))
+			.append(escapeColumn(talias, col))
 			.append(" AS ")
 			.append(escapeColumn(DaoNamings.javaName2ColumnLabel(cname)))
 			.append(',');
@@ -329,9 +322,6 @@ public abstract class SqlExpert {
 						continue;
 					}
 				}
-				else {
-					col = capsuleColumn(col);
-				}
 				
 				asTableColumn(sql, alias, col, ef.getName());
 				sel = true;
@@ -354,9 +344,6 @@ public abstract class SqlExpert {
 					
 					if (col.length() == 0) {
 						col = en.getKey();
-					}
-					else {
-						col = capsuleColumn(col);
 					}
 
 					
@@ -811,9 +798,20 @@ public abstract class SqlExpert {
 	}
 	
 	public String escapeColumn(String table, String column) {
+		if (Strings.startsWithChar(column, '(') && Strings.endsWithChar(column, ')')) {
+			return column;
+		}
+		
+		int dot = Strings.indexOf(column, '.');
+		if (dot > 0) {
+			table = column.substring(0, dot);
+			column = column.substring(dot + 1);
+		}
+		
 		if (Strings.isEmpty(table)) {
 			return escapeColumn(column);
 		}
+
 		return escapeTable(table) + '.' + escapeColumn(column);
 	}
 
@@ -823,9 +821,5 @@ public abstract class SqlExpert {
 	
 	public String escapeColumn(String column) {
 		return escape(column); 
-	}
-	
-	protected String capsuleColumn(String col) {
-		return '(' + col + ')';
 	}
 }

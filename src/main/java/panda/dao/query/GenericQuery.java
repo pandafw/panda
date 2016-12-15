@@ -266,11 +266,21 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * set column value, the value will be auto modified to ( value )
 	 * @param name column name
 	 * @param value column value
 	 * @return this
 	 */
 	public GenericQuery column(String name, String value) {
+		return rawColumn(name, '(' + value + ')');
+	}
+
+	/**
+	 * @param name column name
+	 * @param value column value
+	 * @return this
+	 */
+	private GenericQuery rawColumn(String name, String value) {
 		setColumn(name, value);
 		flags = null;
 		return this;
@@ -720,7 +730,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		join(type, query, join, cs);
 		for (EntityField ef : entity.getFields()) {
 			if (join.equals(ef.getJoinName())) {
-				column(ef.getName(), join + '.' + ef.getJoinField());
+				rawColumn(ef.getName(), join + '.' + ef.getJoinField());
 			}
 		}
 		return this;
