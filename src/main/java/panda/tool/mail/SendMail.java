@@ -219,8 +219,9 @@ public class SendMail {
 
 	/**
 	 * @param attachs attachment files
+	 * @throws EmailException 
 	 */
-	public void setAttachments(String[] attachs) {
+	public void setAttachments(String[] attachs) throws EmailException {
 		for (String a : attachs) {
 			EmailAttachment ea = new EmailAttachment(FileNames.getName(a), a);
 			email.addAttachment(ea);
