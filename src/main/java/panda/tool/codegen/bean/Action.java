@@ -1,8 +1,10 @@
 package panda.tool.codegen.bean;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,6 +31,7 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;list&quot; type=&quot;{panda.tool.codegen}ListUI&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *         &lt;element name=&quot;input&quot; type=&quot;{panda.tool.codegen}InputUI&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
+ *       &lt;attribute name=&quot;autoJoin&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;generate&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;trimString&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;trimList&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -58,6 +61,8 @@ public class Action {
 	@XmlElement(name = "input")
 	private List<InputUI> inputUIList;
 
+	@XmlAttribute
+	private String autoJoin;
 	@XmlAttribute
 	private Boolean generate;
 	@XmlAttribute
@@ -97,6 +102,7 @@ public class Action {
 	 * @param action source action
 	 */
 	public Action(Action action) {
+		this.autoJoin = action.autoJoin;
 		this.generate = action.generate;
 		this.trimString = action.trimString;
 		this.trimList = action.trimList;
@@ -213,6 +219,9 @@ public class Action {
 	public static Action extend(Action src, Action parent) {
 		Action me = new Action(parent);
 
+		if (src.autoJoin != null) {
+			me.autoJoin = src.autoJoin;
+		}
 		if (src.generate != null) {
 			me.generate = src.generate;
 		}
@@ -371,6 +380,33 @@ public class Action {
 			}
 		}
 		return cs;
+	}
+
+	public String getAutoJoin() {
+		return autoJoin;
+	}
+
+	/**
+	 * left:X right:Y
+	 * @return map { 'X': 'left', 'Y': 'right' }
+	 */
+	public Map<String, String> getAutoJoins() {
+		Map<String, String> m = new LinkedHashMap<String, String>();
+		String[] ss = Strings.split(autoJoin);
+		for (String s : ss) {
+			String[] js = Strings.split(s, ':');
+			if (js.length > 1) {
+				m.put(js[1].toUpperCase(), Strings.capitalize(js[0].toLowerCase()));
+			}
+			else {
+				m.put(js[0].toUpperCase(), "");
+			}
+		}
+		return m;
+	}
+
+	public void setAutoJoin(String autoJoin) {
+		this.autoJoin = Strings.stripToLowerNull(autoJoin);
 	}
 
 	/**

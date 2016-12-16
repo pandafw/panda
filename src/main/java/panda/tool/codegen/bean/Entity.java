@@ -370,6 +370,18 @@ public class Entity {
 		return Classes.getShortClassName(name);
 	}
 
+	public String getQueryPackage() {
+		return getPackage() + ".query";
+	}
+
+	public String getQueryName() {
+		return getQueryPackage() + "." + getQuerySimpleName();
+	}
+
+	public String getQuerySimpleName() {
+		return getSimpleName() + "Query";
+	}
+	
 	/**
 	 * @return the identityProperty
 	 */

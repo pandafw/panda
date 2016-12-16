@@ -281,7 +281,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 			wrapper, tplEntityBean, true);
 
 		setJavaEntityQueryImportList(wrapper, entity);
-		processTpl(entity.getPackage() + ".query", entity.getSimpleName() + "Query.java", 
+		processTpl(entity.getQueryPackage(), entity.getQuerySimpleName() + ".java", 
 			wrapper, tplEntityQuery);
 	}
 

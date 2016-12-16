@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-
+import panda.dao.query.GenericQuery;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
@@ -18,8 +16,8 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.annotation.view.Err;
 import panda.mvc.annotation.view.Ok;
-import panda.mvc.bean.QueryerOx;
 import panda.mvc.bean.Queryer;
+import panda.mvc.bean.QueryerOx;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
@@ -30,6 +28,9 @@ import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 /**
  * action source generator
@@ -178,6 +179,11 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		if (Strings.isNotEmpty(action.getAuth())) {
 			imports.add("panda.wing.auth.Auth");
 			imports.add("panda.wing.constant.AUTH");
+		}
+		
+		if (Strings.isNotEmpty(action.getAutoJoin())) {
+			imports.add(entity.getQueryName());
+			imports.add(GenericQuery.class.getName());
 		}
 		
 		processTpl(pkg, cls + ".java", wrapper, tplAction, true);

@@ -83,6 +83,39 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 </#list>
 
+<#if action.autoJoin?has_content>
+	/*----------------------------------------------------------------------*
+	 * Joins
+	 *----------------------------------------------------------------------*/
+	@Override
+	protected void addQueryJoins(GenericQuery<${entityBeanClass}> gq) {
+		super.addQueryJoins(gq);
+
+		${entityBeanClass}Query eq = new ${entityBeanClass}Query(gq);
+<#if action.autoJoin == "all">
+	<#list entity.joinMap?keys as k>
+		eq.autoJoin${k?upper_case}();
+	</#list>
+<#elseif action.autoJoin == "inner:all">
+	<#list entity.joinMap?keys as k>
+		eq.autoInnerJoin${k?upper_case}();
+	</#list>
+<#elseif action.autoJoin == "left:all">
+	<#list entity.joinMap?keys as k>
+		eq.autoLeftJoin${k?upper_case}();
+	</#list>
+<#elseif action.autoJoin == "right:all">
+	<#list entity.joinMap?keys as k>
+		eq.autoInnerJoin${k?upper_case}();
+	</#list>
+<#else>
+	<#list action.autoJoins?keys as k>
+		eq.auto${action.autoJoins[k]}Join${k?upper_case}();
+	</#list>
+</#if>
+	}
+
+</#if>
 	/*----------------------------------------------------------------------*
 	 * Actions
 	 *----------------------------------------------------------------------*/
