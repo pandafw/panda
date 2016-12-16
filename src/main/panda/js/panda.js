@@ -2268,6 +2268,10 @@ function _plv_onAllClick(el) {
 function _plv_onTBodyClick(evt) {
 	var $t = $(evt.target);
 	
+	if ($t.prop('tagName') == 'A') {
+		return;
+	}
+	
 	var $tr = $t.closest('tr');
 	if ($t.hasClass('p-lv-cb')) {
 		evt.stopPropagation();
