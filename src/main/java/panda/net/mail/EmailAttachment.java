@@ -8,18 +8,17 @@ public class EmailAttachment {
 	private String name;
 	private Object data;
 	
-	public EmailAttachment() {
-		super();
-	}
-	
-	public EmailAttachment(String name, Object data) {
-		super();
-		this.name = name;
-		this.data = data;
+	public EmailAttachment(String name, Object data) throws EmailException {
+		this(null, name, data);
 	}
 
-	public EmailAttachment(String cid, String name, Object data) {
-		super();
+	public EmailAttachment(String cid, String name, Object data) throws EmailException {
+		if (Strings.isEmpty(name)) {
+			throw new EmailException("Empty name of email attachment");
+		}
+		if (data == null) {
+			throw new EmailException("Null data of email attachment");
+		}
 		this.cid = cid;
 		this.name = name;
 		this.data = data;
