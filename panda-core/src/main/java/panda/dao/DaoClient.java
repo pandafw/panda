@@ -13,7 +13,6 @@ import panda.lang.Strings;
 
 /**
  * !! thread-safe !!
- * @author yf.frank.wang@gmail.com
  */
 public abstract class DaoClient {
 	protected Entities entities;

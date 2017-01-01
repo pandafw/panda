@@ -50,7 +50,6 @@ import panda.log.Logs;
  * </ul>
  * <p/>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class SimpleDataSource implements DataSource {
 	private static Log log = Logs.getLog(SimpleDataSource.class);

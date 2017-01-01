@@ -7,7 +7,6 @@ import java.util.Map;
 
 /**
  * SqlExecutor
- * @author yf.frank.wang@gmail.com
  */
 public interface SqlExecutor {
 	/**

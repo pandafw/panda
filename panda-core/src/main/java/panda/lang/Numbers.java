@@ -9,7 +9,6 @@ import java.util.Locale;
 
 /**
  * Utility class for Number.
- * @author yf.frank.wang@gmail.com
  */
 public class Numbers {
 	/** 1KB */

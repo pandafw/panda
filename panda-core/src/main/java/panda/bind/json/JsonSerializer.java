@@ -9,7 +9,6 @@ import panda.lang.Strings;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class JsonSerializer extends AbstractSerializer {

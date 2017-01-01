@@ -12,7 +12,6 @@ import panda.mvc.validation.annotation.Validates;
 
 /**
  * Query bean object
- * @author yf.frank.wang@gmail.com
  */
 public class Queryer implements Cloneable, Serializable {
 	/**

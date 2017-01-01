@@ -26,7 +26,6 @@ import panda.log.Log;
 import panda.net.Inets;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class HttpResponse implements Closeable {
 	private static final Log log = HttpClient.log;

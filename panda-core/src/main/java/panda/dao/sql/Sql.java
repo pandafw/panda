@@ -6,7 +6,6 @@ import java.util.List;
 import panda.lang.Objects;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Sql {
 	private StringBuilder sql = new StringBuilder();

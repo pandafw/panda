@@ -21,7 +21,6 @@ import panda.wing.entity.query.ResourceQuery;
 
 /**
  * A class for load database resource.
- * @author yf.frank.wang@gmail.com
  */
 @IocBean(type=ResourceLoader.class, create="initialize")
 public class AppResourceBundleLoader extends ResourceLoader {

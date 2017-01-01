@@ -6,7 +6,6 @@ import panda.lang.Arrays;
 
 /**
  * Progress bar of console
- * @author yf.frank.wang@gmail.com
  */
 public abstract class ConsoleProgressBar extends AbstractProgressBar {
 

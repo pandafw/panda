@@ -12,8 +12,6 @@ import panda.lang.Strings;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public class IocProxyBeanHandler<T extends IocProxy> extends AbstractJavaBeanHandler<T> {

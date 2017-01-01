@@ -23,7 +23,6 @@ import panda.log.Logs;
 import panda.net.URLHelper;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class HttpClient {
 	protected static Log log = Logs.getLog(HttpClient.class);

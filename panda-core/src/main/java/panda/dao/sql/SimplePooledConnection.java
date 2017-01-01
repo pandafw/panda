@@ -24,7 +24,6 @@ import panda.lang.reflect.Methods;
 
 /**
  * SimplePooledConnection
- * @author yf.frank.wang@gmail.com
  */
 public class SimplePooledConnection implements Connection {
 

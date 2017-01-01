@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MockDataSource implements DataSource {
 	public PrintWriter getLogWriter() throws SQLException {

@@ -2,7 +2,6 @@ package panda.dao;
 
 /**
  * Database enum
- * @author yf.frank.wang@gmail.com
  */
 public enum DB {
 	/**

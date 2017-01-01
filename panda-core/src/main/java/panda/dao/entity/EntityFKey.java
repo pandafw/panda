@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * Foreign key entity
- * @author yf.frank.wang@gmail.com
  */
 public class EntityFKey {
 	private String name;

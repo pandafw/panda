@@ -20,7 +20,6 @@ import panda.log.Logs;
 
 /**
  * A class for load database resource.
- * @author yf.frank.wang@gmail.com
  */
 public class BeanResourceMaker implements ResourceMaker {
 	protected static Log log = Logs.getLog(BeanResourceMaker.class);

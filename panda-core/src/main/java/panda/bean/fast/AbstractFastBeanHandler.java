@@ -9,9 +9,6 @@ import panda.bean.handler.AbstractJavaBeanHandler;
 
 
 /**
- * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public abstract class AbstractFastBeanHandler<T> extends AbstractJavaBeanHandler<T> {

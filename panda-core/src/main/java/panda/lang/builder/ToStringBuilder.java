@@ -61,7 +61,6 @@ import panda.lang.Objects;
  * into the constructor.
  * </p>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ToStringBuilder implements Builder<String> {
 

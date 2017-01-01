@@ -15,7 +15,6 @@ import freemarker.template.Configuration;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class FreemarkerSqlManager extends SimpleSqlManager {
 	/**

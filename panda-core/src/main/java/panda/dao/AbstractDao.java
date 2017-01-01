@@ -28,7 +28,6 @@ import java.util.Set;
 
 /**
  * !! thread-unsafe !!
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractDao implements Dao {
 	protected final DaoClient daoClient;

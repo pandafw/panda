@@ -17,7 +17,6 @@ import panda.io.stream.StringBuilderWriter;
  * #ThreadSafe#
  * </p>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class Systems {
 

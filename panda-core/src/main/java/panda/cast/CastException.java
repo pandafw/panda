@@ -2,7 +2,6 @@ package panda.cast;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class CastException extends RuntimeException {

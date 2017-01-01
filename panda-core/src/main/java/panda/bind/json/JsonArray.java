@@ -44,7 +44,6 @@ import panda.io.stream.CharSequenceReader;
  * </ul>
  * 
  * @see <a href="http://JSON.org">JSON.org</a>
- * @author yf.frank.wang@gmail.com
  */
 public class JsonArray extends ArrayList<Object> {
 	/**

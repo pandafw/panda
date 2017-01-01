@@ -9,7 +9,6 @@ import panda.lang.Objects;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Filter {
 	protected static class OperatorFilter extends Filter {

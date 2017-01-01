@@ -5,7 +5,6 @@ import panda.lang.Texts;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class DaoNamings {
 	private static boolean isAllUpperCase(final CharSequence cs) {

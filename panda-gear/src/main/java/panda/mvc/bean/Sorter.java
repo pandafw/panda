@@ -11,7 +11,6 @@ import panda.mvc.validation.annotation.Validates;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Sorter implements Cloneable, Serializable {
 

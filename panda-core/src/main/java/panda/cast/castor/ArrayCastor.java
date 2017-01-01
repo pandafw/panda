@@ -15,7 +15,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <S> source type
  * @param <T> target type

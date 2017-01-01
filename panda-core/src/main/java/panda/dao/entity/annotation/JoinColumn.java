@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 
 /**
  * A JOIN Column mapping:
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.METHOD })

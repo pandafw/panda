@@ -6,8 +6,6 @@ import panda.bean.BeanHandler;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public abstract class AbstractSimpleBeanHandler<T> implements BeanHandler<T> {

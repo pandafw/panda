@@ -15,7 +15,6 @@ import panda.mvc.validation.annotation.Validates;
 
 /**
  * Filter bean object
- * @author yf.frank.wang@gmail.com
  */
 public class Filter implements Cloneable, Serializable {
 

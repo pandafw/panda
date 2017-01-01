@@ -23,7 +23,6 @@ import panda.lang.codec.binary.Base64;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class AbstractSerializer extends AbstractBinder implements Serializer {

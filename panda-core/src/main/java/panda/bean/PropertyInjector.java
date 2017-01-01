@@ -6,7 +6,6 @@ import panda.lang.Injector;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class PropertyInjector implements Injector {

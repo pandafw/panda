@@ -9,7 +9,6 @@ import java.io.IOException;
 
 /**
  * automatically delete file when the input stream is closed.
- * @author yf.frank.wang@gmail.com
  */
 public class AutoDeleteInputStream extends FilterInputStream {
 	

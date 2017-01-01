@@ -13,7 +13,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class JsonDeserializer extends AbstractDeserializer {

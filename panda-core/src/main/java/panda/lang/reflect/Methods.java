@@ -19,7 +19,6 @@ import panda.lang.collection.MultiKey;
 /**
  * utility class for Method
  * 
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("unchecked")
 public class Methods {

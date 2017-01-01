@@ -28,8 +28,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  */
 public class Beans {
 	private static Map<Class<?>, Map<String, PropertyAccessor>> accessors = new HashMap<Class<?>, Map<String, PropertyAccessor>>();

@@ -26,7 +26,6 @@ import panda.log.Logs;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JdbcSqlExecutor implements SqlExecutor {
 	private static final Log log = Logs.getLog(JdbcSqlExecutor.class);

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class DaoTypes {
 	// ---------------------------------------------------

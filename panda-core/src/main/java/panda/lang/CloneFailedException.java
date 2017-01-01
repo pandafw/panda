@@ -1,7 +1,6 @@
 package panda.lang;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class CloneFailedException extends RuntimeException {
 	private static final long serialVersionUID = 0;

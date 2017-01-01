@@ -22,7 +22,6 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 	protected static Log log = Logs.getLog(JdbcSqlResultSet.class);

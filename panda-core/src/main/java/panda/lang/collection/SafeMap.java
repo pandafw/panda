@@ -14,7 +14,6 @@ import panda.log.Logs;
 /**
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
- * @author yf.frank.wang@gmail.com
  */
 public class SafeMap<K, V> implements Map<K, V> {
 	private final static Log log = Logs.getLog(SafeMap.class);

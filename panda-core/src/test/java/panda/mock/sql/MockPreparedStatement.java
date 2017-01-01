@@ -22,7 +22,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MockPreparedStatement extends MockStatement implements PreparedStatement {
 

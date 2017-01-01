@@ -9,7 +9,6 @@ import panda.mvc.validation.annotation.Validates;
 
 /**
  * Pager bean object
- * @author yf.frank.wang@gmail.com
  */
 public class Pager implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;

@@ -14,7 +14,6 @@ import panda.lang.Exceptions;
 /**
  * A class for load external resource.
  * 
- * @author yf.frank.wang@gmail.com
  */
 @IocBean
 public class ResourceLoader {

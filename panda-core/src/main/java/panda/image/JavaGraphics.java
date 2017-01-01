@@ -44,7 +44,6 @@ import javax.imageio.ImageIO;
  * avoid unmanaging the image in order to keep good performance.
  * </p>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class JavaGraphics {
 

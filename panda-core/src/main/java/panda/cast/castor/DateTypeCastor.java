@@ -17,7 +17,6 @@ import panda.lang.time.FastDateFormat;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class DateTypeCastor {

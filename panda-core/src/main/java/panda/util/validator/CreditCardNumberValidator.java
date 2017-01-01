@@ -2,7 +2,6 @@ package panda.util.validator;
 
 /**
  * Credit Card Number Validator
- * @author yf.frank.wang@gmail.com
  */
 public class CreditCardNumberValidator {
 	/**

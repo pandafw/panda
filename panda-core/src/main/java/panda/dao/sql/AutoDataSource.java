@@ -15,7 +15,6 @@ import panda.log.Logs;
 /**
  * This is a automatic data source implementation.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class AutoDataSource implements DataSource {
 	private static final Log log = Logs.getLog(AutoDataSource.class);

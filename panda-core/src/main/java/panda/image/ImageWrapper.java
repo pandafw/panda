@@ -5,7 +5,6 @@ import java.io.OutputStream;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public interface ImageWrapper {
 	

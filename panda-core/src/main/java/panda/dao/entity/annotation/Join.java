@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
  *   select * from [this] 
  *     [LEFT OUTER] JOIN [target] ON [keys] = [refs]  
  * </pre>
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

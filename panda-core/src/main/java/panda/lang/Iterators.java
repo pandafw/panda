@@ -10,7 +10,6 @@ import panda.lang.collection.KeyValue;
 
 /**
  * utility class for Iterator. 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Iterators {
 	/**

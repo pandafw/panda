@@ -36,7 +36,6 @@ import panda.log.Logs;
 /**
  * ulitity class for Class
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Classes {
 	public final static Class[] EMPTY_CLASS_ARRAY = new Class[0];

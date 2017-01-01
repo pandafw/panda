@@ -9,7 +9,6 @@ import java.util.Set;
 
 /**
  * resource bundle for map
- * @author yf.frank.wang@gmail.com
  */
 public class MapResource extends AbstractResource {
 	/**

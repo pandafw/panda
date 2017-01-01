@@ -52,7 +52,6 @@ import java.nio.charset.CodingErrorAction;
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ReaderInputStream extends InputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;

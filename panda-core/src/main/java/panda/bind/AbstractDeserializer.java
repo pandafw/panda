@@ -9,7 +9,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class AbstractDeserializer extends AbstractBinder implements Deserializer {

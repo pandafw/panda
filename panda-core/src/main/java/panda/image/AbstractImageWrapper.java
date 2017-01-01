@@ -5,7 +5,6 @@ import panda.io.stream.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractImageWrapper implements ImageWrapper {
 	protected String format = "PNG";

@@ -11,7 +11,6 @@ import panda.lang.reflect.Types;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractArrayBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 	protected static final Set<String> SIZES = Arrays.toSet("size", "length" );

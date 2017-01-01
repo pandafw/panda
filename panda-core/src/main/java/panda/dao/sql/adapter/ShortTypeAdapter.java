@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Object implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class ShortTypeAdapter<T> extends AbstractCastTypeAdapter<T, Short> {
 	public ShortTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

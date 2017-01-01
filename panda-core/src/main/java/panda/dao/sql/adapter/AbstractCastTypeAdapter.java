@@ -5,8 +5,6 @@ import panda.cast.Castors;
 
 
 /**
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> Java Type
  * @param <P> Jdbc Type
  */

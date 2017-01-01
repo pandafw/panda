@@ -2,7 +2,6 @@ package panda.bind;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Binds {
 	protected static void setDefaultSerializerOptions(AbstractSerializer as) {

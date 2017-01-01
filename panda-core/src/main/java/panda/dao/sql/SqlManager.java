@@ -9,7 +9,6 @@ import panda.dao.sql.executor.DynamicSqlManager;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class SqlManager {
 	private static SqlManager i = new DynamicSqlManager();

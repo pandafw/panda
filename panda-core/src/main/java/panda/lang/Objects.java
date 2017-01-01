@@ -17,7 +17,6 @@ import panda.lang.mutable.MutableInt;
 
 /**
  * utility class for Object. 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Objects {
 	/**

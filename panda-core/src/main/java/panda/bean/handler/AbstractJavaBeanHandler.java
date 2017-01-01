@@ -8,8 +8,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public abstract class AbstractJavaBeanHandler<T> extends AbstractBeanHandler<T> {

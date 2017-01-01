@@ -6,8 +6,6 @@ import panda.bean.PropertyHandler;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public abstract class AbstractPropertyHandler<T> implements PropertyHandler<T> {

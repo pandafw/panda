@@ -1,7 +1,6 @@
 package panda.cast.castor;
 
 /**
- * @author yf.frank.wang@gmail.com
  *
  */
 public class PrimitiveWrapCastor {

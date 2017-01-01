@@ -19,7 +19,6 @@ import panda.net.http.UserAgent;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class HttpServletSupport {
 	private HttpServletRequest request;

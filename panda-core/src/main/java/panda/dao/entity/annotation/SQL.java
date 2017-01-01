@@ -28,7 +28,6 @@ import panda.dao.DB;
  * <li>参数: @XXX， 直接参考对象自身的属性值
  * </ul>
  * 
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

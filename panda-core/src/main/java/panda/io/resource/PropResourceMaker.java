@@ -9,7 +9,6 @@ import panda.io.Streams;
 import panda.lang.ClassLoaders;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class PropResourceMaker implements ResourceMaker {
 	

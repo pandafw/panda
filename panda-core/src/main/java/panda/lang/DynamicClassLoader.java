@@ -36,7 +36,6 @@ import panda.log.Logs;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class DynamicClassLoader extends ClassLoader {

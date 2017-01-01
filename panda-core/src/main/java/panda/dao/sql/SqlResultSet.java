@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public interface SqlResultSet<T> {
 	// ---------------------------------------------------------------------

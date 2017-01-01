@@ -9,7 +9,6 @@ import panda.lang.Strings;
 
 /**
  * Boolean implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public abstract class BoolCharTypeAdapter<T> extends AbstractCastTypeAdapter<T, String> {
 	public BoolCharTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

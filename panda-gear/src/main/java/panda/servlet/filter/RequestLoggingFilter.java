@@ -59,7 +59,6 @@ import panda.servlet.HttpServlets;
  *     <li><b>%u</b> - Requested URL path</li>
  * </ul> 
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class RequestLoggingFilter implements Filter {
 	private static Log log = Logs.getLog(RequestLoggingFilter.class);

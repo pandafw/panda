@@ -2,8 +2,6 @@ package panda.bean;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  */
 public class BeanAccessor {
 	private Object bean;

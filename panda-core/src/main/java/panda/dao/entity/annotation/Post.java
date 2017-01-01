@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
  * 
  * @see panda.dao.entity.annotation.SQL
  * 
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

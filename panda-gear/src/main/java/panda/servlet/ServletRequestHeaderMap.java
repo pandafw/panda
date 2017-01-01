@@ -18,7 +18,6 @@ import panda.lang.collection.MapEntry;
 /**
  * A simple implementation of the {@link java.util.Map} interface to handle a collection of request headers.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ServletRequestHeaderMap implements Map<String, Object> {
 	private HttpServletRequest request;

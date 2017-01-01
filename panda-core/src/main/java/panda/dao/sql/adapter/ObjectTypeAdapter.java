@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 
 /**
  * Object implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class ObjectTypeAdapter<T> extends AbstractCastTypeAdapter<T, Object> {
 	public ObjectTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

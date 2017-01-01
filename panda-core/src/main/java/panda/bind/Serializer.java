@@ -3,7 +3,6 @@ package panda.bind;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public interface Serializer {

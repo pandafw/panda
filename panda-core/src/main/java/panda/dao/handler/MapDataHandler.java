@@ -11,7 +11,6 @@ import panda.lang.Asserts;
 /**
  * DataHandler for save data to map
  * @param <T> data type
- * @author yf.frank.wang@gmail.com
  */
 public class MapDataHandler<T> implements DataHandler<T> {
 	private Map map;

@@ -13,7 +13,6 @@ import panda.io.FileNames;
 
 /**
  * utility class for Locale. 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Locales {
 

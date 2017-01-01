@@ -1,7 +1,6 @@
 package panda.log;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public interface Log {
 	boolean isTraceEnabled();

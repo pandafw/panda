@@ -7,7 +7,6 @@ import panda.bind.PropertyFilter;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class ExcludePropertyFilter implements PropertyFilter {

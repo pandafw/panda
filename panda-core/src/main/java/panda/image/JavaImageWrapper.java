@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JavaImageWrapper extends AbstractImageWrapper {
 	private BufferedImage image;

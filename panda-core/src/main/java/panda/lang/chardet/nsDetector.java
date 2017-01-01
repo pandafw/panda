@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class nsDetector extends nsPSMDetector {

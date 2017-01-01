@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Cookie {
 	// RFC2109 attributes

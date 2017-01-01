@@ -58,7 +58,6 @@ import panda.servlet.ServletRequestHeaderMap;
  * &lt;/filter-mapping&gt;
  * </pre>
  *
- * @author yf.frank.wang@gmail.com
  */
 public class RequestDumpFilter implements Filter {
 	private final static Log log = Logs.getLog(RequestDumpFilter.class);

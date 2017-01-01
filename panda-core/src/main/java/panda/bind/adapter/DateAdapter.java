@@ -10,8 +10,6 @@ import panda.lang.time.FastDateFormat;
 /**
  * Convert Date to Long<br/>
  * setToTime(false) to use DateFormat to convert Date Type Value 
- * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class DateAdapter implements SourceAdapter {

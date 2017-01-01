@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Byte implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class ByteTypeAdapter<T> extends AbstractCastTypeAdapter<T, Byte> {
 	public ByteTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

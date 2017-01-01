@@ -26,7 +26,6 @@ import java.util.Map;
 
 /**
  * !! thread-unsafe !!
- * @author yf.frank.wang@gmail.com
  */
 public class SqlDao extends AbstractDao {
 	private int transactionLevel = Connection.TRANSACTION_NONE;

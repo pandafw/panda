@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * utility class for ClassLoader
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ClassLoaders {
 	private static ClassLoaderWrapper classLoaderWrapper = new ClassLoaderWrapper();

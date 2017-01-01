@@ -19,7 +19,6 @@ import panda.lang.collection.MapEntry;
 /**
  * A simple implementation of the {@link java.util.Map} interface to handle a collection of request attributes.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ServletRequestAttrMap implements Map<String, Object> {
 	private ServletRequest request;

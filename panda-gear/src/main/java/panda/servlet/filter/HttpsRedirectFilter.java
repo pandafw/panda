@@ -16,7 +16,6 @@ import panda.servlet.ServletURLBuilder;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class HttpsRedirectFilter implements Filter {
 	/**

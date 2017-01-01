@@ -7,7 +7,6 @@ import panda.lang.Objects;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class KeyValue<K, V> implements Entry<K, V> {
 

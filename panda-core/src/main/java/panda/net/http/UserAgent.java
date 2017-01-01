@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class UserAgent {
 

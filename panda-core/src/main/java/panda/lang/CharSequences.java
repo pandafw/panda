@@ -4,7 +4,6 @@ import java.nio.CharBuffer;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class CharSequences {
 	// -----------------------------------------------------------------------

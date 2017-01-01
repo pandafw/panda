@@ -8,7 +8,6 @@ import java.util.zip.Checksum;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Checksums {
 	private static final int STREAM_BUFFER_LENGTH = 1024;

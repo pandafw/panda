@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Double implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class DoubleTypeAdapter<T> extends AbstractCastTypeAdapter<T, Double> {
 	public DoubleTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

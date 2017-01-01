@@ -7,7 +7,6 @@ import panda.lang.Strings;
 
 /**
  * Gauge bar of console
- * @author yf.frank.wang@gmail.com
  */
 public class ConsoleGaugeBar extends ConsoleProgressBar {
 

@@ -8,8 +8,6 @@ import panda.lang.Strings;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 @SuppressWarnings("unchecked")

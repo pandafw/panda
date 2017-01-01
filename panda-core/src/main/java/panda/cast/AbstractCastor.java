@@ -18,7 +18,6 @@ import panda.log.Logs;
  * @param <S> source type
  * @param <T> target type
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 	protected final static Log log = Logs.getLog(AbstractCastor.class);

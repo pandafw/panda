@@ -12,7 +12,6 @@ import panda.lang.Systems;
 
 /**
  * Base class for file process.
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractFileTool {
 	/**

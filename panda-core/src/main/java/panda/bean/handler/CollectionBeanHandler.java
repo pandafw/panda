@@ -10,8 +10,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public class CollectionBeanHandler<T extends Collection> extends AbstractArrayBeanHandler<T> {

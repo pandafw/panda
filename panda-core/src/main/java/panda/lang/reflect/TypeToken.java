@@ -18,7 +18,6 @@ import java.lang.reflect.Type;
  * <p>This syntax cannot be used to create type literals that have wildcard
  * parameters, such as {@code Class<?>} or {@code List<? extends CharSequence>}.
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class TypeToken<T> {

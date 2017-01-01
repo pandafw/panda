@@ -12,7 +12,6 @@ import panda.io.stream.CharSequenceReader;
  * A JSONTokener takes a source string and extracts characters and tokens from it.
  * 
  * @see <a href="http://JSON.org">JSON.org</a>
- * @author yf.frank.wang@gmail.com
  */
 public class JsonTokener {
 	private boolean ignoreComments = true;

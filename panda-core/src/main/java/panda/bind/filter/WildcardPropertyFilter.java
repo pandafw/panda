@@ -8,7 +8,6 @@ import panda.io.FileNames;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class WildcardPropertyFilter implements PropertyFilter {

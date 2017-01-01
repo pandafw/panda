@@ -21,7 +21,6 @@ import panda.lang.collection.MapEntry;
  * session attributes. The {@link #entrySet()} method enumerates over all session attributes and
  * creates a Set of entries. Note, this will occur lazily - only when the entry set is asked for.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class HttpSessionMap implements Map<String, Object> {
 	protected HttpSession session;

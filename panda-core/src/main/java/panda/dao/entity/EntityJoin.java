@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * Join entity
- * @author yf.frank.wang@gmail.com
  */
 public class EntityJoin {
 	private String name;

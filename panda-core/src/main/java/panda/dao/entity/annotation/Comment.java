@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * Comment for table or field
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})

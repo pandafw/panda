@@ -8,7 +8,6 @@ import panda.lang.Numbers;
 
 /**
  * TimeSpan
- * @author yf.frank.wang@gmail.com
  */
 public class TimeSpan implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -10,7 +10,6 @@ package panda.lang.builder;
  * store the result in a public static final variable for the rest of the
  * program to access.</p>
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class StandardToStringStyle extends ToStringStyle {

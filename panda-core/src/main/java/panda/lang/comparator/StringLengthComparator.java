@@ -5,7 +5,6 @@ import java.util.Comparator;
 
 /**
  * length comparator for string
- * @author yf.frank.wang@gmail.com
  */
 public class StringLengthComparator implements Comparator<String> {
 	/**

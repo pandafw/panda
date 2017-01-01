@@ -22,7 +22,6 @@ import panda.lang.collection.MapEntry;
  * enumerates over all servlet context attributes and init parameters and returns a collection of both.
  * Note, this will occur lazily - only when the entry set is asked for.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ServletContextMap implements Map<String, Object> {
 	private ServletContext context;

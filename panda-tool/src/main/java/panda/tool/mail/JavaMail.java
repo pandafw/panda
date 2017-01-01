@@ -25,7 +25,6 @@ import panda.util.tool.AbstractCommandTool;
 
 /**
  * a class for send mail
- * @author yf.frank.wang@gmail.com
  */
 public class JavaMail {
 	private static Log log = Logs.getLog(JavaMail.class);

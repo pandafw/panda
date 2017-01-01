@@ -12,8 +12,6 @@ import java.lang.annotation.Target;
  * 这个字符串会被变成 Map&lt;String,String&gt;，你可以在运行时随时取到。 <br>
  * 尤其时是对某些 JdbcExpert，这个 Map 会有特殊含义<br>
  * 比如 MysqlExpert 会根据这个 Map 改变一个对象默认的数据库引擎
- * 
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

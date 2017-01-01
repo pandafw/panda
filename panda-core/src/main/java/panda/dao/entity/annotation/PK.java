@@ -31,7 +31,6 @@ import java.lang.annotation.Target;
  * <p>
  * 在 POJO 中，你可以同时声明 '@Id'，'@PK'，但是 '@Id' 更优先
  * 
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

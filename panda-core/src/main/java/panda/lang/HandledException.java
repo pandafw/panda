@@ -1,7 +1,6 @@
 package panda.lang;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("serial")
 public class HandledException extends RuntimeException {

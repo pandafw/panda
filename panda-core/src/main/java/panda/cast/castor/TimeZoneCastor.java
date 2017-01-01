@@ -6,7 +6,6 @@ import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class TimeZoneCastor extends AbstractCastor<Object, TimeZone> {
 	public TimeZoneCastor() {

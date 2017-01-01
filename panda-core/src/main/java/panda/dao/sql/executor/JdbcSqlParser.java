@@ -3,7 +3,6 @@ package panda.dao.sql.executor;
 import java.util.List;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 abstract class JdbcSqlParser {
 	/**

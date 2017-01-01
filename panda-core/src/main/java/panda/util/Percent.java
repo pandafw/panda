@@ -3,7 +3,6 @@ package panda.util;
 /**
  * Percent
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class Percent {
 	/**

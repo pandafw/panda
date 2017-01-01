@@ -16,7 +16,6 @@ import java.util.Set;
 
 /**
  * @param <T> entity type
- * @author yf.frank.wang@gmail.com
  */
 public class EntityDao<T> {
 	//--------------------------------------------------------------

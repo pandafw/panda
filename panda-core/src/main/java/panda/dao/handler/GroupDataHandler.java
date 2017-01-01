@@ -13,7 +13,6 @@ import panda.lang.Asserts;
 /**
  * DataHandler for group data.
  * @param <T> data type
- * @author yf.frank.wang@gmail.com
  */
 public class GroupDataHandler<T> implements DataHandler<T> {
 	private BeanHandler<T> bh;

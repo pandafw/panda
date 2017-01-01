@@ -14,7 +14,6 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Entity<T> {
 	protected Class<T> type;

@@ -145,7 +145,6 @@ import panda.dao.sql.SqlManager;
  * 
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class SimpleSqlExecutor extends JdbcSqlExecutor {
 	/**

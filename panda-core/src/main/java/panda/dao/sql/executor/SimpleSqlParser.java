@@ -12,7 +12,6 @@ import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class SimpleSqlParser extends JdbcSqlParser {
 	/**

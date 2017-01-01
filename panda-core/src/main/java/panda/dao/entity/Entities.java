@@ -9,7 +9,6 @@ import panda.lang.Collections;
 
 /**
  * !! thread-safe !!
- * @author yf.frank.wang@gmail.com
  */
 public class Entities {
 	private static Entities i = new Entities();

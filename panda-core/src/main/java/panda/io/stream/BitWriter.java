@@ -7,7 +7,6 @@ import java.io.OutputStream;
 
 /**
  * BitWriter
- * @author yf.frank.wang@gmail.com
  */
 public class BitWriter implements Closeable, Flushable {
 

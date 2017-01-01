@@ -20,7 +20,6 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 @IocBean(type=DaoClient.class)
 public class SqlDaoClient extends DaoClient {

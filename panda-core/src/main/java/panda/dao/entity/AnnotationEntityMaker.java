@@ -48,7 +48,6 @@ import panda.log.Logs;
 
 /**
  * Create a Entity by Class
- * @author yf.frank.wang@gmail.com
  */
 public class AnnotationEntityMaker implements EntityMaker {
 	private static final Log log = Logs.getLog(AnnotationEntityMaker.class);

@@ -47,7 +47,6 @@ import java.util.regex.Pattern;
  * Assert.notNull(surname, "The surname must not be %s", null);
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class Asserts {

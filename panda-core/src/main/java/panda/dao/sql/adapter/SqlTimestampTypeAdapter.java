@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 
 /**
  * SQL timestamp implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class SqlTimestampTypeAdapter<T> extends AbstractCastTypeAdapter<T, Timestamp> {
 	public SqlTimestampTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

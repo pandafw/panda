@@ -42,7 +42,6 @@ import panda.lang.Systems;
  * </pre>
  * </p>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class ToStringStyle implements Serializable {
 

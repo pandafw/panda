@@ -8,7 +8,6 @@ import java.sql.Time;
 
 /**
  * SQL time implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class SqlTimeTypeAdapter<T> extends AbstractCastTypeAdapter<T, Time> {
 	public SqlTimeTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

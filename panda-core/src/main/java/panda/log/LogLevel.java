@@ -3,7 +3,6 @@ package panda.log;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public enum LogLevel {
 	TRACE, 

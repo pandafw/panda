@@ -23,7 +23,6 @@ import panda.lang.Strings;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <T> table
  */

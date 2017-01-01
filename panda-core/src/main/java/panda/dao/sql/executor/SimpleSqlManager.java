@@ -11,7 +11,6 @@ import panda.dao.sql.SqlManager;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class SimpleSqlManager extends SqlManager {
 	/**

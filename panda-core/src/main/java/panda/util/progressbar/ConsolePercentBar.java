@@ -6,7 +6,6 @@ import panda.lang.Strings;
 
 /**
  * Percent bar of console
- * @author yf.frank.wang@gmail.com
  */
 public class ConsolePercentBar extends ConsoleProgressBar {
 

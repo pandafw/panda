@@ -9,8 +9,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHandler<T> {

@@ -1,7 +1,6 @@
 package panda.dao;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class DatabaseMeta {
 	/**

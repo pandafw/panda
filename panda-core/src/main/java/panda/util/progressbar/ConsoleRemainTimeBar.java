@@ -6,7 +6,6 @@ import panda.lang.Strings;
 
 /**
  * remain time information of progress on console
- * @author yf.frank.wang@gmail.com
  */
 public class ConsoleRemainTimeBar extends ConsoleProgressBar {
 

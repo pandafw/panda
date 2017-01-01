@@ -29,7 +29,6 @@ import java.lang.annotation.Target;
  * 这样，插入的时候，Dao 就不会忽略这个字段了。
  * 
  * @see panda.dao.entity.annotation.Post
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

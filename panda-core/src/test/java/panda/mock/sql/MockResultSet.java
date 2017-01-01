@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.Map;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MockResultSet implements ResultSet {
 

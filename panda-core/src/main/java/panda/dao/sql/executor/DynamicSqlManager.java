@@ -5,7 +5,6 @@ import java.sql.Connection;
 import panda.dao.sql.SqlExecutor;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class DynamicSqlManager extends SimpleSqlManager {
 	/**

@@ -8,7 +8,6 @@ package panda.cast;
  * @param <S> source type
  * @param <T> target type
  * 
- * @author yf.frank.wang@gmail.com
  */
 public interface Castor<S, T> {
 	/**

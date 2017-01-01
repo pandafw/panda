@@ -11,7 +11,6 @@ import panda.dao.query.Query;
 
 /**
  * !! thread-unsafe !!
- * @author yf.frank.wang@gmail.com
  */
 public interface Dao {
 	/**

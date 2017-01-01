@@ -39,7 +39,6 @@ package panda.dao.sql.executor;
  * 
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class DynamicSqlExecutor extends SimpleSqlExecutor {
 	/**

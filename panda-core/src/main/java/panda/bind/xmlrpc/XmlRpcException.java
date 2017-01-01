@@ -2,7 +2,6 @@ package panda.bind.xmlrpc;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class XmlRpcException extends RuntimeException {

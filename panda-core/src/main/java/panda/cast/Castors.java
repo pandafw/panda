@@ -37,7 +37,6 @@ import panda.lang.reflect.Types;
 
 /**
  * !! thread-safe !! 
- * @author yf.frank.wang@gmail.com
  */
 public class Castors {
 	private static Castors i = new Castors();

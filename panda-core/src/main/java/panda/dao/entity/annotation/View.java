@@ -15,7 +15,6 @@ import java.lang.annotation.Target;
  * <p>
  * 和注解 '@Table' 一样，注解的值可以支持动态表名
  * 
- * @author yf.frank.wang@gmail.com
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

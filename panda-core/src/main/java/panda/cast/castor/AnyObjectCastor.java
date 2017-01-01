@@ -8,7 +8,6 @@ import panda.lang.Objects;
 import panda.lang.reflect.Types;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AnyObjectCastor<T> extends AbstractCastor<Object, T> {
 	public AnyObjectCastor(Type toType) {

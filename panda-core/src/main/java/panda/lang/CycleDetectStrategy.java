@@ -2,7 +2,6 @@ package panda.lang;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public interface CycleDetectStrategy {

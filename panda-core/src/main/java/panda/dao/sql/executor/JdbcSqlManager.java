@@ -7,7 +7,6 @@ import panda.dao.sql.SqlManager;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JdbcSqlManager extends SqlManager {
 	/**

@@ -10,7 +10,6 @@ import panda.mvc.validation.annotation.Validates;
 
 /**
  * DateRange
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("serial")
 public class DateRange implements Cloneable, Serializable {

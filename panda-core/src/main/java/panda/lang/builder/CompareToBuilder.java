@@ -48,7 +48,6 @@ import panda.lang.Objects;
  * @see java.lang.Object#hashCode()
  * @see EqualsBuilder
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class CompareToBuilder implements Builder<Integer> {
 

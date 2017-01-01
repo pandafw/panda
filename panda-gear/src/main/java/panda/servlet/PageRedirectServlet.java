@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("serial")
 public class PageRedirectServlet extends HttpServlet {

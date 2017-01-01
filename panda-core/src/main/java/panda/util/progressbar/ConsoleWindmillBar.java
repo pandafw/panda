@@ -5,7 +5,6 @@ import java.io.PrintStream;
 
 /**
  * A progress windmill of console
- * @author yf.frank.wang@gmail.com
  */
 public class ConsoleWindmillBar extends ConsoleProgressBar {
 

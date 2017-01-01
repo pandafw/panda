@@ -14,7 +14,6 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class URLHelper {
 	public static final char SEPARATOR = '/';

@@ -9,7 +9,6 @@ import panda.lang.Strings;
 /**
  * Miscellaneous {@link Constructor} related utility functions.
  * 
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("unchecked")
 public class Constructors {

@@ -8,7 +8,6 @@ import java.util.List;
 import panda.bean.Beans;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class DynamicSqlParser extends SimpleSqlParser {
 	/**

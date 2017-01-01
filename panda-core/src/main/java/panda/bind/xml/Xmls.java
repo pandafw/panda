@@ -9,7 +9,6 @@ import panda.io.Streams;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class Xmls extends Binds {

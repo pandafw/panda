@@ -8,7 +8,6 @@ import panda.dao.query.Filter.ComboFilter;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <T> query target type
  */

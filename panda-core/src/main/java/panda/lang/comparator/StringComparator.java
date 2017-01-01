@@ -7,7 +7,6 @@ import panda.lang.Objects;
 
 /**
  * string comparator for string
- * @author yf.frank.wang@gmail.com
  */
 public class StringComparator implements Comparator<String> {
 

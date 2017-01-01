@@ -11,7 +11,6 @@ import java.util.StringTokenizer;
 
 /**
  * Utility class for exception
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Exceptions {
 	public static RuntimeException impossible() {

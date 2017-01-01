@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Long implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class LongTypeAdapter<T> extends AbstractCastTypeAdapter<T, Long> {
 	public LongTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

@@ -6,7 +6,6 @@ import panda.lang.Strings;
 /**
  * Constants of logic operator.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public enum Operator {
 	IS_NULL {

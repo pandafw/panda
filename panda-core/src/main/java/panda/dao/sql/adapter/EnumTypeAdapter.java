@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 /**
  * Enum implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class EnumTypeAdapter implements TypeAdapter {
 

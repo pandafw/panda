@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * 封装了实体的索引
- * @author yf.frank.wang@gmail.com
  */
 public class EntityIndex {
 	private String name;

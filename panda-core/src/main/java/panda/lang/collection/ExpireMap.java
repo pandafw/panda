@@ -9,7 +9,6 @@ import java.util.Set;
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ExpireMap<K, V> implements Map<K, V> {
 	private Map<K, Long> kts;

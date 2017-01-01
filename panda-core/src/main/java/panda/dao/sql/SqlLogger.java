@@ -16,7 +16,6 @@ import panda.log.Logs;
 /**
  * SqlLogger
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class SqlLogger {
 	/**

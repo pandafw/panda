@@ -17,7 +17,6 @@ import panda.lang.Arrays;
 import panda.lang.Strings;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class WelcomeRedirectFilter implements Filter {
 	private String welcomeURL;

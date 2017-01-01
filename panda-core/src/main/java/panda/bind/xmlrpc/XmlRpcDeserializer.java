@@ -22,7 +22,6 @@ import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class XmlRpcDeserializer extends AbstractDeserializer {
 	public XmlRpcDeserializer() {

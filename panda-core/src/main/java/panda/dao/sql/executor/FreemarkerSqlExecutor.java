@@ -11,7 +11,6 @@ import freemarker.template.Template;
 
 /**
  * FreemarkerSqlExecutor
- * @author yf.frank.wang@gmail.com
  */
 public class FreemarkerSqlExecutor extends SimpleSqlExecutor {
 	/**

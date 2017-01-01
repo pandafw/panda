@@ -7,7 +7,6 @@ import panda.lang.Asserts;
 /**
  * reverse order comparator
  * @param <T> the type of objects that may be compared by this comparator
- * @author yf.frank.wang@gmail.com
  */
 public class ReverseComparator<T> implements Comparator<T> {
 	private Comparator<T> comparator;

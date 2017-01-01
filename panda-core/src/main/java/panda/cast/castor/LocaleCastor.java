@@ -7,7 +7,6 @@ import panda.cast.CastContext;
 import panda.lang.Locales;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class LocaleCastor extends AbstractCastor<Object, Locale> {
 	public LocaleCastor() {

@@ -31,7 +31,6 @@ import panda.lang.Exceptions;
  * }
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class LineIterator implements Iterator<String>, Closeable {
 

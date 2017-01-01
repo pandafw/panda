@@ -18,7 +18,6 @@ import panda.bind.AbstractDeserializer;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class XmlDeserializer extends AbstractDeserializer {

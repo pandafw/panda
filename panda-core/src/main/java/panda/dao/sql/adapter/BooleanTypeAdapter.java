@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Boolean implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class BooleanTypeAdapter<T> extends AbstractCastTypeAdapter<T, Boolean> {
 	public BooleanTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

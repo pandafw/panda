@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 /**
  * byte[] implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class ByteArrayTypeAdapter<T> extends AbstractCastTypeAdapter<T, byte[]> {
 	public ByteArrayTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

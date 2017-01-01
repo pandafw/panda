@@ -10,7 +10,6 @@ import panda.lang.CycleDetectStrategy;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <T> target type
  */

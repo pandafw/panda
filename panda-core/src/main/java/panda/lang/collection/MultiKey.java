@@ -3,7 +3,6 @@ package panda.lang.collection;
 import panda.lang.Arrays;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MultiKey {
 	private final Object[] keys;

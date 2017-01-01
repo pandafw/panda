@@ -17,7 +17,6 @@ import panda.log.impl.ConsoleLogAdapter;
 import panda.log.impl.DefaultLog;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public final class Logs {
 	private static final String CONFIG = "panda-log.properties";

@@ -7,7 +7,6 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MockStatement implements Statement {
 

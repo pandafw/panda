@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 /**
  * String implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class StringTypeAdapter<T> extends AbstractCastTypeAdapter<T, String> {
 	public StringTypeAdapter(TypeAdapters adapters, Class<T> toType) {

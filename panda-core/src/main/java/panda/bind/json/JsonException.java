@@ -2,7 +2,6 @@ package panda.bind.json;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class JsonException extends RuntimeException {

@@ -4,7 +4,6 @@ import panda.util.Percent;
 
 /**
  * AbstractProgressBar
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractProgressBar extends Percent implements Runnable {
 	/**

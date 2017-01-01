@@ -21,7 +21,6 @@ import panda.lang.Strings;
 
 /**
  * Properties extented class.
- * @author yf.frank.wang@gmail.com
  */
 public class Settings implements Map<String, String> {
 	private Map<String, String> props = new HashMap<String, String>();

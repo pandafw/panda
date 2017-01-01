@@ -12,7 +12,6 @@ import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class TextResourceMaker implements ResourceMaker {
 	

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class HttpStatus {
 	/*

@@ -41,7 +41,6 @@ import panda.net.http.UserAgent;
 
 /**
  * utility class for http servlet
- * @author yf.frank.wang@gmail.com
  */
 public class HttpServlets {
 

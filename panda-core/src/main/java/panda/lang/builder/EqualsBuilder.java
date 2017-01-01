@@ -38,7 +38,6 @@ package panda.lang.builder;
  *  }
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class EqualsBuilder implements Builder<Boolean> {
 	/**

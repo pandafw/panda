@@ -2,7 +2,6 @@ package panda.dao.entity;
 
 /**
  * Entity Maker
- * @author yf.frank.wang@gmail.com
  */
 public interface EntityMaker {
 

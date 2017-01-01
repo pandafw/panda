@@ -30,7 +30,6 @@ import panda.lang.Exceptions;
 /**
  * Static methods for working with types.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Types {
 	public static final Type[] EMPTY_TYPE_ARRAY = new Type[] {};

@@ -7,7 +7,6 @@ import panda.lang.Strings;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class EntityField {

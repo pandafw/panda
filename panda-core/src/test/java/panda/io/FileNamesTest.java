@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class FileNamesTest extends FileBasedTestCase {
 	private static final String SEP = "" + File.separatorChar;

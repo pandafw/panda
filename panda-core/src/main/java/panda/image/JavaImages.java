@@ -17,7 +17,6 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JavaImages extends Images {
 	@Override

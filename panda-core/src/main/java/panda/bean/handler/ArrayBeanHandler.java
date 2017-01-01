@@ -8,8 +8,6 @@ import panda.lang.reflect.Types;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> class type
  */
 public class ArrayBeanHandler<T> extends AbstractArrayBeanHandler<T> {

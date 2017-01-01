@@ -24,7 +24,6 @@ import panda.lang.reflect.Types;
 /**
  * utility class for array
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Arrays {
 	/**

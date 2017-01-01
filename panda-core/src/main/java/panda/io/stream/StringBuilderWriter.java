@@ -11,7 +11,6 @@ import java.io.Writer;
  * thread) implementation for better performance. For safe usage with multiple {@link Thread}s then
  * <code>java.io.StringWriter</code> should be used.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class StringBuilderWriter extends Writer implements Serializable {
 	private static final long serialVersionUID = 1L;

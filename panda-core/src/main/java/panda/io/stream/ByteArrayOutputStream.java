@@ -30,7 +30,6 @@ import panda.lang.Collections;
  * exactly like the original. The only exception is the deprecated toString(int) method that has
  * been ignored.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ByteArrayOutputStream extends OutputStream {
 

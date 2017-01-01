@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public interface Deserializer {

@@ -15,7 +15,6 @@ import panda.vfs.FileItem;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ByteArrayCastor extends AnySingleCastor<byte[]> {
 	public ByteArrayCastor() {

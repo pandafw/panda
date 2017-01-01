@@ -28,7 +28,6 @@ import panda.lang.collection.CaseInsensitiveSet;
 import panda.lang.collection.SafeMap;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 @SuppressWarnings("unchecked")
 public abstract class Collections {

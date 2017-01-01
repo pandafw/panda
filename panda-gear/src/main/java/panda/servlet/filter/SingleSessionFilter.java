@@ -26,7 +26,6 @@ import panda.log.Logs;
  * use the same JSESSIONID.
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class SingleSessionFilter implements Filter {
 	/**

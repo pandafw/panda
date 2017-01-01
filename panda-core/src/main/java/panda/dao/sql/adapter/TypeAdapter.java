@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 /**
  * Interface for get data from jdbc and set data to jdbc
- * @author yf.frank.wang@gmail.com
  */
 public interface TypeAdapter<T> {
 	/**

@@ -32,7 +32,6 @@ import panda.io.stream.StringBuilderWriter;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class Doms {

@@ -4,7 +4,6 @@ import java.util.Map;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MapEntry<K, V> extends KeyValue<K, V> {
 	protected Map<K, V> map;

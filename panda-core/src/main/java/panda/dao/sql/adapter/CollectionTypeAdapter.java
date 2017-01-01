@@ -14,7 +14,6 @@ import panda.lang.reflect.Types;
 
 /**
  * base collection implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class CollectionTypeAdapter<T> implements TypeAdapter<T> {
 	private Type type;

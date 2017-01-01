@@ -43,7 +43,6 @@ import panda.lang.chardet.nsDetector;
  *
  * @see <a href="http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  *
- * @author yf.frank.wang@gmail.com
  */
 public class Charsets {
 	/**

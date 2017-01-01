@@ -4,7 +4,6 @@ import panda.cast.CastContext;
 import panda.cast.Castor;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class DirectCastor<S, T> implements Castor<S, T> {
 	public static DirectCastor INSTANCE = new DirectCastor();

@@ -12,7 +12,6 @@ package panda.lang;
  * #ThreadSafe#
  * </p>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Chars {
 	/**

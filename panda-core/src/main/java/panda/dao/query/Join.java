@@ -5,7 +5,6 @@ import panda.lang.Asserts;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class Join {
 	public static final String LEFT = "LEFT";

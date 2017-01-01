@@ -18,7 +18,6 @@ import panda.lang.collection.MapEntry;
 /**
  * A simple implementation of the {@link java.util.Map} interface to handle a collection of request parameters.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class ServletRequestParamMap implements Map<String, Object> {
 	private HttpServletRequest request;

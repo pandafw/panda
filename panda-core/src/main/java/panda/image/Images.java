@@ -12,7 +12,6 @@ import panda.lang.Systems;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Images {
 	private static Images i = initInstance();

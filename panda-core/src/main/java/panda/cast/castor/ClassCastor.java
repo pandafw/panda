@@ -4,7 +4,6 @@ import panda.cast.CastContext;
 import panda.lang.Classes;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class ClassCastor extends AnySingleCastor<Class> {
 	public ClassCastor() {

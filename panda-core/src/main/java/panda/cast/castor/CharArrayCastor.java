@@ -14,7 +14,6 @@ import panda.lang.codec.binary.Base64;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class CharArrayCastor extends AnySingleCastor<char[]> {
 	public CharArrayCastor() {

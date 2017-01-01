@@ -49,7 +49,6 @@ import panda.lang.Systems;
 /**
  * File Utilities class.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class Files {
 	/**

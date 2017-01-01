@@ -9,8 +9,6 @@ import panda.lang.Charsets;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
- *
  * @param <T> target type
  */
 public abstract class AnyJsonCastor<T> extends AnyObjectCastor<T> {

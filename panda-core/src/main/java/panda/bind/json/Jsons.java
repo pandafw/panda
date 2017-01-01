@@ -11,7 +11,6 @@ import panda.lang.Charsets;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class Jsons extends Binds {

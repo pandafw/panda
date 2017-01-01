@@ -62,7 +62,6 @@ import panda.lang.Strings;
  * </ul>
  *
  * @see <a href="http://JSON.org">JSON.org</a>
- * @author yf.frank.wang@gmail.com
  */
 public class JsonObject extends LinkedHashMap<String, Object> {
 	/**

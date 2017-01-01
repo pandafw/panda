@@ -7,7 +7,6 @@ import java.util.Set;
 
 /**
  * Implements an Enumeration that combines elements from a Set and an Enumeration.
- * @author yf.frank.wang@gmail.com
  */
 public class ResourceEnumeration implements Enumeration<String> {
 

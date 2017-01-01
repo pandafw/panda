@@ -10,7 +10,6 @@ import panda.lang.Numbers;
 import panda.vfs.FileItem;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class NumberTypeCastor {
 	public static class NumberCastor extends AnySingleCastor<Number> {

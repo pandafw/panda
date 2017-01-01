@@ -17,7 +17,6 @@ import panda.vfs.FileItem;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public abstract class StreamCastor<T> extends AnySingleCastor<T> {

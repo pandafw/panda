@@ -7,7 +7,6 @@ import panda.cast.CastContext;
 import panda.lang.Iterators;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class IteratorCastor extends AbstractCastor<Object, Iterator> {
 	public IteratorCastor() {

@@ -6,7 +6,6 @@ import java.util.List;
 
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class CycleDetector {
 	/** cycle detect value stack */

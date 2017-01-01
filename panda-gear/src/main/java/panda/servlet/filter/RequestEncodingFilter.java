@@ -30,7 +30,6 @@ import javax.servlet.ServletResponse;
  *
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class RequestEncodingFilter implements Filter {
 	private String encoding;

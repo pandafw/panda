@@ -29,7 +29,6 @@ import panda.servlet.ServletURLBuilder;
  * and redirect to the request URL with query string build by request.parameters. 
  * </pre>
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class SessionRecoveryFilter implements Filter {
 	/**

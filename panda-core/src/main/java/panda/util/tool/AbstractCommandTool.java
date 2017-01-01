@@ -19,7 +19,6 @@ import panda.lang.reflect.Methods;
 
 /**
  * Base main class
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AbstractCommandTool {
 	public static void checkExists(File param, String name) {

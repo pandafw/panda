@@ -50,7 +50,6 @@ import java.nio.charset.CodingErrorAction;
  * <p>
  * Instances of {@link WriterOutputStream} are not thread safe.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class WriterOutputStream extends OutputStream {
 	private static final int DEFAULT_BUFFER_SIZE = 1024;

@@ -58,7 +58,6 @@ package panda.lang.builder;
  * 
  * @param <T> the type of object that the builder will construct or compute.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public interface Builder<T> {
 

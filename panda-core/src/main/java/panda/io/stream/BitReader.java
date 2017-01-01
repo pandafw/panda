@@ -7,7 +7,6 @@ import java.io.InputStream;
 
 /**
  * BitReader
- * @author yf.frank.wang@gmail.com
  */
 public class BitReader implements Closeable {
 

@@ -4,7 +4,6 @@ import panda.bind.filter.IncludePropertyFilter;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class QueryerPropertyFilter extends IncludePropertyFilter {

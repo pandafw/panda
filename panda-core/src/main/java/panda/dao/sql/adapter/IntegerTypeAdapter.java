@@ -8,7 +8,6 @@ import java.sql.Types;
 
 /**
  * Integer Decimal implementation of TypeAdapter
- * @author yf.frank.wang@gmail.com
  */
 public class IntegerTypeAdapter<T> extends AbstractCastTypeAdapter<T, Integer> {
 	public IntegerTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

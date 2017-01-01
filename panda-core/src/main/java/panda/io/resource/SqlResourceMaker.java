@@ -22,7 +22,6 @@ import panda.log.Logs;
 
 /**
  * A class for load database resource.
- * @author yf.frank.wang@gmail.com
  */
 public class SqlResourceMaker extends BeanResourceMaker {
 	protected static Log log = Logs.getLog(SqlResourceMaker.class);

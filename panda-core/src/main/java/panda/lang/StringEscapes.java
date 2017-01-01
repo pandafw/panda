@@ -17,7 +17,6 @@ import java.io.IOException;
 /**
  * utility class for string escape
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class StringEscapes {
 	/* ESCAPE TRANSLATORS */

@@ -94,7 +94,6 @@ import java.util.regex.Pattern;
  * <p>#ThreadSafe#</p>
  * @see java.lang.String
  * 
- * @author yf.frank.wang@gmail.com
  */
 public class Strings {
 	/**

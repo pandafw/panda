@@ -18,7 +18,6 @@ import panda.io.stream.StringBuilderWriter;
 /**
  * Utility class for Text.
  * 
- * @author yf.frank.wang@gmail.com
  */
 public abstract class Texts {
 	public final static String ELLIPSIS = "...";

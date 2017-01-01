@@ -11,7 +11,6 @@ import panda.vfs.FileItem;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <T> target type
  */

@@ -2,7 +2,6 @@ package panda.bind.xml;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class XmlException extends RuntimeException {

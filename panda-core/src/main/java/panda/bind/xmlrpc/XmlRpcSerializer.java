@@ -14,7 +14,6 @@ import panda.lang.time.DateTimes;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class XmlRpcSerializer extends AbstractSerializer {

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import panda.lang.Iterators;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public abstract class AnySingleCastor<T> extends AnyObjectCastor<T> {
 	public AnySingleCastor(Type toType) {

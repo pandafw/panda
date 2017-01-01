@@ -20,7 +20,6 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class MockConnection implements Connection {
 

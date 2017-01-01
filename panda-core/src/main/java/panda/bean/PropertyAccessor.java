@@ -9,7 +9,6 @@ import panda.lang.Exceptions;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  */
 public class PropertyAccessor {

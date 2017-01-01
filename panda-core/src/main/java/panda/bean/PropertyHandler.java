@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 
 /**
  * 
- * @author yf.frank.wang@gmail.com
  *
  * @param <T> class type
  */

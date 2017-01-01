@@ -6,7 +6,6 @@ import panda.dao.sql.adapter.TypeAdapters;
 import panda.lang.Objects;
 
 /**
- * @author yf.frank.wang@gmail.com
  */
 public class JdbcSqlParameter {
 	public static enum Mode {
