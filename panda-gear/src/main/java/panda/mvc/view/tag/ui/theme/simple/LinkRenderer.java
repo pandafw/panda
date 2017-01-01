@@ -11,7 +11,7 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
-	private static final String PANDA_CDN = "http://foolite.github.io/panda-html/";
+	private static final String PANDA_CDN = "http://foolite.github.io/panda/";
 	private static final String JQUERY_VERSION = "1.12.4";
 	private static final String BOOTSTRAP_VERSION = "3.3.7";
 	private static final String FONTAWESOME_VERSION = "4.7.0";
