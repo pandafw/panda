@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="panda-version">
-	<property name="ver.src" value="../panda-java/src/main/java/panda/Panda.java"/>
-
-	<import file="prj-version.xml"/>
-</project>
