@@ -1,4 +1,4 @@
-package panda.util.progressbar;
+package panda.tool.progressbar;
 
 import java.io.PrintStream;
 
