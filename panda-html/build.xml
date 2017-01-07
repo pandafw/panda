@@ -3,7 +3,7 @@
 	<property file="build.properties" />
 	
 	<!-- version -->
-	<import file="../panda-java/ant/panda-version.xml"/>
+	<import file="../ant/panda-version.xml"/>
 
 	<target name="usage">
 		<echo><![CDATA[
@@ -295,9 +295,9 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 	
 	<target name="ghp" description="Copy panda sources to panda-html gh-pages branch">
-		<delete dir="../panda-html.ghp/${prj.version}"/>
-		<mkdir dir="../panda-html.ghp/${prj.version}"/>
-		<copy todir="../panda-html.ghp/${prj.version}" preservelastmodified="true">
+		<delete dir="../../panda.ghp/${prj.version}"/>
+		<mkdir dir="../../panda.ghp/${prj.version}"/>
+		<copy todir="../../panda.ghp/${prj.version}" preservelastmodified="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>
@@ -307,7 +307,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	<target name="dist" depends="jar" description="Distribute project as a jar file"/>
 
 	<!-- maven -->
-	<import file="../panda-java/ant/prj-maven.xml"/>
+	<import file="../ant/prj-maven.xml"/>
 	
 	<!-- release -->
 	<target name="release" description="Release the project">

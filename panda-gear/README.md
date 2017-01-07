@@ -1,5 +1,5 @@
 panda-gear
 ==========
 
-Panda Gear Web Framework
+Panda MVC Web Framework
 

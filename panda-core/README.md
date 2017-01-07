@@ -4,55 +4,35 @@ Panda Java Framework
 A lightweight Java Framework.
 
 
-Requirements
-------------
-
- - Java 6
 
 
 Features
 ------------
 
+ - panda.aop: AOP library
+ - panda.asm: Java ASM library, used by AOP
  - panda.bean: Java Bean Utilities
- - panda.bind: Java XML/JSON Serializer
- - panda.castor: Java Type Converter
-   - String <-> Number
-   - String <-> Date, Calendar
+ - panda.bind: Java XML/JSON Serializer/Deserializer
+ - panda.cast: Java Type Converter
+   - String <-> Number, Date, Calendar, ...
    - Map <-> Java Bean
    - etc.
  - panda.dao: Annotation Based Object/Relational Mapping Library
+ - panda.doc: HTML, markdown library
+ - panda.el: A simple EL library
+ - panda.ex: A extension library (Slack)
  - panda.io: IO Utilities
- - panda.lang: Standard java utilities like commons-lang
+ - panda.ioc: IOC library
+ - panda.lang: Standard java utilities like apache commons-lang
+ - panda.lang.codec: Base64, QCode, Hex codec
+ - panda.lang.collection: Collection library
+ - panda.lang.mutable: Mutable classes
+ - panda.lang.reflect: Java Reflect classes
  - panda.log: Logger library
+ - panda.net: like apache commons-net
+ - panda.task: A simple task scheduler library
+ - panda.tpl: A template library
+ - panda.vfs: A simple VFS library
 
 
-Ivy Settings
-------------
-    <ivysettings>
-        <settings defaultResolver="default" />
-        <resolvers>
-            <chain name="public">
-                <ibiblio name="maven" m2compatible="true" />
-                <ibiblio name="panda" m2compatible="true" root="https://raw.github.com/foolite/panda-repo/master/" />
-            </chain>
-        </resolvers>
-        <include url="${ivy.default.settings.dir}/ivysettings-shared.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml" />
-    </ivysettings>
-
-
-Change Log
------------
-
-### 1.0.0 (Released: 2013-11-07)
- - Considered stable
-
-
-
-OSS
------------
- - https://github.com/rjeschke/txtmark
- - https://code.google.com/archive/p/markdown4j
 

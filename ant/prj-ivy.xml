@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="prj-ivy" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<!-- ivy -->
+	<target name="ivy-resolve" description="ivy --> retreive dependencies">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="lib/api"/>
+			<fileset dir="lib/run"/>
+			<fileset dir="lib/gae"/>
+			<fileset dir="lib/jdbc"/>
+			<fileset dir="lib/tool"/>
+		</delete>
+		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
+	</target>
+
+	<target name="ivy-report" description="ivy --> generates a report of dependencies">
+		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,tool"/>
+	</target>
+
+	<target name="ivy-clean" description="ivy --> clean the cache">
+		<ivy:cleancache />
+	</target>
+</project>

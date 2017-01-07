@@ -3,13 +3,13 @@
 	<property file="build.properties"/>
 	
 	<path id="dep.cp">
+		<pathelement path="../panda-core/out/classes"/>
 		<pathelement path="../panda-gear/out/classes"/>
-		<pathelement path="../panda-java/out/classes"/>
 		<path refid="lib.cp"/>
 	</path>
 
 	<!-- build -->
-	<import file="../panda-java/ant/panda-build.xml"/>
+	<import file="../ant/panda-build.xml"/>
 	
 	<!-- release -->
 	<target name="release" description="Release the project">

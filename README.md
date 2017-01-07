@@ -1,4 +1,4 @@
-Panda Framework
+ Panda Framework
 =================
 
 Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应用。
@@ -16,15 +16,91 @@ Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应�
 
 断断续续坚持编写了好几年，总算完成了一个我比较满意的框架。
 它可以实现Spring/Struts2/Hibernate的一些非常常用的功能。
-并且可以通过XML定义文件来自动产生实现“检索/列表/新建/修改/删除”功能的源代码（包括HTMl页面及后台处理）。
+并且可以通过XML定义文件来自动产生实现“检索/列表/新建/修改/删除”功能的源代码（包括HTML页面及后台处理）。
 
 我做了一个[http://pdemo.foolite.com]DEMO网站，通过这个DEMO大家可以比较直观的了解Panda。
 
 感谢同学能够耐心的看完上面那一堆啰嗦的废话，下面言归正传。
 Panda是由以下几个部分组成的。
 
- - panda-java  
-   这是Panda框架中最基础的部分，它包含了类似apache-commons的许多有用的类,类似Spring的IOC/AOP。
+
+ - panda-core
+
+ 这是Panda框架中最基础的部分，它包含了类似apache-commons的许多有用的类,类似Spring的IOC/AOP。
+
 
  - panda-gear
-   MVC模块。
+
+ MVC模块。类似Spring-MVC, Struts2。包含了一些常用的Taglib。
+
+ 
+ - panda-wing
+
+ 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。
+ 
+
+ - panda-html
+
+ 包含了jQuery, Bootstrap, 以及panda-gear中一些taglib所需要的css/javascript。
+
+ 
+ - panda-tool
+ 
+ 源代码生成器。可以自动生成Entity类, Query类, Dao类, Action类, View的Freemarker(HTML)模板文件。
+ 
+ 
+ - panda-demo
+ 
+ panda框架的DEMO WEB应用。
+ 
+ 
+
+ 感想
+-------------
+如果大家觉得panda好用,并且能够对你的工作有帮助，留个言提个建议或写个bug报告的话，我会非常感激。
+欢迎Folk。
+
+
+
+ 感谢
+-----------
+ - apache commons lang
+ - apache commons codec
+ - apache commons collections
+ - struts2
+ - Nutz
+ - https://github.com/rjeschke/txtmark
+ - https://code.google.com/archive/p/markdown4j
+
+
+
+ 版本历史
+-------------
+
+ - 1.2.0 （2016-01-10）
+   初版。  
+   （其实1.2.0之前还有好几个版本，bug多多，就不在这里写了）
+   
+
+ Requirements
+--------------
+
+ - Java 7
+
+
+ Ivy Settings
+--------------
+    <ivysettings>
+        <settings defaultResolver="default" />
+        <resolvers>
+            <chain name="public">
+                <ibiblio name="maven" m2compatible="true" />
+                <ibiblio name="panda" m2compatible="true" root="https://raw.github.com/foolite/panda-repo/master/" />
+            </chain>
+        </resolvers>
+        <include url="${ivy.default.settings.dir}/ivysettings-shared.xml" />
+        <include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
+        <include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml" />
+        <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml" />
+    </ivysettings>
+

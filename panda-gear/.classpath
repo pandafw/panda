@@ -32,6 +32,6 @@
 	<classpathentry kind="lib" path="lib/tool/org.eclipse.jdt.core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/javax.el.jar"/>
 	<classpathentry kind="lib" path="lib/tool/com.sun.el.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/panda-java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/panda-core"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

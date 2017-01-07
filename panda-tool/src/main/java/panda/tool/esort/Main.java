@@ -1,9 +1,9 @@
 package panda.tool.esort;
 
-import panda.util.progressbar.ConsoleGaugeBar;
-import panda.util.progressbar.ConsolePercentBar;
-import panda.util.progressbar.ConsoleRemainTimeBar;
-import panda.util.progressbar.ConsoleWindmillBar;
+import panda.tool.progressbar.ConsoleGaugeBar;
+import panda.tool.progressbar.ConsolePercentBar;
+import panda.tool.progressbar.ConsoleRemainTimeBar;
+import panda.tool.progressbar.ConsoleWindmillBar;
 
 /**
  * @author fsoft
