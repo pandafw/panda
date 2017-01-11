@@ -412,9 +412,8 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @param email email
 	 * @param name template name
 	 * @param model data
-	 * @param html html message
 	 */
-	public void sendTemplateMail(Email email, String name, Object model, boolean html) throws EmailException {
+	public void sendTemplateMail(Email email, String name, Object model) throws EmailException {
 		String subject = "";
 		String content;
 		try {
@@ -431,12 +430,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 		}
 
 		email.setSubject(subject);
-		if (html) {
-			email.setHtmlMsg(content);
-		}
-		else {
-			email.setTextMsg(content);
-		}
+		email.setMessage(content);
 
 		sendMail(email);
 	}
@@ -445,10 +439,9 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * send email
 	 * @param email email
 	 * @param name template name
-	 * @param html html message
 	 */
-	public void sendTemplateMail(Email email, String name, boolean html) throws EmailException {
-		sendTemplateMail(email, name, null, html);
+	public void sendTemplateMail(Email email, String name) throws EmailException {
+		sendTemplateMail(email, name, null);
 	}
 	
 	/**

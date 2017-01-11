@@ -432,19 +432,26 @@ public class Email {
 	}
 	
 	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = Strings.defaultString(message);
+	}
+
+	/**
 	 * @param text the text message to set
 	 */
 	public void setTextMsg(String text) {
-		this.message = Strings.defaultString(text);
-		this.html = false;
+		setMessage(text);
+		setHtml(false);
 	}
 	
 	/**
 	 * @param html the html message to set
 	 */
 	public void setHtmlMsg(String html) {
-		this.message = Strings.defaultString(html);
-		this.html = true;
+		setMessage(html);
+		setHtml(true);
 	}
 	
 	/**
@@ -452,6 +459,13 @@ public class Email {
 	 */
 	public boolean isHtml() {
 		return html;
+	}
+
+	/**
+	 * @param html the html to set
+	 */
+	public void setHtml(boolean html) {
+		this.html = html;
 	}
 
 	/**
