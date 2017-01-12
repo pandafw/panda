@@ -11,6 +11,6 @@ import panda.mvc.ParamAdaptor;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Documented
-public @interface Adapt {
+public @interface AdaptBy {
 	Class<? extends ParamAdaptor> type();
 }

@@ -33,7 +33,7 @@ import panda.mvc.Mvcs;
 import panda.mvc.Setup;
 import panda.mvc.UrlMapping;
 import panda.mvc.ViewMaker;
-import panda.mvc.annotation.Adapt;
+import panda.mvc.annotation.AdaptBy;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
 import panda.mvc.annotation.IocBy;
@@ -331,7 +331,7 @@ public class DefaultMvcLoading implements Loading {
 	
 	protected ActionInfo createActionInfo(Ioc ioc, Class<?> type) {
 		ActionInfo ai = new ActionInfo();
-		evalHttpAdaptor(ai, type.getAnnotation(Adapt.class));
+		evalHttpAdaptor(ai, type.getAnnotation(AdaptBy.class));
 		evalOkView(ai, type.getAnnotation(Ok.class));
 		evalErrorView(ai, type.getAnnotation(Err.class));
 		evalFatalView(ai, type.getAnnotation(Fatal.class));
@@ -343,7 +343,7 @@ public class DefaultMvcLoading implements Loading {
 
 	protected ActionInfo createActionInfo(Ioc ioc, Method method) {
 		ActionInfo ai = new ActionInfo();
-		evalHttpAdaptor(ai, method.getAnnotation(Adapt.class));
+		evalHttpAdaptor(ai, method.getAnnotation(AdaptBy.class));
 		evalOkView(ai, method.getAnnotation(Ok.class));
 		evalErrorView(ai, method.getAnnotation(Err.class));
 		evalFatalView(ai, method.getAnnotation(Fatal.class));
@@ -405,7 +405,7 @@ public class DefaultMvcLoading implements Loading {
 		ai.setActionType(type);
 	}
 
-	protected void evalHttpAdaptor(ActionInfo ai, Adapt ab) {
+	protected void evalHttpAdaptor(ActionInfo ai, AdaptBy ab) {
 		if (null != ab) {
 			ai.setAdaptor(ab.type());
 		}
