@@ -13,6 +13,9 @@ import panda.log.Logs;
 import panda.mvc.config.ServletMvcConfig;
 import panda.net.http.HttpStatus;
 
+/**
+ * Servlet Entry Point
+ */
 public class MvcServlet extends HttpServlet {
 	private static final Log log = Logs.getLog(MvcServlet.class);
 

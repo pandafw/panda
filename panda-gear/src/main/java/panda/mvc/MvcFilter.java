@@ -16,7 +16,7 @@ import panda.log.Logs;
 import panda.mvc.config.FilterMvcConfig;
 
 /**
- * 同 JSP/Serlvet 容器的挂接点
+ * Filter Entry Point
  */
 public class MvcFilter implements Filter {
 
