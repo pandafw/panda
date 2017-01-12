@@ -1,5 +1,6 @@
 package panda.lang;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class Regexs {
@@ -11,6 +12,17 @@ public class Regexs {
 	public static final Pattern PATTERN_EMAIL = Pattern.compile(REGEX_EMAIL);
 	public static final Pattern PATTERN_FILENAME = Pattern.compile(REGEX_FILENAME);
 
+	public static boolean matches(Collection<Pattern> patterns, CharSequence s) {
+		if (Collections.isNotEmpty(patterns)) {
+			for (Pattern p : patterns) {
+				if (p.matcher(s).matches()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isURL(String value) {
 		return PATTERN_URL.matcher(value).matches();
 	}
