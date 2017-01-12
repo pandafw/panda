@@ -65,6 +65,15 @@ public interface MvcConstants extends IocConstants {
 	/** Custom Servlet Error View */
 	public static final String SERVLET_ERROR_VIEW = "panda.view.servlet.error";
 
+	/** The locale cookie domain */
+	public static final String LOCALE_COOKIE_DOMAIN = "panda.locale.cookie.domain";
+
+	/** The locale cookie path */
+	public static final String LOCALE_COOKIE_PATH = "panda.locale.cookie.path";
+
+	/** The locale cookie max age */
+	public static final String LOCALE_COOKIE_MAXAGE = "panda.locale.cookie.maxage";
+
 	/** The locale domains */
 	public static final String LOCALE_DOMAINS = "panda.locale.domains";
 
@@ -73,6 +82,15 @@ public interface MvcConstants extends IocConstants {
 
 	/** The default locale */
 	public static final String LOCALE_DEFAULT = "panda.locale.default";
+
+	/** The locale save to session */
+	public static final String LOCALE_SAVE_TO_SESSION = "panda.locale.save.to.session";
+
+	/** The locale save to cookie */
+	public static final String LOCALE_SAVE_TO_COOKIE = "panda.locale.save.to.cookie";
+
+	/** The locale from accept language */
+	public static final String LOCALE_FROM_ACCEPT_LANGUAGE = "panda.locale.from.accept.language";
 
 	/** The sitemesh configuration */
 	public static final String SITEMESH = "panda.sitemesh";

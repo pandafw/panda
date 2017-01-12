@@ -44,8 +44,14 @@ public class LocaleProcessor extends AbstractProcessor {
 	protected String requestName = DEFAULT_ATTRIBUTE;
 	protected String sessionName = DEFAULT_ATTRIBUTE;
 	protected String cookieName = DEFAULT_COOKIE;
+
+	@IocInject(value=MvcConstants.LOCALE_COOKIE_DOMAIN, required=false)
 	protected String cookieDomain;
+
+	@IocInject(value=MvcConstants.LOCALE_COOKIE_PATH, required=false)
 	protected String cookiePath;
+
+	@IocInject(value=MvcConstants.LOCALE_COOKIE_MAXAGE, required=false)
 	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
 
 	@IocInject(value=MvcConstants.LOCALE_DOMAINS, required=false)
@@ -57,10 +63,14 @@ public class LocaleProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.LOCALE_DEFAULT, required=false)
 	protected Locale defaultLocale = Locale.getDefault();
 	
-	protected boolean fromAcceptLanguage = true;
-
+	@IocInject(value=MvcConstants.LOCALE_SAVE_TO_SESSION, required=false)
 	protected boolean saveToSession = false;
+
+	@IocInject(value=MvcConstants.LOCALE_SAVE_TO_COOKIE, required=false)
 	protected boolean saveToCookie = true;
+
+	@IocInject(value=MvcConstants.LOCALE_FROM_ACCEPT_LANGUAGE, required=false)
+	protected boolean fromAcceptLanguage = true;
 
 	/**
 	 * Constructor
@@ -69,6 +79,9 @@ public class LocaleProcessor extends AbstractProcessor {
 	}
 
 	public void process(ActionContext ac) {
+		boolean saveToSession = this.saveToSession;
+		boolean saveToCookie = this.saveToCookie;
+
 		Locale locale = null;
 		HttpSession session = ac.getRequest().getSession(false);
 
@@ -77,7 +90,9 @@ public class LocaleProcessor extends AbstractProcessor {
 			String ln = domainLocales.get(sn);
 			if (ln != null) {
 				locale = Locales.toLocale(ln);
-				saveToCookie = false;
+				if (locale != null) {
+					saveToCookie = false;
+				}
 			}
 		}
 		
@@ -90,7 +105,6 @@ public class LocaleProcessor extends AbstractProcessor {
 					saveToCookie = false;
 				}
 			}
-
 		}
 
 		if (locale == null && session != null) {
