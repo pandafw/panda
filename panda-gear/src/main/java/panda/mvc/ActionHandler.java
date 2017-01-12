@@ -1,6 +1,8 @@
 package panda.mvc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,7 @@ import panda.ioc.Scope;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
 import panda.lang.Classes;
+import panda.lang.Regexs;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -39,22 +42,15 @@ public class ActionHandler {
 
 	private MvcConfig config;
 
-	private Pattern ignorePtn;
+	/**
+	 * the regex patterns of the URI to exclude
+	 */
+	private List<Pattern> ignoreRegexs;
 
 	/**
-	 * 需要排除的路径前缀
+	 * the servlet paths to exclude
 	 */
-	private Pattern exclusionsPrefix;
-
-	/**
-	 * 需要排除的后缀名
-	 */
-	private Pattern exclusionsSuffix;
-
-	/**
-	 * 需要排除的固定路径
-	 */
-	private Set<String> exclusionPaths;
+	private Set<String> ignorePaths;
 
 	/**
 	 * @return the loading
@@ -86,71 +82,49 @@ public class ActionHandler {
 		this.loading = new DefaultMvcLoading();
 		this.mapping = loading.load(config);
 
-		String regx = config.getInitParameter("ignore");
-		if (Strings.isNotEmpty(regx)) {
-			ignorePtn = Pattern.compile(regx, Pattern.CASE_INSENSITIVE);
-		}
-		
-		String exclusions = config.getInitParameter("exclusions");
-		if (exclusions != null) {
-			String[] tmps = Strings.split(exclusions);
-			Set<String> prefix = new HashSet<String>();
-			Set<String> suffix = new HashSet<String>();
+		String ignores = config.getInitParameter("ignores");
+		if (ignores != null) {
+			String[] es = Strings.split(ignores);
+			Set<String> regex = new HashSet<String>();
 			Set<String> paths = new HashSet<String>();
-			for (String tmp : tmps) {
-				tmp = tmp.trim().intern();
-				if (tmp.length() > 1) {
-					if (tmp.startsWith("*")) {
-						prefix.add(tmp.substring(1));
-						continue;
-					}
-					else if (tmp.endsWith("*")) {
-						suffix.add(tmp.substring(0, tmp.length() - 1));
-						continue;
-					}
+			for (String s : es) {
+				s = Strings.strip(s);
+				if (Strings.isEmpty(s)) {
+					continue;
 				}
-				paths.add(tmp);
+				
+				if (Strings.startsWithChar(s, '^') || Strings.endsWithChar(s, '&')) {
+					regex.add(s);
+					continue;
+				}
+				paths.add(s);
 			}
-			if (prefix.size() > 0) {
-				exclusionsPrefix = Pattern.compile("^(" + Strings.join(prefix, '|') + ")", Pattern.CASE_INSENSITIVE);
-				log.info("exclusionsPrefix  = " + exclusionsPrefix);
-			}
-			if (suffix.size() > 0) {
-				exclusionsSuffix = Pattern.compile("^(" + Strings.join(suffix, '|') + ")", Pattern.CASE_INSENSITIVE);
-				log.info("exclusionsSuffix = " + exclusionsSuffix);
+			if (regex.size() > 0) {
+				ignoreRegexs = new ArrayList<Pattern>();
+				for (String s : regex) {
+					ignoreRegexs.add(Pattern.compile(s));
+				}
+				log.info("ignore regexs  = " + Strings.join(regex, " "));
 			}
 			if (paths.size() > 0) {
-				exclusionPaths = paths;
-				log.info("exclusionsPath   = " + exclusionPaths);
+				ignorePaths = paths;
+				log.info("ignore paths   = " + ignorePaths);
 			}
 		}
 	}
 
 	/**
-	 * 过滤请求. 过滤顺序(ignorePtn,exclusionsSuffix,exclusionsPrefix,exclusionPaths)
+	 * determine the servlet path should exclude or not.
+	 * order: ignorePaths, ignoreRegexs
 	 * 
-	 * @param matchUrl
+	 * @param path servlet path
 	 */
-	protected boolean isExclusion(String matchUrl) {
-		if (ignorePtn != null && ignorePtn.matcher(matchUrl).find()) {
+	protected boolean ignore(String path) {
+		if (ignorePaths != null && ignorePaths.contains(path)) {
 			return true;
 		}
-		if (exclusionsSuffix != null) {
-			if (exclusionsSuffix.matcher(matchUrl).find()) {
-				return true;
-			}
-		}
-		if (exclusionsPrefix != null) {
-			if (exclusionsPrefix.matcher(matchUrl).find()) {
-				return true;
-			}
-		}
-		if (exclusionPaths != null) {
-			for (String exclusionPath : exclusionPaths) {
-				if (exclusionPath.equals(matchUrl)) {
-					return true;
-				}
-			}
+		if (Regexs.matches(ignoreRegexs, path)) {
+			return true;
 		}
 		return false;
 	}
@@ -159,8 +133,9 @@ public class ActionHandler {
 		if (log.isTraceEnabled()) {
 			log.trace(config.getAppName() + " handle:\n" + HttpServlets.dumpRequestProperties(req));
 		}
-		String url = HttpServlets.getServletPath(req);
-		if (isExclusion(url)) {
+		
+		String path = HttpServlets.getServletPath(req);
+		if (ignore(path)) {
 			return false;
 		}
 
