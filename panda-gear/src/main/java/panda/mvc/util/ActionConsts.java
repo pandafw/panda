@@ -1,11 +1,8 @@
 package panda.mvc.util;
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
 
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -76,20 +73,5 @@ public class ActionConsts extends ActionSupport {
 		}
 		cache.put(key, v);
 		return v == Objects.NULL ? def : (Map)v;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Set<String> getCharsets() {
-		final String name = "charsets";
-		
-		Object v = cache.get(name);
-		if (v instanceof Set) {
-			return (Set<String>)v;
-		}
-
-		SortedMap<String,Charset> map = Charset.availableCharsets();
-		v = map.keySet();
-		cache.put(name, v);
-		return (Set<String>)v;
 	}
 }

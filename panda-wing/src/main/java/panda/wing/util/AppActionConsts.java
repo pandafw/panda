@@ -1,16 +1,31 @@
 package panda.wing.util;
 
+import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
-import panda.lang.Collections;
 import panda.mvc.util.ActionConsts;
 import panda.wing.constant.RC;
 
 @SuppressWarnings("unchecked")
 @IocBean(type=ActionConsts.class, scope=Scope.REQUEST)
 public class AppActionConsts extends ActionConsts {
+	public Set<String> getAvaliableCharsets() {
+		final String name = "avaliable-charsets";
+		
+		Object v = cache.get(name);
+		if (v instanceof Set) {
+			return (Set<String>)v;
+		}
+
+		SortedMap<String,Charset> map = Charset.availableCharsets();
+		v = map.keySet();
+		cache.put(name, v);
+		return (Set<String>)v;
+	}
 
 	/**
 	 * getPermissionMap
@@ -33,14 +48,7 @@ public class AppActionConsts extends ActionConsts {
 	 * @return map
 	 */
 	public Map<String, String> getDataStatusMap() {
-		Object v = cache.get(RC.DATA_STATUS_MAP);
-		if (v instanceof Map) {
-			return (Map)v;
-		}
-
-		Map<String, String> m = getTextAsMap(RC.DATA_STATUS_MAP, Collections.EMPTY_MAP);
-		cache.put(RC.DATA_STATUS_MAP, m);
-		return m;
+		return getTextAsMap(RC.DATA_STATUS_MAP);
 	}
 
 	/**
