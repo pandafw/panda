@@ -1,5 +1,15 @@
 package panda.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.cast.Castors;
@@ -16,15 +26,6 @@ import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.lang.Objects;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * !! thread-unsafe !!
@@ -871,7 +872,7 @@ public abstract class AbstractDao implements Dao {
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		Map<?, ?> map = new HashMap<Object, Object>();
+		Map<?, ?> map = new LinkedHashMap<Object, Object>();
 		selectByQuery(query, new MapDataHandler(bh, map, keyProp, valProp));
 		return map;
 	}
