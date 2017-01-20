@@ -28,19 +28,19 @@ public class AppActionConsts extends ActionConsts {
 	}
 
 	/**
-	 * getPermissionMap
+	 * getAuthPermissionMap
 	 * @return map
 	 */
-	public Map<String, String> getPermissionMap() {
-		return getTextAsMap(RC.PERMISSIONS);
+	public Map<String, String> getAuthPermissionMap() {
+		return getTextAsMap(RC.AUTH_PERMISSIONS);
 	}
 	
 	/**
-	 * getRoleMap
+	 * getAuthRoleMap
 	 * @return map
 	 */
-	public Map<String, String> getRoleMap() {
-		return getTextAsMap(RC.ROLES);
+	public Map<String, String> getAuthRoleMap() {
+		return getTextAsMap(RC.AUTH_ROLES);
 	}
 	
 	/**

@@ -39,14 +39,14 @@ public interface RC {
 	public final static String REDIRECT_TIMEOUT = "redirect-timeout";
 
 	/**
-	 * PERMISSIONS = "permissions";
+	 * AUTH_PERMISSIONS = "auth-permissions";
 	 */
-	public final static String PERMISSIONS = "permissions";
+	public final static String AUTH_PERMISSIONS = "auth-permissions";
 
 	/**
-	 * ROLES = "roles";
+	 * AUTH_ROLES = "auth-roles";
 	 */
-	public final static String ROLES = "roles";
+	public final static String AUTH_ROLES = "auth-roles";
 
 	//------------------------------------------------------------
 	// UI SETTINGS
