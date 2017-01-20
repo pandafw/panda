@@ -26,6 +26,7 @@ import panda.mvc.ActionContext;
 import panda.mvc.Mvcs;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.validator.BinaryValidator;
+import panda.mvc.validation.validator.CIDRValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
 import panda.mvc.validation.validator.ConstantValidator;
 import panda.mvc.validation.validator.CreditCardNoValidator;
@@ -71,6 +72,7 @@ public class DefaultValidators implements Validators {
 		map.put(FILENAME, FilenameValidator.class);
 		map.put(CREDITCARDNO, CreditCardNoValidator.class);
 		map.put(BINARY, BinaryValidator.class);
+		map.put(CIDR, CIDRValidator.class);
 		map.put(DATE, DateValidator.class);
 		map.put(NUMBER, NumberValidator.class);
 		map.put(STRING, StringValidator.class);

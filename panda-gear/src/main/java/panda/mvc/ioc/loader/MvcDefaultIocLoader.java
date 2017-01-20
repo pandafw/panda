@@ -33,6 +33,7 @@ import panda.mvc.util.DefaultTextProvider;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.validator.BinaryValidator;
+import panda.mvc.validation.validator.CIDRValidator;
 import panda.mvc.validation.validator.CastErrorValidator;
 import panda.mvc.validation.validator.ConstantValidator;
 import panda.mvc.validation.validator.CreditCardNoValidator;
@@ -179,6 +180,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			
 			// validators
 			BinaryValidator.class,
+			CIDRValidator.class,
 			CastErrorValidator.class,
 			ConstantValidator.class,
 			CreditCardNoValidator.class,

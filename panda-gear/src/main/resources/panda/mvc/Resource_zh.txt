@@ -90,7 +90,7 @@ validation-cast-file=请选择文件。
 validation-cast-number=请输入整数字。
 validation-cast-time=请输入"HH:mm:ss"格式的时间。
 validation-cast-url=请输入正确的URL。（例: http://www.domain.com）
-validation-cidr=请输入正确的IP或者CIDR。（例: 192.168.1.1/32）
+validation-cidr=${top.error == null ? "请输入正确的IP或者CIDR。" : (top.error + "が正しいIPまたはCIDRではありません。")}（例: 192.168.1.1/32）
 validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
 (top.comparator == "lt" ? "<=" : \

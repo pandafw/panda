@@ -5,9 +5,12 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import panda.lang.Exceptions;
 import panda.lang.Objects;
+import panda.lang.Strings;
 
 public class CIDR implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,6 +42,27 @@ public class CIDR implements Cloneable, Serializable {
 		addr = cidr.addr;
 		mask = cidr.mask;
 	}
+
+	public static boolean isCIDR(String cidr) {
+		try {
+			new CIDR(cidr);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static List<CIDR> split(String cidrs) {
+		String[] ss = Strings.split(cidrs);
+		List<CIDR> cs = new ArrayList<CIDR>(ss.length);
+		
+		for (String s : ss) {
+			cs.add(new CIDR(s));
+		}
+		return cs;
+	}
+
 
 	public boolean isV6() {
 		return addr instanceof Inet6Address;

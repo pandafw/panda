@@ -91,7 +91,7 @@ validation-cast-number=整数を入力してください。
 validation-cast-file=フィアルを選択してください。
 validation-cast-time=時間形式"HH:mm:ss"で入力してください。
 validation-cast-url=正しいURLを入力してください。（例: http://www.domain.com）
-validation-cidr=正しいIPまたはCIDRを入力してください。（例: 192.168.1.1/32）
+validation-cidr=${top.error == null ? "正しいIPまたはCIDRを入力してください。" : (top.error + "が正しいIPまたはCIDRではありません。")}（例: 192.168.1.1/32）
 validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
 (top.comparator == "lt" ? "<=" : \

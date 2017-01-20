@@ -21,6 +21,7 @@ public interface Validators {
 	public static final String CREDITCARDNO = "creditcardno";
 
 	public static final String BINARY = "binary";
+	public static final String CIDR = "cidr";
 	public static final String DATE = "date";
 	public static final String NUMBER = "number";
 	public static final String STRING = "string";
@@ -49,6 +50,7 @@ public interface Validators {
 	public static final String MSGID_CAST_URL = "validation-cast-url";
 	public static final String MSGID_CONSTANT = "validation-constant";
 	public static final String MSGID_PROHIBITED = "validation-prohibited";
+	public static final String MSGID_CIDR = "validation-cidr";
 	public static final String MSGID_DATETIME_RANGE = "validation-datetime-range";
 	public static final String MSGID_DATE_RANGE = "validation-date-range";
 	public static final String MSGID_TIME_RANGE = "validation-time-range";

@@ -648,6 +648,7 @@ public abstract class AbstractCodeGenerator {
 		vtmap.put("creditcardno", "Validators.CREDITCARDNO");
 
 		vtmap.put("binary", "Validators.BINARY");
+		vtmap.put("cidr", "Validators.CIDR");
 		vtmap.put("date", "Validators.DATE");
 		vtmap.put("byte", "Validators.NUMBER");
 		vtmap.put("short", "Validators.NUMBER");
@@ -718,6 +719,7 @@ public abstract class AbstractCodeGenerator {
 
 		vmmap.put("email", "Validators.MSGID_EMAIL");
 		vmmap.put("imail", "Validators.MSGID_IMAIL");
+		vmmap.put("cidr", "Validators.MSGID_CIDR");
 		vmmap.put("url", "Validators.MSGID_URL");
 		vmmap.put("password", "Validators.MSGID_PASSWORD");
 		vmmap.put("byte", "Validators.MSGID_NUMBER_RANGE");

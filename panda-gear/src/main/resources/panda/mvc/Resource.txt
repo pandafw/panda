@@ -148,8 +148,8 @@ validation-cast-decimal=Please input a decimal number.
 validation-cast-file=Please select a file.
 validation-cast-number=Please input a number.
 validation-cast-time=Please input "HH:mm:ss" date string.
-validation-cast-url=Please input a correct URL (ex: "http://www.domain.com").
-validation-cidr=Please input a correct IP or CIDR (ex: 192.168.1.1/32).
+validation-cast-url=Please input a correct URL. (ex: "http://www.domain.com")
+validation-cidr=${top.error == null ? "Please input a correct IP or CIDR." : (top.error + " is a incorrect IP or CIDR.")} (ex: 192.168.1.1/32)
 validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \
 (top.comparator == "le" ? "<" : \
 (top.comparator == "lt" ? "<=" : \
