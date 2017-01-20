@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import panda.ioc.annotation.IocBean;
 import panda.mvc.ActionContext;
+import panda.mvc.View;
 
 @IocBean
 public class InvokeProcessor extends AbstractProcessor {
@@ -13,7 +14,14 @@ public class InvokeProcessor extends AbstractProcessor {
 		Object[] args = ac.getArgs();
 		try {
 			Object r = method.invoke(action, args);
-			ac.setResult(r);
+			if (r != null) {
+				if (r instanceof View) {
+					ac.setView((View)r);
+				}
+				else {
+					ac.setResult(r);
+				}
+			}
 			doNext(ac);
 		}
 		catch (Exception e) {

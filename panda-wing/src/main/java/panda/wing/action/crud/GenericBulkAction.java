@@ -37,28 +37,28 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * bdelete
 	 */
 	protected Object bdelete(Map<String, String[]> args) {
-		return doResult(doBulkDeleteSelect(args));
+		return doBulkDeleteSelect(args);
 	}
 
 	/**
 	 * bdelete_execute
 	 */
 	protected Object bdelete_execute(Map<String, String[]> args) {
-		return doResult(doBulkDeleteExecute(args));
+		return doBulkDeleteExecute(args);
 	}
 
 	/**
 	 * bupdate
 	 */
 	protected Object bupdate(Map<String, String[]> args) {
-		return doResult(doBulkUpdateSelect(args));
+		return doBulkUpdateSelect(args);
 	}
 
 	/**
 	 * bupdate_execute
 	 */
 	protected Object bupdate_execute(Map<String, String[]> args) {
-		return doResult(doBulkUpdateExecute(args));
+		return doBulkUpdateExecute(args);
 	}
 	
 	//------------------------------------------------------------
@@ -88,12 +88,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final List<T> dataList = selectDataList(keys, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 
 		if (!checkOnBulkDelete(dataList)) {
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 		
@@ -114,7 +114,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				log.error(e.getMessage(), e);
 			}
 			addSystemError(RC.ACTION_FAILED_PREFIX, e);
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 		finally {
@@ -123,7 +123,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 
@@ -202,12 +202,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		final List<T> dataList = selectDataList(keys, true);
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 
 		if (!checkOnBulkUpdate(dataList)) {
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 		
@@ -228,7 +228,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				log.error(e.getMessage(), e);
 			}
 			addSystemError(RC.ACTION_FAILED_PREFIX, e);
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 		finally {
@@ -237,7 +237,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		
 		if (Collections.isEmpty(dataList)) {
 			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
-			setScenarioResult();
+			setScenarioView();
 			return dataList;
 		}
 

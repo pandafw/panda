@@ -13,7 +13,6 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
-import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.wing.action.AbstractAction;
 
@@ -28,9 +27,8 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	protected final static String METHOD_SEPARATOR = "_";
 
 	//------------------------------------------------------------
-	// scenario & result
+	// scenario
 	//------------------------------------------------------------
-	protected View resultView;
 	protected String actionScenario;
 
 	//------------------------------------------------------------
@@ -239,34 +237,19 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 		this.actionScenario = actionScenario;
 	}
 
-	protected void setResultView(View result) {
-		this.resultView = result;
-	}
-
 	/**
-	 * set result by action scenario
+	 * set view by action scenario
 	 */
-	protected void setScenarioResult() {
-		resultView = new SitemeshFreemarkerView("~" + getActionScenario());
+	protected void setScenarioView() {
+		context.setView(new SitemeshFreemarkerView("~" + getActionScenario()));
 	}
 
 	/**
-	 * set result by action scenario
+	 * set view by action scenario
 	 * @param step scenario step
 	 */
-	protected void setScenarioResult(String step) {
-		resultView = new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step);
-	}
-
-	//------------------------------------------------------------
-	// result
-	//------------------------------------------------------------
-	protected Object doResult(Object r) {
-		if (resultView == null) {
-			return r;
-		}
-		getContext().setResult(r);
-		return resultView;
+	protected void setScenarioView(String step) {
+		context.setView(new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step));
 	}
 
 	//------------------------------------------------------------

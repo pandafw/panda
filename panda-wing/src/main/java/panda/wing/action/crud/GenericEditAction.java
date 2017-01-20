@@ -76,10 +76,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected void setResultOnExecCheckError() {
 		if (hasActionErrors() || hasFieldErrors() || !isInputConfirm()) {
-			setScenarioResult();
+			setScenarioView();
 		}
 		else {
-			setScenarioResult(RESULT_CONFIRM);
+			setScenarioView(RESULT_CONFIRM);
 		}
 	}
 
@@ -90,126 +90,126 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * view
 	 */
 	protected Object view(T key) {
-		return doResult(doViewSelect(key));
+		return doViewSelect(key);
 	}
 	
 	/**
 	 * view_input
 	 */
 	protected Object view_input(T data) {
-		return doResult(doViewInput(data));
+		return doViewInput(data);
 	}
 
 	/**
 	 * print
 	 */
 	protected Object print(T key) {
-		return doResult(doViewSelect(key));
+		return doViewSelect(key);
 	}
 
 	/**
 	 * print_input
 	 */
 	protected Object print_input(T data) {
-		return doResult(doViewInput(data));
+		return doViewInput(data);
 	}
 
 	/**
 	 * copy
 	 */
 	protected Object copy(T key) {
-		return doResult(doCopySelect(key));
+		return doCopySelect(key);
 	}
 
 	/**
 	 * copy_input
 	 */
 	protected Object copy_input(T data) {
-		return doResult(doCopyInput(data));
+		return doCopyInput(data);
 	}
 
 	/**
 	 * copy_confirm
 	 */
 	protected Object copy_confirm(T data) {
-		return doResult(doInsertConfirm(data));
+		return doInsertConfirm(data);
 	}
 
 	/**
 	 * copy_execute
 	 */
 	public Object copy_execute(T data) {
-		return doResult(doInsertExecute(data));
+		return doInsertExecute(data);
 	}
 
 	/**
 	 * add
 	 */
 	protected Object add() {
-		return doResult(doInsertInit());
+		return doInsertInit();
 	}
 
 	/**
 	 * add_input
 	 */
 	protected Object add_input(T data) {
-		return doResult(doInsertInput(data));
+		return doInsertInput(data);
 	}
 
 	/**
 	 * add_confirm
 	 */
 	protected Object add_confirm(T data) {
-		return doResult(doInsertConfirm(data));
+		return doInsertConfirm(data);
 	}
 
 	/**
 	 * add_execute
 	 */
 	protected Object add_execute(T data) {
-		return doResult(doInsertExecute(data));
+		return doInsertExecute(data);
 	}
 
 	/**
 	 * edit
 	 */
 	protected Object edit(T key) {
-		return doResult(doUpdateSelect(key));
+		return doUpdateSelect(key);
 	}
 
 	/**
 	 * edit_input
 	 */
 	protected Object edit_input(T data) {
-		return doResult(doUpdateInput(data));
+		return doUpdateInput(data);
 	}
 
 	/**
 	 * edit_confirm
 	 */
 	public Object edit_confirm(T data) {
-		return doResult(doUpdateConfirm(data));
+		return doUpdateConfirm(data);
 	}
 
 	/**
 	 * edit_execute
 	 */
 	protected Object edit_execute(T data) {
-		return doResult(doUpdateExecute(data));
+		return doUpdateExecute(data);
 	}
 
 	/**
 	 * delete
 	 */
 	protected Object delete(T key) {
-		return doResult(doDeleteSelect(key));
+		return doDeleteSelect(key);
 	}
 
 	/**
 	 * delete_execute
 	 */
 	protected Object delete_execute(T key) {
-		return doResult(doDeleteExecute(key));
+		return doDeleteExecute(key);
 	}
 
 	//------------------------------------------------------------
@@ -277,7 +277,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		else {
 			if (hasActionErrors() || hasFieldErrors()) {
-				setScenarioResult();
+				setScenarioView();
 			}
 		}
 		return pd;
@@ -311,7 +311,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				log.error(e.getMessage(), e);
 			}
 			addSystemError(RC.ACTION_FAILED_PREFIX, e);
-			setScenarioResult();
+			setScenarioView();
 			return data;
 		}
 		finally {
@@ -352,7 +352,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		else {
 			if (hasActionErrors() || hasFieldErrors()) {
-				setScenarioResult();
+				setScenarioView();
 			}
 		}
 		return pd;
@@ -390,7 +390,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				log.error(e.getMessage(), e);
 			}
 			addSystemError(RC.ACTION_FAILED_PREFIX, e);
-			setScenarioResult();
+			setScenarioView();
 			return pd;
 		}
 		finally {
@@ -448,7 +448,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				log.error(e.getMessage(), e);
 			}
 			addSystemError(RC.ACTION_FAILED_PREFIX, e);
-			setScenarioResult();
+			setScenarioView();
 			return sd;
 		}
 		finally {
@@ -964,7 +964,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return true;
 		}
 
-		setScenarioResult();
+		setScenarioView();
 		return false;
 	}
 

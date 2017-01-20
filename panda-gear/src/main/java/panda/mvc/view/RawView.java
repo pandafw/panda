@@ -81,8 +81,8 @@ public class RawView implements View {
 		HttpServletResponse res = ac.getResponse();
 		Object obj = ac.getResult();
 
-		// 如果用户自行设置了,那就不要再设置了!
 		if (res.getContentType() == null) {
+			// set image content type
 			if (obj != null && obj instanceof BufferedImage && MimeType.TEXT_PLAIN.equals(contentType)) {
 				contentType = MimeType.IMG_PNG;
 			}
@@ -93,7 +93,6 @@ public class RawView implements View {
 			return;
 		}
 		
-		// 文件
 		if (obj instanceof File) {
 			File file = (File)obj;
 			long fileSz = file.length();
@@ -147,32 +146,27 @@ public class RawView implements View {
 			}
 			out.flush();
 		}
-		// 字节数组
 		else if (obj instanceof byte[]) {
 			res.setHeader("Content-Length", "" + ((byte[])obj).length);
 			OutputStream out = res.getOutputStream();
 			Streams.write((byte[])obj, out);
 			out.flush();
 		}
-		// 字符数组
 		else if (obj instanceof char[]) {
 			Writer writer = res.getWriter();
 			writer.write((char[])obj);
 			writer.flush();
 		}
-		// 文本流
 		else if (obj instanceof Reader) {
 			Writer writer = res.getWriter();
 			Streams.copy((Reader)obj, writer);
 			writer.flush();
 		}
-		// 二进制流
 		else if (obj instanceof InputStream) {
 			OutputStream out = res.getOutputStream();
 			Streams.copy((InputStream)obj, out);
 			out.flush();
 		}
-		// 普通对象
 		else {
 			byte[] data = String.valueOf(obj).getBytes(Charsets.UTF_8);
 			res.setHeader("Content-Length", "" + data.length);

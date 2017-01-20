@@ -48,6 +48,7 @@ public class ActionContext {
 	private Locale locale;
 	private Object action;
 	private Object result;
+	private View view;
 
 	private Object[] args;
 	private Object params;
@@ -294,6 +295,20 @@ public class ActionContext {
 	 */
 	public void setResult(Object result) {
 		this.result = result;
+	}
+
+	/**
+	 * @return the view
+	 */
+	public View getView() {
+		return view;
+	}
+
+	/**
+	 * @param view the view to set
+	 */
+	public void setView(View view) {
+		this.view = view;
 	}
 
 	/**
