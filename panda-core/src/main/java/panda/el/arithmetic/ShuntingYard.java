@@ -26,38 +26,48 @@ public class ShuntingYard {
 	 * @param current
 	 */
 	private void parseOperator(Operator current) {
+		// '(' or '['
+		if (current instanceof LBracketOpt || current instanceof LArrayOpt) {
+			opts.addFirst(current);
+			return;
+		}
+
+		// ')'
+		if (current instanceof RBracketOpt) {
+			Operator op;
+			while ((op = opts.poll()) != null) {
+				if (op instanceof LBracketOpt) {
+					return;
+				}
+				rpn.add(op);
+			}
+			throw new IllegalArgumentException("Failed to find '(' for ')'");
+		}
+
+		// ']'
+		if (current instanceof RArrayOpt) {
+			Operator op;
+			while ((op = opts.poll()) != null) {
+				if (op instanceof LArrayOpt) {
+					return;
+				}
+				rpn.add(op);
+			}
+			throw new IllegalArgumentException("Failed to find '[' for ']'");
+		}
+
 		// 空,直接添加进操作符队列
 		if (opts.isEmpty()) {
 			opts.addFirst(current);
 			return;
 		}
-		// 左括号
-		if (current instanceof LBracketOpt || current instanceof LArrayOpt) {
-			opts.addFirst(current);
-			return;
-		}
-		// 遇到右括号
-		if (current instanceof RBracketOpt) {
-			while (!(opts.peek() instanceof LBracketOpt)) {
-				rpn.add(opts.poll());
-			}
-			opts.poll();
-			return;
-		}
-		if (current instanceof RArrayOpt) {
-			while (!(opts.peek() instanceof LArrayOpt)) {
-				rpn.add(opts.poll());
-			}
-			opts.poll();
-			return;
-		}
-
 
 		// 符号队列top元素优先级大于当前,则直接添加到
-		if (!opts.isEmpty() && opts.peek().getPriority() > current.getPriority()) {
+		if (opts.peek().getPriority() > current.getPriority()) {
 			opts.addFirst(current);
 			return;
 		}
+		
 		// 一般情况,即优先级小于栈顶,那么直接弹出来,添加到逆波兰表达式中
 		while (!opts.isEmpty() && opts.peek().getPriority() <= current.getPriority()) {
 			// 三元表达式嵌套的特殊处理
