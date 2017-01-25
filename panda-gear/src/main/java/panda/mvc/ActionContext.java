@@ -109,8 +109,8 @@ public class ActionContext {
 	/**
 	 * @return the info
 	 */
-	public ActionInfo getInfo() {
-		return chain.getInfo();
+	public ActionConfig getConfig() {
+		return chain.getConfig();
 	}
 
 	/**
@@ -222,21 +222,21 @@ public class ActionContext {
 	 * @return the method
 	 */
 	public Method getMethod() {
-		return chain == null ? null : getInfo().getMethod();
+		return chain == null ? null : getConfig().getActionMethod();
 	}
 
 	/**
 	 * @return the method name
 	 */
 	public String getMethodName() {
-		return chain == null ? null : getInfo().getMethod().getName();
+		return chain == null ? null : getConfig().getActionMethod().getName();
 	}
 
 	/**
 	 * @return the adapter type
 	 */
 	public Class<? extends ParamAdaptor> getAdaptorType() {
-		return chain == null ? null : getInfo().getAdaptor();
+		return chain == null ? null : getConfig().getAdaptor();
 	}
 	
 	/**

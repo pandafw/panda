@@ -20,8 +20,6 @@ import panda.mvc.view.Views;
 public class ValidateProcessor extends AbstractProcessor {
 	@Override
 	public void process(ActionContext ac) {
-		View view = Views.evalView(ac.getIoc(), ac.getInfo().getErrorView());
-
 		Validators validators = Mvcs.getValidators(ac);
 
 		if (validate(ac, validators)) {
@@ -29,6 +27,7 @@ public class ValidateProcessor extends AbstractProcessor {
 			return;
 		}
 
+		View view = Views.evalView(ac.getIoc(), ac.getConfig().getErrorView());
 		if (view == null) {
 			StringBuilder sb = new StringBuilder();
 			

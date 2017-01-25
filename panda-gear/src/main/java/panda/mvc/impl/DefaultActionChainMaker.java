@@ -7,7 +7,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionChainMaker;
-import panda.mvc.ActionInfo;
+import panda.mvc.ActionConfig;
 import panda.mvc.MvcConfig;
 import panda.mvc.MvcConstants;
 import panda.mvc.processor.AdaptProcessor;
@@ -58,7 +58,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		return map.get(key);
 	}
 	
-	public ActionChain eval(MvcConfig config, ActionInfo ai) {
+	public ActionChain eval(MvcConfig config, ActionConfig ai) {
 		List<String> procs = getProcessors(ai.getChainName());
 		if (procs == null) {
 			throw new IllegalArgumentException("Failed to find chain [" + ai.getChainName() + "] for " + ai.getActionType());

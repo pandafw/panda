@@ -3,32 +3,32 @@ package panda.mvc;
 import panda.mvc.impl.ActionInvoker;
 
 /**
- * 路径映射
+ * URL Mapping
  */
 public interface UrlMapping {
 
 	/**
-	 * 增加一个映射
+	 * add a url mapping
 	 * 
-	 * @param maker 处理器工厂
-	 * @param ai 处理器配置
+	 * @param acm action chain maker
+	 * @param ac action config
+	 * @param mc MVC config
 	 */
-	void add(ActionChainMaker maker, ActionInfo ai, MvcConfig config);
+	void add(ActionChainMaker acm, ActionConfig ac, MvcConfig mc);
 
 	/**
-	 * 根据一个路径，获取一个动作链的调用者，并且，如果这个路径中包括统配符 '?' 或者 '*' <br>
-	 * 需要为上下文对象设置好路径参数
+	 * get action invoker by path
 	 * 
-	 * @param ac 上下文对象
-	 * @return 动作链的调用者
+	 * @param ac action context
+	 * @return action invoker
 	 */
 	ActionInvoker getActionInvoker(ActionContext ac);
 
 	/**
-	 * find action info by path
+	 * find action config by path
 	 * 
 	 * @param path path
-	 * @return action info
+	 * @return action config
 	 */
-	ActionInfo getActionInfo(String path);
+	ActionConfig getActionConfig(String path);
 }

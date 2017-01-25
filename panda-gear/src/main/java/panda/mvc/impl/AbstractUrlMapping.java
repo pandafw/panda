@@ -15,7 +15,7 @@ import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
+import panda.mvc.ActionConfig;
 import panda.mvc.MvcConfig;
 import panda.mvc.UrlMapping;
 import panda.servlet.HttpServlets;
@@ -29,11 +29,11 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 
 	private Map<String, ActionInvoker> map = new HashMap<String, ActionInvoker>();
 	
-	public void add(ActionChainMaker maker, ActionInfo ai, MvcConfig config) {
+	public void add(ActionChainMaker acm, ActionConfig ac, MvcConfig mc) {
 		// check path
-		String[] paths = ai.getPaths();
+		String[] paths = ac.getPaths();
 		if (Arrays.isEmpty(paths)) {
-			throw new IllegalArgumentException(String.format("Empty @At of %s.%s", ai.getActionType().getName(), ai.getMethod().getName()));
+			throw new IllegalArgumentException(String.format("Empty @At of %s.%s", ac.getActionType().getName(), ac.getActionMethod().getName()));
 		}
 
 		for (int i = 0; i < paths.length; i++) {
@@ -46,7 +46,7 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 			}
 		}
 
-		ActionChain chain = maker.eval(config, ai);
+		ActionChain chain = acm.eval(mc, ac);
 
 		// mapping path
 		for (String path : paths) {
@@ -55,12 +55,12 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 				invoker = new ActionInvoker();
 				map.put(path, invoker);
 			}
-			if (ai.hasHttpMethod()) {
-				for (String hm : ai.getHttpMethods()) {
+			if (ac.hasAtMethod()) {
+				for (String hm : ac.getAtMethods()) {
 					if (invoker.hasChain(hm)) {
 						throw new IllegalArgumentException(String.format("%s.%s @At(%s, %s) is already mapped for %s.%s().", 
-							ai.getActionType().getName(), ai.getMethod().getName(), path, hm, 
-							invoker.getChain(hm).getInfo().getActionType().getName(), invoker.getChain(hm).getInfo().getMethod().getName()));
+							ac.getActionType().getName(), ac.getActionMethod().getName(), path, hm, 
+							invoker.getChain(hm).getConfig().getActionType().getName(), invoker.getChain(hm).getConfig().getActionMethod().getName()));
 					}
 					invoker.addChain(hm, chain);
 				}
@@ -68,8 +68,8 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 			else {
 				if (invoker.getDefaultChain() != null) {
 					throw new IllegalArgumentException(String.format("%s.%s @At(%s) is already mapped for %s.%s().", 
-						ai.getActionType().getName(), ai.getMethod().getName(), path, 
-						invoker.getDefaultChain().getInfo().getActionType().getName(), invoker.getDefaultChain().getInfo().getMethod().getName()));
+						ac.getActionType().getName(), ac.getActionMethod().getName(), path, 
+						invoker.getDefaultChain().getConfig().getActionType().getName(), invoker.getDefaultChain().getConfig().getActionMethod().getName()));
 				}
 				invoker.setDefaultChain(chain);
 			}
@@ -77,7 +77,7 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug("Add: " + ai.toString());
+			log.debug("Add: " + ac.toString());
 		}
 	}
 
@@ -103,12 +103,12 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 		return null;
 	}
 
-	public ActionInfo getActionInfo(String path) {
+	public ActionConfig getActionConfig(String path) {
 		ActionInvoker invoker = getInvoker(path, null);
 		if (invoker != null) {
 			ActionChain chain = invoker.getDefaultChain();
 			if (chain != null) {
-				return chain.getInfo();
+				return chain.getConfig();
 			}
 		}
 		if (log.isDebugEnabled()) {

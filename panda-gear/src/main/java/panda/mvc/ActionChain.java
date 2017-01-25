@@ -1,14 +1,15 @@
 package panda.mvc;
 
 /**
- * Mvc 处理器接口
+ * Mvc action process chain
+ * 
  * <p>
- * 这个接口的实现必须保证线程安全，即，不能在自己存储私有属性
+ * !! thread safe !!
  * 
  */
 public interface ActionChain {
 
-	ActionInfo getInfo();
+	ActionConfig getConfig();
 	
 	void doChain(ActionContext ac);
 

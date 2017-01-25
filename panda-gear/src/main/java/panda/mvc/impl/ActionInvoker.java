@@ -110,14 +110,14 @@ public class ActionInvoker {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (defaultChain != null) {
-			sb.append(defaultChain.getInfo());
+			sb.append(defaultChain.getConfig());
 		}
 		if (Collections.isNotEmpty(chainMap)) {
 			for (Entry<String, ActionChain> en : chainMap.entrySet()) {
 				if (sb.length() > 0) {
 					sb.append(Streams.LINE_SEPARATOR).append("   - ");
 				}
-				sb.append(en.getKey()).append(": ").append(en.getValue().getInfo());
+				sb.append(en.getKey()).append(": ").append(en.getValue().getConfig());
 			}
 		}
 		return sb.toString();

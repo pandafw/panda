@@ -21,7 +21,7 @@ public class FatalProcessor extends AbstractProcessor {
 
 			HttpServlets.logException(ac.getRequest(), e);
 
-			View view = Views.evalView(ac.getIoc(), ac.getInfo().getFatalView());
+			View view = Views.evalView(ac.getIoc(), ac.getConfig().getFatalView());
 			if (view != null) {
 				try {
 					HttpServlets.safeReset(ac.getResponse());

@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
+
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
@@ -80,6 +82,15 @@ public abstract class Mvcs {
 	 */
 	public static void setCastors(Castors castors) {
 		Mvcs.castors = castors;
+	}
+	
+	public static Ioc getIoc(ServletContext sc) {
+		ActionHandler handler = (ActionHandler)sc.getAttribute(ActionHandler.class.getName());
+		if (handler == null) {
+			return null;
+		}
+		
+		return handler.getConfig().getIoc();
 	}
 	
 	/**
@@ -170,8 +181,8 @@ public abstract class Mvcs {
 	/**
 	 * find value in context
 	 */
-	public static Object findValue(ActionContext context, String expr) {
-		return findValue(context, expr, Objects.NULL);
+	public static Object findValue(ActionContext ac, String expr) {
+		return findValue(ac, expr, Objects.NULL);
 	}
 	
 	/**

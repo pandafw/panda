@@ -25,7 +25,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
+import panda.mvc.ActionConfig;
 import panda.mvc.IocProvider;
 import panda.mvc.Loading;
 import panda.mvc.MvcConfig;
@@ -131,7 +131,7 @@ public class DefaultMvcLoading implements Loading {
 		ActionChainMaker chainMaker = createChainMaker(config);
 
 		// create action info for mail module
-		ActionInfo mainInfo = createActionInfo(config.getIoc(), mainModule);
+		ActionConfig mainInfo = createActionInfo(config.getIoc(), mainModule);
 
 		// scan classes
 		Collection<Class<?>> actions = scanModules(mainModule);
@@ -144,7 +144,7 @@ public class DefaultMvcLoading implements Loading {
 
 		int atMethods = 0;
 		for (Class<?> action : actions) {
-			ActionInfo actionInfo = createActionInfo(config.getIoc(), action).mergeWith(mainInfo);
+			ActionConfig actionInfo = createActionInfo(config.getIoc(), action).mergeWith(mainInfo);
 			for (Method method : action.getMethods()) {
 				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
 				if (Modifier.isPublic(method.getModifiers()) 
@@ -152,7 +152,7 @@ public class DefaultMvcLoading implements Loading {
 						&& !method.isBridge()
 						&& method.isAnnotationPresent(At.class)) {
 					// add to mapping
-					ActionInfo info = createActionInfo(config.getIoc(), method).mergeWith(actionInfo);
+					ActionConfig info = createActionInfo(config.getIoc(), method).mergeWith(actionInfo);
 					mapping.add(chainMaker, info, config);
 					atMethods++;
 				}
@@ -329,8 +329,8 @@ public class DefaultMvcLoading implements Loading {
 		}
 	}
 	
-	protected ActionInfo createActionInfo(Ioc ioc, Class<?> type) {
-		ActionInfo ai = new ActionInfo();
+	protected ActionConfig createActionInfo(Ioc ioc, Class<?> type) {
+		ActionConfig ai = new ActionConfig();
 		evalHttpAdaptor(ai, type.getAnnotation(AdaptBy.class));
 		evalOkView(ai, type.getAnnotation(Ok.class));
 		evalErrorView(ai, type.getAnnotation(Err.class));
@@ -341,25 +341,25 @@ public class DefaultMvcLoading implements Loading {
 		return ai;
 	}
 
-	protected ActionInfo createActionInfo(Ioc ioc, Method method) {
-		ActionInfo ai = new ActionInfo();
+	protected ActionConfig createActionInfo(Ioc ioc, Method method) {
+		ActionConfig ai = new ActionConfig();
 		evalHttpAdaptor(ai, method.getAnnotation(AdaptBy.class));
 		evalOkView(ai, method.getAnnotation(Ok.class));
 		evalErrorView(ai, method.getAnnotation(Err.class));
 		evalFatalView(ai, method.getAnnotation(Fatal.class));
 		evalAt(ioc, ai, method.getAnnotation(At.class), method.getName());
 		evalActionChainMaker(ai, method.getAnnotation(Chain.class));
-		ai.setMethod(method);
+		ai.setActionMethod(method);
 		return ai;
 	}
 
-	protected void evalActionChainMaker(ActionInfo ai, Chain cb) {
+	protected void evalActionChainMaker(ActionConfig ai, Chain cb) {
 		if (null != cb) {
 			ai.setChainName(cb.value());
 		}
 	}
 
-	protected void evalAt(Ioc ioc, ActionInfo ai, At at, String def) {
+	protected void evalAt(Ioc ioc, ActionConfig ai, At at, String def) {
 		if (at != null) {
 			if (Arrays.isNotEmpty(at.value())) {
 				IocProxy ip = new IocProxy(ioc);
@@ -376,36 +376,34 @@ public class DefaultMvcLoading implements Loading {
 			}
 
 			if (Arrays.isNotEmpty(at.method())) {
-				for (String m : at.method()) {
-					ai.getHttpMethods().add(m);
-				}
+				ai.setAtMethods(at.method());
 			}
 		}
 	}
 
-	protected void evalFatalView(ActionInfo ai, Fatal fatal) {
+	protected void evalFatalView(ActionConfig ai, Fatal fatal) {
 		if (null != fatal) {
 			ai.setFatalView(fatal.value());
 		}
 	}
 
-	protected void evalErrorView(ActionInfo ai, Err error) {
+	protected void evalErrorView(ActionConfig ai, Err error) {
 		if (null != error) {
 			ai.setErrorView(error.value());
 		}
 	}
 
-	protected void evalOkView(ActionInfo ai, Ok ok) {
+	protected void evalOkView(ActionConfig ai, Ok ok) {
 		if (null != ok) {
 			ai.setOkView(ok.value());
 		}
 	}
 
-	protected void evalAction(ActionInfo ai, Class<?> type) {
+	protected void evalAction(ActionConfig ai, Class<?> type) {
 		ai.setActionType(type);
 	}
 
-	protected void evalHttpAdaptor(ActionInfo ai, AdaptBy ab) {
+	protected void evalHttpAdaptor(ActionConfig ai, AdaptBy ab) {
 		if (null != ab) {
 			ai.setAdaptor(ab.type());
 		}

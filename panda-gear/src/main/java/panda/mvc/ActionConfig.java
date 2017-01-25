@@ -1,16 +1,14 @@
 package panda.mvc;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import panda.lang.Arrays;
 import panda.lang.Strings;
 import panda.lang.reflect.Methods;
 
-public class ActionInfo {
+public class ActionConfig {
 
 	private String[] paths;
 
@@ -22,17 +20,16 @@ public class ActionInfo {
 	private String errorView;
 	private String fatalView;
 
-	private List<String> httpMethods;
+	private String[] atMethods;
 
 	private Class<?> actionType;
 
-	private Method method;
+	private Method actionMethod;
 
-	public ActionInfo() {
-		httpMethods = new ArrayList<String>(4);
+	public ActionConfig() {
 	}
 
-	public ActionInfo mergeWith(ActionInfo parent) {
+	public ActionConfig mergeWith(ActionConfig parent) {
 		if (paths != null && Arrays.isNotEmpty(parent.paths)) {
 			Set<String> myPaths = new HashSet<String>(paths.length * parent.paths.length);
 			for (String p : paths) {
@@ -74,27 +71,23 @@ public class ActionInfo {
 	}
 
 	/**
-	 * @return 这个入口函数是不是只匹配特殊的 http 方法。
+	 * @return true if some atMethod exists
 	 */
-	public boolean hasHttpMethod() {
-		return httpMethods.size() > 0;
+	public boolean hasAtMethod() {
+		return Arrays.isNotEmpty(atMethods);
 	}
 
 	/**
-	 * 只能接受如下字符串
-	 * <ul>
-	 * <li>GET
-	 * <li>PUT
-	 * <li>POST
-	 * <li>DELETE
-	 * </ul>
-	 * 
-	 * @return 特殊的 HTTP 方法列表
+	 * @return at method list
 	 */
-	public List<String> getHttpMethods() {
-		return httpMethods;
+	public String[] getAtMethods() {
+		return atMethods;
 	}
 
+	public void setAtMethods(String[] methods) {
+		atMethods = methods;
+	}
+	
 	public String[] getPaths() {
 		return paths;
 	}
@@ -151,12 +144,12 @@ public class ActionInfo {
 		this.actionType = actionType;
 	}
 
-	public Method getMethod() {
-		return method;
+	public Method getActionMethod() {
+		return actionMethod;
 	}
 
-	public void setMethod(Method method) {
-		this.method = method;
+	public void setActionMethod(Method method) {
+		this.actionMethod = method;
 	}
 
 	@Override
@@ -165,7 +158,7 @@ public class ActionInfo {
 		
 		sb.append(Strings.rightPad(Strings.join(paths, ", "), 50));
 		sb.append(" >> ");
-		sb.append(Methods.toSimpleString(method));
+		sb.append(Methods.toSimpleString(actionMethod));
 		sb.append(":");
 		sb.append(" @Ok(").append(okView).append(")");
 		sb.append(" @Err(").append(errorView).append(")");

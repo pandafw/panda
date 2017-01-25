@@ -8,7 +8,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
+import panda.mvc.ActionConfig;
 import panda.mvc.Processor;
 
 public class DefaultActionChain implements ActionChain {
@@ -16,22 +16,22 @@ public class DefaultActionChain implements ActionChain {
 	
 	public static final String IOC_PREFIX = "#";
 	
-	private ActionInfo ainfo;
+	private ActionConfig config;
 	private List<String> procs;
 	
 	public static class ProxyActionChain implements ActionChain {
-		private ActionInfo ainfo;
+		private ActionConfig config;
 		private List<String> procs;
 		private int current = -1;
 
-		public ProxyActionChain(ActionInfo ainfo, List<String> procs) {
-			this.ainfo = ainfo;
+		public ProxyActionChain(ActionConfig config, List<String> procs) {
+			this.config = config;
 			this.procs = procs;
 		}
 
 		@Override
-		public ActionInfo getInfo() {
-			return ainfo;
+		public ActionConfig getConfig() {
+			return config;
 		}
 
 		@Override
@@ -64,28 +64,28 @@ public class DefaultActionChain implements ActionChain {
 			}
 			catch (Throwable e) {
 				if (log.isDebugEnabled()) {
-					log.debugf("Failed to init processor(%s) for action chain %s/%s", name, ainfo.getChainName(), ainfo.getMethod());
+					log.debugf("Failed to init processor(%s) for action chain %s/%s", name, config.getChainName(), config.getActionMethod());
 				}
 				throw Exceptions.wrapThrow(e);
 			}
 		}
 	}
 
-	public DefaultActionChain(ActionInfo ainfo, List<String> procs) {
-		this.ainfo = ainfo;
+	public DefaultActionChain(ActionConfig ainfo, List<String> procs) {
+		this.config = ainfo;
 		this.procs = procs;
 	}
 
 	/**
-	 * @return the info
+	 * @return the action config
 	 */
-	public ActionInfo getInfo() {
-		return ainfo;
+	public ActionConfig getConfig() {
+		return config;
 	}
 
 	public void doChain(ActionContext ac) {
-		ac.setAction(ac.getIoc().get(ainfo.getActionType()));
-		ac.setChain(new ProxyActionChain(ainfo, procs));
+		ac.setAction(ac.getIoc().get(config.getActionType()));
+		ac.setChain(new ProxyActionChain(config, procs));
 		ac.getChain().doNext(ac);
 	}
 

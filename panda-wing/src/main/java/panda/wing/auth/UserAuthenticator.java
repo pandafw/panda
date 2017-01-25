@@ -12,7 +12,7 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.ActionInfo;
+import panda.mvc.ActionConfig;
 import panda.mvc.UrlMapping;
 import panda.net.IPs;
 import panda.servlet.HttpServlets;
@@ -98,13 +98,13 @@ public abstract class UserAuthenticator {
 		Method method = ac.getMethod();
 		Class<?> clazz = ac.getAction().getClass();
 		if (Strings.isNotEmpty(path)) {
-			// find action info
-			ActionInfo ai = urlmapping.getActionInfo(path);
-			if (ai == null) {
+			// find action config
+			ActionConfig am = urlmapping.getActionConfig(path);
+			if (am == null) {
 				return allowUnknownUri ? OK_NO_MAPPING : UNKNOWN;
 			}
-			method = ai.getMethod();
-			clazz = ai.getActionType();
+			method = am.getActionMethod();
+			clazz = am.getActionType();
 		}
 		
 

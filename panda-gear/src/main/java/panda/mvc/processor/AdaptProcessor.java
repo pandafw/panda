@@ -18,7 +18,7 @@ public class AdaptProcessor extends AbstractProcessor {
 	
 	@Override
 	public void process(ActionContext ac) {
-		View view = Views.evalView(ac.getIoc(), ac.getInfo().getErrorView());
+		View view = Views.evalView(ac.getIoc(), ac.getConfig().getErrorView());
 
 		if (view == null) {
 			adapt(ac);

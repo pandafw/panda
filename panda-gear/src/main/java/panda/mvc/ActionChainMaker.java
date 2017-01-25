@@ -1,19 +1,14 @@
 package panda.mvc;
 
-/**
- * 处理器的工厂类
- * <p>
- * 根据给定的 ProcessorConfig 对象，生成一个处理器链表的头节点
- */
 public interface ActionChainMaker {
 
 	/**
-	 * 根据配置信息，生成一个动作链
+	 * create action chain
 	 * 
-	 * @param config 应用配置信息对象
-	 * @param ai 入口函数配置信息
-	 * @return 动作链
+	 * @param mc Mvc configuration
+	 * @param am  action meta
+	 * @return action chain
 	 */
-	ActionChain eval(MvcConfig config, ActionInfo ai);
+	ActionChain eval(MvcConfig mc, ActionConfig am);
 
 }
