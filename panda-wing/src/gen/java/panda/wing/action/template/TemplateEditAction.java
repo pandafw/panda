@@ -2,9 +2,8 @@ package panda.wing.action.template;
 
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
@@ -29,8 +28,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * view
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object view(@Param Template key) {
 		return super.view(key);
 	}
@@ -39,8 +37,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * view_input
 	 */
 	@At
-	@Ok("sftl:~view")
-	@Err("sftl:~view")
+	@To(value="sftl:~view", error="sftl:~view")
 	public Object view_input(@Param Template data) {
 		return super.view_input(data);
 	}
@@ -49,8 +46,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * print
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object print(@Param Template key) {
 		return super.print(key);
 	}
@@ -59,8 +55,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * print_input
 	 */
 	@At
-	@Ok("sftl:~print")
-	@Err("sftl:~print")
+	@To(value="sftl:~print", error="sftl:~print")
 	public Object print_input(@Param Template data) {
 		return super.print_input(data);
 	}
@@ -69,8 +64,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * add
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object add() {
 		return super.add();
 	}
@@ -79,8 +73,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * add_input
 	 */
 	@At
-	@Ok("sftl:~add")
-	@Err("sftl:~add")
+	@To(value="sftl:~add", error="sftl:~add")
 	public Object add_input(@Param Template data) {
 		return super.add_input(data);
 	}
@@ -89,8 +82,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * add_confirm
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~add")
+	@To(value=View.SFTL, error="sftl:~add")
 	public Object add_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -102,8 +94,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * add_execute
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~add")
+	@To(value=View.SFTL, error="sftl:~add")
 	public Object add_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -115,8 +106,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * copy
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object copy(@Param Template key) {
 		return super.copy(key);
 	}
@@ -125,8 +115,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * copy_input
 	 */
 	@At
-	@Ok("sftl:~copy")
-	@Err("sftl:~copy")
+	@To(value="sftl:~copy", error="sftl:~copy")
 	public Object copy_input(@Param Template data) {
 		return super.copy_input(data);
 	}
@@ -135,8 +124,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * copy_confirm
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~copy")
+	@To(value=View.SFTL, error="sftl:~copy")
 	public Object copy_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -148,8 +136,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * copy_execute
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~copy")
+	@To(value=View.SFTL, error="sftl:~copy")
 	public Object copy_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -161,8 +148,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * edit
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object edit(@Param Template key) {
 		return super.edit(key);
 	}
@@ -171,8 +157,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * edit_input
 	 */
 	@At
-	@Ok("sftl:~edit")
-	@Err("sftl:~edit")
+	@To(value="sftl:~edit", error="sftl:~edit")
 	public Object edit_input(@Param Template data) {
 		return super.edit_input(data);
 	}
@@ -181,8 +166,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * edit_confirm
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~edit")
+	@To(value=View.SFTL, error="sftl:~edit")
 	public Object edit_confirm(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -194,8 +178,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * edit_execute
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~edit")
+	@To(value=View.SFTL, error="sftl:~edit")
 	public Object edit_execute(@Param @Validates({
 			@Validate(value=Validators.REQUIRED, params="{ fields: { 'name': '', 'language': '', 'country': '' } }", msgId=Validators.MSGID_REQUIRED),
 			@Validate(value=Validators.VISIT)
@@ -207,8 +190,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * delete
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object delete(@Param Template key) {
 		return super.delete(key);
 	}
@@ -217,8 +199,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * delete_execute
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:delete")
+	@To(value=View.SFTL, error="sftl:delete")
 	public Object delete_execute(@Param Template key) {
 		return super.delete_execute(key);
 	}

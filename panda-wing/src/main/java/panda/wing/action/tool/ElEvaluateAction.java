@@ -4,10 +4,8 @@ import panda.el.El;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
@@ -17,22 +15,18 @@ import panda.wing.constant.AUTH;
 public class ElEvaluateAction extends AbstractAction {
 
 	@At("")
-	@Ok(View.SFTL)
+	@To(View.SFTL)
 	public void input() {
 	}
 
 	@At
-	@Ok(View.JSON)
-	@Err(View.JSON)
-	@Fatal(View.JSON)
+	@To(all=View.JSON)
 	public Object json(@Param("expr") String expr) {
 		return exec(expr);
 	}
 	
 	@At
-	@Ok(View.XML)
-	@Err(View.XML)
-	@Fatal(View.XML)
+	@To(all=View.XML)
 	public Object xml(@Param("expr") String expr) {
 		return exec(expr);
 	}

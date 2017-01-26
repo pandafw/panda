@@ -18,8 +18,8 @@ import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Ok;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
@@ -27,7 +27,7 @@ import panda.wing.constant.AUTH;
 
 @At("${super_context}/sql")
 @Auth(AUTH.SUPER)
-@Ok(View.SFTL)
+@To(View.SFTL)
 public class SqlExecuteAction extends AbstractAction {
 	public static class Option {
 		protected boolean autoCommit = true;

@@ -6,8 +6,8 @@ import panda.lang.Threads;
 import panda.lang.time.StopWatch;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Ok;
 
 
 public abstract class GenericSyncWorkAction extends GenericWorkAction {
@@ -71,12 +71,12 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 	
 	@At("")
-	@Ok(View.SFTL)
+	@To(View.SFTL)
 	public void input() {
 	}
 
 	@At
-	@Ok(View.JSON)
+	@To(View.JSON)
 	@Override
 	public Object stop() {
 		GenericSyncWorkAction aswa = getSelf();
@@ -99,7 +99,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 	
 	@At
-	@Ok(View.JSON)
+	@To(View.JSON)
 	@Override
 	public Object status() {
 		GenericSyncWorkAction aswa = getSelf();
@@ -110,7 +110,7 @@ public abstract class GenericSyncWorkAction extends GenericWorkAction {
 	}
 
 	@At
-	@Ok(View.VOID)
+	@To(View.VOID)
 	public Object start(@Param("e.*") Events es) {
 		init(es);
 

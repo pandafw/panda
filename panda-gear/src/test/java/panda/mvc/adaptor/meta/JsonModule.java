@@ -4,14 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 
 @At("/json")
-@Ok("json")
-@Fatal("json")
+@To(all=View.JSON)
 public class JsonModule {
 
 	@At("hello")
@@ -20,25 +19,25 @@ public class JsonModule {
 	}
 
 	@At("map")
-	@Ok("raw")
+	@To(View.RAW)
 	public int jsonMap(Map map) {
 		return map.size();
 	}
 
 	@At("list")
-	@Ok("raw")
+	@To(View.RAW)
 	public int jsonList(@Param List<Pet> pets) {
 		return pets.size();
 	}
 
 	@At("array")
-	@Ok("raw")
+	@To(View.RAW)
 	public int jsonArray(@Param Pet[] pets) {
 		return pets.length;
 	}
 
 	@At("map/obj")
-	@Ok("raw")
+	@To(View.RAW)
 	public int mapPet(@Param Pet pet) {
 		return pet.map.size();
 	}

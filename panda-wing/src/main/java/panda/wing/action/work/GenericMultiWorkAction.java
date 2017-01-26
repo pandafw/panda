@@ -6,7 +6,7 @@ import java.util.Map;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 
 
 public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
@@ -83,7 +83,7 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 	}
 
 	@At("")
-	@Ok(View.SFTL)
+	@To(View.SFTL)
 	public void input() {
 		findKey();
 		findKey();

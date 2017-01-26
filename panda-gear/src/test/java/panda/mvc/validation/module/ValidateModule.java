@@ -1,21 +1,18 @@
 package panda.mvc.validation.module;
 
+import panda.mvc.View;
 import panda.mvc.annotation.At;
 import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.Modules;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.ioc.provider.ComboIocProvider;
 import panda.mvc.validation.Validators;
-import panda.mvc.validation.annotation.Validates;
 import panda.mvc.validation.annotation.Validate;
+import panda.mvc.validation.annotation.Validates;
 
 @At
-@Ok("raw")
-@Err("json")
-@Fatal("json")
+@To(value=View.RAW, error=View.JSON, fatal=View.JSON)
 @IocBy(type=ComboIocProvider.class, args={"*default", "*json","panda/mvc/validation/module/test.js"})
 @Modules(scan = true)
 public class ValidateModule {

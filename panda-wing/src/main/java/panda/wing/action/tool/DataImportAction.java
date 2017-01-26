@@ -39,8 +39,8 @@ import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validates;
 import panda.vfs.FileItem;
@@ -50,7 +50,7 @@ import panda.wing.constant.AUTH;
 
 @At("${super_context}/dataimp")
 @Auth(AUTH.SUPER)
-@Ok(View.SFTL)
+@To(View.SFTL)
 public class DataImportAction extends AbstractAction {
 	protected static class DataType {
 		String type;

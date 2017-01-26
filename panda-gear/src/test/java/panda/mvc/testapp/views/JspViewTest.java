@@ -16,10 +16,10 @@ public class JspViewTest extends BaseWebappTest {
 	@Test
 	public void test_simple() throws IOException {
 		get("/views/jsp2");
-		assertEquals("null", resp.getContentText());
+		assertEquals("2", resp.getContentText());
 		get("/views/jsp3");
-		assertEquals("null", resp.getContentText());
+		assertEquals("3", resp.getContentText());
 		get("/views/jsp4");
-		assertEquals("null", resp.getContentText());
+		assertEquals("4", resp.getContentText());
 	}
 }

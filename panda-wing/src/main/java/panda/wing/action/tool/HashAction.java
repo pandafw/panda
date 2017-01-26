@@ -11,8 +11,8 @@ import panda.lang.codec.binary.Hex;
 import panda.lang.crypto.Digests;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Ok;
 import panda.vfs.FileItem;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
@@ -21,7 +21,7 @@ import panda.wing.constant.AUTH;
 
 @At("${super_context}/hash")
 @Auth(AUTH.SUPER)
-@Ok(View.SFTL)
+@To(View.SFTL)
 public class HashAction extends AbstractAction {
 	/**
 	 * execute

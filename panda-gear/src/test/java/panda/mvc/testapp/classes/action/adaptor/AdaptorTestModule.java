@@ -7,19 +7,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import panda.io.Streams;
+import panda.mvc.View;
 import panda.mvc.adaptor.meta.Pet;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.testapp.BaseWebappTest;
 
+import junit.framework.TestCase;
+
 @At("/adaptor")
-@Ok("raw")
-@Fatal("http:500")
+@To(value=View.RAW, fatal="http:500")
 public class AdaptorTestModule extends BaseWebappTest {
 
 	@At("edate")

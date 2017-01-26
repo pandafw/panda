@@ -5,14 +5,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.testapp.BaseWebappTest;
 import panda.mvc.testapp.classes.bean.UserT;
 
 @At("/common")
-@Ok("raw")
+@To(View.RAW)
 public class CommonTest extends BaseWebappTest {
 
 	// 最最基本的测试
@@ -59,19 +60,19 @@ public class CommonTest extends BaseWebappTest {
 
 	// Parms混用
 	@At("path")
-	@Ok(">>:/${reqp.key}.jsp")
+	@To(">>:/${reqp.key}.jsp")
 	public void test_req_param() {
 	}
 
 	// Test EL
 	@At("path2")
-	@Ok("->:/${reqp.key.length() == 1 ? 'base' : 'false'}.jsp")
+	@To("->:/${reqp.key.length() == 1 ? 'base' : 'false'}.jsp")
 	public void test_req_param2() {
 	}
 
 	// Test 测试获取Servlet的对象
 	@At("servlet_obj")
-	@Ok("http:200")
+	@To("http:200")
 	public void test_servlet_obj(HttpServletRequest req, HttpServletResponse resp, ServletContext context,
 			HttpSession session) throws Throwable {
 		req.getInputStream();

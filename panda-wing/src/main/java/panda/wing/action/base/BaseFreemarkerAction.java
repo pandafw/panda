@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.wing.action.AbstractAction;
@@ -15,7 +15,7 @@ public abstract class BaseFreemarkerAction extends AbstractAction {
 	FreemarkerHelper freemarker;
 	
 	@At("(.*)\\.ftl$")
-	@Ok("ftl:${result}")
+	@To("ftl:${result}")
 	public Object ftl(String path) throws Exception {
 		String location = "/" + path + ".ftl";
 		if (!freemarker.hasTemplate(location)) {
@@ -26,7 +26,7 @@ public abstract class BaseFreemarkerAction extends AbstractAction {
 	}
 
 	@At("(.*)\\.sftl$")
-	@Ok("sftl:${result}")
+	@To("sftl:${result}")
 	public Object sftl(String path) throws Exception {
 		return ftl(path);
 	}

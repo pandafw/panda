@@ -5,7 +5,7 @@ import java.util.List;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 import panda.wing.AppConstants;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
@@ -25,7 +25,7 @@ public class CronsAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At("")
-	@Ok(View.SFTL)
+	@To(View.SFTL)
 	public List<CronEntry> execute() throws Exception {
 		return crons;
 	}

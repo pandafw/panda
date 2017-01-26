@@ -1,4 +1,4 @@
-package panda.mvc.annotation.view;
+package panda.mvc.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,7 +9,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Documented
-public @interface Ok {
+public @interface To {
 
-	public String value();
+	/** success view */
+	public String value() default "";
+
+	/** validation error view */
+	public String error() default "";
+	
+	/** fatal view */
+	public String fatal() default "";
+	
+	/** all view */
+	public String all() default "";
 }

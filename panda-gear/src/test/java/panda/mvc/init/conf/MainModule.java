@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.bind.json.Jsons;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 
 @At
-@Fatal("json")
+@To(all=View.JSON)
 public class MainModule {
 
 	@At("/param/a")
-	@Ok("json")
+	@To(View.JSON)
 	public List<String> f_A(@Param("ids") long[] ids) {
 		List<String> ls = new ArrayList<String>();
 		for (long n : ids) {
@@ -24,7 +24,7 @@ public class MainModule {
 	}
 
 	@At("/param/b")
-	@Ok("raw")
+	@To(View.RAW)
 	public String f_B(@Param("ids") long[] ids) {
 		return Jsons.toJson(ids);
 	}

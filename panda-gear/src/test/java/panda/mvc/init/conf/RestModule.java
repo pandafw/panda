@@ -1,13 +1,12 @@
 package panda.mvc.init.conf;
 
+import panda.mvc.View;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 import panda.net.http.HttpMethod;
 
 @At
-@Ok("raw")
-@Fatal("json")
+@To(value=View.RAW, fatal=View.JSON)
 public class RestModule {
 
 	@At(value="/abc", method=HttpMethod.GET)

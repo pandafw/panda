@@ -7,7 +7,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 import panda.wing.AppConstants;
 import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
@@ -18,7 +18,7 @@ import panda.wing.util.AppResourceBundleLoader;
 
 @At("${super_context}/loadtask")
 @Auth(AUTH.SUPER)
-@Ok(View.SFTL)
+@To(View.SFTL)
 public class LoadTaskAction extends AbstractAction {
 	protected final static String CKEY_RESOURCE = "resource";
 	

@@ -1,10 +1,11 @@
 package panda.mvc.init.module;
 
+import panda.mvc.View;
 import panda.mvc.annotation.At;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 
 @At("/base")
-@Ok("json")
+@To(View.JSON)
 public class BaseModule {
 
 	private String nameX;

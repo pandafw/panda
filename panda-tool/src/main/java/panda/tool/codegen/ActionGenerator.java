@@ -13,9 +13,8 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerOx;
 import panda.mvc.validation.Validators;
@@ -150,8 +149,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		}
 
 		imports.add(At.class.getName());
-		imports.add(Ok.class.getName());
-		imports.add(Err.class.getName());
+		imports.add(To.class.getName());
 		imports.add(Param.class.getName());
 		if (Collections.isNotEmpty(action.getSortedInputUIList())) {
 			for (InputUI iui : action.getSortedInputUIList()) {

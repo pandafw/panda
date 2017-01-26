@@ -24,8 +24,8 @@ import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChainMaker;
-import panda.mvc.ActionContext;
 import panda.mvc.ActionConfig;
+import panda.mvc.ActionContext;
 import panda.mvc.IocProvider;
 import panda.mvc.Loading;
 import panda.mvc.MvcConfig;
@@ -38,9 +38,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.Chain;
 import panda.mvc.annotation.IocBy;
 import panda.mvc.annotation.Modules;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
+import panda.mvc.annotation.To;
 import panda.mvc.config.AbstractMvcConfig;
 import panda.mvc.ioc.provider.DefaultIocProvider;
 
@@ -330,36 +328,32 @@ public class DefaultMvcLoading implements Loading {
 	}
 	
 	protected ActionConfig createActionInfo(Ioc ioc, Class<?> type) {
-		ActionConfig ai = new ActionConfig();
-		evalHttpAdaptor(ai, type.getAnnotation(AdaptBy.class));
-		evalOkView(ai, type.getAnnotation(Ok.class));
-		evalErrorView(ai, type.getAnnotation(Err.class));
-		evalFatalView(ai, type.getAnnotation(Fatal.class));
-		evalAt(ioc, ai, type.getAnnotation(At.class), null);
-		evalActionChainMaker(ai, type.getAnnotation(Chain.class));
-		evalAction(ai, type);
-		return ai;
+		ActionConfig ac = new ActionConfig();
+		evalHttpAdaptor(ac, type.getAnnotation(AdaptBy.class));
+		evalViews(ac, type.getAnnotation(To.class));
+		evalAt(ioc, ac, type.getAnnotation(At.class), null);
+		evalActionChainMaker(ac, type.getAnnotation(Chain.class));
+		evalAction(ac, type);
+		return ac;
 	}
 
 	protected ActionConfig createActionInfo(Ioc ioc, Method method) {
-		ActionConfig ai = new ActionConfig();
-		evalHttpAdaptor(ai, method.getAnnotation(AdaptBy.class));
-		evalOkView(ai, method.getAnnotation(Ok.class));
-		evalErrorView(ai, method.getAnnotation(Err.class));
-		evalFatalView(ai, method.getAnnotation(Fatal.class));
-		evalAt(ioc, ai, method.getAnnotation(At.class), method.getName());
-		evalActionChainMaker(ai, method.getAnnotation(Chain.class));
-		ai.setActionMethod(method);
-		return ai;
+		ActionConfig am = new ActionConfig();
+		evalHttpAdaptor(am, method.getAnnotation(AdaptBy.class));
+		evalViews(am, method.getAnnotation(To.class));
+		evalAt(ioc, am, method.getAnnotation(At.class), method.getName());
+		evalActionChainMaker(am, method.getAnnotation(Chain.class));
+		am.setActionMethod(method);
+		return am;
 	}
 
-	protected void evalActionChainMaker(ActionConfig ai, Chain cb) {
+	protected void evalActionChainMaker(ActionConfig ac, Chain cb) {
 		if (null != cb) {
-			ai.setChainName(cb.value());
+			ac.setChainName(cb.value());
 		}
 	}
 
-	protected void evalAt(Ioc ioc, ActionConfig ai, At at, String def) {
+	protected void evalAt(Ioc ioc, ActionConfig ac, At at, String def) {
 		if (at != null) {
 			if (Arrays.isNotEmpty(at.value())) {
 				IocProxy ip = new IocProxy(ioc);
@@ -369,43 +363,45 @@ public class DefaultMvcLoading implements Loading {
 					a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
 					ps[i] = a.length() > 1 ? Strings.stripEnd(a, '/') : a;
 				}
-				ai.setPaths(ps);
+				ac.setPaths(ps);
 			}
 			else if (def != null) {
-				ai.setPaths(Arrays.toArray(def));
+				ac.setPaths(Arrays.toArray(def));
 			}
 
 			if (Arrays.isNotEmpty(at.method())) {
-				ai.setAtMethods(at.method());
+				ac.setAtMethods(at.method());
 			}
 		}
 	}
 
-	protected void evalFatalView(ActionConfig ai, Fatal fatal) {
-		if (null != fatal) {
-			ai.setFatalView(fatal.value());
+	protected void evalViews(ActionConfig am, To vm) {
+		if (vm == null) {
+			return;
+		}
+		if (Strings.isNotEmpty(vm.all())) {
+			am.setOkView(vm.all());
+			am.setErrorView(vm.all());
+			am.setFatalView(vm.all());
+		}
+		if (Strings.isNotEmpty(vm.value())) {
+			am.setOkView(vm.value());
+		}
+		if (Strings.isNotEmpty(vm.error())) {
+			am.setErrorView(vm.error());
+		}
+		if (Strings.isNotEmpty(vm.fatal())) {
+			am.setFatalView(vm.fatal());
 		}
 	}
 
-	protected void evalErrorView(ActionConfig ai, Err error) {
-		if (null != error) {
-			ai.setErrorView(error.value());
-		}
+	protected void evalAction(ActionConfig am, Class<?> type) {
+		am.setActionType(type);
 	}
 
-	protected void evalOkView(ActionConfig ai, Ok ok) {
-		if (null != ok) {
-			ai.setOkView(ok.value());
-		}
-	}
-
-	protected void evalAction(ActionConfig ai, Class<?> type) {
-		ai.setActionType(type);
-	}
-
-	protected void evalHttpAdaptor(ActionConfig ai, AdaptBy ab) {
+	protected void evalHttpAdaptor(ActionConfig am, AdaptBy ab) {
 		if (null != ab) {
-			ai.setAdaptor(ab.type());
+			am.setAdaptor(ab.type());
 		}
 	}
 

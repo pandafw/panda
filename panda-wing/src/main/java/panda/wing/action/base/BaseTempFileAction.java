@@ -9,10 +9,8 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.time.DateTimes;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.view.HttpStatusView;
 import panda.mvc.view.VoidView;
 import panda.servlet.HttpServletSupport;
@@ -115,9 +113,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@Ok(View.JSON)
-	@Err(View.JSON)
-	@Fatal(View.JSON)
+	@To(all=View.JSON)
 	public FileItem upload(@Param("file") FileItem file) throws Exception {
 		return file;
 	}
@@ -129,9 +125,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@Ok(View.JSON)
-	@Err(View.JSON)
-	@Fatal(View.JSON)
+	@To(all=View.JSON)
 	public FileItem[] uploads(@Param("files") FileItem[] files) throws Exception {
 		return files;
 	}
@@ -143,9 +137,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	 * @throws Exception if an error occurs
 	 */
 	@At
-	@Ok(View.JSON)
-	@Err(View.JSON)
-	@Fatal(View.JSON)
+	@To(all=View.JSON)
 	public FileItem iupload(@Param("file") FileItem file, @Param("width") int width, @Param("height") int height, @Param("scale") int scale) throws Exception {
 		if (file != null && file.isExists()) {
 			if (width > 0 && height > 0) {

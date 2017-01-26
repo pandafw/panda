@@ -3,9 +3,8 @@ package panda.wing.action.property;
 import java.util.Map;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Ok;
 import panda.wing.action.crud.GenericBulkAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
@@ -31,8 +30,7 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 	 * bdelete
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object bdelete(@Param Map<String, String[]> args) {
 		return super.bdelete(args);
 	}
@@ -41,8 +39,7 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 	 * bdelete_execute
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err("sftl:~bdelete")
+	@To(value=View.SFTL, error="sftl:~bdelete")
 	public Object bdelete_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}

@@ -3,14 +3,13 @@ package panda.mvc.init.module;
 import javax.servlet.ServletContext;
 
 import panda.ioc.annotation.IocInject;
+import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Fatal;
-import panda.mvc.annotation.view.Ok;
 
 @At("/ioc")
-@Ok("raw")
-@Fatal("json")
+@To(value=View.RAW, fatal=View.JSON)
 public class IocTestModule {
 
 	@IocInject 

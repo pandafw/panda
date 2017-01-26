@@ -410,14 +410,14 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	/**
 	 * send email
 	 * @param email email
-	 * @param name template name
+	 * @param tpl template name
 	 * @param model data
 	 */
-	public void sendTemplateMail(Email email, String name, Object model) throws EmailException {
+	public void sendTemplateMail(Email email, String tpl, Object model) throws EmailException {
 		String subject = "";
 		String content;
 		try {
-			content = freemarker.execTemplate(name, model);
+			content = freemarker.execTemplate(tpl, model);
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

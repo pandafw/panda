@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
-import panda.mvc.annotation.view.Err;
-import panda.mvc.annotation.view.Ok;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerOx;
 import panda.mvc.validation.annotation.Validates;
@@ -36,8 +35,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 * list
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object list(@Param @Validates Queryer qr) {
 		return super.list(qr);
 	}
@@ -46,8 +44,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 * list_csv
 	 */
 	@At
-	@Ok(View.FTL)
-	@Err(View.FTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object list_csv(@Param @Validates QueryerOx qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 		if (displayField("id")) {
@@ -128,8 +125,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 * list_print
 	 */
 	@At
-	@Ok(View.SFTL)
-	@Err(View.SFTL)
+	@To(value=View.SFTL, error=View.SFTL)
 	public Object list_print(@Param @Validates Queryer qr) {
 		return super.list_print(qr);
 	}
@@ -138,8 +134,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 * list_json
 	 */
 	@At
-	@Ok(View.JSON)
-	@Err(View.JSON)
+	@To(all=View.JSON)
 	public Object list_json(@Param @Validates QueryerOx qr) {
 		return super.list_json(qr);
 	}
@@ -148,8 +143,7 @@ public class ResourceListAction extends GenericListAction<Resource> {
 	 * list_xml
 	 */
 	@At
-	@Ok(View.XML)
-	@Err(View.XML)
+	@To(all=View.XML)
 	public Object list_xml(@Param @Validates QueryerOx qr) {
 		return super.list_xml(qr);
 	}
