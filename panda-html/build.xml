@@ -109,7 +109,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/bootstrap3/js/bootstrap-patch.min.js"/>
 		</java>
 
-		<!-- plugins -->
+		<!-- bootstrap3 plugins -->
 		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins.js" binary="true">
 			<fileset dir="src/main/bootstrap3/js">
 				<include name="bootstrap-*.js"/>
@@ -133,23 +133,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<copy overwrite="true" 
 			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js" 
 			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.min.js"/>
-
-		<!-- panda -->
-		<concat destfile="src/main/panda/js/panda.js" binary="true">
-			<fileset dir="src/main/panda/js">
-				<include name="core.*.js"/>
-				<include name="ui.*.js"/>
-			</fileset>
-		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/panda/js/panda.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/panda/js/panda.min.js"/>
-		</java>
 
 		<!-- jquery -->
 		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
@@ -193,6 +176,23 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			jsfile="src/main/jquery/js/jquery-plugins-zh-HK.js" 
 			minfile="src/main/jquery/js/jquery-plugins-zh-HK.min.js"/>
 -->
+
+		<!-- panda -->
+		<concat destfile="src/main/panda/js/panda.js" binary="true">
+			<fileset dir="src/main/panda/js">
+				<include name="core.*.js"/>
+				<include name="ui.*.js"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/panda/js/panda.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/panda/js/panda.min.js"/>
+		</java>
 	</target>
 
 	<target name="min-css" description="Merge &amp; minify css files">
@@ -227,7 +227,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/bootstrap3/css/bootstrap-switch.min.css"/>
 		</java>
 		
-		<!-- plugins -->
+		<!-- bootstrap3 plugins -->
 		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
 			<fileset dir="src/main/bootstrap3/css">
 				<include name="bootstrap-*.css"/>
@@ -246,20 +246,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/bootstrap3/css/bootstrap-plugins.min.css"/>
 		</java>
 
-		<!-- panda -->
-		<concat destfile="src/main/panda/css/panda.css" binary="true">
-			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
-		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/panda/css/panda.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/panda/css/panda.min.css"/>
-		</java>
-
 		<!-- jquery -->
 		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
 			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
@@ -272,6 +258,20 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="css"/>
 			<arg value="-o"/>
 			<arg value="src/main/jquery/css/jquery-plugins.min.css"/>
+		</java>
+
+		<!-- panda -->
+		<concat destfile="src/main/panda/css/panda.css" binary="true">
+			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/panda/css/panda.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/panda/css/panda.min.css"/>
 		</java>
 	</target>
 

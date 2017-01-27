@@ -45,6 +45,26 @@
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
 	cursor: auto;
 }
+
+/** navbar-nav */
+.navbar-nav > li > span {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	line-height: 20px;
+}
+
+@media (min-width: 768px) {
+	.navbar-nav > li > span {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+}
+.navbar-default .navbar-nav > li > span {
+	color: #777;
+}
+.navbar-inverse .navbar-nav > li > span {
+	color: #9d9d9d;
+}
 .p-required {
 	color: #FF0000;
 }
