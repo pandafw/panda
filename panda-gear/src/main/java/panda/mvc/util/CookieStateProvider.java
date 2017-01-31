@@ -179,6 +179,9 @@ public class CookieStateProvider implements StateProvider {
 		if (path == null) {
 			path = context.getRequest().getRequestURI();
 		}
+		if (Strings.startsWithChar(path, '~')){
+			path = context.getBase() + path.substring(1);
+		}
 		c.setPath(path);
 
 		if (secure != null) {
