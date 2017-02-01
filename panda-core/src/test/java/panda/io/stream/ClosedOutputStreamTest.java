@@ -12,6 +12,7 @@ public class ClosedOutputStreamTest extends TestCase {
 	/**
 	 * Test the <code>write(b)</code> method.
 	 */
+	@SuppressWarnings("resource")
 	public void testRead() {
 		try {
 			new ClosedOutputStream().write('x');

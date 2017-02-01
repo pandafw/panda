@@ -93,6 +93,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 	/**
 	 * Test constructor.
 	 */
+	@SuppressWarnings("resource")
 	@Test
 	public void testConstructor() throws Exception {
 		try {
@@ -269,6 +270,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 	/**
 	 * Tests hasNext when it throws an exception.
 	 */
+	@SuppressWarnings("resource")
 	@Test
 	public void testNextWithException() throws Exception {
 		final Reader reader = new BufferedReader(new StringReader("")) {

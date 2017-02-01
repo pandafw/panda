@@ -341,6 +341,7 @@ public class BOMInputStreamTest {
 		in.close();
 	}
 
+	@SuppressWarnings("resource")
 	@Test
 	public void testNoBoms() throws Exception {
 		final byte[] data = new byte[] { 'A', 'B', 'C' };
