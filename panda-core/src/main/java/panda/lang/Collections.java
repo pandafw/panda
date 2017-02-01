@@ -170,10 +170,10 @@ public abstract class Collections {
 	 * @param coll the collection to get the cardinality map for, must not be null
 	 * @return the populated cardinality map
 	 */
-	public static Map getCardinalityMap(final Collection coll) {
-		Map count = new HashMap();
-		for (Iterator it = coll.iterator(); it.hasNext();) {
-			Object obj = it.next();
+	public static <T> Map<T, Integer> getCardinalityMap(final Collection<T> coll) {
+		Map<T, Integer> count = new HashMap<T, Integer>();
+		for (Iterator<T> it = coll.iterator(); it.hasNext();) {
+			T obj = it.next();
 			Integer c = (Integer)(count.get(obj));
 			if (c == null) {
 				count.put(obj, INTEGER_ONE);
