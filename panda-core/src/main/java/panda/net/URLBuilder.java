@@ -256,8 +256,8 @@ public class URLBuilder {
 
 	protected void appendPort(StringBuilder link, String scheme, int port) {
 		if (port > 0) {
-			if ((scheme.equals("http") && (port != 80))
-					|| (scheme.equals("https") && port != 443)) {
+			if ((Scheme.HTTP.equals(scheme) && (port != 80))
+					|| (Scheme.HTTPS.equals(scheme) && port != 443)) {
 				link.append(":").append(port);
 			}
 		}

@@ -69,7 +69,8 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 
 	// -------------------------------------------------------------
 	public static final String X_REAL_IP = "X-Real-IP";
-	public static final String X_FORWARD_FOR = "X-Forwarded-For";
+	public static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
+	public static final String X_FORWARDED_FOR = "X-Forwarded-For";
 	
 	// -------------------------------------------------------------
 	public static final String USER_AGENT_PC = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.186 Safari/535.1";

@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import panda.net.Scheme;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletURLBuilder;
 
@@ -33,12 +34,13 @@ public class HttpsRedirectFilter implements Filter {
 
 		HttpServletRequest request = (HttpServletRequest)req;
 		String schema = request.getScheme();
-		if (!"https".equals(schema)) {
-			ServletURLBuilder ub = new ServletURLBuilder();
-			ub.setScheme("https");
-			ub.setParams(request.getParameterMap());
-			ub.setForceAddSchemeHostAndPort(true);
-			String url = ub.toString();
+		if (Scheme.HTTP.equals(schema)) {
+			ServletURLBuilder sub = new ServletURLBuilder();
+			sub.setRequest(request);
+			sub.setScheme(Scheme.HTTPS);
+			sub.setParams(request.getParameterMap());
+			sub.setForceAddSchemeHostAndPort(true);
+			String url = sub.build();
 			
 			HttpServletResponse response = (HttpServletResponse)res;
 			HttpServlets.sendRedirect(response, url);

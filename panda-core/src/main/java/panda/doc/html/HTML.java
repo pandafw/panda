@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import panda.lang.Arrays;
+import panda.net.Scheme;
 
 /**
  * HTML utility class.
@@ -24,7 +25,7 @@ public abstract class HTML {
 		HTMLElement.ul);
 	
 	/** Set of valid markdown link prefixes. */
-	private final static Set<String> LINK_PREFIX = Arrays.toSet("http", "https", "ftp", "ftps");
+	private final static Set<String> LINK_PREFIX = Arrays.toSet(Scheme.HTTP, Scheme.HTTPS, Scheme.FTP, Scheme.FTPS);
 
 	private static Set<String> toSet(HTMLElement ... a) {
 		Set<String> set = new HashSet<String>(a.length);
