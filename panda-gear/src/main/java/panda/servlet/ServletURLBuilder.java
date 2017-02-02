@@ -53,10 +53,10 @@ public class ServletURLBuilder extends URLBuilder {
 			host = request.getServerName();
 			if (Strings.isEmpty(scheme)) {
 				scheme = HttpServlets.getScheme(request);
-				port = request.getServerPort();
+				port = HttpServlets.getServerPort(request);
 			}
 			if (port <= 0) {
-				port = request.getServerPort();
+				port = HttpServlets.getServerPort(request);
 			}
 		}
 		else if (scheme != null && scheme.equals(HttpServlets.getScheme(request))) {

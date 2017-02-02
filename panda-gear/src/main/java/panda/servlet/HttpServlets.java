@@ -26,6 +26,7 @@ import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
+import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
@@ -123,6 +124,19 @@ public class HttpServlets {
 	}
 
 	/**
+	 * get server port from X_FORWARD_PORT, request.getServerPort()
+	 * @param request request
+	 * @return port
+	 */
+	public static int getServerPort(HttpServletRequest request) {
+		int port = Numbers.toInt(request.getHeader(HttpHeader.X_FORWARDED_PORT), 0);
+		if (port <= 0) {
+			port = request.getServerPort();
+		}
+		return port;
+	}
+
+	/**
 	 * get remote ip from X_REAL_IP, X_FORWARD_FOR, request.getRemoteAddr
 	 * @param request request
 	 * @return remote ip
@@ -160,9 +174,9 @@ public class HttpServlets {
 		}
 
 		URLBuilder ub = new URLBuilder();
-		ub.setScheme(request.getScheme());
+		ub.setScheme(getScheme(request));
 		ub.setHost(request.getServerName());
-		ub.setPort(request.getServerPort());
+		ub.setPort(getServerPort(request));
 		ub.setPath(uri);
 		ub.setQuery(query);
 		return ub.build();

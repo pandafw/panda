@@ -69,6 +69,7 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 
 	// -------------------------------------------------------------
 	public static final String X_REAL_IP = "X-Real-IP";
+	public static final String X_FORWARDED_PORT = "X-Forwarded-Port";
 	public static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
 	public static final String X_FORWARDED_FOR = "X-Forwarded-For";
 	
