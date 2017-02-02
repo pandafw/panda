@@ -52,14 +52,14 @@ public class ServletURLBuilder extends URLBuilder {
 		if (forceAddSchemeHostAndPort) {
 			host = request.getServerName();
 			if (Strings.isEmpty(scheme)) {
-				scheme = request.getScheme();
+				scheme = HttpServlets.getScheme(request);
 				port = request.getServerPort();
 			}
 			if (port <= 0) {
 				port = request.getServerPort();
 			}
 		}
-		else if (scheme != null && scheme.equals(request.getScheme())) {
+		else if (scheme != null && scheme.equals(HttpServlets.getScheme(request))) {
 			scheme = null;
 		}
 

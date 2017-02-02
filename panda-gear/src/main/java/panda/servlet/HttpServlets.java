@@ -110,6 +110,19 @@ public class HttpServlets {
 	}
 
 	/**
+	 * get scheme from X_FORWARD_FOR, request.getScheme()
+	 * @param request request
+	 * @return scheme
+	 */
+	public static String getScheme(HttpServletRequest request) {
+		String scheme = request.getHeader(HttpHeader.X_FORWARDED_PROTO);
+		if (Strings.isEmpty(scheme)) {
+			scheme = request.getScheme();
+		}
+		return scheme;
+	}
+
+	/**
 	 * get remote ip from X_REAL_IP, X_FORWARD_FOR, request.getRemoteAddr
 	 * @param request request
 	 * @return remote ip
@@ -117,7 +130,7 @@ public class HttpServlets {
 	public static String getRemoteAddr(HttpServletRequest request) {
 		String ip = request.getHeader(HttpHeader.X_REAL_IP);
 		if (Strings.isEmpty(ip)) {
-			ip = request.getHeader(HttpHeader.X_FORWARD_FOR);
+			ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
 			int i = Strings.indexOf(ip, ',');
 			if (i >= 0) {
 				ip = ip.substring(i + 1);
@@ -320,7 +333,7 @@ public class HttpServlets {
 			writer.append(request.getRemoteAddr());
 			String ip = request.getHeader(HttpHeader.X_REAL_IP);
 			if (Strings.isEmpty(ip)) {
-				ip = request.getHeader(HttpHeader.X_FORWARD_FOR);
+				ip = request.getHeader(HttpHeader.X_FORWARDED_FOR);
 			}
 			if (Strings.isNotEmpty(ip)) {
 				writer.append('(').append(ip).append(')');
