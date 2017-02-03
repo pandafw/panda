@@ -5070,6 +5070,7 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
 	};
 
 	var pluginOptions = {
+		prepend: true,
 		clickToHide: true,
 		autoHide: true,
 		autoHideDelay: 5000,
@@ -5243,7 +5244,7 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
 			anchor.css(css).addClass(pluginClassName + "-corner");
 			$("body").append(anchor);
 		}
-		return anchor.prepend(this.wrapper);
+		return anchor[this.options.prepend ? "prepend" : "append"](this.wrapper);
 	};
 
 	Notification.prototype.setElementPosition = function() {
