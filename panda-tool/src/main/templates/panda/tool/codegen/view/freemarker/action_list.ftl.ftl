@@ -29,7 +29,7 @@
 		<#if a?starts_with('@')>
 	${s}#if a.canAccess("${ap}")>
 		${s}@p.url var='_u_' action='${ap}'/>
-		${s}#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('label-${an}', '') + '</a>'/>
+		${s}#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('label-${an}', '') + '</a>'/>
 	${s}/#if>
 		<#else>
 	${s}#if a.canAccess("${ap}")>
@@ -40,7 +40,7 @@
 		</#if>
 			"icon": a.getText("icon-${an}"),
 			"label": a.getText("label-${an}", ""),
-			"tooltip": a.getText("tooltip-${an}", "")
+			"tooltip": a.getText("tip-${an}", "")
 		}] />
 	${s}/#if>
 		</#if>

@@ -868,8 +868,8 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 					write(c.header);
 				}
 				else {
-					String sa = getText("tooltip-select-all", "");
-					String sn = getText("tooltip-select-none", "");
+					String sa = getText("tip-select-all", "");
+					String sn = getText("tip-select-none", "");
 					Attributes a = new Attributes();
 					a.add("type", "checkbox")
 					 .add("class", "checkbox p-lv-ca")

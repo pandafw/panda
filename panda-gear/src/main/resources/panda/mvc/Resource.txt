@@ -56,10 +56,10 @@ pager-label-last=⋙
 pager-label-empty=
 pager-label-limit=Display:
 pager-limit-list=10,20,30,40,50,60,70,80,90,100,200,300
-pager-tooltip-prev=« Previous ${top.limit}
-pager-tooltip-next=Next ${top.limit} »
-pager-tooltip-first=⋘ First Page
-pager-tooltip-last=Last Page ⋙
+pager-tip-prev=« Previous ${top.limit}
+pager-tip-next=Next ${top.limit} »
+pager-tip-first=⋘ First Page
+pager-tip-last=Last Page ⋙
 
 
 #listview
@@ -257,19 +257,19 @@ message-processed=Process completed.
 
 
 #tooltip
-tooltip-add=Add
-tooltip-cancel=Cancel
-tooltip-copy=Copy
-tooltip-delete=Delete
-tooltip-download=Download
-tooltip-edit=Edit
-tooltip-insert=Insert
-tooltip-new=New
-tooltip-recover=Recover
-tooltip-select-all=Select all
-tooltip-select-none=Select none
-tooltip-trash=Delete
-tooltip-update=Update
+tip-add=Add
+tip-cancel=Cancel
+tip-copy=Copy
+tip-delete=Delete
+tip-download=Download
+tip-edit=Edit
+tip-insert=Insert
+tip-new=New
+tip-recover=Recover
+tip-select-all=Select all
+tip-select-none=Select none
+tip-trash=Delete
+tip-update=Update
 
 #placeholder
 placeholder-search=Search...

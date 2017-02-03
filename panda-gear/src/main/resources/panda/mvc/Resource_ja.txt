@@ -22,10 +22,10 @@ pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=
 pager-label-limit=表示件数：
-pager-tooltip-prev=« 前の${top.limit}件
-pager-tooltip-next=次の${top.limit}件 »
-pager-tooltip-first=⋘ 最初のページ
-pager-tooltip-last=最後のページ ⋙
+pager-tip-prev=« 前の${top.limit}件
+pager-tip-next=次の${top.limit}件 »
+pager-tip-first=⋘ 最初のページ
+pager-tip-last=最後のページ ⋙
 
 
 #listview - filters
@@ -201,19 +201,19 @@ message-processed=処理完了。
 
 
 #tooltip
-tooltip-add=追加
-tooltip-cancel=取消
-tooltip-copy=複写
-tooltip-delete=削除
-tooltip-download=ダウンロード
-tooltip-edit=編集
-tooltip-insert=新規
-tooltip-new=新規
-tooltip-recover=復元
-tooltip-selectAll=すべて選択
-tooltip-selectNone=未選択の状態にします
-tooltip-trash=削除
-tooltip-update=変更
+tip-add=追加
+tip-cancel=取消
+tip-copy=複写
+tip-delete=削除
+tip-download=ダウンロード
+tip-edit=編集
+tip-insert=新規
+tip-new=新規
+tip-recover=復元
+tip-selectAll=すべて選択
+tip-selectNone=未選択の状態にします
+tip-trash=削除
+tip-update=変更
 
 #placeholder
 placeholder-search=検索...

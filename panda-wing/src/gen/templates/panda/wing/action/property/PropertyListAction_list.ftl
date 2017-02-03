@@ -38,7 +38,7 @@
 	<#assign _ash_ = "" />
 	<#if a.canAccess("~/add")>
 		<@p.url var='_u_' action='~/add'/>
-		<#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tooltip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
+		<#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('label-new', '') + '</a>'/>
 	</#if>
 	<#if a.canAccess("~/copy")>
 		<#assign _actions_ = _actions_ + [{
@@ -46,7 +46,7 @@
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-copy"),
 			"label": a.getText("label-copy", ""),
-			"tooltip": a.getText("tooltip-copy", "")
+			"tooltip": a.getText("tip-copy", "")
 		}] />
 	</#if>
 	<#if a.canAccess("~/edit")>
@@ -55,7 +55,7 @@
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-edit"),
 			"label": a.getText("label-edit", ""),
-			"tooltip": a.getText("tooltip-edit", "")
+			"tooltip": a.getText("tip-edit", "")
 		}] />
 	</#if>
 	<#if a.canAccess("~/delete")>
@@ -64,7 +64,7 @@
 			"params": { "id": "%{top.id}" },
 			"icon": a.getText("icon-delete"),
 			"label": a.getText("label-delete", ""),
-			"tooltip": a.getText("tooltip-delete", "")
+			"tooltip": a.getText("tip-delete", "")
 		}] />
 	</#if>
 	<#if _actions_?has_content || _ash_?has_content>

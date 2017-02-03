@@ -22,10 +22,10 @@ pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=
 pager-label-limit=显示件数：
-pager-tooltip-prev=« 上一页
-pager-tooltip-next=下一页 »
-pager-tooltip-first=⋘ 最前页
-pager-tooltip-last=最后页 ⋙
+pager-tip-prev=« 上一页
+pager-tip-next=下一页 »
+pager-tip-first=⋘ 最前页
+pager-tip-last=最后页 ⋙
 
 
 #listview - filters
@@ -200,19 +200,19 @@ message-processing=处理中...
 message-processed=处理成功。
 
 #tooltip
-tooltip-add=追加
-tooltip-cancel=取消
-tooltip-copy=复写
-tooltip-delete=删除
-tooltip-download=下载
-tooltip-edit=编辑
-tooltip-insert=登录
-tooltip-new=新建
-tooltip-recover=恢复
-tooltip-selectAll=全部选择
-tooltip-selectNone=不选择任何项目
-tooltip-trash=删除
-tooltip-update=变更
+tip-add=追加
+tip-cancel=取消
+tip-copy=复写
+tip-delete=删除
+tip-download=下载
+tip-edit=编辑
+tip-insert=登录
+tip-new=新建
+tip-recover=恢复
+tip-selectAll=全部选择
+tip-selectNone=不选择任何项目
+tip-trash=删除
+tip-update=变更
 
 
 #placeholder
