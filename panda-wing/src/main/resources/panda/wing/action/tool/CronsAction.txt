@@ -1,10 +1,10 @@
 title=Cron Jobs
 
-label-no=No.
-label-url=URL
-label-description=Description
-label-schedule=Schedule
-label-result=Result
+lbl-no=No.
+lbl-url=URL
+lbl-description=Description
+lbl-schedule=Schedule
+lbl-result=Result
 
 
 

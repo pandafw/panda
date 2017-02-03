@@ -22,10 +22,10 @@ pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=
 pager-label-limit=表示件数：
-pager-tip-prev=« 前の${top.limit}件
-pager-tip-next=次の${top.limit}件 »
-pager-tip-first=⋘ 最初のページ
-pager-tip-last=最後のページ ⋙
+pager-tooltip-prev=« 前の${top.limit}件
+pager-tooltip-next=次の${top.limit}件 »
+pager-tooltip-first=⋘ 最初のページ
+pager-tooltip-last=最後のページ ⋙
 
 
 #listview - filters

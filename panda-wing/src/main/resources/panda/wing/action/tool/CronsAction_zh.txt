@@ -1,10 +1,10 @@
 title=Cron任务
 
-label-no=编号
-label-url=URL
-label-description=说明
-label-schedule=执行计划
-label-result=执行结果
+lbl-no=编号
+lbl-url=URL
+lbl-description=说明
+lbl-schedule=执行计划
+lbl-result=执行结果
 
 
 

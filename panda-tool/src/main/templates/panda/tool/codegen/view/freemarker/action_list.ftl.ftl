@@ -29,7 +29,7 @@
 		<#if a?starts_with('@')>
 	${s}#if a.canAccess("${ap}")>
 		${s}@p.url var='_u_' action='${ap}'/>
-		${s}#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('label-${an}', '') + '</a>'/>
+		${s}#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('lbl-${an}', '') + '</a>'/>
 	${s}/#if>
 		<#else>
 	${s}#if a.canAccess("${ap}")>
@@ -39,7 +39,7 @@
 			"params": { <#list entity.primaryKeyList as p>"${p.name}": "%{top.${p.name}}"<#if p_has_next>, </#if></#list> },
 		</#if>
 			"icon": a.getText("icon-${an}"),
-			"label": a.getText("label-${an}", ""),
+			"label": a.getText("lbl-${an}", ""),
 			"tooltip": a.getText("tip-${an}", "")
 		}] />
 	${s}/#if>

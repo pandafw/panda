@@ -1,9 +1,9 @@
 title=Cronジョブ
 
-label-no=番号
-label-url=URL
-label-description=説明
-label-schedule=実行計画
-label-result=実行結果
+lbl-no=番号
+lbl-url=URL
+lbl-description=説明
+lbl-schedule=実行計画
+lbl-result=実行結果
 
 

@@ -38,10 +38,10 @@ public class Pager extends UIBean {
 	private final static String LABEL_PREV = "pager-label-prev";
 	private final static String LABEL_NEXT = "pager-label-next";
 	private final static String LABEL_LIMIT = "pager-label-limit";
-	private final static String TOOLTIP_FIRST = "pager-tip-first";
-	private final static String TOOLTIP_LAST = "pager-tip-last";
-	private final static String TOOLTIP_PREV = "pager-tip-prev";
-	private final static String TOOLTIP_NEXT = "pager-tip-next";
+	private final static String TOOLTIP_FIRST = "pager-tooltip-first";
+	private final static String TOOLTIP_LAST = "pager-tooltip-last";
+	private final static String TOOLTIP_PREV = "pager-tooltip-prev";
+	private final static String TOOLTIP_NEXT = "pager-tooltip-next";
 	private final static String LIMIT_LIST = "pager-limit-list";
 	private final static String LINK_SIZE = "pager-link-size";
 	private final static String LINK_STYLE = "pager-link-style";

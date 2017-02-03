@@ -65,10 +65,10 @@ navi-super-pwdhash=密码哈希
 
 
 #label
-label-page-size=显示件数：
-label-sort=排序：
-label-attachment=附件
-label-search-result="${top.key}"的检索结果
+lbl-page-size=显示件数：
+lbl-sort=排序：
+lbl-attachment=附件
+lbl-search-result="${top.key}"的检索结果
 
 
 #d.statusMap

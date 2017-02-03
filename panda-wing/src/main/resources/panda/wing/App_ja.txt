@@ -65,10 +65,10 @@ navi-super-pwdhash=パスワードハッシュ
 
 
 #label
-label-page-size=表示件数：
-label-sort=並び順：
-label-attachment=添付ファイル
-label-search-result="${top.key}"の検索結果
+lbl-page-size=表示件数：
+lbl-sort=並び順：
+lbl-attachment=添付ファイル
+lbl-search-result="${top.key}"の検索結果
 
 
 #d.statusMap

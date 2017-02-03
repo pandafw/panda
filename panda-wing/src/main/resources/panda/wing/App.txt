@@ -92,10 +92,10 @@ navi-super-pwdhash=Password Hash
 
 
 #label
-label-page-size=Page Size:
-label-sort=Sort:
-label-attachment=Attachment
-label-search-result=Search result of "${top.key}"
+lbl-page-size=Page Size:
+lbl-sort=Sort:
+lbl-attachment=Attachment
+lbl-search-result=Search result of "${top.key}"
 
 
 #d.statusMap
