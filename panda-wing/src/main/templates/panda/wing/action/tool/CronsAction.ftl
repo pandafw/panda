@@ -59,7 +59,7 @@
 			</td>
 		</tr>
 		<tr><th class="cron-th-result">
-				<@p.b btype="primary" icon="icon-execute" onclick="return cronJobExec(this);" label="#(button-exec)"/>
+				<@p.b btype="primary" icon="icon-execute" onclick="return cronJobExec(this);" label="#(btn-exec)"/>
 			</th>
 			<td class="cron-td-result"></td>
 		</tr>

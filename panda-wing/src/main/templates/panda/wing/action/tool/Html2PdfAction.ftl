@@ -16,7 +16,7 @@
 			<@p.param name="after">(Ctrl+Enter to generate PDF)<br/></@p.param>
 		</@p.textarea>
 		<@p.div cssClass="p-buttons">
-			<@p.submit id="html2pdf_submit" icon="icon-pdf" label="#(button-pdf)"/>
+			<@p.submit id="html2pdf_submit" icon="icon-pdf" label="#(btn-pdf)"/>
 		</@p.div>
 	</@p.form>
 

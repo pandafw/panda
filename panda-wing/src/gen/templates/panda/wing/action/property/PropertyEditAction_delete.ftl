@@ -97,14 +97,14 @@
 		<#assign _buttons_ = [{
 			"icon": "icon-delete-execute",
 			"action": "~/delete_execute",
-			"text": "button-delete-execute"
+			"text": "btn-delete-execute"
 		}]/>
 			<#if a.canAccess('~/list')>
 				<@p.url var="_u_" action="~/list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-list"
+					"text": "btn-list"
 				}]/>
 			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>
@@ -112,7 +112,7 @@
 	</@p.form>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
+		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
 	</div>
 </#if>
 </div>

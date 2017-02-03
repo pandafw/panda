@@ -22,7 +22,7 @@
 			<@p.form id="hashs" action="~/" method="get" theme="bs3h" showDescrip="true">
 				<@p.textarea key="s" rows="3" enterfire="form"/>
 				<@p.div cssClass="p-buttons">
-					<@p.submit icon="fa fa-gear" label="#(button-hash)"/>
+					<@p.submit icon="fa fa-gear" label="#(btn-hash)"/>
 				</@p.div>
 			</@p.form>
 		</div>
@@ -34,7 +34,7 @@
 					size="50"
 				/>
 				<@p.div cssClass="p-buttons">
-					<@p.submit icon="fa fa-gear" label="#(button-hash)"/>
+					<@p.submit icon="fa fa-gear" label="#(btn-hash)"/>
 				</@p.div>
 			</@p.form>
 		</div>

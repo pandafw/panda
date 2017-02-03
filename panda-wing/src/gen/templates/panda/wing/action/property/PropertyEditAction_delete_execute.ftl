@@ -19,7 +19,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
+<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -104,7 +104,7 @@
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-list"
+					"text": "btn-list"
 				}]/>
 			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>

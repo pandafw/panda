@@ -170,7 +170,7 @@ ${s}/#if>
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
 		${s}#if a.canAccess("${ap}")>
-			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(button-${an})"/>
+			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(btn-${an})"/>
 		${s}/#if>
 	</#list>
 	${s}/@p.set>

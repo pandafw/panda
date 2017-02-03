@@ -18,10 +18,10 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(button-refresh)"/>
-</li><#if r?? && a.canAccessData("~/print", r)><li><@p.a icon="icon-print" label="#(button-print)" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/></@p.a>
-</li></#if><#if a.canAccess("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(button-new)"/>
-</li></#if><#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
+		<li><@p.a icon="icon-refresh" href="javascript:location.reload(true)" label="#(btn-refresh)"/>
+</li><#if r?? && a.canAccessData("~/print", r)><li><@p.a icon="icon-print" label="#(btn-print)" target="_blank" action="~/print"><@p.param name="id" value="%{r.id}"/></@p.a>
+</li></#if><#if a.canAccess("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(btn-new)"/>
+</li></#if><#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -96,7 +96,7 @@
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-edit",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-edit"
+					"text": "btn-edit"
 				}]/>
 			</#if>
 			<#if r?? && a.canAccessData('~/copy', r)>
@@ -106,7 +106,7 @@
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-copy",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-copy"
+					"text": "btn-copy"
 				}]/>
 			</#if>
 			<#if r?? && a.canAccessData('~/delete', r)>
@@ -116,7 +116,7 @@
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-delete",
 					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "button-delete"
+					"text": "btn-delete"
 				}]/>
 			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>
@@ -124,7 +124,7 @@
 	</@p.form>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(button-back)"/>
+		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
 	</div>
 </#if>
 </div>

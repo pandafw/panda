@@ -315,8 +315,8 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 
 		for (ListColumn c : columns) {
 			if ("check".equals(c.type)) {
-				String textSelectAll =  getText("button-select-all");
-				String textSelectNone =  getText("button-select-none");
+				String textSelectAll =  getText("btn-select-all");
+				String textSelectNone =  getText("btn-select-none");
 				String iconSelectAll =  getText("icon-select-all");
 				String iconSelectNone =  getText("icon-select-none");
 

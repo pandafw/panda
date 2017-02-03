@@ -18,7 +18,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(button-list)"/>
+<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -99,13 +99,13 @@
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-copy-confirm",
 			"action": "~/copy_confirm",
-			"text": "button-copy-confirm"
+			"text": "btn-copy-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-copy-execute",
 			"action": "~/copy_execute",
-			"text": "button-copy-execute"
+			"text": "btn-copy-execute"
 		}]/>
 	</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>

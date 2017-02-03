@@ -21,7 +21,7 @@
 		/>
 		<@p.checkbox name="deleteAll" fieldLabel="#(deleteAll)" fieldValue="true"/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="fa fa-inbox" label="#(button-import)"/>
+			<@p.submit icon="fa fa-inbox" label="#(btn-import)"/>
 		</@p.div>
 	</@p.form>
 	

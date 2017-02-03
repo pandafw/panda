@@ -15,7 +15,7 @@ ${s}#if r??>
 		${s}#assign _buttons_ = [{
 			"icon": "icon-${ui.name}-execute",
 			"action": "~/${ui.name}_execute",
-			"text": "button-${ui.name}-execute"
+			"text": "btn-${ui.name}-execute"
 		}]/>
 		<#include "edit-actions.ftl"/>
 	${s}/@p.form>

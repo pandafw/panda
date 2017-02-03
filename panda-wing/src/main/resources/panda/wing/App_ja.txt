@@ -92,45 +92,45 @@ locale-countries=\
 #--------------------------------------------
 # Generic Action
 #--------------------------------------------
-button-pdf-print=PDF出力
-button-pdf-list_print=PDF出力
+btn-pdf-print=PDF出力
+btn-pdf-list_print=PDF出力
 
-button-add-confirm=確認画面へ
-button-add-execute=登録
-button-cancel-confirm=確認画面へ
-button-cancel-execute=取消
-button-copy-confirm=確認画面へ
-button-copy-execute=登録
-button-delete-confirm=確認画面へ
-button-delete-execute=削除
-button-edit-confirm=確認画面へ
-button-edit-execute=更新
-button-insert-confirm=確認画面へ
-button-insert-execute=登録
-button-import-confirm=確認画面へ
-button-import-execute=インポート
-button-trash-confirm=確認画面へ
-button-trash-execute=削除
-button-recover-confirm=確認画面へ
-button-recover-execute=復元
-button-update-confirm=確認画面へ
-button-update-execute=更新
+btn-add-confirm=確認画面へ
+btn-add-execute=登録
+btn-cancel-confirm=確認画面へ
+btn-cancel-execute=取消
+btn-copy-confirm=確認画面へ
+btn-copy-execute=登録
+btn-delete-confirm=確認画面へ
+btn-delete-execute=削除
+btn-edit-confirm=確認画面へ
+btn-edit-execute=更新
+btn-insert-confirm=確認画面へ
+btn-insert-execute=登録
+btn-import-confirm=確認画面へ
+btn-import-execute=インポート
+btn-trash-confirm=確認画面へ
+btn-trash-execute=削除
+btn-recover-confirm=確認画面へ
+btn-recover-execute=復元
+btn-update-confirm=確認画面へ
+btn-update-execute=更新
 
 
-button-bcancel=取消
-button-bcancel-execute=取消
-button-bdelete=削除
-button-bdelete-execute=削除
-button-bdisable=無効
-button-bdisable-execute=無効
-button-benable=有効
-button-benable-execute=有効
-button-brecover=復元
-button-brecover-execute=復元
-button-btrash=削除
-button-btrash-execute=削除
-button-bupdate=編集
-button-bupdate-execute=更新
+btn-bcancel=取消
+btn-bcancel-execute=取消
+btn-bdelete=削除
+btn-bdelete-execute=削除
+btn-bdisable=無効
+btn-bdisable-execute=無効
+btn-benable=有効
+btn-benable-execute=有効
+btn-brecover=復元
+btn-brecover-execute=復元
+btn-btrash=削除
+btn-btrash-execute=削除
+btn-bupdate=編集
+btn-bupdate-execute=更新
 
 
 title-list=${top.title} - 一覧

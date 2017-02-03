@@ -22,14 +22,14 @@
 		${s}#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-${ui.name}-confirm",
 			"action": "~/${ui.name}_confirm",
-			"text": "button-${ui.name}-confirm"
+			"text": "btn-${ui.name}-confirm"
 		}]/>
 	${s}#else>
 </#if>
 		${s}#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-${ui.name}-execute",
 			"action": "~/${ui.name}_execute",
-			"text": "button-${ui.name}-execute"
+			"text": "btn-${ui.name}-execute"
 		}]/>
 <#if "true" == props['ui.input.confirm']!>
 	${s}/#if>
@@ -38,7 +38,7 @@
 		${s}#assign _buttons_ = _buttons_ + [{
 			"type": "reset",
 			"icon": "icon-reset",
-			"text": "button-reset"
+			"text": "btn-reset"
 		}]/>
 </#if>
 		<#include "edit-actions.ftl"/>

@@ -26,7 +26,7 @@
 		<@p.textarea key="message" rows="10" enterfire="form"/>
 		<@p.checkbox key="html" fieldValue="true"/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="icon-email" label="#(button-send)"/>
+			<@p.submit icon="icon-email" label="#(btn-send)"/>
 		</@p.div>
 	</@p.form>
 

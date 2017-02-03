@@ -25,8 +25,8 @@
 	<@p.form cssClass="p-eform" id="syncw" focusme="false" method="get" theme="bs3h">
 		<@safeinclude path=('/' + a.class.name?replace('.', '/') + "-inputs.ftl") />
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="return syncw_start();" label="#(button-start)"/>
-			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="return syncw_stop();" label="#(button-stop)"/>
+			<@p.submit icon="fa-cog" btype="primary" id="btnStart" onclick="return syncw_start();" label="#(btn-start)"/>
+			<@p.submit icon="fa-stop" btype="danger" id="btnStop" onclick="return syncw_stop();" label="#(btn-stop)"/>
 		</@p.div>
 	</@p.form>
 	

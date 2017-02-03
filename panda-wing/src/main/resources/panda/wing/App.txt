@@ -121,45 +121,45 @@ locale-countries=\
 #--------------------------------------------
 # Generic Action
 #--------------------------------------------
-button-pdf-print=PDF Print
-button-pdf-list_print=PDF Print
+btn-pdf-print=PDF Print
+btn-pdf-list_print=PDF Print
 
-button-add-confirm=Confirm
-button-add-execute=Submit
-button-cancel-confirm=Confirm
-button-cancel-execute=Submit
-button-copy-confirm=Confirm
-button-copy-execute=Submit
-button-delete-confirm=Confirm
-button-delete-execute=Delete
-button-edit-confirm=Confirm
-button-edit-execute=Submit
-button-import-confirm=Confirm
-button-import-execute=Import
-button-insert-confirm=Confirm
-button-insert-execute=Submit
-button-recover-confirm=Confirm
-button-recover-execute=Recover
-button-trash-confirm=Confirm
-button-trash-execute=Delete
-button-update-confirm=Confirm
-button-update-execute=Submit
+btn-add-confirm=Confirm
+btn-add-execute=Submit
+btn-cancel-confirm=Confirm
+btn-cancel-execute=Submit
+btn-copy-confirm=Confirm
+btn-copy-execute=Submit
+btn-delete-confirm=Confirm
+btn-delete-execute=Delete
+btn-edit-confirm=Confirm
+btn-edit-execute=Submit
+btn-import-confirm=Confirm
+btn-import-execute=Import
+btn-insert-confirm=Confirm
+btn-insert-execute=Submit
+btn-recover-confirm=Confirm
+btn-recover-execute=Recover
+btn-trash-confirm=Confirm
+btn-trash-execute=Delete
+btn-update-confirm=Confirm
+btn-update-execute=Submit
 
 
-button-bcancel=Cancel
-button-bcancel-execute=Submit
-button-bdelete=Delete
-button-bdelete-execute=Delete
-button-bdisable=Disable
-button-bdisable-execute=Disable
-button-benable=Enable
-button-benable-execute=Enable
-button-brecover=Recover
-button-brecover-execute=Recover
-button-btrash=Delete
-button-btrash-execute=Delete
-button-bupdate=Update
-button-bupdate-execute=Submit
+btn-bcancel=Cancel
+btn-bcancel-execute=Submit
+btn-bdelete=Delete
+btn-bdelete-execute=Delete
+btn-bdisable=Disable
+btn-bdisable-execute=Disable
+btn-benable=Enable
+btn-benable-execute=Enable
+btn-brecover=Recover
+btn-brecover-execute=Recover
+btn-btrash=Delete
+btn-btrash-execute=Delete
+btn-bupdate=Update
+btn-bupdate-execute=Submit
 
 
 icon-pdf-print=fa fa-file-text

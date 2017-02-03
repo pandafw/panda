@@ -44,7 +44,7 @@
 			<td class="mc-td-name"><@p.text name=('task-' + _c)/></td>
 			<td class="mc-td-key">${_c}</td>
 			<td class="mc-td-time"><@p.property value=(app[_c + '.load.date']!) format="datetime"/></td>
-			<td class="mc-td-reload"><@p.a icon="icon-reload" action="/task/${_c}/load/start" onclick="return mc_reload(this);" label="#(button-reload)"/></td>
+			<td class="mc-td-reload"><@p.a icon="icon-reload" action="/task/${_c}/load/start" onclick="return mc_reload(this);" label="#(btn-reload)"/></td>
 		</tr>
 		<tr style="display:none">
 			<td>&nbsp;</td>

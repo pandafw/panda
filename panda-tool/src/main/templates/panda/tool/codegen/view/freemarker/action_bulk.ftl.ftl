@@ -66,7 +66,7 @@ ${s}/#if>
 	
 	<br/>
 	<div class="p-tcenter">
-		${s}@p.submit icon="icon-${ui.name}-execute" onclick="return ${action.name}_${ui.name}_submit();" label="#(button-${ui.name}-execute)"/>
+		${s}@p.submit icon="icon-${ui.name}-execute" onclick="return ${action.name}_${ui.name}_submit();" label="#(btn-${ui.name}-execute)"/>
 		<#include "bulk-buttons.ftl"/>
 
 		<script type="text/javascript"><!--

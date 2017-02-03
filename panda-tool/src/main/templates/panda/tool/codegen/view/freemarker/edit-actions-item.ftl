@@ -3,19 +3,19 @@
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-back",
 					"onclick": "window.history.back(); return false;",
-					"text": "button-back"
+					"text": "btn-back"
 				}]/>
 	<#elseif _a == '!refresh'>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-refresh",
 					"onclick": "location.reload(true); return false;",
-					"text": "button-refresh"
+					"text": "btn-refresh"
 				}]/>
 	<#elseif _a == '!reset'>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"type": "reset",
 					"icon": "icon-reset",
-					"text": "button-reset"
+					"text": "btn-reset"
 				}]/>
 	<#elseif _a?starts_with('!')>
 		<#assign _as = _a2?split(':')/>
@@ -24,7 +24,7 @@
 			${s}#assign _buttons_ = _buttons_ + [{
 				"icon": "icon-${an}",
 				"onclick": "_as[1]",
-				"text": "button-${an}"
+				"text": "btn-${an}"
 			}]/>
 	<#elseif _a?starts_with('@')>
 		<#assign _as = _a2?split(':')/>
@@ -35,7 +35,7 @@
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-${an}",
 					"action": "${ap}",
-					"text": "button-${an}"
+					"text": "btn-${an}"
 				}]/>
 			${s}/#if>
 	<#else>
@@ -61,7 +61,7 @@
 		<#else>
 					"onclick": "location.href='${d}{vars._u_?js_string}'; return false;",
 		</#if>
-					"text": "button-${an}"
+					"text": "btn-${an}"
 				}]/>
 			${s}/#if>
 	</#if>

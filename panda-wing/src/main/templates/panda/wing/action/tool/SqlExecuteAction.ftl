@@ -19,7 +19,7 @@
 			</td>
 		</tr>
 		<tr><td colspan="2"><@p.textarea name="sql" rows="8" cssStyle="width:100%" enterfire="#sqlexec_submit"/></td></tr>
-		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" label="#(button-exec)"/></td></tr>
+		<tr><td colspan="2" align="center"><@p.submit id="sqlexec_submit" icon="flash" label="#(btn-exec)"/></td></tr>
 	</table>
 	</@p.form>
 	

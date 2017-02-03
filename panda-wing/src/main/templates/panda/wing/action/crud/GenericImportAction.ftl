@@ -27,7 +27,7 @@
 		/>
 		<@p.checkbox name="loose" fieldLabel="#(p.loose)" fieldValue="true"/>
 		<@p.div cssClass="p-buttons">
-			<@p.submit icon="import" label="#(button-import)"/>
+			<@p.submit icon="import" label="#(btn-import)"/>
 		</@p.div>
 	</@p.form>
 

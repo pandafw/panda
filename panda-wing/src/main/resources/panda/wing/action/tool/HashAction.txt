@@ -1,6 +1,6 @@
 title=Hash
 
-button-hash=Hash
+btn-hash=Hash
 
 p.s=String hash
 p.f=File hash
