@@ -92,6 +92,8 @@ public class Module {
 			extend = false;
 			for (Action action : getActionList()) {
 				if (Strings.isNotEmpty(action.getExtend())) {
+//					System.out.println("Extend action[" + action.getExtend() + "] of " + action.getName());
+
 					Action parent = null;
 					for (Action a2 : getActionList()) {
 						if (a2.getName().equals(action.getExtend())) {
@@ -101,6 +103,10 @@ public class Module {
 					}
 					if (parent == null) {
 						throw new Exception("Can not find extend action[" + action.getExtend()
+								+ "] of " + action.getName());
+					}
+					if (parent == action) {
+						throw new Exception("Can not extend self action[" + action.getExtend()
 								+ "] of " + action.getName());
 					}
 

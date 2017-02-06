@@ -161,6 +161,8 @@ public class Action {
 			extend = false;
 			for (ListUI lui : getListUIList()) {
 				if (Strings.isNotEmpty(lui.getExtend())) {
+//					System.out.println("Extend ListUI[" + lui.getExtend() + "] of " + lui.getName());
+
 					ListUI parent = null;
 					for (ListUI lui2 : getListUIList()) {
 						if (lui2.getName().equals(lui.getExtend())) {
@@ -170,6 +172,10 @@ public class Action {
 					}
 					if (parent == null) {
 						throw new Exception("Can not find extend ListUI[" + lui.getExtend()
+								+ "] of " + lui.getName());
+					}
+					if (parent == lui) {
+						throw new Exception("Can not extend self ListUI[" + lui.getExtend()
 								+ "] of " + lui.getName());
 					}
 
@@ -187,6 +193,8 @@ public class Action {
 			extend = false;
 			for (InputUI iui : getInputUIList()) {
 				if (Strings.isNotEmpty(iui.getExtend())) {
+//					System.out.println("Extend InputUI[" + iui.getExtend() + "] of " + iui.getName());
+
 					InputUI parent = null;
 					for (InputUI iui2 : getInputUIList()) {
 						if (iui2.getName().equals(iui.getExtend())) {
@@ -196,6 +204,10 @@ public class Action {
 					}
 					if (parent == null) {
 						throw new Exception("Can not find extend InputUI[" + iui.getExtend()
+								+ "] of " + iui.getName());
+					}
+					if (parent == iui) {
+						throw new Exception("Can not extend self InputUI[" + iui.getExtend()
 								+ "] of " + iui.getName());
 					}
 

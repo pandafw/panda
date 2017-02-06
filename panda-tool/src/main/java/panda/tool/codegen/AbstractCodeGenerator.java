@@ -78,14 +78,14 @@ public abstract class AbstractCodeGenerator {
 			}
 
 			if (cl.hasOption("i")) {
-				setParameter("includes", cl.getOptionValues("i"));
+				setParameter("incs", cl.getOptionValues("i"));
 			}
 			else {
 				errorRequired(options, "includes");
 			}
 
 			if (cl.hasOption("e")) {
-				setParameter("excludes", cl.getOptionValues("e"));
+				setParameter("excs", cl.getOptionValues("e"));
 			}
 			
 			if (cl.hasOption("o")) {
@@ -130,7 +130,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param includes the includes to set
 	 */
-	public void setIncludes(String[] includes) {
+	public void setIncs(String[] includes) {
 		this.includes = Strings.trimAll(includes);
 	}
 
@@ -144,7 +144,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param excludes the excludes to set
 	 */
-	public void setExcludes(String[] excludes) {
+	public void setExcs(String[] excludes) {
 		this.excludes = Strings.trimAll(excludes);
 	}
 
