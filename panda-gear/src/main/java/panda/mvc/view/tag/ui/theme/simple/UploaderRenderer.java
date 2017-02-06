@@ -58,13 +58,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		stag("div", attr);
 
 		Attributes a = new Attributes();
-		a.type("file");
-		if (readonly) {
-			a.css(this, "p-uploader-file p-hidden");
-		}
-		else {
-			a.css(this, "p-uploader-file");
-		}
+		a.type("file").css(this, "p-uploader-file p-hidden");
 		a.add("name", "")
 		 .add("value", "")
 		 .disabled(tag)
@@ -91,6 +85,9 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 
 		String durl = null;
 		
+		write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
+		write(html(getText("btn-select-file", "Browse...")));
+		write("</button>");
 		write("<span class=\"p-uploader-text\">");
 		if (tag.isFileExits()) {
 			if (Strings.isNotEmpty(pdl)) {

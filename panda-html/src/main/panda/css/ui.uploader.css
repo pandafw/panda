@@ -1,3 +1,9 @@
+.p-uploader-file {
+	margin-right: 20px;
+}
+.p-uploader-progress {
+	margin: 5px 0;
+}
 .p-uploader-text {
 	display: inline-block;
 	margin-bottom: 0;

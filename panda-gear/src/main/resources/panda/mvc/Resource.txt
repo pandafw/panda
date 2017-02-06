@@ -312,6 +312,7 @@ btn-save=Save
 btn-search=Search
 btn-select-all=Select all
 btn-select-none=Select none
+btn-select-file=Select file...
 btn-send=Send
 btn-shopping=Shopping
 btn-signin=Sign in

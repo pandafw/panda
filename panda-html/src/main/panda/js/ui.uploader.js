@@ -18,6 +18,7 @@
 		
 		var $uid = $u.children('.p-uploader-fid');
 		var $uf = $u.children('.p-uploader-file');
+		var $ub = $u.children('.p-uploader-btn');
 		var $ut = $u.children('.p-uploader-text');
 		var $ui = $u.children('.p-uploader-image');
 
@@ -97,15 +98,11 @@
 			loading = true;
 
 			$uid.val('');
-			$uf.hide();
+			$ub.length ? $ub.hide() : $uf.hide();
 			$ui.hide().empty();
 			$ut.hide().html("&nbsp;");
 			$ue.hide().empty();
 
-//			$up.css({
-//				width: $uf.width() + 'px',
-//				height: Math.floor($uf.height() * 0.8) + 'px'
-//			})
 			$up.show();
 
 			var progress = 0;
@@ -125,7 +122,8 @@
 			function _endUpload() {
 				_progress(100);
 				$up.hide();
-				$uf.val("").show();
+				$uf.val("");
+				$ub.length ? $ub.show() : $uf.show();
 				loading = false;
 			}
 
@@ -161,7 +159,13 @@
 		}
 
 		$uf.change(function() { 
-			setTimeout(_upload, 10); 
+			setTimeout(_upload, 10);
+		});
+		
+		$ub.click(function(e) {
+			e.preventDefault();
+			$uf.trigger('click');
+			return false;
 		});
 	};
 
