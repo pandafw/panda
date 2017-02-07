@@ -1578,7 +1578,7 @@ if (typeof String.formatSize != "function") {
 	function setAlertType($p, s, t) {
 		$p.removeClass('alert-danger alert-warning alert-info alert-success').addClass(s.types[t]);
 	}
-	
+
 	function addMsg($p, s, m, t) {
 		var ic = s.icons[t];
 		var tc = s.texts[t];
@@ -1610,6 +1610,33 @@ if (typeof String.formatSize != "function") {
 		}
 	}
 	
+	function addAlerts($p, s, m, t) {
+		if (typeof(m) == 'string') {
+			addMsg($p, s, m, t);
+		}
+		else if ($.isArray(m)) {
+			for (var i = 0; i < m.length; i++) {
+				if (typeof(m[i]) == 'string') {
+					addMsg($p, s, m[i], t);
+				}
+				else {
+					addMsg($p, s, m[i].html, m[i].type);
+				}
+			}
+		}
+		else if (m) {
+			if (m.params) {
+				addMsgs($p, s, m.params.errors, "error");
+			}
+			if (m.action) {
+				addMsgs($p, s, m.action.errors, "error");
+				addMsgs($p, s, m.action.warnings, "warn");
+				addMsgs($p, s, m.action.confirms, "help");
+				addMsgs($p, s, m.action.messages, "info");
+			}
+		}
+	}
+
 	$.palert = {
 		ulCls: 'fa-ul',
 		icons: {
@@ -1671,31 +1698,8 @@ if (typeof String.formatSize != "function") {
 					a = true;
 				}
 				
-				if (typeof(m) == 'string') {
-					addMsg($p, s, m, t);
-				}
-				else if ($.isArray(m)) {
-					for (var i = 0; i < m.length; i++) {
-						if (typeof(m[i]) == 'string') {
-							addMsg($p, s, m[i], t);
-						}
-						else {
-							addMsg($p, s, m[i].html, m[i].type);
-						}
-					}
-				}
-				else if (m) {
-					if (m.params) {
-						addMsgs($p, s, m.params.errors, "error");
-					}
-					if (m.action) {
-						addMsgs($p, s, m.action.errors, "error");
-						addMsgs($p, s, m.action.warnings, "warn");
-						addMsgs($p, s, m.action.confirms, "help");
-						addMsgs($p, s, m.action.messages, "info");
-					}
-				}
-				
+				addAlerts($p, s, m, t);
+
 				if (a) { 
 					$p.slideDown();
 				}
@@ -1713,6 +1717,17 @@ if (typeof String.formatSize != "function") {
 			}
 		});
 	};
+
+	$.palert.notify = function(m, t, s) {
+		s = $.extend({}, $.palert, s);
+		t = t || 'info';
+		var ns = $.extend({ style: 'palert' }, $.palert.notifys);
+
+		var $p = $('<div></div>').addClass('p-alert alert');
+		addAlerts($p, s, m, t);
+		
+		$.notify({ html: $p}, ns);
+	}
 	
 	$.palert.toggleFieldErrors = function(el) {
 		var $fes = $(el).closest('.p-field-errors-alert').next('.p-field-errors');
@@ -1728,6 +1743,15 @@ if (typeof String.formatSize != "function") {
 		}
 		return false;
 	};
+
+	// ==================
+	$(window).on('load', function () {
+		if ($.notify) {
+			$.notify.addStyle('palert', {
+				html: '<div data-notify-html="html"></div>'
+			});
+		}
+	});
 })(jQuery);
 (function($) {
 	$(window).on('load', function() {
