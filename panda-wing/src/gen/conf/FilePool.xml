@@ -69,7 +69,7 @@
 			</field>
 		</input>
 	</action>
-	<action name="filepool" auth="${action.auth}" path="${action.context}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="filepool" auth="${action.auth}" path="${action.path}" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>

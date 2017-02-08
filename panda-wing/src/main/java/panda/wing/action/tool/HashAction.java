@@ -19,7 +19,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
 
-@At("${super_context}/hash")
+@At("${super_path}/hash")
 @Auth(AUTH.SUPER)
 @To(View.SFTL)
 public class HashAction extends AbstractAction {

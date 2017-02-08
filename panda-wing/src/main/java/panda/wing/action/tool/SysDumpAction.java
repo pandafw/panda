@@ -10,7 +10,7 @@ import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/sysdump")
+@At("${super_path}/sysdump")
 @Auth(AUTH.SUPER)
 public class SysDumpAction extends AbstractAction {
 	@At("")

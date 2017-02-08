@@ -15,7 +15,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.entity.Resource;
 
-@At("${super_context}/resource")
+@At("${super_path}/resource")
 @Auth(AUTH.SUPER)
 public class ResourceListAction extends GenericListAction<Resource> {
 

@@ -20,7 +20,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
 
-@At("${super_context}/sendmail")
+@At("${super_path}/sendmail")
 @Auth(AUTH.SUPER)
 @To(value=View.SFTL, error=View.SFTL)
 public class SendMailAction extends AbstractAction {

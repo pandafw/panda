@@ -12,7 +12,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.entity.Property;
 
-@At("${super_context}/property")
+@At("${super_path}/property")
 @Auth(AUTH.SUPER)
 public class PropertyEditAction extends GenericEditAction<Property> {
 

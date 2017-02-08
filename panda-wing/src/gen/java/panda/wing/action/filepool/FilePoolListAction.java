@@ -15,7 +15,7 @@ import panda.wing.action.crud.GenericListAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/filepool")
+@At("${super_path}/filepool")
 @Auth(AUTH.SUPER)
 public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 

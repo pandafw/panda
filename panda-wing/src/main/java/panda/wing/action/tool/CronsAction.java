@@ -12,7 +12,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.task.CronEntry;
 
-@At("${super_context}/crons")
+@At("${super_path}/crons")
 @Auth(AUTH.SUPER)
 public class CronsAction extends AbstractAction {
 	@IocInject(value=AppConstants.CRONS, required=false)

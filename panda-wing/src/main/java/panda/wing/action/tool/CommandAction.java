@@ -17,7 +17,7 @@ import panda.wing.constant.AUTH;
 
 
 @Auth(AUTH.SUPER)
-@At("${super_context}/cmd")
+@At("${super_path}/cmd")
 @To(View.SFTL)
 public class CommandAction extends AbstractAction {
 	public static class Result {

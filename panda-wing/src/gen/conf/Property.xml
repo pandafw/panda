@@ -134,17 +134,17 @@
 			</field>
 		</input>
 	</action>
-	<action name="property" auth="${action.auth}" path="${action.context}" extend="action.Property" actionClass="${action.package}.property.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
+	<action name="property" auth="${action.auth}" path="${action.path}" extend="action.Property" actionClass="${action.package}.property.PropertyListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
 		<list name="list_csv" extend="basicList" template="${template.list_csv}" generate="true"/>
 		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
 		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="property" auth="${action.auth}" path="${action.context}" extend="action.Property" actionClass="${action.package}.property.PropertyBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="property" auth="${action.auth}" path="${action.path}" extend="action.Property" actionClass="${action.package}.property.PropertyBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
-	<action name="property" auth="${action.auth}" path="${action.context}" extend="action.Property" actionClass="${action.package}.property.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
+	<action name="property" auth="${action.auth}" path="${action.path}" extend="action.Property" actionClass="${action.package}.property.PropertyEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">
 		<input name="view" extend="basicInput" template="${template.view}" generate="true">
 			<param name="toolbar" value="${view.toolbar}"/>
 			<param name="actions" value="${view.actions}"/>

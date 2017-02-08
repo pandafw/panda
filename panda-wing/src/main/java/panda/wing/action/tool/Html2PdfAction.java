@@ -24,7 +24,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.util.pdf.Html2Pdf;
 
-@At("${super_context}/html2pdf")
+@At("${super_path}/html2pdf")
 @Auth(AUTH.SUPER)
 public class Html2PdfAction extends AbstractAction {
 	private static final Log log = Logs.getLog(Html2PdfAction.class);

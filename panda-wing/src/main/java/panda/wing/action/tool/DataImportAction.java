@@ -48,7 +48,7 @@ import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/dataimp")
+@At("${super_path}/dataimp")
 @Auth(AUTH.SUPER)
 @To(View.SFTL)
 public class DataImportAction extends AbstractAction {

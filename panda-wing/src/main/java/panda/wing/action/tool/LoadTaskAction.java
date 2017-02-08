@@ -16,7 +16,7 @@ import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 
 
-@At("${super_context}/loadtask")
+@At("${super_path}/loadtask")
 @Auth(AUTH.SUPER)
 @To(View.SFTL)
 public class LoadTaskAction extends AbstractAction {

@@ -10,7 +10,7 @@ import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/el")
+@At("${super_path}/el")
 @Auth(AUTH.SUPER)
 public class ElEvaluateAction extends AbstractAction {
 

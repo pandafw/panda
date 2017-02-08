@@ -10,7 +10,7 @@ import panda.vfs.dao.FileDataQuery;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/filepool")
+@At("${super_path}/filepool")
 @Auth(AUTH.SUPER)
 public class FilePoolBulkExAction extends FilePoolBulkAction {
 	/**

@@ -7,7 +7,7 @@ import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 import panda.wing.entity.Template;
 
-@At("${super_context}/template")
+@At("${super_path}/template")
 @Auth(AUTH.SUPER)
 public class TemplateEditExAction extends TemplateEditAction {
 

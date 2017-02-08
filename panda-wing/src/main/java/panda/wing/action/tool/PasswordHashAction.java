@@ -14,7 +14,7 @@ import panda.wing.action.AbstractAction;
 import panda.wing.auth.Auth;
 import panda.wing.constant.AUTH;
 
-@At("${super_context}/pwdhash")
+@At("${super_path}/pwdhash")
 @Auth(AUTH.SUPER)
 @To(View.SFTL)
 public class PasswordHashAction extends AbstractAction {
