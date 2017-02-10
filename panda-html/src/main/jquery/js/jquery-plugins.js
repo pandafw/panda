@@ -438,6 +438,17 @@ jQuery.jcookie = function(name, value, options) {
 		});
 	};
 })(jQuery);
+(function($) {
+	$.jscript = function(url) {
+		var s = document.createElement('script');
+		s.type = 'text/javascript';
+		s.async = true;
+		s.src = url;
+		$('body').append(s);
+		return $;
+	};
+})(jQuery);
+
 /**
   @author: remy sharp / http://remysharp.com
   @params:
@@ -535,14 +546,20 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
-	$.jscript = function(url) {
-		var s = document.createElement('script');
-		s.type = 'text/javascript';
-		s.async = true;
-		s.src = url;
-		$('body').append(s);
-		return $;
-	};
+	$.fn.selectText = function() {
+		if ($(this).length) {
+			if (document.selection) {
+				var range = document.body.createTextRange();
+				range.moveToElementText($(this).get(0));
+				range.select();
+			}
+			else if (window.getSelection) {
+				var range = document.createRange();
+				range.selectNode($(this).get(0));
+				window.getSelection().addRange(range);
+			}
+		}
+	}
 })(jQuery);
 
 /*!
