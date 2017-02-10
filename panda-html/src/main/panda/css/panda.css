@@ -77,19 +77,36 @@
 
 /** form layout */
 .p-form.form-horizontal {
-	background-color: #f9f9f9;
 	color: #333;
 	padding: 10px;
 }
 .p-form.form-horizontal .form-group {
-	border-bottom: 1px solid #ccc;
 	margin: 0;
 	padding: 5px 0;
 }
 .p-form.form-horizontal .p-buttons.form-group {
-	border-bottom: 0;
 	margin: 10px 0;
 }
+.p-eform.form-horizontal,
+.p-cform.form-horizontal,
+.p-vform.form-horizontal,
+.p-sform.form-horizontal {
+	background-color: #f9f9f9;
+}
+.p-eform.form-horizontal .form-group,
+.p-cform.form-horizontal .form-group,
+.p-vform.form-horizontal .form-group,
+.p-sform.form-horizontal .form-group {
+	border-bottom: 1px solid #ccc;
+}
+.p-eform.form-horizontal .p-buttons.form-group,
+.p-cform.form-horizontal .p-buttons.form-group,
+.p-vform.form-horizontal .p-buttons.form-group,
+.p-sform.form-horizontal .p-buttons.form-group {
+	border-bottom: 0;
+}
+
+/** form control */
 .p-form .form-control {
 	color: #333;
 }
