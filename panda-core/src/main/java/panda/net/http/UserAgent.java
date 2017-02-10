@@ -45,7 +45,15 @@ public class UserAgent {
 	public static final String IPHONE = "iPhone";
 	public static final String IPAD = "iPad";
 	public static final String IPOD = "iPod";
+	public static final String IOS = "ios";
 	public static final String ANDROID = "Android";
+	public static final String WINDOWS = "Windows";
+	public static final String MACINTOSH = "Macintosh";
+	public static final String LINUX = "Linux";
+	public static final String UBUNTU = "Ubuntu";
+	public static final String MINT = "Mint";
+	public static final String FEDORA = "Fedora";
+	public static final String GENTOO = "Gentoo";
 	
 	private static final String[] ROBOTS = { 
 		"robot", "Googlebot", "bingbot", "yahoo", "baidu", 
@@ -159,9 +167,58 @@ public class UserAgent {
 	 * @return true if user agent is ios
 	 */
 	public boolean isIos() {
-		return browsers.containsKey("ios");
+		return browsers.containsKey(IOS);
 	}
 
+	/**
+	 * @return true if user agent is windows
+	 */
+	public boolean isWindows() {
+		return browsers.containsKey(WINDOWS);
+	}
+
+	/**
+	 * @return true if user agent is Macintosh
+	 */
+	public boolean isMacOS() {
+		return browsers.containsKey(MACINTOSH);
+	}
+
+	/**
+	 * @return true if user agent is Linux
+	 */
+	public boolean isLinux() {
+		return browsers.containsKey(LINUX);
+	}
+
+	/**
+	 * @return true if user agent is Ubuntu
+	 */
+	public boolean isUbuntu() {
+		return browsers.containsKey(UBUNTU);
+	}
+
+	/**
+	 * @return true if user agent is Fedora
+	 */
+	public boolean isFedora() {
+		return browsers.containsKey(FEDORA);
+	}
+
+	/**
+	 * @return true if user agent is Mint
+	 */
+	public boolean isMint() {
+		return browsers.containsKey(MINT);
+	}
+
+	/**
+	 * @return true if user agent is Gentoo
+	 */
+	public boolean isGentoo() {
+		return browsers.containsKey(GENTOO);
+	}
+	
 	private void init() {
 		browsers = new HashMap<String, Version>();
 		
@@ -182,13 +239,24 @@ public class UserAgent {
 		parse(IPAD);
 		parse(IPOD);
 		parse(ANDROID);
+		parse(WINDOWS);
+		parse(MACINTOSH);
+		parse(LINUX);
+		parse(UBUNTU);
+		parse(MINT);
+		parse(FEDORA);
+		parse(GENTOO);
 		
 		if (checkRobot()) {
 			browsers.put(ROBOT, DUMMY);
 		}
 		
-		if (isAndroid() || isIphone() || isIpad() || isIpod()) {
+		if (isAndroid()) {
 			browsers.put(MOBILE, DUMMY);
+		}
+		if (isIphone() || isIpad() || isIpod()) {
+			browsers.put(MOBILE, DUMMY);
+			browsers.put(IOS, DUMMY);
 		}
 	}
 
@@ -255,9 +323,9 @@ public class UserAgent {
 	}
 
 	/**
-	 * @return simple string
+	 * @return simple string with major version
 	 */
-	public String toSimpleString() {
+	public String toMajorString() {
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, Version> en : browsers.entrySet()) {
 			String b = en.getKey().toLowerCase();
@@ -266,6 +334,18 @@ public class UserAgent {
 			if (v.major > 0) {
 				sb.append(b).append(v.major).append(' ');
 			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * @return simple string
+	 */
+	public String toSimpleString() {
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, Version> en : browsers.entrySet()) {
+			String b = en.getKey().toLowerCase();
+			sb.append(b).append(' ');
 		}
 		return sb.toString();
 	}
