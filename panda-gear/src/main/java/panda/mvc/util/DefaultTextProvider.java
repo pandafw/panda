@@ -327,25 +327,6 @@ public class DefaultTextProvider implements TextProvider {
 			return msg;
 		}
 
-		// nothing still? Aright, search the package hierarchy now
-		for (Class cls = clazz; (cls != null) && !cls.equals(Object.class); cls = cls.getSuperclass()) {
-			String pkg = cls.getName();
-			while (true) {
-				int dot = pkg.lastIndexOf('.');
-				if (dot <= 0) {
-					break;
-				}
-				
-				pkg = pkg.substring(0, dot);
-				String pn = pkg + ".package";
-
-				msg = getMessage(locale, pn, key, arg);
-				if (msg != null) {
-					return msg;
-				}
-			}
-		}
-
 		// see if it's a child property
 		int idx = key.indexOf(".");
 		if (idx != -1) {
@@ -400,6 +381,9 @@ public class DefaultTextProvider implements TextProvider {
 			return null;
 		}
 
+		// add to checked
+		checked.add(clazz.getName());
+
 		// look in properties of this class
 		String msg = getMessage(locale, clazz.getName(), key, arg);
 		if (msg != null) {
@@ -410,6 +394,17 @@ public class DefaultTextProvider implements TextProvider {
 		Class[] ifs = clazz.getInterfaces();
 		for (Class i : ifs) {
 			msg = getMessage(locale, i.getName(), key, arg);
+			if (msg != null) {
+				return msg;
+			}
+		}
+
+		// look in properties of this class's package
+		String pn = clazz.getPackage().getName() + ".package";
+		if (!checked.contains(pn)) {
+			checked.add(pn);
+			
+			msg = getMessage(locale, pn, key, arg);
 			if (msg != null) {
 				return msg;
 			}
