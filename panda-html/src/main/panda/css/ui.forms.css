@@ -13,12 +13,12 @@
 	color: #333;
 	padding: 10px;
 }
-.p-form.form-horizontal .form-group {
+.p-form.form-horizontal > .form-group {
 	margin: 0;
 	padding: 5px 0;
 }
-.p-form.form-horizontal .p-buttons.form-group {
-	margin: 10px 0;
+.p-form.form-horizontal > .p-buttons.form-group {
+	padding: 10px 0;
 }
 .p-eform.form-horizontal,
 .p-cform.form-horizontal,
@@ -26,17 +26,17 @@
 .p-sform.form-horizontal {
 	background-color: #f9f9f9;
 }
-.p-eform.form-horizontal .form-group,
-.p-cform.form-horizontal .form-group,
-.p-vform.form-horizontal .form-group,
-.p-sform.form-horizontal .form-group {
-	border-bottom: 1px solid #ccc;
+.p-eform.form-horizontal > .form-group,
+.p-cform.form-horizontal > .form-group,
+.p-vform.form-horizontal > .form-group,
+.p-sform.form-horizontal > .form-group {
+	border-top: 1px solid #ccc;
 }
-.p-eform.form-horizontal .p-buttons.form-group,
-.p-cform.form-horizontal .p-buttons.form-group,
-.p-vform.form-horizontal .p-buttons.form-group,
-.p-sform.form-horizontal .p-buttons.form-group {
-	border-bottom: 0;
+.p-eform.form-horizontal > div.form-group:first-of-type,
+.p-cform.form-horizontal > div.form-group:first-of-type,
+.p-vform.form-horizontal > div.form-group:first-of-type,
+.p-sform.form-horizontal > div.form-group:first-of-type {
+	border-top: 0;
 }
 
 /** form control */
