@@ -13,7 +13,7 @@ public abstract class Bean {
 	 * is this data active
 	 * @return true if bean is valid
 	 */
-	protected static boolean isActive(IStatus bean) {
+	public static boolean isActive(IStatus bean) {
 		return bean.getStatus() != null && VC.STATUS_ACTIVE == bean.getStatus();
 	}
 	
@@ -21,7 +21,7 @@ public abstract class Bean {
 	 * is this data disabled
 	 * @return true if bean is disabled
 	 */
-	protected static boolean isDisabled(IStatus bean) {
+	public static boolean isDisabled(IStatus bean) {
 		return bean.getStatus() != null && VC.STATUS_DISABLED == bean.getStatus();
 	}
 	
@@ -29,7 +29,7 @@ public abstract class Bean {
 	 * is this data trashed
 	 * @return true if bean is trashed
 	 */
-	protected static boolean isTrashed(IStatus bean) {
+	public static boolean isTrashed(IStatus bean) {
 		return bean.getStatus() != null && VC.STATUS_TRASHED == bean.getStatus();
 	}
 

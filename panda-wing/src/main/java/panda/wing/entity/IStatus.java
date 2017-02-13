@@ -14,23 +14,5 @@ public interface IStatus {
 	 */
 	public void setStatus(Character status);
 
-	//----------------------------------------------------------------------
-	/**
-	 * is this data active
-	 * @return true if this data is active
-	 */
-	public boolean isActive();
-
-	/**
-	 * is this data disabled
-	 * @return true if this data is disabled
-	 */
-	public boolean isDisabled();
-
-	/**
-	 * is this data trashed
-	 * @return true if this data is trashed
-	 */
-	public boolean isTrashed();
 }
 

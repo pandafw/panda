@@ -2,12 +2,11 @@ package panda.wing.entity;
 
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
-import panda.wing.constant.VC;
 
 public class SBean extends Bean implements IStatus {
 	
 	@Column(notNull=true)
-	protected Character status = VC.STATUS_ACTIVE;
+	protected Character status;
 	
 
 	/**
@@ -24,31 +23,6 @@ public class SBean extends Bean implements IStatus {
 	@Override
 	public void setStatus(Character status) {
 		this.status = status;
-	}
-
-	//----------------------------------------------------------------------
-	/**
-	 * is this data active
-	 * @return true if bean is valid
-	 */
-	public boolean isActive() {
-		return isActive(this);
-	}
-	
-	/**
-	 * is this data disabled
-	 * @return true if bean is disabled
-	 */
-	public boolean isDisabled() {
-		return isDisabled(this);
-	}
-	
-	/**
-	 * is this data trashed
-	 * @return true if bean is trashed
-	 */
-	public boolean isTrashed() {
-		return isTrashed(this);
 	}
 
 	//----------------------------------------------------------------------

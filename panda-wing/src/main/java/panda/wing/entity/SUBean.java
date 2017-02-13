@@ -4,12 +4,11 @@ import java.util.Date;
 
 import panda.dao.entity.annotation.Column;
 import panda.lang.Objects;
-import panda.wing.constant.VC;
 
 public class SUBean extends Bean implements IStatus, IUpdate {
 	
 	@Column(notNull=true)
-	protected Character status = VC.STATUS_ACTIVE;
+	protected Character status;
 	
 	@Column(notNull=true)
 	protected Long uusid;
@@ -81,31 +80,6 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	@Override
 	public void setUtime(Date utime) {
 		this.utime = utime;
-	}
-
-	//----------------------------------------------------------------------
-	/**
-	 * is this data active
-	 * @return true if bean is valid
-	 */
-	public boolean isActive() {
-		return isActive(this);
-	}
-	
-	/**
-	 * is this data disabled
-	 * @return true if bean is disabled
-	 */
-	public boolean isDisabled() {
-		return isDisabled(this);
-	}
-	
-	/**
-	 * is this data trashed
-	 * @return true if bean is trashed
-	 */
-	public boolean isTrashed() {
-		return isTrashed(this);
 	}
 
 	//----------------------------------------------------------------------
