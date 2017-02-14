@@ -2142,7 +2142,7 @@ public abstract class Arrays {
 	 *         {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
 	 */
 	public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
-		if (array == null) {
+		if (array == null || array.length == 0) {
 			return INDEX_NOT_FOUND;
 		}
 		if (startIndex < 0) {
