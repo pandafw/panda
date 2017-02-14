@@ -57,7 +57,7 @@ public abstract class UserAuthenticator {
 	 * @return true if user has permit to access the method
 	 */
 	public int authenticate(ActionContext ac) {
-		return authenticate(ac, null);
+		return authenticate(ac, null, allowUnknownUri);
 	}
 	
 	//----------------------------------------------------
@@ -78,20 +78,20 @@ public abstract class UserAuthenticator {
 	}
 
 	/**
-	 * hasPermission
+	 * can access the specified action
 	 * @param context action context
 	 * @param action action path
 	 * @return true if action has access permit
 	 */
-	public boolean hasPermission(ActionContext context, String action) {
-		int r= authenticate(context, action);
-		return r <= UserAuthenticator.OK || r == UserAuthenticator.UNSECURE;
+	public boolean canAccess(ActionContext context, String action) {
+		int r= authenticate(context, action, false);
+		return r <= OK || r == UNSECURE;
 	}
 
 	/**
 	 * @return true if user has permit to access the action
 	 */
-	public int authenticate(ActionContext ac, String path) {
+	protected int authenticate(ActionContext ac, String path, boolean allowUnknownUri) {
 		// get user for later use
 		Object su = getSessionUser(ac);
 
