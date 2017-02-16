@@ -138,6 +138,9 @@ fieldset.p-lv-filters legend {
 	display: inline-block;
 	vertical-align: top;
 }
+.p-lv-fs-inputgroup .p-lv-f-g2.p-hidden {
+	display: none;
+}
 .p-lv-fs-inputgroup .p-lv-f-date-c.form-control,
 .p-lv-fs-inputgroup .p-lv-f-datetime-c.form-control,
 .p-lv-fs-inputgroup .p-lv-f-time-c.form-control,

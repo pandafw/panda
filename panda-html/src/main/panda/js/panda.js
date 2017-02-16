@@ -2404,7 +2404,7 @@ function s_totop() {
 
 function s_preload() {
 	$('body').append(
-		'<div id="preload" class="p-vhidden">'
+		'<div id="preload" class="p-dispear">'
 			+ '<div class="ui-loadmask"></div>'
 			+ '<div class="p-loader-large-snake"></div>'
 		+ '</div>');
