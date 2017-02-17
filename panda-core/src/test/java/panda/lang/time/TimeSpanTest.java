@@ -145,8 +145,8 @@ public class TimeSpanTest {
 		Assert.assertEquals("1 seconds", TimeSpan.toDisplayString(1001));
 		Assert.assertEquals("1.1 seconds", TimeSpan.toDisplayString(1100));
 		
-		Date s = DateTimes.datetimeFormat().parse("2016-01-25 23:14:03");
-		Date e = DateTimes.datetimeFormat().parse("2016-01-26 03:17:27");
+		Date s = DateTimes.isoDatetimeNotFormat().parse("2016-01-25 23:14:03");
+		Date e = DateTimes.isoDatetimeNotFormat().parse("2016-01-26 03:17:27");
 		System.out.println(new TimeSpan(e.getTime() - s.getTime()).toString());
 	}
 }

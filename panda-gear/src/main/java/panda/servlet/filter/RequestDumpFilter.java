@@ -148,7 +148,7 @@ public class RequestDumpFilter implements Filter {
 	}
 
 	private void dumpRequest(HttpBufferedRequestWrapper req, long time, int serial) {
-		String date = DateTimes.dateFormat().format(time);
+		String date = DateTimes.isoDateFormat().format(time);
 		String fn = DateTimes.timestampLogFormat().format(time);
 		File dumpFolder = new File(dumpPath, date);
 		File dumpFile = new File(dumpFolder, fn + "." + serial + "-req.log");
@@ -188,7 +188,7 @@ public class RequestDumpFilter implements Filter {
 		// flush wrapper
 		wrapper.flushBuffer();
 		
-		String date = DateTimes.dateFormat().format(time);
+		String date = DateTimes.isoDateFormat().format(time);
 		String fn = DateTimes.timestampLogFormat().format(time);
 		File dumpFolder = new File(dumpPath, date);
 		File dumpFile = new File(dumpFolder, fn + "." + serial + "-res.log");

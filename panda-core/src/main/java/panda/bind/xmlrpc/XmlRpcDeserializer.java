@@ -241,7 +241,7 @@ public class XmlRpcDeserializer extends AbstractDeserializer {
 	protected static class SaxHandler extends DefaultHandler {
 		private static class XmlRpcElem {
 			public static FastDateFormat[] DATE_FORMATS = {
-				DateTimes.isoDatetimeFormat(),
+				DateTimes.isoDatetimeNotFormat(),
 				DateTimes.isoDatetimeNohFormat()
 			};
 

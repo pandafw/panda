@@ -140,94 +140,166 @@ public class DateTimes {
 	 * ISO8601 formatter for date-time without time zone. The format used is
 	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat ISO_DATETIME_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss");
+	public static final String ISO_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
 	/**
 	 * ISO8601 formatter for date-time without time zone and separator '-'. The format used is
 	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat ISO_DATETIME_NO_H_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HH:mm:ss");
+	public static final String ISO_DATETIME_NO_H_FORMAT = "yyyyMMdd'T'HH:mm:ss";
 
 	/**
 	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat ISO_DATETIME_NO_T_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+	public static final String ISO_DATETIME_NO_T_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	/**
 	 * ISO8601 formatter for date-time with time zone. The format used is
 	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
 	 */
-	public static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT = FastDateFormat
-		.getInstance("yyyy-MM-dd'T'HH:mm:ssZZ");
+	public static final String ISO_DATETIME_TIMEZONE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZ";
 
 	/**
 	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
 	 */
-	public static final FastDateFormat ISO_DATE_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
+	public static final String ISO_DATE_FORMAT = "yyyy-MM-dd";
 
 	/**
 	 * ISO8601-like formatter for date with time zone. The format used is <tt>yyyy-MM-ddZZ</tt>.
 	 * This pattern does not comply with the formal ISO8601 specification as the standard does not
 	 * allow a time zone without a time.
 	 */
-	public static final FastDateFormat ISO_DATE_TIME_ZONE_FORMAT = FastDateFormat.getInstance("yyyy-MM-ddZZ");
+	public static final String ISO_DATE_TIMEZONE_FORMAT = "yyyy-MM-ddZZ";
 
 	/**
-	 * ISO8601 formatter for time without time zone. The format used is <tt>'T'HH:mm:ss</tt>.
+	 * ISO8601 formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat ISO_TIME_FORMAT = FastDateFormat.getInstance("'T'HH:mm:ss");
+	public static final String ISO_TIME_FORMAT = "HH:mm:ss";
 
 	/**
-	 * ISO8601 formatter for time with time zone. The format used is <tt>'T'HH:mm:ssZZ</tt>.
+	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
 	 */
-	public static final FastDateFormat ISO_TIME_TIME_ZONE_FORMAT = FastDateFormat.getInstance("'T'HH:mm:ssZZ");
-
-	/**
-	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. This
-	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
-	 * 'T' prefix for times.
-	 */
-	public static final FastDateFormat ISO_TIME_NO_T_FORMAT = FastDateFormat.getInstance("HH:mm:ss");
-
-	/**
-	 * ISO8601-like formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>. This
-	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
-	 * 'T' prefix for times.
-	 */
-	public static final FastDateFormat ISO_TIME_NO_T_TIME_ZONE_FORMAT = FastDateFormat.getInstance("HH:mm:ssZZ");
+	public static final String ISO_TIME_TIMEZONE_FORMAT = "HH:mm:ssZZ";
 
 	/**
 	 * SMTP (and probably other) date headers. The format used is
 	 * <tt>EEE, dd MMM yyyy HH:mm:ss Z</tt> in US locale.
 	 */
-	public static final FastDateFormat SMTP_DATETIME_FORMAT = FastDateFormat.getInstance("EEE, dd MMM yyyy HH:mm:ss Z",
-		Locale.US);
+	public static final String SMTP_DATETIME_FORMAT = "EEE, dd MMM yyyy HH:mm:ss Z";
 
 	/**
 	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
 	 */
-	public static final FastDateFormat TIMESTAMP_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSS");
+	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+
+	/**
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>.
+	 */
+	public static final String DATE_YMD_NO_H_FORMAT = "yyyyMMdd";
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 */
+	public static final String TIME_HMS_NO_C_FORMAT = "HHmmss";
+
+	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 */
+	public static final String TIME_HHMM_FORMAT = "HH:mm";
 
 	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMddTHHmmss.SSS</tt>. 
 	 */
-	public static final FastDateFormat TIMESTAMP_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HHmmss.SSS");
+	public static final String TIMESTAMP_LOG_FORMAT = "yyyyMMdd'T'HHmmss.SSS";
 
 	/**
 	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
 	 */
-	public static final FastDateFormat DATETIME_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd'T'HHmmss");
+	public static final String DATETIME_LOG_FORMAT = "yyyyMMdd'T'HHmmss";
+
+	// -----------------------------------------------------------------------
+	/**
+	 * ISO8601 formatter for date-time without time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
+	 */
+	private static final FastDateFormat iso_datetime_format = FastDateFormat.getInstance(ISO_DATETIME_FORMAT);
 
 	/**
-	 * Date format for log. The format used is <tt>yyyyMMdd</tt>. 
+	 * ISO8601 formatter for date-time without time zone and separator '-'. The format used is
+	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat DATE_LOG_FORMAT = FastDateFormat.getInstance("yyyyMMdd");
+	private static final FastDateFormat iso_datetime_no_h_format = FastDateFormat.getInstance(ISO_DATETIME_NO_H_FORMAT);
 
 	/**
-	 * Time format for log. The format used is <tt>HHmmss</tt>. 
+	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
+	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
-	public static final FastDateFormat TIME_LOG_FORMAT = FastDateFormat.getInstance("HHmmss");
+	private static final FastDateFormat iso_datetime_no_t_format = FastDateFormat.getInstance(ISO_DATETIME_NO_T_FORMAT);
+
+	/**
+	 * ISO8601 formatter for date-time with time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
+	 */
+	private static final FastDateFormat iso_datetime_timezone_format = FastDateFormat.getInstance(ISO_DATETIME_TIMEZONE_FORMAT);
+
+	/**
+	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
+	 */
+	private static final FastDateFormat iso_date_format = FastDateFormat.getInstance(ISO_DATE_FORMAT);
+
+	/**
+	 * ISO8601-like formatter for date with time zone. The format used is <tt>yyyy-MM-ddZZ</tt>.
+	 * This pattern does not comply with the formal ISO8601 specification as the standard does not
+	 * allow a time zone without a time.
+	 */
+	private static final FastDateFormat iso_date_timezone_format = FastDateFormat.getInstance(ISO_DATE_TIMEZONE_FORMAT);
+
+	/**
+	 * ISO8601 formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>.
+	 */
+	private static final FastDateFormat iso_time_format = FastDateFormat.getInstance(ISO_TIME_FORMAT);
+
+	/**
+	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
+	 */
+	private static final FastDateFormat iso_time_timezone_format = FastDateFormat.getInstance(ISO_TIME_TIMEZONE_FORMAT);
+
+	/**
+	 * SMTP (and probably other) date headers. The format used is
+	 * <tt>EEE, dd MMM yyyy HH:mm:ss Z</tt> in US locale.
+	 */
+	private static final FastDateFormat smtp_datetime_format = FastDateFormat.getInstance(SMTP_DATETIME_FORMAT, Locale.US);
+
+	/**
+	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
+	 */
+	private static final FastDateFormat timestamp_format = FastDateFormat.getInstance(TIMESTAMP_FORMAT);
+
+	/**
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
+	 */
+	private static final FastDateFormat date_ymd_noh_format = FastDateFormat.getInstance(DATE_YMD_NO_H_FORMAT);
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 */
+	private static final FastDateFormat time_hms_noc_format = FastDateFormat.getInstance(TIME_HMS_NO_C_FORMAT);
+
+	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 */
+	private static final FastDateFormat time_hhmm_format = FastDateFormat.getInstance(TIME_HHMM_FORMAT);
+
+	/**
+	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
+	 */
+	private static final FastDateFormat timestamp_log_format = FastDateFormat.getInstance(TIMESTAMP_LOG_FORMAT);
+
+	/**
+	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 */
+	private static final FastDateFormat datetime_log_format = FastDateFormat.getInstance(DATETIME_LOG_FORMAT);
 
 	// -----------------------------------------------------------------------
 	/**
@@ -1926,76 +1998,115 @@ public class DateTimes {
 	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
 	 */
 	public static FastDateFormat isoDatetimeFormat() {
-		return ISO_DATETIME_FORMAT;
+		return iso_datetime_format;
 	}
 	
 	/**
 	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
 	 */
-	public static FastDateFormat datetimeFormat() {
-		return ISO_DATETIME_NO_T_FORMAT;
+	public static FastDateFormat isoDatetimeNotFormat() {
+		return iso_datetime_no_t_format;
 	}
+
+	/**
+	 * ISO8601 formatter for date-time with time zone. The format used is
+	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
+	 */
+	public static FastDateFormat isoDatetimeTimeZoneFormat() {
+		return iso_datetime_timezone_format;
+	}
+
+	/**
+	 * ISO8601-like formatter for date with time zone. The format used is <tt>yyyy-MM-ddZZ</tt>.
+	 * This pattern does not comply with the formal ISO8601 specification as the standard does not
+	 * allow a time zone without a time.
+	 */
+	public static FastDateFormat isoDateTimezoneFormat() {
+		return iso_date_timezone_format;
+	}
+
 	
 	/**
 	 * ISO8601 formatter for date-time without time zone and separator '-' char. The format used is
 	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
 	 */
 	public static FastDateFormat isoDatetimeNohFormat() {
-		return ISO_DATETIME_NO_H_FORMAT;
+		return iso_datetime_no_h_format;
 	}
 	
 	/**
 	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
 	 */
-	public static FastDateFormat dateFormat() {
-		return ISO_DATE_FORMAT;
+	public static FastDateFormat isoDateFormat() {
+		return iso_date_format;
 	}
 	
 	/**
-	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. This
-	 * pattern does not comply with the formal ISO8601 specification as the standard requires the
-	 * 'T' prefix for times.
+	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. 
 	 */
-	public static FastDateFormat timeFormat() {
-		return ISO_TIME_NO_T_FORMAT;
+	public static FastDateFormat isoTimeFormat() {
+		return iso_time_format;
 	}
 	
+	/**
+	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
+	 */
+	public static FastDateFormat isoTimeTimezoneFormat() {
+		return iso_time_timezone_format;
+	}
+
+	/**
+	 * SMTP (and probably other) date headers. The format used is
+	 * <tt>EEE, dd MMM yyyy HH:mm:ss Z</tt> in US locale.
+	 */
+	public static FastDateFormat smtpDatetimeFormat() {
+		return smtp_datetime_format;
+	}
+
 	/**
 	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
 	 */
 	public static FastDateFormat timestampFormat() {
-		return TIMESTAMP_FORMAT;
+		return timestamp_format;
+	}
+
+	/**
+	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
+	 */
+	public static FastDateFormat dateYmdNohFormat() {
+		return date_ymd_noh_format;
+	}
+
+	/**
+	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 */
+	public static final FastDateFormat timeHmsNocFormat() {
+		return time_hms_noc_format;
+	}
+
+	/**
+	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 */
+	public static final FastDateFormat timeHhmmFormat() {
+		return time_hhmm_format;
 	}
 	
 	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
 	 */
 	public static FastDateFormat timestampLogFormat() {
-		return TIMESTAMP_LOG_FORMAT;
+		return timestamp_log_format;
 	}
 
 	/**
-	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
+	 * DateTime format for log. The format used is <tt>yyyyMMdd'T'HHmmss</tt>. 
 	 */
 	public static FastDateFormat datetimeLogFormat() {
-		return DATETIME_LOG_FORMAT;
-	}
-
-	/**
-	 * Date format for log. The format used is <tt>yyyyMMdd</tt>. 
-	 */
-	public static FastDateFormat dateLogFormat() {
-		return DATE_LOG_FORMAT;
-	}
-
-	/**
-	 * Time format for log. The format used is <tt>HHmmss</tt>. 
-	 */
-	public static final FastDateFormat timeLogFormat() {
-		return TIME_LOG_FORMAT;
+		return datetime_log_format;
 	}
 	
+	// -----------------------------------------------------------------------
 	/**
 	 * <p>
 	 * Formats a date/time into a specific pattern using the UTC time zone.

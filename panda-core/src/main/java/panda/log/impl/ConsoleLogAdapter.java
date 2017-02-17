@@ -24,7 +24,7 @@ public class ConsoleLogAdapter extends BaseLogAdapter {
 		}
 
 		private void output(PrintStream out, String level, Object msg, Throwable t) {
-			out.printf("%s %s [%s] %s\n", DateTimes.timeFormat().format(DateTimes.getDate()), level, Thread.currentThread()
+			out.printf("%s %s [%s] %s\n", DateTimes.isoTimeFormat().format(DateTimes.getDate()), level, Thread.currentThread()
 				.getName(), msg);
 			if (t != null) {
 				t.printStackTrace(out);

@@ -214,7 +214,7 @@ public class XmlRpcBinderTest {
 		obj.getParams().add(10);
 		obj.getParams().add("str");
 		obj.getParams().add(12.5);
-		obj.getParams().add(DateTimes.datetimeFormat().parse("2010-10-01 12:00:01"));
+		obj.getParams().add(DateTimes.isoDatetimeNotFormat().parse("2010-10-01 12:00:01"));
 		obj.getParams().add("Hello World!".getBytes());
 
 		Xdo oa = XmlRpcs.fromXml(xml, Xdo.class);
@@ -262,7 +262,7 @@ public class XmlRpcBinderTest {
 		obj.getParams().add(10);
 		obj.getParams().add("str");
 		obj.getParams().add(12.5);
-		obj.getParams().add(DateTimes.datetimeFormat().parse("2010-10-01 12:00:01"));
+		obj.getParams().add(DateTimes.isoDatetimeNotFormat().parse("2010-10-01 12:00:01"));
 		obj.getParams().add(Arrays.asList(new Object[] { 1, "s", 3 }));
 
 		Xdo oa = XmlRpcs.fromXml(xml, Xdo.class);

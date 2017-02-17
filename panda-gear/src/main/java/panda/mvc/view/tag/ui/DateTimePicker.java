@@ -1,7 +1,9 @@
 package panda.mvc.view.tag.ui;
 
+import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.time.DateTimes;
 import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 
@@ -30,9 +32,9 @@ import panda.mvc.Mvcs;
  */
 @IocBean(singleton=false)
 public class DateTimePicker extends DatePicker {
-	protected static final String DEFAULT_DATETIME_FORMAT = "datetime";
+	protected static final String DEFAULT_DATETIME_FORMAT = DateTypeCastor.DATETIME;
 
-	protected static final String DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	protected static final String DEFAULT_DATETIME_PATTERN = DateTimes.ISO_DATETIME_NO_T_FORMAT;
 
 	/**
 	 * get date time format from text

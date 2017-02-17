@@ -41,7 +41,7 @@ public class XmlRpcSaxHandlerTest {
 		@Override
 		public void endElement(Object value) {
 			if (value instanceof Date) {
-				value = DateTimes.datetimeFormat().format((Date)value);
+				value = DateTimes.isoDatetimeNotFormat().format((Date)value);
 			}
 			else if (value instanceof byte[]) {
 				value = new String((byte[])value);

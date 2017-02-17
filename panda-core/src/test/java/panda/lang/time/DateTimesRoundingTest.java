@@ -31,7 +31,7 @@ public class DateTimesRoundingTest {
 	Date targetMilliSecondDate;
 
 	Calendar januaryOneCalendar;
-	FastDateFormat fdf = DateTimes.ISO_DATETIME_FORMAT;
+	FastDateFormat fdf = DateTimes.isoDatetimeFormat();
 
 	@Before
 	public void setUp() throws Exception {

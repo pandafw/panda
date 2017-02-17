@@ -66,7 +66,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 		 * @return the time
 		 */
 		public String getDate() {
-			return time == null ? null : DateTimes.TIMESTAMP_FORMAT.format(time);
+			return time == null ? null : DateTimes.timestampFormat().format(time);
 		}
 		
 		public String getMsg() {

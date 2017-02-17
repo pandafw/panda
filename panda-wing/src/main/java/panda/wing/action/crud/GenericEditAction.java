@@ -983,7 +983,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());
 				
-				addActionWarning(getScenarioMessage(msg, DateTimes.datetimeFormat().format(sb.getUtime())));
+				addActionWarning(getScenarioMessage(msg, DateTimes.isoDatetimeNotFormat().format(sb.getUtime())));
 				return false;
 			}
 		}

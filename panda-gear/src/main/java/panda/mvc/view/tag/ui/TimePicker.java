@@ -1,7 +1,9 @@
 package panda.mvc.view.tag.ui;
 
+import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
@@ -34,9 +36,9 @@ import panda.mvc.Mvcs;
 public class TimePicker extends DatePicker {
 	protected static final Log log = Logs.getLog(TimePicker.class);
 
-	protected static final String DEFAULT_TIME_FORMAT = "time";
+	protected static final String DEFAULT_TIME_FORMAT = DateTypeCastor.TIME;
 
-	protected static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
+	protected static final String DEFAULT_TIME_PATTERN = DateTimes.ISO_TIME_FORMAT;
 
 	
 	public TimePicker() {

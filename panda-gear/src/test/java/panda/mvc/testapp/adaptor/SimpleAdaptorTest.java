@@ -18,7 +18,7 @@ public class SimpleAdaptorTest extends BaseWebappTest {
 		get("/adaptor/edate?d=20120924");
 		assertEquals(200, resp.getStatusCode());
 
-		long ms = DateTimes.dateFormat().parse("2012-09-24").getTime();
+		long ms = DateTimes.isoDateFormat().parse("2012-09-24").getTime();
 		long rems = Long.parseLong(resp.getContentText());
 		assertEquals(ms, rems);
 	}

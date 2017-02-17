@@ -1,6 +1,8 @@
 package panda.mvc.view.tag.ui;
 
+import panda.cast.castor.DateTypeCastor;
 import panda.ioc.annotation.IocBean;
+import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
@@ -32,9 +34,9 @@ import panda.mvc.Mvcs;
 public class DatePicker extends TriggerField {
 	protected static final Log log = Logs.getLog(DatePicker.class);
 
-	protected static final String DEFAULT_DATE_FORMAT = "date";
+	protected static final String DEFAULT_DATE_FORMAT = DateTypeCastor.DATE;
 
-	protected static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
+	protected static final String DEFAULT_DATE_PATTERN = DateTimes.ISO_DATE_FORMAT;
 
 	protected String pattern;
 	protected String options;
@@ -45,6 +47,8 @@ public class DatePicker extends TriggerField {
 	
 	public DatePicker() {
 		ricon = "icon-calendar";
+		
+		// default add ptrigger=true to enable clear icon
 		addParameter("dataPtrigger", "true");
 	}
 
