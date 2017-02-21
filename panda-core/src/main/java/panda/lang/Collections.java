@@ -652,6 +652,25 @@ public abstract class Collections {
 	}
 
 	/**
+	 * Returns <tt>true</tt> if this map contains a mapping for the specified key. More formally,
+	 * returns <tt>true</tt> if and only if this map contains a mapping for a key <tt>k</tt> such
+	 * that <tt>(key==null ? k==null : key.equals(k))</tt>. (There can be at most one such mapping.)
+	 *
+	 * @param key key whose presence in this map is to be tested
+	 * @return <tt>true</tt> if this map contains a mapping for the specified key
+	 * @throws ClassCastException if the key is of an inappropriate type for this map
+	 *             (<a href="Collection.html#optional-restrictions">optional</a>)
+	 * @throws NullPointerException if the specified key is null and this map does not permit null
+	 *             keys (<a href="Collection.html#optional-restrictions">optional</a>)
+	 */
+	public static boolean containsKey(Map map, Object key) {
+		if (map != null) {
+			return map.containsKey(key);
+		}
+		return false;
+	}
+
+	/**
 	 * Check whether the given Iterator contains the given element.
 	 * 
 	 * @param source the source collection
