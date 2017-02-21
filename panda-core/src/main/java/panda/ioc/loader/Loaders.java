@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import panda.ioc.meta.IocEventSet;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
-import panda.lang.Marks;
+import panda.lang.Chars;
 import panda.lang.Strings;
 
 public abstract class Loaders {
@@ -18,23 +18,23 @@ public abstract class Loaders {
 		}
 
 		int c0 = value.charAt(0);
-		if (c0 == Marks.QUOTATION) {
+		if (c0 == Chars.SINGLE_QUOTE) {
 			return new IocValue(IocValue.TYPE_NORMAL, value.substring(1));
 		}
-		if (c0 == Marks.SHARP && value.length() > 1) {
+		if (c0 == Chars.SHARP && value.length() > 1) {
 			return new IocValue(IocValue.TYPE_REF, value.substring(1));
 		}
 		if (value.length() > 3) {
 			int c1 = value.charAt(1);
 			int cx = value.charAt(value.length() - 1);
 			
-			if ((c0 == Marks.DOLLAR || c0 == Marks.PERCENT) && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
+			if ((c0 == Chars.DOLLAR || c0 == Chars.PERCENT) && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
 				return new IocValue(IocValue.TYPE_EL, value.substring(2, value.length() - 1));
 			}
-			if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACES_LEFT && cx == Marks.BRACES_RIGHT) {
+			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACES_LEFT && cx == Chars.BRACES_RIGHT) {
 				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
 			}
-			if (c0 == Marks.EXCLAMATION && c1 == Marks.BRACKETS_LEFT && cx == Marks.BRACKETS_RIGHT) {
+			if (c0 == Chars.EXCLAMATION && c1 == Chars.BRACKETS_LEFT && cx == Chars.BRACKETS_RIGHT) {
 				return new IocValue(IocValue.TYPE_JSON, value.substring(1));
 			}
 		}

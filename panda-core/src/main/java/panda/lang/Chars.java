@@ -58,6 +58,39 @@ public abstract class Chars {
 	 */
 	public static final char DOUBLE_QUOTE = '"';
 	
+	/** ' */
+	public static final char SINGLE_QUOTE = '\'';
+	
+	/** # */
+	public static final char SHARP = '#';
+	
+	/** $ */
+	public static final char DOLLAR = '$';
+	
+	/** % */
+	public static final char PERCENT = '%';
+
+	/** { */
+	public static final char BRACES_LEFT = '{';
+	
+	/** } */
+	public static final char BRACES_RIGHT = '}';
+	
+	/** ( */
+	public static final char PARENTHESES_LEFT = '(';
+	
+	/** } */
+	public static final char PARENTHESES_RIGHT = ')';
+	
+	/** [ */
+	public static final char BRACKETS_LEFT = '[';
+	
+	/** ] */
+	public static final char BRACKETS_RIGHT = ']';
+	
+	/** ! */
+	public static final char EXCLAMATION = '!';
+
 	private static final String[] CHAR_STRING_ARRAY = new String[128];
 	static {
 		for (char c = 0; c < CHAR_STRING_ARRAY.length; c++) {
