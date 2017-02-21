@@ -152,7 +152,11 @@ public class Filter implements Cloneable, Serializable {
 	private String type;
 
 	@SuppressWarnings("unchecked")
-	private <T> T getObject(int idx, Class<T> cls) {
+	private <T> T getObject(int idx, Class<T> cls, String type) {
+		if (type != null && !type.equals(this.type)) {
+			return null;
+		}
+			
 		if (values == null || values.size() <= idx) {
 			return null;
 		}
@@ -161,6 +165,7 @@ public class Filter implements Cloneable, Serializable {
 		if (v == null) {
 			return null;
 		}
+		
 		return cls.isAssignableFrom(v.getClass()) ? (T)v : null;
 	}
 	
@@ -204,19 +209,19 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	private Boolean getBoolean(int idx) {
-		return getObject(idx, Boolean.class);
+		return getObject(idx, Boolean.class, VT_BOOLEAN);
 	}
 
-	private Date getDate(int idx) {
-		return getObject(idx, Date.class);
+	private Date getDate(int idx, String type) {
+		return getObject(idx, Date.class, type);
 	}
 
 	private Number getNumber(int idx) {
-		return getObject(idx, Number.class);
+		return getObject(idx, Number.class, VT_NUMBER);
 	}
 
 	private String getString(int idx) {
-		return getObject(idx, String.class);
+		return getObject(idx, String.class, VT_STRING);
 	}
 
 	/**
@@ -265,7 +270,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the value
 	 */
 	public Object getValue() {
-		return getObject(0, Object.class);
+		return getObject(0, Object.class, null);
 	}
 
 	/**
@@ -279,7 +284,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the value2
 	 */
 	public Object getValue2() {
-		return getObject(1, Object.class);
+		return getObject(1, Object.class, null);
 	}
 
 	/**
@@ -338,7 +343,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Date> getDateTimeValues() {
-		return (List<Date>)values;
+		return VT_DATETIME.equals(type) ? (List<Date>)values : null;
 	}
 
 	/**
@@ -353,7 +358,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the dv
 	 */
 	public Date getDateTimeValue() {
-		return getDate(0);
+		return getDate(0, VT_DATETIME);
 	}
 
 	/**
@@ -367,7 +372,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the dtv2
 	 */
 	public Date getDateTimeValue2() {
-		return getDate(1);
+		return getDate(1, VT_DATETIME);
 	}
 
 	/**
@@ -382,7 +387,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Date> getDateValues() {
-		return (List<Date>)values;
+		return VT_DATE.equals(type) ? (List<Date>)values : null;
 	}
 
 	/**
@@ -397,7 +402,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the dv
 	 */
 	public Date getDateValue() {
-		return getDate(0);
+		return getDate(0, VT_DATE);
 	}
 
 	/**
@@ -411,7 +416,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the dv2
 	 */
 	public Date getDateValue2() {
-		return getDate(1);
+		return getDate(1, VT_DATE);
 	}
 
 	/**
@@ -426,7 +431,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Date> getTimeValues() {
-		return (List<Date>)values;
+		return VT_TIME.equals(type) ? (List<Date>)values : null;
 	}
 
 	/**
@@ -441,7 +446,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the tv
 	 */
 	public Date getTimeValue() {
-		return getDate(0);
+		return getDate(0, VT_TIME);
 	}
 
 	/**
@@ -455,7 +460,7 @@ public class Filter implements Cloneable, Serializable {
 	 * @return the tv2
 	 */
 	public Date getTimeValue2() {
-		return getDate(1);
+		return getDate(1, VT_TIME);
 	}
 
 	/**

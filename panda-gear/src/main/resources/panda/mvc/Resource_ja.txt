@@ -148,7 +148,7 @@ validation-number-range=${(top.min != null && top.max != null) ? (top.min + "~" 
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\
 の数字を入力してください。
-validation-number-to=The number must be larger than start number.
+validation-number-to=開始数字より大きい数字を入力してください。
 validation-numericstring=数字を入力してください。
 validation-password=パスワードが英数字で入力してください。
 validation-password-notsame=パスワードが一致していません。

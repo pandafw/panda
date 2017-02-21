@@ -146,7 +146,7 @@ validation-number-range=请输入${(top.min != null && top.max != null) ? (top.m
 (top.min != null ? (top.min + "以上") : \
 (top.max != null ? (top.max + "以下") : ""))}\
 的数字。
-validation-number-to=The number must be larger than start number.
+validation-number-to=请输入比初始数值大的数字。
 validation-numericstring=请输入数字。
 validation-password=密码必须输入英数字。
 validation-password-notsame=输入密码和确认密码不一致。
