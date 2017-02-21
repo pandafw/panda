@@ -4,187 +4,107 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Date/Time Picker for Twitter Boostrap">
-
-<meta name="author" content="Thiago de Arruda">
 <title>Bootstrap Date/Time Picker</title>
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet">
-<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.min.css" rel="stylesheet">
-<link href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.css" type="text/css">
+<link href="../../main/bootstrap3/css/bootstrap.css" rel="stylesheet">
+<link href="../../main/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="../../main/bootstrap3/css/bootstrap-datetimepicker.css" rel="stylesheet">
-
-<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-<!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
 </head>
 <body>
-	<div class="outer">
-		<!-- header -->
-		<div id="header-wrap" class="row-fluid">
-			<a href="https://github.com/tarruda/bootstrap-datetimepicker"><img
-				style="position: absolute; top: 0; right: 0; border: 0;"
-				src="./bootstrap-datetimepicker_files/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
-			<header class="span6 offset3">
-				<h1>bootstrap-datetimepicker</h1>
-				<h2>Date/Time Picker for Twitter Boostrap</h2>
-				<section id="downloads" class="pull-right">
-					<div class="img"></div>
-					<a class="zip-download-link"
-						href="http://tarruda.github.io/bootstrap-datetimepicker/assets/dist/bootstrap-datetimepicker-0.0.11.zip"> <span
-						class="download-descr"> Download this project as a .zip file </span>
-					</a>
-				</section>
-			</header>
+	<div class="container">
+		<h1>bootstrap-datetimepicker</h1>
+		<h2>Date/Time Picker for Twitter Boostrap</h2>
+
+		<h3 id="demo">Demo</h3>
+
+		<h4
+			id="default_behavior_in_ptbr_picks_datetime_with_fast_masked_input_typing_need_only_to_type_the_numbers_the_static_part_of_the_mask_is_inserted_automatically_if_missing_or_via_the_popup_widget_which_supports_year_month_day_hour_and_minute_views">Default
+			behavior in pt-BR, picks date/time with fast masked input typing (need only to type the numbers, the static part of
+			the mask is inserted automatically if missing) or via the popup widget, which supports year, month, day, hour and
+			minute views:</h4>
+		<div class="well">
+			<div class="input-group" data-spy="datetimepicker" data-language='pt-BR'>
+				<input class="form-control" data-format="MM/dd/yyyy HH:mm:ss" type="text"> <div class="input-group-addon"><i
+					class="fa fa-calendar"></i></div>
+			</div>
 		</div>
-		<!-- content -->
-		<div id="main-content-wrap" class="row-fluid">
-			<section id="main-content" class="span6 offset3">
-				<h3 id="introduction">Introduction</h3>
 
-				<p>
-					Simple date/time picker component based on the work of <a href="http://www.eyecon.ro/bootstrap-datepicker/">Stefan
-						Petre</a>, with contributions taken from <a href="https://github.com/eternicode">Andrew Rowls</a> and <a
-						href="https://github.com/jdewit">jdewit</a>.
-				</p>
-
-				<h3 id="demo">Demo</h3>
-
-				<h4
-					id="default_behavior_in_ptbr_picks_datetime_with_fast_masked_input_typing_need_only_to_type_the_numbers_the_static_part_of_the_mask_is_inserted_automatically_if_missing_or_via_the_popup_widget_which_supports_year_month_day_hour_and_minute_views">Default
-					behavior in pt-BR, picks date/time with fast masked input typing (need only to type the numbers, the static part of
-					the mask is inserted automatically if missing) or via the popup widget, which supports year, month, day, hour and
-					minute views:</h4>
-				<div class="well">
-					<div class="input-group" data-spy="datetimepicker" data-language='pt-BR'>
-						<input data-format="MM/dd/yyyy HH:mm:ss" type="text"> <span class="input-group-addon"><i
-							class="fa fa-calendar"></i></span>
-					</div>
-				</div>
-				<p>Code:</p>
-				<div class="highlight">
-					<pre>
-						<code class="html"></code>
-					</pre>
-				</div>
-				<h4 id="similar_to_above_example_but_in_us_datehour_format">Similar to above example, but in US date/hour format:</h4>
-				<div class="well">
-					<div class="input-group" data-spy="datetimepicker" data-language='en'>
-						<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"> <span class="input-group-addon"><i
-							class="fa fa-calendar"></i></span>
-					</div>
-				</div>
-				<p>Code:</p>
-				<div class="highlight">
-					<pre>
-						<code class="html"></code>
-					</pre>
-				</div>
-				<h4 id="disables_date_picker">Disables date picker:</h4>
-				<div class="well">
-					<div class="input-group" data-spy="datetimepicker" data-pick-date="false">
-						<input data-format="hh:mm:ss" type="text"> <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-					</div>
-				</div>
-				<p>Code:</p>
-				<div class="highlight">
-					<pre>
-						<code class="html"></code>
-					</pre>
-				</div>
-				<h4 id="disables_time_picker">Disables time picker:</h4>
-				<div class="well">
-					<div class="input-group" data-spy="datetimepicker" data-pick-time="false">
-						<input data-format="yyyy-MM-dd" type="text"> <span class="input-group-addon"><i
-							class="fa fa-calendar"></i></span>
-					</div>
-				</div>
-				<p>Code:</p>
-				<div class="highlight">
-					<pre>
-						<code class="html"></code>
-					</pre>
-				</div>
-				<h3 id="api">API</h3>
-
-				<p>The widget class provides 4 methods to manipulate dates: ‘getDate’/’setDate’ for working with UTC and
-					‘getLocalDate’/’setLocalDate’ for working with local dates:</p>
-				<div class="highlight">
-					<pre>
-						<code class="js"></code>
-					</pre>
-				</div>
-				<p>The date value can be unset by passing ‘null’ to any of the ‘set’ methods or by erasing the input:</p>
-				<div class="highlight">
-					<pre>
-						<code class="js"></code>
-					</pre>
-				</div>
-				<p>The only event exposed is ‘changeDate’, which will expose ‘date’ and ‘localDate’ properties on the event
-					object:</p>
-				<div class="highlight">
-					<pre>
-						<code class="js"></code>
-					</pre>
-				</div>
-				<h3 id="options">Options</h3>
-
-				<p>These are the default options for initializing the widget:</p>
-				<div class="highlight">
-					<pre>
-						<code class="js"></code>
-					</pre>
-				</div>
-				<p>Examples of using these options can be seen in the file test/specs.coffee.</p>
-
-				<h3 id="complete_sample_markup">Complete sample markup</h3>
-
-				<p>Copy and paste the following code in a file(eg: test.html) and it should produce a widget similar to the
-					first demo:</p>
-				<div class="highlight">
-					<pre>
-						<code class="html"></code>
-					</pre>
-				</div>
-				<h3 id="development">Development</h3>
-
-				<p>If you want to contribute, please follow the settings in the .lvimrc file (2 space indentation).</p>
-
-				<p>To report bugs, ideally an automated test that reproduces the bug should be created in the
-					‘test/issues.coffee’ file(following the conventions of the tests already defined there) and submitted with a pull
-					request.</p>
-
-				<p>To compile/minify you need to have make, node.js and npm on your $PATH</p>
-				<div class="highlight">
-					<pre>
-						<code class="sh"></code>
-					</pre>
-				</div>
-				<p>To run the automated tests:</p>
-				<div class="highlight">
-					<pre>
-						<code class="sh"></code>
-					</pre>
-				</div>
-				<p>It should download all dependencies needed for testing(phantomjs, jquery…)</p>
-			</section>
+		<h4 id="similar_to_above_example_but_in_us_datehour_format">Similar to above example, but in US date/hour format:</h4>
+		<div class="well">
+			<div class="input-group" data-spy="datetimepicker" data-language='en'>
+				<input class="form-control" data-format="MM/dd/yyyy HH:mm:ss PP" type="text"> <span class="input-group-addon"><i
+					class="fa fa-calendar"></i></span>
+			</div>
 		</div>
-		<!-- footer  -->
-		<div id="footer-wrap" class="row-fluid">
-			<footer class="span6 offset3">
-				<p class="copyright">
-					bootstrap-datetimepicker maintained by <a href="https://github.com/tarruda">Thiago de Arruda</a>
-				</p>
-				<p>
-					Published with <a href="http://pages.github.com/">GitHub Pages</a>
-				</p>
-			</footer>
+
+		<h4 id="disables_date_picker">Disables date picker:</h4>
+		<div class="well">
+			<div class="input-group" data-spy="datetimepicker" data-pick-date="false">
+				<input class="form-control" data-format="hh:mm:ss" type="text"> <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+			</div>
+		</div>
+
+		<h4 id="disables_time_picker">Disables time picker:</h4>
+		<div class="well">
+			<div class="input-group" data-spy="datetimepicker" data-pick-time="false">
+				<input class="form-control" data-format="yyyy-MM-dd" type="text"> <span class="input-group-addon"><i
+					class="fa fa-calendar"></i></span>
+			</div>
+		</div>
+
+		<h4 id="time_picker_hhmm">HH:mm time picker:</h4>
+		<div class="well">
+			<div class="input-group" data-spy="datetimepicker" data-pick-date="false">
+				<input class="form-control" data-format="HH:mm" type="text" size="22"><span class="input-group-addon"><i
+					class="fa fa-clock-o"></i></span>
+			</div>
+		</div>
+
+		<h3 id="api">API</h3>
+		<p>The widget class provides 4 methods to manipulate dates: ‘getDate’/’setDate’ for working with UTC and
+			‘getLocalDate’/’setLocalDate’ for working with local dates:</p>
+		<div class="highlight">
+			<pre>
+				<code class="js"></code>
+			</pre>
+		</div>
+		<p>The date value can be unset by passing ‘null’ to any of the ‘set’ methods or by erasing the input:</p>
+		<div class="highlight">
+			<pre>
+				<code class="js"></code>
+			</pre>
+		</div>
+		<p>The only event exposed is ‘changeDate’, which will expose ‘date’ and ‘localDate’ properties on the event
+			object:</p>
+		<div class="highlight">
+			<pre>
+				<code class="js"></code>
+			</pre>
+		</div>
+
+		<h3 id="options">Options</h3>
+		<p>These are the default options for initializing the widget:</p>
+		<div class="highlight">
+			<pre>
+				<code class="js"></code>
+			</pre>
+		</div>
+
+		<p>Examples of using these options can be seen in the file test/specs.coffee.</p>
+
+		<h3 id="complete_sample_markup">Complete sample markup</h3>
+
+		<p>Copy and paste the following code in a file(eg: test.html) and it should produce a widget similar to the
+			first demo:</p>
+		<div class="highlight">
+			<pre>
+				<code class="html"></code>
+			</pre>
 		</div>
 	</div>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.js" type="text/javascript"></script>
+	<script src="../../main/jquery/js/jquery-1.12.4.js"></script>
+	<script src="../../main/bootstrap3/js/bootstrap.js"></script>
 	<script src="../../main/bootstrap3/js/bootstrap-datetimepicker.js"></script>
 	<script src="../../main/bootstrap3/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>
 </body>

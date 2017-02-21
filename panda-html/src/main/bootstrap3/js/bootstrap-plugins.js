@@ -51,6 +51,7 @@
       this.language = options.language in dates ? options.language : 'en'
       this.pickDate = options.pickDate;
       this.pickTime = options.pickTime;
+      this.pickSeconds = options.pickSeconds;
       this.timeIcon = options.timeIcon || 'fa fa-clock-o';
       this.dateIcon = options.dateIcon || 'fa fa-calendar';
       this.$input = this.$element.is('input') ? this.$element : this.$element.find('input');
@@ -77,7 +78,10 @@
             icon.addClass((this.pickTime && !this.pickDate) ? this.timeIcon : this.dateIcon);
         }
       }
-      this.widget = $(getTemplate(this.timeIcon, options.pickDate, options.pickTime, options.pick12HourFormat, options.pickSeconds, options.collapse)).appendTo('body');
+      if (this.format == 'HH:mm' || this.format == 'hh:mm' ) { 
+        this.pickSeconds = false;
+      }
+      this.widget = $(getTemplate(this.timeIcon, this.pickDate, this.pickTime, options.pick12HourFormat, this.pickSeconds, options.collapse)).appendTo('body');
       this.minViewMode = options.minViewMode||this.$element.data('date-minviewmode')||0;
       if (typeof this.minViewMode === 'string') {
         switch (this.minViewMode) {
