@@ -24,6 +24,10 @@ public class TimePickerRenderer extends AbstractTextFieldRenderer<TimePicker> {
 
 	@Override
 	protected void renderHeader() throws IOException {
-		write("<div class=\"input-group p-timepicker\" data-spy=\"datetimepicker\" data-pick-date=\"false\">");
+		write("<div class=\"input-group p-timepicker\" data-spy=\"datetimepicker\" data-pick-date=\"false\"");
+		if (Boolean.FALSE.equals(tag.getPickSeconds())) {
+			write(" data-pick-seconds=\"false\"");
+		}
+		write(">");
 	}
 }

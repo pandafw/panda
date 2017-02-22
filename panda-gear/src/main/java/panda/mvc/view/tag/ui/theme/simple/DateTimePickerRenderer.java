@@ -24,6 +24,10 @@ public class DateTimePickerRenderer extends AbstractTextFieldRenderer<DateTimePi
 
 	@Override
 	protected void renderHeader() throws IOException {
-		write("<div class=\"input-group p-datetimepicker\" data-spy=\"datetimepicker\">");
+		write("<div class=\"input-group p-datetimepicker\" data-spy=\"datetimepicker\"");
+		if (Boolean.FALSE.equals(tag.getPickSeconds())) {
+			write(" data-pick-seconds=\"false\"");
+		}
+		write(">");
 	}
 }

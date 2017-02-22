@@ -41,6 +41,9 @@ public class DatePicker extends TriggerField {
 	protected String pattern;
 	protected String options;
 
+	protected Boolean pickSeconds;
+
+	//TODO
 	//NOT USED
 	protected String inline;
 	protected String defaults;
@@ -125,4 +128,19 @@ public class DatePicker extends TriggerField {
 	public void setOptions(String options) {
 		this.options = options;
 	}
+
+	/**
+	 * @return the pickSeconds
+	 */
+	public Boolean getPickSeconds() {
+		return pickSeconds;
+	}
+
+	/**
+	 * @param pickSeconds the pickSeconds to set
+	 */
+	public void setPickSeconds(Boolean pickSeconds) {
+		this.pickSeconds = pickSeconds;
+	}
+	
 }
