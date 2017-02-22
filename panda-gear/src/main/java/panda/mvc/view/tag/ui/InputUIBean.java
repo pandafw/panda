@@ -10,6 +10,7 @@ public abstract class InputUIBean extends UIBean {
 	// shortcut, sets label, name, and value
 	protected String key;
 
+	protected boolean nolabel;
 	protected String label;
 	protected String labelPosition;
 	protected String labelSeparator = ":";
@@ -17,8 +18,8 @@ public abstract class InputUIBean extends UIBean {
 	protected String labelClass;
 	protected String inputClass;
 	
-	protected Boolean required;
-	protected Boolean readonly;
+	protected boolean required;
+	protected boolean readonly;
 	protected String requiredString;
 	protected String requiredPosition;
 	protected String errorPosition;
@@ -128,25 +129,26 @@ public abstract class InputUIBean extends UIBean {
 	}
 
 	/**
-	 * @return the labelPosition
-	 */
-	public String getLabelPosition() {
-		return labelPosition;
-	}
-
-	/**
-	 * @param labelPosition the labelPosition to set
-	 */
-	public void setLabelPosition(String labelPosition) {
-		this.labelPosition = labelPosition;
-	}
-
-	/**
 	 * @return the key
 	 */
 	public String getKey() {
 		return key;
 	}
+
+	/**
+	 * @return the nolabel
+	 */
+	public boolean isNolabel() {
+		return nolabel;
+	}
+
+	/**
+	 * @param nolabel the nolabel to set
+	 */
+	public void setNolabel(boolean nolabel) {
+		this.nolabel = nolabel;
+	}
+
 
 	/**
 	 * @return the label
@@ -160,6 +162,20 @@ public abstract class InputUIBean extends UIBean {
 	 */
 	public String getLabelSeparator() {
 		return labelSeparator;
+	}
+
+	/**
+	 * @return the labelPosition
+	 */
+	public String getLabelPosition() {
+		return labelPosition;
+	}
+
+	/**
+	 * @param labelPosition the labelPosition to set
+	 */
+	public void setLabelPosition(String labelPosition) {
+		this.labelPosition = labelPosition;
 	}
 
 	/**
@@ -215,10 +231,6 @@ public abstract class InputUIBean extends UIBean {
 		this.errorPosition = errorPosition;
 	}
 
-	/** If set to true, the rendered element will indicate that input is required */
-//	public void setRequiredLabel(Boolean requiredLabel) {
-//		this.requiredLabel = requiredLabel;
-//	}
 	
 	/** required string */
 	public void setRequiredString(String requiredString) {
@@ -233,7 +245,7 @@ public abstract class InputUIBean extends UIBean {
 	/**
 	 * @return the required
 	 */
-	public Boolean getRequired() {
+	public boolean isRequired() {
 		return required;
 	}
 
@@ -254,14 +266,14 @@ public abstract class InputUIBean extends UIBean {
 	/**
 	 * @return the readonly
 	 */
-	public Boolean getReadonly() {
+	public boolean isReadonly() {
 		return readonly;
 	}
 
 	/**
 	 * @param readonly the readonly to set
 	 */
-	public void setReadonly(Boolean readonly) {
+	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
 	}
 

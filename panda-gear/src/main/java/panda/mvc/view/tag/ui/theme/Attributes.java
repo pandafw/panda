@@ -232,11 +232,6 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes forId(UIBean tag) {
-		addIfExists("for", tag.getId());
-		return this;
-	}
-
 	public Attributes css(AbstractTagRenderer tr) {
 		return css(tr, null);
 	}
@@ -392,7 +387,7 @@ public class Attributes {
 	}
 
 	public Attributes readonly(InputUIBean tag) {
-		addIfTrue("readonly", tag.getReadonly());
+		addIfTrue("readonly", tag.isReadonly());
 		return this;
 	}
 
@@ -402,7 +397,7 @@ public class Attributes {
 	}
 
 	public Attributes disabled(UIBean tag) {
-		addIfTrue("disabled", tag.getDisabled());
+		addIfTrue("disabled", tag.isDisabled());
 		return this;
 	}
 
@@ -446,7 +441,17 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes labelFor(Map<String, Object> params) {
+	public Attributes forId(UIBean tag) {
+		addIfExists("for", tag.getId());
+		return this;
+	}
+
+	public Attributes forId(String target) {
+		addIfExists("for", target);
+		return this;
+	}
+
+	public Attributes forId(Map<String, Object> params) {
 		addIfExists("for", params.get("for"));
 		return this;
 	}

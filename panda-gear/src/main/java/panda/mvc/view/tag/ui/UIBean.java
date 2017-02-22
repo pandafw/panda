@@ -25,7 +25,7 @@ public abstract class UIBean extends Component {
 	protected String cssStyle;
 	protected String cssErrorClass;
 	protected String cssErrorStyle;
-	protected Boolean disabled;
+	protected boolean disabled;
 	protected Integer tabindex;
 	protected String title;
 
@@ -215,7 +215,7 @@ public abstract class UIBean extends Component {
 	/**
 	 * @return the disabled
 	 */
-	public Boolean getDisabled() {
+	public boolean isDisabled() {
 		return disabled;
 	}
 

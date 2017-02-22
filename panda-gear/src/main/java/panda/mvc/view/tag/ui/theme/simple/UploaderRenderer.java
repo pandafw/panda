@@ -24,9 +24,6 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	protected void render() throws IOException {
 		Attributes attr = new Attributes();
 		
-		boolean readonly = Attributes.isTrue(tag.getReadonly());
-		boolean disabled = Attributes.isTrue(tag.getDisabled());
-		
 		String pul = tag.getUploadLink();
 		String pun = tag.getUploadName();
 		String pud = tag.getUploadData();
@@ -52,7 +49,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 			.data("defaultText", pet)
 			;
 		
-		if (!(readonly || disabled)) {
+		if (!(tag.isReadonly() || tag.isDisabled())) {
 			attr.data("spy", "puploader");
 		}
 		stag("div", attr);
@@ -76,7 +73,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		a = new Attributes();
 		a.type("hidden")
 		 .cssClass("p-uploader-fid")
-		 .disabled(disabled);
+		 .disabled(tag);
 		if (name != null) {
 			a.name(name);
 			a.value(String.valueOf(tag.getFileId()));
