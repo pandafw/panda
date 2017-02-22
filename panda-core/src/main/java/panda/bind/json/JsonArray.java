@@ -96,22 +96,18 @@ public class JsonArray extends ArrayList<Object> {
 	}
 
 	/**
-	 * Get the boolean value associated with an index. The string values "true" and "false" are
-	 * converted to boolean.
+	 * Get the boolean value associated with an index.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The truth.
-	 * @throws JsonException If there is no value for the index or if the value is not convertible
-	 *             to boolean.
+	 * @throws JsonException If there is no value for the index or if the value is not a Boolean object.
 	 */
 	public boolean getBoolean(int index) throws JsonException {
 		Object object = this.get(index);
-		if (object.equals(Boolean.FALSE) || (object instanceof String && ((String)object).equalsIgnoreCase("false"))) {
-			return false;
+		if (object instanceof Boolean) {
+			return ((Boolean)object).booleanValue();
 		}
-		else if (object.equals(Boolean.TRUE) || (object instanceof String && ((String)object).equalsIgnoreCase("true"))) {
-			return true;
-		}
+
 		throw new JsonException("JsonArray[" + index + "] is not a boolean.");
 	}
 
@@ -120,17 +116,14 @@ public class JsonArray extends ArrayList<Object> {
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The value.
-	 * @throws JsonException If the key is not found or if the value cannot be converted to a
-	 *             number.
+	 * @throws JsonException If the key is not found or if the value is not a Number object.
 	 */
 	public double getDouble(int index) throws JsonException {
 		Object object = this.get(index);
-		try {
-			return object instanceof Number ? ((Number)object).doubleValue() : Double.parseDouble((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).doubleValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonArray[" + index + "] is not a number.");
-		}
+		throw new JsonException("JsonArray[" + index + "] is not a number.");
 	}
 
 	/**
@@ -142,12 +135,10 @@ public class JsonArray extends ArrayList<Object> {
 	 */
 	public int getInt(int index) throws JsonException {
 		Object object = this.get(index);
-		try {
-			return object instanceof Number ? ((Number)object).intValue() : Integer.parseInt((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).intValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonArray[" + index + "] is not a number.");
-		}
+		throw new JsonException("JsonArray[" + index + "] is not a number.");
 	}
 
 	/**
@@ -190,12 +181,10 @@ public class JsonArray extends ArrayList<Object> {
 	 */
 	public long getLong(int index) throws JsonException {
 		Object object = this.get(index);
-		try {
-			return object instanceof Number ? ((Number)object).longValue() : Long.parseLong((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).longValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonArray[" + index + "] is not a number.");
-		}
+		throw new JsonException("JsonArray[" + index + "] is not a number.");
 	}
 
 	/**
@@ -244,7 +233,7 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional boolean value associated with an index. It returns false if there is no
-	 * value at that index, or if the value is not Boolean.TRUE or the String "true".
+	 * value at that index, or if the value is not a Boolean.TRUE.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The truth.
@@ -255,25 +244,23 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional boolean value associated with an index. It returns the defaultValue if there
-	 * is no value at that index or if it is not a Boolean or the String "true" or "false" (case
-	 * insensitive).
+	 * is no value at that index or if it is not a Boolean object.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @param defaultValue A boolean default.
 	 * @return The truth.
 	 */
 	public boolean optBoolean(int index, boolean defaultValue) {
-		try {
-			return this.getBoolean(index);
+		Object object = this.get(index);
+		if (object instanceof Boolean) {
+			return (Boolean)object;
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
 	 * Get the optional double value associated with an index. NaN is returned if there is no value
-	 * for the index, or if the value is not a number and cannot be converted to a number.
+	 * for the index, or if the value is not a number.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The value.
@@ -284,25 +271,23 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional double value associated with an index. The defaultValue is returned if there
-	 * is no value for the index, or if the value is not a number and cannot be converted to a
-	 * number.
+	 * is no value for the index, or if the value is not a number.
 	 * 
 	 * @param index subscript
 	 * @param defaultValue The default value.
 	 * @return The value.
 	 */
 	public double optDouble(int index, double defaultValue) {
-		try {
-			return this.getDouble(index);
+		Object object = this.get(index);
+		if (object instanceof Number) {
+			return ((Number)object).doubleValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
 	 * Get the optional int value associated with an index. Zero is returned if there is no value
-	 * for the index, or if the value is not a number and cannot be converted to a number.
+	 * for the index, or if the value is not a number.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The value.
@@ -313,19 +298,18 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional int value associated with an index. The defaultValue is returned if there is
-	 * no value for the index, or if the value is not a number and cannot be converted to a number.
+	 * no value for the index, or if the value is not a number.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @param defaultValue The default value.
 	 * @return The value.
 	 */
 	public int optInt(int index, int defaultValue) {
-		try {
-			return this.getInt(index);
+		Object object = this.get(index);
+		if (object instanceof Number) {
+			return ((Number)object).intValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
@@ -354,7 +338,7 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional long value associated with an index. Zero is returned if there is no value
-	 * for the index, or if the value is not a number and cannot be converted to a number.
+	 * for the index, or if the value is not a number.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return The value.
@@ -365,45 +349,45 @@ public class JsonArray extends ArrayList<Object> {
 
 	/**
 	 * Get the optional long value associated with an index. The defaultValue is returned if there
-	 * is no value for the index, or if the value is not a number and cannot be converted to a
-	 * number.
+	 * is no value for the index, or if the value is not a number.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @param defaultValue The default value.
 	 * @return The value.
 	 */
 	public long optLong(int index, long defaultValue) {
-		try {
-			return this.getLong(index);
+		Object object = this.get(index);
+		if (object instanceof Number) {
+			return ((Number)object).longValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
-	 * Get the optional string value associated with an index. It returns an empty string if there
-	 * is no value at that index. If the value is not a string and is not null, then it is coverted
-	 * to a string.
+	 * Get the optional string value associated with an index. It returns null if there
+	 * is no value at that index or if the value is not a string.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @return A String value.
 	 */
 	public String optString(int index) {
-		return this.optString(index, "");
+		return this.optString(index, null);
 	}
 
 	/**
-	 * Get the optional string associated with an index. The defaultValue is returned if the key is
-	 * not found.
+	 * Get the optional string associated with an index. The defaultValue is returned if there
+	 * is no value at that index or if the value is not a string.
 	 * 
 	 * @param index The index must be between 0 and length() - 1.
 	 * @param defaultValue The default value.
 	 * @return A String value.
 	 */
 	public String optString(int index, String defaultValue) {
-		Object object = this.opt(index);
-		return null == object ? defaultValue : object.toString();
+		Object object = this.get(index);
+		if (object instanceof String) {
+			return (String)object;
+		}
+		return defaultValue;
 	}
 
 	/**
@@ -437,8 +421,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @return this.
 	 */
 	public JsonArray put(double value) throws JsonException {
-		Double d = new Double(value);
-		this.put(d);
+		this.put(new Double(value));
 		return this;
 	}
 
@@ -450,8 +433,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @return this.
 	 */
 	public JsonArray put(float value) throws JsonException {
-		Float d = new Float(value);
-		this.put(d);
+		this.put(new Float(value));
 		return this;
 	}
 

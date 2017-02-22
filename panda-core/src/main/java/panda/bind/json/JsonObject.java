@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import panda.io.stream.CharSequenceReader;
-import panda.lang.Strings;
 
 /**
  * A JsonObject is an unordered collection of name/value pairs. Its external
@@ -205,15 +204,12 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param key A key string.
 	 * @return The truth.
-	 * @throws JsonException if the value is not a Boolean or the String "true" or "false".
+	 * @throws JsonException if the value is not a Boolean.
 	 */
 	public boolean getBoolean(String key) throws JsonException {
 		Object object = this.get(key);
-		if (object.equals(Boolean.FALSE) || (object instanceof String && ((String)object).equalsIgnoreCase("false"))) {
-			return false;
-		}
-		else if (object.equals(Boolean.TRUE) || (object instanceof String && ((String)object).equalsIgnoreCase("true"))) {
-			return true;
+		if (object instanceof Boolean) {
+			return ((Boolean)object).booleanValue();
 		}
 		throw new JsonException("JsonObject[" + key + "] is not a Boolean.");
 	}
@@ -223,17 +219,14 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param key A key string.
 	 * @return The numeric value.
-	 * @throws JsonException if the key is not found or if the value is not a Number object and
-	 *             cannot be converted to a number.
+	 * @throws JsonException if the key is not found or if the value is not a Number object
 	 */
 	public double getDouble(String key) throws JsonException {
 		Object object = this.get(key);
-		try {
-			return object instanceof Number ? ((Number)object).doubleValue() : Double.parseDouble((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).doubleValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonObject[" + key + "] is not a number.");
-		}
+		throw new JsonException("JsonObject[" + key + "] is not a number.");
 	}
 
 	/**
@@ -241,17 +234,14 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param key A key string.
 	 * @return The numeric value.
-	 * @throws JsonException if the key is not found or if the value is not a Number object and
-	 *             cannot be converted to a number.
+	 * @throws JsonException if the key is not found or if the value is not a Number object
 	 */
 	public float getFloat(String key) throws JsonException {
 		Object object = this.get(key);
-		try {
-			return object instanceof Number ? ((Number)object).floatValue() : Float.parseFloat((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).floatValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonObject[" + key + "] is not a number.");
-		}
+		throw new JsonException("JsonObject[" + key + "] is not a number.");
 	}
 
 	/**
@@ -259,17 +249,14 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param key A key string.
 	 * @return The integer value.
-	 * @throws JsonException if the key is not found or if the value cannot be converted to an
-	 *             integer.
+	 * @throws JsonException if the key is not found or if the value is not a Number object
 	 */
 	public int getInt(String key) throws JsonException {
 		Object object = this.get(key);
-		try {
-			return object instanceof Number ? ((Number)object).intValue() : Integer.parseInt((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).intValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonObject[" + key + "] is not an int.");
-		}
+		throw new JsonException("JsonObject[" + key + "] is not a number.");
 	}
 
 	/**
@@ -307,16 +294,14 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param key A key string.
 	 * @return The long value.
-	 * @throws JsonException if the key is not found or if the value cannot be converted to a long.
+	 * @throws JsonException if the key is not found or if the value is not a Number object
 	 */
 	public long getLong(String key) throws JsonException {
 		Object object = this.get(key);
-		try {
-			return object instanceof Number ? ((Number)object).longValue() : Long.parseLong((String)object);
+		if (object instanceof Number) {
+			return ((Number)object).longValue();
 		}
-		catch (Exception e) {
-			throw new JsonException("JsonObject[" + key + "] is not a long.");
-		}
+		throw new JsonException("JsonObject[" + key + "] is not a number.");
 	}
 
 	/**
@@ -437,7 +422,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional boolean associated with a key. It returns false if there is no such key, or
-	 * if the value is not Boolean.TRUE or the String "true".
+	 * if the value is not Boolean.TRUE.
 	 * 
 	 * @param key A key string.
 	 * @return The truth.
@@ -448,25 +433,23 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional boolean associated with a key. It returns the defaultValue if there is no
-	 * such key, or if it is not a Boolean or the String "true" or "false" (case insensitive).
+	 * such key, or if it is not a Boolean.
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
 	 * @return The truth.
 	 */
 	public boolean optBoolean(String key, boolean defaultValue) {
-		try {
-			return this.getBoolean(key);
+		Object object = this.get(key);
+		if (object instanceof Boolean) {
+			return ((Boolean)object).booleanValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
 	 * Get an optional double associated with a key, or NaN if there is no such key or if its value
-	 * is not a number. If the value is a string, an attempt will be made to evaluate it as a
-	 * number.
+	 * is not a number. 
 	 * 
 	 * @param key A string which is the key.
 	 * @return An object which is the value.
@@ -477,26 +460,23 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional double associated with a key, or the defaultValue if there is no such key or
-	 * if its value is not a number. If the value is a string, an attempt will be made to evaluate
-	 * it as a number.
+	 * if its value is not a number. 
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
 	 * @return An object which is the value.
 	 */
 	public double optDouble(String key, double defaultValue) {
-		try {
-			return this.getDouble(key);
+		Object object = this.get(key);
+		if (object instanceof Number) {
+			return ((Number)object).doubleValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
 	 * Get an optional float associated with a key, or NaN if there is no such key or if its value
-	 * is not a number. If the value is a string, an attempt will be made to evaluate it as a
-	 * number.
+	 * is not a number.
 	 * 
 	 * @param key A string which is the key.
 	 * @return An object which is the value.
@@ -507,26 +487,23 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional float associated with a key, or the defaultValue if there is no such key or
-	 * if its value is not a number. If the value is a string, an attempt will be made to evaluate
-	 * it as a number.
+	 * if its value is not a number.
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
 	 * @return An object which is the value.
 	 */
 	public float optFloat(String key, float defaultValue) {
-		try {
-			return this.getFloat(key);
+		Object object = this.get(key);
+		if (object instanceof Number) {
+			return ((Number)object).floatValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
 	 * Get an optional int value associated with a key, or zero if there is no such key or if the
-	 * value is not a number. If the value is a string, an attempt will be made to evaluate it as a
-	 * number.
+	 * value is not a number.
 	 * 
 	 * @param key A key string.
 	 * @return An object which is the value.
@@ -537,20 +514,18 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional int value associated with a key, or the default if there is no such key or if
-	 * the value is not a number. If the value is a string, an attempt will be made to evaluate it
-	 * as a number.
+	 * the value is not a number.
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
 	 * @return An object which is the value.
 	 */
 	public int optInt(String key, int defaultValue) {
-		try {
-			return this.getInt(key);
+		Object object = this.get(key);
+		if (object instanceof Number) {
+			return ((Number)object).intValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
@@ -579,8 +554,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional long value associated with a key, or zero if there is no such key or if the
-	 * value is not a number. If the value is a string, an attempt will be made to evaluate it as a
-	 * number.
+	 * value is not a number.
 	 * 
 	 * @param key A key string.
 	 * @return An object which is the value.
@@ -591,36 +565,34 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get an optional long value associated with a key, or the default if there is no such key or
-	 * if the value is not a number. If the value is a string, an attempt will be made to evaluate
-	 * it as a number.
+	 * if the value is not a number.
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
 	 * @return An object which is the value.
 	 */
 	public long optLong(String key, long defaultValue) {
-		try {
-			return this.getLong(key);
+		Object object = this.get(key);
+		if (object instanceof Number) {
+			return ((Number)object).longValue();
 		}
-		catch (Exception e) {
-			return defaultValue;
-		}
+		return defaultValue;
 	}
 
 	/**
-	 * Get an optional string associated with a key. It returns an empty string if there is no such
-	 * key. If the value is not a string and is not null, then it is converted to a string.
+	 * Get an optional string associated with a key. It returns null if there is no such
+	 * key or if the value is not a string.
 	 * 
 	 * @param key A key string.
 	 * @return A string which is the value.
 	 */
 	public String optString(String key) {
-		return this.optString(key, Strings.EMPTY);
+		return optString(key, null);
 	}
 
 	/**
 	 * Get an optional string associated with a key. It returns the defaultValue if there is no such
-	 * key.
+	 * key or if the value is not a string.
 	 * 
 	 * @param key A key string.
 	 * @param defaultValue The default.
@@ -628,7 +600,10 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 */
 	public String optString(String key, String defaultValue) {
 		Object object = this.opt(key);
-		return object == null ? defaultValue : object.toString();
+		if (object instanceof String) {
+			return (String)object;
+		}
+		return defaultValue;
 	}
 
 	/**
