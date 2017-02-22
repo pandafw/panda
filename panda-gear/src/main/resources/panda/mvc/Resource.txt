@@ -24,12 +24,14 @@ boolean-format-check=top ? '<i class="fa fa-check-square-o"></i>' : '<i class="f
 date-format=yyyy-MM-dd HH:mm:ss.SSS
 date-format-timestamp=yyyy-MM-dd HH:mm:ss.SSS
 date-format-datetime=yyyy-MM-dd HH:mm:ss
-date-format-datetm=yyyy-MM-dd HH:mm
+date-format-datehhmm=yyyy-MM-dd HH:mm
 date-format-date=yyyy-MM-dd
 date-format-time=HH:mm:ss
+date-format-hhmm=HH:mm
 date-format-year=yyyy
 date-format-cce=MM/yyyy
 date-format-file=_(yyyyMMdd-HHmmss)
+
 
 #number
 #number-format=#
@@ -144,10 +146,12 @@ validation-cast-boolean=Please input "true" or "false".
 validation-cast-char=Please input a character.
 validation-cast-date=Please input "yyyy-MM-dd" date string.
 validation-cast-datetime=Please input "yyyy-MM-dd HH:mm:ss" date string.
+validation-cast-datehhmm=Please input "yyyy-MM-dd HH:mm" date string.
 validation-cast-decimal=Please input a decimal number.
 validation-cast-file=Please select a file.
 validation-cast-number=Please input a number.
 validation-cast-time=Please input "HH:mm:ss" date string.
+validation-cast-hhmm=Please input "HH:mm" date string.
 validation-cast-url=Please input a correct URL. (ex: "http://www.domain.com")
 validation-cidr=${top.error == null ? "Please input a correct IP or CIDR." : (top.error + " is a incorrect IP or CIDR.")} (ex: 192.168.1.1/32)
 validation-compare=The value is not ${(top.comparator == "eq" ? "=" : \

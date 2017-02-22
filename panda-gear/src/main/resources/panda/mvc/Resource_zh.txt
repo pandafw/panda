@@ -3,12 +3,6 @@
 boolean-format-yesno=top ? "是" : "否"
 
 #date
-date-format=yyyy-MM-dd HH:mm:ss.SSS
-date-format-timestamp=yyyy-MM-dd HH:mm:ss.SSS
-date-format-datetime=yyyy-MM-dd HH:mm:ss
-date-format-datetm=yyyy-MM-dd HH:mm
-date-format-date=yyyy-MM-dd
-
 date-timezone=GMT+8:00
 
 #number
@@ -85,10 +79,12 @@ validation-cast-boolean=请输入true或者false。
 validation-cast-char=请输入字符。
 validation-cast-date=请输入"yyyy/MM/dd"格式的日期。
 validation-cast-datetime=请输入"yyyy/MM/dd HH:mm:ss"格式的日期。
+validation-cast-datehhmm=请输入"yyyy/MM/dd HH:mm"格式的日期。
 validation-cast-decimal=请输入数字。
 validation-cast-file=请选择文件。
 validation-cast-number=请输入整数字。
 validation-cast-time=请输入"HH:mm:ss"格式的时间。
+validation-cast-hhmm=请输入"HH:mm"格式的时间。
 validation-cast-url=请输入正确的URL。（例: http://www.domain.com）
 validation-cidr=${top.error == null ? "请输入正确的IP或者CIDR。" : (top.error + "が正しいIPまたはCIDRではありません。")}（例: 192.168.1.1/32）
 validation-compare=该项目的内容必须${(top.comparator == "eq" ? "=" : \

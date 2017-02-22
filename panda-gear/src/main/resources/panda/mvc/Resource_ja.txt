@@ -3,13 +3,13 @@
 boolean-format=top ? "○" : "×"
 
 #date
+date-timezone=Asia/Tokyo
 date-format=yyyy/MM/dd HH:mm:ss.SSS
 date-format-timestamp=yyyy/MM/dd HH:mm:ss.SSS
 date-format-datetime=yyyy/MM/dd HH:mm:ss
-date-format-datetm=yyyy/MM/dd HH:mm
+date-format-datehhmm=yyyy/MM/dd HH:mm
 date-format-date=yyyy/MM/dd
 
-date-timezone=Asia/Tokyo
 
 #number
 number-format-currency=#,###
@@ -86,10 +86,12 @@ validation-cast-boolean=trueまたはfalseを入力してください。
 validation-cast-char=文字を入力してください。
 validation-cast-date=日付形式"yyyy/MM/dd"で入力してください。
 validation-cast-datetime=日付形式"yyyy/MM/dd HH:mm:ss"で入力してください。
+validation-cast-datehhmm=日付形式"yyyy/MM/dd HH:mm"で入力してください。
 validation-cast-decimal=数字を入力してください。
 validation-cast-number=整数を入力してください。
 validation-cast-file=フィアルを選択してください。
 validation-cast-time=時間形式"HH:mm:ss"で入力してください。
+validation-cast-hhmm=時間形式"HH:mm"で入力してください。
 validation-cast-url=正しいURLを入力してください。（例: http://www.domain.com）
 validation-cidr=${top.error == null ? "正しいIPまたはCIDRを入力してください。" : (top.error + "が正しいIPまたはCIDRではありません。")}（例: 192.168.1.1/32）
 validation-compare=項目の値が${(top.comparator == "eq" ? "=" : \
