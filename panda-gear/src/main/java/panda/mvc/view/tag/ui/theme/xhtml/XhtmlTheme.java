@@ -48,24 +48,25 @@ public class XhtmlTheme extends WrapTheme {
 
 		addWrapper(Form.class, new RendererWrapperFactory(XFormWrapper.class, FormRenderer.class));
 
-		addWrapper(Div.class, new RendererWrapperFactory(XGroupWrapper.class, DivRenderer.class));
+		addWrapper(Div.class, new RendererWrapperFactory(XInputWrapper.GroupWrapper.class, DivRenderer.class));
 
-		addWrapper(Checkbox.class, new RendererWrapperFactory(XInputWrapper.class, CheckboxRenderer.class));
-		addWrapper(CheckboxList.class, new RendererWrapperFactory(XInputWrapper.class, CheckboxListRenderer.class));
-		addWrapper(DatePicker.class, new RendererWrapperFactory(XInputWrapper.class, DatePickerRenderer.class));
-		addWrapper(DateTimePicker.class, new RendererWrapperFactory(XInputWrapper.class, DateTimePickerRenderer.class));
-		addWrapper(File.class, new RendererWrapperFactory(XInputWrapper.class, FileRenderer.class));
-		addWrapper(Password.class, new RendererWrapperFactory(XInputWrapper.class, PasswordRenderer.class));
-		addWrapper(Radio.class, new RendererWrapperFactory(XInputWrapper.class, RadioRenderer.class));
-		addWrapper(Select.class, new RendererWrapperFactory(XInputWrapper.class, SelectRenderer.class));
-		addWrapper(TextField.class, new RendererWrapperFactory(XInputWrapper.class, TextFieldRenderer.class));
-		addWrapper(TextArea.class, new RendererWrapperFactory(XInputWrapper.class, TextAreaRenderer.class));
-		addWrapper(TimePicker.class, new RendererWrapperFactory(XInputWrapper.class, TimePickerRenderer.class));
-		addWrapper(TriggerField.class, new RendererWrapperFactory(XInputWrapper.class, TriggerFieldRenderer.class));
-		addWrapper(Uploader.class, new RendererWrapperFactory(XInputWrapper.class, UploaderRenderer.class));
-		addWrapper(ViewField.class, new RendererWrapperFactory(XInputWrapper.class, ViewFieldRenderer.class));
+		addWrapper(Checkbox.class, new RendererWrapperFactory(XInputWrapper.NormalWrapper.class, CheckboxRenderer.class));
+		addWrapper(CheckboxList.class, new RendererWrapperFactory(XInputWrapper.NormalWrapper.class, CheckboxListRenderer.class));
+		addWrapper(DatePicker.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, DatePickerRenderer.class));
+		addWrapper(DateTimePicker.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, DateTimePickerRenderer.class));
+		addWrapper(File.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, FileRenderer.class));
+		addWrapper(Password.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, PasswordRenderer.class));
+		addWrapper(Radio.class, new RendererWrapperFactory(XInputWrapper.NormalWrapper.class, RadioRenderer.class));
+		addWrapper(Select.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, SelectRenderer.class));
+		addWrapper(TextField.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, TextFieldRenderer.class));
+		addWrapper(TextArea.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, TextAreaRenderer.class));
+		addWrapper(TimePicker.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, TimePickerRenderer.class));
+		addWrapper(TriggerField.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, TriggerFieldRenderer.class));
+		addWrapper(Uploader.class, new RendererWrapperFactory(XInputWrapper.ControlWrapper.class, UploaderRenderer.class));
 
-		addWrapper(Reset.class, new RendererWrapperFactory(XInputWrapper.class, ResetRenderer.class));
-		addWrapper(Submit.class, new RendererWrapperFactory(XInputWrapper.class, SubmitRenderer.class));
+		addWrapper(ViewField.class, new RendererWrapperFactory(XInputWrapper.StaticWrapper.class, ViewFieldRenderer.class));
+
+		addWrapper(Reset.class, new RendererWrapperFactory(XInputWrapper.NormalWrapper.class, ResetRenderer.class));
+		addWrapper(Submit.class, new RendererWrapperFactory(XInputWrapper.NormalWrapper.class, SubmitRenderer.class));
 	}
 }

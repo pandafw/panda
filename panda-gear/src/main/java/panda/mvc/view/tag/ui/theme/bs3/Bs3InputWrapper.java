@@ -7,13 +7,12 @@ import java.util.Map;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Div;
-import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.InputUIBean;
 import panda.mvc.view.tag.ui.theme.Attributes;
-import panda.mvc.view.tag.ui.theme.RendererWrapper;
+import panda.mvc.view.tag.ui.theme.InputRendererWrapper;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
+public abstract class Bs3InputWrapper<T extends InputUIBean> extends InputRendererWrapper<T> {
 	/**
 	 * @param rc context
 	 */
@@ -34,10 +33,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 	public void renderEnd() throws Exception {
 		super.renderEnd();
 
-		boolean required = Attributes.isTrue(tag.getRequired());
-		String requiredposition = tag.getRequiredPosition();
-
-		if (required && "side".equals(requiredposition)) {
+		if (tag.isRequired() && "side".equals(tag.getRequiredPosition())) {
 			writeRequired();
 		}
 
@@ -52,30 +48,10 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 		}
 	}
 
-	protected void writeRequired() throws IOException {
-		write("<span class=\"p-required\">");
-		write(defs(tag.getRequiredString(), "*"));
-		write("</span>");
-	}
-
-	protected void writeDescrip() throws IOException {
-		if (Strings.isNotEmpty(tag.getDescription())) {
-			Form form = tag.findForm();
-			if (form != null && Boolean.TRUE.equals(form.getShowDescrip())) {
-				write("<span class=\"p-descrip\">");
-				write(tag.getDescription());
-				write("</span>");
-			}
-		}
-	}
-
 	protected void renderHeader() throws Exception {
 		String name = tag.getName();
 
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		boolean required = Attributes.isTrue(tag.getRequired());
-		String requiredposition = tag.getRequiredPosition();
-
 		boolean hasFieldErrors = (name != null
 			&& Collections.isNotEmpty(fieldErrors)
 			&& fieldErrors.get(name) != null);
@@ -84,31 +60,11 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 		attr.cssClass(join(tag.getCssClass(), "form-group", (hasFieldErrors ? "has-error" : null)));
 		stag("div", attr);
 
-		attr.clear().forId(tag).cssClass(getLabelClass());
-		stag("label", attr);
-
-		String label = tag.getLabel();
-		if (Strings.isNotEmpty(label)) {
-			if (required && "left".equals(defs(requiredposition, "left"))) {
-				writeRequired();
-			}
-
-			write(html(label));
-
-			if (required && "right".equals(requiredposition)) {
-				writeRequired();
-			}
-			write(defs(tag.getLabelSeparator(), ":"));
-		}
-		etag("label");
+		writeInputLabel();
 
 		renderInputDivBegin();
 	}
 
-	protected String getLabelClass() {
-		return null;
-	}
-	
 	protected void renderInputDivBegin() throws IOException {
 	}
 
@@ -116,32 +72,7 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends RendererWra
 	}
 
 	protected void renderFooter() throws Exception {
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		if (Collections.isNotEmpty(fieldErrors)) {
-			for (String fn : getGroupTags()) {
-				List<String> fes = fieldErrors.get(fn);
-				if (Collections.isNotEmpty(fes)) {
-					boolean ul = false;
-					Attributes as = new Attributes();
-					for (String fe : fes) {
-						if (Strings.isNotEmpty(fe)) {
-							if (!ul) {
-								as.clear().add("errorFor", fn).cssClass("fa-ul p-field-errors");
-								stag("ul", as);
-								ul = true;
-							}
-							write("<li class=\"text-danger\"><i class=\"fa-li fa fa-exclamation-circle\"></i>");
-							write(phtml(fe));
-							write("</li>");
-						}
-					}
-					if (ul) {
-						etag("ul");
-					}
-				}
-			}
-		}
-		
+		writeFieldErrors();
 		renderInputDivEnd();
 		etag("div");
 	}

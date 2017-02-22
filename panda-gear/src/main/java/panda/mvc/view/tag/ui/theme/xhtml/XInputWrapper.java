@@ -1,19 +1,17 @@
 package panda.mvc.view.tag.ui.theme.xhtml;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import panda.lang.Collections;
-import panda.lang.Strings;
+import panda.mvc.view.tag.ui.Div;
 import panda.mvc.view.tag.ui.InputUIBean;
 import panda.mvc.view.tag.ui.theme.Attributes;
-import panda.mvc.view.tag.ui.theme.RendererWrapper;
+import panda.mvc.view.tag.ui.theme.InputRendererWrapper;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
-/**
- */
-public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
+
+public abstract class XInputWrapper<T extends InputUIBean> extends InputRendererWrapper<T> {
 	/**
 	 * @param context context
 	 */
@@ -27,7 +25,6 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 			renderHeader();
 		}
 		writeBefore();
-
 		super.renderStart();
 	}
 	
@@ -35,108 +32,109 @@ public class XInputWrapper<T extends InputUIBean> extends RendererWrapper<T> {
 	public void renderEnd() throws Exception {
 		super.renderEnd();
 		
+		writeDescrip();
 		writeAfter();
 
 		if (!isInGroup()) {
 			renderFooter();
 		}
 	}
-	
-	protected void writeRequired() throws IOException {
-		write("<span class=\"p-required\">");
-		write(defs(tag.getRequiredString(), "*"));
-		write("</span>");
-	}
 
 	protected void renderHeader() throws Exception {
 		String name = tag.getName();
 
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-
 		boolean hasFieldErrors = (name != null
 			&& Collections.isNotEmpty(fieldErrors)
 			&& fieldErrors.get(name) != null);
 
-		boolean required = Attributes.isTrue(tag.getRequired());
-		String requiredposition = tag.getRequiredPosition();
+		Attributes attr = new Attributes();
+		if (hasFieldErrors) {
+			attr.cssClass("has-error");
+		}
+		stag("tr", attr);
 
-		write("<tr class=\"p-tr-input\"><td class=\"p-td-label\">");
-
-		String label = tag.getLabel();
-		if (Strings.isNotEmpty(label)) {
-			Attributes al = new Attributes();
-			al.addIfExists("for", tag.getId())
-			  .add("class", hasFieldErrors ? "p-label-error" : "p-label");
-			stag("label", al);
+		if (tag.isNolabel()) {
+			attr.clear().add("colspan", 2);
+			stag("td", attr);
+		}
+		else {
+			stag("th");
+			writeInputLabel();
+			etag("th");
 			
-			if (required && "left".equals(defs(requiredposition, "left"))) {
-				writeRequired();
-			}
-
-			write(html(label));
-
-			if (required && "right".equals(requiredposition)) {
-				write("<span class=\"p-required\">*</span>");
-			}
-			write(defs(tag.getLabelSeparator(), ":"));
-			etag("label");
+			stag("td");
 		}
-		etag("td");
-		
-		Attributes a = new Attributes();
-		a.add("class", "p-td-input");
-		if (Strings.isEmpty(tag.getTooltip())) {
-			a.add("colspan", "2");
-		}
-		stag("td", a);
 	}
 	
 	protected void renderFooter() throws Exception {
-		boolean required = Attributes.isTrue(tag.getRequired());
-		String requiredposition = tag.getRequiredString();
-		
-		if (required && "side".equals(requiredposition)) {
+		if (tag.isRequired() && "side".equals(tag.getRequiredPosition())) {
 			writeRequired();
 		}
 		
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		if (Collections.isNotEmpty(fieldErrors)) {
-			for (String fn : getGroupTags()) {
-				List<String> fes = fieldErrors.get(fn);
-				if (Strings.isNotEmpty(fn) && Collections.isNotEmpty(fes)) {
-					boolean ul = false;
-					for (String fe : fes) {
-						if (Strings.isNotEmpty(fe)) {
-							if (!ul) {
-								Attributes aul = new Attributes();
-								aul.add("errorFor", fn)
-									.add("class", "p-field-errors");
-								stag("ul", aul);
-								ul = true;
-							}
-							write("<li class=\"p-field-error\">");
-							write(icon("p-icon p-icon-error p-field-error"));
-							write(phtml(fe));
-							write("</li>");
-						}
-					}
-					if (ul) {
-						etag("ul");
-					}
-				}
-			}
-			etag("td");
-		}
-
-		String tooltip = tag.getTooltip();
-		if (Strings.isNotEmpty(tooltip)) {
-			write("<td class=\"p-td-tooltip\">");
-			write("<div class=\"p-tooltip\">");
-			write(Strings.isEmpty(tooltip) ? "&nbsp;" : tooltip);
-			write("</div>");
-			etag("td");
-		}
+		etag("td");
 
 		etag("tr");
+	}
+
+	//-----------------------------------------------------------------
+	public static class GroupWrapper extends XInputWrapper<Div> {
+		/**
+		 * @param rc context
+		 */
+		public GroupWrapper(RenderingContext rc) {
+			super(rc);
+		}
+
+		@Override
+		public void renderStart() throws Exception {
+			renderHeader();
+			writeBefore();
+			setInGroup(true);
+		}
+
+		@Override
+		public void renderEnd() throws Exception {
+			writeAfter();
+			renderFooter();
+			setInGroup(false);
+		}
+	}
+
+	public static class ControlWrapper extends XInputWrapper {
+		/**
+		 * @param context context
+		 */
+		public ControlWrapper(RenderingContext context) {
+			super(context);
+		}
+
+		protected void renderHeader() throws Exception {
+			super.renderHeader();
+			addCss("form-control");
+		}
+	}
+
+	public static class StaticWrapper extends XInputWrapper {
+		/**
+		 * @param context context
+		 */
+		public StaticWrapper(RenderingContext context) {
+			super(context);
+		}
+
+		protected void renderHeader() throws Exception {
+			super.renderHeader();
+			addCss("form-control-static");
+		}
+	}
+
+	public static class NormalWrapper extends XInputWrapper {
+		/**
+		 * @param context context
+		 */
+		public NormalWrapper(RenderingContext context) {
+			super(context);
+		}
 	}
 }

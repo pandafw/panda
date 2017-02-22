@@ -18,14 +18,16 @@ public class XFormWrapper extends RendererWrapper<Form> {
 		super.renderStart();
 
 		Attributes a = new Attributes();
-		a.add("class", join("p-xhtml", tag.getCssClass()))
+		a.cssClass(tag, "p-xhtml")
 		 .cssStyle(tag);
 
 		stag("table", a);
+		stag("tbody");
 	}
 
 	@Override
 	public void renderEnd() throws Exception {
+		etag("tbody");
 		etag("table");
 		super.renderEnd();
 	}

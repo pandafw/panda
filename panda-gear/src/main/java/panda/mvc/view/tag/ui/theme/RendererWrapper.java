@@ -6,8 +6,8 @@ import panda.lang.Strings;
 import panda.mvc.view.tag.ui.UIBean;
 
 public abstract class RendererWrapper<T extends UIBean> extends AbstractTagRenderer<T> {
-	private static final String GROUP_KEY = "form_group";
-	private static final String GROUP_TAG = "form_group_tags";
+	private static final String GROUP_KEY = "input_group";
+	private static final String GROUP_TAG = "input_group_tags";
 	
 	private TagRenderer simpleRenderer;
 	

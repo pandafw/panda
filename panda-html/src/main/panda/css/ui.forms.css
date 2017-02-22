@@ -8,7 +8,20 @@
 	color: #666;
 }
 
-/** form layout */
+/** xhtml table layout */
+table.p-xhtml > tbody > tr > th, table.p-xhtml > tbody > tr > td {
+	padding: 2px 5px;
+	vertical-align: top;
+}
+table.p-xhtml > tbody > tr > th > label,
+table.p-xhtml > tbody > tr > td > .radio,
+table.p-xhtml > tbody > tr > td > .checkbox,
+table.p-xhtml > tbody > tr > td > .radio-inline,
+table.p-xhtml > tbody > tr > td > .checkbox-inline {
+	padding-top: 5px;
+}
+
+/** bootstrap form layout */
 .p-form.form-horizontal {
 	color: #333;
 	padding: 10px;
