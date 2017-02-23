@@ -446,7 +446,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				_fv = _fn + ".sv";
 				
 				String _fvv = qf == null ? null : qf.getSv();
-				writeTextField("form-control p-lv-f-string-v", _fv, _ifn + "_v", _fvv, null);
+				writeTextField("form-control p-lv-f-string-v", _fv, _ifn + "_v", _fvv, false);
 				
 				_fvv = qf == null ? null : qf.getC();
 				writeSelect("form-control p-lv-f-string-c", _fn + ".c", _ifn + "_c", stringFilterMap, _fvv);

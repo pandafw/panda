@@ -26,7 +26,7 @@ public abstract class AbstractTagExRenderer<T extends UIBean> extends AbstractTa
 		super(rc);
 	}
 
-	protected void writeTextField(String cssClass, String name, String id, Object value, Boolean disabled) throws IOException {
+	protected void writeTextField(String cssClass, String name, String id, Object value, boolean disabled) throws IOException {
 		if (textField == null) {
 			textField = newTag(TextField.class);
 		}
