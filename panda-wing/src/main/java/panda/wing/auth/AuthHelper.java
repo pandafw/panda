@@ -57,7 +57,7 @@ public class AuthHelper {
 	 * ticket cookie age
 	 */
 	@IocInject(value=AppConstants.PANDA_AUTH_TICKET_COOKIE_AGE, required=false)
-	protected int cookieAge = COOKIE.AUTH_TICKET_AGE;
+	protected Integer cookieAge = COOKIE.AUTH_TICKET_AGE;
 
 	/**
 	 * @param u user
@@ -140,7 +140,7 @@ public class AuthHelper {
 		return Encrypts.decrypt(value, secret, cipher);
 	}
 	
-	protected int getCookieAge(ActionContext ac, Object user) {
+	protected Integer getCookieAge(ActionContext ac, Object user) {
 		return cookieAge;
 	}
 	
@@ -157,7 +157,7 @@ public class AuthHelper {
 	 * setLoginUser
 	 * @param user user
 	 */
-	protected void setLoginUser(ActionContext context, Object user, int cookieAge) {
+	protected void setLoginUser(ActionContext context, Object user, Integer cookieAge) {
 		if (user instanceof ILogin) {
 			ILogin iu = (ILogin)user;
 			iu.setLoginTime(System.currentTimeMillis());
@@ -178,13 +178,13 @@ public class AuthHelper {
 	 * setLoginUser
 	 * @param user user
 	 */
-	protected void saveUserToCookie(ActionContext context, Object user, int cookieAge) {
+	protected void saveUserToCookie(ActionContext context, Object user, Integer cookieAge) {
 		String ticket = Jsons.toJson(user);
 		String eticket = encrypt(ticket);
 		String cookiePath = context.getServlet().getContextPath() + "/";
 		
 		Cookie c = new Cookie(COOKIE.AUTH_TICKET, eticket);
-		if (cookieAge >= 0) {
+		if (cookieAge != null) {
 			c.setMaxAge(cookieAge);
 		}
 		c.setPath(cookiePath);
