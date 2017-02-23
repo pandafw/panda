@@ -58,6 +58,16 @@ public abstract class XInputWrapper<T extends InputUIBean> extends InputRenderer
 			attr.clear().add("colspan", 2);
 			stag("td", attr);
 		}
+		else if ("full".equals(tag.getLabelPosition())) {
+			attr.clear().add("colspan", 2);
+			stag("th", attr);
+			writeInputLabel();
+			etag("th");
+			etag("tr");
+
+			stag("tr");
+			stag("td", attr);
+		}
 		else {
 			stag("th");
 			writeInputLabel();
