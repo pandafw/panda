@@ -9,16 +9,24 @@
 }
 
 /** xhtml table layout */
-table.p-xhtml > tbody > tr > th, table.p-xhtml > tbody > tr > td {
+.p-xhtml {
+	width: 100%;
+}
+.p-xhtml > tbody > tr > th, .p-xhtml > tbody > tr > td {
 	padding: 2px 5px;
 	vertical-align: top;
 }
-table.p-xhtml > tbody > tr > th > label,
-table.p-xhtml > tbody > tr > td > .radio,
-table.p-xhtml > tbody > tr > td > .checkbox,
-table.p-xhtml > tbody > tr > td > .radio-inline,
-table.p-xhtml > tbody > tr > td > .checkbox-inline {
+.p-xhtml > tbody > tr > th > label,
+.p-xhtml > tbody > tr > td > .radio,
+.p-xhtml > tbody > tr > td > .checkbox,
+.p-xhtml > tbody > tr > td > .radio-inline,
+.p-xhtml > tbody > tr > td > .checkbox-inline {
 	padding-top: 5px;
+}
+.p-xform input.form-control[size], .p-xform select.form-control,
+.p-xform .p-radiomap input.form-control, .p-xform .p-checkboxlist input.form-control, .p-xform input.p-checkbox,
+.p-xform .input-group-addon, .p-xform .input-group-btn {
+	width: auto;
 }
 
 /** bootstrap form layout */
