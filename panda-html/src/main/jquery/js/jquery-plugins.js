@@ -563,10 +563,9 @@ jQuery.jcookie = function(name, value, options) {
 })(jQuery);
 
 /*!
-	Autosize v1.18.7 - 2014-04-13
-	Automatically adjust textarea height based on user input.
-	(c) 2014 Jack Moore - http://www.jacklmoore.com/autosize
-	license: http://www.opensource.org/licenses/mit-license.php
+	Autosize 1.18.18
+	license: MIT
+	http://www.jacklmoore.com/autosize
 */
 (function ($) {
 	var
@@ -579,9 +578,6 @@ jQuery.jcookie = function(name, value, options) {
 		placeholder: true
 	},
 
-	// border:0 is unnecessary, but avoids a bug in Firefox on OSX
-	copy = '<textarea tabindex="-1" style="position:absolute; top:-999px; left:0; right:auto; bottom:auto; border:0; padding: 0; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; word-wrap:break-word; height:0 !important; min-height:0 !important; overflow:hidden; transition:none; -webkit-transition:none; -moz-transition:none;"/>',
-
 	// line-height is conditionally included because IE7/IE8/old Opera do not return the correct value.
 	typographyStyles = [
 		'fontFamily',
@@ -591,14 +587,18 @@ jQuery.jcookie = function(name, value, options) {
 		'letterSpacing',
 		'textTransform',
 		'wordSpacing',
-		'textIndent'
+		'textIndent',
+		'whiteSpace'
 	],
 
 	// to keep track which textarea is being mirrored when adjust() is called.
 	mirrored,
 
 	// the mirror element, which is used to calculate what size the mirrored element should be.
-	mirror = $(copy).data('autosize', true)[0];
+	mirror = $('<textarea aria-hidden="true" tabindex="-1"/>').data('autosize', true)[0];
+
+	// border:0 is unnecessary, but avoids a bug in Firefox on OSX
+	mirror.style.cssText = "position:absolute; top:-999px; left:0; right:auto; bottom:auto; border:0; padding: 0; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; word-wrap:break-word; height:0 !important; min-height:0 !important; overflow:hidden; transition:none; -webkit-transition:none; -moz-transition:none;";
 
 	// test that line-height can be accurately copied.
 	mirror.style.lineHeight = '99px';
@@ -634,7 +634,8 @@ jQuery.jcookie = function(name, value, options) {
 				resize: ta.style.resize
 			},
 			timeout,
-			width = $ta.width();
+			width = $ta.width(),
+			taResize = $ta.css('resize');
 
 			if ($ta.data('autosize')) {
 				// exit if autosize has already been applied, or if the textarea is the mirror element.
@@ -647,37 +648,37 @@ jQuery.jcookie = function(name, value, options) {
 			}
 
 			// IE8 and lower return 'auto', which parses to NaN, if no min-height is set.
-			minHeight = Math.max(parseInt($ta.css('minHeight'), 10) - boxOffset || 0, $ta.height());
+			minHeight = Math.max(parseFloat($ta.css('minHeight')) - boxOffset || 0, $ta.height());
 
 			$ta.css({
 				overflow: 'hidden',
 				overflowY: 'hidden',
-				wordWrap: 'break-word', // horizontal overflow is hidden, so break-word is necessary for handling words longer than the textarea width
-				resize: ($ta.css('resize') === 'none' || $ta.css('resize') === 'vertical') ? 'none' : 'horizontal'
+				wordWrap: 'break-word' // horizontal overflow is hidden, so break-word is necessary for handling words longer than the textarea width
 			});
 
-			// The mirror width must exactly match the textarea width, so using getBoundingClientRect because it doesn't round the sub-pixel value.
-			// window.getComputedStyle, getBoundingClientRect returning a width are unsupported, but also unneeded in IE8 and lower.
+			if (taResize === 'vertical') {
+				$ta.css('resize','none');
+			} else if (taResize === 'both') {
+				$ta.css('resize', 'horizontal');
+			}
+
+			// getComputedStyle is preferred here because it preserves sub-pixel values, while jQuery's .width() rounds to an integer.
 			function setWidth() {
 				var width;
-				var style = window.getComputedStyle ? window.getComputedStyle(ta, null) : false;
-				
+				var style = window.getComputedStyle ? window.getComputedStyle(ta, null) : null;
+
 				if (style) {
-
-					width = ta.getBoundingClientRect().width;
-
-					if (width === 0 || typeof width !== 'number') {
-						width = parseInt(style.width,10);
+					width = parseFloat(style.width);
+					if (style.boxSizing === 'border-box' || style.webkitBoxSizing === 'border-box' || style.mozBoxSizing === 'border-box') {
+						$.each(['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'], function(i,val){
+							width -= parseFloat(style[val]);
+						});
 					}
-
-					$.each(['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'], function(i,val){
-						width -= parseInt(style[val],10);
-					});
 				} else {
-					width = Math.max($ta.width(), 0);
+					width = $ta.width();
 				}
 
-				mirror.style.width = width + 'px';
+				mirror.style.width = Math.max(width,0) + 'px';
 			}
 
 			function initMirror() {
@@ -686,7 +687,7 @@ jQuery.jcookie = function(name, value, options) {
 				mirrored = ta;
 				mirror.className = options.className;
 				mirror.id = options.id;
-				maxHeight = parseInt($ta.css('maxHeight'), 10);
+				maxHeight = parseFloat($ta.css('maxHeight'));
 
 				// mirror is a duplicate textarea located off-screen that
 				// is automatically updated to contain the same text as the
@@ -696,7 +697,7 @@ jQuery.jcookie = function(name, value, options) {
 				$.each(typographyStyles, function(i,val){
 					styles[val] = $ta.css(val);
 				});
-				
+
 				$(mirror).css(styles).attr('wrap', $ta.attr('wrap'));
 
 				setWidth();
@@ -715,7 +716,7 @@ jQuery.jcookie = function(name, value, options) {
 			// Using mainly bare JS in this function because it is going
 			// to fire very often while typing, and needs to very efficient.
 			function adjust() {
-				var height, original;
+				var height, originalHeight;
 
 				if (mirrored !== ta) {
 					initMirror();
@@ -724,16 +725,17 @@ jQuery.jcookie = function(name, value, options) {
 				}
 
 				if (!ta.value && options.placeholder) {
-					// If the textarea is empty, copy the placeholder text into 
-					// the mirror control and use that for sizing so that we 
+					// If the textarea is empty, copy the placeholder text into
+					// the mirror control and use that for sizing so that we
 					// don't end up with placeholder getting trimmed.
-					mirror.value = ($ta.attr("placeholder") || '') + options.append;
+					mirror.value = ($ta.attr("placeholder") || '');
 				} else {
-					mirror.value = ta.value + options.append;
+					mirror.value = ta.value;
 				}
 
+				mirror.value += options.append || '';
 				mirror.style.overflowY = ta.style.overflowY;
-				original = parseInt(ta.style.height,10);
+				originalHeight = parseFloat(ta.style.height) || 0;
 
 				// Setting scrollTop to zero is needed in IE8 and lower for the next step to be accurately applied
 				mirror.scrollTop = 0;
@@ -755,11 +757,16 @@ jQuery.jcookie = function(name, value, options) {
 
 				height += boxOffset;
 
-				if (original !== height) {
+				if (Math.abs(originalHeight - height) > 1/100) {
 					ta.style.height = height + 'px';
+
+					// Trigger a repaint for IE8 for when ta is nested 2 or more levels inside an inline-block
+					mirror.className = mirror.className;
+
 					if (callback) {
 						options.callback.call(ta,ta);
 					}
+					$ta.trigger('autosize.resized');
 				}
 			}
 
@@ -833,7 +840,7 @@ jQuery.jcookie = function(name, value, options) {
 		$('textarea[autosize="true"]').autosize();
 	});
 
-}(window.jQuery || window.$)); // jQuery or jQuery-like library, such as Zepto
+}(jQuery || $)); // jQuery or jQuery-like library, such as Zepto
 (function($) {
 	function collapse($el) {
 		if (!$el.hasClass('ui-collapsed')) {
