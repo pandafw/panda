@@ -10,7 +10,6 @@ public abstract class InputUIBean extends UIBean {
 	// shortcut, sets label, name, and value
 	protected String key;
 
-	protected boolean nolabel;
 	protected String label;
 	protected String labelPosition;
 	protected String labelSeparator = ":";
@@ -134,21 +133,6 @@ public abstract class InputUIBean extends UIBean {
 	public String getKey() {
 		return key;
 	}
-
-	/**
-	 * @return the nolabel
-	 */
-	public boolean isNolabel() {
-		return nolabel;
-	}
-
-	/**
-	 * @param nolabel the nolabel to set
-	 */
-	public void setNolabel(boolean nolabel) {
-		this.nolabel = nolabel;
-	}
-
 
 	/**
 	 * @return the label
