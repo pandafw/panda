@@ -20,7 +20,7 @@ public class DivRenderer extends AbstractTagRenderer<Div> {
 			.cssClass(tag)
 			.disabled(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)

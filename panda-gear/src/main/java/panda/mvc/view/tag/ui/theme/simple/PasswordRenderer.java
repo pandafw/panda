@@ -26,7 +26,7 @@ public class PasswordRenderer extends AbstractEndRenderer<Password> {
 			.disabled(tag)
 			.readonly(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);

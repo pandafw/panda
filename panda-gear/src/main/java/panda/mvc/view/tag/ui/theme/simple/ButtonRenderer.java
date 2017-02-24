@@ -27,7 +27,7 @@ public class ButtonRenderer extends AbstractEndRenderer<Button> {
 			.cssClass(tag, "btn btn-" + btype)
 			.disabled(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)

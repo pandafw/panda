@@ -879,7 +879,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 					+ ((queryer != null && queryer.getSorter() != null && c.name.equals(queryer.getSorter().getColumn())) ? " p-sorted p-lv-sort-" + queryer.getSorter().getDirection() : "")
 					+ (fsdefines.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
-				.title(tag);
+				.tooltip(tag);
 			if (c.width > 0) {
 				tha.cssStyle("width:" + c.width);
 			}

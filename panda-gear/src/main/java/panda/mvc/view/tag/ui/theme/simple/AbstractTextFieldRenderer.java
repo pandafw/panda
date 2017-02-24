@@ -55,7 +55,7 @@ public abstract class AbstractTextFieldRenderer<T extends TextField> extends Abs
 			.readonly(tag)
 			.tabindex(tag)
 			.formatValue(this, tag)
-			.title(tag)
+			.tooltip(tag)
 			.placeholder(tag)
 			.mask(tag)
 			.commons(tag)

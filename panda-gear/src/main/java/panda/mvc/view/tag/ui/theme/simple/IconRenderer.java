@@ -23,7 +23,7 @@ public class IconRenderer extends AbstractEndRenderer<Icon> {
 			.cssClass(tag, ticon(icon))
 			.disabled(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)

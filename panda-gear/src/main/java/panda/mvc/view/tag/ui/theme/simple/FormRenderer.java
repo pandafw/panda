@@ -26,7 +26,7 @@ public class FormRenderer extends AbstractTagRenderer {
 			.add("method", defs(form.getMethod(), "post"))
 			.enctype(form)
 			.acceptcharset(form)
-			.title(tag)
+			.tooltip(tag)
 			.onsubmit(form)
 			.onreset(form)
 			.addIfExists("hooked", form.getHooked())

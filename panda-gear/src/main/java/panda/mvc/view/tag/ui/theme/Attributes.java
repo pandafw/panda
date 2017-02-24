@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import panda.lang.Collections;
+import panda.lang.Objects;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.Texts;
@@ -316,13 +317,17 @@ public class Attributes {
 		return this;
 	}
 
-	public Attributes title(UIBean tag) {
-		if (Strings.isEmpty(tag.getTitle())) {
-			addIfExists("title", tag.getTooltip());
+	public Attributes tooltip(UIBean tag) {
+		if (Strings.isNotEmpty(tag.getTooltip())) {
+			if (Objects.isEmpty(tag.getParameter("dataToggle"))) {
+				add("data-toggle", "tooltip");
+			}
+			add("title", tag.getTooltip());
 		}
 		else {
-			add("title", tag.getTitle());
+			addIfExists("title", tag.getTitle());
 		}
+
 		return this;
 	}
 

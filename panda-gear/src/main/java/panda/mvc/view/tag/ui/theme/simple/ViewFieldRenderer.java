@@ -46,7 +46,7 @@ public class ViewFieldRenderer extends AbstractEndRenderer<ViewField> {
 		
 		a = new Attributes();
 		a.css(this, "p-viewfield")
-		 .title(tag)
+		 .tooltip(tag)
 		 .commons(tag)
 		 .dynamics(tag);
 		stag("p", a);

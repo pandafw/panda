@@ -26,7 +26,7 @@ public class FileRenderer extends AbstractEndRenderer<File> {
 		 .disabled(tag)
 		 .accept(tag)
 		 .tabindex(tag)
-		 .title(tag)
+		 .tooltip(tag)
 		 .commons(tag)
 		 .events(tag)
 		 .dynamics(tag);

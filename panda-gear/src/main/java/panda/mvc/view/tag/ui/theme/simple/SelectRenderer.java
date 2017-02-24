@@ -31,7 +31,7 @@ public class SelectRenderer extends AbstractEndRenderer<Select> {
 			.readonly(tag)
 			.multiple(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);

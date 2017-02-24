@@ -28,7 +28,7 @@ public class CheckboxListRenderer extends AbstractEndRenderer<CheckboxList> {
 		}
 		Attributes attrs = new Attributes();
 		attrs.id(id)
-			.title(tag)
+			.tooltip(tag)
 			.cssClass(tag, cssc)
 			.cssStyle(tag)
 			.commons(tag)

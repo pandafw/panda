@@ -32,7 +32,7 @@ public class AnchorRenderer extends AbstractEndRenderer<Anchor> {
 			.cssClass(tag, btn)
 			.disabled(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.cssStyle(tag)
 			.commons(tag)
 			.events(tag)

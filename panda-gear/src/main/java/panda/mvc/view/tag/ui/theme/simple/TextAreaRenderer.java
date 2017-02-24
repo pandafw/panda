@@ -26,7 +26,7 @@ public class TextAreaRenderer extends AbstractEndRenderer<TextArea> {
 			.readonly(tag)
 			.tabindex(tag)
 			.maxlength(tag)
-			.title(tag)
+			.tooltip(tag)
 			.placeholder(tag)
 			.data("layout", tag.getLayout())
 			.commons(tag)

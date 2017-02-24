@@ -35,7 +35,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 
 		attr.id(tag)
 			.cssClass("p-uploader")
-			.title(tag)
+			.tooltip(tag)
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag)

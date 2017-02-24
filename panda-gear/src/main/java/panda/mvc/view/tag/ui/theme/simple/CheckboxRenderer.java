@@ -27,7 +27,7 @@ public class CheckboxRenderer extends AbstractEndRenderer<Checkbox> {
 			.readonly(tag)
 			.disabled(tag)
 			.tabindex(tag)
-			.title(tag)
+			.tooltip(tag)
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag);

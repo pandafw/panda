@@ -25,7 +25,7 @@ public class RadioRenderer extends AbstractEndRenderer<Radio> {
 		}
 		Attributes attrs = new Attributes();
 		attrs.id(id)
-			.title(tag)
+			.tooltip(tag)
 			.cssClass(tag, cssc)
 			.cssStyle(tag)
 			.commons(tag)
