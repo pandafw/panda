@@ -32,6 +32,8 @@ public abstract class XInputWrapper<T extends InputUIBean> extends InputRenderer
 	public void renderEnd() throws Exception {
 		super.renderEnd();
 		
+		writeSideRequired();
+		writeFieldErrors();
 		writeDescrip();
 		writeAfter();
 
@@ -78,12 +80,7 @@ public abstract class XInputWrapper<T extends InputUIBean> extends InputRenderer
 	}
 	
 	protected void renderFooter() throws Exception {
-		if (tag.isRequired() && "side".equals(tag.getRequiredPosition())) {
-			writeRequired();
-		}
-		
 		etag("td");
-
 		etag("tr");
 	}
 

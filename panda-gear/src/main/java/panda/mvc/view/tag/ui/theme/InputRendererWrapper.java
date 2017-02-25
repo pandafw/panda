@@ -23,6 +23,18 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 		write("</span>");
 	}
 
+	protected void writeLeftRequired() throws IOException {
+		if (tag.isRequired() && "left".equals(defs(tag.getRequiredPosition(), "left"))) {
+			writeRequired();
+		}
+	}
+
+	protected void writeSideRequired() throws IOException {
+		if (tag.isRequired() && "side".equals(tag.getRequiredPosition())) {
+			writeRequired();
+		}
+	}
+
 	protected void writeSeparator() throws IOException {
 		write(defs(tag.getLabelSeparator(), ":"));
 	}
@@ -48,9 +60,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 		stag("label", attr);
 
 		if (Strings.isNotEmpty(tag.getLabel())) {
-			if (tag.isRequired() && "left".equals(defs(tag.getRequiredPosition(), "left"))) {
-				writeRequired();
-			}
+			writeLeftRequired();
 
 			write(html(tag.getLabel()));
 

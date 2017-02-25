@@ -33,10 +33,8 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends InputRender
 	public void renderEnd() throws Exception {
 		super.renderEnd();
 
-		if (tag.isRequired() && "side".equals(tag.getRequiredPosition())) {
-			writeRequired();
-		}
-
+		writeSideRequired();
+		writeFieldErrors();
 		writeDescrip();
 		writeAfter();
 
@@ -72,7 +70,6 @@ public abstract class Bs3InputWrapper<T extends InputUIBean> extends InputRender
 	}
 
 	protected void renderFooter() throws Exception {
-		writeFieldErrors();
 		renderInputDivEnd();
 		etag("div");
 	}
