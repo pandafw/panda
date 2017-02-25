@@ -194,6 +194,11 @@ public class DateTimes {
 	public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
 	/**
+	 * Date Time format without seconds. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
+	 */
+	public static final String DATETIME_HHMM_FORMAT = "yyyy-MM-dd HH:mm";
+
+	/**
 	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>.
 	 */
 	public static final String DATE_YMD_NO_H_FORMAT = "yyyyMMdd";
@@ -295,6 +300,11 @@ public class DateTimes {
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
 	 */
 	private static final FastDateFormat timestamp_log_format = FastDateFormat.getInstance(TIMESTAMP_LOG_FORMAT);
+
+	/**
+	 * Date Time format without seconds. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
+	 */
+	private static final FastDateFormat datetime_hhmm_format = FastDateFormat.getInstance(DATETIME_HHMM_FORMAT);
 
 	/**
 	 * DateTime format for log. The format used is <tt>yyyyMMddTHHmmss</tt>. 
@@ -2097,6 +2107,13 @@ public class DateTimes {
 	 */
 	public static FastDateFormat timestampLogFormat() {
 		return timestamp_log_format;
+	}
+
+	/**
+	 * DateTime without secnods. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
+	 */
+	public static FastDateFormat datetimeHhmmFormat() {
+		return datetime_hhmm_format;
 	}
 
 	/**

@@ -25,6 +25,7 @@ public class DateTypeCastor {
 	public final static String ISODATE_NOH = "isodatenoh";
 	public final static String TIMESTAMP = "timestamp";
 	public final static String DATETIME = "datetime";
+	public final static String DATEHHMM = "datehhmm";
 	public final static String DATE = "date";
 	public final static String TIME = "time";
 	public final static String HHMM = "hhmm";
@@ -38,12 +39,14 @@ public class DateTypeCastor {
 		DATE_FORMATS.put(ISODATE_NOH, DateTimes.isoDatetimeNohFormat());
 		DATE_FORMATS.put(TIMESTAMP, DateTimes.timestampFormat());
 		DATE_FORMATS.put(DATETIME, DateTimes.isoDatetimeNotFormat());
+		DATE_FORMATS.put(DATEHHMM, DateTimes.datetimeHhmmFormat());
 		DATE_FORMATS.put(DATE, DateTimes.isoDateFormat());
 		DATE_FORMATS.put(TIME, DateTimes.isoTimeFormat());
 		DATE_FORMATS.put(HHMM, DateTimes.timeHhmmFormat());
 
 		JP_DATE_FORMATS.put(TIMESTAMP, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss.SSS"));
 		JP_DATE_FORMATS.put(DATETIME, FastDateFormat.getInstance("yyyy/MM/dd HH:mm:ss"));
+		JP_DATE_FORMATS.put(DATEHHMM, FastDateFormat.getInstance("yyyy/MM/dd HH:mm"));
 		JP_DATE_FORMATS.put(DATE, FastDateFormat.getInstance("yyyy/MM/dd"));
 		
 		LOCALE_DATE_FORMATS.put(Locale.JAPAN, JP_DATE_FORMATS);
