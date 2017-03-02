@@ -180,7 +180,7 @@ public class UserAgent {
 	/**
 	 * @return true if user agent is Macintosh
 	 */
-	public boolean isMacOS() {
+	public boolean isMacintosh() {
 		return browsers.containsKey(MACINTOSH);
 	}
 
