@@ -35,6 +35,30 @@
 .p-field-errors-caret {
 	font-size: 80%;
 }
+.p-loading {
+}
+
+.p-loading:after {
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: bottom;
+	content: "......";
+	width: 0px;
+	animation: pkf-ellipsis steps(8,end) 1s infinite;
+	-webkit-animation: pkf-ellipsis steps(8,end) 1s infinite;
+}
+
+@keyframes pkf-ellipsis {
+	to {
+		width: 2em;
+	}
+}
+
+@-webkit-keyframes pkf-ellipsis {
+	to {
+		width: 2em;
+	}
+}
 /** bootstrap modify */
 .text-warning {
 	/*color: #8a6d3b;*/
