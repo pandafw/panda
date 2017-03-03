@@ -1738,7 +1738,14 @@ if (typeof String.formatSize != "function") {
 		var $p = $('<div></div>').addClass('p-alert alert');
 		addAlerts($p, s, m, t);
 		
-		$.notify({ html: $p}, ns);
+		if ($.notify) {
+			if (!$.notify.getStyle('palert')) {
+				$.notify.addStyle('palert', {
+					html: '<div data-notify-html="html"></div>'
+				});
+			}
+			$.notify({ html: $p}, ns);
+		}
 	}
 	
 	$.palert.toggleFieldErrors = function(el) {
@@ -1755,15 +1762,6 @@ if (typeof String.formatSize != "function") {
 		}
 		return false;
 	};
-
-	// ==================
-	$(window).on('load', function () {
-		if ($.notify) {
-			$.notify.addStyle('palert', {
-				html: '<div data-notify-html="html"></div>'
-			});
-		}
-	});
 })(jQuery);
 (function($) {
 	$(window).on('load', function() {
