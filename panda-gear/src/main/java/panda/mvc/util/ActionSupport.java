@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import panda.io.Settings;
 import panda.ioc.Ioc;
@@ -75,6 +76,13 @@ public class ActionSupport {
 	}
 	
 	/**
+	 * @return the session
+	 */
+	public HttpSession getSession() {
+		return context.getSession();
+	}
+	
+	/**
 	 * @return the request
 	 */
 	public HttpServletRequest getRequest() {
@@ -98,7 +106,7 @@ public class ActionSupport {
 	/**
 	 * @return session map
 	 */
-	public Map<String, Object> getSession() {
+	public Map<String, Object> getSes() {
 		return context.getSes();
 	}
 
