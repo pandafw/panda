@@ -110,7 +110,7 @@ public class ActionInvoker {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (defaultChain != null) {
-			sb.append(defaultChain.getConfig());
+			sb.append(defaultChain.getConfig().toString(true));
 		}
 		if (Collections.isNotEmpty(chainMap)) {
 			for (Entry<String, ActionChain> en : chainMap.entrySet()) {

@@ -122,7 +122,11 @@ public abstract class AbstractUrlMapping implements UrlMapping {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getClass());
 		for (Entry<String, ActionInvoker> en : (new TreeMap<String, ActionInvoker>(map)).entrySet()) {
-			sb.append(Streams.LINE_SEPARATOR).append(" - ").append(en.getValue().toString());
+			sb.append(Streams.LINE_SEPARATOR)
+				.append(" - ")
+				.append(Strings.rightPad(en.getKey(), 50))
+				.append(" >> ")
+				.append(en.getValue().toString());
 		}
 		return sb.toString();
 	}

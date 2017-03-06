@@ -154,15 +154,28 @@ public class ActionConfig {
 
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+	
+	public String toString(boolean noPath) {
 		StringBuilder sb = new StringBuilder();
+
+		if (!noPath) {
+			sb.append(Strings.join(paths, ", "));
+			sb.append(" >> ");
+		}
 		
-		sb.append(Strings.rightPad(Strings.join(paths, ", "), 50));
-		sb.append(" >> ");
 		sb.append(Methods.toSimpleString(actionMethod));
 		sb.append(":");
-		sb.append(" @Ok(").append(okView).append(")");
-		sb.append(" @Err(").append(errorView).append(")");
-		sb.append(" @Fatal(").append(fatalView).append(")");
+		if (Strings.isNotEmpty(okView)) {
+			sb.append(" @Ok(").append(okView).append(")");
+		}
+		if (Strings.isNotEmpty(errorView)) {
+			sb.append(" @Err(").append(errorView).append(")");
+		}
+		if (Strings.isNotEmpty(fatalView)) {
+			sb.append(" @Fatal(").append(fatalView).append(")");
+		}
 		return sb.toString();
 	}
 }
