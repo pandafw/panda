@@ -138,6 +138,18 @@ public class FreemarkerHelper {
 		return sw.toString();
 	}
 
+	//-------------------------------------------------------------------
+	/**
+	 * create a template by string
+	 * @param string template string
+	 * @return Template
+	 * @throws TemplateException if a template error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	public Template newTemplate(String string) throws TemplateException, IOException {
+		return new Template("string", new StringReader(string), fm.getConfiguration());
+	}
+
 	/**
 	 * process template
 	 * @param string template string
@@ -158,7 +170,7 @@ public class FreemarkerHelper {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void evalTemplate(Writer writer, String string, Object model) throws TemplateException, IOException {
-		Template template = initTemplate(string);
+		Template template = newTemplate(string);
 		execTemplate(writer, template, model);
 	}
 	
@@ -185,16 +197,5 @@ public class FreemarkerHelper {
 		StringBuilderWriter sw = new StringBuilderWriter();
 		evalTemplate(sw, string, model);
 		return sw.toString();
-	}
-
-	/**
-	 * initialize template
-	 * @param string
-	 * @return Template
-	 * @throws TemplateException if a template error occurs
-	 * @throws IOException if an I/O error occurs
-	 */
-	public Template initTemplate(String string) throws TemplateException, IOException {
-		return new Template("string", new StringReader(string), fm.getConfiguration());
 	}
 }

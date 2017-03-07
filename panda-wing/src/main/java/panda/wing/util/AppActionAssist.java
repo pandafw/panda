@@ -1,5 +1,6 @@
 package panda.wing.util;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -39,6 +40,8 @@ import panda.wing.entity.ICreate;
 import panda.wing.entity.IStatus;
 import panda.wing.entity.IUpdate;
 
+import freemarker.template.TemplateException;
+
 
 @IocBean(type=ActionAssist.class, scope=Scope.REQUEST)
 public class AppActionAssist extends ActionAssist implements AccessControler {
@@ -68,6 +71,18 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 */
 	public boolean hasTemplate(String name) {
 		return freemarker.hasTemplate(name);
+	}
+	
+	/**
+	 * process template
+	 * @param name template name
+	 * @param model model
+	 * @return result
+	 * @throws TemplateException if a template error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	public String execTemplate(String name, Object model) throws TemplateException, IOException {
+		return freemarker.execTemplate(name, model);
 	}
 	
 	//--------------------------------------------------------------------------	

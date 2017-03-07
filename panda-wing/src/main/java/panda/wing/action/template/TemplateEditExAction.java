@@ -12,12 +12,12 @@ import panda.wing.entity.Template;
 public class TemplateEditExAction extends TemplateEditAction {
 
 	@IocInject
-	private FreemarkerHelper fh;
+	private FreemarkerHelper freemarker;
 	
 	@Override
 	protected boolean checkOnInput(Template data, Template srcData) {
 		try {
-			fh.initTemplate(data.getSource());
+			freemarker.newTemplate(data.getSource());
 			return true;
 		}
 		catch (Exception e) {
