@@ -36,22 +36,6 @@ import panda.servlet.HttpServlets;
 public class FileUploader {
 
 	// ----------------------------------------------------- Manifest constants
-
-	/**
-	 * HTTP content type header name.
-	 */
-	public static final String CONTENT_TYPE = "Content-type";
-
-	/**
-	 * HTTP content disposition header name.
-	 */
-	public static final String CONTENT_DISPOSITION = "Content-disposition";
-
-	/**
-	 * HTTP content length header name.
-	 */
-	public static final String CONTENT_LENGTH = "Content-length";
-
 	/**
 	 * Content-disposition value for form data.
 	 */
@@ -194,7 +178,7 @@ public class FileUploader {
 	 * @return The file name for the current <code>encapsulation</code>.
 	 */
 	protected String getFileName(FileItemHeaders headers) {
-		return getFileName(headers.getHeader(CONTENT_DISPOSITION));
+		return getFileName(headers.getString(FileItemHeaders.CONTENT_DISPOSITION));
 	}
 
 	/**
@@ -226,7 +210,7 @@ public class FileUploader {
 	 * @return The field name for the current <code>encapsulation</code>.
 	 */
 	protected String getFieldName(FileItemHeaders headers) {
-		return getFieldName(headers.getHeader(CONTENT_DISPOSITION));
+		return getFieldName(headers.getString(FileItemHeaders.CONTENT_DISPOSITION));
 	}
 
 	/**
@@ -260,7 +244,7 @@ public class FileUploader {
 	 */
 	protected FileItemHeaders getParsedHeaders(String headerPart) {
 		final int len = headerPart.length();
-		FileItemHeadersImpl headers = newFileItemHeaders();
+		FileItemHeaders headers = newFileItemHeaders();
 		int start = 0;
 		for (;;) {
 			int end = parseEndOfLine(headerPart, start);
@@ -296,8 +280,8 @@ public class FileUploader {
 	 * 
 	 * @return The new instance.
 	 */
-	protected FileItemHeadersImpl newFileItemHeaders() {
-		return new FileItemHeadersImpl();
+	protected FileItemHeaders newFileItemHeaders() {
+		return new FileItemHeaders();
 	}
 
 	/**
@@ -327,7 +311,7 @@ public class FileUploader {
 	 * @param headers String with all headers.
 	 * @param header Map where to store the current header.
 	 */
-	private void parseHeaderLine(FileItemHeadersImpl headers, String header) {
+	private void parseHeaderLine(FileItemHeaders headers, String header) {
 		final int colonOffset = header.indexOf(':');
 		if (colonOffset == -1) {
 			// This header line is malformed, skip it.
@@ -335,7 +319,7 @@ public class FileUploader {
 		}
 		String headerName = header.substring(0, colonOffset).trim();
 		String headerValue = header.substring(header.indexOf(':') + 1).trim();
-		headers.addHeader(headerName, headerValue);
+		headers.addString(headerName, headerValue);
 	}
 
 	private class FileItemIteratorImpl implements FileItemIterator {
@@ -572,7 +556,7 @@ public class FileUploader {
 			}
 			catch (IllegalArgumentException iae) {
 				throw new InvalidContentTypeException(format("The boundary specified in the %s header is too long",
-					CONTENT_TYPE), iae);
+					FileItemHeaders.CONTENT_TYPE), iae);
 			}
 			multi.setHeaderEncoding(charEncoding);
 
@@ -624,7 +608,7 @@ public class FileUploader {
 					// We're parsing the outer multipart
 					String fieldName = getFieldName(headers);
 					if (fieldName != null) {
-						String subContentType = headers.getHeader(CONTENT_TYPE);
+						String subContentType = headers.getString(FileItemHeaders.CONTENT_TYPE);
 						if (subContentType != null
 								&& subContentType.toLowerCase(Locale.ENGLISH).startsWith(MimeType.MULTIPART_MIXED)) {
 							currentFieldName = fieldName;
@@ -635,7 +619,7 @@ public class FileUploader {
 							continue;
 						}
 						String fileName = getFileName(headers);
-						currentItem = new FileItemStreamImpl(fileName, fieldName, headers.getHeader(CONTENT_TYPE),
+						currentItem = new FileItemStreamImpl(fileName, fieldName, headers.getString(FileItemHeaders.CONTENT_TYPE),
 							fileName == null, getContentLength(headers));
 						currentItem.setHeaders(headers);
 						notifier.noteItem();
@@ -647,7 +631,7 @@ public class FileUploader {
 					String fileName = getFileName(headers);
 					if (fileName != null) {
 						currentItem = new FileItemStreamImpl(fileName, currentFieldName,
-							headers.getHeader(CONTENT_TYPE), false, getContentLength(headers));
+							headers.getString(FileItemHeaders.CONTENT_TYPE), false, getContentLength(headers));
 						currentItem.setHeaders(headers);
 						notifier.noteItem();
 						itemValid = true;
@@ -658,9 +642,9 @@ public class FileUploader {
 			}
 		}
 
-		private long getContentLength(FileItemHeaders pHeaders) {
+		private long getContentLength(FileItemHeaders headers) {
 			try {
-				return Long.parseLong(pHeaders.getHeader(CONTENT_LENGTH));
+				return Long.parseLong(headers.getString(FileItemHeaders.CONTENT_LENGTH));
 			}
 			catch (Exception e) {
 				return -1;

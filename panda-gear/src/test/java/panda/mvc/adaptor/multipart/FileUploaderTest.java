@@ -275,7 +275,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 
 	private void assertHeaders(String[] pHeaderNames, String[] pHeaderValues, TestFileItem pItem, int pIndex) {
 		for (int i = 0; i < pHeaderNames.length; i++) {
-			final String value = pItem.getHeaders().getHeader(pHeaderNames[i]);
+			final String value = pItem.getHeaders().getString(pHeaderNames[i]);
 			if (i == pIndex) {
 				assertEquals(pHeaderValues[i], value);
 			}

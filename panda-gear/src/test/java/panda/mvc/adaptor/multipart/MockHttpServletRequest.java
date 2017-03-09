@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import panda.net.http.HttpHeader;
+
 class MockHttpServletRequest implements HttpServletRequest {
 
 	private final InputStream m_requestData;
@@ -51,7 +53,7 @@ class MockHttpServletRequest implements HttpServletRequest {
 		m_requestData = requestData;
 		length = requestLength;
 		m_strContentType = strContentType;
-		m_headers.put(FileUploader.CONTENT_TYPE, strContentType);
+		m_headers.put(HttpHeader.CONTENT_TYPE, strContentType);
 	}
 
 	/**
