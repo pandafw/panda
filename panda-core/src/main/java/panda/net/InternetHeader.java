@@ -134,8 +134,6 @@ public abstract class InternetHeader extends CaseInsensitiveMap<String, Object> 
 			return this;
 		}
 
-		value = convertValue(value);
-
 		Object object = get(key);
 		if (object == null) {
 			put(key, value);
@@ -149,9 +147,10 @@ public abstract class InternetHeader extends CaseInsensitiveMap<String, Object> 
 		else {
 			vs = new ArrayList<String>();
 			vs.add(object);
-			put(key, vs);
+			super.put(key, vs);
 		}
 		
+		value = convertValue(value);
 		if (value instanceof List) {
 			vs.addAll((List)value);
 		}
