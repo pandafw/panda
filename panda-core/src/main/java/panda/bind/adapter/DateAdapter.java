@@ -8,13 +8,13 @@ import panda.bind.SourceAdapter;
 import panda.lang.time.FastDateFormat;
 
 /**
- * Convert Date to Long<br/>
- * setToTime(false) to use DateFormat to convert Date Type Value 
- *
+ * Convert Date to Milliseconds (Long), 
+ * or setDateFormat("yyyy-MM-dd") to use DateFormat to convert Date to formatted string.
  */
 public class DateAdapter implements SourceAdapter {
+	public static final DateAdapter toMillis = new DateAdapter();
+	
 	private Format dateFormat;
-	private boolean toTime = true;
 
 	/**
 	 * Constructor
@@ -23,17 +23,17 @@ public class DateAdapter implements SourceAdapter {
 	}
 
 	/**
+	 * @param dateFormat the date format to set
+	 */
+	public DateAdapter(String dateFormat) {
+		setDateFormat(dateFormat);
+	}
+
+	/**
 	 * @param dateFormat the dateFormat to set
 	 */
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = FastDateFormat.getInstance(dateFormat);
-	}
-
-	/**
-	 * @param toTime the toTime to set
-	 */
-	public void setToTime(boolean toTime) {
-		this.toTime = toTime;
 	}
 
 	/**
@@ -62,12 +62,8 @@ public class DateAdapter implements SourceAdapter {
 		if (dateFormat != null){
 			return dateFormat.format(value);
 		}
-		else if (toTime) {
-			return value.getTime();
-		}
-		else {
-			return value;
-		}
+		
+		return value.getTime();
 	}
 }
 

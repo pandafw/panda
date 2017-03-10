@@ -2,7 +2,6 @@ package panda.bind;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -13,8 +12,10 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.bind.adapter.DateAdapter;
 import panda.lang.Arrays;
 import panda.lang.Chars;
+import panda.lang.Collections;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.CycleDetector;
 import panda.lang.Objects;
@@ -31,16 +32,22 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	public static final int DEFAULT_PRETTY_INDENT = 1;
 
 	//-------------- settings --------------------- 
-	private char indentChar = Chars.TAB;
-	private int cycleDetectStrategy = CycleDetectStrategy.CYCLE_DETECT_NOPROP;
+	protected int cycleDetectStrategy = CycleDetectStrategy.CYCLE_DETECT_NOPROP;
+
+	/** indent character */
+	protected char indentChar = Chars.TAB;
 
 	/** The number of spaces to add to each level of indentation. */
 	protected int indentFactor = 0;
 
-	private Map<Type, SourceAdapter> sourceAdapters = new HashMap<Type, SourceAdapter>();
+	/** source object adapters */
+	protected Map<Class, SourceAdapter> sourceAdapters = new HashMap<Class, SourceAdapter>();
+
+	/** convert Date or Calendar object to milliseconds */
+	protected boolean dateToMillis = false;
 	
 	//-------------- internal --------------------- 
-	private CycleDetector cycleDetector = new CycleDetector();
+	protected CycleDetector cycleDetector = new CycleDetector();
 
 	protected Appendable writer;
 
@@ -79,23 +86,6 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		this.indentChar = indentChar;
 	}
 
-	public Map<Type, SourceAdapter> getSourceAdapters() {
-		return sourceAdapters;
-	}
-	@SuppressWarnings("unchecked")
-	public <T> SourceAdapter<T> getSourceAdapter(Type type) {
-		return sourceAdapters.get(type);
-	}
-	public void registerSourceAdapter(Type type, SourceAdapter sourceAdapter) {
-		sourceAdapters.put(type, sourceAdapter);
-	}
-	public void removeSourceAdapter(Type type) {
-		sourceAdapters.remove(type);
-	}
-	public void clearSourceAdapters() {
-		sourceAdapters.clear();
-	}
-
 	/**
 	 * @return the indentFactor
 	 */
@@ -122,6 +112,62 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	 */
 	public void setPrettyPrint(boolean prettyPrint) {
 		indentFactor = prettyPrint ? PRETTY_INDENT_FACTOR : 0;
+	}
+
+	/**
+	 * @return the dateToMillis
+	 */
+	public boolean isDateToMillis() {
+		return dateToMillis;
+	}
+
+	/**
+	 * @param dateToMillis the dateToMillis to set
+	 */
+	public void setDateToMillis(boolean dateToMillis) {
+		this.dateToMillis = dateToMillis;
+	}
+
+	//----------------------------------------------------------
+	public Map<Class, SourceAdapter> getSourceAdapters() {
+		return sourceAdapters;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> SourceAdapter<T> getSourceAdapter(Class type) {
+		if (dateToMillis) {
+			if (type.isAssignableFrom(Date.class) || type.isAssignableFrom(Calendar.class)) {
+				return DateAdapter.toMillis;
+			}
+		}
+		
+		if (Collections.isEmpty(sourceAdapters)) {
+			return null;
+		}
+		
+		SourceAdapter<T> sa = sourceAdapters.get(type);
+		if (sa != null) {
+			return sa;
+		}
+		
+		for (Entry<Class, SourceAdapter> en : sourceAdapters.entrySet()) {
+			if (en.getKey().isAssignableFrom(type)) {
+				return en.getValue();
+			}
+		}
+		return null;
+	}
+	
+	public void registerSourceAdapter(Class type, SourceAdapter sourceAdapter) {
+		sourceAdapters.put(type, sourceAdapter);
+	}
+	
+	public void removeSourceAdapter(Class type) {
+		sourceAdapters.remove(type);
+	}
+	
+	public void clearSourceAdapters() {
+		sourceAdapters.clear();
 	}
 
 	//----------------------------------------------------------

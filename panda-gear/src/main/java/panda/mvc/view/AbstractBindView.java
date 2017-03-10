@@ -240,15 +240,14 @@ public abstract class AbstractBindView extends AbstractDataView {
 			}
 		}
 
-		DateAdapter da = new DateAdapter();
 		if (DATE_FORMAT_LONG.compareToIgnoreCase(dateFormat) == 0) {
-			da.setToTime(true);
+			as.setDateToMillis(true);
 		}
 		else {
-			da.setDateFormat(dateFormat);
+			DateAdapter da = new DateAdapter(dateFormat);
+			as.registerSourceAdapter(Date.class, da);
+			as.registerSourceAdapter(Calendar.class, da);
 		}
-		as.registerSourceAdapter(Date.class, da);
-		as.registerSourceAdapter(Calendar.class, da);
 
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
