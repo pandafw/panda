@@ -1198,8 +1198,7 @@ public abstract class Classes {
 			}
 		}
 
-		throw new NoSuchMethodException("Can't find a public method for " + methodName + " "
-				+ Arrays.toString(parameterTypes));
+		throw new NoSuchMethodException("Can't find a public method for " + methodName + "(" + Strings.join(parameterTypes, ", ") + ")");
 	}
 
 	// ----------------------------------------------------------------------

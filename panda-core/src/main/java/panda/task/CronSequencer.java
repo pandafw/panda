@@ -375,7 +375,10 @@ public class CronSequencer {
 
 	@Override
 	public String toString() {
-		return Objects.toStringBuilder().append(expression).toString();
+		return Objects.toStringBuilder()
+				.append(expression)
+				.append(timeZone)
+				.toString();
 	}
 
 }

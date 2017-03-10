@@ -57,7 +57,7 @@ public class CharsetsTest {
 
 	@Test
 	public void testDetectCharsets() throws Exception {
-		Assert.assertEquals("[Shift_JIS,GB18030]", Arrays.toString(Charsets.detectCharsets(Streams.toByteArray(getClass().getResource("Shift-JIS.txt")))));
+		Assert.assertEquals("Shift_JIS,GB18030", Strings.join(Charsets.detectCharsets(Streams.toByteArray(getClass().getResource("Shift-JIS.txt"))), ","));
 	}
 
 }
