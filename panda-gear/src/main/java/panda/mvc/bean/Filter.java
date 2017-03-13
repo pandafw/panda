@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.validation.Validators;
@@ -307,7 +308,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	public void setBooleanValues(List<Boolean> bvs) {
 		this.type = VT_BOOLEAN;
-		this.values = bvs;
+		this.values = Collections.stripToNull(bvs);
 	}
 
 	/**
@@ -347,11 +348,11 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param dtvs the dtvs to set
+	 * @param evs the dtvs to set
 	 */
-	public void setDateTimeValues(List<Date> dtvs) {
+	public void setDateTimeValues(List<Date> evs) {
 		this.type = VT_DATETIME;
-		this.values = dtvs;
+		this.values = Collections.stripToNull(evs);
 	}
 
 	/**
@@ -362,10 +363,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param dtv the dtv to set
+	 * @param ev the dtv to set
 	 */
-	public void setDateTimeValue(Date dtv) {
-		setObject(0, dtv, VT_DATETIME);
+	public void setDateTimeValue(Date ev) {
+		setObject(0, ev, VT_DATETIME);
 	}
 
 	/**
@@ -376,10 +377,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param dtv2 the dtv2 to set
+	 * @param ev2 the dtv2 to set
 	 */
-	public void setDateTimeValue2(Date dtv2) {
-		setObject(1, dtv2, VT_DATETIME);
+	public void setDateTimeValue2(Date ev2) {
+		setObject(1, ev2, VT_DATETIME);
 	}
 
 	/**
@@ -395,7 +396,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	public void setDateValues(List<Date> dvs) {
 		this.type = VT_DATE;
-		this.values = dvs;
+		this.values = Collections.stripToNull(dvs);
 	}
 
 	/**
@@ -439,7 +440,7 @@ public class Filter implements Cloneable, Serializable {
 	 */
 	public void setTimeValues(List<Date> tvs) {
 		this.type = VT_TIME;
-		this.values = tvs;
+		this.values = Collections.stripToNull(tvs);
 	}
 
 	/**
@@ -479,11 +480,11 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param numberValues the numberValues to set
+	 * @param nvs the numberValues to set
 	 */
-	public void setNumberValues(List<Number> numberValues) {
+	public void setNumberValues(List<Number> nvs) {
 		this.type = VT_NUMBER;
-		this.values = numberValues;
+		this.values = Collections.stripToNull(nvs);
 	}
 
 	/**
@@ -494,10 +495,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param numberValue the numberValue to set
+	 * @param nv the numberValue to set
 	 */
-	public void setNumberValue(Number numberValue) {
-		setObject(0, numberValue, VT_NUMBER);
+	public void setNumberValue(Number nv) {
+		setObject(0, nv, VT_NUMBER);
 	}
 
 	/**
@@ -508,10 +509,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param numberValue2 the numberValue2 to set
+	 * @param nv2 the numberValue2 to set
 	 */
-	public void setNumberValue2(Number numberValue2) {
-		setObject(1, numberValue2, VT_NUMBER);
+	public void setNumberValue2(Number nv2) {
+		setObject(1, nv2, VT_NUMBER);
 	}
 
 	/**
@@ -523,11 +524,11 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param stringValues the stringValues to set
+	 * @param svs the stringValues to set
 	 */
-	public void setStringValues(List<String> stringValues) {
+	public void setStringValues(List<String> svs) {
 		this.type = VT_STRING;
-		this.values = stringValues;
+		this.values = Collections.stripToNull(svs);
 	}
 
 	/**
@@ -538,10 +539,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param stringValue the stringValue to set
+	 * @param sv the stringValue to set
 	 */
-	public void setStringValue(String stringValue) {
-		setObject(0, stringValue, VT_STRING);
+	public void setStringValue(String sv) {
+		setObject(0, Strings.stripToNull(sv), VT_STRING);
 	}
 
 	/**
@@ -552,10 +553,10 @@ public class Filter implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @param stringValue2 the stringValue2 to set
+	 * @param sv2 the stringValue2 to set
 	 */
-	public void setStringValue2(String stringValue2) {
-		setObject(1, stringValue2, VT_STRING);
+	public void setStringValue2(String sv2) {
+		setObject(1, Strings.stripToNull(sv2), VT_STRING);
 	}
 
 	//////////////////////////////////////////////////////////
