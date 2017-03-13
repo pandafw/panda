@@ -23,61 +23,51 @@
 			"type": "number",
 			"header": a.getText("listview-th-number", ""),
 			"fixed": true
-		}] />
-<#if a.displayField("id")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "id",
 			"value": false,
 			"header": a.getFieldLabel("id"),
+			"display": a.displayField("id"),
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("id")
-		}] />
-</#if>
-<#if a.displayField("name")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "name",
 			"value": false,
 			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("name")
-		}] />
-</#if>
-<#if a.displayField("size")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "size",
 			"value": false,
 			"header": a.getFieldLabel("size"),
+			"display": a.displayField("size"),
 			"format": {
 				"type": "integer"
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("size")
-		}] />
-</#if>
-<#if a.displayField("date")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "date",
 			"value": false,
 			"header": a.getFieldLabel("date"),
+			"display": a.displayField("date"),
 			"format": {
 				"type": "timestamp"
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("date")
-		}] />
-</#if>
-<#if a.displayField("flag")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "flag",
 			"value": false,
 			"header": a.getFieldLabel("flag"),
+			"display": a.displayField("flag"),
 			"format": {
 				"type": "integer"
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("flag")
 		}] />
-</#if>
 
 
 	<@p.listview id="filepool_list_print" action="~/list_print" 

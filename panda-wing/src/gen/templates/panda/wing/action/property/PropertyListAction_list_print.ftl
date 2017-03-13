@@ -23,32 +23,27 @@
 			"type": "number",
 			"header": a.getText("listview-th-number", ""),
 			"fixed": true
-		}] />
-<#if a.displayField("id")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "id",
 			"value": false,
 			"header": a.getFieldLabel("id"),
+			"display": a.displayField("id"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("id")
-		}] />
-</#if>
-<#if a.displayField("clazz")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "clazz",
 			"value": false,
 			"header": a.getFieldLabel("clazz"),
+			"display": a.displayField("clazz"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("clazz")
-		}] />
-</#if>
-<#if a.displayField("language")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "language",
 			"value": false,
 			"header": a.getFieldLabel("language"),
+			"display": a.displayField("language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
@@ -56,13 +51,11 @@
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("language")
-		}] />
-</#if>
-<#if a.displayField("country")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "country",
 			"value": false,
 			"header": a.getFieldLabel("country"),
+			"display": a.displayField("country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
@@ -70,43 +63,35 @@
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("country")
-		}] />
-</#if>
-<#if a.displayField("name")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "name",
 			"value": false,
 			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("name")
-		}] />
-</#if>
-<#if a.displayField("value")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "value",
 			"value": false,
 			"header": a.getFieldLabel("value"),
+			"display": a.displayField("value"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("value")
-		}] />
-</#if>
-<#if a.displayField("memo")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "memo",
 			"value": false,
 			"header": a.getFieldLabel("memo"),
+			"display": a.displayField("memo"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("memo")
-		}] />
-</#if>
-<#if a.displayField("status")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "status",
 			"value": false,
 			"header": a.getFieldLabel("status"),
+			"display": a.displayField("status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
@@ -114,23 +99,19 @@
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("status")
-		}] />
-</#if>
-<#if a.displayField("uusid")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "uusid",
 			"value": false,
 			"header": a.getFieldLabel("uusid"),
+			"display": a.displayField("uusid"),
 			"hidden": false,
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("uusid")
-		}] />
-</#if>
-<#if a.displayField("utime")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name": "utime",
 			"value": false,
 			"header": a.getFieldLabel("utime"),
+			"display": a.displayField("utime"),
 			"format": {
 				"type": "datetime"
 			},
@@ -138,7 +119,6 @@
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("utime")
 		}] />
-</#if>
 
 
 	<@p.listview id="property_list_print" action="~/list_print" 

@@ -91,35 +91,34 @@
 		}] />
 	</#if>
 
-<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
 			"value": true,
 			"header": a.getFieldLabel("id"),
+			"display": a.displayField("id"),
+			"filterable": a.filterField("id"),
 			"filter": {
 				"type": "number"
 			},
 			"link": true,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("id")
-		}] />
-</#if>
-<#if a.displayField("name")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "name",
 			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
+			"filterable": a.filterField("name"),
 			"filter": {
 				"type": "string"
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("name")
-		}] />
-</#if>
-<#if a.displayField("size")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "size",
 			"header": a.getFieldLabel("size"),
+			"display": a.displayField("size"),
+			"filterable": a.filterField("size"),
 			"format": {
 				"type": "integer"
 			},
@@ -128,12 +127,11 @@
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("size")
-		}] />
-</#if>
-<#if a.displayField("date")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "date",
 			"header": a.getFieldLabel("date"),
+			"display": a.displayField("date"),
+			"filterable": a.filterField("date"),
 			"format": {
 				"type": "timestamp"
 			},
@@ -142,12 +140,11 @@
 			},
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("date")
-		}] />
-</#if>
-<#if a.displayField("flag")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "flag",
 			"header": a.getFieldLabel("flag"),
+			"display": a.displayField("flag"),
+			"filterable": a.filterField("flag"),
 			"format": {
 				"type": "integer"
 			},
@@ -157,7 +154,7 @@
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("flag")
 		}] />
-</#if>
+
 
 	<#if a.actionsAlignRight>
 		<#assign _columns_ = _columns_ + _actionc_![]/>

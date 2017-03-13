@@ -91,12 +91,13 @@
 		}] />
 	</#if>
 
-<#if a.displayField("id")>
 	<#assign _columns_ = _columns_ + [{
 			"name" : "id",
 			"pkey" : true,
 			"value": true,
 			"header": a.getFieldLabel("id"),
+			"display": a.displayField("id"),
+			"filterable": a.filterField("id"),
 			"filter": {
 				"type": "number"
 			},
@@ -104,12 +105,11 @@
 			"link": true,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("id")
-		}] />
-</#if>
-<#if a.displayField("clazz")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "clazz",
 			"header": a.getFieldLabel("clazz"),
+			"display": a.displayField("clazz"),
+			"filterable": a.filterField("clazz"),
 			"filter": {
 				"type": "string"
 			},
@@ -117,12 +117,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("clazz")
-		}] />
-</#if>
-<#if a.displayField("language")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "language",
 			"header": a.getFieldLabel("language"),
+			"display": a.displayField("language"),
+			"filterable": a.filterField("language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
@@ -135,12 +134,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("language")
-		}] />
-</#if>
-<#if a.displayField("country")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "country",
 			"header": a.getFieldLabel("country"),
+			"display": a.displayField("country"),
+			"filterable": a.filterField("country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
@@ -153,12 +151,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("country")
-		}] />
-</#if>
-<#if a.displayField("name")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "name",
 			"header": a.getFieldLabel("name"),
+			"display": a.displayField("name"),
+			"filterable": a.filterField("name"),
 			"filter": {
 				"type": "string"
 			},
@@ -166,12 +163,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("name")
-		}] />
-</#if>
-<#if a.displayField("value")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "value",
 			"header": a.getFieldLabel("value"),
+			"display": a.displayField("value"),
+			"filterable": a.filterField("value"),
 			"filter": {
 				"type": "string"
 			},
@@ -179,12 +175,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("value")
-		}] />
-</#if>
-<#if a.displayField("memo")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "memo",
 			"header": a.getFieldLabel("memo"),
+			"display": a.displayField("memo"),
+			"filterable": a.filterField("memo"),
 			"filter": {
 				"type": "string"
 			},
@@ -192,12 +187,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("memo")
-		}] />
-</#if>
-<#if a.displayField("status")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "status",
 			"header": a.getFieldLabel("status"),
+			"display": a.displayField("status"),
+			"filterable": a.filterField("status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
@@ -210,12 +204,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("status")
-		}] />
-</#if>
-<#if a.displayField("uusid")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "uusid",
 			"header": a.getFieldLabel("uusid"),
+			"display": a.displayField("uusid"),
+			"filterable": a.filterField("uusid"),
 			"filter": {
 				"type": "number"
 			},
@@ -223,12 +216,11 @@
 			"link": false,
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("uusid")
-		}] />
-</#if>
-<#if a.displayField("utime")>
-	<#assign _columns_ = _columns_ + [{
+		}, {
 			"name" : "utime",
 			"header": a.getFieldLabel("utime"),
+			"display": a.displayField("utime"),
+			"filterable": a.filterField("utime"),
 			"format": {
 				"type": "datetime"
 			},
@@ -240,7 +232,7 @@
 			"sortable": true,
 			"tooltip": a.getFieldTooltip("utime")
 		}] />
-</#if>
+
 
 	<#if a.actionsAlignRight>
 		<#assign _columns_ = _columns_ + _actionc_![]/>
