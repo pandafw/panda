@@ -40,7 +40,6 @@ public class UserAgent {
 	public static final String MSIE11 = "Trident";
 	public static final String NETSCAPE = "Netscape";
 	public static final String OPERA = "Opera";
-	public static final String WEBKIT = "WebKit";
 	public static final String SAFARI = "Safari";
 	public static final String IPHONE = "iPhone";
 	public static final String IPAD = "iPad";
@@ -226,26 +225,22 @@ public class UserAgent {
 			return;
 		}
 		
-		parse(CHROME);
-		parse(FIREFOX);
-		parse(EDGE);
-		parse(MSIE);
-		parse(MSIE11, MSIE, 11);
-		parse(NETSCAPE);
-		parse(OPERA);
-		parse(WEBKIT);
-		parse(SAFARI);
-		parse(IPHONE);
-		parse(IPAD);
-		parse(IPOD);
-		parse(ANDROID);
-		parse(WINDOWS);
-		parse(MACINTOSH);
-		parse(LINUX);
-		parse(UBUNTU);
-		parse(MINT);
-		parse(FEDORA);
-		parse(GENTOO);
+		if (parse(CHROME) 
+				|| parse(FIREFOX)
+				|| parse(EDGE)
+				|| parse(MSIE)
+				|| parse(MSIE11, MSIE, 11)
+				|| parse(OPERA)
+				|| parse(SAFARI)
+				|| parse(NETSCAPE)) {
+		}
+
+		if (parse(IPHONE) || parse(IPAD) || parse(IPOD)
+				|| parse(ANDROID) || parse(WINDOWS) || parse(MACINTOSH)) {
+		}
+		else if (parse(LINUX)) {
+			if (parse(UBUNTU) || parse(MINT) || parse(FEDORA) || parse(GENTOO)) {}
+		}
 		
 		if (checkRobot()) {
 			browsers.put(ROBOT, DUMMY);
@@ -260,38 +255,41 @@ public class UserAgent {
 		}
 	}
 
-	private void parse(String client) {
-		parse(client, client, 0);
+	private boolean parse(String client) {
+		return parse(client, client, 0);
 	}
 	
-	private void parse(String client, String alias, int major) {
+	private boolean parse(String client, String alias, int major) {
 		int i = userAgent.indexOf(client);
-		if (i >= 0) {
-			for (i += client.length(); i < userAgent.length(); i++) {
-				char c = userAgent.charAt(i);
-				if (Character.isDigit(c)) {
-					break;
-				}
-			}
-			
-			int j = i;
-			for (; j < userAgent.length(); j++) {
-				char c = userAgent.charAt(j);
-				if (!Character.isDigit(c) && c != '.') {
-					break;
-				}
-			}
-			
-			String ver = "";
-			if (i < userAgent.length()) {
-				ver = userAgent.substring(i, j);
-			}
-
-			if (major == 0) {
-				major = this.parseMajorVersion(ver);
-			}
-			browsers.put(alias, new Version(ver, major, 0));
+		if (i < 0) {
+			return false;
 		}
+
+		for (i += client.length(); i < userAgent.length(); i++) {
+			char c = userAgent.charAt(i);
+			if (Character.isDigit(c)) {
+				break;
+			}
+		}
+		
+		int j = i;
+		for (; j < userAgent.length(); j++) {
+			char c = userAgent.charAt(j);
+			if (!Character.isDigit(c) && c != '.') {
+				break;
+			}
+		}
+		
+		String ver = "";
+		if (i < userAgent.length()) {
+			ver = userAgent.substring(i, j);
+		}
+
+		if (major == 0) {
+			major = this.parseMajorVersion(ver);
+		}
+		browsers.put(alias, new Version(ver, major, 0));
+		return true;
 	}
 	
 	private boolean checkRobot() {
