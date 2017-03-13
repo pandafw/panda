@@ -96,8 +96,13 @@ public class Csv extends Component {
 		try {
 			ArrayList<Object> line = new ArrayList<Object>();
 			for (ListColumn c : columns) {
-				if (!c.hidden) {
-					line.add(c.header == null ? c.name : c.header);
+				if (c.hidden) {
+					continue;
+				}
+
+				line.add(c.header == null ? c.name : c.header);
+				if (c.format != null && Strings.isEmpty(c.format.escape)) {
+					c.format.escape = Escapes.ESCAPE_NONE;
 				}
 			}
 			cw.writeList(line);
@@ -149,6 +154,7 @@ public class Csv extends Component {
 									}
 									property.setValue(v);
 									property.setFormat(c.format.type);
+									property.setEscape(c.format.escape);
 									value =  property.formatValue();
 								}
 							}
