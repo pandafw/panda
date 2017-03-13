@@ -35,8 +35,12 @@ public class Escapes {
 	public static final String ESCAPE_XML = "xml";
 	
 	public static String escape(CharSequence value, String escape) {
-		if (Strings.isEmpty(value) || Strings.isEmpty(escape)) {
+		if (Strings.isEmpty(value)) {
 			return Strings.EMPTY;
+		}
+		
+		if (Strings.isEmpty(escape)) {
+			return value.toString();
 		}
 
 		switch (escape.charAt(0)) {
