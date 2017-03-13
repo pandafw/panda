@@ -20,10 +20,7 @@ ${s}#if result?has_content>
 			"name": "_check_",
 			"type": "check",
 			"fixed": true
-		}] />
-<#list ui.displayColumnList as c>
-${s}#if a.displayField("${c.name}")>
-	${s}#assign _columns_ = _columns_ + [{
+		}, <#list ui.orderedColumnList as c>{
 			"name": "${c.name}",
 		<#if entity.isPrimaryKey(c.name)>
 			"pkey" : true,
@@ -32,16 +29,14 @@ ${s}#if a.displayField("${c.name}")>
 			"value": ${c.value?string},
 		</#if>
 			"header": a.getFieldLabel("${c.name}"),
+			"display": <#if c.display?has_content>${c.display?string}<#else>a.displayField("${c.name}")</#if>,
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
 				"${fp.name}": ${fp.value},
 			</#list>
 				"type": "${c.format.type?replace('#', '\\x23')}"
-				},
-		</#if>
-		<#if c.display??>
-			"display": ${c.display?string},
+			},
 		</#if>
 		<#if c.hidden??>
 			"hidden": ${c.hidden?string},
@@ -51,9 +46,8 @@ ${s}#if a.displayField("${c.name}")>
 		</#if>
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("${c.name}")
-		}] />
-${s}/#if>
-</#list>
+		}<#if c_has_next>, </#if></#list>] />
+
 
 	${s}@p.listview id="${action.name}_${ui.name}"
 		action="~/${ui.name}_execute" method="post"

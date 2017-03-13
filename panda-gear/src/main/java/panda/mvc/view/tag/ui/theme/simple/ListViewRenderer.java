@@ -735,73 +735,74 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			}
 
 			ListColumn.Filter of = c.filter;
-			if (of != null && of.display) {
-				fm.put(c.name, of);
+			if (of == null) {
+				continue;
+			}
 
-				if (of.label == null) {
-					of.label = c.header;
-				}
-				if (of.tooltip == null) {
-					of.tooltip = c.tooltip;
-				}
-				
-				String _fn = _pf + c.name;
+			fm.put(c.name, of);
+			if (of.label == null) {
+				of.label = c.header;
+			}
+			if (of.tooltip == null) {
+				of.tooltip = c.tooltip;
+			}
+			
+			String _fn = _pf + c.name;
 
-				boolean _hfe = false;
-				if (Collections.isNotEmpty(fieldErrors)) {
-					String _fn_d = _fn + '.';
-					for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-						if (en2.getKey().startsWith(_fn_d)) {
-							_hfe = true;
-							break;
-						}
+			boolean _hfe = false;
+			if (Collections.isNotEmpty(fieldErrors)) {
+				String _fn_d = _fn + '.';
+				for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
+					if (en2.getKey().startsWith(_fn_d)) {
+						_hfe = true;
+						break;
 					}
 				}
+			}
 
-				Filter qf = qfs == null ? null : qfs.get(c.name);
-				if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
-					fsinputs.add(c.name);
-					fsinput = true;
-				}
-				else if (of.fixed) {
-					fsinputs.add(c.name);
-					fsfixed = true;
-				}
+			Filter qf = qfs == null ? null : qfs.get(c.name);
+			if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
+				fsinputs.add(c.name);
+				fsinput = true;
+			}
+			else if (of.fixed) {
+				fsinputs.add(c.name);
+				fsfixed = true;
+			}
 
-				if (qf == null) {
-					continue;
-				}
-				
-				boolean _fd = false;
+			if (qf == null) {
+				continue;
+			}
+			
+			boolean _fd = false;
 
-				if ("string".equals(of.type)) {
-					_fd = Strings.isNotEmpty(qf.getSv());
-				}
-				else if ("boolean".equals(of.type)) {
-					_fd = qf.getBv() != null || qf.getBv2() != null;
-				}
-				else if ("number".equals(of.type)) {
-					_fd = qf.getNv() != null || qf.getNv2() != null;
-				}
-				else if ("datetime".equals(of.type)) {
-					_fd = qf.getEv() != null || qf.getEv2() != null;
-				}
-				else if ("date".equals(of.type)) {
-					_fd = qf.getDv() != null || qf.getDv2() != null;
-				}
-				else if ("time".equals(of.type)) {
-					_fd = qf.getTv() != null || qf.getTv2() != null;
-				}
-				else if ("checklist".equals(of.type)) {
-					_fd = Collections.isNotEmpty(qf.getSvs());
-				}
-				else if ("radio".equals(of.type) || "select".equals(of.type)) {
-					_fd = Strings.isNotEmpty(qf.getSv());
-				}
-				
-				if (_fd) {
-					fsdefines.add(c.name);
-				}
+			if ("string".equals(of.type)) {
+				_fd = Strings.isNotEmpty(qf.getSv());
+			}
+			else if ("boolean".equals(of.type)) {
+				_fd = qf.getBv() != null || qf.getBv2() != null;
+			}
+			else if ("number".equals(of.type)) {
+				_fd = qf.getNv() != null || qf.getNv2() != null;
+			}
+			else if ("datetime".equals(of.type)) {
+				_fd = qf.getEv() != null || qf.getEv2() != null;
+			}
+			else if ("date".equals(of.type)) {
+				_fd = qf.getDv() != null || qf.getDv2() != null;
+			}
+			else if ("time".equals(of.type)) {
+				_fd = qf.getTv() != null || qf.getTv2() != null;
+			}
+			else if ("checklist".equals(of.type)) {
+				_fd = Collections.isNotEmpty(qf.getSvs());
+			}
+			else if ("radio".equals(of.type) || "select".equals(of.type)) {
+				_fd = Strings.isNotEmpty(qf.getSv());
+			}
+			
+			if (_fd) {
+				fsdefines.add(c.name);
 			}
 		}
 		

@@ -346,7 +346,7 @@ public class Action {
 		return list;
 	}
 
-	public Set<String> getListUIColumns() {
+	public Set<String> getDisplayListUIColumns() {
 		Set<String> cs = new LinkedHashSet<String>();
 		for (ListUI lui : getSortedListUIList()) {
 			for (ListColumn lc : lui.getDisplayColumnList()) {
@@ -379,7 +379,7 @@ public class Action {
 		return list;
 	}
 
-	public Set<String> getInputUIFields() {
+	public Set<String> getDisplayInputUIFields() {
 		Set<String> cs = new LinkedHashSet<String>();
 		for (InputUI iui : getSortedInputUIList()) {
 			for (InputField inf : iui.getDisplayFieldList()) {

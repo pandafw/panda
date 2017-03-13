@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name=&quot;param&quot; type=&quot;{panda.tool.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
  *       &lt;attribute name=&quot;fixed&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
- *       &lt;attribute name=&quot;display&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;order&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}int&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
@@ -43,8 +42,6 @@ public class Filter implements Comparable<Filter> {
 
 	@XmlAttribute
 	private Boolean fixed;
-	@XmlAttribute
-	private Boolean display;
 	@XmlAttribute
 	private Integer order;
 	@XmlAttribute
@@ -69,7 +66,6 @@ public class Filter implements Comparable<Filter> {
 	 */
 	public Filter(Filter filter) {
 		this.fixed = filter.fixed;
-		this.display = filter.display;
 		this.order = filter.order;
 		this.name = filter.name;
 		this.type = filter.type;
@@ -104,20 +100,6 @@ public class Filter implements Comparable<Filter> {
 	 */
 	public void setFixed(Boolean fixed) {
 		this.fixed = fixed;
-	}
-
-	/**
-	 * @return the display
-	 */
-	public Boolean getDisplay() {
-		return display;
-	}
-
-	/**
-	 * @param display the display to set
-	 */
-	public void setDisplay(Boolean display) {
-		this.display = display;
 	}
 
 	/**

@@ -12,11 +12,9 @@ import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.EntityProperty;
-import panda.tool.codegen.bean.Filter;
 import panda.tool.codegen.bean.InputField;
 import panda.tool.codegen.bean.InputUI;
 import panda.tool.codegen.bean.ListColumn;
-import panda.tool.codegen.bean.ListQuery;
 import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
 import panda.tool.codegen.bean.Resource;
@@ -365,30 +363,6 @@ public class TextGenerator extends AbstractCodeGenerator {
 
 						if (write) {
 							pwabp.print('\n');
-						}
-					}
-
-					pwabp.print('\n');
-					for (ListQuery lq : listui.getQueryList()) {
-						pwabp.print('\n');
-						for (Filter f : lq.getFilterList()) {
-							boolean write = false;
-							if (Strings.isNotEmpty(f.getLabel())) {
-								saveProperty(pwabp, 
-									listui.getName() + "-filter-" + lq.getName() + "-" + f.getName(), 
-									f.getLabel());
-								write = true;
-							}
-							if (Strings.isNotEmpty(f.getTooltip())) {
-								saveProperty(pwabp, 
-									listui.getName() + "-filter-" + lq.getName() + "-" + f.getName() + "-tip", 
-									f.getTooltip());
-								write = true;
-							}
-
-							if (write) {
-								pwabp.print('\n');
-							}
 						}
 					}
 				}

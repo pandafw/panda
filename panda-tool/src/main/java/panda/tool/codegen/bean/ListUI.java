@@ -50,8 +50,6 @@ public class ListUI implements Comparable<ListUI> {
 
 	@XmlElement(name = "column")
 	private List<ListColumn> columnList;
-	@XmlElement(name = "query")
-	private List<ListQuery> queryList;
 	@XmlElement(name = "param")
 	private List<Param> paramList;
 	@XmlElement
@@ -94,11 +92,6 @@ public class ListUI implements Comparable<ListUI> {
 		columnList = new ArrayList<ListColumn>();
 		for (ListColumn lc : lui.getColumnList()) {
 			columnList.add(new ListColumn(lc));
-		}
-
-		queryList = new ArrayList<ListQuery>();
-		for (ListQuery lq : lui.getQueryList()) {
-			queryList.add(new ListQuery(lq));
 		}
 
 		paramList = new ArrayList<Param>();
@@ -159,23 +152,6 @@ public class ListUI implements Comparable<ListUI> {
 			}
 		}
 
-		List<ListQuery> mlqList = me.getQueryList();
-		List<ListQuery> slqList = src.getQueryList();
-		for (ListQuery slq : slqList) {
-			boolean add = false;
-			for (int i = 0; i < mlqList.size(); i++) {
-				ListQuery mlq = mlqList.get(i);
-				if (mlq.getName().equals(slq.getName())) {
-					mlqList.set(i, ListQuery.extend(slq, mlq));
-					add = true;
-					break;
-				}
-			}
-			if (!add) {
-				mlqList.add(new ListQuery(slq));
-			}
-		}
-
 		List<Param> mpList = me.getParamList();
 		List<Param> spList = src.getParamList();
 		for (Param sp : spList) {
@@ -207,28 +183,28 @@ public class ListUI implements Comparable<ListUI> {
 			if (lc.getOrder() == null) {
 				lc.setOrder((i + 1) * 100);
 			}
-			if (!Boolean.FALSE.equals(lc.getDisplay())) {
+			if (Strings.isEmpty(lc.getDisplay()) || "true".equals(lc.getDisplay())) {
 				set.add(lc);
 			}
 		}
 		return set;
 	}
 
-//	/**
-//	 * @return the ordered column list 
-//	 */
-//	public Set<ListColumn> getOrderedColumnList() {
-//		Set<ListColumn> set = new TreeSet<ListColumn>();
-//		List<ListColumn> list = getColumnList();
-//		for (int i = 0; i < list.size(); i++) {
-//			ListColumn lc = list.get(i);
-//			if (lc.getOrder() == null) {
-//				lc.setOrder((i + 1) * 100);
-//			}
-//			set.add(lc);
-//		}
-//		return set;
-//	}
+	/**
+	 * @return the ordered column list 
+	 */
+	public Set<ListColumn> getOrderedColumnList() {
+		Set<ListColumn> set = new TreeSet<ListColumn>();
+		List<ListColumn> list = getColumnList();
+		for (int i = 0; i < list.size(); i++) {
+			ListColumn lc = list.get(i);
+			if (lc.getOrder() == null) {
+				lc.setOrder((i + 1) * 100);
+			}
+			set.add(lc);
+		}
+		return set;
+	}
 
 	/**
 	 * @return the columnList
@@ -238,35 +214,6 @@ public class ListUI implements Comparable<ListUI> {
 			columnList = new ArrayList<ListColumn>();
 		}
 		return this.columnList;
-	}
-
-	/**
-	 * @return the queryList
-	 */
-	public List<ListQuery> getQueryList() {
-		if (queryList == null) {
-			queryList = new ArrayList<ListQuery>();
-		}
-		return queryList;
-	}
-
-	/**
-	 * @return the display query list which ListQuery.display is not false
-	 */
-	public Set<ListQuery> getDisplayQueryList() {
-		Set<ListQuery> set = new TreeSet<ListQuery>();
-		List<ListQuery> list = getQueryList();
-		for (int i = 0; i < list.size(); i++) {
-			ListQuery q = list.get(i);
-			if (q.getOrder() == null) {
-				q.setOrder((i + 1) * 100);
-			}
-
-			if (!Boolean.FALSE.equals(q.getDisplay())) {
-				set.add(q);
-			}
-		}
-		return set;
 	}
 
 	/**

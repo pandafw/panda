@@ -12,13 +12,12 @@
 			"type": "number",
 			"header": a.getText("listview-th-number", ""),
 			"fixed": true
-		}] />
-<#list ui.displayColumnList as c>
-${s}#if a.displayField("${c.name}")>
-	${s}#assign _columns_ = _columns_ + [{
+		}, <#list ui.orderedColumnList as c>{
 			"name": "${c.name}",
 			"value": ${(c.value!true)?string},
 			"header": a.getFieldLabel("${c.name}"),
+			"display": <#if c.display?has_content>${c.display?string}<#else>a.displayField("${c.name}")</#if>,
+			"filterable": <#if c.filterable?has_content>${c.filterable?string}<#else>a.filterField("${c.name}")</#if>,
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -29,9 +28,6 @@ ${s}#if a.displayField("${c.name}")>
 		</#if>
 		<#if c.filter??>
 			"filter": {
-			<#if c.filter.display??>
-				"display": ${c.filter.display?string},
-			</#if>
 			<#if c.filter.label??>
 				"label": "${c.filter.label}",
 			</#if>
@@ -47,9 +43,6 @@ ${s}#if a.displayField("${c.name}")>
 				"type": "${c.filter.type?replace('#', '\\x23')}"
 			},
 		</#if>
-		<#if c.display??>
-			"display": ${c.display?string},
-		</#if>
 		<#if c.hidden??>
 			"hidden": ${c.hidden?string},
 		</#if>
@@ -62,16 +55,11 @@ ${s}#if a.displayField("${c.name}")>
 		<#if c.sortable??>
 			"sortable": ${c.sortable?string},
 		</#if>
-		<#if c.filterable??>
-			"filterable": ${c.filterable?string},
-		</#if>
 		<#if c.width?has_content>
 			"width": "${c.width}",
 		</#if>
 			"tooltip": a.getFieldTooltip("${c.name}")
-		}] />
-${s}/#if>
-</#list>
+		}<#if c_has_next>, </#if></#list>] />
 
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 

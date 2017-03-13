@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Strings;
+
 /**
  * <p>
  * Java class for ListColumn complex type.
@@ -20,14 +22,14 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name=&quot;format&quot; type=&quot;{panda.tool.codegen}Format&quot; minOccurs=&quot;0&quot;/&gt;
  *         &lt;element name=&quot;filter&quot; type=&quot;{panda.tool.codegen}Filter&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name=&quot;display&quot; default=&quot;true&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;display&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;link&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;nowrap&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;width&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;group&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
- *       &lt;attribute name=&quot;filterable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
+ *       &lt;attribute name=&quot;filterable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;sortable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;hidden&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;value&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -49,7 +51,7 @@ public class ListColumn implements Comparable<ListColumn> {
 	private Filter filter;
 
 	@XmlAttribute
-	private Boolean display;
+	private String display;
 	@XmlAttribute
 	private String tooltip;
 	@XmlAttribute
@@ -65,7 +67,7 @@ public class ListColumn implements Comparable<ListColumn> {
 	@XmlAttribute
 	private Boolean sortable;
 	@XmlAttribute
-	private Boolean filterable;
+	private String filterable;
 	@XmlAttribute
 	private Boolean hidden;
 	@XmlAttribute
@@ -202,14 +204,17 @@ public class ListColumn implements Comparable<ListColumn> {
 	/**
 	 * @return the display
 	 */
-	public Boolean getDisplay() {
+	public String getDisplay() {
 		return display;
 	}
 
 	/**
 	 * @param display the display to set
 	 */
-	public void setDisplay(Boolean display) {
+	public void setDisplay(String display) {
+		if (Strings.isNotEmpty(display) && !"true".equals(display) && !"false".equals(display)) {
+			throw new IllegalArgumentException("Invalid display value: " + display);
+		}
 		this.display = display;
 	}
 
@@ -314,14 +319,17 @@ public class ListColumn implements Comparable<ListColumn> {
 	/**
 	 * @return the filterable
 	 */
-	public Boolean getFilterable() {
+	public String getFilterable() {
 		return filterable;
 	}
 
 	/**
 	 * @param filterable the filterable to set
 	 */
-	public void setFilterable(Boolean filterable) {
+	public void setFilterable(String filterable) {
+		if (Strings.isNotEmpty(filterable) && !"true".equals(filterable) && !"false".equals(filterable)) {
+			throw new IllegalArgumentException("Invalid filterable value: " + filterable);
+		}
 		this.filterable = filterable;
 	}
 

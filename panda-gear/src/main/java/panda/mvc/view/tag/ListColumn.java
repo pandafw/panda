@@ -18,7 +18,6 @@ public class ListColumn {
 		public boolean fixed;
 		public String label;
 		public String tooltip;
-		public boolean display = true;
 		public Object list;
 	}
 
@@ -29,6 +28,8 @@ public class ListColumn {
 	public String tooltip;
 	public boolean hidden;
 	public boolean display = true;
+	public boolean filterable = true;
+	public boolean sortable = false;
 
 	public boolean fixed;
 	public boolean wswrap;
@@ -43,6 +44,4 @@ public class ListColumn {
 	public Object link;
 	public List<ItemLink> actions;
 	
-	public boolean sortable = false;
-	public boolean filterable = true;
 }

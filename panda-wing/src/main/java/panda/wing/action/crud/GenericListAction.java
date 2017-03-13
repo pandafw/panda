@@ -231,8 +231,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		Set<Entry> s = params.entrySet();
 		for (Entry e : s) {
 			if (e.getKey() != null) {
-				if (e.getKey().toString().startsWith("_") 
-						|| Objects.isEmpty(e.getValue())) {
+				if (e.getKey().toString().startsWith("_") || Objects.isEmpty(e.getValue())) {
 					keys.add(e.getKey());
 				}
 			}
@@ -428,8 +427,16 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	//-------------------------------------------------------------
-	// call by view
+	// called by view
 	//-------------------------------------------------------------
+	/**
+	 * @param field field name
+	 * @return true if the field is filterable
+	 */
+	public boolean filterField(String field) {
+		return displayField(field);
+	}
+
 	public boolean isActionsAlignLeft() {
 		String a = getText("listview-actions-align");
 		if (Strings.isEmpty(a)) {
