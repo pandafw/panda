@@ -483,11 +483,7 @@ public abstract class DaoTestCase {
 	@Test
 	public void testUpdateColumn() {
 		Teacher expect = Teacher.create(2);
-		Teacher update = Teacher.create(2);
 		expect.setMemo("update");
-
-		update.setMemo(expect.getMemo());
-		update.setData("XXX".getBytes());
 
 		Assert.assertEquals(1, dao.update(expect, "memo"));
 		
@@ -498,9 +494,9 @@ public abstract class DaoTestCase {
 	@Test
 	public void testUpdateIgnoreNull() {
 		Teacher expect = Teacher.create(2);
-		Teacher update = Teacher.create(2);
 		expect.setMemo("update");
 	
+		Teacher update = Teacher.create(2);
 		update.setMemo(expect.getMemo());
 		update.setData(null);
 
@@ -532,7 +528,25 @@ public abstract class DaoTestCase {
 		t.setMemo("u");
 
 		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
-		q.in("name","T2", "T3").excludeAll().include("memo");
+		q.in("name", "T2", "T3").excludeAll().include("memo");
+		
+		Assert.assertEquals(expect.size(), dao.updates(t, q));
+		
+		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
+		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
+	}
+
+	@Test
+	public void testUpdatesColumnByQuery() {
+		List<Teacher> expect = Teacher.creates(2, 3);
+		expect.get(0).setMemo(expect.get(0).getMemo() + "+u");
+		expect.get(1).setMemo(expect.get(1).getMemo() + "+u");
+
+		Teacher t = new Teacher();
+		t.setMemo("u");
+
+		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
+		q.in("name", "T2", "T3").excludeAll().column("memo", "CONCAT(memo, '+u')");
 		
 		Assert.assertEquals(expect.size(), dao.updates(t, q));
 		

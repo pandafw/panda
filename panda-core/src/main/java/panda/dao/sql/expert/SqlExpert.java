@@ -278,8 +278,23 @@ public abstract class SqlExpert {
 			if (ef.isReadonly() || query.shouldExclude(ef.getName())) {
 				continue;
 			}
-			sql.append(' ').append(escapeColumn(ef.getColumn())).append("=?,");
-			sql.addParam(getFieldValue(ef, data));
+
+			String col = ef.getColumn();
+			if (Strings.isEmpty(col)) {
+				throw new IllegalArgumentException("Can not update no-mapping field - " + ef.getName());
+			}
+			
+			sql.append(' ');
+
+			String val = query.getColumn(ef.getName());
+			if (Strings.isEmpty(val)) {
+				sql.append(escapeColumn(col)).append("=?,");
+				sql.addParam(getFieldValue(ef, data));
+			}
+			else {
+				sql.append(escapeColumn(col)).append('=').append(val).append(',');
+			}
+			
 			set = true;
 		}
 		if (!set) {
