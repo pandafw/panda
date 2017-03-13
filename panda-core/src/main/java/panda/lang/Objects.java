@@ -649,7 +649,7 @@ public abstract class Objects {
 			return Array.getLength(o) == 0;
 		}
 		else {
-			return o.toString().length() == 0;
+			return false;
 		}
 	}
 
