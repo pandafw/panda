@@ -707,6 +707,15 @@ public interface Dao {
 	 * @return updated count
 	 */
 	int updatesIgnoreNull(Collection<?> col);
+
+	/**
+	 * update records by the supplied query
+	 * 
+	 * @param query where condition and update fields filter
+	 * @return updated count
+	 */
+	int updates(Query<?> query);
+
 	/**
 	 * update records by the supplied object and query
 	 * 

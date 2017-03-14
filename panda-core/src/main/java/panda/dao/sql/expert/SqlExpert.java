@@ -288,6 +288,9 @@ public abstract class SqlExpert {
 
 			String val = query.getColumn(ef.getName());
 			if (Strings.isEmpty(val)) {
+				if (data == null) {
+					throw new IllegalArgumentException("Failed to get field(" + ef.getName() + ") value from null object");
+				}
 				sql.append(escapeColumn(col)).append("=?,");
 				sql.addParam(getFieldValue(ef, data));
 			}

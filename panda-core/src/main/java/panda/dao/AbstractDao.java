@@ -1374,6 +1374,17 @@ public abstract class AbstractDao implements Dao {
 	}
 
 	/**
+	 * update records by the supplied query
+	 * 
+	 * @param query query
+	 * @return updated count
+	 */
+	@Override
+	public int updates(Query<?> query) {
+		return updatesByQuery(null, cloneQuery(query), Integer.MAX_VALUE);
+	}
+
+	/**
 	 * update records by the supplied object and query
 	 * 
 	 * @param obj sample object
@@ -1382,8 +1393,6 @@ public abstract class AbstractDao implements Dao {
 	 */
 	@Override
 	public int updates(Object obj, Query<?> query) {
-		assertObject(obj);
-
 		return updatesByQuery(obj, cloneQuery(query), Integer.MAX_VALUE);
 	}
 
