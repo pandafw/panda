@@ -465,8 +465,15 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @throws EmailException if an email error occurs
 	 */
 	public void sendMail(Email email) throws EmailException {
+		if (email.getSender() == null) {
+			String s = getMailSetting(SC.MAIL_SENDER, null);
+			if (Strings.isNotEmpty(s)) {
+				email.setSender(s);
+			}
+		}
+
 		if (email.getFrom() == null) {
-			email.setFrom(getMailSetting(SC.MAIL_FROM_MAIL, null), getMailSetting(SC.MAIL_FROM_NAME, null));
+			email.setFrom(getMailSetting(SC.MAIL_FROM, null));
 		}
 
 		String charset = getMailSetting(SC.MAIL_CHARSET, Charsets.UTF_8);

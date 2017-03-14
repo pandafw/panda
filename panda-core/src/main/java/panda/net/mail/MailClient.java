@@ -383,7 +383,7 @@ public class MailClient {
 				checkReply(host, port, client);
 			}
 
-			client.setSender(email.getSender());
+			client.setSender(email.getSenderAddress());
 			checkReply(host, port, client);
 
 			for (EmailAddress ea : rcpts) {

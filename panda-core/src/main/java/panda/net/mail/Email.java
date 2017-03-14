@@ -22,6 +22,7 @@ public class Email {
 	private String msgId;
 	private Date date;
 	private String charset = Charsets.UTF_8;
+	private EmailAddress sender;
 	private EmailAddress from;
 	private Set<EmailAddress> rcpts;
 	private List<EmailAddress> tos;
@@ -80,17 +81,25 @@ public class Email {
 	}
 
 	/**
-	 * @return the from address
+	 * @return the sender address
 	 */
-	public String getSender() {
-		return from.getAddress();
+	public String getSenderAddress() {
+		return (sender == null ? from : sender).getAddress();
+	}
+
+	/**
+	 * @return the sender address
+	 */
+	public EmailAddress getSender() {
+		return sender;
 	}
 	
 	/**
-	 * @return the from
+	 * @param addr the sender address to set
+	 * @throws EmailException 
 	 */
-	public EmailAddress getFrom() {
-		return from;
+	public void setSender(String addr) throws EmailException {
+		this.sender = new EmailAddress(addr);
 	}
 	
 	/**
@@ -101,11 +110,18 @@ public class Email {
 	}
 
 	/**
-	 * @param addr the from to set
+	 * @return the from
+	 */
+	public EmailAddress getFrom() {
+		return from;
+	}
+	
+	/**
+	 * @param from the from address to set
 	 * @throws EmailException 
 	 */
-	public void setFrom(String addr) throws EmailException {
-		setFrom(addr, null);
+	public void setFrom(String from) throws EmailException {
+		this.from = EmailAddress.parse(from);
 	}
 
 	/**
@@ -144,10 +160,10 @@ public class Email {
 
 	/**
 	 * add to
-	 * @param addr to address
+	 * @param to the to address
 	 */
-	public void addTo(String addr) throws EmailException {
-		addTo(addr, null);
+	public void addTo(String to) throws EmailException {
+		addTo(EmailAddress.parse(to));
 	}
 
 	/**
@@ -199,11 +215,11 @@ public class Email {
 
 	/**
 	 * add cc
-	 * @param addr cc address
+	 * @param cc the cc address
 	 * @throws EmailException 
 	 */
-	public void addCc(String addr) throws EmailException {
-		addCc(addr, null);
+	public void addCc(String cc) throws EmailException {
+		addCc(EmailAddress.parse(cc));
 	}
 
 	/**
@@ -256,11 +272,11 @@ public class Email {
 
 	/**
 	 * add bcc
-	 * @param addr bcc address
+	 * @param bcc  the bcc address
 	 * @throws EmailException 
 	 */
-	public void addBcc(String addr) throws EmailException {
-		addBcc(addr, null);
+	public void addBcc(String bcc) throws EmailException {
+		addBcc(EmailAddress.parse(bcc));
 	}
 
 	/**
@@ -317,7 +333,7 @@ public class Email {
 	 * @throws EmailException 
 	 */
 	public void addReplyTo(String addr) throws EmailException {
-		addReplyTo(addr, null);
+		addReplyTo(EmailAddress.parse(addr));
 	}
 
 	/**
@@ -560,6 +576,9 @@ public class Email {
 		}
 		if (date != null) {
 			sb.append("DATE   : ").append(date).append(Streams.LINE_SEPARATOR);
+		}
+		if (sender != null) {
+			sb.append("SENDER : ").append(sender.getAddress()).append(Streams.LINE_SEPARATOR);
 		}
 		if (from != null) {
 			sb.append("FROM   : ").append(from).append(Streams.LINE_SEPARATOR);
