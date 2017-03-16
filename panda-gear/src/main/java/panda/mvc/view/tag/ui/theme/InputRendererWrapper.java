@@ -42,7 +42,7 @@ public abstract class InputRendererWrapper<T extends InputUIBean> extends Render
 	protected void writeDescrip() throws IOException {
 		if (Strings.isNotEmpty(tag.getDescription())) {
 			Form form = tag.findForm();
-			if (form != null && Boolean.TRUE.equals(form.getShowDescrip())) {
+			if (form != null && !Boolean.FALSE.equals(form.getHideDescrip())) {
 				write("<span class=\"p-descrip\">");
 				write(tag.getDescription());
 				write("</span>");

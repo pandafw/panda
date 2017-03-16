@@ -65,7 +65,7 @@ public class Form extends UIBean {
 
 	protected String labelClass;
 	protected String inputClass;
-	protected Boolean showDescrip;
+	protected Boolean hideDescrip;
 
 	@Override
 	protected void evaluateParams() {
@@ -260,17 +260,17 @@ public class Form extends UIBean {
 	}
 
 	/**
-	 * @return the showDescrip
+	 * @return the hideDescrip
 	 */
-	public Boolean getShowDescrip() {
-		return showDescrip;
+	public Boolean getHideDescrip() {
+		return hideDescrip;
 	}
 
 	/**
-	 * @param showDescrip the showDescrip to set
+	 * @param hideDescrip the hideDescrip to set
 	 */
-	public void setShowDescrip(Boolean showDescrip) {
-		this.showDescrip = showDescrip;
+	public void setHideDescrip(Boolean hideDescrip) {
+		this.hideDescrip = hideDescrip;
 	}
 
 	//----------------------------------------------------------

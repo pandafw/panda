@@ -14,7 +14,7 @@
 			<#assign _formenctype = "multipart/form-data" />
 		</#if>
 	</#list>
-	${s}@p.form cssClass="p-eform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" focusme="${ui.focus?c}" method="post"<#if _formenctype?has_content> enctype="${_formenctype}"</#if><#if ui.theme?has_content> showDescrip="true" theme="${ui.theme}"</#if>>
+	${s}@p.form cssClass="p-eform" id="<#if ui.formId?has_content>${ui.formId}<#else>${action.name}</#if>" focusme="${ui.focus?c}" method="post"<#if _formenctype?has_content> enctype="${_formenctype}"</#if><#if ui.theme?has_content> theme="${ui.theme}"</#if>>
 		<#include "edit-update-fields.ftl" />
 		${s}#assign _buttons_ = [] />
 <#if "true" == props['ui.input.confirm']!>
