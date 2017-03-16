@@ -46,6 +46,10 @@ listview-filter-strings=\
 #	"nk": "不像"
 
 
+#uploader
+uploader-text=下载
+
+
 
 #servlet error
 servlet-error-title-404=网页不存在

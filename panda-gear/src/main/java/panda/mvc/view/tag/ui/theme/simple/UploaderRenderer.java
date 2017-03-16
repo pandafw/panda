@@ -55,7 +55,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		stag("div", attr);
 
 		Attributes a = new Attributes();
-		a.type("file").css(this, "p-uploader-file p-hidden");
+		a.type("file").css(this, "p-uploader-file");
 		a.add("name", "")
 		 .add("value", "")
 		 .disabled(tag)
@@ -76,7 +76,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		 .disabled(tag);
 		if (name != null) {
 			a.name(name);
-			a.value(String.valueOf(tag.getFileId()));
+			a.value(Strings.defaultString(tag.getFileId()));
 		}
 		xtag("input", a);
 
@@ -85,6 +85,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
 		write(html(getText("btn-select-file", "Browse...")));
 		write("</button>");
+
 		write("<span class=\"p-uploader-text\">");
 		if (tag.isFileExits()) {
 			if (Strings.isNotEmpty(pdl)) {

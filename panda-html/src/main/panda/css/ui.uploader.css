@@ -1,4 +1,7 @@
-.p-uploader-file {
+.p-uploader-file, input.p-uploader-file, input[type="file"].p-uploader-file {
+	display: none;
+}
+.p-uploader-btn {
 	margin-right: 20px;
 }
 .p-uploader-progress {

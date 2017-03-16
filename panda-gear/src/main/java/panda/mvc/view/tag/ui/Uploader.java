@@ -65,6 +65,10 @@ public class Uploader extends InputUIBean {
 				defaultLink = defaulter.build();
 			}
 		}
+		
+		if (defaultText == null) {
+			defaultText = context.getText().getText("uploader-text", "");
+		}
 	}
 	
 	/**

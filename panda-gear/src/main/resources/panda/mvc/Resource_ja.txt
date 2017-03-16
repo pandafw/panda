@@ -53,6 +53,9 @@ listview-filter-strings=\
 #	"nk": "をLIKEしない"
 
 
+#uploader
+uploader-text=ダウンロード
+
 
 #servlet error
 servlet-error-title-404=ページ表示エラー

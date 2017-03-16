@@ -114,6 +114,10 @@ listview-filter-numbers=\
 	"ne": "≠" 
 
 
+#uploader
+uploader-text=Download
+
+
 
 #servlet error
 servlet-error-title-404=Page Not Found.
