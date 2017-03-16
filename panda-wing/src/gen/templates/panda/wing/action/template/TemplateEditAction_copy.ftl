@@ -23,7 +23,7 @@
 
 	<#include "/action-alert.ftl"/>
 
-	<@p.form cssClass="p-eform" id="template" focusme="true" method="post" showDescrip="true" theme="bs3h">
+	<@p.form cssClass="p-eform" id="template" focusme="true" method="post" theme="bs3h">
 	<#if a.displayField("id")>
 			<@p.viewfield
 				key="id"
