@@ -189,6 +189,9 @@ public class LocaleProcessor extends AbstractProcessor {
 		}
 		else {
 			c.setPath(ac.getRequest().getContextPath());
+			if (Strings.isEmpty(c.getPath())) {
+				c.setPath("/");
+			}
 		}
 		
 		c.setMaxAge(cookieMaxAge);
