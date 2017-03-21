@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
 
+import panda.Panda;
 import panda.bean.Beans;
 import panda.bind.json.JsonArray;
 import panda.bind.json.JsonObject;
@@ -107,7 +108,8 @@ public abstract class Mvcs {
 		else if (sb.charAt(0) == '~') {
 			sb = ac.getRequest().getContextPath() + sb.substring(1);
 		}
-		return sb;
+		
+		return sb + '/' + Panda.VERSION;
 	}
 
 	/**

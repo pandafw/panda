@@ -8,13 +8,6 @@ import java.util.Properties;
 
 import javax.servlet.ServletContext;
 
-import freemarker.cache.TemplateLoader;
-import freemarker.ext.jsp.TaglibFactory;
-import freemarker.template.Configuration;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -27,12 +20,19 @@ import panda.mvc.Mvcs;
 import panda.mvc.view.taglib.TagLibrary;
 import panda.mvc.view.taglib.TagLibraryManager;
 
+import freemarker.cache.TemplateLoader;
+import freemarker.ext.jsp.TaglibFactory;
+import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+
 @IocBean(create="initialize")
 public class FreemarkerManager {
 	private static final Log LOG = Logs.getLog(FreemarkerManager.class);
 
 	public static final String KEY_JSP_TAGLIBS = "JspTaglibs";
-	public static final String KEY_STATIC = "static";
+	public static final String KEY_STATICS = "statics";
 
 	@IocInject(value=MvcConstants.FREEMARKER_SETTINGS, required=false)
 	protected String settings = "freemarker.properties";
@@ -49,7 +49,7 @@ public class FreemarkerManager {
 	@IocInject(value = MvcConstants.FREEMARKER_BEANWRAPPER_CACHE, required = false)
 	protected boolean cacheBeanWrapper;
 
-	protected String staticBase;
+	protected String statics;
 	
 	@IocInject
 	protected TagLibraryManager taglibManager;
@@ -87,10 +87,10 @@ public class FreemarkerManager {
 			model.put(KEY_JSP_TAGLIBS, jspTaglibs);
 		}
 
-		if (staticBase == null) {
-			staticBase = Mvcs.getStaticBase(ac, null);
+		if (statics == null) {
+			statics = Mvcs.getStaticBase(ac, null);
 		}
-		model.put(KEY_STATIC, staticBase);
+		model.put(KEY_STATICS, statics);
 
 		model.put(SafeInclude.MACRO_NAME, new SafeInclude());
 		return model;

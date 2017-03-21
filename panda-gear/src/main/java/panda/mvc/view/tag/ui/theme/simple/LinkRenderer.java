@@ -104,10 +104,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 		
 		StringBuilder s = new StringBuilder();
-		s.append(sbase)
-			.append('/')
-			.append(Panda.VERSION)
-			.append(uri);
+		s.append(sbase).append(uri);
 		if (Strings.isNotEmpty(version)) {
 			s.append("?v=").append(version);
 		}
