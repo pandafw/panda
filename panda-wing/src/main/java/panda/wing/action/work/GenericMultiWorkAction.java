@@ -31,7 +31,7 @@ public abstract class GenericMultiWorkAction extends GenericSyncWorkAction {
 	 */
 	protected void findKey() {
 		if (key == null) {
-			key = Strings.stripToEmpty((String)getReqp().get("k"));
+			key = Strings.stripToEmpty((String)getReqParams().get("k"));
 		}
 	}
 	

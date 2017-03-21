@@ -120,15 +120,15 @@ public class ActionSupport {
 	/**
 	 * @return request parameter map
 	 */
-	public Map<String, Object> getReqp() {
-		return context.getReqp();
+	public Map<String, Object> getReqParams() {
+		return context.getReqParams();
 	}
 
 	/**
 	 * @return request header map
 	 */
-	public Map<String, Object> getReqh() {
-		return context.getReqh();
+	public Map<String, Object> getReqHeader() {
+		return context.getReqHeader();
 	}
 	
 	/**

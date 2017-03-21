@@ -29,8 +29,8 @@
 			<tr><th width="200">Name</th><th>Value</th></tr>
 		</thead>
 		<tbody>
-<#list reqh?keys as k> 
-			<tr><td>${k?html}</td><td><#list reqh[k] as v>${v?html}<br/></#list></td></tr>
+<#list reqHeader?keys as k> 
+			<tr><td>${k?html}</td><td><#list reqHeader[k] as v>${v?html}<br/></#list></td></tr>
 </#list>
 		</tbody>
 		</table>
@@ -52,7 +52,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<#list request.cookies as _c>
+<#list request.cookies![] as _c>
 			<tr>
 				<td>${_c.name?default("")?html}</td>
 				<td>${_c.value?default("")?html}</td>
@@ -132,8 +132,8 @@
 			<tr><th width="200">Name</th><th>Values</th></tr>
 		</thead>
 		<tbody>
-<#list reqp?keys as k>
-			<tr><td>${k?html}</td><td>${peqp[k].toString()?html}</td></tr>
+<#list reqParams?keys as k>
+			<tr><td>${k?html}</td><td>${reqParams[k].toString()?html}</td></tr>
 </#list>
 		</tbody>
 		</table>

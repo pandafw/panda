@@ -470,14 +470,14 @@ public class ActionContext {
 	/**
 	 * @return the request parameter map
 	 */
-	public Map<String, Object> getReqp() {
+	public Map<String, Object> getReqParams() {
 		return new ServletRequestParamMap(request);
 	}
 
 	/**
 	 * @return the request header map
 	 */
-	public Map<String, Object> getReqh() {
+	public Map<String, Object> getReqHeader() {
 		return new ServletRequestHeaderMap(request);
 	}
 	
