@@ -11,7 +11,7 @@
 	<#include "/action-alert.ftl"/>
 
 	<@p.form id="html2pdf" method="get" target="_blank" theme="bs3h" loadmask="false">
-		<@p.select key="charset" list="%{consts.charsets}" emptyOption="true"/>
+		<@p.select key="charset" list="%{consts.avaliableCharsets}" emptyOption="true"/>
 		<@p.textarea key="url" rows="5" enterfire="#html2pdf_submit">
 			<@p.param name="after">(Ctrl+Enter to generate PDF)<br/></@p.param>
 		</@p.textarea>
