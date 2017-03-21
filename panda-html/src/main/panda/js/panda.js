@@ -2576,6 +2576,7 @@ function s_loadmask() {
 		window: true
 	});
 }
+
 function s_resize() {
 	$(window).trigger('resize');
 }
@@ -2585,9 +2586,7 @@ function s_getLinkMark() {
 	if (i > 0) {
 		return location.href.substring(i);
 	}
-	else {
-		return "";
-	}
+	return "";
 }
 
 function s_setTitle(title) {
@@ -2595,12 +2594,7 @@ function s_setTitle(title) {
 	if (d < 0) {
 		d = document.title.indexOf(' | ');
 	}
-	if (d < 0) {
-		document.title = title;
-	}
-	else {
-		document.title = title + document.title.substring(d);
-	}
+	document.title = title + (d < 0 ? '' : document.title.substring(d));
 }
 
 function s_setQueryParam(vs) {
@@ -2638,25 +2632,6 @@ function s_google_analytics(c) {
 		
 		s_addScript(('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
 	}
-}
-
-
-//------------------------------------------------------
-// facebook comments
-function s_facebook_comments(i, h, w) {
-	h = h || document.location;
-	$(i).attr({
-		"data-href": h || document.location,
-		"data-num-posts": '2',
-		"data-width": w || '500'
-	});
-	s_addScript("http://connect.facebook.net/ja_JP/all.js#xfbml=1");
-}
-
-//------------------------------------------------------
-// google plus one
-function s_google_plusone() {
-	s_addScript("https://apis.google.com/js/plusone.js");
 }
 
 //------------------------------------------------------
