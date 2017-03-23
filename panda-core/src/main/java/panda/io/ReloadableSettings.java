@@ -6,10 +6,13 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import panda.lang.Exceptions;
+import panda.log.Log;
+import panda.log.Logs;
 
 public class ReloadableSettings extends Settings {
 
+	private static final Log log = Logs.getLog(ReloadableSettings.class);
+	
 	private File file;
 
 	/**
@@ -26,15 +29,12 @@ public class ReloadableSettings extends Settings {
 	 * check interval (default: 60s)
 	 */
 	private long interval = 60000;
-	
+
+	public ReloadableSettings() {
+	}
+
 	public ReloadableSettings(String file) throws IOException {
-		if (Files.isFile(file)) {
-			this.file = new File(file);
-			load(file);
-		}
-		else {
-			load(file);
-		}
+		load(file);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class ReloadableSettings extends Settings {
 	}
 
 	private synchronized void reload() {
-		if (checkpoint > 0) {
+		if (file != null && checkpoint > 0) {
 			long now = System.currentTimeMillis();
 			if (now > checkpoint) {
 				checkpoint = now + interval;
@@ -63,7 +63,7 @@ public class ReloadableSettings extends Settings {
 						load(file);
 					}
 					catch (IOException e) {
-						throw Exceptions.wrapThrow(e);
+						log.error("Failed to reload " + file.getAbsolutePath());
 					}
 				}
 			}

@@ -24,7 +24,7 @@ public class RegexMethodMatcherTest {
 		agent.addInterceptor(new RegexMethodMatcher(null, "nonArgsVoid", 0), interceptor);
 		agent.addInterceptor(MethodMatcherFactory.matcher(".*"), new LoggingMethodInterceptor());
 		Class<Aop1> cls = agent.define(DefaultClassDefiner.create(), Aop1.class);
-		Aop1 aop1 = Classes.born(cls, "Nutz");
+		Aop1 aop1 = Classes.born(cls, "AOP");
 		aop1.nonArgsVoid();
 		assertFalse(interceptor.runned);
 		aop1.argsVoid(null);

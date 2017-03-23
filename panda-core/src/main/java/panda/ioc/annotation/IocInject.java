@@ -12,18 +12,15 @@ import java.lang.annotation.Target;
 public @interface IocInject {
 
 	/**
-	 * 规则: type:value
-	 * <p/>
-	 * type 类型
-	 * <p/>
-	 * 对应的值
-	 * <p/>
-	 * 如: <code>ref:dao</code> 代表引用另外一个对象
-	 * <p/>
-	 * 如: <code>env:OS</code> 获取环境变量OS,即操作系统的名字 <b>缺省情况下,为 "ref:fieldName", fieldName为字段的名字</b>
-	 * 
-	 * @see panda.ioc.meta.IocValue
-	 * @return 需要注入的值的表达式
+	 * Bean Name or Bean Value
+	 * <pre>
+	 *   String Value: starts with single quote (ex: "'abc" => "abc")
+	 *   Reference IocObject: starts with sharp (ex: "#dao" => ioc object of "dao")
+	 *   EL Expression: $(...) or %(...)
+	 *   JSON Object: !{...}
+	 *   JSON Array: ![...]
+	 * </pre>
+	 * @return Bean Name
 	 */
 	String value() default "";
 	

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface IocBean {
 
 	/**
-	 * 指定一个名字, 默认为取类名的首字母小写, 如 STing,会设置为sTing
+	 * Ioc Bean Name
 	 */
 	String name() default "";
 	
@@ -29,12 +29,9 @@ public @interface IocBean {
 	Class<?> type() default Object.class;
 	
 	/**
-	 * 每个单一的值,规则与 org.nutz.ioc.loader.annotation.Inject一致
-	 * <p/>
-	 * 这些值,对应构造方法的参数
+	 * Constructor arguments
 	 * 
 	 * @see panda.ioc.meta.IocValue
-	 * @see panda.ioc.annotation.IocInject
 	 */
 	String[] args() default {};
 
@@ -43,24 +40,24 @@ public @interface IocBean {
 	boolean singleton() default true;
 
 	/**
-	 * 当对象被Ioc容器创建后调用的方法
+	 * initialize method invoked on object is created
 	 */
 	String create() default "";
 
 	/**
-	 * 当对象被移出Ioc容器时调用的方法
+	 * depose method invoked on object is removed from Ioc container
 	 */
 	String depose() default "";
 
 	/**
-	 * 当对象被调用者从Ioc容器调出时触发的方法
+	 * fetch method invoked on object is fetched from Ioc container
 	 */
 	String fetch() default "";
 
 	/**
-	 * 你要注入的字段属于超类? 试试这个吧. 只能注入与字段同名的对象 !
+	 * the name of fields which need to be inject
 	 * 
-	 * @return 需要注入的字段名
+	 * @return field names
 	 */
 	String[] fields() default {};
 

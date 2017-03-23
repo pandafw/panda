@@ -19,9 +19,6 @@ import panda.cast.Castors;
 import panda.lang.Strings;
 
 
-/**
- * Properties extented class.
- */
 public class Settings implements Map<String, String> {
 	private Map<String, String> props = new HashMap<String, String>();
 	
@@ -29,17 +26,15 @@ public class Settings implements Map<String, String> {
 	}
 
 	public Settings(String... files) throws IOException {
-		setPaths(files);
+		load(files);
 	}
 
 	/**
-	 * 加载指定文件/文件夹的Properties文件,合并成一个Properties对象
-	 * <p>
-	 * <b style=color:red>如果有重复的key,请务必注意加载的顺序!!<b/>
+	 * load multiple properties files.
 	 * 
-	 * @param paths 需要加载的Properties文件路径
+	 * @param paths properties files
 	 */
-	public synchronized void setPaths(String... paths) throws IOException {
+	public synchronized void load(String... paths) throws IOException {
 		for (String path : paths) {
 			load(path);
 		}

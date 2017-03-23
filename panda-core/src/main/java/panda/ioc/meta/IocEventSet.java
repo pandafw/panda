@@ -1,13 +1,12 @@
 package panda.ioc.meta;
 
 /**
- * 描述了一个对象可以监听的事件。
+ * Ioc Event 
  * <p>
- * 三个属性分别表示：
  * <ul>
- * <li>create: 对象创建时触发
- * <li>fetch: 对象获取时触发
- * <li>depose: 对象销毁时触发
+ * <li>create: invoke on object created
+ * <li>fetch:  invoke on object get from Ioc Container
+ * <li>depose: invoke on object is removed from Ioc Container
  * </ul>
  * 它们的值：
  * <ul>

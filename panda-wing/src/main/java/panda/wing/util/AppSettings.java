@@ -1,24 +1,36 @@
 package panda.wing.util;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import panda.io.ReloadableSettings;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.wing.AppConstants;
 import panda.wing.constant.SC;
 
 @IocBean(type=Settings.class)
-public class AppSettings extends Settings {
+public class AppSettings extends ReloadableSettings {
 	private static final Log log = Logs.getLog(AppSettings.class);
 
 	@IocInject(required=false)
 	protected ServletContext servlet;
-	
+
+	@IocInject(value=AppConstants.PANDA_SETTINGS_RUNTIME, required=false)
+	protected String runtime;
+
+	@IocInject(value=AppConstants.PANDA_SETTINGS_CHECK_INTERVAL, required=false)
+	public void setInterval(long interval) {
+		super.setInterval(interval);
+	}
+
 	public AppSettings() throws IOException {
 		putAll(System.getProperties());
 
@@ -43,6 +55,9 @@ public class AppSettings extends Settings {
 		catch (IOException e) {
 		}
 
+		if (Strings.isNotEmpty(runtime)) {
+			load(new File(runtime));
+		}
 		log.info("Version: " + getAppVersion());
 	}
 	

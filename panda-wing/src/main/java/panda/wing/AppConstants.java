@@ -3,6 +3,12 @@ package panda.wing;
 import panda.mvc.MvcConstants;
 
 public interface AppConstants extends MvcConstants {
+	/** The reloadable settings */
+	public static final String PANDA_SETTINGS_RUNTIME = "panda.settings.runtime";
+
+	/** The reloadable settings check interval */
+	public static final String PANDA_SETTINGS_CHECK_INTERVAL = "panda.settings.check.interval";
+
 	/** The cache */
 	public static final String PANDA_CACHE = "panda.cache";
 
@@ -11,9 +17,6 @@ public interface AppConstants extends MvcConstants {
 
 	/** The wkhtmltopdf processor wait timeout */
 	public static final String PANDA_WKHTML2PDF_TIMEOUT = "panda.wkhtml2pdf.timeout";
-
-	/** The fonts path used by flyingsaucer */
-	public static final String PANDA_FONTS_PATH = "panda.fonts.path";
 
 	/** The load task keys */
 	public static final String PANDA_TASK_LOAD_KEYS = "panda.task.load.keys";
