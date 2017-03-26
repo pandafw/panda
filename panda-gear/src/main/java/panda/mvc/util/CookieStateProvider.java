@@ -28,13 +28,13 @@ public class CookieStateProvider implements StateProvider {
 	/**
 	 * encrypt key
 	 */
-	@IocInject(value=MvcConstants.PANDA_SECRET_COOKIE_KEY, required=false)
+	@IocInject(value=MvcConstants.COOKIE_SECRET_KEY, required=false)
 	protected String secret = Encrypts.DEFAULT_KEY;
 	
 	/**
 	 * encrypt cipher
 	 */
-	@IocInject(value=MvcConstants.PANDA_SECRET_COOKIE_CIPHER, required=false)
+	@IocInject(value=MvcConstants.COOKIE_SECRET_CIPHER, required=false)
 	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	private String prefix;

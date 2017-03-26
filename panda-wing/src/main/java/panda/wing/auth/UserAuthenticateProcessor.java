@@ -18,16 +18,16 @@ import panda.wing.constant.RC;
 
 @IocBean
 public class UserAuthenticateProcessor extends AbstractProcessor {
-	@IocInject(value=AppConstants.PANDA_AUTH_UNLOGIN_VIEW, required=false)
+	@IocInject(value=AppConstants.AUTH_UNLOGIN_VIEW, required=false)
 	private String unloginView;
 	
-	@IocInject(value=AppConstants.PANDA_AUTH_UNSECURE_VIEW, required=false)
+	@IocInject(value=AppConstants.AUTH_UNSECURE_VIEW, required=false)
 	private String unsecureView;
 	
-	@IocInject(value=AppConstants.PANDA_AUTH_UNLOGIN_URL, required=false)
+	@IocInject(value=AppConstants.AUTH_UNLOGIN_URL, required=false)
 	private String unloginUrl;
 	
-	@IocInject(value=AppConstants.PANDA_AUTH_UNSECURE_URL, required=false)
+	@IocInject(value=AppConstants.AUTH_UNSECURE_URL, required=false)
 	private String unsecureUrl;
 	
 	/**

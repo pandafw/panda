@@ -36,7 +36,7 @@ public abstract class UserAuthenticator {
 	/**
 	 * allow unknown uri: true (default), false
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_ALLOW_UNKNOWN_URL, required=false)
+	@IocInject(value=AppConstants.AUTH_ALLOW_UNKNOWN_URL, required=false)
 	protected boolean allowUnknownUri = true;
 
 	@IocInject

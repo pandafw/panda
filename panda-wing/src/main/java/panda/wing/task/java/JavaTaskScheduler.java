@@ -4,18 +4,16 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.mvc.MvcConstants;
 import panda.task.CronTrigger;
 import panda.task.TaskScheduler;
 import panda.task.ThreadPoolTaskScheduler;
-import panda.wing.constant.SC;
+import panda.wing.AppConstants;
 import panda.wing.task.ActionTask;
 import panda.wing.task.CronEntry;
 
@@ -27,19 +25,34 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	
 	@IocInject(required=false)
 	protected ServletContext servlet;
-	
-	@IocInject
-	protected Settings settings;
 
-	@IocInject(value=MvcConstants.CRONS, required=false)
+	@IocInject(value=AppConstants.SCHEDULER_CRONS, required=false)
 	protected List<CronEntry> crons;
+
+	@IocInject(value=AppConstants.TASK_ACTION_SCHEME, required=false)
+	protected String scheme = "http://localhost:8080";
+	
+	@IocInject(value=AppConstants.SCHEDULER_ENABLE, required=false)
+	protected boolean enable;
+
+	@IocInject(value=AppConstants.SCHEDULER_NAME, required=false)
+	public void setName(String name) {
+		super.setName(name);
+	}
+
+	@IocInject(value=AppConstants.SCHEDULER_POOL_SIZE, required=false)
+	public void setPoolSize(int poolSize) {
+		super.setPoolSize(poolSize);
+	}
+	
+	public JavaTaskScheduler() {
+		setName("scheduler");
+	}
 	
 	public void initialize() {
-		if (settings.getPropertyAsBoolean(SC.SCHEDULER_ENABLE)) {
-			log.info("Starting " + JavaTaskScheduler.class.getName() + " ...");
+		if (enable) {
+			log.info("Starting " + getClass().getName() + " ...");
 			
-			setName(settings.getProperty(SC.SCHEDULER_NAME, "scheduler"));
-			setPoolSize(settings.getPropertyAsInt(SC.SCHEDULER_POOL_SIZE, 1));
 			super.initialize();
 			
 			addCronTask();
@@ -86,10 +99,7 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 
 	private ActionTask newActionTask(String url) {
 		if (url.startsWith("/")) {
-			String scheme = settings.getProperty(SC.TASK_SCHEME, "http");
-			String server = settings.getProperty(SC.TASK_SERVER, "localhost");
-			int port = settings.getPropertyAsInt(SC.TASK_PORT, 80);
-			url = scheme + "://" + server + ':' + port + servlet.getContextPath() + url;
+			url = scheme + servlet.getContextPath() + url;
 		}
 		return new ActionTask(url);
 	}

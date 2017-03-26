@@ -11,26 +11,6 @@ public interface SC {
 
 	public static final String LUCENE_ANALYZER = "lucene.analyzer";
 
-	public static final String EXECUTOR_ENABLE = "executor.enable";
-
-	public static final String EXECUTOR_NAME = "executor.name";
-
-	public static final String EXECUTOR_CORE_POOL_SIZE = "executor.pool.size.core";
-
-	public static final String EXECUTOR_MAX_POOL_SIZE = "executor.pool.size.max";
-
-	public static final String SCHEDULER_ENABLE = "scheduler.enable";
-
-	public static final String SCHEDULER_NAME = "scheduler.name";
-
-	public static final String SCHEDULER_POOL_SIZE = "scheduler.pool.size";
-
-	public static final String TASK_SCHEME = "task.scheme";
-
-	public static final String TASK_SERVER = "task.server";
-
-	public static final String TASK_PORT = "task.port";
-
 	public static final String CACHE_PROVIDER = "cache.provider";
 
 	public static final String CACHE_NAME = "cache.name";

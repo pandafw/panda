@@ -7,14 +7,12 @@ public interface MvcConstants extends IocConstants {
 
 	public static final String MVC_CHAINS = "panda.mvc.chains";
 	
-	public static final String CRONS = "panda.crons";
-	
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
 	
-	/* The secret */
-	public static final String PANDA_SECRET_COOKIE_KEY = "panda.secret.cookie.key";
+	/* Cookie Secret */
+	public static final String COOKIE_SECRET_KEY = "panda.cookie.secret.key";
 	
-	public static final String PANDA_SECRET_COOKIE_CIPHER = "panda.secret.cookie.cipher";
+	public static final String COOKIE_SECRET_CIPHER = "panda.cookie.secret.cipher";
 
 	/* File POOL */
 	public static final String FILEPOOL_MAXAGE = "panda.filepool.maxage";

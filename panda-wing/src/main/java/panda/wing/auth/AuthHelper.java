@@ -32,31 +32,31 @@ public class AuthHelper {
 	/**
 	 * secure user session time (s): 30m 
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_SECURE_USER_AGE, required=false)
+	@IocInject(value=AppConstants.AUTH_SECURE_USER_AGE, required=false)
 	protected long secureUserAge = 30 * 60;
 	
 	/**
 	 * auth user type
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_USER_TYPE, required=false)
+	@IocInject(value=AppConstants.AUTH_USER_TYPE, required=false)
 	protected Class userType;
 
 	/**
 	 * encrypt key
 	 */
-	@IocInject(value=AppConstants.PANDA_SECRET_AUTH_KEY, required=false)
+	@IocInject(value=AppConstants.AUTH_SECRET_KEY, required=false)
 	protected String secret = Encrypts.DEFAULT_KEY;
 	
 	/**
 	 * encrypt cipher
 	 */
-	@IocInject(value=AppConstants.PANDA_SECRET_AUTH_CIPHER, required=false)
+	@IocInject(value=AppConstants.AUTH_SECRET_CIPHER, required=false)
 	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
 	 * ticket cookie age
 	 */
-	@IocInject(value=AppConstants.PANDA_AUTH_TICKET_COOKIE_AGE, required=false)
+	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_AGE, required=false)
 	protected Integer cookieAge = COOKIE.AUTH_TICKET_AGE;
 
 	/**

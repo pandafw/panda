@@ -1,28 +1,43 @@
 package panda.wing.task.java;
 
-import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.task.TaskExecutor;
 import panda.task.ThreadPoolTaskExecutor;
-import panda.wing.constant.SC;
+import panda.wing.AppConstants;
 
 @IocBean(type=TaskExecutor.class, create="initialize", depose="shutdown")
 public class JavaTaskExecutor extends ThreadPoolTaskExecutor {
 	private static final Log log = Logs.getLog(JavaTaskExecutor.class);
 
-	@IocInject
-	protected Settings settings;
+	@IocInject(value=AppConstants.EXECUTOR_ENABLE, required=false)
+	protected boolean enable;
 
+	@IocInject(value=AppConstants.EXECUTOR_NAME, required=false)
+	public void setName(String name) {
+		super.setName(name);
+	}
+
+	@IocInject(value=AppConstants.EXECUTOR_CORE_POOL_SIZE, required=false)
+	public void setCorePoolSize(int corePoolSize) {
+		super.setCorePoolSize(corePoolSize);
+	}
+	
+	@IocInject(value=AppConstants.EXECUTOR_MAX_POOL_SIZE, required=false)
+	public void setMaxPoolSize(int maxPoolSize) {
+		super.setMaxPoolSize(maxPoolSize);
+	}
+	
+	public JavaTaskExecutor() {
+		setName("executor");
+	}
+	
 	public void initialize() {
-		if (settings.getPropertyAsBoolean(SC.EXECUTOR_ENABLE)) {
-			log.info("Starting " + JavaTaskExecutor.class.getName() + " ...");
+		if (enable) {
+			log.info("Starting " + getClass().getName() + " ...");
 			
-			setName(settings.getProperty(SC.EXECUTOR_NAME, "executor"));
-			setCorePoolSize(settings.getPropertyAsInt(SC.EXECUTOR_CORE_POOL_SIZE, 1));
-			setMaxPoolSize(settings.getPropertyAsInt(SC.EXECUTOR_MAX_POOL_SIZE, Integer.MAX_VALUE));
 			super.initialize();
 		}
 	}

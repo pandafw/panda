@@ -24,7 +24,7 @@ public class LoadTaskAction extends AbstractAction {
 	
 	protected final static String CKEY_TEMPLATE = "template";
 	
-	@IocInject(value=AppConstants.PANDA_TASK_LOAD_KEYS, required=false)
+	@IocInject(value=AppConstants.TASK_LOAD_KEYS, required=false)
 	protected List<String> tasks;
 	
 	@IocInject

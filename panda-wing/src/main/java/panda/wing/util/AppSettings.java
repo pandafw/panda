@@ -23,10 +23,10 @@ public class AppSettings extends ReloadableSettings {
 	@IocInject(required=false)
 	protected ServletContext servlet;
 
-	@IocInject(value=AppConstants.PANDA_SETTINGS_RUNTIME, required=false)
+	@IocInject(value=AppConstants.SETTINGS_RELOAD_PATH, required=false)
 	protected String runtime;
 
-	@IocInject(value=AppConstants.PANDA_SETTINGS_CHECK_INTERVAL, required=false)
+	@IocInject(value=AppConstants.SETTINGS_RELOAD_INTERVAL, required=false)
 	public void setInterval(long interval) {
 		super.setInterval(interval);
 	}

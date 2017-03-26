@@ -15,7 +15,7 @@ import panda.wing.task.CronEntry;
 @At("${super_path}/crons")
 @Auth(AUTH.SUPER)
 public class CronsAction extends AbstractAction {
-	@IocInject(value=AppConstants.CRONS, required=false)
+	@IocInject(value=AppConstants.SCHEDULER_CRONS, required=false)
 	private List<CronEntry> crons;
 	
 	/**
