@@ -4,14 +4,13 @@ import java.util.List;
 
 import panda.dao.Dao;
 import panda.dao.DaoClient;
-import panda.io.Settings;
 import panda.io.resource.BeanResourceMaker;
 import panda.io.resource.ResourceLoader;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.wing.constant.SC;
+import panda.wing.AppConstants;
 import panda.wing.constant.VC;
 import panda.wing.entity.Property;
 import panda.wing.entity.Resource;
@@ -26,10 +25,11 @@ import panda.wing.entity.query.ResourceQuery;
 public class AppResourceBundleLoader extends ResourceLoader {
 	private static final Log log = Logs.getLog(AppResourceBundleLoader.class);
 
-	protected static String DB = "db";
-	
-	@IocInject
-	protected Settings settings;
+	@IocInject(value=AppConstants.DATABASE_RESOURCE, required=false)
+	private boolean resource;
+
+	@IocInject(value=AppConstants.DATABASE_PROPERTY, required=false)
+	private boolean property;
 
 	@IocInject
 	protected DaoClient daoClient;
@@ -47,7 +47,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 	 * load external resources
 	 */
 	public void initialize() throws Exception {
-		if (settings.getPropertyAsBoolean(SC.DATABASE_RESOURCE)) {
+		if (resource) {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Resource.CLAZZ);
@@ -60,7 +60,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			databaseResourceLoader = mrbm;
 			addResourceMaker(mrbm);
 		}
-		else if (settings.getPropertyAsBoolean(SC.DATABASE_PROPERTY)) {
+		else if (property) {
 			BeanResourceMaker mrbm = new BeanResourceMaker();
 
 			mrbm.setClassColumn(Property.CLAZZ);
@@ -83,7 +83,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			return;
 		}
 		
-		if (settings.getPropertyAsBoolean(SC.DATABASE_RESOURCE)) {
+		if (resource) {
 			log.info("Loading database resources ...");
 
 			Dao dao = daoClient.getDao();
@@ -92,7 +92,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 			List<Resource> list = dao.select(rq);
 			databaseResourceLoader.loadResources(list);
 		}
-		else if (settings.getPropertyAsBoolean(SC.DATABASE_PROPERTY)) {
+		else if (property) {
 			log.info("Loading database properties ...");
 
 			Dao dao = daoClient.getDao();

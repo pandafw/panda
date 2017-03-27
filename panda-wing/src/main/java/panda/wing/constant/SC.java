@@ -25,12 +25,6 @@ public interface SC {
 
 	public static final String DATA_JDBC_URL = "data.jdbc.url";
 
-	public static final String DATABASE_TEMPLATE = "database.template";
-
-	public static final String DATABASE_RESOURCE = "database.resource";
-
-	public static final String DATABASE_PROPERTY = "database.property";
-
 	public static final String SUPER_USERNAME = "super.username";
 	public static final String SUPER_PASSWORD = "super.password";
 

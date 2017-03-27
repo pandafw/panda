@@ -2,21 +2,20 @@ package panda.wing.util;
 
 import java.util.List;
 
-import freemarker.cache.TemplateLoader;
-
 import panda.dao.Dao;
 import panda.dao.DaoClient;
-import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.tpl.ftl.ExternalTemplateLoader;
-import panda.wing.constant.SC;
+import panda.wing.AppConstants;
 import panda.wing.constant.VC;
 import panda.wing.entity.Template;
 import panda.wing.entity.query.TemplateQuery;
+
+import freemarker.cache.TemplateLoader;
 
 @IocBean(type=TemplateLoader.class, create="initialize")
 public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
@@ -25,8 +24,8 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	public AppFreemarkerTemplateLoader() {
 	}
 
-	@IocInject
-	private Settings settings;
+	@IocInject(value=AppConstants.DATABASE_TEMPLATE, required=false)
+	private boolean enable;
 
 	@IocInject
 	private DaoClient daoClient;
@@ -41,7 +40,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	}
 
 	public void initialize() {
-		if (settings.getPropertyAsBoolean(SC.DATABASE_TEMPLATE)) {
+		if (enable) {
 			ExternalTemplateLoader etl = new ExternalTemplateLoader();
 			
 			etl.setNameColumn(Template.NAME);

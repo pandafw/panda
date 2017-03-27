@@ -80,4 +80,13 @@ public interface AppConstants extends MvcConstants {
 
 	public static final String LUCENE_ANALYZER = "panda.lucene.analyzer";
 
+	//------------------------------------------------
+	// The database settings
+	//
+	public static final String DATABASE_TEMPLATE = "panda.database.template";
+
+	public static final String DATABASE_RESOURCE = "panda.database.resource";
+
+	public static final String DATABASE_PROPERTY = "panda.database.property";
+
 }
