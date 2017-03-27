@@ -7,12 +7,6 @@ package panda.wing.constant;
 public interface SC {
 	public static final String APP_VERSION = "app.version";
 
-	public static final String CACHE_PROVIDER = "cache.provider";
-
-	public static final String CACHE_NAME = "cache.name";
-
-	public static final String CACHE_MAXAGE = "cache.maxage";
-
 	public static final String DATA_PREFIX = "data.";
 
 	public static final String DATA_SOURCE = "data.source";

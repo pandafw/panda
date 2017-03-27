@@ -3,12 +3,27 @@ package panda.wing;
 import panda.mvc.MvcConstants;
 
 public interface AppConstants extends MvcConstants {
+	//------------------------------------------------
+	// reloadable settings
+	//
 	/** The reloadable settings path */
 	public static final String SETTINGS_RELOAD_PATH = "panda.settings.reload.path";
 
 	/** The reloadable settings check interval */
 	public static final String SETTINGS_RELOAD_INTERVAL = "panda.settings.reload.interval";
 
+	//------------------------------------------------
+	// cache
+	//
+	/** The cache ioc bean name */
+	public static final String CACHE_IOCBEAN = "panda.cache";
+
+	public static final String CACHE_PROVIDER = "panda.cache.provider";
+
+	public static final String CACHE_NAME = "panda.cache.name";
+
+	public static final String CACHE_MAXAGE = "panda.cache.maxage";
+	
 	//------------------------------------------------
 	// task executor
 	//
@@ -37,9 +52,6 @@ public interface AppConstants extends MvcConstants {
 	
 	/** The load task keys */
 	public static final String TASK_LOAD_KEYS = "panda.task.load.keys";
-
-	/** The cache */
-	public static final String CACHE = "panda.cache";
 
 	//------------------------------------------------
 	// html to pdf
