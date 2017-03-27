@@ -16,11 +16,16 @@ import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.AppConstants;
+import panda.wing.constant.SC;
+import panda.wing.util.AppSettings;
 
 
 @IocBean(create="initialize", depose="destroy")
 public class LuceneProvider {
 	private static final Log log = Logs.getLog(LuceneProvider.class);
+	
+	@IocInject
+	protected AppSettings settings;
 	
 	@IocInject(value=AppConstants.LUCENE_LOCATION, required=false)
 	protected String location = "web://WEB-INF/_lucene";
@@ -101,7 +106,8 @@ public class LuceneProvider {
 
 	//-----------------------------------------------
 	protected File getLuceneLocation() throws IOException {
-		File file = new File(location);
+		String path = settings.getPropertyAsPath(SC.LUCENE_LOCATION, location);
+		File file = new File(path);
 		Files.makeDirs(file);
 		return file;
 	}

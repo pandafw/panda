@@ -22,10 +22,15 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.wing.AppConstants;
+import panda.wing.constant.SC;
+import panda.wing.util.AppSettings;
 
-@IocBean(type=Html2Pdf.class, singleton=false)
+@IocBean(type=Html2Pdf.class, singleton=false, create="initialize")
 public class WkHtml2Pdf extends Html2Pdf {
 	private static final Log log = Logs.getLog(WkHtml2Pdf.class);
+
+	@IocInject
+	protected AppSettings settings;
 	
 	@IocInject(value=AppConstants.WKHTML2PDF_PATH, required=false)
 	protected String path = "wkhtmltopdf";
@@ -49,6 +54,11 @@ public class WkHtml2Pdf extends Html2Pdf {
 		this.timeout = timeout;
 	}
 
+	public void initialize() {
+		path = settings.getPropertyAsPath(SC.WKHTML2PDF_PATH, path);
+		timeout = settings.getPropertyAsInt(SC.WKHTML2PDF_TIMEOUT, timeout);
+	}
+	
 	@Override
 	public void process(OutputStream os) throws Exception {
 		if (!Files.isFile(path)) {

@@ -7,6 +7,9 @@ package panda.wing.constant;
 public interface SC {
 	public static final String APP_VERSION = "app.version";
 
+	//--------------------------------------------------------
+	// data properties
+	//
 	public static final String DATA_PREFIX = "data.";
 
 	public static final String DATA_SOURCE = "data.source";
@@ -19,12 +22,25 @@ public interface SC {
 
 	public static final String DATA_JDBC_URL = "data.jdbc.url";
 
+	//--------------------------------------------------------
+	public static final String LUCENE_LOCATION = "lucene.location";
+
+	//--------------------------------------------------------
 	public static final String SUPER_USERNAME = "super.username";
 	public static final String SUPER_PASSWORD = "super.password";
 
+	//------------------------------------------------
+	// html to pdf
+	//
+	/** The wkhtmltopdf exe path */
+	public static final String WKHTML2PDF_PATH = "wkhtml2pdf.path";
+
+	/** The wkhtmltopdf processor wait timeout */
+	public static final String WKHTML2PDF_TIMEOUT = "wkhtml2pdf.timeout";
+
 	//--------------------------------------------------------
 	// mail properties
-	//--------------------------------------------------------
+	//
 	/**
 	 * MAIL_DEBUG = "mail-debug";
 	 */
