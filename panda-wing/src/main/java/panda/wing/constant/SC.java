@@ -7,10 +7,6 @@ package panda.wing.constant;
 public interface SC {
 	public static final String APP_VERSION = "app.version";
 
-	public static final String LUCENE_LOCATION = "lucene.location";
-
-	public static final String LUCENE_ANALYZER = "lucene.analyzer";
-
 	public static final String CACHE_PROVIDER = "cache.provider";
 
 	public static final String CACHE_NAME = "cache.name";

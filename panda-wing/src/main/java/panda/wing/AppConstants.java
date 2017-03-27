@@ -3,13 +3,15 @@ package panda.wing;
 import panda.mvc.MvcConstants;
 
 public interface AppConstants extends MvcConstants {
-	/** The reloadable settings */
+	/** The reloadable settings path */
 	public static final String SETTINGS_RELOAD_PATH = "panda.settings.reload.path";
 
 	/** The reloadable settings check interval */
 	public static final String SETTINGS_RELOAD_INTERVAL = "panda.settings.reload.interval";
 
-	/** task executor */
+	//------------------------------------------------
+	// task executor
+	//
 	public static final String EXECUTOR_ENABLE = "panda.executor.enable";
 
 	public static final String EXECUTOR_NAME = "panda.executor.name";
@@ -18,7 +20,9 @@ public interface AppConstants extends MvcConstants {
 
 	public static final String EXECUTOR_MAX_POOL_SIZE = "panda.executor.pool.size.max";
 
-	/** task scheduler */
+	//------------------------------------------------
+	// task scheduler
+	//
 	public static final String SCHEDULER_ENABLE = "panda.scheduler.enable";
 
 	public static final String SCHEDULER_NAME = "panda.scheduler.name";
@@ -37,13 +41,18 @@ public interface AppConstants extends MvcConstants {
 	/** The cache */
 	public static final String CACHE = "panda.cache";
 
+	//------------------------------------------------
+	// html to pdf
+	//
 	/** The wkhtmltopdf exe path */
 	public static final String WKHTML2PDF_PATH = "panda.wkhtml2pdf.path";
 
 	/** The wkhtmltopdf processor wait timeout */
 	public static final String WKHTML2PDF_TIMEOUT = "panda.wkhtml2pdf.timeout";
 
-	/** The authenticate */
+	//------------------------------------------------
+	// The authenticate
+	//
 	public static final String AUTH_ALLOW_UNKNOWN_URL = "panda.auth.allow.unknown.url";
 	
 	public static final String AUTH_UNLOGIN_VIEW = "panda.auth.unlogin.view";
@@ -63,5 +72,12 @@ public interface AppConstants extends MvcConstants {
 	public static final String AUTH_SECRET_KEY = "panda.secret.auth.key";
 	
 	public static final String AUTH_SECRET_CIPHER = "panda.secret.auth.cipher";
-	
+
+	//------------------------------------------------
+	// The lucene settings
+	//
+	public static final String LUCENE_LOCATION = "panda.lucene.location";
+
+	public static final String LUCENE_ANALYZER = "panda.lucene.analyzer";
+
 }

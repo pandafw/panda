@@ -15,17 +15,18 @@ import panda.lang.Numbers;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.wing.constant.SC;
-import panda.wing.util.AppSettings;
+import panda.wing.AppConstants;
 
 
 @IocBean(create="initialize", depose="destroy")
 public class LuceneProvider {
 	private static final Log log = Logs.getLog(LuceneProvider.class);
 	
-	//--------------------------------------------------------------
-	@IocInject
-	protected AppSettings settings;
+	@IocInject(value=AppConstants.LUCENE_LOCATION, required=false)
+	protected String location = "web://WEB-INF/_lucene";
+	
+	@IocInject(value=AppConstants.LUCENE_ANALYZER, required=false)
+	protected String analyzer = StandardAnalyzer.class.getName();
 	
 	protected LuceneWrapper luceneWrapper;
 
@@ -100,8 +101,7 @@ public class LuceneProvider {
 
 	//-----------------------------------------------
 	protected File getLuceneLocation() throws IOException {
-		String path = settings.getPropertyAsPath(SC.LUCENE_LOCATION, "web://WEB-INF/_lucene");
-		File file = new File(path);
+		File file = new File(location);
 		Files.makeDirs(file);
 		return file;
 	}
@@ -172,9 +172,8 @@ public class LuceneProvider {
 	
 	@SuppressWarnings("unchecked")
 	protected Class<? extends Analyzer> getLuceneAnalyzerType() {
-		String cls = settings.getProperty(SC.LUCENE_ANALYZER, StandardAnalyzer.class.getName());
 		try {
-			return (Class<? extends Analyzer>)Classes.getClass(cls);
+			return (Class<? extends Analyzer>)Classes.getClass(analyzer);
 		}
 		catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
