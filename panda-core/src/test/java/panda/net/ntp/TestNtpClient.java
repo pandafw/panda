@@ -5,13 +5,12 @@ import org.junit.BeforeClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import panda.net.examples.ntp.SimpleNTPServer;
 import panda.net.ntp.NTPUDPClient;
 import panda.net.ntp.NtpUtils;
 import panda.net.ntp.NtpV3Packet;
 import panda.net.ntp.TimeInfo;
 import panda.net.ntp.TimeStamp;
-
-import examples.ntp.SimpleNTPServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
