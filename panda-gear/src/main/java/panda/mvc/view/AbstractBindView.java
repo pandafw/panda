@@ -240,7 +240,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 			}
 		}
 
-		if (DATE_FORMAT_LONG.compareToIgnoreCase(dateFormat) == 0) {
+		if (DATE_FORMAT_LONG.equalsIgnoreCase(dateFormat)) {
 			as.setDateToMillis(true);
 		}
 		else {

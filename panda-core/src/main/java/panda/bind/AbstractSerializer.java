@@ -136,7 +136,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	@SuppressWarnings("unchecked")
 	public <T> SourceAdapter<T> getSourceAdapter(Class type) {
 		if (dateToMillis) {
-			if (type.isAssignableFrom(Date.class) || type.isAssignableFrom(Calendar.class)) {
+			if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
 				return DateAdapter.toMillis;
 			}
 		}
