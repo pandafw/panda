@@ -24,7 +24,10 @@ class Emitter {
 	/** Plugins references **/
 	private Map<String, Plugin> plugins = new HashMap<String, Plugin>();
 
-	/** Constructor. */
+	/** 
+	 * Constructor. 
+	 * @param config the Configuration
+	 */
 	public Emitter(final Configuration config) {
 		this.config = config;
 		this.useExtensions = config.forceExtendedProfile;

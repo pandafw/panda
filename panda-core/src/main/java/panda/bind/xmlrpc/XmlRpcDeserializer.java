@@ -294,6 +294,8 @@ public class XmlRpcDeserializer extends AbstractDeserializer {
 			/**
 			 * Processes the character data supplied by the parser. Depending on the current type of
 			 * the value, the data will be treated accordingly.
+			 * 
+			 * @throws XmlRpcException if a parse error occurred
 			 */
 			public void processText() throws XmlRpcException {
 				if (!shouldProcessText) {

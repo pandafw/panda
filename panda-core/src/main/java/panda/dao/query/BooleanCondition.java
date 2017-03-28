@@ -4,6 +4,7 @@ package panda.dao.query;
 
 
 /**
+ * @param <E> query target type
  */
 public class BooleanCondition<E extends EntityQuery> extends ObjectCondition<E> {
 	/**

@@ -67,6 +67,7 @@ public class Converter {
 
 	/**
 	 * 重新设置解析器
+	 * @param val the Parse list
 	 */
 	public void setParse(List<Parse> val) {
 		parses.addAll(val);
@@ -252,6 +253,7 @@ public class Converter {
 
 	/**
 	 * 取得一个有效数据
+	 * @return the fetched item
 	 */
 	public Object fetchItem() {
 		return itemCache.poll();
@@ -259,6 +261,7 @@ public class Converter {
 
 	/**
 	 * 是否结束
+	 * @return true if the cache is empty
 	 */
 	public boolean isEnd() {
 		return itemCache.isEmpty();

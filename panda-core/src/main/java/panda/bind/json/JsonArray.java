@@ -81,6 +81,7 @@ public class JsonArray extends ArrayList<Object> {
 	/**
 	 * Construct a JsonArray from an array
 	 * 
+	 * @param array array object
 	 * @throws JsonException If not an array.
 	 */
 	public JsonArray(Object array) throws JsonException {

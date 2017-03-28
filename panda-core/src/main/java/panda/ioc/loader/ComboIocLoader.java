@@ -60,6 +60,8 @@ public class ComboIocLoader implements IocLoader {
 	 *   "config.xml"
 	 * }</code>
 	 * <p/>
+	 * 
+	 * @param args the arguments
 	 */
 	public ComboIocLoader(String ... args) {
 		this();

@@ -24,7 +24,7 @@ public class TextResourceMaker implements ResourceMaker {
 	}
 
 	/**
-	 * @param format
+	 * @param format resource file suffix
 	 */
 	public TextResourceMaker(String format) {
 		this.format = format;

@@ -61,12 +61,14 @@ public class Doms {
 		/**
 		 * handle the node when traverse into it 
 		 * @param node the node to be handled
+		 * @param level the level of dom
 		 * @return false if stop the traverse
 		 */
 		int handle(Node node, int level);
 
 		/**
 		 * handle the node when traverse out of it
+		 * @param level the level of dom
 		 * @param node the node
 		 */
 		void handleOut(Node node, int level);

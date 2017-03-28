@@ -125,6 +125,8 @@ public class XmlRpcTags {
 	 * pre-calculated and are represented by the hash constants at the top of this file.
 	 * 
 	 * @param s The string to calculate a hash for.
+	 * 
+	 * @return the hash code
 	 */
 	public static int hash(String s) {
 		int hash = 0;

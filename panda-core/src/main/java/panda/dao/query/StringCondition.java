@@ -5,6 +5,7 @@ package panda.dao.query;
 
 
 /**
+ * @param <E> query target type
  */
 public class StringCondition<E extends EntityQuery> extends ComparableCondition<E, String> {
 	/**

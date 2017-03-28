@@ -11,7 +11,9 @@ import junit.framework.TestCase;
  */
 public class NullReaderTest extends TestCase {
 
-	/** Constructor */
+	/** Constructor 
+	 * @param name name
+	 */
 	public NullReaderTest(final String name) {
 		super(name);
 	}
@@ -30,6 +32,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test <code>available()</code> method.
+	 * @throws Exception if an error occurs
 	 */
 	public void testRead() throws Exception {
 		final int size = 5;
@@ -57,6 +60,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test <code>read(char[])</code> method.
+	 * @throws Exception if an error occurs
 	 */
 	public void testReadCharArray() throws Exception {
 		final char[] chars = new char[10];
@@ -104,6 +108,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test when configured to throw an EOFException at the end of file (rather than return -1).
+	 * @throws Exception if an error occurs
 	 */
 	public void testEOFException() throws Exception {
 		final Reader reader = new TestNullReader(2, false, true);
@@ -121,6 +126,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test <code>mark()</code> and <code>reset()</code> methods.
+	 * @throws Exception if an error occurs
 	 */
 	public void testMarkAndReset() throws Exception {
 		int position = 0;
@@ -172,6 +178,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test <code>mark()</code> not supported.
+	 * @throws Exception if an error occurs
 	 */
 	public void testMarkNotSupported() throws Exception {
 		final Reader reader = new TestNullReader(100, false, true);
@@ -197,6 +204,7 @@ public class NullReaderTest extends TestCase {
 
 	/**
 	 * Test <code>skip()</code> method.
+	 * @throws Exception if an error occurs
 	 */
 	public void testSkip() throws Exception {
 		final Reader reader = new TestNullReader(10, true, false);

@@ -18,6 +18,7 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	/**
 	 * Constructor
 	 * @param beans bean handler beans
+	 * @param type class type
 	 */
 	public AbstractBeanHandler(Beans beans, Type type) {
 		this.beans = beans;

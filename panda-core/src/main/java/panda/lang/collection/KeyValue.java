@@ -5,8 +5,9 @@ import java.util.Map.Entry;
 
 import panda.lang.Objects;
 
-
 /**
+ * @param <K> the Key Type
+ * @param <V> the Value Type
  */
 public class KeyValue<K, V> implements Entry<K, V> {
 

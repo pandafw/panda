@@ -19,6 +19,7 @@ public interface Parse {
 	 * 一句话,只读取自己能转换的,自己不能转换的一律不操作.
 	 * 
 	 * @param exp 表达式
+	 * @return 队列顶部元素
 	 */
 	Object fetchItem(CharQueue exp);
 

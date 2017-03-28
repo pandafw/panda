@@ -79,6 +79,12 @@ public class Files {
 		}
 	}
 
+	/**
+	 * lock file
+	 * @param file the File object
+	 * @return the FileLocker
+	 * @throws IOException if an IO error occurs
+	 */
 	public static FileLocker lock(File file) throws IOException {
 		RandomAccessFile raf = new RandomAccessFile(file, "rw");
 		
@@ -92,6 +98,12 @@ public class Files {
 		return new FileLocker(raf, lock);
 	}
 	
+	/**
+	 * try to lock file
+	 * @param file the File object
+	 * @return the FileLocker
+	 * @throws IOException if an IO error occurs
+	 */
 	public static FileLocker tryLock(File file) throws IOException {
 		RandomAccessFile raf = new RandomAccessFile(file, "rw");
 
@@ -117,6 +129,7 @@ public class Files {
 	 * 
 	 * @param src source file or directory
 	 * @param des target file or directory
+	 * @throws IOException if an IO error occurs
 	 */
 	public static void copy(File src, File des) throws IOException {
 		if (src.isDirectory()) {
@@ -130,24 +143,27 @@ public class Files {
 	/**
 	 * directory check
 	 * 
+	 * @param dir the directory name
 	 * @return false if file is null or not directory
 	 */
-	public static boolean isDirectory(String f) {
-		return null != f && isDirectory(new File(f));
+	public static boolean isDirectory(String dir) {
+		return null != dir && isDirectory(new File(dir));
 	}
 
 	/**
 	 * directory check
 	 * 
+	 * @param dir the File object
 	 * @return false if file is null or not directory
 	 */
-	public static boolean isDirectory(File f) {
-		return null != f && f.exists() && f.isDirectory();
+	public static boolean isDirectory(File dir) {
+		return null != dir && dir.exists() && dir.isDirectory();
 	}
 
 	/**
 	 * file check
 	 * 
+	 * @param f the file name
 	 * @return false if file is null or not file
 	 */
 	public static boolean isFile(String f) {
@@ -157,6 +173,7 @@ public class Files {
 	/**
 	 * file check
 	 * 
+	 * @param f the File object
 	 * @return false if file is null or not file
 	 */
 	public static boolean isFile(File f) {
@@ -1344,7 +1361,7 @@ public class Files {
 			fos = new FileOutputStream(destFile);
 			input = fis.getChannel();
 			output = fos.getChannel();
-			final long size = input.size(); // TODO See IO-386
+			final long size = input.size();
 			long pos = 0;
 			long count = 0;
 			while (pos < size) {
@@ -1365,8 +1382,8 @@ public class Files {
 			Streams.safeClose(fis);
 		}
 
-		final long srcLen = srcFile.length(); // TODO See IO-386
-		final long dstLen = destFile.length(); // TODO See IO-386
+		final long srcLen = srcFile.length();
+		final long dstLen = destFile.length();
 		if (srcLen != dstLen) {
 			throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
 					+ "' Expected length: " + srcLen + " Actual: " + dstLen);

@@ -9,7 +9,7 @@ public class ListSet<E> implements Set<E> {
 	private final List<E> list;
 
 	/**
-	 * @param list
+	 * @param list the list
 	 */
 	public ListSet(List<E> list) {
 		this.list = list;

@@ -18,6 +18,7 @@ public interface ObjectWeaver {
 	 * 根据自身内容创建一个对象，并触发创建事件
 	 * 
 	 * @param ing 容器构造时
+	 * @return the object
 	 */
 	Object born(IocMaking ing);
 
@@ -25,6 +26,7 @@ public interface ObjectWeaver {
 	 * 为对象触发 CREATE 事件
 	 * 
 	 * @param obj 对象
+	 * @return the return value
 	 */
 	Object onCreate(Object obj);
 

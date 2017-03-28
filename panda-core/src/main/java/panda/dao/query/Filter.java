@@ -92,6 +92,7 @@ public class Filter {
 		}
 
 		/**
+		 * @param index the element index of the array
 		 * @return the value
 		 */
 		public Object getValue(int index) {
@@ -144,7 +145,7 @@ public class Filter {
 		private List<Filter> filters = new ArrayList<Filter>();
 
 		/**
-		 * @param logical
+		 * @param logical Logical object
 		 */
 		public ComboFilter(Logical logical) {
 			this.logical = logical;

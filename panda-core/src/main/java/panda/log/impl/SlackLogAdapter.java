@@ -177,6 +177,8 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	/**
 	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
 	 * message.
+	 * 
+	 * @param subject the subject
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -184,7 +186,8 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 
 	/**
 	 * @param webhook the webhook to set
-	 * @throws MalformedURLException 
+	 * @throws MalformedURLException if no protocol is specified, or an
+     *               unknown protocol is found, or <tt>spec</tt> is <tt>null</tt>. 
 	 */
 	public void setWebhook(String webhook) throws MalformedURLException {
 		this.webhook = new URL(webhook);

@@ -109,6 +109,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a <code>byte[]</code>.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest
 	 */
@@ -119,6 +120,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a <code>byte[]</code>.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest
 	 * @throws IOException On error reading from the stream
@@ -130,6 +132,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a hex string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest as a hex string
 	 */
@@ -140,6 +143,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a hex string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest as a hex string
 	 */
@@ -150,6 +154,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a base64 string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest as a base64 string
 	 */
@@ -160,6 +165,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-256 digest and returns the value as a base64 string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-256 digest as a base64 string
 	 */
@@ -171,6 +177,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a <code>byte[]</code>.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest
 	 */
@@ -181,6 +188,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a <code>byte[]</code>.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest
 	 * @throws IOException On error reading from the stream
@@ -192,6 +200,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a hex string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest as a hex string
 	 */
@@ -202,6 +211,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a hex string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest as a hex string
 	 */
@@ -212,6 +222,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a base64 string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest as a base64 string
 	 */
@@ -222,6 +233,7 @@ public class Macs {
 	/**
 	 * Calculates the SHA-512 digest and returns the value as a base64 string.
 	 * 
+	 * @param secret the secret string
 	 * @param data Data to digest
 	 * @return SHA-512 digest as a base64 string
 	 */

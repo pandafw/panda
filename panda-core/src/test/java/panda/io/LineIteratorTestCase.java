@@ -92,6 +92,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 	// -----------------------------------------------------------------------
 	/**
 	 * Test constructor.
+	 * @throws Exception if an error occurs
 	 */
 	@SuppressWarnings("resource")
 	@Test
@@ -107,6 +108,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with no lines.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testZeroLines() throws Exception {
@@ -115,6 +117,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with 1 line.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testOneLines() throws Exception {
@@ -123,6 +126,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with 2 lines.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testTwoLines() throws Exception {
@@ -131,6 +135,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with 3 lines.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testThreeLines() throws Exception {
@@ -139,6 +144,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a missing File.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testMissingFile() throws Exception {
@@ -159,6 +165,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with a Valid encoding.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testValidEncoding() throws Exception {
@@ -183,6 +190,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test a file with an Invalid encoding.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testInvalidEncoding() throws Exception {
@@ -206,6 +214,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test the iterator using only the nextLine() method.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testNextLineOnlyDefaultEncoding() throws Exception {
@@ -218,6 +227,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test the iterator using only the nextLine() method.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testNextLineOnlyNullEncoding() throws Exception {
@@ -232,6 +242,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test the iterator using only the nextLine() method.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testNextLineOnlyUtf8Encoding() throws Exception {
@@ -246,6 +257,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test the iterator using only the next() method.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testNextOnly() throws Exception {
@@ -269,6 +281,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Tests hasNext when it throws an exception.
+	 * @throws Exception if an error occurs
 	 */
 	@SuppressWarnings("resource")
 	@Test
@@ -290,6 +303,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
 	/**
 	 * Test closing the iterator before all the file has been processed.
+	 * @throws Exception if an error occurs
 	 */
 	@Test
 	public void testCloseEarly() throws Exception {

@@ -8,6 +8,7 @@ import panda.lang.Objects;
 import panda.lang.reflect.Types;
 
 /**
+ * @param <T> target type
  */
 public abstract class AnyObjectCastor<T> extends AbstractCastor<Object, T> {
 	public AnyObjectCastor(Type toType) {

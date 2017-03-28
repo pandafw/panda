@@ -43,6 +43,7 @@ public class TestHelper {
 	
 	/**
 	 * execSQL
+	 * @param clazz class
 	 * @param connection connection
 	 * @param name resource name
 	 * @param splitter splitter

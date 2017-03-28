@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 public interface PropertyHandler<T> {
 	/**
 	 * get object type
+	 * @return object type
 	 */
 	Type getType();
 	

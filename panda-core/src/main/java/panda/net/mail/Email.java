@@ -96,7 +96,7 @@ public class Email {
 	
 	/**
 	 * @param addr the sender address to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setSender(String addr) throws EmailException {
 		this.sender = new EmailAddress(addr);
@@ -104,6 +104,7 @@ public class Email {
 	
 	/**
 	 * @return the encoded from
+	 * @throws EmailException if an error occurs
 	 */
 	public String getEncodedFrom() throws EmailException {
 		return Email.toEncodedAddress(Arrays.asList(from), charset);
@@ -118,7 +119,7 @@ public class Email {
 	
 	/**
 	 * @param from the from address to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setFrom(String from) throws EmailException {
 		this.from = EmailAddress.parse(from);
@@ -127,7 +128,7 @@ public class Email {
 	/**
 	 * @param addr the from address to set
 	 * @param name the from name
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setFrom(String addr, String name) throws EmailException {
 		this.from = new EmailAddress(addr, name);
@@ -135,7 +136,7 @@ public class Email {
 
 	/**
 	 * @param addr the from to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setFrom(EmailAddress addr) throws EmailException {
 		this.from = addr;
@@ -144,6 +145,7 @@ public class Email {
 	/**
 	 * add to
 	 * @param ea to email address
+	 * @throws EmailException if an error occurs
 	 */
 	public void addTo(EmailAddress ea) throws EmailException {
 		if (ea == null) {
@@ -161,6 +163,7 @@ public class Email {
 	/**
 	 * add to
 	 * @param to the to address
+	 * @throws EmailException if an error occurs
 	 */
 	public void addTo(String to) throws EmailException {
 		addTo(EmailAddress.parse(to));
@@ -170,6 +173,7 @@ public class Email {
 	 * add to
 	 * @param addr address
 	 * @param name name
+	 * @throws EmailException if an error occurs
 	 */
 	public void addTo(String addr, String name) throws EmailException {
 		addTo(new EmailAddress(addr, name));
@@ -191,6 +195,7 @@ public class Email {
 	
 	/**
 	 * @return the encoded tos
+	 * @throws EmailException if an error occurs
 	 */
 	public String getEncodedTos() throws EmailException {
 		return Email.toEncodedAddress(tos, charset);
@@ -216,7 +221,7 @@ public class Email {
 	/**
 	 * add cc
 	 * @param cc the cc address
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addCc(String cc) throws EmailException {
 		addCc(EmailAddress.parse(cc));
@@ -226,7 +231,7 @@ public class Email {
 	 * add cc
 	 * @param addr address
 	 * @param name name
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addCc(String addr, String name) throws EmailException {
 		addCc(new EmailAddress(addr, name));
@@ -248,6 +253,7 @@ public class Email {
 
 	/**
 	 * @return the encoded ccs
+	 * @throws EmailException if an error occurs
 	 */
 	public String getEncodedCcs() throws EmailException {
 		return Email.toEncodedAddress(ccs, charset);
@@ -273,7 +279,7 @@ public class Email {
 	/**
 	 * add bcc
 	 * @param bcc  the bcc address
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addBcc(String bcc) throws EmailException {
 		addBcc(EmailAddress.parse(bcc));
@@ -283,7 +289,7 @@ public class Email {
 	 * add bcc
 	 * @param addr address
 	 * @param name name
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addBcc(String addr, String name) throws EmailException {
 		addBcc(new EmailAddress(addr, name));
@@ -305,6 +311,7 @@ public class Email {
 
 	/**
 	 * @return the encoded bccs
+	 * @throws EmailException if an error occurs
 	 */
 	public String getEncodedBccs() throws EmailException {
 		return Email.toEncodedAddress(bccs, charset);
@@ -313,6 +320,7 @@ public class Email {
 	/**
 	 * add replyTo
 	 * @param ea replyTo email address
+	 * @throws EmailException if an error occurs
 	 */
 	public void addReplyTo(EmailAddress ea) throws EmailException {
 		if (ea == null) {
@@ -330,7 +338,7 @@ public class Email {
 	/**
 	 * add replyTo
 	 * @param addr replyTo address
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addReplyTo(String addr) throws EmailException {
 		addReplyTo(EmailAddress.parse(addr));
@@ -340,7 +348,7 @@ public class Email {
 	 * add replyTo
 	 * @param addr address
 	 * @param name name
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void addReplyTo(String addr, String name) throws EmailException {
 		addReplyTo(new EmailAddress(addr, name));
@@ -362,6 +370,7 @@ public class Email {
 
 	/**
 	 * @return the encoded replyTos
+	 * @throws EmailException if an error occurs
 	 */
 	public String getEncodedReplyTos() throws EmailException {
 		return Email.toEncodedAddress(replyTos, charset);
@@ -427,7 +436,7 @@ public class Email {
 	
 	/**
 	 * @return the encoded subject
-	 * @throws UnsupportedEncodingException 
+	 * @exception UnsupportedEncodingException if the encoding fails
 	 */
 	public String getEncodedSubject() throws UnsupportedEncodingException {
 		return Mimes.encodeWord(subject, charset);

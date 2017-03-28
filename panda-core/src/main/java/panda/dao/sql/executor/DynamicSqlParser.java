@@ -141,6 +141,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 	/**
 	 * Constructor
 	 * @param sql sql statement
+	 * @param keepComments true to keep comments
 	 */
 	public DynamicSqlParser(String sql, boolean keepComments) {
 		super(sql, keepComments);
@@ -151,6 +152,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 	 * 
 	 * @param sql sql
 	 * @param segments segments
+	 * @param keepComments true to keep comments
 	 */
 	@Override
 	protected void compile(String sql, List<SqlSegment> segments, boolean keepComments) {
@@ -162,6 +164,7 @@ public class DynamicSqlParser extends SimpleSqlParser {
 	 * 
 	 * @param sql sql
 	 * @param segments segments
+	 * @param keepComments true to keep comments
 	 * @param start start position
 	 * @param close close ']' need or not
 	 */

@@ -86,13 +86,14 @@ public class ShuntingYard {
 	/**
 	 * 转换成 逆波兰表示法（Reverse Polish notation，RPN，或逆波兰记法）
 	 * 
-	 * @param val
+	 * @param exp expression
+	 * @return object queue
 	 */
-	public Queue<Object> parseToRPN(String val) {
+	public Queue<Object> parseToRPN(String exp) {
 		rpn = new LinkedList<Object>();
 		opts = new LinkedList<Operator>();
 
-		Converter converter = new Converter(val);
+		Converter converter = new Converter(exp);
 		converter.initItems();
 		while (!converter.isEnd()) {
 			Object item = converter.fetchItem();

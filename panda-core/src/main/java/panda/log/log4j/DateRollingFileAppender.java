@@ -121,6 +121,11 @@ public class DateRollingFileAppender extends FileAppender {
 	 * Instantiate a <code>DateRollingFileAppender</code> and open the file designated by
 	 * <code>filename</code>. The opened filename will become the ouput destination for this
 	 * appender.
+	 * 
+	 * @param layout the Layout
+	 * @param filename the file name
+	 * @param datePattern the date pattern
+	 * @throws IOException if an IO error occurs
 	 */
 	public DateRollingFileAppender(Layout layout, String filename, String datePattern) throws IOException {
 		super(layout, filename, true);
@@ -145,12 +150,14 @@ public class DateRollingFileAppender extends FileAppender {
 	/**
 	 * The <b>DatePattern</b> takes a string in the same format as expected by
 	 * {@link SimpleDateFormat}. This options determines the rollover schedule.
+	 * 
+	 * @param pattern the pattern
 	 */
 	public void setDatePattern(String pattern) {
 		datePattern = pattern;
 	}
 
-	/** Returns the value of the <b>DatePattern</b> option. */
+	/** @return the value of the <b>DatePattern</b> option. */
 	public String getDatePattern() {
 		return datePattern;
 	}

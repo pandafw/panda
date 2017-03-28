@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * A mutable <code>Object</code> wrapper.
  * 
+ * @param <T> the object type
  */
 public class MutableObject<T> implements Mutable<T>, Serializable {
 

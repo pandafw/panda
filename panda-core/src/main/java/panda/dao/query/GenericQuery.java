@@ -160,6 +160,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * clear
+	 * @return this
 	 */
 	public GenericQuery clear() {
 		start = 0;
@@ -899,6 +900,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * @param start the start to set
+	 * @return this
 	 */
 	public GenericQuery start(long start) {
 		setStart(start);
@@ -907,6 +909,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * @param limit the limit to set
+	 * @return this
 	 */
 	public GenericQuery limit(long limit) {
 		setLimit(limit);
@@ -1328,7 +1331,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 
 	/**
 	 * equal to primary keys, Entity must be set
-	 * @param keys
+	 * @param keys primary keys
 	 * @return this
 	 */
 	public GenericQuery equalToPrimaryKeys(Object ... keys) {

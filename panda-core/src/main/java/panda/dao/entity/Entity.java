@@ -14,6 +14,7 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 
 /**
+ * @param <T> class type
  */
 public class Entity<T> {
 	protected Class<T> type;
@@ -57,6 +58,8 @@ public class Entity<T> {
 
 	/**
 	 * constructor
+	 * 
+	 * @param entity the Entity
 	 */
 	public Entity(Entity<T> entity) {
 		this.type = entity.type;
@@ -279,6 +282,7 @@ public class Entity<T> {
 	}
 
 	/**
+	 * @param name the option name
 	 * @return option
 	 */
 	public Object getOption(String name) {
@@ -312,6 +316,7 @@ public class Entity<T> {
 	}
 
 	/**
+	 * @param db the DB object
 	 * @return the prepSqls
 	 */
 	public String getPrepSql(DB db) {
@@ -333,6 +338,7 @@ public class Entity<T> {
 	}
 
 	/**
+	 * @param db the DB object
 	 * @return the postSql
 	 */
 	public String getPostSql(DB db) {

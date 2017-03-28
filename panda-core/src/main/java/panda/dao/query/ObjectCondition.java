@@ -4,6 +4,7 @@ package panda.dao.query;
 
 
 /**
+ * @param <E> query target type
  */
 public class ObjectCondition<E extends EntityQuery> extends AbstractCondition<E> {
 	/**

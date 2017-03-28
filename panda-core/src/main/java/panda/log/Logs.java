@@ -60,6 +60,8 @@ public final class Logs {
 
 	/**
 	 * get a log by caller's class name
+	 * 
+	 * @return the Log
 	 */
 	public static Log get() {
 		StackTraceElement[] sts = Thread.currentThread().getStackTrace();

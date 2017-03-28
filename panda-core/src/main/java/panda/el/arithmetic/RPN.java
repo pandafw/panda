@@ -22,6 +22,7 @@ public class RPN {
 
 	/**
 	 * 进行EL的预编译
+	 * @param rpn the RPN Queue
 	 */
 	public RPN(Queue<Object> rpn) {
 		compile(rpn);
@@ -29,6 +30,9 @@ public class RPN {
 
 	/**
 	 * 执行已经预编译的EL
+	 * 
+	 * @param ec the ElContext
+	 * @return the calculated value
 	 */
 	public Object calculate(ElContext ec) {
 		return calculate(ec, el);
@@ -36,6 +40,10 @@ public class RPN {
 
 	/**
 	 * 根据逆波兰表达式进行计算
+	 * 
+	 * @param ec the ElContext
+	 * @param rpn the RPN Queue
+	 * @return the calculated value
 	 */
 	public Object calculate(ElContext ec, Queue<Object> rpn) {
 		LinkedList<Object> operand = OperatorTree(rpn);
@@ -58,6 +66,7 @@ public class RPN {
 
 	/**
 	 * 预先编译
+	 * @param rpn the RPN Queue
 	 */
 	public void compile(Queue<Object> rpn) {
 		el = OperatorTree(rpn);

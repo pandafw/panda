@@ -14,6 +14,7 @@ import panda.io.Streams;
 
 /**
  * Blob implementation of TypeAdapter
+ * @param <T> Java Type
  */
 public class BlobTypeAdapter<T> extends AbstractCastTypeAdapter<T, InputStream> {
 	public BlobTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

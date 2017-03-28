@@ -199,6 +199,7 @@ public class StopWatch {
 	 * This method starts a new timing session, clearing any previous values.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch is already running.
 	 */
 	public StopWatch start() {
@@ -222,6 +223,7 @@ public class StopWatch {
 	 * This method ends a new timing session, allowing the time to be retrieved.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch is not running.
 	 */
 	public StopWatch stop() {
@@ -243,6 +245,7 @@ public class StopWatch {
 	 * <p>
 	 * This method clears the internal values to allow the object to be reused.
 	 * </p>
+	 * @return this
 	 */
 	public StopWatch reset() {
 		this.runningState = State.UNSTARTED;
@@ -254,6 +257,7 @@ public class StopWatch {
 	 * <p>
 	 * Restarts the stopwatch.
 	 * </p>
+	 * @return this
 	 */
 	public StopWatch restart() {
 		reset();
@@ -271,6 +275,7 @@ public class StopWatch {
 	 * point.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch is not running.
 	 */
 	public StopWatch split() {
@@ -292,6 +297,7 @@ public class StopWatch {
 	 * original start point to continue.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch has not been split.
 	 */
 	public StopWatch unsplit() {
@@ -311,6 +317,7 @@ public class StopWatch {
 	 * the suspend and resume calls in the total time.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch is not currently running.
 	 */
 	public StopWatch suspend() {
@@ -332,6 +339,7 @@ public class StopWatch {
 	 * the suspend and resume calls in the total time.
 	 * </p>
 	 * 
+	 * @return this
 	 * @throws IllegalStateException if the StopWatch has not been suspended.
 	 */
 	public StopWatch resume() {

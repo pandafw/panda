@@ -19,6 +19,8 @@ public class MapResource extends AbstractResource {
 	/**
 	 * Constructor
 	 * @param props content map
+	 * @param parent parent resource object
+	 * @param locale locale
 	 */
 	public MapResource(Properties props, Resource parent, Locale locale) {
 		super(parent, locale);
@@ -35,6 +37,8 @@ public class MapResource extends AbstractResource {
 	/**
 	 * Constructor
 	 * @param map content map
+	 * @param parent parent resource object
+	 * @param locale locale
 	 */
 	public MapResource(Map<String, Object> map, Resource parent, Locale locale) {
 		super(parent, locale);

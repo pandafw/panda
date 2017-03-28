@@ -36,6 +36,8 @@ public class ThreadPoolTaskScheduler extends TaskExecutorSupport implements Task
 	 * Set the ScheduledExecutorService's pool size.
 	 * Default is 1.
 	 * <p><b>This setting can be modified at runtime, for example through JMX.</b>
+	 * 
+	 * @param poolSize the poolSize
 	 */
 	public void setPoolSize(int poolSize) {
 		Asserts.isTrue(poolSize > 0, "'poolSize' must be 1 or higher");
@@ -47,6 +49,8 @@ public class ThreadPoolTaskScheduler extends TaskExecutorSupport implements Task
 
 	/**
 	 * Set a custom {@link ErrorHandler} strategy.
+	 * 
+	 * @param errorHandler the errorHandler
 	 */
 	public void setErrorHandler(ErrorHandler errorHandler) {
 		Asserts.notNull(errorHandler, "'errorHandler' must not be null");
@@ -101,7 +105,7 @@ public class ThreadPoolTaskScheduler extends TaskExecutorSupport implements Task
 	}
 
 	/**
-	 * Return the current pool size.
+	 * @return the current pool size.
 	 * <p>Requires an underlying {@link ScheduledThreadPoolExecutor}.
 	 * @see #getScheduledThreadPoolExecutor()
 	 * @see java.util.concurrent.ScheduledThreadPoolExecutor#getPoolSize()
@@ -115,7 +119,7 @@ public class ThreadPoolTaskScheduler extends TaskExecutorSupport implements Task
 	}
 
 	/**
-	 * Return the number of currently active threads.
+	 * @return the number of currently active threads.
 	 * <p>Requires an underlying {@link ScheduledThreadPoolExecutor}.
 	 * @see #getScheduledThreadPoolExecutor()
 	 * @see java.util.concurrent.ScheduledThreadPoolExecutor#getActiveCount()

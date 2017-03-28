@@ -399,7 +399,7 @@ public final class Mimes {
 	 * 
 	 * @param data The array of byte data to decode.
 	 * @return the number of bytes produced.
-	 * @exception IOException
+	 * @exception IOException if an IO error occurs.
 	 */
 	public static byte[] decodeQuoted(byte[] data) throws IOException {
 		try {
@@ -479,6 +479,7 @@ public final class Mimes {
 	 *            parameter is null, then the "Q" encoding is used if most of characters to be
 	 *            encoded are in the ASCII charset, otherwise "B" encoding is used.
 	 * @return Unicode string containing only US-ASCII characters
+	 * @exception UnsupportedEncodingException if the encoding fails
 	 */
 	public static String encodeText(String text, String charset, String encoding) throws UnsupportedEncodingException {
 		return encodeWord(text, charset, encoding, false);
@@ -517,6 +518,7 @@ public final class Mimes {
 	 * for example, uses this to encode it's 'phrase' component.
 	 * 
 	 * @param word Unicode string
+	 * @param charset the charset
 	 * @return Array of Unicode strings containing only US-ASCII characters.
 	 * @exception UnsupportedEncodingException if the encoding fails
 	 */

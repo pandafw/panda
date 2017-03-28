@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import panda.io.stream.CharSequenceReader;
 
@@ -109,13 +108,10 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @param map A map object that can be used to initialize the contents of the JsonObject.
 	 */
-	public JsonObject(Map map) {
+	public JsonObject(Map<?,?> map) {
 		if (map != null) {
-			Iterator i = map.entrySet().iterator();
-			while (i.hasNext()) {
-				Entry e = (Entry)i.next();
-				Object value = e.getValue();
-				this.set(e.getKey().toString(), value);
+			for (java.util.Map.Entry en : map.entrySet()) {
+				this.set(en.getKey().toString(), en.getValue());
 			}
 		}
 	}
@@ -148,7 +144,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	}
 
 	public JsonObject accumulateAll(Map<String, Object> map) throws JsonException {
-		for (Entry<String, Object> en : map.entrySet()) {
+		for (java.util.Map.Entry<String, Object> en : map.entrySet()) {
 			accumulate(en.getKey(), en.getValue());
 		}
 		return this;

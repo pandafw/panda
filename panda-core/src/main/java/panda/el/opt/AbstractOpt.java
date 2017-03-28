@@ -11,6 +11,7 @@ import panda.el.obj.ElObj;
 public abstract class AbstractOpt implements Operator {
 	/**
 	 * 操作符对象自身的符号
+	 * @return the operator string
 	 */
 	public abstract String operator();
 

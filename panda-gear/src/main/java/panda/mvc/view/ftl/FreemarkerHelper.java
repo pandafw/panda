@@ -26,7 +26,7 @@ public class FreemarkerHelper {
 	/**
 	 * @param name template name
 	 * @return template
-	 * @throws IOException 
+	 * @throws IOException if an IO error occurs
 	 */
 	public Template getTemplate(String name) throws IOException {
 		return fm.getConfiguration().getTemplate(name, ac.getLocale());

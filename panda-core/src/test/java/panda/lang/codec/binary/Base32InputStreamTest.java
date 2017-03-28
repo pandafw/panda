@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import panda.lang.Strings;
 
+@SuppressWarnings("javadoc")
 public class Base32InputStreamTest {
 
     private static final String ENCODED_FOO = "MZXW6===";
@@ -29,7 +30,7 @@ public class Base32InputStreamTest {
     /**
      * Tests the problem reported in CODEC-130. Missing / wrong implementation of skip.
      */
-    @Test
+	@Test
     public void testCodec130() throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         final Base32OutputStream base32os = new Base32OutputStream(bos);

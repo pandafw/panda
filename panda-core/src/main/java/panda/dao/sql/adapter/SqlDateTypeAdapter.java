@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 /**
  * SQL Date implementation of TypeAdapter
+ * @param <T> Java Type
  */
 public class SqlDateTypeAdapter<T> extends AbstractCastTypeAdapter<T, Date> {
 	public SqlDateTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

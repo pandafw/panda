@@ -14,9 +14,6 @@ import org.junit.Test;
  */
 public class FileItemHeadersTest {
 
-	/**
-	 * @throws Exception
-	 */
 	@Test
 	public void testFileItemHeaders() throws Exception {
 		FileItemHeaders aMutableFileItemHeaders = new FileItemHeaders();

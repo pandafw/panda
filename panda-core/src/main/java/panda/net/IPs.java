@@ -227,6 +227,7 @@ public class IPs {
 	/**
 	 * Utility routine to check if the InetAddress is an IPv4 mapped IPv6 address.
 	 *
+	 * @param addr a byte array representing an IPv4-Mapped address
 	 * @return a <code>boolean</code> indicating if the InetAddress is an IPv4 mapped IPv6 address;
 	 *         or false if address is IPv4 address.
 	 */

@@ -809,6 +809,7 @@ public abstract class Texts {
 	 * 
 	 * @param str value The string to truncate
 	 * @param len length The maximum length to allow before truncating
+	 * @param ellipsis the ellipsis string
 	 * @return The converted textELLIPSIS
 	 */
 	public static String ellipsis(String str, int len, String ellipsis) {
@@ -843,6 +844,7 @@ public abstract class Texts {
 	 * 
 	 * @param str value The string to truncate
 	 * @param len length The maximum length to allow before truncating
+	 * @param ellipsis the ellipsis string
 	 * @return The converted text
 	 */
 	public static String ellipsiz(String str, int len, String ellipsis) {
@@ -920,6 +922,10 @@ public abstract class Texts {
 	// -----------------------------------------------------------------------
 	/**
 	 * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java
+	 * 
+	 * @param s0 the string
+	 * @param s1 the string
+	 * @return the Levenshtein distance
 	 */
 	public static int computeLevenshteinDistance(String s0, String s1) {
 		int len0 = s0.length() + 1;

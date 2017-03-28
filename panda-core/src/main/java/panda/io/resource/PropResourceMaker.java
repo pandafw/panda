@@ -21,7 +21,7 @@ public class PropResourceMaker implements ResourceMaker {
 	}
 
 	/**
-	 * @param format
+	 * @param format property file suffix
 	 */
 	public PropResourceMaker(String format) {
 		this.format = format;

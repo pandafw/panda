@@ -52,6 +52,9 @@ public class TimeSpan implements Serializable {
 
 	/**
 	 * Returns a TimeSpan that represents a specified number of days
+	 * 
+	 * @param days the days
+	 * @return the TimeSpan
 	 */
 	public static TimeSpan fromDays(double days) {
 		return new TimeSpan((long)(days * MS_DAY));
@@ -59,6 +62,9 @@ public class TimeSpan implements Serializable {
 
 	/**
 	 * Returns a TimeSpan that represents a specified number of hours
+	 * 
+	 * @param hours the hours
+	 * @return the TimeSpan
 	 */
 	public static TimeSpan fromHours(double hours) {
 		return new TimeSpan((long)(hours * MS_HOUR));
@@ -66,6 +72,9 @@ public class TimeSpan implements Serializable {
 
 	/**
 	 * Returns a TimeSpan that represents a specified number of minutes
+	 * 
+	 * @param minutes the minutes
+	 * @return the TimeSpan
 	 */
 	public static TimeSpan fromMinutes(double minutes) {
 		return new TimeSpan((long)(minutes * MS_MINUTE));
@@ -73,6 +82,9 @@ public class TimeSpan implements Serializable {
 
 	/**
 	 * Returns a TimeSpan that represents a specified number of seconds
+	 * 
+	 * @param seconds the seconds
+	 * @return the TimeSpan
 	 */
 	public static TimeSpan fromSeconds(double seconds) {
 		return new TimeSpan((long)(seconds * MS_SECOND));
@@ -80,6 +92,9 @@ public class TimeSpan implements Serializable {
 
 	/**
 	 * Returns a TimeSpan that represents a specified number of milliseconds
+	 * 
+	 * @param milliseconds the milliseconds
+	 * @return the TimeSpan
 	 */
 	public static TimeSpan fromMilliseconds(long milliseconds) {
 		return new TimeSpan(milliseconds);

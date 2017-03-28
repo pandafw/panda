@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+@SuppressWarnings("javadoc")
 public abstract class AbstractObjectTest extends BulkTest {
 
     /** Current major release for Collections */

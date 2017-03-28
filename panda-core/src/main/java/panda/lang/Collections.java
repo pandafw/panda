@@ -350,7 +350,7 @@ public abstract class Collections {
 	
 	/**
 	 * return first key of map
-	 * @param map
+	 * @param map the map
 	 * @return first key
 	 */
 	public static <K> K firstKey(Map<K, ?> map) {
@@ -363,7 +363,7 @@ public abstract class Collections {
 
 	/**
 	 * return first value of map
-	 * @param map
+	 * @param map the map
 	 * @return first value
 	 */
 	public static <V> V firstValue(Map<?, V> map) {
@@ -376,7 +376,7 @@ public abstract class Collections {
 
 	/**
 	 * return first entry of map
-	 * @param map
+	 * @param map the map
 	 * @return first entry
 	 */
 	public static <K, V> Entry<K, V> firstEntry(Map<K, V> map) {
@@ -656,6 +656,7 @@ public abstract class Collections {
 	 * returns <tt>true</tt> if and only if this map contains a mapping for a key <tt>k</tt> such
 	 * that <tt>(key==null ? k==null : key.equals(k))</tt>. (There can be at most one such mapping.)
 	 *
+	 * @param map the map
 	 * @param key key whose presence in this map is to be tested
 	 * @return <tt>true</tt> if this map contains a mapping for the specified key
 	 * @throws ClassCastException if the key is of an inappropriate type for this map
@@ -1870,11 +1871,12 @@ public abstract class Collections {
 	 * Implementation note: Implementations of this method need not create a separate <tt>Set</tt>
 	 * object for each call. Using this method is likely to have comparable cost to using the
 	 * like-named field. (Unlike this method, the field does not provide type safety.)
+	 * @return the empty set
 	 * 
 	 * @see #EMPTY_SET
 	 */
 	public static final <T> Set<T> emptySet() {
-		return java.util.Collections.emptySet();
+		return (Set<T>) EMPTY_SET;
 	}
 
 	/**
@@ -1897,10 +1899,11 @@ public abstract class Collections {
 	 * object for each call. Using this method is likely to have comparable cost to using the
 	 * like-named field. (Unlike this method, the field does not provide type safety.)
 	 * 
+	 * @return the empty list
 	 * @see #EMPTY_LIST
 	 */
 	public static final <T> List<T> emptyList() {
-		return java.util.Collections.emptyList();
+		return (List<T>) EMPTY_LIST;
 	}
 
 	/**
@@ -1922,11 +1925,11 @@ public abstract class Collections {
 	 * Implementation note: Implementations of this method need not create a separate <tt>Map</tt>
 	 * object for each call. Using this method is likely to have comparable cost to using the
 	 * like-named field. (Unlike this method, the field does not provide type safety.)
-	 * 
+	 * @return the empty map
 	 * @see #EMPTY_MAP
 	 */
 	public static final <K, V> Map<K, V> emptyMap() {
-		return java.util.Collections.emptyMap();
+		return (Map<K,V>) EMPTY_MAP;
 	}
 
 	/**
@@ -2013,6 +2016,8 @@ public abstract class Collections {
 	 * The returned comparator is serializable (assuming the specified comparator is also
 	 * serializable or null).
 	 * 
+     * @param cmp a comparator who's ordering is to be reversed by the returned
+     * comparator or {@code null}
 	 * @return a comparator that imposes the reverse ordering of the specified comparator.
 	 */
 	public static <T> Comparator<T> reverseOrder(Comparator<T> cmp) {
@@ -2052,6 +2057,7 @@ public abstract class Collections {
 	 * 
 	 * @param c the collection in which to determine the frequency of <tt>o</tt>
 	 * @param o the object whose frequency is to be determined
+	 * @return the number of elements in the specified collection equal to the specified object.
 	 * @throws NullPointerException if <tt>c</tt> is null
 	 */
 	public static int frequency(Collection<?> c, Object o) {
@@ -2074,6 +2080,7 @@ public abstract class Collections {
 	 * 
 	 * @param c1 a collection
 	 * @param c2 a collection
+	 * @return <tt>true</tt> if the two specified collections have no elements in common.
 	 * @throws NullPointerException if either collection is null
 	 */
 	public static boolean disjoint(Collection<?> c1, Collection<?> c2) {
@@ -2160,6 +2167,7 @@ public abstract class Collections {
 	 * invert copy map, the key/value pair is inverted.
 	 * @param des destination map
 	 * @param src source map array
+	 * @return the destination map (des)
 	 */
 	public static Map invertAddAll(Map des, Map ... src) {
 		if (src == null || src.length == 0) {
@@ -2179,6 +2187,7 @@ public abstract class Collections {
 	 * copy source maps to des map
 	 * @param des destination map
 	 * @param src source map array
+	 * @return the destination map (des)
 	 */
 	public static <K, V> Map<K, V> addAll(Map<K, V> des, Map<K, V> ... src) {
 		if (src == null || src.length == 0) {
@@ -2194,6 +2203,10 @@ public abstract class Collections {
 
 	/**
 	 * remove prefix of key
+	 * 
+	 * @param map the original map
+	 * @param prefix the key prefix
+	 * @return the subtracted map
 	 */
 	public static <T> Map<String, T> subMap(Map<String, T> map, String prefix) {
 		if (isEmpty(map) || Strings.isEmpty(prefix)) {
@@ -2211,24 +2224,30 @@ public abstract class Collections {
 	}
 
 	/**
-	 * strip empty list to null
+	 * strip empty collection to null
+	 * 
+	 * @param coll the collection
+	 * @return the stripped collection (coll)
 	 */
-	public static <T> Collection<T> stripToNull(Collection<T> list) {
-		if (isEmpty(list)) {
+	public static <T> Collection<T> stripToNull(Collection<T> coll) {
+		if (isEmpty(coll)) {
 			return null;
 		}
 
-		for (Iterator it = list.iterator(); it.hasNext();) {
+		for (Iterator it = coll.iterator(); it.hasNext();) {
 			if (Objects.isEmpty(it.next())) {
 				it.remove();
 			}
 		}
 		
-		return isEmpty(list) ? null : list;
+		return isEmpty(coll) ? null : coll;
 	}
 
 	/**
 	 * strip empty list to null
+	 * 
+	 * @param list the list
+	 * @return the stripped list (list)
 	 */
 	public static <T> List<T> stripToNull(List<T> list) {
 		if (isEmpty(list)) {

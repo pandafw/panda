@@ -19,7 +19,7 @@ public class ComboIocContext implements IocContext {
 	/**
 	 * Context 的获取优先级，以数组的顺序来决定
 	 * 
-	 * @param contexts
+	 * @param contexts the IocContext array
 	 */
 	public ComboIocContext(IocContext... contexts) {
 		if (contexts != null) {

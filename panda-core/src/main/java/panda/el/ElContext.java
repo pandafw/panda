@@ -16,14 +16,15 @@ public class ElContext {
 	}
 
 	/**
-	 * @param context
+	 * @param context context object
 	 */
 	public ElContext(Object context) {
 		this(context, false);
 	}
 
 	/**
-	 * @param context
+	 * @param context context object
+	 * @param strict set this to true if you want NullPointException should be raised
 	 */
 	public ElContext(Object context, boolean strict) {
 		this.context = context;

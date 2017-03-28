@@ -37,7 +37,7 @@ public class LuceneProvider {
 
 	/**
 	 * initialize
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public void initialize() throws IOException {
 		if (Systems.IS_OS_APPENGINE) {

@@ -16,6 +16,7 @@ class LinkRef {
 	 * 
 	 * @param link The link.
 	 * @param title The title (may be <code>null</code>).
+	 * @param isAbbrev Is abbreviate
 	 */
 	public LinkRef(final String link, final String title, final boolean isAbbrev) {
 		this.link = link;

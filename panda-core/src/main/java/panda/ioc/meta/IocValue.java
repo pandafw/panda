@@ -22,8 +22,8 @@ public class IocValue {
 	}
 
 	/**
-	 * @param type
-	 * @param value
+	 * @param type the IocValue type
+	 * @param value the value
 	 */
 	public IocValue(char type, Object value) {
 		this.type = type;

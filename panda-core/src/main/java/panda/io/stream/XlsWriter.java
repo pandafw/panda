@@ -124,6 +124,7 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	 * Writes the entire list to a CSV file. The list is assumed to be a String[]
 	 *
 	 * @param allLines a List of String[], with each String[] representing a line of the file.
+	 * @throws IOException if an IO error occurred
 	 */
 	public void writeAll(List<?> allLines) throws IOException {
 		for (Iterator iter = allLines.iterator(); iter.hasNext();) {
@@ -190,6 +191,7 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	 * Writes the next line to the file.
 	 *
 	 * @param array a string array with each comma-separated element as a separate entry.
+	 * @throws IOException if an IO error occurred
 	 */
 	public void writeArray(Object[] array) throws IOException {
 		writeList(Arrays.asList(array));

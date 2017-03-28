@@ -315,6 +315,7 @@ public class URLHelper {
 
 	/**
 	 * @param queryString query string
+	 * @param encoding the encoding
 	 * @return parameter map
 	 */
 	@SuppressWarnings("unchecked")

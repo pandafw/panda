@@ -20,6 +20,7 @@ public class XmlRpcFaultException extends Exception {
 	 * Creates a new exception with the supplied message and error code. The message and error code
 	 * values are those returned from the remote XML-RPC service.
 	 * 
+	 * @param errorCode The error code.
 	 * @param message The exception message.
 	 */
 	public XmlRpcFaultException(int errorCode, String message) {

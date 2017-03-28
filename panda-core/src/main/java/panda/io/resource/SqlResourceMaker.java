@@ -32,6 +32,10 @@ public class SqlResourceMaker extends BeanResourceMaker {
 	
 	/**
 	 * load resources
+	 * 
+	 * @param dataSource data source
+	 * @param tableName table name
+	 * @param whereClause where clause string
 	 * @throws Exception if an error occurs
 	 */
 	public void loadResources(DataSource dataSource, String tableName, String whereClause) throws Exception {

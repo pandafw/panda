@@ -35,6 +35,8 @@ public class PeriodicTrigger implements Trigger {
 
 	/**
 	 * Create a trigger with the given period in milliseconds.
+	 * 
+	 * @param period the period
 	 */
 	public PeriodicTrigger(long period) {
 		this(period, null);
@@ -44,6 +46,9 @@ public class PeriodicTrigger implements Trigger {
 	 * Create a trigger with the given period and time unit. The time unit will
 	 * apply not only to the period but also to any 'initialDelay' value, if
 	 * configured on this Trigger later via {@link #setInitialDelay(long)}.
+	 * 
+	 * @param period the period
+	 * @param timeUnit the time unit
 	 */
 	public PeriodicTrigger(long period, TimeUnit timeUnit) {
 		Asserts.isTrue(period >= 0, "period must not be negative");
@@ -56,6 +61,8 @@ public class PeriodicTrigger implements Trigger {
 	 * Specify the delay for the initial execution. It will be evaluated in
 	 * terms of this trigger's {@link TimeUnit}. If no time unit was explicitly
 	 * provided upon instantiation, the default is milliseconds.
+	 * 
+	 * @param initialDelay the initial delay
 	 */
 	public void setInitialDelay(long initialDelay) {
 		this.initialDelay = this.timeUnit.toMillis(initialDelay);
@@ -65,6 +72,8 @@ public class PeriodicTrigger implements Trigger {
 	 * Specify whether the periodic interval should be measured between the
 	 * scheduled start times rather than between actual completion times.
 	 * The latter, "fixed delay" behavior, is the default.
+	 * 
+	 * @param fixedRate the fixed rate
 	 */
 	public void setFixedRate(boolean fixedRate) {
 		this.fixedRate = fixedRate;

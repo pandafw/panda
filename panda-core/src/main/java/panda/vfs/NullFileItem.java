@@ -17,6 +17,8 @@ public class NullFileItem implements FileItem {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param id the file id
 	 */
 	public NullFileItem(Long id) {
 		this.id = id;
@@ -24,6 +26,9 @@ public class NullFileItem implements FileItem {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param id the file id
+	 * @param name the file name
 	 */
 	public NullFileItem(Long id, String name) {
 		this.id = id;

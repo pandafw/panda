@@ -10,15 +10,15 @@ public class MethodCreator<T> implements Creator<T> {
 	private Method method;
 
 	/**
-	 * @param method
+	 * @param method the method
 	 */
 	public MethodCreator(Method method) {
 		this.method = method;
 	}
 
 	/**
-	 * @param object
-	 * @param method
+	 * @param object the object
+	 * @param method the method
 	 */
 	public MethodCreator(Object object, Method method) {
 		this.object = object;

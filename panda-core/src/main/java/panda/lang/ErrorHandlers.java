@@ -37,6 +37,11 @@ public abstract class ErrorHandlers {
 	 * errors suppressed by default whereas one-shot tasks will have errors
 	 * propagated by default since those errors may be expected through the
 	 * returned {@link Future}. In both cases, the errors will be logged.
+	 * 
+	 * @param task the runnable task
+	 * @param errorHandler the error handler
+	 * @param isRepeatingTask is repeating task
+	 * @return ErrorHandler
 	 */
 	public static DelegatingErrorHandlingRunnable decorateTaskWithErrorHandler(
 			Runnable task, ErrorHandler errorHandler, boolean isRepeatingTask) {
@@ -53,6 +58,9 @@ public abstract class ErrorHandlers {
 	 * value indicating whether the task will be repeating or not. For repeating tasks
 	 * it will suppress errors, but for one-time tasks it will propagate. In both
 	 * cases, the error will be logged.
+	 * 
+	 * @param isRepeatingTask is repeating task
+	 * @return ErrorHandler
 	 */
 	public static ErrorHandler getDefaultErrorHandler(boolean isRepeatingTask) {
 		return (isRepeatingTask ? LOG_AND_SUPPRESS_ERROR_HANDLER : LOG_AND_PROPAGATE_ERROR_HANDLER);

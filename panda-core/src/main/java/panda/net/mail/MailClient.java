@@ -199,6 +199,7 @@ public class MailClient {
 
 	/**
 	 * @param email email
+	 * @throws EmailException if an error occurs
 	 */
 	public void send(Email email) throws EmailException {
 		if (Strings.isEmpty(email.getMsgId())) {

@@ -35,6 +35,7 @@ public interface SqlExecutor {
 	 * such as an SQL DDL statement. 
 	 *
 	 * @param sqls The SQL statements to execute.
+	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(List<String> sqls) throws SQLException;
@@ -46,6 +47,7 @@ public interface SqlExecutor {
 	 *
 	 * @param sqls The SQL statements to execute.
 	 * @param batchSize the batch size to execute at a time
+	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(List<String> sqls, int batchSize) throws SQLException;
@@ -57,6 +59,7 @@ public interface SqlExecutor {
 	 *
 	 * @param sql The SQL statement to execute.
 	 * @param parameters The parameter object list (e.g. JavaBean, Map, XML etc.).
+	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(String sql, List<Object> parameters) throws SQLException;
@@ -69,6 +72,7 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameters The parameter object list (e.g. JavaBean, Map, XML etc.).
 	 * @param batchSize the batch size to execute at a time
+	 * @return the effected row count array
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public int[] executeBatch(String sql, List<Object> parameters, int batchSize) throws SQLException;
@@ -301,8 +305,8 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A List of result objects.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -337,8 +341,8 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A List of result objects.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -356,8 +360,8 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
-	 * @param skip            The number of results to ignore.
-	 * @param max             The maximum number of results to return.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A List of result objects.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -392,6 +396,8 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
@@ -428,6 +434,8 @@ public interface SqlExecutor {
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param keyPropertyName         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -446,6 +454,8 @@ public interface SqlExecutor {
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param keyPropertyName         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
@@ -482,6 +492,8 @@ public interface SqlExecutor {
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
 	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
@@ -520,6 +532,8 @@ public interface SqlExecutor {
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
 	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
@@ -539,6 +553,8 @@ public interface SqlExecutor {
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
 	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param skip the record count to skip
+	 * @param max the max record count to fetch
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */

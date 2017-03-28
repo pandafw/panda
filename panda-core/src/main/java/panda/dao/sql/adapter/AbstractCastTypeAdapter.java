@@ -15,7 +15,8 @@ public abstract class AbstractCastTypeAdapter<T, P> implements TypeAdapter<T> {
 	
 	/**
 	 * @param adapters adapters
-	 * @param javaType to type
+	 * @param javaType the java type
+	 * @param jdbcType the jdbc type
 	 */
 	public AbstractCastTypeAdapter(TypeAdapters adapters, Class<T> javaType, Class<P> jdbcType) {
 		castors = adapters.getCastors();

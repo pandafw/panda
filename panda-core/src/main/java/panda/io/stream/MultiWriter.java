@@ -8,6 +8,7 @@ public class MultiWriter extends Writer {
 	
 	/**
 	 * Constructs a new NullWriter.
+	 * @param outs the output writer array
 	 */
 	public MultiWriter(Writer... outs) {
 		this.outs = outs;

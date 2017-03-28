@@ -79,7 +79,7 @@ public class InterceptorChain {
 	}
 
 	/**
-	 * 正在被调用的Method
+	 * @return 正在被调用的Method
 	 */
 	public Method getCallingMethod() {
 		return callingMethod;
@@ -87,6 +87,7 @@ public class InterceptorChain {
 
 	/**
 	 * 方法调用的参数数组,如果你要改变参数,那么必须保证参数类型与方法参数兼容.
+	 * @return the arguments array
 	 */
 	public Object[] getArgs() {
 		return args;
@@ -106,6 +107,7 @@ public class InterceptorChain {
 
 	/**
 	 * 获取当前的方法拦截器列表,注意,这个列表是不可修改的.如果需要修改,那么请通过{@link #setMethodInterceptors(List)}
+	 * @return method intercepter list
 	 */
 	public List<MethodInterceptor> getMethodInterceptors() {
 		return Collections.unmodifiableList(miList);
@@ -113,6 +115,8 @@ public class InterceptorChain {
 
 	/**
 	 * 设置当前调用的方法拦截器列表,注意,这个set只对当前方法调用有效.
+	 * 
+	 * @param miList method intercepter list
 	 */
 	public void setMethodInterceptors(List<MethodInterceptor> miList) {
 		this.miList = miList;

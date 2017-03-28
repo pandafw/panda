@@ -23,8 +23,11 @@ public class Sqls {
 	private static final Log log = Logs.getLog(Sqls.class);
 	
 	/**
-	 * @param jndi
-	 * @throws NamingException
+	 * lookup jndi data source
+	 * 
+	 * @param jndi jndi string
+	 * @return the DataSource
+	 * @throws NamingException if a naming exception is encountered
 	 */
 	public static DataSource lookupJndiDataSource(String jndi) throws NamingException {
 		return (DataSource)JndiLookup.lookup(jndi);
@@ -270,6 +273,7 @@ public class Sqls {
 	/**
 	 * 0-9a-zA-Z_
 	 * @param c character
+	 * @return true if the specified character is [0-9a-zA-Z_]
 	 */
 	public static boolean isValidColumnChar(int c) {
 		return c == '_' || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');

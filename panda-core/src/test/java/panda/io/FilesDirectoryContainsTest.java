@@ -130,6 +130,7 @@ public class FilesDirectoryContainsTest extends FileBasedTestCase {
 
 	/**
 	 * Test to demonstrate a file which does not exist returns false
+	 * @throws IOException if an IO error occurs
 	 */
 	@Test
 	public void testFileDoesNotExistBug() throws IOException {

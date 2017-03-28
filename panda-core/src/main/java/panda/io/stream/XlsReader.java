@@ -164,6 +164,7 @@ public class XlsReader implements ListReader<Object>, Closeable {
 	/**
 	 * Reads the row and converts to a string array.
 	 * 
+	 * @param r the row index
 	 * @return a string array with each comma-separated element as a separate entry.
 	 * 
 	 * @throws IOException if bad things happen during the read

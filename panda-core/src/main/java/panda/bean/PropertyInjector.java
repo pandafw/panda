@@ -14,8 +14,10 @@ public class PropertyInjector implements Injector {
 
 
 	/**
-	 * @param handler
-	 * @param field
+	 * Constructor
+	 * 
+	 * @param field field name
+	 * @param handler property handler
 	 */
 	public PropertyInjector(String field, PropertyHandler handler) {
 		this.field = field;

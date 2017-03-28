@@ -29,7 +29,7 @@ public class XmlRpcClient {
 	private String url;
 
 	/**
-	 * @param url
+	 * @param url the Xml-Rpc EntryPoint URL
 	 */
 	public XmlRpcClient(String url) {
 		this.url = url;

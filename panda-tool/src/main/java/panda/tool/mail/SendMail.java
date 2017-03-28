@@ -144,7 +144,7 @@ public class SendMail {
 
 	/**
 	 * @param from the from to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setFrom(String from) throws EmailException {
 		email.setFrom(from);
@@ -152,7 +152,7 @@ public class SendMail {
 
 	/**
 	 * @param tos the tos to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setTo(String[] tos) throws EmailException {
 		for (String s : tos) {
@@ -162,7 +162,7 @@ public class SendMail {
 
 	/**
 	 * @param ccs the ccs to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setCc(String[] ccs) throws EmailException {
 		for (String s : ccs) {
@@ -172,7 +172,7 @@ public class SendMail {
 
 	/**
 	 * @param bccs the bccs to set
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setBcc(String[] bccs) throws EmailException {
 		for (String s : bccs) {
@@ -219,7 +219,7 @@ public class SendMail {
 
 	/**
 	 * @param attachs attachment files
-	 * @throws EmailException 
+	 * @throws EmailException if an error occurs
 	 */
 	public void setAttachments(String[] attachs) throws EmailException {
 		for (String a : attachs) {

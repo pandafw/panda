@@ -291,6 +291,10 @@ public abstract class JavaGraphics {
 	 * Returns a scaled image of a source image. (ratio keeped)
 	 * </p>
 	 * 
+	 * @param image the source image
+	 * @param newWidth the width of the scaled image
+	 * @param newHeight the height of the scaled image
+	 * @return a new compatible <code>BufferedImage</code> containing a scaled <code>image</code>
 	 * @see #createScaledImage(java.awt.image.BufferedImage, int, int, boolean)
 	 */
 	public static BufferedImage createScaledImage(BufferedImage image,
@@ -503,6 +507,11 @@ public abstract class JavaGraphics {
 	 * Returns a scaled image (ratio keep) of a source image.
 	 * </p>
 	 * 
+	 * @param image the source image
+	 * @param newWidth the width of the scaled image
+	 * @param newHeight the height of the scaled image
+	 * @return a new compatible <code>BufferedImage</code> containing a scaled image of
+	 *         <code>image</code>
 	 * @see #createScaledImageSlow(java.awt.image.BufferedImage, int, int, boolean)
 	 */
 	public static BufferedImage createScaledImageSlow(BufferedImage image,

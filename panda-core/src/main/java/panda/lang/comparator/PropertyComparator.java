@@ -11,6 +11,8 @@ import panda.lang.Objects;
 
 /**
  * comparator for property
+ * 
+ * @param <T> the object type
  */
 public class PropertyComparator<T> implements Comparator<T> {
 	protected BeanHandler<T> bh;

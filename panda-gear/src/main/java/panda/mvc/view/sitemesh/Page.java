@@ -7,9 +7,9 @@ public class Page {
 	
 	
 	/**
-	 * @param title
-	 * @param head
-	 * @param body
+	 * @param title the title
+	 * @param head the head
+	 * @param body the body
 	 */
 	public Page(String title, String head, String body) {
 		super();

@@ -22,31 +22,31 @@ public class Aop1 {
 	protected Aop1(Integer uu) {
 	}
 
-	/**
+	/*
 	 * 无参数,无返回
 	 */
-	public void nonArgsVoid() throws Throwable {
+	public void nonArgsVoid() {
 		System.out.println("My - " + name + " >> nonArgsVoid");
 	}
 
 	protected void voidZ() {
 	}
 
-	/**
+	/*
 	 * 有一个参数,无返回
 	 */
 	public void argsVoid(String x) {
 		System.out.println("My - " + name + " >> argsVoid");
 	}
 
-	/**
+	/*
 	 * 有多个参数,无返回
 	 */
 	public void mixObjectsVoid(String x, Object obj, Integer i, JFrame f) {
 		System.out.println("My - " + name + " >> mixObjectsVoid");
 	}
 
-	/**
+	/*
 	 * 有多个参数,无返回
 	 */
 	public void mixArgsVoid(String x, Object obj, int yy, char xp, long... z) {
@@ -55,7 +55,7 @@ public class Aop1 {
 		// new Throwable().printStackTrace();
 	}
 
-	/**
+	/*
 	 * 有多个参数,无返回
 	 */
 	public void mixArgsVoid2(String x, Object obj, int yy, char xp, long bb, boolean ser, char xzzz, String ppp,

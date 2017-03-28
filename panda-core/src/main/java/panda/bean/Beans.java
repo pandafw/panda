@@ -135,6 +135,8 @@ public class Beans {
 	 * @param name the property name 
 	 * @param value the property value to be set
 	 * 
+	 * @return true if set value successfully
+	 * 
 	 * @exception IllegalArgumentException if <code>bean</code> or
 	 *                <code>name</code> is null
 	 *                throws an exception
@@ -180,6 +182,7 @@ public class Beans {
 	 * @param bean Bean whose property is to be set
 	 * @param name the property name 
 	 * @param value the property value to be set
+	 * @return true if set value successfully
 	 * 
 	 * @exception IllegalArgumentException if <code>bean</code> or
 	 *                <code>name</code> is null
@@ -550,6 +553,7 @@ public class Beans {
 	 * @param bean Bean whose property is to be set
 	 * @param name the property name 
 	 * @param value the property value to be set
+	 * @return true if set value successfully
 	 * 
 	 * @exception IllegalArgumentException if <code>bean</code> or
 	 *                <code>name</code> is null
@@ -605,6 +609,7 @@ public class Beans {
 	 * @param bean Bean whose property is to be set
 	 * @param name the property name 
 	 * @param value the property value to be set
+	 * @return true if set value successfully
 	 * 
 	 * @exception IllegalArgumentException if <code>bean</code> or
 	 *                <code>name</code> is null

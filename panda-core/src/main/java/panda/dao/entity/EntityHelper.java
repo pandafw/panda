@@ -13,7 +13,8 @@ import panda.lang.Objects;
 public abstract class EntityHelper {
 	/**
 	 * clear primary key value of data
-	 * @param data data
+	 * @param entity the Entity
+	 * @param data the data
 	 */
 	public static <T> void clearPrimaryKeyValues(Entity<T> entity, T data) {
 		if (data == null) {
@@ -29,7 +30,8 @@ public abstract class EntityHelper {
 
 	/**
 	 * clear identity value of data
-	 * @param data data
+	 * @param entity the Entity
+	 * @param data the data
 	 */
 	public static <T> void clearIdentityValue(Entity<T> entity, T data) {
 		if (data == null) {
@@ -60,6 +62,9 @@ public abstract class EntityHelper {
 	}
 
 	/**
+	 * @param efs the EntityField list
+	 * @param lhs the left object
+	 * @param rhs the right object
 	 * @return true if lhs is different with rhs
 	 */
 	public static boolean isDifferent(Collection<EntityField> efs, Object lhs, Object rhs) {
@@ -74,6 +79,8 @@ public abstract class EntityHelper {
 	}
 	
 	/**
+	 * @param entity the Entity
+	 * @param data the data
 	 * @return true if check successfully
 	 */
 	public static <T> boolean hasPrimaryKeyValues(Entity<T> entity, T data) {
@@ -89,6 +96,10 @@ public abstract class EntityHelper {
 
 	/**
 	 * checkPrimaryKeys
+	 * 
+	 * @param dao the DAO
+	 * @param entity the Entity
+	 * @param data the data
 	 * @return true if check successfully
 	 */
 	public static <T> boolean checkPrimaryKeys(Dao dao, Entity<T> entity, T data) {
@@ -149,6 +160,11 @@ public abstract class EntityHelper {
 
 	/**
 	 * checkForeignKey
+	 * 
+	 * @param dao the DAO
+	 * @param entity the Entity
+	 * @param data the data
+	 * @param efk the EntityFKey
 	 * @return true if check successfully
 	 */
 	public static <T> boolean checkForeignKey(Dao dao, Entity<T> entity, T data, EntityFKey efk) {
@@ -182,8 +198,11 @@ public abstract class EntityHelper {
 	}
 	
 	/**
-	 * checkForeignKeys
-	 * @param data
+	 * Check Foreign Keys
+	 * 
+	 * @param dao DAO object
+	 * @param entity the Entity
+	 * @param data the data to check
 	 * @return true if check successfully
 	 */
 	public static <T> List<EntityFKey> checkForeignKeys(Dao dao, Entity<T> entity, T data) {
@@ -203,7 +222,9 @@ public abstract class EntityHelper {
 	
 	/**
 	 * check not null fields
-	 * @param data
+	 * 
+	 * @param entity the Entity
+	 * @param data the data to check
 	 * @return null fields
 	 */
 	public static <T> List<EntityField> checkNotNulls(Entity<T> entity, T data) {
@@ -221,7 +242,9 @@ public abstract class EntityHelper {
 	
 	/**
 	 * check not null fields
-	 * @param data
+	 * 
+	 * @param efs the EntityField list
+	 * @param data the data to check
 	 * @return null fields
 	 */
 	public static <T> List<EntityField> checkNotNulls(List<EntityField> efs, T data) {

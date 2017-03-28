@@ -15,7 +15,9 @@ public class El {
 	private CharSequence expr;
 
 	/**
-	 * compile
+	 * EL expression constructor
+	 * 
+	 * @param cs the EL expression
 	 */
 	public El(CharSequence cs) {
 		try {
@@ -30,18 +32,31 @@ public class El {
 	}
 
 	/**
-	 * 解析预编译后的EL表达式
+	 * evaluate the EL expression
+	 * @return the evaluated value
 	 */
 	public Object eval() {
 		ElContext ec = new ElContext(null);
 		return rpn.calculate(ec);
 	}
 
+	/**
+	 * evaluate the EL expression
+	 * 
+	 * @param context the context object
+	 * @return the evaluated value
+	 */
 	public Object eval(Object context) {
 		ElContext ec = new ElContext(context);
 		return rpn.calculate(ec);
 	}
 
+	/**
+	 * evaluate the EL expression
+	 * 
+	 * @param ec the ElContext object
+	 * @return the evaluated value
+	 */
 	public Object eval(ElContext ec) {
 		return rpn.calculate(ec);
 	}
@@ -74,7 +89,10 @@ public class El {
 	}
 	
 	/**
-	 * 对参数代表的表达式进行运算
+	 * evaluate the EL expression
+	 * 
+	 * @param expr the EL expression
+	 * @return the evaluated value
 	 */
 	public static Object eval(String expr) {
 		// 逆波兰表示法（Reverse Polish notation，RPN，或逆波兰记法）

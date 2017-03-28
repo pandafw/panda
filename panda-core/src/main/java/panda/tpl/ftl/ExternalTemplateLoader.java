@@ -133,6 +133,7 @@ public class ExternalTemplateLoader extends StringTemplateLoader {
 
 	/**
 	 * Load templates from list.
+	 * @param tplList the template list
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadTemplates(List tplList) {

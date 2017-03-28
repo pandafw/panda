@@ -8,7 +8,10 @@ public class BeanAccessor {
 	private BeanHandler handler;
 
 	/**
-	 * @param bean
+	 * Constructor
+	 * 
+	 * @param handler bean handler
+	 * @param bean bean object
 	 */
 	public BeanAccessor(BeanHandler handler, Object bean) {
 		this.bean = bean;

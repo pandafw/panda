@@ -170,7 +170,8 @@ public abstract class Fields {
 	 * get all annotation fields of the class and it's super class
 	 * Discard duplicate field of parents.
 	 * 
-	 * @param ann annotation
+	 * @param cls the class
+	 * @param ann the annotation
 	 * @return fields
 	 */
 	public static <A extends Annotation> List<Field> getAnnotationFields(Class<?> cls, Class<A> ann) {
@@ -187,6 +188,7 @@ public abstract class Fields {
 	 * Return all fields of the class and it's super class (exclude the Object class). <br>
 	 * Discard duplicate field of parents.
 	 * 
+	 * @param cls the class
 	 * @return field list
 	 */
 	public static Collection<Field> getDeclaredFields(Class<?> cls) {
@@ -197,6 +199,7 @@ public abstract class Fields {
 	 * Return all static fields of the class and it's super class (exclude the Object class). <br>
 	 * Discard duplicate field of parents.
 	 * 
+	 * @param cls the class
 	 * @param noFinal include final fields
 	 * @return field list
 	 */

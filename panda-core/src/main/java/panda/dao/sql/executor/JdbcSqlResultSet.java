@@ -22,6 +22,7 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
+ * @param <T> the record type
  */
 public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 	protected static Log log = Logs.getLog(JdbcSqlResultSet.class);

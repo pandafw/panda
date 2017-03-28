@@ -99,16 +99,18 @@ public interface Dao {
 
 	//--------------------------------------------------------------------
 	/**
-	 * create table ddl
+	 * create table DDL
 	 * 
 	 * @param type record type
+	 * @return DDL string
 	 */
 	String ddl(Class<?> type);
 
 	/**
-	 * create table ddl
+	 * create table DDL
 	 * 
 	 * @param entity entity
+	 * @return DDL string
 	 */
 	String ddl(Entity<?> entity);
 
@@ -154,16 +156,20 @@ public interface Dao {
 	/**
 	 * get a record by the supplied keys
 	 * 
+	 * @param <T> class type
 	 * @param type record type
 	 * @param keys record keys (int, string or java bean with keys)
+	 * @return record object
 	 */
 	<T> T fetch(Class<T> type, Object ... keys);
 
 	/**
 	 * get a record by the supplied keys
 	 * 
+	 * @param <T> class type
 	 * @param entity entity
 	 * @param keys record keys (int, string or java bean with keys)
+	 * @return record object
 	 */
 	<T> T fetch(Entity<T> entity, Object ... keys);
 
@@ -285,6 +291,7 @@ public interface Dao {
 	 * @param coll the collection to store the value
 	 * @param type record type
 	 * @param prop The property to be used as the value in the collection.
+	 * @return record collection
 	 */
 	Collection<?> coll(Collection<?> coll, Class<?> type, String prop);
 
@@ -294,6 +301,7 @@ public interface Dao {
 	 * @param coll the collection to store the value
 	 * @param entity entity
 	 * @param prop The property to be used as the value in the collection.
+	 * @return record collection
 	 */
 	Collection<?> coll(Collection<?> coll, Entity<?> entity, String prop);
 
@@ -303,6 +311,7 @@ public interface Dao {
 	 * @param coll the collection to store the value
 	 * @param table table name
 	 * @param prop The property to be used as the value in the collection.
+	 * @return record collection
 	 */
 	Collection<?> coll(Collection<?> coll, String table, String prop);
 
@@ -313,6 +322,7 @@ public interface Dao {
 	 * @param coll the collection to store the value
 	 * @param query query, order, offset, limit and filters
 	 * @param prop The property to be used as the value in the collection.
+	 * @return record collection
 	 */
 	Collection<?> coll(Collection<?> coll, Query<?> query, String prop);
 
@@ -738,11 +748,13 @@ public interface Dao {
 	//--------------------------------------------------------------------
 	/**
 	 * execute a transaction
+	 * @param transaction runnable transaction
 	 */
 	void exec(Runnable transaction);
 	
 	/**
 	 * execute a transaction
+	 * @param transaction runnable transaction
 	 * @param level transaction level
 	 */
 	void exec(Runnable transaction, int level);

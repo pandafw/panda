@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 /**
  * BigDecimal implementation of TypeAdapter
+ * @param <T> Java Type
  */
 public class BigDecimalAdapter<T> extends AbstractCastTypeAdapter<T, BigDecimal> {
 	public BigDecimalAdapter(TypeAdapters adapters, Class<T> javaType) {

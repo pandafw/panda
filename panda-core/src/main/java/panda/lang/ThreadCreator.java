@@ -39,6 +39,7 @@ public class ThreadCreator implements ThreadFactory {
 
 	/**
 	 * Specify the prefix to use for the names of newly created threads.
+	 * @param threadNamePrefix the thread name prefix
 	 */
 	public void setThreadNamePrefix(String threadNamePrefix) {
 		this.threadNamePrefix = (threadNamePrefix != null ? threadNamePrefix : getDefaultThreadNamePrefix());
@@ -47,6 +48,7 @@ public class ThreadCreator implements ThreadFactory {
 	/**
 	 * Return the thread name prefix to use for the names of newly
 	 * created threads.
+	 * @return the thread name prefix
 	 */
 	public String getThreadNamePrefix() {
 		return this.threadNamePrefix;
@@ -55,6 +57,7 @@ public class ThreadCreator implements ThreadFactory {
 	/**
 	 * Set the priority of the threads that this factory creates.
 	 * Default is 5.
+	 * @param threadPriority the thread priority to set
 	 * @see java.lang.Thread#NORM_PRIORITY
 	 */
 	public void setThreadPriority(int threadPriority) {
@@ -62,7 +65,7 @@ public class ThreadCreator implements ThreadFactory {
 	}
 
 	/**
-	 * Return the priority of the threads that this factory creates.
+	 * @return the priority of the threads that this factory creates.
 	 */
 	public int getThreadPriority() {
 		return this.threadPriority;
@@ -76,6 +79,8 @@ public class ThreadCreator implements ThreadFactory {
 	 * by default finish their execution.
 	 * <p>Specify "true" for eager shutdown of threads which still
 	 * actively execute a Runnable.
+	 * 
+	 * @param daemon the daemon to set
 	 * @see java.lang.Thread#setDaemon
 	 */
 	public void setDaemon(boolean daemon) {
@@ -84,6 +89,7 @@ public class ThreadCreator implements ThreadFactory {
 
 	/**
 	 * Return whether this factory should create daemon threads.
+	 * @return the daemon
 	 */
 	public boolean isDaemon() {
 		return this.daemon;
@@ -91,6 +97,8 @@ public class ThreadCreator implements ThreadFactory {
 
 	/**
 	 * Specify the name of the thread group that threads should be created in.
+	 * 
+	 * @param name the thread group name
 	 * @see #setThreadGroup
 	 */
 	public void setThreadGroupName(String name) {
@@ -99,6 +107,8 @@ public class ThreadCreator implements ThreadFactory {
 
 	/**
 	 * Specify the thread group that threads should be created in.
+	 * 
+	 * @param threadGroup the thread group
 	 * @see #setThreadGroupName
 	 */
 	public void setThreadGroup(ThreadGroup threadGroup) {
@@ -108,6 +118,8 @@ public class ThreadCreator implements ThreadFactory {
 	/**
 	 * Return the thread group that threads should be created in
 	 * (or {@code null}) for the default group.
+	 * 
+	 * @return the thread group
 	 */
 	public ThreadGroup getThreadGroup() {
 		return this.threadGroup;
@@ -119,6 +131,7 @@ public class ThreadCreator implements ThreadFactory {
 	 * <p>Default implementation creates a new Thread for the given
 	 * Runnable, applying an appropriate thread name.
 	 * @param runnable the Runnable to execute
+	 * @return the thread
 	 * @see #nextThreadName()
 	 */
 	public Thread createThread(Runnable runnable) {

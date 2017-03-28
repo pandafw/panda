@@ -195,6 +195,7 @@ public final class DomainKeyTest {
 	 * Checks, whether this {@code DomainKey} fits to the given identity and
 	 * {@link RSAPrivateKey}.
 	 * 
+	 * @param dkey the dkim key
 	 * @param identity
 	 *            The identity.
 	 * @param privateKey

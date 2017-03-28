@@ -677,8 +677,8 @@ public class MultipartStream {
 		}
 
 		/**
-		 * @param message
-		 * @param cause
+		 * @param message the exception message
+		 * @param cause the cause exception
 		 */
 		public MalformedStreamException(String message, Throwable cause) {
 			super(message, cause);

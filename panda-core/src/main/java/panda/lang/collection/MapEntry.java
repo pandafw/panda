@@ -2,8 +2,9 @@ package panda.lang.collection;
 
 import java.util.Map;
 
-
 /**
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public class MapEntry<K, V> extends KeyValue<K, V> {
 	protected Map<K, V> map;
@@ -11,6 +12,7 @@ public class MapEntry<K, V> extends KeyValue<K, V> {
 	/**
 	 * Constructs a new pair with the specified key and given value.
 	 * 
+	 * @param map the map
 	 * @param key the key for the entry, may be null
 	 * @param value the value for the entry, may be null
 	 */

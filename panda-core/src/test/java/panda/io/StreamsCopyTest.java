@@ -121,6 +121,7 @@ public class StreamsCopyTest extends FileBasedTestCase {
 
 	/**
 	 * Test Copying file > 2GB - see issue# IO-84
+	 * @throws Exception if an error occurs
 	 */
 	public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
 		final long size = (long)Integer.MAX_VALUE + (long)1;
@@ -399,6 +400,7 @@ public class StreamsCopyTest extends FileBasedTestCase {
 
 	/**
 	 * Test Copying file > 2GB - see issue# IO-84
+	 * @throws Exception if an error occurs
 	 */
 	public void testCopy_readerToWriter_IO84() throws Exception {
 		final long size = (long)Integer.MAX_VALUE + (long)1;

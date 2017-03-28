@@ -187,7 +187,7 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Returns value of the <b>To</b> option.
+	 * @return value of the <b>To</b> option.
 	 */
 	public String getTo() {
 		return to;
@@ -229,7 +229,7 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Returns value of the <b>From</b> option.
+	 * @return the value of the <b>From</b> option.
 	 */
 	public String getFrom() {
 		return from;
@@ -245,7 +245,7 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Returns value of the <b>Subject</b> option.
+	 * @return the value of the <b>Subject</b> option.
 	 */
 	public String getSubject() {
 		return subject;
@@ -253,6 +253,8 @@ public class SmtpLogAppender extends AbstractAppender {
 
 	/**
 	 * The <b>From</b> option takes a string value which should be a e-mail address of the sender.
+	 * 
+	 * @param from the from address
 	 */
 	public void setFrom(String from) {
 		this.from = from;
@@ -270,6 +272,8 @@ public class SmtpLogAppender extends AbstractAppender {
 	/**
 	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
 	 * message.
+	 * 
+	 * @param subject the mail subject
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -278,13 +282,15 @@ public class SmtpLogAppender extends AbstractAppender {
 	/**
 	 * The <b>SMTPHost</b> option takes a string value which should be a the host name of the SMTP
 	 * server that will send the e-mail message.
+	 * 
+	 * @param smtpHost the smtp server
 	 */
 	public void setSMTPHost(String smtpHost) {
 		this.smtpHost = smtpHost;
 	}
 
 	/**
-	 * Returns value of the <b>SMTPHost</b> option.
+	 * @return the value of the <b>SMTPHost</b> option.
 	 */
 	public String getSMTPHost() {
 		return smtpHost;
@@ -293,6 +299,8 @@ public class SmtpLogAppender extends AbstractAppender {
 	/**
 	 * The <b>To</b> option takes a string value which should be a comma separated list of e-mail
 	 * address of the recipients.
+	 * 
+	 * @param to the to address
 	 */
 	public void setTo(String to) {
 		this.to = to;

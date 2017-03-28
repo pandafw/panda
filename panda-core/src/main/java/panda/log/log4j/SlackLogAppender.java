@@ -188,7 +188,7 @@ public class SlackLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Returns value of the <b>Subject</b> option.
+	 * @return the value of the <b>Subject</b> option.
 	 */
 	public String getSubject() {
 		return subject;
@@ -197,6 +197,8 @@ public class SlackLogAppender extends AbstractAppender {
 	/**
 	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
 	 * message.
+	 * 
+	 * @param subject the subject
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;

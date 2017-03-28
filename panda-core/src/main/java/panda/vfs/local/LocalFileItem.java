@@ -23,6 +23,10 @@ public class LocalFileItem implements FileItem, Serializable {
 	
 	/**
 	 * Constructor
+	 * 
+	 * @param localFilePool local file pool
+	 * @param id file id
+	 * @param file the local file
 	 */
 	public LocalFileItem(LocalFilePool localFilePool, Long id, File file) {
 		this.localFilePool = localFilePool;

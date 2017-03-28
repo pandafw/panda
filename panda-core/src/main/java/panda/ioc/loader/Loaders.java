@@ -44,6 +44,10 @@ public abstract class Loaders {
 
 	/**
 	 * 查看一下 me 中有没有缺少的属性，没有的话，从 it 补充
+	 * 
+	 * @param me the IocObject to be merged
+	 * @param it the IocObject to merge from
+	 * @return the merged IocObject (me)
 	 */
 	public static IocObject mergeWith(IocObject me, IocObject it) {
 		// merge type

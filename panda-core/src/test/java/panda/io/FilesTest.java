@@ -432,7 +432,6 @@ public class FilesTest extends FileBasedTestCase {
 		assertTrue(file.toString().indexOf("file% %me.txt%") >= 0);
 	}
 
-	/** IO-252 */
 	public void testToFile5() throws Exception {
 		final URL url = new URL("file", null, "both%20are%20100%20%25%20true");
 		final File file = Files.toFile(url);
@@ -889,6 +888,7 @@ public class FilesTest extends FileBasedTestCase {
 
 	/**
 	 * Tests the {@link Files#sizeOf(File)} method.
+	 * @throws Exception if an error occurs
 	 */
 	public void testSizeOf() throws Exception {
 		final File file = new File(getTestDirectory(), getName());
@@ -926,6 +926,7 @@ public class FilesTest extends FileBasedTestCase {
 
 	/**
 	 * Tests the {@link Files#sizeOf(File)} method.
+	 * @throws Exception if an error occurs
 	 */
 	public void testSizeOfAsBigInteger() throws Exception {
 		final File file = new File(getTestDirectory(), getName());
@@ -1337,7 +1338,6 @@ public class FilesTest extends FileBasedTestCase {
 		Files.deleteDir(target);
 	}
 
-	/** Test for IO-141 */
 	public void testCopyDirectoryToChild() throws Exception {
 		final File grandParentDir = new File(getTestDirectory(), "grandparent");
 		final File parentDir = new File(grandParentDir, "parent");
@@ -1353,7 +1353,6 @@ public class FilesTest extends FileBasedTestCase {
 		assertTrue("Size > 0", expectedSize > 0);
 	}
 
-	/** Test for IO-141 */
 	public void testCopyDirectoryToGrandChild() throws Exception {
 		final File grandParentDir = new File(getTestDirectory(), "grandparent");
 		final File parentDir = new File(grandParentDir, "parent");
@@ -1368,7 +1367,6 @@ public class FilesTest extends FileBasedTestCase {
 		assertTrue("Size > 0", expectedSize > 0);
 	}
 
-	/** Test for IO-217 Files.copyDirectoryToDirectory makes infinite loops */
 	public void testCopyDirectoryToItself() throws Exception {
 		final File dir = new File(getTestDirectory(), "itself");
 		dir.mkdirs();
@@ -1534,6 +1532,7 @@ public class FilesTest extends FileBasedTestCase {
 
 	/**
 	 * Test the Files implementation.
+	 * @throws Exception if an error occurs
 	 */
 	public void testFiles() throws Exception {
 		// Loads file from classpath

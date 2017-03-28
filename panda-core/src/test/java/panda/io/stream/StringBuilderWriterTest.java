@@ -20,7 +20,9 @@ public class StringBuilderWriterTest extends TestCase {
 		super(name);
 	}
 
-	/** Test {@link StringBuilderWriter} constructor. */
+	/** Test {@link StringBuilderWriter} constructor. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testAppendConstructCapacity() throws IOException {
 		final Writer writer = new StringBuilderWriter(100);
 		writer.append("Foo");
@@ -38,7 +40,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link StringBuilderWriter} constructor. */
+	/** Test {@link StringBuilderWriter} constructor. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testAppendConstructNull() throws IOException {
 		final Writer writer = new StringBuilderWriter((StringBuilder)null);
 		writer.append("Foo");
@@ -46,7 +50,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#append(char)}. */
+	/** Test {@link Writer#append(char)}. 
+	 * @throws IOException if an error occurs
+	 */
 	public void testAppendChar() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.append('F').append('o').append('o');
@@ -54,7 +60,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#append(CharSequence)}. */
+	/** Test {@link Writer#append(CharSequence)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testAppendCharSequence() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.append("Foo").append("Bar");
@@ -62,7 +70,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#append(CharSequence, int, int)}. */
+	/** Test {@link Writer#append(CharSequence, int, int)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testAppendCharSequencePortion() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
@@ -84,7 +94,9 @@ public class StringBuilderWriterTest extends TestCase {
 		assertEquals("FooBar", writer.toString());
 	}
 
-	/** Test {@link Writer#write(int)}. */
+	/** Test {@link Writer#write(int)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testWriteChar() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.write('F');
@@ -96,7 +108,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#write(char[])}. */
+	/** Test {@link Writer#write(char[])}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testWriteCharArray() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.write(new char[] { 'F', 'o', 'o' });
@@ -106,7 +120,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#write(char[], int, int)}. */
+	/** Test {@link Writer#write(char[], int, int)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testWriteCharArrayPortion() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.write(FOOBAR_CHARS, 3, 3);
@@ -116,7 +132,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#write(String)}. */
+	/** Test {@link Writer#write(String)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testWriteString() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.write("Foo");
@@ -126,7 +144,9 @@ public class StringBuilderWriterTest extends TestCase {
 		writer.close();
 	}
 
-	/** Test {@link Writer#write(String, int, int)}. */
+	/** Test {@link Writer#write(String, int, int)}. 
+	 * @throws IOException if an error occurs
+	 * */
 	public void testWriteStringPortion() throws IOException {
 		final Writer writer = new StringBuilderWriter();
 		writer.write("FooBar", 3, 3);

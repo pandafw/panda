@@ -44,26 +44,35 @@ public interface FileItem {
 	
 	/**
 	 * @return the data
+	 * @throws IOException if an IO error occurs.
 	 */
 	byte[] getData() throws IOException;
 
 	/**
 	 * @return the input stream
+	 * @throws IOException if an IO error occurs.
 	 */
 	InputStream getInputStream() throws IOException;
 
 	/**
 	 * save data
+	 * 
+	 * @param data the data to save
+	 * @throws IOException if an IO error occurs.
 	 */
 	void save(byte[] data) throws IOException;
 	
 	/**
 	 * save data
+	 * 
+	 * @param data the data to save
+	 * @throws IOException if an IO error occurs.
 	 */
 	void save(InputStream data) throws IOException;
 	
 	/**
 	 * delete self
+	 * @throws IOException if an IO error occurs.
 	 */
 	void delete() throws IOException;
 }

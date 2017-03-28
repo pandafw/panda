@@ -13,15 +13,15 @@ public class IocException extends RuntimeException {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message the error message
+	 * @param cause the cause exception
 	 */
 	public IocException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
-	 * @param message
+	 * @param message the error message
 	 */
 	public IocException(String message) {
 		super(message);

@@ -15,7 +15,9 @@ import org.junit.Test;
 public class CharSequenceReaderTest {
 	private static final char NONE = (new char[1])[0];
 
-	/** Test {@link Reader#close()}. */
+	/** Test {@link Reader#close()}. 
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testClose() throws IOException {
 		final Reader reader = new CharSequenceReader("FooBar");
@@ -24,7 +26,9 @@ public class CharSequenceReaderTest {
 		checkRead(reader, "Foo");
 	}
 
-	/** Test {@link Reader#markSupported()}. */
+	/** Test {@link Reader#markSupported()}. 
+	 * @throws Exception if an error occurs
+	 */
 	@Test
 	public void testMarkSupported() throws Exception {
 		final Reader reader = new CharSequenceReader("FooBar");
@@ -32,7 +36,9 @@ public class CharSequenceReaderTest {
 		reader.close();
 	}
 
-	/** Test {@link Reader#mark(int)}. */
+	/** Test {@link Reader#mark(int)}.
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testMark() throws IOException {
 		final Reader reader = new CharSequenceReader("FooBar");
@@ -47,7 +53,9 @@ public class CharSequenceReaderTest {
 		checkRead(reader, "Foo");
 	}
 
-	/** Test {@link Reader#skip(long)}. */
+	/** Test {@link Reader#skip(long)}. 
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testSkip() throws IOException {
 		final Reader reader = new CharSequenceReader("FooBar");
@@ -63,7 +71,9 @@ public class CharSequenceReaderTest {
 		assertEquals(-1, reader.read());
 	}
 
-	/** Test {@link Reader#read()}. */
+	/** Test {@link Reader#read()}. 
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testRead() throws IOException {
 		final Reader reader = new CharSequenceReader("Foo");
@@ -75,7 +85,9 @@ public class CharSequenceReaderTest {
 		reader.close();
 	}
 
-	/** Test {@link Reader#read(char[])}. */
+	/** Test {@link Reader#read(char[])}. 
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testReadCharArray() throws IOException {
 		final Reader reader = new CharSequenceReader("FooBar");
@@ -92,7 +104,9 @@ public class CharSequenceReaderTest {
 		reader.close();
 	}
 
-	/** Test {@link Reader#read(char[], int, int)}. */
+	/** Test {@link Reader#read(char[], int, int)}. 
+	 * @throws IOException if an error occurs
+	 */
 	@Test
 	public void testReadCharArrayPortion() throws IOException {
 		final char[] chars = new char[10];

@@ -157,6 +157,7 @@ class Line {
 	 * Counts the amount of 'ch' in this line.
 	 * 
 	 * @param ch The char to count.
+	 * @param min the minimum count
 	 * @return A value > 0 if this line only consists of 'ch' end spaces.
 	 */
 	public boolean isAllChars(char ch, int min) {

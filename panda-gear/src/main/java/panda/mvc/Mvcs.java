@@ -95,7 +95,9 @@ public abstract class Mvcs {
 	}
 	
 	/**
-	 * @return static base path
+	 * @param ac the action context
+	 * @param sb the string
+	 * @return the static base path
 	 */
 	public static String getStaticBase(ActionContext ac, String sb) {
 		if (sb == null) {
@@ -114,6 +116,10 @@ public abstract class Mvcs {
 
 	/**
 	 * create a instance
+	 * 
+	 * @param ioc the IOC
+	 * @param type the type
+	 * @return ioc bean instance or new object instance
 	 */
 	public static <T> T born(Ioc ioc, Class<T> type) {
 		T obj = ioc.getIfExists(type);

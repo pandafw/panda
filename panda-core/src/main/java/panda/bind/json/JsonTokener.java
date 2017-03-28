@@ -40,6 +40,10 @@ public class JsonTokener {
 
 	/**
 	 * Construct a JSONTokener from an InputStream.
+	 * 
+	 * @param inputStream the input stream
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public JsonTokener(InputStream inputStream) throws JsonException {
 		this(new InputStreamReader(inputStream));
@@ -65,6 +69,8 @@ public class JsonTokener {
 	/**
 	 * Back up one character. This provides a sort of lookahead capability, so that you can test for
 	 * a digit or letter before attempting to parse the next number or identifier.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public void back() throws JsonException {
 		if (this.usePrevious || this.index <= 0) {
@@ -84,6 +90,8 @@ public class JsonTokener {
 	 * Determine if the source string still contains characters that next() can consume.
 	 * 
 	 * @return true if not yet at the end of the source.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public boolean more() throws JsonException {
 		this.next();
@@ -111,6 +119,8 @@ public class JsonTokener {
 	 * Get the next character in the source string.
 	 * 
 	 * @return The next character, or 0 if past the end of the source string.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public char next() throws JsonException {
 		int c;
@@ -320,6 +330,8 @@ public class JsonTokener {
 	 * first.
 	 * 
 	 * @return A id string.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public String nextId() throws JsonException {
 		StringBuilder sb = new StringBuilder();
@@ -341,6 +353,8 @@ public class JsonTokener {
 	 * 
 	 * @param delimiter A delimiter character.
 	 * @return A string.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public String nextTo(char delimiter) throws JsonException {
 		StringBuilder sb = new StringBuilder();
@@ -362,6 +376,8 @@ public class JsonTokener {
 	 * 
 	 * @param delimiters A set of delimiter characters.
 	 * @return A string, trimmed.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public String nextTo(String delimiters) throws JsonException {
 		char c;
@@ -383,6 +399,8 @@ public class JsonTokener {
 	 * 
 	 * @param to A character to skip to.
 	 * @return The requested character, or 0 if past the end of the source string.
+	 * 
+	 * @throws JsonException if a parse error occurred
 	 */
 	public char skipTo(char to) throws JsonException {
 		char c;

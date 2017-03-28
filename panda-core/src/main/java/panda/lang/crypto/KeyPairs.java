@@ -59,9 +59,11 @@ public class KeyPairs {
 	 * get RSA Private Key from raw data
 	 *
 	 * @param data raw data
-	 * @return rsa private key
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * @return the PrivateKey
+	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
+	 *             the specified algorithm.
+	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
+	 *             factory to produce a public key.
 	 */
 	public static PrivateKey getRSAPrivateKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(data);
@@ -74,8 +76,10 @@ public class KeyPairs {
 	 *
 	 * @param data base64 string
 	 * @return rsa private key
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
+	 *             the specified algorithm.
+	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
+	 *             factory to produce a public key.
 	 */
 	public static PrivateKey getRSAPrivateKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PRIVATE_KEY), END_PRIVATE_KEY));
@@ -88,8 +92,10 @@ public class KeyPairs {
 	 *
 	 * @param data raw data
 	 * @return rsa public key
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
+	 *             the specified algorithm.
+	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
+	 *             factory to produce a public key.
 	 */
 	public static PublicKey getRSAPublicKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		X509EncodedKeySpec spec = new X509EncodedKeySpec(data);
@@ -102,8 +108,10 @@ public class KeyPairs {
 	 *
 	 * @param data base64 string
 	 * @return rsa public key
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
+	 *             the specified algorithm.
+	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
+	 *             factory to produce a public key.
 	 */
 	public static PublicKey getRSAPublicKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));

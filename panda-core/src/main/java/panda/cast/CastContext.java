@@ -24,7 +24,9 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	private Map<String, Object> errors;
 	
 	/**
-	 * @param castors
+	 * Constructor
+	 * 
+	 * @param castors Castors object
 	 */
 	public CastContext(Castors castors) {
 		this.castors = castors;
@@ -137,6 +139,9 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	
 	/**
 	 * add error value
+	 * 
+	 * @param name error name
+	 * @param value error value
 	 */
 	public void addError(String name, Object value) {
 		if (errors == null) {

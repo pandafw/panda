@@ -9,7 +9,7 @@ public class ConstructorCreator<T> implements Creator<T> {
 	private Constructor<T> constructor;
 
 	/**
-	 * @param constructor
+	 * @param constructor the constructor
 	 */
 	public ConstructorCreator(Constructor<T> constructor) {
 		this.constructor = constructor;

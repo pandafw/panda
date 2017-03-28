@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 
 /**
+ * @param <T> the result type
  */
 public interface SqlResultSet<T> {
 	// ---------------------------------------------------------------------

@@ -6,6 +6,7 @@ package panda.el.parse;
 public interface CharQueue {
 	/**
 	 * 不删除字符的情况下读取第一个字符
+	 * @return the peeked character
 	 */
 	char peek();
 
@@ -13,16 +14,19 @@ public interface CharQueue {
 	 * 不删除字符的情况下读取第ofset个字符,
 	 * 
 	 * @param ofset 偏移量
+	 * @return the peeked character
 	 */
 	char peek(int ofset);
 
 	/**
 	 * 读取字符,并删除字符
+	 * @return the polled character
 	 */
 	char poll();
 
 	/**
 	 * 是否为空
+	 * @return true if the queue is empty
 	 */
 	boolean isEmpty();
 }

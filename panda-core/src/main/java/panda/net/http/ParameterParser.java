@@ -57,6 +57,8 @@ public class ParameterParser {
 
 	/**
 	 * ParameterParser constructor.
+	 * 
+	 * @param lowerCaseNames set parameter names to lowercase or not
 	 */
 	public ParameterParser(boolean lowerCaseNames) {
 		this.lowerCaseNames = lowerCaseNames;
@@ -229,6 +231,7 @@ public class ParameterParser {
 	 * Multiple separators may be specified and the earliest found in the input string is used.
 	 * 
 	 * @param str the string that contains a sequence of name/value pairs
+	 * @param key the parameter key
 	 * @param separators the name/value pairs separators
 	 * @return a map of name/value pairs
 	 */
@@ -259,6 +262,7 @@ public class ParameterParser {
 	 * Extracts a map of name/value pairs from the given string. Names are expected to be unique.
 	 * 
 	 * @param str the string that contains a sequence of name/value pairs
+	 * @param key the parameter key
 	 * @param separator the name/value pairs separator
 	 * @return a map of name/value pairs
 	 */
@@ -289,6 +293,7 @@ public class ParameterParser {
 	 * be unique.
 	 * 
 	 * @param charArray the array of characters that contains a sequence of name/value pairs
+	 * @param key the parameter key
 	 * @param separator the name/value pairs separator
 	 * @return a map of name/value pairs
 	 */
@@ -361,6 +366,7 @@ public class ParameterParser {
 	 * @param charArray the array of characters that contains a sequence of name/value pairs
 	 * @param offset - the initial offset.
 	 * @param length - the length.
+	 * @param key the parameter key
 	 * @param separator the name/value pairs separator
 	 * @return value
 	 */

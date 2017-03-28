@@ -12,22 +12,22 @@ public class MvcException extends RuntimeException {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message the message
+	 * @param cause the cause error
 	 */
 	public MvcException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
-	 * @param message
+	 * @param message the message
 	 */
 	public MvcException(String message) {
 		super(message);
 	}
 
 	/**
-	 * @param cause
+	 * @param cause the cause error
 	 */
 	public MvcException(Throwable cause) {
 		super(cause);

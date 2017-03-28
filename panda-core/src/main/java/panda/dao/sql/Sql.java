@@ -84,6 +84,7 @@ public class Sql {
 	
 	/**
 	 * @param param the parameter to add
+	 * @return this
 	 */
 	public Sql addParam(Object param) {
 		if (params == null) {

@@ -34,6 +34,7 @@ public class LogLog {
 
 	/**
 	 * Allows to enable/disable log4j internal logging.
+	 * @param enabled weather to enable internal debug
 	 */
 	static public void setInternalDebugging(boolean enabled) {
 		debugEnabled = enabled;
@@ -42,6 +43,8 @@ public class LogLog {
 	/**
 	 * This method is used to output log4j internal debug statements. Output goes to
 	 * <code>System.out</code>.
+	 * 
+	 * @param msg the message
 	 */
 	public static void debug(String msg) {
 		if (debugEnabled && !quietMode) {
@@ -52,6 +55,9 @@ public class LogLog {
 	/**
 	 * This method is used to output log4j internal debug statements. Output goes to
 	 * <code>System.out</code>.
+	 * 
+	 * @param msg the message
+	 * @param t the exception
 	 */
 	public static void debug(String msg, Throwable t) {
 		if (debugEnabled && !quietMode) {
@@ -64,6 +70,8 @@ public class LogLog {
 	/**
 	 * This method is used to output log4j internal error statements. There is no way to disable
 	 * error statements. Output goes to <code>System.err</code>.
+	 * 
+	 * @param msg the message
 	 */
 	public static void error(String msg) {
 		if (quietMode)
@@ -74,6 +82,9 @@ public class LogLog {
 	/**
 	 * This method is used to output log4j internal error statements. There is no way to disable
 	 * error statements. Output goes to <code>System.err</code>.
+	 * 
+	 * @param msg the message
+	 * @param t the exception
 	 */
 	public static void error(String msg, Throwable t) {
 		if (quietMode)
@@ -97,6 +108,8 @@ public class LogLog {
 	/**
 	 * This method is used to output log internal warning statements. There is no way to disable
 	 * warning statements. Output goes to <code>System.err</code>.
+	 * 
+	 * @param msg the message
 	 */
 	public static void warn(String msg) {
 		if (quietMode)
@@ -108,6 +121,9 @@ public class LogLog {
 	/**
 	 * This method is used to output log internal warnings. There is no way to disable warning
 	 * statements. Output goes to <code>System.err</code>.
+	 * 
+	 * @param msg the message
+	 * @param t the exception
 	 */
 	public static void warn(String msg, Throwable t) {
 		if (quietMode)

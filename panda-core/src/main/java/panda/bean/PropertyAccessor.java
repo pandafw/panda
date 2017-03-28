@@ -47,6 +47,8 @@ public class PropertyAccessor {
 
 	/**
 	 * get property value of the specified object
+	 * @param obj object instance
+	 * @return the property value
 	 */
 	public Object getValue(Object obj) {
 		try {
@@ -65,6 +67,9 @@ public class PropertyAccessor {
 	
 	/**
 	 * set property value of the specified object
+	 * @param obj object instance
+	 * @param val property value
+	 * @return true if set value successfully
 	 */
 	public boolean setValue(Object obj, Object val) {
 		try {

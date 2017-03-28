@@ -159,6 +159,7 @@ public class Digests {
 	 * Calculates the MD2 digest and returns the value as a 16 element <code>byte[]</code>.
 	 * 
 	 * @param data Data to digest
+	 * @return MD2 digest
 	 */
 	public static byte[] md2(String data) {
 		return md2(Strings.getBytesUtf8(data));
@@ -220,6 +221,7 @@ public class Digests {
 	 * Calculates the MD5 digest and returns the value as a 16 element <code>byte[]</code>.
 	 * 
 	 * @param data Data to digest
+	 * @return MD5 digest
 	 */
 	public static byte[] md5(String data) {
 		return md5(Strings.getBytesUtf8(data));

@@ -310,7 +310,9 @@ public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 
 	//-------------------------------------------------------------
 	/**
-	 * Returns the length of the encoded version of this byte array.
+	 * @param b the bytes
+	 * @param encodingWord weather to encode word
+	 * @return the length of the encoded version of this byte array.
 	 */
 	public static int encodedLength(byte[] b, boolean encodingWord) {
 		int len = 0;
@@ -382,6 +384,7 @@ public class QCodec extends RFC1522Codec implements StringEncoder, StringDecoder
 	 * Encodes an array of bytes using the defined encoding scheme.
 	 * 
 	 * @param bytes Data to be encoded
+	 * @param encodeBlanks weather to encode blanks
 	 * @return A byte array containing the encoded data
 	 */
 	public static byte[] encodeBytes(byte[] bytes, boolean encodeBlanks) {

@@ -26,6 +26,8 @@ public class Threads {
 
 	/**
 	 * join, do not throw exception
+	 * 
+	 * @param t the thread
 	 */
 	public static void safeJoin(Thread t) {
 		try {

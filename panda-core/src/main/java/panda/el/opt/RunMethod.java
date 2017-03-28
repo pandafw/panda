@@ -16,11 +16,13 @@ public interface RunMethod {
 	 * 
 	 * @param ec context
 	 * @param ps 参数, 即EL表达式中, 函数括号内的内容.
+	 * @return the method return value
 	 */
 	Object run(ElContext ec, List<?> ps);
 
 	/**
 	 * 取得方法自身的符号
+	 * @return the operator string
 	 */
 	String operator();
 }

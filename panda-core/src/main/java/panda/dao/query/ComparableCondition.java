@@ -4,6 +4,8 @@ import java.util.Collection;
 
 
 /**
+ * @param <E> query target type
+ * @param <T> the compare value type
  */
 public class ComparableCondition<E extends EntityQuery, T> extends ObjectCondition<E> {
 	/**

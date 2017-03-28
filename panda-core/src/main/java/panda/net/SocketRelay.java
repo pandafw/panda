@@ -32,7 +32,7 @@ public class SocketRelay implements Runnable {
 	}
 
 	/**
-	 * @param address
+	 * @param address the address
 	 */
 	public SocketRelay(InetSocketAddress address) {
 		super();

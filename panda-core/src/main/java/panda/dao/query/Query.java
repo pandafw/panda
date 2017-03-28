@@ -82,6 +82,7 @@ public interface Query<T> {
 	public Map<String, Join> getJoins();
 
 	/**
+	 * @param join the join name
 	 * @return join
 	 */
 	public Join getJoin(String join);

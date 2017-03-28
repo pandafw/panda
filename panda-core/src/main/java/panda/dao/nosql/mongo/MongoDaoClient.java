@@ -55,6 +55,8 @@ public class MongoDaoClient extends DaoClient {
 	/**
 	 * tokumx support transaction
 	 * http://www.tokutek.com/2013/04/mongodb-multi-statement-transactions-yes-we-can/
+	 * 
+	 * @return false the mongo does not support transaction
 	 */
 	public boolean isTransactionSupport() {
 		return false;

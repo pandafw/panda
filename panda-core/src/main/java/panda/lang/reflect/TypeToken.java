@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  * <p>This syntax cannot be used to create type literals that have wildcard
  * parameters, such as {@code Class<?>} or {@code List<? extends CharSequence>}.
  * 
- *
+ * @param <T> the type
  */
 public class TypeToken<T> {
 	final Class<? super T> rawType;
@@ -62,14 +62,14 @@ public class TypeToken<T> {
 	}
 
 	/**
-	 * Returns the raw (non-generic) type for this type.
+	 * @return the raw (non-generic) type for this type.
 	 */
 	public final Class<? super T> getRawType() {
 		return rawType;
 	}
 
 	/**
-	 * Gets underlying {@code Type} instance.
+	 * @return the underlying {@code Type} instance.
 	 */
 	public final Type getType() {
 		return type;
@@ -92,6 +92,9 @@ public class TypeToken<T> {
 
 	/**
 	 * Gets type literal for the given {@code Type} instance.
+	 * 
+	 * @param type the type
+	 * @return the TypeToken
 	 */
 	public static TypeToken<?> get(Type type) {
 		return new TypeToken<Object>(type);
@@ -99,6 +102,9 @@ public class TypeToken<T> {
 
 	/**
 	 * Gets type literal for the given {@code Class} instance.
+	 * 
+	 * @param type the type
+	 * @return the TypeToken
 	 */
 	public static <T> TypeToken<T> get(Class<T> type) {
 		return new TypeToken<T>(type);

@@ -112,6 +112,7 @@ public class ReaderInputStreamTest {
     
     /**
      * Tests https://issues.apache.org/jira/browse/IO-277
+	 * @throws IOException if an error occurs
      */
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {

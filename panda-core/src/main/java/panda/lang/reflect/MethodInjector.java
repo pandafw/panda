@@ -10,7 +10,7 @@ public class MethodInjector implements Injector {
 	private Method method;
 
 	/**
-	 * @param method
+	 * @param method the method
 	 */
 	public MethodInjector(Method method) {
 		this.method = method;

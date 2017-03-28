@@ -23,7 +23,7 @@ public class EHCacheHelper {
 		private final Cache cache;
 		
 		/**
-		 * @param cache
+		 * @param cache the cache
 		 */
 		public EHCacheMap(Cache cache) {
 			this.cache = cache;

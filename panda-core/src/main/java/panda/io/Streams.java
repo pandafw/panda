@@ -125,6 +125,7 @@ public class Streams {
 	 * 
 	 * @param sourceStream the stream to copy
 	 * @return a copy of the stream
+	 * @throws IOException if an IO error occurred
 	 */
 	public static InputStream copy(InputStream sourceStream) throws IOException {
 		if (sourceStream.markSupported())
@@ -141,6 +142,7 @@ public class Streams {
 	 * 
 	 * @param sourceReader the stream to reader
 	 * @return a copy of the reader
+	 * @throws IOException if an IO error occurred
 	 */
 	public static Reader copy(Reader sourceReader) throws IOException {
 		if (sourceReader.markSupported())
@@ -1172,6 +1174,10 @@ public class Streams {
 	 * 
 	 * @param path the file name or class name to load
 	 * @return an input stream
+     * @exception  FileNotFoundException  if the file does not exist,
+     *                   is a directory rather than a regular file,
+     *                   or for some other reason cannot be opened for
+     *                   reading.
 	 */
 	public static InputStream getStream(final String path) throws FileNotFoundException {
 		InputStream is = null;
@@ -1791,6 +1797,7 @@ public class Streams {
 	 * 
 	 * @param input the <code>InputStream</code> to read from
 	 * @param output the <code>Writer</code> to write to
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -1813,6 +1820,7 @@ public class Streams {
 	 * @param input the <code>InputStream</code> to read from
 	 * @param output the <code>Writer</code> to write to
 	 * @param encoding the encoding to use, null means platform default
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -1843,6 +1851,7 @@ public class Streams {
 	 * @param input the <code>InputStream</code> to read from
 	 * @param output the <code>Writer</code> to write to
 	 * @param encoding the encoding to use, null means platform default
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -2008,6 +2017,7 @@ public class Streams {
 	 * 
 	 * @param input the <code>Reader</code> to read from
 	 * @param output the <code>OutputStream</code> to write to
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -2039,6 +2049,7 @@ public class Streams {
 	 * @param input the <code>Reader</code> to read from
 	 * @param output the <code>OutputStream</code> to write to
 	 * @param encoding the encoding to use, null means platform default
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -2072,6 +2083,7 @@ public class Streams {
 	 * @param input the <code>Reader</code> to read from
 	 * @param output the <code>OutputStream</code> to write to
 	 * @param encoding the encoding to use for the OutputStream, null means platform default
+	 * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
 	 * @throws NullPointerException if the input or output is null
 	 * @throws IOException if an I/O error occurs
 	 */

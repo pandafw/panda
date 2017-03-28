@@ -309,6 +309,8 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	//----------------------------------------------------------------------
 	/**
 	 * set start
+	 * 
+	 * @param start the start position
 	 * @return this
 	 */
 	public Q start(int start) {
@@ -318,6 +320,7 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 
 	/**
 	 * set start
+	 * @param start the start position
 	 * @return this
 	 */
 	public Q start(long start) {
@@ -327,6 +330,7 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 
 	/**
 	 * set limit
+	 * @param limit the fetch limitation
 	 * @return this
 	 */
 	public Q limit(int limit) {
@@ -336,6 +340,7 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 
 	/**
 	 * set limit
+	 * @param limit the fetch limitation
 	 * @return this
 	 */
 	public Q limit(long limit) {
@@ -615,7 +620,8 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	//-------------------------------------------------------------------------------------------
 	/**
 	 * equal to primary keys, Entity must be set
-	 * @param keys
+	 * 
+	 * @param keys primary keys
 	 * @return this
 	 */
 	public Q equalToPrimaryKeys(Object ... keys) {

@@ -128,6 +128,7 @@ public interface Decorator {
 	 * </pre>
 	 * 
 	 * @param out The StringBuilder to write to.
+	 * @param level The level
 	 */
 	public void openHeadline(final StringBuilder out, int level);
 
@@ -144,6 +145,7 @@ public interface Decorator {
 	 * </pre>
 	 * 
 	 * @param out The StringBuilder to write to.
+	 * @param level The level.
 	 */
 	public void closeHeadline(final StringBuilder out, int level);
 

@@ -146,6 +146,8 @@ public abstract class Types {
 	
 	/**
 	 * 获取一个类的泛型参数数组，如果这个类没有泛型参数，返回 null
+	 * @param cls the class
+	 * @return the type array
 	 */
 	public static Type[] getDeclaredGenericTypeParams(Class<?> cls) {
 		if (cls == null)
@@ -269,7 +271,8 @@ public abstract class Types {
 	 * <p> These objects may only be accessed via the following public static
 	 * final variables, and are the only {@code Class} objects for which
 	 * this method returns {@code true}.
-	 *
+	 * 
+	 * @param type the type
 	 * @return true if and only if this class represents a primitive type
 	 */
 	public static boolean isPrimitiveType(Type type) {
@@ -1245,6 +1248,8 @@ public abstract class Types {
 	/**
 	 * Returns a new parameterized type, applying {@code typeArguments} to {@code rawType}.
 	 * 
+	 * @param rawType the raw type
+	 * @param typeArguments the type arguments
 	 * @return a {@link java.io.Serializable serializable} parameterized type.
 	 */
 	public static ParameterizedType paramTypeOf(Type rawType, Type... typeArguments) {
@@ -1255,6 +1260,9 @@ public abstract class Types {
 	 * Returns a new parameterized type, applying {@code typeArguments} to {@code rawType} and
 	 * enclosed by {@code ownerType}.
 	 * 
+	 * @param ownerType the owner type
+	 * @param rawType the raw type
+	 * @param typeArguments the type arguments
 	 * @return a {@link java.io.Serializable serializable} parameterized type.
 	 */
 	public static ParameterizedType paramTypeOfOwner(Type ownerType, Type rawType,
@@ -1265,6 +1273,7 @@ public abstract class Types {
 	/**
 	 * Returns an array type whose elements are all instances of {@code componentType}.
 	 * 
+	 * @param componentType the component type
 	 * @return a {@link java.io.Serializable serializable} generic array type.
 	 */
 	public static GenericArrayType arrayTypeOf(Type componentType) {
@@ -1276,6 +1285,9 @@ public abstract class Types {
 	 * {@code bound} is {@code CharSequence.class}, this returns {@code ? extends CharSequence}. If
 	 * {@code bound} is {@code Object.class}, this returns {@code ?}, which is shorthand for
 	 * {@code ? extends Object}.
+	 * 
+	 * @param bound the bound type
+	 * @return the WildCardType
 	 */
 	public static WildcardType subTypeOf(Type bound) {
 		return new WildcardTypeImpl(new Type[] { bound }, EMPTY_TYPE_ARRAY);
@@ -1285,6 +1297,9 @@ public abstract class Types {
 	 * Returns a type that represents an unknown supertype of {@code bound}. For example, if
 	 * {@code bound} is {@code String.class}, this returns {@code ?
 	 * super String}.
+	 * 
+	 * @param bound the bound type
+	 * @return the WildCardType
 	 */
 	public static WildcardType superTypeOf(Type bound) {
 		return new WildcardTypeImpl(new Type[] { Object.class }, new Type[] { bound });
@@ -1294,6 +1309,9 @@ public abstract class Types {
 	 * Returns a type that is functionally equal but not necessarily equal according to
 	 * {@link Object#equals(Object) Object.equals()}. The returned type is
 	 * {@link java.io.Serializable}.
+	 * 
+	 * @param type the type
+	 * @return the canonicalized type
 	 */
 	public static Type canonicalize(Type type) {
 		if (type instanceof Class) {
@@ -1361,7 +1379,9 @@ public abstract class Types {
 	}
 
 	/**
-	 * Returns true if {@code a} and {@code b} are equal.
+	 * @param a the type
+	 * @param b the type
+	 * @return true if {@code a} and {@code b} are equal.
 	 */
 	public static boolean equals(Type a, Type b) {
 		if (a == b) {
@@ -1494,6 +1514,9 @@ public abstract class Types {
 	/**
 	 * Returns the element type of this collection type.
 	 * 
+	 * @param context the type
+	 * @param contextRawType type raw type
+	 * @return the collection element type
 	 * @throws IllegalArgumentException if this type is not a collection.
 	 */
 	public static Type getCollectionElementType(Type context, Class<?> contextRawType) {
@@ -1539,6 +1562,10 @@ public abstract class Types {
 	/**
 	 * Returns a two element array containing this map's key and value types in positions 0 and 1
 	 * respectively.
+	 * 
+	 * @param context the type
+	 * @param contextRawType the raw type
+	 * @return the key/value types
 	 */
 	public static Type[] getMapKeyAndValueTypes(Type context, Class<?> contextRawType) {
 		/*

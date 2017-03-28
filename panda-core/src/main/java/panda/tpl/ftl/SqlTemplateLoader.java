@@ -28,6 +28,9 @@ public class SqlTemplateLoader extends ExternalTemplateLoader {
 	/**
 	 * Load templates from database.
 	 * 
+	 * @param dataSource the data source
+	 * @param tableName the table name
+	 * @param whereClause the where clause
 	 * @throws Exception if an error occurs
 	 */
 	public void loadTemplates(DataSource dataSource, String tableName, String whereClause) throws Exception {

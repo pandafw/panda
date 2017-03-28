@@ -49,6 +49,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	 * Set the ThreadPoolExecutor's core pool size.
 	 * Default is 1.
 	 * <p><b>This setting can be modified at runtime, for example through JMX.</b>
+	 * 
+	 * @param corePoolSize the corePoolSize
 	 */
 	public void setCorePoolSize(int corePoolSize) {
 		synchronized (this.poolSizeMonitor) {
@@ -60,7 +62,7 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	}
 
 	/**
-	 * Return the ThreadPoolExecutor's core pool size.
+	 * @return the ThreadPoolExecutor's core pool size.
 	 */
 	public int getCorePoolSize() {
 		synchronized (this.poolSizeMonitor) {
@@ -72,6 +74,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	 * Set the ThreadPoolExecutor's maximum pool size.
 	 * Default is {@code Integer.MAX_VALUE}.
 	 * <p><b>This setting can be modified at runtime, for example through JMX.</b>
+	 * 
+	 * @param maxPoolSize the maxPoolSize
 	 */
 	public void setMaxPoolSize(int maxPoolSize) {
 		synchronized (this.poolSizeMonitor) {
@@ -83,7 +87,7 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	}
 
 	/**
-	 * Return the ThreadPoolExecutor's maximum pool size.
+	 * @return the ThreadPoolExecutor's maximum pool size.
 	 */
 	public int getMaxPoolSize() {
 		synchronized (this.poolSizeMonitor) {
@@ -95,6 +99,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	 * Set the ThreadPoolExecutor's keep-alive seconds.
 	 * Default is 60.
 	 * <p><b>This setting can be modified at runtime, for example through JMX.</b>
+	 * 
+	 * @param keepAliveSeconds the keepAliveSeconds
 	 */
 	public void setKeepAliveSeconds(int keepAliveSeconds) {
 		synchronized (this.poolSizeMonitor) {
@@ -106,7 +112,7 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	}
 
 	/**
-	 * Return the ThreadPoolExecutor's keep-alive seconds.
+	 * @return the ThreadPoolExecutor's keep-alive seconds.
 	 */
 	public int getKeepAliveSeconds() {
 		synchronized (this.poolSizeMonitor) {
@@ -119,6 +125,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	 * growing and shrinking even in combination with a non-zero queue (since
 	 * the max pool size will only grow once the queue is full).
 	 * <p>Default is "false".
+	 * 
+	 * @param allowCoreThreadTimeOut the allowCoreThreadTimeOut
 	 * @see java.util.concurrent.ThreadPoolExecutor#allowCoreThreadTimeOut(boolean)
 	 */
 	public void setAllowCoreThreadTimeOut(boolean allowCoreThreadTimeOut) {
@@ -130,6 +138,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	 * Default is {@code Integer.MAX_VALUE}.
 	 * <p>Any positive value will lead to a LinkedBlockingQueue instance;
 	 * any other value will lead to a SynchronousQueue instance.
+	 * 
+	 * @param queueCapacity the queueCapacity
 	 * @see java.util.concurrent.LinkedBlockingQueue
 	 * @see java.util.concurrent.SynchronousQueue
 	 */
@@ -183,7 +193,8 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	}
 
 	/**
-	 * Return the current pool size.
+	 * @return the current pool size.
+	 * 
 	 * @see java.util.concurrent.ThreadPoolExecutor#getPoolSize()
 	 */
 	public int getPoolSize() {
@@ -195,7 +206,7 @@ public class ThreadPoolTaskExecutor extends TaskExecutorSupport implements Async
 	}
 
 	/**
-	 * Return the number of currently active threads.
+	 * @return the number of currently active threads.
 	 * @see java.util.concurrent.ThreadPoolExecutor#getActiveCount()
 	 */
 	public int getActiveCount() {

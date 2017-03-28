@@ -16,8 +16,8 @@ import panda.lang.Exceptions;
 import panda.vfs.FileItem;
 
 /**
- * 
  *
+ * @param <T> target type
  */
 public abstract class StreamCastor<T> extends AnySingleCastor<T> {
 	public StreamCastor(Type toType) {

@@ -21,6 +21,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 		/**
 		 * translate 
 		 * @param sql sql to append
+		 * @param executor the JdbcSqlExecutor
 		 * @param parameter parameter object
 		 * @param sqlParams sql parameters
 		 * @return true if sql appended

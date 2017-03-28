@@ -53,6 +53,8 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	/**
 	 * Set the ThreadFactory to use for the ExecutorService's thread pool.
 	 * Default is the underlying ExecutorService's default thread factory.
+	 * 
+	 * @param threadFactory the thread factory
 	 */
 	public void setThreadFactory(ThreadFactory threadFactory) {
 		this.threadFactory = (threadFactory != null ? threadFactory : this);
@@ -61,6 +63,8 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	/**
 	 * Set the RejectedExecutionHandler to use for the ExecutorService.
 	 * Default is the ExecutorService's default abort policy.
+	 * 
+	 * @param rejectedExecutionHandler the rejected execution handler
 	 * @see java.util.concurrent.ThreadPoolExecutor.AbortPolicy
 	 */
 	public void setRejectedExecutionHandler(RejectedExecutionHandler rejectedExecutionHandler) {
@@ -80,6 +84,7 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * down - e.g. in order to keep up other resources that your tasks may need -,
 	 * set the {@link #setAwaitTerminationSeconds "awaitTerminationSeconds"}
 	 * property instead of or in addition to this property.
+	 * @param waitForJobsToCompleteOnShutdown the waitForJobsToCompleteOnShutdown
 	 * @see java.util.concurrent.ExecutorService#shutdown()
 	 * @see java.util.concurrent.ExecutorService#shutdownNow()
 	 */
@@ -107,6 +112,8 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	 * since all remaining tasks in the queue will still get executed - in contrast
 	 * to the default shutdown behavior where it's just about waiting for currently
 	 * executing tasks that aren't reacting to thread interruption.
+	 * 
+	 * @param awaitTerminationSeconds the awaitTerminationSeconds
 	 * @see java.util.concurrent.ExecutorService#shutdown()
 	 * @see java.util.concurrent.ExecutorService#awaitTermination
 	 */

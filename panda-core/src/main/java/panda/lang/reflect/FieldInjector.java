@@ -10,7 +10,7 @@ public class FieldInjector implements Injector {
 	private Field field;
 
 	/**
-	 * @param field
+	 * @param field the field
 	 */
 	public FieldInjector(Field field) {
 		this.field = field;

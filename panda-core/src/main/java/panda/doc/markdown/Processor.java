@@ -80,6 +80,7 @@ public class Processor {
 	 * Transforms an input file into HTML using the given Configuration.
 	 * 
 	 * @param file The File to process.
+	 * @param configuration The Contifuration.
 	 * @return The processed String.
 	 * @throws IOException if an IO error occurs
 	 * @see Configuration

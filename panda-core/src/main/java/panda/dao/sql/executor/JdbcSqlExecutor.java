@@ -1230,6 +1230,8 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
@@ -1358,6 +1360,8 @@ public class JdbcSqlExecutor implements SqlExecutor {
 	 * @param resultClass The class of result object 
 	 * @param keyPropertyName The property to be used as the key in the Map.
 	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param skip The number of results to ignore.
+	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */

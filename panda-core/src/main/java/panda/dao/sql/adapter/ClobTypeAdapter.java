@@ -13,6 +13,7 @@ import panda.io.Streams;
 
 /**
  * Clob implementation of TypeAdapter
+ * @param <T> Java Type
  */
 public class ClobTypeAdapter<T> extends AbstractCastTypeAdapter<T, Reader> {
 	public ClobTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

@@ -46,16 +46,17 @@ public class SimpleSqlManager extends SqlManager {
 	}
 
 	/**
+	 * @param sql the sql
 	 * @return the sqlParserCache
 	 */
-	public JdbcSqlParser getSqlParser(String key) {
+	public JdbcSqlParser getSqlParser(String sql) {
 		if (sqlParserCache == null) {
 			return null;
 		}
 		
 		try {
 			lock.readLock().lock();
-			return sqlParserCache.get(key);
+			return sqlParserCache.get(sql);
 		}
 		finally {
 			lock.readLock().unlock();

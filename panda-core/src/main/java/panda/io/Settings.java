@@ -33,6 +33,7 @@ public class Settings implements Map<String, String> {
 	 * load multiple properties files.
 	 * 
 	 * @param paths properties files
+	 * @throws IOException if an IO error occurred
 	 */
 	public synchronized void load(String... paths) throws IOException {
 		for (String path : paths) {

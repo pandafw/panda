@@ -6,7 +6,8 @@ package panda.lang;
 public interface ErrorHandler {
 
 	/**
-	 * Handle the given error, possibly rethrowing it as a fatal exception.
+	 * Handle the given error, possibly re-throwing it as a fatal exception.
+	 * @param t the throwable object
 	 */
 	void handleError(Throwable t);
 

@@ -779,8 +779,8 @@ public abstract class Objects {
 	 * </tr>
 	 * </table>
 	 * 
-	 * @param obj1
-	 * @param obj2
+	 * @param obj1 the source object(collection or string)
+	 * @param obj2 the object to check
 	 * @return true if obj1 contains obj2
 	 */
 	public static boolean contains(Object obj1, Object obj2) {

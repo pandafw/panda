@@ -413,6 +413,7 @@ public class ObjectsTest {
 
 	/**
 	 * Tests {@link Objects#clone(Object)} with an uncloneable object.
+	 * @throws Throwable if an error occurs
 	 */
 	@Test(expected = NoSuchMethodException.class)
 	public void testCloneOfUncloneable() throws Throwable {
@@ -463,6 +464,7 @@ public class ObjectsTest {
 
 	/**
 	 * Tests {@link Objects#cloneIfPossible(Object)} with an uncloneable object.
+	 * @throws Throwable if an error occurs
 	 */
 	@Test(expected = NoSuchMethodException.class)
 	public void testPossibleCloneOfUncloneable() throws Throwable {

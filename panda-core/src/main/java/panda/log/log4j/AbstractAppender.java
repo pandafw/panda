@@ -93,7 +93,9 @@ public abstract class AbstractAppender extends AppenderSkeleton {
 	 * <p>
 	 * It checks whether there is a set output target and also if there is a set
 	 * layout. If these checks fail, then the boolean value <code>false</code>
-	 * is returned.
+	 * is returned.</p>
+	 * 
+	 * @return check result
 	 */
 	protected boolean checkEntryConditions() {
 		if (this.closed) {

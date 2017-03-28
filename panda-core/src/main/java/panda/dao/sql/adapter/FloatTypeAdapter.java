@@ -8,6 +8,7 @@ import java.sql.Types;
 
 /**
  * Float implementation of TypeAdapter
+ * @param <T> Java Type
  */
 public class FloatTypeAdapter<T> extends AbstractCastTypeAdapter<T, Float> {
 	public FloatTypeAdapter(TypeAdapters adapters, Class<T> javaType) {

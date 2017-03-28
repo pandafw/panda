@@ -35,15 +35,15 @@ public class SocketForward implements Runnable {
 	}
 
 	/**
-	 * @param remoteAddr
+	 * @param remoteAddr the remote address
 	 */
 	public SocketForward(InetSocketAddress remoteAddr) {
 		this(new InetSocketAddress((InetAddress)null, remoteAddr.getPort()), remoteAddr);
 	}
 
 	/**
-	 * @param localAddr
-	 * @param remoteAddr
+	 * @param localAddr the local address
+	 * @param remoteAddr the remote address
 	 */
 	public SocketForward(InetSocketAddress localAddr, InetSocketAddress remoteAddr) {
 		super();

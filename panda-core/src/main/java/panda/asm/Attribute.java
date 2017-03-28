@@ -63,8 +63,8 @@ public class Attribute {
     }
 
     /**
-	 * @param type
-	 * @param value
+	 * @param type type
+	 * @param value value
 	 */
 	public Attribute(String type, byte[] value) {
 		super();

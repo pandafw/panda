@@ -2,8 +2,8 @@ package panda.dao.query;
 
 
 
-
 /**
+ * @param <E> query target type
  */
 public abstract class AbstractCondition<E extends EntityQuery> {
 	protected E parent;

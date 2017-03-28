@@ -145,6 +145,7 @@ public class EntityDao<T> {
 	 * get a record by the supplied keys
 	 * 
 	 * @param keys record keys (int, string or java bean with keys)
+	 * @return the record object
 	 */
 	public T fetch(Object ... keys) {
 		return dao.fetch(entity, keys);
@@ -228,6 +229,7 @@ public class EntityDao<T> {
 	 * 
 	 * @param coll the collection to store the value
 	 * @param prop The property to be used as the value in the collection.
+	 * @return the record object collection
 	 */
 	public Collection<?> coll(Collection<?> coll, String prop) {
 		return dao.coll(coll, entity, prop);
@@ -240,6 +242,7 @@ public class EntityDao<T> {
 	 * @param coll the collection to store the value
 	 * @param prop The property to be used as the value in the collection.
 	 * @param query WHERE conditions, order, offset, limit and filters
+	 * @return the record object collection
 	 */
 	public Collection<?> coll(Collection<?> coll, Query<?> query, String prop) {
 		return dao.coll(coll, query, prop);
@@ -546,12 +549,14 @@ public class EntityDao<T> {
 	//-------------------------------------------------------------------------
 	/**
 	 * execute a transaction
+	 * @param transaction the runnable transaction
 	 */
 	public void exec(Runnable transaction) {
 		dao.exec(transaction);
 	}
 	/**
 	 * execute a transaction
+	 * @param transaction the runnable transaction
 	 * @param level transaction level
 	 */
 	public void exec(Runnable transaction, int level) {

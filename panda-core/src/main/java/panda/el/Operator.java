@@ -8,7 +8,7 @@ import java.util.Queue;
 public interface Operator {
 
 	/**
-	 * 优先级
+	 * @return the priority of the operator
 	 */
 	public int getPriority();
 
@@ -20,7 +20,8 @@ public interface Operator {
 	public void wrap(Queue<Object> operand);
 
 	/**
-	 * 计算
+	 * @param ec the ElContext
+	 * @return the calculated value
 	 */
 	public Object calculate(ElContext ec);
 

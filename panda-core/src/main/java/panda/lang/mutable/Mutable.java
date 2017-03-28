@@ -9,6 +9,7 @@ package panda.lang.mutable;
  * effectively change the value of the primitive/string. Another use case is to store a frequently changing primitive in
  * a collection (for example a total in a map) without needing to create new Integer/Long wrapper objects.
  * 
+ * @param <T> the mutable type
  */
 public interface Mutable<T> {
 

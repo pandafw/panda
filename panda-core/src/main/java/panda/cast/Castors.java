@@ -157,8 +157,9 @@ public class Castors {
 	/**
 	 * Register (add) a castor for a class
 	 * 
-	 * @param toType - the class
-	 * @param castor - the castor instance
+	 * @param fromType the source class type 
+	 * @param toType the target class type
+	 * @param castor the castor instance
 	 */
 	public void register(Type fromType, Type toType, Castor castor) {
 		castors.put(new MultiKey(fromType, toType), castor);
@@ -167,7 +168,8 @@ public class Castors {
 	/**
 	 * Unregister (remove) a castor for a class
 	 * 
-	 * @param toType - the class
+	 * @param fromType the source class type 
+	 * @param toType the target class type
 	 */
 	public void unregister(Type fromType, Type toType) {
 		castors.remove(new MultiKey(fromType, toType));
@@ -204,8 +206,9 @@ public class Castors {
 	
 	/**
 	 * getCastor
-	 * @param toType object type
-	 * @return Castor
+	 * @param fromType the source class type 
+	 * @param toType the target class type
+	 * @return Castor the castor instance
 	 */
 	@SuppressWarnings("unchecked")
 	public <S, T> Castor<S, T> getCastor(Type fromType, Type toType) {

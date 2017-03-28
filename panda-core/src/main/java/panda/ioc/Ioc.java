@@ -21,12 +21,14 @@ public interface Ioc {
 	/**
 	 * @param type 类型
 	 * @return 是否存在某一特定对象
+	 * @throws IocException if an error occurred
 	 */
 	boolean has(Class<?> type) throws IocException;
 
 	/**
 	 * @param name 对象名
 	 * @return 是否存在某一特定对象
+	 * @throws IocException if an error occurred
 	 */
 	boolean has(String name) throws IocException;
 
@@ -34,6 +36,7 @@ public interface Ioc {
 	 * @param type 类型
 	 * @param name 对象名
 	 * @return 是否存在某一特定对象
+	 * @throws IocException if an error occurred
 	 */
 	boolean has(Class<?> type, String name) throws IocException;
 
@@ -59,6 +62,7 @@ public interface Ioc {
 	 *            如果不为null对象注入配置的类型优先
 	 * @param name 对象的名称
 	 * @return 对象本身
+	 * @throws IocException if an error occurred
 	 */
 	<T> T get(Class<T> type, String name) throws IocException;
 
@@ -84,6 +88,7 @@ public interface Ioc {
 	 *            如果不为null对象注入配置的类型优先
 	 * @param name 对象的名称
 	 * @return 对象本身
+	 * @throws IocException if an error occurred
 	 */
 	<T> T getIfExists(Class<T> type, String name) throws IocException;
 

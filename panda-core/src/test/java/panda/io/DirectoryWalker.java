@@ -229,6 +229,7 @@ import panda.io.filter.TrueFileFilter;
  *  }
  * </pre>
  *
+ * @param <T> type
  */
 public abstract class DirectoryWalker<T> {
 

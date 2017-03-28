@@ -118,6 +118,7 @@ public class HttpRequest {
 
 	/**
 	 * @param encoding the encoding to set
+	 * @return this
 	 */
 	public HttpRequest setEncoding(String encoding) {
 		this.encoding = encoding;
@@ -360,7 +361,7 @@ public class HttpRequest {
 
 	/**
 	 * @param writer writer
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public void toString(Appendable writer) throws IOException {
 		toString(writer, TOSTRING_BODY_LIMIT);
@@ -369,7 +370,7 @@ public class HttpRequest {
 	/**
 	 * @param writer writer
 	 * @param bodyLimit body size limit
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public void toString(Appendable writer, int bodyLimit) throws IOException {
 		writer.append(method).append(' ').append(getURL().toString());

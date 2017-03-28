@@ -22,6 +22,7 @@ public class DefaultClassDefiner extends ClassLoader implements ClassDefiner {
 
 	/**
 	 * 虽然是public的,但一般情况下不需要用哦. 用默认的全局ClassDefiner就很好.
+	 * @param parent parent class loader
 	 */
 	public DefaultClassDefiner(ClassLoader parent) {
 		super(parent);

@@ -695,6 +695,7 @@ public abstract class Classes {
      * final variables, and are the only {@code Class} objects for which
      * this method returns {@code true}.
      *
+     * @param type the class type
      * @return true if and only if this class represents a primitive type
      */
 	public static boolean isPrimitiveType(Class<?> type) {
@@ -2042,6 +2043,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is String
 	 */
 	public static boolean isString(Class<?> cls) {
@@ -2049,6 +2051,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is CharSequence
 	 */
 	public static boolean isCharSequence(Class<?> cls) {
@@ -2056,6 +2059,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is char or Character
 	 */
 	public static boolean isChar(Class<?> cls) {
@@ -2063,6 +2067,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is boolean or Boolean
 	 */
 	public static boolean isBoolean(Class<?> cls) {
@@ -2070,6 +2075,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is float or Float
 	 */
 	public static boolean isFloat(Class<?> cls) {
@@ -2077,6 +2083,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is double or Double
 	 */
 	public static boolean isDouble(Class<?> cls) {
@@ -2084,6 +2091,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is int or Integer
 	 */
 	public static boolean isInt(Class<?> cls) {
@@ -2091,6 +2099,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is float or double or BigDecimal
 	 */
 	public static boolean isDecimal(Class<?> cls) {
@@ -2098,6 +2107,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is long or Long
 	 */
 	public static boolean isLong(Class<?> cls) {
@@ -2105,6 +2115,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is short or Short
 	 */
 	public static boolean isShort(Class<?> cls) {
@@ -2112,6 +2123,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is byte or Byte
 	 */
 	public static boolean isByte(Class<?> cls) {
@@ -2119,6 +2131,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is float, double, BigDecimal
 	 */
 	public static boolean isFloatLike(Class<?> cls) {
@@ -2126,6 +2139,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is int, long, short, byte, BigInteger
 	 */
 	public static boolean isIntLike(Class<?> cls) {
@@ -2133,6 +2147,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is a primitive number class
 	 */
 	public static boolean isPrimitiveNumber(Class<?> cls) {
@@ -2140,6 +2155,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is a number class
 	 */
 	public static boolean isNumber(Class<?> cls) {
@@ -2147,6 +2163,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is a enum class
 	 */
 	public static boolean isEnum(Class<?> cls) {
@@ -2154,6 +2171,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is a interface class
 	 */
 	public static boolean isInterface(Class<?> cls) {
@@ -2161,6 +2179,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is Array, Map, Collection
 	 */
 	public static boolean isContainer(Class<?> cls) {
@@ -2168,6 +2187,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is Array class
 	 */
 	public static boolean isArray(Class<?> cls) {
@@ -2175,6 +2195,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is Collection class
 	 */
 	public static boolean isCollection(Class<?> cls) {
@@ -2182,6 +2203,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is Array class or Collection class
 	 */
 	public static boolean isArrayOrCollection(Class<?> cls) {
@@ -2189,6 +2211,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is Map class
 	 */
 	public static boolean isMap(Class<?> cls) {
@@ -2196,6 +2219,7 @@ public abstract class Classes {
 	}
 
 	/**
+	 * @param cls the class type
 	 * @return true if the class is a Date or Calendar class
 	 */
 	public static boolean isDateTime(Class<?> cls) {

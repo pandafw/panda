@@ -37,6 +37,8 @@ public class Methods {
 	
 	/**
 	 * Gets all methods of the given class and its parents (if any).
+	 * @param cls the class
+	 * @return the method array
 	 */
 	public static Method[] getAllMethods(Class<?> cls) {
 		final List<Method> all = getAllMethodsList(cls);
@@ -45,6 +47,8 @@ public class Methods {
 
 	/**
 	 * Gets all methods of the given class and its parents (if any).
+	 * @param cls the class
+	 * @return the method list
 	 */
 	public static List<Method> getAllMethodsList(Class<?> cls) {
 		List<Method> list = new ArrayList<Method>();
@@ -60,6 +64,8 @@ public class Methods {
 
 	/**
 	 * call getDeclaredMethods(xx, null)
+	 * @param cls the class
+	 * @return the method array
 	 */
 	public static Method[] getDeclaredMethods(Class<?> cls) {
 		return getDeclaredMethods(cls, null);
@@ -67,6 +73,8 @@ public class Methods {
 
 	/**
 	 * call getDeclaredMethods(xx, Object.class)
+	 * @param cls the class
+	 * @return the method array
 	 */
 	public static Method[] getDeclaredMethodsWithoutTop(Class<?> cls) {
 		return getDeclaredMethods(cls, Object.class);
@@ -75,6 +83,9 @@ public class Methods {
 	/**
 	 * Gets declared methods of the given class and its parents until top class.
 	 * Discard duplicate method of parents.
+	 * @param cls the class
+	 * @param top the top base class
+	 * @return the method array
 	 */
 	public static Method[] getDeclaredMethods(Class<?> cls, Class<?> top) {
 		Map<MultiKey, Method> map = new LinkedHashMap<MultiKey, Method>();
@@ -97,6 +108,7 @@ public class Methods {
 	}
 
 	/**
+	 * @param cls the class
 	 * @param ann annotation
 	 * @return methods
 	 */

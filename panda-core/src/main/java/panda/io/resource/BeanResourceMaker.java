@@ -303,6 +303,7 @@ public class BeanResourceMaker implements ResourceMaker {
 
 	/**
 	 * load resources
+	 * @param resList resource list
 	 */
 	@SuppressWarnings("unchecked")
 	public void loadResources(List resList) {

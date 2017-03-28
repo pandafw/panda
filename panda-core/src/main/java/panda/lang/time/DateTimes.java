@@ -2006,6 +2006,8 @@ public class DateTimes {
 	/**
 	 * ISO8601 formatter for date-time without time zone. The format used is
 	 * <tt>yyyy-MM-dd'T'HH:mm:ss</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDatetimeFormat() {
 		return iso_datetime_format;
@@ -2014,6 +2016,8 @@ public class DateTimes {
 	/**
 	 * ISO8601 formatter for date-time without time zone and prefix 'T' char. The format used is
 	 * <tt>yyyy-MM-dd HH:mm:ss</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDatetimeNotFormat() {
 		return iso_datetime_no_t_format;
@@ -2022,6 +2026,8 @@ public class DateTimes {
 	/**
 	 * ISO8601 formatter for date-time with time zone. The format used is
 	 * <tt>yyyy-MM-dd'T'HH:mm:ssZZ</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDatetimeTimeZoneFormat() {
 		return iso_datetime_timezone_format;
@@ -2031,6 +2037,8 @@ public class DateTimes {
 	 * ISO8601-like formatter for date with time zone. The format used is <tt>yyyy-MM-ddZZ</tt>.
 	 * This pattern does not comply with the formal ISO8601 specification as the standard does not
 	 * allow a time zone without a time.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDateTimezoneFormat() {
 		return iso_date_timezone_format;
@@ -2040,6 +2048,8 @@ public class DateTimes {
 	/**
 	 * ISO8601 formatter for date-time without time zone and separator '-' char. The format used is
 	 * <tt>yyyyMMdd'T'HH:mm:ss</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDatetimeNohFormat() {
 		return iso_datetime_no_h_format;
@@ -2047,6 +2057,8 @@ public class DateTimes {
 	
 	/**
 	 * ISO8601 formatter for date without time zone. The format used is <tt>yyyy-MM-dd</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoDateFormat() {
 		return iso_date_format;
@@ -2054,6 +2066,8 @@ public class DateTimes {
 	
 	/**
 	 * ISO8601-like formatter for time without time zone. The format used is <tt>HH:mm:ss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoTimeFormat() {
 		return iso_time_format;
@@ -2061,6 +2075,8 @@ public class DateTimes {
 	
 	/**
 	 * ISO8601 formatter for time with time zone. The format used is <tt>HH:mm:ssZZ</tt>.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat isoTimeTimezoneFormat() {
 		return iso_time_timezone_format;
@@ -2069,6 +2085,8 @@ public class DateTimes {
 	/**
 	 * SMTP (and probably other) date headers. The format used is
 	 * <tt>EEE, dd MMM yyyy HH:mm:ss Z</tt> in US locale.
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat smtpDatetimeFormat() {
 		return smtp_datetime_format;
@@ -2076,6 +2094,8 @@ public class DateTimes {
 
 	/**
 	 * Timestamp format. The format used is <tt>yyyy-MM-dd HH:mm:ss.SSS</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat timestampFormat() {
 		return timestamp_format;
@@ -2083,6 +2103,8 @@ public class DateTimes {
 
 	/**
 	 * Date format without hyphen. The format used is <tt>yyyyMMdd</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat dateYmdNohFormat() {
 		return date_ymd_noh_format;
@@ -2090,6 +2112,8 @@ public class DateTimes {
 
 	/**
 	 * Time format without colon. The format used is <tt>HHmmss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static final FastDateFormat timeHmsNocFormat() {
 		return time_hms_noc_format;
@@ -2097,6 +2121,8 @@ public class DateTimes {
 
 	/**
 	 * Time format without seconds. The format used is <tt>HH:mm</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static final FastDateFormat timeHhmmFormat() {
 		return time_hhmm_format;
@@ -2104,6 +2130,8 @@ public class DateTimes {
 	
 	/**
 	 * Timestamp format for log. The format used is <tt>yyyyMMdd'T'HHmmss.SSS</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat timestampLogFormat() {
 		return timestamp_log_format;
@@ -2111,6 +2139,8 @@ public class DateTimes {
 
 	/**
 	 * DateTime without secnods. The format used is <tt>yyyy-MM-dd HH:mm</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat datetimeHhmmFormat() {
 		return datetime_hhmm_format;
@@ -2118,6 +2148,8 @@ public class DateTimes {
 
 	/**
 	 * DateTime format for log. The format used is <tt>yyyyMMdd'T'HHmmss</tt>. 
+	 * 
+	 * @return the FastDateFormat object
 	 */
 	public static FastDateFormat datetimeLogFormat() {
 		return datetime_log_format;

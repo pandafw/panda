@@ -6,6 +6,7 @@ import java.util.Iterator;
 import panda.lang.Iterators;
 
 /**
+ * @param <T> target type
  */
 public abstract class AnySingleCastor<T> extends AnyObjectCastor<T> {
 	public AnySingleCastor(Type toType) {
