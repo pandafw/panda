@@ -1,4 +1,4 @@
-package panda.net;
+package panda.tool.socket;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +18,7 @@ import panda.lang.Strings;
 import panda.lang.Threads;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.Sockets;
 
 public class SocketRelay implements Runnable {
 	private final static Log log = Logs.getLog(SocketRelay.class);

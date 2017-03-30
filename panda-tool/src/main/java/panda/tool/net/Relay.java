@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import org.apache.commons.cli.CommandLine;
 
 import panda.lang.Numbers;
-import panda.net.SocketRelay;
+import panda.tool.socket.SocketRelay;
 import panda.util.tool.AbstractCommandTool;
 
 /**
