@@ -1145,6 +1145,8 @@ public abstract class AbstractDao implements Dao {
 	protected abstract int deletesByQuery(Query<?> query);
 
 	//-------------------------------------------------------------------------
+	protected abstract <T> T insertData(Entity<T> entity, T obj) throws Exception;
+
 	/**
 	 * insert a record.
 	 * <p>
@@ -1164,11 +1166,31 @@ public abstract class AbstractDao implements Dao {
 		assertObject(obj);
 
 		Entity<T> entity = getEntity((Class<T>)obj.getClass());
+		return insert(entity, obj);
+	}
+
+	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the obj
+	 * @param obj the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
+	 */
+	public <T> T insert(Entity<T> entity, T obj) {
+		assertObject(obj);
+
 		assertTable(entity);
 		
 		autoStart();
 		try {
-			T d = insert(entity, obj);
+			T d = insertData(entity, obj);
 			autoCommit();
 			return d;
 		}
@@ -1180,8 +1202,6 @@ public abstract class AbstractDao implements Dao {
 			autoClose();
 		}
 	}
-
-	protected abstract <T> T insert(Entity<T> entity, T obj) throws Exception;
 
 	/**
 	 * insert record collections.
@@ -1197,16 +1217,50 @@ public abstract class AbstractDao implements Dao {
 	 * @return the inserted record collection
 	 */
 	@Override
-	public Collection<?> inserts(Collection<?> col) {
+	public <T> Collection<T> inserts(Collection<T> col) {
 		assertCollection(col);
 
 		autoStart();
 		try {
-			for (Object obj : col) {
+			for (T obj : col) {
 				if (obj == null) {
 					continue;
 				}
 				insert(obj);
+			}
+
+			autoCommit();
+			return col;
+		}
+		finally {
+			autoClose();
+		}
+	}
+
+	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the obj
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	public <T> Collection<T> inserts(Entity<T> entity, Collection<T> col) {
+		assertCollection(col);
+
+		autoStart();
+		try {
+			for (T obj : col) {
+				if (obj == null) {
+					continue;
+				}
+				insert(entity, obj);
 			}
 
 			autoCommit();

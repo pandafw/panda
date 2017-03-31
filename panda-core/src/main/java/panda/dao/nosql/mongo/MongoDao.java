@@ -482,25 +482,40 @@ public class MongoDao extends AbstractDao {
 		}
 	}
 	
-	protected <T> T insert(Entity<T> entity, T obj) throws Exception {
+	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the data
+	 * @param data the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
+	 */
+	@Override
+	protected <T> T insertData(Entity<T> entity, T data) throws Exception {
 		if (log.isDebugEnabled()) {
-			log.debug("insert: " + obj);
+			log.debug("insert: " + data);
 		}
 		
 		EntityField idef = entity.getIdentity();
 		if (idef == null) {
-			insertData(entity, obj);
-			return obj;
+			writeData(entity, data);
+			return data;
 		}
 
-		Object oid = idef.getValue(obj);
+		Object oid = idef.getValue(data);
 		if (isValidIdentity(oid)) {
-			insertData(entity, obj);
-			return obj;
+			writeData(entity, data);
+			return data;
 		}
 
 		DBCollection dbc = db.getCollection(getTableName(entity));
-		DBObject dbo = convertDataToBson(entity, obj);
+		DBObject dbo = convertDataToBson(entity, data);
 
 		for (int i = 0; i < 100; i++) {
 			Object gid;
@@ -517,14 +532,14 @@ public class MongoDao extends AbstractDao {
 				gid = ObjectId.get();
 			}
 
-			if (!idef.setValue(obj, cast(gid, idef.getType()))) {
+			if (!idef.setValue(data, cast(gid, idef.getType()))) {
 				throw new DaoException("Failed to set identity to entity: " + entity.getType());
 			}
 			
 			dbo.put(ID, gid);
 			try {
 				dbc.insert(dbo);
-				return obj;
+				return data;
 			}
 			catch (MongoException me) {
 				if (me.getCode() == 11000) {
@@ -877,7 +892,7 @@ public class MongoDao extends AbstractDao {
 	}
 	
 	//--------------------------------------------------------------------
-	private WriteResult insertData(Entity<?> entity, Object obj) {
+	private WriteResult writeData(Entity<?> entity, Object obj) {
 		DBObject dbo = convertDataToBson(entity, obj);
 		DBCollection dbc = db.getCollection(getTableName(entity));
 		return dbc.insert(dbo);

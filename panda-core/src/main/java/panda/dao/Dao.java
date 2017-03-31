@@ -640,6 +640,22 @@ public interface Dao {
 	<T> T insert(T obj);
 
 	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the obj
+	 * @param obj the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
+	 */
+	<T> T insert(Entity<T> entity, T obj);
+
+	/**
 	 * insert record collections.
 	 * <p>
 	 * a '@Id' field will be set after insert. 
@@ -652,7 +668,23 @@ public interface Dao {
 	 * @param col the record collection to be inserted
 	 * @return the inserted record collection
 	 */
-	Collection<?> inserts(Collection<?> col);
+	<T> Collection<T> inserts(Collection<T> col);
+
+	/**
+	 * insert record collections.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the obj
+	 * @param col the record collection to be inserted
+	 * @return the inserted record collection
+	 */
+	<T> Collection<T> inserts(Entity<T> entity, Collection<T> col);
 
 	//--------------------------------------------------------------------
 	/**

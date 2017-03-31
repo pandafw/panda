@@ -424,7 +424,7 @@ public class EntityDao<T> {
 	 * @return the inserted record
 	 */
 	public T insert(T obj) {
-		return dao.insert(obj);
+		return dao.insert(entity, obj);
 	}
 
 	/**
@@ -440,9 +440,8 @@ public class EntityDao<T> {
 	 * @param col the record collection to be inserted
 	 * @return the inserted record collection
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<T> inserts(Collection<T> col) {
-		return (Collection<T>)dao.inserts(col);
+		return dao.inserts(entity, col);
 	}
 
 	//-------------------------------------------------------------------------

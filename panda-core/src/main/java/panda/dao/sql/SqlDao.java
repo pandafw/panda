@@ -524,7 +524,7 @@ public class SqlDao extends AbstractDao {
 	}
 
 	//-------------------------------------------------------------------------
-	protected <T> T insert(Entity<T> entity, T obj) throws Exception {
+	protected <T> T insertData(Entity<T> entity, T obj) throws Exception {
 		EntityField eid = entity.getIdentity();
 		if (eid == null) {
 			Sql sql = getSqlExpert().insert(entity, obj, false);

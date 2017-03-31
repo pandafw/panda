@@ -957,7 +957,22 @@ public class GaeDao extends AbstractDao {
 	}
 
 	//--------------------------------------------------------------------
-	protected <T> T insert(Entity<T> entity, T data) throws Exception {
+	/**
+	 * insert a record.
+	 * <p>
+	 * a '@Id' field will be set after insert. 
+	 * set '@Id(auto=false)' to disable retrieving the primary key of the newly inserted row.
+	 * <p>
+	 * the '@Prep("SELECT ...")' sql will be executed before insert.
+	 * <p>
+	 * the '@Post("SELECT ...")' sql will be executed after insert.
+	 * 
+	 * @param entity the Entity of the obj
+	 * @param data the record to be inserted (@Id property will be setted)
+	 * @return the inserted record
+	 */
+	@Override
+	protected <T> T insertData(Entity<T> entity, T data) throws Exception {
 		com.google.appengine.api.datastore.Entity ge;
 		Object kid = getDataIdentity(entity, data);
 		if (isValidIdentity(kid)) {
