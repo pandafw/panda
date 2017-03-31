@@ -31,12 +31,12 @@ public class TicketAuthenticator extends UserAuthenticator {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected List<String> getUserPermits(Object su) {
+	protected List<String> getUserPermissions(Object su) {
 		if (su == null) {
 			return Collections.EMPTY_LIST;
 		}
-		if (su instanceof IPermits) {
-			return ((IPermits)su).getPermits();
+		if (su instanceof IPermission) {
+			return ((IPermission)su).getPermissions();
 		}
 		if (su instanceof IRole) {
 			return Arrays.asList(((IRole)su).getRole());

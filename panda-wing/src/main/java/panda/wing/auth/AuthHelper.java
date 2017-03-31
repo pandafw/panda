@@ -68,8 +68,8 @@ public class AuthHelper {
 		if (u == null) {
 			return false;
 		}
-		if (u instanceof IPermits) {
-			return Collections.contains(((IPermits)u).getPermits(), p);
+		if (u instanceof IPermission) {
+			return Collections.contains(((IPermission)u).getPermissions(), p);
 		}
 		if (u instanceof IRole) {
 			return Strings.equals(((IRole)u).getRole(), p);

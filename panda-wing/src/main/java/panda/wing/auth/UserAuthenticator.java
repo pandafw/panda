@@ -45,7 +45,7 @@ public abstract class UserAuthenticator {
 	//----------------------------------------------------
 	// abstract methods
 	//
-	protected abstract List<String> getUserPermits(Object su);
+	protected abstract List<String> getUserPermissions(Object su);
 
 	protected abstract boolean isSecureSessionUser(Object su);
 	
@@ -115,14 +115,14 @@ public abstract class UserAuthenticator {
 			return OK_NO_DEFINES;
 		}
 		
-		Collection<String> uperms = getUserPermits(su);
+		Collection<String> uperms = getUserPermissions(su);
 
-		// user has 'deny all' permits
+		// user has 'deny all' permission
 		if (Collections.contains(uperms, AUTH.NONE)) {
 			return DENIED;
 		}
 
-		// user has 'allow all' permits
+		// user has 'allow all' permission
 		if (Collections.contains(uperms, AUTH.SUPER)) {
 			return OK;
 		}
