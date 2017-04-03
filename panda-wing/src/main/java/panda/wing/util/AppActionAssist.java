@@ -22,15 +22,15 @@ import panda.lang.time.DateTimes;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
-import panda.mvc.util.ActionAssist;
 import panda.mvc.util.AccessControler;
+import panda.mvc.util.ActionAssist;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.ftl.FreemarkerHelper;
 import panda.net.mail.Email;
-import panda.net.mail.EmailException;
 import panda.net.mail.EmailClient;
-import panda.wing.auth.AuthHelper;
+import panda.net.mail.EmailException;
+import panda.wing.auth.AppAuthenticator;
 import panda.wing.auth.IUser;
 import panda.wing.auth.UserAuthenticator;
 import panda.wing.constant.RC;
@@ -57,11 +57,8 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	@IocInject
 	protected AppResourceBundleLoader resBundleLoader;
 
-	@IocInject(required=false)
-	protected AuthHelper authHelper;
-	
-	@IocInject(required=false)
-	protected UserAuthenticator authenticator;
+	@IocInject(type=UserAuthenticator.class, required=false)
+	protected AppAuthenticator authenticator;
 
 	//--------------------------------------------------------------------------	
 	/**
@@ -132,11 +129,11 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 
 	//--------------------------------------------------------------------------	
 	public String encrypt(String value) {
-		return authHelper.encrypt(value);
+		return authenticator.encrypt(value);
 	}
 	
 	public String decrypt(String value) {
-		return authHelper.decrypt(value);
+		return authenticator.decrypt(value);
 	}
 	
 	//--------------------------------------------------------------------------	
@@ -160,7 +157,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @return true - if the user is administrator
 	 */
 	public boolean isAdminUser(IUser u) {
-		return authHelper.isAdminUser(u);
+		return authenticator.isAdminUser(u);
 	}
 
 	/**
@@ -175,35 +172,12 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @return true - if the user is super
 	 */
 	public boolean isSuperUser(IUser u) {
-		return authHelper.isSuperUser(u);
-	}
-
-	/**
-	* @param username username
-	* @param password password
-	* @return true if username & password equals properties setting
-	*/
-	public boolean isSuperUser(String username, String password) {
-		return authHelper.isSuperUser(username, password);
-	}
-
-	/**
-	 * @return the super user name
-	 */
-	public String getSuperUsername() {
-		return settings.getProperty(SC.SUPER_USERNAME);
-	}
-
-	/**
-	 * @return the user user password
-	 */
-	public String getSuperPassword() {
-		return settings.getProperty(SC.SUPER_PASSWORD);
+		return authenticator.isSuperUser(u);
 	}
 
 	//--------------------------------------------------------------------------
 	public long getLoginUserId() {
-		return authHelper.getLoginUserId(context);
+		return authenticator.getLoginUserId(context);
 	}
 
 	/**
@@ -211,7 +185,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @return user
 	 */
 	public IUser getLoginUser() {
-		return authHelper.getLoginUser(context);
+		return authenticator.getLoginUser(context);
 	}
 
 	/**
@@ -219,14 +193,14 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @param user user
 	 */
 	public void setLoginUser(IUser user) {
-		authHelper.setLoginUser(context, user);
+		authenticator.setAuthenticatedUser(context, user);
 	}
 
 	/**
 	 * removeLoginUser
 	 */
 	public void removeLoginUser() {
-		authHelper.removeLoginUser(context);
+		authenticator.removeAuthenticatedUser(context);
 	}
 
 	/**

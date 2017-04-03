@@ -25,10 +25,6 @@ public interface SC {
 	//--------------------------------------------------------
 	public static final String LUCENE_LOCATION = "lucene.location";
 
-	//--------------------------------------------------------
-	public static final String SUPER_USERNAME = "super.username";
-	public static final String SUPER_PASSWORD = "super.password";
-
 	//------------------------------------------------
 	// html to pdf
 	//

@@ -47,7 +47,7 @@ public abstract class UserAuthenticator {
 	//
 	protected abstract List<String> getUserPermissions(Object su);
 
-	protected abstract boolean isSecureSessionUser(Object su);
+	protected abstract boolean isSecureAuthenticatedUser(Object su);
 	
 
 	//----------------------------------------------------
@@ -63,7 +63,7 @@ public abstract class UserAuthenticator {
 	//----------------------------------------------------
 	// override methods
 	//
-	protected Object getSessionUser(ActionContext ac) {
+	protected Object getAuthenticatedUser(ActionContext ac) {
 		Object u = ac.getRequest().getAttribute(REQ.USER);
 		if (u == null) {
 			HttpSession session = ac.getRequest().getSession(false);
@@ -79,12 +79,12 @@ public abstract class UserAuthenticator {
 
 	/**
 	 * can access the specified action
-	 * @param context action context
+	 * @param ac action context
 	 * @param action action path
 	 * @return true if action has access permit
 	 */
-	public boolean canAccess(ActionContext context, String action) {
-		int r= authenticate(context, action, false);
+	public boolean canAccess(ActionContext ac, String action) {
+		int r= authenticate(ac, action, false);
 		return r <= OK || r == UNSECURE;
 	}
 
@@ -93,7 +93,7 @@ public abstract class UserAuthenticator {
 	 */
 	protected int authenticate(ActionContext ac, String path, boolean allowUnknownUri) {
 		// get user for later use
-		Object su = getSessionUser(ac);
+		Object su = getAuthenticatedUser(ac);
 
 		Method method = ac.getMethod();
 		Class<?> clazz = ac.getAction().getClass();
@@ -167,7 +167,7 @@ public abstract class UserAuthenticator {
 			return IPs.isPrivateIP(HttpServlets.getRemoteAddr(req)) ? OK : DENIED;
 		}
 		if (AUTH.SECURE.equals(define)) {
-			return isSecureSessionUser(su) ? OK : UNSECURE;
+			return isSecureAuthenticatedUser(su) ? OK : UNSECURE;
 		}
 		return Collections.contains(uperms, define) ? OK : (su == null ? UNLOGIN : DENIED);
 	}
