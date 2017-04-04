@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import panda.bind.json.JsonDeserializer;
 import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
+import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -25,6 +26,7 @@ import panda.wing.constant.REQ;
 import panda.wing.constant.SES;
 import panda.wing.constant.VC;
 
+@IocBean(type=UserAuthenticator.class)
 public class AppAuthenticator extends UserAuthenticator {
 	
 	private static final Log log = Logs.getLog(AppAuthenticator.class);

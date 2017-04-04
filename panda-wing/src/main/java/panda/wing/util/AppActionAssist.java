@@ -33,7 +33,6 @@ import panda.net.mail.EmailClient;
 import panda.net.mail.EmailException;
 import panda.wing.auth.AppAuthenticator;
 import panda.wing.auth.IUser;
-import panda.wing.auth.UserAuthenticator;
 import panda.wing.constant.RC;
 import panda.wing.constant.SC;
 import panda.wing.constant.VC;
@@ -58,7 +57,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	@IocInject
 	protected AppResourceBundleLoader resBundleLoader;
 
-	@IocInject(type=UserAuthenticator.class, required=false)
+	@IocInject
 	protected AppAuthenticator authenticator;
 
 	//--------------------------------------------------------------------------	

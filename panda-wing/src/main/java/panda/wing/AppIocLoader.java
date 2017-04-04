@@ -12,6 +12,8 @@ import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
+import panda.wing.auth.AppAuthenticator;
+import panda.wing.auth.UserAuthenticateProcessor;
 import panda.wing.lucene.LuceneProvider;
 import panda.wing.task.gae.GaeTaskExecutor;
 import panda.wing.task.gae.GaeTaskScheduler;
@@ -24,6 +26,7 @@ import panda.wing.util.AppDaoClientProvider;
 import panda.wing.util.AppFreemarkerTemplateLoader;
 import panda.wing.util.AppResourceBundleLoader;
 import panda.wing.util.AppSettings;
+import panda.wing.util.pdf.WkHtml2Pdf;
 
 public class AppIocLoader extends MvcComboIocLoader {
 	public static class AppDefaultIocLoader extends MvcDefaultIocLoader {
@@ -54,6 +57,11 @@ public class AppIocLoader extends MvcComboIocLoader {
 			clss.add(AppSettings.class);
 			clss.add(AppDaoClientProvider.class);
 			clss.add(LuceneProvider.class);
+			
+			clss.add(AppAuthenticator.class);
+			clss.add(UserAuthenticateProcessor.class);
+			
+			clss.add(WkHtml2Pdf.class);
 			
 			if (Systems.IS_OS_APPENGINE) {
 				clss.add(GaeTaskExecutor.class);
