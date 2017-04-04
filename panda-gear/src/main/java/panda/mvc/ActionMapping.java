@@ -37,8 +37,9 @@ public interface ActionMapping {
 	/**
 	 * find action config by method
 	 * 
-	 * @param method method
+	 * @param clazz action class
+	 * @param method action method
 	 * @return action config
 	 */
-	ActionConfig getActionConfig(Method method);
+	ActionConfig getActionConfig(Class clazz, Method method);
 }

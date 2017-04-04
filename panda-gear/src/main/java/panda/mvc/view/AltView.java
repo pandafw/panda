@@ -46,7 +46,7 @@ public class AltView extends AbstractView {
 			}
 			
 			ActionMapping am = ac.getIoc().get(ActionMapping.class);
-			ActionConfig acfg = am.getActionConfig(m);
+			ActionConfig acfg = am.getActionConfig(cls, m);
 			if (acfg == null) {
 				continue;
 			}

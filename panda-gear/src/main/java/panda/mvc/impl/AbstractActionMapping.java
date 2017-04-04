@@ -29,14 +29,14 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	protected abstract ActionInvoker getInvoker(String path, List<String> args);
 
 	private Map<String, ActionInvoker> ainks = new HashMap<String, ActionInvoker>();
-	private Map<Method, ActionConfig> acfgs = new HashMap<Method, ActionConfig>();
+	private Map<String, ActionConfig> acfgs = new HashMap<String, ActionConfig>();
 
 	@Override
 	public void add(ActionChainMaker acm, ActionConfig acfg, MvcConfig mcfg) {
 		// add method
-		if (acfgs.put(acfg.getActionMethod(), acfg) != null) {
-			throw new IllegalArgumentException(String.format("%s.%s is already mapped.", 
-				acfg.getActionType().getName(), acfg.getActionMethod().getName()));
+		String mn = acfg.getActionType().getName() + '.' + acfg.getActionMethod().getName();
+		if (acfgs.put(mn, acfg) != null) {
+			throw new IllegalArgumentException(mn + " is already mapped.");
 		}
 		
 		// check path
@@ -132,12 +132,13 @@ public abstract class AbstractActionMapping implements ActionMapping {
 	/**
 	 * find action config by method
 	 * 
-	 * @param method method
+	 * @param clazz action class
+	 * @param method action method
 	 * @return action config
 	 */
 	@Override
-	public ActionConfig getActionConfig(Method method) {
-		return acfgs.get(method);
+	public ActionConfig getActionConfig(Class clazz, Method method) {
+		return acfgs.get(clazz.getName() + '.' + method.getName());
 	}
 
 	@Override

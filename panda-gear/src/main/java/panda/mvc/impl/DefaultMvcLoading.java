@@ -115,20 +115,20 @@ public class DefaultMvcLoading implements Loading {
 
 	}
 
-	protected ActionMapping evalActionMapping(AbstractMvcConfig config) throws Exception {
-		ActionMapping mapping = createActionMapping(config);
+	protected ActionMapping evalActionMapping(AbstractMvcConfig mcfg) throws Exception {
+		ActionMapping mapping = createActionMapping(mcfg);
 		if (log.isInfoEnabled()) {
 			log.infof("Build " + ActionMapping.class.getName() + " by %s ...", mapping.getClass().getName());
 		}
 
-		Class<?> mainModule = config.getMainModule();
+		Class<?> mainModule = mcfg.getMainModule();
 		
-		createViewMaker(config);
+		createViewMaker(mcfg);
 
-		ActionChainMaker chainMaker = createChainMaker(config);
+		ActionChainMaker chainMaker = createChainMaker(mcfg);
 
 		// create action info for mail module
-		ActionConfig mainInfo = createActionInfo(config.getIoc(), mainModule);
+		ActionConfig mainCfg = createActionConfig(mcfg.getIoc(), mainModule);
 
 		// scan classes
 		Collection<Class<?>> actions = scanModules(mainModule);
@@ -141,7 +141,7 @@ public class DefaultMvcLoading implements Loading {
 
 		int atMethods = 0;
 		for (Class<?> action : actions) {
-			ActionConfig actionInfo = createActionInfo(config.getIoc(), action).mergeWith(mainInfo);
+			ActionConfig clsCfg = createActionConfig(mcfg.getIoc(), action).mergeWith(mainCfg);
 			for (Method method : action.getMethods()) {
 				// public & not synthetic/bridge (ignore generic type method for super class) & @At is declared
 				if (Modifier.isPublic(method.getModifiers()) 
@@ -149,8 +149,8 @@ public class DefaultMvcLoading implements Loading {
 						&& !method.isBridge()
 						&& method.isAnnotationPresent(At.class)) {
 					// add to mapping
-					ActionConfig info = createActionInfo(config.getIoc(), method).mergeWith(actionInfo);
-					mapping.add(chainMaker, info, config);
+					ActionConfig acfg = createActionConfig(mcfg.getIoc(), method).mergeWith(clsCfg);
+					mapping.add(chainMaker, acfg, mcfg);
 					atMethods++;
 				}
 			}
@@ -326,7 +326,7 @@ public class DefaultMvcLoading implements Loading {
 		}
 	}
 	
-	protected ActionConfig createActionInfo(Ioc ioc, Class<?> type) {
+	protected ActionConfig createActionConfig(Ioc ioc, Class<?> type) {
 		ActionConfig ac = new ActionConfig();
 		evalHttpAdaptor(ac, type.getAnnotation(AdaptBy.class));
 		evalViews(ac, type.getAnnotation(To.class));
@@ -336,7 +336,7 @@ public class DefaultMvcLoading implements Loading {
 		return ac;
 	}
 
-	protected ActionConfig createActionInfo(Ioc ioc, Method method) {
+	protected ActionConfig createActionConfig(Ioc ioc, Method method) {
 		ActionConfig am = new ActionConfig();
 		evalHttpAdaptor(am, method.getAnnotation(AdaptBy.class));
 		evalViews(am, method.getAnnotation(To.class));
