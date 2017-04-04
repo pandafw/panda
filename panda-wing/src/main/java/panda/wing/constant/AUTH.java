@@ -5,7 +5,9 @@ package panda.wing.constant;
  */
 public interface AUTH {
 	
-	
+	/**
+	 * AUTH AND
+	 */
 	public static final char AND = '+';
 
 	/**
@@ -18,16 +20,33 @@ public interface AUTH {
 	 */
 	public static final String NONE = "-";
 
-	public static final String TICKET = "";
+	/**
+	 * Ticket (Sign in)
+	 */
+	public static final String TICKET = "~";
 
+	/**
+	 * Remote Address is local network address
+	 */
 	public static final String LOCAL = "_local_";
 	
+	/**
+	 * secure user (retype password)
+	 */
 	public static final String SECURE = "_secure_";
-	
+
+	/**
+	 * Admin
+	 */
 	public static final String ADMIN = "admin";
 
-	public static final String USER = "user";
+	/**
+	 * AND LOCAL
+	 */
+	public static final String ALOCAL = "+_local_";
 
-	public static final String PLOCAL = "+_local_";
-	public static final String PSECURE = "+_secure_";
+	/**
+	 * AND SECURE
+	 */
+	public static final String ASECURE = "+_secure_";
 }

@@ -21,7 +21,7 @@ import panda.wing.constant.AUTH;
 import panda.wing.constant.REQ;
 import panda.wing.constant.SES;
 
-public abstract class UserAuthenticator {
+public class UserAuthenticator {
 	//--------------------------------------------------------
 	// result code
 	//--------------------------------------------------------
@@ -43,14 +43,6 @@ public abstract class UserAuthenticator {
 	protected UrlMapping urlmapping;
 	
 	//----------------------------------------------------
-	// abstract methods
-	//
-	protected abstract List<String> getUserPermissions(Object su);
-
-	protected abstract boolean isSecureAuthenticatedUser(Object su);
-	
-
-	//----------------------------------------------------
 	// public methods
 	//
 	/**
@@ -60,10 +52,25 @@ public abstract class UserAuthenticator {
 		return authenticate(ac, null, allowUnknownUri);
 	}
 	
+	/**
+	 * can access the specified action
+	 * @param ac action context
+	 * @param action action path
+	 * @return true if action has access permit
+	 */
+	public boolean canAccess(ActionContext ac, String action) {
+		int r= authenticate(ac, action, false);
+		return r <= OK || r == UNSECURE;
+	}
+
 	//----------------------------------------------------
 	// override methods
 	//
 	protected Object getAuthenticatedUser(ActionContext ac) {
+		return getUserFromContext(ac);
+	}
+	
+	protected Object getUserFromContext(ActionContext ac) {
 		Object u = ac.getRequest().getAttribute(REQ.USER);
 		if (u == null) {
 			HttpSession session = ac.getRequest().getSession(false);
@@ -77,15 +84,12 @@ public abstract class UserAuthenticator {
 		return u;
 	}
 
-	/**
-	 * can access the specified action
-	 * @param ac action context
-	 * @param action action path
-	 * @return true if action has access permit
-	 */
-	public boolean canAccess(ActionContext ac, String action) {
-		int r= authenticate(ac, action, false);
-		return r <= OK || r == UNSECURE;
+	protected List<String> getUserPermissions(Object su) {
+		return null;
+	}
+
+	protected boolean isSecureAuthenticatedUser(Object su) {
+		return false;
 	}
 
 	/**
@@ -114,7 +118,11 @@ public abstract class UserAuthenticator {
 		if (Collections.isEmpty(defines)) {
 			return OK_NO_DEFINES;
 		}
+		if (Collections.isItemsEmpty(defines)) {
+			return OK_NO_DEFINES;
+		}
 		
+
 		Collection<String> uperms = getUserPermissions(su);
 
 		// user has 'deny all' permission
@@ -129,28 +137,28 @@ public abstract class UserAuthenticator {
 
 		// check AND @Auth(...)
 		for (String d : defines) {
-			if (Strings.isEmpty(d)) {
+			if (Strings.isEmpty(d) || d.charAt(0) != AUTH.AND) {
 				continue;
 			}
 			
-			if (d.charAt(0) == AUTH.AND) {
-				int a = authenticatePermission(ac, su, uperms, d.substring(1));
-				if (a > OK) {
-					return a;
-				}
+			int a = authenticatePermission(ac, su, uperms, d.substring(1));
+			if (a > OK) {
+				return a;
 			}
 		}
 
-		// check  @Auth(...)
+		// check OR @Auth(...)
 		int r = UNKNOWN;
 		for (String d : defines) {
-			if (Strings.isEmpty(d) || d.charAt(0) != AUTH.AND) {
-				int a = authenticatePermission(ac, su, uperms, d);
-				if (a <= OK) {
-					return a;
-				}
-				r = a;
+			if (Strings.isEmpty(d) || d.charAt(0) == AUTH.AND) {
+				continue;
 			}
+
+			int a = authenticatePermission(ac, su, uperms, d);
+			if (a <= OK) {
+				return a;
+			}
+			r = a;
 		}
 
 		return r;
@@ -158,7 +166,7 @@ public abstract class UserAuthenticator {
 
 	protected int authenticatePermission(ActionContext ac, Object su, Collection<String> uperms, String define) {
 		// @Auth("") means login check only
-		if (Strings.isEmpty(define)) {
+		if (AUTH.TICKET.equals(define)) {
 			return su == null ? UNLOGIN : OK;
 		}
 
