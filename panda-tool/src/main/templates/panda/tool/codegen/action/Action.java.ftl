@@ -260,7 +260,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At${gen.trimAtName(ui.name)}
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
 		return super.bdelete_execute(args);
 	}
@@ -279,7 +279,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_execute(@Param Map<String, String[]> args) {
 		return super.bupdate_execute(args);
 	}
@@ -338,7 +338,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_input
 	 */
 	@At
-	@To(value="sftl:~${ui.name}", error="sftl:~${ui.name}")
+	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		return super.view_input(data);
 	}
@@ -357,7 +357,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_input
 	 */
 	@At
-	@To(value="sftl:~${ui.name}", error="sftl:~${ui.name}")
+	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		return super.print_input(data);
 	}
@@ -376,7 +376,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_input
 	 */
 	@At
-	@To(value="sftl:~${ui.name}", error="sftl:~${ui.name}")
+	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		return super.add_input(data);
 	}
@@ -385,7 +385,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_confirm
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_confirm(data);
 	}
@@ -394,7 +394,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.add_execute(data);
 	}
@@ -413,7 +413,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_input
 	 */
 	@At
-	@To(value="sftl:~${ui.name}", error="sftl:~${ui.name}")
+	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		return super.copy_input(data);
 	}
@@ -422,7 +422,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_confirm
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_confirm(data);
 	}
@@ -431,7 +431,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.copy_execute(data);
 	}
@@ -450,7 +450,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_input
 	 */
 	@At
-	@To(value="sftl:~${ui.name}", error="sftl:~${ui.name}")
+	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_input(@Param ${entityBeanClass} data) {
 		return super.edit_input(data);
 	}
@@ -459,7 +459,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_confirm
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_confirm(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_confirm(data);
 	}
@@ -468,7 +468,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:~${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
 	public Object ${ui.name}_execute(@Param <@validates ui=ui/> ${entityBeanClass} data) {
 		return super.edit_execute(data);
 	}
@@ -487,7 +487,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * ${ui.name}_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:${ui.name}")
+	@To(value=View.SFTL, error="sftl:~${ui.name}")
 	public Object ${ui.name}_execute(@Param ${entityBeanClass} key) {
 		return super.delete_execute(key);
 	}

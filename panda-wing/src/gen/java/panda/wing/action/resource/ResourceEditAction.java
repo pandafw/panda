@@ -203,7 +203,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 * delete_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:delete")
+	@To(value=View.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param Resource key) {
 		return super.delete_execute(key);
 	}

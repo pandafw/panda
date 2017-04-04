@@ -199,7 +199,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 * delete_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:delete")
+	@To(value=View.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param Template key) {
 		return super.delete_execute(key);
 	}

@@ -203,7 +203,7 @@ public class PropertyEditAction extends GenericEditAction<Property> {
 	 * delete_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:delete")
+	@To(value=View.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param Property key) {
 		return super.delete_execute(key);
 	}

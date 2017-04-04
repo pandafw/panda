@@ -70,7 +70,7 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 * delete_execute
 	 */
 	@At
-	@To(value=View.SFTL, error="sftl:delete")
+	@To(value=View.SFTL, error="sftl:~delete")
 	public Object delete_execute(@Param DaoFileItem key) {
 		return super.delete_execute(key);
 	}
