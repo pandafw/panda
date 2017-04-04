@@ -8,6 +8,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.View;
 import panda.mvc.ViewMaker;
+import panda.mvc.view.AltView;
 import panda.mvc.view.CsvView;
 import panda.mvc.view.ForwardView;
 import panda.mvc.view.FreemarkerView;
@@ -23,14 +24,36 @@ import panda.mvc.view.XmlView;
 import panda.net.http.HttpStatus;
 
 /**
- * 默认的的视图工厂类
+ * Default View Maker
  */
 @IocBean(type=ViewMaker.class)
 public class DefaultViewMaker implements ViewMaker {
 	private static final Log log = Logs.getLog(DefaultViewMaker.class);
 	
-	public View make(Ioc ioc, String type, String value) {
-		type = type.toLowerCase();
+	public View make(Ioc ioc, String viewstr) {
+		if (Strings.isEmpty(viewstr)) {
+			return null;
+		}
+
+		String type, value;
+		int pos = viewstr.indexOf(':');
+		if (pos > 0) {
+			type = Strings.stripToNull(viewstr.substring(0, pos).toLowerCase());
+			value = Strings.stripToNull(viewstr.substring(pos + 1));
+		}
+		else {
+			type = viewstr.toLowerCase();
+			value = null;
+		}
+		
+		return make(ioc, type, value);
+	}
+	
+	protected View make(Ioc ioc, String type, String value) {
+		if (View.ALT.equals(type) || View.ALT2.equals(type)) {
+			return new AltView(this, value);
+		}
+		
 		if (View.JSP.equals(type)) {
 			return new JspView(value);
 		}

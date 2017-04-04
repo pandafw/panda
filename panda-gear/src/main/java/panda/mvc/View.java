@@ -22,12 +22,13 @@ public interface View {
 	public static final String FORWARD = "forward";
 	public static final String FORWARD2 = "->";
 	public static final String RAW = "raw";
+
+	public static final String ALT = "alt";
+	public static final String ALT2 = "~>";
+
 	public static final String VOID = "void";
 	public static final String NONE = "none";
 	public static final String NULL = "null";
 
-	public static final String FTL_INPUT = "ftl:~input";
-	public static final String SFTL_INPUT = "s" + FTL_INPUT;
-	
 	void render(ActionContext ac);
 }
