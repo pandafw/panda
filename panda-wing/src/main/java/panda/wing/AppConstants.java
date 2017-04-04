@@ -79,6 +79,10 @@ public interface AppConstants extends MvcConstants {
 	
 	public static final String AUTH_USER_TYPE = "panda.auth.user.type";
 	
+	public static final String AUTH_TICKET_PARAM_NAME = "panda.auth.ticket.param.name";
+	
+	public static final String AUTH_TICKET_COOKIE_NAME = "panda.auth.ticket.cookie.name";
+
 	public static final String AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";
 
 	public static final String AUTH_SECRET_KEY = "panda.secret.auth.key";

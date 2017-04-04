@@ -54,35 +54,24 @@ public class AppAuthenticator extends UserAuthenticator {
 	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
+	 * ticket parameter name
+	 */
+	@IocInject(value=AppConstants.AUTH_TICKET_PARAM_NAME, required=false)
+	protected String paramName = "_ticket_";
+
+	/**
+	 * ticket cookie name
+	 */
+	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_NAME, required=false)
+	protected String cookieName = COOKIE.AUTH_TICKET;
+
+	/**
 	 * ticket cookie age
 	 */
 	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_AGE, required=false)
 	protected Integer cookieAge = COOKIE.AUTH_TICKET_AGE;
 
 	//------------------------------------------------------------------------
-	@Override
-	public boolean isSecureAuthenticatedUser(Object su) {
-		if (su instanceof ILogin) {
-			Long lt = ((ILogin)su).getLoginTime();
-			if (lt != null) {
-				return System.currentTimeMillis() - lt < secureUserAge * 1000;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	protected Object getAuthenticatedUser(ActionContext ac) {
-		Object u = super.getAuthenticatedUser(ac);
-		if (u != null) {
-			return u;
-		}
-
-		u = getUserFromClient(ac);
-		saveUserToContext(ac, u);
-		return u;
-	}
-	
 	@Override
 	@SuppressWarnings("unchecked")
 	protected List<String> getUserPermissions(Object su) {
@@ -98,7 +87,38 @@ public class AppAuthenticator extends UserAuthenticator {
 		return Collections.EMPTY_LIST;
 	}
 
+	@Override
+	public boolean isSecureAuthenticatedUser(Object su) {
+		if (su instanceof ILogin) {
+			Long lt = ((ILogin)su).getLoginTime();
+			if (lt != null) {
+				return System.currentTimeMillis() - lt < secureUserAge * 1000;
+			}
+		}
+		return false;
+	}
+
 	//------------------------------------------------------
+	@Override
+	protected Object getAuthenticatedUser(ActionContext ac) {
+		Object u = getUserFromParameter(ac);
+		if (u != null) {
+			saveUserToContext(ac, u);
+			return u;
+		}
+
+		u = super.getAuthenticatedUser(ac);
+		if (u != null) {
+			return u;
+		}
+
+		u = getUserFromClient(ac);
+		if (u != null) {
+			saveUserToContext(ac, u);
+		}
+		return u;
+	}
+
 	/**
 	 * setAuthenticatedUser
 	 * @param ac action context
@@ -173,15 +193,6 @@ public class AppAuthenticator extends UserAuthenticator {
 	}
 
 	//------------------------------------------------------
-	public String encrypt(String value) {
-		return Encrypts.encrypt(value, secret, cipher);
-	}
-	
-	public String decrypt(String value) {
-		return Encrypts.decrypt(value, secret, cipher);
-	}
-	
-	//------------------------------------------------------
 	protected void saveUserToContext(ActionContext ac, Object user) {
 		ac.getRequest().setAttribute(REQ.USER, user);
 	}
@@ -218,12 +229,12 @@ public class AppAuthenticator extends UserAuthenticator {
 		JsonSerializer js = Jsons.newJsonSerializer();
 		js.setDateToMillis(true);
 
-		String ticket = js.serialize(user);
+		String ticket = serializeUser(user);
 		String eticket = encrypt(ticket);
 		String cookiePath = ac.getServlet().getContextPath() + "/";
 		Integer cookieAge = getCookieAge(ac, user);
 		
-		Cookie c = new Cookie(COOKIE.AUTH_TICKET, eticket);
+		Cookie c = new Cookie(cookieName, eticket);
 		if (cookieAge != null) {
 			c.setMaxAge(cookieAge);
 		}
@@ -240,7 +251,7 @@ public class AppAuthenticator extends UserAuthenticator {
 		
 		HttpServlets.removeCookie(
 			res, 
-			COOKIE.AUTH_TICKET,
+			cookieName,
 			cookiePath);
 	}
 
@@ -255,7 +266,7 @@ public class AppAuthenticator extends UserAuthenticator {
 		}
 		
 		HttpServletRequest req = ac.getRequest();
-		Cookie c = HttpServlets.getCookie(req, COOKIE.AUTH_TICKET);
+		Cookie c = HttpServlets.getCookie(req, cookieName);
 		if (c == null) {
 			return null;
 		}
@@ -263,15 +274,39 @@ public class AppAuthenticator extends UserAuthenticator {
 		String ticket = c.getValue();
 		try {
 			ticket = decrypt(ticket);
-			JsonDeserializer jd = new JsonDeserializer();
-			jd.setIgnoreMissingProperty(true);
-			jd.setIgnoreReadonlyProperty(true);
-			jd.setIgnoreNullProperty(true);
-			Object u = jd.deserialize(ticket, userType);
+			Object u = deserializeUser(ticket);
 			return u;
 		}
 		catch (Exception e) {
-			log.warn("Incorrect " + COOKIE.AUTH_TICKET + ": " + ticket, e);
+			log.warn("Incorrect AUTH Cookie " + cookieName + ": " + ticket, e);
+		}
+		return null;
+	}
+
+	//------------------------------------------------------
+	/**
+	 * get user object from request parameter
+	 * @param ac action context
+	 * @return user object
+	 */
+	protected Object getUserFromParameter(ActionContext ac) {
+		if (userType == null) {
+			return null;
+		}
+		
+		HttpServletRequest req = ac.getRequest();
+		String ticket = req.getParameter(paramName);
+		if (Strings.isEmpty(ticket)) {
+			return null;
+		}
+		
+		try {
+			ticket = decrypt(ticket);
+			Object u = deserializeUser(ticket);
+			return u;
+		}
+		catch (Exception e) {
+			log.warn("Incorrect AUTH Param " + cookieName + ": " + ticket, e);
 		}
 		return null;
 	}
@@ -301,5 +336,32 @@ public class AppAuthenticator extends UserAuthenticator {
 	 */
 	protected void removeUserFromClient(ActionContext ac) {
 		removeUserFromCookie(ac);
+	}
+
+	//------------------------------------------------------
+	public String encrypt(String value) {
+		return Encrypts.encrypt(value, secret, cipher);
+	}
+	
+	public String decrypt(String value) {
+		return Encrypts.decrypt(value, secret, cipher);
+	}
+	
+	protected String serializeUser(Object user) {
+		JsonSerializer js = Jsons.newJsonSerializer();
+		js.setDateToMillis(true);
+		return js.serialize(user);
+	}
+	
+	protected Object deserializeUser(String ticket) {
+		if (userType == null) {
+			return null;
+		}
+		
+		JsonDeserializer jd = new JsonDeserializer();
+		jd.setIgnoreMissingProperty(true);
+		jd.setIgnoreReadonlyProperty(true);
+		jd.setIgnoreNullProperty(true);
+		return jd.deserialize(ticket, userType);
 	}
 }
