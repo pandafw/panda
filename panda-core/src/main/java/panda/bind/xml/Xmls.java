@@ -4,14 +4,13 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Type;
 
-import panda.bind.Binds;
 import panda.io.Streams;
 
 /**
  * 
  *
  */
-public abstract class Xmls extends Binds {
+public abstract class Xmls {
 	public static <T> T fromXml(String xml, Type type) {
 		XmlDeserializer xd = new XmlDeserializer();
 		return xd.deserialize(xml, type);
@@ -28,42 +27,41 @@ public abstract class Xmls extends Binds {
 		return xd.deserialize(r, type);
 	}
 
-	private static XmlSerializer createXmlSerializer() {
+	public static XmlSerializer newXmlSerializer() {
 		XmlSerializer xs = new XmlSerializer();
-		setDefaultSerializerOptions(xs);
 		return xs;
 	}
 	
 	public static String toXml(Object value) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		return xs.serialize(value);
 	}
 
 	public static String toXml(Object value, boolean pretty) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		xs.setPrettyPrint(pretty);
 		return xs.serialize(value);
 	}
 
 	public static String toXml(Object value, int indent) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		xs.setIndentFactor(indent);
 		return xs.serialize(value);
 	}
 
 	public static void toXml(Object value, Appendable writer) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		xs.serialize(value, writer);
 	}
 
 	public static void toXml(Object value, Appendable writer, boolean pretty) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		xs.setPrettyPrint(pretty);
 		xs.serialize(value, writer);
 	}
 
 	public static void toXml(Object value, Appendable writer, int indent) {
-		XmlSerializer xs = createXmlSerializer();
+		XmlSerializer xs = newXmlSerializer();
 		xs.setIndentFactor(indent);
 		xs.serialize(value, writer);
 	}

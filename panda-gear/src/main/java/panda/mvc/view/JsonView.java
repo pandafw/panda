@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import panda.bind.json.JsonSerializer;
+import panda.bind.json.Jsons;
 import panda.io.MimeType;
 import panda.log.Log;
 import panda.log.Logs;
@@ -30,7 +31,7 @@ public class JsonView extends AbstractBindView {
 	@Override
 	protected void writeResult(PrintWriter writer, Object result) throws IOException {
 		if (result != null) {
-			JsonSerializer js = new JsonSerializer();
+			JsonSerializer js = Jsons.newJsonSerializer();
 			setSerializerOptions(js);
 
 			if (log.isDebugEnabled()) {

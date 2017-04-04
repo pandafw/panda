@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import panda.bind.json.JsonDeserializer;
 import panda.bind.json.JsonSerializer;
+import panda.bind.json.Jsons;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
@@ -214,7 +215,7 @@ public class AppAuthenticator extends UserAuthenticator {
 	 * @param user user
 	 */
 	protected void saveUserToCookie(ActionContext ac, Object user) {
-		JsonSerializer js = new JsonSerializer();
+		JsonSerializer js = Jsons.newJsonSerializer();
 		js.setDateToMillis(true);
 
 		String ticket = js.serialize(user);

@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import panda.bind.json.JsonObject;
 import panda.bind.json.JsonSerializer;
+import panda.bind.json.Jsons;
 import panda.cast.Castors;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -338,10 +339,10 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @param sorter sorter
 	 */
 	public void saveSorterParams(Sorter sorter) {
-		JsonSerializer js = new JsonSerializer();
+		JsonSerializer js = Jsons.newJsonSerializer();
 		js.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(true));
-		String ss = js.serialize(sorter);
 
+		String ss = js.serialize(sorter);
 		getState().saveState("sorter", ss);
 	}
 	
