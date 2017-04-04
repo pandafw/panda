@@ -31,7 +31,7 @@ import panda.mvc.Loading;
 import panda.mvc.MvcConfig;
 import panda.mvc.Mvcs;
 import panda.mvc.Setup;
-import panda.mvc.UrlMapping;
+import panda.mvc.ActionMapping;
 import panda.mvc.ViewMaker;
 import panda.mvc.annotation.AdaptBy;
 import panda.mvc.annotation.At;
@@ -46,7 +46,7 @@ public class DefaultMvcLoading implements Loading {
 
 	private static final Log log = Logs.getLog(DefaultMvcLoading.class);
 
-	public UrlMapping load(AbstractMvcConfig config) {
+	public ActionMapping load(AbstractMvcConfig config) {
 		if (log.isInfoEnabled()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(String.format("Panda.Mvc [%s] is initializing ...", config.getAppName())).append(Streams.LINE_SEPARATOR);
@@ -74,7 +74,7 @@ public class DefaultMvcLoading implements Loading {
 		/*
 		 * 准备返回值
 		 */
-		UrlMapping mapping;
+		ActionMapping mapping;
 
 		/*
 		 * 准备计时
@@ -91,7 +91,7 @@ public class DefaultMvcLoading implements Loading {
 			/*
 			 * 组装UrlMapping
 			 */
-			mapping = evalUrlMapping(config);
+			mapping = evalActionMapping(config);
 
 			/*
 			 * 执行用户自定义 Setup
@@ -115,11 +115,10 @@ public class DefaultMvcLoading implements Loading {
 
 	}
 
-	protected UrlMapping evalUrlMapping(AbstractMvcConfig config) throws Exception {
-		// 准备 UrlMapping
-		UrlMapping mapping = createUrlMapping(config);
+	protected ActionMapping evalActionMapping(AbstractMvcConfig config) throws Exception {
+		ActionMapping mapping = createActionMapping(config);
 		if (log.isInfoEnabled()) {
-			log.infof("Build URL mapping by %s ...", mapping.getClass().getName());
+			log.infof("Build " + ActionMapping.class.getName() + " by %s ...", mapping.getClass().getName());
 		}
 
 		Class<?> mainModule = config.getMainModule();
@@ -165,21 +164,21 @@ public class DefaultMvcLoading implements Loading {
 		else {
 			if (log.isInfoEnabled()) {
 				log.infof("Found %d module methods", atMethods);
-				log.infof("URLMapping: %s", mapping.toString());
+				log.infof(ActionMapping.class.getName() + ": %s", mapping.toString());
 			}
 		}
 
 		return mapping;
 	}
 
-	protected UrlMapping createUrlMapping(MvcConfig config) throws Exception {
-		UrlMapping um = config.getIoc().getIfExists(UrlMapping.class);
+	protected ActionMapping createActionMapping(MvcConfig config) throws Exception {
+		ActionMapping um = config.getIoc().getIfExists(ActionMapping.class);
 		if (um == null) {
-			um = new RegexUrlMapping();
+			um = new RegexActionMapping();
 		}
 
 		if (log.isDebugEnabled()) {
-			log.debug("Use UrlMapping: " +  um.getClass());
+			log.debug("Use " + ActionMapping.class.getName() + ": " +  um.getClass());
 		}
 		return um;
 	}

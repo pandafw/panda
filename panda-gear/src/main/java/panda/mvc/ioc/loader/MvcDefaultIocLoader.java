@@ -17,7 +17,7 @@ import panda.mvc.alert.ParamAlertSupport;
 import panda.mvc.annotation.Modules;
 import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.impl.DefaultActionChainMaker;
-import panda.mvc.impl.RegexUrlMapping;
+import panda.mvc.impl.RegexActionMapping;
 import panda.mvc.processor.AdaptProcessor;
 import panda.mvc.processor.FatalProcessor;
 import panda.mvc.processor.InvokeProcessor;
@@ -137,7 +137,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	
 	protected Set<Object> getDefaults() {
 		return Arrays.toSet(new Object[] {
-			RegexUrlMapping.class,
+			RegexActionMapping.class,
 			DefaultActionChainMaker.class,
 			
 			// file pool used by Upload

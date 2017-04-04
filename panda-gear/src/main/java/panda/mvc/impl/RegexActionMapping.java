@@ -9,21 +9,21 @@ import java.util.regex.Pattern;
 
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.mvc.UrlMapping;
+import panda.mvc.ActionMapping;
 
 /**
- * Regular expression url mapping
+ * Regular expression action mapping
  * 
  * The regular expression must end with $.
  *
  */
-@IocBean(type=UrlMapping.class)
-public class RegexUrlMapping extends AbstractUrlMapping implements UrlMapping {
+@IocBean(type=ActionMapping.class)
+public class RegexActionMapping extends AbstractActionMapping implements ActionMapping {
 	private Map<String, ActionInvoker> urlmap;
 	private List<Pattern> patterns;
 	private List<ActionInvoker> actionis;
 
-	public RegexUrlMapping() {
+	public RegexActionMapping() {
 		urlmap = new HashMap<String, ActionInvoker>();
 		patterns = new ArrayList<Pattern>();
 		actionis = new ArrayList<ActionInvoker>();

@@ -166,16 +166,17 @@ public class ActionConfig {
 		}
 		
 		sb.append(Methods.toSimpleString(actionMethod));
-		sb.append(":");
+		sb.append(": @To(");
 		if (Strings.isNotEmpty(okView)) {
-			sb.append(" @Ok(").append(okView).append(")");
+			sb.append("ok=").append(okView).append(", ");
 		}
 		if (Strings.isNotEmpty(errorView)) {
-			sb.append(" @Err(").append(errorView).append(")");
+			sb.append("error=").append(errorView).append(", ");
 		}
 		if (Strings.isNotEmpty(fatalView)) {
-			sb.append(" @Fatal(").append(fatalView).append(")");
+			sb.append("fatal=").append(fatalView);
 		}
+		sb.append(')');
 		return sb.toString();
 	}
 }

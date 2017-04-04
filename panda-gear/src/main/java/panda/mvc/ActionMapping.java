@@ -1,20 +1,22 @@
 package panda.mvc;
 
+import java.lang.reflect.Method;
+
 import panda.mvc.impl.ActionInvoker;
 
 /**
- * URL Mapping
+ * Action Mapping
  */
-public interface UrlMapping {
+public interface ActionMapping {
 
 	/**
-	 * add a url mapping
+	 * add a mapping
 	 * 
 	 * @param acm action chain maker
-	 * @param ac action config
-	 * @param mc MVC config
+	 * @param acfg action config
+	 * @param mcfg MVC config
 	 */
-	void add(ActionChainMaker acm, ActionConfig ac, MvcConfig mc);
+	void add(ActionChainMaker acm, ActionConfig acfg, MvcConfig mcfg);
 
 	/**
 	 * get action invoker by path
@@ -31,4 +33,12 @@ public interface UrlMapping {
 	 * @return action config
 	 */
 	ActionConfig getActionConfig(String path);
+
+	/**
+	 * find action config by method
+	 * 
+	 * @param method method
+	 * @return action config
+	 */
+	ActionConfig getActionConfig(Method method);
 }

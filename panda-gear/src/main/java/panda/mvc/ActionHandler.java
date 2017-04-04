@@ -38,7 +38,7 @@ public class ActionHandler {
 	
 	private Loading loading;
 
-	private UrlMapping mapping;
+	private ActionMapping mapping;
 
 	private MvcConfig config;
 
@@ -62,7 +62,7 @@ public class ActionHandler {
 	/**
 	 * @return the mapping
 	 */
-	public UrlMapping getMapping() {
+	public ActionMapping getMapping() {
 		return mapping;
 	}
 

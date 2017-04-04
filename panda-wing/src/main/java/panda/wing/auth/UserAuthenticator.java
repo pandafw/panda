@@ -13,7 +13,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.ActionConfig;
-import panda.mvc.UrlMapping;
+import panda.mvc.ActionMapping;
 import panda.net.IPs;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
@@ -40,7 +40,7 @@ public class UserAuthenticator {
 	protected boolean allowUnknownUri = true;
 
 	@IocInject
-	protected UrlMapping urlmapping;
+	protected ActionMapping urlmapping;
 	
 	//----------------------------------------------------
 	// public methods

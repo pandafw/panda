@@ -4,7 +4,7 @@ import panda.mvc.config.AbstractMvcConfig;
 
 public interface Loading {
 
-	UrlMapping load(AbstractMvcConfig config);
+	ActionMapping load(AbstractMvcConfig config);
 
 	void depose(MvcConfig config);
 

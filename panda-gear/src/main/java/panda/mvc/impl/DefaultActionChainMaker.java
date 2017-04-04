@@ -58,12 +58,12 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		return map.get(key);
 	}
 	
-	public ActionChain eval(MvcConfig config, ActionConfig ai) {
-		List<String> procs = getProcessors(ai.getChainName());
+	public ActionChain eval(MvcConfig mcfg, ActionConfig acfg) {
+		List<String> procs = getProcessors(acfg.getChainName());
 		if (procs == null) {
-			throw new IllegalArgumentException("Failed to find chain [" + ai.getChainName() + "] for " + ai.getActionType());
+			throw new IllegalArgumentException("Failed to find chain [" + acfg.getChainName() + "] for " + acfg.getActionType());
 		}
-		ActionChain chain = new DefaultActionChain(ai, procs);
+		ActionChain chain = new DefaultActionChain(acfg, procs);
 		return chain;
 	}
 }
