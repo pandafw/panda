@@ -30,8 +30,8 @@
 			<element name="property" type="tns:EntityProperty" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
 		<attribute name="identitySequence" type="string"></attribute>
-		<attribute name="identityIncrement" type="int"></attribute>
-		<attribute name="identityStart" type="int"></attribute>
+		<attribute name="identityIncrement" type="string"></attribute>
+		<attribute name="identityStart" type="string"></attribute>
 		<attribute name="identity" type="string"></attribute>
 		<attribute name="table" type="string"></attribute>
 		<attribute name="trimString" type="string"></attribute>
@@ -39,7 +39,7 @@
 		<attribute name="baseBeanClass" type="string"></attribute>
 		<attribute name="baseInterface" type="string"></attribute>
 		<attribute name="baseQueryClass" type="string"></attribute>
-		<attribute name="generate" type="boolean" default="true"></attribute>
+		<attribute name="generate" type="string" default="true"></attribute>
 		<attribute name="comment" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
@@ -59,7 +59,7 @@
 			</choice>
 		</sequence>
 		<attribute name="autoJoin" type="string"></attribute>
-		<attribute name="generate" type="boolean"></attribute>
+		<attribute name="generate" type="string"></attribute>
 		<attribute name="trimString" type="string"></attribute>
 		<attribute name="trimList" type="string"></attribute>
 		<attribute name="dataListFieldName" type="string"></attribute>
@@ -88,11 +88,11 @@
 		<attribute name="foreignEntity" type="string"></attribute>
 		<attribute name="foreignKey" type="string"></attribute>
 		<attribute name="uniqueKey" type="string"></attribute>
-		<attribute name="primaryKey" type="boolean"></attribute>
+		<attribute name="primaryKey" type="string"></attribute>
 		<attribute name="defaultValue" type="string"></attribute>
-		<attribute name="notNull" type="boolean"></attribute>
-		<attribute name="scale" type="int"></attribute>
-		<attribute name="size" type="int"></attribute>
+		<attribute name="notNull" type="string"></attribute>
+		<attribute name="scale" type="string"></attribute>
+		<attribute name="size" type="string"></attribute>
 		<attribute name="fieldKind" type="string"></attribute>
 		<attribute name="nativeType" type="string"></attribute>
 		<attribute name="jdbcType" type="string"></attribute>
@@ -149,7 +149,7 @@
 				<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
 			</choice>
 		</sequence>
-		<attribute name="generate" type="boolean"></attribute>
+		<attribute name="generate" type="string"></attribute>
 		<attribute name="safeInclude" type="string"></attribute>
 		<attribute name="cssColumn" type="string"></attribute>
 		<attribute name="template" type="string"></attribute>
@@ -166,9 +166,9 @@
 				<element name="footer" type="string" minOccurs="0" maxOccurs="1"></element>
 			</choice>
 		</sequence>
-		<attribute name="generate" type="boolean"></attribute>
+		<attribute name="generate" type="string"></attribute>
 		<attribute name="safeInclude" type="string"></attribute>
-		<attribute name="focus" type="boolean"></attribute>
+		<attribute name="focus" type="string"></attribute>
 		<attribute name="theme" type="string"></attribute>
 		<attribute name="formId" type="string"></attribute>
 		<attribute name="template" type="string"></attribute>
@@ -187,15 +187,15 @@
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="link" type="string"></attribute>
-		<attribute name="nowrap" type="boolean"></attribute>
+		<attribute name="nowrap" type="string"></attribute>
 		<attribute name="width" type="string"></attribute>
-		<attribute name="group" type="boolean"></attribute>
-		<attribute name="query" type="boolean"></attribute>
+		<attribute name="group" type="string"></attribute>
+		<attribute name="query" type="string"></attribute>
 		<attribute name="filterable" type="string"></attribute>
-		<attribute name="sortable" type="boolean"></attribute>
-		<attribute name="hidden" type="boolean"></attribute>
-		<attribute name="value" type="boolean"></attribute>
-		<attribute name="order" type="int"></attribute>
+		<attribute name="sortable" type="string"></attribute>
+		<attribute name="hidden" type="string"></attribute>
+		<attribute name="value" type="string"></attribute>
+		<attribute name="order" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 
@@ -203,8 +203,8 @@
 		<sequence>
 			<element name="filter" type="tns:Filter" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="display" type="boolean"></attribute>
-		<attribute name="order" type="int"></attribute>
+		<attribute name="display" type="string"></attribute>
+		<attribute name="order" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 
@@ -219,14 +219,14 @@
 				<element name="validator" type="tns:Validator" minOccurs="0" maxOccurs="unbounded"></element>
 			</choice>
 		</sequence>
-		<attribute name="display" type="boolean"></attribute>
+		<attribute name="display" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
-		<attribute name="actionField" type="boolean" default="false"></attribute>
-		<attribute name="required" type="boolean"></attribute>
+		<attribute name="actionField" type="string" default="false"></attribute>
+		<attribute name="required" type="string"></attribute>
 		<attribute name="requiredrefer" type="string"></attribute>
-		<attribute name="requiredvalidate" type="boolean"></attribute>
-		<attribute name="order" type="int"></attribute>
+		<attribute name="requiredvalidate" type="string"></attribute>
+		<attribute name="order" type="string"></attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 
@@ -248,8 +248,8 @@
 		<sequence>
 			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="fixed" type="boolean"></attribute>
-		<attribute name="order" type="int"></attribute>
+		<attribute name="fixed" type="string"></attribute>
+		<attribute name="order" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="type" type="string" use="required"></attribute>
