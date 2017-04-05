@@ -27,37 +27,48 @@ public abstract class InputUIBean extends UIBean {
 
 	protected Object value;
 
+	protected void evaluateLabelParam() {
+		if (label == null) {
+			// lookup the label from a TextProvider (default value is the key)
+			label = context.getText().getText("p." + key, null);
+			if (label == null) {
+				label = context.getText().getText(key, key);
+			}
+		}
+	}
+	
+	protected void evaluateDescriptionParam() {
+		if (description == null) {
+			// lookup the placeholder from a TextProvider (default value is the key)
+			description = context.getText().getText("p." + key + "-dip", null);
+			if (description == null) {
+				description = context.getText().getText(key + "-dip", null);
+			}
+		}
+	}
+	
+	protected void evaluateTooltipParam() {
+		if (tooltip == null) {
+			// lookup the tooltip from a TextProvider (default value is the key)
+			tooltip = context.getText().getText("p." + key + "-tip", null);
+			if (tooltip == null) {
+				tooltip = context.getText().getText(key + "-tip", null);
+			}
+		}
+	}
+
 	@Override
 	protected void evaluateParams() {
 		super.evaluateParams();
 
 		if (key != null) {
-			if (tooltip == null) {
-				// lookup the tooltip from a TextProvider (default value is the key)
-				tooltip = context.getText().getText("p." + key + "-tip", null);
-				if (tooltip == null) {
-					tooltip = context.getText().getText(key + "-tip", null);
-				}
-			}
-
 			if (name == null) {
 				name = key;
 			}
 
-			if (label == null) {
-				// lookup the label from a TextProvider (default value is the key)
-				label = context.getText().getText("p." + key, null);
-				if (label == null) {
-					label = context.getText().getText(key, key);
-				}
-			}
-			if (description == null) {
-				// lookup the placeholder from a TextProvider (default value is the key)
-				description = context.getText().getText("p." + key + "-dip", null);
-				if (description == null) {
-					description = context.getText().getText(key + "-dip", null);
-				}
-			}
+			evaluateLabelParam();
+			evaluateDescriptionParam();
+			evaluateTooltipParam();
 		}
 
 		// see if the value was specified as a parameter already

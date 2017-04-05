@@ -11,6 +11,14 @@ public class ViewField extends ListUIBean {
 	protected String format;
 	protected String icon;
 
+	protected void evaluateDescriptionParam() {
+		// do not get text from resource (x-dip or p.x-dip)
+	}
+	
+	protected void evaluateTooltipParam() {
+		// do not get text from resource (x-tip or p.x-tip)
+	}
+
 	/**
 	 * @return the escape
 	 */
