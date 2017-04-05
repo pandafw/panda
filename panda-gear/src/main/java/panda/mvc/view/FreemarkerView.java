@@ -22,7 +22,7 @@ public class FreemarkerView extends AbstractPathView {
 	/**
 	 * alternative method
 	 */
-	public static final char ALT = '~';
+	public static final char ALT_PREFIX = '~';
 
 	/**
 	 * extension
@@ -103,11 +103,11 @@ public class FreemarkerView extends AbstractPathView {
 				path = findTemplate(fh, path, action, ac.getMethodName());
 			}
 		}
-		else if (path.charAt(0) == ALT) {
+		else if (path.charAt(0) == ALT_PREFIX) {
 			String method = path.substring(1);
 
 			path = ac.getPath();
-			path = FileNames.removeExtension(path) + ALT + method + EXT;
+			path = FileNames.removeExtension(path) + ALT_PREFIX + method + EXT;
 			if (!fh.hasTemplate(path)) {
 				Class<?> action = ac.getAction().getClass();
 				path = findTemplate(fh, path, action, method);

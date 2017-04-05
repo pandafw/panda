@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import panda.io.MimeType;
+import panda.lang.Strings;
 import panda.mvc.ActionContext;
 import panda.mvc.view.tag.Csv;
 
@@ -61,7 +62,7 @@ public class TsvView extends CsvView {
 		if (result != null) {
 			Csv csv = (Csv)result;
 			csv.start(writer);
-			csv.end(writer, NULL);
+			csv.end(writer, Strings.EMPTY);
 		}
 	}
 }

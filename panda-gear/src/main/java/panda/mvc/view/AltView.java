@@ -1,6 +1,8 @@
 package panda.mvc.view;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import panda.lang.Strings;
 import panda.mvc.ActionConfig;
@@ -11,11 +13,10 @@ import panda.mvc.ViewMaker;
 
 public class AltView extends AbstractView {
 
-	private ViewMaker maker;
+	private static final String STACK_KEY = AltView.class.getName() + ".stack";
 	
-	public AltView(ViewMaker maker, String location) {
+	public AltView(String location) {
 		super(location);
-		this.maker = maker;
 	}
 
 	@Override
@@ -36,21 +37,33 @@ public class AltView extends AbstractView {
 			throw new IllegalArgumentException("Invalid altview: " + location 
 				+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 		}
-		
-		View view = null;
 
-		Class cls = ac.getAction().getClass();
-		for (Method m : cls.getMethods()) {
-			if (!m.getName().equals(name)) {
-				continue;
-			}
-			
+		// cycle detect
+		cycleDetect(ac);
+
+		// find action config
+		ActionConfig acfg = null;
+		if (ac.getMethodName().equals(name)) {
+			acfg = ac.getConfig();
+		}
+		else {
+			// find alternative method ActionConfig
 			ActionMapping am = ac.getIoc().get(ActionMapping.class);
-			ActionConfig acfg = am.getActionConfig(cls, m);
-			if (acfg == null) {
-				continue;
-			}
 
+			Class cls = ac.getConfig().getActionType();
+			for (Method m : cls.getMethods()) {
+				if (!m.getName().equals(name)) {
+					continue;
+				}
+				
+				acfg = am.getActionConfig(cls, m);
+				if (acfg != null) {
+					break;
+				}
+			}
+		}
+
+		if (acfg != null) {
 			String sv = acfg.getOkView();
 			if (Strings.isNotEmpty(type)) {
 				if ("ok".equals(type)) {
@@ -66,17 +79,32 @@ public class AltView extends AbstractView {
 						+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 				}
 			}
-			
-			view = maker.make(ac.getIoc(), sv);
-			break;
+
+			ViewMaker maker = Views.getViewMaker(ac.getIoc());
+			View view = maker.make(ac.getIoc(), sv);
+			if (view != null) {
+				view.render(ac);
+				return;
+			}
 		}
 		
-		if (view == null) {
-			throw new IllegalArgumentException("Failed to find altview: " + location 
-				+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
-		}
-
-		view.render(ac);
+		throw new IllegalArgumentException("Failed to find altview: " + location 
+			+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
 	}
 
+	protected void cycleDetect(ActionContext ac) {
+		String key = ac.getAction().getClass().getName() + '.' + location;
+
+		@SuppressWarnings("unchecked")
+		Set<String> stack = (Set<String>)ac.getReq().get(STACK_KEY);
+		if (stack == null) {
+			stack = new HashSet<String>();
+			ac.getReq().put(STACK_KEY, stack);
+		}
+		
+		if (!stack.add(key)) {
+			throw new IllegalArgumentException("Cycle altview detected: " + location 
+				+ " / " + ac.getConfig().getActionMethod().getName() + '@' + ac.getConfig().getActionType());
+		}
+	}
 }

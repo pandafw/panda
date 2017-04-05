@@ -21,11 +21,6 @@ import panda.wing.action.AbstractAction;
  * @param <T> data type
  */
 public abstract class GenericBaseAction<T> extends AbstractAction {
-	/**
-	 * METHOD_SEPARATOR = "_";
-	 */
-	protected final static String METHOD_SEPARATOR = "_";
-
 	//------------------------------------------------------------
 	// scenario
 	//------------------------------------------------------------
@@ -225,7 +220,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 */
 	protected String getActionScenario() {
 		if (actionScenario == null) {
-			actionScenario = Strings.substringBefore(context.getMethodName(), METHOD_SEPARATOR);
+			actionScenario = Strings.substringBefore(context.getMethodName(), '_');
 		}
 		return actionScenario;
 	}
@@ -241,7 +236,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * set view by action scenario
 	 */
 	protected void setScenarioView() {
-		context.setView(new SitemeshFreemarkerView("~" + getActionScenario()));
+		setScenarioView(null);
 	}
 
 	/**
@@ -249,7 +244,11 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @param step scenario step
 	 */
 	protected void setScenarioView(String step) {
-		context.setView(new SitemeshFreemarkerView("~" + getActionScenario() + "_" + step));
+		String v = getActionScenario();
+		if (Strings.isNotEmpty(step)) {
+			v += '_' + step;
+		}
+		context.setView(new SitemeshFreemarkerView(SitemeshFreemarkerView.ALT_PREFIX + v));
 	}
 
 	//------------------------------------------------------------

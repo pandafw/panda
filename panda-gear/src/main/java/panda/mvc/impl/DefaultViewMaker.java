@@ -51,7 +51,7 @@ public class DefaultViewMaker implements ViewMaker {
 	
 	protected View make(Ioc ioc, String type, String value) {
 		if (View.ALT.equals(type) || View.ALT2.equals(type)) {
-			return new AltView(this, value);
+			return new AltView(value);
 		}
 		
 		if (View.JSP.equals(type)) {
