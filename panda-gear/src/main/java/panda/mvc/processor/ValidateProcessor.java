@@ -27,23 +27,7 @@ public class ValidateProcessor extends AbstractProcessor {
 			return;
 		}
 
-		View view = Views.evalView(ac.getIoc(), ac.getConfig().getErrorView());
-		if (view == null) {
-			StringBuilder sb = new StringBuilder();
-			
-			sb.append("Validation error occurs for " + ac.getPath() + ": \n");
-			if (ac.getActionAlert().hasErrors()) {
-				sb.append("ActionErrors: ");
-				Jsons.toJson(ac.getActionAlert().getErrors(), sb, true);
-			}
-			if (ac.getParamAlert().hasErrors()) {
-				sb.append("ParamErrors: ");
-				Jsons.toJson(ac.getParamAlert().getErrors(), sb, true);
-			}
-			throw new ValidateException(sb.toString());
-		}
-			
-		view.render(ac);
+		doErrorView(ac);
 	}
 
 	protected boolean validate(ActionContext ac, Validators vts) {
@@ -92,4 +76,23 @@ public class ValidateProcessor extends AbstractProcessor {
 		}
 	}
 
+	protected void doErrorView(ActionContext ac) {
+		View view = Views.evalView(ac.getIoc(), ac.getConfig().getErrorView());
+		if (view == null) {
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("Validation error occurs for " + ac.getPath() + ": \n");
+			if (ac.getActionAlert().hasErrors()) {
+				sb.append("ActionErrors: ");
+				Jsons.toJson(ac.getActionAlert().getErrors(), sb, true);
+			}
+			if (ac.getParamAlert().hasErrors()) {
+				sb.append("ParamErrors: ");
+				Jsons.toJson(ac.getParamAlert().getErrors(), sb, true);
+			}
+			throw new ValidateException(sb.toString());
+		}
+			
+		view.render(ac);
+	}
 }
