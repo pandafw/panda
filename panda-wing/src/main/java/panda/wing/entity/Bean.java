@@ -1,6 +1,6 @@
 package panda.wing.entity;
 
-import panda.wing.constant.VC;
+import panda.wing.constant.VAL;
 
 public abstract class Bean {
 	/**
@@ -14,7 +14,7 @@ public abstract class Bean {
 	 * @return true if bean is valid
 	 */
 	public static boolean isActive(IStatus bean) {
-		return bean.getStatus() != null && VC.STATUS_ACTIVE == bean.getStatus();
+		return bean.getStatus() != null && VAL.STATUS_ACTIVE == bean.getStatus();
 	}
 	
 	/**
@@ -22,7 +22,7 @@ public abstract class Bean {
 	 * @return true if bean is disabled
 	 */
 	public static boolean isDisabled(IStatus bean) {
-		return bean.getStatus() != null && VC.STATUS_DISABLED == bean.getStatus();
+		return bean.getStatus() != null && VAL.STATUS_DISABLED == bean.getStatus();
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public abstract class Bean {
 	 * @return true if bean is trashed
 	 */
 	public static boolean isTrashed(IStatus bean) {
-		return bean.getStatus() != null && VC.STATUS_TRASHED == bean.getStatus();
+		return bean.getStatus() != null && VAL.STATUS_TRASHED == bean.getStatus();
 	}
 
 	/**

@@ -38,8 +38,8 @@ import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.ListColumn;
 import panda.net.URLHelper;
 import panda.servlet.HttpServlets;
-import panda.wing.constant.RC;
-import panda.wing.constant.VC;
+import panda.wing.constant.RES;
+import panda.wing.constant.VAL;
 
 
 /**
@@ -79,7 +79,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Object list(Queryer qr) {
 		set_save(true);
-		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_json(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_JSON_PAGE_ITEMS, VC.DEFAULT_JSON_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_JSON_PAGE_ITEMS, VAL.DEFAULT_JSON_MAX_ITEMS);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_xml(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_XML_PAGE_ITEMS, VC.DEFAULT_XML_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_XML_PAGE_ITEMS, VAL.DEFAULT_XML_MAX_ITEMS);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, VC.DEFAULT_CSV_PAGE_ITEMS, VC.DEFAULT_CSV_MAX_ITEMS);
+		Object rv = doList(qr, VAL.DEFAULT_CSV_PAGE_ITEMS, VAL.DEFAULT_CSV_MAX_ITEMS);
 		if (rv instanceof View) {
 			return rv;
 		}
@@ -118,7 +118,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		
 		CsvView cv = new CsvView();
 		cv.setCsv(csv);
-		cv.setFilename(getText(RC.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
+		cv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
 		cv.setAttachment(true);
 		
 		return cv;
@@ -131,7 +131,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		Object rv = doList(qr, VC.DEFAULT_TSV_PAGE_ITEMS, VC.DEFAULT_TSV_MAX_ITEMS);
+		Object rv = doList(qr, VAL.DEFAULT_TSV_PAGE_ITEMS, VAL.DEFAULT_TSV_MAX_ITEMS);
 		if (rv instanceof View) {
 			return rv;
 		}
@@ -143,7 +143,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		
 		TsvView tv = new TsvView();
 		tv.setCsv(csv);
-		tv.setFilename(getText(RC.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
+		tv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
 		tv.setAttachment(true);
 		
 		return tv;
@@ -156,7 +156,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 
-		return doList(qr, VC.DEFAULT_PDF_PAGE_ITEMS, VC.DEFAULT_PDF_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_PDF_PAGE_ITEMS, VAL.DEFAULT_PDF_MAX_ITEMS);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_print(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VC.DEFAULT_POPUP_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_POPUP_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
 	}
 
 	//------------------------------------------------------------
@@ -397,7 +397,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
 		if (listCountable == null) {
-			listCountable = getTextAsBoolean(RC.UI_LIST_COUNTABLE, true);
+			listCountable = getTextAsBoolean(RES.UI_LIST_COUNTABLE, true);
 		}
 
 		final Dao dao = getDao();
@@ -659,7 +659,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected void addQueryOrders(GenericQuery<T> gq, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
-			String sc = getText(getMethodName() + RC.SORTER_SUFFIX, (String)null);
+			String sc = getText(getMethodName() + RES.SORTER_SUFFIX, (String)null);
 			assist().castToSorter(sorter, sc);
 		}
 		if (Strings.isNotEmpty(sorter.getColumn())) {

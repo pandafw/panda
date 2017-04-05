@@ -11,7 +11,7 @@ import panda.log.Logs;
 import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.tpl.ftl.ExternalTemplateLoader;
 import panda.wing.AppConstants;
-import panda.wing.constant.VC;
+import panda.wing.constant.VAL;
 import panda.wing.entity.Template;
 import panda.wing.entity.query.TemplateQuery;
 
@@ -66,7 +66,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 			Dao dao = daoClient.getDao();
 	
 			TemplateQuery tq = new TemplateQuery();
-			tq.status().equalTo(VC.STATUS_ACTIVE);
+			tq.status().equalTo(VAL.STATUS_ACTIVE);
 			List<Template> list = dao.select(tq);
 	
 			databaseTemplateLoader.loadTemplates(list);

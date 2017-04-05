@@ -1,7 +1,7 @@
 package panda.wing.constant;
 
 /**
- * View Constants
+ * View constants
  */
 public interface VIEW {
 	public static final String ALT_INPUT = "alt:input";

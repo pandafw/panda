@@ -2,7 +2,7 @@ package panda.wing.action.base;
 
 import panda.lang.Strings;
 import panda.lang.time.DateTimes;
-import panda.wing.constant.RC;
+import panda.wing.constant.RES;
 
 /**
  */
@@ -15,7 +15,7 @@ public abstract class BaseLoadAction extends BaseTaskAction {
 	}
 
 	public BaseLoadAction(String appKey) {
-		this(appKey, RC.MESSAGE_PROCESSED);
+		this(appKey, RES.MESSAGE_PROCESSED);
 	}
 
 	public BaseLoadAction(String appKey, String msgKey) {

@@ -19,7 +19,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.wing.constant.SC;
+import panda.wing.constant.SET;
 
 @IocBean(create="initialize")
 public class AppDaoClientProvider {
@@ -49,21 +49,21 @@ public class AppDaoClientProvider {
 	public void initialize() throws Exception {
 		daoClient = buildDaoClient();
 		
-		String prefix = settings.getProperty(SC.DATA_PREFIX);
+		String prefix = settings.getProperty(SET.DATA_PREFIX);
 		if (Strings.isNotEmpty(prefix)) {
 			daoClient.setPrefix(prefix);
 		}
 	}
 	
 	protected DaoClient buildDaoClient() throws Exception {
-		String dstype = settings.getProperty(SC.DATA_SOURCE);
+		String dstype = settings.getProperty(SET.DATA_SOURCE);
 		if (GAE.equalsIgnoreCase(dstype)) {
 			GaeDaoClient gdc = GaeDaoClient.i();
 			return gdc;
 		}
 		
 		if (MONGO.equalsIgnoreCase(dstype)) {
-			String url = settings.getProperty(SC.DATA_MONGO_URL);
+			String url = settings.getProperty(SET.DATA_MONGO_URL);
 
 			log.info("MONGO - " +  url);
 			MongoDaoClient daoClient = new MongoDaoClient(url);
@@ -74,7 +74,7 @@ public class AppDaoClientProvider {
 		if (JNDI.equalsIgnoreCase(dstype)) {
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 
-			String jndi = settings.getProperty(SC.DATA_JNDI_RESOURCE);
+			String jndi = settings.getProperty(SET.DATA_JNDI_RESOURCE);
 			log.info("JNDI - " + jndi);
 			try {
 				DataSource ds = Sqls.lookupJndiDataSource(jndi);
@@ -99,9 +99,9 @@ public class AppDaoClientProvider {
 	}
 
 	private DataSource createSimpleDataSource() {
-		log.info("JDBC - " + settings.getProperty(SC.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SC.DATA_JDBC_URL));
+		log.info("JDBC - " + settings.getProperty(SET.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SET.DATA_JDBC_URL));
 
-		Map<String, String> dps = Collections.subMap(settings, SC.DATA_PREFIX);
+		Map<String, String> dps = Collections.subMap(settings, SET.DATA_PREFIX);
 		if (servlet != null) {
 			String web = servlet.getRealPath("/");
 			for (Entry<String, String> en : dps.entrySet()) {

@@ -16,7 +16,7 @@ import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.AppConstants;
-import panda.wing.constant.SC;
+import panda.wing.constant.SET;
 import panda.wing.util.AppSettings;
 
 
@@ -106,7 +106,7 @@ public class LuceneProvider {
 
 	//-----------------------------------------------
 	protected File getLuceneLocation() throws IOException {
-		String path = settings.getPropertyAsPath(SC.LUCENE_LOCATION, location);
+		String path = settings.getPropertyAsPath(SET.LUCENE_LOCATION, location);
 		File file = new File(path);
 		Files.makeDirs(file);
 		return file;

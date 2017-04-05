@@ -3,8 +3,9 @@ package panda.wing.constant;
 
 
 /**
+ * Settings Constants
  */
-public interface SC {
+public interface SET {
 	public static final String APP_VERSION = "app.version";
 
 	//--------------------------------------------------------

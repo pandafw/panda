@@ -33,9 +33,9 @@ import panda.net.mail.EmailClient;
 import panda.net.mail.EmailException;
 import panda.wing.auth.AppAuthenticator;
 import panda.wing.auth.IUser;
-import panda.wing.constant.RC;
-import panda.wing.constant.SC;
-import panda.wing.constant.VC;
+import panda.wing.constant.RES;
+import panda.wing.constant.SET;
+import panda.wing.constant.VAL;
 import panda.wing.entity.ICreate;
 import panda.wing.entity.IStatus;
 import panda.wing.entity.IUpdate;
@@ -120,7 +120,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 */
 	public boolean isValidLocale(String language, String country) {
 		if (Strings.isNotEmpty(language) && Strings.isNotEmpty(country)) {
-			if (!VC.LOCALE_ALL.equals(country)) {
+			if (!VAL.LOCALE_ALL.equals(country)) {
 				return Locales.isAvailableLocale(new Locale(language, country));
 			}
 		}
@@ -237,7 +237,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	public void initCommonFields(Object data) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
-				((IStatus)data).setStatus(VC.STATUS_ACTIVE);
+				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
 			}
 		}
 		
@@ -264,7 +264,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	public void initUpdateFields(Object data, Object srcData) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
-				((IStatus)data).setStatus(VC.STATUS_ACTIVE);
+				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
 			}
 		}
 		
@@ -302,7 +302,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 		
 		String sc = (String)sp.loadState("sorter");
 		if (Strings.isEmpty(sc)) {
-			sc = getText(getMethodName() + RC.SORTER_SUFFIX, null);
+			sc = getText(getMethodName() + RES.SORTER_SUFFIX, null);
 		}
 		castToSorter(sorter, sc);
 
@@ -364,7 +364,7 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 * @param pager pager
 	 */
 	public void setLimitToPager(Pager pager) {
-		setLimitToPager(pager, VC.DEFAULT_LIST_PAGE_ITEMS, VC.DEFAULT_LIST_MAX_ITEMS);
+		setLimitToPager(pager, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
 	}
 	
 	/**
@@ -375,11 +375,11 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 */
 	public void setLimitToPager(Pager pager, long def, long max) {
 		if (!pager.hasLimit()) {
-			long l = getTextAsLong(getMethodName() + RC.PAGE_ITEMS_DEFAULT_SUFFIX, def);
+			long l = getTextAsLong(getMethodName() + RES.PAGE_ITEMS_DEFAULT_SUFFIX, def);
 			pager.setLimit(l);
 		}
 
-		long m = getTextAsLong(getMethodName() + RC.PAGE_ITEMS_MAXIMUM_SUFFIX, max);
+		long m = getTextAsLong(getMethodName() + RES.PAGE_ITEMS_MAXIMUM_SUFFIX, max);
 		if (m > 0 && (!pager.hasLimit() || pager.getLimit() > m)) {
 			pager.setLimit(m);
 		}
@@ -440,64 +440,64 @@ public class AppActionAssist extends ActionAssist implements AccessControler {
 	 */
 	public void sendMail(Email email) throws EmailException {
 		if (email.getSender() == null) {
-			String s = getMailSetting(SC.MAIL_SENDER, null);
+			String s = getMailSetting(SET.MAIL_SENDER, null);
 			if (Strings.isNotEmpty(s)) {
 				email.setSender(s);
 			}
 		}
 
 		if (email.getFrom() == null) {
-			email.setFrom(getMailSetting(SC.MAIL_FROM, null));
+			email.setFrom(getMailSetting(SET.MAIL_FROM, null));
 		}
 
-		String charset = getMailSetting(SC.MAIL_CHARSET, Charsets.UTF_8);
+		String charset = getMailSetting(SET.MAIL_CHARSET, Charsets.UTF_8);
 		if (Strings.isNotEmpty(charset)) {
 			email.setCharset(charset);
 		}
 
 		EmailClient client = new EmailClient();
-		String helo = getMailSetting(SC.MAIL_SMTP_HELO, null);
+		String helo = getMailSetting(SET.MAIL_SMTP_HELO, null);
 		if (Strings.isNotEmpty(helo)) {
 			client.setHelo(helo);
 		}
 		
-		String host = getMailSetting(SC.MAIL_SMTP_HOST, null);
+		String host = getMailSetting(SET.MAIL_SMTP_HOST, null);
 		if (Strings.isNotEmpty(host)) {
 			client.setHost(host);
 		}
 		
-		int port = getMailSettingAsInt(SC.MAIL_SMTP_PORT, 0);
+		int port = getMailSettingAsInt(SET.MAIL_SMTP_PORT, 0);
 		if (port > 0) {
 			client.setPort(port);
 		}
 
-		if (getMailSettingAsBoolean(SC.MAIL_SMTP_SSL, false)) {
+		if (getMailSettingAsBoolean(SET.MAIL_SMTP_SSL, false)) {
 			client.setSsl(true);
 		}
 
-		if (!getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, true)) {
+		if (!getMailSettingAsBoolean(SET.MAIL_SMTP_TLS, true)) {
 			client.setTls(false);
 		}
 
-		int timeout = getMailSettingAsInt(SC.MAIL_SMTP_CONN_TIMEOUT, 0);
+		int timeout = getMailSettingAsInt(SET.MAIL_SMTP_CONN_TIMEOUT, 0);
 		if (timeout > 0) {
 			client.setConnectTimeout(timeout);
 		}
 
-		timeout = getMailSettingAsInt(SC.MAIL_SMTP_SEND_TIMEOUT, 0);
+		timeout = getMailSettingAsInt(SET.MAIL_SMTP_SEND_TIMEOUT, 0);
 		if (timeout > 0) {
 			client.setDefaultTimeout(timeout);
 		}
 
 //		client.setTLS(getMailSettingAsBoolean(SC.MAIL_SMTP_TLS, false));
 		
-		String username = getMailSetting(SC.MAIL_SMTP_USER, null);
+		String username = getMailSetting(SET.MAIL_SMTP_USER, null);
 		if (Strings.isNotEmpty(username)) {
 			client.setUsername(username);
-			client.setPassword(getMailSetting(SC.MAIL_SMTP_PASSWORD, ""));
+			client.setPassword(getMailSetting(SET.MAIL_SMTP_PASSWORD, ""));
 		}
 		
-		String bounce = getMailSetting(SC.MAIL_SMTP_BOUNCE, null);
+		String bounce = getMailSetting(SET.MAIL_SMTP_BOUNCE, null);
 		if (Strings.isNotEmpty(bounce)) {
 //			email.setBounceAddress(bounce);
 		}

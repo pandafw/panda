@@ -1,7 +1,7 @@
 package panda.wing.constant;
 
 /**
- * Auth Constants
+ * Authentication constants
  */
 public interface AUTH {
 	

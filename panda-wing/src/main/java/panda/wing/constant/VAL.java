@@ -3,8 +3,9 @@ package panda.wing.constant;
 
 
 /**
+ * Value constants
  */
-public interface VC {
+public interface VAL {
 	//--------------------------------------------------------
 	// status
 	//--------------------------------------------------------

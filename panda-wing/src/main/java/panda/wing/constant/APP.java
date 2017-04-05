@@ -1,7 +1,7 @@
 package panda.wing.constant;
 
 /**
- * Application Container Constants
+ * Application container constants
  */
 public interface APP {
 	

@@ -21,10 +21,9 @@ import panda.mvc.ActionContext;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
 import panda.wing.constant.AUTH;
-import panda.wing.constant.COOKIE;
 import panda.wing.constant.REQ;
 import panda.wing.constant.SES;
-import panda.wing.constant.VC;
+import panda.wing.constant.VAL;
 
 @IocBean(type=UserAuthenticator.class)
 public class AppAuthenticator extends UserAuthenticator {
@@ -62,16 +61,16 @@ public class AppAuthenticator extends UserAuthenticator {
 	protected String paramName = "_ticket_";
 
 	/**
-	 * ticket cookie name
+	 * ticket cookie name (default: WW_TICKET)
 	 */
 	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_NAME, required=false)
-	protected String cookieName = COOKIE.AUTH_TICKET;
+	protected String cookieName = "WW_TICKET";
 
 	/**
-	 * ticket cookie age
+	 * ticket cookie age (default: 60 * 60 * 24 * 7days)
 	 */
 	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_AGE, required=false)
-	protected Integer cookieAge = COOKIE.AUTH_TICKET_AGE;
+	protected Integer cookieAge = 60 * 60 * 24 * 7;
 
 	//------------------------------------------------------------------------
 	@Override
@@ -182,7 +181,7 @@ public class AppAuthenticator extends UserAuthenticator {
 	 */
 	public long getLoginUserId(ActionContext ac) {
 		IUser user = getLoginUser(ac);
-		return user == null ? VC.SYSTEM_UID : user.getId();
+		return user == null ? VAL.SYSTEM_UID : user.getId();
 	}
 
 	/**

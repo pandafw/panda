@@ -22,7 +22,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
 import panda.wing.AppConstants;
-import panda.wing.constant.SC;
+import panda.wing.constant.SET;
 import panda.wing.util.AppSettings;
 
 @IocBean(type=Html2Pdf.class, singleton=false, create="initialize")
@@ -55,8 +55,8 @@ public class WkHtml2Pdf extends Html2Pdf {
 	}
 
 	public void initialize() {
-		path = settings.getPropertyAsPath(SC.WKHTML2PDF_PATH, path);
-		timeout = settings.getPropertyAsInt(SC.WKHTML2PDF_TIMEOUT, timeout);
+		path = settings.getPropertyAsPath(SET.WKHTML2PDF_PATH, path);
+		timeout = settings.getPropertyAsInt(SET.WKHTML2PDF_TIMEOUT, timeout);
 	}
 	
 	@Override

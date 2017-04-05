@@ -14,7 +14,7 @@ import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.AppConstants;
-import panda.wing.constant.SC;
+import panda.wing.constant.SET;
 
 @IocBean(type=Settings.class)
 public class AppSettings extends ReloadableSettings {
@@ -62,7 +62,7 @@ public class AppSettings extends ReloadableSettings {
 	}
 	
 	public String getAppVersion() {
-		return get(SC.APP_VERSION);
+		return get(SET.APP_VERSION);
 	}
 
 	public String getPropertyAsPath(String name) {

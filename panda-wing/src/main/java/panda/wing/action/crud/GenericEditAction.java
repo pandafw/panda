@@ -17,7 +17,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.wing.BusinessRuntimeException;
-import panda.wing.constant.RC;
+import panda.wing.constant.RES;
 import panda.wing.entity.Bean;
 import panda.wing.entity.IUpdate;
 
@@ -65,7 +65,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	// setting
 	//------------------------------------------------------------
 	public boolean isInputConfirm() {
-		return getTextAsBoolean(RC.UI_INPUT_CONFIRM, false);
+		return getTextAsBoolean(RES.UI_INPUT_CONFIRM, false);
 	}
 	
 	//------------------------------------------------------------
@@ -273,7 +273,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected Object doInsertConfirm(T data) {
 		T pd = prepareData(data);
 		if (checkOnInsert(pd)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
+			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
 		else {
 			if (hasActionErrors() || hasFieldErrors()) {
@@ -310,7 +310,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addSystemError(RC.ACTION_FAILED_PREFIX, e);
+			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
 			return data;
 		}
@@ -318,7 +318,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			finalInsert(pd);
 		}
 
-		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
 		return pd;
 	}
 	
@@ -348,7 +348,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		
 		if (checkOnUpdate(pd, sd)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
+			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
 		else {
 			if (hasActionErrors() || hasFieldErrors()) {
@@ -389,7 +389,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addSystemError(RC.ACTION_FAILED_PREFIX, e);
+			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
 			return pd;
 		}
@@ -397,7 +397,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			finalUpdate(pd, sd);
 		}
 
-		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
 		return pd;
 	}
 
@@ -412,7 +412,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		
 		if (checkOnDelete(pk, sd)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX));
+			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
 		return sd;
 	}
@@ -447,7 +447,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addSystemError(RC.ACTION_FAILED_PREFIX, e);
+			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
 			return sd;
 		}
@@ -455,7 +455,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			finalDelete(sd);
 		}
 		
-		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
 		return sd;
 	}
 
@@ -501,7 +501,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected T selectData(T key) {
 		if (!EntityHelper.hasPrimaryKeyValues(getEntity(), key)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return null;
 		}
 		
@@ -512,13 +512,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		
 		T d = getDao().fetch(gq);
 		if (d == null) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return null;
 		}
 
 		d = trimData(d);
 		if (d == null) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return null;
 		}
 		return d;
@@ -832,11 +832,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 	
 	protected void addDataDuplicateError(T data, Collection<EntityField> efs) {
-		addDataFieldErrors(data, efs, RC.ERROR_ITEM_DUPLICATE, RC.ERROR_DATA_DUPLICATE);
+		addDataFieldErrors(data, efs, RES.ERROR_ITEM_DUPLICATE, RES.ERROR_DATA_DUPLICATE);
 	}
 
 	protected void addDataIncorrectError(T data, Collection<EntityField> efs) {
-		addDataFieldErrors(data, efs, RC.ERROR_ITEM_INCORRECT, RC.ERROR_DATA_INCORRECT);
+		addDataFieldErrors(data, efs, RES.ERROR_ITEM_INCORRECT, RES.ERROR_DATA_INCORRECT);
 	}
 	
 	//------------------------------------------------------------
@@ -866,7 +866,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return true;
 		}
 
-		addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+		addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 		return false;
 	}
 
@@ -950,7 +950,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkDataChangedOnUpdate(T data, T sd) {
-		return checkDataChanged(data, sd, RC.WARN_DATA_CHANGED_PREFIX);
+		return checkDataChanged(data, sd, RES.WARN_DATA_CHANGED_PREFIX);
 	}
 
 	/**
@@ -960,7 +960,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkDataChangedOnDelete(T data, T sd) {
-		if (checkDataChanged(data, sd, RC.WARN_DATA_CHANGED_PREFIX)) {
+		if (checkDataChanged(data, sd, RES.WARN_DATA_CHANGED_PREFIX)) {
 			return true;
 		}
 

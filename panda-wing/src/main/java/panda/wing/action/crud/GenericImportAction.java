@@ -40,7 +40,7 @@ import panda.log.Logs;
 import panda.mvc.Mvcs;
 import panda.mvc.view.tag.Escapes;
 import panda.vfs.FileItem;
-import panda.wing.constant.RC;
+import panda.wing.constant.RES;
 
 /**
  * @param <T> data type
@@ -432,7 +432,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(getMessage(RC.ERROR_INPUT));
+		sb.append(getMessage(RES.ERROR_INPUT));
 		for (Entry<String, List<String>> en : getParamAware().getErrors().entrySet()) {
 			String label = getFieldLabel(en.getKey()) + ": ";
 			for (String s : en.getValue()) {
@@ -547,11 +547,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	}
 
 	protected String dataDuplicateError(T data, Collection<EntityField> efs) {
-		return dataFieldErrors(data, efs, RC.ERROR_DATA_DUPLICATE);
+		return dataFieldErrors(data, efs, RES.ERROR_DATA_DUPLICATE);
 	}
 
 	protected String dataIncorrectError(T data, Collection<EntityField> efs) {
-		return dataFieldErrors(data, efs, RC.ERROR_DATA_INCORRECT);
+		return dataFieldErrors(data, efs, RES.ERROR_DATA_INCORRECT);
 	}
 
 	// ------------------------------------------------------------

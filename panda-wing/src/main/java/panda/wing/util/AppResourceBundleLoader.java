@@ -11,7 +11,7 @@ import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.AppConstants;
-import panda.wing.constant.VC;
+import panda.wing.constant.VAL;
 import panda.wing.entity.Property;
 import panda.wing.entity.Resource;
 import panda.wing.entity.query.PropertyQuery;
@@ -88,7 +88,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 
 			Dao dao = daoClient.getDao();
 			ResourceQuery rq = new ResourceQuery();
-			rq.status().equalTo(VC.STATUS_ACTIVE);
+			rq.status().equalTo(VAL.STATUS_ACTIVE);
 			List<Resource> list = dao.select(rq);
 			databaseResourceLoader.loadResources(list);
 		}
@@ -97,7 +97,7 @@ public class AppResourceBundleLoader extends ResourceLoader {
 
 			Dao dao = daoClient.getDao();
 			PropertyQuery pq = new PropertyQuery();
-			pq.status().equalTo(VC.STATUS_ACTIVE);
+			pq.status().equalTo(VAL.STATUS_ACTIVE);
 			List<Property> list = dao.select(pq);
 			databaseResourceLoader.loadResources(list);
 		}

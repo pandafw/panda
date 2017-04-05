@@ -15,7 +15,7 @@ import panda.lang.mutable.MutableInt;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.wing.BusinessRuntimeException;
-import panda.wing.constant.RC;
+import panda.wing.constant.RES;
 
 
 /**
@@ -71,11 +71,11 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		List<T> keys = convertArgsToList(args);
 		final List<T> dataList = selectDataList(keys, true);
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return dataList;
 		}
 		if (checkOnBulkDelete(dataList)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX, String.valueOf(dataList.size())));
+			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX, String.valueOf(dataList.size())));
 		}
 		return dataList;
 	}
@@ -87,7 +87,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		List<T> keys = convertArgsToList(args);
 		final List<T> dataList = selectDataList(keys, true);
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
 			return dataList;
 		}
@@ -113,7 +113,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addSystemError(RC.ACTION_FAILED_PREFIX, e);
+			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
 			return dataList;
 		}
@@ -122,12 +122,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 		
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
 			return dataList;
 		}
 
-		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
 		return dataList;
 	}
 
@@ -185,11 +185,11 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		List<T> keys = convertArgsToList(args);
 		final List<T> dataList = selectDataList(keys,true);
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			return dataList;
 		}
 		if (checkOnBulkUpdate(dataList)) {
-			addActionConfirm(getScenarioMessage(RC.ACTION_CONFIRM_PREFIX, String.valueOf(dataList.size())));
+			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX, String.valueOf(dataList.size())));
 		}
 		return dataList;
 	}
@@ -201,7 +201,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		List<T> keys = convertArgsToList(args);
 		final List<T> dataList = selectDataList(keys, true);
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
 			return dataList;
 		}
@@ -227,7 +227,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			else {
 				log.error(e.getMessage(), e);
 			}
-			addSystemError(RC.ACTION_FAILED_PREFIX, e);
+			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
 			return dataList;
 		}
@@ -236,12 +236,12 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 		
 		if (Collections.isEmpty(dataList)) {
-			addActionError(getMessage(RC.ERROR_DATA_NOTFOUND));
+			addActionError(getMessage(RES.ERROR_DATA_NOTFOUND));
 			setScenarioView();
 			return dataList;
 		}
 
-		addActionMessage(getScenarioMessage(RC.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
+		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX, String.valueOf(dataList.size())));
 		return dataList;
 	}
 

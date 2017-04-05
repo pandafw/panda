@@ -14,7 +14,7 @@ import panda.net.URLHelper;
 import panda.net.http.HttpStatus;
 import panda.servlet.HttpServlets;
 import panda.wing.AppConstants;
-import panda.wing.constant.RC;
+import panda.wing.constant.RES;
 
 @IocBean
 public class UserAuthenticateProcessor extends AbstractProcessor {
@@ -72,7 +72,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 		}
 
 		if (r == UserAuthenticator.UNLOGIN) {
-			addActionError(ac, RC.ERROR_UNLOGIN);
+			addActionError(ac, RES.ERROR_UNLOGIN);
 			if (Strings.isNotEmpty(unloginView)) {
 				doView(ac, unloginView);
 				return;
@@ -85,7 +85,7 @@ public class UserAuthenticateProcessor extends AbstractProcessor {
 			}
 		}
 		if (r == UserAuthenticator.UNSECURE) {
-			addActionError(ac, RC.ERROR_UNSECURE);
+			addActionError(ac, RES.ERROR_UNSECURE);
 			if (Strings.isNotEmpty(unsecureView)) {
 				doView(ac, unsecureView);
 				return;

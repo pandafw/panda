@@ -3,9 +3,9 @@ package panda.wing.constant;
 
 
 /**
- * ResourceConstants
+ * Resource constants
  */
-public interface RC {
+public interface RES {
 	//------------------------------------------------------------
 	// CONSTS
 	//------------------------------------------------------------
@@ -23,6 +23,32 @@ public interface RC {
 	 * LOCALE_COUNTRIES = "locale-countries";
 	 */
 	public final static String LOCALE_COUNTRIES = "locale-countries";
+
+	/**
+	 * CALENDAR_WEEKDAYS = "calendar-weekdays";
+	 */
+	public final static String CALENDAR_WEEKDAYS = "calendar-weekdays";;
+
+	/**
+	 * CALENDAR_WEEKDAYS_ABBR = "calendar-weekdays-abbr";
+	 */
+	public final static String CALENDAR_WEEKDAYS_ABBR = "calendar-weekdays-abbr";
+
+	/**
+	 * CALENDAR_WEEKDAYS_MIN = "calendar-weekdays-min";
+	 */
+	public final static String CALENDAR_WEEKDAYS_MIN = "calendar-weekdays-min";;
+
+	/**
+	 * CALENDAR_MONTHS = "calendar-months";
+	 */
+	public final static String CALENDAR_MONTHS = "calendar-months";
+
+	/**
+	 * CALENDAR_MONTHS_ABBR = "calendar-months-abbr";
+	 */
+	public final static String CALENDAR_MONTHS_ABBR = "calendar-months-abbr";
+
 
 	//------------------------------------------------------------
 	// SETTINGS
