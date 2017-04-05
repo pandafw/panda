@@ -17,8 +17,6 @@ navi-help-termsofuse=利用規約
 
 navi-settings=設定
 
-navi-company-info=会社情報
-
 navi-user=会員センター
 navi-user-register=登録
 navi-user-login=ログイン
@@ -46,6 +44,8 @@ navi-admin-service=サービス管理
 navi-admin-category=カテゴリ管理
 navi-admin-contents=コンテンツ管理
 navi-admin-index=インデックス管理
+navi-admin-tag=タグ管理
+
 
 navi-super=システム管理
 navi-super-sysdump=システムダンプ

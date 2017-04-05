@@ -43,9 +43,9 @@ navi-help-contact=Contact
 navi-help-privacy=Privacy
 navi-help-termsofuse=Terms of use
 
+
 navi-settings=Settings
 
-navi-company-info=Company Information
 
 navi-user=My Account
 navi-user-register=Register
@@ -53,6 +53,7 @@ navi-user-login=Login
 navi-user-logout=Logout
 navi-user-signin=Sign in
 navi-user-signout=Sign out
+
 
 navi-user-account=My Account
 navi-user-info=User Information
@@ -62,33 +63,71 @@ navi-user-profile=Profile
 navi-user-profile-edit=Profile Edit
 navi-user-usagelog=Usage Log
 
+icon-user-info=fa fa-user
+icon-user-password-change=fa fa-key
+icon-user-password-reset=fa fa-key
+icon-user-profile=fa fa-address-card-o
+icon-user-profile-edit=fa fa-address-card
+icon-user-usagelog=fa fa-history
+
+
 navi-admin=Administration
 navi-admin-account=Account Management
 navi-admin-user=User Management
 navi-admin-group=Group Management
 navi-admin-company=Company Management
 
+icon-admin-account=fa fa-user-circle-o
+icon-admin-user=fa fa-user-circle
+icon-admin-group=fa fa-group
+icon-admin-company=fa fa-bank
+
+
 navi-admin-site=Site
 navi-admin-service=Service Management
 navi-admin-category=Category Management
 navi-admin-contents=Contents Management
 navi-admin-index=Index Management
+navi-admin-tag=Tag Management
+
+icon-admin-service=fa fa-gear
+icon-admin-category=fa fa-bookmark
+icon-admin-tag=fa fa-bookmark
 
 navi-super=System
-navi-super-sysdump=System Dump
-navi-super-loadtask=Cache
+icon-super=fa fa-wrench
+
+navi-super-filepool=File Pool
 navi-super-property=Property
 navi-super-resource=Resource
 navi-super-template=Template
+
+navi-super-cmdexec=CMD Tool
 navi-super-crons=Crons
 navi-super-dataimp=Data Import
-navi-super-html2pdf=HTML->PDF
-navi-super-filepool=File Pool
 navi-super-eleval=EL Tool
-navi-super-sqlexec=SQL Tool
-navi-super-sendmail=Send Mail
-navi-super-cmdexec=CMD Tool
+navi-super-html2pdf=HTML->PDF
+navi-super-loadtask=Cache
 navi-super-pwdhash=Password Hash
+navi-super-sendmail=Send Mail
+navi-super-sqlexec=SQL Tool
+navi-super-sysdump=System Dump
+
+icon-super-filepool=fa fa-file-o
+icon-super-property=fa fa-file-text-o
+icon-super-resource=fa fa-file-text-o
+icon-super-template=fa fa-file-code-o
+
+icon-super-cmdexec=fa fa-terminal
+icon-super-crons=fa fa-clock-o
+icon-super-dataimp=fa fa-cloud-upload
+icon-super-eleval=fa fa-keyboard-o
+icon-super-html2pdf=fa fa-file-pdf-o
+icon-super-loadtask=fa fa-spinner
+icon-super-pwdhash=fa fa-hashtag
+icon-super-sendmail=fa fa-envelope-o
+icon-super-sqlexec=fa fa-strikethrough
+icon-super-sysdump=fa fa-bug
 
 
 #label

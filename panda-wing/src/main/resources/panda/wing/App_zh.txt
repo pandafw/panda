@@ -17,8 +17,6 @@ navi-help-termsofuse=使用条款
 
 navi-settings=设置
 
-navi-company-info=公司信息
-
 navi-user=会员中心
 navi-user-register=会员注册
 navi-user-login=登入
@@ -45,7 +43,8 @@ navi-admin-site=网站管理
 navi-admin-service=服务管理
 navi-admin-category=类别管理
 navi-admin-contents=内容管理
-navi-admin-index=检索索引管理
+navi-admin-index=索引管理
+navi-admin-tag=标签管理
 
 navi-super=系统管理
 navi-super-sysdump=系统信息
