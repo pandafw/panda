@@ -18,8 +18,15 @@ import panda.mvc.view.ftl.FreemarkerHelper;
  */
 public class FreemarkerView extends AbstractPathView {
 	public static final FreemarkerView DEFAULT = new FreemarkerView(null);
-	public static final FreemarkerView INPUT = new FreemarkerView("~input");
+	
+	/**
+	 * alternative method
+	 */
+	public static final char ALT = '~';
 
+	/**
+	 * extension
+	 */
 	private static final String EXT = ".ftl";
 	
 	protected String encoding = Charsets.UTF_8;
@@ -96,11 +103,11 @@ public class FreemarkerView extends AbstractPathView {
 				path = findTemplate(fh, path, action, ac.getMethodName());
 			}
 		}
-		else if (path.charAt(0) == '~') {
+		else if (path.charAt(0) == ALT) {
 			String method = path.substring(1);
 
 			path = ac.getPath();
-			path = FileNames.removeExtension(path) + '~' + method + EXT;
+			path = FileNames.removeExtension(path) + ALT + method + EXT;
 			if (!fh.hasTemplate(path)) {
 				Class<?> action = ac.getAction().getClass();
 				path = findTemplate(fh, path, action, method);

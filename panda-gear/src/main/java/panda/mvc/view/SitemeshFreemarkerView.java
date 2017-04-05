@@ -21,7 +21,6 @@ import panda.mvc.view.sitemesh.Sitemesher;
  */
 public class SitemeshFreemarkerView extends FreemarkerView {
 	public static final SitemeshFreemarkerView DEFAULT = new SitemeshFreemarkerView(null);
-	public static final SitemeshFreemarkerView INPUT = new SitemeshFreemarkerView("~input");
 
 	public SitemeshFreemarkerView(String location) {
 		super(location);
