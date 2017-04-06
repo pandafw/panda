@@ -18,11 +18,12 @@ navi-help-termsofuse=使用条款
 navi-settings=设置
 
 navi-user=会员中心
-navi-user-register=会员注册
-navi-user-login=登入
-navi-user-logout=登出
-navi-user-signin=登入
-navi-user-signout=登出
+navi-user-register=注册
+navi-user-login=登录
+navi-user-logout=退出
+navi-user-signin=登录
+navi-user-signout=退出
+navi-user-signup=注册
 
 navi-user-account=我的账户
 navi-user-info=用户信息
@@ -42,7 +43,6 @@ navi-admin-company=公司管理
 navi-admin-site=网站管理
 navi-admin-service=服务管理
 navi-admin-category=类别管理
-navi-admin-contents=内容管理
 navi-admin-index=索引管理
 navi-admin-tag=标签管理
 
@@ -86,6 +86,19 @@ locale-countries=\
 	"*": "*", \
 	"JP": "日本", \
 	"CN": "中国"
+
+
+#calendar
+calendar-weekdays=[ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ]
+calendar-weekdays-abbr=[ "周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日" ]
+calendar-weekdays-min=[ "日", "一", "二", "三", "四", "五", "六" ]
+calendar-months=[ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+calendar-months-abbr=[ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+
+
+#title
+title-reload=${top}「重新加载确认」
+title-reloaded=${top}「重新加载结果」
 
 
 #--------------------------------------------
