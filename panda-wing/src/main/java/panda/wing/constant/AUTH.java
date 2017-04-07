@@ -26,6 +26,14 @@ public interface AUTH {
 	public static final String TICKET = "~";
 
 	/**
+	 * Admin
+	 */
+	public static final String ADMIN = "A";
+
+	//------------------------------------------------
+	// special authentication
+	//
+	/**
 	 * Remote Address is local network address
 	 */
 	public static final String LOCAL = "_local_";
@@ -34,11 +42,6 @@ public interface AUTH {
 	 * secure user (retype password)
 	 */
 	public static final String SECURE = "_secure_";
-
-	/**
-	 * Admin
-	 */
-	public static final String ADMIN = "admin";
 
 	/**
 	 * AND LOCAL
