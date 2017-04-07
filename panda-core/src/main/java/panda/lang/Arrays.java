@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.RandomAccess;
@@ -8649,6 +8650,42 @@ public abstract class Arrays {
 		}
 
 		Set<T> set = new HashSet<T>(a.length);
+		for (T e : a) {
+			set.add(e);
+		}
+		return set;
+	}
+
+	/**
+	 * Returns a new linked set contains all elements of the specified array.
+	 * 
+	 * @param a the array
+	 * @return a set
+	 */
+	public static <T> Set<T> toLinkedSet(T... a) {
+		if (a == null) {
+			return null;
+		}
+
+		Set<T> set = new LinkedHashSet<T>(a.length);
+		for (T e : a) {
+			set.add(e);
+		}
+		return set;
+	}
+
+	/**
+	 * Returns a new linked set contains all elements of the specified array.
+	 * 
+	 * @param a the array
+	 * @return a set
+	 */
+	public static <T> Set<T> toTreeSet(T... a) {
+		if (a == null) {
+			return null;
+		}
+
+		Set<T> set = new TreeSet<T>();
 		for (T e : a) {
 			set.add(e);
 		}

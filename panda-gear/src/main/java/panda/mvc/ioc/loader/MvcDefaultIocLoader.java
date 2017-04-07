@@ -1,10 +1,10 @@
 package panda.mvc.ioc.loader;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import panda.io.resource.ResourceLoader;
-import panda.lang.Arrays;
+import panda.lang.Collections;
 import panda.mvc.MvcConfig;
 import panda.mvc.adaptor.DefaultParamAdaptor;
 import panda.mvc.adaptor.ejector.FormParamEjector;
@@ -105,9 +105,7 @@ import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
-	protected Set<Object> getModules(MvcConfig config) {
-		Set<Object> pkgs = new HashSet<Object>();
-
+	protected void addModules(MvcConfig config, Set<Object> pkgs) {
 		Class<?> mm = config.getMainModule();
 		pkgs.add(mm);
 		
@@ -118,25 +116,27 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 				pkgs.add(mm.getPackage().getName());
 			}
 			
-			for (Class<?> cls : ms.value()) {
-				pkgs.add(cls);
-			}
-	
 			for (String pkg : ms.packages()) {
 				pkgs.add(pkg);
 			}
+			
+			for (Class<?> cls : ms.value()) {
+				pkgs.add(cls);
+			}
 		}
-		return pkgs;
 	}
 	
 	protected Set<Object> getDefaults(MvcConfig config) {
-		Set<Object> ss = getModules(config);
-		ss.addAll(getDefaults());
+		Set<Object> ss = new LinkedHashSet<Object>();
+		
+		addDefaults(ss);
+		addModules(config, ss);
 		return ss;
 	}
 	
-	protected Set<Object> getDefaults() {
-		return Arrays.toSet(new Object[] {
+	@SuppressWarnings("unchecked")
+	protected void addDefaults(Set<Object> ss) {
+		Collections.addAll(ss,
 			RegexActionMapping.class,
 			DefaultActionChainMaker.class,
 			
@@ -262,7 +262,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			// Sitemesh
 			SitemeshManager.class,
 			FreemarkerSitemesher.class
-		});
+		);
 	};
 	
 	public MvcDefaultIocLoader(MvcConfig config) {

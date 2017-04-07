@@ -34,7 +34,7 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		}
 		
 		// String, Number, .....
-		if (IocValue.TYPE_NORMAL == type) {
+		if (IocValue.TYPE_RAW == type) {
 			// Array
 			if (value.getClass().isArray()) {
 				Object[] vs = (Object[])value;

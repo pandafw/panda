@@ -9,17 +9,33 @@ import panda.lang.Chars;
 import panda.lang.Strings;
 
 public abstract class Loaders {
+	/**
+	 * convert inject description to IocValue
+	 * 
+	 * <pre>
+	 * ${...}: el expression
+	 * %{...}: el expression
+	 * !{...}: json object
+	 * ![...]: json array
+	 * '...  : normal: value.substring(1)
+	 * #...  : reference ioc bean
+	 * </pre>
+	 * 
+	 * @param value inject object description
+	 * @param defType default ioc type
+	 * @return the IocValue
+	 */
 	public static IocValue convert(String value, char defType) {
 		if (value == null) {
 			return new IocValue(IocValue.TYPE_NULL);
 		}
 		if (value.isEmpty()) {
-			return new IocValue(IocValue.TYPE_NORMAL, value);
+			return new IocValue(IocValue.TYPE_RAW, value);
 		}
 
 		int c0 = value.charAt(0);
 		if (c0 == Chars.SINGLE_QUOTE) {
-			return new IocValue(IocValue.TYPE_NORMAL, value.substring(1));
+			return new IocValue(IocValue.TYPE_RAW, value.substring(1));
 		}
 		if (c0 == Chars.SHARP && value.length() > 1) {
 			return new IocValue(IocValue.TYPE_REF, value.substring(1));
@@ -43,7 +59,7 @@ public abstract class Loaders {
 	}
 
 	/**
-	 * 查看一下 me 中有没有缺少的属性，没有的话，从 it 补充
+	 * merge IocObject from it to me.
 	 * 
 	 * @param me the IocObject to be merged
 	 * @param it the IocObject to merge from

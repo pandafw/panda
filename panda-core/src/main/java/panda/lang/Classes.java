@@ -2256,12 +2256,12 @@ public abstract class Classes {
 			throw new NullPointerException("packages is null!");
 		}
 		
-		Set<String> pkgs = Arrays.toSet(packages);
+		Collection<String> pkgs = Arrays.toLinkedSet(packages);
 		
 		return scan(pkgs);
 	}
 	
-	public static List<Class<?>> scan(Set<String> packages) {
+	public static List<Class<?>> scan(Collection<String> packages) {
 		if (Collections.isEmpty(packages)) {
 			throw new IllegalArgumentException("No packages supplied!");
 		}

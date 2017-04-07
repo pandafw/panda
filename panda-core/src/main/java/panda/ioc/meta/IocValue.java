@@ -5,12 +5,12 @@ import panda.lang.Objects;
 
 public class IocValue {
 
-	public static final char TYPE_NULL = '0';
-	public static final char TYPE_NORMAL = '1';
+	public static final char TYPE_NULL = '-';
+	public static final char TYPE_RAW = '*';
 
-	public static final char TYPE_REF = 'R';
-	public static final char TYPE_EL = 'E';
-	public static final char TYPE_JSON = 'J';
+	public static final char TYPE_REF = '#';
+	public static final char TYPE_EL = '$';
+	public static final char TYPE_JSON = '!';
 
 	private char type;
 	private Object value;

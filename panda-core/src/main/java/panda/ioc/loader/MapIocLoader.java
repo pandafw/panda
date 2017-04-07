@@ -232,7 +232,7 @@ public class MapIocLoader extends AbstractIocLoader {
 
 		// Map
 		if (obj instanceof Map<?, ?>) {
-			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
+			IocValue iv = new IocValue(IocValue.TYPE_RAW);
 			Map<String, Object> map = (Map<String, Object>)obj;
 			// Normal map
 			Map<String, IocValue> newmap = new HashMap<String, IocValue>();
@@ -246,7 +246,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		
 		// Array
 		if (obj.getClass().isArray()) {
-			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
+			IocValue iv = new IocValue(IocValue.TYPE_RAW);
 			Object[] array = (Object[])obj;
 			IocValue[] ivs = new IocValue[array.length];
 			for (int i = 0; i < ivs.length; i++) {
@@ -258,7 +258,7 @@ public class MapIocLoader extends AbstractIocLoader {
 		
 		// Collection
 		if (obj instanceof Collection<?>) {
-			IocValue iv = new IocValue(IocValue.TYPE_NORMAL);
+			IocValue iv = new IocValue(IocValue.TYPE_RAW);
 			Collection<IocValue> values = new ArrayList<IocValue>(((Collection)obj).size());
 			Iterator<?> it = ((Collection<?>)obj).iterator();
 			while (it.hasNext()) {
@@ -271,10 +271,10 @@ public class MapIocLoader extends AbstractIocLoader {
 		}
 		
 		// Normal
-		return new IocValue(IocValue.TYPE_NORMAL, obj);
+		return new IocValue(IocValue.TYPE_RAW, obj);
 	}
 
-	private IocValue convert(String value) {
-		return Loaders.convert(value, IocValue.TYPE_NORMAL);
+	protected IocValue convert(String value) {
+		return Loaders.convert(value, IocValue.TYPE_RAW);
 	}
 }

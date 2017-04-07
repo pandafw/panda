@@ -39,7 +39,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
 		// 并且有一个非 null 的名称的时候才会保存
 		// 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
-		ObjectProxy op = new ObjectProxy();
+		DefaultObjectProxy op = new DefaultObjectProxy();
 		if (iobj.isSingleton() && ing.getName() != null) {
 			if (!ing.getIoc().getContext().save(iobj.getScope(), ing.getName(), op)) {
 				throw new IocException("Failed to save '" + ing.getName() + "' to " + iobj.getScope() + " IocContext");
@@ -97,7 +97,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		return op;
 	}
 
-	private void createObject(ObjectProxy op, ObjectWeaver ow, IocMaking ing) {
+	private void createObject(DefaultObjectProxy op, ObjectWeaver ow, IocMaking ing) {
 		Object obj = ow.born(ing);
 
 		// set obj to proxy

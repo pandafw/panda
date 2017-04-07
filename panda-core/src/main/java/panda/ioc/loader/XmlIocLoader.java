@@ -212,7 +212,7 @@ public class XmlIocLoader extends AbstractIocLoader {
 	protected static final String JSON_TAG = "json";
 
 	protected IocValue parseX(Element element) throws Throwable {
-		IocValue iocValue = new IocValue(IocValue.TYPE_NORMAL);
+		IocValue iocValue = new IocValue(IocValue.TYPE_RAW);
 		String type = element.getNodeName();
 		if (JSON_TAG.equalsIgnoreCase(type)) {
 			iocValue.setType(IocValue.TYPE_JSON);

@@ -5,8 +5,8 @@ import javax.servlet.ServletContext;
 import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.IocLoader;
-import panda.ioc.ObjectProxy;
 import panda.ioc.Scope;
+import panda.ioc.impl.DefaultObjectProxy;
 import panda.mvc.MvcConfig;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 
@@ -24,9 +24,9 @@ public class DefaultIocProvider extends AbstractIocProvider {
 		IocContext ictx = ioc.getContext();
 		
 		// save default beans
-		ictx.save(Scope.APP, MvcConfig.class.getName(), new ObjectProxy(config));
-		ictx.save(Scope.APP, ServletContext.class.getName(), new ObjectProxy(config.getServletContext()));
-		ictx.save(Scope.APP, "$servlet", new ObjectProxy(config.getServletContext()));
+		ictx.save(Scope.APP, MvcConfig.class.getName(), new DefaultObjectProxy(config));
+		ictx.save(Scope.APP, ServletContext.class.getName(), new DefaultObjectProxy(config.getServletContext()));
+		ictx.save(Scope.APP, "$servlet", new DefaultObjectProxy(config.getServletContext()));
 	}
 	
 	protected IocLoader getIocLoader(MvcConfig config, String ... args) {

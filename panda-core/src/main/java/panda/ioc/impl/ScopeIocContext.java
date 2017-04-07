@@ -44,13 +44,13 @@ public class ScopeIocContext implements IocContext {
 		return proxys.get(name);
 	}
 
-	public boolean save(String scope, String name, ObjectProxy obj) {
+	public boolean save(String scope, String name, ObjectProxy op) {
 		if (accept(scope)) {
 			checkBuffer();
 			if (log.isDebugEnabled()) {
 				log.debugf("Save object '%s' to [%s] ", name, scope);
 			}
-			proxys.put(name, obj);
+			proxys.put(name, op);
 			return true;
 		}
 		return false;

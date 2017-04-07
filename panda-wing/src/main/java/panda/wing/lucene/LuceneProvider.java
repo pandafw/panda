@@ -9,6 +9,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import panda.io.Files;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.ioc.util.ObjectProvider;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
@@ -21,7 +22,7 @@ import panda.wing.util.AppSettings;
 
 
 @IocBean(create="initialize", depose="destroy")
-public class LuceneProvider {
+public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 	private static final Log log = Logs.getLog(LuceneProvider.class);
 	
 	@IocInject
@@ -202,4 +203,12 @@ public class LuceneProvider {
 		}
 	}
 	
+
+	//----------------------------------------
+	// ObjectProvider implements
+	//
+	@Override
+	public LuceneWrapper getObject() {
+		return getLuceneWrapper();
+	}
 }

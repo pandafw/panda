@@ -3,7 +3,7 @@ package panda.mvc.impl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,12 +26,12 @@ import panda.log.Logs;
 import panda.mvc.ActionChainMaker;
 import panda.mvc.ActionConfig;
 import panda.mvc.ActionContext;
+import panda.mvc.ActionMapping;
 import panda.mvc.IocProvider;
 import panda.mvc.Loading;
 import panda.mvc.MvcConfig;
 import panda.mvc.Mvcs;
 import panda.mvc.Setup;
-import panda.mvc.ActionMapping;
 import panda.mvc.ViewMaker;
 import panda.mvc.annotation.AdaptBy;
 import panda.mvc.annotation.At;
@@ -183,8 +183,8 @@ public class DefaultMvcLoading implements Loading {
 		return um;
 	}
 
-	protected ActionChainMaker createChainMaker(MvcConfig config) {
-		ActionChainMaker maker = config.getIoc().get(ActionChainMaker.class);
+	protected ActionChainMaker createChainMaker(MvcConfig mcfg) {
+		ActionChainMaker maker = mcfg.getIoc().get(ActionChainMaker.class);
 
 		if (log.isDebugEnabled()) {
 			log.debug("Use ActionChainMaker: " +  maker.getClass());
@@ -276,20 +276,17 @@ public class DefaultMvcLoading implements Loading {
 	
 	//----------------------------------------------------------------
 	protected Set<Class<?>> scanModules(Class<?> mainModule) {
-		Set<Class<?>> actions = new HashSet<Class<?>>();
+		Set<Class<?>> actions = new LinkedHashSet<Class<?>>();
 
 		Modules ann = mainModule.getAnnotation(Modules.class);
 		if (ann == null) {
+			// no annotation, add the specified class
 			addAction(actions, mainModule, true);
 			return actions;
 		}
 
-		for (Class<?> action : ann.value()) {
-			addAction(actions, action, true);
-		}
-
 		// scan packages
-		Set<String> packages = new HashSet<String>();
+		Set<String> packages = new LinkedHashSet<String>();
 
 		if (ann.scan()) {
 			// add default main package
@@ -309,6 +306,11 @@ public class DefaultMvcLoading implements Loading {
 			for (Class<?> sub : subs) {
 				addAction(actions, sub, false);
 			}
+		}
+
+		// add classes
+		for (Class<?> action : ann.value()) {
+			addAction(actions, action, true);
 		}
 
 		return actions;

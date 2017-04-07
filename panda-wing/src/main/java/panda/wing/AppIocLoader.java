@@ -2,16 +2,12 @@ package panda.wing;
 
 import java.util.Set;
 
-import panda.io.resource.ResourceLoader;
+import panda.lang.Collections;
 import panda.lang.Systems;
 import panda.mvc.MvcConfig;
 import panda.mvc.filepool.MvcDaoFilePool;
-import panda.mvc.filepool.MvcLocalFilePool;
 import panda.mvc.ioc.loader.MvcComboIocLoader;
 import panda.mvc.ioc.loader.MvcDefaultIocLoader;
-import panda.mvc.util.ActionAssist;
-import panda.mvc.util.ActionConsts;
-import panda.mvc.view.ftl.FreemarkerTemplateLoader;
 import panda.wing.auth.AppAuthenticator;
 import panda.wing.auth.UserAuthenticateProcessor;
 import panda.wing.lucene.LuceneProvider;
@@ -35,44 +31,32 @@ public class AppIocLoader extends MvcComboIocLoader {
 		}
 
 		@Override
-		protected Set<Object> getDefaults() {
-			Set<Object> clss = super.getDefaults();
+		@SuppressWarnings("unchecked")
+		protected void addDefaults(Set<Object> ss) {
+			super.addDefaults(ss);
 			
-			clss.remove(MvcLocalFilePool.class);
-			clss.add(MvcDaoFilePool.class);
-
-			clss.remove(ActionAssist.class);
-			clss.add(AppActionAssist.class);
-			
-			clss.remove(ActionConsts.class);
-			clss.add(AppActionConsts.class);
-			
-			clss.remove(ResourceLoader.class);
-			clss.add(AppResourceBundleLoader.class);
-			
-			clss.remove(FreemarkerTemplateLoader.class);
-			clss.add(AppFreemarkerTemplateLoader.class);
-			clss.add(AppCacheProvider.class);
-
-			clss.add(AppSettings.class);
-			clss.add(AppDaoClientProvider.class);
-			clss.add(LuceneProvider.class);
-			
-			clss.add(AppAuthenticator.class);
-			clss.add(UserAuthenticateProcessor.class);
-			
-			clss.add(WkHtml2Pdf.class);
+			Collections.addAll(ss, 
+				MvcDaoFilePool.class,
+				AppActionAssist.class,
+				AppActionConsts.class,
+				AppResourceBundleLoader.class,
+				AppFreemarkerTemplateLoader.class,
+				AppCacheProvider.class,
+				AppSettings.class,
+				AppDaoClientProvider.class,
+				LuceneProvider.class,
+				AppAuthenticator.class,
+				UserAuthenticateProcessor.class,
+				WkHtml2Pdf.class);
 			
 			if (Systems.IS_OS_APPENGINE) {
-				clss.add(GaeTaskExecutor.class);
-				clss.add(GaeTaskScheduler.class);
+				ss.add(GaeTaskExecutor.class);
+				ss.add(GaeTaskScheduler.class);
 			}
 			else {
-				clss.add(JavaTaskExecutor.class);
-				clss.add(JavaTaskScheduler.class);
+				ss.add(JavaTaskExecutor.class);
+				ss.add(JavaTaskScheduler.class);
 			}
-			
-			return clss;
 		}
 	}
 	

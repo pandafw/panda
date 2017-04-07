@@ -26,7 +26,7 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
- * 基于注解的Ioc配置
+ * Annotation Ioc Loader
  */
 public class AnnotationIocLoader extends AbstractIocLoader {
 
@@ -106,10 +106,6 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		}
 
 		String beanName = getBeanName(clazz);
-		if (beans.containsKey(beanName)) {
-			throw new IocException(String.format("Duplicate beanName=%s, by %s !!  Have been define by %s !!",
-				beanName, clazz, beans.get(beanName).getType()));
-		}
 
 		if (log.isDebugEnabled()) {
 			log.debug("Found a @IocBean of " + clazz);
@@ -118,7 +114,12 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		try {
 			IocObject iocObject = createIocObject(clazz);
 			if (iocObject != null) {
-				beans.put(beanName, iocObject);
+				IocObject old = beans.put(beanName, iocObject);
+				if (old != null) {
+					if (log.isWarnEnabled()) {
+						log.warn("IocBean(" + beanName + ") is replaced by " + clazz);
+					}
+				}
 			}
 		}
 		catch (SecurityException e) {
@@ -270,21 +271,22 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 	
 	protected void setIocFields(IocObject iocObject, Class<?> clazz, String[] fields) {
 		if (fields != null && fields.length > 0) {
-			for (String fieldInfo : fields) {
-				if (iocObject.hasField(fieldInfo)) {
-					throw duplicateField(clazz, fieldInfo);
+			for (String field : fields) {
+				if (iocObject.hasField(field)) {
+					throw duplicateField(clazz, field);
 				}
-				
-				if (Strings.contains(fieldInfo, ':')) { // dao:jndi:dataSource/jdbc形式
-					String[] datas = Strings.split(fieldInfo, ':');
-					// 完整形式, 与@Inject完全一致了
-					iocObject.addField(datas[0], convert(datas[1]));
+
+				int c = field.indexOf(':');
+				if (c > 0) {
+					// name:description
+					iocObject.addField(field.substring(0, c), convert(field.substring(c + 1)));
 				}
 				else {
-					// 基本形式, 引用与自身同名的bean
+					// name only (use field type)
+					Field f = Fields.getField(clazz, field, true);
 					IocValue iocValue = new IocValue(IocValue.TYPE_REF);
-					iocValue.setValue(fieldInfo);
-					iocObject.addField(fieldInfo, iocValue);
+					iocValue.setValue(f.getType());
+					iocObject.addField(field, iocValue);
 				}
 			}
 		}
@@ -323,7 +325,7 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		return Exceptions.makeThrow(IocException.class, "Duplicate filed defined! Class=%s,FileName=%s", classZ, name);
 	}
 
-	private IocValue convert(String value) {
+	protected IocValue convert(String value) {
 		return Loaders.convert(value, IocValue.TYPE_REF);
 	}
 

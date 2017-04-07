@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.ioc.Ioc;
-import panda.ioc.ObjectProxy;
 import panda.ioc.Scope;
 import panda.ioc.impl.ComboIocContext;
 import panda.ioc.impl.DefaultIoc;
+import panda.ioc.impl.DefaultObjectProxy;
 import panda.lang.Classes;
 import panda.lang.Regexs;
 import panda.lang.Strings;
@@ -151,11 +151,11 @@ public class ActionHandler {
 				if (IocRequestListener.isRequestScopeEnable) {
 					ric = RequestIocContext.get(req);
 
-					ric.save(Scope.REQUEST, ActionContext.class.getName(), new ObjectProxy(ac));
-					ric.save(Scope.REQUEST, ServletRequest.class.getName(), new ObjectProxy(req));
-					ric.save(Scope.REQUEST, ServletResponse.class.getName(), new ObjectProxy(res));
-					ric.save(Scope.REQUEST, HttpServletRequest.class.getName(), new ObjectProxy(req));
-					ric.save(Scope.REQUEST, HttpServletResponse.class.getName(), new ObjectProxy(res));
+					ric.save(Scope.REQUEST, ActionContext.class.getName(), new DefaultObjectProxy(ac));
+					ric.save(Scope.REQUEST, ServletRequest.class.getName(), new DefaultObjectProxy(req));
+					ric.save(Scope.REQUEST, ServletResponse.class.getName(), new DefaultObjectProxy(res));
+					ric.save(Scope.REQUEST, HttpServletRequest.class.getName(), new DefaultObjectProxy(req));
+					ric.save(Scope.REQUEST, HttpServletResponse.class.getName(), new DefaultObjectProxy(res));
 					
 					ctx.addContext(ric);
 				}

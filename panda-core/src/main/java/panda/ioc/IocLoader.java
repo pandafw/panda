@@ -7,22 +7,22 @@ import panda.ioc.meta.IocObject;
 public interface IocLoader {
 
 	/**
-	 * @return 配置信息里所有对象的名称
+	 * @return the bean names
 	 */
 	Set<String> getNames();
 
 	/**
-	 * 每次这个函数被调用，则要构造一个新的 IocObject
+	 * Get a IocObject of the bean (A new IocObject should be created every time)
 	 * 
-	 * @param name
+	 * @param name the bean name
 	 * @return IocObject
-	 * @throws IocLoadException
+	 * @throws IocLoadException if an error occurs
 	 */
 	IocObject load(String name) throws IocLoadException;
 
 	/**
-	 * @param name
-	 * @return 配置信息里是否存在一个对象
+	 * @param name the bean name
+	 * @return true if the loader has the specified bean description
 	 */
 	boolean has(String name);
 

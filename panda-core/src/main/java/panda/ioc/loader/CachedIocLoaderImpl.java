@@ -5,7 +5,7 @@ import panda.ioc.IocLoader;
 import panda.ioc.meta.IocObject;
 
 /**
- * 简单的带缓存的IocLoader <b/>仅对singleton == true的IocObject对象进行缓存,
+ * A simple IocLoader with cache
  */
 public class CachedIocLoaderImpl extends AbstractIocLoader implements CachedIocLoader {
 

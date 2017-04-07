@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import panda.ioc.IocLoadException;
 import panda.ioc.IocLoader;
@@ -13,6 +14,7 @@ import panda.ioc.meta.IocObject;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -27,7 +29,7 @@ public class ComboIocLoader implements IocLoader {
 	public static final String ANNOTATION = "annotation";
 
 	/**
-	 * 类别名
+	 * Loader Alias
 	 */
 	protected Map<String, Class<? extends IocLoader>> alias = new HashMap<String, Class<? extends IocLoader>>();
 
@@ -49,8 +51,9 @@ public class ComboIocLoader implements IocLoader {
 	}
 
 	/**
-	 * <p/>
-	 * Example:
+	 * Initialize the combo IocLoader.
+	 * If duplicated name bean exists, the last added loader will handle the bean (FIFO priority).
+	 * 
 	 * <p/>
 	 * <pre>{ 
 	 *   "*panda.ioc.loader.JsonIocLoader",
@@ -102,12 +105,18 @@ public class ComboIocLoader implements IocLoader {
 	}
 
 	private void checkBeanNames() {
-		Set<String> beanNames = new HashSet<String>();
-		for (IocLoader loader : iocLoaders) {
-			for (String beanName : loader.getNames()) {
-				if (!beanNames.add(beanName) && log.isWarnEnabled()) {
-					log.warnf("Found Duplicate beanName=%s, please check you config!", beanName);
+		if (log.isWarnEnabled()) {
+			Set<String> dups = new TreeSet<String>();
+			Set<String> names = new HashSet<String>();
+			for (IocLoader loader : iocLoaders) {
+				for (String name : loader.getNames()) {
+					if (!names.add(name)) {
+						dups.add(name);
+					}
 				}
+			}
+			if (dups.size() > 0) {
+				log.warnf("Found duplicated beans (%s), please check you config!\n%s", dups.size(), Strings.join(dups, '\n'));
 			}
 		}
 	}
@@ -179,7 +188,8 @@ public class ComboIocLoader implements IocLoader {
 	}
 
 	public IocObject load(String name) throws IocLoadException {
-		for (IocLoader iocLoader : iocLoaders) {
+		for (int i = iocLoaders.size() - 1; i >= 0; i--) {
+			IocLoader iocLoader = iocLoaders.get(i);
 			if (iocLoader.has(name)) {
 				IocObject iocObject = iocLoader.load(name);
 				if (log.isDebugEnabled()) {
