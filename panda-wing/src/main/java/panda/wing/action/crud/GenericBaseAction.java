@@ -13,6 +13,7 @@ import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
+import panda.mvc.View;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.wing.action.AbstractAction;
 
@@ -22,9 +23,10 @@ import panda.wing.action.AbstractAction;
  */
 public abstract class GenericBaseAction<T> extends AbstractAction {
 	//------------------------------------------------------------
-	// scenario
+	// scenario & apimode
 	//------------------------------------------------------------
-	protected String actionScenario;
+	protected String scenario;
+	protected boolean apimode;
 
 	//------------------------------------------------------------
 	// entity properties
@@ -216,39 +218,69 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	// scenario
 	//------------------------------------------------------------
 	/**
-	 * @return the actionScenario
+	 * @return the scenario
 	 */
-	protected String getActionScenario() {
-		if (actionScenario == null) {
-			actionScenario = Strings.substringBefore(context.getMethodName(), '_');
+	protected String getScenario() {
+		if (scenario == null) {
+			scenario = Strings.substringBefore(context.getMethodName(), '_');
 		}
-		return actionScenario;
+		return scenario;
 	}
 
 	/**
-	 * @param actionScenario the actionScenario to set
+	 * @param scenario the scenario to set
 	 */
-	protected void setActionScenario(String actionScenario) {
-		this.actionScenario = actionScenario;
+	protected void setScenario(String scenario) {
+		this.scenario = scenario;
 	}
 
 	/**
-	 * set view by action scenario
+	 * set view by scenario
 	 */
 	protected void setScenarioView() {
 		setScenarioView(null);
 	}
 
 	/**
-	 * set view by action scenario
+	 * set view by scenario
 	 * @param step scenario step
 	 */
 	protected void setScenarioView(String step) {
-		String v = getActionScenario();
+		if (apimode) {
+			// do not set view on api mode
+			return;
+		}
+		
+		String v = getScenario();
 		if (Strings.isNotEmpty(step)) {
 			v += '_' + step;
 		}
-		context.setView(new SitemeshFreemarkerView(SitemeshFreemarkerView.ALT_PREFIX + v));
+		
+		View w = newScenarioView(v);
+		context.setView(w);
+	}
+
+	/**
+	 * create a scenario view (default: sftl:~xxx)
+	 * @param sn the scenario step name
+	 * @return the view
+	 */
+	protected View newScenarioView(String sn) {
+		return new SitemeshFreemarkerView(SitemeshFreemarkerView.ALT_PREFIX + sn);
+	}
+
+	/**
+	 * @return the apimode
+	 */
+	protected boolean isApimode() {
+		return apimode;
+	}
+
+	/**
+	 * @param apimode the apimode to set
+	 */
+	protected void setApimode(boolean apimode) {
+		this.apimode = apimode;
 	}
 
 	//------------------------------------------------------------
@@ -279,7 +311,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @return message string
 	 */
 	protected String getScenarioMessage(String prefix) {
-		String msg = prefix + getActionScenario();
+		String msg = prefix + getScenario();
 		return getText(msg, msg);
 	}
 	
@@ -290,7 +322,7 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	 * @return message string
 	 */
 	protected String getScenarioMessage(String prefix, String param) {
-		String msg = prefix + getActionScenario();
+		String msg = prefix + getScenario();
 		return getText(msg, msg, param);
 	}
 
