@@ -31,6 +31,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			js = false;
 			writeJquery();
 			writeJqueryPlugins();
+			writeJqueryExtra();
 			writeBootstrap();
 			writeBootstrapPlugins();
 			writePanda();
@@ -41,6 +42,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			css = false;
 			writeJquery();
 			writeJqueryPlugins();
+			writeJqueryExtra();
 			writeBootstrap();
 			writeBootstrapPlugins();
 			writePanda();
@@ -133,11 +135,24 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				writeStaticCss("/jquery/css/jquery-plugins");
 				writeStaticJs("/jquery/js/jquery-plugins");
 			}
-//
-//			String la = getJqueryLang();
-//			if ("ja".equals(la) || la.startsWith("zh")) {
-//				writeStaticJs("/jquery/plugins/i18n/jquery-plugins-" + jsstr(la));
-//			}
+		}
+	}
+
+	private void writeJqueryExtra() throws IOException {
+		if (tag.isJqueryExtra()) {
+			if (tag.isCdn()) {
+				writePandaCdnCss("/jquery/extra/css/jquery-extra");
+				writePandaCdnJs("/jquery/extra/js/jquery-extra");
+			}
+			else {
+				writeStaticCss("/jquery/extra/css/jquery-extra");
+				writeStaticJs("/jquery/extra/js/jquery-extra");
+			}
+
+			String la = this.getBootstrapLang();
+			if ("ja".equals(la) || la.startsWith("zh")) {
+				writeStaticJs("/jquery/extra/locales/jquery-extra-" + jsstr(la));
+			}
 		}
 	}
 	

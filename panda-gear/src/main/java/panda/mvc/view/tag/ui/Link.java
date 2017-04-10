@@ -18,8 +18,8 @@ import panda.ioc.annotation.IocBean;
  *    <li>debug</li>
  *    <li>version</li>
  *    <li>jquery</li>
- *    <li>jqueryUi</li>
  *    <li>jqueryPlugins</li>
+ *    <li>jqueryExtra</li>
  *    <li>bootstrap</li>
  *    <li>bootstrapPlugins</li>
  *    <li>panda</li>
@@ -50,6 +50,7 @@ public class Link extends UIBean {
 	protected Locale locale;
 	protected boolean jquery;
 	protected boolean jqueryPlugins;
+	protected boolean jqueryExtra;
 	protected boolean bootstrap;
 	protected boolean bootstrapPlugins;
 	protected boolean i18n;
@@ -67,7 +68,7 @@ public class Link extends UIBean {
 			locale = context.getLocale();
 		}
 
-		if (jqueryPlugins || bootstrap) {
+		if (bootstrap || jqueryPlugins || jqueryExtra) {
 			jquery = true;
 		}
 		if (bootstrapPlugins) {
@@ -206,6 +207,20 @@ public class Link extends UIBean {
 	 */
 	public void setJqueryPlugins(boolean jqueryPlugins) {
 		this.jqueryPlugins = jqueryPlugins;
+	}
+
+	/**
+	 * @return the jqueryExtra
+	 */
+	public boolean isJqueryExtra() {
+		return jqueryExtra;
+	}
+
+	/**
+	 * @param jqueryExtra the jqueryExtra to set
+	 */
+	public void setJqueryExtra(boolean jqueryExtra) {
+		this.jqueryExtra = jqueryExtra;
 	}
 
 	/**
