@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import panda.lang.Strings;
 
-@SuppressWarnings("javadoc")
 public class Base32InputStreamTest {
 
     private static final String ENCODED_FOO = "MZXW6===";

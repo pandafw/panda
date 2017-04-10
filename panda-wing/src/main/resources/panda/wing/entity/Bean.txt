@@ -1,9 +1,9 @@
 id=ID
 status=Status
-cusid=Create ID
+cusid=Create UID
 cusnm=Create User
 ctime=Create Date
-uusid=Update ID
+uusid=Update UID
 uusnm=Update User
 utime=Update Date
 
