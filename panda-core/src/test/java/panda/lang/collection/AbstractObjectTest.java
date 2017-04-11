@@ -134,8 +134,6 @@ public abstract class AbstractObjectTest extends BulkTest {
      * class can be serialized and de-serialized in memory,
      * using the handy makeObject() method
      *
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
     public void testSimpleSerialization() throws Exception {
         final Object o = makeObject();

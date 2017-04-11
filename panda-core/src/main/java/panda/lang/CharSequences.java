@@ -6,6 +6,7 @@ import java.nio.CharBuffer;
 /**
  */
 public abstract class CharSequences {
+    private static final int NOT_FOUND = -1;
 	// -----------------------------------------------------------------------
 	/**
 	 * <p>
@@ -24,7 +25,7 @@ public abstract class CharSequences {
 	 * @throws IndexOutOfBoundsException if {@code start} is negative or if {@code start} is greater
 	 *             than {@code length()}
 	 */
-	public static CharSequence subSequence(CharSequence cs, int start) {
+	public static CharSequence subSequence(final CharSequence cs, final int start) {
 		return cs == null ? null : cs.subSequence(start, cs.length());
 	}
 
@@ -39,22 +40,33 @@ public abstract class CharSequences {
 	 * @param start the start index, negative starts at the string start
 	 * @return the index where the search char was found, -1 if not found
 	 */
-	public static int indexOf(CharSequence cs, int searchChar, int start) {
+	public static int indexOf(final CharSequence cs, final int searchChar, int start) {
 		if (cs instanceof String) {
 			return ((String)cs).indexOf(searchChar, start);
 		}
-		else {
-			int sz = cs.length();
-			if (start < 0) {
-				start = 0;
-			}
+		final int sz = cs.length();
+		if (start < 0) {
+			start = 0;
+		}
+		if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
 			for (int i = start; i < sz; i++) {
 				if (cs.charAt(i) == searchChar) {
 					return i;
 				}
 			}
-			return -1;
 		}
+		// supplementary characters (LANG1300)
+		if (searchChar <= Character.MAX_CODE_POINT) {
+			char[] chars = Character.toChars(searchChar);
+			for (int i = start; i < sz - 1; i++) {
+				char high = cs.charAt(i);
+				char low = cs.charAt(i + 1);
+				if (high == chars[0] && low == chars[1]) {
+					return i;
+				}
+			}
+		}
+		return NOT_FOUND;
 	}
 
 	/**
@@ -65,7 +77,7 @@ public abstract class CharSequences {
 	 * @param start the start index
 	 * @return the index where the search sequence was found
 	 */
-	public static int indexOf(CharSequence cs, CharSequence searchChar, int start) {
+	public static int indexOf(final CharSequence cs, final CharSequence searchChar, final int start) {
 		return cs.toString().indexOf(searchChar.toString(), start);
 		// if (cs instanceof String && searchChar instanceof String) {
 		// // TODO: Do we assume searchChar is usually relatively small;
@@ -88,25 +100,41 @@ public abstract class CharSequences {
 	 * @param start the start index, negative returns -1, beyond length starts at end
 	 * @return the index where the search char was found, -1 if not found
 	 */
-	public static int lastIndexOf(CharSequence cs, int searchChar, int start) {
+	public static int lastIndexOf(final CharSequence cs, final int searchChar, int start) {
 		if (cs instanceof String) {
 			return ((String)cs).lastIndexOf(searchChar, start);
 		}
-		else {
-			int sz = cs.length();
-			if (start < 0) {
-				return -1;
-			}
-			if (start >= sz) {
-				start = sz - 1;
-			}
+		final int sz = cs.length();
+		if (start < 0) {
+			return NOT_FOUND;
+		}
+		if (start >= sz) {
+			start = sz - 1;
+		}
+		if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
 			for (int i = start; i >= 0; --i) {
 				if (cs.charAt(i) == searchChar) {
 					return i;
 				}
 			}
-			return -1;
 		}
+		// supplementary characters (LANG1300)
+		// NOTE - we must do a forward traversal for this to avoid duplicating code points
+		if (searchChar <= Character.MAX_CODE_POINT) {
+			char[] chars = Character.toChars(searchChar);
+			// make sure it's not the last index
+			if (start == sz - 1) {
+				return NOT_FOUND;
+			}
+			for (int i = start; i >= 0; i--) {
+				char high = cs.charAt(i);
+				char low = cs.charAt(i + 1);
+				if (chars[0] == high && chars[1] == low) {
+					return i;
+				}
+			}
+		}
+		return NOT_FOUND;
 	}
 
 	/**
@@ -117,7 +145,7 @@ public abstract class CharSequences {
 	 * @param start the start index
 	 * @return the index where the search sequence was found
 	 */
-	public static int lastIndexOf(CharSequence cs, CharSequence searchChar, int start) {
+	public static int lastIndexOf(final CharSequence cs, final CharSequence searchChar, final int start) {
 		return cs.toString().lastIndexOf(searchChar.toString(), start);
 		// if (cs instanceof String && searchChar instanceof String) {
 		// // TODO: Do we assume searchChar is usually relatively small;
@@ -144,18 +172,16 @@ public abstract class CharSequences {
 	 * @param cs the {@code CharSequence} to be processed
 	 * @return the resulting char array
 	 */
-	public static char[] toCharArray(CharSequence cs) {
+	public static char[] toCharArray(final CharSequence cs) {
 		if (cs instanceof String) {
 			return ((String)cs).toCharArray();
 		}
-		else {
-			int sz = cs.length();
-			char[] array = new char[cs.length()];
-			for (int i = 0; i < sz; i++) {
-				array[i] = cs.charAt(i);
-			}
-			return array;
+		final int sz = cs.length();
+		final char[] array = new char[cs.length()];
+		for (int i = 0; i < sz; i++) {
+			array[i] = cs.charAt(i);
 		}
+		return array;
 	}
 
 	/**
@@ -169,16 +195,48 @@ public abstract class CharSequences {
 	 * @param length character length of the region
 	 * @return whether the region matched
 	 */
-	public static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart,
-			CharSequence substring, int start, int length) {
+	public static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,
+			final CharSequence substring, final int start, final int length) {
 		if (cs instanceof String && substring instanceof String) {
-			return ((String)cs).regionMatches(ignoreCase, thisStart, (String)substring, start,
-				length);
+			return ((String)cs).regionMatches(ignoreCase, thisStart, (String)substring, start, length);
 		}
-		else {
-			// TODO: Implement rather than convert to String
-			return cs.toString().regionMatches(ignoreCase, thisStart, substring.toString(), start,
-				length);
+		int index1 = thisStart;
+		int index2 = start;
+		int tmpLen = length;
+
+		// Extract these first so we detect NPEs the same as the java.lang.String version
+		final int srcLen = cs.length() - thisStart;
+		final int otherLen = substring.length() - start;
+
+		// Check for invalid parameters
+		if (thisStart < 0 || start < 0 || length < 0) {
+			return false;
 		}
+
+		// Check that the regions are long enough
+		if (srcLen < length || otherLen < length) {
+			return false;
+		}
+
+		while (tmpLen-- > 0) {
+			final char c1 = cs.charAt(index1++);
+			final char c2 = substring.charAt(index2++);
+
+			if (c1 == c2) {
+				continue;
+			}
+
+			if (!ignoreCase) {
+				return false;
+			}
+
+			// The same check as in String.regionMatches():
+			if (Character.toUpperCase(c1) != Character.toUpperCase(c2)
+					&& Character.toLowerCase(c1) != Character.toLowerCase(c2)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

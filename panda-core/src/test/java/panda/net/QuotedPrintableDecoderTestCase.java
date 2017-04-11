@@ -55,7 +55,6 @@ public final class QuotedPrintableDecoderTestCase {
 	/**
 	 * This is NOT supported by Commons-Codec, see CODEC-121.
 	 * 
-	 * @throws Exception
 	 * @see <a href="https://issues.apache.org/jira/browse/CODEC-121">CODEC-121</a>
 	 */
 	@Test
