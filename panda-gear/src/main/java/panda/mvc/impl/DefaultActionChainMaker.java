@@ -1,5 +1,9 @@
 package panda.mvc.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
@@ -16,12 +20,9 @@ import panda.mvc.processor.InvokeProcessor;
 import panda.mvc.processor.LayoutProcessor;
 import panda.mvc.processor.LocaleProcessor;
 import panda.mvc.processor.PrepareProcessor;
+import panda.mvc.processor.RedirectProcessor;
 import panda.mvc.processor.ValidateProcessor;
 import panda.mvc.processor.ViewProcessor;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @IocBean(type=ActionChainMaker.class, create="initialize")
 public class DefaultActionChainMaker implements ActionChainMaker {
@@ -38,6 +39,7 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		if (!map.containsKey(DEFAULT_CHAIN)) {
 			List<String> defs = Arrays.toList(
 				DefaultActionChain.IOC_PREFIX + FatalProcessor.class.getName(),
+				DefaultActionChain.IOC_PREFIX + RedirectProcessor.class.getName(),
 				DefaultActionChain.IOC_PREFIX + LocaleProcessor.class.getName(),
 				DefaultActionChain.IOC_PREFIX + LayoutProcessor.class.getName(),
 				DefaultActionChain.IOC_PREFIX + AdaptProcessor.class.getName(),

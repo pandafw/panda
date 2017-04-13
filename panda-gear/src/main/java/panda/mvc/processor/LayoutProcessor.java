@@ -4,8 +4,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.net.http.UserAgent;
 import panda.servlet.HttpServlets;
 
@@ -21,6 +23,11 @@ public class LayoutProcessor extends AbstractProcessor {
 	 * DEFAULT_PARAMETER = "__layout";
 	 */
 	public static final String DEFAULT_PARAMETER = "__layout";
+
+	/**
+	 * DEFAULT_COOKIE = "WW_LAYOUT";
+	 */
+	public static final String DEFAULT_COOKIE = DEFAULT_ATTRIBUTE;
 
 	/**
 	 * DEFAULT_COOKIE_MAXAGE = 60 * 60 * 24 * 30; //1M
@@ -45,14 +52,27 @@ public class LayoutProcessor extends AbstractProcessor {
 	protected String parameterName = DEFAULT_PARAMETER;
 	protected String requestName = DEFAULT_ATTRIBUTE;
 	protected String sessionName = DEFAULT_ATTRIBUTE;
-	protected String cookieName = DEFAULT_ATTRIBUTE;
+	protected String cookieName = DEFAULT_COOKIE;
+
+	@IocInject(value=MvcConstants.LAYOUT_COOKIE_DOMAIN, required=false)
 	protected String cookieDomain;
+
+	@IocInject(value=MvcConstants.LAYOUT_COOKIE_PATH, required=false)
 	protected String cookiePath;
-	protected Integer cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
+
+	@IocInject(value=MvcConstants.LAYOUT_COOKIE_MAXAGE, required=false)
+	protected int cookieMaxAge = DEFAULT_COOKIE_MAXAGE;
+
 	protected String defaultLayout = PC_LAYOUT;
 
+	@IocInject(value=MvcConstants.LAYOUT_SAVE_TO_SESSION, required=false)
 	protected boolean saveToSession = false;
+
+	@IocInject(value=MvcConstants.LAYOUT_SAVE_TO_COOKIE, required=false)
 	protected boolean saveToCookie = true;
+
+	@IocInject(value=MvcConstants.LAYOUT_FROM_USER_AGENT, required=false)
+	protected boolean fromUserAgent = true;
 
 	/**
 	 * Constructor
@@ -60,70 +80,10 @@ public class LayoutProcessor extends AbstractProcessor {
 	public LayoutProcessor() {
 	}
 
-	/**
-	 * @param attributeName the attributeName to set
-	 */
-	public void setSessionName(String attributeName) {
-		this.sessionName = attributeName;
-	}
-
-	/**
-	 * @param parameterName the parameterName to set
-	 */
-	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName;
-	}
-
-	/**
-	 * @param cookieName the cookieName to set
-	 */
-	public void setCookieName(String cookieName) {
-		this.cookieName = cookieName;
-	}
-
-	/**
-	 * @param cookieDomain the cookieDomain to set
-	 */
-	public void setCookieDomain(String cookieDomain) {
-		this.cookieDomain = cookieDomain;
-	}
-
-	/**
-	 * @param cookiePath the cookiePath to set
-	 */
-	public void setCookiePath(String cookiePath) {
-		this.cookiePath = cookiePath;
-	}
-
-	/**
-	 * @param cookieMaxAge the cookieMaxAge to set
-	 */
-	public void setCookieMaxAge(Integer cookieMaxAge) {
-		this.cookieMaxAge = cookieMaxAge;
-	}
-
-	/**
-	 * @param defaultLayout the defaultLayout to set
-	 */
-	public void setDefaultLayout(String defaultLayout) {
-		this.defaultLayout = defaultLayout;
-	}
-
-	/**
-	 * @param saveToSession the saveToSession to set
-	 */
-	public void setSaveToSession(boolean saveToSession) {
-		this.saveToSession = saveToSession;
-	}
-
-	/**
-	 * @param saveToCookie the saveToCookie to set
-	 */
-	public void setSaveToCookie(boolean saveToCookie) {
-		this.saveToCookie = saveToCookie;
-	}
-
 	public void process(ActionContext ac) {
+		boolean saveToSession = this.saveToSession;
+		boolean saveToCookie = this.saveToCookie;
+
 		HttpSession session = ac.getRequest().getSession(false);
 
 		String layout = null;
@@ -151,8 +111,13 @@ public class LayoutProcessor extends AbstractProcessor {
 			saveToCookie = false;
 		}
 		
-		if (Strings.isEmpty(layout)) {
+		if (Strings.isEmpty(layout) && fromUserAgent) {
 			layout = getLayoutFromUserAgent(ac);
+			saveToCookie = false;
+		}
+
+		if (layout == null) {
+			layout = defaultLayout;
 			saveToCookie = false;
 		}
 		
@@ -212,9 +177,7 @@ public class LayoutProcessor extends AbstractProcessor {
 		if (ua.isMobile() || ua.isRobot()) {
 			return MOBILE_LAYOUT;
 		}
-		else {
-			return defaultLayout;
-		}
+		return null;
 	}
 
 	protected void saveLayoutToCookie(ActionContext ac, String layout) {
@@ -228,6 +191,9 @@ public class LayoutProcessor extends AbstractProcessor {
 		}
 		else {
 			c.setPath(ac.getRequest().getContextPath());
+			if (Strings.isEmpty(c.getPath())) {
+				c.setPath("/");
+			}
 		}
 		
 		c.setMaxAge(cookieMaxAge);

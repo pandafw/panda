@@ -90,6 +90,27 @@ public interface MvcConstants extends IocConstants {
 	/** The locale from accept language */
 	public static final String LOCALE_FROM_ACCEPT_LANGUAGE = "panda.locale.from.accept.language";
 
+	/** The layout cookie domain */
+	public static final String LAYOUT_COOKIE_DOMAIN = "panda.layout.cookie.domain";
+
+	/** The layout cookie path */
+	public static final String LAYOUT_COOKIE_PATH = "panda.layout.cookie.path";
+
+	/** The layout cookie max age */
+	public static final String LAYOUT_COOKIE_MAXAGE = "panda.layout.cookie.maxage";
+
+	/** The default layout */
+	public static final String LAYOUT_DEFAULT = "panda.layout.default";
+
+	/** The layout save to session */
+	public static final String LAYOUT_SAVE_TO_SESSION = "panda.layout.save.to.session";
+
+	/** The layout save to cookie */
+	public static final String LAYOUT_SAVE_TO_COOKIE = "panda.layout.save.to.cookie";
+
+	/** The layout from user agent */
+	public static final String LAYOUT_FROM_USER_AGENT = "panda.layout.from.useragent";
+
 	/** The sitemesh configuration */
 	public static final String SITEMESH = "panda.sitemesh";
 }

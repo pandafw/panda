@@ -51,6 +51,8 @@ public class ActionConfig {
 						else {
 							myPaths.add(pp + '/' + p);
 						}
+						
+						// @At("") -> [ '/parent', '/parent/' ]
 						if (Strings.isEmpty(p)) {
 							myPaths.add(pp);
 						}

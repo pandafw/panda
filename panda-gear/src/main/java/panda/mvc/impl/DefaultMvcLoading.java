@@ -71,31 +71,16 @@ public class DefaultMvcLoading implements Loading {
 			log.info(sb.toString());
 		}
 
-		/*
-		 * 准备返回值
-		 */
 		ActionMapping mapping;
 
-		/*
-		 * 准备计时
-		 */
 		StopWatch sw = new StopWatch();
 		try {
 			setContextClass(config);
 			
-			/*
-			 * 检查 Ioc 容器并创建和保存它
-			 */
 			createIoc(config);
 
-			/*
-			 * 组装UrlMapping
-			 */
 			mapping = evalActionMapping(config);
 
-			/*
-			 * 执行用户自定义 Setup
-			 */
 			evalSetup(config, true);
 		}
 		catch (Exception e) {
@@ -104,9 +89,8 @@ public class DefaultMvcLoading implements Loading {
 			}
 			throw Exceptions.wrapThrow(e);
 		}
-
-		// Done
 		sw.stop();
+
 		if (log.isInfoEnabled()) {
 			log.infof("Panda.Mvc [%s] is up in %s", config.getAppName(), sw.toString());
 		}

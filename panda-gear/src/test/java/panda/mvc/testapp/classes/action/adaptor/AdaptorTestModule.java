@@ -32,7 +32,7 @@ public class AdaptorTestModule extends BaseWebappTest {
 	}
 
 	@At("ins")
-	public String getInputStream(InputStream ins) throws IOException {
+	public String getInputStream2(InputStream ins) throws IOException {
 		return new String(Streams.toByteArray(ins));
 	}
 

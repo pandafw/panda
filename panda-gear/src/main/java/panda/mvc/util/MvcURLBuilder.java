@@ -213,33 +213,43 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	}
 
 	//-------------------------------------------------------------------
+	public static String buildPath(ActionContext context, String action) {
+		return buildPath(context, action, true);
+	}
+	
 	public static String buildPath(ActionContext context, String action, boolean includeContext) {
 		String uri;
 
 		if (Strings.isNotEmpty(action)) {
-			uri = action;
-			char c = action.charAt(0);
-			
-			if (c == '~') {
-				// resolve URL
-				String self = context.getPath();
-				String path = Strings.stripStart(action.substring(1), '/');
-				uri = URLHelper.resolveURL(self, path);
-				if (includeContext) {
-					uri = context.getBase() + uri;
-				}
+			if (action.startsWith("//")) {
+				// absolute site path
+				uri = action.substring(1);
 			}
-			else if (c == '+') {
-				// append path
-				String self = context.getPath();
-				uri = URLHelper.appendPath(self, action.substring(1));
-				if (includeContext) {
-					uri = context.getBase() + uri;
+			else {
+				uri = action;
+
+				char c = action.charAt(0);
+				if (c == '~') {
+					// resolve URL
+					String self = context.getPath();
+					String path = Strings.stripStart(action.substring(1), '/');
+					uri = URLHelper.resolveURL(self, path);
+					if (includeContext) {
+						uri = context.getBase() + uri;
+					}
 				}
-			}
-			else if (c == '/') {
-				if (includeContext) {
-					uri = context.getBase() + uri;
+				else if (c == '+') {
+					// append path
+					String self = context.getPath();
+					uri = URLHelper.appendPath(self, action.substring(1));
+					if (includeContext) {
+						uri = context.getBase() + uri;
+					}
+				}
+				else if (c == '/') {
+					if (includeContext) {
+						uri = context.getBase() + uri;
+					}
 				}
 			}
 		}

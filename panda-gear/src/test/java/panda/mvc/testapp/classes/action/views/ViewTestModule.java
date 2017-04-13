@@ -12,6 +12,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Charsets;
 import panda.mvc.ActionContext;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
 
 @IocBean
@@ -20,6 +21,11 @@ public class ViewTestModule {
 
 	@IocInject
 	protected ActionContext context;
+
+	@At("")
+	@Redirect(toslash=true)
+	public void index() {
+	}
 
 	@At("jsp2")
 	@To("jsp:jsp/views/jspView")
@@ -41,33 +47,33 @@ public class ViewTestModule {
 
 	// -------------ServerRedirectView
 	@At("red")
-	@To(">>:/${reqp.to}.jsp")
+	@To(">>:/${reqParams.to}.jsp")
 	public void serverRedirectView() {
 	}
 
 	@At("red2")
-	@To("RedirEct:/${reqp.to}.jsp")
+	@To("RedirEct:/${reqParams.to}.jsp")
 	public void serverRedirectView2() {
 	}
 
 	@At("red3")
-	@To("redirect:/${reqp.to}.jsp")
+	@To("redirect:/${reqParams.to}.jsp")
 	public void serverRedirectView3() {
 	}
 
 	// -------------ForwardView
 	@At("for")
-	@To("->:/${reqp.to}.jsp")
+	@To("->:/${reqParams.to}.jsp")
 	public void forwardView() {
 	}
 
 	@At("for2")
-	@To("fOrWard:/${reqp.to}.jsp")
+	@To("fOrWard:/${reqParams.to}.jsp")
 	public void forwardView2() {
 	}
 
 	@At("for3")
-	@To("forward:/${reqp.to == null ? 'base' : 'base'}.jsp")
+	@To("forward:/${reqParams.to == null ? 'base' : 'base'}.jsp")
 	public void forwardView3() {
 	}
 

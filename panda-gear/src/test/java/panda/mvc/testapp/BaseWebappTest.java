@@ -76,8 +76,17 @@ public abstract class BaseWebappTest {
 	}
 
 	public HttpResponse get(String path) {
+		return get(path, true);
+	}
+
+	public HttpResponse get(String path, boolean redirect) {
 		try {
-			resp = HttpClient.get(getBaseURL() + path);
+			HttpRequest hr = HttpRequest.create(getBaseURL() + path, HttpMethod.GET);
+			hr.getHeader().setDefaultAgentPC();
+			
+			HttpClient hc = new HttpClient(hr);
+			hc.setAutoRedirect(redirect);
+			resp = hc.send();
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);

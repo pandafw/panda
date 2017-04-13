@@ -345,15 +345,4 @@ public class ActionAssist extends ActionSupport {
 	public Object findValue(String expr, Object arg) {
 		return Mvcs.findValue(getContext(), expr, arg);
 	}
-
-	/**
-	 * @return true if redirect to slash
-	 */
-	public boolean redirectToSlash() {
-		if (Strings.endsWithChar(getContext().getPath(), '/')) {
-			return false;
-		}
-		HttpServlets.sendRedirect(getResponse(), getContext().getBase() + getContext().getPath() + '/');
-		return true;
-	}
 }

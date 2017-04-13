@@ -6,12 +6,12 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
+import panda.mvc.annotation.Redirect;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.mvc.view.VoidView;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailClient;
@@ -243,10 +243,8 @@ public class SendMailAction extends AbstractAction {
 	 * input
 	 */
 	@At("")
+	@Redirect(toslash=true)
 	public Object input(@Param Arg a) {
-		if (assist().redirectToSlash()) {
-			return VoidView.INSTANCE;
-		}
 		return null;
 	}
 	

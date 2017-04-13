@@ -1,21 +1,24 @@
 package panda.mvc.view;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import panda.mvc.ActionContext;
+import panda.mvc.util.MvcURLBuilder;
 import panda.servlet.HttpServlets;
 
 /**
- * 重定向视图
+ * RedirectView
  * <p>
- * 在入口函数上声明：
+ * Samples：
  * <p>
- * '@Ok("redirect:/pet/list.nut")'
+ * '@To("redirect:/pet/list.do")'
  * <p>
- * 实际上相当于：<br>
- * new ServerRedirectView("/pet/list.nut");
+ * or：<br>
+ * new RedirectView("/pet/list.do");
  * 
+ * <p>
+ * @To("//anotherContext/some") -> redirect to: /anotherContext/some
+ * @To("//some") -> redirect to: /thisContext/some
+ * @To("+/some") -> redirect to: /thisContext + context.getPath() + /some
+ * @To("~/some") -> redirect to: /thisContext + context.getPath() + /../some
  */
 public class RedirectView extends AbstractPathView {
 
@@ -24,20 +27,10 @@ public class RedirectView extends AbstractPathView {
 	}
 
 	public void render(ActionContext ac) {
-		HttpServletRequest req = ac.getRequest();
-		HttpServletResponse res = ac.getResponse();
-
 		String path = evalPath(ac);
 
-		// This site
-		if (path.startsWith("//")) {
-			path = path.substring(1);
-		}
-		// Absolute path, add the context path for it
-		else if (path.length() > 0 && path.charAt(0) == '/') {
-			path = req.getContextPath() + path;
-		}
+		String url = MvcURLBuilder.buildPath(ac, path);
 		
-		HttpServlets.sendRedirect(res, path);
+		HttpServlets.sendRedirect(ac.getResponse(), url);
 	}
 }
