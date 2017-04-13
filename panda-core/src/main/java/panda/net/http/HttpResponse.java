@@ -104,7 +104,9 @@ public class HttpResponse implements Closeable {
 	}
 
 	public boolean isMoved() {
-		return statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY;
+		return statusCode == HttpStatus.SC_MOVED_PERMANENTLY 
+				|| statusCode == HttpStatus.SC_MOVED_TEMPORARILY
+				|| statusCode == HttpStatus.SC_SEE_OTHER;
 	}
 
 	public boolean isServerError() {

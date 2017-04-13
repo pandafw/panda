@@ -355,6 +355,7 @@ public class HttpClient {
 		}
 		conn.setConnectTimeout(connTimeout);
 		conn.setReadTimeout(readTimeout);
+		conn.setInstanceFollowRedirects(false);
 	}
 
 	protected void setupRequestHeader() {
