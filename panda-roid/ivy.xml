@@ -1,0 +1,21 @@
+<ivy-module version="2.0">
+	<info organisation="${prj.org}" module="${prj.name}" revision="${prj.version}"/>
+	<configurations>
+		<conf name="api" visibility="public" />
+		<conf name="gae" visibility="public" />
+		<conf name="jdbc" visibility="public" />
+		<conf name="run" visibility="public" />
+		<conf name="test" visibility="public" />
+	</configurations>
+	<publications>
+		<artifact name="${prj.name}" type="jar" conf="run" ext="jar" />
+	</publications>
+	<dependencies>
+		<!-- RUN -->
+		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
+		<!-- POI -->
+		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.13" conf="run->master,sources" />
+		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.13" conf="run->master,sources" />
+	</dependencies>
+</ivy-module>

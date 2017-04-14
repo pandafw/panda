@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="panda/bean/fast/|panda/dao/nosql/|panda/dao/sql/|panda/dao/sql/adapter/|panda/dao/sql/executor/|panda/dao/sql/expert/|panda/image/GaeImageWrapper.java|panda/image/GaeImages.java|panda/image/JavaGraphics.java|panda/image/JavaImageWrapper.java|panda/image/JavaImages.java|panda/io/resource/SqlResourceMaker.java|panda/lang/DynamicClassLoader.java|panda/mock/jndi/|panda/mock/sql/|panda/mock/web/|panda/net/MXLookup.java|panda/servlet/|panda/tpl/ftl/|panda/util/JndiLookup.java|panda/util/tool/" kind="src" path="core"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/log4j.jar" sourcepath="libs/log4j-sources.jar"/>
+	<classpathentry kind="lib" path="libs/poi.jar" sourcepath="libs/poi-sources.jar"/>
+	<classpathentry kind="lib" path="libs/poi-ooxml.jar" sourcepath="libs/poi-ooxml-sources.jar"/>
+	<classpathentry kind="lib" path="libs/poi-ooxml-schemas.jar" sourcepath="libs/poi-ooxml-schemas-sources.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
