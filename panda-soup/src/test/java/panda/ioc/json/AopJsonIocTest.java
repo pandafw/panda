@@ -1,11 +1,11 @@
 package panda.ioc.json;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import panda.ioc.Ioc;
 import panda.ioc.IocLoader;
+import panda.ioc.aop.impl.DefaultMirrorFactory;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.json.pojo.Mammal;
 import panda.ioc.loader.JsonIocLoader;
@@ -15,7 +15,8 @@ public class AopJsonIocTest {
 	@Test
 	public void test_simple() {
 		IocLoader il = new JsonIocLoader(AopJsonIocTest.class.getPackage().getName().replace('.', '/') + "/aop.js");
-		Ioc ioc = new DefaultIoc(il);
+		DefaultIoc ioc = new DefaultIoc(il);
+		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
 		StringBuilder sb = ioc.get(StringBuilder.class, "sb");
 		Mammal fox = ioc.get(Mammal.class, "fox");
 

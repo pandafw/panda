@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import panda.aop.MethodMatcher;
 import panda.aop.matcher.MethodMatcherFactory;
+import panda.lang.Objects;
 
 public class AopConfigrationItem {
 
@@ -19,23 +20,14 @@ public class AopConfigrationItem {
 
 	private Pattern classnamePattern;
 
-	public MethodMatcher getMethodMatcher() {
-		return methodMatcher;
-	}
-
-	public boolean matchClassName(String className) {
-		return classnamePattern.matcher(className).find();
-	}
-
 	public AopConfigrationItem() {
 	}
 
 	public AopConfigrationItem(String name, String method, String interceptor, boolean singleton) {
-		super();
-		this.name = name;
-		this.method = method;
-		this.interceptor = interceptor;
-		this.singleton = singleton;
+		setName(name);
+		setMethod(method);
+		setInterceptor(interceptor);
+		setSingleton(singleton);
 	}
 
 	public String getName() {
@@ -47,6 +39,10 @@ public class AopConfigrationItem {
 		this.classnamePattern = Pattern.compile(className);
 	}
 
+	public boolean matchClassName(String className) {
+		return classnamePattern.matcher(className).find();
+	}
+
 	public String getMethod() {
 		return method;
 	}
@@ -54,6 +50,10 @@ public class AopConfigrationItem {
 	public void setMethod(String methodName) {
 		this.method = methodName;
 		this.methodMatcher = MethodMatcherFactory.matcher(methodName);
+	}
+
+	public MethodMatcher getMethodMatcher() {
+		return methodMatcher;
 	}
 
 	public String getInterceptor() {
@@ -72,4 +72,13 @@ public class AopConfigrationItem {
 		this.singleton = singleton;
 	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringBuilder()
+				.append("name", name)
+				.append("method", method)
+				.append("interceptor", interceptor)
+				.append("singletion", singleton)
+				.toString();
+	}
 }

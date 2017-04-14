@@ -1,11 +1,12 @@
 package panda.ioc.aop.config.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import panda.ioc.Ioc;
+import panda.ioc.aop.impl.DefaultMirrorFactory;
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.JsonIocLoader;
 
@@ -13,13 +14,15 @@ public class JsonAopConfigrationTest {
 
 	@Test
 	public void test_jsonAop() {
-		Ioc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
+		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
+		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
 		test(ioc);
 	}
 
 	@Test
 	public void test_jsonAop2() {
-		Ioc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop2.js"));
+		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop2.js"));
+		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
 		test(ioc);
 	}
 

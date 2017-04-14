@@ -1,15 +1,17 @@
 package panda.ioc.aop;
 
 
-public interface MirrorFactory {
+public class MirrorFactory {
 
 	/**
-	 * 根据一个类型生成 Mirror 对象
+	 * Get a mirror class for AOP
 	 * 
 	 * @param type the class type
 	 * @param name the mirror name
 	 * @return the mirror class
 	 */
-	<T> Class<T> getMirror(Class<T> type, String name);
+	public <T> Class<T> getMirror(Class<T> type, String name) {
+		return type;
+	}
 
 }

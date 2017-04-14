@@ -104,3 +104,15 @@ Panda是由以下几个部分组成的。
         <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml" />
     </ivysettings>
 
+Acknowledgements
+----------------
+Panda use the following software packages:
+
+| Name                | License                                                       | Source                                                 |
+|---------------------|---------------------------------------------------------------|--------------------------------------------------------|
+| Commons Codec       | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-codec/       |
+| Commons Collections | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-collections/ |
+| Commons Lang        | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-lang/        |
+| Commons Net         | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-net/         |
+| Nutz                | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://nutzam.com/                                    |
+| OW2 ASM             | [OW2](http://asm.ow2.org/license.html)                        | http://asm.ow2.org/                                    |

@@ -12,15 +12,13 @@ import java.lang.annotation.Target;
  * 或者说，让一组拦截器控制这个方法。
  * <p>
  * 这个注解接受一组值，每个值，就是一个容器内对象的名称，在 Ioc 容器中，<br>
- * 你可以任意声明这个对象，只要这个对象实现了 MethodInterceptor 接口
- * 
- * @see panda.aop.MethodInterceptor
+ * 你可以任意声明这个对象，只要这个对象实现了 panda.aop.MethodInterceptor 接口
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
 public @interface Aop {
 
-    String[] value();
+	String[] value();
 
 }

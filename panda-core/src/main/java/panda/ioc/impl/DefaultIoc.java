@@ -17,7 +17,6 @@ import panda.ioc.Scope;
 import panda.ioc.ValueProxyMaker;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.aop.MirrorFactory;
-import panda.ioc.aop.impl.DefaultMirrorFactory;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.loader.CachedIocLoader;
 import panda.ioc.loader.CachedIocLoaderImpl;
@@ -67,7 +66,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	private Object lock;
 	
 	/**
-	 * 可扩展的"字段值"生成器
+	 * Value Proxy Maker
 	 */
 	private ValueProxyMaker vpMaker;
 
@@ -111,9 +110,9 @@ public class DefaultIoc implements Ioc, Cloneable {
 		setValueProxyMaker(new DefaultValueProxyMaker());
 		weavers = new HashMap<String, ObjectWeaver>();
 
-		// 初始化类工厂， 这是同 AOP 的连接点
+		// Class Factory for AOP
 		if (mirrors == null) {
-			this.mirrors = new DefaultMirrorFactory(this);
+			this.mirrors = new MirrorFactory();
 		}
 		else {
 			this.mirrors = mirrors;

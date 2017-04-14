@@ -18,7 +18,7 @@ import panda.log.Logs;
 /**
  * 通过AopConfigration来识别需要拦截的方法,并根据需要生成新的类
  */
-public class DefaultMirrorFactory implements MirrorFactory {
+public class DefaultMirrorFactory extends MirrorFactory {
 
 	private static final Log log = Logs.getLog(DefaultMirrorFactory.class);
 
@@ -32,6 +32,7 @@ public class DefaultMirrorFactory implements MirrorFactory {
 		this.ioc = ioc;
 	}
 
+	@Override
 	public <T> Class<T> getMirror(Class<T> type, String name) {
 		if (MethodInterceptor.class.isAssignableFrom(type)
 			|| type.getName().endsWith(ClassAgent.CLASSNAME_SUFFIX)
