@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import panda.ioc.annotation.IocBean;
 import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 
@@ -15,7 +14,6 @@ import panda.lang.Exceptions;
  * A class for load external resource.
  * 
  */
-@IocBean
 public class ResourceLoader {
 	private final Map<String, Resource> resources = new HashMap<String, Resource>();
 

@@ -3,7 +3,6 @@ package panda.mvc.ioc.loader;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import panda.io.resource.ResourceLoader;
 import panda.lang.Collections;
 import panda.mvc.MvcConfig;
 import panda.mvc.adaptor.DefaultParamAdaptor;
@@ -31,6 +30,8 @@ import panda.mvc.util.ActionAssist;
 import panda.mvc.util.ActionConsts;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.DefaultTextProvider;
+import panda.mvc.util.MvcResourceLoader;
+import panda.mvc.util.MvcSettings;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.validation.DefaultValidators;
 import panda.mvc.validation.validator.BinaryValidator;
@@ -147,9 +148,10 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			// utility
 			ActionAssist.class,
 			ActionConsts.class,
-			ResourceLoader.class,
 			CookieStateProvider.class,
 			DefaultTextProvider.class,
+			MvcResourceLoader.class,
+			MvcSettings.class,
 			MvcURLBuilder.class,
 	
 			// processor

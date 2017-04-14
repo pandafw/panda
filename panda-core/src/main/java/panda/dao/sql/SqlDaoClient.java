@@ -13,15 +13,10 @@ import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.executor.JdbcSqlManager;
 import panda.dao.sql.expert.SqlExpert;
 import panda.dao.sql.expert.SqlExpertConfig;
-import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 
-/**
- */
-@IocBean(type=DaoClient.class)
 public class SqlDaoClient extends DaoClient {
 	private static Log log = Logs.getLog(SqlDaoClient.class);
 	
@@ -48,7 +43,6 @@ public class SqlDaoClient extends DaoClient {
 	 * @param dataSource the dataSource to set
 	 * @throws SQLException if a sql error occurs
 	 */
-	@IocInject
 	public void setDataSource(DataSource dataSource) throws SQLException {
 		this.dataSource = dataSource;
 		this.sqlExpert = getExpert(dataSource);

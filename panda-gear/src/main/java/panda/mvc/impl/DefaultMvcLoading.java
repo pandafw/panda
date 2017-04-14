@@ -12,7 +12,7 @@ import panda.bind.json.Jsons;
 import panda.io.Files;
 import panda.io.Streams;
 import panda.ioc.Ioc;
-import panda.ioc.IocProxy;
+import panda.ioc.bean.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.Classes;

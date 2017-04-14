@@ -1,11 +1,11 @@
-package panda.bean.handler;
+package panda.ioc.bean;
 
 import java.lang.reflect.Type;
 import java.util.Set;
 
 import panda.bean.Beans;
+import panda.bean.handler.AbstractJavaBeanHandler;
 import panda.ioc.IocConstants;
-import panda.ioc.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Exceptions;
 import panda.lang.Strings;

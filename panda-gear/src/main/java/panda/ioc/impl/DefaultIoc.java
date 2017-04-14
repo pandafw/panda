@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import panda.bean.Beans;
 import panda.ioc.Ioc;
 import panda.ioc.IocContext;
 import panda.ioc.IocException;
@@ -17,6 +18,8 @@ import panda.ioc.Scope;
 import panda.ioc.ValueProxyMaker;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.aop.MirrorFactory;
+import panda.ioc.bean.IocProxy;
+import panda.ioc.bean.IocProxyBeanHandler;
 import panda.ioc.loader.AnnotationIocLoader;
 import panda.ioc.loader.CachedIocLoader;
 import panda.ioc.loader.CachedIocLoaderImpl;
@@ -96,27 +99,21 @@ public class DefaultIoc implements Ioc, Cloneable {
 	}
 
 	protected DefaultIoc(ObjectMaker objMaker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
+		// register IocProxyBeanHandler
+		Beans beans = Beans.i();
+		beans.register(IocProxy.class, new IocProxyBeanHandler(beans, IocProxy.class));
+
 		this.lock = new Object();
 		this.objMaker = objMaker;
 		this.defaultScope = defaultScope;
 		this.context = context;
-		if (loader instanceof CachedIocLoader) {
-			this.loader = loader;
-		}
-		else {
-			this.loader = CachedIocLoaderImpl.create(loader);
-		}
+		this.loader = (loader instanceof CachedIocLoader ? loader : CachedIocLoaderImpl.create(loader));
 		
 		setValueProxyMaker(new DefaultValueProxyMaker());
 		weavers = new HashMap<String, ObjectWeaver>();
 
 		// Class Factory for AOP
-		if (mirrors == null) {
-			this.mirrors = new MirrorFactory();
-		}
-		else {
-			this.mirrors = mirrors;
-		}
+		this.mirrors = (mirrors == null ? new MirrorFactory() : mirrors);
 	}
 
 	public <T> T getIfExists(Class<T> type) throws IocException {

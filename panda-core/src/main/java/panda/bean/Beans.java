@@ -13,12 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import panda.bean.handler.ArrayBeanHandler;
 import panda.bean.handler.CollectionBeanHandler;
-import panda.bean.handler.IocProxyBeanHandler;
 import panda.bean.handler.IterableBeanHandler;
 import panda.bean.handler.JavaBeanHandler;
 import panda.bean.handler.ListBeanHandler;
 import panda.bean.handler.MapBeanHandler;
-import panda.ioc.IocProxy;
 import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
@@ -296,10 +294,6 @@ public class Beans {
 			}
 			else if (Types.isAssignable(type, Iterable.class)) {
 				handler = new IterableBeanHandler(this, type);
-			}
-			else if (Types.isAssignable(type, IocProxy.class)) {
-				handler = new IocProxyBeanHandler(this, type);
-				register(type, handler);
 			}
 			else if (Types.isImmutableType(type)) {
 				throw new IllegalArgumentException("Illegal bean type: " + type);

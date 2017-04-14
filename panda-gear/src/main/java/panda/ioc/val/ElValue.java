@@ -2,8 +2,8 @@ package panda.ioc.val;
 
 import panda.el.El;
 import panda.ioc.IocMaking;
-import panda.ioc.IocProxy;
 import panda.ioc.ValueProxy;
+import panda.ioc.bean.IocProxy;
 
 /**
  * 支持用户通过自定的 EL Expression 来生成值

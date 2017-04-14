@@ -1,6 +1,10 @@
-package panda.ioc;
+package panda.ioc.bean;
 
 import java.util.Set;
+
+import panda.ioc.Ioc;
+import panda.ioc.IocContext;
+import panda.ioc.IocException;
 
 public class IocProxy implements Ioc {
 	private Ioc ioc;

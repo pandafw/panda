@@ -11,50 +11,13 @@
 		<artifact name="${prj.name}" type="jar" conf="run" ext="jar" />
 	</publications>
 	<dependencies>
-		<!-- API -->
-		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="api->master,sources" />
-		<dependency org="javax.servlet.jsp" name="javax.servlet.jsp-api" rev="2.2.1" conf="api->master,sources" />
-		<dependency org="javax.websocket" name="javax.websocket-api" rev="1.1" conf="api->master,sources" />
-
 		<!-- RUN -->
-		<dependency org="com.itextpdf" name="itextpdf" rev="5.4.4" conf="run->master,sources" />
-		<dependency org="com.itextpdf" name="itext-asian" rev="5.2.0" conf="run->master,sources" />
-		<dependency org="com.itextpdf.tool" name="xmlworker" rev="5.4.4" conf="run->master,sources" />
 		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
-		<dependency org="net.sf.ehcache" name="ehcache-core" rev="2.6.9" conf="run->master,sources" />
-		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
-
-		<!-- POI -->
-		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />
-		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.13" conf="run->master,sources" />
-		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.13" conf="run->master,sources" />
-
-		<!-- JDBC -->
-		<dependency org="com.h2database" name="h2" rev="1.3.173" conf="jdbc->master,sources" />
-		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.0" conf="jdbc->master,sources" />
-		<dependency org="org.postgresql" name="postgresql" rev="9.4.1209.jre6" conf="jdbc->master,sources" />
-		<dependency org="org.xerial" name="sqlite-jdbc" rev="3.8.11.2" conf="jdbc->master,sources" />
-		<dependency org="mysql" name="mysql-connector-java" rev="5.1.39" conf="jdbc->master,sources" />
 
 		<!-- TOOL -->
 		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>
 		<dependency org="emma" name="emma_ant" rev="2.1.5320" conf="tool->*"/>
 		<dependency org="junit" name="junit" rev="4.11" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-continuation" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-http" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-io" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-security" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-server" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-util" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-xml" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty" name="jetty-jsp" rev="8.1.19.v20160209" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty.orbit" name="org.apache.jasper.glassfish" rev="2.2.2.v201112011158" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty.orbit" name="org.apache.taglibs.standard.glassfish" rev="1.2.0.v201112081803" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty.orbit" name="org.eclipse.jdt.core" rev="3.7.1" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty.orbit" name="javax.el" rev="2.1.0.v201105211819" conf="tool->*"/>
-		<dependency org="org.eclipse.jetty.orbit" name="com.sun.el" rev="1.0.0.v201105211818" conf="tool->*"/>
 	</dependencies>
 </ivy-module>

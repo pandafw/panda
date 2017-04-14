@@ -5,33 +5,10 @@
 	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="out/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/api/javax.servlet-api.jar" sourcepath="lib/api/javax.servlet-api-sources.jar"/>
-	<classpathentry kind="lib" path="lib/api/javax.servlet.jsp-api.jar" sourcepath="lib/api/javax.servlet.jsp-api-sources.jar"/>
-	<classpathentry kind="lib" path="lib/api/javax.websocket-api.jar" sourcepath="lib/api/javax.websocket-api-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/ehcache-core.jar" sourcepath="lib/run/ehcache-core-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/poi.jar" sourcepath="lib/run/poi-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/poi-ooxml.jar" sourcepath="lib/run/poi-ooxml-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/poi-ooxml-schemas.jar" sourcepath="lib/run/poi-ooxml-schemas-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/velocity.jar" sourcepath="lib/run/velocity-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-continuation.jar" sourcepath="lib/tool/jetty-continuation-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-http.jar" sourcepath="lib/tool/jetty-http-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-io.jar" sourcepath="lib/tool/jetty-io-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-jsp.jar" sourcepath="lib/tool/jetty-jsp-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-security.jar" sourcepath="lib/tool/jetty-security-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-server.jar" sourcepath="lib/tool/jetty-server-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-servlet.jar" sourcepath="lib/tool/jetty-servlet-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-webapp.jar" sourcepath="lib/tool/jetty-webapp-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-util.jar" sourcepath="lib/tool/jetty-util-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/jetty-xml.jar" sourcepath="lib/tool/jetty-xml-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/org.apache.jasper.glassfish.jar" sourcepath="lib/tool/org.apache.jasper.glassfish-sources.jar"/>
-	<classpathentry kind="lib" path="lib/tool/org.apache.taglibs.standard.glassfish.jar"/>
-	<classpathentry kind="lib" path="lib/tool/org.eclipse.jdt.core.jar"/>
-	<classpathentry kind="lib" path="lib/tool/javax.el.jar"/>
-	<classpathentry kind="lib" path="lib/tool/com.sun.el.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/panda-gear"/>
 	<classpathentry kind="output" path="out/classes"/>
 </classpath>

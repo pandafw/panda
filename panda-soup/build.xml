@@ -4,6 +4,7 @@
 	
 	<path id="dep.cp">
 		<pathelement path="../panda-core/out/classes"/>
+		<pathelement path="../panda-gear/out/classes"/>
 		<path refid="lib.cp"/>
 	</path>
 
