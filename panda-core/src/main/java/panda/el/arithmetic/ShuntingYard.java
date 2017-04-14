@@ -89,7 +89,7 @@ public class ShuntingYard {
 	 * @param exp expression
 	 * @return object queue
 	 */
-	public Queue<Object> parseToRPN(String exp) {
+	public Queue<Object> parseToRPN(CharSequence exp) {
 		rpn = new LinkedList<Object>();
 		opts = new LinkedList<Operator>();
 

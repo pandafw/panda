@@ -23,7 +23,7 @@ public class El {
 		try {
 			expr = cs;
 			ShuntingYard sy = new ShuntingYard();
-			Queue<Object> que = sy.parseToRPN(cs.toString());
+			Queue<Object> que = sy.parseToRPN(cs);
 			rpn = new RPN(que);
 		}
 		catch (Exception e) {
@@ -126,7 +126,7 @@ public class El {
 			return true;
 		}
 		if (o instanceof Boolean) {
-			return ((Boolean)o).booleanValue();
+			return !((Boolean)o).booleanValue();
 		}
 		if (o instanceof Number) {
 			return ((Number)o).intValue() == 0;
