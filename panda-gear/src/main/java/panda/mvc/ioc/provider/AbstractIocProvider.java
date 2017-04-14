@@ -1,12 +1,24 @@
 package panda.mvc.ioc.provider;
 
 import panda.ioc.IocLoader;
+import panda.ioc.aop.MirrorFactory;
 import panda.ioc.impl.DefaultIoc;
+import panda.lang.Classes;
 import panda.mvc.IocProvider;
+import panda.mvc.MvcConfig;
+import panda.mvc.annotation.IocBy;
 
 public abstract class AbstractIocProvider implements IocProvider {
-	protected DefaultIoc create(IocLoader loader) {
-		return new DefaultIoc(loader);
+	protected DefaultIoc create(MvcConfig mcfg, IocLoader loader) {
+		DefaultIoc ioc = new DefaultIoc(loader);
+
+		IocBy ib = mcfg.getMainModule().getAnnotation(IocBy.class);
+		if (ib != null) {
+			MirrorFactory mf = Classes.born(ib.mirror());
+			ioc.setMirrorFactory(mf);
+		}
+
+		return ioc;
 	}
 
 }

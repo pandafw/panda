@@ -15,14 +15,14 @@ public class JsonAopConfigrationTest {
 	@Test
 	public void test_jsonAop() {
 		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop.js"));
-		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
+		ioc.setMirrorFactory(new DefaultMirrorFactory());
 		test(ioc);
 	}
 
 	@Test
 	public void test_jsonAop2() {
 		DefaultIoc ioc = new DefaultIoc(new JsonIocLoader(JsonAopConfigrationTest.class.getPackage().getName().replace('.', '/') + "/jsonfile-aop2.js"));
-		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
+		ioc.setMirrorFactory(new DefaultMirrorFactory());
 		test(ioc);
 	}
 

@@ -16,12 +16,12 @@ public class XmlAopConfigrationTest {
 
 	@Test
 	public void testGetMirror() throws ParserConfigurationException, SAXException, IOException {
-		DefaultMirrorFactory mirrorFactory = new DefaultMirrorFactory(null);
+		DefaultMirrorFactory mirrorFactory = new DefaultMirrorFactory();
 		String xml = getClass().getPackage().getName().replace('.', '/') + "/xmlfile-aop.xml";
 		mirrorFactory.setAopConfigration(new XmlAopConfigration(xml));
-		assertNotNull(mirrorFactory.getMirror(XmlAopConfigration.class, null));
-		assertNotNull(mirrorFactory.getMirror(DefaultMirrorFactory.class, null));
-		assertNotNull(mirrorFactory.getMirror(DefaultIoc.class, null));
+		assertNotNull(mirrorFactory.getMirror(null, XmlAopConfigration.class, null));
+		assertNotNull(mirrorFactory.getMirror(null, DefaultMirrorFactory.class, null));
+		assertNotNull(mirrorFactory.getMirror(null, DefaultIoc.class, null));
 	}
 
 }

@@ -224,7 +224,7 @@ public class DefaultMvcLoading implements Loading {
 		}
 		
 		if (log.isDebugEnabled()) {
-			log.debugf("@IocBy(type=%s, args=%s)", ip.getName(), Jsons.toJson(args));
+			log.debugf("@IocBy(type=%s, args=%s, mirror=%s)", ip.getName(), Jsons.toJson(args), (ib == null ? null : ib.mirror().getName()));
 		}
 		
 		Ioc ioc = Classes.born(ip).create(config, args);

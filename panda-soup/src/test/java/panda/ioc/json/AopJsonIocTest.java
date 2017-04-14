@@ -16,7 +16,7 @@ public class AopJsonIocTest {
 	public void test_simple() {
 		IocLoader il = new JsonIocLoader(AopJsonIocTest.class.getPackage().getName().replace('.', '/') + "/aop.js");
 		DefaultIoc ioc = new DefaultIoc(il);
-		ioc.setMirrorFactory(new DefaultMirrorFactory(ioc));
+		ioc.setMirrorFactory(new DefaultMirrorFactory());
 		StringBuilder sb = ioc.get(StringBuilder.class, "sb");
 		Mammal fox = ioc.get(Mammal.class, "fox");
 

@@ -34,7 +34,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 
 	public ObjectProxy make(IocMaking ing, IocObject iobj) {
 		// 获取 Mirror， AOP 将在这个方法中进行
-		Class<?> mirror = ing.getMirrors().getMirror(iobj.getType(), ing.getName());
+		Class<?> mirror = ing.getMirrors().getMirror(ing.getIoc(), iobj.getType(), ing.getName());
 
 		// 建立对象代理，并保存在上下文环境中 只有对象为 singleton
 		// 并且有一个非 null 的名称的时候才会保存

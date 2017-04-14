@@ -12,21 +12,21 @@ import panda.mvc.ioc.loader.MvcDefaultIocLoader;
 
 public class DefaultIocProvider extends AbstractIocProvider {
 	@Override
-	public Ioc create(MvcConfig config, String... args) {
-		Ioc ioc = create(getIocLoader(config, args));
+	public Ioc create(MvcConfig mcfg, String... args) {
+		Ioc ioc = create(mcfg, getIocLoader(mcfg, args));
 		
-		setIocBeans(ioc, config);
+		setIocBeans(ioc, mcfg);
 		
 		return ioc;
 	}
 	
-	protected void setIocBeans(Ioc ioc, MvcConfig config) {
+	protected void setIocBeans(Ioc ioc, MvcConfig mcfg) {
 		IocContext ictx = ioc.getContext();
 		
 		// save default beans
-		ictx.save(Scope.APP, MvcConfig.class.getName(), new DefaultObjectProxy(config));
-		ictx.save(Scope.APP, ServletContext.class.getName(), new DefaultObjectProxy(config.getServletContext()));
-		ictx.save(Scope.APP, "$servlet", new DefaultObjectProxy(config.getServletContext()));
+		ictx.save(Scope.APP, MvcConfig.class.getName(), new DefaultObjectProxy(mcfg));
+		ictx.save(Scope.APP, ServletContext.class.getName(), new DefaultObjectProxy(mcfg.getServletContext()));
+		ictx.save(Scope.APP, "$servlet", new DefaultObjectProxy(mcfg.getServletContext()));
 	}
 	
 	protected IocLoader getIocLoader(MvcConfig config, String ... args) {

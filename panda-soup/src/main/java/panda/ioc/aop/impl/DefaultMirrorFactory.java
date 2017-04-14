@@ -22,18 +22,12 @@ public class DefaultMirrorFactory extends MirrorFactory {
 
 	private static final Log log = Logs.getLog(DefaultMirrorFactory.class);
 
-	private Ioc ioc;
-
 	private ClassDefiner cd;
 
 	private AopConfigration aopConfigration;
 
-	public DefaultMirrorFactory(Ioc ioc) {
-		this.ioc = ioc;
-	}
-
 	@Override
-	public <T> Class<T> getMirror(Class<T> type, String name) {
+	public <T> Class<T> getMirror(Ioc ioc, Class<T> type, String name) {
 		if (MethodInterceptor.class.isAssignableFrom(type)
 			|| type.getName().endsWith(ClassAgent.CLASSNAME_SUFFIX)
 			|| AopConfigration.IOCNAME.equals(name)
