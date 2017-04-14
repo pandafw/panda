@@ -24,8 +24,14 @@ import panda.lang.time.StopWatch;
  */
 public class EncryptsTest extends TestCase {
 	private void encdec(String text, String trans) {
-		String enc = Encrypts.encrypt(text, Encrypts.DEFAULT_KEY, trans);
-		String dec = Encrypts.decrypt(enc, Encrypts.DEFAULT_KEY, trans);
+		encdec(text, null, trans);
+	}
+
+	private void encdec(String text, String key, String trans) {
+		key = key == null ? Encrypts.DEFAULT_KEY : key;
+		
+		String enc = Encrypts.encrypt(text, key, trans);
+		String dec = Encrypts.decrypt(enc, key, trans);
 
 		assertEquals(text, dec);
 	}
@@ -35,7 +41,7 @@ public class EncryptsTest extends TestCase {
 	}
 
 	public void testDES() throws Exception {
-		encdec("1234567", Encrypts.DES);
+		encdec("1234567", "12345678", Encrypts.DES);
 	}
 
 	public void testAES() {
@@ -43,12 +49,16 @@ public class EncryptsTest extends TestCase {
 	}
 	
 	private void speedTest(List<String> samples, String trans) {
+		speedTest(samples, null, trans);
+	}
+	
+	private void speedTest(List<String> samples, String key, String trans) {
 		final int CNT = samples.size();
-		final int MAX = 1;
+		final int MAX = 10;
 		StopWatch sw = new StopWatch();
 		for (int j = 0; j < MAX; j++) {
 			for (int i = 0; i < CNT; i++) {
-				encdec(samples.get(i), trans);
+				encdec(samples.get(i), key, trans);
 			}
 		}
 		System.out.println(trans + ": " + sw);
@@ -63,18 +73,11 @@ public class EncryptsTest extends TestCase {
 		}
 
 		speedTest(samples, Encrypts.AES);
-		speedTest(samples, Encrypts.AES);
-		speedTest(samples, Encrypts.AESWrap);
-		speedTest(samples, Encrypts.AESFOUR);
 		speedTest(samples, Encrypts.Blowfish);
-		speedTest(samples, Encrypts.DES);
-		speedTest(samples, Encrypts.DESede);
-		speedTest(samples, Encrypts.DESedeWrap);
-		speedTest(samples, Encrypts.ECIES);
+		speedTest(samples, "12345678", Encrypts.DES);
+		speedTest(samples, "123456781234567812345678", Encrypts.DESede);
 		speedTest(samples, Encrypts.RC2);
 		speedTest(samples, Encrypts.RC4);
-		speedTest(samples, Encrypts.RC5);
-		speedTest(samples, Encrypts.RSA);
 	}
 
 	@Test

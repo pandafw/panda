@@ -15,17 +15,11 @@ import panda.lang.codec.binary.Base64;
 public class Encrypts {
 	//------------------------------------------------------------------------------
 	public static final String AES = "AES";
-	public static final String AESWrap = "AESWrap";
-	public static final String AESFOUR = "AESFOUR";
 	public static final String Blowfish = "Blowfish";
 	public static final String DES = "DES";
 	public static final String DESede = "DESede";
-	public static final String DESedeWrap = "DESedeWrap";
-	public static final String ECIES = "ECIES";
 	public static final String RC2 = "RC2";
 	public static final String RC4 = "RC4";
-	public static final String RC5 = "RC5";
-	public static final String RSA = "RSA";
 	
 	//------------------------------------------------------------------------------
 	/** AES/CBC/NoPadding (128) */
@@ -60,7 +54,7 @@ public class Encrypts {
 	public static final String RSA_ECB_OAEPWITHSHA256_AND_MGF1PADDING  = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
 	
 	//------------------------------------------------------------------------------
-	public static final String DEFAULT_CIPHER = Encrypts.Blowfish;
+	public static final String DEFAULT_CIPHER = Encrypts.AES;
 	public static final String DEFAULT_KEY = "== Panda Java ==";
 
 	//------------------------------------------------------------------------------
