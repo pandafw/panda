@@ -12,4 +12,9 @@ public class SqlDaoSqliteTest extends SqlDaoTestCase {
 	protected DaoClient getDaoClient() {
 		return client;
 	}
+
+	protected String concatSql(String a, String b) {
+		return "(" + a + " || " + b + ")";
+	}
+
 }

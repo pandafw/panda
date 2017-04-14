@@ -8,10 +8,6 @@ import panda.io.Files;
 import panda.lang.Exceptions;
 
 
-
-
-/**
- */
 public class SqlDaoDerbyTest extends SqlDaoTestCase {
 	private static SqlDaoClient client = createSqlDaoClient();
 
@@ -30,10 +26,7 @@ public class SqlDaoDerbyTest extends SqlDaoTestCase {
 		return client;
 	}
 
-	@Override
-	protected void init() {
-		
-		super.init();
+	protected String concatSql(String a, String b) {
+		return "(" + a + " || " + b + ")";
 	}
-	
 }

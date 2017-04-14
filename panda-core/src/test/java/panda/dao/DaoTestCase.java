@@ -536,6 +536,10 @@ public abstract class DaoTestCase {
 		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
 	}
 
+	protected String concatSql(String a, String b) {
+		return "CONCAT(" + a + ", " + b + ")";
+	}
+
 	@Test
 	public void testUpdatesColumnByQuery() {
 		List<Teacher> expect = Teacher.creates(2, 3);
@@ -546,7 +550,7 @@ public abstract class DaoTestCase {
 		t.setMemo("u");
 
 		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
-		q.in("name", "T2", "T3").excludeAll().column("memo", "CONCAT(memo, '+u')");
+		q.in("name", "T2", "T3").excludeAll().column("memo", concatSql("memo", "'+u'"));
 		
 		Assert.assertEquals(expect.size(), dao.updates(t, q));
 		

@@ -29,7 +29,7 @@ public class SMTPHeaderTestCase {
 	public void testToString() {
 		assertNotNull(header);
 		// Note that the DotTerminatedMessageWriter converts LF to CRLF
-		assertEquals("From: from@here.invalid\nSubject: Test email\nTo: to@there.invalid\n\n",
+		assertEquals("From: from@here.invalid\nSubject: Test email\nTo: to@there.invalid\n",
 			(header.toString()));
 	}
 
@@ -38,7 +38,7 @@ public class SMTPHeaderTestCase {
 		SMTPHeader hdr = new SMTPHeader("from@here.invalid", "to@there.invalid", null);
 		assertNotNull(hdr);
 		// Note that the DotTerminatedMessageWriter converts LF to CRLF
-		assertEquals("From: from@here.invalid\nTo: to@there.invalid\n\n", hdr.toString());
+		assertEquals("From: from@here.invalid\nTo: to@there.invalid\n", hdr.toString());
 	}
 
 //	@Test(expected = IllegalArgumentException.class)
@@ -51,7 +51,7 @@ public class SMTPHeaderTestCase {
 		SMTPHeader hdr = new SMTPHeader("from@here.invalid", null, null);
 		assertNotNull(hdr);
 		// Note that the DotTerminatedMessageWriter converts LF to CRLF
-		assertEquals("From: from@here.invalid\n\n", hdr.toString());
+		assertEquals("From: from@here.invalid\n", hdr.toString());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class SMTPHeaderTestCase {
 		hdr.set("X-Header1", "value 1");
 		hdr.set("X-Header2", "value 2");
 		// Note that the DotTerminatedMessageWriter converts LF to CRLF
-		assertEquals("From: from@here.invalid\nX-Header1: value 1\nX-Header2: value 2\n\n", hdr.toString());
+		assertEquals("From: from@here.invalid\nX-Header1: value 1\nX-Header2: value 2\n", hdr.toString());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class SMTPHeaderTestCase {
 		assertNotNull(hdr);
 		hdr.set("Date", "dummy date");
 		// does not replace the Date field
-		assertEquals("Date: dummy date\nFrom: from@here.invalid\n\n", hdr.toString());
+		assertEquals("Date: dummy date\nFrom: from@here.invalid\n", hdr.toString());
 	}
 
 	// Returns the msg without a date
