@@ -106,16 +106,14 @@ public class CaseInsensitiveMap<K, V> implements Map<K, V>, Cloneable {
 	@Override
 	public Set<K> keySet() {
 		return new Set<K>() {
-			Set<K> ks = cmap.keySet();
-			
 			@Override
 			public int size() {
-				return ks.size();
+				return cmap.keySet().size();
 			}
 
 			@Override
 			public boolean isEmpty() {
-				return ks.isEmpty();
+				return cmap.keySet().isEmpty();
 			}
 
 			@Override
@@ -125,17 +123,17 @@ public class CaseInsensitiveMap<K, V> implements Map<K, V>, Cloneable {
 
 			@Override
 			public Iterator<K> iterator() {
-				return ks.iterator();
+				return cmap.keySet().iterator();
 			}
 
 			@Override
 			public Object[] toArray() {
-				return ks.toArray();
+				return cmap.keySet().toArray();
 			}
 
 			@Override
 			public <T> T[] toArray(T[] a) {
-				return ks.toArray(a);
+				return cmap.keySet().toArray(a);
 			}
 
 			@Override
@@ -201,6 +199,22 @@ public class CaseInsensitiveMap<K, V> implements Map<K, V>, Cloneable {
 			public void clear() {
 				keys.clear();
 				cmap.clear();
+			}
+
+			@Override
+			public int hashCode() {
+				return cmap.keySet().hashCode();
+			}
+
+			@Override
+			public boolean equals(Object o) {
+				if (o == this)
+					return true;
+
+				if (!(o instanceof Set))
+					return false;
+				
+				return cmap.keySet().equals(o);
 			}
 		};
 	}
