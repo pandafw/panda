@@ -1,6 +1,7 @@
 package panda.mvc.validation.validator;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -16,11 +17,9 @@ import panda.vfs.FileItem;
 @IocBean(singleton=false)
 public class RequiredValidator extends AbstractValidator {
 
-	private Map<String, String> fields;
+	private Collection<String> fields;
+	private Map<String, String> refers;
 	
-	/**
-	 * 
-	 */
 	public RequiredValidator() {
 		setMsgId(Validators.MSGID_REQUIRED);
 	}
@@ -28,25 +27,39 @@ public class RequiredValidator extends AbstractValidator {
 	/**
 	 * @return the fields
 	 */
-	public Map<String, String> getFields() {
+	public Collection<String> getFields() {
 		return fields;
 	}
 
 	/**
 	 * @param fields the fields to set
 	 */
-	public void setFields(Map<String, String> fields) {
+	public void setFields(Collection<String> fields) {
 		this.fields = fields;
+	}
+
+	/**
+	 * @return the refers
+	 */
+	public Map<String, String> getRefers() {
+		return refers;
+	}
+
+	/**
+	 * @param refers the refers to set
+	 */
+	public void setRefers(Map<String, String> refers) {
+		this.refers = refers;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	protected boolean validateValue(ActionContext ac, Object value) {
 		if (value != null) {
-			if (Collections.isNotEmpty(fields)) {
+			if (Collections.isNotEmpty(refers)) {
 				boolean errs = false;
 				BeanHandler bh = Beans.i().getBeanHandler(value.getClass());
-				for (Entry<String, String> en : fields.entrySet()) {
+				for (Entry<String, String> en : refers.entrySet()) {
 					Object v = bh.getBeanValue(value, en.getKey());
 					if (!exists(v)) {
 						addChildFieldError(ac, en.getKey(), en.getValue());
@@ -55,16 +68,35 @@ public class RequiredValidator extends AbstractValidator {
 				}
 				return !errs;
 			}
+
+			if (Collections.isNotEmpty(fields)) {
+				boolean errs = false;
+				BeanHandler bh = Beans.i().getBeanHandler(value.getClass());
+				for (String f : fields) {
+					Object v = bh.getBeanValue(value, f);
+					if (!exists(v)) {
+						addChildFieldError(ac, f, f);
+						errs = true;
+					}
+				}
+				return !errs;
+			}
+
 			return exists(value);
 		}
 		
-		if (Collections.isEmpty(fields)) {
-			addFieldError(ac);
-		}
-		else {
-			for (Entry<String, String> en : fields.entrySet()) {
+		if (Collections.isNotEmpty(refers)) {
+			for (Entry<String, String> en : refers.entrySet()) {
 				addChildFieldError(ac, en.getKey(), en.getValue());
 			}
+		}
+		else if (Collections.isNotEmpty(fields)) {
+			for (String f : fields) {
+				addChildFieldError(ac, f, f);
+			}
+		}
+		else {
+			addFieldError(ac);
 		}
 		return false;
 	}

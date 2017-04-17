@@ -55,7 +55,15 @@ public class ValidateModule {
 	@At
 	public Object reqirAny(
 			@Param
-			@Validates(@Validate(value=Validators.REQUIRED, params="fields: { 'consts':'', 'el':'el2' }", message="required"))
+			@Validates(@Validate(value=Validators.REQUIRED, params="refers: { 'consts':'', 'el':'el2' }", message="required"))
+			ValidateObject one) {
+		return one.consts + ' ' + one.el;
+	}
+
+	@At
+	public Object reqirAny2(
+			@Param
+			@Validates(@Validate(value=Validators.REQUIRED, params="fields: [ 'consts', 'el' ]", message="required"))
 			ValidateObject one) {
 		return one.consts + ' ' + one.el;
 	}

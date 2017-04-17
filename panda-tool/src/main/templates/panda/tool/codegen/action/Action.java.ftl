@@ -5,7 +5,7 @@ package ${actionPackage};
 import ${i};
 </#list>
 <#macro validates ui><#if ui.requiredValidateFieldList?has_content>@Validates({
-			@Validate(value=${gen.validatorType('required')}, params="{ fields: ${ui.requiredValidateFields} }", msgId=${gen.validatorMsgId('required')}),
+			@Validate(value=${gen.validatorType('required')}, params="{ ${ui.requiredValidateFields} }", msgId=${gen.validatorMsgId('required')}),
 			@Validate(value=${gen.validatorType('visit')})
 			})<#else>@Validates</#if></#macro>
 

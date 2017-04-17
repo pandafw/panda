@@ -233,14 +233,34 @@ public class InputUI implements Comparable<InputUI> {
 	}
 	
 	public String getRequiredValidateFields() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{ ");
+		boolean allEmpty = true;
 		for (InputField f : getRequiredValidateFieldList()) {
-			sb.append('\'').append(f.getName()).append("': '").append(Strings.defaultString(f.getRequiredrefer())).append("', ");
+			String r = Strings.defaultString(f.getRequiredrefer());
+			if (Strings.isNotEmpty(r)) {
+				allEmpty = false;
+			}
 		}
-		sb.setLength(sb.length() - 2);
-		sb.append(" }");
-		return sb.toString();
+
+		if (allEmpty) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("fields: [ ");
+			for (InputField f : getRequiredValidateFieldList()) {
+				sb.append('\'').append(f.getName()).append("', ");
+			}
+			sb.setLength(sb.length() - 2);
+			sb.append(" ]");
+			return sb.toString();
+		}
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("refers: { ");
+			for (InputField f : getRequiredValidateFieldList()) {
+				sb.append('\'').append(f.getName()).append("': '").append(Strings.defaultString(f.getRequiredrefer())).append("', ");
+			}
+			sb.setLength(sb.length() - 2);
+			sb.append(" }");
+			return sb.toString();
+		}
 	}
 
 	public InputField getFieldByName(String name) {

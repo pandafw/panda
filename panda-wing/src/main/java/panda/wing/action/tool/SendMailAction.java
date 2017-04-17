@@ -253,7 +253,7 @@ public class SendMailAction extends AbstractAction {
 	 */
 	@At
 	public void send(@Param @Validates({
-		@Validate(value=Validators.REQUIRED, params="{ fields: { 'from': '', 'to': '' } }", msgId=Validators.MSGID_REQUIRED),
+		@Validate(value=Validators.REQUIRED, params="{ fields: [ 'from', 'to' ] }", msgId=Validators.MSGID_REQUIRED),
 		@Validate(value=Validators.VISIT)
 		}) Arg a) {
 

@@ -370,6 +370,23 @@ public class ValidateTest extends AbstractMvcTestCase {
 		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el2\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
 	}
 
+
+	@Test
+	public void testRequiredAny2Ok() throws Throwable {
+		request.setRequestURI("/reqirAny2");
+		request.addParameter("consts", "a");
+		request.addParameter("el", "ok");
+		servlet.service(request, response);
+		assertEquals("a ok", response.getContentAsString());
+	}
+
+	@Test
+	public void testRequiredAny2Err() throws Throwable {
+		request.setRequestURI("/reqirAny2");
+		servlet.service(request, response);
+		assertEquals("{\"success\":false,\"alerts\":{\"params\":{\"errors\":{\"consts\":[\"required\"],\"el\":[\"required\"]}}},\"params\":{\"number\":0}}", response.getContentAsString());
+	}
+
 	@Test
 	public void testRequiredOneOk() throws Throwable {
 		request.setRequestURI("/reqirOne");
