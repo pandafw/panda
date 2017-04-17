@@ -28,7 +28,7 @@ import panda.mvc.ioc.IocRequestListener;
 import panda.mvc.ioc.IocSessionListener;
 import panda.mvc.ioc.RequestIocContext;
 import panda.mvc.ioc.SessionIocContext;
-import panda.servlet.HttpDelegateResponseWrapper;
+import panda.servlet.DelegateHttpServletResponseWrapper;
 import panda.servlet.HttpServlets;
 
 public class ActionHandler {
@@ -175,7 +175,7 @@ public class ActionHandler {
 		ac.setIoc(ioc);
 		ac.setServlet(config.getServletContext());
 		ac.setRequest(req);
-		ac.setResponse(new HttpDelegateResponseWrapper(res));
+		ac.setResponse(new DelegateHttpServletResponseWrapper(res));
 
 		try {
 			ActionInvoker invoker = mapping.getActionInvoker(ac);

@@ -38,7 +38,7 @@ import javax.servlet.http.Part;
 import panda.lang.Asserts;
 import panda.lang.Collections;
 import panda.net.http.HttpHeader;
-import panda.servlet.DelegatingServletInputStream;
+import panda.servlet.DelegateServletInputStream;
 
 /**
  * Mock implementation of the {@link javax.servlet.http.HttpServletRequest} interface.
@@ -334,7 +334,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	public ServletInputStream getInputStream() {
 		if (this.content != null) {
-			return new DelegatingServletInputStream(new ByteArrayInputStream(this.content));
+			return new DelegateServletInputStream(new ByteArrayInputStream(this.content));
 		}
 		else {
 			return null;

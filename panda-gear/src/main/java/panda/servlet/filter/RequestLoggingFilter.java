@@ -117,7 +117,7 @@ public class RequestLoggingFilter implements Filter {
 		}
 
 		if (accessLog != null) {
-			String accessFormat = config.getInitParameter("accessFormat");
+			String accessFormat = config.getInitParameter("accessLogFormat");
 			if (Strings.isEmpty(accessFormat)) {
 				accessFormat = "%t %a %h %p %m %s %A %V %P %S %T %I %u";
 			}

@@ -17,7 +17,7 @@ import panda.servlet.mock.MockHttpServletRequest;
  *
  * @see MockHttpServletRequest
  */
-public class DelegatingServletInputStream extends ServletInputStream {
+public class DelegateServletInputStream extends ServletInputStream {
 
 	private final InputStream sourceStream;
 
@@ -26,7 +26,7 @@ public class DelegatingServletInputStream extends ServletInputStream {
 	 * Create a DelegatingServletInputStream for the given source stream.
 	 * @param sourceStream the source stream (never <code>null</code>)
 	 */
-	public DelegatingServletInputStream(InputStream sourceStream) {
+	public DelegateServletInputStream(InputStream sourceStream) {
 		Asserts.notNull(sourceStream, "Source InputStream must not be null");
 		this.sourceStream = sourceStream;
 	}

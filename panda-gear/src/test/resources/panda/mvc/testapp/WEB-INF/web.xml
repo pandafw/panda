@@ -3,6 +3,31 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	
+	<listener>
+		<listener-class>panda.mvc.ioc.IocSessionListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>panda.mvc.ioc.IocRequestListener</listener-class>
+	</listener>
+
+	<!-- filter -->
+	<filter>
+		<filter-name>encoding-filter</filter-name>
+		<filter-class>panda.servlet.filter.RequestEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>logging-filter</filter-name>
+		<filter-class>panda.servlet.filter.RequestLoggingFilter</filter-class>
+		<init-param>
+			<param-name>accessLogName</param-name>
+			<param-value>access</param-value>
+		</init-param>
+	</filter>
 	<filter>
 		<filter-name>mvc</filter-name>
 		<filter-class>panda.mvc.MvcFilter</filter-class>
@@ -13,20 +38,49 @@
 	</filter>
 
 	<filter-mapping>
+		<filter-name>encoding-filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>logging-filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
 		<filter-name>mvc</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	<listener>
-		<listener-class>panda.mvc.ioc.IocSessionListener</listener-class>
-	</listener>
-	
-	<listener>
-		<listener-class>panda.mvc.ioc.IocRequestListener</listener-class>
-	</listener>
 
+	<servlet id="jsp">
+		<servlet-name>uu</servlet-name>
+		<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+		<init-param>
+			<param-name>logVerbosityLevel</param-name>
+			<param-value>DEBUG</param-value>
+		</init-param>
+		<init-param>
+			<param-name>fork</param-name>
+			<param-value>>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>keepgenerated</param-name>
+			<param-value>>true</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>jsp</servlet-name>
+		<url-pattern>*.jsp</url-pattern>
+		<url-pattern>*.jspf</url-pattern>
+		<url-pattern>*.jspx</url-pattern>
+		<url-pattern>*.xsp</url-pattern>
+		<url-pattern>*.JSP</url-pattern>
+		<url-pattern>*.JSPF</url-pattern>
+		<url-pattern>*.JSPX</url-pattern>
+		<url-pattern>*.XSP</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-
 </web-app>

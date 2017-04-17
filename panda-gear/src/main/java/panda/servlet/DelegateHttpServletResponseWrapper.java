@@ -1,7 +1,6 @@
 package panda.servlet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
@@ -9,23 +8,20 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import panda.io.stream.ByteArrayOutputStream;
+import panda.io.stream.WriterOutputStream;
 import panda.lang.Charsets;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpStatus;
 
-public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
+public class DelegateHttpServletResponseWrapper extends HttpServletResponseWrapper {
 	private HttpHeader head;
 	private HttpStatus status = new HttpStatus(SC_OK);
 	private ServletOutputStream stream;
 	private PrintWriter writer;
 	
-	private ByteArrayOutputStream body;
-
-	public HttpBufferedResponseWrapper(HttpServletResponse res) throws IOException {
+	public DelegateHttpServletResponseWrapper(HttpServletResponse res) {
 		super(res);
 		head = new HttpHeader();
-		body = new ByteArrayOutputStream();
 	}
 
 	/**
@@ -47,14 +43,6 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 	 */
 	public String getStatusMsg() {
 		return status.getReason();
-	}
-
-	/**
-	 * @return the body
-	 */
-	public InputStream getBodyStream() throws IOException {
-		flush();
-		return body.toInputStream();
 	}
 
 	private void flush() throws IOException {
@@ -128,31 +116,40 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 		super.setStatus(sc, sm);
 	}
 
+	/**
+	 * do not throw exception even if stream is already returned.
+	 * @return writer
+	 */
 	@Override
 	public PrintWriter getWriter() throws IOException {
-		if (stream != null) {
-			throw new IllegalStateException("the getOutputStream() method has already been called on this response");
-		}
 		if (writer == null) {
-			String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
-			writer = new PrintWriter(new OutputStreamWriter(delegateServletOutputStream(), cs));
+			if (stream == null) {
+				writer = super.getWriter();
+			}
+			else {
+				String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+				writer = new PrintWriter(new OutputStreamWriter(stream, cs));
+			}
 		}
 		return writer;
 	}
 	
+	/**
+	 * do not throw exception even if writer is already returned.
+	 * @return writer
+	 */
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
-		if (writer != null) {
-			throw new IllegalStateException("the getWriter() method has already been called on this response");
-		}
 		if (stream == null) {
-			stream = delegateServletOutputStream();
+			if (writer == null) {
+				stream = super.getOutputStream();
+			}
+			else {
+				String cs = Charsets.defaultEncoding(getCharacterEncoding(), Charsets.UTF_8);
+				stream = new DelegateServletOutputStream(new WriterOutputStream(writer, cs));
+			}
 		}
 		return stream;
-	}
-
-	private ServletOutputStream delegateServletOutputStream() throws IOException {
-		return new DelegatingServletOutputStream(body, super.getOutputStream());
 	}
 
 	@Override
@@ -169,8 +166,8 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 
 	@Override
 	public void flushBuffer() throws IOException {
-		super.flushBuffer();
 		flush();
+		super.flushBuffer();
 	}
 	
 	@Override
@@ -179,14 +176,11 @@ public class HttpBufferedResponseWrapper extends HttpServletResponseWrapper {
 		
 		status.setStatus(SC_OK);
 		head.clear();
-		body.reset();
 	}
 
 	@Override
 	public void resetBuffer() {
 		super.resetBuffer();
-
-		body.reset();
 	}
 
 }

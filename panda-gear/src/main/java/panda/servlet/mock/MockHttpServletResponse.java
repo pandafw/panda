@@ -20,7 +20,7 @@ import panda.lang.Asserts;
 import panda.lang.Chars;
 import panda.lang.Strings;
 import panda.net.http.HttpHeader;
-import panda.servlet.DelegatingServletOutputStream;
+import panda.servlet.DelegateServletOutputStream;
 import panda.servlet.HttpServlets;
 
 /**
@@ -482,7 +482,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	 * Inner class that adapts the ServletOutputStream to mark the
 	 * response as committed once the buffer size is exceeded.
 	 */
-	private class ResponseServletOutputStream extends DelegatingServletOutputStream {
+	private class ResponseServletOutputStream extends DelegateServletOutputStream {
 
 		public ResponseServletOutputStream(OutputStream out) {
 			super(out);

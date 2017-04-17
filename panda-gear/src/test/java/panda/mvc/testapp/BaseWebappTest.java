@@ -33,9 +33,6 @@ public abstract class BaseWebappTest {
 	public void startServer() throws Throwable {
 		try {
 			if (server == null) {
-				// Set JSP to use Standard JavaC always
-				System.setProperty("org.apache.jasper.compiler.disablejsr199", "false");
-
 				String xml = "WEB-INF/web.xml";
 				URL url = BaseWebappTest.class.getResource(xml);
 				String path = url.toExternalForm();
@@ -44,7 +41,9 @@ public abstract class BaseWebappTest {
 				server = new Server(9999);
 				
 				String war = path.substring(0, path.length() - xml.length());
-				WebAppContext wac = new WebAppContext(war, getContextPath());
+				WebAppContext wac = new WebAppContext();
+				wac.setResourceBase(war);
+				wac.setContextPath(getContextPath());
 
 				//wac.setAttribute("javax.servlet.context.tempdir", war + "WEB-INF/tmp");
 

@@ -16,7 +16,7 @@ import panda.servlet.mock.MockHttpServletResponse;
  *
  * @see MockHttpServletResponse
  */
-public class DelegatingServletOutputStream extends ServletOutputStream {
+public class DelegateServletOutputStream extends ServletOutputStream {
 
 	private final OutputStream[] ostreams;
 
@@ -24,7 +24,7 @@ public class DelegatingServletOutputStream extends ServletOutputStream {
 	 * Create a DelegatingServletOutputStream for the given target stream.
 	 * @param targetStreams the target streams (never <code>null</code>)
 	 */
-	public DelegatingServletOutputStream(OutputStream ... targetStreams) {
+	public DelegateServletOutputStream(OutputStream ... targetStreams) {
 		Asserts.notNull(targetStreams, "Target OutputStreams must not be null");
 		Asserts.noNullElements(targetStreams);
 		this.ostreams = targetStreams;
