@@ -34,7 +34,7 @@
 		<link>
 			<name>core</name>
 			<type>2</type>
-			<location>/data/Develop/Projects/foolite/panda/panda-core/src/main/java</location>
+			<location>/data/Develop/Projects/panda/panda-core/src/main/java</location>
 		</link>
 	</linkedResources>
 </projectDescription>

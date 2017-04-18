@@ -175,8 +175,8 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		}
 		imports.add(View.class.getName());
 		if (Strings.isNotEmpty(action.getAuth())) {
-			imports.add("panda.wing.auth.Auth");
-			imports.add("panda.wing.constant.AUTH");
+			imports.add("panda.app.auth.Auth");
+			imports.add("panda.app.constant.AUTH");
 		}
 		
 		if (Strings.isNotEmpty(action.getAutoJoin())) {
