@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="panda-tube" default="usage" basedir=".">
+	<property file="build.properties"/>
+	
+	<path id="dep.cp">
+		<pathelement path="../panda-core/out/classes"/>
+		<path refid="lib.cp"/>
+	</path>
+
+	<!-- build -->
+	<import file="../ant/panda-build.xml"/>
+
+</project>
