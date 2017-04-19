@@ -257,6 +257,10 @@ public abstract class Mvcs {
 	 * #(...) : text
 	 */
 	public static Object evaluate(ActionContext ac, String expr, Object arg) {
+		if (Strings.isEmpty(expr)) {
+			return expr;
+		}
+		
 		Object val = expr;
 		if (expr.length() > 3) {
 			char c0 = expr.charAt(0);
@@ -292,6 +296,10 @@ public abstract class Mvcs {
 	 * translate expression
 	 */
 	public static String translate(ActionContext ac, String expr, Object arg) {
+		if (Strings.isEmpty(expr)) {
+			return expr;
+		}
+		
 		if (arg != Objects.NULL) {
 			try {
 				ac.push(arg);

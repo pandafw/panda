@@ -272,8 +272,11 @@ public class DefaultTextProvider implements TextProvider {
 		return beans.getBeanValue(parent, property);
 	}
 
-	private String evalMessage(String text, Object arg) {
-		return Mvcs.translate(context, text, arg);
+	private String evalMessage(String txt, Object arg) {
+		if (Strings.isEmpty(txt)) {
+			return txt;
+		}
+		return Mvcs.translate(context, txt, arg);
 	}
 
 	/**
@@ -303,7 +306,7 @@ public class DefaultTextProvider implements TextProvider {
 	/**
 	 * Gets the default message.
 	 */
-	private String getDefaultMessage(Locale locale, String key, String def, Object arg) {
+	private String getDefaultMessage(Locale locale, String key, Object arg) {
 		String txt = findDefaultText(locale, key);
 		if (txt == null) {
 			return null;
@@ -318,7 +321,7 @@ public class DefaultTextProvider implements TextProvider {
 			if (log.isWarnEnabled()) {
 				log.warn("Trying to find text with empty key!");
 			}
-			return def;
+			return evalMessage(def, arg);
 		}
 
 		// search up class hierarchy
@@ -358,12 +361,12 @@ public class DefaultTextProvider implements TextProvider {
 		}
 
 		// get default
-		msg = getDefaultMessage(locale, key, def, arg);
+		msg = getDefaultMessage(locale, key, arg);
 		if (msg == null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Unable to find text for key '" + key + "' in class '" + clazz.getName() + "' and locale '" + locale + "'");
 			}
-			return def;
+			return evalMessage(def, arg);
 		}
 		
 		return msg;
