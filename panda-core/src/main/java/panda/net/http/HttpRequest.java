@@ -215,6 +215,24 @@ public class HttpRequest {
 		return this;
 	}
 
+	public String getContentType() {
+		return getHeader().getContentType();
+	}
+
+	public HttpRequest setContentType(String type) {
+		getHeader().setContentType(type);
+		return this;
+	}
+
+	public String getUserAgent() {
+		return getHeader().getUserAgent();
+	}
+	
+	public HttpRequest setUserAgent(String agent) {
+		getHeader().setUserAgent(agent);
+		return this;
+	}
+	
 	public List<Cookie> getCookies() {
 		List<Cookie> cs = new ArrayList<Cookie>();
 		String hc = getHeader().getString(HttpHeader.COOKIE);

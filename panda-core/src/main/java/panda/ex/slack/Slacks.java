@@ -6,7 +6,6 @@ import panda.bind.json.Jsons;
 import panda.io.MimeType;
 import panda.lang.Charsets;
 import panda.net.http.HttpClient;
-import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
 import panda.net.http.HttpRequest;
 import panda.net.http.HttpResponse;
@@ -16,7 +15,7 @@ public class Slacks {
 		HttpClient hc = new HttpClient();
 		HttpRequest hreq = hc.getRequest();
 		hreq.setUrl(url)
-			.setHeader(HttpHeader.CONTENT_TYPE, MimeType.APP_JSON)
+			.setContentType(MimeType.APP_JSON)
 			.setMethod(HttpMethod.POST);
 		hreq.setEncoding(Charsets.UTF_8);
 		

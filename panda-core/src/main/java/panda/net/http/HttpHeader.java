@@ -108,10 +108,26 @@ public class HttpHeader extends InternetHeader implements Cloneable, Serializabl
 		return this;
 	}
 
+	public String getUserAgent() {
+		return getString(USER_AGENT);
+	}
+	
 	public HttpHeader setUserAgent(String agent) {
 		return (HttpHeader)set(USER_AGENT, agent);
 	}
 
+	public String getContentType() {
+		return getString(CONTENT_TYPE);
+	}
+	
+	public HttpHeader setContentType(String type) {
+		return (HttpHeader)set(CONTENT_TYPE, type);
+	}
+	
+	public boolean isKeepAlive() {
+		return "keep-alive".equalsIgnoreCase(getString(CONNECTION));
+	}
+	
 	public HttpHeader setKeepAlive(boolean keep) {
 		return (HttpHeader)set(CONNECTION, keep ? "keep-alive" : "close");
 	}
