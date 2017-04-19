@@ -10,6 +10,8 @@ import panda.log.impl.AbstractLogAdapter;
 public class LogCatAdapter extends AbstractLogAdapter {
 	private static final int TAG_SIZE = 23;
 
+	public static String TAG_NAME = "PANDA";
+	
 	public static String getLogTag(String name) {
 		if (name == null) {
 			return "null";
@@ -82,7 +84,7 @@ public class LogCatAdapter extends AbstractLogAdapter {
 	
 
 	//------------------------------------------------
-	private String tag = "PANDA";
+	private String tag = TAG_NAME;
 	
 	public String getTag() {
 		return tag;

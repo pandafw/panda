@@ -28,7 +28,12 @@ public final class Logs {
 	private static LogAdapter adapter;
 
 	static {
+		if (Systems.IS_OS_ANDROID) {
+			ConsoleLog.console = System.out;
+		}
+
 		init();
+		
 		try {
 			getLog(Panda.class).debug("Panda is licensed under the GNU General Public License 3. " 
 				+ "Report bugs: https://github.com/foolite/panda/issues");
@@ -128,7 +133,7 @@ public final class Logs {
 		if (adapter == null) {
 			String[] adapters = new String[] {
 					ConsoleLogAdapter.class.getPackage().getName() + ".Log4jLogAdapter",
-					"panda.android.log.LogCatAdapter"
+					"panda.roid.log.LogCatAdapter"
 			};
 
 			ClassLoader cl = ClassLoaders.getClassLoader();

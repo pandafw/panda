@@ -27,7 +27,7 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 				as.add(adapter);
 			}
 			catch (Throwable e) {
-				System.err.println("Failed to initialize " + adapter.getClass() + ": " + e.getMessage());
+				LogLog.error("Failed to initialize " + adapter.getClass() + ": " + e.getMessage());
 			}
 		}
 		adapters = as;
@@ -45,7 +45,7 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 					adapters.add(adapter);
 				}
 				catch (Throwable e) {
-					System.err.println("Failed to create " + a + ": " + e.getMessage());
+					LogLog.error("Failed to create " + a + ": " + e.getMessage());
 				}
 			}
 		}
@@ -72,9 +72,6 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 		return new ComboLog(name, threshold, logs.toArray(new Log[logs.size()]));
 	}
 
-	/**
-	 * Console log to System.out and System.err
-	 */
 	private static class ComboLog extends AbstractLog {
 		private Log[] logs;
 		

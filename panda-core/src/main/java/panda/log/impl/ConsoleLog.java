@@ -6,6 +6,8 @@ import panda.lang.time.DateTimes;
 import panda.log.LogLevel;
 
 public class ConsoleLog extends AbstractLog {
+	public static PrintStream console;
+	
 	public ConsoleLog(String name, LogLevel level) {
 		super(name, level);
 	}
@@ -20,7 +22,13 @@ public class ConsoleLog extends AbstractLog {
 	
 	@Override
 	public void log(LogLevel level, String msg, Throwable t) {
-		PrintStream out = (level.isGreaterOrEqual(LogLevel.WARN) ? System.err : System.out);
+		PrintStream out ;
+		if (console == null) {
+			out = (level.isGreaterOrEqual(LogLevel.WARN) ? System.err : System.out);
+		}
+		else {
+			out = console;
+		}
 		output(out, level.toString(), msg, t);
 	}
 
