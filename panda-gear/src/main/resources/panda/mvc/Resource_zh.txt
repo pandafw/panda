@@ -16,10 +16,10 @@ pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
 pager-label-empty=
 pager-label-limit=显示件数：
-pager-tip-prev=« 上一页
-pager-tip-next=下一页 »
-pager-tip-first=⋘ 最前页
-pager-tip-last=最后页 ⋙
+pager-tooltip-prev=« 上一页
+pager-tooltip-next=下一页 »
+pager-tooltip-first=⋘ 最前页
+pager-tooltip-last=最后页 ⋙
 
 
 #listview - filters
