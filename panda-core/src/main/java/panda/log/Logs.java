@@ -21,7 +21,7 @@ import panda.log.impl.ConsoleLog;
 public final class Logs {
 	private static final String CONFIG = "panda-log.properties";
 	
-	private static LogLevel rootLvl = LogLevel.TRACE;
+	private static LogLevel rootLogLevel = LogLevel.TRACE;
 
 	private static Map<String, LogLevel> levels = new HashMap<String, LogLevel>();
 
@@ -80,6 +80,41 @@ public final class Logs {
 		return getLogger(adapter, sts[2].getClassName());
 	}
 
+	/**
+	 * get the log level by the name
+	 * @param name name
+	 * @return log level
+	 */
+	public static LogLevel getLogLevel(String name) {
+		LogLevel lvl = rootLogLevel;
+		if (Collections.isNotEmpty(levels) && Strings.isNotEmpty(name)) {
+			String key = "";
+			for (Entry<String, LogLevel> en : levels.entrySet()) {
+				if (name.startsWith(en.getKey())) {
+					if (en.getKey().length() > key.length()) {
+						key = en.getKey();
+						lvl = en.getValue();
+					}
+				}
+			}
+		}
+		return lvl;
+	}
+
+	/**
+	 * @return the rootLogLevel
+	 */
+	public static LogLevel getRootLogLevel() {
+		return rootLogLevel;
+	}
+
+	/**
+	 * @param rootLogLevel the rootLogLevel to set
+	 */
+	public static void setRootLogLevel(LogLevel rootLogLevel) {
+		Logs.rootLogLevel = rootLogLevel;
+	}
+
 	private static Log getLogger(LogAdapter adapter, String name) {
 		Log log;
 		try {
@@ -106,7 +141,7 @@ public final class Logs {
 						key = key.substring(4);
 						LogLevel lvl = LogLevel.parse(en.getValue().toString());
 						if ("*".equals(key)) {
-							rootLvl = lvl;
+							rootLogLevel = lvl;
 						}
 						else {
 							levels.put(key, lvl);
@@ -154,21 +189,5 @@ public final class Logs {
 			adapter = new ConsoleLogAdapter();
 			adapter.init(props);
 		}
-	}
-
-	public static LogLevel getLogLevel(String name) {
-		LogLevel lvl = rootLvl;
-		if (Collections.isNotEmpty(levels) && Strings.isNotEmpty(name)) {
-			String key = "";
-			for (Entry<String, LogLevel> en : levels.entrySet()) {
-				if (name.startsWith(en.getKey())) {
-					if (en.getKey().length() > key.length()) {
-						key = en.getKey();
-						lvl = en.getValue();
-					}
-				}
-			}
-		}
-		return lvl;
 	}
 }
