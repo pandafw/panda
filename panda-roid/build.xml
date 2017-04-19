@@ -9,7 +9,6 @@
 	</condition>
 
 	<!-- version -->
-	<property name="ver.src" value="../panda-core/src/main/java/panda/Panda.java"/>
 	<import file="../ant/panda-version.xml"/>
 	
 	<path id="main.cp">
