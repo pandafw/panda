@@ -485,6 +485,10 @@ public class Beans {
 				continue;
 			}
 			
+			if (!Void.TYPE.equals(m.getReturnType())) {
+				continue;
+			}
+			
 			Type[] pts = m.getGenericParameterTypes();
 			if (pts == null || pts.length != 1) {
 				continue;
