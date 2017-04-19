@@ -88,39 +88,39 @@ public class Pager extends UIBean {
 		TextProvider txt = context.getText();
 
 		if (emptyText == null) {
-			emptyText = txt.getText(LABEL_EMPTY, "", this);
+			emptyText = txt.getText(LABEL_EMPTY, "", pager);
 		}
 
 		if (firstText == null) {
-			firstText = txt.getText(LABEL_FIRST, "⋘", this);
+			firstText = txt.getText(LABEL_FIRST, "⋘", pager);
 		}
 		
 		if (lastText == null) {
-			lastText = txt.getText(LABEL_LAST, "⋙", this);
+			lastText = txt.getText(LABEL_LAST, "⋙", pager);
 		}
 		
 		if (prevText == null) {
-			prevText = txt.getText(LABEL_PREV, "«", this);
+			prevText = txt.getText(LABEL_PREV, "«", pager);
 		}
 		
 		if (nextText == null) {
-			nextText = txt.getText(LABEL_NEXT, "»", this);
+			nextText = txt.getText(LABEL_NEXT, "»", pager);
 		}
 
 		if (firstTooltip == null) {
-			firstTooltip = txt.getText(TOOLTIP_FIRST, "⋘ First Page", this);
+			firstTooltip = txt.getText(TOOLTIP_FIRST, "⋘ First Page", pager);
 		}
 		
 		if (lastTooltip == null) {
-			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page ⋙", this);
+			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page ⋙", pager);
 		}
 		
 		if (prevTooltip == null) {
-			prevTooltip = txt.getText(TOOLTIP_PREV, "« Previous ${top.limit}", this);
+			prevTooltip = txt.getText(TOOLTIP_PREV, "« Previous ${top.limit}", pager);
 		}
 		
 		if (nextTooltip == null) {
-			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} »", this);
+			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} »", pager);
 		}
 
 		if (linkSize == null) {
@@ -147,7 +147,7 @@ public class Pager extends UIBean {
 			infoText = txt.getText(
 				pager.getTotal() == null ? LABEL_INFOZ : LABEL_INFO, 
 				pager.getTotal() == null ? "${top.begin}~${top.end}" : "${top.begin}~${top.end}/${top.total}",
-				this);
+				pager);
 		}
 	}
 
