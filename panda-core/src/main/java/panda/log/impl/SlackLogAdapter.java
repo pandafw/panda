@@ -233,7 +233,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		protected String name;
 		
 		protected SlackLog(SlackLogAdapter adapter, String name) {
-			super(name);
+			super(name, adapter.threshold);
 			this.adapter = adapter;
 			this.name = name;
 		}

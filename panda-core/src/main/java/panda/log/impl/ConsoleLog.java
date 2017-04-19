@@ -5,9 +5,9 @@ import java.io.PrintStream;
 import panda.lang.time.DateTimes;
 import panda.log.LogLevel;
 
-public class DefaultLog extends AbstractLog {
-	public DefaultLog(String name) {
-		super(name);
+public class ConsoleLog extends AbstractLog {
+	public ConsoleLog(String name, LogLevel level) {
+		super(name, level);
 	}
 
 	/**
@@ -25,8 +25,11 @@ public class DefaultLog extends AbstractLog {
 	}
 
 	private void output(PrintStream out, String level, Object msg, Throwable t) {
-		out.printf("%s %s [%s] %s\n", DateTimes.isoTimeFormat().format(DateTimes.getDate()), level, Thread.currentThread()
-			.getName(), msg);
+		out.printf("%s %s [%s] %s\n", 
+			DateTimes.timestampFormat().format(DateTimes.getDate()), 
+			level, 
+			Thread.currentThread().getName(), 
+			msg);
 		if (t != null) {
 			t.printStackTrace(out);
 		}

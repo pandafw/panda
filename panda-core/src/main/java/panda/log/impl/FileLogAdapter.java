@@ -24,7 +24,7 @@ import panda.log.Log;
 import panda.log.LogLevel;
 
 
-public class FileLogAdapter extends BaseLogAdapter {
+public class FileLogAdapter extends AbstractLogAdapter {
 	protected FastDateFormat sdf;
 
 	protected long next = System.currentTimeMillis();
@@ -192,11 +192,13 @@ public class FileLogAdapter extends BaseLogAdapter {
 	/**
 	 * File log
 	 */
-	protected static class FileLog extends BaseLog {
+	protected static class FileLog extends AbstractLog {
+		protected FileLogAdapter adapter;
 		protected String name;
 		
 		protected FileLog(FileLogAdapter adapter, String name) {
-			super(adapter, name);
+			super(name, adapter.threshold);
+			this.adapter = adapter;
 			this.name = name;
 		}
 
@@ -218,7 +220,7 @@ public class FileLogAdapter extends BaseLogAdapter {
 				sb.append(Exceptions.getStackTrace(t)).append('\n');
 			}
 
-			((FileLogAdapter)adapter).print(sb.toString());
+			adapter.print(sb.toString());
 		}
 	}
 }

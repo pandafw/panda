@@ -30,8 +30,8 @@ public abstract class AbstractLog implements Log {
 
 	protected LogLevel level;
 
-	protected AbstractLog(String name) {
-		level = Logs.getLogLevel(name);
+	protected AbstractLog(String name, LogLevel level) {
+		this.level = (level == null ? Logs.getLogLevel(name) : level);
 	}
 
 	protected void log(LogLevel level, LogInfo info) {

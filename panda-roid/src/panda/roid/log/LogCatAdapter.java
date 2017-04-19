@@ -93,7 +93,7 @@ public class LogCatAdapter extends AbstractLogAdapter {
 	}
 
 	public Log getLogger(String name) {
-		return new LogCatLog(name);
+		return new LogCatLog(tag, name, threshold);
 	}
 
 	@Override
@@ -101,22 +101,27 @@ public class LogCatAdapter extends AbstractLogAdapter {
 		if ("tag".equalsIgnoreCase(name)) {
 			setTag(value);
 		}
+		else {
+			super.setProperty(name, value);
+		}
 	}
 	
 	/**
 	 * LogCat
 	 */
-	private class LogCatLog extends AbstractLog {
-		private String cat;
+	private static class LogCatLog extends AbstractLog {
+		private String tag;
+		private String name;
 		
-		LogCatLog(String name) {
-			super(name);
-			cat = name;
+		LogCatLog(String tag, String name, LogLevel threshold) {
+			super(name, threshold);
+			this.tag = tag;
+			this.name = name;
 		}
 
 		@Override
 		public void log(LogLevel level, String msg, Throwable t) {
-			LogCatAdapter.log(tag, cat, level, msg, t);
+			LogCatAdapter.log(tag, name, level, msg, t);
 		}
 	}
 }

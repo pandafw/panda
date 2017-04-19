@@ -29,7 +29,7 @@ public class Log4jLogAdapter implements LogAdapter {
 		private Logger logger;
 
 		Log4JLogger(String className) {
-			super(className);
+			super(className, null);
 			
 			logger = Logger.getLogger(className);
 			

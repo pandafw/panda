@@ -14,7 +14,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
-import panda.log.impl.DefaultLog;
+import panda.log.impl.ConsoleLog;
 
 /**
  */
@@ -82,7 +82,7 @@ public final class Logs {
 		}
 		catch (Throwable e) {
 			LogLog.error("Failed to getLogger(" + adapter.getClass() + ", " + name + ")");
-			log =  new DefaultLog(name);
+			log =  new ConsoleLog(name, null);
 		}
 		return log;
 	}

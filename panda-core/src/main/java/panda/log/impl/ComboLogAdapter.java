@@ -12,7 +12,7 @@ import panda.log.LogLevel;
 import panda.log.LogLog;
 
 
-public class ComboLogAdapter extends BaseLogAdapter {
+public class ComboLogAdapter extends AbstractLogAdapter {
 	private List<LogAdapter> adapters = new ArrayList<LogAdapter>();
 
 	@Override
@@ -67,19 +67,19 @@ public class ComboLogAdapter extends BaseLogAdapter {
 		}
 
 		if (logs.isEmpty()) {
-			return new DefaultLog(name);
+			return new ConsoleLog(name, threshold);
 		}
-		return new ComboLog(this, name, logs.toArray(new Log[logs.size()]));
+		return new ComboLog(name, threshold, logs.toArray(new Log[logs.size()]));
 	}
 
 	/**
 	 * Console log to System.out and System.err
 	 */
-	private static class ComboLog extends BaseLog {
+	private static class ComboLog extends AbstractLog {
 		private Log[] logs;
 		
-		ComboLog(ComboLogAdapter adapter, String name, Log[] logs) {
-			super(adapter, name);
+		ComboLog(String name, LogLevel level,  Log[] logs) {
+			super(name, level);
 			this.logs = logs;
 		}
 
