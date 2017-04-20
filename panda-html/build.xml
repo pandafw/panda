@@ -149,8 +149,57 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</java>
 
 		<!-- jquery extra -->
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/jquery/extra/js/jquery.ui.hammer.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/jquery/extra/js/jquery.ui.hammer.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/jquery/extra/js/jquery.ui.lightbox.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/jquery/extra/js/jquery.ui.lightbox.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/jquery/extra/js/jquery.ui.meio.mask.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/jquery/extra/js/jquery.ui.meio.mask.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/jquery/extra/js/jquery.ui.mousewheel.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/jquery/extra/js/jquery.ui.mousewheel.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/jquery/extra/js/jquery.ui.tablesorter.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/jquery/extra/js/jquery.ui.tablesorter.min.js"/>
+		</java>
+
 		<concat destfile="src/main/jquery/extra/js/jquery-extra.js" binary="true">
-			<fileset dir="src/main/jquery/extra/js" includes="jquery.*.js"/>
+			<fileset dir="src/main/jquery/extra/js">
+				<include name="jquery.*.js"/>
+				<exclude name="*.min.js"/>
+			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/jquery/extra/js/jquery-extra.js"/>
