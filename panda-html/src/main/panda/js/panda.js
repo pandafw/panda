@@ -1852,8 +1852,6 @@ if (typeof String.formatSize != "function") {
 		focusForm();
 	});
 })(jQuery);
-if (typeof(panda) == "undefined") { panda = {}; }
-
 function plv_options(id, options) {
 	var lv = document.getElementById(id);
 	for (var p in options) {

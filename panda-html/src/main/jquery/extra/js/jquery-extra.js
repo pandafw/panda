@@ -3651,12 +3651,12 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
 		}
 	});
 })(jQuery);
-/*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
- * Licensed under the MIT License (LICENSE.txt).
+/*!
+ * jQuery Mousewheel 3.1.13
  *
- * Version: 3.1.11
- *
- * Requires: jQuery 1.2.2+
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license
+ * http://jquery.org/license
  */
 
 (function (factory) {
@@ -3685,7 +3685,7 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
     }
 
     var special = $.event.special.mousewheel = {
-        version: '3.1.11',
+        version: '3.1.12',
 
         setup: function() {
             if ( this.addEventListener ) {
@@ -3714,11 +3714,12 @@ if (typeof define == TYPE_FUNCTION && define.amd) {
         },
 
         getLineHeight: function(elem) {
-            var $parent = $(elem)['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
+            var $elem = $(elem),
+                $parent = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
             if (!$parent.length) {
                 $parent = $('body');
             }
-            return parseInt($parent.css('fontSize'), 10);
+            return parseInt($parent.css('fontSize'), 10) || parseInt($elem.css('fontSize'), 10) || 16;
         },
 
         getPageHeight: function(elem) {
