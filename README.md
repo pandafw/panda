@@ -1,6 +1,13 @@
  Panda Framework
 =================
 
+Panda is a Java development framework, it can help you quickly create a WEB application.
+
+ - [Project Site](http://foolite.github.io/panda)
+ - [English Readme](https://github.com/foolite/panda/wiki/Readme)
+
+
+
 Panda是一个Java的开发框架，它可以帮你快速的建立一个WEB应用。
 
 看到这里可能有的同学会说，现在开发Java的WEB应用大家都用Spring/Struts2/Hibernate这些经典的框架，
@@ -88,31 +95,7 @@ Panda是由以下几个部分组成的。
  - Java 7
 
 
- Ivy Settings
---------------
-    <ivysettings>
-        <settings defaultResolver="default" />
-        <resolvers>
-            <chain name="public">
-                <ibiblio name="maven" m2compatible="true" />
-                <ibiblio name="panda" m2compatible="true" root="https://raw.github.com/foolite/panda-repo/master/" />
-            </chain>
-        </resolvers>
-        <include url="${ivy.default.settings.dir}/ivysettings-shared.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml" />
-        <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml" />
-    </ivysettings>
+ - [项目网站](http://foolite.github.io/panda)
+ - [中文说明](https://github.com/foolite/panda/wiki/Readme_zh)
 
-Acknowledgements
-----------------
-Panda use the following software packages:
 
-| Name                | License                                                       | Source                                                 |
-|---------------------|---------------------------------------------------------------|--------------------------------------------------------|
-| Commons Codec       | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-codec/       |
-| Commons Collections | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-collections/ |
-| Commons Lang        | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-lang/        |
-| Commons Net         | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-net/         |
-| Nutz                | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://nutzam.com/                                    |
-| OW2 ASM             | [OW2](http://asm.ow2.org/license.html)                        | http://asm.ow2.org/                                    |
