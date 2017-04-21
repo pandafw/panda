@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import panda.ioc.annotation.IocBean;
-import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ListColumn;
@@ -36,13 +35,6 @@ public class ListView extends UIBean {
 	protected Boolean sortable;
 	protected String cssColumn;
 	protected String cssTable;
-	protected String cssFiltersLabel;
-	protected String cssFiltersInput;
-	protected String labelFiltersCaption;
-	protected String labelFiltersAddFilter;
-	protected String labelFiltersMethod;
-	protected String labelFiltersBtnClear;
-	protected String labelFiltersBtnQuery;
 
 	// form attributes
 	protected String action;
@@ -53,23 +45,6 @@ public class ListView extends UIBean {
 
 	// auto size table (deprecated)
 	protected boolean autosize = true;
-	
-	// write java script
-	protected boolean script = true;
-
-	/**
-	 * expand query filters:
-	 * default
-	 *  - show: has input filter
-	 *  - hide: no input filter
-	 * fixed
-	 *  - show: has input filter | has fixed filter
-	 * always
-	 *  - show always
-	 * none
-	 *  - hide always
-	 */
-	protected char fsexpand = 'd';
 
 	//--------------------------------------------
 	// style option
@@ -95,71 +70,6 @@ public class ListView extends UIBean {
 	protected String hiddens;
 	
 	private static int sequence = 0;
-
-	private Map boolFilterMap;
-	private Map dateFilterMap;
-	private Map stringFilterMap;
-	private Map numberFilterMap;
-	private Map filterMethodMap;
-	
-	/**
-	 * getTextAsMap
-	 * @param name resource name
-	 * @return map value
-	 */
-	private Map getTextAsMap(String name) {
-		return context.getText().getTextAsMap(name, Collections.EMPTY_MAP);
-	}
-
-	/**
-	 * @return the getFilterMethodMap
-	 */
-	public Map getFilterMethodMap() {
-		if (filterMethodMap == null) {
-			filterMethodMap = getTextAsMap("listview-filter-methods");
-		}
-		return filterMethodMap;
-	}
-
-	/**
-	 * @return the boolFilterMap
-	 */
-	public Map getBoolFilterMap() {
-		if (boolFilterMap == null) {
-			boolFilterMap = getTextAsMap("listview-filter-bools");
-		}
-		return boolFilterMap;
-	}
-
-	/**
-	 * @return the dateFilterMap
-	 */
-	public Map getDateFilterMap() {
-		if (dateFilterMap == null) {
-			dateFilterMap = getTextAsMap("listview-filter-dates");
-		}
-		return dateFilterMap;
-	}
-
-	/**
-	 * @return the numberFilterMap
-	 */
-	public Map getNumberFilterMap() {
-		if (numberFilterMap == null) {
-			numberFilterMap = getTextAsMap("listview-filter-numbers");
-		}
-		return numberFilterMap;
-	}
-
-	/**
-	 * @return the stringFilterMap
-	 */
-	public Map getStringFilterMap() {
-		if (stringFilterMap == null) {
-			stringFilterMap = getTextAsMap("listview-filter-strings");
-		}
-		return stringFilterMap;
-	}
 
 	/**
 	 * Override UIBean's implementation, such that component Html id is determined in the following
@@ -191,35 +101,6 @@ public class ListView extends UIBean {
 		if (hideCheckAll == null) {
 			hideCheckAll = context.getText().getTextAsBoolean("listview-hideCheckAll", false);
 		}
-		
-		if (cssFiltersLabel == null) {
-			cssFiltersLabel = context.getText().getText("listview-filters-css-label", "col-sm-3");
-		}
-		
-		if (cssFiltersInput == null) {
-			cssFiltersInput = context.getText().getText("listview-filters-css-input", "col-sm-9");
-		}
-		
-		if (labelFiltersCaption == null) {
-			labelFiltersCaption = context.getText().getText("listview-filters-caption", "Filters");
-		}
-		
-		if (labelFiltersAddFilter == null) {
-			labelFiltersAddFilter = context.getText().getText("listview-filters-label-addFilter", "Add filter");
-		}
-		
-		if (labelFiltersMethod == null) {
-			labelFiltersMethod = context.getText().getText("listview-filters-label-method", "Query method");
-		}
-		
-		if (labelFiltersBtnClear == null) {
-			labelFiltersBtnClear = context.getText().getText("listview-filters-button-clear", "Clear");
-		}
-		
-		if (labelFiltersBtnQuery == null) {
-			labelFiltersBtnQuery = context.getText().getText("listview-filters-button-query", "Search");
-		}
-		
 	}
 
 	/**
@@ -354,13 +235,6 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @return the script
-	 */
-	public boolean isScript() {
-		return script;
-	}
-
-	/**
 	 * @return the tools
 	 */
 	public String getTools() {
@@ -417,41 +291,6 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @param boolFilterMap the boolFilterMap to set
-	 */
-	public void setBoolFilterMap(Map boolFilterMap) {
-		this.boolFilterMap = boolFilterMap;
-	}
-
-	/**
-	 * @param dateFilterMap the dateFilterMap to set
-	 */
-	public void setDateFilterMap(Map dateFilterMap) {
-		this.dateFilterMap = dateFilterMap;
-	}
-
-	/**
-	 * @param stringFilterMap the stringFilterMap to set
-	 */
-	public void setStringFilterMap(Map stringFilterMap) {
-		this.stringFilterMap = stringFilterMap;
-	}
-
-	/**
-	 * @param numberFilterMap the numberFilterMap to set
-	 */
-	public void setNumberFilterMap(Map numberFilterMap) {
-		this.numberFilterMap = numberFilterMap;
-	}
-
-	/**
-	 * @param filterMethodMap the filterMethodMap to set
-	 */
-	public void setFilterMethodMap(Map filterMethodMap) {
-		this.filterMethodMap = filterMethodMap;
-	}
-
-	/**
 	 * @param list the list to set
 	 */
 	public void setList(Object list) {
@@ -491,13 +330,6 @@ public class ListView extends UIBean {
 	 */
 	public void setAutosize(boolean autosize) {
 		this.autosize = autosize;
-	}
-
-	/**
-	 * @param script the script to set
-	 */
-	public void setScript(boolean script) {
-		this.script = script;
 	}
 
 	/**
@@ -628,130 +460,6 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @param fsexpand the fsexpand to set
-	 */
-	public void setFsexpand(String fsexpand) {
-		if (Strings.isEmpty(fsexpand)) {
-			return;
-		}
-		this.fsexpand = Character.toLowerCase(fsexpand.charAt(0));
-	}
-	
-	public boolean isFsExpandAlways() {
-		return fsexpand == 'a';
-	}
-	
-	public boolean isFsExpandDefault() {
-		return fsexpand == 'd';
-	}
-	
-	public boolean isFsExpandFixed() {
-		return fsexpand == 'f';
-	}
-	
-	public boolean isFsExpandNone() {
-		return fsexpand == 'n';
-	}
-
-	/**
-	 * @return the cssFiltersLabel
-	 */
-	public String getCssFiltersLabel() {
-		return cssFiltersLabel;
-	}
-
-	/**
-	 * @param cssFiltersLabel the cssFiltersLabel to set
-	 */
-	public void setCssFiltersLabel(String cssFiltersLabel) {
-		this.cssFiltersLabel = cssFiltersLabel;
-	}
-
-	/**
-	 * @return the cssFiltersInput
-	 */
-	public String getCssFiltersInput() {
-		return cssFiltersInput;
-	}
-
-	/**
-	 * @param cssFiltersInput the cssFiltersInput to set
-	 */
-	public void setCssFiltersInput(String cssFiltersInput) {
-		this.cssFiltersInput = cssFiltersInput;
-	}
-
-	/**
-	 * @return the labelFiltersCaption
-	 */
-	public String getLabelFiltersCaption() {
-		return labelFiltersCaption;
-	}
-
-	/**
-	 * @param labelFiltersCaption the labelFiltersCaption to set
-	 */
-	public void setLabelFiltersCaption(String labelFiltersCaption) {
-		this.labelFiltersCaption = labelFiltersCaption;
-	}
-
-	/**
-	 * @return the labelFiltersAddFilter
-	 */
-	public String getLabelFiltersAddFilter() {
-		return labelFiltersAddFilter;
-	}
-
-	/**
-	 * @param labelFiltersAddFilter the labelFiltersAddFilter to set
-	 */
-	public void setLabelFiltersAddFilter(String labelFiltersAddFilter) {
-		this.labelFiltersAddFilter = labelFiltersAddFilter;
-	}
-
-	/**
-	 * @return the labelFiltersMethod
-	 */
-	public String getLabelFiltersMethod() {
-		return labelFiltersMethod;
-	}
-
-	/**
-	 * @param labelFiltersMethod the labelFiltersMethod to set
-	 */
-	public void setLabelFiltersMethod(String labelFiltersMethod) {
-		this.labelFiltersMethod = labelFiltersMethod;
-	}
-
-	/**
-	 * @return the labelFiltersBtnClear
-	 */
-	public String getLabelFiltersBtnClear() {
-		return labelFiltersBtnClear;
-	}
-
-	/**
-	 * @param labelFiltersBtnClear the labelFiltersBtnClear to set
-	 */
-	public void setLabelFiltersBtnClear(String labelFiltersBtnClear) {
-		this.labelFiltersBtnClear = labelFiltersBtnClear;
-	}
-
-	/**
-	 * @return the labelFiltersBtnQuery
-	 */
-	public String getLabelFiltersBtnQuery() {
-		return labelFiltersBtnQuery;
-	}
-
-	/**
-	 * @param labelFiltersBtnQuery the labelFiltersBtnQuery to set
-	 */
-	public void setLabelFiltersBtnQuery(String labelFiltersBtnQuery) {
-		this.labelFiltersBtnQuery = labelFiltersBtnQuery;
-	}
-
-	/**
 	 * @return the pagerStyle
 	 */
 	public String getPagerStyle() {
@@ -764,6 +472,5 @@ public class ListView extends UIBean {
 	public void setPagerStyle(String pagerStyle) {
 		this.pagerStyle = pagerStyle;
 	}
-
 
 }

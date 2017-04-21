@@ -125,25 +125,6 @@ function plv_checkRow(id, row, check) {
 	_plv_selectRow(trs.eq(row), check);
 }
 
-function _plv_init_filters($lv) {
-	$lv.find(".p-lv-filters")
-		.find('.form-group')
-			.each(function() {
-				if ($(this).hasClass('p-hidden')) {
-					$(this).find("input,select,textarea").prop('disabled', true);
-				}
-			}).end()
-		.find('.p-lv-fs-remove').click(_plv_onDelFilter).end()
-		.find('.p-lv-fs-clear').click(_plv_onClearFilters).end()
-		.find('.p-lv-fs-select').change(_plv_onAddFilter).end()
-		.find('.p-lv-f-number-c, .p-lv-f-date-c, .p-lv-f-datetime-c, .p-lv-f-time-c')
-			.on('change', _plv_onBetweenChange)
-			.end()
-		.find('form')
-			.submit(function() {
-				$lv.loadmask();
-			});
-}
 
 function _plv_init_table($lv) {
 	if ($lv.data("autosize") == 'true') {
@@ -231,7 +212,6 @@ function _plv_init($lv) {
 	}
 	$lv.data("plistview", true);
 	_plv_init_table($lv);
-	_plv_init_filters($lv);
 }
 
 function _plv_sort(id, cn) {
@@ -272,30 +252,6 @@ function _plv_limit(id, l) {
 
 	document.getElementById(id + "_limit").value = l;
 	document.getElementById(id + "_submit").click();
-}
-
-function _plv_clearFieldValue() {
-	switch (this.tagName) {
-	case "INPUT":
-		switch (this.type) {
-		case "radio":
-		case "checkbox":
-			this.checked = false;
-			break;
-		case "text":
-			this.value = "";
-			break;
-		}
-		break;
-	case "SELECT":
-		if (!this.name.endsWith(".c")) {
-			this.selectedIndex = 0;
-		}
-		break;
-	case "TEXTAREA":
-		this.value = "";
-		break;
-	}
 }
 
 function _plv_selectRow(tr, c) {
@@ -340,62 +296,6 @@ function _plv_toggleRow($tr, ts) {
 			}
 		});
 	_plv_setCheckAll($lv, all);
-}
-
-function _plv_onBetweenChange() {
-	var $t = $(this);
-	if ($t.val() == 'bt') {
-		$t.nextAll().removeClass('p-hidden').find('INPUT').prop('disabled', false);
-	}
-	else {
-		$t.nextAll().addClass('p-hidden').find('INPUT').prop('disabled', true);
-	}
-}
-
-function _plv_onAddFilter() {
-	var e = this;
-	if (e.selectedIndex > 0) {
-		$(e).closest(".p-lv-filters")
-			.find('.p-lv-fsi-' + e.value)
-				.removeClass('p-hidden')
-				.find("input,select,textarea").prop('disabled', false).end()
-				.end()
-			.fieldset('expand');
-		e.options[e.selectedIndex].disabled = true;
-		e.selectedIndex = 0;
-	}
-	return false;
-}
-
-function _plv_onDelFilter() {
-	var $g = $(this).closest(".form-group");
-	$g.addClass('p-hidden')
-		.find("input,select,textarea")
-			.prop('disabled', true)
-			.each(_plv_clearFieldValue)
-			.end()
-		.find(".p-label-error")
-			.removeClass('p-label-error')
-			.end()
-		.find(".p-field-errors")
-			.remove()
-			.end()
-		.closest(".p-lv-filters")
-			.find('.p-lv-fs-select>option[value=' + $g.data('item') + ']')
-				.prop('disabled', false);
-}
-
-function _plv_onClearFilters() {
-	$(this).closest(".p-lv-fsform")
-		.find(".p-field-errors")
-			.remove()
-			.end()
-		.find(".p-label-error")
-			.removeClass('p-label-error')
-			.end()
-		.find("input,select,textarea")
-			.each(_plv_clearFieldValue);
-	return false;
 }
 
 function _plv_setCheckAll($lv, check, crows) {

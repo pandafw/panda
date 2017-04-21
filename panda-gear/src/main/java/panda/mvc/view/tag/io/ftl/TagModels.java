@@ -33,6 +33,7 @@ import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
+import panda.mvc.view.tag.ui.Queryer;
 import panda.mvc.view.tag.ui.Radio;
 import panda.mvc.view.tag.ui.Reset;
 import panda.mvc.view.tag.ui.Select;
@@ -80,6 +81,7 @@ public class TagModels {
 	protected TagModel param;
 	protected TagModel password;
 	protected TagModel property;
+	protected TagModel queryer;
 	protected TagModel radio;
 	protected TagModel reset;
 	protected TagModel select;
@@ -401,6 +403,16 @@ public class TagModels {
 			property = new TagModel(context, Property.class);
 		}
 		return property;
+	}
+
+	/**
+	 * @return QueryerModel
+	 */
+	public TagModel getQueryer() {
+		if (queryer == null) {
+			queryer = new TagModel(context, Queryer.class);
+		}
+		return queryer;
 	}
 
 	/**

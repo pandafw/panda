@@ -1,0 +1,78 @@
+/*---------------------------------------------*/
+/* queryer.css                                 */
+/*---------------------------------------------*/
+.p-qr {
+	font-size: 90%;
+	position: relative;
+}
+.p-qr .form-control {
+	height: 28px;
+}
+.p-qr input[type=radio], .p-qr input[type=checkbox] {
+	margin-top: 1px;
+}
+.p-qr > fieldset {
+	padding: 5px;
+}
+.p-qr > fieldset > legend {
+}
+.p-qr-form {
+	background-color: #f9f9f9;
+	padding: 10px;
+}
+.p-qr-form.form-horizontal .form-group {
+	border-bottom: none;
+}
+.p-qr-form .p-qr-remove {
+	color: #999;
+	margin-top: 8px;
+	position: absolute;
+	cursor: pointer;
+	z-index: 1;
+}
+.p-qr-form .p-qr-sep {
+	border-top: 1px dashed #ccc;
+	margin: 5px 0;
+	width: 100%;
+}
+.p-qr-inputgroup .p-qr-f-number-v.form-control,
+.p-qr-inputgroup .p-qr-f-number-v2.form-control,
+.p-qr-inputgroup .p-qr-f-string-v.form-control {
+	display: inline;
+	width: 170px;
+}
+.p-qr-inputgroup .p-qr-f-datetime-v.form-control,
+.p-qr-inputgroup .p-qr-f-datetime-v2.form-control {
+	width: 170px;
+}
+.p-qr-inputgroup .p-qr-f-date-v.form-control,
+.p-qr-inputgroup .p-qr-f-date-v2.form-control,
+.p-qr-inputgroup .p-qr-f-time-v.form-control,
+.p-qr-inputgroup .p-qr-f-time-v2.form-control {
+	width: 120px;
+}
+.p-qr-inputgroup .p-qr-f-g1, .p-qr-inputgroup .p-qr-f-g2 {
+	display: inline-block;
+	vertical-align: top;
+}
+.p-qr-inputgroup .p-qr-f-g2.p-hidden {
+	display: none;
+}
+.p-qr-inputgroup .p-qr-f-date-c.form-control,
+.p-qr-inputgroup .p-qr-f-datetime-c.form-control,
+.p-qr-inputgroup .p-qr-f-time-c.form-control,
+.p-qr-inputgroup .p-qr-f-number-c.form-control,
+.p-qr-inputgroup .p-qr-f-string-c.form-control {
+	display: inline;
+	width: auto;
+}
+.p-qr .p-qr-select {
+	font-size: 12px;
+	margin: 0 10px;
+	padding: 0 10px;
+	position: absolute;
+	top: -5px;
+	right: 0;
+	width: auto;
+}
+

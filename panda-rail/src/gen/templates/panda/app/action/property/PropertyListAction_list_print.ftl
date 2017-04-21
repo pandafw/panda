@@ -123,7 +123,7 @@
 
 	<@p.listview id="property_list_print" action="~/list_print" 
 		list=result columns=_columns_ cssColumn="status"
-		cssTable="table-striped" autosize="false" script="false"
+		cssTable="table-striped"
 	/>
 </div>
 

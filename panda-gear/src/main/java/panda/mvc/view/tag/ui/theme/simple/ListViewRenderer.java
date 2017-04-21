@@ -2,11 +2,9 @@ package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,17 +32,6 @@ import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
-	protected static final String T_RADIO = "radio";
-	protected static final String T_CHECKLIST = "checklist";
-	protected static final String T_TIME = "time";
-	protected static final String T_DATE = "date";
-	protected static final String T_DATETIME = "datetime";
-	protected static final String T_NUMBER = "number";
-	protected static final String T_BOOLEAN = "boolean";
-	protected static final String T_STRING = "string";
-
-	protected static final Set<String> TWO_INPUT_TYPES = Arrays.toSet(T_TIME, T_DATE, T_DATETIME, T_NUMBER);
-	
 	private String id;
 
 	private String prefix = "";
@@ -57,15 +44,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	
 	// filters define list
 	private Set<String> fsdefines = new HashSet<String>();
-	
-	// filters input/fixed list
-	private Set<String> fsinputs = new HashSet<String>();
-	
-	// has input filter
-	private boolean fsinput = false;
-	
-	// has fixed filter
-	private boolean fsfixed = false;
 	
 	private AccessControler controler;
 	
@@ -102,7 +80,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				throw new IllegalArgumentException("Invalid list " + v.getClass() + " of " + tag.getClass() + ", should be Collection/Array");
 			}
 		}
-
 		if (list != null) {
 			listz = list.size();
 		}
@@ -116,34 +93,59 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 				c.format.escape = Escapes.ESCAPE_PHTML;
 			}
 		}
-		
 		cssColumns = Strings.split(defs(tag.getCssColumn()));
+
+		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
+		for (ListColumn c : columns) {
+			if (!c.filterable) {
+				continue;
+			}
+
+			ListColumn.Filter cf = c.filter;
+			if (cf == null) {
+				continue;
+			}
+
+			Filter qf = qfs == null ? null : qfs.get(c.name);
+			if (qf == null) {
+				continue;
+			}
+			
+			if (QueryerRenderer.isFiltered(cf, qf)) {
+				fsdefines.add(c.name);
+			}
+		}
 	}
 
 	public void render() throws IOException {
 		initVars();
 		
-		Attributes a = new Attributes();
+		Attributes attr = new Attributes();
 		
-		a.add("id", id)
-		 .cssClass(tag, "p-lv")
-		 .data("onrowclick", tag.getOnrowclick())
-		 .cssStyle(tag);
+		attr.id(id)
+			.cssClass(tag, "p-lv")
+			.data("onrowclick", tag.getOnrowclick())
+			.cssStyle(tag)
+			.disabled(tag)
+			.tabindex(tag)
+			.tooltip(tag)
+			.cssStyle(tag)
+			.commons(tag)
+			.events(tag)
+			.dynamics(tag);
 		if (tag.isSingleSelect()) {
-			a.data("singleSelect", "true");
+			attr.data("singleSelect", "true");
 		}
 		if (tag.isUntoggleSelect()) {
-			a.data("untoggleSelect", "true");
+			attr.data("untoggleSelect", "true");
 		}
 		if (tag.isAutosize()) {
-			a.data("autosize", "true");
+			attr.data("autosize", "true");
 		}
-		stag("div", a);
+		stag("div", attr);
 		
 		writeListViewForm();
 
-		writeListViewQueryer();
-		
 		writeListViewHeader();
 		
 		writeListViewTable();
@@ -151,12 +153,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		writeListViewFooter();
 		
 		etag("div");
-	}
-
-	protected void writeJsc(String js) throws IOException {
-		if (tag.isScript()) {
-			super.writeJsc(js);
-		}
 	}
 
 	private void writeListViewHiddens() throws IOException {
@@ -221,20 +217,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		form.end(writer, "");
 	}
 
-	private void writeHidden(String id, String name, Object value) throws IOException {
-		writeHidden(id, name, value, false);
-	}
-	
-	private void writeHidden(String id, String name, Object value, boolean disabled) throws IOException {
-		Attributes ha = new Attributes();
-		ha.type("hidden")
-		  .id(id)
-		  .name(name)
-		  .value(tag.castString(value))
-		  .disabled(disabled);
-		xtag("input", ha);
-	}
-	
 	private Object getBeanProperty(Object bean, String name) {
 		try {
 			return Beans.getBean(bean, name);
@@ -245,7 +227,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 
 	private boolean isPagerLimitSelective() {
-		Pager pg = createPager("");
+		Pager pg = newTag(Pager.class);
+
+		pg.setLinkStyle(tag.getPagerStyle());
 		pg.evaluateParams();
 
 		return pg.isLimitSelective();
@@ -273,16 +257,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		Pager pg = createPager(pos);
 		pg.start(writer);
 		pg.end(writer, "");
-	}
-	
-	private void writeListViewQueryer() throws IOException {
-		write("<div id=\"");
-		write(id);
-		write("_queryer\" class=\"p-lv-queryer\">");
-		
-		writeListViewFilters();
-		
-		write("</div>");
 	}
 	
 	private void writeListViewHeader() throws IOException {
@@ -375,490 +349,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		write("</div>");
 
 		write("</div>");
-	}
-
-	@SuppressWarnings("unchecked")
-	private void writeListViewFilterItems(Map<String, ListColumn.Filter> fm) throws IOException {
-		Map<String, String> stringFilterMap = tag.getStringFilterMap();
-		Map<String, String> boolFilterMap = tag.getBoolFilterMap(); 
-		Map<String, String> numberFilterMap = tag.getNumberFilterMap();
-		Map<String, String> dateFilterMap = tag.getDateFilterMap();
-
-		String _pf = prefix + "f.";
-
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
-		
-		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
-			ListColumn.Filter _f = en.getValue();
-			String _name = en.getKey();
-			String _hname = html(_name);
-			Filter qf = qfs == null ? null : qfs.get(_name);
-			
-			String _fn = _pf + _name;
-			String _ifn = id + "_fsf_" + _name;
-			boolean _fd = fsinputs.contains(_name);
-
-			boolean _hfe = false;
-			if (Collections.isNotEmpty(fieldErrors)) {
-				for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-					if (en2.getKey().startsWith(_fn + '.')) {
-						_hfe = true;
-						break;
-					}
-				}
-			}
-
-			write("<div class=\"p-lv-fsi-" 
-					+ _hname
-					+ (_fd ? "" : " p-hidden")
-					+ " form-group"
-					+ (TWO_INPUT_TYPES.contains(_f.type) || !_hfe ? "" : " has-error")
-					+ "\" data-item=\""
-					+ _hname
-					+ "\">");
-
-			if (!_f.fixed) {
-				write(icon("p-lv-fs-remove fa fa-minus-circle"));
-			}
-
-			write("<label for=\"" + _ifn + "_v\" class=\"");
-			write(tag.getCssFiltersLabel());
-			write(" control-label " + (_hfe ? "p-error" : "") + "\">");
-			if (Strings.isNotEmpty(_f.label)) {
-				write(html(_f.label));
-				write(":");
-			}
-			write("</label>");
-
-			write("<div class=\"");
-			write(tag.getCssFiltersInput());
-			write(" p-lv-fs-inputgroup\"");
-			if (Strings.isNotEmpty(_f.tooltip)) {
-				write("title=\"");
-				write(html(_f.tooltip));
-				write("\"");
-			}
-			write(">");
-
-			String _fv;
-			if (T_STRING.equals(_f.type)) {
-				_fv = _fn + ".sv";
-				
-				String _fvv = qf == null ? null : qf.getSv();
-				writeTextField("form-control p-lv-f-string-v", _fv, _ifn + "_v", _fvv, false);
-				
-				_fvv = qf == null ? null : qf.getC();
-				writeSelect("form-control p-lv-f-string-c", _fn + ".c", _ifn + "_c", stringFilterMap, _fvv);
-			}
-			else if (T_BOOLEAN.equals(_f.type)) {
-				_fv = _fn + ".bv";
-				write("<input type=\"hidden\" name=\"" + _fn + ".c\" value=\"in\"/>");
-				write("<div class=\"p-checkboxlist\">");
-
-				Boolean _fvv = qf == null ? null : qf.getBv();
-				write("<label class=\"checkbox-inline\">");
-				Attributes ia = new Attributes();
-				ia.add("type", "checkbox")
-				  .add("class", "p-lv-f-boolean-true")
-				  .add("name", _fv)
-				  .add("id", _ifn + "_v")
-				  .add("value", "true")
-				  .addIfTrue("checked", _fvv);
-				xtag("input", ia);
-				write(boolFilterMap.get("true"));
-				write("</label>");
-				
-				_fv = _fn + ".bv2";
-				_fvv = qf == null ? null : qf.getBv2();
-				write("<label class=\"checkbox-inline\">");
-				ia = new Attributes();
-				ia.add("type", "checkbox")
-				  .add("class", "p-lv-f-boolean-false")
-				  .add("name", _fv)
-				  .add("id", _ifn + "_v2")
-				  .add("value", "false")
-				  .addIfTrue("checked", Boolean.FALSE.equals(_fvv));
-				xtag("input", ia);
-				write(boolFilterMap.get("false"));
-				write("</label>");
-				
-				write("</div>");
-			}
-			else if (T_NUMBER.equals(_f.type)) {
-				_fv = _fn + ".nv";
-				Number _fvv = qf == null ? null : qf.getNv();
-
-				write("<div class=\"p-lv-f-g1");
-				write(Collections.containsKey(fieldErrors, _fv) ? " has-error" : "");
-				write("\">");
-				writeTextField("form-control p-lv-f-number-v", _fv, _ifn + "_v", _fvv, false);
-				write("</div>");
-				
-				String _fvc = qf == null ? null : qf.getC();
-				if (_fvc == null) {
-					_fvc = Collections.firstKey(numberFilterMap);
-				}
-				writeSelect("form-control p-lv-f-number-c", _fn + ".c", _ifn + "_c", numberFilterMap, _fvc);
-				
-				_fv = _fn + ".nv2";
-				_fvv = qf == null ? null : qf.getNv2();
-				boolean d = !Filter.BETWEEN.equals(_fvc);
-				write("<div class=\"p-lv-f-g2");
-				write(Collections.containsKey(fieldErrors, _fv) ? " has-error" : "");
-				if (d) {
-					write(" p-hidden");
-				}
-				write("\">");
-				writeTextField("form-control p-lv-f-number-v2", _fv, _ifn + "_v2", _fvv, d);
-				write("</div>");
-			}
-			else if (T_DATETIME.equals(_f.type)) {
-				_fv = _fn + ".ev";
-				Date _fvv = qf == null ? null : qf.getEv();
-
-				write("<div class=\"p-lv-f-g1");
-				write(Collections.containsKey(fieldErrors, _fv) ? " has-error" : "");
-				write("\">");
-				writeDateTimePicker("form-control p-lv-f-datetime-v", _fv, _ifn + "_v", _f.type, _fvv, false);
-				write("</div>");
-
-				String _fvc = qf == null ? null : qf.getC();
-				if (_fvc == null) {
-					_fvc = Collections.firstKey(numberFilterMap);
-				}
-				writeSelect("form-control p-lv-f-datetime-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
-				
-				_fv = _fn + ".ev2";
-				_fvv = qf == null ? null : qf.getEv2();
-				boolean d = !Filter.BETWEEN.equals(_fvc);
-				write("<div class=\"p-lv-f-g2" + (Collections.containsKey(fieldErrors, _fv) ? " has-error" : ""));
-				if (d) {
-					write(" p-hidden");
-				}
-				write("\">");
-				writeDateTimePicker("form-control p-lv-f-datetime-v2", _fv, _ifn + "_v2", _f.type, _fvv, d);
-				write("</div>");
-			}
-			else if (T_DATE.equals(_f.type)) {
-				_fv = _fn + ".dv";
-				Date _fvv = qf == null ? null : qf.getDv();
-
-				write("<div class=\"p-lv-f-g1");
-				write(Collections.containsKey(fieldErrors, _fv) ? " has-error" : "");
-				write("\">");
-				writeDatePicker("form-control p-lv-f-date-v", _fv, _ifn + "_v", _f.type, _fvv, false);
-				write("</div>");
-
-				String _fvc = qf == null ? null : qf.getC();
-				if (_fvc == null) {
-					_fvc = Collections.firstKey(numberFilterMap);
-				}
-				writeSelect("form-control p-lv-f-date-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
-				
-				_fv = _fn + ".dv2";
-				_fvv = qf == null ? null : qf.getDv2();
-				boolean d = !Filter.BETWEEN.equals(_fvc);
-				write("<div class=\"p-lv-f-g2" + (Collections.containsKey(fieldErrors, _fv) ? " has-error" : ""));
-				if (d) {
-					write(" p-hidden");
-				}
-				write("\">");
-				writeDatePicker("form-control p-lv-f-date-v2", _fv, _ifn + "_v2", _f.type, _fvv, d);
-				write("</div>");
-			}
-			else if (T_TIME.equals(_f.type)) {
-				_fv = _fn + ".tv";
-				Date _fvv = qf == null ? null : qf.getTv();
-
-				write("<div class=\"p-lv-f-g1");
-				write(Collections.containsKey(fieldErrors, _fv) ? " has-error" : "");
-				write("\">");
-				writeTimePicker("form-control p-lv-f-time-v", _fv, _ifn + "_v", _f.type, _fvv, false);
-				write("</div>");
-
-				String _fvc = qf == null ? null : qf.getC();
-				if (_fvc == null) {
-					_fvc = Collections.firstKey(numberFilterMap);
-				}
-				writeSelect("form-control p-lv-f-time-c", _fn + ".c", _ifn + "_c", dateFilterMap, _fvc);
-				
-				_fv = _fn + ".tv2";
-				_fvv = qf == null ? null : qf.getTv2();
-				boolean d = !Filter.BETWEEN.equals(_fvc);
-				write("<div class=\"p-lv-f-g2" + (Collections.containsKey(fieldErrors, _fv) ? " has-error" : ""));
-				if (d) {
-					write(" p-hidden");
-				}
-				write("\">");
-				writeTimePicker("form-control p-lv-f-time-v2", _fv, _ifn + "_v2", _f.type, _fvv, d);
-				write("</div>");
-			}
-			else if (T_CHECKLIST.equals(_f.type)) {
-				write("<input type=\"hidden\" name=\"" + _fn + ".c\" value=\"in\"/>");
-				
-				_fv = _fn + ".svs";
-				List<String> _fvv = qf == null ? null : qf.getSvs();
-				writeCheckboxList("p-lv-f-checklist", _fv, _ifn + "_v", _f.list, _fvv);
-			}
-			else if (T_RADIO.equals(_f.type)) {
-				write("<input type=\"hidden\" name=\"" + _fn + ".c\" value=\"eq\"/>");
-
-				_fv = _fn + ".sv";
-				String _fvv = qf == null ? null : qf.getSv();
-				writeRadio("p-lv-f-checklist", _fv, _ifn + "_v", _f.list, _fvv);
-			}
-			else if ("select".equals(_f.type)) {
-				write("<input type=\"hidden\" name=\"" + _fn + ".c\" value=\"eq\"/>");
-				
-				_fv = _fn + ".sv";
-				String _fvv = qf == null ? null : qf.getSv();
-				writeSelect("form-control p-lv-f-select", _fv, _ifn + "_v", _f.list, _fvv, true);
-			}
-			
-			if (Collections.isNotEmpty(fieldErrors)) {
-				for (Entry<String, List<String>> fen : fieldErrors.entrySet()) {
-					if (fen.getKey().startsWith(_fn + ".")) {
-						write("<ul errorFor=\"" + html(_ifn) + "\" class=\"");
-						write(FieldErrorRenderer.UL_CLASS);
-						write("\">");
-						for (String m : fen.getValue()) {
-							write("<li class=\"");
-							write(FieldErrorRenderer.LI_CLASS);
-							write("\">");
-							write(icon(FieldErrorRenderer.ICON_CLASS));
-							write(html(m));
-							write("</li>");
-						}
-						write("</ul>");
-					}
-				}
-			}
-			write("</div>");
-			
-			write("</div>");
-		}
-	}
-
-	private Map<String, ListColumn.Filter> getEditableFilters(Map<String, ListColumn.Filter> fm) {
-		// get editable filters
-		Map<String, ListColumn.Filter> fm2 = new LinkedHashMap<String, ListColumn.Filter>();
-		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
-			String _name = en.getKey();
-			ListColumn.Filter _f = en.getValue();
-			if (!_f.fixed) {
-				fm2.put(_name, _f);
-			}
-		}
-		return fm2;
-	}
-
-	@SuppressWarnings("unchecked")
-	private void writeListViewFilterOptions() throws IOException {
-		Map<String, String> filterMethodMap = (Map<String, String>)tag.getFilterMethodMap();
-		if (Collections.isEmpty(filterMethodMap)) {
-			return;
-		}
-
-		write("<div class=\"form-group p-lv-submit\">");
-		write("<label class=\"");
-		write(tag.getCssFiltersLabel());
-		write(" control-label\">");
-		write(tag.getLabelFiltersMethod());
-		write(":</label>");
-		write("<div class=\"");
-		write(tag.getCssFiltersInput());
-		write("\">");
-
-		String mv = (queryer != null && queryer.getMethod() != null ? queryer.getMethod() : Queryer.AND);
-		writeRadio("p-lv-f-method", prefix + "m", id + "_fsform_filterm", filterMethodMap, mv);
-		
-		write("</div></div>");
-	}
-	
-	private void writeListViewFilterButtons(Map<String, ListColumn.Filter> fm) throws IOException {
-		write("<div class=\"form-group p-lv-submit\">");
-		write("<label class=\"");
-		write(tag.getCssFiltersLabel());
-		write(" control-label\"></label>");
-
-		write("<div class=\"");
-		write(tag.getCssFiltersInput());
-		write("\">");
-
-		// buttons
-		write(button(tag.getLabelFiltersBtnQuery(), "icon-search"));
-		write(' ');
-		write(button(tag.getLabelFiltersBtnClear(), "icon-clear", "p-lv-fs-clear"));
-		write(' ');
-
-		write("</div></div>");
-	}
-	
-	private void writeListViewFilterSelect(Map<String, ListColumn.Filter> fm) throws IOException {
-		// select
-		Map<String, ListColumn.Filter> fm2 = getEditableFilters(fm);
-		if (Collections.isNotEmpty(fm2)) {
-			write("<select id=\"" + id + "_fsform_fsadd" + "\"");
-			write(" class=\"form-control p-lv-fs-select\" onclick=\"return false;\">");
-			write("<option value=\"\">-- ");
-			write(tag.getLabelFiltersAddFilter());
-			write(" --</option>");
-	
-			for (Entry<String, ListColumn.Filter> en : fm2.entrySet()) {
-				String _name = en.getKey();
-				ListColumn.Filter _f = en.getValue();
-	
-				boolean _fd = fsinputs.contains(_name);
-	
-				write("<option value=\"" + html(_name) + "\"");
-				if (_fd) {
-					write(" disabled");
-				}
-				write(">");
-				write(html(_f.label));
-				write("</option>");
-			}
-			write("</select>");
-		}
-	}
-
-	private void writeListViewFilters() throws IOException {
-		Map<String, ListColumn.Filter> fm = new LinkedHashMap<String, ListColumn.Filter>();
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
-		
-		String _pf = prefix + "f.";
-		for (ListColumn c : columns) {
-			if (!c.filterable) {
-				continue;
-			}
-
-			ListColumn.Filter of = c.filter;
-			if (of == null) {
-				continue;
-			}
-
-			fm.put(c.name, of);
-			if (of.label == null) {
-				of.label = c.header;
-			}
-			if (of.tooltip == null) {
-				of.tooltip = c.tooltip;
-			}
-			
-			String _fn = _pf + c.name;
-
-			boolean _hfe = false;
-			if (Collections.isNotEmpty(fieldErrors)) {
-				String _fn_d = _fn + '.';
-				for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-					if (en2.getKey().startsWith(_fn_d)) {
-						_hfe = true;
-						break;
-					}
-				}
-			}
-
-			Filter qf = qfs == null ? null : qfs.get(c.name);
-			if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
-				fsinputs.add(c.name);
-				fsinput = true;
-			}
-			else if (of.fixed) {
-				fsinputs.add(c.name);
-				fsfixed = true;
-			}
-
-			if (qf == null) {
-				continue;
-			}
-			
-			boolean _fd = false;
-
-			if ("string".equals(of.type)) {
-				_fd = Strings.isNotEmpty(qf.getSv());
-			}
-			else if ("boolean".equals(of.type)) {
-				_fd = qf.getBv() != null || qf.getBv2() != null;
-			}
-			else if ("number".equals(of.type)) {
-				_fd = qf.getNv() != null || qf.getNv2() != null;
-			}
-			else if ("datetime".equals(of.type)) {
-				_fd = qf.getEv() != null || qf.getEv2() != null;
-			}
-			else if ("date".equals(of.type)) {
-				_fd = qf.getDv() != null || qf.getDv2() != null;
-			}
-			else if ("time".equals(of.type)) {
-				_fd = qf.getTv() != null || qf.getTv2() != null;
-			}
-			else if ("checklist".equals(of.type)) {
-				_fd = Collections.isNotEmpty(qf.getSvs());
-			}
-			else if ("radio".equals(of.type) || "select".equals(of.type)) {
-				_fd = Strings.isNotEmpty(qf.getSv());
-			}
-			
-			if (_fd) {
-				fsdefines.add(c.name);
-			}
-		}
-		
-		if (Collections.isEmpty(fm)) {
-			return;
-		}
-		
-		write("<fieldset class=\"p-lv-filters ui-collapsible");
-		if (tag.isFsExpandNone()
-				|| (tag.isFsExpandDefault() && !fsinput)
-				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
-			write(" ui-collapsed");
-		}
-		write("\" data-spy=\"fieldset\"><legend>");
-		write(tag.getLabelFiltersCaption());
-		write("</legend>");
-
-		Form form = context.getIoc().get(Form.class);
-
-		form.setId(id + "_fsform");
-		form.setCssClass("p-lv-fsform form-horizontal");
-		form.setAction(tag.getAction());
-		form.setMethod(defs(tag.getMethod(), "get"));
-		form.setOnsubmit(tag.getOnsubmit());
-		form.setOnreset(tag.getOnreset());
-		form.setLoadmask(false);
-		if (tag.isFsExpandNone()
-				|| (tag.isFsExpandDefault() && !fsinput)
-				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
-			form.setCssStyle("display: none");
-		}
-
-		form.start(writer);
-
-		if (queryer != null) {
-			if (queryer.getPager() != null && isPagerLimitSelective()) {
-				writeHidden(id + "_fsform_limit", prefix + "p.l", queryer.getPager().getLimit());
-			}
-			if (queryer.getSorter() != null) {
-				writeHidden(id + "_fsform_sort", prefix + "s.c", queryer.getSorter().getColumn());
-				writeHidden(id + "_fsform_dir", prefix + "s.d", queryer.getSorter().getDirection());
-			}
-		}
-
-		writeListViewFilterItems(fm);
-		
-		write("<div class=\"p-lv-filters-sep\"></div>");
-
-		writeListViewFilterOptions();
-		writeListViewFilterButtons(fm);
-		
-		form.end(writer, "");
-		
-		writeListViewFilterSelect(fm);
-		
-		write("</fieldset>");
 	}
 
 	private void writeListViewTableHeader() throws IOException {

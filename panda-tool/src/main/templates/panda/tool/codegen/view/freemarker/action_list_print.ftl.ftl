@@ -12,7 +12,7 @@
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		cssTable="table-striped" autosize="false" script="false"
+		cssTable="table-striped"
 	/>
 	<@safeinc step=""/>
 </div>

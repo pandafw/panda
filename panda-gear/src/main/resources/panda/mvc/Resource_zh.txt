@@ -23,17 +23,17 @@ pager-tooltip-last=最后页 ⋙
 
 
 #listview - filters
-listview-filters-caption=检索
-listview-filters-label-addFilter=检索条件追加
-listview-filters-button-query=检索
-listview-filters-button-clear=清除
-listview-filters-label-method=检索方法
+query-lbl-caption=检索
+query-lbl-add-filter=检索条件追加
+query-btn-search=检索
+query-btn-clear=清除
+query-lbl-method=检索方法
 
-listview-filter-bools=\
+query-booleans=\
 	"true":  "是", \
 	"false": "否"
 
-listview-filter-strings=\
+query-strings=\
 	"mt": "包含", \
 	"lm": "开头", \
 	"rm": "结尾", \

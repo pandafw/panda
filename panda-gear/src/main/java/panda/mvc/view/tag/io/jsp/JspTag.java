@@ -41,6 +41,7 @@ import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
+import panda.mvc.view.tag.ui.Queryer;
 import panda.mvc.view.tag.ui.Radio;
 import panda.mvc.view.tag.ui.Reset;
 import panda.mvc.view.tag.ui.Select;
@@ -303,6 +304,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 	public static class PasswordTag extends JspTag {
 		protected Component getBean(ActionContext ac) {
 			return getBean(ac, Password.class);
+		}
+	}
+
+	public static class QueryerTag extends JspTag {
+		protected Component getBean(ActionContext ac) {
+			return getBean(ac, Queryer.class);
 		}
 	}
 

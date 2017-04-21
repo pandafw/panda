@@ -67,36 +67,33 @@ pager-tooltip-last=Last Page ⋙
 #listview
 listview-th-number=#
 listview-th-rownum=#
-
-#listview - sortable
 listview-sortable=true
-
-#listview - actions align
 listview-actions-align=left
 
-#listview - filters
-listview-filters-caption=Filter
-listview-filters-label-addFilter=Add filter
-listview-filters-label-method=Query method
-listview-filters-button-clear=Clear
-listview-filters-button-query=Search
-#listview-filters-css-label=col-sm-3
-#listview-filters-css-input=col-sm-9
 
-listview-filter-methods=\
+#queryer
+query-lbl-caption=Filter
+query-lbl-add-filter=Add filter
+query-lbl-method=Query method
+query-btn-clear=Clear
+query-btn-search=Search
+query-css-label=col-sm-3
+query-css-input=col-sm-9
+
+query-methods=\
 	"and": "AND", \
 	"or":  "OR"
 
-listview-filter-bools=\
+query-booleans=\
 	"true":  "Yes", \
 	"false": "No" 
 
-listview-filter-dates=\
+query-dates=\
 	"bt": "～", \
 	"eq": "＝", \
 	"ne": "≠" 
 
-listview-filter-strings=\
+query-strings=\
 	"mt": "contains", \
 	"lm": "starts with", \
 	"rm": "ends with", \
@@ -108,7 +105,7 @@ listview-filter-strings=\
 #	"lk": "likes", \
 #	"nk": "not likes"
 
-listview-filter-numbers=\
+query-numbers=\
 	"bt": "～", \
 	"eq": "＝", \
 	"ne": "≠" 

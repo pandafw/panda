@@ -10,8 +10,6 @@
 .p-lv-form {
 	display: none;
 }
-.p-lv-submit {
-}
 
 /* header */
 .p-lv-header {
@@ -82,81 +80,6 @@
 /* checkbox */
 .p-lv-check input[type=checkbox] {
 	margin: 0;
-}
-
-/* filters */
-.p-lv-queryer {
-	font-size: 90%;
-	position: relative;
-}
-.p-lv-queryer .form-control {
-	height: 28px;
-}
-.p-lv-queryer input[type=radio], .p-lv-queryer input[type=checkbox] {
-	margin-top: 1px;
-}
-fieldset.p-lv-filters {
-	padding: 5px;
-}
-fieldset.p-lv-filters legend {
-}
-.p-lv-fsform {
-	background-color: #f9f9f9;
-	padding: 10px;
-}
-.p-lv-fsform.form-horizontal .form-group {
-	border-bottom: none;
-}
-.p-lv-fsform .p-lv-fs-remove {
-	color: #999;
-	margin-top: 8px;
-	position: absolute;
-	cursor: pointer;
-	z-index: 1;
-}
-.p-lv-fsform .p-lv-filters-sep {
-	border-top: 1px dashed #ccc;
-	width: 100%;
-}
-.p-lv-fs-inputgroup .p-lv-f-number-v.form-control,
-.p-lv-fs-inputgroup .p-lv-f-number-v2.form-control,
-.p-lv-fs-inputgroup .p-lv-f-string-v.form-control {
-	display: inline;
-	width: 170px;
-}
-.p-lv-fs-inputgroup .p-lv-f-datetime-v.form-control,
-.p-lv-fs-inputgroup .p-lv-f-datetime-v2.form-control {
-	width: 170px;
-}
-.p-lv-fs-inputgroup .p-lv-f-date-v.form-control,
-.p-lv-fs-inputgroup .p-lv-f-date-v2.form-control,
-.p-lv-fs-inputgroup .p-lv-f-time-v.form-control,
-.p-lv-fs-inputgroup .p-lv-f-time-v2.form-control {
-	width: 120px;
-}
-.p-lv-fs-inputgroup .p-lv-f-g1, .p-lv-fs-inputgroup .p-lv-f-g2 {
-	display: inline-block;
-	vertical-align: top;
-}
-.p-lv-fs-inputgroup .p-lv-f-g2.p-hidden {
-	display: none;
-}
-.p-lv-fs-inputgroup .p-lv-f-date-c.form-control,
-.p-lv-fs-inputgroup .p-lv-f-datetime-c.form-control,
-.p-lv-fs-inputgroup .p-lv-f-time-c.form-control,
-.p-lv-fs-inputgroup .p-lv-f-number-c.form-control,
-.p-lv-fs-inputgroup .p-lv-f-string-c.form-control {
-	display: inline;
-	width: auto;
-}
-.p-lv-queryer .p-lv-fs-select {
-	font-size: 12px;
-	margin: 0 10px;
-	padding: 0 10px;
-	position: absolute;
-	top: -5px;
-	right: 0;
-	width: auto;
 }
 
 

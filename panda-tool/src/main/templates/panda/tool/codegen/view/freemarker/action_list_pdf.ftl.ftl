@@ -9,10 +9,9 @@
 
 	<#include "list-print-columns.ftl"/>
 
-
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
-		cssTable="table-striped" autosize="false" script="false" header=" " footer=" "
+		cssTable="table-striped" header=" " footer=" "
 	/>
 	<@safeinc step=""/>
 </div>

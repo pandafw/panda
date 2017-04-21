@@ -24,6 +24,7 @@ import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
+import panda.mvc.view.tag.ui.Queryer;
 import panda.mvc.view.tag.ui.Radio;
 import panda.mvc.view.tag.ui.Reset;
 import panda.mvc.view.tag.ui.Select;
@@ -68,6 +69,7 @@ public class SimpleTheme extends Theme {
 		rfs.put(ListView.class, ListViewRenderer.class);
 		rfs.put(Pager.class, PagerRenderer.class);
 		rfs.put(Password.class, PasswordRenderer.class);
+		rfs.put(Queryer.class, QueryerRenderer.class);
 		rfs.put(Radio.class, RadioRenderer.class);
 		rfs.put(Reset.class, ResetRenderer.class);
 		rfs.put(Select.class, SelectRenderer.class);

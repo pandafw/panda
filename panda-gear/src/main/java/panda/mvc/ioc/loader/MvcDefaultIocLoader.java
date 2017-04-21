@@ -93,6 +93,7 @@ import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.OptGroup;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
+import panda.mvc.view.tag.ui.Queryer;
 import panda.mvc.view.tag.ui.Radio;
 import panda.mvc.view.tag.ui.Reset;
 import panda.mvc.view.tag.ui.Select;
@@ -247,6 +248,7 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			OptGroup.class,
 			Pager.class,
 			Password.class,
+			Queryer.class,
 			Radio.class,
 			Reset.class,
 			Select.class,

@@ -219,7 +219,11 @@
 		</#if>
 	</@p.set>
 
-	<@p.listview id="resource_list" action="~/list" 
+	<@p.queryer id="resource_list_qr" action="~/list"
+		columns=_columns_
+	/>
+
+	<@p.listview id="resource_list" action="~/list"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 		link={ "action": "~/view", "params": { "id": "%{top.id}" } }

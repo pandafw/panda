@@ -29,18 +29,18 @@ pager-tooltip-last=最後のページ ⋙
 
 
 #listview - filters
-listview-filters-caption=検索
-listview-filters-label-addFilter=検索条件の追加
-listview-filters-button-query=検索
-listview-filters-button-clear=クリア
-listview-filters-label-method=検索方法
+query-lbl-caption=検索
+query-lbl-add-filter=検索条件の追加
+query-btn-search=検索
+query-btn-clear=クリア
+query-lbl-method=検索方法
 
 
-listview-filter-bools=\
+query-booleans=\
 	"true":  "はい", \
 	"false": "いいえ" 
 
-listview-filter-strings=\
+query-strings=\
 	"mt": "を含む", \
 	"lm": "で始まる", \
 	"rm": "で終わる", \

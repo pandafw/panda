@@ -26,6 +26,20 @@ public abstract class AbstractTagExRenderer<T extends UIBean> extends AbstractTa
 		super(rc);
 	}
 
+	protected void writeHidden(String id, String name, Object value) throws IOException {
+		writeHidden(id, name, value, false);
+	}
+	
+	protected void writeHidden(String id, String name, Object value, boolean disabled) throws IOException {
+		Attributes ha = new Attributes();
+		ha.type("hidden")
+		  .id(id)
+		  .name(name)
+		  .value(tag.castString(value))
+		  .disabled(disabled);
+		xtag("input", ha);
+	}
+	
 	protected void writeTextField(String cssClass, String name, String id, Object value, boolean disabled) throws IOException {
 		if (textField == null) {
 			textField = newTag(TextField.class);
