@@ -167,7 +167,7 @@
 </#if>
 
 	${s}@p.queryer id="${action.name}_${ui.name}_qr" action="~/${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>
-		columns=_columns_<#if ui.params.fsexpand?has_content> fsexpand="${ui.params.fsexpand}"</#if>
+		columns=_columns_<#if ui.params.fsexpand?has_content> expand="${ui.params.fsexpand}"</#if>
 	/>
 
 	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}"<#if ui.params.method?has_content> method="${ui.params.method}"</#if><#if ui.params.target?has_content> target="${ui.params.target}"</#if>

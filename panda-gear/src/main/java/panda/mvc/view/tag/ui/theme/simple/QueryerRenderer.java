@@ -187,9 +187,9 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		}
 		
 		write("<fieldset class=\"p-qr-filters ui-collapsible");
-		if (tag.isFsExpandNone()
-				|| (tag.isFsExpandDefault() && !fsinput)
-				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
+		if (tag.isExpandNone()
+				|| (tag.isExpandDefault() && !fsinput)
+				|| (tag.isExpandFixed() && !fsinput && !fsfixed)) {
 			write(" ui-collapsed");
 		}
 		write("\" data-spy=\"fieldset\"><legend>");
@@ -206,9 +206,9 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		form.setOnsubmit(tag.getOnsubmit());
 		form.setOnreset(tag.getOnreset());
 		form.setLoadmask(false);
-		if (tag.isFsExpandNone()
-				|| (tag.isFsExpandDefault() && !fsinput)
-				|| (tag.isFsExpandFixed() && !fsinput && !fsfixed)) {
+		if (tag.isExpandNone()
+				|| (tag.isExpandDefault() && !fsinput)
+				|| (tag.isExpandFixed() && !fsinput && !fsfixed)) {
 			form.setCssStyle("display: none");
 		}
 		form.start(writer);

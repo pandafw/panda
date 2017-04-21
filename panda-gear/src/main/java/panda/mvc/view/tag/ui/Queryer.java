@@ -45,7 +45,7 @@ public class Queryer extends UIBean {
 	 * none
 	 *  - hide always
 	 */
-	protected char fsexpand = 'd';
+	protected char expand = 'd';
 
 	protected String pagerStyle;
 
@@ -328,29 +328,29 @@ public class Queryer extends UIBean {
 	}
 
 	/**
-	 * @param fsexpand the fsexpand to set
+	 * @param expand the expand to set
 	 */
-	public void setFsexpand(String fsexpand) {
-		if (Strings.isEmpty(fsexpand)) {
+	public void setExpand(String expand) {
+		if (Strings.isEmpty(expand)) {
 			return;
 		}
-		this.fsexpand = Character.toLowerCase(fsexpand.charAt(0));
+		this.expand = Character.toLowerCase(expand.charAt(0));
 	}
 	
-	public boolean isFsExpandAlways() {
-		return fsexpand == 'a';
+	public boolean isExpandAlways() {
+		return expand == 'a';
 	}
 	
-	public boolean isFsExpandDefault() {
-		return fsexpand == 'd';
+	public boolean isExpandDefault() {
+		return expand == 'd';
 	}
 	
-	public boolean isFsExpandFixed() {
-		return fsexpand == 'f';
+	public boolean isExpandFixed() {
+		return expand == 'f';
 	}
 	
-	public boolean isFsExpandNone() {
-		return fsexpand == 'n';
+	public boolean isExpandNone() {
+		return expand == 'n';
 	}
 
 	/**
