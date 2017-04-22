@@ -99,7 +99,6 @@
 		</#if>
 			"header": a.getFieldLabel("${c.name}"),
 			"display": <#if c.display?has_content>${c.display?string}<#else>a.displayField("${c.name}")</#if>,
-			"filterable": <#if c.filterable?has_content>${c.filterable?string}<#else>a.filterField("${c.name}")</#if>,
 		<#if c.format??>
 			"format": {
 			<#list c.format.paramList as fp>
@@ -109,6 +108,7 @@
 			},
 		</#if>
 		<#if c.filter??>
+			"filterable": <#if c.filterable?has_content>${c.filterable?string}<#else>a.filterField("${c.name}")</#if>,
 			"filter": {
 			<#if c.filter.label??>
 				"label": "${c.filter.label}",
@@ -134,14 +134,11 @@
 		<#if c.link?has_content>
 			"link": ${c.link},
 		</#if>
-		<#if c.nowrap??>
-			"nowrap": ${c.nowrap?string},
-		</#if>
 		<#if c.sortable??>
 			"sortable": ${c.sortable?string},
 		</#if>
-		<#if c.width?has_content>
-			"width": "${c.width}",
+		<#if c.cssClass?has_content>
+			"cssClass": "${c.cssClass}",
 		</#if>
 			"tooltip": a.getFieldTooltip("${c.name}")
 		}<#if c_has_next>, </#if></#list>] />

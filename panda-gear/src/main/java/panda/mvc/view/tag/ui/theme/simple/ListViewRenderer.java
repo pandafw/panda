@@ -96,23 +96,25 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		cssColumns = Strings.split(defs(tag.getCssColumn()));
 
 		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
-		for (ListColumn c : columns) {
-			if (!c.filterable) {
-				continue;
-			}
-
-			ListColumn.Filter cf = c.filter;
-			if (cf == null) {
-				continue;
-			}
-
-			Filter qf = qfs == null ? null : qfs.get(c.name);
-			if (qf == null) {
-				continue;
-			}
-			
-			if (QueryerRenderer.isFiltered(cf, qf)) {
-				fsdefines.add(c.name);
+		if (qfs != null) {
+			for (ListColumn c : columns) {
+				if (!c.filterable) {
+					continue;
+				}
+	
+				ListColumn.Filter cf = c.filter;
+				if (cf == null) {
+					continue;
+				}
+	
+				Filter qf = qfs.get(c.name);
+				if (qf == null) {
+					continue;
+				}
+				
+				if (QueryerRenderer.isFiltered(cf, qf)) {
+					fsdefines.add(c.name);
+				}
 			}
 		}
 	}
@@ -371,9 +373,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 					+ (fsdefines.contains(c.name) ? " p-lv-filtered" : "")
 					+ (c.hidden ? " p-lv-hidden" : ""))
 				.tooltip(tag);
-			if (c.width > 0) {
-				tha.cssStyle("width:" + c.width);
-			}
 			stag("th", tha);
 
 			if ("check".equals(ctype)) {
@@ -481,10 +480,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 					tda.add("class", "p-lv-" + ctype 
 							   + ("cm".equals(ctype) ? " p-lv-cm-" + c.name : "")
 							   + (c.hidden ? " p-lv-hidden" : "")
-							   + (c.wswrap ? " p-lv-wswrap" : ""));
-					if (c.width > 0) {
-						tda.cssStyle("width:" + c.width);
-					}
+							   + (Strings.isNotEmpty(c.cssClass) ? (" " + c.cssClass) : ""));
 					stag(c.fixed ? "th" : "td", tda);
 					
 
@@ -517,7 +513,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 							ha.type("hidden")
 							  .cssClass("p-lv-cv" + (c.pkey ? " p-lv-ck" : ""))
 							  .name(c.name)
-							  .disabled(!c.enabled)
 							  .value(tag.castString(getBeanProperty(d, c.name)));
 							xtag("input", ha);
 						}

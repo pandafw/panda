@@ -24,24 +24,22 @@ public class ListColumn {
 	public String name;
 	public String type;
 	public String header;
-	public int width;
 	public String tooltip;
-	public boolean hidden;
+	public String cssClass;
+
 	public boolean display = true;
 	public boolean filterable = true;
 	public boolean sortable = false;
 
 	public boolean fixed;
-	public boolean wswrap;
 	public boolean group;
 	public boolean pkey;
-	public boolean enabled;
 	public boolean value;
+	public boolean hidden;
 
 	public Format format;
 	public Filter filter;
 	
 	public Object link;
 	public List<ItemLink> actions;
-	
 }

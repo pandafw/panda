@@ -185,12 +185,10 @@
 		</sequence>
 		<attribute name="display" type="string"></attribute>
 		<attribute name="tooltip" type="string"></attribute>
+		<attribute name="cssClass" type="string"></attribute>
 		<attribute name="label" type="string"></attribute>
 		<attribute name="link" type="string"></attribute>
-		<attribute name="nowrap" type="string"></attribute>
-		<attribute name="width" type="string"></attribute>
 		<attribute name="group" type="string"></attribute>
-		<attribute name="query" type="string"></attribute>
 		<attribute name="filterable" type="string"></attribute>
 		<attribute name="sortable" type="string"></attribute>
 		<attribute name="hidden" type="string"></attribute>

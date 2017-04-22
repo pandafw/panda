@@ -22,12 +22,11 @@ import panda.lang.Strings;
  *         &lt;element name=&quot;format&quot; type=&quot;{panda.tool.codegen}Format&quot; minOccurs=&quot;0&quot;/&gt;
  *         &lt;element name=&quot;filter&quot; type=&quot;{panda.tool.codegen}Filter&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
+ *       &lt;attribute name=&quot;cssClass&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;display&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;tooltip&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;label&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;link&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
- *       &lt;attribute name=&quot;nowrap&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
- *       &lt;attribute name=&quot;width&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;group&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
  *       &lt;attribute name=&quot;filterable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *       &lt;attribute name=&quot;sortable&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}boolean&quot; /&gt;
@@ -51,6 +50,8 @@ public class ListColumn implements Comparable<ListColumn> {
 	private Filter filter;
 
 	@XmlAttribute
+	private String cssClass;
+	@XmlAttribute
 	private String display;
 	@XmlAttribute
 	private String tooltip;
@@ -58,10 +59,6 @@ public class ListColumn implements Comparable<ListColumn> {
 	private String label;
 	@XmlAttribute
 	private String link;
-	@XmlAttribute
-	private Boolean nowrap;
-	@XmlAttribute
-	private String width;
 	@XmlAttribute
 	private Boolean group;
 	@XmlAttribute
@@ -92,8 +89,7 @@ public class ListColumn implements Comparable<ListColumn> {
 		this.display = lc.display;
 		this.tooltip = lc.tooltip;
 		this.link = lc.link;
-		this.nowrap = lc.nowrap;
-		this.width = lc.width;
+		this.cssClass = lc.cssClass;
 		this.group = lc.group;
 		this.sortable = lc.sortable;
 		this.filterable = lc.filterable;
@@ -131,11 +127,8 @@ public class ListColumn implements Comparable<ListColumn> {
 		if (src.link != null) {
 			me.link = src.link;
 		}
-		if (src.nowrap != null) {
-			me.nowrap = src.nowrap;
-		}
-		if (src.width != null) {
-			me.width = src.width;
+		if (src.cssClass != null) {
+			me.cssClass = src.cssClass;
 		}
 		if (src.group != null) {
 			me.group = src.group;
@@ -261,31 +254,17 @@ public class ListColumn implements Comparable<ListColumn> {
 	}
 
 	/**
-	 * @return the nowrap
+	 * @return the cssClass
 	 */
-	public Boolean getNowrap() {
-		return nowrap;
+	public String getCssClass() {
+		return cssClass;
 	}
 
 	/**
-	 * @param nowrap the nowrap to set
+	 * @param cssClass the cssClass to set
 	 */
-	public void setNowrap(Boolean nowrap) {
-		this.nowrap = nowrap;
-	}
-
-	/**
-	 * @return the width
-	 */
-	public String getWidth() {
-		return width;
-	}
-
-	/**
-	 * @param width the width to set
-	 */
-	public void setWidth(String width) {
-		this.width = width;
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
 	}
 
 	/**

@@ -474,16 +474,10 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	margin: 0;
 	width: 100%;
 }
+.p-lv-cm {
+}
 .p-lv-hidden {
 	display: none;
-}
-.p-lv-nowrap {
-	white-space: nowrap;
-}
-.p-lv-wswrap {
-	white-space: normal;
-}
-.p-lv-cm {
 }
 
 /* table - thead */
@@ -850,7 +844,7 @@ tbody.p-lv-tbody > tr > td:first-child {
 	position: absolute;
 	color: #ccc;
 	margin: 10px 0 0 -18px;
-	z-index: 2;
+	z-index: 3;
 	cursor: pointer;
 }
 .p-trigger:hover {

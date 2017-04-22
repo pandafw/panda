@@ -22,12 +22,9 @@
 		<#if c.group??>
 			"group": ${c.group?string},
 		</#if>
-		<#if c.nowrap??>
-			"nowrap": ${c.nowrap?string},
+		<#if c.cssClass?has_content>
+			"cssClass": "${c.cssClass}",
 		</#if>
 			"sortable": false,
-		<#if c.width?has_content>
-			"width": "${c.width}",
-		</#if>
 			"tooltip": a.getFieldTooltip("${c.name}")
 		}<#if c_has_next>, </#if></#list>] />

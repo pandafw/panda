@@ -104,16 +104,10 @@
 	margin: 0;
 	width: 100%;
 }
+.p-lv-cm {
+}
 .p-lv-hidden {
 	display: none;
-}
-.p-lv-nowrap {
-	white-space: nowrap;
-}
-.p-lv-wswrap {
-	white-space: normal;
-}
-.p-lv-cm {
 }
 
 /* table - thead */
