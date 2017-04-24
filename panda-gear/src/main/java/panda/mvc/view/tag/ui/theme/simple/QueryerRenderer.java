@@ -1,9 +1,9 @@
 package panda.mvc.view.tag.ui.theme.simple;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +14,7 @@ import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.bean.Filter;
 import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.tag.ListFilter;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Queryer;
@@ -40,6 +41,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 	private panda.mvc.bean.Queryer queryer;
 
 	private List<ListColumn> columns;
+	private List<ListFilter> filters;
 	
 	// filters define list
 	private Set<String> fsdefines = new HashSet<String>();
@@ -55,22 +57,6 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 	
 	public QueryerRenderer(RenderingContext context) {
 		super(context);
-	}
-
-	private void initVars() {
-		id = tag.getId();
-
-		if (Strings.isEmpty(tag.getQueryer())) {
-			if (context.getParams() instanceof panda.mvc.bean.Queryer) {
-				queryer = (panda.mvc.bean.Queryer)context.getParams();
-			}
-		}
-		else {
-			queryer = (panda.mvc.bean.Queryer)context.getParameter(tag.getQueryer());
-			prefix = tag.getQueryer() + '.';
-		}
-		
-		columns = tag.getColumns();
 	}
 
 	public void render() throws IOException {
@@ -95,7 +81,85 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		etag("div");
 	}
 
-	public static boolean isFiltered(ListColumn.Filter cf, Filter qf) {
+	private void initVars() {
+		id = tag.getId();
+
+		if (Strings.isEmpty(tag.getQueryer())) {
+			if (context.getParams() instanceof panda.mvc.bean.Queryer) {
+				queryer = (panda.mvc.bean.Queryer)context.getParams();
+			}
+		}
+		else {
+			queryer = (panda.mvc.bean.Queryer)context.getParameter(tag.getQueryer());
+			prefix = tag.getQueryer() + '.';
+		}
+		
+		columns = tag.getColumns();
+
+		filters = tag.getFilters();
+		if (filters == null) {
+			filters = new ArrayList<ListFilter>();
+
+			Map<String, List<String>> fes = context.getParamAlert().getErrors();
+			Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
+			
+			String _pf = prefix + "f.";
+			for (ListColumn c : columns) {
+				if (!c.filterable) {
+					continue;
+				}
+	
+				ListFilter cf = c.filter;
+				if (cf == null) {
+					continue;
+				}
+
+				filters.add(cf);
+				if (cf.name == null) {
+					cf.name = c.name;
+				}
+				if (cf.label == null) {
+					cf.label = c.header;
+				}
+				if (cf.tooltip == null) {
+					cf.tooltip = c.tooltip;
+				}
+				
+				String _fn = _pf + c.name;
+	
+				boolean _hfe = false;
+				if (Collections.isNotEmpty(fes)) {
+					String _fn_d = _fn + '.';
+					for (Entry<String, List<String>> en2 : fes.entrySet()) {
+						if (en2.getKey().startsWith(_fn_d)) {
+							_hfe = true;
+							break;
+						}
+					}
+				}
+	
+				Filter qf = qfs == null ? null : qfs.get(c.name);
+				if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
+					fsinputs.add(c.name);
+					fsinput = true;
+				}
+				else if (cf.fixed) {
+					fsinputs.add(c.name);
+					fsfixed = true;
+				}
+	
+				if (qf == null) {
+					continue;
+				}
+				
+				if (isFiltered(cf, qf)) {
+					fsdefines.add(c.name);
+				}
+			}
+		}
+	}
+
+	public static boolean isFiltered(ListFilter cf, Filter qf) {
 		boolean r = false;
 
 		if (T_STRING.equals(cf.type)) {
@@ -127,62 +191,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 	}
 	
 	private void writeFilters() throws IOException {
-		Map<String, ListColumn.Filter> fm = new LinkedHashMap<String, ListColumn.Filter>();
-		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
-		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
-		
-		String _pf = prefix + "f.";
-		for (ListColumn c : columns) {
-			if (!c.filterable) {
-				continue;
-			}
-
-			ListColumn.Filter cf = c.filter;
-			if (cf == null) {
-				continue;
-			}
-
-			fm.put(c.name, cf);
-			if (cf.label == null) {
-				cf.label = c.header;
-			}
-			if (cf.tooltip == null) {
-				cf.tooltip = c.tooltip;
-			}
-			
-			String _fn = _pf + c.name;
-
-			boolean _hfe = false;
-			if (Collections.isNotEmpty(fieldErrors)) {
-				String _fn_d = _fn + '.';
-				for (Entry<String, List<String>> en2 : fieldErrors.entrySet()) {
-					if (en2.getKey().startsWith(_fn_d)) {
-						_hfe = true;
-						break;
-					}
-				}
-			}
-
-			Filter qf = qfs == null ? null : qfs.get(c.name);
-			if (_hfe || (qf != null && Strings.isNotEmpty(qf.getC()))) {
-				fsinputs.add(c.name);
-				fsinput = true;
-			}
-			else if (cf.fixed) {
-				fsinputs.add(c.name);
-				fsfixed = true;
-			}
-
-			if (qf == null) {
-				continue;
-			}
-			
-			if (isFiltered(cf, qf)) {
-				fsdefines.add(c.name);
-			}
-		}
-		
-		if (Collections.isEmpty(fm)) {
+		if (Collections.isEmpty(filters)) {
 			return;
 		}
 		
@@ -229,16 +238,16 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 			}
 		}
 
-		writeFilterItems(fm);
+		writeFilterItems();
 		
 		write("<div class=\"p-qr-sep\"></div>");
 
 		writeFilterMethod();
-		writeFilterButtons(fm);
+		writeFilterButtons();
 		
 		form.end(writer, "");
 		
-		writeFilterSelect(fm);
+		writeFilterSelect();
 		
 		write("</fieldset>");
 	}
@@ -253,7 +262,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void writeFilterItems(Map<String, ListColumn.Filter> fm) throws IOException {
+	private void writeFilterItems() throws IOException {
 		Map<String, String> stringFilterMap = tag.getStringFilterMap();
 		Map<String, String> boolFilterMap = tag.getBoolFilterMap(); 
 		Map<String, String> numberFilterMap = tag.getNumberFilterMap();
@@ -264,9 +273,8 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		Map<String, List<String>> fieldErrors = context.getParamAlert().getErrors();
 		Map<String, Filter> qfs = (queryer == null ? null : queryer.getFilters());
 		
-		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
-			ListColumn.Filter _f = en.getValue();
-			String _name = en.getKey();
+		for (ListFilter _f : filters) {
+			String _name = _f.name;
 			String _hname = html(_name);
 			Filter qf = qfs == null ? null : qfs.get(_name);
 			
@@ -515,19 +523,6 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		}
 	}
 
-	private Map<String, ListColumn.Filter> getEditableFilters(Map<String, ListColumn.Filter> fm) {
-		// get editable filters
-		Map<String, ListColumn.Filter> fm2 = new LinkedHashMap<String, ListColumn.Filter>();
-		for (Entry<String, ListColumn.Filter> en : fm.entrySet()) {
-			String _name = en.getKey();
-			ListColumn.Filter _f = en.getValue();
-			if (!_f.fixed) {
-				fm2.put(_name, _f);
-			}
-		}
-		return fm2;
-	}
-
 	@SuppressWarnings("unchecked")
 	private void writeFilterMethod() throws IOException {
 		Map<String, String> filterMethodMap = (Map<String, String>)tag.getFilterMethodMap();
@@ -551,7 +546,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		write("</div></div>");
 	}
 	
-	private void writeFilterButtons(Map<String, ListColumn.Filter> fm) throws IOException {
+	private void writeFilterButtons() throws IOException {
 		write("<div class=\"form-group p-qr-buttons\">");
 		write("<label class=\"");
 		write(tag.getCssLabel());
@@ -570,30 +565,36 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		write("</div></div>");
 	}
 	
-	private void writeFilterSelect(Map<String, ListColumn.Filter> fm) throws IOException {
-		// select
-		Map<String, ListColumn.Filter> fm2 = getEditableFilters(fm);
-		if (Collections.isNotEmpty(fm2)) {
-			write("<select id=\"" + id + "_fsform_fsadd" + "\"");
-			write(" class=\"form-control p-qr-select\" onclick=\"return false;\">");
-			write("<option value=\"\">-- ");
-			write(tag.getLabelAddFilter());
-			write(" --</option>");
-	
-			for (Entry<String, ListColumn.Filter> en : fm2.entrySet()) {
-				String _name = en.getKey();
-				ListColumn.Filter _f = en.getValue();
-	
-				boolean _fd = fsinputs.contains(_name);
-	
-				write("<option value=\"" + html(_name) + "\"");
-				if (_fd) {
-					write(" disabled");
-				}
-				write(">");
-				write(html(_f.label));
-				write("</option>");
+	private void writeFilterSelect() throws IOException {
+		// selectable filter
+		boolean empty = true;
+		for (ListFilter _f : filters) {
+			if (_f.fixed) {
+				continue;
 			}
+			if (empty) {
+				empty = false;
+				write("<select id=\"" + id + "_fsform_fsadd" + "\"");
+				write(" class=\"form-control p-qr-select\" onclick=\"return false;\">");
+				write("<option value=\"\">-- ");
+				write(tag.getLabelAddFilter());
+				write(" --</option>");
+			}
+
+			String _name = _f.name;
+
+			boolean _fd = fsinputs.contains(_name);
+
+			write("<option value=\"" + html(_name) + "\"");
+			if (_fd) {
+				write(" disabled");
+			}
+			write(">");
+			write(html(_f.label));
+			write("</option>");
+		}
+		
+		if (!empty) {
 			write("</select>");
 		}
 	}

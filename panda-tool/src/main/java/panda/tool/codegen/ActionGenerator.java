@@ -144,6 +144,11 @@ public class ActionGenerator extends AbstractCodeGenerator {
 						imports.add(ArrayList.class.getName());
 						imports.add(ListColumn.class.getName());
 					}
+					else if ("list_json".equals(s)
+							|| "list_xml".equals(s)) {
+						imports.add(Validates.class.getName());
+						imports.add(QueryerOx.class.getName());
+					}
 				}
 			}
 		}

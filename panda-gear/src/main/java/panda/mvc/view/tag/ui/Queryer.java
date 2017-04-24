@@ -8,6 +8,7 @@ import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.tag.ListFilter;
 
 /**
  * Render an HTML Queryer.
@@ -15,6 +16,7 @@ import panda.mvc.view.tag.ListColumn;
 @IocBean(singleton=false)
 public class Queryer extends UIBean {
 	protected List<ListColumn> columns;
+	protected List<ListFilter> filters;
 
 	protected String queryer;
 
@@ -187,6 +189,27 @@ public class Queryer extends UIBean {
 	}
 
 	/**
+	 * @param columns the columns to set
+	 */
+	public void setColumns(List<ListColumn> columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return the filters
+	 */
+	public List<ListFilter> getFilters() {
+		return filters;
+	}
+
+	/**
+	 * @param filters the filters to set
+	 */
+	public void setFilters(List<ListFilter> filters) {
+		this.filters = filters;
+	}
+
+	/**
 	 * @return the queryer
 	 */
 	public String getQueryer() {
@@ -194,10 +217,25 @@ public class Queryer extends UIBean {
 	}
 
 	/**
+	 * @param queryer the queryer to set
+	 */
+	public void setQueryer(String queryer) {
+		this.queryer = queryer;
+	}
+
+	/**
 	 * @return the action
 	 */
 	public String getAction() {
 		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 	/**
@@ -222,6 +260,13 @@ public class Queryer extends UIBean {
 	}
 
 	/**
+	 * @param target the target to set
+	 */
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	/**
 	 * @return the onsubmit
 	 */
 	public String getOnsubmit() {
@@ -229,10 +274,24 @@ public class Queryer extends UIBean {
 	}
 
 	/**
+	 * @param onsubmit the onsubmit to set
+	 */
+	public void setOnsubmit(String onsubmit) {
+		this.onsubmit = onsubmit;
+	}
+
+	/**
 	 * @return the onreset
 	 */
 	public String getOnreset() {
 		return onreset;
+	}
+
+	/**
+	 * @param onreset the onreset to set
+	 */
+	public void setOnreset(String onreset) {
+		this.onreset = onreset;
 	}
 
 	/**
@@ -268,49 +327,6 @@ public class Queryer extends UIBean {
 	 */
 	public void setFilterMethodMap(Map filterMethodMap) {
 		this.filterMethodMap = filterMethodMap;
-	}
-
-	/**
-	 * @param columns the columns to set
-	 */
-	public void setColumns(List<ListColumn> columns) {
-		this.columns = columns;
-	}
-
-	/**
-	 * @param queryer the queryer to set
-	 */
-	public void setQueryer(String queryer) {
-		this.queryer = queryer;
-	}
-
-	/**
-	 * @param action the action to set
-	 */
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	/**
-	 * @param target the target to set
-	 */
-	public void setTarget(String target) {
-		this.target = target;
-	}
-
-	/**
-	 * @param onsubmit the onsubmit to set
-	 */
-	public void setOnsubmit(String onsubmit) {
-		this.onsubmit = onsubmit;
-	}
-
-	/**
-	 * @param onreset the onreset to set
-	 */
-	public void setOnreset(String onreset) {
-		this.onreset = onreset;
 	}
 
 	/**

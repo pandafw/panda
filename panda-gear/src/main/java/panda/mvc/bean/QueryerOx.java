@@ -1,6 +1,8 @@
 package panda.mvc.bean;
 
-
+/**
+ * disable p.s/p.l for input parameter
+ */
 public class QueryerOx extends Queryer {
 
 	private static final long serialVersionUID = 1L;

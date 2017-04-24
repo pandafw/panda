@@ -23,6 +23,7 @@ import panda.mvc.util.AccessControler;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Escapes;
 import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.tag.ListFilter;
 import panda.mvc.view.tag.ui.Form;
 import panda.mvc.view.tag.ui.ListView;
 import panda.mvc.view.tag.ui.ListView.ItemLink;
@@ -102,7 +103,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 					continue;
 				}
 	
-				ListColumn.Filter cf = c.filter;
+				ListFilter cf = c.filter;
 				if (cf == null) {
 					continue;
 				}

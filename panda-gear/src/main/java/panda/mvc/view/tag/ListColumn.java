@@ -12,14 +12,6 @@ public class ListColumn {
 		public Object codemap;
 		public String escape;
 	}
-	
-	public static class Filter {
-		public String type;
-		public boolean fixed;
-		public String label;
-		public String tooltip;
-		public Object list;
-	}
 
 	public String name;
 	public String type;
@@ -38,7 +30,7 @@ public class ListColumn {
 	public boolean hidden;
 
 	public Format format;
-	public Filter filter;
+	public ListFilter filter;
 	
 	public Object link;
 	public List<ItemLink> actions;
