@@ -22,7 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name=&quot;param&quot; type=&quot;{panda.tool.codegen}Param&quot; maxOccurs=&quot;unbounded&quot; minOccurs=&quot;0&quot;/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name=&quot;type&quot; use=&quot;required&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;type&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
+ *       &lt;attribute name=&quot;pattern&quot; type=&quot;{http://www.w3.org/2001/XMLSchema}string&quot; /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -35,8 +36,11 @@ public class Format {
 	@XmlElement(name = "param")
 	private List<Param> paramList;
 
-	@XmlAttribute(required = true)
+	@XmlAttribute
 	private String type;
+
+	@XmlAttribute
+	private String pattern;
 
 	/**
 	 * Constructor
@@ -51,6 +55,7 @@ public class Format {
 	 */
 	public Format(Format format) {
 		this.type = format.type;
+		this.pattern = format.pattern;
 
 		paramList = new LinkedList<Param>();
 		for (Param p : format.getParamList()) {
@@ -84,6 +89,20 @@ public class Format {
 	 */
 	public void setType(String value) {
 		this.type = value;
+	}
+
+	/**
+	 * @return the pattern
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * @param pattern the pattern to set
+	 */
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
 	}
 
 }

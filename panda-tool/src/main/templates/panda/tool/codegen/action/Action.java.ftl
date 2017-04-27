@@ -176,7 +176,12 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 			lc.hidden = ${(c.hidden!false)?string};
 	<#if c.format??>
 			ListColumn.Format lcf = new ListColumn.Format();
+		<#if c.format.type?has_content>
 			lcf.type = "${c.format.type}";
+		</#if>
+		<#if c.format.pattern?has_content>
+			lcf.pattern = "${c.format.pattern}";
+		</#if>
 		<#list c.format.paramList as fp>
 			lcf.${fp.name} = ${gen.translateToJava(fp.value)};
 		</#list>
@@ -204,7 +209,12 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 			lc.hidden = ${(c.hidden!false)?string};
 	<#if c.format??>
 			ListColumn.Format lcf = new ListColumn.Format();
+		<#if c.format.type?has_content>
 			lcf.type = "${c.format.type}";
+		</#if>
+		<#if c.format.pattern?has_content>
+			lcf.pattern = "${c.format.pattern}";
+		</#if>
 		<#list c.format.paramList as fp>
 			lcf.${fp.name} = ${gen.translateToJava(fp.value)};
 		</#list>

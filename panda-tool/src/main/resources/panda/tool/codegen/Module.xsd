@@ -239,7 +239,8 @@
 		<sequence>
 			<element name="param" type="tns:Param" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="type" type="string" use="required"></attribute>
+		<attribute name="type" type="string"></attribute>
+		<attribute name="pattern" type="string"></attribute>
 	</complexType>
 
 	<complexType name="Filter">
