@@ -118,10 +118,10 @@
 			"name" : "size",
 			"header": a.getFieldLabel("size"),
 			"display": a.displayField("size"),
-			"filterable": a.filterField("size"),
 			"format": {
-				"type": "integer"
+				"type": "intcomma"
 			},
+			"filterable": a.filterField("size"),
 			"filter": {
 				"type": "number"
 			},
@@ -131,10 +131,10 @@
 			"name" : "date",
 			"header": a.getFieldLabel("date"),
 			"display": a.displayField("date"),
-			"filterable": a.filterField("date"),
 			"format": {
 				"type": "timestamp"
 			},
+			"filterable": a.filterField("date"),
 			"filter": {
 				"type": "datetime"
 			},
@@ -145,9 +145,6 @@
 			"header": a.getFieldLabel("flag"),
 			"display": a.displayField("flag"),
 			"filterable": a.filterField("flag"),
-			"format": {
-				"type": "integer"
-			},
 			"filter": {
 				"type": "number"
 			},

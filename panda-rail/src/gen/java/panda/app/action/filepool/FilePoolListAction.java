@@ -67,7 +67,7 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 			lc.header = getFieldLabel("size");
 			lc.hidden = false;
 			ListColumn.Format lcf = new ListColumn.Format();
-			lcf.type = "integer";
+			lcf.type = "intcomma";
 			lc.format = lcf;
 			columns.add(lc);
 		}
@@ -86,9 +86,6 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 			lc.name = "flag";
 			lc.header = getFieldLabel("flag");
 			lc.hidden = false;
-			ListColumn.Format lcf = new ListColumn.Format();
-			lcf.type = "integer";
-			lc.format = lcf;
 			columns.add(lc);
 		}
 		return super.list_csv(qr, columns);

@@ -25,7 +25,7 @@
 				<filter type="string"/>
 			</column>
 			<column name="size" sortable="true">
-				<format type="integer"/>
+				<format type="intcomma"/>
 				<filter type="number"/>
 			</column>
 			<column name="date" sortable="true">
@@ -33,7 +33,6 @@
 				<filter type="datetime"/>
 			</column>
 			<column name="flag" sortable="true">
-				<format type="integer"/>
 				<filter type="number"/>
 			</column>
 		</list>

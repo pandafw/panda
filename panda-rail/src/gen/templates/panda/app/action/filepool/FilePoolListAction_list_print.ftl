@@ -43,7 +43,7 @@
 			"header": a.getFieldLabel("size"),
 			"display": a.displayField("size"),
 			"format": {
-				"type": "integer"
+				"type": "intcomma"
 			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("size")
@@ -62,9 +62,6 @@
 			"value": false,
 			"header": a.getFieldLabel("flag"),
 			"display": a.displayField("flag"),
-			"format": {
-				"type": "integer"
-			},
 			"sortable": false,
 			"tooltip": a.getFieldTooltip("flag")
 		}] />

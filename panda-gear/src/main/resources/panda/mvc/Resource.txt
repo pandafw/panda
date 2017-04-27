@@ -37,7 +37,8 @@ date-format-file=_(yyyyMMdd-HHmmss)
 #number-format=#
 number-format-id=#
 number-format-currency=#,###.00
-number-format-integer=#,###
+number-format-integer=#
+number-format-intcomma=#,###
 
 #password
 password-format=******

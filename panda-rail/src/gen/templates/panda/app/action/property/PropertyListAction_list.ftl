@@ -121,11 +121,11 @@
 			"name" : "language",
 			"header": a.getFieldLabel("language"),
 			"display": a.displayField("language"),
-			"filterable": a.filterField("language"),
 			"format": {
 				"codemap": consts.localeLanguageMap,
 				"type": "code"
 			},
+			"filterable": a.filterField("language"),
 			"filter": {
 				"list": consts.localeLanguageMap,
 				"type": "select"
@@ -138,11 +138,11 @@
 			"name" : "country",
 			"header": a.getFieldLabel("country"),
 			"display": a.displayField("country"),
-			"filterable": a.filterField("country"),
 			"format": {
 				"codemap": consts.localeCountryMap,
 				"type": "code"
 			},
+			"filterable": a.filterField("country"),
 			"filter": {
 				"list": consts.localeCountryMap,
 				"type": "select"
@@ -191,11 +191,11 @@
 			"name" : "status",
 			"header": a.getFieldLabel("status"),
 			"display": a.displayField("status"),
-			"filterable": a.filterField("status"),
 			"format": {
 				"codemap": consts.dataStatusMap,
 				"type": "code"
 			},
+			"filterable": a.filterField("status"),
 			"filter": {
 				"list": consts.dataStatusMap,
 				"type": "checklist"
@@ -220,10 +220,10 @@
 			"name" : "utime",
 			"header": a.getFieldLabel("utime"),
 			"display": a.displayField("utime"),
-			"filterable": a.filterField("utime"),
 			"format": {
 				"type": "datetime"
 			},
+			"filterable": a.filterField("utime"),
 			"filter": {
 				"type": "datetime"
 			},
