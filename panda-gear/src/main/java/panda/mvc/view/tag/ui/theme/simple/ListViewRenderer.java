@@ -573,7 +573,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 								else {
 									Object v = getBeanProperty(d, c.name);
 									if (v != null) {
-										write(formatValue(v, c.format.type));
+										write(formatValue(v, c.format.type, c.format.pattern, c.format.escape));
 									}
 								}
 							}

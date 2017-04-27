@@ -339,12 +339,20 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	 * format and escape value
 	 */
 	public String formatValue(Object value, String format, String escape) {
+		return formatValue(value, format, null, escape);
+	}
+	
+	/**
+	 * format and escape value
+	 */
+	public String formatValue(Object value, String format, String pattern, String escape) {
 		if (value != null) {
 			if (property == null) {
 				property = newTag(Property.class);
 			}
 			property.setValue(value);
 			property.setFormat(format);
+			property.setPattern(pattern);
 			property.setEscape(Strings.defaultString(escape, Escapes.ESCAPE_HTML));
 			return property.formatValue();
 		}

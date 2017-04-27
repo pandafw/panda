@@ -10,6 +10,7 @@ public class ListColumn {
 		public String type;
 		public String expr;
 		public Object codemap;
+		public String pattern;
 		public String escape;
 	}
 

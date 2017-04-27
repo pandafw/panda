@@ -82,6 +82,7 @@ public class Property extends ContextBean {
 	private String defaultValue;
 	private String name;
 	private String format;
+	private String pattern;
 	private Object value;
 	private String escape = Escapes.ESCAPE_HTML;
 	
@@ -120,7 +121,7 @@ public class Property extends ContextBean {
 			name = "top";
 		}
 
-		if (format == null) {
+		if (Strings.isEmpty(format) && Strings.isEmpty(pattern)) {
 			ev = escape(getStringValue());
 		}
 		else {
@@ -150,7 +151,7 @@ public class Property extends ContextBean {
 						cbool = newComponent(CBoolean.class);
 					}
 					cbool.setValue((Boolean)av);
-					cbool.setPattern(null);
+					cbool.setPattern(pattern);
 					cbool.setFormat(format);
 					cbool.start(sw);
 					cbool.end(sw, "");
@@ -162,7 +163,7 @@ public class Property extends ContextBean {
 						cdate = newComponent(CDate.class);
 					}
 					cdate.setValue(av instanceof Calendar ? ((Calendar)av).getTime() : (Date)av);
-					cdate.setPattern(null);
+					cdate.setPattern(pattern);
 					cdate.setFormat(format);
 					cdate.start(sw);
 					cdate.end(sw, "");
@@ -174,7 +175,7 @@ public class Property extends ContextBean {
 						cnumber = newComponent(CNumber.class);
 					}
 					cnumber.setValue((Number)av);
-					cnumber.setPattern(null);
+					cnumber.setPattern(pattern);
 					cnumber.setFormat(format);
 					cnumber.start(sw);
 					cnumber.end(sw, "");
@@ -184,7 +185,7 @@ public class Property extends ContextBean {
 					ev = escape((String)av);
 				}
 				else {
-					ev = escape(getStringValue());
+					ev = escape(castString(av));
 				}
 			}
 		}
@@ -245,6 +246,13 @@ public class Property extends ContextBean {
 	 */
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	/**
+	 * @param pattern the pattern to set
+	 */
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
 	}
 
 }

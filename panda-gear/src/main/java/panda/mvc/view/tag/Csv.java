@@ -154,6 +154,7 @@ public class Csv extends Component {
 									}
 									property.setValue(v);
 									property.setFormat(c.format.type);
+									property.setPattern(c.format.pattern);
 									property.setEscape(c.format.escape);
 									value =  property.formatValue();
 								}
