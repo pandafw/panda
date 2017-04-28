@@ -10,13 +10,17 @@
 
 	<!-- build -->
 	<import file="../ant/panda-build.xml"/>
-	
+
+	<target name="codegen-xsd-deploy">
+		<copy file="${out.dir}/classes/panda/tool/codegen/Module.xsd" tofile="${prj.repo}/com/github/pandafw/${prj.name}/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
+	</target>
+
 	<!-- release -->
 	<target name="release" description="Release the project">
 		<antcall target="ivy-resolve"/>
 		<antcall target="build"/>
 		<antcall target="dist"/>
 		<antcall target="mvn-panda-deploy"/>
-		<copy file="${out.dir}/classes/panda/tool/codegen/Module.xsd" todir="${prj.repo}/com/foolite/${prj.name}/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
+		<antcall target="codegen-xsd-deploy"/>
 	</target>
 </project>
