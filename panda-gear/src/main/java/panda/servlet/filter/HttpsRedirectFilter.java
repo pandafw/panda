@@ -33,7 +33,7 @@ public class HttpsRedirectFilter implements Filter {
 			throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
-		String schema = request.getScheme();
+		String schema = HttpServlets.getScheme(request);
 		if (Scheme.HTTP.equals(schema)) {
 			ServletURLBuilder sub = new ServletURLBuilder();
 			sub.setRequest(request);
