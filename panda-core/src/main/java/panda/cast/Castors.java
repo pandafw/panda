@@ -67,6 +67,12 @@ public class Castors {
 		return i().cast(value, toType);
 	}
 
+	public static <T> T scast(Object value, Type toType, boolean skipCastError) {
+		Asserts.notNull(toType);
+		Castors cs = i();
+		return cs.cast(value, toType, cs.newCastContext(skipCastError));
+	}
+
 	public static <T> T scastTo(Object value, T target) {
 		if (value == null) {
 			return target;
@@ -75,6 +81,17 @@ public class Castors {
 		Asserts.notNull(target);
 		
 		return i().castTo(value, target);
+	}
+
+	public static <T> T scastTo(Object value, T target, boolean skipCastError) {
+		if (value == null) {
+			return target;
+		}
+		
+		Asserts.notNull(target);
+		
+		Castors cs = i();
+		return cs.castTo(value, target, cs.newCastContext(skipCastError));
 	}
 
 	// ------------------------------------------------------------------------
@@ -184,6 +201,10 @@ public class Castors {
 	
 	public CastContext newCastContext() {
 		return new CastContext(this);
+	}
+	
+	public CastContext newCastContext(boolean skipCastError) {
+		return new CastContext(this, skipCastError);
 	}
 	
 	/**

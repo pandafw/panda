@@ -31,6 +31,17 @@ public class CastContext extends CycleDetector implements CycleDetectStrategy {
 	public CastContext(Castors castors) {
 		this.castors = castors;
 	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param castors Castors object
+	 * @param skipCastError skip cast error
+	 */
+	public CastContext(Castors castors, boolean skipCastError) {
+		this.castors = castors;
+		this.skipCastError = skipCastError;
+	}
 
 	/**
 	 * @return the encoding
