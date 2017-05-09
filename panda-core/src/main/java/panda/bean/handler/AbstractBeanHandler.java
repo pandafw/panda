@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.lang.Strings;
+import panda.lang.reflect.Types;
 
 /**
  * 
@@ -38,6 +39,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 	 * @return BeanHandler
 	 */
 	protected BeanHandler getBeanHandler(Type type) {
+		if (Types.isImmutableType(type)) {
+			return null;
+		}
 		return beans.getBeanHandler(type);
 	}
 	
@@ -89,6 +93,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 		}
 		
 		BeanHandler bh = getBeanHandler(itemType);
+		if (bh == null) {
+			return null;
+		}
 		return bh.getBeanType(itemValue, nestName);
 	}
 
@@ -129,6 +136,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 		}
 
 		BeanHandler bh = getBeanHandler(itemType);
+		if (bh == null) {
+			return false;
+		}
 		return bh.canReadBean(itemValue, nestName);
 	}
 	
@@ -169,6 +179,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 		}
 
 		BeanHandler bh = getBeanHandler(itemType);
+		if (bh == null) {
+			return false;
+		}
 		return bh.canWriteBean(itemValue, nestName);
 	}
 
@@ -195,6 +208,9 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 
 		String nestName = beanName.substring(dot + 1);
 		BeanHandler bh = getBeanHandler(itemValue.getClass());
+		if (bh == null) {
+			return null;
+		}
 		return bh.getBeanValue(itemValue, nestName);
 	}
 
@@ -221,6 +237,10 @@ public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> 
 		}
 
 		BeanHandler bh = getBeanHandler(itemType);
+		if (bh == null) {
+			return false;
+		}
+
 		if (itemValue == null) {
 			itemValue = bh.createObject(); 
 			if (!setPropertyValue(beanObject, itemName, itemValue)) {
