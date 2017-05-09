@@ -8,7 +8,7 @@ Features
 ------------
 
  | Package                | Description                                                               |
- |------------------      |---------------------------------------------------------------------------|
+ |----------------------- |---------------------------------------------------------------------------|
  | panda.bean             | Java Bean Utilities                                                       |
  | panda.bind             | Java XML/JSON Serializer/Deserializer                                     |
  | panda.cast             | Java Type Converter (String <-> Number/Date/Calendar, Map <-> Java Bean)  |
@@ -16,9 +16,9 @@ Features
  | panda.doc              | HTML, markdown library                                                    |
  | panda.el               | A simple EL library                                                       |
  | panda.ex               | A extension library (Slack)                                               |
- | panda.io               | IO Utilities                                                              |
  | panda.ioc              | IOC library                                                               |
  | panda.lang             | Standard java utilities like apache commons-lang                          |
+ | panda.lang.chardet     | Charset detection (java port of the source from mozilla)                  |
  | panda.lang.codec       | Base64, QCode, Hex codec                                                  |
  | panda.lang.collection  | Collection library                                                        |
  | panda.lang.mutable     | Mutable classes                                                           |
@@ -30,8 +30,10 @@ Features
  | panda.vfs              | A simple VFS library                                                      |
 
 
+
 Acknowledgements
 ----------------
+
 Panda use the following software packages:
 
 | Name                | License                                                       | Source                                                 |
@@ -41,5 +43,6 @@ Panda use the following software packages:
 | Commons IO          | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-io/          |
 | Commons Lang        | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-lang/        |
 | Commons Net         | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-net/         |
+| jChatdet            | [Mozilla](https://www.mozilla.org/en-US/MPL/)                 | https://github.com/vidoss/jchardet                     |
 | Nutz                | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://nutzam.com/                                    |
 | TxtMark             | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://github.com/rjeschke/txtmark                    |
