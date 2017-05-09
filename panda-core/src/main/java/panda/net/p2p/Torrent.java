@@ -164,7 +164,7 @@ public class Torrent {
 			if (Collections.isEmpty(files)) {
 				throw new IOException("Invalid torrent file: missing <length> or <info.files>");
 			}
-			this.files = Castors.scast(files, Types.paramTypeOf(List.class, Item.class));
+			this.files = Castors.scast(files, Types.paramTypeOf(List.class, Item.class), false);
 
 			length = 0;
 			for (Item i : this.files) {
