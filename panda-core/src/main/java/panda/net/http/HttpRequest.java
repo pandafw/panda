@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.io.FileNames;
+import panda.io.MimeType;
 import panda.io.Streams;
 import panda.io.stream.WriterOutputStream;
 import panda.lang.Charsets;
@@ -337,19 +339,26 @@ public class HttpRequest {
 				
 				String key = en.getKey();
 				Object val = en.getValue();
+
 				File f = null;
 				if (isFile(val)) {
 					f = (File)val;
 				}
-				dos.writeBytes("Content-Disposition:    form-data;    name=\"");
+
+				dos.writeBytes(HttpHeader.CONTENT_DISPOSITION);
+				dos.writeBytes(": form-data; name=\"");
 				dos.writeBytes(Mimes.encodeText(key, encoding));
 				dos.writeBytes("\"");
 				if (f != null && f.exists()) {
-					dos.writeBytes(";    filename=\"");
+					dos.writeBytes("; filename=\"");
 					dos.writeBytes(Mimes.encodeText(f.getPath(), encoding));
 					dos.writeBytes("\"");
 					dos.writeBytes(Strings.CRLF);
-					dos.writeBytes("Content-Type:   application/octet-stream");
+
+					dos.writeBytes(HttpHeader.CONTENT_TYPE);
+					dos.writeBytes(": ");
+					dos.writeBytes(FileNames.getContentTypeFor(f.getName(), MimeType.APP_STREAM));
+
 					dos.writeBytes(Strings.CRLF);
 					dos.writeBytes(Strings.CRLF);
 					if (f.length() > 0) {

@@ -1988,7 +1988,7 @@ public abstract class FileNames {
 	 * @return a String indicating the MIME type for the specified file name.
 	 */
 	public static String getContentTypeFor(String filename) {
-		return getContentTypeFor(filename);
+		return getContentTypeFor(filename, null);
 	}
 
 	public static boolean isAbsolutePath(String path) {
