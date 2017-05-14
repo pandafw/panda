@@ -26,6 +26,7 @@ public class MimeType {
 	public static final String APP_JSON = "application/json";
 	public static final String APP_STREAM = "application/octet-stream";
 
+	public static final String IMG_GIF = "image/gif";
 	public static final String IMG_JPEG = "image/jpeg";
 	public static final String IMG_PNG = "image/png";
 	public static final String IMG_WEBP = "image/webp";
