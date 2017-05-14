@@ -1967,15 +1967,28 @@ public abstract class FileNames {
 
 	/**
 	 * Gets the MIME type for the specified file name.
+	 * If the MIME type is not found, the [def] will be returned.
+	 * 
+	 * @param filename the specified file name
+	 * @param def the default type
+	 * @return a String indicating the MIME type for the specified file name.
+	 */
+	public static String getContentTypeFor(String filename, String def) {
+		if (Strings.isEmpty(filename)) {
+			return def == null ? filename : def;
+		}
+		String t = URLConnection.getFileNameMap().getContentTypeFor(filename);
+		return Strings.isEmpty(t) ? def : t;
+	}
+
+	/**
+	 * Gets the MIME type for the specified file name.
 	 * 
 	 * @param filename the specified file name
 	 * @return a String indicating the MIME type for the specified file name.
 	 */
 	public static String getContentTypeFor(String filename) {
-		if (Strings.isEmpty(filename)) {
-			return filename;
-		}
-		return URLConnection.getFileNameMap().getContentTypeFor(filename);
+		return getContentTypeFor(filename);
 	}
 
 	public static boolean isAbsolutePath(String path) {
