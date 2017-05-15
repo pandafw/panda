@@ -82,10 +82,12 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 
 		String durl = null;
 		
-		write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
-		write(html(getText("btn-select-file", "Browse...")));
-		write("</button>");
-
+		if (!(tag.isReadonly() || tag.isDisabled())) {
+			write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
+			write(html(getText("btn-select-file", "Browse...")));
+			write("</button>");
+		}
+		
 		write("<span class=\"p-uploader-text\">");
 		if (tag.isFileExits()) {
 			if (Strings.isNotEmpty(pdl)) {
