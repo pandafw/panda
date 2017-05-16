@@ -24,6 +24,7 @@ import panda.app.constant.AUTH;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.Jsons;
+import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.io.FileNames;
 import panda.io.FileType;
@@ -360,7 +361,7 @@ public class DataImportAction extends AbstractAction {
 	protected Map<String, Object> getRowValues(ListReader<?> sheet, int r,
 			List<?> columns, List<DataType> types, List uploadData) {
 		try {
-			List<?> row = sheet.readList();
+			List row = sheet.readList();
 			if (row == null) {
 				return null;
 			}
@@ -382,6 +383,12 @@ public class DataImportAction extends AbstractAction {
 					catch (Exception e) {
 						String msg = getError(arg.target, r, c + 1, v, e);
 						throw new RuntimeException(msg);
+					}
+					
+					// convert to string for view
+					if (!(v instanceof CharSequence)) {
+						String sv = Castors.scast(v, String.class);
+						row.set(c, sv);
 					}
 				}
 			}
