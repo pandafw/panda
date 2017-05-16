@@ -72,6 +72,7 @@ public class XlsReader implements ListReader<Object>, Closeable {
 	 */
 	public void setSheet(int i) {
 		sheet = workbook.getSheetAt(i);
+		rowidx = 0;
 	}
 
 	/**
