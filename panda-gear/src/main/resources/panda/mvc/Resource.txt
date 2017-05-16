@@ -98,10 +98,10 @@ query-strings=\
 	"mt": "contains", \
 	"lm": "starts with", \
 	"rm": "ends with", \
-	"ge": "great equals", \
-	"le": "less equals", \
 	"eq": "equals", \
-	"ne": "not equals"
+	"ne": "not equals", \
+	"ge": "great equals", \
+	"le": "less equals"
 #	, \
 #	"lk": "likes", \
 #	"nk": "not likes"
