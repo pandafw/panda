@@ -75,8 +75,8 @@ public interface MvcConstants extends IocConstants {
 	/** The locale domains */
 	public static final String LOCALE_DOMAINS = "panda.locale.domains";
 
-	/** The allowed locale */
-	public static final String LOCALE_ALLOWED = "panda.locale.allowed";
+	/** The acceptable locale */
+	public static final String LOCALE_ACCEPTS = "panda.locale.accepts";
 
 	/** The default locale */
 	public static final String LOCALE_DEFAULT = "panda.locale.default";

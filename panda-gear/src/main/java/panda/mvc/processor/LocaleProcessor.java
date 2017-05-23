@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Locales;
 import panda.lang.Strings;
@@ -57,11 +58,8 @@ public class LocaleProcessor extends AbstractProcessor {
 	@IocInject(value=MvcConstants.LOCALE_DOMAINS, required=false)
 	protected Map<String, String> domainLocales;
 	
-	@IocInject(value=MvcConstants.LOCALE_ALLOWED, required=false)
-	protected String[] allowedLocales;
-	
-	@IocInject(value=MvcConstants.LOCALE_DEFAULT, required=false)
-	protected Locale defaultLocale = Locale.getDefault();
+	@IocInject(value=MvcConstants.LOCALE_ACCEPTS, required=false)
+	protected String[] acceptLocales;
 	
 	@IocInject(value=MvcConstants.LOCALE_SAVE_TO_SESSION, required=false)
 	protected boolean saveToSession = false;
@@ -127,7 +125,12 @@ public class LocaleProcessor extends AbstractProcessor {
 		}
 
 		if (locale == null) {
-			locale = defaultLocale;
+			if (Arrays.isEmpty(acceptLocales)) {
+				locale = Locale.getDefault();
+			}
+			else {
+				locale = Locales.parseLocale(acceptLocales[0]);
+			}
 			saveToCookie = false;
 		}
 		
@@ -161,7 +164,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		if (locale != null && !(locale instanceof Locale)) {
 			locale = Locales.toLocale(locale.toString(), null);
 		}
-		return isAllowedLocale((Locale)locale) ? (Locale)locale : null;
+		return isAcceptableLocale((Locale)locale) ? (Locale)locale : null;
 	}
 
 	protected Locale getLocaleFromAcceptLanguage(ActionContext ac) {
@@ -199,13 +202,14 @@ public class LocaleProcessor extends AbstractProcessor {
 		ac.getResponse().addCookie(c);
 	}
 
-	protected boolean isAllowedLocale(Locale locale) {
+	protected boolean isAcceptableLocale(Locale locale) {
 		if (locale != null) {
-			if (allowedLocales == null) {
+			if (acceptLocales == null) {
 				return true;
 			}
+			
 			String l = locale.toString();
-			for (String p : allowedLocales) {
+			for (String p : acceptLocales) {
 				if (l.startsWith(p)) {
 					return true;
 				}
@@ -220,7 +224,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		}
 		
 		Locale locale = Locales.toLocale(str);
-		if (isAllowedLocale(locale)) {
+		if (isAcceptableLocale(locale)) {
 			return locale;
 		}
 		
@@ -228,7 +232,7 @@ public class LocaleProcessor extends AbstractProcessor {
 		if (i > 0) {
 			String s2 = str.substring(0, i);
 			locale = Locales.toLocale(s2);
-			if (isAllowedLocale(locale)) {
+			if (isAcceptableLocale(locale)) {
 				return locale;
 			}
 		}
