@@ -15,12 +15,12 @@ Available targets are:
 build             --> Build the project (minjs, mincss)
 min-css           --> Merge & minify css files
 min-js            --> Merge & minify javascript files
-dist              --> Distribute project as a jar file (jar)
+dist              --> Distribute project (jar, ghp)
+ghp               --> Copy sources to gh-pages location
 jar               --> Make the project as a jar file
 release           --> Release the project
 mvn-pom           --> Generate pom.xml
-mvn-local-install --> Deploy release version to maven local repository
-mvn-panda-deploy  --> Deploy release version to panda-repo repository
+mvn-local-deploy  --> Deploy release version to local maven repository
 mvn-oss-deploy    --> Deploy snapshot version to maven snapshot repository
 mvn-oss-stage     --> Deploy release version to maven staging repository
 ]]>
@@ -349,7 +349,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</java>
 	</target>
 
-	<target name="build" depends="min-js, min-css" description="Build the project"/>
+	<target name="build" depends="min-js, min-css, ghp" description="Build the project"/>
 
 	<target name="jar" description="Make project as a jar file">
 		<delete dir="out"/>
@@ -368,10 +368,12 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</jar>
 	</target>
 	
-	<target name="ghp" description="Copy panda sources to panda-html gh-pages branch">
-		<delete dir="../../panda.ghp/${prj.version}"/>
-		<mkdir dir="../../panda.ghp/${prj.version}"/>
-		<copy todir="../../panda.ghp/${prj.version}" preservelastmodified="true">
+	<target name="ghp" description="Copy sources to gh-pages location">
+		<mkdir dir="../docs/${prj.version}"/>
+		<delete dir="../docs/${prj.version}" includeemptydirs="true">
+			<exclude name="*.xsd"/>
+		</delete>
+		<copy todir="../docs/${prj.version}" preservelastmodified="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>
@@ -388,7 +390,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<antcall target="ivy-resolve"/>
 		<antcall target="build"/>
 		<antcall target="dist"/>
-		<antcall target="mvn-panda-deploy"/>
-		<antcall target="ghp"/>
+		<antcall target="mvn-local-deploy"/>
 	</target>
 </project>

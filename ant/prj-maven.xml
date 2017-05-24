@@ -57,37 +57,8 @@
 		<writepom/>
 	</target>
 	
-	<!-- local deploy -->
-	<target name="mvn-local-install" description="Deploy release version to Maven local repository">
-		<!-- write pom.xml -->
-		<writepom/>
-
-		<!-- deploy the artifact -->
-		<artifact:mvn pom="${out.dir}/pom.xml">
-			<arg value="install:install-file" />
-			<arg value="-DcreateChecksum=true" />
-			<arg value="-DupdateReleaseInfo=true" />
-			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
-		</artifact:mvn>
-		<artifact:mvn pom="${out.dir}/pom.xml">
-			<arg value="install:install-file" />
-			<arg value="-DcreateChecksum=true" />
-			<arg value="-Dpackaging=java-source" />
-			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}-sources.jar" />
-		</artifact:mvn>
-		<artifact:mvn pom="${out.dir}/pom.xml">
-			<arg value="install:install-file" />
-			<arg value="-DcreateChecksum=true" />
-			<arg value="-Dpackaging=javadoc" />
-			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}-javadoc.jar" />
-		</artifact:mvn>
-	</target>
-
-	<!-- mvn panda-repo deploy -->
-	<target name="mvn-panda-deploy" description="Deploy release version to panda-repo repository">
+	<!-- local maven deploy -->
+	<target name="mvn-local-deploy" description="Deploy release version to local maven repository">
 		<!-- write pom.xml -->
 		<writepom/>
 

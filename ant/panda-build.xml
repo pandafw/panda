@@ -25,6 +25,6 @@
 		<antcall target="ivy-resolve"/>
 		<antcall target="build"/>
 		<antcall target="dist"/>
-		<antcall target="mvn-panda-deploy"/>
+		<antcall target="mvn-local-deploy"/>
 	</target>
 </project>

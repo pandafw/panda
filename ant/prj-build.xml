@@ -38,13 +38,6 @@
 		<delete dir="${out.dir}"/>
 	</target>
 
-	<target name="cp-fonts" description="Copy fonts to the web/WEB-INF/fonts directory">
-		<delete dir="web/WEB-INF/fonts" />
-		<copy todir="web/WEB-INF/fonts" preservelastmodified="true">
-			<fileset dir="../panda-asserts/fonts" />
-		</copy>
-	</target>
-
 	<target name="cp-res" description="Copy resource files to the classes directory">
 		<mkdir dir="${out.dir}/classes"/>
 		<delete>

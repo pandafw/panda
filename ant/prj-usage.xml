@@ -32,8 +32,7 @@ test-report       --> Build the test report
 test-rescp        --> Copy test resource to the test classes directory
 test-run          --> Run all junit test case
 mvn-pom           --> Generate pom.xml
-mvn-local-install --> Deploy release version to maven local repository
-mvn-panda-deploy  --> Deploy release version to panda-repo repository
+mvn-local-deploy  --> Deploy release version to local maven repository
 mvn-oss-deploy    --> Deploy snapshot version to maven snapshot repository
 mvn-oss-stage     --> Deploy release version to maven staging repository
 ]]>
