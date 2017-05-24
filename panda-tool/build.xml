@@ -12,7 +12,8 @@
 	<import file="../ant/panda-build.xml"/>
 
 	<target name="codegen-xsd-deploy">
-		<copy file="${out.dir}/classes/panda/tool/codegen/Module.xsd" tofile="${prj.repo}/com/github/pandafw/${prj.name}/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
+		<mkdir dir="../docs/${prj.version}"/>
+		<copy file="${src.dir}/main/resources/panda/tool/codegen/Module.xsd" tofile="../docs/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
 	</target>
 
 	<!-- release -->
