@@ -15,7 +15,7 @@ Panda是由以下几个部分组成的。
  | panda-rail             | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
  | panda-soup             | ASM/AOP模块                                                               |
  | panda-tool             | 源代码生成器。可以自动生成Entity类, Query类, Dao类, Action类, View的Freemarker(HTML)模板文件。 |
- | panda-tube             | Java XML/JSON Serializer/Deserializer                                     |
+ | panda-tube             | Web Service API的客户端（WordPress XMP-RPC）                              |
 
 
 
@@ -35,7 +35,7 @@ Panda的最大亮点或许是panda-tool这个源代码生成器吧。
 它可以实现Spring/Struts2/Hibernate的一些非常常用的功能。
 并且可以通过XML定义文件来自动产生实现“检索/列表/新建/修改/删除”功能的源代码（包括HTML页面及后台处理）。
 
-我做了一个[http://pdemo.foolite.com]DEMO网站，通过这个DEMO大家可以比较直观的了解Panda。
+我做了一个[http://pdemo.foolite.com](DEMO网站)，通过这个DEMO大家可以比较直观的了解Panda。
 
 
 如果大家觉得panda好用,并且能够对你的工作有帮助，留个言提个建议或写个bug报告的话，我会非常感激。
