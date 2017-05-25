@@ -90,7 +90,8 @@
 	color: #9d9d9d;
 }
 .p-required {
-	color: #FF0000;
+	color: #f00;
+	font-family: Verdana;
 }
 .p-descrip {
 	display: block;

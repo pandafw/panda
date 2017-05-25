@@ -1,5 +1,6 @@
 .p-required {
-	color: #FF0000;
+	color: #f00;
+	font-family: Verdana;
 }
 .p-descrip {
 	display: block;
