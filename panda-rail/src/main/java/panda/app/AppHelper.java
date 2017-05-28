@@ -16,6 +16,7 @@ import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
+import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.app.entity.Resource;
@@ -28,14 +29,19 @@ import panda.vfs.dao.DaoFileItem;
 public abstract class AppHelper {
 	private static Log log = Logs.getLog(AppHelper.class);
 	
-	public static void ddlTables(Appendable writer, Dao dao, Class<?> ... classes) throws IOException {
-		for (Class<?> c : classes) {
-			Entity<?> e = dao.getEntity(c);
-			writer.append("/* ").append(e.getTable()).append(" */");
-			writer.append(Streams.LINE_SEPARATOR);
-			writer.append(dao.ddl(c));
-			writer.append(Streams.LINE_SEPARATOR);
-			writer.append(Streams.LINE_SEPARATOR);
+	public static void ddlTables(Appendable writer, Dao dao, Class<?> ... classes) {
+		try {
+			for (Class<?> c : classes) {
+				Entity<?> e = dao.getEntity(c);
+				writer.append("/* ").append(e.getTable()).append(" */");
+				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(dao.ddl(c));
+				writer.append(Streams.LINE_SEPARATOR);
+				writer.append(Streams.LINE_SEPARATOR);
+			}
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
 		}
 	}
 
@@ -55,7 +61,7 @@ public abstract class AppHelper {
 		}
 	}
 
-	public static void ddlDefaultTables(Appendable writer, Dao dao) throws IOException {
+	public static void ddlDefaultTables(Appendable writer, Dao dao) {
 		ddlTables(writer, dao,
 			DaoFileItem.class,
 			DaoFileData.class,

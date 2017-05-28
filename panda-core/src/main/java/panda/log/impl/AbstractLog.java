@@ -1,85 +1,78 @@
 package panda.log.impl;
 
 
-import panda.lang.Arrays;
 import panda.log.Log;
+import panda.log.LogEvent;
 import panda.log.LogLevel;
 import panda.log.Logs;
 
 
 public abstract class AbstractLog implements Log {
-	private static final LogInfo LOGINFO_ERROR = new LogInfo("<ERROR>");
-	private static final LogInfo LOGINFO_NULL = new LogInfo("<NULL>");
-	
-	protected static class LogInfo {
-		String msg;
-		Throwable ex;
-
-		public LogInfo() {
-		}
-
-		public LogInfo(String msg) {
-			this.msg = msg;
-		}
-
-		public LogInfo(String msg, Throwable ex) {
-			this.msg = msg;
-			this.ex = ex;
-		}
-	}
-
+	protected String name;
 	protected LogLevel level;
 
 	protected AbstractLog(String name, LogLevel level) {
-		this.level = (level == null ? Logs.getLogLevel(name) : level);
+		this.name = name;
+		this.level = Logs.getLogLevel(name);
+		if (level != null && this.level.isLessOrEqual(level)) {
+			this.level = level;
+		}
 	}
 
-	protected void log(LogLevel level, LogInfo info) {
-		log(level, info.msg, info.ex);
-	}
-
-	public abstract void log(LogLevel level, String msg, Throwable tx);
 	
-	private LogInfo makeInfo(Object obj, Throwable ex) {
-		return new LogInfo(String.valueOf(obj), ex);
+	/**
+	 * @return the FQCN
+	 */
+	public String getFQCN() {
+		return AbstractLog.class.getName();
 	}
 	
 	/**
-	 * Create a LogInfo object
-	 * <p/>
-	 * <code>log.warn(e)</code>
-	 * <p/>
-	 * <code>log.warnf("User(name=%s) login fail",username,e)</code>
+	 * @return the name
 	 */
-	private LogInfo makeInfo(Object obj, Object... args) {
-		if (obj == null)
-			return LOGINFO_NULL;
+	@Override
+	public String getName() {
+		return name;
+	}
 
-		try {
-			LogInfo info = new LogInfo();
-			if (obj instanceof Throwable) {
-				info.ex = (Throwable)obj;
-				info.msg = info.ex.getMessage();
-			}
-			else if (args == null || args.length == 0) {
-				info.msg = obj.toString();
-			}
-			else {
-				info.msg = String.format(obj.toString(), args);
-				if (args[args.length - 1] instanceof Throwable) {
-					info.ex = (Throwable)args[args.length - 1];
-				}
-			}
-			return info;
-		}
-		catch (Throwable e) {
-			if (isWarnEnabled()) {
-				warn("String format fail in log , fmt = " + obj + " , args = " + Arrays.toString(args), e);
-			}
-			return LOGINFO_ERROR;
+	/**
+	 * @return the level
+	 */
+	@Override
+	public LogLevel getLevel() {
+		return level;
+	}
+
+	@Override
+	public void log(LogLevel level, String message) {
+		if (level.isGreaterOrEqual(this.level)) {
+			write(new LogEvent(getFQCN(), name, level, message));
 		}
 	}
 
+	@Override
+	public void log(LogLevel level, String message, Throwable error) {
+		if (level.isGreaterOrEqual(this.level)) {
+			write(new LogEvent(getFQCN(), name, level, message, error));
+		}
+	}
+
+	@Override
+	public void logf(LogLevel level, String message, Object... args) {
+		if (level.isGreaterOrEqual(this.level)) {
+			write(new LogEvent(getFQCN(), name, level, message, args));
+		}
+	}
+
+	@Override
+	public void log(LogEvent event) {
+		if (event.getLevel().isGreaterOrEqual(this.level)) {
+			write(event);
+		}
+	}
+
+	protected abstract void write(LogEvent event);
+	
 	@Override
 	public boolean isFatalEnabled() {
 		return level.isLessOrEqual(LogLevel.FATAL);
@@ -111,128 +104,92 @@ public abstract class AbstractLog implements Log {
 	}
 	
 	@Override
-	public void trace(Object msg) {
-		if (isTraceEnabled()) {
-			log(LogLevel.TRACE, makeInfo(msg));
-		}
+	public void trace(String message) {
+		log(LogLevel.TRACE, message);
 	}
 
 	@Override
-	public void trace(Object msg, Throwable t) {
-		if (isTraceEnabled()) {
-			log(LogLevel.TRACE, makeInfo(msg, t));
-		}
+	public void trace(String message, Throwable error) {
+		log(LogLevel.TRACE, message, error);
 	}
 
 	@Override
-	public void tracef(String fmt, Object... args) {
-		if (isTraceEnabled()) {
-			log(LogLevel.TRACE, makeInfo(fmt, args));
-		}
+	public void tracef(String format, Object... args) {
+		logf(LogLevel.TRACE, format, args);
 	}
 
 	@Override
-	public void debug(Object msg) {
-		if (isDebugEnabled()) {
-			log(LogLevel.DEBUG, makeInfo(msg));
-		}
+	public void debug(String message) {
+		log(LogLevel.DEBUG, message);
 	}
 
 	@Override
-	public void debug(Object msg, Throwable t) {
-		if (isDebugEnabled()) {
-			log(LogLevel.DEBUG, makeInfo(msg, t));
-		}
+	public void debug(String message, Throwable error) {
+		log(LogLevel.DEBUG, message, error);
 	}
 
 	@Override
-	public void debugf(String fmt, Object... args) {
-		if (isDebugEnabled()) {
-			log(LogLevel.DEBUG, makeInfo(fmt, args));
-		}
+	public void debugf(String format, Object... args) {
+		logf(LogLevel.DEBUG, format, args);
 	}
 
 	@Override
-	public void info(Object msg) {
-		if (isInfoEnabled()) {
-			log(LogLevel.INFO, makeInfo(msg));
-		}
+	public void info(String message) {
+		log(LogLevel.INFO, message);
 	}
 
 	@Override
-	public void info(Object msg, Throwable t) {
-		if (isInfoEnabled()) {
-			log(LogLevel.INFO, makeInfo(msg, t));
-		}
+	public void info(String message, Throwable error) {
+		log(LogLevel.INFO, message, error);
 	}
 
 	@Override
-	public void infof(String fmt, Object... args) {
-		if (isInfoEnabled()) {
-			log(LogLevel.INFO, makeInfo(fmt, args));
-		}
+	public void infof(String format, Object... args) {
+		logf(LogLevel.INFO, format, args);
 	}
 
 	@Override
-	public void warn(Object msg) {
-		if (isWarnEnabled()) {
-			log(LogLevel.WARN, makeInfo(msg));
-		}
+	public void warn(String message) {
+		log(LogLevel.WARN, message);
 	}
 
 	@Override
-	public void warn(Object msg, Throwable t) {
-		if (isWarnEnabled()) {
-			log(LogLevel.WARN, makeInfo(msg, t));
-		}
+	public void warn(String message, Throwable error) {
+		log(LogLevel.WARN, message, error);
 	}
 
 	@Override
-	public void warnf(String fmt, Object... args) {
-		if (isWarnEnabled()) {
-			log(LogLevel.WARN, makeInfo(fmt, args));
-		}
+	public void warnf(String format, Object... args) {
+		logf(LogLevel.WARN, format, args);
 	}
 
 	@Override
-	public void error(Object msg) {
-		if (isErrorEnabled()) {
-			log(LogLevel.ERROR, makeInfo(msg));
-		}
+	public void error(String message) {
+		log(LogLevel.ERROR, message);
 	}
 
 	@Override
-	public void error(Object msg, Throwable t) {
-		if (isErrorEnabled()) {
-			log(LogLevel.ERROR, makeInfo(msg, t));
-		}
+	public void error(String message, Throwable error) {
+		log(LogLevel.ERROR, message, error);
 	}
 
 	@Override
-	public void errorf(String fmt, Object... args) {
-		if (isErrorEnabled()) {
-			log(LogLevel.ERROR, makeInfo(fmt, args));
-		}
+	public void errorf(String format, Object... args) {
+		logf(LogLevel.ERROR, format, args);
 	}
 
 	@Override
-	public void fatal(Object msg) {
-		if (isFatalEnabled()) {
-			log(LogLevel.FATAL, makeInfo(msg));
-		}
+	public void fatal(String message) {
+		log(LogLevel.FATAL, message);
 	}
 
 	@Override
-	public void fatal(Object msg, Throwable t) {
-		if (isFatalEnabled()) {
-			log(LogLevel.FATAL, makeInfo(msg, t));
-		}
+	public void fatal(String message, Throwable error) {
+		log(LogLevel.FATAL, message, error);
 	}
 
 	@Override
-	public void fatalf(String fmt, Object... args) {
-		if (isFatalEnabled()) {
-			log(LogLevel.FATAL, makeInfo(fmt, args));
-		}
+	public void fatalf(String format, Object... args) {
+		logf(LogLevel.FATAL, format, args);
 	}
 }

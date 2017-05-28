@@ -24,7 +24,6 @@ public class Email {
 	private String charset = Charsets.UTF_8;
 	private EmailAddress sender;
 	private EmailAddress from;
-	private Set<EmailAddress> rcpts;
 	private List<EmailAddress> tos;
 	private List<EmailAddress> ccs;
 	private List<EmailAddress> bccs;
@@ -157,7 +156,6 @@ public class Email {
 		}
 		
 		tos.add(ea);
-		addRcpt(ea);
 	}
 
 	/**
@@ -215,7 +213,6 @@ public class Email {
 		}
 		
 		ccs.add(ea);
-		addRcpt(ea);
 	}
 
 	/**
@@ -273,7 +270,6 @@ public class Email {
 		}
 		
 		bccs.add(ea);
-		addRcpt(ea);
 	}
 
 	/**
@@ -332,7 +328,6 @@ public class Email {
 		}
 		
 		replyTos.add(ea);
-		addRcpt(ea);
 	}
 
 	/**
@@ -380,11 +375,25 @@ public class Email {
 	 * @return the rcpts
 	 */
 	public Set<EmailAddress> getRcpts() {
-		return Collections.unmodifiableSet(rcpts);
+		Set<EmailAddress> rcpts = new HashSet<EmailAddress>();
+		if (tos != null) {
+			rcpts.addAll(tos);
+		}
+		if (ccs != null) {
+			rcpts.addAll(ccs);
+		}
+		if (bccs != null) {
+			rcpts.addAll(bccs);
+		}
+		if (replyTos != null) {
+			rcpts.addAll(replyTos);
+		}
+		return rcpts;
 	}
 
 	public Map<String, List<EmailAddress>> getRcptsByDomain() {
 		Map<String, List<EmailAddress>> m = new HashMap<String, List<EmailAddress>>();
+		Set<EmailAddress> rcpts = getRcpts();
 		for (EmailAddress r : rcpts) {
 			String d = r.getDomain();
 			List<EmailAddress> rs = m.get(d);
@@ -395,13 +404,6 @@ public class Email {
 			rs.add(r);
 		}
 		return m;
-	}
-
-	private void addRcpt(EmailAddress addr) {
-		if (rcpts == null) {
-			rcpts = new HashSet<EmailAddress>();
-		}
-		rcpts.add(addr);
 	}
 
 	public static String toEncodedAddress(Collection<EmailAddress> eas, String charset) throws EmailException {

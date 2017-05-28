@@ -1,7 +1,10 @@
 package panda.roid.log;
 
+import org.apache.log4j.helpers.LogLog;
+
 import panda.lang.Strings;
 import panda.log.Log;
+import panda.log.LogEvent;
 import panda.log.LogLevel;
 import panda.log.impl.AbstractLog;
 import panda.log.impl.AbstractLogAdapter;
@@ -12,73 +15,25 @@ public class LogCatAdapter extends AbstractLogAdapter {
 
 	public static String TAG_NAME = "PANDA";
 	
-	public static String getLogTag(String name) {
-		if (name == null) {
-			return "null";
+	protected void write(LogEvent event) {
+		String msg = format.format(event);
+		if (event.getLevel() == LogLevel.FATAL) {
+			android.util.Log.wtf(tag, msg, event.getError());
 		}
-		
-		int len = name.length();
-		if (len <= TAG_SIZE) {
-			return name;
+		else if (event.getLevel() == LogLevel.ERROR) {
+			android.util.Log.e(tag, msg, event.getError());
 		}
-
-		if (Strings.contains(name, '.')) {
-			String[] ss = Strings.split(name, '.');
-			for (int i = 0; i < ss.length; i++) {
-				String s = ss[i];
-				if (s.length() > 1) {
-					if (i == ss.length - 1) {
-						if (s.length() > len - TAG_SIZE) {
-							ss[i] = s.substring(0, s.length() - len + TAG_SIZE);
-							len = TAG_SIZE;
-						}
-						else {
-							ss[i] = s.charAt(0) + "*";
-							len -= s.length() - 2;
-						}
-					}
-					else {
-						ss[i] = s.charAt(0) + "*";
-						len -= s.length() - 2;
-					}
-				}
-				
-				if (len <= TAG_SIZE) {
-					break;
-				}
-			}
-			
-			name = Strings.join(ss, '.');
-			if (name.length() > TAG_SIZE) {
-				name = '*' + name.substring(name.length() - TAG_SIZE + 1);
-			}
+		else if (event.getLevel() == LogLevel.WARN) {
+			android.util.Log.w(tag, msg, event.getError());
 		}
-		else {
-			name = name.substring(0, TAG_SIZE - 1) + '*';
+		else if (event.getLevel() == LogLevel.INFO) {
+			android.util.Log.i(tag, msg, event.getError());
 		}
-
-		return name;
-	}
-
-	public static void log(String tag, String cat, LogLevel level, String msg, Throwable t) {
-		msg = cat + " - " + msg;
-		if (level == LogLevel.FATAL) {
-			android.util.Log.wtf(tag, msg, t);
+		else if (event.getLevel() == LogLevel.DEBUG) {
+			android.util.Log.d(tag, msg, event.getError());
 		}
-		else if (level == LogLevel.ERROR) {
-			android.util.Log.e(tag, msg, t);
-		}
-		else if (level == LogLevel.WARN) {
-			android.util.Log.w(tag, msg, t);
-		}
-		else if (level == LogLevel.INFO) {
-			android.util.Log.i(tag, msg, t);
-		}
-		else if (level == LogLevel.DEBUG) {
-			android.util.Log.d(tag, msg, t);
-		}
-		else if (level == LogLevel.TRACE) {
-			android.util.Log.v(tag, msg, t);
+		else if (event.getLevel() == LogLevel.TRACE) {
+			android.util.Log.v(tag, msg, event.getError());
 		}
 	}
 	
@@ -91,11 +46,15 @@ public class LogCatAdapter extends AbstractLogAdapter {
 	}
 
 	public void setTag(String tag) {
-		this.tag = tag;
+		if (Strings.isEmpty(tag)) {
+			LogLog.error("Empty TAG");
+			return;
+		}
+		this.tag = Strings.left(tag, TAG_SIZE);
 	}
 
 	public Log getLogger(String name) {
-		return new LogCatLog(tag, name, threshold);
+		return new LogCatLog(this, name);
 	}
 
 	@Override
@@ -112,18 +71,16 @@ public class LogCatAdapter extends AbstractLogAdapter {
 	 * LogCat
 	 */
 	private static class LogCatLog extends AbstractLog {
-		private String tag;
-		private String name;
+		private LogCatAdapter adapter;
 		
-		LogCatLog(String tag, String name, LogLevel threshold) {
-			super(name, threshold);
-			this.tag = tag;
-			this.name = name;
+		protected LogCatLog(LogCatAdapter adapter, String name) {
+			super(name, adapter.threshold);
+			this.adapter = adapter;
 		}
 
 		@Override
-		public void log(LogLevel level, String msg, Throwable t) {
-			LogCatAdapter.log(tag, name, level, msg, t);
+		protected void write(LogEvent event) {
+			adapter.write(event);
 		}
 	}
 }

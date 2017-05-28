@@ -1,30 +1,35 @@
 package panda.log.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import panda.lang.ClassLoaders;
-import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogEvent;
 import panda.log.LogLevel;
 import panda.log.LogLog;
 
 
 public class ComboLogAdapter extends AbstractLogAdapter {
-	private List<LogAdapter> adapters = new ArrayList<LogAdapter>();
+	private Map<String, LogAdapter> adapters = new LinkedHashMap<String, LogAdapter>();
 
 	@Override
-	public void init(Properties props) {
-		super.init(props);
+	public void init(String name, Properties props) {
+		super.init(name, props);
 		
-		List<LogAdapter> as = new ArrayList<LogAdapter>(adapters.size());
-		for (LogAdapter adapter : adapters) {
+		Map<String, LogAdapter> as = new LinkedHashMap<String, LogAdapter>(adapters.size());
+		for (Entry<String, LogAdapter> en : adapters.entrySet()) {
+			String an = en.getKey();
+			LogAdapter adapter = en.getValue();
 			try {
-				adapter.init(props);
+				adapter.init(an, props);
 				adapter.getLogger("panda");
-				as.add(adapter);
+				as.put(an, adapter);
 			}
 			catch (Throwable e) {
 				LogLog.error("Failed to initialize " + adapter.getClass() + ": " + e.getMessage());
@@ -35,29 +40,29 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 
 	@Override
 	protected void setProperty(String name, String value) {
-		if ("adapters".equalsIgnoreCase(name)) {
-			String[] as = Strings.split(value);
-
-			ClassLoader cl = ClassLoaders.getClassLoader();
-			for (String a : as) {
-				try {
-					LogAdapter adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
-					adapters.add(adapter);
-				}
-				catch (Throwable e) {
-					LogLog.error("Failed to create " + a + ": " + e.getMessage());
-				}
-			}
+		if (name.startsWith("adapter.")) {
+			name = name.substring("adapter.".length());
+			addAdapter(name, value);
 		}
 		else {
 			super.setProperty(name, value);
 		}
 	}
 	
+	private void addAdapter(String name, String impl) {
+		try {
+			ClassLoader cl = ClassLoaders.getClassLoader();
+			LogAdapter adapter = (LogAdapter)Class.forName(impl, true, cl).newInstance();
+			adapters.put(name, adapter);
+		}
+		catch (Throwable e) {
+			LogLog.error("Failed to create " + name + ":" + impl, e);
+		}
+	}
 
 	public Log getLogger(String name) {
 		List<Log> logs = new ArrayList<Log>(adapters.size());
-		for (LogAdapter a : adapters) {
+		for (LogAdapter a : adapters.values()) {
 			try {
 				logs.add(a.getLogger(name));
 			}
@@ -81,9 +86,9 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 		}
 
 		@Override
-		public void log(LogLevel level, String msg, Throwable tx) {
+		protected void write(LogEvent event) {
 			for (Log g : logs) {
-				g.log(level, msg, tx);
+				g.log(event);
 			}
 		}
 	}

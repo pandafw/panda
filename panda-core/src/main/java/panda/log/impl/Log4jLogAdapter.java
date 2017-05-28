@@ -7,15 +7,15 @@ import org.apache.log4j.Logger;
 
 import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogEvent;
 import panda.log.LogLevel;
 
 /**
  * Apache log4j adapter
- * 
  */
 public class Log4jLogAdapter implements LogAdapter {
 	@Override
-	public void init(Properties props) {
+	public void init(String name, Properties props) {
 	}
 	
 	@Override
@@ -24,8 +24,6 @@ public class Log4jLogAdapter implements LogAdapter {
 	}
 
 	private static class Log4JLogger extends AbstractLog {
-		public static final String SUPER_FQCN = AbstractLog.class.getName();
-
 		private Logger logger;
 
 		Log4JLogger(String className) {
@@ -76,9 +74,9 @@ public class Log4jLogAdapter implements LogAdapter {
 		}
 		
 		@Override
-		public void log(LogLevel level, String msg, Throwable tx) {
-			Level lvl = toLog4jLevel(level);
-			logger.log(SUPER_FQCN, lvl, msg, tx);
+		protected void write(LogEvent event) {
+			Level lvl = toLog4jLevel(event.getLevel());
+			logger.log(event.getFQCN(), lvl, event.getMessage(), event.getError());
 		}
 	}
 }

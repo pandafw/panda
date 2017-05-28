@@ -14,9 +14,10 @@ import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
-import panda.lang.Strings;
-import panda.lang.time.DateTimes;
 import panda.log.Log;
+import panda.log.LogEvent;
+import panda.log.LogFormat;
+import panda.log.LogFormat.SimpleLogFormat;
 import panda.log.LogLevel;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
@@ -25,8 +26,8 @@ import panda.net.http.Https;
 
 public class SlackLogAdapter extends AbstractLogAdapter {
 
-	/** default subject */
-	private String subject;
+	/** subject format */
+	private LogFormat subject = new SimpleLogFormat("[%p] %c - %m");
 
 	/** slack web hook url */
 	protected URL webhook;
@@ -73,6 +74,9 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		else if ("readTimeout".equalsIgnoreCase(name)) {
 			setReadTimeout(Numbers.toInt(value, 0));
 		}
+		else {
+			super.setProperty(name, value);
+		}
 	}
 
 	protected String getEmojiIcon(LogLevel level) {
@@ -97,26 +101,17 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		return ":ghost:";
 	}
 
-	protected void log(String name, LogLevel level, String msg, Throwable t) {
-		String title = level.toString() + " " + subject;
+	protected void write(LogEvent event) {
+		String title = subject.format(event);
 
 		StringBuilder body = new StringBuilder();
-		body.append(DateTimes.timestampFormat().format(DateTimes.getDate()))
-			.append(' ')
-			.append(Strings.rightPad(level.toString(), 5))
-			.append(" [")
-			.append(Thread.currentThread().getName())
-			.append("] ")
-			.append(name)
-			.append(" - ")
-			.append(msg)
-			.append('\n');
+		body.append(format.format(event));
 
-		if (t != null) {
-			body.append(Exceptions.getStackTrace(t)).append('\n');
+		if (event.getError() != null) {
+			body.append(Exceptions.getStackTrace(event.getError()));
 		}
 
-		String emoji = getEmojiIcon(level);
+		String emoji = getEmojiIcon(event.getLevel());
 		
 		Message smsg = new Message();
 
@@ -181,7 +176,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	 * @param subject the subject
 	 */
 	public void setSubject(String subject) {
-		this.subject = subject;
+		this.subject = new SimpleLogFormat(subject);
 	}
 
 	/**
@@ -226,21 +221,19 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	}
 
 	/**
-	 * File log
+	 * Slack log
 	 */
 	protected static class SlackLog extends AbstractLog {
 		protected SlackLogAdapter adapter;
-		protected String name;
 		
 		protected SlackLog(SlackLogAdapter adapter, String name) {
 			super(name, adapter.threshold);
 			this.adapter = adapter;
-			this.name = name;
 		}
 
 		@Override
-		public void log(LogLevel level, String msg, Throwable t) {
-			adapter.log(name, level, msg, t);
+		protected void write(LogEvent event) {
+			adapter.write(event);
 		}
 	}
 }

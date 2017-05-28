@@ -1,11 +1,13 @@
 package panda.log;
 
+import java.io.PrintStream;
+
 /**
  * This class used to output log statements from within the log package.
  */
 public class LogLog {
 	/**
-	 * Defining this value makes log4j print log internal debug statements to
+	 * Defining this value makes LOG print log internal debug statements to
 	 * <code>System.out</code>.
 	 * <p>
 	 * The value of this string is <b>panda.log.debug</b>.
@@ -13,6 +15,9 @@ public class LogLog {
 	 * Note that the search for all option names is case sensitive.
 	 */
 	public static final String DEBUG_KEY = "panda.log.debug";
+
+	/** output stream */
+	public static PrintStream output;
 
 	protected static boolean debugEnabled = false;
 
@@ -33,27 +38,34 @@ public class LogLog {
 	}
 
 	/**
-	 * Allows to enable/disable log4j internal logging.
+	 * Allows to enable/disable LOG internal logging.
 	 * @param enabled weather to enable internal debug
 	 */
-	static public void setInternalDebugging(boolean enabled) {
+	public static void setInternalDebugging(boolean enabled) {
 		debugEnabled = enabled;
 	}
 
+	private static PrintStream getOutput(boolean error) {
+		if (output != null) {
+			return output;
+		}
+		return error ? System.err : System.out;
+	}
+	
 	/**
-	 * This method is used to output log4j internal debug statements. Output goes to
+	 * This method is used to output LOG internal debug statements. Output goes to
 	 * <code>System.out</code>.
 	 * 
 	 * @param msg the message
 	 */
 	public static void debug(String msg) {
 		if (debugEnabled && !quietMode) {
-			System.out.println(PREFIX + msg);
+			getOutput(false).println(PREFIX + msg);
 		}
 	}
 
 	/**
-	 * This method is used to output log4j internal debug statements. Output goes to
+	 * This method is used to output LOG internal debug statements. Output goes to
 	 * <code>System.out</code>.
 	 * 
 	 * @param msg the message
@@ -61,38 +73,41 @@ public class LogLog {
 	 */
 	public static void debug(String msg, Throwable t) {
 		if (debugEnabled && !quietMode) {
-			System.out.println(PREFIX + msg);
-			if (t != null)
-				t.printStackTrace(System.out);
+			getOutput(false).println(PREFIX + msg);
+			if (t != null) {
+				t.printStackTrace(getOutput(false));
+			}
 		}
 	}
 
 	/**
-	 * This method is used to output log4j internal error statements. There is no way to disable
+	 * This method is used to output LOG internal error statements. There is no way to disable
 	 * error statements. Output goes to <code>System.err</code>.
 	 * 
 	 * @param msg the message
 	 */
 	public static void error(String msg) {
-		if (quietMode)
+		if (quietMode) {
 			return;
-		System.err.println(ERR_PREFIX + msg);
+		}
+		getOutput(true).println(ERR_PREFIX + msg);
 	}
 
 	/**
-	 * This method is used to output log4j internal error statements. There is no way to disable
+	 * This method is used to output LOG internal error statements. There is no way to disable
 	 * error statements. Output goes to <code>System.err</code>.
 	 * 
 	 * @param msg the message
 	 * @param t the exception
 	 */
 	public static void error(String msg, Throwable t) {
-		if (quietMode)
+		if (quietMode) {
 			return;
-
-		System.err.println(ERR_PREFIX + msg);
+		}
+		
+		getOutput(true).println(ERR_PREFIX + msg);
 		if (t != null) {
-			t.printStackTrace();
+			t.printStackTrace(getOutput(true));
 		}
 	}
 
@@ -112,10 +127,11 @@ public class LogLog {
 	 * @param msg the message
 	 */
 	public static void warn(String msg) {
-		if (quietMode)
+		if (quietMode) {
 			return;
-
-		System.err.println(WARN_PREFIX + msg);
+		}
+		
+		getOutput(true).println(WARN_PREFIX + msg);
 	}
 
 	/**
@@ -126,12 +142,13 @@ public class LogLog {
 	 * @param t the exception
 	 */
 	public static void warn(String msg, Throwable t) {
-		if (quietMode)
+		if (quietMode) {
 			return;
+		}
 
-		System.err.println(WARN_PREFIX + msg);
+		getOutput(true).println(WARN_PREFIX + msg);
 		if (t != null) {
-			t.printStackTrace();
+			t.printStackTrace(getOutput(true));
 		}
 	}
 }

@@ -14,7 +14,6 @@
 		<!-- API -->
 
 		<!-- RUN -->
-		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="run->master,sources" />
 
 		<!-- JDBC -->
 

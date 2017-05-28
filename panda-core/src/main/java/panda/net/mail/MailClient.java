@@ -19,6 +19,7 @@ import panda.io.Streams;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
 import panda.lang.Arrays;
+import panda.lang.Asserts;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Collections;
@@ -202,6 +203,9 @@ public class MailClient {
 	 * @throws EmailException if an error occurs
 	 */
 	public void send(Email email) throws EmailException {
+		Asserts.notNull(email.getFrom(), "Email.From is required");
+		Asserts.notEmpty(email.getTos(), "Email.To is required");
+
 		if (Strings.isEmpty(email.getMsgId())) {
 			email.setMsgId(generateMsgId());
 		}

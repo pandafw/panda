@@ -17,10 +17,6 @@
 		<dependency org="javax.websocket" name="javax.websocket-api" rev="1.1" conf="api->master,sources" />
 
 		<!-- RUN -->
-		<dependency org="com.itextpdf" name="itextpdf" rev="5.4.4" conf="run->master,sources" />
-		<dependency org="com.itextpdf" name="itext-asian" rev="5.2.0" conf="run->master,sources" />
-		<dependency org="com.itextpdf.tool" name="xmlworker" rev="5.4.4" conf="run->master,sources" />
-		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
 		<dependency org="net.sf.ehcache" name="ehcache-core" rev="2.6.9" conf="run->master,sources" />
 		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="run->master,sources" />
 		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
@@ -29,6 +25,7 @@
 		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.13" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.13" conf="run->master,sources" />
+		<dependency org="org.apache.xmlbeans" name="xmlbeans" rev="2.4.0" conf="run->master,sources" />
 
 		<!-- JDBC -->
 		<dependency org="com.h2database" name="h2" rev="1.3.173" conf="jdbc->master,sources" />

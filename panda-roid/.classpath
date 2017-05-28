@@ -4,10 +4,12 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/commons-logging.jar" sourcepath="libs/commons-logging-sources.jar"/>
 	<classpathentry kind="lib" path="libs/log4j.jar" sourcepath="libs/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="libs/poi.jar" sourcepath="libs/poi-sources.jar"/>
 	<classpathentry kind="lib" path="libs/poi-ooxml.jar" sourcepath="libs/poi-ooxml-sources.jar"/>
 	<classpathentry kind="lib" path="libs/poi-ooxml-schemas.jar" sourcepath="libs/poi-ooxml-schemas-sources.jar"/>
+	<classpathentry kind="lib" path="libs/xmlbeans.jar" sourcepath="libs/xmlbeans-sources.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>

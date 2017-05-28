@@ -5,6 +5,6 @@ import panda.log.Log;
 
 public class ConsoleLogAdapter extends AbstractLogAdapter {
 	public Log getLogger(String name) {
-		return new ConsoleLog(name, threshold);
+		return new ConsoleLog(name, threshold, format);
 	}
 }

@@ -4,13 +4,14 @@ import java.util.Properties;
 
 import panda.log.Log;
 import panda.log.LogAdapter;
+import panda.log.LogEvent;
 import panda.log.LogLevel;
 
 /**
  * log nothing
  */
 public class NopLog implements Log, LogAdapter {
-	public void init(Properties props) {
+	public void init(String name, Properties props) {
 	}
 	
 	public Log getLogger(String name) {
@@ -20,26 +21,50 @@ public class NopLog implements Log, LogAdapter {
 	protected NopLog() {
 	}
 	
+
 	@Override
-	public void log(LogLevel level, String msg, Throwable tx) {}
+	public String getName() {
+		return "";
+	}
+
+	@Override
+	public LogLevel getLevel() {
+		return null;
+	}
+
+	@Override
+	public void log(LogLevel level, String message) {
+	}
+
+	@Override
+	public void log(LogLevel level, String message, Throwable error) {
+	}
+
+	@Override
+	public void logf(LogLevel level, String message, Object... args) {
+	}
+
+	@Override
+	public void log(LogEvent event) {
+	}
+
+	@Override
+	public void warnf(String format, Object... args) {}
 	
 	@Override
-	public void warnf(String fmt, Object... args) {}
+	public void warn(String message, Throwable t) {}
 	
 	@Override
-	public void warn(Object msg, Throwable t) {}
+	public void warn(String message) {}
 	
 	@Override
-	public void warn(Object msg) {}
+	public void tracef(String format, Object... args) {}
 	
 	@Override
-	public void tracef(String fmt, Object... args) {}
+	public void trace(String message, Throwable t) {}
 	
 	@Override
-	public void trace(Object msg, Throwable t) {}
-	
-	@Override
-	public void trace(Object msg) {}
+	public void trace(String message) {}
 	
 	@Override
 	public boolean isWarnEnabled() {
@@ -72,50 +97,50 @@ public class NopLog implements Log, LogAdapter {
 	}
 	
 	@Override
-	public void infof(String fmt, Object... args) {
+	public void infof(String format, Object... args) {
 	}
 	
 	@Override
-	public void info(Object msg, Throwable t) {
+	public void info(String message, Throwable t) {
 	}
 	
 	@Override
-	public void info(Object msg) {
+	public void info(String message) {
 	}
 	
 	@Override
-	public void fatalf(String fmt, Object... args) {
+	public void fatalf(String format, Object... args) {
 	}
 	
 	@Override
-	public void fatal(Object msg, Throwable t) {
+	public void fatal(String message, Throwable t) {
 	}
 	
 	@Override
-	public void fatal(Object msg) {
+	public void fatal(String message) {
 	}
 	
 	@Override
-	public void errorf(String fmt, Object... args) {
+	public void errorf(String format, Object... args) {
 	}
 	
 	@Override
-	public void error(Object msg, Throwable t) {
+	public void error(String message, Throwable t) {
 	}
 	
 	@Override
-	public void error(Object msg) {
+	public void error(String message) {
 	}
 	
 	@Override
-	public void debugf(String fmt, Object... args) {
+	public void debugf(String format, Object... args) {
 	}
 	
 	@Override
-	public void debug(Object msg, Throwable t) {
+	public void debug(String message, Throwable t) {
 	}
 	
 	@Override
-	public void debug(Object msg) {
+	public void debug(String message) {
 	}
 }

@@ -5,7 +5,6 @@
 	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="out/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/panda-core"/>

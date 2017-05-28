@@ -14,18 +14,17 @@ import java.util.Properties;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.Streams;
-import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
-import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 import panda.lang.time.RollingCalendar;
 import panda.log.Log;
-import panda.log.LogLevel;
+import panda.log.LogEvent;
+import panda.log.LogLog;
 
 
 public class FileLogAdapter extends AbstractLogAdapter {
-	protected FastDateFormat sdf;
+	protected FastDateFormat dateFormat;
 
 	protected long next = System.currentTimeMillis();
 	
@@ -52,15 +51,15 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	}
 
 	@Override
-	public void init(Properties props) {
-		super.init(props);
+	public void init(String name, Properties props) {
+		super.init(name, props);
 		
 		validatePath();
 
 		rc = new RollingCalendar();
 		rc.setRollingPattern(datePattern);
 
-		sdf = FastDateFormat.getInstance(datePattern);
+		dateFormat = FastDateFormat.getInstance(datePattern);
 	}
 
 	@Override
@@ -128,7 +127,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		
 		String path = getAbsolutePath();
 		String dir = FileNames.getParent(path);
-		String date = sdf.format(now);
+		String date = dateFormat.format(now);
 		final String base = FileNames.getBaseName(path);
 		final String ext = FileNames.getExtension(path);
 		final File flog = new File(dir, base + date + (Strings.isEmpty(ext) ? "" : '.' + ext));
@@ -158,7 +157,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 						if (fn.startsWith(base)) {
 							String ds = fn.substring(base.length());
 							try {
-								Date d = sdf.parse(ds);
+								Date d = dateFormat.parse(ds);
 								if (d.getTime() < old) {
 									file.delete();
 								}
@@ -175,8 +174,10 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		}
 	}
 
-	protected synchronized void print(String msg) {
+	protected synchronized void write(LogEvent event) {
 		try {
+			String msg = format.format(event);
+
 			rollOver();
 			writer.write(msg);
 			if (bufferSize == -1) {
@@ -185,7 +186,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 			}
 		}
 		catch (Throwable e) {
-			e.printStackTrace();
+			LogLog.error("FileLog Error", e);
 		}
 	}
 	
@@ -203,24 +204,8 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		}
 
 		@Override
-		public void log(LogLevel level, String msg, Throwable t) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(DateTimes.timestampFormat().format(DateTimes.getDate()))
-				.append(' ')
-				.append(Strings.rightPad(level.toString(), 5))
-				.append(" [")
-				.append(Thread.currentThread().getName())
-				.append("] ")
-				.append(name)
-				.append(" - ")
-				.append(msg)
-				.append('\n');
-
-			if (t != null) {
-				sb.append(Exceptions.getStackTrace(t)).append('\n');
-			}
-
-			adapter.print(sb.toString());
+		protected void write(LogEvent event) {
+			adapter.write(event);
 		}
 	}
 }

@@ -1,8 +1,9 @@
 package panda.log;
 
-/**
- */
 public interface Log {
+	String getName();
+	LogLevel getLevel();
+	
 	boolean isTraceEnabled();
 	boolean isInfoEnabled();
 	boolean isDebugEnabled();
@@ -10,29 +11,32 @@ public interface Log {
 	boolean isErrorEnabled();
 	boolean isFatalEnabled();
 
-	void log(LogLevel level, String msg, Throwable tx);
+	void log(LogLevel level, String message);
+	void log(LogLevel level, String message, Throwable error);
+	void logf(LogLevel level, String message, Object... args);
+	void log(LogEvent event);
+	
+	void trace(String message);
+	void trace(String message, Throwable error);
+	void tracef(String format, Object... args);
 
-	void trace(Object message);
-	void trace(Object message, Throwable t);
-	void tracef(String fmt, Object... args);
+	void debug(String message);
+	void debug(String message, Throwable error);
+	void debugf(String format, Object... args);
 
-	void debug(Object message);
-	void debug(Object message, Throwable t);
-	void debugf(String fmt, Object... args);
+	void info(String message);
+	void info(String message, Throwable error);
+	void infof(String format, Object... args);
 
-	void info(Object message);
-	void info(Object message, Throwable t);
-	void infof(String fmt, Object... args);
+	void warn(String message);
+	void warn(String message, Throwable error);
+	void warnf(String format, Object... args);
 
-	void warn(Object message);
-	void warn(Object message, Throwable t);
-	void warnf(String fmt, Object... args);
+	void error(String message);
+	void error(String message, Throwable error);
+	void errorf(String format, Object... args);
 
-	void error(Object message);
-	void error(Object message, Throwable t);
-	void errorf(String fmt, Object... args);
-
-	void fatal(Object message);
-	void fatal(Object message, Throwable t);
-	void fatalf(String fmt, Object... args);
+	void fatal(String message);
+	void fatal(String message, Throwable error);
+	void fatalf(String format, Object... args);
 }

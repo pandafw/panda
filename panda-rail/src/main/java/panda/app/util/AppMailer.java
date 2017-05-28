@@ -59,10 +59,10 @@ public class AppMailer {
 	/**
 	 * send email
 	 * @param email email
-	 * @param name template name
+	 * @param tpl template name
 	 */
-	public void sendTemplateMail(Email email, String name) throws EmailException {
-		sendTemplateMail(email, name, null);
+	public void sendTemplateMail(Email email, String tpl) throws EmailException {
+		sendTemplateMail(email, tpl, null);
 	}
 	
 	/**

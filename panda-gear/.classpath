@@ -11,10 +11,10 @@
 	<classpathentry kind="lib" path="lib/api/javax.websocket-api.jar" sourcepath="lib/api/javax.websocket-api-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/ehcache-core.jar" sourcepath="lib/run/ehcache-core-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
-	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi.jar" sourcepath="lib/run/poi-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-ooxml.jar" sourcepath="lib/run/poi-ooxml-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-ooxml-schemas.jar" sourcepath="lib/run/poi-ooxml-schemas-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/xmlbeans.jar" sourcepath="lib/run/xmlbeans-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/velocity.jar" sourcepath="lib/run/velocity-sources.jar"/>
 	<classpathentry kind="lib" path="lib/tool/hamcrest-core.jar"/>
 	<classpathentry kind="lib" path="lib/tool/junit.jar" sourcepath="lib/tool/junit-sources.jar"/>

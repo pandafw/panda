@@ -11,10 +11,6 @@
 		<artifact name="${prj.name}" type="jar" conf="run" ext="jar" />
 	</publications>
 	<dependencies>
-		<!-- RUN -->
-		<dependency org="log4j" name="log4j" rev="1.2.17" conf="run->master,sources" />
-		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
-
 		<!-- TOOL -->
 		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>
 		<dependency org="emma" name="emma_ant" rev="2.1.5320" conf="tool->*"/>

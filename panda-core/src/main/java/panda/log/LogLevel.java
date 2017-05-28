@@ -12,8 +12,16 @@ public enum LogLevel {
 	ERROR,
 	FATAL;
 
+	public boolean isLess(LogLevel level) {
+		return ordinal() < level.ordinal();
+	}
+
 	public boolean isLessOrEqual(LogLevel level) {
 		return ordinal() <= level.ordinal();
+	}
+
+	public boolean isGreater(LogLevel level) {
+		return ordinal() > level.ordinal();
 	}
 
 	public boolean isGreaterOrEqual(LogLevel level) {

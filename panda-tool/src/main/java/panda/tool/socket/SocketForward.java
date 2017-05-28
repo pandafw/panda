@@ -104,7 +104,7 @@ public class SocketForward implements Runnable {
 			}
 		}
 		catch (IOException e) {
-			log.error(e);
+			log.error("Failed to forwarding socket", e);
 		}
 		finally {
 			for (Forward r : relays) {
@@ -168,10 +168,10 @@ public class SocketForward implements Runnable {
 				log.debug(e.getMessage());
 			}
 			catch (IOException e) {
-				log.warn(e);
+				log.warn("error", e);
 			}
 			catch (Throwable e) {
-				log.error(e);
+				log.error("error", e);
 			}
 			finally {
 				log.debug("Close " + client);

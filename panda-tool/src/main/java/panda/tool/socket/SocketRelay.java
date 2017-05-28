@@ -94,7 +94,7 @@ public class SocketRelay implements Runnable {
 			}
 		}
 		catch (IOException e) {
-			log.error(e);
+			log.error("error", e);
 		}
 		finally {
 			for (Relayer r : relays.values()) {
@@ -218,7 +218,7 @@ public class SocketRelay implements Runnable {
 				}
 			}
 			catch (Throwable e) {
-				log.error(e);
+				log.error("error", e);
 			}
 			finally {
 				for (Socket s : clients) {

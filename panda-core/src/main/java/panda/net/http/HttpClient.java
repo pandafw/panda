@@ -323,10 +323,10 @@ public class HttpClient {
 				if (Strings.isNotEmpty(text)) {
 					msg.append(Streams.LINE_SEPARATOR).append(text);
 				}
-				log.trace(msg);
+				log.trace(msg.toString());
 			}
 			else {
-				log.debug(msg);
+				log.debug(msg.toString());
 			}
 		}
 		return response;

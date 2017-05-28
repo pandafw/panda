@@ -8,18 +8,18 @@ import java.util.Properties;
 
 import panda.Panda;
 import panda.io.Streams;
+import panda.lang.Booleans;
 import panda.lang.ClassLoaders;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.impl.ConsoleLogAdapter;
+import panda.log.ex.JavaLogHandler;
 import panda.log.impl.ConsoleLog;
 
-/**
- */
 public final class Logs {
-	private static final String CONFIG = "panda-log.properties";
+	private static final String CONFIG = "panda-logging.properties";
 	
 	private static LogLevel rootLogLevel = LogLevel.TRACE;
 
@@ -29,7 +29,8 @@ public final class Logs {
 
 	static {
 		if (Systems.IS_OS_ANDROID) {
-			ConsoleLog.console = System.out;
+			LogLog.output = System.out;
+			ConsoleLog.output = System.out;
 		}
 
 		init();
@@ -56,11 +57,11 @@ public final class Logs {
 	/**
 	 * Get a Log by name
 	 * 
-	 * @param className the name of Log
+	 * @param name the name of Log
 	 * @return Log
 	 */
-	public static Log getLog(String className) {
-		return getLogger(adapter, className);
+	public static Log getLog(String name) {
+		return getLogger(adapter, name);
 	}
 
 	/**
@@ -122,7 +123,7 @@ public final class Logs {
 		}
 		catch (Throwable e) {
 			LogLog.error("Failed to getLogger(" + adapter.getClass() + ", " + name + ")");
-			log =  new ConsoleLog(name, null);
+			log =  new ConsoleLog(name);
 		}
 		return log;
 	}
@@ -132,13 +133,14 @@ public final class Logs {
 
 		InputStream is = ClassLoaders.getResourceAsStream(CONFIG);
 		if (is != null) {
-			// load adapter from config
 			try {
 				props.load(is);
+				
+				// level settings
 				for (Entry<Object, Object> en : props.entrySet()) {
 					String key = en.getKey().toString();
-					if (key.startsWith("log.")) {
-						key = key.substring(4);
+					if (key.startsWith("level.")) {
+						key = key.substring("level.".length());
 						LogLevel lvl = LogLevel.parse(en.getValue().toString());
 						if ("*".equals(key)) {
 							rootLogLevel = lvl;
@@ -148,12 +150,26 @@ public final class Logs {
 						}
 					}
 				}
-				
-				String impl = props.getProperty(LogAdapter.class.getName());
+
+				// adapter setting
+				String name = LogAdapter.class.getName();
+				String impl = props.getProperty(name);
 				if (Strings.isNotEmpty(impl)) {
+					int d = impl.indexOf(':');
+					if (d > 0) {
+						name = impl.substring(0, d);
+						impl = impl.substring(d + 1);
+					}
+
 					adapter = (LogAdapter)Classes.newInstance(impl);
-					adapter.init(props);
+					adapter.init(name, props);
 					adapter.getLogger("panda");
+				}
+				
+				// java logging redirect
+				String v = props.getProperty("panda.log.java.logging.redirect");
+				if (Booleans.toBoolean(v)) {
+					JavaLogHandler.redirect();
 				}
 			}
 			catch (Throwable e) {
@@ -175,7 +191,7 @@ public final class Logs {
 			for (String a : adapters) {
 				try {
 					adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
-					adapter.init(props);
+					adapter.init(a, props);
 					adapter.getLogger("panda");
 					break;
 				}
@@ -187,7 +203,7 @@ public final class Logs {
 
 		if (adapter == null) {
 			adapter = new ConsoleLogAdapter();
-			adapter.init(props);
+			adapter.init(adapter.getClass().getName(), props);
 		}
 	}
 }

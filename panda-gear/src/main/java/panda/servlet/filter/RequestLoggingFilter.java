@@ -250,7 +250,7 @@ public class RequestLoggingFilter implements Filter {
 					msg.append('\t');
 				}
 				
-				accessLog.info(msg);
+				accessLog.info(msg.toString());
 			}
 		}
 		catch (Throwable e) {

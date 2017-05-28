@@ -18,25 +18,34 @@ public class SmtpLogAppender extends AbstractAppender {
 	/** subject layout */
 	protected Layout subjectLayout;
 
+	/**
+	 * From recipient.
+	 */
 	private String from;
 
 	/**
 	 * Comma separated list of to recipients.
 	 */
 	private String to;
+
 	/**
 	 * Comma separated list of cc recipients.
 	 */
 	private String cc;
+
 	/**
 	 * Comma separated list of bcc recipients.
 	 */
 	private String bcc;
+
 	/**
 	 * Comma separated list of replyTo addresses.
 	 */
 	private String replyTo;
 
+	/**
+	 * mail subject
+	 */
 	private String subject;
 
 	private String smtpHost;
@@ -152,7 +161,7 @@ public class SmtpLogAppender extends AbstractAppender {
 		return super.checkEntryConditions();
 	}
 
-	EmailAddress getAddress(String addressStr) {
+	private EmailAddress getAddress(String addressStr) {
 		try {
 			return EmailAddress.parse(addressStr);
 		}
@@ -162,7 +171,7 @@ public class SmtpLogAppender extends AbstractAppender {
 		}
 	}
 
-	List<EmailAddress> parseAddress(String addressStr) {
+	private List<EmailAddress> parseAddress(String addressStr) {
 		try {
 			return EmailAddress.parseList(addressStr);
 		}
@@ -184,13 +193,6 @@ public class SmtpLogAppender extends AbstractAppender {
 	 */
 	public void setSubjectLayout(Layout subjectLayout) {
 		this.subjectLayout = subjectLayout;
-	}
-
-	/**
-	 * @return value of the <b>To</b> option.
-	 */
-	public String getTo() {
-		return to;
 	}
 
 	/**
@@ -236,22 +238,6 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Get the reply addresses.
-	 * 
-	 * @return reply addresses as comma separated string, may be null.
-	 */
-	public String getReplyTo() {
-		return replyTo;
-	}
-
-	/**
-	 * @return the value of the <b>Subject</b> option.
-	 */
-	public String getSubject() {
-		return subject;
-	}
-
-	/**
 	 * The <b>From</b> option takes a string value which should be a e-mail address of the sender.
 	 * 
 	 * @param from the from address
@@ -261,39 +247,10 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Set the e-mail addresses to which replies should be directed.
-	 * 
-	 * @param addresses reply addresses as comma separated string, may be null.
+	 * @return value of the <b>To</b> option.
 	 */
-	public void setReplyTo(final String addresses) {
-		this.replyTo = addresses;
-	}
-
-	/**
-	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
-	 * message.
-	 * 
-	 * @param subject the mail subject
-	 */
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	/**
-	 * The <b>SMTPHost</b> option takes a string value which should be a the host name of the SMTP
-	 * server that will send the e-mail message.
-	 * 
-	 * @param smtpHost the smtp server
-	 */
-	public void setSMTPHost(String smtpHost) {
-		this.smtpHost = smtpHost;
-	}
-
-	/**
-	 * @return the value of the <b>SMTPHost</b> option.
-	 */
-	public String getSMTPHost() {
-		return smtpHost;
+	public String getTo() {
+		return to;
 	}
 
 	/**
@@ -307,12 +264,21 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Set the cc recipient addresses.
+	 * Get the reply addresses.
 	 * 
-	 * @param addresses recipient addresses as comma separated string, may be null.
+	 * @return reply addresses as comma separated string, may be null.
 	 */
-	public void setCc(final String addresses) {
-		this.cc = addresses;
+	public String getReplyTo() {
+		return replyTo;
+	}
+
+	/**
+	 * Set the e-mail addresses to which replies should be directed.
+	 * 
+	 * @param addresses reply addresses as comma separated string, may be null.
+	 */
+	public void setReplyTo(final String addresses) {
+		this.replyTo = addresses;
 	}
 
 	/**
@@ -325,12 +291,12 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * Set the bcc recipient addresses.
+	 * Set the cc recipient addresses.
 	 * 
 	 * @param addresses recipient addresses as comma separated string, may be null.
 	 */
-	public void setBcc(final String addresses) {
-		this.bcc = addresses;
+	public void setCc(final String addresses) {
+		this.cc = addresses;
 	}
 
 	/**
@@ -343,77 +309,46 @@ public class SmtpLogAppender extends AbstractAppender {
 	}
 
 	/**
-	 * The <b>SmtpPassword</b> option takes a string value which should be the password required to
-	 * authenticate against the mail server.
+	 * Set the bcc recipient addresses.
 	 * 
-	 * @param password password, may be null.
+	 * @param addresses recipient addresses as comma separated string, may be null.
 	 */
-	public void setSMTPPassword(final String password) {
-		this.smtpPassword = password;
+	public void setBcc(final String addresses) {
+		this.bcc = addresses;
 	}
 
 	/**
-	 * The <b>SmtpUsername</b> option takes a string value which should be the username required to
-	 * authenticate against the mail server.
-	 * 
-	 * @param username user name, may be null.
+	 * @return the value of the <b>Subject</b> option.
 	 */
-	public void setSMTPUsername(final String username) {
-		this.smtpUsername = username;
+	public String getSubject() {
+		return subject;
 	}
 
 	/**
-	 * Setting the <b>SmtpDebug</b> option to true will cause the mail session to log its server
-	 * interaction to stdout. This can be useful when debuging the appender but should not be used
-	 * during production because username and password information is included in the output.
+	 * The <b>Subject</b> option takes a string value which should be a the subject of the e-mail
+	 * message.
 	 * 
-	 * @param debug debug flag.
+	 * @param subject the mail subject
 	 */
-	public void setSMTPDebug(final boolean debug) {
-		this.smtpDebug = debug;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	/**
-	 * @param ssl ssl flag.
+	 * @return the value of the <b>SMTPHost</b> option.
 	 */
-	public void setSMTPSsl(final boolean ssl) {
-		this.smtpSsl = ssl;
+	public String getSMTPHost() {
+		return smtpHost;
 	}
 
 	/**
-	 * Get SMTP password.
+	 * The <b>SMTPHost</b> option takes a string value which should be a the host name of the SMTP
+	 * server that will send the e-mail message.
 	 * 
-	 * @return SMTP password, may be null.
+	 * @param smtpHost the smtp server
 	 */
-	public String getSMTPPassword() {
-		return smtpPassword;
-	}
-
-	/**
-	 * Get SMTP user name.
-	 * 
-	 * @return SMTP user name, may be null.
-	 */
-	public String getSMTPUsername() {
-		return smtpUsername;
-	}
-
-	/**
-	 * Get SMTP debug.
-	 * 
-	 * @return SMTP debug flag.
-	 */
-	public boolean getSMTPDebug() {
-		return smtpDebug;
-	}
-
-	/**
-	 * Get SMTP ssl.
-	 * 
-	 * @return SMTP ssl flag.
-	 */
-	public boolean getSMTPSsl() {
-		return smtpSsl;
+	public void setSMTPHost(String smtpHost) {
+		this.smtpHost = smtpHost;
 	}
 
 	/**
@@ -432,5 +367,79 @@ public class SmtpLogAppender extends AbstractAppender {
 	 */
 	public final void setSMTPPort(final int val) {
 		smtpPort = val;
+	}
+
+	/**
+	 * Get SMTP user name.
+	 * 
+	 * @return SMTP user name, may be null.
+	 */
+	public String getSMTPUsername() {
+		return smtpUsername;
+	}
+
+	/**
+	 * The <b>SmtpUsername</b> option takes a string value which should be the username required to
+	 * authenticate against the mail server.
+	 * 
+	 * @param username user name, may be null.
+	 */
+	public void setSMTPUsername(final String username) {
+		this.smtpUsername = username;
+	}
+
+	/**
+	 * Get SMTP password.
+	 * 
+	 * @return SMTP password, may be null.
+	 */
+	public String getSMTPPassword() {
+		return smtpPassword;
+	}
+
+	/**
+	 * The <b>SmtpPassword</b> option takes a string value which should be the password required to
+	 * authenticate against the mail server.
+	 * 
+	 * @param password password, may be null.
+	 */
+	public void setSMTPPassword(final String password) {
+		this.smtpPassword = password;
+	}
+
+	/**
+	 * Get SMTP ssl.
+	 * 
+	 * @return SMTP ssl flag.
+	 */
+	public boolean getSMTPSsl() {
+		return smtpSsl;
+	}
+
+	/**
+	 * @param ssl ssl flag.
+	 */
+	public void setSMTPSsl(final boolean ssl) {
+		this.smtpSsl = ssl;
+	}
+
+	/**
+	 * Get SMTP debug.
+	 * 
+	 * @return SMTP debug flag.
+	 */
+	public boolean getSMTPDebug() {
+		return smtpDebug;
+	}
+
+	/**
+	 * Setting the <b>SmtpDebug</b> option to true will cause the mail session to log its server
+	 * interaction to stdout. This can be useful when debuging the appender but should not be used
+	 * during production because username and password information is included in the output.
+	 * 
+	 * @param debug debug flag.
+	 */
+	public void setSMTPDebug(final boolean debug) {
+		this.smtpDebug = debug;
 	}
 }
