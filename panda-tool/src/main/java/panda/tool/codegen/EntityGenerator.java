@@ -49,19 +49,10 @@ import panda.tool.codegen.bean.Module;
  */
 public class EntityGenerator extends AbstractCodeGenerator {
 	/**
-	 * Main class for ModelGenerator
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCodeGenerator.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			AbstractCodeGenerator cg = new EntityGenerator();
-
-			cgm.execute(cg, args);
-		}
+	public static void main(String[] args) {
+		new EntityGenerator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------

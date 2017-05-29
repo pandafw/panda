@@ -10,8 +10,7 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.image.ImageWrapper;
 import panda.image.Images;
 import panda.image.JavaGraphics;
@@ -19,84 +18,18 @@ import panda.image.JavaImages;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Strings;
-import panda.util.tool.AbstractCommandTool;
-import panda.util.tool.AbstractFileTool;
+import panda.tool.AbstractCommandTool;
+import panda.tool.AbstractFileTool;
 
 /**
  * 
  */
 public class ThumbnailCreator extends AbstractFileTool {
 	/**
-	 * Base main class for code generator. Parse basic command line options.
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractFileTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main m = new Main();
-			
-			ThumbnailCreator c = new ThumbnailCreator();
-
-			m.execute(c, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("o", "output", "Output directory");
-
-			addCommandLineOption("f", "format", "Tumbnail format");
-			
-			addCommandLineOption("w", "width", "Thumbnail width");
-
-			addCommandLineOption("h", "height", "Tumbnail height");
-
-			addCommandLineOption("z", "size", "Thumbnail size");
-
-			addCommandLineOption("q", "quality", "Thumbnail quality");
-
-			addCommandLineFlag("ow", "overwrite", "Overwrite existing file");
-
-			addCommandLineFlag("sw", "slow", "Use slow resize algorithm");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("o")) {
-				setParameter("out", cl.getOptionValue("o").trim());
-			}
-			
-			if (!cl.hasOption("w") && !cl.hasOption("h") && !cl.hasOption("z")) {
-				errorRequired(options, "width/height/size");
-			}
-			
-			if (cl.hasOption("f")) {
-				setParameter("format", cl.getOptionValue("f").trim());
-			}
-			
-			if (cl.hasOption("w")) {
-				setParameter("width", Integer.parseInt(cl.getOptionValue("w").trim()));
-			}
-			if (cl.hasOption("h")) {
-				setParameter("height", Integer.parseInt(cl.getOptionValue("h").trim()));
-			}
-			if (cl.hasOption("z")) {
-				setParameter("size", Integer.parseInt(cl.getOptionValue("z").trim()));
-			}
-			if (cl.hasOption("q")) {
-				setParameter("quality", Integer.parseInt(cl.getOptionValue("q").trim()));
-			}
-			if (cl.hasOption("ow")) {
-				setParameter("overwrite", true);
-			}
-			if (cl.hasOption("sw")) {
-				setParameter("slow", true);
-			}
-		}
+	public static void main(String[] args) {
+		new ThumbnailCreator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -127,10 +60,26 @@ public class ThumbnailCreator extends AbstractFileTool {
 	}
 
 	/**
+	 * @param outdir the outdir to set
+	 */
+	@Option(opt='o', option="output", arg="DIR", usage="Output directory")
+	public void setOut(String outdir) {
+		this.out = Strings.replaceChars(outdir, '\\', '/');
+	}
+
+	/**
 	 * @return the width
 	 */
 	public int getWidth() {
 		return width;
+	}
+
+	/**
+	 * @param width the width to set
+	 */
+	@Option(opt='w', option="width", arg="SIZE", usage="Thumbnail width")
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	/**
@@ -141,10 +90,26 @@ public class ThumbnailCreator extends AbstractFileTool {
 	}
 
 	/**
+	 * @param height the height to set
+	 */
+	@Option(opt='h', option="height", arg="SIZE", usage="Tumbnail height")
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	/**
 	 * @return the size
 	 */
 	public int getSize() {
 		return size;
+	}
+
+	/**
+	 * @param size the size to set
+	 */
+	@Option(opt='z', option="size", arg="SIZE", usage="Thumbnail size")
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	/**
@@ -157,6 +122,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	/**
 	 * @param quality the quality to set
 	 */
+	@Option(opt='q', option="quality", arg="QUALITY", usage="Thumbnail quality")
 	public void setQuality(int quality) {
 		this.quality = quality;
 	}
@@ -171,43 +137,9 @@ public class ThumbnailCreator extends AbstractFileTool {
 	/**
 	 * @param format the format to set
 	 */
+	@Option(opt='f', option="format", arg="FORMAT", usage="Tumbnail format")
 	public void setFormat(String format) {
 		this.format = Strings.lowerCase(Strings.stripToNull(format));
-	}
-
-	/**
-	 * @param outdir the outdir to set
-	 */
-	public void setOut(String outdir) {
-		this.out = Strings.replaceChars(outdir, '\\', '/');
-	}
-
-	/**
-	 * @param width the width to set
-	 */
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	/**
-	 * @param height the height to set
-	 */
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	/**
-	 * @param size the size to set
-	 */
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	/**
-	 * @param verbose the verbose to set
-	 */
-	public void setVerbose(int verbose) {
-		this.verbose = verbose;
 	}
 
 	/**
@@ -220,6 +152,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	/**
 	 * @param overwrite the overwrite to set
 	 */
+	@Option(opt='O', option="overwrite", usage="Overwrite existing file")
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
 	}
@@ -234,6 +167,7 @@ public class ThumbnailCreator extends AbstractFileTool {
 	/**
 	 * @param slow the slow to set
 	 */
+	@Option(opt='S', option="slow", usage="Use slow resize algorithm")
 	public void setSlow(boolean slow) {
 		this.slow = slow;
 	}
@@ -245,12 +179,6 @@ public class ThumbnailCreator extends AbstractFileTool {
 
 		if (width < 1 && height < 1 && size < 1) {
 			throw new IllegalArgumentException("parameter [width/height/size] should > 0.");
-		}
-		if (includes != null && includes.length > 0) {
-			for (int i = 0; i < includes.length; i++) {
-				String s = includes[i];
-				includes[i] = Strings.replaceChars(s, '/', File.separatorChar);
-			}
 		}
 	}
 

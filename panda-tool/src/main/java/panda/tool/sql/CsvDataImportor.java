@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlManager;
 import panda.io.stream.CsvReader;
@@ -19,37 +18,12 @@ import panda.lang.Strings;
  */
 public class CsvDataImportor extends AbstractDataImportor {
 	/**
-	 * Main class
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractDataImportor.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			Object cg = new CsvDataImportor();
-
-			cgm.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("c", "charset", "charset");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("c")) {
-				setParameter("charset", cl.getOptionValue("c").trim());
-			}
-		}
+	public static void main(String[] args) {
+		new CsvDataImportor().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -72,6 +46,7 @@ public class CsvDataImportor extends AbstractDataImportor {
 	/**
 	 * @param charset the charset to set
 	 */
+	@Option(opt='C', option="charset", arg="CHARSET", usage="The charset of the file")
 	public void setCharset(String charset) {
 		this.charset = charset;
 	}

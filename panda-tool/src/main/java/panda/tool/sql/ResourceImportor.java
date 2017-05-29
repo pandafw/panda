@@ -1,5 +1,12 @@
 package panda.tool.sql;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlManager;
 import panda.io.FileNames;
@@ -7,76 +14,18 @@ import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Locales;
 import panda.lang.Strings;
-import panda.util.tool.AbstractCommandTool;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.commons.cli.CommandLine;
 
 /**
  * Import resources to database
  */
 public class ResourceImportor extends AbstractSqlTool {
 	/**
-	 * Main class
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractSqlTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			Object cg = new ResourceImportor();
-
-			cgm.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("si", "insert sql", "insert sql template [e.g.: INSERT INTO RESOURCE VALUES(:language, :country:, :variant, :source) ]", true);
-
-			addCommandLineOption("su", "update sql", "update sql template [e.g.: UPDATE RESOURCE SET SOURCE=:source WHERE LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant) ]");
-
-			addCommandLineOption("ed", "encoding", "encoding of resource source file");
-
-			addCommandLineOption("pn", "prefix", "prefix of class name");
-
-			addCommandLineOption("es", "emptystr", "string for emtpy locale field (language, country, variant)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("si")) {
-				setParameter("insertSql", cl.getOptionValue("si"));
-			}
-
-			if (cl.hasOption("su")) {
-				setParameter("updateSql", cl.getOptionValue("su"));
-			}
-
-			if (cl.hasOption("ed")) {
-				setParameter("encoding", cl.getOptionValue("ed"));
-			}
-
-			if (cl.hasOption("pn")) {
-				setParameter("prefix", cl.getOptionValue("pn"));
-			}
-
-			if (cl.hasOption("es")) {
-				setParameter("emptystr", cl.getOptionValue("es"));
-			}
-		}
+	public static void main(String[] args) {
+		new ResourceImportor().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -134,6 +83,7 @@ public class ResourceImportor extends AbstractSqlTool {
 	/**
 	 * @param updateSql the updateSql to set
 	 */
+	@Option(opt='U', option="update", arg="SQL", usage="update sql template [e.g.: UPDATE RESOURCE SET SOURCE=:source WHERE LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant) ]")
 	public void setUpdateSql(String updateSql) {
 		this.updateSql = Strings.stripToNull(updateSql);
 	}
@@ -141,6 +91,7 @@ public class ResourceImportor extends AbstractSqlTool {
 	/**
 	 * @param insertSql the insertSql to set
 	 */
+	@Option(opt='I', option="insert", arg="SQL", required=true, usage="insert sql template [e.g.: INSERT INTO RESOURCE VALUES(:language, :country:, :variant, :source) ]")
 	public void setInsertSql(String insertSql) {
 		this.insertSql = Strings.stripToNull(insertSql);
 	}
@@ -148,6 +99,7 @@ public class ResourceImportor extends AbstractSqlTool {
 	/**
 	 * @param encoding the encoding to set
 	 */
+	@Option(opt='C', option="charset", arg="CHARSET", usage="The charset of the resource source file")
 	public void setEncoding(String encoding) {
 		this.encoding = Strings.stripToNull(encoding);
 	}
@@ -155,6 +107,7 @@ public class ResourceImportor extends AbstractSqlTool {
 	/**
 	 * @param prefix the prefix to set
 	 */
+	@Option(opt='P', option="prefix", arg="PREFIX", usage="prefix of class name")
 	public void setPrefix(String prefix) {
 		this.prefix = Strings.stripToNull(prefix);
 	}
@@ -162,14 +115,9 @@ public class ResourceImportor extends AbstractSqlTool {
 	/**
 	 * @param emptystr the emptystr to set
 	 */
+	@Option(opt='E', option="emptystr", arg="STR", usage="string for emtpy locale field (language, country, variant)")
 	public void setEmptystr(String emptystr) {
 		this.emptystr = Strings.stripToNull(emptystr);
-	}
-
-	@Override
-	protected void checkParameters() throws Exception {
-		super.checkParameters();
-		AbstractCommandTool.checkRequired(insertSql, "insertSql");
 	}
 
 	@Override

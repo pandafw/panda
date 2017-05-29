@@ -4,60 +4,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-import org.apache.commons.cli.CommandLine;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import panda.args.Option;
 import panda.io.Streams;
+import panda.tool.AbstractFileTool;
 import panda.tool.poi.xls.XlsTextExtractor;
-import panda.util.tool.AbstractFileTool;
 
 /**
  * 
  */
 public class ExcelExtractor extends AbstractFileTool {
-	public static class Main extends AbstractFileTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main m = new Main();
-			ExcelExtractor c = new ExcelExtractor();
-			m.execute(c, args);
-		}
-
-		
-		/**
-		 * Constructor 
-		 */
-		public Main() {
-			hasTarget = true;
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineFlag("es", "summary", "extract summary");
-			addCommandLineFlag("eh", "header", "extract header");
-			addCommandLineFlag("ef", "footer", "extract footer");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-
-			if (cl.hasOption("es")) {
-				setParameter("extractSummary", true);
-			}
-
-			if (cl.hasOption("eh")) {
-				setParameter("extractHeader", true);
-			}
-			
-			if (cl.hasOption("ef")) {
-				setParameter("extractFooter", true);
-			}
-		}
+	/**
+	 * @param args arguments
+	 */
+	public static void main(String[] args) {
+		new ExcelExtractor().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -74,9 +36,15 @@ public class ExcelExtractor extends AbstractFileTool {
 		includes = new String[] { "**/*.xls" };
 	}
 
+	@Option(opt='t', option="target", arg="FILE", usage="The target file or directory which contains target files")
+	public void setTarget(String target) {
+		super.setTarget(target);
+	}
+
 	/**
 	 * @param extractSummary the extractSummary to set
 	 */
+	@Option(opt='S', option="summary", usage="Extract summary")
 	public void setExtractSummary(boolean extractSummary) {
 		xlsTextExtractor.setExtractSummary(extractSummary);
 	}
@@ -84,6 +52,7 @@ public class ExcelExtractor extends AbstractFileTool {
 	/**
 	 * @param extractHeader the extractHeader to set
 	 */
+	@Option(opt='H', option="header", usage="Extract header")
 	public void setExtractHeader(boolean extractHeader) {
 		xlsTextExtractor.setExtractHeader(extractHeader);
 	}
@@ -91,6 +60,7 @@ public class ExcelExtractor extends AbstractFileTool {
 	/**
 	 * @param extractFooter the extractFooter to set
 	 */
+	@Option(opt='F', option="footer", usage="Extract footer")
 	public void setExtractFooter(boolean extractFooter) {
 		xlsTextExtractor.setExtractFooter(extractFooter);
 	}

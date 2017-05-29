@@ -1,57 +1,27 @@
 package panda.tool.net;
 
+import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
-
-import panda.lang.Collections;
+import panda.args.Argument;
+import panda.args.Option;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpMethod;
 import panda.net.http.HttpResponse;
-import panda.util.tool.AbstractCommandTool;
+import panda.tool.AbstractCommandTool;
 
 /**
  */
-public class Http {
+public class Http extends AbstractCommandTool {
 	/**
-	 * Base main class for code generator. Parse basic command line options.
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCommandTool {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main main = new Main();
-			
-			Object cg = new Http();
-
-			main.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("a", "auth", "WWW Athentication", false);
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("a")) {
-				setParameter("auth", cl.getOptionValue("a").trim());
-			}
-
-			if (Collections.isEmpty(cl.getArgList())) {
-				throw new ParseException("URL is required!");
-			}
-			setParameter("args", cl.getArgList());
-		}
+	public static void main(String[] args) {
+		new Http().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -62,6 +32,7 @@ public class Http {
 	// properties
 	//---------------------------------------------------------------------------------------
 	protected String auth;
+	protected String url;
 	protected List<String> args;
 
 	/**
@@ -75,10 +46,15 @@ public class Http {
 	/**
 	 * @param auth the auth to set
 	 */
+	@Option(opt='a', option="auth", arg="AUTH", usage="WWW Athentication")
 	public void setAuth(String auth) {
 		this.auth = auth;
 	}
 
+	@Argument(name="URL", index=0, usage="The URL to access")
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
 	/**
 	 * @return the args
@@ -91,6 +67,7 @@ public class Http {
 	/**
 	 * @param args the args to set
 	 */
+	@Argument(name="PARAMS", usage="The query paramters")
 	public void setArgs(List<String> args) {
 		this.args = args;
 	}
@@ -98,9 +75,8 @@ public class Http {
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		HttpClient hc = new HttpClient();
 		
 		if (Strings.isNotEmpty(auth)) {
@@ -108,9 +84,8 @@ public class Http {
 			hc.getRequest().setBasicAuthentication(ss[0], ss.length > 1 ? ss[1] : "");
 		}
 		
-		hc.getRequest().setUrl(args.get(0));
-		for (int i = 1; i < args.size(); i++) {
-			String a = args.get(i);
+		hc.getRequest().setUrl(url);
+		for (String a : args) {
 			int j = a.indexOf('=');
 			if (j > 0) {
 				hc.getRequest().setParam(a.substring(0, j), a.substring(j + 1));
@@ -124,7 +99,12 @@ public class Http {
 		System.out.println(hc.getRequest().toString());
 		System.out.println();
 
-		HttpResponse hr = hc.doGet();
-		System.out.println(hr.toString());
+		try {
+			HttpResponse hr = hc.doGet();
+			System.out.println(hr.toString());
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
 	}
 }

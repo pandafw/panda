@@ -21,19 +21,10 @@ import panda.lang.Strings;
  */
 public class XlsDataImportor extends AbstractDataImportor {
 	/**
-	 * Main class
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractDataImportor.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			Object cg = new XlsDataImportor();
-
-			cgm.execute(cg, args);
-		}
+	public static void main(String[] args) {
+		new XlsDataImportor().execute(args);
 	}
 	
 	/**

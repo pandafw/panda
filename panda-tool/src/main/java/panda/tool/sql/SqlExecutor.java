@@ -6,66 +6,19 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Statement;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Argument;
+import panda.args.Option;
+import panda.lang.Arrays;
 import panda.lang.Strings;
-import panda.util.tool.AbstractCommandTool;
 
 /**
  * SqlExecutor.
  */
 public class SqlExecutor extends AbstractSqlTool {
-	/**
-	 * Base main class for code generator. Parse basic command line options.
-	 */
-	protected abstract static class Main extends AbstractSqlTool.Main {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("c", "charset", "The charset of source file");
-
-			addCommandLineOption("ie", "ignoreError", "Ignore error and continue.");
-
-			addCommandLineOption("si", "linker", "The symbolic string of linker");
-
-			addCommandLineOption("sd", "delimiter", "The symbolic string of delimiter");
-
-			addCommandLineOption("sc", "commiter", "The symbolic string of commiter");
-
-			addCommandLineOption("sm", "commenter", "The symbolic string of commenter");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("c")) {
-				setParameter("charset", cl.getOptionValues("c"));
-			}
-
-			if (cl.hasOption("ie")) {
-				setParameter("ignoreError", true);
-			}
-
-			if (cl.hasOption("sl")) {
-				setParameter("linker", cl.getOptionValues("sl"));
-			}
-
-			if (cl.hasOption("sd")) {
-				setParameter("delimiter", cl.getOptionValues("sd"));
-			}
-
-			if (cl.hasOption("sc")) {
-				setParameter("commiter", cl.getOptionValues("sc"));
-			}
-
-			if (cl.hasOption("sm")) {
-				setParameter("commenter", cl.getOptionValues("sm"));
-			}
-		}
+	public static void main(String[] args) {
+		new SqlExecutor().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -76,7 +29,7 @@ public class SqlExecutor extends AbstractSqlTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private String sql;
+	private String[] sqls;
 	private String charset;
 	private String linker = "@";
 	private String delimiter = ";";
@@ -131,6 +84,7 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @param charset the charset to set
 	 */
+	@Option(opt='C', option="charset", arg="CHARSET", usage="The charset of the resource source file")
 	public void setCharset(String charset) {
 		this.charset = charset;
 	}
@@ -138,45 +92,22 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @return the sql
 	 */
-	public String getSql() {
-		return sql;
+	public String[] getSqls() {
+		return sqls;
 	}
 
 	/**
-	 * @param sql the sql to set
+	 * @param sqls the sqls to set
 	 */
-	public void setSql(String sql) {
-		this.sql = sql;
+	@Argument(name="SQL", usage="The SQL to execute")
+	public void setSqls(String[] sqls) {
+		this.sqls = sqls;
 	}
 
-	/**
-	 * @return the source or sql
-	 */
-	public String getSource() {
-		if (sql != null) {
-			return sql;
-		}
-		else {
-			return source.getPath();
-		}
-	}
-	
-	/**
-	 * @param s the source or sql to set
-	 */
-	public void setSource(String s) {
-		File f = new File(s);
-		if (f.exists()) {
-			this.source = f;
-		}
-		else {
-			this.sql = s;
-		}
-	}
-	
 	/**
 	 * @param linker the linker to set
 	 */
+	@Option(opt='L', option="linker", arg="SYM", usage="The symbolic string of linker")
 	public void setLinker(String linker) {
 		this.linker = linker;
 	}
@@ -184,6 +115,7 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @param delimiter the delimiter to set
 	 */
+	@Option(opt='D', option="delimiter", arg="SYM", usage="The symbolic string of delimiter")
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
@@ -191,6 +123,7 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @param commiter the commiter to set
 	 */
+	@Option(opt='O', option="commiter", arg="SYM", usage="The symbolic string of commiter")
 	public void setCommiter(String commiter) {
 		this.commiter = commiter;
 	}
@@ -198,6 +131,7 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @param commenter the commenter to set
 	 */
+	@Option(opt='M', option="commenter", arg="SYM", usage="The symbolic string of commenter")
 	public void setCommenter(String commenter) {
 		this.commenter = commenter;
 	}
@@ -205,23 +139,9 @@ public class SqlExecutor extends AbstractSqlTool {
 	/**
 	 * @param ignoreError the ignoreError to set
 	 */
+	@Option(opt='Q', option="quiet", usage="Ignore error and continue.")
 	public void setIgnoreError(boolean ignoreError) {
 		this.ignoreError = ignoreError;
-	}
-
-	@Override
-	protected void checkParameters() throws Exception {
-		super.checkParameters();
-		
-		if (sql == null && source == null) {
-			throw new IllegalArgumentException("parameter [sql/source] is required.");
-		}
-
-		AbstractCommandTool.checkRequired(includes, "includes");
-		for (int i = 0; i < includes.length; i++) {
-			String s = includes[i];
-			includes[i] = Strings.replaceChars(s, '/', File.separatorChar);
-		}
 	}
 
 	@Override
@@ -230,18 +150,20 @@ public class SqlExecutor extends AbstractSqlTool {
 		
 		cntSql = 0;
 
-		if (sql == null && source.isDirectory()) {
+		if (Arrays.isEmpty(sqls) && source.isDirectory()) {
 			println0("Executing: " + source.getPath());
 		}
 	}
 
 	@Override
 	protected void doProcess() throws Exception {
-		if (sql != null) {
-			execSql(sql, false);
+		if (Arrays.isEmpty(sqls)) {
+			process(source);
 		}
 		else {
-			process(source);
+			for (String sql : sqls) {
+				execSql(sql, false);
+			}
 		}
 	}
 	
@@ -250,7 +172,7 @@ public class SqlExecutor extends AbstractSqlTool {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(cntSql).append(" sql statements");
-		if (sql == null) {
+		if (Arrays.isEmpty(sqls)) {
 			sb.append(" of ").append(cntFile).append(" files");
 		}
 		sb.append(" executed successfully");

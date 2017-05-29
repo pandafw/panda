@@ -2,15 +2,14 @@ package panda.cast.castor;
 
 import java.util.Locale;
 
-import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
 import panda.lang.Locales;
 
 /**
  */
-public class LocaleCastor extends AbstractCastor<Object, Locale> {
+public class LocaleCastor extends AnySingleCastor<Locale> {
 	public LocaleCastor() {
-		super(Object.class, Locale.class);
+		super(Locale.class);
 	}
 
 	@Override

@@ -12,7 +12,6 @@
 	</publications>
 	<dependencies>
 		<!-- RUN -->
-		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.10-FINAL" conf="run->master,sources" />

@@ -1,81 +1,17 @@
-package panda.util.tool;
+package panda.tool;
 
 import java.io.File;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.io.FileNames;
 import panda.lang.HandledException;
-import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
 
 /**
  * Base class for file process.
  */
-public abstract class AbstractFileTool {
-	/**
-	 * Base main class for code generator. Parse basic command line options.
-	 */
-	protected abstract static class Main extends AbstractCommandTool {
-		protected boolean hasTarget = false;
-		
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-
-			addCommandLineOption("s", "source", "The source file or directory which contains source files");
-
-			addCommandLineOption("i", "includes", "The pattern of source files to import");
-
-			addCommandLineOption("e", "excludes", "The pattern of source files to exclude");
-
-			if (hasTarget) {
-				addCommandLineOption("t", "target", "The target file or directory which contains target files");
-			}
-
-			addCommandLineFlag("r", "recursive", "Recursively scan sub directories");
-
-			addCommandLineFlag("ie", "ignore", "Continue processing when error occurs");
-
-			addCommandLineOption("v", "verbose", "Print information level (1-5)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("s")) {
-				setParameter("source", cl.getOptionValue("s"));
-			}
-
-			if (cl.hasOption("i")) {
-				setParameter("includes", cl.getOptionValue("i"));
-			}
-
-			if (cl.hasOption("e")) {
-				setParameter("excludes", cl.getOptionValue("e"));
-			}
-			
-			if (cl.hasOption("t")) {
-				setParameter("target", cl.getOptionValue("t"));
-			}
-
-			if (cl.hasOption("r")) {
-				setParameter("recursive", true);
-			}
-			
-			if (cl.hasOption("ie")) {
-				setParameter("ignoreError", true);
-			}
-			
-			if (cl.hasOption("v")) {
-				String v = cl.getOptionValue("v").trim();
-				setParameter("verbose", Numbers.toInt(v, 5));
-			}
-		}
-	}
-	
+public abstract class AbstractFileTool extends AbstractCommandTool {
 	/**
 	 * Constructor
 	 */
@@ -129,41 +65,6 @@ public abstract class AbstractFileTool {
 	public boolean isRecursive() {
 		return recursive;
 	}
-
-	/**
-	 * @param source the source to set
-	 */
-	public void setSource(String source) {
-		this.source = new File(source);
-	}
-
-	/**
-	 * @param includes the includes to set
-	 */
-	public void setIncludes(String includes) {
-		this.includes = Strings.trimAll(Strings.split(includes, ','));
-	}
-
-	/**
-	 * @param excludes the excludes to set
-	 */
-	public void setExcludes(String excludes) {
-		this.excludes = Strings.trimAll(Strings.split(excludes, ','));
-	}
-
-	/**
-	 * @param recursive the recursive to set
-	 */
-	public void setRecursive(boolean recursive) {
-		this.recursive = recursive;
-	}
-
-	/**
-	 * @param verbose the verbose to set
-	 */
-	public void setVerbose(int verbose) {
-		this.verbose = verbose;
-	}
 	
 	/**
 	 * @return the ignoreError
@@ -173,15 +74,65 @@ public abstract class AbstractFileTool {
 	}
 
 	/**
+	 * @param source the source to set
+	 */
+	@Option(opt='s', option="source", arg="FILE", usage="The source file or directory which contains source files")
+	public void setSource(String source) {
+		this.source = new File(source);
+	}
+
+	/**
+	 * @param includes the includes to set
+	 */
+	@Option(opt='i', option="includes", arg="PATTERN", usage="The pattern of source files to import")
+	public void setIncludes(String includes) {
+		this.includes = Strings.trimAll(Strings.split(includes, ','));
+		for (int i = 0; i < this.includes.length; i++) {
+			String s = this.includes[i];
+			this.includes[i] = Strings.replaceChars(s, '/', File.separatorChar);
+		}
+	}
+
+	protected void setTarget(String target) {
+		this.target = new File(target);
+	}
+
+	/**
+	 * @param excludes the excludes to set
+	 */
+	@Option(opt='e', option="excludes", arg="PATTERN", usage="The pattern of source files to exclude")
+	public void setExcludes(String excludes) {
+		this.excludes = Strings.trimAll(Strings.split(excludes, ','));
+	}
+
+	/**
+	 * @param recursive the recursive to set
+	 */
+	@Option(opt='r', option="recursive", usage="Recursively scan sub directories")
+	public void setRecursive(boolean recursive) {
+		this.recursive = recursive;
+	}
+
+	/**
 	 * @param ignoreError the ignoreError to set
 	 */
+	@Option(opt='q', option="quiet", usage="Continue processing when error occurs")
 	public void setIgnoreError(boolean ignoreError) {
 		this.ignoreError = ignoreError;
 	}
 
 	/**
+	 * @param verbose the verbose to set
+	 */
+	@Option(opt='v', option="verbose", arg="LEVEL", usage="Print information level (1-5)")
+	public void setVerbose(int verbose) {
+		this.verbose = verbose;
+	}
+
+	/**
 	 * execute
 	 */
+	@Override
 	public void execute() {
 		try {
 			checkParameters();
@@ -301,12 +252,6 @@ public abstract class AbstractFileTool {
 	}
 	
 	protected void checkParameters() throws Exception {
-		AbstractCommandTool.checkRequired(includes, "includes");
-		
-		for (int i = 0; i < includes.length; i++) {
-			String s = includes[i];
-			includes[i] = Strings.replaceChars(s, '/', File.separatorChar);
-		}
 	}
 
 	protected void printParameters() {

@@ -1,6 +1,7 @@
 package panda.cast.castor;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -66,6 +67,9 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof byte[]) {
 				InputStream bis = new ByteArrayInputStream((byte[])value);
 				Streams.copy(bis, a, cc.getEncoding());
+			}
+			else if (value instanceof File) {
+				a.append(value.toString());
 			}
 			else if (value instanceof InputStream) {
 				Streams.copy((InputStream)value, a, cc.getEncoding());

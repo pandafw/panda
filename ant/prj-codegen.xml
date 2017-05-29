@@ -12,14 +12,7 @@
 		<pathelement path="${prj.repo}/com/github/pandafw/panda-core/${panda.version}/panda-core-${panda.version}.jar"/>
 		<pathelement path="${prj.repo}/com/github/pandafw/panda-gear/${panda.version}/panda-gear-${panda.version}.jar"/>
 		<pathelement path="${prj.repo}/com/github/pandafw/panda-tool/${panda.version}/panda-tool-${panda.version}.jar"/>
-		<fileset dir=".." erroronmissingdir="false">
-			<include name="panda-core/lib/run/commons-cli.jar"/>
-			<include name="panda-tool/lib/run/commons-cli.jar"/>
-			<include name="panda/panda-core/lib/run/commons-cli.jar"/>
-			<include name="panda/panda-tool/lib/run/commons-cli.jar"/>
-		</fileset>
 		<fileset dir="lib/run" erroronmissingdir="false">
-			<include name="commons-cli.jar"/>
 			<include name="freemarker.jar"/>
 			<include name="panda-*.jar"/>
 		</fileset>

@@ -1,60 +1,20 @@
 package panda.tool.crypto;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
-
-import panda.lang.Arrays;
+import panda.args.Argument;
+import panda.args.Option;
 import panda.lang.crypto.Encrypts;
-import panda.util.tool.AbstractCommandTool;
+import panda.tool.AbstractCommandTool;
 
 
 /**
  */
-public class Encrypt {
+public class Encrypt extends AbstractCommandTool {
 	/**
-	 * Main & Ant entry class fir JSMinify
+	 * main
+	 * @param args arugments
 	 */
-	public static class Main extends AbstractCommandTool {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("k", "key", "Encrypt key");
-			addCommandLineFlag("d", "dec", "Decrypt");
-			addCommandLineOption("t", "transform", "Encrypt transform");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("k")) {
-				setParameter("key", cl.getOptionValue("k").trim());
-			}
-			
-			if (cl.hasOption("t")) {
-				setParameter("transform", cl.getOptionValue("t").trim());
-			}
-
-			if (cl.hasOption("d")) {
-				setParameter("decrypt", true);
-			}
-
-			if (Arrays.isEmpty(cl.getArgs())) {
-				throw new ParseException("Encrypt arguments is required.");
-			}
-			setParameter("args", cl.getArgs());
-		}
-
-		/**
-		 * main
-		 * @param args arugments
-		 */
-		public static void main(String args[]) {
-			Main m = new Main();
-			Encrypt e = new Encrypt();
-			m.execute(e, args);
-		}
+	public static void main(String args[]) {
+		new Encrypt().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -68,6 +28,7 @@ public class Encrypt {
 	/**
 	 * @param key the key to set
 	 */
+	@Option(opt='k', option="key", arg="KEY", usage="Encrypt key")
 	public void setKey(String key) {
 		this.key = key;
 	}
@@ -75,6 +36,7 @@ public class Encrypt {
 	/**
 	 * @param transform the transform to set
 	 */
+	@Option(opt='t', option="transform", arg="ALGO", usage="Encrypt transform (default is AES)")
 	public void setTransform(String transform) {
 		this.transform = transform;
 	}
@@ -82,13 +44,15 @@ public class Encrypt {
 	/**
 	 * @param decrypt the decrypt to set
 	 */
-	protected void setDecrypt(boolean decrypt) {
+	@Option(opt='d', option="dec", usage="Decrypt")
+	public void setDecrypt(boolean decrypt) {
 		this.decrypt = decrypt;
 	}
 
 	/**
 	 * @param args the args to set
 	 */
+	@Argument(name="string", required=true, usage="The string to encrypt or decrypt")
 	public void setArgs(String[] args) {
 		this.args = args;
 	}
@@ -96,11 +60,7 @@ public class Encrypt {
 	/**
 	 * execute
 	 */
-	public void execute() throws Exception {
-		if (Arrays.isEmpty(args)) {
-			throw new IllegalArgumentException("Encrypt arguments is required.");
-		}
-
+	public void execute() {
 		for (String s : args) {
 			if (decrypt) {
 				System.out.println(s + " -> " + Encrypts.decrypt(s, key, transform));

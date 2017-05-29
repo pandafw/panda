@@ -36,19 +36,10 @@ import freemarker.template.Template;
  */
 public class ActionGenerator extends AbstractCodeGenerator {
 	/**
-	 * Main class for ActionGenerator
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCodeGenerator.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			AbstractCodeGenerator cg = new ActionGenerator();
-
-			cgm.execute(cg, args);
-		}
+	public static void main(String[] args) {
+		new ActionGenerator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------

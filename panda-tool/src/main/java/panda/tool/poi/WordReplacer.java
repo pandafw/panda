@@ -4,50 +4,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-import org.apache.commons.cli.CommandLine;
 import org.apache.poi.hwpf.HWPFDocument;
 
+import panda.args.Option;
 import panda.io.FileNames;
 import panda.io.Streams;
+import panda.tool.AbstractFileTool;
 import panda.tool.poi.doc.DocTextReplacer;
-import panda.util.tool.AbstractFileTool;
 
 /**
  * 
  */
 public class WordReplacer extends AbstractFileTool {
-	public static class Main extends AbstractFileTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main m = new Main();
-			WordReplacer c = new WordReplacer();
-			m.execute(c, args);
-		}
-
-		/**
-		 * Constructor 
-		 */
-		public Main() {
-			hasTarget = true;
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-
-			addCommandLineOption("x", "suffix", "The suffix of target file name");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-
-			if (cl.hasOption("x")) {
-				setParameter("suffix", cl.getOptionValue("x"));
-			}
-		}
+	/**
+	 * @param args arguments
+	 */
+	public static void main(String[] args) {
+		new WordReplacer().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -64,6 +37,11 @@ public class WordReplacer extends AbstractFileTool {
 		includes = new String[] { "**/*.doc" };
 	}
 
+	@Option(opt='t', option="target", arg="FILE", usage="The target file or directory which contains target files")
+	public void setTarget(String target) {
+		super.setTarget(target);
+	}
+
 	/**
 	 * @return the suffix
 	 */
@@ -74,6 +52,7 @@ public class WordReplacer extends AbstractFileTool {
 	/**
 	 * @param suffix the suffix to set
 	 */
+	@Option(opt='x', option="suffix", arg="SUFFIX", usage="The suffix of target file name")
 	public void setSuffix(String suffix) {
 		this.suffix = suffix;
 	}

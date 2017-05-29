@@ -4,14 +4,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.cli.CommandLine;
-
 import panda.lang.Strings;
 import panda.tool.codegen.bean.Action;
-import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Entity;
+import panda.tool.codegen.bean.ListUI;
 import panda.tool.codegen.bean.Module;
 import panda.tool.codegen.bean.Resource;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -20,36 +19,10 @@ import freemarker.template.Template;
  */
 public class AjaxResourceGenerator extends AbstractCodeGenerator {
 	/**
-	 * Main class for PropertyResourceGenerator
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCodeGenerator.Main {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("l", "locale", "Resource locale (e.g: ja zh_CN)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("l")) {
-				setParameter("locale", cl.getOptionValue("l").trim());
-			}
-		}
-
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			AbstractCodeGenerator cg = new AjaxResourceGenerator();
-
-			cgm.execute(cg, args);
-		}
-
+	public static void main(String[] args) {
+		new AjaxResourceGenerator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------

@@ -1,85 +1,39 @@
 package panda.tool.chardet;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Argument;
+import panda.args.Option;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.HandledException;
-import panda.lang.Strings;
 import panda.lang.chardet.LangHint;
-import panda.util.tool.AbstractCommandTool;
+import panda.tool.AbstractCommandTool;
 
 /**
  * A class used for detect text encoding
  */
-public class CharDetect {
+public class CharDetect extends AbstractCommandTool {
 	/**
-	 * Main & Ant entry class fir JSMinify
+	 * main
+	 * @param args arugments
 	 */
-	public static class Main extends AbstractCommandTool {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("f", "file", "Source file.");
-			addCommandLineOption("u", "url", "URL.");
-			addCommandLineOption("h", "hint", "Language hint. (ja | zh | cn | tw | ko)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("f")) {
-				setParameter("file", cl.getOptionValue("f").trim());
-			}
-			
-			if (cl.hasOption("u")) {
-				setParameter("url", cl.getOptionValue("u").trim());
-			}
-			
-			if (!cl.hasOption("f") && !cl.hasOption("u")) {
-				errorRequired(options, "file/url");
-			}
-			
-			if (cl.hasOption("h")) {
-				setParameter("hint", cl.getOptionValue("h").trim());
-			}
-		}
-
-		/**
-		 * main
-		 * @param args arugments
-		 */
-		public static void main(String args[]) {
-			Main m = new Main();
-			CharDetect cd = new CharDetect();
-			m.execute(cd, args);
-		}
+	public static void main(String args[]) {
+		new CharDetect().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private String file;
 	private String url;
 	private LangHint hint;
 	
 
 	/**
-	 * @param file the file to set
-	 */
-	public void setFile(String file) {
-		this.file = file;
-	}
-
-	/**
 	 * @param url the url to set
 	 */
+	@Argument(name="URL", required=true, usage="The URL to detect character encoding")
 	public void setUrl(String url) {
 		this.url = url;
 	}
@@ -87,14 +41,9 @@ public class CharDetect {
 	/**
 	 * @param hint the hint to set
 	 */
+	@Option(opt='h', option="hint", arg="HINT", usage="Language hint. (ja | zh | cn | tw | ko)")
 	public void setHint(String hint) {
 		this.hint = LangHint.parse(hint);
-	}
-
-	protected void checkParameters() throws Exception {
-		if (Strings.isEmpty(file) && Strings.isEmpty(url)) {
-			throw new IllegalArgumentException("parameter [file] or [url] is required.");
-		}
 	}
 
 	/**
@@ -103,13 +52,7 @@ public class CharDetect {
 	public void execute() {
 		InputStream is = null;
 		try {
-			checkParameters();
-			if (Strings.isNotEmpty(file)) {
-				is = new FileInputStream(file);
-			}
-			else {
-				is = new URL(url).openStream();
-			}
+			is = new URL(url).openStream();
 			is = Streams.buffer(is);
 			String charset = Charsets.detectCharset(is, hint);
 			

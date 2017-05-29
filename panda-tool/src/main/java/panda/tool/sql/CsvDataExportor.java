@@ -12,8 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.dao.sql.SqlExecutor;
@@ -32,37 +31,12 @@ import panda.tool.DynaBean;
  */
 public class CsvDataExportor extends AbstractDataExportor {
 	/**
-	 * Main class
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractDataExportor.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			Object cg = new CsvDataExportor();
-
-			cgm.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("c", "charset", "charset");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("c")) {
-				setParameter("charset", cl.getOptionValue("c").trim());
-			}
-		}
+	public static void main(String[] args) {
+		new CsvDataExportor().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -88,6 +62,7 @@ public class CsvDataExportor extends AbstractDataExportor {
 	/**
 	 * @param charset the charset to set
 	 */
+	@Option(opt='C', option="charset", arg="CHARSET", usage="The charset of the file")
 	public void setCharset(String charset) {
 		this.charset = charset;
 	}

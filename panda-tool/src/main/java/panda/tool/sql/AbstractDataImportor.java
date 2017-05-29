@@ -14,43 +14,17 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.bind.json.Jsons;
 import panda.io.Streams;
 import panda.lang.Strings;
+import panda.lang.time.DateTimes;
+import panda.lang.time.FastDateFormat;
 
 /**
  * Base class for table data import
  */
 public abstract class AbstractDataImportor extends AbstractSqlTool {
-	/**
-	 * Main class
-	 */
-	protected abstract static class Main extends AbstractSqlTool.Main {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("t", "truncate", "truncate table before import data");
-
-			addCommandLineOption("c", "commit", "commit limit");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("t")) {
-				setParameter("truncate", true);
-			}
-
-			if (cl.hasOption("c")) {
-				setParameter("commit", Integer.parseInt(cl.getOptionValue("c").trim()));
-			}
-		}
-	}
-	
 	protected static class DataType {
 		String type;
 		String format;
@@ -86,6 +60,7 @@ public abstract class AbstractDataImportor extends AbstractSqlTool {
 	/**
 	 * @param truncate the truncate to set
 	 */
+	@Option(opt='T', option="truncate", usage="Truncate table before import data")
 	public void setTruncate(boolean truncate) {
 		this.truncate = truncate;
 	}
@@ -93,6 +68,7 @@ public abstract class AbstractDataImportor extends AbstractSqlTool {
 	/**
 	 * @param commit the commit to set
 	 */
+	@Option(opt='L', option="limit", arg="NUM", usage="Commit limit count (default is 1000)")
 	public void setCommit(Integer commit) {
 		this.commit = commit;
 	}
@@ -134,9 +110,9 @@ public abstract class AbstractDataImportor extends AbstractSqlTool {
 	protected void importFile(FileInputStream fis) throws Exception {
 	}
 	
-	private static SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-	private static SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private static FastDateFormat timestampFormat = DateTimes.timestampFormat();
+	private static FastDateFormat datetimeFormat = DateTimes.isoDatetimeNotFormat();
+	private static FastDateFormat dateFormat = DateTimes.isoDateFormat();
 	
 	protected Date parseDate(String str, String format) throws Exception {
 		if ("now".equalsIgnoreCase(str)) {

@@ -236,9 +236,6 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		Collection<Method> methods = Methods.getAnnotationMethods(clazz, IocInject.class);
 		for (Method method : methods) {
 			IocInject inject = method.getAnnotation(IocInject.class);
-			if (inject == null) {
-				continue;
-			}
 			
 			int m = method.getModifiers();
 			if (Modifier.isAbstract(m) || Modifier.isStatic(m)) {

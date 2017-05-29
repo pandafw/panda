@@ -2,51 +2,20 @@ package panda.tool.net;
 
 import java.net.InetSocketAddress;
 
-import org.apache.commons.cli.CommandLine;
-
-import panda.lang.Numbers;
+import panda.args.Option;
+import panda.tool.AbstractCommandTool;
 import panda.tool.socket.SocketRelay;
-import panda.util.tool.AbstractCommandTool;
 
 /**
  */
-public class Relay {
+public class Relay extends AbstractCommandTool {
 	/**
-	 * Base main class for code generator. Parse basic command line options.
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCommandTool {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main main = new Main();
-			
-			Object cg = new Relay();
-
-			main.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("h", "host", "Listen Host (default: 0.0.0.0)", false);
-			addCommandLineOption("p", "port", "Listen Port (default: 8888)", false);
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("h")) {
-				setParameter("host", cl.getOptionValue("h").trim());
-			}
-			if (cl.hasOption("p")) {
-				setParameter("port", Numbers.toInt(cl.getOptionValue("p").trim()));
-			}
-		}
+	public static void main(String[] args) {
+		new Relay().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -69,6 +38,7 @@ public class Relay {
 	/**
 	 * @param host the host to set
 	 */
+	@Option(opt='h', option="host", arg="HOST", usage="Listen Host (default: 0.0.0.0)")
 	public void setHost(String host) {
 		this.host = host;
 	}
@@ -83,15 +53,15 @@ public class Relay {
 	/**
 	 * @param port the port to set
 	 */
+	@Option(opt='p', option="port", arg="PORT", usage="Listen Port (default: 8888)")
 	public void setPort(int port) {
 		this.port = port;
 	}
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		SocketRelay sr = new SocketRelay(new InetSocketAddress(host, port));
 		sr.run();
 	}

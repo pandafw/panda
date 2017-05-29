@@ -9,70 +9,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.dao.sql.SqlExecutor;
 import panda.dao.sql.SqlManager;
 import panda.io.FileNames;
 import panda.io.Streams;
 import panda.lang.Locales;
 import panda.lang.Strings;
-import panda.util.tool.AbstractCommandTool;
 
 /**
  * Import java properties to database
  */
 public class PropertyImportor extends AbstractSqlTool {
 	/**
-	 * Main class for ImpProperties
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractSqlTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			Object cg = new PropertyImportor();
-
-			cgm.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("si", "insert sql", "insert sql template [e.g.: INSERT INTO PROPERTY VALUES(:clazz, :language, :country, :variant, :name, :value)", true);
-			addCommandLineOption("su", "update sql", "update sql template [e.g.: UPDATE PROPERTY SET VALUE=:value WHERE CLAZZ=:class AND LANGUAGE=:language AND COUNTRY=:country AND NAME=:name) ]");
-			addCommandLineOption("sd", "delete sql", "delete sql template [e.g.: DELETE FROM PROPERTY WHERE CLAZZ=:clazz AND LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant)");
-			addCommandLineOption("pn", "prefix", "prefix of class name");
-			addCommandLineOption("es", "emptystr", "string for emtpy locale field (language, country, variant)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("sd")) {
-				setParameter("deleteSql", cl.getOptionValue("sd"));
-			}
-
-			if (cl.hasOption("si")) {
-				setParameter("insertSql", cl.getOptionValue("si"));
-			}
-
-			if (cl.hasOption("su")) {
-				setParameter("updateSql", cl.getOptionValue("su"));
-			}
-
-			if (cl.hasOption("pn")) {
-				setParameter("prefix", cl.getOptionValue("pn"));
-			}
-
-			if (cl.hasOption("es")) {
-				setParameter("emtpystr", cl.getOptionValue("es"));
-			}
-		}
+	public static void main(String[] args) {
+		new PropertyImportor().execute(args);
 	}
 
 	/**
@@ -133,6 +86,7 @@ public class PropertyImportor extends AbstractSqlTool {
 	/**
 	 * @param deleteSql the deleteSql to set
 	 */
+	@Option(opt='D', option="delete", arg="SQL", usage="delete sql template [e.g.: DELETE FROM PROPERTY WHERE CLAZZ=:clazz AND LANGUAGE=:language AND COUNTRY=:country AND VARIANT=:variant)")
 	public void setDeleteSql(String deleteSql) {
 		this.deleteSql = Strings.stripToNull(deleteSql);
 	}
@@ -140,6 +94,7 @@ public class PropertyImportor extends AbstractSqlTool {
 	/**
 	 * @param updateSql the updateSql to set
 	 */
+	@Option(opt='U', option="update", arg="SQL", usage="update sql template [e.g.: UPDATE PROPERTY SET VALUE=:value WHERE CLAZZ=:class AND LANGUAGE=:language AND COUNTRY=:country AND NAME=:name) ]")
 	public void setUpdateSql(String updateSql) {
 		this.updateSql = Strings.stripToNull(updateSql);
 	}
@@ -147,6 +102,7 @@ public class PropertyImportor extends AbstractSqlTool {
 	/**
 	 * @param insertSql the insertSql to set
 	 */
+	@Option(opt='I', option="insert", arg="SQL", required=true, usage="insert sql template [e.g.: INSERT INTO PROPERTY VALUES(:clazz, :language, :country, :variant, :name, :value)")
 	public void setInsertSql(String insertSql) {
 		this.insertSql = Strings.stripToNull(insertSql);
 	}
@@ -154,6 +110,7 @@ public class PropertyImportor extends AbstractSqlTool {
 	/**
 	 * @param prefix the prefix to set
 	 */
+	@Option(opt='P', option="prefix", arg="PREFIX", usage="prefix of class name")
 	public void setPrefix(String prefix) {
 		this.prefix = Strings.stripToNull(prefix);
 	}
@@ -161,15 +118,9 @@ public class PropertyImportor extends AbstractSqlTool {
 	/**
 	 * @param emptystr the emptystr to set
 	 */
+	@Option(opt='E', option="emptystr", arg="STR", usage="string for emtpy locale field (language, country, variant)")
 	public void setEmptystr(String emptystr) {
 		this.emptystr = Strings.stripToNull(emptystr);
-	}
-
-	@Override
-	protected void checkParameters() throws Exception {
-		super.checkParameters();
-		
-		AbstractCommandTool.checkRequired(insertSql, "insertSql");
 	}
 
 	@Override

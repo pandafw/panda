@@ -3,8 +3,7 @@ package panda.tool.codegen;
 import java.io.File;
 import java.io.PrintWriter;
 
-import org.apache.commons.cli.CommandLine;
-
+import panda.args.Option;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Strings;
@@ -26,36 +25,10 @@ import freemarker.template.Configuration;
  */
 public class TextGenerator extends AbstractCodeGenerator {
 	/**
-	 * Main class for PropertyResourceGenerator
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCodeGenerator.Main {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("l", "locale", "Resource locale (e.g: ja zh_CN)");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("l")) {
-				setParameter("locale", cl.getOptionValue("l").trim());
-			}
-		}
-
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			AbstractCodeGenerator cg = new TextGenerator();
-
-			cgm.execute(cg, args);
-		}
-
+	public static void main(String[] args) {
+		new TextGenerator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -75,6 +48,7 @@ public class TextGenerator extends AbstractCodeGenerator {
 	/**
 	 * @param locale the locale to set
 	 */
+	@Option(opt='l', option="locale", arg="LOCALE", usage="Resource locale (e.g: ja zh_CN)")
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}

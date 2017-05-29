@@ -2,59 +2,20 @@ package panda.tool.net;
 
 import java.net.InetSocketAddress;
 
-import org.apache.commons.cli.CommandLine;
-
-import panda.lang.Numbers;
+import panda.args.Option;
+import panda.tool.AbstractCommandTool;
 import panda.tool.socket.SocketForward;
-import panda.util.tool.AbstractCommandTool;
 
 /**
  */
-public class Forward {
+public class Forward extends AbstractCommandTool {
 	/**
-	 * Base main class for code generator. Parse basic command line options.
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCommandTool {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main main = new Main();
-			
-			Object cg = new Forward();
-
-			main.execute(cg, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("lh", "localhost", "Local Host", false);
-			addCommandLineOption("lp", "localport", "Local Port", false);
-			addCommandLineOption("rh", "remotehost", "Remote Host", true);
-			addCommandLineOption("rp", "remoteport", "Remote Port", false);
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("lh")) {
-				setParameter("localhost", cl.getOptionValue("lh").trim());
-			}
-			if (cl.hasOption("lp")) {
-				setParameter("localport", Numbers.toInt(cl.getOptionValue("lp").trim()));
-			}
-			if (cl.hasOption("rh")) {
-				setParameter("remotehost", cl.getOptionValue("rh").trim());
-			}
-			if (cl.hasOption("rp")) {
-				setParameter("remoteport", Numbers.toInt(cl.getOptionValue("rp").trim()));
-			}
-		}
+	public static void main(String[] args) {
+		new Forward().execute(args);
 	}
-	
+
 	/**
 	 * Constructor
 	 */
@@ -81,6 +42,7 @@ public class Forward {
 	/**
 	 * @param localhost the localhost to set
 	 */
+	@Option(opt='h', option="localhost", arg="HOST", usage="Local Host")
 	public void setLocalhost(String localhost) {
 		this.localhost = localhost;
 	}
@@ -97,6 +59,7 @@ public class Forward {
 	/**
 	 * @param localport the localport to set
 	 */
+	@Option(opt='p', option="localport", arg="PORT", usage="Local Port")
 	public void setLocalport(int localport) {
 		this.localport = localport;
 	}
@@ -113,6 +76,7 @@ public class Forward {
 	/**
 	 * @param remotehost the remotehost to set
 	 */
+	@Option(opt='H', option="remotehost", required=true, arg="HOST", usage="Remote Host")
 	public void setRemotehost(String remotehost) {
 		this.remotehost = remotehost;
 	}
@@ -129,6 +93,7 @@ public class Forward {
 	/**
 	 * @param remoteport the remoteport to set
 	 */
+	@Option(opt='P', option="remoteport", arg="PORT", usage="Remote Port")
 	public void setRemoteport(int remoteport) {
 		this.remoteport = remoteport;
 	}
@@ -136,9 +101,8 @@ public class Forward {
 
 	/**
 	 * execute
-	 * @throws Exception if an error occurs
 	 */
-	public void execute() throws Exception {
+	public void execute() {
 		if (localport == 0) {
 			localport = remoteport;
 		}

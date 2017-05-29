@@ -6,7 +6,6 @@
 	<classpathentry kind="src" output="out/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="out/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi.jar" sourcepath="lib/run/poi-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-ooxml.jar" sourcepath="lib/run/poi-ooxml-sources.jar"/>

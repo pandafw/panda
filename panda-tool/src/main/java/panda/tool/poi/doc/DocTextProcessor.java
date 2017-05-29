@@ -16,8 +16,6 @@ import panda.lang.codec.binary.Hex;
  * 
  */
 public abstract class DocTextProcessor {
-//	private static Log log = LogFactory.getLog(DocTextProcessor.class);
-
 	protected static final byte BEL_MARK = 0x07;
 
 	protected static final byte FIELD_BEGIN_MARK = 0x13;

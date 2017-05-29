@@ -4,47 +4,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-import org.apache.commons.cli.CommandLine;
 import org.apache.poi.hwpf.HWPFDocument;
 
+import panda.args.Option;
 import panda.io.Streams;
+import panda.tool.AbstractFileTool;
 import panda.tool.poi.doc.DocTextExtractor;
-import panda.util.tool.AbstractFileTool;
 
 /**
  * 
  */
 public class WordExtractor extends AbstractFileTool {
-	public static class Main extends AbstractFileTool.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main m = new Main();
-			WordExtractor c = new WordExtractor();
-			m.execute(c, args);
-		}
-
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-
-			addCommandLineFlag("es", "summary", "extract summary");
-			addCommandLineFlag("eh", "header", "extract header");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("es")) {
-				setParameter("extractSummary", true);
-			}
-
-			if (cl.hasOption("eh")) {
-				setParameter("extractHeader", true);
-			}
-		}
+	/**
+	 * @param args arguments
+	 */
+	public static void main(String[] args) {
+		new WordExtractor().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
@@ -64,6 +39,7 @@ public class WordExtractor extends AbstractFileTool {
 	/**
 	 * @param extractSummary the extractSummary to set
 	 */
+	@Option(opt='S', option="summary", usage="Extract summary")
 	public void setExtractSummary(boolean extractSummary) {
 		docTextExtractor.setExtractSummary(extractSummary);
 	}
@@ -71,6 +47,7 @@ public class WordExtractor extends AbstractFileTool {
 	/**
 	 * @param extractHeader the extractHeader to set
 	 */
+	@Option(opt='H', option="header", usage="Extract header")
 	public void setExtractHeader(boolean extractHeader) {
 		docTextExtractor.setExtractHeader(extractHeader);
 	}
@@ -78,6 +55,7 @@ public class WordExtractor extends AbstractFileTool {
 	/**
 	 * @param extractFooter the extractFooter to set
 	 */
+	@Option(opt='F', option="footer", usage="Extract footer")
 	public void setExtractFooter(boolean extractFooter) {
 		docTextExtractor.setExtractFooter(extractFooter);
 	}

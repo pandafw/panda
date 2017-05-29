@@ -24,7 +24,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.commons.cli.CommandLine;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -32,6 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
+import panda.args.Option;
 import panda.io.FileNames;
 import panda.io.Settings;
 import panda.io.Streams;
@@ -39,13 +39,12 @@ import panda.lang.Chars;
 import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.HandledException;
-import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Texts;
-import panda.tool.IllegalLicenseException;
+import panda.tool.AbstractCommandTool;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.Module;
-import panda.util.tool.AbstractCommandTool;
+
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -53,52 +52,7 @@ import freemarker.template.Template;
 /**
  * Base class for code generator.
  */
-public abstract class AbstractCodeGenerator {
-	/**
-	 * Base main class for code generator. Parse basic command line options.
-	 */
-	protected abstract static class Main extends AbstractCommandTool {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("d", "dir", "The directory which contains configuration files.");
-			addCommandLineOption("i", "includes", "The files to be include.");
-			addCommandLineOption("e", "excludes", "The files to be exclude.");
-			addCommandLineOption("o", "output", "Output directory. (default is current directory.)");
-			addCommandLineOption("v", "verbose", "Print information level (1-3).");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("d")) {
-				setParameter("dir", new File(cl.getOptionValue("d").trim()));
-			}
-
-			if (cl.hasOption("i")) {
-				setParameter("incs", cl.getOptionValues("i"));
-			}
-			else {
-				errorRequired(options, "includes");
-			}
-
-			if (cl.hasOption("e")) {
-				setParameter("excs", cl.getOptionValues("e"));
-			}
-			
-			if (cl.hasOption("o")) {
-				setParameter("out", new File(cl.getOptionValue("o").trim()));
-			}
-			
-			if (cl.hasOption("v")) {
-				String v = cl.getOptionValue("v").trim();
-				setParameter("verbose", Numbers.toInt(v, 5));
-			}
-		}
-	}
-
+public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
@@ -123,6 +77,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param dir the dir to set
 	 */
+	@Option(opt='d', option="dir", arg="DIR", usage="The directory which contains configuration files.")
 	public void setDir(File dir) {
 		this.dir = dir;
 	}
@@ -130,13 +85,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param includes the includes to set
 	 */
-	public void setIncs(String[] includes) {
-		this.includes = Strings.trimAll(includes);
-	}
-
-	/**
-	 * @param includes the includes to set
-	 */
+	@Option(opt='i', option="includes", arg="PATTERN", usage="The pattern of source files to import")
 	public void setIncludes(String includes) {
 		this.includes = Strings.trimAll(Strings.split(includes, ','));
 	}
@@ -144,13 +93,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param excludes the excludes to set
 	 */
-	public void setExcs(String[] excludes) {
-		this.excludes = Strings.trimAll(excludes);
-	}
-
-	/**
-	 * @param excludes the excludes to set
-	 */
+	@Option(opt='e', option="excludes", arg="PATTERN", usage="The pattern of source files to exclude")
 	public void setExcludes(String excludes) {
 		this.excludes = Strings.trimAll(Strings.split(excludes, ','));
 	}
@@ -158,6 +101,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param outdir the outdir to set
 	 */
+	@Option(opt='o', option="output", arg="DIR", usage="Output directory. (default is current directory.)")
 	public void setOut(File outdir) {
 		AbstractCommandTool.checkRequired(outdir, "out");
 		this.out = outdir;
@@ -166,6 +110,7 @@ public abstract class AbstractCodeGenerator {
 	/**
 	 * @param verbose the verbose to set
 	 */
+	@Option(opt='v', option="verbose", arg="LEVEL", usage="Print information level (1-5)")
 	public void setVerbose(int verbose) {
 		this.verbose = verbose;
 	}
@@ -388,9 +333,6 @@ public abstract class AbstractCodeGenerator {
 			scan(dir);
 			
 			postProcess();
-		}
-		catch (IllegalLicenseException e) {
-			throw new IllegalLicenseException(e.getMessage());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

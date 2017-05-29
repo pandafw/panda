@@ -19,6 +19,7 @@ import panda.cast.castor.DateTypeCastor;
 import panda.cast.castor.DirectCastor;
 import panda.cast.castor.EmailAddressCastor;
 import panda.cast.castor.EnumCastor;
+import panda.cast.castor.FileCastor;
 import panda.cast.castor.FileItemCastor;
 import panda.cast.castor.IterableCastor;
 import panda.cast.castor.IteratorCastor;
@@ -150,6 +151,7 @@ public class Castors {
 		register(new LocaleCastor());
 		register(new TimeZoneCastor());
 		
+		register(new FileCastor());
 		register(new FileItemCastor());
 		register(new EmailAddressCastor());
 	}

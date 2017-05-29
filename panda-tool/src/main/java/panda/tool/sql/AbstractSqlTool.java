@@ -5,69 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.cli.CommandLine;
-
-import panda.util.tool.AbstractCommandTool;
-import panda.util.tool.AbstractFileTool;
+import panda.args.Option;
+import panda.tool.AbstractCommandTool;
+import panda.tool.AbstractFileTool;
 
 /**
  * Base class for sql tool.
  */
 public abstract class AbstractSqlTool extends AbstractFileTool {
-	/**
-	 * Base main class for code generator. Parse basic command line options.
-	 */
-	protected abstract static class Main extends AbstractFileTool.Main {
-		@Override
-		protected void addCommandLineOptions() throws Exception {
-			super.addCommandLineOptions();
-			
-			addCommandLineOption("jd", "jdbcDriver", "JDBC Driver");
-
-			addCommandLineOption("jc", "jdbcUrl", "JDBC Connection URL");
-
-			addCommandLineOption("ju", "jdbcUsername", "JDBC User Name");
-			
-			addCommandLineOption("jp", "jdbcPassword", "JDBC User Password");
-			
-			addCommandLineOption("ac", "autoCommit", "Auto commit");
-		}
-
-		@Override
-		protected void getCommandLineOptions(CommandLine cl) throws Exception {
-			super.getCommandLineOptions(cl);
-			
-			if (cl.hasOption("jd")) {
-				setParameter("jdbcDriver", cl.getOptionValue("jd").trim());
-			}
-			else {
-				errorRequired(options, "jdbcDriver");
-			}
-
-			if (cl.hasOption("jc")) {
-				setParameter("jdbcUrl", cl.getOptionValue("jc").trim());
-			}
-			else {
-				errorRequired(options, "jdbcUrl");
-			}
-
-			if (cl.hasOption("ju")) {
-				setParameter("jdbcUsername", cl.getOptionValue("ju").trim());
-			}
-			else {
-				errorRequired(options, "jdbcUsername");
-			}
-			
-			if (cl.hasOption("jp")) {
-				setParameter("jdbcPassword", cl.getOptionValue("jp").trim());
-			}
-
-			if (cl.hasOption("ac")) {
-				setParameter("autoCommit", true);
-			}
-		}
-	}
-	
 	/**
 	 * Constructor
 	 */
@@ -94,6 +39,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	/**
 	 * @param jdbcDriver the jdbcDriver to set
 	 */
+	@Option(opt='d', option="driver", arg="DRIVER", required=true, usage="JDBC Driver")
 	public void setJdbcDriver(String jdbcDriver) {
 		this.jdbcDriver = jdbcDriver;
 	}
@@ -108,6 +54,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	/**
 	 * @param jdbcUrl the jdbcUrl to set
 	 */
+	@Option(opt='c', option="conn", arg="URL", required=true, usage="JDBC Connection URL")
 	public void setJdbcUrl(String jdbcUrl) {
 		this.jdbcUrl = jdbcUrl;
 	}
@@ -122,6 +69,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	/**
 	 * @param jdbcUsername the jdbcUsername to set
 	 */
+	@Option(opt='u', option="user", arg="NAME", required=true, usage="JDBC User Name")
 	public void setJdbcUsername(String jdbcUsername) {
 		this.jdbcUsername = jdbcUsername;
 	}
@@ -136,6 +84,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	/**
 	 * @param jdbcPassword the jdbcPassword to set
 	 */
+	@Option(opt='p', option="pass", arg="PASS", usage="JDBC User Password")
 	public void setJdbcPassword(String jdbcPassword) {
 		this.jdbcPassword = jdbcPassword;
 	}
@@ -150,6 +99,7 @@ public abstract class AbstractSqlTool extends AbstractFileTool {
 	/**
 	 * @param autoCommit the autoCommit to set
 	 */
+	@Option(opt='a', option="autocommit", usage="Auto commit")
 	public void setAutoCommit(boolean autoCommit) {
 		this.autoCommit = autoCommit;
 	}

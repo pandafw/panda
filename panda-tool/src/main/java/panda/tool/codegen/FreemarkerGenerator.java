@@ -17,19 +17,10 @@ import freemarker.template.Template;
  */
 public class FreemarkerGenerator extends AbstractCodeGenerator {
 	/**
-	 * Main class for FreemarkerGenerator
+	 * @param args arguments
 	 */
-	public static class Main extends AbstractCodeGenerator.Main {
-		/**
-		 * @param args arguments
-		 */
-		public static void main(String[] args) {
-			Main cgm = new Main();
-			
-			AbstractCodeGenerator cg = new FreemarkerGenerator();
-
-			cgm.execute(cg, args);
-		}
+	public static void main(String[] args) {
+		new FreemarkerGenerator().execute(args);
 	}
 
 	//---------------------------------------------------------------------------------------
