@@ -265,4 +265,14 @@ public class CastorTest extends TestCase {
 		catch (CastException e) {
 		}
 	}
+	
+	public void testCastToPrimitive() throws Exception {
+		try {
+			Integer i = 2;
+			Castors.scastTo("1", i);
+			fail();
+		}
+		catch (CastException e) {
+		}
+	}
 }

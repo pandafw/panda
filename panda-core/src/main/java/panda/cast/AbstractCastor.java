@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import panda.lang.CycleDetectStrategy;
+import panda.lang.Exceptions;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.collection.KeyValue;
@@ -152,13 +153,9 @@ public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 	 * @param context context
 	 * @return casted value
 	 */
-	@SuppressWarnings("unchecked")
 	protected T castValueTo(S value, T target, CastContext context) {
-		if (isAssignable(value)) {
-			return (T)value;
-		}
-		
-		return castValue(value, context);
+		throw Exceptions.unsupported("CastValueTo(" + (value == null ? "NULL" : value.getClass())
+			+ ", " + (target == null ? "NULL" : target.getClass()) + ") is not supported");
 	}
 
 	protected CastException wrapError(Throwable e, CastContext context) {
