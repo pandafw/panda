@@ -38,8 +38,8 @@ public class HttpsRedirectFilter implements Filter {
 			ServletURLBuilder sub = new ServletURLBuilder();
 			sub.setRequest(request);
 			sub.setScheme(Scheme.HTTPS);
+			sub.setHost(request.getServerName());
 			sub.setParams(request.getParameterMap());
-			sub.setForceAddSchemeHostAndPort(true);
 			String url = sub.build();
 			
 			HttpServletResponse response = (HttpServletResponse)res;
