@@ -2,6 +2,11 @@
 <project name="prj-maven" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property name="out.dir" value="out"/>
 
+	<!-- set project property -->
+	<property name="prj.type" value="jar"/>
+	<property name="prj.license" value="Apache 2.0"/>
+	<property name="prj.license.url" value="http://www.apache.org/licenses/LICENSE-2.0"/>
+
 	<!-- defined maven snapshots and staging repository id and url -->
 	<property name="mvn.ssr.id" value="sonatype-nexus-snapshots" />
 	<property name="mvn.ssr.url" value="https://oss.sonatype.org/content/repositories/snapshots" />
@@ -13,43 +18,12 @@
 		<attribute name="version" default="${prj.version}"/>
 		<sequential>
 			<echo>version = @{version}</echo>
-			<echo file="${out.dir}/pom.xml"><![CDATA[
-<project>
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>${prj.org}</groupId>
-	<artifactId>${prj.name}</artifactId>
-	<packaging>jar</packaging>
-	<name>${prj.title}</name>
-	<version>@{version}</version>
-	<description>${prj.desc}</description>
-	<url>${prj.url}</url>
-	<licenses>
-		<license>
-			<name>GNU GENERAL PUBLIC LICENSE v3</name>
-			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<scm>
-		<connection>scm:git:${prj.scm}</connection>
-		<developerConnection>scm:git:${prj.scm}</developerConnection>
-		<url>${prj.scm}</url>
-	</scm>
-	<developers>
-		<developer>
-			<id>${prj.author.id}</id>
-			<name>${prj.author.name}</name>
-			<email>${prj.author.email}</email>
-		</developer>
-	</developers>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-</project>
-]]>
-			</echo>
+			<copy file="pom.xml" todir="${out.dir}" overwrite="true" force="true"/>
+			<replaceregexp file="${out.dir}/pom.xml"
+				match="&lt;version&gt;.*&lt;/version&gt;"
+				replace="&lt;version&gt;@{version}&lt;/version&gt;"
+				byline="true"
+				encoding="ISO-8859-1"/>
 		</sequential>
 	</macrodef>
 
@@ -59,8 +33,8 @@
 	
 	<!-- local maven deploy -->
 	<target name="mvn-local-deploy" description="Deploy release version to local maven repository">
-		<!-- write pom.xml -->
-		<writepom/>
+		<!-- copy pom.xml -->
+		<copy file="pom.xml" todir="${out.dir}" overwrite="true" force="true"/>
 
 		<property name="location.repo" location="${prj.repo}"/>
 
@@ -81,7 +55,7 @@
 			<arg value="-DcreateChecksum=true" />
 			<arg value="-DupdateReleaseInfo=true" />
 			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.${prj.type}" />
 			<arg value="${argsrc}" />
 			<arg value="${argdoc}" />
 		</artifact:mvn>
@@ -98,14 +72,14 @@
 			<arg value="-Durl=${mvn.ssr.url}" />
 			<arg value="-DrepositoryId=${mvn.ssr.id}" />
 			<arg value="-DpomFile=pom.xml" />
-			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.${prj.type}" />
 		</artifact:mvn>
 	</target>
 
 	<!-- mvn sonatype release deploy -->
 	<target name="mvn-oss-stage" description="Deploy release version to maven staging repository">
-		<!-- write pom.xml -->
-		<writepom/>
+		<!-- copy pom.xml -->
+		<copy file="pom.xml" todir="${out.dir}" overwrite="true" force="true"/>
 
 		<condition property="argsrc" value="-Dsources=${prj.name}-${VERSION}-sources.jar">
 			<available file="${out.dir}/${prj.name}-${VERSION}-sources.jar"/>
@@ -125,7 +99,7 @@
 			<arg value="-DrepositoryId=${mvn.sgr.id}" />
 			<arg value="-DpomFile=pom.xml" />
 			<arg value="-DupdateReleaseInfo=true" />
-			<arg value="-Dfile=${prj.name}-${VERSION}.jar" />
+			<arg value="-Dfile=${prj.name}-${VERSION}.${prj.type}" />
 			<arg value="${argsrc}" />
 			<arg value="${argdoc}" />
 		</artifact:mvn>

@@ -1,0 +1,34 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.pandafw</groupId>
+	<artifactId>panda-roid</artifactId>
+	<packaging>jar</packaging>
+	<name>Panda Java Android Library</name>
+	<version>1.2.0</version>
+	<description>Panda Java Android Library</description>
+	<url>https://github.com/pandafw/panda/tree/master/panda-roid</url>
+	<licenses>
+		<license>
+			<name>Apache 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:pandafw/panda.git</connection>
+		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
+		<url>git@github.com:pandafw/panda.git</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>yf.frank.wang</id>
+			<name>Frank Wang</name>
+			<email>yf.frank.wang@outlook.com</email>
+		</developer>
+	</developers>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+</project>
