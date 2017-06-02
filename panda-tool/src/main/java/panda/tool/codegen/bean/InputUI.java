@@ -407,6 +407,10 @@ public class InputUI implements Comparable<InputUI> {
 		return extend;
 	}
 
+	public String[] getExtends() {
+		return Strings.split(extend, ", ");
+	}
+
 	/**
 	 * @param extend the extend to set
 	 */

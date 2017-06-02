@@ -309,6 +309,10 @@ public class ListUI implements Comparable<ListUI> {
 		return extend;
 	}
 
+	public String[] getExtends() {
+		return Strings.split(extend, ", ");
+	}
+
 	/**
 	 * Sets the value of the extend property.
 	 * 

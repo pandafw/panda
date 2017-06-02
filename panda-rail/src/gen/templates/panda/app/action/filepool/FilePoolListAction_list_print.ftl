@@ -68,7 +68,7 @@
 
 
 	<@p.listview id="filepool_list_print" action="~/list_print" 
-		list=result columns=_columns_ cssColumn="status"
+		list=result columns=_columns_
 		cssTable="table-striped"
 	/>
 </div>

@@ -5,8 +5,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-import panda.bind.json.JsonException;
 import panda.bind.json.Jsons;
+import panda.lang.Exceptions;
 import panda.lang.Strings;
 
 /**
@@ -61,10 +61,9 @@ public class Param {
 			try {
 				return Jsons.fromJson(value);
 			}
-			catch (JsonException e) {
-				System.err.println("the value of <Param name='" + this.name
-						+ "'> is not a JSON format: " + this.value);
-				throw e;
+			catch (Throwable e) {
+				System.out.println("the value of <Param name='" + name + "'> is not a JSON format: " + value);
+				throw Exceptions.wrapThrow(e);
 			}
 		}
 		return value;

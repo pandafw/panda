@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Strings;
 
@@ -160,31 +161,39 @@ public class Action {
 		while (extend) {
 			extend = false;
 			for (ListUI lui : getListUIList()) {
-				if (Strings.isNotEmpty(lui.getExtend())) {
-//					System.out.println("Extend ListUI[" + lui.getExtend() + "] of " + lui.getName());
+				if (Arrays.isEmpty(lui.getExtends())) {
+					continue;
+				}
+				
+				ListUI nui = lui;
+				for (String et : lui.getExtends()) {
+//					System.out.println("Extend ListUI[" + et + "] of " + nui.getName());
 
 					ListUI parent = null;
 					for (ListUI lui2 : getListUIList()) {
-						if (lui2.getName().equals(lui.getExtend())) {
+						if (lui2.getName().equals(et)) {
 							parent = lui2;
 							break;
 						}
 					}
 					if (parent == null) {
-						throw new Exception("Can not find extend ListUI[" + lui.getExtend()
-								+ "] of " + lui.getName());
+						throw new Exception("Can not find extend ListUI[" + et + "] of " + lui.getName());
 					}
 					if (parent == lui) {
-						throw new Exception("Can not extend self ListUI[" + lui.getExtend()
-								+ "] of " + lui.getName());
+						throw new Exception("Can not extend self ListUI[" + et + "] of " + lui.getName());
 					}
-
-					getListUIList().remove(lui);
-					getListUIList().add(ListUI.extend(lui, parent));
-
-					extend = true;
-					break;
+					
+					nui = ListUI.extend(nui, parent);
+//					for (ListColumn lc : nui.getColumnList()) {
+//						System.out.print(lc.getName() + ":" + lc.getHidden() + ",");
+//					}
+//					System.out.println();
 				}
+
+				getListUIList().remove(lui);
+				getListUIList().add(nui);
+				extend = true;
+				break;
 			}
 		}
 
@@ -192,31 +201,39 @@ public class Action {
 		while (extend) {
 			extend = false;
 			for (InputUI iui : getInputUIList()) {
-				if (Strings.isNotEmpty(iui.getExtend())) {
-//					System.out.println("Extend InputUI[" + iui.getExtend() + "] of " + iui.getName());
+				if (Arrays.isEmpty(iui.getExtends())) {
+					continue;
+				}
+				
+				InputUI nui = iui;
+				for (String et : iui.getExtends()) {
+//					System.out.println("Extend InputUI[" + et + "] of " + nui.getName());
 
 					InputUI parent = null;
 					for (InputUI iui2 : getInputUIList()) {
-						if (iui2.getName().equals(iui.getExtend())) {
+						if (iui2.getName().equals(et)) {
 							parent = iui2;
 							break;
 						}
 					}
 					if (parent == null) {
-						throw new Exception("Can not find extend InputUI[" + iui.getExtend()
-								+ "] of " + iui.getName());
+						throw new Exception("Can not find extend InputUI[" + et + "] of " + iui.getName());
 					}
 					if (parent == iui) {
-						throw new Exception("Can not extend self InputUI[" + iui.getExtend()
-								+ "] of " + iui.getName());
+						throw new Exception("Can not extend self InputUI[" + et + "] of " + iui.getName());
 					}
-
-					getInputUIList().remove(iui);
-					getInputUIList().add(InputUI.extend(iui, parent));
-
-					extend = true;
-					break;
+					
+					nui = InputUI.extend(nui, parent);
+//					for (InputField inf : nui.getFieldList()) {
+//						System.out.print(inf.getName()+ ",");
+//					}
+//					System.out.println();
 				}
+
+				getInputUIList().remove(iui);
+				getInputUIList().add(nui);
+				extend = true;
+				break;
 			}
 		}
 	}
@@ -552,6 +569,10 @@ public class Action {
 	 */
 	public String getExtend() {
 		return extend;
+	}
+
+	public String[] getExtends() {
+		return Strings.split(extend, ", ");
 	}
 
 	/**

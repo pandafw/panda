@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import panda.io.Settings;
-import panda.lang.Strings;
+import panda.lang.Arrays;
 
 /**
  * <p>
@@ -91,31 +91,35 @@ public class Module {
 		while (extend) {
 			extend = false;
 			for (Action action : getActionList()) {
-				if (Strings.isNotEmpty(action.getExtend())) {
-//					System.out.println("Extend action[" + action.getExtend() + "] of " + action.getName());
+				if (Arrays.isEmpty(action.getExtends())) {
+					continue;
+				}
+				
+				Action na = action;
+				for (String et : action.getExtends()) {
+//					System.out.println("Extend action[" + et + "] of " + action.getName());
 
 					Action parent = null;
 					for (Action a2 : getActionList()) {
-						if (a2.getName().equals(action.getExtend())) {
+						if (a2.getName().equals(et)) {
 							parent = a2;
 							break;
 						}
 					}
 					if (parent == null) {
-						throw new Exception("Can not find extend action[" + action.getExtend()
-								+ "] of " + action.getName());
+						throw new Exception("Can not find extend action[" + et + "] of " + action.getName());
 					}
 					if (parent == action) {
-						throw new Exception("Can not extend self action[" + action.getExtend()
-								+ "] of " + action.getName());
+						throw new Exception("Can not extend self action[" + et + "] of " + action.getName());
 					}
-
-					getActionList().remove(action);
-					getActionList().add(Action.extend(action, parent));
-
-					extend = true;
-					break;
+					
+					na = Action.extend(action, parent);
 				}
+
+				getActionList().remove(action);
+				getActionList().add(na);
+				extend = true;
+				break;
 			}
 		}
 		for (Action action : getActionList()) {

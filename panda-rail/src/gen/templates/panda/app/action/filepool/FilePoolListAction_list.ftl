@@ -167,7 +167,7 @@
 	/>
 
 	<@p.listview id="filepool_list" action="~/list"
-		list=result columns=_columns_ cssColumn="status"
+		list=result columns=_columns_
 		cssTable="table-hover table-striped"
 		link={ "action": "~/view", "params": { "id": "%{top.id}" } }
 		tools="%{vars.lvtools}"

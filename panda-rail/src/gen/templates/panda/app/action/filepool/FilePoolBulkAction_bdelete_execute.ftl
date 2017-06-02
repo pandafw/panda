@@ -71,7 +71,7 @@
 
 
 	<@p.listview id="filepool_bdelete"
-		list=result columns=_columns_ cssColumn="status"
+		list=result columns=_columns_
 		cssTable="table-hover table-striped"
 	/>
 	
