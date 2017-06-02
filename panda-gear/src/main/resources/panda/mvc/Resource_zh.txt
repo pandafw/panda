@@ -164,7 +164,7 @@ validation-string-length=请输入${\
 (top.minLength != null ? (top.minLength + "位字符以上") : \
 (top.maxLength != null ? (top.maxLength + "位字符以下") : ""))\
 }的文字。（输入文字字数：${top.length}）
-validation-telnumber=请输入正确的电话号码。（例: 012-3456-7890）
+validation-telno=请输入正确的电话号码。（例: 012-3456-7890）
 validation-url=请输入正确的URL。（例: http://www.domain.com）
 validation-zenkakustring=请输入全角文字。
 validation-zenkakukatakanastring=请输入全角片假名。

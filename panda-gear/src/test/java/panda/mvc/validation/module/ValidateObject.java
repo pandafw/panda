@@ -44,7 +44,7 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.REGEX, params="{regex: 'ok'}", message="'${top.value}', '${top.regex}'"))
 	public String regex;
 
-	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telnumber)' }", message="not a telephone number."))
+	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telno)' }", message="not a telephone number."))
 	public String telno;
 
 	@Validates(@Validate(type=StringValidator.class, params="{type:'A'}", message="'${top.value}' is not A."))

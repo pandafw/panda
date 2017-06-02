@@ -46,7 +46,7 @@ password-format=******
 #regex
 regex-numeric=\\d+
 regex-password=\\w+
-regex-telnumber=(\\+?\\d{1,4} |\\(\\+?\\d{1,4}\\) )?\\d{1,3}-?\\d{1,4}-?\\d{1,4}( \\(\\d{1,4}\\))?
+regex-telno=(\\+?\\d{1,4} |\\(\\+?\\d{1,4}\\) )?\\d{1,3}-?\\d{1,4}-?\\d{1,4}( \\(\\d{1,4}\\))?
 regex-zipcode=\\d{3}-?\\d{4}
 
 #pager - total, start(0-index), begin, end, count, limit, page, pages
@@ -227,7 +227,7 @@ validation-string-length=The string length (${top.length}) must be ${\
 (top.minLength != null ? (">= " + top.minLength) : \
 (top.maxLength != null ? ("<= " + top.maxLength) : ""))\
 } characters.
-validation-telnumber=Please input a correct telephone number (ex: "12-3456-7890").
+validation-telno=Please input a correct telephone number (ex: "12-3456-7890").
 validation-url=Please input a correct URL (ex: "http://www.domain.com").
 validation-zenkakustring=Please input full character.
 validation-zenkakukatakanastring=Please input full katakana character.
