@@ -27,7 +27,7 @@ public class FreemarkerSqlManager extends SimpleSqlManager {
 	 */
 	public static class ClassTemplateLoader extends URLTemplateLoader {
 		protected URL getURL(String name) {
-			return ClassLoaders.getResourceAsURL(name, getClass());
+			return ClassLoaders.getResourceAsURL(name, getClass().getClassLoader());
 		}
 	}
 	

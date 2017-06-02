@@ -37,7 +37,7 @@ public class BeanResourceMaker implements ResourceMaker {
 	protected String packageName;
 
 	
-	public Resource getResource(Resource parent, String baseName, Locale locale, ClassLoader calssLoader) throws IOException {
+	public Resource getResource(Resource parent, String baseName, Locale locale, ClassLoader classLoader) throws IOException {
 		Map<String, Object> map = resources.get(Resources.toBundleName(baseName, locale));
 		if (map != null) {
 			MapResource res = new MapResource(map, parent, locale);

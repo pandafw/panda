@@ -171,7 +171,7 @@ public class DynamicClassLoader extends ClassLoader {
 	private Map<String, ClassJavaFileObject> javaObjects = new HashMap<String, ClassJavaFileObject>();
 
 	public DynamicClassLoader() {
-		this(ClassLoaders.getClassLoader(), null);
+		this(DynamicClassLoader.class.getClassLoader(), null);
 		compiler = ToolProvider.getSystemJavaCompiler();
 		if (compiler == null) {
 			throw Exceptions.unsupported("Failed to getSystemJavaCompiler()");

@@ -21,7 +21,7 @@ import panda.log.impl.ConsoleLog;
 public final class Logs {
 	private static final String CONFIG = "panda-logging.properties";
 	
-	private static LogLevel rootLogLevel = LogLevel.TRACE;
+	private static LogLevel rootLogLevel = LogLevel.INFO;
 
 	private static Map<String, LogLevel> levels = new HashMap<String, LogLevel>();
 
@@ -187,10 +187,9 @@ public final class Logs {
 					"panda.roid.log.LogCatAdapter"
 			};
 
-			ClassLoader cl = ClassLoaders.getClassLoader();
 			for (String a : adapters) {
 				try {
-					adapter = (LogAdapter)Class.forName(a, true, cl).newInstance();
+					adapter = (LogAdapter)Classes.getClass(a).newInstance();
 					adapter.init(a, props);
 					adapter.getLogger("panda");
 					break;

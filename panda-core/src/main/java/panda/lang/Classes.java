@@ -1069,36 +1069,14 @@ public abstract class Classes {
 	 * @return the class represented by {@code className} using the {@code classLoader}
 	 * @throws ClassNotFoundException if the class is not found
 	 */
-	public static Class<?> getClass(ClassLoader classLoader, String className, boolean initialize)
-			throws ClassNotFoundException {
-		try {
-			Class<?> cls;
-			if (abbreviationMap.containsKey(className)) {
-				String clsName = "[" + abbreviationMap.get(className);
-				cls = Class.forName(clsName, initialize, classLoader).getComponentType();
-			}
-			else {
-				cls = Class.forName(toJavaStyleName(className), initialize, classLoader);
-			}
-			return cls;
+	public static Class<?> getClass(ClassLoader classLoader, String className, boolean initialize) throws ClassNotFoundException {
+		if (abbreviationMap.containsKey(className)) {
+			String clsName = "[" + abbreviationMap.get(className);
+			return Class.forName(clsName, initialize, Classes.class.getClassLoader()).getComponentType();
 		}
-		catch (ClassNotFoundException ex) {
-			// allow path separators (.) as inner class name separators
-			int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
 
-			if (lastDotIndex != -1) {
-				try {
-					return getClass(classLoader, className.substring(0, lastDotIndex)
-							+ INNER_CLASS_SEPARATOR_CHAR + className.substring(lastDotIndex + 1),
-						initialize);
-				}
-				catch (ClassNotFoundException ex2) { // NOPMD
-					// ignore exception
-				}
-			}
-
-			throw ex;
-		}
+		String clsName = toJavaStyleName(className);
+		return ClassLoaders.classForName(clsName, initialize, classLoader);
 	}
 
 	/**
@@ -1146,7 +1124,7 @@ public abstract class Classes {
 	 */
 	public static Class<?> getClass(String className, boolean initialize)
 			throws ClassNotFoundException {
-		return getClass(ClassLoaders.getClassLoader(), className, initialize);
+		return getClass(null, className, initialize);
 	}
 	
 	// Public method
@@ -1603,7 +1581,7 @@ public abstract class Classes {
 	 * @return whether the specified class is present
 	 */
 	public static boolean isPresent(String className) {
-		return isPresent(className, ClassLoaders.getClassLoader());
+		return isPresent(className, null);
 	}
 
 	/**

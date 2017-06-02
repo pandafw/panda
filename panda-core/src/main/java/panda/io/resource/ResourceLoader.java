@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 
 /**
@@ -48,7 +47,7 @@ public class ResourceLoader {
 	}
 
 	public Resource getResource(String base, Locale locale) {
-		return getResource(base, locale, ClassLoaders.getClassLoader());
+		return getResource(base, locale, null);
 	}
 
 	public Resource getResource(String base, Locale locale, ClassLoader classLoader) {

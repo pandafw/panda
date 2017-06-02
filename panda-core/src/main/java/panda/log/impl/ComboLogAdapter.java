@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import panda.lang.ClassLoaders;
+import panda.lang.Classes;
 import panda.log.Log;
 import panda.log.LogAdapter;
 import panda.log.LogEvent;
@@ -51,8 +51,7 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 	
 	private void addAdapter(String name, String impl) {
 		try {
-			ClassLoader cl = ClassLoaders.getClassLoader();
-			LogAdapter adapter = (LogAdapter)Class.forName(impl, true, cl).newInstance();
+			LogAdapter adapter = (LogAdapter)Classes.getClass(impl).newInstance();
 			adapters.put(name, adapter);
 		}
 		catch (Throwable e) {

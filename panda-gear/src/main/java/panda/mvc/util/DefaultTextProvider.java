@@ -15,7 +15,6 @@ import panda.io.resource.ResourceLoader;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.lang.ClassLoaders;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
@@ -40,11 +39,8 @@ public class DefaultTextProvider implements TextProvider {
 	@IocInject
 	private ResourceLoader resourceLoader;
 
-	private ClassLoader resourceClassLoader;
-
 	public DefaultTextProvider() {
 		beans = Beans.i();
-		resourceClassLoader = ClassLoaders.getClassLoader();
 	}
 
 	/**
@@ -455,18 +451,14 @@ public class DefaultTextProvider implements TextProvider {
 	}
 
 	/**
-	 * Finds the given resorce bundle by it's name.
-	 * <p/>
-	 * Will use <code>Thread.currentThread().getContextClassLoader()</code> as the classloader. If
-	 * {@link #resourceClassLoader} is defined and the bundle cannot be found the current
-	 * classloader it will delegate to that.
+	 * Finds the given resource bundle by it's name.
 	 * 
 	 * @param src the name of the bundle (usually it's FQN classname).
 	 * @param locale the locale.
 	 * @return the bundle, <tt>null</tt> if not found.
 	 */
 	private Resource findResourceBundle(String src, Locale locale) {
-		return resourceLoader.getResource(src, locale, resourceClassLoader);
+		return resourceLoader.getResource(src, locale);
 	}
 
 	public void clearResourceBundlesCache() {

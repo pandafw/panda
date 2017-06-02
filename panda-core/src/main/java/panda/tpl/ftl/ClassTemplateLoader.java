@@ -38,6 +38,6 @@ public class ClassTemplateLoader extends URLTemplateLoader {
 		if (name.startsWith("/")) {
 			name = name.substring(1);
 		}
-		return ClassLoaders.getResourceAsURL(path + name, getClass());
+		return ClassLoaders.getResourceAsURL(path + name, getClass().getClassLoader());
 	}
 }
