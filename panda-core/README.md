@@ -43,6 +43,7 @@ Panda use the following software packages:
 | Commons IO          | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-io/          |
 | Commons Lang        | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-lang/        |
 | Commons Net         | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://commons.apache.org/proper/commons-net/         |
+| java-utils-mail-dkim| https://github.com/markenwerk/java-utils-mail-dkim/blob/master/LICENSE | https://github.com/markenwerk/java-utils-mail-dkim |
 | jChatdet            | [Mozilla](https://www.mozilla.org/en-US/MPL/)                 | https://github.com/vidoss/jchardet                     |
 | Nutz                | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://nutzam.com/                                    |
 | TxtMark             | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)      | https://github.com/rjeschke/txtmark                    |

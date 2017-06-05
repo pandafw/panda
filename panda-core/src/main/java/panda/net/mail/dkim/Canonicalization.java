@@ -17,11 +17,7 @@ public enum Canonicalization {
 		public String canonicalizeBody(String body) {
 			// Remove trailing empty lines ...
 			body = Strings.stripEnd(body, "\r\n");
-			if (Strings.isEmpty(body)) {
-				return "\r\n";
-			}
-
-			return body;
+			return body + "\r\n";
 		}
 	},
 
@@ -29,9 +25,48 @@ public enum Canonicalization {
 	 * The 'relaxed' canonicalization algorithm.
 	 */
 	RELAXED {
+		private String canonicalize(String s, boolean body) {
+			if (Strings.isEmpty(s)) {
+				return s;
+			}
+			
+			StringBuilder sb = new StringBuilder();
+			
+			// Reduces all sequences of WSP within a line to a single SP character
+			boolean sp = false;
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (c == ' ' || c == '\t' || c == '\u000B' || c == '\u000C') {
+					sp = true;
+				}
+				else if (sp) {
+					sp = false;
+					sb.append(' ').append(c);
+				}
+				else {
+					sb.append(c);
+				}
+			}
+			
+			// Remove trailing empty lines
+			int e = sb.length() - 1;
+			for (; e >= 0; e--) {
+				char c = sb.charAt(e);
+				if (c != '\r' && c != '\n') {
+					break;
+				}
+			}
+
+			sb.setLength(e + 1);
+			if (body) {
+				sb.append("\r\n");
+			}
+			return sb.toString();
+		}
+		
 		public String canonicalizeHeader(String name, String value) {
 			name = name.trim().toLowerCase();
-			value = value.replaceAll("\\s+", " ").trim();
+			value = canonicalize(value, false).trim();
 			return name + ": " + value;
 		}
 
@@ -40,15 +75,7 @@ public enum Canonicalization {
 				return "\r\n";
 			}
 
-			body = body.replaceAll("[ \\t\\x0B\\f]+", " ");
-			body = body.replaceAll(" \r\n", "\r\n");
-
-			// Remove trailing empty lines ...
-			body = Strings.stripEnd(body, "\r\n");
-			if (Strings.isEmpty(body)) {
-				return "\r\n";
-			}
-
+			body = canonicalize(body, true);
 			return body;
 		}
 	};
