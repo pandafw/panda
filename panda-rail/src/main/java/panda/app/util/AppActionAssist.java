@@ -28,7 +28,7 @@ import panda.lang.time.DateTimes;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.filter.SorterPropertyFilter;
-import panda.mvc.util.AccessControler;
+import panda.mvc.util.AccessHandler;
 import panda.mvc.util.ActionAssist;
 import panda.mvc.util.MvcURLBuilder;
 import panda.mvc.util.StateProvider;
@@ -38,7 +38,7 @@ import freemarker.template.TemplateException;
 
 
 @IocBean(type=ActionAssist.class, scope=Scope.REQUEST)
-public class AppActionAssist extends ActionAssist implements AccessControler {
+public class AppActionAssist extends ActionAssist implements AccessHandler {
 	@IocInject
 	protected AppSettings settings;
 

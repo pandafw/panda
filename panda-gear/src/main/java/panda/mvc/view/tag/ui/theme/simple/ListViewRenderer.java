@@ -19,7 +19,7 @@ import panda.lang.Strings;
 import panda.mvc.Mvcs;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Queryer;
-import panda.mvc.util.AccessControler;
+import panda.mvc.util.AccessHandler;
 import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Escapes;
 import panda.mvc.view.tag.ListColumn;
@@ -46,7 +46,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	// filters define list
 	private Set<String> fsdefines = new HashSet<String>();
 	
-	private AccessControler controler;
+	private AccessHandler accessor;
 	
 	private Map<String, Map> codemaps = new HashMap<String, Map>();
 
@@ -55,7 +55,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 
 	private void initVars() {
-		controler = context.getAction() instanceof AccessControler ? (AccessControler)context.getAction() : null;
+		accessor = context.getAction() instanceof AccessHandler ? (AccessHandler)context.getAction() : null;
 
 		id = tag.getId();
 
@@ -621,9 +621,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 	}
 	
 	private boolean writeAlink(String cls, Object d, ItemLink link) throws IOException {
-		if (controler != null) {
+		if (accessor != null) {
 			if (Strings.isNotEmpty(link.action)) {
-				if (!controler.canAccessData(link.action, d)) {
+				if (!accessor.canAccessData(link.action, d)) {
 					return false;
 				}
 			}

@@ -1,7 +1,7 @@
 package panda.mvc.util;
 
 
-public interface AccessControler {
+public interface AccessHandler {
 	/**
 	 * canDataAccess
 	 * @param action action
