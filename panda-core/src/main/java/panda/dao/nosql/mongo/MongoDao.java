@@ -983,7 +983,7 @@ public class MongoDao extends AbstractDao {
 					ef = eid;
 				}
 				else {
-					ef = en.getField(fn);
+					ef = en.getColumn(fn);
 					if (ef == null || ef.isNotPersistent() || query.shouldExclude(ef.getName())) {
 						continue;
 					}

@@ -33,7 +33,7 @@ public class MongoDaoTest extends DaoTestCase {
 			return new MongoDaoClient(url);
 		}
 		catch (Exception e) {
-			log.warn("Failed to connect " + url + "\n" + e.getMessage());
+			log.warn("Failed to connect " + url, e);
 			return null;
 		}
 	}

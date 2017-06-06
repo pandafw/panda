@@ -8,6 +8,8 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import panda.dao.Dao;
+import panda.dao.DaoClient;
 import panda.dao.entity.Klass;
 import panda.dao.entity.Score;
 import panda.dao.entity.Student;
@@ -529,28 +531,6 @@ public abstract class DaoTestCase {
 
 		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
 		q.in("name", "T2", "T3").excludeAll().include("memo");
-		
-		Assert.assertEquals(expect.size(), dao.updates(t, q));
-		
-		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
-		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
-	}
-
-	protected String concatSql(String a, String b) {
-		return "CONCAT(" + a + ", " + b + ")";
-	}
-
-	@Test
-	public void testUpdatesColumnByQuery() {
-		List<Teacher> expect = Teacher.creates(2, 3);
-		expect.get(0).setMemo(expect.get(0).getMemo() + "+u");
-		expect.get(1).setMemo(expect.get(1).getMemo() + "+u");
-
-		Teacher t = new Teacher();
-		t.setMemo("u");
-
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
-		q.in("name", "T2", "T3").excludeAll().column("memo", concatSql("memo", "'+u'"));
 		
 		Assert.assertEquals(expect.size(), dao.updates(t, q));
 		

@@ -38,6 +38,7 @@ public class MongoDaoClient extends DaoClient {
 		mcs = new ConcurrentHashMap<Class<?>, MongoConverter>();
 	}
 
+	@SuppressWarnings("deprecation")
 	public DB getDb() {
 		return mongo.getDB(mcu.getDatabase());
 	}

@@ -337,7 +337,7 @@ public class GaeDao extends AbstractDao {
 			Map<String, Object> eps = ge.getProperties();
 			for (Entry<String, Object> e : eps.entrySet()) {
 				String fn = e.getKey();
-				EntityField ef = entity.getField(fn);
+				EntityField ef = entity.getColumn(fn);
 				if (ef == null || ef.isNotPersistent() || query.shouldExclude(ef.getName())) {
 					continue;
 				}
