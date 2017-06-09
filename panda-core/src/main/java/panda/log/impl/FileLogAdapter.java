@@ -46,7 +46,8 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	
 	protected RollingCalendar rc;
 	
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new FileLog(this, name);
 	}
 

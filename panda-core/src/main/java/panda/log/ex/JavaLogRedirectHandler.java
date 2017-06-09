@@ -12,15 +12,14 @@ import panda.log.LogLevel;
 import panda.log.LogLog;
 import panda.log.Logs;
 
-public class JavaLogHandler extends Handler {
+public class JavaLogRedirectHandler extends Handler {
 	public static void redirect() {
-		String CONFIG = "handlers = " + JavaLogHandler.class.getName() 
-				+ "\n.level = FINEST";
+		String CONFIG = "handlers = " + JavaLogRedirectHandler.class.getName() + "\n.level = FINEST";
 
 		try {
 			LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(CONFIG.getBytes()));
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			LogLog.error("Failed to redirect Java Logging", e);
 		}
 	}

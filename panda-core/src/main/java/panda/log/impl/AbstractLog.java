@@ -72,35 +72,39 @@ public abstract class AbstractLog implements Log {
 	}
 
 	protected abstract void write(LogEvent event);
+
+	protected boolean isLogLevelEnabled(LogLevel level) {
+		return this.level.isLessOrEqual(level);
+	}
 	
 	@Override
 	public boolean isFatalEnabled() {
-		return level.isLessOrEqual(LogLevel.FATAL);
+		return isLogLevelEnabled(LogLevel.FATAL);
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
-		return level.isLessOrEqual(LogLevel.ERROR);
+		return isLogLevelEnabled(LogLevel.ERROR);
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
-		return level.isLessOrEqual(LogLevel.WARN);
+		return isLogLevelEnabled(LogLevel.WARN);
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
-		return level.isLessOrEqual(LogLevel.INFO);
+		return isLogLevelEnabled(LogLevel.INFO);
 	}
 
 	@Override
 	public boolean isDebugEnabled() {
-		return level.isLessOrEqual(LogLevel.DEBUG);
+		return isLogLevelEnabled(LogLevel.DEBUG);
 	}
 
 	@Override
 	public boolean isTraceEnabled() {
-		return level.isLessOrEqual(LogLevel.TRACE);
+		return isLogLevelEnabled(LogLevel.TRACE);
 	}
 	
 	@Override

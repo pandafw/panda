@@ -53,7 +53,8 @@ public class LogCatAdapter extends AbstractLogAdapter {
 		this.tag = Strings.left(tag, TAG_SIZE);
 	}
 
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new LogCatLog(this, name);
 	}
 

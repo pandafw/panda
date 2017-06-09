@@ -18,6 +18,10 @@ public class LogTest {
 		logger.info("in");
 		logger.warning("wn");
 		logger.log(Level.SEVERE, "er", new Exception("ex"));
+		
+		
+		Log log2 = Logs.getLog("panda.log.test.A");
+		log2.debug("this is a");
 	}
 
 }

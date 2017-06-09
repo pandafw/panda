@@ -4,7 +4,8 @@ import panda.log.Log;
 
 
 public class ConsoleLogAdapter extends AbstractLogAdapter {
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new ConsoleLog(name, threshold, format);
 	}
 }

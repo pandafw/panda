@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import panda.lang.Classes;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogAdapter;
 import panda.log.LogEvent;
@@ -22,13 +23,17 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 	public void init(String name, Properties props) {
 		super.init(name, props);
 		
+		if (Strings.isEmpty(name)) {
+			setProperties("panda.", props);
+		}
+
 		Map<String, LogAdapter> as = new LinkedHashMap<String, LogAdapter>(adapters.size());
 		for (Entry<String, LogAdapter> en : adapters.entrySet()) {
 			String an = en.getKey();
 			LogAdapter adapter = en.getValue();
 			try {
 				adapter.init(an, props);
-				adapter.getLogger("panda");
+				adapter.getLog("panda");
 				as.put(an, adapter);
 			}
 			catch (Throwable e) {
@@ -40,8 +45,8 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 
 	@Override
 	protected void setProperty(String name, String value) {
-		if (name.startsWith("adapter.")) {
-			name = name.substring("adapter.".length());
+		if (name.startsWith("logger.")) {
+			name = name.substring("logger.".length());
 			addAdapter(name, value);
 		}
 		else {
@@ -59,11 +64,15 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 		}
 	}
 
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		List<Log> logs = new ArrayList<Log>(adapters.size());
 		for (LogAdapter a : adapters.values()) {
 			try {
-				logs.add(a.getLogger(name));
+				Log l = a.getLog(name);
+				if (!(l instanceof NopLog)) {
+					logs.add(l);
+				}
 			}
 			catch (Throwable e) {
 				LogLog.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
@@ -72,6 +81,9 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 
 		if (logs.isEmpty()) {
 			return new ConsoleLog(name, threshold);
+		}
+		if (logs.size() == 1) {
+			return logs.get(0);
 		}
 		return new ComboLog(name, threshold, logs.toArray(new Log[logs.size()]));
 	}

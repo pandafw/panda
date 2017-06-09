@@ -9,7 +9,8 @@ import panda.log.LogLevel;
 
 public class JavaLogAdapter extends AbstractLogAdapter {
 
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new JavaLog(this, name);
 	}
 

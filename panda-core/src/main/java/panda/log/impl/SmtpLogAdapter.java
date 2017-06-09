@@ -59,7 +59,8 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 
 	private MailClient client;
 
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new SmtpLog(this, name);
 	}
 

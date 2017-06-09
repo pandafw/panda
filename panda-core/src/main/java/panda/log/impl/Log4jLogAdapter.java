@@ -1,36 +1,29 @@
 package panda.log.impl;
 
-import java.util.Properties;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import panda.log.Log;
-import panda.log.LogAdapter;
 import panda.log.LogEvent;
 import panda.log.LogLevel;
 
 /**
  * Apache log4j adapter
  */
-public class Log4jLogAdapter implements LogAdapter {
+public class Log4jLogAdapter extends AbstractLogAdapter {
 	@Override
-	public void init(String name, Properties props) {
-	}
-	
-	@Override
-	public Log getLogger(String name) {
-		return new Log4JLogger(name);
+	protected Log getLogger(String name) {
+		return new Log4JLogger(name, threshold);
 	}
 
 	private static class Log4JLogger extends AbstractLog {
 		private Logger logger;
 
-		Log4JLogger(String className) {
-			super(className, null);
+		Log4JLogger(String className, LogLevel level) {
+			super(className, level);
 			
 			logger = Logger.getLogger(className);
-			
+
 			if (logger.isEnabledFor(Level.TRACE)) {
 				level = LogLevel.TRACE;
 			}
@@ -51,6 +44,10 @@ public class Log4jLogAdapter implements LogAdapter {
 			}
 			else {
 				level = LogLevel.TRACE;
+			}
+
+			if (this.level.isLessOrEqual(level)) {
+				this.level = level;
 			}
 		}
 

@@ -44,8 +44,8 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 	/** read timeout */
 	protected int readTimeout = 30000;
 
-
-	public Log getLogger(String name) {
+	@Override
+	protected Log getLogger(String name) {
 		return new SlackLog(this, name);
 	}
 

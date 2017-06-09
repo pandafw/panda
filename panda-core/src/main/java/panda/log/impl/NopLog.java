@@ -11,10 +11,12 @@ import panda.log.LogLevel;
  * log nothing
  */
 public class NopLog implements Log, LogAdapter {
+	public static final NopLog INSTANCE = new NopLog();
+	
 	public void init(String name, Properties props) {
 	}
 	
-	public Log getLogger(String name) {
+	public Log getLog(String name) {
 		return this;
 	}
 	
