@@ -2,7 +2,7 @@
 #form
 #form-label-class=col-sm-3
 #form-input-class=col-sm-9
-form-load-mask=false
+#form-load-mask=false
 
 #cookie
 #cookie-state-domain=

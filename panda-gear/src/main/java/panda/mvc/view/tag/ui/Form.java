@@ -82,7 +82,7 @@ public class Form extends UIBean {
 		}
 		
 		if (loadmask == null) {
-			loadmask = context.getText().getTextAsBoolean("form-load-mask", false);
+			loadmask = context.getText().getTextAsBoolean("form-load-mask");
 		}
 		
 		if (labelClass == null) {
