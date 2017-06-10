@@ -214,25 +214,35 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 }
 
 /* LOADER */
-.p-loader-squares-circle {
-	background: url("../img/loader/squares-circle.gif") center center no-repeat;
-	width: 31px;
-	height: 31px;
+.p-loader-fading-squares {
+	background: url("../img/loader/fading-squares.gif") center center no-repeat;
+	width: 160px;
+	height: 24px;
+}
+.p-loader-fading-balls {
+	background: url("../img/loader/fading-balls.gif") center center no-repeat;
+	width: 64px;
+	height: 64px;
+}
+.p-loader-fountain {
+	background: url("../img/loader/fountain.gif") center center no-repeat;
+	width: 160px;
+	height: 20px;
 }
 .p-loader-snake {
 	background: url("../img/loader/snake.gif") center center no-repeat;
 	width: 16px;
 	height: 16px;
 }
-.p-loader-big-snake {
-	background: url("../img/loader/big-snake.gif") center center no-repeat;
+.p-loader-snake-big {
+	background: url("../img/loader/snake-big.gif") center center no-repeat;
 	width: 24px;
 	height: 24px;
 }
-.p-loader-large-snake {
-	background: url("../img/loader/large-snake.gif") center center no-repeat;
-	width: 48px;
-	height: 48px;
+.p-loader-squares-circle {
+	background: url("../img/loader/squares-circle.gif") center center no-repeat;
+	width: 31px;
+	height: 31px;
 }
 
 /* background-image */
@@ -243,6 +253,15 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	background-image: url("../img/magnifier-32.png");
 }
 
+/* ui-loadmask hack */
+.ui-loadmask {
+	background: url('../img/loader/fountain.gif') no-repeat 0 0;
+	width: 160px;
+	height: 20px;
+}
+.ui-loadmask .ui-loadmask-msg {
+	margin: -20px 0 0 0;
+}
 /*--------------------------------------------------
  * section
 --------------------------------------------------*/

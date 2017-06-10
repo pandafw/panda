@@ -28,7 +28,7 @@ function s_preload() {
 	$('body').append(
 		'<div id="preload" class="p-dispear">'
 			+ '<div class="ui-loadmask"></div>'
-			+ '<div class="p-loader-large-snake"></div>'
+			+ '<div class="p-loader-fountain"></div>'
 		+ '</div>');
 }
 
@@ -170,7 +170,7 @@ function sl_submit(id) {
 		d[d.length] = { name: '__inner', value: 'true' };
 		
 		var $p = $i.parent();
-		$p.loadmask({ cssClass: 'p-loader-large-snake' });
+		$p.loadmask({ cssClass: 'p-loader-fountain' });
 		$p.load($f.attr('action'), d, function() {
 				$p.unloadmask();
 			});
@@ -183,7 +183,7 @@ function sl_submit(id) {
 
 function s_loadmask() {
 	$('body').loadmask({
-		cssClass: 'p-loader-large-snake',
+		cssClass: 'p-loader-fountain',
 		mask: false,
 		window: true
 	});

@@ -1,8 +1,8 @@
 .ui-loadmask-mask {
 	background-color: #CCC;
-	-moz-opacity: 0.2;
-	opacity: .2;
-	filter: alpha(opacity=20);
+	-moz-opacity: 0.1;
+	opacity: .1;
+	filter: alpha(opacity=10);
 	position: absolute;
 	top: 0;
 	left: 0;
