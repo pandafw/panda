@@ -111,7 +111,7 @@ public class XmlBinderTest {
 		Assert.assertEquals("12", Xmls.fromXml("<doc>12</doc>", String.class));
 
 		Assert.assertEquals("<doc>34</doc>", Xmls.toXml(34));
-		Assert.assertEquals(34, Xmls.fromXml("<doc>34</doc>", int.class));
+		Assert.assertEquals(new Integer(34), (Integer)Xmls.fromXml("<doc>34</doc>", int.class));
 	}
 
 	@Test

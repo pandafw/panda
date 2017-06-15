@@ -119,7 +119,7 @@ public class JsonBinderTest {
 		Assert.assertEquals("12", Jsons.fromJson("'12'", String.class));
 
 		Assert.assertEquals("34", Jsons.toJson(34));
-		Assert.assertEquals(34, Jsons.fromJson("34", int.class));
+		Assert.assertEquals(new Integer(34), (Integer)Jsons.fromJson("34", int.class));
 	}
 	
 	@Test
