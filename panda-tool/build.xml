@@ -16,12 +16,13 @@
 		<copy file="${src.dir}/main/resources/panda/tool/codegen/Module.xsd" tofile="../docs/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
 	</target>
 
+	<target name="build" depends="clean, cp-res, n2a, codegen-xsd-deploy, javac, javadoc" description="Build the project"/>
+	
 	<!-- release -->
 	<target name="release" description="Release the project">
 		<antcall target="ivy-resolve"/>
 		<antcall target="build"/>
 		<antcall target="dist"/>
 		<antcall target="mvn-local-deploy"/>
-		<antcall target="codegen-xsd-deploy"/>
 	</target>
 </project>
