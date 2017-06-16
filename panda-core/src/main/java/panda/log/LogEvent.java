@@ -38,11 +38,11 @@ public class LogEvent {
 	}
 
 	public LogEvent(String fqcn, String name, LogLevel level, String message) {
-		this(fqcn, name, level, message, (Throwable)null);
+		this(fqcn, name, level, message, (Object[])null);
 	}
 
 	public LogEvent(String fqcn, String name, LogLevel level, String message, Throwable error) {
-		this(fqcn, name, level, message, new Object[] { error });
+		this(fqcn, name, level, message, error == null ? (Object[])null : new Object[] { error });
 	}
 
 	public LogEvent(String fqcn, String name, LogLevel level, String format, Object... args) {
