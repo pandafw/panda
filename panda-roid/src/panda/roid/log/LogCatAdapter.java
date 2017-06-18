@@ -8,11 +8,10 @@ import panda.log.LogEvent;
 import panda.log.LogLevel;
 import panda.log.impl.AbstractLog;
 import panda.log.impl.AbstractLogAdapter;
+import panda.roid.Androids;
 
 
 public class LogCatAdapter extends AbstractLogAdapter {
-	private static final int TAG_SIZE = 23;
-
 	public static String TAG_NAME = "PANDA";
 	
 	protected void write(LogEvent event) {
@@ -50,7 +49,7 @@ public class LogCatAdapter extends AbstractLogAdapter {
 			LogLog.error("Empty TAG");
 			return;
 		}
-		this.tag = Strings.left(tag, TAG_SIZE);
+		this.tag = Strings.left(tag, Androids.LOGTAG_MAXLENGTH);
 	}
 
 	@Override

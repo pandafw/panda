@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Environment;
 
 public class Androids {
+	public static final int LOGTAG_MAXLENGTH = 23;
+
 	private static File internalStorageDirectory;
 	private static File externalStorageDirectory;
 	
