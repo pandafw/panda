@@ -87,6 +87,9 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 			else if (value instanceof EmailAddress) {
 				a.append(value.toString());
 			}
+			else if (value instanceof Enum) {
+				a.append(value.toString());
+			}
 			else {
 				// set error for unknown types
 				castError(value, cc);
