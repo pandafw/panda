@@ -40,6 +40,7 @@ public class JdbcSqlResultSet<T> implements SqlResultSet<T> {
 		protected String jdbcType;
 		protected String propertyName;
 		protected Type propertyType;
+		@SuppressWarnings("rawtypes")
 		protected TypeAdapter typeAdapter;
 	}
 

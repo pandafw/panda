@@ -95,7 +95,7 @@ public abstract class AbstractDao implements Dao {
 		Asserts.notNull(query, "The query is null");
 	}
 	
-	protected void assertCallback(DataHandler callback) {
+	protected void assertCallback(DataHandler<?> callback) {
 		Asserts.notNull(callback, "The data handler is null");
 	}
 	
@@ -103,7 +103,7 @@ public abstract class AbstractDao implements Dao {
 		Asserts.notNull(entity, "The entity of [%s] is undefined", type.toString());
 	}
 	
-	protected void assertCollection(Collection col) {
+	protected void assertCollection(Collection<?> col) {
 		Asserts.notNull(col, "The collection is null");
 	}
 	
@@ -118,7 +118,7 @@ public abstract class AbstractDao implements Dao {
 	@SuppressWarnings("unchecked")
 	protected <T> T createEntityData(Entity<T> en) throws DaoException {
 		try {
-			return en == null ? (T)(new HashMap()) : en.getType().newInstance();
+			return en == null ? (T)(new HashMap<String, Object>()) : en.getType().newInstance();
 		}
 		catch (Exception e) {
 			throw new DaoException(e);
@@ -162,7 +162,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return the table name of query
 	 */
 	@Override
-	public String getTableName(Query query) {
+	public String getTableName(Query<?> query) {
 		return getDaoClient().getTableName(query);
 	}
 
@@ -470,7 +470,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) list
 	 */
 	@Override
-	public List<Map> select(String table) {
+	public List<Map<String, ?>> select(String table) {
 		return selectByQuery(createQuery(table));
 	}
 
@@ -528,7 +528,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return callback processed count
 	 */
 	@Override
-	public long select(String table, DataHandler<Map> callback) {
+	public long select(String table, DataHandler<Map<String, ?>> callback) {
 		return selectByQuery(createQuery(table), callback);
 	}
 
@@ -604,7 +604,7 @@ public abstract class AbstractDao implements Dao {
 		return collByQuery(coll, cloneQuery(query), prop);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Collection<?> collByQuery(Collection<?> coll, GenericQuery<?> query, String prop) {
 		query.includeOnly(prop);
 
@@ -770,7 +770,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) map
 	 */
 	@Override
-	public Map<?, Map> map(String table, String keyProp) {
+	public Map<?, Map<String, ?>> map(String table, String keyProp) {
 		return mapByQuery(createQuery(table), keyProp);
 	}
 
@@ -866,7 +866,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record map
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Map<?, ?> mapByQuery(GenericQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 
@@ -911,7 +911,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record(a map) group
 	 */
 	@Override
-	public Map<?, List<Map>> group(String table, String keyProp) {
+	public Map<?, List<Map<String, ?>>> group(String table, String keyProp) {
 		return groupByQuery(createQuery(table), keyProp);
 	}
 
@@ -939,7 +939,7 @@ public abstract class AbstractDao implements Dao {
 	protected <T> Map<?, List<T>> groupByQuery(GenericQuery<T> query, String keyProp) {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		Map<?, List<T>> map = new HashMap<Object, List<T>>();
+		Map<Object, List<T>> map = new HashMap<Object, List<T>>();
 		selectByQuery(query, new GroupDataHandler<T>(bh, map, keyProp));
 		return map;
 	}
@@ -1007,7 +1007,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record group
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<?, List<?>> groupByQuery(GenericQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 		
@@ -1032,7 +1032,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery query = createQuery(entity);
+		GenericQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
 
 		return deletes(query);
@@ -1068,7 +1068,7 @@ public abstract class AbstractDao implements Dao {
 
 		assertTable(entity);
 
-		GenericQuery query = createQuery(entity);
+		GenericQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, keys);
 		
 		return deletesByQuery(query);
@@ -1320,7 +1320,6 @@ public abstract class AbstractDao implements Dao {
 	 * @param fields the fields to update
 	 * @return updated count
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public int update(Object obj, Collection<String> fields) {
 		assertObject(obj);
@@ -1351,7 +1350,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery query = createQuery(entity);
+		GenericQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
 		excludeNullProperties(query, obj);
 
@@ -1465,7 +1464,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery gq = cloneQuery(query);
+		GenericQuery<?> gq = cloneQuery(query);
 		excludeNullProperties(gq, obj);
 
 		return updatesByQuery(obj, gq, Integer.MAX_VALUE);
@@ -1546,11 +1545,11 @@ public abstract class AbstractDao implements Dao {
 		return new GenericQuery<T>(entity);
 	}
 	
-	protected GenericQuery<Map> createQuery(String table) {
-		return new GenericQuery<Map>(table);
+	protected GenericQuery<Map<String, ?>> createQuery(String table) {
+		return new GenericQuery<Map<String, ?>>(table);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected <T> GenericQuery<T> cloneQuery(Query<T> query) {
 		assertQuery(query);
 		GenericQuery<T> q = new GenericQuery<T>(query);
@@ -1563,7 +1562,7 @@ public abstract class AbstractDao implements Dao {
 				Join join = en.getValue();
 				Query<?> jq = join.getQuery();
 				if (jq.getEntity() == null && jq.getType() != null) {
-					GenericQuery gq = new GenericQuery(jq);
+					GenericQuery<?> gq = new GenericQuery(jq);
 					Entity entity = getEntity(gq.getType());
 					gq.setEntity(entity);
 
@@ -1581,7 +1580,7 @@ public abstract class AbstractDao implements Dao {
 		query.equalToPrimaryKeys(keys);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void excludeNullProperties(GenericQuery<?> query, Object obj) {
 		Entity<?> entity = query.getEntity();
 		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());

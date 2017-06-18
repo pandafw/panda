@@ -507,6 +507,7 @@ public abstract class Arrays {
 	 * @param items the varargs array items, null allowed
 	 * @return the array, not null unless a null array is passed in
 	 */
+	@SafeVarargs
 	public static <T> T[] toArray(final T... items) {
 		return items;
 	}
@@ -4089,7 +4090,8 @@ public abstract class Arrays {
 		if (length == 0) {
 			return new Object[0];
 		}
-		Class wrapperType = Array.get(source, 0).getClass();
+
+		Class<?> wrapperType = Array.get(source, 0).getClass();
 		Object[] newArray = (Object[])Array.newInstance(wrapperType, length);
 		for (int i = 0; i < length; i++) {
 			newArray[i] = Array.get(source, i);
@@ -4342,6 +4344,7 @@ public abstract class Arrays {
 	 *         the type is the same as the second array.
 	 * @throws IllegalArgumentException if the array types are incompatible
 	 */
+	@SafeVarargs
 	public static <T> T[] addAll(final T[] array1, final T... array2) {
 		if (array1 == null) {
 			return clone(array2);
@@ -5979,6 +5982,7 @@ public abstract class Arrays {
 	 * @return A new array containing the existing elements except the earliest-encountered
 	 *         occurrences of the specified elements.
 	 */
+	@SafeVarargs
 	public static <T> T[] removeElements(final T[] array, final T... values) {
 		if (isEmpty(array) || isEmpty(values)) {
 			return clone(array);
@@ -6826,7 +6830,7 @@ public abstract class Arrays {
 	}
 
 	public static Object newInstance(Type componentType, int size) {
-		Class componentClazz = Types.getRawType(componentType);
+		Class<?> componentClazz = Types.getRawType(componentType);
 		return Array.newInstance(componentClazz, size);
 	}
 
@@ -8613,6 +8617,7 @@ public abstract class Arrays {
 	 * @param a the array by which the list will be backed
 	 * @return a list view of the specified array
 	 */
+	@SafeVarargs
 	public static <T> List<T> asList(T... a) {
 		if (a == null) {
 			return null;
@@ -8626,6 +8631,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a list
 	 */
+	@SafeVarargs
 	public static <T> List<T> toList(T... a) {
 		if (a == null) {
 			return null;
@@ -8644,6 +8650,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a set
 	 */
+	@SafeVarargs
 	public static <T> Set<T> toSet(T... a) {
 		if (a == null) {
 			return null;
@@ -8662,6 +8669,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a set
 	 */
+	@SafeVarargs
 	public static <T> Set<T> toLinkedSet(T... a) {
 		if (a == null) {
 			return null;
@@ -8680,6 +8688,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a set
 	 */
+	@SafeVarargs
 	public static <T> Set<T> toTreeSet(T... a) {
 		if (a == null) {
 			return null;
@@ -8699,6 +8708,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a map
 	 */
+	@SafeVarargs
 	public static <T> Map<T, T> toMap(T... a) {
 		if (a == null) {
 			return null;
@@ -8721,6 +8731,7 @@ public abstract class Arrays {
 	 * @param a the array
 	 * @return a set
 	 */
+	@SafeVarargs
 	public static <T> LinkedHashMap<T, T> toLinkedMap(T... a) {
 		if (a == null) {
 			return null;

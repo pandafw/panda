@@ -20,6 +20,7 @@ public class JdbcSqlParameter {
 	private final Integer scale;
 	private final Object value;
 	private final Mode mode;
+	@SuppressWarnings("rawtypes")
 	private final TypeAdapter typeAdapter;
 
 	/**
@@ -83,7 +84,6 @@ public class JdbcSqlParameter {
 	 * @param mode mode
 	 * @param typeAdapters typeAdapters
 	 */
-	@SuppressWarnings("unchecked")
 	public JdbcSqlParameter(String name, Object value, String jdbcType, Integer scale, String mode, TypeAdapters typeAdapters) {
 		this.name = name;
 		this.value = value;
@@ -110,7 +110,7 @@ public class JdbcSqlParameter {
 			this.mode = Mode.IN;
 		}
 		
-		Class parameterValueClass = value == null ? null : value.getClass(); 
+		Class<?> parameterValueClass = value == null ? null : value.getClass(); 
 		this.typeAdapter = typeAdapters.getTypeAdapter(parameterValueClass, jdbcType);
 		if (this.typeAdapter == null) {
 			throw new IllegalArgumentException("Illegal parameter '" + name + "': unknown TypeAdapter [" + parameterValueClass + ", " + jdbcType + "].");
@@ -136,6 +136,7 @@ public class JdbcSqlParameter {
 	/**
 	 * @return the TypeAdapter of the parameter
 	 */
+	@SuppressWarnings("rawtypes")
 	public TypeAdapter getTypeAdapter() {
 		return typeAdapter;
 	}

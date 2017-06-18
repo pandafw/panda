@@ -7,6 +7,7 @@ package panda.dao.query;
 /**
  * @param <E> query target type
  */
+@SuppressWarnings("rawtypes")
 public class StringCondition<E extends EntityQuery> extends ComparableCondition<E, String> {
 	/**
 	 * @param parent parent

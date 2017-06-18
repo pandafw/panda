@@ -229,7 +229,7 @@ public class Methods {
 	 * @param parameterTypes match these parameters - treat null as empty array
 	 * @return The value returned by the invoked method
 	 */
-	public static Object safeCall(Object object, String methodName, Object[] args, Class[] parameterTypes) {
+	public static Object safeCall(Object object, String methodName, Object[] args, Class<?>[] parameterTypes) {
 		try {
 			return invokeMethod(object, methodName, args, parameterTypes);
 		}

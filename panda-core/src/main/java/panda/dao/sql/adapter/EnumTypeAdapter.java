@@ -8,6 +8,7 @@ import java.sql.SQLException;
 /**
  * Enum implementation of TypeAdapter
  */
+@SuppressWarnings("rawtypes")
 public class EnumTypeAdapter implements TypeAdapter {
 
 	private Class type;

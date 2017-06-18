@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
+import panda.bind.adapter.CalendarAdapter;
 import panda.bind.adapter.DateAdapter;
 import panda.lang.Arrays;
 import panda.lang.Chars;
@@ -22,10 +23,7 @@ import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 
-/**
- * 
- *
- */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractSerializer extends AbstractBinder implements Serializer {
 	public static final int PRETTY_INDENT_FACTOR = 1;
 	
@@ -134,10 +132,13 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> SourceAdapter<T> getSourceAdapter(Class type) {
+	public <T> SourceAdapter<T> getSourceAdapter(Class<T> type) {
 		if (dateToMillis) {
-			if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
-				return DateAdapter.toMillis;
+			if (Date.class.isAssignableFrom(type)) {
+				return (SourceAdapter<T>)DateAdapter.toMillis;
+			}
+			if (Calendar.class.isAssignableFrom(type)) {
+				return (SourceAdapter<T>)CalendarAdapter.toMillis;
 			}
 		}
 		
@@ -145,7 +146,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 			return null;
 		}
 		
-		SourceAdapter<T> sa = sourceAdapters.get(type);
+		SourceAdapter sa = sourceAdapters.get(type);
 		if (sa != null) {
 			return sa;
 		}
@@ -158,7 +159,7 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 		return null;
 	}
 	
-	public void registerSourceAdapter(Class type, SourceAdapter sourceAdapter) {
+	public <T> void registerSourceAdapter(Class<T> type, SourceAdapter<T> sourceAdapter) {
 		sourceAdapters.put(type, sourceAdapter);
 	}
 	

@@ -118,7 +118,7 @@ public class DerbySqlExpert extends SqlExpert {
 	 * @see <a href="http://db.apache.org/derby/docs/10.10/ref/rrefsqlj41360.html">http://db.apache.org/derby/docs/10.10/ref/rrefsqlj41360.html</a>
 	 */
 	@Override
-	protected void limit(Sql sql, Query query, String alias) {
+	protected void limit(Sql sql, Query<?> query, String alias) {
 		if (query.getStart() > 0) {
 			sql.append(" OFFSET ").append(query.getStart()).append(" ROWS");
 		}

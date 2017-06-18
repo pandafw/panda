@@ -6,10 +6,6 @@ import java.util.List;
 import panda.bind.PropertyFilter;
 import panda.io.FileNames;
 
-/**
- * 
- *
- */
 public class WildcardPropertyFilter implements PropertyFilter {
 
 	private List<String> filterNames;

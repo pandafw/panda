@@ -116,7 +116,7 @@ public class CmdLineParser {
 		throw new CmdLineException("Invalid option " + a);
 	}
 	
-	protected void inject(Iterator it, Option opt, String a, Object v) throws CmdLineException {
+	protected void inject(Iterator<String> it, Option opt, String a, Object v) throws CmdLineException {
 		if (Strings.isEmpty(opt.arg())) {
 			v = true;
 		}

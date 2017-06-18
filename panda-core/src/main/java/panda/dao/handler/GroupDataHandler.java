@@ -14,6 +14,7 @@ import panda.lang.Asserts;
  * DataHandler for group data.
  * @param <T> data type
  */
+@SuppressWarnings("rawtypes")
 public class GroupDataHandler<T> implements DataHandler<T> {
 	private BeanHandler<T> bh;
 	private Map map;

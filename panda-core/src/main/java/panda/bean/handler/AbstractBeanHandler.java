@@ -11,7 +11,7 @@ import panda.lang.reflect.Types;
  * 
  * @param <T> class type
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class AbstractBeanHandler<T> extends AbstractPropertyHandler<T> implements BeanHandler<T> {
 	protected Beans beans;
 	protected Type type;

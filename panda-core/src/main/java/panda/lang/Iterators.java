@@ -11,6 +11,7 @@ import panda.lang.collection.KeyValue;
 /**
  * utility class for Iterator. 
  */
+@SuppressWarnings("rawtypes")
 public abstract class Iterators {
 	/**
 	 * Determine whether a given object can be made into an <code>Iterator</code>

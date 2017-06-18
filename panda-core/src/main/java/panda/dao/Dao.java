@@ -46,7 +46,7 @@ public interface Dao {
 	 * @param query query
 	 * @return the table name of query
 	 */
-	String getTableName(Query query);
+	String getTableName(Query<?> query);
 
 	/**
 	 * @param entity entity
@@ -237,7 +237,7 @@ public interface Dao {
 	 * @param table table name
 	 * @return record(a map) list
 	 */
-	List<Map> select(String table);
+	List<Map<String, ?>> select(String table);
 
 	/**
 	 * select records by the supplied query.
@@ -273,7 +273,7 @@ public interface Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	long select(String table, DataHandler<Map> callback);
+	long select(String table, DataHandler<Map<String, ?>> callback);
 
 	/**
 	 * select records by the supplied query.
@@ -428,7 +428,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record(a map) map
 	 */
-	Map<?, Map> map(String table, String keyProp);
+	Map<?, Map<String, ?>> map(String table, String keyProp);
 
 	/**
 	 * select records by the supplied query.
@@ -508,7 +508,7 @@ public interface Dao {
 	 * @param keyProp The property to be used as the key in the Map.
 	 * @return record(a map) group
 	 */
-	Map<?, List<Map>> group(String table, String keyProp);
+	Map<?, List<Map<String, ?>>> group(String table, String keyProp);
 
 	/**
 	 * select records by the supplied query.

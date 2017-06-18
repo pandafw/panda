@@ -88,6 +88,7 @@ public class XmlDeserializer extends AbstractDeserializer {
 			private String name;
 			private Object value;
 			private StringBuilder text;
+			@SuppressWarnings("rawtypes")
 			private BeanHandler beanh;
 			private int leaf = 0;
 		}

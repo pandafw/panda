@@ -4,8 +4,7 @@ import panda.cast.AbstractCastor;
 import panda.cast.CastContext;
 import panda.lang.Iterators;
 
-/**
- */
+@SuppressWarnings("rawtypes")
 public class IterableCastor extends AbstractCastor<Object, Iterable> {
 	public IterableCastor() {
 		super(Object.class, Iterable.class);

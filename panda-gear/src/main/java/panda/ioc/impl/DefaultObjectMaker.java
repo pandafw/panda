@@ -123,7 +123,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 		return dw;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> cls, IocMaking ing, IocObject iobj) {
 		// 为编织器设置事件触发器：创建时
 		if (null != iobj.getEvents()) {
@@ -158,7 +158,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 			dw.setCreator(new MethodCreator<Object>(m));
 		}
 		else {
-			Constructor c = Constructors.getConstructor(cls, args);
+			Constructor<?> c = Constructors.getConstructor(cls, args);
 			if (c == null) {
 				c = Constructors.getConstructor(cls, args.length);
 				if (c == null) {

@@ -1,8 +1,6 @@
 package panda.bean;
 
-/**
- * 
- */
+@SuppressWarnings("rawtypes")
 public class BeanAccessor {
 	private Object bean;
 	private BeanHandler handler;

@@ -107,13 +107,13 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	 * @throws IOException if an IO error occurred
 	 */
 	public void writeAll(List<?> allLines) throws IOException {
-		for (Iterator iter = allLines.iterator(); iter.hasNext();) {
+		for (Iterator<?> iter = allLines.iterator(); iter.hasNext();) {
 			Object nextLine = iter.next();
 			if (nextLine == null){
 				writeList(Collections.EMPTY_LIST);
 			}
 			else if (nextLine instanceof Collection) {
-				writeList((Collection)nextLine);
+				writeList((Collection<?>)nextLine);
 			}
 			else if (nextLine instanceof Object[]) {
 				writeArray((Object[])nextLine);
@@ -188,7 +188,7 @@ public class CsvWriter implements ListWriter, Closeable, Flushable {
 	@Override
 	public void writeList(Collection<?> list) throws IOException {
 		int i = 0;
-		for (Iterator it = list.iterator(); it.hasNext();) {
+		for (Iterator<?> it = list.iterator(); it.hasNext();) {
 			if (i != 0) {
 				writer.append(separator);
 			}

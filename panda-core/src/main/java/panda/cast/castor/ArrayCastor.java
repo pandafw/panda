@@ -52,7 +52,7 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected T castValueTo(S value, T target, CastContext context) {
 		if (value.getClass().isArray()) {
 			Type fType = value.getClass().getComponentType();
@@ -73,7 +73,7 @@ public class ArrayCastor<S, T> extends AbstractCastor<S, T> {
 			Castor conv = getCastor(context, fType, toComponentType);
 
 			int i = 0;
-			List list = new ArrayList();
+			List<Object> list = new ArrayList<Object>();
 			Iterator it = Iterators.asIterator(value);
 			while (it.hasNext()) {
 				Object v = it.next();

@@ -2,8 +2,7 @@ package panda.cast.castor;
 
 import panda.cast.CastContext;
 
-/**
- */
+@SuppressWarnings("rawtypes")
 public class EnumCastor extends AnySingleCastor<Enum> {
 	public EnumCastor(Class<?> toType) {
 		super(toType);

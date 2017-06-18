@@ -12,6 +12,7 @@ import panda.lang.reflect.Types;
  * 
  * @param <T> class type
  */
+@SuppressWarnings("rawtypes")
 public class CollectionBeanHandler<T extends Collection> extends AbstractArrayBeanHandler<T> {
 	protected Type elementType;
 	

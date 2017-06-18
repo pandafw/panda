@@ -69,9 +69,9 @@ public class JsonArray extends ArrayList<Object> {
 	 * 
 	 * @param collection A Collection.
 	 */
-	public JsonArray(Collection collection) {
+	public JsonArray(Collection<?> collection) {
 		if (collection != null) {
-			Iterator iter = collection.iterator();
+			Iterator<?> iter = collection.iterator();
 			while (iter.hasNext()) {
 				this.add(iter.next());
 			}
@@ -409,7 +409,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @param value A Collection value.
 	 * @return this.
 	 */
-	public JsonArray put(Collection value) {
+	public JsonArray put(Collection<?> value) {
 		this.put(new JsonArray(value));
 		return this;
 	}
@@ -467,7 +467,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @param value A Map value.
 	 * @return this.
 	 */
-	public JsonArray put(Map value) {
+	public JsonArray put(Map<?, ?> value) {
 		this.put(new JsonObject(value));
 		return this;
 	}
@@ -507,7 +507,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @return this.
 	 * @throws JsonException If the index is negative or if the value is not finite.
 	 */
-	public JsonArray put(int index, Collection value) throws JsonException {
+	public JsonArray put(int index, Collection<?> value) throws JsonException {
 		this.put(index, new JsonArray(value));
 		return this;
 	}
@@ -563,7 +563,7 @@ public class JsonArray extends ArrayList<Object> {
 	 * @return this.
 	 * @throws JsonException If the index is negative or if the the value is an invalid number.
 	 */
-	public JsonArray put(int index, Map value) throws JsonException {
+	public JsonArray put(int index, Map<?, ?> value) throws JsonException {
 		this.put(index, new JsonObject(value));
 		return this;
 	}

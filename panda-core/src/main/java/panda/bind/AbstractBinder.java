@@ -14,10 +14,7 @@ import panda.cast.Castors;
 import panda.lang.Arrays;
 import panda.lang.reflect.Types;
 
-/**
- * 
- *
- */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class AbstractBinder {
 	private Castors castors = Castors.i();
 
@@ -83,8 +80,7 @@ public abstract class AbstractBinder {
 	public Map<Type, PropertyFilter> getPropertyFilters() {
 		return propertyFilters;
 	}
-	@SuppressWarnings("unchecked")
-	public <T> PropertyFilter<T> getPropertyFilter(Type type) {
+	public PropertyFilter getPropertyFilter(Type type) {
 		return propertyFilters.get(type);
 	}
 	public void registerPropertyFilter(Type type, PropertyFilter propertyFilter) {
@@ -110,7 +106,6 @@ public abstract class AbstractBinder {
 		return castors.getCastor(fromType, toType);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected <T> T convertValue(Object value, Type toType) {
 		if (toType == null) {
 			return null;

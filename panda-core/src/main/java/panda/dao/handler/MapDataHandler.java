@@ -12,6 +12,7 @@ import panda.lang.Asserts;
  * DataHandler for save data to map
  * @param <T> data type
  */
+@SuppressWarnings("rawtypes")
 public class MapDataHandler<T> implements DataHandler<T> {
 	private Map map;
 	private String key;

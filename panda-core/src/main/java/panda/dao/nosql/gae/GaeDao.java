@@ -314,7 +314,7 @@ public class GaeDao extends AbstractDao {
 		return value;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void convertEntityToData(com.google.appengine.api.datastore.Entity ge, Object data,
 			Query<?> query) throws DaoException {
 
@@ -596,7 +596,7 @@ public class GaeDao extends AbstractDao {
 		return service.prepare(transaction, gq);
 	}
 
-	private FetchOptions getFetchOptions(Query q) {
+	private FetchOptions getFetchOptions(Query<?> q) {
 		FetchOptions fo = FetchOptions.Builder.withDefaults();
 		if (q.getStart() > 0) {
 			fo.offset((int)q.getStart());

@@ -182,6 +182,7 @@ public class ArraysTest {
 		assertEquals(0, array.length);
 	}
 
+	@SafeVarargs
 	private static <T> T[] toArrayPropagatingType(final T... items) {
 		return Arrays.toArray(items);
 	}

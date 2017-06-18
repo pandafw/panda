@@ -22,7 +22,8 @@ public class LRUMap<K,V> extends LinkedHashMap<K,V> implements Serializable {
 		this.maxEntries = maxEntries;
 	}
 
-	protected boolean removeEldestEntry(Map.Entry eldest) {
+	@Override
+	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
 		return ( size() > maxEntries );
 	}
 }

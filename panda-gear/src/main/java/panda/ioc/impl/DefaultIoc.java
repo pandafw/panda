@@ -101,7 +101,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 	protected DefaultIoc(ObjectMaker objMaker, IocLoader loader, IocContext context, String defaultScope, MirrorFactory mirrors) {
 		// register IocProxyBeanHandler
 		Beans beans = Beans.i();
-		beans.register(IocProxy.class, new IocProxyBeanHandler(beans, IocProxy.class));
+		beans.register(IocProxy.class, new IocProxyBeanHandler<IocProxy>(beans, IocProxy.class));
 
 		this.lock = new Object();
 		this.objMaker = objMaker;

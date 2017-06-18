@@ -28,6 +28,7 @@ import panda.vfs.local.LocalFileItem;
 /**
  * a factory class for TypeAdapter objects.
  */
+@SuppressWarnings("rawtypes")
 public class TypeAdapters {
 	private static TypeAdapters i = new TypeAdapters();
 	

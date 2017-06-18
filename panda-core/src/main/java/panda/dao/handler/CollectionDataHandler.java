@@ -12,6 +12,7 @@ import panda.lang.Asserts;
  * get the property value from the data, and add it to the collection 
  * @param <T> data type
  */
+@SuppressWarnings("rawtypes")
 public class CollectionDataHandler<T> implements DataHandler<T> {
 	private BeanHandler<T> bh;
 	private Collection coll;

@@ -110,7 +110,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 */
 	public JsonObject(Map<?,?> map) {
 		if (map != null) {
-			for (java.util.Map.Entry en : map.entrySet()) {
+			for (java.util.Map.Entry<?, ?> en : map.entrySet()) {
 				this.set(en.getKey().toString(), en.getValue());
 			}
 		}
@@ -376,7 +376,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * 
 	 * @return An iterator of the keys.
 	 */
-	public Iterator keys() {
+	public Iterator<String> keys() {
 		return this.keySet().iterator();
 	}
 
@@ -396,7 +396,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 */
 	public JsonArray names() {
 		JsonArray ja = new JsonArray();
-		Iterator keys = this.keys();
+		Iterator<String> keys = this.keys();
 		while (keys.hasNext()) {
 			ja.put(keys.next());
 		}
@@ -624,7 +624,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return this.
 	 * @throws JsonException if the value is invalid
 	 */
-	public JsonObject set(String key, Collection value) throws JsonException {
+	public JsonObject set(String key, Collection<?> value) throws JsonException {
 		this.put(key, new JsonArray(value));
 		return this;
 	}
@@ -690,7 +690,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return this.
 	 * @throws JsonException if the value is invalid
 	 */
-	public JsonObject set(String key, Map value) throws JsonException {
+	public JsonObject set(String key, Map<?, ?> value) throws JsonException {
 		this.put(key, new JsonObject(value));
 		return this;
 	}
@@ -760,13 +760,13 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 		}
 
 		if (object instanceof Collection) {
-			return new JsonArray((Collection)object);
+			return new JsonArray((Collection<?>)object);
 		}
 		if (object.getClass().isArray()) {
 			return new JsonArray(object);
 		}
 		if (object instanceof Map) {
-			return new JsonObject((Map)object);
+			return new JsonObject((Map<?, ?>)object);
 		}
 		
 		throw new JsonException("Invalid argument: " + object.getClass());

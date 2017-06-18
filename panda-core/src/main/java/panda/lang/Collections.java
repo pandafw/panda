@@ -27,9 +27,7 @@ import panda.lang.collection.CaseInsensitiveMap;
 import panda.lang.collection.CaseInsensitiveSet;
 import panda.lang.collection.SafeMap;
 
-/**
- */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class Collections {
 	/** Constant to avoid repeated object creation */
 	private static Integer INTEGER_ONE = new Integer(1);

@@ -17,12 +17,12 @@ public class Entities {
 		return i;
 	}
 
-	protected Map<Class<?>, Entity> entities;
+	protected Map<Class<?>, Entity<?>> entities;
 	protected Beans beans;
 	protected EntityMaker entityMaker;
 	
 	public Entities() {
-		entities = new ConcurrentHashMap<Class<?>, Entity>();
+		entities = new ConcurrentHashMap<Class<?>, Entity<?>>();
 		beans = Beans.i();
 		entityMaker = new AnnotationEntityMaker(this);
 	}
@@ -58,7 +58,7 @@ public class Entities {
 	/**
 	 * @return the entities
 	 */
-	public Map<Class<?>, Entity> getEntities() {
+	public Map<Class<?>, Entity<?>> getEntities() {
 		return Collections.unmodifiableMap(entities);
 	}
 
@@ -68,7 +68,7 @@ public class Entities {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Entity<T> getEntity(Class<T> type) {
-		Entity<T> entity = entities.get(type);
+		Entity<?> entity = entities.get(type);
 		if (entity == null) {
 			synchronized(this) {
 				entity = entities.get(type);
@@ -79,6 +79,6 @@ public class Entities {
 				}
 			}
 		}
-		return entity;
+		return (Entity<T>)entity;
 	}
 }

@@ -8,6 +8,7 @@ import panda.cast.Castor;
  * @param <S> source type
  * @param <T> target type
  */
+@SuppressWarnings("rawtypes")
 public class DirectCastor<S, T> implements Castor<S, T> {
 	public static DirectCastor INSTANCE = new DirectCastor();
 

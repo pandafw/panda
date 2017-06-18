@@ -305,8 +305,8 @@ public class BeanResourceMaker implements ResourceMaker {
 	 * load resources
 	 * @param resList resource list
 	 */
-	@SuppressWarnings("unchecked")
-	public void loadResources(List resList) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void loadResources(List<?> resList) {
 		Map<String, Map<String, Object>> res = new HashMap<String, Map<String, Object>>();
 
 		BundleKey lastBundle = null;

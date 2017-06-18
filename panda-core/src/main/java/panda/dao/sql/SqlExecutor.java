@@ -378,11 +378,11 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map<Object, T> selectMap(String sql, Class<T> resultClass, String keyPropertyName)
+	public <T> Map<Object, T> selectMap(String sql, Class<T> resultClass, String keyProp)
 			throws SQLException;
 
 	/**
@@ -395,13 +395,13 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
 	 * @param skip The number of results to ignore.
 	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map<Object, T> selectMap(String sql, Class<T> resultClass, String keyPropertyName,
+	public <T> Map<Object, T> selectMap(String sql, Class<T> resultClass, String keyProp,
 			int skip, int max) throws SQLException;
 
 	/**
@@ -414,13 +414,13 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyPropertyName         The property to be used as the key in the Map.
+	 * @param keyProp         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
 	 * @return A Map keyed by keyProp with values being the result object instance.
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName) throws SQLException;
+			String keyProp) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -432,7 +432,7 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyPropertyName         The property to be used as the key in the Map.
+	 * @param keyProp         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
 	 * @param skip The number of results to ignore.
 	 * @param max  The maximum number of results to return.
@@ -440,7 +440,7 @@ public interface SqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName, int skip, int max) throws SQLException;
+			String keyProp, int skip, int max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -452,7 +452,7 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
-	 * @param keyPropertyName         The property to be used as the key in the Map.
+	 * @param keyProp         The property to be used as the key in the Map.
 	 * @param resultClass The class of result object 
 	 * @param skip The number of results to ignore.
 	 * @param max  The maximum number of results to return.
@@ -460,7 +460,7 @@ public interface SqlExecutor {
 	 * @throws java.sql.SQLException If an error occurs.
 	 */
 	public <T> Map<Object, T> selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName, long skip, long max) throws SQLException;
+			String keyProp, long skip, long max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -472,13 +472,13 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
-	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map selectMap(String sql, Class<T> resultClass, String keyPropertyName,
-			String valuePropertyName) throws SQLException;
+	public <T> Map<?, ?> selectMap(String sql, Class<T> resultClass, String keyProp,
+			String valProp) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -490,15 +490,15 @@ public interface SqlExecutor {
 	 * @param <T> The type of result object 
 	 * @param sql The SQL statement to execute.
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
-	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
 	 * @param skip The number of results to ignore.
 	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map selectMap(String sql, Class<T> resultClass, String keyPropertyName,
-			String valuePropertyName, int skip, int max) throws SQLException;
+	public <T> Map<?, ?> selectMap(String sql, Class<T> resultClass, String keyProp,
+			String valProp, int skip, int max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -511,13 +511,13 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
-	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName, String valuePropertyName) throws SQLException;
+	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
+			String keyProp, String valProp) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -530,15 +530,15 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
-	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
 	 * @param skip The number of results to ignore.
 	 * @param max  The maximum number of results to return.
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName, String valuePropertyName, int skip, int max) throws SQLException;
+	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
+			String keyProp, String valProp, int skip, int max) throws SQLException;
 
 	/**
 	 * Executes a mapped SQL SELECT statement that returns data to populate
@@ -551,15 +551,15 @@ public interface SqlExecutor {
 	 * @param sql The SQL statement to execute.
 	 * @param parameter The parameter object (e.g. JavaBean, Map, XML etc.).
 	 * @param resultClass The class of result object 
-	 * @param keyPropertyName The property to be used as the key in the Map.
-	 * @param valuePropertyName The property to be used as the value in the Map.
+	 * @param keyProp The property to be used as the key in the Map.
+	 * @param valProp The property to be used as the value in the Map.
 	 * @param skip the record count to skip
 	 * @param max the max record count to fetch
 	 * @return A Map keyed by keyProp with values of valueProp.
 	 * @throws java.sql.SQLException If an SQL error occurs.
 	 */
-	public <T> Map selectMap(String sql, Object parameter, Class<T> resultClass,
-			String keyPropertyName, String valuePropertyName, long skip, long max) throws SQLException;
+	public <T> Map<?, ?> selectMap(String sql, Object parameter, Class<T> resultClass,
+			String keyProp, String valProp, long skip, long max) throws SQLException;
 
 	/**
 	 * Executes the given SQL statement, which returns a single <code>ResultSetEx</code> object.

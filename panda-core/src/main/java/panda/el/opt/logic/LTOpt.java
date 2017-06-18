@@ -5,7 +5,7 @@ import panda.el.opt.TwoOpt;
 import panda.lang.Classes;
 
 /**
- * 小于
+ * Less Than
  */
 public class LTOpt extends TwoOpt {
 
@@ -17,7 +17,7 @@ public class LTOpt extends TwoOpt {
 		return "<";
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object calculate(ElContext ec) {
 		Comparable lval = (Comparable)getLeft(ec);
 		Comparable rval = (Comparable)getRight(ec);

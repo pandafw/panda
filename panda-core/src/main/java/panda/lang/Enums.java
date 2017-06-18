@@ -210,6 +210,7 @@ public class Enums {
 	 *             64 values
 	 * @see #generateBitVectors(Class, Iterable)
 	 */
+	@SafeVarargs
 	public static <E extends Enum<E>> long generateBitVector(final Class<E> enumClass, final E... values) {
 		Asserts.noNullElements(values);
 		return generateBitVector(enumClass, Arrays.<E> asList(values));
@@ -237,6 +238,7 @@ public class Enums {
 	 * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any
 	 *             {@code values} {@code null}
 	 */
+	@SafeVarargs
 	public static <E extends Enum<E>> long[] generateBitVectors(final Class<E> enumClass, final E... values) {
 		asEnum(enumClass);
 		Asserts.noNullElements(values);

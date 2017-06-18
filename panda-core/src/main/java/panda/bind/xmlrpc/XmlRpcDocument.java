@@ -70,6 +70,7 @@ public class XmlRpcDocument<T> {
 			return false;
 		}
 
+		@SuppressWarnings("rawtypes")
 		XmlRpcDocument rhs = (XmlRpcDocument)obj;
 		return Objects.equalsBuilder()
 				.append(methodName, rhs.methodName)

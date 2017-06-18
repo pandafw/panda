@@ -1,11 +1,6 @@
 package panda.bind;
 
-/**
- * 
- *
- * @param <T> class type
- */
-public interface PropertyFilter<T> {
+public interface PropertyFilter {
 	/**
 	 * @param source the owner of the property
 	 * @param name the name of the property

@@ -9,7 +9,7 @@ import panda.dao.query.Filter.ComboFilter;
 import panda.lang.Objects;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	protected GenericQuery<T> query;
 

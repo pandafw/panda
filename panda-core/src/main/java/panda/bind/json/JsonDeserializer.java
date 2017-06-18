@@ -222,7 +222,7 @@ public class JsonDeserializer extends AbstractDeserializer {
 		
 		T obj = null;
 		BeanHandler<T> bh = null;
-		PropertyFilter<T> pf = null;
+		PropertyFilter pf = null;
 		if (type != null) {
 			bh = getBeanHandler(type);
 			obj = bh.createObject();
@@ -337,11 +337,11 @@ public class JsonDeserializer extends AbstractDeserializer {
 			throw syntaxError("A json array can not be serialized to the " + Types.toString(type));
 		}
 
-		List list = null;
+		List<Object> list = null;
 		Type etype = null;
 
 		if (type != null) {
-			list = new ArrayList();
+			list = new ArrayList<Object>();
 			etype = getArrayElementType(type);
 		}
 

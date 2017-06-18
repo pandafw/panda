@@ -9,6 +9,7 @@ import panda.lang.Collections;
 /**
  * HTML entities
  */
+@SuppressWarnings("unchecked")
 public class HTMLEntities {
 	public static final String NBSP = "&nbsp;";
 	public static final String APOS = "&apos;";
@@ -45,7 +46,6 @@ public class HTMLEntities {
 	/**
 	 * XML escape map
 	 */
-	@SuppressWarnings("unchecked")
 	public static final Map<String, String> XML_ESCAPE = merge(BASIC_ESCAPE, APOS_ESCAPE);
 
 	/**
@@ -168,7 +168,6 @@ public class HTMLEntities {
 	 * href="https://secure.wikimedia.org/wikipedia/en/wiki/ISO/IEC_8859-1">ISO-8859-1</a>
 	 * characters to their named HTML 3.x equivalents.
 	 */
-	@SuppressWarnings("unchecked")
 	public static final Map<String, String> HTML3_ESCAPE = merge(XML_ESCAPE, ISO8859_1_ESCAPE);
 
 	/**
@@ -393,7 +392,6 @@ public class HTMLEntities {
 	/**
 	 * HTML4 escape map
 	 */
-	@SuppressWarnings("unchecked")
 	public static final Map<String, String> HTML4_ESCAPE = merge(HTML3_ESCAPE, HTML40_EXTENDED_ESCAPE);
 
 	/**

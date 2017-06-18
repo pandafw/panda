@@ -119,7 +119,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
@@ -165,7 +165,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			parse(parameter);
 		}
 		
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object paramValue = null;
 			if (parameter != null) {
@@ -227,7 +227,7 @@ public class SimpleSqlParser extends JdbcSqlParser {
 			this.propertyName = propertyName;
 		}
 		
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public boolean translate(StringBuilder sql, JdbcSqlExecutor executor, Object parameter, List<JdbcSqlParameter> sqlParams) {
 			Object rv = null;
 			if (parameter != null) {

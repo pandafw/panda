@@ -127,7 +127,7 @@ public class SQLiteSqlExpert extends SqlExpert {
 	 * @see <a href="http://sqlite.org/lang_select.html">http://sqlite.org/lang_select.html</a>
 	 */
 	@Override
-	protected void limit(Sql sql, Query query, String alias) {
+	protected void limit(Sql sql, Query<?> query, String alias) {
 		if (query.getStart() > 0 || query.getLimit() > 0) {
 			sql.append(" LIMIT ").append(query.getLimit() > 0 ? query.getLimit() : Integer.MAX_VALUE);
 			

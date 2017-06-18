@@ -3,8 +3,7 @@ package panda.cast.castor;
 import panda.cast.CastContext;
 import panda.lang.Classes;
 
-/**
- */
+@SuppressWarnings("rawtypes")
 public class ClassCastor extends AnySingleCastor<Class> {
 	public ClassCastor() {
 		super(Class.class);

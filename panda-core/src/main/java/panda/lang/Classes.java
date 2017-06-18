@@ -38,7 +38,7 @@ import panda.log.Logs;
  * 
  */
 public abstract class Classes {
-	public final static Class[] EMPTY_CLASS_ARRAY = new Class[0];
+	public final static Class<?>[] EMPTY_CLASS_ARRAY = new Class<?>[0];
 
 	public final static String PACKAGE_INFO_CLASS = "package-info.class";
 
@@ -1711,7 +1711,7 @@ public abstract class Classes {
 	 * @return the constructor, or <code>null</code> if not found
 	 * @see java.lang.Class#getConstructor
 	 */
-	public static Constructor getConstructorIfAvailable(Class<?> cls, Class<?>[] paramTypes) {
+	public static Constructor<?> getConstructorIfAvailable(Class<?> cls, Class<?>[] paramTypes) {
 		Asserts.notNull(cls, "Class must not be null");
 		try {
 			return cls.getConstructor(paramTypes);
@@ -1849,12 +1849,13 @@ public abstract class Classes {
 	 * @return a String of form "[com.foo.Bar, com.foo.Baz]"
 	 * @see java.util.AbstractCollection#toString()
 	 */
-	public static String classNamesToString(Collection classes) {
+	public static String classNamesToString(Collection<?> classes) {
 		if (Collections.isEmpty(classes)) {
 			return ARRAY_SUFFIX;
 		}
+
 		StringBuilder sb = new StringBuilder("[");
-		for (Iterator it = classes.iterator(); it.hasNext(); ) {
+		for (Iterator<?> it = classes.iterator(); it.hasNext(); ) {
 			Class<?> cls = (Class<?>) it.next();
 			sb.append(cls.getName());
 			if (it.hasNext()) {
@@ -1922,7 +1923,7 @@ public abstract class Classes {
 	 * @param instance the instance to analyse for interfaces
 	 * @return all interfaces that the given instance implements as Set
 	 */
-	public static Set getAllInterfacesAsSet(Object instance) {
+	public static Set<Class<?>> getAllInterfacesAsSet(Object instance) {
 		Asserts.notNull(instance, "Instance must not be null");
 		return getAllInterfacesForClassAsSet(instance.getClass());
 	}
@@ -1934,7 +1935,7 @@ public abstract class Classes {
 	 * @param cls the class to analyse for interfaces
 	 * @return all interfaces that the given object implements as Set
 	 */
-	public static Set getAllInterfacesForClassAsSet(Class<?> cls) {
+	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> cls) {
 		return getAllInterfacesForClassAsSet(cls, null);
 	}
 
@@ -1947,11 +1948,14 @@ public abstract class Classes {
 	 * (may be <code>null</code> when accepting all declared interfaces)
 	 * @return all interfaces that the given object implements as Set
 	 */
-	public static Set getAllInterfacesForClassAsSet(Class<?> cls, ClassLoader classLoader) {
+	@SuppressWarnings("unchecked")
+	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> cls, ClassLoader classLoader) {
 		Asserts.notNull(cls, "Class must not be null");
 		if (cls.isInterface()) {
-			return Collections.singleton(cls);
+			Set<?> s = Collections.singleton(cls);
+			return (Set<Class<?>>)s;
 		}
+		
 		Set<Class<?>> interfaces = new LinkedHashSet<Class<?>>();
 		while (cls != null) {
 			for (int i = 0; i < cls.getInterfaces().length; i++) {
@@ -1974,7 +1978,7 @@ public abstract class Classes {
 	 * @return the merged interface as Class
 	 * @see java.lang.reflect.Proxy#getProxyClass
 	 */
-	public static Class<?> createCompositeInterface(Class[] interfaces, ClassLoader classLoader) {
+	public static Class<?> createCompositeInterface(Class<?>[] interfaces, ClassLoader classLoader) {
 		Asserts.notEmpty(interfaces, "Interfaces must not be empty");
 		Asserts.notNull(classLoader, "ClassLoader must not be null");
 		return Proxy.getProxyClass(classLoader, interfaces);

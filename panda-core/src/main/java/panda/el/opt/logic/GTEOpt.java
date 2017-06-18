@@ -5,7 +5,7 @@ import panda.el.opt.TwoOpt;
 import panda.lang.Classes;
 
 /**
- * 大于等于
+ * Great Than or Equal
  */
 public class GTEOpt extends TwoOpt {
 
@@ -13,7 +13,7 @@ public class GTEOpt extends TwoOpt {
 		return 6;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object calculate(ElContext ec) {
 		Comparable lval = (Comparable)getLeft(ec);
 		Comparable rval = (Comparable)getRight(ec);

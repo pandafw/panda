@@ -18,6 +18,7 @@ import panda.lang.reflect.Types;
  *
  * @param <T> target type
  */
+@SuppressWarnings("rawtypes")
 public class MapCastor<T extends Map<?,?>> extends AnyJsonCastor<T> {
 	private Castors castors;
 	private Type keyType;
@@ -39,8 +40,8 @@ public class MapCastor<T extends Map<?,?>> extends AnyJsonCastor<T> {
 		this.valType = ts[1];
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
+	@Override
 	protected boolean isAssignable(Object value) {
 		if (super.isAssignable(value)) {
 			if (isObjectType(keyType) && isObjectType(valType)) {

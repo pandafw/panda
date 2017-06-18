@@ -13,7 +13,7 @@ import panda.lang.reflect.Types;
  * 
  * @param <T> class type
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MapBeanHandler<T extends Map> extends AbstractJavaBeanHandler<T> {
 	private Type elementType;
 	

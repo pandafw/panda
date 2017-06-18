@@ -24,9 +24,7 @@ import panda.lang.reflect.Fields;
 import panda.lang.reflect.Methods;
 import panda.lang.reflect.Types;
 
-/**
- * 
- */
+@SuppressWarnings("rawtypes")
 public class Beans {
 	private static Map<Class<?>, Map<String, PropertyAccessor>> accessors = new HashMap<Class<?>, Map<String, PropertyAccessor>>();
 	

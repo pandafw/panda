@@ -118,8 +118,8 @@ public class Settings implements Map<String, String> {
 	}
 
 	public synchronized void putAll(Properties ps) {
-		for (Iterator i = ps.entrySet().iterator(); i.hasNext(); ) {
-			Entry e = (Entry)i.next();
+		for (Iterator<Entry<Object, Object>> i = ps.entrySet().iterator(); i.hasNext(); ) {
+			Entry<Object, Object> e = i.next();
 			props.put(e.getKey().toString(), e.getValue().toString());
 		}
 	}
@@ -234,7 +234,7 @@ public class Settings implements Map<String, String> {
 	 * @param name resource name
 	 * @return List value
 	 */
-	public List getPropertyAsList(String name) {
+	public List<?> getPropertyAsList(String name) {
 		return getPropertyAsList(name, null);
 	}
 	
@@ -244,8 +244,8 @@ public class Settings implements Map<String, String> {
 	 * @param defaultValue default value
 	 * @return list value
 	 */
-	public List getPropertyAsList(String name, List defaultValue) {
-		List list = defaultValue;
+	public List<?> getPropertyAsList(String name, List<?> defaultValue) {
+		List<?> list = defaultValue;
 
 		String expr = Strings.stripToNull(get(name));
 		if (Strings.isNotEmpty(expr)) {
@@ -263,7 +263,7 @@ public class Settings implements Map<String, String> {
 	 * @param name resource name
 	 * @return map value
 	 */
-	public Map getPropertyAsMap(String name) {
+	public Map<String, ?> getPropertyAsMap(String name) {
 		return getPropertyAsMap(name, null);
 	}
 	
@@ -272,8 +272,8 @@ public class Settings implements Map<String, String> {
 	 * @param defaultValue default value
 	 * @return map value
 	 */
-	public Map getPropertyAsMap(String name, Map defaultValue) {
-		Map map = defaultValue;
+	public Map<String, ?> getPropertyAsMap(String name, Map<String, ?> defaultValue) {
+		Map<String, ?> map = defaultValue;
 
 		String expr = Strings.stripToNull(get(name));
 		if (Strings.isNotEmpty(expr)) {

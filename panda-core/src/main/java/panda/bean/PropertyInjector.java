@@ -4,10 +4,7 @@ import java.lang.reflect.Type;
 
 import panda.lang.Injector;
 
-/**
- * 
- *
- */
+@SuppressWarnings("rawtypes")
 public class PropertyInjector implements Injector {
 	private String field;
 	private PropertyHandler handler;

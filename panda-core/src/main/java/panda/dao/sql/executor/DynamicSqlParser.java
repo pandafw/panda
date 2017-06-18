@@ -97,13 +97,13 @@ public class DynamicSqlParser extends SimpleSqlParser {
 				return !(expValue == null
 						|| (expValue instanceof Boolean && Boolean.FALSE.equals(expValue))
 						|| (expValue.getClass().isArray() && Array.getLength(expValue) < 1)
-						|| (expValue instanceof Collection && ((Collection)expValue).isEmpty()));
+						|| (expValue instanceof Collection && ((Collection<?>)expValue).isEmpty()));
 			}
 			else if (operator == NOT) {
 				return (expValue == null
 						|| (expValue instanceof Boolean && Boolean.FALSE.equals(expValue))
 						|| (expValue.getClass().isArray() && Array.getLength(expValue) < 1)
-						|| (expValue instanceof Collection && ((Collection)expValue).isEmpty()));
+						|| (expValue instanceof Collection && ((Collection<?>)expValue).isEmpty()));
 			}
 			else {
 				return false;

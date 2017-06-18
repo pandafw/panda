@@ -21,8 +21,8 @@ public class SimpleSqlExecutorH2Test extends SimpleSqlExecutorTestCase {
 		actual.setFreal(n);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void prepareActualMap(Map actual) {
 		super.prepareActualMap(actual);
 

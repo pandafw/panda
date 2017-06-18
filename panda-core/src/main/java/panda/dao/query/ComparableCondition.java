@@ -7,6 +7,7 @@ import java.util.Collection;
  * @param <E> query target type
  * @param <T> the compare value type
  */
+@SuppressWarnings("unchecked")
 public class ComparableCondition<E extends EntityQuery, T> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent
@@ -137,7 +138,6 @@ public class ComparableCondition<E extends EntityQuery, T> extends ObjectConditi
 	 * @param values value list
 	 * @return parent
 	 */
-	@SuppressWarnings("unchecked")
 	public E in(Collection<T> values) {
 		parent.getQuery().in(field, values);
 		return parent;

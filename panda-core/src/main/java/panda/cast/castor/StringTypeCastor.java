@@ -31,6 +31,7 @@ public abstract class StringTypeCastor<T> extends AnySingleCastor<T> {
 		this.dateCastor = dateCastor;
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected boolean write(Object value, Appendable a, CastContext cc) {
 		try {
 			if (value instanceof Class) {

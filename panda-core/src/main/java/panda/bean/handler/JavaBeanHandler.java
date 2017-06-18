@@ -14,6 +14,7 @@ import panda.lang.reflect.Types;
  * 
  * @param <T> class type
  */
+@SuppressWarnings("rawtypes")
 public class JavaBeanHandler<T> extends AbstractJavaBeanHandler<T> {
 
 	private Map<String, PropertyAccessor> accessors;

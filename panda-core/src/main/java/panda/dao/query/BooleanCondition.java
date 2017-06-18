@@ -6,6 +6,7 @@ package panda.dao.query;
 /**
  * @param <E> query target type
  */
+@SuppressWarnings("rawtypes")
 public class BooleanCondition<E extends EntityQuery> extends ObjectCondition<E> {
 	/**
 	 * @param parent parent

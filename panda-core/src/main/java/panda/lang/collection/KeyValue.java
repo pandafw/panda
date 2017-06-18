@@ -86,7 +86,7 @@ public class KeyValue<K, V> implements Entry<K, V> {
 			return false;
 		}
 
-		Map.Entry rhs = (Map.Entry)obj;
+		Map.Entry<?, ?> rhs = (Map.Entry<?, ?>)obj;
 		return Objects.equalsBuilder().append(key, rhs.getKey()).append(value, rhs.getValue()).isEquals();
 	}
 

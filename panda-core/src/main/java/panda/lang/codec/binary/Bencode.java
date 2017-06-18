@@ -70,7 +70,7 @@ public class Bencode implements Encoder, Decoder {
 			os.write(bs);
 		}
 		else if (object instanceof List) {
-			List list = (List)object;
+			List<?> list = (List<?>)object;
 			os.write('l');
 			for (Object elem : list) {
 				write(elem, os);
@@ -78,11 +78,11 @@ public class Bencode implements Encoder, Decoder {
 			os.write('e');
 		}
 		else if (object instanceof Map) {
-			Map map = (Map)object;
+			Map<?, ?> map = (Map<?, ?>)object;
 
 			os.write('d');
 			for (Object elem : map.entrySet()) {
-				Map.Entry entry = (Map.Entry)elem;
+				Map.Entry<?, ?> entry = (Map.Entry<?, ?>)elem;
 				write(entry.getKey().toString().getBytes(), os);
 				write(entry.getValue(), os);
 			}

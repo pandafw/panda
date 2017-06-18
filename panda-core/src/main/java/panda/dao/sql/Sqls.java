@@ -152,7 +152,7 @@ public class Sqls {
 	 * close ResultSet with out throw exception
 	 * @param resultSet result set
 	 */
-	public static void safeClose(SqlResultSet resultSet) {
+	public static void safeClose(SqlResultSet<?> resultSet) {
 		try {
 			if (resultSet != null && !resultSet.isClosed()) {
 				resultSet.close();
@@ -245,7 +245,7 @@ public class Sqls {
 	 * @param skip            The number of results to ignore.
 	 * @throws SQLException if a SQL exception occurs
 	 */
-	public static void skipResultSet(SqlResultSet resultSet, long skip) throws SQLException {
+	public static void skipResultSet(SqlResultSet<?> resultSet, long skip) throws SQLException {
 		skipResultSet(resultSet, (int)skip);
 	}
 
@@ -255,7 +255,7 @@ public class Sqls {
 	 * @param skip            The number of results to ignore.
 	 * @throws SQLException if a SQL exception occurs
 	 */
-	public static void skipResultSet(SqlResultSet resultSet, int skip) throws SQLException {
+	public static void skipResultSet(SqlResultSet<?> resultSet, int skip) throws SQLException {
 		if (skip > 0) {
 			if (resultSet.getType() != ResultSet.TYPE_FORWARD_ONLY) {
 				resultSet.absolute(skip);

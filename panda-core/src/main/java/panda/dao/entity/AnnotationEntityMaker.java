@@ -354,7 +354,7 @@ public class AnnotationEntityMaker implements EntityMaker {
 	private void addEntityField(Entity<?> entity, MappingInfo mi) {
 		EntityField ef = new EntityField();
 
-		Class cls = Types.getRawType(mi.type);
+		Class<?> cls = Types.getRawType(mi.type);
 		
 		ef.setName(mi.name);
 		ef.setType(mi.type);

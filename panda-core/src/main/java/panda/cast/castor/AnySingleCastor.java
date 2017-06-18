@@ -23,6 +23,7 @@ public abstract class AnySingleCastor<T> extends AnyObjectCastor<T> {
 		}
 
 		if (Iterators.isIterable(value)) {
+			@SuppressWarnings("rawtypes")
 			Iterator it = Iterators.asIterator(value);
 			if (it.hasNext()) {
 				Object v = it.next();

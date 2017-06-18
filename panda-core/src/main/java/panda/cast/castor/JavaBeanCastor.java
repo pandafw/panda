@@ -37,7 +37,7 @@ public class JavaBeanCastor<T> extends AnyJsonCastor<T> {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected T castValueTo(Object value, T bean, CastContext context) {
 		if (!(value instanceof Map)) {
 			return castError(value, context);

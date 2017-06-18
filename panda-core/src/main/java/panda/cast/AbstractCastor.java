@@ -193,11 +193,11 @@ public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 		throw new CastException(castErrorMsg(value, context));
 	}
 	
-	protected Castor getCastor(CastContext context, Type fromType, Type toType) {
+	protected <TS, TT> Castor<TS, TT> getCastor(CastContext context, Type fromType, Type toType) {
 		return context.getCastors().getCastor(fromType, toType);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Object castChild(CastContext context, Castor conv, int index, Object value) {
 		if (value == null) {
 			return conv.cast(value, context);
@@ -223,7 +223,7 @@ public abstract class AbstractCastor<S, T> implements Castor<S, T> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Map.Entry castChild(CastContext context, Castor keyCastor, Castor valCastor, String name, Object key, Object value) {
 		if (key == null) {
 			key = keyCastor.cast(key, context);

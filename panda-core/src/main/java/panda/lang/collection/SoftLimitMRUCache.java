@@ -37,6 +37,7 @@ import java.lang.ref.SoftReference;
  * @author Steve Ebersole
  * @author Manuel Dominguez Sarmiento
  */
+@SuppressWarnings("rawtypes")
 public class SoftLimitMRUCache implements Serializable {
 	private static final long serialVersionUID = 1L;
 

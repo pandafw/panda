@@ -5,14 +5,14 @@ import panda.el.opt.TwoOpt;
 import panda.lang.Classes;
 
 /**
- * 小于等于
+ * Less Than or Equal
  */
 public class LTEOpt extends TwoOpt {
 	public int getPriority() {
 		return 6;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object calculate(ElContext ec) {
 		Comparable lval = (Comparable)getLeft(ec);
 		Comparable rval = (Comparable)getRight(ec);

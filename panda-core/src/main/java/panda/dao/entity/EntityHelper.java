@@ -167,11 +167,11 @@ public abstract class EntityHelper {
 	 * @param efk the EntityFKey
 	 * @return true if check successfully
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> boolean checkForeignKey(Dao dao, Entity<T> entity, T data, EntityFKey efk) {
 		boolean allNull = true;
 		
-		@SuppressWarnings("unchecked")
-		GenericQuery q = new GenericQuery(efk.getReference());
+		GenericQuery<?> q = new GenericQuery(efk.getReference());
 
 		int i = 0;
 		for (EntityField rf : efk.getReference().getPrimaryKeys()) {

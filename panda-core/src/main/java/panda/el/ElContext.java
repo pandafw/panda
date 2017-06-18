@@ -6,6 +6,7 @@ import panda.bean.Beans;
 public class ElContext {
 	private boolean strict;
 	private Object context;
+	@SuppressWarnings("rawtypes")
 	private BeanHandler handler;
 
 	/**

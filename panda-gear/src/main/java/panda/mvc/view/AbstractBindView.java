@@ -10,6 +10,7 @@ import java.util.Map;
 
 import panda.bean.BeanHandler;
 import panda.bind.AbstractSerializer;
+import panda.bind.adapter.CalendarAdapter;
 import panda.bind.adapter.DateAdapter;
 import panda.lang.CycleDetectStrategy;
 import panda.lang.Exceptions;
@@ -199,6 +200,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 		result.put("result", ac.getResult());
 
 		if (Strings.isNotEmpty(location)) {
+			@SuppressWarnings("rawtypes")
 			BeanHandler acb = Mvcs.getBeans().getBeanHandler(ac.getClass());
 
 			List<String> pnl = toList(location);
@@ -244,9 +246,8 @@ public abstract class AbstractBindView extends AbstractDataView {
 			as.setDateToMillis(true);
 		}
 		else {
-			DateAdapter da = new DateAdapter(dateFormat);
-			as.registerSourceAdapter(Date.class, da);
-			as.registerSourceAdapter(Calendar.class, da);
+			as.registerSourceAdapter(Date.class, new DateAdapter(dateFormat));
+			as.registerSourceAdapter(Calendar.class, new CalendarAdapter(dateFormat));
 		}
 
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));

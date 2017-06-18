@@ -10,7 +10,7 @@ public class Mssql2012SqlExpert extends Mssql2005SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(Sql sql, Query query, String alias) {
+	protected void limit(Sql sql, Query<?> query, String alias) {
 		if (query.hasOrders()) {
 			// offset needs order
 			// @see http://technet.microsoft.com/en-us/library/gg699618.aspx

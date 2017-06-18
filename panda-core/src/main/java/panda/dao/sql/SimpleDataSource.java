@@ -214,10 +214,10 @@ public class SimpleDataSource implements DataSource {
 	 * @param props - the configuration parameters
 	 */
 	public SimpleDataSource(Properties props) {
-		initialize((Map)props);
+		initialize((Map<?, ?>)props);
 	}
 
-	private void initialize(Map props) {
+	private void initialize(Map<?, ?> props) {
 		if (props == null) {
 			throw new IllegalArgumentException(
 					"SimpleDataSource: The properties map passed to the initializer was null.");

@@ -20,6 +20,7 @@ public class StaticOpt extends TwoOpt implements RunMethod {
 		return 1;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Class getClass(ElContext ec) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
@@ -49,7 +50,7 @@ public class StaticOpt extends TwoOpt implements RunMethod {
 	}
 	
 	public Object calculate(ElContext ec) {
-		Class clz = getClass(ec);
+		Class<?> clz = getClass(ec);
 		try {
 			return Fields.readStaticField(clz, right.toString(), false);
 		}
@@ -59,7 +60,7 @@ public class StaticOpt extends TwoOpt implements RunMethod {
 	}
 
 	public Object run(ElContext ec, List<?> param) {
-		Class clz = getClass(ec);
+		Class<?> clz = getClass(ec);
 
 		Object[] arg = param.toArray();
 		try {

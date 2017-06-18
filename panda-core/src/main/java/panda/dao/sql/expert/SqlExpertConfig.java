@@ -79,9 +79,9 @@ public class SqlExpertConfig {
 		this.experts = new HashMap<String, Class<? extends SqlExpert>>();
 		this._experts = new HashMap<Pattern, Class<? extends SqlExpert>>();
 		for (Entry<String, Object> entry : exps.entrySet()) {
-			Class clazz;
+			Class<? extends SqlExpert> clazz;
 			try {
-				clazz = Classes.getClass(entry.getValue().toString());
+				clazz = (Class<? extends SqlExpert>)Classes.getClass(entry.getValue().toString());
 			}
 			catch (ClassNotFoundException e) {
 				log.warn("Failed to get class " + entry.getValue() + " for " + entry.getKey());

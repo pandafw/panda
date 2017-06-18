@@ -79,7 +79,7 @@ public abstract class DaoClient {
 	/**
 	 * @return the entities
 	 */
-	public Map<Class<?>, Entity> getEntities() {
+	public Map<Class<?>, Entity<?>> getEntities() {
 		return entities.getEntities();
 	}
 
@@ -123,7 +123,7 @@ public abstract class DaoClient {
 	 * @param query query
 	 * @return the table name of query
 	 */
-	public String getTableName(Query query) {
+	public String getTableName(Query<?> query) {
 		if (Strings.isEmpty(prefix)) {
 			return query.getTable();
 		}

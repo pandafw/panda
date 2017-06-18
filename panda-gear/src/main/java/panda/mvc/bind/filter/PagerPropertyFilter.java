@@ -2,10 +2,6 @@ package panda.mvc.bind.filter;
 
 import panda.bind.filter.IncludePropertyFilter;
 
-/**
- * 
- *
- */
 public class PagerPropertyFilter extends IncludePropertyFilter {
 	/**
 	 * Constructor

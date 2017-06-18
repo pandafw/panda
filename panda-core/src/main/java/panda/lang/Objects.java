@@ -83,6 +83,7 @@ public abstract class Objects {
 	 * @return the first value from {@code values} which is not {@code null}, or {@code null} if
 	 *         there are no non-null values
 	 */
+	@SafeVarargs
 	public static <T> T firstNonNull(final T... values) {
 		if (values != null) {
 			for (final T val : values) {
@@ -344,6 +345,7 @@ public abstract class Objects {
 	 *         <li>If all the comparables are null, null is returned.
 	 *         </ul>
 	 */
+	@SafeVarargs
 	public static <T extends Comparable<? super T>> T min(final T... values) {
 		T result = null;
 		if (values != null) {
@@ -370,6 +372,7 @@ public abstract class Objects {
 	 *         <li>If all the comparables are null, null is returned.
 	 *         </ul>
 	 */
+	@SafeVarargs
 	public static <T extends Comparable<? super T>> T max(final T... values) {
 		T result = null;
 		if (values != null) {
@@ -433,6 +436,7 @@ public abstract class Objects {
 	 * @throws NullPointerException if items is {@code null}
 	 * @throws IllegalArgumentException if items is empty or contains {@code null} values
 	 */
+	@SafeVarargs
 	public static <T extends Comparable<? super T>> T median(final T... items) {
 		Asserts.notEmpty(items);
 		Asserts.noNullElements(items);
@@ -455,6 +459,7 @@ public abstract class Objects {
 	 * @throws NullPointerException if items or comparator is {@code null}
 	 * @throws IllegalArgumentException if items is empty or contains {@code null} values
 	 */
+	@SafeVarargs
 	public static <T> T median(final Comparator<T> comparator, final T... items) {
 		Asserts.notEmpty(items, "null/empty items");
 		Asserts.noNullElements(items);
@@ -476,6 +481,7 @@ public abstract class Objects {
 	 * @param items to check
 	 * @return most populous T, {@code null} if non-unique or no items supplied
 	 */
+	@SafeVarargs
 	public static <T> T mode(final T... items) {
 		if (Arrays.isNotEmpty(items)) {
 			final HashMap<T, MutableInt> occurrences = new HashMap<T, MutableInt>(items.length);
@@ -640,10 +646,10 @@ public abstract class Objects {
 			return ((CharSequence)o).length() == 0;
 		}
 		else if (o instanceof Collection) {
-			return ((Collection)o).isEmpty();
+			return ((Collection<?>)o).isEmpty();
 		}
 		else if (o instanceof Map) {
-			return ((Map)o).isEmpty();
+			return ((Map<?, ?>)o).isEmpty();
 		}
 		else if (o.getClass().isArray()) {
 			return Array.getLength(o) == 0;
@@ -794,14 +800,14 @@ public abstract class Objects {
 		}
 
 		if (obj1 instanceof Map) {
-			if (((Map)obj1).containsKey(obj2) || (s2 != null && ((Map)obj1).containsKey(s2))) {
+			if (((Map<?, ?>)obj1).containsKey(obj2) || (s2 != null && ((Map<?, ?>)obj1).containsKey(s2))) {
 				return true;
 			}
 			return false;
 		}
 		
 		if (obj1 instanceof Iterable) {
-			for (Object value : ((Iterable)obj1)) {
+			for (Object value : ((Iterable<?>)obj1)) {
 				if (obj2.equals(value) || stringEquals(s2, value)) {
 					return true;
 				}

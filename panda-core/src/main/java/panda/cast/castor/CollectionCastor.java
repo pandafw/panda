@@ -36,13 +36,13 @@ public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Ob
 				return true;
 			}
 
-			Collection c = (Collection)value;
+			Collection<?> c = (Collection<?>)value;
 			if (c.isEmpty()) {
 				return true;
 			}
 
 			boolean assignable = true;
-			Iterator it = c.iterator();
+			Iterator<?> it = c.iterator();
 			while (it.hasNext()) {
 				Object v = it.next();
 				if (v != null && !Types.isAssignable(v.getClass(), toElementType)) {
@@ -66,7 +66,7 @@ public class CollectionCastor<T extends Collection<?>> extends AbstractCastor<Ob
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected T castValue(Object value, CastContext context) {
 		Collection coll = createTarget();
 		if (value.getClass().isArray()) {

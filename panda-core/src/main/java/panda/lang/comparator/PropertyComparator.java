@@ -36,7 +36,7 @@ public class PropertyComparator<T> implements Comparator<T> {
 	 * @return a negative integer, zero, or a positive integer as the first argument is less than,
 	 *         equal to, or greater than the second.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int compare(T o1, T o2) {
 		if (o1 == null && o2 == null) {
 			return 0;

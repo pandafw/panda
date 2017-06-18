@@ -109,7 +109,7 @@ public class Mssql2005SqlExpert extends SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(Sql sql, Query query, String alias) {
+	protected void limit(Sql sql, Query<?> query, String alias) {
 		// very rough, but works
 		if (query.getStart() > 0) {
 			if (query.hasOrders()) {

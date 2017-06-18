@@ -94,7 +94,6 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		Assert.assertEquals(expect, actual);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSelectQueryJoin() {
 		List<Score> expect = Score.creates(1, 2);

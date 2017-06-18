@@ -144,7 +144,7 @@ public class OracleSqlExpert extends SqlExpert {
 	 * @param query query
 	 */
 	@Override
-	protected void limit(Sql sql, Query query, String alias) {
+	protected void limit(Sql sql, Query<?> query, String alias) {
 		if (query.getStart() > 0) {
 			sql.insert(0, "SELECT * FROM (SELECT T.*, ROWNUM RN_ FROM (");
 			sql.append(") T");

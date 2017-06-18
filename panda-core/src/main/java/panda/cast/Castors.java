@@ -39,6 +39,7 @@ import panda.lang.reflect.Types;
 /**
  * !! thread-safe !! 
  */
+@SuppressWarnings("rawtypes")
 public class Castors {
 	private static Castors i = new Castors();
 

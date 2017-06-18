@@ -529,7 +529,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updates(T obj, Query query) {
+	public int updates(T obj, Query<?> query) {
 		return dao.updates(obj, query);
 	}
 
@@ -541,7 +541,7 @@ public class EntityDao<T> {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	public int updatesIgnoreNull(T obj, Query query) {
+	public int updatesIgnoreNull(T obj, Query<?> query) {
 		return dao.updatesIgnoreNull(obj, query);
 	}
 

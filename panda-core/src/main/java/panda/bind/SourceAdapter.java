@@ -1,10 +1,5 @@
 package panda.bind;
 
-/**
- * 
- *
- * @param <T> class type
- */
 public interface SourceAdapter<T> {
 	public static final int ADAPTER_NONE = 0;
 	public static final int ADAPTER_AUTO = 1;

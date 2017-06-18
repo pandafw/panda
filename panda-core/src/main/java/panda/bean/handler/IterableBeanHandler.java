@@ -11,6 +11,7 @@ import panda.lang.reflect.Types;
  * 
  * @param <T> class type
  */
+@SuppressWarnings("rawtypes")
 public class IterableBeanHandler<T extends Iterable> extends AbstractArrayBeanHandler<T> {
 	protected Type elementType;
 	

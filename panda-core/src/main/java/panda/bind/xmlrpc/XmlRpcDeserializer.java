@@ -21,8 +21,6 @@ import panda.lang.codec.binary.Base64;
 import panda.lang.time.DateTimes;
 import panda.lang.time.FastDateFormat;
 
-/**
- */
 public class XmlRpcDeserializer extends AbstractDeserializer {
 	public XmlRpcDeserializer() {
 	}
@@ -59,6 +57,7 @@ public class XmlRpcDeserializer extends AbstractDeserializer {
 			private Type type;
 			private String name;
 			private Object value;
+			@SuppressWarnings("rawtypes")
 			private BeanHandler beanh;
 			private int leaf = 0;
 		}

@@ -5,10 +5,6 @@ import java.util.List;
 
 import panda.bind.PropertyFilter;
 
-/**
- * 
- *
- */
 public class ExcludePropertyFilter implements PropertyFilter {
 
 	protected List<String> excludes;

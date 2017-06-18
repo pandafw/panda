@@ -328,7 +328,6 @@ public class SqlDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	protected boolean existsByKeys(Entity<?> entity, Object ... keys) {
 		assertEntity(entity);
 
@@ -336,7 +335,7 @@ public class SqlDao extends AbstractDao {
 			return existsByTable(getTableName(entity));
 		}
 
-		GenericQuery query = createQuery(entity);
+		GenericQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, keys);
 		selectPrimaryKeys(query);
 		
@@ -668,7 +667,7 @@ public class SqlDao extends AbstractDao {
 		}
 	}
 
-	private boolean isClientPaginate(Query query) {
+	private boolean isClientPaginate(Query<?> query) {
 		return (query != null && query.needsPaginate() && !getSqlExpert().isSupportPaginate());
 	}
 }

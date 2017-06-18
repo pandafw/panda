@@ -504,6 +504,7 @@ public abstract class Texts {
 	// -----------------------------------------------------------------------
 	public static class BeanEvaluator implements Evaluator {
 		private Object context;
+		@SuppressWarnings("rawtypes")
 		private BeanHandler beanh;
 		
 		public BeanEvaluator(Object context) {

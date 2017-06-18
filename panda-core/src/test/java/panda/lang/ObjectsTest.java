@@ -380,7 +380,6 @@ public class ObjectsTest {
 		Objects.median(new CharSequenceComparator());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testMode() {
 		assertNull(Objects.mode((Object[])null));

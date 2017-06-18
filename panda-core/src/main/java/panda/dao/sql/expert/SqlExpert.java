@@ -626,13 +626,13 @@ public abstract class SqlExpert {
 	}
 	
 	//-----------------------------------------------------------------------
-	private void _limit(Sql sql, Query query, String alias) {
+	private void _limit(Sql sql, Query<?> query, String alias) {
 		if (query != null && query.needsPaginate() && isSupportPaginate()) {
 			limit(sql, query, alias);
 		}
 	}
 	
-	protected abstract void limit(Sql sql, Query query, String alias);
+	protected abstract void limit(Sql sql, Query<?> query, String alias);
 
 	//-----------------------------------------------------------------------
 	protected String evalFieldType(String type, int size, int scale) {

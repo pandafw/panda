@@ -29,6 +29,7 @@ public class Constructors {
 	 *         <tt>Constructor</tt> can be found.
 	 * @see #invokeConstructor
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <T> Constructor<T> getConstructor(Class<T> type, Class<?>... argTypes) {
 		if (null == type || null == argTypes) {
 			throw new NullPointerException();
@@ -81,6 +82,7 @@ public class Constructors {
 	 *         <tt>Constructor</tt> can be found.
 	 * @see #invokeConstructor
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <T> Constructor<T> getConstructor(Class<T> type, int argLength) {
 		if (null == type) {
 			throw new NullPointerException();
