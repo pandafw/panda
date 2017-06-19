@@ -1,12 +1,12 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pandafw</groupId>
-	<artifactId>panda-rail</artifactId>
+	<artifactId>panda-lane</artifactId>
 	<packaging>jar</packaging>
 	<name>Panda Rail</name>
 	<version>1.2.0</version>
 	<description>Panda Java Extention Modules for Web Application</description>
-	<url>https://github.com/pandafw/panda/tree/master/panda-rail</url>
+	<url>https://github.com/pandafw/panda/tree/master/panda-lane</url>
 	<licenses>
 		<license>
 			<name>Apache 2.0</name>

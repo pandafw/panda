@@ -11,9 +11,9 @@ Panda是由以下几个部分组成的。
  |----------------------- |---------------------------------------------------------------------------|
  | panda-core             | 这是Panda框架中最基础的部分，它包含了类似apache-commons的许多有用的类。   |
  | panda-gear             | IOC/MVC模块。类似Spring-MVC, Struts2。包含了一些常用的Taglib。            |
+ | panda-glue             | ASM/AOP模块                                                               |
  | panda-html             | 包含了jQuery, Bootstrap, 以及panda-gear中一些taglib所需要的css/javascript。|
- | panda-rail             | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
- | panda-soup             | ASM/AOP模块                                                               |
+ | panda-lane             | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
  | panda-tool             | 源代码生成器。可以自动生成Entity类, Query类, Dao类, Action类, View的Freemarker(HTML)模板文件。 |
  | panda-tube             | Web Service API的客户端（WordPress XMP-RPC）                              |
 
