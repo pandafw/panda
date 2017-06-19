@@ -261,24 +261,37 @@ public class HttpResponse implements Closeable {
 		return content;
 	}
 
-	public String getContentText(String charsetName) throws IOException {
+	public String getContentText() throws IOException {
+		return getContentText(null);
+	}
+
+	public String getContentText(String charset) throws IOException {
+		return getContentText(charset, -1);
+	}
+
+	public String getContentText(int limit) throws IOException {
+		return getContentText(null, limit);
+	}
+
+	public String getContentText(String charset, int limit) throws IOException {
 		// call this for save content byte array 
 		getContent();
 		
 		StringBuilder sb = new StringBuilder();
-		Reader rd = getReader(charsetName);
+		Reader rd = getReader(charset);
 		int c = rd.read();
 		if (c != Streams.EOF) {
 			if (c != Chars.BOM) {
 				sb.append((char)c);
 			}
-			Streams.copy(rd, sb);
+			if (limit > 0) {
+				Streams.copyLarge(rd, sb, 0, limit);
+			}
+			else {
+				Streams.copy(rd, sb);
+			}
 		}
 		return sb.toString();
-	}
-
-	public String getContentText() throws IOException {
-		return getContentText(null);
 	}
 
 	@Override
