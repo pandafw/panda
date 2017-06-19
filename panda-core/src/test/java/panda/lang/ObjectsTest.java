@@ -374,7 +374,6 @@ public class ObjectsTest {
 		Objects.median(new CharSequenceComparator());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testMode() {
 		assertNull(Objects.mode((Object[])null));
@@ -382,8 +381,6 @@ public class ObjectsTest {
 		assertNull(Objects.mode("foo", "bar", "baz"));
 		assertNull(Objects.mode("foo", "bar", "baz", "foo", "bar"));
 		assertEquals("foo", Objects.mode("foo", "bar", "baz", "foo"));
-		assertEquals(Integer.valueOf(9),
-			Objects.mode("foo", "bar", "baz", Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(9)));
 	}
 
 	static final class NonComparableCharSequence implements CharSequence {
