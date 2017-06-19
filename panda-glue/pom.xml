@@ -1,12 +1,12 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pandafw</groupId>
-	<artifactId>panda-soup</artifactId>
+	<artifactId>panda-glue</artifactId>
 	<packaging>jar</packaging>
 	<name>Panda AOP/ASM Library</name>
 	<version>1.2.0</version>
 	<description>A lightweight ASM/AOP library</description>
-	<url>https://github.com/pandafw/panda/tree/master/panda-soup</url>
+	<url>https://github.com/pandafw/panda/tree/master/panda-glue</url>
 	<licenses>
 		<license>
 			<name>Apache 2.0</name>

@@ -1,4 +1,4 @@
-panda-soup
+panda-glue
 ==========
 
 Panda ASM/AOP Library
