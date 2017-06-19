@@ -273,7 +273,7 @@ public class HttpClient {
 	
 	protected HttpResponse doSend() throws IOException {
 		if (log.isDebugEnabled()) {
-			log.debug(request.toString(512));
+			log.debug(request.toString(1024));
 		}
 		else if (log.isTraceEnabled()) {
 			log.trace(request.toString(10240));
@@ -318,11 +318,12 @@ public class HttpClient {
 				response.getHeader().write(msg);
 			}
 
+			String text = response.getContentText(log.isTraceEnabled() ? 10240 : 1024);
+			if (Strings.isNotEmpty(text)) {
+				msg.append(Streams.LINE_SEPARATOR).append(text);
+			}
+
 			if (log.isTraceEnabled()) {
-				String text = response.getContentText();
-				if (Strings.isNotEmpty(text)) {
-					msg.append(Streams.LINE_SEPARATOR).append(text);
-				}
 				log.trace(msg.toString());
 			}
 			else {
