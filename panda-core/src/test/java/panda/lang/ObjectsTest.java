@@ -17,12 +17,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import panda.lang.Arrays;
-import panda.lang.Asserts;
-import panda.lang.CloneFailedException;
-import panda.lang.Objects;
-import panda.lang.mutable.MutableObject;
-
 /**
  * Unit tests {@link Objects}.
  *
@@ -380,6 +374,7 @@ public class ObjectsTest {
 		Objects.median(new CharSequenceComparator());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testMode() {
 		assertNull(Objects.mode((Object[])null));
@@ -389,119 +384,6 @@ public class ObjectsTest {
 		assertEquals("foo", Objects.mode("foo", "bar", "baz", "foo"));
 		assertEquals(Integer.valueOf(9),
 			Objects.mode("foo", "bar", "baz", Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(9)));
-	}
-
-	/**
-	 * Tests {@link Objects#clone(Object)} with a cloneable object.
-	 */
-	@Test
-	public void testCloneOfCloneable() {
-		final CloneableString string = new CloneableString("apache");
-		final CloneableString stringClone = Objects.clone(string);
-		assertEquals("apache", stringClone.getValue());
-	}
-
-	/**
-	 * Tests {@link Objects#clone(Object)} with a not cloneable object.
-	 */
-	@Test
-	public void testCloneOfNotCloneable() {
-		final String string = new String("apache");
-		assertNull(Objects.clone(string));
-	}
-
-	/**
-	 * Tests {@link Objects#clone(Object)} with an uncloneable object.
-	 * @throws Throwable if an error occurs
-	 */
-	@Test(expected = NoSuchMethodException.class)
-	public void testCloneOfUncloneable() throws Throwable {
-		final UncloneableString string = new UncloneableString("apache");
-		try {
-			Objects.clone(string);
-			fail("Thrown " + CloneFailedException.class.getName() + " expected");
-		}
-		catch (final CloneFailedException e) {
-			throw e.getCause();
-		}
-	}
-
-	/**
-	 * Tests {@link Objects#clone(Object)} with an object array.
-	 */
-	@Test
-	public void testCloneOfStringArray() {
-		assertTrue(Arrays.equals(new String[] { "string" }, Objects.clone(new String[] { "string" })));
-	}
-
-	/**
-	 * Tests {@link Objects#clone(Object)} with an array of primitives.
-	 */
-	@Test
-	public void testCloneOfPrimitiveArray() {
-		assertTrue(Arrays.equals(new int[] { 1 }, Objects.clone(new int[] { 1 })));
-	}
-
-	/**
-	 * Tests {@link Objects#cloneIfPossible(Object)} with a cloneable object.
-	 */
-	@Test
-	public void testPossibleCloneOfCloneable() {
-		final CloneableString string = new CloneableString("apache");
-		final CloneableString stringClone = Objects.cloneIfPossible(string);
-		assertEquals("apache", stringClone.getValue());
-	}
-
-	/**
-	 * Tests {@link Objects#cloneIfPossible(Object)} with a not cloneable object.
-	 */
-	@Test
-	public void testPossibleCloneOfNotCloneable() {
-		final String string = new String("apache");
-		assertSame(string, Objects.cloneIfPossible(string));
-	}
-
-	/**
-	 * Tests {@link Objects#cloneIfPossible(Object)} with an uncloneable object.
-	 * @throws Throwable if an error occurs
-	 */
-	@Test(expected = NoSuchMethodException.class)
-	public void testPossibleCloneOfUncloneable() throws Throwable {
-		final UncloneableString string = new UncloneableString("apache");
-		try {
-			Objects.cloneIfPossible(string);
-			fail("Thrown " + CloneFailedException.class.getName() + " expected");
-		}
-		catch (final CloneFailedException e) {
-			throw e.getCause();
-		}
-	}
-
-	/**
-	 * String that is cloneable.
-	 */
-	static final class CloneableString extends MutableObject<String> implements Cloneable {
-		private static final long serialVersionUID = 1L;
-
-		CloneableString(final String s) {
-			super(s);
-		}
-
-		@Override
-		public CloneableString clone() throws CloneNotSupportedException {
-			return (CloneableString)super.clone();
-		}
-	}
-
-	/**
-	 * String that is not cloneable.
-	 */
-	static final class UncloneableString extends MutableObject<String> implements Cloneable {
-		private static final long serialVersionUID = 1L;
-
-		UncloneableString(final String s) {
-			super(s);
-		}
 	}
 
 	static final class NonComparableCharSequence implements CharSequence {

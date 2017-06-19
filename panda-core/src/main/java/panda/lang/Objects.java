@@ -2,8 +2,6 @@ package panda.lang;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -509,83 +507,6 @@ public abstract class Objects {
 			return result;
 		}
 		return null;
-	}
-
-	// cloning
-	// -----------------------------------------------------------------------
-	/**
-	 * <p>
-	 * Clone an object.
-	 * </p>
-	 * 
-	 * @param <T> the type of the object
-	 * @param obj the object to clone, null returns null
-	 * @return the clone if the object implements {@link Cloneable} otherwise {@code null}
-	 * @throws CloneFailedException if the object is cloneable and the clone operation fails
-	 */
-	public static <T> T clone(final T obj) {
-		if (obj instanceof Cloneable) {
-			final Object result;
-			if (obj.getClass().isArray()) {
-				final Class<?> componentType = obj.getClass().getComponentType();
-				if (!componentType.isPrimitive()) {
-					result = ((Object[])obj).clone();
-				}
-				else {
-					int length = Array.getLength(obj);
-					result = Array.newInstance(componentType, length);
-					while (length-- > 0) {
-						Array.set(result, length, Array.get(obj, length));
-					}
-				}
-			}
-			else {
-				try {
-					final Method clone = obj.getClass().getMethod("clone");
-					result = clone.invoke(obj);
-				}
-				catch (final NoSuchMethodException e) {
-					throw new CloneFailedException("Cloneable type " + obj.getClass().getName()
-							+ " has no clone method", e);
-				}
-				catch (final IllegalAccessException e) {
-					throw new CloneFailedException("Cannot clone Cloneable type " + obj.getClass().getName(), e);
-				}
-				catch (final InvocationTargetException e) {
-					throw new CloneFailedException("Exception cloning Cloneable type " + obj.getClass().getName(),
-						e.getCause());
-				}
-			}
-			@SuppressWarnings("unchecked")
-			// OK because input is of type T
-			final T checked = (T)result;
-			return checked;
-		}
-
-		return null;
-	}
-
-	/**
-	 * <p>
-	 * Clone an object if possible.
-	 * </p>
-	 * <p>
-	 * This method is similar to {@link #clone(Object)}, but will return the provided instance as
-	 * the return value instead of {@code null} if the instance is not cloneable. This is more
-	 * convenient if the caller uses different implementations (e.g. of a service) and some of the
-	 * implementations do not allow concurrent processing or have state. In such cases the
-	 * implementation can simply provide a proper clone implementation and the caller's code does
-	 * not have to change.
-	 * </p>
-	 * 
-	 * @param <T> the type of the object
-	 * @param obj the object to clone, null returns null
-	 * @return the clone if the object implements {@link Cloneable} otherwise the object itself
-	 * @throws CloneFailedException if the object is cloneable and the clone operation fails
-	 */
-	public static <T> T cloneIfPossible(final T obj) {
-		final T clone = clone(obj);
-		return clone == null ? obj : clone;
 	}
 
 	// Null
