@@ -272,11 +272,11 @@ public class HttpClient {
 	}
 	
 	protected HttpResponse doSend() throws IOException {
-		if (log.isDebugEnabled()) {
-			log.debug(request.toString(1024));
-		}
-		else if (log.isTraceEnabled()) {
+		if (log.isTraceEnabled()) {
 			log.trace(request.toString(10240));
+		}
+		else if (log.isDebugEnabled()) {
+			log.debug(request.toString(1024));
 		}
 		
 		HttpResponse response;

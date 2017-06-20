@@ -3,6 +3,7 @@ package panda.net.http;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -167,7 +169,7 @@ public class HttpRequest {
 	 */
 	public URL getURL() {
 		String url = this.url;
-		if (isGet() && Collections.isNotEmpty(params)) {
+		if (!isPost() && Collections.isNotEmpty(params)) {
 			url = URLBuilder.buildURL(url, params, encoding);
 		}
 
@@ -329,10 +331,17 @@ public class HttpRequest {
 			os.flush();
 			return;
 		}
-
+		
+		writeBodyParams(os, -1);
+	}
+	
+	protected boolean writeBodyParams(OutputStream os, int limit) throws IOException {
 		DataOutputStream dos = new DataOutputStream(os);
 		if (isPostFile()) {
-			for (Entry<String, ?> en : params.entrySet()) {
+			Iterator<Entry<String, Object>> it = params.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<String, Object> en = it.next();
+				
 				dos.writeBytes("--");
 				dos.writeBytes(getMultipartBoundary());
 				dos.writeBytes(Strings.CRLF);
@@ -362,8 +371,14 @@ public class HttpRequest {
 					dos.writeBytes(Strings.CRLF);
 					dos.writeBytes(Strings.CRLF);
 					if (f.length() > 0) {
-						Streams.copy(f, dos);
-						dos.writeBytes(Strings.CRLF);
+						FileInputStream fis = new FileInputStream(f);
+						try {
+							Streams.copyLarge(fis, dos, 0, limit);
+							dos.writeBytes(Strings.CRLF);
+						}
+						finally {
+							Streams.safeClose(fis);
+						}
 					}
 				}
 				else {
@@ -372,6 +387,10 @@ public class HttpRequest {
 					byte[] bs = val.toString().getBytes(encoding);
 					dos.write(bs);
 					dos.writeBytes(Strings.CRLF);
+				}
+				
+				if (limit > 0 && dos.size() >= limit && it.hasNext()) {
+					return false;
 				}
 			}
 
@@ -384,6 +403,7 @@ public class HttpRequest {
 			dos.writeBytes(getURLEncodedParams());
 		}
 		dos.flush();
+		return true;
 	}
 
 	/**
@@ -396,30 +416,35 @@ public class HttpRequest {
 	
 	/**
 	 * @param writer writer
-	 * @param bodyLimit body size limit
+	 * @param limit body size limit
 	 * @throws IOException if an IO error occurs
 	 */
-	public void toString(Appendable writer, int bodyLimit) throws IOException {
+	public void toString(Appendable writer, int limit) throws IOException {
 		writer.append(method).append(' ').append(getURL().toString());
 		if (header != null) {
 			writer.append(Streams.LINE_SEPARATOR);
 			header.write(writer);
 		}
-		if (!isGet()) {
+		if (isPost()) {
 			writer.append(Streams.LINE_SEPARATOR);
 			WriterOutputStream wos = new WriterOutputStream(writer, encoding);
 			if (body != null) {
-				if (body.available() > bodyLimit || !body.markSupported()) {
-					writer.append("<<stream: " + body + " - " + body.available() + ">>");
-				}
-				else {
+				if (body.markSupported()) {
 					body.mark(Integer.MAX_VALUE);
-					writeBody(wos);
+					Streams.copyLarge(body, wos, 0, limit);
+					wos.flush();
+					if (body.available() > 0) {
+						writer.append(Streams.LINE_SEPARATOR).append("...");
+					}
 					body.reset();
+					writer.append(Streams.LINE_SEPARATOR);
 				}
+				writer.append("<<stream: " + body + " [" + body.available() + "] >>");
 			}
 			else {
-				writeBody(wos);
+				if (!writeBodyParams(wos, limit)) {
+					writer.append(Streams.LINE_SEPARATOR).append("...");
+				}
 			}
 		}
 	}
@@ -433,13 +458,13 @@ public class HttpRequest {
 	}
 
 	/**
-	 * @param bodyLimit body size limit
+	 * @param limit body size limit
 	 * @return request string
 	 */
-	public String toString(int bodyLimit) {
+	public String toString(int limit) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			toString(sb, bodyLimit);
+			toString(sb, limit);
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
