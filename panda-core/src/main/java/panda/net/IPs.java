@@ -7,22 +7,31 @@ import java.net.InetAddress;
 import panda.lang.Strings;
 
 public class IPs {
-	public final static CIDR LOOPBACK_V4 = new CIDR("127.0.0.1/8");
+	/** Current network (only valid as source address) RFC 1700 */
+	public final static CIDR THIS_LOCAL_V4 = new CIDR("0.0.0.0/8");
+
+	/** Loopback IPv4 127.0.0.0/8 */
+	public final static CIDR LOOPBACK_V4 = new CIDR("127.0.0.0/8");
+	
+	/** Loopback IPv6 ::1 */
 	public final static CIDR LOOPBACK_V6 = new CIDR("::1");
 
-	// Class A: 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8)
+	/** Class A: 10.0.0.0 ~ 10.255.255.255 (10.0.0.0/8) */
 	public final static CIDR CLASS_A_V4 = new CIDR("10.0.0.0/8");
 	
-	// Class B: 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12)
+	/** Class B: 172.16.0.0 ~ 172.31.255.255 (172.16.0.0/12) */
 	public final static CIDR CLASS_B_V4 = new CIDR("172.16.0.0/12");
 	
-	// Class C: 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16)
+	/** Class C: 192.168.0.0 ~ 192.168.255.255 (192.168.0.0/16) */
 	public final static CIDR CLASS_C_V4 = new CIDR("192.168.0.0/16");
 	
-	// Link Local IPv6 fe80::/10
+	/** Link Local IPv4 169.254.0.0/16 */
+	public final static CIDR LINK_LOCAL_V4 = new CIDR("169.254.0.0/16");
+	
+	/** Link Local IPv6 fe80::/10 */
 	public final static CIDR LINK_LOCAL_V6 = new CIDR("fe80::/10");
 	
-	// ULA(Unique Local Addresses) IPv6 fc00::/7
+	/** ULA(Unique Local Addresses) IPv6 fc00::/7 */
 	public final static CIDR ULA_V6 = new CIDR("fc00::/7");
 	
 	private final static int INADDR4SZ = 4;
@@ -324,6 +333,8 @@ public class IPs {
 					|| CLASS_A_V4.include(cidr)
 					|| CLASS_B_V4.include(cidr)
 					|| CLASS_C_V4.include(cidr)
+					|| THIS_LOCAL_V4.include(cidr)
+					|| LINK_LOCAL_V4.include(cidr)
 					|| LOOPBACK_V6.include(cidr)
 					|| LINK_LOCAL_V6.include(cidr)
 					|| ULA_V6.include(cidr);
