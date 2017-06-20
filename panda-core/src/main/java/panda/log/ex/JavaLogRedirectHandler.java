@@ -14,7 +14,7 @@ import panda.log.Logs;
 
 public class JavaLogRedirectHandler extends Handler {
 	public static void redirect() {
-		String CONFIG = "handlers = " + JavaLogRedirectHandler.class.getName() + "\n.level = FINEST";
+		String CONFIG = "handlers = " + JavaLogRedirectHandler.class.getName() + "\n.level = ALL";
 
 		try {
 			LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(CONFIG.getBytes()));
