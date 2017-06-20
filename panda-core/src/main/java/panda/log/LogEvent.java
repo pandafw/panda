@@ -1,5 +1,6 @@
 package panda.log;
 
+import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Strings;
 
@@ -236,5 +237,22 @@ public class LogEvent {
 	 */
 	public void setCallLineNo(int callLineNo) {
 		this.callLineNo = callLineNo;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("level: ").append(level)
+			.append(", name: ").append(name)
+			.append(", class: ").append(callClass)
+			.append(", method: ").append(callMethod)
+			.append(", lineno: ").append(callLineNo)
+			.append(", FQCN: ").append(fqcn)
+			.append(Streams.LINE_SEPARATOR)
+			.append("message: ").append(message);
+		if (error != null) {
+			sb.append(Streams.LINE_SEPARATOR).append(error);
+		}
+		return sb.toString();
 	}
 }
