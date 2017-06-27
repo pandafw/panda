@@ -1,5 +1,7 @@
 package panda.mvc.view.tag.ui;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +15,7 @@ import panda.vfs.FileItem;
 @IocBean(singleton=false)
 public class Uploader extends InputUIBean {
 	protected String accept;
+	protected boolean multiple;
 	protected Integer size;
 	
 	@IocInject
@@ -76,6 +79,20 @@ public class Uploader extends InputUIBean {
 	 */
 	public String getAccept() {
 		return accept;
+	}
+
+	/**
+	 * @return the multiple
+	 */
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+	/**
+	 * @param multiple the multiple to set
+	 */
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
 	}
 
 	/**
@@ -261,27 +278,20 @@ public class Uploader extends InputUIBean {
 	}
 
 	//----------------------------------------------
-	public FileItem getFileItem() {
-		return (FileItem)value;
-	}
-
-	public Long getFileId() {
-		return value == null ? null : getFileItem().getId();
-	}
-
-	public String getFileName() {
-		return value == null ? null : getFileItem().getName();
-	}
-
-	public Integer getFileSize() {
-		return value == null ? null : getFileItem().getSize();
-	}
-
-	public String getFileContentType() {
-		return value == null ? null : getFileItem().getContentType();
-	}
-
-	public boolean isFileExits() {
-		return value == null ? false : getFileItem().isExists();
+	@SuppressWarnings("unchecked")
+	public Collection<FileItem> getFileItems() {
+		if (value == null) {
+			return null;
+		}
+		if (value instanceof Collection) {
+			return (Collection<FileItem>)value;
+		}
+		if (value instanceof FileItem[]) {
+			return Arrays.asList((FileItem[])value);
+		}
+		if (value instanceof FileItem) {
+			return Arrays.asList((FileItem)value);
+		}
+		throw new IllegalArgumentException("The uploader value is not a Collection/Array/FileItem object: " + value.getClass());
 	}
 }

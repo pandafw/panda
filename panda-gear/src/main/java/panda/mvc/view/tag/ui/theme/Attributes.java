@@ -476,6 +476,11 @@ public class Attributes {
 		return this;
 	}
 
+	public Attributes multiple(Uploader tag) {
+		addIfTrue("multiple", tag.isMultiple());
+		return this;
+	}
+
 	public Attributes cols(TextArea ta) {
 		addIfExists("cols", ta.getCols(), false);
 		return this;

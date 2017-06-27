@@ -7,6 +7,7 @@ import java.util.Map;
 import panda.bind.json.JsonObject;
 import panda.doc.html.HTMLEntities;
 import panda.io.Files;
+import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.view.tag.ui.Anchor;
 import panda.mvc.view.tag.ui.Uploader;
@@ -14,6 +15,7 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 import panda.net.URLBuilder;
+import panda.vfs.FileItem;
 
 public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 	public UploaderRenderer(RenderingContext context) {
@@ -39,6 +41,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 			.commons(tag)
 			.events(tag)
 			.dynamics(tag)
+			.data("name", tag.getName())
 			.data("uploadLink", pul)
 			.data("uploadName", pun)
 			.data("uploadData", pud)
@@ -61,41 +64,63 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		 .disabled(tag)
 		 .size(tag)
 		 .accept(tag)
+		 .multiple(tag)
 		 .tabindex(tag);
 		xtag("input", a);
 
-		String name = tag.getName();
-		String uct = defs(tag.getFileContentType());
-		Integer ufs = tag.getFileSize();
-		
-		boolean isImg = uct.startsWith("image/") || Strings.startsWith(tag.getAccept(), "image/");
-		
-		a = new Attributes();
-		a.type("hidden")
-		 .cssClass("p-uploader-fid")
-		 .disabled(tag);
-		if (name != null) {
-			a.name(name);
-			a.value(Strings.defaultString(tag.getFileId()));
-		}
-		xtag("input", a);
-
-		String durl = null;
-		
 		if (!(tag.isReadonly() || tag.isDisabled())) {
 			write("<button class=\"btn btn-sm btn-default p-uploader-btn\">");
 			write(html(getText("btn-select-file", "Browse...")));
 			write("</button>");
 		}
+		write("<div class=\"p-uploader-sep\"></div>");
 		
+		if (Collections.isEmpty(tag.getFileItems())) {
+			if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
+				write("<div class=\"p-uploader-item\">");
+				write("<a href=\"");
+				write(pel);
+				write("\">");
+				write(xicon((Strings.startsWith(tag.getAccept(), "image/") ? "icon-image" : "icon-attachment") + " p-uploader-icon"));
+				write(" ");
+				write(pet);
+				write("</a>");
+				write("</div>");
+			}
+		}
+		else {
+			for (FileItem fi : tag.getFileItems()) {
+				writeFileItem(fi, pdn, pdl, pdd, pel);
+			}
+		}
+		
+		etag("div");
+	}
+	
+	private void writeFileItem(FileItem fi, String pdn, String pdl, String pdd, String pel) throws IOException {
+		write("<div class=\"p-uploader-item\">");
+		
+		Attributes a = new Attributes();
+		a.type("hidden")
+		 .cssClass("p-uploader-fid")
+		 .disabled(tag);
+		if (tag.getName() != null) {
+			a.name(tag.getName());
+			a.value(Strings.defaultString(fi.getId()));
+		}
+		xtag("input", a);
+
+		String durl = null;
+		boolean isImg = Strings.startsWith(fi.getContentType(), "image/") || Strings.startsWith(tag.getAccept(), "image/");
+
 		write("<span class=\"p-uploader-text\">");
-		if (tag.isFileExits()) {
+		if (fi.isExists()) {
 			if (Strings.isNotEmpty(pdl)) {
 				Map<String, Object> ps = JsonObject.fromJson(pdd);
 				if (ps == null) {
 					ps = new HashMap<String, Object>();
 				}
-				ps.put(pdn, tag.getFileId());
+				ps.put(pdn, fi.getId());
 				
 				durl = URLBuilder.buildURL(pdl, ps, true);
 				
@@ -104,23 +129,16 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 				at.setHref(durl);
 				at.setIcon("icon-check");
 				at.start(writer);
-				at.end(writer, html(tag.getFileName()) + " " + filesize(ufs));
+				at.end(writer, html(fi.getName()) + " " + filesize(fi.getSize()));
 			}
 			else {
 				write("<span>");
 				write(xicon("icon-check p-uploader-icon"));
-				write(html(tag.getFileName()));
+				write(html(fi.getName()));
 				write(" ");
-				write(filesize(ufs));
+				write(filesize(fi.getSize()));
 				write("</span>");
 			}
-		}
-		else if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
-			write("<a href=\"" + pel + "\">");
-			write(xicon((isImg ? "icon-image" : "icon-attachment") + " p-uploader-icon"));
-			write(" ");
-			write(pet);
-			write("</a>");
 		}
 		else {
 			write(HTMLEntities.NBSP);
@@ -129,18 +147,23 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 
 		write("<div class=\"p-uploader-image\">");
 		if (isImg) {
+			String iu = null;
 			if (Strings.isNotEmpty(durl)) {
-				write("<img class=\"img-thumbnail\" src=\"" + durl + "\"/>");
+				iu = durl;
 			}
 			else if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
-				write("<img class=\"img-thumbnail\" src=\"" + pel + "\"/>");
+				iu = pel;
 			}
+			write("<a href=\"");
+			write(iu);
+			write("\"><img class=\"img-thumbnail\" src=\"");
+			write(iu);
+			write("\"/></a>");
 		}
 		write("</div>");
-		
-		etag("div");
+		write("</div>");
 	}
-
+	
 	private String filesize(Integer fs) {
 		String sz = Files.toDisplaySize(fs);
 

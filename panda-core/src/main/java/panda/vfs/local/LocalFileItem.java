@@ -10,6 +10,7 @@ import java.util.Date;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.Streams;
+import panda.lang.Objects;
 import panda.vfs.FileItem;
 
 /**
@@ -139,7 +140,10 @@ public class LocalFileItem implements FileItem, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return file.toString();
+		return Objects.toStringBuilder()
+				.append("id", id)
+				.append("file", file)
+				.toString();
 	}
 
 	/**

@@ -2770,26 +2770,14 @@ s_setbase({
 		
 		var loading = false;
 		
-		var pul = $u.data('uploadLink');
-		var pun = $u.data('uploadName');
-		var pud = JSON.sparse($u.data('uploadData'));
-		var pdl = $u.data('dnloadLink');
-		var pdn = $u.data('dnloadName');
-		var pdd = JSON.sparse($u.data('dnloadData'));
-		var pel = $u.data('defaultLink');
-		var pet = $u.data('defaultText');
-		
-		var $uid = $u.children('.p-uploader-fid');
 		var $uf = $u.children('.p-uploader-file');
 		var $ub = $u.children('.p-uploader-btn');
-		var $ut = $u.children('.p-uploader-text');
-		var $ui = $u.children('.p-uploader-image');
 
 		var $up = $('<div class="p-uploader-progress progress progress-striped" style="display: none"><div class="progress-bar progress-bar-info" style="width: 0%"></div></div>');
-		$up.insertBefore($ut);
+		$up.insertAfter($ub.length > 0 ? $ub : $uf);
 
 		var $ue = $('<div class="p-uploader-error"></div>');
-		$ue.insertAfter($ut);
+		$ue.insertAfter($up);
 		
 		function _filesize(fs) {
 			var sz = String.formatSize(fs);
@@ -2799,7 +2787,20 @@ s_setbase({
 			return sz;
 		}
 
-		function _info(uid, ufn, ufs, uct) {
+		function _info(fi) {
+			var uid = fi.id, ufn = fi.name, ufs = fi.size, uct = fi.contentType;
+			var pdl = $u.data('dnloadLink');
+			var pdn = $u.data('dnloadName');
+			var pdd = JSON.sparse($u.data('dnloadData'));
+			var pel = $u.data('defaultLink');
+			var pet = $u.data('defaultText');
+
+			var $uitem = $('<div>').addClass('p-uploader-item').appendTo($u);
+			var $uid = $('<input>').attr('type', 'hidden').attr('name', $u.data('name')).addClass('p-uploader-fid').appendTo($uitem);
+			var $ut = $('<span>').addClass('p-uploader-text').appendTo($uitem);
+			var $ui = $('<div>').addClass('p-uploader-image').appendTo($uitem);
+
+
 			$uid.val(uid || '');
 			
 			ufn = ufn || uid || $uf.val();
@@ -2811,14 +2812,13 @@ s_setbase({
 			}
 			
 			if (ufn) {
-				var s = '<i class="fa fa-check p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs)
+				var s = '<i class="fa fa-paperclip p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs)
 				if (durl) {
 					$ut.html('<a href="' + durl + '">' + s + '</a>');
 				}
 				else {
 					$ut.html('<span>' + s + '</span>');
 				}
-				$ut.show();
 			}
 			else if (pel) {
 				$ut.html('<a href="' + pel + '">'
@@ -2826,18 +2826,17 @@ s_setbase({
 						+ (String.startsWith(uct, 'image/') ? 'fa-picture-o' : 'fa-paperclip')
 						+ ' p-uploader-icon"></i> '
 						+ String.defaults(pet)
-						+ '</a>')
-					.show();
+						+ '</a>');
 			}
 			
-			$('<i class="p-uploader-remove fa fa-remove"></i>').click(_clear).appendTo($ut);
+			$('<i class="p-uploader-remove fa fa-remove"></i>').click(_remove).appendTo($ut);
 
 			if (String.startsWith(uct, 'image/')) {
-				if (durl) {
-					$ui.html('<img class="img-thumbnail" src="' + durl + '"></img>').fadeIn();
-				}
-				else if (pel) {
-					$ui.html('<img class="img-thumbnail" src="' + pel + '"></img>').fadeIn();
+				var u = durl || pel;
+				if (u) {
+					var $a = $('<a>').attr('href', u);
+					var $i = $('<img>').addClass('img-thumbnail').attr('src', u).appendTo($a);
+					$a.appendTo($ui).fadeIn();
 				}
 			}
 		}
@@ -2846,11 +2845,8 @@ s_setbase({
 			$up.children('.progress-bar').css({width: v + '%'});
 		}
 		
-		function _clear() {
-			$uid.val('');
-			$uf.val('');
-			$ut.html("&nbsp;");
-			$ui.empty();
+		function _remove() {
+			$(this).closest('.p-uploader-item').fadeOut(function() { $(this).remove(); });
 			$ue.hide().empty();
 		}
 		
@@ -2860,10 +2856,7 @@ s_setbase({
 			}
 			loading = true;
 
-			$uid.val('');
 			$ub.length ? $ub.hide() : $uf.hide();
-			$ui.hide().empty();
-			$ut.hide().html("&nbsp;");
 			$ue.hide().empty();
 
 			$up.show();
@@ -2890,17 +2883,26 @@ s_setbase({
 				loading = false;
 			}
 
-			var file = {}; file[pun] = $uf; 
+			var file = {}; file[$u.data('uploadName')] = $uf; 
 			$.ajaf({
-				url: pul,
-				data: pud,
+				url: $u.data('uploadLink'),
+				data: JSON.sparse($u.data('uploadData')),
 				file: file,
 				dataType: 'json',
 				success: function(d) {
 					_endUpload();
 					if (d.success) {
+						$u.children('.p-uploader-item').remove();
+						
 						var r = d.result;
-						_info(r.id, r.name, r.size, r.contentType);
+						if ($.isArray(r)) {
+							for (var i = 0; i < r.length; i++) {
+								_info(r[i]);
+							}
+						}
+						else {
+							_info(r);
+						}
 					}
 					else {
 						if (d.alerts) {

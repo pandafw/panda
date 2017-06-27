@@ -7,16 +7,30 @@
 .p-uploader-progress {
 	margin: 5px 0;
 }
+.p-uploader-sep {
+	margin: 7px 0 0 0;
+}
+.p-uploader-item {
+	border: 1px solid #ccc;
+	display: inline-block;
+	padding: 8px;
+	margin: 0 7px 7px 0;
+	vertical-align: top;
+}
 .p-uploader-text {
 	display: inline-block;
-	margin-bottom: 0;
-	padding-top: 7px;
 }
 .p-uploader-remove {
 	color: #999;
 	cursor: pointer;
-	margin-left: 20px;
+	margin-left: 10px;
+	padding: 3px;
+}
+.p-uploader-remove:hover {
+	color: #235273;
 }
 .p-uploader-image img {
 	margin: 5px 0;
+	max-width: 192px;
+	max-height: 192px;
 }
