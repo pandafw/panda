@@ -354,6 +354,10 @@ public class ListColumn implements Comparable<ListColumn> {
 		this.order = order;
 	}
 
+	public boolean isVirtualColumn() {
+		return Strings.isEmpty(name) || !Character.isLetter(name.charAt(0));
+	}
+	
 	/**
 	 * @return the name
 	 */

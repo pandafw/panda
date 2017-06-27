@@ -32,11 +32,11 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		setType(${entityBeanClass}.class);
 <#assign lcs = action.displayListUIColumns/>
 <#if lcs?has_content>
-		addDisplayFields(<#list lcs as c>${entity.simpleName}.${c}<#if c_has_next>, </#if></#list>);
+		addDisplayFields(<#list lcs as lc><#if lc.virtualColumn>"${lc.name}"<#else>${entity.simpleName}.${lc.uname}</#if><#if lc_has_next>, </#if></#list>);
 </#if>
 <#assign ifs = action.displayInputUIFields/>
 <#if ifs?has_content>
-		addDisplayFields(<#list ifs as f><#if f?starts_with('.')>"${f?substring(1)}"<#else>${entity.simpleName}.${f}</#if><#if f_has_next>, </#if></#list>);
+		addDisplayFields(<#list ifs as f><#if f.actionField>"${f.name}"<#else>${entity.simpleName}.${f.uname}</#if><#if f_has_next>, </#if></#list>);
 </#if>
 	}
 

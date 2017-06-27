@@ -363,12 +363,13 @@ public class Action {
 		return list;
 	}
 
-	public Set<String> getDisplayListUIColumns() {
-		Set<String> cs = new LinkedHashSet<String>();
+	public Set<ListColumn> getDisplayListUIColumns() {
+		Set<ListColumn> cs = new LinkedHashSet<ListColumn>();
 		for (ListUI lui : getSortedListUIList()) {
 			for (ListColumn lc : lui.getDisplayColumnList()) {
-				cs.add(lc.getUname());
+				cs.add(lc);
 			}
+			break;
 		}
 		return cs;
 	}
@@ -396,17 +397,13 @@ public class Action {
 		return list;
 	}
 
-	public Set<String> getDisplayInputUIFields() {
-		Set<String> cs = new LinkedHashSet<String>();
+	public Set<InputField> getDisplayInputUIFields() {
+		Set<InputField> cs = new LinkedHashSet<InputField>();
 		for (InputUI iui : getSortedInputUIList()) {
 			for (InputField inf : iui.getDisplayFieldList()) {
-				if (inf.getActionField().booleanValue()) {
-					cs.add("." + inf.getName());
-				}
-				else {
-					cs.add(inf.getUname());
-				}
+				cs.add(inf);
 			}
+			break;
 		}
 		return cs;
 	}
