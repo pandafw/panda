@@ -550,7 +550,7 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 								}
 								else if ("eval".equals(c.format.type)) {
 									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
-									Object v = Mvcs.evaluate(context, c.format.expr);
+									Object v = Mvcs.evaluate(context, c.format.expr, d);
 									if (v != null) {
 										v = tag.castString(v);
 										write(Escapes.escape((String)v, c.format.escape));
@@ -559,14 +559,14 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 								else if ("expr".equals(c.format.type)) {
 									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
 									String v = tag.findString(c.format.expr, d);
-									if (v != null) {
+									if (Strings.isNotEmpty(v)) {
 										write(Escapes.escape(v, c.format.escape));
 									}
 								}
 								else if ("tran".equals(c.format.type)) {
 									Asserts.notEmpty(c.format.expr, "The expression of [" + c.name + "] is empty");
-									String v = Mvcs.translate(context, c.format.expr);
-									if (v != null) {
+									String v = Mvcs.translate(context, c.format.expr, d);
+									if (Strings.isNotEmpty(v)) {
 										write(Escapes.escape(v, c.format.escape));
 									}
 								}
