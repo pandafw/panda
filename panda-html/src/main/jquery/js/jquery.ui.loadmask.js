@@ -35,15 +35,14 @@
 			$mb.addClass(conf.cssClass);
 		}
 		if (conf.label) {
-			$mb.append('<table class="ui-loadmask-msg"><tr><td>' + conf.label + '</td></tr></table>');
+			$mb.addClass('ui-loadmask-hasmsg').append('<table class="ui-loadmask-msg"><tr><td>' + conf.label + '</td></tr></table>');
 		}
 		$el.append($mb);
 		
 		//calculate center position
-		var el = 0, et = 0;
-		var ew, eh;
-		var mbw = $mb.width() - parseInt($mb.css("padding-left")) - parseInt($mb.css("padding-right"));
-		var mbh = $mb.height() - parseInt($mb.css("padding-top")) - parseInt($mb.css("padding-bottom"));
+		var el = 0, et = 0, ew, eh;
+		var mbw = $mb.outerWidth();
+		var mbh = $mb.outerHeight();
 		if (conf.window) {
 			$w = $(window);
 			el = $w.scrollLeft();

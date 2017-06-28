@@ -1,8 +1,6 @@
 .ui-loadmask-mask {
-	background-color: #CCC;
-	-moz-opacity: 0.1;
+	background-color: #ccc;
 	opacity: .1;
-	filter: alpha(opacity=10);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -13,20 +11,23 @@
 }
 
 .ui-loadmask {
-	background: url('../img/loading.gif') no-repeat 0 0;
+	background: url('../img/loading.gif') no-repeat 12px 50%;
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 31px;
-	height: 31px;
+	padding: 15px 0px 15px 48px;
 	z-index: 20001;
 }
-
+.ui-loadmask-hasmsg {
+	background-color: #fff;
+	border: solid 1px #ADD8E6;
+	opacity: 0.9;
+	
+}
 .ui-loadmask .ui-loadmask-msg {
 	border: 0 none;
 	background: transparent;
 	color: #222;
-	margin: 0 0 0 40px;
 	padding: 0;
 	white-space: nowrap;
 	width: 100%;
@@ -36,7 +37,7 @@
 	border: 0 none;
 	background: transparent;
 	margin: 0;
-	padding: 0;
+	padding: 0 20px 0 0;
 	text-align: center;
 	vertical-align: middle;
 }

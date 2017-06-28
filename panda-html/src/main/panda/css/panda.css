@@ -253,15 +253,6 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	background-image: url("../img/magnifier-32.png");
 }
 
-/* ui-loadmask hack */
-.ui-loadmask {
-	background: url('../img/loader/fountain.gif') no-repeat 0 0;
-	width: 160px;
-	height: 20px;
-}
-.ui-loadmask .ui-loadmask-msg {
-	margin: -20px 0 0 0;
-}
 /*--------------------------------------------------
  * section
 --------------------------------------------------*/
@@ -624,6 +615,17 @@ tbody.p-lv-tbody > tr > td:first-child {
 	background-image: linear-gradient(to bottom, transparent, transparent 45%, #666 46%, transparent 47%, transparent 50%, #666 51%, transparent 52%, transparent);
 }
 
+/* ui-loadmask hack */
+.ui-loadmask {
+	background-image: url('../img/loader/fountain.gif');
+	background-position: 50% 100%;
+	min-width: 180px;
+	min-height: 22px;
+	padding: 0 0 20px 0;
+}
+.ui-loadmask .ui-loadmask-msg td {
+	padding: 10px 15px 0 15px;
+}
 /*---------------------------------------------*/
 /* pager.css                                   */
 /*---------------------------------------------*/

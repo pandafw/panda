@@ -1,0 +1,11 @@
+/* ui-loadmask hack */
+.ui-loadmask {
+	background-image: url('../img/loader/fountain.gif');
+	background-position: 50% 100%;
+	min-width: 180px;
+	min-height: 22px;
+	padding: 0 0 20px 0;
+}
+.ui-loadmask .ui-loadmask-msg td {
+	padding: 10px 15px 0 15px;
+}
