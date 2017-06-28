@@ -47,7 +47,7 @@ query-strings=\
 
 
 #uploader
-uploader-text=下载
+uploader-text-download=下载
 
 
 

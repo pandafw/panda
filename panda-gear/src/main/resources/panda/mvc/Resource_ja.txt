@@ -54,7 +54,7 @@ query-strings=\
 
 
 #uploader
-uploader-text=ダウンロード
+uploader-text-download=ダウンロード
 
 
 #servlet error

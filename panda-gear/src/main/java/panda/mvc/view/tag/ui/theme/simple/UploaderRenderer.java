@@ -9,7 +9,6 @@ import panda.doc.html.HTMLEntities;
 import panda.io.Files;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.mvc.view.tag.ui.Anchor;
 import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -32,8 +31,6 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		String pdl = tag.getDnloadLink();
 		String pdn = tag.getDnloadName();
 		String pdd = tag.getDnloadData();
-		String pel = tag.getDefaultLink();
-		String pet = tag.getDefaultText();
 
 		attr.id(tag)
 			.cssClass("p-uploader")
@@ -48,8 +45,6 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 			.data("dnloadLink", pdl)
 			.data("dnloadName", pdn)
 			.data("dnloadData", pdd)
-			.data("defaultLink", pel)
-			.data("defaultText", pet)
 			;
 		
 		if (!(tag.isReadonly() || tag.isDisabled())) {
@@ -76,28 +71,35 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		write("<div class=\"p-uploader-sep\"></div>");
 		
 		if (Collections.isEmpty(tag.getFileItems())) {
+			String pel = tag.getDefaultLink();
 			if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
 				write("<div class=\"p-uploader-item\">");
-				write("<a href=\"");
-				write(pel);
-				write("\">");
-				write(xicon((Strings.startsWith(tag.getAccept(), "image/") ? "icon-image" : "icon-attachment") + " p-uploader-icon"));
-				write(" ");
-				write(pet);
-				write("</a>");
+				
+				boolean bImg = Strings.startsWith(tag.getAccept(), "image/");
+				String pet = tag.getDefaultText();
+				if (!bImg && Strings.isEmpty(pet)) {
+					pet = context.getText().getText("uploader-text-download", "");
+				}
+
+				if (Strings.isNotEmpty(pet)) {
+					writeLabel(pel, pet, bImg);
+				}
+				if (bImg) {
+					writeImage(pel);
+				}
 				write("</div>");
 			}
 		}
 		else {
 			for (FileItem fi : tag.getFileItems()) {
-				writeFileItem(fi, pdn, pdl, pdd, pel);
+				writeFileItem(fi, pdn, pdl, pdd);
 			}
 		}
 		
 		etag("div");
 	}
 	
-	private void writeFileItem(FileItem fi, String pdn, String pdl, String pdd, String pel) throws IOException {
+	private void writeFileItem(FileItem fi, String pdn, String pdl, String pdd) throws IOException {
 		write("<div class=\"p-uploader-item\">");
 		
 		Attributes a = new Attributes();
@@ -124,12 +126,7 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 				
 				durl = URLBuilder.buildURL(pdl, ps, true);
 				
-				Anchor at = newTag(Anchor.class);
-				at.setCssClass("p-uploader-icon");
-				at.setHref(durl);
-				at.setIcon("icon-check");
-				at.start(writer);
-				at.end(writer, html(fi.getName()) + " " + filesize(fi.getSize()));
+				writeLabel(durl, html(fi.getName()) + " " + filesize(fi.getSize()), isImg);
 			}
 			else {
 				write("<span>");
@@ -145,22 +142,29 @@ public class UploaderRenderer extends AbstractEndRenderer<Uploader> {
 		}
 		write("</span>");
 
-		write("<div class=\"p-uploader-image\">");
-		if (isImg) {
-			String iu = null;
-			if (Strings.isNotEmpty(durl)) {
-				iu = durl;
-			}
-			else if (tag.isDefaultEnable() && Strings.isNotEmpty(pel)) {
-				iu = pel;
-			}
-			write("<a href=\"");
-			write(iu);
-			write("\"><img class=\"img-thumbnail\" src=\"");
-			write(iu);
-			write("\"/></a>");
+		if (isImg && Strings.isNotEmpty(durl)) {
+			writeImage(durl);
 		}
 		write("</div>");
+	}
+	
+	private void writeLabel(String link, String text, boolean isImg) throws IOException {
+		write("<a href=\"");
+		write(link);
+		write("\">");
+		write(xicon((isImg ? "icon-image" : "icon-attachment") + " p-uploader-icon"));
+		write(" ");
+		write(text);
+		write("</a>");
+	}
+
+	private void writeImage(String iu) throws IOException {
+		write("<div class=\"p-uploader-image\">");
+		write("<a href=\"");
+		write(iu);
+		write("\"><img class=\"img-thumbnail\" src=\"");
+		write(iu);
+		write("\"/></a>");
 		write("</div>");
 	}
 	

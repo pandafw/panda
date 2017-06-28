@@ -2792,8 +2792,6 @@ s_setbase({
 			var pdl = $u.data('dnloadLink');
 			var pdn = $u.data('dnloadName');
 			var pdd = JSON.sparse($u.data('dnloadData'));
-			var pel = $u.data('defaultLink');
-			var pet = $u.data('defaultText');
 
 			var $uitem = $('<div>').addClass('p-uploader-item').appendTo($u);
 			var $uid = $('<input>').attr('type', 'hidden').attr('name', $u.data('name')).addClass('p-uploader-fid').appendTo($uitem);
@@ -2811,33 +2809,23 @@ s_setbase({
 				durl = pdl + '?' + $.param(ps);
 			}
 			
+			var img = String.startsWith(uct, 'image/');
 			if (ufn) {
-				var s = '<i class="fa fa-paperclip p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs)
+				var s = '<i class="fa fa-' + (img ? 'image' : 'paperclip') + ' p-uploader-icon"></i> ' + ufn + ' ' + _filesize(ufs);
 				if (durl) {
-					$ut.html('<a href="' + durl + '">' + s + '</a>');
+					$('<a>').attr('href', durl).html(s).appendTo($ut);
 				}
 				else {
-					$ut.html('<span>' + s + '</span>');
+					$('<span>').html(s).appendTo($ut);
 				}
-			}
-			else if (pel) {
-				$ut.html('<a href="' + pel + '">'
-						+ '<i class="fa '
-						+ (String.startsWith(uct, 'image/') ? 'fa-picture-o' : 'fa-paperclip')
-						+ ' p-uploader-icon"></i> '
-						+ String.defaults(pet)
-						+ '</a>');
 			}
 			
-			$('<i class="p-uploader-remove fa fa-remove"></i>').click(_remove).appendTo($ut);
+			$('<i>').addClass('p-uploader-remove fa fa-remove').click(_remove).appendTo($ut);
 
-			if (String.startsWith(uct, 'image/')) {
-				var u = durl || pel;
-				if (u) {
-					var $a = $('<a>').attr('href', u);
-					var $i = $('<img>').addClass('img-thumbnail').attr('src', u).appendTo($a);
-					$a.appendTo($ui).fadeIn();
-				}
+			if (img && durl) {
+				var $a = $('<a>').attr('href', durl);
+				var $i = $('<img>').addClass('img-thumbnail').attr('src', durl).appendTo($a);
+				$a.appendTo($ui).fadeIn();
 			}
 		}
 
