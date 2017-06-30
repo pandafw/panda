@@ -3,8 +3,6 @@ package panda.app.auth;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import panda.app.AppConstants;
 import panda.app.constant.AUTH;
@@ -30,6 +28,8 @@ public class AppAuthenticator extends UserAuthenticator {
 	
 	private static final Log log = Logs.getLog(AppAuthenticator.class);
 
+	public static final String DEFAULT_COOKIE_NAME = "WW_TICKET";
+	
 	/**
 	 * secure user session time (s): 30m 
 	 */
@@ -61,10 +61,16 @@ public class AppAuthenticator extends UserAuthenticator {
 	protected String paramName = "_ticket_";
 
 	/**
-	 * ticket cookie name (default: WW_TICKET)
+	 * ticket cookie name (default: WW_TICKET + CONTEXT_PATH.replace('/', '_'))
 	 */
 	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_NAME, required=false)
-	protected String cookieName = "WW_TICKET";
+	protected String cookieName;
+
+	/**
+	 * ticket cookie path (default: CONTEXT_PATH)
+	 */
+	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_PATH, required=false)
+	protected String cookiePath;
 
 	/**
 	 * ticket cookie age (default: 60 * 60 * 24 * 7days)
@@ -222,6 +228,24 @@ public class AppAuthenticator extends UserAuthenticator {
 		return cookieAge;
 	}
 	
+	protected String getCookieName(ActionContext ac) {
+		if (Strings.isNotEmpty(cookieName)) {
+			return cookieName;
+		}
+		
+		if (Strings.isEmpty(ac.getBase())) {
+			return DEFAULT_COOKIE_NAME;
+		}
+		return DEFAULT_COOKIE_NAME + Strings.replaceChars(ac.getBase(), '/', '_').toUpperCase();
+	}
+	
+	protected String getCookiePath(ActionContext ac) {
+		if (Strings.isNotEmpty(cookiePath)) {
+			return cookiePath;
+		}
+		return ac.getBase() + '/';
+	}
+
 	/**
 	 * saveUserToCookie
 	 * @param user user
@@ -232,28 +256,24 @@ public class AppAuthenticator extends UserAuthenticator {
 
 		String ticket = serializeUser(user);
 		String eticket = encrypt(ticket);
-		String cookiePath = ac.getServlet().getContextPath() + "/";
 		Integer cookieAge = getCookieAge(ac, user);
 		
-		Cookie c = new Cookie(cookieName, eticket);
+		Cookie c = new Cookie(getCookieName(ac), eticket);
 		if (cookieAge != null) {
 			c.setMaxAge(cookieAge);
 		}
-		c.setPath(cookiePath);
+		c.setPath(getCookiePath(ac));
 
 		ac.getResponse().addCookie(c);
 
 		ac.getRequest().setAttribute(REQ.USER, user);
 	}
 
-	protected void removeUserFromCookie(ActionContext context) {
-		HttpServletResponse res = context.getResponse();
-		String cookiePath = context.getBase() + "/";
-		
+	protected void removeUserFromCookie(ActionContext ac) {
 		HttpServlets.removeCookie(
-			res, 
-			cookieName,
-			cookiePath);
+			ac.getResponse(), 
+			getCookieName(ac),
+			getCookiePath(ac));
 	}
 
 	/**
@@ -266,8 +286,8 @@ public class AppAuthenticator extends UserAuthenticator {
 			return null;
 		}
 		
-		HttpServletRequest req = ac.getRequest();
-		Cookie c = HttpServlets.getCookie(req, cookieName);
+		String n = getCookieName(ac);
+		Cookie c = HttpServlets.getCookie(ac.getRequest(), n);
 		if (c == null) {
 			return null;
 		}
@@ -278,8 +298,8 @@ public class AppAuthenticator extends UserAuthenticator {
 			Object u = deserializeUser(ticket);
 			return u;
 		}
-		catch (Exception e) {
-			log.warn("Incorrect AUTH Cookie " + cookieName + ": " + ticket, e);
+		catch (Throwable e) {
+			log.warn("Invalid AUTH Cookie " + n + ": " + ticket, e);
 		}
 		return null;
 	}
@@ -295,8 +315,7 @@ public class AppAuthenticator extends UserAuthenticator {
 			return null;
 		}
 		
-		HttpServletRequest req = ac.getRequest();
-		String ticket = req.getParameter(paramName);
+		String ticket = ac.getRequest().getParameter(paramName);
 		if (Strings.isEmpty(ticket)) {
 			return null;
 		}
@@ -307,7 +326,7 @@ public class AppAuthenticator extends UserAuthenticator {
 			return u;
 		}
 		catch (Exception e) {
-			log.warn("Incorrect AUTH Param " + cookieName + ": " + ticket, e);
+			log.warn("Invalid AUTH Param " + paramName + ": " + ticket, e);
 		}
 		return null;
 	}
