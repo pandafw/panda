@@ -10,6 +10,7 @@ import java.util.Map;
 import panda.bean.BeanHandler;
 import panda.bind.json.JsonObject;
 import panda.dao.DB;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Objects;
 
@@ -293,6 +294,28 @@ public class Entity<T> {
 	}
 
 	/**
+	 * get entity fields by names
+	 * 
+	 * @param names field names
+	 * @return entity field list
+	 */
+	public List<EntityField> getFields(String... names) {
+		if (Arrays.isEmpty(names)) {
+			return null;
+		}
+
+		List<EntityField> efs = new ArrayList<EntityField>();
+		for (String n : names) {
+			EntityField ef = fields.get(n);
+			if (ef == null) {
+				return null;
+			}
+			efs.add(ef);
+		}
+		return efs;
+	}
+
+	/**
 	 * get a entity field by column name
 	 * 
 	 * @param name column name
@@ -300,6 +323,28 @@ public class Entity<T> {
 	 */
 	public EntityField getColumn(String name) {
 		return columns.get(name);
+	}
+
+	/**
+	 * get entity fields by column names
+	 * 
+	 * @param names column names
+	 * @return entity field list
+	 */
+	public List<EntityField> getColumns(String... names) {
+		if (Arrays.isEmpty(names)) {
+			return null;
+		}
+
+		List<EntityField> efs = new ArrayList<EntityField>();
+		for (String n : names) {
+			EntityField ef = columns.get(n);
+			if (ef == null) {
+				return null;
+			}
+			efs.add(ef);
+		}
+		return efs;
 	}
 
 	/**
