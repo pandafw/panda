@@ -1,4 +1,5 @@
 p.file=数据文件
+p.update=覆盖原有数据
 p.loose=忽略错误数据
 
 well-import=请指定UNICODE(带BOM)的CSV(逗号分隔), TSV/TXT(逗号分隔)或者XLS(Excel 2003), XLSX(Excel 2007~)\

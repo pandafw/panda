@@ -37,6 +37,7 @@ public abstract class EntityHelper {
 		if (data == null) {
 			return;
 		}
+		
 		EntityField eid = entity.getIdentity();
 		if (eid != null) {
 			Object value = Castors.scast(null, eid.getType());
@@ -51,13 +52,30 @@ public abstract class EntityHelper {
 	 * @param des destination data
 	 */
 	public static <T> void copyIdentityValue(Entity<T> entity, T src, T des) {
-		if (src == null || des == null) {
+		if (src == null || des == null || src == des) {
 			return;
 		}
 
 		EntityField eid = entity.getIdentity();
 		if (eid != null) {
 			eid.setValue(des, eid.getValue(src));
+		}
+	}
+
+	/**
+	 * copy primary key values from source data to destination data
+	 * @param entity entity
+	 * @param src source data
+	 * @param des destination data
+	 */
+	public static <T> void copyPrimaryKeyValues(Entity<T> entity, T src, T des) {
+		if (src == null || des == null || src == des) {
+			return;
+		}
+
+		Collection<EntityField> efs = entity.getPrimaryKeys();
+		for (EntityField ef : efs) {
+			ef.setValue(des, ef.getValue(src));
 		}
 	}
 
@@ -95,39 +113,38 @@ public abstract class EntityHelper {
 	}
 
 	/**
-	 * checkPrimaryKeys
-	 * 
-	 * @param dao the DAO
-	 * @param entity the Entity
-	 * @param data the data
-	 * @return true if check successfully
+	 * find duplicate unique index
+	 * @param dao dao
+	 * @param entity entity
+	 * @param data data
+	 * @param sdat source data, check unique index data modified or not if sdat is supplied 
+	 * @return duplicate unique index
 	 */
-	public static <T> boolean checkPrimaryKeys(Dao dao, Entity<T> entity, T data) {
-		EntityField eid = entity.getIdentity(); 
-		if (eid == null) {
-			List<EntityField> pks = entity.getPrimaryKeys();
+	public static <T> EntityIndex findDuplicateUniqueIndex(Dao dao, Entity<T> entity, T data, T sdat) {
+		Collection<EntityIndex> eis = entity.getIndexes();
+		if (Collections.isEmpty(eis)) {
+			return null;
+		}
+		
+		for (EntityIndex ei : eis) {
+			if (!ei.isUnique()) {
+				continue;
+			}
 
-			GenericQuery<T> q = new GenericQuery<T>(entity);
-			for (EntityField pk : pks) {
-				Object dv = pk.getValue(data);
-				if (dv == null) {
-					return false;
+			if (sdat != null) {
+				if (EntityHelper.isDifferent(ei.getFields(), data, sdat)) {
+					if (!checkUniqueIndex(dao, entity, data, ei)) {
+						return ei;
+					}
 				}
-
-				q.equalTo(pk.getName(), dv);
 			}
-
-			if (dao.exists(entity, data)) {
-				return false;
-			}
-		}
-		else {
-			Object id = eid.getValue(data);
-			if (dao.isValidIdentity(id) && dao.exists(entity, data)) {
-				return false;
+			else {
+				if (!checkUniqueIndex(dao, entity, data, ei)) {
+					return ei;
+				}
 			}
 		}
-		return true;
+		return null;
 	}
 
 	public static <T> boolean checkUniqueIndex(Dao dao, Entity<T> entity, T data, EntityIndex ei) {
@@ -156,6 +173,48 @@ public abstract class EntityHelper {
 		}
 		
 		return true;
+	}
+
+	/**
+	 * findIncorrectForeignKey
+	 * @param data
+	 * @return true if check successfully
+	 */
+	public static <T> EntityFKey findIncorrectForeignKey(Dao dao, Entity<T> entity, T data) {
+		Collection<EntityFKey> efks = entity.getForeignKeys();
+		if (Collections.isEmpty(efks)) {
+			return null;
+		}
+		
+		for (EntityFKey efk : efks) {
+			if (!checkForeignKey(dao, entity, data, efk)) {
+				return efk;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * findIncorrectForeignKeys
+	 * 
+	 * @param dao DAO object
+	 * @param entity the Entity
+	 * @param data the data to check
+	 * @return true if check successfully
+	 */
+	public static <T> List<EntityFKey> findIncorrectForeignKeys(Dao dao, Entity<T> entity, T data) {
+		Collection<EntityFKey> efks = entity.getForeignKeys();
+		if (Collections.isEmpty(efks)) {
+			return null;
+		}
+
+		List<EntityFKey> eefks = new ArrayList<EntityFKey>();
+		for (EntityFKey efk : efks) {
+			if (!checkForeignKey(dao, entity, data, efk)) {
+				eefks.add(efk);
+			}
+		}
+		return eefks.isEmpty() ? null : eefks;
 	}
 
 	/**
@@ -198,29 +257,6 @@ public abstract class EntityHelper {
 	}
 	
 	/**
-	 * Check Foreign Keys
-	 * 
-	 * @param dao DAO object
-	 * @param entity the Entity
-	 * @param data the data to check
-	 * @return true if check successfully
-	 */
-	public static <T> List<EntityFKey> checkForeignKeys(Dao dao, Entity<T> entity, T data) {
-		Collection<EntityFKey> efks = entity.getForeignKeys();
-		if (Collections.isEmpty(efks)) {
-			return null;
-		}
-
-		List<EntityFKey> eefks = new ArrayList<EntityFKey>();
-		for (EntityFKey efk : efks) {
-			if (!checkForeignKey(dao, entity, data, efk)) {
-				eefks.add(efk);
-			}
-		}
-		return eefks.isEmpty() ? null : eefks;
-	}
-	
-	/**
 	 * check not null fields
 	 * 
 	 * @param entity the Entity
@@ -256,5 +292,82 @@ public abstract class EntityHelper {
 			}
 		}
 		return nulls.isEmpty() ? null : nulls;
+	}
+
+	/**
+	 * fetch data by the entity field key.
+	 * if key is null, then null will be returned.
+	 * @param dao dao
+	 * @param entity entity
+	 * @param ef entity field
+	 * @param data the data contains the query key
+	 * @return the fetched data (first 1)
+	 */
+	public static <T> T fetchDataByField(Dao dao, Entity<T> entity, EntityField ef, T data) {
+		Object dv = ef.getValue(data);
+		if (dv == null) {
+			return null;
+		}
+		
+		GenericQuery<T> q = new GenericQuery<T>(entity);
+		q.equalTo(ef.getName(), dv).limit(1);
+		return dao.fetch(q);
+	}
+	
+	/**
+	 * fetch data by the keys of entity fields.
+	 * if keys is null, then null will be returned.
+	 * @param dao dao
+	 * @param entity entity
+	 * @param fs entity fields
+	 * @param data the data contains the query keys
+	 * @return the fetched data (first 1)
+	 */
+	public static <T> T fetchDataByFields(Dao dao, Entity<T> entity, String[] fs, T data) {
+		Collection<EntityField> efs = entity.getFields(fs);
+		return fetchDataByFields(dao, entity, efs, data);
+	}
+	
+	/**
+	 * fetch data by the keys of entity fields.
+	 * if keys is null, then null will be returned.
+	 * @param dao dao
+	 * @param entity entity
+	 * @param efs entity fields
+	 * @param data the data contains the query keys
+	 * @return the fetched data (first 1)
+	 */
+	public static <T> T fetchDataByFields(Dao dao, Entity<T> entity, Collection<?> efs, T data) {
+		boolean allNull = true;
+
+		GenericQuery<T> q = new GenericQuery<T>(entity);
+		for (Object o : efs) {
+			EntityField ef = null;
+			if (o instanceof EntityField) {
+				ef = (EntityField)o;
+			}
+			else if (o instanceof String) {
+				ef = entity.getField((String)o);
+			}
+			else {
+				throw new IllegalArgumentException("Invalid entity field: " + (o == null ? null : o.getClass()));
+			}
+
+			Object dv = ef.getValue(data);
+			if (dv == null) {
+				q.isNull(ef.getName());
+			}
+			else {
+				allNull = false;
+				q.equalTo(ef.getName(), dv);
+			}
+		}
+
+		if (allNull) {
+			return null;
+		}
+		
+		q.limit(1);
+		return dao.fetch(q);
 	}
 }

@@ -1,6 +1,7 @@
 package panda.app.action.crud;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import panda.app.BusinessRuntimeException;
@@ -226,22 +227,22 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doViewSelect
 	 */
 	protected Object doViewSelect(T key) {
-		T pk = prepareKey(key);
-		T sd = selectData(pk);
-		return sd;
+		T pkey = prepareKey(key);
+		T sdat = selectData(pkey);
+		return sdat;
 	}
 
 	/**
 	 * doCopySelect
 	 */
 	protected Object doCopySelect(T key) {
-		T pk = prepareKey(key);
-		T sd = selectData(pk);
-		if (sd != null) {
-			clearOnCopy(sd);
+		T pkey = prepareKey(key);
+		T sdat = selectData(pkey);
+		if (sdat != null) {
+			clearOnCopy(sdat);
 			clearOnCopy(key);
 		}
-		return sd;
+		return sdat;
 	}
 
 	/**
@@ -255,9 +256,9 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertInit
 	 */
 	protected Object doInsertInit() {
-		T pd = prepareData(null);
-		getContext().setParams(pd);
-		return pd;
+		T pdat = prepareData(null);
+		getContext().setParams(pdat);
+		return pdat;
 	}
 
 	/**
@@ -271,8 +272,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doInsertConfirm
 	 */
 	protected Object doInsertConfirm(T data) {
-		T pd = prepareData(data);
-		if (checkOnInsert(pd)) {
+		T pdat = prepareData(data);
+		if (checkOnInsert(pdat)) {
 			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
 		else {
@@ -280,28 +281,35 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				setScenarioView();
 			}
 		}
-		return pd;
+		return pdat;
 	}
 
 	/**
 	 * doInsertExecute
 	 */
 	protected Object doInsertExecute(T data) {
-		final T pd = prepareData(data);
-		if (!checkOnInsert(pd)) {
+		final T pdat = prepareData(data);
+		if (!checkOnInsert(pdat)) {
 			setResultOnExecCheckError();
-			return pd;
+			return pdat;
 		}
 
 		try {
-			final T id = startInsert(pd);
+			final T id = startInsert(pdat);
+			// Required fields are check by validators,
+			// but some fields are initialed by program,
+			// we check these not null fields to prevent SQL error
+			if (!checkNotNulls(id)) {
+				setResultOnExecCheckError();
+				return pdat;
+			}
 			getDao().exec(new Runnable() {
 				public void run() {
 					insertData(id);
-					EntityHelper.copyIdentityValue(getEntity(), id, pd);
+					EntityHelper.copyIdentityValue(getEntity(), id, pdat);
 				}
 			});
-			afterInsert(pd);
+			afterInsert(pdat);
 		}
 		catch (Throwable e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -315,11 +323,11 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return data;
 		}
 		finally {
-			finalInsert(pd);
+			finalInsert(pdat);
 		}
 
 		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
-		return pd;
+		return pdat;
 	}
 	
 	/**
@@ -341,13 +349,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * doUpdateConfirm
 	 */
 	protected Object doUpdateConfirm(T data) {
-		T pd = prepareData(data);
-		T sd = selectData(pd);
-		if (sd == null) {
+		T pdat = prepareData(data);
+		T sdat = selectData(pdat);
+		if (sdat == null) {
 			return null;
 		}
 		
-		if (checkOnUpdate(pd, sd)) {
+		if (checkOnUpdate(pdat, sdat)) {
 			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
 		else {
@@ -355,32 +363,32 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				setScenarioView();
 			}
 		}
-		return pd;
+		return pdat;
 	}
 	
 	/**
 	 * doUpdateExecute
 	 */
 	protected Object doUpdateExecute(T data) {
-		final T pd = prepareData(data);
-		final T sd = selectData(pd);
-		if (sd == null) {
+		final T pdat = prepareData(data);
+		final T sdat = selectData(pdat);
+		if (sdat == null) {
 			return null;
 		}
 
-		if (!checkOnUpdate(pd, sd)) {
+		if (!checkOnUpdate(pdat, sdat)) {
 			setResultOnExecCheckError();
 			return data;
 		}
 
 		try {
-			final T ud = startUpdate(pd, sd);
+			final T udat = startUpdate(pdat, sdat);
 			getDao().exec(new Runnable() {
 				public void run() {
-					updateData(ud, sd);
+					updateData(udat, sdat);
 				}
 			});
-			afterUpdate(pd, sd);
+			afterUpdate(pdat, sdat);
 		}
 		catch (Throwable e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -391,54 +399,54 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
-			return pd;
+			return pdat;
 		}
 		finally {
-			finalUpdate(pd, sd);
+			finalUpdate(pdat, sdat);
 		}
 
 		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
-		return pd;
+		return pdat;
 	}
 
 	/**
 	 * doDeleteSelect
 	 */
 	protected Object doDeleteSelect(T key) {
-		final T pk = prepareKey(key);
-		final T sd = selectData(pk);
-		if (sd == null) {
+		final T pkey = prepareKey(key);
+		final T sdat = selectData(pkey);
+		if (sdat == null) {
 			return null;
 		}
 		
-		if (checkOnDelete(pk, sd)) {
+		if (checkOnDelete(pkey, sdat)) {
 			addActionConfirm(getScenarioMessage(RES.ACTION_CONFIRM_PREFIX));
 		}
-		return sd;
+		return sdat;
 	}
 
 	/**
 	 * doDeleteExecute
 	 */
 	protected Object doDeleteExecute(final T key) {
-		final T pk = prepareKey(key);
-		final T sd = selectData(pk);
-		if (sd == null) {
+		final T pkey = prepareKey(key);
+		final T sdat = selectData(pkey);
+		if (sdat == null) {
 			return null;
 		}
 
-		if (!checkOnDelete(pk, sd)) {
-			return sd;
+		if (!checkOnDelete(pkey, sdat)) {
+			return sdat;
 		}
 		
 		try {
-			startDelete(sd);
+			startDelete(sdat);
 			getDao().exec(new Runnable() {
 				public void run() {
-					deleteData(sd);
+					deleteData(sdat);
 				}
 			});
-			afterDelete(sd);
+			afterDelete(sdat);
 		}
 		catch (Throwable e) {
 			if (e instanceof BusinessRuntimeException) {
@@ -449,14 +457,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			}
 			addSystemError(RES.ACTION_FAILED_PREFIX, e);
 			setScenarioView();
-			return sd;
+			return sdat;
 		}
 		finally {
-			finalDelete(sd);
+			finalDelete(sdat);
 		}
 		
 		addActionMessage(getScenarioMessage(RES.ACTION_SUCCESS_PREFIX));
-		return sd;
+		return sdat;
 	}
 
 	//------------------------------------------------------------
@@ -543,10 +551,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkCommon
 	 * @param data data
-	 * @param sd source data (null on insert)
+	 * @param sdat source data (null on insert)
 	 * @return true if do something success
 	 */
-	protected boolean checkCommon(T data, T sd) {
+	protected boolean checkCommon(T data, T sdat) {
 		Asserts.notNull(data, "data is null");
 		return true;
 	}
@@ -554,10 +562,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkOnInput (Insert & Update)
 	 * @param data data
-	 * @param sd source data (null on insert)
+	 * @param sdat source data (null on insert)
 	 * @return true if do something success
 	 */
-	protected boolean checkOnInput(T data, T sd) {
+	protected boolean checkOnInput(T data, T sdat) {
 		Asserts.notNull(data, "data is null");
 		return true;
 	}
@@ -594,7 +602,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 				return false;
 			}
 		}
-		if (!checkUniqueKeysOnInsert(data)) {
+		if (!checkUniqueIndexesOnInsert(data)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -646,48 +654,48 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @return the update fields
 	 */
-	protected Set<String> getUpdateFields(T data, T sd) {
+	protected Set<String> getUpdateFields(T data, T sdat) {
 		return getDisplayFields();
 	}
 
 	/**
 	 * checkOnUpdate
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check success
 	 */
-	protected boolean checkOnUpdate(T data, T sd) {
+	protected boolean checkOnUpdate(T data, T sdat) {
 		boolean c = true;
 
 		// !IMPORTANT: do not change check order
-		if (!checkCommon(data, sd)) {
+		if (!checkCommon(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkOnInput(data, sd)) {
+		if (!checkOnInput(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkDataChangedOnUpdate(data, sd)) {
+		if (!checkDataChangedOnUpdate(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		// primary key can not be modified or null
-		if (!checkPrimaryKeysOnUpdate(data, sd)) {
+		if (!checkPrimaryKeysOnUpdate(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
-		if (!checkUniqueKeysOnUpdate(data, sd)) {
+		if (!checkUniqueIndexesOnUpdate(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -705,21 +713,21 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * startUpdate
 	 * @param data input data
-	 * @param sd source data
+	 * @param sdat source data
 	 */
-	protected T startUpdate(T data, T sd) {
-		assist().initUpdateFields(data, sd);
+	protected T startUpdate(T data, T sdat) {
+		assist().initUpdateFields(data, sdat);
 		return data;
 	}
 
 	/**
 	 * update data
-	 * @param ud update data
-	 * @param sd source data
+	 * @param udat update data
+	 * @param sdat source data
 	 * @return update count
 	 */
-	protected int updateData(T ud, T sd) {
-		int cnt = getDao().update(ud, getUpdateFields(ud, sd));
+	protected int updateData(T udat, T sdat) {
+		int cnt = getDao().update(udat, getUpdateFields(udat, sdat));
 		if (cnt != 1) {
 			throw new RuntimeException("The update data count (" + cnt + ") does not equals 1.");
 		}
@@ -729,17 +737,17 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * afterUpdate
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 */
-	protected void afterUpdate(T data, T sd) {
+	protected void afterUpdate(T data, T sdat) {
 	}
 
 	/**
 	 * finalUpdate
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 */
-	protected void finalUpdate(T data, T sd) {
+	protected void finalUpdate(T data, T sdat) {
 	}
 
 	//------------------------------------------------------------
@@ -748,20 +756,20 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkOnDelete
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check success
 	 */
-	protected boolean checkOnDelete(T data, T sd) {
+	protected boolean checkOnDelete(T data, T sdat) {
 		boolean c = true;
 		
-		if (!checkCommon(data, sd)) {
+		if (!checkCommon(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
 			}
 		}
 		
-		if (!checkDataChangedOnDelete(data, sd)) {
+		if (!checkDataChangedOnDelete(data, sdat)) {
 			c = false;
 			if (checkAbortOnError) {
 				return false;
@@ -838,30 +846,62 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	protected void addDataIncorrectError(T data, Collection<EntityField> efs) {
 		addDataFieldErrors(data, efs, RES.ERROR_ITEM_INCORRECT, RES.ERROR_DATA_INCORRECT);
 	}
+
+	protected void addDataRequiredError(T data, Collection<EntityField> efs) {
+		addDataFieldErrors(data, efs, RES.ERROR_ITEM_REQUIRED, RES.ERROR_ITEM_REQUIRED);
+	}
 	
 	//------------------------------------------------------------
 	// check methods
 	//------------------------------------------------------------
+	/**
+	 * checkNotNulls
+	 * 
+	 * @param data data
+	 */
+	protected boolean checkNotNulls(T data) {
+		List<EntityField> efs = EntityHelper.checkNotNulls(entity, data);
+		if (Collections.isNotEmpty(efs)) {
+			addDataRequiredError(data, efs);
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * checkPrimaryKeyOnInsert
 	 * @param data data
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeysOnInsert(T data) {
-		if (EntityHelper.checkPrimaryKeys(getDao(), getEntity(), data)) {
-			return true;
+		EntityField eid = entity.getIdentity(); 
+		if (eid == null) {
+			if (!EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
+				addDataIncorrectError(data, getEntity().getPrimaryKeys());
+				return false;
+			}
 		}
-
-		addDataDuplicateError(data, getEntity().getPrimaryKeys());
-		return false;
+		else {
+			Object id = eid.getValue(data);
+			if (!dao.isValidIdentity(id)) {
+				return true;
+			}
+		}
+		
+		if (!dao.exists(entity, data)) {
+			addDataDuplicateError(data, getEntity().getPrimaryKeys());
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkPrimaryKeysOnUpdate(T data, T sd) {
+	protected boolean checkPrimaryKeysOnUpdate(T data, T sdat) {
 		if (EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
 			return true;
 		}
@@ -870,57 +910,34 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		return false;
 	}
 
-	protected boolean checkUniqueIndex(T data, EntityIndex ei) {
-		if (EntityHelper.checkUniqueIndex(getDao(), getEntity(), data, ei)) {
+	/**
+	 * checkUniqueIndexesOnInsert
+	 * @return true if check successfully
+	 */
+	protected boolean checkUniqueIndexesOnInsert(T data) {
+		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, null);
+		if (ei == null) {
 			return true;
 		}
-
+		
 		addDataDuplicateError(data, ei.getFields());
 		return false;
 	}
 
 	/**
-	 * checkUniqueKeysOnInsert
-	 * @return true if check successfully
-	 */
-	protected boolean checkUniqueKeysOnInsert(T data) {
-		Collection<EntityIndex> eis = getEntity().getIndexes();
-		if (Collections.isEmpty(eis)) {
-			return true;
-		}
-		
-		for (EntityIndex ei : eis) {
-			if (!checkUniqueIndex(data, ei)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * checkUniqueKeysOnUpdate
+	 * checkUniqueIndexesOnUpdate
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkUniqueKeysOnUpdate(T data, T sd) {
-		Collection<EntityIndex> eis = getEntity().getIndexes();
-		if (Collections.isEmpty(eis)) {
+	protected boolean checkUniqueIndexesOnUpdate(T data, T sdat) {
+		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, sdat);
+		if (ei == null) {
 			return true;
 		}
 		
-		for (EntityIndex ei : eis) {
-			if (!ei.isUnique()) {
-				continue;
-			}
-
-			if (EntityHelper.isDifferent(ei.getFields(), data, sd)) {
-				if (!checkUniqueIndex(data, ei)) {
-					return false;
-				}
-			}
-		}
-		return true;
+		addDataDuplicateError(data, ei.getFields());
+		return false;
 	}
 
 	/**
@@ -929,38 +946,33 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkForeignKeys(T data) {
-		Collection<EntityFKey> efks = getEntity().getForeignKeys();
-		if (Collections.isEmpty(efks)) {
+		EntityFKey efk = EntityHelper.findIncorrectForeignKey(getDao(), getEntity(), data);
+		if (efk == null) {
 			return true;
 		}
 		
-		for (EntityFKey efk : efks) {
-			if (!EntityHelper.checkForeignKey(getDao(), getEntity(), data, efk)) {
-				addDataIncorrectError(data, efk.getFields());
-				return false;
-			}
-		}
-		return true;
+		addDataIncorrectError(data, efk.getFields());
+		return false;
 	}
 
 	/**
 	 * check data is changed on update
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkDataChangedOnUpdate(T data, T sd) {
-		return checkDataChanged(data, sd, RES.WARN_DATA_CHANGED_PREFIX);
+	protected boolean checkDataChangedOnUpdate(T data, T sdat) {
+		return checkDataChanged(data, sdat, RES.WARN_DATA_CHANGED_PREFIX);
 	}
 
 	/**
 	 * check data changed on delete
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @return true if check successfully
 	 */
-	protected boolean checkDataChangedOnDelete(T data, T sd) {
-		if (checkDataChanged(data, sd, RES.WARN_DATA_CHANGED_PREFIX)) {
+	protected boolean checkDataChangedOnDelete(T data, T sdat) {
+		if (checkDataChanged(data, sdat, RES.WARN_DATA_CHANGED_PREFIX)) {
 			return true;
 		}
 
@@ -971,14 +983,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * check data is changed or not
 	 * @param data data
-	 * @param sd source data
+	 * @param sdat source data
 	 * @param msg warn message id
 	 * @return true if check successfully
 	 */
-	protected boolean checkDataChanged(T data, T sd, String msg) {
+	protected boolean checkDataChanged(T data, T sdat, String msg) {
 		if (data instanceof IUpdate) {
 			IUpdate cb = (IUpdate)data;
-			IUpdate sb = (IUpdate)sd;
+			IUpdate sb = (IUpdate)sdat;
 			if (Bean.isChanged(cb, sb)) {
 				cb.setUusid(sb.getUusid());
 				cb.setUtime(sb.getUtime());

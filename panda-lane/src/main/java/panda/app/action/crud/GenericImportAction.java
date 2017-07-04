@@ -47,9 +47,14 @@ import panda.vfs.FileItem;
  */
 public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	private final static Log log = Logs.getLog(GenericImportAction.class);
+	
+	protected static String[] FEXTS = { FileType.CSV, FileType.TSV, FileType.TXT, FileType.XLS, FileType.XLSX };
 
 	public static class Arg {
 		private FileItem file;
+		private boolean update = false;
+		
+		/** not strict (continue if error occurs) */
 		private boolean loose = false;
 
 		public FileItem getFile() {
@@ -66,6 +71,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 		public void setLoose(boolean loose) {
 			this.loose = loose;
+		}
+
+		public boolean isUpdate() {
+			return update;
+		}
+
+		public void setUpdate(boolean update) {
+			this.update = update;
 		}
 	}
 
@@ -99,7 +112,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	/** argument */
+	private Arg arg;
+	
+	/** treat number as text string (XlsReader) */
 	private boolean numAsText;
+	
+	/** key definition for update */
+	private Object updateKey;
 
 	/**
 	 * @return the numAsText
@@ -115,9 +135,29 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		this.numAsText = numAsText;
 	}
 
-	protected static String[] FEXTS = { FileType.CSV, FileType.TSV, FileType.TXT, FileType.XLS, FileType.XLSX };
+	/**
+	 * @return the updateKey
+	 */
+	protected Object getUpdateKey() {
+		return updateKey;
+	}
 
-	private static boolean isAllowedExt(String fext) {
+	/**
+	 * @param updateKey the updateKey to set
+	 */
+	protected void setUpdateKey(Object updateKey) {
+		this.updateKey = updateKey;
+	}
+
+	public boolean isUpdatable() {
+		return updateKey != null;
+	}
+	
+	/**
+	 * @param fext file extension
+	 * @return true if the file extension is acceptable
+	 */
+	protected boolean isAcceptableFileType(String fext) {
 		return Arrays.contains(FEXTS, fext);
 	}
 	
@@ -126,6 +166,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @throws Exception if an error occurs
 	 */
 	protected Object import_(Arg arg) {
+		this.arg = arg;
 		if (arg.file == null) {
 			return null;
 		}
@@ -140,7 +181,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				try {
 					while ((entry = zis.getNextEntry()) != null) {
 						fext = FileNames.getExtension(entry.getName());
-						if (isAllowedExt(fext)) {
+						if (isAcceptableFileType(fext)) {
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
 							Streams.copy(zis, baos);
 							input = baos.toInputStream();
@@ -160,7 +201,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 			}
 
 			if (input == null) {
-				if (!isAllowedExt(fext)) {
+				if (!isAcceptableFileType(fext)) {
 					addFieldError("file", getText("error-file"));
 					return null;
 				}
@@ -183,7 +224,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				addFieldError("file", getText("error-file"));
 				return null;
 			}
-			return impFile(reader, !arg.loose);
+			return impFile(reader);
 		}
 		catch (Throwable e) {
 			logException("import", e);
@@ -240,7 +281,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return columns;
 	}
 
-	protected Object impFile(final ListReader csv, final boolean strict) throws Exception {
+	protected Object impFile(final ListReader csv) throws Exception {
 		if (csv == null) {
 			return null;
 		}
@@ -258,21 +299,21 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		final Ret ret = new Ret();
 		ret.headers = headers;
 
-		if (strict) {
+		if (arg.loose) {
+			impDatas(ret, csv, columns);
+		}
+		else {
 			getDao().exec(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						impData(ret, csv, columns, strict);
+						impDatas(ret, csv, columns);
 					}
 					catch (Exception e) {
 						throw Exceptions.wrapThrow(e);
 					}
 				}
 			});
-		}
-		else {
-			impData(ret, csv, columns, strict);
 		}
 
 		if (ret.success.size() > 0) {
@@ -284,8 +325,8 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return ret;
 	}
 
-	protected void impData(Ret ret, ListReader csv, String[] columns, boolean strict) throws Exception {
-		for (int i = 1;; i++) {
+	protected void impDatas(Ret ret, ListReader csv, String[] columns) throws Exception {
+		for (int i = 1; ; i++) {
 			List row = csv.readList();
 			if (row == null) {
 				break;
@@ -304,26 +345,43 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 			try {
 				T data = castData(values);
-				trimData(data);
 
-				checkData(data);
-
-				saveData(data);
+				impData(data);
+				
 				ret.success.add(row);
 			}
 			catch (Exception e) {
-				if (strict) {
+				if (!arg.loose) {
 					String vs = rowToString(row);
 					String msg = getDataError(i, vs, e);
 					throw new RuntimeException(msg);
 				}
 				Collections.insert(row, 0, "[" + i + "]: " + e.getMessage());
 				ret.warning.add(row);
-				continue;
 			}
 		}
 	}
 
+	protected void impData(T data) {
+		trimData(data);
+
+		checkNotNulls(data);
+		validateData(data);
+		checkForeignKeys(data);
+		if (updateKey != null && arg.update) {
+			T sdat = findUpdateData(data);
+			if (sdat != null) {
+				checkUniqueIndexesOnUpdate(data, sdat);
+				updateData(data, sdat);
+				return;
+			}
+		}
+		
+		checkPrimaryKeysOnInsert(data);
+		checkUniqueIndexesOnInsert(data);
+		insertData(data);
+	}
+	
 	protected Map<String, Object> rowToMap(String[] columns, List<?> row) {
 		Map<String, Object> values = new HashMap<String, Object>(columns.length);
 		for (int c = 0; c < columns.length && c < row.size(); c++) {
@@ -390,25 +448,21 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	}
 
 	protected void trimData(T data) {
-		EntityHelper.clearIdentityValue(getEntity(), data);
 		assist().initCommonFields(data);
 	}
 
-	protected void saveData(T data) {
+	protected void insertData(T data) {
 		getDao().insert(data);
 	}
 
+	protected void updateData(T data, T sdat) {
+		EntityHelper.copyPrimaryKeyValues(getEntity(), sdat, data);
+		getDao().update(data);
+	}
+	
 	// ------------------------------------------------------------
 	// check methods
 	// ------------------------------------------------------------
-	protected void checkData(T data) {
-		checkNotNulls(data);
-		validateData(data);
-		checkPrimaryKeys(data);
-		checkUniqueKeys(data);
-		checkForeignKeys(data);
-	}
-
 	/**
 	 * checkNotNulls
 	 * 
@@ -444,32 +498,71 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		throw new IllegalArgumentException(sb.toString());
 	}
 
+	protected T findUpdateData(T data) {
+		if (updateKey instanceof EntityField) {
+			EntityField ef = (EntityField)updateKey;
+			return EntityHelper.fetchDataByField(getDao(), getEntity(), ef, data);
+		}
+		else if (updateKey instanceof EntityIndex) {
+			Collection<EntityField> efs = ((EntityIndex)updateKey).getFields();
+			return EntityHelper.fetchDataByFields(getDao(), getEntity(), efs, data);
+		}
+		else if (updateKey instanceof Collection) {
+			return EntityHelper.fetchDataByFields(getDao(), getEntity(), (Collection)updateKey, data);
+		}
+		else if (updateKey instanceof String[]) {
+			return EntityHelper.fetchDataByFields(getDao(), getEntity(), (String[])updateKey, data);
+		}
+		else {
+			throw new IllegalArgumentException("Invalid update key: " + updateKey.getClass());
+		}
+	}
+	
 	/**
 	 * checkPrimaryKeys
 	 * 
-	 * @param data data
+	 * @param data the data
 	 */
-	protected void checkPrimaryKeys(T data) {
-		if (!EntityHelper.checkPrimaryKeys(getDao(), getEntity(), data)) {
+	protected void checkPrimaryKeysOnInsert(T data) {
+		EntityField eid = getEntity().getIdentity();
+		if (eid == null) {
+			if (!EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
+				throw new IllegalArgumentException(dataIncorrectError(data, getEntity().getPrimaryKeys()));
+			}
+		}
+		else {
+			Object id = eid.getValue(data);
+			if (!dao.isValidIdentity(id)) {
+				return;
+			}
+		}
+		
+		if (dao.exists(getEntity(), data)) {
 			throw new IllegalArgumentException(dataDuplicateError(data, getEntity().getPrimaryKeys()));
 		}
 	}
 
 	/**
-	 * checkUniqueKeys
+	 * checkUniqueIndexes for insert
 	 * 
 	 * @param data data
 	 */
-	protected void checkUniqueKeys(T data) {
-		Collection<EntityIndex> eis = getEntity().getIndexes();
-		if (Collections.isEmpty(eis)) {
-			return;
+	protected void checkUniqueIndexesOnInsert(T data) {
+		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, null);
+		if (ei != null) {
+			throw new IllegalArgumentException(dataDuplicateError(data, ei.getFields()));
 		}
+	}
 
-		for (EntityIndex ei : eis) {
-			if (!EntityHelper.checkUniqueIndex(getDao(), getEntity(), data, ei)) {
-				throw new IllegalArgumentException(dataDuplicateError(data, ei.getFields()));
-			}
+	/**
+	 * checkUniqueIndexes for update
+	 * 
+	 * @param data data
+	 */
+	protected void checkUniqueIndexesOnUpdate(T data, T sdat) {
+		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, sdat);
+		if (ei != null) {
+			throw new IllegalArgumentException(dataDuplicateError(data, ei.getFields()));
 		}
 	}
 
@@ -479,16 +572,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data
 	 */
 	protected void checkForeignKeys(T data) {
-		Collection<EntityFKey> efks = getEntity().getForeignKeys();
-		if (Collections.isEmpty(efks)) {
+		EntityFKey efk = EntityHelper.findIncorrectForeignKey(getDao(), getEntity(), data);
+		if (efk == null) {
 			return;
 		}
-
-		for (EntityFKey efk : efks) {
-			if (!EntityHelper.checkForeignKey(getDao(), getEntity(), data, efk)) {
-				throw new IllegalArgumentException(dataIncorrectError(data, efk.getFields()));
-			}
-		}
+		
+		throw new IllegalArgumentException(dataIncorrectError(data, efk.getFields()));
 	}
 
 	// ------------------------------------------------------------

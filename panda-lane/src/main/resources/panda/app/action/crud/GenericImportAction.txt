@@ -1,5 +1,6 @@
 p.file=File
-p.loose=Continue on error
+p.update=Override if data already exists
+p.loose=Continue if error occurs
 
 well-import=Please select Unicode(with BOM) CSV(comma-separated), TSV/TXT(tab-separated) \
 or XLS(Excel 2003), XLSX(Excel 2007~) \

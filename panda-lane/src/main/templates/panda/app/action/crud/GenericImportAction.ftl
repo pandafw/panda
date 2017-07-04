@@ -25,6 +25,9 @@
 			value=""
 			size="50"
 		/>
+	<#if a.updatable>
+		<@p.checkbox name="update" fieldLabel="#(p.update)" fieldValue="true"/>
+	</#if>
 		<@p.checkbox name="loose" fieldLabel="#(p.loose)" fieldValue="true"/>
 		<@p.div cssClass="p-buttons">
 			<@p.submit icon="import" label="#(btn-import)"/>
