@@ -29,10 +29,11 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	private Workbook workbook;
 	private Sheet sheet;
 	private int rowidx;
-
-	private boolean allString;
 	private CellStyle dateCellStyle;
 
+	/** treat all cells to string cell */
+	private boolean allString;
+	
 	public XlsWriter(OutputStream os) throws IOException {
 		writer = os;
 		workbook = create();
@@ -54,6 +55,15 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	}
 
 	/**
+	 * @param format date format
+	 */
+	public void setDateFormat(String format) {
+		dateCellStyle = workbook.createCellStyle();
+		CreationHelper createHelper = workbook.getCreationHelper();
+		dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("format"));
+	}
+
+	/**
 	 * create workbook
 	 * @return workbook
 	 * @throws IOException
@@ -69,12 +79,6 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	protected void init() throws IOException {
 		newSheet();
 		setDateFormat("yyyy-MM-dd HH:mm:ss");
-	}
-
-	public void setDateFormat(String format) {
-		dateCellStyle = workbook.createCellStyle();
-		CreationHelper createHelper = workbook.getCreationHelper();
-		dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("format"));
 	}
 
 	/**
@@ -203,6 +207,7 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	 * @throws IOException if bad things happen
 	 */
 	public void flush() throws IOException {
+		workbook.write(writer);
 		writer.flush();
 	}
 
@@ -213,6 +218,7 @@ public class XlsWriter implements ListWriter, Closeable, Flushable {
 	 *
 	 */
 	public void close() throws IOException {
+		flush();
 		writer.close();
 	}
 }

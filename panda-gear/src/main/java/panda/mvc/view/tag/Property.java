@@ -10,6 +10,7 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.MvcException;
+import panda.mvc.view.util.Escapes;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -91,7 +92,7 @@ public class Property extends ContextBean {
 	private CNumber cnumber;
 
 	/**
-	 * @see panda.mvc.view.tag.Component#start(java.io.Writer)
+	 * @see panda.mvc.view.tag.TagBean#start(java.io.Writer)
 	 */
 	public boolean start(Writer writer) {
 		boolean result = super.start(writer);

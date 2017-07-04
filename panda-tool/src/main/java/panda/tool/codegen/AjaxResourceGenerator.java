@@ -112,15 +112,14 @@ public class AjaxResourceGenerator extends AbstractCodeGenerator {
 						
 						String uin = Strings.capitalize(action.getName());
 
-						for (String t : lui.getTemplates()) {
-							if ("list".equals(t)) {
-								Template tpl = tplMap.get("SliduModule_xx");
-								if (tpl == null) {
-									throw new IllegalArgumentException("Illegal template: " + t);
-								}
-
-								processTpl(pkg, uin + "Module" + (locale.equals("_") ? "" : locale) + ".js", wrapper, tpl);
+						String t = lui.getTemplate();
+						if ("list".equals(t)) {
+							Template tpl = tplMap.get("SliduModule_xx");
+							if (tpl == null) {
+								throw new IllegalArgumentException("Illegal template: " + t);
 							}
+
+							processTpl(pkg, uin + "Module" + (locale.equals("_") ? "" : locale) + ".js", wrapper, tpl);
 						}
 					}
 				}

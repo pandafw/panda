@@ -7,8 +7,8 @@ import panda.ioc.annotation.IocBean;
 import panda.lang.Collections;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.view.tag.ListColumn;
-import panda.mvc.view.tag.ListFilter;
+import panda.mvc.view.util.ListColumn;
+import panda.mvc.view.util.ListFilter;
 
 /**
  * Render an HTML Queryer.

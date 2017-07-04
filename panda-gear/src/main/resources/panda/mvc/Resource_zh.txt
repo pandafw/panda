@@ -278,6 +278,8 @@ btn-to-signin=登录画面
 btn-trash=删除
 btn-update=修改
 btn-view=显示
+btn-xls=XLS导出
+btn-xlsx=XLSX导出
 btn-xml=XML导出
 
 

@@ -20,6 +20,8 @@ import panda.mvc.view.RedirectView;
 import panda.mvc.view.SitemeshFreemarkerView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
+import panda.mvc.view.XlsView;
+import panda.mvc.view.XlsxView;
 import panda.mvc.view.XmlView;
 import panda.net.http.HttpStatus;
 
@@ -92,6 +94,20 @@ public class DefaultViewMaker implements ViewMaker {
 				return TsvView.DEFAULT;
 			}
 			return new TsvView(value);
+		}
+		
+		if (View.XLS.equals(type)) {
+			if (Strings.isBlank(value)) {
+				return XlsView.DEFAULT;
+			}
+			return new XlsView(value);
+		}
+		
+		if (View.XLSX.equals(type)) {
+			if (Strings.isBlank(value)) {
+				return XlsxView.DEFAULT;
+			}
+			return new XlsxView(value);
 		}
 		
 		if (View.REDIRECT.equals(type) || View.REDIRECT2.equals(type)) {

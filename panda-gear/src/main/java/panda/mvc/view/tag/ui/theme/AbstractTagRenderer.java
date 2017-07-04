@@ -10,9 +10,9 @@ import panda.io.MimeType;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.view.tag.Escapes;
 import panda.mvc.view.tag.Property;
 import panda.mvc.view.tag.ui.UIBean;
+import panda.mvc.view.util.Escapes;
 
 public abstract class AbstractTagRenderer<T extends UIBean> implements TagRenderer {
 	protected ActionContext context;

@@ -10,6 +10,6 @@ import panda.ioc.annotation.IocBean;
 public class Tsv extends Csv {
 
 	public Tsv() {
-		separator = '\t';
+		setSeparator('\t');
 	}
 }

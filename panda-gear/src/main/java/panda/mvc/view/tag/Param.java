@@ -7,7 +7,7 @@ import panda.lang.Strings;
 import panda.mvc.MvcException;
 
 @IocBean(singleton=false)
-public class Param extends Component {
+public class Param extends TagBean {
 	/**
 	 * Tags can implement this to support nested param tags without the <tt>name</tt> attribute.
 	 * <p/>
@@ -33,7 +33,7 @@ public class Param extends Component {
 	}
 
 	public boolean end(Writer writer, String body) {
-		Component component = findAncestor(Component.class);
+		TagBean component = findAncestor(TagBean.class);
 		if (value != null) {
 			if (component instanceof UnnamedParametric) {
 				((UnnamedParametric)component).addParameter(value);

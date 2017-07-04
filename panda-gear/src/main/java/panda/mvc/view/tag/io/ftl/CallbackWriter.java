@@ -7,17 +7,17 @@ import freemarker.template.TemplateModelException;
 import freemarker.template.TransformControl;
 
 import panda.io.stream.StringBuilderWriter;
-import panda.mvc.view.tag.Component;
+import panda.mvc.view.tag.TagBean;
 
 /**
  */
 public class CallbackWriter extends Writer implements TransformControl {
-	private Component bean;
+	private TagBean bean;
 	private Writer writer;
 	private StringBuilderWriter body;
 	private boolean saveBody = false;
 
-	public CallbackWriter(Component bean, Writer writer) {
+	public CallbackWriter(TagBean bean, Writer writer) {
 		this.bean = bean;
 		this.writer = writer;
 
@@ -69,7 +69,7 @@ public class CallbackWriter extends Writer implements TransformControl {
 		throw throwable;
 	}
 
-	public Component getBean() {
+	public TagBean getBean() {
 		return bean;
 	}
 }

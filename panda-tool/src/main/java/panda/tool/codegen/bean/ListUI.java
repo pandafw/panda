@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import panda.lang.Arrays;
 import panda.lang.Strings;
 
 /**
@@ -271,15 +270,6 @@ public class ListUI implements Comparable<ListUI> {
 	 */
 	public void setSafeInclude(String safeInclude) {
 		this.safeInclude = safeInclude;
-	}
-
-	/**
-	 * Gets the value of the templates property.
-	 * 
-	 * @return templates
-	 */
-	public List<String> getTemplates() {
-		return Arrays.asList(Strings.split(template));
 	}
 
 	/**

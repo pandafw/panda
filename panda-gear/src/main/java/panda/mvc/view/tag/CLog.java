@@ -12,7 +12,7 @@ import panda.log.Logs;
  * Render a log message.
  */
 @IocBean(singleton=false)
-public class CLog extends Component {
+public class CLog extends TagBean {
 	protected String category;
 	protected String level;
 
@@ -37,7 +37,7 @@ public class CLog extends Component {
 	}
 	
 	/**
-	 * @see panda.mvc.view.tag.Component#end(java.io.Writer, java.lang.String)
+	 * @see panda.mvc.view.tag.TagBean#end(java.io.Writer, java.lang.String)
 	 */
 	public boolean end(Writer writer, String body) {
 		String msg = body;

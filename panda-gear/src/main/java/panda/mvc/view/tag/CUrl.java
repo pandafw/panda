@@ -16,7 +16,7 @@ public class CUrl extends ContextBean {
 	protected MvcURLBuilder urlbuilder;
 	
 	/**
-	 * @see panda.mvc.view.tag.Component#end(java.io.Writer, java.lang.String)
+	 * @see panda.mvc.view.tag.TagBean#end(java.io.Writer, java.lang.String)
 	 */
 	public boolean end(Writer writer, String body) {
 		if (Collections.isNotEmpty(params)) {

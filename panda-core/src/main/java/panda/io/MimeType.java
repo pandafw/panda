@@ -66,6 +66,6 @@ public class MimeType {
 	 * @return mime type from alias
 	 */
 	public static String getMimeType(String alias) {
-		return Strings.defaultString(aliases.get(alias.toLowerCase()), alias);
+		return Strings.defaultString(aliases.get(Strings.lowerCase(alias)), alias);
 	}
 }

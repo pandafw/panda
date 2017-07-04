@@ -6,6 +6,7 @@ import java.io.Writer;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
 import panda.mvc.MvcException;
+import panda.mvc.view.util.Escapes;
 
 /**
  * <!-- START SNIPPET: javadoc --> Render a I18n text message.

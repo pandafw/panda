@@ -120,7 +120,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * Actions
 	 *----------------------------------------------------------------------*/
 <#if action.listUIList?has_content><#list action.listUIList as ui><#if ui.generate!false>
-<#if ui.templates?seq_contains("list")>
+<#if ui.template == "list">
 	/**
 	 * ${ui.name}
 	 */
@@ -130,7 +130,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_popup")>
+<#elseif ui.template == ("list_popup")>
 	/**
 	 * ${ui.name}
 	 */
@@ -140,7 +140,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_popup(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_pdf")>
+<#elseif ui.template == ("list_pdf")>
 	/**
 	 * ${ui.name}
 	 */
@@ -150,7 +150,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_pdf(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_print")>
+<#elseif ui.template == ("list_print")>
 	/**
 	 * ${ui.name}
 	 */
@@ -160,7 +160,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_print(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_csv")>
+<#elseif [ "list_csv", "list_tsv", "list_xls", "list_xlsx" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
 	 */
@@ -190,43 +190,10 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 			columns.add(lc);
 		}
 </#list>
-		return super.list_csv(qr, columns);
+		return super.${ui.template}(qr, columns);
 	}
 	
-<#elseif ui.templates?seq_contains("list_tsv")>
-	/**
-	 * ${ui.name}
-	 */
-	@At${gen.trimAtName(ui.name)}
-	@To(value=View.SFTL, error=View.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
-		List<ListColumn> columns = new ArrayList<ListColumn>();
-<#list ui.displayColumnList as c>
-		if (displayField("${c.name}")) {
-			ListColumn lc = new ListColumn();
-			lc.name = "${c.name}";
-			lc.header = getFieldLabel("${c.name}");
-			lc.hidden = ${(c.hidden!false)?string};
-	<#if c.format??>
-			ListColumn.Format lcf = new ListColumn.Format();
-		<#if c.format.type?has_content>
-			lcf.type = "${c.format.type}";
-		</#if>
-		<#if c.format.pattern?has_content>
-			lcf.pattern = "${c.format.pattern}";
-		</#if>
-		<#list c.format.paramList as fp>
-			lcf.${fp.name} = ${gen.translateToJava(fp.value)};
-		</#list>
-			lc.format = lcf;
-	</#if>
-			columns.add(lc);
-		}
-</#list>
-		return super.list_tsv(qr, columns);
-	}
-	
-<#elseif ui.templates?seq_contains("list_json")>
+<#elseif ui.template == ("list_json")>
 	/**
 	 * ${ui.name}
 	 */
@@ -236,7 +203,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_json(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("list_xml")>
+<#elseif ui.template == ("list_xml")>
 	/**
 	 * ${ui.name}
 	 */
@@ -246,7 +213,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_xml(qr);
 	}
 	
-<#elseif ui.templates?seq_contains("import")>
+<#elseif ui.template == ("import")>
 	/**
 	 * ${ui.name}
 	 */
@@ -256,7 +223,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.import_(arg);
 	}
 	
-<#elseif ui.templates?seq_contains("bdelete")>
+<#elseif ui.template == ("bdelete")>
 	/**
 	 * ${ui.name}
 	 */
@@ -275,7 +242,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.bdelete_execute(args);
 	}
 	
-<#elseif ui.templates?seq_contains("bupdate")>
+<#elseif ui.template == ("bupdate")>
 	/**
 	 * ${ui.name}
 	 */
@@ -294,7 +261,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.bupdate_execute(args);
 	}
 	
-<#elseif ui.templates?seq_contains("bedit")>
+<#elseif ui.template == ("bedit")>
 	/**
 	 * ${ui.name}
 	 */
@@ -334,7 +301,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 </#if>
 </#if></#list></#if>
 <#if action.inputUIList?has_content><#list action.inputUIList as ui><#if ui.generate!false>
-<#if ui.templates?seq_contains("view")>
+<#if ui.template == ("view")>
 	/**
 	 * ${ui.name}
 	 */
@@ -353,7 +320,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.view_input(data);
 	}
 
-<#elseif ui.templates?seq_contains("print")>
+<#elseif ui.template == ("print")>
 	/**
 	 * ${ui.name}
 	 */
@@ -372,7 +339,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.print_input(data);
 	}
 
-<#elseif ui.templates?seq_contains("add")>
+<#elseif ui.template == ("add")>
 	/**
 	 * ${ui.name}
 	 */
@@ -409,7 +376,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.add_execute(data);
 	}
 
-<#elseif ui.templates?seq_contains("copy")>
+<#elseif ui.template == ("copy")>
 	/**
 	 * ${ui.name}
 	 */
@@ -446,7 +413,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.copy_execute(data);
 	}
 
-<#elseif ui.templates?seq_contains("edit")>
+<#elseif ui.template == ("edit")>
 	/**
 	 * ${ui.name}
 	 */
@@ -483,7 +450,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.edit_execute(data);
 	}
 
-<#elseif ui.templates?seq_contains("delete")>
+<#elseif ui.template == ("delete")>
 	/**
 	 * ${ui.name}
 	 */

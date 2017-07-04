@@ -8,12 +8,12 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.MvcConstants;
-import panda.mvc.view.tag.Component;
+import panda.mvc.view.tag.TagBean;
 import panda.mvc.view.tag.ui.theme.RendererEngine;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 
-public abstract class UIBean extends Component {
+public abstract class UIBean extends TagBean {
 	private static final Log log = Logs.getLog(UIBean.class);
 
 	protected String body;

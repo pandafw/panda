@@ -106,6 +106,9 @@ import panda.mvc.view.tag.ui.Uploader;
 import panda.mvc.view.tag.ui.ViewField;
 import panda.mvc.view.tag.ui.theme.ThemeRenderEngine;
 import panda.mvc.view.taglib.TagLibraryManager;
+import panda.mvc.view.util.CsvExporter;
+import panda.mvc.view.util.XlsExporter;
+import panda.mvc.view.util.XlsxExporter;
 
 public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 	protected void addModules(MvcConfig config, Set<Object> pkgs) {
@@ -209,6 +212,11 @@ public class MvcDefaultIocLoader extends MvcAnnotationIocLoader {
 			// View
 			ThemeRenderEngine.class,
 
+			// View Utils
+			CsvExporter.class,
+			XlsExporter.class,
+			XlsxExporter.class,
+			
 			// Taglibs
 			TagLibraryManager.class,
 	

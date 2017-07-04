@@ -1,35 +1,33 @@
 package panda.mvc.view;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 
 import panda.io.MimeType;
 import panda.lang.Exceptions;
-import panda.lang.Strings;
 import panda.mvc.ActionContext;
-import panda.mvc.view.tag.Csv;
-import panda.mvc.view.util.CsvExporter;
+import panda.mvc.view.util.XlsExporter;
 
 
-public class CsvView extends AbstractDataView {
-	public static final CsvView DEFAULT = new CsvView("");
+public class XlsView extends AbstractDataView {
+	public static final XlsView DEFAULT = new XlsView("");
 
 	private Object result;
 	
 	/**
 	 * Constructor.
 	 */
-	public CsvView() {
+	public XlsView() {
 		this("");
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public CsvView(String location) {
+	public XlsView(String location) {
 		super(location);
-		setContentType(MimeType.TEXT_CSV);
-		setBom(true);
+		setContentType(MimeType.APP_XLS);
+		setBom(false);
 	}
 
 	/**
@@ -55,7 +53,7 @@ public class CsvView extends AbstractDataView {
 			writeResult(ac, result);
 		}
 	}
-	
+
 	/**
 	 * write result
 	 * @param ac action context
@@ -65,9 +63,9 @@ public class CsvView extends AbstractDataView {
 		try {
 			writeHeader(ac);
 
-			PrintWriter writer = ac.getResponse().getWriter();
-			writeResult(writer, result);
-			writer.flush();
+			OutputStream os = ac.getResponse().getOutputStream();
+			writeResult(os, result);
+			os.flush();
 		}
 		catch (IOException e) {
 			throw Exceptions.wrapThrow(e);
@@ -80,15 +78,10 @@ public class CsvView extends AbstractDataView {
 	 * @param result result object
 	 * @throws IOException
 	 */
-	protected void writeResult(PrintWriter writer, Object result) throws IOException {
-		if (result instanceof Csv) {
-			Csv csv = (Csv)result;
-			csv.start(writer);
-			csv.end(writer, Strings.EMPTY);
-		}
-		else if (result instanceof CsvExporter) {
-			CsvExporter csv = (CsvExporter)result;
-			csv.export(writer);
+	protected void writeResult(OutputStream os, Object result) throws IOException {
+		if (result instanceof XlsExporter) {
+			XlsExporter xls = (XlsExporter)result;
+			xls.export(os);
 		}
 	}
 }

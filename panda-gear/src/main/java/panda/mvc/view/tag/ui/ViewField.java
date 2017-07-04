@@ -1,7 +1,7 @@
 package panda.mvc.view.tag.ui;
 
 import panda.ioc.annotation.IocBean;
-import panda.mvc.view.tag.Escapes;
+import panda.mvc.view.util.Escapes;
 
 
 @IocBean(singleton=false)

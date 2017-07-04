@@ -1,14 +1,9 @@
 package panda.mvc.view;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import panda.io.MimeType;
 import panda.lang.Charsets;
-import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.servlet.HttpServletSupport;
 
@@ -24,7 +19,7 @@ public abstract class AbstractDataView extends AbstractView {
 	
 	protected String filename;
 	
-	protected boolean bom = true;
+	protected boolean bom;
 
 	/**
 	 * Constructor.
@@ -118,43 +113,19 @@ public abstract class AbstractDataView extends AbstractView {
 	}
 
 	/**
-	 * write result
-	 * @param writer response writer
-	 * @param result result object
+	 * write response header
+	 * @param ac action context
 	 * @throws IOException
 	 */
-	protected void writeResult(PrintWriter writer, Object result) throws IOException {
-		if (result != null) {
-			writer.write(result.toString());
-		}
-	}
-	
-	/**
-	 * write result
-	 * @param ac action context
-	 * @param result result object
-	 */
-	protected void writeResult(ActionContext ac, Object result) {
-		try {
-			HttpServletRequest request = ac.getRequest();
-			HttpServletResponse response = ac.getResponse();
-	
-			HttpServletSupport hss = new HttpServletSupport(request, response);
-			hss.setMaxAge(maxAge);
-			hss.setCharset(encoding);
-			hss.setContentType(contentType);
-			hss.setAttachment(attachment);
-			hss.setFileName(filename);
-			hss.setBom(bom);
-			hss.writeResponseHeader();
-	
-			PrintWriter writer = response.getWriter();
-			writeResult(writer, result);
-			writer.flush();
-		}
-		catch (IOException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+	protected void writeHeader(ActionContext ac) throws IOException {
+		HttpServletSupport hss = new HttpServletSupport(ac.getRequest(), ac.getResponse());
+		hss.setMaxAge(maxAge);
+		hss.setCharset(encoding);
+		hss.setContentType(contentType);
+		hss.setAttachment(attachment);
+		hss.setFileName(filename);
+		hss.setBom(bom);
+		hss.writeResponseHeader();
 	}
 }
 

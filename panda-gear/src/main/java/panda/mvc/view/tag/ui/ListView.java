@@ -6,7 +6,7 @@ import java.util.Map;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Objects;
 import panda.lang.Strings;
-import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.util.ListColumn;
 
 /**
  * Render an HTML List View.

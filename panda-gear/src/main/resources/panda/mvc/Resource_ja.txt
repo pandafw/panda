@@ -281,6 +281,8 @@ btn-to-signin=サインイン画面へ
 btn-trash=削除
 btn-update=編集
 btn-view=照会
+btn-xls=XLS出力
+btn-xlsx=XLSX出力
 btn-xml=XML出力
 
 

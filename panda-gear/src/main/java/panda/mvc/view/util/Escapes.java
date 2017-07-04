@@ -1,4 +1,4 @@
-package panda.mvc.view.tag;
+package panda.mvc.view.util;
 
 import panda.lang.StringEscapes;
 import panda.lang.Strings;

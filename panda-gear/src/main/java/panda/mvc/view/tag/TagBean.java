@@ -1,16 +1,5 @@
 package panda.mvc.view.tag;
 
-import panda.bean.BeanHandler;
-import panda.bean.Beans;
-import panda.cast.CastException;
-import panda.ioc.annotation.IocInject;
-import panda.lang.Collections;
-import panda.lang.Objects;
-import panda.lang.Strings;
-import panda.mvc.ActionContext;
-import panda.mvc.MvcException;
-import panda.mvc.Mvcs;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Type;
@@ -19,15 +8,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import panda.bean.BeanHandler;
+import panda.bean.Beans;
+import panda.cast.CastException;
+import panda.lang.Collections;
+import panda.lang.Objects;
+import panda.lang.Strings;
+import panda.mvc.MvcException;
+import panda.mvc.Mvcs;
+import panda.mvc.view.Component;
+
 /**
  * Base class to extend for UI components.
  * <p/>
  * This class is a good extension point when building reuseable UI components.
  */
-public class Component {
-
-	@IocInject
-	protected ActionContext context;
+public class TagBean extends Component {
 
 	protected Map<String, Object> params;
 	
@@ -36,7 +32,7 @@ public class Component {
 	/**
 	 * Constructor.
 	 */
-	public Component() {
+	public TagBean() {
 	}
 	
 	protected void addParameter(String name, Object value) {
@@ -130,12 +126,12 @@ public class Component {
 	 * @return the component if found, <tt>null</tt> if not.
 	 */
 	@SuppressWarnings("unchecked")
-	protected Component findAncestor(Class clazz) {
+	protected TagBean findAncestor(Class clazz) {
 		List<Object> cs = context.getTops();
 		int p = cs.indexOf(this);
 		if (p >= 0) {
 			for (int i = p - 1; i >= 0; i--) {
-				Component c = (Component)cs.get(i);
+				TagBean c = (TagBean)cs.get(i);
 				if (clazz.isAssignableFrom(c.getClass()) && c != this) {
 					return c;
 				}
@@ -184,41 +180,5 @@ public class Component {
 			Object v = Mvcs.evaluate(context, en.getValue(), arg);
 			addParameter(p, v);
 		}
-	}
-	
-	public Object findValue(String expr) {
-		return Mvcs.findValue(context, expr);
-	}
-	
-	public Object findValue(String expr, Object arg) {
-		return Mvcs.findValue(context, expr, arg);
-	}
-
-	public String castString(Object o) {
-		if (o == null) {
-			return null;
-		}
-		return Mvcs.castString(context, o);
-	}
-
-	public String castString(Object o, String format) {
-		if (o == null) {
-			return null;
-		}
-		return Mvcs.castString(context, o, format);
-	}
-
-	public String findString(String expr) {
-		Object o = findValue(expr);
-		return castString(o);
-	}
-	
-	public String findString(String expr, Object arg) {
-		Object o = findValue(expr, arg);
-		return castString(o);
-	}
-	
-	public <T> T newComponent(Class<T> cls) {
-		return context.getIoc().get(cls);
 	}
 }

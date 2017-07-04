@@ -10,36 +10,36 @@
 	<#if ui.params.actionUpdate??><#assign actionUpdate = ui.params.actionUpdate/></#if>
 	<#if ui.params.actionDelete??><#assign actionDelete = ui.params.actionDelete/></#if>
 	<#list action.listUIList as ui><#if ui.template?? && ui.generate!false>
-		<#if ui.templates?seq_contains("list")>
+		<#if ui.template == ("list")>
 			<#assign actionList = ui.name/>
-		<#elseif ui.templates?seq_contains("bdelete") 
-			|| ui.templates?seq_contains("bupdate")
-			|| ui.templates?seq_contains("bedit")>
+		<#elseif ui.template == ("bdelete") 
+			|| ui.template == ("bupdate")
+			|| ui.template == ("bedit")>
 			<#assign actionBulkNames = (actionBulkNames![]) + [ ui.name ]/>
 		</#if>
 	</#if></#list>
 	<#list action.inputUIList as ui><#if ui.template?? && ui.generate!false>
-		<#if ui.templates?seq_contains("view")>
+		<#if ui.template == ("view")>
 			<#if !(actionView??)>
 				<#assign actionView = '~/' + ui.name/>
 			</#if>
-		<#elseif ui.templates?seq_contains("print")>
+		<#elseif ui.template == ("print")>
 			<#if !(actionPrint??)>
 				<#assign actionPrint = '~/' + ui.name/>
 			</#if>
-		<#elseif ui.templates?seq_contains("insert")>
+		<#elseif ui.template == ("insert")>
 			<#if !(actionInsert??)>
 				<#assign actionInsert = '~/' + ui.name/>
 			</#if>
-		<#elseif ui.templates?seq_contains("copy")>
+		<#elseif ui.template == ("copy")>
 			<#if !(actionCopy??)>
 				<#assign actionCopy = '~/' + ui.name/>
 			</#if>
-		<#elseif ui.templates?seq_contains("update")>
+		<#elseif ui.template == ("update")>
 			<#if !(actionUpdate??)>
 				<#assign actionUpdate = '~/' + ui.name/>
 			</#if>
-		<#elseif ui.templates?seq_contains("delete")>
+		<#elseif ui.template == ("delete")>
 			<#if !(actionDelete??)>
 				<#assign actionDelete = '~/' + ui.name/>
 			</#if>

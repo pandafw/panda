@@ -32,6 +32,8 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		"_list",
 		"_list_csv",
 		"_list_tsv",
+		"_list_xls",
+		"_list_xlsx",
 		"_list_pdf",
 		"_list_popup",
 		"_list_print",
@@ -114,21 +116,20 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 					
 					String uin = action.getSimpleActionClass() + "_" + lui.getName();
 
-					for (String t : lui.getTemplates()) {
-						if ("bdelete".equals(t) || "bupdate".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bulk"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bulk_success"));
-						}
-						else if ("bedit".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bedit"));
-							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_bedit_confirm"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bedit_success"));
-						}
-						else if (t.startsWith("list")) {
-							if (!("list_json".equals(t) || "list_xml".equals(t))) {
-								Template tpl = findTpl("_" + t);
-								processTpl(pkg, uin + ".ftl", wrapper, tpl);
-							}
+					String t = lui.getTemplate();
+					if ("bdelete".equals(t) || "bupdate".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bulk"));
+						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bulk_success"));
+					}
+					else if ("bedit".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_bedit"));
+						processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_bedit_confirm"));
+						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bedit_success"));
+					}
+					else if (t.startsWith("list")) {
+						if (!("list_json".equals(t) || "list_xml".equals(t))) {
+							Template tpl = findTpl("_" + t);
+							processTpl(pkg, uin + ".ftl", wrapper, tpl);
 						}
 					}
 				}
@@ -144,24 +145,23 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 
 					String uin = action.getSimpleActionClass() + "_" +iui.getName();
 
-					for (String t : iui.getTemplates()) {
-						if ("view".equals(t) || "print".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_" + t));
-						}
-						else if ("delete".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
-						}
-						else if ("add".equals(t) || "copy".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_add"));
-							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_add_confirm"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_add_success"));
-						}
-						else if ("edit".equals(t)) {
-							processTpl(pkg, uin + ".ftl", wrapper, findTpl("_edit"));
-							processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_edit_confirm"));
-							processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_edit_success"));
-						}
+					String t = iui.getTemplate();
+					if ("view".equals(t) || "print".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_" + t));
+					}
+					else if ("delete".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_delete"));
+						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_delete_success"));
+					}
+					else if ("add".equals(t) || "copy".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_add"));
+						processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_add_confirm"));
+						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_add_success"));
+					}
+					else if ("edit".equals(t)) {
+						processTpl(pkg, uin + ".ftl", wrapper, findTpl("_edit"));
+						processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_edit_confirm"));
+						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_edit_success"));
 					}
 				}
 			}

@@ -1,5 +1,7 @@
 package panda.mvc.view;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,6 +62,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 	 */
 	public AbstractBindView(String location) {
 		super(location);
+		setBom(true);
 	}
 
 	/**
@@ -215,6 +218,26 @@ public abstract class AbstractBindView extends AbstractDataView {
 		writeResult(ac, result);
 	}
 
+	/**
+	 * write result
+	 * @param ac action context
+	 * @param result result object
+	 */
+	protected void writeResult(ActionContext ac, Object result) {
+		try {
+			writeHeader(ac);
+
+			PrintWriter writer = ac.getResponse().getWriter();
+			writeResult(writer, result);
+			writer.flush();
+		}
+		catch (IOException e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	protected abstract void writeResult(PrintWriter writer, Object result) throws IOException;
+	
 	protected List<String> toList(String str) {
 		List<String> list = new ArrayList<String>();
 		if (!Strings.isBlank(str)) {

@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import panda.lang.Arrays;
 import panda.lang.Strings;
 
 /**
@@ -307,14 +306,6 @@ public class InputUI implements Comparable<InputUI> {
 		return params;
 	}
 	
-	/**
-	 * Gets the value of the templates property.
-	 * 
-	 * @return templates
-	 */
-	public List<String> getTemplates() {
-		return Arrays.asList(Strings.split(template));
-	}
 
 	/**
 	 * @return the generate

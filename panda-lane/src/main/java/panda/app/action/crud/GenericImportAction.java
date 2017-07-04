@@ -39,7 +39,7 @@ import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.Mvcs;
-import panda.mvc.view.tag.Escapes;
+import panda.mvc.view.util.Escapes;
 import panda.vfs.FileItem;
 
 /**

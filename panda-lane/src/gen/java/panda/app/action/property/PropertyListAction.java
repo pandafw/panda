@@ -13,7 +13,7 @@ import panda.mvc.annotation.param.Param;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerOx;
 import panda.mvc.validation.annotation.Validates;
-import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.util.ListColumn;
 
 @At("${super_path}/property")
 @Auth(AUTH.SUPER)

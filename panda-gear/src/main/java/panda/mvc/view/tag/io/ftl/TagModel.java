@@ -14,28 +14,28 @@ import freemarker.template.TemplateTransformModel;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.view.tag.Component;
+import panda.mvc.view.tag.TagBean;
 
 public class TagModel implements TemplateTransformModel {
 	private static final Log LOG = Logs.getLog(TagModel.class);
 
-	private Class<? extends Component> tagCls;
+	private Class<? extends TagBean> tagCls;
 	protected ActionContext context;
 
-	public TagModel(ActionContext ac, Class<? extends Component> tagCls) {
+	public TagModel(ActionContext ac, Class<? extends TagBean> tagCls) {
 		this.context = ac;
 		this.tagCls = tagCls;
 	}
 
 	public Writer getWriter(Writer writer, Map params) throws TemplateModelException, IOException {
-		Component bean = getBean();
+		TagBean bean = getBean();
 
 		Map<String, Object> ups = unwrapParameters(params);
 		bean.setParameters(ups);
 		return new CallbackWriter(bean, writer);
 	}
 
-	protected Component getBean() {
+	protected TagBean getBean() {
 		return context.getIoc().get(tagCls);
 	}
 

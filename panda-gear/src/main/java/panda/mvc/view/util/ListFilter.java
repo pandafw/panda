@@ -1,4 +1,4 @@
-package panda.mvc.view.tag;
+package panda.mvc.view.util;
 
 public class ListFilter {
 	public String name;

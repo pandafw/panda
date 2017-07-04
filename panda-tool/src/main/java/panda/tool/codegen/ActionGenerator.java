@@ -20,7 +20,7 @@ import panda.mvc.bean.QueryerOx;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.mvc.view.tag.ListColumn;
+import panda.mvc.view.util.ListColumn;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.ActionProperty;
 import panda.tool.codegen.bean.Entity;
@@ -115,31 +115,30 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(action.getActionBaseClass());
 		if (Collections.isNotEmpty(action.getSortedListUIList())) {
 			for (ListUI lui : action.getSortedListUIList()) {
-				for (String s : lui.getTemplates()) {
-					if ("bdelete".equals(s) 
-							|| "bupdate".equals(s)
-							|| "bedit".equals(s)) {
-						imports.add(Map.class.getName());
-					}
-					else if ("list".equals(s)
-							|| "list_popup".equals(s)
-							|| "list_print".equals(s)) {
-						imports.add(Queryer.class.getName());
-						imports.add(Validates.class.getName());
-					}
-					else if ("list_csv".equals(s)
-							|| "list_tsv".equals(s)) {
-						imports.add(Validates.class.getName());
-						imports.add(QueryerOx.class.getName());
-						imports.add(List.class.getName());
-						imports.add(ArrayList.class.getName());
-						imports.add(ListColumn.class.getName());
-					}
-					else if ("list_json".equals(s)
-							|| "list_xml".equals(s)) {
-						imports.add(Validates.class.getName());
-						imports.add(QueryerOx.class.getName());
-					}
+				String s = lui.getTemplate();
+				if ("bdelete".equals(s) 
+						|| "bupdate".equals(s)
+						|| "bedit".equals(s)) {
+					imports.add(Map.class.getName());
+				}
+				else if ("list".equals(s)
+						|| "list_popup".equals(s)
+						|| "list_print".equals(s)) {
+					imports.add(Queryer.class.getName());
+					imports.add(Validates.class.getName());
+				}
+				else if ("list_csv".equals(s)
+						|| "list_tsv".equals(s)) {
+					imports.add(Validates.class.getName());
+					imports.add(QueryerOx.class.getName());
+					imports.add(List.class.getName());
+					imports.add(ArrayList.class.getName());
+					imports.add(ListColumn.class.getName());
+				}
+				else if ("list_json".equals(s)
+						|| "list_xml".equals(s)) {
+					imports.add(Validates.class.getName());
+					imports.add(QueryerOx.class.getName());
 				}
 			}
 		}
@@ -149,18 +148,18 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		imports.add(Param.class.getName());
 		if (Collections.isNotEmpty(action.getSortedInputUIList())) {
 			for (InputUI iui : action.getSortedInputUIList()) {
-				if (Collections.contains(iui.getTemplates(), "copy") 
-						|| Collections.contains(iui.getTemplates(), "edit")
-						|| Collections.contains(iui.getTemplates(), "add")) {
+				if (Strings.equals(iui.getTemplate(), "copy") 
+						|| Strings.equals(iui.getTemplate(), "edit")
+						|| Strings.equals(iui.getTemplate(), "add")) {
 					imports.add(Validates.class.getName());
 				}
 			}
 		}
 		if (Collections.isNotEmpty(entity.getNotNullList()) && Collections.isNotEmpty(action.getSortedInputUIList())) {
 			for (InputUI iui : action.getSortedInputUIList()) {
-				if (Collections.contains(iui.getTemplates(), "copy") 
-						|| Collections.contains(iui.getTemplates(), "edit")
-						|| Collections.contains(iui.getTemplates(), "add")) {
+				if (Strings.equals(iui.getTemplate(), "copy") 
+						|| Strings.equals(iui.getTemplate(), "edit")
+						|| Strings.equals(iui.getTemplate(), "add")) {
 					imports.add(Validates.class.getName());
 					if (Collections.isNotEmpty(iui.getRequiredValidateFieldList())) {
 						imports.add(Validate.class.getName());

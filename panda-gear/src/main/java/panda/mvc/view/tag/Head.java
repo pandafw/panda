@@ -38,7 +38,7 @@ import panda.servlet.HttpServletSupport;
  *
  */
 @IocBean(singleton=false)
-public class Head extends Component {
+public class Head extends TagBean {
 	protected HttpServletSupport hss = new HttpServletSupport();
 	
 	/**
