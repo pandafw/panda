@@ -25,6 +25,8 @@ public class MimeType {
 	public static final String APP_JAVASCRIPT = "application/javascript";
 	public static final String APP_JSON = "application/json";
 	public static final String APP_STREAM = "application/octet-stream";
+	public static final String APP_XLS = "application/vnd.ms-excel";
+	public static final String APP_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 	public static final String IMG_GIF = "image/gif";
 	public static final String IMG_JPEG = "image/jpeg";
