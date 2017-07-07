@@ -11,9 +11,9 @@ public abstract class AbstractLog implements Log {
 	protected String name;
 	protected LogLevel level;
 
-	protected AbstractLog(String name, LogLevel level) {
+	protected AbstractLog(Logs logs, String name, LogLevel level) {
 		this.name = name;
-		this.level = Logs.getLogLevel(name);
+		this.level = logs.getLogLevel(name);
 		if (level != null && this.level.isLessOrEqual(level)) {
 			this.level = level;
 		}

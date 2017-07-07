@@ -1,10 +1,10 @@
 package panda.log;
 
-import java.util.Properties;
+import java.util.Map;
 
 public interface LogAdapter {
 
-	void init(String name, Properties props);
+	void init(Logs logs, String name, Map<String, String> props);
 	
 	Log getLog(String name);
 

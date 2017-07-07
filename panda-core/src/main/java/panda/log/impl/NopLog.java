@@ -1,11 +1,12 @@
 package panda.log.impl;
 
-import java.util.Properties;
+import java.util.Map;
 
 import panda.log.Log;
 import panda.log.LogAdapter;
 import panda.log.LogEvent;
 import panda.log.LogLevel;
+import panda.log.Logs;
 
 /**
  * log nothing
@@ -13,9 +14,11 @@ import panda.log.LogLevel;
 public class NopLog implements Log, LogAdapter {
 	public static final NopLog INSTANCE = new NopLog();
 	
-	public void init(String name, Properties props) {
+	@Override
+	public void init(Logs logs, String name, Map<String, String> props) {
 	}
 	
+	@Override
 	public Log getLog(String name) {
 		return this;
 	}

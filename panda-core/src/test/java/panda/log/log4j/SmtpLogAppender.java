@@ -8,6 +8,7 @@ import org.apache.log4j.spi.ErrorCode;
 import org.apache.log4j.spi.LoggingEvent;
 
 import panda.log.LogLevel;
+import panda.log.Logs;
 import panda.log.impl.ConsoleLog;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
@@ -131,7 +132,7 @@ public class SmtpLogAppender extends AbstractAppender {
 		mc.setPassword(smtpPassword);
 		mc.setSsl(smtpSsl);
 		if (smtpDebug) {
-			ConsoleLog log = new ConsoleLog(getClass().getName(), null);
+			ConsoleLog log = new ConsoleLog(Logs.i(), getClass().getName());
 			log.setLogLevel(LogLevel.DEBUG);
 			mc.setLog(log);
 		}

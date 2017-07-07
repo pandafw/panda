@@ -1,7 +1,7 @@
 package panda.log.impl;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import panda.lang.Booleans;
 import panda.lang.Exceptions;
@@ -12,6 +12,7 @@ import panda.log.LogFormat;
 import panda.log.LogFormat.SimpleLogFormat;
 import panda.log.LogLevel;
 import panda.log.LogLog;
+import panda.log.Logs;
 import panda.net.mail.Email;
 import panda.net.mail.EmailAddress;
 import panda.net.mail.EmailException;
@@ -108,8 +109,8 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 	}
 
 	@Override
-	public void init(String name, Properties props) {
-		super.init(name, props);
+	public void init(Logs logs, String name, Map<String, String> props) {
+		super.init(logs, name, props);
 		
 		client = createClient();
 	}
@@ -130,7 +131,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 		mc.setPassword(smtpPassword);
 		mc.setSsl(smtpSsl);
 		if (smtpDebug) {
-			ConsoleLog log = new ConsoleLog(getClass().getName(), null);
+			ConsoleLog log = new ConsoleLog(logs, getClass().getName());
 			log.setLogLevel(LogLevel.DEBUG);
 			mc.setLog(log);
 		}
@@ -409,7 +410,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 		protected SmtpLogAdapter adapter;
 		
 		protected SmtpLog(SmtpLogAdapter adapter, String name) {
-			super(name, adapter.threshold);
+			super(adapter.logs, name, adapter.threshold);
 			this.adapter = adapter;
 		}
 

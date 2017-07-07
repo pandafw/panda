@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Properties;
+import java.util.Map;
 
 import panda.io.FileNames;
 import panda.io.Files;
@@ -21,6 +21,7 @@ import panda.lang.time.RollingCalendar;
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogLog;
+import panda.log.Logs;
 
 
 public class FileLogAdapter extends AbstractLogAdapter {
@@ -52,8 +53,8 @@ public class FileLogAdapter extends AbstractLogAdapter {
 	}
 
 	@Override
-	public void init(String name, Properties props) {
-		super.init(name, props);
+	public void init(Logs logs, String name, Map<String, String> props) {
+		super.init(logs, name, props);
 		
 		validatePath();
 
@@ -199,7 +200,7 @@ public class FileLogAdapter extends AbstractLogAdapter {
 		protected String name;
 		
 		protected FileLog(FileLogAdapter adapter, String name) {
-			super(name, adapter.threshold);
+			super(adapter.logs, name, adapter.threshold);
 			this.adapter = adapter;
 			this.name = name;
 		}

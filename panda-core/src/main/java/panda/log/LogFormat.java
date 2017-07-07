@@ -26,6 +26,7 @@ import panda.lang.time.FastDateFormat;
 public abstract class LogFormat {
 	public abstract String format(LogEvent event);
 	
+	public final static LogFormat SIMPLE = new SimpleLogFormat("%c - %m%n");
 	public final static LogFormat DEFAULT = new SimpleLogFormat("%d{yyyy-MM-dd HH:mm:ss} %-5p %c - %m%n");
 	
 	public static class SimpleLogFormat extends LogFormat {

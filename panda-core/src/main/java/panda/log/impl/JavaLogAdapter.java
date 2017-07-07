@@ -84,7 +84,7 @@ public class JavaLogAdapter extends AbstractLogAdapter {
 		protected String name;
 
 		protected JavaLog(JavaLogAdapter adapter, String name) {
-			super(name, adapter.threshold);
+			super(adapter.logs, name, adapter.threshold);
 			this.adapter = adapter;
 			this.name = name;
 		}

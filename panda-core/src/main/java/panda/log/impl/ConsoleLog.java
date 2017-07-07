@@ -4,24 +4,25 @@ import java.io.PrintStream;
 
 import panda.log.LogEvent;
 import panda.log.LogFormat;
-import panda.log.LogLevel;
 import panda.log.LogFormat.SimpleLogFormat;
+import panda.log.LogLevel;
+import panda.log.Logs;
 
 public class ConsoleLog extends AbstractLog {
 	public static PrintStream output;
 	
 	protected LogFormat format = SimpleLogFormat.DEFAULT;
 
-	public ConsoleLog(String name) {
-		super(name, null);
+	public ConsoleLog(Logs logs, String name) {
+		super(logs, name, null);
 	}
 
-	public ConsoleLog(String name, LogLevel level) {
-		super(name, level);
+	public ConsoleLog(Logs logs, String name, LogLevel level) {
+		super(logs, name, level);
 	}
 
-	public ConsoleLog(String name, LogLevel level, LogFormat format) {
-		super(name, level);
+	public ConsoleLog(Logs logs, String name, LogLevel level, LogFormat format) {
+		super(logs, name, level);
 		this.format = format;
 	}
 

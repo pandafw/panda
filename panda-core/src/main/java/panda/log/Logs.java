@@ -1,28 +1,24 @@
 package panda.log;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import panda.Panda;
-import panda.io.Streams;
+import panda.io.Settings;
 import panda.lang.Arrays;
 import panda.lang.Booleans;
-import panda.lang.ClassLoaders;
 import panda.lang.Classes;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.lang.Systems;
 import panda.log.ex.JavaLogRedirectHandler;
-import panda.log.impl.ConsoleLog;
-import panda.log.impl.ConsoleLogAdapter;
 import panda.log.impl.ComboLogAdapter;
+import panda.log.impl.ConsoleLog;
 
 public final class Logs {
-	private static final String CONFIG = "panda-logging.properties";
+	public static final String CONFIG = "panda-logging.properties";
 
 	private static class LogConfig {
 		LogLevel level;
@@ -46,10 +42,8 @@ public final class Logs {
 	}
 
 	private static LogConfig rootlc = new LogConfig(LogLevel.INFO, null);
-
-	private static Map<String, LogConfig> configs = new HashMap<String, LogConfig>();
-
-	private static LogAdapter adapter;
+	
+	private static Logs logs;
 
 	static {
 		if (Systems.IS_OS_ANDROID) {
@@ -67,6 +61,33 @@ public final class Logs {
 		}
 	}
 
+	public static Logs i() {
+		return logs;
+	}
+	
+	private static void init() {
+		Settings props = new Settings();
+		
+		// load properties
+		try {
+			props.load(CONFIG);
+		}
+		catch (Throwable e) {
+			LogLog.error("Failed to load log config: " + CONFIG, e);
+		}
+		
+		// create logs
+		logs = new Logs(props);
+	}
+
+	/**
+	 * initialize logs
+	 * @param props properties
+	 */
+	public static void init(Map<String, String> props) {
+		logs = new Logs(props);
+	}
+	
 	/**
 	 * Get a Log by Class
 	 * 
@@ -84,64 +105,7 @@ public final class Logs {
 	 * @return Log
 	 */
 	public static Log getLog(String name) {
-		return getLogger(adapter, name);
-	}
-
-	/**
-	 * get a log by caller's class name
-	 * 
-	 * @return the Log
-	 */
-	public static Log get() {
-		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-		if (Systems.IS_OS_ANDROID) {
-			for (int i = 0; i < sts.length; i++) {
-				if (sts[i].getClassName().equals(Logs.class.getName())) {
-					return adapter.getLog(sts[i + 1].getClassName());
-				}
-			}
-		}
-		return getLogger(adapter, sts[2].getClassName());
-	}
-
-	/**
-	 * get the log level by the name
-	 * @param name name
-	 * @return log level
-	 */
-	public static LogLevel getLogLevel(String name) {
-		return getLogConfig(name).level;
-	}
-
-	/**
-	 * get the loggers by the name
-	 * @param name name
-	 * @return loggers
-	 */
-	public static Set<String> getLogLoggers(String name) {
-		LogConfig lc = getLogConfig(name);
-		return Collections.isEmpty(lc.loggers) ? rootlc.loggers : lc.loggers;
-	}
-	
-	/**
-	 * get the LogConfig by the name
-	 * @param name name
-	 * @return LogConfig
-	 */
-	private static LogConfig getLogConfig(String name) {
-		LogConfig lc = rootlc;
-		if (Collections.isNotEmpty(configs) && Strings.isNotEmpty(name)) {
-			String key = "";
-			for (Entry<String, LogConfig> en : configs.entrySet()) {
-				if (name.startsWith(en.getKey())) {
-					if (en.getKey().length() > key.length()) {
-						key = en.getKey();
-						lc = en.getValue();
-					}
-				}
-			}
-		}
-		return lc;
+		return logs.getLogger(name);
 	}
 
 	/**
@@ -172,16 +136,116 @@ public final class Logs {
 		rootlc.loggers = loggers;
 	}
 
-	private static Log getLogger(LogAdapter adapter, String name) {
+	//-------------------------------------------------------------------------
+	private LogAdapter adapter;
+	private Map<String, LogConfig> configs = new HashMap<String, LogConfig>();
+
+	protected Logs() {
+		adapter = new ComboLogAdapter();
+	}
+
+	protected Logs(Map<String, String> props) {
+		// level settings
+		initLogLevels(props);
+		
+		// java logging redirect
+		String v = props.get("panda.java.logging.redirect");
+		if (Booleans.toBoolean(v)) {
+			JavaLogRedirectHandler.redirect();
+		}
+
+		// initialize adapter
+		initLogAdapter(props);
+	}
+
+	protected void initLogLevels(Map<String, String> props) {
+		for (Entry<String, String> en : props.entrySet()) {
+			String key = en.getKey();
+			if (key.startsWith("level.")) {
+				key = key.substring("level.".length());
+				LogConfig lc = LogConfig.parse(en.getValue());
+				if (lc == null) {
+					continue;
+				}
+
+				if ("*".equals(key)) {
+					rootlc = lc;
+				}
+				else {
+					configs.put(key, lc);
+				}
+			}
+		}
+	}
+	
+	protected void initLogAdapter(Map<String, String> props) {
+		String name = "";
+		String impl = props.get(LogAdapter.class.getName());
+		if (Strings.isEmpty(impl)) {
+			adapter = new ComboLogAdapter();
+		}
+		else {
+			int d = impl.indexOf(':');
+			if (d > 0) {
+				name = impl.substring(0, d);
+				impl = impl.substring(d + 1);
+			}
+			try {
+				adapter = (LogAdapter)Classes.newInstance(impl);
+			}
+			catch (Throwable e) {
+				LogLog.error("Failed to create LogAdapter: " + impl);
+			}
+		}
+		adapter.init(this, name, props);
+		adapter.getLog("panda");
+	}
+
+	/**
+	 * get the Logger by the name
+	 * @param name name
+	 * @return Log
+	 */
+	protected Log getLogger(String name) {
 		Log log;
 		try {
 			log = adapter.getLog(name);
 		}
 		catch (Throwable e) {
 			LogLog.error("Failed to getLogger(" + adapter.getClass() + ", " + name + ")");
-			log =  new ConsoleLog(name);
+			log =  new ConsoleLog(logs, name);
 		}
 		return log;
+	}
+	
+	/**
+	 * get the LogConfig by the name
+	 * @param name name
+	 * @return LogConfig
+	 */
+	protected LogConfig getLogConfig(String name) {
+		LogConfig lc = rootlc;
+		if (Collections.isNotEmpty(configs) && Strings.isNotEmpty(name)) {
+			String key = "";
+			for (Entry<String, LogConfig> en : configs.entrySet()) {
+				if (name.startsWith(en.getKey())) {
+					if (en.getKey().length() > key.length()) {
+						key = en.getKey();
+						lc = en.getValue();
+					}
+				}
+			}
+		}
+		return lc;
+	}
+
+	/**
+	 * get the log level by the name
+	 * @param name name
+	 * @return log level
+	 */
+	public LogLevel getLogLevel(String name) {
+		return getLogConfig(name).level;
 	}
 
 	/**
@@ -190,7 +254,7 @@ public final class Logs {
 	 * @param name     logger name
 	 * @return true if the adapter is enabled for the logger
 	 */
-	public static boolean isLoggerEnabled(String adapter, String name) {
+	public boolean isLoggerEnabled(String adapter, String name) {
 		if (Strings.isEmpty(adapter)) {
 			return true;
 		}
@@ -201,69 +265,14 @@ public final class Logs {
 		}
 		return loggers.contains(adapter);
 	}
-	
-	private static void init() {
-		Properties props = new Properties();
 
-		InputStream is = ClassLoaders.getResourceAsStream(CONFIG);
-		if (is != null) {
-			try {
-				props.load(is);
-				
-				// level settings
-				for (Entry<Object, Object> en : props.entrySet()) {
-					String key = en.getKey().toString();
-					if (key.startsWith("level.")) {
-						key = key.substring("level.".length());
-						LogConfig lc = LogConfig.parse(en.getValue().toString());
-						if (lc == null) {
-							continue;
-						}
-
-						if ("*".equals(key)) {
-							rootlc = lc;
-						}
-						else {
-							configs.put(key, lc);
-						}
-					}
-				}
-
-				// java logging redirect
-				String v = props.getProperty("panda.java.logging.redirect");
-				if (Booleans.toBoolean(v)) {
-					JavaLogRedirectHandler.redirect();
-				}
-
-				// initialize adapter
-				String name = "";
-				String impl = props.getProperty(LogAdapter.class.getName());
-				if (Strings.isEmpty(impl)) {
-					adapter = new ComboLogAdapter();
-				}
-				else {
-					int d = impl.indexOf(':');
-					if (d > 0) {
-						name = impl.substring(0, d);
-						impl = impl.substring(d + 1);
-					}
-					adapter = (LogAdapter)Classes.newInstance(impl);
-				}
-				adapter.init(name, props);
-				adapter.getLog("panda");
-			}
-			catch (Throwable e) {
-				LogLog.error("Failed to initialize log", e);
-				adapter = null;
-			}
-			finally {
-				Streams.safeClose(is);
-			}
-		}
-
-		if (adapter == null) {
-			adapter = new ConsoleLogAdapter();
-			adapter.init(adapter.getClass().getName(), props);
-		}
+	/**
+	 * get the loggers by the name
+	 * @param name name
+	 * @return loggers
+	 */
+	public Set<String> getLogLoggers(String name) {
+		LogConfig lc = getLogConfig(name);
+		return Collections.isEmpty(lc.loggers) ? rootlc.loggers : lc.loggers;
 	}
 }

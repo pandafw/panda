@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogLevel;
+import panda.log.Logs;
 
 /**
  * Apache log4j adapter
@@ -13,14 +14,14 @@ import panda.log.LogLevel;
 public class Log4jLogAdapter extends AbstractLogAdapter {
 	@Override
 	protected Log getLogger(String name) {
-		return new Log4JLogger(name, threshold);
+		return new Log4JLogger(logs, name, threshold);
 	}
 
 	private static class Log4JLogger extends AbstractLog {
 		private Logger logger;
 
-		Log4JLogger(String className, LogLevel level) {
-			super(className, level);
+		Log4JLogger(Logs logs, String className, LogLevel level) {
+			super(logs, className, level);
 			
 			logger = Logger.getLogger(className);
 

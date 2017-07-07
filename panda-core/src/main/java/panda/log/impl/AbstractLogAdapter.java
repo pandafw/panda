@@ -1,7 +1,7 @@
 package panda.log.impl;
 
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import panda.log.Log;
 import panda.log.LogAdapter;
@@ -12,6 +12,9 @@ import panda.log.Logs;
 
 
 public abstract class AbstractLogAdapter implements LogAdapter {
+	/** logs */
+	protected Logs logs;
+	
 	/** adapter name */
 	protected String name;
 
@@ -19,7 +22,8 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 	protected LogFormat format = LogFormat.DEFAULT;
 	
 	@Override
-	public void init(String name, Properties props) {
+	public void init(Logs logs, String name, Map<String, String> props) {
+		this.logs = logs;
 		this.name = name;
 		String prefix = "logger." + name + ".";
 		setProperties(prefix, props);
@@ -27,7 +31,7 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 	
 	@Override
 	public Log getLog(String name) {
-		if (Logs.isLoggerEnabled(this.name, name)) {
+		if (logs.isLoggerEnabled(this.name, name)) {
 			return getLogger(name);
 		}
 		return NopLog.INSTANCE;
@@ -35,12 +39,12 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 
 	protected abstract Log getLogger(String name);
 	
-	protected void setProperties(String prefix, Properties props) {
-		for (Entry<Object, Object> en : props.entrySet()) {
-			String key = en.getKey().toString();
+	protected void setProperties(String prefix, Map<String, String> props) {
+		for (Entry<String, String> en : props.entrySet()) {
+			String key = en.getKey();
 			if (key.startsWith(prefix)) {
 				key = key.substring(prefix.length());
-				setProperty(key, en.getValue().toString());
+				setProperty(key, en.getValue());
 			}
 		}
 	}

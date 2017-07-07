@@ -227,7 +227,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 		protected SlackLogAdapter adapter;
 		
 		protected SlackLog(SlackLogAdapter adapter, String name) {
-			super(name, adapter.threshold);
+			super(adapter.logs, name, adapter.threshold);
 			this.adapter = adapter;
 		}
 
