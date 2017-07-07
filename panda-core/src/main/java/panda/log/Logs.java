@@ -60,8 +60,7 @@ public final class Logs {
 		init();
 		
 		try {
-			getLog(Panda.class).debug("Panda is licensed under the GNU General Public License 3. " 
-				+ "Report bugs: https://github.com/pandafw/panda/issues");
+			getLog(Panda.class).debug("Panda is licensed under the Apache License Version 2.0, please report bugs to https://github.com/pandafw/panda/issues");
 		}
 		catch (Throwable e) {
 			// just pass!!

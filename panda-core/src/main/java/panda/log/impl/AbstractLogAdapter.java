@@ -21,7 +21,7 @@ public abstract class AbstractLogAdapter implements LogAdapter {
 	@Override
 	public void init(String name, Properties props) {
 		this.name = name;
-		String prefix = "log." + name + ".";
+		String prefix = "logger." + name + ".";
 		setProperties(prefix, props);
 	}
 	
