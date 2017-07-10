@@ -2,6 +2,7 @@ package panda.lang;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -75,6 +76,9 @@ public abstract class Classes {
 
 	/** The ".class" file suffix */
 	public final static String CLASS_FILE_SUFFIX = ".class";
+
+	/** The ".jar" file suffix */
+	public final static String JAR_FILE_SUFFIX = ".jar";
 
 	/** The array suffix [] */
 	public final static String ARRAY_SUFFIX = "[]";
@@ -2274,6 +2278,10 @@ public abstract class Classes {
 	
 	private static Set<String> classes;
 	
+	/**
+	 * get all classes from class loader's URL
+	 * @return class set
+	 */
 	public synchronized static Set<String> getAllClasses() {
 		if (classes != null) {
 			return classes;
@@ -2288,7 +2296,8 @@ public abstract class Classes {
 			if (log.isDebugEnabled()) {
 				log.debug("Scan " + url);
 			}
-			if (url.getFile().endsWith("jar")) {
+			
+			if (url.getFile().endsWith(JAR_FILE_SUFFIX)) {
 				ZipInputStream zis = null;
 				try {
 					zis = Streams.zip(new FileInputStream(url.getFile()));
@@ -2301,8 +2310,11 @@ public abstract class Classes {
 						}
 					}
 				}
+				catch (FileNotFoundException e) {
+					// skip
+				}
 				catch (IOException e) {
-					log.warn("Failed to open " + url.getFile());
+					log.warn("Failed to read " + url.getFile() + ": " + e.getMessage());
 				}
 				finally {
 					Streams.safeClose(zis);
@@ -2310,7 +2322,7 @@ public abstract class Classes {
 			}
 			else {
 				File dir = new File(url.getFile());
-				if (dir.exists()) {
+				if (dir.isDirectory()) {
 					Collection<File> files = Files.listFiles(dir, true, CLASS_FILE_SUFFIX);
 					for (File file : files) {
 						if (file.getName().equals(PACKAGE_INFO_CLASS)) {
@@ -2325,31 +2337,5 @@ public abstract class Classes {
 			}
 		}
 		return classes;
-	}
-
-	/**
-	 * 获取基本类型的默认值
-	 * 
-	 * @param cls 基本类型
-	 * @return 0/false,如果传入的pClass不是基本类型的类,则返回null
-	 */
-	public static Object getPrimitiveDefaultValue(Class<?> cls) {
-		if (int.class.equals(cls))
-			return Integer.valueOf(0);
-		if (long.class.equals(cls))
-			return Long.valueOf(0);
-		if (short.class.equals(cls))
-			return Short.valueOf((short)0);
-		if (float.class.equals(cls))
-			return Float.valueOf(0f);
-		if (double.class.equals(cls))
-			return Double.valueOf(0);
-		if (byte.class.equals(cls))
-			return Byte.valueOf((byte)0);
-		if (char.class.equals(cls))
-			return Character.valueOf((char)0);
-		if (boolean.class.equals(cls))
-			return Boolean.FALSE;
-		return null;
 	}
 }

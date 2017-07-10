@@ -2,11 +2,10 @@ package panda.roid.log;
 
 import panda.io.FileNames;
 import panda.lang.Booleans;
-import panda.log.impl.FileLogAdapter;
 import panda.roid.Androids;
 
 
-public class AndroidFileLogAdapter extends FileLogAdapter {
+public class FileLogAdapter extends panda.log.impl.FileLogAdapter {
 	private boolean internal;
 	
 	@Override
