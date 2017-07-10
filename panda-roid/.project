@@ -30,11 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>core</name>
-			<type>2</type>
-			<location>/data/Develop/Projects/panda/panda-core/src/main/java</location>
-		</link>
-	</linkedResources>
 </projectDescription>

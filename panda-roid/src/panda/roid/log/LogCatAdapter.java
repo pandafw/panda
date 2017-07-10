@@ -1,12 +1,11 @@
 package panda.roid.log;
 
-import org.apache.log4j.helpers.LogLog;
-
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogFormat;
 import panda.log.LogLevel;
+import panda.log.LogLog;
 import panda.log.impl.AbstractLog;
 import panda.log.impl.AbstractLogAdapter;
 import panda.roid.Androids;

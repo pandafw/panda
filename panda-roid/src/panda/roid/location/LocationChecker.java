@@ -22,6 +22,7 @@ public class LocationChecker {
 	 * 
 	 * @param current The current Location fix, to which you want to compare the new one
 	 * @param location The new Location that you want to evaluate
+	 * @return true if location is better than current
 	 */
 	public static boolean isBetterLocation(Location current, Location location) {
 		if (current == null) {

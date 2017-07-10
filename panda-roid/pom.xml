@@ -19,6 +19,13 @@
 		<developerConnection>scm:git:git@github.com:pandafw/panda.git</developerConnection>
 		<url>git@github.com:pandafw/panda.git</url>
 	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>com.github.pandafw</groupId>
+			<artifactId>panda-core</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+	</dependencies>
 	<developers>
 		<developer>
 			<id>yf.frank.wang</id>

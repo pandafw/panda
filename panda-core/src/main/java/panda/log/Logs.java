@@ -1,5 +1,6 @@
 package panda.log;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -71,6 +72,9 @@ public final class Logs {
 		// load properties
 		try {
 			props.load(CONFIG);
+		}
+		catch (FileNotFoundException e) {
+			// skip
 		}
 		catch (Throwable e) {
 			LogLog.error("Failed to load log config: " + CONFIG, e);

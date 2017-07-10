@@ -16,6 +16,7 @@ public class Bitmaps {
 	 * Rotates the bitmap by the specified degree. If a new bitmap is created, the original bitmap is recycled.
 	 * @param b bitmap object
 	 * @param degrees rotate degrees
+	 * @return rotated bitmap
 	 */
 	public static Bitmap rotate(Bitmap b, int degrees) {
 		return rotate(b, degrees, null);
@@ -26,6 +27,7 @@ public class Bitmaps {
 	 * @param b bitmap object
 	 * @param degrees rotate degrees
 	 * @param m matrix object
+	 * @return rotated bitmap
 	 */
 	public static Bitmap rotate(Bitmap b, int degrees, Matrix m) {
 		if (degrees != 0 && b != null) {

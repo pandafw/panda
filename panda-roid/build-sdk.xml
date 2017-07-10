@@ -13,6 +13,8 @@
 
          source.dir
              The name of the source directory. Default is 'src'.
+         jar.libs.dir
+             The name of the libs directory. Default is 'libs'.
          out.dir
              The name of the output directory. Default is 'bin'.
 
