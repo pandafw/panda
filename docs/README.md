@@ -3,7 +3,7 @@
 
 Panda is a Java development framework, it can help you quickly create a WEB application.
 
- - [English Readme](Readme)
+ - [English Readme](Readme_en)
 
 
 
