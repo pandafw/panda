@@ -21,7 +21,7 @@ import panda.tpl.ftl.MultiTemplateLoader;
 public class FreemarkerTemplateLoader extends MultiTemplateLoader {
 	private static final Log log = Logs.getLog(FreemarkerTemplateLoader.class);
 
-	public static final String DEFAULT_WEB_PATH = "/WEB-INF/templates/";
+	public static final String DEFAULT_WEB_PATH = "/WEB-INF/";
 	
 	@IocInject(value=MvcConstants.FREEMARKER_TEMPLATES_WEB_PATH, required=false)
 	private String webpath = DEFAULT_WEB_PATH;
