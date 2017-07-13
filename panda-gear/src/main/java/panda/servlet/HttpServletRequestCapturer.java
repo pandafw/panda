@@ -15,12 +15,12 @@ import panda.io.stream.ByteArrayOutputStream;
 import panda.lang.Charsets;
 import panda.net.URLBuilder;
 
-public class BufferedHttpServletRequestWrapper extends HttpServletRequestWrapper {
+public class HttpServletRequestCapturer extends HttpServletRequestWrapper {
 	private ByteArrayOutputStream body;
 	private BufferedReader reader;
 	private ServletInputStream stream;
 
-	public BufferedHttpServletRequestWrapper(HttpServletRequest req) throws IOException {
+	public HttpServletRequestCapturer(HttpServletRequest req) throws IOException {
 		super(req);
 	}
 

@@ -14,10 +14,10 @@ import panda.net.http.HttpHeader;
 import panda.net.http.HttpStatus;
 
 public class DelegateHttpServletResponseWrapper extends HttpServletResponseWrapper {
-	private HttpHeader head;
-	private HttpStatus status = new HttpStatus(SC_OK);
-	private ServletOutputStream stream;
-	private PrintWriter writer;
+	protected HttpHeader head;
+	protected HttpStatus status = new HttpStatus(SC_OK);
+	protected ServletOutputStream stream;
+	protected PrintWriter writer;
 	
 	public DelegateHttpServletResponseWrapper(HttpServletResponse res) {
 		super(res);
@@ -45,7 +45,11 @@ public class DelegateHttpServletResponseWrapper extends HttpServletResponseWrapp
 		return status.getReason();
 	}
 
-	private void flush() throws IOException {
+	/**
+	 * flush writer and stream
+	 * @throws IOException throw if an error occurs
+	 */
+	public void flush() throws IOException {
 		if (writer != null) {
 			writer.flush();
 		}
@@ -177,10 +181,4 @@ public class DelegateHttpServletResponseWrapper extends HttpServletResponseWrapp
 		status.setStatus(SC_OK);
 		head.clear();
 	}
-
-	@Override
-	public void resetBuffer() {
-		super.resetBuffer();
-	}
-
 }

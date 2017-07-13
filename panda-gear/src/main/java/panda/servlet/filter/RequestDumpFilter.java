@@ -24,8 +24,8 @@ import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.net.http.HttpHeader;
-import panda.servlet.BufferedHttpServletRequestWrapper;
-import panda.servlet.BufferedHttpServletResponseWrapper;
+import panda.servlet.HttpServletRequestCapturer;
+import panda.servlet.HttpServletResponseCapturer;
 import panda.servlet.HttpServlets;
 import panda.servlet.ServletRequestHeaderMap;
 
@@ -123,14 +123,14 @@ public class RequestDumpFilter implements Filter {
 		}
 
 		if (dumpRequest) {
-			BufferedHttpServletRequestWrapper reqWrapper = new BufferedHttpServletRequestWrapper(request);
+			HttpServletRequestCapturer reqWrapper = new HttpServletRequestCapturer(request);
 			req = reqWrapper;
 			dumpRequest(reqWrapper, time, serial);
 		}
 
-		BufferedHttpServletResponseWrapper resWrapper = null;
+		HttpServletResponseCapturer resWrapper = null;
 		if (dumpResponse) {
-			resWrapper = new BufferedHttpServletResponseWrapper(response);
+			resWrapper = new HttpServletResponseCapturer(response);
 			res = resWrapper;
 		}
 
@@ -147,7 +147,7 @@ public class RequestDumpFilter implements Filter {
 		}
 	}
 
-	private void dumpRequest(BufferedHttpServletRequestWrapper req, long time, int serial) {
+	private void dumpRequest(HttpServletRequestCapturer req, long time, int serial) {
 		String date = DateTimes.isoDateFormat().format(time);
 		String fn = DateTimes.timestampLogFormat().format(time);
 		File dumpFolder = new File(dumpPath, date);
@@ -183,7 +183,7 @@ public class RequestDumpFilter implements Filter {
 	}
 	
 	private void dumpResponse(HttpServletRequest request, HttpServletResponse response,
-			BufferedHttpServletResponseWrapper wrapper, long time, int serial) throws IOException {
+			HttpServletResponseCapturer wrapper, long time, int serial) throws IOException {
 
 		// flush wrapper
 		wrapper.flushBuffer();
