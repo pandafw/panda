@@ -13,6 +13,7 @@ public interface View {
 	public static final String XML = "xml";
 	
 	public static final String JSP = "jsp";
+	public static final String SJSP = "sjsp";
 	public static final String REDIRECT = "redirect";
 	public static final String REDIRECT2 = ">>";
 	public static final String IOC = "ioc";

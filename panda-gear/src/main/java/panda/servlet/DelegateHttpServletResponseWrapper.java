@@ -15,13 +15,14 @@ import panda.net.http.HttpStatus;
 
 public class DelegateHttpServletResponseWrapper extends HttpServletResponseWrapper {
 	protected HttpHeader head;
-	protected HttpStatus status = new HttpStatus(SC_OK);
+	protected HttpStatus status;
 	protected ServletOutputStream stream;
 	protected PrintWriter writer;
 	
 	public DelegateHttpServletResponseWrapper(HttpServletResponse res) {
 		super(res);
 		head = new HttpHeader();
+		status = new HttpStatus(SC_OK);
 	}
 
 	/**

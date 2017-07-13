@@ -18,6 +18,7 @@ import panda.mvc.view.JspView;
 import panda.mvc.view.RawView;
 import panda.mvc.view.RedirectView;
 import panda.mvc.view.SitemeshFreemarkerView;
+import panda.mvc.view.SitemeshJspView;
 import panda.mvc.view.TsvView;
 import panda.mvc.view.VoidView;
 import panda.mvc.view.XlsView;
@@ -58,6 +59,10 @@ public class DefaultViewMaker implements ViewMaker {
 		
 		if (View.JSP.equals(type)) {
 			return new JspView(value);
+		}
+		
+		if (View.SJSP.equals(type)) {
+			return new SitemeshJspView(value);
 		}
 		
 		if (View.FTL.equals(type)) {

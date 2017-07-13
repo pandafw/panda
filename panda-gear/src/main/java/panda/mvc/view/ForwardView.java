@@ -1,6 +1,9 @@
 package panda.mvc.view;
 
+import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,14 +69,21 @@ public class ForwardView extends AbstractPathView {
 		}
 
 		// 执行 Forward
-		forward(ac, path, args);
+		forward(ac, path + args);
 	}
 
-	protected void forward(ActionContext ac, String path, String args) {
+	protected void forward(ActionContext ac, String path) {
 		HttpServletRequest req = ac.getRequest();
 		HttpServletResponse res = ac.getResponse();
-
-		path = path + args;
+		try {
+			forward(req, res, path);
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+	
+	protected void forward(HttpServletRequest req, HttpServletResponse res, String path) throws ServletException, IOException {
 		if (log.isDebugEnabled()) {
 			log.debug("Forward: " + path);
 		}
@@ -83,13 +93,7 @@ public class ForwardView extends AbstractPathView {
 			throw Exceptions.makeThrow("Fail to find Forward '%s'", path);
 		}
 		
-		// Do rendering
-		try {
-			rd.forward(req, res);
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		rd.forward(req, res);
 	}
 	
 	/**
