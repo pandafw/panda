@@ -31,6 +31,7 @@ import panda.mvc.view.tag.ui.Hidden;
 import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
+import panda.mvc.view.tag.ui.OptGroup;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
 import panda.mvc.view.tag.ui.Queryer;
@@ -77,6 +78,7 @@ public class TagModels {
 	protected TagModel listview;
 	protected TagModel log;
 	protected TagModel number;
+	protected TagModel optgroup;
 	protected TagModel pager;
 	protected TagModel param;
 	protected TagModel password;
@@ -363,6 +365,16 @@ public class TagModels {
 			number = new TagModel(context, CNumber.class);
 		}
 		return number;
+	}
+
+	/**
+	 * @return OptGroupModel
+	 */
+	public TagModel getOptgroup() {
+		if (optgroup == null) {
+			optgroup = new TagModel(context, OptGroup.class);
+		}
+		return optgroup;
 	}
 
 	/**

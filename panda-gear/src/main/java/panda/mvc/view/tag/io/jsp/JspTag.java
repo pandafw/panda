@@ -14,11 +14,12 @@ import panda.mvc.view.tag.CDate;
 import panda.mvc.view.tag.CLog;
 import panda.mvc.view.tag.CNumber;
 import panda.mvc.view.tag.CSet;
-import panda.mvc.view.tag.TagBean;
+import panda.mvc.view.tag.CUrl;
 import panda.mvc.view.tag.Csv;
 import panda.mvc.view.tag.Head;
 import panda.mvc.view.tag.Param;
 import panda.mvc.view.tag.Property;
+import panda.mvc.view.tag.TagBean;
 import panda.mvc.view.tag.Text;
 import panda.mvc.view.tag.Tsv;
 import panda.mvc.view.tag.ui.ActionConfirm;
@@ -39,6 +40,7 @@ import panda.mvc.view.tag.ui.Hidden;
 import panda.mvc.view.tag.ui.Icon;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.ListView;
+import panda.mvc.view.tag.ui.OptGroup;
 import panda.mvc.view.tag.ui.Pager;
 import panda.mvc.view.tag.ui.Password;
 import panda.mvc.view.tag.ui.Queryer;
@@ -295,6 +297,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 		}
 	}
 
+	public static class OptGroupTag extends JspTag {
+		protected TagBean getBean(ActionContext ac) {
+			return getBean(ac, OptGroup.class);
+		}
+	}
+
 	public static class PagerTag extends JspTag {
 		protected TagBean getBean(ActionContext ac) {
 			return getBean(ac, Pager.class);
@@ -364,6 +372,12 @@ public abstract class JspTag extends BodyTagSupport implements DynamicAttributes
 	public static class UploaderTag extends JspTag {
 		protected TagBean getBean(ActionContext ac) {
 			return getBean(ac, Uploader.class);
+		}
+	}
+
+	public static class UrlTag extends JspTag {
+		protected TagBean getBean(ActionContext ac) {
+			return getBean(ac, CUrl.class);
 		}
 	}
 
