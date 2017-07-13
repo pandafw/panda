@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 
 import panda.Panda;
 import panda.bean.Beans;
@@ -16,9 +17,9 @@ import panda.cast.castor.FileItemCastor;
 import panda.el.El;
 import panda.el.ElTemplate;
 import panda.ioc.Ioc;
+import panda.lang.Chars;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Chars;
 import panda.lang.Objects;
 import panda.lang.Strings;
 import panda.mvc.util.TextProvider;
@@ -85,13 +86,64 @@ public abstract class Mvcs {
 		Mvcs.castors = castors;
 	}
 	
+	/**
+	 * get action handler from servlet context
+	 * @param sc servlet context
+	 * @return action handler
+	 */
+	public static ActionHandler getActionHandler(ServletContext sc) {
+		return (ActionHandler)sc.getAttribute(ActionHandler.class.getName());
+	}
+	
+	/**
+	 * set action handler to servlet context
+	 * @param sc servlet context
+	 * @param ah action handler
+	 */
+	public static void setActionHandler(ServletContext sc, ActionHandler ah) {
+		if (ah == null) {
+			sc.removeAttribute(ActionHandler.class.getName());
+		}
+		else {
+			sc.setAttribute(ActionHandler.class.getName(), ah);
+		}
+	}
+	
+	/** 
+	 * get Ioc from servlet context
+	 * @param sc servlet context
+	 * @return ioc
+	 */
 	public static Ioc getIoc(ServletContext sc) {
-		ActionHandler handler = (ActionHandler)sc.getAttribute(ActionHandler.class.getName());
+		ActionHandler handler = getActionHandler(sc);
 		if (handler == null) {
 			return null;
 		}
 		
 		return handler.getConfig().getIoc();
+	}
+	
+	/**
+	 * get action context from servlet request
+	 * @param req servlet request
+	 * @return action context
+	 */
+	public static ActionContext getActionContext(ServletRequest req) {
+		return (ActionContext)req.getAttribute(ActionContext.class.getName());
+	}
+
+	/**
+	 * set action context to servlet request
+	 * @param req servlet request
+	 * @param ac action context
+	 */
+	public static void setActionContext(ServletRequest req, ActionContext ac) {
+		if (ac == null) {
+			req.removeAttribute(ActionContext.class.getName());
+		}
+		else {
+			req.setAttribute(ActionContext.class.getName(), ac);
+		}
 	}
 	
 	/**

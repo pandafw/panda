@@ -1,49 +1,48 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
-
-	<description><![CDATA["Panda html tag library"]]></description>
-	<display-name>"Panda Html Tags"</display-name>
-	<tlib-version>2.2</tlib-version>
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+	<description>Panda html tag library</description>
+	<display-name>Panda Html Tags</display-name>
+	<jsp-version>1.2</jsp-version>
+	<tlib-version>1.2</tlib-version>
 	<short-name>p</short-name>
 	<uri>/panda-tags</uri>
 
 	<tag>
 		<description><![CDATA[Render action confirms if they exists]]></description>
 		<name>actionconfirm</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ActionConfirmTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.ActionConfirmTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render action errors if they exists]]></description>
 		<name>actionerror</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ActionErrorTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.ActionErrorTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render action messages if they exists]]></description>
 		<name>actionmessage</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ActionMessageTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.ActionMessageTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render action warnings if they exists]]></description>
 		<name>actionwarning</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ActionWarningTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.ActionWarningTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a HTML href element that when clicked can optionally call a URL via remote XMLHttpRequest and updates its targets]]></description>
 		<name>a</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.AnchorTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.AnchorTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -51,15 +50,15 @@
 	<tag>
 		<description><![CDATA[Render a formatted boolean.]]></description>
 		<name>boolean</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.BooleanTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.BooleanTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a HTML href element that when clicked can optionally call a URL via remote XMLHttpRequest and updates its targets]]></description>
 		<name>b</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ButtonTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.ButtonTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -67,7 +66,7 @@
 	<tag>
 		<description><![CDATA[Render a checkbox input field]]></description>
 		<name>checkbox</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.CheckboxTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.CheckboxTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -75,7 +74,7 @@
 	<tag>
 		<description><![CDATA[Render a list of checkboxes]]></description>
 		<name>checkboxlist</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.CheckboxListTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.CheckboxListTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -83,7 +82,7 @@
 	<tag>
 		<description><![CDATA[Print out csv list]]></description>
 		<name>csv</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.CsvTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.CsvTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -91,15 +90,15 @@
 	<tag>
 		<description><![CDATA[Render a formatted date.]]></description>
 		<name>date</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.DateTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.DateTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render datepicker input text field]]></description>
 		<name>datepicker</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.DatePickerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.DatePickerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -107,7 +106,7 @@
 	<tag>
 		<description><![CDATA[Render datetimepicker input text field]]></description>
 		<name>datetimepicker</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.DateTimePickerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.DateTimePickerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -115,7 +114,7 @@
 	<tag>
 		<description><![CDATA[Render timepicker input text field]]></description>
 		<name>timepicker</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.TimePickerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.TimePickerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -123,7 +122,7 @@
 	<tag>
 		<description><![CDATA[Render a div tag]]></description>
 		<name>div</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.DivTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.DivTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -131,7 +130,7 @@
 	<tag>
 		<description><![CDATA[Render field error (all or partial depending on param tag nested)if they exists]]></description>
 		<name>fielderror</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.FieldErrorTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.FieldErrorTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -139,7 +138,7 @@
 	<tag>
 		<description><![CDATA[Render a file input field]]></description>
 		<name>file</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.FileTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.FileTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -147,7 +146,7 @@
 	<tag>
 		<description><![CDATA[Renders an input form]]></description>
 		<name>form</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.FormTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.FormTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -155,15 +154,15 @@
 	<tag>
 		<description><![CDATA[Render head.]]></description>
 		<name>head</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.HeadTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.HeadTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a hidden input field]]></description>
 		<name>hidden</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.HiddenTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.HiddenTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -171,23 +170,23 @@
 	<tag>
 		<description><![CDATA[Render Icon.]]></description>
 		<name>link</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.IconTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.IconTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render link.]]></description>
 		<name>link</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.LinkTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.LinkTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Renders a list view]]></description>
 		<name>listview</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ListViewTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.ListViewTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -195,7 +194,7 @@
 	<tag>
 		<description><![CDATA[Render a log message.]]></description>
 		<name>log</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.LogTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.LogTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -203,15 +202,15 @@
 	<tag>
 		<description><![CDATA[Render a formatted number.]]></description>
 		<name>number</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.NumberTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.NumberTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Renders a option group]]></description>
 		<name>pager</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.OptGroupTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.OptGroupTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -219,7 +218,7 @@
 	<tag>
 		<description><![CDATA[Renders a pager navigator]]></description>
 		<name>pager</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.PagerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.PagerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -227,7 +226,7 @@
 	<tag>
 		<description><![CDATA[Renders a parameter]]></description>
 		<name>param</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ParamTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.ParamTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -235,7 +234,7 @@
 	<tag>
 		<description><![CDATA[Render an HTML input tag of type password]]></description>
 		<name>password</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.PasswordTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.PasswordTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -243,15 +242,15 @@
 	<tag>
 		<description><![CDATA[Print out expression which evaluates against the stack]]></description>
 		<name>property</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.PropertyTag</tag-class>
-		<body-content>empty</body-content>
+		<tag-class>panda.mvc.view.tag.io.jsp.PropertyTag</tag-class>
+		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a queryer]]></description>
 		<name>queryer</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.queryerTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.queryerTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -259,15 +258,15 @@
 	<tag>
 		<description><![CDATA[Renders a radio button input field]]></description>
 		<name>radio</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.RadioTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.RadioTag</tag-class>
 		<body-content>JSP</body-content>
-		<dynamic-attributes>false</dynamic-attributes>
+		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a reset button]]></description>
 		<name>reset</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ResetTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.ResetTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -275,15 +274,15 @@
 	<tag>
 		<description><![CDATA[Render a select element]]></description>
 		<name>select</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.SelectTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.SelectTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
 	<tag>
 		<description><![CDATA[Render a set tag]]></description>
-		<name>submit</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.SetTag</tag-class>
+		<name>set</name>
+		<tag-class>panda.mvc.view.tag.io.jsp.SetTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -291,7 +290,7 @@
 	<tag>
 		<description><![CDATA[Render a submit button]]></description>
 		<name>submit</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.SubmitTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.SubmitTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -299,7 +298,7 @@
 	<tag>
 		<description><![CDATA[Render a I18n text message]]></description>
 		<name>text</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.TextTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.TextTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -307,7 +306,7 @@
 	<tag>
 		<description><![CDATA[Render HTML textarea tag.]]></description>
 		<name>textarea</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.TextareaTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.TextAreaTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -315,7 +314,7 @@
 	<tag>
 		<description><![CDATA[Render an HTML input field of type text]]></description>
 		<name>textfield</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.TextFieldTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.TextFieldTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -323,7 +322,7 @@
 	<tag>
 		<description><![CDATA[Render a span and hidden field that displays read-only information]]></description>
 		<name>triggerfield</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.TriggerFieldTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.TriggerFieldTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -331,7 +330,7 @@
 	<tag>
 		<description><![CDATA[Render a uploader input field]]></description>
 		<name>uploader</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.UploaderTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.UploaderTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -339,7 +338,7 @@
 	<tag>
 		<description><![CDATA[This tag is used to create a URL]]></description>
 		<name>url</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.URLTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.URLTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
@@ -347,7 +346,7 @@
 	<tag>
 		<description><![CDATA[Render a span and hidden field that displays read-only information]]></description>
 		<name>viewfield</name>
-		<tag-class>panda.mvc.view.tag.io.jsp.JspTag.ViewFieldTag</tag-class>
+		<tag-class>panda.mvc.view.tag.io.jsp.ViewFieldTag</tag-class>
 		<body-content>JSP</body-content>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>

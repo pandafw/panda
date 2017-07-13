@@ -177,6 +177,8 @@ public class ActionHandler {
 		ac.setRequest(req);
 		ac.setResponse(new DelegateHttpServletResponseWrapper(res));
 
+		// save action context to request
+		Mvcs.setActionContext(req, ac);
 		try {
 			ActionInvoker invoker = mapping.getActionInvoker(ac);
 			if (invoker == null) {
@@ -189,6 +191,9 @@ public class ActionHandler {
 			if (ric != null) {
 				RequestIocContext.depose(req);
 			}
+			
+			// remove action context from request
+			Mvcs.setActionContext(req, null);
 		}
 	}
 

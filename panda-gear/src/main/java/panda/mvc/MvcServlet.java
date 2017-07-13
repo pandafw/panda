@@ -31,7 +31,7 @@ public class MvcServlet extends HttpServlet {
 		if (handler == null) {
 			ServletMvcConfig config = new ServletMvcConfig(conf);
 			handler = new ActionHandler(config);
-			conf.getServletContext().setAttribute(ActionHandler.class.getName(), handler);
+			Mvcs.setActionHandler(conf.getServletContext(), handler);
 		}
 	}
 

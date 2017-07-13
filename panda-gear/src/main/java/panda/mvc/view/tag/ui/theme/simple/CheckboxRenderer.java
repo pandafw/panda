@@ -3,6 +3,7 @@ package panda.mvc.view.tag.ui.theme.simple;
 import java.io.IOException;
 
 import panda.lang.Strings;
+import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Checkbox;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.Attributes;
@@ -23,7 +24,7 @@ public class CheckboxRenderer extends AbstractEndRenderer<Checkbox> {
 			.name(tag)
 			.css(this, "p-checkbox")
 			.add("value", tag.getFieldValue())
-			.addIfTrue("checked", tag.getValue())
+			.addIfTrue("checked", isChecked())
 			.readonly(tag)
 			.disabled(tag)
 			.tabindex(tag)
@@ -37,5 +38,24 @@ public class CheckboxRenderer extends AbstractEndRenderer<Checkbox> {
 			body(tag.getFieldLabel());
 		}
 		write("&nbsp;</label>");
+	}
+	
+	protected boolean isChecked() {
+		Object v = tag.getValue();
+		if (v == null) {
+			return false;
+		}
+		
+		if (v instanceof Boolean) {
+			return ((Boolean)v).booleanValue();
+		}
+		
+		if (Strings.isEmpty(tag.getFieldValue())) {
+			boolean b = Mvcs.castValue(context, v, boolean.class);
+			return b;
+		}
+		
+		String s = Mvcs.castString(context, v);
+		return tag.getFieldValue().equals(s);
 	}
 }

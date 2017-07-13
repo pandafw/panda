@@ -31,7 +31,7 @@ public class MvcFilter implements Filter {
 		if (handler == null) {
 			FilterMvcConfig config = new FilterMvcConfig(conf);
 			handler = new ActionHandler(config);
-			conf.getServletContext().setAttribute(ActionHandler.class.getName(), handler);
+			Mvcs.setActionHandler(conf.getServletContext(), handler);
 		}
 	}
 
