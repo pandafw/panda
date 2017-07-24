@@ -3,7 +3,7 @@ package panda.app.lucene;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -28,10 +28,9 @@ import panda.lang.Strings;
 /**
  */
 public class LuceneWrapper implements Closeable {
-	protected String path;
 	protected Version version;
-	protected Class<? extends Analyzer> analyzer;
 	protected Directory directory;
+	protected Class<? extends Analyzer> analyzer;
 	protected IndexReader indexReader;
 	protected IndexWriter indexWriter;
 
@@ -39,50 +38,45 @@ public class LuceneWrapper implements Closeable {
 		this(null, Version.LATEST);
 	}
 
-	protected LuceneWrapper(LuceneWrapper lw) {
-		copy(lw);
-	}
-
 	/**
-	 * @param path lucene directory
+	 * @param directory lucene directory
 	 */
-	public LuceneWrapper(String path) {
-		this(path, Version.LATEST);
+	public LuceneWrapper(Directory directory) {
+		this(directory, Version.LATEST);
 	}
 	
 	/**
-	 * @param path lucene directory
+	 * @param directory lucene directory
 	 * @param version lucene version
 	 */
-	public LuceneWrapper(String path, Version version) {
-		this(path, StandardAnalyzer.class, version);
+	public LuceneWrapper(Directory directory, Version version) {
+		this(directory, StandardAnalyzer.class, version);
 	}
 
 	/**
-	 * @param path lucene directory
+	 * @param directory lucene directory
 	 * @param analyzer analyzer class
 	 */
-	public LuceneWrapper(String path, Class<? extends Analyzer> analyzer) {
-		this(path, analyzer, Version.LATEST);
+	public LuceneWrapper(Directory directory, Class<? extends Analyzer> analyzer) {
+		this(directory, analyzer, Version.LATEST);
 	}
 
 	/**
-	 * @param path lucene directory
+	 * @param directory lucene directory
 	 * @param version lucene version
 	 * @param analyzer analyzer class
 	 */
-	public LuceneWrapper(String path, Class<? extends Analyzer> analyzer, Version version) {
-		super();
-		this.path = path;
+	public LuceneWrapper(Directory directory, Class<? extends Analyzer> analyzer, Version version) {
+		this.directory = directory;
 		this.analyzer = analyzer;
 		this.version = version;
 	}
 
 	/**
-	 * @return the path
+	 * @return the directory
 	 */
-	public String getPath() {
-		return path;
+	public Directory getDirectory() {
+		return directory;
 	}
 
 	/**
@@ -92,10 +86,6 @@ public class LuceneWrapper implements Closeable {
 		return version;
 	}
 
-	public void init() throws IOException {
-		this.directory = FSDirectory.open(Paths.get(path));
-	}
-	
 	@Override
 	public void close() throws IOException {
 		if (directory != null) {
@@ -103,25 +93,20 @@ public class LuceneWrapper implements Closeable {
 			directory = null;
 		}
 	}
-	
-	protected void copy(LuceneWrapper lw) {
-		this.path = lw.path;
-		this.version = lw.version;
-		this.analyzer = lw.analyzer;
-		this.directory = lw.directory;
-		this.indexReader = lw.indexReader;
-		this.indexWriter = lw.indexWriter;
-	}
 
 	public void clean() throws IOException {
 		close();
 		
-		File file = new File(path);
-		if (file.exists()) {
-			Files.forceDelete(file);
+		// clean
+		if (directory instanceof FSDirectory) {
+			Path p = ((FSDirectory)directory).getDirectory();
+			File file = p.toFile();
+			if (file.exists()) {
+				Files.forceDelete(file);
+			}
 		}
 	}
-	
+
 	public Analyzer getAnalyzer() {
 		return Classes.born(analyzer);
 	}
@@ -152,7 +137,7 @@ public class LuceneWrapper implements Closeable {
 	/**
 	 * @return the lucene IndexWriter
 	 */
-	public IndexWriter getIndexWriter() {
+	public synchronized IndexWriter getIndexWriter() {
 		if (indexWriter == null) {
 			indexWriter = openIndexWriter(directory);
 		}
@@ -199,6 +184,6 @@ public class LuceneWrapper implements Closeable {
 	
 	@Override
 	public String toString() {
-		return version + ":" + path;
+		return version + ":" + directory;
 	}
 }

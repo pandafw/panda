@@ -24,6 +24,7 @@ public interface SET {
 	public static final String DATA_JDBC_URL = "data.jdbc.url";
 
 	//--------------------------------------------------------
+	public static final String LUCENE_STORE = "lucene.store";
 	public static final String LUCENE_LOCATION = "lucene.location";
 
 	//------------------------------------------------

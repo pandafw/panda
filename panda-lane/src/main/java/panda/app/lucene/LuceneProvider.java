@@ -2,9 +2,13 @@ package panda.app.lucene;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 
 import panda.app.AppConstants;
 import panda.app.constant.SET;
@@ -28,6 +32,9 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 	@IocInject
 	protected AppSettings settings;
 	
+	@IocInject(value=AppConstants.LUCENE_STORE, required=false)
+	protected String store;
+	
 	@IocInject(value=AppConstants.LUCENE_LOCATION, required=false)
 	protected String location = "web://WEB-INF/_lucene";
 	
@@ -36,17 +43,28 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 	
 	protected LuceneWrapper luceneWrapper;
 
+	public boolean isInMemory() {
+		return (Systems.IS_OS_APPENGINE || "mem".equalsIgnoreCase(getLuceneStore()));
+	}
+
 	/**
 	 * initialize
 	 * @throws IOException if an IO error occurs
 	 */
 	public void initialize() throws IOException {
-		if (Systems.IS_OS_APPENGINE) {
-			
+		if (isInMemory()) {
+			initMemoryLucene();
 		}
 		else {
 			initLocalLucene();
 		}
+	}
+
+	public LuceneWrapper newLuceneWrapper() {
+		if (isInMemory()) {
+			return newMemoryLucene();
+		}
+		return newLocalLucene(0);
 	}
 	
 	/**
@@ -60,40 +78,19 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 	 * @param luceneWrapper the lucene wrapper to set
 	 */
 	public void setLuceneWrapper(LuceneWrapper luceneWrapper) {
-		File path = new File(luceneWrapper.getPath());
-		if ("0".equals(path.getName())) {
+		log.info("set lucene: " + luceneWrapper);
+
+		LuceneWrapper lw = this.luceneWrapper;
+		this.luceneWrapper = luceneWrapper;
+		
+		// clear old lucene
+		if (lw != null) {
 			try {
-				luceneWrapper.close();
-				
-				long lv = getLatestLuceneRevision() + 1;
-				File npath = new File(getLuceneLocation(), String.valueOf(lv));
-				Files.moveDir(path, npath);
-				
-				luceneWrapper = new LuceneWrapper(npath.getPath(), getLuceneAnalyzerType());
-				luceneWrapper.init();
+				lw.close();
+				lw.clean();
 			}
 			catch (IOException e) {
-				throw Exceptions.wrapThrow(e);
-			}
-		}
-		
-		log.info("set lucene: " + luceneWrapper);
-		if (this.luceneWrapper == null) {
-			this.luceneWrapper = luceneWrapper;
-		}
-		else {
-			LuceneWrapper lw = new LuceneWrapper(this.luceneWrapper);
-			this.luceneWrapper.copy(luceneWrapper);
-			
-			// clear old lucene
-			if (lw != null) {
-				try {
-					lw.close();
-					lw.clean();
-				}
-				catch (IOException e) {
-					log.warn("Failed to close lucene: " + lw, e);
-				}
+				log.warn("Failed to close lucene: " + lw, e);
 			}
 		}
 	}
@@ -106,6 +103,10 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 	}
 
 	//-----------------------------------------------
+	protected String getLuceneStore() {
+		return settings.getProperty(SET.LUCENE_STORE, store);
+	}
+	
 	protected File getLuceneLocation() throws IOException {
 		String path = settings.getPropertyAsPath(SET.LUCENE_LOCATION, location);
 		File file = new File(path);
@@ -165,16 +166,16 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 		}
 	}
 
+	protected void initMemoryLucene() {
+		setLuceneWrapper(newMemoryLucene());
+	}
+	
 	protected void initLocalLucene() throws IOException {
 		long revision = getLatestLuceneRevision();
 		
 		setLuceneWrapper(newLocalLucene(revision));
 		
 		cleanLocalLuceneRevisions(revision);
-	}
-
-	public LuceneWrapper newLocalLucene() {
-		return newLocalLucene(0);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -187,14 +188,21 @@ public class LuceneProvider implements ObjectProvider<LuceneWrapper> {
 		}
 	}
 	
+	protected LuceneWrapper newMemoryLucene() {
+		Directory directory = new RAMDirectory();
+		LuceneWrapper lw = new LuceneWrapper(directory, getLuceneAnalyzerType());
+		return lw;
+	}
+
 	protected LuceneWrapper newLocalLucene(long revision) {
 		try {
 			File lucenePath = getLuceneLocation();
 
 			File latestPath = new File(lucenePath, String.valueOf(revision));
 			
-			LuceneWrapper lw = new LuceneWrapper(latestPath.getPath(), getLuceneAnalyzerType());
-			lw.init();
+			Directory directory = FSDirectory.open(Paths.get(latestPath.getPath()));
+
+			LuceneWrapper lw = new LuceneWrapper(directory, getLuceneAnalyzerType());
 			
 			return lw;
 		}
