@@ -522,11 +522,12 @@ public class GaeDao extends AbstractDao {
 				fo = FilterOperator.NOT_EQUAL;
 			}
 			else if (op == Operator.IN) {
-				fo = FilterOperator.IN;
+				// GAE SQL does not support IN operator
+				// fo = FilterOperator.IN;
 			}
 
 			if (fo == null) {
-				throw Exceptions.unsupported("Operator " + op + " is not supported by Google App Engine.");
+				throw Exceptions.unsupported("GQL operator " + op + " is not supported by Google App Engine.");
 			}
 			return new FilterPredicate(column, fo, convertValueToGae(evc.getValue()));
 		}
