@@ -491,14 +491,14 @@ public class GaeDao extends AbstractDao {
 		Operator op = evc.getOperator();
 		if (op == Operator.BETWEEN) {
 			List<Filter> fs = new ArrayList<Filter>();
-			fs.add(new FilterPredicate(column, FilterOperator.GREATER_THAN_OR_EQUAL, evc.getValue(0)));
-			fs.add(new FilterPredicate(column, FilterOperator.LESS_THAN_OR_EQUAL, evc.getValue(1)));
+			fs.add(new FilterPredicate(column, FilterOperator.GREATER_THAN_OR_EQUAL, convertValueToGae(evc.getValue(0))));
+			fs.add(new FilterPredicate(column, FilterOperator.LESS_THAN_OR_EQUAL, convertValueToGae(evc.getValue(1))));
 			return new CompositeFilter(CompositeFilterOperator.AND, fs);
 		}
 		else if (op == Operator.NOT_BETWEEN) {
 			List<Filter> fs = new ArrayList<Filter>();
-			fs.add(new FilterPredicate(column, FilterOperator.LESS_THAN, evc.getValue(0)));
-			fs.add(new FilterPredicate(column, FilterOperator.GREATER_THAN, evc.getValue(1)));
+			fs.add(new FilterPredicate(column, FilterOperator.LESS_THAN, convertValueToGae(evc.getValue(0))));
+			fs.add(new FilterPredicate(column, FilterOperator.GREATER_THAN, convertValueToGae(evc.getValue(1))));
 			return new CompositeFilter(CompositeFilterOperator.OR, fs);
 		}
 		else {
@@ -528,7 +528,7 @@ public class GaeDao extends AbstractDao {
 			if (fo == null) {
 				throw Exceptions.unsupported("Operator " + op + " is not supported by Google App Engine.");
 			}
-			return new FilterPredicate(column, fo, evc.getValue());
+			return new FilterPredicate(column, fo, convertValueToGae(evc.getValue()));
 		}
 	}
 
