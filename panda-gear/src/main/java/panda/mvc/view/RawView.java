@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import panda.io.Files;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -60,10 +60,10 @@ public class RawView implements View {
 
 	public RawView(String contentType) {
 		if (Strings.isBlank(contentType)) {
-			this.contentType = MimeType.TEXT_PLAIN;
+			this.contentType = MimeTypes.TEXT_PLAIN;
 		}
 		else {
-			this.contentType = MimeType.getMimeType(contentType);
+			this.contentType = MimeTypes.getMimeType(contentType);
 		}
 	}
 
@@ -83,8 +83,8 @@ public class RawView implements View {
 
 		if (res.getContentType() == null) {
 			// set image content type
-			if (obj != null && obj instanceof BufferedImage && MimeType.TEXT_PLAIN.equals(contentType)) {
-				contentType = MimeType.IMG_PNG;
+			if (obj != null && obj instanceof BufferedImage && MimeTypes.TEXT_PLAIN.equals(contentType)) {
+				contentType = MimeTypes.IMG_PNG;
 			}
 			res.setContentType(contentType);
 		}

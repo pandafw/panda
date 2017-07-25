@@ -9,6 +9,8 @@ import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.app.util.pdf.Html2Pdf;
+import panda.io.FileTypes;
+import panda.io.MimeTypes;
 import panda.io.stream.ByteArrayOutputStream;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Exceptions;
@@ -123,8 +125,8 @@ public class Html2PdfAction extends AbstractAction {
 
 			HttpServletSupport hss = new HttpServletSupport(request, response);
 			hss.setContentLength(Integer.valueOf(pdf.length));
-			hss.setContentType("application/pdf");
-			hss.setFileName(getFileNameFromUrl(arg.url) + ".pdf");
+			hss.setContentType(MimeTypes.APP_PDF);
+			hss.setFileName(getFileNameFromUrl(arg.url) + '.' + FileTypes.PDF);
 			hss.setMaxAge(0);
 
 			hss.writeResponseHeader();

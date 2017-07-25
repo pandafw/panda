@@ -5,7 +5,7 @@ import java.util.Date;
 
 import panda.app.action.AbstractAction;
 import panda.el.ElTemplate;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
@@ -118,7 +118,7 @@ public abstract class GenericWorkAction extends AbstractAction {
 			HttpServletSupport hss = new HttpServletSupport(getRequest(), getResponse());
 			hss.setMaxAge(0);
 			hss.setCharset(Charsets.UTF_8);
-			hss.setContentType(MimeType.TEXT_HTML);
+			hss.setContentType(MimeTypes.TEXT_HTML);
 			try {
 				hss.writeResponseHeader();
 			}

@@ -13,7 +13,7 @@ import java.util.Set;
 
 import panda.Panda;
 import panda.io.Files;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Strings;
@@ -369,10 +369,10 @@ public class HttpClient {
 		Https.setupRequestHeader(conn, request.getURL(), request.getHeader());
 		
 		if (request.isPostFile()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
 		}
 		else if (request.isPostForm()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
+			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
 		}
 	}
 }

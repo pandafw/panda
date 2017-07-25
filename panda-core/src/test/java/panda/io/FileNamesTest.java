@@ -968,9 +968,9 @@ public class FileNamesTest extends FileBasedTestCase {
 	 * test method: GetContentTypeForName
 	 */
 	public void testGetContentTypeForName() {
-		assertEquals(MimeType.IMG_GIF, FileNames.getContentTypeFor("/a/s1.gif"));
-		assertEquals(MimeType.IMG_PNG, FileNames.getContentTypeFor("a.png"));
-		assertEquals(MimeType.IMG_JPEG, FileNames.getContentTypeFor("a.jpg"));
+		assertEquals(MimeTypes.IMG_GIF, FileNames.getContentTypeFor("/a/s1.gif"));
+		assertEquals(MimeTypes.IMG_PNG, FileNames.getContentTypeFor("a.png"));
+		assertEquals(MimeTypes.IMG_JPEG, FileNames.getContentTypeFor("a.jpg"));
 		assertEquals(null, FileNames.getContentTypeFor("a.js"));
 		assertEquals(null, FileNames.getContentTypeFor("a.css"));
 	}

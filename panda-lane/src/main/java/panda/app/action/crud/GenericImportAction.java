@@ -22,7 +22,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
 import panda.io.FileNames;
-import panda.io.FileType;
+import panda.io.FileTypes;
 import panda.io.Streams;
 import panda.io.stream.BOMInputStream;
 import panda.io.stream.ByteArrayOutputStream;
@@ -48,7 +48,7 @@ import panda.vfs.FileItem;
 public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	private final static Log log = Logs.getLog(GenericImportAction.class);
 	
-	protected static String[] FEXTS = { FileType.CSV, FileType.TSV, FileType.TXT, FileType.XLS, FileType.XLSX };
+	protected static String[] FEXTS = { FileTypes.CSV, FileTypes.TSV, FileTypes.TXT, FileTypes.XLS, FileTypes.XLSX };
 
 	public static class Arg {
 		private FileItem file;
@@ -175,7 +175,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		try {
 			InputStream input = null;
 			String fext = FileNames.getExtension(arg.file.getName());
-			if (FileType.ZIP.equalsIgnoreCase(fext)) {
+			if (FileTypes.ZIP.equalsIgnoreCase(fext)) {
 				ZipInputStream zis = new ZipInputStream(arg.file.getInputStream(), Charsets.CS_UTF_8);
 				ZipEntry entry;
 				try {
@@ -208,16 +208,16 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 				input = arg.file.getInputStream();
 			}
 
-			if (FileType.XLS.equalsIgnoreCase(fext)) {
+			if (FileTypes.XLS.equalsIgnoreCase(fext)) {
 				reader = getXlsReader(input, false);
 			}
-			else if (FileType.XLSX.equalsIgnoreCase(fext)) {
+			else if (FileTypes.XLSX.equalsIgnoreCase(fext)) {
 				reader = getXlsReader(input, true);
 			}
-			else if (FileType.CSV.equalsIgnoreCase(fext)) {
+			else if (FileTypes.CSV.equalsIgnoreCase(fext)) {
 				reader = getCsvReader(input, Chars.COMMA);
 			}
-			else if (FileType.TSV.equalsIgnoreCase(fext) || FileType.TXT.equalsIgnoreCase(fext)) {
+			else if (FileTypes.TSV.equalsIgnoreCase(fext) || FileTypes.TXT.equalsIgnoreCase(fext)) {
 				reader = getCsvReader(input, Chars.TAB);
 			}
 			else {

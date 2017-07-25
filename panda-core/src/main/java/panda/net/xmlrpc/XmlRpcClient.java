@@ -7,7 +7,7 @@ import java.util.List;
 import panda.bind.xmlrpc.XmlRpcDocument;
 import panda.bind.xmlrpc.XmlRpcs;
 import panda.cast.Castors;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.time.StopWatch;
@@ -52,7 +52,7 @@ public class XmlRpcClient {
 		String xbody = XmlRpcs.toXml(xreq, true, log.isDebugEnabled());
 
 		HttpRequest hreq = HttpRequest.post(url);
-		hreq.getHeader().setDefaultAgentPC().setContentType(MimeType.TEXT_XML);
+		hreq.getHeader().setDefaultAgentPC().setContentType(MimeTypes.TEXT_XML);
 		hreq.setBody(xbody);
 		
 		http.setRequest(hreq);

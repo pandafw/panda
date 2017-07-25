@@ -14,7 +14,7 @@ import panda.ex.gcloud.vision.images.Feature;
 import panda.ex.gcloud.vision.images.FeatureType;
 import panda.ex.gcloud.vision.images.Image;
 import panda.ex.gcloud.vision.images.ImageSource;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.net.URLHelper;
@@ -58,7 +58,7 @@ public class ImagesAnnotate {
 
 		hr.setUrl(getApiEndPoint());
 		hr.setUserAgent(getClass().getName());
-		hr.setContentType(MimeType.APP_JSON);
+		hr.setContentType(MimeTypes.APP_JSON);
 		hr.setBody(b);
 
 		HttpResponse hrs = hc.doPost();

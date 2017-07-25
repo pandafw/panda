@@ -10,7 +10,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Before;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Exceptions;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpHeader;
@@ -106,7 +106,7 @@ public abstract class BaseWebappTest {
 	}
 
 	public HttpResponse post(String path, String data) {
-		return post(path, data, MimeType.APP_STREAM);
+		return post(path, data, MimeTypes.APP_STREAM);
 	}
 	
 	public HttpResponse post(String path, String data, String contentType) {

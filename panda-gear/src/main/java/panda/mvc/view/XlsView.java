@@ -3,7 +3,7 @@ package panda.mvc.view;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Exceptions;
 import panda.mvc.ActionContext;
 import panda.mvc.view.util.XlsExporter;
@@ -26,7 +26,7 @@ public class XlsView extends AbstractDataView {
 	 */
 	public XlsView(String location) {
 		super(location);
-		setContentType(MimeType.APP_XLS);
+		setContentType(MimeTypes.APP_XLS);
 		setBom(false);
 	}
 

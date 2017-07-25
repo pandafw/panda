@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
@@ -71,18 +71,18 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 			if (Strings.isEmpty(contentType)) {
 				//skip
 			}
-			else if (contentType.startsWith(MimeType.MULTIPART_PREFIX)) {
+			else if (contentType.startsWith(MimeTypes.MULTIPART_PREFIX)) {
 				ejector = ac.getIoc().get(MultiPartParamEjector.class);
 			}
-			else if (contentType.startsWith(MimeType.APP_STREAM)) {
+			else if (contentType.startsWith(MimeTypes.APP_STREAM)) {
 				ejector = ac.getIoc().get(MultiPartParamEjector.class);
 			}
-			else if (contentType.startsWith(MimeType.TEXT_XML)) {
+			else if (contentType.startsWith(MimeTypes.TEXT_XML)) {
 				ejector = ac.getIoc().get(XmlParamEjector.class);
 			}
-			else if (contentType.startsWith(MimeType.APP_JSON) 
-					|| contentType.startsWith(MimeType.TEXT_JAVASCRIPT)
-					|| contentType.startsWith(MimeType.TEXT_JSON)) {
+			else if (contentType.startsWith(MimeTypes.APP_JSON) 
+					|| contentType.startsWith(MimeTypes.TEXT_JAVASCRIPT)
+					|| contentType.startsWith(MimeTypes.TEXT_JSON)) {
 				ejector = ac.getIoc().get(JsonParamEjector.class);
 			}
 		}

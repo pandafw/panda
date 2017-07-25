@@ -1,6 +1,6 @@
 package panda.mvc.view;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 
 
 public class XlsxView extends XlsView {
@@ -18,7 +18,7 @@ public class XlsxView extends XlsView {
 	 */
 	public XlsxView(String location) {
 		super(location);
-		setContentType(MimeType.APP_XLSX);
+		setContentType(MimeTypes.APP_XLSX);
 	}
 }
 

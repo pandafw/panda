@@ -3,7 +3,7 @@ package panda.ex.slack;
 import java.io.IOException;
 
 import panda.bind.json.Jsons;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Charsets;
 import panda.net.http.HttpClient;
 import panda.net.http.HttpMethod;
@@ -15,7 +15,7 @@ public class Slacks {
 		HttpClient hc = new HttpClient();
 		HttpRequest hreq = hc.getRequest();
 		hreq.setUrl(url)
-			.setContentType(MimeType.APP_JSON)
+			.setContentType(MimeTypes.APP_JSON)
 			.setMethod(HttpMethod.POST);
 		hreq.setEncoding(Charsets.UTF_8);
 		

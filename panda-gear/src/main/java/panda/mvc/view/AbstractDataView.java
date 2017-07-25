@@ -2,7 +2,7 @@ package panda.mvc.view;
 
 import java.io.IOException;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Charsets;
 import panda.mvc.ActionContext;
 import panda.servlet.HttpServletSupport;
@@ -11,7 +11,7 @@ import panda.servlet.HttpServletSupport;
 public abstract class AbstractDataView extends AbstractView {
 	protected int maxAge = 0;
 
-	protected String contentType = MimeType.TEXT_PLAIN;
+	protected String contentType = MimeTypes.TEXT_PLAIN;
 
 	protected String encoding = Charsets.UTF_8;
 

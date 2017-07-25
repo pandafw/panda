@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 
 import org.junit.Test;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Charsets;
 import panda.lang.Strings;
 import panda.mvc.AbstractMvcTestCase;
@@ -26,7 +26,7 @@ public class JsonAdaptorTest extends AbstractMvcTestCase {
 		request.setRequestURI(path);
 		request.setMethod(HttpMethod.POST);
 		request.setContent(Strings.getBytes(json, Charsets.UTF_8));
-		request.setContentType(MimeType.APP_JSON);
+		request.setContentType(MimeTypes.APP_JSON);
 	}
 
 	@Test

@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 import panda.bind.xml.XmlSerializer;
 import panda.bind.xml.Xmls;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -25,7 +25,7 @@ public class XmlView extends AbstractBindView {
 	 */
 	public XmlView(String location) {
 		super(location);
-		setContentType(MimeType.TEXT_XML);
+		setContentType(MimeTypes.TEXT_XML);
 	}
 
 	/**

@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.SizeLimitExceededException;
 import panda.io.stream.LimitedInputStream;
 import panda.net.http.MultipartStream;
@@ -610,7 +610,7 @@ public class FileUploader {
 					if (fieldName != null) {
 						String subContentType = headers.getString(FileItemHeaders.CONTENT_TYPE);
 						if (subContentType != null
-								&& subContentType.toLowerCase(Locale.ENGLISH).startsWith(MimeType.MULTIPART_MIXED)) {
+								&& subContentType.toLowerCase(Locale.ENGLISH).startsWith(MimeTypes.MULTIPART_MIXED)) {
 							currentFieldName = fieldName;
 							// Multiple files associated with this field name
 							byte[] subBoundary = getBoundary(subContentType);

@@ -1,6 +1,6 @@
 package panda.mvc.view;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 
 
 public class TsvView extends CsvView {
@@ -18,7 +18,7 @@ public class TsvView extends CsvView {
 	 */
 	public TsvView(String location) {
 		super(location);
-		setContentType(MimeType.TEXT_TSV);
+		setContentType(MimeTypes.TEXT_TSV);
 	}
 }
 

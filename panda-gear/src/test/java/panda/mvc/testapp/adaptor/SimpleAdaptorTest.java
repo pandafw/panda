@@ -7,7 +7,7 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.time.DateTimes;
 import panda.mvc.testapp.BaseWebappTest;
 
@@ -25,7 +25,7 @@ public class SimpleAdaptorTest extends BaseWebappTest {
 
 	@Test
 	public void test_json_map_type() {
-		resp = post("/adaptor/json/type", "{'abc': 123456}", MimeType.TEXT_JSON);
+		resp = post("/adaptor/json/type", "{'abc': 123456}", MimeTypes.TEXT_JSON);
 		assertEquals(200, resp.getStatusCode());
 	}
 

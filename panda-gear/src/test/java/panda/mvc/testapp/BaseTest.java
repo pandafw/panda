@@ -6,16 +6,16 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 
 public class BaseTest extends BaseWebappTest {
 
 	@Test
 	public void test_json_adaptor() throws IOException {
-		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeType.APP_JSON);
+		post("/adaptor/json/pet/array", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeTypes.APP_JSON);
 		assertEquals("pets(2) array", resp.getContentText());
 
-		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeType.APP_JSON);
+		post("/adaptor/json/pet/list", "{pets:[{name:'zzh'},{name:'wendal'}]}", MimeTypes.APP_JSON);
 		assertEquals("pets(2) list", resp.getContentText());
 	}
 

@@ -3,7 +3,7 @@ package panda.mvc.view;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -28,7 +28,7 @@ public class CsvView extends AbstractDataView {
 	 */
 	public CsvView(String location) {
 		super(location);
-		setContentType(MimeType.TEXT_CSV);
+		setContentType(MimeTypes.TEXT_CSV);
 		setBom(true);
 	}
 

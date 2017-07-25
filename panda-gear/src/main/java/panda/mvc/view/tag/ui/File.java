@@ -1,6 +1,6 @@
 package panda.mvc.view.tag.ui;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
@@ -36,7 +36,7 @@ public class File extends InputUIBean {
 		Form form = (Form)findAncestor(Form.class);
 		if (form != null) {
 			String encType = form.getEnctype();
-			if (!MimeType.MULTIPART_FORM_DATA.equals(encType)) {
+			if (!MimeTypes.MULTIPART_FORM_DATA.equals(encType)) {
 				// uh oh, this isn't good! Let's warn the developer
 				LOG.warn("A file upload UI tag (r.file) being used without a form set to enctype 'multipart/form-data'. This is probably an error!");
 			}

@@ -7,7 +7,7 @@ import panda.lang.Strings;
 
 
 
-public class MimeType {
+public class MimeTypes {
 	public static final String MULTIPART_PREFIX = "multipart/";
 	
 	/**
@@ -24,6 +24,7 @@ public class MimeType {
 
 	public static final String APP_JAVASCRIPT = "application/javascript";
 	public static final String APP_JSON = "application/json";
+	public static final String APP_PDF = "application/pdf";
 	public static final String APP_STREAM = "application/octet-stream";
 	public static final String APP_XLS = "application/vnd.ms-excel";
 	public static final String APP_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

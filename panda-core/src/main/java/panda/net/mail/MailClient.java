@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import panda.io.FileNames;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.io.stream.StringBuilderWriter;
 import panda.io.stream.WriterOutputStream;
@@ -508,7 +508,7 @@ public class MailClient {
 			out.write("--" + boundary + "\n");
 			out.write(SMTPHeader.CONTENT_TYPE);
 			out.write(": ");
-			out.write(email.isHtml() ? MimeType.TEXT_HTML : MimeType.TEXT_PLAIN);
+			out.write(email.isHtml() ? MimeTypes.TEXT_HTML : MimeTypes.TEXT_PLAIN);
 			out.write("; charset=");
 			out.write(email.getCharset());
 			out.write("\n");

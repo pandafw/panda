@@ -27,7 +27,7 @@ import panda.bind.json.Jsons;
 import panda.cast.Castors;
 import panda.dao.Dao;
 import panda.io.FileNames;
-import panda.io.FileType;
+import panda.io.FileTypes;
 import panda.io.Streams;
 import panda.io.stream.BOMInputStream;
 import panda.io.stream.CsvReader;
@@ -121,19 +121,19 @@ public class DataImportAction extends AbstractAction {
 		
 		try {
 			String fext = FileNames.getExtension(arg.file.getName());
-			if (FileType.XLS.equalsIgnoreCase(fext)) {
+			if (FileTypes.XLS.equalsIgnoreCase(fext)) {
 				byte[] data = arg.file.getData();
 				if (data != null) {
 					impXls(data, false);
 				}
 			}
-			else if (FileType.XLSX.equalsIgnoreCase(fext)) {
+			else if (FileTypes.XLSX.equalsIgnoreCase(fext)) {
 				byte[] data = arg.file.getData();
 				if (data != null) {
 					impXls(data, true);
 				}
 			}
-			else if (FileType.CSV.equalsIgnoreCase(fext)) {
+			else if (FileTypes.CSV.equalsIgnoreCase(fext)) {
 				if (Strings.isEmpty(arg.target)) {
 					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}
@@ -144,8 +144,8 @@ public class DataImportAction extends AbstractAction {
 					}
 				}
 			}
-			else if (FileType.TSV.equalsIgnoreCase(fext) 
-					|| FileType.TXT.equalsIgnoreCase(fext)) {
+			else if (FileTypes.TSV.equalsIgnoreCase(fext) 
+					|| FileTypes.TXT.equalsIgnoreCase(fext)) {
 				if (Strings.isEmpty(arg.target)) {
 					addFieldError("target", getText(Validators.MSGID_REQUIRED));
 				}

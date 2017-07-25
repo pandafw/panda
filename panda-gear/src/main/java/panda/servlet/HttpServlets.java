@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import panda.bind.json.JsonObject;
 import panda.bind.json.Jsons;
 import panda.cast.Castors;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Charsets;
@@ -104,7 +104,7 @@ public class HttpServlets {
 		String ct = request.getContentType();
 		if (HttpMethod.POST.equalsIgnoreCase(request.getMethod()) 
 				&& ct != null
-				&& ct.startsWith(MimeType.X_WWW_FORM_URLECODED)) {
+				&& ct.startsWith(MimeTypes.X_WWW_FORM_URLECODED)) {
 			return true;
 		}
 		return false;
@@ -913,7 +913,7 @@ public class HttpServlets {
 	public static void writeRedirect(HttpServletResponse res, String url, boolean encode) throws IOException {
 		HttpServletSupport hss = new HttpServletSupport(res);
 		hss.setCharset(Charsets.UTF_8);
-		hss.setContentType(MimeType.TEXT_HTML);
+		hss.setContentType(MimeTypes.TEXT_HTML);
 		hss.setMaxAge(0);
 		hss.writeResponseHeader();
 		

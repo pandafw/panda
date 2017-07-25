@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
@@ -203,7 +203,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 
 	protected void writeJsc(String jsc) throws IOException {
 		write("<script type=\"");
-		write(MimeType.TEXT_JAVASCRIPT);
+		write(MimeTypes.TEXT_JAVASCRIPT);
 		write("\">");
 		write(jsc);
 		write("</script>\n");
@@ -212,7 +212,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		write("<script src=\"");
 		write(js);
 		write("\" type=\"");
-		write(MimeType.TEXT_JAVASCRIPT);
+		write(MimeTypes.TEXT_JAVASCRIPT);
 		write("\"></script>\n");
 	}
 

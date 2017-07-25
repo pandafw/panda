@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 import panda.bind.json.JsonSerializer;
 import panda.bind.json.Jsons;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -19,7 +19,7 @@ public class JsonView extends AbstractBindView {
 	
 	public JsonView(String location) {
 		super(location);
-		setContentType(MimeType.TEXT_JAVASCRIPT);
+		setContentType(MimeTypes.TEXT_JAVASCRIPT);
 	}
 
 	/**

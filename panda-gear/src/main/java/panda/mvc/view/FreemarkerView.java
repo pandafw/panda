@@ -1,7 +1,7 @@
 package panda.mvc.view;
 
 import panda.io.FileNames;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -30,7 +30,7 @@ public class FreemarkerView extends AbstractPathView {
 	private static final String EXT = ".ftl";
 	
 	protected String encoding = Charsets.UTF_8;
-	protected String contentType = MimeType.TEXT_HTML;
+	protected String contentType = MimeTypes.TEXT_HTML;
 
 	public FreemarkerView(String location) {
 		super(location);

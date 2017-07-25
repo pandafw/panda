@@ -10,7 +10,7 @@ import java.net.URL;
 import panda.bind.json.Jsons;
 import panda.ex.slack.Attachment;
 import panda.ex.slack.Message;
-import panda.io.MimeType;
+import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
@@ -139,7 +139,7 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			conn.setConnectTimeout(connTimeout);
 			conn.setReadTimeout(readTimeout);
 			conn.setRequestMethod(HttpMethod.POST);
-			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeType.APP_JAVASCRIPT);
+			conn.addRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.APP_JAVASCRIPT);
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
 			
