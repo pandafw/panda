@@ -127,10 +127,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
 		</java>
-		<copy overwrite="true" 
+		<copy overwrite="true" force="true"
 			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" 
 			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.js"/>
-		<copy overwrite="true" 
+		<copy overwrite="true" force="true"
 			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js" 
 			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.min.js"/>
 
@@ -373,7 +373,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<delete dir="../docs/${prj.version}" includeemptydirs="true">
 			<exclude name="*.xsd"/>
 		</delete>
-		<copy todir="../docs/${prj.version}" preservelastmodified="true">
+		<copy todir="../docs/${prj.version}" preservelastmodified="true" overwrite="true" force="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>

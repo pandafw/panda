@@ -68,7 +68,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 
 	<target name="prepare" description="Prepare source">
 		<mkdir dir="${out.dir}"/>
-		<copy todir="libs" preservelastmodified="true" failonerror="false">
+		<copy todir="libs" preservelastmodified="true" overwrite="true" force="true" failonerror="false">
 			<fileset dir="../panda-core/out">
 				<include name="panda-core-*.jar"/>
 			</fileset>

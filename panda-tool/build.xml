@@ -13,7 +13,9 @@
 
 	<target name="codegen-xsd-deploy">
 		<mkdir dir="../docs/${prj.version}"/>
-		<copy file="${src.dir}/main/resources/panda/tool/codegen/Module.xsd" tofile="../docs/${prj.version}/panda-codegen-module.xsd" overwrite="true" force="true"/>
+		<copy overwrite="true" force="true"
+			file="${src.dir}/main/resources/panda/tool/codegen/Module.xsd"
+			tofile="../docs/${prj.version}/panda-codegen-module.xsd"/>
 	</target>
 
 	<target name="build" depends="clean, cp-res, n2a, codegen-xsd-deploy, javac, javadoc" description="Build the project"/>
