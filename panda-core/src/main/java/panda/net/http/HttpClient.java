@@ -17,6 +17,7 @@ import panda.io.MimeType;
 import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Strings;
+import panda.lang.Systems;
 import panda.lang.time.StopWatch;
 import panda.log.Log;
 import panda.log.Logs;
@@ -90,9 +91,14 @@ public class HttpClient {
 	protected boolean validateSslCert = true;
 	
 	static {
-		// fix error: java.net.ProtocolException: Server redirected too many times
-		// see http://stackoverflow.com/questions/11022934/getting-java-net-protocolexception-server-redirected-too-many-times-error
-		CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+		if (Systems.IS_OS_APPENGINE) {
+			
+		}
+		else if (Systems.IS_JAVA_1_6) {
+			// fix error: java.net.ProtocolException: Server redirected too many times (JDK1.6)
+			// see http://stackoverflow.com/questions/11022934/getting-java-net-protocolexception-server-redirected-too-many-times-error
+			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+		}
 	}
 
 	public HttpClient() {
