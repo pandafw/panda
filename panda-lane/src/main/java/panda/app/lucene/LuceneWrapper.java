@@ -21,6 +21,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import panda.io.Files;
+import panda.io.Streams;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -88,6 +89,14 @@ public class LuceneWrapper implements Closeable {
 
 	@Override
 	public void close() throws IOException {
+		if (indexReader != null) {
+			Streams.safeClose(indexReader);
+			indexReader = null;
+		}
+		if (indexWriter != null) {
+			Streams.safeClose(indexWriter);
+			indexWriter = null;
+		}
 		if (directory != null) {
 			directory.close();
 			directory = null;
