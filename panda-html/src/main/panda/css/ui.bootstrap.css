@@ -9,6 +9,11 @@
 	cursor: auto;
 }
 
+/** modal-dialog */
+.modal-dialog {
+	z-index: 1050;
+}
+
 /** navbar-nav */
 .navbar-nav > li > span {
 	padding-top: 10px;
