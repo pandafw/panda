@@ -8,11 +8,11 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import panda.dao.query.Order;
 import panda.io.Files;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Exceptions;
+import panda.lang.Order;
 import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.Texts;

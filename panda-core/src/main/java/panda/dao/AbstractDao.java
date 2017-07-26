@@ -19,7 +19,7 @@ import panda.dao.entity.EntityField;
 import panda.dao.handler.CollectionDataHandler;
 import panda.dao.handler.GroupDataHandler;
 import panda.dao.handler.MapDataHandler;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Join;
 import panda.dao.query.Query;
 import panda.lang.Arrays;
@@ -325,7 +325,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return true if the record or the table exists in the data store
 	 */
-	protected abstract boolean existsByQuery(GenericQuery<?> query);
+	protected abstract boolean existsByQuery(DataQuery<?> query);
 
 	//-------------------------------------------------------------------------
 	/**
@@ -371,7 +371,7 @@ public abstract class AbstractDao implements Dao {
 	protected <T> T fetchByKeys(Entity<T> entity, Object ... keys) {
 		assertEntity(entity);
 
-		GenericQuery<T> query = createQuery(entity);
+		DataQuery<T> query = createQuery(entity);
 		queryPrimaryKey(query, keys);
 
 		return fetchByQuery(query);
@@ -383,7 +383,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record
 	 */
-	protected abstract <T> T fetchByQuery(GenericQuery<T> query);
+	protected abstract <T> T fetchByQuery(DataQuery<T> query);
 	
 	//-------------------------------------------------------------------------
 	/**
@@ -493,7 +493,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record list
 	 */
-	protected abstract <T> List<T> selectByQuery(GenericQuery<T> query);
+	protected abstract <T> List<T> selectByQuery(DataQuery<T> query);
 
 	/**
 	 * select all records.
@@ -551,7 +551,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param callback DataHandler callback
 	 * @return callback processed count
 	 */
-	protected abstract <T> long selectByQuery(GenericQuery<T> query, DataHandler<T> callback);
+	protected abstract <T> long selectByQuery(DataQuery<T> query, DataHandler<T> callback);
 
 	//--------------------------------------------------------------------
 	/**
@@ -605,7 +605,7 @@ public abstract class AbstractDao implements Dao {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Collection<?> collByQuery(Collection<?> coll, GenericQuery<?> query, String prop) {
+	protected Collection<?> collByQuery(Collection<?> coll, DataQuery<?> query, String prop) {
 		query.includeOnly(prop);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
@@ -665,7 +665,7 @@ public abstract class AbstractDao implements Dao {
 		return listByQuery(cloneQuery(query), prop);
 	}
 
-	protected List<?> listByQuery(GenericQuery<?> query, String prop) {
+	protected List<?> listByQuery(DataQuery<?> query, String prop) {
 		List<?> list = new ArrayList<Object>();
 		collByQuery(list, query, prop);
 		return list;
@@ -730,7 +730,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record value set
 	 */
-	protected Set<?> setByQuery(GenericQuery<?> query, String prop) {
+	protected Set<?> setByQuery(DataQuery<?> query, String prop) {
 		Set<?> set = new HashSet<Object>();
 		collByQuery(set, query, prop);
 		return set;
@@ -795,7 +795,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record map
 	 */
-	protected <T> Map<?, T> mapByQuery(GenericQuery<T> query, String keyProp) {
+	protected <T> Map<?, T> mapByQuery(DataQuery<T> query, String keyProp) {
 		Map<?, T> map = new HashMap<Object, T>();
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 		selectByQuery(query, new MapDataHandler<T>(bh, map, keyProp));
@@ -867,7 +867,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record map
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Map<?, ?> mapByQuery(GenericQuery<?> query, String keyProp, String valProp) {
+	protected Map<?, ?> mapByQuery(DataQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
@@ -936,7 +936,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param query query
 	 * @return record group
 	 */
-	protected <T> Map<?, List<T>> groupByQuery(GenericQuery<T> query, String keyProp) {
+	protected <T> Map<?, List<T>> groupByQuery(DataQuery<T> query, String keyProp) {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
 		Map<Object, List<T>> map = new HashMap<Object, List<T>>();
@@ -1008,7 +1008,7 @@ public abstract class AbstractDao implements Dao {
 	 * @return record group
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map<?, List<?>> groupByQuery(GenericQuery<?> query, String keyProp, String valProp) {
+	public Map<?, List<?>> groupByQuery(DataQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 		
 		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
@@ -1032,7 +1032,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
 
 		return deletes(query);
@@ -1068,7 +1068,7 @@ public abstract class AbstractDao implements Dao {
 
 		assertTable(entity);
 
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, keys);
 		
 		return deletesByQuery(query);
@@ -1327,7 +1327,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
 		if (Collections.isNotEmpty(fields)) {
 			query.excludeAll().include(fields);
@@ -1350,7 +1350,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, obj);
 		excludeNullProperties(query, obj);
 
@@ -1464,7 +1464,7 @@ public abstract class AbstractDao implements Dao {
 		Entity<?> entity = getEntity(obj.getClass());
 		assertTable(entity);
 		
-		GenericQuery<?> gq = cloneQuery(query);
+		DataQuery<?> gq = cloneQuery(query);
 		excludeNullProperties(gq, obj);
 
 		return updatesByQuery(obj, gq, Integer.MAX_VALUE);
@@ -1478,7 +1478,7 @@ public abstract class AbstractDao implements Dao {
 	 * @param limit limit count of updated items
 	 * @return updated count
 	 */
-	protected abstract int updatesByQuery(Object obj, GenericQuery<?> query, int limit);
+	protected abstract int updatesByQuery(Object obj, DataQuery<?> query, int limit);
 	
 	//-------------------------------------------------------------------------
 	/**
@@ -1537,22 +1537,22 @@ public abstract class AbstractDao implements Dao {
 	}
 	
 	//--------------------------------------------------------------------
-	protected <T> GenericQuery<T> createQuery(Class<T> type) {
-		return new GenericQuery<T>(getEntity(type));
+	protected <T> DataQuery<T> createQuery(Class<T> type) {
+		return new DataQuery<T>(getEntity(type));
 	}
 	
-	protected <T> GenericQuery<T> createQuery(Entity<T> entity) {
-		return new GenericQuery<T>(entity);
+	protected <T> DataQuery<T> createQuery(Entity<T> entity) {
+		return new DataQuery<T>(entity);
 	}
 	
-	protected GenericQuery<Map<String, ?>> createQuery(String table) {
-		return new GenericQuery<Map<String, ?>>(table);
+	protected DataQuery<Map<String, ?>> createQuery(String table) {
+		return new DataQuery<Map<String, ?>>(table);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected <T> GenericQuery<T> cloneQuery(Query<T> query) {
+	protected <T> DataQuery<T> cloneQuery(Query<T> query) {
 		assertQuery(query);
-		GenericQuery<T> q = new GenericQuery<T>(query);
+		DataQuery<T> q = new DataQuery<T>(query);
 		if (q.getEntity() == null && q.getType() != null) {
 			Entity<T> entity = getEntity(q.getType());
 			q.setEntity(entity);
@@ -1562,7 +1562,7 @@ public abstract class AbstractDao implements Dao {
 				Join join = en.getValue();
 				Query<?> jq = join.getQuery();
 				if (jq.getEntity() == null && jq.getType() != null) {
-					GenericQuery<?> gq = new GenericQuery(jq);
+					DataQuery<?> gq = new DataQuery(jq);
 					Entity entity = getEntity(gq.getType());
 					gq.setEntity(entity);
 
@@ -1576,12 +1576,12 @@ public abstract class AbstractDao implements Dao {
 	}
 	
 	//--------------------------------------------------------------------
-	protected void queryPrimaryKey(GenericQuery<?> query, Object ... keys) {
+	protected void queryPrimaryKey(DataQuery<?> query, Object ... keys) {
 		query.equalToPrimaryKeys(keys);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void excludeNullProperties(GenericQuery<?> query, Object obj) {
+	protected void excludeNullProperties(DataQuery<?> query, Object obj) {
 		Entity<?> entity = query.getEntity();
 		BeanHandler bh = getBeans().getBeanHandler(obj.getClass());
 
@@ -1601,7 +1601,7 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected void excludePrimaryKeys(GenericQuery<?> query) {
+	protected void excludePrimaryKeys(DataQuery<?> query) {
 		if (query.hasColumns()) {
 			query.excludePrimaryKeys();
 		}
@@ -1610,7 +1610,7 @@ public abstract class AbstractDao implements Dao {
 		}
 	}
 
-	protected void selectPrimaryKeys(GenericQuery<?> query) {
+	protected void selectPrimaryKeys(DataQuery<?> query) {
 		query.clearColumns();
 		query.includePrimayKeys();
 	}

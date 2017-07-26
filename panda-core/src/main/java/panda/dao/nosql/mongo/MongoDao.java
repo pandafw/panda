@@ -32,13 +32,13 @@ import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Operator;
-import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.io.Streams;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
+import panda.lang.Order;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -284,7 +284,7 @@ public class MongoDao extends AbstractDao {
 			return existsByTable(getTableName(entity));
 		}
 
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		query.setLimit(1);
 		queryPrimaryKey(query, keys);
 		
@@ -299,7 +299,7 @@ public class MongoDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	protected boolean existsByQuery(GenericQuery<?> query) {
+	protected boolean existsByQuery(DataQuery<?> query) {
 		if (!query.hasFilters()) {
 			return existsByTable(getTableName(query));
 		}
@@ -322,7 +322,7 @@ public class MongoDao extends AbstractDao {
 	 * @return record
 	 */
 	@Override
-	protected <T> T fetchByQuery(GenericQuery<T> query) {
+	protected <T> T fetchByQuery(DataQuery<T> query) {
 		if (log.isDebugEnabled()) {
 			log.debug("fetchByQuery: " + query);
 		}
@@ -385,7 +385,7 @@ public class MongoDao extends AbstractDao {
 	 * @return record list
 	 */
 	@Override
-	protected <T> List<T> selectByQuery(GenericQuery<T> query) {
+	protected <T> List<T> selectByQuery(DataQuery<T> query) {
 		if (log.isDebugEnabled()) {
 			log.debug("selectByQuery: " + query);
 		}
@@ -421,7 +421,7 @@ public class MongoDao extends AbstractDao {
 	 * @return callback processed count
 	 */
 	@Override
-	protected <T> long selectByQuery(GenericQuery <T>query, DataHandler<T> callback) {
+	protected <T> long selectByQuery(DataQuery <T>query, DataHandler<T> callback) {
 		if (log.isDebugEnabled()) {
 			log.debug("selectByQuery: " + query);
 		}
@@ -561,7 +561,7 @@ public class MongoDao extends AbstractDao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	protected int updatesByQuery(Object obj, GenericQuery<?> query, int limit) {
+	protected int updatesByQuery(Object obj, DataQuery<?> query, int limit) {
 		if (log.isDebugEnabled()) {
 			log.debug("updatesByQuery: " + query);
 		}
@@ -593,7 +593,7 @@ public class MongoDao extends AbstractDao {
 	}
 
 	//--------------------------------------------------------------------
-	private DBObject field(GenericQuery<?> query) {
+	private DBObject field(DataQuery<?> query) {
 		Entity<?> entity = query.getEntity();
 		if (entity != null) {
 			BasicDBObject dbo = new BasicDBObject();
@@ -642,7 +642,7 @@ public class MongoDao extends AbstractDao {
 		return dbo;
 	}
 	
-	private DBCursor createCursor(GenericQuery<?> query) {
+	private DBCursor createCursor(DataQuery<?> query) {
 		DBCollection dbc = db.getCollection(getTableName(query));
 		
 		DBObject dbq = where(query);

@@ -14,7 +14,7 @@ import panda.dao.entity.Klass;
 import panda.dao.entity.Score;
 import panda.dao.entity.Student;
 import panda.dao.entity.Teacher;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
@@ -73,7 +73,7 @@ public abstract class DaoTestCase {
 
 	@Test
 	public void testCountQuery() {
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.equalTo("name", "T1");
 		Assert.assertEquals(1,  dao.count(q));
 	}
@@ -188,7 +188,7 @@ public abstract class DaoTestCase {
 			t.setData(null);
 		}
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 
 		q.in("name", "T1", "T3").include("name").include("memo");
 		List<Teacher> actual = dao.select(q);
@@ -204,7 +204,7 @@ public abstract class DaoTestCase {
 			t.setData(null);
 		}
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 
 		q.in("name", "T1", "T3").exclude("data");
 		List<Teacher> actual = dao.select(q);
@@ -216,7 +216,7 @@ public abstract class DaoTestCase {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.or().equalTo("name", "T1").equalTo("name", "T3").end();
 		List<Teacher> actual = dao.select(q);
 		
@@ -228,7 +228,7 @@ public abstract class DaoTestCase {
 		List<Teacher> expect = Teacher.creates(1, 3);
 		expect.remove(1);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.in("name", "T1", "T3");
 		List<Teacher> actual = dao.select(q);
 		
@@ -239,7 +239,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotIn() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.notIn("name", new String[] { "T1", "T2", "T3" });
 		List<Teacher> actual = dao.select(q);
 		
@@ -250,7 +250,7 @@ public abstract class DaoTestCase {
 	public void testSelectBetween() {
 		List<Student> expect = Student.creates(1, 3);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.between("id", 1, 3);
 		List<Student> actual = dao.select(q);
 		
@@ -261,7 +261,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotBetween() {
 		List<Student> expect = Student.creates(4, 5);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.notBetween("id", 1, 3);
 		List<Student> actual = dao.select(q);
 		
@@ -272,7 +272,7 @@ public abstract class DaoTestCase {
 	public void testSelectLike() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.like("name", "%1");
 		List<Student> actual = dao.select(q);
 		
@@ -283,7 +283,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotLike() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.notLike("name", "%1");
 		List<Student> actual = dao.select(q);
 		
@@ -294,7 +294,7 @@ public abstract class DaoTestCase {
 	public void testSelectMatch() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.match("name", "1");
 		
 		List<Student> actual = dao.select(q);
@@ -306,7 +306,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotMatch() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.notMatch("name", "1");
 		List<Student> actual = dao.select(q);
 		
@@ -317,7 +317,7 @@ public abstract class DaoTestCase {
 	public void testSelectLeftMatch() {
 		List<Student> expect = Student.creates(1, 5);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.match("name", "S");
 		List<Student> actual = dao.select(q);
 		
@@ -328,7 +328,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotLeftMatch() {
 		List<Student> expect = new ArrayList<Student>();
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.notMatch("name", "S");
 		List<Student> actual = dao.select(q);
 		
@@ -339,7 +339,7 @@ public abstract class DaoTestCase {
 	public void testSelectRightMatch() {
 		List<Student> expect = Student.creates(1, 1);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.match("name", "1");
 		List<Student> actual = dao.select(q);
 		
@@ -350,7 +350,7 @@ public abstract class DaoTestCase {
 	public void testSelectNotRightMatch() {
 		List<Student> expect = Student.creates(2, 5);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.notMatch("name", "1");
 		List<Student> actual = dao.select(q);
 		
@@ -361,7 +361,7 @@ public abstract class DaoTestCase {
 	public void testSelectStart() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.start(3);
 		List<Teacher> actual = dao.select(q);
 		
@@ -372,7 +372,7 @@ public abstract class DaoTestCase {
 	public void testSelectLimit() {
 		List<Teacher> expect = Teacher.creates(1, 2);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.limit(2);
 		List<Teacher> actual = dao.select(q);
 		
@@ -383,7 +383,7 @@ public abstract class DaoTestCase {
 	public void testSelectStartLimit() {
 		List<Teacher> expect = Teacher.creates(3, 4);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.start(2).limit(2);
 		List<Teacher> actual = dao.select(q);
 		
@@ -395,7 +395,7 @@ public abstract class DaoTestCase {
 	public void testSelectOrderStart() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.orderByAsc("name").start(3);
 		List<Teacher> actual = dao.select(q);
 		
@@ -406,7 +406,7 @@ public abstract class DaoTestCase {
 	public void testSelectOrderLimit() {
 		List<Teacher> expect = Teacher.creates(1, 2);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.orderByAsc("name").limit(2);
 		List<Teacher> actual = dao.select(q);
 		
@@ -417,7 +417,7 @@ public abstract class DaoTestCase {
 	public void testSelectOrderStartLimit() {
 		List<Teacher> expect = Teacher.creates(3, 4);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.orderByAsc("name").start(2).limit(2);
 		List<Teacher> actual = dao.select(q);
 		
@@ -428,7 +428,7 @@ public abstract class DaoTestCase {
 	public void testSelectPage() {
 		List<Teacher> expect = Teacher.creates(2, 3);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 		q.start(1).limit(2);
 		List<Teacher> actual = dao.select(q);
 		
@@ -439,7 +439,7 @@ public abstract class DaoTestCase {
 	public void testSelectPageWhere() {
 		List<Student> expect = Student.creates(2, 3);
 		
-		GenericQuery<Student> q = new GenericQuery<Student>(Student.class);
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
 		q.greaterThan("id", 0).start(1).limit(2);
 		List<Student> actual = dao.select(q);
 		
@@ -529,7 +529,7 @@ public abstract class DaoTestCase {
 		Teacher t = new Teacher();
 		t.setMemo("u");
 
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
+		DataQuery<Teacher> q = new DataQuery<Teacher>(dao.getEntity(Teacher.class));
 		q.in("name", "T2", "T3").excludeAll().include("memo");
 		
 		Assert.assertEquals(expect.size(), dao.updates(t, q));

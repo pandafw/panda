@@ -6,7 +6,7 @@ import java.util.List;
 
 import panda.cast.Castors;
 import panda.dao.Dao;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.lang.Collections;
 import panda.lang.Objects;
 
@@ -154,7 +154,7 @@ public abstract class EntityHelper {
 
 		boolean allNull = true;
 
-		GenericQuery<T> q = new GenericQuery<T>(entity);
+		DataQuery<T> q = new DataQuery<T>(entity);
 		for (EntityField ef : ei.getFields()) {
 			Object dv = ef.getValue(data);
 			if (dv == null) {
@@ -230,7 +230,7 @@ public abstract class EntityHelper {
 	public static <T> boolean checkForeignKey(Dao dao, Entity<T> entity, T data, EntityFKey efk) {
 		boolean allNull = true;
 		
-		GenericQuery<?> q = new GenericQuery(efk.getReference());
+		DataQuery<?> q = new DataQuery(efk.getReference());
 
 		int i = 0;
 		for (EntityField rf : efk.getReference().getPrimaryKeys()) {
@@ -309,7 +309,7 @@ public abstract class EntityHelper {
 			return null;
 		}
 		
-		GenericQuery<T> q = new GenericQuery<T>(entity);
+		DataQuery<T> q = new DataQuery<T>(entity);
 		q.equalTo(ef.getName(), dv).limit(1);
 		return dao.fetch(q);
 	}
@@ -340,7 +340,7 @@ public abstract class EntityHelper {
 	public static <T> T fetchDataByFields(Dao dao, Entity<T> entity, Collection<?> efs, T data) {
 		boolean allNull = true;
 
-		GenericQuery<T> q = new GenericQuery<T>(entity);
+		DataQuery<T> q = new DataQuery<T>(entity);
 		for (Object o : efs) {
 			EntityField ef = null;
 			if (o instanceof EntityField) {

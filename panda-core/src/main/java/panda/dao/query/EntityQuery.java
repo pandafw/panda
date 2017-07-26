@@ -7,18 +7,19 @@ import java.util.Map;
 import panda.dao.entity.Entity;
 import panda.dao.query.Filter.ComboFilter;
 import panda.lang.Objects;
+import panda.lang.Order;
 
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
-	protected GenericQuery<T> query;
+	protected DataQuery<T> query;
 
 	/**
 	 * constructor
 	 * @param table table
 	 */
 	public EntityQuery(Class<T> table) {
-		this.query = new GenericQuery<T>(table);
+		this.query = new DataQuery<T>(table);
 	}
 
 	/**
@@ -26,20 +27,20 @@ public class EntityQuery<T, Q extends EntityQuery> implements Query<T> {
 	 * @param entity query entity
 	 */
 	public EntityQuery(Entity<T> entity) {
-		this.query = new GenericQuery<T>(entity);
+		this.query = new DataQuery<T>(entity);
 	}
 
 	/**
 	 * @param query the query to set
 	 */
-	public EntityQuery(GenericQuery<T> query) {
+	public EntityQuery(DataQuery<T> query) {
 		this.query = query;
 	}
 
 	/**
 	 * @return the query
 	 */
-	protected GenericQuery<T> getQuery() {
+	protected DataQuery<T> getQuery() {
 		return query;
 	}
 	

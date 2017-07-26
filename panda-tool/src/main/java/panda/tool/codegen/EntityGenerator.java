@@ -28,7 +28,7 @@ import panda.dao.entity.annotation.PK;
 import panda.dao.entity.annotation.Table;
 import panda.dao.query.BooleanCondition;
 import panda.dao.query.ComparableCondition;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.ObjectCondition;
 import panda.dao.query.Query;
 import panda.dao.query.StringCondition;
@@ -161,7 +161,7 @@ public class EntityGenerator extends AbstractCodeGenerator {
 		if (Collections.isNotEmpty(entity.getJoinMap())) {
 			imports.add(Query.class.getName());
 		}
-		imports.add(GenericQuery.class.getName());
+		imports.add(DataQuery.class.getName());
 		imports.add(Entities.class.getName());
 		if (Strings.isNotEmpty(entity.getBaseQueryClass())) {
 			imports.add(entity.getBaseQueryClass());

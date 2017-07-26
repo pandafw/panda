@@ -18,7 +18,9 @@ import panda.dao.query.Filter.ValueFilter;
 import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Collections;
+import panda.lang.Logical;
 import panda.lang.Objects;
+import panda.lang.Order;
 import panda.lang.Strings;
 
 /**
@@ -26,7 +28,7 @@ import panda.lang.Strings;
  *
  * @param <T> table
  */
-public class GenericQuery<T> implements Query<T>, Cloneable {
+public class DataQuery<T> implements Query<T>, Cloneable {
 	protected Object target;
 	protected boolean distinct;
 	protected long start;
@@ -50,7 +52,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * constructor
 	 * @param type query type
 	 */
-	public GenericQuery(Class<T> type) {
+	public DataQuery(Class<T> type) {
 		this.target = type;
 	}
 
@@ -58,21 +60,21 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * constructor
 	 * @param entity query entity
 	 */
-	public GenericQuery(Entity<T> entity) {
+	public DataQuery(Entity<T> entity) {
 		this.target = entity;
 	}
 
 	/**
 	 * @param target query target
 	 */
-	public GenericQuery(String target) {
+	public DataQuery(String target) {
 		this.target = target;
 	}
 	
 	/**
 	 * @param query query to clone
 	 */
-	public GenericQuery(Query<T> query) {
+	public DataQuery(Query<T> query) {
 		target = query.getTarget();
 		start = query.getStart();
 		limit = query.getLimit();
@@ -162,7 +164,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * clear
 	 * @return this
 	 */
-	public GenericQuery<T> clear() {
+	public DataQuery<T> clear() {
 		start = 0;
 		limit = 0;
 		if (columns != null) {
@@ -271,7 +273,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value column value
 	 * @return this
 	 */
-	public GenericQuery<T> column(String name, String value) {
+	public DataQuery<T> column(String name, String value) {
 		return rawColumn(name, '(' + value + ')');
 	}
 
@@ -280,7 +282,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value column value
 	 * @return this
 	 */
-	private GenericQuery<T> rawColumn(String name, String value) {
+	private DataQuery<T> rawColumn(String name, String value) {
 		setColumn(name, value);
 		flags = null;
 		return this;
@@ -291,7 +293,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value the column value
 	 * @return this
 	 */
-	private GenericQuery<T> setColumn(String name, String value) {
+	private DataQuery<T> setColumn(String name, String value) {
 		Asserts.notEmpty(name);
 		if (columns == null) {
 			columns = new LinkedHashMap<String, String>();
@@ -321,7 +323,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * include primary keys
 	 * @return this
 	 */
-	public GenericQuery<T> includePrimayKeys() {
+	public DataQuery<T> includePrimayKeys() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getPrimaryKeys()) {
 			incColumn(ef.getName());
@@ -334,7 +336,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * include not primary keys
 	 * @return this
 	 */
-	public GenericQuery<T> includeNotPrimaryKeys() {
+	public DataQuery<T> includeNotPrimaryKeys() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
@@ -348,7 +350,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return this
 	 */
-	public GenericQuery<T> includeAll() {
+	public DataQuery<T> includeAll() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
 			incColumn(ef.getName());
@@ -361,7 +363,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names include name
 	 * @return this
 	 */
-	public GenericQuery<T> include(String... names) {
+	public DataQuery<T> include(String... names) {
 		return include(Arrays.asList(names));
 	}
 
@@ -369,7 +371,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names include name
 	 * @return this
 	 */
-	public GenericQuery<T> include(Collection<String> names) {
+	public DataQuery<T> include(Collection<String> names) {
 		if (Collections.isNotEmpty(names)) {
 			for (String name : names) {
 				incColumn(name);
@@ -383,7 +385,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names include name
 	 * @return this
 	 */
-	public GenericQuery<T> includeOnly(String... names) {
+	public DataQuery<T> includeOnly(String... names) {
 		return includeOnly(Arrays.asList(names));
 	}
 
@@ -391,7 +393,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names include name
 	 * @return this
 	 */
-	public GenericQuery<T> includeOnly(Collection<String> names) {
+	public DataQuery<T> includeOnly(Collection<String> names) {
 		if (Collections.isEmpty(names)) {
 			clearColumns();
 			return this;
@@ -416,7 +418,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * exclude primary keys
 	 * @return this
 	 */
-	public GenericQuery<T> excludePrimaryKeys() {
+	public DataQuery<T> excludePrimaryKeys() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (ef.isPrimaryKey()) {
@@ -431,7 +433,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * exclude not primary keys
 	 * @return this
 	 */
-	public GenericQuery<T> excludeNotPrimaryKeys() {
+	public DataQuery<T> excludeNotPrimaryKeys() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
 			if (!ef.isPrimaryKey()) {
@@ -445,7 +447,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	/**
 	 * @return this
 	 */
-	public GenericQuery<T> excludeAll() {
+	public DataQuery<T> excludeAll() {
 		Entity<?> entity = getEntity();
 		for (EntityField ef : entity.getFields()) {
 			excColumn(ef.getName());
@@ -458,7 +460,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names the field names to exclude
 	 * @return this
 	 */
-	public GenericQuery<T> exclude(String... names) {
+	public DataQuery<T> exclude(String... names) {
 		return exclude(Arrays.asList(names));
 	}
 
@@ -466,7 +468,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param names the field names to exclude
 	 * @return this
 	 */
-	public GenericQuery<T> exclude(Collection<String> names) {
+	public DataQuery<T> exclude(Collection<String> names) {
 		if (Collections.isNotEmpty(names)) {
 			for (String name : names) {
 				excColumn(name);
@@ -505,7 +507,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * 
 	 * @return this
 	 */
-	public GenericQuery<T> clearColumns() {
+	public DataQuery<T> clearColumns() {
 		if (columns != null) {
 			columns.clear();
 			flags = null;
@@ -550,7 +552,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery<T> leftJoin(Query<?> query, String alias, String ... conditions) {
+	public DataQuery<T> leftJoin(Query<?> query, String alias, String ... conditions) {
 		return join(Join.LEFT, query, alias, conditions);
 	}
 
@@ -561,7 +563,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery<T> rightJoin(Query<?> query, String alias, String ... conditions) {
+	public DataQuery<T> rightJoin(Query<?> query, String alias, String ... conditions) {
 		return join(Join.RIGHT, query, alias, conditions);
 	}
 
@@ -572,7 +574,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery<T> innerJoin(Query<?> query, String alias, String ... conditions) {
+	public DataQuery<T> innerJoin(Query<?> query, String alias, String ... conditions) {
 		return join(Join.INNER, query, alias, conditions);
 	}
 
@@ -583,7 +585,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery<T> join(Query<?> query, String alias, String ... conditions) {
+	public DataQuery<T> join(Query<?> query, String alias, String ... conditions) {
 		return join(null, query, alias, conditions);
 	}
 
@@ -595,7 +597,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param conditions join conditions
 	 * @return this
 	 */
-	public GenericQuery<T> join(String type, Query<?> query, String alias, String ... conditions) {
+	public DataQuery<T> join(String type, Query<?> query, String alias, String ... conditions) {
 		Asserts.notEmpty(alias, "The parameter alias is empty");
 		if (joins == null) {
 			joins = new LinkedHashMap<String, Join>();
@@ -612,7 +614,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param join join name
 	 * @return this
 	 */
-	public GenericQuery<T> autoLeftJoin(String join) {
+	public DataQuery<T> autoLeftJoin(String join) {
 		return autoJoin(Join.LEFT, join);
 	}
 
@@ -622,7 +624,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param query join table query
 	 * @return this
 	 */
-	public GenericQuery<T> autoLeftJoin(String join, Query<?> query) {
+	public DataQuery<T> autoLeftJoin(String join, Query<?> query) {
 		return autoJoin(Join.LEFT, join, query);
 	}
 
@@ -631,7 +633,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param join join name
 	 * @return this
 	 */
-	public GenericQuery<T> autoRightJoin(String join) {
+	public DataQuery<T> autoRightJoin(String join) {
 		return autoJoin(Join.RIGHT, join);
 	}
 
@@ -641,7 +643,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param query join table query
 	 * @return this
 	 */
-	public GenericQuery<T> autoRightJoin(String join, Query<?> query) {
+	public DataQuery<T> autoRightJoin(String join, Query<?> query) {
 		return autoJoin(Join.RIGHT, join, query);
 	}
 
@@ -650,7 +652,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param join join name
 	 * @return this
 	 */
-	public GenericQuery<T> autoInnerJoin(String join) {
+	public DataQuery<T> autoInnerJoin(String join) {
 		return autoJoin(Join.INNER, join);
 	}
 
@@ -660,7 +662,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param query join table query
 	 * @return this
 	 */
-	public GenericQuery<T> autoInnerJoin(String join, Query<?> query) {
+	public DataQuery<T> autoInnerJoin(String join, Query<?> query) {
 		return autoJoin(Join.INNER, join, query);
 	}
 
@@ -669,7 +671,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param join join name
 	 * @return this
 	 */
-	public GenericQuery<T> autoJoin(String join) {
+	public DataQuery<T> autoJoin(String join) {
 		return autoJoin(null, join);
 	}
 
@@ -679,7 +681,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param query join table query
 	 * @return this
 	 */
-	public GenericQuery<T> autoJoin(String join, Query<?> query) {
+	public DataQuery<T> autoJoin(String join, Query<?> query) {
 		return autoJoin(null, join, query);
 	}
 
@@ -689,7 +691,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param join join name
 	 * @return this
 	 */
-	public GenericQuery<T> autoJoin(String type, String join) {
+	public DataQuery<T> autoJoin(String type, String join) {
 		return autoJoin(type, join, null);
 	}
 	
@@ -701,7 +703,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @return this
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public GenericQuery<T> autoJoin(String type, String join, Query<?> query) {
+	public DataQuery<T> autoJoin(String type, String join, Query<?> query) {
 		Asserts.notEmpty(join, "The parameter join is empty");
 		Entity<?> entity = getEntity();
 
@@ -714,7 +716,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		}
 
 		if (query == null) {
-			query = new GenericQuery(ej.getTarget());
+			query = new DataQuery(ej.getTarget());
 		}
 		else {
 			if (query.getEntity() != ej.getTarget()) {
@@ -772,7 +774,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param column column
 	 * @return this
 	 */
-	public GenericQuery<T> orderBy(String column) {
+	public DataQuery<T> orderBy(String column) {
 		return orderBy(column, true);
 	}
 
@@ -782,7 +784,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param order order direction
 	 * @return this
 	 */
-	public GenericQuery<T> orderBy(String name, Order order) {
+	public DataQuery<T> orderBy(String name, Order order) {
 		Asserts.notEmpty(name, "The parameter name is empty");
 		if (orders == null) {
 			orders = new LinkedHashMap<String, Order>();
@@ -797,7 +799,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param order order direction
 	 * @return this
 	 */
-	public GenericQuery<T> orderBy(String name, String order) {
+	public DataQuery<T> orderBy(String name, String order) {
 		return orderBy(name, Order.parse(order));
 	}
 
@@ -807,7 +809,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param ascend direction
 	 * @return this
 	 */
-	public GenericQuery<T> orderBy(String name, boolean ascend) {
+	public DataQuery<T> orderBy(String name, boolean ascend) {
 		return orderBy(name, ascend ? Order.ASC : Order.DESC);
 	}
 
@@ -816,7 +818,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name name
 	 * @return this
 	 */
-	public GenericQuery<T> orderByAsc(String name) {
+	public DataQuery<T> orderByAsc(String name) {
 		return orderBy(name, true);
 	}
 
@@ -825,7 +827,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param name name
 	 * @return this
 	 */
-	public GenericQuery<T> orderByDesc(String name) {
+	public DataQuery<T> orderByDesc(String name) {
 		return orderBy(name, false);
 	}
 
@@ -853,7 +855,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param column column
 	 * @return this
 	 */
-	public GenericQuery<T> groupBy(String ... column) {
+	public DataQuery<T> groupBy(String ... column) {
 		if (groups == null) {
 			groups = new ArrayList<String>();
 		}
@@ -902,7 +904,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param start the start to set
 	 * @return this
 	 */
-	public GenericQuery<T> start(long start) {
+	public DataQuery<T> start(long start) {
 		setStart(start);
 		return this;
 	}
@@ -911,7 +913,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param limit the limit to set
 	 * @return this
 	 */
-	public GenericQuery<T> limit(long limit) {
+	public DataQuery<T> limit(long limit) {
 		setLimit(limit);
 		return this;
 	}
@@ -956,32 +958,32 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		return false;
 	}
 	
-	private GenericQuery<T> addSimpleExpression(String field, Operator operator) {
+	private DataQuery<T> addSimpleExpression(String field, Operator operator) {
 		getCurrent().add(new SimpleFilter(field, operator));
 		return this;
 	}
 
-	private GenericQuery<T> addCompareValueExpression(String field, Operator operator, Object compareValue) {
+	private DataQuery<T> addCompareValueExpression(String field, Operator operator, Object compareValue) {
 		getCurrent().add(new ValueFilter(field, operator, compareValue));
 		return this;
 	}
 
-	private GenericQuery<T> addCompareFieldExpression(String field, Operator operator, String compareField) {
+	private DataQuery<T> addCompareFieldExpression(String field, Operator operator, String compareField) {
 		getCurrent().add(new ReferFilter(field, operator, compareField));
 		return this;
 	}
 
-	private GenericQuery<T> addCompareCollectionExpression(String field, Operator operator, Object[] values) {
+	private DataQuery<T> addCompareCollectionExpression(String field, Operator operator, Object[] values) {
 		getCurrent().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
-	private GenericQuery<T> addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
+	private DataQuery<T> addCompareCollectionExpression(String field, Operator operator, Collection<?> values) {
 		getCurrent().add(new ValueFilter(field, operator, values));
 		return this;
 	}
 
-	private GenericQuery<T> addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
+	private DataQuery<T> addCompareRanageExpression(String field, Operator operator, Object minValue, Object maxValue) {
 		getCurrent().add(new ValueFilter(field, operator, new Object[] { minValue, maxValue }));
 		return this;
 	}
@@ -1010,7 +1012,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * starts with AND
 	 * @return this
 	 */
-	public GenericQuery<T> and() {
+	public DataQuery<T> and() {
 		ComboFilter cf = new ComboFilter(Logical.AND);
 		getCurrent().add(cf);
 		setCurrent(cf);
@@ -1021,7 +1023,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * starts with OR
 	 * @return this
 	 */
-	public GenericQuery<T> or() {
+	public DataQuery<T> or() {
 		ComboFilter cf = new ComboFilter(Logical.OR);
 		getCurrent().add(cf);
 		setCurrent(cf);
@@ -1032,7 +1034,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * end with AND/OR
 	 * @return this
 	 */
-	public GenericQuery<T> end() {
+	public DataQuery<T> end() {
 		ComboFilter cf = getCurrent();
 
 		// remove current from stack
@@ -1054,7 +1056,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param field field 
 	 * @return this
 	 */
-	public GenericQuery<T> isNull(String field) {
+	public DataQuery<T> isNull(String field) {
 		return addSimpleExpression(field, Operator.IS_NULL);
 	}
 
@@ -1063,7 +1065,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param field field 
 	 * @return this
 	 */
-	public GenericQuery<T> isNotNull(String field) {
+	public DataQuery<T> isNotNull(String field) {
 		return addSimpleExpression(field, Operator.IS_NOT_NULL);
 	}
 
@@ -1073,7 +1075,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> equalTo(String field, Object value) {
+	public DataQuery<T> equalTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.EQUAL, value);
 	}
 
@@ -1083,7 +1085,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> notEqualTo(String field, Object value) {
+	public DataQuery<T> notEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.NOT_EQUAL, value);
 	}
 
@@ -1093,7 +1095,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> greaterThan(String field, Object value) {
+	public DataQuery<T> greaterThan(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_THAN, value);
 	}
 
@@ -1103,7 +1105,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> greaterThanOrEqualTo(String field, Object value) {
+	public DataQuery<T> greaterThanOrEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.GREATER_EQUAL, value);
 	}
 
@@ -1113,7 +1115,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> lessThan(String field, Object value) {
+	public DataQuery<T> lessThan(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_THAN, value);
 	}
 
@@ -1123,7 +1125,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> lessThanOrEqualTo(String field, Object value) {
+	public DataQuery<T> lessThanOrEqualTo(String field, Object value) {
 		return addCompareValueExpression(field, Operator.LESS_EQUAL, value);
 	}
 
@@ -1133,7 +1135,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> like(String field, String value) {
+	public DataQuery<T> like(String field, String value) {
 		return addCompareValueExpression(field, Operator.LIKE, value);
 	}
 
@@ -1143,7 +1145,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> notLike(String field, String value) {
+	public DataQuery<T> notLike(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, value);
 	}
 
@@ -1153,7 +1155,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> match(String field, String value) {
+	public DataQuery<T> match(String field, String value) {
 		return addCompareValueExpression(field, Operator.MATCH, value);
 	}
 
@@ -1163,7 +1165,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> notMatch(String field, String value) {
+	public DataQuery<T> notMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_MATCH, value);
 	}
 
@@ -1173,7 +1175,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> leftMatch(String field, String value) {
+	public DataQuery<T> leftMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.LEFT_MATCH, value);
 	}
 
@@ -1183,7 +1185,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> notLeftMatch(String field, String value) {
+	public DataQuery<T> notLeftMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LEFT_MATCH, value);
 	}
 
@@ -1193,7 +1195,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> rightMatch(String field, String value) {
+	public DataQuery<T> rightMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.RIGHT_MATCH, value);
 	}
 
@@ -1203,7 +1205,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value value
 	 * @return this
 	 */
-	public GenericQuery<T> notRightMatch(String field, String value) {
+	public DataQuery<T> notRightMatch(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_RIGHT_MATCH, value);
 	}
 
@@ -1213,7 +1215,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> equalToField(String field, String compareField) {
+	public DataQuery<T> equalToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.EQUAL, compareField);
 	}
 
@@ -1223,7 +1225,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> notEqualToField(String field, String compareField) {
+	public DataQuery<T> notEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.NOT_EQUAL, compareField);
 	}
 
@@ -1233,7 +1235,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> greaterThanField(String field, String compareField) {
+	public DataQuery<T> greaterThanField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_THAN, compareField);
 	}
 
@@ -1243,7 +1245,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> greaterThanOrEqualToField(String field, String compareField) {
+	public DataQuery<T> greaterThanOrEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.GREATER_EQUAL, compareField);
 	}
 
@@ -1253,7 +1255,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> lessThanField(String field, String compareField) {
+	public DataQuery<T> lessThanField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_THAN, compareField);
 	}
 
@@ -1263,7 +1265,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param compareField field to compare
 	 * @return this
 	 */
-	public GenericQuery<T> lessThanOrEqualToField(String field, String compareField) {
+	public DataQuery<T> lessThanOrEqualToField(String field, String compareField) {
 		return addCompareFieldExpression(field, Operator.LESS_EQUAL, compareField);
 	}
 
@@ -1273,7 +1275,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public GenericQuery<T> in(String field, Object... values) {
+	public DataQuery<T> in(String field, Object... values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 
@@ -1283,7 +1285,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public GenericQuery<T> in(String field, Collection<?> values) {
+	public DataQuery<T> in(String field, Collection<?> values) {
 		return addCompareCollectionExpression(field, Operator.IN, values);
 	}
 
@@ -1293,7 +1295,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public GenericQuery<T> notIn(String field, Object[] values) {
+	public DataQuery<T> notIn(String field, Object[] values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -1303,7 +1305,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param values values
 	 * @return this
 	 */
-	public GenericQuery<T> notIn(String field, Collection<?> values) {
+	public DataQuery<T> notIn(String field, Collection<?> values) {
 		return addCompareCollectionExpression(field, Operator.NOT_IN, values);
 	}
 
@@ -1314,7 +1316,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value2 value to
 	 * @return this
 	 */
-	public GenericQuery<T> between(String field, Object value1, Object value2) {
+	public DataQuery<T> between(String field, Object value1, Object value2) {
 		return addCompareRanageExpression(field, Operator.BETWEEN, value1, value2);
 	}
 
@@ -1325,7 +1327,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param value2 value to
 	 * @return this
 	 */
-	public GenericQuery<T> notBetween(String field, Object value1, Object value2) {
+	public DataQuery<T> notBetween(String field, Object value1, Object value2) {
 		return addCompareRanageExpression(field, Operator.NOT_BETWEEN, value1, value2);
 	}
 
@@ -1334,7 +1336,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @param keys primary keys
 	 * @return this
 	 */
-	public GenericQuery<T> equalToPrimaryKeys(Object ... keys) {
+	public DataQuery<T> equalToPrimaryKeys(Object ... keys) {
 		Entity<?> entity = getEntity();
 		
 		if (keys == null || keys.length == 0) {
@@ -1370,8 +1372,8 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
-	public GenericQuery<T> clone() {
-		return new GenericQuery<T>(this);
+	public DataQuery<T> clone() {
+		return new DataQuery<T>(this);
 	}
 
 	/**
@@ -1395,7 +1397,7 @@ public class GenericQuery<T> implements Query<T>, Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		
-		GenericQuery rhs = (GenericQuery)obj;
+		DataQuery rhs = (DataQuery)obj;
 		return Objects.equalsBuilder()
 				.append(target, rhs.target)
 				.append(distinct, rhs.distinct)

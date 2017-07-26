@@ -88,7 +88,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	 * Joins
 	 *----------------------------------------------------------------------*/
 	@Override
-	protected void addQueryJoins(GenericQuery<${entityBeanClass}> gq) {
+	protected void addQueryJoins(DataQuery<${entityBeanClass}> gq) {
 		super.addQueryJoins(gq);
 
 		${entityBeanClass}Query eq = new ${entityBeanClass}Query(gq);

@@ -34,12 +34,12 @@ import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
-import panda.dao.query.GenericQuery;
-import panda.dao.query.Logical;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Operator;
-import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.lang.Exceptions;
+import panda.lang.Logical;
+import panda.lang.Order;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -608,7 +608,7 @@ public class GaeDao extends AbstractDao {
 		return fo;
 	}
 
-	private com.google.appengine.api.datastore.Entity fetchSingle(GenericQuery<?> query) {
+	private com.google.appengine.api.datastore.Entity fetchSingle(DataQuery<?> query) {
 		query.setLimit(1);
 		PreparedQuery pq = prepareQuery(query);
 		FetchOptions fo = getFetchOptions(query);
@@ -731,7 +731,7 @@ public class GaeDao extends AbstractDao {
 			return existsByTable(getTableName(entity));
 		}
 
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		query.setLimit(1);
 		queryPrimaryKey(query, keys);
 		selectPrimaryKeys(query);
@@ -747,7 +747,7 @@ public class GaeDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	protected boolean existsByQuery(GenericQuery<?> query) {
+	protected boolean existsByQuery(DataQuery<?> query) {
 		if (!query.hasFilters()) {
 			return existsByTable(getTableName(query));
 		}
@@ -786,7 +786,7 @@ public class GaeDao extends AbstractDao {
 	 * @return record
 	 */
 	@Override
-	protected <T> T fetchByQuery(GenericQuery<T> query) {
+	protected <T> T fetchByQuery(DataQuery<T> query) {
 		Entity<T> entity = query.getEntity();
 		
 		autoStart();
@@ -852,7 +852,7 @@ public class GaeDao extends AbstractDao {
 	 * @return record list
 	 */
 	@Override
-	protected <T> List<T> selectByQuery(GenericQuery<T> query) {
+	protected <T> List<T> selectByQuery(DataQuery<T> query) {
 		if (isQueryIdentity(query)) {
 			T d = fetchByQuery(query);
 			List<T> list = new ArrayList<T>();
@@ -891,7 +891,7 @@ public class GaeDao extends AbstractDao {
 	 * @return callback processed count
 	 */
 	@Override
-	protected <T> long selectByQuery(GenericQuery <T>query, DataHandler<T> callback) {
+	protected <T> long selectByQuery(DataQuery <T>query, DataHandler<T> callback) {
 		if (isQueryIdentity(query)) {
 			T d = fetchByQuery(query);
 			callback(callback, d, 0);
@@ -986,7 +986,7 @@ public class GaeDao extends AbstractDao {
 			setDataIdentity(entity, data, ge.getKey());
 		}
 
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		convertDataToEntity(query, data, ge);
 		saveEntity(ge);
 		return data;
@@ -1000,7 +1000,7 @@ public class GaeDao extends AbstractDao {
 	 * @param query where condition and update fields filter
 	 * @return updated count
 	 */
-	protected int updatesByQuery(Object data, GenericQuery<?> query, int limit) {
+	protected int updatesByQuery(Object data, DataQuery<?> query, int limit) {
 		autoStart();
 		try {
 			int cnt = 0;

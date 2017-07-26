@@ -12,7 +12,7 @@ import panda.dao.entity.EntityFKey;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityHelper;
 import panda.dao.entity.EntityIndex;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.io.Streams;
 import panda.lang.Asserts;
 import panda.lang.Classes;
@@ -513,7 +513,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 			return null;
 		}
 		
-		GenericQuery<T> gq = new GenericQuery<T>(getEntity());
+		DataQuery<T> gq = new DataQuery<T>(getEntity());
 		addQueryFields(gq);
 		addQueryJoins(gq);
 		addQueryFilters(gq, key);
@@ -532,7 +532,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		return d;
 	}
 
-	protected void addQueryFields(GenericQuery<T> gq) {
+	protected void addQueryFields(DataQuery<T> gq) {
 		Collection<String> ufs = getDisplayFields();
 		if (Collections.isNotEmpty(ufs)) {
 			gq.excludeAll();
@@ -541,10 +541,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	protected void addQueryJoins(GenericQuery<T> gq) {
+	protected void addQueryJoins(DataQuery<T> gq) {
 	}
 	
-	protected void addQueryFilters(GenericQuery<T> gq, T key) {
+	protected void addQueryFilters(DataQuery<T> gq, T key) {
 		gq.equalToPrimaryKeys(key);
 	}
 

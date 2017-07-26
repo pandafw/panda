@@ -2,8 +2,8 @@ package panda.mvc.bean;
 
 import java.io.Serializable;
 
-import panda.dao.query.Order;
 import panda.lang.Objects;
+import panda.lang.Order;
 import panda.lang.Strings;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;

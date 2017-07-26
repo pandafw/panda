@@ -11,7 +11,7 @@ import panda.app.constant.RES;
 import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.lang.Collections;
 import panda.lang.mutable.MutableInt;
 import panda.log.Log;
@@ -253,7 +253,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param dataList data list
 	 * @return count
 	 */
-	protected int addKeyListToQuery(GenericQuery<T> gq, List<T> dataList, boolean raiseError) {
+	protected int addKeyListToQuery(DataQuery<T> gq, List<T> dataList, boolean raiseError) {
 		Entity<T> entity = getEntity();
 		List<EntityField> keys = entity.getPrimaryKeys();
 
@@ -344,7 +344,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		return ds;
 	}
 	
-	protected void addQueryColumns(GenericQuery<T> gq) {
+	protected void addQueryColumns(DataQuery<T> gq) {
 		Set<String> cs = getDisplayFields();
 		if (Collections.isNotEmpty(cs)) {
 			gq.excludeAll();
@@ -353,10 +353,10 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 		}
 	}
 	
-	protected void addQueryJoins(GenericQuery<T> gq) {
+	protected void addQueryJoins(DataQuery<T> gq) {
 	}
 	
-	protected void addQueryFilters(GenericQuery<T> gq) {
+	protected void addQueryFilters(DataQuery<T> gq) {
 	}
 
 	/**
@@ -367,7 +367,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	protected List<T> selectDataList(List<T> dataList, boolean filter) {
 		Collections.removeNull(dataList);
 		if (Collections.isNotEmpty(dataList)) {
-			GenericQuery<T> q = new GenericQuery<T>(getEntity());
+			DataQuery<T> q = new DataQuery<T>(getEntity());
 
 			int count = addKeyListToQuery(q, dataList, false);
 			if (count > 0) {
@@ -415,7 +415,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	 * @param gq generic query
 	 * @return sample data
 	 */
-	protected T getBulkUpdateSample(List<T> dataList, GenericQuery<T> gq) {
+	protected T getBulkUpdateSample(List<T> dataList, DataQuery<T> gq) {
 		return null;
 	}
 	
@@ -429,7 +429,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 			return 0;
 		}
 
-		GenericQuery<T> q = new GenericQuery<T>(getEntity());
+		DataQuery<T> q = new DataQuery<T>(getEntity());
 		addKeyListToQuery(q, dataList, true);
 		addQueryFilters(q);
 

@@ -6,7 +6,7 @@ import panda.dao.DaoException;
 import panda.dao.DataHandler;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Query;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.dao.sql.expert.SqlExpert;
@@ -335,7 +335,7 @@ public class SqlDao extends AbstractDao {
 			return existsByTable(getTableName(entity));
 		}
 
-		GenericQuery<?> query = createQuery(entity);
+		DataQuery<?> query = createQuery(entity);
 		queryPrimaryKey(query, keys);
 		selectPrimaryKeys(query);
 		
@@ -351,7 +351,7 @@ public class SqlDao extends AbstractDao {
 	 * @return true if the record or the table exists in the data store
 	 */
 	@Override
-	protected boolean existsByQuery(GenericQuery<?> query) {
+	protected boolean existsByQuery(DataQuery<?> query) {
 		if (!query.hasFilters()) {
 			return existsByTable(getTableName(query));
 		}
@@ -368,7 +368,7 @@ public class SqlDao extends AbstractDao {
 	 * @return record
 	 */
 	@Override
-	protected <T> T fetchByQuery(GenericQuery<T> query) {
+	protected <T> T fetchByQuery(DataQuery<T> query) {
 		query.setLimit(1);
 		Sql sql = getSqlExpert().select(query);
 		
@@ -419,7 +419,7 @@ public class SqlDao extends AbstractDao {
 	 * @return record list
 	 */
 	@Override
-	protected <T> List<T> selectByQuery(GenericQuery<T> query) {
+	protected <T> List<T> selectByQuery(DataQuery<T> query) {
 		Sql sql = getSqlExpert().select(query);
 		
 		autoStart();
@@ -452,7 +452,7 @@ public class SqlDao extends AbstractDao {
 	 * @return callback processed count
 	 */
 	@Override
-	public <T> long selectByQuery(GenericQuery<T> query, DataHandler<T> callback) {
+	public <T> long selectByQuery(DataQuery<T> query, DataHandler<T> callback) {
 		assertCallback(callback);
 		
 		SqlResultSet<T> srs = null;
@@ -644,7 +644,7 @@ public class SqlDao extends AbstractDao {
 	 * @return updated count
 	 */
 	@Override
-	protected int updatesByQuery(Object obj, GenericQuery<?> query, int limit) {
+	protected int updatesByQuery(Object obj, DataQuery<?> query, int limit) {
 		excludePrimaryKeys(query);
 
 		Sql sql = getSqlExpert().update(obj, query);

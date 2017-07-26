@@ -6,7 +6,7 @@ import panda.app.entity.CBean;
 import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 
 @SuppressWarnings("unchecked")
 public class CQuery<T extends CBean, Q extends CQuery> extends EntityQuery<T, Q> {
@@ -29,7 +29,7 @@ public class CQuery<T extends CBean, Q extends CQuery> extends EntityQuery<T, Q>
 	/**
 	 * @param query the query to set
 	 */
-	public CQuery(GenericQuery<T> query) {
+	public CQuery(DataQuery<T> query) {
 		super(query);
 	}
 

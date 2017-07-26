@@ -1,7 +1,4 @@
-package panda.dao.query;
-
-import panda.lang.Strings;
-
+package panda.lang;
 
 /**
  */

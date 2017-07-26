@@ -4,7 +4,7 @@ import panda.app.entity.Template;
 import panda.app.entity.query.SUQuery;
 import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.StringCondition;
 
 public class TemplateQuery extends SUQuery<Template, TemplateQuery> {
@@ -19,7 +19,7 @@ public class TemplateQuery extends SUQuery<Template, TemplateQuery> {
 	 * Constructor
 	 * @param query the query to set
 	 */
-	public TemplateQuery(GenericQuery<Template> query) {
+	public TemplateQuery(DataQuery<Template> query) {
 		super(query);
 	}
 

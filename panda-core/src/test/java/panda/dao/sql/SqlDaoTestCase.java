@@ -12,7 +12,7 @@ import panda.dao.DaoTestCase;
 import panda.dao.entity.Score;
 import panda.dao.entity.Student;
 import panda.dao.entity.Teacher;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mock.sql.MockDataSource;
@@ -48,7 +48,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 	public void testSelectEmptyAndEnd() {
 		List<Teacher> expect = Teacher.creates(1, 5);
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 
 		q.and().end();
 		List<Teacher> actual = dao.select(q);
@@ -75,7 +75,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 			t.setMemo("m");
 		}
 		
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(Teacher.class);
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
 
 		q.in("name", "T1", "T3").column("memo", "'m'");
 		List<Teacher> actual = dao.select(q);
@@ -87,7 +87,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 	public void testSelectSum() {
 		List<Score> expect = Score.sums(1, 2);
 		
-		GenericQuery<Score> q = new GenericQuery<Score>(Score.class);
+		DataQuery<Score> q = new DataQuery<Score>(Score.class);
 
 		q.in("student", 1, 2).include("student").column("score", "sum(" + getSqlDaoClient().getSqlExpert().escapeColumn("score") + ")").groupBy("student");
 		List<Score> actual = dao.select(q);
@@ -101,8 +101,8 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 			s.setStudentName("S" + s.getStudent());
 		}
 
-		GenericQuery<Score> q = new GenericQuery<Score>(Score.class);
-		GenericQuery<Student> j = new GenericQuery<Student>(Student.class);
+		DataQuery<Score> q = new DataQuery<Score>(Score.class);
+		DataQuery<Student> j = new DataQuery<Student>(Student.class);
 
 		q.in("student", 1, 2)
 			.leftJoin(j, "st", "student = id")
@@ -125,7 +125,7 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		Teacher t = new Teacher();
 		t.setMemo("u");
 
-		GenericQuery<Teacher> q = new GenericQuery<Teacher>(dao.getEntity(Teacher.class));
+		DataQuery<Teacher> q = new DataQuery<Teacher>(dao.getEntity(Teacher.class));
 		q.in("name", "T2", "T3").excludeAll().column("memo", concatSql("memo", "'+u'"));
 		
 		Assert.assertEquals(expect.size(), dao.updates(t, q));

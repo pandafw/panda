@@ -4,7 +4,7 @@ import panda.app.entity.Property;
 import panda.app.entity.query.SUQuery;
 import panda.dao.entity.Entities;
 import panda.dao.query.ComparableCondition;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.StringCondition;
 
 public class PropertyQuery extends SUQuery<Property, PropertyQuery> {
@@ -19,7 +19,7 @@ public class PropertyQuery extends SUQuery<Property, PropertyQuery> {
 	 * Constructor
 	 * @param query the query to set
 	 */
-	public PropertyQuery(GenericQuery<Property> query) {
+	public PropertyQuery(DataQuery<Property> query) {
 		super(query);
 	}
 

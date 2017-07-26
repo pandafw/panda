@@ -7,7 +7,7 @@ import panda.app.entity.SUBean;
 import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 
 @SuppressWarnings("unchecked")
 public class SUQuery<T extends SUBean, Q extends SUQuery> extends EntityQuery<T, Q> {
@@ -30,7 +30,7 @@ public class SUQuery<T extends SUBean, Q extends SUQuery> extends EntityQuery<T,
 	/**
 	 * @param query the query to set
 	 */
-	public SUQuery(GenericQuery<T> query) {
+	public SUQuery(DataQuery<T> query) {
 		super(query);
 	}
 

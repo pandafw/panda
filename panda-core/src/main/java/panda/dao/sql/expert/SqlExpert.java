@@ -20,11 +20,11 @@ import panda.dao.query.Filter;
 import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Join;
 import panda.dao.query.Operator;
-import panda.dao.query.Order;
 import panda.dao.query.Query;
 import panda.dao.sql.Sql;
 import panda.dao.sql.Sqls;
 import panda.lang.Iterators;
+import panda.lang.Order;
 import panda.lang.Strings;
 import panda.lang.Texts;
 

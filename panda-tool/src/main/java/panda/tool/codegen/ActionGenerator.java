@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
@@ -176,7 +176,7 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		
 		if (Strings.isNotEmpty(action.getAutoJoin())) {
 			imports.add(entity.getQueryName());
-			imports.add(GenericQuery.class.getName());
+			imports.add(DataQuery.class.getName());
 		}
 		
 		processTpl(pkg, cls + ".java", wrapper, tplAction, true);

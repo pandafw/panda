@@ -6,7 +6,7 @@ import panda.app.entity.CUBean;
 import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 
 @SuppressWarnings("unchecked")
 public class CUQuery<T extends CUBean, Q extends CUQuery> extends EntityQuery<T, Q> {
@@ -29,7 +29,7 @@ public class CUQuery<T extends CUBean, Q extends CUQuery> extends EntityQuery<T,
 	/**
 	 * @param query the query to set
 	 */
-	public CUQuery(GenericQuery<T> query) {
+	public CUQuery(DataQuery<T> query) {
 		super(query);
 	}
 

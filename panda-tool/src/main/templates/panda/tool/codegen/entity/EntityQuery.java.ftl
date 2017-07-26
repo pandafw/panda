@@ -17,7 +17,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	 * Constructor
 	 * @param query the query to set
 	 */
-	public ${name}(GenericQuery<${entity.simpleName}> query) {
+	public ${name}(DataQuery<${entity.simpleName}> query) {
 		super(query);
 	}
 

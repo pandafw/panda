@@ -6,7 +6,7 @@ import panda.app.entity.SCUBean;
 import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 
 @SuppressWarnings("unchecked")
 public class SCUQuery<T extends SCUBean, Q extends SCUQuery> extends EntityQuery<T, Q> {
@@ -29,7 +29,7 @@ public class SCUQuery<T extends SCUBean, Q extends SCUQuery> extends EntityQuery
 	/**
 	 * @param query the query to set
 	 */
-	public SCUQuery(GenericQuery<T> query) {
+	public SCUQuery(DataQuery<T> query) {
 		super(query);
 	}
 

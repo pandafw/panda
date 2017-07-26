@@ -15,7 +15,7 @@ import panda.app.constant.VAL;
 import panda.dao.Dao;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Join;
 import panda.dao.query.Query;
 import panda.lang.Collections;
@@ -440,7 +440,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * queryList
 	 */
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
-		final GenericQuery<T> gq = new GenericQuery<T>(getEntity());
+		final DataQuery<T> gq = new DataQuery<T>(getEntity());
 
 		addQueryColumns(gq);
 		addQueryJoins(gq);
@@ -520,7 +520,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
-	protected void addQueryColumns(GenericQuery<T> gq) {
+	protected void addQueryColumns(DataQuery<T> gq) {
 		Set<String> fs = getDisplayFields();
 		if (Collections.isNotEmpty(fs)) {
 			gq.excludeAll();
@@ -532,14 +532,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
-	protected void addQueryJoins(GenericQuery<T> gq) {
+	protected void addQueryJoins(DataQuery<T> gq) {
 	}
 	
 	/**
 	 * @param gq query
 	 */
 	@SuppressWarnings("unchecked")
-	protected void addQueryFilters(GenericQuery<T> gq, Queryer qr) {
+	protected void addQueryFilters(DataQuery<T> gq, Queryer qr) {
 		qr.normalize();
 		if (Collections.isEmpty(qr.getFilters())) {
 			return;
@@ -598,12 +598,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					
 					join.setType(Join.INNER);
 					Query<?> jq = join.getQuery();
-					GenericQuery jgq;
-					if (jq instanceof GenericQuery) {
-						jgq = (GenericQuery)jq;
+					DataQuery jgq;
+					if (jq instanceof DataQuery) {
+						jgq = (DataQuery)jq;
 					}
 					else {
-						jgq = new GenericQuery(jq);
+						jgq = new DataQuery(jq);
 						join.setQuery(jgq);
 					}
 
@@ -623,7 +623,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		gq.end();
 	}
 
-	protected void addQueryFilter(GenericQuery<T> gq, Filter f, String name, Object value, List<?> values) {
+	protected void addQueryFilter(DataQuery<T> gq, Filter f, String name, Object value, List<?> values) {
 		if (Filter.EQUAL.equals(f.getComparator())) {
 			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
@@ -709,7 +709,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 */
-	protected void addQueryOrders(GenericQuery<T> gq, Sorter sorter) {
+	protected void addQueryOrders(DataQuery<T> gq, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
 			String sc = getText(getMethodName() + RES.SORTER_SUFFIX, (String)null);
 			assist().castToSorter(sorter, sc);

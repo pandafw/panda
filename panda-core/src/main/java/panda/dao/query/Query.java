@@ -5,6 +5,7 @@ import java.util.Map;
 
 import panda.dao.entity.Entity;
 import panda.dao.query.Filter.ComboFilter;
+import panda.lang.Order;
 
 /**
  * 

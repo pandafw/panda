@@ -6,7 +6,7 @@ import panda.app.entity.UBean;
 import panda.dao.entity.Entity;
 import panda.dao.query.ComparableCondition;
 import panda.dao.query.EntityQuery;
-import panda.dao.query.GenericQuery;
+import panda.dao.query.DataQuery;
 
 @SuppressWarnings("unchecked")
 public class UQuery<T extends UBean, Q extends UQuery> extends EntityQuery<T, Q> {
@@ -29,7 +29,7 @@ public class UQuery<T extends UBean, Q extends UQuery> extends EntityQuery<T, Q>
 	/**
 	 * @param query the query to set
 	 */
-	public UQuery(GenericQuery<T> query) {
+	public UQuery(DataQuery<T> query) {
 		super(query);
 	}
 
