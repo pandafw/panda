@@ -72,8 +72,10 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 			writePagerLimit();
 		}
 		else if (count > 0) {
-			writePagerLinkPrev(true);
 			writePagerTextInfo();
+			writePagerLinkFirst();
+			writePagerLinkPrev(true);
+			writePagerLinkPages();
 			writePagerLinkNext(true);
 			writePagerLimit();
 		}

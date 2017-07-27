@@ -41,13 +41,17 @@ public class Pager implements Cloneable, Serializable {
 			if (page != null) {
 				start = (page - 1) * (limit == null ? 0 : limit);
 			}
-			if (start != null) {
+			else if (start != null) {
 				if (limit == null || limit == 0) {
 					page = start > 0 ? 2L : 1L;
 				}
 				else {
 					page = calcPage();
 				}
+			}
+			else {
+				page = 1L;
+				start = 0L;
 			}
 		}
 		// total is known
