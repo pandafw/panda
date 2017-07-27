@@ -28,9 +28,15 @@ public class InvokeProcessor extends AbstractProcessor {
 					throw new RuntimeException("Failed to invoke " + method, e);
 				}
 			}
+			if (ex instanceof RuntimeException) {
+				throw (RuntimeException)ex;
+			}
 			else {
 				throw new RuntimeException("Failed to invoke " + method, ex);
 			}
+		}
+		catch (RuntimeException e) {
+			throw e;
 		}
 		catch (Exception e) {
 			throw new RuntimeException("Failed to invoke " + method, e);
