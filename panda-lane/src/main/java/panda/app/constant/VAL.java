@@ -42,8 +42,8 @@ public interface VAL {
 
 	
 	//----------------------------------------------------
-	// LIST
-	//----------------------------------------------------
+	// List
+	//
 	/**
 	 * DEFAULT_LIST_PAGE_ITEMS = 20;
 	 */
@@ -54,6 +54,9 @@ public interface VAL {
 	 */
 	public final static long DEFAULT_LIST_MAX_ITEMS = 300;
 	
+	//----------------------------------------------------
+	// Popup
+	//
 	/**
 	 * DEFAULT_POPUP_PAGE_ITEMS = 10;
 	 */
@@ -64,53 +67,16 @@ public interface VAL {
 	 */
 	public final static long DEFAULT_POPUP_MAX_ITEMS = 300;
 	
+	//----------------------------------------------------
+	// Export
+	//
 	/**
-	 * DEFAULT_CSV_PAGE_ITEMS = 1000;
+	 * DEFAULT_EXPORT_PAGE_ITEMS = 2000;
 	 */
-	public final static long DEFAULT_CSV_PAGE_ITEMS = 1000;
+	public final static long DEFAULT_EXPORT_PAGE_ITEMS = 2000;
 	
 	/**
-	 * DEFAULT_CSV_MAX_ITEMS = 10000;
+	 * DEFAULT_EXPORT_MAX_ITEMS = 10000;
 	 */
-	public final static long DEFAULT_CSV_MAX_ITEMS = 10000;
-	
-	/**
-	 * DEFAULT_TSV_PAGE_ITEMS = 1000;
-	 */
-	public final static long DEFAULT_TSV_PAGE_ITEMS = 1000;
-	
-	/**
-	 * DEFAULT_TSV_MAX_ITEMS = 10000;
-	 */
-	public final static long DEFAULT_TSV_MAX_ITEMS = 10000;
-	
-	/**
-	 * DEFAULT_PDF_PAGE_ITEMS = 1000;
-	 */
-	public final static long DEFAULT_PDF_PAGE_ITEMS = 1000;
-	
-	/**
-	 * DEFAULT_PDF_MAX_ITEMS = 10000;
-	 */
-	public final static long DEFAULT_PDF_MAX_ITEMS = 10000;
-	
-	/**
-	 * DEFAULT_JSON_PAGE_ITEMS = 1000;
-	 */
-	public final static long DEFAULT_JSON_PAGE_ITEMS = 1000;
-	
-	/**
-	 * DEFAULT_JSON_MAX_ITEMS = 10000;
-	 */
-	public final static long DEFAULT_JSON_MAX_ITEMS = 10000;
-	
-	/**
-	 * DEFAULT_XML_PAGE_ITEMS = 1000;
-	 */
-	public final static long DEFAULT_XML_PAGE_ITEMS = 1000;
-	
-	/**
-	 * DEFAULT_XML_MAX_ITEMS = 10000;
-	 */
-	public final static long DEFAULT_XML_MAX_ITEMS = 10000;
+	public final static long DEFAULT_EXPORT_MAX_ITEMS = 10000;
 }

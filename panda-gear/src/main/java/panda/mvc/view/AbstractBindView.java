@@ -24,7 +24,7 @@ import panda.mvc.alert.ParamAlert;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
-import panda.mvc.bean.QueryerOx;
+import panda.mvc.bean.QueryerEx;
 import panda.mvc.bean.Sorter;
 import panda.mvc.bind.filter.FileItemPropertyFilter;
 import panda.mvc.bind.filter.FilterPropertyFilter;
@@ -276,7 +276,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 		as.registerPropertyFilter(Filter.class, new FilterPropertyFilter(shortName));
 		as.registerPropertyFilter(Pager.class, new PagerPropertyFilter(shortName));
 		as.registerPropertyFilter(Queryer.class, new QueryerPropertyFilter(shortName));
-		as.registerPropertyFilter(QueryerOx.class, new QueryerPropertyFilter(shortName));
+		as.registerPropertyFilter(QueryerEx.class, new QueryerPropertyFilter(shortName));
 		as.registerPropertyFilter(Sorter.class, new SorterPropertyFilter(shortName));
 
 		FileItemPropertyFilter fipf = new FileItemPropertyFilter();

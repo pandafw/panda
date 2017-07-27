@@ -20,7 +20,7 @@
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if a.canAccess("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(btn-new)"/>
 </li></#if><#if a.canAccess("~/list_print")><li><@p.a icon="icon-print" target="_blank" action="~/list_print" includeParams="all" label="#(btn-print)"/>
-</li></#if><#if a.canAccess("~/list_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/list_csv" includeParams="all" label="#(btn-csv)"/>
+</li></#if><#if a.canAccess("~/expo_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/expo_csv" includeParams="all" label="#(btn-csv)"/>
 </li></#if><#if a.canAccess("~/list_json")><li><@p.a icon="icon-json" target="_blank" action="~/list_json" includeParams="all" label="#(btn-json)"/>
 </li></#if><#if a.canAccess("~/list_xml")><li><@p.a icon="icon-xml" target="_blank" action="~/list_xml" includeParams="all" label="#(btn-xml)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>

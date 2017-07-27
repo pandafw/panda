@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import panda.dao.query.DataQuery;
+import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.mvc.View;
@@ -16,7 +17,7 @@ import panda.mvc.annotation.At;
 import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.mvc.bean.Queryer;
-import panda.mvc.bean.QueryerOx;
+import panda.mvc.bean.QueryerEx;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
@@ -98,6 +99,8 @@ public class ActionGenerator extends AbstractCodeGenerator {
 		}
 	}
 
+	private final static Set<String> colus = Arrays.toSet("csv", "tsv", "xls", "xlsx");
+	
 	private void processJavaAction(Module module, Action action, Entity entity) throws Exception {
 		String pkg = action.getActionPackage();
 
@@ -121,24 +124,22 @@ public class ActionGenerator extends AbstractCodeGenerator {
 						|| "bedit".equals(s)) {
 					imports.add(Map.class.getName());
 				}
-				else if ("list".equals(s)
-						|| "list_popup".equals(s)
-						|| "list_print".equals(s)) {
+				
+				
+				if ("list".equals(s) || Strings.startsWith(s, "list_")) {
+					imports.add(Validates.class.getName());
 					imports.add(Queryer.class.getName());
-					imports.add(Validates.class.getName());
 				}
-				else if ("list_csv".equals(s)
-						|| "list_tsv".equals(s)) {
+				if (Strings.startsWith(s, "expo_")) {
 					imports.add(Validates.class.getName());
-					imports.add(QueryerOx.class.getName());
+					imports.add(QueryerEx.class.getName());
+				}
+				
+				String se = Strings.substringAfter(s, '_');
+				if (colus.contains(se)) {
 					imports.add(List.class.getName());
 					imports.add(ArrayList.class.getName());
 					imports.add(ListColumn.class.getName());
-				}
-				else if ("list_json".equals(s)
-						|| "list_xml".equals(s)) {
-					imports.add(Validates.class.getName());
-					imports.add(QueryerOx.class.getName());
 				}
 			}
 		}

@@ -19,7 +19,7 @@
 		<!-- RUN -->
 		<dependency org="net.sf.ehcache" name="ehcache-core" rev="2.6.9" conf="run->master,sources" />
 		<dependency org="org.apache.velocity" name="velocity" rev="1.7" conf="run->master,sources" />
-		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
+		<dependency org="org.freemarker" name="freemarker" rev="2.3.23" conf="run->master,sources" />
 
 		<!-- POI -->
 		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />

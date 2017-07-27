@@ -21,7 +21,7 @@
 		<dependency org="org.apache.lucene" name="lucene-queries" rev="5.5.3" conf="run->master,sources" />
 		<dependency org="org.apache.lucene" name="lucene-queryparser" rev="5.5.3" conf="run->master,sources" />
 		<dependency org="org.apache.lucene" name="lucene-analyzers-common" rev="5.5.3" conf="run->master,sources" />
-		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
+		<dependency org="org.freemarker" name="freemarker" rev="2.3.23" conf="run->master,sources" />
 		
 		<!-- POI -->
 		<dependency org="org.apache.poi" name="poi" rev="3.13" conf="run->master,sources" />

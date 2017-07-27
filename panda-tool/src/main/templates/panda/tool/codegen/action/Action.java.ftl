@@ -140,16 +140,6 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_popup(qr);
 	}
 	
-<#elseif ui.template == ("list_pdf")>
-	/**
-	 * ${ui.name}
-	 */
-	@At${gen.trimAtName(ui.name)}
-	@To(value=View.SFTL, error=View.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer qr) {
-		return super.list_pdf(qr);
-	}
-	
 <#elseif ui.template == ("list_print")>
 	/**
 	 * ${ui.name}
@@ -160,13 +150,13 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.list_print(qr);
 	}
 	
-<#elseif [ "list_csv", "list_tsv", "list_xls", "list_xlsx" ]?seq_contains(ui.template)>
+<#elseif [ "list_csv", "list_tsv", "list_xls", "list_xlsx", "expo_csv", "expo_tsv", "expo_xls", "expo_xlsx" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
 		List<ListColumn> columns = new ArrayList<ListColumn>();
 <#list ui.displayColumnList as c>
 		if (displayField("${c.name}")) {
@@ -193,24 +183,24 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 		return super.${ui.template}(qr, columns);
 	}
 	
-<#elseif ui.template == ("list_json")>
+<#elseif [ "list_json", "list_xml", "expo_json", "expo_xml" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
 	 */
 	@At${gen.trimAtName(ui.name)}
-	@To(all=View.JSON)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
-		return super.list_json(qr);
+	@To(all=View.${ui.template?keep_after('_')?upper_case})
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+		return super.${ui.template}(qr);
 	}
 	
-<#elseif ui.template == ("list_xml")>
+<#elseif [ "list_pdf", "expo_pdf" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
 	 */
 	@At${gen.trimAtName(ui.name)}
-	@To(all=View.XML)
-	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates QueryerOx qr) {
-		return super.list_xml(qr);
+	@To(value=View.SFTL, error=View.SFTL)
+	public Object ${gen.trimMethodName(ui.name)}(@Param @Validates Queryer<#if ui.template?starts_with('expo_')>Ex</#if> qr) {
+		return super.${ui.template}(qr);
 	}
 	
 <#elseif ui.template == ("import")>

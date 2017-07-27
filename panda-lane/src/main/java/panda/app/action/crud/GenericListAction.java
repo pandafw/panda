@@ -28,6 +28,7 @@ import panda.mvc.View;
 import panda.mvc.bean.Filter;
 import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
+import panda.mvc.bean.QueryerEx;
 import panda.mvc.bean.Sorter;
 import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.MvcURLBuilder;
@@ -87,131 +88,6 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
-	 * list_json
-	 */
-	protected Object list_json(Queryer qr) {
-		set_load(false);
-		set_save(false);
-		return doList(qr, VAL.DEFAULT_JSON_PAGE_ITEMS, VAL.DEFAULT_JSON_MAX_ITEMS);
-	}
-	
-	/**
-	 * list_xml
-	 */
-	protected Object list_xml(Queryer qr) {
-		set_load(false);
-		set_save(false);
-		return doList(qr, VAL.DEFAULT_XML_PAGE_ITEMS, VAL.DEFAULT_XML_MAX_ITEMS);
-	}
-	
-	/**
-	 * list_csv
-	 */
-	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
-		set_load(false);
-		set_save(false);
-
-		Object rv = doList(qr, VAL.DEFAULT_CSV_PAGE_ITEMS, VAL.DEFAULT_CSV_MAX_ITEMS);
-		if (rv instanceof View) {
-			return rv;
-		}
-		
-		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
-		csv.setList((List)rv);
-		csv.setColumns(columns);
-		
-		CsvView cv = new CsvView();
-		cv.setResult(csv);
-		cv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
-		cv.setAttachment(true);
-		
-		return cv;
-	}
-	
-	/**
-	 * list_tsv
-	 */
-	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
-		set_load(false);
-		set_save(false);
-
-		Object rv = doList(qr, VAL.DEFAULT_TSV_PAGE_ITEMS, VAL.DEFAULT_TSV_MAX_ITEMS);
-		if (rv instanceof View) {
-			return rv;
-		}
-		
-		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
-		csv.setSeparator('\t');
-		csv.setList((List)rv);
-		csv.setColumns(columns);
-		
-		TsvView tv = new TsvView();
-		tv.setResult(csv);
-		tv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
-		tv.setAttachment(true);
-		
-		return tv;
-	}
-	
-	/**
-	 * list_xls
-	 */
-	protected Object list_xls(Queryer qr, List<ListColumn> columns) {
-		set_load(false);
-		set_save(false);
-
-		Object rv = doList(qr, VAL.DEFAULT_TSV_PAGE_ITEMS, VAL.DEFAULT_TSV_MAX_ITEMS);
-		if (rv instanceof View) {
-			return rv;
-		}
-		
-		XlsExporter xls = getContext().getIoc().get(XlsExporter.class);
-		xls.setList((List)rv);
-		xls.setColumns(columns);
-		
-		XlsView xv = new XlsView();
-		xv.setResult(xls);
-		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xls");
-		xv.setAttachment(true);
-		
-		return xv;
-	}
-	
-	/**
-	 * list_xlsx
-	 */
-	protected Object list_xlsx(Queryer qr, List<ListColumn> columns) {
-		set_load(false);
-		set_save(false);
-
-		Object rv = doList(qr, VAL.DEFAULT_TSV_PAGE_ITEMS, VAL.DEFAULT_TSV_MAX_ITEMS);
-		if (rv instanceof View) {
-			return rv;
-		}
-		
-		XlsxExporter xls = getContext().getIoc().get(XlsxExporter.class);
-		xls.setList((List)rv);
-		xls.setColumns(columns);
-		
-		XlsxView xv = new XlsxView();
-		xv.setResult(xls);
-		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xlsx");
-		xv.setAttachment(true);
-		
-		return xv;
-	}
-	
-	/**
-	 * list_pdf
-	 */
-	protected Object list_pdf(Queryer qr) {
-		set_load(false);
-		set_save(false);
-
-		return doList(qr, VAL.DEFAULT_PDF_PAGE_ITEMS, VAL.DEFAULT_PDF_MAX_ITEMS);
-	}
-	
-	/**
 	 * list_print
 	 */
 	protected Object list_print(Queryer qr) {
@@ -227,6 +103,121 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		set_load(false);
 		set_save(false);
 		return doList(qr, VAL.DEFAULT_POPUP_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_json
+	 */
+	protected Object list_json(Queryer qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_xml
+	 */
+	protected Object list_xml(Queryer qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_pdf
+	 */
+	protected Object list_pdf(Queryer qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+
+	
+	/**
+	 * list_csv
+	 */
+	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
+		return doCsv(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_tsv
+	 */
+	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
+		return doTsv(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_xls
+	 */
+	protected Object list_xls(Queryer qr, List<ListColumn> columns) {
+		return doXls(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+	
+	/**
+	 * list_xlsx
+	 */
+	protected Object list_xlsx(Queryer qr, List<ListColumn> columns) {
+		return doXlsx(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+	}
+
+	//------------------------------------------------------------
+	// Export methods
+	//------------------------------------------------------------
+	/**
+	 * expo_json
+	 */
+	protected Object expo_json(QueryerEx qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+	
+	/**
+	 * expo_xml
+	 */
+	protected Object expo_xml(QueryerEx qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+	
+	/**
+	 * expo_pdf
+	 */
+	protected Object expo_pdf(QueryerEx qr) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+
+	
+	/**
+	 * expo_csv
+	 */
+	protected Object expo_csv(QueryerEx qr, List<ListColumn> columns) {
+		return doCsv(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+	
+	/**
+	 * expo_tsv
+	 */
+	protected Object expo_tsv(QueryerEx qr, List<ListColumn> columns) {
+		return doTsv(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+	
+	/**
+	 * expo_xls
+	 */
+	protected Object expo_xls(QueryerEx qr, List<ListColumn> columns) {
+		return doXls(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+	}
+	
+	/**
+	 * expo_xlsx
+	 */
+	protected Object expo_xlsx(QueryerEx qr, List<ListColumn> columns) {
+		return doXlsx(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
 	}
 
 	//------------------------------------------------------------
@@ -434,6 +425,91 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		queryList(qr, defLimit, maxLimit);
 		
 		return dataList;
+	}
+
+	protected Object doCsv(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
+		set_load(false);
+		set_save(false);
+
+		Object rv = doList(qr, defLimit, maxLimit);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
+		csv.setList((List)rv);
+		csv.setColumns(columns);
+		
+		CsvView cv = new CsvView();
+		cv.setResult(csv);
+		cv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".csv");
+		cv.setAttachment(true);
+		
+		return cv;
+	}
+	
+	protected Object doTsv(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
+		set_load(false);
+		set_save(false);
+
+		Object rv = doList(qr, defLimit, maxLimit);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		CsvExporter csv = getContext().getIoc().get(CsvExporter.class);
+		csv.setSeparator('\t');
+		csv.setList((List)rv);
+		csv.setColumns(columns);
+		
+		TsvView tv = new TsvView();
+		tv.setResult(csv);
+		tv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".tsv");
+		tv.setAttachment(true);
+		
+		return tv;
+	}
+
+	protected Object doXls(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
+		set_load(false);
+		set_save(false);
+
+		Object rv = doList(qr, defLimit, maxLimit);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		XlsExporter xls = getContext().getIoc().get(XlsExporter.class);
+		xls.setList((List)rv);
+		xls.setColumns(columns);
+		
+		XlsView xv = new XlsView();
+		xv.setResult(xls);
+		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xls");
+		xv.setAttachment(true);
+		
+		return xv;
+	}
+
+	protected Object doXlsx(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
+		set_load(false);
+		set_save(false);
+
+		Object rv = doList(qr, defLimit, maxLimit);
+		if (rv instanceof View) {
+			return rv;
+		}
+		
+		XlsxExporter xls = getContext().getIoc().get(XlsxExporter.class);
+		xls.setList((List)rv);
+		xls.setColumns(columns);
+		
+		XlsxView xv = new XlsxView();
+		xv.setResult(xls);
+		xv.setFilename(getText(RES.TITLE) + '_' + assist().getCsvFileTime() + ".xlsx");
+		xv.setAttachment(true);
+		
+		return xv;
 	}
 
 	/**

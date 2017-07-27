@@ -17,7 +17,7 @@
 		<dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.poi" name="poi-scratchpad" rev="3.10-FINAL" conf="run->master,sources" />
 		<dependency org="org.apache.xmlbeans" name="xmlbeans" rev="2.4.0" conf="run->master,sources" />
-		<dependency org="org.freemarker" name="freemarker" rev="2.3.20" conf="run->master,sources" />
+		<dependency org="org.freemarker" name="freemarker" rev="2.3.23" conf="run->master,sources" />
 
 		<!-- TOOL -->
 		<dependency org="emma" name="emma" rev="2.1.5320" conf="tool->*"/>

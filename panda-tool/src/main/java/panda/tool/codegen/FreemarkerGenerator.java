@@ -30,13 +30,18 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 		"_bulk",
 		"_bulk_success",
 		"_list",
+		"_list_popup",
+		"_list_print",
 		"_list_csv",
 		"_list_tsv",
 		"_list_xls",
 		"_list_xlsx",
 		"_list_pdf",
-		"_list_popup",
-		"_list_print",
+		"_expo_csv",
+		"_expo_tsv",
+		"_expo_xls",
+		"_expo_xlsx",
+		"_expo_pdf",
 		"_delete",
 		"_delete_success",
 		"_add",
@@ -126,11 +131,9 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 						processTpl(pkg, uin + "_confirm.ftl", wrapper, findTpl("_bedit_confirm"));
 						processTpl(pkg, uin + "_execute.ftl", wrapper, findTpl("_bedit_success"));
 					}
-					else if (t.startsWith("list")) {
-						if (!("list_json".equals(t) || "list_xml".equals(t))) {
-							Template tpl = findTpl("_" + t);
-							processTpl(pkg, uin + ".ftl", wrapper, tpl);
-						}
+					else if (!t.endsWith("_json") && !t.endsWith("_xml") && !"import".equals(t)) {
+						Template tpl = findTpl("_" + t);
+						processTpl(pkg, uin + ".ftl", wrapper, tpl);
 					}
 				}
 
