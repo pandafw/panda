@@ -19,6 +19,7 @@ public class SafeInclude implements TemplateDirectiveModel {
 	public static final String MACRO_NAME = "safeinclude";
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void execute(Environment environment, Map map, TemplateModel[] templateModel,
 			TemplateDirectiveBody directiveBody) throws TemplateException, IOException {
 

@@ -35,6 +35,7 @@ public class FreemarkerSqlManager extends SimpleSqlManager {
 	 * @return the configuration
 	 * @throws Exception if an error occurs
 	 */
+	@SuppressWarnings("deprecation")
 	public Configuration getConfiguration() throws Exception {
 		if (configuration == null) {
 			configuration = new Configuration();

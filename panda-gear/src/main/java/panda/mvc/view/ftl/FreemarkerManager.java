@@ -123,6 +123,7 @@ public class FreemarkerManager {
 	 * <li>loads settings from the classpath file /freemarker.properties
 	 * </ul>
 	 */
+	@SuppressWarnings("deprecation")
 	protected void initConfiguration() throws IOException, TemplateException {
 		config = new Configuration();
 

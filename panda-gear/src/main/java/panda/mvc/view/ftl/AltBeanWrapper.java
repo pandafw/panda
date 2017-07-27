@@ -16,6 +16,7 @@ import freemarker.template.TemplateModel;
 public class AltBeanWrapper extends BeansWrapper {
 	private boolean altMapWrapper;
 
+	@SuppressWarnings("deprecation")
 	public AltBeanWrapper(boolean altMapWrapper) {
 		this.altMapWrapper = altMapWrapper;
 	}

@@ -302,6 +302,7 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	protected void loadTemplates(Configuration cfg) throws Exception {
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void initTemplate() throws Exception {
 		ftlConfig = new Configuration();
 

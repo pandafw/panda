@@ -39,6 +39,7 @@ public class TagModel implements TemplateTransformModel {
 		return context.getIoc().get(tagCls);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected Map<String, Object> unwrapParameters(Map params) {
 		Map<String, Object> map = new HashMap<String, Object>(params.size());
 		BeansWrapper objectWrapper = BeansWrapper.getDefaultInstance();
