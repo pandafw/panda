@@ -19,7 +19,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(btn-list)"/>
+<#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -129,12 +129,12 @@
 
 		
 	<#if a.canAccess("~/list")>
-		<@p.a btn="default" icon="icon-list" action="~/list" label="#(btn-list)"/>
+		<@p.a action="~/list" btn="default" icon="icon-list" label="#(btn-list)"/>
 	</#if>
 	</div>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
+		<@p.a href="#" onclick="window.history.back();return false;" btn="default" icon="back" label="#(btn-back)"/>
 	</div>
 </#if>
 </div>

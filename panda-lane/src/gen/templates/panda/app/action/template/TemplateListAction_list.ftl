@@ -18,11 +18,11 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/add")><li><@p.a icon="icon-new" action="~/add" label="#(btn-new)"/>
-</li></#if><#if a.canAccess("~/list_print")><li><@p.a icon="icon-print" target="_blank" action="~/list_print" includeParams="all" label="#(btn-print)"/>
-</li></#if><#if a.canAccess("~/expo_csv")><li><@p.a icon="icon-csv" target="_blank" action="~/expo_csv" includeParams="all" label="#(btn-csv)"/>
-</li></#if><#if a.canAccess("~/list_json")><li><@p.a icon="icon-json" target="_blank" action="~/list_json" includeParams="all" label="#(btn-json)"/>
-</li></#if><#if a.canAccess("~/list_xml")><li><@p.a icon="icon-xml" target="_blank" action="~/list_xml" includeParams="all" label="#(btn-xml)"/>
+<#if a.canAccess("~/add")><li><@p.a action="~/add" icon="icon-new" label="#(btn-new)"/>
+</li></#if><#if a.canAccess("~/list_print")><li><@p.a action="~/list_print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
+</li></#if><#if a.canAccess("~/expo_csv")><li><@p.a action="~/expo_csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
+</li></#if><#if a.canAccess("~/list_json")><li><@p.a action="~/list_json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
+</li></#if><#if a.canAccess("~/list_xml")><li><@p.a action="~/list_xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -30,14 +30,14 @@
 	<#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": a.getText("listview-th-number", ""),
-		"fixed": true
+		"fixed": true,
+		"header": a.getText("listview-th-number", "")
 	}] />
 
 	<#assign _actions_ = [] />
 	<#assign _ash_ = "" />
 	<#if a.canAccess("~/add")>
-		<@p.url var='_u_' action='~/add'/>
+		<@p.url var='_u_' action='~/add' escapeAmp='true'/>
 		<#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-new', '')?html + '"><i class="' + a.getText('icon-new', '') + '"></i>' + a.getText('lbl-new', '') + '</a>'/>
 	</#if>
 	<#if a.canAccess("~/copy")>
@@ -74,9 +74,9 @@
 		<#assign _actionc_ = [{
 			"name": "_actions_",
 			"type": "actions",
+			"fixed": true,
 			"header": _ash_,
-			"actions": _actions_,
-			"fixed": true
+			"actions": _actions_
 		}] />
 	</#if>
 	<#if a.actionsAlignLeft>
@@ -203,7 +203,7 @@
 	</#if>
 	<@p.set var="lvtools">
 		<#if a.canAccess("~/bdelete")>
-			<@p.b icon="icon-bdelete" onclick="return template_list_bdelete();" label="#(btn-bdelete)"/>
+			<@p.b onclick="return template_list_bdelete();" icon="icon-bdelete" label="#(btn-bdelete)"/>
 		</#if>
 	</@p.set>
 

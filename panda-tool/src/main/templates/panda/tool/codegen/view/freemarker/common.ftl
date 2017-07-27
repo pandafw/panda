@@ -79,7 +79,7 @@ ${s}/#if>
 	</#macro>
 	<#macro sback>
 	<div class="p-tcenter">
-		${s}@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
+		${s}@p.a href="#" onclick="window.history.back();return false;" btn="default" icon="back" label="#(btn-back)"/>
 	</div>
 	</#macro>
 	<#macro footer>

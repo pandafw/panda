@@ -90,6 +90,24 @@ public interface MvcConstants extends IocConstants {
 	/** The locale from accept language */
 	public static final String LOCALE_FROM_ACCEPT_LANGUAGE = "panda.locale.from.accept.language";
 
+	/** The redirect parameter name */
+	public static final String REDIRECT_PARAMETER = "panda.redirect.parameter";
+
+	/** The redirect query name */
+	public static final String REDIRECT_QUERY_NAME = "panda.redirect.query.name";
+
+	/** The layout parameter name */
+	public static final String LAYOUT_PARAMETER_NAME = "panda.layout.parameter.name";
+
+	/** The layout request attribute */
+	public static final String LAYOUT_REQUEST_ATTR = "panda.layout.request.attr";
+
+	/** The layout session attribute */
+	public static final String LAYOUT_SESSION_ATTR = "panda.layout.session.attr";
+
+	/** The layout cookie name */
+	public static final String LAYOUT_COOKIE_NAME = "panda.layout.cookie.name";
+
 	/** The layout cookie domain */
 	public static final String LAYOUT_COOKIE_DOMAIN = "panda.layout.cookie.domain";
 

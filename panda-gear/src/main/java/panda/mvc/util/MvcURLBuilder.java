@@ -1,6 +1,7 @@
 package panda.mvc.util;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -39,6 +40,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	protected String action;
 
 	protected String includeParams;
+	protected List<String> excludeParams;
 
 	protected boolean includeContext = true;
 
@@ -84,6 +86,20 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	 */
 	public void setIncludeParams(String includeParams) {
 		this.includeParams = includeParams;
+	}
+
+	/**
+	 * @return the excludeParams
+	 */
+	public List<String> getExcludeParams() {
+		return excludeParams;
+	}
+
+	/**
+	 * @param excludeParams the excludeParams to set
+	 */
+	public void setExcludeParams(List<String> excludeParams) {
+		this.excludeParams = excludeParams;
 	}
 
 	/**
@@ -170,6 +186,21 @@ public class MvcURLBuilder extends ServletURLBuilder {
 		setBeans(Mvcs.getBeans());
 		setCastors(Mvcs.getCastors());
 		setRequest(context.getRequest());
+
+		// split action and query string
+		if (Strings.isNotEmpty(action)) {
+			int q = action.indexOf('?');
+			if (q >= 0) {
+				String qs = action.substring(q + 1);
+				action = action.substring(0, q);
+				if (Strings.isEmpty(query)) {
+					query = qs;
+				}
+				else {
+					query += '&' + qs;
+				}
+			}
+		}
 		
 		if (path == null) {
 			path = buildPath(context, action, includeContext);
@@ -181,27 +212,24 @@ public class MvcURLBuilder extends ServletURLBuilder {
 			if (Collections.isNotEmpty(qsm)) {
 				Map ps = getParamsMap();
 				for (Entry<String, Object> en : qsm.entrySet()) {
-					if (!ps.containsKey(en.getKey())) {
-						ps.put(en.getKey(), en.getValue());
+					if (ps.containsKey(en.getKey()) || Collections.contains(excludeParams, en.getKey())) {
+						continue;
 					}
+					ps.put(en.getKey(), en.getValue());
 				}
 				params = ps;
 			}
 		}
 		else if (INCLUDE_ALL.equalsIgnoreCase(includeParams)) {
-			if (params == null) {
-				params = request.getParameterMap();
-			}
-			else {
-				Map ps = getParamsMap();
-				Map<String, String[]> qm = request.getParameterMap();
-				for (Entry<String, String[]> en : qm.entrySet()) {
-					if (!ps.containsKey(en.getKey())) {
-						ps.put(en.getKey(), en.getValue());
-					}
+			Map ps = getParamsMap();
+			Map<String, String[]> qm = request.getParameterMap();
+			for (Entry<String, String[]> en : qm.entrySet()) {
+				if (ps.containsKey(en.getKey()) || Collections.contains(excludeParams, en.getKey())) {
+					continue;
 				}
-				params = ps;
+				ps.put(en.getKey(), en.getValue());
 			}
+			params = ps;
 		}
 
 		return super.build();

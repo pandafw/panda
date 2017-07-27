@@ -1,8 +1,8 @@
 	${s}#assign _columns_ = [{
 			"name": "_number_",
 			"type": "number",
-			"header": a.getText("listview-th-number", ""),
-			"fixed": true
+			"fixed": true,
+			"header": a.getText("listview-th-number", "")
 		}, <#list ui.orderedColumnList as c>{
 			"name": "${c.name}",
 			"value": false,

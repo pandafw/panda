@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletResponse;
-
 import panda.app.constant.RES;
 import panda.app.constant.VAL;
 import panda.dao.Dao;
@@ -127,9 +125,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * list_pdf
 	 */
 	protected Object list_pdf(Queryer qr) {
-		set_load(false);
-		set_save(false);
-		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doPdf(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
 	}
 
 	
@@ -186,9 +182,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * expo_pdf
 	 */
 	protected Object expo_pdf(QueryerEx qr) {
-		set_load(false);
-		set_save(false);
-		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doPdf(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
 	}
 
 	
@@ -336,9 +330,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				Map params = URLHelper.parseQueryString(qs);
 				removeRedundantParams(params);
 				if (Collections.isNotEmpty(params)) {
-					HttpServletResponse response = getResponse();
 					String url = MvcURLBuilder.buildURL(context, params);
-					HttpServlets.sendRedirect(response, url);
+					HttpServlets.sendRedirect(getResponse(), url);
 					return null;
 				}
 			}
@@ -425,6 +418,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		queryList(qr, defLimit, maxLimit);
 		
 		return dataList;
+	}
+
+	protected Object doPdf(Queryer qr, long defLimit, long maxLimit) {
+		set_load(false);
+		set_save(false);
+		return doList(qr, defLimit, maxLimit);
 	}
 
 	protected Object doCsv(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {

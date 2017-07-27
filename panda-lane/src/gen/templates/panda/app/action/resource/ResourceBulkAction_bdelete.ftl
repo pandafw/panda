@@ -19,7 +19,7 @@
 
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
-<#if a.canAccess("~/list")><li><@p.a icon="icon-list" action="~/list" label="#(btn-list)"/>
+<#if a.canAccess("~/list")><li><@p.a action="~/list" icon="icon-list" label="#(btn-list)"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>
@@ -119,9 +119,9 @@
 	
 	<br/>
 	<div class="p-tcenter">
-		<@p.submit icon="icon-bdelete-execute" onclick="return resource_bdelete_submit();" label="#(btn-bdelete-execute)"/>
+		<@p.submit onclick="return resource_bdelete_submit();" icon="icon-bdelete-execute" label="#(btn-bdelete-execute)"/>
 
-		<@p.a btn="default" icon="icon-back" href="javascript:window.history.back()" label="#(btn-back)"/>
+		<@p.a href="javascript:window.history.back()" btn="default" icon="icon-back" label="#(btn-back)"/>
 
 		<script type="text/javascript"><!--
 			function resource_bdelete_submit() {
@@ -135,7 +135,7 @@
 	</div>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
+		<@p.a href="#" onclick="window.history.back();return false;" btn="default" icon="back" label="#(btn-back)"/>
 	</div>
 </#if>
 </div>

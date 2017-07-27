@@ -2,14 +2,14 @@
 	<#if _a == '!back'>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-back",
-					"onclick": "window.history.back(); return false;",
-					"text": "btn-back"
+					"text": "btn-back",
+					"onclick": "window.history.back(); return false;"
 				}]/>
 	<#elseif _a == '!refresh'>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-refresh",
-					"onclick": "location.reload(true); return false;",
-					"text": "btn-refresh"
+					"text": "btn-refresh",
+					"onclick": "location.reload(true); return false;"
 				}]/>
 	<#elseif _a == '!reset'>
 				${s}#assign _buttons_ = _buttons_ + [{
@@ -23,18 +23,18 @@
 		<#assign an = _as[0]/>
 			${s}#assign _buttons_ = _buttons_ + [{
 				"icon": "icon-${an}",
-				"onclick": "_as[1]",
-				"text": "btn-${an}"
+				"text": "btn-${an}",
+				"onclick": "_as[1]"
 			}]/>
 	<#elseif _a?starts_with('@')>
 		<#assign _as = _a2?split(':')/>
 		<#if _as[0] == '' || (_as[1]!'') == ''>${action.error("Invalid toolbar item [" + _a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
 		<#assign an = _as[0]/>
-		<#assign ap = gen.getActionPath(_as[1])/>
-			${s}#if a.canAccess('${ap}')>
+		<#assign ap = _as[1]/>
+			${s}#if a.canAccess('${gen.getActionPath(ap)}')>
 				${s}#assign _buttons_ = _buttons_ + [{
-					"icon": "icon-${an}",
 					"action": "${ap}",
+					"icon": "icon-${an}",
 					"text": "btn-${an}"
 				}]/>
 			${s}/#if>
@@ -56,12 +56,12 @@
 		</#if>
 				${s}#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-${an}",
+					"text": "btn-${an}",
 		<#if _a?contains('^')>
-					"onclick": "window.open('${d}{vars._u_?js_string}'); return false;",
+					"onclick": "window.open('${d}{vars._u_?js_string}'); return false;"
 		<#else>
-					"onclick": "location.href='${d}{vars._u_?js_string}'; return false;",
+					"onclick": "location.href='${d}{vars._u_?js_string}'; return false;"
 		</#if>
-					"text": "btn-${an}"
 				}]/>
 			${s}/#if>
 	</#if>

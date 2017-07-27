@@ -91,8 +91,8 @@
 				<@p.url var="_u_" action="~/list"/>
 				<#assign _buttons_ = _buttons_ + [{
 					"icon": "icon-list",
-					"onclick": "location.href='${vars._u_?js_string}'; return false;",
-					"text": "btn-list"
+					"text": "btn-list",
+					"onclick": "location.href='${vars._u_?js_string}'; return false;"
 				}]/>
 			</#if>
 			<#include "/panda/mvc/view/form-buttons.ftl"/>
@@ -100,7 +100,7 @@
 	</@p.form>
 <#else>
 	<div class="p-tcenter">
-		<@p.a btn="default" icon="back" href="#" onclick="window.history.back();return false;" label="#(btn-back)"/>
+		<@p.a href="#" onclick="window.history.back();return false;" btn="default" icon="back" label="#(btn-back)"/>
 	</div>
 </#if>
 </div>

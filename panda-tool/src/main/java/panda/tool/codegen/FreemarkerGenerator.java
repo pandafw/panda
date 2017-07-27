@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import panda.lang.Strings;
+import panda.net.URLHelper;
 import panda.tool.codegen.bean.Action;
 import panda.tool.codegen.bean.Entity;
 import panda.tool.codegen.bean.InputUI;
@@ -203,7 +204,13 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 	}
 	
 	public String getActionQuery(String uri) {
-		return Strings.substringAfter(uri, '?');
+		String qs = Strings.substringAfter(uri, '?');
+		return qs;
+	}
+	
+	public Map<String, Object> getActionParams(String uri) {
+		String qs = Strings.substringAfter(uri, '?');
+		return URLHelper.parseQueryString(qs);
 	}
 	
 	public String getActionPath(String uri) {

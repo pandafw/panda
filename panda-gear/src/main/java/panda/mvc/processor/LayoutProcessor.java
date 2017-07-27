@@ -49,9 +49,16 @@ public class LayoutProcessor extends AbstractProcessor {
 	 */
 	public static final String DEFAULT_LAYOUT = PC_LAYOUT;
 
+	@IocInject(value=MvcConstants.LAYOUT_PARAMETER_NAME, required=false)
 	protected String parameterName = DEFAULT_PARAMETER;
+
+	@IocInject(value=MvcConstants.LAYOUT_REQUEST_ATTR, required=false)
 	protected String requestName = DEFAULT_ATTRIBUTE;
+
+	@IocInject(value=MvcConstants.LAYOUT_SESSION_ATTR, required=false)
 	protected String sessionName = DEFAULT_ATTRIBUTE;
+
+	@IocInject(value=MvcConstants.LAYOUT_COOKIE_NAME, required=false)
 	protected String cookieName = DEFAULT_COOKIE;
 
 	@IocInject(value=MvcConstants.LAYOUT_COOKIE_DOMAIN, required=false)

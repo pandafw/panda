@@ -12,8 +12,8 @@
 	${s}#assign _columns_ = [{
 		"name": "_number_",
 		"type": "number",
-		"header": a.getText("listview-th-number", ""),
-		"fixed": true
+		"fixed": true,
+		"header": a.getText("listview-th-number", "")
 	}] />
 
 <#if ui.params.actions?has_content>
@@ -25,14 +25,12 @@
 		<#assign aa = t?split(':')/>
 		<#if aa[0] == '' || (aa[1]!'') == ''>${action.error("Invalid list action item [" + a + "] of action [" + action.name + "] ui [" + ui.name + "]")}</#if><#t/>
 		<#assign an = aa[0]/>
-		<#assign ap = gen.getActionPath(aa[1])/>
+		<#assign ap = aa[1]/>
+	${s}#if a.canAccess("${gen.getActionPath(ap)}")>
 		<#if a?starts_with('@')>
-	${s}#if a.canAccess("${ap}")>
-		${s}@p.url var='_u_' action='${ap}'/>
+		${s}@p.url var='_u_' action='${ap}' escapeAmp='true'/>
 		${s}#assign _ash_ = '<a class="p-lv-ia" href="' + vars._u_ + '" title="' + a.getText('tip-${an}', '')?html + '"><i class="' + a.getText('icon-${an}', '') + '"></i>' + a.getText('lbl-${an}', '') + '</a>'/>
-	${s}/#if>
 		<#else>
-	${s}#if a.canAccess("${ap}")>
 		${s}#assign _actions_ = _actions_ + [{
 			"action": "${ap}",
 		<#if a?contains('%') && entity.primaryKeyList?has_content>
@@ -42,8 +40,8 @@
 			"label": a.getText("lbl-${an}", ""),
 			"tooltip": a.getText("tip-${an}", "")
 		}] />
-	${s}/#if>
 		</#if>
+	${s}/#if>
 	</#list>
 	${s}#if _actions_?has_content || _ash_?has_content>
 		${s}#if !(_ash_?has_content)>
@@ -52,9 +50,9 @@
 		${s}#assign _actionc_ = [{
 			"name": "_actions_",
 			"type": "actions",
+			"fixed": true,
 			"header": _ash_,
-			"actions": _actions_,
-			"fixed": true
+			"actions": _actions_
 		}] />
 	${s}/#if>
 	${s}#if a.actionsAlignLeft>
@@ -162,7 +160,7 @@
 		<#assign an = a[0]/>
 		<#assign ap = gen.getActionPath(a[1])/>
 		${s}#if a.canAccess("${ap}")>
-			${s}@p.b icon="icon-${an}" onclick="return ${action.name}_${ui.name}_${an}();" label="#(btn-${an})"/>
+			${s}@p.b onclick="return ${action.name}_${ui.name}_${an}();" icon="icon-${an}" label="#(btn-${an})"/>
 		${s}/#if>
 	</#list>
 	${s}/@p.set>
@@ -188,15 +186,8 @@
 	<#list _ops as _op>
 		<#assign a = gen.stripStartMark(_op)?split(':')/>
 		<#assign an = a[0]/>
-		<#assign ap = gen.getActionPath(a[1])/>
-		<#assign aq = gen.getActionQuery(a[1])/>
-		<#if _op?starts_with('@')>
-			<#if (a[2]!'') == ''>${action.error("Invalid listview options [" + _op + "] of action [" + action.name + "]")}</#if><#t/>
-		function ${action.name}_${ui.name}_${an}() {
-			<#if _op?contains('^')>window.open<#else>location.href = </#if>("${s}@p.url action='${ap}' escapeAmp='false'/>?${aq!}=" + encodeURIComponent("${s}@p.url action='${a[2]}' forceAddSchemeHostAndPort='true' escapeAmp='false'/>" + location.search));
-			return false;
-		}
-		<#elseif _op?starts_with('%')>
+		<#assign ap = a[1]/>
+		<#if _op?starts_with('%')>
 		function ${action.name}_${ui.name}_${an}() {
 			return plv_submitCheckedKeys('${action.name}_${ui.name}', '${s}@p.url action="${ap}"/>', null, "<#if _op?contains('^')>_blank</#if>");
 		}

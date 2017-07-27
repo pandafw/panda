@@ -21,8 +21,8 @@
 	<#assign _columns_ = [{
 			"name": "_number_",
 			"type": "number",
-			"header": a.getText("listview-th-number", ""),
-			"fixed": true
+			"fixed": true,
+			"header": a.getText("listview-th-number", "")
 		}, {
 			"name": "id",
 			"value": false,
