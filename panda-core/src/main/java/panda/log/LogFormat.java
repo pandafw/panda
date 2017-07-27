@@ -21,6 +21,7 @@ import panda.lang.time.FastDateFormat;
  * %C: caller class name (!!SLOW!!)
  * %L: caller source line number (!!SLOW!!)
  * %M: caller class method (!!SLOW!!)
+ * %e: error.class: error.message
  * %d{format}: date
  */
 public abstract class LogFormat {
@@ -75,6 +76,9 @@ public abstract class LogFormat {
 				LogFormat format = null;
 				char symbol = pattern.charAt(i);
 				switch (symbol) {
+				case 'e':
+					format = new ErrorLogFormat(padding);
+					break;
 				case 'c':
 					format = new NameLogFormat(padding);
 					break;
@@ -149,6 +153,10 @@ public abstract class LogFormat {
 	public static abstract class SymbolLogFormat extends LogFormat {
 		protected int padding;
 
+		public SymbolLogFormat(int padding) {
+			this.padding = padding;
+		}
+
 		/**
 		 * @return the padding
 		 */
@@ -182,7 +190,7 @@ public abstract class LogFormat {
 		private FastDateFormat format = DateTimes.isoDatetimeNotFormat();
 		
 		public DateLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		/**
@@ -205,7 +213,7 @@ public abstract class LogFormat {
 	
 	public static class NameLogFormat extends SymbolLogFormat {
 		public NameLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -216,7 +224,7 @@ public abstract class LogFormat {
 	
 	public static class MessageLogFormat extends SymbolLogFormat {
 		public MessageLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -227,7 +235,7 @@ public abstract class LogFormat {
 	
 	public static class LevelLogFormat extends SymbolLogFormat {
 		public LevelLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -238,7 +246,7 @@ public abstract class LogFormat {
 	
 	public static class ThreadLogFormat extends SymbolLogFormat {
 		public ThreadLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -249,7 +257,7 @@ public abstract class LogFormat {
 	
 	public static class ClassLogFormat extends SymbolLogFormat {
 		public ClassLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -261,7 +269,7 @@ public abstract class LogFormat {
 	
 	public static class MethodLogFormat extends SymbolLogFormat {
 		public MethodLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
@@ -273,13 +281,28 @@ public abstract class LogFormat {
 	
 	public static class LineNoLogFormat extends SymbolLogFormat {
 		public LineNoLogFormat(int padding) {
-			this.padding = padding;
+			super(padding);
 		}
 
 		@Override
 		protected String value(LogEvent event) {
 			event.inferCaller();
 			return String.valueOf(event.getCallLineNo());
+		}
+	}
+	
+	public static class ErrorLogFormat extends SymbolLogFormat {
+		public ErrorLogFormat(int padding) {
+			super(padding);
+		}
+
+		@Override
+		protected String value(LogEvent event) {
+			Throwable e = event.getError();
+			if (e == null) {
+				return Strings.EMPTY;
+			}
+			return e.getClass().getName() + ": " + e.getMessage();
 		}
 	}
 }
