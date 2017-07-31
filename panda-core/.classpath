@@ -23,6 +23,10 @@
 	<classpathentry kind="lib" path="lib/run/commons-logging.jar" sourcepath="lib/run/commons-logging-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/lucene-core.jar" sourcepath="lib/run/lucene-core-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/lucene-queries.jar" sourcepath="lib/run/lucene-queries-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/lucene-queryparser.jar" sourcepath="lib/run/lucene-queryparser-sources.jar"/>
+	<classpathentry kind="lib" path="lib/run/lucene-analyzers-common.jar" sourcepath="lib/run/lucene-analyzers-common-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi.jar" sourcepath="lib/run/poi-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-ooxml.jar" sourcepath="lib/run/poi-ooxml-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/poi-ooxml-schemas.jar" sourcepath="lib/run/poi-ooxml-schemas-sources.jar"/>

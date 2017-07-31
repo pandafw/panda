@@ -2,7 +2,7 @@ package panda.mvc.bean;
 
 import panda.lang.Objects;
 
-public class Indexer {
+public class IndexArg {
 	protected Pager pager = new Pager();
 	protected Sorter sorter = new Sorter();
 	protected String key;
@@ -180,7 +180,7 @@ public class Indexer {
 		if (getClass() != obj.getClass())
 			return false;
 
-		Indexer rhs = (Indexer) obj;
+		IndexArg rhs = (IndexArg) obj;
 		return Objects.equalsBuilder()
 				.append(pager, rhs.pager)
 				.append(sorter, rhs.sorter)
@@ -194,8 +194,8 @@ public class Indexer {
 	 * Clone
 	 * @return Clone Object
 	 */
-	public Indexer clone() {
-		Indexer clone = new Indexer();
+	public IndexArg clone() {
+		IndexArg clone = new IndexArg();
 		
 		clone.pager = this.pager == null ? null : this.pager.clone();
 		clone.sorter = this.sorter == null ? null : this.sorter.clone();

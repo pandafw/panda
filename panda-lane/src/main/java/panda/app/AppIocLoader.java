@@ -4,7 +4,7 @@ import java.util.Set;
 
 import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
-import panda.app.lucene.LuceneProvider;
+import panda.app.index.RevisionedLuceneIndexes;
 import panda.app.task.gae.GaeTaskExecutor;
 import panda.app.task.gae.GaeTaskScheduler;
 import panda.app.task.java.JavaTaskExecutor;
@@ -44,7 +44,6 @@ public class AppIocLoader extends MvcComboIocLoader {
 				AppCacheProvider.class,
 				AppSettings.class,
 				AppDaoClientProvider.class,
-				LuceneProvider.class,
 				AppAuthenticator.class,
 				UserAuthenticateProcessor.class,
 				WkHtml2Pdf.class);
@@ -56,6 +55,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 			else {
 				ss.add(JavaTaskExecutor.class);
 				ss.add(JavaTaskScheduler.class);
+				ss.add(RevisionedLuceneIndexes.class);
 			}
 		}
 	}

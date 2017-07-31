@@ -94,8 +94,6 @@ public interface AppConstants extends MvcConstants {
 	//------------------------------------------------
 	// The lucene settings
 	//
-	public static final String LUCENE_STORE = "panda.lucene.store";
-
 	public static final String LUCENE_LOCATION = "panda.lucene.location";
 
 	public static final String LUCENE_ANALYZER = "panda.lucene.analyzer";

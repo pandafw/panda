@@ -1,7 +1,5 @@
 package panda.app;
 
-import panda.app.lucene.LuceneProvider;
-import panda.app.lucene.LuceneWrapper;
 import panda.app.util.AppCacheProvider;
 import panda.app.util.AppDaoClientProvider;
 import panda.dao.DaoClient;
@@ -21,8 +19,6 @@ public class AppIocProvider extends DefaultIocProvider {
 		ioc.getContext().save(Scope.APP, DaoClient.class.getName(), new DelegateObjectProxy(ioc, AppDaoClientProvider.class));
 		
 		ioc.getContext().save(Scope.APP, AppConstants.CACHE_IOCBEAN, new DelegateObjectProxy(ioc, AppCacheProvider.class));
-
-		ioc.getContext().save(Scope.APP, LuceneWrapper.class.getName(), new DelegateObjectProxy(ioc, LuceneProvider.class));
 	}
 
 	@Override
