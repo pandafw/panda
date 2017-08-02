@@ -274,7 +274,7 @@ public class ActionAssist extends ActionSupport {
 	/**
 	 * @see Files#toDisplaySize(Long)
 	 */
-	public String formatFileSize(long size) {
+	public String formatFileSize(Long size) {
 		return Files.toDisplaySize(size);
 	}
 	
