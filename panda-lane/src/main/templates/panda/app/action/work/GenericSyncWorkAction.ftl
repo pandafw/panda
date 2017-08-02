@@ -36,7 +36,8 @@
 	<br/>
 
 	<script type="text/javascript">
-		var work_pms = [];
+		var work_msgs_maxsize = 1000;
+		var work_msgs = [];
 
 		function syncw_status() {
 			work_on_start();
@@ -69,7 +70,7 @@
 		function syncw_start() {
 			work_on_start();
 
-			work_pms = [];
+			work_msgs = [];
 			$('#syncw_log').empty();
 			
 			var url = "<@p.url action='+/start' includeParams='get'/>";
@@ -168,10 +169,11 @@
 				var $m = $('<div class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</div>');
 
 				$('#syncw_log').append($m);
+				$m.scrollIntoView();
 
-				work_pms.push($m);
-				while (work_pms.length > 20) {
-					work_pms.shift().remove();
+				work_msgs.push($m);
+				while (work_msgs.length > work_msgs_maxsize) {
+					work_msgs.shift().remove();
 				}
 			}
 		}

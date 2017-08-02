@@ -1930,6 +1930,14 @@ jQuery.jcookie = function(name, value, options) {
 	};
 })(jQuery);
 (function($) {
+	$.fn.scrollIntoView = function() {
+		if (this.length) {
+			this.get(0).scrollIntoView();
+		}
+		return this;
+	};
+})(jQuery);
+(function($) {
 	$.fn.selectText = function() {
 		var $t = $(this);
 		if ($t.length) {
