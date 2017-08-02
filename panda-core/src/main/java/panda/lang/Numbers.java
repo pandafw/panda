@@ -237,6 +237,10 @@ public class Numbers {
 		return (toDouble(value) != null);
 	}
 
+	public static Integer toInt(Number num) {
+		return (num == null ? null : num.intValue());
+	}
+
 	/**
 	 * <p>
 	 * Convert a <code>String</code> to an <code>int</code>, returning <code>zero</code> if the
@@ -288,6 +292,10 @@ public class Numbers {
 		catch (NumberFormatException nfe) {
 			return defaultValue;
 		}
+	}
+
+	public static Long toLong(Number num) {
+		return (num == null ? null : num.longValue());
 	}
 
 	/**
@@ -343,6 +351,10 @@ public class Numbers {
 		}
 	}
 
+	public static Float toFloat(Number num) {
+		return (num == null ? null : num.floatValue());
+	}
+
 	/**
 	 * <p>
 	 * Convert a <code>String</code> to a <code>float</code>, returning <code>null</code> if the
@@ -394,6 +406,10 @@ public class Numbers {
 		catch (NumberFormatException nfe) {
 			return defaultValue;
 		}
+	}
+
+	public static Double toDouble(Number num) {
+		return (num == null ? null : num.doubleValue());
 	}
 
 	/**
@@ -449,6 +465,10 @@ public class Numbers {
 		}
 	}
 
+
+	public static BigDecimal toBigDecimal(Number num) {
+		return (num == null ? null : (num instanceof BigDecimal ? (BigDecimal)num : BigDecimal.valueOf(num.doubleValue())));
+	}
 
 	/**
 	 * <p>
@@ -554,6 +574,10 @@ public class Numbers {
 		catch (NumberFormatException nfe) {
 			return defaultValue;
 		}
+	}
+
+	public static BigInteger toBigInteger(Number num) {
+		return (num == null ? null : (num instanceof BigInteger ? (BigInteger)num : BigInteger.valueOf(num.longValue())));
 	}
 
 	/**

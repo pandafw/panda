@@ -26,7 +26,7 @@ public class NumbersTest {
 		assertTrue("toInt(String) 1 failed", Numbers.toInt("12345") == 12345);
 		assertTrue("toInt(String) 2 failed", Numbers.toInt("abc") == null);
 		assertTrue("toInt(empty) failed", Numbers.toInt("") == null);
-		assertTrue("toInt(null) failed", Numbers.toInt(null) == null);
+		assertTrue("toInt(null) failed", Numbers.toInt((String)null) == null);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class NumbersTest {
 		assertTrue("toLong(Long.MAX_VALUE) failed", Numbers.toLong(Long.MAX_VALUE + "") == Long.MAX_VALUE);
 		assertTrue("toLong(Long.MIN_VALUE) failed", Numbers.toLong(Long.MIN_VALUE + "") == Long.MIN_VALUE);
 		assertTrue("toLong(empty) failed", Numbers.toLong("") == null);
-		assertTrue("toLong(null) failed", Numbers.toLong(null) == null);
+		assertTrue("toLong(null) failed", Numbers.toLong((String)null) == null);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class NumbersTest {
 		assertTrue("toFloat(Float.MAX_VALUE) failed", Numbers.toFloat(Float.MAX_VALUE + "") == Float.MAX_VALUE);
 		assertTrue("toFloat(Float.MIN_VALUE) failed", Numbers.toFloat(Float.MIN_VALUE + "") == Float.MIN_VALUE);
 		assertTrue("toFloat(empty) failed", Numbers.toFloat("") == null);
-		assertTrue("toFloat(null) failed", Numbers.toFloat(null) == null);
+		assertTrue("toFloat(null) failed", Numbers.toFloat((String)null) == null);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class NumbersTest {
 		assertTrue("toDouble(Double.MAX_VALUE) failed", Numbers.toDouble(Double.MAX_VALUE + "") == Double.MAX_VALUE);
 		assertTrue("toDouble(Double.MIN_VALUE) failed", Numbers.toDouble(Double.MIN_VALUE + "") == Double.MIN_VALUE);
 		assertTrue("toDouble(empty) failed", Numbers.toDouble("") == null);
-		assertTrue("toDouble(null) failed", Numbers.toDouble(null) == null);
+		assertTrue("toDouble(null) failed", Numbers.toDouble((String)null) == null);
 	}
 
 	/**
