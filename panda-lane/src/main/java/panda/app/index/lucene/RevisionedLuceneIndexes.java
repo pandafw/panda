@@ -1,4 +1,4 @@
-package panda.app.index;
+package panda.app.index.lucene;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import org.apache.lucene.store.FSDirectory;
 
 import panda.app.AppConstants;
 import panda.app.constant.SET;
+import panda.app.index.RevisionedIndexes;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
 import panda.idx.Indexer;

@@ -4,7 +4,8 @@ import java.util.Set;
 
 import panda.app.auth.AppAuthenticator;
 import panda.app.auth.UserAuthenticateProcessor;
-import panda.app.index.RevisionedLuceneIndexes;
+import panda.app.index.gae.RevisionedGaeIndexes;
+import panda.app.index.lucene.RevisionedLuceneIndexes;
 import panda.app.task.gae.GaeTaskExecutor;
 import panda.app.task.gae.GaeTaskScheduler;
 import panda.app.task.java.JavaTaskExecutor;
@@ -51,6 +52,7 @@ public class AppIocLoader extends MvcComboIocLoader {
 			if (Systems.IS_OS_APPENGINE) {
 				ss.add(GaeTaskExecutor.class);
 				ss.add(GaeTaskScheduler.class);
+				ss.add(RevisionedGaeIndexes.class);
 			}
 			else {
 				ss.add(JavaTaskExecutor.class);

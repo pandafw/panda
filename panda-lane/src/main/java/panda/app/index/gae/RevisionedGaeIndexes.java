@@ -1,4 +1,4 @@
-package panda.app.index;
+package panda.app.index.gae;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 
+import panda.app.index.RevisionedIndexes;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
 import panda.idx.Indexer;

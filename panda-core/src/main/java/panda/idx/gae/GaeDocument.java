@@ -153,6 +153,10 @@ public class GaeDocument implements IDocument {
 		return ns;
 	}
 
+	/**
+	 * @param name field name
+	 * @param num must be less than or equal to 2147483647.000000
+	 */
 	@Override
 	public void addNumberField(String name, Number num) {
 		if (num == null) {
