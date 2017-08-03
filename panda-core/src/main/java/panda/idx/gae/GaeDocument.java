@@ -3,6 +3,7 @@ package panda.idx.gae;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
@@ -13,13 +14,20 @@ public class GaeDocument implements IDocument {
 	protected Document.Builder db;
 	protected Document doc;
 
-	public GaeDocument() {
-		this(null);
+	public GaeDocument(Locale locale) {
+		this(locale, null);
 	}
 
 	public GaeDocument(Document doc) {
+		this(null, doc);
+	}
+
+	public GaeDocument(Locale locale, Document doc) {
 		this.doc = doc;
 		this.db = Document.newBuilder();
+		if (locale != null) {
+			this.db.setLocale(locale);
+		}
 	}
 
 	/**

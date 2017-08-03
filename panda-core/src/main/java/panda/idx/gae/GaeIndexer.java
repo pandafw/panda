@@ -3,6 +3,7 @@ package panda.idx.gae;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
@@ -21,14 +22,30 @@ import panda.idx.Indexer;
 public class GaeIndexer implements Indexer {
 	protected String name;
 	protected Index index;
+	protected Locale locale;
 
 	/**
 	 * @param name name
 	 * @param index gae index
 	 */
-	public GaeIndexer(String name, Index index) {
+	public GaeIndexer(String name, Index index, Locale locale) {
 		this.name = name;
 		this.index = index;
+		this.locale = locale;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 
 	/**
@@ -45,7 +62,7 @@ public class GaeIndexer implements Indexer {
 
 	@Override
 	public IDocument newDocument() {
-		return new GaeDocument();
+		return new GaeDocument(locale);
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class LuceneQuery extends IQuery {
 		else {
 			Sort sort = new Sort(sorts.toArray(new SortField[0]));
 			try {
-				collector = TopFieldCollector.create(sort, (int)(getLimit()), true, false, false);
+				collector = TopFieldCollector.create(sort, (int)(getStart() + getLimit()), true, false, false);
 			}
 			catch (IOException e) {
 				throw new IndexException("Failed to create TopFieldCollector: " + sorts);

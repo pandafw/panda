@@ -2,6 +2,7 @@ package panda.app.index.gae;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.google.appengine.api.search.GetIndexesRequest;
@@ -11,6 +12,7 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 
+import panda.app.AppConstants;
 import panda.app.index.RevisionedIndexes;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
@@ -118,6 +120,12 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	}
 
 	//-------------------------------------------------------------------
+	@IocInject(value=AppConstants.GAE_SEARCH_LOCALE, required=false)
+	public void setLocale(Locale locale) {
+		super.setLocale(locale);
+	}
+	
+	//-------------------------------------------------------------------
 	@Override
 	public Indexer newIndexer() {
 		return newIndexer(DEFAULT);
@@ -129,7 +137,7 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 			long v = getLatestRevision(name) + 1;
 			IndexSpec is = IndexSpec.newBuilder().setName(name + "." + v).build();
 			Index index = SearchServiceFactory.getSearchService().getIndex(is);
-			GaeIndexer gi = new GaeIndexer(name, index);
+			GaeIndexer gi = new GaeIndexer(name, index, getLocale());
 			return gi;
 		}
 		catch (Exception e) {

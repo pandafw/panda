@@ -1,6 +1,7 @@
 package panda.idx.gae;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.google.appengine.api.search.Index;
@@ -15,6 +16,7 @@ public class GaeIndexes implements Indexes {
 	public static final String DEFAULT = "default";
 	
 	protected Map<String, GaeIndexer> indexes;
+	protected Locale locale;
 
 	public GaeIndexes() {
 		indexes = new HashMap<String, GaeIndexer>();
@@ -30,6 +32,20 @@ public class GaeIndexes implements Indexes {
 		return index;
 	}
 	
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
 	@Override
 	public synchronized Indexer getIndexer() {
 		return getIndexer(DEFAULT);
@@ -39,7 +55,7 @@ public class GaeIndexes implements Indexes {
 	public synchronized Indexer getIndexer(String name) {
 		GaeIndexer gi = indexes.get(name);
 		if (gi == null) {
-			gi = new GaeIndexer(name, getIndex(name));
+			gi = new GaeIndexer(name, getIndex(name), locale);
 			indexes.put(name, gi);
 		}
 		return gi;
