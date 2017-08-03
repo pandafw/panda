@@ -73,7 +73,7 @@
 						}
 					}
 					if (git != null) {
-						var s = run("git --git-dir=" + git.getPath() + " rev-list --all --count");
+						var s = run("git --git-dir=" + git.getPath() + " rev-list --count HEAD");
 						if (s != "") {
 							r = s;
 						}
