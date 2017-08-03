@@ -183,7 +183,7 @@ public class DaoFilePool implements FilePool {
 				dao.select(fdq, new DataHandler<DaoFileData>() {
 					private int len = 0;
 		
-					public boolean handle(DaoFileData data) throws Exception {
+					public boolean handle(DaoFileData data) {
 						System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
 						len += data.getData().length;
 						return true;

@@ -48,7 +48,7 @@ public class CollectionDataHandler<T> implements DataHandler<T> {
 	 * @return false to stop the process
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean handle(T data) throws Exception {
+	public boolean handle(T data) {
 		Object v = bh.getPropertyValue(data, prop);
 		coll.add(v);
 
