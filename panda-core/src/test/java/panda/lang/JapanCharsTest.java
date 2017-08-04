@@ -5,14 +5,12 @@ import org.junit.Test;
 
 import panda.lang.JapanChars;
 
-import junit.framework.TestCase;
-
 /**
  * test class for AsiaCharUtils
  */
-public class JapanCharsTest extends TestCase {
+public class JapanCharsTest {
 	private void print(String name, String zen, String han) {
-		Assert.assertEquals(zen.length(), han.length());
+		Assert.assertEquals(name, zen.length(), han.length());
 		
 		System.out.println(Strings.center(name, 40, '/'));
 		for (int i = 0; i < zen.length(); i++) {
@@ -26,73 +24,79 @@ public class JapanCharsTest extends TestCase {
 	
 	@Test
 	public void printLine() {
-		System.out.println("HANKAKU_ASCII:   " + JapanChars.HANKAKU_ASCII);
-		System.out.println("ZENKAKU_ASCII:   " + JapanChars.ZENKAKU_ASCII);
-		System.out.println("HANKAKU_NORMAL:  " + JapanChars.HANKAKU_NORMAL);
-		System.out.println("ZENKAKU_NORMAL:  " + JapanChars.ZENKAKU_NORMAL);
-		System.out.println("HANKAKU_KASATAHA:" + JapanChars.HANKAKU_KASATAHA);
-		System.out.println("ZENKAKU_KASATAHA:" + JapanChars.ZENKAKU_KASATAHA);
-		System.out.println("ZENKAKU_GAZADABA:" + JapanChars.ZENKAKU_GAZADABA);
-		System.out.println("HANKAKU_WAOU:    " + JapanChars.HANKAKU_WAOU);
-		System.out.println("ZENKAKU_WAOU:    " + JapanChars.ZENKAKU_WAOU);
-		System.out.println("ZENKAKU_VAVO:    " + JapanChars.ZENKAKU_VAVO);
-		System.out.println("HANKAKU_HANDAKU: " + JapanChars.HANKAKU_HANDAKU);
-		System.out.println("ZENKAKU_HANDAKU: " + JapanChars.ZENKAKU_HANDAKU);
+		System.out.println("HANKAKU_DIGIT:    " + JapanChars.HANKAKU_DIGIT);
+		System.out.println("ZENKAKU_DIGIT:    " + JapanChars.ZENKAKU_DIGIT);
+		System.out.println("HANKAKU_LETTER:   " + JapanChars.HANKAKU_LETTER);
+		System.out.println("ZENKAKU_LETTER:   " + JapanChars.ZENKAKU_LETTER);
+		System.out.println("HANKAKU_SYMBOL:   " + JapanChars.HANKAKU_SYMBOL);
+		System.out.println("ZENKAKU_SYMBOL:   " + JapanChars.ZENKAKU_SYMBOL);
+		System.out.println("HANKAKU_ASCII:    " + JapanChars.HANKAKU_ASCII);
+		System.out.println("ZENKAKU_ASCII:    " + JapanChars.ZENKAKU_ASCII);
+		System.out.println("HANKAKU_MARK:     " + JapanChars.HANKAKU_MARK);
+		System.out.println("ZENKAKU_MARK:     " + JapanChars.ZENKAKU_MARK);
+		System.out.println("HANKAKU_AYATU:    " + JapanChars.HANKAKU_AYATU);
+		System.out.println("ZENKAKU_AYATU:    " + JapanChars.ZENKAKU_AYATU);
+		System.out.println("HANKAKU_ANAMAYARA:" + JapanChars.HANKAKU_ANAMAYARA);
+		System.out.println("ZENKAKU_ANAMAYARA:" + JapanChars.ZENKAKU_ANAMAYARA);
+		System.out.println("HANKAKU_KASATAHA: " + JapanChars.HANKAKU_KASATAHA);
+		System.out.println("ZENKAKU_KASATAHA: " + JapanChars.ZENKAKU_KASATAHA);
+		System.out.println("ZENKAKU_GAZADABA: " + JapanChars.ZENKAKU_GAZADABA);
+		System.out.println("HANKAKU_WAOU:     " + JapanChars.HANKAKU_WAOU);
+		System.out.println("ZENKAKU_WAOU:     " + JapanChars.ZENKAKU_WAOU);
+		System.out.println("ZENKAKU_VAVO:     " + JapanChars.ZENKAKU_VAVO);
+		System.out.println("HANKAKU_HANDAKU:  " + JapanChars.HANKAKU_HANDAKU);
+		System.out.println("ZENKAKU_HANDAKU:  " + JapanChars.ZENKAKU_HANDAKU);
 	}
 
 	@Test
-	public void printPair() {
-		print("HANKAKU_ASCII:   ", JapanChars.ZENKAKU_ASCII, JapanChars.HANKAKU_ASCII);
-		print("HANKAKU_NORMAL:  ", JapanChars.ZENKAKU_NORMAL, JapanChars.HANKAKU_NORMAL);
-		print("HANKAKU_KASATAHA:", JapanChars.ZENKAKU_KASATAHA, JapanChars.HANKAKU_KASATAHA);
-		print("HANKAKU_WAOU:    ", JapanChars.ZENKAKU_WAOU, JapanChars.HANKAKU_WAOU);
-		print("HANKAKU_HANDAKU: ", JapanChars.ZENKAKU_HANDAKU, JapanChars.HANKAKU_HANDAKU);
+	public void testPair() {
+		print("HANKAKU_DIGIT:    ", JapanChars.ZENKAKU_DIGIT, JapanChars.HANKAKU_DIGIT);
+		print("HANKAKU_LETTER:   ", JapanChars.ZENKAKU_LETTER, JapanChars.HANKAKU_LETTER);
+		print("HANKAKU_SYMBOL:   ", JapanChars.ZENKAKU_SYMBOL, JapanChars.HANKAKU_SYMBOL);
+		print("HANKAKU_ASCII:    ", JapanChars.ZENKAKU_ASCII, JapanChars.HANKAKU_ASCII);
+		print("HANKAKU_MARK:     ", JapanChars.ZENKAKU_MARK, JapanChars.HANKAKU_MARK);
+		print("HANKAKU_AYATU:    ", JapanChars.ZENKAKU_AYATU, JapanChars.HANKAKU_AYATU);
+		print("HANKAKU_ANAMAYARA:", JapanChars.ZENKAKU_ANAMAYARA, JapanChars.HANKAKU_ANAMAYARA);
+		print("HANKAKU_KASATAHA: ", JapanChars.ZENKAKU_KASATAHA, JapanChars.HANKAKU_KASATAHA);
+		print("HANKAKU_WAOU:     ", JapanChars.ZENKAKU_WAOU, JapanChars.HANKAKU_WAOU);
+		print("HANKAKU_HANDAKU:  ", JapanChars.ZENKAKU_HANDAKU, JapanChars.HANKAKU_HANDAKU);
 	}
 	
-	@Test
-	public void testLength() {
-		Assert.assertEquals(JapanChars.HANKAKU_ASCII.length(), JapanChars.ZENKAKU_ASCII.length());
-		Assert.assertEquals(JapanChars.HANKAKU_NORMAL.length(), JapanChars.ZENKAKU_NORMAL.length());
-		Assert.assertEquals(JapanChars.HANKAKU_KASATAHA.length(), JapanChars.ZENKAKU_KASATAHA.length());
-		Assert.assertEquals(JapanChars.HANKAKU_KASATAHA.length(), JapanChars.ZENKAKU_GAZADABA.length());
-		Assert.assertEquals(JapanChars.HANKAKU_WAOU.length(), JapanChars.ZENKAKU_WAOU.length());
-		Assert.assertEquals(JapanChars.HANKAKU_WAOU.length(), JapanChars.ZENKAKU_VAVO.length());
-		Assert.assertEquals(JapanChars.HANKAKU_DAKU.length(), JapanChars.ZENKAKU_DAKU.length());
-		Assert.assertEquals(JapanChars.HANKAKU_HANDAKU.length(), JapanChars.ZENKAKU_HANDAKU.length());
-		Assert.assertEquals(JapanChars.HANKAKU.length(), JapanChars.ZENKAKU.length());
-	}
-
 	/**
 	 * test method: IsHankakuKatakanaChar
 	 */
+	@Test
 	public void testIsHankakuKatakanaChar() {
-		assertFalse(JapanChars.isHankakuKatakana('a'));
-		assertTrue(JapanChars.isHankakuKatakana('\uff88'));
+		Assert.assertFalse(JapanChars.isHankakuKatakana('a'));
+		Assert.assertTrue(JapanChars.isHankakuKatakana('\uff88'));
 	}
 
 	/**
 	 * test method: isZenkakuKatakanaChar
 	 */
+	@Test
 	public void testIsZenkakuKatakanaChar() {
-		assertFalse(JapanChars.isZenkakuKatakana('a'));
-		assertTrue(JapanChars.isZenkakuKatakana('\u30a1'));
+		Assert.assertFalse(JapanChars.isZenkakuKatakana('a'));
+		Assert.assertTrue(JapanChars.isZenkakuKatakana('\u30a1'));
 	}
 
 	/**
 	 * test method: isHankakuChar
 	 */
+	@Test
 	public void testIsHankakuChar() {
-		assertFalse(JapanChars.isHankaku('\250'));
-		assertFalse(JapanChars.isHankaku('\u300b'));
-		assertTrue(JapanChars.isHankaku('a'));
+		Assert.assertFalse(JapanChars.isHankaku('\250'));
+		Assert.assertFalse(JapanChars.isHankaku('\u300b'));
+		Assert.assertTrue(JapanChars.isHankaku('a'));
 	}
 
 	/**
 	 * test method: isZenkakuChar
 	 */
+	@Test
 	public void testIsZenkakuChar() {
-		assertFalse(JapanChars.isZenkaku('a'));
-		assertTrue(JapanChars.isZenkaku('\u3011'));
+		Assert.assertFalse(JapanChars.isZenkaku('a'));
+		Assert.assertTrue(JapanChars.isZenkaku('\u3011'));
 	}
 
 }

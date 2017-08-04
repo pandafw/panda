@@ -6,84 +6,134 @@ package panda.lang;
  */
 public abstract class JapanChars {
 	/** 
+	 * 半角数字: 0123456789
+	 */
+	public static final String HANKAKU_DIGIT = "0123456789";
+
+	/**
+	 * 全角数字: ０１２３４５６７８９
+	 */
+	public static final String ZENKAKU_DIGIT = "０１２３４５６７８９";
+
+	/**
+	 * 半角英字: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+	 */
+	public static final String HANKAKU_LETTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+	/**
+	 * 全角英字: ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
+	 */
+	public static final String ZENKAKU_LETTER = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ";
+	
+	/**
+	 * 半角記号: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+	 */
+	public static final String HANKAKU_SYMBOL = " !\"\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+
+	/**
+	 * 全角記号: ！“”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～
+	 */
+	public static final String ZENKAKU_SYMBOL = "　！”“＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝～";
+
+	/** 
 	 * 半角: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 	 */
-	protected static final String HANKAKU_ASCII = " !\"\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	public static final String HANKAKU_ASCII = HANKAKU_DIGIT + HANKAKU_LETTER + HANKAKU_SYMBOL;
 
 	/** 
 	 * 全角: ！“”＃＄％＆’（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［￥］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～
 	 */
-	protected static final String ZENKAKU_ASCII = "　！”“＃＄％＆’（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［￥］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～";
+	public static final String ZENKAKU_ASCII = ZENKAKU_DIGIT + ZENKAKU_LETTER + ZENKAKU_SYMBOL;
 
-	/** 
-	 * 半角: ｡｢｣､･ｧｨｩｪｫｬｭｮｯｰｱｲｴｵﾅﾆﾇﾈﾉﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾝﾞﾟ  
+	/**
+	 * 半角: ｡｢｣､･ﾞﾟ
 	 */
-	protected static final String HANKAKU_NORMAL = "｡｢｣､･ｧｨｩｪｫｬｭｮｯｰｱｲｴｵﾅﾆﾇﾈﾉﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾝﾞﾟ";
+	public static final String HANKAKU_MARK = "｡｢｣､･ﾞﾟ";
 
-	/** 
-	 * 全角: 。「」、・ァィゥェォャュョッーアイエオナニヌネノマミムメモヤユヨラリルレロン゛゜　
+	/**
+	 * 全角: 。「」、・゛゜
 	 */
-	protected static final String ZENKAKU_NORMAL = "。「」、・ァィゥェォャュョッーアイエオナニヌネノマミムメモヤユヨラリルレロン゛゜";
+	public static final String ZENKAKU_MARK = "。「」、・゛゜";
+
+	/**
+	 * 半角: ｧｨｩｪｫｬｭｮｯｰ
+	 */
+	public static final String HANKAKU_AYATU = "ｧｨｩｪｫｬｭｮｯｰ";
+
+	/**
+	 * 全角: ァィゥェォャュョッー
+	 */
+	public static final String ZENKAKU_AYATU = "ァィゥェォャュョッー";
+
+	/**
+	 * 半角: ｱｲｴｵﾅﾆﾇﾈﾉﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾝ
+	 */
+	public static final String HANKAKU_ANAMAYARA = "ｱｲｴｵﾅﾆﾇﾈﾉﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾝ";
+
+	/**
+	 * 全角: アイエオナニヌネノマミムメモヤユヨラリルレロン
+	 */
+	public static final String ZENKAKU_ANAMAYARA = "アイエオナニヌネノマミムメモヤユヨラリルレロン";
 
 	/** 
 	 * 半角　かさたは　行: ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎｳ
 	 */
-	protected static final String HANKAKU_KASATAHA = "ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎｳ";
+	public static final String HANKAKU_KASATAHA = "ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎｳ";
 
 	/** 
 	 * 全角　かさたは　行: カキクケコサシスセソタチツテトハヒフヘホウ
 	 */
-	protected static final String ZENKAKU_KASATAHA = "カキクケコサシスセソタチツテトハヒフヘホウ";
+	public static final String ZENKAKU_KASATAHA = "カキクケコサシスセソタチツテトハヒフヘホウ";
 	
 	/** 
 	 * 全角　がざだば　行: ガギグゲゴザジズゼゾダヂヅデドバビブベボヴ
 	 */
-	protected static final String ZENKAKU_GAZADABA = "ガギグゲゴザジズゼゾダヂヅデドバビブベボヴ";
+	public static final String ZENKAKU_GAZADABA = "ガギグゲゴザジズゼゾダヂヅデドバビブベボヴ";
 
 	/** 
 	 * 半角　わ　行: ﾜｦ
 	 */
-	protected static final String HANKAKU_WAOU = "ﾜｦ";
+	public static final String HANKAKU_WAOU = "ﾜｦ";
 
 	/** 
 	 * 全角　わ　行: ワヲ
 	 */
-	protected static final String ZENKAKU_WAOU = "ワヲ";
+	public static final String ZENKAKU_WAOU = "ワヲ";
 	
 	/** 
 	 * 全角　わ　行: ヷヺ
 	 */
-	protected static final String ZENKAKU_VAVO = "ヷヺ";
+	public static final String ZENKAKU_VAVO = "ヷヺ";
 
 	/** 
 	 * 半角　濁文字: ｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾊﾋﾌﾍﾎｳﾜｦ
 	 */
-	protected static final String HANKAKU_DAKU = HANKAKU_KASATAHA + HANKAKU_WAOU;
+	public static final String HANKAKU_DAKU = HANKAKU_KASATAHA + HANKAKU_WAOU;
 	
 	/**
 	 * 全角　濁文字: ガギグゲゴザジズゼゾダヂヅデドバビブベボヴヷヺ
 	 */
-	protected static final String ZENKAKU_DAKU = ZENKAKU_GAZADABA + ZENKAKU_VAVO;
+	public static final String ZENKAKU_DAKU = ZENKAKU_GAZADABA + ZENKAKU_VAVO;
 
 	/** 
 	 * 半角　半濁文字: ﾊﾋﾌﾍﾎ
 	 */
-	protected static final String HANKAKU_HANDAKU = "ﾊﾋﾌﾍﾎ";
+	public static final String HANKAKU_HANDAKU = "ﾊﾋﾌﾍﾎ";
 	
 	/**
 	 * 全角　半濁文字: パピプペポ
 	 */
-	protected static final String ZENKAKU_HANDAKU = "パピプペポ";
+	public static final String ZENKAKU_HANDAKU = "パピプペポ";
 
 	/** 
 	 * 半角
 	 */
-	protected static final String HANKAKU = HANKAKU_ASCII + HANKAKU_NORMAL + HANKAKU_KASATAHA + HANKAKU_WAOU;
+	public static final String HANKAKU = HANKAKU_ASCII + HANKAKU_MARK + HANKAKU_AYATU + HANKAKU_ANAMAYARA + HANKAKU_KASATAHA + HANKAKU_WAOU;
 
 	/** 
 	 * 全角
 	 */
-	protected static final String ZENKAKU = ZENKAKU_ASCII + ZENKAKU_NORMAL + ZENKAKU_KASATAHA + ZENKAKU_WAOU;
+	public static final String ZENKAKU = ZENKAKU_ASCII + ZENKAKU_MARK + ZENKAKU_AYATU + ZENKAKU_ANAMAYARA + ZENKAKU_KASATAHA + ZENKAKU_WAOU;
 
 	public static char toZenkaku(char c) {
 		int i = HANKAKU.indexOf(c);
