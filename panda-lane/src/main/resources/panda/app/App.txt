@@ -1,11 +1,12 @@
-#########################################################################
-# application resource
-#########################################################################
-#ui
+#-----------------------------------------------------------------------------
+# ui
+#-----------------------------------------------------------------------------
 ui-input-confirm=false
 ui-list-countable=true
 
-#pager - limit
+#-----------------------------------------------------------------------------
+# list
+#-----------------------------------------------------------------------------
 #list-items-default=20
 #list-items-maximum=300
 
@@ -16,7 +17,9 @@ ui-list-countable=true
 #expo_xxx-items-maximum=10000
 
 
-#navigation
+#-----------------------------------------------------------------------------
+# navigation
+#-----------------------------------------------------------------------------
 navi-top=TOP
 navi-home=Home
 
@@ -120,20 +123,26 @@ icon-super-sqlexec=fa fa-strikethrough
 icon-super-sysdump=fa fa-bug
 
 
-#label
+#-----------------------------------------------------------------------------
+# label
+#-----------------------------------------------------------------------------
 lbl-page-size=Page Size:
 lbl-sort=Sort:
 lbl-attachment=Attachment
 lbl-search-result=Search result of "${top.key}"
 
 
-#d.statusMap
+#-----------------------------------------------------------------------------
+# d.statusMap
+#-----------------------------------------------------------------------------
 data-statusMap=\
 	"A": "Enbaled", \
 	"D": "Disabled"
 
 
-#locale
+#-----------------------------------------------------------------------------
+# locale
+#-----------------------------------------------------------------------------
 locale-languages=\
 	"*": "*", \
 	"en": "English", \
@@ -146,15 +155,26 @@ locale-countries=\
 	"CN": "China"
 
 
+#-----------------------------------------------------------------------------
+# calendar
+#-----------------------------------------------------------------------------
+calendar-weekdays=[ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
+calendar-weekdays-abbr=[ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ]
+calendar-weekdays-min=[ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ]
+calendar-months=[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
+calendar-months-abbr=[ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
-#title
+
+#-----------------------------------------------------------------------------
+# title
+#-----------------------------------------------------------------------------
 title-reload=${top} - Reload
 title-reloadex=${top} - Reload complete
 
 
-#--------------------------------------------
+#-----------------------------------------------------------------------------
 # Generic Action
-#--------------------------------------------
+#-----------------------------------------------------------------------------
 btn-pdf-print=PDF Print
 btn-pdf-list_print=PDF Print
 
@@ -254,7 +274,9 @@ title-brecover=${top.title} - Recover
 title-btrash=${top.title} - Delete
 title-bupdate=${top.title} - Update
 
-#step
+#-----------------------------------------------------------------------------
+# step
+#-----------------------------------------------------------------------------
 step-list=List
 step-list_print=List
 step-list_pdf=List
@@ -311,7 +333,9 @@ step-bupdate=Update
 step-bupdate-confirm=Confirm
 step-bupdate-success=Complete
 
-#action messages
+#-----------------------------------------------------------------------------
+# action messages
+#-----------------------------------------------------------------------------
 action-confirm-add=Are you sure to add this data?
 action-failed-add=System error occurred. Failed to add this data.${top}
 action-success-add=The data is successfully added.
@@ -373,10 +397,14 @@ action-confirm-bupdate=Are you sure to update these ${top} items?
 action-failed-bupdate=System error occurred. Failed to update these data.${top}
 action-success-bupdate=${top} items have been successfully updaated.
 
-#confirm messages
+#-----------------------------------------------------------------------------
+# confirm messages
+#-----------------------------------------------------------------------------
 confirm-data-overwrite=Are you sure to overwrite this data?
 
-#warn messages
+#-----------------------------------------------------------------------------
+# warn messages
+#-----------------------------------------------------------------------------
 warn-data-changed-on-delete=The data is updated by other user at ${top}.\nAre you sure to delete the data?
 warn-data-changed-on-edit=The data is updated by other user at ${top}.\nAre you sure to overwrite the data?
 warn-data-changed-on-trash=The data is updated by other user at ${top}.\nAre you sure to delete the data?
