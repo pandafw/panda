@@ -6,7 +6,7 @@ import panda.app.constant.AUTH;
 import panda.app.util.AppResourceBundleLoader;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.annotation.At;
-import panda.mvc.util.DefaultTextProvider;
+import panda.mvc.util.ActionTextProvider;
 
 @At("/task/resource/load")
 @Auth({ AUTH.LOCAL, AUTH.SUPER })
@@ -23,7 +23,7 @@ public class ResourceLoadAction extends BaseLoadAction {
 	
 	@Override
 	protected boolean doLoad() throws Exception {
-		((DefaultTextProvider)getText()).clearResourceBundlesCache();
+		((ActionTextProvider)getText()).clearResourceBundlesCache();
 
 		arbLoader.reload();
 		

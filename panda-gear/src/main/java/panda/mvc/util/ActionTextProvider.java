@@ -25,8 +25,8 @@ import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 
 @IocBean(type=TextProvider.class, scope=Scope.REQUEST)
-public class DefaultTextProvider implements TextProvider {
-	private final static Log log = Logs.getLog(DefaultTextProvider.class);
+public class ActionTextProvider implements TextProvider {
+	private final static Log log = Logs.getLog(ActionTextProvider.class);
 
 	private List<String> defaultResources;
 	
@@ -39,7 +39,7 @@ public class DefaultTextProvider implements TextProvider {
 	@IocInject
 	private ResourceLoader resourceLoader;
 
-	public DefaultTextProvider() {
+	public ActionTextProvider() {
 		beans = Beans.i();
 	}
 
