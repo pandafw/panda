@@ -1,6 +1,7 @@
 package panda.lang.crypto;
 
 import java.io.IOException;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -11,11 +12,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+import javax.crypto.spec.SecretKeySpec;
+
 import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.codec.binary.Base64;
 
-public class KeyPairs {
+public class Keys {
 	public final static String BEGIN_PRIVATE_KEY = "-----BEGIN PRIVATE KEY-----";
 	public final static String END_PRIVATE_KEY = "-----END PRIVATE KEY-----";
 	public final static String BEGIN_RSA_PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----";
@@ -31,6 +34,14 @@ public class KeyPairs {
 	public final static String RSA = "RSA";
 	public final static String EC = "EC";
 
+	public static SecretKeySpec secretKeySpec(String key, String algorithm) {
+		return secretKeySpec(Strings.getBytesUtf8(key), algorithm);
+	}
+
+	public static SecretKeySpec secretKeySpec(byte[] key, String algorithm) {
+		return new SecretKeySpec(key, algorithm);
+	}
+	
 	public static KeyPair create(String provider, String algorithm, int keysize) {
 		try {
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm, provider);
@@ -56,7 +67,7 @@ public class KeyPairs {
 	}
 
 	/**
-	 * get RSA Private Key from raw data
+	 * get Private Key from raw data
 	 *
 	 * @param data raw data
 	 * @return the PrivateKey
@@ -65,41 +76,41 @@ public class KeyPairs {
 	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
 	 *             factory to produce a public key.
 	 */
-	public static PrivateKey getRSAPrivateKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PrivateKey getPrivateKey(byte[] data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(data);
-		KeyFactory kf = KeyFactory.getInstance(RSA);
+		KeyFactory kf = KeyFactory.getInstance(algorithm);
 		return kf.generatePrivate(spec);
 	}
 
 	/**
-	 * get RSA Private Key from base64 string
+	 * get Private Key from base64 string
 	 *
 	 * @param data base64 string
-	 * @return rsa private key
+	 * @return private key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
 	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
 	 *             factory to produce a public key.
 	 */
-	public static PrivateKey getRSAPrivateKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PrivateKey getPrivateKey(String data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PRIVATE_KEY), END_PRIVATE_KEY));
 		byte[] decoded = Base64.decodeBase64(encoded);
-		return getRSAPrivateKey(decoded);
+		return getPrivateKey(decoded, algorithm);
 	}
 
 	/**
-	 * get RSA Public Key from raw data
+	 * get Public Key from raw data
 	 *
 	 * @param data raw data
-	 * @return rsa public key
+	 * @return public key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
 	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
 	 *             factory to produce a public key.
 	 */
-	public static PublicKey getRSAPublicKey(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PublicKey getPublicKey(byte[] data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		X509EncodedKeySpec spec = new X509EncodedKeySpec(data);
-		KeyFactory kf = KeyFactory.getInstance(RSA);
+		KeyFactory kf = KeyFactory.getInstance(algorithm);
 		return kf.generatePublic(spec);
 	}
 
@@ -107,16 +118,26 @@ public class KeyPairs {
 	 * get RSA Private Key from base64 string
 	 *
 	 * @param data base64 string
-	 * @return rsa public key
+	 * @return public key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
 	 * @throws InvalidKeySpecException if the given key specification is inappropriate for this key
 	 *             factory to produce a public key.
 	 */
-	public static PublicKey getRSAPublicKey(String data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static PublicKey getPublicKey(String data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		String encoded = Strings.strip(Strings.remove(Strings.remove(data, BEGIN_PUBLIC_KEY), END_PUBLIC_KEY));
 		byte[] decoded = Base64.decodeBase64(encoded);
-		return getRSAPublicKey(decoded);
+		return getPublicKey(decoded, algorithm);
+	}
+	
+	public static Key parseKey(String data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		if (Strings.startsWith(data, BEGIN_PUBLIC_KEY)) {
+			return getPublicKey(data, algorithm);
+		}
+		if (Strings.startsWith(data, BEGIN_PRIVATE_KEY)) {
+			return getPrivateKey(data, algorithm);
+		}
+		throw new IllegalArgumentException("Invalid Key: " + data);
 	}
 	
 	public static void toPem(PrivateKey key, Appendable out) throws IOException {

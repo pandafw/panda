@@ -1,8 +1,12 @@
 package panda.tool.crypto;
 
+import java.security.Key;
+
 import panda.args.Argument;
 import panda.args.Option;
-import panda.lang.crypto.Encrypts;
+import panda.lang.crypto.Ciphers;
+import panda.lang.crypto.Cryptor;
+import panda.lang.crypto.Keys;
 import panda.tool.AbstractCommandTool;
 
 
@@ -20,8 +24,8 @@ public class Decrypt extends AbstractCommandTool {
 	//---------------------------------------------------------------------------------------
 	// properties
 	//---------------------------------------------------------------------------------------
-	private String key = Encrypts.DEFAULT_KEY;
-	private String transform = Encrypts.DEFAULT_CIPHER;
+	private String key = Ciphers.AES;
+	private String algorithm = "== Panda Java ==";
 	private String[] args;
 	
 	/**
@@ -33,11 +37,11 @@ public class Decrypt extends AbstractCommandTool {
 	}
 
 	/**
-	 * @param transform the transform to set
+	 * @param algorithm the algorithm to set
 	 */
-	@Option(opt='t', option="transform", arg="ALGO", usage="Encrypt transform (default is AES)")
-	public void setTransform(String transform) {
-		this.transform = transform;
+	@Option(opt='t', option="algorithm", arg="ALGO", usage="Encrypt algorithm (default is AES)")
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
 	}
 
 	/**
@@ -52,8 +56,10 @@ public class Decrypt extends AbstractCommandTool {
 	 * execute
 	 */
 	public void execute() {
+		Key key = Keys.secretKeySpec(this.key, algorithm);
+		Cryptor c = new Cryptor(algorithm, key, key);
 		for (String s : args) {
-			System.out.println(s + " -> " + Encrypts.decrypt(s, key, transform));
+			System.out.println(s + " -> " + c.decrypt(s));
 		}
 	}
 }

@@ -9,10 +9,14 @@ public interface MvcConstants extends IocConstants {
 	
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
 	
-	/* Cookie Secret */
-	public static final String COOKIE_SECRET_KEY = "panda.cookie.secret.key";
+	/* Crypto */
+	public static final String CRYPTO_ALGORITHM = "panda.crypto.algorithm";
+
+	public static final String CRYPTO_KEY_SECRET = "panda.crypto.key.secret";
 	
-	public static final String COOKIE_SECRET_CIPHER = "panda.cookie.secret.cipher";
+	public static final String CRYPTO_KEY_ENCODE = "panda.crypto.key.encode";
+
+	public static final String CRYPTO_KEY_DECODE = "panda.crypto.key.decode";
 
 	/* File POOL */
 	public static final String FILEPOOL_MAXAGE = "panda.filepool.maxage";

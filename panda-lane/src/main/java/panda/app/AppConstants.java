@@ -87,10 +87,6 @@ public interface AppConstants extends MvcConstants {
 
 	public static final String AUTH_TICKET_COOKIE_AGE = "panda.auth.ticket.cookie.age";
 
-	public static final String AUTH_SECRET_KEY = "panda.auth.secret.key";
-	
-	public static final String AUTH_SECRET_CIPHER = "panda.auth.secret.cipher";
-
 	//------------------------------------------------
 	// The lucene settings
 	//

@@ -1,18 +1,9 @@
 package panda.lang.crypto;
 
-import java.security.Key;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
-import panda.lang.Exceptions;
-import panda.lang.Strings;
-import panda.lang.codec.binary.Base64;
-
 /**
  * https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
  */
-public class Encrypts {
+public class Ciphers {
 	//------------------------------------------------------------------------------
 	public static final String AES = "AES";
 	public static final String Blowfish = "Blowfish";
@@ -52,62 +43,4 @@ public class Encrypts {
 	public static final String RSA_ECB_OAEPWITHSHA1_AND_MGF1PADDING    = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 	/** RSA/ECB/OAEPWithSHA-256AndMGF1Padding (1024, 2048) */
 	public static final String RSA_ECB_OAEPWITHSHA256_AND_MGF1PADDING  = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
-	
-	//------------------------------------------------------------------------------
-	public static final String DEFAULT_CIPHER = Encrypts.AES;
-	public static final String DEFAULT_KEY = "== Panda Java ==";
-
-	//------------------------------------------------------------------------------
-	public static byte[] keyBytes(String key) {
-		return Strings.getBytesUtf8(key);
-	}
-	
-	public static String encrypt(String text, String key, String algorithm) {
-		byte[] t = Strings.getBytesUtf8(text);
-		byte[] k = keyBytes(key);
-		byte[] encrypted = encrypt(t, k, algorithm);
-		return Strings.newStringUtf8(Base64.encodeBase64(encrypted, false, false));
-	}
-
-	public static String decrypt(String text, String key, String algorithm) {
-		byte[] t = Base64.decodeBase64(text);
-		byte[] k = keyBytes(key);
-		byte[] decrypted = decrypt(t, k, algorithm);
-		return Strings.newStringUtf8(decrypted);
-	}
-
-	//------------------------------------------------------------------------------
-	public static byte[] encrypt(byte[] data, Key key, String algorithm) {
-		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-			byte[] encrypted = cipher.doFinal(data);
-			return encrypted;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-	}
-
-	public static byte[] decrypt(byte[] data, Key key, String algorithm) {
-		try {
-			Cipher cipher = Cipher.getInstance(algorithm);
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] decrypted = cipher.doFinal(data);
-			return decrypted;
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-	}
-	
-	public static byte[] encrypt(byte[] data, byte[] key, String algorithm) {
-		SecretKeySpec skey = new SecretKeySpec(key, algorithm);
-		return encrypt(data, skey, algorithm);
-	}
-
-	public static byte[] decrypt(byte[] data, byte[] key, String algorithm) {
-		SecretKeySpec skey = new SecretKeySpec(key, algorithm);
-		return decrypt(data, skey, algorithm);
-	}
 }

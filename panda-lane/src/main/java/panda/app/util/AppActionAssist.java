@@ -384,7 +384,8 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 * @param pager pager
 	 */
 	public void saveLimitParams(Pager pager) {
-		getState().saveState("limit", pager.getLimit());
+		if (pager.getLimit() != null) {
+			getState().saveState("limit", pager.getLimit().toString());
+		}
 	}
-	
 }

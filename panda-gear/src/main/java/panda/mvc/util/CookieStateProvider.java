@@ -6,9 +6,8 @@ import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
-import panda.lang.crypto.Encrypts;
+import panda.lang.crypto.Cryptor;
 import panda.mvc.ActionContext;
-import panda.mvc.MvcConstants;
 import panda.servlet.HttpServlets;
 
 
@@ -25,18 +24,9 @@ public class CookieStateProvider implements StateProvider {
 	@IocInject
 	protected ActionContext context;
 
-	/**
-	 * encrypt key
-	 */
-	@IocInject(value=MvcConstants.COOKIE_SECRET_KEY, required=false)
-	protected String secret = Encrypts.DEFAULT_KEY;
+	@IocInject
+	protected Cryptor cryptor;
 	
-	/**
-	 * encrypt cipher
-	 */
-	@IocInject(value=MvcConstants.COOKIE_SECRET_CIPHER, required=false)
-	protected String cipher = Encrypts.DEFAULT_CIPHER;
-
 	private String prefix;
 	private String domain;
 	private String path;
@@ -138,9 +128,9 @@ public class CookieStateProvider implements StateProvider {
 	 * @param value value
 	 * @return encoded value
 	 */
-	private String encodeValue(Object value) {
+	private String encodeValue(String value) {
 		try {
-			return value == null ? Strings.EMPTY : Encrypts.encrypt(value.toString(), secret, cipher);
+			return value == null ? Strings.EMPTY : cryptor.encrypt(value);
 		}
 		catch (Exception e) {
 			return Strings.EMPTY;
@@ -152,9 +142,9 @@ public class CookieStateProvider implements StateProvider {
 	 * @param value value
 	 * @return encoded value
 	 */
-	private String decodeValue(Object value) {
+	private String decodeValue(String value) {
 		try {
-			return value == null ? Strings.EMPTY : Encrypts.decrypt(value.toString(), secret, cipher);
+			return value == null ? Strings.EMPTY : cryptor.decrypt(value);
 		}
 		catch (Exception e) {
 			return Strings.EMPTY;
@@ -166,7 +156,8 @@ public class CookieStateProvider implements StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	public StateProvider saveState(String name, Object value) {
+	@Override
+	public StateProvider saveState(String name, String value) {
 		String key = getKey(name);
 		String val = encodeValue(value);
 
@@ -205,7 +196,8 @@ public class CookieStateProvider implements StateProvider {
 	 * @param name state name
 	 * @return state value 
 	 */
-	public Object loadState(String name) {
+	@Override
+	public String loadState(String name) {
 		String key = getKey(name);
 		Cookie c = HttpServlets.getCookie(context.getRequest(), key);
 		if (c != null) {

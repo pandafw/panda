@@ -28,9 +28,7 @@ import panda.mvc.bean.Pager;
 import panda.mvc.bean.Queryer;
 import panda.mvc.bean.QueryerEx;
 import panda.mvc.bean.Sorter;
-import panda.mvc.util.CookieStateProvider;
 import panda.mvc.util.MvcURLBuilder;
-import panda.mvc.util.SessionStateProvider;
 import panda.mvc.util.StateProvider;
 import panda.mvc.view.CsvView;
 import panda.mvc.view.TsvView;
@@ -319,21 +317,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			return new Queryer();
 		}
 		
-		if (sp instanceof SessionStateProvider) {
-			Queryer qr = (Queryer)sp.loadState(STATE_LIST);
-			return qr == null ? new Queryer() : qr;
-		}
-		
-		if (sp instanceof CookieStateProvider) {
-			String qs = (String)sp.loadState(STATE_LIST);
-			if (Strings.isNotBlank(qs)) {
-				Map params = URLHelper.parseQueryString(qs);
-				removeRedundantParams(params);
-				if (Collections.isNotEmpty(params)) {
-					String url = MvcURLBuilder.buildURL(context, params);
-					HttpServlets.sendRedirect(getResponse(), url);
-					return null;
-				}
+		String qs = (String)sp.loadState(STATE_LIST);
+		if (Strings.isNotBlank(qs)) {
+			Map params = URLHelper.parseQueryString(qs);
+			removeRedundantParams(params);
+			if (Collections.isNotEmpty(params)) {
+				String url = MvcURLBuilder.buildURL(context, params);
+				HttpServlets.sendRedirect(getResponse(), url);
+				return null;
 			}
 		}
 
@@ -349,12 +340,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			return;
 		}
 		
-		if (sp instanceof SessionStateProvider) {
-			sp.saveState(STATE_LIST, qr);
-		}
-		else if (sp instanceof CookieStateProvider) {
-			sp.saveState(STATE_LIST, getListParametersString(qr));
-		}
+		sp.saveState(STATE_LIST, getListParametersString(qr));
 	}
 
 	/**

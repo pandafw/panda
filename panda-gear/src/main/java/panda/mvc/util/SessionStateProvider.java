@@ -69,7 +69,8 @@ public class SessionStateProvider implements StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	public StateProvider saveState(String name, Object value) {
+	@Override
+	public StateProvider saveState(String name, String value) {
 		getSession().put(getKey(name), value);
 		return this;
 	}
@@ -79,7 +80,8 @@ public class SessionStateProvider implements StateProvider {
 	 * @param name state name
 	 * @return state value 
 	 */
-	public Object loadState(String name) {
-		return getSession().get(getKey(name));
+	@Override
+	public String loadState(String name) {
+		return (String)getSession().get(getKey(name));
 	}
 }

@@ -10,12 +10,12 @@ public interface StateProvider {
 	 * @param name state name
 	 * @param value state value
 	 */
-	StateProvider saveState(String name, Object value);
+	StateProvider saveState(String name, String value);
 	
 	/**
 	 * Load state
 	 * @param name state name
 	 * @return state value 
 	 */
-	Object loadState(String name);
+	String loadState(String name);
 }

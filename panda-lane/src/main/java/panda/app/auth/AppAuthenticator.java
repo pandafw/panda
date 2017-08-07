@@ -17,7 +17,7 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
-import panda.lang.crypto.Encrypts;
+import panda.lang.crypto.Cryptor;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
@@ -30,6 +30,9 @@ public class AppAuthenticator extends UserAuthenticator {
 
 	public static final String DEFAULT_COOKIE_NAME = "WW_TICKET";
 	
+	@IocInject
+	protected Cryptor cryptor;
+	
 	/**
 	 * secure user session time (s): 30m 
 	 */
@@ -41,18 +44,6 @@ public class AppAuthenticator extends UserAuthenticator {
 	 */
 	@IocInject(value=AppConstants.AUTH_USER_TYPE, required=false)
 	protected Class userType;
-
-	/**
-	 * encrypt key
-	 */
-	@IocInject(value=AppConstants.AUTH_SECRET_KEY, required=false)
-	protected String secret = Encrypts.DEFAULT_KEY;
-	
-	/**
-	 * encrypt cipher
-	 */
-	@IocInject(value=AppConstants.AUTH_SECRET_CIPHER, required=false)
-	protected String cipher = Encrypts.DEFAULT_CIPHER;
 
 	/**
 	 * ticket parameter name
@@ -360,11 +351,11 @@ public class AppAuthenticator extends UserAuthenticator {
 
 	//------------------------------------------------------
 	public String encrypt(String value) {
-		return Encrypts.encrypt(value, secret, cipher);
+		return cryptor.encrypt(value);
 	}
 	
 	public String decrypt(String value) {
-		return Encrypts.decrypt(value, secret, cipher);
+		return cryptor.decrypt(value);
 	}
 	
 	protected String serializeUser(Object user) {
