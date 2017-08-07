@@ -7,6 +7,8 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Strings;
 import panda.lang.crypto.Cryptor;
+import panda.log.Log;
+import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.servlet.HttpServlets;
 
@@ -16,6 +18,8 @@ import panda.servlet.HttpServlets;
  */
 @IocBean(type=StateProvider.class, scope=Scope.REQUEST)
 public class CookieStateProvider implements StateProvider {
+	private final static Log log = Logs.getLog(CookieStateProvider.class);
+	
 	private final static String DOMAIN = "cookie-state-domain";
 	private final static String PATH = "cookie-state-path";
 	private final static String MAXAGE = "cookie-state-maxage";
@@ -27,7 +31,6 @@ public class CookieStateProvider implements StateProvider {
 	@IocInject
 	protected Cryptor cryptor;
 	
-	private String prefix;
 	private String domain;
 	private String path;
 	private Integer maxAge;
@@ -37,14 +40,6 @@ public class CookieStateProvider implements StateProvider {
 	 * Constructor
 	 */
 	public CookieStateProvider() {
-	}
-	
-	/**
-	 * Constructor
-	 * @param prefix prefix
-	 */
-	public CookieStateProvider(String prefix) {
-		setPrefix(prefix);
 	}
 	
 	/**
@@ -58,20 +53,6 @@ public class CookieStateProvider implements StateProvider {
 		secure = textProvider.getTextAsBoolean(SECURE);
 	}
 	
-	/**
-	 * @return the prefix
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
-	/**
-	 * @param prefix the prefix to set
-	 */
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-
 	/**
 	 * @return the maxAge
 	 */
@@ -115,25 +96,21 @@ public class CookieStateProvider implements StateProvider {
 	}
 
 	/**
-	 * get key name
-	 * @param name state name
-	 * @return key name
-	 */
-	private String getKey(String name) {
-		return prefix == null ? name : prefix + name;
-	}
-
-	/**
 	 * encode value 
 	 * @param value value
 	 * @return encoded value
 	 */
 	private String encodeValue(String value) {
+		if (Strings.isEmpty(value)) {
+			return value;
+		}
+		
 		try {
-			return value == null ? Strings.EMPTY : cryptor.encrypt(value);
+			return cryptor.encrypt(value);
 		}
 		catch (Exception e) {
-			return Strings.EMPTY;
+			log.error("Failed to encrypt:" + value);
+			return null;
 		}
 	}
 	
@@ -143,11 +120,16 @@ public class CookieStateProvider implements StateProvider {
 	 * @return encoded value
 	 */
 	private String decodeValue(String value) {
+		if (Strings.isEmpty(value)) {
+			return value;
+		}
+		
 		try {
-			return value == null ? Strings.EMPTY : cryptor.decrypt(value);
+			return cryptor.decrypt(value);
 		}
 		catch (Exception e) {
-			return Strings.EMPTY;
+			log.warn("Failed to decrypt:" + value);
+			return null;
 		}
 	}
 
@@ -155,13 +137,16 @@ public class CookieStateProvider implements StateProvider {
 	 * Save state
 	 * @param name state name
 	 * @param value state value
+	 * @return true if state value saved successfully
 	 */
 	@Override
-	public StateProvider saveState(String name, String value) {
-		String key = getKey(name);
+	public boolean saveState(String name, String value) {
 		String val = encodeValue(value);
+		if (val == null) {
+			return false;
+		}
 
-		Cookie c = new Cookie(key, val);
+		Cookie c = new Cookie(name, val);
 
 		if (domain != null) {
 			c.setDomain(domain);
@@ -187,8 +172,7 @@ public class CookieStateProvider implements StateProvider {
 		}
 		
 		context.getResponse().addCookie(c);
-		
-		return this;
+		return true;
 	}
 	
 	/**
@@ -198,8 +182,7 @@ public class CookieStateProvider implements StateProvider {
 	 */
 	@Override
 	public String loadState(String name) {
-		String key = getKey(name);
-		Cookie c = HttpServlets.getCookie(context.getRequest(), key);
+		Cookie c = HttpServlets.getCookie(context.getRequest(), name);
 		if (c != null) {
 			return decodeValue(c.getValue());
 		}

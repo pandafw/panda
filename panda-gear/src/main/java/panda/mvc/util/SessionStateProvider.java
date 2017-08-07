@@ -1,78 +1,45 @@
 package panda.mvc.util;
 
-import java.util.Map;
-
+import panda.ioc.Scope;
+import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.mvc.ActionContext;
-import panda.servlet.HttpSessionMap;
 
 
 /**
  * SessionStateProvider
  */
+@IocBean(type=StateProvider.class, scope=Scope.REQUEST)
 public class SessionStateProvider implements StateProvider {
-	private Map<String, Object> session;
-	private String prefix;
+	@IocInject
+	protected ActionContext context;
 	
 	/**
 	 * Constructor
 	 */
 	public SessionStateProvider() {
-		this(null);
 	}
 	
 	/**
-	 * Constructor
-	 * @param prefix prefix
-	 */
-	public SessionStateProvider(String prefix) {
-		this.prefix = prefix;
-	}
-	
-	/**
-	 * @param context the context to set
-	 */
-	@IocInject
-	public void setActionContext(ActionContext context) {
-		this.session = new HttpSessionMap(context.getRequest());
-	}
-
-	/**
-	 * @return the prefix
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
-	/**
-	 * @param prefix the prefix to set
-	 */
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-
-	/**
-	 * get key name
+	 * make session key
 	 * @param name state name
-	 * @return key name
+	 * @return session key name (path/name)
 	 */
-	private String getKey(String name) {
-		return prefix == null ? name : prefix + name;
-	}
-
-	private Map<String, Object> getSession() {
-		return session;
+	private String toKey(String name) {
+		return context.getPath() + '/' + name;
 	}
 
 	/**
 	 * Save state
 	 * @param name state name
 	 * @param value state value
+	 * @return true if state value saved successfully
 	 */
 	@Override
-	public StateProvider saveState(String name, String value) {
-		getSession().put(getKey(name), value);
-		return this;
+	public boolean saveState(String name, String value) {
+		String key = toKey(name);
+		context.getSession().setAttribute(key, value);
+		return true;
 	}
 	
 	/**
@@ -82,6 +49,7 @@ public class SessionStateProvider implements StateProvider {
 	 */
 	@Override
 	public String loadState(String name) {
-		return (String)getSession().get(getKey(name));
+		String key = toKey(name);
+		return (String)context.getSession().getAttribute(key);
 	}
 }

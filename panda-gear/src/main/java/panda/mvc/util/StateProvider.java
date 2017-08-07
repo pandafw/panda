@@ -9,8 +9,9 @@ public interface StateProvider {
 	 * Save state
 	 * @param name state name
 	 * @param value state value
+	 * @return true if state value saved successfully
 	 */
-	StateProvider saveState(String name, String value);
+	boolean saveState(String name, String value);
 	
 	/**
 	 * Load state
