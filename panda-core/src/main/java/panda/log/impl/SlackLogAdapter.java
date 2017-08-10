@@ -19,6 +19,7 @@ import panda.log.LogEvent;
 import panda.log.LogFormat;
 import panda.log.LogFormat.SimpleLogFormat;
 import panda.log.LogLevel;
+import panda.log.LogLog;
 import panda.net.http.HttpHeader;
 import panda.net.http.HttpMethod;
 import panda.net.http.Https;
@@ -149,8 +150,8 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			dos.flush();
 			hos.flush();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Throwable e) {
+			LogLog.error("Error occured while sending slack notification.", e);
 		}
 		finally {
 			Streams.safeClose(hos);
@@ -161,8 +162,8 @@ public class SlackLogAdapter extends AbstractLogAdapter {
 			his = conn.getInputStream();
 			Streams.safeDrain(his, readTimeout);
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Throwable e) {
+			LogLog.error("Error occured while getting slack response.", e);
 		}
 		finally {
 			Streams.safeClose(his);

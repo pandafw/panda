@@ -14,6 +14,7 @@ import java.util.Map;
 import panda.io.FileNames;
 import panda.io.Files;
 import panda.io.Streams;
+import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.time.FastDateFormat;
@@ -178,13 +179,18 @@ public class FileLogAdapter extends AbstractLogAdapter {
 
 	protected synchronized void write(LogEvent event) {
 		try {
-			String msg = format.format(event);
-
 			rollOver();
+
+			String msg = format.format(event);
 			writer.write(msg);
+			
+			if (event.getError() != null) {
+				msg = Exceptions.getStackTrace(event.getError());
+				writer.write(msg);
+			}
+
 			if (bufferSize == -1) {
 				writer.flush();
-				
 			}
 		}
 		catch (Throwable e) {

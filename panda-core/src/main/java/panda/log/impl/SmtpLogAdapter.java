@@ -189,10 +189,7 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 			email.setTextMsg(message);
 			client.send(email);
 		}
-		catch (EmailException e) {
-			LogLog.error("Error occured while sending e-mail notification.", e);
-		}
-		catch (RuntimeException e) {
+		catch (Throwable e) {
 			LogLog.error("Error occured while sending e-mail notification.", e);
 		}
 	}
