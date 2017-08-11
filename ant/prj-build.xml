@@ -112,6 +112,7 @@
 			destdir="${out.dir}/javadoc"
 			encoding="UTF-8" docencoding="UTF-8" charset="UTF-8" locale="en_US"
 			use="true" splitindex="true" useexternalfile="yes"
+			additionalparam="-quiet"
 			windowTitle="${prj.title} ${prj.version} API"
 			doctitle="${prj.title} ${prj.version} API"
 			footer="&lt;a href=&quot;${prj.url}&quot;&gt;${prj.url}&lt;/a&gt;"
