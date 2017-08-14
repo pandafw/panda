@@ -24,7 +24,7 @@ public abstract class Randoms {
 	}
 
 	public static int randInt(int min, int max) {
-		return rand.nextInt(max - min) + min;
+		return rand.nextInt(max + 1 - min) + min;
 	}
 	
 	public static short randShort() {
@@ -36,7 +36,7 @@ public abstract class Randoms {
 	}
 
 	public static short randShort(short min, short max) {
-		return (short)(rand.nextInt(max - min) + min);
+		return (short)(rand.nextInt(max + 1 - min) + min);
 	}
 	
 	public static long randLong() {
