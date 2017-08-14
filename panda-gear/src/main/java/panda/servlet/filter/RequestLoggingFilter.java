@@ -129,8 +129,7 @@ public class RequestLoggingFilter implements Filter {
 	/**
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
 
@@ -149,12 +148,20 @@ public class RequestLoggingFilter implements Filter {
 			chain.doFilter(req, frw == null ? res : frw);
 		}
 		catch (Throwable e) {
-			HttpServlets.logException(request, e);
-			if (frw != null) {
-				frw.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			try {
+				if (HttpServlets.logException(request, e)) {
+					if (frw != null) {
+						frw.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					}
+					else {
+						((HttpServletResponse)res).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					}
+				}
 			}
-			else {
-				((HttpServletResponse)res).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			catch (Throwable e2) {
+				if (log.isWarnEnabled()) {
+					log.warn(e.getMessage(), e);
+				}
 			}
 		}
 		finally {

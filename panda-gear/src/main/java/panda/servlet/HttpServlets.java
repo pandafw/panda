@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -305,30 +306,70 @@ public class HttpServlets {
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
 	
-	public static void logException(HttpServletRequest request, Throwable e) {
-		logException(request, e, null);
+	private static Set<String> CLIENT_ABORT_ERRORS = Arrays.toSet("org.apache.catalina.connector.ClientAbortException");
+	
+	public static void addClientAbortErrors(String ... args) {
+		CLIENT_ABORT_ERRORS.addAll(Arrays.asList(args));
 	}
 	
-	private static String[] EXCLUDE_ERRORS = { "org.apache.catalina.connector.ClientAbortException" };
+	public static boolean isClientAbortError(Throwable e) {
+		return CLIENT_ABORT_ERRORS.contains(e.getClass().getName());
+	}
 	
-	public static void logException(HttpServletRequest request, Throwable e, String msg) {
-		if (Arrays.contains(EXCLUDE_ERRORS, e.getClass().getName())) {
-			return;
+	/**
+	 * @param request http servlet request
+	 * @param e error
+	 * @return false if e is a ClientAbortException
+	 */
+	public static boolean logException(HttpServletRequest request, Throwable e) {
+		return logException(request, e, null);
+	}
+	
+	/**
+	 * @param request http servlet request
+	 * @param e error
+	 * @param msg error message
+	 * @return false if e is a ClientAbortException
+	 */
+	public static boolean logException(HttpServletRequest request, Throwable e, String msg) {
+		Log log = Logs.getLog(e.getClass());
+
+		boolean r = !isClientAbortError(e);
+		if (r) {
+			if (!log.isErrorEnabled()) {
+				return r;
+			}
+		}
+		else {
+			if (!log.isWarnEnabled()) {
+				return r;
+			}
 		}
 		
-		Log log = Logs.getLog(e.getClass());
 
 		StringBuilder sb = new StringBuilder();
 		if (Strings.isNotEmpty(msg)) {
 			sb.append(msg).append(Streams.LINE_SEPARATOR);
 		}
 		if (request != null) {
-			HttpServlets.dumpRequestTrace(request, sb);
+			if (r) {
+				dumpRequestTrace(request, sb);
+			}
+			else {
+				dumpRequestPath(request, sb);
+			}
 			sb.append(Streams.LINE_SEPARATOR);
 		}
-		sb.append(Exceptions.getStackTrace(e));
-
-		log.error(sb.toString());
+		if (r) {
+			sb.append(Exceptions.getStackTrace(e));
+			log.error(sb.toString());
+		}
+		else {
+			sb.append(e.getClass().getName() + ": " + e.getMessage());
+			log.warn(sb.toString());
+		}
+		
+		return r;
 	}
 	
 	/**
