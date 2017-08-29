@@ -10,7 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.InflaterInputStream;
 
 import panda.io.Files;
@@ -173,6 +175,15 @@ public class HttpResponse implements Closeable {
 			}
 		}
 		return cs;
+	}
+
+	public Map<String, Cookie> getCookieMap() {
+		Map<String, Cookie> cm = new HashMap<String, Cookie>();
+		List<Cookie> cs = getCookies();
+		for (Cookie c : cs) {
+			cm.put(c.getName(), c);
+		}
+		return cm;
 	}
 
 	public List<Cookie> getCookies() {

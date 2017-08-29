@@ -237,6 +237,17 @@ public class HttpRequest {
 		return this;
 	}
 	
+	public Map<String, Cookie> getCookieMap() {
+		Map<String, Cookie> cs = new HashMap<String, Cookie>();
+		String hc = getHeader().getString(HttpHeader.COOKIE);
+		String[] ss = Strings.split(hc, ';');
+		for (String s : ss) {
+			Cookie c = new Cookie(s);
+			cs.put(c.getName(), c);
+		}
+		return cs;
+	}
+	
 	public List<Cookie> getCookies() {
 		List<Cookie> cs = new ArrayList<Cookie>();
 		String hc = getHeader().getString(HttpHeader.COOKIE);
