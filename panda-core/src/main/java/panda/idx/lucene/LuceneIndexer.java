@@ -31,14 +31,13 @@ import panda.idx.IndexException;
 import panda.idx.Indexer;
 import panda.io.Files;
 import panda.io.Streams;
-import panda.lang.Classes;
 import panda.lang.Exceptions;
 
 public class LuceneIndexer implements Indexer {
 	protected String name;
 	protected Version version;
 	protected Directory directory;
-	protected Class<? extends Analyzer> analyzer;
+	protected Analyzer analyzer;
 	protected IndexReader indexReader;
 	protected IndexWriter indexWriter;
 
@@ -56,15 +55,15 @@ public class LuceneIndexer implements Indexer {
 	 * @param version lucene version
 	 */
 	public LuceneIndexer(String name, Directory directory, Version version) {
-		this(name, directory, StandardAnalyzer.class, version);
+		this(name, directory, new StandardAnalyzer(), version);
 	}
 
 	/**
 	 * @param name name
 	 * @param directory lucene directory
-	 * @param analyzer analyzer class
+	 * @param analyzer lucene analyzer
 	 */
-	public LuceneIndexer(String name, Directory directory, Class<? extends Analyzer> analyzer) {
+	public LuceneIndexer(String name, Directory directory, Analyzer analyzer) {
 		this(name, directory, analyzer, Version.LATEST);
 	}
 
@@ -72,9 +71,9 @@ public class LuceneIndexer implements Indexer {
 	 * @param name name
 	 * @param directory lucene directory
 	 * @param version lucene version
-	 * @param analyzer analyzer class
+	 * @param analyzer lucene analyzer
 	 */
-	public LuceneIndexer(String name, Directory directory, Class<? extends Analyzer> analyzer, Version version) {
+	public LuceneIndexer(String name, Directory directory, Analyzer analyzer, Version version) {
 		this.name = name;
 		this.directory = directory;
 		this.analyzer = analyzer;
@@ -99,7 +98,7 @@ public class LuceneIndexer implements Indexer {
 	 * @return the analyzer
 	 */
 	public Analyzer getAnalyzer() {
-		return Classes.born(analyzer);
+		return analyzer;
 	}
 
 	/**

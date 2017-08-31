@@ -141,14 +141,8 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	protected Class<? extends Analyzer> getAnalyzerType(String name) {
-		try {
-			return (Class<? extends Analyzer>)Classes.getClass(analyzer);
-		}
-		catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+	protected Analyzer getAnalyzer(String name) {
+		return (Analyzer)Classes.born(analyzer);
 	}
 	
 	//-------------------------------------------------------------------
@@ -167,7 +161,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 			
 			Directory directory = FSDirectory.open(Paths.get(root, folder));
 
-			LuceneIndexer li = new LuceneIndexer(name, directory, getAnalyzerType(name));
+			LuceneIndexer li = new LuceneIndexer(name, directory, getAnalyzer(name));
 			
 			return li;
 		}

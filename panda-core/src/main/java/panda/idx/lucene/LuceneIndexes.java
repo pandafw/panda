@@ -33,8 +33,8 @@ public class LuceneIndexes implements Indexes {
 		}
 	}
 	
-	protected Class<? extends Analyzer> getAnalyzerType(String name) {
-		return StandardAnalyzer.class;
+	protected Analyzer getAnalyzer(String name) {
+		return new StandardAnalyzer();
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class LuceneIndexes implements Indexes {
 	public synchronized Indexer getIndexer(String name) {
 		LuceneIndexer li = indexes.get(name);
 		if (li == null) {
-			li = new LuceneIndexer(name, getDirectory(name), getAnalyzerType(name));
+			li = new LuceneIndexer(name, getDirectory(name), getAnalyzer(name));
 			indexes.put(name, li);
 		}
 		return li;
