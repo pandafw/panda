@@ -7,7 +7,7 @@ import panda.mvc.ActionContext;
  * Base class for string field validators.
  */
 public abstract class AbstractStringValidator extends AbstractValidator {
-	private boolean empty = false;
+	private boolean empty = true;
 	private boolean strip = false;
 	private boolean trim = false;
 
@@ -70,7 +70,7 @@ public abstract class AbstractStringValidator extends AbstractValidator {
 	@Override
 	protected boolean validateValue(ActionContext ac, Object value) {
 		if (value == null) {
-			return true;
+			return empty;
 		}
 		
 		String str = trimFieldValue(value);
