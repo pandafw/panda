@@ -494,7 +494,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 */
 	protected T prepareData(T data) {
 		if (data == null) {
-			data = Classes.born(type);
+			data = Classes.born(getType());
 		}
 		return data;
 	}
@@ -860,7 +860,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */
 	protected boolean checkNotNulls(T data) {
-		List<EntityField> efs = EntityHelper.checkNotNulls(entity, data);
+		List<EntityField> efs = EntityHelper.checkNotNulls(getEntity(), data);
 		if (Collections.isNotEmpty(efs)) {
 			addDataRequiredError(data, efs);
 			return false;
@@ -874,7 +874,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeysOnInsert(T data) {
-		EntityField eid = entity.getIdentity(); 
+		EntityField eid = getEntity().getIdentity(); 
 		if (eid == null) {
 			if (!EntityHelper.hasPrimaryKeyValues(getEntity(), data)) {
 				addDataIncorrectError(data, getEntity().getPrimaryKeys());
@@ -883,12 +883,12 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 		else {
 			Object id = eid.getValue(data);
-			if (!dao.isValidIdentity(id)) {
+			if (!getDao().isValidIdentity(id)) {
 				return true;
 			}
 		}
 		
-		if (!dao.exists(entity, data)) {
+		if (!getDao().exists(getEntity(), data)) {
 			addDataDuplicateError(data, getEntity().getPrimaryKeys());
 			return false;
 		}

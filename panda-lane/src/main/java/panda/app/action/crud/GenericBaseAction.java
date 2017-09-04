@@ -25,21 +25,21 @@ public abstract class GenericBaseAction<T> extends AbstractAction {
 	//------------------------------------------------------------
 	// scenario & apimode
 	//------------------------------------------------------------
-	protected String scenario;
-	protected boolean apimode;
+	private String scenario;
+	private boolean apimode;
 
 	//------------------------------------------------------------
 	// entity properties
 	//------------------------------------------------------------
-	protected Class<T> type;
-	protected Entity<T> entity;
-	protected Dao dao;
+	private Class<T> type;
+	private Entity<T> entity;
+	private Dao dao;
 	
 	//------------------------------------------------------------
 	// display fields (display & update)
 	//------------------------------------------------------------
-	protected Set<String> displayFields;
-	protected Map<String, String> mappingFields;
+	private Set<String> displayFields;
+	private Map<String, String> mappingFields;
 	
 	/**
 	 * Constructor 

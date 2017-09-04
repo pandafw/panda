@@ -444,7 +444,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 
 	protected T castData(Map<String, Object> values) {
 		context.clearCastErrors();
-		return Mvcs.castValueWithErrors(context, values, type, null);
+		return Mvcs.castValueWithErrors(context, values, getType(), null);
 	}
 
 	protected void trimData(T data) {
@@ -469,7 +469,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @param data data
 	 */
 	protected void checkNotNulls(T data) {
-		List<EntityField> efs = EntityHelper.checkNotNulls(entity, data);
+		List<EntityField> efs = EntityHelper.checkNotNulls(getEntity(), data);
 		if (Collections.isNotEmpty(efs)) {
 			throw new IllegalArgumentException(dataIncorrectError(data, efs));
 		}
@@ -532,12 +532,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 		else {
 			Object id = eid.getValue(data);
-			if (!dao.isValidIdentity(id)) {
+			if (!getDao().isValidIdentity(id)) {
 				return;
 			}
 		}
 		
-		if (dao.exists(getEntity(), data)) {
+		if (getDao().exists(getEntity(), data)) {
 			throw new IllegalArgumentException(dataDuplicateError(data, getEntity().getPrimaryKeys()));
 		}
 	}

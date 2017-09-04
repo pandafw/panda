@@ -337,7 +337,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 				String v = (vs == null || i >= vs.length) ? null : vs[i];
 				o.put(k, v);
 			}
-			T d = Castors.scast(o, type);
+			T d = Castors.scast(o, getType());
 			ds.add(d);
 		}
 
