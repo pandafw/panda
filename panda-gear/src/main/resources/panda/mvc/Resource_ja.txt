@@ -187,7 +187,7 @@ validation-string-length=${\
 (top.minLength == top.maxLength ? (top.minLength + "桁") : (top.minLength + "~" + top.maxLength + "桁以内")) : \
 (top.minLength != null ? (top.minLength + "桁以上") : \
 (top.maxLength != null ? (top.maxLength + "桁以下") : ""))\
-}の文字を入力してください。（入力文字数: ${top.length}）
+}の文字を入力してください。${top.length != null ? ("（入力文字数: " + top.length + "）") : ""}
 validation-telno=正しい電話番号を入力してください。（例: 03-1234-5678）
 validation-url=正しいURLを入力してください。（例: http://www.domain.com）
 validation-zenkakustring=全角文字を入力してください。
