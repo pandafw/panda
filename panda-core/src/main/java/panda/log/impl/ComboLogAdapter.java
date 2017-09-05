@@ -67,6 +67,23 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 
 	@Override
 	protected Log getLogger(String name) {
+		if (adapters.isEmpty()) {
+			return new ConsoleLog(this.logs, name, threshold);
+		}
+		
+		if (adapters.size() == 1) {
+			for (LogAdapter a : adapters.values()) {
+				try {
+					return a.getLog(name);
+				}
+				catch (Throwable e) {
+					LogLog.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
+				}
+			}
+			return new ConsoleLog(this.logs, name, threshold);
+		}
+		
+		boolean error = false;
 		List<Log> logs = new ArrayList<Log>(adapters.size());
 		for (LogAdapter a : adapters.values()) {
 			try {
@@ -76,12 +93,17 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 				}
 			}
 			catch (Throwable e) {
+				error = true;
 				LogLog.error("Failed to getLogger(" + a.getClass() + ", " + name + ")");
 			}
 		}
 
 		if (logs.isEmpty()) {
-			return new ConsoleLog(this.logs, name, threshold);
+			if (error) {
+				// return a console log if some error occurs
+				return new ConsoleLog(this.logs, name, threshold);
+			}
+			return NopLog.INSTANCE;
 		}
 
 		if (logs.size() == 1) {
@@ -94,7 +116,7 @@ public class ComboLogAdapter extends AbstractLogAdapter {
 	private static class ComboLog extends AbstractLog {
 		private Log[] logs;
 		
-		ComboLog(Logs p, String name, LogLevel level,  Log[] logs) {
+		ComboLog(Logs p, String name, LogLevel level, Log[] logs) {
 			super(p, name, level);
 			this.logs = logs;
 		}

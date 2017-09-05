@@ -17,6 +17,7 @@ import panda.lang.Systems;
 import panda.log.ex.JavaLogRedirectHandler;
 import panda.log.impl.ComboLogAdapter;
 import panda.log.impl.ConsoleLog;
+import panda.log.impl.ConsoleLogAdapter;
 
 public final class Logs {
 	public static final String CONFIG = "panda-logging.properties";
@@ -145,7 +146,7 @@ public final class Logs {
 	private Map<String, LogConfig> configs = new HashMap<String, LogConfig>();
 
 	protected Logs() {
-		adapter = new ComboLogAdapter();
+		adapter = new ConsoleLogAdapter();
 	}
 
 	protected Logs(Map<String, String> props) {
@@ -199,6 +200,7 @@ public final class Logs {
 			}
 			catch (Throwable e) {
 				LogLog.error("Failed to create LogAdapter: " + impl);
+				adapter = new ComboLogAdapter();
 			}
 		}
 		adapter.init(this, name, props);
