@@ -176,6 +176,9 @@ tbody.p-lv-tbody > tr > th.p-lv-actions, tbody.p-lv-tbody > tr > td.p-lv-actions
 .table-responsive > .p-lv-table th, .table-responsive > .p-lv-table td {
 	white-space: nowrap;
 }
+.print .table-responsive > .p-lv-table th, .print .table-responsive > .p-lv-table td {
+	white-space: normal;
+}
 
 thead.p-lv-chead > tr > th,
 thead.p-lv-chead > tr > th.p-lv-actions,
