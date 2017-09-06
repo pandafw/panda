@@ -1,7 +1,7 @@
 package panda.dao.sql.expert;
 
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -16,9 +16,7 @@ import panda.log.Logs;
 public class SqlExpertConfig {
 	private static Log log = Logs.getLog(SqlExpertConfig.class);
 	
-	private Map<String, Class<? extends SqlExpert>> experts;
-
-	private Map<Pattern, Class<? extends SqlExpert>> _experts;
+	private Map<Pattern, Class<? extends SqlExpert>> experts;
 
 	private Map<String, Object> options;
 
@@ -46,19 +44,9 @@ public class SqlExpertConfig {
 		this.options = options;
 	}
 
-	public SqlExpert getExpert(String str) {
-		Class<? extends SqlExpert> type = experts.get(str);
-		try {
-			return type.newInstance();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public SqlExpert matchExpert(String dbName) {
-		for (Entry<Pattern, Class<? extends SqlExpert>> entry : _experts.entrySet()) {
-			if (entry.getKey().matcher(dbName).find()) {
+	public SqlExpert matchExpert(String name) {
+		for (Entry<Pattern, Class<? extends SqlExpert>> entry : experts.entrySet()) {
+			if (entry.getKey().matcher(name).find()) {
 				try {
 					return entry.getValue().newInstance();
 				}
@@ -70,14 +58,13 @@ public class SqlExpertConfig {
 		return null;
 	}
 
-	public Map<String, Class<? extends SqlExpert>> getExperts() {
+	public Map<Pattern, Class<? extends SqlExpert>> getExperts() {
 		return experts;
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setExperts(Map<String, Object> exps) {
-		this.experts = new HashMap<String, Class<? extends SqlExpert>>();
-		this._experts = new HashMap<Pattern, Class<? extends SqlExpert>>();
+		experts = new LinkedHashMap<Pattern, Class<? extends SqlExpert>>();
 		for (Entry<String, Object> entry : exps.entrySet()) {
 			Class<? extends SqlExpert> clazz;
 			try {
@@ -90,8 +77,7 @@ public class SqlExpertConfig {
 
 			// case insensitive
 			Pattern pattern = Pattern.compile(entry.getKey(), Pattern.DOTALL & Pattern.CASE_INSENSITIVE);
-			experts.put(entry.getKey(), clazz);
-			_experts.put(pattern, clazz);
+			experts.put(pattern, clazz);
 		}
 	}
 }

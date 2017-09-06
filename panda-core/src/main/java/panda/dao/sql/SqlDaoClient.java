@@ -95,9 +95,9 @@ public class SqlDaoClient extends DaoClient {
 		try {
 			conn = dataSource.getConnection();
 			DatabaseMetaData meta = conn.getMetaData();
-			String pnm = meta.getDatabaseProductName();
-			String ver = meta.getDatabaseProductVersion();
-			return getExpert(pnm, ver);
+			String dpn = meta.getDatabaseProductName();
+			String dpv = meta.getDatabaseProductVersion();
+			return getExpert(dpn, dpv);
 		}
 		finally {
 			Sqls.safeClose(conn);
@@ -107,30 +107,30 @@ public class SqlDaoClient extends DaoClient {
 	/**
 	 * get SqlExpert by productName and version
 	 * 
-	 * @param productName database product name
+	 * @param name database product name
 	 * @param version database version
 	 * @return SqlExpert
 	 * @see java.sql.Connection#getMetaData()
 	 * @see java.sql.DatabaseMetaData#getDatabaseProductName()
 	 */
-	public SqlExpert getExpert(String productName, String version) {
-		String dbName = (productName + " " + version).toLowerCase();
-		log.info("Get SqlExpert for " + dbName);
+	public SqlExpert getExpert(String name, String version) {
+		String db = (name + " " + version).toLowerCase();
+		log.info("Get SqlExpert for " + db);
 
-		SqlExpert se = sqlExpertConfig.matchExpert(dbName);
-		if (null == se) {
-			throw Exceptions.makeThrow("Can not support database '%s %s'", productName, version);
+		SqlExpert se = sqlExpertConfig.matchExpert(db);
+		if (se == null) {
+			throw Exceptions.makeThrow("Failed to find SqlExpert for database '%s %s'", name, version);
 		}
 		se.setOptions(sqlExpertConfig.getOptions());
 		se.setClient(this);
 		se.setCastors(getCastors());
-		se.setDatabaseMeta(productName, version);
+		se.setDatabaseMeta(name, version);
 		
 		return se;
 	}
 
 	/**
-	 * @return datebase meta
+	 * @return database meta
 	 */
 	@Override
 	public DatabaseMeta getDatabaseMeta() {

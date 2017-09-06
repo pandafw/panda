@@ -102,17 +102,17 @@ public abstract class SqlExpert {
 		this.client = client;
 	}
 
-	protected String getEntityMeta(Entity<?> entity, String name) {
+	protected String getEntityOptionString(Entity<?> entity, String name) {
 		Object v = getEntityOption(entity, name, null);
 		return (v == null ? null : v.toString());
 	}
 	
-	protected String getEntityOptString(Entity<?> entity, String name, String defv) {
+	protected String getEntityOptionString(Entity<?> entity, String name, String defv) {
 		Object v = getEntityOption(entity, name, null);
 		return (v == null ? defv : v.toString());
 	}
 	
-	protected Object getEntityOptString(Entity<?> entity, String name) {
+	protected Object getEntityOption(Entity<?> entity, String name) {
 		return getEntityOption(entity, name, null);
 	}
 	

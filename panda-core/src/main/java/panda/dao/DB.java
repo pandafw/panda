@@ -21,6 +21,10 @@ public enum DB {
 	 */
 	ORACLE,
 	/**
+	 * MariaDB
+	 */
+	MARIADB,
+	/**
 	 * MS-SqlServer
 	 */
 	MSSQL,

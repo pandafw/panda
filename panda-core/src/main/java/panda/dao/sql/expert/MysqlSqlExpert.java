@@ -14,10 +14,6 @@ import panda.io.Streams;
 import panda.lang.Strings;
 
 public class MysqlSqlExpert extends SqlExpert {
-	private static final String META_ENGINE = "mysql-engine";
-
-	private static final String META_CHARSET = "mysql-charset";
-
 	@Override
 	public DB getDatabaseType() {
 		return DB.MYSQL;
@@ -36,6 +32,10 @@ public class MysqlSqlExpert extends SqlExpert {
 	@Override
 	public String dropTable(String tableName) {
 		return "DROP TABLE IF EXISTS " + escapeTable(tableName);
+	}
+
+	protected String getTableOption(Entity<?> entity, String name, String defv) {
+		return getEntityOptionString(entity, "mysql-" + name, defv);
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class MysqlSqlExpert extends SqlExpert {
 			sb.append(" AUTO_INCREMENT=").append(eid.getIdStartWith());
 		}
 
-		String engine = getEntityMeta(entity, META_ENGINE);
+		String engine = getTableOption(entity, "engine", null);
 		if (Strings.isNotEmpty(engine)) {
 			sb.append(" ENGINE=" + engine);
 		}
 		
-		String charset = getEntityOptString(entity, META_CHARSET, "UTF8");
+		String charset = getTableOption(entity, "charset", "UTF8");
 		sb.append(" CHARSET=" + charset);
 
 		if (Strings.isNotEmpty(entity.getComment())) {

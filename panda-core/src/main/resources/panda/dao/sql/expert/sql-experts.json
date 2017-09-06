@@ -3,25 +3,27 @@
 	 * default SqlExpert mapping
 	 */
 	"experts": {
-		"db2.*" : 			"panda.dao.sql.expert.Db2SqlExpert",
-		".+derby.+" : 		"panda.dao.sql.expert.DerbySqlExpert",
-		"h2.*" : 			"panda.dao.sql.expert.H2SqlExpert",
-		"hsql.*" : 			"panda.dao.sql.expert.HsqldbSqlExpert",
-		"mysql.*" : 		"panda.dao.sql.expert.MysqlSqlExpert",
-		"oracle.*" : 		"panda.dao.sql.expert.OracleSqlExpert",
-		"postgresql.*" : 	"panda.dao.sql.expert.PostgreSqlExpert",
-		"sqlite" : 			"panda.dao.sql.expert.SQLiteSqlExpert",
-		// SqlServer2005 --> 9.0 , SqlServer2008 --> 10.0
-		"microsoft sql server.*(8)[.].+" : 		"panda.dao.sql.expert.Mssql2000SqlExpert",
-		"microsoft sql server.*(9)[.].+" : 		"panda.dao.sql.expert.Mssql2005SqlExpert",
-		"microsoft sql server.*(10)[.].+" : 	"panda.dao.sql.expert.Mssql2008SqlExpert",
-		"microsoft sql server.*(11)[.].+" : 	"panda.dao.sql.expert.Mssql2012SqlExpert"
+		"db2" : 		"panda.dao.sql.expert.Db2SqlExpert",
+		"derby" : 		"panda.dao.sql.expert.DerbySqlExpert",
+		"h2" : 			"panda.dao.sql.expert.H2SqlExpert",
+		"hsql" : 		"panda.dao.sql.expert.HsqldbSqlExpert",
+		"mariadb" : 	"panda.dao.sql.expert.MariadbSqlExpert",
+		"mysql" : 		"panda.dao.sql.expert.MysqlSqlExpert",
+		"oracle" : 		"panda.dao.sql.expert.OracleSqlExpert",
+		"postgresql" : 	"panda.dao.sql.expert.PostgreSqlExpert",
+		"sqlite" : 		"panda.dao.sql.expert.SQLiteSqlExpert",
+		"microsoft sql server.*(8)[.].+" : 	"panda.dao.sql.expert.Mssql2000SqlExpert",
+		"microsoft sql server.*(9)[.].+" : 	"panda.dao.sql.expert.Mssql2005SqlExpert",
+		"microsoft sql server.*(10)[.].+" : "panda.dao.sql.expert.Mssql2008SqlExpert",
+		// 11: 2012, 12: 2014, 13: 2016
+		"microsoft sql server" : 			"panda.dao.sql.expert.Mssql2012SqlExpert"
 	},
 
 	/*
 	 * global options
 	 */
 	"options": {
+		"mariadb-engine" : "InnoDB",
 		"mysql-engine" : "InnoDB"
 	}
 }
