@@ -27,21 +27,15 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
-import panda.io.filter.DirectoryFileFilter;
-import panda.io.filter.FalseFileFilter;
-import panda.io.filter.FileFilters;
 import panda.io.filter.IOFileFilter;
-import panda.io.filter.SuffixFileFilter;
-import panda.io.filter.TrueFileFilter;
 import panda.io.stream.BOMInputStream;
-import panda.lang.Arrays;
 import panda.lang.Charsets;
+import panda.lang.Iterators;
 import panda.lang.Numbers;
 import panda.lang.Strings;
 import panda.lang.Systems;
@@ -633,323 +627,199 @@ public class Files {
 	}
 
 	// -----------------------------------------------------------------------
-	/**
-	 * Finds files within a given directory (and optionally its subdirectories). All files found are
-	 * filtered by an IOFileFilter.
-	 * 
-	 * @param files the collection of files found.
-	 * @param directory the directory to search in.
-	 * @param filter the filter to apply to files and directories.
-	 * @param includeSubDirectories indicates if will include the subdirectories themselves
-	 */
-	private static void innerListFiles(final Collection<File> files, final File directory, final IOFileFilter filter,
-			final boolean includeSubDirectories) {
-		final File[] found = directory.listFiles((FileFilter)filter);
-
-		if (found != null) {
-			for (final File file : found) {
-				if (file.isDirectory()) {
-					if (includeSubDirectories) {
-						files.add(file);
-					}
-					innerListFiles(files, file, filter, includeSubDirectories);
-				}
-				else {
-					files.add(file);
-				}
-			}
+	private static Collection<File> fileIteratorToList(FileIterator it) {
+		try {
+			return Iterators.toList(it);
 		}
+		finally {
+			it.safeClose();
+		}
+	}
+	
+	/**
+	 * Finds files within a given directory (no sub directories) which match an array
+	 * of extensions.
+	 * 
+	 * @param directory the directory to search in
+	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
+	 *            {@code null}, all files are returned.
+	 * @return an collection of java.io.File with the matching files
+	 */
+	public static Collection<File> listFiles(File directory, String... extensions) {
+		return fileIteratorToList(iterateFiles(directory, extensions));
 	}
 
 	/**
-	 * Finds files within a given directory (and optionally its subdirectories). All files found are
+	 * Finds files within a given directory (and optionally its sub directories) which match an array
+	 * of extensions.
+	 * 
+	 * @param directory the directory to search in
+	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
+	 *            {@code null}, all files are returned.
+	 * @param recursive if true all sub directories are searched as well
+	 * @return an collection of java.io.File with the matching files
+	 */
+	public static Collection<File> listFiles(File directory, boolean recursive, String... extensions) {
+		return fileIteratorToList(iterateFiles(directory, recursive, extensions));
+	}
+
+	/**
+	 * Finds files within a given directory (and optionally its sub directories). All files found are
 	 * filtered by an IOFileFilter.
 	 * <p>
-	 * If your search should recurse into subdirectories you can pass in an IOFileFilter for
+	 * If your search should recurse into sub directories you can pass in an IOFileFilter for
 	 * directories. You don't need to bind a DirectoryFileFilter (via logical AND) to this filter.
 	 * This method does that for you.
 	 * <p>
 	 * An example: If you want to search through all directories called "temp" you pass in
-	 * <code>FileFilterUtils.NameFileFilter("temp")</code>
+	 * <code>FileFilters.NameFileFilter("temp")</code>
 	 * <p>
 	 * Another common usage of this method is find files in a directory tree but ignoring the
 	 * directories generated CVS. You can simply pass in
-	 * <code>FileFilterUtils.makeCVSAware(null)</code>.
+	 * <code>FileFilters.makeCVSAware(null)</code>.
 	 * 
 	 * @param directory the directory to search in
 	 * @param fileFilter filter to apply when finding files.
-	 * @param dirFilter optional filter to apply when finding subdirectories. If this parameter is
-	 *            {@code null}, subdirectories will not be included in the search. Use
+	 * @param recursive if true all sub directories are searched as well
+	 * @return an collection of java.io.File with the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static Collection<File> listFiles(File directory, IOFileFilter fileFilter, boolean recursive) {
+		return fileIteratorToList(iterateFiles(directory, fileFilter, recursive));
+	}
+	
+	/**
+	 * Finds files within a given directory (and optionally its sub directories). All files found are
+	 * filtered by an IOFileFilter.
+	 * <p>
+	 * If your search should recurse into sub directories you can pass in an IOFileFilter for
+	 * directories. You don't need to bind a DirectoryFileFilter (via logical AND) to this filter.
+	 * This method does that for you.
+	 * <p>
+	 * An example: If you want to search through all directories called "temp" you pass in
+	 * <code>FileFilters.NameFileFilter("temp")</code>
+	 * <p>
+	 * Another common usage of this method is find files in a directory tree but ignoring the
+	 * directories generated CVS. You can simply pass in
+	 * <code>FileFilters.makeCVSAware(null)</code>.
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param dirFilter optional filter to apply when finding sub directories. If this parameter is
+	 *            {@code null}, sub directories will not be included in the search. Use
 	 *            TrueFileFilter.INSTANCE to match all directories.
 	 * @return an collection of java.io.File with the matching files
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter,
-			final IOFileFilter dirFilter) {
-		validateListFilesParameters(directory, fileFilter);
-
-		final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-		final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
-
-		// Find files
-		final Collection<File> files = new java.util.LinkedList<File>();
-		innerListFiles(files, directory, FileFilters.or(effFileFilter, effDirFilter), false);
-		return files;
+	public static Collection<File> listFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+		return fileIteratorToList(iterateFiles(directory, fileFilter, dirFilter));
 	}
 
 	/**
-	 * Finds files within a given directory (and optionally its subdirectories). All files found are
+	 * Finds files within a given directory (and optionally its sub directories). All files found are
 	 * filtered by an IOFileFilter.
 	 * <p>
-	 * If your search should recurse into subdirectories you can pass in an IOFileFilter for
-	 * directories. You don't need to bind a DirectoryFileFilter (via logical AND) to this filter.
-	 * This method does that for you.
-	 * <p>
-	 * An example: If you want to search through all directories called "temp" you pass in
-	 * <code>FileFilterUtils.NameFileFilter("temp")</code>
-	 * <p>
-	 * Another common usage of this method is find files in a directory tree but ignoring the
-	 * directories generated CVS. You can simply pass in
-	 * <code>FileFilterUtils.makeCVSAware(null)</code>.
-	 * 
-	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
-	 * @param recursive if true all subdirectories are searched as well
-	 * @return an collection of java.io.File with the matching files
-	 * @see panda.io.filter.FileFilters
-	 * @see panda.io.filter.NameFileFilter
-	 */
-	public static Collection<File> listFiles(final File directory, final IOFileFilter fileFilter,
-		final boolean recursive) {
-		return listFiles(directory, fileFilter, recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
-	}
-
-	/**
-	 * Validates the given arguments.
-	 * <ul>
-	 * <li>Throws {@link IllegalArgumentException} if {@code directory} is not a directory</li>
-	 * <li>Throws {@link NullPointerException} if {@code fileFilter} is null</li>
-	 * </ul>
-	 * 
-	 * @param directory The File to test
-	 * @param fileFilter The IOFileFilter to test
-	 */
-	private static void validateListFilesParameters(final File directory, final IOFileFilter fileFilter) {
-		if (!directory.isDirectory()) {
-			throw new IllegalArgumentException("Parameter 'directory' is not a directory: " + directory);
-		}
-		if (fileFilter == null) {
-			throw new NullPointerException("Parameter 'fileFilter' is null");
-		}
-	}
-
-	/**
-	 * Returns a filter that accepts files in addition to the {@link File} objects accepted by the
-	 * given filter.
-	 * 
-	 * @param fileFilter a base filter to add to
-	 * @return a filter that accepts files
-	 */
-	private static IOFileFilter setUpEffectiveFileFilter(final IOFileFilter fileFilter) {
-		return FileFilters.and(fileFilter, FileFilters.notFileFilter(DirectoryFileFilter.INSTANCE));
-	}
-
-	/**
-	 * Returns a filter that accepts directories in addition to the {@link File} objects accepted by
-	 * the given filter.
-	 * 
-	 * @param dirFilter a base filter to add to
-	 * @return a filter that accepts directories
-	 */
-	private static IOFileFilter setUpEffectiveDirFilter(final IOFileFilter dirFilter) {
-		return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilters.and(dirFilter,
-			DirectoryFileFilter.INSTANCE);
-	}
-
-	/**
-	 * Finds files within a given directory (and optionally its subdirectories). All files found are
-	 * filtered by an IOFileFilter.
-	 * <p>
-	 * The resulting collection includes the subdirectories themselves.
+	 * The resulting collection includes the sub directories themselves.
 	 * <p>
 	 * 
 	 * @see Files#listFiles
 	 * @param directory the directory to search in
 	 * @param fileFilter filter to apply when finding files.
-	 * @param dirFilter optional filter to apply when finding subdirectories. If this parameter is
-	 *            {@code null}, subdirectories will not be included in the search. Use
+	 * @param dirFilter optional filter to apply when finding sub directories. If this parameter is
+	 *            {@code null}, sub directories will not be included in the search. Use
 	 *            TrueFileFilter.INSTANCE to match all directories.
 	 * @return an collection of java.io.File with the matching files
 	 * @see panda.io.filter.FileFilters
 	 * @see panda.io.filter.NameFileFilter
 	 */
-	public static Collection<File> listFilesAndDirs(final File directory, final IOFileFilter fileFilter,
-			final IOFileFilter dirFilter) {
-		validateListFilesParameters(directory, fileFilter);
-
-		final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-		final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
-
-		// Find files
-		final Collection<File> files = new java.util.LinkedList<File>();
-		if (directory.isDirectory()) {
-			files.add(directory);
-		}
-		innerListFiles(files, directory, FileFilters.or(effFileFilter, effDirFilter), true);
-		return files;
-	}
-
-	/**
-	 * Allows iteration over the files in given directory (and optionally its subdirectories).
-	 * <p>
-	 * All files found are filtered by an IOFileFilter. This method is based on
-	 * {@link #listFiles(File, IOFileFilter, IOFileFilter)}, which supports Iterable ('foreach'
-	 * loop).
-	 * <p>
-	 * 
-	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
-	 * @param dirFilter optional filter to apply when finding subdirectories. If this parameter is
-	 *            {@code null}, subdirectories will not be included in the search. Use
-	 *            TrueFileFilter.INSTANCE to match all directories.
-	 * @return an iterator of java.io.File for the matching files
-	 * @see panda.io.filter.FileFilters
-	 * @see panda.io.filter.NameFileFilter
-	 */
-	public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter,
-			final IOFileFilter dirFilter) {
-		return listFiles(directory, fileFilter, dirFilter).iterator();
-	}
-
-	/**
-	 * Allows iteration over the files in given directory (and optionally its subdirectories).
-	 * <p>
-	 * All files found are filtered by an IOFileFilter. This method is based on
-	 * {@link #listFiles(File, IOFileFilter, IOFileFilter)}, which supports Iterable ('foreach'
-	 * loop).
-	 * <p>
-	 * 
-	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
-	 * @param recursive if true all subdirectories are searched as well
-	 * @return an iterator of java.io.File for the matching files
-	 * @see panda.io.filter.FileFilters
-	 * @see panda.io.filter.NameFileFilter
-	 */
-	public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter,
-			final boolean recursive) {
-		return listFiles(directory, fileFilter, recursive).iterator();
-	}
-
-	/**
-	 * Allows iteration over the files in given directory (and optionally its subdirectories).
-	 * <p>
-	 * All files found are filtered by an IOFileFilter. This method is based on
-	 * {@link #listFilesAndDirs(File, IOFileFilter, IOFileFilter)}, which supports Iterable
-	 * ('foreach' loop).
-	 * <p>
-	 * The resulting iterator includes the subdirectories themselves.
-	 * 
-	 * @param directory the directory to search in
-	 * @param fileFilter filter to apply when finding files.
-	 * @param dirFilter optional filter to apply when finding subdirectories. If this parameter is
-	 *            {@code null}, subdirectories will not be included in the search. Use
-	 *            TrueFileFilter.INSTANCE to match all directories.
-	 * @return an iterator of java.io.File for the matching files
-	 * @see panda.io.filter.FileFilters
-	 * @see panda.io.filter.NameFileFilter
-	 */
-	public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
-			final IOFileFilter dirFilter) {
-		return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
+	public static Collection<File> listFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+		return fileIteratorToList(iterateFilesAndDirs(directory, fileFilter, dirFilter));
 	}
 
 	// -----------------------------------------------------------------------
 	/**
-	 * Converts an array of file extensions to suffixes for use with IOFileFilters.
-	 * 
-	 * @param extensions an array of extensions. Format: {"java", "xml"}
-	 * @return an array of suffixes. Format: {".java", ".xml"}
-	 */
-	private static String[] toSuffixes(final String[] extensions) {
-		final List<String> suffixes = new ArrayList<String>(extensions.length);
-		for (String e : extensions) {
-			if (Strings.isEmpty(e)) {
-				continue;
-			}
-			if (e.charAt(0) == '.') {
-				suffixes.add(e);
-			}
-			else {
-				suffixes.add('.' + e);
-			}
-		}
-		return suffixes.toArray(new String[suffixes.size()]);
-	}
-
-	/**
-	 * Finds files within a given directory (no subdirectories) which match an array
-	 * of extensions.
-	 * 
-	 * @param directory the directory to search in
-	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
-	 *            {@code null}, all files are returned.
-	 * @return an collection of java.io.File with the matching files
-	 */
-	public static Collection<File> listFiles(final File directory, final String... extensions) {
-		return listFiles(directory, false, extensions);
-	}
-
-	/**
-	 * Finds files within a given directory (and optionally its subdirectories) which match an array
-	 * of extensions.
-	 * 
-	 * @param directory the directory to search in
-	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
-	 *            {@code null}, all files are returned.
-	 * @param recursive if true all subdirectories are searched as well
-	 * @return an collection of java.io.File with the matching files
-	 */
-	public static Collection<File> listFiles(final File directory, final boolean recursive, final String... extensions) {
-		IOFileFilter filter;
-		if (Arrays.isEmpty(extensions)) {
-			filter = TrueFileFilter.INSTANCE;
-		}
-		else {
-			final String[] suffixes = toSuffixes(extensions);
-			filter = new SuffixFileFilter(suffixes);
-		}
-		return listFiles(directory, filter, recursive);
-	}
-
-	/**
-	 * Allows iteration over the files in a given directory (and optionally its subdirectories)
-	 * which match an array of extensions. This method is based on
-	 * {@link #listFiles(File, boolean, String...)}, which supports Iterable ('foreach' loop).
-	 * 
-	 * @param directory the directory to search in
-	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
-	 *            {@code null}, all files are returned.
-	 * @param recursive if true all subdirectories are searched as well
-	 * @return an iterator of java.io.File with the matching files
-	 */
-	public static Iterator<File> iterateFiles(final File directory, final boolean recursive, final String... extensions) {
-		return listFiles(directory, recursive, extensions).iterator();
-	}
-
-	/**
 	 * Allows iteration over the files in a given directory (no recursive)
-	 * which match an array of extensions. This method is based on
-	 * {@link #listFiles(File, boolean, String...)}, which supports Iterable ('foreach' loop).
+	 * which match an array of extensions. 
 	 * 
 	 * @param directory the directory to search in
 	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
 	 *            {@code null}, all files are returned.
 	 * @return an iterator of java.io.File with the matching files
 	 */
-	public static Iterator<File> iterateFiles(final File directory, final String... extensions) {
-		return iterateFiles(directory, false, extensions);
+	public static FileIterator iterateFiles(File directory, String... extensions) {
+		return new FileIterator(directory, extensions);
+	}
+
+	/**
+	 * Allows iteration over the files in a given directory (and optionally its sub directories)
+	 * which match an array of extensions. 
+	 * 
+	 * @param directory the directory to search in
+	 * @param extensions an array of extensions, ex. {"java","xml"}. If this parameter is
+	 *            {@code null}, all files are returned.
+	 * @param recursive if true all sub directories are searched as well
+	 * @return an iterator of java.io.File with the matching files
+	 */
+	public static FileIterator iterateFiles(File directory, boolean recursive, String... extensions) {
+		return new FileIterator(directory, recursive, extensions);
+	}
+
+	/**
+	 * Allows iteration over the files in given directory (and optionally its sub directories).
+	 * <p>
+	 * All files found are filtered by an IOFileFilter. 
+	 * <p>
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param recursive if true all sub directories are searched as well
+	 * @return an iterator of java.io.File for the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static FileIterator iterateFiles(File directory, IOFileFilter fileFilter, boolean recursive) {
+		return new FileIterator(directory, fileFilter, recursive);
+	}
+
+	/**
+	 * Allows iteration over the files in given directory (and optionally its sub directories).
+	 * <p>
+	 * All files found are filtered by an IOFileFilter. 
+	 * <p>
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param dirFilter optional filter to apply when finding sub directories. If this parameter is
+	 *            {@code null}, sub directories will not be included in the search. Use
+	 *            TrueFileFilter.INSTANCE to match all directories.
+	 * @return an iterator of java.io.File for the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static FileIterator iterateFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+		return new FileIterator(directory, fileFilter, dirFilter);
+	}
+
+	/**
+	 * Allows iteration over the files in given directory (and optionally its sub directories).
+	 * <p>
+	 * All files found are filtered by an IOFileFilter. 
+	 * <p>
+	 * The resulting iterator includes the sub directories themselves.
+	 * 
+	 * @param directory the directory to search in
+	 * @param fileFilter filter to apply when finding files.
+	 * @param dirFilter optional filter to apply when finding sub directories. If this parameter is
+	 *            {@code null}, sub directories will not be included in the search. Use
+	 *            TrueFileFilter.INSTANCE to match all directories.
+	 * @return an iterator of java.io.File for the matching files
+	 * @see panda.io.filter.FileFilters
+	 * @see panda.io.filter.NameFileFilter
+	 */
+	public static FileIterator iterateFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+		return new FileIterator(directory, fileFilter, dirFilter, true);
 	}
 
 	// -----------------------------------------------------------------------
@@ -1505,11 +1375,11 @@ public class Files {
 	 * 
 	 * <pre>
 	 * // Create a filter for &quot;.txt&quot; files
-	 * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(&quot;.txt&quot;);
-	 * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+	 * IOFileFilter txtSuffixFilter = FileFilters.suffixFileFilter(&quot;.txt&quot;);
+	 * IOFileFilter txtFiles = FileFilters.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
 	 * 
 	 * // Create a filter for either directories or &quot;.txt&quot; files
-	 * FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
+	 * FileFilter filter = FileFilters.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
 	 * 
 	 * // Copy using the filter
 	 * FileUtils.copyDirectory(srcDir, destDir, filter);
@@ -1552,11 +1422,11 @@ public class Files {
 	 * 
 	 * <pre>
 	 * // Create a filter for &quot;.txt&quot; files
-	 * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(&quot;.txt&quot;);
-	 * IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+	 * IOFileFilter txtSuffixFilter = FileFilters.suffixFileFilter(&quot;.txt&quot;);
+	 * IOFileFilter txtFiles = FileFilters.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
 	 * 
 	 * // Create a filter for either directories or &quot;.txt&quot; files
-	 * FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
+	 * FileFilter filter = FileFilters.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
 	 * 
 	 * // Copy using the filter
 	 * FileUtils.copyDirectory(srcDir, destDir, filter, false);

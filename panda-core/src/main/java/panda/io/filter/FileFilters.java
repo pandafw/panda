@@ -240,19 +240,19 @@ public class FileFilters {
 	 * @return a prefix checking filter
 	 * @see PrefixFileFilter
 	 */
-	public static IOFileFilter prefixFileFilter(String prefix) {
+	public static IOFileFilter prefixFileFilter(String... prefix) {
 		return new PrefixFileFilter(prefix);
 	}
 
 	/**
 	 * Returns a filter that returns true if the filename starts with the specified text.
 	 * 
-	 * @param prefix the filename prefix
 	 * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+	 * @param prefix the filename prefix
 	 * @return a prefix checking filter
 	 * @see PrefixFileFilter
 	 */
-	public static IOFileFilter prefixFileFilter(String prefix, IOCase caseSensitivity) {
+	public static IOFileFilter prefixFileFilter(IOCase caseSensitivity, String... prefix) {
 		return new PrefixFileFilter(prefix, caseSensitivity);
 	}
 
@@ -263,7 +263,7 @@ public class FileFilters {
 	 * @return a suffix checking filter
 	 * @see SuffixFileFilter
 	 */
-	public static IOFileFilter suffixFileFilter(String suffix) {
+	public static IOFileFilter suffixFileFilter(String... suffix) {
 		return new SuffixFileFilter(suffix);
 	}
 
@@ -275,7 +275,7 @@ public class FileFilters {
 	 * @return a suffix checking filter
 	 * @see SuffixFileFilter
 	 */
-	public static IOFileFilter suffixFileFilter(String suffix, IOCase caseSensitivity) {
+	public static IOFileFilter suffixFileFilter(IOCase caseSensitivity, String... suffix) {
 		return new SuffixFileFilter(suffix, caseSensitivity);
 	}
 

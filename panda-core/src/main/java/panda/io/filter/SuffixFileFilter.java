@@ -19,8 +19,8 @@ import panda.io.IOCase;
  * }
  * </pre>
  * 
- * @see FileFilters#suffixFileFilter(String)
- * @see FileFilters#suffixFileFilter(String, IOCase)
+ * @see FileFilters#suffixFileFilter(String...)
+ * @see FileFilters#suffixFileFilter(IOCase, String...)
  */
 public class SuffixFileFilter extends AbstractFileFilter {
 
@@ -37,7 +37,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the suffix is null
 	 */
 	public SuffixFileFilter(String suffix) {
-		this(suffix, IOCase.SENSITIVE);
+		this(suffix, null);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 			throw new IllegalArgumentException("The suffix must not be null");
 		}
 		this.suffixes = new String[] { suffix };
-		this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+		this.caseSensitivity = caseSensitivity == null ? IOCase.INSENSITIVE : caseSensitivity;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @throws IllegalArgumentException if the suffix array is null
 	 */
 	public SuffixFileFilter(String[] suffixes) {
-		this(suffixes, IOCase.SENSITIVE);
+		this(suffixes, null);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 		}
 		this.suffixes = new String[suffixes.length];
 		System.arraycopy(suffixes, 0, this.suffixes, 0, suffixes.length);
-		this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+		this.caseSensitivity = caseSensitivity == null ? IOCase.INSENSITIVE : caseSensitivity;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	 * @throws ClassCastException if the list does not contain Strings
 	 */
 	public SuffixFileFilter(List<String> suffixes) {
-		this(suffixes, IOCase.SENSITIVE);
+		this(suffixes, null);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
 			throw new IllegalArgumentException("The list of suffixes must not be null");
 		}
 		this.suffixes = suffixes.toArray(new String[suffixes.size()]);
-		this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+		this.caseSensitivity = caseSensitivity == null ? IOCase.INSENSITIVE : caseSensitivity;
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class SuffixFileFilter extends AbstractFileFilter {
 	}
 
 	/**
-	 * Provide a String representaion of this file filter.
+	 * Provide a String representation of this file filter.
 	 * 
-	 * @return a String representaion
+	 * @return a String representation
 	 */
 	@Override
 	public String toString() {

@@ -19,8 +19,8 @@ import panda.io.IOCase;
  * }
  * </pre>
  * 
- * @see FileFilters#prefixFileFilter(String)
- * @see FileFilters#prefixFileFilter(String, IOCase)
+ * @see FileFilters#prefixFileFilter(String...)
+ * @see FileFilters#prefixFileFilter(IOCase, String...)
  */
 public class PrefixFileFilter extends AbstractFileFilter {
 

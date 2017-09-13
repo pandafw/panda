@@ -1,10 +1,15 @@
 package panda.lang;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import panda.lang.collection.KeyValue;
 
@@ -205,5 +210,41 @@ public abstract class Iterators {
 		}
 		
 		return new KeyValueIterator(value);
+	}
+
+	public static <T> List<T> toList(Iterator<T> it) {
+		if (it == null) {
+			return null;
+		}
+		
+		List<T> c = new ArrayList<T>();
+		while (it.hasNext()) {
+			c.add(it.next());
+		}
+		return c;
+	}
+
+	public static <T> Set<T> toSet(Iterator<T> it) {
+		if (it == null) {
+			return null;
+		}
+		
+		Set<T> c = new HashSet<T>();
+		while (it.hasNext()) {
+			c.add(it.next());
+		}
+		return c;
+	}
+
+	public static <T> Set<T> toLinkedSet(Iterator<T> it) {
+		if (it == null) {
+			return null;
+		}
+		
+		Set<T> c = new LinkedHashSet<T>();
+		while (it.hasNext()) {
+			c.add(it.next());
+		}
+		return c;
 	}
 }
