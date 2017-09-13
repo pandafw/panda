@@ -17,10 +17,12 @@ import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
+import panda.lang.codec.binary.Base64;
 import panda.lang.crypto.Cryptor;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
+import panda.net.http.HttpHeader;
 import panda.servlet.HttpServlets;
 
 @IocBean(type=UserAuthenticator.class)
@@ -105,7 +107,7 @@ public class AppAuthenticator extends UserAuthenticator {
 			return u;
 		}
 
-		u = super.getAuthenticatedUser(ac);
+		u = getUserFromContext(ac);
 		if (u != null) {
 			return u;
 		}
@@ -200,13 +202,9 @@ public class AppAuthenticator extends UserAuthenticator {
 		ac.getSes().remove(SES.USER);
 	}
 
-	//------------------------------------------------------
-	/**
-	 * override method 
-	 * @param ac action context
-	 * @param user user object
-	 * @return cookie age
-	 */
+	//-------------------------------------------------------------
+	// overrideable method 
+	//
 	protected Integer getCookieAge(ActionContext ac, Object user) {
 		if (user instanceof ILogin) {
 			ILogin iu = (ILogin)user;
@@ -237,10 +235,6 @@ public class AppAuthenticator extends UserAuthenticator {
 		return ac.getBase() + '/';
 	}
 
-	/**
-	 * saveUserToCookie
-	 * @param user user
-	 */
 	protected void saveUserToCookie(ActionContext ac, Object user) {
 		JsonSerializer js = Jsons.newJsonSerializer();
 		js.setDateToMillis(true);
@@ -267,11 +261,6 @@ public class AppAuthenticator extends UserAuthenticator {
 			getCookiePath(ac));
 	}
 
-	/**
-	 * get user object from cookie
-	 * @param ac action context
-	 * @return user object
-	 */
 	protected Object getUserFromCookie(ActionContext ac) {
 		if (userType == null) {
 			return null;
@@ -297,6 +286,20 @@ public class AppAuthenticator extends UserAuthenticator {
 
 	//------------------------------------------------------
 	/**
+	 * get user object from request
+	 * @param ac action context
+	 * @return user object
+	 */
+	protected Object getUserFromRequest(ActionContext ac) {
+		Object u = getUserFromParameter(ac);
+		if (u != null) {
+			return u;
+		}
+		
+		return getUserFromAuthorization(ac);
+	}
+	
+	/**
 	 * get user object from request parameter
 	 * @param ac action context
 	 * @return user object
@@ -317,11 +320,47 @@ public class AppAuthenticator extends UserAuthenticator {
 			return u;
 		}
 		catch (Exception e) {
-			log.warn("Invalid AUTH Param " + paramName + ": " + ticket, e);
+			log.warn("Invalid AUTH Parameter " + paramName + ": " + ticket, e);
 		}
 		return null;
 	}
 
+	/**
+	 * get user object from Authorization Header
+	 * @param ac action context
+	 * @return user object
+	 */
+	protected Object getUserFromAuthorization(ActionContext ac) {
+		String auth = ac.getRequest().getHeader(HttpHeader.AUTHORIZATION);
+		if (Strings.isEmpty(auth)) {
+			return null;
+		}
+		
+		if (!Strings.startsWithIgnoreCase(auth, "Basic ")) {
+			return null;
+		}
+		
+		auth = Base64.decodeBase64String(auth.substring(6));
+
+		int c = auth.indexOf(':');
+		if (c < 0) {
+			return null;
+		}
+		
+		String username = auth.substring(6, c);
+		String password = auth.substring(c + 1);
+		return getUserFromNameAndPwd(username, password);
+	}
+
+	/**
+	 * get user object from Authorization Header
+	 * @param username 
+	 * @return user object
+	 */
+	protected Object getUserFromNameAndPwd(String username, String password) {
+		return null;
+	}
+	
 	//------------------------------------------------------
 	/**
 	 * save user object to client
