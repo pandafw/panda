@@ -7,23 +7,40 @@ import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 import panda.lang.Exceptions;
 import panda.net.ssl.HostnameVerifiers;
 import panda.net.ssl.SSLContexts;
+import panda.net.ssl.SSLSocketFactoryEx;
 import panda.net.ssl.TrustManagers;
 
 /**
  * panda.log use this class, so do not use log
  */
 public class Https {
+	public static void disableSSLv3Protocols(HttpURLConnection conn) {
+		try {
+			if (conn instanceof HttpsURLConnection) {
+				HttpsURLConnection sconn = (HttpsURLConnection)conn;
+				SSLSocketFactory sslsf = sconn.getSSLSocketFactory();
+				SSLSocketFactoryEx sslsfe = new SSLSocketFactoryEx(sslsf, "TLSv1", "TLSv1.1", "TLSv1.2");
+				sconn.setSSLSocketFactory(sslsfe);
+			}
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
 	public static void ignoreValidateCertification(HttpURLConnection conn) {
 		try {
 			if (conn instanceof HttpsURLConnection) {
 				HttpsURLConnection sconn = (HttpsURLConnection)conn;
 
 				SSLContext sslcontext = SSLContexts.createSSLContext("SSL", null, TrustManagers.getAcceptAllTrustManager());
-				sconn.setSSLSocketFactory(sslcontext.getSocketFactory());
+				SSLSocketFactory sslsf = sslcontext.getSocketFactory();
+				sconn.setSSLSocketFactory(sslsf);
 				sconn.setHostnameVerifier(HostnameVerifiers.trustHostnameVerifier());
 			}
 		}

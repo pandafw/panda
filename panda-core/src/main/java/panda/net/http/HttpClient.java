@@ -89,12 +89,10 @@ public class HttpClient {
 
 	protected boolean autoRedirect = false;
 	protected boolean validateSslCert = true;
+	protected boolean disableSSLv3 = false;
 	
 	static {
-		if (Systems.IS_OS_APPENGINE) {
-			
-		}
-		else if (Systems.IS_JAVA_1_6) {
+		if (Systems.IS_JAVA_1_6) {
 			// fix error: java.net.ProtocolException: Server redirected too many times (JDK1.6)
 			// see http://stackoverflow.com/questions/11022934/getting-java-net-protocolexception-server-redirected-too-many-times-error
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
@@ -121,13 +119,6 @@ public class HttpClient {
 	/**
 	 * @return the request
 	 */
-	public HttpRequest getReq() {
-		return request;
-	}
-
-	/**
-	 * @return the request
-	 */
 	public HttpRequest getRequest() {
 		return request;
 	}
@@ -138,13 +129,6 @@ public class HttpClient {
 	public void setRequest(HttpRequest request) {
 		Asserts.notNull(request, "the request object is null");
 		this.request = request;
-	}
-
-	/**
-	 * @return the response
-	 */
-	public HttpResponse getRes() {
-		return response;
 	}
 
 	/**
@@ -180,6 +164,20 @@ public class HttpClient {
 	 */
 	public void setValidateSslCert(boolean validateSslCert) {
 		this.validateSslCert = validateSslCert;
+	}
+
+	/**
+	 * @return the disableSSLv3
+	 */
+	public boolean isDisableSSLv3() {
+		return disableSSLv3;
+	}
+
+	/**
+	 * @param disableSSLv3 the disableSSLv3 to set
+	 */
+	public void setDisableSSLv3(boolean disableSSLv3) {
+		this.disableSSLv3 = disableSSLv3;
 	}
 
 	/**
@@ -359,6 +357,9 @@ public class HttpClient {
 
 		if (!validateSslCert) {
 			Https.ignoreValidateCertification(conn);
+		}
+		if (disableSSLv3) {
+			Https.disableSSLv3Protocols(conn);
 		}
 		conn.setConnectTimeout(connTimeout);
 		conn.setReadTimeout(readTimeout);

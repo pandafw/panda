@@ -8,11 +8,7 @@ import javax.net.ssl.SSLSocket;
 /**
  * General utilities for SSLSocket.
  */
-public class SSLSockets {
-	private SSLSockets() {
-		// Not instantiable
-	}
-
+public abstract class SSLSockets {
 	/**
 	 * Enable the HTTPS endpoint identification algorithm on an SSLSocket.
 	 * 
