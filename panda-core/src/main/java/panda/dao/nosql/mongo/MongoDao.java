@@ -24,15 +24,15 @@ import com.mongodb.WriteResult;
 
 import panda.dao.AbstractDao;
 import panda.dao.DaoException;
-import panda.dao.DataHandler;
+import panda.dao.DaoIterator;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.entity.EntityIndex;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
-import panda.dao.query.DataQuery;
 import panda.dao.query.Operator;
 import panda.dao.query.Query;
 import panda.io.Streams;
@@ -417,40 +417,57 @@ public class MongoDao extends AbstractDao {
 	 * select records by the supplied query.
 	 * 
 	* @param query query
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	protected <T> long selectByQuery(DataQuery <T>query, DataHandler<T> callback) {
+	protected <T> DaoIterator<T> iterateByQuery(DataQuery<T> query) {
 		if (log.isDebugEnabled()) {
-			log.debug("selectByQuery: " + query);
+			log.debug("iterateByQuery: " + query);
 		}
-		
-		DBCursor cursor = null;
 		
 		autoStart();
 		try {
-			cursor = createCursor(query);
-
-			long count = 0;
-			while (cursor.hasNext()) {
-				DBObject dbo = cursor.next();
-				T data = convertBsonToData(query, dbo);
-				if (!callback(callback, data, count++)) {
-					break;
-				}
-			}
-			return count;
+			DBCursor cursor = createCursor(query);
+			return new MongoDaoIterator<T>(query, cursor);
 		}
-		catch (Exception e) {
-			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
-		}
-		finally {
-			Streams.safeClose(cursor);
+		catch (Throwable e) {
 			autoClose();
+			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
 	}
 
+	private class MongoDaoIterator<T> implements DaoIterator<T> {
+		DataQuery<T> query;
+		DBCursor cursor;
+		
+		public MongoDaoIterator(DataQuery<T> query, DBCursor cursor) {
+			this.query = query;
+			this.cursor = cursor;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return cursor.hasNext();
+		}
+
+		@Override
+		public T next() {
+			DBObject dbo = cursor.next();
+			T data = convertBsonToData(query, dbo);
+			return data;
+		}
+
+		@Override
+		public void remove() {
+			throw Exceptions.unsupported("Remove unsupported on MongoDaoIterator");
+		}
+
+		@Override
+		public void close() {
+			autoClose();
+		}
+	}
+	
 	//--------------------------------------------------------------------
 	/**
 	 * delete record by the supplied query

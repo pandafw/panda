@@ -16,9 +16,6 @@ import panda.cast.Castors;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityDao;
 import panda.dao.entity.EntityField;
-import panda.dao.handler.CollectionDataHandler;
-import panda.dao.handler.GroupDataHandler;
-import panda.dao.handler.MapDataHandler;
 import panda.dao.query.DataQuery;
 import panda.dao.query.Join;
 import panda.dao.query.Query;
@@ -93,10 +90,6 @@ public abstract class AbstractDao implements Dao {
 
 	protected void assertQuery(Query<?> query) {
 		Asserts.notNull(query, "The query is null");
-	}
-	
-	protected void assertCallback(DataHandler<?> callback) {
-		Asserts.notNull(callback, "The data handler is null");
 	}
 	
 	protected void assertEntity(Entity<?> entity, Class<?> type) {
@@ -499,59 +492,54 @@ public abstract class AbstractDao implements Dao {
 	 * select all records.
 	 * 
 	 * @param type record type
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	public <T> long select(Class<T> type, DataHandler<T> callback) {
-		return selectByQuery(createQuery(type), callback);
+	public <T> DaoIterator<T> iterate(Class<T> type) {
+		return iterateByQuery(createQuery(type));
 	}
 
 	/**
 	 * select all records.
 	 * 
 	 * @param entity entity
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	public <T> long select(Entity<T> entity, DataHandler<T> callback) {
+	public <T> DaoIterator<T> iterate(Entity<T> entity) {
 		assertEntity(entity);
-		return selectByQuery(createQuery(entity), callback);
+		return iterateByQuery(createQuery(entity));
 	}
 
 	/**
 	 * select all records.
 	 * 
 	 * @param table table name
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	public long select(String table, DataHandler<Map<String, ?>> callback) {
-		return selectByQuery(createQuery(table), callback);
+	public DaoIterator<Map<String, ?>> iterate(String table) {
+		return iterateByQuery(createQuery(table));
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * 
 	 * @param query query
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	public <T> long select(Query<T> query, DataHandler<T> callback) {
-		return selectByQuery(cloneQuery(query), callback);
+	public <T> DaoIterator<T> iterate(Query<T> query) {
+		return iterateByQuery(cloneQuery(query));
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * 
 	 * @param query query
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	protected abstract <T> long selectByQuery(DataQuery<T> query, DataHandler<T> callback);
+	protected abstract <T> DaoIterator<T> iterateByQuery(DataQuery<T> query);
 
 	//--------------------------------------------------------------------
 	/**
@@ -605,12 +593,22 @@ public abstract class AbstractDao implements Dao {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Collection<?> collByQuery(Collection<?> coll, DataQuery<?> query, String prop) {
+	protected Collection<?> collByQuery(Collection coll, DataQuery<?> query, String prop) {
 		query.includeOnly(prop);
 
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
+		BeanHandler bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		selectByQuery(query, new CollectionDataHandler(bh, coll, prop));
+		DaoIterator<?> it = iterateByQuery(query);
+		try {
+			while (it.hasNext()) {
+				Object o = it.next();
+				Object v = bh.getPropertyValue(o, prop);
+				coll.add(v);
+			}
+		}
+		finally {
+			it.close();
+		}
 		return coll;
 	}
 
@@ -796,9 +794,21 @@ public abstract class AbstractDao implements Dao {
 	 * @return record map
 	 */
 	protected <T> Map<?, T> mapByQuery(DataQuery<T> query, String keyProp) {
-		Map<?, T> map = new HashMap<Object, T>();
+		Map<Object, T> map = new LinkedHashMap<Object, T>();
+
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
-		selectByQuery(query, new MapDataHandler<T>(bh, map, keyProp));
+
+		DaoIterator<T> it = iterateByQuery(query);
+		try {
+			while (it.hasNext()) {
+				T o = it.next();
+				Object kv = bh.getPropertyValue(o, keyProp);
+				map.put(kv, o);
+			}
+		}
+		finally {
+			it.close();
+		}
 		return map;
 	}
 
@@ -870,10 +880,22 @@ public abstract class AbstractDao implements Dao {
 	protected Map<?, ?> mapByQuery(DataQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
+		BeanHandler bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		Map<?, ?> map = new LinkedHashMap<Object, Object>();
-		selectByQuery(query, new MapDataHandler(bh, map, keyProp, valProp));
+		Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+
+		DaoIterator it = iterateByQuery(query);
+		try {
+			while (it.hasNext()) {
+				Object o = it.next();
+				Object kv = bh.getPropertyValue(o, keyProp);
+				Object vv = bh.getPropertyValue(o, valProp);
+				map.put(kv, vv);
+			}
+		}
+		finally {
+			it.close();
+		}
 		return map;
 	}
 
@@ -939,8 +961,25 @@ public abstract class AbstractDao implements Dao {
 	protected <T> Map<?, List<T>> groupByQuery(DataQuery<T> query, String keyProp) {
 		BeanHandler<T> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		Map<Object, List<T>> map = new HashMap<Object, List<T>>();
-		selectByQuery(query, new GroupDataHandler<T>(bh, map, keyProp));
+		Map<Object, List<T>> map = new LinkedHashMap<Object, List<T>>();
+
+		DaoIterator<T> it = iterateByQuery(query);
+		try {
+			while (it.hasNext()) {
+				T o = it.next();
+				Object kv = bh.getPropertyValue(o, keyProp);
+
+				List<T> vs = map.get(kv);
+				if (vs == null) {
+					vs = new ArrayList<T>();
+					map.put(kv, vs);
+				}
+				vs.add(o);
+			}
+		}
+		finally {
+			it.close();
+		}
 		return map;
 	}
 
@@ -1011,10 +1050,28 @@ public abstract class AbstractDao implements Dao {
 	public Map<?, List<?>> groupByQuery(DataQuery<?> query, String keyProp, String valProp) {
 		query.includeOnly(keyProp, valProp);
 		
-		BeanHandler<?> bh = getDaoClient().getBeans().getBeanHandler(query.getType());
+		BeanHandler bh = getDaoClient().getBeans().getBeanHandler(query.getType());
 
-		Map<?, List<?>> map = new HashMap<Object, List<?>>();
-		selectByQuery(query, new GroupDataHandler(bh, map, keyProp, valProp));
+		Map<Object, List<?>> map = new LinkedHashMap<Object, List<?>>();
+
+		DaoIterator it = iterateByQuery(query);
+		try {
+			while (it.hasNext()) {
+				Object o = it.next();
+				Object kv = bh.getPropertyValue(o, keyProp);
+				Object vv = bh.getPropertyValue(o, valProp);
+
+				List vs = map.get(kv);
+				if (vs == null) {
+					vs = new ArrayList();
+					map.put(kv, vs);
+				}
+				vs.add(vv);
+			}
+		}
+		finally {
+			it.close();
+		}
 		return map;
 	}
 
@@ -1613,14 +1670,5 @@ public abstract class AbstractDao implements Dao {
 	protected void selectPrimaryKeys(DataQuery<?> query) {
 		query.clearColumns();
 		query.includePrimayKeys();
-	}
-	
-	protected <T> boolean callback(DataHandler<T> callback, T data, long index) {
-		try {
-			return callback.handle(data);
-		}
-		catch (Exception ex) {
-			throw new DaoException("Data Handle Error [" + index + "]: " + ex.getMessage() + " - " + data, ex);
-		}
 	}
 }

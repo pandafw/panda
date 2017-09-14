@@ -252,37 +252,33 @@ public interface Dao {
 	 * select all records.
 	 * 
 	 * @param type record type
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	<T> long select(Class<T> type, DataHandler<T> callback);
+	<T> DaoIterator<T> iterate(Class<T> type);
 
 	/**
 	 * select all records.
 	 * 
 	 * @param entity entity
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	<T> long select(Entity<T> entity, DataHandler<T> callback);
+	<T> DaoIterator<T> iterate(Entity<T> entity);
 
 	/**
 	 * select all records.
 	 * 
 	 * @param table table name
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	long select(String table, DataHandler<Map<String, ?>> callback);
+	DaoIterator<Map<String, ?>> iterate(String table);
 
 	/**
 	 * select records by the supplied query.
 	 * 
 	 * @param query query, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	<T> long select(Query<T> query, DataHandler<T> callback);
+	<T> DaoIterator<T> iterate(Query<T> query);
 
 	//--------------------------------------------------------------------
 	/**

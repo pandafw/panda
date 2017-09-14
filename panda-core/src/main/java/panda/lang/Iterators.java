@@ -48,26 +48,30 @@ public abstract class Iterators {
 	}
 
 	// Iterator for enumerations
-	public static class EnumerationIterator implements Iterator, Iterable {
-		Enumeration enumeration;
+	public static class EnumerationIterator<E> implements Iterator<E>, Iterable<E> {
+		Enumeration<E> enumeration;
 
-		public EnumerationIterator(Enumeration aEnum) {
+		public EnumerationIterator(Enumeration<E> aEnum) {
 			enumeration = aEnum;
 		}
 
+		@Override
 		public boolean hasNext() {
 			return enumeration.hasMoreElements();
 		}
 
-		public Object next() {
+		@Override
+		public E next() {
 			return enumeration.nextElement();
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException("Remove is not supported in EnumerationIterator.");
 		}
 
-		public Iterator iterator() {
+		@Override
+		public Iterator<E> iterator() {
 			return this;
 		}
 	}
@@ -84,19 +88,53 @@ public abstract class Iterators {
 			size = Array.getLength(array);
 		}
 
+		@Override
 		public boolean hasNext() {
 			return index < size;
 		}
 
+		@Override
 		public Object next() {
 			return Array.get(array, index++);
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException("Remove is not supported in ArrayIterator.");
 		}
 
+		@Override
 		public Iterator iterator() {
+			return this;
+		}
+	}
+	
+	public static class SingleIterator<T> implements Iterator<T>, Iterable<T> {
+		T obj;
+		
+		public SingleIterator(T obj) {
+			this.obj = obj;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return obj != null;
+		}
+
+		@Override
+		public T next() {
+			T o = obj;
+			obj = null;
+			return o;
+		}
+
+		@Override
+		public void remove() {
+			throw Exceptions.unsupported("Remove unsupported on SingleIterator");
+		}
+
+		@Override
+		public Iterator<T> iterator() {
 			return this;
 		}
 	}
@@ -113,6 +151,7 @@ public abstract class Iterators {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Iterator asIterator(Object value) {
 		if (value == null) {
 			return null;
@@ -134,9 +173,10 @@ public abstract class Iterators {
 			return new EnumerationIterator((Enumeration)value);
 		}
 		
-		return Arrays.asList(value).iterator();
+		return new SingleIterator(value);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Iterable asIterable(Object value) {
 		if (value == null) {
 			return null;
@@ -158,7 +198,7 @@ public abstract class Iterators {
 			return new EnumerationIterator((Enumeration)value);
 		}
 
-		return Arrays.asList(value);
+		return new SingleIterator(value);
 	}
 	
 	//----------------------------------------------------------

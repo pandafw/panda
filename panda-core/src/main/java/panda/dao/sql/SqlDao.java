@@ -1,9 +1,16 @@
 package panda.dao.sql;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import panda.dao.AbstractDao;
 import panda.dao.DB;
 import panda.dao.DaoException;
-import panda.dao.DataHandler;
+import panda.dao.DaoIterator;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
 import panda.dao.query.DataQuery;
@@ -16,13 +23,6 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.lang.reflect.Types;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * !! thread-unsafe !!
@@ -448,13 +448,10 @@ public class SqlDao extends AbstractDao {
 	 * select records by the supplied query.
 	 * 
 	 * @param query query
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	public <T> long selectByQuery(DataQuery<T> query, DataHandler<T> callback) {
-		assertCallback(callback);
-		
+	public <T> DaoIterator<T> iterateByQuery(DataQuery<T> query) {
 		SqlResultSet<T> srs = null;
 		Sql sql = getSqlExpert().select(query);
 		
@@ -462,8 +459,7 @@ public class SqlDao extends AbstractDao {
 		try {
 			srs = executor.selectResultSet(sql.getSql(), sql.getParams(), query.getType());
 			
-			long count = 0;
-			long max = Long.MAX_VALUE;
+			long limit = Long.MAX_VALUE;
 			if (isClientPaginate(query)) {
 				if (getSqlExpert().isSupportScroll()) {
 					executor.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
@@ -475,27 +471,67 @@ public class SqlDao extends AbstractDao {
 					executor.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
 				}
 				if (query.getLimit() > 0) {
-					max = query.getLimit();
+					limit = query.getLimit();
 				}
 			}
-			
-			boolean next = true;
-			while (srs.next() && next && count < max) {
-				T data = srs.getResult();
-				next = callback(callback, data, count);
-				count++;
-			}
-			return count;
+
+			return new SqlDaoIterator<T>(srs, limit);
 		}
 		catch (SQLException e) {
+			try {
+				Sqls.safeClose(srs);
+				autoClose();
+			}
+			catch (Exception ex) {
+				
+			}
 			throw new DaoException("Failed to select query " + getTableName(query) + ": " + sql.getSql() + " - " + e.getMessage(), e);
 		}
-		finally {
+	}
+
+	private class SqlDaoIterator<T> implements DaoIterator<T> {
+		private SqlResultSet<T> srs;
+		private long count;
+		private long limit;
+		
+		public SqlDaoIterator(SqlResultSet<T> srs, long limit) {
+			this.srs = srs;
+			this.limit = limit;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			try {
+				return srs.next() && count < limit;
+			}
+			catch (SQLException e) {
+				throw new DaoException(e);
+			}
+		}
+
+		@Override
+		public T next() {
+			try {
+				T d = srs.getResult();
+				count++;
+				return d;
+			}
+			catch (SQLException e) {
+				throw new DaoException(e);
+			}
+		}
+
+		@Override
+		public void remove() {
+			throw Exceptions.unsupported("Remove unsupported on GaoDaoIterator");
+		}
+
+		@Override
+		public void close() {
 			Sqls.safeClose(srs);
 			autoClose();
 		}
 	}
-
 	//-------------------------------------------------------------------------
 	/**
 	 * delete record by the supplied query

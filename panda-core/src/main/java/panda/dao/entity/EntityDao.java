@@ -1,16 +1,16 @@
 package panda.dao.entity;
 
-import panda.dao.Dao;
-import panda.dao.DaoClient;
-import panda.dao.DataHandler;
-import panda.dao.DatabaseMeta;
-import panda.dao.query.Query;
-import panda.lang.Texts;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import panda.dao.Dao;
+import panda.dao.DaoClient;
+import panda.dao.DaoIterator;
+import panda.dao.DatabaseMeta;
+import panda.dao.query.Query;
+import panda.lang.Texts;
 
 
 
@@ -205,22 +205,20 @@ public class EntityDao<T> {
 	/**
 	 * select all records.
 	 * 
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	public long select(DataHandler<T> callback) {
-		return dao.select(entity, callback);
+	public DaoIterator<T> iterate() {
+		return dao.iterate(entity);
 	}
 
 	/**
 	 * select records by the supplied query.
 	 * 
 	 * @param query WHERE conditions, order, offset, limit and filters
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
-	public long select(Query<T> query, DataHandler<T> callback) {
-		return dao.select(query, callback);
+	public DaoIterator<T> iterate(Query<T> query) {
+		return dao.iterate(query);
 	}
 
 	//--------------------------------------------------------------------

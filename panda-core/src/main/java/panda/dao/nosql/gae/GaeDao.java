@@ -27,17 +27,18 @@ import com.google.appengine.api.datastore.Text;
 
 import panda.dao.AbstractDao;
 import panda.dao.DaoException;
-import panda.dao.DataHandler;
+import panda.dao.DaoIterator;
 import panda.dao.entity.Entity;
 import panda.dao.entity.EntityField;
+import panda.dao.query.DataQuery;
 import panda.dao.query.Filter.ComboFilter;
 import panda.dao.query.Filter.ReferFilter;
 import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
-import panda.dao.query.DataQuery;
 import panda.dao.query.Operator;
 import panda.dao.query.Query;
 import panda.lang.Exceptions;
+import panda.lang.Iterators.SingleIterator;
 import panda.lang.Logical;
 import panda.lang.Order;
 import panda.lang.Strings;
@@ -853,6 +854,10 @@ public class GaeDao extends AbstractDao {
 	 */
 	@Override
 	protected <T> List<T> selectByQuery(DataQuery<T> query) {
+		if (log.isDebugEnabled()) {
+			log.debug("selectByQuery: " + query);
+		}
+		
 		if (isQueryIdentity(query)) {
 			T d = fetchByQuery(query);
 			List<T> list = new ArrayList<T>();
@@ -887,44 +892,82 @@ public class GaeDao extends AbstractDao {
 	 * select records by the supplied query.
 	 * 
 	* @param query query
-	 * @param callback DataHandler callback
-	 * @return callback processed count
+	 * @return data iterator
 	 */
 	@Override
-	protected <T> long selectByQuery(DataQuery <T>query, DataHandler<T> callback) {
+	protected <T> DaoIterator<T> iterateByQuery(DataQuery<T> query) {
+		if (log.isDebugEnabled()) {
+			log.debug("iterateByQuery: " + query);
+		}
+		
 		if (isQueryIdentity(query)) {
 			T d = fetchByQuery(query);
-			callback(callback, d, 0);
-			return 1;
+			return new OneDaoIterator<T>(d);
 		}
 
 		autoStart();
 		try {
-			Entity<T> entity = query.getEntity();
-			
 			PreparedQuery pq = prepareQuery(query);
 			FetchOptions fo = getFetchOptions(query);
 			Iterator<com.google.appengine.api.datastore.Entity> it = pq.asIterator(fo);
 
-			long count = 0;
-			while (it.hasNext()) {
-				com.google.appengine.api.datastore.Entity ge = it.next();
-				T data = createEntityData(entity);
-				convertEntityToData(ge, data, query);
-				if (!callback(callback, data, count++)) {
-					break;
-				}
-			}
-			return count;
+			return new GaeDaoIterator<T>(query, it);
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
+			autoClose();
 			throw new DaoException("Failed to select entity " + getTableName(query) + ": " + query, e);
 		}
-		finally {
-			autoClose();
+	}
+	
+	private static class OneDaoIterator<T> extends SingleIterator<T> implements DaoIterator<T> {
+		public OneDaoIterator(T data) {
+			super(data);
+		}
+		
+		@Override
+		public void remove() {
+			throw Exceptions.unsupported("Remove unsupported on OneDaoIterator");
+		}
+
+		@Override
+		public void close() {
 		}
 	}
 
+	private class GaeDaoIterator<T> implements DaoIterator<T> {
+		DataQuery<T> query;
+		Iterator<com.google.appengine.api.datastore.Entity> it;
+		
+		public GaeDaoIterator(DataQuery<T> query, Iterator<com.google.appengine.api.datastore.Entity> it) {
+			this.query = query;
+			this.it = it;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		@Override
+		public T next() {
+			com.google.appengine.api.datastore.Entity ge = it.next();
+			Entity<T> entity = query.getEntity();
+			T data = createEntityData(entity);
+			convertEntityToData(ge, data, query);
+			return data;
+		}
+
+		@Override
+		public void remove() {
+			throw Exceptions.unsupported("Remove unsupported on GaoDaoIterator");
+		}
+
+		@Override
+		public void close() {
+			autoClose();
+		}
+	}
+	
 	//--------------------------------------------------------------------
 	/**
 	 * delete record by the supplied query

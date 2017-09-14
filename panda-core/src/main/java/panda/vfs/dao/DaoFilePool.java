@@ -8,7 +8,7 @@ import java.util.List;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.dao.DaoException;
-import panda.dao.DataHandler;
+import panda.dao.DaoIterator;
 import panda.io.Streams;
 import panda.lang.Collections;
 import panda.lang.time.DateTimes;
@@ -180,15 +180,18 @@ public class DaoFilePool implements FilePool {
 				
 				fdq.fid().equalTo(fi.getId()).bno().asc();
 				
-				dao.select(fdq, new DataHandler<DaoFileData>() {
-					private int len = 0;
-		
-					public boolean handle(DaoFileData data) {
+				DaoIterator<DaoFileData> it = dao.iterate(fdq);
+				try {
+					int len = 0;
+					while (it.hasNext()) {
+						DaoFileData data = it.next();
 						System.arraycopy(data.getData(), 0, buf, len, data.getData().length);
 						len += data.getData().length;
-						return true;
 					}
-				});
+				}
+				finally {
+					it.close();
+				}
 			}
 			
 			fi.setData(buf);

@@ -447,6 +447,23 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
+	public void testIterate() {
+		List<Teacher> expect = Teacher.creates(1, 2);
+		
+		DataQuery<Teacher> q = new DataQuery<Teacher>(Teacher.class);
+		q.limit(2);
+
+		List<Teacher> actual = new ArrayList<Teacher>();
+		try (DaoIterator<Teacher> it = dao.iterate(q)) {
+			while (it.hasNext()) {
+				actual.add(it.next());
+			}
+		}
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
 	public void testDelete() {
 		Score expect = Score.create(2, 2, 2);
 		Assert.assertEquals(1, dao.delete(expect));
