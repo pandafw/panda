@@ -632,7 +632,7 @@ public class Files {
 			return Iterators.toList(it);
 		}
 		finally {
-			it.safeClose();
+			Streams.safeClose(it);
 		}
 	}
 	
@@ -749,7 +749,10 @@ public class Files {
 	 * @return an iterator of java.io.File with the matching files
 	 */
 	public static FileIterator iterateFiles(File directory, String... extensions) {
-		return new FileIterator(directory, extensions);
+		if (Systems.IS_OS_APPENGINE) {
+			return new IOFileIterator(directory, extensions);
+		}
+		return new NioFileIterator(directory, extensions);
 	}
 
 	/**
@@ -763,7 +766,10 @@ public class Files {
 	 * @return an iterator of java.io.File with the matching files
 	 */
 	public static FileIterator iterateFiles(File directory, boolean recursive, String... extensions) {
-		return new FileIterator(directory, recursive, extensions);
+		if (Systems.IS_OS_APPENGINE) {
+			return new IOFileIterator(directory, recursive, extensions);
+		}
+		return new NioFileIterator(directory, recursive, extensions);
 	}
 
 	/**
@@ -780,7 +786,10 @@ public class Files {
 	 * @see panda.io.filter.NameFileFilter
 	 */
 	public static FileIterator iterateFiles(File directory, IOFileFilter fileFilter, boolean recursive) {
-		return new FileIterator(directory, fileFilter, recursive);
+		if (Systems.IS_OS_APPENGINE) {
+			return new IOFileIterator(directory, fileFilter, recursive);
+		}
+		return new NioFileIterator(directory, fileFilter, recursive);
 	}
 
 	/**
@@ -799,7 +808,10 @@ public class Files {
 	 * @see panda.io.filter.NameFileFilter
 	 */
 	public static FileIterator iterateFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
-		return new FileIterator(directory, fileFilter, dirFilter);
+		if (Systems.IS_OS_APPENGINE) {
+			return new IOFileIterator(directory, fileFilter, dirFilter);
+		}
+		return new NioFileIterator(directory, fileFilter, dirFilter);
 	}
 
 	/**
@@ -819,7 +831,10 @@ public class Files {
 	 * @see panda.io.filter.NameFileFilter
 	 */
 	public static FileIterator iterateFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
-		return new FileIterator(directory, fileFilter, dirFilter, true);
+		if (Systems.IS_OS_APPENGINE) {
+			return new IOFileIterator(directory, fileFilter, dirFilter, true);
+		}
+		return new NioFileIterator(directory, fileFilter, dirFilter, true);
 	}
 
 	// -----------------------------------------------------------------------

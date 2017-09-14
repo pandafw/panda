@@ -203,7 +203,7 @@ public class Streams {
 	 * 	// error handling
 	 * }
 	 * finally {
-	 * 	Streams.closeQuietly(closeable);
+	 * 	Streams.safeClose(closeable);
 	 * }
 	 * </pre>
 	 * 
@@ -216,6 +216,17 @@ public class Streams {
 			}
 		}
 		catch (IOException ioe) {
+			// ignore
+		}
+	}
+
+	public static void safeClose(AutoCloseable closeable) {
+		try {
+			if (closeable != null) {
+				closeable.close();
+			}
+		}
+		catch (Exception ioe) {
 			// ignore
 		}
 	}
@@ -239,7 +250,7 @@ public class Streams {
 	 * 	// error handling
 	 * }
 	 * finally {
-	 * 	Streams.closeQuietly(selector);
+	 * 	Streams.safeClose(selector);
 	 * }
 	 * </pre>
 	 * 
@@ -1047,7 +1058,7 @@ public class Streams {
 	 * 	}
 	 * }
 	 * finally {
-	 * 	Streams.closeQuietly(reader);
+	 * 	Streams.safeClose(reader);
 	 * }
 	 * </pre>
 	 * 
@@ -1079,7 +1090,7 @@ public class Streams {
 	 * 	}
 	 * }
 	 * finally {
-	 * 	Streams.closeQuietly(stream);
+	 * 	Streams.safeClose(stream);
 	 * }
 	 * </pre>
 	 * 
@@ -1113,7 +1124,7 @@ public class Streams {
 	 * 	}
 	 * }
 	 * finally {
-	 * 	Streams.closeQuietly(stream);
+	 * 	Streams.safeClose(stream);
 	 * }
 	 * </pre>
 	 * 
