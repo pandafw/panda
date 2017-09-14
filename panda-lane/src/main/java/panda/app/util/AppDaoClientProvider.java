@@ -8,8 +8,8 @@ import javax.sql.DataSource;
 
 import panda.app.constant.SET;
 import panda.dao.DaoClient;
-import panda.dao.nosql.gae.GaeDaoClient;
-import panda.dao.nosql.mongo.MongoDaoClient;
+import panda.dao.gae.GaeDaoClient;
+import panda.dao.mongo.MongoDaoClient;
 import panda.dao.sql.SimpleDataSource;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.Sqls;

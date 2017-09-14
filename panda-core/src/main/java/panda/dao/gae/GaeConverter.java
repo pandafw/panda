@@ -1,4 +1,4 @@
-package panda.dao.nosql.gae;
+package panda.dao.gae;
 
 public interface GaeConverter {
 	Object convert(Object obj);

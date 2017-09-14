@@ -1,4 +1,4 @@
-package panda.dao.nosql.mongo;
+package panda.dao.mongo;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

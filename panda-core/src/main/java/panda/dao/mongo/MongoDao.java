@@ -1,4 +1,4 @@
-package panda.dao.nosql.mongo;
+package panda.dao.mongo;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
