@@ -13,6 +13,7 @@ import panda.lang.StringEscapes;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.net.http.HttpHeader;
 import panda.servlet.HttpServletSupport;
 
 
@@ -119,7 +120,9 @@ public abstract class GenericWorkAction extends AbstractAction {
 			hss.setMaxAge(0);
 			hss.setCharset(Charsets.UTF_8);
 			hss.setContentType(MimeTypes.TEXT_HTML);
+
 			try {
+				getResponse().addHeader(HttpHeader.X_ACCEL_BUFFERING, "off");
 				hss.writeResponseHeader();
 			}
 			catch (Exception e) {
