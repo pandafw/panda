@@ -254,21 +254,24 @@ public class ClassLoaders {
 	}
 
 	/**
-	 * Attempt to load a class from a group of class loader
+	 * Attempt to load a class from a group of class loader.
+	 * This implementation supports the syntaxes "{@code java.util.Map.Entry}" and 
+	 * {@code java.util.Map$Entry}".
 	 * 
 	 * @param name - the class to load
 	 * @param initialize whether the class must be initialized
-	 * @param classLoader - the group of class loader set to examine
+	 * @param classLoaders - the group of class loader set to examine
 	 * @return the class
 	 * @exception ClassNotFoundException if the class cannot be loaded
 	 */
-	private static Class<?> classForName(String name, boolean initialize, Collection<ClassLoader> classLoader) throws ClassNotFoundException {
-		for (ClassLoader cl : classLoader) {
-			if (null != cl) {
+	private static Class<?> classForName(String name, boolean initialize, Collection<ClassLoader> classLoaders) throws ClassNotFoundException {
+		for (ClassLoader cl : classLoaders) {
+			if (cl != null) {
 				try {
 					Class<?> c = Class.forName(name, true, cl);
-					if (null != c)
+					if (null != c) {
 						return c;
+					}
 				}
 				catch (ClassNotFoundException e) {
 					// we'll ignore this until all classloaders fail to locate the class
@@ -276,6 +279,25 @@ public class ClassLoaders {
 			}
 		}
 
+		// allow path separators (.) as inner class name separators
+		String cn = name;
+		int d = 0;
+		while ((d = cn.lastIndexOf('.')) != -1) {
+			cn = cn.substring(0, d) + '$' + cn.substring(d + 1);
+			for (ClassLoader cl : classLoaders) {
+				if (cl != null) {
+					try {
+						Class<?> c = Class.forName(cn, true, cl);
+						if (null != c) {
+							return c;
+						}
+					}
+					catch (ClassNotFoundException e) {
+						// we'll ignore this until all classloaders fail to locate the class
+					}
+				}
+			}
+		}
 		throw new ClassNotFoundException("Cannot find class: " + name);
 	}
 
