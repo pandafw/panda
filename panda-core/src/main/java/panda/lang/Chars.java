@@ -449,6 +449,23 @@ public abstract class Chars {
 
 	// --------------------------------------------------------------------------
 	/**
+	 * Checkes whether the character is non-breaking space ({@code '\u005Cu00A0'},
+	 *      {@code '\u005Cu2007'}, {@code '\u005Cu202F'}) or whitespace is stripped as defined by
+	 * {@link Character#isWhitespace(char)}.
+	 */
+	public static boolean isSpace(char ch) {
+		return Character.isWhitespace(ch) || isNonBreakingSpace(ch);
+	}
+	
+	/**
+	 * Checkes whether the character is non-breaking space ({@code '\u005Cu00A0'},
+	 *      {@code '\u005Cu2007'}, {@code '\u005Cu202F'})
+	 */
+	public static boolean isNonBreakingSpace(char ch) {
+		return ch == '\u00A0' || ch == '\uu2007' || ch == '\u202F';
+	}
+
+	/**
 	 * <p>
 	 * Checks whether the character is ASCII 7 bit.
 	 * </p>

@@ -252,7 +252,7 @@ public class Strings {
 			return true;
 		}
 		for (int i = 0; i < strLen; i++) {
-			if (Character.isWhitespace(cs.charAt(i)) == false) {
+			if (Chars.isSpace(cs.charAt(i)) == false) {
 				return false;
 			}
 		}
@@ -398,7 +398,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * This is similar to {@link #trim(CharSequence)} but removes whitespace. Whitespace is defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * <p>
 	 * A {@code null} input String returns {@code null}.
@@ -445,7 +445,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * This is similar to {@link #trimToNull(CharSequence)} but removes whitespace. Whitespace is defined
-	 * by {@link Character#isWhitespace(char)}.
+	 * by {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -473,7 +473,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * This is similar to {@link #trimToNull(CharSequence)} but removes whitespace. Whitespace is defined
-	 * by {@link Character#isWhitespace(char)}.
+	 * by {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -540,7 +540,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * This is similar to {@link #trimToEmpty(CharSequence)} but removes whitespace. Whitespace is defined
-	 * by {@link Character#isWhitespace(char)}.
+	 * by {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -568,7 +568,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * This is similar to {@link #trimToEmpty(CharSequence)} but removes whitespace. Whitespace is defined
-	 * by {@link Character#isWhitespace(char)}.
+	 * by {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -635,7 +635,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the stripChars String is {@code null}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}. Alternatively use {@link #strip(CharSequence)}.
+	 * {@link Chars#isSpace(char)}. Alternatively use {@link #strip(CharSequence)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -718,7 +718,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the strip char is {@code 0}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -747,7 +747,7 @@ public class Strings {
 
 		int start = 0;
 		if (chr == 0) {
-			while (start != strLen && Character.isWhitespace(str.charAt(start))) {
+			while (start != strLen && Chars.isSpace(str.charAt(start))) {
 				start++;
 			}
 		}
@@ -769,7 +769,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the stripChars String is {@code null}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -799,7 +799,7 @@ public class Strings {
 
 		int start = 0;
 		if (stripChars == null) {
-			while (start != strLen && Character.isWhitespace(str.charAt(start))) {
+			while (start != strLen && Chars.isSpace(str.charAt(start))) {
 				start++;
 			}
 		}
@@ -850,7 +850,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the strip char is {@code 0}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -878,7 +878,7 @@ public class Strings {
 		}
 
 		if (chr == 0) {
-			while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+			while (end != 0 && Chars.isSpace(str.charAt(end - 1))) {
 				end--;
 			}
 		}
@@ -900,7 +900,7 @@ public class Strings {
 	 * </p>
 	 * <p>
 	 * If the stripChars String is {@code null}, whitespace is stripped as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -930,7 +930,7 @@ public class Strings {
 		}
 
 		if (stripChars == null) {
-			while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+			while (end != 0 && Chars.isSpace(str.charAt(end - 1))) {
 				end--;
 			}
 		}
@@ -950,7 +950,7 @@ public class Strings {
 	/**
 	 * <p>
 	 * Strips whitespace from the start and end of every String in an array. Whitespace is defined
-	 * by {@link Character#isWhitespace(char)}.
+	 * by {@link Chars#isSpace(char)}.
 	 * </p>
 	 * <p>
 	 * A new array is returned each time, except for length zero. A {@code null} array will return
@@ -975,12 +975,12 @@ public class Strings {
 	 * <p>
 	 * Strips any of a set of characters from the start and end of every String in an array.
 	 * </p>
-	 * Whitespace is defined by {@link Character#isWhitespace(char)}.</p>
+	 * Whitespace is defined by {@link Chars#isSpace(char)}.</p>
 	 * <p>
 	 * A new array is returned each time, except for length zero. A {@code null} array will return
 	 * {@code null}. An empty array will return itself. A {@code null} array entry will be ignored.
 	 * A {@code null} stripChars will strip whitespace as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * {@link Chars#isSpace(char)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -1749,7 +1749,6 @@ public class Strings {
 	 *         character
 	 * @see java.lang.Character#isWhitespace
 	 */
-	// From org.springframework.util.StringUtils, under Apache License 2.0
 	public static boolean containsWhitespace(final CharSequence seq) {
 		if (isEmpty(seq)) {
 			return false;
@@ -4737,7 +4736,7 @@ public class Strings {
 
 		int start = 0;
 		if (chr == 0) {
-			while (start != strLen && Character.isWhitespace(sb.charAt(start))) {
+			while (start != strLen && Chars.isSpace(sb.charAt(start))) {
 				start++;
 			}
 		}
@@ -4766,7 +4765,7 @@ public class Strings {
 		}
 
 		if (chr == 0) {
-			while (end != 0 && Character.isWhitespace(sb.charAt(end - 1))) {
+			while (end != 0 && Chars.isSpace(sb.charAt(end - 1))) {
 				end--;
 			}
 		}
@@ -8088,7 +8087,7 @@ public class Strings {
 		}
 		for (int i = 0; i < strLen; i++) {
 			char c = str.charAt(i);
-			if (c > 0x20 && !Character.isWhitespace(c)) {
+			if (c > 0x20 && !Chars.isSpace(c)) {
 				return true;
 			}
 		}
