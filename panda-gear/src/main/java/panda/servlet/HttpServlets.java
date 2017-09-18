@@ -345,27 +345,31 @@ public class HttpServlets {
 				return r;
 			}
 		}
-		
 
 		StringBuilder sb = new StringBuilder();
-		if (Strings.isNotEmpty(msg)) {
-			sb.append(msg).append(Streams.LINE_SEPARATOR);
+		if (Strings.isEmpty(msg)) {
+			sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
+		}
+		else {
+			sb.append(msg);
 		}
 		if (request != null) {
+			sb.append(Streams.LINE_SEPARATOR);
 			if (r) {
 				dumpRequestTrace(request, sb);
 			}
 			else {
 				dumpRequestPath(request, sb);
 			}
-			sb.append(Streams.LINE_SEPARATOR);
 		}
 		if (r) {
-			sb.append(Exceptions.getStackTrace(e));
-			log.error(sb.toString());
+			log.error(sb.toString(), e);
 		}
 		else {
-			sb.append(e.getClass().getName() + ": " + e.getMessage());
+			if (Strings.isEmpty(msg)) {
+				sb.append(Streams.LINE_SEPARATOR);
+				sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
+			}
 			log.warn(sb.toString());
 		}
 		
