@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import panda.ioc.annotation.IocBean;
+import panda.lang.reflect.Methods;
 import panda.mvc.ActionContext;
 import panda.mvc.View;
 import panda.mvc.validation.ValidateException;
@@ -25,21 +26,21 @@ public class InvokeProcessor extends AbstractProcessor {
 			if (ex instanceof ValidateException) {
 				r = Views.evalView(ac.getIoc(), ac.getConfig().getErrorView());
 				if (r == null) {
-					throw new RuntimeException("Failed to invoke " + method, e);
+					throw (ValidateException)ex;
 				}
 			}
-			if (ex instanceof RuntimeException) {
+			else if (ex instanceof RuntimeException) {
 				throw (RuntimeException)ex;
 			}
 			else {
-				throw new RuntimeException("Failed to invoke " + method, ex);
+				throw new RuntimeException(ex);
 			}
 		}
 		catch (RuntimeException e) {
 			throw e;
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Failed to invoke " + method, e);
+			throw new RuntimeException("Failed to invoke " + Methods.toSimpleString(method) + ": " + e.getMessage(), e);
 		}
 
 		if (r != null) {
