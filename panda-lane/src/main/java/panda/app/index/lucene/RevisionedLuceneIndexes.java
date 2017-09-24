@@ -124,6 +124,9 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 				vs.put(n, i);
 				olds.add(n + "." + latest);
 			}
+			else {
+				olds.add(n + "." + e);
+			}
 		}
 		
 		for (String s : olds) {
