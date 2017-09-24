@@ -7,6 +7,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import panda.ioc.Scope;
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -35,7 +37,7 @@ public @interface IocBean {
 	 */
 	String[] args() default {};
 
-	String scope() default "app";
+	String scope() default Scope.APP;
 
 	boolean singleton() default true;
 

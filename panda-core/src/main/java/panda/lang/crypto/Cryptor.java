@@ -1,8 +1,12 @@
 package panda.lang.crypto;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.Key;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.SecretKeySpec;
 
 import panda.lang.Exceptions;
@@ -57,6 +61,30 @@ public class Cryptor {
 			cipher.init(Cipher.DECRYPT_MODE, decodeKey);
 			byte[] decrypted = cipher.doFinal(data);
 			return decrypted;
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public CipherOutputStream encrypt(OutputStream os) {
+		try {
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.ENCRYPT_MODE, encodeKey);
+			CipherOutputStream cos = new CipherOutputStream(os, cipher);
+			return cos;
+		}
+		catch (Exception e) {
+			throw Exceptions.wrapThrow(e);
+		}
+	}
+
+	public CipherInputStream decrypt(InputStream is) {
+		try {
+			Cipher cipher = Cipher.getInstance(algorithm);
+			cipher.init(Cipher.DECRYPT_MODE, decodeKey);
+			CipherInputStream cis = new CipherInputStream(is, cipher);
+			return cis;
 		}
 		catch (Exception e) {
 			throw Exceptions.wrapThrow(e);

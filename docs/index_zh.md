@@ -10,7 +10,7 @@ Panda Framework是由以下几个部分组成的。
  | 模块                   | 说明                                                                      |
  |----------------------- |---------------------------------------------------------------------------|
  | panda-core             | 这是Panda框架中最基础的部分，它包含了类似apache-commons的许多有用的类。   |
- | panda-gear             | IOC/MVC模块。类似Spring-MVC, Struts2。包含了一些常用的Taglib。            |
+ | panda-gear             | [IOC](ioc/ioc_zh.md)/MVC模块。类似Spring-MVC, Struts2。包含了一些常用的Taglib。            |
  | panda-glue             | ASM/AOP模块                                                               |
  | panda-html             | 包含了jQuery, Bootstrap, 以及panda-gear中一些taglib所需要的css/javascript。|
  | panda-lane             | 扩展模块。包含了实现CRUD的基础模板类，用户认证/权限管理的基础类，和一些其他的有用的类。|
@@ -35,7 +35,7 @@ Panda Framework的最大亮点或许是panda-tool这个源代码生成器吧。
 它可以实现Spring/Struts2/Hibernate的一些非常常用的功能。
 并且可以通过XML定义文件来自动产生实现“检索/列表/新建/修改/删除”功能的源代码（包括HTML页面及后台处理）。
 
-我做了一个[http://pandafw.tk](DEMO网站)，通过这个DEMO大家可以比较直观的了解Panda Framework。
+我做了一个[DEMO网站](http://pandafw.tk)，通过这个DEMO大家可以比较直观的了解Panda Framework。
 
 
 如果大家觉得panda Framework好用,并且能够对你的工作有帮助，留个言提个建议或写个bug报告的话，我会非常感激。

@@ -17,9 +17,7 @@ import panda.log.Log;
 import panda.log.Logs;
 
 /**
- * 从 Json 文件中读取配置信息。 支持 Merge with parent ，利用 MapLoader
- * <p>
- * 注，如果 JSON 配置文件被打入 Jar 包中，这个加载器将不能正常工作
+ * Load Ioc configurations from Json.
  */
 public class JsonIocLoader extends MapIocLoader {
 	private static final Log log = Logs.getLog(JsonIocLoader.class);
