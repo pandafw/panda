@@ -11,7 +11,7 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
-	private static final String PANDA_CDN = "http://pandafw.github.io/panda/";
+	private static final String PANDA_CDN = "//pandafw.github.io/repos/";
 	private static final String JQUERY_VERSION = "1.12.4";
 	private static final String BOOTSTRAP_VERSION = "3.3.7";
 	private static final String FONTAWESOME_VERSION = "4.7.0";
@@ -117,7 +117,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private void writeJquery() throws IOException {
 		if (js && tag.isJquery()) {
 			if (tag.isCdn()) {
-				writeCdnJs("http://code.jquery.com/jquery-" + JQUERY_VERSION + debug() + ".js");
+				writeCdnJs("//code.jquery.com/jquery-" + JQUERY_VERSION + debug() + ".js");
 			}
 			else {
 				writeStaticJs("/jquery/js/jquery-" + JQUERY_VERSION);
@@ -160,11 +160,11 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		boolean bs = tag.isBootstrap();
 		if (css && bs) {
 			if (tag.isCdn()) {
-				writeCdnCss("http://netdna.bootstrapcdn.com/bootstrap/" 
+				writeCdnCss("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
 						+ "/css/bootstrap"
 						+ debug() + ".css");
-				writeCdnCss("http://netdna.bootstrapcdn.com/font-awesome/" 
+				writeCdnCss("//netdna.bootstrapcdn.com/font-awesome/" 
 						+ FONTAWESOME_VERSION 
 						+ "/css/font-awesome"
 						+ debug() + ".css");
@@ -176,7 +176,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 		if (js && bs) {
 			if (tag.isCdn()) {
-				writeCdnJs("http://netdna.bootstrapcdn.com/bootstrap/" 
+				writeCdnJs("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
 						+ "/js/bootstrap" 
 						+ debug() + ".js");

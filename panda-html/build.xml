@@ -349,7 +349,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</java>
 	</target>
 
-	<target name="build" depends="min-js, min-css, ghp" description="Build the project"/>
+	<target name="build" depends="min-js, min-css" description="Build the project"/>
 
 	<target name="jar" description="Make project as a jar file">
 		<delete dir="out"/>
@@ -369,18 +369,18 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	</target>
 	
 	<target name="ghp" description="Copy sources to gh-pages location">
-		<mkdir dir="../docs/${prj.version}"/>
-		<delete dir="../docs/${prj.version}" includeemptydirs="true">
+		<mkdir dir="${prj.repo}/docs/${prj.version}"/>
+		<delete dir="${prj.repo}/docs/${prj.version}" includeemptydirs="true">
 			<exclude name="*.xsd"/>
 		</delete>
-		<copy todir="../docs/${prj.version}" preservelastmodified="true" overwrite="true" force="true">
+		<copy todir="${prj.repo}/docs/${prj.version}" preservelastmodified="true" overwrite="true" force="true">
 			<fileset dir="src/main">
 				<include name="**"/>
 			</fileset>
 		</copy>
 	</target>
 
-	<target name="dist" depends="jar" description="Distribute project as a jar file"/>
+	<target name="dist" depends="jar, ghp" description="Distribute project as a jar file"/>
 
 	<!-- maven -->
 	<import file="../ant/prj-maven.xml"/>
