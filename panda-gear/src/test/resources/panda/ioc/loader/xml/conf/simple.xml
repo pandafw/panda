@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ioc>
-	<obj name="queen" type="panda.ioc.loader.xml.meta.Bee">
+	<queen>
+		<type>panda.ioc.loader.xml.meta.Bee</type>
 		<args>
-			<str>TheQueen</str>
+			<i>TheQueen</i>
 		</args>
-	</obj>
+	</queen>
 
-	<obj name="A" type="panda.ioc.loader.xml.meta.Bee">
+	<A>
+		<type>panda.ioc.loader.xml.meta.Bee</type>
 		<args>
-			<ref>queen</ref>
-			<str>TheA</str>
+			<i>#queen</i>
+			<i>TheA</i>
 		</args>
-	</obj>
+	</A>
 
-	<obj name="B" type="panda.ioc.loader.xml.meta.Bee">
+	<B>
+		<type>panda.ioc.loader.xml.meta.Bee</type>
 		<args>
-			<ref>queen</ref>
-			<str>TheB</str>
+			<i>#queen</i>
+			<i>TheB</i>
 		</args>
-	</obj>
+	</B>
 
-	<obj name="C" type="panda.ioc.loader.xml.meta.Bee">
+	<C>
+		<type>panda.ioc.loader.xml.meta.Bee</type>
 		<args>
-			<ref>queen</ref>
-			<str>TheC</str>
+			<i>#queen</i>
+			<i>TheC</i>
 		</args>
 		<events>
 			<create>onBorn</create>
 			<fetch>work</fetch>
 			<depose>onDead</depose>
 		</events>
-		<field name="age">
-			<int>15</int>
-		</field>
-		<field name="friends">
-			<array>
-				<ref>A</ref>
-				<ref>B</ref>
-				<obj type="panda.ioc.loader.xml.meta.Bee">
-					<field name="age"><int>123</int></field>
-				</obj>
-			</array>
-		</field>
-		<field name="map">
+		<fields>
+			<age>15</age>
+			<friends>
+				<i>#A</i>
+				<i>#B</i>
+				<i>
+					<type>panda.ioc.loader.xml.meta.Bee</type>
+					<fields>
+						<age>123</age>
+					</fields>
+				</i>
+			</friends>
 			<map>
-				<item key="abc"><str>ABC</str></item>
+				<abc>ABC</abc>
 			</map>
-		</field>
-	</obj>
+		</fields>
+	</C>
 </ioc>

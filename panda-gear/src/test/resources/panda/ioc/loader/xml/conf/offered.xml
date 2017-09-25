@@ -1,52 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ioc>
-	<obj name="obj" singleton="true" scope="app" parent="XXX"
-		type="java.lang.String">
+	<obj>
+		<parent>XXX</parent>
 		<args>
-			<str>Tasdfadf</str>
-			<int>23</int>
-			<float>78.34</float>
-			<bool>true</bool>
-			<refer>abc</refer>
-			<refer>$Ioc</refer>
-			<java>$abc.find('YYY')</java>
-			<env>TOMCAT_HOME</env>
-			<file>/home/panda/tmp/name.txt</file>
-			<obj type="java.lang.StringBuilder" name="xx">
+			<i>Tasdfadf</i>
+			<i>23</i>
+			<i>78.34</i>
+			<i>true</i>
+			<i>#abc</i>
+			<i>#$Ioc</i>
+			<i>${abc.find('YYY')}</i>
+			<i>
+				<type>java.lang.StringBuilder</type>
 				<args>
-					<str>tttt</str>
+					<i>tttt</i>
 				</args>
-			</obj>
-			<array>
-				<str>XXXX</str>
-				<str>XXXX</str>
-			</array>
-			<list>
-				<int>34</int>
-				<float>78.34</float>
-			</list>
-			<map>
-				<item key="a">
-					<str>XXXX</str>
-				</item>
-				<item key="B">
-					<int>11</int>
-				</item>
-			</map>
+			</i>
+			<i>
+				<i>XXXX</i>
+				<i>XXXX</i>
+			</i>
+			<i>
+				<i>34</i>
+				<i>78.34</i>
+			</i>
+			<i>
+				<a>XXXX</a>
+				<B>11</B>
+			</i>
 		</args>
-		<field name="field1">
-			<env>JAVA_HOME</env>
-		</field>
+		<fields>
+			<field1>JAVA_HOME</field1>
+		</fields>
 		<events>
 			<create>onCreate</create>
 			<depose>depose</depose>
 			<fetch>com.you.app.OnFetchObject</fetch>
 		</events>
 	</obj>
-	<obj name="XXX">
+	<XXX>
 		<events>
 			<create>xxxx</create>
 			<depose></depose>
 		</events>
-	</obj>
+	</XXX>
 </ioc>
