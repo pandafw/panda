@@ -5,6 +5,10 @@
 
 <body>
 <style>
+	#syncw_log {
+		max-height: 480px;
+		overflow-y: auto;
+	}
 	#syncw_log div {
 		border: none 0;
 		font-size: 80%;
@@ -36,7 +40,7 @@
 	<br/>
 
 	<script type="text/javascript">
-		var work_msgs_maxsize = 1000;
+		var work_msgs_limit = 10000;
 		var work_msgs = [];
 
 		function syncw_status() {
@@ -168,17 +172,20 @@
 			if (msg) {
 				var $m = $('<div class="' + work_status_cls(level) + '">' + String.escapeHtml(work_status_msg(time, level, msg, count, total)) + '</div>');
 
-				$('#syncw_log').append($m);
-				$m.scrollIntoView();
+				var $sl = $('#syncw_log');
+				
+				$sl.append($m).scrollTop($sl.scrollTop() + $m.outerHeight() + 20);
 
 				work_msgs.push($m);
-				while (work_msgs.length > work_msgs_maxsize) {
+				while (work_msgs.length > work_msgs_limit) {
 					work_msgs.shift().remove();
 				}
 			}
 		}
 		
-		function onPageLoad() { syncw_status(); }
+		function onPageLoad() {
+			syncw_status();
+		}
 	</script>
 </div>
 
