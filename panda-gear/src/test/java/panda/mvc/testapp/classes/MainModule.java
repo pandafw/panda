@@ -8,7 +8,7 @@ import panda.mvc.ioc.provider.ComboIocProvider;
 
 @To(all=View.JSON)
 @IocBy(type=ComboIocProvider.class, args={"*default", "*json","panda/mvc/testapp/classes/ioc/test.js"})
-@Modules(packages={ "panda.dao.sql" }, scan = true)
+@Modules(scan = true)
 public class MainModule {
 
 }

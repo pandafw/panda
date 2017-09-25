@@ -63,7 +63,7 @@ public class JsonIocLoader extends MapIocLoader {
 	private void loadFromStream(InputStream is) throws IOException {
 		try {
 			JsonObject jo = JsonObject.fromJson(is, Charsets.UTF_8);
-			if (null != jo && jo.size() > 0) {
+			if (jo != null && jo.size() > 0) {
 				initialize(jo);
 			}
 		}
@@ -74,7 +74,7 @@ public class JsonIocLoader extends MapIocLoader {
 	
 	private void loadFromReader(Reader reader) {
 		JsonObject jo = JsonObject.fromJson(reader);
-		if (null != jo && jo.size() > 0) {
+		if (jo != null && jo.size() > 0) {
 			initialize(jo);
 		}
 	}

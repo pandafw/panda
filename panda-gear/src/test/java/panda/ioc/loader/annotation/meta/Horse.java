@@ -1,4 +1,4 @@
-package panda.ioc.loader.xml.meta;
+package panda.ioc.loader.annotation.meta;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;

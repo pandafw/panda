@@ -61,7 +61,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			
 			// If has parent
 			Object p = m.get("parent");
-			if (null != p) {
+			if (p != null) {
 				checkParents(map, name);
 				IocObject parent = beans.get((String)p);
 				if (parent == null) {
@@ -93,7 +93,7 @@ public class MapIocLoader extends AbstractIocLoader {
 	}
 
 	/**
-	 * 检查继承关系,如果发现循环继承,或其他错误的继承关系,则抛出ObjectLoadException
+	 * 检查继承关系,如果发现循环继承,或其他错误的继承关系,则抛出IllegalArgumentException
 	 * 
 	 * @param name beanId
 	 */
@@ -153,14 +153,14 @@ public class MapIocLoader extends AbstractIocLoader {
 
 			// scope
 			v = map.get("scope");
-			if (null != v) {
+			if (v != null) {
 				iobj.setScope(v.toString());
 			}
 			
 			// events
 			try {
 				v = map.get("events");
-				if (null != v) {
+				if (v != null) {
 					IocEventSet ies = Castors.i().cast(v, IocEventSet.class);
 					iobj.setEvents(ies);
 				}
@@ -172,7 +172,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			// args
 			try {
 				v = map.get("args");
-				if (null != v) {
+				if (v != null) {
 					for (Object o : Iterators.asIterable(v)) {
 						iobj.addArg(object2value(o));
 					}
@@ -185,7 +185,7 @@ public class MapIocLoader extends AbstractIocLoader {
 			// fields
 			try {
 				v = map.get("fields");
-				if (null != v) {
+				if (v != null) {
 					Map<String, Object> fields = (Map<String, Object>)v;
 					for (Entry<String, Object> en : fields.entrySet()) {
 						iobj.addField(en.getKey(), object2value(en.getValue()));
@@ -234,6 +234,14 @@ public class MapIocLoader extends AbstractIocLoader {
 		if (obj instanceof Map<?, ?>) {
 			IocValue iv = new IocValue(IocValue.TYPE_RAW);
 			Map<String, Object> map = (Map<String, Object>)obj;
+
+			// Inner
+			if (map.size() > 0 && isIocObject(map)) {
+				iv.setType(IocValue.TYPE_INNER);
+				iv.setValue(map2iobj(map));
+				return iv;
+			}
+
 			// Normal map
 			Map<String, IocValue> newmap = new HashMap<String, IocValue>();
 			for (Entry<String, Object> en : map.entrySet()) {

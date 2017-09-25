@@ -11,10 +11,12 @@ import panda.ioc.IocException;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.ValueProxyMaker;
+import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.ioc.val.ArrayValue;
 import panda.ioc.val.CollectionValue;
 import panda.ioc.val.ElValue;
+import panda.ioc.val.InnerValue;
 import panda.ioc.val.MapValue;
 import panda.ioc.val.ReferValue;
 import panda.ioc.val.StaticValue;
@@ -108,6 +110,11 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 		if (IocValue.TYPE_JSON == type) {
 			Object jv = Jsons.fromJson(value.toString());
 			return new StaticValue(jv);
+		}
+		
+		// INNER
+		if (IocValue.TYPE_INNER == type) {
+			return new InnerValue((IocObject)value);
 		}
 
 		throw new IllegalArgumentException("Invalid type of IocValue: " + type);

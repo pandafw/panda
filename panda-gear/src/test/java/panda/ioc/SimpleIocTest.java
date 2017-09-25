@@ -8,11 +8,11 @@ import org.junit.Test;
 
 import panda.ioc.impl.DefaultIoc;
 import panda.ioc.loader.AnnotationIocLoader;
-import panda.ioc.loader.xml.meta.BlackHorse;
-import panda.ioc.loader.xml.meta.Cat;
-import panda.ioc.loader.xml.meta.DogMaster;
-import panda.ioc.loader.xml.meta.Horse;
-import panda.ioc.loader.xml.meta.SingletonService;
+import panda.ioc.loader.annotation.meta.BlackHorse;
+import panda.ioc.loader.annotation.meta.Cat;
+import panda.ioc.loader.annotation.meta.DogMaster;
+import panda.ioc.loader.annotation.meta.Horse;
+import panda.ioc.loader.annotation.meta.SingletonService;
 
 public class SimpleIocTest {
 

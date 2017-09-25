@@ -246,4 +246,15 @@ public class SimpleJsonIocTest {
 		Ioc ioc = I(J("iocV", "type:'" + IocSelf.class.getName() + "',fields:{ioc:'#$iOc'}"));
 		assertEquals(ioc, ioc.get(IocSelf.class, "iocV").getIoc());
 	}
+
+	@Test
+	public void test_inner() {
+		Ioc ioc = I(J("fox", "another: { type:'" + Animal.class.getName() + "', args: [ 'bat' ], events: { create: 'onCreate', fetch: 'onFetch', depose: 'onDepose' } }"));
+		
+		Animal a = ioc.get(Animal.class, "fox").getAnother();
+		assertEquals("bat", a.getName());
+		assertEquals(1, a.getCreateTime());
+		assertEquals(1, a.getFetchTime());
+		assertEquals(0, a.getDeposeTime());
+	}
 }

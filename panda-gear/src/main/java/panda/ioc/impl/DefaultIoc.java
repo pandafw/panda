@@ -154,7 +154,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 		ObjectProxy op = context.fetch(name);
 
 		// 如果未发现对象
-		if (null == op) {
+		if (op == null) {
 			// 线程同步
 			synchronized (lock) {
 				// 再次读取
@@ -169,7 +169,7 @@ public class DefaultIoc implements Ioc, Cloneable {
 						
 						// 读取对象定义
 						IocObject iobj = loader.load(name);
-						if (null == iobj) {
+						if (iobj == null) {
 							for (String iocBeanName : loader.getNames()) {
 								// 相似性少于3 --> 大小写错误,1-2个字符调换顺序或写错
 								if (3 > Texts.computeLevenshteinDistance(name.toLowerCase(), iocBeanName.toLowerCase())) {

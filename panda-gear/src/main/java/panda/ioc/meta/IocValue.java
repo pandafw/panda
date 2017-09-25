@@ -7,6 +7,7 @@ public class IocValue {
 
 	public static final char TYPE_NULL = '-';
 	public static final char TYPE_RAW = '*';
+	public static final char TYPE_INNER = 'i';
 
 	public static final char TYPE_REF = '#';
 	public static final char TYPE_EL = '$';
