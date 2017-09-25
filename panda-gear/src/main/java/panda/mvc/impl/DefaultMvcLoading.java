@@ -147,8 +147,8 @@ public class DefaultMvcLoading implements Loading {
 		}
 		else {
 			if (log.isInfoEnabled()) {
-				log.infof("Found %d module methods", atMethods);
-				log.infof(ActionMapping.class.getName() + ": %s", mapping.toString());
+				log.info("Found " + atMethods + " module methods");
+				log.info(ActionMapping.class.getName() + ": " + mapping);
 			}
 		}
 

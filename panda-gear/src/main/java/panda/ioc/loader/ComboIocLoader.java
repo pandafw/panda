@@ -188,8 +188,7 @@ public class ComboIocLoader implements IocLoader {
 	}
 
 	public IocObject load(String name) throws IocLoadException {
-		for (int i = iocLoaders.size() - 1; i >= 0; i--) {
-			IocLoader iocLoader = iocLoaders.get(i);
+		for (IocLoader iocLoader : iocLoaders) {
 			if (iocLoader.has(name)) {
 				IocObject iocObject = iocLoader.load(name);
 				if (log.isDebugEnabled()) {

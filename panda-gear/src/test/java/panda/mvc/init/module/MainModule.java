@@ -5,8 +5,9 @@ import panda.mvc.annotation.Modules;
 import panda.mvc.ioc.provider.ComboIocProvider;
 
 @Modules(scan = true)
-@IocBy(type = ComboIocProvider.class, args = { "*default", 
+@IocBy(type = ComboIocProvider.class, args = {
+	"*anno", "panda.mvc.init.module",
 	"*json", "panda/mvc/init/module/base.js", 
-	"*anno", "panda.mvc.init.module" })
+	"*default"})
 public class MainModule {
 }

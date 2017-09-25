@@ -7,7 +7,7 @@ import panda.mvc.annotation.To;
 import panda.mvc.ioc.provider.ComboIocProvider;
 
 @To(all=View.JSON)
-@IocBy(type=ComboIocProvider.class, args={"*default", "*json","panda/mvc/testapp/classes/ioc/test.js"})
+@IocBy(type=ComboIocProvider.class, args={ "*json","panda/mvc/testapp/classes/ioc/test.js", "*default" })
 @Modules(scan = true)
 public class MainModule {
 

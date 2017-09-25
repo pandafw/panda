@@ -13,7 +13,7 @@ import panda.mvc.validation.annotation.Validates;
 
 @At
 @To(value=View.RAW, error=View.JSON, fatal=View.JSON)
-@IocBy(type=ComboIocProvider.class, args={"*default", "*json","panda/mvc/validation/module/test.js"})
+@IocBy(type=ComboIocProvider.class, args={ "*json","panda/mvc/validation/module/test.js", "*default" })
 @Modules(scan = true)
 public class ValidateModule {
 

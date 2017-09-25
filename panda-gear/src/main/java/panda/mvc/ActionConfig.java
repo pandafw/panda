@@ -169,16 +169,31 @@ public class ActionConfig {
 		
 		sb.append(Methods.toSimpleString(actionMethod));
 		sb.append(": @To(");
+		sb.append(getViewInfo());
+		sb.append(')');
+		return sb.toString();
+	}
+	
+	private String getViewInfo() {
+		StringBuilder sb = new StringBuilder();
 		if (Strings.isNotEmpty(okView)) {
-			sb.append("ok=").append(okView).append(", ");
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append("ok=").append(okView);
 		}
 		if (Strings.isNotEmpty(errorView)) {
-			sb.append("error=").append(errorView).append(", ");
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
+			sb.append("error=").append(errorView);
 		}
 		if (Strings.isNotEmpty(fatalView)) {
+			if (sb.length() > 0) {
+				sb.append(", ");
+			}
 			sb.append("fatal=").append(fatalView);
 		}
-		sb.append(')');
 		return sb.toString();
 	}
 }
