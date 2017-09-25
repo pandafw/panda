@@ -3,7 +3,7 @@ package panda.bind.xml;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -21,7 +21,7 @@ import panda.bind.AbstractDeserializer;
  *
  */
 public class XmlDeserializer extends AbstractDeserializer {
-	private Class<?> defaultXmlObjectType = HashMap.class;
+	private Class<?> defaultXmlObjectType = LinkedHashMap.class;
 	private Class<?> defaultXmlArrayType = ArrayList.class;
 
 	public XmlDeserializer() {
@@ -159,6 +159,14 @@ public class XmlDeserializer extends AbstractDeserializer {
 				// initialize parent element
 				if (deser.isArrayType(ep.type)) {
 					ep.beanh = deser.getBeanHandler(deser.getDefaultXmlArrayType());
+					ep.value = ep.beanh.createObject();
+					em.type = deser.getArrayElementType(ep.type);
+					em.name = String.valueOf(ep.leaf);
+				}
+				else if (Object.class == ep.type && em.name.equals("i")) {
+					// <i> is special tag for array
+					ep.type = deser.getDefaultXmlArrayType();
+					ep.beanh = deser.getBeanHandler(ep.type);
 					ep.value = ep.beanh.createObject();
 					em.type = deser.getArrayElementType(ep.type);
 					em.name = String.valueOf(ep.leaf);

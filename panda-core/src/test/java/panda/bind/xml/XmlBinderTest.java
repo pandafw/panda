@@ -232,13 +232,41 @@ public class XmlBinderTest {
 		m.put("m2", l2);
 		
 		String s = Xmls.toXml(m, true);
-//		System.out.println(s);
+		//System.out.println(s);
 	
 		// NOTE: <m0></m0> -> null
 		m.put("m0", null);
 		
 		Map<String, List<Number>> m2 = Xmls.fromXml(
 			s, new TypeToken<Map<String, List<Number>>>() {}.getType());
+		
+		Assert.assertTrue(Objects.equals(m, m2));
+	}
+	
+	@Test
+	public void testMapList2() {
+		Map<String, Object> m = new LinkedHashMap<String, Object>();
+		List<String> l0 = new ArrayList<String>();
+		m.put("m0", l0);
+
+		List<String> l1 = new ArrayList<String>();
+		l1.add("11");
+		l1.add("12");
+		m.put("m1", l1);
+
+		List<String> l2 = new ArrayList<String>();
+		l2.add("21");
+		l2.add("22");
+		m.put("m2", l2);
+		
+		String s = Xmls.toXml(m, true);
+		System.out.println(s);
+	
+		// NOTE: <m0></m0> -> null
+		m.put("m0", null);
+		
+		Map<String, Object> m2 = Xmls.fromXml(
+			s, new TypeToken<Map<String, Object>>() {}.getType());
 		
 		Assert.assertTrue(Objects.equals(m, m2));
 	}
