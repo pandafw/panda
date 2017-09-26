@@ -16,15 +16,14 @@ import panda.dao.sql.Sqls;
 import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.ioc.util.ObjectProvider;
 import panda.lang.Collections;
 import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 
 @IocBean(create="initialize")
-public class AppDaoClientProvider implements ObjectProvider<DaoClient> {
-	private static final Log log = Logs.getLog(AppDaoClientProvider.class);
+public class AppDaoClientFactory {
+	private static final Log log = Logs.getLog(AppDaoClientFactory.class);
 
 	private static final String GAE = "gae";
 	private static final String MONGO = "mongo";
@@ -115,13 +114,5 @@ public class AppDaoClientProvider implements ObjectProvider<DaoClient> {
 		DataSource ds = new SimpleDataSource(dps);
 		
 		return ds;
-	}
-
-	//----------------------------------------
-	// ObjectProvider implements
-	//
-	@Override
-	public DaoClient getObject() {
-		return getDaoClient();
 	}
 }

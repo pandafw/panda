@@ -12,8 +12,11 @@ import panda.app.task.java.JavaTaskExecutor;
 import panda.app.task.java.JavaTaskScheduler;
 import panda.app.util.AppActionAssist;
 import panda.app.util.AppActionConsts;
-import panda.app.util.AppCacheProvider;
-import panda.app.util.AppDaoClientProvider;
+import panda.app.util.AppCache;
+import panda.app.util.AppCacheFactory;
+import panda.app.util.AppDao;
+import panda.app.util.AppDaoClient;
+import panda.app.util.AppDaoClientFactory;
 import panda.app.util.AppFreemarkerTemplateLoader;
 import panda.app.util.AppResourceBundleLoader;
 import panda.app.util.AppSettings;
@@ -38,15 +41,18 @@ public class AppIocLoader extends MvcComboIocLoader {
 			
 			Collections.addAll(ss, 
 				MvcDaoFilePool.class,
+				AppAuthenticator.class,
+				UserAuthenticateProcessor.class,
 				AppActionAssist.class,
 				AppActionConsts.class,
 				AppResourceBundleLoader.class,
 				AppFreemarkerTemplateLoader.class,
-				AppCacheProvider.class,
+				AppCache.class,
+				AppCacheFactory.class,
+				AppDao.class,
+				AppDaoClient.class,
+				AppDaoClientFactory.class,
 				AppSettings.class,
-				AppDaoClientProvider.class,
-				AppAuthenticator.class,
-				UserAuthenticateProcessor.class,
 				WkHtml2Pdf.class);
 			
 			if (Systems.IS_OS_APPENGINE) {

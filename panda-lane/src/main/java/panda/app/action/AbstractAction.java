@@ -7,7 +7,7 @@ import panda.ioc.annotation.IocInject;
 import panda.mvc.util.AccessHandler;
 import panda.mvc.util.ActionSupport;
 
-public class AbstractAction extends ActionSupport implements AccessHandler {
+public abstract class AbstractAction extends ActionSupport implements AccessHandler {
 	/*------------------------------------------------------------
 	 * bean
 	 *------------------------------------------------------------*/

@@ -9,7 +9,6 @@ import panda.io.Settings;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
-import panda.ioc.util.ObjectProvider;
 import panda.lang.Collections;
 import panda.lang.Systems;
 import panda.lang.collection.ExpireMap;
@@ -17,8 +16,8 @@ import panda.log.Log;
 import panda.log.Logs;
 
 @IocBean(create="initialize", depose="depose")
-public class AppCacheProvider implements ObjectProvider<Map> {
-	private static final Log log = Logs.getLog(AppCacheProvider.class);
+public class AppCacheFactory {
+	private static final Log log = Logs.getLog(AppCacheFactory.class);
 
 	private static final String EHCACHE_CONFIG = "ehcache.xml";
 	private static final String EHCACHE = "ehcache";
@@ -95,12 +94,5 @@ public class AppCacheProvider implements ObjectProvider<Map> {
 			EHCacheHelper.shutdownCache();
 		}
 	}
-
-	//----------------------------------------
-	// ObjectProvider implements
-	//
-	@Override
-	public Map getObject() {
-		return getCache();
-	}
 }
+
