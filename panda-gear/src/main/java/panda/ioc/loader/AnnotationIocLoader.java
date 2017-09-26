@@ -16,7 +16,6 @@ import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
 import panda.lang.Collections;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.lang.reflect.FieldInjector;
 import panda.lang.reflect.Fields;
@@ -90,17 +89,16 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 			log.trace("Check " + clazz);
 		}
 		
-		if (clazz.isInterface() || clazz.isMemberClass() || clazz.isEnum() || clazz.isAnnotation()
-				|| clazz.isAnonymousClass()) {
+		if (clazz.isMemberClass() || clazz.isEnum() || clazz.isAnnotation() || clazz.isAnonymousClass()) {
 			return;
 		}
 		
 		int modify = clazz.getModifiers();
-		if (Modifier.isAbstract(modify) || (!Modifier.isPublic(modify))) {
+		if (!Modifier.isPublic(modify)) {
 			return;
 		}
 		
-		if (!isBeanAnnotated(clazz)) {
+		if (isNeedCheckInject(clazz)) {
 			checkInject(clazz);
 			return;
 		}
@@ -150,8 +148,18 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		setIocFields(iocObject, clazz, iocBean.fields());
 
 		// factory
-		if (Strings.isNotBlank(iocBean.factory())) {
+		if (Strings.isNotEmpty(iocBean.factory())) {
 			iocObject.setFactory(iocBean.factory());
+		}
+
+		// check interface
+		if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+			if (iocBean.type() != Object.class) {
+				iocObject.setType(iocBean.type());
+			}
+			if (Strings.isEmpty(iocBean.factory())) {
+				throw new IocException("Missing factory for ioc bean: " + clazz);
+			}
 		}
 		return iocObject;
 	}
@@ -289,8 +297,10 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		}
 	}
 	
-	protected boolean isBeanAnnotated(Class<?> cls) {
-		return cls.getAnnotation(IocBean.class) != null;
+	protected boolean isNeedCheckInject(Class<?> cls) {
+		return !cls.isInterface() 
+				&& !Modifier.isAbstract(cls.getModifiers()) 
+				&& (cls.getAnnotation(IocBean.class) == null);
 	}
 	
 	protected String getBeanName(Class<?> cls) {
@@ -303,9 +313,9 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		}
 		
 		String bn = iocBean.name();
-		if (Strings.isBlank(bn)) {
+		if (Strings.isEmpty(bn)) {
 			bn = iocBean.value();
-			if (Strings.isBlank(bn)) {
+			if (Strings.isEmpty(bn)) {
 				Class<?> cn = iocBean.type();
 				if (cn == Object.class) {
 					bn = cls.getName();
@@ -318,8 +328,8 @@ public class AnnotationIocLoader extends AbstractIocLoader {
 		return bn;
 	}
 	
-	private static final IocException duplicateField(Class<?> classZ, String name) {
-		return Exceptions.makeThrow(IocException.class, "Duplicate filed defined! Class=%s,FileName=%s", classZ, name);
+	private static final IocException duplicateField(Class<?> clazz, String name) {
+		return new IocException("Duplicate field '" + name + "' defined in " + clazz);
 	}
 
 	protected IocValue convert(String value) {

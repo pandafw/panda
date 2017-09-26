@@ -18,15 +18,11 @@ import panda.lang.Arrays;
 import panda.lang.Classes;
 import panda.lang.Iterators;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
 
 /**
  * 从一个 Map 对象中读取配置信息，支持 Parent
  */
 public class MapIocLoader extends AbstractIocLoader {
-
-	private static final Log log = Logs.getLog(MapIocLoader.class);
 
 	protected MapIocLoader() {
 	}
@@ -206,10 +202,6 @@ public class MapIocLoader extends AbstractIocLoader {
 			for (Entry<String, Object> en : map.entrySet()) {
 				iobj.addField(en.getKey(), object2value(en.getValue()));
 			}
-			if (log.isWarnEnabled()) {
-				log.warn("Using *Declared* ioc-define (without type or events)!!! Please use Standard Ioc-Define!!"
-						+ " Bean will define as: " + iobj);
-			}
 		}
 		return iobj;
 	}
@@ -217,7 +209,7 @@ public class MapIocLoader extends AbstractIocLoader {
 	@SuppressWarnings("unchecked")
 	private IocValue object2value(Object obj) {
 		// Null
-		if (null == obj) {
+		if (obj == null) {
 			return new IocValue(IocValue.TYPE_NULL);
 		}
 		

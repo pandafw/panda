@@ -2,6 +2,7 @@ package panda.mvc.view.tag.ui;
 
 import java.io.Writer;
 
+import panda.ioc.annotation.IocBean;
 import panda.log.Log;
 import panda.log.Logs;
 
@@ -29,6 +30,7 @@ import panda.log.Logs;
  * <!-- END SNIPPET: example -->
  * </pre>
  */
+@IocBean(singleton=false)
 public class OptGroup extends ListUIBean {
 	private static Log LOG = Logs.getLog(OptGroup.class);
 

@@ -7,6 +7,7 @@ import panda.ioc.IocEventTrigger;
 import panda.ioc.IocMaking;
 import panda.ioc.ObjectWeaver;
 import panda.ioc.ValueProxy;
+import panda.lang.Arrays;
 import panda.lang.Creator;
 import panda.lang.reflect.Types;
 
@@ -70,21 +71,24 @@ public class DefaultObjectWeaver implements ObjectWeaver {
 
 	public Object born(IocMaking ing) {
 		// 准备构造函数参数
-		Object[] args = new Object[this.args.length];
-		for (int i = 0; i < args.length; i++) {
-			Object o = this.args[i].get(ing);
-			if (o != null && !Types.isAssignable(o.getClass(), argTypes[i], false)) {
-				o = Castors.i().cast(o, argTypes[i]);
+		Object[] args = Arrays.EMPTY_OBJECT_ARRAY;
+		if (Arrays.isNotEmpty(this.args)) {
+			args = new Object[this.args.length];
+			for (int i = 0; i < args.length; i++) {
+				Object o = this.args[i].get(ing);
+				if (o != null && !Types.isAssignable(o.getClass(), argTypes[i], false)) {
+					o = Castors.i().cast(o, argTypes[i]);
+				}
+				args[i] = o;
 			}
-			args[i] = o;
 		}
-
+		
 		// 创建实例
 		return creator.create(args);
 	}
 
 	public Object onCreate(Object obj) {
-		if (null != onCreate && null != obj) {
+		if (onCreate != null && obj != null) {
 			onCreate.trigger(obj);
 		}
 		return obj;

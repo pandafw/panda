@@ -24,8 +24,8 @@ public class MvcAnnotationIocLoader extends AnnotationIocLoader {
 	}
 
 	@Override
-	protected boolean isBeanAnnotated(Class<?> cls) {
-		return super.isBeanAnnotated(cls) || cls.getAnnotation(At.class) != null;
+	protected boolean isNeedCheckInject(Class<?> cls) {
+		return super.isNeedCheckInject(cls) && cls.getAnnotation(At.class) == null;
 	}
 
 	@Override

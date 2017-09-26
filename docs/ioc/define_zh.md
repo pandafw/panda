@@ -52,7 +52,7 @@ XiaoHei
 ~~~
 
 ### 工厂方法
-语法:
+#### 语法1 (类全名@方法名):
 ```JavaScript
     {
         type : "panda.demo.ioc.Pet",
@@ -60,7 +60,33 @@ XiaoHei
         factory: "com.my.PetFactory@create"
     }
 ```
-其中**com.my.PetFactory**是工厂类的类全名, **create**是工厂方法, 其参数是"*Tom*"
+其中**com.my.PetFactory**是工厂类的类全名, **create**是工厂方法, 其参数是"**Tom**"。
+
+
+#### 语法2 (#Ioc对象名@方法名):
+```JavaScript
+    {
+        type : "panda.demo.ioc.Pet",
+        args : [ "Tom" ],
+        factory: "#PetFactory.create"
+    }
+```
+其中**PetFactory**是Ioc对象名, **create**是工厂方法, 其参数是"**Tom**"。
+
+
+#### 语法3 (${EL表达式}):
+```JavaScript
+    {
+        type : "panda.demo.ioc.Pet",
+        args : [ "Tom" ],
+        factory: "${'com.my.PetFactory'@create()}"
+    }
+```
+其中 ${'com.my.PetFactory'@create()} 是EL表达式, EL表达式的书写方法可参照[这里](inject_zh.md#el表达式)。
+
+请注意，EL表达式忽略了参数设置 **args : [ "Tom" ]**。
+
+更详细的说明，请参照 [EL表达式](../core/el_zh.md)。
 
 
 ### 生命周期范围

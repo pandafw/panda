@@ -2,7 +2,6 @@ package panda.ioc.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Map.Entry;
 
 import panda.ioc.IocEventTrigger;
@@ -14,6 +13,10 @@ import panda.ioc.ObjectWeaver;
 import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
+import panda.ioc.wea.BeanMethodCreator;
+import panda.ioc.wea.ElCreator;
+import panda.lang.Arrays;
+import panda.lang.Chars;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -84,7 +87,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 			}
 			catch (Throwable e) {
 				if (log.isWarnEnabled()) {
-					log.warn(String.format("IobObj: \n%s", iobj.toString()), e);
+					log.warn("Error occurred for IocObject: " + iobj);
 				}
 				
 				// 当异常发生，从 context 里移除 ObjectProxy
@@ -126,7 +129,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setWeaverCreator(DefaultObjectWeaver dw, Class<?> cls, IocMaking ing, IocObject iobj) {
 		// 为编织器设置事件触发器：创建时
-		if (null != iobj.getEvents()) {
+		if (iobj.getEvents() != null) {
 			dw.setOnCreate(createTrigger(cls, iobj.getEvents().getCreate()));
 		}
 
@@ -143,19 +146,54 @@ public class DefaultObjectMaker implements ObjectMaker {
 			args[i] = vps[i].get(ing);
 		}
 
-		// 缓存构造函数
-		if (iobj.getFactory() != null) {
-			// factory这属性, 格式应该是 类名@方法名
-			String[] tmp = iobj.getFactory().split("@", 2);
-			Method m = Methods.getMatchingAccessibleMethod(cls, tmp[0], args);
-			if (m == null) {
-				m = Methods.getMatchingAccessibleMethod(cls, tmp[0], args.length);
-				if (m == null) {
-					throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + cls + " / " + Arrays.toString(args));
-				}
+		// factory
+		if (Strings.isNotEmpty(iobj.getFactory())) {
+			String fa = iobj.getFactory();
+			int c0 = fa.charAt(0);
+
+			if (fa.length() > 3 && (c0 == Chars.DOLLAR || c0 == Chars.PERCENT) 
+					&& fa.charAt(1) == Chars.BRACES_LEFT 
+					&& fa.charAt(fa.length() - 1) == Chars.BRACES_RIGHT) {
+				// EL
+				dw.setCreator(new ElCreator(ing.getIoc(), fa.substring(2, fa.length() - 1)));
 			}
-			dw.setArgTypes(m.getGenericParameterTypes());
-			dw.setCreator(new MethodCreator<Object>(m));
+			else if (c0 == Chars.SHARP) {
+				// iocbean.method
+				int d = fa.lastIndexOf('.');
+				if (d < 1) {
+					throw new IocException("Invalid factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+				}
+				String name = fa.substring(1, d);
+				String method = fa.substring(d + 1);
+				Object obj = ing.getIoc().get(null, name);
+
+				Method m = Methods.getMatchingAccessibleMethod(obj.getClass(), method, args);
+				if (m == null) {
+					m = Methods.getMatchingAccessibleMethod(obj.getClass(), method, args.length);
+					if (m == null) {
+						throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+					}
+				}
+				dw.setArgTypes(m.getGenericParameterTypes());
+				dw.setCreator(new BeanMethodCreator<Object>(ing.getIoc(), name, m));
+			}
+			else {
+				// static class@method
+				String[] ss = fa.split("@", 2);
+				if (ss.length != 2) {
+					throw new IocException("Invalid factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+				}
+
+				Method m = Methods.getMatchingAccessibleMethod(cls, ss[0], args);
+				if (m == null) {
+					m = Methods.getMatchingAccessibleMethod(cls, ss[0], args.length);
+					if (m == null) {
+						throw new IocException("Failed to find factory method of '" + ing.getName() + "': " + fa + '(' + Arrays.toString(args) + ')');
+					}
+				}
+				dw.setArgTypes(m.getGenericParameterTypes());
+				dw.setCreator(new MethodCreator<Object>(m));
+			}
 		}
 		else {
 			Constructor<?> c = Constructors.getConstructor(cls, args);
