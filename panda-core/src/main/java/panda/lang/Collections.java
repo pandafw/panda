@@ -2278,4 +2278,97 @@ public abstract class Collections {
 		
 		return true;
 	}
+
+	//--------------------------------------------------------------------------
+	private static class ListSet<E> implements Set<E> {
+		private final List<E> list;
+
+		/**
+		 * @param list the list
+		 */
+		public ListSet(List<E> list) {
+			this.list = list;
+		}
+
+		@Override
+		public int size() {
+			return list.size();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return list.isEmpty();
+		}
+
+		@Override
+		public boolean contains(Object o) {
+			return list.contains(o);
+		}
+
+		@Override
+		public Iterator<E> iterator() {
+			return list.iterator();
+		}
+
+		@Override
+		public Object[] toArray() {
+			return list.toArray();
+		}
+
+		@Override
+		public <T> T[] toArray(T[] a) {
+			return list.toArray(a);
+		}
+
+		@Override
+		public boolean add(E e) {
+			return list.add(e);
+		}
+
+		@Override
+		public boolean remove(Object o) {
+			return list.remove(o);
+		}
+
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			return list.containsAll(c);
+		}
+
+		@Override
+		public boolean addAll(Collection<? extends E> c) {
+			return list.addAll(c);
+		}
+
+		@Override
+		public boolean retainAll(Collection<?> c) {
+			return list.retainAll(c);
+		}
+
+		@Override
+		public boolean removeAll(Collection<?> c) {
+			return list.removeAll(c);
+		}
+
+		@Override
+		public void clear() {
+			list.clear();
+		}
+	}
+	
+	/**
+	 * Returns a set backed by the specified list. (Changes to the returned list
+	 * "write through" to the list.) 
+	 * <p>
+	 * This method also provides a convenient way to convert list to set
+	 * 
+	 * @param list the list by which the set will be backed
+	 * @return a set of the specified list
+	 */
+	public static <T> Set<T> asSet(List<T> list) {
+		if (list == null) {
+			return null;
+		}
+		return new ListSet(list);
+	}
 }

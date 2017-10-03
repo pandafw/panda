@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import panda.lang.Asserts;
+import panda.lang.Collections;
+import panda.lang.Exceptions;
+import panda.lang.Strings;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
-
-import panda.lang.Asserts;
-import panda.lang.Exceptions;
-import panda.lang.Strings;
-import panda.lang.collection.ListSet;
 
 public class EHCacheHelper {
 	public static class EHCacheMap implements Map {
@@ -85,7 +85,7 @@ public class EHCacheHelper {
 		@Override
 		@SuppressWarnings("unchecked")
 		public Set keySet() {
-			return new ListSet(cache.getKeys());
+			return Collections.asSet(cache.getKeys());
 		}
 
 		@Override
