@@ -3,6 +3,12 @@ package panda.lang.comparator;
 import java.util.Comparator;
 
 public class DictionaryComparator implements Comparator<byte[]> {
+	private final static DictionaryComparator i = new DictionaryComparator();
+	
+	public static DictionaryComparator i() {
+		return i;
+	}
+	
 	public DictionaryComparator() {
 	}
 

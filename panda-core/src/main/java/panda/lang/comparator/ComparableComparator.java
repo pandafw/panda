@@ -2,20 +2,22 @@ package panda.lang.comparator;
 
 import java.util.Comparator;
 
-
 /**
- * string comparator for string
+ * comparator for comparable object
  */
-public class StringComparator implements Comparator<String> {
-	private final static StringComparator i = new StringComparator();
+public class ComparableComparator<T extends Comparable> implements Comparator<T> {
+	private final static ComparableComparator i = new ComparableComparator();
 	
-	public final static StringComparator i() {
+	public static ComparableComparator i() {
 		return i;
 	}
 	
-	private StringComparator() {
+	/**
+	 * constructor
+	 */
+	public ComparableComparator() {
 	}
-
+	
 	/**
 	 * @param o1 the first object to be compared.
 	 * @param o2 the second object to be compared.
@@ -23,7 +25,8 @@ public class StringComparator implements Comparator<String> {
 	 *         equal to, or greater than the second.
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
-	public int compare(String o1, String o2) {
+	@SuppressWarnings("unchecked")
+	public int compare(Comparable o1, Comparable o2) {
 		if (o1 == null && o2 == null) {
 			return 0;
 		}

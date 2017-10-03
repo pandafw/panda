@@ -6,14 +6,14 @@ import java.util.Comparator;
 /**
  * string comparator for string
  */
-public class StringComparator implements Comparator<String> {
-	private final static StringComparator i = new StringComparator();
+public class IgnoreCaesStringComparator implements Comparator<String> {
+	private final static IgnoreCaesStringComparator i = new IgnoreCaesStringComparator();
 	
-	public final static StringComparator i() {
+	public final static IgnoreCaesStringComparator i() {
 		return i;
 	}
 	
-	private StringComparator() {
+	private IgnoreCaesStringComparator() {
 	}
 
 	/**
@@ -36,6 +36,6 @@ public class StringComparator implements Comparator<String> {
 		if (o1 == o2) {
 			return 0;
 		}
-		return o1.compareTo(o2);
+		return o1.compareToIgnoreCase(o2);
 	}
 }

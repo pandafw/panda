@@ -7,6 +7,15 @@ import java.util.Comparator;
  * length comparator for string
  */
 public class StringLengthComparator implements Comparator<String> {
+	private final static StringLengthComparator i = new StringLengthComparator();
+	
+	public static StringLengthComparator i() {
+		return i;
+	}
+	
+	private StringLengthComparator() {
+	}
+	
 	/**
 	 * @param o1 string1
 	 * @param o2 string2
