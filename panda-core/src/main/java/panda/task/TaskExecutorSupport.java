@@ -127,7 +127,7 @@ public abstract class TaskExecutorSupport extends ThreadCreator {
 	public void initialize() {
 		Asserts.validState(executor == null, "ExecutorService " + getName() + " already initialized");
 		if (log.isInfoEnabled()) {
-			log.info("Initializing ExecutorService " + getName());
+			log.info("Initialize ExecutorService " + getName());
 		}
 		executor = initializeExecutor(this.threadFactory, this.rejectedExecutionHandler);
 	}

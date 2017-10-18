@@ -1,15 +1,23 @@
 package panda.tool.sql;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 import panda.args.Argument;
 import panda.args.Option;
+import panda.dao.sql.SqlIterator;
+import panda.dao.sql.Sqls;
+import panda.io.Streams;
 import panda.lang.Arrays;
 import panda.lang.Strings;
+import panda.lang.Systems;
 
 /**
  * SqlExecutor.
@@ -32,9 +40,9 @@ public class SqlExecutor extends AbstractSqlTool {
 	private String[] sqls;
 	private String charset;
 	private String linker = "@";
-	private String delimiter = ";";
 	private String commiter = "/";
 	private String commenter = "--";
+	private boolean stdin = false;
 	private boolean ignoreError = false;
 
 	private int cntSql;
@@ -54,13 +62,6 @@ public class SqlExecutor extends AbstractSqlTool {
 	}
 
 	/**
-	 * @return the delimiter
-	 */
-	public String getDelimiter() {
-		return delimiter;
-	}
-
-	/**
 	 * @return the commiter
 	 */
 	public String getCommiter() {
@@ -72,6 +73,13 @@ public class SqlExecutor extends AbstractSqlTool {
 	 */
 	public String getCommenter() {
 		return commenter;
+	}
+
+	/**
+	 * @return the stdin
+	 */
+	public boolean isStdin() {
+		return stdin;
 	}
 
 	/**
@@ -113,14 +121,6 @@ public class SqlExecutor extends AbstractSqlTool {
 	}
 
 	/**
-	 * @param delimiter the delimiter to set
-	 */
-	@Option(opt='D', option="delimiter", arg="SYM", usage="The symbolic string of delimiter")
-	public void setDelimiter(String delimiter) {
-		this.delimiter = delimiter;
-	}
-
-	/**
 	 * @param commiter the commiter to set
 	 */
 	@Option(opt='O', option="commiter", arg="SYM", usage="The symbolic string of commiter")
@@ -137,9 +137,17 @@ public class SqlExecutor extends AbstractSqlTool {
 	}
 
 	/**
+	 * @param stdin the stdin to set
+	 */
+	@Option(opt='I', option="stdin", usage="Use stdin")
+	public void setStdin(boolean stdin) {
+		this.stdin = stdin;
+	}
+
+	/**
 	 * @param ignoreError the ignoreError to set
 	 */
-	@Option(opt='Q', option="quiet", usage="Ignore error and continue.")
+	@Option(opt='Q', option="quiet", usage="Ignore error and continue")
 	public void setIgnoreError(boolean ignoreError) {
 		this.ignoreError = ignoreError;
 	}
@@ -150,20 +158,21 @@ public class SqlExecutor extends AbstractSqlTool {
 		
 		cntSql = 0;
 
-		if (Arrays.isEmpty(sqls) && source.isDirectory()) {
+		if (Arrays.isEmpty(sqls) && source.isDirectory() && !stdin) {
 			println0("Executing: " + source.getPath());
 		}
 	}
 
 	@Override
 	protected void doProcess() throws Exception {
-		if (Arrays.isEmpty(sqls)) {
-			process(source);
+		if (Arrays.isNotEmpty(sqls)) {
+			processSqls(sqls);
+		}
+		else if (stdin) {
+			processStdin();
 		}
 		else {
-			for (String sql : sqls) {
-				execSql(sql, false);
-			}
+			process(source);
 		}
 	}
 	
@@ -172,9 +181,10 @@ public class SqlExecutor extends AbstractSqlTool {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(cntSql).append(" sql statements");
-		if (Arrays.isEmpty(sqls)) {
+		if (Arrays.isEmpty(sqls) || !stdin) {
 			sb.append(" of ").append(cntFile).append(" files");
 		}
+		
 		sb.append(" executed successfully");
 
 		println0(sb.toString());
@@ -182,110 +192,116 @@ public class SqlExecutor extends AbstractSqlTool {
 
 	@Override
 	protected void processFile(File file) throws Exception {
-		execSql(file);
-	}
-	
-	/**
-	 * execSql
-	 * 
-	 * @param file sql file
-	 * @throws Exception if an error occurs
-	 */
-	private void execSql(File file) throws Exception {
 		println1("Executing sql file: " + file.getPath());
 
-		BufferedReader br;
-		if (Strings.isEmpty(charset)) {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+		execSql(file.getParent(), new FileInputStream(file));
+	}
+	
+	private void processStdin() throws Exception {
+		execSql(Systems.USER_DIR, System.in);
+	}
+	
+	private void processSqls(String[] sqls) throws Exception {
+		for (String sql : sqls) {
+			execSql(Systems.USER_DIR, new StringReader(sql));
 		}
-		else {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
-		}
-
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = br.readLine()) != null) {
-			line = line.trim();
-			if (line.length() < 1 || line.startsWith(commenter)) {
-				sb.append(" ");
-			}
-			else if (line.equals(commiter)) {
-				if (sb.length() > 0) {
-					execSql(sb.toString(), true);
-					commit();
-					sb = new StringBuilder();
-				}
-			}
-			else if (line.startsWith(linker)) {
-				if (sb.length() > 0) {
-					execSql(sb.toString(), false);
-					sb = new StringBuilder();
-				}
-				line = line.substring(1);
-				String[] ss = line.split(delimiter);
-				for (String s : ss) {
-					if (Strings.isNotBlank(s)) {
-						File inc = new File(file.getParent(), line);
-						execSql(inc);
-					}
-				}
-			}
-			else {
-				sb.append(" ").append(line);
-			}
-		}
-
-		execSql(sb.toString(), false);
-		commit();
 	}
 
-	private void execSql(String sqls, boolean single) throws Exception {
-		sqls = sqls.trim();
-		if (sqls.length() < 1) {
-			return;
-		}
-
-		String[] ss;
-		if (single) {
-			if (sqls.endsWith(delimiter)) {
-				sqls = sqls.substring(0, sqls.length() - 1);
-			}
-			ss = new String[] { sqls };
+	private void execSql(String dir, InputStream in) throws Exception {
+		Reader r;
+		if (Strings.isEmpty(charset)) {
+			r = (new InputStreamReader(in));
 		}
 		else {
-			ss = sqls.split(delimiter);
+			r = (new InputStreamReader(in, charset));
 		}
-
+		
+		execSql(dir, r);
+	}
+	
+	private void execSql(String dir, Reader r) throws Exception {
+		SqlIterator si = new SqlIterator(r);
+		
 		Statement stm = connection.createStatement();
-		for (String sql : ss) {
-			sql = sql.trim();
-			if ("exit".equalsIgnoreCase(sql)) {
-				
-			}
-			else if ("commit".equalsIgnoreCase(sql)) {
-				commit();
-			}
-			else if (sql.length() > 0) {
-				try {
-					println3("Execute SQL: " + sql);
-					stm.executeUpdate(sql);
-					cntSql++;
+		try {
+			while (si.hasNext()) {
+				String sql = si.next();
+				if ("exit".equalsIgnoreCase(sql)) {
+					break;
 				}
-				catch (Exception e) {
-					println2("Error: " + e.getMessage());
-					if (!ignoreError) {
-						throw e;
+				else if ("rollback".equalsIgnoreCase(sql)) {
+					rollback();
+				}
+				else if ("commit".equalsIgnoreCase(sql)) {
+					commit();
+				}
+				else if (sql.startsWith(linker)) {
+					String s = sql.substring(1);
+					if (Strings.isNotBlank(s)) {
+						File f = new File(dir, s);
+						processFile(f);
+					}
+				}
+				else if (sql.length() > 0) {
+					try {
+						println3("Execute SQL: " + sql);
+						stm.execute(sql);
+						ResultSet rs = stm.getResultSet();
+						if (rs != null) {
+							printResultSet(rs);
+						}
+						else {
+							println0("> Updated: " + stm.getUpdateCount());
+						}
+						cntSql++;
+					}
+					catch (Exception e) {
+						println2("Error: " + e.getMessage());
+						if (!ignoreError) {
+							throw e;
+						}
 					}
 				}
 			}
 		}
-		if (stm != null) {
-			try {
-				stm.close();
-			}
-			catch (Exception e) {
-				;
-			}
+		finally {
+			Sqls.safeClose(stm);
+			Streams.safeClose(si);
 		}
+	}
+
+	private void printResultSet(ResultSet rs) throws Exception {
+		ResultSetMetaData meta = rs.getMetaData();
+		int cnt = meta.getColumnCount();
+
+		String[] row = new String[cnt];
+		for (int i = 1; i <= cnt; i++) {
+			row[i - 1] = meta.getColumnLabel(i);
+		}
+		
+		String c = Strings.join(row, " | ");
+		String h = Strings.repeat('-', c.length());
+		println0(h);
+		println0(c);
+		println0(h);
+		
+		while (rs.next()) {
+			row = new String[cnt];
+			for (int i = 1; i <= cnt; i++) {
+				int type = meta.getColumnType(i);
+				if (Sqls.isBinaryType(type)) {
+					byte[] bs = rs.getBytes(i);
+					if (bs != null) {
+						row[i - 1] = "(" + bs.length + "B)";
+					}
+				}
+				else {
+					row[i - 1] = rs.getString(i);
+				}
+			}
+			String d = Strings.join(row, " | ");
+			println0(d);
+		}
+		println0("");
 	}
 }
