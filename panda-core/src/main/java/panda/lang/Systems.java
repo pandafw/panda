@@ -989,7 +989,7 @@ public class Systems {
 	 * </p>
 	 * 
 	 */
-	public static final boolean IS_OS_APPENGINE = (Classes.findClass("com.google.appengine.api.log.LogService") != null);
+	public static final boolean IS_OS_APPENGINE = Strings.isNotEmpty(getSystemProperty("com.google.appengine.application.id"));
 
 	/**
 	 * <p>
