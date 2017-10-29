@@ -8,7 +8,6 @@ import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import panda.io.Settings;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
@@ -22,9 +21,6 @@ public class MvcCryptor extends Cryptor {
 	public static final String DEFAULT_ALGORITHM = "AES";
 	public static final String DEFAULT_KEYPHRASE = "== Panda Java ==";
 
-	@IocInject
-	protected Settings settings;
-	
 	public MvcCryptor() {
 		super(DEFAULT_ALGORITHM, DEFAULT_KEYPHRASE);
 	}

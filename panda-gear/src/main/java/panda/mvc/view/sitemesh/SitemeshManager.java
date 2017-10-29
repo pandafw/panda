@@ -13,6 +13,7 @@ import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
 import panda.mvc.MvcConstants;
+import panda.mvc.SiteConstants;
 import panda.mvc.view.sitemesh.SitemeshConfig.SitemeshDecorator;
 
 @IocBean(create="initialize")
@@ -29,7 +30,7 @@ public class SitemeshManager {
 	protected SitemeshConfig smcfg;
 	
 	public void initialize() {
-		if (settings.getPropertyAsBoolean("sitemesh.disable")) {
+		if (settings.getPropertyAsBoolean(SiteConstants.SITEMESH_DISABLE)) {
 			log.info("Sitemesh disabled");
 			smcfg = null;
 		}

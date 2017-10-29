@@ -79,17 +79,18 @@ public class AppDaoClientFactory {
 			try {
 				DataSource ds = Sqls.lookupJndiDataSource(jndi);
 				sqlDaoClient.setDataSource(ds);
+				return sqlDaoClient;
 			}
 			catch (Exception e) {
 				log.warn("Failed to use jndi resource - " + jndi + " : " + e.getMessage());
-				DataSource ds = createSimpleDataSource();
-				sqlDaoClient.setDataSource(ds);
+				dstype = JDBC;
 			}
-			return sqlDaoClient;
 		}
 
 		if (JDBC.equalsIgnoreCase(dstype)) {
-			DataSource ds = createSimpleDataSource();
+			String dst = settings.getProperty(SET.DATA_JDBC);
+			String pre = SET.DATA_PREFIX + (Strings.isEmpty(dst) ? "" : dst + ".");
+			DataSource ds = createSimpleDataSource(pre);
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 			sqlDaoClient.setDataSource(ds);
 			return sqlDaoClient;
@@ -98,18 +99,17 @@ public class AppDaoClientFactory {
 		throw new IllegalArgumentException("The data source type [" + dstype + "] is invalid.");
 	}
 
-	private DataSource createSimpleDataSource() {
-		log.info("JDBC - " + settings.getProperty(SET.DATA_JDBC_DRIVER) + ":" + settings.getProperty(SET.DATA_JDBC_URL));
+	private DataSource createSimpleDataSource(String prefix) {
+		log.info("Create Simple JDBC DataSource");
 
-		Map<String, String> dps = Collections.subMap(settings, SET.DATA_PREFIX);
-		if (servlet != null) {
-			String web = servlet.getRealPath("/");
-			for (Entry<String, String> en : dps.entrySet()) {
-				if (en.getValue().contains("${web}")) {
-					String v = en.getValue().replace("${web}", web);
-					en.setValue(v);
-				}
+		Map<String, String> dps = Collections.subMap(settings, prefix);
+		String web = servlet != null ? servlet.getRealPath("/") : "web";
+		for (Entry<String, String> en : dps.entrySet()) {
+			if (en.getValue().contains("${web}")) {
+				String v = en.getValue().replace("${web}", web);
+				en.setValue(v);
 			}
+			log.info("  " + en.getKey() + ": " + en.getValue());
 		}
 		DataSource ds = new SimpleDataSource(dps);
 		

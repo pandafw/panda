@@ -11,7 +11,7 @@ import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
-	private static final String PANDA_CDN = "//pandafw.github.io/repos/";
+	private static final String CDN_BASE = Mvcs.PANDA_CDN + '/' + Panda.VERSION;
 	private static final String JQUERY_VERSION = "1.12.4";
 	private static final String BOOTSTRAP_VERSION = "3.3.7";
 	private static final String FONTAWESOME_VERSION = "4.7.0";
@@ -60,7 +60,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	protected void writePandaCdnJs(String path, boolean debug) throws IOException {
 		if (js) {
-			writeCdnJs(PANDA_CDN + Panda.VERSION + path + (debug ? debug() : "") + ".js");
+			writeCdnJs(CDN_BASE + path + (debug ? debug() : "") + ".js");
 		}
 	}
 	protected void writeCdnJs(String jsl) throws IOException {
@@ -80,8 +80,9 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 	
 	protected void writePandaCdnCss(String path) throws IOException {
-		writeCdnCss(PANDA_CDN + Panda.VERSION + path + debug() + ".css");
+		writeCdnCss(CDN_BASE + path + debug() + ".css");
 	}
+	
 	protected void writeCdnCss(String cssl) throws IOException {
 		if (css) {
 			writeCss(cssl);
@@ -116,7 +117,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeJquery() throws IOException {
 		if (js && tag.isJquery()) {
-			if (tag.isCdn()) {
+			if (tag.getCdn()) {
 				writeCdnJs("//code.jquery.com/jquery-" + JQUERY_VERSION + debug() + ".js");
 			}
 			else {
@@ -127,7 +128,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeJqueryPlugins() throws IOException {
 		if (tag.isJqueryPlugins()) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnCss("/jquery/css/jquery-plugins");
 				writePandaCdnJs("/jquery/js/jquery-plugins");
 			}
@@ -140,7 +141,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeJqueryExtra() throws IOException {
 		if (tag.isJqueryExtra()) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnCss("/jquery/extra/css/jquery-extra");
 				writePandaCdnJs("/jquery/extra/js/jquery-extra");
 			}
@@ -159,7 +160,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private void writeBootstrap() throws IOException {
 		boolean bs = tag.isBootstrap();
 		if (css && bs) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writeCdnCss("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
 						+ "/css/bootstrap"
@@ -175,7 +176,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			}
 		}
 		if (js && bs) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writeCdnJs("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
 						+ "/js/bootstrap" 
@@ -190,7 +191,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private void writeBootstrapPlugins() throws IOException {
 		boolean bsp = tag.isBootstrapPlugins();
 		if (css && bsp) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnCss("/bootstrap3/css/bootstrap-plugins");
 			}
 			else {
@@ -199,7 +200,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 		
 		if (js && bsp) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnJs("/bootstrap3/js/bootstrap-plugins");
 			}
 			else {
@@ -208,7 +209,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			
 			String la = getBootstrapLang();
 			if (tag.isI18n()) {
-				if (tag.isCdn()) {
+				if (tag.useCdn()) {
 					writePandaCdnJs("/bootstrap3/js/bootstrap-plugins-i18n");
 				}
 				else {
@@ -216,7 +217,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				}
 			}
 			else if (!"en".equals(la)) {
-				if (tag.isCdn()) {
+				if (tag.useCdn()) {
 					writePandaCdnJs("/bootstrap3/js/locales/bootstrap-datetimepicker." + jsstr(la), false);
 				}
 				else {
@@ -251,7 +252,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private void writePanda() throws IOException {
 		boolean panda = tag.isPanda();
 		if (css && panda) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnCss("/panda/css/panda");
 			}
 			else {
@@ -259,7 +260,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			}
 		}
 		if (js && panda) {
-			if (tag.isCdn()) {
+			if (tag.useCdn()) {
 				writePandaCdnJs("/panda/js/panda");
 			}
 			else {
@@ -269,6 +270,6 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 	
 	private String debug() {
-		 return (tag.isDebug() ? "" : ".min");
+		 return (tag.useDebug() ? "" : ".min");
 	}
 }

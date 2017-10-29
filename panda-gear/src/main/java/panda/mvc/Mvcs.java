@@ -16,6 +16,7 @@ import panda.cast.Castors;
 import panda.cast.castor.FileItemCastor;
 import panda.el.El;
 import panda.el.ElTemplate;
+import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Chars;
 import panda.lang.Classes;
@@ -30,6 +31,8 @@ import panda.mvc.validation.Validators;
  * Mvc helper methods
  */
 public abstract class Mvcs {
+	public static final String PANDA_CDN = "//pandafw.github.io/repos";
+
 	private static Beans beans = Beans.i();
 	private static Castors castors = Castors.i();
 	
@@ -152,10 +155,17 @@ public abstract class Mvcs {
 	 * @return the static base path
 	 */
 	public static String getStaticBase(ActionContext ac, String sb) {
-		if (sb == null) {
-			sb = ac.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
+		if (Strings.isEmpty(sb)) {
+			Settings ss = ac.getSettings();
+			if (ss.getPropertyAsBoolean(SiteConstants.SITE_CDN)) {
+				sb = PANDA_CDN;
+			}
 		}
 
+		if (Strings.isEmpty(sb)) {
+			sb = ac.getIoc().getIfExists(String.class, MvcConstants.UI_STATIC_BASE);
+		}
+		
 		if (Strings.isEmpty(sb)) {
 			sb = ac.getServlet().getContextPath() + "/static";
 		}

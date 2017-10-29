@@ -1,11 +1,11 @@
 package panda.app.constant;
 
-
+import panda.mvc.SiteConstants;
 
 /**
  * Settings Constants
  */
-public interface SET {
+public interface SET extends SiteConstants {
 	public static final String APP_VERSION = "app.version";
 
 	//--------------------------------------------------------
@@ -19,9 +19,7 @@ public interface SET {
 
 	public static final String DATA_JNDI_RESOURCE = "data.jndi.resource";
 
-	public static final String DATA_JDBC_DRIVER = "data.jdbc.driver";
-
-	public static final String DATA_JDBC_URL = "data.jdbc.url";
+	public static final String DATA_JDBC = "data.jdbc";
 
 	//--------------------------------------------------------
 	public static final String LUCENE_STORE = "lucene.store";

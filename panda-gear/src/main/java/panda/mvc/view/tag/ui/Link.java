@@ -2,7 +2,10 @@ package panda.mvc.view.tag.ui;
 
 import java.util.Locale;
 
+import panda.io.Settings;
 import panda.ioc.annotation.IocBean;
+import panda.ioc.annotation.IocInject;
+import panda.mvc.SiteConstants;
 
 
 /**
@@ -40,11 +43,14 @@ import panda.ioc.annotation.IocBean;
  */
 @IocBean(singleton=false)
 public class Link extends UIBean {
+	@IocInject
+	Settings settings;
+	
 	// attributes
-	protected boolean cdn;
 	protected String statics;
 	protected String version;
-	protected boolean debug;
+	protected Boolean cdn;
+	protected Boolean debug;
 	protected boolean js;
 	protected boolean css;
 	protected Locale locale;
@@ -81,20 +87,13 @@ public class Link extends UIBean {
 			bootstrap = true;
 			bootstrapPlugins = true;
 		}
-	}
-
-	/**
-	 * @return the cdn
-	 */
-	public boolean isCdn() {
-		return cdn;
-	}
-
-	/**
-	 * @param cdn the cdn to set
-	 */
-	public void setCdn(boolean cdn) {
-		this.cdn = cdn;
+		
+		if (cdn == null) {
+			cdn = settings.getPropertyAsBoolean(SiteConstants.SITE_CDN);
+		}
+		if (debug == null) {
+			debug = settings.getPropertyAsBoolean(SiteConstants.SITE_DEBUG);
+		}
 	}
 
 	/**
@@ -126,16 +125,44 @@ public class Link extends UIBean {
 	}
 
 	/**
+	 * @return the cdn
+	 */
+	public boolean useCdn() {
+		return cdn;
+	}
+
+	/**
+	 * @return the cdn
+	 */
+	public Boolean getCdn() {
+		return cdn;
+	}
+
+	/**
+	 * @param cdn the cdn to set
+	 */
+	public void setCdn(Boolean cdn) {
+		this.cdn = cdn;
+	}
+
+	/**
 	 * @return the debug
 	 */
-	public boolean isDebug() {
+	public boolean useDebug() {
+		return debug;
+	}
+
+	/**
+	 * @return the debug
+	 */
+	public Boolean getDebug() {
 		return debug;
 	}
 
 	/**
 	 * @param debug the debug to set
 	 */
-	public void setDebug(boolean debug) {
+	public void setDebug(Boolean debug) {
 		this.debug = debug;
 	}
 
