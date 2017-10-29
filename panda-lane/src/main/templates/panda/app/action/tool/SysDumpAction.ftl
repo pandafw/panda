@@ -233,6 +233,28 @@
 		</table>
 	</div>
 	<br/>
+
+	<div class="panel panel-success">
+		<div class="panel-heading">System.Environment</div>
+		<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="thn">Name</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+<#assign _ses = assist.findValue("'java.lang.System'@getenv()")/>
+<#list _ses?keys as k>
+			<tr>
+				<td>${k?html}</td>
+				<td><#if _ses[k]??>${_ses[k].toString()?html}</#if></td>
+			</tr>
+</#list>
+		</tbody>
+		</table>
+	</div>
+	<br/>
 </div>
 </body>
 </html>
