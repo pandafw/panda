@@ -6,21 +6,24 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import panda.app.entity.Resource;
+import panda.app.entity.Template;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
+import panda.dao.DaoException;
+import panda.dao.DaoIterator;
 import panda.dao.entity.Entity;
 import panda.dao.sql.SqlDaoClient;
 import panda.dao.sql.SqlIterator;
 import panda.dao.sql.Sqls;
 import panda.dao.sql.executor.JdbcSqlExecutor;
 import panda.io.Streams;
+import panda.lang.Arrays;
 import panda.lang.Charsets;
 import panda.lang.ClassLoaders;
 import panda.lang.Exceptions;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.app.entity.Resource;
-import panda.app.entity.Template;
 import panda.vfs.dao.DaoFileData;
 import panda.vfs.dao.DaoFileItem;
 
@@ -29,6 +32,14 @@ import panda.vfs.dao.DaoFileItem;
 public abstract class AppHelper {
 	private static Log log = Logs.getLog(AppHelper.class);
 	
+	public static final Class[] APP_ENTITIES = {
+			DaoFileItem.class,
+			DaoFileData.class,
+			Template.class,
+			Resource.class
+		};
+		
+
 	public static void ddlTables(Appendable writer, Dao dao, Class<?> ... classes) {
 		try {
 			for (Class<?> c : classes) {
@@ -62,30 +73,44 @@ public abstract class AppHelper {
 	}
 
 	public static void ddlDefaultTables(Appendable writer, Dao dao) {
-		ddlTables(writer, dao,
-			DaoFileItem.class,
-			DaoFileData.class,
-			Template.class,
-			Resource.class
-			);
+		ddlTables(writer, dao, APP_ENTITIES);
 	}
 
 	public static void createDefaultTables(Dao dao) {
-		createTables(dao,
-			DaoFileItem.class,
-			DaoFileData.class,
-			Template.class,
-			Resource.class
-			);
+		createTables(dao, APP_ENTITIES);
 	}
 	
 	public static void dropDefaultTables(Dao dao) {
-		dropTables(dao,
-			Template.class,
-			Resource.class,
-			DaoFileData.class,
-			DaoFileItem.class
-			);
+		Class[] es = APP_ENTITIES.clone();
+		Arrays.reverse(es);
+		dropTables(dao, es);
+	}
+
+	public static void copyTables(Dao sdao, Dao ddao, Class<?>... classes) {
+		for (Class<?> c : classes) {
+			log.info("Copy table for " + c);
+			
+			DaoIterator di = sdao.iterate(c);
+			try {
+				while (di.hasNext()) {
+					Object o = di.next();
+					if (ddao.exists(o.getClass(), o)) {
+						log.debug("Update: " + o);
+						ddao.update(o);
+					}
+					else {
+						log.debug("Insert: " + o);;
+						ddao.insert(o);
+					}
+				}
+			}
+			catch (DaoException e) {
+				log.error("Failed to copy table for " + c, e);
+			}
+			finally {
+				Streams.safeClose(di);
+			}
+		}
 	}
 	
 	public static void execSql(DaoClient dc, String file) throws SQLException {
