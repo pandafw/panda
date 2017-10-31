@@ -23,11 +23,15 @@ import panda.lang.Randoms;
 import panda.lang.Strings;
 import panda.lang.Texts;
 import panda.lang.reflect.Types;
+import panda.log.Log;
+import panda.log.Logs;
 
 /**
  * !! thread-unsafe !!
  */
 public class SqlDao extends AbstractDao {
+	private static final Log log = Logs.getLog(SqlDao.class);
+	
 	private int transactionLevel = Connection.TRANSACTION_NONE;
 	
 	/**
@@ -559,116 +563,137 @@ public class SqlDao extends AbstractDao {
 	}
 
 	//-------------------------------------------------------------------------
-	protected <T> T insertData(Entity<T> entity, T obj) throws Exception {
-		EntityField eid = entity.getIdentity();
-		if (eid == null) {
-			Sql sql = getSqlExpert().insert(entity, obj, false);
-			int c = executor.update(sql.getSql(), sql.getParams());
-			if (c != 1) {
-				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
+	protected <T> T insertData(Entity<T> entity, T obj) {
+		Sql sql = null;
+
+		try {
+			EntityField eid = entity.getIdentity();
+			if (eid == null) {
+				sql = getSqlExpert().insert(entity, obj, false);
+				int c = executor.update(sql.getSql(), sql.getParams());
+				if (c != 1) {
+					throw new DaoException(c + " records updated when insert entity: " + sql);
+				}
+				return obj;
 			}
-			return obj;
-		}
-		
-		Object iid = eid.getValue(obj);
-		if (isValidIdentity(iid)) {
-			if (eid.isNumberIdentity()) {
-				String s = getSqlExpert().identityInsertOn(entity);
-				if (Strings.isNotEmpty(s)) {
-					executor.execute(s);
+			
+			Object iid = eid.getValue(obj);
+			if (isValidIdentity(iid)) {
+				if (eid.isNumberIdentity()) {
+					String s = getSqlExpert().identityInsertOn(entity);
+					if (Strings.isNotEmpty(s)) {
+						try {
+							executor.execute(s);
+						}
+						catch (SQLException e) {
+							log.warn("Failed to execute SQL: " + s + "\nERROR: " + e.getMessage());
+						}
+					}
+				}
+				
+				sql = getSqlExpert().insert(entity, obj, false);
+				try {
+					int c = executor.update(sql.getSql(), sql.getParams());
+					if (c != 1) {
+						throw new DaoException(c + " records updated when insert entity: " + sql);
+					}
+				}
+				finally {
+					if (eid.isNumberIdentity()) {
+						String s = getSqlExpert().identityInsertOff(entity);
+						if (Strings.isNotEmpty(s)) {
+							try {
+								executor.execute(s);
+							}
+							catch (SQLException e) {
+								log.warn("Failed to execute SQL: " + s + "\nERROR: " + e.getMessage());
+							}
+						}
+					}
+					
+				}
+
+				return obj;
+			}
+			
+			if (eid.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
+				sql = getSqlExpert().insert(entity, obj, true);
+				return executor.insert(sql.getSql(), sql.getParams(), obj, eid.getName());
+			}
+	
+			if (eid.isAutoGenerate() && eid.isStringIdentity()) {
+				String aid = Randoms.randUUID32();
+				if (!eid.setValue(obj, aid)) {
+					throw new DaoException("Failed to set identity to entity: " + entity.getType());
+				}
+	
+				sql = getSqlExpert().insert(entity, obj, false);
+				int c = executor.update(sql.getSql(), sql.getParams());
+				if (c != 1) {
+					throw new DaoException(c + " records updated when insert entity: " + sql);
+				}
+				return obj;
+			}
+			
+			String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());
+			if (Strings.isEmpty(prep)) {
+				prep = entity.getPrepSql(DB.GENERAL);
+			}
+
+			String post = entity.getPostSql(getSqlExpert().getDatabaseType());
+			if (Strings.isEmpty(post)) {
+				post = entity.getPostSql(DB.GENERAL);
+			}
+			
+			if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
+				prep = getSqlExpert().prepIdentity(entity);
+				post = getSqlExpert().postIdentity(entity);
+			}
+			else {
+				Map<String, String> m = new HashMap<String, String>();
+				m.put("view", getViewName(entity));
+				m.put("table", getTableName(entity));
+				m.put("field", eid.getName());
+				
+				prep = Texts.translate(prep, m);
+				post = Texts.translate(post, m);
+			}
+
+			if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
+				throw new DaoException("Failed to get (" + getSqlExpert().getDatabaseType() + ") identity select sql for entity: " + entity.getType());
+			}
+			
+			if (Strings.isNotEmpty(prep)) {
+				iid = executor.fetch(prep, Types.getRawType(eid.getType()));
+				if (!isValidIdentity(iid)) {
+					throw new DaoException("Failed to get identity by PREP-SQL: " + prep);
+				}
+				if (!eid.setValue(obj, iid)) {
+					throw new DaoException("Failed to set identity to entity: " + entity.getType());
 				}
 			}
 			
-			Sql sql = getSqlExpert().insert(entity, obj, false);
+			sql = getSqlExpert().insert(entity, obj, false);
 			int c = executor.update(sql.getSql(), sql.getParams());
-
-			if (eid.isNumberIdentity()) {
-				String s = getSqlExpert().identityInsertOff(entity);
-				if (Strings.isNotEmpty(s)) {
-					executor.execute(s);
+			if (c != 1) {
+				throw new DaoException(c + " records updated when insert entity: " + sql);
+			}
+	
+			if (Strings.isNotEmpty(post)) {
+				iid = executor.fetch(post, Types.getRawType(eid.getType()));
+				if (!isValidIdentity(iid)) {
+					throw new DaoException("Failed to get identity by POST-SQL: " + post);
+				}
+				if (!eid.setValue(obj, iid)) {
+					throw new DaoException("Failed to set identity to entity: " + entity.getType());
 				}
 			}
 			
-			if (c != 1) {
-				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
-			}
-
 			return obj;
 		}
-		
-		if (eid.isAutoIncrement() && getSqlExpert().isSupportAutoIncrement()) {
-			Sql sql = getSqlExpert().insert(entity, obj, true);
-			return executor.insert(sql.getSql(), sql.getParams(), obj, eid.getName());
+		catch (SQLException e) {
+			throw new DaoException("Failed to insert entity: " + sql, e);
 		}
-
-		if (eid.isAutoGenerate() && eid.isStringIdentity()) {
-			String aid = Randoms.randUUID32();
-			if (!eid.setValue(obj, aid)) {
-				throw new DaoException("Failed to set identity to entity: " + entity.getType());
-			}
-
-			Sql sql = getSqlExpert().insert(entity, obj, false);
-			int c = executor.update(sql.getSql(), sql.getParams());
-			if (c != 1) {
-				throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
-			}
-			return obj;
-		}
-		
-		Map<String, String> m = new HashMap<String, String>();
-		m.put("view", getViewName(entity));
-		m.put("table", getTableName(entity));
-		m.put("field", eid.getName());
-		
-		String prep = entity.getPrepSql(getSqlExpert().getDatabaseType());
-		if (Strings.isEmpty(prep)) {
-			prep = entity.getPrepSql(DB.GENERAL);
-		}
-		String post = entity.getPostSql(getSqlExpert().getDatabaseType());
-		if (Strings.isEmpty(post)) {
-			post = entity.getPostSql(DB.GENERAL);
-		}
-		
-		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
-			prep = getSqlExpert().prepIdentity(entity);
-			post = getSqlExpert().postIdentity(entity);
-		}
-		else {
-			prep = Texts.translate(prep, m);
-			post = Texts.translate(post, m);
-		}
-
-		if (Strings.isEmpty(prep) && Strings.isEmpty(post)) {
-			throw new DaoException("Failed to get (" + getSqlExpert().getDatabaseType() + ") identity select sql for entity: " + entity.getType());
-		}
-		
-		if (Strings.isNotEmpty(prep)) {
-			iid = executor.fetch(prep, Types.getRawType(eid.getType()));
-			if (!isValidIdentity(iid)) {
-				throw new DaoException("Failed to get identity from prep sql: " + prep);
-			}
-			if (!eid.setValue(obj, iid)) {
-				throw new DaoException("Failed to set identity to entity: " + entity.getType());
-			}
-		}
-		
-		Sql sql = getSqlExpert().insert(entity, obj, false);
-		int c = executor.update(sql.getSql(), sql.getParams());
-		if (c != 1) {
-			throw new DaoException("Failed to insert entity, update count: " + c + ", SQL: " + sql.getSql());
-		}
-
-		if (Strings.isNotEmpty(post)) {
-			iid = executor.fetch(post, Types.getRawType(eid.getType()));
-			if (!isValidIdentity(iid)) {
-				throw new DaoException("Failed to get identity from post sql: " + post);
-			}
-			if (!eid.setValue(obj, iid)) {
-				throw new DaoException("Failed to set identity to entity: " + entity.getType());
-			}
-		}
-		
-		return obj;
 	}
 
 	//-------------------------------------------------------------------------

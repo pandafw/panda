@@ -27,7 +27,7 @@
 		<dependency org="com.microsoft" name="sqljdbc4" rev="4.0" conf="jdbc->master,sources" />
 		<dependency org="com.oracle" name="ojdbc6" rev="12.1.0.2" conf="jdbc->master,sources" />
 		<dependency org="org.apache.derby" name="derby" rev="10.10.1.1" conf="jdbc->master,sources" />
-		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.0" conf="jdbc->master,sources" />
+		<dependency org="org.hsqldb" name="hsqldb" rev="2.3.5" conf="jdbc->master,sources" />
 		<dependency org="org.mariadb.jdbc" name="mariadb-java-client" rev="1.6.4" conf="jdbc->master,sources" />
 		<dependency org="org.mongodb" name="mongo-java-driver" rev="3.4.2" conf="jdbc->master,sources" />
 		<dependency org="org.postgresql" name="postgresql" rev="9.4.1209.jre6" conf="jdbc->master,sources" />

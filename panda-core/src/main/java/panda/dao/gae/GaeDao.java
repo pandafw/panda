@@ -753,6 +753,10 @@ public class GaeDao extends AbstractDao {
 			return existsByTable(getTableName(query));
 		}
 
+		if (log.isDebugEnabled()) {
+			log.debug("existsByQuery: " + query);
+		}
+		
 		autoStart();
 		try {
 			com.google.appengine.api.datastore.Entity ge = null;
@@ -788,6 +792,10 @@ public class GaeDao extends AbstractDao {
 	 */
 	@Override
 	protected <T> T fetchByQuery(DataQuery<T> query) {
+		if (log.isDebugEnabled()) {
+			log.debug("fetchByQuery: " + query);
+		}
+		
 		Entity<T> entity = query.getEntity();
 		
 		autoStart();
@@ -829,6 +837,10 @@ public class GaeDao extends AbstractDao {
 	 */
 	@Override
 	protected long countByQuery(Query<?> query) {
+		if (log.isDebugEnabled()) {
+			log.debug("countByQuery: " + query);
+		}
+		
 		autoStart();
 		try {
 			PreparedQuery pq = prepareQuery(query, true);
@@ -977,6 +989,10 @@ public class GaeDao extends AbstractDao {
 	 */
 	@Override
 	protected int deletesByQuery(Query<?> query) {
+		if (log.isDebugEnabled()) {
+			log.debug("deletesByQuery: " + query);
+		}
+		
 		autoStart();
 		try {
 			PreparedQuery pq = prepareQuery(query, true);
@@ -1016,7 +1032,11 @@ public class GaeDao extends AbstractDao {
 	 * @return the inserted record
 	 */
 	@Override
-	protected <T> T insertData(Entity<T> entity, T data) throws Exception {
+	protected <T> T insertData(Entity<T> entity, T data) {
+		if (log.isDebugEnabled()) {
+			log.debug("insert: " + data);
+		}
+
 		com.google.appengine.api.datastore.Entity ge;
 		Object kid = getDataIdentity(entity, data);
 		if (isValidIdentity(kid)) {
@@ -1044,6 +1064,10 @@ public class GaeDao extends AbstractDao {
 	 * @return updated count
 	 */
 	protected int updatesByQuery(Object data, DataQuery<?> query, int limit) {
+		if (log.isDebugEnabled()) {
+			log.debug("updatesByQuery: " + query);
+		}
+		
 		autoStart();
 		try {
 			int cnt = 0;
@@ -1074,7 +1098,7 @@ public class GaeDao extends AbstractDao {
 					convertDataToEntity(query, data, ge);
 					saveEntity(ge);
 					if (++cnt > limit) {
-						throw new Exception("Too many (" + cnt + ") records updated.");
+						throw new DaoException("Too many (" + cnt + ") records updated.");
 					}
 				}
 			}

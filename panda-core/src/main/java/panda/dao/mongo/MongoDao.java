@@ -510,15 +510,15 @@ public class MongoDao extends AbstractDao {
 	 * the '@Post("SELECT ...")' sql will be executed after insert.
 	 * 
 	 * @param entity the Entity of the data
-	 * @param data the record to be inserted (@Id property will be setted)
+	 * @param data the record to be inserted (@Id property will be set)
 	 * @return the inserted record
 	 */
 	@Override
-	protected <T> T insertData(Entity<T> entity, T data) throws Exception {
+	protected <T> T insertData(Entity<T> entity, T data) {
 		if (log.isDebugEnabled()) {
 			log.debug("insert: " + data);
 		}
-		
+
 		EntityField idef = entity.getIdentity();
 		if (idef == null) {
 			writeData(entity, data);

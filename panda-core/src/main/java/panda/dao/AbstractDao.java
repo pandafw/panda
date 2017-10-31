@@ -1202,7 +1202,7 @@ public abstract class AbstractDao implements Dao {
 	protected abstract int deletesByQuery(Query<?> query);
 
 	//-------------------------------------------------------------------------
-	protected abstract <T> T insertData(Entity<T> entity, T obj) throws Exception;
+	protected abstract <T> T insertData(Entity<T> entity, T obj);
 
 	/**
 	 * insert a record.
@@ -1253,7 +1253,7 @@ public abstract class AbstractDao implements Dao {
 		}
 		catch (Exception e) {
 			rollback();
-			throw new DaoException("Failed to insert entity " + entity.getType() + ": " + e.getMessage(), e);
+			throw new DaoException("Failed to insert " + getTableName(entity) + ": " + obj, e);
 		}
 		finally {
 			autoClose();
