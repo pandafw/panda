@@ -80,7 +80,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 */
 	protected Object list(Queryer qr) {
 		set_save(true);
-		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_print(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_POPUP_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_POPUP_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_json(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
@@ -116,14 +116,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object list_xml(Queryer qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
 	 * list_pdf
 	 */
 	protected Object list_pdf(Queryer qr) {
-		return doPdf(qr, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doPdf(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 
 	
@@ -131,28 +131,28 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * list_csv
 	 */
 	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
-		return doCsv(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doCsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
 	 * list_tsv
 	 */
 	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
-		return doTsv(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doTsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
 	 * list_xls
 	 */
 	protected Object list_xls(Queryer qr, List<ListColumn> columns) {
-		return doXls(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doXls(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
 	 * list_xlsx
 	 */
 	protected Object list_xlsx(Queryer qr, List<ListColumn> columns) {
-		return doXlsx(qr, columns, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		return doXlsx(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 
 	//------------------------------------------------------------
@@ -164,7 +164,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object expo_json(QueryerEx qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 	
 	/**
@@ -173,14 +173,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	protected Object expo_xml(QueryerEx qr) {
 		set_load(false);
 		set_save(false);
-		return doList(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doList(qr, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 	
 	/**
 	 * expo_pdf
 	 */
 	protected Object expo_pdf(QueryerEx qr) {
-		return doPdf(qr, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doPdf(qr, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 
 	
@@ -188,28 +188,28 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * expo_csv
 	 */
 	protected Object expo_csv(QueryerEx qr, List<ListColumn> columns) {
-		return doCsv(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doCsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 	
 	/**
 	 * expo_tsv
 	 */
 	protected Object expo_tsv(QueryerEx qr, List<ListColumn> columns) {
-		return doTsv(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doTsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 	
 	/**
 	 * expo_xls
 	 */
 	protected Object expo_xls(QueryerEx qr, List<ListColumn> columns) {
-		return doXls(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doXls(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 	
 	/**
 	 * expo_xlsx
 	 */
 	protected Object expo_xlsx(QueryerEx qr, List<ListColumn> columns) {
-		return doXlsx(qr, columns, VAL.DEFAULT_EXPORT_PAGE_ITEMS, VAL.DEFAULT_EXPORT_MAX_ITEMS);
+		return doXlsx(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
 	}
 
 	//------------------------------------------------------------

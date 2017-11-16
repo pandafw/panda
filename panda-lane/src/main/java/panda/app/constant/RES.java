@@ -92,14 +92,14 @@ public interface RES {
 	public final static String SORTER_SUFFIX = "-sorter";
 	
 	/**
-	 * PAGER_LIMIT_SUFFIX = "-pager-limit";
+	 * PAGESIZE_DEFAULT_SUFFIX = "-pagesize-default";
 	 */
-	public final static String PAGE_ITEMS_DEFAULT_SUFFIX = "-items-default";
+	public final static String PAGESIZE_DEFAULT_SUFFIX = "-pagesize-default";
 	
 	/**
-	 * PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
+	 * PAGESIZE_MAXIMUM_SUFFIX = "-pagesize-maximum";
 	 */
-	public final static String PAGE_ITEMS_MAXIMUM_SUFFIX = "-items-maximum";
+	public final static String PAGESIZE_MAXIMUM_SUFFIX = "-pagesize-maximum";
 	
 	//------------------------------------------------------------
 	// TEXTS

@@ -358,7 +358,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 * @param pager pager
 	 */
 	public void setLimitToPager(Pager pager) {
-		setLimitToPager(pager, VAL.DEFAULT_LIST_PAGE_ITEMS, VAL.DEFAULT_LIST_MAX_ITEMS);
+		setLimitToPager(pager, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
 	}
 	
 	/**
@@ -369,11 +369,11 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	 */
 	public void setLimitToPager(Pager pager, long def, long max) {
 		if (!pager.hasLimit()) {
-			long l = getTextAsLong(getMethodName() + RES.PAGE_ITEMS_DEFAULT_SUFFIX, def);
+			long l = getTextAsLong(getMethodName() + RES.PAGESIZE_DEFAULT_SUFFIX, def);
 			pager.setLimit(l);
 		}
 
-		long m = getTextAsLong(getMethodName() + RES.PAGE_ITEMS_MAXIMUM_SUFFIX, max);
+		long m = getTextAsLong(getMethodName() + RES.PAGESIZE_MAXIMUM_SUFFIX, max);
 		if (m > 0 && (!pager.hasLimit() || pager.getLimit() > m)) {
 			pager.setLimit(m);
 		}

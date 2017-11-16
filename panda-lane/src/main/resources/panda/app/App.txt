@@ -7,14 +7,15 @@ ui-list-countable=true
 #-----------------------------------------------------------------------------
 # list
 #-----------------------------------------------------------------------------
-#list-items-default=20
-#list-items-maximum=300
+#list-pagesize-default=20
+#list-pagesize-maximum=300
 
-#list_popup-items-default=10
-#list_popup-items-maximum=300
+#list_popup-pagesize-default=10
+#list_popup-pagesize-maximum=300
 
-#expo_xxx-items-default=2000
-#expo_xxx-items-maximum=10000
+# export xxx page size, xxx: json/xml/csv/tsv/pdf/xls/xlsx
+#expo_xxx-pagesize-default=2000
+#expo_xxx-pagesize-maximum=10000
 
 
 #-----------------------------------------------------------------------------

@@ -45,38 +45,38 @@ public interface VAL {
 	// List
 	//
 	/**
-	 * DEFAULT_LIST_PAGE_ITEMS = 20;
+	 * DEFAULT_LIST_PAGESIZE = 20;
 	 */
-	public final static long DEFAULT_LIST_PAGE_ITEMS = 20;
+	public final static long DEFAULT_LIST_PAGESIZE = 20;
 
 	/**
-	 * DEFAULT_LIST_MAX_ITEMS = 300;
+	 * MAXIMUM_LIST_PAGESIZE = 300;
 	 */
-	public final static long DEFAULT_LIST_MAX_ITEMS = 300;
+	public final static long MAXIMUM_LIST_PAGESIZE = 300;
 	
 	//----------------------------------------------------
 	// Popup
 	//
 	/**
-	 * DEFAULT_POPUP_PAGE_ITEMS = 10;
+	 * DEFAULT_POPUP_PAGESIZE = 10;
 	 */
-	public final static long DEFAULT_POPUP_PAGE_ITEMS = 10;
+	public final static long DEFAULT_POPUP_PAGESIZE = 10;
 
 	/**
-	 * DEFAULT_POPUP_MAX_ITEMS = 300;
+	 * MAXIMUM_POPUP_PAGESIZE = 300;
 	 */
-	public final static long DEFAULT_POPUP_MAX_ITEMS = 300;
+	public final static long MAXIMUM_POPUP_PAGESIZE = 300;
 	
 	//----------------------------------------------------
 	// Export
 	//
 	/**
-	 * DEFAULT_EXPORT_PAGE_ITEMS = 2000;
+	 * DEFAULT_EXPORT_PAGESIZE = 2000;
 	 */
-	public final static long DEFAULT_EXPORT_PAGE_ITEMS = 2000;
+	public final static long DEFAULT_EXPORT_PAGESIZE = 2000;
 	
 	/**
-	 * DEFAULT_EXPORT_MAX_ITEMS = 10000;
+	 * MAXIMUM_EXPORT_PAGESIZE = 10000;
 	 */
-	public final static long DEFAULT_EXPORT_MAX_ITEMS = 10000;
+	public final static long MAXIMUM_EXPORT_PAGESIZE = 10000;
 }
