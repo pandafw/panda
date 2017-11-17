@@ -22,6 +22,27 @@ public abstract class StringEscapes {
 	/* ESCAPE TRANSLATORS */
 
 	/**
+	 * Translator object for escaping regular expression. While {@link #escapeRegex(CharSequence)} is the expected method
+	 * of use, this object allows the Java escaping functionality to be used as the foundation for a
+	 * custom translator.
+	 */
+	public static final CharSequenceTranslator ESCAPE_REGEX = new LookupTranslator(
+		new String[][] {
+			{ "[", "\\[" },
+			{ "]", "\\]" },
+			{ "\\", "\\\\" },
+			{ "^", "\\^" },
+			{ "$", "\\$" },
+			{ ".", "\\." },
+			{ "|", "\\|" },
+			{ "?", "\\?" },
+			{ "*", "\\*" },
+			{ "+", "\\+" },
+			{ "(", "\\(" },
+			{ ")", "\\)" }
+		});
+
+	/**
 	 * Translator object for escaping Java. While {@link #escapeJava(CharSequence)} is the expected method
 	 * of use, this object allows the Java escaping functionality to be used as the foundation for a
 	 * custom translator.
@@ -174,6 +195,20 @@ public abstract class StringEscapes {
 	public static final CharSequenceTranslator UNESCAPE_CSV = new CsvUnescaper();
 
 	/* Helper functions */
+
+	// Regex
+	// --------------------------------------------------------------------------
+	/**
+	 * <p>
+	 * Escapes the characters in a {@code String} using Regular Expression String rules.
+	 * </p>
+	 * 
+	 * @param input String to escape values in, may be null
+	 * @return String with escaped values, {@code null} if null string input
+	 */
+	public static final String escapeRegex(final CharSequence input) {
+		return ESCAPE_REGEX.translate(input);
+	}
 
 	// Java and JavaScript
 	// --------------------------------------------------------------------------

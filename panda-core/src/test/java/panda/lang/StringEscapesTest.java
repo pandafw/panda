@@ -17,7 +17,49 @@ import panda.lang.escape.NumericEntityEscaper;
  * Unit tests for {@link StringEscapes}.
  */
 public class StringEscapesTest {
-    private final static String FOO = "foo";
+	private final static String FOO = "foo";
+
+	@Test
+	public void testEscapeRegex() throws IOException {
+		assertEquals(null, StringEscapes.escapeRegex(null));
+		try {
+			StringEscapes.ESCAPE_REGEX.translate(null, null);
+			fail();
+		}
+		catch (final IOException ex) {
+			fail();
+		}
+		catch (final IllegalArgumentException ex) {
+		}
+		try {
+			StringEscapes.ESCAPE_REGEX.translate("", null);
+			fail();
+		}
+		catch (final IOException ex) {
+			fail();
+		}
+		catch (final IllegalArgumentException ex) {
+		}
+
+		assertEscapeRegex("empty string", "", "");
+		assertEscapeRegex(FOO, FOO);
+		assertEscapeRegex("backslash", "\\\\", "\\");
+		assertEscapeRegex("\\[\\]\\\\\\^\\$\\.\\|\\?\\*\\+\\(\\)ab", "[]\\^$.|?*+()ab");
+	}
+
+	private void assertEscapeRegex(final String escaped, final String original) throws IOException {
+		assertEscapeRegex(null, escaped, original);
+	}
+
+	private void assertEscapeRegex(String message, final String expected, final String original) throws IOException {
+		final String converted = StringEscapes.escapeRegex(original);
+		message = "escapeRegex(String) failed" + (message == null ? "" : (": " + message));
+		assertEquals(message, expected, converted);
+
+		final StringBuilderWriter writer = new StringBuilderWriter();
+		StringEscapes.ESCAPE_REGEX.translate(original, writer);
+		assertEquals(expected, writer.toString());
+	}
 
 	@Test
 	public void testEscapeJava() throws IOException {

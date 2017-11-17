@@ -43,7 +43,6 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		return null;
 	}
 
-	
 	@Test
 	public void testSelectEmptyAndEnd() {
 		List<Teacher> expect = Teacher.creates(1, 5);
@@ -133,5 +132,4 @@ public abstract class SqlDaoTestCase extends DaoTestCase {
 		Assert.assertEquals(expect.get(0), dao.fetch(Teacher.class, expect.get(0)));
 		Assert.assertEquals(expect.get(1), dao.fetch(Teacher.class, expect.get(1)));
 	}
-
 }

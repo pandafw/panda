@@ -19,9 +19,9 @@ import panda.util.JndiLookup;
 /**
  * utility class for sql
  */
-public class Sqls {
+public abstract class Sqls {
 	private static final Log log = Logs.getLog(Sqls.class);
-	
+
 	/**
 	 * lookup jndi data source
 	 * 
@@ -37,11 +37,10 @@ public class Sqls {
 	 * escape sql Like string
 	 * 
 	 * @param str string
+	 * @param esc escape char
 	 * @return escaped string
 	 */
-	public static String escapeLike(String str) {
-		final char esc = '~';
-
+	public static String escapeLike(String str, char esc) {
 		StringBuilder result = new StringBuilder();
 
 		for (int i = 0; i < str.length(); i++) {
@@ -92,30 +91,84 @@ public class Sqls {
 	/**
 	 * like string 
 	 * @param str string
+	 * @param esc escape char
 	 * @return %str%
 	 */
-	public static String stringLike(String str) {
-		return '%' + escapeLike(str) + '%';
+	public static String stringLike(String str, char esc) {
+		return '%' + escapeLike(str, esc) + '%';
 	}
 	
 	/**
 	 * starts like string 
 	 * @param str string
+	 * @param esc escape char
 	 * @return str%
 	 */
-	public static String startsLike(String str) {
-		return escapeLike(str) + '%';
+	public static String startsLike(String str, char esc) {
+		return escapeLike(str, esc) + '%';
 	}
 	
 	/**
 	 * ends like string 
 	 * @param str string
+	 * @param esc escape char
 	 * @return %str
 	 */
-	public static String endsLike(String str) {
-		return '%' + escapeLike(str);
+	public static String endsLike(String str, char esc) {
+		return '%' + escapeLike(str, esc);
+	}
+
+	private static void toRegex(StringBuilder sb, char c) {
+		switch (c) {
+		case '%':
+			sb.append(".*");
+			break;
+		case '_':
+			sb.append(".");
+			break;
+		default:
+			sb.append(c);
+			break;
+		}
+	}
+
+	/**
+	 * convert like string to regular expression
+	 * @param str like string
+	 * @param esc escape char
+	 * @return regular expression
+	 */
+	public static String like2regex(String str, char esc) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c == esc) {
+				if (i < str.length() - 1) {
+					i++;
+					c = str.charAt(i);
+					sb.append(c);
+					continue;
+				}
+			}
+			toRegex(sb, c);
+		}
+		return sb.toString();
 	}
 	
+	/**
+	 * convert like string to regular expression
+	 * @param str like string
+	 * @return regular expression
+	 */
+	public static String like2regex(String str) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			toRegex(sb, c);
+		}
+		return sb.toString();
+	}
+
 	private static Pattern illegalFieldNamePattern = Pattern.compile(".*[^a-zA-Z_0-9\\.].*");
 
 	/**

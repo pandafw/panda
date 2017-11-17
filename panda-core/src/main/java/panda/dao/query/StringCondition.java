@@ -28,12 +28,34 @@ public class StringCondition<E extends EntityQuery> extends ComparableCondition<
 	}
 
 	/**
+	 * add "field LIKE value" expression
+	 * @param value value
+	 * @param esc escape char
+	 * @return parent
+	 */
+	public E like(String value, char esc) {
+		parent.getQuery().like(field, value, esc);
+		return parent;
+	}
+
+	/**
 	 * add "field NOT LIKE value" expression
 	 * @param value value
 	 * @return this
 	 */
 	public E notLike(String value) {
 		parent.getQuery().notLike(field, value);
+		return parent;
+	}
+
+	/**
+	 * add "field NOT LIKE value" expression
+	 * @param value value
+	 * @param esc escape char
+	 * @return this
+	 */
+	public E notLike(String value, char esc) {
+		parent.getQuery().notLike(field, value, esc);
 		return parent;
 	}
 

@@ -35,10 +35,12 @@ import panda.dao.query.Filter.SimpleFilter;
 import panda.dao.query.Filter.ValueFilter;
 import panda.dao.query.Operator;
 import panda.dao.query.Query;
+import panda.dao.sql.Sqls;
 import panda.io.Streams;
 import panda.lang.Collections;
 import panda.lang.Exceptions;
 import panda.lang.Order;
+import panda.lang.StringEscapes;
 import panda.lang.Strings;
 import panda.lang.reflect.Types;
 import panda.log.Log;
@@ -784,61 +786,47 @@ public class MongoDao extends AbstractDao {
 			return;
 		}
 		
-		if (op == Operator.LIKE) {
-			// FIXME: escape value
-			String reg = Strings.replace(Strings.replace(vf.getValue().toString(), "%", ".*"), "_", "?*");
-			Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, p));
+		if (op == Operator.LIKE || op == Operator.NOT_LIKE) {
+			String r;
+			
+			if (vf.getValue() instanceof Object[]) {
+				String s = (String)((Object[])vf.getValue())[0];
+				char esc = (char)((Object[])vf.getValue())[1];
+				r = Sqls.like2regex(s, esc);
+			}
+			else {
+				r = Sqls.like2regex(vf.getValue().toString());
+			}
+			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
+			Object o = op == Operator.LIKE ? p : new BasicDBObject("$not", p);
+			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		
-		if (op == Operator.NOT_LIKE) {
-			// FIXME: escape value
-			String reg = Strings.replace(Strings.replace(vf.getValue().toString(), "%", ".*"), "_", "?*");
-			Pattern p = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, new BasicDBObject("$not", p)));
+		if (op == Operator.MATCH || op == Operator.NOT_MATCH) {
+			String s = StringEscapes.escapeRegex(vf.getValue().toString());
+			String r = ".*" + s + ".*";
+			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
+			Object o = (op == Operator.MATCH ? p : new BasicDBObject("$not", p));
+			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		
-		if (op == Operator.MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile(".*" + vf.getValue() + ".*", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, p));
+		if (op == Operator.LEFT_MATCH || op == Operator.NOT_LEFT_MATCH) {
+			String s = StringEscapes.escapeRegex(vf.getValue().toString());
+			String r = "^" + s + ".*";
+			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
+			Object o = (op == Operator.LEFT_MATCH ? p : new BasicDBObject("$not", p));
+			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		
-		if (op == Operator.NOT_MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile(".*" + vf.getValue() + ".*", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, new BasicDBObject("$not", p)));
-			return;
-		}
-		
-		if (op == Operator.LEFT_MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile("^" + vf.getValue() + ".*", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, p));
-			return;
-		}
-		
-		if (op == Operator.NOT_LEFT_MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile("^" + vf.getValue() + ".*", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, new BasicDBObject("$not", p)));
-			return;
-		}
-		
-		if (op == Operator.RIGHT_MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile(".*" + vf.getValue() + "$", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, p));
-			return;
-		}
-		
-		if (op == Operator.NOT_RIGHT_MATCH) {
-			// FIXME: escape value
-			Pattern p = Pattern.compile(".*" + vf.getValue() + "$", Pattern.CASE_INSENSITIVE);
-			qs.add(new BasicDBObject(column, new BasicDBObject("$not", p)));
+		if (op == Operator.RIGHT_MATCH || op == Operator.NOT_RIGHT_MATCH) {
+			String s = StringEscapes.escapeRegex(vf.getValue().toString());
+			String r = ".*" + s + "$";
+			Pattern p = Pattern.compile(r, Pattern.CASE_INSENSITIVE);
+			Object o = (op == Operator.RIGHT_MATCH ? p : new BasicDBObject("$not", p));
+			qs.add(new BasicDBObject(column, o));
 			return;
 		}
 		

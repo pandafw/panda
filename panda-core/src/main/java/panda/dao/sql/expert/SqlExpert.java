@@ -523,32 +523,42 @@ public abstract class SqlExpert {
 			sql.setCharAt(sql.length() - 1, ')');
 		}
 		else if (op == Operator.MATCH) {
-			sql.append("LIKE ?");
-			sql.addParam(Sqls.stringLike(vf.getValue().toString()));
+			sql.append("LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.stringLike(vf.getValue().toString(), '~'));
 		}
 		else if (op == Operator.NOT_MATCH) {
-			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.stringLike(vf.getValue().toString()));
+			sql.append("NOT LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.stringLike(vf.getValue().toString(), '~'));
 		}
 		else if (op == Operator.LEFT_MATCH) {
-			sql.append("LIKE ?");
-			sql.addParam(Sqls.startsLike(vf.getValue().toString()));
+			sql.append("LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.startsLike(vf.getValue().toString(), '~'));
 		}
 		else if (op == Operator.NOT_LEFT_MATCH) {
-			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.startsLike(vf.getValue().toString()));
+			sql.append("NOT LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.startsLike(vf.getValue().toString(), '~'));
 		}
 		else if (op == Operator.RIGHT_MATCH) {
-			sql.append("LIKE ?");
-			sql.addParam(Sqls.endsLike(vf.getValue().toString()));
+			sql.append("LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.endsLike(vf.getValue().toString(), '~'));
 		}
 		else if (op == Operator.NOT_RIGHT_MATCH) {
-			sql.append("NOT LIKE ?");
-			sql.addParam(Sqls.endsLike(vf.getValue().toString()));
+			sql.append("NOT LIKE ? ESCAPE '~'");
+			sql.addParam(Sqls.endsLike(vf.getValue().toString(), '~'));
+		}
+		else if (op == Operator.LIKE || op == Operator.NOT_LIKE) {
+			if (vf.getValue() instanceof Object[]) {
+				Object[] vs = (Object[])vf.getValue();
+				sql.append(op).append(" ? ESCAPE '").append((char)vs[1]).append('\'');
+				sql.addParam(vs[0]);
+			}
+			else {
+				sql.append(op).append(' ').append('?');
+				sql.addParam(vf.getValue());
+			}
 		}
 		else {
-			sql.append(op).append(' ');
-			sql.append('?');
+			sql.append(op).append(' ').append('?');
 			sql.addParam(vf.getValue());
 		}
 	}

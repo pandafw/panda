@@ -358,6 +358,43 @@ public abstract class DaoTestCase {
 	}
 
 	@Test
+	public void testSelectLikeEscape() {
+		List<Student> expect = Student.creates(1, 1);
+		
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
+		q.like("name", "SS%1", 'S');
+		List<Student> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectNotLikeEscape() {
+		List<Student> expect = Student.creates(2, 5);
+		
+		DataQuery<Student> q = new DataQuery<Student>(Student.class);
+		q.notLike("name", "SS%1", 'S');
+		List<Student> actual = dao.select(q);
+		
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
+	public void testSelectMatchEscape() {
+		List<Teacher> expect = Teacher.creates(2, 3);
+		expect.get(0).setMemo(expect.get(0).getMemo() + "%u");
+		expect.get(1).setMemo(expect.get(1).getMemo() + "%u");
+
+		Assert.assertEquals(1, dao.update(expect.get(0)));
+		Assert.assertEquals(1, dao.update(expect.get(1)));
+		
+		DataQuery<Teacher> q = new DataQuery<Teacher>(dao.getEntity(Teacher.class));
+		q.clear().match("memo", "%");
+		List<Teacher> actual = dao.select(q);
+		Assert.assertEquals(expect, actual);
+	}
+
+	@Test
 	public void testSelectStart() {
 		List<Teacher> expect = Teacher.creates(4, 5);
 		

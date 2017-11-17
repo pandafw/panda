@@ -1140,6 +1140,17 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	}
 
 	/**
+	 * add "field LIKE value" expression
+	 * @param field field 
+	 * @param value value
+	 * @param esc escape char
+	 * @return this
+	 */
+	public DataQuery<T> like(String field, String value, char esc) {
+		return addCompareValueExpression(field, Operator.LIKE, new Object[] { value, esc });
+	}
+
+	/**
 	 * add "field NOT LIKE value" expression
 	 * @param field field 
 	 * @param value value
@@ -1147,6 +1158,17 @@ public class DataQuery<T> implements Query<T>, Cloneable {
 	 */
 	public DataQuery<T> notLike(String field, String value) {
 		return addCompareValueExpression(field, Operator.NOT_LIKE, value);
+	}
+
+	/**
+	 * add "field NOT LIKE value" expression
+	 * @param field field 
+	 * @param value value
+	 * @param esc escape char
+	 * @return this
+	 */
+	public DataQuery<T> notLike(String field, String value, char esc) {
+		return addCompareValueExpression(field, Operator.NOT_LIKE, new Object[] { value, esc });
 	}
 
 	/**

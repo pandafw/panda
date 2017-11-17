@@ -15,8 +15,13 @@ public class EntityArrays {
 		return JAVA_CTRL_CHARS_ESCAPE;
 	}
 
-	private static final String[][] JAVA_CTRL_CHARS_ESCAPE = { { "\b", "\\b" }, { "\n", "\\n" }, { "\t", "\\t" },
-			{ "\f", "\\f" }, { "\r", "\\r" } };
+	private static final String[][] JAVA_CTRL_CHARS_ESCAPE = { 
+			{ "\b", "\\b" }, 
+			{ "\n", "\\n" }, 
+			{ "\t", "\\t" },
+			{ "\f", "\\f" }, 
+			{ "\r", "\\r" } 
+			};
 
 	/**
 	 * Reverse of {@link #JAVA_CTRL_CHARS_ESCAPE()} for unescaping purposes.
