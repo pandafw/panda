@@ -1,6 +1,8 @@
 package panda.app.task.java;
 
 import panda.app.AppConstants;
+import panda.app.constant.SET;
+import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
@@ -11,6 +13,9 @@ import panda.task.ThreadPoolTaskExecutor;
 @IocBean(type=TaskExecutor.class, create="initialize", depose="shutdown")
 public class JavaTaskExecutor extends ThreadPoolTaskExecutor {
 	private static final Log log = Logs.getLog(JavaTaskExecutor.class);
+
+	@IocInject
+	protected AppSettings settings;
 
 	@IocInject(value=AppConstants.EXECUTOR_ENABLE, required=false)
 	protected boolean enable;
@@ -35,6 +40,8 @@ public class JavaTaskExecutor extends ThreadPoolTaskExecutor {
 	}
 	
 	public void initialize() {
+		enable = settings.getPropertyAsBoolean(SET.EXECUTOR_ENABLE, enable);
+
 		if (enable) {
 			log.info("Starting " + getClass().getName() + " ...");
 			

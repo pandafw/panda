@@ -26,6 +26,13 @@ public interface SET extends SiteConstants {
 	public static final String LUCENE_LOCATION = "lucene.location";
 
 	//------------------------------------------------
+	// scheduler & executor
+	//
+	public static final String SCHEDULER_ENABLE = "scheduler.enable";
+
+	public static final String EXECUTOR_ENABLE = "executor.enable";
+
+	//------------------------------------------------
 	// html to pdf
 	//
 	/** The wkhtmltopdf exe path */

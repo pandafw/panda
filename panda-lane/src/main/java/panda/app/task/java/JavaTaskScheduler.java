@@ -5,8 +5,10 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import panda.app.AppConstants;
+import panda.app.constant.SET;
 import panda.app.task.ActionTask;
 import panda.app.task.CronEntry;
+import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.lang.Collections;
@@ -26,14 +28,17 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	@IocInject(required=false)
 	protected ServletContext servlet;
 
+	@IocInject
+	protected AppSettings settings;
+	
+	@IocInject(value=AppConstants.SCHEDULER_ENABLE, required=false)
+	protected boolean enable;
+
 	@IocInject(value=AppConstants.SCHEDULER_CRONS, required=false)
 	protected List<CronEntry> crons;
 
 	@IocInject(value=AppConstants.TASK_ACTION_SCHEME, required=false)
 	protected String scheme = "http://localhost:8080";
-	
-	@IocInject(value=AppConstants.SCHEDULER_ENABLE, required=false)
-	protected boolean enable;
 
 	@IocInject(value=AppConstants.SCHEDULER_NAME, required=false)
 	public void setName(String name) {
@@ -50,6 +55,8 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	}
 	
 	public void initialize() {
+		enable = settings.getPropertyAsBoolean(SET.SCHEDULER_ENABLE, enable);
+
 		if (enable) {
 			log.info("Starting " + getClass().getName() + " ...");
 			
