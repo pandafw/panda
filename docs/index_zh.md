@@ -35,7 +35,7 @@ Panda Framework的最大亮点或许是panda-tool这个源代码生成器吧。
 它可以实现Spring/Struts2/Hibernate的一些非常常用的功能。
 并且可以通过XML定义文件来自动产生实现“检索/列表/新建/修改/删除”功能的源代码（包括HTML页面及后台处理）。
 
-我做了一个[DEMO网站](http://pandafw.tk)，通过这个DEMO大家可以比较直观的了解Panda Framework。
+我做了一个[DEMO网站](http://pandafw.ga)，通过这个DEMO大家可以比较直观的了解Panda Framework。
 
 
 如果大家觉得panda Framework好用,并且能够对你的工作有帮助，留个言提个建议或写个bug报告的话，我会非常感激。
