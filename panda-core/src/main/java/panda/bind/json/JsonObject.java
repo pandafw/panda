@@ -436,7 +436,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return The truth.
 	 */
 	public boolean optBoolean(String key, boolean defaultValue) {
-		Object object = this.get(key);
+		Object object = this.opt(key);
 		if (object instanceof Boolean) {
 			return ((Boolean)object).booleanValue();
 		}
@@ -463,7 +463,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return An object which is the value.
 	 */
 	public double optDouble(String key, double defaultValue) {
-		Object object = this.get(key);
+		Object object = this.opt(key);
 		if (object instanceof Number) {
 			return ((Number)object).doubleValue();
 		}
@@ -490,7 +490,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return An object which is the value.
 	 */
 	public float optFloat(String key, float defaultValue) {
-		Object object = this.get(key);
+		Object object = this.opt(key);
 		if (object instanceof Number) {
 			return ((Number)object).floatValue();
 		}
@@ -517,7 +517,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return An object which is the value.
 	 */
 	public int optInt(String key, int defaultValue) {
-		Object object = this.get(key);
+		Object object = this.opt(key);
 		if (object instanceof Number) {
 			return ((Number)object).intValue();
 		}
@@ -568,7 +568,7 @@ public class JsonObject extends LinkedHashMap<String, Object> {
 	 * @return An object which is the value.
 	 */
 	public long optLong(String key, long defaultValue) {
-		Object object = this.get(key);
+		Object object = this.opt(key);
 		if (object instanceof Number) {
 			return ((Number)object).longValue();
 		}
