@@ -56,16 +56,11 @@ public class Beans {
 
 	// ------------------------------------------------------------------------
 	public final static String[] RESERVED_PROPERTY_NAMES = { "class", "declaringClass", "metaClass" };
-	public final static Class<?>[] RESERVED_PROPERTY_TYPES = { Class.class };
-	
+
 	public static boolean isReservedProperty(String propertyName) {
 		return Arrays.contains(RESERVED_PROPERTY_NAMES, propertyName);
 	}
 	
-	public static boolean isReservedProperty(Type propertyType) {
-		return Arrays.contains(RESERVED_PROPERTY_TYPES, propertyType);
-	}
-
 	/**
 	 * get bean name from method.
 	 * the method must like getXXX, setXXX, isXXX

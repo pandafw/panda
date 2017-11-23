@@ -2,6 +2,7 @@ package panda.bind;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -254,6 +255,12 @@ public abstract class AbstractSerializer extends AbstractBinder implements Seria
 				writeNumber((Number)src);
 			}
 			else if (src instanceof CharSequence) {
+				writeString(src.toString());
+			}
+			else if (src instanceof Class) {
+				writeString(((Class)src).getName());
+			}
+			else if (src instanceof Type) {
 				writeString(src.toString());
 			}
 			else if (isImmutableType(type)) {

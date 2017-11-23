@@ -27,6 +27,7 @@ public class JsonBinderTest {
 		private A[] ary;
 		private List<A> lst;
 		private Map<String, A> map;
+		private Class<?> cls;
 
 		public A() {
 		}
@@ -84,6 +85,12 @@ public class JsonBinderTest {
 		public void setMap(Map<String, A> map) {
 			this.map = map;
 		}
+		public Class<?> getCls() {
+			return cls;
+		}
+		public void setCls(Class<?> cls) {
+			this.cls = cls;
+		}
 		@Override
 		public boolean equals(Object rhs) {
 			if (this == rhs) {
@@ -105,6 +112,7 @@ public class JsonBinderTest {
 				.append(ary, a.ary)
 				.append(lst, a.lst)
 				.append(map, a.map)
+				.append(cls, a.cls)
 				.build();
 		}
 	}
@@ -163,9 +171,10 @@ public class JsonBinderTest {
 		
 		m.put("class", "cls");
 		m.put("clazz", "clz");
+		m.put("cls", A.class.getName());
 
 		String s = Jsons.toJson(m);
-		Assert.assertEquals("{\"class\":\"cls\",\"clazz\":\"clz\"}", s);
+		Assert.assertEquals("{\"class\":\"cls\",\"clazz\":\"clz\",\"cls\":\"" + A.class.getName() + "\"}", s);
 		
 		JsonObject jo = JsonObject.fromJson(s);
 		Assert.assertEquals(s, jo.toString());
@@ -195,6 +204,7 @@ public class JsonBinderTest {
 		jd.setIgnoreMissingProperty(true);
 		A actual = jd.deserialize(s, A.class);
 		A expect = new A();
+		expect.setCls(A.class);
 		Assert.assertEquals(expect, actual);
 	}
 	

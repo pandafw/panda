@@ -264,6 +264,26 @@ public class Castors {
 		}
 		
 		Class<?> toClass = Types.getRawType(toType);
+		// type -> class castor
+		castor = castors.get(new MultiKey(fromType, toClass));
+		if (castor != null) {
+			return castor;
+		}
+		
+		// object -> class castor
+		if (!Object.class.equals(fromType)) {
+			castor = castors.get(new MultiKey(Object.class, toClass));
+			if (castor != null) {
+				return castor;
+			}
+		}
+		
+		// default castor
+		if (Object.class.equals(toClass)) {
+			return DirectCastor.i();
+		}
+
+		// 
 		if (toClass.isEnum()) {
 			return (Castor<S, T>)new EnumCastor(toClass);
 		}

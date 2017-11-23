@@ -11,7 +11,6 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.cast.Castor;
 import panda.cast.Castors;
-import panda.lang.Arrays;
 import panda.lang.reflect.Types;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -30,7 +29,6 @@ public abstract class AbstractBinder {
 	 * Constructor 
 	 */
 	public AbstractBinder() {
-		getExcludePropertyTypes().addAll(Arrays.asList(Beans.RESERVED_PROPERTY_TYPES));
 	}
 
 	public boolean isIgnoreNullProperty() {
