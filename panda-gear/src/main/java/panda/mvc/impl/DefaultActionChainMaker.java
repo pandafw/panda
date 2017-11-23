@@ -6,6 +6,7 @@ import java.util.Map;
 
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.ioc.meta.IocValue;
 import panda.lang.Arrays;
 import panda.lang.Collections;
 import panda.lang.Strings;
@@ -38,15 +39,15 @@ public class DefaultActionChainMaker implements ActionChainMaker {
 		}
 		if (!map.containsKey(DEFAULT_CHAIN)) {
 			List<String> defs = Arrays.toList(
-				DefaultActionChain.IOC_PREFIX + FatalProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + RedirectProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + LocaleProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + LayoutProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + AdaptProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + PrepareProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + ValidateProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + InvokeProcessor.class.getName(),
-				DefaultActionChain.IOC_PREFIX + ViewProcessor.class.getName()
+				IocValue.TYPE_REF + FatalProcessor.class.getName(),
+				IocValue.TYPE_REF + RedirectProcessor.class.getName(),
+				IocValue.TYPE_REF + LocaleProcessor.class.getName(),
+				IocValue.TYPE_REF + LayoutProcessor.class.getName(),
+				IocValue.TYPE_REF + AdaptProcessor.class.getName(),
+				IocValue.TYPE_REF + PrepareProcessor.class.getName(),
+				IocValue.TYPE_REF + ValidateProcessor.class.getName(),
+				IocValue.TYPE_REF + InvokeProcessor.class.getName(),
+				IocValue.TYPE_REF + ViewProcessor.class.getName()
 			);
 			map.put(DEFAULT_CHAIN, defs);
 		}

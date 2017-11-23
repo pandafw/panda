@@ -1,6 +1,5 @@
 package panda.mvc.validation;
 
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,19 +9,17 @@ import panda.bean.BeanHandler;
 import panda.bean.Beans;
 import panda.bind.json.JsonException;
 import panda.bind.json.JsonObject;
-import panda.bind.json.Jsons;
 import panda.cast.CastException;
 import panda.cast.Castors;
-import panda.io.Streams;
+import panda.ioc.Ioc;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.ioc.meta.IocValue;
 import panda.lang.Arrays;
-import panda.lang.Charsets;
-import panda.lang.ClassLoaders;
 import panda.lang.Classes;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
 import panda.mvc.ActionContext;
+import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.validator.BinaryValidator;
@@ -48,58 +45,60 @@ import panda.mvc.validation.validator.URLValidator;
 import panda.mvc.validation.validator.Validator;
 import panda.mvc.validation.validator.VisitValidator;
 
-@IocBean(type=Validators.class)
+@IocBean(type=Validators.class, create="initialize")
 public class DefaultValidators implements Validators {
 	// -------------------------------------------------------
+	@IocInject
+	private Ioc ioc;
+	
 	@IocInject(required=false)
 	private Beans beans = Beans.i();
 
 	@IocInject(required=false)
 	private Castors castors = Mvcs.getCastors();
-	
-	private Map<String, Class<? extends Validator>> map;
 
-	@SuppressWarnings("unchecked")
+	@IocInject(value=MvcConstants.MVC_VALIDATORS, required=false)
+	private Map<String, String> aliass;
+
 	public DefaultValidators() {
-		map = new HashMap<String, Class<? extends Validator>>();
-		map.put(CAST, CastErrorValidator.class);
-		map.put(REQUIRED, RequiredValidator.class);
-		map.put(EMPTY, EmptyValidator.class);
-		map.put(EL, ElValidator.class);
-		map.put(REGEX, RegexValidator.class);
-		map.put(EMAIL, EmailValidator.class);
-		map.put(IMAIL, ImailValidator.class);
-		map.put(FILENAME, FilenameValidator.class);
-		map.put(CREDITCARDNO, CreditCardNoValidator.class);
-		map.put(BINARY, BinaryValidator.class);
-		map.put(CIDR, CIDRValidator.class);
-		map.put(DATE, DateValidator.class);
-		map.put(NUMBER, NumberValidator.class);
-		map.put(STRING, StringValidator.class);
-		map.put(DECIMAL, DecimalValidator.class);
-		map.put(FILE, FileValidator.class);
-		map.put(IMAGE, ImageValidator.class);
-		map.put(CONSTANT, ConstantValidator.class);
-		map.put(PROHIBITED, ProhibitedValidator.class);
-		map.put(URL, URLValidator.class);
-		map.put(VISIT, VisitValidator.class);
+	}
+
+	private void addValidator(String alias, Class<? extends Validator> type) {
+		if (!aliass.containsKey(alias)) {
+			aliass.put(alias, IocValue.TYPE_REF + type.getName());
+		}
+	}
+	
+	public void initialize() {
+		if (aliass == null) {
+			aliass = new HashMap<String, String>();
+		}
 		
-		InputStream is = null;
-		try {
-			// load default custom settings
-			is = ClassLoaders.getResourceAsStream("mvc-validators.json");
-			if (is != null) {
-				Map<String, String> cm = Jsons.fromJson(is, Charsets.UTF_8, Map.class);
-				for (Entry<String, String> en : cm.entrySet()) {
-					map.put(en.getKey(), (Class<? extends Validator>)Classes.getClass(en.getValue()));
-				}
-			}
-		}
-		catch (Exception e) {
-			throw Exceptions.wrapThrow(e);
-		}
-		finally {
-			Streams.safeClose(is);
+		addValidator(CAST, CastErrorValidator.class);
+		addValidator(REQUIRED, RequiredValidator.class);
+		addValidator(EMPTY, EmptyValidator.class);
+		addValidator(EL, ElValidator.class);
+		addValidator(REGEX, RegexValidator.class);
+		addValidator(EMAIL, EmailValidator.class);
+		addValidator(IMAIL, ImailValidator.class);
+		addValidator(FILENAME, FilenameValidator.class);
+		addValidator(CREDITCARDNO, CreditCardNoValidator.class);
+		addValidator(BINARY, BinaryValidator.class);
+		addValidator(CIDR, CIDRValidator.class);
+		addValidator(DATE, DateValidator.class);
+		addValidator(NUMBER, NumberValidator.class);
+		addValidator(STRING, StringValidator.class);
+		addValidator(DECIMAL, DecimalValidator.class);
+		addValidator(FILE, FileValidator.class);
+		addValidator(IMAGE, ImageValidator.class);
+		addValidator(CONSTANT, ConstantValidator.class);
+		addValidator(PROHIBITED, ProhibitedValidator.class);
+		addValidator(URL, URLValidator.class);
+		addValidator(VISIT, VisitValidator.class);
+
+		// check validators
+		for (String a : aliass.values()) {
+			createValidator(ioc, a);
 		}
 	}
 
@@ -116,7 +115,7 @@ public class DefaultValidators implements Validators {
 	@Override
 	public boolean validate(ActionContext ac, Validator parent, String name, Object value, Validate[] vs) {
 		if (Arrays.isEmpty(vs)) {
-			Validator fv = createValidator(ac, VisitValidator.class, Validators.VISIT);
+			Validator fv = createValidator(ac, Validators.VISIT);
 			fv.setName(name);
 			return fv.validate(ac, value);
 		}
@@ -144,7 +143,7 @@ public class DefaultValidators implements Validators {
 	 */
 	@SuppressWarnings("unchecked")
 	public Validator createValidator(ActionContext ac, Validate v) {
-		Validator fv = createValidator(ac, v.type(), v.value());
+		Validator fv = createValidator(ac, v.value());
 
 		if (Strings.isNotEmpty(v.refer())) {
 			fv.setRefer(v.refer());
@@ -192,42 +191,36 @@ public class DefaultValidators implements Validators {
 		return fv;
 	}
 	
-	public Validator createValidator(ActionContext ac, Class<? extends Validator> type, String alias) {
-		Validator v = _createValidator(ac, type, alias);
+	public Validator createValidator(ActionContext ac, String alias) {
+		Validator v = createValidator(ac.getIoc(), alias);
 		if (v instanceof VisitValidator) {
 			((VisitValidator)v).setValidators(this);
 		}
 		return v;
 	}
 	
-	private Validator _createValidator(ActionContext ac, Class<? extends Validator> type, String alias) {
-		if (type != Validator.class) {
-			Validator fv = ac.getIoc().getIfExists(type);
-			if (fv != null) {
-				return fv;
-			}
-			try {
-				return Classes.newInstance(type);
-			}
-			catch (Exception e) {
-				throw new IllegalArgumentException("Failed to create validator(" + type + ")", e);
-			}
+	private Validator createValidator(Ioc ioc, String alias) {
+		if (Strings.isEmpty(alias)) {
+			throw new IllegalArgumentException("Missing value of @Validator()");
+		}
+		
+		String name = aliass.get(alias);
+		if (name == null) {
+			name = alias;
 		}
 
-		if (Strings.isNotEmpty(alias)) {
-			Class<? extends Validator> c = map.get(alias);
-			if (c != null) {
-				return _createValidator(ac, c, null);
+		try {
+			Validator v;
+			if (Strings.startsWithChar(name, IocValue.TYPE_REF)) {
+				v = ioc.get(Validator.class, name.substring(1));
 			}
-
-			try {
-				return (Validator)Classes.newInstance(alias);
+			else {
+				v = (Validator)Classes.newInstance(name);
 			}
-			catch (Exception e) {
-				throw new IllegalArgumentException("Failed to create validator(" + alias + ")", e);
-			}
+			return v;
 		}
-
-		throw new IllegalArgumentException("Missing type or value of @Validator()");
+		catch (Exception e) {
+			throw new IllegalArgumentException("Failed to create validator(" + name + ")", e);
+		}
 	}
 }

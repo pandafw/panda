@@ -6,9 +6,11 @@ public interface MvcConstants extends IocConstants {
 	public static final String TAGLIB_NAME = "panda.taglib.name";
 
 	public static final String MVC_CHAINS = "panda.mvc.chains";
-	
+
+	public static final String MVC_VALIDATORS = "panda.mvc.validators";
+
 	public static final String DEFAULT_RESOURCE_BUNDLES = "panda.resources.default";
-	
+
 	/* Crypto */
 	public static final String CRYPTO_ALGORITHM = "panda.crypto.algorithm";
 

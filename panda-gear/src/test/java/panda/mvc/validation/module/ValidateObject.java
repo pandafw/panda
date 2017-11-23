@@ -5,7 +5,6 @@ import java.util.Date;
 import panda.mvc.validation.Validators;
 import panda.mvc.validation.annotation.Validate;
 import panda.mvc.validation.annotation.Validates;
-import panda.mvc.validation.validator.StringValidator;
 
 public class ValidateObject {
 	@Validates(@Validate(value=Validators.BINARY, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))
@@ -47,21 +46,23 @@ public class ValidateObject {
 	@Validates(@Validate(value=Validators.REGEX, params="{ regex: '#(regex-telno)' }", message="not a telephone number."))
 	public String telno;
 
-	@Validates(@Validate(type=StringValidator.class, params="{type:'A'}", message="'${top.value}' is not A."))
+	private final static String SV = "#panda.mvc.validation.validator.StringValidator";
+
+	@Validates(@Validate(value=SV, params="{type:'A'}", message="'${top.value}' is not A."))
 	public String string;
 
-	@Validates(@Validate(type=StringValidator.class, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))
+	@Validates(@Validate(value=SV, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"))
 	public String strlen;
 	
 	@Validates({
-		@Validate(type=StringValidator.class, shortCircuit=true, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
-		@Validate(type=StringValidator.class, params="{type: 'A'}", message="'${top.value}' is not A.")
+		@Validate(value=SV, shortCircuit=true, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
+		@Validate(value=SV, params="{type: 'A'}", message="'${top.value}' is not A.")
 	})
 	public String shortCircuitTrue;
 	
 	@Validates({
-		@Validate(type=StringValidator.class, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
-		@Validate(type=StringValidator.class, params="{type: 'A'}", message="'${top.value}' is not A.")
+		@Validate(value=SV, params="{minLength: 5, maxLength: 100}", message="${top.length}, ${top.minLength} ~ ${top.maxLength}"),
+		@Validate(value=SV, params="{type: 'A'}", message="'${top.value}' is not A.")
 	})
 	public String shortCircuitFalse;
 }

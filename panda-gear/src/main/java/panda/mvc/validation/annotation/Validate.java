@@ -5,17 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import panda.mvc.validation.validator.Validator;
-
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validate {
-
-	/**
-	 * The validator type
-	 */
-	Class<? extends Validator> type() default Validator.class;
-	
 	/**
 	 * The referred field name to show error message.
 	 */
@@ -46,5 +38,5 @@ public @interface Validate {
 	/**
 	 * validator name
 	 */
-	String value() default "";
+	String value();
 }

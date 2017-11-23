@@ -2,8 +2,10 @@ package panda.mvc.impl;
 
 import java.util.List;
 
+import panda.ioc.meta.IocValue;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionChain;
@@ -13,8 +15,6 @@ import panda.mvc.Processor;
 
 public class DefaultActionChain implements ActionChain {
 	private static final Log log = Logs.getLog(DefaultActionChain.class);
-	
-	public static final String IOC_PREFIX = "#";
 	
 	private ActionConfig config;
 	private List<String> procs;
@@ -54,11 +54,11 @@ public class DefaultActionChain implements ActionChain {
 		protected Processor initProcessor(String name, ActionContext ac) {
 			try {
 				Processor p;
-				if (name.startsWith(IOC_PREFIX)) {
+				if (Strings.startsWithChar(name, IocValue.TYPE_REF)) {
 					p = ac.getIoc().get(Processor.class, name.substring(1));
 				}
 				else {
-					p = (Processor)Classes.born(name);
+					p = (Processor)Classes.newInstance(name);
 				}
 				return p;
 			}
