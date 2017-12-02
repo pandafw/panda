@@ -153,7 +153,7 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 		
 		if (gi != null) {
 			if (gi.getIndex().getName().equals(((GaeIndexer)indexer).getIndex().getName())) {
-				log.warn("Failed to set same same gae indexer");
+				log.error("Failed to set same same gae indexer");
 				return;
 			}
 

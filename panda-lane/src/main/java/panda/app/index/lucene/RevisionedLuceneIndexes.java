@@ -179,7 +179,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 		log.info("old lucene indexer: " + li);
 		if (li != null) {
 			if (((FSDirectory)li.getDirectory()).getDirectory().equals(((FSDirectory)((LuceneIndexer)indexer).getDirectory()).getDirectory())) {
-				log.warn("Failed to set same same FSDirectory indexer");
+				log.error("Failed to set same same FSDirectory indexer");
 				return;
 			}
 			log.info("drop lucene indexer: " + indexer);
