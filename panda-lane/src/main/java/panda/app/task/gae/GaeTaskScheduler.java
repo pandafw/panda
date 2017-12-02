@@ -8,7 +8,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import javax.servlet.ServletContext;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.task.CronEntry;
 import panda.app.util.AppSettings;
@@ -31,10 +31,10 @@ public class GaeTaskScheduler implements TaskScheduler {
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=AppConstants.SCHEDULER_ENABLE, required=false)
+	@IocInject(value=MVC.SCHEDULER_ENABLE, required=false)
 	protected boolean enable;
 
-	@IocInject(value=AppConstants.SCHEDULER_CRONS, required=false)
+	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)
 	protected List<CronEntry> crons;
 	
 	public void initialize() {

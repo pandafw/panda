@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 
-import panda.app.AppConstants;
 import panda.app.constant.AUTH;
+import panda.app.constant.MVC;
 import panda.app.constant.REQ;
 import panda.app.constant.SES;
 import panda.app.constant.VAL;
@@ -38,37 +38,37 @@ public class AppAuthenticator extends UserAuthenticator {
 	/**
 	 * secure user session time (s): 30m 
 	 */
-	@IocInject(value=AppConstants.AUTH_SECURE_USER_AGE, required=false)
+	@IocInject(value=MVC.AUTH_SECURE_USER_AGE, required=false)
 	protected long secureUserAge = 30 * 60;
 	
 	/**
 	 * auth user type
 	 */
-	@IocInject(value=AppConstants.AUTH_USER_TYPE, required=false)
+	@IocInject(value=MVC.AUTH_USER_TYPE, required=false)
 	protected Class userType;
 
 	/**
 	 * ticket parameter name
 	 */
-	@IocInject(value=AppConstants.AUTH_TICKET_PARAM_NAME, required=false)
+	@IocInject(value=MVC.AUTH_TICKET_PARAM_NAME, required=false)
 	protected String paramName = "_ticket_";
 
 	/**
 	 * ticket cookie name (default: WW_TICKET + CONTEXT_PATH.replace('/', '_'))
 	 */
-	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_NAME, required=false)
+	@IocInject(value=MVC.AUTH_TICKET_COOKIE_NAME, required=false)
 	protected String cookieName;
 
 	/**
 	 * ticket cookie path (default: CONTEXT_PATH)
 	 */
-	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_PATH, required=false)
+	@IocInject(value=MVC.AUTH_TICKET_COOKIE_PATH, required=false)
 	protected String cookiePath;
 
 	/**
 	 * ticket cookie age (default: 60 * 60 * 24 * 7days)
 	 */
-	@IocInject(value=AppConstants.AUTH_TICKET_COOKIE_AGE, required=false)
+	@IocInject(value=MVC.AUTH_TICKET_COOKIE_AGE, required=false)
 	protected Integer cookieAge = 60 * 60 * 24 * 7;
 
 	//------------------------------------------------------------------------

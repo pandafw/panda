@@ -1,6 +1,6 @@
 package panda.app.task.java;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
@@ -17,20 +17,20 @@ public class JavaTaskExecutor extends ThreadPoolTaskExecutor {
 	@IocInject
 	protected AppSettings settings;
 
-	@IocInject(value=AppConstants.EXECUTOR_ENABLE, required=false)
+	@IocInject(value=MVC.EXECUTOR_ENABLE, required=false)
 	protected boolean enable;
 
-	@IocInject(value=AppConstants.EXECUTOR_NAME, required=false)
+	@IocInject(value=MVC.EXECUTOR_NAME, required=false)
 	public void setName(String name) {
 		super.setName(name);
 	}
 
-	@IocInject(value=AppConstants.EXECUTOR_CORE_POOL_SIZE, required=false)
+	@IocInject(value=MVC.EXECUTOR_CORE_POOL_SIZE, required=false)
 	public void setCorePoolSize(int corePoolSize) {
 		super.setCorePoolSize(corePoolSize);
 	}
 	
-	@IocInject(value=AppConstants.EXECUTOR_MAX_POOL_SIZE, required=false)
+	@IocInject(value=MVC.EXECUTOR_MAX_POOL_SIZE, required=false)
 	public void setMaxPoolSize(int maxPoolSize) {
 		super.setMaxPoolSize(maxPoolSize);
 	}

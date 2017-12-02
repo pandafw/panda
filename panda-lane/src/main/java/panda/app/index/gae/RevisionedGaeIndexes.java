@@ -12,7 +12,7 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.index.RevisionedIndexes;
 import panda.app.util.AppSettings;
 import panda.idx.IndexException;
@@ -121,7 +121,7 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	}
 
 	//-------------------------------------------------------------------
-	@IocInject(value=AppConstants.GAE_SEARCH_LOCALE, required=false)
+	@IocInject(value=MVC.GAE_SEARCH_LOCALE, required=false)
 	public void setLocale(Locale locale) {
 		super.setLocale(locale);
 	}

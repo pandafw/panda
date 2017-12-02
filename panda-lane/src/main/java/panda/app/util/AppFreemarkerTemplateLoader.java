@@ -2,7 +2,7 @@ package panda.app.util;
 
 import java.util.List;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.VAL;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
@@ -24,7 +24,7 @@ public class AppFreemarkerTemplateLoader extends FreemarkerTemplateLoader {
 	public AppFreemarkerTemplateLoader() {
 	}
 
-	@IocInject(value=AppConstants.DATABASE_TEMPLATE, required=false)
+	@IocInject(value=MVC.DATABASE_TEMPLATE, required=false)
 	private boolean enable;
 
 	@IocInject

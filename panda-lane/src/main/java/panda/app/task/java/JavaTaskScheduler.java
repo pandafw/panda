@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.task.ActionTask;
 import panda.app.task.CronEntry;
@@ -31,21 +31,21 @@ public class JavaTaskScheduler extends ThreadPoolTaskScheduler {
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=AppConstants.SCHEDULER_ENABLE, required=false)
+	@IocInject(value=MVC.SCHEDULER_ENABLE, required=false)
 	protected boolean enable;
 
-	@IocInject(value=AppConstants.SCHEDULER_CRONS, required=false)
+	@IocInject(value=MVC.SCHEDULER_CRONS, required=false)
 	protected List<CronEntry> crons;
 
-	@IocInject(value=AppConstants.TASK_ACTION_SCHEME, required=false)
+	@IocInject(value=MVC.TASK_ACTION_SCHEME, required=false)
 	protected String scheme = "http://localhost:8080";
 
-	@IocInject(value=AppConstants.SCHEDULER_NAME, required=false)
+	@IocInject(value=MVC.SCHEDULER_NAME, required=false)
 	public void setName(String name) {
 		super.setName(name);
 	}
 
-	@IocInject(value=AppConstants.SCHEDULER_POOL_SIZE, required=false)
+	@IocInject(value=MVC.SCHEDULER_POOL_SIZE, required=false)
 	public void setPoolSize(int poolSize) {
 		super.setPoolSize(poolSize);
 	}

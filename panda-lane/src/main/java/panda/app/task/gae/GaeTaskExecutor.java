@@ -1,6 +1,6 @@
 package panda.app.task.gae;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.util.AppSettings;
 import panda.ioc.annotation.IocBean;
@@ -16,7 +16,7 @@ public class GaeTaskExecutor implements TaskExecutor {
 	@IocInject
 	protected AppSettings settings;
 
-	@IocInject(value=AppConstants.EXECUTOR_ENABLE, required=false)
+	@IocInject(value=MVC.EXECUTOR_ENABLE, required=false)
 	protected boolean enable;
 
 	public void initialize() {

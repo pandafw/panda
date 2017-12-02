@@ -1,8 +1,8 @@
-package panda.app;
+package panda.app.constant;
 
 import panda.mvc.MvcConstants;
 
-public interface AppConstants extends MvcConstants {
+public interface MVC extends MvcConstants {
 	//------------------------------------------------
 	// reloadable settings
 	//

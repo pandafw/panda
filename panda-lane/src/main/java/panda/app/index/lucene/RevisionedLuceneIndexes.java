@@ -13,7 +13,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.index.RevisionedIndexes;
 import panda.app.util.AppSettings;
@@ -39,10 +39,10 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=AppConstants.LUCENE_LOCATION, required=false)
+	@IocInject(value=MVC.LUCENE_LOCATION, required=false)
 	protected String location = "web://WEB-INF/_lucene";
 	
-	@IocInject(value=AppConstants.LUCENE_ANALYZER, required=false)
+	@IocInject(value=MVC.LUCENE_ANALYZER, required=false)
 	protected String analyzer = StandardAnalyzer.class.getName();
 	
 	/**

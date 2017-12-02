@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.io.Settings;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
@@ -28,19 +28,19 @@ public class AppCacheFactory {
 	/**
 	 * cache provider
 	 */
-	@IocInject(value=AppConstants.CACHE_PROVIDER, required=false)
+	@IocInject(value=MVC.CACHE_PROVIDER, required=false)
 	protected String provider;
 	
 	/**
 	 * cache name
 	 */
-	@IocInject(value=AppConstants.CACHE_NAME, required=false)
+	@IocInject(value=MVC.CACHE_NAME, required=false)
 	protected String name;
 	
 	/**
 	 * cache max-age seconds
 	 */
-	@IocInject(value=AppConstants.CACHE_MAXAGE, required=false)
+	@IocInject(value=MVC.CACHE_MAXAGE, required=false)
 	protected int maxAge;
 
 	/**

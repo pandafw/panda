@@ -7,8 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import panda.app.AppConstants;
 import panda.app.constant.AUTH;
+import panda.app.constant.MVC;
 import panda.app.constant.REQ;
 import panda.app.constant.SES;
 import panda.ioc.annotation.IocInject;
@@ -36,7 +36,7 @@ public class UserAuthenticator {
 	/**
 	 * allow unknown uri: true (default), false
 	 */
-	@IocInject(value=AppConstants.AUTH_ALLOW_UNKNOWN_URL, required=false)
+	@IocInject(value=MVC.AUTH_ALLOW_UNKNOWN_URL, required=false)
 	protected boolean allowUnknownUri = true;
 
 	@IocInject

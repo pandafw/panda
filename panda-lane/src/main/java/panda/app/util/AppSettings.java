@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.io.ReloadableSettings;
 import panda.io.Settings;
@@ -23,10 +23,10 @@ public class AppSettings extends ReloadableSettings {
 	@IocInject(required=false)
 	protected ServletContext servlet;
 
-	@IocInject(value=AppConstants.SETTINGS_RELOAD_PATH, required=false)
+	@IocInject(value=MVC.SETTINGS_RELOAD_PATH, required=false)
 	protected String runtime;
 
-	@IocInject(value=AppConstants.SETTINGS_RELOAD_INTERVAL, required=false)
+	@IocInject(value=MVC.SETTINGS_RELOAD_INTERVAL, required=false)
 	public void setInterval(long interval) {
 		super.setInterval(interval);
 	}

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.SET;
 import panda.app.util.AppSettings;
 import panda.io.Files;
@@ -32,10 +32,10 @@ public class WkHtml2Pdf extends Html2Pdf {
 	@IocInject
 	protected AppSettings settings;
 	
-	@IocInject(value=AppConstants.WKHTML2PDF_PATH, required=false)
+	@IocInject(value=MVC.WKHTML2PDF_PATH, required=false)
 	protected String path = "wkhtmltopdf";
 	
-	@IocInject(value=AppConstants.WKHTML2PDF_TIMEOUT, required=false)
+	@IocInject(value=MVC.WKHTML2PDF_TIMEOUT, required=false)
 	protected int timeout = 300;
 
 	public String getPath() {

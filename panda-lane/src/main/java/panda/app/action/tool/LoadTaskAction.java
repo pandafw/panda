@@ -3,10 +3,10 @@ package panda.app.action.tool;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.app.AppConstants;
 import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
+import panda.app.constant.MVC;
 import panda.app.util.AppFreemarkerTemplateLoader;
 import panda.app.util.AppResourceBundleLoader;
 import panda.ioc.annotation.IocInject;
@@ -24,7 +24,7 @@ public class LoadTaskAction extends AbstractAction {
 	
 	protected final static String CKEY_TEMPLATE = "template";
 	
-	@IocInject(value=AppConstants.TASK_LOAD_KEYS, required=false)
+	@IocInject(value=MVC.TASK_LOAD_KEYS, required=false)
 	protected List<String> tasks;
 	
 	@IocInject

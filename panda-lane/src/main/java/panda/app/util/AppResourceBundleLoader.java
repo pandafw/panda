@@ -2,7 +2,7 @@ package panda.app.util;
 
 import java.util.List;
 
-import panda.app.AppConstants;
+import panda.app.constant.MVC;
 import panda.app.constant.VAL;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
@@ -25,10 +25,10 @@ import panda.app.entity.query.ResourceQuery;
 public class AppResourceBundleLoader extends ResourceLoader {
 	private static final Log log = Logs.getLog(AppResourceBundleLoader.class);
 
-	@IocInject(value=AppConstants.DATABASE_RESOURCE, required=false)
+	@IocInject(value=MVC.DATABASE_RESOURCE, required=false)
 	private boolean resource;
 
-	@IocInject(value=AppConstants.DATABASE_PROPERTY, required=false)
+	@IocInject(value=MVC.DATABASE_PROPERTY, required=false)
 	private boolean property;
 
 	@IocInject
