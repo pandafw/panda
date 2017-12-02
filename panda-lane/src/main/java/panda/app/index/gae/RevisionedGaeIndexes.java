@@ -85,7 +85,8 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 			log.warn("Failed delete gae index " + index.getName(), e);
 		}
 	}
-	protected void cleanOldRevisionIndex() throws IOException {
+	
+	private void cleanOldRevisionIndex() throws IOException {
 		SearchService searchService = SearchServiceFactory.getSearchService();
 		GetResponse<Index> response = searchService.getIndexes(GetIndexesRequest.newBuilder());
 
@@ -132,7 +133,7 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	}
 	
 	@Override
-	public Indexer newIndexer(String name) {
+	public synchronized Indexer newIndexer(String name) {
 		try {
 			long v = getLatestRevision(name) + 1;
 			IndexSpec is = IndexSpec.newBuilder().setName(name + "." + v).build();
@@ -146,9 +147,21 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 	}
 	
 	@Override
-	public void setIndexer(Indexer indexer) {
-		log.info("set gae indexer: " + indexer);
+	public synchronized void setIndexer(Indexer indexer) {
+		GaeIndexer gi = indexes.get(indexer.name());
+		log.info("old gae indexer: " + gi);
+		
+		if (gi != null) {
+			if (gi.getIndex().getName().equals(((GaeIndexer)indexer).getIndex().getName())) {
+				log.warn("Failed to set same same gae indexer");
+				return;
+			}
 
+			log.info("drop gae indexer: " + gi);
+			gi.drop();
+		}
+
+		log.info("set gae indexer: " + indexer);
 		addIndexer((GaeIndexer)indexer);
 	}
 }

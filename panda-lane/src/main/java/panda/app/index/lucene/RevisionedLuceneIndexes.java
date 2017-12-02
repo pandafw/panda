@@ -99,7 +99,20 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 		return latest;
 	}
 
-	protected void cleanOldRevisionDirectory() throws IOException {
+	private void removeLuceneDirectory(File root, String folder) {
+		File f = new File(root, folder);
+		if (f.exists()) {
+			log.info("Remove old lucene directory: " + f);
+			try {
+				Files.forceDelete(f);
+			}
+			catch (IOException e) {
+				log.warn("Failed delete " + f.getPath(), e);
+			}
+		}
+	}
+	
+	private void cleanOldRevisionDirectory() throws IOException {
 		File root = new File(getLuceneLocation());
 
 		List<String> olds = new ArrayList<String>();
@@ -112,7 +125,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 			File f = new File(root, s);
 			if (i == null || !Files.isDirectory(f)) {
 				// Remove invalid lucene file
-				olds.add(s);
+				removeLuceneDirectory(root, s);
 				continue;
 			}
 
@@ -122,23 +135,10 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 			}
 			else if (latest.longValue() < i) {
 				vs.put(n, i);
-				olds.add(n + "." + latest);
+				removeLuceneDirectory(root, n + "." + latest);
 			}
 			else {
 				olds.add(n + "." + e);
-			}
-		}
-		
-		for (String s : olds) {
-			File f = new File(root, s);
-			if (f.exists()) {
-				log.info("Remove old lucene file: " + f);
-				try {
-					Files.forceDelete(f);
-				}
-				catch (IOException e) {
-					log.warn("Failed delete " + f.getPath(), e);
-				}
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	}
 	
 	@Override
-	public Indexer newIndexer(String name) {
+	public synchronized Indexer newIndexer(String name) {
 		try {
 			long v = getLatestRevision(name) + 1;
 
@@ -174,17 +174,19 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	}
 	
 	@Override
-	public void setIndexer(Indexer indexer) {
-		log.info("set lucene indexer: " + indexer);
-
-		LuceneIndexer li = (LuceneIndexer)getIndexer(indexer.name());
-		if (((FSDirectory)li.getDirectory()).getDirectory().equals(((FSDirectory)((LuceneIndexer)indexer).getDirectory()).getDirectory())) {
-			log.warn("Failed to set same same FSDirectory indexer");
-			return;
+	public synchronized void setIndexer(Indexer indexer) {
+		LuceneIndexer li = indexes.get(indexer.name());
+		log.info("old lucene indexer: " + li);
+		if (li != null) {
+			if (((FSDirectory)li.getDirectory()).getDirectory().equals(((FSDirectory)((LuceneIndexer)indexer).getDirectory()).getDirectory())) {
+				log.warn("Failed to set same same FSDirectory indexer");
+				return;
+			}
+			log.info("drop lucene indexer: " + indexer);
+			dropIndexer(indexer.name());
 		}
 
-		dropIndexer(indexer.name());
-
+		log.info("set lucene indexer: " + indexer);
 		addIndexer((LuceneIndexer)indexer);
 	}
 }

@@ -22,7 +22,6 @@ public interface SET extends SiteConstants {
 	public static final String DATA_JDBC = "data.jdbc";
 
 	//--------------------------------------------------------
-	public static final String LUCENE_STORE = "lucene.store";
 	public static final String LUCENE_LOCATION = "lucene.location";
 
 	//------------------------------------------------
