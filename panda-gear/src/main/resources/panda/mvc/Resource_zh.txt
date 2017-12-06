@@ -19,16 +19,17 @@ date-timezone=GMT+8:00
 password-format=●●●●●●
 
 #-----------------------------------------------------------------------------
-# pager - total, start(0-index), begin, end, count, limit, page, pages
+# pager
+# vars: total, start(0-index), begin, end, count, limit, page, pages
 #-----------------------------------------------------------------------------
+pager-limit-list={ '20': '20件', '50': '50件', '100': '100件' }
 pager-label-info=${top.begin}~${top.end}/全${top.total}件
 pager-label-infoz=${top.begin}件~${top.end}件
-pager-label-empty=
-pager-label-limit=显示件数：
-pager-tooltip-prev=« 上一页
-pager-tooltip-next=下一页 »
-pager-tooltip-first=⋘ 最前页
-pager-tooltip-last=最后页 ⋙
+pager-tooltip-prev=&lt; 上一页
+pager-tooltip-next=下一页 &gt;
+pager-tooltip-first=&lt;&lt; 最前页
+pager-tooltip-last=最后页 &gt;&gt;
+pager-tooltip-limit=显示件数
 
 
 #-----------------------------------------------------------------------------

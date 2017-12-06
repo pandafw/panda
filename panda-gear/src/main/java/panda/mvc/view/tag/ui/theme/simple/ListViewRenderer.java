@@ -262,39 +262,6 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		pg.end(writer, "");
 	}
 	
-	private void writeListViewHeader() throws IOException {
-		boolean p = tag.isShowHeadPager(listz);
-		boolean t = tag.isShowHeadTools(listz);
-		boolean a = tag.isShowHeadAddon(listz);
-
-		if (!p && !t && !a) {
-			return;
-		}
-
-		write("<div id=\"");
-		write(id);
-		write("_header\" class=\"p-lv-header\">");
-
-		write("<div class=\"p-lv-toolbar\">");
-		if (p) {
-			writePager("header");
-		}
-		if (t) {
-			write("<div class=\"p-lv-tools\">");
-			writeCheckAllButton();
-			write(tag.getTools());
-			write("</div>");
-		}
-		if (a) {
-			write("<div class=\"p-lv-addon\">");
-			write(tag.getAddon());
-			write("</div>");
-		}
-		write("</div>");
-
-		write("</div>");
-	}
-	
 	private void writeCheckAllButton() throws IOException {
 		if (tag.isHideCheckAll()) {
 			return;
@@ -321,10 +288,10 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 		}
 	}
 	
-	private void writeListViewFooter() throws IOException {
-		boolean p = tag.isShowFootPager(listz);
-		boolean t = tag.isShowFootTools(listz);
-		boolean a = tag.isShowFootAddon(listz);
+	private void writeListViewHeader() throws IOException {
+		boolean p = tag.isShowHeadPager(listz);
+		boolean t = tag.isShowHeadTools(listz);
+		boolean a = tag.isShowHeadAddon(listz);
 
 		if (!p && !t && !a) {
 			return;
@@ -332,8 +299,9 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 
 		write("<div id=\"");
 		write(id);
-		write("_footer\" class=\"p-lv-footer\">");
-		
+		write("_header\" class=\"p-lv-header\">");
+
+		write("<div class=\"clearfix\"></div>");
 		write("<div class=\"p-lv-toolbar\">");
 		if (t) {
 			write("<div class=\"p-lv-tools\">");
@@ -347,10 +315,46 @@ public class ListViewRenderer extends AbstractEndExRenderer<ListView> {
 			write("</div>");
 		}
 		if (p) {
-			writePager("footer");
+			writePager("header");
 		}
 		write("</div>");
 
+		write("<div class=\"clearfix\"></div>");
+		write("</div>");
+	}
+	
+	private void writeListViewFooter() throws IOException {
+		boolean p = tag.isShowFootPager(listz);
+		boolean t = tag.isShowFootTools(listz);
+		boolean a = tag.isShowFootAddon(listz);
+
+		if (!p && !t && !a) {
+			return;
+		}
+
+		write("<div id=\"");
+		write(id);
+		write("_footer\" class=\"p-lv-footer\">");
+		
+		write("<div class=\"clearfix\"></div>");
+		write("<div class=\"p-lv-toolbar\">");
+		if (p) {
+			writePager("footer");
+		}
+		if (t) {
+			write("<div class=\"p-lv-tools\">");
+			writeCheckAllButton();
+			write(tag.getTools());
+			write("</div>");
+		}
+		if (a) {
+			write("<div class=\"p-lv-addon\">");
+			write(tag.getAddon());
+			write("</div>");
+		}
+		write("</div>");
+
+		write("<div class=\"clearfix\"></div>");
 		write("</div>");
 	}
 

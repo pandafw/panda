@@ -13,6 +13,11 @@ import panda.mvc.view.util.ListColumn;
  */
 @IocBean(singleton=false)
 public class ListView extends UIBean {
+	private final static String HEADER_THRESHOLD = "listview-header-threshold";
+	private final static String FOOTER_THRESHOLD = "listview-footer-threshold";
+	private final static String SORTABLE = "listview-sortable";
+	private final static String HIDE_CHECK_ALL = "listview-hideCheckAll";
+
 	public static class ItemLink {
 		public String href;
 		public String action;
@@ -23,8 +28,6 @@ public class ListView extends UIBean {
 		public String onclick;
 		public Map<String, Object> params;
 	}
-	
-	public static final int THRESHOLD = 10;
 	
 	// attributes
 	protected Object list;
@@ -43,7 +46,7 @@ public class ListView extends UIBean {
 	protected String onsubmit;
 	protected String onreset;
 
-	// auto size table (deprecated)
+	// auto size table
 	protected boolean autosize = true;
 
 	//--------------------------------------------
@@ -52,8 +55,11 @@ public class ListView extends UIBean {
 	// t : tools
 	// a : addon
 	// 
-	protected String header;
-	protected String footer;
+	protected String headerStyle;
+	protected String footerStyle;
+
+	protected Integer headerThreshold;
+	protected Integer footerThreshold;
 
 	protected String tools;
 	protected String addon;
@@ -94,12 +100,20 @@ public class ListView extends UIBean {
 
 		populateComponentHtmlId();
 		
+		if (headerThreshold == null) {
+			headerThreshold = context.getText().getTextAsInt(HEADER_THRESHOLD, 0);
+		}
+
+		if (footerThreshold == null) {
+			footerThreshold = context.getText().getTextAsInt(FOOTER_THRESHOLD, 10);
+		}
+
 		if (sortable == null) {
-			sortable = context.getText().getTextAsBoolean("listview-sortable", true);
+			sortable = context.getText().getTextAsBoolean(SORTABLE, true);
 		}
 
 		if (hideCheckAll == null) {
-			hideCheckAll = context.getText().getTextAsBoolean("listview-hideCheckAll", false);
+			hideCheckAll = context.getText().getTextAsBoolean(HIDE_CHECK_ALL, false);
 		}
 	}
 
@@ -113,17 +127,17 @@ public class ListView extends UIBean {
 	}
 
 	private boolean isShowHeadPart(int part, int count) {
-		if (Strings.isEmpty(header)) {
-			return count > THRESHOLD;
+		if (Strings.isEmpty(headerStyle)) {
+			return headerThreshold == 0 || count > this.headerThreshold;
 		}
-		return Strings.contains(header, part);
+		return Strings.contains(headerStyle, part);
 	}
 
 	private boolean isShowFootPart(int part, int count) {
-		if (Strings.isEmpty(footer)) {
-			return true;
+		if (Strings.isEmpty(footerStyle)) {
+			return footerThreshold == 0 || count > this.footerThreshold;
 		}
-		return Strings.contains(footer, part);
+		return Strings.contains(footerStyle, part);
 	}
 	
 	public boolean isShowHeadPager(int count) {
@@ -432,31 +446,59 @@ public class ListView extends UIBean {
 	}
 
 	/**
-	 * @return the header
+	 * @return the header style
 	 */
-	public String getHeader() {
-		return header;
+	public String getHeaderStyle() {
+		return headerStyle;
 	}
 
 	/**
-	 * @param header the header to set
+	 * @param headerStyle the header style to set
 	 */
-	public void setHeader(String header) {
-		this.header = header;
+	public void setHeaderStyle(String headerStyle) {
+		this.headerStyle = headerStyle;
 	}
 
 	/**
-	 * @return the footer
+	 * @return the headerThreshold
 	 */
-	public String getFooter() {
-		return footer;
+	public int getHeaderThreshold() {
+		return headerThreshold;
 	}
 
 	/**
-	 * @param footer the footer to set
+	 * @param headerThreshold the headerThreshold to set
 	 */
-	public void setFooter(String footer) {
-		this.footer = footer;
+	public void setHeaderThreshold(int headerThreshold) {
+		this.headerThreshold = headerThreshold;
+	}
+
+	/**
+	 * @return the footer style
+	 */
+	public String getFooterStyle() {
+		return footerStyle;
+	}
+
+	/**
+	 * @param footerStyle the footer style to set
+	 */
+	public void setFooterStyle(String footerStyle) {
+		this.footerStyle = footerStyle;
+	}
+
+	/**
+	 * @return the footerThreshold
+	 */
+	public int getFooterThreshold() {
+		return footerThreshold;
+	}
+
+	/**
+	 * @param footerThreshold the footerThreshold to set
+	 */
+	public void setFooterThreshold(int footerThreshold) {
+		this.footerThreshold = footerThreshold;
 	}
 
 	/**

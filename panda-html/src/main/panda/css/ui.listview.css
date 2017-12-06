@@ -14,15 +14,19 @@
 /* header */
 .p-lv-header {
 }
-.p-lv-header .p-lv-toolbar {
-	margin: 0 0 -1px 0;
+.p-lv-header .p-lv-toolbar .p-lv-tools,
+.p-lv-header .p-lv-toolbar .p-lv-pager {
+	margin: 0 0 8px 0;
 }
 
 /* footer */
 .p-lv-footer {
 }
-.p-lv-footer .p-lv-toolbar {
-	margin: -1px 0 0 0;
+.p-lv-footer .p-lv-toolbar .p-lv-tools {
+	margin: 8px 0 0 0;
+}
+.p-lv-footer .p-lv-toolbar .p-lv-pager {
+	margin: 5px 0;
 }
 
 /* toolbar */
@@ -31,7 +35,7 @@
 	padding: 0 8px;
 }
 .p-lv-toolbar .p-lv-tools {
-	margin: 8px 0;
+	margin: 0;
 	white-space: nowrap;
 }
 .p-lv-toolbar .p-lv-pager {
@@ -42,6 +46,32 @@
 }
 .p-lv-tools > button {
 	margin-right: 5px;
+}
+
+/* toolbar for PC */
+@media (min-width: 768px) {
+	.p-lv-header .p-lv-toolbar {
+		margin: 0 0 5px 0;
+		text-align: right;
+	}
+	.p-lv-header .p-lv-toolbar .p-lv-tools {
+		margin: 0;
+		float: left;
+	}
+	.p-lv-header .p-lv-toolbar .p-lv-pager {
+		margin: 0;
+	}
+	.p-lv-footer .p-lv-toolbar {
+		margin: 8px 0;
+		text-align: left;
+	}
+	.p-lv-footer .p-lv-toolbar .p-lv-tools {
+		margin: 0;
+	}
+	.p-lv-footer .p-lv-toolbar .p-lv-pager {
+		margin: 0;
+		float: right;
+	}
 }
 
 /* action link */

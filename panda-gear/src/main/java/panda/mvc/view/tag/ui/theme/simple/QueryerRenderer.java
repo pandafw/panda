@@ -194,14 +194,17 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		if (Collections.isEmpty(filters)) {
 			return;
 		}
-		
+
+		boolean collapsed = false;
 		write("<fieldset class=\"p-qr-filters ui-collapsible");
 		if (tag.isExpandNone()
 				|| (tag.isExpandDefault() && !fsinput)
 				|| (tag.isExpandFixed() && !fsinput && !fsfixed)) {
+			collapsed = true;
 			write(" ui-collapsed");
 		}
 		write("\" data-spy=\"fieldset\"><legend>");
+		write("<i class=\"ui-fieldset-icon fa fa-caret-" + (collapsed ? "right" : "down") + "\"></i>");
 		write(tag.getLabelCaption());
 		write("</legend>");
 
@@ -247,7 +250,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		
 		form.end(writer, "");
 		
-		writeFilterSelect();
+		writeFilterSelect(collapsed);
 		
 		write("</fieldset>");
 	}
@@ -565,7 +568,7 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 		write("</div></div>");
 	}
 	
-	private void writeFilterSelect() throws IOException {
+	private void writeFilterSelect(boolean collapsed) throws IOException {
 		// selectable filter
 		boolean empty = true;
 		for (ListFilter _f : filters) {
@@ -575,8 +578,9 @@ public class QueryerRenderer extends AbstractEndExRenderer<Queryer> {
 			if (empty) {
 				empty = false;
 				write("<select id=\"" + id + "_fsform_fsadd" + "\"");
-				write(" class=\"form-control p-qr-select\" onclick=\"return false;\">");
-				write("<option value=\"\">-- ");
+				write(" class=\"form-control p-qr-select\" onclick=\"return false;\"");
+				write(collapsed ? " style=\"display: none\"" : "");
+				write("><option value=\"\">-- ");
 				write(tag.getLabelAddFilter());
 				write(" --</option>");
 			}

@@ -19,8 +19,13 @@
 	margin-left: 3px;
 	padding: 5px 11px;
 }
+.pagination.p-pager > li.p-pager-info > span {
+	padding: 5px 11px 0 0;
+}
 .pagination.p-pager > li.p-pager-info > span,
-.pagination.p-pager > li.p-pager-info > span:hover {
+.pagination.p-pager > li.p-pager-info > span:hover,
+.pagination.p-pager > li.p-pager-limit > span,
+.pagination.p-pager > li.p-pager-limit > span:hover {
 	background-color: transparent;
 	border-bottom: 0 none;
 	color: #555;

@@ -111,34 +111,25 @@ public class PagerRenderer extends AbstractEndRenderer<Pager> {
 	}
 
 	private void writePagerLimit() throws IOException {
-		if (limit == null || limit < 1 || !tag.isLimitSelective()) {
+		if (limit == null || limit < 1 || !tag.isLimitSelective() || Strings.isEmpty(tag.getOnLimitChange())) {
 			return;
 		}
 
-		String onLimitChange = tag.getOnLimitChange();
-	
 		write("<li class=\"p-pager-limit\"><span>");
 		write(tag.getLimitLabel());
-		if (Strings.isEmpty(onLimitChange)) {
-			write(limit.toString());
-		}
-		else {
-			Select select = context.getIoc().get(Select.class);
-			
-			select.setTheme("simple");
-			select.setId(id + "_limit");
-			String limitName = tag.getLimitName();
-			if (Strings.isEmpty(limitName)) {
-				select.setName(id + "_limit");
-			}
-			select.setCssClass("select");
-			select.setValue(limit.toString());
-			select.setList(tag.getLimitList());
-			select.setOnchange(onLimitChange);
-			
-			select.start(writer);
-			select.end(writer, "");
-		}
+
+		Select select = context.getIoc().get(Select.class);
+		select.setTheme("simple");
+		select.setId(id + "_limit");
+		select.setName(Strings.isEmpty(tag.getLimitName()) ? id + "_limit" : tag.getLimitName());
+		select.setCssClass("select");
+		select.setValue(limit.toString());
+		select.setList(tag.getLimitList());
+		select.setTooltip(tag.getLimitTooltip());
+		select.setOnchange(tag.getOnLimitChange());
+		
+		select.start(writer);
+		select.end(writer, "");
 		write("</span></li>");
 	}
 

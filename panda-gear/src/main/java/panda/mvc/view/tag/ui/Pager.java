@@ -1,8 +1,8 @@
 package panda.mvc.view.tag.ui;
 
+import panda.bind.json.JsonObject;
 import panda.ioc.annotation.IocBean;
 import panda.lang.Strings;
-import panda.lang.Texts;
 import panda.mvc.util.TextProvider;
 
 
@@ -27,8 +27,8 @@ import panda.mvc.util.TextProvider;
 public class Pager extends UIBean {
 	private final static String DEFAULT_LINK_HREF = "#";
 	private final static int DEFAULT_LINK_SIZE = 5;
-	private final static String DEFAULT_LINK_STYLE = "ihfp#nl";
-	private final static String DEFAULT_LIMIT_LIST = "10,20,30,40,50,60,70,80,90,100";
+	private final static String DEFAULT_LINK_STYLE = "ihfp#nls";
+	private final static String DEFAULT_LIMIT_LIST = "{ '20': '20 Items', '50': '50 Items', '100': '100 Items' }";
 
 	private final static String LABEL_EMPTY = "pager-label-empty";
 	private final static String LABEL_INFO = "pager-label-info";
@@ -42,6 +42,7 @@ public class Pager extends UIBean {
 	private final static String TOOLTIP_LAST = "pager-tooltip-last";
 	private final static String TOOLTIP_PREV = "pager-tooltip-prev";
 	private final static String TOOLTIP_NEXT = "pager-tooltip-next";
+	private final static String TOOLTIP_LIMIT = "pager-tooltip-limit";
 	private final static String LIMIT_LIST = "pager-limit-list";
 	private final static String LINK_SIZE = "pager-link-size";
 	private final static String LINK_STYLE = "pager-link-style";
@@ -59,6 +60,7 @@ public class Pager extends UIBean {
 	protected String lastTooltip;
 	protected String prevTooltip;
 	protected String nextTooltip;
+	protected String limitTooltip;
 
 	protected String linkHref;
 	protected Integer linkSize;
@@ -92,35 +94,35 @@ public class Pager extends UIBean {
 		}
 
 		if (firstText == null) {
-			firstText = txt.getText(LABEL_FIRST, "⋘", pager);
+			firstText = txt.getText(LABEL_FIRST, "&lt;&lt;", pager);
 		}
 		
 		if (lastText == null) {
-			lastText = txt.getText(LABEL_LAST, "⋙", pager);
+			lastText = txt.getText(LABEL_LAST, "&gt;&gt;", pager);
 		}
 		
 		if (prevText == null) {
-			prevText = txt.getText(LABEL_PREV, "«", pager);
+			prevText = txt.getText(LABEL_PREV, "&lt;", pager);
 		}
 		
 		if (nextText == null) {
-			nextText = txt.getText(LABEL_NEXT, "»", pager);
+			nextText = txt.getText(LABEL_NEXT, "&gt;", pager);
 		}
 
 		if (firstTooltip == null) {
-			firstTooltip = txt.getText(TOOLTIP_FIRST, "⋘ First Page", pager);
+			firstTooltip = txt.getText(TOOLTIP_FIRST, "&lt;&lt; First Page", pager);
 		}
 		
 		if (lastTooltip == null) {
-			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page ⋙", pager);
+			lastTooltip = txt.getText(TOOLTIP_LAST, "Last Page &gt;&gt;", pager);
 		}
 		
 		if (prevTooltip == null) {
-			prevTooltip = txt.getText(TOOLTIP_PREV, "« Previous ${top.limit}", pager);
+			prevTooltip = txt.getText(TOOLTIP_PREV, "&lt; Previous ${top.limit}", pager);
 		}
 		
 		if (nextTooltip == null) {
-			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} »", pager);
+			nextTooltip = txt.getText(TOOLTIP_NEXT, "Next ${top.limit} &gt;", pager);
 		}
 
 		if (linkSize == null) {
@@ -136,11 +138,15 @@ public class Pager extends UIBean {
 		}
 
 		if (limitLabel == null) {
-			limitLabel = txt.getText(LABEL_LIMIT, "Display:");
+			limitLabel = txt.getText(LABEL_LIMIT, "");
+		}
+
+		if (limitTooltip == null) {
+			limitTooltip = txt.getText(TOOLTIP_LIMIT, "Display Items");
 		}
 		
 		if (limitList == null) {
-			limitList = Texts.parseCsv(txt.getText(LIMIT_LIST, DEFAULT_LIMIT_LIST));
+			limitList = JsonObject.fromJson(txt.getText(LIMIT_LIST, DEFAULT_LIMIT_LIST));
 		}
 
 		if (infoText == null) {
@@ -336,6 +342,13 @@ public class Pager extends UIBean {
 	}
 
 	/**
+	 * @return the limitTooltip
+	 */
+	public String getLimitTooltip() {
+		return limitTooltip;
+	}
+
+	/**
 	 * @return the limitList
 	 */
 	public Object getLimitList() {
@@ -452,6 +465,13 @@ public class Pager extends UIBean {
 	 */
 	public void setLimitLabel(String limitLabel) {
 		this.limitLabel = limitLabel;
+	}
+
+	/**
+	 * @param limitTooltip the limitTooltip to set
+	 */
+	public void setLimitTooltip(String limitTooltip) {
+		this.limitTooltip = limitTooltip;
 	}
 
 	/**

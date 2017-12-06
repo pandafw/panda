@@ -400,15 +400,19 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 /* header */
 .p-lv-header {
 }
-.p-lv-header .p-lv-toolbar {
-	margin: 0 0 -1px 0;
+.p-lv-header .p-lv-toolbar .p-lv-tools,
+.p-lv-header .p-lv-toolbar .p-lv-pager {
+	margin: 0 0 8px 0;
 }
 
 /* footer */
 .p-lv-footer {
 }
-.p-lv-footer .p-lv-toolbar {
-	margin: -1px 0 0 0;
+.p-lv-footer .p-lv-toolbar .p-lv-tools {
+	margin: 8px 0 0 0;
+}
+.p-lv-footer .p-lv-toolbar .p-lv-pager {
+	margin: 5px 0;
 }
 
 /* toolbar */
@@ -417,7 +421,7 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 	padding: 0 8px;
 }
 .p-lv-toolbar .p-lv-tools {
-	margin: 8px 0;
+	margin: 0;
 	white-space: nowrap;
 }
 .p-lv-toolbar .p-lv-pager {
@@ -428,6 +432,32 @@ div.p-textfield i, div.p-triggerfield i, div.p-datepicker i, div.p-timepicker i,
 }
 .p-lv-tools > button {
 	margin-right: 5px;
+}
+
+/* toolbar for PC */
+@media (min-width: 768px) {
+	.p-lv-header .p-lv-toolbar {
+		margin: 0 0 5px 0;
+		text-align: right;
+	}
+	.p-lv-header .p-lv-toolbar .p-lv-tools {
+		margin: 0;
+		float: left;
+	}
+	.p-lv-header .p-lv-toolbar .p-lv-pager {
+		margin: 0;
+	}
+	.p-lv-footer .p-lv-toolbar {
+		margin: 8px 0;
+		text-align: left;
+	}
+	.p-lv-footer .p-lv-toolbar .p-lv-tools {
+		margin: 0;
+	}
+	.p-lv-footer .p-lv-toolbar .p-lv-pager {
+		margin: 0;
+		float: right;
+	}
 }
 
 /* action link */
@@ -655,8 +685,13 @@ tbody.p-lv-tbody > tr > td:first-child {
 	margin-left: 3px;
 	padding: 5px 11px;
 }
+.pagination.p-pager > li.p-pager-info > span {
+	padding: 5px 11px 0 0;
+}
 .pagination.p-pager > li.p-pager-info > span,
-.pagination.p-pager > li.p-pager-info > span:hover {
+.pagination.p-pager > li.p-pager-info > span:hover,
+.pagination.p-pager > li.p-pager-limit > span,
+.pagination.p-pager > li.p-pager-limit > span:hover {
 	background-color: transparent;
 	border-bottom: 0 none;
 	color: #555;
