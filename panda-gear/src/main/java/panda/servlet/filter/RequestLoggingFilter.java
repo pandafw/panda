@@ -132,10 +132,11 @@ public class RequestLoggingFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
 		HttpServletRequest request = (HttpServletRequest)req;
+		HttpServletResponse response = (HttpServletResponse)res;
 
 		FilterResponseWrapper frw = null;
 		if (accessLog != null) {
-			frw = new FilterResponseWrapper((HttpServletResponse)res);
+			frw = new FilterResponseWrapper(response);
 		}
 
 		StopWatch sw = new StopWatch();
@@ -149,14 +150,22 @@ public class RequestLoggingFilter implements Filter {
 		}
 		catch (Throwable e) {
 			try {
-				if (HttpServlets.logException(request, e)) {
-					if (frw != null) {
-						frw.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				// log exception
+				Log elog = Logs.getLog(e.getClass());
+				if (HttpServlets.isClientAbortError(e)) {
+					if (elog.isWarnEnabled()) {
+						String s = HttpServlets.dumpException(request, e, false);
+						elog.warn(s);
 					}
-					else {
-						((HttpServletResponse)res).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-					}
+					return;
 				}
+
+				if (elog.isErrorEnabled()) {
+					String s = HttpServlets.dumpException(request, e, true);
+					elog.error(s, e);
+				}
+
+				HttpServlets.sendError(frw == null ? response : frw, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
 			catch (Throwable e2) {
 				if (log.isWarnEnabled()) {

@@ -29,8 +29,6 @@ import panda.lang.Charsets;
 import panda.lang.Exceptions;
 import panda.lang.Numbers;
 import panda.lang.Strings;
-import panda.log.Log;
-import panda.log.Logs;
 import panda.net.Mimes;
 import panda.net.URLBuilder;
 import panda.net.URLHelper;
@@ -311,71 +309,44 @@ public class HttpServlets {
 	public static void addClientAbortErrors(String ... args) {
 		CLIENT_ABORT_ERRORS.addAll(Arrays.asList(args));
 	}
-	
+
+	/**
+	 * check the exception or the e.getCause() is a ClientAbortException
+	 * @param e exception
+	 * @return true if e or e.getCause() is a ClientAbortException
+	 */
 	public static boolean isClientAbortError(Throwable e) {
-		return CLIENT_ABORT_ERRORS.contains(e.getClass().getName());
+		while (e != null) {
+			if (CLIENT_ABORT_ERRORS.contains(e.getClass().getName())) {
+				return true;
+			}
+			e = e.getCause();
+		}
+		return false;
 	}
 	
 	/**
 	 * @param request http servlet request
 	 * @param e error
-	 * @return false if e is a ClientAbortException
+	 * @param trace dump request trace or not
+	 * @return request exception dump string
 	 */
-	public static boolean logException(HttpServletRequest request, Throwable e) {
-		return logException(request, e, null);
-	}
-	
-	/**
-	 * @param request http servlet request
-	 * @param e error
-	 * @param msg error message
-	 * @return false if e is a ClientAbortException
-	 */
-	public static boolean logException(HttpServletRequest request, Throwable e, String msg) {
-		Log log = Logs.getLog(e.getClass());
-
-		boolean r = !isClientAbortError(e);
-		if (r) {
-			if (!log.isErrorEnabled()) {
-				return r;
-			}
-		}
-		else {
-			if (!log.isWarnEnabled()) {
-				return r;
-			}
-		}
-
+	public static String dumpException(HttpServletRequest request, Throwable e, boolean trace) {
 		StringBuilder sb = new StringBuilder();
-		if (Strings.isEmpty(msg)) {
-			sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
-		}
-		else {
-			sb.append(msg);
-		}
+
+		sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
 		if (request != null) {
 			sb.append(Streams.LINE_SEPARATOR);
-			if (r) {
+			if (trace) {
 				dumpRequestTrace(request, sb);
 			}
 			else {
 				dumpRequestPath(request, sb);
 			}
 		}
-		if (r) {
-			log.error(sb.toString(), e);
-		}
-		else {
-			if (Strings.isEmpty(msg)) {
-				sb.append(Streams.LINE_SEPARATOR);
-				sb.append(e.getClass().getName()).append(": ").append(e.getMessage());
-			}
-			log.warn(sb.toString());
-		}
-		
-		return r;
+		return sb.toString();
 	}
-	
+
 	/**
 	 * dump request trace
 	 * @param request request 

@@ -19,8 +19,22 @@ public class FatalProcessor extends AbstractProcessor {
 		catch (Throwable e) {
 			ac.setError(e);
 
-			HttpServlets.logException(ac.getRequest(), e);
+			// log exception
+			Log elog = Logs.getLog(e.getClass());
+			if (HttpServlets.isClientAbortError(e)) {
+				if (elog.isWarnEnabled()) {
+					String s = HttpServlets.dumpException(ac.getRequest(), e, false);
+					elog.warn(s);
+				}
+				return;
+			}
 
+			if (elog.isErrorEnabled()) {
+				String s = HttpServlets.dumpException(ac.getRequest(), e, true);
+				elog.error(s, e);
+			}
+
+			// process error view
 			View view = Views.evalView(ac.getIoc(), ac.getConfig().getFatalView());
 			if (view != null) {
 				try {
@@ -38,7 +52,7 @@ public class FatalProcessor extends AbstractProcessor {
 				HttpServlets.sendException(ac.getRequest(), ac.getResponse(), e);
 			}
 			catch (Throwable e3) {
-				log.error("Failed to send exception", e3);
+				log.warn("Failed to send exception", e3);
 			}
 		}
 	}
