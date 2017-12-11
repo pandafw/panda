@@ -524,15 +524,15 @@ public abstract class AbstractCodeGenerator extends AbstractCommandTool {
 	}
 
 	protected void checkLicense(Module m, String pkg) {
-//		if (StringUtils.isBlank(pkg)) {
+//		if (Strings.isBlank(pkg)) {
 //			throw new IllegalArgumentException("package is required.");
 //		}
 //		
-//		pkg = StringUtils.replaceChars(pkg, '/', '.');
+//		pkg = Strings.replaceChars(pkg, '/', '.');
 //		String license = m.getProps().getProperty("license");
 //		try {
 //			license = StringCryptoUtils.decrypt(license);
-//			String[] ls = StringUtils.split(license, ',');
+//			String[] ls = Strings.split(license, ',');
 //			if (pkg.startsWith(ls[0])) {
 //				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 //				Date ld = sdf.parse(ls[1]);

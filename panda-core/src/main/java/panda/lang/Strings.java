@@ -68,7 +68,7 @@ import java.util.regex.Pattern;
  *      - the number of changes needed to change one String into another</li>
  * </ul>
  *
- * <p>The {@code StringUtils} class defines certain words related to
+ * <p>The {@code Strings} class defines certain words related to
  * String handling.</p>
  *
  * <ul>
@@ -79,14 +79,14 @@ import java.util.regex.Pattern;
  *  <li>trim - the characters &lt;= 32 as in {@link String#trim()}</li>
  * </ul>
  *
- * <p>{@code StringUtils} handles {@code null} input Strings quietly.
+ * <p>{@code Strings} handles {@code null} input Strings quietly.
  * That is to say that a {@code null} input will return {@code null}.
  * Where a {@code boolean} or {@code int} is being returned
  * details vary by method.</p>
  *
  * <p>A side effect of the {@code null} handling is that a
  * {@code NullPointerException} should be considered a bug in
- * {@code StringUtils}.</p>
+ * {@code Strings}.</p>
  *
  * <p>Methods in this class give sample code to explain their operation.
  * The symbol {@code *} is used to indicate any input including {@code null}.</p>

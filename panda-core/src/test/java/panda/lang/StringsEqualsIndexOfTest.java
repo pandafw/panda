@@ -440,7 +440,7 @@ public class StringsEqualsIndexOfTest  {
 		assertTrue(Strings.containsWhitespace("\n"));
 	}
 
-	// The purpose of this class is to test StringUtils#equals(CharSequence, CharSequence)
+	// The purpose of this class is to test Strings#equals(CharSequence, CharSequence)
 	// with a CharSequence implementation whose equals(Object) override requires that the
 	// other object be an instance of CustomCharSequence, even though, as char sequences,
 	// `seq` may equal the other object.
