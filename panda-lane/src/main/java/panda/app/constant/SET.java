@@ -11,7 +11,9 @@ public interface SET extends SiteConstants {
 	//--------------------------------------------------------
 	// data properties
 	//
-	public static final String DATA_PREFIX = "data.";
+	public static final String DATA = "data";
+
+	public static final String DATA_PREFIX = "data.prefix";
 
 	public static final String DATA_SOURCE = "data.source";
 

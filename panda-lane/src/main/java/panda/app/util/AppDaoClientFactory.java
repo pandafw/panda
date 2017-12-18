@@ -89,7 +89,7 @@ public class AppDaoClientFactory {
 
 		if (JDBC.equalsIgnoreCase(dstype)) {
 			String dst = settings.getProperty(SET.DATA_JDBC);
-			String pre = SET.DATA_PREFIX + (Strings.isEmpty(dst) ? "" : dst + ".");
+			String pre = SET.DATA + (Strings.isEmpty(dst) ? "." : "." + dst + ".");
 			DataSource ds = createSimpleDataSource(pre);
 			SqlDaoClient sqlDaoClient = new SqlDaoClient();
 			sqlDaoClient.setDataSource(ds);
