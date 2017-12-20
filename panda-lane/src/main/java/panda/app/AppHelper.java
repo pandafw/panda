@@ -86,23 +86,32 @@ public abstract class AppHelper {
 		dropTables(dao, es);
 	}
 
-	public static void copyTables(Dao sdao, Dao ddao, Class<?>... classes) {
-		for (Class<?> c : classes) {
+	public static void copyTables(final Dao sdao, final Dao ddao, Class<?>... classes) {
+		for (final Class<?> c : classes) {
 			log.info("Copy table for " + c);
 			
-			DaoIterator di = sdao.iterate(c);
+			final DaoIterator di = sdao.iterate(c);
 			try {
-				while (di.hasNext()) {
-					Object o = di.next();
-					if (ddao.exists(o.getClass(), o)) {
-						log.debug("Update: " + o);
-						ddao.update(o);
+				ddao.exec(new Runnable() {
+					@Override
+					public void run() {
+						int i = 0;
+						while (di.hasNext()) {
+							Object o = di.next();
+							if (ddao.exists(o.getClass(), o)) {
+								log.debug("Update [" + c.getSimpleName() + "]: " + o);
+								ddao.update(o);
+							}
+							else {
+								log.debug("Insert [" + c.getSimpleName() + "]: " + o);;
+								ddao.insert(o);
+								if (++i % 100 == 0) {
+									ddao.commit();
+								}
+							}
+						}
 					}
-					else {
-						log.debug("Insert: " + o);;
-						ddao.insert(o);
-					}
-				}
+				});
 			}
 			catch (DaoException e) {
 				log.error("Failed to copy table for " + c, e);
