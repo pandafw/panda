@@ -3,9 +3,7 @@ package panda.app.index.lucene;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -115,7 +113,6 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 	private void cleanOldRevisionDirectory() throws IOException {
 		File root = new File(getLuceneLocation());
 
-		List<String> olds = new ArrayList<String>();
 		Map<String, Long> vs = new HashMap<String, Long>();
 		for (String s : root.list()) {
 			String n = FileNames.getBaseName(s);
@@ -138,7 +135,7 @@ public class RevisionedLuceneIndexes extends LuceneIndexes implements Revisioned
 				removeLuceneDirectory(root, n + "." + latest);
 			}
 			else {
-				olds.add(n + "." + e);
+				removeLuceneDirectory(root, s);
 			}
 		}
 	}

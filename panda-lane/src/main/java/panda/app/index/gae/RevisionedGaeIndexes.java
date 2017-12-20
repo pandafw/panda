@@ -112,9 +112,10 @@ public class RevisionedGaeIndexes extends GaeIndexes implements RevisionedIndexe
 				long lv = Numbers.toLong(le, 0L);
 				if (lv < i) {
 					vs.put(n, index);
-
-					// Remove old gae index
 					deleteIndex(latest);
+				}
+				else {
+					deleteIndex(index);
 				}
 			}
 		}
