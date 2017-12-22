@@ -71,11 +71,11 @@ public class HttpClient {
 	}
 	
 	//---------------------------------------------------------------------
+	protected HttpURLConnection httpconn;
 	protected HttpRequest request;
 	protected HttpResponse response;
 
 	protected Proxy proxy;
-	protected HttpURLConnection conn;
 
 	/**
 	 * connection timeout (default: 30s)
@@ -241,9 +241,9 @@ public class HttpClient {
 			return doSend();
 		}
 
-		HttpResponse res = doSend();
-		if (!res.isMoved()) {
-			return res;
+		doSend();
+		if (!response.isMoved()) {
+			return response;
 		}
 
 		String url = request.getURL().toString();
@@ -254,23 +254,23 @@ public class HttpClient {
 		request.setParams(null);
 		
 		while (true) {
-			String location = res.getHeader().getString(HttpHeader.LOCATION);
+			String location = response.getHeader().getString(HttpHeader.LOCATION);
 			url = URLHelper.resolveURL(url, location);
 			if (Strings.isEmpty(url)) {
-				return res;
+				return response;
 			}
 
 			if (urls.contains(url)) {
 				log.info("infinite redirect loop detected: " + url);
-				return res;
+				return response;
 			}
 
 			urls.add(url);
 			request.setUrl(url);
 
-			res = doSend();
-			if (!res.isMoved()) {
-				return res;
+			doSend();
+			if (!response.isMoved()) {
+				return response;
 			}
 		}
 	}
@@ -283,8 +283,6 @@ public class HttpClient {
 			log.debug(request.toString(1024));
 		}
 		
-		HttpResponse response;
-
 		StopWatch sw = new StopWatch();
 		if (request.isPost()) {
 			openConnection();
@@ -293,20 +291,19 @@ public class HttpClient {
 
 			OutputStream os = null;
 			try {
-				os = conn.getOutputStream();
+				os = httpconn.getOutputStream();
 				request.writeBody(os);
 				os.flush();
 			}
 			finally {
 				Streams.safeClose(os);
 			}
-			response = createResponse();
 		}
 		else {
 			openConnection();
 			setupRequestHeader();
-			response = createResponse();
 		}
+		createResponse();
 
 		if (log.isDebugEnabled()) {
 			StringBuilder msg = new StringBuilder();
@@ -337,43 +334,42 @@ public class HttpClient {
 		return response;
 	}
 
-	protected HttpResponse createResponse() throws IOException {
-		response = new HttpResponse(request.getURL(), conn);
-		return response;
+	protected void createResponse() throws IOException {
+		response = new HttpResponse(request.getURL(), httpconn);
 	}
 
 	protected void setupDoInputOutputFlag() {
-		conn.setDoInput(true);
-		conn.setDoOutput(true);
+		httpconn.setDoInput(true);
+		httpconn.setDoOutput(true);
 	}
 
 	protected void openConnection() throws IOException {
 		if (proxy != null) {
-			conn = (HttpURLConnection)request.getURL().openConnection(proxy);
+			httpconn = (HttpURLConnection)request.getURL().openConnection(proxy);
 		}
 		else {
-			conn = (HttpURLConnection)request.getURL().openConnection();
+			httpconn = (HttpURLConnection)request.getURL().openConnection();
 		}
 
 		if (!validateSslCert) {
-			Https.ignoreValidateCertification(conn);
+			Https.ignoreValidateCertification(httpconn);
 		}
 		if (disableSSLv3) {
-			Https.disableSSLv3Protocols(conn);
+			Https.disableSSLv3Protocols(httpconn);
 		}
-		conn.setConnectTimeout(connTimeout);
-		conn.setReadTimeout(readTimeout);
-		conn.setInstanceFollowRedirects(false);
+		httpconn.setConnectTimeout(connTimeout);
+		httpconn.setReadTimeout(readTimeout);
+		httpconn.setInstanceFollowRedirects(false);
 	}
 
 	protected void setupRequestHeader() {
-		Https.setupRequestHeader(conn, request.getURL(), request.getHeader());
+		Https.setupRequestHeader(httpconn, request.getURL(), request.getHeader());
 		
 		if (request.isPostFile()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
+			httpconn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.MULTIPART_FORM_DATA + "; boundary=" + request.getMultipartBoundary());
 		}
 		else if (request.isPostForm()) {
-			conn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
+			httpconn.setRequestProperty(HttpHeader.CONTENT_TYPE, MimeTypes.X_WWW_FORM_URLECODED + "; charset=" + request.getEncoding());
 		}
 	}
 }
