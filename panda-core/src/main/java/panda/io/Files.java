@@ -135,6 +135,26 @@ public class Files {
 	}
 
 	/**
+	 * existence check
+	 * 
+	 * @param file the file name
+	 * @return false if file is null or not exists
+	 */
+	public static boolean exists(String file) {
+		return null != file && new File(file).exists();
+	}
+
+	/**
+	 * existence check
+	 * 
+	 * @param file the File object
+	 * @return false if file is null or not exists
+	 */
+	public static boolean exists(File file) {
+		return null != file && file.exists();
+	}
+
+	/**
 	 * directory check
 	 * 
 	 * @param dir the directory name
