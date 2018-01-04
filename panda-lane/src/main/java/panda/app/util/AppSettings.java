@@ -23,12 +23,12 @@ public class AppSettings extends ReloadableSettings {
 	@IocInject(required=false)
 	protected ServletContext servlet;
 
-	@IocInject(value=MVC.SETTINGS_RELOAD_PATH, required=false)
+	@IocInject(value=MVC.SETTINGS_RUNTIME_PATH, required=false)
 	protected String runtime;
 
-	@IocInject(value=MVC.SETTINGS_RELOAD_INTERVAL, required=false)
-	public void setInterval(long interval) {
-		super.setInterval(interval);
+	@IocInject(value=MVC.SETTINGS_RUNTIME_DELAY, required=false)
+	public void setDelay(long delay) {
+		super.setDelay(delay);
 	}
 
 	public AppSettings() throws IOException {

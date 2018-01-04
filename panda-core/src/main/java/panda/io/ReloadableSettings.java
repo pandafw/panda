@@ -26,9 +26,9 @@ public class ReloadableSettings extends Settings {
 	private long checkpoint = 0;
 	
 	/**
-	 * check interval (default: 60s)
+	 * check delay (default: 60s)
 	 */
-	private long interval = 60000;
+	private long delay = 60000;
 
 	public ReloadableSettings() {
 	}
@@ -38,24 +38,24 @@ public class ReloadableSettings extends Settings {
 	}
 
 	/**
-	 * @return the interval
+	 * @return the delay
 	 */
-	public long getInterval() {
-		return interval;
+	public long getDelay() {
+		return delay;
 	}
 
 	/**
-	 * @param interval the interval to set
+	 * @param delay the delay to set
 	 */
-	public void setInterval(long interval) {
-		this.interval = interval;
+	public void setDelay(long delay) {
+		this.delay = delay;
 	}
 
 	private synchronized void reload() {
 		if (file != null && checkpoint > 0) {
 			long now = System.currentTimeMillis();
 			if (now > checkpoint) {
-				checkpoint = now + interval;
+				checkpoint = now + delay;
 				
 				long lm = file.lastModified();
 				if (lm != loaded) {
@@ -77,17 +77,7 @@ public class ReloadableSettings extends Settings {
 		super.load(file);
 		this.file = file;
 		this.loaded = file.lastModified();
-		this.checkpoint = System.currentTimeMillis() + interval;
-	}
-
-	@Override
-	public synchronized void load(String file) throws IOException {
-		if (Files.isFile(file)) {
-			this.load(new File(file));
-		}
-		else {
-			super.load(file);
-		}
+		this.checkpoint = System.currentTimeMillis() + delay;
 	}
 
 	//-------------------------------------------------------

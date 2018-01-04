@@ -4,13 +4,13 @@ import panda.mvc.MvcConstants;
 
 public interface MVC extends MvcConstants {
 	//------------------------------------------------
-	// reloadable settings
+	// runtime reloadable settings
 	//
-	/** The reloadable settings path */
-	public static final String SETTINGS_RELOAD_PATH = "panda.settings.reload.path";
+	/** The runtime reloadable settings path */
+	public static final String SETTINGS_RUNTIME_PATH = "panda.settings.runtime.path";
 
-	/** The reloadable settings check interval */
-	public static final String SETTINGS_RELOAD_INTERVAL = "panda.settings.reload.interval";
+	/** The runtime reloadable settings check delay (ms) */
+	public static final String SETTINGS_RUNTIME_DELAY = "panda.settings.runtime.delay";
 
 	//------------------------------------------------
 	// cache
