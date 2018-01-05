@@ -31,7 +31,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			js = false;
 			writeJquery();
 			writeJqueryPlugins();
-			writeJqueryExtra();
+			writeJqueryExtras();
 			writeBootstrap();
 			writeBootstrapPlugins();
 			writePanda();
@@ -42,7 +42,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			css = false;
 			writeJquery();
 			writeJqueryPlugins();
-			writeJqueryExtra();
+			writeJqueryExtras();
 			writeBootstrap();
 			writeBootstrapPlugins();
 			writePanda();
@@ -127,7 +127,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	private void writeJqueryPlugins() throws IOException {
-		if (tag.isJqueryPlugins()) {
+		if (tag.isJqplugins()) {
 			if (tag.useCdn()) {
 				writePandaCdnCss("/jquery/css/jquery-plugins");
 				writePandaCdnJs("/jquery/js/jquery-plugins");
@@ -139,20 +139,20 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 
-	private void writeJqueryExtra() throws IOException {
-		if (tag.isJqueryExtra()) {
+	private void writeJqueryExtras() throws IOException {
+		if (tag.isJqextras()) {
 			if (tag.useCdn()) {
-				writePandaCdnCss("/jquery/extra/css/jquery-extra");
-				writePandaCdnJs("/jquery/extra/js/jquery-extra");
+				writePandaCdnCss("/jquery/extras/css/jquery-extras");
+				writePandaCdnJs("/jquery/extras/js/jquery-extras");
 			}
 			else {
-				writeStaticCss("/jquery/extra/css/jquery-extra");
-				writeStaticJs("/jquery/extra/js/jquery-extra");
+				writeStaticCss("/jquery/extras/css/jquery-extras");
+				writeStaticJs("/jquery/extras/js/jquery-extras");
 			}
 
 			String la = this.getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/jquery/extra/locales/jquery-extra-" + jsstr(la));
+				writeStaticJs("/jquery/extras/locales/jquery-extras-" + jsstr(la));
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	private void writeBootstrapPlugins() throws IOException {
-		boolean bsp = tag.isBootstrapPlugins();
+		boolean bsp = tag.isBsplugins();
 		if (css && bsp) {
 			if (tag.useCdn()) {
 				writePandaCdnCss("/bootstrap3/css/bootstrap-plugins");

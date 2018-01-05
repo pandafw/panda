@@ -21,12 +21,11 @@ import panda.mvc.SiteConstants;
  *    <li>debug</li>
  *    <li>version</li>
  *    <li>jquery</li>
- *    <li>jqueryPlugins</li>
- *    <li>jqueryExtra</li>
+ *    <li>jqplugins</li>
+ *    <li>jqextras</li>
  *    <li>bootstrap</li>
- *    <li>bootstrapPlugins</li>
+ *    <li>bsplugins</li>
  *    <li>panda</li>
- *    <li>loading</li>
  * </ul>
  *
  * <p/>
@@ -44,7 +43,7 @@ import panda.mvc.SiteConstants;
 @IocBean(singleton=false)
 public class Link extends UIBean {
 	@IocInject
-	Settings settings;
+	private Settings settings;
 	
 	// attributes
 	protected String statics;
@@ -55,10 +54,10 @@ public class Link extends UIBean {
 	protected boolean css;
 	protected Locale locale;
 	protected boolean jquery;
-	protected boolean jqueryPlugins;
-	protected boolean jqueryExtra;
+	protected boolean jqplugins;
+	protected boolean jqextras;
 	protected boolean bootstrap;
-	protected boolean bootstrapPlugins;
+	protected boolean bsplugins;
 	protected boolean i18n;
 	protected boolean panda;
 	
@@ -74,18 +73,18 @@ public class Link extends UIBean {
 			locale = context.getLocale();
 		}
 
-		if (bootstrap || jqueryPlugins || jqueryExtra) {
+		if (bootstrap || jqplugins || jqextras) {
 			jquery = true;
 		}
-		if (bootstrapPlugins) {
+		if (bsplugins) {
 			jquery = true;
 			bootstrap = true;
 		}
 		if (panda) {
 			jquery = true;
-			jqueryPlugins = true;
+			jqplugins = true;
 			bootstrap = true;
-			bootstrapPlugins = true;
+			bsplugins = true;
 		}
 		
 		if (cdn == null) {
@@ -223,31 +222,31 @@ public class Link extends UIBean {
 	}
 
 	/**
-	 * @return the jqueryPlugins
+	 * @return the jqplugins
 	 */
-	public boolean isJqueryPlugins() {
-		return jqueryPlugins;
+	public boolean isJqplugins() {
+		return jqplugins;
 	}
 
 	/**
-	 * @param jqueryPlugins the jqueryPlugins to set
+	 * @param jqplugins the jqplugins to set
 	 */
-	public void setJqueryPlugins(boolean jqueryPlugins) {
-		this.jqueryPlugins = jqueryPlugins;
+	public void setJqplugins(boolean jqplugins) {
+		this.jqplugins = jqplugins;
 	}
 
 	/**
-	 * @return the jqueryExtra
+	 * @return the jqextras
 	 */
-	public boolean isJqueryExtra() {
-		return jqueryExtra;
+	public boolean isJqextras() {
+		return jqextras;
 	}
 
 	/**
-	 * @param jqueryExtra the jqueryExtra to set
+	 * @param jqextras the jqextras to set
 	 */
-	public void setJqueryExtra(boolean jqueryExtra) {
-		this.jqueryExtra = jqueryExtra;
+	public void setJqextras(boolean jqextras) {
+		this.jqextras = jqextras;
 	}
 
 	/**
@@ -265,17 +264,17 @@ public class Link extends UIBean {
 	}
 
 	/**
-	 * @return the bootstrapPlugins
+	 * @return the bsplugins
 	 */
-	public boolean isBootstrapPlugins() {
-		return bootstrapPlugins;
+	public boolean isBsplugins() {
+		return bsplugins;
 	}
 
 	/**
-	 * @param bootstrapPlugins the bootstrapPlugins to set
+	 * @param bsplugins the bsplugins to set
 	 */
-	public void setBootstrapPlugins(boolean bootstrapPlugins) {
-		this.bootstrapPlugins = bootstrapPlugins;
+	public void setBsplugins(boolean bsplugins) {
+		this.bsplugins = bsplugins;
 	}
 
 	/**
