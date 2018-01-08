@@ -202,6 +202,9 @@
 	border-color: #ccc;
 	border-style: dashed;
 }
+.p-viewfield {
+	word-wrap: break-word;
+}
 
 /** trigger, datetimepicker */
 div.p-textfield, div.p-triggerfield, div.p-datepicker, div.p-timepicker, div.p-datetimepicker {
