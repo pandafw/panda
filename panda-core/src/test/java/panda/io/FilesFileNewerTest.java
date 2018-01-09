@@ -83,7 +83,7 @@ public class FilesFileNewerTest extends FileBasedTestCase {
 	 * </ul>
 	 * Then compares (with the needed <code>isFileNewer</code> method) the last modification date of
 	 * the specified file with the specified time reference, the created <code>Date</code> and the
-	 * temporary file. <br/>
+	 * temporary file. <br>
 	 * The test is successfull if the three comparaisons return the specified wanted result.
 	 * 
 	 * @param description describes the tested situation
@@ -106,7 +106,7 @@ public class FilesFileNewerTest extends FileBasedTestCase {
 	}
 
 	/**
-	 * Tests the <code>isFileNewer(File, long)</code> method without specifying a <code>File</code>. <br/>
+	 * Tests the <code>isFileNewer(File, long)</code> method without specifying a <code>File</code>. <br>
 	 * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
 	 */
 	public void testIsFileNewerNoFile() {
@@ -119,7 +119,7 @@ public class FilesFileNewerTest extends FileBasedTestCase {
 	}
 
 	/**
-	 * Tests the <code>isFileNewer(File, Date)</code> method without specifying a <code>Date</code>. <br/>
+	 * Tests the <code>isFileNewer(File, Date)</code> method without specifying a <code>Date</code>. <br>
 	 * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
 	 */
 	public void testIsFileNewerNoDate() {
@@ -133,7 +133,7 @@ public class FilesFileNewerTest extends FileBasedTestCase {
 
 	/**
 	 * Tests the <code>isFileNewer(File, File)</code> method without specifying a reference
-	 * <code>File</code>. <br/>
+	 * <code>File</code>. <br>
 	 * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
 	 */
 	public void testIsFileNewerNoFileReference() {

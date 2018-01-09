@@ -149,6 +149,9 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		this.updateKey = updateKey;
 	}
 
+	/**
+	 * @return the updatable
+	 */
 	public boolean isUpdatable() {
 		return updateKey != null;
 	}
@@ -241,7 +244,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
-	protected XlsReader getXlsReader(InputStream input, boolean ooxml) throws Exception {
+	/**
+	 * get XLS reader
+	 * @param input input stream
+	 * @param ooxml xlsx format
+	 * @return XlsReader
+	 * @throws IOException if an IO error occurred
+	 */
+	protected XlsReader getXlsReader(InputStream input, boolean ooxml) throws IOException {
 		if (input == null) {
 			return null;
 		}
@@ -251,7 +261,15 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return xr;
 	}
 
-	protected CsvReader getCsvReader(InputStream input, char separator) throws Exception {
+
+	/**
+	 * get Csv reader
+	 * @param input input stream
+	 * @param separator separator
+	 * @return CsvReader
+	 * @throws IOException if an IO error occurred
+	 */
+	protected CsvReader getCsvReader(InputStream input, char separator) throws IOException {
 		if (input == null) {
 			return null;
 		}
@@ -261,6 +279,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return new CsvReader(new InputStreamReader(bis, cs == null ? Charsets.CS_UTF_8 : cs), separator);
 	}
 
+	/**
+	 * mapping headers to columns
+	 * @param headers headers
+	 * @return columns
+	 */
 	protected String[] mapColumns(List<?> headers) {
 		String[] columns = new String[headers.size()];
 		Entity<T> en = getEntity();
@@ -281,12 +304,18 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return columns;
 	}
 
-	protected Object impFile(final ListReader csv) throws Exception {
-		if (csv == null) {
+	/**
+	 * import file
+	 * @param lst list reader
+	 * @return Ret Object
+	 * @throws IOException if an IO error occurred
+	 */
+	protected Object impFile(final ListReader lst) throws IOException {
+		if (lst == null) {
 			return null;
 		}
 
-		final List<?> headers = csv.readList();
+		final List<?> headers = lst.readList();
 		if (headers == null || headers.isEmpty()) {
 			return null;
 		}
@@ -300,14 +329,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		ret.headers = headers;
 
 		if (arg.loose) {
-			impDatas(ret, csv, columns);
+			impDatas(ret, lst, columns);
 		}
 		else {
 			getDao().exec(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						impDatas(ret, csv, columns);
+						impDatas(ret, lst, columns);
 					}
 					catch (Exception e) {
 						throw Exceptions.wrapThrow(e);
@@ -325,9 +354,15 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return ret;
 	}
 
-	protected void impDatas(Ret ret, ListReader csv, String[] columns) throws Exception {
+	/**
+	 * @param ret the Ret object
+	 * @param lst the list reader
+	 * @param columns columns
+	 * @throws IOException if an IO error occurred
+	 */
+	protected void impDatas(Ret ret, ListReader lst, String[] columns) throws IOException {
 		for (int i = 1; ; i++) {
-			List row = csv.readList();
+			List row = lst.readList();
 			if (row == null) {
 				break;
 			}
@@ -362,6 +397,10 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	/**
+	 * import data
+	 * @param data the the input data
+	 */
 	protected void impData(T data) {
 		trimData(data);
 
@@ -369,7 +408,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		validateData(data);
 		checkForeignKeys(data);
 		if (updateKey != null && arg.update) {
-			T sdat = findUpdateData(data);
+			T sdat = findSourceData(data);
 			if (sdat != null) {
 				checkUniqueIndexesOnUpdate(data, sdat);
 				updateData(data, sdat);
@@ -381,7 +420,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		checkUniqueIndexesOnInsert(data);
 		insertData(data);
 	}
-	
+
+	/**
+	 * convert row data to data map
+	 * @param columns columns 
+	 * @param row row data
+	 * @return data map
+	 */
 	protected Map<String, Object> rowToMap(String[] columns, List<?> row) {
 		Map<String, Object> values = new HashMap<String, Object>(columns.length);
 		for (int c = 0; c < columns.length && c < row.size(); c++) {
@@ -397,6 +442,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return values;
 	}
 
+	/**
+	 * log exception
+	 * @param method method name
+	 * @param e exception
+	 */
 	protected void logException(String method, Throwable e) {
 		log.warn(method, e);
 
@@ -409,6 +459,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	/**
+	 * get header error
+	 * @param col column number
+	 * @param val value
+	 * @return error message
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getHeaderError(int col, Object val) {
 		Map m = new HashMap();
@@ -418,6 +474,13 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-header", m);
 	}
 
+	/**
+	 * get data error
+	 * @param row row number
+	 * @param val value
+	 * @param e exception
+	 * @return error message
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getDataError(int row, Object val, Throwable e) {
 		Map m = new HashMap();
@@ -428,6 +491,14 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-data", m);
 	}
 
+	/**
+	 * get value error
+	 * @param row row number
+	 * @param col col number
+	 * @param val value
+	 * @param e exception
+	 * @return error message
+	 */
 	@SuppressWarnings("unchecked")
 	protected String getValueError(int row, int col, Object val, Throwable e) {
 		Map m = new HashMap();
@@ -439,22 +510,44 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage("error-value", m);
 	}
 
+	/**
+	 * trim data of row 
+	 * @param row row data
+	 */
 	protected void trimRow(List row) {
 	}
 
+	/**
+	 * cast data map to data object
+	 * @param values data map
+	 * @return data object
+	 */
 	protected T castData(Map<String, Object> values) {
 		context.clearCastErrors();
 		return Mvcs.castValueWithErrors(context, values, getType(), null);
 	}
 
+	/**
+	 * trim data
+	 * @param data data object
+	 */
 	protected void trimData(T data) {
 		assist().initCommonFields(data);
 	}
 
+	/**
+	 * insert data
+	 * @param data the input data
+	 */
 	protected void insertData(T data) {
 		getDao().insert(data);
 	}
 
+	/**
+	 * update data
+	 * @param data the input data
+	 * @param sdat the source data
+	 */
 	protected void updateData(T data, T sdat) {
 		EntityHelper.copyPrimaryKeyValues(getEntity(), sdat, data);
 		getDao().update(data);
@@ -498,7 +591,12 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		throw new IllegalArgumentException(sb.toString());
 	}
 
-	protected T findUpdateData(T data) {
+	/**
+	 * find existing data
+	 * @param data the input data
+	 * @return data object
+	 */
+	protected T findSourceData(T data) {
 		if (updateKey instanceof EntityField) {
 			EntityField ef = (EntityField)updateKey;
 			return EntityHelper.fetchDataByField(getDao(), getEntity(), ef, data);
@@ -521,7 +619,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkPrimaryKeys
 	 * 
-	 * @param data the data
+	 * @param data the input data
 	 */
 	protected void checkPrimaryKeysOnInsert(T data) {
 		EntityField eid = getEntity().getIdentity();
@@ -545,7 +643,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUniqueIndexes for insert
 	 * 
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void checkUniqueIndexesOnInsert(T data) {
 		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, null);
@@ -557,7 +655,8 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkUniqueIndexes for update
 	 * 
-	 * @param data data
+	 * @param data the input data
+	 * @param sdat the source data
 	 */
 	protected void checkUniqueIndexesOnUpdate(T data, T sdat) {
 		EntityIndex ei = EntityHelper.findDuplicateUniqueIndex(getDao(), getEntity(), data, sdat);
@@ -569,7 +668,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkForeignKeys
 	 * 
-	 * @param data
+	 * @param data the input data
 	 */
 	protected void checkForeignKeys(T data) {
 		EntityFKey efk = EntityHelper.findIncorrectForeignKey(getDao(), getEntity(), data);
@@ -583,6 +682,11 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	// ------------------------------------------------------------
 	// error message methods
 	// ------------------------------------------------------------
+	/**
+	 * convert row data to string
+	 * @param row row data
+	 * @return the data string
+	 */
 	protected String rowToString(final List row) {
 		Iterator iterator = row.iterator();
 		final Object first = iterator.next();
@@ -604,10 +708,25 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return buf.toString();
 	}
 
+	/**
+	 * get data field errors
+	 * @param data the input data
+	 * @param efs entity fields
+	 * @param dataErrMsg data error message
+	 * @return the error message
+	 */
 	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg) {
 		return dataFieldErrors(data, efs, dataErrMsg, null);
 	}
 
+	/**
+	 * get data field errors
+	 * @param data the input data
+	 * @param efs entity fields
+	 * @param dataErrMsg data error message
+	 * @param format the data format
+	 * @return the error message
+	 */
 	protected String dataFieldErrors(T data, Collection<EntityField> efs, String dataErrMsg, String format) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" (");
@@ -635,10 +754,22 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 		return getMessage(dataErrMsg, sb.toString());
 	}
 
+	/**
+	 * get data duplicate error
+	 * @param data the input data
+	 * @param efs entity fields
+	 * @return the error message
+	 */
 	protected String dataDuplicateError(T data, Collection<EntityField> efs) {
 		return dataFieldErrors(data, efs, RES.ERROR_DATA_DUPLICATE);
 	}
 
+	/**
+	 * get data incorrect error
+	 * @param data the input data
+	 * @param efs entity fields
+	 * @return the error message
+	 */
 	protected String dataIncorrectError(T data, Collection<EntityField> efs) {
 		return dataFieldErrors(data, efs, RES.ERROR_DATA_INCORRECT);
 	}
@@ -646,20 +777,42 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	// ------------------------------------------------------------
 	// html escape methods
 	//
+	/**
+	 * escape value
+	 * @param v value
+	 * @return escaped string
+	 */
 	public String escapeValue(Object v) {
 		String s = formatValue(v);
 		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
 
+	/**
+	 * escape value
+	 * @param v value
+	 * @param format format
+	 * @return escaped string
+	 */
 	protected String escapeValue(Object v, String format) {
 		String s = formatValue(v, format);
 		return Escapes.escape(s, Escapes.ESCAPE_PHTML);
 	}
 
+	/**
+	 * format value
+	 * @param v value
+	 * @return formated string
+	 */
 	public String formatValue(Object v) {
 		return formatValue(v, null);
 	}
 
+	/**
+	 * format value
+	 * @param v value
+	 * @param format format
+	 * @return formated string
+	 */
 	protected String formatValue(Object v, String format) {
 		if (v == null) {
 			return Strings.EMPTY;

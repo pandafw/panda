@@ -89,6 +89,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * view
+	 * @param key the input key
 	 */
 	protected Object view(T key) {
 		return doViewSelect(key);
@@ -96,6 +97,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * view_input
+	 * @param data the input data
 	 */
 	protected Object view_input(T data) {
 		return doViewInput(data);
@@ -103,6 +105,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * print
+	 * @param key the input key
 	 */
 	protected Object print(T key) {
 		return doViewSelect(key);
@@ -110,6 +113,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * print_input
+	 * @param data the input data
 	 */
 	protected Object print_input(T data) {
 		return doViewInput(data);
@@ -117,6 +121,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * copy
+	 * @param key the input key
 	 */
 	protected Object copy(T key) {
 		return doCopySelect(key);
@@ -124,6 +129,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * copy_input
+	 * @param data the input data
 	 */
 	protected Object copy_input(T data) {
 		return doCopyInput(data);
@@ -131,6 +137,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * copy_confirm
+	 * @param data the input data
 	 */
 	protected Object copy_confirm(T data) {
 		return doInsertConfirm(data);
@@ -138,6 +145,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * copy_execute
+	 * @param data the input data
 	 */
 	public Object copy_execute(T data) {
 		return doInsertExecute(data);
@@ -152,6 +160,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * add_input
+	 * @param data the input data
 	 */
 	protected Object add_input(T data) {
 		return doInsertInput(data);
@@ -159,6 +168,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * add_confirm
+	 * @param data the input data
 	 */
 	protected Object add_confirm(T data) {
 		return doInsertConfirm(data);
@@ -166,6 +176,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * add_execute
+	 * @param data the input data
 	 */
 	protected Object add_execute(T data) {
 		return doInsertExecute(data);
@@ -173,6 +184,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * edit
+	 * @param key the input key
 	 */
 	protected Object edit(T key) {
 		return doUpdateSelect(key);
@@ -180,6 +192,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * edit_input
+	 * @param data the input data
 	 */
 	protected Object edit_input(T data) {
 		return doUpdateInput(data);
@@ -187,6 +200,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * edit_confirm
+	 * @param data the input data
 	 */
 	public Object edit_confirm(T data) {
 		return doUpdateConfirm(data);
@@ -194,6 +208,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * edit_execute
+	 * @param data the input data
 	 */
 	protected Object edit_execute(T data) {
 		return doUpdateExecute(data);
@@ -201,6 +216,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * delete
+	 * @param key the input key
 	 */
 	protected Object delete(T key) {
 		return doDeleteSelect(key);
@@ -208,6 +224,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * delete_execute
+	 * @param key the input key
 	 */
 	protected Object delete_execute(T key) {
 		return doDeleteExecute(key);
@@ -218,6 +235,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * doViewInput 
+	 * @param data the input data
 	 */
 	protected Object doViewInput(T data) {
 		return prepareData(data);
@@ -225,6 +243,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doViewSelect
+	 * @param key the input key
 	 */
 	protected Object doViewSelect(T key) {
 		T pkey = prepareKey(key);
@@ -234,6 +253,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doCopySelect
+	 * @param key the input key
 	 */
 	protected Object doCopySelect(T key) {
 		T pkey = prepareKey(key);
@@ -247,6 +267,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doCopyInput
+	 * @param data the input data
 	 */
 	protected Object doCopyInput(T data) {
 		return prepareData(data);
@@ -263,6 +284,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doInsertInput
+	 * @param data the input data
 	 */
 	protected Object doInsertInput(T data) {
 		return prepareData(data);
@@ -270,6 +292,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doInsertConfirm
+	 * @param data the input data
 	 */
 	protected Object doInsertConfirm(T data) {
 		T pdat = prepareData(data);
@@ -286,6 +309,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doInsertExecute
+	 * @param data the input data
 	 */
 	protected Object doInsertExecute(T data) {
 		final T pdat = prepareData(data);
@@ -332,6 +356,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * doUpdateInput
+	 * @param data the input data
 	 */
 	protected Object doUpdateInput(T data) {
 		return prepareData(data);
@@ -339,6 +364,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doUpdateSelect
+	 * @param key the input key
 	 */
 	protected Object doUpdateSelect(T key) {
 		T pk = prepareKey(key);
@@ -347,6 +373,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doUpdateConfirm
+	 * @param data the input data
 	 */
 	protected Object doUpdateConfirm(T data) {
 		T pdat = prepareData(data);
@@ -368,6 +395,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * doUpdateExecute
+	 * @param data the input data
 	 */
 	protected Object doUpdateExecute(T data) {
 		final T pdat = prepareData(data);
@@ -411,6 +439,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doDeleteSelect
+	 * @param key the input key
 	 */
 	protected Object doDeleteSelect(T key) {
 		final T pkey = prepareKey(key);
@@ -427,6 +456,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doDeleteExecute
+	 * @param key the input key
 	 */
 	protected Object doDeleteExecute(final T key) {
 		final T pkey = prepareKey(key);
@@ -472,7 +502,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * trim data
-	 * @param data data object
+	 * @param data the input data
 	 */
 	protected T trimData(T data) {
 		return data;
@@ -489,7 +519,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * prepare default data
-	 * @param data data
+	 * @param data the input data
 	 * @return data
 	 */
 	protected T prepareData(T data) {
@@ -504,8 +534,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * selectData
-	 * @param key key
-	 * @return data data found
+	 * @param key the input key
+	 * @return data the data found from Dao
 	 */
 	protected T selectData(T key) {
 		if (!EntityHelper.hasPrimaryKeyValues(getEntity(), key)) {
@@ -532,6 +562,10 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		return d;
 	}
 
+	/**
+	 * add query fields
+	 * @param gq query
+	 */
 	protected void addQueryFields(DataQuery<T> gq) {
 		Collection<String> ufs = getDisplayFields();
 		if (Collections.isNotEmpty(ufs)) {
@@ -541,17 +575,26 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	/**
+	 * add query joins
+	 * @param gq query
+	 */
 	protected void addQueryJoins(DataQuery<T> gq) {
 	}
-	
+
+	/**
+	 * add query filters
+	 * @param gq query
+	 * @param key the input key
+	 */
 	protected void addQueryFilters(DataQuery<T> gq, T key) {
 		gq.equalToPrimaryKeys(key);
 	}
 
 	/**
 	 * checkCommon
-	 * @param data data
-	 * @param sdat source data (null on insert)
+	 * @param data the input data
+	 * @param sdat the source data (null on insert)
 	 * @return true if do something success
 	 */
 	protected boolean checkCommon(T data, T sdat) {
@@ -561,8 +604,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkOnInput (Insert & Update)
-	 * @param data data
-	 * @param sdat source data (null on insert)
+	 * @param data the input data
+	 * @param sdat the source data (null on insert)
 	 * @return true if do something success
 	 */
 	protected boolean checkOnInput(T data, T sdat) {
@@ -575,7 +618,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * checkOnInsert
-	 * @param data data
+	 * @param data the input data
 	 * @return true if check success
 	 */
 	protected boolean checkOnInsert(T data) {
@@ -619,7 +662,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * startInsert
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected T startInsert(T data) {
 		assist().initCommonFields(data);
@@ -628,7 +671,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * insert data
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void insertData(T data) {
 		getDao().insert(data);
@@ -636,14 +679,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * afterInsert
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void afterInsert(T data) {
 	}
 
 	/**
 	 * finalInsert
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void finalInsert(T data) {
 	}
@@ -652,6 +695,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	// update methods
 	//------------------------------------------------------------
 	/**
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return the update fields
 	 */
 	protected Set<String> getUpdateFields(T data, T sdat) {
@@ -660,8 +705,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkOnUpdate
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check success
 	 */
 	protected boolean checkOnUpdate(T data, T sdat) {
@@ -712,8 +757,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * startUpdate
-	 * @param data input data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 */
 	protected T startUpdate(T data, T sdat) {
 		assist().initUpdateFields(data, sdat);
@@ -723,7 +768,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * update data
 	 * @param udat update data
-	 * @param sdat source data
+	 * @param sdat the source data
 	 * @return update count
 	 */
 	protected int updateData(T udat, T sdat) {
@@ -736,16 +781,16 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * afterUpdate
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 */
 	protected void afterUpdate(T data, T sdat) {
 	}
 
 	/**
 	 * finalUpdate
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 */
 	protected void finalUpdate(T data, T sdat) {
 	}
@@ -755,8 +800,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * checkOnDelete
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check success
 	 */
 	protected boolean checkOnDelete(T data, T sdat) {
@@ -781,14 +826,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * startDelete(T)
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void startDelete(T data) {
 	}
 
 	/**
 	 * delete data
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void deleteData(T data) {
 		int cnt = getDao().delete(data);
@@ -799,14 +844,14 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * afterDelete
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void afterDelete(T data) {
 	}
 
 	/**
 	 * finalDelete
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void finalDelete(T data) {
 	}
@@ -814,6 +859,13 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	// error message methods
 	//------------------------------------------------------------
+	/**
+	 * add data field errors
+	 * @param data the input data
+	 * @param efs entity fields
+	 * @param itemErrMsg item error message
+	 * @param dataErrMsg data error message
+	 */
 	protected void addDataFieldErrors(T data, Collection<EntityField> efs, String itemErrMsg, String dataErrMsg) {
 		StringBuilder sb = new StringBuilder();
 		for (EntityField ef : efs) {
@@ -838,15 +890,30 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 		addActionError(getMessage(dataErrMsg, sb.toString()));
 	}
-	
+
+	/**
+	 * add data duplicate error
+	 * @param data the input data
+	 * @param efs entity fields
+	 */
 	protected void addDataDuplicateError(T data, Collection<EntityField> efs) {
 		addDataFieldErrors(data, efs, RES.ERROR_ITEM_DUPLICATE, RES.ERROR_DATA_DUPLICATE);
 	}
 
+	/**
+	 * add data incorrect error
+	 * @param data the input data
+	 * @param efs entity fields
+	 */
 	protected void addDataIncorrectError(T data, Collection<EntityField> efs) {
 		addDataFieldErrors(data, efs, RES.ERROR_ITEM_INCORRECT, RES.ERROR_DATA_INCORRECT);
 	}
 
+	/**
+	 * add data required error
+	 * @param data the input data
+	 * @param efs entity fields
+	 */
 	protected void addDataRequiredError(T data, Collection<EntityField> efs) {
 		addDataFieldErrors(data, efs, RES.ERROR_ITEM_REQUIRED, RES.ERROR_ITEM_REQUIRED);
 	}
@@ -857,7 +924,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * checkNotNulls
 	 * 
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected boolean checkNotNulls(T data) {
 		List<EntityField> efs = EntityHelper.checkNotNulls(getEntity(), data);
@@ -870,7 +937,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * checkPrimaryKeyOnInsert
-	 * @param data data
+	 * @param data the input data
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeysOnInsert(T data) {
@@ -897,8 +964,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkPrimaryKeysOnUpdate(T data, T sdat) {
@@ -926,8 +993,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkUniqueIndexesOnUpdate
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkUniqueIndexesOnUpdate(T data, T sdat) {
@@ -957,8 +1024,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * check data is changed on update
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkDataChangedOnUpdate(T data, T sdat) {
@@ -967,8 +1034,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * check data changed on delete
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @return true if check successfully
 	 */
 	protected boolean checkDataChangedOnDelete(T data, T sdat) {
@@ -982,8 +1049,8 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * check data is changed or not
-	 * @param data data
-	 * @param sdat source data
+	 * @param data the input data
+	 * @param sdat the source data
 	 * @param msg warn message id
 	 * @return true if check successfully
 	 */
@@ -1007,7 +1074,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * clear on copy
-	 * @param data data
+	 * @param data the input data
 	 */
 	protected void clearOnCopy(T data) {
 		if (data != null) {

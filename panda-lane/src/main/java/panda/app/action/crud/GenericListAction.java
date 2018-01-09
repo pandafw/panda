@@ -77,6 +77,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * list
+	 * @param qr queryer
 	 */
 	protected Object list(Queryer qr) {
 		set_save(true);
@@ -85,6 +86,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_print
+	 * @param qr queryer
 	 */
 	protected Object list_print(Queryer qr) {
 		set_load(false);
@@ -94,6 +96,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_popup
+	 * @param qr queryer
 	 */
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
@@ -103,6 +106,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_json
+	 * @param qr queryer
 	 */
 	protected Object list_json(Queryer qr) {
 		set_load(false);
@@ -112,6 +116,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_xml
+	 * @param qr queryer
 	 */
 	protected Object list_xml(Queryer qr) {
 		set_load(false);
@@ -121,6 +126,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_pdf
+	 * @param qr queryer
 	 */
 	protected Object list_pdf(Queryer qr) {
 		return doPdf(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -129,6 +135,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_csv
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
 		return doCsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -136,6 +144,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_tsv
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
 		return doTsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -143,6 +153,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_xls
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object list_xls(Queryer qr, List<ListColumn> columns) {
 		return doXls(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -150,6 +162,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * list_xlsx
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object list_xlsx(Queryer qr, List<ListColumn> columns) {
 		return doXlsx(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -160,6 +174,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * expo_json
+	 * @param qr queryer
 	 */
 	protected Object expo_json(QueryerEx qr) {
 		set_load(false);
@@ -169,6 +184,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_xml
+	 * @param qr queryer
 	 */
 	protected Object expo_xml(QueryerEx qr) {
 		set_load(false);
@@ -178,6 +194,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_pdf
+	 * @param qr queryer
 	 */
 	protected Object expo_pdf(QueryerEx qr) {
 		return doPdf(qr, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -186,6 +203,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_csv
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object expo_csv(QueryerEx qr, List<ListColumn> columns) {
 		return doCsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -193,6 +212,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_tsv
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object expo_tsv(QueryerEx qr, List<ListColumn> columns) {
 		return doTsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -200,6 +221,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_xls
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object expo_xls(QueryerEx qr, List<ListColumn> columns) {
 		return doXls(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -207,6 +230,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * expo_xlsx
+	 * @param qr queryer
+	 * @param colums list columns
 	 */
 	protected Object expo_xlsx(QueryerEx qr, List<ListColumn> columns) {
 		return doXlsx(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -253,6 +278,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return listCountable;
 	}
 
+	/**
+	 * @param listCountable the listCountable to set
+	 */
 	protected void setListCountable(Boolean listCountable) {
 		this.listCountable = listCountable;
 	}
@@ -277,7 +305,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * 
+	 * @param qr queryer
 	 * @return true - if need load list parameters
 	 */
 	protected boolean isNeedLoadListParameters(Queryer qr) {
@@ -290,7 +318,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * load list parameters
-	 * @return null - send redirect url
+	 * @return null if redirect url is sent
 	 */
 	protected Queryer loadListParameters(Queryer qr) {
 		Queryer q = loadListParameters();
@@ -309,7 +337,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * load list parameters
-	 * @return null - send redirect url
+	 * @return null if redirect url is sent
 	 */
 	protected Queryer loadListParameters() {
 		StateProvider sp = getState();
@@ -333,6 +361,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	
 	/**
 	 * save list parameters
+	 * @param qr queryer
 	 */
 	protected void saveListParameters(Queryer qr) {
 		StateProvider sp = getState();
@@ -344,6 +373,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
+	 * @param qr queryer
 	 * @return list parameters string
 	 */
 	protected String getListParametersString(Queryer qr) {
@@ -352,6 +382,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 	
 	/**
+	 * @param qr queryer
 	 * @return list parameters string
 	 */
 	protected Map<String, Object> getListParameters(Queryer qr) {
@@ -389,6 +420,13 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return params;
 	}
 
+	/**
+	 * do list
+	 * @param qr queryer
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doList(Queryer qr, long defLimit, long maxLimit) {
 		if (isNeedLoadListParameters(qr)) {
 			qr = loadListParameters(qr);
@@ -406,12 +444,27 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return dataList;
 	}
 
+	/**
+	 * do pdf
+	 * @param qr queryer
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doPdf(Queryer qr, long defLimit, long maxLimit) {
 		set_load(false);
 		set_save(false);
 		return doList(qr, defLimit, maxLimit);
 	}
 
+	/**
+	 * do csv
+	 * @param qr queryer
+	 * @param columns list columns
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doCsv(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
 		set_load(false);
 		set_save(false);
@@ -433,6 +486,15 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return cv;
 	}
 	
+
+	/**
+	 * do tsv
+	 * @param qr queryer
+	 * @param columns list columns
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doTsv(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
 		set_load(false);
 		set_save(false);
@@ -455,6 +517,15 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return tv;
 	}
 
+
+	/**
+	 * do xls
+	 * @param qr queryer
+	 * @param columns list columns
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doXls(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
 		set_load(false);
 		set_save(false);
@@ -476,6 +547,15 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return xv;
 	}
 
+
+	/**
+	 * do xlsx
+	 * @param qr queryer
+	 * @param columns list columns
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
+	 * @return data list or view
+	 */
 	protected Object doXlsx(Queryer qr, List<ListColumn> columns, long defLimit, long maxLimit) {
 		set_load(false);
 		set_save(false);
@@ -499,6 +579,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * queryList
+	 * @param qr queryer
+	 * @param defLimit default limit
+	 * @param maxLimit default maximum limit
 	 */
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
 		final DataQuery<T> gq = new DataQuery<T>(getEntity());
@@ -550,6 +633,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return displayField(field);
 	}
 
+	/**
+	 * @return true if listview-actions-align=l
+	 */
 	public boolean isActionsAlignLeft() {
 		String a = getText("listview-actions-align");
 		if (Strings.isEmpty(a)) {
@@ -558,6 +644,10 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		return a.charAt(0) == 'l';
 	}
 	
+
+	/**
+	 * @return true if listview-actions-align=r
+	 */
 	public boolean isActionsAlignRight() {
 		String a = getText("listview-actions-align");
 		if (Strings.isEmpty(a)) {
@@ -579,7 +669,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * @param gq query
+	 * add query columns
+	 * @param gq DataQuery
 	 */
 	protected void addQueryColumns(DataQuery<T> gq) {
 		Set<String> fs = getDisplayFields();
@@ -591,13 +682,15 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	}
 
 	/**
-	 * @param gq query
+	 * add query joins
+	 * @param gq DataQuery
 	 */
 	protected void addQueryJoins(DataQuery<T> gq) {
 	}
 	
 	/**
-	 * @param gq query
+	 * @param gq DataQuery
+	 * @param gq queryer
 	 */
 	@SuppressWarnings("unchecked")
 	protected void addQueryFilters(DataQuery<T> gq, Queryer qr) {
@@ -684,6 +777,14 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		gq.end();
 	}
 
+	/**
+	 * add filter to queryer
+	 * @param gq DataQuery
+	 * @param f filter
+	 * @param name field name
+	 * @param value field value
+	 * @param values field values
+	 */
 	protected void addQueryFilter(DataQuery<T> gq, Filter f, String name, Object value, List<?> values) {
 		if (Filter.EQUAL.equals(f.getComparator())) {
 			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
@@ -769,6 +870,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * @param gq query
+	 * @param sorter sorter
 	 */
 	protected void addQueryOrders(DataQuery<T> gq, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
@@ -785,6 +887,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		}
 	}
 
+	/**
+	 * add limit options to queryer
+	 * @param pager pager
+	 * @param def default limit
+	 * @param max maximum limit
+	 */
 	protected void addLimitToPager(Pager pager, long def, long max) {
 		assist().setLimitToPager(pager, def, max);
 	}

@@ -4303,10 +4303,10 @@ public class Strings {
 	 * @return the joined String, {@code null} if null array input; or the empty string if
 	 *         {@code endIndex - startIndex <= 0}. The number of joined entries is given by
 	 *         {@code endIndex - startIndex}
-	 * @throws ArrayIndexOutOfBoundsException ife<br/>
-	 *             {@code startIndex < 0} or <br/>
-	 *             {@code startIndex >= array.length()} or <br/>
-	 *             {@code endIndex < 0} or <br/>
+	 * @throws ArrayIndexOutOfBoundsException ife<br>
+	 *             {@code startIndex < 0} or <br>
+	 *             {@code startIndex >= array.length()} or <br>
+	 *             {@code endIndex < 0} or <br>
 	 *             {@code endIndex > array.length()}
 	 */
 	public static String join(final Object[] array, String separator, final int startIndex, final int endIndex) {
