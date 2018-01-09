@@ -29,6 +29,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	 *----------------------------------------------------------------------*/
 	/**
 	 * list
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -38,6 +40,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	
 	/**
 	 * list_print
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -47,6 +51,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	
 	/**
 	 * list_json
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At
 	@To(all=View.JSON)
@@ -56,6 +62,8 @@ public class FilePoolListAction extends GenericListAction<DaoFileItem> {
 	
 	/**
 	 * list_xml
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At
 	@To(all=View.XML)

@@ -161,6 +161,7 @@ public class ${name} <#if entity.baseBeanClass?has_content>extends ${class_name(
 
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(${name} src) {
 <#list entity.propertyList as p>

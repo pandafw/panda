@@ -73,6 +73,8 @@ public abstract class BaseTempFileAction extends AbstractAction {
 
 	/**
 	 * download
+	 * @param id id
+	 * @return view
 	 * 
 	 * @throws Exception if an error occurs
 	 */
@@ -109,6 +111,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	/**
 	 * upload
 	 * 
+	 * @param file the upload file
 	 * @return file
 	 * @throws Exception if an error occurs
 	 */
@@ -121,6 +124,7 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	/**
 	 * upload
 	 * 
+	 * @param files the upload files
 	 * @return file
 	 * @throws Exception if an error occurs
 	 */
@@ -131,7 +135,12 @@ public abstract class BaseTempFileAction extends AbstractAction {
 	}
 
 	/**
-	 * upload
+	 * image upload
+	 * 
+	 * @param file the input file
+	 * @param width image width
+	 * @param height image height
+	 * @param scale resize scale
 	 * 
 	 * @return uploaded file item
 	 * @throws Exception if an error occurs

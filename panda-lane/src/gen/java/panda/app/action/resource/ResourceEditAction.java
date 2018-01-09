@@ -30,6 +30,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 	 *----------------------------------------------------------------------*/
 	/**
 	 * view
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -39,6 +41,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * view_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~view", error="sftl:~view")
@@ -48,6 +52,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * print
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -57,6 +63,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * print_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~print", error="sftl:~print")
@@ -66,6 +74,7 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * add
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -75,6 +84,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * add_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~add", error="sftl:~add")
@@ -84,6 +95,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * add_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~add")
@@ -96,6 +109,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * add_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~add")
@@ -108,6 +123,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * copy
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -117,6 +134,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * copy_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~copy", error="sftl:~copy")
@@ -126,6 +145,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * copy_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~copy")
@@ -138,6 +159,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * copy_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~copy")
@@ -150,6 +173,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * edit
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -159,6 +184,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * edit_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~edit", error="sftl:~edit")
@@ -168,6 +195,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * edit_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~edit")
@@ -180,6 +209,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * edit_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~edit")
@@ -192,6 +223,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * delete
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -201,6 +234,8 @@ public class ResourceEditAction extends GenericEditAction<Resource> {
 
 	/**
 	 * delete_execute
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~delete")

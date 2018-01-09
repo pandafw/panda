@@ -18,7 +18,7 @@ import panda.mvc.validation.annotation.Validates;
 })
 public class Resource extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = 261888793L;
+	private static final long serialVersionUID = -761008424L;
 
 	/**
 	 * Constructor
@@ -165,6 +165,7 @@ public class Resource extends SUBean implements Serializable {
 
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(Resource src) {
 		this.id = src.id;

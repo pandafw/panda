@@ -28,6 +28,8 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 	 *----------------------------------------------------------------------*/
 	/**
 	 * bdelete
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -37,6 +39,8 @@ public class PropertyBulkAction extends GenericBulkAction<Property> {
 
 	/**
 	 * bdelete_execute
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~bdelete")

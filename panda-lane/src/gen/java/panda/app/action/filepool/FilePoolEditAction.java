@@ -23,6 +23,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 	 *----------------------------------------------------------------------*/
 	/**
 	 * view
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -32,6 +34,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 
 	/**
 	 * view_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~view", error="sftl:~view")
@@ -41,6 +45,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 
 	/**
 	 * print
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -50,6 +56,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 
 	/**
 	 * print_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~print", error="sftl:~print")
@@ -59,6 +67,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 
 	/**
 	 * delete
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -68,6 +78,8 @@ public abstract class FilePoolEditAction extends GenericEditAction<DaoFileItem> 
 
 	/**
 	 * delete_execute
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~delete")

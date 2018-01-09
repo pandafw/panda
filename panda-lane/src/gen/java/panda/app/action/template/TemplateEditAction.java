@@ -26,6 +26,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 	 *----------------------------------------------------------------------*/
 	/**
 	 * view
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -35,6 +37,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * view_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~view", error="sftl:~view")
@@ -44,6 +48,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * print
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -53,6 +59,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * print_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~print", error="sftl:~print")
@@ -62,6 +70,7 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * add
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -71,6 +80,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * add_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~add", error="sftl:~add")
@@ -80,6 +91,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * add_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~add")
@@ -92,6 +105,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * add_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~add")
@@ -104,6 +119,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * copy
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -113,6 +130,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * copy_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~copy", error="sftl:~copy")
@@ -122,6 +141,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * copy_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~copy")
@@ -134,6 +155,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * copy_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~copy")
@@ -146,6 +169,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * edit
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -155,6 +180,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * edit_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~edit", error="sftl:~edit")
@@ -164,6 +191,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * edit_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~edit")
@@ -176,6 +205,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * edit_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~edit")
@@ -188,6 +219,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * delete
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -197,6 +230,8 @@ public abstract class TemplateEditAction extends GenericEditAction<Template> {
 
 	/**
 	 * delete_execute
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~delete")

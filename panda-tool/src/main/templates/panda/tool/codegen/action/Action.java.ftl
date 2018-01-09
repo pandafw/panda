@@ -87,11 +87,15 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	/*----------------------------------------------------------------------*
 	 * Joins
 	 *----------------------------------------------------------------------*/
+	/**
+	 * add query joins
+	 * @param dq data query
+	 */
 	@Override
-	protected void addQueryJoins(DataQuery<${entityBeanClass}> gq) {
-		super.addQueryJoins(gq);
+	protected void addQueryJoins(DataQuery<${entityBeanClass}> dq) {
+		super.addQueryJoins(dq);
 
-		${entityBeanClass}Query eq = new ${entityBeanClass}Query(gq);
+		${entityBeanClass}Query eq = new ${entityBeanClass}Query(dq);
 <#if action.autoJoin == "all">
 	<#list entity.joinMap?keys as k>
 		eq.autoJoin${k?upper_case}();
@@ -123,6 +127,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#if ui.template == "list">
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -133,6 +139,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("list_popup")>
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -143,6 +151,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("list_print")>
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -153,6 +163,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif [ "list_csv", "list_tsv", "list_xls", "list_xlsx", "expo_csv", "expo_tsv", "expo_xls", "expo_xlsx" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -186,6 +198,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif [ "list_json", "list_xml", "expo_json", "expo_xml" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(all=View.${ui.template?keep_after('_')?upper_case})
@@ -196,6 +210,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif [ "list_pdf", "expo_pdf" ]?seq_contains(ui.template)>
 	/**
 	 * ${ui.name}
+	 * @param qr queryer
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -206,6 +222,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("import")>
 	/**
 	 * ${ui.name}
+	 * @param arg argument
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -216,6 +234,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("bdelete")>
 	/**
 	 * ${ui.name}
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -225,6 +245,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -235,6 +257,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("bupdate")>
 	/**
 	 * ${ui.name}
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -244,6 +268,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -254,6 +280,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("bedit")>
 	/**
 	 * ${ui.name}
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -263,6 +290,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -272,6 +300,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_confirm
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -281,6 +310,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -294,6 +324,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#if ui.template == ("view")>
 	/**
 	 * ${ui.name}
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -303,6 +335,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -313,6 +347,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("print")>
 	/**
 	 * ${ui.name}
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -322,6 +358,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -332,6 +370,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("add")>
 	/**
 	 * ${ui.name}
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -341,6 +380,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -350,6 +391,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -359,6 +402,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -369,6 +414,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("copy")>
 	/**
 	 * ${ui.name}
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -378,6 +425,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -387,6 +436,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -396,6 +447,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -406,6 +459,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("edit")>
 	/**
 	 * ${ui.name}
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -415,6 +470,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_input
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value="sftl:~${gen.trimMethodName(ui.name)}", error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -424,6 +481,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_confirm
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -433,6 +492,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param data the input data
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${gen.trimMethodName(ui.name)}")
@@ -443,6 +504,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#elseif ui.template == ("delete")>
 	/**
 	 * ${ui.name}
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
@@ -452,6 +515,8 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 	/**
 	 * ${ui.name}_execute
+	 * @param key the input key
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~${ui.name}")

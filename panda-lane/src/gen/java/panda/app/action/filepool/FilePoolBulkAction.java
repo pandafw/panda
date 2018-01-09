@@ -24,6 +24,8 @@ public abstract class FilePoolBulkAction extends GenericBulkAction<DaoFileItem> 
 	 *----------------------------------------------------------------------*/
 	/**
 	 * bdelete
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -33,6 +35,8 @@ public abstract class FilePoolBulkAction extends GenericBulkAction<DaoFileItem> 
 
 	/**
 	 * bdelete_execute
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~bdelete")

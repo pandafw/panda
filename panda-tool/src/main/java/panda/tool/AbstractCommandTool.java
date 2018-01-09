@@ -60,6 +60,7 @@ public abstract class AbstractCommandTool {
 
 	/**
 	 * @param args arguments
+	 * @return exit code
 	 */
 	public int execute(String[] args) {
 		CmdLineParser clp = new CmdLineParser(this);

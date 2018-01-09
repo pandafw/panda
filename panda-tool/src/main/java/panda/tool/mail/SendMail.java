@@ -149,6 +149,7 @@ public class SendMail extends AbstractCommandTool {
 
 	/**
 	 * @param file the message file to set
+	 * @throws IOException if an IO error occurred
 	 */
 	@Option(opt='M', option="file", arg="FILE", usage="Mail message file")
 	public void setMessageFile(String file) throws IOException {

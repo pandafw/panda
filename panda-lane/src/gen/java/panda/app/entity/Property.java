@@ -17,7 +17,7 @@ import panda.mvc.validation.annotation.Validates;
 })
 public class Property extends SUBean implements Serializable {
 
-	private static final long serialVersionUID = -739036720L;
+	private static final long serialVersionUID = 140558409L;
 
 	/**
 	 * Constructor
@@ -210,6 +210,7 @@ public class Property extends SUBean implements Serializable {
 
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(Property src) {
 		this.id = src.id;

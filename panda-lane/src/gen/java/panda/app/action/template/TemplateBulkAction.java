@@ -28,6 +28,8 @@ public class TemplateBulkAction extends GenericBulkAction<Template> {
 	 *----------------------------------------------------------------------*/
 	/**
 	 * bdelete
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error=View.SFTL)
@@ -37,6 +39,8 @@ public class TemplateBulkAction extends GenericBulkAction<Template> {
 
 	/**
 	 * bdelete_execute
+	 * @param args arguments
+	 * @return result or view
 	 */
 	@At
 	@To(value=View.SFTL, error="sftl:~bdelete")

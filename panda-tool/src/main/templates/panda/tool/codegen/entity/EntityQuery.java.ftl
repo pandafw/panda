@@ -59,6 +59,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 <#list entity.joinMap?keys as k>
 	/**
 	 * auto left join ${k}
+	 * @return this
 	 */
 	public ${name} autoLeftJoin${k}() {
 		autoLeftJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
@@ -68,6 +69,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	/**
 	 * auto left join ${k}
 	 * @param jq join table query
+	 * @return this
 	 */
 	public ${name} autoLeftJoin${k}(Query<?> jq) {
 		autoLeftJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
@@ -76,6 +78,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 
 	/**
 	 * auto right join ${k}
+	 * @return this
 	 */
 	public ${name} autoRightJoin${k}() {
 		autoRightJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
@@ -85,6 +88,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	/**
 	 * auto right join ${k}
 	 * @param jq join table query
+	 * @return this
 	 */
 	public ${name} autoRightJoin${k}(Query<?> jq) {
 		autoRightJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
@@ -93,6 +97,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 
 	/**
 	 * auto inner join ${k}
+	 * @return this
 	 */
 	public ${name} autoInnerJoin${k?upper_case}() {
 		autoInnerJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
@@ -102,6 +107,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	/**
 	 * auto inner join ${k}
 	 * @param jq join table query
+	 * @return this
 	 */
 	public ${name} autoInnerJoin${k?upper_case}(Query<?> jq) {
 		autoInnerJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
@@ -110,6 +116,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 
 	/**
 	 * auto join ${k}
+	 * @return this
 	 */
 	public ${name} autoJoin${k}() {
 		autoJoin(${entity.simpleName}._JOIN_${k?upper_case}_);
@@ -119,6 +126,7 @@ public class ${name} extends ${class_name(entity.baseQueryClass)}<${entity.simpl
 	/**
 	 * auto join ${k}
 	 * @param jq join table query
+	 * @return this
 	 */
 	public ${name} autoJoin${k}(Query<?> jq) {
 		autoJoin(${entity.simpleName}._JOIN_${k?upper_case}_, jq);
