@@ -177,7 +177,7 @@ public class FastDateParser implements DateParser, Serializable {
      * Parse format into Strategies
      */
     private class StrategyParser {
-        final private Calendar definingCalendar;
+        private final Calendar definingCalendar;
         private int currentIdx;
 
         StrategyParser(final Calendar definingCalendar) {
@@ -844,6 +844,8 @@ public class FastDateParser implements DateParser, Serializable {
                         break;
                     case 5: // offset 5 starts additional names, probably standard time
                         tzInfo = standard;
+                        break;
+                    default:
                         break;
                     }
                     if (zoneNames[i] != null) {

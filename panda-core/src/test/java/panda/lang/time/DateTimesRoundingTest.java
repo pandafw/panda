@@ -55,6 +55,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Tests DateTimes.round()-method with Calendar.Year
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundYear() throws Exception {
@@ -68,6 +69,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.MONTH Includes rounding months with 28, 29, 30
 	 * and 31 days Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundMonth() throws Exception {
@@ -108,6 +110,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with DateTimes.SEMI_MONTH Includes rounding months with 28,
 	 * 29, 30 and 31 days, each with first and second half Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundSemiMonth() throws Exception {
@@ -172,6 +175,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.DATE Includes rounding the extremes of one day
 	 * Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundDate() throws Exception {
@@ -193,6 +197,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.DAY_OF_MONTH Includes rounding the extremes of
 	 * one day Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundDayOfMonth() throws Exception {
@@ -214,6 +219,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.AM_PM Includes rounding the extremes of both AM
 	 * and PM of one day Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundAmPm() throws Exception {
@@ -242,6 +248,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.HOUR_OF_DAY Includes rounding the extremes of
 	 * one hour Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundHourOfDay() throws Exception {
@@ -263,7 +270,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.HOUR Includes rounding the extremes of one hour
 	 * Includes rounding to January 1
-	 * 
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundHour() throws Exception {
@@ -285,6 +292,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.MINUTE Includes rounding the extremes of one
 	 * minute Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundMinute() throws Exception {
@@ -306,6 +314,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.SECOND Includes rounding the extremes of one
 	 * second Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundSecond() throws Exception {
@@ -327,6 +336,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Tests DateTimes.round()-method with Calendar.MILLISECOND Includes rounding the extremes of
 	 * one second Includes rounding to January 1
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundMilliSecond() throws Exception {
@@ -345,6 +355,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.YEAR
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateYear() throws Exception {
@@ -355,6 +366,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.MONTH
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateMonth() throws Exception {
@@ -367,6 +379,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Test DateTimes.truncate()-method with DateTimes.SEMI_MONTH Includes truncating months with
 	 * 28, 29, 30 and 31 days, each with first and second half
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateSemiMonth() throws Exception {
@@ -417,6 +430,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.DATE
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateDate() throws Exception {
@@ -427,6 +441,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.DAY_OF_MONTH
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateDayOfMonth() throws Exception {
@@ -438,6 +453,7 @@ public class DateTimesRoundingTest {
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.AM_PM Includes truncating the extremes of both
 	 * AM and PM of one day
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateAmPm() throws Exception {
@@ -454,6 +470,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.HOUR
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateHour() throws Exception {
@@ -464,6 +481,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.HOUR_OF_DAY
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateHourOfDay() throws Exception {
@@ -474,6 +492,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.MINUTE
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateMinute() throws Exception {
@@ -484,6 +503,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.SECOND
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateSecond() throws Exception {
@@ -494,6 +514,7 @@ public class DateTimesRoundingTest {
 
 	/**
 	 * Test DateTimes.truncate()-method with Calendar.SECOND
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateMilliSecond() throws Exception {

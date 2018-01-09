@@ -238,7 +238,7 @@ public class DateTimesTest {
 		
 		//TODO: bugfix
 		Date date = DateTimes.parse(dateStr, parsers);
-		//assertEquals(cal.getTime(), date);
+		assertEquals(cal.getTime(), date);
 
 		dateStr = "1972-338";
 		date = DateTimes.parse(dateStr, parsers);
@@ -628,6 +628,7 @@ public class DateTimesTest {
 	// -----------------------------------------------------------------------
 	/**
 	 * Tests various values with the round method
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRound() throws Exception {
@@ -796,6 +797,7 @@ public class DateTimesTest {
 	/**
 	 * Tests the Changes Made by LANG-346 to the DateTimes.modify() private method invoked by
 	 * DateTimes.round().
+	 * @throws Exception error
 	 */
 	@Test
 	public void testRoundLang346() throws Exception {
@@ -850,6 +852,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests various values with the trunc method
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncate() throws Exception {
@@ -1009,6 +1012,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests for LANG-59 see http://issues.apache.org/jira/browse/LANG-59
+	 * @throws Exception error
 	 */
 	@Test
 	public void testTruncateLang59() throws Exception {
@@ -1088,6 +1092,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests various values with the ceiling method
+	 * @throws Exception error
 	 */
 	@Test
 	public void testCeil() throws Exception {
@@ -1288,6 +1293,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests various values with the ceiling method
+	 * @throws Exception error
 	 */
 	@Test
 	public void testZeroCeil() throws Exception {
@@ -1315,6 +1321,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests the iterator exceptions
+	 * @throws Exception error
 	 */
 	@Test
 	public void testIteratorEx() throws Exception {
@@ -1351,6 +1358,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests the calendar iterator for week ranges
+	 * @throws Exception error
 	 */
 	@Test
 	public void testWeekIterator() throws Exception {
@@ -1403,6 +1411,7 @@ public class DateTimesTest {
 
 	/**
 	 * Tests the calendar iterator for month-based ranges
+	 * @throws Exception error
 	 */
 	@Test
 	public void testMonthIterator() throws Exception {

@@ -327,6 +327,7 @@ public class FastDatePrinterTest {
      * the format method did contain a bug: it did not use the TimeZone data.
      *
      * This method test that the bug is fixed.
+	 * @throws Exception error
      */
     @Test
     public void testLang916() throws Exception {

@@ -65,6 +65,10 @@ public class FastDateParserTest {
 
 	/**
 	 * Override this method in derived tests to change the construction of instances
+	 * @param format format
+	 * @param timeZone time zone
+	 * @param locale locale
+	 * @return DateParser
 	 */
 	protected DateParser getInstance(final String format, final TimeZone timeZone, final Locale locale) {
         return new FastDateParser(format, timeZone, locale, null);
@@ -488,6 +492,7 @@ public class FastDateParserTest {
 
 	/**
 	 * Tests that pre-1000AD years get padded with yyyy
+	 * @throws ParseException error
 	 */
 	@Test
 	public void testLowYearPadding() throws ParseException {
@@ -506,6 +511,7 @@ public class FastDateParserTest {
 	}
 
 	/**
+	 * @throws ParseException error
 	 */
 	@Test
 	public void testMilleniumBug() throws ParseException {
