@@ -2,12 +2,12 @@ package panda.el.opt.logic;
 
 import panda.el.El;
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * or(||)
  */
-public class OrOpt extends TwoOpt {
+public class OrOpt extends AbstractTwoOpt {
 
 	public int getPriority() {
 		return 12;

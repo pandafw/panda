@@ -2,12 +2,12 @@ package panda.el.opt.logic;
 
 import panda.el.ElContext;
 import panda.el.ElException;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * and
  */
-public class AndOpt extends TwoOpt {
+public class AndOpt extends AbstractTwoOpt {
 	public int getPriority() {
 		return 11;
 	}

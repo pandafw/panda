@@ -67,6 +67,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support put adding.
+     * @return true
      */
     public boolean isPutAddSupported() {
         return true;
@@ -80,6 +81,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support put changing.
+     * @return true
      */
     public boolean isPutChangeSupported() {
         return true;
@@ -93,6 +95,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * Default implementation returns isPutChangeSupported().
      * Override if your collection class does not support setValue but does
      * support put changing.
+     * @return true
      */
     public boolean isSetValueSupported() {
         return isPutChangeSupported();
@@ -105,6 +108,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support removal operations.
+     * @return true
      */
     public boolean isRemoveSupported() {
         return true;
@@ -117,6 +121,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns false.
      * Override if your map class structurally modifies on get.
+     * @return false
      */
     public boolean isGetStructuralModify() {
         return false;
@@ -140,6 +145,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support null keys.
+     * @return true
      */
     public boolean isAllowNullKey() {
         return true;
@@ -152,6 +158,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support null values.
+     * @return true
      */
     public boolean isAllowNullValue() {
         return true;
@@ -164,6 +171,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support duplicate values.
+     * @return true
      */
     public boolean isAllowDuplicateValues() {
         return true;
@@ -176,11 +184,15 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>
      * Default implementation returns true.
      * Override if your collection class does not support fast failure.
+     * @return true
      */
     public boolean isFailFastExpected() {
         return true;
     }
 
+    /**
+     * @return false
+     */
     public boolean areEqualElementsDistinguishable() {
         return false;
     }
@@ -191,6 +203,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      *  #getSampleValues()} and all array elements must be different. The
      *  default implementation constructs a set of String keys, and includes a
      *  single null key if {@link #isAllowNullKey()} returns <code>true</code>.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public K[] getSampleKeys() {
@@ -230,6 +243,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * <p>Override getOtherElements to return the results of this method if your
      * collection does not support heterogenous elements or the null element.
      * </p>
+     * @return array
      */
     public Object[] getOtherNonNullStringElements() {
         return new Object[] {
@@ -246,6 +260,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * {@link #isAllowNullValue()} returns <code>true</code>, and includes
      * two values that are the same if {@link #isAllowDuplicateValues()} returns
      * <code>true</code>.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public V[] getSampleValues() {
@@ -269,6 +284,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
      * {@link #isAllowNullValue()} returns <code>true</code>, and includes two values
      * that are the same if {@link #isAllowDuplicateValues()} returns
      * <code>true</code>.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public V[] getNewSampleValues() {
@@ -286,6 +302,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
     /**
      *  Helper method to add all the mappings described by
      * {@link #getSampleKeys()} and {@link #getSampleValues()}.
+     * @param m map
      */
     public void addSampleMappings(final Map<? super K, ? super V> m) {
 
@@ -350,6 +367,8 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
 
     /**
      * Creates a new Map Entry that is independent of the first and the map.
+     * @param entry entry
+     * @return entry
      */
     public static <K, V> Map.Entry<K, V> cloneMapEntry(final Map.Entry<K, V> entry) {
         final HashMap<K, V> map = new HashMap<K, V>();
@@ -643,6 +662,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
     /**
      * Compare the current serialized form of the Map
      * against the canonical version in SVN.
+     * @throws Exception error
      */
     public void testEmptyMapCompatibility() throws Exception {
         /**
@@ -665,6 +685,7 @@ public abstract class AbstractMapTest<K, V> extends AbstractObjectTest {
     /**
      * Compare the current serialized form of the Map
      * against the canonical version in SVN.
+     * @throws Exception error
      */
     public void testFullMapCompatibility() throws Exception {
         /**

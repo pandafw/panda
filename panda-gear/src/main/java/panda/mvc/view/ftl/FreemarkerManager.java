@@ -122,6 +122,8 @@ public class FreemarkerManager {
 	 * <li>sets up the object wrapper to be the BeansWrapper
 	 * <li>loads settings from the classpath file /freemarker.properties
 	 * </ul>
+	 * @throws IOException if an IO error occurred
+	 * @throws TemplateException if a template error occurred
 	 */
 	@SuppressWarnings("deprecation")
 	protected void initConfiguration() throws IOException, TemplateException {
@@ -146,6 +148,8 @@ public class FreemarkerManager {
 	/**
 	 * Load the settings from the /freemarker.properties file on the classpath
 	 * 
+	 * @throws IOException if an IO error occurred
+	 * @throws TemplateException if a template error occurred
 	 * @see freemarker.template.Configuration#setSettings for the definition of valid settings
 	 */
 	protected void loadSettings() throws IOException, TemplateException {

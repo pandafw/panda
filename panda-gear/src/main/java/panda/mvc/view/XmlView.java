@@ -22,6 +22,7 @@ public class XmlView extends AbstractBindView {
 	
 	/**
 	 * Constructor.
+	 * @param location the location
 	 */
 	public XmlView(String location) {
 		super(location);

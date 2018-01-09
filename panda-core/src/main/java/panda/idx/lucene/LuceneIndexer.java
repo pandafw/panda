@@ -103,6 +103,7 @@ public class LuceneIndexer implements Indexer {
 
 	/**
 	 * close
+	 * @throws IOException if an IO error occurred
 	 */
 	protected void close() throws IOException {
 		if (indexReader != null) {

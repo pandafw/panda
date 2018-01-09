@@ -51,6 +51,7 @@ public class SimpleNamingContext implements Context {
 
 	/**
 	 * Create a new naming context with the given naming root.
+	 * @param root root name
 	 */
 	public SimpleNamingContext(String root) {
 		this.root = root;
@@ -60,6 +61,9 @@ public class SimpleNamingContext implements Context {
 	/**
 	 * Create a new naming context with the given naming root,
 	 * the given name/object map, and the JNDI environment entries.
+	 * @param root root name
+	 * @param boundObjects bound objects
+	 * @param env environments
 	 */
 	public SimpleNamingContext(String root, Hashtable<String, Object> boundObjects, Hashtable<String, Object> env) {
 		this.root = root;

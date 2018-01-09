@@ -62,11 +62,10 @@ public class ThemeRenderEngine implements RendererEngine {
 	}
 
 	/**
-	 * Allows for providing custom theme classes (implementations of the
-	 * org.apache.struts2.views.java.Theme) interface for custom rendering of
-	 * tags using the javatemplates engine
+	 * Allows for providing custom theme classes (implementations of the Theme)
 	 * 
 	 * @param themes a space delimited list of theme class names
+	 * @throws Exception if a custom theme class could not be create
 	 */
 	@IocInject(value = MvcConstants.UI_CUSTOM_THEMES, required = false)
 	public void setThemeClasses(String themes) throws Exception {

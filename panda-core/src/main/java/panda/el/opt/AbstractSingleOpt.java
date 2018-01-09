@@ -6,9 +6,9 @@ import panda.el.ElContext;
 import panda.el.ElException;
 
 /**
- * Single Operator
+ * Abstract Single Operand Operator
  */
-public abstract class SingleOpt extends AbstractOpt {
+public abstract class AbstractSingleOpt extends AbstractOpt {
 	protected Object right;
 
 	public void wrap(Queue<Object> operand) {

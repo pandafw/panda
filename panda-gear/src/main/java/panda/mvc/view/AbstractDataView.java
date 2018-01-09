@@ -23,6 +23,7 @@ public abstract class AbstractDataView extends AbstractView {
 
 	/**
 	 * Constructor.
+	 * @param location the location
 	 */
 	public AbstractDataView(String location) {
 		super(location);

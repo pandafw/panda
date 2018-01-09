@@ -121,6 +121,7 @@ public class CUBean extends Bean implements ICreate, IUpdate {
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(CUBean src) {
 		this.cusid = src.cusid;

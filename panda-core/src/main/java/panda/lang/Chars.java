@@ -452,6 +452,8 @@ public abstract class Chars {
 	 * Checkes whether the character is non-breaking space ({@code '\u005Cu00A0'},
 	 *      {@code '\u005Cu2007'}, {@code '\u005Cu202F'}) or whitespace is stripped as defined by
 	 * {@link Character#isWhitespace(char)}.
+	 * @param ch char
+	 * @return is space
 	 */
 	public static boolean isSpace(char ch) {
 		return Character.isWhitespace(ch) || isNonBreakingSpace(ch);
@@ -460,6 +462,8 @@ public abstract class Chars {
 	/**
 	 * Checkes whether the character is non-breaking space ({@code '\u005Cu00A0'},
 	 *      {@code '\u005Cu2007'}, {@code '\u005Cu202F'})
+	 * @param ch char
+	 * @return is non breaking space
 	 */
 	public static boolean isNonBreakingSpace(char ch) {
 		return ch == '\u00A0' || ch == '\uu2007' || ch == '\u202F';

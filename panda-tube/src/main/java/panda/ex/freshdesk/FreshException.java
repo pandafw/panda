@@ -46,7 +46,8 @@ public class FreshException extends IOException {
 	}
 
 	/**
-	 * @param error
+	 * @param message error message
+	 * @param error error result
 	 */
 	public FreshException(String message, ErrorResult error) {
 		super(message);

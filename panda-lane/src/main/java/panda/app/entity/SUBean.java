@@ -85,6 +85,7 @@ public class SUBean extends Bean implements IStatus, IUpdate {
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(SUBean src) {
 		this.status = src.status;

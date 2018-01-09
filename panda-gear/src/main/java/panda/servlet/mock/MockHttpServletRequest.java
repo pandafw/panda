@@ -225,6 +225,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	/**
 	 * Return the ServletContext that this request is associated with. (Not
 	 * available in the standard HttpServletRequest interface for some reason.)
+	 * @return MockServletContext
 	 */
 	public MockServletContext getMockServletContext() {
 		return this.servletContext;
@@ -243,7 +244,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	}
 
 	/**
-	 * Return whether this request is still active (that is, not completed yet).
+	 * @return whether this request is still active (that is, not completed yet).
 	 */
 	public boolean isActive() {
 		return this.active;
@@ -267,6 +268,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	/**
 	 * Check whether this request is still active (that is, not completed yet),
 	 * throwing an IllegalStateException if not active anymore.
+	 * @throws IllegalStateException if request is not active
 	 */
 	protected void checkActive() throws IllegalStateException {
 		if (!this.active) {
@@ -346,6 +348,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * <p>
 	 * If there are already one or more values registered for the given
 	 * parameter name, they will be replaced.
+	 * @param name name
+	 * @param value value
 	 */
 	public void setParameter(String name, String value) {
 		setParameter(name, new String[] { value });
@@ -356,6 +360,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * <p>
 	 * If there are already one or more values registered for the given
 	 * parameter name, they will be replaced.
+	 * @param name name
+	 * @param values values
 	 */
 	public void setParameter(String name, String[] values) {
 		Asserts.notNull(name, "Parameter name must not be null");
@@ -366,6 +372,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * Sets all provided parameters <emphasis>replacing</emphasis> any existing
 	 * values for the provided parameter names. To add without replacing
 	 * existing values, use {@link #addParameters(java.util.Map)}.
+	 * @param params parameters
 	 */
 	@SuppressWarnings("rawtypes")
 	public void setParameters(Map params) {
@@ -391,6 +398,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * <p>
 	 * If there are already one or more values registered for the given
 	 * parameter name, the given value will be added to the end of the list.
+	 * @param name name
+	 * @param value value
 	 */
 	public void addParameter(String name, String value) {
 		addParameter(name, new String[] { value });
@@ -401,6 +410,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * <p>
 	 * If there are already one or more values registered for the given
 	 * parameter name, the given values will be added to the end of the list.
+	 * @param name name
+	 * @param values values
 	 */
 	public void addParameter(String name, String[] values) {
 		Asserts.notNull(name, "Parameter name must not be null");
@@ -420,6 +431,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * Adds all provided parameters <emphasis>without</emphasis> replacing any
 	 * existing values. To replace existing values, use
 	 * {@link #setParameters(java.util.Map)}.
+	 * @param params parameters
 	 */
 	@SuppressWarnings("unchecked")
 	public void addParameters(Map<String, Object> params) {
@@ -448,6 +460,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	/**
 	 * Remove already registered values for the specified HTTP parameter, if
 	 * any.
+	 * @param name name
 	 */
 	public void removeParameter(String name) {
 		Asserts.notNull(name, "Parameter name must not be null");
@@ -566,6 +579,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 	/**
 	 * Add a new preferred locale, before any existing locales.
+	 * @param locale locale
 	 */
 	public void addPreferredLocale(Locale locale) {
 		Asserts.notNull(locale, "Locale must not be null");
@@ -660,6 +674,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	 * repeated <code>addHeader</code> calls for individual elements, you can
 	 * use a single call with an entire array or Collection of values as
 	 * parameter.
+	 * @param name name
+	 * @param value value
 	 * @see #getHeaderNames
 	 * @see #getHeader
 	 * @see #getHeaders

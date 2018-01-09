@@ -23,6 +23,7 @@ public class XlsView extends AbstractDataView {
 
 	/**
 	 * Constructor.
+	 * @param location the location
 	 */
 	public XlsView(String location) {
 		super(location);
@@ -74,6 +75,7 @@ public class XlsView extends AbstractDataView {
 
 	/**
 	 * write result
+	 * @param os output stream
 	 * @param writer response writer
 	 * @param result result object
 	 * @throws IOException

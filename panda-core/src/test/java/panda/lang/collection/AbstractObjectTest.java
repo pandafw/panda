@@ -59,6 +59,7 @@ public abstract class AbstractObjectTest extends BulkTest {
     /**
      * Is serialization testing supported.
      * Default is true.
+     * @return true
      */
     public boolean isTestSerialization() {
         return true;
@@ -67,6 +68,7 @@ public abstract class AbstractObjectTest extends BulkTest {
     /**
      * Returns true to indicate that the collection supports equals() comparisons.
      * This implementation returns true;
+     * @return true
      */
     public boolean isEqualsCheckable() {
         return true;
@@ -133,6 +135,7 @@ public abstract class AbstractObjectTest extends BulkTest {
      * Sanity check method, makes sure that any Serializable
      * class can be serialized and de-serialized in memory,
      * using the handy makeObject() method
+     * @throws Exception error
      *
      */
     public void testSimpleSerialization() throws Exception {

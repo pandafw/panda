@@ -201,38 +201,57 @@ public abstract class InputUIBean extends UIBean {
 		return value;
 	}
 
-	/** Label expression used for rendering an element specific label */
+	/** 
+	 * Label expression used for rendering an element specific label 
+	 * @param label the label to set
+	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
-	/** String that will be appended to the label */
+	/** 
+	 * String that will be appended to the label 
+	 * @param labelseparator the labelseparator to set
+	 */
 	public void setLabelSeparator(String labelseparator) {
 		this.labelSeparator = labelseparator;
 	}
 
-	/** Define label position of form element (top/left) */
+	/**
+	 * Define label position of form element (top/left) 
+	 * @param labelPosition the labelPosition to set
+	 */
 	public void setLabelposition(String labelPosition) {
 		this.labelPosition = labelPosition;
 	}
 
-	/** Define required position of required form element (left|right) */
+	/** 
+	 * Define required position of required form element (left|right) 
+	 * @param requiredPosition the requiredPosition to set
+	 */
 	public void setRequiredPosition(String requiredPosition) {
 		this.requiredPosition = requiredPosition;
 	}
 
-	/** Define error position of form element (top|bottom) */
+	/**
+	 * Define error position of form element (top|bottom) 
+	 * @param errorPosition the errorPosition to set
+	 */
 	public void setErrorPosition(String errorPosition) {
 		this.errorPosition = errorPosition;
 	}
-
 	
-	/** required string */
+	/**
+	 * @param requiredString the requiredstring to set
+	 */
 	public void setRequiredString(String requiredString) {
 		this.requiredString = requiredString;
 	}
 
-	/** Set the key (name, value, label) for this particular component */
+	/**
+	 * Set the key (name, value, label) for this particular component 
+	 * @param key the key to set
+	 */
 	public void setKey(String key) {
 		this.key = key;
 	}

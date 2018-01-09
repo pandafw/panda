@@ -52,6 +52,7 @@ public class ProgressListenerTest extends FileUploadTestCase {
 
 	/**
 	 * Parse a very long file upload by using a progress listener.
+	 * @throws Exception Exception
 	 */
 	@Test
 	public void testProgressListener() throws Exception {

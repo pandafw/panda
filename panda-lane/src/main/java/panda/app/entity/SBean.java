@@ -28,6 +28,7 @@ public class SBean extends Bean implements IStatus {
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(SBean src) {
 		this.status = src.status;

@@ -1,12 +1,12 @@
 package panda.el.opt.bit;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * 与
  */
-public class BitAnd extends TwoOpt {
+public class BitAnd extends AbstractTwoOpt {
 	public int getPriority() {
 		return 8;
 	}

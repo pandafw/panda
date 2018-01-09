@@ -1,12 +1,12 @@
 package panda.el.opt.bit;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * Unsigned Right Shift: >>>
  */
-public class UnsignedRightShift extends TwoOpt {
+public class UnsignedRightShift extends AbstractTwoOpt {
 	public int getPriority() {
 		return 5;
 	}

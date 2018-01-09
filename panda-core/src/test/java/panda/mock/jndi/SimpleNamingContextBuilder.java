@@ -82,6 +82,7 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 	 * reinitialize JNDI bindings from scratch repeatedly.
 	 * @return an empty SimpleNamingContextBuilder that can be used
 	 * to control JNDI bindings
+	 * @throws NamingException if a error occurred
 	 */
 	public static SimpleNamingContextBuilder emptyActivatedContextBuilder() throws NamingException {
 		if (activated != null) {
@@ -107,6 +108,7 @@ public class SimpleNamingContextBuilder implements InitialContextFactoryBuilder 
 	 * static method to get an empty context (for example, in test methods).
 	 * @throws IllegalStateException if there's already a naming context builder
 	 * registered with the JNDI NamingManager
+	 * @throws NamingException if a error occurred
 	 */
 	public void activate() throws IllegalStateException, NamingException {
 		log.info("Activating simple JNDI environment");

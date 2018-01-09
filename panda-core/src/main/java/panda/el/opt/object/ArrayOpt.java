@@ -4,12 +4,12 @@ import java.lang.reflect.Array;
 import java.util.Map;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * 数组读取 将'['做为读取操作符使用,它读取两个参数,一个是数组本身,一个是下标 多维数组,则是先读出一维,然后再读取下一维度的数据
  */
-public class ArrayOpt extends TwoOpt {
+public class ArrayOpt extends AbstractTwoOpt {
 	public int getPriority() {
 		return 1;
 	}

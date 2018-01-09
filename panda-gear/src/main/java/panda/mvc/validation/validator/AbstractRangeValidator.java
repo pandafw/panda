@@ -4,6 +4,7 @@ import panda.mvc.ActionContext;
 
 /**
  * Base class for range based validators.
+ * @param <T> comparable type
  */
 public abstract class AbstractRangeValidator<T extends Comparable> extends AbstractValidator {
 

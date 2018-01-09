@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * "," 逗号操作符,将左右两边的数据组织成一个数据
  */
-public class CommaOpt extends TwoOpt {
+public class CommaOpt extends AbstractTwoOpt {
 	public int getPriority() {
 		return 90;
 	}

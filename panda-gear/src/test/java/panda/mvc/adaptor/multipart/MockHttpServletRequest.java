@@ -41,6 +41,8 @@ class MockHttpServletRequest implements HttpServletRequest {
 
 	/**
 	 * Creates a new instance with the given request data and content type.
+	 * @param requestData request data
+	 * @param strContentType content type
 	 */
 	public MockHttpServletRequest(final byte[] requestData, final String strContentType) {
 		this(new ByteArrayInputStream(requestData), requestData.length, strContentType);
@@ -48,6 +50,9 @@ class MockHttpServletRequest implements HttpServletRequest {
 
 	/**
 	 * Creates a new instance with the given request data and content type.
+	 * @param requestData request data
+	 * @param requestLength request data length
+	 * @param strContentType content type
 	 */
 	public MockHttpServletRequest(final InputStream requestData, final long requestLength, final String strContentType) {
 		m_requestData = requestData;
@@ -281,6 +286,7 @@ class MockHttpServletRequest implements HttpServletRequest {
 
 	/**
 	 * For testing attack scenarios in SizesTest.
+	 * @param length the content length
 	 */
 	public void setContentLength(long length) {
 		this.length = length;
@@ -474,6 +480,8 @@ class MockHttpServletRequest implements HttpServletRequest {
 
 		/**
 		 * Creates a new instance, which returns the given streams data.
+		 * @param pStream input stream
+		 * @param readLimit read limit
 		 */
 		public MyServletInputStream(InputStream pStream, int readLimit) {
 			in = pStream;

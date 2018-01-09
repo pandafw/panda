@@ -5,12 +5,14 @@ import panda.app.constant.VAL;
 public abstract class Bean {
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(Bean src) {
 	}
 
 	/**
 	 * is this data active
+	 * @param bean the bean object
 	 * @return true if bean is valid
 	 */
 	public static boolean isActive(IStatus bean) {
@@ -19,6 +21,7 @@ public abstract class Bean {
 	
 	/**
 	 * is this data disabled
+	 * @param bean the bean object
 	 * @return true if bean is disabled
 	 */
 	public static boolean isDisabled(IStatus bean) {
@@ -27,6 +30,7 @@ public abstract class Bean {
 	
 	/**
 	 * is this data trashed
+	 * @param bean the bean object
 	 * @return true if bean is trashed
 	 */
 	public static boolean isTrashed(IStatus bean) {

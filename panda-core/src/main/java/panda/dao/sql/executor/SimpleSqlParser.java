@@ -456,8 +456,9 @@ public class SimpleSqlParser extends JdbcSqlParser {
 	/**
 	 * compile sql to segments
 	 * 
-	 * @param sql sql
+	 * @param sql sql string
 	 * @param segments segments
+	 * @param keepComments keep comments or not
 	 */
 	protected void compile(String sql, List<SqlSegment> segments, boolean keepComments) {
 		int i;

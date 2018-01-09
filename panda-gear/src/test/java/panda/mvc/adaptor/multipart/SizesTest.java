@@ -25,6 +25,7 @@ public class SizesTest extends FileUploadTestCase {
 
 	/**
 	 * Runs a test with varying file sizes.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFileUpload() throws IOException {
@@ -66,6 +67,7 @@ public class SizesTest extends FileUploadTestCase {
 
 	/**
 	 * Checks, whether limiting the file size works.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFileSizeLimit() throws IOException {
@@ -105,6 +107,7 @@ public class SizesTest extends FileUploadTestCase {
 
 	/**
 	 * Checks, whether a faked Content-Length header is detected.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFileSizeLimitWithFakedContentLength() throws IOException {
@@ -157,6 +160,7 @@ public class SizesTest extends FileUploadTestCase {
 
 	/**
 	 * Checks, whether the maxSize works.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testMaxSizeLimit() throws IOException {

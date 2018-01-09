@@ -53,6 +53,7 @@ public class Checkbox extends InputUIBean {
 
 	/**
 	 * The actual HTML value attribute of the checkbox
+	 * @param fieldValue the fieldValue to set
 	 */
 	public void setFieldValue(String fieldValue) {
 		this.fieldValue = fieldValue;

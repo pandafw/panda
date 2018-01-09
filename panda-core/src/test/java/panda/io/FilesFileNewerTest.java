@@ -89,6 +89,7 @@ public class FilesFileNewerTest extends FileBasedTestCase {
 	 * @param description describes the tested situation
 	 * @param file the file of which the last modification date is compared
 	 * @param time the time reference measured in milliseconds since the epoch
+	 * @param wantedResult wanted result
 	 * @see Files#isFileNewer(File, long)
 	 * @see Files#isFileNewer(File, Date)
 	 * @see Files#isFileNewer(File, File)

@@ -151,6 +151,7 @@ public class ThreadCreator implements ThreadFactory {
 	 * <p>Default implementation returns the specified thread name prefix
 	 * with an increasing thread count appended: for example,
 	 * "SimpleAsyncTaskExecutor-0".
+	 * @return the next thread name prefix
 	 * @see #getThreadNamePrefix()
 	 */
 	protected String nextThreadName() {

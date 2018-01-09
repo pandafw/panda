@@ -177,7 +177,9 @@ public abstract class EntityHelper {
 
 	/**
 	 * findIncorrectForeignKey
-	 * @param data
+	 * @param dao dao
+	 * @param entity entity
+	 * @param data data
 	 * @return true if check successfully
 	 */
 	public static <T> EntityFKey findIncorrectForeignKey(Dao dao, Entity<T> entity, T data) {

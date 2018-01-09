@@ -323,6 +323,8 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 
 	/**
 	 * format and escape value
+	 * @param v value
+	 * @return formatted string
 	 */
 	public String formatValue(Object v) {
 		return formatValue(v, null, null);
@@ -330,6 +332,9 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 
 	/**
 	 * format and escape value
+	 * @param v value
+	 * @param format format
+	 * @return formatted string
 	 */
 	public String formatValue(Object v, String format) {
 		return formatValue(v, format, null);
@@ -337,6 +342,10 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	
 	/**
 	 * format and escape value
+	 * @param value value
+	 * @param format format
+	 * @param escape escape method
+	 * @return formatted string
 	 */
 	public String formatValue(Object value, String format, String escape) {
 		return formatValue(value, format, null, escape);
@@ -344,6 +353,11 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 	
 	/**
 	 * format and escape value
+	 * @param value value
+	 * @param format format
+	 * @param pattern pattern
+	 * @param escape escape method
+	 * @return formatted string
 	 */
 	public String formatValue(Object value, String format, String pattern, String escape) {
 		if (value != null) {

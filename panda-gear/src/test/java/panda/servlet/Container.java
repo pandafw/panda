@@ -39,7 +39,9 @@ public final class Container {
 		classMappings.put("com.ibm.ws.webcontainer.jsp.servlet.JspServlet", new Integer(WEBSPHERE));
 	}
 
-	/** Get the current container. */
+	/**
+	 * @return the current container
+	 */
 	public static int i() {
 		if (result == -1) {
 			final String classMatch = searchForClosestClass(classMappings);

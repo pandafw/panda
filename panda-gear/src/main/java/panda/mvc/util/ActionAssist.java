@@ -222,6 +222,7 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param order the order to reverse
 	 * @return reverse order
 	 */
 	public String reverseOrder(String order) {
@@ -230,6 +231,8 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param str string to escape
+	 * @return escaped html string
 	 * @see StringEscapes#escapeHtml(CharSequence)
 	 */
 	public String escapeHtml(CharSequence str) {
@@ -237,6 +240,8 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param str string to escape
+	 * @return escaped phtml string
 	 * @see StringEscapes#escapePhtml(CharSequence)
 	 */
 	public String escapePhtml(CharSequence str) {
@@ -244,6 +249,8 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param str string to escape
+	 * @return escaped java string
 	 * @see StringEscapes#escapeJava(CharSequence)
 	 */
 	public String escapeJava(CharSequence str) {
@@ -251,6 +258,8 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param str string to escape
+	 * @return escaped javascript string
 	 * @see StringEscapes#escapeJavaScript(CharSequence)
 	 */
 	public String escapeJavaScript(CharSequence str) {
@@ -258,6 +267,8 @@ public class ActionAssist extends ActionSupport {
 	}
 
 	/**
+	 * @param str string to escape
+	 * @return escaped xml string
 	 * @see StringEscapes#escapeXml(CharSequence)
 	 */
 	public String escapeXml(CharSequence str) {
@@ -265,6 +276,8 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
+	 * @param str string to escape
+	 * @return escaped csv string
 	 * @see StringEscapes#escapeCsv(CharSequence)
 	 */
 	public String escapeCsv(CharSequence str) {
@@ -272,6 +285,8 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
+	 * @param size file size
+	 * @return formatted string
 	 * @see Files#toDisplaySize(Long)
 	 */
 	public String formatFileSize(Long size) {
@@ -279,6 +294,11 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * 
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted text
 	 * @see Texts#ellipsis(String, int)
 	 */
 	public String ellipsis(String str, int len) {
@@ -286,6 +306,12 @@ public class ActionAssist extends ActionSupport {
 	}
 	
 	/**
+	 * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
+	 * the length of charCodeAt(i) > 0xFF will be treated as 2.
+	 * 
+	 * @param str value The string to truncate
+	 * @param len length The maximum length to allow before truncating
+	 * @return The converted text
 	 * @see Texts#ellipsiz(String, int)
 	 */
 	public String ellipsiz(String str, int len) {
@@ -334,6 +360,9 @@ public class ActionAssist extends ActionSupport {
 
 	/**
 	 * find value in context
+	 * @param expr expression
+	 * @return value
+	 * @see Mvcs#findValue(panda.mvc.ActionContext, String)
 	 */
 	public Object findValue(String expr) {
 		return Mvcs.findValue(getContext(), expr);
@@ -341,6 +370,11 @@ public class ActionAssist extends ActionSupport {
 	
 	/**
 	 * find value in context with argument
+	 * @param ac action context
+	 * @param expr expression
+	 * @param arg argument
+	 * @return value
+	 * @see Mvcs#findValue(panda.mvc.ActionContext, String, Object)
 	 */
 	public Object findValue(String expr, Object arg) {
 		return Mvcs.findValue(getContext(), expr, arg);

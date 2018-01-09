@@ -1,12 +1,12 @@
 package panda.el.opt.bit;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * Left Shift: <<
  */
-public class LeftShift extends TwoOpt {
+public class LeftShift extends AbstractTwoOpt {
 	public int getPriority() {
 		return 5;
 	}

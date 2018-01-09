@@ -21,6 +21,7 @@ public class StreamingTest extends FileUploadTestCase {
 
 	/**
 	 * Tests a file upload with varying file sizes.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFileUpload() throws IOException {
@@ -46,6 +47,7 @@ public class StreamingTest extends FileUploadTestCase {
 
 	/**
 	 * Tests, whether an invalid request throws a proper exception.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFileUploadException() throws IOException {
@@ -63,6 +65,7 @@ public class StreamingTest extends FileUploadTestCase {
 
 	/**
 	 * Tests, whether an IOException is properly delegated.
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testIOException() throws IOException {
@@ -102,6 +105,7 @@ public class StreamingTest extends FileUploadTestCase {
 
 	/**
 	 * Test for FILEUPLOAD-135
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFILEUPLOAD135() throws IOException {

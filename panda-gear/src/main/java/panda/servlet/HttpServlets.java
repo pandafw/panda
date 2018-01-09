@@ -682,7 +682,7 @@ public class HttpServlets {
 
 	/**
 	 * Retrieve the content length of the request.
-	 * 
+	 * @param request http servlet request
 	 * @return The content length of the request.
 	 */
 	public static long getContentLength(HttpServletRequest request) {
@@ -697,6 +697,7 @@ public class HttpServlets {
 	}
 
 	/**
+	 * @param request http servlet request
 	 * @return userAgent
 	 */
 	public static UserAgent getUserAgent(HttpServletRequest request) {
@@ -714,6 +715,7 @@ public class HttpServlets {
 
 	/**
 	 * @param request request
+	 * @param defaultEncoding default encoding
 	 * @return character encoding
 	 */
 	public static String getEncoding(HttpServletRequest request, String defaultEncoding) {
@@ -769,6 +771,7 @@ public class HttpServlets {
 	 * 
 	 * @param response response
 	 * @param name the cookie's name
+	 * @param path the cookie's path
 	 */
 	public static void removeCookie(HttpServletResponse response, String name, String path) {
 		Cookie c = new Cookie(name, Strings.EMPTY);
@@ -788,6 +791,7 @@ public class HttpServlets {
 	/**
 	 * encode file name by User-Agent
 	 * @param request request
+	 * @param charset the charset
 	 * @param filename file name
 	 * @return encoded file name
 	 * @throws UnsupportedEncodingException  if an error occurs
@@ -850,6 +854,7 @@ public class HttpServlets {
 	/**
 	 * Set cache control to response header
 	 * @param response HttpServletResponse
+	 * @param maxAge max age for the response
 	 */
 	public static void setResponseCache(HttpServletResponse response, int maxAge) {
 		setResponseCache(response, maxAge, HttpHeader.CACHE_CONTROL_PUBLIC);
@@ -858,6 +863,8 @@ public class HttpServlets {
 	/**
 	 * Set cache control to response header
 	 * @param response HttpServletResponse
+	 * @param maxAge max age
+	 * @param cacheControl cache control
 	 */
 	public static void setResponseCache(HttpServletResponse response, int maxAge, String cacheControl) {
 		String cc = "max-age=" + maxAge;
@@ -906,6 +913,7 @@ public class HttpServlets {
 	/**
 	 * @param res response 
 	 * @param url redirect url
+	 * @param permanently 301 or 302
 	 */
 	public static void sendRedirect(HttpServletResponse res, String url, boolean permanently) {
 		res.setStatus(permanently ? HttpServletResponse.SC_MOVED_PERMANENTLY : HttpServletResponse.SC_MOVED_TEMPORARILY);
@@ -924,6 +932,7 @@ public class HttpServlets {
 	/**
 	 * @param res response 
 	 * @param url redirect url
+	 * @param encode encode redirect url
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void writeRedirect(HttpServletResponse res, String url, boolean encode) throws IOException {
@@ -945,6 +954,7 @@ public class HttpServlets {
 
 	/**
 	 * @param res response 
+	 * @param sc status code
 	 */
 	public static void sendError(HttpServletResponse res, int sc) {
 		try {

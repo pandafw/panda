@@ -31,6 +31,7 @@ public class CommonLoggingLogger implements org.apache.commons.logging.Log, Seri
 
 	/**
 	 * Base constructor.
+	 * @param name log name
 	 */
 	public CommonLoggingLogger(String name) {
 		this.name = name;
@@ -39,6 +40,7 @@ public class CommonLoggingLogger implements org.apache.commons.logging.Log, Seri
 
 	/**
 	 * For use with a log factory.
+	 * @param logger log object
 	 */
 	public CommonLoggingLogger(Log logger) {
 		if (logger == null) {
@@ -176,6 +178,7 @@ public class CommonLoggingLogger implements org.apache.commons.logging.Log, Seri
 
 	/**
 	 * Return the native Logger instance we are using.
+	 * @return the log object
 	 */
 	public Log getLogger() {
 		Log result = logger;

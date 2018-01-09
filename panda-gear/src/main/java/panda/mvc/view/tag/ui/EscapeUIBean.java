@@ -12,7 +12,9 @@ public abstract class EscapeUIBean extends UIBean {
 		return escape;
 	}
 
-	/** Whether to escape HTML */
+	/** 
+	 * @param escape the escape to set
+	 */
 	public void setEscape(boolean escape) {
 		this.escape = escape;
 	}

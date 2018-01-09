@@ -59,6 +59,7 @@ public class AppCacheFactory {
 
 	/**
 	 * initialize
+	 * @throws Exception if an error occurred
 	 */
 	public void initialize() throws Exception {
 		cache = buildCache();

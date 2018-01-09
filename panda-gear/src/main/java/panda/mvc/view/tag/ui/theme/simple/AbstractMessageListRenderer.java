@@ -11,6 +11,7 @@ import panda.mvc.view.tag.ui.theme.RenderingContext;
 
 /**
  * Base class for ActionError and ActionMessage
+ * @param <T> bean type
  */
 public abstract class AbstractMessageListRenderer<T extends EscapeUIBean> extends AbstractEndRenderer<T> {
 	

@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
  * If your {@link List} fails one of these tests by design, you may still use this base set of
  * cases. Simply override the test case (method) your {@link List} fails or override one of the
  * protected methods from AbstractCollectionTest.
+ * @param <E> element type
  */
 public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 
@@ -41,6 +42,7 @@ public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 	 * {@link #makeFullCollection()} support the <code>set operation.
 	 * <p>
 	 * Default implementation returns true. Override if your collection class does not support set.
+	 * @return true
 	 */
 	public boolean isSetSupported() {
 		return true;
@@ -1057,6 +1059,8 @@ public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 
 	/**
 	 * Compare the current serialized form of the List against the canonical version in SVN.
+	 * @throws IOException error
+	 * @throws ClassNotFoundException error
 	 */
 	@SuppressWarnings("unchecked")
 	public void testEmptyListCompatibility() throws IOException, ClassNotFoundException {
@@ -1077,6 +1081,8 @@ public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 
 	/**
 	 * Compare the current serialized form of the List against the canonical version in SVN.
+	 * @throws IOException error
+	 * @throws ClassNotFoundException error
 	 */
 	@SuppressWarnings("unchecked")
 	public void testFullListCompatibility() throws IOException, ClassNotFoundException {
@@ -1107,6 +1113,7 @@ public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 	 * 10. Each sublist is 6 elements smaller than its parent list. (By default this means that two
 	 * rounds of sublists will be tested). The verify() method is overloaded to test that the
 	 * original list is modified when the sublist is.
+	 * @return bulk test
 	 */
 	public BulkTest bulkTestSubList() {
 		if (getFullElements().length - 6 < 10) {
@@ -1265,6 +1272,7 @@ public abstract class AbstractListTest<E> extends AbstractCollectionTest<E> {
 	/**
 	 * Invokes all the methods on the given sublist to make sure they raise a
 	 * {@link java.util.ConcurrentModificationException ConcurrentModificationException}.
+	 * @param list list
 	 */
 	protected void failFastAll(final List<E> list) {
 		final Method[] methods = List.class.getMethods();

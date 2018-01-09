@@ -21,7 +21,7 @@ public interface ViewMaker {
 
 	/**
 	 * 注解 '@To' 的值是个字符串，用户可以随意定义。字符串从第一个冒号处拆成两半 前半部分会转换成小写，作为视图类型，后一半为视图的值。
-	 * 
+	 * @param ioc ioc
 	 * @param viewstr view description string
 	 * @return View object
 	 */

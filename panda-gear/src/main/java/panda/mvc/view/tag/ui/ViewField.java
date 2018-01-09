@@ -69,7 +69,7 @@ public class ViewField extends ListUIBean {
 	}
 
 	/**
-	 * The actual HTML value attribute of the checkbox
+	 * @param fieldValue The actual HTML value attribute of the checkbox
 	 */
 	public void setFieldValue(String fieldValue) {
 		this.fieldValue = fieldValue;

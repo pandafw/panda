@@ -34,7 +34,8 @@ public class Processor {
 	/**
 	 * Constructor.
 	 * 
-	 * @param reader The input reader.
+	 * @param reader the input reader.
+	 * @param config the configuration
 	 */
 	protected Processor(final Reader reader, final Configuration config) {
 		this.reader = reader;

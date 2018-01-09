@@ -6,11 +6,10 @@ import panda.el.Operator;
 import panda.el.obj.ElObj;
 
 /**
- * 操作符抽象类
+ * abstract class for Operator
  */
 public abstract class AbstractOpt implements Operator {
 	/**
-	 * 操作符对象自身的符号
 	 * @return the operator string
 	 */
 	public abstract String operator();
@@ -31,7 +30,10 @@ public abstract class AbstractOpt implements Operator {
 	}
 
 	/**
-	 * 计算子项
+	 * calculate item
+	 * @param ec EL Context
+	 * @param obj object
+	 * @return calculated result
 	 */
 	protected Object calculateItem(ElContext ec, Object obj) {
 		if (obj == null) {

@@ -27,6 +27,7 @@ public class GaeIndexer implements Indexer {
 	/**
 	 * @param name name
 	 * @param index gae index
+	 * @param locale locale
 	 */
 	public GaeIndexer(String name, Index index, Locale locale) {
 		this.name = name;

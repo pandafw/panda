@@ -64,9 +64,10 @@ public abstract class CBean extends Bean implements ICreate {
 
 	//----------------------------------------------------------------------
 	/**
-	 * set properties from the specified object.
+	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
-	public void set(CBean src) {
+	public void copy(CBean src) {
 		this.cusid = src.cusid;
 		this.cusnm = src.cusnm;
 		this.ctime = src.ctime;

@@ -1,12 +1,12 @@
 package panda.el.opt.arithmetic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * "-"
  */
-public class SubOpt extends TwoOpt {
+public class SubOpt extends AbstractTwoOpt {
 
 	public String operator() {
 		return "-";

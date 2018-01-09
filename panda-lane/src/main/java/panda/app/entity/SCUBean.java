@@ -140,6 +140,7 @@ public class SCUBean extends Bean implements IStatus, ICreate, IUpdate {
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(SCUBean src) {
 		this.status = src.status;

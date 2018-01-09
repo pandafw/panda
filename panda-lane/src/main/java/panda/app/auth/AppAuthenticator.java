@@ -354,7 +354,8 @@ public class AppAuthenticator extends UserAuthenticator {
 
 	/**
 	 * get user object from Authorization Header
-	 * @param username 
+	 * @param username user name
+	 * @param password password
 	 * @return user object
 	 */
 	protected Object getUserFromNameAndPwd(String username, String password) {

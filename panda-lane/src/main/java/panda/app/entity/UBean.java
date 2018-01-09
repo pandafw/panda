@@ -65,6 +65,7 @@ public class UBean extends Bean implements IUpdate {
 	//----------------------------------------------------------------------
 	/**
 	 * copy properties from the specified object.
+	 * @param src the source object to copy
 	 */
 	public void copy(UBean src) {
 		this.uusid = src.uusid;

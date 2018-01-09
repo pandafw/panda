@@ -51,6 +51,7 @@ public class Queryer implements Cloneable, Serializable {
 
 	/**
 	 * copy properties from the specified Queryer
+	 * @param qr queryer
 	 */
 	public void copy(Queryer qr) {
 		name = qr.name;
@@ -103,6 +104,7 @@ public class Queryer implements Cloneable, Serializable {
 
 	/**
 	 * is OR
+	 * @return true if method is OR
 	 */
 	public boolean isOr() {
 		return OR.equals(method);

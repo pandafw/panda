@@ -21,6 +21,7 @@ public class HttpServletResponseCapturer extends DelegateHttpServletResponseWrap
 
 	/**
 	 * @return the body
+	 * @throws IOException if an IO error occurred
 	 */
 	public InputStream getBodyStream() throws IOException {
 		flush();

@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import panda.el.ElContext;
-import panda.el.opt.SingleOpt;
+import panda.el.opt.AbstractSingleOpt;
 
 /**
  * Negate: '-'
  */
-public class NegateOpt extends SingleOpt {
+public class NegateOpt extends AbstractSingleOpt {
 	public int getPriority() {
 		return 2;
 	}

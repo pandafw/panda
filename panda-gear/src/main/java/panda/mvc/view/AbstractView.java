@@ -8,6 +8,9 @@ public abstract class AbstractView implements View {
 
 	protected String location;
 	
+	/**
+	 * @param location the location
+	 */
 	public AbstractView(String location) {
 		if (location == null) {
 			return;

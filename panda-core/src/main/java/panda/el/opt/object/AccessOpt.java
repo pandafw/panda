@@ -6,14 +6,14 @@ import panda.bean.Beans;
 import panda.el.ElContext;
 import panda.el.ElException;
 import panda.el.opt.RunMethod;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 import panda.lang.Exceptions;
 import panda.lang.reflect.Methods;
 
 /**
  * 访问符:'.'
  */
-public class AccessOpt extends TwoOpt implements RunMethod {
+public class AccessOpt extends AbstractTwoOpt implements RunMethod {
 	
 	public AccessOpt() {
 	}

@@ -193,6 +193,9 @@ public abstract class Mvcs {
 
 	/**
 	 * cast to string
+	 * @param ac action context
+	 * @param value object value
+	 * @return casted string
 	 */
 	public static String castString(ActionContext ac, Object value) {
 		return castValue(ac, value, String.class, null);
@@ -200,6 +203,10 @@ public abstract class Mvcs {
 
 	/**
 	 * cast to string
+	 * @param ac action context
+	 * @param value object value
+	 * @param format value format
+	 * @return casted string
 	 */
 	public static String castString(ActionContext ac, Object value, String format) {
 		return castValue(ac, value, String.class, format);
@@ -207,6 +214,10 @@ public abstract class Mvcs {
 
 	/**
 	 * cast value
+	 * @param ac action context
+	 * @param value object value
+	 * @param type the type to cast
+	 * @return casted object
 	 */
 	public static <T> T castValue(ActionContext ac, Object value, Type type) {
 		return castValue(ac, value, type, null);
@@ -214,6 +225,11 @@ public abstract class Mvcs {
 
 	/**
 	 * cast value
+	 * @param ac action context
+	 * @param value object value
+	 * @param type the type to cast
+	 * @param format value format
+	 * @return casted object
 	 */
 	public static <T> T castValue(ActionContext ac, Object value, Type type, String format) {
 		Castors cs = getCastors();
@@ -227,10 +243,27 @@ public abstract class Mvcs {
 		return cs.cast(value, type, cc);
 	}
 
+	/**
+	 * cast value and save errors to action context
+	 * @param ac action context
+	 * @param value object value
+	 * @param type the type to cast
+	 * @param format value format
+	 * @return casted object
+	 */
 	public static <T> T castValueWithErrors(ActionContext ac, Object value, Type type, String format) {
 		return castValueWithErrors(ac, null, value, type, format);
 	}
 
+	/**
+	 * cast value and save errors to action context
+	 * @param ac action context
+	 * @param name value name
+	 * @param value object value
+	 * @param type the type to cast
+	 * @param format value format
+	 * @return casted object
+	 */
 	public static <T> T castValueWithErrors(ActionContext ac, String name, Object value, Type type, String format) {
 		Castors cs = Mvcs.getCastors();
 		CastContext cc = cs.newCastContext();
@@ -250,6 +283,9 @@ public abstract class Mvcs {
 
 	/**
 	 * find value in context
+	 * @param ac action context
+	 * @param expr expression
+	 * @return value
 	 */
 	public static Object findValue(ActionContext ac, String expr) {
 		return findValue(ac, expr, Objects.NULL);
@@ -257,6 +293,10 @@ public abstract class Mvcs {
 	
 	/**
 	 * find value in context with argument
+	 * @param ac action context
+	 * @param expr expression
+	 * @param arg argument
+	 * @return value
 	 */
 	public static Object findValue(ActionContext ac, String expr, Object arg) {
 		if (Objects.NULL == arg) {
@@ -278,6 +318,9 @@ public abstract class Mvcs {
 	 * !{...} : json object
 	 * ![...] : json array
 	 * #(...) : text
+	 * @param ac action context
+	 * @param expr expression
+	 * @return evaluated object
 	 */
 	public static Object evaluate(ActionContext ac, Object expr) {
 		if (expr instanceof String) {
@@ -292,6 +335,10 @@ public abstract class Mvcs {
 	 * !{...} : json object
 	 * ![...] : json array
 	 * #(...) : text
+	 * @param ac action context
+	 * @param expr expression
+	 * @param arg argument
+	 * @return evaluated object
 	 */
 	public static Object evaluate(ActionContext ac, Object expr, Object arg) {
 		if (expr instanceof String) {
@@ -306,6 +353,9 @@ public abstract class Mvcs {
 	 * !{...} : json object
 	 * ![...] : json array
 	 * #(...) : text
+	 * @param ac action context
+	 * @param expr expression
+	 * @return evaluated object
 	 */
 	public static Object evaluate(ActionContext ac, String expr) {
 		return evaluate(ac, expr, Objects.NULL);
@@ -317,6 +367,10 @@ public abstract class Mvcs {
 	 * !{...} : json object
 	 * ![...] : json array
 	 * #(...) : text
+	 * @param ac action context
+	 * @param expr expression
+	 * @param arg argument
+	 * @return evaluated object
 	 */
 	public static Object evaluate(ActionContext ac, String expr, Object arg) {
 		if (Strings.isEmpty(expr)) {
@@ -349,6 +403,9 @@ public abstract class Mvcs {
 
 	/**
 	 * translate expression
+	 * @param ac action context
+	 * @param expr expression
+	 * @return translated string
 	 */
 	public static String translate(ActionContext ac, String expr) {
 		return translate(ac, expr, Objects.NULL);
@@ -356,6 +413,10 @@ public abstract class Mvcs {
 	
 	/**
 	 * translate expression
+	 * @param ac action context
+	 * @param expr expression
+	 * @param arg argument
+	 * @return translated string
 	 */
 	public static String translate(ActionContext ac, String expr, Object arg) {
 		if (Strings.isEmpty(expr)) {
@@ -376,6 +437,9 @@ public abstract class Mvcs {
 	
 	/**
 	 * translate expression
+	 * @param expr expression
+	 * @param arg argument
+	 * @return translated string
 	 */
 	public static String translate(String expr, Object arg) {
 		return ElTemplate.evaluate(expr, arg);
@@ -384,20 +448,23 @@ public abstract class Mvcs {
 	//----------------------------------------------
 	/**
 	 * get date pattern from text
+	 * @param ac action context
 	 * @param format date format
 	 * @return date pattern
 	 */
-	public static String getDatePattern(ActionContext context, String format) {
-		return getDatePattern(context, format, null);
+	public static String getDatePattern(ActionContext ac, String format) {
+		return getDatePattern(ac, format, null);
 	}
 	
 	/**
 	 * get date pattern from text
+	 * @param ac action context
 	 * @param format date format
+	 * @param defv default value
 	 * @return date pattern
 	 */
-	public static String getDatePattern(ActionContext context, String format, String defv) {
-		TextProvider tp = context.getText();
+	public static String getDatePattern(ActionContext ac, String format, String defv) {
+		TextProvider tp = ac.getText();
 		String pattern = null;
 
 		if (Strings.isNotEmpty(format)) {
@@ -415,10 +482,11 @@ public abstract class Mvcs {
 
 	/**
 	 * get date timezone from text
+	 * @param ac action context
 	 * @return date timezone
 	 */
-	public static TimeZone getDateTimeZone(ActionContext context) {
-		TextProvider tp = context.getText();
+	public static TimeZone getDateTimeZone(ActionContext ac) {
+		TextProvider tp = ac.getText();
 		String tz = null;
 
 		tz = tp.getText(DATE_TIMEZONE, (String)null);
@@ -431,11 +499,12 @@ public abstract class Mvcs {
 
 	/**
 	 * get number pattern from text
+	 * @param ac action context
 	 * @param format number format
 	 * @return number pattern
 	 */
-	public static String getNumberPattern(ActionContext context, String format) {
-		TextProvider tp = context.getText();
+	public static String getNumberPattern(ActionContext ac, String format) {
+		TextProvider tp = ac.getText();
 		String pattern = null;
 
 		if (Strings.isNotEmpty(format)) {

@@ -56,6 +56,8 @@ public class MockJspWriter extends JspWriter {
 
 	/**
 	 * Lazily initialize the target Writer.
+	 * @return target writer
+	 * @throws IOException if an IO error occurred
 	 */
 	protected PrintWriter getTargetWriter() throws IOException {
 		if (this.targetWriter == null) {

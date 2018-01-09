@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 /**
  * comparator for comparable object
+ * @param <T> comparable type
  */
 public class ComparableComparator<T extends Comparable> implements Comparator<T> {
 	private final static ComparableComparator i = new ComparableComparator();

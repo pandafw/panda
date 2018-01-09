@@ -25,6 +25,8 @@ import panda.vfs.FileItem;
 public class HashAction extends AbstractAction {
 	/**
 	 * execute
+	 * @param s the string to hash
+	 * @param f the file to hash
 	 * @return Hash result map
 	 * @throws Exception if an error occurs
 	 */

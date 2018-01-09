@@ -145,7 +145,7 @@ public class LayoutProcessor extends AbstractProcessor {
 
 	/**
 	 * Save the given layout to the ActionInvocation.
-	 * 
+	 * @param ac action context
 	 * @param layout The layout to save.
 	 */
 	protected void saveLayout(ActionContext ac, String layout) {
@@ -154,6 +154,7 @@ public class LayoutProcessor extends AbstractProcessor {
 	
 	/**
 	 * get context layout
+	 * @param ac action context
 	 * @return layout
 	 */
 	public static String getLayout(ActionContext ac) {

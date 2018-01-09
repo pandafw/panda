@@ -1,12 +1,12 @@
 package panda.el.opt.arithmetic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 
 /**
  * "+"
  */
-public class PlusOpt extends TwoOpt {
+public class PlusOpt extends AbstractTwoOpt {
 	public int getPriority() {
 		return 4;
 	}

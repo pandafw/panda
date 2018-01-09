@@ -176,6 +176,8 @@ public class SmtpLogAdapter extends AbstractLogAdapter {
 
 	/**
 	 * Send the contents of the cyclic buffer as an e-mail message.
+	 * @param subject the mail subject
+	 * @param message the mail content
 	 */
 	protected void sendMail(String subject, String message) {
 		try {

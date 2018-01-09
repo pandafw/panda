@@ -134,7 +134,11 @@ public abstract class FileBasedTestCase extends TestCase {
 		}
 	}
 
-	/** Assert that the content of a file is equal to that in a byte[]. */
+	/** Assert that the content of a file is equal to that in a byte[]. 
+	 * @param b0 byte array
+	 * @param file file
+	 * @throws IOException io error
+	 */
 	protected void assertEqualContent(final byte[] b0, final File file) throws IOException {
 		final InputStream is = new java.io.FileInputStream(file);
 		int count = 0, numRead = 0;
@@ -154,7 +158,11 @@ public abstract class FileBasedTestCase extends TestCase {
 		}
 	}
 
-	/** Assert that the content of a file is equal to that in a char[]. */
+	/** Assert that the content of a file is equal to that in a char[]. 
+	 * @param c0 char array
+	 * @param file file
+	 * @throws IOException io error
+	 */
 	protected void assertEqualContent(final char[] c0, final File file) throws IOException {
 		final Reader ir = new java.io.FileReader(file);
 		int count = 0, numRead = 0;

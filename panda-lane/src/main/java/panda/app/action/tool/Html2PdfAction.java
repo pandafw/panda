@@ -88,7 +88,8 @@ public class Html2PdfAction extends AbstractAction {
 	
 	/**
 	 * execute
-	 * 
+	 * @param arg the input arguments
+	 * @return view
 	 * @throws Exception if an error occurs
 	 */
 	@At("")

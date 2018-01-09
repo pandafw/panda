@@ -52,6 +52,7 @@ public class Entity<T> {
 	
 	/**
 	 * constructor
+	 * @param type entity type
 	 */
 	protected Entity(Class<T> type) {
 		this.type = type;

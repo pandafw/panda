@@ -33,6 +33,7 @@ public class AppMailer {
 	 * @param email email
 	 * @param tpl template name
 	 * @param model data
+	 * @throws EmailException if an email error occurs
 	 */
 	public void sendTemplateMail(Email email, String tpl, Object model) throws EmailException {
 		String subject = "";
@@ -60,6 +61,7 @@ public class AppMailer {
 	 * send email
 	 * @param email email
 	 * @param tpl template name
+	 * @throws EmailException if an email error occurs
 	 */
 	public void sendTemplateMail(Email email, String tpl) throws EmailException {
 		sendTemplateMail(email, tpl, null);

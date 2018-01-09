@@ -973,6 +973,7 @@ public class Filter implements Cloneable, Serializable {
 
 	/**
 	 * normalize
+	 * @param filters filters
 	 */
 	public static void normalize(Map<String, Filter> filters) {
 		if (filters != null) {

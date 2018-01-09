@@ -739,6 +739,8 @@ public final class FastPageParser {
 		/**
 		 * Adds a name/value property pair to this tag. Each property that is added represents a
 		 * property that was parsed from the tag's HTML.
+		 * @param name property name
+		 * @param value property value
 		 */
 		public void addProperty(String name, String value) {
 			if (properties == null) {

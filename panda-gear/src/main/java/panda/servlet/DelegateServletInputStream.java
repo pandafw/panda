@@ -32,7 +32,7 @@ public class DelegateServletInputStream extends ServletInputStream {
 	}
 
 	/**
-	 * Return the underlying source stream (never <code>null</code>).
+	 * @return the underlying source stream (never <code>null</code>).
 	 */
 	public final InputStream getSourceStream() {
 		return this.sourceStream;

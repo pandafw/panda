@@ -46,6 +46,7 @@ public class UserAuthenticator {
 	// public methods
 	//
 	/**
+	 * @param ac action context
 	 * @return true if user has permit to access the method
 	 */
 	public int authenticate(ActionContext ac) {
@@ -93,6 +94,9 @@ public class UserAuthenticator {
 	}
 
 	/**
+	 * @param ac action context
+	 * @param path action path
+	 * @param allowUnknownUri OK_NO_MAPPING or UNKNOWN
 	 * @return true if user has permit to access the action
 	 */
 	protected int authenticate(ActionContext ac, String path, boolean allowUnknownUri) {

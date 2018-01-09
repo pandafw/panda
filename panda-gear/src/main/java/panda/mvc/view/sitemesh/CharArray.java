@@ -22,6 +22,7 @@ public class CharArray {
 	/**
 	 * Constructs a CharArray that is initialized to the specified size. Do not pass in a negative
 	 * value because there is no bounds checking!
+	 * @param size buffer size
 	 */
 	public CharArray(int size) {
 		buffer = new char[size];
@@ -37,6 +38,8 @@ public class CharArray {
 	/**
 	 * Returns the character that is at the specified position in the array. There is no bounds
 	 * checking on this method so be sure to pass in a sensible value.
+	 * @param pos position
+	 * @return char
 	 */
 	public char charAt(int pos) {
 		return buffer[pos];
@@ -69,7 +72,7 @@ public class CharArray {
 	}
 
 	/**
-	 * Returns the current length of the character array.
+	 * @return the current length of the character array.
 	 */
 	public int length() {
 		return size;
@@ -78,6 +81,8 @@ public class CharArray {
 	/**
 	 * Appends an existing CharArray on to this one. Passing in a <tt>null</tt> CharArray will
 	 * result in a <tt>NullPointerException</tt>.
+	 * @param chars char array
+	 * @return this
 	 */
 	public CharArray append(CharArray chars) {
 		return append(chars.buffer, 0, chars.size);
@@ -85,11 +90,20 @@ public class CharArray {
 
 	/**
 	 * Appends the supplied characters to the end of the array.
+	 * @param chars char array
+	 * @return this
 	 */
 	public CharArray append(char[] chars) {
 		return append(chars, 0, chars.length);
 	}
 
+	/**
+	 * Appends the supplied characters to the end of the array.
+	 * @param chars char array
+	 * @param position start position
+	 * @param length length
+	 * @return this
+	 */
 	public CharArray append(char[] chars, int position, int length) {
 		int requiredSize = length + size;
 		if (requiredSize >= buffer.length)
@@ -101,6 +115,8 @@ public class CharArray {
 
 	/**
 	 * Appends a single character to the end of the character array.
+	 * @param c a char
+	 * @return this
 	 */
 	public CharArray append(char c) {
 		if (buffer.length == size)
@@ -112,6 +128,8 @@ public class CharArray {
 	/**
 	 * Appends the supplied string to the end of this character array. Passing in a <tt>null</tt>
 	 * string will result in a <tt>NullPointerException</tt>.
+	 * @param str a string
+	 * @return this
 	 */
 	public CharArray append(String str) {
 		int requiredSize = str.length() + size;
@@ -128,6 +146,9 @@ public class CharArray {
 	/**
 	 * Returns a substring from within this character array. Note that NO range checking is
 	 * performed!
+	 * @param begin start index
+	 * @param end end index (exclusive)
+	 * @return string
 	 */
 	public String substring(int begin, int end) {
 		return new String(buffer, begin, end - begin);
@@ -147,7 +168,7 @@ public class CharArray {
 	}
 
 	/**
-	 * Returns the substring that was specified by the {@link #setSubstr(int, int)} call.
+	 * @return the substring that was specified by the {@link #setSubstr(int, int)} call.
 	 */
 	public String getLowerSubstr() {
 		for (int i = subStrStart; i < subStrStart + subStrLen; i++)
@@ -159,6 +180,8 @@ public class CharArray {
 	 * This compares a substring of this character array (as specified by the
 	 * {@link #setSubstr(int, int)} method call) with the supplied string. The supplied string
 	 * <em>must</em> be lowercase, otherwise the comparison will fail.
+	 * @param lowerStr lower string
+	 * @return compare result
 	 */
 	public boolean compareLowerSubstr(String lowerStr) {
 		// Range check
@@ -178,6 +201,7 @@ public class CharArray {
 	 * {@link #setSubstr(int, int)} method). This uses the same calculation as the
 	 * <tt>String.hashCode()</tt> method so that it remains compatible with the hashcodes of normal
 	 * strings.
+	 * @return hash code
 	 */
 	public int substrHashCode() {
 		int hash = 0;
@@ -198,6 +222,9 @@ public class CharArray {
 	 * <p/>
 	 * If (and only if) the supplied string and the relevant portion of the character array are
 	 * considered equal, this method will return <tt>true</tt>.
+	 * @param lowerStr lower string
+	 * @param offset offset
+	 * @return compare result
 	 */
 	public boolean compareLower(String lowerStr, int offset) {
 		// Range check

@@ -28,6 +28,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests the problem reported in CODEC-130. Missing / wrong implementation of skip.
+     * @throws IOException io error
      */
 	@Test
     public void testCodec130() throws IOException {
@@ -50,6 +51,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests the bug reported in CODEC-105. Bad interactions with InputStream when reading one byte at a time.
+     * @throws IOException io error
      */
     @Test
     public void testCodec105() throws IOException {
@@ -131,7 +133,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests skipping past the end of a stream.
-     *
+     * @throws Throwable error
      */
     @Test
     public void testAvailable() throws Throwable {
@@ -366,7 +368,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests markSupported.
-     *
+     * @throws Exception error
      */
     @Test
     public void testMarkSupported() throws Exception {
@@ -380,7 +382,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests read returning 0
-     *
+     * @throws Exception error
      */
     @Test
     public void testRead0() throws Exception {
@@ -416,7 +418,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests read throwing IndexOutOfBoundsException
-     *
+     * @throws Exception error
      */
     @Test
     public void testReadOutOfBounds() throws Exception {
@@ -457,7 +459,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests skipping as a noop
-     *
+     * @throws Throwable error
      */
     @Test
     public void testSkipNone() throws Throwable {
@@ -474,7 +476,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests skipping number of characters larger than the internal buffer.
-     *
+     * @throws Throwable error
      */
     @Test
     public void testSkipBig() throws Throwable {
@@ -489,7 +491,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests skipping past the end of a stream.
-     *
+     * @throws Throwable error
      */
     @Test
     public void testSkipPastEnd() throws Throwable {
@@ -505,7 +507,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests skipping to the end of a stream.
-     *
+     * @throws Throwable error
      */
     @Test
     public void testSkipToEnd() throws Throwable {
@@ -521,7 +523,7 @@ public class Base32InputStreamTest {
 
     /**
      * Tests if negative arguments to skip are handled correctly.
-     *
+     * @throws Throwable error
      */
     @Test(expected=IllegalArgumentException.class)
     public void testSkipWrongArgument() throws Throwable {

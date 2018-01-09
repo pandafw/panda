@@ -15,6 +15,7 @@ public class XlsxView extends XlsView {
 
 	/**
 	 * Constructor.
+	 * @param location the location
 	 */
 	public XlsxView(String location) {
 		super(location);

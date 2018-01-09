@@ -241,48 +241,49 @@ public class SendMailAction extends AbstractAction {
 
 	/**
 	 * input
+	 * @param arg the input argument
 	 */
 	@At("")
 	@Redirect(toslash=true)
-	public Object input(@Param Arg a) {
-		return null;
+	public void input(@Param Arg arg) {
 	}
 	
 	/**
 	 * send mail
+	 * @param arg the input argument
 	 */
 	@At
 	public void send(@Param @Validates({
 		@Validate(value=Validators.REQUIRED, params="{ fields: [ 'from', 'to' ] }", msgId=Validators.MSGID_REQUIRED),
 		@Validate(value=Validators.VISIT)
-		}) Arg a) {
+		}) Arg arg) {
 
 		try {
 			Email email = new Email();
-			email.setFrom(a.getFrom());
-			email.addTo(a.getTo());
-			email.addCc(a.getCc());
-			email.setSubject(a.getSubject());
-			if (a.isHtml()) {
-				email.setHtmlMsg(a.getMessage());
+			email.setFrom(arg.getFrom());
+			email.addTo(arg.getTo());
+			email.addCc(arg.getCc());
+			email.setSubject(arg.getSubject());
+			if (arg.isHtml()) {
+				email.setHtmlMsg(arg.getMessage());
 			}
 			else {
-				email.setTextMsg(a.getMessage());
+				email.setTextMsg(arg.getMessage());
 			}
-			email.signWithDomainKey(a.getFrom().getDomain(), a.getDkimSelector(), a.getDkimPrivateKey());
+			email.signWithDomainKey(arg.getFrom().getDomain(), arg.getDkimSelector(), arg.getDkimPrivateKey());
 			
 			EmailClient client = new EmailClient();
-			client.setHost(a.getHost());
-			if (a.getPort() != null) {
-				client.setPort(a.getPort());
+			client.setHost(arg.getHost());
+			if (arg.getPort() != null) {
+				client.setPort(arg.getPort());
 			}
-			client.setUsername(a.getUsername());
-			client.setPassword(a.getPassword());
-			if (a.getConnTimeout() != null) {
-				client.setConnectTimeout(a.getConnTimeout());
+			client.setUsername(arg.getUsername());
+			client.setPassword(arg.getPassword());
+			if (arg.getConnTimeout() != null) {
+				client.setConnectTimeout(arg.getConnTimeout());
 			}
-			if (a.getReadTimeout() != null) {
-				client.setDefaultTimeout(a.getReadTimeout());
+			if (arg.getReadTimeout() != null) {
+				client.setDefaultTimeout(arg.getReadTimeout());
 			}
 			client.send(email);
 			

@@ -113,6 +113,7 @@ public class Select extends ListUIBean {
 
 	/**
 	 * Whether or not to add an empty (--) option after the header option
+	 * @param emptyOption the emptyOption to set
 	 */
 	public void setEmptyOption(boolean emptyOption) {
 		this.emptyOption = emptyOption;
@@ -120,6 +121,7 @@ public class Select extends ListUIBean {
 
 	/**
 	 * Key for first item in list. Must not be empty! '-1' and '' is correct, '' is bad.
+	 * @param headerKey the headerKey to set
 	 */
 	public void setHeaderKey(String headerKey) {
 		this.headerKey = headerKey;
@@ -127,6 +129,7 @@ public class Select extends ListUIBean {
 
 	/**
 	 * Value expression for first item in list
+	 * @param headerValue the headerValue to set
 	 */
 	public void setHeaderValue(String headerValue) {
 		this.headerValue = headerValue;
@@ -136,6 +139,7 @@ public class Select extends ListUIBean {
 	 * Creates a multiple select. The tag will pre-select multiple values
 	 * if the values are passed as an Array or a Collection(of appropriate types) via the value attribute. 
 	 * If one of the keys equals one of the values in the Collection or Array it wil be selected
+	 * @param multiple the multiple to set
 	 */
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
@@ -143,6 +147,7 @@ public class Select extends ListUIBean {
 
 	/**
 	 * Size of the element box (# of elements to show)
+	 * @param size the size to set
 	 */
 	public void setSize(String size) {
 		this.size = size;

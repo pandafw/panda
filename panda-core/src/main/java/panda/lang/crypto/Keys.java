@@ -70,6 +70,7 @@ public class Keys {
 	 * get Private Key from raw data
 	 *
 	 * @param data raw data
+	 * @param algorithm algorithm
 	 * @return the PrivateKey
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
@@ -86,6 +87,7 @@ public class Keys {
 	 * get Private Key from base64 string
 	 *
 	 * @param data base64 string
+	 * @param algorithm algorithm
 	 * @return private key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
@@ -102,6 +104,7 @@ public class Keys {
 	 * get Public Key from raw data
 	 *
 	 * @param data raw data
+	 * @param algorithm algorithm
 	 * @return public key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
@@ -118,6 +121,7 @@ public class Keys {
 	 * get RSA Private Key from base64 string
 	 *
 	 * @param data base64 string
+	 * @param algorithm algorithm
 	 * @return public key
 	 * @throws NoSuchAlgorithmException if no Provider supports a KeyFactorySpi implementation for
 	 *             the specified algorithm.
@@ -129,7 +133,15 @@ public class Keys {
 		byte[] decoded = Base64.decodeBase64(encoded);
 		return getPublicKey(decoded, algorithm);
 	}
-	
+
+	/**
+	 * parse key from string
+	 * @param data key data string
+	 * @param algorithm algorithm
+	 * @return key
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
 	public static Key parseKey(String data, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		if (Strings.startsWith(data, BEGIN_PUBLIC_KEY)) {
 			return getPublicKey(data, algorithm);
@@ -139,7 +151,13 @@ public class Keys {
 		}
 		throw new IllegalArgumentException("Invalid Key: " + data);
 	}
-	
+
+	/**
+	 * print pem form key
+	 * @param key private key
+	 * @param out output
+	 * @throws IOException if an IO error occurred
+	 */
 	public static void toPem(PrivateKey key, Appendable out) throws IOException {
 		out.append(BEGIN_PRIVATE_KEY);
 		out.append(Strings.CRLF);
@@ -148,6 +166,12 @@ public class Keys {
 		out.append(Strings.CRLF);
 	}
 	
+	/**
+	 * print pem form key
+	 * @param key private key
+	 * @return pem string
+	 * @throws IOException if an IO error occurred
+	 */
 	public static String toPem(PrivateKey key) {
 		StringBuilder out = new StringBuilder();
 		try {
@@ -159,6 +183,13 @@ public class Keys {
 		return out.toString();
 	}
 
+
+	/**
+	 * print pem form key
+	 * @param key public key
+	 * @param out output
+	 * @throws IOException if an IO error occurred
+	 */
 	public static void toPem(PublicKey key, Appendable out) throws IOException {
 		out.append(BEGIN_PUBLIC_KEY);
 		out.append(Strings.CRLF);
@@ -167,6 +198,13 @@ public class Keys {
 		out.append(Strings.CRLF);
 	}
 	
+
+	/**
+	 * print pem form key
+	 * @param key public key
+	 * @return pem string
+	 * @throws IOException if an IO error occurred
+	 */
 	public static String toPem(PublicKey key) {
 		StringBuilder out = new StringBuilder();
 		try {

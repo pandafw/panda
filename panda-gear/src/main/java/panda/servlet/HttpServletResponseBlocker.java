@@ -22,6 +22,7 @@ public class HttpServletResponseBlocker extends DelegateHttpServletResponseWrapp
 
 	/**
 	 * @return the body
+	 * @throws IOException if an IO error occurred
 	 */
 	public InputStream getBodyStream() throws IOException {
 		flush();
@@ -30,6 +31,7 @@ public class HttpServletResponseBlocker extends DelegateHttpServletResponseWrapp
 
 	/**
 	 * @return the body
+	 * @throws IOException if an IO error occurred
 	 */
 	public String getBodyContent() throws IOException {
 		InputStream is = getBodyStream();

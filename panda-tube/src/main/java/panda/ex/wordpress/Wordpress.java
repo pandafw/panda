@@ -62,6 +62,11 @@ public class Wordpress {
 
 	/**
 	 * for jdk6 compiler error (type parameters of <T>T cannot be determined)
+	 * @param method wordpress method
+	 * @param params parameters
+	 * @return result
+	 * @throws XmlRpcFaultException if a XmlRpcFault error occurred
+	 * @throws IOException if an IO error occurred
 	 */
 	protected boolean callb(String method, Object... params) throws XmlRpcFaultException, IOException {
 		Boolean b = call(method, Boolean.class, params);
@@ -70,12 +75,25 @@ public class Wordpress {
 
 	/**
 	 * for jdk6 compiler error (type parameters of <T>T cannot be determined)
+	 * @param method wordpress method
+	 * @param params parameters
+	 * @return result
+	 * @throws XmlRpcFaultException if a XmlRpcFault error occurred
+	 * @throws IOException if an IO error occurred
 	 */
 	protected int calli(String method, Object... params) throws XmlRpcFaultException, IOException {
 		Integer i = call(method, Integer.class, params);
 		return i == null ? 0 : i.intValue();
 	}
-	
+
+	/**
+	 * @param method wordpress method
+	 * @param type result type
+	 * @param params parameters
+	 * @return result
+	 * @throws XmlRpcFaultException if a XmlRpcFault error occurred
+	 * @throws IOException if an IO error occurred
+	 */
 	protected <T> T call(String method, Type type, Object... params) throws XmlRpcFaultException, IOException {
 		List<Object> ress = client.call(method, List.class, params);
 		

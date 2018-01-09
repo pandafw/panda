@@ -38,7 +38,7 @@ public class TestFileItem {
 
 	/**
 	 * Creates a new instance.
-	 * 
+	 * @param item file item stream
 	 * @throws IOException Creating the file item failed.
 	 */
 	public TestFileItem(FileItemStream item) throws IOException {

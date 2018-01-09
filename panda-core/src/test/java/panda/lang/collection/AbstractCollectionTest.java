@@ -80,6 +80,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  override the default (i.e. where equal elements are distinguishable),
      *  should provide additional tests on iterator.remove() to make sure the
      *  proper elements are removed when remove() is called on the iterator.
+     * @return false
      **/
     public boolean areEqualElementsDistinguishable() {
         return false;
@@ -92,6 +93,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  operations.<P>
      *  Default implementation returns true.  Override if your collection
      *  class does not support add or addAll.
+     * @return true
      */
     public boolean isAddSupported() {
         return true;
@@ -105,6 +107,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  <code>iterator().remove()</code> methods.
      *  Default implementation returns true.  Override if your collection
      *  class does not support removal operations.
+     * @return true
      */
     public boolean isRemoveSupported() {
         return true;
@@ -113,6 +116,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
     /**
      * Returns true to indicate that the collection supports holding null.
      * The default implementation returns true;
+     * @return true
      */
     public boolean isNullSupported() {
         return true;
@@ -121,6 +125,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
     /**
      * Returns true to indicate that the collection supports fail fast iterators.
      * The default implementation returns true;
+     * @return false
      */
     public boolean isFailFastSupported() {
         return false;
@@ -261,6 +266,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  simply invokes <code>addAll</code> on an empty collection with
      *  the results of {@link #getFullElements()}.  Override this default
      *  if your collection doesn't support addAll.
+     * @return collection
      */
     public Collection<E> makeFullCollection() {
         final Collection<E> c = makeObject();
@@ -270,6 +276,8 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
 
     /**
      * Creates a new Map Entry that is independent of the first and the map.
+     * @param entry entry
+     * @return map
      */
     public Map.Entry<E, E> cloneMapEntry(final Map.Entry<E, E> entry) {
         final HashMap<E, E> map = new HashMap<E, E>();
@@ -287,6 +295,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  Override if you require specific testing elements.  Note that if you
      *  override {@link #makeFullCollection()}, you <I>must</I> override
      *  this method to reflect the contents of a full collection.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public E[] getFullElements() {
@@ -307,6 +316,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  without null.  Note that some of the tests add these elements
      *  to an empty or full collection, so if your collection restricts
      *  certain kinds of elements, you should override this method.
+     * @return array
      */
     public E[] getOtherElements() {
         return getOtherNonNullElements();
@@ -320,6 +330,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  of different types.  Override getFullElements to return
      *  the results of this method if your collection does not support
      *  the null element.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public E[] getFullNonNullElements() {
@@ -349,6 +360,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  Returns the default list of objects returned by
      *  {@link #getOtherElements()}.  Includes many objects
      *  of different types.
+     * @return array
      */
     @SuppressWarnings("unchecked")
     public E[] getOtherNonNullElements() {
@@ -370,6 +382,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  {@link #getFullElements()}.  Override getFullElements to return
      *  the results of this method if your collection does not support
      *  heterogenous elements or the null element.
+     * @return array
      */
     public Object[] getFullNonNullStringElements() {
         return new Object[] {
@@ -383,6 +396,7 @@ public abstract class AbstractCollectionTest<E> extends AbstractObjectTest {
      *  {@link #getOtherElements()}.  Override getOtherElements to return
      *  the results of this method if your collection does not support
      *  heterogenous elements or the null element.
+     * @return array
      */
     public Object[] getOtherNonNullStringElements() {
         return new Object[] {

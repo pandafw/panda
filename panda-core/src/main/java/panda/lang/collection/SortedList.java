@@ -12,6 +12,7 @@ import java.util.Comparator;
  * correct place. Object that are equal according to the comparator, will be in the list in the
  * order that they were added to this list. Add only objects that the comparator can compare.
  * </p>
+ * @param <E> element type
  */
 public class SortedList<E> extends ArrayList<E> {
 	private static final long serialVersionUID = 1L;

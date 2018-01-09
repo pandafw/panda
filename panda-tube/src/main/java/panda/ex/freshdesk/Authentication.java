@@ -131,6 +131,7 @@ public class Authentication {
 	/** 
 	 * add basic authentication to http request
 	 * @param hc http client
+	 * @param uri http uri
 	 */
 	public void authenticateRequest(HttpClient hc, String uri) {
 		hc.setDisableSSLv3(true);

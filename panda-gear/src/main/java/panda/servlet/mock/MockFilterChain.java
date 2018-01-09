@@ -36,14 +36,14 @@ public class MockFilterChain implements FilterChain {
 	}
 
 	/**
-	 * Return the request that {@link #doFilter} has been called with.
+	 * @return the request that {@link #doFilter} has been called with.
 	 */
 	public ServletRequest getRequest() {
 		return this.request;
 	}
 
 	/**
-	 * Return the response that {@link #doFilter} has been called with.
+	 * @return the response that {@link #doFilter} has been called with.
 	 */
 	public ServletResponse getResponse() {
 		return this.response;

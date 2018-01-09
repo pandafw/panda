@@ -78,6 +78,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list(Queryer qr) {
 		set_save(true);
@@ -87,6 +88,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_print
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list_print(Queryer qr) {
 		set_load(false);
@@ -97,6 +99,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_popup
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list_popup(Queryer qr) {
 		set_load(false);
@@ -107,6 +110,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_json
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list_json(Queryer qr) {
 		set_load(false);
@@ -117,6 +121,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_xml
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list_xml(Queryer qr) {
 		set_load(false);
@@ -127,6 +132,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_pdf
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object list_pdf(Queryer qr) {
 		return doPdf(qr, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -136,7 +142,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_csv
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object list_csv(Queryer qr, List<ListColumn> columns) {
 		return doCsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -145,7 +152,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_tsv
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object list_tsv(Queryer qr, List<ListColumn> columns) {
 		return doTsv(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -154,7 +162,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_xls
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object list_xls(Queryer qr, List<ListColumn> columns) {
 		return doXls(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -163,7 +172,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * list_xlsx
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object list_xlsx(Queryer qr, List<ListColumn> columns) {
 		return doXlsx(qr, columns, VAL.DEFAULT_LIST_PAGESIZE, VAL.MAXIMUM_LIST_PAGESIZE);
@@ -175,6 +185,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_json
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object expo_json(QueryerEx qr) {
 		set_load(false);
@@ -185,6 +196,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_xml
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object expo_xml(QueryerEx qr) {
 		set_load(false);
@@ -195,6 +207,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_pdf
 	 * @param qr queryer
+	 * @return data list or view
 	 */
 	protected Object expo_pdf(QueryerEx qr) {
 		return doPdf(qr, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -204,7 +217,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_csv
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object expo_csv(QueryerEx qr, List<ListColumn> columns) {
 		return doCsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -213,7 +227,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_tsv
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object expo_tsv(QueryerEx qr, List<ListColumn> columns) {
 		return doTsv(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -222,7 +237,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_xls
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object expo_xls(QueryerEx qr, List<ListColumn> columns) {
 		return doXls(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -231,7 +247,8 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	/**
 	 * expo_xlsx
 	 * @param qr queryer
-	 * @param colums list columns
+	 * @param columns list columns
+	 * @return data list or view
 	 */
 	protected Object expo_xlsx(QueryerEx qr, List<ListColumn> columns) {
 		return doXlsx(qr, columns, VAL.DEFAULT_EXPORT_PAGESIZE, VAL.MAXIMUM_EXPORT_PAGESIZE);
@@ -318,6 +335,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * load list parameters
+	 * @param qr queryer
 	 * @return null if redirect url is sent
 	 */
 	protected Queryer loadListParameters(Queryer qr) {
@@ -584,12 +602,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 	 * @param maxLimit default maximum limit
 	 */
 	protected void queryList(final Queryer qr, long defLimit, long maxLimit) {
-		final DataQuery<T> gq = new DataQuery<T>(getEntity());
+		final DataQuery<T> dq = new DataQuery<T>(getEntity());
 
-		addQueryColumns(gq);
-		addQueryJoins(gq);
-		addQueryFilters(gq, qr);
-		addQueryOrders(gq, qr.getSorter());
+		addQueryColumns(dq);
+		addQueryJoins(dq);
+		addQueryFilters(dq, qr);
+		addQueryOrders(dq, qr.getSorter());
 		addLimitToPager(qr.getPager(), defLimit, maxLimit);
 		
 		if (listCountable == null) {
@@ -600,12 +618,12 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 		dao.exec(new Runnable() {
 			public void run() {
 				if (listCountable) {
-					qr.getPager().setTotal(getDao().count(gq));
+					qr.getPager().setTotal(getDao().count(dq));
 					qr.getPager().normalize();
 					if (qr.getPager().getTotal() > 0) {
-						gq.setStart(qr.getPager().getStart());
-						gq.setLimit(qr.getPager().getLimit());
-						dataList = getDao().select(gq);
+						dq.setStart(qr.getPager().getStart());
+						dq.setLimit(qr.getPager().getLimit());
+						dataList = getDao().select(dq);
 						dataList = trimDataList(dataList);
 					}
 					else {
@@ -613,9 +631,9 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 					}
 				}
 				else {
-					gq.setStart(qr.getPager().getStart());
-					gq.setLimit(qr.getPager().getLimit());
-					dataList = getDao().select(gq);
+					dq.setStart(qr.getPager().getStart());
+					dq.setLimit(qr.getPager().getLimit());
+					dataList = getDao().select(dq);
 					dataList = trimDataList(dataList);
 				}
 			}
@@ -670,40 +688,40 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * add query columns
-	 * @param gq DataQuery
+	 * @param dq DataQuery
 	 */
-	protected void addQueryColumns(DataQuery<T> gq) {
+	protected void addQueryColumns(DataQuery<T> dq) {
 		Set<String> fs = getDisplayFields();
 		if (Collections.isNotEmpty(fs)) {
-			gq.excludeAll();
-			gq.includePrimayKeys();
-			gq.include(fs);
+			dq.excludeAll();
+			dq.includePrimayKeys();
+			dq.include(fs);
 		}
 	}
 
 	/**
 	 * add query joins
-	 * @param gq DataQuery
+	 * @param dq DataQuery
 	 */
-	protected void addQueryJoins(DataQuery<T> gq) {
+	protected void addQueryJoins(DataQuery<T> dq) {
 	}
 	
 	/**
-	 * @param gq DataQuery
-	 * @param gq queryer
+	 * @param dq DataQuery
+	 * @param qr queryer
 	 */
 	@SuppressWarnings("unchecked")
-	protected void addQueryFilters(DataQuery<T> gq, Queryer qr) {
+	protected void addQueryFilters(DataQuery<T> dq, Queryer qr) {
 		qr.normalize();
 		if (Collections.isEmpty(qr.getFilters())) {
 			return;
 		}
 		
 		if (qr.isOr()) {
-			gq.or();
+			dq.or();
 		}
 		else {
-			gq.and();
+			dq.and();
 		}
 		
 		for (Entry<String, Filter> e : qr.getFilters().entrySet()) {
@@ -742,7 +760,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				}
 				
 				if (ef.isJoinField()) {
-					Join join = gq.getJoin(ef.getJoinName());
+					Join join = dq.getJoin(ef.getJoinName());
 					if (join == null) {
 						if (log.isDebugEnabled()) {
 							log.debug("SKIP filter of join field [" + name + "] of entity " + entity);
@@ -771,80 +789,80 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				continue;
 			}
 			
-			addQueryFilter(gq, f, name, value, values);
+			addQueryFilter(dq, f, name, value, values);
 		}
 
-		gq.end();
+		dq.end();
 	}
 
 	/**
 	 * add filter to queryer
-	 * @param gq DataQuery
+	 * @param dq DataQuery
 	 * @param f filter
 	 * @param name field name
 	 * @param value field value
 	 * @param values field values
 	 */
-	protected void addQueryFilter(DataQuery<T> gq, Filter f, String name, Object value, List<?> values) {
+	protected void addQueryFilter(DataQuery<T> dq, Filter f, String name, Object value, List<?> values) {
 		if (Filter.EQUAL.equals(f.getComparator())) {
 			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
-				gq.between(name, value, value2);
+				dq.between(name, value, value2);
 			}
 			else {
-				gq.equalTo(name, value);
+				dq.equalTo(name, value);
 			}
 		}
 		else if (Filter.NOT_EQUAL.equals(f.getComparator())) {
 			if (value instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 				Date value2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)value), -1);
-				gq.notBetween(name, value, value2);
+				dq.notBetween(name, value, value2);
 			}
 			else {
-				gq.notEqualTo(name, value);
+				dq.notEqualTo(name, value);
 			}
 		}
 		else if (Filter.LESS_THAN.equals(f.getComparator())) {
-			gq.lessThan(name, value);
+			dq.lessThan(name, value);
 		}
 		else if (Filter.LESS_EQUAL.equals(f.getComparator())) {
-			gq.lessThanOrEqualTo(name, value);
+			dq.lessThanOrEqualTo(name, value);
 		}
 		else if (Filter.GREATER_THAN.equals(f.getComparator())) {
-			gq.greaterThan(name, value);
+			dq.greaterThan(name, value);
 		}
 		else if (Filter.GREATER_EQUAL.equals(f.getComparator())) {
-			gq.greaterThanOrEqualTo(name, value);
+			dq.greaterThanOrEqualTo(name, value);
 		}
 		else if (Filter.LIKE.equals(f.getComparator())) {
-			gq.like(name, value.toString());
+			dq.like(name, value.toString());
 		}
 		else if (Filter.NOT_LIKE.equals(f.getComparator())) {
-			gq.notLike(name, value.toString());
+			dq.notLike(name, value.toString());
 		}
 		else if (Filter.MATCH.equals(f.getComparator())) {
-			gq.match(name, value.toString());
+			dq.match(name, value.toString());
 		}
 		else if (Filter.NOT_MATCH.equals(f.getComparator())) {
-			gq.notMatch(name, value.toString());
+			dq.notMatch(name, value.toString());
 		}
 		else if (Filter.LEFT_MATCH.equals(f.getComparator())) {
-			gq.leftMatch(name, value.toString());
+			dq.leftMatch(name, value.toString());
 		}
 		else if (Filter.NOT_LEFT_MATCH.equals(f.getComparator())) {
-			gq.notLeftMatch(name, value.toString());
+			dq.notLeftMatch(name, value.toString());
 		}
 		else if (Filter.RIGHT_MATCH.equals(f.getComparator())) {
-			gq.rightMatch(name, value.toString());
+			dq.rightMatch(name, value.toString());
 		}
 		else if (Filter.NOT_RIGHT_MATCH.equals(f.getComparator())) {
-			gq.notRightMatch(name, value.toString());
+			dq.notRightMatch(name, value.toString());
 		}
 		else if (Filter.IN.equals(f.getComparator())) {
-			gq.in(name, values);
+			dq.in(name, values);
 		}
 		else if (Filter.NOT_IN.equals(f.getComparator())) {
-			gq.notIn(name, values);
+			dq.notIn(name, values);
 		}
 		else if (Filter.BETWEEN.equals(f.getComparator())) {
 			Object v1 = values.get(0);
@@ -853,26 +871,26 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 			if (v1 == null && v2 == null) {
 			}
 			else if (v1 == null) {
-				gq.lessThanOrEqualTo(name, v2);
+				dq.lessThanOrEqualTo(name, v2);
 			}
 			else if (v2 == null) {
-				gq.greaterThanOrEqualTo(name, v1);
+				dq.greaterThanOrEqualTo(name, v1);
 			}
 			else {
 				if (v1 instanceof Date && v2 instanceof Date && Filter.VT_DATE.equals(f.getType())) {
 					v2 = DateTimes.addMilliseconds(DateTimes.zeroCeiling((Date)v2), -1);
 				}
-				gq.between(name, v1, v2);
+				dq.between(name, v1, v2);
 			}
 		}
 	}
 
 
 	/**
-	 * @param gq query
+	 * @param dq query
 	 * @param sorter sorter
 	 */
-	protected void addQueryOrders(DataQuery<T> gq, Sorter sorter) {
+	protected void addQueryOrders(DataQuery<T> dq, Sorter sorter) {
 		if (Strings.isEmpty(sorter.getColumn())) {
 			String sc = getText(getMethodName() + RES.SORTER_SUFFIX, (String)null);
 			assist().castToSorter(sorter, sc);
@@ -882,7 +900,7 @@ public abstract class GenericListAction<T> extends GenericBaseAction<T> {
 				if (Strings.isEmpty(sorter.getDirection())) {
 					sorter.setDirection(Sorter.ASC);
 				}
-				gq.orderBy(sorter.getColumn(), sorter.getDirection());
+				dq.orderBy(sorter.getColumn(), sorter.getDirection());
 			}
 		}
 	}

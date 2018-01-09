@@ -118,6 +118,7 @@ public class ActionHandler {
 	 * order: ignorePaths, ignoreRegexs
 	 * 
 	 * @param path servlet path
+	 * @return true if path should ignored
 	 */
 	protected boolean ignore(String path) {
 		if (ignorePaths != null && ignorePaths.contains(path)) {

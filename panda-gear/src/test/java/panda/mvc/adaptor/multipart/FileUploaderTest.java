@@ -91,6 +91,8 @@ public class FileUploaderTest extends FileUploadTestCase {
 
 	/**
 	 * This is what the browser does if you submit the form without choosing a file.
+	 * @throws UnsupportedEncodingException UnsupportedEncodingException
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testEmptyFile() throws UnsupportedEncodingException, IOException {
@@ -109,6 +111,8 @@ public class FileUploaderTest extends FileUploadTestCase {
 	 * Internet Explorer 5 for the Mac has a bug where the carriage return is missing on any
 	 * boundary line immediately preceding an input with type=image. (type=submit does not have the
 	 * bug.)
+	 * @throws UnsupportedEncodingException UnsupportedEncodingException
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testIE5MacBug() throws UnsupportedEncodingException, IOException {
@@ -148,6 +152,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 
 	/**
 	 * Test for <a href="http://issues.apache.org/jira/browse/FILEUPLOAD-62">FILEUPLOAD-62</a>
+	 * @throws Exception Exception
 	 */
 	@Test
 	public void testFILEUPLOAD62() throws Exception {
@@ -182,6 +187,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 
 	/**
 	 * Test for <a href="http://issues.apache.org/jira/browse/FILEUPLOAD-111">FILEUPLOAD-111</a>
+	 * @throws IOException IOException
 	 */
 	@Test
 	public void testFoldedHeaders() throws IOException {
@@ -219,6 +225,7 @@ public class FileUploaderTest extends FileUploadTestCase {
 
 	/**
 	 * Test case for <a href="http://issues.apache.org/jira/browse/FILEUPLOAD-130">
+	 * @throws Exception Exception
 	 */
 	@Test
 	public void testFileUpload130() throws Exception {

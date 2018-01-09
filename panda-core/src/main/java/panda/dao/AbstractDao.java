@@ -360,6 +360,7 @@ public abstract class AbstractDao implements Dao {
 	 * 
 	 * @param entity entity
 	 * @param keys record keys (int, string or java bean with keys)
+	 * @return record
 	 */
 	protected <T> T fetchByKeys(Entity<T> entity, Object ... keys) {
 		assertEntity(entity);

@@ -183,7 +183,8 @@ public class SqlExecuteAction extends AbstractAction {
 
 	/**
 	 * execute
-	 * @return INPUT
+	 * @param o the input option
+	 * @return results
 	 * @throws Exception if an error occurs
 	 */
 	@At("")

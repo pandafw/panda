@@ -24,6 +24,7 @@ public class RegexValidator extends AbstractStringValidator {
 	/**
 	 * Sets whether the expression should be matched against in a case-sensitive
 	 * way. Default is <code>true</code>.
+	 * @param caseSensitive the caseSensitive to set
 	 */
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;

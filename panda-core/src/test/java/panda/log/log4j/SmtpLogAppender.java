@@ -198,6 +198,8 @@ public class SmtpLogAppender extends AbstractAppender {
 
 	/**
 	 * Layout body of email message.
+	 * @param event logging event
+	 * @return body string
 	 */
 	protected String formatBody(LoggingEvent event) {
 		StringBuilder sb = new StringBuilder();
@@ -207,6 +209,7 @@ public class SmtpLogAppender extends AbstractAppender {
 
 	/**
 	 * Send the contents of the cyclic buffer as an e-mail message.
+	 * @param event logging event
 	 */
 	protected void sendMail(LoggingEvent event) {
 		try {

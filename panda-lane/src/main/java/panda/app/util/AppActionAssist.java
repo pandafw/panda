@@ -253,9 +253,10 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	
 	/**
 	 * initialize update fields of data
-	 * @param data data
+	 * @param data input data
+	 * @param sdat source data
 	 */
-	public void initUpdateFields(Object data, Object srcData) {
+	public void initUpdateFields(Object data, Object sdat) {
 		if (data instanceof IStatus) {
 			if (((IStatus)data).getStatus() == null) {
 				((IStatus)data).setStatus(VAL.STATUS_ACTIVE);
@@ -264,7 +265,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 		
 		if (data instanceof ICreate) {
 			ICreate cb = (ICreate)data;
-			ICreate sb = (ICreate)srcData;
+			ICreate sb = (ICreate)sdat;
 	
 			cb.setCusid(sb.getCusid());
 			cb.setCtime(sb.getCtime());
@@ -282,6 +283,7 @@ public class AppActionAssist extends ActionAssist implements AccessHandler {
 	/**
 	 * load sorter parameters from stateProvider
 	 * @param sorter sorter
+	 * @param orders orders
 	 */
 	public void loadSorterParams(Sorter sorter, Map<String, String> orders) {
 		StateProvider sp = getState();

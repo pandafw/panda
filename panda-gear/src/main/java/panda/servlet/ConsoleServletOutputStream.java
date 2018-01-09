@@ -38,7 +38,7 @@ public class ConsoleServletOutputStream extends ServletOutputStream {
 	}
 
 	/**
-	 * Return the underlying target stream (never <code>null</code>).
+	 * @return the underlying target stream (never <code>null</code>).
 	 */
 	public final PrintStream getTargetStream() {
 		return this.targetStream;

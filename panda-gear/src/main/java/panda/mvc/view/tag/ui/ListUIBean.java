@@ -83,6 +83,7 @@ public abstract class ListUIBean extends InputUIBean {
 	/**
 	 * Iterable source to populate from. If the list is a Map (key, value), the Map key will become
 	 * the option 'value' parameter and the Map value will become the option body.
+	 * @param list the list object to set
 	 */
 	public void setList(Object list) {
 		this.list = list;

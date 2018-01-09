@@ -90,6 +90,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * view
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object view(T key) {
 		return doViewSelect(key);
@@ -98,6 +99,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * view_input
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object view_input(T data) {
 		return doViewInput(data);
@@ -106,6 +108,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * print
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object print(T key) {
 		return doViewSelect(key);
@@ -114,6 +117,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * print_input
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object print_input(T data) {
 		return doViewInput(data);
@@ -122,6 +126,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * copy
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object copy(T key) {
 		return doCopySelect(key);
@@ -130,6 +135,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * copy_input
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object copy_input(T data) {
 		return doCopyInput(data);
@@ -138,6 +144,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * copy_confirm
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object copy_confirm(T data) {
 		return doInsertConfirm(data);
@@ -146,6 +153,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * copy_execute
 	 * @param data the input data
+	 * @return data object
 	 */
 	public Object copy_execute(T data) {
 		return doInsertExecute(data);
@@ -153,6 +161,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * add
+	 * @return data object
 	 */
 	protected Object add() {
 		return doInsertInit();
@@ -161,6 +170,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * add_input
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object add_input(T data) {
 		return doInsertInput(data);
@@ -169,6 +179,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * add_confirm
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object add_confirm(T data) {
 		return doInsertConfirm(data);
@@ -177,6 +188,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * add_execute
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object add_execute(T data) {
 		return doInsertExecute(data);
@@ -185,6 +197,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * edit
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object edit(T key) {
 		return doUpdateSelect(key);
@@ -193,6 +206,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * edit_input
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object edit_input(T data) {
 		return doUpdateInput(data);
@@ -201,6 +215,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * edit_confirm
 	 * @param data the input data
+	 * @return data object
 	 */
 	public Object edit_confirm(T data) {
 		return doUpdateConfirm(data);
@@ -209,6 +224,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * edit_execute
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object edit_execute(T data) {
 		return doUpdateExecute(data);
@@ -217,6 +233,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * delete
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object delete(T key) {
 		return doDeleteSelect(key);
@@ -225,6 +242,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * delete_execute
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object delete_execute(T key) {
 		return doDeleteExecute(key);
@@ -236,6 +254,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doViewInput 
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doViewInput(T data) {
 		return prepareData(data);
@@ -244,6 +263,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doViewSelect
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object doViewSelect(T key) {
 		T pkey = prepareKey(key);
@@ -254,6 +274,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doCopySelect
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object doCopySelect(T key) {
 		T pkey = prepareKey(key);
@@ -268,6 +289,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doCopyInput
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doCopyInput(T data) {
 		return prepareData(data);
@@ -275,6 +297,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doInsertInit
+	 * @return data object
 	 */
 	protected Object doInsertInit() {
 		T pdat = prepareData(null);
@@ -285,6 +308,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doInsertInput
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doInsertInput(T data) {
 		return prepareData(data);
@@ -293,6 +317,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doInsertConfirm
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doInsertConfirm(T data) {
 		T pdat = prepareData(data);
@@ -310,6 +335,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doInsertExecute
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doInsertExecute(T data) {
 		final T pdat = prepareData(data);
@@ -357,6 +383,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doUpdateInput
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doUpdateInput(T data) {
 		return prepareData(data);
@@ -365,6 +392,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doUpdateSelect
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object doUpdateSelect(T key) {
 		T pk = prepareKey(key);
@@ -374,6 +402,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doUpdateConfirm
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doUpdateConfirm(T data) {
 		T pdat = prepareData(data);
@@ -396,6 +425,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doUpdateExecute
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected Object doUpdateExecute(T data) {
 		final T pdat = prepareData(data);
@@ -440,6 +470,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doDeleteSelect
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object doDeleteSelect(T key) {
 		final T pkey = prepareKey(key);
@@ -457,6 +488,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * doDeleteExecute
 	 * @param key the input key
+	 * @return data object
 	 */
 	protected Object doDeleteExecute(final T key) {
 		final T pkey = prepareKey(key);
@@ -503,6 +535,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * trim data
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected T trimData(T data) {
 		return data;
@@ -663,6 +696,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	/**
 	 * startInsert
 	 * @param data the input data
+	 * @return data object
 	 */
 	protected T startInsert(T data) {
 		assist().initCommonFields(data);
@@ -759,6 +793,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * startUpdate
 	 * @param data the input data
 	 * @param sdat the source data
+	 * @return data object
 	 */
 	protected T startUpdate(T data, T sdat) {
 		assist().initUpdateFields(data, sdat);
@@ -925,6 +960,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 	 * checkNotNulls
 	 * 
 	 * @param data the input data
+	 * @return true if check successfully
 	 */
 	protected boolean checkNotNulls(T data) {
 		List<EntityField> efs = EntityHelper.checkNotNulls(getEntity(), data);
@@ -979,6 +1015,7 @@ public abstract class GenericEditAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * checkUniqueIndexesOnInsert
+	 * @param data the input data
 	 * @return true if check successfully
 	 */
 	protected boolean checkUniqueIndexesOnInsert(T data) {

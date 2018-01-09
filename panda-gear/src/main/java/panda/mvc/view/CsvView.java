@@ -25,6 +25,7 @@ public class CsvView extends AbstractDataView {
 
 	/**
 	 * Constructor.
+	 * @param location the location
 	 */
 	public CsvView(String location) {
 		super(location);

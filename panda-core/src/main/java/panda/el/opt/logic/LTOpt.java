@@ -1,13 +1,13 @@
 package panda.el.opt.logic;
 
 import panda.el.ElContext;
-import panda.el.opt.TwoOpt;
+import panda.el.opt.AbstractTwoOpt;
 import panda.lang.Classes;
 
 /**
  * Less Than
  */
-public class LTOpt extends TwoOpt {
+public class LTOpt extends AbstractTwoOpt {
 
 	public int getPriority() {
 		return 6;

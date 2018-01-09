@@ -82,13 +82,14 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	/**
 	 * Set whether {@link #getOutputStream()} access is allowed.
 	 * <p>Default is <code>true</code>.
+	 * @param outputStreamAccessAllowed the outputStreamAccessAllowed to set
 	 */
 	public void setOutputStreamAccessAllowed(boolean outputStreamAccessAllowed) {
 		this.outputStreamAccessAllowed = outputStreamAccessAllowed;
 	}
 
 	/**
-	 * Return whether {@link #getOutputStream()} access is allowed.
+	 * @return whether {@link #getOutputStream()} access is allowed.
 	 */
 	public boolean isOutputStreamAccessAllowed() {
 		return this.outputStreamAccessAllowed;
@@ -97,13 +98,14 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	/**
 	 * Set whether {@link #getWriter()} access is allowed.
 	 * <p>Default is <code>true</code>.
+	 * @param writerAccessAllowed the writerAccessAllowed to set
 	 */
 	public void setWriterAccessAllowed(boolean writerAccessAllowed) {
 		this.writerAccessAllowed = writerAccessAllowed;
 	}
 
 	/**
-	 * Return whether {@link #getOutputStream()} access is allowed.
+	 * @return whether {@link #getOutputStream()} access is allowed.
 	 */
 	public boolean isWriterAccessAllowed() {
 		return this.writerAccessAllowed;

@@ -17,6 +17,8 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * Constructor
+	 * @param parent parent resource
+	 * @param locale locale
 	 */
 	protected AbstractResource(Resource parent, Locale locale) {
 		this.parent = parent;

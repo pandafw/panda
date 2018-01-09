@@ -4,6 +4,10 @@ import java.util.List;
 
 import panda.app.constant.MVC;
 import panda.app.constant.VAL;
+import panda.app.entity.Property;
+import panda.app.entity.Resource;
+import panda.app.entity.query.PropertyQuery;
+import panda.app.entity.query.ResourceQuery;
 import panda.dao.Dao;
 import panda.dao.DaoClient;
 import panda.io.resource.BeanResourceMaker;
@@ -12,10 +16,6 @@ import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
 import panda.log.Log;
 import panda.log.Logs;
-import panda.app.entity.Property;
-import panda.app.entity.Resource;
-import panda.app.entity.query.PropertyQuery;
-import panda.app.entity.query.ResourceQuery;
 
 
 /**
@@ -44,7 +44,8 @@ public class AppResourceBundleLoader extends ResourceLoader {
 	}
 
 	/**
-	 * load external resources
+	 * initial load external resources
+	 * @throws Exception if an error occurs
 	 */
 	public void initialize() throws Exception {
 		if (resource) {
@@ -78,6 +79,10 @@ public class AppResourceBundleLoader extends ResourceLoader {
 		reload();
 	}
 	
+	/**
+	 * reload external resources
+	 * @throws Exception if an error occurs
+	 */
 	public void reload() throws Exception {
 		if (databaseResourceLoader == null) {
 			return;

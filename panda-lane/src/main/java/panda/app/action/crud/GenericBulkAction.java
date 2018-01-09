@@ -35,6 +35,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * bdelete
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object bdelete(Map<String, String[]> args) {
 		return doBulkDeleteSelect(args);
@@ -42,6 +44,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * bdelete_execute
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object bdelete_execute(Map<String, String[]> args) {
 		return doBulkDeleteExecute(args);
@@ -49,6 +53,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * bupdate
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object bupdate(Map<String, String[]> args) {
 		return doBulkUpdateSelect(args);
@@ -56,6 +62,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * bupdate_execute
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object bupdate_execute(Map<String, String[]> args) {
 		return doBulkUpdateExecute(args);
@@ -66,6 +74,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * doBulkDeleteSelect
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object doBulkDeleteSelect(Map<String, String[]> args) {
 		List<T> keys = convertArgsToList(args);
@@ -82,6 +92,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doBulkDeleteExecute
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object doBulkDeleteExecute(Map<String, String[]> args) {
 		List<T> keys = convertArgsToList(args);
@@ -180,6 +192,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	//------------------------------------------------------------
 	/**
 	 * doBulkUpdateSelect
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object doBulkUpdateSelect(Map<String, String[]> args) {
 		List<T> keys = convertArgsToList(args);
@@ -196,6 +210,8 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 
 	/**
 	 * doBulkUpdateExecute
+	 * @param args arguments
+	 * @return data list
 	 */
 	protected Object doBulkUpdateExecute(Map<String, String[]> args) {
 		List<T> keys = convertArgsToList(args);
@@ -251,6 +267,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	/**
 	 * @param gq query
 	 * @param dataList data list
+	 * @param raiseError raise error if invalid item 
 	 * @return count
 	 */
 	protected int addKeyListToQuery(DataQuery<T> gq, List<T> dataList, boolean raiseError) {
@@ -362,6 +379,7 @@ public abstract class GenericBulkAction<T> extends GenericBaseAction<T> {
 	/**
 	 * selectDataList
 	 * @param dataList dataList
+	 * @param filter true to call addQueryFilters()
 	 * @return dataList
 	 */
 	protected List<T> selectDataList(List<T> dataList, boolean filter) {
