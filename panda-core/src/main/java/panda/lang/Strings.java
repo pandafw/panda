@@ -8407,7 +8407,7 @@ public class Strings {
 	 * @param chars the chars to find, may be null or empty
 	 * @return <code>true</code> if the String ends with any of the chars
 	 */
-	public static boolean endsWithChars(String string, String chars) {
+	public static boolean endsWithChars(CharSequence string, CharSequence chars) {
 		if (isEmpty(string) || isEmpty(chars)) {
 			return false;
 		}
@@ -8439,7 +8439,7 @@ public class Strings {
 	 * @param chars the chars to find, may be null or empty
 	 * @return <code>true</code> if the String ends with any of the the prefixes
 	 */
-	public static boolean endsWithCharsIgnoreCase(String string, String chars) {
+	public static boolean endsWithCharsIgnoreCase(CharSequence string, CharSequence chars) {
 		if (isEmpty(string) || isEmpty(chars)) {
 			return false;
 		}
@@ -8470,7 +8470,7 @@ public class Strings {
 	 * @param find the char to find, may be null
 	 * @return <code>true</code> if the String starts with the char
 	 */
-	public static boolean endsWithChar(String string, char find) {
+	public static boolean endsWithChar(CharSequence string, char find) {
 		if (isEmpty(string)) {
 			return false;
 		}
@@ -8492,7 +8492,7 @@ public class Strings {
 	 * @param find the char to find, may be null
 	 * @return <code>true</code> if the String ends with the char
 	 */
-	public static boolean endsWithCharIgnoreCase(String string, char find) {
+	public static boolean endsWithCharIgnoreCase(CharSequence string, char find) {
 		if (isEmpty(string)) {
 			return false;
 		}
