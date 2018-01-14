@@ -18,6 +18,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	
 	private boolean js;
 	private boolean css;
+	private String lang;
 
 	public LinkRenderer(RenderingContext rc) {
 		super(rc);
@@ -155,6 +156,47 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				writeStaticJs("/jquery/extras/locales/jquery-extras-" + jsstr(la));
 			}
 		}
+		
+		if (tag.isHammer()) {
+			writeJqueryExtra("hammer", false);
+		}
+		
+		if (tag.isLightbox()) {
+			writeJqueryExtra("lightbox", true);
+
+			String la = this.getBootstrapLang();
+			if ("ja".equals(la) || la.startsWith("zh")) {
+				writeStaticJs("/jquery/extras/locales/jquery.ui.lightbox." + jsstr(la));
+			}
+		}
+
+		if (tag.isMeiomask()) {
+			writeJqueryExtra("meio.mask", false);
+			String la = this.getBootstrapLang();
+			if ("ja".equals(la)) {
+				writeStaticJs("/jquery/extras/locales/jquery.ui.meio.mask." + jsstr(la));
+			}
+		}
+
+		if (tag.isMousewheel()) {
+			writeJqueryExtra("mousewheel", false);
+		}
+
+		if (tag.isTablesorter()) {
+			writeJqueryExtra("tablesorter", true);
+		}
+	}
+	
+	private void writeJqueryExtra(String name, boolean css) throws IOException {
+		String path = "/jquery/extras/css/jquery.ui." + name;
+		if (tag.useCdn()) {
+			writePandaCdnCss(path);
+			writePandaCdnJs(path);
+		}
+		else {
+			writeStaticCss(path);
+			writeStaticJs(path);
+		}
 	}
 	
 	private void writeBootstrap() throws IOException {
@@ -229,24 +271,26 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 
 	private String getBootstrapLang() {
-		Locale locale = tag.getLocale();
-		String la = locale.getLanguage();
-		if ("fa".equals(la)) {
-			la += "-IR";
-		}
-		else if ("pt".equals(la)) {
-			la += "-BR";
-		}
-		else if ("zh".equals(la)) {
-			if ("TW".equalsIgnoreCase(locale.getCountry())
-					|| "HK".equalsIgnoreCase(locale.getCountry())) {
-				la += "-TW";
+		if (Strings.isEmpty(lang)) {
+			Locale locale = tag.getLocale();
+			lang = locale.getLanguage();
+			if ("fa".equals(lang)) {
+				lang += "-IR";
 			}
-			else {
-				la += "-CN";
+			else if ("pt".equals(lang)) {
+				lang += "-BR";
+			}
+			else if ("zh".equals(lang)) {
+				if ("TW".equalsIgnoreCase(locale.getCountry())
+						|| "HK".equalsIgnoreCase(locale.getCountry())) {
+					lang += "-TW";
+				}
+				else {
+					lang += "-CN";
+				}
 			}
 		}
-		return la;
+		return lang;
 	}
 
 	private void writePanda() throws IOException {

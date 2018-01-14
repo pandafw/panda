@@ -26,13 +26,18 @@ import panda.mvc.SiteConstants;
  *    <li>bootstrap</li>
  *    <li>bsplugins</li>
  *    <li>panda</li>
+ *    <li>hammer</li>
+ *    <li>lightbox</li>
+ *    <li>meiomask</li>
+ *    <li>mousewheel</li>
+ *    <li>tablesorter</li>
  * </ul>
  *
- * <p/>
+ * <p></p>
  *
  * <!-- END SNIPPET: javadoc -->
  *
- * <p/> <b>Examples</b>
+ * <p></p> <b>Examples</b>
  * <pre>
  *  <!-- START SNIPPET: example -->
  *  &lt;r:link /&gt;
@@ -60,6 +65,11 @@ public class Link extends UIBean {
 	protected boolean bsplugins;
 	protected boolean i18n;
 	protected boolean panda;
+	protected boolean hammer;
+	protected boolean lightbox;
+	protected boolean meiomask;
+	protected boolean mousewheel;
+	protected boolean tablesorter;
 	
 
 	/**
@@ -85,6 +95,17 @@ public class Link extends UIBean {
 			jqplugins = true;
 			bootstrap = true;
 			bsplugins = true;
+		}
+		
+		if (hammer || lightbox || meiomask || mousewheel || tablesorter) {
+			jquery = true;
+		}
+		if (jqextras) {
+			hammer = false;
+			lightbox = false;
+			meiomask = false;
+			mousewheel = false;
+			tablesorter = false;
 		}
 		
 		if (cdn == null) {
@@ -303,6 +324,76 @@ public class Link extends UIBean {
 	 */
 	public void setPanda(boolean panda) {
 		this.panda = panda;
+	}
+
+	/**
+	 * @return the hammer
+	 */
+	public boolean isHammer() {
+		return hammer;
+	}
+
+	/**
+	 * @param hammer the hammer to set
+	 */
+	public void setHammer(boolean hammer) {
+		this.hammer = hammer;
+	}
+
+	/**
+	 * @return the lightbox
+	 */
+	public boolean isLightbox() {
+		return lightbox;
+	}
+
+	/**
+	 * @param lightbox the lightbox to set
+	 */
+	public void setLightbox(boolean lightbox) {
+		this.lightbox = lightbox;
+	}
+
+	/**
+	 * @return the meiomask
+	 */
+	public boolean isMeiomask() {
+		return meiomask;
+	}
+
+	/**
+	 * @param meiomask the meiomask to set
+	 */
+	public void setMeiomask(boolean meiomask) {
+		this.meiomask = meiomask;
+	}
+
+	/**
+	 * @return the mousewheel
+	 */
+	public boolean isMousewheel() {
+		return mousewheel;
+	}
+
+	/**
+	 * @param mousewheel the mousewheel to set
+	 */
+	public void setMousewheel(boolean mousewheel) {
+		this.mousewheel = mousewheel;
+	}
+
+	/**
+	 * @return the tablesorter
+	 */
+	public boolean isTablesorter() {
+		return tablesorter;
+	}
+
+	/**
+	 * @param tablesorter the tablesorter to set
+	 */
+	public void setTablesorter(boolean tablesorter) {
+		this.tablesorter = tablesorter;
 	}
 
 }
