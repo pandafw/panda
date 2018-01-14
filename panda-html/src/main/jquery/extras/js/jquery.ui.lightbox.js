@@ -21,8 +21,8 @@
 		// Configuration related to navigation
 		fixedNavigation:		false,		// (boolean) Boolean that informs if the navigation (next and prev button) will be fixed or not in the interface.
 		// Configuration related to images
-		textBtnPrev:			'&laquo;',			// (string) the text of prev button
-		textBtnNext:			'&raquo;',			// (string) the text of next button
+		textBtnPrev:			'&lsaquo;',			// (string) the text of prev button
+		textBtnNext:			'&rsaquo;',			// (string) the text of next button
 		textBtnClose:			'&times;',		// (string) the text of close button
 		// Configuration related to container image box
 		containerBorderSize:	10,			// (integer) If you adjust the padding in the CSS for the container, #lightbox-container-image-box, you will need to update this value
