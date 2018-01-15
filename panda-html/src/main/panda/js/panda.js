@@ -1807,10 +1807,10 @@ if (typeof String.formatSize != "function") {
 			
 			if ($a && $a.length) {
 				f = true;
+				var $w = $(window), st = $w.scrollTop(), sl = $w.scrollLeft();
 				$a.focus();
-				$('body').scrollTop(0).scrollLeft(0);
+				$(window).scrollTop(st).scrollLeft(sl);
 			}
-			
 		});
 	}
 
