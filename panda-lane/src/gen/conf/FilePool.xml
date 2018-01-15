@@ -74,7 +74,7 @@
 		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
 		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
-	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
+	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolBulkDeleteAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>
 	</action>
 	<action name="filepool" extend="action.FilePool" actionClass="${action.package}.filepool.FilePoolEditAction" actionBaseClass="${action.baseEditActionClass}" generate="true">

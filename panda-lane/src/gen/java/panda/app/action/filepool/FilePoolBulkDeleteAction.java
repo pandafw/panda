@@ -8,12 +8,12 @@ import panda.mvc.annotation.To;
 import panda.mvc.annotation.param.Param;
 import panda.vfs.dao.DaoFileItem;
 
-public abstract class FilePoolBulkAction extends GenericBulkAction<DaoFileItem> {
+public abstract class FilePoolBulkDeleteAction extends GenericBulkAction<DaoFileItem> {
 
 	/**
 	 * Constructor
 	 */
-	public FilePoolBulkAction() {
+	public FilePoolBulkDeleteAction() {
 		setType(DaoFileItem.class);
 		addDisplayFields(DaoFileItem.ID, DaoFileItem.NAME, DaoFileItem.SIZE, DaoFileItem.DATE, DaoFileItem.FLAG);
 	}

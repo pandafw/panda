@@ -6,18 +6,17 @@ import java.util.List;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
 import panda.mvc.annotation.At;
-import panda.app.action.filepool.FilePoolBulkAction;
 import panda.vfs.FileItem;
 import panda.vfs.dao.DaoFileItem;
 import panda.vfs.dao.FileDataQuery;
 
 @At("${super_path}/filepool")
 @Auth(AUTH.SUPER)
-public class FilePoolBulkExAction extends FilePoolBulkAction {
+public class FilePoolBulkDeleteExAction extends FilePoolBulkDeleteAction {
 	/**
 	 * Constructor
 	 */
-	public FilePoolBulkExAction() {
+	public FilePoolBulkDeleteExAction() {
 	}
 
 	/**
