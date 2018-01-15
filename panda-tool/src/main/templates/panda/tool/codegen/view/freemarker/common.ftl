@@ -48,7 +48,7 @@
 	<#macro header>
 <html>
 <head>
-	<title>${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></title>
+	<title>${s}@p.text name="title-${gen.trimUiName(ui.name)}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></title>
 </head>
 <body>
 <#if ui.header?has_content>
@@ -61,18 +61,18 @@
 		<ol class="breadcrumb">
 			<li>${s}@p.i icon="icon"/> ${s}@p.text name="title"/></li>
 		<#list steps as st>
-			<li<#if !st_has_next> class="active"</#if>>${s}@p.text name="step-${st}"/></li>
+			<li<#if !st_has_next> class="active"</#if>>${s}@p.text name="step-${gen.trimUiName(st)}"/></li>
 		</#list>
 		</ol>
 	</div>
 		<#else>
 	<div class="p-header">
-		<h3>${s}@p.i icon="icon"/> ${s}@p.text name="title-${ui.name}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
+		<h3>${s}@p.i icon="icon"/> ${s}@p.text name="title-${gen.trimUiName(ui.name)}">${s}@p.param name="title" value="#(title)"/>${s}/@p.text></h3>
 	</div>
 		</#if>
 	</#macro>
 	<#macro swell step="">
-${s}#assign _well = a.getText("well-${ui.name}${step}", "")/>
+${s}#assign _well = a.getText("well-${gen.trimUiName(ui.name)}${step}", "")/>
 ${s}#if _well?has_content>
 	<div class="p-well">${d}{_well}</div>
 ${s}/#if>
@@ -107,7 +107,7 @@ ${s}/@p.url><#rt/>
 	</#macro>
 	<#macro safeinc step>
 <#if ui.safeInclude?? && ui.safeInclude?lower_case != 'false'>
-	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${ui.name}${step}-custom.ftl</#if>"/>
+	${s}@safeinclude path="<#if ui.safeInclude?has_content>${ui.safeInclude}<#else>${action.simpleActionClass}_${gen.trimUiName(ui.name)}${step}-custom.ftl</#if>"/>
 </#if>
 	</#macro>
 </#if>

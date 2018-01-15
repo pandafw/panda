@@ -326,37 +326,46 @@ public class DefaultMvcLoading implements Loading {
 		ActionConfig am = new ActionConfig();
 		evalHttpAdaptor(am, method.getAnnotation(AdaptBy.class));
 		evalViews(am, method.getAnnotation(To.class));
-		evalAt(ioc, am, method.getAnnotation(At.class), method.getName());
+		evalAt(ioc, am, method.getAnnotation(At.class), method);
 		evalActionChainMaker(am, method.getAnnotation(Chain.class));
 		am.setActionMethod(method);
 		return am;
 	}
 
 	protected void evalActionChainMaker(ActionConfig ac, Chain cb) {
-		if (null != cb) {
+		if (cb != null) {
 			ac.setChainName(cb.value());
 		}
 	}
 
-	protected void evalAt(Ioc ioc, ActionConfig ac, At at, String def) {
-		if (at != null) {
-			if (Arrays.isNotEmpty(at.value())) {
-				IocProxy ip = new IocProxy(ioc);
-				String[] ps = new String[at.value().length];
-				for (int i = 0; i < ps.length; i++) {
-					String a = at.value()[i];
-					a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
-					ps[i] = a.length() > 1 ? Strings.stripEnd(a, '/') : a;
-				}
-				ac.setPaths(ps);
-			}
-			else if (def != null) {
-				ac.setPaths(Arrays.toArray(def));
-			}
+	protected void evalAt(Ioc ioc, ActionConfig ac, At at, Method method) {
+		if (at == null) {
+			return;
+		}
 
-			if (Arrays.isNotEmpty(at.method())) {
-				ac.setAtMethods(at.method());
+		if (Arrays.isNotEmpty(at.value())) {
+			IocProxy ip = new IocProxy(ioc);
+			String[] ps = new String[at.value().length];
+			for (int i = 0; i < ps.length; i++) {
+				String a = at.value()[i];
+				a = Strings.isEmpty(a) ? a : Mvcs.translate(a, ip);
+				ps[i] = a.length() > 1 ? Strings.stripEnd(a, '/') : a;
 			}
+			ac.setPaths(ps);
+		}
+		else if (method != null) {
+			String mn = method.getName();
+			String ma = Strings.replaceChars(mn, '_', '.');
+			if (ma.equals(mn)) {
+				ac.setPaths(Arrays.toArray(ma));
+			}
+			else {
+				ac.setPaths(Arrays.toArray(mn, ma));
+			}
+		}
+
+		if (Arrays.isNotEmpty(at.method())) {
+			ac.setAtMethods(at.method());
 		}
 	}
 

@@ -107,9 +107,9 @@
 	</action>
 	<action name="resource" auth="${action.auth}" path="${action.path}" extend="action.Resource" actionClass="${action.package}.resource.ResourceListAction" actionBaseClass="${action.baseListActionClass}" generate="true">
 		<list name="list" extend="basicList" template="${template.list}" generate="true"/>
-		<list name="list_print" extend="basicList" template="${template.list_print}" generate="true"/>
-		<list name="list_json" extend="basicList" template="${template.list_json}" generate="true"/>
-		<list name="list_xml" extend="basicList" template="${template.list_xml}" generate="true"/>
+		<list name="list.print" extend="basicList" template="${template.list_print}" generate="true"/>
+		<list name="list.json" extend="basicList" template="${template.list_json}" generate="true"/>
+		<list name="list.xml" extend="basicList" template="${template.list_xml}" generate="true"/>
 	</action>
 	<action name="resource" auth="${action.auth}" path="${action.path}" extend="action.Resource" actionClass="${action.package}.resource.ResourceBulkAction" actionBaseClass="${action.baseBulkActionClass}" generate="true">
 		<list name="bdelete" extend="basicBulk" template="${template.bdelete}" generate="true"/>

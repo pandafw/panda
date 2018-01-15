@@ -126,7 +126,7 @@
 
 
 	<@p.listview id="property_bdelete"
-		action="~/bdelete_execute" method="post"
+		action="~/bdelete.execute" method="post"
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-hover table-striped"
 	/>

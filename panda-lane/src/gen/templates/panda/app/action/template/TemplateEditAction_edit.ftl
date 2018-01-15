@@ -99,13 +99,13 @@
 	<#if a.inputConfirm>
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-edit-confirm",
-			"action": "~/edit_confirm",
+			"action": "~/edit.confirm",
 			"text": "btn-edit-confirm"
 		}]/>
 	<#else>
 		<#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-edit-execute",
-			"action": "~/edit_execute",
+			"action": "~/edit.execute",
 			"text": "btn-edit-execute"
 		}]/>
 	</#if>

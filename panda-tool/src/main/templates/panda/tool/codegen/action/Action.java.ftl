@@ -126,7 +126,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#if action.listUIList?has_content><#list action.listUIList as ui><#if ui.generate!false>
 <#if ui.template == "list">
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -138,7 +138,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif ui.template == ("list_popup")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -150,7 +150,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif ui.template == ("list_print")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -162,7 +162,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif [ "list_csv", "list_tsv", "list_xls", "list_xlsx", "expo_csv", "expo_tsv", "expo_xls", "expo_xlsx" ]?seq_contains(ui.template)>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -197,7 +197,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif [ "list_json", "list_xml", "expo_json", "expo_xml" ]?seq_contains(ui.template)>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -209,7 +209,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif [ "list_pdf", "expo_pdf" ]?seq_contains(ui.template)>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param qr queryer
 	 * @return result or view
 	 */
@@ -221,19 +221,19 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif ui.template == ("import")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param arg argument
 	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
 	@To(value=View.SFTL, error=View.SFTL)
 	public Object ${gen.trimMethodName(ui.name)}(@Param Arg arg) {
-		return super.import_(arg);
+		return super.importx(arg);
 	}
 	
 <#elseif ui.template == ("bdelete")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param args arguments
 	 * @return result or view
 	 */
@@ -244,7 +244,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param args arguments
 	 * @return result or view
 	 */
@@ -256,7 +256,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif ui.template == ("bupdate")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param args arguments
 	 * @return result or view
 	 */
@@ -267,7 +267,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param args arguments
 	 * @return result or view
 	 */
@@ -279,7 +279,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	
 <#elseif ui.template == ("bedit")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
@@ -289,7 +289,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @return result or view
 	 */
 	@At
@@ -299,7 +299,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_confirm
+	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @return result or view
 	 */
 	@At
@@ -309,7 +309,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @return result or view
 	 */
 	@At
@@ -323,7 +323,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 <#if action.inputUIList?has_content><#list action.inputUIList as ui><#if ui.generate!false>
 <#if ui.template == ("view")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
 	 * @return result or view
 	 */
@@ -334,7 +334,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -346,7 +346,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 <#elseif ui.template == ("print")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
 	 * @return result or view
 	 */
@@ -357,7 +357,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -369,7 +369,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 <#elseif ui.template == ("add")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @return result or view
 	 */
 	@At${gen.trimAtName(ui.name)}
@@ -379,7 +379,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -390,7 +390,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_confirm
+	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -401,7 +401,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -413,7 +413,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 <#elseif ui.template == ("copy")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
 	 * @return result or view
 	 */
@@ -424,7 +424,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -435,7 +435,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_confirm
+	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -446,7 +446,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -458,7 +458,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 <#elseif ui.template == ("edit")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
 	 * @return result or view
 	 */
@@ -469,7 +469,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_input
+	 * ${gen.trimMethodName(ui.name)}_input
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -480,7 +480,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_confirm
+	 * ${gen.trimMethodName(ui.name)}_confirm
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -491,7 +491,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param data the input data
 	 * @return result or view
 	 */
@@ -503,7 +503,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 
 <#elseif ui.template == ("delete")>
 	/**
-	 * ${ui.name}
+	 * ${gen.trimMethodName(ui.name)}
 	 * @param key the input key
 	 * @return result or view
 	 */
@@ -514,7 +514,7 @@ public<#if !(action.path??)> abstract</#if> class ${actionClass} extends ${actio
 	}
 
 	/**
-	 * ${ui.name}_execute
+	 * ${gen.trimMethodName(ui.name)}_execute
 	 * @param key the input key
 	 * @return result or view
 	 */

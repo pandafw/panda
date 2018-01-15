@@ -84,7 +84,7 @@
 	</#if>
 		<#assign _buttons_ = [{
 			"icon": "icon-delete-execute",
-			"action": "~/delete_execute",
+			"action": "~/delete.execute",
 			"text": "btn-delete-execute"
 		}]/>
 			<#if a.canAccess('~/list')>

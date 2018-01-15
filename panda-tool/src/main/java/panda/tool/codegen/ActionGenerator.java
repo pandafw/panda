@@ -212,9 +212,10 @@ public class ActionGenerator extends AbstractCodeGenerator {
 
 	public String trimMethodName(String nm) {
 		if ("import".equals(nm)) {
-			return "import_";
+			return "importx";
 		}
-		return nm;
+		
+		return Strings.replaceChars(nm, '.', '_');
 	}
 
 	public String translateToJava(String sv) {

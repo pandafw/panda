@@ -14,7 +14,7 @@ ${s}#if r??>
 		<#include "edit-view-fields.ftl"/>
 		${s}#assign _buttons_ = [{
 			"icon": "icon-${ui.name}-execute",
-			"action": "~/${ui.name}_execute",
+			"action": "~/${ui.name}${props['ui.action.seperator']!'.'}execute",
 			"text": "btn-${ui.name}-execute"
 		}]/>
 		<#include "edit-actions.ftl"/>

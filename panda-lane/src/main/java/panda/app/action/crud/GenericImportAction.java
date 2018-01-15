@@ -169,7 +169,7 @@ public abstract class GenericImportAction<T> extends GenericBaseAction<T> {
 	 * @return result
 	 * @throws Exception if an error occurs
 	 */
-	protected Object import_(Arg arg) {
+	protected Object importx(Arg arg) {
 		this.arg = arg;
 		if (arg.file == null) {
 			return null;

@@ -67,7 +67,7 @@
 		}<#if c_has_next>, </#if></#list>] />
 
 
-	${s}@p.listview id="${action.name}_${ui.name}" action="~/${ui.name}" 
+	${s}@p.listview id="${action.name}_${gen.trimUiName(ui.name)}" action="~/${ui.name}" 
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		headPager="true" singleSelect="true" toggleSelect="false"
 		cssClass="p-lv-clickable" cssTable="table-hover table-striped"

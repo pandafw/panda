@@ -105,7 +105,7 @@
 		}] />
 
 
-	<@p.listview id="resource_list_print" action="~/list_print" 
+	<@p.listview id="resource_list_print" action="~/list.print" 
 		list=result columns=_columns_ cssColumn="status"
 		cssTable="table-striped"
 	/>

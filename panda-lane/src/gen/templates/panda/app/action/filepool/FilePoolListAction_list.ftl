@@ -19,10 +19,10 @@
 
 	<div class="p-toolbar-wrap"><ul class="p-toolbar">
 <#if a.canAccess("~/add")><li><@p.a action="~/add" icon="icon-new" label="#(btn-new)"/>
-</li></#if><#if a.canAccess("~/list_print")><li><@p.a action="~/list_print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
-</li></#if><#if a.canAccess("~/expo_csv")><li><@p.a action="~/expo_csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
-</li></#if><#if a.canAccess("~/list_json")><li><@p.a action="~/list_json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
-</li></#if><#if a.canAccess("~/list_xml")><li><@p.a action="~/list_xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
+</li></#if><#if a.canAccess("~/list.print")><li><@p.a action="~/list.print" includeParams="all" icon="icon-print" label="#(btn-print)" target="_blank"/>
+</li></#if><#if a.canAccess("~/expo.csv")><li><@p.a action="~/expo.csv" includeParams="all" icon="icon-csv" label="#(btn-csv)" target="_blank"/>
+</li></#if><#if a.canAccess("~/list.json")><li><@p.a action="~/list.json" includeParams="all" icon="icon-json" label="#(btn-json)" target="_blank"/>
+</li></#if><#if a.canAccess("~/list.xml")><li><@p.a action="~/list.xml" includeParams="all" icon="icon-xml" label="#(btn-xml)" target="_blank"/>
 </li></#if>	</ul><div class="clearfix"></div></div>
 
 	<#include "/action-alert.ftl"/>

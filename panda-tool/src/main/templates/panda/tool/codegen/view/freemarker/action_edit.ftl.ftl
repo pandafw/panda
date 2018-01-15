@@ -21,14 +21,14 @@
 	${s}#if a.inputConfirm>
 		${s}#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-${ui.name}-confirm",
-			"action": "~/${ui.name}_confirm",
+			"action": "~/${ui.name}${props['ui.action.seperator']!'.'}confirm",
 			"text": "btn-${ui.name}-confirm"
 		}]/>
 	${s}#else>
 </#if>
 		${s}#assign _buttons_ = _buttons_ + [{
 			"icon": "icon-${ui.name}-execute",
-			"action": "~/${ui.name}_execute",
+			"action": "~/${ui.name}${props['ui.action.seperator']!'.'}execute",
 			"text": "btn-${ui.name}-execute"
 		}]/>
 <#if "true" == props['ui.input.confirm']!>

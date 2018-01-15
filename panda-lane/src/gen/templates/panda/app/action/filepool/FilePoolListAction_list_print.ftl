@@ -67,7 +67,7 @@
 		}] />
 
 
-	<@p.listview id="filepool_list_print" action="~/list_print" 
+	<@p.listview id="filepool_list_print" action="~/list.print" 
 		list=result columns=_columns_
 		cssTable="table-striped"
 	/>

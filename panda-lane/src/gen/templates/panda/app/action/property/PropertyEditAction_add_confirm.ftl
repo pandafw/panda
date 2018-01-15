@@ -99,8 +99,8 @@
 			/>
 	</#if>
 		<@p.div cssClass="p-buttons">
-			<@p.submit action="~/add_execute" icon="icon-add-execute" label="#(btn-add-execute)"/>
-			<@p.submit action="~/add_input" icon="icon-back" label="#(btn-back)"/>
+			<@p.submit action="~/add.execute" icon="icon-add-execute" label="#(btn-add-execute)"/>
+			<@p.submit action="~/add.input" icon="icon-back" label="#(btn-back)"/>
 		</@p.div>
 	</@p.form>
 <#else>

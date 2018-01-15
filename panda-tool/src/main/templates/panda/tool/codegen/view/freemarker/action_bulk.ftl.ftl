@@ -55,7 +55,7 @@ ${s}#if result?has_content>
 
 
 	${s}@p.listview id="${action.name}_${ui.name}"
-		action="~/${ui.name}_execute" method="post"
+		action="~/${ui.name}${props['ui.action.seperator']!'.'}execute" method="post"
 		list=result columns=_columns_<#if ui.cssColumn?has_content> cssColumn="${ui.cssColumn}"</#if>
 		cssTable="table-hover table-striped"
 	<#if ui.params.addon?has_content>

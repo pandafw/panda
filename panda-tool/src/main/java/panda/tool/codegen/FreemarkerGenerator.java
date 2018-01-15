@@ -120,7 +120,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 					
 					wrapper.put("ui", lui);
 					
-					String uin = action.getSimpleActionClass() + "_" + lui.getName();
+					String uin = action.getSimpleActionClass() + "_" + trimUiName(lui.getName());
 
 					String t = lui.getTemplate();
 					if ("bdelete".equals(t) || "bupdate".equals(t)) {
@@ -147,7 +147,7 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 
 					wrapper.put("ui", iui);
 
-					String uin = action.getSimpleActionClass() + "_" +iui.getName();
+					String uin = action.getSimpleActionClass() + "_" + trimUiName(iui.getName());
 
 					String t = iui.getTemplate();
 					if ("view".equals(t) || "print".equals(t)) {
@@ -170,6 +170,10 @@ public class FreemarkerGenerator extends AbstractCodeGenerator {
 				}
 			}
 		}
+	}
+
+	public String trimUiName(String nm) {
+		return Strings.replaceChars(nm, '.', '_');
 	}
 	
 	public boolean startsWithLetter(String str) {
