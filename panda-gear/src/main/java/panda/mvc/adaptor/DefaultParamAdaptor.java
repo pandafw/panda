@@ -22,9 +22,7 @@ import panda.io.MimeTypes;
 import panda.ioc.Ioc;
 import panda.ioc.Scope;
 import panda.ioc.annotation.IocBean;
-import panda.ioc.annotation.IocInject;
 import panda.lang.Arrays;
-import panda.lang.Charsets;
 import panda.lang.Classes;
 import panda.lang.Exceptions;
 import panda.lang.Strings;
@@ -32,7 +30,6 @@ import panda.lang.reflect.Types;
 import panda.log.Log;
 import panda.log.Logs;
 import panda.mvc.ActionContext;
-import panda.mvc.MvcConstants;
 import panda.mvc.Mvcs;
 import panda.mvc.ParamAdaptor;
 import panda.mvc.adaptor.ejector.FormParamEjector;
@@ -56,9 +53,6 @@ public class DefaultParamAdaptor implements ParamAdaptor {
 
 	private static final String ATTR_EJECTOR = ParamEjector.class.getName();
 
-	@IocInject(value=MvcConstants.IO_INPUT_ENCODING, required=false)
-	protected String encoding = Charsets.UTF_8;
-	
 	protected ParamEjector getParamEjector(ActionContext ac) {
 		ParamEjector ejector = (ParamEjector)ac.getRequest().getAttribute(ATTR_EJECTOR);
 		if (ejector != null) {

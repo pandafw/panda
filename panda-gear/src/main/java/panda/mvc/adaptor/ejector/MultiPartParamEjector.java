@@ -12,7 +12,9 @@ import panda.io.SizeLimitExceededException;
 import panda.io.Streams;
 import panda.ioc.annotation.IocBean;
 import panda.ioc.annotation.IocInject;
+import panda.lang.Charsets;
 import panda.lang.Exceptions;
+import panda.lang.Strings;
 import panda.lang.time.DateTimes;
 import panda.log.Log;
 import panda.log.Logs;
@@ -29,6 +31,12 @@ import panda.vfs.FilePool;
 public class MultiPartParamEjector extends AbstractParamEjector {
 	private static final Log log = Logs.getLog(MultiPartParamEjector.class);
 
+	@IocInject(value=MvcConstants.REQUEST_ENCODING, required=false)
+	private String encoding = Charsets.UTF_8;
+	
+	@IocInject(value=MvcConstants.REQUEST_EMPTY_PARAMS, required=false)
+	private boolean emptyParams = true;
+	
 	private Map<String, Object> params;
 
 	/**
@@ -66,10 +74,12 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 					log.debug("parse: " + ac.getPath());
 				}
 
-				String qs = req.getQueryString();
-				params = URLHelper.parseQueryString(qs);
+				String enc = HttpServlets.getEncoding(req, encoding);
 
-				parse(req);
+				String qs = req.getQueryString();
+				params = URLHelper.parseQueryString(qs, enc, !emptyParams);
+
+				parse(req, enc);
 			}
 			catch (SizeLimitExceededException e) {
 				HttpServlets.safeDrain(req, drainTimeout);
@@ -82,23 +92,22 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 		return params;
 	}
 
-	protected void parse(HttpServletRequest req) throws IOException {
-		String encoding = HttpServlets.getEncoding(req);
-		
+	protected void parse(HttpServletRequest req, String encoding) throws IOException {
 		FileUploader fu = new FileUploader();
 		fu.setBodySizeMax(bodySizeMax);
 		fu.setFileSizeMax(fileSizeMax);
+		fu.setHeaderEncoding(encoding);
 		FileItemIterator iter = fu.getItemIterator(req);
 		while (iter.hasNext()) {
 			final FileItemStream item = iter.next();
-			Object val = null;
 			if (item.isFormField()) {
-				val = Streams.toString(item.openStream(), encoding);
+				String s = Streams.toString(item.openStream(), encoding);
+				addStringParam(item.getFieldName(), s);
 			}
 			else {
-				val = saveUploadFile(item);
+				FileItem i = saveUploadFile(item);
+				addFileItemParam(item.getFieldName(), i);
 			}
-			addParam(item.getFieldName(), val);
 		}
 	}
 
@@ -108,6 +117,18 @@ public class MultiPartParamEjector extends AbstractParamEjector {
 		return fp.saveFile(name, item.openStream(), true);
 	}
 
+	protected void addStringParam(String name, String value) {
+		if (Strings.isNotEmpty(value)) {
+			addParam(name, value);
+		}
+	}
+	
+	protected void addFileItemParam(String name, FileItem value) {
+		if (value != null) {
+			addParam(name, value);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected void addParam(String name, Object value) {
 		Object v = params.get(name);

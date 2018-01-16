@@ -39,14 +39,17 @@ public interface MvcConstants extends IocConstants {
 	/** Cache model instances at BeanWrapper level */
 	public static final String FREEMARKER_BEANWRAPPER_CACHE = "panda.freemarker.beanwrapper.cache";
 
-	/** Input encoding */
-	public static final String IO_INPUT_ENCODING = "panda.io.input.encoding";
+	/** Request encoding */
+	public static final String REQUEST_ENCODING = "panda.request.encoding";
 
-	/** The default encode method to generate Struts URLs */
-	public static final String UI_URL_ENCODE = "panda.ui.url.encode";
+	/** Parse empty parameters for http request */
+	public static final String REQUEST_EMPTY_PARAMS = "panda.request.empty.params";
+
+	/** The default url encodeing */
+	public static final String URL_ENCODING = "panda.url.encoding";
 
 	/** incude context path of url */
-	public static final String UI_URL_INCLUDE_CONTEXT = "panda.url.include.context";
+	public static final String URL_INCLUDE_CONTEXT = "panda.url.include.context";
 
 	/** The defaults of datepicker */
 	public static final String UI_DATEPICKER_DEFAULTS = "panda.ui.datepicker.defaults";

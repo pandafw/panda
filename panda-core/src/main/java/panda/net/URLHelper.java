@@ -318,46 +318,71 @@ public class URLHelper {
 	 * @param encoding the encoding
 	 * @return parameter map
 	 */
-	@SuppressWarnings("unchecked")
 	public static Map<String, Object> parseQueryString(String queryString, String encoding) {
+		return parseQueryString(queryString, encoding, false);
+	}
+	
+	/**
+	 * @param queryString query string
+	 * @param removeEmpty remove empty parameter
+	 * @return parameter map
+	 */
+	public static Map<String, Object> parseQueryString(String queryString, boolean removeEmpty) {
+		return parseQueryString(queryString, Charsets.UTF_8, removeEmpty);
+	}
+
+	/**
+	 * @param queryString query string
+	 * @param encoding the encoding
+	 * @param removeEmpty remove empty parameter
+	 * @return parameter map
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> parseQueryString(String queryString, String encoding, boolean removeEmpty) {
 		Map<String, Object> qparams = new LinkedHashMap<String, Object>();
-		if (queryString == null) {
+		if (Strings.isEmpty(queryString)) {
 			return qparams;
 		}
 		
-		String[] params = queryString.split("&");
-		for (int a = 0; a < params.length; a++) {
-			if (params[a].trim().length() > 0) {
-				String[] tmpParams = params[a].split("=");
-				String paramName = null;
-				String paramValue = "";
-				if (tmpParams.length > 0) {
-					paramName = tmpParams[0];
-				}
-				if (tmpParams.length > 1) {
-					paramValue = tmpParams[1];
-				}
-				if (paramName != null) {
-					String translatedParamValue = decodeURL(paramValue, encoding);
+		String[] params = Strings.split(queryString, '&');
+		for (String a : params) {
+			a = Strings.trim(a);
+			if (Strings.isEmpty(a)) {
+				continue;
+			}
 
-					if (qparams.containsKey(paramName)) {
-						Object currentParam = qparams.get(paramName);
-						if (currentParam instanceof String) {
-							List<String> ss = new ArrayList<String>();
-							ss.add((String)currentParam);
-							ss.add(translatedParamValue);
-							qparams.put(paramName, ss);
-						}
-						else {
-							List<String> ss = (List<String>)currentParam;
-							ss.add(translatedParamValue);
-							qparams.put(paramName, ss);
-						}
-					}
-					else {
-						qparams.put(paramName, translatedParamValue);
-					}
+			String k, v;
+			int d = a.indexOf('=');
+			if (d < 0) {
+				k = a;
+				v = null;
+			}
+			else {
+				k = Strings.trim(a.substring(0, d));
+				v = Strings.trim(a.substring(d + 1));
+			}
+
+			if (removeEmpty && Strings.isEmpty(v)) {
+				continue;
+			}
+
+			k = decodeURL(k, encoding);
+			v = decodeURL(v, encoding);
+			if (qparams.containsKey(k)) {
+				Object cv = qparams.get(k);
+				if (cv instanceof String) {
+					List<String> ss = new ArrayList<String>();
+					ss.add((String)cv);
+					ss.add(k);
+					qparams.put(k, ss);
 				}
+				else {
+					List<String> ss = (List<String>)cv;
+					ss.add(v);
+				}
+			}
+			else {
+				qparams.put(k, v);
 			}
 		}
 		return qparams;

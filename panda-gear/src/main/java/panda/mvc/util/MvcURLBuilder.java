@@ -112,7 +112,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	/**
 	 * @param includeContext the includeContext to set
 	 */
-	@IocInject(value = MvcConstants.UI_URL_INCLUDE_CONTEXT, required = false)
+	@IocInject(value = MvcConstants.URL_INCLUDE_CONTEXT, required = false)
 	public void setIncludeContext(boolean includeContext) {
 		this.includeContext = includeContext;
 	}
@@ -149,7 +149,7 @@ public class MvcURLBuilder extends ServletURLBuilder {
 	/**
 	 * @param encoding the encoding to set
 	 */
-	@IocInject(value = MvcConstants.UI_URL_ENCODE, required = false)
+	@IocInject(value = MvcConstants.URL_ENCODING, required = false)
 	public void setEncoding(String encoding) {
 		this.encoding = encoding;
 	}
