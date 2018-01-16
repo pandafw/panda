@@ -2222,7 +2222,7 @@ public abstract class Collections {
 	}
 
 	/**
-	 * strip empty collection to null
+	 * remove empty elements from collection
 	 * 
 	 * @param coll the collection
 	 * @return the stripped collection (coll)
@@ -2242,7 +2242,7 @@ public abstract class Collections {
 	}
 
 	/**
-	 * strip empty list to null
+	 * remove empty elements from list
 	 * 
 	 * @param list the list
 	 * @return the stripped list (list)
@@ -2259,6 +2259,86 @@ public abstract class Collections {
 		}
 		
 		return isEmpty(list) ? null : list;
+	}
+
+	/**
+	 * remove empty elements from set
+	 * 
+	 * @param set the set
+	 * @return the stripped set (set)
+	 */
+	public static <T> Set<T> stripToNull(Set<T> set) {
+		if (isEmpty(set)) {
+			return null;
+		}
+
+		for (Iterator it = set.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return isEmpty(set) ? null : set;
+	}
+
+	/**
+	 * remove empty elements from collection
+	 * 
+	 * @param coll the collection
+	 * @return the stripped collection (coll)
+	 */
+	public static <T> Collection<T> stripToEmpty(Collection<T> coll) {
+		if (coll == null) {
+			return new ArrayList<T>();
+		}
+
+		for (Iterator it = coll.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return coll;
+	}
+
+	/**
+	 * remove empty elements from list
+	 * 
+	 * @param list the list
+	 * @return the stripped list (list)
+	 */
+	public static <T> List<T> stripToEmpty(List<T> list) {
+		if (list == null) {
+			return new ArrayList<T>();
+		}
+
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return list;
+	}
+
+	/**
+	 * remove empty elements from set
+	 * 
+	 * @param set the set
+	 * @return the stripped set (set)
+	 */
+	public static <T> Set<T> stripToEmpty(Set<T> set) {
+		if (set == null) {
+			return new HashSet<T>();
+		}
+
+		for (Iterator it = set.iterator(); it.hasNext();) {
+			if (Objects.isEmpty(it.next())) {
+				it.remove();
+			}
+		}
+		
+		return set;
 	}
 
 	/**
