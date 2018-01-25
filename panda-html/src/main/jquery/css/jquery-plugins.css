@@ -31,18 +31,28 @@ fieldset.ui-collapsed {
 }
 
 .ui-loadmask {
-	background: url('../img/loading.gif') no-repeat 12px 50%;
 	position: absolute;
 	top: 0;
 	left: 0;
-	padding: 15px 0px 15px 48px;
+	padding: 20px;
 	z-index: 20001;
 }
+.ui-loadmask-img {
+	background: url('../img/loading.gif') no-repeat center center;
+	width: 24px;
+	height: 24px;
+}
 .ui-loadmask-hasmsg {
+	padding: 15px 20px 15px 54px;
 	background-color: #fff;
 	border: solid 1px #ADD8E6;
 	opacity: 0.9;
-	
+}
+.ui-loadmask-hasmsg .ui-loadmask-img {
+	position: absolute;
+	margin-top: -12px;
+	top: 50%;
+	left: 15px;
 }
 .ui-loadmask .ui-loadmask-msg {
 	border: 0 none;
@@ -57,7 +67,7 @@ fieldset.ui-collapsed {
 	border: 0 none;
 	background: transparent;
 	margin: 0;
-	padding: 0 20px 0 0;
+	padding: 0;
 	text-align: center;
 	vertical-align: middle;
 }

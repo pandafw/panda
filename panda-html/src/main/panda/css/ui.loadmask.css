@@ -1,11 +1,33 @@
-/* ui-loadmask hack */
+/**
+ * ui-loadmask hack
+ * https://icons8.com/preloaders/
+ * Foreground color: #435BD1   Background color: #FFFFFF
+ */
 .ui-loadmask {
-	background-image: url('../img/loader/fountain.gif');
-	background-position: 50% 100%;
-	min-width: 180px;
-	min-height: 22px;
-	padding: 0 0 20px 0;
+	background-color: #fff;
+	border: solid 1px #ADD8E6;
+	opacity: 0.9;
 }
-.ui-loadmask .ui-loadmask-msg td {
-	padding: 10px 15px 0 15px;
+.ui-loadmask-img {
+	background-image: url('../img/loader/fountain.gif');
+	width: 160px;
+	height: 20px;
+}
+.ui-loadmask-hasmsg {
+	padding: 18px 20px 18px 64px;
+}
+.ui-loadmask-hasmsg .ui-loadmask-img {
+	background-image: url('../img/loader/squares-circle.gif');
+	width: 32px;
+	height: 32px;
+	margin-top: -16px;
+}
+.ui-loadmask-big.ui-loadmask-hasmsg {
+	padding: 24px 30px 24px 100px;
+}
+.ui-loadmask-big.ui-loadmask-hasmsg .ui-loadmask-img {
+	background-image: url('../img/loader/squares-circle-big.gif');
+	width: 64px;
+	height: 64px;
+	margin-top: -32px;
 }

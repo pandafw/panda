@@ -1,5 +1,5 @@
 (function($) {
-	function maskElement($el, conf) {
+	function maskElement($el, c) {
 		//if this element has delayed mask scheduled then remove it and display the new one
 		if ($el.data("_mask_timeout") !== undefined) {
 			clearTimeout($el.data("_mask_timeout"));
@@ -15,7 +15,7 @@
 		}
 		$el.addClass("ui-loadmasked");
 
-		if (conf.mask !== false) {
+		if (c.mask !== false) {
 			var $m = $('<div class="ui-loadmask-mask"></div>');
 			//auto height fix for IE
 			if ($.browser.msie) {
@@ -30,36 +30,19 @@
 			$el.find("select").addClass("ui-loadmasked-hidden");
 		}
 		
-		var $mb = $('<div class="ui-loadmask" style="display:none;"></div>');
-		if (conf.cssClass) {
-			$mb.addClass(conf.cssClass);
+		var $mb = $('<div class="ui-loadmask" style="display:none;"><div class="ui-loadmask-img"></div></div>');
+		if (c.cssClass) {
+			$mb.addClass(c.cssClass);
 		}
-		if (conf.label) {
-			$mb.addClass('ui-loadmask-hasmsg').append('<table class="ui-loadmask-msg"><tr><td>' + conf.label + '</td></tr></table>');
+		if (c.html) {
+			$mb.html(html);
+		}
+		else if (c.label) {
+			$mb.addClass('ui-loadmask-hasmsg').append('<table class="ui-loadmask-msg"><tr><td>' + c.label + '</td></tr></table>');
 		}
 		$el.append($mb);
-		
-		//calculate center position
-		var el = 0, et = 0, ew, eh;
-		var mbw = $mb.outerWidth();
-		var mbh = $mb.outerHeight();
-		if (conf.window) {
-			$w = $(window);
-			el = $w.scrollLeft();
-			et = $w.scrollTop();
-			ew = $w.width();
-			eh = $w.height();
-		}
-		else {
-			ew = $el.width();
-			eh = $el.height();
-		}
 
-		$mb.css({
-			top: Math.round(et + (eh - mbh) / 2) + "px",
-			left: Math.round(el + (ew - mbw) / 2) + "px"
-		});
-		
+		$mb.center();
 		$mb.show();
 	}
 	
@@ -78,29 +61,29 @@
  
 	/**
 	 * Displays loading mask over selected element(s). Accepts both single and multiple selectors.
-	 *
-	 * @param label Text message that will be displayed on top of the mask besides a spinner (optional). 
-	 * 				If not provided only mask will be displayed without a label or a spinner.  	
-	 * @param delay Delay in milliseconds before element is masked (optional). If unmask() is called 
+	 * @param cssClass css class for the mask element
+	 * @param html  html content for the mask body
+	 * @param label text message that will be display
+	 * @param delay Delay in milliseconds before element is masked (optional). If unloadmask() is called 
 	 *              before the delay times out, no mask is displayed. This can be used to prevent unnecessary 
-	 *              mask display for quick processes.   	
+	 *              mask display for quick processes.
 	 */
-	$.fn.loadmask = function(conf) {
-		if (typeof(conf) == 'string') {
-			conf = { label: conf };
+	$.fn.loadmask = function(c) {
+		if (typeof(c) == 'string') {
+			c = { label: c };
 		}
 		else {
-			conf = conf || {};
+			c = c || {};
 		}
 		return this.each(function() {
-			if (conf.delay !== undefined && conf.delay > 0) {
+			if (c.delay !== undefined && c.delay > 0) {
 				var $el = $(this);
 				$el.data("_mask_timeout", setTimeout(function() {
-					maskElement($el, conf);
-				}, conf.delay));
+					maskElement($el, c);
+				}, c.delay));
 			}
 			else {
-				maskElement($(this), conf);
+				maskElement($(this), c);
 			}
 		});
 	};
