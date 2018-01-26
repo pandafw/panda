@@ -20,7 +20,6 @@
 	<classpathentry kind="lib" path="lib/jdbc/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/gae/appengine-api-1.0-sdk.jar"/>
 	<classpathentry kind="lib" path="lib/gae/appengine-api-labs.jar"/>
-	<classpathentry kind="lib" path="lib/run/commons-cli.jar" sourcepath="lib/run/commons-cli-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/commons-logging.jar" sourcepath="lib/run/commons-logging-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/freemarker.jar" sourcepath="lib/run/freemarker-sources.jar"/>
 	<classpathentry kind="lib" path="lib/run/log4j.jar" sourcepath="lib/run/log4j-sources.jar"/>

@@ -3,7 +3,7 @@
 	<property name="repo.local" location="${prj.repo}"/>
 
 	<!-- ivy -->
-	<target name="ivy-resolve" description="ivy --> retreive dependencies">
+	<target name="ivy-resolve" description="ivy resolve dependencies">
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="lib/api"/>
 			<fileset dir="lib/run"/>
@@ -14,11 +14,11 @@
 		<ivy:retrieve conf="api,run,gae,jdbc,tool" pattern="lib/[conf]/[artifact](-[classifier]).[ext]"/>
 	</target>
 
-	<target name="ivy-report" description="ivy --> generates a report of dependencies">
+	<target name="ivy-report" description="ivy generates a report of dependencies">
 		<ivy:report todir="lib/ivy" conf="api,run,gae,jdbc,tool"/>
 	</target>
 
-	<target name="ivy-clean" description="ivy --> clean the cache">
+	<!--target name="ivy-clean" description="ivy clean the cache">
 		<ivy:cleancache />
-	</target>
+	</target-->
 </project>
