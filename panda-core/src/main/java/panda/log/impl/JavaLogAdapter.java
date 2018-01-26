@@ -4,14 +4,13 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
-import org.apache.log4j.helpers.LogLog;
-
 import panda.io.Streams;
 import panda.lang.ClassLoaders;
 import panda.lang.Systems;
 import panda.log.Log;
 import panda.log.LogEvent;
 import panda.log.LogLevel;
+import panda.log.LogLog;
 
 public class JavaLogAdapter extends AbstractLogAdapter {
 	static {
