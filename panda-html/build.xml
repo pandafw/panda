@@ -43,7 +43,7 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 	<target name="min-js" description="Merge &amp; minify javascript files">
 		<!-- bootstrap2 -->
 		<concat destfile="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js" binary="true">
-			<fileset dir="src/main/bootstrap2/js/locales">
+			<fileset dir="src/main/bootstrap2/js/i18n">
 				<include name="*.js"/>
 			</fileset>
 		</concat>
@@ -67,20 +67,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		</java>
 
 		<!-- bootstrap3 -->
-		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
-			<fileset dir="src/main/bootstrap3/js/locales">
-				<include name="*.js"/>
-			</fileset>
-		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
-		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
 			<arg value="--charset"/>
@@ -127,12 +113,34 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
 		</java>
-		<copy overwrite="true" force="true"
-			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" 
-			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.js"/>
-		<copy overwrite="true" force="true"
-			file="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js" 
-			tofile="src/main/bootstrap3/js/bootstrap-plungins-i18n.min.js"/>
+
+		<!-- boostrap i18n -->
+		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
+			<fileset dir="src/main/bootstrap3/js/i18n">
+				<include name="bootstrap-datetimepicker.*.js"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
+		</java>
+		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins-i18n.js" binary="true">
+			<fileset dir="src/main/bootstrap3/js">
+				<include name="bootstrap-*-i18n.js"/>
+				<exclude name="bootstrap-plugins-i18n.js"/>
+			</fileset>
+		</concat>
+		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins-i18n.min.js" binary="true">
+			<fileset dir="src/main/bootstrap3/js">
+				<include name="bootstrap-*-i18n.min.js"/>
+				<exclude name="bootstrap-plugins-i18n.min.js"/>
+			</fileset>
+		</concat>
 
 		<!-- jquery plugins -->
 		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
@@ -211,43 +219,52 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/jquery/extras/js/jquery-extras.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/locales/jquery-extras-ja.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/locales" includes="*.ja.js"/>
+		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.ja.js" binary="true">
+			<fileset dir="src/main/jquery/extras/js/i18n">
+				<include name="*.ja.js"/>
+				<exclude name="jquery-extras.*"/>
+			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-ja.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.ja.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-ja.min.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.ja.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/locales/jquery-extras-zh-CN.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/locales" includes="*.zh-CN.js"/>
+		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.js" binary="true">
+			<fileset dir="src/main/jquery/extras/js/i18n">
+				<include name="*.zh_CN.js"/>
+				<exclude name="jquery-extras.*"/>
+			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-zh-CN.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-zh-CN.min.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/locales/jquery-extras-zh-TW.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/locales" includes="*.zh-TW.js"/>
+		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.js" binary="true">
+			<fileset dir="src/main/jquery/extras/js/i18n">
+				<include name="*.zh_TW.js"/>
+				<exclude name="jquery-extras.*"/>
+			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-zh-TW.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/locales/jquery-extras-zh-TW.min.js"/>
+			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.min.js"/>
 		</java>
 
 

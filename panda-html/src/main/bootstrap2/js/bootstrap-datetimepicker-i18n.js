@@ -303,20 +303,6 @@
         };
 }(jQuery));
 /**
- * Brazilian translation for bootstrap-datetimepicker
- * Cauan Cabral <cauan@radig.com.br>
- */
-;(function($){
-	$.fn.datetimepicker.dates['pt-BR'] = {
-		days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
-		daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
-		daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa", "Do"],
-		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-		today: "Hoje"
-	};
-}(jQuery));
-/**
  * Portuguese translation for bootstrap-datetimepicker
  * Original code: Cauan Cabral <cauan@radig.com.br>
  * Tiago Melo <tiago.blackcode@gmail.com>
@@ -328,6 +314,20 @@
 		daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa", "Do"],
 		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+	};
+}(jQuery));
+/**
+ * Brazilian translation for bootstrap-datetimepicker
+ * Cauan Cabral <cauan@radig.com.br>
+ */
+;(function($){
+	$.fn.datetimepicker.dates['pt-BR'] = {
+		days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
+		daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+		daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa", "Do"],
+		months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+		monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+		today: "Hoje"
 	};
 }(jQuery));
 /**
@@ -346,20 +346,6 @@
 	};
 }(jQuery));
 /**
- * Serbian latin translation for bootstrap-datetimepicker
- * Bojan Milosavlević <milboj@gmail.com>
- */
-;(function($){
-	$.fn.datetimepicker.dates['rs-latin'] = {
-		days: ["Nedelja","Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota", "Nedelja"],
-		daysShort: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub", "Ned"],
-		daysMin: ["N", "Po", "U", "Sr", "Č", "Pe", "Su", "N"],
-		months: ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"],
-		monthsShort: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"],
-		today: "Danas"
-	};
-}(jQuery));
-/**
  * Serbian cyrillic translation for bootstrap-datetimepicker
  * Bojan Milosavlević <milboj@gmail.com>
  */
@@ -371,6 +357,20 @@
 		months: ["Јануар", "Фебруар", "Март", "Април", "Мај", "Јун", "Јул", "Август", "Септембар", "Октобар", "Новембар", "Децембар"],
 		monthsShort: ["Јан", "Феб", "Мар", "Апр", "Мај", "Јун", "Јул", "Авг", "Сеп", "Окт", "Нов", "Дец"],
 		today: "Данас"
+	};
+}(jQuery));
+/**
+ * Serbian latin translation for bootstrap-datetimepicker
+ * Bojan Milosavlević <milboj@gmail.com>
+ */
+;(function($){
+	$.fn.datetimepicker.dates['rs-latin'] = {
+		days: ["Nedelja","Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota", "Nedelja"],
+		daysShort: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub", "Ned"],
+		daysMin: ["N", "Po", "U", "Sr", "Č", "Pe", "Su", "N"],
+		months: ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"],
+		monthsShort: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"],
+		today: "Danas"
 	};
 }(jQuery));
 /**

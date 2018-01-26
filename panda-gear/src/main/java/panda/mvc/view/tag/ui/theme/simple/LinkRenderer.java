@@ -151,9 +151,9 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 				writeStaticJs("/jquery/extras/js/jquery-extras");
 			}
 
-			String la = this.getBootstrapLang();
+			String la = getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/jquery/extras/locales/jquery-extras-" + jsstr(la));
+				writeStaticJs("/jquery/extras/i18n/jquery-extras." + jsstr(la));
 			}
 		}
 		
@@ -164,17 +164,17 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (tag.isLightbox()) {
 			writeJqueryExtra("lightbox", true);
 
-			String la = this.getBootstrapLang();
+			String la = getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/jquery/extras/locales/jquery.ui.lightbox." + jsstr(la));
+				writeStaticJs("/jquery/extras/i18n/jquery.ui.lightbox." + jsstr(la));
 			}
 		}
 
 		if (tag.isMeiomask()) {
 			writeJqueryExtra("meio.mask", false);
-			String la = this.getBootstrapLang();
+			String la = getBootstrapLang();
 			if ("ja".equals(la)) {
-				writeStaticJs("/jquery/extras/locales/jquery.ui.meio.mask." + jsstr(la));
+				writeStaticJs("/jquery/extras/i18n/jquery.ui.meio.mask." + jsstr(la));
 			}
 		}
 
@@ -260,13 +260,13 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			}
 			else if (!"en".equals(la)) {
 				if (tag.useCdn()) {
-					writePandaCdnJs("/bootstrap3/js/locales/bootstrap-datetimepicker." + jsstr(la), false);
+					writePandaCdnJs("/bootstrap3/js/i18n/bootstrap-datetimepicker." + la, false);
 				}
 				else {
-					writeStaticJs("/bootstrap3/js/locales/bootstrap-datetimepicker." + jsstr(la), false);
+					writeStaticJs("/bootstrap3/js/i18n/bootstrap-datetimepicker." + la, false);
 				}
 			}
-			writeJscript("$(function() { $.fn.datetimepicker.defaults.language = '" + jsstr(la) + "'; });");
+			writeJscript("$(function() { $.fn.datetimepicker.defaults.language = '" + la + "'; });");
 		}
 	}
 
@@ -274,19 +274,13 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		if (Strings.isEmpty(lang)) {
 			Locale locale = tag.getLocale();
 			lang = locale.getLanguage();
-			if ("fa".equals(lang)) {
-				lang += "-IR";
-			}
-			else if ("pt".equals(lang)) {
-				lang += "-BR";
-			}
-			else if ("zh".equals(lang)) {
+			if ("zh".equals(lang)) {
 				if ("TW".equalsIgnoreCase(locale.getCountry())
 						|| "HK".equalsIgnoreCase(locale.getCountry())) {
-					lang += "-TW";
+					lang += "_TW";
 				}
 				else {
-					lang += "-CN";
+					lang += "_CN";
 				}
 			}
 		}
