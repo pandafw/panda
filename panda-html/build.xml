@@ -77,15 +77,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-switch.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-switch.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
 			<arg value="src/main/bootstrap3/js/bootstrap-patch.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
@@ -156,115 +147,125 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/jquery/js/jquery-plugins.min.js"/>
 		</java>
 
-		<!-- jquery extras -->
+		<!-- extras -->
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery.ui.hammer.js"/>
+			<arg value="src/main/extras/js/bootstrap-switch.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery.ui.hammer.min.js"/>
+			<arg value="src/main/extras/js/bootstrap-switch.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery.ui.lightbox.js"/>
+			<arg value="src/main/extras/js/jquery.ui.hammer.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery.ui.lightbox.min.js"/>
+			<arg value="src/main/extras/js/jquery.ui.hammer.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery.ui.meio.mask.js"/>
+			<arg value="src/main/extras/js/jquery.ui.lightbox.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery.ui.meio.mask.min.js"/>
+			<arg value="src/main/extras/js/jquery.ui.lightbox.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery.ui.mousewheel.js"/>
+			<arg value="src/main/extras/js/jquery.ui.meio.mask.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery.ui.mousewheel.min.js"/>
+			<arg value="src/main/extras/js/jquery.ui.meio.mask.min.js"/>
 		</java>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery.ui.tablesorter.js"/>
+			<arg value="src/main/extras/js/jquery.ui.mousewheel.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery.ui.tablesorter.min.js"/>
+			<arg value="src/main/extras/js/jquery.ui.mousewheel.min.js"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/extras/js/jquery.ui.tablesorter.js"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="src/main/extras/js/jquery.ui.tablesorter.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/jquery-extras.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js">
+		<concat destfile="src/main/extras/js/extras.js" binary="true">
+			<fileset dir="src/main/extras/js">
 				<include name="jquery.*.js"/>
+				<include name="bootstrap-*.js"/>
 				<exclude name="*.min.js"/>
 			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/jquery-extras.js"/>
+			<arg value="src/main/extras/js/extras.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/jquery-extras.min.js"/>
+			<arg value="src/main/extras/js/extras.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.ja.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/i18n">
+		<concat destfile="src/main/extras/js/i18n/extras.ja.js" binary="true">
+			<fileset dir="src/main/extras/js/i18n">
 				<include name="*.ja.js"/>
-				<exclude name="jquery-extras.*"/>
+				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.ja.js"/>
+			<arg value="src/main/extras/js/i18n/extras.ja.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.ja.min.js"/>
+			<arg value="src/main/extras/js/i18n/extras.ja.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/i18n">
+		<concat destfile="src/main/extras/js/i18n/extras.zh_CN.js" binary="true">
+			<fileset dir="src/main/extras/js/i18n">
 				<include name="*.zh_CN.js"/>
-				<exclude name="jquery-extras.*"/>
+				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.js"/>
+			<arg value="src/main/extras/js/i18n/extras.zh_CN.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_CN.min.js"/>
+			<arg value="src/main/extras/js/i18n/extras.zh_CN.min.js"/>
 		</java>
 
-		<concat destfile="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.js" binary="true">
-			<fileset dir="src/main/jquery/extras/js/i18n">
+		<concat destfile="src/main/extras/js/i18n/extras.zh_TW.js" binary="true">
+			<fileset dir="src/main/extras/js/i18n">
 				<include name="*.zh_TW.js"/>
-				<exclude name="jquery-extras.*"/>
+				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.js"/>
+			<arg value="src/main/extras/js/i18n/extras.zh_TW.js"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="js"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/js/i18n/jquery-extras.zh_TW.min.js"/>
+			<arg value="src/main/extras/js/i18n/extras.zh_TW.min.js"/>
 		</java>
 
 
@@ -308,15 +309,6 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="-o"/>
 			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
 		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/css/bootstrap-switch.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/css/bootstrap-switch.min.css"/>
-		</java>
 		
 		<!-- bootstrap3 plugins -->
 		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
@@ -351,18 +343,49 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 			<arg value="src/main/jquery/css/jquery-plugins.min.css"/>
 		</java>
 
-		<!-- jquery extras -->
-		<concat destfile="src/main/jquery/extras/css/jquery-extras.css" binary="true">
-			<fileset dir="src/main/jquery/extras/css" includes="jquery.*.css"/>
-		</concat>
+		<!-- extras -->
 		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/extras/css/jquery-extras.css"/>
+			<arg value="src/main/extras/css/bootstrap-switch.css"/>
 			<arg value="--charset"/>
 			<arg value="UTF-8"/>
 			<arg value="--type"/>
 			<arg value="css"/>
 			<arg value="-o"/>
-			<arg value="src/main/jquery/extras/css/jquery-extras.min.css"/>
+			<arg value="src/main/extras/css/bootstrap-switch.min.css"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/extras/css/jquery.ui.lightbox.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/extras/css/jquery.ui.lightbox.min.css"/>
+		</java>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/extras/css/jquery.ui.tablesort.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/extras/css/jquery.ui.tablesort.min.css"/>
+		</java>
+
+		<concat destfile="src/main/extras/css/extras.css" binary="true">
+			<fileset dir="src/main/extras/css">
+				<include name="jquery.*.css"/>
+				<include name="bootstrap-*.css"/>
+			</fileset>
+		</concat>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="src/main/extras/css/extras.css"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="src/main/extras/css/extras.min.css"/>
 		</java>
 
 		<!-- panda -->

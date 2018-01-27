@@ -32,9 +32,9 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			js = false;
 			writeJquery();
 			writeJqueryPlugins();
-			writeJqueryExtras();
 			writeBootstrap();
 			writeBootstrapPlugins();
+			writeExtras();
 			writePanda();
 		}
 
@@ -43,9 +43,9 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			css = false;
 			writeJquery();
 			writeJqueryPlugins();
-			writeJqueryExtras();
 			writeBootstrap();
 			writeBootstrapPlugins();
+			writeExtras();
 			writePanda();
 		}
 	}
@@ -140,55 +140,59 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 
-	private void writeJqueryExtras() throws IOException {
-		if (tag.isJqextras()) {
+	private void writeExtras() throws IOException {
+		if (tag.isExtras()) {
 			if (tag.useCdn()) {
-				writePandaCdnCss("/jquery/extras/css/jquery-extras");
-				writePandaCdnJs("/jquery/extras/js/jquery-extras");
+				writePandaCdnCss("/extras/css/extras");
+				writePandaCdnJs("/extras/js/extras");
 			}
 			else {
-				writeStaticCss("/jquery/extras/css/jquery-extras");
-				writeStaticJs("/jquery/extras/js/jquery-extras");
+				writeStaticCss("extras/css/extras");
+				writeStaticJs("/extras/js/extras");
 			}
 
 			String la = getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/jquery/extras/i18n/jquery-extras." + jsstr(la));
+				writeStaticJs("/extras/i18n/extras." + la);
 			}
 		}
 		
 		if (tag.isHammer()) {
-			writeJqueryExtra("hammer", false);
+			writeExtra("jquery.ui.hammer", false);
 		}
 		
 		if (tag.isLightbox()) {
-			writeJqueryExtra("lightbox", true);
+			writeExtra("jquery.ui.lightbox", true);
 
 			String la = getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
-				writeStaticJs("/jquery/extras/i18n/jquery.ui.lightbox." + jsstr(la));
+				writeStaticJs("/extras/i18n/jquery.ui.lightbox." + la);
 			}
 		}
 
 		if (tag.isMeiomask()) {
-			writeJqueryExtra("meio.mask", false);
+			writeExtra("jquery.ui.meio.mask", false);
 			String la = getBootstrapLang();
 			if ("ja".equals(la)) {
-				writeStaticJs("/jquery/extras/i18n/jquery.ui.meio.mask." + jsstr(la));
+				writeStaticJs("/jquery/extras/i18n/jquery.ui.meio.mask." + la);
 			}
 		}
 
 		if (tag.isMousewheel()) {
-			writeJqueryExtra("mousewheel", false);
+			writeExtra("jquery.ui.mousewheel", false);
 		}
 
 		if (tag.isTablesorter()) {
-			writeJqueryExtra("tablesorter", true);
+			writeExtra("jquery.ui.tablesorter", true);
+		}
+		
+		if (tag.isSwitch()) {
+			writeExtra("bootstrap-switch", true);
 		}
 	}
 	
-	private void writeJqueryExtra(String name, boolean css) throws IOException {
-		String path = "/jquery/extras/css/jquery.ui." + name;
+	private void writeExtra(String name, boolean css) throws IOException {
+		String path = "/extras/css/" + name;
 		if (tag.useCdn()) {
 			writePandaCdnCss(path);
 			writePandaCdnJs(path);

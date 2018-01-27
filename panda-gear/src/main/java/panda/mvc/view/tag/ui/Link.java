@@ -60,11 +60,12 @@ public class Link extends UIBean {
 	protected Locale locale;
 	protected boolean jquery;
 	protected boolean jqplugins;
-	protected boolean jqextras;
 	protected boolean bootstrap;
 	protected boolean bsplugins;
 	protected boolean i18n;
 	protected boolean panda;
+	protected boolean extras;
+	protected boolean bswitch;
 	protected boolean hammer;
 	protected boolean lightbox;
 	protected boolean meiomask;
@@ -83,7 +84,7 @@ public class Link extends UIBean {
 			locale = context.getLocale();
 		}
 
-		if (bootstrap || jqplugins || jqextras) {
+		if (bootstrap || jqplugins || extras) {
 			jquery = true;
 		}
 		if (bsplugins) {
@@ -97,10 +98,14 @@ public class Link extends UIBean {
 			bsplugins = true;
 		}
 		
-		if (hammer || lightbox || meiomask || mousewheel || tablesorter) {
+		if (bswitch || hammer || lightbox || meiomask || mousewheel || tablesorter) {
 			jquery = true;
 		}
-		if (jqextras) {
+		if (bswitch) {
+			bootstrap = true;
+		}
+		if (extras) {
+			bswitch = false;
 			hammer = false;
 			lightbox = false;
 			meiomask = false;
@@ -257,20 +262,6 @@ public class Link extends UIBean {
 	}
 
 	/**
-	 * @return the jqextras
-	 */
-	public boolean isJqextras() {
-		return jqextras;
-	}
-
-	/**
-	 * @param jqextras the jqextras to set
-	 */
-	public void setJqextras(boolean jqextras) {
-		this.jqextras = jqextras;
-	}
-
-	/**
 	 * @return the bootstrap
 	 */
 	public boolean isBootstrap() {
@@ -324,6 +315,35 @@ public class Link extends UIBean {
 	 */
 	public void setPanda(boolean panda) {
 		this.panda = panda;
+	}
+
+	/**
+	 * @return the extras
+	 */
+	public boolean isExtras() {
+		return extras;
+	}
+
+	/**
+	 * @param extras the extras to set
+	 */
+	public void setExtras(boolean extras) {
+		this.extras = extras;
+	}
+
+	
+	/**
+	 * @return the bswitch
+	 */
+	public boolean isSwitch() {
+		return bswitch;
+	}
+
+	/**
+	 * @param bswitch the bswitch to set
+	 */
+	public void setSwitch(boolean bswitch) {
+		this.bswitch = bswitch;
 	}
 
 	/**
