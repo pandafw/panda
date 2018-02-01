@@ -1259,12 +1259,12 @@ if (typeof String.prototype.escapeRegExp != "function") {
 }
 if (typeof String.prototype.escapeHtml != "function") {
 	String.prototype.escapeHtml = function() {
-		return this.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		return this.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 	};
 }
 if (typeof String.prototype.unescapeHtml != "function") {
 	String.prototype.unescapeHtml = function() {
-		return this.replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+		return this.replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
 	};
 }
 if (typeof String.prototype.escapePhtml != "function") {
