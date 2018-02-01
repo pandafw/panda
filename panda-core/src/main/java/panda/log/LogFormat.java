@@ -12,6 +12,7 @@ import panda.lang.time.FastDateFormat;
 /**
  * Log Format
  * 
+ * <pre>
  * %c: log name(category)
  * %m: message
  * %n: the platform dependent line separator (windows: "\r\n", linux: "\n")
@@ -23,6 +24,8 @@ import panda.lang.time.FastDateFormat;
  * %M: caller class method (!!SLOW!!)
  * %e: error.class: error.message
  * %d{format}: date
+ * %X{key}: MDC value
+ * </pre>
  */
 public abstract class LogFormat {
 	public abstract String format(LogEvent event);
@@ -108,8 +111,18 @@ public abstract class LogFormat {
 					format = new DateLogFormat(padding);
 					if (i + 1 < pattern.length() && pattern.charAt(i + 1) == '{') {
 						int e = pattern.indexOf('}', i + 2);
-						if (e > i + 3) {
+						if (e > i + 2) {
 							((DateLogFormat)format).setFormat(pattern.substring(i + 2, e));
+							i = e;
+						}
+					}
+					break;
+				case 'X':
+					format = new MDCLogFormat(padding);
+					if (i + 1 < pattern.length() && pattern.charAt(i + 1) == '{') {
+						int e = pattern.indexOf('}', i + 2);
+						if (e > i + 2) {
+							((MDCLogFormat)format).setKey(pattern.substring(i + 2, e));
 							i = e;
 						}
 					}
@@ -208,6 +221,34 @@ public abstract class LogFormat {
 		@Override
 		protected String value(LogEvent event) {
 			return format.format(event.getMillis());
+		}
+	}
+	
+	public static class MDCLogFormat extends SymbolLogFormat {
+		private String key;
+		
+		public MDCLogFormat(int padding) {
+			super(padding);
+		}
+
+		/**
+		 * @param key the MDC key to set
+		 */
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+		@Override
+		protected String value(LogEvent event) {
+			if (key == null || key.length() == 0) {
+				return MDC.map().toString();
+			}
+			
+			Object o = MDC.get(key);
+			if (o == null) {
+				return "";
+			}
+			return o.toString();
 		}
 	}
 	

@@ -8,6 +8,7 @@ public class LogTest {
 	public static void main(String[] args) {
 		Log log = Logs.getLog(LogTest.class);
 		
+		MDC.put("k", "mdc");
 		log.debug("d");
 		log.info("i");
 		log.warn("w");
