@@ -27,19 +27,15 @@ import panda.lang.codec.StringEncoder;
 public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, StringDecoder {
 
 	/**
-	 * Radix used in encoding and decoding.
-	 */
-	static final int RADIX = 16;
-
-	/**
 	 * The default charset used for string decoding and encoding.
 	 */
 	protected String charset;
 
 	/**
-	 * Release 1.5 made this field final.
+	 * Escape character.
 	 */
 	protected static final byte ESCAPE_CHAR = '%';
+
 	/**
 	 * BitSet of www-form-url safe characters.
 	 */
@@ -85,6 +81,22 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 	}
 
 	/**
+	 * The default charset used for string decoding and encoding.
+	 * 
+	 * @return the default string charset.
+	 */
+	public String getCharset() {
+		return this.charset;
+	}
+
+	/**
+	 * @param charset the charset to set
+	 */
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	/**
 	 * Encodes an array of bytes into an array of URL safe 7-bit characters. Unsafe characters are
 	 * escaped.
 	 * 
@@ -115,13 +127,29 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 			}
 			else {
 				buffer.write(ESCAPE_CHAR);
-				final char hex1 = Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, RADIX));
-				final char hex2 = Character.toUpperCase(Character.forDigit(b & 0xF, RADIX));
+				final char hex1 = Utils.hexDigit(b >> 4);
+				final char hex2 = Utils.hexDigit(b);
 				buffer.write(hex1);
 				buffer.write(hex2);
 			}
 		}
 		return buffer.toByteArray();
+	}
+
+	/**
+	 * encode url
+	 * @param str the url
+	 * @param charset the charset
+	 * @return encoded url
+	 * @throws EncoderException Thrown if URL encoding is unsuccessful
+	 */
+	public static final String encodeUrl(final String str, final String charset) throws EncoderException {
+		try {
+			return Strings.newStringUsAscii(encodeUrl(WWW_FORM_URL, str.getBytes(charset)));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new EncoderException(e);
+		}
 	}
 
 	/**
@@ -133,6 +161,19 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 	 * @throws DecoderException Thrown if URL decoding is unsuccessful
 	 */
 	public static final byte[] decodeUrl(final byte[] bytes) throws DecoderException {
+		return decodeUrl(bytes, false);
+	}
+	
+	/**
+	 * Decodes an array of URL safe 7-bit characters into an array of original bytes. Escaped
+	 * characters are converted back to their original representation.
+	 * 
+	 * @param bytes array of URL safe characters
+	 * @param safe ignore illegal character
+	 * @return array of original bytes
+	 * @throws DecoderException Thrown if URL decoding is unsuccessful
+	 */
+	public static final byte[] decodeUrl(final byte[] bytes, final boolean safe) throws DecoderException {
 		if (bytes == null) {
 			return null;
 		}
@@ -145,14 +186,38 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 				buffer.write(' ');
 			}
 			else if (b == ESCAPE_CHAR) {
-				try {
-					final int u = Utils.digit16(bytes[++i]);
-					final int l = Utils.digit16(bytes[++i]);
-					buffer.write((char)((u << 4) + l));
+				if (i + 2 >= bytes.length) {
+					if (safe) {
+						buffer.write(b);
+						continue;
+					}
+					throw new DecoderException("Invalid hex character at " + i);
 				}
-				catch (final ArrayIndexOutOfBoundsException e) {
-					throw new DecoderException("Invalid URL encoding: ", e);
+
+				final byte b1 = bytes[++i];
+				final int u = Utils.safeDigit16(b1);
+				if (u == -1) {
+					if (safe) {
+						buffer.write(b);
+						buffer.write(b1);
+						continue;
+					}
+					throw new DecoderException("Invalid URL encoding: not a valid hex digit [" + i + "]: " + b1);
 				}
+
+				final byte b2 = bytes[++i];
+				final int l = Utils.safeDigit16(b2);
+				if (l == -1) {
+					if (safe) {
+						buffer.write(b);
+						buffer.write(b1);
+						buffer.write(b2);
+						continue;
+					}
+					throw new DecoderException("Invalid URL encoding: not a valid hex digit [" + i + "]: " + bytes[i]);
+				}
+
+				buffer.write((char)((u << 4) + l));
 			}
 			else {
 				buffer.write(b);
@@ -161,6 +226,60 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 		return buffer.toByteArray();
 	}
 
+	/**
+	 * Decodes an array of URL safe 7-bit characters into an array of original bytes. Escaped
+	 * characters are converted back to their original representation.
+	 * 
+	 * @param bytes array of URL safe characters
+	 * @return array of original bytes
+	 */
+	public static final byte[] safeDecodeUrl(final byte[] bytes) {
+		return decodeUrl(bytes, true);
+	}
+
+	/**
+	 * decode url
+	 * 
+	 * @param str the url str
+	 * @param charset the charset
+	 * @param safe ignore illegal escape character
+	 * @return decoded url
+	 * @throws DecoderException Thrown if URL decoding is unsuccessful
+	 */
+	public static final String decodeUrl(final String str, final String charset, final boolean safe) throws DecoderException {
+		byte[] bs = Strings.getBytesUsAscii(str);
+		byte[] ds = decodeUrl(bs, safe);
+		try {
+			return new String(ds, charset);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new DecoderException(e);
+		}
+	}
+
+	/**
+	 * decode url
+	 * 
+	 * @param str the url str
+	 * @param charset the charset
+	 * @return decoded url
+	 * @throws DecoderException Thrown if URL decoding is unsuccessful
+	 */
+	public static final String decodeUrl(final String str, final String charset) throws DecoderException {
+		return decodeUrl(str, charset, false);
+	}
+
+	/**
+	 * decode url without exception
+	 * 
+	 * @param str the url str
+	 * @param charset the charset
+	 * @return decoded url
+	 */
+	public static final String safeDecodeUrl(final String str, final String charset) {
+		return decodeUrl(str, charset, true);
+	}
+	
 	/**
 	 * Encodes an array of bytes into an array of URL safe 7-bit characters. Unsafe characters are
 	 * escaped.
@@ -199,7 +318,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 		if (str == null) {
 			return null;
 		}
-		return Strings.newStringUsAscii(encode(str.getBytes(charset)));
+		return encodeUrl(str, charset);
 	}
 
 	/**
@@ -217,7 +336,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 			return null;
 		}
 		try {
-			return encode(str, getDefaultCharset());
+			return encode(str, charset);
 		}
 		catch (final UnsupportedEncodingException e) {
 			throw new EncoderException(e.getMessage(), e);
@@ -238,7 +357,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 		if (str == null) {
 			return null;
 		}
-		return new String(decode(Strings.getBytesUsAscii(str)), charset);
+		return decodeUrl(str, charset);
 	}
 
 	/**
@@ -256,7 +375,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 			return null;
 		}
 		try {
-			return decode(str, getDefaultCharset());
+			return decode(str, charset);
 		}
 		catch (final UnsupportedEncodingException e) {
 			throw new DecoderException(e.getMessage(), e);
@@ -314,25 +433,4 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 
 		}
 	}
-
-	/**
-	 * The default charset used for string decoding and encoding.
-	 * 
-	 * @return the default string charset.
-	 */
-	public String getDefaultCharset() {
-		return this.charset;
-	}
-
-	/**
-	 * The <code>String</code> encoding used for decoding and encoding.
-	 * 
-	 * @return Returns the encoding.
-	 * @deprecated Use {@link #getDefaultCharset()}, will be removed in 2.0.
-	 */
-	@Deprecated
-	public String getEncoding() {
-		return this.charset;
-	}
-
 }

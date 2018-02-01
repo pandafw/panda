@@ -1,8 +1,5 @@
 package panda.net;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,8 +7,8 @@ import java.util.Map;
 
 import panda.io.FileNames;
 import panda.lang.Charsets;
-import panda.lang.Exceptions;
 import panda.lang.Strings;
+import panda.lang.codec.net.URLCodec;
 
 /**
  */
@@ -269,12 +266,7 @@ public class URLHelper {
 			return url;
 		}
 		
-		try {
-			return URLEncoder.encode(url, encoding);
-		}
-		catch (UnsupportedEncodingException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return URLCodec.encodeUrl(url, encoding);
 	}
 
 	/**
@@ -297,12 +289,7 @@ public class URLHelper {
 			return input;
 		}
 		
-		try {
-			return URLDecoder.decode(input, encoding);
-		}
-		catch (UnsupportedEncodingException e) {
-			throw Exceptions.wrapThrow(e);
-		}
+		return URLCodec.safeDecodeUrl(input, encoding);
 	}
 
 	/**

@@ -269,4 +269,12 @@ public class URLCodecTest {
 		assertEquals(encoded1, encoded2);
 		this.validateState(urlCodec);
 	}
+
+	@Test
+	public void testSafeDecodeUrl() throws Exception {
+		String val = "http://localhost/tes%XXt";
+
+		String dec = URLCodec.safeDecodeUrl(val, Charsets.UTF_8);
+		assertEquals(val, dec);
+	}
 }
