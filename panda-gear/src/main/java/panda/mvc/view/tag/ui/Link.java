@@ -31,6 +31,7 @@ import panda.mvc.SiteConstants;
  *    <li>meiomask</li>
  *    <li>mousewheel</li>
  *    <li>tablesorter</li>
+ *    <li>respondjs</li>
  * </ul>
  *
  * <p></p>
@@ -71,7 +72,7 @@ public class Link extends UIBean {
 	protected boolean meiomask;
 	protected boolean mousewheel;
 	protected boolean tablesorter;
-	
+	protected boolean respondjs;
 
 	/**
 	 * Evaluate extra parameters
@@ -416,5 +417,18 @@ public class Link extends UIBean {
 		this.tablesorter = tablesorter;
 	}
 
+	/**
+	 * @return the respondjs
+	 */
+	public boolean isRespondjs() {
+		return respondjs;
+	}
+
+	/**
+	 * @param respondjs the respondjs to set
+	 */
+	public void setRespondjs(boolean respondjs) {
+		this.respondjs = respondjs;
+	}
 }
 

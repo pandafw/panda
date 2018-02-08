@@ -208,6 +208,7 @@ public abstract class AbstractTagRenderer<T extends UIBean> implements TagRender
 		write(jsc);
 		write("</script>\n");
 	}
+
 	protected void writeJs(String js) throws IOException {
 		write("<script src=\"");
 		write(js);

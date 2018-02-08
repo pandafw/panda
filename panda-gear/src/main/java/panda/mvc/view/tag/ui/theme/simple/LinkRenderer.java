@@ -9,6 +9,8 @@ import panda.mvc.Mvcs;
 import panda.mvc.view.tag.ui.Link;
 import panda.mvc.view.tag.ui.theme.AbstractEndRenderer;
 import panda.mvc.view.tag.ui.theme.RenderingContext;
+import panda.net.http.UserAgent;
+import panda.servlet.HttpServlets;
 
 public class LinkRenderer extends AbstractEndRenderer<Link> {
 	private static final String CDN_BASE = Mvcs.PANDA_CDN + '/' + Panda.VERSION;
@@ -46,80 +48,15 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			writeBootstrap();
 			writeBootstrapPlugins();
 			writeExtras();
+			writeRespondJs();
 			writePanda();
 		}
-	}
-
-	protected void writeJscript(String jsc) throws IOException {
-		if (js) {
-			writeJsc(jsc);
-		}
-	}
-	protected void writePandaCdnJs(String path) throws IOException {
-		writePandaCdnJs(path, true);
-	}
-	
-	protected void writePandaCdnJs(String path, boolean debug) throws IOException {
-		if (js) {
-			writeCdnJs(CDN_BASE + path + (debug ? debug() : "") + ".js");
-		}
-	}
-	protected void writeCdnJs(String jsl) throws IOException {
-		if (js) {
-			writeJs(jsl);
-		}
-	}
-	
-	protected void writeStaticJs(String jsl) throws IOException {
-		writeStaticJs(jsl, true);
-	}
-	
-	protected void writeStaticJs(String jsl, boolean debug) throws IOException {
-		if (js) {
-			writeJs(suri(jsl + (debug ? debug() : "") + ".js", tag.getVersion()));
-		}
-	}
-	
-	protected void writePandaCdnCss(String path) throws IOException {
-		writeCdnCss(CDN_BASE + path + debug() + ".css");
-	}
-	
-	protected void writeCdnCss(String cssl) throws IOException {
-		if (css) {
-			writeCss(cssl);
-		}
-	}
-	protected void writeStaticCss(String cssl) throws IOException {
-		if (css) {
-			writeCss(suri(cssl + debug() + ".css", tag.getVersion()));
-		}
-	}
-
-	protected void writeStaticCss(String cssl, String cls) throws IOException {
-		if (css) {
-			writeCss(suri(cssl + debug() + ".css", tag.getVersion()), cls);
-		}
-	}
-	
-	private String sbase;
-	protected String suri(String uri, String version) {
-		if (sbase == null) {
-			sbase = Mvcs.getStaticBase(context, ((Link)tag).getStatics());
-		}
-		
-		StringBuilder s = new StringBuilder();
-		s.append(sbase).append(uri);
-		if (Strings.isNotEmpty(version)) {
-			s.append("?v=").append(version);
-		}
-
-		return s.toString();
 	}
 
 	private void writeJquery() throws IOException {
 		if (js && tag.isJquery()) {
 			if (tag.getCdn()) {
-				writeCdnJs("//code.jquery.com/jquery-" + JQUERY_VERSION + debug() + ".js");
+				writeCdnJs("//code.jquery.com/jquery-" + JQUERY_VERSION);
 			}
 			else {
 				writeStaticJs("/jquery/js/jquery-" + JQUERY_VERSION);
@@ -142,14 +79,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 	private void writeExtras() throws IOException {
 		if (tag.isExtras()) {
-			if (tag.useCdn()) {
-				writePandaCdnCss("/extras/css/extras");
-				writePandaCdnJs("/extras/js/extras");
-			}
-			else {
-				writeStaticCss("extras/css/extras");
-				writeStaticJs("/extras/js/extras");
-			}
+			writeExtra("extras", true);
 
 			String la = getBootstrapLang();
 			if ("ja".equals(la) || la.startsWith("zh")) {
@@ -172,9 +102,10 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 
 		if (tag.isMeiomask()) {
 			writeExtra("jquery.ui.meio.mask", false);
+
 			String la = getBootstrapLang();
 			if ("ja".equals(la)) {
-				writeStaticJs("/jquery/extras/i18n/jquery.ui.meio.mask." + la);
+				writeStaticJs("/extras/i18n/jquery.ui.meio.mask." + la);
 			}
 		}
 
@@ -192,14 +123,17 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 	}
 	
 	private void writeExtra(String name, boolean css) throws IOException {
-		String path = "/extras/css/" + name;
 		if (tag.useCdn()) {
-			writePandaCdnCss(path);
-			writePandaCdnJs(path);
+			if (css) {
+				writePandaCdnCss("/extras/css/" + name);
+			}
+			writePandaCdnJs("/extras/js/" + name);
 		}
 		else {
-			writeStaticCss(path);
-			writeStaticJs(path);
+			if (css) {
+				writeStaticCss("/extras/css/" + name);
+			}
+			writeStaticJs("/extras/js/" + name);
 		}
 	}
 	
@@ -209,12 +143,10 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (tag.useCdn()) {
 				writeCdnCss("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
-						+ "/css/bootstrap"
-						+ debug() + ".css");
+						+ "/css/bootstrap");
 				writeCdnCss("//netdna.bootstrapcdn.com/font-awesome/" 
 						+ FONTAWESOME_VERSION 
-						+ "/css/font-awesome"
-						+ debug() + ".css");
+						+ "/css/font-awesome");
 			}
 			else {
 				writeStaticCss("/bootstrap3/css/bootstrap");
@@ -225,8 +157,7 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 			if (tag.useCdn()) {
 				writeCdnJs("//netdna.bootstrapcdn.com/bootstrap/" 
 						+ BOOTSTRAP_VERSION 
-						+ "/js/bootstrap" 
-						+ debug() + ".js");
+						+ "/js/bootstrap");
 			}
 			else {
 				writeStaticJs("/bootstrap3/js/bootstrap");
@@ -311,7 +242,91 @@ public class LinkRenderer extends AbstractEndRenderer<Link> {
 		}
 	}
 	
+	private void writeRespondJs() throws IOException {
+		if (js && tag.isRespondjs()) {
+			UserAgent ua = HttpServlets.getUserAgent(context.getRequest());
+			if (ua.isMsie() && ua.getMajorVersion(UserAgent.MSIE) < 9) {
+				if (tag.useCdn()) {
+					writeCdnJs("//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond");
+				}
+				else {
+					writeStaticJs("/respondjs/respondjs");
+				}
+			}
+		}
+	}
+
+	//-------------------------------
 	private String debug() {
-		 return (tag.useDebug() ? "" : ".min");
+		return (tag.useDebug() ? "" : ".min");
+	}
+
+	protected void writeJscript(String jsc) throws IOException {
+		if (js) {
+			writeJsc(jsc);
+		}
+	}
+
+	protected void writeCdnJs(String jsl) throws IOException {
+		writeCdnJs(jsl, true);
+	}
+	
+	protected void writeCdnJs(String jsl, boolean debug) throws IOException {
+		if (js) {
+			writeJs(jsl + (debug ? debug() : "") + ".js");
+		}
+	}
+	
+	protected void writeCdnCss(String cssl) throws IOException {
+		if (css) {
+			writeCss(cssl + debug() + ".css");
+		}
+	}
+
+	protected void writePandaCdnJs(String path) throws IOException {
+		writePandaCdnJs(path, true);
+	}
+	
+	protected void writePandaCdnJs(String path, boolean debug) throws IOException {
+		if (js) {
+			writeCdnJs(CDN_BASE + path, debug);
+		}
+	}
+	
+	protected void writePandaCdnCss(String path) throws IOException {
+		if (css) {
+			writeCdnCss(CDN_BASE + path);
+		}
+	}
+	
+	protected void writeStaticJs(String jsl) throws IOException {
+		writeStaticJs(jsl, true);
+	}
+	
+	protected void writeStaticJs(String jsl, boolean debug) throws IOException {
+		if (js) {
+			writeJs(suri(jsl + (debug ? debug() : "") + ".js", tag.getVersion()));
+		}
+	}
+
+	protected void writeStaticCss(String cssl) throws IOException {
+		if (css) {
+			writeCss(suri(cssl + debug() + ".css", tag.getVersion()));
+		}
+	}
+	
+	private String sbase;
+	protected String suri(String uri, String version) {
+		if (sbase == null) {
+			sbase = Mvcs.getStaticBase(context, ((Link)tag).getStatics());
+		}
+		
+		StringBuilder s = new StringBuilder();
+		s.append(sbase).append(uri);
+		if (Strings.isNotEmpty(version)) {
+			s.append("?v=").append(version);
+		}
+
+		return s.toString();
 	}
 }

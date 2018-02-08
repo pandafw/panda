@@ -12,9 +12,9 @@ ${prj.name}-${VERSION} build file
 
 Available targets are:
 
-build             --> Build the project (minjs, mincss)
-min-css           --> Merge & minify css files
-min-js            --> Merge & minify javascript files
+build             --> Build the project (build-js, build-css)
+build-css         --> Merge & minify css files
+build-js          --> Merge & minify javascript files
 dist              --> Distribute project (jar, ghp)
 ghp               --> Copy sources to gh-pages location
 jar               --> Make the project as a jar file
@@ -39,52 +39,59 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<ivy:cleancache />
 	</target>
 
+	<!-- common target -->
+	<target name="minjs">
+		<echo>minify ${src}</echo>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="${src}"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="js"/>
+			<arg value="-o"/>
+			<arg value="${out}"/>
+		</java>
+	</target>
+
+	<target name="mincss">
+		<echo>minify ${src}</echo>
+		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
+			<arg value="${src}"/>
+			<arg value="--charset"/>
+			<arg value="UTF-8"/>
+			<arg value="--type"/>
+			<arg value="css"/>
+			<arg value="-o"/>
+			<arg value="${out}"/>
+		</java>
+	</target>
+
 	<!-- build -->
-	<target name="min-js" description="Merge &amp; minify javascript files">
+	<target name="build-js" description="Merge &amp; minify javascript files">
 		<!-- bootstrap2 -->
 		<concat destfile="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js" binary="true">
 			<fileset dir="src/main/bootstrap2/js/i18n">
 				<include name="*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.js"/>
+			<param name="out" value="src/main/bootstrap2/js/bootstrap-datetimepicker-i18n.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap2/js/bootstrap-datetimepicker.js"/>
+			<param name="out" value="src/main/bootstrap2/js/bootstrap-datetimepicker.min.js"/>
+		</antcall>
 
 		<!-- bootstrap3 -->
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-patch.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-patch.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap3/js/bootstrap-datetimepicker.js"/>
+			<param name="out" value="src/main/bootstrap3/js/bootstrap-datetimepicker.min.js"/>
+		</antcall>
+			<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap3/js/bootstrap-patch.js"/>
+			<param name="out" value="src/main/bootstrap3/js/bootstrap-patch.min.js"/>
+		</antcall>
 
 		<!-- bootstrap3 plugins -->
 		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins.js" binary="true">
@@ -95,15 +102,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="bootstrap-*-i18n.*js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-plugins.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap3/js/bootstrap-plugins.js"/>
+			<param name="out" value="src/main/bootstrap3/js/bootstrap-plugins.min.js"/>
+		</antcall>
 
 		<!-- boostrap i18n -->
 		<concat destfile="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js" binary="true">
@@ -111,15 +113,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="bootstrap-datetimepicker.*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.js"/>
+			<param name="out" value="src/main/bootstrap3/js/bootstrap-datetimepicker-i18n.min.js"/>
+		</antcall>
 		<concat destfile="src/main/bootstrap3/js/bootstrap-plugins-i18n.js" binary="true">
 			<fileset dir="src/main/bootstrap3/js">
 				<include name="bootstrap-*-i18n.js"/>
@@ -137,71 +134,36 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 		<concat destfile="src/main/jquery/js/jquery-plugins.js" binary="true">
 			<fileset dir="src/main/jquery/js" includes="jquery.*.js"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/js/jquery-plugins.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/jquery/js/jquery-plugins.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/jquery/js/jquery-plugins.js"/>
+			<param name="out" value="src/main/jquery/js/jquery-plugins.min.js"/>
+		</antcall>
 
 		<!-- extras -->
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/bootstrap-switch.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/bootstrap-switch.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/jquery.ui.hammer.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/jquery.ui.hammer.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/jquery.ui.lightbox.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/jquery.ui.lightbox.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/jquery.ui.meio.mask.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/jquery.ui.meio.mask.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/jquery.ui.mousewheel.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/jquery.ui.mousewheel.min.js"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/jquery.ui.tablesorter.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/jquery.ui.tablesorter.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/bootstrap-switch.js"/>
+			<param name="out" value="src/main/extras/js/bootstrap-switch.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/jquery.ui.hammer.js"/>
+			<param name="out" value="src/main/extras/js/jquery.ui.hammer.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/jquery.ui.lightbox.js"/>
+			<param name="out" value="src/main/extras/js/jquery.ui.lightbox.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/jquery.ui.meio.mask.js"/>
+			<param name="out" value="src/main/extras/js/jquery.ui.meio.mask.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/jquery.ui.mousewheel.js"/>
+			<param name="out" value="src/main/extras/js/jquery.ui.mousewheel.min.js"/>
+		</antcall>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/jquery.ui.tablesorter.js"/>
+			<param name="out" value="src/main/extras/js/jquery.ui.tablesorter.min.js"/>
+		</antcall>
 
 		<concat destfile="src/main/extras/js/extras.js" binary="true">
 			<fileset dir="src/main/extras/js">
@@ -210,15 +172,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="*.min.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/extras.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/extras.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/extras.js"/>
+			<param name="out" value="src/main/extras/js/extras.min.js"/>
+		</antcall>
 
 		<concat destfile="src/main/extras/js/i18n/extras.ja.js" binary="true">
 			<fileset dir="src/main/extras/js/i18n">
@@ -226,15 +183,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/i18n/extras.ja.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/i18n/extras.ja.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/i18n/extras.ja.js"/>
+			<param name="out" value="src/main/extras/js/i18n/extras.ja.min.js"/>
+		</antcall>
 
 		<concat destfile="src/main/extras/js/i18n/extras.zh_CN.js" binary="true">
 			<fileset dir="src/main/extras/js/i18n">
@@ -242,15 +194,10 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/i18n/extras.zh_CN.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/i18n/extras.zh_CN.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/i18n/extras.zh_CN.js"/>
+			<param name="out" value="src/main/extras/js/i18n/extras.zh_CN.min.js"/>
+		</antcall>
 
 		<concat destfile="src/main/extras/js/i18n/extras.zh_TW.js" binary="true">
 			<fileset dir="src/main/extras/js/i18n">
@@ -258,16 +205,16 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="extras.*"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/js/i18n/extras.zh_TW.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/js/i18n/extras.zh_TW.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/extras/js/i18n/extras.zh_TW.js"/>
+			<param name="out" value="src/main/extras/js/i18n/extras.zh_TW.min.js"/>
+		</antcall>
 
+		<!-- others -->
+		<antcall target="minjs">
+			<param name="src" value="src/main/respondjs/respond.js"/>
+			<param name="out" value="src/main/respondjs/respond.min.js"/>
+		</antcall>
 
 		<!-- panda -->
 		<concat destfile="src/main/panda/js/panda.js" binary="true">
@@ -276,39 +223,24 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="ui.*.js"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/panda/js/panda.js"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="js"/>
-			<arg value="-o"/>
-			<arg value="src/main/panda/js/panda.min.js"/>
-		</java>
+		<antcall target="minjs">
+			<param name="src" value="src/main/panda/js/panda.js"/>
+			<param name="out" value="src/main/panda/js/panda.min.js"/>
+		</antcall>
 	</target>
 
-	<target name="min-css" description="Merge &amp; minify css files">
+	<target name="build-css" description="Merge &amp; minify css files">
 		<!-- bootstrap2 -->
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/bootstrap2/css/bootstrap-datetimepicker.css"/>
+			<param name="out" value="src/main/bootstrap2/css/bootstrap-datetimepicker.min.css"/>
+		</antcall>
 
 		<!-- bootstrap3 -->
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/bootstrap3/css/bootstrap-datetimepicker.css"/>
+			<param name="out" value="src/main/bootstrap3/css/bootstrap-datetimepicker.min.css"/>
+		</antcall>
 		
 		<!-- bootstrap3 plugins -->
 		<concat destfile="src/main/bootstrap3/css/bootstrap-plugins.css" binary="true">
@@ -319,58 +251,33 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<exclude name="bootstrap-*.min.css"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/bootstrap3/css/bootstrap-plugins.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/bootstrap3/css/bootstrap-plugins.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/bootstrap3/css/bootstrap-plugins.css"/>
+			<param name="out" value="src/main/bootstrap3/css/bootstrap-plugins.min.css"/>
+		</antcall>
 
 		<!-- jquery plugins -->
 		<concat destfile="src/main/jquery/css/jquery-plugins.css" binary="true">
 			<fileset dir="src/main/jquery/css" includes="jquery.*.css"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/jquery/css/jquery-plugins.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/jquery/css/jquery-plugins.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/jquery/css/jquery-plugins.css"/>
+			<param name="out" value="src/main/jquery/css/jquery-plugins.min.css"/>
+		</antcall>
 
 		<!-- extras -->
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/css/bootstrap-switch.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/css/bootstrap-switch.min.css"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/css/jquery.ui.lightbox.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/css/jquery.ui.lightbox.min.css"/>
-		</java>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/css/jquery.ui.tablesort.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/css/jquery.ui.tablesort.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/extras/css/bootstrap-switch.css"/>
+			<param name="out" value="src/main/extras/css/bootstrap-switch.min.css"/>
+		</antcall>
+		<antcall target="mincss">
+			<param name="src" value="src/main/extras/css/jquery.ui.lightbox.css"/>
+			<param name="out" value="src/main/extras/css/jquery.ui.lightbox.min.css"/>
+		</antcall>
+		<antcall target="mincss">
+			<param name="src" value="src/main/extras/css/jquery.ui.tablesort.css"/>
+			<param name="out" value="src/main/extras/css/jquery.ui.tablesort.min.css"/>
+		</antcall>
 
 		<concat destfile="src/main/extras/css/extras.css" binary="true">
 			<fileset dir="src/main/extras/css">
@@ -378,32 +285,22 @@ mvn-oss-stage     --> Deploy release version to maven staging repository
 				<include name="bootstrap-*.css"/>
 			</fileset>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/extras/css/extras.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/extras/css/extras.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/extras/css/extras.css"/>
+			<param name="out" value="src/main/extras/css/extras.min.css"/>
+		</antcall>
 
 		<!-- panda -->
 		<concat destfile="src/main/panda/css/panda.css" binary="true">
 			<fileset dir="src/main/panda/css" includes="ui.*.css"/>
 		</concat>
-		<java jar="lib/tool/yuicompressor.jar" fork="true" failonerror="true">
-			<arg value="src/main/panda/css/panda.css"/>
-			<arg value="--charset"/>
-			<arg value="UTF-8"/>
-			<arg value="--type"/>
-			<arg value="css"/>
-			<arg value="-o"/>
-			<arg value="src/main/panda/css/panda.min.css"/>
-		</java>
+		<antcall target="mincss">
+			<param name="src" value="src/main/panda/css/panda.css"/>
+			<param name="out" value="src/main/panda/css/panda.min.css"/>
+		</antcall>
 	</target>
 
-	<target name="build" depends="min-js, min-css" description="Build the project"/>
+	<target name="build" depends="build-js, build-css" description="Build the project"/>
 
 	<target name="jar" description="Make project as a jar file">
 		<delete dir="out"/>
