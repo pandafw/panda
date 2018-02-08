@@ -225,9 +225,9 @@ public class UserAgent {
 			return;
 		}
 		
-		if (parse(CHROME) 
+		if (parse(EDGE) 
+				|| parse(CHROME)
 				|| parse(FIREFOX)
-				|| parse(EDGE)
 				|| parse(MSIE)
 				|| parse(MSIE11, MSIE, 11)
 				|| parse(OPERA)
