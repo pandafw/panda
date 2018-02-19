@@ -14,7 +14,7 @@ import panda.ioc.ValueProxy;
 import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.ioc.wea.BeanMethodCreator;
-import panda.ioc.wea.ElCreator;
+import panda.ioc.wea.ELCreator;
 import panda.lang.Arrays;
 import panda.lang.Chars;
 import panda.lang.Classes;
@@ -155,7 +155,7 @@ public class DefaultObjectMaker implements ObjectMaker {
 					&& fa.charAt(1) == Chars.BRACES_LEFT 
 					&& fa.charAt(fa.length() - 1) == Chars.BRACES_RIGHT) {
 				// EL
-				dw.setCreator(new ElCreator(ing.getIoc(), fa.substring(2, fa.length() - 1)));
+				dw.setCreator(new ELCreator(ing.getIoc(), fa.substring(2, fa.length() - 1)));
 			}
 			else if (c0 == Chars.SHARP) {
 				// iocbean.method

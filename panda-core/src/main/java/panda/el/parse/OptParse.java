@@ -1,6 +1,6 @@
 package panda.el.parse;
 
-import panda.el.ElException;
+import panda.el.ELException;
 import panda.el.Parse;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
@@ -104,7 +104,7 @@ public class OptParse implements Parse {
 				exp.poll();
 				return new EQOpt();
 			}
-			throw new ElException("Incorrect expression, illegal character after '='");
+			throw new ELException("Incorrect expression, illegal character after '='");
 		case '!':
 			exp.poll();
 			switch (exp.peek()) {

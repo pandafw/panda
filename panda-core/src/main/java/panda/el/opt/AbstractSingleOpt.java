@@ -2,8 +2,8 @@ package panda.el.opt;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 
 /**
  * Abstract Single Operand Operator
@@ -15,10 +15,10 @@ public abstract class AbstractSingleOpt extends AbstractOpt {
 		right = operand.poll();
 	}
 
-	protected boolean isReturnNull(ElContext ec, Object rval) {
+	protected boolean isReturnNull(ELContext ec, Object rval) {
 		if (rval == null) {
 			if (ec.strict()) {
-				throw new ElException("right object is NULL: " + right);
+				throw new ELException("right object is NULL: " + right);
 			}
 			return true;
 		}

@@ -1,7 +1,7 @@
 package panda.el.opt.logic;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -15,9 +15,9 @@ public class QuestionSelectOpt extends AbstractTwoOpt {
 		return 13;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		if (!(left instanceof QuestionOpt)) {
-			throw new ElException("三元表达式错误!");
+			throw new ELException("三元表达式错误!");
 		}
 		
 		QuestionOpt qo = (QuestionOpt)left;

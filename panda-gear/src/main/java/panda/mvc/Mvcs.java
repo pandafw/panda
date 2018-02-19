@@ -14,8 +14,8 @@ import panda.bind.json.JsonObject;
 import panda.cast.CastContext;
 import panda.cast.Castors;
 import panda.cast.castor.FileItemCastor;
-import panda.el.El;
-import panda.el.ElTemplate;
+import panda.el.EL;
+import panda.el.ELTemplate;
 import panda.io.Settings;
 import panda.ioc.Ioc;
 import panda.lang.Chars;
@@ -300,12 +300,12 @@ public abstract class Mvcs {
 	 */
 	public static Object findValue(ActionContext ac, String expr, Object arg) {
 		if (Objects.NULL == arg) {
-			return El.eval(expr, ac);
+			return EL.eval(expr, ac);
 		}
 
 		try {
 			ac.push(arg);
-			return El.eval(expr, ac);
+			return EL.eval(expr, ac);
 		}
 		finally {
 			ac.pop();
@@ -426,13 +426,13 @@ public abstract class Mvcs {
 		if (arg != Objects.NULL) {
 			try {
 				ac.push(arg);
-				return ElTemplate.evaluate(expr, ac);
+				return ELTemplate.evaluate(expr, ac);
 			}
 			finally {
 				ac.pop();
 			}
 		}
-		return ElTemplate.evaluate(expr, ac);
+		return ELTemplate.evaluate(expr, ac);
 	}
 	
 	/**
@@ -442,7 +442,7 @@ public abstract class Mvcs {
 	 * @return translated string
 	 */
 	public static String translate(String expr, Object arg) {
-		return ElTemplate.evaluate(expr, arg);
+		return ELTemplate.evaluate(expr, arg);
 	}
 
 	//----------------------------------------------

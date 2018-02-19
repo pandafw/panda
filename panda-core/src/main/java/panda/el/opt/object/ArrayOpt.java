@@ -3,7 +3,7 @@ package panda.el.opt.object;
 import java.lang.reflect.Array;
 import java.util.Map;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -14,7 +14,7 @@ public class ArrayOpt extends AbstractTwoOpt {
 		return 1;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
 

@@ -1,6 +1,6 @@
 package panda.el.opt.arithmetic;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -15,7 +15,7 @@ public class PlusOpt extends AbstractTwoOpt {
 		return "+";
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
 

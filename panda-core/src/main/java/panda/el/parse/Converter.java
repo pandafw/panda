@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import panda.el.ElException;
+import panda.el.ELException;
 import panda.el.Parse;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 import panda.el.opt.LArrayOpt;
 import panda.el.opt.LBracketOpt;
 import panda.el.opt.RArrayOpt;
@@ -102,7 +102,7 @@ public class Converter {
 				return parseItem(obj);
 			}
 		}
-		throw new ElException("Failed to parse!");
+		throw new ELException("Failed to parse!");
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class Converter {
 
 		// '('
 		if (item instanceof LBracketOpt) {
-			if (prev instanceof ElObj) {
+			if (prev instanceof ELObj) {
 				MethodOpt prem = new MethodOpt();
 				item = new Object[] { prem, item };
 				methods.addFirst(prem);

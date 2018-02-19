@@ -1,7 +1,7 @@
 package panda.el.parse;
 
 import panda.el.Parse;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 
 /**
  * 标识符转换
@@ -18,7 +18,7 @@ public class IdentifierParse implements Parse {
 			
 			String s = sb.toString();
 			if (s.equals("null")) {
-				return new ElObj(null);
+				return new ELObj(null);
 			}
 			if (s.equals("true")) {
 				return Boolean.TRUE;
@@ -26,7 +26,7 @@ public class IdentifierParse implements Parse {
 			if (s.equals("false")) {
 				return Boolean.FALSE;
 			}
-			return new ElObj(sb.toString());
+			return new ELObj(sb.toString());
 		}
 		return NULL;
 	}

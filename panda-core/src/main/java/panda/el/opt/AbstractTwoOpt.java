@@ -2,10 +2,10 @@ package panda.el.opt;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.Operator;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 
 /**
  * Abstract 2 Operands Operator
@@ -24,7 +24,7 @@ public abstract class AbstractTwoOpt extends AbstractOpt {
 	 * @param ec EL context
 	 * @return the right calculated result
 	 */
-	public Object getRight(ElContext ec) {
+	public Object getRight(ELContext ec) {
 		return calculateItem(ec, right);
 	}
 
@@ -33,7 +33,7 @@ public abstract class AbstractTwoOpt extends AbstractOpt {
 	 * @param ec EL context
 	 * @return the left calculated result
 	 */
-	public Object getLeft(ElContext ec) {
+	public Object getLeft(ELContext ec) {
 		return calculateItem(ec, left);
 	}
 
@@ -42,7 +42,7 @@ public abstract class AbstractTwoOpt extends AbstractOpt {
 	 * @param ec EL context
 	 * @return left variable
 	 */
-	protected Object getLeftVar(ElContext ec) {
+	protected Object getLeftVar(ELContext ec) {
 		if (left == null) {
 			return ec.context();
 		}
@@ -50,8 +50,8 @@ public abstract class AbstractTwoOpt extends AbstractOpt {
 		if (left instanceof Operator) {
 			return ((Operator)left).calculate(ec);
 		}
-		if (left instanceof ElObj) {
-			return ((ElObj)left).getObj(ec);
+		if (left instanceof ELObj) {
+			return ((ELObj)left).getObj(ec);
 		}
 		return left;
 	}
@@ -63,16 +63,16 @@ public abstract class AbstractTwoOpt extends AbstractOpt {
 	 * @param rval right var
 	 * @return weather to return null
 	 */
-	protected boolean isReturnNull(ElContext ec, Object lval, Object rval) {
+	protected boolean isReturnNull(ELContext ec, Object lval, Object rval) {
 		if (lval == null) {
 			if (ec.strict()) {
-				throw new ElException(getClass().getSimpleName() + " left object is NULL: " + left);
+				throw new ELException(getClass().getSimpleName() + " left object is NULL: " + left);
 			}
 			return true;
 		}
 		if (rval == null) {
 			if (ec.strict()) {
-				throw new ElException("right object is NULL: " + right);
+				throw new ELException("right object is NULL: " + right);
 			}
 			return true;
 		}

@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import panda.el.ElTemplate;
+import panda.el.ELTemplate;
 import panda.io.Streams;
 import panda.lang.Charsets;
 import panda.lang.reflect.Fields;
@@ -37,7 +37,7 @@ public class ResourceTest {
 		ps.load(r);
 		
 		for (Object v : ps.values()) {
-			new ElTemplate((String)v);
+			new ELTemplate((String)v);
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class ResourceTest {
 		top = iv;
 
 		Fields.writeField(iv, "image", false, true);
-		String actual = ElTemplate.evaluate(s, this, true);
+		String actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 		
 		////
@@ -93,17 +93,17 @@ public class ResourceTest {
 
 		Fields.writeField(iv, "maxWidth", 30, true);
 		Fields.writeField(iv, "minWidth", null, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		Fields.writeField(iv, "maxWidth", null, true);
 		Fields.writeField(iv, "minWidth", 20, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		Fields.writeField(iv, "maxWidth", 30, true);
 		Fields.writeField(iv, "minWidth", 20, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		////
@@ -112,17 +112,17 @@ public class ResourceTest {
 
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", null, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		Fields.writeField(iv, "maxHeight", null, true);
 		Fields.writeField(iv, "minHeight", 20, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", 20, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 		////
@@ -130,7 +130,7 @@ public class ResourceTest {
 		Fields.writeField(iv, "minWidth", 20, true);
 		Fields.writeField(iv, "maxHeight", 30, true);
 		Fields.writeField(iv, "minHeight", 20, true);
-		actual = ElTemplate.evaluate(s, this, true);
+		actual = ELTemplate.evaluate(s, this, true);
 		System.out.println(actual);
 
 	}

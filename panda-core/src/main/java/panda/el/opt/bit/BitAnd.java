@@ -1,6 +1,6 @@
 package panda.el.opt.bit;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -11,7 +11,7 @@ public class BitAnd extends AbstractTwoOpt {
 		return 8;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Integer lval = (Integer)getLeft(ec);
 		Integer rval = (Integer)getRight(ec);
 		if (isReturnNull(ec, lval, rval)) {

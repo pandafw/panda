@@ -2,8 +2,8 @@ package panda.el.opt.object;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.Operator;
 import panda.el.opt.AbstractOpt;
 
@@ -21,11 +21,11 @@ public class FetchArrayOpt extends AbstractOpt {
 		left = operand.poll();
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		if (left instanceof Operator) {
 			return ((Operator)left).calculate(ec);
 		}
-		throw new ElException("Invalid left operator: " + left);
+		throw new ELException("Invalid left operator: " + left);
 	}
 
 	public String operator() {

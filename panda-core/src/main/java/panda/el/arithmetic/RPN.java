@@ -3,9 +3,9 @@ package panda.el.arithmetic;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.Operator;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 
 /**
  * 逆波兰表示法（Reverse Polish
@@ -33,7 +33,7 @@ public class RPN {
 	 * @param ec the ElContext
 	 * @return the calculated value
 	 */
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		return calculate(ec, el);
 	}
 
@@ -44,7 +44,7 @@ public class RPN {
 	 * @param rpn the RPN Queue
 	 * @return the calculated value
 	 */
-	public Object calculate(ElContext ec, Queue<Object> rpn) {
+	public Object calculate(ELContext ec, Queue<Object> rpn) {
 		LinkedList<Object> operand = OperatorTree(rpn);
 		return calculate(ec, operand);
 	}
@@ -52,13 +52,13 @@ public class RPN {
 	/**
 	 * 计算
 	 */
-	private Object calculate(ElContext ec, LinkedList<Object> el2) {
+	private Object calculate(ELContext ec, LinkedList<Object> el2) {
 		Object obj = el2.peek();
 		if (obj instanceof Operator) {
 			return ((Operator)obj).calculate(ec);
 		}
-		if (obj instanceof ElObj) {
-			return ((ElObj)obj).getObj(ec);
+		if (obj instanceof ELObj) {
+			return ((ELObj)obj).getObj(ec);
 		}
 		return obj;
 	}

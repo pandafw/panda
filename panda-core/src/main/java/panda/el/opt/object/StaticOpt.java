@@ -2,8 +2,8 @@ package panda.el.opt.object;
 
 import java.util.List;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.opt.RunMethod;
 import panda.el.opt.AbstractTwoOpt;
 import panda.lang.Classes;
@@ -21,10 +21,10 @@ public class StaticOpt extends AbstractTwoOpt implements RunMethod {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Class getClass(ElContext ec) {
+	private Class getClass(ELContext ec) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
-			throw new ElException("obj is NULL, can't call obj@" + right);
+			throw new ELException("obj is NULL, can't call obj@" + right);
 		}
 		
 		Class clz;
@@ -34,7 +34,7 @@ public class StaticOpt extends AbstractTwoOpt implements RunMethod {
 		else if (obj instanceof String) {
 			String c = (String)obj;
 			if (Strings.isEmpty(c)) {
-				throw new ElException("obj is EMPTY, can't call ''@" + right);
+				throw new ELException("obj is EMPTY, can't call ''@" + right);
 			}
 
 			if (Character.isUpperCase(c.charAt(0))) {
@@ -49,7 +49,7 @@ public class StaticOpt extends AbstractTwoOpt implements RunMethod {
 		return clz;
 	}
 	
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Class<?> clz = getClass(ec);
 		try {
 			return Fields.readStaticField(clz, right.toString(), false);
@@ -59,7 +59,7 @@ public class StaticOpt extends AbstractTwoOpt implements RunMethod {
 		}
 	}
 
-	public Object run(ElContext ec, List<?> param) {
+	public Object run(ELContext ec, List<?> param) {
 		Class<?> clz = getClass(ec);
 
 		Object[] arg = param.toArray();

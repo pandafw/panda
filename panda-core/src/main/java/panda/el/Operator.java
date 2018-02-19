@@ -23,6 +23,6 @@ public interface Operator {
 	 * @param ec the ElContext
 	 * @return the calculated value
 	 */
-	public Object calculate(ElContext ec);
+	public Object calculate(ELContext ec);
 
 }

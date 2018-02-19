@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
-import panda.el.El;
-import panda.el.Evaluator;
+import panda.el.EL;
 import panda.io.Streams;
 import panda.io.stream.CharSequenceReader;
 import panda.io.stream.CsvReader;
@@ -502,8 +501,13 @@ public abstract class Texts {
 	}
 
 	// -----------------------------------------------------------------------
+	public static interface Evaluator {
+		Object evaluate(String expression);
+	}
+
 	public static class BeanEvaluator implements Evaluator {
 		private Object context;
+
 		@SuppressWarnings("rawtypes")
 		private BeanHandler beanh;
 		
@@ -518,15 +522,15 @@ public abstract class Texts {
 		}
 	}
 
-	public static class ElEvaluator implements Evaluator {
+	public static class ELEvaluator implements Evaluator {
 		private Object context;
 		
-		public ElEvaluator(Object context) {
+		public ELEvaluator(Object context) {
 			this.context = context;
 		}
 		
 		public Object evaluate(String expression) {
-			return new El(expression).eval(context);
+			return new EL(expression).eval(context);
 		}
 	}
 	
@@ -583,7 +587,7 @@ public abstract class Texts {
 			return expression;
 		}
 		
-		Evaluator eva = new ElEvaluator(wrapper);
+		Evaluator eva = new ELEvaluator(wrapper);
 		return translate(expression, eva, prefix, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
 	}
 

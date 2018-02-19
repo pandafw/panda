@@ -1,6 +1,6 @@
 package panda.el.parse;
 
-import panda.el.ElException;
+import panda.el.ELException;
 import panda.el.Parse;
 
 /**
@@ -40,7 +40,7 @@ public class ValParse implements Parse {
 					break;
 				case '.':
 					if (hasPoint) {
-						throw new ElException("表达式错误,请查看是否有多个'.'!");
+						throw new ELException("表达式错误,请查看是否有多个'.'!");
 					}
 					hasPoint = true;
 					sb.append(exp.poll());

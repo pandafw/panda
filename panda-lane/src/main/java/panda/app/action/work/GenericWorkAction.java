@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import panda.app.action.AbstractAction;
-import panda.el.ElTemplate;
+import panda.el.ELTemplate;
 import panda.io.MimeTypes;
 import panda.io.Streams;
 import panda.lang.Charsets;
@@ -26,29 +26,29 @@ public abstract class GenericWorkAction extends AbstractAction {
 	protected static final char L_SUCCESS = 's';
 	
 	public static class Events {
-		protected ElTemplate onStart;
-		protected ElTemplate onStatus;
-		protected ElTemplate onFinish;
+		protected ELTemplate onStart;
+		protected ELTemplate onStatus;
+		protected ELTemplate onFinish;
 
 		/**
 		 * @param onStart the onStart to set
 		 */
 		public void setOnStart(String onStart) {
-			this.onStart = new ElTemplate(onStart, PREFIX);
+			this.onStart = new ELTemplate(onStart, PREFIX);
 		}
 
 		/**
 		 * @param onStatus the onStatus to set
 		 */
 		public void setOnStatus(String onStatus) {
-			this.onStatus = new ElTemplate(onStatus, PREFIX);;
+			this.onStatus = new ELTemplate(onStatus, PREFIX);;
 		}
 
 		/**
 		 * @param onFinish the onFinish to set
 		 */
 		public void setOnFinish(String onFinish) {
-			this.onFinish = new ElTemplate(onFinish, PREFIX);;
+			this.onFinish = new ELTemplate(onFinish, PREFIX);;
 		}
 	}
 

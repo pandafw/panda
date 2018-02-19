@@ -1,6 +1,6 @@
 package panda.el.opt.arithmetic;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -16,7 +16,7 @@ public class SubOpt extends AbstractTwoOpt {
 		return 4;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Number lval = (Number)getLeft(ec);
 		Number rval = (Number)getRight(ec);
 

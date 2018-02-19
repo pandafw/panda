@@ -3,8 +3,8 @@ package panda.el.opt.object;
 import java.util.List;
 
 import panda.bean.Beans;
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.opt.RunMethod;
 import panda.el.opt.AbstractTwoOpt;
 import panda.lang.Exceptions;
@@ -27,18 +27,18 @@ public class AccessOpt extends AbstractTwoOpt implements RunMethod {
 		return 1;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
 			if (ec.strict()) {
-				throw new ElException("obj is NULL, can't call obj." + right);
+				throw new ELException("obj is NULL, can't call obj." + right);
 			}
 			return null;
 		}
 		return Beans.getProperty(obj, right.toString());
 	}
 
-	public Object run(ElContext ec, List<?> param) {
+	public Object run(ELContext ec, List<?> param) {
 		Object obj = getLeftVar(ec);
 		if (obj == null) {
 			throw new NullPointerException();

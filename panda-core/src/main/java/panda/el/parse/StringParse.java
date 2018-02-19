@@ -1,6 +1,6 @@
 package panda.el.parse;
 
-import panda.el.ElException;
+import panda.el.ELException;
 import panda.el.Parse;
 
 /**
@@ -60,7 +60,7 @@ public class StringParse implements Parse {
 			sb.append('\f');
 			break;
 		default:
-			throw new ElException("Unexpected char");
+			throw new ELException("Unexpected char");
 		}
 	}
 }

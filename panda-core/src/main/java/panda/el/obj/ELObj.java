@@ -1,11 +1,11 @@
 package panda.el.obj;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 
-public class ElObj {
+public class ELObj {
 	private String val;
 
-	public ElObj(String val) {
+	public ELObj(String val) {
 		this.val = val;
 	}
 
@@ -13,7 +13,7 @@ public class ElObj {
 		return val;
 	}
 
-	public Object getObj(ElContext ec) {
+	public Object getObj(ELContext ec) {
 		if (val == null) {
 			return null;
 		}

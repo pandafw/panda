@@ -3,7 +3,7 @@ package panda.app.action.tool;
 import panda.app.action.AbstractAction;
 import panda.app.auth.Auth;
 import panda.app.constant.AUTH;
-import panda.el.El;
+import panda.el.EL;
 import panda.lang.Strings;
 import panda.mvc.View;
 import panda.mvc.annotation.At;
@@ -12,7 +12,7 @@ import panda.mvc.annotation.param.Param;
 
 @At("${super_path}/el")
 @Auth(AUTH.SUPER)
-public class ElEvaluateAction extends AbstractAction {
+public class ELEvaluateAction extends AbstractAction {
 
 	@At("")
 	@To(View.SFTL)
@@ -37,7 +37,7 @@ public class ElEvaluateAction extends AbstractAction {
 		}
 		
 		try {
-			return El.eval(expr, getContext());
+			return EL.eval(expr, getContext());
 		}
 		catch (Exception e) {
 			getContext().setError(e);

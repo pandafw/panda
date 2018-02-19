@@ -2,7 +2,7 @@ package panda.el.opt;
 
 import java.util.List;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 
 /**
  * 方法执行接口.<br>
@@ -18,7 +18,7 @@ public interface RunMethod {
 	 * @param ps 参数, 即EL表达式中, 函数括号内的内容.
 	 * @return the method return value
 	 */
-	Object run(ElContext ec, List<?> ps);
+	Object run(ELContext ec, List<?> ps);
 
 	/**
 	 * 取得方法自身的符号

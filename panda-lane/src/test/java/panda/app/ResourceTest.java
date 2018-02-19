@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import panda.el.ElTemplate;
+import panda.el.ELTemplate;
 import panda.io.Streams;
 import panda.lang.Charsets;
 
@@ -35,7 +35,7 @@ public class ResourceTest {
 		ps.load(r);
 		
 		for (Object v : ps.values()) {
-			new ElTemplate((String)v);
+			new ELTemplate((String)v);
 		}
 	}
 	

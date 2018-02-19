@@ -3,7 +3,12 @@ package panda.el;
 import panda.bean.BeanHandler;
 import panda.bean.Beans;
 
-public class ElContext {
+public class ELContext {
+	public static boolean defaultStrict;
+	
+	public static final ELContext DEFAULT = new ELContext();
+	public static final ELContext STRICT = new ELContext(true);
+	
 	private boolean strict;
 	private Object context;
 
@@ -11,23 +16,30 @@ public class ElContext {
 	private BeanHandler handler;
 
 	/**
+	 * @param strict the default strict to set
+	 */
+	public static void setDefaultStrictMode(boolean strict) {
+		defaultStrict = strict;
+	}
+	
+	/**
 	 * Constructor
 	 */
-	public ElContext() {
+	public ELContext() {
 		this(null);
 	}
 
 	/**
 	 * @param context context object
 	 */
-	public ElContext(Object context) {
-		this(context, false);
+	public ELContext(Object context) {
+		this(context, defaultStrict);
 	}
 
 	/**
 	 * @param strict strict mode
 	 */
-	public ElContext(boolean strict) {
+	public ELContext(boolean strict) {
 		this(null, strict);
 	}
 
@@ -35,7 +47,7 @@ public class ElContext {
 	 * @param context context object
 	 * @param strict set this to true if you want NullPointException should be raised
 	 */
-	public ElContext(Object context, boolean strict) {
+	public ELContext(Object context, boolean strict) {
 		this.context = context;
 		this.strict = strict;
 		this.handler = context == null ? null : Beans.i().getBeanHandler(context.getClass());

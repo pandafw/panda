@@ -3,7 +3,7 @@ package panda.el.opt.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -15,7 +15,7 @@ public class CommaOpt extends AbstractTwoOpt {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		List<Object> objs = new ArrayList<Object>();
 		if (left instanceof CommaOpt) {
 			List<Object> tem = (List<Object>)((CommaOpt)left).calculate(ec);

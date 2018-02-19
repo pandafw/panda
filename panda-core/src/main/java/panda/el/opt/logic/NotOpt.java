@@ -2,7 +2,7 @@ package panda.el.opt.logic;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractOpt;
 
 /**
@@ -19,7 +19,7 @@ public class NotOpt extends AbstractOpt {
 		right = rpn.poll();
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object rval = calculateItem(ec, right);
 		return Logics.isFalse(rval);
 	}

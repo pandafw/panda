@@ -12,30 +12,30 @@ import panda.lang.Chars;
 import panda.tpl.AbstractTemplate;
 import panda.tpl.TemplateException;
 
-public class ElTemplate extends AbstractTemplate {
-	private static Map<String, ElTemplate> cache = new WeakHashMap<String, ElTemplate>();
+public class ELTemplate extends AbstractTemplate {
+	private static Map<String, ELTemplate> cache = new WeakHashMap<String, ELTemplate>();
 	
 	public static final char[] PREFIXS = { Chars.DOLLAR, Chars.PERCENT };
 	
 	private List<Object> segments;
 
-	public ElTemplate(String expr) throws TemplateException {
+	public ELTemplate(String expr) throws TemplateException {
 		this(expr, PREFIXS);
 	}
 
-	public ElTemplate(String expr, char prefix) throws TemplateException {
+	public ELTemplate(String expr, char prefix) throws TemplateException {
 		this(expr, prefix, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
 	}
 
-	public ElTemplate(String expr, char[] prefixs) throws TemplateException {
+	public ELTemplate(String expr, char[] prefixs) throws TemplateException {
 		this(expr, prefixs, Chars.BRACES_LEFT, Chars.BRACES_RIGHT);
 	}
 
-	public ElTemplate(String expr, char prefix, char open, char close) throws TemplateException {
+	public ELTemplate(String expr, char prefix, char open, char close) throws TemplateException {
 		this(expr, new char[] { prefix }, open, close);
 	}
 	
-	public ElTemplate(String expr, char[] prefixs, char open, char close) throws TemplateException {
+	public ELTemplate(String expr, char[] prefixs, char open, char close) throws TemplateException {
 		Asserts.notNull(expr);
 		
 		segments = new ArrayList<Object>();
@@ -133,7 +133,7 @@ public class ElTemplate extends AbstractTemplate {
 			segments.add(expr.substring(x, i));
 		}
 
-		segments.add(El.get(el));
+		segments.add(EL.get(el));
 
 		return j;
 	}
@@ -141,8 +141,8 @@ public class ElTemplate extends AbstractTemplate {
 	public void evaluate(Appendable out, Object context, boolean strict) throws TemplateException {
 		try {
 			for (Object o : segments) {
-				if (o instanceof El) {
-					Object r = ((El)o).eval(new ElContext(context, strict));
+				if (o instanceof EL) {
+					Object r = ((EL)o).eval(new ELContext(context, strict));
 					if (r != null) {
 						out.append(r.toString());
 					}
@@ -171,8 +171,8 @@ public class ElTemplate extends AbstractTemplate {
 	//-----------------------------------------------------------------------
 	// static methods
 	//
-	private static ElTemplate get(String expression) throws TemplateException {
-		ElTemplate elt = cache.get(expression);
+	private static ELTemplate get(String expression) throws TemplateException {
+		ELTemplate elt = cache.get(expression);
 		if (elt != null) {
 			return elt;
 		}
@@ -182,7 +182,7 @@ public class ElTemplate extends AbstractTemplate {
 				return elt;
 			}
 			
-			elt = new ElTemplate(expression);
+			elt = new ELTemplate(expression);
 			cache.put(expression, elt);
 			return elt;
 		}

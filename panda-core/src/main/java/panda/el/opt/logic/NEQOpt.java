@@ -1,6 +1,6 @@
 package panda.el.opt.logic;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -11,7 +11,7 @@ public class NEQOpt extends AbstractTwoOpt {
 		return 6;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object lval = getLeft(ec);
 		Object rval = getRight(ec);
 

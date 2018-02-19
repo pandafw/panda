@@ -1,7 +1,7 @@
 package panda.el.opt.logic;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.opt.AbstractTwoOpt;
 
 /**
@@ -12,17 +12,17 @@ public class AndOpt extends AbstractTwoOpt {
 		return 11;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object lval = getLeft(ec);
 		if (!(lval instanceof Boolean)) {
-			throw new ElException("Invalid left bool object for '&&': " + lval);
+			throw new ELException("Invalid left bool object for '&&': " + lval);
 		}
 		if (!(Boolean)lval) {
 			return false;
 		}
 		Object rval = getRight(ec);
 		if (!(rval instanceof Boolean)) {
-			throw new ElException("Invalid right bool object for '&&': " + rval);
+			throw new ELException("Invalid right bool object for '&&': " + rval);
 		}
 		if (!(Boolean)rval) {
 			return false;

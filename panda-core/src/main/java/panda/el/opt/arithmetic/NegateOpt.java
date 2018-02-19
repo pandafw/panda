@@ -3,7 +3,7 @@ package panda.el.opt.arithmetic;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractSingleOpt;
 
 /**
@@ -14,7 +14,7 @@ public class NegateOpt extends AbstractSingleOpt {
 		return 2;
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Object rval = calculateItem(ec, right);
 		if (isReturnNull(ec, rval)) {
 			return null;

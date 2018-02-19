@@ -15,7 +15,7 @@ import panda.ioc.meta.IocObject;
 import panda.ioc.meta.IocValue;
 import panda.ioc.val.ArrayValue;
 import panda.ioc.val.CollectionValue;
-import panda.ioc.val.ElValue;
+import panda.ioc.val.ELValue;
 import panda.ioc.val.InnerValue;
 import panda.ioc.val.MapValue;
 import panda.ioc.val.ReferValue;
@@ -103,7 +103,7 @@ public class DefaultValueProxyMaker implements ValueProxyMaker {
 
 		// EL
 		if (IocValue.TYPE_EL == type) {
-			return new ElValue(value.toString());
+			return new ELValue(value.toString());
 		}
 		
 		// JSON

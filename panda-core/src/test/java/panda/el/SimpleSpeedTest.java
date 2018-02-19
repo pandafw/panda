@@ -42,7 +42,7 @@ public class SimpleSpeedTest {
 				context.put("num", 0);
 				for (int i = 0; i < max; i++) {
 					context.put("i", i);
-					context.put("num", El.eval(elstr, context));
+					context.put("num", EL.eval(elstr, context));
 				}
 				System.out.println("Num: " + context.get("num"));
 			}
@@ -51,7 +51,7 @@ public class SimpleSpeedTest {
 
 		StopWatch sw4 = StopWatch.run(new Runnable() {
 			public void run() {
-				El el2pre = new El(elstr);
+				EL el2pre = new EL(elstr);
 				context.put("num", 0);
 				context.put("z", z);
 				for (int i = 0; i < max; i++) {
@@ -65,7 +65,7 @@ public class SimpleSpeedTest {
 
 		StopWatch sw5 = StopWatch.run(new Runnable() {
 			public void run() {
-				El el2pre = new El(elstr);
+				EL el2pre = new EL(elstr);
 				context.put("num", 0);
 				context.put("z", z);
 				for (int i = 0; i < max; i++) {

@@ -1,6 +1,6 @@
 package panda.el.opt.logic;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractTwoOpt;
 import panda.lang.Classes;
 
@@ -14,7 +14,7 @@ public class GTEOpt extends AbstractTwoOpt {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		Comparable lval = (Comparable)getLeft(ec);
 		Comparable rval = (Comparable)getRight(ec);
 

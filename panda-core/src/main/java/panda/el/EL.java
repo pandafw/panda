@@ -7,8 +7,8 @@ import java.util.WeakHashMap;
 import panda.el.arithmetic.RPN;
 import panda.el.arithmetic.ShuntingYard;
 
-public class El {
-	private static Map<String, El> cache = new WeakHashMap<String, El>();
+public class EL {
+	private static Map<String, EL> cache = new WeakHashMap<String, EL>();
 	
 	private RPN rpn;
 	private CharSequence expr;
@@ -18,7 +18,7 @@ public class El {
 	 * 
 	 * @param cs the EL expression
 	 */
-	public El(CharSequence cs) {
+	public EL(CharSequence cs) {
 		try {
 			expr = cs;
 			ShuntingYard sy = new ShuntingYard();
@@ -26,7 +26,7 @@ public class El {
 			rpn = new RPN(que);
 		}
 		catch (Exception e) {
-			throw new ElException("Failed to parse El expression '" + cs + "'", e);
+			throw new ELException("Failed to parse El expression '" + cs + "'", e);
 		}
 	}
 
@@ -35,8 +35,7 @@ public class El {
 	 * @return the evaluated value
 	 */
 	public Object eval() {
-		ElContext ec = new ElContext(null);
-		return rpn.calculate(ec);
+		return rpn.calculate(ELContext.DEFAULT);
 	}
 
 	/**
@@ -46,7 +45,7 @@ public class El {
 	 * @return the evaluated value
 	 */
 	public Object eval(Object context) {
-		ElContext ec = new ElContext(context);
+		ELContext ec = new ELContext(context);
 		return rpn.calculate(ec);
 	}
 
@@ -56,7 +55,10 @@ public class El {
 	 * @param ec the ElContext object
 	 * @return the evaluated value
 	 */
-	public Object eval(ElContext ec) {
+	public Object eval(ELContext ec) {
+		if (ec == null) {
+			ec = ELContext.DEFAULT;
+		}
 		return rpn.calculate(ec);
 	}
 
@@ -67,8 +69,8 @@ public class El {
 	//---------------------------------------------------------------
 	// static methods
 	//
-	public static El get(String expr) {
-		El el = cache.get(expr);
+	public static EL get(String expr) {
+		EL el = cache.get(expr);
 		if (el != null) {
 			return el;
 		}
@@ -77,14 +79,14 @@ public class El {
 			if (el != null) {
 				return el;
 			}
-			el = new El(expr);
+			el = new EL(expr);
 			cache.put(expr, el);
 			return el;
 		}
 	}
 
-	public static El parse(String expr) {
-		return new El(expr);
+	public static EL parse(String expr) {
+		return new EL(expr);
 	}
 	
 	/**
@@ -109,7 +111,7 @@ public class El {
 			return get(expr).eval(context);
 		}
 		catch (Exception e) {
-			throw new ElException("Failed to eval('" + expr + "', " + (context == null ? "null" : context.getClass()) + ")", e);
+			throw new ELException("Failed to eval('" + expr + "', " + (context == null ? "null" : context.getClass()) + ")", e);
 		}
 	}
 
@@ -120,12 +122,12 @@ public class El {
 	 * @param context the parameters
 	 * @return the evaluated value
 	 */
-	public static Object eval(String expr, ElContext context) {
+	public static Object eval(String expr, ELContext context) {
 		try {
 			return get(expr).eval(context);
 		}
 		catch (Exception e) {
-			throw new ElException("Failed to eval('" + expr + "', " + context + ")", e);
+			throw new ELException("Failed to eval('" + expr + "', " + context + ")", e);
 		}
 	}
 }

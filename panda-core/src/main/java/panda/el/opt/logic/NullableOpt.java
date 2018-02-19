@@ -2,7 +2,7 @@ package panda.el.opt.logic;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
+import panda.el.ELContext;
 import panda.el.opt.AbstractOpt;
 
 public class NullableOpt extends AbstractOpt {
@@ -20,7 +20,7 @@ public class NullableOpt extends AbstractOpt {
 	}
 
 	@Override
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		try {
 			return calculateItem(ec, right);
 		}

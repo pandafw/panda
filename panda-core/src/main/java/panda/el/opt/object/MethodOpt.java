@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.Operator;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 import panda.el.opt.RunMethod;
 import panda.el.opt.AbstractTwoOpt;
 
@@ -40,27 +40,27 @@ public class MethodOpt extends AbstractTwoOpt {
 		}
 	}
 
-	public Object calculate(ElContext ec) {
+	public Object calculate(ELContext ec) {
 		return fetchMethod(ec).run(ec, fetchParam(ec));
 	}
 
-	private RunMethod fetchMethod(ElContext ec) {
+	private RunMethod fetchMethod(ELContext ec) {
 		if (left instanceof RunMethod) {
 			return (RunMethod)left;
 		}
 		
-		if (left instanceof ElObj) {
+		if (left instanceof ELObj) {
 			return new AccessOpt(null, left);
 		}
 		
-		throw new ElException("left is unsupported method: " + left + (left == null ? "" : " / " + left.getClass()));
+		throw new ELException("left is unsupported method: " + left + (left == null ? "" : " / " + left.getClass()));
 	}
 
 	/**
 	 * 取得方法执行的参数
 	 */
 	@SuppressWarnings("unchecked")
-	private List<Object> fetchParam(ElContext ec) {
+	private List<Object> fetchParam(ELContext ec) {
 		List<Object> rvals = new ArrayList<Object>();
 		if (right != null) {
 			if (right instanceof CommaOpt) {

@@ -2,8 +2,8 @@ package panda.el.opt;
 
 import java.util.Queue;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 
 /**
  * "{"
@@ -25,7 +25,7 @@ public class LArrayOpt extends AbstractOpt {
 	public void wrap(Queue<Object> obj) {
 	}
 
-	public Object calculate(ElContext ec) {
-		throw new ElException("calculate() is unsupported by '}'");
+	public Object calculate(ELContext ec) {
+		throw new ELException("calculate() is unsupported by '}'");
 	}
 }

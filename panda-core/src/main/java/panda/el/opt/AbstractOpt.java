@@ -1,9 +1,9 @@
 package panda.el.opt;
 
-import panda.el.ElContext;
-import panda.el.ElException;
+import panda.el.ELContext;
+import panda.el.ELException;
 import panda.el.Operator;
-import panda.el.obj.ElObj;
+import panda.el.obj.ELObj;
 
 /**
  * abstract class for Operator
@@ -35,7 +35,7 @@ public abstract class AbstractOpt implements Operator {
 	 * @param obj object
 	 * @return calculated result
 	 */
-	protected Object calculateItem(ElContext ec, Object obj) {
+	protected Object calculateItem(ELContext ec, Object obj) {
 		if (obj == null) {
 			return null;
 		}
@@ -48,13 +48,13 @@ public abstract class AbstractOpt implements Operator {
 		if (obj instanceof String) {
 			return obj;
 		}
-		if (obj instanceof ElObj) {
-			return ((ElObj)obj).getObj(ec);
+		if (obj instanceof ELObj) {
+			return ((ELObj)obj).getObj(ec);
 		}
 		if (obj instanceof Operator) {
 			return ((Operator)obj).calculate(ec);
 		}
-		throw new ElException("Unknown calculate value: " + obj);
+		throw new ELException("Unknown calculate value: " + obj);
 
 	}
 }

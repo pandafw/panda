@@ -1,6 +1,6 @@
 package panda.ioc.val;
 
-import panda.el.El;
+import panda.el.EL;
 import panda.ioc.IocMaking;
 import panda.ioc.ValueProxy;
 import panda.ioc.bean.IocProxy;
@@ -50,11 +50,11 @@ import panda.ioc.bean.IocProxy;
  * 但是你的 getTime 函数的参数是一个 java.sql.Timestamp，那么容器会自动为你转型。<br>
  * 任何对象，只要有一个接受字符串作为参数的构造函数，都可以被成功的从字符串构建
  */
-public class ElValue implements ValueProxy {
-	private El el;
+public class ELValue implements ValueProxy {
+	private EL el;
 
-	public ElValue(String expr) {
-		el = new El(expr);
+	public ELValue(String expr) {
+		el = new EL(expr);
 	}
 
 	public Object get(IocMaking ing) {
