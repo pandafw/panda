@@ -1,6 +1,5 @@
 package panda.el.opt.logic;
 
-import panda.el.El;
 import panda.el.ElContext;
 import panda.el.opt.AbstractTwoOpt;
 
@@ -16,7 +15,7 @@ public class QuestionOpt extends AbstractTwoOpt {
 	}
 
 	public Object calculate(ElContext ec) {
-		return El.isTrue(getLeft(ec));
+		return Logics.isTrue(getLeft(ec));
 	}
 
 	public String operator() {

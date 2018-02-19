@@ -15,13 +15,15 @@ public class IdentifierParse implements Parse {
 			while (!exp.isEmpty() && Character.isJavaIdentifierPart(exp.peek())) {
 				sb.append(exp.poll());
 			}
-			if (sb.toString().equals("null")) {
+			
+			String s = sb.toString();
+			if (s.equals("null")) {
 				return new ElObj(null);
 			}
-			if (sb.toString().equals("true")) {
+			if (s.equals("true")) {
 				return Boolean.TRUE;
 			}
-			if (sb.toString().equals("false")) {
+			if (s.equals("false")) {
 				return Boolean.FALSE;
 			}
 			return new ElObj(sb.toString());

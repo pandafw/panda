@@ -14,6 +14,9 @@ public class ElObj {
 	}
 
 	public Object getObj(ElContext ec) {
+		if (val == null) {
+			return null;
+		}
 		return ec.get(val);
 	}
 

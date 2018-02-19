@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import panda.bind.json.Jsons;
+import panda.lang.Arrays;
 import panda.lang.Strings;
 
 @SuppressWarnings("unchecked")
@@ -240,6 +240,7 @@ public class ElTest {
 		assertEquals(new Long(1900), El.eval("a.date.getTime()", context));
 		
 		assertFalse((Boolean)El.eval("'java.lang.Boolean'@FALSE"));
+		assertEquals(Boolean.TRUE, El.eval("'java.lang.Boolean'@parseBoolean('true')", new ElContext(true)));
 	}
 
 	public static class MethodUtil {
@@ -412,9 +413,6 @@ public class ElTest {
 		context.put("s", Static.class);
 		context.put("a", new Static());
 
-		//TODO
-		//assertEquals("xxx", El.eval(new Static(), "@printParam(@info)"));
-		
 		assertEquals("yyy", El.eval("@printParam('yyy')", new Static()));
 		assertEquals("xxx", El.eval("@info", new Static()));
 		assertEquals("xxx", El.eval("s@printParam(s@info)", context));
@@ -528,13 +526,13 @@ public class ElTest {
 		context.put("System", System.class);
 
 		Object val = El.eval("System@getenv('PATH').getClass().getName()", context);
-		Assert.assertNotNull(val);
+		Assert.assertEquals("java.lang.String", val);
 
 		Object val2 = El.eval("'java.lang.System'@getenv('PATH').getClass().getName()", context);
-		Assert.assertEquals(val, val2);
+		Assert.assertEquals("java.lang.String", val2);
 
 		Object val3 = El.eval("'System'@getenv('PATH').getClass().getName()", context);
-		Assert.assertEquals(val, val3);
+		Assert.assertEquals("java.lang.String", val3);
 	}
 
 	public static class ListTest {
@@ -641,5 +639,47 @@ public class ElTest {
 		context.put("util", new ArrayTest());
 		context.put("map", map);
 		System.out.println(exp.eval(context));
+	}
+
+	@Test
+	public void test_Strict() {
+		Map<String, Object> ctx = new HashMap<String, Object>();
+		ctx.put("obj", Arrays.toMap("pet", null));
+
+		ElContext ec = new ElContext(ctx, true);
+
+		El.eval("obj.pet", ec);
+		El.eval("!!(obj.pet)", ec);
+		
+		try {
+			El.eval("(obj.pet.name) == null", ec);
+			Assert.fail("(obj.pet.name) == null");
+		}
+		catch (Exception e) {
+		}
+	}
+
+	@Test
+	public void test_Nullable() {
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("obj", Arrays.toMap("pet", null));
+		m.put("girls", new ArrayList<String>());
+		ElContext ctx = new ElContext(m, true);
+
+		El.eval("obj.pet", ctx);
+		El.eval("!!(obj.pet)", ctx);
+		assertTrue((Boolean)El.eval("!!(obj.pet.name) == null", ctx));
+		assertTrue((Boolean)El.eval("!(!(!!(obj.pet.name) == null))", ctx));
+	}
+
+	@Test
+	public void test_Orable() {
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("obj", Arrays.toMap("pet", null));
+		m.put("girls", new ArrayList<String>());
+		ElContext ctx = new ElContext(m, true);
+
+		assertEquals("cat", El.eval("!!(obj.pet.name) ||| 'cat'", ctx));
+		assertEquals("dog", El.eval("!!(obj.girls) ||| 'dog'", ctx));
 	}
 }

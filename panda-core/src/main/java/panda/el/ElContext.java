@@ -6,6 +6,7 @@ import panda.bean.Beans;
 public class ElContext {
 	private boolean strict;
 	private Object context;
+
 	@SuppressWarnings("rawtypes")
 	private BeanHandler handler;
 
@@ -21,6 +22,13 @@ public class ElContext {
 	 */
 	public ElContext(Object context) {
 		this(context, false);
+	}
+
+	/**
+	 * @param strict strict mode
+	 */
+	public ElContext(boolean strict) {
+		this(null, strict);
 	}
 
 	/**
@@ -75,5 +83,9 @@ public class ElContext {
 	 */
 	public boolean strict() {
 		return strict;
+	}
+	
+	public String toString() {
+		return (strict ? "strict: " : "") + (context == null ? "null" : context.getClass());
 	}
 }

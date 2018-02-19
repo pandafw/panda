@@ -88,53 +88,7 @@ public class Converter {
 			}
 			itemCache.add(obj);
 		}
-//		itemCache = clearUp(itemCache);
 	}
-
-//	/**
-//	 * 清理转换后的结果, 主要做一些标识性的转换
-//	 * 
-//	 * @param rpn
-//	 */
-//	private void clearUp(List<Object> rpn) {
-//		for (int i = 0; i < rpn.size(); i++) {
-//			Object obj = rpn.get(i);
-//			if (!(obj instanceof ElObj)) {
-//				rpn.set(i, )dest.add(rpn.removeFirst());
-//				continue;
-//			}
-//		}
-//		LinkedList<Object> dest = new LinkedList<Object>();
-//		while (!rpn.isEmpty()) {
-//			Object obj = rpn.removeFirst();
-//			
-//			if (!obj instanceof ElObj) {
-//				dest.add(rpn.removeFirst());
-//				continue;
-//			}
-//			
-//			ElObj obj = (ElObj)rpn.removeFirst();
-//			// 方法对象
-//			if (!rpn.isEmpty() && rpn.getFirst() instanceof MethodOpt) {
-//				dest.add(new MethodObj(obj.getVal()));
-//				continue;
-//			}
-//			// 属性对象
-//			if (dest.size() > 0 && dest.getLast() instanceof RunMethod 
-//					&& rpn.size() > 0
-//					&& rpn.getFirst() instanceof RunMethod) {
-//				dest.add(new IdentifierObj(obj.getVal()));
-//				continue;
-//			}
-//			// //普通的对象
-//			// if(!(dest.getLast() instanceof AccessOpt) && !(rpn.peekFirst()
-//			// instanceof MethodOpt)){
-//			// continue;
-//			// }
-//			dest.add(new IdentifierObj(obj.getVal()));
-//		}
-//		return dest;
-//	}
 
 	/**
 	 * 解析数据

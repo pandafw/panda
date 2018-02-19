@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import panda.lang.Arrays;
 import panda.lang.Asserts;
 import panda.lang.Chars;
-import panda.lang.collection.LRUMap;
 import panda.tpl.AbstractTemplate;
 import panda.tpl.TemplateException;
 
 public class ElTemplate extends AbstractTemplate {
-	private static Map<String, ElTemplate> cache = new LRUMap<String, ElTemplate>(1000);
+	private static Map<String, ElTemplate> cache = new WeakHashMap<String, ElTemplate>();
 	
 	public static final char[] PREFIXS = { Chars.DOLLAR, Chars.PERCENT };
 	

@@ -8,7 +8,6 @@ import panda.el.Parse;
  */
 public class StringParse implements Parse {
 	public Object fetchItem(CharQueue exp) {
-		// @ JKTODO 添加转意字符
 		switch (exp.peek()) {
 		case '\'':
 		case '"':

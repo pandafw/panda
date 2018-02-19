@@ -5,26 +5,33 @@ import java.util.Queue;
 import panda.el.ElContext;
 import panda.el.opt.AbstractOpt;
 
-/**
- * Not(!)
- */
-public class NotOpt extends AbstractOpt {
+public class NullableOpt extends AbstractOpt {
+
 	private Object right;
 
+	@Override
 	public int getPriority() {
 		return 7;
 	}
 
+	@Override
 	public void wrap(Queue<Object> rpn) {
 		right = rpn.poll();
 	}
 
+	@Override
 	public Object calculate(ElContext ec) {
-		Object rval = calculateItem(ec, right);
-		return Logics.isFalse(rval);
+		try {
+			return calculateItem(ec, right);
+		}
+		catch (Throwable e) {
+			return null;
+		}
 	}
 
+	@Override
 	public String operator() {
-		return "!";
+		return "!!";
 	}
+
 }

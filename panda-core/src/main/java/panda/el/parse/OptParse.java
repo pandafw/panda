@@ -26,6 +26,8 @@ import panda.el.opt.logic.LTEOpt;
 import panda.el.opt.logic.LTOpt;
 import panda.el.opt.logic.NEQOpt;
 import panda.el.opt.logic.NotOpt;
+import panda.el.opt.logic.NullableOpt;
+import panda.el.opt.logic.OrableOpt;
 import panda.el.opt.logic.OrOpt;
 import panda.el.opt.logic.QuestionOpt;
 import panda.el.opt.logic.QuestionSelectOpt;
@@ -109,6 +111,9 @@ public class OptParse implements Parse {
 			case '=':
 				exp.poll();
 				return new NEQOpt();
+			case '!':
+				exp.poll();
+				return new NullableOpt();
 			}
 			return new NotOpt();
 		case '|':
@@ -116,6 +121,10 @@ public class OptParse implements Parse {
 			switch (exp.peek()) {
 			case '|':
 				exp.poll();
+				if (exp.peek() == '|') {
+					exp.poll();
+					return new OrableOpt();
+				}
 				return new OrOpt();
 			}
 			return new BitOr();
