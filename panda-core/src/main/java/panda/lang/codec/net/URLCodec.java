@@ -328,7 +328,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 	 * @param str string to convert to a URL safe form
 	 * @return URL safe string
 	 * @throws EncoderException Thrown if URL encoding is unsuccessful
-	 * @see #getDefaultCharset()
+	 * @see #getCharset()
 	 */
 	@Override
 	public String encode(final String str) throws EncoderException {
@@ -367,7 +367,7 @@ public class URLCodec implements BinaryEncoder, BinaryDecoder, StringEncoder, St
 	 * @param str URL safe string to convert into its original form
 	 * @return original string
 	 * @throws DecoderException Thrown if URL decoding is unsuccessful
-	 * @see #getDefaultCharset()
+	 * @see #getCharset()
 	 */
 	@Override
 	public String decode(final String str) throws DecoderException {

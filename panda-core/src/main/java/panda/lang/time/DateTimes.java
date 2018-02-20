@@ -2426,7 +2426,7 @@ public class DateTimes {
 	 *
 	 * @param str the date to parse, not null
 	 * @param locale the locale whose date format symbols should be used. If <code>null</code>, the
-	 *            system locale is used (as per {@link #parseDate(String, String...)}).
+	 *            system locale is used (as per {@link #parse(String, String...)}).
 	 * @param patterns the date format patterns to use, see SimpleDateFormat, not null
 	 * @return the parsed date
 	 * @throws IllegalArgumentException if the date string or pattern array is null
@@ -2471,7 +2471,7 @@ public class DateTimes {
 	 *
 	 * @param str the date to parse, not null
 	 * @param locale the locale whose date format symbols should be used. If <code>null</code>, the
-	 *            system locale is used (as per {@link #parseDateStrictly(String, String...)}).
+	 *            system locale is used (as per {@link #parseStrictly(String, String...)}).
 	 * @param patterns the date format patterns to use, see SimpleDateFormat, not null
 	 * @return the parsed date
 	 * @throws IllegalArgumentException if the date string or pattern array is null
