@@ -6,7 +6,12 @@ import panda.mvc.SiteConstants;
  * Settings Constants
  */
 public interface SET extends SiteConstants {
+	//--------------------------------------------------------
+	// project/app version
+	//
 	public static final String APP_VERSION = "app.version";
+	public static final String PRJ_VERSION = "prj.version";
+	public static final String PRJ_REVISION = "prj.revision";
 
 	//--------------------------------------------------------
 	// data properties

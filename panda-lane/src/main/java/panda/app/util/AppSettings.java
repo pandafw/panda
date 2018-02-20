@@ -62,9 +62,17 @@ public class AppSettings extends ReloadableSettings {
 	}
 	
 	public String getAppVersion() {
-		return get(SET.APP_VERSION);
+		String av = get(SET.APP_VERSION);
+		if (Strings.isEmpty(av)) {
+			av = getProperty(SET.PRJ_VERSION, "");
+			String rv = get(SET.PRJ_REVISION);
+			if (Strings.isNotEmpty(rv)) {
+				av += "." + rv;
+			}
+		}
+		return av;
 	}
-
+	
 	public String getPropertyAsPath(String name) {
 		return getPropertyAsPath(name, null);
 	}

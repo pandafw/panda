@@ -182,9 +182,10 @@
 				<attribute name="Created-By" value="${prj.org}"/>
 				<attribute name="Built-By" value="${prj.org}"/>
 				<attribute name="Built-Date" value="${TODAY}"/>
+				<attribute name="Implementation-Vendor" value="${prj.url}"/>
 				<attribute name="Implementation-Title" value="${prj.title}"/>
 				<attribute name="Implementation-Version" value="${VERSION}"/> 
-				<attribute name="Implementation-Vendor" value="${prj.url}"/>
+				<attribute name="Implementation-Revision" value="${REVISION}"/> 
 			</manifest>
 			<fileset dir="${out.dir}/classes"/>
 		</jar>
