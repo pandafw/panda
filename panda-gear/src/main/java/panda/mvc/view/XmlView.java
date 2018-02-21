@@ -8,6 +8,7 @@ import panda.bind.xml.Xmls;
 import panda.io.MimeTypes;
 import panda.log.Log;
 import panda.log.Logs;
+import panda.mvc.ActionContext;
 
 /**
  * serialize XML object to output
@@ -46,12 +47,13 @@ public class XmlView extends AbstractBindView {
 
 	/**
 	 * write result
+	 * @param ac action context
 	 * @param writer response writer
 	 * @param result result object
 	 * @throws IOException
 	 */
 	@Override
-	protected void writeResult(PrintWriter writer, Object result) throws IOException {
+	protected void writeResult(ActionContext ac, PrintWriter writer, Object result) throws IOException {
 		if (result != null) {
 			XmlSerializer xs = Xmls.newXmlSerializer();
 			setSerializerOptions(xs);

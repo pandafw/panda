@@ -229,7 +229,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 			writeHeader(ac);
 
 			PrintWriter writer = ac.getResponse().getWriter();
-			writeResult(writer, result);
+			writeResult(ac, writer, result);
 			writer.flush();
 		}
 		catch (IOException e) {
@@ -237,7 +237,7 @@ public abstract class AbstractBindView extends AbstractDataView {
 		}
 	}
 
-	protected abstract void writeResult(PrintWriter writer, Object result) throws IOException;
+	protected abstract void writeResult(ActionContext ac, PrintWriter writer, Object result) throws IOException;
 	
 	protected List<String> toList(String str) {
 		List<String> list = new ArrayList<String>();
